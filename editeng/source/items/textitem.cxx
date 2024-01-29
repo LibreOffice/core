@@ -107,7 +107,6 @@ SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkIte
 SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0_deg10, false, TypedWhichId<SvxCharRotateItem>(0));}
 SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, TypedWhichId<SvxCharScaleWidthItem>(0));}
 SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
-SfxPoolItem* SvxNoHyphenItem::CreateDefault() {return new SvxNoHyphenItem(false, 0);}
 
 // class SvxFontListItem -------------------------------------------------
 

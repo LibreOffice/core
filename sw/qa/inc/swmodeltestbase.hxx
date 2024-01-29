@@ -105,12 +105,6 @@ public:
 
 protected:
     /**
-     * Helper func used by each unit test to test the 'import' code.
-     * (Loads the requested file and then calls 'verify' method)
-     */
-    void executeImportTest(const char* filename, const char* pPassword = nullptr);
-
-    /**
      * Helper func used by each unit test to test the 'export' code.
      * (Loads the requested file, calls 'verify' function, save it to temp file, load the
      * temp file and then calls 'verify' function again)

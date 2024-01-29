@@ -62,16 +62,6 @@ SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const OUStri
 {
 }
 
-void SwModelTestBase::executeImportTest(const char* filename, const char* pPassword)
-{
-    maTempFile.EnableKillingFile(false);
-    header();
-    loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
-    verify();
-    finish();
-    maTempFile.EnableKillingFile();
-}
-
 void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const char* pPassword)
 {
     maTempFile.EnableKillingFile(false);

@@ -132,12 +132,12 @@ cui/source/inc/GraphicsTestsDialog.hxx:48
     void GraphicsTestsDialog::LinkStubHandleResultViewRequest(void *,weld::Button &)
 cui/source/inc/SvxNotebookbarConfigPage.hxx:40
     void SvxNotebookbarConfigPage::SetElement()
+cui/source/options/optsave.hxx:82
+    void SvxSaveTabPage::DetectHiddenControls()
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:19
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:80
     const std::map<rtl::OUString, std::vector<rtl::OUString> > & dbahsql::SchemaParser::getPrimaryKeys() const
-dbaccess/source/ui/app/AppController.hxx:144
-    rtl::OUString dbaui::OApplicationController::getStrippedDatabaseName() const
 dbaccess/source/ui/inc/dsmeta.hxx:87
     __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<int>, std::set<int> > dbaui::FeatureSet::begin() const
 dbaccess/source/ui/inc/dsmeta.hxx:88
@@ -186,19 +186,15 @@ editeng/inc/edtspell.hxx:103
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, std::__cxx1998::vector<struct editeng::MisspellRange> >, std::vector<struct editeng::MisspellRange> > WrongList::begin() const
 editeng/inc/edtspell.hxx:104
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const struct editeng::MisspellRange *, std::__cxx1998::vector<struct editeng::MisspellRange> >, std::vector<struct editeng::MisspellRange> > WrongList::end() const
-editeng/inc/ParagraphPortionList.hxx:51
+editeng/inc/ParagraphPortionList.hxx:59
     void ParaPortionList::Append(std::unique_ptr<ParaPortion>)
-editeng/inc/ParagraphPortionList.hxx:54
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<ParaPortion> *, std::__cxx1998::vector<std::unique_ptr<ParaPortion> > >, std::vector<std::unique_ptr<ParaPortion> > > ParaPortionList::begin()
-editeng/inc/ParagraphPortionList.hxx:55
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<ParaPortion> *, std::__cxx1998::vector<std::unique_ptr<ParaPortion> > >, std::vector<std::unique_ptr<ParaPortion> > > ParaPortionList::end()
-editeng/inc/ParagraphPortionList.hxx:56
+editeng/inc/ParagraphPortionList.hxx:71
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<ParaPortion> *, std::__cxx1998::vector<std::unique_ptr<ParaPortion> > >, std::vector<std::unique_ptr<ParaPortion> > > ParaPortionList::cbegin() const
-editeng/inc/ParagraphPortionList.hxx:57
+editeng/inc/ParagraphPortionList.hxx:72
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const std::unique_ptr<ParaPortion> *, std::__cxx1998::vector<std::unique_ptr<ParaPortion> > >, std::vector<std::unique_ptr<ParaPortion> > > ParaPortionList::cend() const
 editeng/source/editeng/impedit.hxx:236
     tools::Rectangle LOKSpecialPositioning::GetWindowPos(const tools::Rectangle &,enum MapUnit) const
-editeng/source/editeng/impedit.hxx:783
+editeng/source/editeng/impedit.hxx:801
     double ImpEditEngine::scaleYFontValue(unsigned short) const
 embeddedobj/source/msole/olecomponent.hxx:75
     _Bool OleComponent::InitializeObject_Impl()
@@ -304,9 +300,9 @@ include/basegfx/matrix/b3dhommatrix.hxx:97
     basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator+=(const basegfx::B3DHomMatrix &)
 include/basegfx/matrix/b3dhommatrix.hxx:98
     basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator-=(const basegfx::B3DHomMatrix &)
-include/basegfx/matrix/b3dhommatrix.hxx:105
+include/basegfx/matrix/b3dhommatrix.hxx:104
     basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator*=(double)
-include/basegfx/matrix/b3dhommatrix.hxx:106
+include/basegfx/matrix/b3dhommatrix.hxx:105
     basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator/=(double)
 include/basegfx/matrix/hommatrixtemplate.hxx:43
      basegfx::internal::ImplMatLine::ImplMatLine<RowSize>(unsigned short)
@@ -440,15 +436,21 @@ include/codemaker/global.hxx:57
     FileStream & operator<<(FileStream &,const rtl::OStringBuffer &)
 include/codemaker/options.hxx:54
     const rtl::OString & Options::getProgramName() const
+include/codemaker/typemanager.hxx:46
+    const rtl::Reference<unoidl::Manager> & TypeManager::getManager() const
+include/codemaker/typemanager.hxx:50
+    const std::vector<rtl::Reference<unoidl::Provider> > & TypeManager::getPrimaryProviders() const
 include/comphelper/automationinvokedzone.hxx:26
      comphelper::Automation::AutomationInvokedZone::AutomationInvokedZone()
 include/comphelper/basicio.hxx:52
     const com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> & comphelper::operator>>(const com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> &,unsigned int &)
 include/comphelper/basicio.hxx:53
     const com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> & comphelper::operator<<(const com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> &,unsigned int)
-include/comphelper/configuration.hxx:289
+include/comphelper/configuration.hxx:301
     void comphelper::ConfigurationLocalizedProperty::set(const type-parameter-?-? &,const std::shared_ptr<comphelper::ConfigurationChanges> &)
 include/comphelper/configuration.hxx:324
+    _Bool comphelper::ConfigurationGroup::isReadOnly(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> &)
+include/comphelper/configuration.hxx:345
     com::sun::star::uno::Reference<com::sun::star::container::XHierarchicalNameReplace> comphelper::ConfigurationGroup::get(const std::shared_ptr<comphelper::ConfigurationChanges> &)
 include/comphelper/errcode.hxx:96
     _Bool ErrCode::operator<(const ErrCode &) const
@@ -860,7 +862,7 @@ include/docmodel/theme/Theme.hxx:173
     void model::Theme::setFormatScheme(const model::FormatScheme &)
 include/docmodel/theme/Theme.hxx:190
     std::vector<Color> model::Theme::GetColors() const
-include/drawinglayer/geometry/viewinformation2d.hxx:123
+include/drawinglayer/geometry/viewinformation2d.hxx:124
     _Bool drawinglayer::geometry::ViewInformation2D::operator!=(const drawinglayer::geometry::ViewInformation2D &) const
 include/drawinglayer/primitive2d/baseprimitive2d.hxx:136
     _Bool drawinglayer::primitive2d::BasePrimitive2D::operator!=(const drawinglayer::primitive2d::BasePrimitive2D &) const
@@ -892,14 +894,16 @@ include/drawinglayer/tools/primitive2dxmldump.hxx:45
     void drawinglayer::Primitive2dXmlDump::dump(const drawinglayer::primitive2d::Primitive2DContainer &,const rtl::OUString &)
 include/editeng/colritem.hxx:76
     void SvxColorItem::setComplexColor(const model::ComplexColor &)
-include/editeng/editeng.hxx:246
-    _Bool EditEngine::GetVertical() const
 include/editeng/editeng.hxx:248
+    _Bool EditEngine::GetVertical() const
+include/editeng/editeng.hxx:250
     enum TextRotation EditEngine::GetRotation() const
 include/editeng/hyphenzoneitem.hxx:67
     _Bool SvxHyphenZoneItem::IsPageEnd() const
 include/editeng/lrspitem.hxx:67
      SvxLeftMarginItem::SvxLeftMarginItem(const long,const unsigned short)
+include/editeng/nhypitem.hxx:29
+    SfxPoolItem * SvxNoHyphenItem::CreateDefault()
 include/editeng/outlobj.hxx:146
      std::optional::optional(struct std::in_place_t,type-parameter-?-? &&...)
 include/editeng/outlobj.hxx:165
@@ -1128,31 +1132,35 @@ include/sfx2/viewsh.hxx:468
     enum LOKDeviceFormFactor SfxViewShell::GetLOKDeviceFormFactor() const
 include/svl/itemiter.hxx:44
     _Bool SfxItemIter::IsAtEnd() const
-include/svl/itempool.hxx:104
+include/svl/itempool.hxx:97
     unsigned short SfxItemPool::GetSize_Impl() const
-include/svl/itempool.hxx:126
+include/svl/itempool.hxx:117
     void SfxItemPool::AddRef(const SfxPoolItem &)
-include/svl/itempool.hxx:127
+include/svl/itempool.hxx:118
     unsigned int SfxItemPool::ReleaseRef(const SfxPoolItem &,unsigned int)
-include/svl/itempool.hxx:156
+include/svl/itempool.hxx:149
+    const type-parameter-?-? * SfxItemPool::GetPoolDefaultItem(TypedWhichId<type-parameter-?-?>) const
+include/svl/itempool.hxx:164
     enum MapUnit SfxItemPool::GetDefaultMetric() const
-include/svl/itempool.hxx:198
-    const type-parameter-?-? * SfxItemPool::GetItem2Default(TypedWhichId<type-parameter-?-?>) const
-include/svl/itemset.hxx:115
-    _Bool SfxItemSet::empty() const
-include/svl/itemset.hxx:116
-    int SfxItemSet::size() const
 include/svl/itemset.hxx:117
+    _Bool SfxItemSet::empty() const
+include/svl/itemset.hxx:118
+    int SfxItemSet::size() const
+include/svl/itemset.hxx:119
     const SfxPoolItem * SfxItemSet::operator[](int) const
 include/svl/lockfilecommon.hxx:60
     void svt::LockFileCommon::SetURL(const rtl::OUString &)
 include/svl/ondemand.hxx:346
     const CharClass & OnDemandCharClass::operator*() const
-include/svl/poolitem.hxx:244
+include/svl/poolitem.hxx:175
+    void SfxPoolItem::setDynamicDefault()
+include/svl/poolitem.hxx:254
     type-parameter-?-? * SfxPoolItem::DynamicWhichCast(TypedWhichId<type-parameter-?-?>)
-include/svl/poolitem.hxx:293
-    _Bool IsPoolDefaultItem(const SfxPoolItem *)
-include/svl/poolitem.hxx:308
+include/svl/poolitem.hxx:352
+    _Bool IsUserDefaultItem(const SfxPoolItem *)
+include/svl/poolitem.hxx:362
+    _Bool IsDynamicDefaultItem(const SfxPoolItem *)
+include/svl/poolitem.hxx:372
     _Bool IsPooledItem(const SfxPoolItem *)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<CntUInt16Item, derived_type>, int>::type)
@@ -1176,8 +1184,6 @@ include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<OptionalBoolItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<SbxItem, derived_type>, int>::type)
-include/svl/typedwhich.hxx:31
-     TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<ScCondFormatDlgItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<ScCondFormatItem, derived_type>, int>::type)
 include/svl/typedwhich.hxx:31
@@ -1998,8 +2004,6 @@ include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<const SfxStringItem, derived_type>, int>::type)
 include/svl/whichranges.hxx:52
     void svl::Items_t::fill(struct std::pair<unsigned short, unsigned short> *)
-include/svtools/accessibilityoptions.hxx:30
-     SvtAccessibilityOptions::SvtAccessibilityOptions()
 include/svtools/ctrlbox.hxx:407
     void FontStyleBox::set_size_request(int,int)
 include/svtools/ctrlbox.hxx:478
@@ -2232,18 +2236,14 @@ include/unotools/resmgr.hxx:62
     _Bool TranslateNId::operator bool() const
 include/unotools/resmgr.hxx:65
     _Bool TranslateNId::operator!=(const struct TranslateNId &) const
-include/unotools/securityoptions.hxx:62
+include/unotools/securityoptions.hxx:63
     _Bool SvtSecurityOptions::Certificate::operator==(const struct SvtSecurityOptions::Certificate &) const
-include/unotools/streamhelper.hxx:45
-     utl::OInputStreamHelper::OInputStreamHelper(tools::SvRef<SvLockBytes>,unsigned int)
 include/unotools/textsearch.hxx:121
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & utl::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const enum utl::SearchParam::SearchType &)
 include/unotools/weakref.hxx:72
      unotools::WeakReference::WeakReference<interface_type>(type-parameter-?-? &)
 include/vcl/alpha.hxx:46
     _Bool AlphaMask::operator!=(const AlphaMask &) const
-include/vcl/alpha.hxx:100
-    _Bool AlphaMask::CopyPixel(const tools::Rectangle &,const tools::Rectangle &)
 include/vcl/animate/Animation.hxx:42
     _Bool Animation::operator!=(const Animation &) const
 include/vcl/animate/AnimationFrame.hxx:77
@@ -2506,7 +2506,7 @@ include/vcl/weldutils.hxx:350
     void weld::DateFormatter::CursorChangedHdl(weld::Entry &)
 include/vcl/weldutils.hxx:350
     void weld::DateFormatter::LinkStubCursorChangedHdl(void *,weld::Entry &)
-include/vcl/window.hxx:376
+include/vcl/window.hxx:377
     const char * ImplDbgCheckWindow(const void *)
 include/vcl/windowstate.hxx:123
     std::basic_ostream<char> & vcl::operator<<(std::basic_ostream<char> &,const vcl::WindowData &)
@@ -2608,8 +2608,6 @@ sc/inc/datamapper.hxx:79
     void sc::ExternalDataSource::setProvider(const rtl::OUString &)
 sc/inc/document.hxx:908
     rtl::OUString ScDocument::MaxRowAsString() const
-sc/inc/document.hxx:1952
-    void ScDocument::SetPattern(short,int,short,const ScPatternAttr &)
 sc/inc/dpfilteredcache.hxx:148
     void ScDPFilteredCache::dump() const
 sc/inc/formulacell.hxx:513
@@ -2678,7 +2676,7 @@ sc/inc/mtvelements.hxx:89
     void svl::mdds_mtv_insert_values(mdds::mtv::base_element_block &,unsigned long,const svl::SharedString &,const type-parameter-?-? &,const type-parameter-?-? &)
 sc/inc/mtvfunctions.hxx:376
     void sc::ProcessElements2(type-parameter-?-? &,type-parameter-?-? &,type-parameter-?-? &)
-sc/inc/patattr.hxx:98
+sc/inc/patattr.hxx:100
     _Bool CellAttributeHolder::operator!() const
 sc/inc/rangecache.hxx:52
     _Bool ScSortedRangeCache::isValid() const
@@ -2838,9 +2836,7 @@ sd/inc/sdabstdlg.hxx:172
     VclPtr<SfxAbstractTabDialog> SdAbstractDialogFactory::CreateSdOutlineBulletTabDlg(weld::Window *,const SfxItemSet *,sd::View *)
 sd/inc/sddll.hxx:47
      SdDLL::SdDLL()
-sd/source/filter/eppt/epptooxml.hxx:79
-    int oox::core::PowerPointExport::GetPPTXLayoutId(int)
-sd/source/filter/eppt/epptooxml.hxx:93
+sd/source/filter/eppt/epptooxml.hxx:92
     void oox::core::PowerPointExport::WriteDefaultColorSchemes(const std::shared_ptr<sax_fastparser::FastSerializerHelper> &)
 sd/source/filter/ppt/pptinanimations.hxx:107
     void ppt::AnimationImporter::dump(const char *,long)
@@ -3248,9 +3244,7 @@ sw/inc/textboxhelper.hxx:256
     _Bool SwTextBoxNode::IsGroupTextBox() const
 sw/inc/view.hxx:479
     void SwView::LinkStubMoveNavigationHdl(void *,void *)
-sw/inc/view.hxx:627
-    void SwView::ApplyAccessibilityOptions()
-sw/inc/viewopt.hxx:314
+sw/inc/viewopt.hxx:316
     const struct SwViewColors & SwViewOption::GetColorConfig() const
 sw/inc/viscrs.hxx:227
     SwShellTableCursor * SwShellTableCursor::GetNext()
@@ -3260,8 +3254,10 @@ sw/inc/viscrs.hxx:229
     SwShellTableCursor * SwShellTableCursor::GetPrev()
 sw/inc/viscrs.hxx:230
     const SwShellTableCursor * SwShellTableCursor::GetPrev() const
-sw/qa/extras/layout/layout3.cxx:2273
+sw/qa/extras/layout/layout3.cxx:2344
     int main()
+sw/qa/inc/swmodeltestbase.hxx:111
+    void SwModelTestBase::executeImportTest(const char *,const char *)
 sw/qa/inc/swmodeltestbase.hxx:229
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> &) const
 sw/source/core/access/accportions.cxx:55
@@ -3280,7 +3276,7 @@ sw/source/core/inc/frame.hxx:1426
     long SwRectFnSet::RightDist(const SwRect &,long) const
 sw/source/core/inc/mvsave.hxx:171
     _Bool ZSortFly::operator==(const ZSortFly &) const
-sw/source/core/text/porlin.hxx:125
+sw/source/core/text/porlin.hxx:109
     _Bool SwLinePortion::IsTabRightPortion() const
 sw/source/core/text/txtpaint.hxx:72
      DbgBackColor::DbgBackColor(OutputDevice *,const _Bool)
@@ -3288,9 +3284,7 @@ sw/source/core/text/txtpaint.hxx:79
      DbgRect::DbgRect(OutputDevice *,const tools::Rectangle &,const _Bool,Color)
 sw/source/filter/ww8/ww8par.hxx:1043
      WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(int,int,SwPaM &)
-sw/source/uibase/inc/pview.hxx:270
-    void SwPagePreview::ApplyAccessibilityOptions()
-sw/source/uibase/inc/swcont.hxx:89
+sw/source/uibase/inc/swcont.hxx:81
     _Bool SwContent::operator==(const SwContent &) const
 sw/source/uibase/inc/unomod.hxx:36
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SwXModule_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
@@ -3462,13 +3456,15 @@ vcl/unx/gtk3/glomenu.cxx:32
     void * g_lo_menu_get_instance_private(struct GLOMenu *)
 writerfilter/source/dmapper/CellColorHandler.hxx:74
     model::ComplexColor writerfilter::dmapper::CellColorHandler::getComplexColor() const
+writerfilter/source/dmapper/DomainMapper_Impl.hxx:764
+    _Bool writerfilter::dmapper::DomainMapper_Impl::GetSdt() const
 writerfilter/source/dmapper/DomainMapperTableManager.hxx:98
     writerfilter::dmapper::TablePositionHandler * writerfilter::dmapper::DomainMapperTableManager::getCurrentTableRealPosition()
-writerfilter/source/dmapper/PropertyMap.hxx:361
+writerfilter/source/dmapper/PropertyMap.hxx:364
     _Bool writerfilter::dmapper::SectionPropertyMap::getFirstPageHeader()
-writerfilter/source/dmapper/PropertyMap.hxx:362
+writerfilter/source/dmapper/PropertyMap.hxx:365
     _Bool writerfilter::dmapper::SectionPropertyMap::getFirstPageFooter()
-writerfilter/source/dmapper/PropertyMap.hxx:389
+writerfilter/source/dmapper/PropertyMap.hxx:392
     int writerfilter::dmapper::SectionPropertyMap::GetBreakType() const
 writerfilter/source/dmapper/TablePositionHandler.hxx:40
     int writerfilter::dmapper::TablePositionHandler::getY() const

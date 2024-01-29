@@ -79,8 +79,6 @@ private:
     DECL_LINK( FilterHdl_Impl, weld::ComboBox&, void );
     DECL_LINK(ODFVersionHdl_Impl, weld::ComboBox&, void );
 
-    void    DetectHiddenControls();
-
 public:
     SvxSaveTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxSaveTabPage() override;
