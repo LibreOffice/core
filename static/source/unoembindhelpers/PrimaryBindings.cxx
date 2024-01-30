@@ -11,6 +11,7 @@
 
 #include <emscripten/bind.h>
 
+#include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
 #include <static/unoembindhelpers/PrimaryBindings.hxx>
@@ -112,6 +113,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         allow_raw_pointers());
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
+    function("getUnoComponentContext", &comphelper::getProcessComponentContext);
 }
 #endif
 
