@@ -6850,7 +6850,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentModelAccessor_getDocumentCurrencies)
 {
     m_pDoc->InsertTab(0, "Sheet1");
 
-    // Check Document Currencies
+    // Check document currencies - expect 0
     auto pAccessor = m_xDocShell->GetDocumentModelAccessor();
     CPPUNIT_ASSERT(pAccessor);
     CPPUNIT_ASSERT_EQUAL(size_t(0), pAccessor->getDocumentCurrencies().size());
@@ -6876,8 +6876,40 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentModelAccessor_getDocumentCurrencies)
         CPPUNIT_ASSERT_EQUAL(u"2,00€"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
     }
 
-    // Check Document Currencies Again
+    // Check document currencies again
     auto aCurrencyIDs = pAccessor->getDocumentCurrencies();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCurrencyIDs.size());
+
+    CPPUNIT_ASSERT_EQUAL(LANGUAGE_SLOVENIAN, aCurrencyIDs[0].eLanguage);
+    CPPUNIT_ASSERT_EQUAL(u"-424"_ustr, aCurrencyIDs[0].aExtension);
+    CPPUNIT_ASSERT_EQUAL(u"€"_ustr, aCurrencyIDs[0].aSymbol);
+
+    // Set the same currency to 2 more cells
+    {
+        m_pDoc->SetValue(ScAddress(1, 1, 0), 5.0);
+        m_pDoc->SetValue(ScAddress(2, 2, 0), 7.0);
+
+        OUString aCode = u"#.##0,00[$€-424]"_ustr;
+
+        sal_Int32 nCheckPos;
+        SvNumFormatType eType;
+        sal_uInt32 nFormat;
+
+        m_pDoc->GetFormatTable()->PutEntry(aCode, nCheckPos, eType, nFormat, LANGUAGE_SLOVENIAN);
+        CPPUNIT_ASSERT_EQUAL(SvNumFormatType::CURRENCY, eType);
+
+        ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+        SfxItemSet& rSet = aNewAttrs.GetItemSet();
+        rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+        m_pDoc->ApplyPattern(1, 1, 0, aNewAttrs); // B2.
+        m_pDoc->ApplyPattern(2, 2, 0, aNewAttrs); // C3.
+
+        CPPUNIT_ASSERT_EQUAL(u"5,00€"_ustr, m_pDoc->GetString(ScAddress(1, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"7,00€"_ustr, m_pDoc->GetString(ScAddress(2, 2, 0)));
+    }
+
+    // Check document currencies again - should be 1 entry only
+    aCurrencyIDs = pAccessor->getDocumentCurrencies();
     CPPUNIT_ASSERT_EQUAL(size_t(1), aCurrencyIDs.size());
 
     CPPUNIT_ASSERT_EQUAL(LANGUAGE_SLOVENIAN, aCurrencyIDs[0].eLanguage);
