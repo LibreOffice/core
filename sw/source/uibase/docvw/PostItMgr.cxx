@@ -98,7 +98,7 @@ using namespace sw::annotation;
 
 namespace {
 
-    enum class CommentNotificationType { Add, Remove, Modify, Resolve };
+    enum class CommentNotificationType { Add, Remove, Modify, Resolve, RedlinedDeletion };
 
     bool comp_pos(const std::unique_ptr<SwSidebarItem>& a, const std::unique_ptr<SwSidebarItem>& b)
     {
@@ -142,7 +142,9 @@ namespace {
         aAnnotation.put("action", (nType == CommentNotificationType::Add ? "Add" :
                                    (nType == CommentNotificationType::Remove ? "Remove" :
                                     (nType == CommentNotificationType::Modify ? "Modify" :
-                                     (nType == CommentNotificationType::Resolve ? "Resolve" : "???")))));
+                                     (nType == CommentNotificationType::RedlinedDeletion ? "RedlinedDeletion" :
+                                      (nType == CommentNotificationType::Resolve ? "Resolve" : "???"))))));
+
         aAnnotation.put("id", nPostItId);
         if (nType != CommentNotificationType::Remove && pItem != nullptr)
         {
@@ -177,6 +179,7 @@ namespace {
             aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
             aAnnotation.put("anchorPos", aSVRect.toString());
             aAnnotation.put("textRange", sRects.getStr());
+            aAnnotation.put("layoutStatus", pItem->mLayoutStatus);
         }
 
         boost::property_tree::ptree aTree;
@@ -384,6 +387,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             }
             case SwFormatFieldHintWhich::REMOVED:
+            case SwFormatFieldHintWhich::REDLINED_DELETION:
             {
                 if (mbDeleteNote)
                 {
@@ -401,7 +405,8 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
                     {
                         SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
-                        lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, pPostItField->GetPostItId());
+                        auto type = pFormatHint->Which() == SwFormatFieldHintWhich::REMOVED ? CommentNotificationType::Remove: CommentNotificationType::RedlinedDeletion;
+                        lcl_CommentNotification(mpView, type, nullptr, pPostItField->GetPostItId());
                     }
                 }
                 break;

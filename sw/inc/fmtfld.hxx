@@ -177,7 +177,8 @@ enum class SwFormatFieldHintWhich
     REMOVED    = 2,
     FOCUS      = 3,
     CHANGED    = 4,
-    RESOLVED   = 5
+    RESOLVED   = 5,
+    REDLINED_DELETION = 6
 };
 
 /// This SfxHint subclass is produced by code that changes the doc model (e.g. SwNodes::ChgNode()),

@@ -3314,6 +3314,7 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
         rJsonWriter.put("anchorPos", aSVRect.toString());
         rJsonWriter.put("textRange", sRects);
+        rJsonWriter.put("layoutStatus", static_cast< sal_Int16 >(pWin->GetLayoutStatus()));
     }
 }
 
