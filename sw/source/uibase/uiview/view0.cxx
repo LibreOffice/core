@@ -752,8 +752,13 @@ void SwView::ExecNumberingOutline(SfxItemPool & rPool)
 {
     SfxItemSetFixed<FN_PARAM_1, FN_PARAM_1> aTmp(rPool);
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateOutlineTabDialog(GetFrameWeld(), &aTmp, GetWrtShell()));
-    pDlg->Execute();
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateOutlineTabDialog(GetFrameWeld(), &aTmp, GetWrtShell()));
+    pDlg->StartExecuteAsync(
+        [pDlg] (sal_Int32 /*nResult*/)->void
+        {
+            pDlg->disposeOnce();
+        }
+    );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
