@@ -37,6 +37,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -340,6 +341,7 @@ void CharacterProperties::AddPropertiesToVector(
 void CharacterProperties::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
+    SolarMutexGuard aGuard;
     const float fDefaultFontHeight = 13.0;
 
     SvtLinguConfig aLinguConfig;
