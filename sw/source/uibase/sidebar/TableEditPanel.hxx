@@ -39,6 +39,9 @@ public:
 private:
     void InitRowHeightToolitem();
     void InitColumnWidthToolitem();
+    void InitAlignmentControls();
+    void EnableLeftRight(sal_uInt16 nAlignment);
+    void AlignmentModify(bool alignmentChanged);
 
     SfxBindings* m_pBindings;
 
@@ -56,11 +59,17 @@ private:
     std::unique_ptr<ToolbarUnoDispatcher> m_xDeleteDispatch;
     std::unique_ptr<weld::Toolbar> m_xSplitMerge;
     std::unique_ptr<ToolbarUnoDispatcher> m_xSplitMergeDispatch;
+    std::unique_ptr<weld::ComboBox> m_xAlignment;
+    SvxRelativeField m_aLeftSpacingEdit;
+    SvxRelativeField m_aRightSpacingEdit;
     std::unique_ptr<weld::Toolbar> m_xMisc;
     std::unique_ptr<ToolbarUnoDispatcher> m_xMiscDispatch;
 
     ::sfx2::sidebar::ControllerItem m_aRowHeightController;
     ::sfx2::sidebar::ControllerItem m_aColumnWidthController;
+    ::sfx2::sidebar::ControllerItem m_aAlignmentController;
+    ::sfx2::sidebar::ControllerItem m_aLeftSpacingController;
+    ::sfx2::sidebar::ControllerItem m_aRightSpacingController;
     ::sfx2::sidebar::ControllerItem m_aInsertRowsBeforeController;
     ::sfx2::sidebar::ControllerItem m_aInsertRowsAfterController;
     ::sfx2::sidebar::ControllerItem m_aInsertColumnsBeforeController;
@@ -78,6 +87,8 @@ private:
 
     DECL_LINK(RowHeightMofiyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ColumnWidthMofiyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(AlignmentHdl, weld::ComboBox&, void);
+    DECL_LINK(SpacingHdl, weld::MetricSpinButton&, void);
 };
 
 } // end of namespace sw::sidebar

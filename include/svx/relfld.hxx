@@ -46,6 +46,7 @@ public:
     void            EnableNegativeMode() {bNegativeEnabled = true;}
 
     void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
+    bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }
     void set_value(int nValue, FieldUnit eValueUnit) { m_xSpinButton->set_value(nValue, eValueUnit); }
     int get_value(FieldUnit eDestUnit) const { return m_xSpinButton->get_value(eDestUnit); }
     int get_min(FieldUnit eValueUnit) const { return m_xSpinButton->get_min(eValueUnit); }
