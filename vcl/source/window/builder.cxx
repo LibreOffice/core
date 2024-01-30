@@ -3184,7 +3184,8 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
     return aItems;
 }
 
-VclPtr<Menu> VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OUString &rID, bool bMenuBar)
+void VclBuilder::handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
+                            bool bMenuBar)
 {
     VclPtr<Menu> pCurrentMenu;
     if (bMenuBar)
@@ -3234,7 +3235,11 @@ VclPtr<Menu> VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OUString
 
     m_aMenus.emplace_back(rID, pCurrentMenu);
 
-    return pCurrentMenu;
+    if (bMenuBar && pParent)
+    {
+        if (SystemWindow* pTopLevel = pParent->GetSystemWindow())
+            pTopLevel->SetMenuBar(dynamic_cast<MenuBar*>(pCurrentMenu.get()));
+    }
 }
 
 void VclBuilder::handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader)
@@ -3594,14 +3599,12 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
     }
     else if (sClass == "GtkMenu")
     {
-        handleMenu(reader, sID, false);
+        handleMenu(reader, pParent, sID, false);
         return nullptr;
     }
     else if (sClass == "GtkMenuBar")
     {
-        VclPtr<Menu> xMenu = handleMenu(reader, sID, true);
-        if (SystemWindow* pTopLevel = pParent ? pParent->GetSystemWindow() : nullptr)
-            pTopLevel->SetMenuBar(dynamic_cast<MenuBar*>(xMenu.get()));
+        handleMenu(reader, pParent, sID, true);
         return nullptr;
     }
     else if (sClass == "GtkSizeGroup")
