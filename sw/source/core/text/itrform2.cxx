@@ -1005,8 +1005,13 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
             pDescriptor = std::make_unique<vcl::PDFWriter::CheckBoxWidget>();
             auto pCheckBoxWidget = static_cast<vcl::PDFWriter::CheckBoxWidget*>(pDescriptor.get());
             pCheckBoxWidget->Checked = pContentControl->GetChecked();
-            pCheckBoxWidget->OnValue = pContentControl->GetCheckedState();
-            pCheckBoxWidget->OffValue = pContentControl->GetUncheckedState();
+            // If it's checked already, then leave the default "Yes" OnValue unchanged, so the
+            // appropriate appearance is found by PDF readers.
+            if (!pCheckBoxWidget->Checked)
+            {
+                pCheckBoxWidget->OnValue = pContentControl->GetCheckedState();
+                pCheckBoxWidget->OffValue = pContentControl->GetUncheckedState();
+            }
             break;
         }
         case SwContentControlType::DROP_DOWN_LIST:
