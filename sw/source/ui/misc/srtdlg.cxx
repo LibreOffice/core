@@ -217,14 +217,6 @@ sal_Unicode SwSortDlg::GetDelimChar() const
     return cRet;
 }
 
-short SwSortDlg::run()
-{
-    short nRet = GenericDialogController::run();
-    if (nRet == RET_OK)
-        Apply();
-    return nRet;
-}
-
 // pass on to the Core
 void SwSortDlg::Apply()
 {

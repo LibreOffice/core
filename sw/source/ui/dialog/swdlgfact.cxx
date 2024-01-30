@@ -185,7 +185,13 @@ bool AbstractGenericDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
 
 short AbstractSwSortDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractSwSortDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractMultiTOXMarkDlg_Impl::Execute()
@@ -1121,7 +1127,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialo
     return VclPtr<AbstractSwTableHeightDlg_Impl>::Create(std::make_unique<SwTableHeightDlg>(pParent, rSh));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh)
+VclPtr<AbstractSwSortDlg> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
     return VclPtr<AbstractSwSortDlg_Impl>::Create(std::make_unique<SwSortDlg>(pParent, rSh));
 }

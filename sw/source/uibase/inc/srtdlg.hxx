@@ -70,7 +70,6 @@ class SwSortDlg final : public weld::GenericDialogController
     sal_uInt16 m_nX;
     sal_uInt16 m_nY;
 
-    void Apply();
     sal_Unicode GetDelimChar() const;
 
     DECL_LINK(CheckHdl, weld::Toggleable&, void);
@@ -81,7 +80,7 @@ class SwSortDlg final : public weld::GenericDialogController
 
 public:
     SwSortDlg(weld::Window* pParent, SwWrtShell& rSh);
-    virtual short run() override;
+    void Apply();
 };
 
 #endif

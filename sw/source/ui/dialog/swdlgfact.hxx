@@ -185,15 +185,17 @@ public:
     virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
 };
 
-class AbstractSwSortDlg_Impl : public VclAbstractDialog
+class AbstractSwSortDlg_Impl : public AbstractSwSortDlg
 {
-    std::unique_ptr<SwSortDlg> m_xDlg;
+    std::shared_ptr<SwSortDlg> m_xDlg;
 public:
-    explicit AbstractSwSortDlg_Impl(std::unique_ptr<SwSortDlg> p)
+    explicit AbstractSwSortDlg_Impl(std::shared_ptr<SwSortDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void Apply() override { m_xDlg->Apply(); }
 };
 
 class AbstractMultiTOXMarkDlg_Impl : public VclAbstractDialog
@@ -790,7 +792,7 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateSwAutoMarkDialog(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(weld::Window *pParent, const OUString &rShortName) override;
-    virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh) override;
+    virtual VclPtr<AbstractSwSortDlg> CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) override;

@@ -419,6 +419,13 @@ public:
     virtual std::optional<SwLanguageListItem> GetSelectedLanguage() = 0;
 };
 
+class AbstractSwSortDlg : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSwSortDlg() override = default;
+public:
+    virtual void Apply() = 0;
+};
 
 class AbstractSwTableWidthDlg : public VclAbstractDialog
 {
@@ -488,7 +495,7 @@ public:
 
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(weld::Window *pParent, const OUString &rShortName) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
+    virtual VclPtr<AbstractSwSortDlg> CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) = 0;

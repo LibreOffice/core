@@ -1289,9 +1289,18 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_SORTING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwSortingDialog(GetView().GetFrameWeld(), rWrtSh));
-            pDlg->Execute();
-            rReq.Done();
+            VclPtr<AbstractSwSortDlg> pDlg(pFact->CreateSwSortingDialog(GetView().GetFrameWeld(), rWrtSh));
+            auto xRequest = std::make_shared<SfxRequest>(rReq);
+            rReq.Ignore(); // the 'old' request is not relevant any more
+            pDlg->StartExecuteAsync(
+                [pDlg, xRequest] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                        pDlg->Apply();
+                    pDlg->disposeOnce();
+                    xRequest->Done();
+                }
+            );
         }
         break;
         case FN_NUMBERING_OUTLINE_DLG:
