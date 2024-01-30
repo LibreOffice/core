@@ -132,7 +132,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTFKeyword::SECT:
         {
             m_bHadSect = true;
-            if (m_bIgnoreNextContSectBreak)
+            if (m_bIgnoreNextContSectBreak || m_aStates.top().getFrame().hasProperties())
             {
                 // testContSectionPageBreak: need \par now
                 dispatchSymbol(RTFKeyword::PAR);

@@ -52,17 +52,24 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_0, "tdf158586_pageBreak0.rtf")
 {
     // The specified page break must be lost because it is in a text frame
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    // CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 
-    // There should be no empty carriage return at the start of the second page
-    // const auto& pLayout = parseLayoutDump();
-    // assertXPathContent(pLayout, "//page[1]/body/txt"_ostr, "First page");}
+    // There should be no empty paragraph at the start
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//anchored"_ostr, 1);
+    assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf158586_0B, "tdf158586_pageBreak0B.rtf")
 {
     // The specified page break must be lost because it is in a text frame
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+
+    // There should be no empty paragraph at the start
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//anchored"_ostr, 1);
+    assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, "First page");
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf158586_1, "tdf158586_pageBreak1.rtf")
