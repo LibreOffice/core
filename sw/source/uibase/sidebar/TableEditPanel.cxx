@@ -12,6 +12,7 @@
 #include <sal/config.h>
 #include <swtypes.hxx>
 #include <cmdid.h>
+#include <strings.hrc>
 #include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -21,7 +22,9 @@
 #include <comphelper/lok.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
 
+using namespace ::com::sun::star;
 namespace sw::sidebar
 {
 std::unique_ptr<PanelLayout>
@@ -84,6 +87,42 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
 
             break;
         }
+        case SID_ATTR_TABLE_ALIGNMENT:
+            if (pState && eState >= SfxItemState::DEFAULT)
+            {
+                const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
+                if (pItem)
+                {
+                    sal_uInt16 nAlignment = pItem->GetValue();
+                    m_xAlignment->set_active_id(OUString::number(nAlignment));
+                    EnableLeftRight(nAlignment);
+                }
+            }
+            break;
+        case SID_ATTR_TABLE_LEFT_SPACE:
+        case SID_ATTR_TABLE_RIGHT_SPACE:
+        {
+            if (pState && eState >= SfxItemState::DEFAULT)
+            {
+                const SfxInt32Item* pItem = static_cast<const SfxInt32Item*>(pState);
+                if (pItem)
+                {
+                    if (SID_ATTR_TABLE_LEFT_SPACE == nSID)
+                    {
+                        m_aLeftSpacingEdit.set_value(
+                            m_aLeftSpacingEdit.normalize(pItem->GetValue()), FieldUnit::TWIP);
+                        m_aLeftSpacingEdit.save_value();
+                    }
+                    else
+                    {
+                        m_aRightSpacingEdit.set_value(
+                            m_aRightSpacingEdit.normalize(pItem->GetValue()), FieldUnit::TWIP);
+                        m_aRightSpacingEdit.save_value();
+                    }
+                }
+            }
+            break;
+        }
     }
 }
 
@@ -106,10 +145,16 @@ TableEditPanel::TableEditPanel(weld::Widget* pParent,
     , m_xDeleteDispatch(new ToolbarUnoDispatcher(*m_xDelete, *m_xBuilder, rxFrame))
     , m_xSplitMerge(m_xBuilder->weld_toolbar("split_merge"))
     , m_xSplitMergeDispatch(new ToolbarUnoDispatcher(*m_xSplitMerge, *m_xBuilder, rxFrame))
+    , m_xAlignment(m_xBuilder->weld_combo_box("alignmentLB"))
+    , m_aLeftSpacingEdit(m_xBuilder->weld_metric_spin_button("leftspace", FieldUnit::CM))
+    , m_aRightSpacingEdit(m_xBuilder->weld_metric_spin_button("rightspace", FieldUnit::CM))
     , m_xMisc(m_xBuilder->weld_toolbar("misc"))
     , m_xMiscDispatch(new ToolbarUnoDispatcher(*m_xMisc, *m_xBuilder, rxFrame))
     , m_aRowHeightController(SID_ATTR_TABLE_ROW_HEIGHT, *pBindings, *this)
     , m_aColumnWidthController(SID_ATTR_TABLE_COLUMN_WIDTH, *pBindings, *this)
+    , m_aAlignmentController(SID_ATTR_TABLE_ALIGNMENT, *pBindings, *this)
+    , m_aLeftSpacingController(SID_ATTR_TABLE_LEFT_SPACE, *pBindings, *this)
+    , m_aRightSpacingController(SID_ATTR_TABLE_RIGHT_SPACE, *pBindings, *this)
     , m_aInsertRowsBeforeController(FN_TABLE_INSERT_ROW_BEFORE, *pBindings, *this)
     , m_aInsertRowsAfterController(FN_TABLE_INSERT_ROW_AFTER, *pBindings, *this)
     , m_aInsertColumnsBeforeController(FN_TABLE_INSERT_COL_BEFORE, *pBindings, *this)
@@ -133,7 +178,7 @@ TableEditPanel::TableEditPanel(weld::Widget* pParent,
 
     InitRowHeightToolitem();
     InitColumnWidthToolitem();
-
+    InitAlignmentControls();
     if (comphelper::LibreOfficeKit::isActive())
         m_xMisc->set_item_visible(".uno:InsertFormula", false);
 }
@@ -164,6 +209,29 @@ void TableEditPanel::InitColumnWidthToolitem()
     m_aColumnWidthEdit.set_max(SAL_MAX_INT32, FieldUnit::TWIP);
 
     limitWidthForSidebar(m_aColumnWidthEdit);
+}
+
+void TableEditPanel::InitAlignmentControls()
+{
+    m_xAlignment->connect_changed(LINK(this, TableEditPanel, AlignmentHdl));
+    m_aLeftSpacingEdit.connect_value_changed(LINK(this, TableEditPanel, SpacingHdl));
+    m_aRightSpacingEdit.connect_value_changed(LINK(this, TableEditPanel, SpacingHdl));
+    m_xAlignment->append(OUString::number(text::HoriOrientation::FULL),
+                         SwResId(STR_TABLE_PANEL_ALIGN_AUTO));
+    m_xAlignment->append(OUString::number(text::HoriOrientation::LEFT),
+                         SwResId(STR_TABLE_PANEL_ALIGN_LEFT));
+    m_xAlignment->append(OUString::number(text::HoriOrientation::LEFT_AND_WIDTH),
+                         SwResId(STR_TABLE_PANEL_ALIGN_FROM_LEFT));
+    m_xAlignment->append(OUString::number(text::HoriOrientation::RIGHT),
+                         SwResId(STR_TABLE_PANEL_ALIGN_RIGHT));
+    m_xAlignment->append(OUString::number(text::HoriOrientation::CENTER),
+                         SwResId(STR_TABLE_PANEL_ALIGN_CENTER));
+    m_xAlignment->append(OUString::number(text::HoriOrientation::NONE),
+                         SwResId(STR_TABLE_PANEL_ALIGN_MANUAL));
+
+    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref(false)->GetMetric();
+    m_aLeftSpacingEdit.SetFieldUnit(eFieldUnit);
+    m_aRightSpacingEdit.SetFieldUnit(eFieldUnit);
 }
 
 TableEditPanel::~TableEditPanel()
@@ -207,6 +275,33 @@ TableEditPanel::~TableEditPanel()
     m_aMergeCellsController.dispose();
 }
 
+void TableEditPanel::EnableLeftRight(sal_uInt16 nAlignment)
+{
+    bool enableLeft = true;
+    bool enableRight = true;
+    switch (nAlignment)
+    {
+        case text::HoriOrientation::FULL:
+            enableLeft = false;
+            enableRight = false;
+            break;
+        case text::HoriOrientation::LEFT:
+            enableLeft = false;
+            break;
+        case text::HoriOrientation::CENTER:
+        case text::HoriOrientation::RIGHT:
+            enableRight = false;
+            break;
+        case text::HoriOrientation::LEFT_AND_WIDTH:
+            enableRight = false;
+            break;
+        default:
+            break;
+    }
+    m_aLeftSpacingEdit.set_sensitive(enableLeft);
+    m_aRightSpacingEdit.set_sensitive(enableRight);
+}
+
 IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, weld::MetricSpinButton&, void)
 {
     SwTwips nNewHeight = static_cast<SwTwips>(
@@ -228,6 +323,56 @@ IMPL_LINK_NOARG(TableEditPanel, ColumnWidthMofiyHdl, weld::MetricSpinButton&, vo
     m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_COLUMN_WIDTH, SfxCallMode::RECORD,
                                               { &aColumnWidth });
 }
+
+IMPL_LINK_NOARG(TableEditPanel, AlignmentHdl, weld::ComboBox&, void) { AlignmentModify(true); }
+
+IMPL_LINK(TableEditPanel, SpacingHdl, weld::MetricSpinButton&, rField, void)
+{
+    if (!rField.get_value_changed_from_saved())
+        return;
+    rField.save_value();
+    AlignmentModify(false);
+}
+
+void TableEditPanel::AlignmentModify(bool alignmentChanged)
+{
+    sal_uInt16 nAlign = m_xAlignment->get_active_id().toUInt32();
+    SwTwips nLeft = static_cast<SwTwips>(
+        m_aLeftSpacingEdit.denormalize(m_aLeftSpacingEdit.get_value(FieldUnit::TWIP)));
+    SwTwips nRight = static_cast<SwTwips>(
+        m_aRightSpacingEdit.denormalize(m_aRightSpacingEdit.get_value(FieldUnit::TWIP)));
+    if (alignmentChanged)
+    {
+        EnableLeftRight(nAlign);
+        switch (nAlign)
+        {
+            case text::HoriOrientation::CENTER:
+                nLeft = nRight = (nLeft + nRight) / 2;
+                break;
+            case text::HoriOrientation::LEFT:
+                nRight = nLeft + nRight;
+                nLeft = 0;
+                break;
+            case text::HoriOrientation::RIGHT:
+                nLeft = nLeft + nRight;
+                nRight = 0;
+                break;
+            default:
+                if (!m_aLeftSpacingEdit.get_sensitive())
+                    nLeft = 0;
+                if (!m_aRightSpacingEdit.get_sensitive())
+                    nRight = 0;
+                break;
+        }
+    }
+
+    SfxUInt16Item aAlign(SID_ATTR_TABLE_ALIGNMENT, nAlign);
+    SfxInt32Item aLeft(SID_ATTR_TABLE_LEFT_SPACE, nLeft);
+    SfxInt32Item aRight(SID_ATTR_TABLE_RIGHT_SPACE, nRight);
+    m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_ALIGNMENT, SfxCallMode::RECORD,
+                                              { &aAlign, &aLeft, &aRight });
+}
+
 } // end of namespace ::sw::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
