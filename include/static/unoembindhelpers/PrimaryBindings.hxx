@@ -32,6 +32,22 @@ enum class uno_Reference
 {
     FromAny
 };
+
+template <typename T> struct UnoInOutParam
+{
+    UnoInOutParam() {}
+
+    UnoInOutParam(T the_value)
+        : value(the_value)
+    {
+    }
+
+    T get() const { return value; }
+
+    void set(T the_value) { value = the_value; }
+
+    T value;
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
