@@ -473,8 +473,9 @@ void dumpWrapper(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                  OUString const& interfaceName, unoidl::InterfaceTypeEntity::Method const& method,
                  std::list<OUString> const& baseTrail)
 {
-    out << "        .function(\"" << method.name << "\", +[](" << cppName(interfaceName);
-    out << " * the_self";
+    out << "        .function(\"" << method.name << "\", +[](::com::sun::star::uno::Reference<"
+        << cppName(interfaceName);
+    out << "> const & the_self";
     if (!method.parameters.empty())
     {
         out << ", ";
@@ -486,6 +487,10 @@ void dumpWrapper(std::ostream& out, rtl::Reference<TypeManager> const& manager,
         out << "static_cast<" << cppName(base) << " *>(";
     }
     out << "the_self";
+    if (!baseTrail.empty())
+    {
+        out << ".get()";
+    }
     for (std::size_t i = 0; i != baseTrail.size(); ++i)
     {
         out << ")";
