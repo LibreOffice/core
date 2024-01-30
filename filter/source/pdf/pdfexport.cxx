@@ -66,6 +66,9 @@
 
 #include <memory>
 
+#include <rtl/bootstrap.hxx>
+#include <config_features.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -501,6 +504,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
             if (!comphelper::IsFuzzing())
             {
+                OUString arch;
+                auto const ok = rtl::Bootstrap::get("_ARCH", arch);
+                assert(ok); (void) ok;
                 // getting the string for the producer
                 OUString aProducerOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
                 if (!aProducerOverride.isEmpty())
@@ -509,7 +515,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aContext.DocumentInfo.Producer =
                         utl::ConfigManager::getProductName() +
                         " " +
-                        utl::ConfigManager::getProductVersion();
+                        utl::ConfigManager::getAboutBoxProductVersion() +
+                        " (" + arch + ") / LibreOffice Community";
             }
 
             aContext.DocumentInfo.Creator = aCreator;
