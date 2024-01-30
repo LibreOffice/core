@@ -1325,6 +1325,16 @@ SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam, sal_uInt32 n
         SetComment( RedlineType::Delete == eTyp
             ? SwResId(STR_REDLINE_COMMENT_DELETED)
             : SwResId(STR_REDLINE_COMMENT_ADDED) );
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            auto eHintType = RedlineType::Delete == eTyp ? SwFormatFieldHintWhich::REDLINED_DELETION: SwFormatFieldHintWhich::INSERTED;
+            const SwTextNode *pTextNode = rPam.GetPointNode().GetTextNode();
+            SwTextAttr* pTextAttr = pTextNode ? pTextNode->GetFieldTextAttrAt(rPam.GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default) : nullptr;
+            SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pTextAttr));
+            if (pTextField)
+                const_cast<SwFormatField&>(pTextField->GetFormatField()).Broadcast(SwFormatFieldHint(&pTextField->GetFormatField(), eHintType));
+        }
     }
 }
 
@@ -1622,6 +1632,16 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
                 {
                     sw::RedlineUnDelText const hint(nStart, nLen);
                     pNd->CallSwClientNotify(hint);
+                }
+
+                if (comphelper::LibreOfficeKit::isActive() && IsAnnotation())
+                {
+                    auto eHintType = eWhy == Invalidation::Add ? SwFormatFieldHintWhich::INSERTED: SwFormatFieldHintWhich::REMOVED;
+                    const SwTextNode *pTextNode = this->GetPointNode().GetTextNode();
+                    SwTextAttr* pTextAttr = pTextNode ? pTextNode->GetFieldTextAttrAt(this->GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default) : nullptr;
+                    SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pTextAttr));
+                    if (pTextField)
+                        const_cast<SwFormatField&>(pTextField->GetFormatField()).Broadcast(SwFormatFieldHint(&pTextField->GetFormatField(), eHintType));
                 }
             }
         }
