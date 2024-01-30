@@ -84,7 +84,17 @@ static void lcl_CreatePortions(
 namespace
 {
     enum class BkmType {
-        Start, End, StartEnd
+        // The order is important: BookmarkCompareStruct::operator () depends on it.
+        // When different bookmarks' starts/ends appear at one position, by default (when there's no
+        // frames at the position - see lcl_ExportBookmark), first previous bookmarks close, then
+        // collapsed ones appear, then new bookmarks open.
+        End, StartEnd, Start
+    };
+
+    enum class ExportBookmarkPass
+    {
+        before_frames,
+        after_frames,
     };
 
     struct SwXBookmarkPortion_Impl
@@ -124,7 +134,8 @@ namespace
             // start of the 2nd bookmark BEFORE the end of the first bookmark
             // See bug #i58438# for more details. The below code is correct and
             // fixes both #i58438 and #i16896#
-            return r1->aPosition < r2->aPosition;
+            return std::make_pair(r1->aPosition, r1->nBkmType)
+                   < std::make_pair(r2->aPosition, r2->nBkmType);
         }
     };
     typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
@@ -132,13 +143,15 @@ namespace
     /// Inserts pBkmk to rBkmArr in case it starts or ends at rOwnNode
     void lcl_FillBookmark(sw::mark::IMark* const pBkmk, const SwNode& rOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
     {
-        bool const hasOther = pBkmk->IsExpanded();
+        bool const isExpanded = pBkmk->IsExpanded();
         const SwPosition& rStartPos = pBkmk->GetMarkStart();
         const SwPosition& rEndPos = pBkmk->GetMarkEnd();
+        // A bookmark where the text was deleted becomes collapsed
+        bool const hasOther = isExpanded && rStartPos != rEndPos;
         bool const bStartPosInNode = rStartPos.GetNode() == rOwnNode;
         bool const bEndPosInNode = rEndPos.GetNode() == rOwnNode;
         sw::mark::CrossRefBookmark* const pCrossRefMark
-            = !hasOther && (bStartPosInNode || bEndPosInNode)
+            = !isExpanded && bStartPosInNode
                   ? dynamic_cast<sw::mark::CrossRefBookmark*>(pBkmk)
                   : nullptr;
 
@@ -556,15 +569,23 @@ lcl_CreateContentControlPortion(const css::uno::Reference<SwXText>& xParent,
  * Exports all bookmarks from rBkmArr into rPortions that have the same start
  * or end position as nIndex.
  *
- * @param rBkmArr the array of bookmarks. If bOnlyFrameStarts is true, then
- * this is only read, otherwise consumed entries are removed.
+ * @param rBkmArr the array of bookmarks.
  *
  * @param rFramePositions the list of positions where there is an at-char /
  * anchored frame.
+ * Collapsed (BkmType::StartEnd) bookmarks, as well as bookmarks that start/end
+ * at the frame anchor position, are considered as wrapping the frames, if any
+ * (i.e., starts are output before the frames; ends are output after frames).
+ * When there's no frame here, bookmarks are expected to not overlap (#i58438):
+ * first, non-collapsed bookmarks' ends are output; then collapsed bookmarks;
+ * then non-collapsed bookmarks' starts.
  *
- * @param bOnlyFrameStarts If true: export only the start of the bookmarks
- * which cover an at-char anchored frame. If false: export the end of the same
- * bookmarks and everything else.
+ * @param stage Case before_frames: if there is a frame at this index, output
+ * starts of both collapsed and non-collapsed bookmarks (remove non-collapsed
+ * starts from rBkmArr, convert collapsed ones to ends); if there's no frame,
+ * doesn't output anything.
+ * Case after_frames: outputs (and removes from rBkmArr) everything (left) at
+ * this index, in the order of occurrence in rBkmArr (see #i58438).
  */
 static void lcl_ExportBookmark(
     TextRangeList_t & rPortions,
@@ -573,54 +594,56 @@ static void lcl_ExportBookmark(
     SwXBookmarkPortion_ImplList& rBkmArr,
     const sal_Int32 nIndex,
     const o3tl::sorted_vector<sal_Int32>& rFramePositions,
-    bool bOnlyFrameStarts)
+    ExportBookmarkPass stage)
 {
     for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end(); aIter != aEnd; )
     {
         const SwXBookmarkPortion_ImplSharedPtr& pPtr = *aIter;
         if ( nIndex > pPtr->getIndex() )
         {
-            if (bOnlyFrameStarts)
-                ++aIter;
-            else
-                aIter = rBkmArr.erase(aIter);
+            assert(!"Some bookmarks were not consumed earlier");
             continue;
         }
         if ( nIndex < pPtr->getIndex() )
             break;
 
-        if ((BkmType::Start == pPtr->nBkmType && bOnlyFrameStarts) ||
-            (BkmType::StartEnd == pPtr->nBkmType))
+        if (stage == ExportBookmarkPass::before_frames)
         {
-            bool bFrameStart = rFramePositions.find(nIndex) != rFramePositions.end();
-            bool bEnd = pPtr->nBkmType == BkmType::StartEnd && bFrameStart && !bOnlyFrameStarts;
-            if (pPtr->nBkmType == BkmType::Start || bFrameStart || !bOnlyFrameStarts)
+            if (rFramePositions.find(nIndex) == rFramePositions.end()) // No frames at this index
+                break; // Do nothing; everything will be output at after_frames pass
+
+            if (pPtr->nBkmType == BkmType::End)
             {
-                // At this we create a text portion, due to one of these
-                // reasons:
-                // - this is the real start of a non-collapsed bookmark
-                // - this is the real position of a collapsed bookmark
-                // - this is the start or end (depending on bOnlyFrameStarts)
-                //   of a collapsed bookmark at the same position as an at-char
-                //   anchored frame
-                rtl::Reference<SwXTextPortion> pPortion =
-                    new SwXTextPortion(pUnoCursor, xParent, bEnd ? PORTION_BOOKMARK_END : PORTION_BOOKMARK_START);
-                rPortions.emplace_back(pPortion);
-                pPortion->SetBookmark(pPtr->xBookmark);
-                pPortion->SetCollapsed( BkmType::StartEnd == pPtr->nBkmType && !bFrameStart );
+                ++aIter;
+                continue; // Only consider BkmType::Start and BkmType::StartEnd in this pass
             }
         }
-        else if (BkmType::End == pPtr->nBkmType && !bOnlyFrameStarts)
-        {
-            rtl::Reference<SwXTextPortion> pPortion =
-                new SwXTextPortion(pUnoCursor, xParent, PORTION_BOOKMARK_END);
-            rPortions.emplace_back(pPortion);
-            pPortion->SetBookmark(pPtr->xBookmark);
-        }
+
+        // At this we create a text portion, due to one of these
+        // reasons:
+        // - this is the real start of a non-collapsed bookmark
+        // - this is the real end of a non-collapsed bookmark
+        // - this is the real position of a collapsed bookmark
+        // - this is the start or end of a collapsed bookmark at the same position as an at-char
+        //   anchored frame
+        const SwTextPortionType portionType
+            = pPtr->nBkmType == BkmType::End ? PORTION_BOOKMARK_END : PORTION_BOOKMARK_START;
+        const bool collapsed
+            = pPtr->nBkmType == BkmType::StartEnd && stage == ExportBookmarkPass::after_frames;
+
+        rtl::Reference<SwXTextPortion> pPortion = new SwXTextPortion(pUnoCursor, xParent, portionType);
+        rPortions.emplace_back(pPortion);
+        pPortion->SetBookmark(pPtr->xBookmark);
+        pPortion->SetCollapsed(collapsed);
 
         // next bookmark
-        if (bOnlyFrameStarts)
+        if (pPtr->nBkmType == BkmType::StartEnd && stage == ExportBookmarkPass::before_frames)
+        {
+            // This is a collapsed bookmark around a frame, and its start portion was just emitted;
+            // turn it into an end bookmark to process after_frames
+            pPtr->nBkmType = BkmType::End;
             ++aIter;
+        }
         else
             aIter = rBkmArr.erase(aIter);
     }
@@ -1164,13 +1187,12 @@ static void lcl_ExportBkmAndRedline(
     SwSoftPageBreakList& rBreakArr,
     const sal_Int32 nIndex,
     const o3tl::sorted_vector<sal_Int32>& rFramePositions,
-    bool bOnlyFrameBookmarkStarts)
+    ExportBookmarkPass stage)
 {
     if (!rBkmArr.empty())
-        lcl_ExportBookmark(rPortions, xParent, pUnoCursor, rBkmArr, nIndex, rFramePositions,
-                           bOnlyFrameBookmarkStarts);
+        lcl_ExportBookmark(rPortions, xParent, pUnoCursor, rBkmArr, nIndex, rFramePositions, stage);
 
-    if (bOnlyFrameBookmarkStarts)
+    if (stage == ExportBookmarkPass::before_frames)
         // Only exporting the start of some collapsed bookmarks: no export of
         // other arrays.
         return;
@@ -1397,7 +1419,7 @@ static void lcl_CreatePortions(
         // Then export start of collapsed bookmarks which "cover" at-char
         // anchored frames.
         lcl_ExportBkmAndRedline( *PortionStack.top().first, i_xParentText,
-            pUnoCursor, Bookmarks, Redlines, SoftPageBreaks, nCurrentIndex, aFramePositions, /*bOnlyFrameBookmarkStarts=*/true );
+            pUnoCursor, Bookmarks, Redlines, SoftPageBreaks, nCurrentIndex, aFramePositions, ExportBookmarkPass::before_frames );
 
         lcl_ExportAnnotationStarts(
             *PortionStack.top().first,
@@ -1415,7 +1437,7 @@ static void lcl_CreatePortions(
         // Export ends of the previously started collapsed bookmarks + all
         // other bookmarks, redlines, etc.
         lcl_ExportBkmAndRedline( *PortionStack.top().first, i_xParentText,
-            pUnoCursor, Bookmarks, Redlines, SoftPageBreaks, nCurrentIndex, aFramePositions, /*bOnlyFrameBookmarkStarts=*/false );
+            pUnoCursor, Bookmarks, Redlines, SoftPageBreaks, nCurrentIndex, aFramePositions, ExportBookmarkPass::after_frames );
 
         lcl_ExportAnnotationStarts(
             *PortionStack.top().first,

@@ -1305,6 +1305,102 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159438)
+{
+    // Given a text with bookmarks, where an end of one bookmark is the position of another,
+    // and the start of a third
+    loadAndReload("bookmark_order.fodt");
+    auto xPara = getParagraph(1);
+
+    // Check that the order of runs is correct (bookmarks don't overlap)
+
+    {
+        auto run = getRun(xPara, 1);
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, "IsStart"));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsCollapsed"));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"bookmark1"_ustr, named->getName());
+    }
+
+    {
+        auto run = getRun(xPara, 2);
+        CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, run->getString());
+    }
+
+    {
+        auto run = getRun(xPara, 3);
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsStart"));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsCollapsed"));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"bookmark1"_ustr, named->getName());
+    }
+
+    {
+        auto run = getRun(xPara, 4);
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, "IsStart"));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, "IsCollapsed"));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"bookmark2"_ustr, named->getName());
+    }
+
+    {
+        auto run = getRun(xPara, 5);
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(run, "IsStart"));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsCollapsed"));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"bookmark3"_ustr, named->getName());
+    }
+
+    {
+        auto run = getRun(xPara, 6);
+        CPPUNIT_ASSERT_EQUAL(u"Text"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, run->getString());
+    }
+
+    {
+        auto run = getRun(xPara, 7);
+        CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr, getProperty<OUString>(run, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsStart"));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(run, "IsCollapsed"));
+        auto named = getProperty<uno::Reference<container::XNamed>>(run, "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(u"bookmark3"_ustr, named->getName());
+    }
+
+    // Test that the markup stays at save-and-reload
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[1]"_ostr,
+                        "bookmark-start"_ostr);
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[1]"_ostr, "name"_ostr,
+                u"bookmark1"_ustr);
+
+    // Without the fix in place, this would fail with
+    // - Expected: bookmark-end
+    // - Actual  : bookmark-start
+    // - In XPath '//office:body/office:text/text:p/*[2]' name of node is incorrect
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[2]"_ostr, "bookmark-end"_ostr);
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[2]"_ostr, "name"_ostr,
+                u"bookmark1"_ustr);
+
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[3]"_ostr, "bookmark"_ostr);
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[3]"_ostr, "name"_ostr,
+                u"bookmark2"_ustr);
+
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[4]"_ostr,
+                        "bookmark-start"_ostr);
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[4]"_ostr, "name"_ostr,
+                u"bookmark3"_ustr);
+
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[5]"_ostr, "bookmark-end"_ostr);
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[5]"_ostr, "name"_ostr,
+                u"bookmark3"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
