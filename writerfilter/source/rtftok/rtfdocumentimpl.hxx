@@ -852,6 +852,8 @@ private:
     bool m_bNeedPar;
     /// If set, an empty paragraph will be added at the end of the document.
     bool m_bNeedFinalPar;
+    /// a synthetic \par was dispatched at the end of the current section
+    bool m_bParAtEndOfSection = false;
     /// The list table and list override table combined.
     RTFSprms m_aListTableSprms;
     /// Maps between listoverridetable and listtable indexes.
