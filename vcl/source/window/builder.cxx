@@ -2733,6 +2733,70 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const vcl::Window *pA
     return false;
 }
 
+void VclBuilder::tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentChild,
+                                    std::string_view sType, std::string_view sInternalChild)
+{
+    //Internal-children default in glade to not having their visible bits set
+    //even though they are visible (generally anyway)
+    if (!sInternalChild.empty())
+        pCurrentChild->Show();
+
+    //Select the first page if it's a notebook
+    if (pCurrentChild->GetType() == WindowType::TABCONTROL)
+    {
+        TabControl *pTabControl = static_cast<TabControl*>(pCurrentChild);
+        pTabControl->SetCurPageId(pTabControl->GetPageId(0));
+
+        //To-Do add reorder capability to the TabControl
+    }
+    else
+    {
+        // We want to sort labels before contents of frames
+        // for keyboard traversal, especially if there
+        // are multiple widgets using the same mnemonic
+        if (sType == "label")
+        {
+            if (VclFrame *pFrameParent = dynamic_cast<VclFrame*>(pParent))
+                pFrameParent->designate_label(pCurrentChild);
+        }
+        if (sInternalChild.starts_with("vbox") || sInternalChild.starts_with("messagedialog-vbox"))
+        {
+            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
+                pBoxParent->set_content_area(static_cast<VclBox*>(pCurrentChild)); // FIXME-VCLPTR
+        }
+        else if (sInternalChild.starts_with("action_area") || sInternalChild.starts_with("messagedialog-action_area"))
+        {
+            vcl::Window *pContentArea = pCurrentChild->GetParent();
+            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : nullptr))
+            {
+                pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild)); // FIXME-VCLPTR
+            }
+        }
+
+        bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pCurrentChild) != nullptr;
+
+        //To-Do make reorder a virtual in Window, move this foo
+        //there and see above
+        std::vector<vcl::Window*> aChilds;
+        for (vcl::Window* pChild = pCurrentChild->GetWindow(GetWindowType::FirstChild); pChild;
+             pChild = pChild->GetWindow(GetWindowType::Next))
+        {
+            if (bIsButtonBox)
+            {
+                if (PushButton* pPushButton = dynamic_cast<PushButton*>(pChild))
+                    pPushButton->setAction(true);
+            }
+
+            aChilds.push_back(pChild);
+        }
+
+        //sort child order within parent so that tabbing
+        //between controls goes in a visually sensible sequence
+        std::stable_sort(aChilds.begin(), aChilds.end(), sortIntoBestTabTraversalOrder(this));
+        BuilderUtils::reorderWithinParent(aChilds, bIsButtonBox);
+    }
+}
+
 void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlreader::XmlReader &reader)
 {
     vcl::Window *pCurrentChild = nullptr;
@@ -2774,69 +2838,8 @@ void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlread
                 pCurrentChild = handleObject(pParent, pAtkProps, reader).get();
 
                 bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
-
                 if (bObjectInserted)
-                {
-                    //Internal-children default in glade to not having their visible bits set
-                    //even though they are visible (generally anyway)
-                    if (!sInternalChild.isEmpty())
-                        pCurrentChild->Show();
-
-                    //Select the first page if it's a notebook
-                    if (pCurrentChild->GetType() == WindowType::TABCONTROL)
-                    {
-                        TabControl *pTabControl = static_cast<TabControl*>(pCurrentChild);
-                        pTabControl->SetCurPageId(pTabControl->GetPageId(0));
-
-                        //To-Do add reorder capability to the TabControl
-                    }
-                    else
-                    {
-                        // We want to sort labels before contents of frames
-                        // for keyboard traversal, especially if there
-                        // are multiple widgets using the same mnemonic
-                        if (sType == "label")
-                        {
-                            if (VclFrame *pFrameParent = dynamic_cast<VclFrame*>(pParent))
-                                pFrameParent->designate_label(pCurrentChild);
-                        }
-                        if (sInternalChild.startsWith("vbox") || sInternalChild.startsWith("messagedialog-vbox"))
-                        {
-                            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
-                                pBoxParent->set_content_area(static_cast<VclBox*>(pCurrentChild)); // FIXME-VCLPTR
-                        }
-                        else if (sInternalChild.startsWith("action_area") || sInternalChild.startsWith("messagedialog-action_area"))
-                        {
-                            vcl::Window *pContentArea = pCurrentChild->GetParent();
-                            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : nullptr))
-                            {
-                                pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild)); // FIXME-VCLPTR
-                            }
-                        }
-
-                        bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pCurrentChild) != nullptr;
-
-                        //To-Do make reorder a virtual in Window, move this foo
-                        //there and see above
-                        std::vector<vcl::Window*> aChilds;
-                        for (vcl::Window* pChild = pCurrentChild->GetWindow(GetWindowType::FirstChild); pChild;
-                            pChild = pChild->GetWindow(GetWindowType::Next))
-                        {
-                            if (bIsButtonBox)
-                            {
-                                if (PushButton* pPushButton = dynamic_cast<PushButton*>(pChild))
-                                    pPushButton->setAction(true);
-                            }
-
-                            aChilds.push_back(pChild);
-                        }
-
-                        //sort child order within parent so that tabbing
-                        //between controls goes in a visually sensible sequence
-                        std::stable_sort(aChilds.begin(), aChilds.end(), sortIntoBestTabTraversalOrder(this));
-                        BuilderUtils::reorderWithinParent(aChilds, bIsButtonBox);
-                    }
-                }
+                    tweakInsertedChild(pParent, pCurrentChild, sType, sInternalChild);
             }
             else if (name == "packing")
             {

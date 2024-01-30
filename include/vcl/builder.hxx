@@ -332,6 +332,10 @@ private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 private:
+    // tweak newly inserted child depending on window type
+    void tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentChild,
+                            std::string_view sType, std::string_view sInternalChild);
+
     VclPtr<vcl::Window> insertObject(vcl::Window *pParent,
                     const OUString &rClass, const OUString &rID,
                     stringmap &rProps, stringmap &rPangoAttributes,
