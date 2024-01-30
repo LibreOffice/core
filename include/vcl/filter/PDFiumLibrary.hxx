@@ -106,6 +106,7 @@ public:
     virtual float getFontSize(PDFiumDocument* pDoc) = 0;
     virtual OUString getFormFieldAlternateName(PDFiumDocument* pDoc) = 0;
     virtual int getFormFieldFlags(PDFiumDocument* pDoc) = 0;
+    virtual OUString getFormFieldValue(PDFiumDocument* pDoc) = 0;
 };
 
 class PDFiumTextPage;
