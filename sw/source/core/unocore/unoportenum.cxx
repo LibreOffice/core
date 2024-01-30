@@ -133,12 +133,18 @@ namespace
     void lcl_FillBookmark(sw::mark::IMark* const pBkmk, const SwNode& rOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
     {
         bool const hasOther = pBkmk->IsExpanded();
-
         const SwPosition& rStartPos = pBkmk->GetMarkStart();
-        if(rStartPos.GetNode() == rOwnNode)
+        const SwPosition& rEndPos = pBkmk->GetMarkEnd();
+        bool const bStartPosInNode = rStartPos.GetNode() == rOwnNode;
+        bool const bEndPosInNode = rEndPos.GetNode() == rOwnNode;
+        sw::mark::CrossRefBookmark* const pCrossRefMark
+            = !hasOther && (bStartPosInNode || bEndPosInNode)
+                  ? dynamic_cast<sw::mark::CrossRefBookmark*>(pBkmk)
+                  : nullptr;
+
+        if (bStartPosInNode)
         {
             // #i109272#: cross reference marks: need special handling!
-            ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
             BkmType const nType = (hasOther || pCrossRefMark)
                 ? BkmType::Start : BkmType::StartEnd;
             rBkmArr.insert(std::make_shared<SwXBookmarkPortion_Impl>(
@@ -146,13 +152,11 @@ namespace
                         nType, rStartPos));
         }
 
-        const SwPosition& rEndPos = pBkmk->GetMarkEnd();
-        if(rEndPos.GetNode() != rOwnNode)
+        if (!bEndPosInNode)
             return;
 
         std::optional<SwPosition> oCrossRefEndPos;
         const SwPosition* pEndPos = nullptr;
-        ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
         if(hasOther)
         {
             pEndPos = &rEndPos;
