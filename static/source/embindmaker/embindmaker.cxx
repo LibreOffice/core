@@ -263,16 +263,12 @@ bool passByReference(rtl::Reference<TypeManager> const& manager, OUString const&
 }
 
 void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
-              std::u16string_view name, bool isConst)
+              std::u16string_view name)
 {
     sal_Int32 k;
     std::vector<OString> args;
     OUString n(
         b2u(codemaker::UnoType::decompose(u2b(resolveAllTypedefs(manager, name)), &k, &args)));
-    if (isConst)
-    {
-        out << "const ";
-    }
     for (sal_Int32 i = 0; i != k; ++i)
     {
         out << "::css::uno::Sequence<";
@@ -345,7 +341,7 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                     {
                         out << ", ";
                     }
-                    dumpType(out, manager, b2u(arg), false);
+                    dumpType(out, manager, b2u(arg));
                 }
                 out << ">";
             }
@@ -403,7 +399,7 @@ void dumpAttributes(std::ostream& out, rtl::Reference<TypeManager> const& manage
             {
                 out << "+[](::com::sun::star::uno::Reference<" << cppName(name)
                     << "> const & the_self, ";
-                dumpType(out, manager, attr.type, false);
+                dumpType(out, manager, attr.type);
                 if (passByReference(manager, attr.type))
                 {
                     out << " const &";
@@ -425,6 +421,15 @@ void dumpAttributes(std::ostream& out, rtl::Reference<TypeManager> const& manage
     }
 }
 
+bool hasInOutParameters(unoidl::InterfaceTypeEntity::Method const& method)
+{
+    return std::any_of(method.parameters.begin(), method.parameters.end(),
+                       [](auto const& parameter) {
+                           return parameter.direction
+                                  != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
+                       });
+}
+
 void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                     unoidl::InterfaceTypeEntity::Method const& method, bool declarations)
 {
@@ -439,31 +444,25 @@ void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manage
         {
             out << ", ";
         }
-        bool isConst;
-        bool isRef;
-        if (param.direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
-        {
-            isConst = passByReference(manager, param.type);
-            isRef = isConst;
-        }
-        else
-        {
-            isConst = false;
-            isRef = true;
-        }
-        // For the embind wrapper, we define a pointer instead of a reference:
         if (declarations)
         {
-            dumpType(out, manager, param.type, isConst);
+            dumpType(out, manager, param.type);
+            if (param.direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+            {
+                if (passByReference(manager, param.type))
+                {
+                    out << " const &";
+                }
+            }
+            else
+            {
+                out << " *";
+            }
             out << " ";
         }
-        if (isRef)
+        else if (param.direction != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
         {
             out << "*";
-        }
-        if (declarations)
-        {
-            out << " ";
         }
         out << param.name;
     }
@@ -497,7 +496,12 @@ void dumpWrapper(std::ostream& out, rtl::Reference<TypeManager> const& manager,
     }
     out << "->" << method.name << "(";
     dumpParameters(out, manager, method, false);
-    out << "); }, ::emscripten::allow_raw_pointers())\n";
+    out << "); }";
+    if (hasInOutParameters(method))
+    {
+        out << ", ::emscripten::allow_raw_pointers()";
+    }
+    out << ")\n";
 }
 
 void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
@@ -506,12 +510,7 @@ void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
 {
     for (auto const& meth : entity->getDirectMethods())
     {
-        if (!baseTrail.empty()
-            || std::any_of(
-                   meth.parameters.begin(), meth.parameters.end(), [](auto const& parameter) {
-                       return parameter.direction
-                              != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
-                   }))
+        if (!baseTrail.empty() || hasInOutParameters(meth))
         {
             dumpWrapper(out, manager, name, meth, baseTrail);
         }
