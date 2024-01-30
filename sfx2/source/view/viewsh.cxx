@@ -30,6 +30,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -3316,10 +3317,11 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
     return pEditWin;
 }
 
-::Color SfxViewShell::GetColorConfigColor(svtools::ColorConfigEntry) const
+::Color SfxViewShell::GetColorConfigColor(svtools::ColorConfigEntry eEntry) const
 {
     SAL_WARN("sfx.view", "SfxViewShell::GetColorConfigColor not overridden!");
-    return {};
+    svtools::ColorConfig aColorConfig;
+    return aColorConfig.GetColorValue(eEntry).nColor;
 }
 
 void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
