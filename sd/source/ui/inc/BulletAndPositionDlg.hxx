@@ -26,7 +26,7 @@
 #include <editeng/svxenum.hxx>
 #include <vcl/weld.hxx>
 #include "View.hxx"
-#include <cui/numberingpreview.hxx>
+#include <svx/numberingpreview.hxx>
 
 #define MN_GALLERY_ENTRY 100
 
