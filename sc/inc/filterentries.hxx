@@ -18,11 +18,14 @@ struct ScFilterEntries
 {
     std::vector<ScTypedStrData> maStrData;
     bool                        mbHasDates;
-    bool                        mbHasEmpties;
+    bool                        mbHasHiddenEmpties;
+    bool                        mbHasUnHiddenEmpties;
     std::set<Color>             maTextColors;
     std::set<Color>             maBackgroundColors;
 
-    ScFilterEntries() : mbHasDates(false), mbHasEmpties(false) {}
+    ScFilterEntries() : mbHasDates(false),
+                        mbHasHiddenEmpties(false),
+                        mbHasUnHiddenEmpties(false) {}
 
     std::vector<ScTypedStrData>::iterator       begin()         { return maStrData.begin(); }
     std::vector<ScTypedStrData>::iterator       end()           { return maStrData.end(); }
