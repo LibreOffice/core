@@ -33,6 +33,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/lok.hxx>
 
+#include <sfx2/viewsh.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
@@ -1771,8 +1772,13 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
 
     if(bScreenDisplay && (!pView || pView->GetApplicationDocumentColor() == COL_AUTO))
     {
-        svtools::ColorConfig aColorConfig;
-        aColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
+        if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+            aColor = pViewShell->GetColorConfigColor(svtools::DOCCOLOR);
+        else
+        {
+            svtools::ColorConfig aColorConfig;
+            aColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
+        }
     }
     else
     {
