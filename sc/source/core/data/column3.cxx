@@ -2583,10 +2583,21 @@ class FilterEntriesHandler
 
         if (bIsEmptyCell)
         {
-            if (!mrFilterEntries.mbHasEmpties)
+            if (mbFilteredRow)
             {
-                mrFilterEntries.push_back(ScTypedStrData(OUString(), 0.0, 0.0, ScTypedStrData::Standard, false, mbFilteredRow));
-                mrFilterEntries.mbHasEmpties = true;
+                if (!mrFilterEntries.mbHasHiddenEmpties)
+                {
+                    mrFilterEntries.push_back(ScTypedStrData(OUString(), 0.0, 0.0, ScTypedStrData::Standard, false, true));
+                    mrFilterEntries.mbHasHiddenEmpties = true;
+                }
+            }
+            else
+            {
+                if (!mrFilterEntries.mbHasUnHiddenEmpties)
+                {
+                    mrFilterEntries.push_back(ScTypedStrData(OUString(), 0.0, 0.0, ScTypedStrData::Standard, false, false));
+                    mrFilterEntries.mbHasUnHiddenEmpties = true;
+                }
             }
             return;
         }
