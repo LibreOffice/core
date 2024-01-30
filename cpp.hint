@@ -6,6 +6,8 @@
 
 #define SAL_UNUSED_PARAMETER
 
+#define SAL_LOPLUGIN_ANNOTATE(id)
+
 #define DECL_LINK(Member, ArgType, RetType) \
     RetType Member(ArgType)
 
