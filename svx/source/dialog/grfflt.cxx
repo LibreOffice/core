@@ -266,10 +266,7 @@ static void handleGraphicFilterDialog(const VclPtr<AbstractGraphicFilterDialog>&
         [pDlg, aInputGraphic, f] (sal_Int32 nResult)->void
         {
             if (nResult == RET_OK)
-            {
-                Graphic aOutputGraphic = pDlg->GetFilteredGraphic( aInputGraphic, 1.0, 1.0 );
-                f(aOutputGraphic);
-            }
+                f(pDlg->GetFilteredGraphic(aInputGraphic, 1.0, 1.0));
             pDlg->disposeOnce();
         }
     );

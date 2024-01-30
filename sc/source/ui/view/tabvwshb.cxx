@@ -525,7 +525,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 auto xRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more
                 pDlg->StartExecuteAsync(
-                    [this, pDlg, xRequest] (sal_Int32 /*nResult*/)->void
+                    [this, pDlg, xRequest=std::move(xRequest)] (sal_Int32 /*nResult*/)->void
                     {
                         GetViewFrame().GetBindings().Invalidate( SID_LINKS );
                         SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
