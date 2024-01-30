@@ -1599,7 +1599,12 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
             uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xFrameAnchor;
-            if (xTextAppendAndConvert.is())
+
+            // Writer layout has problems with redlines on floating table rows in footnotes, avoid
+            // them.
+            bool bInFootnote = m_rDMapper_Impl.IsInFootOrEndnote();
+            bool bRecordChanges = m_rDMapper_Impl.GetSettingsTable()->GetRecordChanges();
+            if (xTextAppendAndConvert.is() && !(bInFootnote && bRecordChanges))
             {
                 std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
                 std::vector<sal_Int32> redPos, redLen;

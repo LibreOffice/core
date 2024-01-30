@@ -97,6 +97,8 @@ public:
     const OUString& GetCurrentDatabaseDataSource() const;
     bool GetGutterAtTop() const;
 
+    bool GetRecordChanges() const;
+
 private:
     // Properties
     virtual void lcl_attribute(Id Name, Value& val) override;

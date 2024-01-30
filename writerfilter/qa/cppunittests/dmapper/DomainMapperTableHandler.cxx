@@ -183,6 +183,20 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHeader)
     // 2233 pages and then there was a layout loop.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), nLastPage);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableFootnoteRedline)
+{
+    // Given a document with a floating table in a footnote, with track changes recorded (but not
+    // visible):
+    // When importing that document:
+    loadFromFile(u"floattable-footnote-redline.docx");
+
+    // Then make sure the table is imported as inline, till Writer layout is ready to handle
+    // floating tables in footnotes:
+    uno::Reference<drawing::XDrawPageSupplier> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xModel->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
