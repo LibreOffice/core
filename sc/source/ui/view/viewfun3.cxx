@@ -759,8 +759,11 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
         }
         else if (comphelper::LibreOfficeKit::isActive())
         {
-            SfxViewShell* pViewShell = rViewData.GetViewShell();
-            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(pViewShell, true /* bColumns */, true /* bRows */,
+            ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
+            pTabViewShell->OnLOKSetWidthOrHeight(rViewData.GetCurX(), true);
+            pTabViewShell->OnLOKSetWidthOrHeight(rViewData.GetCurY(), false);
+
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(pTabViewShell, true /* bColumns */, true /* bRows */,
                 true /* bSizes */, false /* bHidden */, false /* bFiltered */, false /* bGroups */, rViewData.GetTabNo());
         }
     }
