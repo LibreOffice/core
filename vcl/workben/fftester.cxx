@@ -332,6 +332,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
         }
+        else if (strcmp(argv[2], "fods2xls") == 0)
+        {
+            static FFilterCall pfnImport(nullptr);
+            if (!pfnImport)
+            {
+                pfnImport = load(u"libsclo.so", "TestFODSExportXLS");
+            }
+            SvFileStream aFileStream(out, StreamMode::READ);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
+        }
         else if (strcmp(argv[2], "docx") == 0)
         {
             static FFilterCall pfnImport(nullptr);

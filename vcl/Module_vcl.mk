@@ -191,6 +191,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_slkfuzzer \
     Executable_fodtfuzzer \
     Executable_fodt2pdffuzzer \
+    Executable_fods2xlsfuzzer \
     Executable_fodsfuzzer \
     Executable_fodpfuzzer \
     Executable_xlsfuzzer \

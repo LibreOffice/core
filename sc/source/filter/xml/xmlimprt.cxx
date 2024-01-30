@@ -29,6 +29,7 @@
 #include <xmloff/xmlmetai.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
@@ -83,6 +84,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -1716,6 +1718,80 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
     xDocSh->SetLoading(SfxLoadedFlags::NONE);
     bool ret = xFilter->filter(aArgs);
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
+
+    xDocSh->DoClose();
+
+    return ret;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
+{
+    ScDLL::Init();
+
+    SfxObjectShellLock xDocSh(new ScDocShell);
+    xDocSh->DoInitNew();
+    uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
+
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_SET_THROW);
+
+    css::uno::Sequence<OUString> aUserData
+    {
+        "com.sun.star.comp.filter.OdfFlatXml",
+        "",
+        "com.sun.star.comp.Calc.XMLOasisImporter",
+        "com.sun.star.comp.Calc.XMLOasisExporter",
+        "",
+        "",
+        "true"
+    };
+    uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
+    {
+        { "UserData", uno::Any(aUserData) },
+    }));
+    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
+
+    uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
+    xInit->initialize(aOuterArgs);
+
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        { "InputStream", uno::Any(xStream) },
+        { "URL", uno::Any(OUString("private:stream")) },
+    }));
+    xImporter->setTargetDocument(xModel);
+
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    //SetLoading hack because the document properties will be re-initted
+    //by the xml filter and during the init, while it's considered uninitialized,
+    //setting a property will inform the document it's modified, which attempts
+    //to update the properties, which throws cause the properties are uninitialized
+    xDocSh->SetLoading(SfxLoadedFlags::NONE);
+    bool ret = xFilter->filter(aArgs);
+    xDocSh->SetLoading(SfxLoadedFlags::ALL);
+
+    if (ret)
+    {
+        utl::TempFileFast aTempFile;
+
+        uno::Reference<document::XFilter> xXLSFilter(
+            xMultiServiceFactory->createInstance("com.sun.star.comp.oox.xls.ExcelFilter"), uno::UNO_QUERY);
+        uno::Reference<document::XExporter> xExporter(xXLSFilter, uno::UNO_QUERY);
+        xExporter->setSourceDocument(xModel);
+
+        uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
+
+        uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        }));
+        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+            { "FilterName", uno::Any(u"Excel 2007–365"_ustr) },
+            { "OutputStream", uno::Any(xOutputStream) },
+            { "FilterData", uno::Any(aFilterData) }
+        }));
+        xXLSFilter->filter(aDescriptor);
+    }
 
     xDocSh->DoClose();
 
