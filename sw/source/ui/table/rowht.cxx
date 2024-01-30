@@ -61,12 +61,4 @@ SwTableHeightDlg::SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS)
     }
 }
 
-short SwTableHeightDlg::run()
-{
-    short nRet = GenericDialogController::run();
-    if (nRet == RET_OK)
-        Apply();
-    return nRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -436,6 +436,13 @@ public:
     virtual void Apply() = 0;
 };
 
+class AbstractSwTableHeightDlg : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSwTableHeightDlg() override = default;
+public:
+    virtual void Apply() = 0;
+};
 
 class SwAbstractDialogFactory
 {
@@ -497,7 +504,7 @@ public:
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(weld::Window *pParent, const OUString &rShortName) = 0;
 
     virtual VclPtr<AbstractSwSortDlg> CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
-    virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
+    virtual VclPtr<AbstractSwTableHeightDlg> CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) = 0;
 

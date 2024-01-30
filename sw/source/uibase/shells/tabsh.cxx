@@ -887,8 +887,15 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_SET_ROW_HEIGHT:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwTableHeightDialog(GetView().GetFrameWeld(), rSh));
-            pDlg->Execute();
+            VclPtr<AbstractSwTableHeightDlg> pDlg(pFact->CreateSwTableHeightDialog(GetView().GetFrameWeld(), rSh));
+            pDlg->StartExecuteAsync(
+                [pDlg] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                        pDlg->Apply();
+                    pDlg->disposeOnce();
+                }
+            );
             break;
         }
         case FN_NUMBER_BULLETS:

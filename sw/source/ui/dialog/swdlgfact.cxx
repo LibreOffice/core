@@ -155,7 +155,13 @@ bool AbstractSwTableWidthDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
 
 short AbstractSwTableHeightDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractSwTableHeightDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractSwMergeTableDlg_Impl::Execute()
@@ -1128,7 +1134,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwColumnDialog(wel
     return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwColumnDlg>(pParent, rSh));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh)
+VclPtr<AbstractSwTableHeightDlg> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
     return VclPtr<AbstractSwTableHeightDlg_Impl>::Create(std::make_unique<SwTableHeightDlg>(pParent, rSh));
 }
