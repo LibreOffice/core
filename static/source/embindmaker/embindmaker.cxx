@@ -444,9 +444,49 @@ void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manage
         {
             out << ", ";
         }
+        bool wrap = false;
+        if (param.direction != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+        {
+            switch (manager->getSort(resolveOuterTypedefs(manager, param.type)))
+            {
+                case codemaker::UnoType::Sort::Boolean:
+                case codemaker::UnoType::Sort::Byte:
+                case codemaker::UnoType::Sort::Short:
+                case codemaker::UnoType::Sort::UnsignedShort:
+                case codemaker::UnoType::Sort::Long:
+                case codemaker::UnoType::Sort::UnsignedLong:
+                case codemaker::UnoType::Sort::Hyper:
+                case codemaker::UnoType::Sort::UnsignedHyper:
+                case codemaker::UnoType::Sort::Float:
+                case codemaker::UnoType::Sort::Double:
+                case codemaker::UnoType::Sort::Char:
+                case codemaker::UnoType::Sort::Enum:
+                    wrap = true;
+                    break;
+                case codemaker::UnoType::Sort::String:
+                case codemaker::UnoType::Sort::Type:
+                case codemaker::UnoType::Sort::Any:
+                case codemaker::UnoType::Sort::Sequence:
+                case codemaker::UnoType::Sort::PlainStruct:
+                case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+                case codemaker::UnoType::Sort::Interface:
+                    break;
+                default:
+                    throw CannotDumpException("unexpected entity \"" + param.type
+                                              + "\" as parameter type");
+            }
+        }
         if (declarations)
         {
+            if (wrap)
+            {
+                out << "::unoembindhelpers::UnoInOutParam<";
+            }
             dumpType(out, manager, param.type);
+            if (wrap)
+            {
+                out << ">";
+            }
             if (param.direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
             {
                 if (passByReference(manager, param.type))
@@ -460,11 +500,16 @@ void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manage
             }
             out << " ";
         }
-        else if (param.direction != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+        else if (param.direction != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN
+                 && !wrap)
         {
             out << "*";
         }
         out << param.name;
+        if (!declarations && wrap)
+        {
+            out << "->value";
+        }
     }
 }
 
