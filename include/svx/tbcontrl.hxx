@@ -249,72 +249,10 @@ public:
 /** Popup controller for currency combo widget **/
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxCurrencyToolBoxControl final : public svt::PopupWindowController
 {
-public:
-    /**
-    * Struct containing currency data<p>
-    * an instance corresponds to a line in the combo
-    **/
-    struct SvxCurrencyData {
-        /** position of the currency in SvxCurrencyToolBoxControl::CurrencySymbols vector **/
-        sal_uInt16 m_currencyIdx;
-
-        /**
-        * False if the instance corresponds to a line of the combo that shows only the ISO code<p>
-        * True otherwise
-        **/
-        bool m_onlyIsoCode;
-        OUString m_label;
-
-        /** Constant for invalid currency **/
-        static const sal_uInt16 InvalidCurrency;
-
-        /**
-        * Constructor
-        *
-        * @param currencyIdx Position of the currency in SvxCurrencyToolBoxControl::CurrencySymbols vector
-        * @param onlyIsoCode False if the instance corresponds to a line of the combo that shows
-        * only the ISO code<p> True otherwise
-        **/
-        SvxCurrencyData(
-            sal_uInt16 currencyIdx = InvalidCurrency,
-            bool onlyIsoCode = false
-        );
-
-        /** Needed by std::find **/
-        bool operator == (const SvxCurrencyData& other) const;
-    };
-
-    /** vector of combo box currencies **/
-    typedef std::vector<SvxCurrencyData> SvxCurrencyVect_t;
-
 private:
     OUString     m_aFormatString;
     LanguageType m_eLanguage;
     sal_uInt32   m_nFormatKey;
-
-    /** Currencies in the combo **/
-    SvxCurrencyVect_t  m_currencies;
-
-
-    /** Most recently used currencies **/
-    SvxCurrencyVect_t  m_mru_currencies;
-
-    /** Adds a currency to the most recently used list **/
-    void addMruCurrency(sal_Int16 currencyPosition);
-
-    /**
-    * Inner static method that polialtes the currency list and the most recently used
-    * currency list.<p>
-    * The method is static for backward compatibility: it is used by the two
-    * homonymous public methods, one of which is static while the other is instance
-    *
-    * @param bFlag used by SvxNumberFormatShell::GetCurrencySymbols
-    * @param p_mru_currencies output: most recently used currencies
-    * @param pCurrencies output: most recently used currencies
-    * @see SvxNumberFormatShell::GetCurrencySymbols
-    **/
-    static void inner_GetCurrencySymbols( bool bFlag, SvxCurrencyVect_t &p_mru_currencies,
-                                    SvxCurrencyVect_t &pCurrencies);
 
 public:
     /**
@@ -327,9 +265,6 @@ public:
     **/
     static void GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
                                     std::vector<sal_uInt16>& rCurrencyList );
-
-    /** Instance method used by SvxCurrencyList_Impl constructor **/
-    const SvxCurrencyVect_t& GetCurrencySymbols();
 
     explicit SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
     virtual ~SvxCurrencyToolBoxControl() override;
