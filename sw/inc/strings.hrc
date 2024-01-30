@@ -1470,6 +1470,13 @@
 #define STR_CHARACTER_DIRECT_FORMATTING         NC_("STR_CHARACTER_DIRECT_FORMATTING", "Character Direct Formatting")
 #define STR_CHARACTER_DIRECT_FORMATTING_TAG     NC_("STR_CHARACTER_DIRECT_FORMATTING_TAG", "df")
 
+#define STR_TABLE_PANEL_ALIGN_AUTO              NC_("sidebartableedit|alignautolabel", "Automatic")
+#define STR_TABLE_PANEL_ALIGN_LEFT              NC_("sidebartableedit|alignleftlabel", "Left")
+#define STR_TABLE_PANEL_ALIGN_FROM_LEFT         NC_("sidebartableedit|alignfromleftlabel", "From left")
+#define STR_TABLE_PANEL_ALIGN_RIGHT             NC_("sidebartableedit|alignrightlabel", "Right")
+#define STR_TABLE_PANEL_ALIGN_CENTER            NC_("sidebartableedit|aligncenterlabel", "Center")
+#define STR_TABLE_PANEL_ALIGN_MANUAL            NC_("sidebartableedit|alignmanuallabel", "Manual")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

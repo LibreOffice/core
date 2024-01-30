@@ -232,8 +232,7 @@ static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, Sw
     SvxLRSpaceItem aLRSpace( pFormat->GetLRSpace() );
     SwTwips nLeft = aLRSpace.GetLeft();
     SwTwips nRight = aLRSpace.GetRight();
-    SwTwips nDiff = pRep->GetSpace() - nRight - nLeft - nWidth;
-    if(nAlign != text::HoriOrientation::FULL && std::abs(nDiff) > 2)
+    if(nAlign != text::HoriOrientation::FULL)
     {
         SwTwips nLR = pRep->GetSpace() - nWidth;
         switch ( nAlign )
@@ -1199,6 +1198,96 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
             return;
         }
+        case SID_ATTR_TABLE_ALIGNMENT:
+        {
+            const SfxUInt16Item* pAlignItem = rReq.GetArg<SfxUInt16Item>(SID_ATTR_TABLE_ALIGNMENT);
+            if (pAlignItem && pAlignItem->GetValue() <= text::HoriOrientation::LEFT_AND_WIDTH)
+            {
+                SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aSet( GetPool());
+                rSh.StartUndo(SwUndoId::TABLE_ATTR);
+                SwFormatHoriOrient aAttr( 0, pAlignItem->GetValue());
+
+                const SfxInt32Item* pLeftItem = rReq.GetArg<SfxInt32Item>(SID_ATTR_TABLE_LEFT_SPACE);
+                const SfxInt32Item* pRightItem = rReq.GetArg<SfxInt32Item>(SID_ATTR_TABLE_RIGHT_SPACE);
+
+                SvxLRSpaceItem aLRSpace( RES_LR_SPACE );
+                SwTwips nLeft = pLeftItem ? pLeftItem->GetValue() : 0;
+                SwTwips nRight = pRightItem ? pRightItem->GetValue() : 0;
+                SwTabCols aTabCols;
+                rSh.GetTabCols(aTabCols);
+                tools::Long nSpace = aTabCols.GetRightMax();
+                SwTwips nWidth = nSpace;
+                switch (pAlignItem->GetValue())
+                {
+                    case text::HoriOrientation::LEFT:
+                        if (MINLAY < nSpace - nRight)
+                            nWidth = nSpace - nRight;
+                        else
+                        {
+                            nWidth = MINLAY;
+                            nRight = nSpace - MINLAY;
+                        }
+                        nLeft = 0;
+                        break;
+                    case text::HoriOrientation::RIGHT:
+                        if (MINLAY < nSpace - nLeft)
+                            nWidth = nSpace - nLeft;
+                        else
+                        {
+                            nWidth = MINLAY;
+                            nLeft = nSpace - MINLAY;
+                        }
+                        nRight = 0;
+                        break;
+                    case text::HoriOrientation::LEFT_AND_WIDTH:
+                        // width doesn't change
+                        nRight = 0;
+                        nLeft = std::min(nLeft, nSpace);
+                        break;
+                    case text::HoriOrientation::FULL:
+                        nLeft = nRight = 0;
+                        break;
+                    case text::HoriOrientation::CENTER:
+                        if (MINLAY < nSpace - 2 * nLeft)
+                            nWidth = nSpace - 2 * nLeft;
+                        else
+                        {
+                            nWidth = MINLAY;
+                            nLeft = nRight = (nSpace - MINLAY) / 2;
+                        }
+                        break;
+                    case text::HoriOrientation::NONE:
+                        if (MINLAY < nSpace - nLeft - nRight)
+                            nWidth = nSpace - nLeft - nRight;
+                        else
+                        {
+                            nWidth = MINLAY;
+                            //TODO: keep the previous value - if possible and reduce the 'new one' only
+                            nLeft = nRight = (nSpace - MINLAY) / 2;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                SwFormatFrameSize aSz( SwFrameSize::Variable, nWidth );
+                aSet.Put(aSz);
+
+                aLRSpace.SetLeft(nLeft);
+                aLRSpace.SetRight(nRight);
+                aSet.Put( aLRSpace );
+
+                aSet.Put( aAttr );
+                rSh.SetTableAttr( aSet );
+                rSh.EndUndo(SwUndoId::TABLE_ATTR);
+                static sal_uInt16 aInva[] =
+                                {   SID_ATTR_TABLE_LEFT_SPACE,
+                                    SID_ATTR_TABLE_RIGHT_SPACE,
+                                    0
+                                };
+                GetView().GetViewFrame().GetBindings().Invalidate( aInva );
+            }
+            return;
+        }
         default:
             bMore = true;
     }
@@ -1543,6 +1632,57 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                         OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
                 }
 
+                break;
+            }
+            case SID_ATTR_TABLE_ALIGNMENT:
+            {
+                const sal_uInt16 nAlign = pFormat->GetHoriOrient().GetHoriOrient();
+                rSet.Put(SfxUInt16Item(nSlot, nAlign));
+                break;
+            }
+            case SID_ATTR_TABLE_LEFT_SPACE:
+            case SID_ATTR_TABLE_RIGHT_SPACE:
+            {
+                SwTabCols aTabCols;
+                rSh.GetTabCols(aTabCols);
+                tools::Long nSpace = aTabCols.GetRightMax();
+                SvxLRSpaceItem aLRSpace(pFormat->GetLRSpace());
+                SwTwips nLeft = aLRSpace.GetLeft();
+                SwTwips nRight = aLRSpace.GetRight();
+
+                sal_uInt16 nPercent = 0;
+                auto nWidth = ::GetTableWidth(pFormat, aTabCols, &nPercent, &rSh );
+                // The table width is wrong for relative values.
+                if (nPercent)
+                    nWidth = nSpace * nPercent / 100;
+                const sal_uInt16 nAlign = pFormat->GetHoriOrient().GetHoriOrient();
+                if(nAlign != text::HoriOrientation::FULL )
+                {
+                    SwTwips nLR = nSpace - nWidth;
+                    switch ( nAlign )
+                    {
+                        case text::HoriOrientation::CENTER:
+                            nLeft = nRight = nLR / 2;
+                            break;
+                        case text::HoriOrientation::LEFT:
+                            nRight = nLR;
+                            nLeft = 0;
+                            break;
+                        case text::HoriOrientation::RIGHT:
+                            nLeft = nLR;
+                            nRight = 0;
+                            break;
+                        case text::HoriOrientation::LEFT_AND_WIDTH:
+                            nRight = nLR - nLeft;
+                            break;
+                        case text::HoriOrientation::NONE:
+                            if(!nPercent)
+                                nWidth = nSpace - nLeft - nRight;
+                            break;
+                    }
+                }
+                rSet.Put(SfxInt32Item(SID_ATTR_TABLE_LEFT_SPACE, nLeft));
+                rSet.Put(SfxInt32Item(SID_ATTR_TABLE_RIGHT_SPACE, nRight));
                 break;
             }
         }

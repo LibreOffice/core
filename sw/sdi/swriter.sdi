@@ -8710,6 +8710,56 @@ SfxUInt32Item TableColumWidth SID_ATTR_TABLE_COLUMN_WIDTH
     GroupId = SfxGroupId::Table;
 ]
 
+SfxUInt32Item TableAlignment SID_ATTR_TABLE_ALIGNMENT
+(SfxInt32Item TableLeftSpace SID_ATTR_TABLE_LEFT_SPACE, SfxInt32Item TableRightSpace SID_ATTR_TABLE_RIGHT_SPACE)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
+
+SfxInt32Item TableLeftSpace SID_ATTR_TABLE_LEFT_SPACE
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
+
+SfxInt32Item TableRightSpace SID_ATTR_TABLE_RIGHT_SPACE
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
+
 SfxVoidItem OutlineLevelsShown FN_OUTLINE_LEVELS_SHOWN
 ()
 [
