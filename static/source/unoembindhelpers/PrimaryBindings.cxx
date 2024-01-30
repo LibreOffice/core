@@ -40,8 +40,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .value("FromAny", unoembindhelpers::uno_Reference::FromAny);
 
     class_<OUString>("OUString")
-        .constructor(+[](const std::u16string& rString) -> OUString { return OUString(rString); },
-                     allow_raw_pointers())
+        .constructor(+[](const std::u16string& rString) -> OUString { return OUString(rString); })
         .function("toString", +[](const OUString& rSelf) -> std::u16string {
             return std::u16string(rSelf.getStr(), rSelf.getLength());
         });
