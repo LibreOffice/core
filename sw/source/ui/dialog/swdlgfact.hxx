@@ -434,14 +434,16 @@ public:
 
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 {
-    std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>> m_xDlg;
+    std::shared_ptr<SwAutoFormatDlg> m_xDlg;
 public:
-    explicit AbstractSwAutoFormatDlg_Impl(std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>> p)
+    explicit AbstractSwAutoFormatDlg_Impl(std::shared_ptr<SwAutoFormatDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const override;
+    virtual void Apply() override { m_xDlg->Apply(); }
 };
 
 class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg

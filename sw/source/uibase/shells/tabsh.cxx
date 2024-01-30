@@ -873,8 +873,15 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case SID_AUTOFORMAT:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(GetView().GetFrameWeld(), &rSh));
-            pDlg->Execute();
+            VclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(GetView().GetFrameWeld(), &rSh));
+            pDlg->StartExecuteAsync(
+                [pDlg] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                        pDlg->Apply();
+                    pDlg->disposeOnce();
+                }
+            );
             break;
         }
         case FN_TABLE_SET_ROW_HEIGHT:

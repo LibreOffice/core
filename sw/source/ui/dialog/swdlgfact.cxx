@@ -240,7 +240,13 @@ short AbstractSwSelGlossaryDlg_Impl::Execute()
 
 short AbstractSwAutoFormatDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractSwAutoFormatDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractSwFieldDlg_Impl::Execute()

@@ -397,12 +397,10 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
     m_xBtnRename->set_sensitive(bBtnEnable);
 }
 
-short SwAutoFormatDlg::run()
+void SwAutoFormatDlg::Apply()
 {
-    short nRet = SfxDialogController::run();
-    if (nRet == RET_OK && m_bSetAutoFormat)
+    if (m_bSetAutoFormat)
         m_pShell->SetTableStyle((*m_xTableTable)[m_nIndex]);
-    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

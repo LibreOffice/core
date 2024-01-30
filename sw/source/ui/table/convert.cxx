@@ -166,10 +166,16 @@ IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
 {
     SwAbstractDialogFactory& rFact = swui::GetFactory();
 
-    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(
+    VclPtr<AbstractSwAutoFormatDlg> pDlg(
         rFact.CreateSwAutoFormatDlg(m_xDialog.get(), m_pShell, false, mxTAutoFormat.get()));
-    if (RET_OK == pDlg->Execute())
-        mxTAutoFormat = pDlg->FillAutoFormatOfIndex();
+    pDlg->StartExecuteAsync([this, pDlg](sal_Int32 nResult) -> void {
+        if (nResult == RET_OK)
+        {
+            pDlg->Apply();
+            mxTAutoFormat = pDlg->FillAutoFormatOfIndex();
+        }
+        pDlg->disposeOnce();
+    });
 }
 
 IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Toggleable&, rButton, void)
