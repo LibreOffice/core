@@ -61,7 +61,7 @@ struct NotebookBarViewData
 };
 
 /** Notebookbar instance manager is a singleton that is used for track the
- *  per-view instances of view specifc data contained in NotebookBarViewData
+ *  per-view instances of view specific data contained in NotebookBarViewData
  *  class.
  **/
 class NotebookBarViewManager final
