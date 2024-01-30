@@ -11,9 +11,13 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
+#include <i18nlangtag/lang.h>
+#include <rtl/ustring.hxx>
+#include <vector>
 
 namespace sfx
 {
+/** Currency ID, to identify the currency in the currency list */
 struct SFX2_DLLPUBLIC CurrencyID
 {
     OUString aSymbol;
