@@ -537,7 +537,9 @@ void SAL_CALL SfxLibraryContainer::storeLibraries(  )
     }
 }
 
-static void checkAndCopyFileImpl( const INetURLObject& rSourceFolderInetObj,
+namespace
+{
+void checkAndCopyFileImpl( const INetURLObject& rSourceFolderInetObj,
                                   const INetURLObject& rTargetFolderInetObj,
                                   std::u16string_view rCheckFileName,
                                   std::u16string_view rCheckExtension,
@@ -559,18 +561,21 @@ static void checkAndCopyFileImpl( const INetURLObject& rSourceFolderInetObj,
     }
 }
 
-static void createVariableURL( OUString& rStr, std::u16string_view rLibName,
+constexpr OUString sUserBasicVariablePrefix = u"$(USER)/basic/"_ustr;
+
+void createVariableURL( OUString& rStr, std::u16string_view rLibName,
                                std::u16string_view rInfoFileName, bool bUser )
 {
     if( bUser )
     {
-        rStr = "$(USER)/basic/";
+        rStr = sUserBasicVariablePrefix;
     }
     else
     {
         rStr = "$(INST)/" LIBO_SHARE_FOLDER "/basic/";
     }
     rStr += OUString::Concat(rLibName) + "/" + rInfoFileName + ".xlb/";
+}
 }
 
 void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
@@ -1261,6 +1266,11 @@ void SfxLibraryContainer::checkStorageURL( const OUString& aSourceURL,
     {
         aUnexpandedStorageURL = aSourceURL;
     }
+    else
+    {
+        aUnexpandedStorageURL.clear();
+    }
+
     INetURLObject aInetObj( aExpandedSourceURL );
     OUString aExtension = aInetObj.getExtension();
     if( aExtension == "xlb" )
@@ -2515,9 +2525,18 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                                  INetURLObject::EncodeMechanism::All );
         OUString aDestDirPath = aDestInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
+        OUString aDestDirUnexpandedPath = aDestDirPath;
+        if (pImplLib->maUnexpandedStorageURL.startsWith(sUserBasicVariablePrefix))
+        {
+            // try to re-create the variable URL: helps moving the profile
+            OUString aUserBasicURL = expand_url(sUserBasicVariablePrefix);
+            if (OUString aRest; aDestDirPath.startsWith(aUserBasicURL, &aRest))
+                aDestDirUnexpandedPath = sUserBasicVariablePrefix + aRest;
+        }
+
         // Store new URL
         OUString aLibInfoFileURL = pImplLib->maLibInfoFileURL;
-        checkStorageURL( aDestDirPath, pImplLib->maLibInfoFileURL, pImplLib->maStorageURL,
+        checkStorageURL(aDestDirUnexpandedPath, pImplLib->maLibInfoFileURL, pImplLib->maStorageURL,
                          pImplLib->maUnexpandedStorageURL );
 
         try
