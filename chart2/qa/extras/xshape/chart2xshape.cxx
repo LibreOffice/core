@@ -196,7 +196,7 @@ void Chart2XShapeTest::testPieChartLabels2()
     if (!IsDefaultDPI())
         return;
 
-    // text wrap: wrap all text labels except one
+    // text wrap: wrap all text labels except Yellow one
     loadFromFile(u"xlsx/tdf90839-2.xlsx");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-2.xml");
 }
@@ -208,7 +208,7 @@ void Chart2XShapeTest::testPieChartLabels3()
     if (!IsDefaultDPI())
         return;
 
-    // text wrap: wrap no text label except one
+    // text wrap: wrap no text label except Yellow one
     loadFromFile(u"xlsx/tdf90839-3.xlsx");
     compareAgainstReference(getXShapeDumpString(), u"tdf90839-3.xml");
 }

@@ -417,12 +417,14 @@ void PieChart::createTextLabelShape(
         }
         else if (nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE)
         {
-            if ((fAngleDegree >= 67.5 && fAngleDegree <= 112.5)
-                || (fAngleDegree >= 247.5 && fAngleDegree <= 292.5))
-                fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth() / 3.0;
-            else
-                fTextMaximumFrameWidth = 0.85 * (m_aAvailableOuterRect.getWidth() / 2.0 - fPieRadius);
-        }
+            const sal_Int32 nOuterX = aPieLabelInfo.aOuterPosition.getX();
+            if (fAngleDegree < 90 || fAngleDegree > 270) // label is placed on the right side
+                fTextMaximumFrameWidth = 0.8 * abs(m_aAvailableOuterRect.getWidth() - nOuterX);
+            else // label is placed on the left side
+                fTextMaximumFrameWidth = 0.8 * nOuterX;
+
+            fTextMaximumFrameWidth = std::min(fTextMaximumFrameWidth, fCompatMaxTextLen);
+         }
     }
     sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
 
@@ -473,9 +475,9 @@ void PieChart::createTextLabelShape(
                  * so in that bizarre case just try the positive value of the result...
                  */
                 const sal_Int32 nOuterX = aPieLabelInfo.aOuterPosition.getX();
-                if (fAngleDegree < 90 || fAngleDegree > 270) // label is placed on the right half
+                if (fAngleDegree < 90 || fAngleDegree > 270) // label is placed on the right side
                     fTextMaximumFrameWidth = 0.8 * abs(m_aAvailableOuterRect.getWidth() - nOuterX);
-                else // label is placed on the left half
+                else // label is placed on the left side
                     fTextMaximumFrameWidth = 0.8 * nOuterX;
 
                 nTextMaximumFrameWidth = ceil(std::min(fTextMaximumFrameWidth, fCompatMaxTextLen));
