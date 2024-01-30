@@ -1349,6 +1349,12 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
 
     pDocShell->UpdatePaintExt(mnPaintExtFlags, aPaintRange);
     maPaintRanges.Join(aPaintRange);
+
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+        ScTabViewShell::GetActiveViewShell(),
+        true /* bColumns */, true /* bRows */,
+        true /* bSizes */, true /* bHidden */, true /* bFiltered */,
+        true /* bGroups */, aPaintRange.aStart.Tab());
 }
 
 void ScUndoDragDrop::Undo()
@@ -1496,6 +1502,24 @@ void ScUndoDragDrop::Redo()
 
     EndRedo();
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SCTAB nStartTab = aDestRange.aStart.Tab();
+        SCTAB nEndTab = aDestRange.aEnd.Tab();
+        if (bCut)
+        {
+            nStartTab = std::min(nStartTab, aSrcRange.aStart.Tab());
+            nEndTab = std::max(nEndTab, aSrcRange.aEnd.Tab());
+        }
+        for (nTab = nStartTab; nTab <= nEndTab; ++nTab)
+        {
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                ScTabViewShell::GetActiveViewShell(), true /* bColumns */, true /* bRows */,
+                true /* bSizes */, true /* bHidden */, true /* bFiltered */, true /* bGroups */,
+                nTab);
+        }
+    }
 }
 
 void ScUndoDragDrop::Repeat(SfxRepeatTarget& /* rTarget */)
