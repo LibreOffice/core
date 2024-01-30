@@ -990,20 +990,26 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
+            VclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 GetView().GetFrameWeld(), rWrtSh));
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
-            if ( pDlg->Execute() == RET_OK )
-            {
-                const sal_uInt16 nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
-                SfxRequest aReq(GetView().GetViewFrame(), nId);
-                if ( !pDlg->GetStr().isEmpty() )
-                    aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
-                if ( !pDlg->GetFontName().isEmpty() )
-                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, pDlg->GetFontName() ) );
-                ExecuteSlot( aReq );
-            }
-
+            pDlg->StartExecuteAsync(
+                [this, pDlg] (sal_Int32 nResult)->void
+                {
+                    if ( nResult == RET_OK )
+                    {
+                        pDlg->Apply();
+                        const sal_uInt16 nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
+                        SfxRequest aReq(GetView().GetViewFrame(), nId);
+                        if ( !pDlg->GetStr().isEmpty() )
+                            aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
+                        if ( !pDlg->GetFontName().isEmpty() )
+                            aReq.AppendItem( SfxStringItem( FN_PARAM_1, pDlg->GetFontName() ) );
+                        ExecuteSlot( aReq );
+                    }
+                    pDlg->disposeOnce();
+                }
+            );
             rReq.Ignore();
         }
         break;

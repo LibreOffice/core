@@ -54,8 +54,6 @@ class SwInsFootNoteDlg final : public weld::GenericDialogController
     DECL_LINK(NumberExtCharHdl, weld::Button&, void);
     DECL_LINK(NextPrevHdl, weld::Button&, void);
 
-    void    Apply();
-
     void            Init();
 
 public:
@@ -70,13 +68,7 @@ public:
             return m_xNumberCharEdit->get_text();
         return OUString();
     }
-    virtual short run() override
-    {
-        short nRet = GenericDialogController::run();
-        if (nRet == RET_OK)
-            Apply();
-        return nRet;
-    }
+    void    Apply();
 };
 
 #endif

@@ -130,12 +130,19 @@ void SwView::ExecDlgExt(SfxRequest& rReq)
         case  FN_EDIT_FOOTNOTE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
+            VclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 GetFrameWeld(), *m_pWrtShell, true));
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
             pDlg->SetText( SwResId(STR_EDIT_FOOTNOTE) );
-            pDlg->Execute();
+            pDlg->StartExecuteAsync(
+                [pDlg] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                        pDlg->Apply();
+                    pDlg->disposeOnce();
+                }
+            );
             break;
         }
     }

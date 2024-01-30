@@ -298,7 +298,13 @@ short AbstractFieldInputDlg_Impl::Execute()
 
 short AbstractInsFootNoteDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractInsFootNoteDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractJavaEditDialog_Impl::Execute()

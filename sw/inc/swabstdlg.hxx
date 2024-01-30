@@ -113,6 +113,7 @@ class AbstractInsFootNoteDlg : public VclAbstractDialog
 protected:
     virtual ~AbstractInsFootNoteDlg() override = default;
 public:
+    virtual void Apply() = 0;
     virtual OUString    GetFontName() = 0;
     virtual bool        IsEndNote() = 0;
     virtual OUString    GetStr() = 0;

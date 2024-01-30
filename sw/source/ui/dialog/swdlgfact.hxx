@@ -550,13 +550,15 @@ public:
 class SwInsFootNoteDlg;
 class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 {
-    std::unique_ptr<SwInsFootNoteDlg> m_xDlg;
+    std::shared_ptr<SwInsFootNoteDlg> m_xDlg;
 public:
-    explicit AbstractInsFootNoteDlg_Impl(std::unique_ptr<SwInsFootNoteDlg> p)
+    explicit AbstractInsFootNoteDlg_Impl(std::shared_ptr<SwInsFootNoteDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void Apply() override { m_xDlg->Apply(); }
     virtual OUString        GetFontName() override;
     virtual bool            IsEndNote() override;
     virtual OUString        GetStr() override;
