@@ -468,7 +468,7 @@ void PieChart::createTextLabelShape(
                  *
                  * Therefore, handle this by making the label as small as possible.
                  *
-                 * Complication (tdf122765.pptx): it is possiible for the aOuterPosition
+                 * Complication (tdf122765.pptx): it is possible for the aOuterPosition
                  * to be outside of the available outer rectangle (somehow),
                  * so in that bizarre case just try the positive value of the result...
                  */
