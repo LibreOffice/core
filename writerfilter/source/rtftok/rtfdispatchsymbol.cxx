@@ -131,9 +131,6 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         break;
         case RTFKeyword::SECT:
         {
-            if (m_bNeedCr)
-                dispatchSymbol(RTFKeyword::PAR);
-
             m_bHadSect = true;
             if (m_bIgnoreNextContSectBreak)
             {
@@ -143,6 +140,10 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             else
             {
+                if (m_bNeedCr)
+                { // tdf#158586 don't dispatch \par here, it eats deferred page breaks
+                    setNeedPar(true);
+                }
                 sectBreak();
                 if (m_nResetBreakOnSectBreak != RTFKeyword::invalid)
                 {
@@ -409,8 +410,6 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 sal_uInt8 const sBreak[] = { 0xc };
                 Mapper().text(sBreak, 1);
-                // testFdo81892 don't do another \par break directly; because of
-                // GetSplitPgBreakAndParaMark() it does finishParagraph *twice*
                 m_bNeedCr = true;
             }
         }

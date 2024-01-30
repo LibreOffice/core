@@ -672,7 +672,10 @@ void RTFDocumentImpl::parBreak()
     m_bHadPicture = false;
 
     // start new one
-    Mapper().startParagraphGroup();
+    if (!m_bParAtEndOfSection)
+    {
+        Mapper().startParagraphGroup();
+    }
 }
 
 void RTFDocumentImpl::sectBreak(bool bFinal)
@@ -686,14 +689,26 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
     // Also, when pasting, it's fine to not have any paragraph inside the document at all.
     if (m_bNeedPar && (!bFinal || m_bNeedSect || bContinuous) && !isSubstream() && m_bIsNewDoc)
+    {
+        m_bParAtEndOfSection = true;
         dispatchSymbol(RTFKeyword::PAR);
+    }
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
     {
         dispatchFlag(RTFKeyword::PARD);
+        m_bParAtEndOfSection = true;
         dispatchSymbol(RTFKeyword::PAR);
         m_bNeedSect = bNeedSect;
     }
+    // testTdf148515, if RTF ends with \row, endParagraphGroup() must be called!
+    if (!m_bParAtEndOfSection || m_aStates.top().getCurrentBuffer())
+    {
+        Mapper().endParagraphGroup(); // < top para context dies with page break
+    }
+    m_bParAtEndOfSection = false;
+    // paragraph properties are *done* now - only section properties following
+
     while (!m_nHeaderFooterPositions.empty())
     {
         std::pair<Id, std::size_t> aPair = m_nHeaderFooterPositions.front();
@@ -726,7 +741,6 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
 
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
-    Mapper().endParagraphGroup();
 
     // End Section
     if (!m_pSuperstream)
