@@ -509,13 +509,14 @@ public:
 
 class AbstractSwModalRedlineAcceptDlg_Impl : public AbstractSwModalRedlineAcceptDlg
 {
-    std::unique_ptr<SwModalRedlineAcceptDlg> m_xDlg;
+    std::shared_ptr<SwModalRedlineAcceptDlg> m_xDlg;
 public:
-    explicit AbstractSwModalRedlineAcceptDlg_Impl(std::unique_ptr<SwModalRedlineAcceptDlg> p)
+    explicit AbstractSwModalRedlineAcceptDlg_Impl(std::shared_ptr<SwModalRedlineAcceptDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &) override;
 };
 
 class SwGlossaryDlg;

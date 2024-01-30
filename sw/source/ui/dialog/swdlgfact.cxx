@@ -283,7 +283,13 @@ short AbstractSwContentControlListItemDlg_Impl::Execute()
 
 short AbstractSwModalRedlineAcceptDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractSwModalRedlineAcceptDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractGlossaryDlg_Impl::Execute()
