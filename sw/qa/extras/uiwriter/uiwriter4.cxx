@@ -683,8 +683,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testBookmarkCollapsed)
 // 6. Hit Del, thus deleting "abc" (The bookmark "test" is still there).
 // 7. Save the document:
 //      <text:p text:style-name="Standard">
-//          <text:bookmark-start text:name="test"/>
-//          <text:bookmark-end text:name="test"/>
+//          <text:bookmark text:name="test"/>
 //          def
 //      </text:p>
 //
@@ -738,14 +737,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
     // load only content.xml from the resaved document
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
 
-    const OString aPath("/office:document-content/office:body/office:text/text:p");
-
-    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark")); // not found
-    const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
-    const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
-
-    CPPUNIT_ASSERT_EQUAL(0, pos2); // found, and it is first
-    CPPUNIT_ASSERT_EQUAL(1, pos3); // found, and it is second
+    // Bookmark without text becomes collapsed
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/text:bookmark", 1);
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/text:bookmark-start", 0);
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/text:bookmark-end", 0);
 }
 
 // 1. Open a new writer document

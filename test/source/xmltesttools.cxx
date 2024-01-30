@@ -278,6 +278,19 @@ int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString
     return nRet;
 }
 
+void XmlTestTools::assertXPathNodeName(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
+                                          const OString& rExpectedName)
+{
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+                                 1,
+                                 xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In XPath '" + rXPath + "' name of node is incorrect")).getStr(),
+                                 rExpectedName, oconvert(pXmlNode->name));
+}
+
 void XmlTestTools::registerODFNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("office"),
