@@ -421,14 +421,6 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
     }
 }
 
-short SwGlossaryDlg::run()
-{
-    short nRet = SfxDialogController::run();
-    if (nRet == RET_OK)
-        Apply();
-    return nRet;
-}
-
 void SwGlossaryDlg::Apply()
 {
     const OUString aGlosName(m_xShortNameEdit->get_text());

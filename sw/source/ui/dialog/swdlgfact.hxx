@@ -515,13 +515,15 @@ public:
 class SwGlossaryDlg;
 class AbstractGlossaryDlg_Impl : public AbstractGlossaryDlg
 {
-    std::unique_ptr<SwGlossaryDlg> m_xDlg;
+    std::shared_ptr<SwGlossaryDlg> m_xDlg;
 public:
-    explicit AbstractGlossaryDlg_Impl(std::unique_ptr<SwGlossaryDlg> p)
+    explicit AbstractGlossaryDlg_Impl(std::shared_ptr<SwGlossaryDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void Apply() override { m_xDlg->Apply(); }
     virtual OUString        GetCurrGrpName() const override;
     virtual OUString        GetCurrShortName() const override;
 };

@@ -96,7 +96,6 @@ class SwGlossaryDlg final : public SfxDialogController
     DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
     DECL_LINK( TextFilterHdl, OUString&, bool );
 
-    void            Apply();
     void            Init();
     std::unique_ptr<weld::TreeIter> DoesBlockExist(std::u16string_view sBlock, std::u16string_view rShort);
     void            ShowAutoText(const OUString& rGroup, const OUString& rShortName);
@@ -110,8 +109,8 @@ class SwGlossaryDlg final : public SfxDialogController
     void            DeleteEntry();
 public:
     SwGlossaryDlg(const SfxViewFrame& rViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
-    virtual short run() override;
     virtual ~SwGlossaryDlg() override;
+    void Apply();
     OUString GetCurrGrpName() const;
     OUString GetCurrShortName() const
     {

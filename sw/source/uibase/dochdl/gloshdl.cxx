@@ -69,25 +69,35 @@ struct TextBlockInfo_Impl
 void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(m_rViewFrame, this, m_pWrtShell));
-    OUString sName;
-    OUString sShortName;
+    VclPtr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(m_rViewFrame, this, m_pWrtShell));
 
-    if( RET_EDIT == pDlg->Execute() )
-    {
-        sName = pDlg->GetCurrGrpName();
-        sShortName = pDlg->GetCurrShortName();
-    }
+    pDlg->StartExecuteAsync(
+        [this, pDlg] (sal_Int32 nResult)->void
+        {
+            OUString sName;
+            OUString sShortName;
+            if (nResult == RET_OK)
+                pDlg->Apply();
+            if (nResult == RET_EDIT)
+            {
+                sName = pDlg->GetCurrGrpName();
+                sShortName = pDlg->GetCurrShortName();
+            }
+            pDlg->disposeOnce();
+            m_pCurGrp.reset();
+            if(HasGlossaryList())
+            {
+                GetGlossaryList()->ClearGroups();
+            }
 
-    pDlg.disposeAndClear();
-    m_pCurGrp.reset();
-    if(HasGlossaryList())
-    {
-        GetGlossaryList()->ClearGroups();
-    }
+            if( !sName.isEmpty() || !sShortName.isEmpty() )
+                m_rStatGlossaries.EditGroupDoc( sName, sShortName );
 
-    if( !sName.isEmpty() || !sShortName.isEmpty() )
-        m_rStatGlossaries.EditGroupDoc( sName, sShortName );
+            SwGlossaryList* pList = ::GetGlossaryList();
+            if(pList->IsActive())
+                pList->Update();
+        }
+    );
 }
 
 // set the default group; if called from the dialog

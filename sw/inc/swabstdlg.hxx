@@ -93,6 +93,7 @@ class AbstractGlossaryDlg : public VclAbstractDialog
 protected:
     virtual ~AbstractGlossaryDlg() override = default;
 public:
+    virtual void Apply() = 0;
     virtual OUString        GetCurrGrpName() const = 0;
     virtual OUString        GetCurrShortName() const = 0;
 };

@@ -270,7 +270,13 @@ short AbstractSwModalRedlineAcceptDlg_Impl::Execute()
 
 short AbstractGlossaryDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractGlossaryDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractFieldInputDlg_Impl::Execute()
