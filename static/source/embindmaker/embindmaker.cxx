@@ -118,11 +118,26 @@ std::pair<OUString, bool> parseRegistryArgument(sal_uInt32 argument)
 struct Module
 {
     std::map<OUString, std::shared_ptr<Module>> modules;
-    std::vector<OUString> interfaces;
+    std::vector<std::pair<OUString, OUString>> mappings;
 };
 
+OUString
+getServiceConstructorName(unoidl::SingleInterfaceBasedServiceEntity::Constructor const& constructor)
+{
+    return constructor.defaultConstructor ? u"create"_ustr : constructor.name;
+}
+
+OUString jsName(OUString const& name) { return name.replace('.', '$'); }
+
+OUString
+jsServiceConstructor(OUString const& service,
+                     unoidl::SingleInterfaceBasedServiceEntity::Constructor const& constructor)
+{
+    return "uno_Function_" + jsName(service) + "$$" + getServiceConstructorName(constructor);
+}
+
 void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view prefix,
-          Module* module, std::vector<OUString>& interfaces)
+          Module* module, std::vector<OUString>& interfaces, std::vector<OUString>& services)
 {
     assert(cursor.is());
     assert(module != nullptr);
@@ -145,13 +160,31 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
                     sub = std::make_shared<Module>();
                 }
                 scan(static_cast<unoidl::ModuleEntity*>(ent.get())->createCursor(),
-                     Concat2View(name + "."), sub.get(), interfaces);
+                     Concat2View(name + "."), sub.get(), interfaces, services);
                 break;
             }
             case unoidl::Entity::SORT_INTERFACE_TYPE:
-                module->interfaces.emplace_back(name);
+                module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
                 interfaces.emplace_back(name);
                 break;
+            case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+            {
+                auto const& ctors
+                    = static_cast<unoidl::SingleInterfaceBasedServiceEntity*>(ent.get())
+                          ->getConstructors();
+                if (!ctors.empty())
+                {
+                    auto sub = std::make_shared<Module>();
+                    for (auto const& ctor : ctors)
+                    {
+                        sub->mappings.emplace_back(getServiceConstructorName(ctor),
+                                                   jsServiceConstructor(name, ctor));
+                    }
+                    module->modules[id] = sub;
+                    services.emplace_back(name);
+                }
+            }
+            break;
             default:
                 break;
         }
@@ -159,8 +192,6 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
 }
 
 OUString cppName(OUString const& name) { return "::" + name.replaceAll(u".", u"::"); }
-
-OUString jsName(OUString const& name) { return name.replace('.', '$'); }
 
 OUString resolveOuterTypedefs(rtl::Reference<TypeManager> const& manager, OUString const& name)
 {
@@ -529,17 +560,32 @@ void dumpBase(std::ostream& out, rtl::Reference<TypeManager> const& manager,
     dumpMethods(out, manager, interface, ent, baseTrail);
 }
 
+void dumpRegisterFunctionProlog(std::ostream& out, unsigned long long& counter)
+{
+    out << "static void __attribute__((noinline)) register" << counter << "() {\n";
+}
+
+void dumpRegisterFunctionEpilog(std::ostream& out, unsigned long long& counter)
+{
+    out << "}\n";
+    ++counter;
+    if (counter == 0)
+    {
+        std::cerr << "Emitting too many register functions\n";
+        std::exit(EXIT_FAILURE);
+    }
+}
+
 void writeJsMap(std::ostream& out, Module const& module, std::string const& prefix)
 {
     auto comma = false;
-    for (auto const& ifc : module.interfaces)
+    for (auto const & [ id, to ] : module.mappings)
     {
         if (comma)
         {
             out << ",\n";
         }
-        out << prefix << "'" << ifc.copy(ifc.lastIndexOf('.') + 1) << "': instance.uno_Type_"
-            << jsName(ifc);
+        out << prefix << "'" << id << "': instance." << to;
         comma = true;
     }
     for (auto const & [ id, sub ] : module.modules)
@@ -589,9 +635,10 @@ SAL_IMPLEMENT_MAIN()
         }
         auto const module = std::make_shared<Module>();
         std::vector<OUString> interfaces;
+        std::vector<OUString> services;
         for (auto const& prov : mgr->getPrimaryProviders())
         {
-            scan(prov->createRootCursor(), u"", module.get(), interfaces);
+            scan(prov->createRootCursor(), u"", module.get(), interfaces, services);
         }
         std::ofstream cppOut(cppPathname, std::ios_base::out | std::ios_base::trunc);
         if (!cppOut)
@@ -606,6 +653,10 @@ SAL_IMPLEMENT_MAIN()
         for (auto const& ifc : interfaces)
         {
             cppOut << "#include <" << ifc.replace('.', '/') << ".hpp>\n";
+        }
+        for (auto const& srv : services)
+        {
+            cppOut << "#include <" << srv.replace('.', '/') << ".hpp>\n";
         }
         cppOut << "\n"
                   "// TODO: This is a temporary workaround that likely causes the Embind UNO\n"
@@ -625,10 +676,8 @@ SAL_IMPLEMENT_MAIN()
             assert(ent.is());
             assert(ent->getSort() == unoidl::Entity::SORT_INTERFACE_TYPE);
             rtl::Reference const ifcEnt(static_cast<unoidl::InterfaceTypeEntity*>(ent.get()));
-            cppOut << "static void __attribute__((noinline)) register" << n
-                   << "() {\n"
-                      "    ::emscripten::class_<"
-                   << cppName(ifc);
+            dumpRegisterFunctionProlog(cppOut, n);
+            cppOut << "    ::emscripten::class_<" << cppName(ifc);
             //TODO: Embind only supports single inheritance, so use that support at least for a UNO
             // interface's first base, and explicitly spell out the attributes and methods of any
             // remaining bases:
@@ -671,14 +720,24 @@ SAL_IMPLEMENT_MAIN()
             }
             dumpAttributes(cppOut, mgr, ifc, ifcEnt, {});
             dumpMethods(cppOut, mgr, ifc, ifcEnt, {});
-            cppOut << "        ;\n"
-                      "}\n";
-            ++n;
-            if (n == 0)
+            cppOut << "        ;\n";
+            dumpRegisterFunctionEpilog(cppOut, n);
+        }
+        for (auto const& srv : services)
+        {
+            auto const ent = mgr->getManager()->findEntity(srv);
+            assert(ent.is());
+            assert(ent->getSort() == unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE);
+            rtl::Reference const srvEnt(
+                static_cast<unoidl::SingleInterfaceBasedServiceEntity*>(ent.get()));
+            dumpRegisterFunctionProlog(cppOut, n);
+            for (auto const& ctor : srvEnt->getConstructors())
             {
-                std::cerr << "Emitting too many register functions\n";
-                std::exit(EXIT_FAILURE);
+                cppOut << "    ::emscripten::function(\"" << jsServiceConstructor(srv, ctor)
+                       << "\", &" << cppName(srv) << "::" << getServiceConstructorName(ctor)
+                       << ");\n";
             }
+            dumpRegisterFunctionEpilog(cppOut, n);
         }
         cppOut << "EMSCRIPTEN_BINDINGS(unoembind_" << name << ") {\n";
         for (unsigned long long i = 0; i != n; ++i)
