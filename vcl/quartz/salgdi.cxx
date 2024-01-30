@@ -66,6 +66,7 @@
 #include <quartz/SystemFontList.hxx>
 #include <quartz/CoreTextFont.hxx>
 #include <quartz/CoreTextFontFace.hxx>
+#include <quartz/salgdi.h>
 
 using namespace vcl;
 
