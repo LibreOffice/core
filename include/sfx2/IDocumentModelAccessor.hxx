@@ -35,6 +35,7 @@ class SFX2_DLLPUBLIC IDocumentModelAccessor
 {
 public:
     virtual std::vector<CurrencyID> getDocumentCurrencies() const { return {}; }
+    virtual ~IDocumentModelAccessor() = default;
 };
 
 } // end sfx namespace
