@@ -573,7 +573,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 SfxPoolItemHolder aResult;
                 if(nAlias)
                     GetViewFrame().GetDispatcher()->QueryState(nAlias, aResult);
-                if(aResult)
+                if (aResult && !IsInvalidItem(aResult.getItem()) && !IsDisabledItem(aResult.getItem()))
                 {
                     if (!(m_nSelectionType & SelectionType::DrawObject))
                     {
