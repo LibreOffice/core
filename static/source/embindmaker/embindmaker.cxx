@@ -10,13 +10,16 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstddef>
 #include <cstdlib>
 #include <fstream>
 #include <ios>
 #include <iostream>
+#include <list>
 #include <map>
 #include <memory>
 #include <ostream>
+#include <set>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -158,21 +161,6 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
 OUString cppName(OUString const& name) { return "::" + name.replaceAll(u".", u"::"); }
 
 OUString jsName(OUString const& name) { return name.replace('.', '$'); }
-
-void dumpAttributes(std::ostream& out, OUString const& name,
-                    rtl::Reference<unoidl::InterfaceTypeEntity> const& entity)
-{
-    for (auto const& attr : entity->getDirectAttributes())
-    {
-        out << "        .function(\"get" << attr.name << "\", &" << cppName(name) << "::get"
-            << attr.name << ")\n";
-        if (!attr.readOnly)
-        {
-            out << "        .function(\"set" << attr.name << "\", &" << cppName(name) << "::set"
-                << attr.name << ")\n";
-        }
-    }
-}
 
 OUString resolveOuterTypedefs(rtl::Reference<TypeManager> const& manager, OUString const& name)
 {
@@ -346,6 +334,66 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
     }
 }
 
+void dumpAttributes(std::ostream& out, rtl::Reference<TypeManager> const& manager,
+                    OUString const& name, rtl::Reference<unoidl::InterfaceTypeEntity> const& entity,
+                    std::list<OUString> const& baseTrail)
+{
+    for (auto const& attr : entity->getDirectAttributes())
+    {
+        out << "        .function(\"get" << attr.name << "\", ";
+        if (baseTrail.empty())
+        {
+            out << "&" << cppName(name) << "::get" << attr.name;
+        }
+        else
+        {
+            out << "+[](::com::sun::star::uno::Reference<" << cppName(name)
+                << "> const & the_self) { return ";
+            for (auto const& base : baseTrail)
+            {
+                out << "static_cast<" << cppName(base) << " *>(";
+            }
+            out << "the_self.get()";
+            for (std::size_t i = 0; i != baseTrail.size(); ++i)
+            {
+                out << ")";
+            }
+            out << "->get" << attr.name << "(); }";
+        }
+        out << ")\n";
+        if (!attr.readOnly)
+        {
+            out << "        .function(\"set" << attr.name << "\", ";
+            if (baseTrail.empty())
+            {
+                out << "&" << cppName(name) << "::set" << attr.name;
+            }
+            else
+            {
+                out << "+[](::com::sun::star::uno::Reference<" << cppName(name)
+                    << "> const & the_self, ";
+                dumpType(out, manager, attr.type, false);
+                if (passByReference(manager, attr.type))
+                {
+                    out << " const &";
+                }
+                out << " the_value) { ";
+                for (auto const& base : baseTrail)
+                {
+                    out << "static_cast<" << cppName(base) << " *>(";
+                }
+                out << "the_self.get()";
+                for (std::size_t i = 0; i != baseTrail.size(); ++i)
+                {
+                    out << ")";
+                }
+                out << "->set" << attr.name << "(the_value); }";
+            }
+            out << ")\n";
+        }
+    }
+}
+
 void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                     unoidl::InterfaceTypeEntity::Method const& method, bool declarations)
 {
@@ -391,7 +439,8 @@ void dumpParameters(std::ostream& out, rtl::Reference<TypeManager> const& manage
 }
 
 void dumpWrapper(std::ostream& out, rtl::Reference<TypeManager> const& manager,
-                 OUString const& interfaceName, unoidl::InterfaceTypeEntity::Method const& method)
+                 OUString const& interfaceName, unoidl::InterfaceTypeEntity::Method const& method,
+                 std::list<OUString> const& baseTrail)
 {
     out << "        .function(\"" << method.name << "\", +[](" << cppName(interfaceName);
     out << " * the_self";
@@ -400,22 +449,35 @@ void dumpWrapper(std::ostream& out, rtl::Reference<TypeManager> const& manager,
         out << ", ";
     }
     dumpParameters(out, manager, method, true);
-    out << ") { return the_self->" << method.name << "(";
+    out << ") { return ";
+    for (auto const& base : baseTrail)
+    {
+        out << "static_cast<" << cppName(base) << " *>(";
+    }
+    out << "the_self";
+    for (std::size_t i = 0; i != baseTrail.size(); ++i)
+    {
+        out << ")";
+    }
+    out << "->" << method.name << "(";
     dumpParameters(out, manager, method, false);
     out << "); }, ::emscripten::allow_raw_pointers())\n";
 }
 
 void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
-                 OUString const& name, rtl::Reference<unoidl::InterfaceTypeEntity> const& entity)
+                 OUString const& name, rtl::Reference<unoidl::InterfaceTypeEntity> const& entity,
+                 std::list<OUString> const& baseTrail)
 {
     for (auto const& meth : entity->getDirectMethods())
     {
-        if (std::any_of(meth.parameters.begin(), meth.parameters.end(), [](auto const& parameter) {
-                return parameter.direction
-                       != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
-            }))
+        if (!baseTrail.empty()
+            || std::any_of(
+                   meth.parameters.begin(), meth.parameters.end(), [](auto const& parameter) {
+                       return parameter.direction
+                              != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
+                   }))
         {
-            dumpWrapper(out, manager, name, meth);
+            dumpWrapper(out, manager, name, meth, baseTrail);
         }
         else
         {
@@ -423,6 +485,48 @@ void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                 << "::" << meth.name << ")\n";
         }
     }
+}
+
+rtl::Reference<unoidl::InterfaceTypeEntity> resolveBase(rtl::Reference<TypeManager> const& manager,
+                                                        OUString const& name)
+{
+    auto const ent = manager->getManager()->findEntity(name);
+    if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
+    {
+        throw CannotDumpException("bad interface base \"" + name + "\"");
+    }
+    return static_cast<unoidl::InterfaceTypeEntity*>(ent.get());
+}
+
+void recordVisitedBases(rtl::Reference<TypeManager> const& manager, OUString const& name,
+                        std::set<OUString>& visitedBases)
+{
+    auto const ent = resolveBase(manager, name);
+    for (auto const& base : ent->getDirectMandatoryBases())
+    {
+        if (visitedBases.insert(base.name).second)
+        {
+            recordVisitedBases(manager, base.name, visitedBases);
+        }
+    }
+}
+
+void dumpBase(std::ostream& out, rtl::Reference<TypeManager> const& manager,
+              OUString const& interface, OUString const& name, std::set<OUString>& visitedBases,
+              std::list<OUString> const& baseTrail)
+{
+    auto const ent = resolveBase(manager, name);
+    for (auto const& base : ent->getDirectMandatoryBases())
+    {
+        if (visitedBases.insert(base.name).second)
+        {
+            auto trail = baseTrail;
+            trail.push_front(base.name);
+            dumpBase(out, manager, interface, base.name, visitedBases, trail);
+        }
+    }
+    dumpAttributes(out, manager, interface, ent, baseTrail);
+    dumpMethods(out, manager, interface, ent, baseTrail);
 }
 
 void writeJsMap(std::ostream& out, Module const& module, std::string const& prefix)
@@ -524,7 +628,16 @@ SAL_IMPLEMENT_MAIN()
             cppOut << "static void __attribute__((noinline)) register" << n
                    << "() {\n"
                       "    ::emscripten::class_<"
-                   << cppName(ifc) << ">(\"uno_Type_" << jsName(ifc)
+                   << cppName(ifc);
+            //TODO: Embind only supports single inheritance, so use that support at least for a UNO
+            // interface's first base, and explicitly spell out the attributes and methods of any
+            // remaining bases:
+            auto const& bases = ifcEnt->getDirectMandatoryBases();
+            if (bases.size() != 0)
+            {
+                cppOut << ", ::emscripten::base<" << cppName(bases[0].name) << ">";
+            }
+            cppOut << ">(\"uno_Type_" << jsName(ifc)
                    << "\")\n"
                       "        .smart_ptr<::com::sun::star::uno::Reference<"
                    << cppName(ifc) << ">>(\"uno_Reference_" << jsName(ifc)
@@ -547,8 +660,17 @@ SAL_IMPLEMENT_MAIN()
                    << "> const & the_self) { return "
                       "::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface>(the_"
                       "self); })\n";
-            dumpAttributes(cppOut, ifc, ifcEnt);
-            dumpMethods(cppOut, mgr, ifc, ifcEnt);
+            if (bases.size() > 1)
+            {
+                std::set<OUString> visitedBases;
+                recordVisitedBases(mgr, bases[0].name, visitedBases);
+                for (std::size_t i = 1; i != bases.size(); ++i)
+                {
+                    dumpBase(cppOut, mgr, ifc, bases[i].name, visitedBases, { bases[i].name });
+                }
+            }
+            dumpAttributes(cppOut, mgr, ifc, ifcEnt, {});
+            dumpMethods(cppOut, mgr, ifc, ifcEnt, {});
             cppOut << "        ;\n"
                       "}\n";
             ++n;
