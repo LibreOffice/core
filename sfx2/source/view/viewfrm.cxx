@@ -1522,9 +1522,10 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     const auto xContext = comphelper::getProcessComponentContext();
                     const auto xModuleManager = css::frame::ModuleManager::create(xContext);
                     switch (vcl::EnumContext::GetApplicationEnum(
-                        xModuleManager->identify(xCurrentFrame)))
+                        vcl::CommandInfoProvider::GetModuleIdentifier(xCurrentFrame)))
                     {
                         case vcl::EnumContext::Application::WriterForm:
+                        case vcl::EnumContext::Application::WriterReport:
                             bIsBaseFormOpen = true;
                             break;
                         default:
@@ -1533,7 +1534,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     if (!bIsBaseFormOpen)
                     {
                         // tdf#127946 pass in argument for dialog parent
-                        SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
+                        SfxUnoFrameItem aDocFrame(SID_FILLFRAME, xCurrentFrame);
                         GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {},
                                                      { &aDocFrame });
                     }
