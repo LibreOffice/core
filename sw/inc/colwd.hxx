@@ -33,11 +33,9 @@ private:
 
     DECL_LINK(LoseFocusHdl, weld::SpinButton&, void);
 
-    void Apply();
-
 public:
     SwTableWidthDlg(weld::Window* pParent, SwTableFUNC& rFnc);
-    virtual short run() override;
+    void Apply();
 };
 
 #endif

@@ -144,7 +144,13 @@ bool AbstractSplitTableDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
 
 short AbstractSwTableWidthDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractSwTableWidthDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractSwTableHeightDlg_Impl::Execute()
@@ -1136,7 +1142,7 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwWrapDlg(weld::Wi
     return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwWrapDlg>(pParent, rSet, pSh, true/*bDrawMode*/));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc)
+VclPtr<AbstractSwTableWidthDlg> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc)
 {
     return VclPtr<AbstractSwTableWidthDlg_Impl>::Create(std::make_unique<SwTableWidthDlg>(pParent, rFnc));
 }

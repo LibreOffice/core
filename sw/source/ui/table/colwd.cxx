@@ -64,12 +64,4 @@ void SwTableWidthDlg::Apply()
                        o3tl::narrowing<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::TWIP))));
 }
 
-short SwTableWidthDlg::run()
-{
-    short nRet = GenericDialogController::run();
-    if (nRet == RET_OK)
-        Apply();
-    return nRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

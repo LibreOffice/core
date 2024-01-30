@@ -418,6 +418,15 @@ public:
 };
 
 
+class AbstractSwTableWidthDlg : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSwTableWidthDlg() override = default;
+public:
+    virtual void Apply() = 0;
+};
+
+
 class SwAbstractDialogFactory
 {
 public:
@@ -488,7 +497,7 @@ public:
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) = 0;
+    virtual VclPtr<AbstractSwTableWidthDlg> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) = 0;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(weld::Window* pParent,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) = 0;
 

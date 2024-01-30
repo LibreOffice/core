@@ -50,8 +50,15 @@ void SwTableFUNC::ColWidthDlg(weld::Window *pParent)
 {
     InitTabCols();
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
-    pDlg->Execute();
+    VclPtr<AbstractSwTableWidthDlg> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
+    pDlg->StartExecuteAsync(
+        [pDlg] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+                pDlg->Apply();
+            pDlg->disposeOnce();
+        }
+    );
 }
 
 // Determine the width

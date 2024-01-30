@@ -256,15 +256,17 @@ public:
     virtual std::optional<SwLanguageListItem> GetSelectedLanguage() override;
 };
 
-class AbstractSwTableWidthDlg_Impl : public VclAbstractDialog
+class AbstractSwTableWidthDlg_Impl : public AbstractSwTableWidthDlg
 {
-    std::unique_ptr<SwTableWidthDlg> m_xDlg;
+    std::shared_ptr<SwTableWidthDlg> m_xDlg;
 public:
-    explicit AbstractSwTableWidthDlg_Impl(std::unique_ptr<SwTableWidthDlg> p)
+    explicit AbstractSwTableWidthDlg_Impl(std::shared_ptr<SwTableWidthDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void Apply() override { m_xDlg->Apply(); }
 };
 
 class AbstractSwTableHeightDlg_Impl : public VclAbstractDialog
@@ -795,7 +797,7 @@ public:
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) override;
 
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh) override;
-    virtual VclPtr<VclAbstractDialog> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) override;
+    virtual VclPtr<AbstractSwTableWidthDlg> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(weld::Window* pParent,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) override;
     virtual VclPtr<AbstractSwFieldDlg> CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent) override;
