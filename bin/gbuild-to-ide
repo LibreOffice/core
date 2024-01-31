@@ -1778,8 +1778,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             cxxstdversion = cxxstdversionflag[5:]
 
             # create .pro file
-            subdirs_meta_pro.append(lib_name)
-            qt_pro_file = os.path.join(self.base_folder, lib_name, lib_name + '.pro')
+            relative_subdir_path = os.path.relpath(lib_loc, self.gbuildparser.srcdir)
+            subdirs_meta_pro.append(relative_subdir_path)
+            qt_pro_file = os.path.join(self.base_folder, relative_subdir_path, lib_name + '.pro')
             try:
                 content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers, 'cxxstdversionflag': cxxstdversionflag,
                                                                         'cxxstdversion': cxxstdversion, 'objcxx_sources': objcxx_sources,
@@ -1796,7 +1797,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 print("\n\n", file=sys.stderr)
 
             # create .pro.shared file
-            qt_pro_shared_file = os.path.join(self.base_folder, lib_name, lib_name + '.pro.shared')
+            qt_pro_shared_file = os.path.join(self.base_folder, relative_subdir_path, lib_name + '.pro.shared')
             try:
                 with open(qt_pro_shared_file, mode) as fproshared:
                     fproshared.write(self.generate_pro_shared_content(lib_folder))
