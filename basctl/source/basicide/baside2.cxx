@@ -1450,6 +1450,7 @@ void ModulWindow::SetEditorColorScheme(const OUString& rColorScheme)
     Wallpaper aBackgroundColor(GetLayout().GetSyntaxBackgroundColor());
     rEditWindow.SetBackground(aBackgroundColor);
     rEditWindow.GetWindow(GetWindowType::Border)->SetBackground(aBackgroundColor);
+    rEditWindow.SetLineHighlightColor(GetShell()->GetColorConfig()->GetColorScheme(rColorScheme).m_aLineHighlightColor);
 
     // The EditEngine is created only when the module is actually opened for the first time,
     // therefore we need to check if it actually exists before updating its syntax highlighting
