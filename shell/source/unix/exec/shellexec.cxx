@@ -168,7 +168,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         //  in "mailto:foo?\n[0]\tcancel\n[1]\tOpen the file\tmailto:foo\n[2]\t
         //  Open the URL\tmailto:foo\n\nWhich did you mean? Cancelled." on
         //  stderr and SystemShellExecuteException.
-        // 1.2  If it does not match an exitsting pathname (relative to CWD):
+        // 1.2  If it does not match an existing pathname (relative to CWD):
         //  Results in the corresponding application being opened with the given
         //  document (e.g., Mail with a New Message).
         // 2  If the given URI reference does not match a supported scheme
@@ -179,7 +179,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         //  a non-executable regular file:  Results in opening it in TextEdit.
         // 2.3  If it matches an existing pathname (relative to CWD) pointing to
         //  a directory:  Results in opening it in Finder.
-        // 2.4  If it does not match an exitsting pathname (relative to CWD):
+        // 2.4  If it does not match an existing pathname (relative to CWD):
         //  Results in "The file /.../foo:bar does not exits." (where "/..." is
         //  the CWD) on stderr and SystemShellExecuteException.
         aBuffer.append("open");
