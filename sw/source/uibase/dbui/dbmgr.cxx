@@ -3070,24 +3070,32 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
     aDBData.nCommandType = nCmdType;
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
+    VclPtr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData ));
-    if( RET_OK != pDlg->Execute() )
-        return;
+    pDlg->StartExecuteAsync(
+        [xConnection, xSource, pDlg, xResSet, aSelection] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                OUString sDummy;
+                auto xTmpConnection = xConnection;
+                if(!xTmpConnection.is())
+                    xTmpConnection = xSource->getConnection(sDummy, sDummy);
+                try
+                {
+                    pDlg->DataToDoc( aSelection , xSource, xTmpConnection, xResSet);
+                }
+                catch (const uno::Exception&)
+                {
+                    TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
+                }
+                pDlg->disposeOnce();
+            }
+        }
+    );
 
-    OUString sDummy;
-    if(!xConnection.is())
-        xConnection = xSource->getConnection(sDummy, sDummy);
-    try
-    {
-        pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
-    }
-    catch (const uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
-    }
 }
 
 uno::Reference<sdbc::XDataSource> SwDBManager::getDataSourceAsParent(const uno::Reference< sdbc::XConnection>& _xConnection,const OUString& _sDataSourceName)

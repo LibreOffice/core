@@ -222,7 +222,13 @@ short AbstractSwConvertTableDlg_Impl::Execute()
 
 short AbstractSwInsertDBColAutoPilot_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractSwInsertDBColAutoPilot_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractDropDownFieldDialog_Impl::Execute()

@@ -356,13 +356,14 @@ public:
 
 class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPilot
 {
-    std::unique_ptr<SwInsertDBColAutoPilot> m_xDlg;
+    std::shared_ptr<SwInsertDBColAutoPilot> m_xDlg;
 public:
-    explicit AbstractSwInsertDBColAutoPilot_Impl(std::unique_ptr<SwInsertDBColAutoPilot> p)
+    explicit AbstractSwInsertDBColAutoPilot_Impl(std::shared_ptr<SwInsertDBColAutoPilot> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,
         css::uno::Reference< css::sdbc::XDataSource> rxSource,
         css::uno::Reference< css::sdbc::XConnection> xConnection,
