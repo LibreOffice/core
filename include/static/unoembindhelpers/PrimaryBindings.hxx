@@ -11,9 +11,12 @@
 
 #include <sal/config.h>
 
+#include <stdexcept>
+
 #include <emscripten/bind.h>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
 
 template <typename T> struct emscripten::smart_ptr_trait<css::uno::Reference<T>>
@@ -48,6 +51,39 @@ template <typename T> struct UnoInOutParam
 
     T value;
 };
+
+template <typename T>
+void checkSequenceAccess(css::uno::Sequence<T> const& sequence, sal_Int32 index)
+{
+    if (index < 0 || index >= sequence.getLength())
+    {
+        throw std::out_of_range("index out of bounds");
+    }
+}
+
+template <typename T> void registerSequence(char const* name)
+{
+    emscripten::class_<css::uno::Sequence<T>>(name)
+        .template constructor<sal_Int32>()
+        .function("resize",
+                  +[](css::uno::Sequence<T>& self, sal_Int32 size) {
+                      if (size < 0)
+                      {
+                          throw std::invalid_argument("negative size");
+                      }
+                      self.realloc(size);
+                  })
+        .function("size", &css::uno::Sequence<T>::getLength)
+        .function("get",
+                  +[](css::uno::Sequence<T> const& self, sal_Int32 index) {
+                      checkSequenceAccess(self, index);
+                      return self[index];
+                  })
+        .function("set", +[](css::uno::Sequence<T>& self, sal_Int32 index, T const& value) {
+            checkSequenceAccess(self, index);
+            self.getArray()[index] = value;
+        });
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
