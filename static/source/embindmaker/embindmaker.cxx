@@ -136,8 +136,11 @@ jsServiceConstructor(OUString const& service,
     return "uno_Function_" + jsName(service) + "$$" + getServiceConstructorName(constructor);
 }
 
+OUString jsSingleton(OUString const& singleton) { return "uno_Function_" + jsName(singleton); }
+
 void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view prefix,
-          Module* module, std::vector<OUString>& interfaces, std::vector<OUString>& services)
+          Module* module, std::vector<OUString>& interfaces, std::vector<OUString>& services,
+          std::vector<OUString>& singletons)
 {
     assert(cursor.is());
     assert(module != nullptr);
@@ -160,7 +163,7 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
                     sub = std::make_shared<Module>();
                 }
                 scan(static_cast<unoidl::ModuleEntity*>(ent.get())->createCursor(),
-                     Concat2View(name + "."), sub.get(), interfaces, services);
+                     Concat2View(name + "."), sub.get(), interfaces, services, singletons);
                 break;
             }
             case unoidl::Entity::SORT_INTERFACE_TYPE:
@@ -185,6 +188,10 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
                 }
             }
             break;
+            case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
+                module->mappings.emplace_back(id, jsSingleton(name));
+                singletons.emplace_back(name);
+                break;
             default:
                 break;
         }
@@ -685,9 +692,10 @@ SAL_IMPLEMENT_MAIN()
         auto const module = std::make_shared<Module>();
         std::vector<OUString> interfaces;
         std::vector<OUString> services;
+        std::vector<OUString> singletons;
         for (auto const& prov : mgr->getPrimaryProviders())
         {
-            scan(prov->createRootCursor(), u"", module.get(), interfaces, services);
+            scan(prov->createRootCursor(), u"", module.get(), interfaces, services, singletons);
         }
         std::ofstream cppOut(cppPathname, std::ios_base::out | std::ios_base::trunc);
         if (!cppOut)
@@ -706,6 +714,10 @@ SAL_IMPLEMENT_MAIN()
         for (auto const& srv : services)
         {
             cppOut << "#include <" << srv.replace('.', '/') << ".hpp>\n";
+        }
+        for (auto const& sng : singletons)
+        {
+            cppOut << "#include <" << sng.replace('.', '/') << ".hpp>\n";
         }
         cppOut << "\n"
                   "// TODO: This is a temporary workaround that likely causes the Embind UNO\n"
@@ -786,6 +798,13 @@ SAL_IMPLEMENT_MAIN()
                        << "\", &" << cppName(srv) << "::" << getServiceConstructorName(ctor)
                        << ");\n";
             }
+            dumpRegisterFunctionEpilog(cppOut, n);
+        }
+        for (auto const& sng : singletons)
+        {
+            dumpRegisterFunctionProlog(cppOut, n);
+            cppOut << "    ::emscripten::function(\"" << jsSingleton(sng) << "\", &" << cppName(sng)
+                   << "::get);\n";
             dumpRegisterFunctionEpilog(cppOut, n);
         }
         cppOut << "EMSCRIPTEN_BINDINGS(unoembind_" << name << ") {\n";
