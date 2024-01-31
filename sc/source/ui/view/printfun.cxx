@@ -195,10 +195,9 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
     pPageData = nullptr;       // is only needed for initialisation
 }
 
-ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
-                            tools::Long nPage, tools::Long nDocP, const ScRange* pArea,
-                            const ScPrintOptions* pOptions,
-                            ScPageBreakData* pData )
+ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab, tools::Long nPage,
+                         tools::Long nDocP, const ScRange* pArea, const ScPrintOptions* pOptions,
+                         ScPageBreakData* pData, Size aSize, bool bPrintLandscape, bool bUsed)
     :   pDocShell           ( pShell ),
         rDoc(pDocShell->GetDocument()),
         pPrinter            ( pNewPrinter ),
@@ -215,7 +214,10 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
         bPrintAreaValid     ( false ),
-        pPageData           ( pData )
+        pPageData           ( pData ),
+        aPrintPageSize      ( aSize ),
+        bPrintPageLandscape ( bPrintLandscape ),
+        bUsePrintDialogSetting ( bUsed )
 {
     pDev = pPrinter.get();
     aSrcOffset = pPrinter->PixelToLogic(pPrinter->GetPageOffsetPixel(), MapMode(MapUnit::Map100thMM));
@@ -225,8 +227,9 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
     Construct( pOptions );
 }
 
-ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter,
-                         const ScPrintState& rState, const ScPrintOptions* pOptions)
+ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter, const ScPrintState& rState,
+                         const ScPrintOptions* pOptions, Size aSize, bool bPrintLandscape,
+                         bool bUsed)
     :   pDocShell           ( pShell ),
         rDoc(pDocShell->GetDocument()),
         pPrinter            ( pNewPrinter ),
@@ -236,7 +239,10 @@ ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter,
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
         mbHasPrintRange(true),
-        pPageData           ( nullptr )
+        pPageData           ( nullptr ),
+        aPrintPageSize      ( aSize ),
+        bPrintPageLandscape ( bPrintLandscape ),
+        bUsePrintDialogSetting ( bUsed )
 {
     pDev = pPrinter.get();
 
@@ -293,7 +299,10 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
         bPrintAreaValid     ( false ),
-        pPageData           ( nullptr )
+        pPageData           ( nullptr ),
+        aPrintPageSize      ( Size() ),
+        bPrintPageLandscape ( false ),
+        bUsePrintDialogSetting ( false )
 {
     pDev = pOutDev;
     m_aRanges.m_xPageEndX = std::make_shared<std::vector<SCCOL>>();
@@ -302,8 +311,9 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
     Construct( pOptions );
 }
 
-ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
-                             const ScPrintState& rState, const ScPrintOptions* pOptions )
+ScPrintFunc::ScPrintFunc(OutputDevice* pOutDev, ScDocShell* pShell, const ScPrintState& rState,
+                         const ScPrintOptions* pOptions, Size aSize, bool bPrintLandscape,
+                         bool bUsed)
     :   pDocShell           ( pShell ),
         rDoc(pDocShell->GetDocument()),
         pPrinter            ( nullptr ),
@@ -313,7 +323,10 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
         mbHasPrintRange(true),
-        pPageData           ( nullptr )
+        pPageData           ( nullptr ),
+        aPrintPageSize      ( aSize ),
+        bPrintPageLandscape ( bPrintLandscape ),
+        bUsePrintDialogSetting ( bUsed )
 {
     pDev = pOutDev;
 
@@ -877,13 +890,13 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     const SvxPageItem* pPageItem = &pParamSet->Get( ATTR_PAGE );
     nPageUsage          = pPageItem->GetPageUsage();
-    bLandscape          = pPageItem->IsLandscape();
+    bLandscape          = bUsePrintDialogSetting ? bPrintPageLandscape : pPageItem->IsLandscape();
     aFieldData.eNumType = pPageItem->GetNumType();
 
     bCenterHor = pParamSet->Get(ATTR_PAGE_HORCENTER).GetValue();
     bCenterVer = pParamSet->Get(ATTR_PAGE_VERCENTER).GetValue();
 
-    aPageSize = pParamSet->Get(ATTR_PAGE_SIZE).GetSize();
+    aPageSize = bUsePrintDialogSetting ? aPrintPageSize : pParamSet->Get(ATTR_PAGE_SIZE).GetSize();
     if ( !aPageSize.Width() || !aPageSize.Height() )
     {
         OSL_FAIL("PageSize Null ?!?!?");
