@@ -31,20 +31,13 @@ private:
 
     std::unique_ptr<SwNumFormatTreeView> m_xFormatLB;
 
-    void Apply();
     void InitControls();
 
 public:
     DateFormFieldDialog(weld::Widget* pParent, sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc);
     virtual ~DateFormFieldDialog() override;
 
-    virtual short run() override
-    {
-        short nRet = GenericDialogController::run();
-        if (nRet == RET_OK)
-            Apply();
-        return nRet;
-    }
+    void Apply();
 };
 
 } // namespace sw

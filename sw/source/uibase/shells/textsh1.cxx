@@ -2031,14 +2031,25 @@ void SwTextShell::Execute(SfxRequest &rReq)
         else if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDATE )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            sw::mark::DateFieldmark& rDateField = dynamic_cast<sw::mark::DateFieldmark&>(*pFieldBM);
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDateFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), &rDateField, *GetView().GetDocShell()->GetDoc()));
-            if (pDlg->Execute() == RET_OK)
-            {
-                rDateField.Invalidate();
-                rWrtSh.InvalidateWindows( SwRect(rWrtSh.GetView().GetVisArea()) );
-                rWrtSh.UpdateCursor(); // cursor position might be invalid
-            }
+            sw::mark::DateFieldmark* pDateField = &dynamic_cast<sw::mark::DateFieldmark&>(*pFieldBM);
+            VclPtr<AbstractDateFormFieldDialog> pDlg(pFact->CreateDateFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pDateField, *GetView().GetDocShell()->GetDoc()));
+            auto pWrtSh = &rWrtSh;
+            auto xRequest = std::make_shared<SfxRequest>(rReq);
+            rReq.Ignore(); // the 'old' request is not relevant any more
+            pDlg->StartExecuteAsync(
+                [pDlg, pWrtSh, pDateField, xRequest] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                    {
+                        pDlg->Apply();
+                        pDateField->Invalidate();
+                        pWrtSh->InvalidateWindows( SwRect(pWrtSh->GetView().GetVisArea()) );
+                        pWrtSh->UpdateCursor(); // cursor position might be invalid
+                    }
+                    pDlg->disposeOnce();
+                    xRequest->Done();
+                }
+            );
         }
         else
         {

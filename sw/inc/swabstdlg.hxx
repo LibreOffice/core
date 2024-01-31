@@ -460,6 +460,14 @@ public:
     virtual void UpdateFields() = 0;
 };
 
+class AbstractDateFormFieldDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractDateFormFieldDialog() override = default;
+public:
+    virtual void Apply() = 0;
+};
+
 class SwAbstractDialogFactory
 {
 public:
@@ -500,7 +508,7 @@ public:
         SwField* pField, bool bPrevButton, bool bNextButton) = 0;
     virtual VclPtr<AbstractDropDownFormFieldDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc) = 0;
+    virtual VclPtr<AbstractDateFormFieldDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert) = 0;
 
