@@ -3788,8 +3788,6 @@ bool isContentEmpty(uno::Reference<text::XText> const& xText, uno::Reference<tex
 
 void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageType eType)
 {
-    m_StreamStateStack.emplace();
-
     bool bHeader = ePagePartType == PagePartType::Header;
 
     const PropertyIds ePropIsOn = bHeader ? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
@@ -3949,9 +3947,6 @@ void DomainMapper_Impl::PopPageHeaderFooter(PagePartType ePagePartType, PageType
         m_bDiscardHeaderFooter = false;
     }
     m_eInHeaderFooterImport = HeaderFooterImportState::none;
-
-    assert(!m_StreamStateStack.empty());
-    m_StreamStateStack.pop();
 }
 
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
@@ -9752,6 +9747,8 @@ void DomainMapper_Impl::substream(Id rName,
     appendTableHandler();
     getTableManager().startLevel();
 
+    m_StreamStateStack.emplace();
+
     //import of page header/footer
     //Ensure that only one header/footer per section is pushed
 
@@ -9822,6 +9819,9 @@ void DomainMapper_Impl::substream(Id rName,
         PopAnnotation();
     break;
     }
+
+    assert(!m_StreamStateStack.empty());
+    m_StreamStateStack.pop();
 
     getTableManager().endLevel();
     popTableManager();
