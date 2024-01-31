@@ -167,18 +167,26 @@ IMPL_LINK_NOARG(SwMailMergeDocSelectPage, ExchangeDatabaseHdl, weld::Button&, vo
 {
 
     SwAbstractDialogFactory& rFact = ::swui::GetFactory();
-    ScopedVclPtr<VclAbstractDialog> pDlg(rFact.CreateSwChangeDBDlg(*m_pWizard->GetSwView()));
-    pDlg->Execute();
+    VclPtr<AbstractChangeDbDialog> pDlg(rFact.CreateSwChangeDBDlg(*m_pWizard->GetSwView()));
+    pDlg->StartExecuteAsync(
+        [this, pDlg] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+                pDlg->UpdateFields();
+            pDlg->disposeOnce();
 
-    OUString sDataSourceName = m_pWizard->GetSwView()->GetDataSourceName();
+            OUString sDataSourceName = m_pWizard->GetSwView()->GetDataSourceName();
 
-    if(m_xCurrentDocRB->get_active() &&
-       !sDataSourceName.isEmpty() &&
-       SwView::IsDataSourceAvailable(sDataSourceName))
-    {
-        m_xDataSourceWarningFT->hide();
-        m_pWizard->enableButtons(WizardButtonFlags::NEXT, true);
-    }
+            if(m_xCurrentDocRB->get_active() &&
+               !sDataSourceName.isEmpty() &&
+               SwView::IsDataSourceAvailable(sDataSourceName))
+            {
+                m_xDataSourceWarningFT->hide();
+                m_pWizard->enableButtons(WizardButtonFlags::NEXT, true);
+            }
+        }
+    );
+
 }
 
 bool SwMailMergeDocSelectPage::commitPage( ::vcl::WizardTypes::CommitPageReason _eReason )

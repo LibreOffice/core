@@ -3337,8 +3337,15 @@ void SwBaseShell::ExecField( SfxRequest const & rReq )
         case FN_CHANGE_DBFIELD:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
-            pDlg->Execute();
+            VclPtr<AbstractChangeDbDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
+            pDlg->StartExecuteAsync(
+                [pDlg] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                        pDlg->UpdateFields();
+                    pDlg->disposeOnce();
+                }
+            );
         }
         break;
 #endif

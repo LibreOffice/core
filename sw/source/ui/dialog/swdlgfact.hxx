@@ -57,6 +57,7 @@
 #include <optional>
 #include <o3tl/deleter.hxx>
 #include <pagenumberdlg.hxx>
+#include <changedb.hxx>
 
 
 class SwInsertAbstractDlg;
@@ -744,6 +745,20 @@ public:
     virtual sal_uInt16          GetRestartPage() const override;
 };
 
+class AbstractChangeDbDialog_Impl : public AbstractChangeDbDialog
+{
+    std::shared_ptr<SwChangeDBDlg> m_xDlg;
+public:
+    explicit AbstractChangeDbDialog_Impl(std::shared_ptr<SwChangeDBDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void UpdateFields() override { m_xDlg->UpdateFields(); }
+};
+
+
 //AbstractDialogFactory_Impl implementations
 class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 {
@@ -770,7 +785,7 @@ public:
 
     virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual std::shared_ptr<AbstractSwTranslateLangSelectDlg> CreateSwTranslateLangSelectDlg(weld::Window *pParent, SwWrtShell &rSh) override;
-    virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) override;
+    virtual VclPtr<AbstractChangeDbDialog> CreateSwChangeDBDlg(SwView& rVw) override;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) override;
     virtual VclPtr<AbstractSwConvertTableDlg> CreateSwConvertTableDlg(SwView& rView, bool bToTable) override;

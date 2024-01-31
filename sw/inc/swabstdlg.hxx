@@ -451,6 +451,15 @@ protected:
 public:
     virtual void Apply() = 0;
 };
+
+class AbstractChangeDbDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractChangeDbDialog() override = default;
+public:
+    virtual void UpdateFields() = 0;
+};
+
 class SwAbstractDialogFactory
 {
 public:
@@ -475,7 +484,7 @@ public:
 
     virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual std::shared_ptr<AbstractSwTranslateLangSelectDlg> CreateSwTranslateLangSelectDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
-    virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) = 0;
+    virtual VclPtr<AbstractChangeDbDialog> CreateSwChangeDBDlg(SwView& rVw) = 0;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) = 0;
     virtual VclPtr<AbstractSwConvertTableDlg> CreateSwConvertTableDlg(SwView& rView, bool bToTable) = 0;

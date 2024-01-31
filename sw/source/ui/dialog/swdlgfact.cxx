@@ -977,6 +977,17 @@ std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSele
 #endif
 }
 
+short AbstractChangeDbDialog_Impl::Execute()
+{
+    assert(false);
+    return -1;
+}
+
+bool AbstractChangeDbDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 VclPtr<AbstractSwInsertAbstractDlg> SwAbstractDialogFactory_Impl::CreateSwInsertAbstractDlg(weld::Window* pParent)
 {
     return VclPtr<AbstractSwInsertAbstractDlg_Impl>::Create(std::make_unique<SwInsertAbstractDlg>(pParent));
@@ -1047,10 +1058,10 @@ std::shared_ptr<AbstractSwTranslateLangSelectDlg> SwAbstractDialogFactory_Impl::
 #endif
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
+VclPtr<AbstractChangeDbDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwChangeDBDlg>(rVw));
+    return VclPtr<AbstractChangeDbDialog_Impl>::Create(std::make_shared<SwChangeDBDlg>(rVw));
 #else
     (void) rVw;
     return nullptr;

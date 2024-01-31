@@ -158,14 +158,6 @@ SwChangeDBDlg::~SwChangeDBDlg()
 {
 }
 
-short SwChangeDBDlg::run()
-{
-    short nRet = SfxDialogController::run();
-    if (nRet == RET_OK)
-        UpdateFields();
-    return nRet;
-}
-
 void SwChangeDBDlg::UpdateFields()
 {
     std::vector<OUString> aDBNames;

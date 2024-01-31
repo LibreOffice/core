@@ -44,15 +44,15 @@ class SwChangeDBDlg final : public SfxDialogController
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(AddDBHdl, weld::Button&, void);
 
-    void            UpdateFields();
     void            FillDBPopup();
     std::unique_ptr<weld::TreeIter> Insert(std::u16string_view rDBName);
     void            ShowDBName(const SwDBData& rDBData);
 
 public:
     SwChangeDBDlg(SwView const & rVw);
-    virtual short run() override;
     virtual ~SwChangeDBDlg() override;
+
+    void            UpdateFields();
 };
 
 #endif
