@@ -62,54 +62,52 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .value("string", TypeClass::TypeClass_STRING);
 
     // Any
-    class_<Any>("Any").constructor(
-        +[](const val& rObject, const TypeClass& rUnoType) -> Any {
-            switch (rUnoType)
-            {
-                case TypeClass_VOID:
-                    break;
-                case TypeClass_CHAR:
-                    return Any{ rObject.as<sal_Int8>() };
-                case TypeClass_BOOLEAN:
-                    return Any{ rObject.as<bool>() };
-                case TypeClass_BYTE:
-                    return Any{ rObject.as<sal_Int8>() };
-                case TypeClass_SHORT:
-                    return Any{ rObject.as<sal_Int16>() };
-                case TypeClass_UNSIGNED_SHORT:
-                    return Any{ rObject.as<sal_uInt16>() };
-                case TypeClass_LONG:
-                    return Any{ rObject.as<sal_Int32>() };
-                case TypeClass_UNSIGNED_LONG:
-                    return Any{ rObject.as<sal_uInt32>() };
-                case TypeClass_HYPER:
-                    return Any{ rObject.as<sal_Int64>() };
-                case TypeClass_UNSIGNED_HYPER:
-                    return Any{ rObject.as<sal_uInt64>() };
-                case TypeClass_FLOAT:
-                    return Any{ rObject.as<float>() };
-                case TypeClass_DOUBLE:
-                    return Any{ rObject.as<double>() };
-                case TypeClass_STRING:
-                    return Any{ OUString(rObject.as<std::u16string>()) };
-                case TypeClass_TYPE:
-                case TypeClass_ANY:
-                case TypeClass_ENUM:
-                case TypeClass_STRUCT:
-                case TypeClass_EXCEPTION:
-                case TypeClass_SEQUENCE:
-                case TypeClass_INTERFACE:
-                case TypeClass_TYPEDEF:
-                case TypeClass_SERVICE:
-                case TypeClass_MODULE:
-                case TypeClass_INTERFACE_METHOD:
-                case TypeClass_INTERFACE_ATTRIBUTE:
-                default:
-                    break;
-            }
-            return {};
-        },
-        allow_raw_pointers());
+    class_<Any>("Any").constructor(+[](const val& rObject, const TypeClass& rUnoType) -> Any {
+        switch (rUnoType)
+        {
+            case TypeClass_VOID:
+                break;
+            case TypeClass_CHAR:
+                return Any{ rObject.as<sal_Int8>() };
+            case TypeClass_BOOLEAN:
+                return Any{ rObject.as<bool>() };
+            case TypeClass_BYTE:
+                return Any{ rObject.as<sal_Int8>() };
+            case TypeClass_SHORT:
+                return Any{ rObject.as<sal_Int16>() };
+            case TypeClass_UNSIGNED_SHORT:
+                return Any{ rObject.as<sal_uInt16>() };
+            case TypeClass_LONG:
+                return Any{ rObject.as<sal_Int32>() };
+            case TypeClass_UNSIGNED_LONG:
+                return Any{ rObject.as<sal_uInt32>() };
+            case TypeClass_HYPER:
+                return Any{ rObject.as<sal_Int64>() };
+            case TypeClass_UNSIGNED_HYPER:
+                return Any{ rObject.as<sal_uInt64>() };
+            case TypeClass_FLOAT:
+                return Any{ rObject.as<float>() };
+            case TypeClass_DOUBLE:
+                return Any{ rObject.as<double>() };
+            case TypeClass_STRING:
+                return Any{ OUString(rObject.as<std::u16string>()) };
+            case TypeClass_TYPE:
+            case TypeClass_ANY:
+            case TypeClass_ENUM:
+            case TypeClass_STRUCT:
+            case TypeClass_EXCEPTION:
+            case TypeClass_SEQUENCE:
+            case TypeClass_INTERFACE:
+            case TypeClass_TYPEDEF:
+            case TypeClass_SERVICE:
+            case TypeClass_MODULE:
+            case TypeClass_INTERFACE_METHOD:
+            case TypeClass_INTERFACE_ATTRIBUTE:
+            default:
+                break;
+        }
+        return {};
+    });
 
     class_<unoembindhelpers::UnoInOutParam<bool>>("UnoInOutParamBoolean")
         .constructor()
