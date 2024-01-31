@@ -32,6 +32,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/wghtitem.hxx>
@@ -1781,8 +1782,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
     CPPUNIT_ASSERT_EQUAL(OString("PS;Default"), pXTextDocument->getViewRenderState());
 }
 
-// Helper function to get a tile to a bitmap and check the pixel color
-static void assertTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, int nPixelY, Color aColor)
+// Helper function to get a tile to a bitmap
+static Bitmap getTile(SwXTextDocument* pXTextDocument)
 {
     size_t nCanvasSize = 1024;
     size_t nTileSize = 256;
@@ -1793,22 +1794,26 @@ static void assertTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, i
             Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
     pDevice->EnableMapMode(false);
-    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    return pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+}
+
+// Helper function to get a tile to a bitmap and check the pixel color
+static void assertTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, int nPixelY, Color aColor)
+{
+    Bitmap aBitmap = getTile(pXTextDocument);
     Bitmap::ScopedReadAccess pAccess(aBitmap);
     Color aActualColor(pAccess->GetPixel(nPixelX, nPixelY));
     CPPUNIT_ASSERT_EQUAL(aColor, aActualColor);
 }
 
-// Test that changing the theme in one view doesn't change it in the other view
-CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
+static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor)
 {
-    Color aDarkColor(0x1c, 0x1c, 0x1c);
     // Add a minimal dark scheme
     {
         svtools::EditableColorConfig aColorConfig;
         svtools::ColorConfigValue aValue;
         aValue.bIsVisible = true;
-        aValue.nColor = aDarkColor;
+        aValue.nColor = rDarkColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
         aColorConfig.AddScheme(u"Dark");
     }
@@ -1817,10 +1822,17 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         svtools::EditableColorConfig aColorConfig;
         svtools::ColorConfigValue aValue;
         aValue.bIsVisible = true;
-        aValue.nColor = COL_WHITE;
+        aValue.nColor = rLightColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
         aColorConfig.AddScheme(u"Light");
     }
+}
+
+// Test that changing the theme in one view doesn't change it in the other view
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
+{
+    Color aDarkColor(0x1c, 0x1c, 0x1c);
+    addDarkLightThemes(aDarkColor, COL_WHITE);
     SwXTextDocument* pXTextDocument = createDoc();
     int nFirstViewId = SfxLokHelper::getView();
     ViewCallback aView1;
@@ -4146,6 +4158,54 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testToggleFormattingMarks)
     // 2. toggling on ControlCodes should result in view #2 render state reporting
     // 'P' for Pilcrow
     CPPUNIT_ASSERT_EQUAL(OString("P" + sOrigView2RenderState), aView2.m_aViewRenderState);
+}
+
+// toggling chart into dark mode should switch not leave text as black
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
+{
+    addDarkLightThemes(COL_BLACK, COL_WHITE);
+    SwXTextDocument* pXTextDocument = createDoc("large-chart-labels.odt");
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame()->GetFrame().GetFrameInterface();
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        {
+            { "NewTheme", uno::Any(OUString("Dark")) },
+        }
+    );
+    comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
+    CPPUNIT_ASSERT_EQUAL(OString("S;Dark"), pXTextDocument->getViewRenderState());
+
+    Bitmap aBitmap(getTile(pXTextDocument));
+    Size aSize = aBitmap.GetSizePixel();
+
+#ifdef DBGDUMP
+    SvFileStream aNew("/tmp/dump.png", StreamMode::WRITE | StreamMode::TRUNC);
+    vcl::PngImageWriter aPNGWriter(aNew);
+    aPNGWriter.write(BitmapEx(aBitmap));
+#endif
+
+    int nBlackPixels = 0;
+    int nWhitePixels = 0;
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    for (int x = 0; x < aSize.Width(); ++x)
+    {
+        for (int y = 0; y < aSize.Height(); ++y)
+        {
+            Color aActualColor(pAccess->GetPixel(y, x));
+            if (aActualColor.IsDark()) // ignore antialiasing
+                ++nBlackPixels;
+            else
+                ++nWhitePixels;
+        }
+    }
+    // text in white on black background should have both colors dominated by black
+    // background
+    CPPUNIT_ASSERT(nBlackPixels > 0);
+    CPPUNIT_ASSERT(nWhitePixels > 0);
+    CPPUNIT_ASSERT(nBlackPixels > nWhitePixels);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
