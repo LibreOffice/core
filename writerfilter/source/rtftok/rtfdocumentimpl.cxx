@@ -3807,9 +3807,11 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     if (bHex && !m_aHexBuffer.isEmpty())
     {
         rtl_TextEncoding nEncoding = m_aStates.top().getCurrentEncoding();
-        if ((m_aStates.top().getDestination() == Destination::FONTENTRY
-             || m_aStates.top().getDestination() == Destination::FIELDINSTRUCTION)
-            && m_aStates.top().getCurrentEncoding() == RTL_TEXTENCODING_SYMBOL)
+        if (nEncoding == RTL_TEXTENCODING_SYMBOL
+            && (m_aStates.top().getDestination() == Destination::FONTENTRY
+                || (m_aStates.size() > 1
+                    && m_aStates[m_aStates.size() - 2].getDestination()
+                           == Destination::FIELDINSTRUCTION)))
             nEncoding = RTL_TEXTENCODING_MS_1252;
         OUString aString = OStringToOUString(m_aHexBuffer, nEncoding);
         m_aHexBuffer.setLength(0);
