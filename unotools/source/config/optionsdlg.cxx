@@ -44,7 +44,7 @@ static void ReadNode(
 SvtOptionsDialogOptions::SvtOptionsDialogOptions()
 {
     Reference<css::container::XHierarchicalNameAccess> xHierarchyAccess = utl::ConfigManager::acquireTree(u"Office.OptionsDialog");
-    const Sequence< OUString > aNodeSeq = utl::ConfigItem::GetNodeNames( xHierarchyAccess, ROOT_NODE, utl::ConfigNameFormat::LocalPath);
+    const Sequence< OUString > aNodeSeq = utl::ConfigItem::GetNodeNames( xHierarchyAccess, ROOT_NODE, utl::ConfigNameFormat::LocalNode);
     OUString sNode( ROOT_NODE + g_sPathDelimiter );
     for ( const auto& rNode : aNodeSeq )
     {
@@ -94,7 +94,7 @@ static void ReadNode(
     if ( _eType != NT_Option )
     {
         OUString sNodes( sNode + sSet );
-        const Sequence< OUString > aNodes = utl::ConfigItem::GetNodeNames( xHierarchyAccess, sNodes, utl::ConfigNameFormat::LocalPath );
+        const Sequence< OUString > aNodes = utl::ConfigItem::GetNodeNames( xHierarchyAccess, sNodes, utl::ConfigNameFormat::LocalNode );
         for ( const auto& rNode : aNodes )
         {
             OUString sSubNodeName( sNodes + g_sPathDelimiter + rNode );
