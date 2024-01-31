@@ -139,8 +139,8 @@ jsServiceConstructor(OUString const& service,
 OUString jsSingleton(OUString const& singleton) { return "uno_Function_" + jsName(singleton); }
 
 void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view prefix,
-          Module* module, std::vector<OUString>& interfaces, std::vector<OUString>& services,
-          std::vector<OUString>& singletons)
+          Module* module, std::vector<OUString>& enums, std::vector<OUString>& interfaces,
+          std::vector<OUString>& services, std::vector<OUString>& singletons)
 {
     assert(cursor.is());
     assert(module != nullptr);
@@ -163,9 +163,13 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
                     sub = std::make_shared<Module>();
                 }
                 scan(static_cast<unoidl::ModuleEntity*>(ent.get())->createCursor(),
-                     Concat2View(name + "."), sub.get(), interfaces, services, singletons);
+                     Concat2View(name + "."), sub.get(), enums, interfaces, services, singletons);
                 break;
             }
+            case unoidl::Entity::SORT_ENUM_TYPE:
+                module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
+                enums.emplace_back(name);
+                break;
             case unoidl::Entity::SORT_INTERFACE_TYPE:
                 module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
                 interfaces.emplace_back(name);
@@ -690,12 +694,14 @@ SAL_IMPLEMENT_MAIN()
             }
         }
         auto const module = std::make_shared<Module>();
+        std::vector<OUString> enums;
         std::vector<OUString> interfaces;
         std::vector<OUString> services;
         std::vector<OUString> singletons;
         for (auto const& prov : mgr->getPrimaryProviders())
         {
-            scan(prov->createRootCursor(), u"", module.get(), interfaces, services, singletons);
+            scan(prov->createRootCursor(), u"", module.get(), enums, interfaces, services,
+                 singletons);
         }
         std::ofstream cppOut(cppPathname, std::ios_base::out | std::ios_base::trunc);
         if (!cppOut)
@@ -707,6 +713,10 @@ SAL_IMPLEMENT_MAIN()
                   "#include <com/sun/star/uno/Any.hxx>\n"
                   "#include <com/sun/star/uno/Reference.hxx>\n"
                   "#include <static/unoembindhelpers/PrimaryBindings.hxx>\n";
+        for (auto const& enm : enums)
+        {
+            cppOut << "#include <" << enm.replace('.', '/') << ".hpp>\n";
+        }
         for (auto const& ifc : interfaces)
         {
             cppOut << "#include <" << ifc.replace('.', '/') << ".hpp>\n";
@@ -731,6 +741,23 @@ SAL_IMPLEMENT_MAIN()
         }
         cppOut << "}\n\n";
         unsigned long long n = 0;
+        for (auto const& enm : enums)
+        {
+            auto const ent = mgr->getManager()->findEntity(enm);
+            assert(ent.is());
+            assert(ent->getSort() == unoidl::Entity::SORT_ENUM_TYPE);
+            rtl::Reference const enmEnt(static_cast<unoidl::EnumTypeEntity*>(ent.get()));
+            dumpRegisterFunctionProlog(cppOut, n);
+            cppOut << "    ::emscripten::enum_<" << cppName(enm) << ">(\"uno_Type_" << jsName(enm)
+                   << "\")";
+            for (auto const& mem : enmEnt->getMembers())
+            {
+                cppOut << "\n        .value(\"" << mem.name << "\", " << cppName(enm) << "_"
+                       << mem.name << ")";
+            }
+            cppOut << ";\n";
+            dumpRegisterFunctionEpilog(cppOut, n);
+        }
         for (auto const& ifc : interfaces)
         {
             auto const ent = mgr->getManager()->findEntity(ifc);

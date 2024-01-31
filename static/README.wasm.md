@@ -249,7 +249,7 @@ while (xParaEnumeration.hasMoreElements()) {
     xParagraph = new css.text.XTextRange(xParaEnumeration.nextElement(), Module.uno_Reference.FromAny);
     if (xParagraph.$is()) {
         xParaProps = new css.beans.XPropertySet(xParagraph.$query());
-        xParaProps.setPropertyValue(new Module.OUString("CharColor"), new Module.Any(Math.floor(Math.random() * 0xFFFFFF), Module.UnoType.long));
+        xParaProps.setPropertyValue(new Module.OUString("CharColor"), new Module.Any(Math.floor(Math.random() * 0xFFFFFF), css.uno.TypeClass.LONG));
     }
 }
 ```

@@ -45,22 +45,6 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
             return std::u16string(rSelf.getStr(), rSelf.getLength());
         });
 
-    // Types used for Any construction
-    enum_<TypeClass>("UnoType")
-        .value("void", TypeClass::TypeClass_VOID)
-        .value("char", TypeClass::TypeClass_CHAR)
-        .value("bool", TypeClass::TypeClass_BOOLEAN)
-        .value("byte", TypeClass::TypeClass_BYTE)
-        .value("short", TypeClass::TypeClass_SHORT)
-        .value("unsigned_short", TypeClass::TypeClass_UNSIGNED_SHORT)
-        .value("long", TypeClass::TypeClass_LONG)
-        .value("unsigned_long", TypeClass::TypeClass_UNSIGNED_LONG)
-        .value("hyper", TypeClass::TypeClass_HYPER)
-        .value("unsigned_hyper", TypeClass::TypeClass_UNSIGNED_HYPER)
-        .value("float", TypeClass::TypeClass_FLOAT)
-        .value("double", TypeClass::TypeClass_DOUBLE)
-        .value("string", TypeClass::TypeClass_STRING);
-
     // Any
     class_<Any>("Any").constructor(+[](const val& rObject, const TypeClass& rUnoType) -> Any {
         switch (rUnoType)
