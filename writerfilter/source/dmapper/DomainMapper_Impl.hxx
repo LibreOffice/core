@@ -163,6 +163,16 @@ enum StoredRedlines
     NONE
 };
 
+enum class SubstreamType
+{
+    Body,
+    Header,
+    Footer,
+    Footnote,
+    Endnote,
+    Annotation,
+};
+
 /**
  * Storage for state that is relevant outside a header/footer, but not inside it.
  *
@@ -174,6 +184,7 @@ enum StoredRedlines
  */
 struct SubstreamContext
 {
+    SubstreamType eSubstreamType = SubstreamType::Body;
     bool      bTextInserted = false;
     /**
      * This contains the raw table depth. nTableDepth > 0 is the same as
@@ -187,6 +198,10 @@ struct SubstreamContext
     bool      bIsColumnBreakDeferred = false;
     bool      bIsPageBreakDeferred = false;
     sal_Int32 nLineBreaksDeferred = 0;
+    /// Current paragraph had at least one field in it.
+    bool      bParaHadField = false;
+    /// Current paragraph in a table is first paragraph of a cell
+    bool      bFirstParagraphInCell = true;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -569,15 +584,7 @@ private:
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInNumberingImport; //in import of numbering (i.e. numbering.xml)
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
-    enum class HeaderFooterImportState
-    {
-        none,
-        header,
-        footer,
-    }                               m_eInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
-    bool                            m_bInFootOrEndnote;
-    bool                            m_bInFootnote;
     PropertyMapPtr m_pFootnoteContext;
     bool m_bHasFootnoteStyle;
     bool m_bCheckFootnoteStyle;
@@ -626,7 +633,6 @@ private:
     bool                            m_bIsPreviousParagraphFramed;
     bool                            m_bIsLastParaInSection;
     bool                            m_bIsLastSectionGroup;
-    bool                            m_bIsInComments;
     /// If the current paragraph contains section property definitions.
     bool                            m_bParaSectpr;
     bool                            m_bUsingEnhancedFields;
@@ -780,7 +786,7 @@ public:
     /// Getter method for m_bSdt.
     bool GetSdt() const { return m_bSdt;}
     bool GetParaChanged() const { return m_bParaChanged;}
-    bool GetParaHadField() const { return m_bParaHadField; }
+    bool GetParaHadField() const { return m_StreamStateStack.top().bParaHadField; }
     bool GetRemoveThisPara() const { return m_bRemoveThisParagraph; }
 
     void deferBreak( BreakType deferredBreakType );
@@ -900,7 +906,7 @@ public:
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
 
     void PopPageHeaderFooter(PagePartType ePagePartType, PageType eType);
-    bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
+    bool IsInHeaderFooter() const { auto const type(m_StreamStateStack.top().eSubstreamType); return type == SubstreamType::Header || type == SubstreamType::Footer; }
     void ConvertHeaderFooterToTextFrame(bool, bool);
     static void fillEmptyFrameProperties(std::vector<css::beans::PropertyValue>& rFrameProperties, bool bSetAnchorToChar);
 
@@ -908,8 +914,8 @@ public:
 
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
-    bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
-    bool IsInFootnote() const { return IsInFootOrEndnote() && m_bInFootnote; }
+    bool IsInFootOrEndnote() const { auto const type(m_StreamStateStack.top().eSubstreamType); return type == SubstreamType::Footnote || type == SubstreamType::Endnote; }
+    bool IsInFootnote() const { return m_StreamStateStack.top().eSubstreamType == SubstreamType::Footnote; }
 
     void StartCustomFootnote(const PropertyMapPtr pContext);
     void EndCustomFootnote();
@@ -1059,7 +1065,7 @@ public:
     void SetInFootnoteProperties(bool bSet) { m_bIsInFootnoteProperties = bSet;}
     bool IsInFootnoteProperties() const { return m_bIsInFootnoteProperties;}
 
-    bool IsInComments() const { return m_bIsInComments; };
+    bool IsInComments() const { return m_StreamStateStack.top().eSubstreamType == SubstreamType::Annotation; };
 
     std::vector<css::beans::PropertyValue> MakeFrameProperties(const ParagraphProperties& rProps);
     void CheckUnregisteredFrameConversion(bool bPreventOverlap = false);
@@ -1242,15 +1248,9 @@ private:
     // Start a new index section; if needed, finish current paragraph
     css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
-    /// Current paragraph had at least one field in it.
-    bool m_bParaHadField;
-    bool m_bSaveParaHadField;
     css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool m_bParaAutoBefore;
-    /// Current paragraph in a table is first paragraph of a cell
-    bool m_bFirstParagraphInCell;
-    bool m_bSaveFirstParagraphInCell;
     /// Current paragraph had at least one inline object in it.
     bool m_bParaWithInlineObject;
     /// SAXException was seen so document will be abandoned
