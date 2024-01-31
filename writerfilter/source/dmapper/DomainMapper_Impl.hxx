@@ -189,6 +189,8 @@ struct SubstreamContext
     sal_Int32 nLineBreaksDeferred = 0;
     /// Current paragraph had at least one field in it.
     bool      bParaHadField = false;
+    /// Current paragraph in a table is first paragraph of a cell
+    bool      bFirstParagraphInCell = true;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -1232,9 +1234,6 @@ private:
     css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool m_bParaAutoBefore;
-    /// Current paragraph in a table is first paragraph of a cell
-    bool m_bFirstParagraphInCell;
-    bool m_bSaveFirstParagraphInCell;
     /// Current paragraph had at least one inline object in it.
     bool m_bParaWithInlineObject;
     /// SAXException was seen so document will be abandoned

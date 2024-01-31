@@ -402,8 +402,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsSplitPara(false),
         m_bIsActualParagraphFramed( false ),
         m_bParaAutoBefore(false),
-        m_bFirstParagraphInCell(true),
-        m_bSaveFirstParagraphInCell(false),
         m_bParaWithInlineObject(false),
         m_bSaxError(false)
 {
@@ -2357,7 +2355,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         {
             if ( GetIsFirstParagraphInShape() ||
                  (GetIsFirstParagraphInSection() && GetSectionContext() && GetSectionContext()->IsFirstSection()) ||
-                (m_bFirstParagraphInCell
+                (m_StreamStateStack.top().bFirstParagraphInCell
                  && 0 < m_StreamStateStack.top().nTableDepth
                  && m_StreamStateStack.top().nTableDepth == m_nTableCellDepth))
             {
@@ -2655,9 +2653,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 TOOLS_WARN_EXCEPTION("writerfilter", "DomainMapper_Impl::finishParagraph NumberingRules");
                             }
                         }
-                        else if ( m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName") &&
+                        else if (m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName")
                                 // don't update before tables
-                                (m_StreamStateStack.top().nTableDepth == 0 || !m_bFirstParagraphInCell))
+                            && (m_StreamStateStack.top().nTableDepth == 0
+                                || !m_StreamStateStack.top().bFirstParagraphInCell))
                         {
                             aCurrentNumberingName = GetListStyleName(nListId);
                             m_xPreviousParagraph->getPropertyValue("NumberingStyleName") >>= aPreviousNumberingName;
@@ -3024,7 +3023,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         && m_StreamStateStack.top().nTableDepth == m_nTableCellDepth
         && !IsInShape() && !m_bIsInComments)
     {
-        m_bFirstParagraphInCell = false;
+        m_StreamStateStack.top().bFirstParagraphInCell = false;
     }
 
     m_bParaAutoBefore = false;
@@ -3955,7 +3954,6 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
     m_bInFootOrEndnote = true;
     m_bInFootnote = bIsFootnote;
     m_bCheckFirstFootnoteTab = true;
-    m_bSaveFirstParagraphInCell = m_bFirstParagraphInCell;
     try
     {
         // Redlines outside the footnote should not affect footnote content
@@ -4484,7 +4482,6 @@ void DomainMapper_Impl::PopFootOrEndnote()
     m_eSkipFootnoteState = SkipFootnoteSeparator::OFF;
     m_bInFootOrEndnote = m_bInFootnote = false;
     m_pFootnoteContext = nullptr;
-    m_bFirstParagraphInCell = m_bSaveFirstParagraphInCell;
 }
 
 void DomainMapper_Impl::PopAnnotation()
@@ -4973,7 +4970,7 @@ void DomainMapper_Impl::ClearPreviousParagraph()
     m_xPreviousParagraph.clear();
 
     // next table paragraph will be first paragraph in a cell
-    m_bFirstParagraphInCell = true;
+    m_StreamStateStack.top().bFirstParagraphInCell = true;
 }
 
 void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
@@ -8900,8 +8897,11 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                     // keep bookmark range, if it doesn't exceed cell boundary
                     uno::Reference< text::XTextRange > xStart = xCursor->getStart();
                     xCursor->goLeft( 1, false );
-                    if (m_StreamStateStack.top().nTableDepth == 0 || !m_bFirstParagraphInCell)
+                    if (m_StreamStateStack.top().nTableDepth == 0
+                        || !m_StreamStateStack.top().bFirstParagraphInCell)
+                    {
                         xCursor->gotoRange(xStart, true );
+                    }
                 }
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
                 SAL_WARN_IF(aBookmarkIter->second.m_sBookmarkName.isEmpty(), "writerfilter.dmapper", "anonymous bookmark");
