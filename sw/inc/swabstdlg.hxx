@@ -444,6 +444,13 @@ public:
     virtual void Apply() = 0;
 };
 
+class AbstractDropDownFormFieldDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractDropDownFormFieldDialog() override = default;
+public:
+    virtual void Apply() = 0;
+};
 class SwAbstractDialogFactory
 {
 public:
@@ -482,7 +489,7 @@ public:
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(weld::Widget* pParent, SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) = 0;
-    virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) = 0;
+    virtual VclPtr<AbstractDropDownFormFieldDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc) = 0;
 

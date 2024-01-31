@@ -232,7 +232,13 @@ short AbstractDropDownFieldDialog_Impl::Execute()
 
 short AbstractDropDownFormFieldDialog_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractDropDownFormFieldDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractDateFormFieldDialog_Impl::Execute()
@@ -1094,7 +1100,7 @@ VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDown
     return VclPtr<AbstractDropDownFieldDialog_Impl>::Create(std::make_unique<sw::DropDownFieldDialog>(pParent, rSh, pField, bPrevButton, bNextButton));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldDialog(weld::Widget *pParent, sw::mark::IFieldmark* pDropDownField)
+VclPtr<AbstractDropDownFormFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFormFieldDialog(weld::Widget *pParent, sw::mark::IFieldmark* pDropDownField)
 {
     return VclPtr<AbstractDropDownFormFieldDialog_Impl>::Create(std::make_unique<sw::DropDownFormFieldDialog>(pParent, pDropDownField));
 }

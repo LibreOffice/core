@@ -381,15 +381,17 @@ public:
     virtual bool          NextButtonPressed() const override;
 };
 
-class AbstractDropDownFormFieldDialog_Impl : public VclAbstractDialog
+class AbstractDropDownFormFieldDialog_Impl : public AbstractDropDownFormFieldDialog
 {
-    std::unique_ptr<sw::DropDownFormFieldDialog> m_xDlg;
+    std::shared_ptr<sw::DropDownFormFieldDialog> m_xDlg;
 public:
-    explicit AbstractDropDownFormFieldDialog_Impl(std::unique_ptr<sw::DropDownFormFieldDialog> p)
+    explicit AbstractDropDownFormFieldDialog_Impl(std::shared_ptr<sw::DropDownFormFieldDialog> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void Apply() override { m_xDlg->Apply(); }
 };
 
 class AbstractDateFormFieldDialog_Impl : public VclAbstractDialog
@@ -781,7 +783,7 @@ public:
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(weld::Widget* pParent, SwWrtShell &rSh,
         SwField* pField, bool bPrevButton, bool bNextButton) override;
-    virtual VclPtr<VclAbstractDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) override;
+    virtual VclPtr<AbstractDropDownFormFieldDialog> CreateDropDownFormFieldDialog(weld::Widget* pParent, sw::mark::IFieldmark* pDropDownField) override;
     virtual VclPtr<VclAbstractDialog> CreateDateFormFieldDialog(weld::Widget* pParent, sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc) override;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert) override;

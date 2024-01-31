@@ -43,19 +43,12 @@ private:
     void InitControls();
     void AppendItemToList();
     void UpdateButtons();
-    void Apply();
 
 public:
     DropDownFormFieldDialog(weld::Widget* pParent, mark::IFieldmark* pDropDownField);
     virtual ~DropDownFormFieldDialog() override;
 
-    virtual short run() override
-    {
-        short nRet = GenericDialogController::run();
-        if (nRet == RET_OK)
-            Apply();
-        return nRet;
-    }
+    void Apply();
 };
 
 } // namespace sw

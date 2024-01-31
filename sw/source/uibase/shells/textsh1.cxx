@@ -2009,13 +2009,24 @@ void SwTextShell::Execute(SfxRequest &rReq)
              && !(rWrtSh.GetCurrSection() && rWrtSh.GetCurrSection()->IsProtect()) )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDropDownFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pFieldBM));
-            if (pDlg->Execute() == RET_OK)
-            {
-                pFieldBM->Invalidate();
-                rWrtSh.InvalidateWindows( SwRect(rWrtSh.GetView().GetVisArea()) );
-                rWrtSh.UpdateCursor(); // cursor position might be invalid
-            }
+            VclPtr<AbstractDropDownFormFieldDialog> pDlg(pFact->CreateDropDownFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pFieldBM));
+            auto xRequest = std::make_shared<SfxRequest>(rReq);
+            rReq.Ignore(); // the 'old' request is not relevant any more
+            auto pWrtSh = &rWrtSh;
+            pDlg->StartExecuteAsync(
+                [pDlg, pFieldBM, pWrtSh, xRequest] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                    {
+                        pDlg->Apply();
+                        pFieldBM->Invalidate();
+                        pWrtSh->InvalidateWindows( SwRect(pWrtSh->GetView().GetVisArea()) );
+                        pWrtSh->UpdateCursor(); // cursor position might be invalid
+                    }
+                    pDlg->disposeOnce();
+                    xRequest->Done();
+                }
+            );
         }
         else if ( pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDATE )
         {
