@@ -1426,8 +1426,8 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                   || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
         {
             bDraw = PortionType::Footnote != nWhich || m_pFrame->IsFootnoteAllowed();
+            bDraw &= GetOpt().IsHardBlank();
         }
-        bDraw &= GetOpt().IsHardBlank();
         break;
     case PortionType::Bookmark:
         // no shading
