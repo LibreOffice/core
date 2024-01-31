@@ -82,6 +82,19 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_1, "tdf158586_pageBreak1.rtf")
     assertXPathContent(pLayout, "/root/page[2]/body//txt", "Second page");
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf158586_1header, "tdf158586_pageBreak1_header.rtf")
+{
+    // None of the specified text frame settings initiates a real text frame - page break not lost
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+
+    // There should be no empty carriage return at the start of the second page
+    const auto& pLayout = parseLayoutDump();
+    // on import there is a section on page 2; on reimport there is no section
+    // (probably not an important difference?)
+    assertXPathContent(pLayout, "/root/page[2]/body//txt", "Second page");
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
 {
     // The anchor and align properties are sufficient to define a frame
