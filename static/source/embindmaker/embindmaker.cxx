@@ -139,8 +139,9 @@ jsServiceConstructor(OUString const& service,
 OUString jsSingleton(OUString const& singleton) { return "uno_Function_" + jsName(singleton); }
 
 void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view prefix,
-          Module* module, std::vector<OUString>& enums, std::vector<OUString>& interfaces,
-          std::vector<OUString>& services, std::vector<OUString>& singletons)
+          Module* module, std::vector<OUString>& enums, std::vector<OUString>& structs,
+          std::vector<OUString>& interfaces, std::vector<OUString>& services,
+          std::vector<OUString>& singletons)
 {
     assert(cursor.is());
     assert(module != nullptr);
@@ -163,12 +164,17 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
                     sub = std::make_shared<Module>();
                 }
                 scan(static_cast<unoidl::ModuleEntity*>(ent.get())->createCursor(),
-                     Concat2View(name + "."), sub.get(), enums, interfaces, services, singletons);
+                     Concat2View(name + "."), sub.get(), enums, structs, interfaces, services,
+                     singletons);
                 break;
             }
             case unoidl::Entity::SORT_ENUM_TYPE:
                 module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
                 enums.emplace_back(name);
+                break;
+            case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
+                module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
+                structs.emplace_back(name);
                 break;
             case unoidl::Entity::SORT_INTERFACE_TYPE:
                 module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
@@ -369,6 +375,89 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
     for (sal_Int32 i = 0; i != k; ++i)
     {
         out << ">";
+    }
+}
+
+bool hasStructMembers(rtl::Reference<TypeManager> const& manager,
+                      rtl::Reference<unoidl::PlainStructTypeEntity> struc)
+{
+    for (;;)
+    {
+        if (!struc->getDirectMembers().empty())
+        {
+            return true;
+        }
+        auto const& base = struc->getDirectBase();
+        if (base.isEmpty())
+        {
+            return false;
+        }
+        auto const ent = manager->getManager()->findEntity(base);
+        if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_PLAIN_STRUCT_TYPE)
+        {
+            throw CannotDumpException("bad struct base \"" + base + "\"");
+        }
+        struc = static_cast<unoidl::PlainStructTypeEntity*>(ent.get());
+    }
+}
+
+void dumpStructMemberTypes(std::ostream& out, rtl::Reference<TypeManager> const& manager,
+                           rtl::Reference<unoidl::PlainStructTypeEntity> struc, bool& first)
+{
+    auto const& base = struc->getDirectBase();
+    if (!base.isEmpty())
+    {
+        auto const ent = manager->getManager()->findEntity(base);
+        if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_PLAIN_STRUCT_TYPE)
+        {
+            throw CannotDumpException("bad struct base \"" + base + "\"");
+        }
+        dumpStructMemberTypes(out, manager, static_cast<unoidl::PlainStructTypeEntity*>(ent.get()),
+                              first);
+    }
+    for (auto const& mem : struc->getDirectMembers())
+    {
+        if (first)
+        {
+            first = false;
+        }
+        else
+        {
+            out << ", ";
+        }
+        dumpType(out, manager, mem.type);
+        if (passByReference(manager, mem.type))
+        {
+            out << " const &";
+        }
+    }
+}
+
+void dumpStructMembers(std::ostream& out, rtl::Reference<TypeManager> const& manager,
+                       OUString const& name, rtl::Reference<unoidl::PlainStructTypeEntity> struc)
+{
+    auto const& base = struc->getDirectBase();
+    if (!base.isEmpty())
+    {
+        auto const ent = manager->getManager()->findEntity(base);
+        if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_PLAIN_STRUCT_TYPE)
+        {
+            throw CannotDumpException("bad struct base \"" + base + "\"");
+        }
+        dumpStructMembers(out, manager, name,
+                          static_cast<unoidl::PlainStructTypeEntity*>(ent.get()));
+    }
+    for (auto const& mem : struc->getDirectMembers())
+    {
+        out << "\n        .property(\"" << mem.name << "\", +[](" << cppName(name)
+            << " const & the_self) { return the_self." << mem.name << "; }, +[](" << cppName(name)
+            << " & the_self, ";
+        dumpType(out, manager, mem.type);
+        if (passByReference(manager, mem.type))
+        {
+            out << " const &";
+        }
+        out << " the_value) { the_self." << mem.name << " = the_value; })";
     }
 }
 
@@ -695,12 +784,13 @@ SAL_IMPLEMENT_MAIN()
         }
         auto const module = std::make_shared<Module>();
         std::vector<OUString> enums;
+        std::vector<OUString> structs;
         std::vector<OUString> interfaces;
         std::vector<OUString> services;
         std::vector<OUString> singletons;
         for (auto const& prov : mgr->getPrimaryProviders())
         {
-            scan(prov->createRootCursor(), u"", module.get(), enums, interfaces, services,
+            scan(prov->createRootCursor(), u"", module.get(), enums, structs, interfaces, services,
                  singletons);
         }
         std::ofstream cppOut(cppPathname, std::ios_base::out | std::ios_base::trunc);
@@ -716,6 +806,10 @@ SAL_IMPLEMENT_MAIN()
         for (auto const& enm : enums)
         {
             cppOut << "#include <" << enm.replace('.', '/') << ".hpp>\n";
+        }
+        for (auto const& str : structs)
+        {
+            cppOut << "#include <" << str.replace('.', '/') << ".hpp>\n";
         }
         for (auto const& ifc : interfaces)
         {
@@ -754,6 +848,33 @@ SAL_IMPLEMENT_MAIN()
             {
                 cppOut << "\n        .value(\"" << mem.name << "\", " << cppName(enm) << "_"
                        << mem.name << ")";
+            }
+            cppOut << ";\n";
+            dumpRegisterFunctionEpilog(cppOut, n);
+        }
+        for (auto const& str : structs)
+        {
+            auto const ent = mgr->getManager()->findEntity(str);
+            assert(ent.is());
+            assert(ent->getSort() == unoidl::Entity::SORT_PLAIN_STRUCT_TYPE);
+            rtl::Reference const strEnt(static_cast<unoidl::PlainStructTypeEntity*>(ent.get()));
+            dumpRegisterFunctionProlog(cppOut, n);
+            cppOut << "    ::emscripten::class_<" << cppName(str);
+            auto const& base = strEnt->getDirectBase();
+            if (!base.isEmpty())
+            {
+                cppOut << ", ::emscripten::base<" << cppName(base) << ">";
+            }
+            cppOut << ">(\"uno_Type_" << jsName(str)
+                   << "\")\n"
+                      "        .constructor()";
+            if (hasStructMembers(mgr, strEnt))
+            {
+                cppOut << "\n        .constructor<";
+                auto first = true;
+                dumpStructMemberTypes(cppOut, mgr, strEnt, first);
+                cppOut << ">()";
+                dumpStructMembers(cppOut, mgr, str, strEnt);
             }
             cppOut << ";\n";
             dumpRegisterFunctionEpilog(cppOut, n);
