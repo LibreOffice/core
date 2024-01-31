@@ -32,24 +32,7 @@
             if (!bUseTempDir)                                                                      \
                 return;                                                                            \
                                                                                                    \
-            uno::Reference<text::XTextRange> xParagraph = getParagraph(1);                         \
-            /* can be changed only after import */                                                 \
-            uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);                        \
-                                                                                                   \
-            /* Get original link */                                                                \
-            OUString sOriginalFileName = getProperty<OUString>(xText, "HyperLinkURL");             \
-            INetURLObject aOriginalURL(sOriginalFileName);                                         \
-            CPPUNIT_ASSERT(!aOriginalURL.HasError());                                              \
-            OUString sFileName = aOriginalURL.GetLastName();                                       \
-            CPPUNIT_ASSERT(!sFileName.isEmpty());                                                  \
-                                                                                                   \
-            /* Get temp path */                                                                    \
-            OUString sTempDir = utl::GetTempNameBaseDirectory();                                   \
-                                                                                                   \
-            /* Create & apply new URL */                                                           \
-            OUString sOriginalFileInTempDir = sTempDir + sFileName;                                \
-            uno::Reference<beans::XPropertySet> xPropertySet(xText, css::uno::UNO_QUERY);          \
-            xPropertySet->setPropertyValue("HyperLinkURL", css::uno::Any(sOriginalFileInTempDir)); \
+            UseTempDir();                                                                          \
         }                                                                                          \
                                                                                                    \
     public:                                                                                        \
@@ -81,6 +64,28 @@ public:
         auto xChanges = comphelper::ConfigurationChanges::create();
         officecfg::Office::Common::Save::URL::FileSystem::set(!bAbsolute, xChanges);
         xChanges->commit();
+    }
+
+    void UseTempDir()
+    {
+        uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+        /* can be changed only after import */
+        uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
+
+        /* Get original link */
+        OUString sOriginalFileName = getProperty<OUString>(xText, "HyperLinkURL");
+        INetURLObject aOriginalURL(sOriginalFileName);
+        CPPUNIT_ASSERT(!aOriginalURL.HasError());
+        OUString sFileName = aOriginalURL.GetLastName();
+        CPPUNIT_ASSERT(!sFileName.isEmpty());
+
+        /* Get temp path */
+        OUString sTempDir = utl::GetTempNameBaseDirectory();
+
+        /* Create & apply new URL */
+        OUString sOriginalFileInTempDir = sTempDir + sFileName;
+        uno::Reference<beans::XPropertySet> xPropertySet(xText, css::uno::UNO_QUERY);
+        xPropertySet->setPropertyValue("HyperLinkURL", css::uno::Any(sOriginalFileInTempDir));
     }
 };
 
@@ -142,9 +147,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123627_import)
 
 /* EXPORT */
 
-DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", USE_RELATIVE,
-                          USE_TEMP_DIR)
+CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeExport)
 {
+    SetAbsolute(USE_RELATIVE);
+    createSwDoc("relative-link.docx");
+    UseTempDir();
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
