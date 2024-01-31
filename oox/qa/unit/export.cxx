@@ -77,6 +77,48 @@ CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
     assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[1]/wps:spPr/a:xfrm/a:off", "y", "469440");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlOdt)
+{
+    loadFromURL(u"tdf141786_RotatedShapeInGroup.odt");
+
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:InsertCheckboxContentControl", {});
+
+    // FIXME: validation error in OOXML export: Errors: 3
+    skipValidation();
+
+    save("Office Open XML Text");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
+{
+    {
+        loadFromURL(u"dml-groupshape-polygon.docx");
+
+        // Without TrackChanges, inserting the Checkbox works just fine
+        // when exporting to docx.
+        dispatchCommand(mxComponent, ".uno:InsertCheckboxContentControl", {});
+
+        // FIXME: validation error in OOXML export: Errors: 9
+        skipValidation();
+
+        save("Office Open XML Text");
+    }
+
+    {
+        loadFromURL(u"dml-groupshape-polygon.docx");
+
+        // With TrackChanges, the Checkbox causes an assertion in the sax serializer,
+        // in void sax_fastparser::FastSaxSerializer::endFastElement(sal_Int32).
+        // Element == maMarkStack.top()->m_DebugStartedElements.back()
+        // sax/source/tools/fastserializer.cxx#402
+        dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+        dispatchCommand(mxComponent, ".uno:InsertCheckboxContentControl", {});
+
+        save("Office Open XML Text");
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
 {
     // Given a document with a group shape, containing a single polygon child shape:
