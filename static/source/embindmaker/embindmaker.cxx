@@ -288,7 +288,7 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
         b2u(codemaker::UnoType::decompose(u2b(resolveAllTypedefs(manager, name)), &k, &args)));
     for (sal_Int32 i = 0; i != k; ++i)
     {
-        out << "::css::uno::Sequence<";
+        out << "::com::sun::star::uno::Sequence<";
     }
     switch (manager->getSort(n))
     {
@@ -332,10 +332,10 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
             out << "::rtl::OUString";
             break;
         case codemaker::UnoType::Sort::Type:
-            out << "::css::uno::Type";
+            out << "::com::sun::star::uno::Type";
             break;
         case codemaker::UnoType::Sort::Any:
-            out << "::css::uno::Any";
+            out << "::com::sun::star::uno::Any";
             break;
         case codemaker::UnoType::Sort::Enum:
         case codemaker::UnoType::Sort::PlainStruct:
@@ -364,7 +364,7 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
             }
             break;
         case codemaker::UnoType::Sort::Interface:
-            out << "::css::uno::Reference<";
+            out << "::com::sun::star::uno::Reference<";
             out << cppName(n);
             out << ">";
             break;
