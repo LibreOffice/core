@@ -187,6 +187,8 @@ struct SubstreamContext
     bool      bIsColumnBreakDeferred = false;
     bool      bIsPageBreakDeferred = false;
     sal_Int32 nLineBreaksDeferred = 0;
+    /// Current paragraph had at least one field in it.
+    bool      bParaHadField = false;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -767,7 +769,7 @@ public:
     const std::stack<BookmarkInsertPosition>& GetSdtStarts() const;
 
     bool GetParaChanged() const { return m_bParaChanged;}
-    bool GetParaHadField() const { return m_bParaHadField; }
+    bool GetParaHadField() const { return m_StreamStateStack.top().bParaHadField; }
     bool GetRemoveThisPara() const { return m_bRemoveThisParagraph; }
 
     void deferBreak( BreakType deferredBreakType );
@@ -1227,9 +1229,6 @@ private:
     // Start a new index section; if needed, finish current paragraph
     css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
-    /// Current paragraph had at least one field in it.
-    bool m_bParaHadField;
-    bool m_bSaveParaHadField;
     css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool m_bParaAutoBefore;

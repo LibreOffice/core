@@ -401,8 +401,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIgnoreNextTab(false),
         m_bIsSplitPara(false),
         m_bIsActualParagraphFramed( false ),
-        m_bParaHadField(false),
-        m_bSaveParaHadField(false),
         m_bParaAutoBefore(false),
         m_bFirstParagraphInCell(true),
         m_bSaveFirstParagraphInCell(false),
@@ -2614,7 +2612,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 else
                 {
                     uno::Reference<text::XTextCursor> xCursor;
-                    if (m_bParaHadField && !m_bIsInComments && !m_xTOCMarkerCursor.is())
+                    if (m_StreamStateStack.top().bParaHadField
+                        && !m_bIsInComments && !m_xTOCMarkerCursor.is())
                     {
                         // Workaround to make sure char props of the field are not lost.
                         // Not relevant for editeng-based comments.
@@ -3017,7 +3016,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     }
 
     SetIsOutsideAParagraph(true);
-    m_bParaHadField = false;
+    m_StreamStateStack.top().bParaHadField = false;
 
     // don't overwrite m_bFirstParagraphInCell in table separator nodes
     // and in text boxes anchored to the first paragraph of table cells
@@ -3789,7 +3788,6 @@ bool isContentEmpty(uno::Reference<text::XText> const& xText, uno::Reference<tex
 
 void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageType eType)
 {
-    m_bSaveParaHadField = m_bParaHadField;
     m_StreamStateStack.emplace();
 
     bool bHeader = ePagePartType == PagePartType::Header;
@@ -3954,8 +3952,6 @@ void DomainMapper_Impl::PopPageHeaderFooter(PagePartType ePagePartType, PageType
 
     assert(!m_StreamStateStack.empty());
     m_StreamStateStack.pop();
-
-    m_bParaHadField = m_bSaveParaHadField;
 }
 
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
@@ -5932,7 +5928,7 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
 
 void DomainMapper_Impl::PushFieldContext()
 {
-    m_bParaHadField = true;
+    m_StreamStateStack.top().bParaHadField = true;
     if(m_bDiscardHeaderFooter)
         return;
 #ifdef DBG_UTIL
@@ -7045,7 +7041,7 @@ void DomainMapper_Impl::handleToc
 
     m_bStartTOC = true;
     pContext->SetTOC(xTOC);
-    m_bParaHadField = false;
+    m_StreamStateStack.top().bParaHadField = false;
 
     if (!xTOC)
         return;
@@ -7278,7 +7274,7 @@ void DomainMapper_Impl::handleBibliography
         xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::Any(OUString()));
 
     pContext->SetTOC( xTOC );
-    m_bParaHadField = false;
+    m_StreamStateStack.top().bParaHadField = false;
 
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
     appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
@@ -7321,7 +7317,7 @@ void DomainMapper_Impl::handleIndex
         }
     }
     pContext->SetTOC( xTOC );
-    m_bParaHadField = false;
+    m_StreamStateStack.top().bParaHadField = false;
 
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
     appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
@@ -8339,7 +8335,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 }
             }
             else
-                m_bParaHadField = false;
+                m_StreamStateStack.top().bParaHadField = false;
         }
     }
     catch( const uno::Exception& )
