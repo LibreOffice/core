@@ -62,7 +62,6 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     tl \
     utl \
     vcl \
-    cui \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sdui,\

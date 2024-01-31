@@ -2346,7 +2346,6 @@ cui/source/dialogs/SpellAttrib.hxx
 cui/source/dialogs/SpellDialog.cxx
 cui/source/dialogs/about.cxx
 cui/source/dialogs/colorpicker.cxx
-cui/source/dialogs/cuicharmap.cxx
 cui/source/dialogs/cuifmsearch.cxx
 cui/source/dialogs/cuigaldlg.cxx
 cui/source/dialogs/cuigrfflt.cxx
@@ -11313,6 +11312,7 @@ svx/source/dialog/contwnd.cxx
 svx/source/dialog/contwnd.hxx
 svx/source/dialog/crashreportui.cxx
 svx/source/dialog/ctredlin.cxx
+svx/source/dialog/cuicharmap.cxx
 svx/source/dialog/databaseregistrationui.cxx
 svx/source/dialog/dialcontrol.cxx
 svx/source/dialog/dlgctl3d.cxx

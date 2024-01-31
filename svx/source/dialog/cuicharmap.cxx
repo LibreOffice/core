@@ -40,13 +40,13 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
 
-#include <dialmgr.hxx>
-#include <cui/cuicharmap.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/cuicharmap.hxx>
+#include <svx/strings.hrc>
 #include <sfx2/app.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
-#include <strings.hrc>
 #include <unicode/uchar.h>
 #include <unicode/utypes.h>
 
@@ -238,9 +238,9 @@ void SvxCharacterMap::init()
 
     // tdf#117038 set the buttons width to its max possible width so it doesn't
     // make layout change when the label changes
-    m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_REMOVE_FAVORITES));
+    m_xFavouritesBtn->set_label(SvxResId(RID_SVXSTR_REMOVE_FAVORITES));
     auto nMaxWidth = m_xFavouritesBtn->get_preferred_size().Width();
-    m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_ADD_FAVORITES));
+    m_xFavouritesBtn->set_label(SvxResId(RID_SVXSTR_ADD_FAVORITES));
     nMaxWidth = std::max(nMaxWidth, m_xFavouritesBtn->get_preferred_size().Width());
     m_xFavouritesBtn->set_size_request(nMaxWidth, -1);
 
@@ -282,14 +282,14 @@ void SvxCharacterMap::setFavButtonState(std::u16string_view sTitle, std::u16stri
 
     if (m_aCharmapContents.isFavChar(sTitle, rFont))
     {
-        m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_REMOVE_FAVORITES));
+        m_xFavouritesBtn->set_label(SvxResId(RID_SVXSTR_REMOVE_FAVORITES));
     }
     else
     {
         if (m_aCharmapContents.FavCharListIsFull())
             m_xFavouritesBtn->set_sensitive(false);
 
-        m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_ADD_FAVORITES));
+        m_xFavouritesBtn->set_label(SvxResId(RID_SVXSTR_ADD_FAVORITES));
     }
 }
 
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
 {
-    if (m_xFavouritesBtn->get_label().match(CuiResId(RID_CUISTR_ADD_FAVORITES)))
+    if (m_xFavouritesBtn->get_label().match(SvxResId(RID_SVXSTR_ADD_FAVORITES)))
     {
         m_aCharmapContents.updateFavCharacterList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
         setFavButtonState(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
@@ -591,7 +591,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
     else
     {
         m_aCharmapContents.deleteFavCharacterFromList(m_aShowChar.GetText(), m_aShowChar.GetFont().GetFamilyName());
-        m_xFavouritesBtn->set_label(CuiResId(RID_CUISTR_ADD_FAVORITES));
+        m_xFavouritesBtn->set_label(SvxResId(RID_SVXSTR_ADD_FAVORITES));
         m_xFavouritesBtn->set_sensitive(false);
     }
 
@@ -704,7 +704,7 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
         // Select the corresponding character
         SetChar(cChar);
     else {
-        m_xCharName->set_label(CuiResId(RID_CUISTR_MISSING_CHAR));
+        m_xCharName->set_label(SvxResId(RID_SVXSTR_MISSING_CHAR));
         m_aShowChar.SetText(" ");
         switch(radix)
         {

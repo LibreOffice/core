@@ -1841,6 +1841,10 @@
 #define RID_SVXSTR_HOR_PRESET_ONLYHOR               NC_("RID_SVXSTR_HOR_PRESET_ONLYHOR", "Top and Bottom Borders, and All Inner Lines")
 #define RID_SVXSTR_VER_PRESET_ONLYVER               NC_("RID_SVXSTR_VER_PRESET_ONLYVER", "Left and Right Borders, and All Inner Lines")
 
+#define RID_SVXSTR_REMOVE_FAVORITES                 NC_("RID_SVXSTR_REMOVE_FAVORITES", "Remove from Favorites")
+#define RID_SVXSTR_MISSING_CHAR                     NC_("RID_SVXSTR_MISSING_CHAR", "Missing character")
+#define RID_SVXSTR_ADD_FAVORITES                    NC_("RID_SVXSTR_ADD_FAVORITES", "Add to Favorites")
+
 /*--------------------------------------------------------------------
     Description: GraphicSizeCheck strings
  --------------------------------------------------------------------*/

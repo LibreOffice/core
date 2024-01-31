@@ -126,6 +126,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/GenericCheckDialog \
     svx/source/dialog/_bmpmask \
     svx/source/dialog/charmap \
+    svx/source/dialog/cuicharmap \
     svx/source/dialog/searchcharmap \
     svx/source/dialog/connctrl \
     svx/source/dialog/_contdlg \

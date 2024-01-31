@@ -348,7 +348,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cui/cuidllapi.h>
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/color/Transformation.hxx>
 #include <docmodel/dllapi.h>

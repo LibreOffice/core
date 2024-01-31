@@ -47,7 +47,7 @@
 #include <autocdlg.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/svxacorr.hxx>
-#include <cui/cuicharmap.hxx>
+#include <svx/cuicharmap.hxx>
 #include <strings.hrc>
 #include <dialmgr.hxx>
 #include <svx/svxids.hrc>

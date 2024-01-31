@@ -32,7 +32,7 @@
 #include <numfmt.hxx>
 #include <splitcelldlg.hxx>
 #include <cuiimapwnd.hxx>
-#include <cui/cuicharmap.hxx>
+#include <svx/cuicharmap.hxx>
 #include <srchxtra.hxx>
 #include <textanim.hxx>
 #include <autocdlg.hxx>

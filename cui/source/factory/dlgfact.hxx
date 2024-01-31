@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <cfgutil.hxx>
-#include <cui/cuicharmap.hxx>
+#include <svx/cuicharmap.hxx>
 #include <dlgname.hxx>
 #include <cuifmsearch.hxx>
 #include <cuigaldlg.hxx>

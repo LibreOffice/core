@@ -43,7 +43,7 @@
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <View.hxx>
 #include <drawdoc.hxx>
-#include <cui/cuicharmap.hxx>
+#include <svx/cuicharmap.hxx>
 #include <BulletAndPositionDlg.hxx>
 #include <sdresid.hxx>
 #include <DrawViewShell.hxx>

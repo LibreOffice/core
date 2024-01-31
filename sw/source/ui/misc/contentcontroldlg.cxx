@@ -20,7 +20,7 @@
 #include <contentcontroldlg.hxx>
 
 #include <vcl/weld.hxx>
-#include <cui/cuicharmap.hxx>
+#include <svx/cuicharmap.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 

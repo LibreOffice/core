@@ -18,14 +18,12 @@
  */
 #pragma once
 
-#include <cui/cuidllapi.h>
-
 #include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
 #include <sal/log.hxx>
 
 /// Dialog for editing a name
-class CUI_DLLPUBLIC SvxNameDialog final : public weld::GenericDialogController
+class SvxNameDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Entry> m_xEdtName;
@@ -66,7 +64,7 @@ public:
 };
 
 /// Dialog for editing a number
-class CUI_DLLPUBLIC SvxNumberDialog final : public weld::GenericDialogController
+class SvxNumberDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::SpinButton> m_xEdtNumber;
@@ -79,7 +77,7 @@ public:
     sal_Int64 GetNumber() const { return m_xEdtNumber->get_value(); }
 };
 
-class CUI_DLLPUBLIC SvxDecimalNumberDialog final : public weld::GenericDialogController
+class SvxDecimalNumberDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::FormattedSpinButton> m_xEdtNumber;

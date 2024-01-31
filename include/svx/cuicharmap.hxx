@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_CUICHARMAP_HXX
-#define INCLUDED_CUI_CUICHARMAP_HXX
+#pragma once
 
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
@@ -28,7 +27,7 @@
 #include <svx/searchcharmap.hxx>
 #include <svx/ucsubset.hxx>
 #include <sfx2/charwin.hxx>
-#include <cui/cuidllapi.h>
+#include <svx/svxdllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <memory>
@@ -44,7 +43,7 @@ struct SvxShowCharSetItem;
 }
 
 /// Provides the show characters or texts in a drawing area with special sizes and fonts.
-class CUI_DLLPUBLIC SvxShowText final : public weld::CustomWidgetController
+class SVX_DLLPUBLIC SvxShowText final : public weld::CustomWidgetController
 {
 private:
     ScopedVclPtr<VirtualDevice> m_xVirDev;
@@ -71,7 +70,7 @@ public:
 
 /** The main purpose of this dialog is to enable the use of characters
     that are not easily accessible from the keyboard. */
-class CUI_DLLPUBLIC SvxCharacterMap final : public SfxDialogController
+class SVX_DLLPUBLIC SvxCharacterMap final : public SfxDialogController
 {
 private:
     void init();
@@ -160,6 +159,4 @@ public:
     void toggleSearchView(bool state);
 };
 
-#endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
