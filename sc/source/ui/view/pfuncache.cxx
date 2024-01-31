@@ -27,12 +27,17 @@
 #include <prevloc.hxx>
 #include <utility>
 
-ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
-                                    ScPrintSelectionStatus aStatus ) :
+ScPrintFuncCache::ScPrintFuncCache(ScDocShell* pD, const ScMarkData& rMark,
+                                   ScPrintSelectionStatus aStatus, Size aPageSize, bool bLandscape,
+                                   bool bUsed)
+    :
     aSelection(std::move( aStatus )),
     pDocSh( pD ),
     nTotalPages( 0 ),
-    bLocInitialized( false )
+    bLocInitialized( false ),
+    aPrintPageSize( aPageSize ),
+    bPrintPageLandscape( bLandscape ),
+    bUsePrintDialogSetting( bUsed )
 {
     //  page count uses the stored cell widths for the printer anyway,
     //  so ScPrintFunc with the document's printer can be used to count
@@ -62,7 +67,9 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
         tools::Long nThisTab = 0;
         if ( rMark.GetTableSelect( nTab ) )
         {
-            ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
+            ScPrintFunc aFunc(pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange,
+                              &aSelection.GetOptions(), nullptr, aPrintPageSize,
+                              bPrintPageLandscape, bUsePrintDialogSetting);
             nThisTab = aFunc.GetTotalPages();
             nFirstAttr.push_back( aFunc.GetFirstPageNo() );         // from page style or previous sheet
         }

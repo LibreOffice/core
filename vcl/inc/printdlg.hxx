@@ -231,6 +231,8 @@ namespace vcl
         void readFromSettings();
         void setPaperOrientation( Orientation eOrientation, bool fromUser );
         void updateOrientationBox( bool bAutomatic = true );
+        void updatePageSize( int nOrientation );
+        void updatePageRange( const sal_Int32 nPages );
         bool hasOrientationChanged() const;
         void setPreviewText();
         void updatePrinterText();
