@@ -163,6 +163,16 @@ enum StoredRedlines
     NONE
 };
 
+enum class SubstreamType
+{
+    Body,
+    Header,
+    Footer,
+    Footnote,
+    Endnote,
+    Annotation,
+};
+
 /**
  * Storage for state that is relevant outside a header/footer, but not inside it.
  *
@@ -174,6 +184,7 @@ enum StoredRedlines
  */
 struct SubstreamContext
 {
+    SubstreamType eSubstreamType = SubstreamType::Body;
     bool      bTextInserted = false;
     /**
      * This contains the raw table depth. nTableDepth > 0 is the same as
@@ -565,15 +576,7 @@ private:
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInNumberingImport; //in import of numbering (i.e. numbering.xml)
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
-    enum class HeaderFooterImportState
-    {
-        none,
-        header,
-        footer,
-    }                               m_eInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
-    bool                            m_bInFootOrEndnote;
-    bool                            m_bInFootnote;
     PropertyMapPtr m_pFootnoteContext;
     bool m_bHasFootnoteStyle;
     bool m_bCheckFootnoteStyle;
@@ -621,7 +624,6 @@ private:
     bool                            m_bIsPreviousParagraphFramed;
     bool                            m_bIsLastParaInSection;
     bool                            m_bIsLastSectionGroup;
-    bool                            m_bIsInComments;
     /// If the current paragraph contains section property definitions.
     bool                            m_bParaSectpr;
     bool                            m_bUsingEnhancedFields;
@@ -891,7 +893,7 @@ public:
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
 
     void PopPageHeaderFooter(PagePartType ePagePartType, PageType eType);
-    bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
+    bool IsInHeaderFooter() const { auto const type(m_StreamStateStack.top().eSubstreamType); return type == SubstreamType::Header || type == SubstreamType::Footer; }
     void ConvertHeaderFooterToTextFrame(bool, bool);
     static void fillEmptyFrameProperties(std::vector<css::beans::PropertyValue>& rFrameProperties, bool bSetAnchorToChar);
 
@@ -899,8 +901,8 @@ public:
 
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
-    bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
-    bool IsInFootnote() const { return IsInFootOrEndnote() && m_bInFootnote; }
+    bool IsInFootOrEndnote() const { auto const type(m_StreamStateStack.top().eSubstreamType); return type == SubstreamType::Footnote || type == SubstreamType::Endnote; }
+    bool IsInFootnote() const { return m_StreamStateStack.top().eSubstreamType == SubstreamType::Footnote; }
 
     void StartCustomFootnote(const PropertyMapPtr pContext);
     void EndCustomFootnote();
@@ -1050,7 +1052,7 @@ public:
     void SetInFootnoteProperties(bool bSet) { m_bIsInFootnoteProperties = bSet;}
     bool IsInFootnoteProperties() const { return m_bIsInFootnoteProperties;}
 
-    bool IsInComments() const { return m_bIsInComments; };
+    bool IsInComments() const { return m_StreamStateStack.top().eSubstreamType == SubstreamType::Annotation; };
 
     std::vector<css::beans::PropertyValue> MakeFrameProperties(const ParagraphProperties& rProps);
     void CheckUnregisteredFrameConversion(bool bPreventOverlap = false);
