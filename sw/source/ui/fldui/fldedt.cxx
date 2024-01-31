@@ -252,12 +252,6 @@ IMPL_LINK_NOARG(SwFieldEditDlg, OKHdl, weld::Button&, void)
     }
 }
 
-short SwFieldEditDlg::run()
-{
-    // without TabPage no dialog
-    return GetTabPage() ? SfxSingleTabDialogController::run() : static_cast<short>(RET_CANCEL);
-}
-
 // Traveling between fields of the same type
 IMPL_LINK(SwFieldEditDlg, NextPrevHdl, weld::Button&, rButton, void)
 {

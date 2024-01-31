@@ -1149,7 +1149,11 @@ VclPtr<AbstractSwFieldDlg> SwAbstractDialogFactory_Impl::CreateSwFieldDlg(SfxBin
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg(SwView& rVw)
 {
-    return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwFieldEditDlg>(rVw));
+    auto xDlg = std::make_shared<SwFieldEditDlg>(rVw);
+    // without TabPage no dialog
+    if (!xDlg->GetTabPage())
+        return nullptr;
+    return VclPtr<SwAbstractSfxController_Impl>::Create(std::move(xDlg));
 }
 
 VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(weld::Widget* pParent,

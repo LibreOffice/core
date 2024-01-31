@@ -48,8 +48,6 @@ public:
 
     DECL_LINK(OKHdl, weld::Button&, void);
 
-    virtual short   run() override;
-
     void            EnableInsert(bool bEnable);
     void            InsertHdl();
 };
