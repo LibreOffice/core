@@ -21,6 +21,12 @@ using namespace css::uno;
 
 namespace
 {
+template <typename T> void registerInOutParam(char const* name)
+{
+    class_<unoembindhelpers::UnoInOutParam<T>>(name).constructor().constructor<T>().property(
+        "val", &unoembindhelpers::UnoInOutParam<T>::get, &unoembindhelpers::UnoInOutParam<T>::set);
+}
+
 Reference<css::frame::XModel> getCurrentModelFromViewSh()
 {
     SfxViewShell* pSh = nullptr;
@@ -93,61 +99,17 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         return {};
     });
 
-    class_<unoembindhelpers::UnoInOutParam<bool>>("UnoInOutParamBoolean")
-        .constructor()
-        .constructor<bool>()
-        .property("val", &unoembindhelpers::UnoInOutParam<bool>::get,
-                  &unoembindhelpers::UnoInOutParam<bool>::set);
-    class_<unoembindhelpers::UnoInOutParam<sal_Int8>>("UnoInOutParamByte")
-        .constructor()
-        .constructor<sal_Int8>()
-        .property("val", &unoembindhelpers::UnoInOutParam<sal_Int8>::get,
-                  &unoembindhelpers::UnoInOutParam<sal_Int8>::set);
-    class_<unoembindhelpers::UnoInOutParam<sal_Int16>>("UnoInOutParamShort")
-        .constructor()
-        .constructor<sal_Int16>()
-        .property("val", &unoembindhelpers::UnoInOutParam<sal_Int16>::get,
-                  &unoembindhelpers::UnoInOutParam<sal_Int16>::set);
-    class_<unoembindhelpers::UnoInOutParam<sal_uInt16>>("UnoInOutParamUnsignedShort")
-        .constructor()
-        .constructor<sal_uInt16>()
-        .property("val", &unoembindhelpers::UnoInOutParam<sal_uInt16>::get,
-                  &unoembindhelpers::UnoInOutParam<sal_uInt16>::set);
-    class_<unoembindhelpers::UnoInOutParam<sal_Int32>>("UnoInOutParamLong")
-        .constructor()
-        .constructor<sal_Int32>()
-        .property("val", &unoembindhelpers::UnoInOutParam<sal_Int32>::get,
-                  &unoembindhelpers::UnoInOutParam<sal_Int32>::set);
-    class_<unoembindhelpers::UnoInOutParam<sal_uInt32>>("UnoInOutParamUnsignedLong")
-        .constructor()
-        .constructor<sal_uInt32>()
-        .property("val", &unoembindhelpers::UnoInOutParam<sal_uInt32>::get,
-                  &unoembindhelpers::UnoInOutParam<sal_uInt32>::set);
-    class_<unoembindhelpers::UnoInOutParam<sal_Int64>>("UnoInOutParamHyper")
-        .constructor()
-        .constructor<sal_Int64>()
-        .property("val", &unoembindhelpers::UnoInOutParam<sal_Int64>::get,
-                  &unoembindhelpers::UnoInOutParam<sal_Int64>::set);
-    class_<unoembindhelpers::UnoInOutParam<sal_uInt64>>("UnoInOutParamUnsignedHyper")
-        .constructor()
-        .constructor<sal_uInt64>()
-        .property("val", &unoembindhelpers::UnoInOutParam<sal_uInt64>::get,
-                  &unoembindhelpers::UnoInOutParam<sal_uInt64>::set);
-    class_<unoembindhelpers::UnoInOutParam<float>>("UnoInOutParamFloat")
-        .constructor()
-        .constructor<float>()
-        .property("val", &unoembindhelpers::UnoInOutParam<float>::get,
-                  &unoembindhelpers::UnoInOutParam<float>::set);
-    class_<unoembindhelpers::UnoInOutParam<double>>("UnoInOutParamDouble")
-        .constructor()
-        .constructor<double>()
-        .property("val", &unoembindhelpers::UnoInOutParam<double>::get,
-                  &unoembindhelpers::UnoInOutParam<double>::set);
-    class_<unoembindhelpers::UnoInOutParam<char16_t>>("UnoInOutParamChar")
-        .constructor()
-        .constructor<char16_t>()
-        .property("val", &unoembindhelpers::UnoInOutParam<char16_t>::get,
-                  &unoembindhelpers::UnoInOutParam<char16_t>::set);
+    registerInOutParam<bool>("uno_InOutParam_boolean");
+    registerInOutParam<sal_Int8>("uno_InOutParam_byte");
+    registerInOutParam<sal_Int16>("uno_InOutParam_short");
+    registerInOutParam<sal_uInt16>("uno_InOutParam_unsigned_short");
+    registerInOutParam<sal_Int32>("uno_InOutParam_long");
+    registerInOutParam<sal_uInt32>("uno_InOutParam_unsigned_long");
+    registerInOutParam<sal_Int64>("uno_InOutParam_hyper");
+    registerInOutParam<sal_uInt64>("uno_InOutParam_unsigned_hyper");
+    registerInOutParam<float>("uno_InOutParam_float");
+    registerInOutParam<double>("uno_InOutParam_double");
+    registerInOutParam<char16_t>("uno_InOutParam_char");
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
     function("getUnoComponentContext", &comphelper::getProcessComponentContext);
