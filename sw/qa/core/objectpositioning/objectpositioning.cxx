@@ -25,6 +25,8 @@
 #include <flyfrm.hxx>
 #include <frmatr.hxx>
 
+#include <vcl/scheduler.hxx>
+
 namespace
 {
 /// Covers sw/source/core/objectpositioning/ fixes.
@@ -54,6 +56,18 @@ CPPUNIT_TEST_FIXTURE(Test, testOverlapCrash)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     // Without the accompanying fix in place, this test would have crashed.
     pWrtShell->SplitNode();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testImgMoveCrash)
+{
+    createSwDoc("tdf154863-img-move-crash.docx");
+    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Image26"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("VertOrient", uno::Any(static_cast<sal_Int32>(0)));
+    xShapeProps->setPropertyValue("VertOrientPosition", uno::Any(static_cast<sal_Int32>(3000)));
+    Scheduler::ProcessEventsToIdle();
+    // Crash expected before assert if bug exists
+    CPPUNIT_ASSERT(true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testVertPosFromBottom)
