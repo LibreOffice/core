@@ -115,6 +115,7 @@
 #include <frmtool.hxx>
 #include <viewopt.hxx>
 
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <UndoInsert.hxx>
 #include <UndoCore.hxx>
@@ -1177,8 +1178,12 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
         Left(SwCursorSkipMode::Chars, /*bSelect=*/true, aPlaceholder.getLength(),
                 /*bBasicCall=*/false);
     }
+
+    const RedlineFlags oldRedlineFlags = getIDocumentRedlineAccess().GetRedlineFlags();
+    getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::Ignore);
     SwFormatContentControl aContentControl(pContentControl, RES_TXTATR_CONTENTCONTROL);
     SetAttrItem(aContentControl);
+    getIDocumentRedlineAccess().SetRedlineFlags(oldRedlineFlags);
 }
 
 // Insert footnote
