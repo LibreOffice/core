@@ -725,6 +725,16 @@ void dumpRegisterFunctionEpilog(std::ostream& out, unsigned long long& counter)
     }
 }
 
+void recordSequenceTypes(rtl::Reference<TypeManager> const& manager, OUString const& type,
+                         std::set<OUString>& sequences)
+{
+    auto const res = resolveAllTypedefs(manager, type);
+    if (manager->getSort(res) == codemaker::UnoType::Sort::Sequence)
+    {
+        sequences.insert(res);
+    }
+}
+
 void writeJsMap(std::ostream& out, Module const& module, std::string const& prefix)
 {
     auto comma = false;
@@ -852,6 +862,7 @@ SAL_IMPLEMENT_MAIN()
             cppOut << ";\n";
             dumpRegisterFunctionEpilog(cppOut, n);
         }
+        std::set<OUString> sequences;
         for (auto const& str : structs)
         {
             auto const ent = mgr->getManager()->findEntity(str);
@@ -878,6 +889,10 @@ SAL_IMPLEMENT_MAIN()
             }
             cppOut << ";\n";
             dumpRegisterFunctionEpilog(cppOut, n);
+            for (auto const& mem : strEnt->getDirectMembers())
+            {
+                recordSequenceTypes(mgr, mem.type, sequences);
+            }
         }
         for (auto const& ifc : interfaces)
         {
@@ -931,6 +946,18 @@ SAL_IMPLEMENT_MAIN()
             dumpMethods(cppOut, mgr, ifc, ifcEnt, {});
             cppOut << "        ;\n";
             dumpRegisterFunctionEpilog(cppOut, n);
+            for (auto const& attr : ifcEnt->getDirectAttributes())
+            {
+                recordSequenceTypes(mgr, attr.type, sequences);
+            }
+            for (auto const& meth : ifcEnt->getDirectMethods())
+            {
+                for (auto const& param : meth.parameters)
+                {
+                    recordSequenceTypes(mgr, param.type, sequences);
+                }
+                recordSequenceTypes(mgr, meth.returnType, sequences);
+            }
         }
         for (auto const& srv : services)
         {
@@ -959,6 +986,21 @@ SAL_IMPLEMENT_MAIN()
         for (unsigned long long i = 0; i != n; ++i)
         {
             cppOut << "    register" << i << "();\n";
+        }
+        for (auto const& seq : sequences)
+        {
+            cppOut << "    ::unoembindhelpers::registerSequence<";
+            assert(seq.startsWith("[]"));
+            dumpType(cppOut, mgr, seq.copy(2));
+            cppOut << ">(\"uno_Sequence";
+            sal_Int32 k;
+            auto const nuc = b2u(codemaker::UnoType::decompose(u2b(seq), &k));
+            assert(k >= 1);
+            if (k > 1)
+            {
+                cppOut << k;
+            }
+            cppOut << "_" << jsName(nuc) << "\");\n";
         }
         cppOut << "}\n";
         cppOut.close();
