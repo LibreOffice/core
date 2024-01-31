@@ -719,14 +719,20 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
 
     SwAbstractDialogFactory& rFact = swui::GetFactory();
 
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwTableTabDlg(m_xDialog.get(), m_pTableSet.get(), &rSh));
-    if( RET_OK == pDlg->Execute() )
-        m_pTableSet->Put( *pDlg->GetOutputItemSet() );
-    else if( bNewSet )
-    {
-        m_pTableSet.reset();
-        m_pRep.reset();
-    }
+    VclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwTableTabDlg(m_xDialog.get(), m_pTableSet.get(), &rSh));
+    pDlg->StartExecuteAsync(
+        [this, pDlg, bNewSet] (sal_Int32 nResult)->void
+        {
+            if( nResult == RET_OK )
+                m_pTableSet->Put( *pDlg->GetOutputItemSet() );
+            else if( bNewSet )
+            {
+                m_pTableSet.reset();
+                m_pRep.reset();
+            }
+            pDlg->disposeOnce();
+        }
+    );
 }
 
 IMPL_LINK_NOARG(SwInsertDBColAutoPilot, AutoFormatHdl, weld::Button&, void)
