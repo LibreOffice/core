@@ -169,16 +169,24 @@ enum StoredRedlines
  * In case some state of DomainMapper_Impl should be reset before handling the
  * header/footer and should be restored once handling of header/footer is done,
  * then you can use this class to do so.
+ *
+ * note: presumably more state should be moved here.
  */
-class HeaderFooterContext
+struct SubstreamContext
 {
-    bool      m_bTextInserted;
-    sal_Int32 m_nTableDepth;
-
-public:
-    explicit HeaderFooterContext(bool bTextInserted, sal_Int32 nTableDepth);
-    bool getTextInserted() const;
-    sal_Int32 getTableDepth() const;
+    bool      bTextInserted = false;
+    /**
+     * This contains the raw table depth. nTableDepth > 0 is the same as
+     * getTableManager().isInTable(), unless we're in the first paragraph of a
+     * table, or first paragraph after a table, as the table manager is only
+     * updated once we ended the paragraph (and know if the para has the
+     * inTbl SPRM or not).
+     */
+    sal_Int32 nTableDepth = 0;
+    // deferred breaks need to be saved for RTF, probably not for DOCX
+    bool      bIsColumnBreakDeferred = false;
+    bool      bIsPageBreakDeferred = false;
+    sal_Int32 nLineBreaksDeferred = 0;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -477,7 +485,9 @@ private:
 
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
-    std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
+public: // DomainMapper needs it
+    std::stack<SubstreamContext> m_StreamStateStack;
+private:
     std::stack<std::pair<TextAppendContext, PagePartType>> m_aHeaderFooterTextAppendStack;
 
     std::deque<FieldContextPtr> m_aFieldStack;
@@ -488,9 +498,6 @@ private:
     bool                                                                            m_bSetCitation;
     bool                                                                            m_bSetDateValue;
     bool                                                                            m_bIsFirstSection;
-    bool                                                                            m_bIsColumnBreakDeferred;
-    bool                                                                            m_bIsPageBreakDeferred;
-    sal_Int32                                                                       m_nLineBreaksDeferred;
     /// If we want to set "sdt end" on the next character context.
     bool                                                                            m_bSdtEndDeferred;
     /// If we want to set "paragraph sdt end" on the next paragraph context.
@@ -502,7 +509,6 @@ private:
     bool                                                                            m_bStartIndex;
     bool                                                                            m_bStartBibliography;
     unsigned int                                                                    m_nStartGenericField;
-    bool                                                                            m_bTextInserted;
     bool                                                                            m_bTextDeleted;
     LineNumberSettings                                                              m_aLineNumberSettings;
 
@@ -1124,14 +1130,6 @@ public:
     /// Document background color, applied to every page style.
     std::optional<sal_Int32> m_oBackgroundColor;
 
-    /**
-     * This contains the raw table depth. m_nTableDepth > 0 is the same as
-     * getTableManager().isInTable(), unless we're in the first paragraph of a
-     * table, or first paragraph after a table, as the table manager is only
-     * updated once we ended the paragraph (and know if the para has the
-     * inTbl SPRM or not).
-     */
-    sal_Int32 m_nTableDepth;
     /// Raw table cell depth.
     sal_Int32 m_nTableCellDepth;
 
