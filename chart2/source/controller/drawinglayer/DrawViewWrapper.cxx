@@ -40,6 +40,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svx/helperhittest3d.hxx>
 #include <officecfg/Office/Calc.hxx>
 
@@ -212,8 +213,14 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
 
 void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* /* pRedirector */)
 {
-    svtools::ColorConfig aColorConfig;
-    Color aFillColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
+    Color aFillColor;
+    if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+        aFillColor = pViewShell->GetColorConfigColor(svtools::DOCCOLOR);
+    else
+    {
+        svtools::ColorConfig aColorConfig;
+        aFillColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    }
     SetApplicationBackgroundColor(aFillColor);
 
     SdrOutliner& rOutliner = GetModel().GetDrawOutliner();
