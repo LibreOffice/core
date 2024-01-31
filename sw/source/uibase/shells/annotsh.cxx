@@ -163,8 +163,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
-    sal_uInt16 nSlot = rReq.GetSlot();
-    sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+    const sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
     const SfxItemSet *pNewAttrs = rReq.GetArgs();
     sal_uInt16 nEEWhich = 0;
     switch (nSlot)
@@ -473,7 +473,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(m_rView.GetFrameWeld(), m_rView, aDlgAttr, SwCharDlgMode::Ann));
+                VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(m_rView.GetFrameWeld(), m_rView, aDlgAttr, SwCharDlgMode::Ann));
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
                     pDlg->SetCurPageId("fonteffects");
@@ -487,14 +487,21 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                     pDlg->SetCurPageId(pItem->GetValue());
                 }
 
-                sal_uInt16 nRet = pDlg->Execute();
-                if(RET_OK == nRet )
-                {
-                    rReq.Done( *( pDlg->GetOutputItemSet() ) );
-                    aNewAttr.Put(*pDlg->GetOutputItemSet());
-                }
-                if(RET_OK != nRet)
-                    return ;
+                auto xRequest = std::make_shared<SfxRequest>(rReq);
+                rReq.Ignore(); // the 'old' request is not relevant any more
+                pDlg->StartExecuteAsync(
+                    [this, pDlg, xRequest, nEEWhich, aNewAttr2=aNewAttr, pOLV] (sal_Int32 nResult) mutable ->void
+                    {
+                        if (nResult == RET_OK)
+                        {
+                            xRequest->Done( *( pDlg->GetOutputItemSet() ) );
+                            aNewAttr2.Put(*pDlg->GetOutputItemSet());
+                            ExecPost(*xRequest, nEEWhich, aNewAttr2, pOLV);
+                        }
+                        pDlg->disposeOnce();
+                    }
+                );
+                return;
             }
             else
                 aNewAttr.Put(*pArgs);
@@ -582,9 +589,18 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         }
     }
 
+    ExecPost(rReq, nEEWhich, aNewAttr, pOLV );
+}
+
+void SwAnnotationShell::ExecPost( SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr, OutlinerView* pOLV )
+{
+    const SfxItemSet *pNewAttrs = rReq.GetArgs();
+    const sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+
     if(nEEWhich && pNewAttrs)
     {
-        aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
+        rNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
     }
     else if (nEEWhich == EE_CHAR_COLOR)
     {
@@ -597,13 +613,12 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
 
     tools::Rectangle aOutRect = pOLV->GetOutputArea();
-    if (tools::Rectangle() != aOutRect && aNewAttr.Count())
-        pOLV->SetAttribs(aNewAttr);
+    if (tools::Rectangle() != aOutRect && rNewAttr.Count())
+        pOLV->SetAttribs(rNewAttr);
 
     m_rView.GetViewFrame().GetBindings().InvalidateAll(false);
     if ( pOLV->GetOutliner()->IsModified() )
         m_rView.GetWrtShell().SetModified();
-
 }
 
 void SwAnnotationShell::GetState(SfxItemSet& rSet)

@@ -78,6 +78,10 @@ public:
     void        ExecRotateTransliteration(SfxRequest const &);
 
     void        Init();
+
+private:
+    void        ExecutePost(SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr,
+                    OutlinerView* pOLV, bool bRestoreSelection, const ESelection& rOldSelection);
 };
 
 #endif

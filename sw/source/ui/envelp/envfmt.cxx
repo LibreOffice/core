@@ -183,19 +183,25 @@ void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
         SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
         // In order for the background color not to get ironed over:
-        SfxAllItemSet aTmpSet(*pCollSet);
-        ::ConvertAttrCharToGen(aTmpSet);
+        auto xTmpSet = std::make_shared<SfxAllItemSet>(*pCollSet);
+        ::ConvertAttrCharToGen(*xTmpSet);
 
         SwAbstractDialogFactory& rFact = swui::GetFactory();
 
         const OUString sFormatStr = pColl->GetName();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwCharDlg(GetFrameWeld(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
-        if (pDlg->Execute() == RET_OK)
-        {
-            SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
-            ::ConvertAttrGenToChar(aOutputSet, aTmpSet);
-            pCollSet->Put(aOutputSet);
-        }
+        VclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwCharDlg(GetFrameWeld(), pSh->GetView(), *xTmpSet, SwCharDlgMode::Env, &sFormatStr));
+        pDlg->StartExecuteAsync(
+            [pDlg, xTmpSet, pCollSet] (sal_Int32 nResult)->void
+            {
+                if (nResult == RET_OK)
+                {
+                    SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
+                    ::ConvertAttrGenToChar(aOutputSet, *xTmpSet);
+                    pCollSet->Put(aOutputSet);
+                }
+                pDlg->disposeOnce();
+            }
+        );
     }
     else if (o3tl::starts_with(rIdent, u"paragraph"))
     {

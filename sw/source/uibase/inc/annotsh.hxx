@@ -25,6 +25,8 @@
 #include <unotools/caserotate.hxx>
 
 class SwView;
+class OutlinerView;
+
 class SwAnnotationShell final : public SfxShell
 {
     SwView&     m_rView;
@@ -73,6 +75,9 @@ public:
                 GetUndoManager() override;
 
     static SfxItemPool* GetAnnotationPool(SwView const & rV);
+
+private:
+    void        ExecPost(SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr, OutlinerView* pOLV );
 };
 
 #endif

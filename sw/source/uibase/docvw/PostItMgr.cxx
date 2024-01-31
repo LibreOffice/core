@@ -1721,15 +1721,20 @@ void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
     SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END> aDlgAttr(*pPool);
     aDlgAttr.Put(aEditAttr);
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetFrameWeld(), rView, aDlgAttr, SwCharDlgMode::Ann));
-    sal_uInt16 nRet = pDlg->Execute();
-    if (RET_OK == nRet)
-    {
-        aDlgAttr.Put(*pDlg->GetOutputItemSet());
-        FormatAll(aDlgAttr);
-    }
-    pDlg.disposeAndClear();
-    SetActiveSidebarWin(pOrigActiveWin);
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetFrameWeld(), rView, aDlgAttr, SwCharDlgMode::Ann));
+    pDlg->StartExecuteAsync(
+        [this, pDlg, aDlgAttr, pOrigActiveWin] (sal_Int32 nResult)->void
+        {
+            if (nResult == RET_OK)
+            {
+                auto aNewAttr = aDlgAttr;
+                aNewAttr.Put(*pDlg->GetOutputItemSet());
+                FormatAll(aNewAttr);
+            }
+            pDlg->disposeOnce();
+            SetActiveSidebarWin(pOrigActiveWin);
+        }
+    );
 }
 
 void SwPostItMgr::FormatAll(const SfxItemSet &rNewAttr)
