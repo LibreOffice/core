@@ -750,62 +750,67 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_ABSTRACT_NEWDOC:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg(GetView()->GetFrameWeld()));
-            if(RET_OK == pDlg->Execute())
-            {
-                sal_uInt8 nLevel = pDlg->GetLevel();
-                sal_uInt8 nPara = pDlg->GetPara();
-                SwDoc* pSmryDoc = new SwDoc();
-                SfxObjectShellLock xDocSh(new SwDocShell(*pSmryDoc, SfxObjectCreateMode::STANDARD));
-                xDocSh->DoInitNew();
-
-                bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
-                m_xDoc->Summary(*pSmryDoc, nLevel, nPara, bImpress);
-                if( bImpress )
+            VclPtr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg(GetView()->GetFrameWeld()));
+            pDlg->StartExecuteAsync(
+                [this, pDlg, nWhich] (sal_Int32 nResult)->void
                 {
-                    WriterRef xWrt;
-                    // mba: looks as if relative URLs don't make sense here
-                    ::GetRTFWriter(std::u16string_view(), OUString(), xWrt);
-                    SvMemoryStream *pStrm = new SvMemoryStream();
-                    pStrm->SetBufferSize( 16348 );
-                    SwWriter aWrt( *pStrm, *pSmryDoc );
-                    ErrCodeMsg eErr = aWrt.Write( xWrt );
-                    if( !eErr.IgnoreWarning() )
+                    if (nResult == RET_OK)
                     {
-                        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                        uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
+                        sal_uInt8 nLevel = pDlg->GetLevel();
+                        sal_uInt8 nPara = pDlg->GetPara();
+                        SwDoc* pSmryDoc = new SwDoc();
+                        SfxObjectShellLock xDocSh(new SwDocShell(*pSmryDoc, SfxObjectCreateMode::STANDARD));
+                        xDocSh->DoInitNew();
 
-                        uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
-                        pStrm->Seek( STREAM_SEEK_TO_END );
-                        pStrm->WriteChar( '\0' );
-                        pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+                        bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
+                        m_xDoc->Summary(*pSmryDoc, nLevel, nPara, bImpress);
+                        if( bImpress )
+                        {
+                            WriterRef xWrt;
+                            // mba: looks as if relative URLs don't make sense here
+                            ::GetRTFWriter(std::u16string_view(), OUString(), xWrt);
+                            SvMemoryStream *pStrm = new SvMemoryStream();
+                            pStrm->SetBufferSize( 16348 );
+                            SwWriter aWrt( *pStrm, *pSmryDoc );
+                            ErrCodeMsg eErr = aWrt.Write( xWrt );
+                            if( !eErr.IgnoreWarning() )
+                            {
+                                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                                uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-                        uno::Sequence< sal_Int8 > aSeq( pStrm->TellEnd() );
-                        pStrm->ReadBytes( aSeq.getArray(), aSeq.getLength() );
+                                uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
+                                pStrm->Seek( STREAM_SEEK_TO_END );
+                                pStrm->WriteChar( '\0' );
+                                pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
-                        uno::Sequence< beans::PropertyValue > aArgs{
-                            comphelper::makePropertyValue("RtfOutline", aSeq)
-                        };
-                        xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
+                                uno::Sequence< sal_Int8 > aSeq( pStrm->TellEnd() );
+                                pStrm->ReadBytes( aSeq.getArray(), aSeq.getLength() );
+
+                                uno::Sequence< beans::PropertyValue > aArgs{
+                                    comphelper::makePropertyValue("RtfOutline", aSeq)
+                                };
+                                xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
+                            }
+                            else
+                                ErrorHandler::HandleError( eErr );
+                        }
+                        else
+                        {
+                            // Create new document
+                            SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, SFX_INTERFACE_NONE );
+                            SwView      *pCurrView = static_cast<SwView*>( pFrame->GetViewShell());
+
+                            // Set document's title
+                            OUString aTmp = SwResId(STR_ABSTRACT_TITLE) + GetTitle();
+                            xDocSh->SetTitle( aTmp );
+                            pCurrView->GetWrtShell().SetNewDoc();
+                            pFrame->Show();
+                            pSmryDoc->getIDocumentState().SetModified();
+                        }
                     }
-                    else
-                        ErrorHandler::HandleError( eErr );
+                    pDlg->disposeOnce();
                 }
-                else
-                {
-                    // Create new document
-                    SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, SFX_INTERFACE_NONE );
-                    SwView      *pCurrView = static_cast<SwView*>( pFrame->GetViewShell());
-
-                    // Set document's title
-                    OUString aTmp = SwResId(STR_ABSTRACT_TITLE) + GetTitle();
-                    xDocSh->SetTitle( aTmp );
-                    pCurrView->GetWrtShell().SetNewDoc();
-                    pFrame->Show();
-                    pSmryDoc->getIDocumentState().SetModified();
-                }
-
-            }
+            );
         }
         break;
         case FN_OUTLINE_TO_CLIPBOARD:

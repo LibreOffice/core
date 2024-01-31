@@ -104,7 +104,13 @@ short AbstractSwWordCountFloatDlg_Impl::Execute()
 
 short AbstractSwInsertAbstractDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    assert(false);
+    return -1;
+}
+
+bool AbstractSwInsertAbstractDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short SwAbstractSfxController_Impl::Execute()

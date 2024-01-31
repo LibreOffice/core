@@ -104,13 +104,14 @@ public:
 
 class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 {
-    std::unique_ptr<SwInsertAbstractDlg> m_xDlg;
+    std::shared_ptr<SwInsertAbstractDlg> m_xDlg;
 public:
-    explicit AbstractSwInsertAbstractDlg_Impl(std::unique_ptr<SwInsertAbstractDlg> p)
+    explicit AbstractSwInsertAbstractDlg_Impl(std::shared_ptr<SwInsertAbstractDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual sal_uInt8   GetLevel() const override ;
     virtual sal_uInt8   GetPara() const override ;
 };
