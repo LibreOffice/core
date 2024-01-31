@@ -312,15 +312,25 @@ private:
 
     ScPageBreakData*    pPageData;          // for recording the breaks etc.
 
+    Size                aPrintPageSize;         // print page size in Print dialog
+    bool                bPrintPageLandscape;    // print page orientation in Print dialog
+    bool                bUsePrintDialogSetting; // use Print dialog setting
+
 public:
                     ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
                                  tools::Long nPage = 0, tools::Long nDocP = 0,
                                  const ScRange* pArea = nullptr,
                                  const ScPrintOptions* pOptions = nullptr,
-                                 ScPageBreakData* pData = nullptr );
+                                 ScPageBreakData* pData = nullptr,
+                                 Size aPrintPageSize = {},
+                                 bool bPrintPageLandscape = false,
+                                 bool bUsePrintDialogSetting = false );
 
                     ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter,
-                                const ScPrintState& rState, const ScPrintOptions* pOptions );
+                                const ScPrintState& rState, const ScPrintOptions* pOptions,
+                                Size aPrintPageSize = {},
+                                bool bPrintPageLandscape = false,
+                                bool bUsePrintDialogSetting = false );
 
                     // ctors for device other than printer - for preview and pdf:
 
@@ -331,7 +341,9 @@ public:
 
                     ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
                                  const ScPrintState& rState,
-                                 const ScPrintOptions* pOptions );
+                                 const ScPrintOptions* pOptions, Size aPrintPageSize = {},
+                                 bool bPrintPageLandscape = false,
+                                 bool bUsePrintDialogSetting = false);
 
                     ~ScPrintFunc();
 

@@ -90,10 +90,13 @@ class ScPrintFuncCache
     std::vector<tools::Long>       nFirstAttr;
     std::vector<ScPrintPageLocation> aLocations;
     bool                    bLocInitialized;
+    Size                    aPrintPageSize;          // print page size in Print dialog
+    bool                    bPrintPageLandscape;     // print page orientation in Print dialog
+    bool                    bUsePrintDialogSetting;  // use Print dialog setting
 
 public:
-            ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
-                                ScPrintSelectionStatus aStatus );
+            ScPrintFuncCache(ScDocShell* pD, const ScMarkData& rMark, ScPrintSelectionStatus aStatus,
+                             Size aPageSize = {}, bool bLandscape = false, bool bUse = false);
             ~ScPrintFuncCache();
 
     bool    IsSameSelection( const ScPrintSelectionStatus& rStatus ) const;
