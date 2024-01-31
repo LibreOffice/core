@@ -80,6 +80,7 @@ private:
     JobSetup                    maJobSetup;
     Point                       maPageOffset;
     Size                        maPaperSize;
+    Size                        maPrintPageSize;
     ErrCode                     mnError;
     sal_uInt16                  mnPageQueueSize;
     sal_uInt16                  mnCopyCount;
@@ -91,6 +92,7 @@ private:
     bool                        mbInPrintPage;
     bool                        mbNewJobSetup;
     bool                        mbSinglePrintJobs;
+    bool                        mbUsePrintSetting;
 
     VCL_DLLPRIVATE void         ImplInitData();
     VCL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
@@ -220,6 +222,10 @@ public:
     VCL_DLLPRIVATE void         SetPrinterOptions( const vcl::printer::Options& rOptions );
     const vcl::printer::Options& GetPrinterOptions() const { return( *mpPrinterOptions ); }
 
+    void                        SetUsePrintDialogSetting(bool bUsed) { mbUsePrintSetting = bUsed; }
+    bool                        IsUsePrintDialogSetting() { return mbUsePrintSetting; }
+    void                        SetPrintPageSize(Size aPrintPageSize) { maPrintPageSize = aPrintPageSize; }
+    Size                        GetPrintPageSize() { return maPrintPageSize; }
     bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
     void                        SetDuplexMode( DuplexMode );

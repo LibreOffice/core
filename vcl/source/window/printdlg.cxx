@@ -945,6 +945,9 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
     sal_Int32 nPages = maPController->getFilteredPageCount();
     mnCachedPages = nPages;
 
+    if (!i_bMayUseCache)
+        updatePageRange(nPages);
+
     setPreviewText();
 
     if ( !hasPreview() )
@@ -999,6 +1002,43 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
     mxFirstBtn->set_sensitive( mnCurPage != 0 );
     mxLastBtn->set_sensitive( mnCurPage < nPages-1 );
     mxPageEdit->set_sensitive( nPages > 1 );
+}
+
+void PrintDialog::updatePageRange(sal_Int32 nPages)
+{
+    if (nPages > 0 && !mxPageRangesRadioButton->get_active())
+    {
+        OUStringBuffer aBuf(32);
+        aBuf.append("1");
+        if (nPages > 1)
+        {
+            aBuf.append("-" + OUString::number(nPages));
+        }
+        maPController->setValue("PageRange", css::uno::Any(aBuf.makeStringAndClear()));
+        setupOptionalUI();
+    }
+}
+
+void PrintDialog::updatePageSize(int nOrientation)
+{
+    VclPtr<Printer> aPrt(maPController->getPrinter());
+
+    PaperInfo aInfo = aPrt->GetPaperInfo(mxPaperSizeBox->get_active());
+    Size aSize(aInfo.getWidth(), aInfo.getHeight());
+    if (aSize.IsEmpty())
+        aSize = aPrt->GetSizeOfPaper();
+
+    if (nOrientation != ORIENTATION_AUTOMATIC)
+    {
+        if ((nOrientation == ORIENTATION_PORTRAIT && aSize.Width() > aSize.Height())
+            || (nOrientation == ORIENTATION_LANDSCAPE && aSize.Width() < aSize.Height()))
+        {
+            aSize = Size(aSize.Height(), aSize.Width());
+        }
+    }
+
+    aPrt->SetPrintPageSize(aSize);
+    aPrt->SetUsePrintDialogSetting(true);
 }
 
 void PrintDialog::updateOrientationBox( const bool bAutomatic )
@@ -1913,6 +1953,9 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
             }
 
             updateOrientationBox( false );
+
+            updatePageSize(mxOrientationBox->get_active());
+
             setupPaperSidesBox();
 
             // tdf#63905 don't use cache: page size may change
@@ -1954,6 +1997,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
             maUpdatePreviewIdle.Start();
         }
 
+        updatePageSize(mxOrientationBox->get_active());
         setupPaperSidesBox();
     }
     else if ( &rBox == mxPaperSidesBox.get() )
@@ -1967,6 +2011,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
         if ( nOrientation != ORIENTATION_AUTOMATIC )
             setPaperOrientation( static_cast<Orientation>( nOrientation - 1 ), true );
 
+        updatePageSize(nOrientation);
         updateNup( false );
     }
     else if ( &rBox == mxNupOrderBox.get() )
@@ -1993,7 +2038,9 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
 
         maPController->setPaperSizeFromUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
 
-        maUpdatePreviewIdle.Start();
+        updatePageSize(mxOrientationBox->get_active());
+
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 

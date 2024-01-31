@@ -1603,6 +1603,24 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     return bRangeValid;
 }
 
+ static void lcl_SetPrintPage(const uno::Sequence<beans::PropertyValue>& rOptions, Size& aSize,
+                             bool& bLandscape, bool& bUsed)
+{
+    OutputDevice* pDev = lcl_GetRenderDevice(rOptions);
+    if (pDev && pDev->GetOutDevType() == OUTDEV_PRINTER)
+    {
+        Printer* pPrinter = dynamic_cast<Printer*>(pDev);
+        if (pPrinter && pPrinter->IsUsePrintDialogSetting())
+        {
+            bUsed = true;
+            bLandscape = (pPrinter->GetOrientation() == Orientation::Landscape);
+            aSize = pPrinter->GetPrintPageSize();
+            aSize.setWidth(o3tl::convert(aSize.Width(), o3tl::Length::mm100, o3tl::Length::twip));
+            aSize.setHeight(o3tl::convert(aSize.Height(), o3tl::Length::mm100, o3tl::Length::twip));
+        }
+    }
+}
+
 bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                                      const uno::Sequence< beans::PropertyValue >& rOptions,
                                      ScMarkData& rMark,
@@ -1789,13 +1807,19 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr, bRenderToGraphic ) )
         return 0;
 
+    Size aPrintPageSize;
+    bool bPrintPageLandscape = false;
+    bool bUsePrintDialogSetting = false;
+    lcl_SetPrintPage(rOptions, aPrintPageSize, bPrintPageLandscape, bUsePrintDialogSetting);
+
     //  The same ScPrintFuncCache object in pPrintFuncCache is used as long as
     //  the same selection is used (aStatus) and the document isn't changed
     //  (pPrintFuncCache is cleared in Notify handler)
 
-    if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
+    if (!pPrintFuncCache || !pPrintFuncCache->IsSameSelection(aStatus) || bUsePrintDialogSetting)
     {
-        pPrintFuncCache.reset(new ScPrintFuncCache( pDocShell, aMark, aStatus ));
+        pPrintFuncCache.reset(new ScPrintFuncCache(pDocShell, aMark, aStatus, aPrintPageSize,
+                                                   bPrintPageLandscape, bUsePrintDialogSetting));
     }
     sal_Int32 nPages = pPrintFuncCache->GetPageCount();
 
@@ -2021,12 +2045,23 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     }
     else
     {
+        Size aPrintPageSize;
+        bool bPrintPageLandscape = false;
+        bool bUsePrintDialogSetting = false;
+        lcl_SetPrintPage(rOptions, aPrintPageSize, bPrintPageLandscape, bUsePrintDialogSetting);
+
         std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (m_pPrintState && m_pPrintState->nPrintTab == nTab)
-            pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), *m_pPrintState, &aStatus.GetOptions()));
+            pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), *m_pPrintState,
+                                             &aStatus.GetOptions(), aPrintPageSize,
+                                             bPrintPageLandscape,
+                                             bUsePrintDialogSetting));
         else
             pPrintFunc.reset(new ScPrintFunc(pDocShell, pDocShell->GetPrinter(), nTab,
-                                             pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
+                                             pPrintFuncCache->GetFirstAttr(nTab), nTotalPages,
+                                             pSelRange, &aStatus.GetOptions(), nullptr,
+                                             aPrintPageSize, bPrintPageLandscape,
+                                             bUsePrintDialogSetting));
         pPrintFunc->SetRenderFlag( true );
 
         sal_Int32 nContent = 0;
@@ -2419,14 +2454,20 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         aDrawViewKeeper.mpDrawView->SetPrintPreview();
     }
 
+    Size aPrintPageSize;
+    bool bPrintPageLandscape = false;
+    bool bUsePrintDialogSetting = false;
+    lcl_SetPrintPage(rOptions, aPrintPageSize, bPrintPageLandscape, bUsePrintDialogSetting);
+
     //  to increase performance, ScPrintState might be used here for subsequent
     //  pages of the same sheet
-
 
     std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
     if (m_pPrintState && m_pPrintState->nPrintTab == nTab
         && ! pSelRange) // tdf#120161 use selection to set required printed area
-        pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, *m_pPrintState, &aStatus.GetOptions()));
+        pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, *m_pPrintState, &aStatus.GetOptions(),
+                                         aPrintPageSize, bPrintPageLandscape,
+                                         bUsePrintDialogSetting));
     else
         pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions()));
 
