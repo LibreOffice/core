@@ -313,10 +313,6 @@ void SAL_CALL StatusbarController::paint(
 
 void SAL_CALL StatusbarController::click( const css::awt::Point& )
 {
-}
-
-void SAL_CALL StatusbarController::doubleClick( const css::awt::Point& )
-{
     SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
@@ -324,6 +320,10 @@ void SAL_CALL StatusbarController::doubleClick( const css::awt::Point& )
 
     Sequence< PropertyValue > aArgs;
     execute( aArgs );
+}
+
+void SAL_CALL StatusbarController::doubleClick( const css::awt::Point& )
+{
 }
 
 void StatusbarController::addStatusListener( const OUString& aCommandURL )
