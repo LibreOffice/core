@@ -43,6 +43,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
 #include <layouter.hxx>
+#include <layact.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
@@ -1743,6 +1744,10 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                         if (!SwObjectFormatter::FormatObj(*pAnchoredObj, pAnchorFrame, pAnchorPageFrame,
                                 rShell.Imp()->IsAction() ? &rShell.Imp()->GetLayAction() : nullptr))
                         {
+                            if (rShell.Imp()->IsAction() && rShell.Imp()->GetLayAction().IsAgain())
+                            {   // tdf#159015 will always fail, don't loop
+                                return;
+                            }
                             bRestartLayoutProcess = true;
                             break;
                         }
