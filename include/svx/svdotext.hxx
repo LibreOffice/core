@@ -78,6 +78,7 @@ namespace sdr::table {
     class Cell;
     class SdrTableRtfExporter;
     class SdrTableRTFParser;
+    class SdrTableHTMLParser;
 }
 
 
@@ -128,6 +129,7 @@ private:
     friend class sdr::table::Cell;
     friend class sdr::table::SdrTableRtfExporter;
     friend class sdr::table::SdrTableRTFParser;
+    friend class sdr::table::SdrTableHTMLParser;
     friend class TextChain;
     friend class TextChainFlow;
     friend class EditingTextChainFlow;

@@ -284,6 +284,8 @@ private:
 SVX_DLLPUBLIC void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
 SVX_DLLPUBLIC void ImportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
 
+SVX_DLLPUBLIC void ImportAsHTML( SvStream& rStrm, SdrTableObj& rObj );
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
