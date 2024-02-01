@@ -193,6 +193,7 @@ public:
     void testTdf151818_SmartArtFontColor();
     void testNamedTableRef();
     void testTdf131575();
+    void testTdf76115();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -315,6 +316,7 @@ public:
     CPPUNIT_TEST(testTdf151818_SmartArtFontColor);
     CPPUNIT_TEST(testNamedTableRef);
     CPPUNIT_TEST(testTdf131575);
+    CPPUNIT_TEST(testTdf76115);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3067,6 +3069,20 @@ void ScFiltersTest2::testTdf131575()
     ScDocument* pDoc = getScDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("ETAT DES SORTIES"), pDoc->GetString(1, 0, 0));
+}
+
+void ScFiltersTest2::testTdf76115()
+{
+    // It expectedly fails to load normally
+    CPPUNIT_ASSERT_ASSERTION_FAIL(createScDoc("xlsx/tdf76115.xlsx"));
+
+    // importing it must succeed with RepairPackage set to true.
+    uno::Sequence<beans::PropertyValue> aParams
+        = { comphelper::makePropertyValue("RepairPackage", true) };
+    mxComponent = loadFromDesktop(createFileURL(u"xlsx/tdf76115.xlsx"), {}, aParams);
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Filial"), pDoc->GetString(0, 0, 0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest2);
