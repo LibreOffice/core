@@ -4170,7 +4170,8 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
             {
                 SetActiveShell(pActShell);
             }
-            else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
+            else if (SolarMutexGuard aGuard;
+                     (State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
                         HasContentChanged())
             {
                 FindActiveTypeAndRemoveUserData();
