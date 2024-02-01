@@ -184,20 +184,4 @@ public:
     void setMlSymmetric(const SmMlSymmetric* aSymmetric);
 };
 
-/* element's attributes */
-/*************************************************************************************************/
-
-namespace starmathdatabase
-{
-extern SmMlAttributePos MlAttributeListEmpty[1];
-extern SmMlAttributePos MlAttributeListMath[1];
-extern SmMlAttributePos MlAttributeListMi[7];
-extern SmMlAttributePos MlAttributeListMerror[4];
-extern SmMlAttributePos MlAttributeListMn[7];
-extern SmMlAttributePos MlAttributeListMo[18];
-extern SmMlAttributePos MlAttributeListMrow[4];
-extern SmMlAttributePos MlAttributeListMtext[7];
-extern SmMlAttributePos MlAttributeListMstyle[18];
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
