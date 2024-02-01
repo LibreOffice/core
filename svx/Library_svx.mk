@@ -263,6 +263,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/table/tabledesign \
     svx/source/table/tablertfexporter \
     svx/source/table/tablertfimporter \
+	svx/source/table/tablehtmlimporter \
     svx/source/tbxctrls/bulletsnumbering \
     svx/source/tbxctrls/colrctrl \
     svx/source/tbxctrls/SvxColorChildWindow \

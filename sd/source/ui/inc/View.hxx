@@ -176,6 +176,7 @@ public:
                                             const Point& rPos, const Size& rSize );
 
     bool PasteRTFTable( SvStream& rOStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );
+    bool PasteHTMLTable( SvStream& rOStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );
 
     bool                    IsPresObjSelected(bool bOnPage = true, bool bOnMasterPage = true, bool bCheckPresObjListOnly = false, bool bCheckLayoutOnly = false) const;
 

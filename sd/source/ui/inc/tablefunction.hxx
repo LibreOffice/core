@@ -27,6 +27,7 @@
 namespace sd
 {
 void CreateTableFromRTF(SvStream& rStream, SdDrawDocument* pModel);
+void CreateTableFromHTML(SvStream& rStream, SdDrawDocument* pModel);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

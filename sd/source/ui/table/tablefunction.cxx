@@ -286,6 +286,32 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
     sdr::table::ImportAsRTF( rStream, *pObj );
 }
 
+void CreateTableFromHTML(SvStream& rStream, SdDrawDocument* pModel)
+{
+    rStream.Seek( 0 );
+
+    if( !pModel )
+        return;
+
+    SdrPage* pPage = pModel->GetPage(0);
+    if( !pPage )
+        return;
+
+    Size aSize( 200, 200 );
+    ::tools::Rectangle aRect (Point(), aSize);
+    rtl::Reference<sdr::table::SdrTableObj> pObj = new sdr::table::SdrTableObj(
+        *pModel,
+        aRect,
+        1,
+        1);
+    pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), true );
+    apply_table_style( pObj.get(), pModel, OUString() );
+
+    pPage->NbcInsertObject( pObj.get() );
+
+    sdr::table::ImportAsHTML( rStream, *pObj );
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
