@@ -43,6 +43,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <editeng/boxitem.hxx>
 #include <vcl/scheduler.hxx>
 
@@ -1402,6 +1403,21 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyTrailingSpans)
     auto height2 = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_EQUAL(height1, height2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(184, height2, 1); // allow a bit of room for rounding just in case
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testBrokenPackage_Tdf159474)
+{
+    // Given an invalid ODF having a stream not referenced in manifest.xml
+    const OUString url = createFileURL(u"unreferenced_stream.odt");
+    // It expectedly fails to load normally:
+    CPPUNIT_ASSERT_ASSERTION_FAIL(loadFromDesktop(url, {}, {}));
+    // importing it must succeed with RepairPackage set to true.
+    mxComponent
+        = loadFromDesktop(url, {}, { comphelper::makePropertyValue("RepairPackage", true) });
+    // The document imports in repair mode; the original broken package is used as a template,
+    // and the loaded document has no URL:
+    CPPUNIT_ASSERT(uno::Reference<frame::XModel>(mxComponent, uno::UNO_QUERY_THROW)->getURL().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(OUString("Empty document"), getParagraph(1)->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
