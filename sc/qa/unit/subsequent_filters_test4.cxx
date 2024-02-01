@@ -55,6 +55,7 @@
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <comphelper/propertyvalue.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -116,6 +117,20 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testControlImport)
                                                          UNO_QUERY_THROW);
     uno::Reference<drawing::XControlShape> xControlShape(xIA_DrawPage->getByIndex(0),
                                                          UNO_QUERY_THROW);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf76115)
+{
+    // It expectedly fails to load normally
+    CPPUNIT_ASSERT_ASSERTION_FAIL(createScDoc("xlsx/tdf76115.xlsx"));
+
+    // importing it must succeed with RepairPackage set to true.
+    uno::Sequence<beans::PropertyValue> aParams
+        = { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) };
+    loadWithParams(createFileURL(u"xlsx/tdf76115.xlsx"), aParams);
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Filial"), pDoc->GetString(0, 0, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testLegacyOptionButtonGroupBox)
