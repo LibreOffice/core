@@ -171,8 +171,16 @@ protected:
         nTestEqualConditionFulfilled = nTestEqualConditionEnabled | nTestEqualConditionMatched
     };
 
+    enum SortedBinarySearchBits
+    {
+        nBinarySearchDisabled = 0x00,
+        nSearchbAscd = 0x01,
+        nSearchbDesc = 0x02,
+    };
+
     sal_uInt8            nStopOnMismatch;
     sal_uInt8            nTestEqualCondition;
+    sal_uInt8            nSortedBinarySearch;
     bool            bAdvanceQuery;
     bool            bIgnoreMismatchOnLeadingStrings;
     bool            bSortedBinarySearch;
@@ -263,8 +271,11 @@ public:
                         { bAdvanceQuery = bVal; }
     void            AdvanceQueryParamEntryField();
 
-    void            SetSortedBinarySearchMode( bool bVal )
-                        { bSortedBinarySearch = bVal; }
+    void            SetSortedBinarySearchMode( sal_Int8 nSearchMode )
+                        {
+                            nSortedBinarySearch = sal::static_int_cast<sal_uInt8>(nSearchMode == 2 ?
+                                nSearchbAscd : (nSearchMode == -2 ? nSearchbDesc : nBinarySearchDisabled));
+                        }
 
     void            SetXlookupMode( bool bVal )
                         { bXLookUp = bVal; }
@@ -309,11 +320,12 @@ class ScQueryCellIterator
     using Base::nStopOnMismatchEnabled;
     using Base::nTestEqualCondition;
     using Base::nTestEqualConditionEnabled;
+    using Base::nSortedBinarySearch;
+    using Base::nBinarySearchDisabled;
     using Base::PerformQuery;
     using Base::getThisResult;
     using Base::nBestFitCol;
     using Base::nBestFitRow;
-    using Base::bSortedBinarySearch;
     using Base::bXLookUp;
 
     bool GetThis();
