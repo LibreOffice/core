@@ -447,7 +447,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
         case SID_PASTE_SPECIAL:
             {
-                std::shared_ptr<TransferableDataHelper> aDataHelper =
+                std::shared_ptr<const TransferableDataHelper> aDataHelper =
                     std::make_shared<TransferableDataHelper>(TransferableDataHelper::CreateFromSystemClipboard( &rSh.GetView().GetEditWin()));
 
                 if( aDataHelper->GetXTransferable().is()

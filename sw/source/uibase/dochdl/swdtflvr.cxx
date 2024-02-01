@@ -1688,7 +1688,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                                         nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable);
 }
 
-bool SwTransferable::PasteData( TransferableDataHelper& rData,
+bool SwTransferable::PasteData( const TransferableDataHelper& rData,
                             SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
                             SotClipboardFormatId nFormat,
                             SotExchangeDest nDestination, bool bIsPasteFormat,
@@ -2237,7 +2237,7 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
     return bRet;
 }
 
-bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
+bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SotExchangeActionFlags nActionFlags, bool bMsg )
 {
     bool bRet = false;
@@ -3096,7 +3096,7 @@ bool SwTransferable::PasteAsHyperlink( const TransferableDataHelper& rData,
     return bRet;
 }
 
-bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
+bool SwTransferable::PasteFileName( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat,
                                     SwPasteSdr nAction, const Point* pPt,
                                     SotExchangeActionFlags nActionFlags,
@@ -3376,7 +3376,7 @@ bool SwTransferable::IsPasteOwnFormat( const TransferableDataHelper& rData )
 }
 
 bool SwTransferable::PasteFormat( SwWrtShell& rSh,
-                                    TransferableDataHelper& rData,
+                                    const TransferableDataHelper& rData,
                                     SotClipboardFormatId nFormat )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
@@ -3465,7 +3465,7 @@ bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& 
     return SwTransferable::PasteFormat( rSh, rData, SotClipboardFormatId::STRING );
 }
 
-void SwTransferable::PrePasteSpecial( const SwWrtShell& rSh, TransferableDataHelper& rData, const VclPtr<SfxAbstractPasteDialog>& pDlg )
+void SwTransferable::PrePasteSpecial( const SwWrtShell& rSh, const TransferableDataHelper& rData, const VclPtr<SfxAbstractPasteDialog>& pDlg )
 {
     DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
     TransferableObjectDescriptor aDesc;
