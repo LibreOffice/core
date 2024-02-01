@@ -1352,6 +1352,13 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     pDocShell->UpdatePaintExt(mnPaintExtFlags, aPaintRange);
     maPaintRanges.Join(aPaintRange);
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
+        pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Col(), true);
+        pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Row(), false);
+    }
+
     ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
         ScTabViewShell::GetActiveViewShell(),
         true /* bColumns */, true /* bRows */,
@@ -1507,6 +1514,18 @@ void ScUndoDragDrop::Redo()
 
     if (comphelper::LibreOfficeKit::isActive())
     {
+        SCCOL nStartCol = aDestRange.aStart.Col();
+        SCROW nStartRow = aDestRange.aStart.Row();
+        if (bCut)
+        {
+            nStartCol = std::min(nStartCol, aSrcRange.aStart.Col());
+            nStartRow = std::min(nStartRow, aSrcRange.aStart.Row());
+        }
+
+        ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
+        pTabViewShell->OnLOKSetWidthOrHeight(nStartCol, true);
+        pTabViewShell->OnLOKSetWidthOrHeight(nStartRow, false);
+
         SCTAB nStartTab = aDestRange.aStart.Tab();
         SCTAB nEndTab = aDestRange.aEnd.Tab();
         if (bCut)
