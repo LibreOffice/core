@@ -530,7 +530,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     // data block
 
-    ScTableInfo aTabInfo(nY1, nY2);
+    ScTableInfo aTabInfo(nY1, nY2, true);
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
                    nPPTX, nPPTY, false, rOpts.GetOption(VOPT_FORMULAS),
                    &mrViewData.GetMarkData() );
@@ -1576,7 +1576,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     aAbsMode.SetOrigin(aOrigin);
     rDevice.SetMapMode(aAbsMode);
 
-    ScTableInfo aTabInfo(nTopLeftTileRow, nBottomRightTileRow);
+    ScTableInfo aTabInfo(nTopLeftTileRow, nBottomRightTileRow, false);
     rDoc.FillInfo(aTabInfo, nTopLeftTileCol, nTopLeftTileRow,
                    nBottomRightTileCol, nBottomRightTileRow,
                    nTab, fPPTX, fPPTY, false, false);

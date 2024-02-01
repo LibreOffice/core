@@ -366,7 +366,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleInMergedCell)
     m_pDoc->DoMerge(0, 0, 0, 1, 0);  // A1:A2
     CPPUNIT_ASSERT(m_pDoc->IsMerged(ScAddress(0, 0, 0)));
 
-    ScTableInfo aTabInfo(0, 2);
+    ScTableInfo aTabInfo(0, 2, false);
     m_pDoc->FillInfo(aTabInfo, 0, 0, 0, 1, 0, 1, 1, false, false);
     RowInfo* pRowInfo = aTabInfo.mpRowInfo.get();
 
