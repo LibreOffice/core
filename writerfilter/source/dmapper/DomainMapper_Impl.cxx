@@ -373,16 +373,10 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaMarkerChange( false ),
         m_bIsParaMarkerMove( false ),
         m_bRedlineImageInPreviousRun( false ),
-        m_bParaChanged( false ),
-        m_bIsFirstParaInSection( true ),
-        m_bIsFirstParaInSectionAfterRedline( true ),
         m_bDummyParaAddedForTableInSection( false ),
         m_bDummyParaAddedForTableInSectionPage( false ),
         m_bTextFrameInserted(false),
-        m_bIsPreviousParagraphFramed( false ),
-        m_bIsLastParaInSection( false ),
         m_bIsLastSectionGroup( false ),
-        m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false ),
         m_bSdt(false),
         m_bIsFirstRun(false),
@@ -404,7 +398,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsSplitPara(false),
         m_bIsActualParagraphFramed( false ),
         m_bParaAutoBefore(false),
-        m_bParaWithInlineObject(false),
         m_bSaxError(false)
 {
     m_StreamStateStack.emplace(); // add state for document body
@@ -912,25 +905,27 @@ void DomainMapper_Impl::SetIsLastSectionGroup( bool bIsLast )
 
 void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
 {
-    m_bIsLastParaInSection = bIsLast;
+    m_StreamStateStack.top().bIsLastParaInSection = bIsLast;
 }
 
 
 void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 {
-    m_bIsFirstParaInSection = bIsFirst;
+    m_StreamStateStack.top().bIsFirstParaInSection = bIsFirst;
 }
 
 void DomainMapper_Impl::SetIsFirstParagraphInSectionAfterRedline( bool bIsFirstAfterRedline )
 {
-    m_bIsFirstParaInSectionAfterRedline = bIsFirstAfterRedline;
+    m_StreamStateStack.top().bIsFirstParaInSectionAfterRedline = bIsFirstAfterRedline;
 }
 
 bool DomainMapper_Impl::GetIsFirstParagraphInSection( bool bAfterRedline ) const
 {
     // Anchored objects may include multiple paragraphs,
     // and none of them should be considered the first para in section.
-    return ( bAfterRedline ? m_bIsFirstParaInSectionAfterRedline : m_bIsFirstParaInSection )
+    return (bAfterRedline
+                    ? m_StreamStateStack.top().bIsFirstParaInSectionAfterRedline
+                    : m_StreamStateStack.top().bIsFirstParaInSection)
                 && !IsInShape()
                 && !IsInComments()
                 && !IsInFootOrEndnote();
@@ -958,12 +953,10 @@ void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
     m_bTextFrameInserted  = bIsInserted;
 }
 
-
 void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 {
-    m_bParaSectpr = bParaSectpr;
+    m_StreamStateStack.top().bParaSectpr = bParaSectpr;
 }
-
 
 void DomainMapper_Impl::SetSdt(bool bSdt)
 {
@@ -2805,7 +2798,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                     xCur->goLeft( 1 , true );
                     // Extend the redline ranges for empty paragraphs
-                    if ( !m_bParaChanged && m_previousRedline )
+                    if (!m_StreamStateStack.top().bParaChanged && m_previousRedline)
                         CreateRedline( xCur, m_previousRedline );
                     CheckParaMarkerRedline( xCur );
                 }
@@ -2949,21 +2942,21 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     else
         SetIsPreviousParagraphFramed(false);
 
-    m_bRemoveThisParagraph = false;
+    m_StreamStateStack.top().bRemoveThisParagraph = false;
     if( !IsInHeaderFooter() && !IsInShape()
         && (!pParaContext || !pParaContext->props().IsFrameMode()) )
     { // If the paragraph is in a frame, shape or header/footer, it's not a paragraph of the section itself.
         SetIsFirstParagraphInSection(false);
         // don't count an empty deleted paragraph as first paragraph in section to avoid of
         // the deletion of the next empty paragraph later, resulting loss of the associated page break
-        if (!m_previousRedline || m_bParaChanged)
+        if (!m_previousRedline || m_StreamStateStack.top().bParaChanged)
         {
             SetIsFirstParagraphInSectionAfterRedline(false);
             SetIsLastParagraphInSection(false);
         }
     }
     m_previousRedline.clear();
-    m_bParaChanged = false;
+    m_StreamStateStack.top().bParaChanged = false;
 
     if (IsInComments() && pParaContext)
     {
@@ -3000,7 +2993,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     }
 
     m_bParaAutoBefore = false;
-    m_bParaWithInlineObject = false;
+    m_StreamStateStack.top().bParaWithInlineObject = false;
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
@@ -3280,7 +3273,7 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
             m_pParaMarkerRedlineMove.clear();
         }
         CheckRedline( xTextRange );
-        m_bParaChanged = true;
+        m_StreamStateStack.top().bParaChanged = true;
 
         //getTableManager( ).handle(xTextRange);
     }
@@ -4015,7 +4008,8 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
 
     // only export ParagraphFormat, when there is no other redline in the same text portion to avoid missing redline compression,
     // but always export the first ParagraphFormat redline in a paragraph to keep the paragraph style change data for rejection
-    if( (!bUsedRange || !m_bParaChanged) && GetTopContextOfType(CONTEXT_PARAGRAPH) )
+    if ((!bUsedRange || !m_StreamStateStack.top().bParaChanged)
+        && GetTopContextOfType(CONTEXT_PARAGRAPH))
     {
         std::vector<RedlineParamsPtr>& avRedLines = GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines();
         for( const auto& rRedline : avRedLines )
@@ -4660,7 +4654,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         getPropertyName( PROP_OPAQUE ),
                         uno::Any( true ) );
         }
-        m_bParaChanged = true;
+        m_StreamStateStack.top().bParaChanged = true;
         getTableManager().setIsInShape(true);
     }
     catch ( const uno::Exception& )
@@ -6643,15 +6637,15 @@ OUString DomainMapper_Impl::extractTocTitle()
 css::uno::Reference<css::beans::XPropertySet>
 DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
 {
-    if (m_bParaChanged)
+    if (m_StreamStateStack.top().bParaChanged)
     {
-        finishParagraph(GetTopContextOfType(CONTEXT_PARAGRAPH), false); // resets m_bParaChanged
+        finishParagraph(GetTopContextOfType(CONTEXT_PARAGRAPH), false); // resets bParaChanged
         PopProperties(CONTEXT_PARAGRAPH);
         PushProperties(CONTEXT_PARAGRAPH);
         SetIsFirstRun(true);
         // The first paragraph of the index that is continuation of just finished one needs to be
-        // removed when finished (unless more content will arrive, which will set m_bParaChanged)
-        m_bRemoveThisParagraph = true;
+        // removed when finished (unless more content will arrive, which will set bParaChanged)
+        m_StreamStateStack.top().bRemoveThisParagraph = true;
     }
     const auto& xTextAppend = GetTopTextAppend();
     const auto xTextRange = xTextAppend->getEnd();
@@ -8423,7 +8417,7 @@ void DomainMapper_Impl::PopFieldContext()
                     if (m_bStartedTOC || m_bStartIndex || m_bStartBibliography)
                     {
                         // inside SDT, last empty paragraph is also part of index
-                        if (!m_bParaChanged && !m_xSdtEntryStart)
+                        if (!m_StreamStateStack.top().bParaChanged && !m_xSdtEntryStart)
                         {
                             // End of index is the first item on a new paragraph - this paragraph
                             // should not be part of index
@@ -8449,7 +8443,7 @@ void DomainMapper_Impl::PopFieldContext()
                         m_bStartedTOC = false;
                         m_aTextAppendStack.pop();
                         m_StreamStateStack.top().bTextInserted = false;
-                        m_bParaChanged = true; // the paragraph must stay anyway
+                        m_StreamStateStack.top().bParaChanged = true; // the paragraph must stay anyway
                     }
                     m_bStartTOC = false;
                     m_bStartIndex = false;
@@ -9038,7 +9032,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         }
         else if (m_eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
         {
-            m_bParaWithInlineObject = true;
+            m_StreamStateStack.top().bParaWithInlineObject = true;
 
             // store inline images with track changes, because the anchor point
             // to set redlining is not available yet

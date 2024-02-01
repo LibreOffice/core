@@ -194,14 +194,26 @@ struct SubstreamContext
      * inTbl SPRM or not).
      */
     sal_Int32 nTableDepth = 0;
-    // deferred breaks need to be saved for RTF, probably not for DOCX
-    bool      bIsColumnBreakDeferred = false;
-    bool      bIsPageBreakDeferred = false;
+    // deferred breaks need to be saved for RTF, also for DOCX annotations
+    bool bIsColumnBreakDeferred = false;
+    bool bIsPageBreakDeferred = false;
     sal_Int32 nLineBreaksDeferred = 0;
     /// Current paragraph had at least one field in it.
-    bool      bParaHadField = false;
+    bool bParaHadField = false;
     /// Current paragraph in a table is first paragraph of a cell
-    bool      bFirstParagraphInCell = true;
+    bool bFirstParagraphInCell = true;
+    /// If the current paragraph has any runs.
+    bool bParaChanged = false;
+    bool bIsFirstParaInSectionAfterRedline = true;
+    bool bIsFirstParaInSection = true;
+    bool bIsLastParaInSection = false;
+    /// If the current paragraph contains section property definitions.
+    bool bParaSectpr = false;
+    bool bIsPreviousParagraphFramed = false;
+    /// Current paragraph had at least one inline object in it.
+    bool bParaWithInlineObject = false;
+    /// This is a continuation of already finished paragraph - e.g., first in an index section
+    bool bRemoveThisParagraph = false;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -622,26 +634,16 @@ private:
     // text ZWSPs to keep the change tracking of the image in Writer.)
     bool                            m_bRedlineImageInPreviousRun;
 
-    /// If the current paragraph has any runs.
-    bool                            m_bParaChanged;
-    bool                            m_bIsFirstParaInSection;
-    bool                            m_bIsFirstParaInSectionAfterRedline;
     bool                            m_bIsFirstParaInShape = false;
     bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bDummyParaAddedForTableInSectionPage;
     bool                            m_bTextFrameInserted;
-    bool                            m_bIsPreviousParagraphFramed;
-    bool                            m_bIsLastParaInSection;
     bool                            m_bIsLastSectionGroup;
-    /// If the current paragraph contains section property definitions.
-    bool                            m_bParaSectpr;
     bool                            m_bUsingEnhancedFields;
     /// If the current paragraph is inside a structured document element.
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
     bool                            m_bIsOutsideAParagraph;
-    /// This is a continuation of already finished paragraph - e.g., first in an index section
-    bool                            m_bRemoveThisParagraph = false;
 
     css::uno::Reference< css::text::XTextCursor > m_xTOCMarkerCursor;
 
@@ -740,7 +742,7 @@ public:
 
     void SetIsDecimalComma() { m_bIsDecimalComma = true; };
     void SetIsLastParagraphInSection( bool bIsLast );
-    bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
+    bool GetIsLastParagraphInSection() const { return m_StreamStateStack.top().bIsLastParaInSection; }
     void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
     void SetRubyText( OUString const &sText, OUString const &sStyle) {
         m_aRubyInfo.sRubyText = sText;
@@ -766,10 +768,11 @@ public:
     bool GetIsTextFrameInserted() const { return m_bTextFrameInserted;}
     void SetIsTextDeleted(bool bIsTextDeleted) { m_bTextDeleted = bIsTextDeleted; }
 
-    void SetIsPreviousParagraphFramed( bool bIsFramed ) { m_bIsPreviousParagraphFramed = bIsFramed; }
-    bool GetIsPreviousParagraphFramed() const { return m_bIsPreviousParagraphFramed; }
+    void SetIsPreviousParagraphFramed(bool const bIsFramed)
+    { m_StreamStateStack.top().bIsPreviousParagraphFramed = bIsFramed; }
+    bool GetIsPreviousParagraphFramed() const { return m_StreamStateStack.top().bIsPreviousParagraphFramed; }
     void SetParaSectpr(bool bParaSectpr);
-    bool GetParaSectpr() const { return m_bParaSectpr;}
+    bool GetParaSectpr() const { return m_StreamStateStack.top().bParaSectpr; }
 
     void SetSymbolChar( sal_Int32 nSymbol) { m_aSymbolData.cSymbol = sal_Unicode(nSymbol); }
     void SetSymbolFont( OUString const &rName ) { m_aSymbolData.sFont = rName; }
@@ -785,9 +788,9 @@ public:
 
     /// Getter method for m_bSdt.
     bool GetSdt() const { return m_bSdt;}
-    bool GetParaChanged() const { return m_bParaChanged;}
+    bool GetParaChanged() const { return m_StreamStateStack.top().bParaChanged; }
     bool GetParaHadField() const { return m_StreamStateStack.top().bParaHadField; }
-    bool GetRemoveThisPara() const { return m_bRemoveThisParagraph; }
+    bool GetRemoveThisPara() const { return m_StreamStateStack.top().bRemoveThisParagraph; }
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
@@ -1221,7 +1224,7 @@ public:
     bool m_bIsActualParagraphFramed;
     std::deque<css::uno::Any> m_aStoredRedlines[StoredRedlines::NONE];
 
-    bool IsParaWithInlineObject() const { return m_bParaWithInlineObject; }
+    bool IsParaWithInlineObject() const { return m_StreamStateStack.top().bParaWithInlineObject; }
 
     css::uno::Reference< css::embed::XStorage > m_xDocumentStorage;
 
@@ -1251,8 +1254,6 @@ private:
     css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool m_bParaAutoBefore;
-    /// Current paragraph had at least one inline object in it.
-    bool m_bParaWithInlineObject;
     /// SAXException was seen so document will be abandoned
     bool m_bSaxError;
 

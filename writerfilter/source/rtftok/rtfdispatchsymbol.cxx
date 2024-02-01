@@ -406,6 +406,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 sal_uInt8 const sBreak[] = { 0xc };
                 Mapper().text(sBreak, 1);
+                // testFdo81892 don't do another \par break directly; because of
+                // GetSplitPgBreakAndParaMark() it does finishParagraph *twice*
                 m_bNeedCr = true;
             }
         }
