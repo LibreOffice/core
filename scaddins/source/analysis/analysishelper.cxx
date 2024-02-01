@@ -2737,9 +2737,6 @@ bool ScaAnyConverter::getDouble(
         case uno::TypeClass_VOID:
             bContainsVal = false;
         break;
-        case uno::TypeClass_DOUBLE:
-            rAny >>= rfResult;
-        break;
         case uno::TypeClass_STRING:
         {
             auto pString = o3tl::forceAccess< OUString >( rAny );
@@ -2749,9 +2746,14 @@ bool ScaAnyConverter::getDouble(
                 bContainsVal = false;
         }
         break;
+        case uno::TypeClass_HYPER:
+            rfResult = rAny.get<sal_uInt64>();
+        break;
         default:
-            throw lang::IllegalArgumentException();
+            if( !( rAny >>= rfResult ) )
+                throw lang::IllegalArgumentException();
     }
+
     return bContainsVal;
 }
 
