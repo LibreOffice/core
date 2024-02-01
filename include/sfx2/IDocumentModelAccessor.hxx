@@ -28,7 +28,7 @@ struct SFX2_DLLPUBLIC CurrencyID
 /** Document model accessor, used to access parts of the document model.
  *
  * This is useful when some common parts of the model are needed, but can
- * only access the model indirecly from other modules that can access
+ * only access the model indirectly from other modules that can access
  * SfxObjectShell, but don't have a direct access to the document model
  * (and access through UNO would be inconvenient).
  *
