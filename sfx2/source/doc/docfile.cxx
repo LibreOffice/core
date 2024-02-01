@@ -1884,15 +1884,21 @@ uno::Reference< embed::XStorage > const & SfxMedium::GetZipStorageToSign_Impl( b
 
         try
         {
+            const SfxBoolItem* pRepairItem = GetItemSet()->GetItem(SID_REPAIRPACKAGE, false);
+            const bool bRepairPackage = pRepairItem && pRepairItem->GetValue();
             // we can not sign document if there is no stream
             // should it be possible at all?
             if ( !bReadOnly && pImpl->xStream.is() )
             {
-                pImpl->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
+                pImpl->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+                    ZIP_STORAGE_FORMAT_STRING, pImpl->xStream, css::embed::ElementModes::READWRITE,
+                    {}, bRepairPackage);
             }
             else if ( pImpl->xInputStream.is() )
             {
-                pImpl->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xInputStream );
+                pImpl->m_xZipStorage
+                    = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+                        ZIP_STORAGE_FORMAT_STRING, pImpl->xInputStream, {}, bRepairPackage);
             }
         }
         catch( const uno::Exception& )

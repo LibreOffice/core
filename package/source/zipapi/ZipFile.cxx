@@ -38,6 +38,7 @@
 #include <rtl/digest.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -949,7 +950,7 @@ sal_Int32 ZipFile::readCEN()
             if ( nTestSig != CENSIG )
                 throw ZipException("Invalid CEN header (bad signature)" );
 
-            aMemGrabber.skipBytes ( 2 );
+            sal_uInt16 versionMadeBy = static_cast<sal_uInt16>(aMemGrabber.ReadInt16());
             aEntry.nVersion = aMemGrabber.ReadInt16();
             aEntry.nFlag = aMemGrabber.ReadInt16();
 
@@ -969,7 +970,8 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nPathLen = aMemGrabber.ReadInt16();
             aEntry.nExtraLen = aMemGrabber.ReadInt16();
             nCommentLen = aMemGrabber.ReadInt16();
-            aMemGrabber.skipBytes ( 8 );
+            aMemGrabber.skipBytes ( 4 );
+            sal_uInt32 externalFileAttributes = aMemGrabber.ReadUInt32();
             sal_uInt32 nOffset = aMemGrabber.ReadUInt32();
 
             // FIXME64: need to read the 64bit header instead
@@ -1006,6 +1008,15 @@ sal_Int32 ZipFile::readCEN()
                 throw ZipException("Zip entry has an invalid name." );
 
             aMemGrabber.skipBytes( aEntry.nPathLen + aEntry.nExtraLen + nCommentLen );
+
+            // Is this a FAT-compatible empty entry?
+            if (aEntry.nSize == 0 && (versionMadeBy & 0xff00) == 0)
+            {
+                constexpr sal_uInt32 FILE_ATTRIBUTE_DIRECTORY = 16;
+                if (externalFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+                    continue; // This is a directory entry, not a stream - skip it
+            }
+
             aEntries[aEntry.sPath] = aEntry;
         }
 
@@ -1101,6 +1112,7 @@ void ZipFile::recover()
                                                               RTL_TEXTENCODING_UTF8 );
                                     aEntry.nPathLen = static_cast< sal_Int16 >(aFileName.getLength());
                                 }
+                                aEntry.sPath = aEntry.sPath.replace('\\', '/');
 
                                 aEntry.nOffset = nGenPos + nPos + 30 + aEntry.nPathLen + aEntry.nExtraLen;
 
@@ -1111,7 +1123,36 @@ void ZipFile::recover()
                                     aEntry.nSize = 0;
                                 }
 
+                                // Do not add this entry, if it is empty and is a directory of
+                                // an already existing entry
+                                if (aEntry.nSize == 0 && aEntry.nCompressedSize == 0
+                                    && std::find_if(
+                                           aEntries.begin(), aEntries.end(),
+                                           [path = OUString(aEntry.sPath + "/")](const auto& r)
+                                           { return r.first.startsWith(path); })
+                                           != aEntries.end())
+                                {
+                                    nPos += 4;
+                                    continue;
+                                }
+
                                 aEntries.emplace( aEntry.sPath, aEntry );
+
+                                // Drop any "directory" entry corresponding to this one's path;
+                                // since we don't use central directory, we don't see external
+                                // file attributes, so sanitize here
+                                sal_Int32 i = 0;
+                                for (OUString subdir = aEntry.sPath.getToken(0, '/', i); i >= 0;
+                                     subdir += OUString::Concat("/")
+                                               + o3tl::getToken(aEntry.sPath, 0, '/', i))
+                                {
+                                    if (auto it = aEntries.find(subdir); it != aEntries.end())
+                                    {
+                                        // if not empty, let it fail later in ZipPackage::getZipFileContents
+                                        if (it->second.nSize == 0 && it->second.nCompressedSize == 0)
+                                            aEntries.erase(it);
+                                    }
+                                }
                             }
                         }
                     }
