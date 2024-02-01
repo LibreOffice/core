@@ -1191,16 +1191,191 @@ void ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLe
     }
 }
 
+// PK34: Local file header
+void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, sal_Int64 totalSize)
+{
+    ZipEntry aEntry;
+    Sequence<sal_Int8> aTmpBuffer(data.data() + 4, 26);
+    MemoryByteGrabber aMemGrabber(aTmpBuffer);
+
+    aEntry.nVersion = aMemGrabber.ReadInt16();
+    aEntry.nFlag = aMemGrabber.ReadInt16();
+    if ((aEntry.nFlag & 1) == 1)
+        return;
+
+    aEntry.nMethod = aMemGrabber.ReadInt16();
+    if (aEntry.nMethod != STORED && aEntry.nMethod != DEFLATED)
+        return;
+
+    aEntry.nTime = aMemGrabber.ReadInt32();
+    aEntry.nCrc = aMemGrabber.ReadInt32();
+    sal_uInt64 nCompressedSize = aMemGrabber.ReadUInt32();
+    sal_uInt64 nSize = aMemGrabber.ReadUInt32();
+    aEntry.nPathLen = aMemGrabber.ReadInt16();
+    aEntry.nExtraLen = aMemGrabber.ReadInt16();
+
+    const sal_Int32 nDescrLength = (aEntry.nMethod == DEFLATED && (aEntry.nFlag & 8)) ? 16 : 0;
+    const sal_Int64 nBlockHeaderLength = aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
+    if (aEntry.nPathLen < 0 || aEntry.nExtraLen < 0 || dataOffset + nBlockHeaderLength > totalSize)
+        return;
+
+    // read always in UTF8, some tools seem not to set UTF8 bit
+    if (o3tl::make_unsigned(30 + aEntry.nPathLen) <= data.size())
+        aEntry.sPath = OUString(reinterpret_cast<char const*>(data.data() + 30), aEntry.nPathLen,
+                                RTL_TEXTENCODING_UTF8);
+    else
+    {
+        Sequence<sal_Int8> aFileName;
+        aGrabber.seek(dataOffset + 30);
+        aGrabber.readBytes(aFileName, aEntry.nPathLen);
+        aEntry.sPath = OUString(reinterpret_cast<const char*>(aFileName.getConstArray()),
+                                aFileName.getLength(), RTL_TEXTENCODING_UTF8);
+        aEntry.nPathLen = static_cast<sal_Int16>(aFileName.getLength());
+    }
+    aEntry.sPath = aEntry.sPath.replace('\\', '/');
+
+    // read 64bit header
+    if (aEntry.nExtraLen > 0)
+    {
+        Sequence<sal_Int8> aExtraBuffer;
+        if (o3tl::make_unsigned(30 + aEntry.nPathLen) + aEntry.nExtraLen <= data.size())
+        {
+            aExtraBuffer = Sequence<sal_Int8>(data.data() + 30 + aEntry.nPathLen, aEntry.nExtraLen);
+        }
+        else
+        {
+            aGrabber.seek(dataOffset + 30 + aEntry.nExtraLen);
+            aGrabber.readBytes(aExtraBuffer, aEntry.nExtraLen);
+        }
+        MemoryByteGrabber aMemGrabberExtra(aExtraBuffer);
+        if (aEntry.nExtraLen > 0)
+        {
+            readExtraFields(aMemGrabberExtra, aEntry.nExtraLen, nSize, nCompressedSize, nullptr);
+        }
+    }
+
+    sal_Int64 nDataSize = (aEntry.nMethod == DEFLATED) ? nCompressedSize : nSize;
+    sal_Int64 nBlockLength = nDataSize + nBlockHeaderLength;
+
+    if (dataOffset + nBlockLength > totalSize)
+        return;
+
+    aEntry.nCompressedSize = nCompressedSize;
+    aEntry.nSize = nSize;
+
+    aEntry.nOffset = dataOffset + 30 + aEntry.nPathLen + aEntry.nExtraLen;
+
+    if ((aEntry.nSize || aEntry.nCompressedSize) && !checkSizeAndCRC(aEntry))
+    {
+        aEntry.nCrc = 0;
+        aEntry.nCompressedSize = 0;
+        aEntry.nSize = 0;
+    }
+
+    // Do not add this entry, if it is empty and is a directory of an already existing entry
+    if (aEntry.nSize == 0 && aEntry.nCompressedSize == 0
+        && std::find_if(aEntries.begin(), aEntries.end(),
+                        [path = OUString(aEntry.sPath + "/")](const auto& r)
+                        { return r.first.startsWith(path); })
+               != aEntries.end())
+        return;
+
+    aEntries.emplace(aEntry.sPath, aEntry);
+
+    // Drop any "directory" entry corresponding to this one's path; since we don't use
+    // central directory, we don't see external file attributes, so sanitize here
+    sal_Int32 i = 0;
+    for (OUString subdir = aEntry.sPath.getToken(0, '/', i); i >= 0;
+         subdir += OUString::Concat("/") + o3tl::getToken(aEntry.sPath, 0, '/', i))
+    {
+        if (auto it = aEntries.find(subdir); it != aEntries.end())
+        {
+            // if not empty, let it fail later in ZipPackage::getZipFileContents
+            if (it->second.nSize == 0 && it->second.nCompressedSize == 0)
+                aEntries.erase(it);
+        }
+    }
+}
+
+// PK78: Data descriptor
+void ZipFile::HandlePK78(std::span<const sal_Int8> data, sal_Int64 dataOffset)
+{
+    sal_Int64 nCompressedSize, nSize;
+    Sequence<sal_Int8> aTmpBuffer(data.data() + 4, 12 + 8 + 4);
+    MemoryByteGrabber aMemGrabber(aTmpBuffer);
+    sal_Int32 nCRC32 = aMemGrabber.ReadInt32();
+
+    // FIXME64: find a better way to recognize if Zip64 mode is used
+    // Now we check if the memory at +16 byte seems to be a signature
+    // if not, then probably Zip64 mode is used here, except
+    // if memory at +24 byte seems not to be a signature.
+    // Normally Data Descriptor should followed by the next Local File header
+    // that should start with PK34, except for the last file, then it may
+    // followed by Central directory that start with PK12, or
+    // followed by "archive decryption header" that don't have a signature.
+    if ((data[16] == 'P' && data[17] == 'K' && data[19] == data[18] + 1
+         && (data[18] == 3 || data[18] == 1))
+        || !(data[24] == 'P' && data[25] == 'K' && data[27] == data[26] + 1
+             && (data[26] == 3 || data[26] == 1)))
+    {
+        nCompressedSize = aMemGrabber.ReadUInt32();
+        nSize = aMemGrabber.ReadUInt32();
+    }
+    else
+    {
+        nCompressedSize = aMemGrabber.ReadUInt64();
+        nSize = aMemGrabber.ReadUInt64();
+    }
+
+    for (auto& rEntry : aEntries)
+    {
+        // this is a broken package, accept this block not only for DEFLATED streams
+        if ((rEntry.second.nFlag & 8) == 0)
+            continue;
+        sal_Int64 nStreamOffset = dataOffset - nCompressedSize;
+        if (nStreamOffset == rEntry.second.nOffset
+            && nCompressedSize > rEntry.second.nCompressedSize)
+        {
+            // only DEFLATED blocks need to be checked
+            bool bAcceptBlock = (rEntry.second.nMethod == STORED && nCompressedSize == nSize);
+
+            if (!bAcceptBlock)
+            {
+                sal_Int64 nRealSize = 0;
+                sal_Int32 nRealCRC = 0;
+                getSizeAndCRC(nStreamOffset, nCompressedSize, &nRealSize, &nRealCRC);
+                bAcceptBlock = (nRealSize == nSize && nRealCRC == nCRC32);
+            }
+
+            if (bAcceptBlock)
+            {
+                rEntry.second.nCrc = nCRC32;
+                rEntry.second.nCompressedSize = nCompressedSize;
+                rEntry.second.nSize = nSize;
+            }
+        }
+#if 0
+// for now ignore clearly broken streams
+        else if( !rEntry.second.nCompressedSize )
+        {
+            rEntry.second.nCrc = nCRC32;
+            sal_Int32 nRealStreamSize = dataOffset - rEntry.second.nOffset;
+            rEntry.second.nCompressedSize = nRealStreamSize;
+            rEntry.second.nSize = nSize;
+        }
+#endif
+    }
+}
+
 void ZipFile::recover()
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-    sal_Int64 nLength;
     Sequence < sal_Int8 > aBuffer;
 
     try
     {
-        nLength = aGrabber.getLength();
+        const sal_Int64 nLength = aGrabber.getLength();
         if (nLength < ENDHDR)
             return;
 
@@ -1210,7 +1385,7 @@ void ZipFile::recover()
         for( sal_Int64 nGenPos = 0; aGrabber.readBytes( aBuffer, nToRead ) && aBuffer.getLength() > 16; )
         {
             const sal_Int8 *pBuffer = aBuffer.getConstArray();
-            sal_Int32 nBufSize = aBuffer.getLength();
+            const sal_Int32 nBufSize = aBuffer.getLength();
 
             sal_Int64 nPos = 0;
             // the buffer should contain at least one header,
@@ -1221,196 +1396,12 @@ void ZipFile::recover()
             {
                 if ( nPos < nBufSize - 30 && pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 3 && pBuffer[nPos+3] == 4 )
                 {
-                    //PK34: Local file header
-                    ZipEntry aEntry;
-                    Sequence<sal_Int8> aTmpBuffer(&(pBuffer[nPos+4]), 26);
-                    MemoryByteGrabber aMemGrabber(aTmpBuffer);
-
-                    aEntry.nVersion = aMemGrabber.ReadInt16();
-                    aEntry.nFlag = aMemGrabber.ReadInt16();
-
-                    if ( ( aEntry.nFlag & 1 ) != 1 )
-                    {
-                        aEntry.nMethod = aMemGrabber.ReadInt16();
-
-                        if ( aEntry.nMethod == STORED || aEntry.nMethod == DEFLATED )
-                        {
-                            aEntry.nTime = aMemGrabber.ReadInt32();
-                            aEntry.nCrc = aMemGrabber.ReadInt32();
-                            sal_uInt64 nCompressedSize = aMemGrabber.ReadUInt32();
-                            sal_uInt64 nSize = aMemGrabber.ReadUInt32();
-                            aEntry.nPathLen = aMemGrabber.ReadInt16();
-                            aEntry.nExtraLen = aMemGrabber.ReadInt16();
-
-                            sal_Int32 nDescrLength =
-                                ( aEntry.nMethod == DEFLATED && ( aEntry.nFlag & 8 ) ) ? 16 : 0;
-
-                            sal_Int64 nBlockHeaderLength = aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
-                            if ( aEntry.nPathLen >= 0 && aEntry.nExtraLen >= 0
-                                && ( nGenPos + nPos + nBlockHeaderLength ) <= nLength )
-                            {
-                                // read always in UTF8, some tools seem not to set UTF8 bit
-                                if( nPos + 30 + aEntry.nPathLen <= nBufSize )
-                                    aEntry.sPath = OUString ( reinterpret_cast<char const *>(&pBuffer[nPos + 30]),
-                                                              aEntry.nPathLen,
-                                                              RTL_TEXTENCODING_UTF8 );
-                                else
-                                {
-                                    Sequence < sal_Int8 > aFileName;
-                                    aGrabber.seek( nGenPos + nPos + 30 );
-                                    aGrabber.readBytes( aFileName, aEntry.nPathLen );
-                                    aEntry.sPath = OUString ( reinterpret_cast<const char *>(aFileName.getConstArray()),
-                                                              aFileName.getLength(),
-                                                              RTL_TEXTENCODING_UTF8 );
-                                    aEntry.nPathLen = static_cast< sal_Int16 >(aFileName.getLength());
-                                }
-                                aEntry.sPath = aEntry.sPath.replace('\\', '/');
-
-                                // read 64bit header
-                                if (aEntry.nExtraLen > 0)
-                                {
-                                    Sequence<sal_Int8> aExtraBuffer;
-                                    if (nPos + 30 + aEntry.nPathLen + aEntry.nExtraLen <= nBufSize)
-                                    {
-                                        aExtraBuffer = Sequence<sal_Int8>(
-                                            &(pBuffer[nPos + 30 + aEntry.nPathLen]),
-                                            aEntry.nExtraLen);
-                                    }
-                                    else
-                                    {
-                                        aGrabber.seek(nGenPos + nPos + 30 + aEntry.nExtraLen);
-                                        aGrabber.readBytes(aExtraBuffer, aEntry.nExtraLen);
-                                    }
-                                    MemoryByteGrabber aMemGrabberExtra(aExtraBuffer);
-                                    if (aEntry.nExtraLen > 0)
-                                    {
-                                        readExtraFields(aMemGrabberExtra, aEntry.nExtraLen, nSize,
-                                                        nCompressedSize, nullptr);
-                                    }
-                                }
-
-                                sal_Int64 nDataSize = ( aEntry.nMethod == DEFLATED ) ? nCompressedSize : nSize;
-                                sal_Int64 nBlockLength = nDataSize + nBlockHeaderLength;
-
-                                if (( nGenPos + nPos + nBlockLength ) <= nLength )
-                                {
-                                    aEntry.nCompressedSize = nCompressedSize;
-                                    aEntry.nSize = nSize;
-
-                                    aEntry.nOffset = nGenPos + nPos + 30 + aEntry.nPathLen + aEntry.nExtraLen;
-
-                                    if ( ( aEntry.nSize || aEntry.nCompressedSize ) && !checkSizeAndCRC( aEntry ) )
-                                    {
-                                        aEntry.nCrc = 0;
-                                        aEntry.nCompressedSize = 0;
-                                        aEntry.nSize = 0;
-                                    }
-
-                                    // Do not add this entry, if it is empty and is a directory of
-                                    // an already existing entry
-                                    if (aEntry.nSize == 0 && aEntry.nCompressedSize == 0
-                                        && std::find_if(
-                                               aEntries.begin(), aEntries.end(),
-                                               [path = OUString(aEntry.sPath + "/")](const auto& r)
-                                               { return r.first.startsWith(path); })
-                                               != aEntries.end())
-                                        continue;
-
-                                    aEntries.emplace( aEntry.sPath, aEntry );
-
-                                    // Drop any "directory" entry corresponding to this one's path;
-                                    // since we don't use central directory, we don't see external
-                                    // file attributes, so sanitize here
-                                    sal_Int32 i = 0;
-                                    for (OUString subdir = aEntry.sPath.getToken(0, '/', i); i >= 0;
-                                         subdir += OUString::Concat("/")
-                                                   + o3tl::getToken(aEntry.sPath, 0, '/', i))
-                                    {
-                                        if (auto it = aEntries.find(subdir); it != aEntries.end())
-                                        {
-                                            // if not empty, let it fail later in ZipPackage::getZipFileContents
-                                            if (it->second.nSize == 0 && it->second.nCompressedSize == 0)
-                                                aEntries.erase(it);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+                    HandlePK34(std::span(pBuffer + nPos, nBufSize - nPos), nGenPos + nPos, nLength);
                     nPos += 4;
                 }
                 else if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 7 && pBuffer[nPos+3] == 8 )
                 {
-                    //PK78: Data descriptor
-                    sal_Int64 nCompressedSize, nSize;
-                    Sequence<sal_Int8> aTmpBuffer(&(pBuffer[nPos + 4]), 12 + 8 + 4);
-                    MemoryByteGrabber aMemGrabber(aTmpBuffer);
-                    sal_Int32 nCRC32 = aMemGrabber.ReadInt32();
-
-                    // FIXME64: find a better way to recognize if Zip64 mode is used
-                    // Now we check if the memory at +16 byte seems to be a signature
-                    // if not, then probably Zip64 mode is used here, except
-                    // if memory at +24 byte seems not to be a signature.
-                    // Normally Data Descriptor should followed by the next Local File header
-                    // that should start with PK34, except for the last file, then it may
-                    // followed by Central directory that start with PK12, or
-                    // followed by "archive decryption header" that don't have a signature.
-                    if ((pBuffer[nPos + 16] == 'P' && pBuffer[nPos + 17] == 'K'
-                         && pBuffer[nPos + 19] == pBuffer[nPos + 18] + 1
-                         && (pBuffer[nPos + 18] == 3 || pBuffer[nPos + 18] == 1))
-                        || !(pBuffer[nPos + 24] == 'P' && pBuffer[nPos + 25] == 'K'
-                             && pBuffer[nPos + 27] == pBuffer[nPos + 26] + 1
-                             && (pBuffer[nPos + 26] == 3 || pBuffer[nPos + 26] == 1)))
-                    {
-                        nCompressedSize = aMemGrabber.ReadUInt32();
-                        nSize = aMemGrabber.ReadUInt32();
-                    }
-                    else
-                    {
-                        nCompressedSize = aMemGrabber.ReadUInt64();
-                        nSize = aMemGrabber.ReadUInt64();
-                    }
-
-                    for( auto& rEntry : aEntries )
-                    {
-                        // this is a broken package, accept this block not only for DEFLATED streams
-                        if( rEntry.second.nFlag & 8 )
-                        {
-                            sal_Int64 nStreamOffset = nGenPos + nPos - nCompressedSize;
-                            if ( nStreamOffset == rEntry.second.nOffset && nCompressedSize > rEntry.second.nCompressedSize )
-                            {
-                                // only DEFLATED blocks need to be checked
-                                bool bAcceptBlock = ( rEntry.second.nMethod == STORED && nCompressedSize == nSize );
-
-                                if ( !bAcceptBlock )
-                                {
-                                    sal_Int64 nRealSize = 0;
-                                    sal_Int32 nRealCRC = 0;
-                                    getSizeAndCRC( nStreamOffset, nCompressedSize, &nRealSize, &nRealCRC );
-                                    bAcceptBlock = ( nRealSize == nSize && nRealCRC == nCRC32 );
-                                }
-
-                                if ( bAcceptBlock )
-                                {
-                                    rEntry.second.nCrc = nCRC32;
-                                    rEntry.second.nCompressedSize = nCompressedSize;
-                                    rEntry.second.nSize = nSize;
-                                }
-                            }
-#if 0
-// for now ignore clearly broken streams
-                            else if( !rEntry.second.nCompressedSize )
-                            {
-                                rEntry.second.nCrc = nCRC32;
-                                sal_Int32 nRealStreamSize = nGenPos + nPos - rEntry.second.nOffset;
-                                rEntry.second.nCompressedSize = nRealStreamSize;
-                                rEntry.second.nSize = nSize;
-                            }
-#endif
-                        }
-                    }
-
+                    HandlePK78(std::span(pBuffer + nPos, nBufSize - nPos), nGenPos + nPos);
                     nPos += 4;
                 }
                 else

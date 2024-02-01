@@ -29,6 +29,8 @@
 #include "HashMaps.hxx"
 #include "EncryptionData.hxx"
 
+#include <span>
+
 class MemoryByteGrabber;
 namespace com::sun::star {
     namespace uno { class XComponentContext; }
@@ -83,6 +85,8 @@ class ZipFile
     void readLOC( ZipEntry &rEntry );
     sal_Int32 readCEN();
     sal_Int32 findEND();
+    void HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, sal_Int64 totalSize);
+    void HandlePK78(std::span<const sal_Int8> data, sal_Int64 dataOffset);
     void recover();
     static void readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
                                 sal_uInt64& nSize, sal_uInt64& nCompressedSize,
