@@ -1074,14 +1074,19 @@ void ScDocument::FillInfo(
 
 /// We seem to need to allocate three extra rows here, not sure why
 ///
-ScTableInfo::ScTableInfo(SCROW nStartRow, SCROW nEndRow)
+ScTableInfo::ScTableInfo(SCROW nStartRow, SCROW nEndRow, bool bHintOnly)
     : mnArrCount(0)
     , mnArrCapacity(nEndRow - nStartRow + 4)
     , mbPageMode(false)
 {
     assert(nStartRow >= 0);
     assert(nEndRow >= nStartRow);
-    mpRowInfo.reset(new RowInfo[nEndRow - nStartRow + 4] {});
+    if (bHintOnly && mnArrCapacity > 1024)
+    {
+        SAL_INFO("sc.core", "ScTableInfo excessive capacity: " << mnArrCapacity << " start: " << nStartRow << " end: " << nEndRow);
+        mnArrCapacity = 1024;
+    }
+    mpRowInfo.reset(new RowInfo[mnArrCapacity] {});
 }
 
 ScTableInfo::~ScTableInfo()
