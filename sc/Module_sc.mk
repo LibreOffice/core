@@ -90,6 +90,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_uicalc \
 	CppunitTest_sc_vba_macro_test \
 	CppunitTest_sc_a11y \
+	CppunitTest_sc_filter_html \
 ))
 
 ifneq ($(ENABLE_JUMBO_SHEETS),)

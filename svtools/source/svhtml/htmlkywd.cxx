@@ -524,6 +524,7 @@ static HTML_OptionEntry aHTMLOptionTab[] = {
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_title),     HtmlOptionId::TITLE},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_value),     HtmlOptionId::VALUE},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDval),     HtmlOptionId::SDVAL}, // StarDiv NumberValue
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_DSval),     HtmlOptionId::DSVAL},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_SDnum),     HtmlOptionId::SDNUM}, // StarDiv NumberFormat
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdlibrary), HtmlOptionId::SDLIBRARY},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdmodule),  HtmlOptionId::SDMODULE},
