@@ -465,41 +465,43 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     pDlg->PreGetFormat(*aDataHelper);
 
 
-                    pDlg->StartExecuteAsync([aDataHelper, pDlg, &rSh, this](sal_Int32 nResult){
-                    if (nResult == RET_OK)
-                    {
-                        // Temporary variables, because the shell could already be
-                        // destroyed after the paste.
-                        SwView* pView = &m_rView;
-                        bool bRet = false;
-                        SotClipboardFormatId nFormatId = pDlg->GetFormatOnly();
-
-                        if( nFormatId != SotClipboardFormatId::NONE )
-                            bRet = SwTransferable::PasteFormat( rSh, *aDataHelper, nFormatId );
-
-                        if (bRet)
+                    pDlg->StartExecuteAsync(
+                        [aDataHelper, pDlg, &rSh, this](sal_Int32 nResult)
                         {
-                            SfxViewFrame& rViewFrame = pView->GetViewFrame();
-                            uno::Reference< frame::XDispatchRecorder > xRecorder =
-                                    rViewFrame.GetBindings().GetRecorder();
-                            if(xRecorder.is()) {
-                                SfxRequest aReq(rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS);
-                                aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(nFormatId) ) );
-                                aReq.Done();
+                            if (nResult == RET_OK)
+                            {
+                                // Temporary variables, because the shell could already be
+                                // destroyed after the paste.
+                                SwView* pView = &m_rView;
+                                bool bRet = false;
+                                SotClipboardFormatId nFormatId = pDlg->GetFormatOnly();
+
+                                if( nFormatId != SotClipboardFormatId::NONE )
+                                    bRet = SwTransferable::PasteFormat( rSh, *aDataHelper, nFormatId );
+
+                                if (bRet)
+                                {
+                                    SfxViewFrame& rViewFrame = pView->GetViewFrame();
+                                    uno::Reference< frame::XDispatchRecorder > xRecorder =
+                                            rViewFrame.GetBindings().GetRecorder();
+                                    if(xRecorder.is()) {
+                                        SfxRequest aReq(rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS);
+                                        aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(nFormatId) ) );
+                                        aReq.Done();
+                                    }
+                                }
+
+                                if (rSh.IsFrameSelected() || rSh.IsObjSelected())
+                                    rSh.EnterSelFrameMode();
+                                pView->AttrChangedNotify(nullptr);
+
+                                // Fold pasted outlines that have outline content visible attribute false
+                                MakeAllOutlineContentTemporarilyVisible a(rSh.GetDoc());
                             }
+
+                            pDlg->disposeOnce();
                         }
-
-                        if (rSh.IsFrameSelected() || rSh.IsObjSelected())
-                            rSh.EnterSelFrameMode();
-                        pView->AttrChangedNotify(nullptr);
-
-                        // Fold pasted outlines that have outline content visible attribute false
-                        MakeAllOutlineContentTemporarilyVisible a(rSh.GetDoc());
-                    }
-
-                    pDlg->disposeOnce();
-
-                    });
+                    );
                 }
                 else
                     return;
