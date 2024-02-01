@@ -287,8 +287,10 @@ void XmlFilterBase::importDocumentProperties()
     rtl::Reference< ::oox::core::FilterDetect > xDetector( new ::oox::core::FilterDetect( xContext ) );
     xInputStream = xDetector->extractUnencryptedPackage( aMediaDesc );
     Reference< XComponent > xModel = getModel();
+    const bool repairPackage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
     Reference< XStorage > xDocumentStorage (
-            ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( OFOPXML_STORAGE_FORMAT_STRING, xInputStream ) );
+        ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+            OFOPXML_STORAGE_FORMAT_STRING, xInputStream, {}, repairPackage));
     Reference< XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.document.OOXMLDocumentPropertiesImporter",
             xContext);
