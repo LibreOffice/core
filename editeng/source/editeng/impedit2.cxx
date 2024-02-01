@@ -3907,37 +3907,6 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             }
         }
 
-        if ( !bDone )
-        {
-            // RTF
-            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aFlavor );
-            // RICHTEXT
-            datatransfer::DataFlavor aFlavorRichtext;
-            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RICHTEXT, aFlavorRichtext );
-            bool bRtfSupported = rxDataObj->isDataFlavorSupported( aFlavor );
-            bool bRichtextSupported  = rxDataObj->isDataFlavorSupported( aFlavorRichtext );
-            if ( (bRtfSupported || bRichtextSupported) && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::RICHTEXT == format || SotClipboardFormatId::RTF == format))
-            {
-                if(bRichtextSupported)
-                {
-                    aFlavor = aFlavorRichtext;
-                }
-                try
-                {
-                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                    uno::Sequence< sal_Int8 > aSeq;
-                    aData >>= aSeq;
-                    {
-                        SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
-                        aNewSelection = Read( aRTFStream, rBaseURL, EETextFormat::Rtf, rPaM );
-                    }
-                    bDone = true;
-                }
-                catch( const css::uno::Exception& )
-                {
-                }
-            }
-        }
         if (!bDone) {
             // HTML_SIMPLE
             SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML_SIMPLE, aFlavor);
@@ -3984,6 +3953,38 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 catch (const css::uno::Exception&)
                 {
                     TOOLS_WARN_EXCEPTION("editeng", "HTML paste failed");
+                }
+            }
+        }
+
+        if ( !bDone )
+        {
+            // RTF
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aFlavor );
+            // RICHTEXT
+            datatransfer::DataFlavor aFlavorRichtext;
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RICHTEXT, aFlavorRichtext );
+            bool bRtfSupported = rxDataObj->isDataFlavorSupported( aFlavor );
+            bool bRichtextSupported  = rxDataObj->isDataFlavorSupported( aFlavorRichtext );
+            if ( (bRtfSupported || bRichtextSupported) && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::RICHTEXT == format || SotClipboardFormatId::RTF == format))
+            {
+                if(bRichtextSupported)
+                {
+                    aFlavor = aFlavorRichtext;
+                }
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
+                        aNewSelection = Read( aRTFStream, rBaseURL, EETextFormat::Rtf, rPaM );
+                    }
+                    bDone = true;
+                }
+                catch( const css::uno::Exception& )
+                {
                 }
             }
         }
