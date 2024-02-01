@@ -74,6 +74,10 @@
 #include <Shlobj.h>
 #endif
 
+#if defined MACOSX
+#include <sys/stat.h>
+#endif
+
 using namespace comphelper;
 using namespace css::security;
 using namespace css::uno;
@@ -121,6 +125,10 @@ namespace
             u"GNU\\GnuPG\\bin\\kleopatra.exe",
             u"GNU\\GnuPG\\bin\\launch-gpa.exe",
             u"GNU\\GnuPG\\bin\\gpa.exe"};
+#elif defined MACOSX
+    constexpr std::u16string_view aGUIServers[]
+        = { u"/Applications/GPG Keychain.app",
+            u"/System/Applications/Utilities/Keychain Access.app"};
 #else
     constexpr std::u16string_view aGUIServers[]
         = { u"kleopatra", u"seahorse", u"gpa", u"kgpg"};
@@ -175,12 +183,34 @@ void GetCertificateManager(OUString& sExecutable)
 
     for (const auto& rServer: aGUIServers)
     {
-        osl::FileBase::RC searchError = osl::File::searchFileURL(
-            OUString(rServer), aPath,
-            aFoundGUIServer);
-        if (searchError == osl::FileBase::E_None)
+        bool bSetCertMgrPath = false;
+
+#ifdef MACOSX
+        // On macOS, the list of default certificate manager applications
+        // includes absolute paths so check if the path exists and is a
+        // directory
+        if (rServer.starts_with('/'))
         {
-            osl::File::getSystemPathFromFileURL(aFoundGUIServer, sExecutable);
+            OString aSysPath = OUString(rServer).toUtf8();
+            if (struct stat st; stat(aSysPath.getStr(), &st) == 0 && S_ISDIR(st.st_mode))
+            {
+                bSetCertMgrPath = true;
+                sExecutable = rServer;
+            }
+        }
+#endif
+
+        if (!bSetCertMgrPath)
+        {
+            osl::FileBase::RC searchError = osl::File::searchFileURL(
+                OUString(rServer), aPath,
+                aFoundGUIServer);
+            if (searchError == osl::FileBase::E_None && osl::File::getSystemPathFromFileURL(aFoundGUIServer, sExecutable) == osl::FileBase::E_None)
+                bSetCertMgrPath = true;
+        }
+
+        if (bSetCertMgrPath)
+        {
             std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
                 comphelper::ConfigurationChanges::create());
             officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sExecutable,
@@ -558,8 +588,22 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
         uno::Reference<css::system::XSystemShellExecute> xSystemShell(
             css::system::SystemShellExecute::create(xContext));
 
-        xSystemShell->execute(sExecutable, OUString(),
-                              css::system::SystemShellExecuteFlags::DEFAULTS);
+        try
+        {
+            xSystemShell->execute(sExecutable, OUString(),
+                                  css::system::SystemShellExecuteFlags::DEFAULTS);
+        }
+        catch (...)
+        {
+            // Related tdf#159307 fix uncloseable windows due to uncaught exception
+            // XSystemShellExecute::execute() throws an exception for a variety
+            // of common error conditions such as files or directories that
+            // are non-existent or non-executable. Failure to catch such
+            // exceptions would cause the document window to be uncloseable
+            // and the application to be unquittable.
+            TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "executable failed!" );
+            sExecutable = OUString();
+        }
     }
 
     OUString sDialogText = (sExecutable.isEmpty() ?
