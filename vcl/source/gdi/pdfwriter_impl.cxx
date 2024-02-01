@@ -9795,35 +9795,36 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
 
 void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor )
 {
-    OStringBuffer aLine( 80 );
+    OStringBuffer& rLine = drawBitmapLine;
+    rLine.setLength(0);
     updateGraphicsState();
 
-    aLine.append( "q " );
+    rLine.append( "q " );
     if( rFillColor != COL_TRANSPARENT )
     {
-        appendNonStrokingColor( rFillColor, aLine );
-        aLine.append( ' ' );
+        appendNonStrokingColor( rFillColor, rLine );
+        rLine.append( ' ' );
     }
     sal_Int32 nCheckWidth = 0;
-    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rDestSize.Width()), aLine, false, &nCheckWidth );
-    aLine.append( " 0 0 " );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rDestSize.Width()), rLine, false, &nCheckWidth );
+    rLine.append( " 0 0 " );
     sal_Int32 nCheckHeight = 0;
-    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rDestSize.Height()), aLine, true, &nCheckHeight );
-    aLine.append( ' ' );
-    m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), aLine );
-    aLine.append( " cm\n/Im" );
+    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rDestSize.Height()), rLine, true, &nCheckHeight );
+    rLine.append( ' ' );
+    m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), rLine );
+    rLine.append( " cm\n/Im" );
     sal_Int32 nObject = rBitmap.m_aReferenceXObject.getObject();
-    aLine.append(nObject);
-    aLine.append( " Do Q\n" );
+    rLine.append(nObject);
+    rLine.append( " Do Q\n" );
     if( nCheckWidth == 0 || nCheckHeight == 0 )
     {
         // #i97512# avoid invalid current matrix
-        aLine.setLength( 0 );
-        aLine.append( "\n%bitmap image /Im" );
-        aLine.append( rBitmap.m_nObject );
-        aLine.append( " scaled to zero size, omitted\n" );
+        rLine.setLength( 0 );
+        rLine.append( "\n%bitmap image /Im" );
+        rLine.append( rBitmap.m_nObject );
+        rLine.append( " scaled to zero size, omitted\n" );
     }
-    writeBuffer( aLine );
+    writeBuffer( rLine );
 }
 
 const BitmapEmit& PDFWriterImpl::createBitmapEmit(const BitmapEx& i_rBitmap, const Graphic& rGraphic, std::list<BitmapEmit>& rBitmaps, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams)
@@ -10145,9 +10146,10 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
     }
 }
 
-void PDFWriterImpl::updateGraphicsState(Mode const mode)
+ void PDFWriterImpl::updateGraphicsState(Mode const mode)
 {
-    OStringBuffer aLine( 256 );
+    OStringBuffer& rLine = updateGraphicsStateLine;
+    rLine.setLength(0);
     GraphicsState& rNewState = m_aGraphicsStack.front();
     // first set clip region since it might invalidate everything else
 
@@ -10160,7 +10162,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         {
             if( m_aCurrentPDFState.m_bClipRegion )
             {
-                aLine.append( "Q " );
+                rLine.append( "Q " );
                 // invalidate everything but the clip region
                 m_aCurrentPDFState = GraphicsState();
                 rNewState.m_nUpdateFlags = ~GraphicsStateUpdateFlags::ClipRegion;
@@ -10173,19 +10175,19 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
                 SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
 
-                aLine.append("q ");
+                rLine.append("q ");
                 if ( rNewState.m_aClipRegion.count() )
                 {
-                    m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
+                    m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, rLine );
                 }
                 else
                 {
                     // tdf#130150 Need to revert tdf#99680, that breaks the
                     // rule that an set but empty clip-region clips everything
                     // aka draws nothing -> nothing is in an empty clip-region
-                    aLine.append( "0 0 m h " ); // NULL clip, i.e. nothing visible
+                    rLine.append( "0 0 m h " ); // NULL clip, i.e. nothing visible
                 }
-                aLine.append( "W* n\n" );
+                rLine.append( "W* n\n" );
 
                 rNewState.m_aMapMode = std::move(aNewMapMode);
                 SetMapMode( rNewState.m_aMapMode );
@@ -10224,8 +10226,8 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         if( m_aCurrentPDFState.m_aLineColor != rNewState.m_aLineColor &&
             rNewState.m_aLineColor != COL_TRANSPARENT )
         {
-            appendStrokingColor( rNewState.m_aLineColor, aLine );
-            aLine.append( "\n" );
+            appendStrokingColor( rNewState.m_aLineColor, rLine );
+            rLine.append( "\n" );
         }
     }
 
@@ -10235,8 +10237,8 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
         if( m_aCurrentPDFState.m_aFillColor != rNewState.m_aFillColor &&
             rNewState.m_aFillColor != COL_TRANSPARENT )
         {
-            appendNonStrokingColor( rNewState.m_aFillColor, aLine );
-            aLine.append( "\n" );
+            appendNonStrokingColor( rNewState.m_aFillColor, rLine );
+            rLine.append( "\n" );
         }
     }
 
@@ -10251,8 +10253,8 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
 
     // everything is up to date now
     m_aCurrentPDFState = m_aGraphicsStack.front();
-    if ((mode != Mode::NOWRITE) &&  !aLine.isEmpty())
-        writeBuffer( aLine );
+    if ((mode != Mode::NOWRITE) &&  !rLine.isEmpty())
+        writeBuffer( rLine );
 }
 
 /* #i47544# imitate OutputDevice behaviour:

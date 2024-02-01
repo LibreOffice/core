@@ -824,6 +824,10 @@ private:
 
     ::comphelper::Hash                      m_DocDigest;
 
+    // reduce repeated allocations
+    OStringBuffer                           updateGraphicsStateLine{256};
+    OStringBuffer                           drawBitmapLine{80};
+
     sal_uInt64 getCurrentFilePosition()
     {
         sal_uInt64 nPosition{};
