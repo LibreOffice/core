@@ -123,13 +123,13 @@ OUString Databases::expandURL( const OUString& aURL, const Reference< uno::XComp
     return aRetURL;
 }
 
-const char vendVersion[] = "%VENDORVERSION";
-const char vendName[] = "%VENDORNAME";
-const char prodVersion[] = "%PRODUCTVERSION";
-const char vendShort[] = "%VENDORSHORT";
-const char prodName[] = "%PRODUCTNAME";
-const char newProdVersion[] = "$[officeversion]";
-const char newProdName[] = "$[officename]";
+constexpr OUStringLiteral vendVersion = u"%VENDORVERSION";
+constexpr OUStringLiteral vendName = u"%VENDORNAME";
+constexpr OUStringLiteral prodVersion = u"%PRODUCTVERSION";
+constexpr OUStringLiteral vendShort = u"%VENDORSHORT";
+constexpr OUStringLiteral prodName = u"%PRODUCTNAME";
+constexpr OUStringLiteral newProdVersion = u"$[officeversion]";
+constexpr OUStringLiteral newProdName = u"$[officename]";
 
 Databases::Databases( bool showBasic,
                       const OUString& instPath,

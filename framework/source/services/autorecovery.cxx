@@ -1066,35 +1066,35 @@ constexpr OUStringLiteral TYPE_PROP_EXTENSIONS = u"Extensions";
 constexpr OUStringLiteral CFG_ENTRY_PROP_EMPTYDOCUMENTURL = u"ooSetupFactoryEmptyDocumentURL";
 constexpr OUStringLiteral CFG_ENTRY_PROP_FACTORYSERVICE = u"ooSetupFactoryDocumentService";
 
-const char EVENT_ON_NEW[] = "OnNew";
-const char EVENT_ON_LOAD[] = "OnLoad";
-const char EVENT_ON_UNLOAD[] = "OnUnload";
-const char EVENT_ON_MODIFYCHANGED[] = "OnModifyChanged";
-const char EVENT_ON_SAVE[] = "OnSave";
-const char EVENT_ON_SAVEAS[] = "OnSaveAs";
-const char EVENT_ON_SAVETO[] = "OnCopyTo";
-const char EVENT_ON_SAVEDONE[] = "OnSaveDone";
-const char EVENT_ON_SAVEASDONE[] = "OnSaveAsDone";
-const char EVENT_ON_SAVETODONE[] = "OnCopyToDone";
-const char EVENT_ON_SAVEFAILED[] = "OnSaveFailed";
-const char EVENT_ON_SAVEASFAILED[] = "OnSaveAsFailed";
-const char EVENT_ON_SAVETOFAILED[] = "OnCopyToFailed";
+constexpr OUStringLiteral EVENT_ON_NEW = u"OnNew";
+constexpr OUStringLiteral EVENT_ON_LOAD = u"OnLoad";
+constexpr OUStringLiteral EVENT_ON_UNLOAD = u"OnUnload";
+constexpr OUStringLiteral EVENT_ON_MODIFYCHANGED = u"OnModifyChanged";
+constexpr OUStringLiteral EVENT_ON_SAVE = u"OnSave";
+constexpr OUStringLiteral EVENT_ON_SAVEAS = u"OnSaveAs";
+constexpr OUStringLiteral EVENT_ON_SAVETO = u"OnCopyTo";
+constexpr OUStringLiteral EVENT_ON_SAVEDONE = u"OnSaveDone";
+constexpr OUStringLiteral EVENT_ON_SAVEASDONE = u"OnSaveAsDone";
+constexpr OUStringLiteral EVENT_ON_SAVETODONE = u"OnCopyToDone";
+constexpr OUStringLiteral EVENT_ON_SAVEFAILED = u"OnSaveFailed";
+constexpr OUStringLiteral EVENT_ON_SAVEASFAILED = u"OnSaveAsFailed";
+constexpr OUStringLiteral EVENT_ON_SAVETOFAILED = u"OnCopyToFailed";
 
 constexpr OUString RECOVERY_ITEM_BASE_IDENTIFIER = u"recovery_item_"_ustr;
 
-const char CMD_PROTOCOL[] = "vnd.sun.star.autorecovery:";
+constexpr OUString CMD_PROTOCOL = u"vnd.sun.star.autorecovery:"_ustr;
 
-const char CMD_DO_AUTO_SAVE[] = "/doAutoSave";    // force AutoSave ignoring the AutoSave timer
-const char CMD_DO_PREPARE_EMERGENCY_SAVE[] = "/doPrepareEmergencySave";    // prepare the office for the following EmergencySave step (hide windows etcpp.)
-const char CMD_DO_EMERGENCY_SAVE[] = "/doEmergencySave";    // do EmergencySave on crash
-const char CMD_DO_RECOVERY[] = "/doAutoRecovery";    // recover all crashed documents
-const char CMD_DO_ENTRY_BACKUP[] = "/doEntryBackup";    // try to store a temp or original file to a user defined location
-const char CMD_DO_ENTRY_CLEANUP[] = "/doEntryCleanUp";    // remove the specified entry from the recovery cache
-const char CMD_DO_SESSION_SAVE[] = "/doSessionSave";    // save all open documents if e.g. a window manager closes an user session
-const char CMD_DO_SESSION_QUIET_QUIT[] = "/doSessionQuietQuit";    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
-const char CMD_DO_SESSION_RESTORE[] = "/doSessionRestore";    // restore a saved user session from disc
-const char CMD_DO_DISABLE_RECOVERY[] = "/disableRecovery";    // disable recovery and auto save (!) temp. for this office session
-const char CMD_DO_SET_AUTOSAVE_STATE[] = "/setAutoSaveState";    // disable/enable auto save (not crash save) for this office session
+constexpr OUString CMD_DO_AUTO_SAVE = u"/doAutoSave"_ustr;    // force AutoSave ignoring the AutoSave timer
+constexpr OUString CMD_DO_PREPARE_EMERGENCY_SAVE = u"/doPrepareEmergencySave"_ustr;    // prepare the office for the following EmergencySave step (hide windows etcpp.)
+constexpr OUString CMD_DO_EMERGENCY_SAVE = u"/doEmergencySave"_ustr;    // do EmergencySave on crash
+constexpr OUString CMD_DO_RECOVERY = u"/doAutoRecovery"_ustr;    // recover all crashed documents
+constexpr OUString CMD_DO_ENTRY_BACKUP = u"/doEntryBackup"_ustr;    // try to store a temp or original file to a user defined location
+constexpr OUString CMD_DO_ENTRY_CLEANUP = u"/doEntryCleanUp"_ustr;    // remove the specified entry from the recovery cache
+constexpr OUString CMD_DO_SESSION_SAVE = u"/doSessionSave"_ustr;    // save all open documents if e.g. a window manager closes an user session
+constexpr OUString CMD_DO_SESSION_QUIET_QUIT = u"/doSessionQuietQuit"_ustr;    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
+constexpr OUString CMD_DO_SESSION_RESTORE = u"/doSessionRestore"_ustr;    // restore a saved user session from disc
+constexpr OUString CMD_DO_DISABLE_RECOVERY = u"/disableRecovery"_ustr;    // disable recovery and auto save (!) temp. for this office session
+constexpr OUString CMD_DO_SET_AUTOSAVE_STATE = u"/setAutoSaveState"_ustr;    // disable/enable auto save (not crash save) for this office session
 
 constexpr OUStringLiteral REFERRER_USER = u"private:user";
 

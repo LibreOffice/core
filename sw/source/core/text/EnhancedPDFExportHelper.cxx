@@ -168,12 +168,12 @@ struct SwEnhancedPDFState
 namespace
 {
 // ODF Style Names:
-const char aTableHeadingName[]  = "Table Heading";
-const char aQuotations[]        = "Quotations";
-const char aCaption[]           = "Caption";
-const char aHeading[]           = "Heading";
-const char aQuotation[]         = "Quotation";
-const char aSourceText[]        = "Source Text";
+constexpr OUString aTableHeadingName  = u"Table Heading"_ustr;
+constexpr OUString aQuotations        = u"Quotations"_ustr;
+constexpr OUString aCaption           = u"Caption"_ustr;
+constexpr OUString aHeading           = u"Heading"_ustr;
+constexpr OUString aQuotation         = u"Quotation"_ustr;
+constexpr OUString aSourceText        = u"Source Text"_ustr;
 
 // PDF Tag Names:
 constexpr OUStringLiteral aDocumentString = u"Document";
