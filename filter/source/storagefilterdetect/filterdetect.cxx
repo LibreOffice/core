@@ -121,44 +121,44 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         if ( ( aWrap.TargetException >>= aZipException ) && !aRequestedTypeName.isEmpty() )
         {
             // The package is a broken one.
-            uno::Reference< task::XInteractionHandler > xInteraction =
-                aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER, uno::Reference< task::XInteractionHandler >() );
-
-            if ( xInteraction.is() )
+            INetURLObject aParser(
+                aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString()));
+            OUString aDocumentTitle = aParser.getName(INetURLObject::LAST_SEGMENT, true,
+                                                      INetURLObject::DecodeMechanism::WithCharset);
+            bool bRepairPackage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
+            // fdo#46310 Don't ask to repair if the user rejected it once.
+            if (!bRepairPackage && aMediaDesc.getUnpackedValueOrDefault("RepairAllowed", true))
             {
-                INetURLObject aParser( aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL, OUString() ) );
-                OUString aDocumentTitle = aParser.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
-                bool bRepairPackage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
-                // fdo#46310 Don't try to repair if the user rejected it once.
-                bool bRepairAllowed = aMediaDesc.getUnpackedValueOrDefault( "RepairAllowed", true );
+                uno::Reference< task::XInteractionHandler > xInteraction =
+                    aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER, uno::Reference< task::XInteractionHandler >() );
 
-                if ( !bRepairPackage && bRepairAllowed )
+                if ( xInteraction.is() )
                 {
                     // Ask the user whether he wants to try to repair.
-                    RequestPackageReparation aRequest( aDocumentTitle );
-                    xInteraction->handle( aRequest.GetRequest() );
-
-                    if ( aRequest.isApproved() )
-                    {
-                        aTypeName = aRequestedTypeName;
-                        // lok: we want to overwrite file in jail, so don't use template flag
-                        const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
-                        aMediaDesc[MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
-                        aMediaDesc[MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsLOK;
-                        aMediaDesc["RepairPackage"] <<= true;
-                    }
-                    else
+                    RequestPackageReparation aRequest(aDocumentTitle);
+                    xInteraction->handle(aRequest.GetRequest());
+                    bRepairPackage = aRequest.isApproved();
+                    if (!bRepairPackage)
                     {
                         // Repair either not allowed or not successful.
                         NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
                         xInteraction->handle( aNotifyRequest.GetRequest() );
                         aMediaDesc["RepairAllowed"] <<= false;
                     }
-
-                    // Write the changes back.
-                    aMediaDesc >> rDescriptor;
                 }
             }
+            if (bRepairPackage)
+            {
+                aTypeName = aRequestedTypeName;
+                // lok: we want to overwrite file in jail, so don't use template flag
+                const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+                aMediaDesc[MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
+                aMediaDesc[MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsLOK;
+                aMediaDesc["RepairPackage"] <<= true;
+            }
+
+            // Write the changes back.
+            aMediaDesc >> rDescriptor;
         }
     }
     catch( uno::RuntimeException& )
