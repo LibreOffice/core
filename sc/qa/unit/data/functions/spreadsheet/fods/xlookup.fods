@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2024-01-16T18:30:06.278000000</meta:creation-date><meta:editing-duration>PT52M13S</meta:editing-duration><meta:editing-cycles>14</meta:editing-cycles><meta:generator>LibreOfficeDev/24.8.0.0.alpha0$Windows_X86_64 LibreOffice_project/8f959fffda28199c3d97aea8d5468776a0e43d90</meta:generator><dc:date>2024-01-26T18:16:42.850000000</dc:date><meta:document-statistic meta:table-count="2" meta:cell-count="754" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2024-01-16T18:30:06.278000000</meta:creation-date><meta:editing-duration>PT1H12M</meta:editing-duration><meta:editing-cycles>22</meta:editing-cycles><meta:generator>LibreOfficeDev/24.8.0.0.alpha0$Windows_X86_64 LibreOffice_project/2b1f5fa987f02ec8014dbf6837c6b090faf11f2d</meta:generator><dc:date>2024-02-01T11:50:13.789000000</dc:date><meta:document-statistic meta:table-count="2" meta:cell-count="858" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
@@ -30,13 +30,13 @@
        <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">104</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">1</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">115</config:config-item>
        <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">81</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">0</config:config-item>
        <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
        <config:config-item config:name="ZoomValue" config:type="int">65</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -48,7 +48,7 @@
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet1</config:config-item>
-     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1835</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1837</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">65</config:config-item>
      <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -126,7 +126,7 @@
    <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
    <config:config-item-map-named config:name="ScriptConfiguration">
     <config:config-item-map-entry config:name="Sheet1">
-     <config:config-item config:name="CodeName" config:type="string">Sheet1</config:config-item>
+     <config:config-item config:name="CodeName" config:type="string">Munkalap1</config:config-item>
     </config:config-item-map-entry>
     <config:config-item-map-entry config:name="Sheet2">
      <config:config-item config:name="CodeName" config:type="string">Sheet2</config:config-item>
@@ -1597,6 +1597,9 @@
   <style:style style:name="co8" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="5.657cm"/>
   </style:style>
+  <style:style style:name="co9" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="1.875cm"/>
+  </style:style>
   <style:style style:name="ro1" style:family="table-row">
    <style:table-row-properties style:row-height="1.614cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
@@ -1610,7 +1613,7 @@
    <style:table-row-properties style:row-height="0.529cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ro5" style:family="table-row">
-   <style:table-row-properties style:row-height="1.656cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+   <style:table-row-properties style:row-height="1.632cm" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
    <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
@@ -1673,6 +1676,7 @@
   <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
   </style:style>
+  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0"/>
   <style:page-layout style:name="pm1">
    <style:page-layout-properties style:writing-mode="lr-tb"/>
    <style:header-style>
@@ -1715,7 +1719,7 @@
      <text:p><text:sheet-name>???</text:sheet-name><text:s/>(<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2024-01-26">0000.00.00</text:date>, <text:time style:data-style-name="N2" text:time-value="18:11:05.851000000">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2024-02-01">0000.00.00</text:date>, <text:time style:data-style-name="N2" text:time-value="14:12:01.197000000">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -1773,7 +1777,7 @@
      <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
       <text:p>2</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce14" table:formula="of:=AND([Sheet2.C2:.C201])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce14" table:formula="of:=AND([Sheet2.C2:.C202])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" office:value-type="string" calcext:value-type="string">
@@ -1804,7 +1808,8 @@
     <table:table-column table:style-name="co6" table:default-cell-style-name="ce10"/>
     <table:table-column table:style-name="co7" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co8" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co4" table:number-columns-repeated="15" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co4" table:number-columns-repeated="14" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co9" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro2">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Function</text:p>
@@ -1846,7 +1851,24 @@
      <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
       <text:p>4</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Country Asc1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Country Asc2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Country Desc1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Country Desc2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Prefix</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.G2];[.H2:.H11];[.J2:.J11])" office:value-type="string" office:string-value="+55" calcext:value-type="string">
@@ -1880,7 +1902,16 @@
      <table:table-cell office:value-type="float" office:value="10" calcext:value-type="float">
       <text:p>10</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>a</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;India&quot;;[.H2:.H11];[.J2:.J11])" office:value-type="string" office:string-value="+91" calcext:value-type="string">
@@ -1911,7 +1942,16 @@
      <table:table-cell office:value-type="float" office:value="9" calcext:value-type="float">
       <text:p>9</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="7" calcext:value-type="float">
+      <text:p>7</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>b</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;INDIA&quot;;[.H2:.H11];[.J2:.J11])" office:value-type="string" office:string-value="+91" calcext:value-type="string">
@@ -1942,14 +1982,26 @@
      <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
       <text:p>8</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="7" calcext:value-type="float">
+      <text:p>7</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" office:value-type="string" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;Ireland&quot;;[.H2:.H11];[.J2:.J11])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=ISNA([.A5])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
@@ -1973,7 +2025,19 @@
      <table:table-cell office:value-type="float" office:value="7" calcext:value-type="float">
       <text:p>7</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;Ireland&quot;;[.H2:.H11];[.J2:.J11];&quot;&quot;)">
@@ -2004,7 +2068,16 @@
      <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
       <text:p>6</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>e</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;Ireland&quot;;[.H2:.H11];[.J2:.J11];-99)" office:value-type="float" office:value="-99" calcext:value-type="float">
@@ -2032,7 +2105,16 @@
      <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="6" calcext:value-type="float">
       <text:p>6</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>f</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;Ireland&quot;;[.H2:.H11];[.J2:.J11];&quot;Not here&quot;)" office:value-type="string" office:string-value="Not here" calcext:value-type="string">
@@ -2063,14 +2145,26 @@
      <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
       <text:p>4</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>g</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;&quot;;[.H2:.H11];[.J2:.J11])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=ISNA([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
@@ -2094,7 +2188,19 @@
      <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
       <text:p>3</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="7" calcext:value-type="float">
+      <text:p>7</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;Nigeria&quot;;[.H2:.H11];[.J2:.J11];;;1)" office:value-type="string" office:string-value="00234" calcext:value-type="string">
@@ -2125,7 +2231,16 @@
      <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
       <text:p>2</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="7" calcext:value-type="float">
+      <text:p>7</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>I</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;Nigeria&quot;;[.H2:.H11];[.J2:.J11];;;-1)" office:value-type="string" office:string-value="+234" calcext:value-type="string">
@@ -2156,7 +2271,16 @@
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>j</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
@@ -2385,10 +2509,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="2" table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;&quot;;[.I14:.R14];[.I15:.R16])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=ISNA([.A20])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
@@ -2400,10 +2524,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=ISNA([.A21])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>IGAZ</text:p>
@@ -2546,8 +2670,8 @@
      <table:table-cell office:value-type="float" office:value="0.24" calcext:value-type="float">
       <text:p>0,24</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce18" office:value-type="string" calcext:value-type="string">
-      <text:p/>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A30]=[.B30]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="=XLOOKUP(G29;I30:I35;H30:H35;;1;2)" calcext:value-type="string">
       <text:p>=XLOOKUP(G29;I30:I35;H30:H35;;1;2)</text:p>
@@ -2588,7 +2712,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.G29];[.I30:.I35];[.H30:.H35];;2;2)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
@@ -2937,14 +3061,14 @@
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:formula="of:=SUM(COM.MICROSOFT.XLOOKUP([.G44];[.H45:.H49];[.K45:.K49]):COM.MICROSOFT.XLOOKUP([.G45];[.H45:.H49];[.K45:.K49]))" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:502</text:p>
+      <text:p>Hiba:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="11070" calcext:value-type="float">
       <text:p>11070</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18"/>
-     <table:table-cell table:formula="of:=FORMULA([.A44])" office:value-type="string" office:string-value="=SUM(XLOOKUP(G44;H45:H49;K45:K49):XLOOKUP(G45;H45:H49;K45:K49))" calcext:value-type="string">
-      <text:p>=SUM(XLOOKUP(G44;H45:H49;K45:K49):XLOOKUP(G45;H45:H49;K45:K49))</text:p>
+     <table:table-cell table:formula="of:=FORMULA([.A44])" office:value-type="string" office:string-value="=SZUM(XLOOKUP(G44;H45:H49;K45:K49):XLOOKUP(G45;H45:H49;K45:K49))" calcext:value-type="string">
+      <text:p>=SZUM(XLOOKUP(G44;H45:H49;K45:K49):XLOOKUP(G45;H45:H49;K45:K49))</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce12" office:value-type="string" calcext:value-type="string">
       <text:p>XLOOKUP should (in this case) return a range (TODO: Missing feature from Calc: Evaluate Formula)</text:p>
@@ -3067,7 +3191,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;B&quot;;[.H51:.H53];[.K51:.K52])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:504</text:p>
+      <text:p>Hiba:504</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
@@ -3100,7 +3224,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;C&quot;;[.H51:.H53];[.K51:.K52])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:504</text:p>
+      <text:p>Hiba:504</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
@@ -3133,7 +3257,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;E&quot;;[.H51:.I53];[.K51:.L53])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:504</text:p>
+      <text:p>Hiba:504</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
@@ -3166,7 +3290,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;E&quot;;[.H51:.I53];[.K51:.K53])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:504</text:p>
+      <text:p>Hiba:504</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
@@ -3185,7 +3309,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;C&quot;;[.H51:.I53];[.K51:.K53])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:504</text:p>
+      <text:p>Hiba:504</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>err:504</text:p>
@@ -4197,7 +4321,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;C?&quot;;[.H$95:.L$95];[.H$96:.L$96];;2;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
@@ -4346,7 +4470,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP(&quot;f?&quot;;[.I$79:.I$83];[.L$79:.L$83];;2;1)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
@@ -4515,7 +4639,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.M1];[.K$1:.K$12];[.I$1:.I$12];;0;2)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+      <text:p>#HIÁNYZIK</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>#N/A</text:p>
@@ -4528,19 +4652,209 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="90">
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce18"/>
      <table:table-cell table:number-columns-repeated="17"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048374">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.P$1:.P$11];[.T$1:.T$11];;0;2)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#HIÁNYZIK</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A113])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A113])" office:value-type="string" office:string-value="=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;0;2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;0;2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.P$1:.P$11];[.T$1:.T$11];;-1;2)" office:value-type="string" office:string-value="b" calcext:value-type="string">
+      <text:p>b</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>b</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A114]=[.B114]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A114])" office:value-type="string" office:string-value="=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;-1;2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;-1;2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.P$1:.P$11];[.T$1:.T$11];;1;2)" office:value-type="string" office:string-value="d" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A115]=[.B115]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A115])" office:value-type="string" office:string-value="=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;1;2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;P$1:P$11;T$1:T$11;;1;2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.Q$1:.Q$11];[.T$1:.T$11];;0;2)" office:value-type="string" office:string-value="c" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A116]=[.B116]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A116])" office:value-type="string" office:string-value="=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;0;2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;0;2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.Q$1:.Q$11];[.T$1:.T$11];;-1;2)" office:value-type="string" office:string-value="c" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A117]=[.B117]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A117])" office:value-type="string" office:string-value="=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;-1;2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;-1;2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.Q$1:.Q$11];[.T$1:.T$11];;1;2)" office:value-type="string" office:string-value="c" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A118]=[.B118]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A118])" office:value-type="string" office:string-value="=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;1;2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;Q$1:Q$11;T$1:T$11;;1;2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce18"/>
+     <table:table-cell table:number-columns-repeated="17"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.R$1:.R$11];[.T$1:.T$11];;0;-2)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#HIÁNYZIK</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A120])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A120])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;0;-2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;0;-2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.R$1:.R$11];[.T$1:.T$11];;-1;-2)" office:value-type="string" office:string-value="I" calcext:value-type="string">
+      <text:p>I</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>I</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A121]=[.B121]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A121])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;-1;-2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;-1;-2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.R$1:.R$11];[.T$1:.T$11];;1;-2)" office:value-type="string" office:string-value="g" calcext:value-type="string">
+      <text:p>g</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>g</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A122]=[.B122]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A122])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;1;-2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;1;-2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.S$1:.S$11];[.T$1:.T$11];;0;-2)" office:value-type="string" office:string-value="h" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A123]=[.B123]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A123])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;0;-2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;0;-2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.S$1:.S$11];[.T$1:.T$11];;-1;-2)" office:value-type="string" office:string-value="h" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A124]=[.B124]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A124])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;-1;-2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;-1;-2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.S$1:.S$11];[.T$1:.T$11];;1;-2)" office:value-type="string" office:string-value="h" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>h</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A125]=[.B125]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A125])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;1;-2)" calcext:value-type="string">
+      <text:p>=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;1;-2)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="77">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce18"/>
+     <table:table-cell table:number-columns-repeated="17"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048373">
      <table:table-cell table:number-columns-repeated="20"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="20"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C201">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C202">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="true" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="false" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>

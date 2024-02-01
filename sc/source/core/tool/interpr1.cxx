@@ -10643,7 +10643,7 @@ bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryPara
                     aCellIter.SetAdvanceQueryParamEntryField(true);
                     aCellIter.SetXlookupMode(vsa.isXLookup);
                     // TODO: no binary search for column (horizontal) search (use linear)
-                    aCellIter.SetSortedBinarySearchMode(false);
+                    aCellIter.SetSortedBinarySearchMode(vsa.eSearchMode);
                     if (rEntry.eOp == SC_EQUAL)
                     {
                         if (aCellIter.GetFirst())
@@ -10808,13 +10808,14 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         SCROW nRow;
         bool bLessOrEqual = rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL;
         // we can use binary search if the SearchMode is searchbasc or searchbdesc
-        if (ScQueryCellIteratorSortedCache::CanBeUsed(rDoc, rParam, rParam.nTab, cell, refData, rContext) ||
-            (static_cast<SearchMode>(nSearchMode) == searchbasc && !bLessOrEqual) ||
-            (static_cast<SearchMode>(nSearchMode) == searchbdesc && bLessOrEqual))
+        if ((static_cast<SearchMode>(nSearchMode) == searchbasc && !bLessOrEqual) ||
+            (static_cast<SearchMode>(nSearchMode) == searchbdesc && bLessOrEqual) ||
+            ScQueryCellIteratorSortedCache::CanBeUsed(rDoc, rParam, rParam.nTab, cell, refData, rContext))
         {
             // search for the first LessOrEqual value if SearchMode is desc or
             // search for the first GreaterOrEqual value if SearchMode is asc
             ScQueryCellIteratorSortedCache aCellIter(rDoc, rContext, rParam.nTab, rParam, false, false);
+            aCellIter.SetSortedBinarySearchMode(nSearchMode);
             aCellIter.SetXlookupMode(bXlookupMode);
             if (aCellIter.GetFirst())
             {
@@ -10829,8 +10830,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
             bool bReverse = (static_cast<SearchMode>(nSearchMode) == searchrev);
             ScQueryCellIteratorDirect aCellIter(rDoc, rContext, rParam.nTab, rParam, false, bReverse);
 
-            aCellIter.SetSortedBinarySearchMode(static_cast<SearchMode>(nSearchMode) == searchbasc ||
-                static_cast<SearchMode>(nSearchMode) == searchbdesc);
+            aCellIter.SetSortedBinarySearchMode(nSearchMode);
             aCellIter.SetXlookupMode(bXlookupMode);
             if (aCellIter.FindEqualOrSortedLastInRange(nCol, nRow))
             {
@@ -10848,10 +10848,11 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         bool bBinary = rParam.bByRow &&
             (bLiteral || rEntry.GetQueryItem().meType == ScQueryEntry::ByValue);
 
-        if( bBinary && (ScQueryCellIteratorSortedCache::CanBeUsed( rDoc, rParam, rParam.nTab, cell, refData, rContext ) ||
-            static_cast<SearchMode>(nSearchMode) == searchbasc || static_cast<SearchMode>(nSearchMode) == searchbdesc ))
+        if( bBinary && (static_cast<SearchMode>(nSearchMode) == searchbasc || static_cast<SearchMode>(nSearchMode) == searchbdesc ||
+            ScQueryCellIteratorSortedCache::CanBeUsed(rDoc, rParam, rParam.nTab, cell, refData, rContext)))
         {
             ScQueryCellIteratorSortedCache aCellIter( rDoc, rContext, rParam.nTab, rParam, false, false );
+            aCellIter.SetSortedBinarySearchMode(nSearchMode);
             aCellIter.SetXlookupMode(bXlookupMode);
             if (aCellIter.GetFirst())
             {
@@ -10862,8 +10863,9 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         }
         else
         {
-            bool bReverse = (static_cast<SearchMode>(nSearchMode) == searchrev);
-            ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false, bReverse );
+            ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false,
+                static_cast<SearchMode>(nSearchMode) == searchrev);
+            aCellIter.SetSortedBinarySearchMode(nSearchMode);
             aCellIter.SetXlookupMode(bXlookupMode);
             if (aCellIter.GetFirst())
             {
