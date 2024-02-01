@@ -3910,6 +3910,58 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             }
         }
 
+        if (!bDone) {
+            // HTML_SIMPLE
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML_SIMPLE, aFlavor);
+            bool bHtmlSupported = rxDataObj->isDataFlavorSupported(aFlavor);
+            if (bHtmlSupported && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::HTML_SIMPLE == format)) {
+                MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData(aFlavor);
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
+                        SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(aHtmlStream);
+                        if (pHtmlStream != nullptr) {
+                            aNewSelection = Read(*pHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
+                        }
+                    }
+                    bDone = true;
+                }
+                catch (const css::uno::Exception&)
+                {
+                }
+            }
+        }
+
+        if (!bDone) {
+            // HTML
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML_SIMPLE, aFlavor);
+            bool bHtmlSupported = rxDataObj->isDataFlavorSupported(aFlavor);
+            if (bHtmlSupported && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::HTML_SIMPLE == format)) {
+                MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData(aFlavor);
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
+                        SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(aHtmlStream);
+                        if (pHtmlStream != nullptr) {
+                            aNewSelection = Read(*pHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
+                        }
+                    }
+                    bDone = true;
+                }
+                catch (const css::uno::Exception&)
+                {
+                }
+            }
+        }
+
         if ( !bDone )
         {
             // RTF
@@ -3937,31 +3989,6 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     bDone = true;
                 }
                 catch( const css::uno::Exception& )
-                {
-                }
-            }
-        }
-        if (!bDone) {
-            // HTML
-            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML_SIMPLE, aFlavor);
-            bool bHtmlSupported = rxDataObj->isDataFlavorSupported(aFlavor);
-            if (bHtmlSupported && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::HTML_SIMPLE == format)) {
-                MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
-                try
-                {
-                    uno::Any aData = rxDataObj->getTransferData(aFlavor);
-                    uno::Sequence< sal_Int8 > aSeq;
-                    aData >>= aSeq;
-                    {
-                        SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
-                        SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(aHtmlStream);
-                        if (pHtmlStream != nullptr) {
-                            aNewSelection = Read(*pHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
-                        }
-                    }
-                    bDone = true;
-                }
-                catch (const css::uno::Exception&)
                 {
                 }
             }

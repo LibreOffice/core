@@ -1456,8 +1456,40 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && !bLink)
     {
+        bool bIsHtmlSimple = CHECK_FORMAT_TRANS(SotClipboardFormatId::HTML_SIMPLE);
+        if (bIsHtmlSimple)
+        {
+            ::tools::SvRef<SotTempStream> xStm;
+
+            if (aDataHelper.GetSotStorageStream(SotClipboardFormatId::HTML_SIMPLE, xStm))
+            {
+                xStm->Seek(0);
+
+                OutlinerView* pOLV = GetTextEditOutlinerView();
+                MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
+                SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(*xStm);
+
+                if (pOLV)
+                {
+                    ::tools::Rectangle   aRect(pOLV->GetOutputArea());
+                    Point       aPos(pOLV->GetWindow()->PixelToLogic(maDropPos));
+
+                    if (aRect.Contains(aPos) || (!bDrag && IsTextEdit()))
+                    {
+                        // mba: clipboard always must contain absolute URLs (could be from alien source)
+                        pOLV->Read(*pHtmlStream, EETextFormat::Html, mpDocSh->GetHeaderAttributes());
+                        bReturn = true;
+                    }
+                }
+
+                if (!bReturn)
+                    // mba: clipboard always must contain absolute URLs (could be from alien source)
+                    bReturn = SdrView::Paste(*pHtmlStream, EETextFormat::Html, maDropPos, pPage, nPasteOptions);
+            }
+        }
+
         bool bIsRTF = CHECK_FORMAT_TRANS(SotClipboardFormatId::RTF);
-        if (bIsRTF || CHECK_FORMAT_TRANS(SotClipboardFormatId::RICHTEXT))
+        if (!bReturn && (bIsRTF || CHECK_FORMAT_TRANS(SotClipboardFormatId::RICHTEXT)))
         {
             ::tools::SvRef<SotTempStream> xStm;
 
@@ -1493,37 +1525,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
 
-        bool bIsHtmlSimple = CHECK_FORMAT_TRANS(SotClipboardFormatId::HTML_SIMPLE);
-        if (bIsHtmlSimple)
-        {
-            ::tools::SvRef<SotTempStream> xStm;
-
-            if (aDataHelper.GetSotStorageStream(SotClipboardFormatId::HTML_SIMPLE, xStm))
-            {
-                xStm->Seek(0);
-
-                OutlinerView* pOLV = GetTextEditOutlinerView();
-                MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
-                SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(*xStm);
-
-                if (pOLV)
-                {
-                    ::tools::Rectangle   aRect(pOLV->GetOutputArea());
-                    Point       aPos(pOLV->GetWindow()->PixelToLogic(maDropPos));
-
-                    if (aRect.Contains(aPos) || (!bDrag && IsTextEdit()))
-                    {
-                        // mba: clipboard always must contain absolute URLs (could be from alien source)
-                        pOLV->Read(*pHtmlStream, EETextFormat::Html, mpDocSh->GetHeaderAttributes());
-                        bReturn = true;
-                    }
-                }
-
-                if (!bReturn)
-                    // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    bReturn = SdrView::Paste(*pHtmlStream, EETextFormat::Html, maDropPos, pPage, nPasteOptions);
-            }
-        }
     }
 
     if(!bReturn && CHECK_FORMAT_TRANS(SotClipboardFormatId::FILE_LIST))
