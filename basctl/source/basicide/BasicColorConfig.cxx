@@ -62,7 +62,7 @@ ColorScheme BasicColorConfig::GetColorScheme(const OUString& rScheme)
 
     css::uno::Sequence<OUString> aPropNames(aVecPropNames.size());
     OUString* pPropNames = aPropNames.getArray();
-    for (sal_uLong i = 0; i < aVecPropNames.size(); i++)
+    for (size_t i = 0; i < aVecPropNames.size(); i++)
     {
         pPropNames[i] = aVecPropNames[i];
     }
