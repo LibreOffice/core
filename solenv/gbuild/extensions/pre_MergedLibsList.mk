@@ -54,6 +54,7 @@ gb_MERGE_LIBRARY_LIST := \
 	lng \
 	lnth \
 	localebe1 \
+	$(if $(filter iOS MACOSX,$(OS)),MacOSXSpell) \
 	msfilter \
 	mtfrenderer \
 	numbertext \
