@@ -1536,6 +1536,21 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyTrailingSpans)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(184, height2, 1); // allow a bit of room for rounding just in case
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testBrokenPackage_Tdf159474)
+{
+    // Given an invalid ODF having a stream not referenced in manifest.xml
+    const OUString url = createFileURL(u"unreferenced_stream.odt");
+    // It expectedly fails to load normally:
+    CPPUNIT_ASSERT_ASSERTION_FAIL(loadFromDesktop(url, {}, {}));
+    // importing it must succeed with RepairPackage set to true.
+    mxComponent
+        = loadFromDesktop(url, {}, { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) });
+    // The document imports in repair mode; the original broken package is used as a template,
+    // and the loaded document has no URL:
+    CPPUNIT_ASSERT(mxComponent.queryThrow<frame::XModel>()->getURL().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(u"Empty document"_ustr, getParagraph(1)->getString());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
