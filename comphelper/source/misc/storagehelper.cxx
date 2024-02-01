@@ -446,7 +446,10 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
 
     // get 32 random chars out of it
     uno::Sequence < sal_Int8 > aVector(32);
-    rtl_random_getBytes( aRandomPool, aVector.getArray(), aVector.getLength() );
+    if (rtl_random_getBytes(aRandomPool, aVector.getArray(), aVector.getLength()) != rtl_Random_E_None)
+    {
+        throw uno::RuntimeException("rtl_random_getBytes failed");
+    }
 
     rtl_random_destroyPool(aRandomPool);
 
