@@ -106,6 +106,20 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testAnnotationPar, "tdf136445-1-min.rtf")
+{
+    // the problem was that the paragraph break following annotation was missing
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Annotation"),
+        getProperty<OUString>(
+            getRun(getParagraph(1, "I ax xoixx xuxixx xxe xixxx. (Xaxxexx 1989 x.x. xaxax a)"), 2),
+            "TextPortionType"));
+    CPPUNIT_ASSERT(
+        !getProperty<OUString>(getParagraph(2, "Xix\txaxa\tx-a\t\t\txix\tx xi = xa."), "ListId")
+             .isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
