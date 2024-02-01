@@ -28,7 +28,10 @@ namespace
 void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
 {
     rtlRandomPool aRandomPool = rtl_random_createPool();
-    rtl_random_getBytes(aRandomPool, aArray, aSize);
+    if (rtl_random_getBytes(aRandomPool, aArray, aSize) != rtl_Random_E_None)
+    {
+        throw css::uno::RuntimeException("rtl_random_getBytes failed");
+    }
     rtl_random_destroyPool(aRandomPool);
 }
 
