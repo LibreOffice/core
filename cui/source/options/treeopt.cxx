@@ -1757,13 +1757,6 @@ void OfaTreeOptionsDialog::generalOptions(const std::vector<sal_uInt16>& vPageId
                 continue;
             }
 
-            // Disable Basic IDE options, if experimental features are not enabled
-            if( RID_SVXPAGE_BASICIDE_OPTIONS == nPageId )
-            {
-                if( ! officecfg::Office::Common::Misc::ExperimentalMode::get() )
-                    continue;
-            }
-
             if (!vPageId.empty())
             {
                 if (std::find(vPageId.begin(), vPageId.end(), nPageId) != vPageId.end())
