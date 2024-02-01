@@ -64,6 +64,7 @@
 #include <rangelst.hxx>
 
 #include <orcus/css_parser.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -2122,6 +2123,27 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                             bool bValidFmt = GetFormatTable()->PutEntry(aNumFmt, nErrPos, nDummy, nNumberFormat);
                             if (!bValidFmt)
                                 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+                        }
+                    }
+                }
+                break;
+                case HtmlOptionId::DSVAL:
+                {
+                    // data-sheets-value from google sheets, value is a JSON.
+                    OString aEncodedOption = rOption.GetString().toUtf8();
+                    const char* pEncodedOption = aEncodedOption.getStr();
+                    std::stringstream aStream(pEncodedOption);
+                    boost::property_tree::ptree aTree;
+                    boost::property_tree::read_json(aStream, aTree);
+                    // The "1" key describes the original data type.
+                    auto it = aTree.find("1");
+                    if (it != aTree.not_found())
+                    {
+                        int nValueType = std::stoi(it->second.get_value<std::string>());
+                        // 2 is text.
+                        if (nValueType == 2)
+                        {
+                            nNumberFormat = NF_STANDARD_FORMAT_TEXT;
                         }
                     }
                 }

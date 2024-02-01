@@ -344,6 +344,7 @@ STRING_START        = BOOL_END,
     TITLE,
     VALUE,
     SDVAL, // StarDiv NumberValue
+    DSVAL,
     SDNUM, // StarDiv NumberFormat
     SDLIBRARY,
     SDMODULE,
