@@ -109,6 +109,20 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testAnnotationPar, "tdf136445-1-min.rtf")
+{
+    // the problem was that the paragraph break following annotation was missing
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Annotation"),
+        getProperty<OUString>(
+            getRun(getParagraph(1, "I ax xoixx xuxixx xxe xixxx. (Xaxxexx 1989 x.x. xaxax a)"), 2),
+            "TextPortionType"));
+    CPPUNIT_ASSERT(
+        !getProperty<OUString>(getParagraph(2, "Xix\txaxa\tx-a\t\t\txix\tx xi = xa."), "ListId")
+             .isEmpty());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf158826_extraCR, "tdf158826_extraCR.rtf")
 {
     // Note: this is a hand-minimized sample, and very likely doesn't follow RTF { } rules...
