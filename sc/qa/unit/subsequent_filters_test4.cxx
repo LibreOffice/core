@@ -119,6 +119,20 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testControlImport)
                                                          UNO_QUERY_THROW);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf131575)
+{
+    // It expectedly fails to load normally
+    CPPUNIT_ASSERT_ASSERTION_FAIL(createScDoc("xlsx/tdf131575.xlsx"));
+
+    // importing it must succeed with RepairPackage set to true.
+    uno::Sequence<beans::PropertyValue> aParams
+        = { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) };
+    loadWithParams(createFileURL(u"xlsx/tdf131575.xlsx"), aParams);
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("ETAT DES SORTIES"), pDoc->GetString(1, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf76115)
 {
     // It expectedly fails to load normally
