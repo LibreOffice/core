@@ -80,7 +80,7 @@ public:
     void GetStatusBarState (SfxItemSet& rSet);
     void FuPermanent (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
-    static void ExecStatusBar (SfxRequest& rRequest);
+    void ExecStatusBar (SfxRequest& rRequest);
     virtual void Command (const CommandEvent& rEvent, ::sd::Window* pWindow) override;
     void GetMenuState (SfxItemSet &rSet);
     void GetClipboardState (SfxItemSet &rSet);

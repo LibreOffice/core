@@ -131,6 +131,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/connctrl \
     svx/source/dialog/_contdlg \
     svx/source/dialog/contwnd \
+    svx/source/dialog/gotodlg \
     svx/source/dialog/compressgraphicdialog \
     $(call gb_Helper_optional,BREAKPAD, \
 		svx/source/dialog/crashreportdlg \

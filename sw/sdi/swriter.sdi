@@ -1900,23 +1900,6 @@ SfxVoidItem GotoNextWrongTableFormula FN_NEXT_TBLFML_ERR
     GroupId = SfxGroupId::Navigator;
 ]
 
-SfxVoidItem GotoPage FN_GOTO_PAGE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Navigator;
-]
-
 SfxVoidItem GotoPrevIndexMark FN_PREV_TOXMARK
 ()
 [

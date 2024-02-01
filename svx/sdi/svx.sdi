@@ -12508,6 +12508,23 @@ SfxVoidItem EditQrCode SID_EDIT_QRCODE
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem GotoPage SID_GO_TO_PAGE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
 SfxVoidItem SpellCheckIgnore SID_SPELLCHECK_IGNORE
 (SfxStringItem Type FN_PARAM_1)
 [

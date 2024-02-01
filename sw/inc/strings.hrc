@@ -1247,6 +1247,7 @@
 #define STR_IMGBTN_FIELD_DOWN                   NC_("STR_IMGBTN_FIELD_DOWN", "Next field")
 #define STR_IMGBTN_FIELD_BYTYPE_UP              NC_("STR_IMGBTN_FIELD_BYTYPE_UP", "Previous '%FIELDTYPE' field")
 #define STR_IMGBTN_FIELD_BYTYPE_DOWN            NC_("STR_IMGBTN_FIELD_BYTYPE_DOWN", "Next '%FIELDTYPE' field")
+#define STR_GOTO_PAGE_DLG_TITLE                 NC_("STR_GOTO_PAGE_DLG_TITLE", "Go to Page")
 
 #define STR_REDLINE_INSERT                      NC_("STR_REDLINE_INSERT", "Inserted")
 #define STR_REDLINE_DELETE                      NC_("STR_REDLINE_DELETE", "Deleted")

@@ -784,7 +784,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/utlui/initui \
     sw/source/uibase/utlui/navicfg \
     sw/source/uibase/utlui/navipi \
-    sw/source/uibase/utlui/gotodlg \
     sw/source/uibase/utlui/numfmtlb \
     sw/source/uibase/utlui/prcntfld \
     sw/source/uibase/utlui/shdwcrsr \

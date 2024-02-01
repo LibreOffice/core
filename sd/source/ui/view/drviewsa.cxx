@@ -867,6 +867,17 @@ void DrawViewShell::GetStateGoToLastPage (SfxItemSet& rSet)
         rSet.DisableItem( SID_GO_TO_LAST_PAGE );
 }
 
+void DrawViewShell::ExecGoToPage (SfxRequest& rReq)
+{
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
+    Cancel();
+}
+
+void DrawViewShell::GetStateGoToPage (SfxItemSet& rSet)
+{
+    if (meEditMode == EditMode::MasterPage)
+        rSet.DisableItem( SID_GO_TO_PAGE );
+}
 
 } // end of namespace sd
 

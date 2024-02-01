@@ -569,6 +569,7 @@
           <menu:menuitem menu:id=".uno:PreviousSlide"/>
           <menu:menuitem menu:id=".uno:NextSlide"/>
           <menu:menuitem menu:id=".uno:LastSlide"/>
+          <menu:menuitem menu:id=".uno:GotoSlide"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>

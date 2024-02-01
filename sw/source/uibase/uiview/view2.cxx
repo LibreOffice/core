@@ -78,7 +78,6 @@
 #include <swtypes.hxx>
 #include <swwait.hxx>
 #include <redlndlg.hxx>
-#include <gotodlg.hxx>
 #include <view.hxx>
 #include <uivwimp.hxx>
 #include <docsh.hxx>
@@ -161,6 +160,8 @@
 
 #include <svx/srchdlg.hxx>
 #include <o3tl/string_view.hxx>
+
+#include <svx/dialog/gotodlg.hxx>
 
 const char sStatusDelim[] = " : ";
 
@@ -1285,9 +1286,13 @@ void SwView::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case FN_GOTO_PAGE:
+        case SID_GO_TO_PAGE:
         {
-            SwGotoPageDlg aDlg(GetViewFrame().GetFrameWeld(), GetViewFrame().GetBindings());
+            sal_uInt16 nPhyPage, nVirPage;
+            GetWrtShell().GetPageNum(nPhyPage, nVirPage);
+
+            svx::GotoPageDlg aDlg(GetViewFrame().GetFrameWeld(), SwResId(STR_GOTO_PAGE_DLG_TITLE),
+                                 SwResId(ST_PGE) + ":", nPhyPage, GetWrtShell().GetPageCnt());
             if (aDlg.run() == RET_OK)
                 GetWrtShell().GotoPage(aDlg.GetPageSelection(), true);
         }
@@ -2202,7 +2207,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
     {
         case FN_STAT_PAGE:
         {
-            GetViewFrame().GetDispatcher()->Execute( FN_GOTO_PAGE,
+            GetViewFrame().GetDispatcher()->Execute( SID_GO_TO_PAGE,
                                       SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
         }
         break;

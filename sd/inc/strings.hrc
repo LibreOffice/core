@@ -138,6 +138,8 @@
 #define STR_CLICK_ACTION_NEXTPAGE                       NC_("STR_CLICK_ACTION_NEXTPAGE", "Go to next slide")
 #define STR_CLICK_ACTION_FIRSTPAGE                      NC_("STR_CLICK_ACTION_FIRSTPAGE", "Go to first slide")
 #define STR_CLICK_ACTION_LASTPAGE                       NC_("STR_CLICK_ACTION_LASTPAGE", "Go to last slide")
+#define STR_GOTO_PAGE_DLG_TITLE                         NC_("STR_GOTO_PAGE_DLG_TITLE", "Go to Page")
+#define STR_GOTO_SLIDE_DLG_TITLE                        NC_("STR_GOTO_SLIDE_DLG_TITLE", "Go to Slide")
 #define STR_CLICK_ACTION_BOOKMARK                       NC_("STR_CLICK_ACTION_BOOKMARK", "Go to page or object")
 #define STR_CLICK_ACTION_DOCUMENT                       NC_("STR_CLICK_ACTION_DOCUMENT", "Go to document")
 #define STR_CLICK_ACTION_SOUND                          NC_("STR_CLICK_ACTION_SOUND", "Play audio")

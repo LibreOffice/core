@@ -228,7 +228,7 @@ class SvxZoomItem;
 #define SID_UNPACK                          TypedWhichId<SfxBoolItem>(SID_SFX_START + 1662)
 // (SID_SFX_START + 1663) used further down
 #define SID_ATTR_TARGETLANG_STR             (SID_SFX_START + 1664)
-    // FREE
+#define SID_GO_TO_PAGE                      (SID_SFX_START + 1665)
 #define SID_OUTPUTSTREAM                    TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1666)
 #define SID_IMAGE_ORIENTATION               TypedWhichId<SfxImageItem>(SID_SFX_START + 1667)
 

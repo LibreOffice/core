@@ -463,6 +463,7 @@
           <menu:menuitem menu:id=".uno:PreviousPage"/>
           <menu:menuitem menu:id=".uno:NextPage"/>
           <menu:menuitem menu:id=".uno:LastPage"/>
+          <menu:menuitem menu:id=".uno:GotoPage"/>
         </menu:menupopup>
       </menu:menu>
     </menu:menupopup>

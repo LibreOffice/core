@@ -29,6 +29,11 @@
 #include <ViewShell.hxx>
 #include <slideshow.hxx>
 
+#include <svx/svxids.hrc>
+#include <svx/dialog/gotodlg.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
+
 namespace sd {
 
 
@@ -136,6 +141,28 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                     SdPage* pPage = pDrawViewShell->GetActualPage();
                     pDrawViewShell->SwitchPage(mpDoc->GetSdPageCount(
                             pPage->GetPageKind()) - 1);
+                }
+        }
+        break;
+
+        case SID_GO_TO_PAGE:
+        {
+            if( !bSlideShow)
+                if(auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                {
+                    OUString sTitle = SdResId(STR_GOTO_PAGE_DLG_TITLE);
+                    OUString sLabel = SdResId(STR_PAGE_NAME) + ":";
+
+                    if (mpDoc->GetDocumentType() == DocumentType::Impress)
+                    {
+                        sTitle = SdResId(STR_GOTO_SLIDE_DLG_TITLE);
+                        sLabel = SdResId(STR_SLIDE_NAME) + ":";
+                    }
+                    svx::GotoPageDlg aDlg(pDrawViewShell->GetFrameWeld(), sTitle, sLabel,
+                         pDrawViewShell->GetCurPagePos() + 1,
+                         mpDoc->GetSdPageCount(PageKind::Standard));
+                    if (aDlg.run() == RET_OK)
+                        pDrawViewShell->SwitchPage(aDlg.GetPageSelection() - 1);
                 }
         }
         break;

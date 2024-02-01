@@ -222,6 +222,9 @@ public:
     void            ExecGoToLastPage (SfxRequest& rReq);
     void            GetStateGoToLastPage (SfxItemSet& rSet);
 
+    void            ExecGoToPage (SfxRequest& rReq);
+    void            GetStateGoToPage (SfxItemSet& rSet);
+
     SD_DLLPUBLIC void ExecChar(SfxRequest& rReq);
 
     void            ExecuteAnnotation (SfxRequest const & rRequest);

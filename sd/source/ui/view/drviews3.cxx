@@ -1071,6 +1071,13 @@ void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
             GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION_LAYOUT, SfxCallMode::ASYNCHRON );
         }
         break;
+
+        case SID_STATUS_PAGE:
+        {
+            GetViewFrame()->GetDispatcher()->Execute(SID_GO_TO_PAGE,
+                                SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+        }
+        break;
     }
 }
 

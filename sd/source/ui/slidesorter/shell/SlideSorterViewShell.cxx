@@ -50,6 +50,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <svx/svxids.hrc>
@@ -430,8 +431,21 @@ void SlideSorterViewShell::GetAttrState (SfxItemSet& rSet)
     mpSlideSorter->GetController().GetAttrState(rSet);
 }
 
-void SlideSorterViewShell::ExecStatusBar (SfxRequest& )
+void SlideSorterViewShell::ExecStatusBar (SfxRequest& rReq)
 {
+    // nothing is executed during a slide show!
+    if(HasCurrentFunction(SID_PRESENTATION))
+        return;
+
+    switch (rReq.GetSlot())
+    {
+        case SID_STATUS_PAGE:
+        {
+            GetViewFrame()->GetDispatcher()->Execute(SID_GO_TO_PAGE,
+                                          SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+        }
+        break;
+    }
 }
 
 void SlideSorterViewShell::Paint (

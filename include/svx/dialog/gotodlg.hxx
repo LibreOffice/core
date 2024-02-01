@@ -17,38 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_GOTODLG_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_GOTODLG_HXX
+#pragma once
 
-#include <sfx2/bindings.hxx>
+#include <svx/svxdllapi.h>
 #include <vcl/weld.hxx>
 
-class SwView;
-
-class SwGotoPageDlg final : public weld::GenericDialogController
+namespace svx
+{
+class SVX_DLLPUBLIC GotoPageDlg final : public weld::GenericDialogController
 {
 public:
-    SwGotoPageDlg(weld::Window *parent, SfxBindings& rBindings);
+    GotoPageDlg(weld::Window* pParent, const OUString& title, const OUString& label,
+                sal_uInt16 curPagePos, sal_uInt16 pageCnt);
 
-    sal_uInt16 GetPageSelection() const
-    {
-        return mxMtrPageCtrl->get_text().toUInt32();
-    }
+    sal_uInt16 GetPageSelection() const { return mxMtrPageCtrl->get_text().toUInt32(); }
 
 private:
-    SwView       *m_pCreateView;
-    SfxBindings& m_rBindings;
-    sal_uInt16   mnMaxPageCnt;
+    sal_uInt16 mnMaxPageCnt;
 
     std::unique_ptr<weld::SpinButton> mxMtrPageCtrl;
     std::unique_ptr<weld::Label> mxPageNumberLbl;
+    std::unique_ptr<weld::Label> mxPageLbl;
 
-    SwView*    GetCreateView() const;
-    sal_uInt16 GetPageInfo();
-
-    DECL_LINK( PageModifiedHdl, weld::Entry&, void );
+    DECL_LINK(PageModifiedHdl, weld::Entry&, void);
 };
-
-#endif
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
