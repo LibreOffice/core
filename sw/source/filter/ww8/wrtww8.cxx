@@ -3519,8 +3519,10 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
                 // Generate random number with a seed of time as salt.
                 rtlRandomPool aRandomPool = rtl_random_createPool ();
                 sal_uInt8 pDocId[ 16 ];
-                rtl_random_getBytes( aRandomPool, pDocId, 16 );
-
+                if (rtl_random_getBytes(aRandomPool, pDocId, 16) != rtl_Random_E_None)
+                {
+                    throw uno::RuntimeException("rtl_random_getBytes failed");
+                }
                 rtl_random_destroyPool( aRandomPool );
 
                 sal_uInt16 aPassword[16] = {};
