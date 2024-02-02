@@ -9,6 +9,10 @@
         <Action>NoStepInto</Action>
     </Function>
     <Function>
+        <Name>>	std::vector&lt;.*&gt;::operator[]</Name>
+        <Action>NoStepInto</Action>
+    </Function>
+    <Function>
         <Name>tools::SvRef&lt;.*&gt;::operator-&gt;</Name>
         <Action>NoStepInto</Action>
     </Function>
