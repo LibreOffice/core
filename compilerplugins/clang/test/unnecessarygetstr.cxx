@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <ostream>
+#include <sstream>
 #include <string_view>
 #include <string>
 
@@ -126,6 +127,12 @@ namespace test6
 {
 void foo(const OString&);
 void test(std::string v) { foo(v.c_str()); }
+}
+
+// no warning expected
+namespace test7
+{
+void test(const OString& v) { std::stringstream aStream(v.getStr()); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -11,6 +11,7 @@
 
 #include <cassert>
 #include <stack>
+#include <unordered_set>
 
 #include "check.hxx"
 #include "plugin.hxx"
@@ -60,11 +61,20 @@ public:
         if (ignoreLocation(constructExpr))
             return true;
         auto tc = loplugin::TypeCheck(constructExpr->getType());
-        if (tc.ClassOrStruct("basic_string").StdNamespace())
+        if (tc.ClassOrStruct("basic_stringstream").StdNamespace())
+        {
+            // ignore the implicit-conversion nodes that are added here
+            if (constructExpr->getNumArgs() > 0)
+                nodesToIgnore.insert(constructExpr->getArg(0)->IgnoreImplicit());
+        }
+        else if (tc.ClassOrStruct("basic_string").StdNamespace())
         {
             if (constructExpr->getNumArgs() == 1 || constructExpr->getNumArgs() == 2)
-                checkForGetStr(constructExpr->getArg(0), "string constructor",
-                               /*isOStringConstructor*/ false);
+            {
+                if (nodesToIgnore.find(constructExpr) == nodesToIgnore.end())
+                    checkForGetStr(constructExpr->getArg(0), "string constructor",
+                                   /*isOStringConstructor*/ false);
+            }
         }
         else if (tc.ClassOrStruct("basic_string_view").StdNamespace())
         {
@@ -138,6 +148,8 @@ private:
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
+
+    std::unordered_set<const Expr*> nodesToIgnore;
 };
 
 loplugin::Plugin::Registration<UnnecessaryGetStr> unnecessarygetstr("unnecessarygetstr");
