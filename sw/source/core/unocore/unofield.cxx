@@ -1238,20 +1238,34 @@ SwServiceType SwXTextField::GetServiceId() const
     it has to be disconnected first and at the end connected to the
     new instance!
  */
-void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
+void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField,
+        sal_uInt16 const*const pSubType)
 {
-    assert(rField.GetFormatField()->Which() == (rField.GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
+#ifndef NDEBUG
+    auto const oldWhich(
+        (pSubType ? (rField.GetSubType() & nsSwGetSetExpType::GSE_STRING) != 0 : rField.GetInputFlag())
+            ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD);
+    auto const newWhich(oldWhich == RES_TXTATR_FIELD ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD);
+#endif
+    assert(rField.GetFormatField()->Which() == oldWhich);
     rtl::Reference<SwXTextField> const pXField(
         rField.GetFormatField()->GetXTextField());
     if (pXField)
         pXField->m_pImpl->SetFormatField(nullptr, nullptr);
     SwTextField *const pOldAttr(rField.GetFormatField()->GetTextField());
     SwSetExpField tempField(rField);
-    tempField.SetInputFlag(!rField.GetInputFlag());
+    if (pSubType)
+    {
+        tempField.SetSubType(*pSubType);
+    }
+    else
+    {
+        tempField.SetInputFlag(!rField.GetInputFlag());
+    }
     SwFormatField tempFormat(tempField);
     assert(tempFormat.GetField() != &rField);
     assert(tempFormat.GetField() != &tempField); // this copies it again?
-    assert(tempFormat.Which() == (static_cast<SwSetExpField const*>(tempFormat.GetField())->GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
+    assert(tempFormat.Which() == newWhich);
     SwTextNode & rNode(pOldAttr->GetTextNode());
     std::shared_ptr<SwPaM> pPamForTextField;
     IDocumentContentOperations & rIDCO(rNode.GetDoc().getIDocumentContentOperations());
@@ -1266,8 +1280,10 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
     SwTextField const* pNewAttr(rNode.GetFieldTextAttrAt(nStart, ::sw::GetTextAttrMode::Default));
     assert(pNewAttr);
     SwFormatField const& rNewFormat(pNewAttr->GetFormatField());
-    assert(rNewFormat.Which() == (static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
-    assert(static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag() == (dynamic_cast<SwTextInputField const*>(pNewAttr) != nullptr));
+    assert(rNewFormat.Which() == newWhich);
+    assert((dynamic_cast<SwTextInputField const*>(pNewAttr) != nullptr)
+        == ((static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetSubType() & nsSwGetSetExpType::GSE_STRING)
+            && static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag()));
     if (pXField)
     {
         pXField->m_pImpl->SetFormatField(const_cast<SwFormatField*>(&rNewFormat), &rNode.GetDoc());
