@@ -64,6 +64,14 @@
 #include <vector>
 #endif
 
+#ifdef LINUX
+#include <sys/vfs.h>
+// As documented by the kernel
+#define SMB_SUPER_MAGIC  0x517B
+#define CIFS_SUPER_MAGIC 0xFF534D42
+#define SMB2_SUPER_MAGIC 0xFE534D42
+#endif
+
 namespace {
 
 enum class State
@@ -736,9 +744,11 @@ oslFileHandle osl::detail::createFileHandleFromFD(int fd)
     return static_cast<oslFileHandle>(pImpl);
 }
 
-static int osl_file_adjustLockFlags(const OString& path, int flags)
+static void osl_file_adjustLockFlags(const OString& path, int *flags, sal_uInt32 *uFlags)
 {
 #ifdef MACOSX
+    (void) uFlags;
+
     /*
      * The AFP implementation of MacOS X 10.4 treats O_EXLOCK in a way
      * that makes it impossible for OOo to create a backup copy of the
@@ -751,20 +761,50 @@ static int osl_file_adjustLockFlags(const OString& path, int flags)
     {
         if(strncmp("afpfs", s.f_fstypename, 5) == 0)
         {
-            flags &= ~O_EXLOCK;
-            flags |=  O_SHLOCK;
+            *flags &= ~O_EXLOCK;
+            *flags |=  O_SHLOCK;
         }
         else
         {
             /* Needed flags to allow opening a webdav file */
-            flags &= ~(O_EXLOCK | O_SHLOCK | O_NONBLOCK);
+            *flags &= ~(O_EXLOCK | O_SHLOCK | O_NONBLOCK);
+        }
+    }
+#elif defined(LINUX)
+    (void) flags;
+
+    /* get filesystem info */
+    struct statfs aFileStatFs;
+    if (statfs(path.getStr(), &aFileStatFs) < 0)
+    {
+        int e = errno;
+        SAL_INFO("sal.file", "statfs(" << path << "): " << UnixErrnoString(e));
+    }
+    else
+    {
+        SAL_INFO("sal.file", "statfs(" << path << "): OK");
+
+        // We avoid locking if on a Linux CIFS mount otherwise this
+        // fill fail later on when opening the file for reading
+        // during backup creation at save time (even though this is a
+        // write lock and not a read lock).
+        // Fixes the following bug:
+        // https://bugs.documentfoundation.org/show_bug.cgi?id=55004
+        switch (aFileStatFs.f_type) {
+        case SMB_SUPER_MAGIC:
+        case CIFS_SUPER_MAGIC:
+        case SMB2_SUPER_MAGIC:
+            *uFlags |= osl_File_OpenFlag_NoLock;
+            break;
+        default:
+            break;
         }
     }
 #else
     (void) path;
+    (void) flags;
+    (void) uFlags;
 #endif
-
-    return flags;
 }
 
 static bool osl_file_queryLocking(sal_uInt32 uFlags)
@@ -981,7 +1021,7 @@ oslFileError openFilePath(const OString& filePath, oslFileHandle* pHandle,
     }
     else
     {
-        flags = osl_file_adjustLockFlags (filePath, flags);
+        osl_file_adjustLockFlags (filePath, &flags, &uFlags);
     }
 
     // O_EXCL can be set only when O_CREAT is set
