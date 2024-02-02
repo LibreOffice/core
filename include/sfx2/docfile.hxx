@@ -200,6 +200,8 @@ public:
     // independent of later changes via SetOpenMode; used for SID_RELOAD:
     [[nodiscard]] bool IsOriginallyLoadedReadOnly() const;
 
+    [[nodiscard]] bool IsRepairPackage() const;
+
     css::uno::Reference< css::io::XInputStream > const &  GetInputStream();
 
     void                CreateTempFile( bool bReplace = true );

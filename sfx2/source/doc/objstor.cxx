@@ -670,14 +670,13 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             try
             {
                 bool bWarnMediaTypeFallback = false;
-                const SfxBoolItem* pRepairPackageItem = rSet.GetItem(SID_REPAIRPACKAGE, false);
 
                 // treat the package as broken if the mediatype was retrieved as a fallback
                 uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
                 xStorProps->getPropertyValue("MediaTypeFallbackUsed")
                                                                     >>= bWarnMediaTypeFallback;
 
-                if ( pRepairPackageItem && pRepairPackageItem->GetValue() )
+                if (pMedium->IsRepairPackage())
                 {
                     // the macros in repaired documents should be disabled
                     pMedium->GetItemSet().Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::NEVER_EXECUTE ) );

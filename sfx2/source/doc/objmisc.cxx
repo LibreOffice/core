@@ -1957,9 +1957,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions()
             return false;
         }
 
-        if (const SfxBoolItem* pRepairItem
-            = pMedium->GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
-            pRepairItem && pRepairItem->GetValue())
+        if (pMedium->IsRepairPackage())
         {
             mbContinueImportOnFilterExceptions = yes;
             return true;

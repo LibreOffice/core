@@ -1988,8 +1988,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
         {
             const OUString aDocName( pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ) );
-            const SfxBoolItem* pRepairItem = pMedium->GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
-            if ( !pRepairItem || !pRepairItem->GetValue() )
+            if (!pMedium->IsRepairPackage())
             {
                 RequestPackageReparation aRequest( aDocName );
                 xHandler->handle( aRequest.GetRequest() );
@@ -4052,8 +4051,7 @@ OUString SAL_CALL SfxBaseModel::getTitle()
             catch (const ucb::CommandAbortedException &)
             {
             }
-            const SfxBoolItem* pRepairedDocItem = pMedium->GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
-            if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
+            if (pMedium->IsRepairPackage())
                 aResult += SfxResId(STR_REPAIREDDOCUMENT);
         }
 

@@ -1764,6 +1764,12 @@ SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const xStora
     return xRet;
 }
 
+bool SfxMedium::IsRepairPackage() const
+{
+    const SfxBoolItem* pRepairItem = GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
+    return pRepairItem && pRepairItem->GetValue();
+}
+
 uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
 {
     if ( pImpl->xStorage.is() || pImpl->m_bTriedStorage )
@@ -1784,8 +1790,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
     if ( GetErrorIgnoreWarning() )
         return pImpl->xStorage;
 
-    const SfxBoolItem* pRepairItem = GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
-    if ( pRepairItem && pRepairItem->GetValue() )
+    if (IsRepairPackage())
     {
         // the storage should be created for repairing mode
         CreateTempFile( false );
@@ -1979,13 +1984,11 @@ uno::Reference<embed::XStorage> SfxMedium::GetScriptingStorageToSign_Impl()
             SAL_WARN_IF(!pImpl->m_xODFDecryptedInnerPackageStream.is(), "sfx.doc", "no inner package stream?");
             if (pImpl->m_xODFDecryptedInnerPackageStream.is())
             {
-                const SfxBoolItem* pRepairItem = GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
-                const bool bRepairPackage = pRepairItem && pRepairItem->GetValue();
                 pImpl->m_xODFDecryptedInnerZipStorage =
                     ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
                         ZIP_STORAGE_FORMAT_STRING,
                         pImpl->m_xODFDecryptedInnerPackageStream->getInputStream(), {},
-                        bRepairPackage);
+                        IsRepairPackage());
             }
         }
         return pImpl->m_xODFDecryptedInnerZipStorage;
@@ -2006,21 +2009,19 @@ uno::Reference< embed::XStorage > const & SfxMedium::GetZipStorageToSign_Impl( b
 
         try
         {
-            const SfxBoolItem* pRepairItem = GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
-            const bool bRepairPackage = pRepairItem && pRepairItem->GetValue();
             // we can not sign document if there is no stream
             // should it be possible at all?
             if ( !bReadOnly && pImpl->xStream.is() )
             {
                 pImpl->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
                     ZIP_STORAGE_FORMAT_STRING, pImpl->xStream, css::embed::ElementModes::READWRITE,
-                    {}, bRepairPackage);
+                    {}, IsRepairPackage());
             }
             else if ( pImpl->xInputStream.is() )
             {
                 pImpl->m_xZipStorage
                     = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-                        ZIP_STORAGE_FORMAT_STRING, pImpl->xInputStream, {}, bRepairPackage);
+                        ZIP_STORAGE_FORMAT_STRING, pImpl->xInputStream, {}, IsRepairPackage());
             }
         }
         catch( const uno::Exception& )
