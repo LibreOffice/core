@@ -128,6 +128,8 @@ namespace
 #elif defined MACOSX
     constexpr std::u16string_view aGUIServers[]
         = { u"/Applications/GPG Keychain.app",
+            u"/Applications/Trusted Key Manager.app", // tdf#147291
+            u"/Applications/SCinterface/scManager.app", // tdf#147291
             u"/System/Applications/Utilities/Keychain Access.app"};
 #else
     constexpr std::u16string_view aGUIServers[]
