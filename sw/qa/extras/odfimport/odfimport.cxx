@@ -1167,9 +1167,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123968)
     SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->GetNode());
 
     // The field is now editable like any text, thus the field content "New value" shows up for the cursor.
+    // This field's variable is declared as string and used as string - typical.
     CPPUNIT_ASSERT_EQUAL(OUString("inputfield: " + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART)
                                   + "New value" + OUStringChar(CH_TXT_ATR_INPUTFIELDEND)),
                          rStart.GetText());
+
+    // This field's variable is declared as float and used as string - not
+    // typical; this can easily happen if the input field is in a header/footer,
+    // because only content.xml contains the variable-decls, styles.xml is
+    // imported before content.xml, and apparently the default variable type is
+    // numeric.
+    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->GetNode());
+    CPPUNIT_ASSERT_EQUAL(OUString("inputfield: " + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART)
+                                  + "String input for num variable" + OUStringChar(CH_TXT_ATR_INPUTFIELDEND)),
+                         rEnd.GetText());
+
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133459)
