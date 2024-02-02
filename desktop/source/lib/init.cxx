@@ -7553,6 +7553,23 @@ static void preloadData()
 #pragma GCC diagnostic pop
 #endif
 
+    static const OUString preloadComponents[] = {
+        "private:factory/swriter",
+        "private:factory/scalc",
+        "private:factory/simpress",
+        "private:factory/sdraw"
+    };
+    // getting the remote LibreOffice service manager
+    uno::Reference<frame::XDesktop2> xCompLoader(frame::Desktop::create(xContext), uno::UNO_QUERY);
+
+    // Preload and close each of the main components once to initialize global state
+    uno::Sequence<css::beans::PropertyValue> szEmptyArgs(0);
+    for (auto component : preloadComponents)
+    {
+        auto xComp = xCompLoader->loadComponentFromURL(component, "_blank", 0, szEmptyArgs);
+        xComp->dispose();
+    }
+
     // Set user profile's path back to the original one
     rtl::Bootstrap::set(u"UserInstallation"_ustr, sUserPath);
 }
