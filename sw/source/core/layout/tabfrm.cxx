@@ -1754,6 +1754,7 @@ bool SwContentFrame::CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDont
             {
                 // #i23129#, #i36347# - pass correct page frame to
                 // the object formatter
+                SwFrameDeleteGuard aDeleteGuard(pCnt);
                 if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                           *(pCnt->FindPageFrame()) ) )
                 {
