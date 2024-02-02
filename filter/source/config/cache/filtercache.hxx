@@ -20,7 +20,6 @@
 #pragma once
 
 #include <memory>
-#include <mutex>
 
 #include "cacheitem.hxx"
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -57,7 +56,7 @@ class CacheUpdateListener;
                 Further we make it public. So any user of this class
                 can lock us from outside too.
  */
-class FilterCache
+class FilterCache : public cppu::BaseMutex
 {
 
     // public types
@@ -162,7 +161,6 @@ class FilterCache
 
     private:
 
-        mutable std::mutex m_aMutex;
 
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of types. */
@@ -583,7 +581,6 @@ class FilterCache
 
     private:
 
-        std::vector<OUString> getItemNames(std::unique_lock<std::mutex>& rGuard, EItemType eType) const;
 
         /** @short      return a reference to one of our internal
                         sub container, which contains items of the
@@ -598,11 +595,11 @@ class FilterCache
             @throw      [css::uno::Exception]
                         if the required list does not exist.
          */
-        const CacheItemList& impl_getItemList(std::unique_lock<std::mutex>& rGuard, EItemType eType) const;
+        const CacheItemList& impl_getItemList(EItemType eType) const;
 
-        CacheItemList& impl_getItemList(std::unique_lock<std::mutex>& rGuard, EItemType eType);
+        CacheItemList& impl_getItemList(EItemType eType);
 
-        CacheItem& impl_getItem( std::unique_lock<std::mutex>& rGuard, EItemType eType, const OUString& sItem);
+        CacheItem& impl_getItem( EItemType eType, const OUString& sItem);
 
         /** @short      return a valid configuration update access
                         to the underlying configuration package, which
@@ -623,7 +620,7 @@ class FilterCache
                         all necessary listener connections will be established
                         too. So this cache will be informed about outside updates.
          */
-        css::uno::Reference< css::uno::XInterface > impl_openConfig(std::unique_lock<std::mutex>& rGuard, EConfigProvider eProvide);
+        css::uno::Reference< css::uno::XInterface > impl_openConfig(EConfigProvider eProvide);
 
 
         /** @short      tries to open the requested configuration root
@@ -644,8 +641,7 @@ class FilterCache
                         and initialized within the requested modes successfully;
                         a NULL reference otherwise.
          */
-        static css::uno::Reference< css::uno::XInterface > impl_createConfigAccess(std::unique_lock<std::mutex>& rGuard,
-                                                                                  const OUString& sRoot       ,
+        css::uno::Reference< css::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
                                                                                   bool         bReadOnly   ,
                                                                                   bool         bLocalesMode);
 
@@ -669,7 +665,7 @@ class FilterCache
                         Can be empty if an internal error occurred or if the requested
                         key does not exists!
          */
-        static css::uno::Any impl_getDirectCFGValue(std::unique_lock<std::mutex>& rGuard, std::u16string_view sDirectKey);
+        css::uno::Any impl_getDirectCFGValue(std::u16string_view sDirectKey);
 
 
         /** @short      load the underlying configuration into this cache.
@@ -684,7 +680,7 @@ class FilterCache
 
             @throws css::uno::Exception
          */
-        void impl_load(std::unique_lock<std::mutex>& rGuard, EFillState eRequiredState);
+        void impl_load(EFillState eRequiredState);
 
 
         /** @short      validate the whole cache and create
@@ -703,7 +699,7 @@ class FilterCache
             @throw      [css::uno::Exception]
                         if cache is invalid and could not be repaired.
          */
-        void impl_validateAndOptimize(std::unique_lock<std::mutex>& rGuard);
+        void impl_validateAndOptimize();
 
     private:
 
@@ -733,8 +729,7 @@ class FilterCache
             @throw  [css::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
-        void impl_loadSet(std::unique_lock<std::mutex>& rGuard,
-                          const css::uno::Reference< css::container::XNameAccess >& xConfig,
+        void impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
                                 EItemType                                           eType  ,
                                 EReadOption                                         eOption,
                                 CacheItemList*                                      pCache );
@@ -762,8 +757,7 @@ class FilterCache
             @throw  [css::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
-        CacheItem impl_loadItem(std::unique_lock<std::mutex>& rGuard,
-                                const css::uno::Reference< css::container::XNameAccess >& xSet   ,
+        CacheItem impl_loadItem(const css::uno::Reference< css::container::XNameAccess >& xSet   ,
                                       EItemType                                           eType  ,
                                 const OUString&                                    sItem  ,
                                       EReadOption                                         eOption);
@@ -794,8 +788,7 @@ class FilterCache
             @throw  [css::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
-        CacheItemList::iterator impl_loadItemOnDemand( std::unique_lock<std::mutex>& rGuard,
-                                                      EItemType        eType,
+        CacheItemList::iterator impl_loadItemOnDemand(      EItemType        eType,
                                                       const OUString& sItem);
 
 
@@ -862,8 +855,7 @@ class FilterCache
 
             @throws css::uno::Exception
         */
-        void impl_readPatchUINames(std::unique_lock<std::mutex>& rGuard,
-                                   const css::uno::Reference< css::container::XNameAccess >& xNode,
+        void impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
                                          CacheItem&                                          rItem);
 
 
@@ -875,14 +867,13 @@ class FilterCache
                                    const CacheItem&                                           rItem);
 
         /** TODO */
-        void impl_readOldFormat(std::unique_lock<std::mutex>& rGuard);
+        void impl_readOldFormat();
 
         /** TODO
 
             @throws css::uno::Exception
         */
-        CacheItem impl_readOldItem(std::unique_lock<std::mutex>& rGuard,
-                                   const css::uno::Reference< css::container::XNameAccess >& xSet ,
+        CacheItem impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                          EItemType                                           eType,
                                    const OUString&                                    sItem);
 
@@ -918,7 +909,7 @@ class FilterCache
 
             @return sal_True if the requested module is installed; sal_False otherwise.
          */
-        bool impl_isModuleInstalled(std::unique_lock<std::mutex>& rGuard, const OUString& sModule);
+        bool impl_isModuleInstalled(const OUString& sModule);
 
 
         /** @short  convert a list of flag names to its int representation.
