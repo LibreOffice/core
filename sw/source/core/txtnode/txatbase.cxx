@@ -99,7 +99,7 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (End())
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("end"), BAD_CAST(OString::number(*End()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_aAttr.getItem()"), "%p", m_aAttr.getItem());
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("attr-item"), "%p", m_aAttr.getItem());
     const char* pWhich = nullptr;
     std::optional<OString> oValue;
     switch (Which())
@@ -143,6 +143,7 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
             GetAutoFormat().dumpAsXml(pWriter);
             break;
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_ANNOTATION:
         case RES_TXTATR_INPUTFIELD:
             GetFormatField().dumpAsXml(pWriter);
             break;
