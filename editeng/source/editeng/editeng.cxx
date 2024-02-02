@@ -996,7 +996,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     bool bAllowIdle = true;
     bool bReadOnly  = pEditView->IsReadOnly();
 
-    GetCursorFlags nNewCursorFlags = GetCursorFlags::NONE;
+    CursorFlags aNewCursorFlags;
     bool bSetCursorFlags = true;
 
     EditSelection aCurSel( pEditView->getImpl().GetEditSelection() );
@@ -1122,9 +1122,9 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
 
                     bMoved = true;
                     if ( nCode == KEY_HOME )
-                        nNewCursorFlags |= GetCursorFlags::StartOfLine;
+                        aNewCursorFlags.bStartOfLine = true;
                     else if ( nCode == KEY_END )
-                        nNewCursorFlags |= GetCursorFlags::EndOfLine;
+                        aNewCursorFlags.bEndOfLine = true;
 
                 }
 #if OSL_DEBUG_LEVEL > 1
@@ -1402,7 +1402,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     }
 
     if (bSetCursorFlags)
-        pEditView->getImpl().mnExtraCursorFlags = nNewCursorFlags;
+        pEditView->getImpl().maExtraCursorFlags = aNewCursorFlags;
 
     if ( bModified )
     {
@@ -2410,8 +2410,9 @@ tools::Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
     // Check against index, not paragraph
     if ( pNode && ( rPos.nIndex < pNode->Len() ) )
     {
-        aBounds = getImpl().PaMtoEditCursor(EditPaM(pNode, rPos.nIndex), GetCursorFlags::TextOnly);
-        tools::Rectangle aR2 = getImpl().PaMtoEditCursor(EditPaM(pNode, rPos.nIndex + 1), GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine);
+        aBounds = getImpl().PaMtoEditCursor(EditPaM(pNode, rPos.nIndex), CursorFlags{.bTextOnly = true});
+        CursorFlags aFlags { .bTextOnly = true, .bEndOfLine = true};
+        tools::Rectangle aR2 = getImpl().PaMtoEditCursor(EditPaM(pNode, rPos.nIndex + 1), aFlags);
         if ( aR2.Right() > aBounds.Right() )
             aBounds.SetRight( aR2.Right() );
     }

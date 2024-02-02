@@ -492,7 +492,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 const EditLine& rLine = pParaPortion->GetLines()[nLine];
                 if ( nInputEnd > rLine.GetEnd() )
                     nInputEnd = rLine.GetEnd();
-                tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GetCursorFlags::EndOfLine );
+                tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), CursorFlags{ .bEndOfLine = true });
                 tools::Rectangle aRect = pView->getImpl().GetWindowPos( aR1 );
                 auto nExtTextInputWidth = aR2.Left() - aR1.Right();
                 if (EditViewCallbacks* pEditViewCallbacks = pView->getEditViewCallbacks())
@@ -578,7 +578,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                         {
                             if (rInfo.pLine->IsIn(n))
                             {
-                                tools::Rectangle aR = GetEditCursor(*pParaPortion, *rInfo.pLine, n, GetCursorFlags::NONE);
+                                tools::Rectangle aR = GetEditCursor(*pParaPortion, *rInfo.pLine, n, CursorFlags());
                                 aR.Move(getTopLeftDocOffset(rInfo.aArea));
                                 aRects[n - nMinPos] = pView->getImpl().GetWindowPos(aR);
                             }
@@ -989,7 +989,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView const * mpEditView, const 
     const EditLine& rLine = pParaPortion->GetLines()[nLine];
     bool bEmptyLine = rLine.GetStart() == rLine.GetEnd();
 
-    mpEditView->getImpl().mnExtraCursorFlags = GetCursorFlags::NONE;
+    mpEditView->getImpl().maExtraCursorFlags = CursorFlags();
 
     if ( !bEmptyLine )
     {
@@ -1044,7 +1044,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView const * pEditView, const 
     const EditLine& rLine = pParaPortion->GetLines()[nLine];
     bool bEmptyLine = rLine.GetStart() == rLine.GetEnd();
 
-    pEditView->getImpl().mnExtraCursorFlags = GetCursorFlags::NONE;
+    pEditView->getImpl().maExtraCursorFlags = CursorFlags();
 
     bool bParaRTL = IsRightToLeft( nPara );
 
@@ -3129,19 +3129,19 @@ EditPaM ImpEditEngine::InsertLineBreak(const EditSelection& aCurSel)
 //  Helper functions
 
 tools::Rectangle ImpEditEngine::GetEditCursor(ParaPortion const& rPortion, EditLine const& rLine,
-                                              sal_Int32 nIndex, GetCursorFlags nFlags)
+                                              sal_Int32 nIndex, CursorFlags aFlags)
 {
     // nIndex might be not in the line
     // Search within the line...
     tools::Long nX;
 
-    if ((nIndex == rLine.GetStart()) && (nFlags & GetCursorFlags::StartOfLine))
+    if (nIndex == rLine.GetStart() && aFlags.bStartOfLine)
     {
         Range aXRange = GetLineXPosStartEnd(rPortion, rLine);
         nX = !IsRightToLeft(GetEditDoc().GetPos(rPortion.GetNode())) ? aXRange.Min()
                                                                       : aXRange.Max();
     }
-    else if ((nIndex == rLine.GetEnd()) && (nFlags & GetCursorFlags::EndOfLine))
+    else if (nIndex == rLine.GetEnd() && aFlags.bEndOfLine)
     {
         Range aXRange = GetLineXPosStartEnd(rPortion, rLine);
         nX = !IsRightToLeft(GetEditDoc().GetPos(rPortion.GetNode())) ? aXRange.Max()
@@ -3149,7 +3149,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor(ParaPortion const& rPortion, EditL
     }
     else
     {
-        nX = GetXPos(rPortion, rLine, nIndex, bool(nFlags & GetCursorFlags::PreferPortionStart));
+        nX = GetXPos(rPortion, rLine, nIndex, aFlags.bPreferPortionStart);
     }
 
     tools::Rectangle aEditCursor;
@@ -3157,15 +3157,14 @@ tools::Rectangle ImpEditEngine::GetEditCursor(ParaPortion const& rPortion, EditL
     aEditCursor.SetRight(nX);
 
     aEditCursor.SetBottom(rLine.GetHeight() - 1);
-    if (nFlags & GetCursorFlags::TextOnly)
+    if (aFlags.bTextOnly)
         aEditCursor.SetTop(aEditCursor.Bottom() - rLine.GetTxtHeight() + 1);
     else
-        aEditCursor.SetTop(aEditCursor.Bottom()
-                           - std::min(rLine.GetTxtHeight(), rLine.GetHeight()) + 1);
+        aEditCursor.SetTop(aEditCursor.Bottom() - std::min(rLine.GetTxtHeight(), rLine.GetHeight()) + 1);
     return aEditCursor;
 }
 
-tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags )
+tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, CursorFlags aFlags)
 {
     assert( IsUpdateLayout() && "Must not be reached when Update=FALSE: PaMtoEditCursor" );
 
@@ -3175,8 +3174,8 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nF
     const EditLine* pLastLine = nullptr;
     tools::Rectangle aLineArea;
 
-    auto FindPortionLineAndArea
-        = [&, bEOL(bool(nFlags & GetCursorFlags::EndOfLine))](const LineAreaInfo& rInfo) {
+    auto FindPortionLineAndArea = [&, bEOL(aFlags.bEndOfLine)](const LineAreaInfo& rInfo)
+    {
         if (!rInfo.pLine) // start of ParaPortion
         {
             ContentNode* pNode = rInfo.rPortion.GetNode();
@@ -3198,7 +3197,7 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nF
 
     if (pLastLine && pPortion)
     {
-        aEditCursor = GetEditCursor(*pPortion, *pLastLine, nIndex, nFlags);
+        aEditCursor = GetEditCursor(*pPortion, *pLastLine, nIndex, aFlags);
         aEditCursor.Move(getTopLeftDocOffset(aLineArea));
     }
     else

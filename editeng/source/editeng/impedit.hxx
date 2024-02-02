@@ -90,17 +90,13 @@ namespace editeng {
 #define ATTRSPECIAL_WHOLEWORD   1
 #define ATTRSPECIAL_EDGE        2
 
-enum class GetCursorFlags {
-    NONE                = 0x0000,
-    TextOnly            = 0x0001,
-    StartOfLine         = 0x0002,
-    EndOfLine           = 0x0004,
-    PreferPortionStart  = 0x0008,
+struct CursorFlags
+{
+    bool bTextOnly : 1 = false;
+    bool bStartOfLine : 1 = false;
+    bool bEndOfLine : 1 = false;
+    bool bPreferPortionStart : 1 = false;
 };
-namespace o3tl {
-    template<> struct typed_flags<GetCursorFlags> : is_typed_flags<GetCursorFlags, 0x0f> {};
-}
-
 
 struct DragAndDropInfo
 {
@@ -281,7 +277,7 @@ private:
     tools::Long mnInvalidateMore;
     EVControlBits mnControl;
     sal_uInt32 mnTravelXPos;
-    GetCursorFlags mnExtraCursorFlags;
+    CursorFlags maExtraCursorFlags;
     sal_uInt16 mnCursorBidiLevel;
     sal_uInt16 mnScrollDiffX;
     bool mbReadOnly;
@@ -343,7 +339,7 @@ protected:
     void HideDDCursor();
 
     void ImplDrawHighlightRect(OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly, bool bLOKCalcRTL);
-    tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const;
+    tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, CursorFlags aShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const;
 
 public:
     ImpEditView(EditView* pView, EditEngine* pEditEngine, vcl::Window* pWindow);
@@ -1068,8 +1064,8 @@ public:
         return static_cast<const T&>(GetParaAttrib(nPara, sal_uInt16(nWhich)));
     }
 
-    tools::Rectangle PaMtoEditCursor(EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE);
-    tools::Rectangle GetEditCursor(ParaPortion const& rPortion, EditLine const& rLine, sal_Int32 nIndex, GetCursorFlags nFlags);
+    tools::Rectangle PaMtoEditCursor(EditPaM aPaM, CursorFlags aFlags = CursorFlags());
+    tools::Rectangle GetEditCursor(ParaPortion const& rPortion, EditLine const& rLine, sal_Int32 nIndex, CursorFlags aFlags);
 
     bool            IsModified() const { return maEditDoc.IsModified(); }
     void            SetModifyFlag(bool b) { maEditDoc.SetModified( b ); }

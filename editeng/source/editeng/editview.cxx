@@ -1006,7 +1006,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         return false;
 
     // PaMtoEditCursor returns Logical units
-    tools::Rectangle aTempRect = getImpEditEngine().PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
+    tools::Rectangle aTempRect = getImpEditEngine().PaMtoEditCursor(aPaM, CursorFlags{ .bTextOnly = true });
     // GetWindowPos works in Logical units
     aTempRect = getImpl().GetWindowPos(aTempRect);
     // Convert to pixels
