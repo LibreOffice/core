@@ -83,6 +83,9 @@ public:
     /// Test Paste using HTML
     void testHTMLPaste();
 
+    /// Test Paste using an HTML fragment
+    void testHTMLFragmentPaste();
+
     /// Test Copy/Paste with selective selection over multiple paragraphs
     void testMultiParaSelCopyPaste();
 
@@ -132,6 +135,7 @@ public:
     CPPUNIT_TEST(testHyperlinkCopyPaste);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testHTMLPaste);
+    CPPUNIT_TEST(testHTMLFragmentPaste);
     CPPUNIT_TEST(testMultiParaSelCopyPaste);
     CPPUNIT_TEST(testTabsCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
@@ -719,11 +723,18 @@ void Test::testCopyPaste()
 /// XTransferable implementation that provides simple HTML content.
 class TestHTMLTransferable : public cppu::WeakImplHelper<datatransfer::XTransferable>
 {
+    OString m_aHTML;
 public:
+    TestHTMLTransferable(const OString& rHTML);
     uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override;
     uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override;
 };
+
+TestHTMLTransferable::TestHTMLTransferable(const OString& rHTML)
+    : m_aHTML(rHTML)
+{
+}
 
 uno::Any TestHTMLTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
@@ -734,7 +745,7 @@ uno::Any TestHTMLTransferable::getTransferData(const datatransfer::DataFlavor& r
 
     uno::Any aRet;
     SvMemoryStream aStream;
-    aStream.WriteOString("<!DOCTYPE html>\n<html><body>test</body></html>");
+    aStream.WriteOString(m_aHTML);
     aRet <<= uno::Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()), aStream.GetSize());
     return aRet;
 }
@@ -759,7 +770,8 @@ void Test::testHTMLPaste()
     // Given an empty editeng document:
     EditEngine aEditEngine(mpItemPool.get());
     EditDoc &rDoc = aEditEngine.GetEditDoc();
-    uno::Reference< datatransfer::XTransferable > xData(new TestHTMLTransferable);
+    OString aHTML("<!DOCTYPE html>\n<html><body>test</body></html>"_ostr);
+    uno::Reference< datatransfer::XTransferable > xData(new TestHTMLTransferable(aHTML));
 
     // When trying to paste HTML:
     aEditEngine.InsertText(xData, OUString(), rDoc.GetEndPaM(), true);
@@ -770,6 +782,25 @@ void Test::testHTMLPaste()
     // - Actual  :
     // i.e. RTF and plain text paste worked, but not HTML.
     CPPUNIT_ASSERT_EQUAL(OUString("test"), rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
+}
+
+void Test::testHTMLFragmentPaste()
+{
+    // Given an empty editeng document:
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+    OString aHTML("a<b>b</b>c"_ostr);
+    uno::Reference< datatransfer::XTransferable > xData(new TestHTMLTransferable(aHTML));
+
+    // When trying to paste an HTML fragment:
+    aEditEngine.InsertText(xData, OUString(), rDoc.GetEndPaM(), true);
+
+    // Then make sure the text gets pasted:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: abc
+    // - Actual  :
+    // i.e. a HTML fragment without a proper header was ignored on paste.
+    CPPUNIT_ASSERT_EQUAL(OUString("abc"), rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 
 void Test::testMultiParaSelCopyPaste()

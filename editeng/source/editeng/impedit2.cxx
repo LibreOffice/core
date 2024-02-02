@@ -3997,14 +3997,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     uno::Sequence<sal_Int8> aSeq;
                     aData >>= aSeq;
                     SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
-                    static constexpr OUString aExpectedPrefix = u"<!DOCTYPE html>"_ustr;
-                    OUString aActualPrefix;
-                    aHtmlStream.ReadByteStringLine(aActualPrefix, RTL_TEXTENCODING_UTF8,
-                                                   aExpectedPrefix.getLength());
-                    if (aActualPrefix == aExpectedPrefix)
-                    {
-                        aNewSelection = Read(aHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
-                    }
+                    aNewSelection = Read(aHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
                     bDone = true;
                 }
                 catch (const css::uno::Exception&)
