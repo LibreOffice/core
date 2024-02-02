@@ -1314,7 +1314,10 @@ void ZipFile::recover()
                                                [path = OUString(aEntry.sPath + "/")](const auto& r)
                                                { return r.first.startsWith(path); })
                                                != aEntries.end())
+                                    {
+                                        nPos += 4;
                                         continue;
+                                    }
 
                                     aEntries.emplace( aEntry.sPath, aEntry );
 
