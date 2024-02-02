@@ -881,10 +881,9 @@ std::unique_ptr<SwField> SwSetExpField::Copy() const
 
 void SwSetExpField::SetSubType(sal_uInt16 nSub)
 {
+    assert((nSub & 0xff) != (nsSwGetSetExpType::GSE_STRING|nsSwGetSetExpType::GSE_EXPR) && "SubType is illegal!");
     static_cast<SwSetExpFieldType*>(GetTyp())->SetType(nSub & 0xff);
     mnSubType = nSub & 0xff00;
-
-    OSL_ENSURE( (nSub & 0xff) != 3, "SubType is illegal!" );
 }
 
 sal_uInt16 SwSetExpField::GetSubType() const
@@ -1100,8 +1099,19 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_SUBTYPE:
         nTmp32 = lcl_APIToSubType(rAny);
-        if(nTmp32 >= 0)
-            SetSubType(o3tl::narrowing<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
+        if (0 <= nTmp32 && nTmp32 != (GetSubType() & 0xff))
+        {
+            auto const subType(o3tl::narrowing<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
+            if (((nTmp32 & nsSwGetSetExpType::GSE_STRING) != (GetSubType() & nsSwGetSetExpType::GSE_STRING))
+                && GetInputFlag())
+            {
+                SwXTextField::TransmuteLeadToInputField(*this, &subType);
+            }
+            else
+            {
+                SetSubType(subType);
+            }
+        }
         break;
     case FIELD_PROP_PAR3:
         rAny >>= maPText;
@@ -1120,7 +1130,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                 if (static_cast<SwSetExpFieldType*>(GetTyp())->GetType()
                         & nsSwGetSetExpType::GSE_STRING)
                 {
-                    SwXTextField::TransmuteLeadToInputField(*this);
+                    SwXTextField::TransmuteLeadToInputField(*this, nullptr);
                 }
                 else
                 {
