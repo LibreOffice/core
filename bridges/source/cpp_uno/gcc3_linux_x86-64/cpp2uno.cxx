@@ -18,9 +18,6 @@
  */
 
 
-#include <typeinfo>
-
-#include <rtl/alloc.h>
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
@@ -36,7 +33,6 @@
 
 #include "abi.hxx"
 #include "call.hxx"
-#include "rtti.hxx"
 #include "share.hxx"
 
 using namespace ::com::sun::star::uno;

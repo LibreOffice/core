@@ -22,8 +22,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <osl/mutex.hxx>
-#include <osl/time.h>
 #include <rtl/process.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>

@@ -23,10 +23,11 @@
 #include <algorithm>
 #include <cassert>
 
-#include <sal/alloca.h>
-
 #include "jni_bridge.h"
+#include "jni_helper.h"
 #include "jniunoenvironmentdata.hxx"
+
+#include <com/sun/star/uno/Exception.hpp>
 
 namespace jni_uno
 {

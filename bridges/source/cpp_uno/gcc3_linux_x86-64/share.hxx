@@ -21,9 +21,7 @@
 
 #include <typeinfo>
 #include <exception>
-#include <cstddef>
 
-#include <cxxabi.h>
 #ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
 #define _GLIBCXX_CDTOR_CALLABI
 #endif

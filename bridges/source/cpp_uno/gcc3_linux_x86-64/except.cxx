@@ -28,6 +28,7 @@
 #include "rtti.hxx"
 #include "share.hxx"
 
+#include <cxxabi.h>
 
 using namespace ::std;
 using namespace ::com::sun::star::uno;

@@ -55,7 +55,6 @@
 #include "abi.hxx"
 
 #include <o3tl/unreachable.hxx>
-#include <sal/log.hxx>
 
 using namespace x86_64;
 

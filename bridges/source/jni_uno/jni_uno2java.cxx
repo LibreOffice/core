@@ -25,14 +25,13 @@
 #include <cstddef>
 #include <memory>
 
-#include <sal/alloca.h>
-
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <utility>
 
 #include "jni_bridge.h"
+#include "jni_helper.h"
 #include "jniunoenvironmentdata.hxx"
 
 namespace

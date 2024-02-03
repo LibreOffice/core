@@ -1,0 +1,13 @@
+---
+assumeFilename: bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx
+excludelist:
+    bridges/source/cpp_uno/gcc3_linux_x86-64/abi.hxx:
+    # No .hxx -> .h replacement in URE headers
+    - typelib/typedescription.hxx
+    bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx:
+    # No .hxx -> .h replacement in URE headers
+    - typelib/typedescription.hxx
+    bridges/source/cpp_uno/gcc3_linux_x86-64/uno2cpp.cxx:
+    # Actually needed
+    - callvirtualmethod.hxx
+    - share.hxx

@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/alloca.h>
-
 #include <exception>
 #include <typeinfo>
-
-#include <rtl/alloc.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>

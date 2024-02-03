@@ -25,14 +25,11 @@
 #include <cstddef>
 
 #include "jni_base.h"
-#include "jni_helper.h"
-
-#include <osl/diagnose.h>
+#include "jni_info.h"
 
 #include <uno/mapping.h>
 #include <uno/dispatcher.h>
-
-#include <com/sun/star/uno/XInterface.hpp>
+#include <uno/environment.h>
 
 
 namespace jni_uno

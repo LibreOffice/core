@@ -21,14 +21,13 @@
 
 #include <cassert>
 
-#include "jni_bridge.h"
+#include "jni_helper.h"
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <uno/lbnames.h>
 

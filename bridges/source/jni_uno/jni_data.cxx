@@ -23,6 +23,7 @@
 #include <memory>
 
 #include "jni_bridge.h"
+#include "jni_helper.h"
 
 #include <rtl/strbuf.hxx>
 #include <uno/sequence2.h>

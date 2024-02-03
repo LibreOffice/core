@@ -30,7 +30,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <uno/environment.h>
 #include <typelib/typedescription.hxx>
 
 #include <com/sun/star/uno/Type.hxx>

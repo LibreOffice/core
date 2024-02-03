@@ -25,7 +25,6 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.h>
-#include <sal/types.h>
 #include <typelib/typedescription.h>
 #include <uno/dispatcher.h>
 #include <uno/environment.h>

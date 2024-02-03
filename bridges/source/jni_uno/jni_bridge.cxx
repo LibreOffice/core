@@ -24,11 +24,11 @@
 #include <memory>
 
 #include "jni_bridge.h"
+#include "jni_helper.h"
 #include "jniunoenvironmentdata.hxx"
 
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.hxx>
 #include <uno/lbnames.h>
 
 using namespace ::jni_uno;

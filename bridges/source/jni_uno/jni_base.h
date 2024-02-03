@@ -26,14 +26,10 @@
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <jvmaccess/virtualmachine.hxx>
 
-#include <osl/diagnose.h>
-
-#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <utility>
 
-#include <uno/environment.h>
 #include <typelib/typedescription.h>
 
 

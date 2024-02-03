@@ -25,12 +25,10 @@
 #include <osl/thread.h>
 #include <osl/security.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <typelib/typedescription.hxx>
 
 #include <memory>
 #include <new>

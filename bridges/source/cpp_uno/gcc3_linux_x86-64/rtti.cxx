@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cxxabi.h>
 #include <memory>
 #include <mutex>
 #include <typeinfo>
@@ -36,7 +37,6 @@
 #include <o3tl/string_view.hxx>
 
 #include "rtti.hxx"
-#include "share.hxx"
 
 namespace {
 
