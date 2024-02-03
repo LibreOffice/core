@@ -72,6 +72,7 @@ protected:
             SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( const SwFormat& rFormat );
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    void Destr();
 
 public:
 

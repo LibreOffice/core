@@ -454,8 +454,8 @@ public:
 
     inline SwTextFormatColl *GetTextColl() const;
     virtual SwFormatColl *ChgFormatColl( SwFormatColl* ) override;
-    void ChgTextCollUpdateNum( const SwTextFormatColl* pOld,
-                                const SwTextFormatColl* pNew );
+    void ChgTextCollUpdateNum(const SwTextFormatColl* pOld,
+                              const SwTextFormatColl* pNew );
 
     /** Copy collection with all auto formats to dest-node.
         The latter might be in another document!

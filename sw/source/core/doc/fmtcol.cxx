@@ -124,6 +124,7 @@ SwTextFormatColl::~SwTextFormatColl()
             pCharFormat->SetLinkedParaFormat(nullptr);
         }
     }
+    Destr();
 }
 void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {

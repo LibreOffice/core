@@ -1663,13 +1663,14 @@ void SwTextNode::Update(
     }
 }
 
-void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
-                                        const SwTextFormatColl *pNewColl)
+void SwTextNode::ChgTextCollUpdateNum(const SwTextFormatColl* pOldColl,
+                                      const SwTextFormatColl* pNewColl)
 {
     SwDoc& rDoc = GetDoc();
     // query the OutlineLevel and if it changed, notify the Nodes-Array!
-    const int nOldLevel = pOldColl && pOldColl->IsAssignedToListLevelOfOutlineStyle() ?
-                     pOldColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
+    const int nOldLevel = pOldColl && pOldColl->IsAssignedToListLevelOfOutlineStyle()
+                              ? pOldColl->GetAssignedOutlineStyleLevel()
+                              : MAXLEVEL;
     const int nNewLevel = pNewColl && pNewColl->IsAssignedToListLevelOfOutlineStyle() ?
                      pNewColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
 
@@ -3017,8 +3018,9 @@ bool SwTextNode::HasMarkedLabel() const
 
     if ( IsInList() )
     {
-        bResult =
-            GetDoc().getIDocumentListsAccess().getListByName( GetListId() )->IsListLevelMarked( GetActualListLevel() );
+        SwList* pList = GetDoc().getIDocumentListsAccess().getListByName(GetListId());
+        if (pList)
+            bResult = pList->IsListLevelMarked(GetActualListLevel());
     }
 
     return bResult;
@@ -5490,11 +5492,15 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
                 && GetRegisteredIn() == static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat
                 && GetNodes().IsDocNodes() )
         {
-            assert(dynamic_cast<SwTextFormatColl const*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat));
-            assert(dynamic_cast<SwTextFormatColl const*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat));
-            ChgTextCollUpdateNum(
-                    static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat),
-                    static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat) );
+            assert(dynamic_cast<const SwTextFormatColl*>(
+                static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat));
+            if (const SwTextFormatColl* pTxtFmtColOld = dynamic_cast<const SwTextFormatColl*>(
+                    static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat))
+            {
+                ChgTextCollUpdateNum(
+                    pTxtFmtColOld, static_cast<const SwTextFormatColl*>(
+                                    static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat));
+            }
         }
 
         // reset fill information

@@ -200,25 +200,32 @@ void SwFormat::CopyAttrs( const SwFormat& rFormat )
         delete pChgSet;
 }
 
-SwFormat::~SwFormat()
+void SwFormat::Destr()
 {
     // This happens at an ObjectDying message. Thus put all dependent
     // ones on DerivedFrom.
-    if(!HasWriterListeners())
+    if (!HasWriterListeners())
         return;
 
     m_bFormatInDTOR = true;
 
-    if(!DerivedFrom())
+    if (!DerivedFrom())
     {
         SwFormat::ResetFormatAttr(RES_PAGEDESC);
-        SAL_WARN("sw.core", "~SwFormat: format still has clients on death, but parent format is missing: " << GetName());
+        SAL_WARN("sw.core",
+                 "~SwFormat: format still has clients on death, but parent format is missing: "
+                     << GetName());
         return;
     }
-    SwIterator<SwClient,SwFormat> aIter(*this);
-    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
+    SwIterator<SwClient, SwFormat> aIter(*this);
+    for (SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
         pClient->CheckRegistrationFormat(*this);
     assert(!HasWriterListeners());
+}
+
+SwFormat::~SwFormat()
+{
+    Destr();
 }
 
 void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
