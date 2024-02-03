@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
+#include <unordered_map>
+
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -28,12 +33,14 @@
 #include <svtools/langtab.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetagicu.hxx>
 #include <editeng/unolingu.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/langbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
+#include <o3tl/sorted_vector.hxx>
 
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
@@ -190,44 +197,93 @@ void SvxLanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTy
 
 static void SortLanguages(std::vector<weld::ComboBoxEntry>& rEntries)
 {
-    auto langLess = [](const weld::ComboBoxEntry& e1, const weld::ComboBoxEntry& e2)
+    struct NaturalStringSorterCompare
     {
-        if (e1.sId == e2.sId)
-            return false; // shortcut
-        // Make sure that e.g. generic 'Spanish {es}' goes before 'Spanish (Argentina)'.
-        // We can't depend on MsLangId::getPrimaryLanguage/getSubLanguage, because e.g.
-        // for generic Bosnian {bs}, the MS-LCID is 0x781A, and getSubLanguage is not 0.
-        // So we have to do the expensive LanguageTag construction.
-        LanguageTag lt1(LanguageType(e1.sId.toInt32())), lt2(LanguageType(e2.sId.toInt32()));
-        if (lt1.getLanguage() == lt2.getLanguage())
+        bool operator()(const OUString& rLHS, const OUString& rRHS) const
         {
-            const bool isLangOnly1 = lt1.isIsoLocale() && lt1.getCountry().isEmpty();
-            const bool isLangOnly2 = lt2.isIsoLocale() && lt2.getCountry().isEmpty();
+            static const auto aSorter = comphelper::string::NaturalStringSorter(
+                comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetUILanguageTag().getLocale());
+            return aSorter.compare(rLHS, rRHS) < 0;
+        }
+    };
+
+    struct EntryData
+    {
+        LanguageTag tag;
+        weld::ComboBoxEntry entry;
+    };
+
+    struct GenericFirst
+    {
+        bool operator()(const EntryData& e1, const EntryData& e2) const
+        {
+            assert(e1.tag.getLanguage() == e2.tag.getLanguage());
+            if (e1.entry.sId == e2.entry.sId)
+                return false; // shortcut
+
+            // Make sure that e.g. generic 'Spanish {es}' goes before 'Spanish (Argentina)'.
+            // We can't depend on MsLangId::getPrimaryLanguage/getSubLanguage, because e.g.
+            // for generic Bosnian {bs}, the MS-LCID is 0x781A, and getSubLanguage is not 0.
+            // So we have to do the expensive LanguageTag construction in EntryData.
+
+            const bool isLangOnly1 = e1.tag.isIsoLocale() && e1.tag.getCountry().isEmpty();
+            const bool isLangOnly2 = e2.tag.isIsoLocale() && e2.tag.getCountry().isEmpty();
+            assert(!(isLangOnly1 && isLangOnly2));
 
             if (isLangOnly1)
             {
-                // lt1 is a generic language-only tag
-                if (!isLangOnly2)
-                    return true; // lt2 is not
+                // e1.tag is a generic language-only tag, e2.tag is not
+                return true;
             }
             else if (isLangOnly2)
             {
-                // lt2 is a generic language-only tag, lt1 is not
+                // e2.tag is a generic language-only tag, e1.tag is not
                 return false;
             }
-        }
-        // Do a normal string comparison for other cases
-        static const auto aSorter = comphelper::string::NaturalStringSorter(
-            comphelper::getProcessComponentContext(),
-            Application::GetSettings().GetUILanguageTag().getLocale());
-        return aSorter.compare(e1.sString, e2.sString) < 0;
-    };
 
-    std::sort(rEntries.begin(), rEntries.end(), langLess);
-    rEntries.erase(std::unique(rEntries.begin(), rEntries.end(),
-                               [](const weld::ComboBoxEntry& e1, const weld::ComboBoxEntry& e2)
-                               { return e1.sId == e2.sId; }),
-                   rEntries.end());
+            // Do a normal string comparison for other cases
+            return NaturalStringSorterCompare()(e1.entry.sString, e2.entry.sString);
+        }
+    };
+    using SortedLangEntries = o3tl::sorted_vector<EntryData, GenericFirst>;
+
+    // It is impossible to sort using only GenericFirst comparison: it would fail the strict weak
+    // ordering requirement, where the following simplified example would fail the last assertion:
+    //
+    //  weld::ComboBoxEntry nn{ u"노르웨이어(니노르스크) {nn}"_ustr, "30740", "" }
+    //  weld::ComboBoxEntry nn_NO{ u"노르웨이어 뉘노르스크>"_ustr, "2068", "" };
+    //  weld::ComboBoxEntry nb_NO{ u"노르웨이어 부크몰"_ustr, "1044", "" };
+    //
+    //  assert(GenericFirst(nn, nn_NO));
+    //  assert(GenericFirst(nn_NO, nb_NO));
+    //  assert(GenericFirst(nn, nb_NO));
+    //
+    // So only sort this way inside language groups, where the data set itself guarantees the
+    // comparison's strict weak ordering.
+
+    // 1. Create lang-to-set-of-ComboBoxEntry map
+    std::unordered_map<OUString, SortedLangEntries> langToEntriesMap;
+
+    for (const auto& entry : rEntries)
+    {
+        LanguageTag tag(LanguageType(entry.sId.toInt32()));
+        langToEntriesMap[tag.getLanguage()].insert({ tag, entry }); // also makes unique
+    }
+
+    // 2. Sort using generic language's translated name, plus ISO language tag appended just in case
+    std::map<OUString, const SortedLangEntries&, NaturalStringSorterCompare> finalSort;
+    const LanguageTag& uiLang = Application::GetSettings().GetUILanguageTag();
+    for (const auto& [lang, lang_entries] : langToEntriesMap)
+    {
+        OUString translatedLangName = LanguageTagIcu::getDisplayName(LanguageTag(lang), uiLang);
+        finalSort.emplace(translatedLangName + "_" + lang, lang_entries);
+    }
+
+    rEntries.clear();
+    for ([[maybe_unused]] const auto& [lang, lang_entries] : finalSort)
+        for (auto& entryData : lang_entries)
+            rEntries.push_back(entryData.entry);
 }
 
 void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLangNone,
