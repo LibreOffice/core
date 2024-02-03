@@ -12,10 +12,19 @@
 #include "QtInstanceDialog.hxx"
 #include <QtWidgets/QMessageBox>
 
-class QtInstanceMessageDialog : public QtInstanceDialog, public virtual weld::MessageDialog
+class QtInstanceMessageDialog : public QObject,
+                                public QtInstanceDialog,
+                                public virtual weld::MessageDialog
 {
+    Q_OBJECT;
+
 private:
     QMessageBox* m_pMessageDialog;
+
+    // the DialogController/Dialog/function passed to the runAsync variants
+    std::shared_ptr<weld::DialogController> m_xRunAsyncDialogController;
+    std::shared_ptr<weld::Dialog> m_xRunAsyncDialog;
+    std::function<void(sal_Int32)> m_aRunAsyncFunc;
 
 public:
     QtInstanceMessageDialog(QMessageBox* pMessageDialog);
@@ -35,6 +44,14 @@ public:
                             const OUString& rHelpId = {}) override;
     virtual void set_default_response(int nResponse) override;
     virtual int run() override;
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
+                          const std::function<void(sal_Int32)>& func) override;
+    virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                          const std::function<void(sal_Int32)>& func) override;
+    virtual void response(int nResponse) override;
+
+private slots:
+    void dialogFinished(int nResult);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

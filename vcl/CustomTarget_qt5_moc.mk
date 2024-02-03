@@ -14,6 +14,7 @@ $(call gb_CustomTarget_get_target,vcl/qt5) : \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtFilePicker.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtFrame.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtInstance.moc \
+	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtInstanceMessageDialog.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtMainWindow.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtMenu.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtObject.moc \
