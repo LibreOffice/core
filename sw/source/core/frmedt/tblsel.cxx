@@ -1718,7 +1718,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
 
     // Beginning and end should not be in protected cells.
     // If necessary we should search backwards again
-    while ( rpStart->GetFormat()->GetProtect().IsContentProtected() )
+    while (rpStart && rpStart->GetFormat()->GetProtect().IsContentProtected())
     {
         const SwLayoutFrame *pTmpLeaf = rpStart->GetNextLayoutLeaf();
         while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->getFrameArea()) > nEX ) // first skip line
@@ -1739,7 +1739,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
         else
             rpStart = pTmpLeaf;
     }
-    while ( rpEnd->GetFormat()->GetProtect().IsContentProtected() )
+    while (rpEnd && rpEnd->GetFormat()->GetProtect().IsContentProtected())
     {
         const SwLayoutFrame *pTmpLeaf = rpEnd->GetPrevLayoutLeaf();
         while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->getFrameArea()) < nEX ) // skip the line for now
