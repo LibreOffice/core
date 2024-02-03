@@ -35,7 +35,6 @@
 -o sw.SwAccessibleTextGraphicObject
 -o sw.SwXAutoTextEntry
 -o sw.SwXAutoTextGroup
--o sw.SwXBodyText
 -o sw.SwXCell
 -o sw.SwXCellRange
 -o sw.SwXChapterNumbering
