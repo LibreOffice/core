@@ -109,7 +109,6 @@ BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
     , maCallbackTimer()
     , maCallbackLock()
     , maCallbackSeconds(0)
-    , mnTransparenceForShadow(0)
 {
 }
 

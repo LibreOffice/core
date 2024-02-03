@@ -12,7 +12,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-#include <drawinglayer/tools/primitive2dxmldump.hxx>
+#include <extendedprimitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
         = renderPageToPrimitives(xDrawPage);
 
     // Examine the created primitives.
-    drawinglayer::Primitive2dXmlDump aDumper;
+    svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
     sal_Int32 fShadowX = getXPath(pDocument, "//shadow/transform"_ostr, "xy13"_ostr).toInt32();
     sal_Int32 fShadowY = getXPath(pDocument, "//shadow/transform"_ostr, "xy23"_ostr).toInt32();
@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
             = renderPageToPrimitives(xDrawPage);
 
         // Examine the created primitives.
-        drawinglayer::Primitive2dXmlDump aDumper;
+        svx::ExtendedPrimitive2dXmlDump aDumper;
         xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
 
         // Without the accompanying fix in place, this test would have failed with:
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
             = renderPageToPrimitives(xDrawPage);
 
         // Examine the created primitives.
-        drawinglayer::Primitive2dXmlDump aDumper;
+        svx::ExtendedPrimitive2dXmlDump aDumper;
         xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
 
         // Without the accompanying fix in place, this test would have failed with:
@@ -159,7 +159,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
         = renderPageToPrimitives(xDrawPage);
 
     // Examine the created primitives.
-    drawinglayer::Primitive2dXmlDump aDumper;
+    svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -181,7 +181,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
         = renderPageToPrimitives(xDrawPage);
 
     // Then make sure that the background has a bitmap:
-    drawinglayer::Primitive2dXmlDump aDumper;
+    svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1

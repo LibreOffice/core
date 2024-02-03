@@ -12,7 +12,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-#include <drawinglayer/tools/primitive2dxmldump.hxx>
+#include <extendedprimitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
         = renderPageToPrimitives(xDrawPage);
 
     // Then make sure that the cell fill part of the shadow has the expected transparency:
-    drawinglayer::Primitive2dXmlDump aDumper;
+    svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
     // Without the accompanying fix in place, this test would have failed with:
     //- Expected: 0

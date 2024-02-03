@@ -18,7 +18,7 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
-#include <drawinglayer/tools/primitive2dxmldump.hxx>
+#include <extendedprimitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -80,7 +80,7 @@ xmlDocUniquePtr lcl_dumpAndParseFirstObjectWithAssert(SdrPage* pSdrPage)
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
     rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
 
-    drawinglayer::Primitive2dXmlDump aDumper;
+    svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
     CPPUNIT_ASSERT(pXmlDoc);
     return pXmlDoc;
@@ -285,7 +285,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
     rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
 
-    drawinglayer::Primitive2dXmlDump aDumper;
+    svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
 
     assertXPath(pXmlDoc, "/primitive2D"_ostr, 1);

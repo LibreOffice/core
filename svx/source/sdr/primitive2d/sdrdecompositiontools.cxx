@@ -18,6 +18,7 @@
  */
 
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <sdr/primitive2d/sdrcellprimitive.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
@@ -818,7 +819,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
             int nContentWithTransparence = std::count_if(
                 rContentForShadow.begin(), rContentForShadow.end(),
                 [](const Primitive2DReference& xChild) {
-                    auto pChild = dynamic_cast<BufferedDecompositionPrimitive2D*>(xChild.get());
+                    auto pChild = dynamic_cast<SdrCellPrimitive2D*>(xChild.get());
                     return pChild && pChild->getTransparenceForShadow() != 0;
                 });
             if (nContentWithTransparence == 0)

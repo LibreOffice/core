@@ -24,12 +24,11 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <sdr/primitive2d/sdrcellprimitive.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <editeng/borderline.hxx>
-#include <sdr/attribute/sdrfilltextattribute.hxx>
-#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
@@ -57,40 +56,6 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        namespace {
-
-        class SdrCellPrimitive2D : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            basegfx::B2DHomMatrix                       maTransform;
-            attribute::SdrFillTextAttribute             maSdrFTAttribute;
-
-        protected:
-            // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
-
-        public:
-            SdrCellPrimitive2D(
-                basegfx::B2DHomMatrix aTransform,
-                const attribute::SdrFillTextAttribute& rSdrFTAttribute)
-            :   maTransform(std::move(aTransform)),
-                maSdrFTAttribute(rSdrFTAttribute)
-            {
-            }
-
-            // data access
-            const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-            const attribute::SdrFillTextAttribute& getSdrFTAttribute() const { return maSdrFTAttribute; }
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            // provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-
-        }
-
         void SdrCellPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             // prepare unit polygon

@@ -663,6 +663,11 @@ xmlDocUniquePtr Primitive2dXmlDump::dumpAndParse(
     return xmlDocUniquePtr(xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get())));
 }
 
+OUString Primitive2dXmlDump::idToString(sal_uInt32 nId)
+{
+    return drawinglayer::primitive2d::idToString(nId);
+}
+
 void Primitive2dXmlDump::decomposeAndWrite(
     const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
     ::tools::XmlWriter& rWriter)
@@ -672,6 +677,10 @@ void Primitive2dXmlDump::decomposeAndWrite(
         const BasePrimitive2D* pBasePrimitive = rPrimitive2DSequence[i].get();
         sal_uInt32 nId = pBasePrimitive->getPrimitive2DID();
         if (nId < maFilter.size() && maFilter[nId])
+            continue;
+
+        // handled by subclass
+        if (decomposeAndWrite(*pBasePrimitive, rWriter))
             continue;
 
         OUString sCurrentElementTag = drawinglayer::primitive2d::idToString(nId);
@@ -1207,27 +1216,9 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             default:
             {
-                const char* aName = "unhandled";
-                switch (nId)
-                {
-                    case PRIMITIVE2D_ID_RANGE_SVX | 14: // PRIMITIVE2D_ID_SDRCELLPRIMITIVE2D
-                    {
-                        aName = "sdrCell";
-                        break;
-                    }
-                }
-                rWriter.startElement(aName);
+                rWriter.startElement("unhandled");
                 rWriter.attribute("id", sCurrentElementTag);
                 rWriter.attribute("idNumber", nId);
-
-                auto pBufferedDecomposition
-                    = dynamic_cast<const BufferedDecompositionPrimitive2D*>(pBasePrimitive);
-                if (pBufferedDecomposition)
-                {
-                    rWriter.attribute(
-                        "transparenceForShadow",
-                        OString::number(pBufferedDecomposition->getTransparenceForShadow()));
-                }
 
                 drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
                 pBasePrimitive->get2DDecomposition(aPrimitiveContainer,

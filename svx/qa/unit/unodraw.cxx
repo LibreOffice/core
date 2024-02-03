@@ -27,7 +27,7 @@
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <drawinglayer/tools/primitive2dxmldump.hxx>
+#include <extendedprimitive2dxmldump.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <unotools/streamwrap.hxx>
@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
 
     // Check the primitives.
-    drawinglayer::Primitive2dXmlDump aDumper;
+    svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
     assertXPath(pDocument, "//shadow"_ostr, /*nNumberOfNodes=*/1);
 

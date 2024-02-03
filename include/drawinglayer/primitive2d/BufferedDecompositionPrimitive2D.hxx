@@ -74,10 +74,6 @@ private:
     mutable std::mutex maCallbackLock;
     sal_uInt16 maCallbackSeconds;
 
-    /// When a shadow wraps a list of primitives, this primitive wants to influence the transparency
-    /// of the shadow.
-    sal_uInt16 mnTransparenceForShadow;
-
 protected:
     /** access methods to maBuffered2DDecomposition. The usage of this methods may allow
         later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
@@ -111,13 +107,6 @@ public:
     virtual void
     get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                        const geometry::ViewInformation2D& rViewInformation) const override;
-
-    void setTransparenceForShadow(sal_uInt16 nTransparenceForShadow)
-    {
-        mnTransparenceForShadow = nTransparenceForShadow;
-    }
-
-    sal_uInt16 getTransparenceForShadow() const { return mnTransparenceForShadow; }
 };
 
 } // end of namespace drawinglayer::primitive2d

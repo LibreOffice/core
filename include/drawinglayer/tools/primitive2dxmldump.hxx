@@ -22,15 +22,18 @@ namespace tools { class XmlWriter; }
 namespace drawinglayer
 {
 
-class DRAWINGLAYER_DLLPUBLIC Primitive2dXmlDump final
+class DRAWINGLAYER_DLLPUBLIC Primitive2dXmlDump
 {
 private:
     std::vector<bool> maFilter;
+
+protected:
     void decomposeAndWrite(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, tools::XmlWriter& rWriter);
+    static OUString idToString(sal_uInt32 nId);
 
 public:
     Primitive2dXmlDump();
-    ~Primitive2dXmlDump();
+    virtual ~Primitive2dXmlDump();
 
     /** Dumps the input primitive sequence to xml into a file or memory stream and parses the xml for testing.
      *
@@ -44,6 +47,8 @@ public:
     /** Dumps the input primitive sequence to xml into a file. */
     void dump(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, const OUString& rStreamName);
 
+    /** overridden by svx::ExtendedPrimitive2dXmlDump */
+    virtual bool decomposeAndWrite( const drawinglayer::primitive2d::BasePrimitive2D& /*rPrimitive2DSequence*/, ::tools::XmlWriter& /*rWriter*/) { return false; }
 };
 
 }
