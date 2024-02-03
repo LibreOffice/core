@@ -1747,7 +1747,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
         while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->getFrameArea()) > nEX )
             pTmpLeaf = pTmpLeaf->GetPrevLayoutLeaf();
         const SwTabFrame *pTmpTab = rpEnd->FindTabFrame();
-        if ( !pTmpLeaf || !pTmpTab->IsAnLower( pTmpLeaf ) )
+        if ( !pTmpTab->IsAnLower( pTmpLeaf ) )
         {
             pTmpTab = static_cast<const SwTabFrame*>(pTmpTab->FindPrev());
             OSL_ENSURE( pTmpTab->IsTabFrame(), "Predecessor of Follow not Master.");
