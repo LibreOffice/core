@@ -1141,6 +1141,7 @@ public:
 
     /// Document background color, applied to every page style.
     std::optional<sal_Int32> m_oBackgroundColor;
+    bool m_bCopyStandardPageStyleFill = false;
 
     /// Raw table cell depth.
     sal_Int32 m_nTableCellDepth;

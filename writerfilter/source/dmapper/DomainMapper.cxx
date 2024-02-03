@@ -32,6 +32,8 @@
 #include <ooxml/resourceids.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -1475,7 +1477,63 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     switch (rSprm.getId())
     {
     case NS_ooxml::LN_background_background:
+    {
+        // if a VML background has been defined, it was imported into a shape to hold the properties
+        uno::Reference<drawing::XShape> xFill(m_pImpl->PopPendingShape());
+        if (xFill.is())
+        {
+            assert(!m_pImpl->GetTopContext());
+            assert(m_pImpl->GetIsFirstParagraphInShape());
+            assert(mbWasShapeInPara);
+            assert(m_pImpl->GetIsFirstParagraphInSection());
+            assert(m_pImpl->IsOutsideAParagraph());
+            if (m_pImpl->GetSettingsTable()->GetDisplayBackgroundShape())
+            {
+                // apply the XATTR_FILL attributes to the default page style
+                const uno::Reference<beans::XPropertySet> xFillPropertySet(xFill, uno::UNO_QUERY);
+                const uno::Reference<beans::XPropertySetInfo> xFillInfo
+                    = xFillPropertySet->getPropertySetInfo();
+                uno::Reference<beans::XPropertySet> xPS(
+                    m_pImpl->GetPageStyles()->getByName("Standard"), uno::UNO_QUERY_THROW);
+                for (const beans::Property& rProp : xPS->getPropertySetInfo()->getProperties())
+                {
+                    if (rProp.Name == "FillComplexColor" || rProp.Name == "FillGradientName"
+                        || rProp.Name == "FillGradientStepCount"
+                        || rProp.Name == "FillTransparenceGradientName"
+                        || rProp.Name == "FillBitmapURL" || rProp.Name == "FillColor2")
+                    {
+                        // silence exceptions for unsupported stuff when appling to page style
+                        continue;
+                    }
+                    if (!rProp.Name.startsWith("Fill"))
+                        continue;
+
+                    if (!xFillInfo->hasPropertyByName(rProp.Name))
+                        continue;
+
+                    try
+                    {
+                        const uno::Any aFillValue = xFillPropertySet->getPropertyValue(rProp.Name);
+                        xPS->setPropertyValue(rProp.Name, aFillValue);
+                    }
+                    catch (uno::Exception&)
+                    {
+                        DBG_UNHANDLED_EXCEPTION("writerfilter", "Exception setting page background fill");
+                    }
+                }
+
+                m_pImpl->m_bCopyStandardPageStyleFill = true;
+            }
+
+            // The background was unhelpfully imported into the text body: remove it
+            uno::Reference<lang::XComponent> xComponent(xFill, uno::UNO_QUERY_THROW);
+            xComponent->dispose();
+
+            m_pImpl->SetIsFirstParagraphInShape(false);
+            mbWasShapeInPara = false;
+        }
         return;
+    }
     default:
         break;
     }

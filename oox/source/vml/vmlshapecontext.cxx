@@ -251,6 +251,7 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper co
                 return new ShapeContext( rParent, rShapes.createShape< BezierShape >(), rAttribs );
             else
                 return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
+        case VML_TOKEN(background):
         case VML_TOKEN( rect ):
             return new RectangleShapeContext( rParent, rAttribs, rShapes.createShape< RectangleShape >() );
         case VML_TOKEN( roundrect ):

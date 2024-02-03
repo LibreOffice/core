@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -60,6 +61,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Left border:", static_cast<sal_uInt32>(0), nBorderWidth);
 
     // TODO: there SHOULD BE a top border, and even if loaded, it would be lost on re-import...
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.docx")
+{
+    // given a document with a v:background bitmap, but no w:background fillcolor
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    // the image (or any fill for that matter) should be ignored.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
+                         getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf126533_pageGradient)
+{
+    // given a document with a gradient page background
+    loadFromFile(u"fill.docx");
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                         getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
 }
 
 } // end of anonymous namespace
