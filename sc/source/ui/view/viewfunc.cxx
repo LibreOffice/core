@@ -725,17 +725,14 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         }
 
         OUString aFormula( rString );
-        std::shared_ptr< ScTokenArray > pArr;
 
         FormulaProcessingContext context_instance{
-            aPosPtr, aCompPtr, xModificator,  pArr,           nullptr,        pData,
+            aPosPtr, aCompPtr, xModificator,  nullptr,        nullptr,        pData,
             rMark,   *this,    OUString(),    aFormula,       rString,        nCol,
             nRow,    nTab,     bMatrixExpand, bNumFmtChanged, bRecord
         };
 
-        std::shared_ptr<FormulaProcessingContext> context = std::make_shared<FormulaProcessingContext>(context_instance);
-
-        parseAndCorrectFormula(context);
+        parseAndCorrectFormula(std::make_shared<FormulaProcessingContext>(context_instance));
     }
     else
     {

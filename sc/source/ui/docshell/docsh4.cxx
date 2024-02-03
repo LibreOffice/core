@@ -1437,7 +1437,7 @@ void ScDocShell::ExecuteChartSource(SfxRequest& rReq)
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         VclPtr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
         pDlg->StartExecuteAsync(
-            [this, pDlg, xRequest, bUndo, bMultiRange, aChartName, aRangeListRef, bAddRange,
+            [this, pDlg, xRequest=std::move(xRequest), bUndo, bMultiRange, aChartName, aRangeListRef, bAddRange,
              nCol1, nRow1, nCol2, nRow2, nTab] (sal_Int32 nResult)->void
             {
                 if (nResult == RET_OK)
