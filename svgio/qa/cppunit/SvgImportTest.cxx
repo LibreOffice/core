@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
@@ -83,12 +84,27 @@ namespace
 {
 bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
 {
-    return std::equal(rA.begin(), rA.end(), rB.begin(), rB.end(),
+    auto rv = std::mismatch(rA.begin(), rA.end(), rB.begin(), rB.end(),
         [](const css::uno::Reference<css::graphic::XPrimitive2D>& a,
            const css::uno::Reference<css::graphic::XPrimitive2D>& b)
         {
             return drawinglayer::primitive2d::arePrimitive2DReferencesEqual(a, b);
         });
+    if (rv.first == rA.end() && rv.second == rB.end())
+        return true;
+    if (rv.first == rA.end() || rv.second == rB.end())
+    {
+        SAL_WARN("svgio",
+                "first seq length == " << rA.size() <<
+                "second seq length == " << rB.size());
+        return false;
+    }
+    auto idx = std::distance(rA.begin(), rv.first);
+    SAL_WARN("svgio",
+            "first difference at index " << idx <<
+            " expected element " << typeid(*rA[idx]).name() <<
+            " but got element " << typeid(*rB[idx]).name());
+    return false;
 }
 }
 
