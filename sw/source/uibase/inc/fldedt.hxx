@@ -41,6 +41,9 @@ class SwFieldEditDlg final : public SfxSingleTabDialogController
     SfxTabPage* CreatePage(sal_uInt16 nGroup);
 
     void EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr);
+
+    void ImplDestroy();
+
 public:
 
     SwFieldEditDlg(SwView const & rVw);

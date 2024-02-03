@@ -86,6 +86,7 @@
 #include <editeng/optitems.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
+#include <o3tl/deleter.hxx>
 #include <officecfg/Office/OptionsDialog.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -526,7 +527,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, std::u16string
     ActivateLastSelection();
 }
 
-OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
+void OfaTreeOptionsDialog::ImplDestroy()
 {
     xCurrentPageEntry.reset();
 
@@ -580,6 +581,11 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
         bEntry = xTreeLB->iter_next(*xEntry);
     }
     deleteGroupNames();
+}
+
+OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(

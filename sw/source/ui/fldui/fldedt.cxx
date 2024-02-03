@@ -222,10 +222,15 @@ SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
     return GetTabPage();
 }
 
-SwFieldEditDlg::~SwFieldEditDlg()
+void SwFieldEditDlg::ImplDestroy()
 {
     SwViewShell::SetCareDialog(nullptr);
     m_pSh->EnterStdMode();
+}
+
+SwFieldEditDlg::~SwFieldEditDlg()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void SwFieldEditDlg::EnableInsert(bool bEnable)

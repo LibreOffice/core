@@ -210,6 +210,8 @@ private:
 
     int applySearchFilter(const OUString& rSearchTerm);
 
+    void ImplDestroy();
+
     // Common initialization
     OfaTreeOptionsDialog(weld::Window* pParent, bool fromExtensionManager);
 
