@@ -16,6 +16,9 @@
 #include <sfx2/viewsh.hxx>
 #include <static/unoembindhelpers/PrimaryBindings.hxx>
 
+#include <cstdint>
+#include <typeinfo>
+
 using namespace emscripten;
 using namespace css::uno;
 
@@ -26,6 +29,8 @@ template <typename T> void registerInOutParam(char const* name)
     class_<unoembindhelpers::UnoInOutParam<T>>(name).constructor().constructor<T>().property(
         "val", &unoembindhelpers::UnoInOutParam<T>::get, &unoembindhelpers::UnoInOutParam<T>::set);
 }
+
+std::uintptr_t getOUStringRawType() { return reinterpret_cast<std::uintptr_t>(&typeid(OUString)); }
 
 Reference<css::frame::XModel> getCurrentModelFromViewSh()
 {
@@ -44,12 +49,6 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     // Reference bits
     enum_<unoembindhelpers::uno_Reference>("uno_Reference")
         .value("FromAny", unoembindhelpers::uno_Reference::FromAny);
-
-    class_<OUString>("OUString")
-        .constructor(+[](const std::u16string& rString) -> OUString { return OUString(rString); })
-        .function("toString", +[](const OUString& rSelf) -> std::u16string {
-            return std::u16string(rSelf.getStr(), rSelf.getLength());
-        });
 
     // Any
     class_<Any>("Any").constructor(+[](const val& rObject, const TypeClass& rUnoType) -> Any {
@@ -112,7 +111,10 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     registerInOutParam<char16_t>("uno_InOutParam_char");
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
+    function("getOUStringRawType", &getOUStringRawType);
     function("getUnoComponentContext", &comphelper::getProcessComponentContext);
+    function("rtl_uString_release",
+             +[](std::uintptr_t ptr) { rtl_uString_release(reinterpret_cast<rtl_uString*>(ptr)); });
 }
 #endif
 
