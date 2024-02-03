@@ -838,11 +838,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Wind
                 bActivateLastSelection = true;
             Reference< frame::XFrame > xFrame;
             auto xDlg = std::make_unique<OfaTreeOptionsDialog>(pParent, xFrame, bActivateLastSelection);
-            if (nResId == SID_OPTIONS_DATABASES)
-            {
-                xDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
-            }
-            else if (nResId == SID_LANGUAGE_OPTIONS)
+            if (nResId == SID_LANGUAGE_OPTIONS)
             {
                 //open the tab page "tools/options/languages"
                 xDlg->ActivatePage(OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE);
