@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/Tools.hxx>
 #include <utility>
 
 
@@ -30,18 +31,27 @@ namespace drawinglayer::primitive2d
         TransformPrimitive2D::TransformPrimitive2D(
             basegfx::B2DHomMatrix aTransformation,
             Primitive2DContainer&& aChildren)
-        :   GroupPrimitive2D(std::move(aChildren)),
-            maTransformation(std::move(aTransformation))
+        :   maTransformation(std::move(aTransformation)),
+            mxChildren(new GroupPrimitive2D(std::move(aChildren)))
+        {
+        }
+
+        TransformPrimitive2D::TransformPrimitive2D(
+            basegfx::B2DHomMatrix aTransformation,
+            GroupPrimitive2D& rChildren)
+        :   maTransformation(std::move(aTransformation)),
+            mxChildren(&rChildren)
         {
         }
 
         bool TransformPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(GroupPrimitive2D::operator==(rPrimitive))
+            if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const TransformPrimitive2D& rCompare = static_cast< const TransformPrimitive2D& >(rPrimitive);
 
-                return (getTransformation() == rCompare.getTransformation());
+                return maTransformation == rCompare.maTransformation
+                    && arePrimitive2DReferencesEqual(mxChildren, rCompare.mxChildren);
             }
 
             return false;

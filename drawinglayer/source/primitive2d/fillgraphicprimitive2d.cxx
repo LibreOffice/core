@@ -70,11 +70,12 @@ namespace drawinglayer::primitive2d
                     rGraphic,
                     basegfx::B2DHomMatrix());
 
+                rtl::Reference<GroupPrimitive2D> xGroup = new GroupPrimitive2D(std::move(xSeq));
                 for(const auto &a : aMatrices)
                 {
                     rContainer.push_back(new TransformPrimitive2D(
                         getTransformation() * a,
-                        Primitive2DContainer(xSeq)));
+                        *xGroup));
                 }
             }
             else

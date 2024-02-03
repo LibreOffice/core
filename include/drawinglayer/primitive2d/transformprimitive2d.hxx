@@ -46,19 +46,24 @@ namespace drawinglayer::primitive2d
             different, transformed states without the need to create those
             thousand primitive contents.
          */
-        class DRAWINGLAYER_DLLPUBLIC TransformPrimitive2D final : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TransformPrimitive2D final : public BasePrimitive2D
         {
         private:
             // the transformation to apply to the child geometry
             basegfx::B2DHomMatrix                   maTransformation;
+            rtl::Reference<GroupPrimitive2D>        mxChildren;
 
         public:
             /// constructor
             TransformPrimitive2D(
                 basegfx::B2DHomMatrix aTransformation,
                 Primitive2DContainer&& rChildren);
+            TransformPrimitive2D(
+                basegfx::B2DHomMatrix aTransformation,
+                GroupPrimitive2D& rChildren);
 
             /// data read access
+            const Primitive2DContainer& getChildren() const { return mxChildren->getChildren(); }
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
 
             /// compare operator
