@@ -78,7 +78,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
 
     m_xSubTypeList->SetStyle(m_xSubTypeList->GetStyle() |
         WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_FLATVALUESET | WB_3DLOOK );
-    m_xSubTypeList->SetColCount(4);
+    m_xSubTypeList->SetColCount(6);
     m_xSubTypeList->SetLineCount(1);
 
     bool bEnableComplexChartTypes = true;

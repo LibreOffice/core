@@ -24,6 +24,7 @@
 #include <PlottingPositionHelper.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 
 namespace chart
 {
@@ -125,6 +126,7 @@ private: //member
     PiePositionHelper     m_aPosHelper;
     bool                  m_bUseRings;
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
+    ::css::chart2::PieChartSubType m_eSubType;
 
     struct PieLabelInfo
     {

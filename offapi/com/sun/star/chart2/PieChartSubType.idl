@@ -28,6 +28,7 @@ module chart2
 
 /** Mode used for a pie chart template to determine the initial state
     of exploded pies.
+    @since LibreOffice 24.8
  */
 enum PieChartSubType
 {

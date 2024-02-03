@@ -405,13 +405,11 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
             break;
         case TEMPLATE_BAROFPIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_ALL_EXPLODED, true,
-                chart2::PieChartSubType_BAR ));
+                chart2::PieChartOffsetMode_NONE, false, chart2::PieChartSubType_BAR ));
             break;
         case TEMPLATE_PIEOFPIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_ALL_EXPLODED, true,
-                chart2::PieChartSubType_PIE ));
+                chart2::PieChartOffsetMode_NONE, false, chart2::PieChartSubType_PIE ));
             break;
         case TEMPLATE_THREEDPIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,

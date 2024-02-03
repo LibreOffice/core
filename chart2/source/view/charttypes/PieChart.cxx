@@ -185,6 +185,7 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
         , m_aPosHelper( (m_nDimension==3) ? 0.0 : 90.0 )
         , m_bUseRings(false)
         , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
+        , m_eSubType(PieChartSubType_NONE)
         , m_fMaxOffset(std::numeric_limits<double>::quiet_NaN())
 {
     PlotterBase::m_pPosHelper = &m_aPosHelper;
@@ -204,6 +205,14 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
             if( nDimensionCount==3 )
                 m_aPosHelper.m_fRingDistance = 0.1;
         }
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    try
+    {
+        xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_SUBTYPE) >>= m_eSubType; //  "SubType"
     }
     catch( const uno::Exception& )
     {
@@ -277,7 +286,13 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
             drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
             aOffset = aNewOrigin - aOrigin;
         }
+    } else if (m_eSubType != PieChartSubType_NONE) {
+        drawing::Position3D aOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
+        drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene(180, 1.0, rParam.mfLogicZ);
+        aOffset = aNewOrigin - aOrigin;
+        fExplodedOuterRadius *= 2.0/3;
     }
+
 
     //create point
     rtl::Reference<SvxShape> xShape;

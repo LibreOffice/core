@@ -266,6 +266,8 @@ void PieChartTypeTemplate::createChartTypes(
         rtl::Reference< ChartType > xCT = new PieChartType();
         xCT->setFastPropertyValue(
             PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
+        xCT->setFastPropertyValue(
+            PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE )); // "SubType"
         rCoordSys[0]->setChartTypes( std::vector{xCT} );
 
         if( !aSeriesSeq.empty() )
@@ -294,10 +296,8 @@ bool PieChartTypeTemplate::matchesTemplate2(
     getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ) >>= bTemplateUsesRings;
     chart2::PieChartOffsetMode ePieOffsetMode;
     getFastPropertyValue( PROP_PIE_TEMPLATE_OFFSET_MODE ) >>= ePieOffsetMode;
-    /*
-    chart2::PieChartSubType ePieSubType;
-    getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ) >>= ePieSubType;
-    */
+    chart2::PieChartSubType eTemplateSubType;
+    getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ) >>= eTemplateSubType;
 
     //check offset-mode
     if( bResult )
@@ -370,6 +370,15 @@ bool PieChartTypeTemplate::matchesTemplate2(
         if( xCTProp->getFastPropertyValue( PROP_PIECHARTTYPE_USE_RINGS ) >>= bUseRings ) // "UseRings"
         {
             bResult = ( bTemplateUsesRings == bUseRings );
+        }
+    }
+    if( bResult )
+    {
+        rtl::Reference< ChartType > xCTProp = xDiagram->getChartTypeByIndex( 0 );
+        chart2::PieChartSubType eSubType = chart2::PieChartSubType_NONE;
+        if( xCTProp->getFastPropertyValue( PROP_PIECHARTTYPE_SUBTYPE ) >>= eSubType )
+        {
+            bResult = ( eTemplateSubType == eSubType );
         }
     }
 
