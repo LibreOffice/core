@@ -303,6 +303,7 @@ void XmlTestTools::assertXPathNodeName(const xmlDocUniquePtr& pXmlDoc, const OSt
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In XPath '" + rXPath + "' name of node is incorrect")).getStr(),
                                  rExpectedName, oconvert(pXmlNode->name));
+    xmlXPathFreeObject(pXmlObj);
 }
 
 void XmlTestTools::registerODFNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
