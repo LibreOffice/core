@@ -231,7 +231,7 @@ xText = xTextDocument.getText();
 xSimpleText = new css.text.XSimpleText(xText.$query());
 xTextCursor = xSimpleText.createTextCursor();
 xTextRange = new css.text.XTextRange(xTextCursor.$query());
-xTextRange.setString(new Module.OUString("string here!"));
+xTextRange.setString("string here!");
 xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
 xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
 ```
@@ -249,7 +249,7 @@ while (xParaEnumeration.hasMoreElements()) {
     xParagraph = new css.text.XTextRange(xParaEnumeration.nextElement(), Module.uno_Reference.FromAny);
     if (xParagraph.$is()) {
         xParaProps = new css.beans.XPropertySet(xParagraph.$query());
-        xParaProps.setPropertyValue(new Module.OUString("CharColor"), new Module.Any(Math.floor(Math.random() * 0xFFFFFF), css.uno.TypeClass.LONG));
+        xParaProps.setPropertyValue("CharColor", new Module.Any(Math.floor(Math.random() * 0xFFFFFF), css.uno.TypeClass.LONG));
     }
 }
 ```
