@@ -39,6 +39,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -1137,7 +1138,37 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
     Insert( PROP_RIGHT_MARGIN, uno::Any( m_nRightMargin ) );
     Insert(PROP_GUTTER_MARGIN, uno::Any(m_nGutterMargin));
 
-    if ( rDM_Impl.m_oBackgroundColor )
+    // w:background is applied to every page in the document
+    if (!rDM_Impl.m_oBackgroundColor.has_value() && !rDM_Impl.IsRTFImport())
+    {
+        // DOCX has an interesting quirk, where if the fallback background color is not defined,
+        // then the fill is not applied either.
+
+        // Disable the imported fill from the default style
+        if (rDM_Impl.m_bCopyStandardPageStyleFill && m_sPageStyleName == "Standard")
+        {
+            rDM_Impl.m_bCopyStandardPageStyleFill = false;
+            m_aPageStyle->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_NONE));
+        }
+    }
+    else if (rDM_Impl.m_bCopyStandardPageStyleFill) // complex fill: graphics/gradients/patterns
+    {
+        uno::Reference<beans::XPropertySet> xDefaultPageStyle(
+                    rDM_Impl.GetPageStyles()->getByName("Standard"), uno::UNO_QUERY_THROW);
+        for (const beans::Property& rProp : m_aPageStyle->getPropertySetInfo()->getProperties())
+        {
+            try
+            {
+                const uno::Any aFillValue = xDefaultPageStyle->getPropertyValue(rProp.Name);
+                m_aPageStyle->setPropertyValue(rProp.Name, aFillValue);
+            }
+            catch (uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("writerfilter", "Exception setting page background fill");
+            }
+        }
+    }
+    else if (rDM_Impl.m_oBackgroundColor) // simple, solid color
         Insert( PROP_BACK_COLOR, uno::Any( *rDM_Impl.m_oBackgroundColor ) );
 
     // Check for missing footnote separator only in case there is at least

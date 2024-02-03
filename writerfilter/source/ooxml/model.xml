@@ -17744,12 +17744,13 @@
       <element name="sectPr" tokenid="ooxml:CT_PPr_sectPr"/>
       <element name="pPrChange" tokenid="ooxml:CT_PPr_pPrChange"/>
     </resource>
-    <resource name="CT_Background" resource="Properties">
+    <resource name="CT_Background" resource="Shape">
       <attribute name="color" tokenid="ooxml:CT_Background_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Background_themeColor"/>
       <attribute name="themeTint" tokenid="ooxml:CT_Background_themeTint"/>
       <attribute name="themeShade" tokenid="ooxml:CT_Background_themeShade"/>
       <element name="v:background" tokenid="ooxml:CT_Background_v_background"/>
+      <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:background_background"/>
     </resource>
     <resource name="CT_Rel" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_Rel_id"/>
