@@ -144,8 +144,8 @@ bool OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
     CHECK_GL_ERROR();
 
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
-    for(size_t i(0); i != rSceneObjects.size(); ++i) {
-        rSceneObjects[i]->prepare(m_nProgramObject);
+    for(const auto& rSceneObject : rSceneObjects) {
+        rSceneObject->prepare(m_nProgramObject);
     }
 
     GLint location = glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
@@ -208,8 +208,8 @@ bool OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
 void OGLTransitionImpl::finish()
 {
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
-    for(size_t i(0); i != rSceneObjects.size(); ++i) {
-        rSceneObjects[i]->finish();
+    for(const auto& rSceneObject : rSceneObjects) {
+        rSceneObject->finish();
     }
 
     finishTransition();
@@ -278,8 +278,8 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
 {
     const Operations_t& rOverallOperations(maScene.getOperations());
     glm::mat4 matrix;
-    for(size_t i(0); i != rOverallOperations.size(); ++i)
-        rOverallOperations[i]->interpolate(matrix, nTime, SlideWidthScale, SlideHeightScale);
+    for(const auto& rOperation : rOverallOperations)
+        rOperation->interpolate(matrix, nTime, SlideWidthScale, SlideHeightScale);
     CHECK_GL_ERROR();
     if (m_nOperationsTransformLocation != -1) {
         glUniformMatrix4fv(m_nOperationsTransformLocation, 1, false, glm::value_ptr(matrix));
@@ -340,8 +340,8 @@ void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double Sl
 {
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     CHECK_GL_ERROR();
-    for(size_t i(0); i != rSceneObjects.size(); ++i)
-        rSceneObjects[i]->display(m_nSceneTransformLocation, m_nPrimitiveTransformLocation, nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
+    for(const auto& rSceneObject : rSceneObjects)
+        rSceneObject->display(m_nSceneTransformLocation, m_nPrimitiveTransformLocation, nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
     CHECK_GL_ERROR();
 }
 

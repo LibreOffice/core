@@ -803,10 +803,8 @@ void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSor
         pBase = pPool->Next();
     }
     // non-pool styles
-    const SwCharFormats* pFormats = pDoc->GetCharFormats();
-    for(size_t i = 0; i < pFormats->size(); ++i)
+    for(const auto pFormat : *pDoc->GetCharFormats())
     {
-        const SwCharFormat* pFormat = (*pFormats)[i];
         if(pFormat->IsDefault())
             continue;
         const OUString& rName = pFormat->GetName();

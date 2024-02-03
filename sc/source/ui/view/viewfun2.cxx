@@ -2563,11 +2563,14 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         SCTAB nCount = rDoc.GetTableCount();
 
         OUString aOldName;
-        for(size_t i=0; i<TheTabs.size(); ++i)
+        bool isFirstTab = true;
+        for(SCTAB nTab : TheTabs)
         {
-            SCTAB nTab = TheTabs[i];
-            if (i==0)
+            if (isFirstTab)
+            {
                 pUndoDoc->InitUndo( rDoc, nTab,nTab, true,true );   // incl. column/fow flags
+                isFirstTab = false;
+            }
             else
                 pUndoDoc->AddUndoTab( nTab,nTab, true,true );       // incl. column/fow flags
 
