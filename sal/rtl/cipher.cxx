@@ -25,6 +25,10 @@
 #include <algorithm>
 
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
+#include <o3tl/safeint.hxx>
+#include <cassert>
+#include <cstring>
+#include <limits>
 #include <openssl/evp.h>
 #endif
 
