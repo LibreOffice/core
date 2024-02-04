@@ -1037,7 +1037,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         case SID_STYLE_NEW_BY_EXAMPLE:
             {
                 const SfxPoolItem* pNameItem;
-                if (pArgs && SfxItemState::SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
+                if (pArgs && SfxItemState::SET == pArgs->GetItemState(nSlotId, true, &pNameItem))
                     aStyleName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
                 else if ( nSlotId == SID_STYLE_NEW_BY_EXAMPLE )
                 {
@@ -1064,8 +1064,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
 
-                if ( SfxItemState::SET ==
-                     pArgs->GetItemState( nSlotId, true, &pItem ) )
+                if (pArgs && SfxItemState::SET == pArgs->GetItemState(nSlotId, true, &pItem))
                 {
                     const SfxStringItem* pStrItem = dynamic_cast< const SfxStringItem *>( pItem );
                     if ( pStrItem )
