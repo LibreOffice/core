@@ -2632,14 +2632,15 @@ void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
         {
             if (SwFlyFrame* pSFly = SwIterator<SwFlyFrame, SwFormat>(*this).First())
             {
-                if (pSFly->Lower() && !pSFly->Lower()->IsNoTextFrame())
+                SwFrame *pSFlyLower = pSFly->Lower();
+                if (pSFlyLower && !pSFlyLower->IsNoTextFrame())
                 {
                     if (SwTextNode* pSwTxtNode = static_cast<SwTextFrame*>(pSFly->ContainsContent())->GetTextNodeFirst())
                         pSwTxtNode->resetAndQueueAccessibilityCheck(true);
                 }
                 else
                 {
-                    if (SwNode* pSwNode = static_cast<SwNoTextFrame*>(pSFly->Lower())->GetNode())
+                    if (SwNode* pSwNode = static_cast<SwNoTextFrame*>(pSFlyLower)->GetNode())
                         pSwNode->resetAndQueueAccessibilityCheck(true);
                 }
             }
