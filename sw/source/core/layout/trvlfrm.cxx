@@ -234,13 +234,16 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                 }
             }
 
+            SAL_WARN_IF(!pCnt, "sw.layout", "Cursor is gone to a Black hole");
+            if (!pCnt)
+                return false;
+
             // GetContentPos may have modified pCMS
             if ( pCMS && pCMS->m_bStop )
                 return false;
 
             bool bTextRet = false;
 
-            OSL_ENSURE( pCnt, "Cursor is gone to a Black hole" );
             if( pCMS && pCMS->m_pFill && pCnt->IsTextFrame() )
                 bTextRet = pCnt->GetModelPositionForViewPoint( &aTextPos, rPoint, pCMS );
             else
