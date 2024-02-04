@@ -1530,7 +1530,10 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
                 if ( pPage )
                     pCnt = pPage->ContainsContent();
                 else
-                    return ContainsContent()->UnionFrame().Pos();
+                {
+                    pCnt = ContainsContent();
+                    return pCnt ? pCnt->UnionFrame().Pos() : Point();
+                }
             }
             pCnt->Calc(pRenderContext);
         }
