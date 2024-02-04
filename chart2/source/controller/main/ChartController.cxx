@@ -1368,7 +1368,7 @@ void ChartController::executeDispatch_ChartType()
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
     auto aDlg =  std::make_shared<ChartTypeDialog>(GetChartFrame(), getChartModel());
-    aDlg->runAsync(aDlg, [this, aUndoGuard](int nResult) {
+    weld::DialogController::runAsync(aDlg, [this, aUndoGuard](int nResult) {
         if (nResult == RET_OK)
         {
             impl_adaptDataSeriesAutoResize();
