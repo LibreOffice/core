@@ -758,7 +758,7 @@ void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
 
 const OUString & SdrObject::GetName() const
 {
-    static const OUString EMPTY = u""_ustr;
+    static constexpr OUString EMPTY = u""_ustr;
 
     if(m_pPlusData)
     {
