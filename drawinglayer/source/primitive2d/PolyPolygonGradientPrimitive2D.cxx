@@ -29,8 +29,8 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-void PolyPolygonGradientPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+Primitive2DReference PolyPolygonGradientPrimitive2D::create2DDecomposition(
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     if (!getFillGradient().isDefault())
     {
@@ -41,8 +41,9 @@ void PolyPolygonGradientPrimitive2D::create2DDecomposition(
         Primitive2DContainer aSubSequence{ pNewGradient };
 
         // create mask primitive
-        rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), std::move(aSubSequence)));
+        return new MaskPrimitive2D(getB2DPolyPolygon(), std::move(aSubSequence));
     }
+    return nullptr;
 }
 
 PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(

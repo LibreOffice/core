@@ -24,7 +24,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void EpsPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference EpsPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const GDIMetaFile& rSubstituteContent = getMetaFile();
 
@@ -34,11 +34,12 @@ namespace drawinglayer::primitive2d
                 // To really use the Eps data, a renderer has to know and interpret this primitive
                 // directly.
 
-                rContainer.push_back(
+                return
                     new MetafilePrimitive2D(
                         getEpsTransform(),
-                        rSubstituteContent));
+                        rSubstituteContent);
             }
+            return nullptr;
         }
 
         EpsPrimitive2D::EpsPrimitive2D(

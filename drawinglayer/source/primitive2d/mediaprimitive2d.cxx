@@ -32,7 +32,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void MediaPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference MediaPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer xRetval;
             xRetval.resize(1);
@@ -89,7 +89,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            rContainer.append(std::move(xRetval));
+            return new GroupPrimitive2D(std::move(xRetval));
         }
 
         MediaPrimitive2D::MediaPrimitive2D(

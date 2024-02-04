@@ -234,8 +234,7 @@ private:
 
 protected:
     // create decomposition data
-    virtual void create2DDecomposition(
-        Primitive2DContainer& rContainer,
+    virtual Primitive2DReference create2DDecomposition(
         const geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
@@ -269,8 +268,7 @@ SlideBackgroundFillPrimitive2D::SlideBackgroundFillPrimitive2D(
 {
 }
 
-void SlideBackgroundFillPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer,
+Primitive2DReference SlideBackgroundFillPrimitive2D::create2DDecomposition(
     const geometry::ViewInformation2D& rViewInformation) const
 {
     basegfx::B2DVector aPageSize;
@@ -282,21 +280,21 @@ void SlideBackgroundFillPrimitive2D::create2DDecomposition(
 
     // if fill is on default (empty), nothing will be shown, we are done
     if(aFill.isDefault())
-        return;
+        return nullptr;
 
     // Get PolygonRange of own local geometry
     const basegfx::B2DRange aPolygonRange(getB2DPolyPolygon().getB2DRange());
 
     // if local geometry is empty, nothing will be shown, we are done
     if(aPolygonRange.isEmpty())
-        return;
+        return nullptr;
 
     // Get PageRange
     const basegfx::B2DRange aPageRange(0.0, 0.0, aPageSize.getX(), aPageSize.getY());
 
     // if local geometry does not overlap with PageRange, nothing will be shown, we are done
     if(!aPageRange.overlaps(aPolygonRange))
-        return;
+        return nullptr;
 
     // create FillPrimitive2D with the geometry (the PolyPolygon) and
     // the page's definitonRange to:
@@ -311,7 +309,7 @@ void SlideBackgroundFillPrimitive2D::create2DDecomposition(
             aFill,
             aEmptyFillTransparenceGradient));
 
-    rContainer = Primitive2DContainer { aCreatedFill };
+    return aCreatedFill;
 }
 
 void SlideBackgroundFillPrimitive2D::get2DDecomposition(
@@ -321,18 +319,18 @@ void SlideBackgroundFillPrimitive2D::get2DDecomposition(
     basegfx::B2DVector aPageSize;
     drawinglayer::attribute::SdrFillAttribute aFill;
 
-    if(!getBuffered2DDecomposition().empty())
+    if(getBuffered2DDecomposition())
     {
         aFill = getMasterPageFillAttribute(rViewInformation, aPageSize);
 
         if(!(aFill == maLastFill))
         {
             // conditions of last local decomposition have changed, delete
-            const_cast< SlideBackgroundFillPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+            const_cast< SlideBackgroundFillPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
         }
     }
 
-    if(getBuffered2DDecomposition().empty())
+    if(!getBuffered2DDecomposition())
     {
         // remember last Fill
         const_cast< SlideBackgroundFillPrimitive2D* >(this)->maLastFill = aFill;

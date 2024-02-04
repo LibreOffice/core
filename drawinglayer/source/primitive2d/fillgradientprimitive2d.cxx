@@ -23,6 +23,7 @@
 #include <texture/texture.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <utility>
 #include <algorithm>
 
@@ -141,19 +142,20 @@ namespace drawinglayer::primitive2d
             }
         }
 
-        void FillGradientPrimitive2D::createFill(Primitive2DContainer& rContainer, bool bOverlapping) const
+        Primitive2DReference FillGradientPrimitive2D::createFill(bool bOverlapping) const
         {
+            Primitive2DContainer aContainer;
             if (bOverlapping)
             {
                 // OverlappingFill: create solid fill with outmost color
-                rContainer.push_back(
+                aContainer.push_back(
                     new PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(
                             basegfx::utils::createPolygonFromRect(getOutputRange())),
                         getOuterColor()));
 
                 // create solid fill steps by providing callback as lambda
-                auto aCallback([&rContainer,this](
+                auto aCallback([&aContainer,this](
                     const basegfx::B2DHomMatrix& rMatrix,
                     const basegfx::BColor& rColor)
                 {
@@ -162,7 +164,7 @@ namespace drawinglayer::primitive2d
                     aNewPoly.transform(rMatrix);
 
                     // create solid fill
-                    rContainer.push_back(
+                    aContainer.push_back(
                         new PolyPolygonColorPrimitive2D(
                             basegfx::B2DPolyPolygon(aNewPoly),
                             rColor));
@@ -179,7 +181,7 @@ namespace drawinglayer::primitive2d
                     // not really a gradient, we need to create a start primitive
                     // entry using the single color and the covered area
                     const basegfx::B2DRange aOutmostRange(getOutputRange());
-                    rContainer.push_back(
+                    aContainer.push_back(
                         new PolyPolygonColorPrimitive2D(
                             basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aOutmostRange)),
                             getOuterColor()));
@@ -190,11 +192,11 @@ namespace drawinglayer::primitive2d
                     basegfx::B2DPolyPolygon aCombinedPolyPoly;
                     basegfx::BColor aLastColor;
 
-                    auto aCallback([&rContainer,&aCombinedPolyPoly,&aLastColor,this](
+                    auto aCallback([&aContainer,&aCombinedPolyPoly,&aLastColor,this](
                         const basegfx::B2DHomMatrix& rMatrix,
                         const basegfx::BColor& rColor)
                     {
-                        if (rContainer.empty())
+                        if (aContainer.empty())
                         {
                             // 1st callback, init CombinedPolyPoly & create 1st entry
                             basegfx::B2DRange aOutmostRange(getOutputRange());
@@ -211,7 +213,7 @@ namespace drawinglayer::primitive2d
                             aCombinedPolyPoly.append(aFirstPoly);
 
                             // create first primitive
-                            rContainer.push_back(
+                            aContainer.push_back(
                                 new PolyPolygonColorPrimitive2D(
                                     aCombinedPolyPoly,
                                     getOuterColor()));
@@ -232,7 +234,7 @@ namespace drawinglayer::primitive2d
                             aCombinedPolyPoly.append(aNextPoly);
 
                             // create primitive with correct color
-                            rContainer.push_back(
+                            aContainer.push_back(
                                 new PolyPolygonColorPrimitive2D(
                                     aCombinedPolyPoly,
                                     aLastColor));
@@ -247,15 +249,16 @@ namespace drawinglayer::primitive2d
                     generateMatricesAndColors(aCallback);
 
                     // add last inner polygon with last color
-                    rContainer.push_back(
+                    aContainer.push_back(
                         new PolyPolygonColorPrimitive2D(
                             aCombinedPolyPoly,
                             aLastColor));
                 }
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
-        void FillGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference FillGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // default creates overlapping fill which works with AntiAliasing and without.
             // The non-overlapping version does not create single filled polygons, but
@@ -266,8 +269,9 @@ namespace drawinglayer::primitive2d
 
             if(!getFillGradient().isDefault())
             {
-                createFill(rContainer, /*bOverlapping*/true);
+                return createFill(/*bOverlapping*/true);
             }
+            return nullptr;
         }
 
         FillGradientPrimitive2D::FillGradientPrimitive2D(

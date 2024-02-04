@@ -77,7 +77,7 @@ namespace drawinglayer::primitive2d
         {
         protected:
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer,
+            virtual Primitive2DReference create2DDecomposition(
                 const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
@@ -92,14 +92,14 @@ namespace drawinglayer::primitive2d
 
         }
 
-        void NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
-            Primitive2DContainer& rContainer,
+        Primitive2DReference NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
             const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if (!getFillGradient().isDefault())
             {
-                createFill(rContainer, false);
+                return createFill(false);
             }
+            return nullptr;
         }
 
 } // end of namespace

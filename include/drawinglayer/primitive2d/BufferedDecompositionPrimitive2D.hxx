@@ -67,7 +67,7 @@ private:
     friend void flushBufferedDecomposition(BufferedDecompositionPrimitive2D&);
 
     /// a sequence used for buffering the last create2DDecomposition() result
-    Primitive2DContainer maBuffered2DDecomposition;
+    Primitive2DReference maBuffered2DDecomposition;
 
     /// offer callback mechanism to flush buffered content timer-based
     ::rtl::Reference<::salhelper::Timer> maCallbackTimer;
@@ -79,13 +79,12 @@ protected:
         later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
         implementations for buffering the last decomposition.
      */
-    const Primitive2DContainer& getBuffered2DDecomposition() const;
-    void setBuffered2DDecomposition(Primitive2DContainer&& rNew);
+    const Primitive2DReference& getBuffered2DDecomposition() const;
+    void setBuffered2DDecomposition(Primitive2DReference rNew);
 
     /** method which is to be used to implement the local decomposition of a 2D primitive. */
-    virtual void
-    create2DDecomposition(Primitive2DContainer& rContainer,
-                          const geometry::ViewInformation2D& rViewInformation) const = 0;
+    virtual Primitive2DReference
+    create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const = 0;
 
     // when changing from null (which is inactive) to a count of seconds, the
     // callback mechanism to flush buffered content timer-based will be activated.

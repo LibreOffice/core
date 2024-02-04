@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonMarkerPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -28,18 +29,20 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-void PolyPolygonMarkerPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+Primitive2DReference PolyPolygonMarkerPrimitive2D::create2DDecomposition(
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
     const sal_uInt32 nCount(aPolyPolygon.count());
 
+    Primitive2DContainer aContainer;
     for (sal_uInt32 a(0); a < nCount; a++)
     {
-        rContainer.push_back(new PolygonMarkerPrimitive2D(aPolyPolygon.getB2DPolygon(a),
+        aContainer.push_back(new PolygonMarkerPrimitive2D(aPolyPolygon.getB2DPolygon(a),
                                                           getRGBColorA(), getRGBColorB(),
                                                           getDiscreteDashLength()));
     }
+    return new GroupPrimitive2D(std::move(aContainer));
 }
 
 PolyPolygonMarkerPrimitive2D::PolyPolygonMarkerPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,

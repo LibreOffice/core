@@ -202,20 +202,20 @@ namespace drawinglayer::primitive2d
                         nWidth * nHeight);
         }
 
-        void PatternFillPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference PatternFillPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer aRetval;
 
             if(getChildren().empty())
-                return;
+                return nullptr;
 
             if(!(!getReferenceRange().isEmpty() && getReferenceRange().getWidth() > 0.0 && getReferenceRange().getHeight() > 0.0))
-                return;
+                return nullptr;
 
             const basegfx::B2DRange aMaskRange(getMask().getB2DRange());
 
             if(!(!aMaskRange.isEmpty() && aMaskRange.getWidth() > 0.0 && aMaskRange.getHeight() > 0.0))
-                return;
+                return nullptr;
 
             // create tiling matrices
             std::vector< basegfx::B2DHomMatrix > aMatrices;
@@ -252,10 +252,10 @@ namespace drawinglayer::primitive2d
             }
 
             // embed result in mask
-            rContainer.push_back(
+            return
                 new MaskPrimitive2D(
                     getMask(),
-                    std::move(aRetval)));
+                    std::move(aRetval));
         }
 
         PatternFillPrimitive2D::PatternFillPrimitive2D(
@@ -341,7 +341,7 @@ namespace drawinglayer::primitive2d
                 PatternFillPrimitive2D* pThat = const_cast< PatternFillPrimitive2D* >(this);
                 pThat->mnDiscreteWidth = nW;
                 pThat->mnDiscreteHeight = nH;
-                pThat->setBuffered2DDecomposition(Primitive2DContainer());
+                pThat->setBuffered2DDecomposition(nullptr);
             }
 
             // call parent

@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
 
     assertXPath(pXmlDoc, "/primitive2D"_ostr, 1);
 
-    OString aBasePath("/primitive2D/sdrrectangle/polypolygoncolor"_ostr);
+    OString aBasePath("/primitive2D/sdrrectangle/group/polypolygoncolor"_ostr);
     assertXPath(pXmlDoc, aBasePath, "color"_ostr, "#729fcf");
 
     assertXPath(pXmlDoc, aBasePath + "/polypolygon", "height"_ostr,
@@ -299,7 +299,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxx"_ostr, "99");
     assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxy"_ostr, "99");
 
-    aBasePath = "/primitive2D/sdrrectangle/polypolygoncolor/polypolygon/polygon"_ostr;
+    aBasePath = "/primitive2D/sdrrectangle/group/polypolygoncolor/polypolygon/polygon"_ostr;
 
     assertXPath(pXmlDoc, aBasePath + "/point", 5);
     assertXPath(pXmlDoc, aBasePath + "/point[1]", "x"_ostr, "49.5"); // hmm, weird, why?
@@ -313,7 +313,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     assertXPath(pXmlDoc, aBasePath + "/point[5]", "x"_ostr, "99");
     assertXPath(pXmlDoc, aBasePath + "/point[5]", "y"_ostr, "99");
 
-    aBasePath = "/primitive2D/sdrrectangle/polygonstroke"_ostr;
+    aBasePath = "/primitive2D/sdrrectangle/group/polygonstroke"_ostr;
     assertXPath(pXmlDoc, aBasePath, 1);
 
     assertXPath(pXmlDoc, aBasePath + "/line", "color"_ostr, "#3465a4");
@@ -397,7 +397,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
         xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
         // this is a group shape, hence 2 nested objectinfo
-        OString aBasePath = "/primitive2D/objectinfo[4]/objectinfo/unhandled/unhandled/"
+        OString aBasePath = "/primitive2D/objectinfo[4]/objectinfo/unhandled/group/unhandled/group/"
                             "polypolygoncolor/polypolygon/"_ostr;
 
         // The text is: "O" + eop + "O" + eol + "O"
@@ -439,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextWidth)
 
         xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
-        OString aBasePath = "/primitive2D/objectinfo[4]/objectinfo/unhandled/unhandled/"
+        OString aBasePath = "/primitive2D/objectinfo[4]/objectinfo/unhandled/group/unhandled/group/"
                             "polypolygoncolor/polypolygon/"_ostr;
 
         // The text is: 7 line od "OOOOOOO"

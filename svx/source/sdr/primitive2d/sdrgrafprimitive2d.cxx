@@ -19,6 +19,7 @@
 
 #include <sdr/primitive2d/sdrgrafprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
@@ -27,8 +28,8 @@
 
 namespace drawinglayer::primitive2d
 {
-void SdrGrafPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+Primitive2DReference SdrGrafPrimitive2D::create2DDecomposition(
+    const geometry::ViewInformation2D& /*aViewInformation*/) const
 {
     Primitive2DContainer aRetval;
 
@@ -121,7 +122,7 @@ void SdrGrafPrimitive2D::create2DDecomposition(
                                                 getSdrLFSTAttribute().getShadow(), getTransform());
     }
 
-    rContainer.append(std::move(aRetval));
+    return new GroupPrimitive2D(std::move(aRetval));
 }
 
 SdrGrafPrimitive2D::SdrGrafPrimitive2D(

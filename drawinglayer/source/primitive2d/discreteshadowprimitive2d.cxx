@@ -151,12 +151,12 @@ namespace drawinglayer::primitive2d
 
 namespace drawinglayer::primitive2d
 {
-        void DiscreteShadowPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference DiscreteShadowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DContainer xRetval;
 
             if(getDiscreteShadow().getBitmapEx().IsEmpty())
-                return;
+                return nullptr;
 
             const sal_Int32 nQuarter((getDiscreteShadow().getBitmapEx().GetSizePixel().Width() - 3) >> 2);
             const basegfx::B2DVector aScale(getTransform() * basegfx::B2DVector(1.0, 1.0));
@@ -250,10 +250,10 @@ namespace drawinglayer::primitive2d
                         fBorderY + fSingleY));
 
             // put all in object transformation to get to target positions
-            rContainer.push_back(
+            return
                 new TransformPrimitive2D(
                     getTransform(),
-                    std::move(xRetval)));
+                    std::move(xRetval));
         }
 
         DiscreteShadowPrimitive2D::DiscreteShadowPrimitive2D(

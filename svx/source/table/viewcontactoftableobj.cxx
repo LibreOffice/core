@@ -56,8 +56,9 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void SdrCellPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DReference SdrCellPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
+            Primitive2DContainer aContainer;
             // prepare unit polygon
             const basegfx::B2DPolyPolygon aUnitPolyPolygon(basegfx::utils::createUnitPolygon());
 
@@ -67,7 +68,7 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolyPolygon aTransformed(aUnitPolyPolygon);
 
                 aTransformed.transform(getTransform());
-                rContainer.push_back(
+                aContainer.push_back(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrFTAttribute().getFill(),
@@ -76,7 +77,7 @@ namespace drawinglayer::primitive2d
             else
             {
                 // if no fill create one for HitTest and BoundRect fallback
-                rContainer.push_back(
+                aContainer.push_back(
                     createHiddenGeometryPrimitives2D(
                         true,
                         aUnitPolyPolygon,
@@ -86,7 +87,7 @@ namespace drawinglayer::primitive2d
             // add text
             if(!getSdrFTAttribute().getText().isDefault())
             {
-                rContainer.push_back(
+                aContainer.push_back(
                     createTextPrimitive(
                         aUnitPolyPolygon,
                         getTransform(),
@@ -95,6 +96,7 @@ namespace drawinglayer::primitive2d
                         true,
                         false));
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         bool SdrCellPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

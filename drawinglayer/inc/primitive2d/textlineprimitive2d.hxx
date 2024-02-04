@@ -41,7 +41,7 @@ namespace drawinglayer::primitive2d
             basegfx::BColor                             maLineColor;
 
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             /// constructor

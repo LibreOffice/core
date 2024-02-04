@@ -24,6 +24,7 @@
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <processor3d/zbufferprocessor3d.hxx>
 #include <processor3d/shadow3dextractor.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -212,8 +213,9 @@ namespace drawinglayer::primitive2d
             }
         }
 
-        void ScenePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference ScenePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
+            Primitive2DContainer aContainer;
             // create 2D shadows from contained 3D primitives. This creates the shadow primitives on demand and tells if
             // there are some or not. Do this at start, the shadow might still be visible even when the scene is not
             if(impGetShadow3D())
@@ -226,7 +228,7 @@ namespace drawinglayer::primitive2d
                 if(aViewRange.isEmpty() || aShadow2DRange.overlaps(aViewRange))
                 {
                     // add extracted 2d shadows (before 3d scene creations itself)
-                    rContainer.append(maShadowPrimitives);
+                    aContainer.append(maShadowPrimitives);
                 }
             }
 
@@ -238,7 +240,7 @@ namespace drawinglayer::primitive2d
             calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
             if(aVisibleDiscreteRange.isEmpty())
-                return;
+                return new GroupPrimitive2D(std::move(aContainer));
 
             // test if discrete view size (pixel) maybe too big and limit it
             double fViewSizeX(aVisibleDiscreteRange.getWidth());
@@ -412,7 +414,7 @@ namespace drawinglayer::primitive2d
             }
 
             if(!(nRasterWidth && nRasterHeight))
-                return;
+                return new GroupPrimitive2D(std::move(aContainer));
 
             // create view unit buffer
             basegfx::BZPixelRaster aBZPixelRaster(
@@ -508,7 +510,7 @@ namespace drawinglayer::primitive2d
             const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
 
             if(!(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight()))
-                return;
+                return new GroupPrimitive2D(std::move(aContainer));
 
             // create transform for the created bitmap in discrete coordinates first.
             basegfx::B2DHomMatrix aNew2DTransform;
@@ -522,7 +524,7 @@ namespace drawinglayer::primitive2d
             aNew2DTransform *= aInverseOToV;
 
             // create bitmap primitive and add
-            rContainer.push_back(
+            aContainer.push_back(
                 new BitmapPrimitive2D(
                     maOldRenderedBitmap,
                     aNew2DTransform));
@@ -534,8 +536,9 @@ namespace drawinglayer::primitive2d
             {
                 basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                 aOutline.transform(aNew2DTransform);
-                rContainer.push_back(new PolygonHairlinePrimitive2D(std::move(aOutline), basegfx::BColor(1.0, 0.0, 0.0)));
+                aContainer.push_back(new PolygonHairlinePrimitive2D(std::move(aOutline), basegfx::BColor(1.0, 0.0, 0.0)));
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         Primitive2DContainer ScenePrimitive2D::getGeometry2D() const
@@ -684,7 +687,7 @@ namespace drawinglayer::primitive2d
             bool bNeedNewDecomposition(false);
             bool bDiscreteSizesAreCalculated(false);
 
-            if(!getBuffered2DDecomposition().empty())
+            if(getBuffered2DDecomposition())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
                 calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
@@ -712,10 +715,10 @@ namespace drawinglayer::primitive2d
             if(bNeedNewDecomposition)
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ScenePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+                const_cast< ScenePrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
             }
 
-            if(getBuffered2DDecomposition().empty())
+            if(!getBuffered2DDecomposition())
             {
                 if(!bDiscreteSizesAreCalculated)
                 {

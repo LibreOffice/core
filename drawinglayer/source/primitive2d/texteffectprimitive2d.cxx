@@ -28,8 +28,8 @@ namespace drawinglayer::primitive2d
 {
 const double fDiscreteSize(1.1);
 
-void TextEffectPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+Primitive2DReference TextEffectPrimitive2D::create2DDecomposition(
+    const geometry::ViewInformation2D& rViewInformation) const
 {
     // get the distance of one discrete units from target display. Use between 1.0 and sqrt(2) to
     // have good results on rotated objects, too
@@ -37,6 +37,7 @@ void TextEffectPrimitive2D::create2DDecomposition(
                                        * basegfx::B2DVector(fDiscreteSize, fDiscreteSize));
     const basegfx::B2DVector aDiagonalDistance(aDistance * (1.0 / 1.44));
 
+    Primitive2DContainer aContainer;
     switch (getTextEffectStyle2D())
     {
         case TextEffectStyle2D::ReliefEmbossed:
@@ -84,14 +85,14 @@ void TextEffectPrimitive2D::create2DDecomposition(
                 const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(
                     Primitive2DContainer(getTextContent()), aBColorModifierToGray));
 
-                rContainer.push_back(
+                aContainer.push_back(
                     new TransformPrimitive2D(aTransform, Primitive2DContainer{ xModifiedColor }));
 
                 // add original, too
                 const basegfx::BColorModifierSharedPtr aBColorModifierToWhite
                     = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1.0));
 
-                rContainer.push_back(new ModifiedColorPrimitive2D(
+                aContainer.push_back(new ModifiedColorPrimitive2D(
                     Primitive2DContainer(getTextContent()), aBColorModifierToWhite));
             }
             else
@@ -103,11 +104,11 @@ void TextEffectPrimitive2D::create2DDecomposition(
                 const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(
                     Primitive2DContainer(getTextContent()), aBColorModifierToGray));
 
-                rContainer.push_back(
+                aContainer.push_back(
                     new TransformPrimitive2D(aTransform, Primitive2DContainer{ xModifiedColor }));
 
                 // add original, too
-                rContainer.push_back(new GroupPrimitive2D(Primitive2DContainer(getTextContent())));
+                aContainer.push_back(new GroupPrimitive2D(Primitive2DContainer(getTextContent())));
             }
 
             break;
@@ -119,53 +120,54 @@ void TextEffectPrimitive2D::create2DDecomposition(
 
             aTransform.set(0, 2, aDistance.getX());
             aTransform.set(1, 2, 0.0);
-            rContainer.push_back(
+            aContainer.push_back(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, aDiagonalDistance.getX());
             aTransform.set(1, 2, aDiagonalDistance.getY());
-            rContainer.push_back(
+            aContainer.push_back(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, 0.0);
             aTransform.set(1, 2, aDistance.getY());
-            rContainer.push_back(
+            aContainer.push_back(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, -aDiagonalDistance.getX());
             aTransform.set(1, 2, aDiagonalDistance.getY());
-            rContainer.push_back(
+            aContainer.push_back(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, -aDistance.getX());
             aTransform.set(1, 2, 0.0);
-            rContainer.push_back(
+            aContainer.push_back(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, -aDiagonalDistance.getX());
             aTransform.set(1, 2, -aDiagonalDistance.getY());
-            rContainer.push_back(
+            aContainer.push_back(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, 0.0);
             aTransform.set(1, 2, -aDistance.getY());
-            rContainer.push_back(
+            aContainer.push_back(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, aDiagonalDistance.getX());
             aTransform.set(1, 2, -aDiagonalDistance.getY());
-            rContainer.push_back(
+            aContainer.push_back(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             // at last, place original over it, but force to white
             const basegfx::BColorModifierSharedPtr aBColorModifierToWhite
                 = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1.0, 1.0, 1.0));
-            rContainer.push_back(new ModifiedColorPrimitive2D(
+            aContainer.push_back(new ModifiedColorPrimitive2D(
                 Primitive2DContainer(getTextContent()), aBColorModifierToWhite));
 
             break;
         }
     }
+    return new GroupPrimitive2D(std::move(aContainer));
 }
 
 TextEffectPrimitive2D::TextEffectPrimitive2D(Primitive2DContainer&& rTextContent,
@@ -213,17 +215,16 @@ void TextEffectPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    if (!getBuffered2DDecomposition().empty())
+    if (getBuffered2DDecomposition())
     {
         if (maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
         {
             // conditions of last local decomposition have changed, delete
-            const_cast<TextEffectPrimitive2D*>(this)->setBuffered2DDecomposition(
-                Primitive2DContainer());
+            const_cast<TextEffectPrimitive2D*>(this)->setBuffered2DDecomposition(nullptr);
         }
     }
 
-    if (getBuffered2DDecomposition().empty())
+    if (!getBuffered2DDecomposition())
     {
         // remember ViewRange and ViewTransformation
         const_cast<TextEffectPrimitive2D*>(this)->maLastObjectToViewTransformation

@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <primitive2d/texteffectprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <utility>
@@ -152,13 +153,12 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
     }
 }
 
-void TextSimplePortionPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+Primitive2DReference TextSimplePortionPrimitive2D::create2DDecomposition(
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     if (!getTextLength())
-        return;
+        return nullptr;
 
-    Primitive2DContainer aRetval;
     basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     basegfx::B2DHomMatrix aPolygonTransform;
 
@@ -169,9 +169,10 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
     const sal_uInt32 nCount(aB2DPolyPolyVector.size());
 
     if (!nCount)
-        return;
+        return nullptr;
 
     // alloc space for the primitives
+    Primitive2DContainer aRetval;
     aRetval.resize(nCount);
 
     // color-filled polypolygons
@@ -191,11 +192,11 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
         aPolygonTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
         // create outline text effect with current content and replace
-        aRetval = Primitive2DContainer{ new TextEffectPrimitive2D(
-            std::move(aRetval), aTranslate, fRotate, TextEffectStyle2D::Outline) };
+        return new TextEffectPrimitive2D(std::move(aRetval), aTranslate, fRotate,
+                                         TextEffectStyle2D::Outline);
     }
 
-    rContainer.append(std::move(aRetval));
+    return new GroupPrimitive2D(std::move(aRetval));
 }
 
 TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(

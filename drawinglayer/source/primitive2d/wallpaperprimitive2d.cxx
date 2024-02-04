@@ -31,11 +31,11 @@
 
 namespace drawinglayer::primitive2d
 {
-        void WallpaperBitmapPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference WallpaperBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
 
             if(getLocalObjectRange().isEmpty() || getBitmapEx().IsEmpty())
-                return;
+                return nullptr;
 
             Primitive2DReference aRetval;
 
@@ -43,7 +43,7 @@ namespace drawinglayer::primitive2d
             const Size& rPixelSize = getBitmapEx().GetSizePixel();
 
             if(rPixelSize.Width() <= 0 || rPixelSize.Height() <= 0)
-                return;
+                return nullptr;
 
             if(WallpaperStyle::Scale == getWallpaperStyle())
             {
@@ -210,8 +210,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            if (aRetval.is())
-                rContainer.push_back(std::move(aRetval));
+            return aRetval;
         }
 
         WallpaperBitmapPrimitive2D::WallpaperBitmapPrimitive2D(

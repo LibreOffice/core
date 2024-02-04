@@ -21,6 +21,7 @@
 #include <texture/texture.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -33,10 +34,10 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void FillHatchPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference FillHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getFillHatch().isDefault())
-                return;
+                return nullptr;
 
             // create hatch
             const basegfx::BColor aHatchColor(getFillHatch().getColor());
@@ -100,12 +101,12 @@ namespace drawinglayer::primitive2d
 
             // prepare return value
             const bool bFillBackground(getFillHatch().isFillBackground());
-
+            Primitive2DContainer aContainer;
             // evtl. create filled background
             if(bFillBackground)
             {
                 // create primitive for background
-                rContainer.push_back(
+                aContainer.push_back(
                     new PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(
                             basegfx::utils::createPolygonFromRect(getOutputRange())), getBColor()));
@@ -124,8 +125,9 @@ namespace drawinglayer::primitive2d
                 aNewLine.append(rMatrix * aEnd);
 
                 // create hairline
-                rContainer.push_back(new PolygonHairlinePrimitive2D(std::move(aNewLine), aHatchColor));
+                aContainer.push_back(new PolygonHairlinePrimitive2D(std::move(aNewLine), aHatchColor));
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         FillHatchPrimitive2D::FillHatchPrimitive2D(

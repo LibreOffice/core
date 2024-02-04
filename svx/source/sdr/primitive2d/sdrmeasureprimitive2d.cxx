@@ -79,7 +79,7 @@ namespace drawinglayer::primitive2d
                 aLineStartEnd);
         }
 
-        void SdrMeasurePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DReference SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DContainer aRetval;
             rtl::Reference<SdrBlockTextPrimitive2D> xBlockText;
@@ -430,7 +430,7 @@ namespace drawinglayer::primitive2d
                     getSdrLSTAttribute().getShadow());
             }
 
-            rContainer.append(std::move(aRetval));
+            return new GroupPrimitive2D(std::move(aRetval));
         }
 
         SdrMeasurePrimitive2D::SdrMeasurePrimitive2D(

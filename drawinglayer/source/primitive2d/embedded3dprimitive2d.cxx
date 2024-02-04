@@ -59,13 +59,13 @@ namespace drawinglayer::primitive2d
             return !maShadowPrimitives.empty();
         }
 
-        void Embedded3DPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference Embedded3DPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // use info to create a yellow 2d rectangle, similar to empty 3d scenes and/or groups
             const basegfx::B2DRange aLocal2DRange(getB2DRange(rViewInformation));
             basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aLocal2DRange));
             const basegfx::BColor aYellow(1.0, 1.0, 0.0);
-            rContainer.push_back(new PolygonHairlinePrimitive2D(std::move(aOutline), aYellow));
+            return new PolygonHairlinePrimitive2D(std::move(aOutline), aYellow);
         }
 
         Embedded3DPrimitive2D::Embedded3DPrimitive2D(

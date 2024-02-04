@@ -34,6 +34,7 @@
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 namespace sw::sidebarwindows {
 
@@ -55,8 +56,7 @@ private:
     bool                            mbLineSolid : 1;
 
 protected:
-    virtual void create2DDecomposition(
-        drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+    virtual drawinglayer::primitive2d::Primitive2DReference create2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
@@ -88,10 +88,11 @@ public:
 
 }
 
-void AnchorPrimitive::create2DDecomposition(
-    drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+drawinglayer::primitive2d::Primitive2DReference AnchorPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
+    drawinglayer::primitive2d::Primitive2DContainer aContainer;
+
     if ( AnchorState::Tri == maAnchorState ||
          AnchorState::All == maAnchorState )
     {
@@ -101,7 +102,7 @@ void AnchorPrimitive::create2DDecomposition(
                 basegfx::B2DPolyPolygon(maTriangle),
                 getColor()));
 
-        rContainer.push_back(aTriangle);
+        aContainer.push_back(aTriangle);
     }
 
     // prepare view-independent LineWidth and color
@@ -119,7 +120,7 @@ void AnchorPrimitive::create2DDecomposition(
                     getLine(),
                     aLineAttribute));
 
-            rContainer.push_back(aSolidLine);
+            aContainer.push_back(aSolidLine);
         }
         else
         {
@@ -140,7 +141,7 @@ void AnchorPrimitive::create2DDecomposition(
                     aLineAttribute,
                     std::move(aStrokeAttribute)));
 
-            rContainer.push_back(aStrokedLine);
+            aContainer.push_back(aStrokedLine);
         }
     }
 
@@ -154,8 +155,10 @@ void AnchorPrimitive::create2DDecomposition(
                 maLineTop,
                 aLineAttribute));
 
-        rContainer.push_back(aLineTop);
+        aContainer.push_back(aLineTop);
     }
+
+    return new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aContainer));
 }
 
 bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const

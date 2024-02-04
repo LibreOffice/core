@@ -23,6 +23,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <svtools/colorcfg.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -32,7 +33,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void SdrOleContentPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DReference SdrOleContentPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             rtl::Reference<SdrOle2Obj> pSource = mpSdrOle2Obj.get();
             bool bScaleContent(false);
@@ -57,11 +58,11 @@ namespace drawinglayer::primitive2d
             }
 #endif
             if(GraphicType::NONE == aGraphic.GetType())
-                return;
+                return nullptr;
 
             const GraphicObject aGraphicObject(aGraphic);
             const GraphicAttr aGraphicAttr;
-
+            Primitive2DContainer aContainer;
             if(bScaleContent)
             {
                 // get transformation atoms
@@ -97,7 +98,7 @@ namespace drawinglayer::primitive2d
                             aInnerObjectMatrix,
                             aGraphicObject,
                             aGraphicAttr));
-                    rContainer.push_back(aGraphicPrimitive);
+                    aContainer.push_back(aGraphicPrimitive);
                 }
             }
             else
@@ -108,12 +109,12 @@ namespace drawinglayer::primitive2d
                         getObjectTransform(),
                         aGraphicObject,
                         aGraphicAttr));
-                rContainer.push_back(aGraphicPrimitive);
+                aContainer.push_back(aGraphicPrimitive);
             }
 
             // a standard gray outline is created for scaled content
             if(!bScaleContent)
-                return;
+                return new GroupPrimitive2D(std::move(aContainer));
 
             const svtools::ColorConfig aColorConfig;
             const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
@@ -125,8 +126,9 @@ namespace drawinglayer::primitive2d
                 aOutline.transform(getObjectTransform());
                 const drawinglayer::primitive2d::Primitive2DReference xOutline(
                     new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aOutline), aVclColor.getBColor()));
-                rContainer.push_back(xOutline);
+                aContainer.push_back(xOutline);
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         SdrOleContentPrimitive2D::SdrOleContentPrimitive2D(

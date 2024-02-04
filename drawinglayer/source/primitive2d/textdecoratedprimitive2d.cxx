@@ -164,7 +164,7 @@ namespace drawinglayer::primitive2d
             // TODO: Handle Font Emphasis Above/Below
         }
 
-        void TextDecoratedPortionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getWordLineMode())
             {
@@ -176,8 +176,7 @@ namespace drawinglayer::primitive2d
                 if(!aBroken.empty())
                 {
                     // was indeed split to several words, use as result
-                    rContainer.append(std::move(aBroken));
-                    return;
+                    return new GroupPrimitive2D(std::move(aBroken));
                 }
                 else
                 {
@@ -207,68 +206,57 @@ namespace drawinglayer::primitive2d
             impCreateGeometryContent(aRetval, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), getKashidaArray(), aNewFontAttribute);
 
             // Handle Shadow, Outline and TextRelief
-            if(!aRetval.empty())
+            if(aRetval.empty())
+                return nullptr;
+
+            // outline AND shadow depend on NO TextRelief (see dialog)
+            const bool bHasTextRelief(TEXT_RELIEF_NONE != getTextRelief());
+            const bool bHasShadow(!bHasTextRelief && getShadow());
+            const bool bHasOutline(!bHasTextRelief && getFontAttribute().getOutline());
+
+            if(bHasShadow || bHasTextRelief || bHasOutline)
             {
-                // outline AND shadow depend on NO TextRelief (see dialog)
-                const bool bHasTextRelief(TEXT_RELIEF_NONE != getTextRelief());
-                const bool bHasShadow(!bHasTextRelief && getShadow());
-                const bool bHasOutline(!bHasTextRelief && getFontAttribute().getOutline());
+                Primitive2DReference aShadow;
 
-                if(bHasShadow || bHasTextRelief || bHasOutline)
+                if(bHasShadow)
                 {
-                    Primitive2DReference aShadow;
+                    // create shadow with current content (in aRetval). Text shadow
+                    // is constant, relative to font size, rotated with the text and has a
+                    // constant color.
+                    // shadow parameter values
+                    static const double fFactor(1.0 / 24.0);
+                    const double fTextShadowOffset(aDecTrans.getScale().getY() * fFactor);
+                    static basegfx::BColor aShadowColor(0.3, 0.3, 0.3);
 
-                    if(bHasShadow)
+                    // prepare shadow transform matrix
+                    const basegfx::B2DHomMatrix aShadowTransform(basegfx::utils::createTranslateB2DHomMatrix(
+                        fTextShadowOffset, fTextShadowOffset));
+
+                    // create shadow primitive
+                    aShadow = new ShadowPrimitive2D(
+                        aShadowTransform,
+                        aShadowColor,
+                        0,          // fShadowBlur = 0, there's no blur for text shadow yet.
+                        Primitive2DContainer(aRetval));
+                }
+
+                if(bHasTextRelief)
+                {
+                    // create emboss using an own helper primitive since this will
+                    // be view-dependent
+                    const basegfx::BColor aBBlack(0.0, 0.0, 0.0);
+                    const bool bDefaultTextColor(aBBlack == getFontColor());
+                    TextEffectStyle2D aTextEffectStyle2D(TextEffectStyle2D::ReliefEmbossed);
+
+                    if(bDefaultTextColor)
                     {
-                        // create shadow with current content (in aRetval). Text shadow
-                        // is constant, relative to font size, rotated with the text and has a
-                        // constant color.
-                        // shadow parameter values
-                        static const double fFactor(1.0 / 24.0);
-                        const double fTextShadowOffset(aDecTrans.getScale().getY() * fFactor);
-                        static basegfx::BColor aShadowColor(0.3, 0.3, 0.3);
-
-                        // prepare shadow transform matrix
-                        const basegfx::B2DHomMatrix aShadowTransform(basegfx::utils::createTranslateB2DHomMatrix(
-                            fTextShadowOffset, fTextShadowOffset));
-
-                        // create shadow primitive
-                        aShadow = new ShadowPrimitive2D(
-                            aShadowTransform,
-                            aShadowColor,
-                            0,          // fShadowBlur = 0, there's no blur for text shadow yet.
-                            Primitive2DContainer(aRetval));
-                    }
-
-                    if(bHasTextRelief)
-                    {
-                        // create emboss using an own helper primitive since this will
-                        // be view-dependent
-                        const basegfx::BColor aBBlack(0.0, 0.0, 0.0);
-                        const bool bDefaultTextColor(aBBlack == getFontColor());
-                        TextEffectStyle2D aTextEffectStyle2D(TextEffectStyle2D::ReliefEmbossed);
-
-                        if(bDefaultTextColor)
+                        if(TEXT_RELIEF_ENGRAVED == getTextRelief())
                         {
-                            if(TEXT_RELIEF_ENGRAVED == getTextRelief())
-                            {
-                                aTextEffectStyle2D = TextEffectStyle2D::ReliefEngravedDefault;
-                            }
-                            else
-                            {
-                                aTextEffectStyle2D = TextEffectStyle2D::ReliefEmbossedDefault;
-                            }
+                            aTextEffectStyle2D = TextEffectStyle2D::ReliefEngravedDefault;
                         }
                         else
                         {
-                            if(TEXT_RELIEF_ENGRAVED == getTextRelief())
-                            {
-                                aTextEffectStyle2D = TextEffectStyle2D::ReliefEngraved;
-                            }
-                            else
-                            {
-                                aTextEffectStyle2D = TextEffectStyle2D::ReliefEmbossed;
-                            }
+                            aTextEffectStyle2D = TextEffectStyle2D::ReliefEmbossedDefault;
                         }
 
                         aRetval = Primitive2DContainer {
@@ -279,7 +267,7 @@ namespace drawinglayer::primitive2d
                                 aTextEffectStyle2D)
                          };
                     }
-                    else if(bHasOutline)
+                    else
                     {
                         // create outline using an own helper primitive since this will
                         // be view-dependent
@@ -292,16 +280,36 @@ namespace drawinglayer::primitive2d
                          };
                     }
 
-                    if(aShadow.is())
-                    {
-                        // put shadow in front if there is one to paint timely before
-                        // but placed behind content
-                        aRetval.insert(aRetval.begin(), aShadow);
-                    }
+                    aRetval = Primitive2DContainer {
+                        Primitive2DReference(new TextEffectPrimitive2D(
+                            std::move(aRetval),
+                            aDecTrans.getTranslate(),
+                            aDecTrans.getRotate(),
+                            aTextEffectStyle2D))
+                     };
+                }
+                else if(bHasOutline)
+                {
+                    // create outline using an own helper primitive since this will
+                    // be view-dependent
+                    aRetval = Primitive2DContainer {
+                        Primitive2DReference(new TextEffectPrimitive2D(
+                            std::move(aRetval),
+                            aDecTrans.getTranslate(),
+                            aDecTrans.getRotate(),
+                            TextEffectStyle2D::Outline))
+                     };
+                }
+
+                if(aShadow.is())
+                {
+                    // put shadow in front if there is one to paint timely before
+                    // but placed behind content
+                    aRetval.insert(aRetval.begin(), aShadow);
                 }
             }
 
-            rContainer.append(std::move(aRetval));
+            return new GroupPrimitive2D(std::move(aRetval));
         }
 
         TextDecoratedPortionPrimitive2D::TextDecoratedPortionPrimitive2D(

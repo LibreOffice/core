@@ -31,24 +31,24 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-void PolyPolygonGraphicPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+Primitive2DReference PolyPolygonGraphicPrimitive2D::create2DDecomposition(
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     if (getFillGraphic().isDefault())
-        return;
+        return nullptr;
 
     const Graphic& rGraphic = getFillGraphic().getGraphic();
     const GraphicType aType(rGraphic.GetType());
 
     // is there a bitmap or a metafile (do we have content)?
     if (GraphicType::Bitmap != aType && GraphicType::GdiMetafile != aType)
-        return;
+        return nullptr;
 
     const Size aPrefSize(rGraphic.GetPrefSize());
 
     // does content have a size?
     if (!(aPrefSize.Width() && aPrefSize.Height()))
-        return;
+        return nullptr;
 
     // create SubSequence with FillGraphicPrimitive2D based on polygon range
     const basegfx::B2DRange aOutRange(getB2DPolyPolygon().getB2DRange());
@@ -93,7 +93,7 @@ void PolyPolygonGraphicPrimitive2D::create2DDecomposition(
     }
 
     // embed to mask primitive
-    rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), Primitive2DContainer{ xSubRef }));
+    return new MaskPrimitive2D(getB2DPolyPolygon(), Primitive2DContainer{ xSubRef });
 }
 
 PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(

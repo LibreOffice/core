@@ -31,15 +31,15 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void BackgroundColorPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference BackgroundColorPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // transparency invalid or completely transparent, done
             if(getTransparency() < 0.0 || getTransparency() >= 1.0)
-                return;
+                return nullptr;
 
             // no viewport, not visible, done
             if(rViewInformation.getViewport().isEmpty())
-                return;
+                return nullptr;
 
             // create decompose geometry
             const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(rViewInformation.getViewport()));
@@ -55,7 +55,7 @@ namespace drawinglayer::primitive2d
                         getTransparency());
             }
 
-            rContainer.push_back(aDecompose);
+            return aDecompose;
         }
 
         BackgroundColorPrimitive2D::BackgroundColorPrimitive2D(
@@ -86,13 +86,13 @@ namespace drawinglayer::primitive2d
 
         void BackgroundColorPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(!getBuffered2DDecomposition().empty() && (maLastViewport != rViewInformation.getViewport()))
+            if(getBuffered2DDecomposition() && (maLastViewport != rViewInformation.getViewport()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< BackgroundColorPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+                const_cast< BackgroundColorPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
             }
 
-            if(getBuffered2DDecomposition().empty())
+            if(!getBuffered2DDecomposition())
             {
                 // remember ViewRange
                 const_cast< BackgroundColorPrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();

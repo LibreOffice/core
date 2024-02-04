@@ -4991,8 +4991,7 @@ namespace drawinglayer::primitive2d
 
         protected:
             /// local decomposition.
-            virtual void create2DDecomposition(
-                Primitive2DContainer& rContainer,
+            virtual Primitive2DReference create2DDecomposition(
                 const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
@@ -5023,8 +5022,7 @@ namespace drawinglayer::primitive2d
 
         }
 
-        void SwBorderRectanglePrimitive2D::create2DDecomposition(
-            Primitive2DContainer& rContainer,
+        Primitive2DReference SwBorderRectanglePrimitive2D::create2DDecomposition(
             const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             basegfx::B2DPoint aTopLeft(getB2DHomMatrix() * basegfx::B2DPoint(0.0, 0.0));
@@ -5163,13 +5161,12 @@ namespace drawinglayer::primitive2d
 
             // create instance of SdrFrameBorderPrimitive2D if
             // SdrFrameBorderDataVector is used
-            if(!aData.empty())
-            {
-                rContainer.append(
-                        new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
-                            std::move(aData),
-                            true));    // force visualization to minimal one discrete unit (pixel)
-            }
+            if(aData.empty())
+                return nullptr;
+
+            return new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
+                        std::move(aData),
+                        true);    // force visualization to minimal one discrete unit (pixel)
         }
 
         SwBorderRectanglePrimitive2D::SwBorderRectanglePrimitive2D(

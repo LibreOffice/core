@@ -22,6 +22,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <utility>
 
@@ -31,7 +32,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void SdrConnectorPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DReference SdrConnectorPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DContainer aRetval;
 
@@ -73,7 +74,7 @@ namespace drawinglayer::primitive2d
                     getSdrLSTAttribute().getShadow());
             }
 
-            rContainer.append(std::move(aRetval));
+            return new GroupPrimitive2D(std::move(aRetval));
         }
 
         SdrConnectorPrimitive2D::SdrConnectorPrimitive2D(

@@ -20,6 +20,7 @@
 #include <drawinglayer/primitive2d/gridprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -31,10 +32,10 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void GridPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference GridPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(!(!rViewInformation.getViewport().isEmpty() && getWidth() > 0.0 && getHeight() > 0.0))
-                return;
+                return nullptr;
 
             // decompose grid matrix to get logic size
             basegfx::B2DVector aScale, aTranslate;
@@ -159,7 +160,7 @@ namespace drawinglayer::primitive2d
             }
 
             if(aExtendedViewport.isEmpty())
-                return;
+                return nullptr;
 
             // prepare point vectors for point and cross markers
             std::vector< basegfx::B2DPoint > aPositionsPoint;
@@ -229,25 +230,27 @@ namespace drawinglayer::primitive2d
             const sal_uInt32 nCountCross(aPositionsCross.size());
 
             // add PointArrayPrimitive2D if point markers were added
+            Primitive2DContainer aContainer;
             if(nCountPoint)
             {
-                rContainer.push_back(new PointArrayPrimitive2D(std::move(aPositionsPoint), getBColor()));
+                aContainer.push_back(new PointArrayPrimitive2D(std::move(aPositionsPoint), getBColor()));
             }
 
             // add MarkerArrayPrimitive2D if cross markers were added
             if(!nCountCross)
-                return;
+                return new GroupPrimitive2D(std::move(aContainer));
 
             if(!getSubdivisionsX() && !getSubdivisionsY())
             {
                 // no subdivisions, so fall back to points at grid positions, no need to
                 // visualize a difference between divisions and sub-divisions
-                rContainer.push_back(new PointArrayPrimitive2D(std::move(aPositionsCross), getBColor()));
+                aContainer.push_back(new PointArrayPrimitive2D(std::move(aPositionsCross), getBColor()));
             }
             else
             {
-                rContainer.push_back(new MarkerArrayPrimitive2D(std::move(aPositionsCross), getCrossMarker()));
+                aContainer.push_back(new MarkerArrayPrimitive2D(std::move(aPositionsCross), getCrossMarker()));
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         GridPrimitive2D::GridPrimitive2D(
@@ -306,16 +309,16 @@ namespace drawinglayer::primitive2d
 
         void GridPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(!getBuffered2DDecomposition().empty())
+            if(getBuffered2DDecomposition())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< GridPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+                    const_cast< GridPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
                 }
             }
 
-            if(getBuffered2DDecomposition().empty())
+            if(!getBuffered2DDecomposition())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< GridPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

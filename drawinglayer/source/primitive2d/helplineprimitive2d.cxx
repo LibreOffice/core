@@ -23,6 +23,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/PolygonMarkerPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 
 using namespace com::sun::star;
@@ -30,14 +31,14 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void HelplinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference HelplinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(rViewInformation.getViewport().isEmpty() || getDirection().equalZero())
-                return;
+                return nullptr;
 
             // position to view coordinates, DashLen and DashLen in logic
             const basegfx::B2DPoint aViewPosition(rViewInformation.getObjectToViewTransformation() * getPosition());
-
+            Primitive2DReference xRet;
             switch(getStyle())
             {
                 default : // HelplineStyle2D::Point
@@ -52,7 +53,7 @@ namespace drawinglayer::primitive2d
                     aLineA.append(aStartA);
                     aLineA.append(aEndA);
                     aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
-                    rContainer.push_back(new PolygonMarkerPrimitive2D(std::move(aLineA), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
+                    auto xMarker1 = new PolygonMarkerPrimitive2D(std::move(aLineA), getRGBColA(), getRGBColB(), getDiscreteDashLength());
 
                     const basegfx::B2DVector aPerpendicularNormalizedDirection(basegfx::getPerpendicular(aNormalizedDirection));
                     const basegfx::B2DPoint aStartB(aViewPosition - aPerpendicularNormalizedDirection);
@@ -61,8 +62,9 @@ namespace drawinglayer::primitive2d
                     aLineB.append(aStartB);
                     aLineB.append(aEndB);
                     aLineB.transform(rViewInformation.getInverseObjectToViewTransformation());
-                    rContainer.push_back(new PolygonMarkerPrimitive2D(std::move(aLineB), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
+                    auto xMarker2 = new PolygonMarkerPrimitive2D(std::move(aLineB), getRGBColA(), getRGBColB(), getDiscreteDashLength());
 
+                    xRet = new GroupPrimitive2D(Primitive2DContainer{xMarker1, xMarker2});
                     break;
                 }
                 case HelplineStyle2D::Line :
@@ -106,18 +108,20 @@ namespace drawinglayer::primitive2d
                     {
                         // clip against visible area
                         const basegfx::B2DPolyPolygon aResult(basegfx::utils::clipPolygonOnRange(aLine, rViewInformation.getDiscreteViewport(), true, true));
-
+                        Primitive2DContainer aContainer;
                         for(sal_uInt32 a(0); a < aResult.count(); a++)
                         {
                             basegfx::B2DPolygon aPart(aResult.getB2DPolygon(a));
                             aPart.transform(rViewInformation.getInverseObjectToViewTransformation());
-                            rContainer.push_back(new PolygonMarkerPrimitive2D(std::move(aPart), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
+                            aContainer.push_back(new PolygonMarkerPrimitive2D(std::move(aPart), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
                         }
+                        xRet = new GroupPrimitive2D(std::move(aContainer));
                     }
 
                     break;
                 }
             }
+            return xRet;
         }
 
         HelplinePrimitive2D::HelplinePrimitive2D(
@@ -155,16 +159,16 @@ namespace drawinglayer::primitive2d
 
         void HelplinePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(!getBuffered2DDecomposition().empty())
+            if(getBuffered2DDecomposition())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< HelplinePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+                    const_cast< HelplinePrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
                 }
             }
 
-            if(getBuffered2DDecomposition().empty())
+            if(!getBuffered2DDecomposition())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< HelplinePrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

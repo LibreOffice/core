@@ -22,23 +22,26 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <utility>
 
 using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-void PolyPolygonStrokePrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+Primitive2DReference PolyPolygonStrokePrimitive2D::create2DDecomposition(
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
     const sal_uInt32 nCount(aPolyPolygon.count());
 
+    Primitive2DContainer aContainer;
     for (sal_uInt32 a(0); a < nCount; a++)
     {
-        rContainer.push_back(new PolygonStrokePrimitive2D(
+        aContainer.push_back(new PolygonStrokePrimitive2D(
             aPolyPolygon.getB2DPolygon(a), getLineAttribute(), getStrokeAttribute()));
     }
+    return new GroupPrimitive2D(std::move(aContainer));
 }
 
 PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(

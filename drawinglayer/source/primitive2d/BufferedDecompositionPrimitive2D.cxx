@@ -53,10 +53,10 @@ namespace drawinglayer::primitive2d
 {
 void flushBufferedDecomposition(BufferedDecompositionPrimitive2D& rTarget)
 {
-    rTarget.setBuffered2DDecomposition(Primitive2DContainer());
+    rTarget.setBuffered2DDecomposition(nullptr);
 }
 
-const Primitive2DContainer& BufferedDecompositionPrimitive2D::getBuffered2DDecomposition() const
+const Primitive2DReference& BufferedDecompositionPrimitive2D::getBuffered2DDecomposition() const
 {
     if (0 != maCallbackSeconds && maCallbackTimer.is())
     {
@@ -67,7 +67,7 @@ const Primitive2DContainer& BufferedDecompositionPrimitive2D::getBuffered2DDecom
     return maBuffered2DDecomposition;
 }
 
-void BufferedDecompositionPrimitive2D::setBuffered2DDecomposition(Primitive2DContainer&& rNew)
+void BufferedDecompositionPrimitive2D::setBuffered2DDecomposition(Primitive2DReference rNew)
 {
     if (0 == maCallbackSeconds)
     {
@@ -78,7 +78,7 @@ void BufferedDecompositionPrimitive2D::setBuffered2DDecomposition(Primitive2DCon
 
     if (maCallbackTimer.is())
     {
-        if (rNew.empty())
+        if (!rNew)
         {
             // stop timer
             maCallbackTimer->stop();
@@ -91,7 +91,7 @@ void BufferedDecompositionPrimitive2D::setBuffered2DDecomposition(Primitive2DCon
                 maCallbackTimer->start();
         }
     }
-    else if (!rNew.empty())
+    else if (rNew)
     {
         // decomposition defined/set/changed, init & start timer
         maCallbackTimer.set(new LocalCallbackTimer(*this));
@@ -126,12 +126,11 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    if (getBuffered2DDecomposition().empty())
+    if (!getBuffered2DDecomposition())
     {
-        Primitive2DContainer aNewSequence;
-        create2DDecomposition(aNewSequence, rViewInformation);
+        Primitive2DReference aNew = create2DDecomposition(rViewInformation);
         const_cast<BufferedDecompositionPrimitive2D*>(this)->setBuffered2DDecomposition(
-            std::move(aNewSequence));
+            std::move(aNew));
     }
 
     if (0 == maCallbackSeconds)

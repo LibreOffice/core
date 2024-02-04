@@ -19,6 +19,7 @@
 
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -762,13 +763,12 @@ namespace drawinglayer::primitive2d
         }
 
 
-        void SdrFrameBorderPrimitive2D::create2DDecomposition(
-            Primitive2DContainer& rContainer,
+        Primitive2DReference SdrFrameBorderPrimitive2D::create2DDecomposition(
             const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             if(getFrameBorders().empty())
             {
-                return;
+                return nullptr;
             }
 
             Primitive2DContainer aRetval;
@@ -840,7 +840,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            rContainer.append(std::move(aRetval));
+            return new GroupPrimitive2D(std::move(aRetval));
         }
 
         SdrFrameBorderPrimitive2D::SdrFrameBorderPrimitive2D(
@@ -896,9 +896,9 @@ namespace drawinglayer::primitive2d
                 {
                     // conditions of last local decomposition have changed, delete
                     // possible content
-                    if(!getBuffered2DDecomposition().empty())
+                    if(getBuffered2DDecomposition())
                     {
-                        const_cast< SdrFrameBorderPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+                        const_cast< SdrFrameBorderPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
                     }
 
                     // remember new conditions

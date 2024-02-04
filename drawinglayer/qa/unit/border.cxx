@@ -14,6 +14,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <rtl/ref.hxx>
@@ -72,11 +73,14 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoubleDecompositionSolid)
     aBorder->get2DDecomposition(aContainer, aView);
 
     // Make sure it results in two borders as it's a double one.
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), aContainer.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), aContainer.size());
+    auto* pGroupPrimitive
+        = dynamic_cast<const drawinglayer::primitive2d::GroupPrimitive2D*>(aContainer[0].get());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), pGroupPrimitive->getChildren().size());
 
     // Get the inside line, now a PolygonStrokePrimitive2D
     auto pInside = dynamic_cast<const drawinglayer::primitive2d::PolygonStrokePrimitive2D*>(
-        aContainer[0].get());
+        pGroupPrimitive->getChildren()[0].get());
     CPPUNIT_ASSERT(pInside);
 
     // Make sure the inside line's height is fLeftWidth.

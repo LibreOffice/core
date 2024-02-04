@@ -70,7 +70,7 @@ namespace drawinglayer::primitive2d
             BitmapEx                                    maOffsetXYCreatedBitmap;
 
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             // allow this single accessor to change it to set buggered data
             friend void drawinglayer::processor2d::setOffsetXYCreatedBitmap(

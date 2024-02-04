@@ -31,14 +31,14 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void MetafilePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference MetafilePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // Interpret the Metafile and get the content. There should be only one target, as in the start condition,
             // but iterating will be the right thing to do when some push/pop is not closed
             Primitive2DContainer xRetval(wmfemfhelper::interpretMetafile(getMetaFile(), rViewInformation));
 
             if(xRetval.empty())
-                return;
+                return nullptr;
 
             // get target size
             const ::tools::Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
@@ -81,9 +81,7 @@ namespace drawinglayer::primitive2d
                     aAdaptedTransform,
                     std::move(xRetval)));
 
-            xRetval = Primitive2DContainer { aEmbeddedTransform };
-
-            rContainer.append(std::move(xRetval));
+            return aEmbeddedTransform;
         }
 
         MetafilePrimitive2D::MetafilePrimitive2D(

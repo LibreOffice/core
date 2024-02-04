@@ -94,8 +94,7 @@ namespace drawinglayer::primitive2d
             bool                                        mbForceToSingleDiscreteUnit;
 
             // local decomposition.
-            virtual void create2DDecomposition(
-                Primitive2DContainer& rContainer,
+            virtual Primitive2DReference create2DDecomposition(
                 const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:

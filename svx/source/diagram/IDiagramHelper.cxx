@@ -32,6 +32,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -120,8 +121,7 @@ private:
     double mfDiscreteGap; // gap/width of visualization in pixels
     Color maColor;  // base color (made lighter/darker as needed, should be system selection color)
 
-    virtual void create2DDecomposition(
-        drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+    virtual drawinglayer::primitive2d::Primitive2DReference create2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
@@ -134,8 +134,7 @@ public:
     virtual sal_uInt32 getPrimitive2DID() const override;
 };
 
-void OverlayDiagramPrimitive::create2DDecomposition(
-    drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+drawinglayer::primitive2d::Primitive2DReference OverlayDiagramPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // get the dimensions. Do *not* take rotation/shear into account,
@@ -228,15 +227,17 @@ void OverlayDiagramPrimitive::create2DDecomposition(
         aLineColor.getBColor(),
         1.0 * getDiscreteUnit());
 
+    drawinglayer::primitive2d::Primitive2DContainer aContainer;
+
     // filled polygon as BG (may get transparence for better look ?)
-    rContainer.push_back(
+    aContainer.push_back(
         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
             aPolyPolygon,
             aFillColor.getBColor()));
 
     // outline polygon for visibility (may be accentuated shaded
     // top/left, would require alternative creation)
-    rContainer.push_back(
+    aContainer.push_back(
         new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
             std::move(aPolyPolygon),
             aLineAttribute));
@@ -255,13 +256,13 @@ void OverlayDiagramPrimitive::create2DDecomposition(
     aPolygonLapDown.append(basegfx::B2DPoint(fLapRight, fLapDown));
     drawinglayer::attribute::StrokeAttribute aStrokeAttribute({ 2.0 * getDiscreteUnit(), 2.0 * getDiscreteUnit() });
 
-    rContainer.push_back(
+    aContainer.push_back(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
             std::move(aPolygonLapUp),
             aLineAttribute,
             aStrokeAttribute));
 
-    rContainer.push_back(
+    aContainer.push_back(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
             std::move(aPolygonLapDown),
             aLineAttribute,
@@ -271,11 +272,12 @@ void OverlayDiagramPrimitive::create2DDecomposition(
     // as accentuation line for now
     if(bCreateLap && 0 != aTextAsPolyPolygon.count())
     {
-        rContainer.push_back(
+        aContainer.push_back(
             new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                 std::move(aTextAsPolyPolygon),
                 aLineColor.getBColor()));
     }
+    return new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aContainer));
 }
 
 OverlayDiagramPrimitive::OverlayDiagramPrimitive(

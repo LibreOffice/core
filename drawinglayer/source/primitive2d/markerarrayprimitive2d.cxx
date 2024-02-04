@@ -22,6 +22,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 
@@ -30,19 +31,19 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void MarkerArrayPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference MarkerArrayPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
             const sal_uInt32 nMarkerCount(rPositions.size());
 
             if(!nMarkerCount || getMarker().IsEmpty())
-                return;
+                return nullptr;
 
             // get pixel size
             Size aBitmapSize(getMarker().GetSizePixel());
 
             if(!(aBitmapSize.Width() && aBitmapSize.Height()))
-                return;
+                return nullptr;
 
             // get logic half pixel size
             basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
@@ -51,6 +52,7 @@ namespace drawinglayer::primitive2d
             // use half size for expand
             aLogicHalfSize *= 0.5;
 
+            Primitive2DContainer aContainer;
             for(const auto& rPosition : rPositions)
             {
                 const basegfx::B2DRange aRange(rPosition - aLogicHalfSize, rPosition + aLogicHalfSize);
@@ -61,11 +63,12 @@ namespace drawinglayer::primitive2d
                 aTransform.set(0, 2, aRange.getMinX());
                 aTransform.set(1, 2, aRange.getMinY());
 
-                rContainer.push_back(
+                aContainer.push_back(
                     new BitmapPrimitive2D(
                         getMarker(),
                         aTransform));
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         MarkerArrayPrimitive2D::MarkerArrayPrimitive2D(

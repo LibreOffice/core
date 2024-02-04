@@ -24,6 +24,7 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <utility>
 
 
@@ -32,7 +33,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void SdrCustomShapePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DReference SdrCustomShapePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DContainer aRetval(getSubPrimitives());
 
@@ -85,7 +86,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            rContainer.append(std::move(aRetval));
+            return new GroupPrimitive2D(std::move(aRetval));
         }
 
         SdrCustomShapePrimitive2D::SdrCustomShapePrimitive2D(

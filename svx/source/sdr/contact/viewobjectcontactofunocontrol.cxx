@@ -56,6 +56,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 #include <utility>
 /*
@@ -794,8 +795,7 @@ namespace sdr::contact {
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const override;
 
-        virtual void create2DDecomposition(
-                ::drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+        virtual ::drawinglayer::primitive2d::Primitive2DReference create2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const override;
 
@@ -1531,7 +1531,7 @@ namespace sdr::contact {
     }
 
 
-    void LazyControlCreationPrimitive2D::create2DDecomposition( ::drawinglayer::primitive2d::Primitive2DContainer& rContainer, const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    ::drawinglayer::primitive2d::Primitive2DReference LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
@@ -1559,8 +1559,9 @@ namespace sdr::contact {
             // use the default mechanism. This will create a ControlPrimitive2D without
             // handing over a XControl. If not even a XControlModel exists, it will
             // create the SdrObject fallback visualisation
-            rViewContactOfUnoControl.getViewIndependentPrimitive2DContainer(rContainer);
-            return;
+            ::drawinglayer::primitive2d::Primitive2DContainer aContainer;
+            rViewContactOfUnoControl.getViewIndependentPrimitive2DContainer(aContainer);
+            return new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aContainer));
         }
 
         SdrObject const& rSdrObj(m_pVOCImpl->getViewContact().GetSdrObject());
@@ -1572,9 +1573,9 @@ namespace sdr::contact {
 
         // create a primitive and hand over the existing xControl. This will
         // allow the primitive to not need to create another one on demand.
-        rContainer.push_back( new ::drawinglayer::primitive2d::ControlPrimitive2D(
+        return new ::drawinglayer::primitive2d::ControlPrimitive2D(
             m_aTransformation, xControlModel, rControl.getControl(),
-            rSdrObj.GetTitle(), rSdrObj.GetDescription(), pAnchorKey) );
+            rSdrObj.GetTitle(), rSdrObj.GetDescription(), pAnchorKey);
     }
 
     sal_uInt32 LazyControlCreationPrimitive2D::getPrimitive2DID() const

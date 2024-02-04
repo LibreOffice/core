@@ -224,7 +224,7 @@ namespace drawinglayer::primitive2d
             return xRetval;
         }
 
-        void ControlPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference ControlPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // try to create a bitmap decomposition. If that fails for some reason,
             // at least create a replacement decomposition.
@@ -235,7 +235,7 @@ namespace drawinglayer::primitive2d
                 xReference = createPlaceholderDecomposition();
             }
 
-            rContainer.push_back(xReference);
+            return xReference;
         }
 
         ControlPrimitive2D::ControlPrimitive2D(
@@ -319,16 +319,16 @@ namespace drawinglayer::primitive2d
             // destroy existing decomposition. To detect change, use size of unit size in view coordinates
             const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
-            if(!getBuffered2DDecomposition().empty())
+            if(getBuffered2DDecomposition())
             {
                 if(!maLastViewScaling.equal(aNewScaling))
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< ControlPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+                    const_cast< ControlPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
                 }
             }
 
-            if(getBuffered2DDecomposition().empty())
+            if(!getBuffered2DDecomposition())
             {
                 // remember ViewTransformation
                 const_cast< ControlPrimitive2D* >(this)->maLastViewScaling = aNewScaling;

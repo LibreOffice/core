@@ -41,7 +41,7 @@ namespace drawinglayer::primitive2d
             double                                      mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
 
             // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:
             SdrCaptionPrimitive2D(

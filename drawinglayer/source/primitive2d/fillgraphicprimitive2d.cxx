@@ -34,24 +34,25 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void FillGraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference FillGraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const attribute::FillGraphicAttribute& rAttribute = getFillGraphic();
 
             if(rAttribute.isDefault())
-                return;
+                return nullptr;
 
             const Graphic& rGraphic = rAttribute.getGraphic();
 
             if(GraphicType::Bitmap != rGraphic.GetType() && GraphicType::GdiMetafile != rGraphic.GetType())
-                return;
+                return nullptr;
 
             const Size aSize(rGraphic.GetPrefSize());
 
             if(!(aSize.Width() && aSize.Height()))
-                return;
+                return nullptr;
 
             // we have a graphic (bitmap or metafile) with some size
+            Primitive2DContainer aContainer;
             if(rAttribute.getTiling())
             {
                 // get object range and create tiling matrices
@@ -73,7 +74,7 @@ namespace drawinglayer::primitive2d
                 rtl::Reference<GroupPrimitive2D> xGroup = new GroupPrimitive2D(std::move(xSeq));
                 for(const auto &a : aMatrices)
                 {
-                    rContainer.push_back(new TransformPrimitive2D(
+                    aContainer.push_back(new TransformPrimitive2D(
                         getTransformation() * a,
                         *xGroup));
                 }
@@ -86,10 +87,11 @@ namespace drawinglayer::primitive2d
                         rAttribute.getGraphicRange().getRange(),
                         rAttribute.getGraphicRange().getMinimum()));
 
-                create2DDecompositionOfGraphic(rContainer,
+                create2DDecompositionOfGraphic(aContainer,
                     rGraphic,
                     aObjectTransform);
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         FillGraphicPrimitive2D::FillGraphicPrimitive2D(

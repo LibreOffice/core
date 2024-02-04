@@ -23,6 +23,7 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <utility>
 
 
@@ -31,7 +32,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void SdrCaptionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DReference SdrCaptionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DContainer aRetval;
 
@@ -116,7 +117,7 @@ namespace drawinglayer::primitive2d
                 aRetval = createEmbeddedShadowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getShadow());
             }
 
-            rContainer.append(std::move(aRetval));
+            return new GroupPrimitive2D(std::move(aRetval));
         }
 
         SdrCaptionPrimitive2D::SdrCaptionPrimitive2D(

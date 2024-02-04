@@ -168,7 +168,7 @@ namespace drawinglayer::primitive2d
 
         protected:
             /// method which is to be used to implement the local decomposition of a 2D primitive
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
             SwVirtFlyDrawObjPrimitive(
@@ -199,10 +199,10 @@ namespace drawinglayer::primitive2d
 
 namespace drawinglayer::primitive2d
 {
-        void SwVirtFlyDrawObjPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference SwVirtFlyDrawObjPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getOuterRange().isEmpty())
-                return;
+                return nullptr;
 
             // currently this SW object has no primitive representation. As long as this is the case,
             // create invisible geometry to allow correct HitTest and BoundRect calculations for the
@@ -210,10 +210,10 @@ namespace drawinglayer::primitive2d
             // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
             // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
             // as it was done in the old implementation
-            rContainer.push_back(
+            return
                 createHiddenGeometryPrimitives2D(
                     true,
-                    getOuterRange()));
+                    getOuterRange());
         }
 
         bool SwVirtFlyDrawObjPrimitive::operator==(const BasePrimitive2D& rPrimitive) const

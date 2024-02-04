@@ -96,9 +96,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
 
     assertXPath(pDocument, "//objectinfo/group/sdrCell[1]/unifiedtransparence"_ostr, 0);
     assertXPath(pDocument, "//objectinfo/group/sdrCell[2]/unifiedtransparence"_ostr, 0);
-    assertXPath(pDocument, "//objectinfo/group/sdrCell[3]/unifiedtransparence"_ostr,
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[3]/group/unifiedtransparence"_ostr,
                 "transparence"_ostr, "80");
-    assertXPath(pDocument, "//objectinfo/group/sdrCell[4]/unifiedtransparence"_ostr,
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[4]/group/unifiedtransparence"_ostr,
                 "transparence"_ostr, "80");
 }
 

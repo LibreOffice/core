@@ -31,13 +31,13 @@
 
 namespace drawinglayer::primitive2d
 {
-void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
-                                               const geometry::ViewInformation2D&) const
+Primitive2DReference
+GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&) const
 {
     if (0 == getGraphicAttr().GetAlpha())
     {
         // content is invisible, done
-        return;
+        return nullptr;
     }
 
     // do not apply mirroring from GraphicAttr to the Metafile by calling
@@ -107,7 +107,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
     if (aRetval.empty())
     {
         // content is invisible, done
-        return;
+        return nullptr;
     }
 
     if (isAdjusted || isDrawMode)
@@ -127,7 +127,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
         if (aRetval.empty())
         {
             // content is invisible, done
-            return;
+            return nullptr;
         }
     }
 
@@ -164,7 +164,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
             getGraphicAttr().GetBottomCrop() * aCropScaleFactor.getY()) };
     }
 
-    rContainer.append(std::move(aRetval));
+    return new GroupPrimitive2D(std::move(aRetval));
 }
 
 GraphicPrimitive2D::GraphicPrimitive2D(basegfx::B2DHomMatrix aTransform,

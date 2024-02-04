@@ -103,9 +103,8 @@ private:
     const drawinglayer::attribute::StrokeAttribute maStrokeAttribute;
 
     /// create local decomposition
-    virtual void
-    create2DDecomposition(Primitive2DContainer& rContainer,
-                          const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual Primitive2DReference
+    create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
     /// helper to get the full width from maBorderLines
     double getFullWidth() const;

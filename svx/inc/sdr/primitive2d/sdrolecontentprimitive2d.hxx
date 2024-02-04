@@ -44,7 +44,7 @@ namespace drawinglayer::primitive2d
             sal_uInt32                                  mnGraphicVersion;
 
             // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:
             SdrOleContentPrimitive2D(

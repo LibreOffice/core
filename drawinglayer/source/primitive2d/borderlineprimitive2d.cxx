@@ -23,6 +23,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <rtl/math.hxx>
 
 #include <algorithm>
@@ -113,10 +114,10 @@ namespace drawinglayer::primitive2d
             return fRetval;
         }
 
-        void BorderLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference BorderLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if (getStart().equal(getEnd()) || getBorderLines().empty())
-                return;
+                return nullptr;
 
             // get data and vectors
             basegfx::B2DVector aVector(getEnd() - getStart());
@@ -125,6 +126,7 @@ namespace drawinglayer::primitive2d
             const double fFullWidth(getFullWidth());
             double fOffset(fFullWidth * -0.5);
 
+            Primitive2DContainer aContainer;
             for(const auto& candidate : maBorderLines)
             {
                 const double fWidth(candidate.getLineAttribute().getWidth());
@@ -142,7 +144,7 @@ namespace drawinglayer::primitive2d
                         // start and end extends lead to an edge perpendicular to the line, so we can just use
                         // a PolygonStrokePrimitive2D for representation
                         addPolygonStrokePrimitive2D(
-                            rContainer,
+                            aContainer,
                             aStart - (aVector * candidate.getStartLeft()),
                             aEnd + (aVector * candidate.getEndLeft()),
                             candidate.getLineAttribute(),
@@ -163,7 +165,7 @@ namespace drawinglayer::primitive2d
                             aPolygon.append(aEnd + aHalfLineOffset + (aVector * candidate.getEndRight()));
                             aPolygon.append(aStart + aHalfLineOffset - (aVector * candidate.getStartRight()));
 
-                            rContainer.push_back(
+                            aContainer.push_back(
                                 new PolyPolygonColorPrimitive2D(
                                     basegfx::B2DPolyPolygon(aPolygon),
                                     candidate.getLineAttribute().getColor()));
@@ -198,7 +200,7 @@ namespace drawinglayer::primitive2d
                                     aPolygon.append(aStart + aHalfLineOffset - (aVector * candidate.getStartRight()));
                                 }
 
-                                rContainer.push_back(
+                                aContainer.push_back(
                                     new PolyPolygonColorPrimitive2D(
                                         basegfx::B2DPolyPolygon(aPolygon),
                                         candidate.getLineAttribute().getColor()));
@@ -227,7 +229,7 @@ namespace drawinglayer::primitive2d
                                 aPolygon.append(aEnd + aHalfLineOffset + (aVector * fMin));
                                 aPolygon.append(aEnd - aHalfLineOffset + (aVector * fMin));
 
-                                rContainer.push_back(
+                                aContainer.push_back(
                                     new PolyPolygonColorPrimitive2D(
                                         basegfx::B2DPolyPolygon(aPolygon),
                                         candidate.getLineAttribute().getColor()));
@@ -237,7 +239,7 @@ namespace drawinglayer::primitive2d
                             }
 
                             addPolygonStrokePrimitive2D(
-                                rContainer,
+                                aContainer,
                                 aStrokeStart,
                                 aStrokeEnd,
                                 candidate.getLineAttribute(),
@@ -248,6 +250,7 @@ namespace drawinglayer::primitive2d
 
                 fOffset += fWidth;
             }
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         bool BorderLinePrimitive2D::isHorizontalOrVertical(const geometry::ViewInformation2D& rViewInformation) const

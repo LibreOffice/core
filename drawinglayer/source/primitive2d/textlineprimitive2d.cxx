@@ -29,10 +29,10 @@
 
 namespace drawinglayer::primitive2d
 {
-        void TextLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference TextLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(TEXT_LINE_NONE == getTextLine())
-                return;
+                return nullptr;
 
             bool bDoubleLine(false);
             bool bWaveLine(false);
@@ -215,11 +215,12 @@ namespace drawinglayer::primitive2d
                 aNewPrimitive = new PolygonStrokePrimitive2D(std::move(aLine), aLineAttribute, std::move(aStrokeAttribute));
             }
 
-            // add primitive
-            rContainer.push_back(aNewPrimitive);
-
             if(!bDoubleLine)
-                return;
+                return aNewPrimitive;
+
+            // add primitive
+            Primitive2DContainer aContainer;
+            aContainer.push_back(aNewPrimitive);
 
             // double line, create 2nd primitive with offset using TransformPrimitive based on
             // already created NewPrimitive
@@ -244,7 +245,8 @@ namespace drawinglayer::primitive2d
 
             // add transform primitive
             Primitive2DContainer aContent { aNewPrimitive };
-            rContainer.push_back( new TransformPrimitive2D(aTransform, std::move(aContent)) );
+            aContainer.push_back(new TransformPrimitive2D(aTransform, std::move(aContent)));
+            return new GroupPrimitive2D(std::move(aContainer));
         }
 
         TextLinePrimitive2D::TextLinePrimitive2D(
