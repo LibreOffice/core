@@ -2628,22 +2628,25 @@ void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
         }
 
         // update accessibility sidebar object name if we modify the object name on the navigator bar
-        if (!aHint.m_sOld.isEmpty() && aHint.m_sOld != aHint.m_sNew)
+        const bool bUpdateA11yName = !aHint.m_sOld.isEmpty() && aHint.m_sOld != aHint.m_sNew;
+        if (!bUpdateA11yName)
+            return;
+        SwFlyFrame* pSFly = SwIterator<SwFlyFrame, SwFormat>(*this).First();
+        if (!pSFly)
+            return;
+        SwFrame *pSFlyLower = pSFly->Lower();
+        if (!pSFlyLower)
+            return;
+        if (!pSFlyLower->IsNoTextFrame())
         {
-            if (SwFlyFrame* pSFly = SwIterator<SwFlyFrame, SwFormat>(*this).First())
-            {
-                SwFrame *pSFlyLower = pSFly->Lower();
-                if (pSFlyLower && !pSFlyLower->IsNoTextFrame())
-                {
-                    if (SwTextNode* pSwTxtNode = static_cast<SwTextFrame*>(pSFly->ContainsContent())->GetTextNodeFirst())
-                        pSwTxtNode->resetAndQueueAccessibilityCheck(true);
-                }
-                else
-                {
-                    if (SwNode* pSwNode = static_cast<SwNoTextFrame*>(pSFlyLower)->GetNode())
-                        pSwNode->resetAndQueueAccessibilityCheck(true);
-                }
-            }
+            SwContentFrame* pContent = pSFly->ContainsContent();
+            if (SwTextNode* pSwTxtNode = pContent ? static_cast<SwTextFrame*>(pContent)->GetTextNodeFirst() : nullptr)
+                pSwTxtNode->resetAndQueueAccessibilityCheck(true);
+        }
+        else
+        {
+            if (SwNode* pSwNode = static_cast<SwNoTextFrame*>(pSFlyLower)->GetNode())
+                pSwNode->resetAndQueueAccessibilityCheck(true);
         }
     }
     else
