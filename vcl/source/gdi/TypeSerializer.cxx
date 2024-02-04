@@ -444,29 +444,41 @@ static bool UselessScaleForMapMode(const Fraction& rScale)
     return false;
 }
 
-void TypeSerializer::readMapMode(MapMode& rMapMode)
+bool TypeSerializer::readMapMode(MapMode& rMapMode)
 {
     VersionCompatRead aCompat(mrStream);
-    sal_uInt16 nTmp16(0);
+    sal_uInt16 nUnit(0);
     Point aOrigin;
     Fraction aScaleX;
     Fraction aScaleY;
     bool bSimple(true);
 
-    mrStream.ReadUInt16(nTmp16);
-    MapUnit eUnit = static_cast<MapUnit>(nTmp16);
+    mrStream.ReadUInt16(nUnit);
     readPoint(aOrigin);
     readFraction(aScaleX);
     readFraction(aScaleY);
     mrStream.ReadCharAsBool(bSimple);
 
-    const bool bBogus = UselessScaleForMapMode(aScaleX) || UselessScaleForMapMode(aScaleY);
-    SAL_WARN_IF(bBogus, "vcl", "invalid scale");
+    if (nUnit < sal_Int16(MapUnit::Map100thMM) || nUnit > sal_Int16(MapUnit::LAST))
+    {
+        SAL_WARN("vcl.gdi", "Parsing error: invalid mapmode");
+        return false;
+    }
+    MapUnit eUnit = static_cast<MapUnit>(nUnit);
 
-    if (bSimple || bBogus)
+    if (bSimple)
         rMapMode = MapMode(eUnit);
     else
+    {
+        const bool bBogus = UselessScaleForMapMode(aScaleX) || UselessScaleForMapMode(aScaleY);
+        if (bBogus)
+        {
+            SAL_WARN("vcl", "invalid scale");
+            return false;
+        }
         rMapMode = MapMode(eUnit, aOrigin, aScaleX, aScaleY);
+    }
+    return true;
 }
 
 void TypeSerializer::writeMapMode(MapMode const& rMapMode)

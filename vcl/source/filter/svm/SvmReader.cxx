@@ -1233,15 +1233,16 @@ rtl::Reference<MetaAction> SvmReader::TextAlignHandler()
 
 rtl::Reference<MetaAction> SvmReader::MapModeHandler()
 {
-    rtl::Reference<MetaMapModeAction> pAction(new MetaMapModeAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
+
     MapMode aMapMode;
-    aSerializer.readMapMode(aMapMode);
+    const bool bSuccess = aSerializer.readMapMode(aMapMode);
+    if (!bSuccess)
+        return nullptr;
 
+    rtl::Reference<MetaMapModeAction> pAction(new MetaMapModeAction);
     pAction->SetMapMode(aMapMode);
-
     return pAction;
 }
 
