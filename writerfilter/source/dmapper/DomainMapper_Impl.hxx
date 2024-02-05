@@ -214,6 +214,16 @@ struct SubstreamContext
     bool bParaWithInlineObject = false;
     /// This is a continuation of already finished paragraph - e.g., first in an index section
     bool bRemoveThisParagraph = false;
+    bool bIsFirstParaInShape = false;
+    /// If the current section has footnotes.
+    bool bHasFtn = false;
+    css::uno::Reference<css::beans::XPropertySet> xPreviousParagraph;
+    /// Current paragraph has automatic before spacing.
+    bool bParaAutoBefore = false;
+    /// Raw table cell depth.
+    sal_Int32 nTableCellDepth = 0;
+    /// If the next tab should be ignored, used for footnotes.
+    bool bCheckFirstFootnoteTab = false;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -626,7 +636,6 @@ private:
     // text ZWSPs to keep the change tracking of the image in Writer.)
     bool                            m_bRedlineImageInPreviousRun;
 
-    bool                            m_bIsFirstParaInShape = false;
     bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bTextFrameInserted;
     bool                            m_bIsLastSectionGroup;
@@ -748,7 +757,7 @@ public:
     void SetIsFirstParagraphInSectionAfterRedline( bool bIsFirstAfterRedline );
     bool GetIsFirstParagraphInSection( bool bAfterRedline = false ) const;
     void SetIsFirstParagraphInShape(bool bIsFirst);
-    bool GetIsFirstParagraphInShape() const { return m_bIsFirstParaInShape; }
+    bool GetIsFirstParagraphInShape() const { return m_StreamStateStack.top().bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
     bool GetIsDummyParaAddedForTableInSection() const { return m_bDummyParaAddedForTableInSection;}
 
@@ -1140,17 +1149,8 @@ public:
     /// Document background color, applied to every page style.
     std::optional<sal_Int32> m_oBackgroundColor;
 
-    /// Raw table cell depth.
-    sal_Int32 m_nTableCellDepth;
-
-    /// If the current section has footnotes.
-    bool m_bHasFtn;
     /// If the current section has a footnote separator.
     bool m_bHasFtnSep;
-
-    /// If the next tab should be ignored, used for footnotes.
-    bool m_bCheckFirstFootnoteTab;
-    bool m_bIgnoreNextTab;
 
     /// Paragraphs with anchored objects in the current section.
     std::vector<AnchoredObjectsInfo> m_aAnchoredObjectAnchors;
@@ -1196,7 +1196,7 @@ public:
 
     bool IsForceGenericFields() const { return m_bForceGenericFields; }
 
-    void SetParaAutoBefore(bool bParaAutoBefore) { m_bParaAutoBefore = bParaAutoBefore; }
+    void SetParaAutoBefore(bool const bParaAutoBefore) { m_StreamStateStack.top().bParaAutoBefore = bParaAutoBefore; }
 
     /// Forget about the previous paragraph, as it's not inside the same
     /// start/end node.
@@ -1237,9 +1237,6 @@ private:
     // Start a new index section; if needed, finish current paragraph
     css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
-    css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
-    /// Current paragraph has automatic before spacing.
-    bool m_bParaAutoBefore;
     /// SAXException was seen so document will be abandoned
     bool m_bSaxError;
 
