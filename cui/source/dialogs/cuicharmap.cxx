@@ -523,6 +523,7 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 {
     rView->GrabFocus();
 
+    SetCharFont(rView->GetFont());
     m_aShowChar.SetText( rView->GetText() );
     m_aShowChar.SetFont(rView->GetFont());
     m_aShowChar.Invalidate();
