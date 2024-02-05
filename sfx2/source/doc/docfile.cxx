@@ -4006,6 +4006,8 @@ OUString GetLogicBase(const INetURLObject& rURL, std::unique_ptr<SfxMedium_Impl>
     (void) rURL;
     (void) pImpl;
 #else
+    if (!officecfg::Office::Common::Misc::TempFileNextToLocalFile::get())
+        return aLogicBase;
 
     if (!pImpl->m_bHasEmbeddedObjects // Embedded objects would mean a special base, ignore that.
         && rURL.GetProtocol() == INetProtocol::File && !pImpl->m_pInStream)
