@@ -25,7 +25,7 @@ class tdf159428(UITestCase):
             xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
             xContentTree = xNavigatorPanel.getChild("contenttree")
 
-            # select fist bookmark - Heading "H1" should be tracked
+            # select first bookmark - Heading "H1" should be tracked
             self.xUITest.executeCommand(".uno:GoToNextPara")
             self.xUITest.executeCommand(".uno:GoToNextPara")
             xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "111", "END_POS": "119"}))

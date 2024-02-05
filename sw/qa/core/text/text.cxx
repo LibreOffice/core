@@ -1532,7 +1532,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf129810)
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     CPPUNIT_ASSERT(xMetaFile);
 
-    // Find the fist text array action
+    // Find the first text array action
     for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
     {
         auto pAction = xMetaFile->GetAction(nAction);

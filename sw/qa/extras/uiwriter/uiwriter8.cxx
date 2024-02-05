@@ -503,7 +503,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
                 "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr,
                 "portion"_ostr, "Some text...");
 
-    // copy the 2-row table into the fist paragraph of cell "A2",
+    // copy the 2-row table into the first paragraph of cell "A2",
     // but not at paragraph start (changed behaviour)
 
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
