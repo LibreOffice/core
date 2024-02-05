@@ -2747,6 +2747,9 @@ bool ScaAnyConverter::getDouble(
         }
         break;
         case uno::TypeClass_HYPER:
+            rfResult = rAny.get<sal_Int64>();
+        break;
+        case uno::TypeClass_UNSIGNED_HYPER:
             rfResult = rAny.get<sal_uInt64>();
         break;
         default:

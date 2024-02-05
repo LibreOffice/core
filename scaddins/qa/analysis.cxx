@@ -52,6 +52,8 @@ CPPUNIT_TEST_FIXTURE(Test, test_getDec2Hex)
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
                          mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_Int64(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
+                         mxAnalysis->getDec2Hex({}, 110, css::uno::Any(sal_uInt64(10))));
+    CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
                          mxAnalysis->getDec2Hex({}, 110, css::uno::Any(double(10))));
     CPPUNIT_ASSERT_EQUAL(u"000000006E"_ustr,
                          mxAnalysis->getDec2Hex({}, 110, css::uno::Any(float(10))));
