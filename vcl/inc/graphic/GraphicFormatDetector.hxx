@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_GRAPHICFORMATDETECTOR_HXX
-#define INCLUDED_VCL_INC_GRAPHICFORMATDETECTOR_HXX
+#pragma once
 
 #include <tools/stream.hxx>
 #include <vector>
@@ -202,7 +201,5 @@ private:
     GraphicMetadata maMetadata;
 };
 }
-
-#endif // INCLUDED_VCL_INC_GRAPHICFORMATDETECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
