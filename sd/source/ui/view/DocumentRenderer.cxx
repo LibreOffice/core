@@ -2123,13 +2123,10 @@ private:
         else
             nPaperBin = rInfo.mpPrinter->GetPaperBin();
 
-        // For pages larger then the printable area there
-        // are three options:
+        // For pages larger than the printable area there are three options:
         // 1. Scale down to the page to the printable area.
-        // 2. Print only the upper left part of the page
-        //    (without the unprintable borders).
-        // 3. Split the page into parts of the size of the
-        // printable area.
+        // 2. Print only the upper left part of the page (without the unprintable borders).
+        // 3. Split the page into parts of the size of the printable area.
         const bool bScalePage (mpOptions->IsPageSize());
         const bool bCutPage (mpOptions->IsCutPage());
         MapMode aMap (rInfo.maMap);
