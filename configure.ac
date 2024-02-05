@@ -13080,8 +13080,6 @@ dnl ===================================================================
 
 QT5_CFLAGS=""
 QT5_LIBS=""
-QMAKE5="qmake"
-MOC5="moc"
 QT5_GOBJECT_CFLAGS=""
 QT5_GOBJECT_LIBS=""
 QT5_HAVE_GOBJECT=""
@@ -13235,8 +13233,6 @@ dnl ===================================================================
 
 QT6_CFLAGS=""
 QT6_LIBS=""
-QMAKE6="qmake"
-MOC6="moc"
 QT6_PLATFORMS_SRCDIR=""
 if test \( "$test_kf6" = "yes" -a "$ENABLE_KF6" = "TRUE" \) -o \
         \( "$test_qt6" = "yes" -a "$ENABLE_QT6" = "TRUE" \)
