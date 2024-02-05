@@ -1384,9 +1384,11 @@ EMSCRIPTEN_MIN_VERSION="${EMSCRIPTEN_MIN_MAJOR}.${EMSCRIPTEN_MIN_MINOR}.${EMSCRI
 
 if test "$_os" = "Emscripten"; then
     AC_MSG_CHECKING([if Emscripten is at least $EMSCRIPTEN_MIN_VERSION])
-    AS_IF([test -z "$EMSDK"],
-          [AC_MSG_ERROR([No \$EMSDK environment variable.])])
-    EMSCRIPTEN_VERSION_H=$EMSDK/upstream/emscripten/cache/sysroot/include/emscripten/version.h
+    if test -z "$EMSCRIPTEN_VERSION_H"; then
+        AS_IF([test -z "$EMSDK"],
+              [AC_MSG_ERROR([No \$EMSDK environment variable.])])
+        EMSCRIPTEN_VERSION_H=$EMSDK/upstream/emscripten/cache/sysroot/include/emscripten/version.h
+    fi
     if test -f "$EMSCRIPTEN_VERSION_H"; then
         EMSCRIPTEN_MAJOR=$($GREP __EMSCRIPTEN_major__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_major__ //p')
         EMSCRIPTEN_MINOR=$($GREP __EMSCRIPTEN_minor__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_minor__ //p')
