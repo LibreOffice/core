@@ -3674,6 +3674,9 @@ OUString GetLogicBase(std::unique_ptr<SfxMedium_Impl> const & pImpl)
 // permission only to create the specifically named output file in that directory.
 #if !HAVE_FEATURE_MACOSX_SANDBOX
 
+    if (!officecfg::Office::Common::Misc::TempFileNextToLocalFile::get())
+        return aLogicBase;
+
     if (comphelper::isFileUrl(pImpl->m_aLogicName) && !pImpl->m_pInStream)
     {
         // Try to create the temp file in the same directory when storing.

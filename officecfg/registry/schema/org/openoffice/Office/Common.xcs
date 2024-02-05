@@ -5489,6 +5489,15 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="TempFileNextToLocalFile" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if temp files are placed next to the local file when a file is saved.
+          If this is false, the temp file will be placed in the default temp directory.
+          Placing the temp file next to the local file will increase performance, but it might lead
+          to permission issues such as described in this bug: https://bugs.documentfoundation.org/show_bug.cgi?id=158975</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="UseDocumentOOoLockFile" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Allows to specify whether the OOo document file locking
