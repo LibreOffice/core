@@ -1514,8 +1514,11 @@ libo_FUZZ_ARG_ENABLE(skia,
 dnl ---------- *** ----------
 
 libo_FUZZ_ARG_ENABLE(mergelibs,
-    AS_HELP_STRING([--enable-mergelibs],
-        [Merge several of the smaller libraries into one big, "merged", one.])
+    AS_HELP_STRING([--enable-mergelibs=yes/no/more],
+        [Merge several of the smaller libraries into one big "merged" library.
+         The "more" option will link even more of the smaller libraries.
+         "more" not appropriate for distros which split up LibreOffice into multiple packages.
+         It is only appropriate for situations where all of LO is delivered in a single install/package. ])
 )
 
 libo_FUZZ_ARG_ENABLE(breakpad,
@@ -14793,6 +14796,7 @@ AC_LANG_POP([C++])
 # ===================================================================
 AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
+MERGELIBS_MORE=
 
 if test $_os = iOS -o $_os = Android; then
     # Never any point in mergelibs for these as we build just static
@@ -14801,16 +14805,29 @@ if test $_os = iOS -o $_os = Android; then
 fi
 
 if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
-    if test $_os != Linux -a $_os != WINNT; then
-        add_warning "--enable-mergelibs is not tested for this platform"
+    if test "$enable_mergelibs" = "more"; then
+        if test $_os != Linux; then
+            add_warning "--enable-mergelibs=more is not tested for this platform"
+        fi
+        MERGELIBS="TRUE"
+        MERGELIBS_MORE="TRUE"
+        AC_MSG_RESULT([yes (more)])
+        AC_DEFINE(ENABLE_MERGELIBS)
+    elif test "$enable_mergelibs" = "yes" -o "$enable_mergelibs" = ""; then
+        if test $_os != Linux -a $_os != WINNT; then
+            add_warning "--enable-mergelibs is not tested for this platform"
+        fi
+        MERGELIBS="TRUE"
+        AC_MSG_RESULT([yes])
+        AC_DEFINE(ENABLE_MERGELIBS)
+    else
+        AC_MSG_ERROR([unknown value --enable-mergelibs=$enable_mergelibs])
     fi
-    MERGELIBS="TRUE"
-    AC_MSG_RESULT([yes])
-    AC_DEFINE(ENABLE_MERGELIBS)
 else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST([MERGELIBS])
+AC_SUBST([MERGELIBS_MORE])
 
 dnl ===================================================================
 dnl icerun is a wrapper that stops us spawning tens of processes

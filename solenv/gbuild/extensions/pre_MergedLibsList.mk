@@ -106,6 +106,66 @@ gb_MERGE_LIBRARY_LIST := \
 	xsltfilter \
 	xstor \
 
+# if we have --enable-mergelibs=more
+ifneq ($(MERGELIBS_MORE),)
+
+gb_MERGE_LIBRARY_LIST += \
+	analysis \
+	animcore \
+	$(call gb_Helper_optional,AVMEDIA, \
+		$(if $(filter MACOSX,$(OS)),\
+			avmediaMacAVF \
+		) \
+	) \
+	bib \
+	cached1 \
+	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
+	date \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
+	dlgprov \
+	$(if $(filter WNT,$(OS)), \
+		fps \
+	) \
+	$(if $(filter MACOSX,$(OS)),\
+		fps_aqua \
+	) \
+	graphicfilter \
+	hwp \
+	$(if $(filter WNT,$(OS)), \
+		inprocserv \
+	) \
+	log \
+	$(if $(ENABLE_LWP),lwpft) \
+	msforms \
+	$(if $(filter WNT,$(OS)), \
+		oleautobridge \
+	) \
+	pdffilter \
+	pricing \
+	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
+	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
+	slideshow \
+	$(if $(filter WNT,$(OS)), \
+		smplmail \
+	) \
+	storagefd \
+	svgfilter \
+	t602filter \
+	textconversiondlgs \
+	$(if $(filter WNT,$(OS)), \
+		UAccCOM \
+	) \
+	$(call gb_Helper_optional,XMLHELP,ucpchelp1) \
+	$(if $(ENABLE_LIBCMIS),ucpcmis1) \
+	$(if $(WITH_WEBDAV),ucpdav1) \
+	ucppkg1 \
+	$(if $(filter WNT,$(OS)), \
+		wininetbe1 \
+	) \
+	writerperfect \
+	xmlsecurity \
+
+endif
 
 # allow module-deps.pl to color based on this.
 ifneq ($(ENABLE_PRINT_DEPS),)
