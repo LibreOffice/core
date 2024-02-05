@@ -1,7 +1,8 @@
 <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-  <path d="M20,20 L180,20 M20,50 L180,50 M20,80 L180,80" stroke="grey" />
+  <path d="M20,20 L180,20 M20,50 L180,50 M20,80 L180,80 M20,110 L180,110" stroke="grey" />
 
   <text dominant-baseline="auto" x="30" y="20" font-size="20">Auto</text>
   <text dominant-baseline="middle" x="30" y="50" font-size="20">Middle</text>
   <text dominant-baseline="Hanging" x="30" y="80" font-size="20">Hanging</text>
+  <text dominant-baseline="central" x="30" y="110" font-size="20">Central</text>
 </svg>
