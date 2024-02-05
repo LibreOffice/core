@@ -50,13 +50,13 @@ XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
 
 XDashEntry::XDashEntry(const XDash& rDash, const OUString& rName)
 :   XPropertyEntry(rName),
-    aDash(rDash)
+    m_aDash(rDash)
 {
 }
 
 XDashEntry::XDashEntry(const XDashEntry& rOther)
 :   XPropertyEntry(rOther),
-aDash(rOther.aDash)
+m_aDash(rOther.m_aDash)
 {
 }
 

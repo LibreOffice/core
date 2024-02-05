@@ -71,7 +71,7 @@ public:
 class SVXCORE_DLLPUBLIC XDashEntry final : public XPropertyEntry
 {
 private:
-    XDash   aDash;
+    XDash   m_aDash;
 
 public:
     XDashEntry(const XDash& rDash, const OUString& rName);
@@ -79,7 +79,7 @@ public:
 
     const XDash& GetDash() const
     {
-        return aDash;
+        return m_aDash;
     }
 };
 
