@@ -764,7 +764,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156834)
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion"_ostr, 3);
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion"_ostr, 4);
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "text"_ostr, "Auto");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "x"_ostr, "30");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "y"_ostr, "20");
@@ -776,6 +776,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156834)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "text"_ostr, "Hanging");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "x"_ostr, "30");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "y"_ostr, "94");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]"_ostr, "text"_ostr, "Central");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]"_ostr, "x"_ostr, "30");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]"_ostr, "y"_ostr, "116");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104339)
