@@ -467,10 +467,8 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf112694)
     auto verify = [this]() {
         uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
         // Header was on when header for file was for explicit first pages only
-        // (marked via <w:titlePg>).
-        //CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, "HeaderIsOn"));
-        // TODO - can't disable headers/footers selectively (only fo first page)
-        CPPUNIT_ASSERT(getProperty<bool>(aPageStyle, "HeaderIsOn"));
+        // but <w:titlePg> was missing.
+        CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, "HeaderIsOn"));
     };
 
     createSwDoc("tdf112694.docx");

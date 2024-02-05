@@ -3826,7 +3826,10 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
         if (eType == PageType::LEFT)
         {
             if (bHeader)
+            {
                 pSectionContext->m_bLeftHeader = true;
+                pSectionContext->m_bHadLeftHeader = true;
+            }
             else
                 pSectionContext->m_bLeftFooter = true;
 
@@ -3835,7 +3838,10 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
         else if (eType == PageType::FIRST)
         {
             if (bHeader)
+            {
                 pSectionContext->m_bFirstHeader = true;
+                pSectionContext->m_bHadFirstHeader = true;
+            }
             else
                 pSectionContext->m_bFirstFooter = true;
 
@@ -3844,7 +3850,10 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
         else
         {
             if (bHeader)
+            {
                 pSectionContext->m_bRightHeader = true;
+                pSectionContext->m_bHadRightHeader = true;
+            }
             else
                 pSectionContext->m_bRightFooter = true;
 

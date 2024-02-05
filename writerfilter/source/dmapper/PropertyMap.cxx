@@ -566,6 +566,12 @@ void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
     m_aPageStyle->setPropertyValue(getPropertyName(PROP_HEADER_IS_SHARED), uno::Any(!bEvenAndOdd));
     m_aPageStyle->setPropertyValue(getPropertyName(PROP_FOOTER_IS_SHARED), uno::Any(!bEvenAndOdd));
     m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(!m_bTitlePage));
+
+    bool bHadFirstHeader = m_bHadFirstHeader && m_bTitlePage;
+    if (bHasHeader && !bHadFirstHeader && !m_bHadLeftHeader && !m_bHadRightHeader)
+    {
+        m_aPageStyle->setPropertyValue(sHeaderIsOn, uno::Any(false));
+    }
 }
 
 void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine2& rBorderLine, bool bShadow )
