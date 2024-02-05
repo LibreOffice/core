@@ -3452,10 +3452,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         m_pImpl->m_StreamStateStack.top().nTableDepth--;
     break;
     case NS_ooxml::LN_tcStart:
-        m_pImpl->m_nTableCellDepth++;
+        m_pImpl->m_StreamStateStack.top().nTableCellDepth++;
     break;
     case NS_ooxml::LN_tcEnd:
-        m_pImpl->m_nTableCellDepth--;
+        m_pImpl->m_StreamStateStack.top().nTableCellDepth--;
     break;
     case NS_ooxml::LN_glow_glow:
     case NS_ooxml::LN_shadow_shadow:
@@ -4449,20 +4449,16 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
     }
     else if (len == 1 && sText[0] == '\t' )
     {
-        if ( m_pImpl->m_bCheckFirstFootnoteTab && m_pImpl->IsInFootOrEndnote() )
+        if (m_pImpl->m_StreamStateStack.top().bCheckFirstFootnoteTab && m_pImpl->IsInFootOrEndnote())
         {
             // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
-            m_pImpl->m_bCheckFirstFootnoteTab = false;
+            m_pImpl->m_StreamStateStack.top().bCheckFirstFootnoteTab = false;
             sal_Int32 nFirstLineIndent = 0;
             m_pImpl->GetAnyProperty(PROP_PARA_FIRST_LINE_INDENT, m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)) >>= nFirstLineIndent;
             if ( nFirstLineIndent < 0 )
-                m_pImpl->m_bIgnoreNextTab = true;
-        }
-
-        if ( m_pImpl->m_bIgnoreNextTab )
-        {
-            m_pImpl->m_bIgnoreNextTab = false;
-            return;
+            {
+                return;
+            }
         }
     }
     if (!m_pImpl->hasTableManager())

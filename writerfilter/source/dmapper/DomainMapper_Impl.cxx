@@ -387,14 +387,9 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
         m_bReadOnly(rMediaDesc.getUnpackedValueOrDefault("ReadOnly", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
-        m_nTableCellDepth(0),
-        m_bHasFtn(false),
         m_bHasFtnSep(false),
-        m_bCheckFirstFootnoteTab(false),
-        m_bIgnoreNextTab(false),
         m_bIsSplitPara(false),
         m_bIsActualParagraphFramed( false ),
-        m_bParaAutoBefore(false),
         m_bSaxError(false)
 {
     m_StreamStateStack.emplace(); // add state for document body
@@ -963,7 +958,7 @@ bool DomainMapper_Impl::GetIsFirstParagraphInSection( bool bAfterRedline ) const
 
 void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 {
-    m_bIsFirstParaInShape = bIsFirst;
+    m_StreamStateStack.top().bIsFirstParaInShape = bIsFirst;
 }
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
@@ -2391,7 +2386,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                  (GetIsFirstParagraphInSection() && GetSectionContext() && GetSectionContext()->IsFirstSection()) ||
                 (m_StreamStateStack.top().bFirstParagraphInCell
                  && 0 < m_StreamStateStack.top().nTableDepth
-                 && m_StreamStateStack.top().nTableDepth == m_nTableCellDepth))
+                 && m_StreamStateStack.top().nTableDepth == m_StreamStateStack.top().nTableCellDepth))
             {
                 // export requires grabbag to match top_margin, so keep them in sync
                 if (nBeforeAutospacing && bIsAutoSet)
@@ -2667,7 +2662,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                     assert(isNumberingViaRule == (itNumberingRules != aProperties.end()) || IsRTFImport());
                     isNumberingViaRule = (itNumberingRules != aProperties.end());
-                    if (m_xPreviousParagraph.is() && (isNumberingViaRule || isNumberingViaStyle))
+                    if (m_StreamStateStack.top().xPreviousParagraph.is()
+                        && (isNumberingViaRule || isNumberingViaStyle))
                     {
                         // This textnode has numbering. Look up the numbering style name of the current and previous paragraph.
                         OUString aCurrentNumberingName;
@@ -2680,7 +2676,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 aCurrentNumberingName = xCurrentNumberingRules->getName();
                             try
                             {
-                                uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY_THROW);
+                                uno::Reference<container::XNamed> xPreviousNumberingRules(
+                                    m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("NumberingRules"),
+                                    uno::UNO_QUERY_THROW);
                                 aPreviousNumberingName = xPreviousNumberingRules->getName();
                             }
                             catch (const uno::Exception&)
@@ -2688,13 +2686,13 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 TOOLS_WARN_EXCEPTION("writerfilter", "DomainMapper_Impl::finishParagraph NumberingRules");
                             }
                         }
-                        else if (m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName")
+                        else if (m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName")
                                 // don't update before tables
                             && (m_StreamStateStack.top().nTableDepth == 0
                                 || !m_StreamStateStack.top().bFirstParagraphInCell))
                         {
                             aCurrentNumberingName = GetListStyleName(nListId);
-                            m_xPreviousParagraph->getPropertyValue("NumberingStyleName") >>= aPreviousNumberingName;
+                            m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("NumberingStyleName") >>= aPreviousNumberingName;
                         }
 
                         // tdf#133363: remove extra auto space even for mixed list styles
@@ -2703,21 +2701,23 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 || !isNumberingViaRule))
                         {
                             uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
-                            m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
+                            m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
                             const auto & rPrevProperties = aPrevPropertiesSeq;
-                            bool bParaAutoBefore = m_bParaAutoBefore || std::any_of(rPrevProperties.begin(), rPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                            bool bParaAutoBefore = m_StreamStateStack.top().bParaAutoBefore
+                                || std::any_of(rPrevProperties.begin(), rPrevProperties.end(), [](const beans::PropertyValue& rValue)
                             {
                                     return rValue.Name == "ParaTopMarginBeforeAutoSpacing";
                             });
                             // if style based spacing was set to auto in the previous paragraph, style of the actual paragraph must be the same
-                            if (bParaAutoBefore && !m_bParaAutoBefore && m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("ParaStyleName"))
+                            if (bParaAutoBefore && !m_StreamStateStack.top().bParaAutoBefore
+                                && m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("ParaStyleName"))
                             {
                                auto itParaStyle = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
                                {
                                    return rValue.Name == "ParaStyleName";
                                });
                                bParaAutoBefore = itParaStyle != aProperties.end() &&
-                                   m_xPreviousParagraph->getPropertyValue("ParaStyleName") == itParaStyle->Value;
+                                   m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("ParaStyleName") == itParaStyle->Value;
                             }
                             // There was a previous textnode and it had the same numbering.
                             if (bParaAutoBefore)
@@ -2740,7 +2740,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             if (bPrevParaAutoAfter)
                             {
                                 // Previous after spacing is set to auto, set previous after space to 0.
-                                m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::Any(static_cast<sal_Int32>(0)));
+                                m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::Any(static_cast<sal_Int32>(0)));
                             }
                         }
                     }
@@ -2764,9 +2764,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     }
 
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
-                    m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
+                    m_StreamStateStack.top().xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
 
-                    if (m_xPreviousParagraph.is() && // null for SvxUnoTextBase
+                    if (m_StreamStateStack.top().xPreviousParagraph.is() && // null for SvxUnoTextBase
                         (isNumberingViaStyle || isNumberingViaRule))
                     {
                         assert(pParaContext);
@@ -2776,16 +2776,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     pList->GetAbstractDefinition();
                             if (pAbsList &&
                                 // SvxUnoTextRange doesn't have ListId
-                                m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("ListId"))
+                                m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("ListId"))
                             {
                                 OUString paraId;
-                                m_xPreviousParagraph->getPropertyValue("ListId") >>= paraId;
+                                m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("ListId") >>= paraId;
                                 if (!paraId.isEmpty()) // must be on some list?
                                 {
                                     OUString const listId = pAbsList->MapListId(paraId);
                                     if (listId != paraId)
                                     {
-                                        m_xPreviousParagraph->setPropertyValue("ListId", uno::Any(listId));
+                                        m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("ListId", uno::Any(listId));
                                     }
                                 }
                             }
@@ -2806,8 +2806,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     // TODO: Not tested variant with different levels override in different lists.
                                     // Probably m_aListOverrideApplied as a set of overridden listids is not sufficient
                                     // and we need to register level overrides separately.
-                                    m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::Any(true));
-                                    m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::Any(nOverrideLevel));
+                                    m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::Any(true));
+                                    m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::Any(nOverrideLevel));
                                     m_aListOverrideApplied.insert(nListId);
                                 }
                             }
@@ -3040,8 +3040,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         }
     }
 
-    if (m_bIsFirstParaInShape)
-        m_bIsFirstParaInShape = false;
+    if (m_StreamStateStack.top().bIsFirstParaInShape)
+        m_StreamStateStack.top().bIsFirstParaInShape = false;
 
     if (pParaContext)
     {
@@ -3055,13 +3055,13 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     // don't overwrite m_bFirstParagraphInCell in table separator nodes
     // and in text boxes anchored to the first paragraph of table cells
     if (0 < m_StreamStateStack.top().nTableDepth
-        && m_StreamStateStack.top().nTableDepth == m_nTableCellDepth
+        && m_StreamStateStack.top().nTableDepth == m_StreamStateStack.top().nTableCellDepth
         && !IsInShape() && !IsInComments())
     {
         m_StreamStateStack.top().bFirstParagraphInCell = false;
     }
 
-    m_bParaAutoBefore = false;
+    m_StreamStateStack.top().bParaAutoBefore = false;
     m_StreamStateStack.top().bParaWithInlineObject = false;
 
 #ifdef DBG_UTIL
@@ -4011,7 +4011,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
     SAL_WARN_IF(m_StreamStateStack.top().eSubstreamType != SubstreamType::Body, "writerfilter.dmapper", "PushFootOrEndnote() is called from another foot or endnote");
     m_StreamStateStack.top().eSubstreamType = bIsFootnote ? SubstreamType::Footnote : SubstreamType::Endnote;
-    m_bCheckFirstFootnoteTab = true;
+    m_StreamStateStack.top().bCheckFirstFootnoteTab = true;
     try
     {
         // Redlines outside the footnote should not affect footnote content
@@ -4526,9 +4526,6 @@ void DomainMapper_Impl::PopFootOrEndnote()
     if (!IsRTFImport() && !bCopied)
         RemoveLastParagraph();
 
-    // In case the foot or endnote did not contain a tab.
-    m_bIgnoreNextTab = false;
-
     if (!m_aTextAppendStack.empty())
         m_aTextAppendStack.pop();
 
@@ -5013,16 +5010,16 @@ bool DomainMapper_Impl::IsDiscardHeaderFooter() const
 void DomainMapper_Impl::ClearPreviousParagraph()
 {
     // in table cells, set bottom auto margin of last paragraph to 0, except in paragraphs with numbering
-    if ((m_StreamStateStack.top().nTableDepth == (m_nTableCellDepth + 1))
-        && m_xPreviousParagraph.is()
+    if ((m_StreamStateStack.top().nTableDepth == (m_StreamStateStack.top().nTableCellDepth + 1))
+        && m_StreamStateStack.top().xPreviousParagraph.is()
         && hasTableManager() && getTableManager().isCellLastParaAfterAutospacing())
     {
-        uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xPreviousNumberingRules(m_StreamStateStack.top().xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
         if ( !xPreviousNumberingRules.is() || xPreviousNumberingRules->getName().isEmpty() )
-            m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::Any(static_cast<sal_Int32>(0)));
+            m_StreamStateStack.top().xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::Any(static_cast<sal_Int32>(0)));
     }
 
-    m_xPreviousParagraph.clear();
+    m_StreamStateStack.top().xPreviousParagraph.clear();
 
     // next table paragraph will be first paragraph in a cell
     m_StreamStateStack.top().bFirstParagraphInCell = true;
@@ -9842,10 +9839,6 @@ void DomainMapper_Impl::substream(Id rName,
     }
 #endif
 
-    // Save "has footnote" state, which is specific to a section in the body
-    // text, so state from substreams is not relevant.
-    bool bHasFtn = m_bHasFtn;
-
     //finalize any waiting frames before starting alternate streams
     CheckUnregisteredFrameConversion();
     ExecuteFrameConversion();
@@ -9856,6 +9849,8 @@ void DomainMapper_Impl::substream(Id rName,
     appendTableHandler();
     getTableManager().startLevel();
 
+    // Save "has footnote" state, which is specific to a section in the body
+    // text, so state from substreams is not relevant.
     m_StreamStateStack.emplace();
 
     //import of page header/footer
@@ -9933,18 +9928,17 @@ void DomainMapper_Impl::substream(Id rName,
     break;
     }
 
-    assert(!m_StreamStateStack.empty());
     m_StreamStateStack.pop();
+    assert(!m_StreamStateStack.empty());
 
     getTableManager().endLevel();
     popTableManager();
-    m_bHasFtn = bHasFtn;
 
     switch(rName)
     {
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
-        m_bHasFtn = true;
+        m_StreamStateStack.top().bHasFtn = true;
         break;
     }
 
@@ -9963,7 +9957,7 @@ void DomainMapper_Impl::commentProps(const OUString& sId, const CommentPropertie
 
 bool DomainMapper_Impl::handlePreviousParagraphBorderInBetween() const
 {
-    if (!m_xPreviousParagraph.is())
+    if (!m_StreamStateStack.top().xPreviousParagraph.is())
         return false;
 
     // Connected borders ("ParaIsConnectBorder") are always on by default
@@ -9971,7 +9965,7 @@ bool DomainMapper_Impl::handlePreviousParagraphBorderInBetween() const
     // between is used. So this is not the best, but easiest way to check
     // is previous paragraph has border in between.
     bool bConnectBorders = true;
-    m_xPreviousParagraph->getPropertyValue(getPropertyName(PROP_PARA_CONNECT_BORDERS)) >>= bConnectBorders;
+    m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(getPropertyName(PROP_PARA_CONNECT_BORDERS)) >>= bConnectBorders;
 
     if (bConnectBorders)
         return false;
@@ -9980,7 +9974,7 @@ bool DomainMapper_Impl::handlePreviousParagraphBorderInBetween() const
     // method is called). So current paragraph will get border above, but
     // also need to ensure, that no unexpected bottom border are remaining in previous
     // paragraph: since ParaIsConnectBorder=false it will be displayed in unexpected way.
-    m_xPreviousParagraph->setPropertyValue(getPropertyName(PROP_BOTTOM_BORDER), uno::Any(table::BorderLine2()));
+    m_StreamStateStack.top().xPreviousParagraph->setPropertyValue(getPropertyName(PROP_BOTTOM_BORDER), uno::Any(table::BorderLine2()));
 
     return true;
 }

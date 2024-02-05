@@ -1240,7 +1240,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
 
     // Check for missing footnote separator only in case there is at least
     // one footnote.
-    if (rDM_Impl.m_bHasFtn && !rDM_Impl.m_bHasFtnSep)
+    if (rDM_Impl.m_StreamStateStack.top().bHasFtn && !rDM_Impl.m_bHasFtnSep)
     {
         // Set footnote line width to zero, document has no footnote separator.
         Insert(PROP_FOOTNOTE_LINE_RELATIVE_WIDTH, uno::Any(sal_Int32(0)));
@@ -2001,7 +2001,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
     if ( !rDM_Impl.IsInFootOrEndnote() && !rDM_Impl.IsInComments() )
     {
-        rDM_Impl.m_bHasFtn = false;
+        rDM_Impl.m_StreamStateStack.top().bHasFtn = false;
         rDM_Impl.m_bHasFtnSep = false;
     }
 }
