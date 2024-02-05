@@ -22,6 +22,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/pgrditem.hxx>
+#include <editeng/fontitem.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/scopeguard.hxx>
 
@@ -47,6 +48,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 #include <crsrsh.hxx>
 #include <swtypes.hxx>
@@ -74,6 +76,16 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     SwFont aFont(*pOldFnt);
 
+    const SwDoc& rDoc = rInf.GetTextFrame()->GetDoc();
+    if (aFont.IsSymbol(rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()))
+    {
+        const SvxFontItem& rFontItem = rDoc.GetDefault(RES_CHRATR_FONT);
+        aFont.SetName( rFontItem.GetFamilyName(), SwFontScript::Latin );
+        aFont.SetStyleName( rFontItem.GetStyleName(), SwFontScript::Latin );
+        aFont.SetFamily( rFontItem.GetFamily(), SwFontScript::Latin );
+        aFont.SetPitch( rFontItem.GetPitch(), SwFontScript::Latin );
+        aFont.SetCharSet( rFontItem.GetCharSet(), SwFontScript::Latin );
+    }
     // Paint strikeout/underline based on redline color and settings
     // (with an extra pilcrow in the background, because there is
     // no SetStrikeoutColor(), also SetUnderColor() doesn't work()).
