@@ -50,8 +50,6 @@
 #include <gst/pbutils/missing-plugins.h>
 #include <gst/pbutils/pbutils.h>
 
-constexpr OUStringLiteral AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Player_GStreamer";
-constexpr OUString AVMEDIA_GST_PLAYER_SERVICENAME        = u"com.sun.star.media.Player_GStreamer"_ustr;
 #define AVVERSION "gst 1.0: "
 
 using namespace ::com::sun::star;
@@ -951,7 +949,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 
 OUString SAL_CALL Player::getImplementationName()
 {
-    return AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME;
+    return u"com.sun.star.comp.avmedia.Player_GStreamer"_ustr;
 }
 
 
@@ -963,7 +961,7 @@ sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames()
 {
-    return { AVMEDIA_GST_PLAYER_SERVICENAME };
+    return { u"com.sun.star.media.Player_GStreamer"_ustr };
 }
 
 } // namespace
