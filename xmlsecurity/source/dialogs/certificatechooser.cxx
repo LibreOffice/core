@@ -56,7 +56,6 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
 {
     auto nControlWidth = m_xCertLB->get_approximate_digit_width() * 105;
     m_xCertLB->set_size_request(nControlWidth, m_xCertLB->get_height_rows(12));
-    m_xCertLB->make_sorted();
 
     m_xCertLB->connect_changed( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     m_xCertLB->connect_row_activated( LINK( this, CertificateChooser, CertificateSelectHdl ) );
@@ -136,6 +135,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
         return;
 
     m_xCertLB->clear();
+    m_xCertLB->make_unsorted();
     m_xCertLB->freeze();
 
     SvtUserOptions aUserOpts;
@@ -257,6 +257,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
 
     m_xCertLB->thaw();
     m_xCertLB->unselect_all();
+    m_xCertLB->make_sorted();
 
     if (oSelectRow)
     {
