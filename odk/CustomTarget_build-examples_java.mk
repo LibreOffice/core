@@ -9,7 +9,7 @@
 
 my_example_dirs_java = \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs \
-    DevelopersGuide/Charts \
+    DevelopersGuide/Charts/java \
     DevelopersGuide/Components/Addons/JobsAddon \
     DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java \
     DevelopersGuide/Components/JavaComponent \

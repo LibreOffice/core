@@ -35,19 +35,23 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/BasicAndDialogs/ToolkitControls/ToolkitControls/ScrollBarDlg.xdl \
     DevelopersGuide/BasicAndDialogs/ToolkitControls/ToolkitControls/dialog.xlb \
     DevelopersGuide/BasicAndDialogs/ToolkitControls/ToolkitControls/script.xlb \
-    DevelopersGuide/Charts/AddInChart.ods \
-    DevelopersGuide/Charts/CalcHelper.java \
-    DevelopersGuide/Charts/ChartHelper.java \
-    DevelopersGuide/Charts/ChartInCalc.java \
-    DevelopersGuide/Charts/ChartInDraw.java \
-    DevelopersGuide/Charts/ChartInWriter.java \
-    DevelopersGuide/Charts/Helper.java \
-    DevelopersGuide/Charts/JavaSampleChartAddIn.components \
-    DevelopersGuide/Charts/JavaSampleChartAddIn.java \
-    DevelopersGuide/Charts/ListenAtCalcRangeInDraw.java \
-    DevelopersGuide/Charts/Makefile \
-    DevelopersGuide/Charts/SelectionChangeListener.java \
-    DevelopersGuide/Charts/bullet.gif \
+    DevelopersGuide/Charts/java/AddInChart.ods \
+    DevelopersGuide/Charts/java/CalcHelper.java \
+    DevelopersGuide/Charts/java/ChartHelper.java \
+    DevelopersGuide/Charts/java/ChartInCalc.java \
+    DevelopersGuide/Charts/java/ChartInDraw.java \
+    DevelopersGuide/Charts/java/ChartInWriter.java \
+    DevelopersGuide/Charts/java/Helper.java \
+    DevelopersGuide/Charts/java/JavaSampleChartAddIn.components \
+    DevelopersGuide/Charts/java/JavaSampleChartAddIn.java \
+    DevelopersGuide/Charts/java/ListenAtCalcRangeInDraw.java \
+    DevelopersGuide/Charts/java/Makefile \
+    DevelopersGuide/Charts/java/SelectionChangeListener.java \
+    DevelopersGuide/Charts/java/bullet.gif \
+    DevelopersGuide/Charts/python/CalcHelper.py \
+    DevelopersGuide/Charts/python/ChartInCalc.py \
+    DevelopersGuide/Charts/python/Helper.py \
+    DevelopersGuide/Charts/python/bullet.gif \
     DevelopersGuide/Components/Addons/JobsAddon/Addons.xcu \
     DevelopersGuide/Components/Addons/JobsAddon/AsyncJob.components \
     DevelopersGuide/Components/Addons/JobsAddon/AsyncJob.java \
