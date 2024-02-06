@@ -179,71 +179,70 @@ void GlowPrimitive2D::create2DDecomposition(
         std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
         nMaximumQuadraticPixels));
 
-    if (!aAlpha.IsEmpty())
+    if (aAlpha.IsEmpty())
+        return;
+
+    const Size& rBitmapExSizePixel(aAlpha.GetSizePixel());
+
+    if (rBitmapExSizePixel.Width() <= 0 || rBitmapExSizePixel.Height() <= 0)
+        return;
+
+    // We may have to take a corrective scaling into account when the
+    // MaximumQuadraticPixel limit was used/triggered
+    double fScale(1.0);
+
+    if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth
+        || static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
     {
-        const Size& rBitmapExSizePixel(aAlpha.GetSizePixel());
+        // scale in X and Y should be the same (see fReduceFactor in createAlphaMask),
+        // so adapt numerically to a single scale value, they are integer rounded values
+        const double fScaleX(static_cast<double>(rBitmapExSizePixel.Width())
+                             / static_cast<double>(nDiscreteClippedWidth));
+        const double fScaleY(static_cast<double>(rBitmapExSizePixel.Height())
+                             / static_cast<double>(nDiscreteClippedHeight));
 
-        if (rBitmapExSizePixel.Width() > 0 && rBitmapExSizePixel.Height() > 0)
-        {
-            // We may have to take a corrective scaling into account when the
-            // MaximumQuadraticPixel limit was used/triggered
-            double fScale(1.0);
+        fScale = (fScaleX + fScaleY) * 0.5;
+    }
 
-            if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth
-                || static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
-            {
-                // scale in X and Y should be the same (see fReduceFactor in createAlphaMask),
-                // so adapt numerically to a single scale value, they are integer rounded values
-                const double fScaleX(static_cast<double>(rBitmapExSizePixel.Width())
-                                     / static_cast<double>(nDiscreteClippedWidth));
-                const double fScaleY(static_cast<double>(rBitmapExSizePixel.Height())
-                                     / static_cast<double>(nDiscreteClippedHeight));
+    // fDiscreteGlowRadius is the size of the halo from each side of the object. The halo is the
+    // border of glow color that fades from glow transparency level to fully transparent
+    // When blurring a sharp boundary (our case), it gets 50% of original intensity, and
+    // fades to both sides by the blur radius; thus blur radius is half of glow radius.
+    // Consider glow transparency (initial transparency near the object edge)
+    AlphaMask mask(ProcessAndBlurAlphaMask(aAlpha, fDiscreteGlowRadius * fScale / 2.0,
+                                           fDiscreteGlowRadius * fScale / 2.0,
+                                           255 - getGlowColor().GetAlpha()));
 
-                fScale = (fScaleX + fScaleY) * 0.5;
-            }
-
-            // fDiscreteGlowRadius is the size of the halo from each side of the object. The halo is the
-            // border of glow color that fades from glow transparency level to fully transparent
-            // When blurring a sharp boundary (our case), it gets 50% of original intensity, and
-            // fades to both sides by the blur radius; thus blur radius is half of glow radius.
-            // Consider glow transparency (initial transparency near the object edge)
-            AlphaMask mask(ProcessAndBlurAlphaMask(aAlpha, fDiscreteGlowRadius * fScale / 2.0,
-                                                   fDiscreteGlowRadius * fScale / 2.0,
-                                                   255 - getGlowColor().GetAlpha()));
-
-            // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
-            Bitmap bmp(aAlpha.GetSizePixel(), vcl::PixelFormat::N24_BPP);
-            bmp.Erase(getGlowColor());
-            BitmapEx result(bmp, mask);
+    // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
+    Bitmap bmp(aAlpha.GetSizePixel(), vcl::PixelFormat::N24_BPP);
+    bmp.Erase(getGlowColor());
+    BitmapEx result(bmp, mask);
 
 #ifdef DBG_UTIL
-            static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
-            if (bDoSaveForVisualControl)
-            {
-                // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
-                static const OUString sDumpPath(
-                    OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
-                if (!sDumpPath.isEmpty())
-                {
-                    SvFileStream aNew(sDumpPath + "test_glow.png",
-                                      StreamMode::WRITE | StreamMode::TRUNC);
-                    vcl::PngImageWriter aPNGWriter(aNew);
-                    aPNGWriter.write(result);
-                }
-            }
-#endif
-
-            // Independent from discrete sizes of glow alpha creation, always
-            // map and project glow result to geometry range extended by glow
-            // radius, but to the eventually clipped instance (ClippedRange)
-            const primitive2d::Primitive2DReference xEmbedRefBitmap(new BitmapPrimitive2D(
-                result, basegfx::utils::createScaleTranslateB2DHomMatrix(
-                            aClippedRange.getWidth(), aClippedRange.getHeight(),
-                            aClippedRange.getMinX(), aClippedRange.getMinY())));
-
-            rContainer = primitive2d::Primitive2DContainer{ xEmbedRefBitmap };
+    static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
+    if (bDoSaveForVisualControl)
+    {
+        // VCL_DUMP_BMP_PATH should be like C:/path/ or ~/path/
+        static const OUString sDumpPath(
+            OUString::createFromAscii(std::getenv("VCL_DUMP_BMP_PATH")));
+        if (!sDumpPath.isEmpty())
+        {
+            SvFileStream aNew(sDumpPath + "test_glow.png", StreamMode::WRITE | StreamMode::TRUNC);
+            vcl::PngImageWriter aPNGWriter(aNew);
+            aPNGWriter.write(result);
         }
     }
+#endif
+
+    // Independent from discrete sizes of glow alpha creation, always
+    // map and project glow result to geometry range extended by glow
+    // radius, but to the eventually clipped instance (ClippedRange)
+    const primitive2d::Primitive2DReference xEmbedRefBitmap(
+        new BitmapPrimitive2D(result, basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                          aClippedRange.getWidth(), aClippedRange.getHeight(),
+                                          aClippedRange.getMinX(), aClippedRange.getMinY())));
+
+    rContainer = primitive2d::Primitive2DContainer{ xEmbedRefBitmap };
 }
 
 // Using tooling class BufferedDecompositionGroupPrimitive2D now, so

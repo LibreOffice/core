@@ -34,14 +34,11 @@ void PolyPolygonMarkerPrimitive2D::create2DDecomposition(
     const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
     const sal_uInt32 nCount(aPolyPolygon.count());
 
-    if (nCount)
+    for (sal_uInt32 a(0); a < nCount; a++)
     {
-        for (sal_uInt32 a(0); a < nCount; a++)
-        {
-            rContainer.push_back(new PolygonMarkerPrimitive2D(aPolyPolygon.getB2DPolygon(a),
-                                                              getRGBColorA(), getRGBColorB(),
-                                                              getDiscreteDashLength()));
-        }
+        rContainer.push_back(new PolygonMarkerPrimitive2D(aPolyPolygon.getB2DPolygon(a),
+                                                          getRGBColorA(), getRGBColorB(),
+                                                          getDiscreteDashLength()));
     }
 }
 

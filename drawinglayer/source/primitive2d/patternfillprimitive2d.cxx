@@ -254,12 +254,10 @@ namespace drawinglayer::primitive2d
             }
 
             // embed result in mask
-            {
-                rContainer.push_back(
-                    new MaskPrimitive2D(
-                        getMask(),
-                        std::move(aRetval)));
-            }
+            rContainer.push_back(
+                new MaskPrimitive2D(
+                    getMask(),
+                    std::move(aRetval)));
         }
 
         PatternFillPrimitive2D::PatternFillPrimitive2D(

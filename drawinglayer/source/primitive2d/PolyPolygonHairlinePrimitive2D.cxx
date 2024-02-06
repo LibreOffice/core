@@ -34,13 +34,10 @@ void PolyPolygonHairlinePrimitive2D::create2DDecomposition(
     const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
     const sal_uInt32 nCount(aPolyPolygon.count());
 
-    if (nCount)
+    for (sal_uInt32 a(0); a < nCount; a++)
     {
-        for (sal_uInt32 a(0); a < nCount; a++)
-        {
-            rContainer.push_back(
-                new PolygonHairlinePrimitive2D(aPolyPolygon.getB2DPolygon(a), getBColor()));
-        }
+        rContainer.push_back(
+            new PolygonHairlinePrimitive2D(aPolyPolygon.getB2DPolygon(a), getBColor()));
     }
 }
 
