@@ -452,6 +452,14 @@ void LngSvcMgr::modified(const lang::EventObject&)
     aUpdateIdle.Start();
 }
 
+bool LngSvcMgr::joinThreads()
+{
+    if (mxGrammarDsp && !
+        mxGrammarDsp->joinThreads())
+        return false;
+    return true;
+}
+
 //run update, and inform everyone that dictionaries (may) have changed, this
 //needs to be run in the main thread because
 //utl::ConfigChangeListener_Impl::changesOccurred grabs the SolarMutex and we

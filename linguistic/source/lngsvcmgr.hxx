@@ -22,6 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -58,7 +59,8 @@ class LngSvcMgr :
         css::lang::XServiceInfo,
         css::util::XModifyListener
     >,
-    private utl::ConfigItem
+    private utl::ConfigItem,
+    public comphelper::LibreOfficeKit::ThreadJoinable
 {
     friend class LngSvcMgrListenerHelper;
 
@@ -155,6 +157,9 @@ public:
 
     // XModifyListener
     virtual void SAL_CALL modified( const css::lang::EventObject& rEvent ) override;
+
+    // comphelper::LibreOfficeKit::ThreadJoinable
+    virtual bool joinThreads() override;
 
     bool    AddLngSvcEvtBroadcaster(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );

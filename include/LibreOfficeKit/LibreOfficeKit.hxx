@@ -1051,7 +1051,6 @@ public:
      * @since LibreOffice 6.0
      * @param pURL macro url to run
      */
-
     bool runMacro( const char* pURL)
     {
         return mpThis->pClass->runMacro( mpThis, pURL );
@@ -1196,6 +1195,17 @@ public:
     void stopURP(void* pURPContext)
     {
         mpThis->pClass->stopURP(mpThis, pURPContext);
+    }
+
+    /**
+     * Joins all threads if possible to get down to a single process
+     * which can be forked from safely.
+     *
+     * @returns non-zero for successful join, 0 for failure.
+     */
+    int joinThreads()
+    {
+        return mpThis->pClass->joinThreads(mpThis);
     }
 };
 
