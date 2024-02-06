@@ -1,0 +1,72 @@
+From 92c6ea875231876ca264187326ce2d615d5ad543 Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <stephan.bergmann@allotropia.de>
+Date: Tue, 6 Feb 2024 13:14:08 +0100
+Subject: There is no std::basic_string<int>
+
+...and at least LLVM 19 trunk libc++ complains about it now since
+<c3668779c13596e223c26fbd49670d18cd638c40> "[libc++] Remove deprecated
+char_traits base template (#72694)" with
+
+> In file included from dict-generate.cpp:25:
+> In file included from ~/llvm/inst/bin/../include/c++/v1/iostream:43:
+> In file included from ~/llvm/inst/bin/../include/c++/v1/ios:223:
+> In file included from ~/llvm/inst/bin/../include/c++/v1/__locale:24:
+> ~/llvm/inst/bin/../include/c++/v1/string:746:43: error: implicit instantiation of undefined template 'std::char_traits<int>'
+>   746 |   static_assert((is_same<_CharT, typename traits_type::char_type>::value),
+>       |                                           ^
+> dict-generate.cpp:861:18: note: in instantiation of template class 'std::basic_string<int>' requested here
+>   861 |     StringOfInts Chld;
+>       |                  ^
+> ~/llvm/inst/bin/../include/c++/v1/__fwd/string.h:23:29: note: template is declared here
+>    23 | struct _LIBCPP_TEMPLATE_VIS char_traits;
+>       |                             ^
+
+etc., so use a std::vector<int> instead
+---
+ dict-generate.cpp | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/dict-generate.cpp b/dict-generate.cpp
+index eebcca9..fcfaaea 100644
+--- a/dict-generate.cpp
++++ b/dict-generate.cpp
+@@ -22,6 +22,7 @@
+  *
+  **********************************************************************************/
+ 
++#include <algorithm>
+ #include <iostream>
+ #include <string>
+ #include <fstream>
+@@ -387,7 +388,7 @@ typedef map<string, Entry> EntryMap_t;
+ typedef list<string> StringList_t;
+ typedef list<NodeSPtr> NodeList_t;
+ typedef set<StringInt> StringIntSet_t;
+-typedef basic_string<int> StringOfInts;
++typedef vector<int> StringOfInts;
+ typedef vector<unsigned int> UintVect;
+ typedef vector<uint64_t> Uint64Vect;
+ typedef vector<StringInt *> StrIntPtrVect_t;
+@@ -864,15 +865,14 @@ void CreateArrays(NodeSPtr Root, StringIntSet_t & StrSet, StringOfInts & ChildAd
+     for(Itc = Root->ChildBegin(); Itc != Root->ChildEnd(); ++Itc)
+     {
+         int i = Itc->second->GetAddr();
+-        Chld += i;
++        Chld.push_back(i);
+     }
+     // Find where in pointer array the child pointer string is
+-    StringOfInts::size_type x = ChildAddrs.find(Chld);
+-    if (x == StringOfInts::npos)
++    StringOfInts::size_type x = search(ChildAddrs.begin(), ChildAddrs.end(), Chld.begin(), Chld.end()) - ChildAddrs.begin();
++    if (x == ChildAddrs.size())
+     {
+         // Not found, add it
+-        x = ChildAddrs.length();
+-        ChildAddrs += Chld;
++        ChildAddrs.insert(ChildAddrs.end(), Chld.begin(), Chld.end());
+     }
+     // Val will contain the final node data
+     uint64_t Val = Its->i;
+-- 
+2.43.0
+
