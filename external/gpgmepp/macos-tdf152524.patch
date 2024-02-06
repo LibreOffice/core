@@ -1,0 +1,64 @@
+--- src/posix-io.c	2023-02-01 11:50:48
++++ src/posix-io.c	2024-02-05 19:16:00
+@@ -62,6 +62,10 @@
+ # endif
+ #endif
+ #include <sys/socket.h>
++
++#if HAVE_MACOS_SYSTEM
++#include <dispatch/dispatch.h>
++#endif
+ 
+ #include "util.h"
+ #include "priv-io.h"
+@@ -517,12 +521,50 @@
+ }
+ 
+ 
++#if HAVE_MACOS_SYSTEM
++static int
++_gpgme_io_spawn_macos (const char *path, char *const argv[], unsigned int flags,
++		       struct spawn_fd_item_s *fd_list,
++		       void (*atfork) (void *opaque, int reserved),
++		       void *atforkvalue, pid_t *r_pid);
++#endif /*HAVE_MACOS_SYSTEM*/
++
++
+ /* Returns 0 on success, -1 on error.  */
+ int
+ _gpgme_io_spawn (const char *path, char *const argv[], unsigned int flags,
+ 		 struct spawn_fd_item_s *fd_list,
+ 		 void (*atfork) (void *opaque, int reserved),
+ 		 void *atforkvalue, pid_t *r_pid)
++#if HAVE_MACOS_SYSTEM
++{
++	/* tdf#152524 fork() and exec() in a separate libdispatch queue
++	 * This is another attempt to stop the crashing in libdispatch by
++	 * running fork() and exec() within a libdispatch task that will
++	 * run in a sequential queue in a non-main thread.  */
++	static dispatch_queue_t queue = NULL;
++	if (!queue)
++		queue = dispatch_queue_create ("gpgmepp",
++					       DISPATCH_QUEUE_CONCURRENT);
++	if (!queue)
++		return -1;
++
++	__block int ret = -1;
++	dispatch_sync(queue, ^{
++		ret = _gpgme_io_spawn_macos (path, argv, flags,
++					     fd_list, atfork,
++					     atforkvalue, r_pid);
++	});
++
++	return ret;
++}
++
++static int
++_gpgme_io_spawn_macos (const char *path, char *const argv[], unsigned int flags,
++		       struct spawn_fd_item_s *fd_list,
++		       void (*atfork) (void *opaque, int reserved),
++		       void *atforkvalue, pid_t *r_pid)
++#endif /*HAVE_MACOS_SYSTEM*/
+ {
+   pid_t pid;
+   int i;
