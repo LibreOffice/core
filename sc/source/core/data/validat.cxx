@@ -381,6 +381,9 @@ bool ScValidationData::DoError(weld::Window* pParent, const OUString& rInput,
     if ( eErrorStyle == SC_VALERR_MACRO )
         return DoMacro(rPos, rInput, nullptr, pParent);
 
+    if (!bShowError)
+        return true;
+
     //  Output error message
 
     OUString aTitle = aErrorTitle;
