@@ -94,8 +94,7 @@ bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
     }
     else
         n = o3tl::toInt32(std::string_view(text.begin, text.length));
-
-        //TODO: check valid lexical representation
+    //TODO: check valid lexical representation
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
         *value = static_cast< sal_Int16 >(n);
         return true;
@@ -140,7 +139,7 @@ bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
         *value = static_cast< sal_Int64 >(sSuffix.toUInt64(16));
     }
     else *value = o3tl::toInt64(std::string_view(text.begin, text.length));
-        //TODO: check valid lexical representation
+    //TODO: check valid lexical representation
     return true;
 }
 
