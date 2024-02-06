@@ -3159,7 +3159,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     {
         ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
         const ScValidationData* pData = rDoc.GetValidationEntry( nValidation );
-        if (pData && pData->HasErrMsg())
+        if (pData)
         {
             // #i67990# don't use pLastPattern in EnterHandler
             const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
@@ -3200,6 +3200,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
 
                 if (pData->DoError(pActiveViewSh->GetFrameWeld(), aString, aCursorPos))
                     bForget = true;                 // Do not take over input
+
             }
         }
     }
