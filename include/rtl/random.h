@@ -73,6 +73,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_random_destroyPool (
     @param[in] Buffer a buffer containing the bytes to add.
     @param[in] Bytes  the number of bytes to read from the buffer.
     @retval rtl_Random_E_None upon success.
+    @deprecated This now does nothing.
  */
 SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_addBytes (
     rtlRandomPool  Pool,
