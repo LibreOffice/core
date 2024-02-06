@@ -42,7 +42,8 @@ namespace sd {
 
 FuFormatPaintBrush::FuFormatPaintBrush( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 : FuText(pViewSh, pWin, pView, pDoc, rReq)
-, mbPermanent( false )
+    , mnDepth(-1)
+    , mbPermanent( false )
 , mbOldIsQuickTextEditMode( true )
 {
 }
@@ -64,7 +65,7 @@ void FuFormatPaintBrush::DoExecute( SfxRequest& rReq )
 
     if( mpView )
     {
-        mpView->TakeFormatPaintBrush( mxItemSet );
+        mnDepth = mpView->TakeFormatPaintBrush( mxItemSet );
     }
 }
 
@@ -250,7 +251,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
             mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
     }
 
-    mpView->ApplyFormatPaintBrush( *mxItemSet, bNoCharacterFormats, bNoParagraphFormats );
+    mpView->ApplyFormatPaintBrush( *mxItemSet, mnDepth, bNoCharacterFormats, bNoParagraphFormats );
 
     if( pObj )
     {
