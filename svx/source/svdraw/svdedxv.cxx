@@ -2797,11 +2797,12 @@ static const WhichRangesContainer& GetFormatRangeImpl(bool bTextOnly)
     return bTextOnly ? gTextOnly : gFull;
 }
 
-void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSet)
+sal_Int32 SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSet)
 {
+    sal_Int32 nDepth = -2;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     if (rMarkList.GetMarkCount() <= 0)
-        return;
+        return nDepth;
 
     OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -2810,6 +2811,7 @@ void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSe
     if (pOLV)
     {
         rFormatSet->Put(pOLV->GetAttribs());
+        nDepth = pOLV->GetDepth();
     }
     else
     {
@@ -2828,6 +2830,7 @@ void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSe
             mxSelectionController->GetAttributes(*rFormatSet, false);
         }
     }
+    return nDepth;
 }
 
 static SfxItemSet CreatePaintSet(const WhichRangesContainer& pRanges, SfxItemPool& rPool,
@@ -2863,8 +2866,8 @@ static SfxItemSet CreatePaintSet(const WhichRangesContainer& pRanges, SfxItemPoo
 }
 
 void SdrObjEditView::ApplyFormatPaintBrushToText(SfxItemSet const& rFormatSet, SdrTextObj& rTextObj,
-                                                 SdrText* pText, bool bNoCharacterFormats,
-                                                 bool bNoParagraphFormats)
+                                                 SdrText* pText, sal_Int16 nDepth,
+                                                 bool bNoCharacterFormats, bool bNoParagraphFormats)
 {
     OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
     if (!pParaObj)
@@ -2887,6 +2890,9 @@ void SdrObjEditView::ApplyFormatPaintBrushToText(SfxItemSet const& rFormatSet, S
         aSet.Put(CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet,
                                 bNoCharacterFormats, bNoParagraphFormats));
         rOutliner.SetParaAttribs(nPara, aSet);
+        Paragraph* pParagraph = rOutliner.GetParagraph(nPara);
+        if (nDepth > -2)
+            rOutliner.SetDepth(pParagraph, nDepth);
     }
 
     std::optional<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
@@ -2909,11 +2915,11 @@ void SdrObjEditView::DisposeUndoManager()
     mpOldTextEditUndoManager = nullptr;
 }
 
-void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, bool bNoCharacterFormats,
-                                           bool bNoParagraphFormats)
+void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, sal_Int16 nDepth,
+                                           bool bNoCharacterFormats, bool bNoParagraphFormats)
 {
     if (mxSelectionController.is()
-        && mxSelectionController->ApplyFormatPaintBrush(rFormatSet, bNoCharacterFormats,
+        && mxSelectionController->ApplyFormatPaintBrush(rFormatSet, nDepth, bNoCharacterFormats,
                                                         bNoParagraphFormats))
     {
         return;
@@ -2960,8 +2966,8 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, bool bNoChara
             while (--nText >= 0)
             {
                 SdrText* pText = pTextObj->getText(nText);
-                ApplyFormatPaintBrushToText(rFormatSet, *pTextObj, pText, bNoCharacterFormats,
-                                            bNoParagraphFormats);
+                ApplyFormatPaintBrushToText(rFormatSet, *pTextObj, pText, nDepth,
+                                            bNoCharacterFormats, bNoParagraphFormats);
             }
         }
     }
@@ -2983,6 +2989,11 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, bool bNoChara
                                                 rFormatSet, aSet, bNoCharacterFormats,
                                                 bNoParagraphFormats));
             pOLV->SetAttribs(aPaintSet);
+            if (!bNoParagraphFormats && nDepth > -2)
+            {
+                for (sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; ++nPara)
+                    pOLV->SetDepth(nPara, nDepth);
+            }
         }
     }
 

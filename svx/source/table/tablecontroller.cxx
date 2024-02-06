@@ -2922,7 +2922,8 @@ bool SvxTableController::PasteObject( SdrTableObj const * pPasteTableObj )
     return true;
 }
 
-bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
+bool SvxTableController::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, sal_Int16 nDepth,
+                                               bool bNoCharacterFormats, bool bNoParagraphFormats)
 {
     if(!mbCellSelectionMode)
     {
@@ -2953,7 +2954,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
                 if (bUndo)
                     xCell->AddUndo();
                 SdrText* pText = xCell.get();
-                SdrObjEditView::ApplyFormatPaintBrushToText( rFormatSet, rTableObj, pText, bNoCharacterFormats, bNoParagraphFormats );
+                SdrObjEditView::ApplyFormatPaintBrushToText( rFormatSet, rTableObj, pText, nDepth, bNoCharacterFormats, bNoParagraphFormats );
             }
         }
     }

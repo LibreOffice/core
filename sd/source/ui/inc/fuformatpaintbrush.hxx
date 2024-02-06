@@ -52,6 +52,7 @@ private:
     void implcancel();
 
     std::shared_ptr<SfxItemSet> mxItemSet;
+    sal_Int16 mnDepth;
     bool   mbPermanent;
     bool   mbOldIsQuickTextEditMode;
 };

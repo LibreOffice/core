@@ -243,6 +243,8 @@ public:
     void        SelectRange( sal_Int32 nFirst, sal_Int32 nCount );
     void        SetAttribs( const SfxItemSet& );
     void        Indent( short nDiff );
+    sal_Int16   GetDepth() const;
+    void        SetDepth(sal_Int32 nParagraph, sal_Int16 nDepth);
     void        AdjustDepth( short nDX );   // Later replace with Indent!
 
     void        AdjustHeight( tools::Long nDY );

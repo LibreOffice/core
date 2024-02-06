@@ -95,7 +95,9 @@ bool SelectionController::PasteObjModel( const SdrModel& /*rModel*/ )
     return false;
 }
 
-bool SelectionController::ApplyFormatPaintBrush( SfxItemSet& /*rFormatSet*/, bool /*bNoCharacterFormats*/, bool /*bNoParagraphFormats*/ )
+bool SelectionController::ApplyFormatPaintBrush(SfxItemSet& /*rFormatSet*/, sal_Int16 /*nDepth*/,
+                                                bool /*bNoCharacterFormats*/,
+                                                bool /*bNoParagraphFormats*/)
 {
     return false;
 }

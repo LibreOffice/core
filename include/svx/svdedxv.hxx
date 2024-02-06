@@ -301,17 +301,17 @@ public:
     /** returns true if the shape identified by its inventor and identifier supports format paint brush operation */
     static bool SupportsFormatPaintbrush( SdrInventor nObjectInventor, SdrObjKind nObjectIdentifier );
 
-    /** returns a format paint brush set from the current selection */
-    void TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  );
+    /** fills a format paint brush set from the current selection and returns the numbering depth */
+    sal_Int32 TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  );
 
     /** applies a format paint brush set from the current selection.
         if bNoCharacterFormats is true, no character attributes are changed.
         if bNoParagraphFormats is true, no paragraph attributes are changed.
     */
-    void ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
+    void ApplyFormatPaintBrush( SfxItemSet& rFormatSet, sal_Int16 nDepth, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
     /** helper function for selections with multiple SdrText for one SdrTextObj (f.e. tables ) */
-    static void ApplyFormatPaintBrushToText( SfxItemSet const & rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
+    static void ApplyFormatPaintBrushToText( SfxItemSet const & rFormatSet, SdrTextObj& rTextObj, SdrText* pText, sal_Int16 nDepth, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
     void DisposeUndoManager();
 
