@@ -34,6 +34,7 @@
 #include <osl/thread.h>
 
 #include <com/sun/star/uno/Any.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <i18nlangtag/lang.h>
 
@@ -80,7 +81,8 @@ class GrammarCheckingIterator:
         css::lang::XComponent,
         css::lang::XServiceInfo
     >,
-    public LinguDispatcher
+    public LinguDispatcher,
+    public comphelper::LibreOfficeKit::ThreadJoinable
 {
     //the queue is keeping track of all sentences to be checked
     //every element of this queue is a FlatParagraphEntry struct-object
@@ -185,6 +187,9 @@ public:
     // LinguDispatcher
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;
     virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
+
+    // comphelper::LibreOfficeKit::ThreadJoinable
+    virtual bool joinThreads() override;
 };
 
 

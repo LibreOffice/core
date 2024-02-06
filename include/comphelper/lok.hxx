@@ -20,6 +20,14 @@ class LanguageTag;
 
 namespace comphelper::LibreOfficeKit
 {
+/// interface for allowing threads to be transiently shutdown.
+class COMPHELPER_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ThreadJoinable
+{
+public:
+    /// shutdown and join threads, @returns true on success
+    virtual bool joinThreads() = 0;
+};
+
 // Functions to be called only from the LibreOfficeKit implementation in desktop, not from other
 // places in LibreOffice code.
 

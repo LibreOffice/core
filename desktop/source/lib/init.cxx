@@ -2577,6 +2577,8 @@ lo_startURP(LibreOfficeKit* pThis, void* pReceiveURPFromLOContext, void* pSendUR
 
 static void lo_stopURP(LibreOfficeKit* pThis, void* pSendURPToLOContext);
 
+static int lo_joinThreads(LibreOfficeKit* pThis);
+
 static void lo_runLoop(LibreOfficeKit* pThis,
                        LibreOfficeKitPollCallback pPollCallback,
                        LibreOfficeKitWakeCallback pWakeCallback,
@@ -2621,6 +2623,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->trimMemory = lo_trimMemory;
         m_pOfficeClass->startURP = lo_startURP;
         m_pOfficeClass->stopURP = lo_stopURP;
+        m_pOfficeClass->joinThreads = lo_joinThreads;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3351,6 +3354,26 @@ static void lo_stopURP(LibreOfficeKit* /* pThis */,
                        void* pFunctionBasedURPConnection/* FunctionBasedURPConnection* */)
 {
     static_cast<FunctionBasedURPConnection*>(pFunctionBasedURPConnection)->close();
+}
+
+
+static int lo_joinThreads(LibreOfficeKit* /* pThis */)
+{
+    comphelper::ThreadPool &pool = comphelper::ThreadPool::getSharedOptimalPool();
+    pool.joinThreadsIfIdle();
+
+//    if (comphelper::getWorkerCount() > 0)
+//        return 0;
+
+    // Grammar checker thread
+    css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
+        css::linguistic2::LinguServiceManager::create(xContext);
+
+    auto joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(xLangSrv.get());
+    if (joinable && !joinable->joinThreads())
+        return 0;
+
+    return 1;
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,

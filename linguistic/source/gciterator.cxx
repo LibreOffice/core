@@ -312,6 +312,14 @@ void GrammarCheckingIterator::TerminateThread()
     }
 }
 
+
+bool GrammarCheckingIterator::joinThreads()
+{
+    TerminateThread();
+    return true;
+}
+
+
 sal_Int32 GrammarCheckingIterator::NextDocId()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );

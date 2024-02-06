@@ -140,6 +140,9 @@ struct _LibreOfficeKitClass
 
     /// @see lok::Office::stopURP
     void (*stopURP)(LibreOfficeKit* pThis, void* pSendURPToLOContext);
+
+    /// @see lok::Office::joinThreads
+    int (*joinThreads)(LibreOfficeKit* pThis);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
