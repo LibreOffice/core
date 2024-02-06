@@ -126,12 +126,10 @@ namespace svgio::svgreader
 
         void SvgSymbolNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
-            drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
-
             // decompose children
-            SvgNode::decomposeSvgNode(aNewTarget, bReferenced);
+            SvgNode::decomposeSvgNode(rTarget, bReferenced);
 
-            if(aNewTarget.empty())
+            if (rTarget.empty())
                 return;
 
             if(getViewBox())
@@ -157,7 +155,7 @@ namespace svgio::svgreader
                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         aEmbeddingTransform,
-                        std::move(aNewTarget)));
+                        std::move(rTarget)));
 
                 rTarget.push_back(xRef);
             }
