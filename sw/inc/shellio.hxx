@@ -305,6 +305,8 @@ public:
 
 class SwImpBlocks;
 
+/// Used for autotext handling. The list of autotexts get imported to a temporary document, and then
+/// this class provides the actual glossary document which is the final target for autotext.
 class SW_DLLPUBLIC SwTextBlocks
 {
     std::unique_ptr<SwImpBlocks> m_pImp;
