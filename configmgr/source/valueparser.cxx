@@ -80,15 +80,21 @@ bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
 bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
     assert(text.is() && value != nullptr);
     // For backwards compatibility, support hexadecimal values:
-    sal_Int32 n =
+    bool bStartWithHexPrefix =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
-            RTL_CONSTASCII_LENGTH("0X")) == 0 ?
-        static_cast< sal_Int32 >(
-            OString(
+            RTL_CONSTASCII_LENGTH("0X")) == 0;
+    sal_Int32 n;
+    if (bStartWithHexPrefix)
+    {
+        std::string_view sView(
                 text.begin + RTL_CONSTASCII_LENGTH("0X"),
-                text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
-        OString(text.begin, text.length).toInt32();
+                text.length - RTL_CONSTASCII_LENGTH("0X"));
+        n = o3tl::toUInt32(sView, 16);
+    }
+    else
+        n = o3tl::toInt32(std::string_view(text.begin, text.length));
+
         //TODO: check valid lexical representation
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
         *value = static_cast< sal_Int16 >(n);
@@ -122,15 +128,18 @@ bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
 bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
     assert(text.is() && value != nullptr);
     // For backwards compatibility, support hexadecimal values:
-    *value =
+    bool bStartWithHexPrefix =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
-            RTL_CONSTASCII_LENGTH("0X")) == 0 ?
-        static_cast< sal_Int64 >(
-            OString(
+            RTL_CONSTASCII_LENGTH("0X")) == 0;
+    if (bStartWithHexPrefix)
+    {
+        OString sSuffix(
                 text.begin + RTL_CONSTASCII_LENGTH("0X"),
-                text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt64(16)) :
-        OString(text.begin, text.length).toInt64();
+                text.length - RTL_CONSTASCII_LENGTH("0X"));
+        *value = static_cast< sal_Int64 >(sSuffix.toUInt64(16));
+    }
+    else *value = o3tl::toInt64(std::string_view(text.begin, text.length));
         //TODO: check valid lexical representation
     return true;
 }

@@ -60,6 +60,7 @@
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
 #include <unx/glyphcache.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <poll.h>
 #include <memory>
@@ -503,8 +504,7 @@ void SalDisplay::Init()
     const char* pValStr = XGetDefault( pDisp_, "Xft", "dpi" );
     if( pValStr != nullptr )
     {
-        const OString aValStr( pValStr );
-        const tools::Long nDPI = static_cast<tools::Long>(aValStr.toDouble());
+        const tools::Long nDPI = static_cast<tools::Long>(o3tl::toDouble(std::string_view(pValStr)));
         // guard against insane resolution
         if( sal_ValidDPI(nDPI) )
         {

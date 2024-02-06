@@ -77,7 +77,7 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
             else if (aTypeClass == uno::TypeClass_BYTE)
                 aAny <<= static_cast<sal_Int8>(o3tl::toInt32(rValue));
             else if (aTypeClass == uno::TypeClass_BOOLEAN)
-                aAny <<= OString(rValue).toBoolean();
+                aAny <<= rtl_str_toBoolean(rValue.c_str());
             else if (aTypeClass == uno::TypeClass_SHORT)
                 aAny <<= static_cast<sal_Int16>(o3tl::toInt32(rValue));
             else if (aTypeClass == uno::TypeClass_UNSIGNED_SHORT)
@@ -87,7 +87,7 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
             else if (aTypeClass == uno::TypeClass_UNSIGNED_LONG)
                 aAny <<= static_cast<sal_uInt32>(o3tl::toInt32(rValue));
             else if (aTypeClass == uno::TypeClass_FLOAT)
-                aAny <<= OString(rValue).toFloat();
+                aAny <<= rtl_str_toFloat(rValue.c_str());
             else if (aTypeClass == uno::TypeClass_DOUBLE)
                 aAny <<= o3tl::toDouble(rValue);
             else if (aTypeClass == uno::TypeClass_STRING)
@@ -325,9 +325,9 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
         if (rType == "string")
             aValue.Value <<= OUString::fromUtf8(rValue);
         else if (rType == "boolean")
-            aValue.Value <<= OString(rValue).toBoolean();
+            aValue.Value <<= rtl_str_toBoolean(rValue.c_str());
         else if (rType == "float")
-            aValue.Value <<= OString(rValue).toFloat();
+            aValue.Value <<= rtl_str_toFloat(rValue.c_str());
         else if (rType == "long")
             aValue.Value <<= o3tl::toInt32(rValue);
         else if (rType == "short")
@@ -341,7 +341,7 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
         else if (rType == "int16")
             aValue.Value <<= sal_Int16(o3tl::toInt32(rValue));
         else if (rType == "uint64")
-            aValue.Value <<= OString(rValue).toUInt64();
+            aValue.Value <<= rtl_str_toUInt64(rValue.c_str(), 10);
         else if (rType == "uint32")
             aValue.Value <<= o3tl::toUInt32(rValue);
         else if (rType == "uint16")

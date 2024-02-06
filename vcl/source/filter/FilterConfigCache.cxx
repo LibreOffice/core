@@ -20,6 +20,7 @@
 #include "FilterConfigCache.hxx"
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/configuration.hxx>
 #include <tools/svlibrary.h>
@@ -247,8 +248,7 @@ void FilterConfigCache::ImplInitSmart()
         aEntry.sType = sExtension;
         aEntry.sUIName = sExtension;
 
-        OString sFlags( *pPtr++ );
-        aEntry.nFlags = sFlags.toInt32();
+        aEntry.nFlags = o3tl::toInt32(std::string_view(*pPtr++));
 
         OUString    sUserData( OUString::createFromAscii( *pPtr ) );
         aEntry.CreateFilterName( sUserData );

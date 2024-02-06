@@ -20,7 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 #include <tools/stream.hxx>
-
+#include <o3tl/string_view.hxx>
 #include <rtl/character.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
@@ -181,11 +181,11 @@ int XBMReader::ParseDefine( const char* pDefine )
     if( ( pTmp[0] == '0' ) && ( ( pTmp[1] == 'X' ) || ( pTmp[1] == 'x' ) ) )
     {
         pTmp += 2;
-        nRet = OString(pTmp, strlen(pTmp)).toInt32(16);
+        nRet = o3tl::toInt32(std::string_view(pTmp), 16);
     }
     else // read decimal
     {
-        nRet = OString(pTmp, strlen(pTmp)).toInt32();
+        nRet = o3tl::toInt32(std::string_view(pTmp));
     }
 
     return nRet;

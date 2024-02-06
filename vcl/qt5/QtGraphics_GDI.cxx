@@ -32,6 +32,7 @@
 #include <numeric>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <o3tl/string_view.hxx>
 
 QtGraphicsBackend::QtGraphicsBackend(QtFrame* pFrame, QImage* pQImage)
     : m_pFrame(pFrame)
@@ -694,8 +695,7 @@ void QtGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
     char* pForceDpi;
     if ((pForceDpi = getenv("SAL_FORCEDPI")))
     {
-        OString sForceDPI(pForceDpi);
-        rDPIX = rDPIY = sForceDPI.toInt32();
+        rDPIX = rDPIY = o3tl::toInt32(std::string_view(pForceDpi));
         return;
     }
 

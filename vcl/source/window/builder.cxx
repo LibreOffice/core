@@ -2976,7 +2976,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OUString &rID)
                     if (name == "id")
                     {
                         name = reader.getAttributeValue(false);
-                        nId = OString(name.begin, name.length).toUInt32();
+                        nId = o3tl::toUInt32(std::string_view(name.begin, name.length));
                     }
                     else if (nId == 0 && name == "translatable" && reader.getAttributeValue(false) == "yes")
                     {

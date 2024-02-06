@@ -22,6 +22,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <unx/fontmanager.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "gtkcairo.hxx"
 #include <optional>
@@ -3061,8 +3062,7 @@ void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
     char* pForceDpi;
     if ((pForceDpi = getenv("SAL_FORCEDPI")))
     {
-        OString sForceDPI(pForceDpi);
-        rDPIX = rDPIY = sForceDPI.toInt32();
+        rDPIX = rDPIY = o3tl::toInt32(std::string_view(pForceDpi));
         return;
     }
 

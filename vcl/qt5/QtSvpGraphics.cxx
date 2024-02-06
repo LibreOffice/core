@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <salbmp.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <config_cairo_canvas.h>
 
@@ -98,8 +99,7 @@ void QtSvpGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
     char* pForceDpi;
     if ((pForceDpi = getenv("SAL_FORCEDPI")))
     {
-        OString sForceDPI(pForceDpi);
-        rDPIX = rDPIY = sForceDPI.toInt32();
+        rDPIX = rDPIY = o3tl::toInt32(std::string_view(pForceDpi));
         return;
     }
 

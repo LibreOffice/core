@@ -35,20 +35,20 @@ void lcl_parseAdjustmentValue(
     drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue;
     do
     {
-        OString aToken(o3tl::trim(o3tl::getToken(rValue, 0, ',', nIndex)));
+        std::string_view aToken(o3tl::trim(o3tl::getToken(rValue, 0, ',', nIndex)));
         static const char aNamePrefix[] = "Name = \"";
         static const char aValuePrefix[] = "Value = (any) { (long) ";
         if (o3tl::starts_with(aToken, aNamePrefix))
         {
-            OString aName = aToken.copy(strlen(aNamePrefix),
-                                        aToken.getLength() - strlen(aNamePrefix) - strlen("\""));
+            std::string_view aName = aToken.substr(
+                strlen(aNamePrefix), aToken.size() - strlen(aNamePrefix) - strlen("\""));
             aAdjustmentValue.Name = OUString::fromUtf8(aName);
         }
         else if (o3tl::starts_with(aToken, aValuePrefix))
         {
-            OString aValue = aToken.copy(strlen(aValuePrefix),
-                                         aToken.getLength() - strlen(aValuePrefix) - strlen(" }"));
-            aAdjustmentValue.Value <<= aValue.toInt32();
+            std::string_view aValue = aToken.substr(
+                strlen(aValuePrefix), aToken.size() - strlen(aValuePrefix) - strlen(" }"));
+            aAdjustmentValue.Value <<= o3tl::toInt32(aValue);
         }
         else if (!o3tl::starts_with(aToken, "State = "))
             SAL_WARN("oox", "lcl_parseAdjustmentValue: unexpected prefix: " << aToken);
