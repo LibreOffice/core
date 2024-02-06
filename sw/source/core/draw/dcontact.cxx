@@ -2263,7 +2263,7 @@ namespace sdr::contact
             {
                 // create transform primitive
                 xRetval = drawinglayer::primitive2d::Primitive2DContainer {
-                    drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::TransformPrimitive2D(aOffsetMatrix, std::move(xRetval)))
+                    new drawinglayer::primitive2d::TransformPrimitive2D(aOffsetMatrix, std::move(xRetval))
                 };
             }
 

@@ -93,7 +93,7 @@ public:
         rtl::Reference<primitive2d::PolygonStrokePrimitive2D> strokePrimitive(
             new primitive2d::PolygonStrokePrimitive2D(polygon, lineAttributes, strokeAttributes));
         primitive2d::Primitive2DContainer primitives;
-        primitives.push_back(primitive2d::Primitive2DReference(strokePrimitive));
+        primitives.push_back(strokePrimitive);
         processor->process(primitives);
         metafile.Stop();
         metafile.WindStart();

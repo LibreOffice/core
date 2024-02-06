@@ -115,10 +115,9 @@ namespace sdr::overlay
                             getOffset()));
                     const_cast< OverlayObject* >(this)->maPrimitive2DSequence =
                         drawinglayer::primitive2d::Primitive2DContainer {
-                            drawinglayer::primitive2d::Primitive2DReference(
                                 new drawinglayer::primitive2d::TransformPrimitive2D(
                                     aTranslateGridOffset,
-                                    std::move(const_cast<drawinglayer::primitive2d::Primitive2DContainer&>(maPrimitive2DSequence))))
+                                    std::move(const_cast<drawinglayer::primitive2d::Primitive2DContainer&>(maPrimitive2DSequence)))
                         };
                 }
             }

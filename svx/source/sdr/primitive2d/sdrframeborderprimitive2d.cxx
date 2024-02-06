@@ -602,12 +602,11 @@ namespace
         const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * aCombination.getRefModeOffset()));
 
         rTarget.append(
-            drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::BorderLinePrimitive2D(
                     aStart,
                     aStart + rX,
                     std::move(aBorderlines),
-                    std::move(aStrokeAttribute))));
+                    std::move(aStrokeAttribute)));
     }
 
     double getMinimalNonZeroValue(double fCurrent, double fNew)

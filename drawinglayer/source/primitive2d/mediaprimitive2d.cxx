@@ -84,7 +84,7 @@ namespace drawinglayer::primitive2d
 
                     // add transform primitive
                     xRetval = Primitive2DContainer {
-                        Primitive2DReference(new TransformPrimitive2D(aTransform, std::move(xRetval))) // Scaled
+                        new TransformPrimitive2D(aTransform, std::move(xRetval)) // Scaled
                     };
                 }
             }

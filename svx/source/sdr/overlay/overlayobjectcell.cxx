@@ -57,19 +57,18 @@ namespace sdr::overlay
                     const basegfx::B2DRange& rRange(maRectangles[a]);
                     const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(rRange));
 
-                    aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                    aRetval[a] =
                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                             basegfx::B2DPolyPolygon(aPolygon),
-                            aRGBColor));
+                            aRGBColor);
                 }
 
 
                 aRetval = drawinglayer::primitive2d::Primitive2DContainer {
                     // embed in 50% transparent paint
-                    drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             std::move(aRetval),
-                            0.5))
+                            0.5)
                 };
             }
 

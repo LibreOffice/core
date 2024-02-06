@@ -121,18 +121,16 @@ void SvgFeDropShadowNode::apply(drawinglayer::primitive2d::Primitive2DContainer&
     drawinglayer::primitive2d::Primitive2DContainer aTempTarget;
 
     // Create the shadow
-    aTempTarget.append(drawinglayer::primitive2d::Primitive2DReference(
-        new drawinglayer::primitive2d::ShadowPrimitive2D(
-            aTransform, maFloodColor.getBColor(), maStdDeviation.getNumber(),
-            drawinglayer::primitive2d::Primitive2DContainer(rTarget))));
+    aTempTarget.append(new drawinglayer::primitive2d::ShadowPrimitive2D(
+        aTransform, maFloodColor.getBColor(), maStdDeviation.getNumber(),
+        drawinglayer::primitive2d::Primitive2DContainer(rTarget)));
 
     const double fOpacity(maFloodOpacity.solve(*this));
     if (basegfx::fTools::less(fOpacity, 1.0))
     {
         // Apply transparence to the shadow
-        aTempTarget.append(drawinglayer::primitive2d::Primitive2DReference(
-            new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aTempTarget),
-                                                                          1.0 - fOpacity)));
+        aTempTarget.append(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+            std::move(aTempTarget), 1.0 - fOpacity));
     }
 
     // Append the original target

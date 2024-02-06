@@ -208,11 +208,11 @@ namespace drawinglayer::primitive2d
                     fWaveWidth *= 2.0;
                 }
 
-                aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aLine, aLineAttribute, aStrokeAttribute, fWaveWidth, fWaveWidth * 0.5));
+                aNewPrimitive = new PolygonWavePrimitive2D(aLine, aLineAttribute, aStrokeAttribute, fWaveWidth, fWaveWidth * 0.5);
             }
             else
             {
-                aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(std::move(aLine), aLineAttribute, std::move(aStrokeAttribute)));
+                aNewPrimitive = new PolygonStrokePrimitive2D(std::move(aLine), aLineAttribute, std::move(aStrokeAttribute));
             }
 
             // add primitive

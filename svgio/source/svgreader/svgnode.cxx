@@ -662,12 +662,11 @@ namespace {
 
                         rTarget = drawinglayer::primitive2d::Primitive2DContainer {
                             // pack in ObjectInfoPrimitive2D group
-                            drawinglayer::primitive2d::Primitive2DReference(
                                 new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
                                     std::move(rTarget),
                                     aObjectName,
                                     rTitle,
-                                    rDesc))
+                                    rDesc)
                         };
                     }
                 }

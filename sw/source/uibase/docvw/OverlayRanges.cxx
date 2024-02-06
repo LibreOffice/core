@@ -68,10 +68,10 @@ namespace sw::overlay
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
                 const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(maRanges[a]));
-                aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                aRetval[a] =
                     new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(aPolygon),
-                    aRGBColor));
+                    aRGBColor);
             }
             // embed all rectangles in transparent paint
             const sal_uInt16 nTransparence( SvtOptionsDrawinglayer::GetTransparentSelectionPercent() );

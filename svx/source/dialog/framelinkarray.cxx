@@ -1652,10 +1652,9 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     if(!aData.empty())
     {
         aSequence.append(
-            drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
                     std::move(aData),
-                    true)));    // force visualization to minimal one discrete unit (pixel)
+                    true));    // force visualization to minimal one discrete unit (pixel)
     }
 
 #ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
@@ -1663,10 +1662,9 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     {
         // draw ClipRange in yellow to allow simple interactive optical control in office
         aSequence.append(
-            drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                     basegfx::utils::createPolygonFromRect(rClipRange),
-                    basegfx::BColor(1.0, 1.0, 0.0))));
+                    basegfx::BColor(1.0, 1.0, 0.0)));
     }
 #endif
 

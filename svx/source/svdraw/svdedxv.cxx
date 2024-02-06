@@ -520,14 +520,13 @@ TextEditHighContrastOverlaySelection::createOverlayObjectPrimitive2DSequence()
         // This is used in high contrast mode, we will render the selection
         // with the bg forced to the selection Highlight color and the fg color
         // forced to the HighlightText color
-        aRetval.append(drawinglayer::primitive2d::Primitive2DReference(
-            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                basegfx::B2DPolyPolygon(
-                    basegfx::utils::createPolygonFromRect(aClipPolyPolygon.getB2DRange())),
-                aRGBColor)));
+        aRetval.append(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+            basegfx::B2DPolyPolygon(
+                basegfx::utils::createPolygonFromRect(aClipPolyPolygon.getB2DRange())),
+            aRGBColor));
         aRetval.append(mrTextEditOverlayObject.getTextPrimitives());
-        aRetval.append(drawinglayer::primitive2d::Primitive2DReference(
-            new drawinglayer::primitive2d::MaskPrimitive2D(aClipPolyPolygon, std::move(aRetval))));
+        aRetval.append(
+            new drawinglayer::primitive2d::MaskPrimitive2D(aClipPolyPolygon, std::move(aRetval)));
     }
 
     return aRetval;

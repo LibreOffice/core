@@ -405,12 +405,12 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            return Primitive2DReference(
+            return
                 new BorderLinePrimitive2D(
                     pCandidateA->getStart(),
                     pCandidateB->getEnd(),
                     std::move(aMergedBorderLines),
-                    pCandidateA->getStrokeAttribute()));
+                    pCandidateA->getStrokeAttribute());
         }
 
 } // end of namespace

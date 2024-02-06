@@ -38,8 +38,7 @@ namespace sdr::overlay
             if(basegfx::fTools::more(mfAlpha, 0.0))
             {
                 drawinglayer::primitive2d::Primitive2DContainer aNewTransPrimitiveVector { aReference };
-                aReference = drawinglayer::primitive2d::Primitive2DReference(
-                                new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aNewTransPrimitiveVector), mfAlpha));
+                aReference = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aNewTransPrimitiveVector), mfAlpha);
             }
 
             return drawinglayer::primitive2d::Primitive2DContainer { aReference };

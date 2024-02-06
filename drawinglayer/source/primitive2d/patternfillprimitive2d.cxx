@@ -127,10 +127,9 @@ namespace drawinglayer::primitive2d
             {
                 const geometry::ViewInformation2D aViewInformation2D;
                 primitive2d::Primitive2DContainer xEmbedSeq {
-                    primitive2d::Primitive2DReference(
                         new primitive2d::TransformPrimitive2D(
                             basegfx::utils::createScaleB2DHomMatrix(mnDiscreteWidth, mnDiscreteHeight),
-                            Primitive2DContainer(getChildren())))
+                            Primitive2DContainer(getChildren()))
                 };
 
                 const BitmapEx aBitmapEx(
@@ -246,10 +245,9 @@ namespace drawinglayer::primitive2d
                         aMaskRange.getMinimum()));
 
                 aRetval = Primitive2DContainer {
-                    Primitive2DReference(
                         new TransformPrimitive2D(
                             aMaskTransform,
-                            std::move(aRetval)))
+                            std::move(aRetval))
                 };
             }
 

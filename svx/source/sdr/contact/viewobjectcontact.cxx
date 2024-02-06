@@ -334,10 +334,9 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
                     aRGBWhite,
                     0.5);
             xRetval = drawinglayer::primitive2d::Primitive2DContainer{
-                drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                         std::move(xRetval),
-                        aBColorModifier))
+                        aBColorModifier)
             };
         }
     }
@@ -417,7 +416,6 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                     }
 
                     rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
-                        drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::StructureTagPrimitive2D(
                                 eElement,
                                 bBackground,
@@ -425,7 +423,7 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                                 false, // Decorative
                                 std::move(rNewPrimitiveSequence),
                                 pAnchorKey,
-                                &annotIds))
+                                &annotIds)
                     };
                 }
             }
@@ -483,10 +481,9 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                 basegfx::utils::createTranslateB2DHomMatrix(
                     rGridOffset));
             xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
-                drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         aTranslateGridOffset,
-                        std::move(xNewPrimitiveSequence)))
+                        std::move(xNewPrimitiveSequence))
             };
         }
     }

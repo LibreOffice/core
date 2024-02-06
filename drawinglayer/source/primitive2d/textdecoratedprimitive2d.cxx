@@ -40,7 +40,7 @@ namespace drawinglayer::primitive2d
             const attribute::FontAttribute& rFontAttribute) const
         {
             // create the SimpleTextPrimitive needed in any case
-            rTarget.push_back(Primitive2DReference(
+            rTarget.push_back(
                 new TextSimplePortionPrimitive2D(
                     rDecTrans.getB2DHomMatrix(),
                     rText,
@@ -50,7 +50,7 @@ namespace drawinglayer::primitive2d
                     std::vector(rKashidaArray),
                     rFontAttribute,
                     getLocale(),
-                    getFontColor())));
+                    getFontColor()));
 
             CreateDecorationGeometryContent(rTarget, rDecTrans, rText,
                                             nTextPosition, nTextLength,
@@ -107,27 +107,27 @@ namespace drawinglayer::primitive2d
             if(bOverlineUsed)
             {
                 // create primitive geometry for overline
-                rTarget.push_back(Primitive2DReference(
+                rTarget.push_back(
                     new TextLinePrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
                         aTextLayouter.getOverlineOffset(),
                         aTextLayouter.getOverlineHeight(),
                         getFontOverline(),
-                        getOverlineColor())));
+                        getOverlineColor()));
             }
 
             if(bUnderlineUsed)
             {
                 // create primitive geometry for underline
-                rTarget.push_back(Primitive2DReference(
+                rTarget.push_back(
                     new TextLinePrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
                         aTextLayouter.getUnderlineOffset(),
                         aTextLayouter.getUnderlineHeight(),
                         getFontUnderline(),
-                        getTextlineColor())));
+                        getTextlineColor()));
             }
 
             if(!bStrikeoutUsed)
@@ -139,26 +139,26 @@ namespace drawinglayer::primitive2d
                 // strikeout with character
                 const sal_Unicode aStrikeoutChar(TEXT_STRIKEOUT_SLASH == getTextStrikeout() ? '/' : 'X');
 
-                rTarget.push_back(Primitive2DReference(
+                rTarget.push_back(
                     new TextCharacterStrikeoutPrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
                         getFontColor(),
                         aStrikeoutChar,
                         getFontAttribute(),
-                        getLocale())));
+                        getLocale()));
             }
             else
             {
                 // strikeout with geometry
-                rTarget.push_back(Primitive2DReference(
+                rTarget.push_back(
                     new TextGeometryStrikeoutPrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
                         getFontColor(),
                         aTextLayouter.getUnderlineHeight(),
                         aTextLayouter.getStrikeoutOffset(),
-                        getTextStrikeout())));
+                        getTextStrikeout()));
             }
 
             // TODO: Handle Font Emphasis Above/Below
@@ -272,11 +272,11 @@ namespace drawinglayer::primitive2d
                         }
 
                         aRetval = Primitive2DContainer {
-                            Primitive2DReference(new TextEffectPrimitive2D(
+                            new TextEffectPrimitive2D(
                                 std::move(aRetval),
                                 aDecTrans.getTranslate(),
                                 aDecTrans.getRotate(),
-                                aTextEffectStyle2D))
+                                aTextEffectStyle2D)
                          };
                     }
                     else if(bHasOutline)
@@ -284,11 +284,11 @@ namespace drawinglayer::primitive2d
                         // create outline using an own helper primitive since this will
                         // be view-dependent
                         aRetval = Primitive2DContainer {
-                            Primitive2DReference(new TextEffectPrimitive2D(
+                            new TextEffectPrimitive2D(
                                 std::move(aRetval),
                                 aDecTrans.getTranslate(),
                                 aDecTrans.getRotate(),
-                                TextEffectStyle2D::Outline))
+                                TextEffectStyle2D::Outline)
                          };
                     }
 

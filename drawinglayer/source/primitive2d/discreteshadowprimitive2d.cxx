@@ -170,84 +170,84 @@ namespace drawinglayer::primitive2d
             xRetval.resize(8);
 
             // TopLeft
-            xRetval[0] = Primitive2DReference(
+            xRetval[0] =
                 new BitmapPrimitive2D(
                     getDiscreteShadow().getTopLeft(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBigLenX,
                         fBigLenY,
                         -fBorderX,
-                        -fBorderY)));
+                        -fBorderY));
 
             // Top
-            xRetval[1] = Primitive2DReference(
+            xRetval[1] =
                 new BitmapPrimitive2D(
                     getDiscreteShadow().getTop(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         1.0 - (2.0 * (fBorderX + fSingleX)) + fSingleX,
                         fBorderY,
                         fBorderX + fSingleX,
-                        -fBorderY)));
+                        -fBorderY));
 
             // TopRight
-            xRetval[2] = Primitive2DReference(
+            xRetval[2] =
                 new BitmapPrimitive2D(
                     getDiscreteShadow().getTopRight(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBigLenX,
                         fBigLenY,
                         1.0 - fBorderX,
-                        -fBorderY)));
+                        -fBorderY));
 
             // Right
-            xRetval[3] = Primitive2DReference(
+            xRetval[3] =
                 new BitmapPrimitive2D(
                     getDiscreteShadow().getRight(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBorderX,
                         1.0 - (2.0 * (fBorderY + fSingleY)) + fSingleY,
                         1.0 + fSingleX,
-                        fBorderY + fSingleY)));
+                        fBorderY + fSingleY));
 
             // BottomRight
-            xRetval[4] = Primitive2DReference(
+            xRetval[4] =
                 new BitmapPrimitive2D(
                     getDiscreteShadow().getBottomRight(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBigLenX,
                         fBigLenY,
                         1.0 - (fBorderX + fSingleX) + fSingleX,
-                        1.0 - (fBorderY + fSingleY) + fSingleY)));
+                        1.0 - (fBorderY + fSingleY) + fSingleY));
 
             // Bottom
-            xRetval[5] = Primitive2DReference(
+            xRetval[5] =
                 new BitmapPrimitive2D(
                     getDiscreteShadow().getBottom(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         1.0 - (2.0 * (fBorderX + fSingleX)) + fSingleX,
                         fBorderY,
                         fBorderX + fSingleX,
-                        1.0 + fSingleY)));
+                        1.0 + fSingleY));
 
             // BottomLeft
-            xRetval[6] = Primitive2DReference(
+            xRetval[6] =
                 new BitmapPrimitive2D(
                     getDiscreteShadow().getBottomLeft(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBigLenX,
                         fBigLenY,
                         -fBorderX,
-                        1.0 - fBorderY)));
+                        1.0 - fBorderY));
 
             // Left
-            xRetval[7] = Primitive2DReference(
+            xRetval[7] =
                 new BitmapPrimitive2D(
                     getDiscreteShadow().getLeft(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBorderX,
                         1.0 - (2.0 * (fBorderY + fSingleY)) + fSingleY,
                         -fBorderX,
-                        fBorderY + fSingleY)));
+                        fBorderY + fSingleY));
 
             // put all in object transformation to get to target positions
             rContainer.push_back(

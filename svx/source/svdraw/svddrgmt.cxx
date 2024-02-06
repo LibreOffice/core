@@ -197,10 +197,9 @@ SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence()
 drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
 {
     return drawinglayer::primitive2d::Primitive2DContainer {
-        drawinglayer::primitive2d::Primitive2DReference(
             new drawinglayer::primitive2d::TransformPrimitive2D(
                 rDragMethod.getCurrentTransformation(),
-                drawinglayer::primitive2d::Primitive2DContainer(maPrimitive2DSequence)))
+                drawinglayer::primitive2d::Primitive2DContainer(maPrimitive2DSequence))
     };
 }
 
@@ -253,17 +252,15 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
             }
 
             aRetval = drawinglayer::primitive2d::Primitive2DContainer {
-                drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::MarkerArrayPrimitive2D(std::move(aTransformedPositions),
-                        drawinglayer::primitive2d::createDefaultCross_3x3(aColor)))
+                        drawinglayer::primitive2d::createDefaultCross_3x3(aColor))
             };
         }
         else
         {
             aRetval = drawinglayer::primitive2d::Primitive2DContainer {
-                drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::MarkerArrayPrimitive2D(std::move(aTransformedPositions),
-                                                                          SdrHdl::createGluePointBitmap()))
+                                                                          SdrHdl::createGluePointBitmap())
              };
         }
     }
@@ -794,7 +791,7 @@ void SdrDragMethod::CreateOverlayGeometry(
         if(!aResultTransparent.empty())
         {
             aResultTransparent = drawinglayer::primitive2d::Primitive2DContainer {
-                drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aResultTransparent), 0.5))
+                new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aResultTransparent), 0.5)
             };
 
             std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(

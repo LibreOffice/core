@@ -341,10 +341,9 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
                     if(getTransparence() > 0.0)
                     {
                         aRetval = Primitive2DContainer {
-                            Primitive2DReference(
                                 new UnifiedTransparencePrimitive2D(
                                     std::move(aRetval),
-                                    getTransparence()))
+                                    getTransparence())
                         };
                     }
                 }

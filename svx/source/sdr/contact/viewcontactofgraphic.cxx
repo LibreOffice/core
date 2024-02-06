@@ -159,10 +159,9 @@ namespace sdr::contact
                 aOutline.transform(rObjectMatrix);
 
                 xRetval.push_back(
-                    drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                             std::move(aOutline),
-                            aBColor)));
+                            aBColor));
             }
 
             // decompose object matrix to get single values
@@ -209,10 +208,9 @@ namespace sdr::contact
                         fWidth, fHeight, fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
                     xRetval.push_back(
-                        drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::BitmapPrimitive2D(
                                 aDraftBitmap,
-                                aBitmapMatrix)));
+                                aBitmapMatrix));
 
                     // consume bitmap size in X
                     aScale.setX(std::max(0.0, aScale.getX() - (fWidth + fDistance)));

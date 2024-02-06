@@ -632,17 +632,17 @@ namespace emfplushelper
         {
             drawinglayer::primitive2d::Primitive2DContainer aContainer;
             if (aStart.isDefault() && aEnd.isDefault())
-                aContainer.append(drawinglayer::primitive2d::Primitive2DReference(
+                aContainer.append(
                     new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                        polygon, lineAttribute, pen->GetStrokeAttribute(mdExtractedXScale))));
+                        polygon, lineAttribute, pen->GetStrokeAttribute(mdExtractedXScale)));
             else
             {
                 aContainer.resize(polygon.count());
                 for (sal_uInt32 i = 0; i < polygon.count(); i++)
-                    aContainer[i] = drawinglayer::primitive2d::Primitive2DReference(
+                    aContainer[i] =
                         new drawinglayer::primitive2d::PolygonStrokeArrowPrimitive2D(
                             polygon.getB2DPolygon(i), lineAttribute,
-                            pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd));
+                            pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd);
             }
             mrTargetHolders.Current().append(
                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(

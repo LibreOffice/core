@@ -2680,10 +2680,9 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     {
         drawinglayer::primitive2d::Primitive2DContainer aSequence;
         aSequence.append(
-            drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
                     std::move(aData),
-                    true)));    // force visualization to minimal one discrete unit (pixel)
+                    true));    // force visualization to minimal one discrete unit (pixel)
         // paint
         mrTabFrame.ProcessPrimitives(aSequence);
     }
@@ -5167,10 +5166,9 @@ namespace drawinglayer::primitive2d
             if(!aData.empty())
             {
                 rContainer.append(
-                    drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
                             std::move(aData),
-                            true)));    // force visualization to minimal one discrete unit (pixel)
+                            true));    // force visualization to minimal one discrete unit (pixel)
             }
         }
 
@@ -5297,13 +5295,12 @@ void PaintCharacterBorder(
     drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
 
     aBorderLineTarget.append(
-        drawinglayer::primitive2d::Primitive2DReference(
             new drawinglayer::primitive2d::SwBorderRectanglePrimitive2D(
                 aBorderTransform,
                 aStyleTop,
                 aStyleRight,
                 aStyleBottom,
-                aStyleLeft)));
+                aStyleLeft));
     gProp.pBLines->AddBorderLines(std::move(aBorderLineTarget));
 }
 

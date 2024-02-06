@@ -253,7 +253,7 @@ void ViewContactOfPageFill::createViewIndependentPrimitive2DSequence(drawinglaye
 
     // create and add primitive
     const basegfx::BColor aRGBColor(aPageFillColor.getBColor());
-    rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor)));
+    rVisitor.visit(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageFillPolygon), aRGBColor));
 }
 
 ViewContactOfPageFill::ViewContactOfPageFill(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
@@ -302,13 +302,13 @@ void ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence(draw
         aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMinY()));
         aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMaxY()));
 
-        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aLeft), aRGBBorderColor)));
-        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aRight), aRGBBorderColor)));
+        rVisitor.visit(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aLeft), aRGBBorderColor));
+        rVisitor.visit(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aRight), aRGBBorderColor));
     }
     else
     {
         basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
-        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPageBorderPolygon), aRGBBorderColor)));
+        rVisitor.visit(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPageBorderPolygon), aRGBBorderColor));
     }
 }
 
@@ -355,7 +355,7 @@ void ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence(draw
 
     // create page outer border primitive
     const basegfx::BColor aRGBBorderColor(aBorderColor.getBColor());
-    rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPageBorderPolygon), aRGBBorderColor)));
+    rVisitor.visit(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPageBorderPolygon), aRGBBorderColor));
 }
 
 ViewContactOfInnerPageBorder::ViewContactOfInnerPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage)

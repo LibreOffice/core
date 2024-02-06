@@ -191,10 +191,7 @@ namespace drawinglayer::primitive2d
                     bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
                 }
 
-                return Primitive2DReference(
-                    new BitmapPrimitive2D(
-                        bitmap,
-                        getTransform()));
+                return new BitmapPrimitive2D(bitmap, getTransform());
             }
 
             void checkSafeToBuffer(sal_uInt32 nIndex)
@@ -587,9 +584,9 @@ namespace drawinglayer::primitive2d
                         aMaskPolygon.transform(rTransform);
 
                         aRetval = Primitive2DContainer {
-                            Primitive2DReference(new MaskPrimitive2D(
+                            new MaskPrimitive2D(
                                 basegfx::B2DPolyPolygon(aMaskPolygon),
-                                std::move(aRetval)))
+                                std::move(aRetval))
                         };
                     }
                     break;

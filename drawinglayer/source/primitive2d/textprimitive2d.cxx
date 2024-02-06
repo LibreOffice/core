@@ -191,8 +191,8 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
         aPolygonTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
         // create outline text effect with current content and replace
-        aRetval = Primitive2DContainer{ Primitive2DReference(new TextEffectPrimitive2D(
-            std::move(aRetval), aTranslate, fRotate, TextEffectStyle2D::Outline)) };
+        aRetval = Primitive2DContainer{ new TextEffectPrimitive2D(
+            std::move(aRetval), aTranslate, fRotate, TextEffectStyle2D::Outline) };
     }
 
     rContainer.append(std::move(aRetval));

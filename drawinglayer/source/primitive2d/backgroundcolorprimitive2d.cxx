@@ -49,10 +49,10 @@ namespace drawinglayer::primitive2d
             {
                 // if used, embed decompose geometry to unified transparency
                 Primitive2DContainer aContent { aDecompose };
-                aDecompose = Primitive2DReference(
+                aDecompose =
                     new UnifiedTransparencePrimitive2D(
                         std::move(aContent),
-                        getTransparency()));
+                        getTransparency());
             }
 
             rContainer.push_back(aDecompose);

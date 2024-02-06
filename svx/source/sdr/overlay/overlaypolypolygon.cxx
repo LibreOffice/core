@@ -64,8 +64,7 @@ namespace sdr::overlay
                 if (nTransparency > 0)
                 {
                     aReturnContainer = drawinglayer::primitive2d::Primitive2DContainer{
-                        drawinglayer::primitive2d::Primitive2DReference(
-                            new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aReturnContainer), nTransparency / 255.0))
+                            new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aReturnContainer), nTransparency / 255.0)
                      };
                 }
             }

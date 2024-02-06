@@ -343,10 +343,9 @@ namespace wmfemfhelper
             if (rClipPolyPolygon.count())
             {
                 xRetval = drawinglayer::primitive2d::Primitive2DContainer{
-                    drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::MaskPrimitive2D(
                             rClipPolyPolygon,
-                            std::move(xRetval)))
+                            std::move(xRetval))
                 };
             }
         }

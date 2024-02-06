@@ -392,7 +392,7 @@ namespace drawinglayer::primitive2d
             {
                 // embed line geometry to invisible (100% transparent) line group for HitTest
                 aRetval = Primitive2DContainer {
-                    Primitive2DReference(new HiddenGeometryPrimitive2D(std::move(aRetval)))
+                    new HiddenGeometryPrimitive2D(std::move(aRetval))
                 };
             }
 

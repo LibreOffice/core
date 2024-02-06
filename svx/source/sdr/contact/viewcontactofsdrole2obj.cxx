@@ -138,10 +138,9 @@ void ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(drawinglay
         || !GetOle2Obj().GetDescription().isEmpty())
     {
         xContent = drawinglayer::primitive2d::Primitive2DContainer{
-            drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
                     std::move(xContent), GetOle2Obj().GetName(), GetOle2Obj().GetTitle(),
-                    GetOle2Obj().GetDescription()))
+                    GetOle2Obj().GetDescription())
         };
     }
 
@@ -171,11 +170,10 @@ basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometr
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::SdrOle2Primitive2D(
             drawinglayer::primitive2d::Primitive2DContainer {
-                drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
                         GetOle2Obj(),
                         aObjectMatrix,
-                        GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion()))
+                        GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion())
             },
             aObjectMatrix,
             aAttribute));

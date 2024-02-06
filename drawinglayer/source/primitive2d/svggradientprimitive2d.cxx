@@ -84,10 +84,10 @@ namespace drawinglayer::primitive2d
                     {
                         Primitive2DContainer aContent { xRef };
 
-                        xRef = Primitive2DReference(
+                        xRef =
                             new UnifiedTransparencePrimitive2D(
                                 std::move(aContent),
-                                1.0 - fOpacity));
+                                1.0 - fOpacity);
                     }
 
                     rContainer.push_back(xRef);

@@ -97,8 +97,7 @@ namespace drawinglayer::primitive2d
             }
 
             // create HiddenGeometryPrimitive2D
-            return Primitive2DReference(
-                new HiddenGeometryPrimitive2D(Primitive2DContainer { xReference }));
+            return new HiddenGeometryPrimitive2D(Primitive2DContainer { xReference });
         }
 
 } // end of namespace

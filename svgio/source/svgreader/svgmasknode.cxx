@@ -176,10 +176,9 @@ namespace svgio::svgreader
             {
                 // create embedding group element with transformation
                 aNewTarget = drawinglayer::primitive2d::Primitive2DContainer {
-                    drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             *getTransform(),
-                            std::move(aNewTarget)))
+                            std::move(aNewTarget))
                 };
             }
 
@@ -243,12 +242,11 @@ namespace svgio::svgreader
                     {
                         // mask is object-relative, embed in content transformation
                         aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer {
-                            drawinglayer::primitive2d::Primitive2DReference(
                                 new drawinglayer::primitive2d::TransformPrimitive2D(
                                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                                         aContentRange.getRange(),
                                         aContentRange.getMinimum()),
-                                    std::move(aMaskTarget)))
+                                    std::move(aMaskTarget))
                         };
                     }
                     else // userSpaceOnUse
@@ -257,10 +255,9 @@ namespace svgio::svgreader
                         if(pTransform)
                         {
                             aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer {
-                                drawinglayer::primitive2d::Primitive2DReference(
                                     new drawinglayer::primitive2d::TransformPrimitive2D(
                                         *pTransform,
-                                        std::move(aMaskTarget)))
+                                        std::move(aMaskTarget))
                             };
                         }
                     }
@@ -269,10 +266,9 @@ namespace svgio::svgreader
                     // how content is used as alpha is special for Svg
                     {
                         aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer {
-                            drawinglayer::primitive2d::Primitive2DReference(
                                 new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                                     std::move(aMaskTarget),
-                                    std::make_shared<basegfx::BColorModifier_luminance_to_alpha>()))
+                                    std::make_shared<basegfx::BColorModifier_luminance_to_alpha>())
                         };
                     }
 

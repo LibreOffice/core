@@ -110,19 +110,18 @@ namespace sdr::overlay
                 for(sal_uInt32 a(0);a < nCount; a++)
                 {
                     const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(maRanges[a]));
-                    aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                    aRetval[a] =
                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                             basegfx::B2DPolyPolygon(aPolygon),
-                            aRGBColor));
+                            aRGBColor);
                 }
 
                 if(bInvert)
                 {
                     // embed all in invert primitive
                     aRetval = drawinglayer::primitive2d::Primitive2DContainer {
-                        drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::InvertPrimitive2D(
-                                std::move(aRetval)))
+                                std::move(aRetval))
                     };
                 }
                 else if(OverlayType::Transparent == maLastOverlayType)

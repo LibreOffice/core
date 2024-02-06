@@ -539,7 +539,7 @@ namespace drawinglayer::processor2d
             {
                 /// push candidate to HitStack to create it. This only happens when a hit is found and
                 /// creating the HitStack was requested (see collectHitStack)
-                maHitStack.append(primitive2d::Primitive2DReference(const_cast< primitive2d::BasePrimitive2D* >(&rCandidate)));
+                maHitStack.append(const_cast< primitive2d::BasePrimitive2D* >(&rCandidate));
             }
         }
 

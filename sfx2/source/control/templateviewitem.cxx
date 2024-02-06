@@ -69,12 +69,12 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
             fTransparence = pAttrs->fHighlightTransparence;
     }
 
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
+    aSeq[0] =
             new PolyPolygonSelectionPrimitive2D( B2DPolyPolygon(::tools::Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                  aFillColor,
                                                  fTransparence,
                                                  0.0,
-                                                 true));
+                                                 true);
 
     // Draw thumbnail
     Size aImageSize = maPreview1.GetSizePixel();
@@ -91,27 +91,27 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
     aBounds.setClosed(true);
 
-    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                                        B2DPolyPolygon(aBounds), COL_WHITE.getBColor()));
+    aSeq[1] = new PolyPolygonColorPrimitive2D(
+                    B2DPolyPolygon(aBounds), COL_WHITE.getBColor());
 
-    aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( new FillGraphicPrimitive2D(
-                                        createTranslateB2DHomMatrix(maPrev1Pos.X(),maPrev1Pos.Y()),
-                                        FillGraphicAttribute(Graphic(maPreview1),
-                                                            B2DRange(
-                                                                B2DPoint(0,0),
-                                                                B2DPoint(aImageSize.Width(),aImageSize.Height())),
-                                                            false)
-                                        ));
+    aSeq[2] = new FillGraphicPrimitive2D(
+                    createTranslateB2DHomMatrix(maPrev1Pos.X(),maPrev1Pos.Y()),
+                    FillGraphicAttribute(Graphic(maPreview1),
+                                        B2DRange(
+                                            B2DPoint(0,0),
+                                            B2DPoint(aImageSize.Width(),aImageSize.Height())),
+                                        false)
+                    );
 
     // draw thumbnail borders
-    aSeq[3] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
+    aSeq[3] = createBorderLine(aBounds);
 
     if(mbIsDefaultTemplate)
     {
         Point aIconPos(getDefaultIconArea().TopLeft());
 
-        aSeq[4] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D( maDefaultBitmap,
-                    B2DPoint(aIconPos.X(), aIconPos.Y())));
+        aSeq[4] = new DiscreteBitmapPrimitive2D( maDefaultBitmap,
+                    B2DPoint(aIconPos.X(), aIconPos.Y()));
     }
 
     addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);
