@@ -110,7 +110,7 @@ namespace cairocanvas
 
     OUString SAL_CALL Canvas::getServiceName(  )
     {
-        return "com.sun.star.rendering.Canvas.Cairo";
+        return u"com.sun.star.rendering.Canvas.Cairo"_ustr;
     }
 
     //  XServiceInfo
@@ -121,7 +121,7 @@ namespace cairocanvas
     }
     OUString Canvas::getImplementationName()
     {
-        return "com.sun.star.comp.rendering.Canvas.Cairo";
+        return u"com.sun.star.comp.rendering.Canvas.Cairo"_ustr;
     }
     css::uno::Sequence< OUString > Canvas::getSupportedServiceNames()
     {

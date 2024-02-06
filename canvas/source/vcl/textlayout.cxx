@@ -434,7 +434,7 @@ namespace vclcanvas
 
     OUString SAL_CALL TextLayout::getImplementationName()
     {
-        return "VCLCanvas::TextLayout";
+        return u"VCLCanvas::TextLayout"_ustr;
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
@@ -444,7 +444,7 @@ namespace vclcanvas
 
     uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()
     {
-        return { "com.sun.star.rendering.TextLayout" };
+        return { u"com.sun.star.rendering.TextLayout"_ustr };
     }
 }
 

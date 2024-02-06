@@ -144,7 +144,7 @@ namespace cairocanvas
     }
     OUString SpriteCanvas::getImplementationName()
     {
-        return "com.sun.star.comp.rendering.SpriteCanvas.Cairo";
+        return u"com.sun.star.comp.rendering.SpriteCanvas.Cairo"_ustr;
     }
     css::uno::Sequence< OUString > SpriteCanvas::getSupportedServiceNames()
     {

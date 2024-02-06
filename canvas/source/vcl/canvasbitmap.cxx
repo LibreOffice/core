@@ -71,7 +71,7 @@ namespace vclcanvas
 
     OUString SAL_CALL CanvasBitmap::getImplementationName(  )
     {
-        return "VCLCanvas.CanvasBitmap";
+        return u"VCLCanvas.CanvasBitmap"_ustr;
     }
 
     sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )
@@ -81,7 +81,7 @@ namespace vclcanvas
 
     uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.rendering.CanvasBitmap" };
+        return { u"com.sun.star.rendering.CanvasBitmap"_ustr };
     }
 
     BitmapEx CanvasBitmap::getBitmap() const

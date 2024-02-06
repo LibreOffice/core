@@ -346,7 +346,7 @@ namespace cairocanvas
 
     OUString SAL_CALL TextLayout::getImplementationName()
     {
-        return "CairoCanvas::TextLayout";
+        return u"CairoCanvas::TextLayout"_ustr;
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
@@ -356,7 +356,7 @@ namespace cairocanvas
 
     uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()
     {
-        return { "com.sun.star.rendering.TextLayout" };
+        return { u"com.sun.star.rendering.TextLayout"_ustr };
     }
 }
 

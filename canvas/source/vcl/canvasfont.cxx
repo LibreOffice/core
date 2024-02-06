@@ -134,7 +134,7 @@ namespace vclcanvas
 
     OUString SAL_CALL CanvasFont::getImplementationName()
     {
-        return "VCLCanvas::CanvasFont";
+        return u"VCLCanvas::CanvasFont"_ustr;
     }
 
     sal_Bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName )
@@ -144,7 +144,7 @@ namespace vclcanvas
 
     uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()
     {
-        return { "com.sun.star.rendering.CanvasFont" };
+        return { u"com.sun.star.rendering.CanvasFont"_ustr };
     }
 
     vcl::Font const & CanvasFont::getVCLFont() const

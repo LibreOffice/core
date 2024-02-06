@@ -145,7 +145,7 @@ namespace cairocanvas
 
     OUString SAL_CALL CanvasBitmap::getImplementationName(  )
     {
-        return "CairoCanvas.CanvasBitmap";
+        return u"CairoCanvas.CanvasBitmap"_ustr;
     }
 
     sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )
@@ -155,7 +155,7 @@ namespace cairocanvas
 
     uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.rendering.CanvasBitmap" };
+        return { u"com.sun.star.rendering.CanvasBitmap"_ustr };
     }
 
 }

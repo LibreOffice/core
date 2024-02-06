@@ -103,7 +103,7 @@ namespace vclcanvas
 
     OUString SAL_CALL CanvasCustomSprite::getImplementationName()
     {
-        return "VCLCanvas.CanvasCustomSprite";
+        return u"VCLCanvas.CanvasCustomSprite"_ustr;
     }
 
     sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName )
@@ -113,7 +113,7 @@ namespace vclcanvas
 
     uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()
     {
-        return { "com.sun.star.rendering.CanvasCustomSprite" };
+        return { u"com.sun.star.rendering.CanvasCustomSprite"_ustr };
     }
 
     // Sprite
