@@ -912,7 +912,7 @@ void SwPostItMgr::LayoutPostIts()
                 {
                     if (bLoKitActive && !bTiledAnnotations)
                     {
-                        if (visiblePostIt->GetSidebarItem().mbPendingLayout)
+                        if (visiblePostIt->GetSidebarItem().mbPendingLayout && visiblePostIt->GetSidebarItem().mLayoutStatus != SwPostItHelper::DELETED)
                             lcl_CommentNotification(mpView, CommentNotificationType::Add, &visiblePostIt->GetSidebarItem(), 0);
                         else if (visiblePostIt->IsAnchorRectChanged())
                         {
