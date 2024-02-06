@@ -2252,7 +2252,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     if (HasSelection() && mbClickedInSelection)
     {
-        mpDragAndDropInfo.reset(new DragAndDropInfo());
+        mpDragAndDropInfo.reset(new DragAndDropInfo);
     }
     else
     {
@@ -2263,7 +2263,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
         if ( pField )
         {
-            mpDragAndDropInfo.reset(new DragAndDropInfo());
+            mpDragAndDropInfo.reset(new DragAndDropInfo);
             mpDragAndDropInfo->pField = pField;
             ContentNode* pNode = getEditEngine().GetEditDoc().GetObject( nPara );
             aCopySel = EditSelection( EditPaM( pNode, nPos ), EditPaM( pNode, nPos+1 ) );
@@ -2274,7 +2274,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         }
         else if ( IsBulletArea( aMousePos, &nPara ) )
         {
-            mpDragAndDropInfo.reset(new DragAndDropInfo());
+            mpDragAndDropInfo.reset(new DragAndDropInfo);
             mpDragAndDropInfo->bOutlinerMode = true;
             EditPaM aStartPaM(getEditEngine().GetEditDoc().GetObject(nPara), 0);
             EditPaM aEndPaM( aStartPaM );
@@ -2487,7 +2487,7 @@ void ImpEditView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEv
     SolarMutexGuard aVclGuard;
 
     if (!mpDragAndDropInfo)
-        mpDragAndDropInfo.reset(new DragAndDropInfo());
+        mpDragAndDropInfo.reset(new DragAndDropInfo);
 
     mpDragAndDropInfo->bHasValidData = false;
 

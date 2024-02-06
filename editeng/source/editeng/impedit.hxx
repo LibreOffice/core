@@ -100,49 +100,55 @@ struct CursorFlags
 
 struct DragAndDropInfo
 {
-    tools::Rectangle           aCurCursor;
-    tools::Rectangle           aCurSavedCursor;
-    sal_uInt16          nSensibleRange;
-    sal_uInt16          nCursorWidth;
-    ESelection          aBeginDragSel;
-    EditPaM             aDropDest;
-    sal_Int32           nOutlinerDropDest;
-    ESelection          aDropSel;
-    VclPtr<VirtualDevice> pBackground;
-    const SvxFieldItem* pField;
-    bool            bVisCursor              : 1;
-    bool            bDroppedInMe            : 1;
-    bool            bStarterOfDD            : 1;
-    bool            bHasValidData           : 1;
-    bool            bUndoAction             : 1;
-    bool            bOutlinerMode           : 1;
-    bool            bDragAccepted           : 1;
+    tools::Rectangle aCurCursor;
+    tools::Rectangle aCurSavedCursor;
+    sal_uInt16 nSensibleRange = 0;
+    sal_uInt16 nCursorWidth = 0;
+    ESelection aBeginDragSel;
+    EditPaM aDropDest;
+    sal_Int32 nOutlinerDropDest = 0;
+    ESelection aDropSel;
+    VclPtr<VirtualDevice> pBackground = nullptr;
+    const SvxFieldItem* pField = nullptr;
+    bool bVisCursor : 1 = false;
+    bool bDroppedInMe : 1 = false;
+    bool bStarterOfDD : 1 = false;
+    bool bHasValidData : 1 = false;
+    bool bUndoAction : 1 = false;
+    bool bOutlinerMode : 1 = false;
+    bool bDragAccepted : 1 = false;
 
-    DragAndDropInfo()
-      : nSensibleRange(0), nCursorWidth(0), nOutlinerDropDest(0), pBackground(nullptr),
-        pField(nullptr), bVisCursor(false), bDroppedInMe(false), bStarterOfDD(false),
-        bHasValidData(false), bUndoAction(false), bOutlinerMode(false), bDragAccepted(false)
-    {
-    }
     ~DragAndDropInfo()
     {
-            pBackground.disposeAndClear();
+        pBackground.disposeAndClear();
     }
 };
 
 struct ImplIMEInfos
 {
-    OUString    aOldTextAfterStartPos;
+    OUString aOldTextAfterStartPos;
     std::unique_ptr<ExtTextInputAttr[]> pAttribs;
-    EditPaM     aPos;
-    sal_Int32   nLen;
-    bool        bWasCursorOverwrite;
+    EditPaM aPos;
+    sal_Int32 nLen = 0;
+    bool bWasCursorOverwrite = false;
 
-            ImplIMEInfos( const EditPaM& rPos, OUString aOldTextAfterStartPos );
-            ~ImplIMEInfos();
+    ImplIMEInfos(const EditPaM& rPos, OUString _aOldTextAfterStartPos)
+        : aOldTextAfterStartPos(std::move(_aOldTextAfterStartPos))
+        , aPos(rPos)
+    {}
 
-    void    CopyAttribs( const ExtTextInputAttr* pA, sal_uInt16 nL );
-    void    DestroyAttribs();
+    void CopyAttribs(const ExtTextInputAttr* pInputAttributes, sal_uInt16 nInputLength)
+    {
+        nLen = nInputLength;
+        pAttribs.reset(new ExtTextInputAttr[nInputLength]);
+        memcpy(pAttribs.get(), pInputAttributes, nInputLength * sizeof(ExtTextInputAttr));
+    }
+
+    void DestroyAttribs()
+    {
+        pAttribs.reset();
+        nLen = 0;
+    }
 };
 
 // #i18881# to be able to identify the positions of changed words
@@ -151,28 +157,24 @@ typedef std::vector<EditSelection>  SpellContentSelections;
 
 struct SpellInfo
 {
-    EditPaM         aCurSentenceStart;
-    svx::SpellPortions    aLastSpellPortions;
-    SpellContentSelections  aLastSpellContentSelections;
-    EESpellState    eState;
-    EPaM            aSpellStart;
-    EPaM            aSpellTo;
-    bool        bSpellToEnd;
-    bool        bMultipleDoc;
-    SpellInfo() : eState(EESpellState::Ok), bSpellToEnd(true), bMultipleDoc(false)
-        { }
+    EditPaM aCurSentenceStart;
+    svx::SpellPortions aLastSpellPortions;
+    SpellContentSelections aLastSpellContentSelections;
+    EESpellState eState = EESpellState::Ok;
+    EPaM aSpellStart;
+    EPaM aSpellTo;
+    bool bSpellToEnd : 1 = true;
+    bool bMultipleDoc : 1 = false;
 };
 
 // used for text conversion
 struct ConvInfo
 {
-    EPaM            aConvStart;
-    EPaM            aConvTo;
-    EPaM            aConvContinue;    // position to start search for next text portion (word) with
-    bool            bConvToEnd;
-    bool            bMultipleDoc;
-
-    ConvInfo() : bConvToEnd(true), bMultipleDoc(false) {}
+    EPaM aConvStart;
+    EPaM aConvTo;
+    EPaM aConvContinue;    // position to start search for next text portion (word) with
+    bool bConvToEnd : 1 = true;
+    bool bMultipleDoc : 1 = false;
 };
 
 struct FormatterFontMetric
@@ -189,20 +191,21 @@ struct FormatterFontMetric
 class IdleFormattter : public Idle
 {
 private:
-    EditView*   pView;
-    int         nRestarts;
+    EditView* mpView = nullptr;
+    int mnRestarts = 0;
 
 public:
-                IdleFormattter();
-                virtual ~IdleFormattter() override;
+    IdleFormattter();
+    virtual ~IdleFormattter() override;
 
-    void        DoIdleFormat( EditView* pV );
-    void        ForceTimeout();
-    void        ResetRestarts() { nRestarts = 0; }
-    EditView*   GetView()       { return pView; }
+    void DoIdleFormat(EditView* pView);
+    void ForceTimeout();
+    void ResetRestarts() { mnRestarts = 0; }
+    EditView* GetView() { return mpView; }
 };
 
 class ImpEditView;
+
 /// This is meant just for Calc, where all positions in logical units (twips for LOK) are computed by
 /// doing independent pixel-alignment for each cell's size. LOKSpecialPositioning stores
 /// both 'output-area' and 'visible-doc-position' in pure logical unit (twips for LOK).

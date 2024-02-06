@@ -791,23 +791,21 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
 IdleFormattter::IdleFormattter()
     : Idle("editeng::ImpEditEngine aIdleFormatter")
 {
-    pView = nullptr;
-    nRestarts = 0;
 }
 
 IdleFormattter::~IdleFormattter()
 {
-    pView = nullptr;
+    mpView = nullptr;
 }
 
-void IdleFormattter::DoIdleFormat( EditView* pV )
+void IdleFormattter::DoIdleFormat(EditView* pView)
 {
-    pView = pV;
+    mpView = pView;
 
-    if ( IsActive() )
-        nRestarts++;
+    if (IsActive())
+        mnRestarts++;
 
-    if ( nRestarts > 4 )
+    if (mnRestarts > 4)
         ForceTimeout();
     else
         Start();
@@ -815,36 +813,12 @@ void IdleFormattter::DoIdleFormat( EditView* pV )
 
 void IdleFormattter::ForceTimeout()
 {
-    if ( IsActive() )
+    if (IsActive())
     {
         Stop();
         Invoke();
     }
 }
 
-ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, OUString _aOldTextAfterStartPos )
- : aOldTextAfterStartPos(std::move( _aOldTextAfterStartPos )),
- aPos(rPos),
- nLen(0),
- bWasCursorOverwrite(false)
- {
- }
-
-ImplIMEInfos::~ImplIMEInfos()
-{
-}
-
-void ImplIMEInfos::CopyAttribs( const ExtTextInputAttr* pA, sal_uInt16 nL )
-{
-    nLen = nL;
-    pAttribs.reset( new ExtTextInputAttr[ nL ] );
-    memcpy( pAttribs.get(), pA, nL*sizeof(ExtTextInputAttr) );
-}
-
-void ImplIMEInfos::DestroyAttribs()
-{
-    pAttribs.reset();
-    nLen = 0;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
