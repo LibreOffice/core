@@ -1014,6 +1014,16 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_COMMENT:       // Comment
             {
                 SetAllScriptItem(aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE));
+
+                auto const aIndent(o3tl::convert(0.1, o3tl::Length::cm, o3tl::Length::twip));
+                SvxTextLeftMarginItem const leftMargin(aIndent, RES_MARGIN_TEXTLEFT);
+                SvxRightMarginItem const rightMargin(aIndent, RES_MARGIN_RIGHT);
+                aSet.Put(leftMargin);
+                aSet.Put(rightMargin);
+
+                auto const aSpacing(o3tl::convert(0.1, o3tl::Length::cm, o3tl::Length::twip));
+                SvxULSpaceItem topSpacing( aSpacing, 0, RES_UL_SPACE );
+                aSet.Put(topSpacing);
             }
             break;
 
