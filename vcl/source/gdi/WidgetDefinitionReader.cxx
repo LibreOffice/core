@@ -146,9 +146,9 @@ ControlPart xmlStringToControlPart(std::string_view sPart)
     return ControlPart::NONE;
 }
 
-bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
+bool getControlTypeForXmlString(std::string_view rString, ControlType& reType)
 {
-    static std::unordered_map<OString, ControlType> aPartMap = {
+    static std::unordered_map<std::string_view, ControlType> aPartMap = {
         { "pushbutton", ControlType::Pushbutton },
         { "radiobutton", ControlType::Radiobutton },
         { "checkbox", ControlType::Checkbox },
@@ -366,7 +366,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
 
     auto pStyle = std::make_shared<WidgetDefinitionStyle>();
 
-    std::unordered_map<OString, Color*> aStyleColorMap = {
+    std::unordered_map<std::string_view, Color*> aStyleColorMap = {
         { "faceColor", &pStyle->maFaceColor },
         { "checkedColor", &pStyle->maCheckedColor },
         { "lightColor", &pStyle->maLightColor },
@@ -425,7 +425,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
 
     auto pSettings = std::make_shared<WidgetDefinitionSettings>();
 
-    std::unordered_map<OString, OString*> aSettingMap = {
+    std::unordered_map<std::string_view, OString*> aSettingMap = {
         { "noActiveTabTextRaise", &pSettings->msNoActiveTabTextRaise },
         { "centeredTabs", &pSettings->msCenteredTabs },
         { "listBoxEntryMargin", &pSettings->msListBoxEntryMargin },

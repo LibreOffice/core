@@ -59,14 +59,17 @@ bool XmlWalker::open(SvStream* pStream)
     return true;
 }
 
-OString XmlWalker::name() { return reinterpret_cast<const char*>(mpImpl->mpCurrent->name); }
+std::string_view XmlWalker::name()
+{
+    return reinterpret_cast<const char*>(mpImpl->mpCurrent->name);
+}
 
-OString XmlWalker::namespaceHref()
+std::string_view XmlWalker::namespaceHref()
 {
     return reinterpret_cast<const char*>(mpImpl->mpCurrent->ns->href);
 }
 
-OString XmlWalker::namespacePrefix()
+std::string_view XmlWalker::namespacePrefix()
 {
     return reinterpret_cast<const char*>(mpImpl->mpCurrent->ns->prefix);
 }

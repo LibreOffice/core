@@ -1178,7 +1178,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfUaMetadata)
 
     tools::XmlWalker aWalker;
     CPPUNIT_ASSERT(aWalker.open(&rStream));
-    CPPUNIT_ASSERT_EQUAL("xmpmeta"_ostr, aWalker.name());
+    CPPUNIT_ASSERT_EQUAL(std::string_view("xmpmeta"), aWalker.name());
 
     bool bPdfUaMarkerFound = false;
     OString aPdfUaPart;

@@ -40,9 +40,9 @@ public:
 
     bool open(SvStream* pStream);
 
-    OString name();
-    OString namespaceHref();
-    OString namespacePrefix();
+    std::string_view name();
+    std::string_view namespaceHref();
+    std::string_view namespacePrefix();
 
     OString content();
     void children();

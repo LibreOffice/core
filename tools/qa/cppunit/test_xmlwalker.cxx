@@ -41,7 +41,7 @@ void XmlWalkerTest::testReadXML()
     tools::XmlWalker aWalker;
     SvFileStream aFileStream(aXmlFilePath, StreamMode::READ);
     CPPUNIT_ASSERT(aWalker.open(&aFileStream));
-    CPPUNIT_ASSERT_EQUAL("root"_ostr, aWalker.name());
+    CPPUNIT_ASSERT_EQUAL(std::string_view("root"), aWalker.name());
     CPPUNIT_ASSERT_EQUAL("Hello World"_ostr, aWalker.attribute("root-attr"_ostr));
 
     int nNumberOfChildNodes = 0;
@@ -76,8 +76,8 @@ void XmlWalkerTest::testReadXML()
         }
         else if (aWalker.name() == "with-namespace")
         {
-            CPPUNIT_ASSERT_EQUAL("adobe:ns:meta/"_ostr, aWalker.namespaceHref());
-            CPPUNIT_ASSERT_EQUAL("xx"_ostr, aWalker.namespacePrefix());
+            CPPUNIT_ASSERT_EQUAL(std::string_view("adobe:ns:meta/"), aWalker.namespaceHref());
+            CPPUNIT_ASSERT_EQUAL(std::string_view("xx"), aWalker.namespacePrefix());
         }
         aWalker.next();
     }
