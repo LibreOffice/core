@@ -367,12 +367,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaMarkerChange( false ),
         m_bIsParaMarkerMove( false ),
         m_bRedlineImageInPreviousRun( false ),
-        m_bTextFrameInserted(false),
         m_bIsLastSectionGroup( false ),
         m_bUsingEnhancedFields( false ),
-        m_bSdt(false),
-        m_bIsFirstRun(false),
-        m_bIsOutsideAParagraph(true),
         m_nAnnotationId( -1 ),
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
@@ -962,7 +958,7 @@ void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 
 void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
 {
-    m_bTextFrameInserted  = bIsInserted;
+    m_StreamStateStack.top().bTextFrameInserted = bIsInserted;
 }
 
 void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
@@ -972,15 +968,15 @@ void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 
 void DomainMapper_Impl::SetSdt(bool bSdt)
 {
-    m_bSdt = bSdt;
+    m_StreamStateStack.top().bSdt = bSdt;
 
-    if (m_bSdt && !m_aTextAppendStack.empty())
+    if (m_StreamStateStack.top().bSdt && !m_aTextAppendStack.empty())
     {
-        m_xSdtEntryStart = GetTopTextAppend()->getEnd();
+        m_StreamStateStack.top().xSdtEntryStart = GetTopTextAppend()->getEnd();
     }
     else
     {
-        m_xSdtEntryStart.clear();
+        m_StreamStateStack.top().xSdtEntryStart.clear();
     }
 }
 
@@ -1281,7 +1277,7 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
     if(eId == CONTEXT_PARAGRAPH && m_bIsSplitPara)
     {
         // Some paragraph properties only apply at the beginning of the paragraph - apply only once.
-        if (!m_bIsFirstRun)
+        if (!IsFirstRun())
         {
             auto pParaContext = static_cast<ParagraphPropertyMap*>(GetTopContextOfType(eId).get());
             pParaContext->props().SetListId(-1);
@@ -1344,7 +1340,7 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
         m_pLastCharacterContext = m_aPropertyStacks[eId].top();
         // Sadly an assert about deferredCharacterProperties being empty is not possible
         // here, because appendTextPortion() may not be called for every character section.
-        m_deferredCharacterProperties.clear();
+        m_StreamStateStack.top().deferredCharacterProperties.clear();
     }
 
     if (!IsInFootOrEndnote() && IsInCustomFootnote() && !m_aPropertyStacks[eId].empty())
@@ -3252,8 +3248,12 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
         return;
     // Before placing call to processDeferredCharacterProperties(), TopContextType should be CONTEXT_CHARACTER
     // processDeferredCharacterProperties() invokes only if character inserted
-    if( pPropertyMap == m_pTopContext && !m_deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
+    if (pPropertyMap == m_pTopContext
+        && !m_StreamStateStack.top().deferredCharacterProperties.empty()
+        && (GetTopContextType() == CONTEXT_CHARACTER))
+    {
         processDeferredCharacterProperties();
+    }
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if (!xTextAppend.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
@@ -6836,7 +6836,7 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
 /// Returns title of the TOC placed in paragraph(s) before TOC field inside STD-frame
 OUString DomainMapper_Impl::extractTocTitle()
 {
-    if (!m_xSdtEntryStart.is())
+    if (!m_StreamStateStack.top().xSdtEntryStart.is())
         return OUString();
 
     uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -6846,7 +6846,8 @@ OUString DomainMapper_Impl::extractTocTitle()
     // try-catch was added in the same way as inside appendTextSectionAfter()
     try
     {
-        uno::Reference<text::XParagraphCursor> xCursor(xTextAppend->createTextCursorByRange(m_xSdtEntryStart), uno::UNO_QUERY_THROW);
+        uno::Reference<text::XParagraphCursor> const xCursor(
+            xTextAppend->createTextCursorByRange(m_StreamStateStack.top().xSdtEntryStart), uno::UNO_QUERY_THROW);
         if (!xCursor.is())
             return OUString();
 
@@ -7115,7 +7116,7 @@ void DomainMapper_Impl::handleToc
         if (aTocTitle.isEmpty() || bTableOfFigures)
         {
             // reset marker of the TOC title
-            m_xSdtEntryStart.clear();
+            m_StreamStateStack.top().xSdtEntryStart.clear();
 
             // Create section before setting m_bStartTOC: finishing paragraph
             // inside StartIndexSectionChecked could do the wrong thing otherwise
@@ -7131,14 +7132,14 @@ void DomainMapper_Impl::handleToc
         {
             // create TOC section
             css::uno::Reference<css::text::XTextRange> xTextRangeEndOfTocHeader = GetTopTextAppend()->getEnd();
-            xTOC = createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, sTOCServiceName, false);
+            xTOC = createSectionForRange(m_StreamStateStack.top().xSdtEntryStart, xTextRangeEndOfTocHeader, sTOCServiceName, false);
 
             // init [xTOCMarkerCursor]
             uno::Reference< text::XText > xText = xTextAppend->getText();
             m_xTOCMarkerCursor = xText->createTextCursor();
 
             // create header of the TOC with the TOC title inside
-            createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, "com.sun.star.text.IndexHeaderSection", true);
+            createSectionForRange(m_StreamStateStack.top().xSdtEntryStart, xTextRangeEndOfTocHeader, "com.sun.star.text.IndexHeaderSection", true);
         }
     }
 
@@ -8740,7 +8741,7 @@ void DomainMapper_Impl::PopFieldContext()
                     if (m_bStartedTOC || m_bStartIndex || m_bStartBibliography)
                     {
                         // inside SDT, last empty paragraph is also part of index
-                        if (!m_StreamStateStack.top().bParaChanged && !m_xSdtEntryStart)
+                        if (!m_StreamStateStack.top().bParaChanged && !m_StreamStateStack.top().xSdtEntryStart)
                         {
                             // End of index is the first item on a new paragraph - this paragraph
                             // should not be part of index
@@ -9708,16 +9709,16 @@ SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
 
 void DomainMapper_Impl::deferCharacterProperty(sal_Int32 id, const css::uno::Any& value)
 {
-    m_deferredCharacterProperties[ id ] = value;
+    m_StreamStateStack.top().deferredCharacterProperties[ id ] = value;
 }
 
 void DomainMapper_Impl::processDeferredCharacterProperties(bool bCharContext)
 {
     // Actually process in DomainMapper, so that it's the same source file like normal processing.
-    if( !m_deferredCharacterProperties.empty())
+    if (!m_StreamStateStack.top().deferredCharacterProperties.empty())
     {
-        m_rDMapper.processDeferredCharacterProperties(m_deferredCharacterProperties, bCharContext);
-        m_deferredCharacterProperties.clear();
+        m_rDMapper.processDeferredCharacterProperties(m_StreamStateStack.top().deferredCharacterProperties, bCharContext);
+        m_StreamStateStack.top().deferredCharacterProperties.clear();
     }
 }
 

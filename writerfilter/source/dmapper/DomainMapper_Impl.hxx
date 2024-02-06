@@ -249,12 +249,19 @@ struct SubstreamContext
     bool bSdtEndDeferred = false;
     /// If we want to set "paragraph sdt end" on the next paragraph context.
     bool bParaSdtEndDeferred = false;
+    /// If the current paragraph is inside a structured document element.
+    bool bSdt = false;
+    css::uno::Reference<css::text::XTextRange> xSdtEntryStart;
     OUString sCurrentParaStyleName; ///< highly inaccurate. Overwritten by "overlapping" paragraphs like flys.
     bool bHasFootnoteStyle = false;
     bool bCheckFootnoteStyle = false;
     bool bIsInFootnoteProperties = false;
     RubyInfo aRubyInfo;
+    bool bTextFrameInserted = false;
+    bool bIsFirstRun = false;
+    bool bIsOutsideAParagraph = true;
     bool bDummyParaAddedForTableInSection = false; // tdf#161631
+    std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -642,13 +649,8 @@ private:
     // text ZWSPs to keep the change tracking of the image in Writer.)
     bool                            m_bRedlineImageInPreviousRun;
 
-    bool                            m_bTextFrameInserted;
     bool                            m_bIsLastSectionGroup;
     bool                            m_bUsingEnhancedFields;
-    /// If the current paragraph is inside a structured document element.
-    bool                            m_bSdt;
-    bool                            m_bIsFirstRun;
-    bool                            m_bIsOutsideAParagraph;
 
     css::uno::Reference< css::text::XTextCursor > m_xTOCMarkerCursor;
 
@@ -667,11 +669,9 @@ private:
     css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
     css::uno::Reference<css::beans::XPropertySet> const & GetDocumentSettings();
 
-    std::map<sal_Int32, css::uno::Any> m_deferredCharacterProperties;
     SmartTagHandler m_aSmartTagHandler;
 
     css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
-    css::uno::Reference<css::text::XTextRange> m_xSdtEntryStart;
     std::stack<BookmarkInsertPosition> m_xSdtStarts;
 
     std::queue< css::uno::Reference< css::text::XTextFrame > > m_xPendingTextBoxFrames;
@@ -770,7 +770,7 @@ public:
 
     /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );
-    bool GetIsTextFrameInserted() const { return m_bTextFrameInserted;}
+    bool GetIsTextFrameInserted() const { return m_StreamStateStack.top().bTextFrameInserted; }
     void SetIsTextDeleted(bool bIsTextDeleted) { m_bTextDeleted = bIsTextDeleted; }
 
     void SetIsPreviousParagraphFramed(bool const bIsFramed)
@@ -783,7 +783,6 @@ public:
     void SetSymbolFont( OUString const &rName ) { m_aSymbolData.sFont = rName; }
     const SymbolData & GetSymbolData() const { return m_aSymbolData;}
 
-    /// Setter method for m_bSdt.
     void SetSdt(bool bSdt);
 
     void PushSdt();
@@ -791,8 +790,6 @@ public:
     /// Gives access to the currently open run/inline SDTs.
     const std::stack<BookmarkInsertPosition>& GetSdtStarts() const;
 
-    /// Getter method for m_bSdt.
-    bool GetSdt() const { return m_bSdt;}
     bool GetParaChanged() const { return m_StreamStateStack.top().bParaChanged; }
     bool GetParaHadField() const { return m_StreamStateStack.top().bParaHadField; }
     bool GetRemoveThisPara() const { return m_StreamStateStack.top().bRemoveThisParagraph; }
@@ -1095,10 +1092,10 @@ public:
     void SetCurrentRedlineIsRead();
     void RemoveTopRedline( );
     void SetCurrentRedlineInitials( const OUString& sInitials );
-    bool IsFirstRun() const { return m_bIsFirstRun;}
-    void SetIsFirstRun(bool bval) { m_bIsFirstRun = bval;}
-    bool IsOutsideAParagraph() const { return m_bIsOutsideAParagraph;}
-    void SetIsOutsideAParagraph(bool bval) { m_bIsOutsideAParagraph = bval;}
+    bool IsFirstRun() const { return m_StreamStateStack.top().bIsFirstRun; }
+    void SetIsFirstRun(bool const bval) { m_StreamStateStack.top().bIsFirstRun = bval; }
+    bool IsOutsideAParagraph() const { return m_StreamStateStack.top().bIsOutsideAParagraph; }
+    void SetIsOutsideAParagraph(bool const bval) { m_StreamStateStack.top().bIsOutsideAParagraph = bval; }
 
     void ApplySettingsTable();
 
