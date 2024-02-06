@@ -286,6 +286,11 @@ class FieldContext : public virtual SvRefBase
     bool m_bFieldLocked;
     // Current command line type: normal or deleted
     bool m_bCommandType;
+public:
+    bool m_bSetUserFieldContent = false;
+    bool m_bSetCitation = false;
+    bool m_bSetDateValue = false;
+private:
 
     css::uno::Reference<css::text::XTextField> m_xTextField;
     css::uno::Reference<css::text::XFormField> m_xFormField;
@@ -549,9 +554,6 @@ private:
     bool m_bForceGenericFields;
     /// Type of decimal symbol associated to the document language in Writer locale definition
     bool                                                                            m_bIsDecimalComma;
-    bool                                                                            m_bSetUserFieldContent;
-    bool                                                                            m_bSetCitation;
-    bool                                                                            m_bSetDateValue;
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bStartTOC;
     bool                                                                            m_bStartTOCHeaderFooter;

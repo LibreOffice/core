@@ -336,9 +336,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xComponentContext(std::move( xContext )),
         m_bForceGenericFields(officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
         m_bIsDecimalComma( false ),
-        m_bSetUserFieldContent( false ),
-        m_bSetCitation( false ),
-        m_bSetDateValue( false ),
         m_bIsFirstSection( true ),
         m_bStartTOC(false),
         m_bStartTOCHeaderFooter(false),
@@ -7393,9 +7390,9 @@ void DomainMapper_Impl::CloseFieldCommand()
     if( !pContext )
         return;
 
-    m_bSetUserFieldContent = false;
-    m_bSetCitation = false;
-    m_bSetDateValue = false;
+    pContext->m_bSetUserFieldContent = false;
+    pContext->m_bSetCitation = false;
+    pContext->m_bSetDateValue = false;
     // tdf#124472: If the normal command line is not empty, use it,
     // otherwise, the last active row is evaluated.
     if (!pContext->GetCommandIsEmpty(false))
@@ -7559,7 +7556,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xFieldProperties->setPropertyValue(
                             getPropertyName(PROP_IS_FIXED),
                             uno::Any( true ));
-                        m_bSetDateValue = true;
+                        pContext->m_bSetDateValue = true;
                     }
                     else
                         xFieldProperties->setPropertyValue(
@@ -7616,7 +7613,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         uno::Reference<text::XDependentTextField> xDependentField(
                             xFieldInterface, uno::UNO_QUERY_THROW);
                         xDependentField->attachTextFieldMaster(xMaster);
-                        m_bSetUserFieldContent = true;
+                        pContext->m_bSetUserFieldContent = true;
                     }
                 }
                 break;
@@ -8137,7 +8134,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xFieldProperties->setPropertyValue(
                             getPropertyName(PROP_IS_FIXED),
                             uno::Any( true ));
-                        m_bSetDateValue = true;
+                        pContext->m_bSetDateValue = true;
                     }
                     SetNumberFormat( pContext->GetCommand(), xFieldProperties );
                 }
@@ -8231,7 +8228,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     uno::Sequence<beans::PropertyValue> aValues
                         = m_aFieldStack.back()->getProperties()->GetPropertyValues();
                     appendTextContent(xToInsert, aValues);
-                    m_bSetCitation = true;
+                    pContext->m_bSetCitation = true;
                 }
                 break;
 
@@ -8427,7 +8424,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
         {
             try
             {
-                if( m_bSetUserFieldContent )
+                if (pContext->m_bSetUserFieldContent)
                 {
                     // user field content has to be set at the field master
                     uno::Reference< text::XDependentTextField > xDependentField( xTextField, uno::UNO_QUERY_THROW );
@@ -8435,7 +8432,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                             getPropertyName(PROP_CONTENT),
                          uno::Any( rResult ));
                 }
-                else if ( m_bSetCitation )
+                else if (pContext->m_bSetCitation)
                 {
 
                     uno::Reference< beans::XPropertySet > xFieldProperties( xTextField, uno::UNO_QUERY_THROW);
@@ -8479,7 +8476,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                                 uno::Any(aValues));
                     }
                 }
-                else if ( m_bSetDateValue )
+                else if (pContext->m_bSetDateValue)
                 {
                     uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
 
