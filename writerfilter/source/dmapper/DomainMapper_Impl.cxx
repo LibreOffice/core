@@ -343,8 +343,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSetCitation( false ),
         m_bSetDateValue( false ),
         m_bIsFirstSection( true ),
-        m_bSdtEndDeferred(false),
-        m_bParaSdtEndDeferred(false),
         m_bStartTOC(false),
         m_bStartTOCHeaderFooter(false),
         m_bStartedTOC(false),
@@ -360,15 +358,12 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bInNumberingImport(false),
         m_bInAnyTableImport( false ),
         m_bDiscardHeaderFooter( false ),
-        m_bHasFootnoteStyle(false),
-        m_bCheckFootnoteStyle(false),
         m_eSkipFootnoteState(SkipFootnoteSeparator::OFF),
         m_nFootnotes(-1),
         m_nEndnotes(-1),
         m_nFirstFootnoteIndex(-1),
         m_nFirstEndnoteIndex(-1),
         m_bLineNumberingSet( false ),
-        m_bIsInFootnoteProperties( false ),
         m_bIsParaMarkerChange( false ),
         m_bIsParaMarkerMove( false ),
         m_bRedlineImageInPreviousRun( false ),
@@ -382,7 +377,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault("AltChunkStartingRange", uno::Reference<text::XTextRange>())),
-        m_bIsInTextBox(false),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
         m_bReadOnly(rMediaDesc.getUnpackedValueOrDefault("ReadOnly", false)),
@@ -687,7 +681,7 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 void DomainMapper_Impl::AddDummyParaForTableInSection()
 {
     // Shapes, headers, and textboxes can't have sections.
-    if (IsInShape() || IsInHeaderFooter() || m_bIsInTextBox)
+    if (IsInShape() || IsInHeaderFooter() || m_StreamStateStack.top().bIsInTextBox)
         return;
 
     if (!m_aTextAppendStack.empty())
@@ -1448,7 +1442,7 @@ OUString DomainMapper_Impl::GetCurrentParaStyleName()
     // tdf#134784 except in the case of first paragraph of shapes to avoid bad fallback.
     // TODO fix this "highly inaccurate" m_sCurrentParaStyleName
     if ( !IsInShape() )
-        sName = m_sCurrentParaStyleName;
+        sName = m_StreamStateStack.top().sCurrentParaStyleName;
 
     PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
     if ( pParaContext && pParaContext->isSet(PROP_PARA_STYLE_NAME) )
@@ -1687,22 +1681,22 @@ void DomainMapper_Impl::clearDeferredBreaks()
 
 void DomainMapper_Impl::setSdtEndDeferred(bool bSdtEndDeferred)
 {
-    m_bSdtEndDeferred = bSdtEndDeferred;
+    m_StreamStateStack.top().bSdtEndDeferred = bSdtEndDeferred;
 }
 
 bool DomainMapper_Impl::isSdtEndDeferred() const
 {
-    return m_bSdtEndDeferred;
+    return m_StreamStateStack.top().bSdtEndDeferred;
 }
 
 void DomainMapper_Impl::setParaSdtEndDeferred(bool bParaSdtEndDeferred)
 {
-    m_bParaSdtEndDeferred = bParaSdtEndDeferred;
+    m_StreamStateStack.top().bParaSdtEndDeferred = bParaSdtEndDeferred;
 }
 
 bool DomainMapper_Impl::isParaSdtEndDeferred() const
 {
-    return m_bParaSdtEndDeferred;
+    return m_StreamStateStack.top().bParaSdtEndDeferred;
 }
 
 static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFrameProperties,
@@ -3104,7 +3098,8 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
             nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
             nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden)
         {
-            uno::Reference<beans::XPropertySet> xParaStylePropertySet = GetParagraphStyles()->getByName(m_sCurrentParaStyleName).get<uno::Reference<beans::XPropertySet>>();
+            uno::Reference<beans::XPropertySet> const xParaStylePropertySet =
+                GetParagraphStyles()->getByName(m_StreamStateStack.top().sCurrentParaStyleName).get<uno::Reference<beans::XPropertySet>>();
             float fParaStyleBold = css::awt::FontWeight::NORMAL;
             float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
             css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
@@ -4262,15 +4257,15 @@ void DomainMapper_Impl::StartCustomFootnote(const PropertyMapPtr pContext)
         return;
 
     assert(pContext->GetFootnote().is());
-    m_bHasFootnoteStyle = true;
-    m_bCheckFootnoteStyle = !pContext->GetFootnoteStyle().isEmpty();
+    m_StreamStateStack.top().bHasFootnoteStyle = true;
+    m_StreamStateStack.top().bCheckFootnoteStyle = !pContext->GetFootnoteStyle().isEmpty();
     m_pFootnoteContext = pContext;
 }
 
 void DomainMapper_Impl::EndCustomFootnote()
 {
-    m_bHasFootnoteStyle = false;
-    m_bCheckFootnoteStyle = false;
+    m_StreamStateStack.top().bHasFootnoteStyle = false;
+    m_StreamStateStack.top().bCheckFootnoteStyle = false;
 }
 
 void DomainMapper_Impl::PushAnnotation()
@@ -4730,14 +4725,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             m_aAnchoredStack.push(AnchoredContext(xTextContent));
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
 
-            m_xEmbedded.set(m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW);
-            uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_xEmbedded, uno::UNO_QUERY_THROW);
+            m_StreamStateStack.top().xEmbedded.set(m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW);
+            uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY_THROW);
             xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT)));
             xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
             // So that the original bitmap-only shape will be replaced by the embedded object.
             m_aAnchoredStack.top().bToRemove = true;
             m_aTextAppendStack.pop();
-            appendTextContent(m_xEmbedded, uno::Sequence<beans::PropertyValue>());
+            appendTextContent(m_StreamStateStack.top().xEmbedded, uno::Sequence<beans::PropertyValue>());
         }
         else
         {
@@ -4876,7 +4871,7 @@ void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::
     if (!xShape.is())
         return;
 
-    uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_xEmbedded, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> const xEmbeddedProperties(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY_THROW);
     awt::Size aSize = xShape->getSize( );
     xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_WIDTH), uno::Any(sal_Int32(aSize.Width)));
     xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_HEIGHT), uno::Any(sal_Int32(aSize.Height)));
@@ -4886,7 +4881,7 @@ void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::
         xShapeProps->getPropertyValue(getPropertyName(PROP_DESCRIPTION)));
     xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_TITLE),
         xShapeProps->getPropertyValue(getPropertyName(PROP_TITLE)));
-    uno::Reference<container::XNamed> const xEmbedName(m_xEmbedded, uno::UNO_QUERY);
+    uno::Reference<container::XNamed> const xEmbedName(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY);
     uno::Reference<container::XNamed> const xShapeName(xShape, uno::UNO_QUERY);
     OUString const name(xShapeName->getName());
     if (!name.isEmpty()) // setting empty name will throw
@@ -5142,27 +5137,27 @@ void DomainMapper_Impl::HandleLineBreakClear(sal_Int32 nClear)
     {
         case NS_ooxml::LN_Value_ST_BrClear_left:
             // SwLineBreakClear::LEFT
-            m_oLineBreakClear = 1;
+            m_StreamStateStack.top().oLineBreakClear = 1;
             break;
         case NS_ooxml::LN_Value_ST_BrClear_right:
             // SwLineBreakClear::RIGHT
-            m_oLineBreakClear = 2;
+            m_StreamStateStack.top().oLineBreakClear = 2;
             break;
         case NS_ooxml::LN_Value_ST_BrClear_all:
             // SwLineBreakClear::ALL
-            m_oLineBreakClear = 3;
+            m_StreamStateStack.top().oLineBreakClear = 3;
             break;
     }
 }
 
 bool DomainMapper_Impl::HasLineBreakClear() const
 {
-    return m_oLineBreakClear.has_value();
+    return m_StreamStateStack.top().oLineBreakClear.has_value();
 }
 
 void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
 {
-    if (!m_oLineBreakClear.has_value())
+    if (!m_StreamStateStack.top().oLineBreakClear.has_value())
     {
         appendTextPortion("\n", pPropertyMap);
         return;
@@ -5173,10 +5168,10 @@ void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
         uno::Reference<text::XTextContent> xLineBreak(
             GetTextFactory()->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
-        xLineBreakProps->setPropertyValue("Clear", uno::Any(*m_oLineBreakClear));
+        xLineBreakProps->setPropertyValue("Clear", uno::Any(*m_StreamStateStack.top().oLineBreakClear));
         appendTextContent(xLineBreak, pPropertyMap->GetPropertyValues());
     }
-    m_oLineBreakClear.reset();
+    m_StreamStateStack.top().oLineBreakClear.reset();
 }
 
 static sal_Int16 lcl_ParseNumberingType( std::u16string_view rCommand )
@@ -5789,7 +5784,7 @@ void DomainMapper_Impl::ChainTextFrames()
 
 void DomainMapper_Impl::PushTextBoxContent()
 {
-    if (m_bIsInTextBox)
+    if (m_StreamStateStack.top().bIsInTextBox)
         return;
 
     try
@@ -5804,7 +5799,7 @@ void DomainMapper_Impl::PushTextBoxContent()
         m_xPendingTextBoxFrames.push(xTBoxFrame);
 
         m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xTBoxFrame, uno::UNO_QUERY_THROW), {}));
-        m_bIsInTextBox = true;
+        m_StreamStateStack.top().bIsInTextBox = true;
 
         appendTableManager();
         appendTableHandler();
@@ -5818,7 +5813,7 @@ void DomainMapper_Impl::PushTextBoxContent()
 
 void DomainMapper_Impl::PopTextBoxContent()
 {
-    if (!m_bIsInTextBox || m_xPendingTextBoxFrames.empty())
+    if (!m_StreamStateStack.top().bIsInTextBox || m_xPendingTextBoxFrames.empty())
         return;
 
     if (uno::Reference<text::XTextFrame>(m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY).is())
@@ -5831,7 +5826,7 @@ void DomainMapper_Impl::PopTextBoxContent()
         RemoveLastParagraph();
 
         m_aTextAppendStack.pop();
-        m_bIsInTextBox = false;
+        m_StreamStateStack.top().bIsInTextBox = false;
     }
 }
 
@@ -9275,7 +9270,8 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
 
 
     // Update the shape properties if it is embedded object.
-    if(m_xEmbedded.is()){
+    if (m_StreamStateStack.top().xEmbedded.is())
+    {
         if (m_pGraphicImport->GetXShapeObject())
                 m_pGraphicImport->GetXShapeObject()->setPosition(
                     m_pGraphicImport->GetGraphicObjectPosition());
@@ -9284,7 +9280,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         UpdateEmbeddedShapeProps(xShape);
         if (m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
         {
-            uno::Reference<beans::XPropertySet> xEmbeddedProps(m_xEmbedded, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> const xEmbeddedProps(m_StreamStateStack.top().xEmbedded, uno::UNO_QUERY);
             xEmbeddedProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
             xEmbeddedProps->setPropertyValue("IsFollowingTextFlow", uno::Any(m_pGraphicImport->GetLayoutInCell()));
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -9370,7 +9366,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
     // Clear the reference, so in case the embedded object is inside a
     // TextFrame, we won't try to resize it (to match the size of the
     // TextFrame) here.
-    m_xEmbedded.clear();
+    m_StreamStateStack.top().xEmbedded.clear();
     m_pGraphicImport.clear();
 }
 

@@ -163,6 +163,24 @@ enum StoredRedlines
     NONE
 };
 
+struct RubyInfo
+{
+    OUString    sRubyText;
+    OUString    sRubyStyle;
+    sal_uInt32  nSprmId;
+    sal_uInt32  nRubyAlign;
+    sal_uInt32  nHps;
+    sal_uInt32  nHpsBaseText;
+
+    RubyInfo():
+        nSprmId(0),
+        nRubyAlign(0),
+        nHps(0),
+        nHpsBaseText(0)
+    {
+    }
+};
+
 enum class SubstreamType
 {
     Body,
@@ -224,6 +242,18 @@ struct SubstreamContext
     sal_Int32 nTableCellDepth = 0;
     /// If the next tab should be ignored, used for footnotes.
     bool bCheckFirstFootnoteTab = false;
+    std::optional<sal_Int16> oLineBreakClear;
+    bool bIsInTextBox = false;
+    css::uno::Reference<css::text::XTextContent> xEmbedded;
+    /// If we want to set "sdt end" on the next character context.
+    bool bSdtEndDeferred = false;
+    /// If we want to set "paragraph sdt end" on the next paragraph context.
+    bool bParaSdtEndDeferred = false;
+    OUString sCurrentParaStyleName; ///< highly inaccurate. Overwritten by "overlapping" paragraphs like flys.
+    bool bHasFootnoteStyle = false;
+    bool bCheckFootnoteStyle = false;
+    bool bIsInFootnoteProperties = false;
+    RubyInfo aRubyInfo;
     bool bDummyParaAddedForTableInSection = false; // tdf#161631
 };
 
@@ -420,24 +450,6 @@ struct AnnotationPosition
     css::uno::Reference<css::text::XTextRange> m_xEnd;
 };
 
-struct RubyInfo
-{
-    OUString    sRubyText;
-    OUString    sRubyStyle;
-    sal_uInt32  nSprmId;
-    sal_uInt32  nRubyAlign;
-    sal_uInt32  nHps;
-    sal_uInt32  nHpsBaseText;
-
-    RubyInfo():
-        nSprmId(0),
-        nRubyAlign(0),
-        nHps(0),
-        nHpsBaseText(0)
-    {
-    }
-};
-
 struct LineNumberSettings
 {
     sal_Int32   nDistance;
@@ -522,7 +534,6 @@ private:
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedCharacterStyleNo;
     css::uno::Reference<css::text::XText> m_xBodyText;
-    css::uno::Reference<css::text::XTextContent> m_xEmbedded;
 
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
@@ -539,10 +550,6 @@ private:
     bool                                                                            m_bSetCitation;
     bool                                                                            m_bSetDateValue;
     bool                                                                            m_bIsFirstSection;
-    /// If we want to set "sdt end" on the next character context.
-    bool                                                                            m_bSdtEndDeferred;
-    /// If we want to set "paragraph sdt end" on the next paragraph context.
-    bool                                                                            m_bParaSdtEndDeferred;
     bool                                                                            m_bStartTOC;
     bool                                                                            m_bStartTOCHeaderFooter;
     /// If we got any text that is the pre-rendered result of the TOC field.
@@ -596,7 +603,6 @@ private:
     PropertyMapPtr           m_pLastCharacterContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
-    OUString                        m_sCurrentParaStyleName; //highly inaccurate. Overwritten by "overlapping" paragraphs like comments, flys.
     OUString                        m_sDefaultParaStyleName; //caches the ConvertedStyleName of the default paragraph style
     bool                            m_bInDocDefaultsImport;
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
@@ -604,8 +610,6 @@ private:
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
     bool                            m_bDiscardHeaderFooter;
     PropertyMapPtr m_pFootnoteContext;
-    bool m_bHasFootnoteStyle;
-    bool m_bCheckFootnoteStyle;
     /// Skip paragraphs from the <w:separator/> footnote
     SkipFootnoteSeparator           m_eSkipFootnoteState;
     /// preload footnotes and endnotes
@@ -616,9 +620,7 @@ private:
     sal_Int32                       m_nFirstEndnoteIndex;
 
     bool                            m_bLineNumberingSet;
-    bool                            m_bIsInFootnoteProperties;
 
-    RubyInfo                        m_aRubyInfo;
     //registered frame properties
     std::vector<css::beans::PropertyValue> m_aFrameProperties;
     css::uno::Reference<css::text::XTextRange> m_xFrameStartRange;
@@ -680,14 +682,12 @@ public:
     std::deque<sal_Int32> m_aFootnoteIds;
     std::deque<sal_Int32> m_aEndnoteIds;
 
-    bool m_bIsInTextBox;
 private:
     bool m_bIsNewDoc;
     bool m_bIsAltChunk = false;
     /// Document is loaded for viewing, not editing.
     bool m_bReadOnly = false;
     bool m_bIsReadGlossaries;
-    std::optional<sal_Int16> m_oLineBreakClear;
 
 public:
     DomainMapper_Impl(
@@ -750,13 +750,13 @@ public:
     void SetIsDecimalComma() { m_bIsDecimalComma = true; };
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection() const { return m_StreamStateStack.top().bIsLastParaInSection; }
-    void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
+    void SetRubySprmId(sal_uInt32 const nSprmId) { m_StreamStateStack.top().aRubyInfo.nSprmId = nSprmId; }
     void SetRubyText( OUString const &sText, OUString const &sStyle) {
-        m_aRubyInfo.sRubyText = sText;
-        m_aRubyInfo.sRubyStyle = sStyle;
+        m_StreamStateStack.top().aRubyInfo.sRubyText = sText;
+        m_StreamStateStack.top().aRubyInfo.sRubyStyle = sStyle;
     }
-    const RubyInfo & GetRubyInfo() const { return m_aRubyInfo;}
-    void SetRubyInfo(const RubyInfo & rInfo) { m_aRubyInfo = rInfo;}
+    const RubyInfo & GetRubyInfo() const { return m_StreamStateStack.top().aRubyInfo; }
+    void SetRubyInfo(const RubyInfo & rInfo) { m_StreamStateStack.top().aRubyInfo = rInfo; }
 
     void SetIsLastSectionGroup( bool bIsLast );
     bool GetIsLastSectionGroup() const { return m_bIsLastSectionGroup;}
@@ -884,7 +884,7 @@ public:
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
     css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
 
-    void            SetCurrentParaStyleName(const OUString& sStringValue) {m_sCurrentParaStyleName = sStringValue;}
+    void SetCurrentParaStyleName(const OUString& rString) { m_StreamStateStack.top().sCurrentParaStyleName = rString; }
     OUString  GetCurrentParaStyleName();
     OUString  GetDefaultParaStyleName();
 
@@ -928,10 +928,10 @@ public:
 
     void StartCustomFootnote(const PropertyMapPtr pContext);
     void EndCustomFootnote();
-    bool IsInCustomFootnote() const { return m_bHasFootnoteStyle; }
-    bool CheckFootnoteStyle() const { return m_bCheckFootnoteStyle; }
-    void SetHasFootnoteStyle(bool bVal) { m_bHasFootnoteStyle = bVal; }
-    void SetCheckFootnoteStyle(bool bVal) { m_bCheckFootnoteStyle = bVal; }
+    bool IsInCustomFootnote() const { return m_StreamStateStack.top().bHasFootnoteStyle; }
+    bool CheckFootnoteStyle() const { return m_StreamStateStack.top().bCheckFootnoteStyle; }
+    void SetHasFootnoteStyle(bool const bVal) { m_StreamStateStack.top().bHasFootnoteStyle = bVal; }
+    void SetCheckFootnoteStyle(bool const bVal) { m_StreamStateStack.top().bCheckFootnoteStyle = bVal; }
 
     const PropertyMapPtr& GetFootnoteContext() const { return m_pFootnoteContext; }
 
@@ -1071,8 +1071,8 @@ public:
     const LineNumberSettings& GetLineNumberSettings() const { return m_aLineNumberSettings;}
     void SetLineNumberSettings(const LineNumberSettings& rSet) { m_aLineNumberSettings = rSet;}
 
-    void SetInFootnoteProperties(bool bSet) { m_bIsInFootnoteProperties = bSet;}
-    bool IsInFootnoteProperties() const { return m_bIsInFootnoteProperties;}
+    void SetInFootnoteProperties(bool const bSet) { m_StreamStateStack.top().bIsInFootnoteProperties = bSet; }
+    bool IsInFootnoteProperties() const { return m_StreamStateStack.top().bIsInFootnoteProperties; }
 
     bool IsInComments() const { return m_StreamStateStack.top().eSubstreamType == SubstreamType::Annotation; };
 
