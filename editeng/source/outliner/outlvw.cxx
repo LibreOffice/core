@@ -384,6 +384,24 @@ void OutlinerView::Select( Paragraph const * pParagraph, bool bSelect )
     pEditView->SetSelection( aSel );
 }
 
+void OutlinerView::SetDepth(sal_Int32 nParagraph, sal_Int16 nDepth)
+{
+    Paragraph* pParagraph = pOwner->GetParagraph(nParagraph);
+    pOwner->SetDepth(pParagraph, nDepth);
+}
+
+sal_Int16 OutlinerView::GetDepth() const
+{
+    ESelection aESelection = GetSelection();
+    aESelection.Adjust();
+    sal_Int16 nDepth = pOwner->GetDepth(aESelection.nStartPara);
+    for (sal_Int32 nPara = aESelection.nStartPara + 1; nPara <= aESelection.nEndPara; ++nPara)
+    {
+        if (nDepth != pOwner->GetDepth(nPara))
+            return -2;
+    }
+    return nDepth;
+}
 
 void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 {

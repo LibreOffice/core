@@ -70,7 +70,7 @@ public:
         if bNoCharacterFormats is true, no character attributes are changed.
         if bNoParagraphFormats is true, no paragraph attributes are changed.
     */
-    virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
+    virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, sal_Int16 nDepth, bool bNoCharacterFormats, bool bNoParagraphFormats );
     /// This is a table object, and one or more of its cells are selected.
     virtual bool hasSelectedCells() const;
     /// Allows adjusting the point or mark of the selection to a document coordinate.
