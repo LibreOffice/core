@@ -654,6 +654,7 @@ void RTFDocumentImpl::runBreak()
 
 void RTFDocumentImpl::tableBreak()
 {
+    checkFirstRun(); // ooo113308-1.rtf has a header at offset 151084 that doesn't startParagraphGroup() without this
     runBreak();
     Mapper().endParagraphGroup();
     Mapper().startParagraphGroup();
