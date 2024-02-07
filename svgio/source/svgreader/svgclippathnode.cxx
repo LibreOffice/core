@@ -118,7 +118,7 @@ namespace svgio::svgreader
             else
             {
                 // append to current target
-                rTarget.append(aNewTarget);
+                rTarget.append(std::move(aNewTarget));
             }
         }
 

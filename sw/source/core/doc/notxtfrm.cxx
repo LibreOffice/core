@@ -928,11 +928,11 @@ void paintGraphicUsingPrimitivesHelper(
     // -> the primitive handles all crop and mirror stuff
     // -> the primitive renderer will create the needed pdf export data
     // -> if bitmap content, it will be cached system-dependent
-    drawinglayer::primitive2d::Primitive2DContainer aContent(1);
-    aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
-        rGraphicTransform,
-        rGrfObj,
-        rGraphicAttr);
+    drawinglayer::primitive2d::Primitive2DContainer aContent {
+        new drawinglayer::primitive2d::GraphicPrimitive2D(
+            rGraphicTransform,
+            rGrfObj,
+            rGraphicAttr) };
 
     // MM02 use primitive-based version for visualization
     paintGraphicUsingPrimitivesHelper(
@@ -969,11 +969,10 @@ void paintGraphicUsingPrimitivesHelper(
 
         if(0 != aClip.count())
         {
-            rContent.resize(1);
-            rContent[0] =
+            rContent = drawinglayer::primitive2d::Primitive2DContainer {
                 new drawinglayer::primitive2d::MaskPrimitive2D(
                     std::move(aClip),
-                    drawinglayer::primitive2d::Primitive2DContainer(rContent));
+                    std::move(rContent)) };
         }
     }
 
@@ -981,13 +980,12 @@ void paintGraphicUsingPrimitivesHelper(
     {
         // Embed to ObjectInfoPrimitive2D when we have Name/Title/Description
         // information available
-        rContent.resize(1);
-        rContent[0] =
+        rContent = drawinglayer::primitive2d::Primitive2DContainer {
             new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-                drawinglayer::primitive2d::Primitive2DContainer(rContent),
+                std::move(rContent),
                 rName,
                 rTitle,
-                rDescription);
+                rDescription) };
     }
 
     basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);

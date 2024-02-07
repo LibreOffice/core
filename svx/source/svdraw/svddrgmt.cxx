@@ -770,12 +770,12 @@ void SdrDragMethod::CreateOverlayGeometry(
 
         if(DoAddConnectorOverlays())
         {
-            const drawinglayer::primitive2d::Primitive2DContainer aConnectorOverlays(AddConnectorOverlays());
+            drawinglayer::primitive2d::Primitive2DContainer aConnectorOverlays(AddConnectorOverlays());
 
             if(!aConnectorOverlays.empty())
             {
                 // add connector overlays to transparent part
-                aResultTransparent.append(aConnectorOverlays);
+                aResultTransparent.append(std::move(aConnectorOverlays));
             }
         }
 

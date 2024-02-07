@@ -317,11 +317,11 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
         // handle GluePoint
         if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())
         {
-            const drawinglayer::primitive2d::Primitive2DContainer xGlue(GetViewContact().createGluePointPrimitive2DSequence());
+            drawinglayer::primitive2d::Primitive2DContainer xGlue(GetViewContact().createGluePointPrimitive2DSequence());
 
             if(!xGlue.empty())
             {
-                xRetval.append(xGlue);
+                xRetval.append(std::move(xGlue));
             }
         }
 
