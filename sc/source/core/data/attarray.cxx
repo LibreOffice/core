@@ -2326,7 +2326,7 @@ void ScAttrArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
 void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
 {
     SetDefaultIfNotInit();
-    const ScPatternAttr* pDefPattern(&rDocument.getCellAttributeHelper().getDefaultCellAttribute());
+    const CellAttributeHolder aDefHolder(&rDocument.getCellAttributeHelper().getDefaultCellAttribute());
 
     SCSIZE  nIndex;
     SCROW   nRow;
@@ -2351,10 +2351,10 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
                 if (nId != ATTR_MERGE && nId != ATTR_MERGE_FLAG)
                     rSet.ClearItem(nId);
 
-            if ( *pNewPattern == *pDefPattern )
+            if ( *pNewPattern == *aDefHolder.getScPatternAttr() )
             {
                 delete pNewPattern;
-                SetPatternArea( nThisRow, nAttrRow, pDefPattern );
+                SetPatternArea( nThisRow, nAttrRow, aDefHolder );
             }
             else
             {
