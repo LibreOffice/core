@@ -1061,6 +1061,7 @@ void ScColumn::GetOptimalHeight(
             if (!bStdOnly)                      // search covered cells
             {
                 ScNeededSizeOptions aOptions;
+                CellAttributeHolder aOldPattern;
 
                 for (const auto& rSpan : aSpans)
                 {
@@ -1071,7 +1072,7 @@ void ScColumn::GetOptimalHeight(
                         if (rCxt.isForceAutoSize() || !(rDocument.GetRowFlags(nRow, nTab) & CRFlags::ManualSize) )
                         {
                             aOptions.aPattern.setScPatternAttr(pPattern);
-                            const CellAttributeHolder aOldPattern(pPattern);
+                            aOldPattern.setScPatternAttr(pPattern);
                             sal_uInt16 nHeight = static_cast<sal_uInt16>(
                                 std::min(
                                     GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
