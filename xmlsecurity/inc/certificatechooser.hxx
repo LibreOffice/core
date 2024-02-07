@@ -51,8 +51,6 @@ enum class UserAction
 class CertificateChooser final : public weld::GenericDialogController
 {
 private:
-    static inline CertificateChooser* mxInstance = nullptr;
-
     std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
     std::vector<std::shared_ptr<UserData>> mvUserData;
 
@@ -91,14 +89,18 @@ public:
                        UserAction eAction);
     virtual ~CertificateChooser() override;
 
-    static CertificateChooser* getInstance(weld::Window* _pParent,
+    static std::unique_ptr<CertificateChooser> getInstance(weld::Window* _pParent,
                         std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                         UserAction eAction) {
-        if (!mxInstance)
-        {
-            mxInstance = new CertificateChooser(_pParent, std::move(rxSecurityContexts), eAction);
-        }
-        return mxInstance;
+        // Don't reuse CertificateChooser instances
+        // Reusing the same instance will, in the following case, lead to a
+        // crash. It appears that the CertificateChooser is getting disposed
+        // somewhere as mpDialogImpl in its base class ends up being null:
+        // 1. Create an empty Writer document and add a digital signature
+        //    in the Digital Signatures dialog
+        // 2. File > Save As the document, check the "Encrypt with GPG key"
+        //    checkbox, press Encrypt, and crash in Dialog::ImplStartExecute()
+        return std::make_unique<CertificateChooser>(_pParent, std::move(rxSecurityContexts), eAction);
     }
 
     short run() override;
