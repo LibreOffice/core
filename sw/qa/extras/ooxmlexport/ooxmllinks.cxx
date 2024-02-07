@@ -15,41 +15,9 @@
 
 // This file contains tests to check relative/absolute hyperlinks handling
 
-#define USE_TEMP_DIR true
-#define DONT_MODIFY_LINK false
-
+// decide if output link should be converted to absolute
 #define USE_ABSOLUTE true
 #define USE_RELATIVE false
-
-// bAbsolute - decide if output link should be converted to absolute
-// bUseTempDir - decide if link should be modified to be placed in temp dir - for testing relative links
-#define DECLARE_LINKS_EXPORT_TEST(TestName, FileName, bAbsolute, bUseTempDir)                      \
-    class TestName : public Test                                                                   \
-    {                                                                                              \
-    protected:                                                                                     \
-        virtual void postLoad(const char*) override                                                \
-        {                                                                                          \
-            if (!bUseTempDir)                                                                      \
-                return;                                                                            \
-                                                                                                   \
-            UseTempDir();                                                                          \
-        }                                                                                          \
-                                                                                                   \
-    public:                                                                                        \
-        CPPUNIT_TEST_SUITE(TestName);                                                              \
-        CPPUNIT_TEST(Import_Export_Import);                                                        \
-        CPPUNIT_TEST_SUITE_END();                                                                  \
-        void Import_Export_Import()                                                                \
-        {                                                                                          \
-            auto xChanges = comphelper::ConfigurationChanges::create();                            \
-            officecfg::Office::Common::Save::URL::FileSystem::set(!bAbsolute, xChanges);           \
-            xChanges->commit();                                                                    \
-            executeLoadReloadVerify(FileName);                                                     \
-        }                                                                                          \
-        void verify() override;                                                                    \
-    };                                                                                             \
-    CPPUNIT_TEST_SUITE_REGISTRATION(TestName);                                                     \
-    void TestName::verify()
 
 class Test : public SwModelTestBase
 {
@@ -66,6 +34,7 @@ public:
         xChanges->commit();
     }
 
+    // link should be modified to be placed in temp dir - for testing relative links
     void UseTempDir()
     {
         uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
@@ -159,9 +128,12 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeExport)
                 "Target"_ostr, "relative.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", USE_ABSOLUTE,
-                          DONT_MODIFY_LINK)
+CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteExport)
 {
+    SetAbsolute(USE_ABSOLUTE);
+    createSwDoc("relative-link.docx");
+    // Don't modify link.
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
     OUString sTarget
@@ -170,18 +142,24 @@ DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", US
     CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
 
-DECLARE_LINKS_EXPORT_TEST(testAbsoluteToRelativeExport, "absolute-link.docx", USE_RELATIVE,
-                          USE_TEMP_DIR)
+CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeExport)
 {
+    SetAbsolute(USE_RELATIVE);
+    createSwDoc("absolute-link.docx");
+    UseTempDir();
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr,
                 "test.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", USE_ABSOLUTE,
-                          DONT_MODIFY_LINK)
+CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteExport)
 {
+    SetAbsolute(USE_ABSOLUTE);
+    createSwDoc("absolute-link.docx");
+    // Don't modify link.
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
     OUString sTarget
@@ -190,33 +168,48 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", US
     CPPUNIT_ASSERT(sTarget.endsWith("test.docx"));
 }
 
-DECLARE_LINKS_EXPORT_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, USE_TEMP_DIR)
+CPPUNIT_TEST_FIXTURE(Test, testTdf123627_export)
 {
+    SetAbsolute(USE_RELATIVE);
+    createSwDoc("tdf123627.docx");
+    UseTempDir();
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
                 "Target"_ostr, "test.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
+CPPUNIT_TEST_FIXTURE(Test, testTdf126590_export)
 {
+    SetAbsolute(USE_ABSOLUTE);
+    createSwDoc("tdf126590.docx");
+    // Don't modify link.
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     // in the original file: Target="file:///C:\TEMP\test.docx" => invalid file URI
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
                 "Target"_ostr, "file:///C:/TEMP/test.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testTdf126768_export, "tdf126768.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
+CPPUNIT_TEST_FIXTURE(Test, testTdf126768_export)
 {
+    SetAbsolute(USE_ABSOLUTE);
+    createSwDoc("tdf126768.docx");
+    // Don't modify link.
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     // in the original file: "file:///C:\\TEMP\\test.docx" => invalid file URI
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
                 "Target"_ostr, "file:///C:/TEMP/test.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_ABSOLUTE,
-                          DONT_MODIFY_LINK)
+CPPUNIT_TEST_FIXTURE(Test, testNon_ascii_link_export)
 {
+    SetAbsolute(USE_ABSOLUTE);
+    createSwDoc("non_ascii_link.docx");
+    // Don't modify link.
+    saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,

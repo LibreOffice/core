@@ -75,18 +75,6 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
     maTempFile.EnableKillingFile();
 }
 
-void SwModelTestBase::executeLoadReloadVerify(const char* filename, const char* pPassword)
-{
-    maTempFile.EnableKillingFile(false);
-    header();
-    loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
-    postLoad(filename);
-    saveAndReload(mpFilter, pPassword);
-    verify();
-    finish();
-    maTempFile.EnableKillingFile();
-}
-
 void SwModelTestBase::executeImportExport(const char* filename, const char* pPassword)
 {
     maTempFile.EnableKillingFile(false);

@@ -113,13 +113,6 @@ protected:
 
     /**
      * Helper func used by each unit test to test the 'export' code.
-     * (Loads the requested file, save it to temp file, load the
-     * temp file and then calls 'verify' method)
-     */
-    void executeLoadReloadVerify(const char* filename, const char* pPassword = nullptr);
-
-    /**
-     * Helper func used by each unit test to test the 'export' code.
      * (Loads the requested file for document base (this represents
      * the initial document condition), exports with the desired
      * export filter and then calls 'verify' method)
