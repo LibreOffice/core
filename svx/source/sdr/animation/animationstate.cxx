@@ -34,11 +34,8 @@ namespace sdr::animation
 
             if(!maAnimatedPrimitives.empty())
             {
-                const sal_Int32 nCount(maAnimatedPrimitives.size());
-
-                for(sal_Int32 a(0); a < nCount; a++)
+                for(const drawinglayer::primitive2d::Primitive2DReference & xRef : maAnimatedPrimitives)
                 {
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(maAnimatedPrimitives[a]);
                     const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D* pCandidate = static_cast< const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D* >(xRef.get());
 
                     const drawinglayer::animation::AnimationEntry& rAnimEntry = pCandidate->getAnimationEntry();

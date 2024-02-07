@@ -2280,7 +2280,7 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
 
             if (!bForceToMetafile && 1 == rContent.size())
             {
-                const primitive2d::Primitive2DReference xReference(rContent[0]);
+                const primitive2d::Primitive2DReference xReference(rContent.front());
                 pPoPoColor = dynamic_cast<const primitive2d::PolyPolygonColorPrimitive2D*>(
                     xReference.get());
             }
@@ -2391,8 +2391,8 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
     // check for single FillGradientPrimitive2D
     if (!bForceToBigTransparentVDev && 1 == rTransparence.size())
     {
-        pFiGradient
-            = dynamic_cast<const primitive2d::FillGradientPrimitive2D*>(rTransparence[0].get());
+        pFiGradient = dynamic_cast<const primitive2d::FillGradientPrimitive2D*>(
+            rTransparence.front().get());
 
         // check also for correct ID to exclude derived implementations
         if (pFiGradient

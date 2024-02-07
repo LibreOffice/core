@@ -593,9 +593,8 @@ namespace
                         rOutlineAttribute.getLineAttribute(),
                         rOutlineAttribute.getStrokeAttribute(),
                         aStrokePrimitives);
-                    const sal_uInt32 nStrokeCount(aStrokePrimitives.size());
 
-                    if(nStrokeCount)
+                    if(!aStrokePrimitives.empty())
                     {
                         if(rOutlineAttribute.getTransparence())
                         {

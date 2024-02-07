@@ -572,7 +572,7 @@ void VclPixelProcessor2D::processUnifiedTransparencePrimitive2D(
 
         if (1 == rContent.size())
         {
-            const primitive2d::BasePrimitive2D* pBasePrimitive = rContent[0].get();
+            const primitive2d::BasePrimitive2D* pBasePrimitive = rContent.front().get();
 
             switch (pBasePrimitive->getPrimitive2DID())
             {

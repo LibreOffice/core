@@ -319,8 +319,7 @@ namespace
             rInfo.mrFont.DoOnCapitals(aDoDrawPortionInfo);
 
             // transfer collected primitives from maTextPortionPrimitives to a new container
-            drawinglayer::primitive2d::Primitive2DContainer aContainer;
-            aContainer.swap(maTextPortionPrimitives);
+            drawinglayer::primitive2d::Primitive2DContainer aContainer = std::move(maTextPortionPrimitives);
 
             // Take any decoration for the whole formatted portion and keep it to get continuous over/under/strike-through
             if (pNewPrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)

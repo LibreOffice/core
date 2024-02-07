@@ -393,13 +393,12 @@ namespace svgio::svgreader
             if(fPosition < 0.0)
                 return;
 
-            const sal_Int32 nLength(rPathContent.size());
-            sal_Int32 nCurrent(0);
+            auto pathContentIt = rPathContent.begin();
 
-            while(fPosition < fBasegfxPathLength && nCurrent < nLength)
+            while(fPosition < fBasegfxPathLength && pathContentIt != rPathContent.end())
             {
                 const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pCandidate = nullptr;
-                const drawinglayer::primitive2d::Primitive2DReference xReference(rPathContent[nCurrent]);
+                const drawinglayer::primitive2d::Primitive2DReference xReference(*pathContentIt);
 
                 if(xReference.is())
                 {
@@ -427,7 +426,7 @@ namespace svgio::svgreader
                     fPosition = aPathTextBreakupHelper.getPosition();
                 }
 
-                nCurrent++;
+                ++pathContentIt;
             }
         }
 
