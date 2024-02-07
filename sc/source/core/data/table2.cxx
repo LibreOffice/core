@@ -1026,6 +1026,8 @@ static void lcl_SetTransposedPatternInRows(ScTable* pTransClip, SCROW nAttrRow1,
                                            const std::vector<SCROW>& rFilteredRows,
                                            SCROW nRowDestOffset)
 {
+    const CellAttributeHolder aPatternHolder(&rPatternAttr);
+
     for (SCROW nRow = nAttrRow1; nRow <= nAttrRow2; nRow++)
     {
         size_t nFilteredRowAdjustment = 0;
@@ -1046,7 +1048,7 @@ static void lcl_SetTransposedPatternInRows(ScTable* pTransClip, SCROW nAttrRow1,
 
         pTransClip->SetPattern(
             static_cast<SCCOL>(nCol1 + nRow - nRow1 - nFilteredRowAdjustment + nRowDestOffset),
-            static_cast<SCROW>(nCombinedStartRow + nCol - nCol1), rPatternAttr);
+            static_cast<SCROW>(nCombinedStartRow + nCol - nCol1), aPatternHolder);
     }
 }
 
