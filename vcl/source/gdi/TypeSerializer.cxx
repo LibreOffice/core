@@ -447,16 +447,20 @@ static bool UselessScaleForMapMode(const Fraction& rScale)
 bool TypeSerializer::readMapMode(MapMode& rMapMode)
 {
     VersionCompatRead aCompat(mrStream);
-    sal_uInt16 nUnit(0);
-    Point aOrigin;
-    Fraction aScaleX;
-    Fraction aScaleY;
-    bool bSimple(true);
 
-    mrStream.ReadUInt16(nUnit);
+    sal_Int16 nUnit(0);
+    mrStream.ReadInt16(nUnit);
+
+    Point aOrigin;
     readPoint(aOrigin);
+
+    Fraction aScaleX;
     readFraction(aScaleX);
+
+    Fraction aScaleY;
     readFraction(aScaleY);
+
+    bool bSimple(true);
     mrStream.ReadCharAsBool(bSimple);
 
     if (nUnit < sal_Int16(MapUnit::Map100thMM) || nUnit > sal_Int16(MapUnit::LAST))
