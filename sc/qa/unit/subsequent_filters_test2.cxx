@@ -159,6 +159,17 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf123026_optimalRowHeight)
     CPPUNIT_ASSERT_GREATER(2000, nHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf159581_optimalRowHeight)
+{
+    createScDoc("xlsx/tdf159581_optimalRowHeight.xlsx");
+    SCTAB nTab = 1;
+    SCROW nRow = 0; // row 1
+    int nHeight = convertTwipToMm100(getScDoc()->GetRowHeight(nRow, nTab, false));
+
+    // Without the fix, this was 2027. It should be 450.
+    CPPUNIT_ASSERT_LESS(500, nHeight);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testCustomNumFormatHybridCellODS)
 {
     createScDoc("ods/custom-numfmt-hybrid-cell.ods");
