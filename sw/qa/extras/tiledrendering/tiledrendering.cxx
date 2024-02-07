@@ -4165,6 +4165,103 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
     CPPUNIT_ASSERT(nBlackPixels > nWhitePixels);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_yellowPatternFill)
+{
+    SwXTextDocument* pXTextDocument = createDoc("tdf159626_yellowPatternFill.docx");
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+
+    Bitmap aBitmap(getTile(pXTextDocument));
+    Size aSize = aBitmap.GetSizePixel();
+
+    int nPureYellowPixels = 0;
+    int nEdgePlusGrayPlusAntialiasPixels = 0;
+    BitmapScopedReadAccess pAccess(aBitmap);
+    for (tools::Long x = 0; x < aSize.Width(); ++x)
+    {
+        for (tools::Long y = 0; y < aSize.Height(); ++y)
+        {
+            Color aActualColor(pAccess->GetPixel(y, x));
+            if (aActualColor == COL_YELLOW)
+                ++nPureYellowPixels;
+            else
+                ++nEdgePlusGrayPlusAntialiasPixels;
+        }
+    }
+    // The page background pattern is 62 yellow/2 gray pixels - first pixel is gray(foreground)
+    // Without the patch, the document was primarily gray.
+    CPPUNIT_ASSERT(nPureYellowPixels > 0);
+    CPPUNIT_ASSERT(nPureYellowPixels / 2 > nEdgePlusGrayPlusAntialiasPixels);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_yellowPatternFillB)
+{
+    SwXTextDocument* pXTextDocument = createDoc("tdf159626_yellowPatternFillB.docx");
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+
+    Bitmap aBitmap(getTile(pXTextDocument));
+    Size aSize = aBitmap.GetSizePixel();
+
+    int nPureYellowPixels = 0;
+    int nEdgePlusGrayPlusAntialiasPixels = 0;
+    BitmapScopedReadAccess pAccess(aBitmap);
+    for (tools::Long x = 0; x < aSize.Width(); ++x)
+    {
+        for (tools::Long y = 0; y < aSize.Height(); ++y)
+        {
+            Color aActualColor(pAccess->GetPixel(y, x));
+            if (aActualColor == COL_YELLOW)
+                ++nPureYellowPixels;
+            else
+                ++nEdgePlusGrayPlusAntialiasPixels;
+        }
+    }
+    // The page background pattern is 62 yellow/2 gray pixels - first pixel is yellow(background)
+    // LO already imported this correctly, as primarily yellow - ensure it stays that way.
+    CPPUNIT_ASSERT(nPureYellowPixels > 0);
+    CPPUNIT_ASSERT(nPureYellowPixels / 2 > nEdgePlusGrayPlusAntialiasPixels);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_blackPatternFill)
+{
+    SwXTextDocument* pXTextDocument = createDoc("tdf159626_blackPatternFill.docx");
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
+
+    Bitmap aBitmap(getTile(pXTextDocument));
+    Size aSize = aBitmap.GetSizePixel();
+
+    int nPureBlackPixels = 0;
+    int nEdgePlusWhitePlusAntialiasPixels = 0;
+    BitmapScopedReadAccess pAccess(aBitmap);
+    for (tools::Long x = 0; x < aSize.Width(); ++x)
+    {
+        for (tools::Long y = 0; y < aSize.Height(); ++y)
+        {
+            Color aActualColor(pAccess->GetPixel(y, x));
+            if (aActualColor == COL_BLACK)
+                ++nPureBlackPixels;
+            else
+                ++nEdgePlusWhitePlusAntialiasPixels;
+        }
+    }
+    // Both the foreground and background are defined as black, represented by a pattern with
+    // 48 white/16 black pixels.
+    // The document should be entirely black (except for text margin markings).
+    CPPUNIT_ASSERT(nEdgePlusWhitePlusAntialiasPixels > 0);
+    CPPUNIT_ASSERT(nPureBlackPixels / 10 > nEdgePlusWhitePlusAntialiasPixels);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
