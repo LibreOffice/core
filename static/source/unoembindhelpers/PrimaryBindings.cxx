@@ -46,9 +46,10 @@ Reference<css::frame::XModel> getCurrentModelFromViewSh()
 
 EMSCRIPTEN_BINDINGS(PrimaryBindings)
 {
-    // Reference bits
     enum_<unoembindhelpers::uno_Reference>("uno_Reference")
         .value("FromAny", unoembindhelpers::uno_Reference::FromAny);
+    enum_<unoembindhelpers::uno_Sequence>("uno_Sequence")
+        .value("FromSize", unoembindhelpers::uno_Sequence::FromSize);
 
     // Any
     class_<Any>("Any").constructor(+[](const val& rObject, const TypeClass& rUnoType) -> Any {
