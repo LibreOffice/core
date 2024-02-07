@@ -149,6 +149,7 @@ class HTMLOption;
 typedef ::std::map<SCROW, SCROW> InnerMap;
 typedef ::std::map<sal_uInt16, InnerMap*> OuterMap;
 
+/// HTML parser used during paste into Calc.
 class ScHTMLLayoutParser : public ScHTMLParser
 {
 private:
@@ -575,6 +576,8 @@ public:
 
     Builds the table structure correctly, ignores extended formatting like
     pictures or column widths.
+
+    Used during file load / import into Calc.
  */
 class ScHTMLQueryParser : public ScHTMLParser
 {

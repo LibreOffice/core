@@ -74,6 +74,31 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
+namespace
+{
+/// data-sheets-value from google sheets, value is a JSON.
+void ParseDataSheetsValue(const OUString& rDataSheetsValue, sal_uInt32& rNumberFormat)
+{
+    // data-sheets-value from google sheets, value is a JSON.
+    OString aEncodedOption = rDataSheetsValue.toUtf8();
+    const char* pEncodedOption = aEncodedOption.getStr();
+    std::stringstream aStream(pEncodedOption);
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // The "1" key describes the original data type.
+    auto it = aTree.find("1");
+    if (it != aTree.not_found())
+    {
+        int nValueType = std::stoi(it->second.get_value<std::string>());
+        // 2 is text.
+        if (nValueType == 2)
+        {
+            rNumberFormat = NF_STANDARD_FORMAT_TEXT;
+        }
+    }
+}
+}
+
 ScHTMLStyles::ScHTMLStyles() : maEmpty() {}
 
 void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pClassName, size_t nClassName,
@@ -914,6 +939,7 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
     bInCell = true;
     bool bHorJustifyCenterTH = (pInfo->nToken == HtmlTokenId::TABLEHEADER_ON);
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+    sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
     for (const auto & rOption : rOptions)
     {
         switch( rOption.GetToken() )
@@ -982,9 +1008,17 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                 mxActEntry->pNumStr = rOption.GetString();
             }
             break;
+            case HtmlOptionId::DSVAL:
+            {
+                ParseDataSheetsValue(rOption.GetString(), nNumberFormat);
+            }
+            break;
             default: break;
         }
     }
+
+    if (nNumberFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+        mxActEntry->aItemSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat));
 
     mxActEntry->nCol = nColCnt;
     mxActEntry->nRow = nRowCnt;
@@ -2129,23 +2163,7 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                 break;
                 case HtmlOptionId::DSVAL:
                 {
-                    // data-sheets-value from google sheets, value is a JSON.
-                    OString aEncodedOption = rOption.GetString().toUtf8();
-                    const char* pEncodedOption = aEncodedOption.getStr();
-                    std::stringstream aStream(pEncodedOption);
-                    boost::property_tree::ptree aTree;
-                    boost::property_tree::read_json(aStream, aTree);
-                    // The "1" key describes the original data type.
-                    auto it = aTree.find("1");
-                    if (it != aTree.not_found())
-                    {
-                        int nValueType = std::stoi(it->second.get_value<std::string>());
-                        // 2 is text.
-                        if (nValueType == 2)
-                        {
-                            nNumberFormat = NF_STANDARD_FORMAT_TEXT;
-                        }
-                    }
+                    ParseDataSheetsValue(rOption.GetString(), nNumberFormat);
                 }
                 break;
                 default: break;
