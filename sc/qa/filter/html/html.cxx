@@ -16,16 +16,19 @@
 
 #include <comphelper/propertyvalue.hxx>
 
+#include <helper/qahelper.hxx>
+#include <impex.hxx>
+
 using namespace com::sun::star;
 
 namespace
 {
 /// Covers sc/source/filter/html/ fixes.
-class Test : public UnoApiXmlTest, public HtmlTestTools
+class Test : public ScModelTestBase, public HtmlTestTools
 {
 public:
     Test()
-        : UnoApiXmlTest("/sc/qa/filter/html/data/")
+        : ScModelTestBase("/sc/qa/filter/html/data/")
     {
     }
 };
@@ -54,6 +57,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdAsText)
     // - Actual  : 1 (VALUE)
     // i.e. data-sheets-value was ignored on import.
     CPPUNIT_ASSERT_EQUAL(table::CellContentType_TEXT, eType);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsText)
+{
+    // Given an empty document:
+    createScDoc();
+
+    // When pasting HTML with an A2 cell that contains "01" as text:
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    ScImportExport aImporter(*pDoc, aCellPos);
+    SvFileStream aFile(createFileURL(u"text.html"), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    aMemory.Seek(0);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aMemory, OUString(), SotClipboardFormatId::HTML));
+
+    // Then make sure "01" is not auto-converted to 1, as a number:
+    aCellPos = ScAddress(/*nColP=*/0, /*nRowP=*/1, /*nTabP=*/0);
+    CellType eCellType = pDoc->GetCellType(aCellPos);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2 (CELLTYPE_STRING)
+    // - Actual  : 1 (CELLTYPE_VALUE)
+    // i.e. data-sheets-value was ignored on paste.
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, eCellType);
 }
 }
 
