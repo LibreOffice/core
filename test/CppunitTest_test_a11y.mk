@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,test_a11y, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,test_a11y, \
+	acc \
 	sal \
 	cppu \
 	subsequenttest \
