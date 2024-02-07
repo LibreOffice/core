@@ -58,6 +58,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_filter_html, \
 $(eval $(call gb_CppunitTest_set_include,sc_filter_html,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
+    -I$(SRCDIR)/sc/qa/unit \
     $$(INCLUDE) \
 ))
 
