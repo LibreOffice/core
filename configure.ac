@@ -14801,11 +14801,14 @@ dnl expression' with consteval constructor", <https://bugs.llvm.org/show_bug.cgi
 dnl using consteval: 'clang/lib/CodeGen/Address.h:38: llvm::Value*
 dnl clang::CodeGen::Address::getPointer() const: Assertion `isValid()' failed.'" (which should be
 dnl fixed since Clang 14), <https://developercommunity.visualstudio.com/t/1581879> "Bogus error
-dnl C7595 with consteval constructor in ternary expression (/std:c++latest)", or
+dnl C7595 with consteval constructor in ternary expression (/std:c++latest)" (which appears to be
+dnl fixed at least in Visual Studio Community 2022 Preview 17.9.0 Preview 5.0),
 dnl <https://github.com/llvm/llvm-project/issues/54612> "C++20, consteval, anonymous union:
 dnl llvm/lib/IR/Instructions.cpp:1491: void llvm::StoreInst::AssertOK(): Assertion
 dnl `cast<PointerType>(getOperand(1)->getType())->isOpaqueOrPointeeTypeMatches(getOperand(0)->getType())
-dnl && "Ptr must be a pointer to Val type!"' failed." (which should be fixed since Clang 17):
+dnl && "Ptr must be a pointer to Val type!"' failed." (which should be fixed since Clang 17), or
+dnl <https://developercommunity.visualstudio.com/t/Bogus-error-C2440-with-consteval-constru/10579616>
+dnl "Bogus error C2440 with consteval constructor (/std:c++20)":
 AC_LANG_PUSH([C++])
 save_CXX=$CXX
 if test "$COM" = MSC && test "$COM_IS_CLANG" != TRUE; then
@@ -14850,6 +14853,18 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
             };
         };
         auto s5 = S5().f();
+
+        struct S6 {
+            consteval S6(char const (&lit)[2]) {
+                buf[0] = lit[0];
+                buf[1] = lit[1];
+            }
+            union {
+                int x;
+                char buf[2];
+            };
+        };
+        void f6() { S6("a"); }
     ], [
         return (s.i == 1) ? 0 : 1;
     ])], [
