@@ -29,6 +29,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+
 #include <o3tl/float_int_conversion.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <rtl/strbuf.hxx>
@@ -46,6 +47,8 @@
 #include <svx/svdtrans.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <o3tl/string_view.hxx>
+#include <svx/xbitmap.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/virdev.hxx>
 
 namespace oox::vml {
@@ -843,6 +846,51 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                     aFillProps.maBlipProps.mxFillGraphic = rGraphicHelper.importEmbeddedGraphic(moBitmapPath.value());
                     if (aFillProps.maBlipProps.mxFillGraphic.is())
                     {
+                        if (nFillType == XML_pattern)
+                        {
+                            // VML provides an 8x8 black(background) and white(foreground) pattern
+                            // along with specified background(color2) and foreground(color) colors,
+                            // while LO needs the color applied directly to the pattern.
+                            const Graphic aGraphic(aFillProps.maBlipProps.mxFillGraphic);
+                            ::Color nBackColor;
+                            ::Color nPixelColor;
+                            bool bIs8x8 = vcl::bitmap::isHistorical8x8(aGraphic.GetBitmapEx(),
+                                                                       nBackColor, nPixelColor);
+                            if (bIs8x8)
+                            {
+                                nBackColor
+                                    = ConversionHelper::decodeColor(rGraphicHelper, moColor2,
+                                                                    moOpacity2, API_RGB_WHITE)
+                                          .getColor(rGraphicHelper);
+                                // Documentation says undefined == white; observation says lightgray
+                                nPixelColor
+                                    = ConversionHelper::decodeColor(rGraphicHelper, moColor,
+                                                                    moOpacity, COL_LIGHTGRAY)
+                                          .getColor(rGraphicHelper);
+
+                                XOBitmap aXOB(aGraphic.GetBitmapEx());
+                                aXOB.Bitmap2Array();
+                                // LO uses the first pixel's color to represent background pixels
+                                if (aXOB.GetBackgroundColor() == COL_WHITE)
+                                {
+                                    // White always represents the foreground in VML => swap
+                                    aXOB.SetPixelColor(nBackColor);
+                                    aXOB.SetBackgroundColor(nPixelColor);
+                                }
+                                else
+                                {
+                                    assert(aXOB.GetBackgroundColor() == COL_BLACK);
+                                    aXOB.SetPixelColor(nPixelColor);
+                                    aXOB.SetBackgroundColor(nBackColor);
+                                }
+                                aXOB.Array2Bitmap();
+
+                                Graphic aLOPattern(aXOB.GetBitmap());
+                                aLOPattern.setOriginURL(aGraphic.getOriginURL());
+                                aFillProps.maBlipProps.mxFillGraphic = aLOPattern.GetXGraphic();
+                            }
+                        }
+
                         aFillProps.moFillType = XML_blipFill;
                         aFillProps.maBlipProps.moBitmapMode = (nFillType == XML_frame) ? XML_stretch : XML_tile;
                         break;  // do not break if bitmap is missing, but run to XML_solid instead
