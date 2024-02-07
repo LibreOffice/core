@@ -38,6 +38,7 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
+#include <o3tl/compare.hxx>
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -101,7 +102,7 @@ struct lcl_LessXOfPoint
     {
         if( !first.empty() && !second.empty() )
         {
-            return first[0]<second[0];
+            return o3tl::strong_order(first[0], second[0]) < 0;
         }
         return false;
     }

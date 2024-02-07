@@ -62,6 +62,8 @@ public:
 
     TypeCheck Pointer() const;
 
+    TypeCheck MemberPointerOf() const;
+
     TerminalCheck Enum() const;
 
     TypeCheck LvalueReference() const;

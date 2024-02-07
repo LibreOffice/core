@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "sal/config.h"
+
+#include <compare>
+
 struct S
 {
     void* p;
@@ -18,6 +22,8 @@ int main()
         0 // expected-error {{NullToPointer ValueDependentIsNotNull ZeroLiteral -> nullptr [loplugin:nullptr]}}
     };
     (void)s;
+
+    (void)(std::strong_order(0, 1) < 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

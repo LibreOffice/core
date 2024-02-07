@@ -131,10 +131,17 @@ bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
     case Expr::NPCK_CXX11_nullptr:
         break;
     default:
-        if (loplugin::TypeCheck(expr->getType()).Typedef("locale_t")
+        auto const tc = loplugin::TypeCheck(expr->getType());
+        if (tc.Typedef("locale_t")
             .GlobalNamespace())
         {
             break; // POSIX locale_t is left unspecified
+        }
+        // Hack to handle libc++ and stdlibc++ `std::strong_ordering x; x < 0` etc.:
+        if (tc.MemberPointerOf().ClassOrStruct("_CmpUnspecifiedParam").StdNamespace()
+            || tc.Pointer().ClassOrStruct("__unspec").Namespace("__cmp_cat").StdNamespace())
+        {
+            break;
         }
         handleNull(expr->getSubExpr(), expr->getCastKindName(), k);
         break;

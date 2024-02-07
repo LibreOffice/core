@@ -133,6 +133,16 @@ TypeCheck TypeCheck::Pointer() const {
     return TypeCheck();
 }
 
+TypeCheck TypeCheck::MemberPointerOf() const {
+    if (!type_.isNull()) {
+        auto const t = type_->getAs<clang::MemberPointerType>();
+        if (t != nullptr) {
+            return TypeCheck(t->getClass());
+        }
+    }
+    return TypeCheck();
+}
+
 TerminalCheck TypeCheck::Enum() const {
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::EnumType>();

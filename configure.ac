@@ -14787,6 +14787,29 @@ CXX=$save_CXX
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
+AC_MSG_CHECKING([whether $CXX_BASE supports a working C++20 std::strong_order])
+dnl ...which is known to not be implemented in libc++ prior to
+dnl <https://github.com/llvm/llvm-project/commit/d8380ad977e94498e170b06449c81f1fc27da7b5> "[libc++]
+dnl [P1614] Implement [cmp.alg]'s std::{strong,weak,partial}_order" in LLVM 14:
+AC_LANG_PUSH([C++])
+save_CXX=$CXX
+if test "$COM" = MSC && test "$COM_IS_CLANG" != TRUE; then
+    CXX="env LIB=$ILIB $CXX"
+fi
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LINK_IFELSE([AC_LANG_PROGRAM([
+        #include <compare>
+    ], [
+        (void) (std::strong_order(1.0, 2.0) < 0);
+    ])], [
+        AC_DEFINE([HAVE_CPP_STRONG_ORDER],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXX=$save_CXX
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 # ===================================================================
 # Creating bigger shared library to link against
 # ===================================================================
