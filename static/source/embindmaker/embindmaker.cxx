@@ -378,61 +378,6 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
     }
 }
 
-bool hasStructMembers(rtl::Reference<TypeManager> const& manager,
-                      rtl::Reference<unoidl::PlainStructTypeEntity> struc)
-{
-    for (;;)
-    {
-        if (!struc->getDirectMembers().empty())
-        {
-            return true;
-        }
-        auto const& base = struc->getDirectBase();
-        if (base.isEmpty())
-        {
-            return false;
-        }
-        auto const ent = manager->getManager()->findEntity(base);
-        if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_PLAIN_STRUCT_TYPE)
-        {
-            throw CannotDumpException("bad struct base \"" + base + "\"");
-        }
-        struc = static_cast<unoidl::PlainStructTypeEntity*>(ent.get());
-    }
-}
-
-void dumpStructMemberTypes(std::ostream& out, rtl::Reference<TypeManager> const& manager,
-                           rtl::Reference<unoidl::PlainStructTypeEntity> struc, bool& first)
-{
-    auto const& base = struc->getDirectBase();
-    if (!base.isEmpty())
-    {
-        auto const ent = manager->getManager()->findEntity(base);
-        if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_PLAIN_STRUCT_TYPE)
-        {
-            throw CannotDumpException("bad struct base \"" + base + "\"");
-        }
-        dumpStructMemberTypes(out, manager, static_cast<unoidl::PlainStructTypeEntity*>(ent.get()),
-                              first);
-    }
-    for (auto const& mem : struc->getDirectMembers())
-    {
-        if (first)
-        {
-            first = false;
-        }
-        else
-        {
-            out << ", ";
-        }
-        dumpType(out, manager, mem.type);
-        if (passByReference(manager, mem.type))
-        {
-            out << " const &";
-        }
-    }
-}
-
 void dumpStructMembers(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                        OUString const& name, rtl::Reference<unoidl::PlainStructTypeEntity> struc)
 {
@@ -449,15 +394,8 @@ void dumpStructMembers(std::ostream& out, rtl::Reference<TypeManager> const& man
     }
     for (auto const& mem : struc->getDirectMembers())
     {
-        out << "\n        .property(\"" << mem.name << "\", +[](" << cppName(name)
-            << " const & the_self) { return the_self." << mem.name << "; }, +[](" << cppName(name)
-            << " & the_self, ";
-        dumpType(out, manager, mem.type);
-        if (passByReference(manager, mem.type))
-        {
-            out << " const &";
-        }
-        out << " the_value) { the_self." << mem.name << " = the_value; })";
+        out << "\n        .field(\"" << mem.name << "\", &" << cppName(name) << "::" << mem.name
+            << ")";
     }
 }
 
@@ -870,23 +808,9 @@ SAL_IMPLEMENT_MAIN()
             assert(ent->getSort() == unoidl::Entity::SORT_PLAIN_STRUCT_TYPE);
             rtl::Reference const strEnt(static_cast<unoidl::PlainStructTypeEntity*>(ent.get()));
             dumpRegisterFunctionProlog(cppOut, n);
-            cppOut << "    ::emscripten::class_<" << cppName(str);
-            auto const& base = strEnt->getDirectBase();
-            if (!base.isEmpty())
-            {
-                cppOut << ", ::emscripten::base<" << cppName(base) << ">";
-            }
-            cppOut << ">(\"uno_Type_" << jsName(str)
-                   << "\")\n"
-                      "        .constructor()";
-            if (hasStructMembers(mgr, strEnt))
-            {
-                cppOut << "\n        .constructor<";
-                auto first = true;
-                dumpStructMemberTypes(cppOut, mgr, strEnt, first);
-                cppOut << ">()";
-                dumpStructMembers(cppOut, mgr, str, strEnt);
-            }
+            cppOut << "    ::emscripten::value_object<" << cppName(str) << ">(\"uno_Type_"
+                   << jsName(str) << "\")";
+            dumpStructMembers(cppOut, mgr, str, strEnt);
             cppOut << ";\n";
             dumpRegisterFunctionEpilog(cppOut, n);
             for (auto const& mem : strEnt->getDirectMembers())
