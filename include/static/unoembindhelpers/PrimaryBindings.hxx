@@ -11,6 +11,8 @@
 
 #include <sal/config.h>
 
+#include <cstdint>
+#include <limits>
 #include <stdexcept>
 
 #include <emscripten/bind.h>
@@ -34,6 +36,11 @@ namespace unoembindhelpers
 enum class uno_Reference
 {
     FromAny
+};
+
+enum class uno_Sequence
+{
+    FromSize
 };
 
 template <typename T> struct UnoInOutParam
@@ -72,7 +79,21 @@ void checkSequenceAccess(css::uno::Sequence<T> const& sequence, sal_Int32 index)
 template <typename T> void registerSequence(char const* name)
 {
     emscripten::class_<css::uno::Sequence<T>>(name)
-        .constructor(+[](sal_Int32 size) {
+        .constructor(+[](emscripten::val const& members) {
+            auto const len = members["length"].as<std::uint32_t>();
+            if (len > std::numeric_limits<sal_Int32>::max())
+            {
+                throw std::length_error("JavaScript array length too large for C++ UNO sequence");
+            }
+            css::uno::Sequence<T> seq(len);
+            auto const p = seq.getArray();
+            for (std::uint32_t i = 0; i != len; ++i)
+            {
+                p[i] = members[i].as<T>();
+            }
+            return seq;
+        })
+        .constructor(+[](sal_Int32 size, [[maybe_unused]] uno_Sequence) {
             checkSequenceSize(size);
             return css::uno::Sequence<T>(size);
         })
