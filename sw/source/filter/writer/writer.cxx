@@ -160,9 +160,9 @@ bool Writer::CopyNextPam( SwPaM ** ppPam )
 sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 {
     const IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
-    const IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findFirstBookmarkStartsAfter(rPos);
-    if(ppBkmk != pMarkAccess->getBookmarksEnd())
-        return ppBkmk - pMarkAccess->getBookmarksBegin();
+    const IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findFirstMarkNotStartsBefore(rPos);
+    if(ppBkmk != pMarkAccess->getAllMarksEnd())
+        return ppBkmk - pMarkAccess->getAllMarksBegin();
     return -1;
 }
 
