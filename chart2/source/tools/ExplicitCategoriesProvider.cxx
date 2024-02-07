@@ -32,6 +32,7 @@
 #include <DataSeries.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <o3tl/compare.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -460,7 +461,9 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
                 rDateCategories.push_back( std::numeric_limits<double>::quiet_NaN() );
             }
         }
-        std::sort( rDateCategories.begin(), rDateCategories.end() );
+        std::sort(
+            rDateCategories.begin(), rDateCategories.end(),
+            [](auto x, auto y) { return o3tl::strong_order(x, y) < 0; } );
     }
 
     return bAnyDataFound && bOnlyDatesFound;
