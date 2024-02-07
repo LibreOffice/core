@@ -4915,7 +4915,6 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
                 const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
                 bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
                               rBrushItem.GetShadingValue() != ShadingPattern::CLEAR ||
-                              rBrushItem.GetGraphic() != nullptr ||
                               rBrushItem.GetGraphicObject() != nullptr);
             }
             break;
@@ -4983,7 +4982,6 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
                 const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
                 bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
                               rBrushItem.GetShadingValue() != ShadingPattern::CLEAR ||
-                              rBrushItem.GetGraphic() != nullptr ||
                               rBrushItem.GetGraphicObject() != nullptr);
             }
             break;
