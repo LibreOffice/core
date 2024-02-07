@@ -763,7 +763,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
     loadAndReload("tdf88583.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00cc00), getProperty<Color>(getParagraph(1), "FillColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")

@@ -1289,15 +1289,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
 
     // Before table background color was white, should be transparent (auto).
     uno::Reference<text::XTextRange> xCell1(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), getProperty<sal_Int32>(xCell1, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xCell1, "BackColor"));
 
     // Cell with auto color but with 15% fill, shouldn't be transparent.
     uno::Reference<text::XTextRange> xCell2(xTable->getCellByName("B1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd8d8d8), getProperty<sal_Int32>(xCell2, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xd8d8d8), getProperty<Color>(xCell2, "BackColor"));
 
     // Cell with color defined (red).
     uno::Reference<text::XTextRange> xCell3(xTable->getCellByName("A2"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xCell3, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xCell3, "BackColor"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf111964)

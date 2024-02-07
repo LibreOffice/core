@@ -378,13 +378,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
                                                         uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
-    sal_Int32 nActual{ 0 };
+    Color nActual{ 0 };
     xPortion->getPropertyValue("CharColor") >>= nActual;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4485828 (0x4472c4)
     // - Actual  : 16711680 (0xff0000)
     // i.e. the text color was red, not blue.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472C4), nActual);
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472C4), nActual);
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)

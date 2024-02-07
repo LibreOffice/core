@@ -120,10 +120,10 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     // Without the accompanying fix in place, this test would have failed with throwing a
     // beans.UnknownPropertyException, as shadow-as-direct-formatting on tables were not possible.
     xShapeProps->setPropertyValue("Shadow", uno::Any(true));
-    sal_Int32 nRed = 0xff0000;
+    Color nRed = COL_LIGHTRED;
     xShapeProps->setPropertyValue("ShadowColor", uno::Any(nRed));
     CPPUNIT_ASSERT(xShapeProps->getPropertyValue("ShadowColor") >>= nRed);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), nRed);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nRed);
 
     // Add text.
     uno::Reference<table::XCellRange> xTable(xShapeProps->getPropertyValue("Model"),
