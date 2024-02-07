@@ -155,7 +155,7 @@ namespace svgio::svgreader
                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         aEmbeddingTransform,
-                        std::move(rTarget)));
+                        drawinglayer::primitive2d::Primitive2DContainer(rTarget)));
 
                 rTarget.push_back(xRef);
             }

@@ -1621,9 +1621,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158445)
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/transform/transform/transform/polypolygoncolor"_ostr, "color"_ostr, "#000000");
-    assertXPath(pDocument, "/primitive2D/transform/transform/transform/transform/polypolygoncolor/polypolygon"_ostr, "height"_ostr, "8.052");
-    assertXPath(pDocument, "/primitive2D/transform/transform/transform/transform/polypolygoncolor/polypolygon"_ostr, "width"_ostr, "5.328");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/polypolygoncolor"_ostr, "color"_ostr, "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/polypolygoncolor/polypolygon"_ostr, "height"_ostr, "8.052");
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/transform/transform/polypolygoncolor/polypolygon"_ostr, "width"_ostr, "5.328");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159594)
