@@ -142,7 +142,7 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
         aFillColor = rSettings.GetDialogColor().getBColor();
         aLineColor = rSettings.GetDialogTextColor().getBColor();
 
-        rSeq.emplace_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aFillColor));
+        rSeq.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aFillColor));
     }
     else
     {
@@ -153,11 +153,11 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
 
         FillGradientAttribute aFillAttrs(css::awt::GradientStyle_LINEAR, 0.0, 0.0, 0.0, nAngle,
             basegfx::BColorStops(aLighterColor, aFillColor));
-        rSeq.emplace_back(new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, std::move(aFillAttrs)));
+        rSeq.push_back(new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, std::move(aFillAttrs)));
     }
 
     // Create the border lines primitive
-    rSeq.emplace_back(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPolygon), aLineColor));
+    rSeq.push_back(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPolygon), aLineColor));
 }
 
 SwHeaderFooterDashedLine::SwHeaderFooterDashedLine(SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader)
@@ -369,7 +369,7 @@ void SwHeaderFooterWin::PaintButton()
                                             aFontSize.getX(), aFontSize.getY(),
                                             double(aTextPos.X()), double(aTextPos.Y())));
 
-    aSeq.emplace_back(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+    aSeq.push_back(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_sLabel, 0, m_sLabel.getLength(),
                         std::vector<double>(), {}, std::move(aFontAttr), css::lang::Locale(), aLineColor));
 
@@ -419,7 +419,7 @@ void SwHeaderFooterWin::PaintButton()
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         aSignColor = COL_WHITE.getBColor();
 
-    aSeq.emplace_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+    aSeq.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aSign), aSignColor) );
 
     // Create the processor and process the primitives
@@ -428,15 +428,14 @@ void SwHeaderFooterWin::PaintButton()
         drawinglayer::processor2d::createProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
 
     // TODO Ghost it all if needed
-    drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);
+    drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq;
     double nFadeRate = double(m_nFadeRate) / 100.0;
 
     const basegfx::BColorModifierSharedPtr aBColorModifier =
         std::make_shared<basegfx::BColorModifier_interpolate>(COL_WHITE.getBColor(),
                                                 1.0 - nFadeRate);
 
-    aGhostedSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
-                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(std::move(aSeq), aBColorModifier));
+    aGhostedSeq.push_back(new drawinglayer::primitive2d::ModifiedColorPrimitive2D(std::move(aSeq), aBColorModifier));
 
     pProcessor->process(aGhostedSeq);
 

@@ -164,10 +164,8 @@ BitmapEx XHatchList::CreateBitmap( tools::Long nIndex, const Size& rSize) const
             *pVirtualDevice,
             aNewViewInformation2D));
 
-        drawinglayer::primitive2d::Primitive2DContainer aSequence(2);
-
-        aSequence[0] = aHatchPrimitive;
-        aSequence[1] = aBlackRectanglePrimitive;
+        drawinglayer::primitive2d::Primitive2DContainer aSequence {
+            aHatchPrimitive, aBlackRectanglePrimitive };
         pProcessor2D->process(aSequence);
         pProcessor2D.reset();
 

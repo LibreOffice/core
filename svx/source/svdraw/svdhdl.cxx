@@ -2628,9 +2628,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
         aHilightColor));
 
     // combine these
-    drawinglayer::primitive2d::Primitive2DContainer aCombination(2);
-    aCombination[0] = aGraphic;
-    aCombination[1] = aGraphicOutline;
+    drawinglayer::primitive2d::Primitive2DContainer aCombination { aGraphic, aGraphicOutline };
 
     // embed to MaskPrimitive2D
     const drawinglayer::primitive2d::Primitive2DReference aMaskedGraphic(

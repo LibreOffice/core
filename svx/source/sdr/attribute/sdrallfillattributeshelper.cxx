@@ -40,14 +40,14 @@ namespace drawinglayer::attribute
 
             if(isUsed())
             {
-                maPrimitives.resize(1);
-                maPrimitives[0] = drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                    basegfx::B2DPolyPolygon(
-                        basegfx::utils::createPolygonFromRect(
-                            maLastPaintRange)),
-                        maLastDefineRange,
-                    maFillAttribute ? *maFillAttribute : drawinglayer::attribute::SdrFillAttribute(),
-                    maFillGradientAttribute ? *maFillGradientAttribute : drawinglayer::attribute::FillGradientAttribute());
+                maPrimitives = drawinglayer::primitive2d::Primitive2DContainer {
+                    drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(
+                            basegfx::utils::createPolygonFromRect(
+                                maLastPaintRange)),
+                            maLastDefineRange,
+                        maFillAttribute ? *maFillAttribute : drawinglayer::attribute::SdrFillAttribute(),
+                        maFillGradientAttribute ? *maFillGradientAttribute : drawinglayer::attribute::FillGradientAttribute()) };
             }
         }
 

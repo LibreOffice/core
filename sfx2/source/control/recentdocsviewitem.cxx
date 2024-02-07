@@ -300,17 +300,17 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
     // paint the remove/pinned icon when hovered
     if (isHighlighted())
     {
-        drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
+        drawinglayer::primitive2d::Primitive2DContainer aSeq;
 
         Point aIconPos(getRemoveIconArea().TopLeft());
 
-        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
+        aSeq.push_back(new DiscreteBitmapPrimitive2D(
                     m_bRemoveIconHighlighted ? m_aRemoveRecentBitmapHighlighted : m_aRemoveRecentBitmap,
                     B2DPoint(aIconPos.X(), aIconPos.Y())));
 
         // tdf#38742 - draw pinned icon
         const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
-        aSeq[1] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
+        aSeq.push_back(new DiscreteBitmapPrimitive2D(
             m_aPinnedDocumentBitmap, B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())));
 
         pProcessor->process(aSeq);
@@ -318,12 +318,11 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
     // tdf#38742 - draw pinned icon if item is pinned
     else if (m_bPinned)
     {
-        drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
-
         const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
-        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
-            m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHiglighted : m_aPinnedDocumentBitmap,
-            B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())));
+        drawinglayer::primitive2d::Primitive2DContainer aSeq {
+            new DiscreteBitmapPrimitive2D(
+                m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHiglighted : m_aPinnedDocumentBitmap,
+                B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())) };
 
         pProcessor->process(aSeq);
     }

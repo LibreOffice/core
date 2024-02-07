@@ -55,7 +55,6 @@ OverlayStaticRectanglePrimitive::OverlayStaticRectanglePrimitive(
 
 void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    Primitive2DContainer aPrimitive2DSequence;
     const double fHalfWidth = maSize.getWidth() * getDiscreteUnit() / 2.0;
     const double fHalfHeight = maSize.getHeight() * getDiscreteUnit() / 2.0;
 
@@ -63,39 +62,37 @@ void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer
         maPosition.getX() - fHalfWidth, maPosition.getY() - fHalfHeight,
         maPosition.getX() + fHalfWidth, maPosition.getY() + fHalfHeight);
 
-    if (basegfx::fTools::more(getDiscreteUnit(), 0.0) && mfTransparence <= 1.0)
+    if (!basegfx::fTools::more(getDiscreteUnit(), 0.0) || mfTransparence > 1.0)
+        return;
+
+    basegfx::B2DPolygon aPolygon(
+        basegfx::utils::createPolygonFromRect(aRange));
+
+    // create filled primitive
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    aPolyPolygon.append(aPolygon);
+
+    const attribute::LineAttribute aLineAttribute(maStrokeColor, 1.0);
+
+    // create data
+    const Primitive2DReference aStroke(
+        new PolyPolygonStrokePrimitive2D(aPolyPolygon, aLineAttribute));
+
+    // create fill primitive
+    const Primitive2DReference aFill(
+        new PolyPolygonColorPrimitive2D(std::move(aPolyPolygon), maFillColor));
+
+    Primitive2DContainer aPrimitive2DSequence { aFill, aStroke };
+
+    // embed filled to transparency (if used)
+    if (mfTransparence > 0.0)
     {
-        basegfx::B2DPolygon aPolygon(
-            basegfx::utils::createPolygonFromRect(aRange));
+        const Primitive2DReference aFillTransparent(
+            new UnifiedTransparencePrimitive2D(
+                std::move(aPrimitive2DSequence),
+                mfTransparence));
 
-        // create filled primitive
-        basegfx::B2DPolyPolygon aPolyPolygon;
-        aPolyPolygon.append(aPolygon);
-
-        const attribute::LineAttribute aLineAttribute(maStrokeColor, 1.0);
-
-        // create data
-        const Primitive2DReference aStroke(
-            new PolyPolygonStrokePrimitive2D(aPolyPolygon, aLineAttribute));
-
-        // create fill primitive
-        const Primitive2DReference aFill(
-            new PolyPolygonColorPrimitive2D(std::move(aPolyPolygon), maFillColor));
-
-        aPrimitive2DSequence = Primitive2DContainer(2);
-        aPrimitive2DSequence[0] = aFill;
-        aPrimitive2DSequence[1] = aStroke;
-
-        // embed filled to transparency (if used)
-        if (mfTransparence > 0.0)
-        {
-            const Primitive2DReference aFillTransparent(
-                new UnifiedTransparencePrimitive2D(
-                    std::move(aPrimitive2DSequence),
-                    mfTransparence));
-
-            aPrimitive2DSequence = Primitive2DContainer { aFillTransparent };
-        }
+        aPrimitive2DSequence = Primitive2DContainer { aFillTransparent };
     }
 
     rContainer.append(std::move(aPrimitive2DSequence));

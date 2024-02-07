@@ -92,7 +92,8 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     drawinglayer::geometry::ViewInformation2D aDummy;
     rRange.expand(pTitle->getB2DRange(aDummy));
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq { pTitle };
+    // insert two empty elements as placeholders for bg and border
+    drawinglayer::primitive2d::Primitive2DContainer aSeq { nullptr, nullptr, pTitle };
 
     aFontMetric = pDefaultDev->GetFontMetric(aTextFont);
     pDefaultDev->SetMapMode(aOld);
@@ -145,16 +146,16 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
 
     basegfx::B2DPolygon aPoly(basegfx::utils::createPolygonFromRect(rRange));
 
-    const drawinglayer::primitive2d::Primitive2DReference aBg(
+    drawinglayer::primitive2d::Primitive2DReference aBg(
         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPoly), getBaseColor().getBColor()));
 
     basegfx::BColor aBorderColor(0.5, 0.5, 0.5);
-    const drawinglayer::primitive2d::Primitive2DReference aBorder(
+    drawinglayer::primitive2d::Primitive2DReference aBorder(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
             std::move(aPoly), aBorderColor));
 
-    aSeq.insert(aSeq.begin(), aBorder);
-    aSeq.insert(aSeq.begin(), aBg);
+    aSeq[0] = aBg;
+    aSeq[1] = aBorder;
 
     return aSeq;
 }

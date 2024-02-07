@@ -627,10 +627,10 @@ namespace svgio::svgreader
             else // if(pFill)
             {
                 // create fill content
-                aNewFill.resize(1);
-                aNewFill[0] = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                aNewFill.push_back(
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                     rPath,
-                    *pFill);
+                    *pFill));
             }
 
             if(aNewFill.empty())

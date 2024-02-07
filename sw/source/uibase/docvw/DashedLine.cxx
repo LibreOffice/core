@@ -46,7 +46,7 @@ void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     aPolygon.append(aStart);
     aPolygon.append(aEnd);
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
@@ -69,21 +69,19 @@ void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         const basegfx::BColor aOtherColor = basegfx::utils::hsl2rgb(aHslLine);
 
         // Compute the plain line
-        aSeq[0] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPolygon, aOtherColor);
+        aSeq.push_back(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPolygon, aOtherColor));
 
         // Dashed line in twips
         aStrokePattern.push_back(3);
         aStrokePattern.push_back(3);
-
-        aSeq.resize(2);
     }
 
     // Compute the dashed line primitive
-    aSeq[aSeq.size() - 1] =
+    aSeq.push_back(
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                 basegfx::B2DPolyPolygon(aPolygon),
                 drawinglayer::attribute::LineAttribute((SwViewOption::GetCurrentViewOptions().*m_pColorFn)().getBColor()),
-                drawinglayer::attribute::StrokeAttribute(std::move(aStrokePattern)));
+                drawinglayer::attribute::StrokeAttribute(std::move(aStrokePattern))));
 
     pProcessor->process(aSeq);
 }

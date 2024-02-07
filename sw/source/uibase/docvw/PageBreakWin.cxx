@@ -193,14 +193,14 @@ void SwPageBreakWin::PaintButton()
 
     bool bRtl = AllSettings::GetLayoutRTL();
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(3);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
     B2DRectangle aBRect = vcl::unotools::b2DRectangleFromRectangle(aRect);
     B2DPolygon aPolygon = createPolygonFromRect(aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT);
 
     // Create the polygon primitives
-    aSeq[0].set(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+    aSeq.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aPolygon), aOtherColor));
-    aSeq[1].set(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+    aSeq.push_back(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                                         std::move(aPolygon), aColor));
 
     // Create the primitive for the image
@@ -208,7 +208,7 @@ void SwPageBreakWin::PaintButton()
     double nImgOfstX = 3.0;
     if (bRtl)
         nImgOfstX = aRect.Right() - aBmpEx.GetSizePixel().Width() - 3.0;
-    aSeq[2].set(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
+    aSeq.push_back(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
                                         aBmpEx, B2DPoint(nImgOfstX, 1.0)));
 
     double nTop = double(aRect.getOpenHeight()) / 2.0;
@@ -228,16 +228,15 @@ void SwPageBreakWin::PaintButton()
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         aTriangleColor = COL_WHITE.getBColor();
 
-    aSeq.emplace_back();
-    aSeq.back().set( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+    aSeq.push_back( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aTriangle), aTriangleColor));
 
-    drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);
+    drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq;
     double nFadeRate = double(m_nFadeRate) / 100.0;
     const basegfx::BColorModifierSharedPtr aBColorModifier =
                 std::make_shared<basegfx::BColorModifier_interpolate>(COL_WHITE.getBColor(),
                                                         1.0 - nFadeRate);
-    aGhostedSeq[0].set( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+    aGhostedSeq.push_back( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                             std::move(aSeq), aBColorModifier));
 
     // Create the processor and process the primitives

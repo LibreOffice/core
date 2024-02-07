@@ -522,10 +522,9 @@ namespace drawinglayer::primitive2d
                     if(rGraphic.IsAnimated())
                     {
                         // prepare specialized AnimatedGraphicPrimitive2D
-                        aRetval.resize(1);
-                        aRetval[0] = new AnimatedGraphicPrimitive2D(
+                        aRetval = Primitive2DContainer { new AnimatedGraphicPrimitive2D(
                             rGraphic,
-                            rTransform);
+                            rTransform) };
                     }
                     else if(rGraphic.getVectorGraphicData())
                     {
@@ -548,18 +547,16 @@ namespace drawinglayer::primitive2d
                             aEmbedVectorGraphic = rTransform * aEmbedVectorGraphic;
 
                             // add Vector Graphic Data primitives embedded
-                            aRetval.resize(1);
-                            aRetval[0] = new TransformPrimitive2D(
+                            aRetval = Primitive2DContainer { new TransformPrimitive2D(
                                 aEmbedVectorGraphic,
-                                Primitive2DContainer(rGraphic.getVectorGraphicData()->getPrimitive2DSequence()));
+                                Primitive2DContainer(rGraphic.getVectorGraphicData()->getPrimitive2DSequence()))};
                         }
                     }
                     else
                     {
-                        aRetval.resize(1);
-                        aRetval[0] = new BitmapPrimitive2D(
+                        aRetval = Primitive2DContainer { new BitmapPrimitive2D(
                             rGraphic.GetBitmapEx(),
-                            rTransform);
+                            rTransform) };
                     }
 
                     break;
@@ -570,10 +567,9 @@ namespace drawinglayer::primitive2d
                     // create MetafilePrimitive2D
                     const GDIMetaFile& rMetafile = rGraphic.GetGDIMetaFile();
 
-                    aRetval.resize(1);
-                    aRetval[0] = new MetafilePrimitive2D(
+                    aRetval = Primitive2DContainer { new MetafilePrimitive2D(
                         rTransform,
-                        rMetafile);
+                        rMetafile) };
 
                     // #i100357# find out if clipping is needed for this primitive. Unfortunately,
                     // there exist Metafiles who's content is bigger than the proposed PrefSize set

@@ -144,10 +144,9 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
             *pVirtualDevice,
             aNewViewInformation2D));
 
-        drawinglayer::primitive2d::Primitive2DContainer aSequence(2);
-
-        aSequence[0] = aGradientPrimitive;
-        aSequence[1] = aBlackRectanglePrimitive;
+        drawinglayer::primitive2d::Primitive2DContainer aSequence {
+            aGradientPrimitive,
+            aBlackRectanglePrimitive };
 
         pProcessor2D->process(aSequence);
         pProcessor2D.reset();
