@@ -287,14 +287,4 @@ public: // text elements
     void setText(const OUString& rText) { m_aText = rText; };
 };
 
-namespace starmathdatabase
-{
-/**
-  * Generates an attribute vector of default values from an attribute position list.
-  * @param aAttributePosList
-  * @return attribute vector
-  */
-std::vector<SmMlAttribute> makeMlAttributeList(std::vector<SmMlAttributePos> aAttributePosList);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

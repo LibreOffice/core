@@ -110,6 +110,19 @@ constexpr SmMlAttributePos MlAttributeListMstyle[] = {
     { SmMlAttributeValueType::MlSymmetric, 17 }
     // clang-format on
 };
+
+/// Generates an attribute vector of default values from an attribute position list.
+/// @param aAttributePosList
+/// @return attribute vector
+std::vector<SmMlAttribute> makeMlAttributeList(std::span<SmMlAttributePos> aAttributePosList)
+{
+    std::vector<SmMlAttribute> aAttributeList(aAttributePosList.size());
+    for (size_t i = 0; i < aAttributePosList.size(); ++i)
+    {
+        aAttributeList[i].setMlAttributeValueType(aAttributePosList[i].m_aAttributeValueType);
+    }
+    return aAttributeList;
+}
 }
 
 void SmMlElement::SmImplAttributeType()
@@ -161,7 +174,7 @@ void SmMlElement::SmImplAttributeType()
             break;
     }
     // Create attribute vector with given pattern
-    m_aAttributeList = starmathdatabase::makeMlAttributeList(m_aAttributePosList);
+    m_aAttributeList = makeMlAttributeList(m_aAttributePosList);
 }
 
 SmMlAttribute SmMlElement::getAttribute(SmMlAttributeValueType aAttributeType) const
@@ -216,17 +229,6 @@ void SmMlElement::setSubElement(size_t nPos, SmMlElement* aElement)
     }
     // Assign value
     m_aSubElements[nPos] = aElement;
-}
-
-std::vector<SmMlAttribute>
-starmathdatabase::makeMlAttributeList(std::vector<SmMlAttributePos> aAttributePosList)
-{
-    std::vector<SmMlAttribute> aAttributeList(aAttributePosList.size());
-    for (size_t i = 0; i < aAttributePosList.size(); ++i)
-    {
-        aAttributeList[i].setMlAttributeValueType(aAttributePosList[i].m_aAttributeValueType);
-    }
-    return aAttributeList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
