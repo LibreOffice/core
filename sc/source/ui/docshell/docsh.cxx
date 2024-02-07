@@ -3274,13 +3274,18 @@ ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
     rDoc.EnableIdle(false);
 }
 
-ScDocShellModificator::~ScDocShellModificator() COVERITY_NOEXCEPT_FALSE
+void ScDocShellModificator::ImplDestroy()
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     rDoc.SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
     if ( !bAutoCalcShellDisabled && rDocShell.IsDocumentModifiedPending() )
         rDocShell.SetDocumentModified();    // last one shuts off the lights
     rDoc.EnableIdle(bIdleEnabled);
+}
+
+ScDocShellModificator::~ScDocShellModificator()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void ScDocShellModificator::SetDocumentModified()

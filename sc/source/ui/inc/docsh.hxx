@@ -472,9 +472,11 @@ class ScDocShellModificator
     ScDocShellModificator( const ScDocShellModificator& ) = delete;
     ScDocShellModificator&  operator=( const ScDocShellModificator& ) = delete;
 
+    void ImplDestroy();
+
 public:
     explicit ScDocShellModificator( ScDocShell& );
-    ~ScDocShellModificator() COVERITY_NOEXCEPT_FALSE;
+    ~ScDocShellModificator();
     void            SetDocumentModified();
 };
 
