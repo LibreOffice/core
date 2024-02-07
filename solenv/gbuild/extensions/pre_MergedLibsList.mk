@@ -61,6 +61,7 @@ gb_MERGE_LIBRARY_LIST := \
 	odfflatxml \
 	offacc \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
+	oox \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
 	package2 \
 	passwordcontainer \
