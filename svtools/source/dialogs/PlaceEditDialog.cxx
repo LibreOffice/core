@@ -222,7 +222,7 @@ void PlaceEditDialog::InitDetails( )
 #if defined(_WIN32)
     // nPos is the position of first item that is pre-defined in svtools/uiconfig/ui/placeedit.ui,
     // after other CMIS types were inserted
-    m_xLBServerType->remove(nPos + 3);
+    m_xLBServerType->remove(nPos + 2);
 #else
     // Create Windows Share control
     std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
