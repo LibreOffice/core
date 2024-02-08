@@ -1,17 +1,18 @@
 --- src/posix-io.c	2023-02-01 11:50:48
 +++ src/posix-io.c	2024-02-05 19:16:00
-@@ -62,6 +62,10 @@
+@@ -62,6 +62,11 @@
  # endif
  #endif
  #include <sys/socket.h>
 +
 +#if HAVE_MACOS_SYSTEM
 +#include <dispatch/dispatch.h>
++#include <pthread.h>
 +#endif
  
  #include "util.h"
  #include "priv-io.h"
-@@ -517,12 +521,50 @@
+@@ -517,12 +522,79 @@
  }
  
  
@@ -38,17 +39,46 @@
 +	 * run in a sequential queue in a non-main thread.  */
 +	static dispatch_queue_t queue = NULL;
 +	if (!queue)
-+		queue = dispatch_queue_create ("gpgmepp",
++		queue = dispatch_queue_create ("gpgmeppforkandexec",
 +					       DISPATCH_QUEUE_CONCURRENT);
 +	if (!queue)
 +		return -1;
 +
 +	__block int ret = -1;
-+	dispatch_sync(queue, ^{
++	__block int done = false;
++	__block pthread_mutex_t waitlock = PTHREAD_MUTEX_INITIALIZER;
++	__block pthread_cond_t waitcond = PTHREAD_COND_INITIALIZER;
++
++	if (pthread_mutex_lock(&waitlock))
++		return -1;
++
++	/* Use dispatch_async() to force the queue to run in a separate
++	 * thread.  */
++	dispatch_async(queue, ^{
++		if (pthread_mutex_lock(&waitlock))
++		{
++			done = true;
++			pthread_cond_signal(&waitcond);
++			return;
++		}
++
 +		ret = _gpgme_io_spawn_macos (path, argv, flags,
 +					     fd_list, atfork,
 +					     atforkvalue, r_pid);
++
++		done = true;
++		pthread_cond_signal(&waitcond);
++		pthread_mutex_unlock(&waitlock);
 +	});
++
++	/* dispatch_async_and_wait() doesn't necessarily force the queue
++	 * to run in a separate thread so block and until the task has
++	 * finished.  */
++	if (!done)
++		pthread_cond_wait(&waitcond, &waitlock);
++	pthread_cond_destroy(&waitcond);
++	pthread_mutex_unlock(&waitlock);
++	pthread_mutex_destroy(&waitlock);
 +
 +	return ret;
 +}
