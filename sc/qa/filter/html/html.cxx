@@ -15,6 +15,8 @@
 #include <com/sun/star/table/XCellRange.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
 
 #include <helper/qahelper.hxx>
 #include <impex.hxx>
@@ -82,6 +84,37 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsText)
     // - Actual  : 1 (CELLTYPE_VALUE)
     // i.e. data-sheets-value was ignored on paste.
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, eCellType);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsBools)
+{
+    // Given an empty document:
+    createScDoc();
+
+    // When pasting HTML with bool cells:
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    ScImportExport aImporter(*pDoc, aCellPos);
+    SvFileStream aFile(createFileURL(u"bool.html"), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    aMemory.Seek(0);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aMemory, OUString(), SotClipboardFormatId::HTML));
+
+    // Then make sure A1's type is bool, value is true:
+    sal_uInt32 nNumberFormat = pDoc->GetNumberFormat(/*col=*/0, /*row=*/0, /*tab=*/0);
+    const SvNumberformat* pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: BOOLEAN
+    // - Actual  : General
+    // i.e. data-sheets-value's bool case was ignored.
+    CPPUNIT_ASSERT_EQUAL(OUString("BOOLEAN"), pNumberFormat->GetFormatstring());
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(1), pDoc->GetValue(/*col=*/0, /*row=*/0, /*tab=*/0));
+    // And make sure A2's type is bool, value is true:
+    nNumberFormat = pDoc->GetNumberFormat(/*col=*/0, /*row=*/1, /*tab=*/0);
+    pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
+    CPPUNIT_ASSERT_EQUAL(OUString("BOOLEAN"), pNumberFormat->GetFormatstring());
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(0), pDoc->GetValue(/*col=*/0, /*row=*/1, /*tab=*/0));
 }
 }
 
