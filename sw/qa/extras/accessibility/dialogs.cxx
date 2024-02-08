@@ -176,6 +176,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
         collectText());
 }
 
+#if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
 {
     load(u"private:factory/swriter"_ustr);
@@ -193,6 +194,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
         rtl::OUString("<PARAGRAPH/><TEXT_FRAME name=\"Frame1\"><PARAGRAPH/></TEXT_FRAME>"),
         collectText());
 }
+#endif //defined(_WIN32)
 
 #endif //defined(MACOSX)
 
