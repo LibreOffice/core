@@ -1146,11 +1146,9 @@ void LOKEditViewHistory::Update(bool bRemove)
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    static std::mutex aMutex;
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell)
     {
-        std::lock_guard<std::mutex> aLockGuard{aMutex};
         int nDocId = pViewShell->GetDocId().get();
         if (maEditViewHistory.find(nDocId) != maEditViewHistory.end())
             maEditViewHistory[nDocId].remove(pViewShell);
