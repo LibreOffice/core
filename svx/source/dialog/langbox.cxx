@@ -219,8 +219,8 @@ static void SortLanguages(std::vector<weld::ComboBoxEntry>& rEntries)
         bool operator()(const EntryData& e1, const EntryData& e2) const
         {
             assert(e1.tag.getLanguage() == e2.tag.getLanguage());
-            if (e1.entry.sId == e2.entry.sId)
-                return false; // shortcut
+            if (e1.entry.sId == e2.entry.sId || e1.tag.equals(e2.tag))
+                return false; // shortcut; make sure to also compare tags, to resolve system locale
 
             // Make sure that e.g. generic 'Spanish {es}' goes before 'Spanish (Argentina)'.
             // We can't depend on MsLangId::getPrimaryLanguage/getSubLanguage, because e.g.
