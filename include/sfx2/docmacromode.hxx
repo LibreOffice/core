@@ -152,10 +152,18 @@ namespace sfx2
             When this happens, this method here should be replaced by a method at this
             new class.
 
+            @param _rxInteraction
+                A handler for interactions which might become necessary to trust a correct
+                but not yet trusted signature, possibly also adding the author certificate to
+                trusted list.
+
+                If the user needs to be asked, and if this parameter is <NULL/>, the most
+                defensive assumptions will be made, i.e. false will be returned.
+
             @seealso <sfx2/signaturestate.hxx>
         */
         virtual bool
-                    hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) = 0;
+                    hasTrustedScriptingSignature( const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction ) = 0;
 
     protected:
         ~IMacroDocumentAccess() {}
@@ -266,6 +274,8 @@ namespace sfx2
         */
         static bool storageHasMacros( const css::uno::Reference< css::embed::XStorage >& _rxStorage );
 
+        bool hasMacros() const;
+
         static bool containerHasBasicMacros( const css::uno::Reference< css::script::XLibraryContainer >& xContainer );
         /** checks the macro execution mode while loading the document.
 
@@ -293,7 +303,7 @@ namespace sfx2
         bool
                 checkMacrosOnLoading(
                     const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction,
-                    bool bHasValidContentSignature = false
+                    bool bHasValidContentSignature, bool bHasMacros
                 );
 
     private:

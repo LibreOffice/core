@@ -346,6 +346,9 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
 
     m_pTokenizer = new RTFTokenizer(*this, m_pInStream.get(), m_xStatusIndicator);
     m_pSdrImport = new RTFSdrImport(*this, m_xDstDoc);
+
+    // unlike OOXML, this is enabled by default
+    m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Compat_splitPgBreakAndParaMark, new RTFValue(1));
 }
 
 RTFDocumentImpl::~RTFDocumentImpl() = default;
@@ -396,7 +399,7 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString const&
 void RTFDocumentImpl::outputSettingsTable()
 {
     // tdf#136740: do not change target document settings when pasting
-    if (!m_bIsNewDoc)
+    if (!m_bIsNewDoc || isSubstream())
         return;
     writerfilter::Reference<Properties>::Pointer_t pProp
         = new RTFReferenceProperties(m_aSettingsTableAttributes, m_aSettingsTableSprms);
@@ -644,8 +647,8 @@ void RTFDocumentImpl::runProps()
 
 void RTFDocumentImpl::runBreak()
 {
-    sal_uInt8 const sBreak[] = { 0xd };
-    Mapper().text(sBreak, 1);
+    sal_Unicode const sBreak[] = { 0x0d };
+    Mapper().utext(sBreak, 1);
     m_bNeedCr = false;
 }
 
@@ -669,7 +672,10 @@ void RTFDocumentImpl::parBreak()
     m_bHadPicture = false;
 
     // start new one
-    Mapper().startParagraphGroup();
+    if (!m_bParAtEndOfSection)
+    {
+        Mapper().startParagraphGroup();
+    }
 }
 
 void RTFDocumentImpl::sectBreak(bool bFinal)
@@ -683,14 +689,26 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
     // Also, when pasting, it's fine to not have any paragraph inside the document at all.
     if (m_bNeedPar && (!bFinal || m_bNeedSect || bContinuous) && !isSubstream() && m_bIsNewDoc)
+    {
+        m_bParAtEndOfSection = true;
         dispatchSymbol(RTFKeyword::PAR);
+    }
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
     {
         dispatchFlag(RTFKeyword::PARD);
+        m_bParAtEndOfSection = true;
         dispatchSymbol(RTFKeyword::PAR);
         m_bNeedSect = bNeedSect;
     }
+    // testTdf148515, if RTF ends with \row, endParagraphGroup() must be called!
+    if (!m_bParAtEndOfSection || m_aStates.top().getCurrentBuffer())
+    {
+        Mapper().endParagraphGroup(); // < top para context dies with page break
+    }
+    m_bParAtEndOfSection = false;
+    // paragraph properties are *done* now - only section properties following
+
     while (!m_nHeaderFooterPositions.empty())
     {
         std::pair<Id, std::size_t> aPair = m_nHeaderFooterPositions.front();
@@ -723,7 +741,6 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
 
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
-    Mapper().endParagraphGroup();
 
     // End Section
     if (!m_pSuperstream)
@@ -1611,7 +1628,7 @@ void RTFDocumentImpl::text(OUString& rString)
         runProps();
 
     if (!pCurrentBuffer)
-        Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
+        Mapper().utext(rString.getStr(), rString.getLength());
     else
     {
         auto pValue = new RTFValue(rString);
@@ -1760,8 +1777,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         else if (std::get<0>(aTuple) == BUFFER_UTEXT)
         {
             OUString const aString(std::get<1>(aTuple)->getString());
-            Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()),
-                           aString.getLength());
+            Mapper().utext(aString.getStr(), aString.getLength());
         }
         else if (std::get<0>(aTuple) == BUFFER_ENDRUN)
             Mapper().endCharacterGroup();
@@ -2567,7 +2583,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                                  : std::u16string_view(u"TC"));
             str = OUString::Concat(field) + " \"" + str.replaceAll("\"", "\\\"") + "\"";
             singleChar(cFieldStart);
-            Mapper().utext(reinterpret_cast<sal_uInt8 const*>(str.getStr()), str.getLength());
+            Mapper().utext(str.getStr(), str.getLength());
             singleChar(cFieldSep);
             // no result
             singleChar(cFieldEnd);
@@ -3657,6 +3673,17 @@ RTFError RTFDocumentImpl::popState()
             dispatchSymbol(RTFKeyword::PAR);
         if (m_bNeedSect) // may be set by dispatchSymbol above!
             sectBreak(true);
+        else if (!m_pSuperstream)
+        {
+            Mapper().markLastSectionGroup(); // ensure it's set for \par below
+        }
+        if (m_bNeedPar && !m_pSuperstream)
+        {
+            assert(!m_bNeedSect);
+            dispatchSymbol(RTFKeyword::PAR);
+            m_bNeedSect = false; // reset - m_bNeedPar was set for \sect at
+                // end of doc so don't need another one
+        }
     }
 
     m_aStates.pop();
@@ -3852,11 +3879,6 @@ RTFFrame::RTFFrame(RTFParserState* pParserState)
 
 void RTFFrame::setSprm(Id nId, Id nValue)
 {
-    if (m_pDocumentImpl->getFirstRun() && !m_pDocumentImpl->isStyleSheetImport())
-    {
-        m_pDocumentImpl->checkFirstRun();
-        m_pDocumentImpl->setNeedPar(false);
-    }
     switch (nId)
     {
         case NS_ooxml::LN_CT_FramePr_w:
@@ -3894,6 +3916,12 @@ void RTFFrame::setSprm(Id nId, Id nValue)
             break;
         default:
             break;
+    }
+
+    if (m_pDocumentImpl->getFirstRun() && !m_pDocumentImpl->isStyleSheetImport() && hasProperties())
+    {
+        m_pDocumentImpl->checkFirstRun();
+        m_pDocumentImpl->setNeedPar(false);
     }
 }
 
@@ -3996,6 +4024,10 @@ bool RTFFrame::hasProperties() const
 {
     // tdf#153178 \dxfrtext \dfrmtxtx \dfrmtxty \wrapdefault do *not* create frame
     return m_nX != 0 || m_nY != 0 || m_nW != 0 || m_nH != 0
+           || (m_nHoriAlign && m_nHoriAlign != NS_ooxml::LN_Value_doc_ST_XAlign_left)
+           || (m_nHoriAnchor && m_nHoriAnchor != NS_ooxml::LN_Value_doc_ST_HAnchor_text)
+           || (m_nVertAlign && m_nVertAlign != NS_ooxml::LN_Value_doc_ST_YAlign_inline)
+           || (m_nVertAnchor && m_nVertAnchor != NS_ooxml::LN_Value_doc_ST_VAnchor_margin)
            || (m_oWrap && *m_oWrap != NS_ooxml::LN_Value_doc_ST_Wrap_auto);
 }
 

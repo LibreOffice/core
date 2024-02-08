@@ -222,7 +222,9 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
         css::uno::Reference< css::frame::XFrame > xFrame(pIt->get(), css::uno::UNO_QUERY);
         if (xFrame.is())
         {
+            aGuard.unlock(); // because we can call back into ourself
             xFrame->contextChanged();
+            aGuard.lock();
             ++pIt;
         }
         else

@@ -314,6 +314,13 @@ void TitleHelper::impl_updateTitle (bool init)
     }
 }
 
+static OUString getURLFromModel(const css::uno::Reference< css::frame::XModel3 >& xModel)
+{
+    if (css::uno::Reference<css::frame::XStorable> xURLProvider{ xModel, css::uno::UNO_QUERY })
+        return xURLProvider->getLocation();
+    return {};
+}
+
 void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel3 >& xModel, bool init)
 {
     css::uno::Reference< css::uno::XInterface >         xOwner;
@@ -342,24 +349,27 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         return;
 
     OUString sTitle;
-    OUString sURL;
 
-    css::uno::Reference< css::frame::XStorable > xURLProvider(xModel , css::uno::UNO_QUERY);
-    if (xURLProvider.is())
-        sURL = xURLProvider->getLocation ();
+    utl::MediaDescriptor aDescriptor(
+        xModel->getArgs2({ utl::MediaDescriptor::PROP_DOCUMENTTITLE,
+                           utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME }));
 
-    utl::MediaDescriptor aDescriptor(xModel->getArgs2( { utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME } ));
-    const OUString sSuggestedSaveAsName = aDescriptor.getUnpackedValueOrDefault(
-        utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME, OUString());
-
-    if (!sURL.isEmpty())
+    if (const OUString sMediaTitle = aDescriptor.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_DOCUMENTTITLE, OUString());
+        !sMediaTitle.isEmpty())
+    {
+        sTitle = sMediaTitle;
+    }
+    else if (const OUString sURL = getURLFromModel(xModel); !sURL.isEmpty())
     {
         sTitle = impl_convertURL2Title(sURL);
         if (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
             xNumbers->releaseNumber (nLeasedNumber);
         nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
     }
-    else if (!sSuggestedSaveAsName.isEmpty())
+    else if (const OUString sSuggestedSaveAsName = aDescriptor.getUnpackedValueOrDefault(
+                 utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME, OUString());
+             !sSuggestedSaveAsName.isEmpty())
     {
         // tdf#121537 Use suggested save as name for title if file has not yet been saved
         sTitle = sSuggestedSaveAsName;

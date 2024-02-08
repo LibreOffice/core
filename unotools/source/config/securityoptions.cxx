@@ -25,6 +25,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/urlobj.hxx>
@@ -75,7 +78,9 @@ bool IsReadOnly( EOption eOption )
             bReadonly = officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::isReadOnly();
             break;
         case SvtSecurityOptions::EOption::MacroTrustedAuthors:
-            bReadonly = false; // TODO? officecfg::Office::Common::Security::Scripting::TrustedAuthors::isReadOnly();
+            // the officecfg does not expose isReadOnly for a ConfigurationSet, so we have to code this ourself
+            bReadonly =
+              comphelper::detail::ConfigurationWrapper::get().isReadOnly("/org.openoffice.Office.Common/Security/Scripting/TrustedAuthors");
             break;
         case SvtSecurityOptions::EOption::CtrlClickHyperlink:
             bReadonly = officecfg::Office::Common::Security::Scripting::HyperlinksWithCtrlClick::isReadOnly();
@@ -243,6 +248,18 @@ void SetTrustedAuthors( const std::vector< Certificate >& rAuthors )
 //        return;
 
     Reference<css::container::XHierarchicalNameAccess> xHierarchyAccess = utl::ConfigManager::acquireTree(u"Office.Common/Security/Scripting");
+
+    // first, clear existing entries
+    {
+        Reference<css::container::XNameContainer> xCont;
+        xHierarchyAccess->getByHierarchicalName(PROPERTYNAME_MACRO_TRUSTEDAUTHORS) >>= xCont;
+        const Sequence< OUString > aNames = xCont->getElementNames();
+        Reference<css::util::XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
+        for (const OUString& rName : aNames)
+            xCont->removeByName(rName);
+        xBatch->commitChanges();
+    }
+
     sal_Int32   nCnt = rAuthors.size();
     for( sal_Int32 i = 0; i < nCnt; ++i )
     {

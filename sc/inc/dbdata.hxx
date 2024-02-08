@@ -221,6 +221,7 @@ public:
                             SCCOL nDx, SCROW nDy, SCTAB nDz);
 
     void ExtendDataArea(const ScDocument& rDoc);
+    void ExtendBackColorArea(const ScDocument& rDoc);
     void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
     void GetFilterSelCount(SCSIZE& nSelected, SCSIZE& nTotal);
 

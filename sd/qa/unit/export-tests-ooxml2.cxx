@@ -157,6 +157,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf153107)
                 "tl");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf157740_slideMasters)
+{
+    createSdImpressDoc("pptx/tdf157740.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    // Test how many slidemaster we have
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/presentation.xml");
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId", 7);
+
+    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster1.xml");
+    assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId", 1);
+
+    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster7.xml");
+    assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf142291)
 {
     createSdImpressDoc("pptx/tdt142291.pptx");
@@ -1313,7 +1329,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106867)
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
                 "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:cmd/"
                 "p:cBhvr/p:tgtEl/p:spTgt",
-                "spid", "42");
+                "spid", "67");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112280)
@@ -1692,7 +1708,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testAccentColor)
     xmlDocUniquePtr pXmlDocTheme1 = parseExport("ppt/theme/theme1.xml");
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
                 "70ad47");
-    xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme2.xml");
+    xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme12.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
                 "deb340");
 

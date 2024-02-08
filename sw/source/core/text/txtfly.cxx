@@ -162,7 +162,7 @@ SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                             const bool bRight )
 {
     SwRect aRet;
-    const SwFrameFormat* pFormat = &(pAnchoredObj->GetFrameFormat());
+    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
     bool bHandleContour(pFormat->GetSurround().IsContour());
 
     if(!bHandleContour)
@@ -594,7 +594,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
             if (pFly)
             {
                 // #i68520#
-                const SwFormatSurround& rSur = pAnchoredObjTmp->GetFrameFormat().GetSurround();
+                const SwFormatSurround& rSur = pAnchoredObjTmp->GetFrameFormat()->GetSurround();
 
                 // OD 24.01.2003 #106593# - correct clipping of fly frame area.
                 // Consider that fly frame background/shadow can be transparent
@@ -655,8 +655,8 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         if( ( bInFootnote || bInFooterOrHeader ) && m_bTopRule )
         {
             // #i26945#
-            const SwFrameFormat& rFrameFormat = _pAnchoredObj->GetFrameFormat();
-            const SwFormatAnchor& rNewA = rFrameFormat.GetAnchor();
+            const SwFrameFormat* pFrameFormat = _pAnchoredObj->GetFrameFormat();
+            const SwFormatAnchor& rNewA = pFrameFormat->GetAnchor();
             if (RndStdIds::FLY_AT_PAGE == rNewA.GetAnchorId())
             {
                 if ( bInFootnote )
@@ -664,7 +664,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
                 if ( bInFooterOrHeader )
                 {
-                    const SwFormatVertOrient& aVert( rFrameFormat.GetVertOrient() );
+                    const SwFormatVertOrient& aVert(pFrameFormat->GetVertOrient());
                     bool bVertPrt = aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
                             aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA;
                     if( bVertPrt )
@@ -710,13 +710,14 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             {
                 // Within chained Flys we only avoid Lower
                 // #i68520#
-                const SwFormatChain &rChain = mpCurrAnchoredObj->GetFrameFormat().GetChain();
+                const SwFrameFormat* pCurObjFormat = mpCurrAnchoredObj->GetFrameFormat();
+                const SwFormatChain& rChain = pCurObjFormat->GetChain();
                 if ( !rChain.GetPrev() && !rChain.GetNext() )
                 {
                     // #i26945#
-                    const SwFormatAnchor& rNewA = _pAnchoredObj->GetFrameFormat().GetAnchor();
+                    const SwFormatAnchor& rNewA = _pAnchoredObj->GetFrameFormat()->GetAnchor();
                     // #i68520#
-                    const SwFormatAnchor& rCurrA = mpCurrAnchoredObj->GetFrameFormat().GetAnchor();
+                    const SwFormatAnchor& rCurrA = pCurObjFormat->GetAnchor();
 
                     // If <mpCurrAnchoredObj> is anchored as character, its content
                     // does not wrap around pNew
@@ -768,78 +769,85 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         if ( bEvade )
         {
             // #i26945#
-            const SwFormatAnchor& rNewA = _pAnchoredObj->GetFrameFormat().GetAnchor();
-            OSL_ENSURE( RndStdIds::FLY_AS_CHAR != rNewA.GetAnchorId(),
-                    "Don't call GetTop with a FlyInContentFrame" );
-            if (RndStdIds::FLY_AT_PAGE == rNewA.GetAnchorId())
-                return true;  // We always avoid page anchored ones
-
-            // If Flys anchored at paragraph are caught in a FlyCnt, then
-            // their influence ends at the borders of the FlyCnt!
-            // If we are currently formatting the text of the FlyCnt, then
-            // it has to get out of the way of the Frame anchored at paragraph!
-            // m_pCurrFrame is the anchor of pNew?
-            // #i26945#
-            const SwFrame* pTmp = _pAnchoredObj->GetAnchorFrame();
-            if (pTmp == m_pCurrFrame)
-                return true;
-            if( pTmp->IsTextFrame() && ( pTmp->IsInFly() || pTmp->IsInFootnote() ) )
+            if (const SwFrameFormat* pAnchoredObjFormat = _pAnchoredObj->GetFrameFormat())
             {
+                const SwFormatAnchor& rNewA = pAnchoredObjFormat->GetAnchor();
+                OSL_ENSURE(RndStdIds::FLY_AS_CHAR != rNewA.GetAnchorId(),
+                           "Don't call GetTop with a FlyInContentFrame");
+                if (RndStdIds::FLY_AT_PAGE == rNewA.GetAnchorId())
+                    return true; // We always avoid page anchored ones
+
+                // If Flys anchored at paragraph are caught in a FlyCnt, then
+                // their influence ends at the borders of the FlyCnt!
+                // If we are currently formatting the text of the FlyCnt, then
+                // it has to get out of the way of the Frame anchored at paragraph!
+                // m_pCurrFrame is the anchor of pNew?
                 // #i26945#
-                Point aPos = _pAnchoredObj->GetObjRect().Pos();
-                pTmp = GetVirtualUpper( pTmp, aPos );
-            }
-            // #i26945#
-            // If <pTmp> is a text frame inside a table, take the upper
-            // of the anchor frame, which contains the anchor position.
-            else if ( pTmp->IsTextFrame() && pTmp->IsInTab() )
-            {
-                pTmp = const_cast<SwAnchoredObject*>(_pAnchoredObj)
-                                ->GetAnchorFrameContainingAnchPos()->GetUpper();
-            }
-            // #i28701# - consider all objects in same context,
-            // if wrapping style is considered on object positioning.
-            // Thus, text will wrap around negative positioned objects.
-            // #i3317# - remove condition on checking,
-            // if wrappings style is considered on object positioning.
-            // Thus, text is wrapping around negative positioned objects.
-            // #i35640# - no consideration of negative
-            // positioned objects, if wrapping style isn't considered on
-            // object position and former text wrapping is applied.
-            // This condition is typically for documents imported from the
-            // OpenOffice.org file format.
-            const IDocumentSettingAccess* pIDSA = &m_pCurrFrame->GetDoc().getIDocumentSettingAccess();
-            if ( (  pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ||
-                   !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ) &&
-                 ::FindContext( pTmp, SwFrameType::None ) == ::FindContext(m_pCurrFrame, SwFrameType::None))
-            {
-                return true;
-            }
-
-            const SwFrame* pHeader = nullptr;
-            if (m_pCurrFrame->GetNext() != pTmp &&
-                 (IsFrameInSameContext( pTmp, m_pCurrFrame ) ||
-                   // #i13832#, #i24135# wrap around objects in page header
-                   ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
-                     nullptr != ( pHeader = pTmp->FindFooterOrHeader() ) &&
-                     m_pCurrFrame->IsInDocBody())))
-            {
-                if( pHeader || RndStdIds::FLY_AT_FLY == rNewA.GetAnchorId() )
+                const SwFrame* pTmp = _pAnchoredObj->GetAnchorFrame();
+                if (pTmp == m_pCurrFrame)
                     return true;
-
-                // Compare indices:
-                // The Index of the other is retrieved from the anchor attr.
-                SwNodeOffset nTmpIndex = rNewA.GetAnchorNode()->GetIndex();
-                // Now check whether the current paragraph is before the anchor
-                // of the displaced object in the text, then we don't have to
-                // get out of its way.
-                // If possible determine Index via SwFormatAnchor because
-                // otherwise it's quite expensive.
-                if (NODE_OFFSET_MAX == m_nCurrFrameNodeIndex)
-                    m_nCurrFrameNodeIndex = m_pCurrFrame->GetTextNodeFirst()->GetIndex();
-
-                if (FrameContainsNode(*m_pCurrFrame, nTmpIndex) || nTmpIndex < m_nCurrFrameNodeIndex)
+                if (pTmp->IsTextFrame() && (pTmp->IsInFly() || pTmp->IsInFootnote()))
+                {
+                    // #i26945#
+                    Point aPos = _pAnchoredObj->GetObjRect().Pos();
+                    pTmp = GetVirtualUpper(pTmp, aPos);
+                }
+                // #i26945#
+                // If <pTmp> is a text frame inside a table, take the upper
+                // of the anchor frame, which contains the anchor position.
+                else if (pTmp->IsTextFrame() && pTmp->IsInTab())
+                {
+                    pTmp = const_cast<SwAnchoredObject*>(_pAnchoredObj)
+                               ->GetAnchorFrameContainingAnchPos()
+                               ->GetUpper();
+                }
+                // #i28701# - consider all objects in same context,
+                // if wrapping style is considered on object positioning.
+                // Thus, text will wrap around negative positioned objects.
+                // #i3317# - remove condition on checking,
+                // if wrappings style is considered on object positioning.
+                // Thus, text is wrapping around negative positioned objects.
+                // #i35640# - no consideration of negative
+                // positioned objects, if wrapping style isn't considered on
+                // object position and former text wrapping is applied.
+                // This condition is typically for documents imported from the
+                // OpenOffice.org file format.
+                const IDocumentSettingAccess* pIDSA
+                    = &m_pCurrFrame->GetDoc().getIDocumentSettingAccess();
+                if ((pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION)
+                     || !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING))
+                    && ::FindContext(pTmp, SwFrameType::None)
+                           == ::FindContext(m_pCurrFrame, SwFrameType::None))
+                {
                     return true;
+                }
+
+                const SwFrame* pHeader = nullptr;
+                if (m_pCurrFrame->GetNext() != pTmp
+                    && (IsFrameInSameContext(pTmp, m_pCurrFrame) ||
+                        // #i13832#, #i24135# wrap around objects in page header
+                        (!pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING)
+                         && nullptr != (pHeader = pTmp->FindFooterOrHeader())
+                         && m_pCurrFrame->IsInDocBody())))
+                {
+                    if (pHeader || RndStdIds::FLY_AT_FLY == rNewA.GetAnchorId())
+                        return true;
+
+                    // Compare indices:
+                    // The Index of the other is retrieved from the anchor attr.
+                    SwNodeOffset nTmpIndex = rNewA.GetAnchorNode()->GetIndex();
+                    // Now check whether the current paragraph is before the anchor
+                    // of the displaced object in the text, then we don't have to
+                    // get out of its way.
+                    // If possible determine Index via SwFormatAnchor because
+                    // otherwise it's quite expensive.
+                    if (NODE_OFFSET_MAX == m_nCurrFrameNodeIndex)
+                        m_nCurrFrameNodeIndex = m_pCurrFrame->GetTextNodeFirst()->GetIndex();
+
+                    if (FrameContainsNode(*m_pCurrFrame, nTmpIndex)
+                        || nTmpIndex < m_nCurrFrameNodeIndex)
+                        return true;
+                }
             }
         }
     }
@@ -919,7 +927,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
                    pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() ) ||
-                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat().GetFollowTextFlow().GetValue() )
+                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat()->GetFollowTextFlow().GetValue() )
                )
             {
                 continue;
@@ -957,13 +965,13 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                     mpAnchoredObjList->insert( aInsPosIter, pAnchoredObj );
                 }
 
-                const SwFormatSurround &rFlyFormat = pAnchoredObj->GetFrameFormat().GetSurround();
+                const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+                const SwFormatSurround& rFlyFormat = pObjFormat->GetSurround();
                 // #i68520#
                 if ( rFlyFormat.IsAnchorOnly() &&
                      pAnchoredObj->GetAnchorFrame() == GetMaster() )
                 {
-                    const SwFormatVertOrient &rTmpFormat =
-                                    pAnchoredObj->GetFrameFormat().GetVertOrient();
+                    const SwFormatVertOrient &rTmpFormat = pObjFormat->GetVertOrient();
                     if( text::VertOrientation::BOTTOM != rTmpFormat.GetVertOrient() )
                         m_nMinBottom = ( aRectFnSet.IsVert() && m_nMinBottom ) ?
                                      std::min( m_nMinBottom, aBound.Left() ) :
@@ -1003,11 +1011,11 @@ SwTwips SwTextFly::CalcMinBottom() const
         for( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pDrawObj)[ i ];
-            const SwFormatSurround &rFlyFormat = pAnchoredObj->GetFrameFormat().GetSurround();
+            const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+            const SwFormatSurround& rFlyFormat = pObjFormat->GetSurround();
             if( rFlyFormat.IsAnchorOnly() )
             {
-                const SwFormatVertOrient &rTmpFormat =
-                                    pAnchoredObj->GetFrameFormat().GetVertOrient();
+                const SwFormatVertOrient &rTmpFormat = pObjFormat->GetVertOrient();
                 if( text::VertOrientation::BOTTOM != rTmpFormat.GetVertOrient() )
                 {
                     const SwRect& aBound( pAnchoredObj->GetObjRectWithSpaces() );
@@ -1123,7 +1131,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
             if ( mpCurrAnchoredObj != pAnchoredObj && aRect.Overlaps( rRect ) )
             {
                 // #i68520#
-                const SwFormat* pFormat( &(pAnchoredObj->GetFrameFormat()) );
+                const SwFormat* pFormat(pAnchoredObj->GetFrameFormat());
                 const SwFormatSurround &rSur = pFormat->GetSurround();
                 if( bAvoid )
                 {
@@ -1410,7 +1418,7 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 
 css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const
 {
-    const SwFrameFormat* pFormat = &(pAnchoredObj->GetFrameFormat());
+    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
     const SwFormatSurround &rFlyFormat = pFormat->GetSurround();
     css::text::WrapTextMode eSurroundForTextWrap = rFlyFormat.GetSurround();
 

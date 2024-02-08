@@ -555,13 +555,6 @@ static bool isWakeupEvent( NSEvent *pEvent )
 
 bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
-    // Related: tdf#152703 Eliminate potential blocking during live resize
-    // Some events and timers call Application::Reschedule() or
-    // Application::Yield() so don't block and wait for events when a
-    // window is in live resize
-    if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
-        bWait = false;
-
     // ensure that the per thread autorelease pool is top level and
     // will therefore not be destroyed by cocoa implicitly
     SalData::ensureThreadAutoreleasePool();
@@ -598,6 +591,19 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                             dequeue: YES];
             if( pEvent )
             {
+                // tdf#155092 don't dispatch left mouse up events during live resizing
+                // If this is a left mouse up event, dispatching this event
+                // will trigger tdf#155092 to occur in the next mouse down
+                // event. So do not dispatch this event and push it back onto
+                // the front of the event queue so no more events will be
+                // dispatched until live resizing ends. Surprisingly, live
+                // resizing appears to end in the next mouse down event.
+                if ( ImplGetSVData()->mpWinData->mbIsLiveResize && [pEvent type] == NSEventTypeLeftMouseUp )
+                {
+                    [NSApp postEvent: pEvent atStart: YES];
+                    return false;
+                }
+
                 [NSApp sendEvent: pEvent];
                 if ( isWakeupEvent( pEvent ) )
                     continue;
@@ -619,7 +625,11 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         }
 
         // if we had no event yet, wait for one if requested
-        if( bWait && ! bHadEvent )
+        // Related: tdf#152703 Eliminate potential blocking during live resize
+        // Some events and timers call Application::Reschedule() or
+        // Application::Yield() so don't block and wait for events when a
+        // window is in live resize
+        if( bWait && ! bHadEvent && !ImplGetSVData()->mpWinData->mbIsLiveResize )
         {
             SolarMutexReleaser aReleaser;
 
@@ -716,6 +726,7 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
 
     unsigned/*NSUInteger*/ nEventMask = 0;
     if( nType & VclInputFlags::MOUSE)
+    {
         nEventMask |=
             NSEventMaskLeftMouseDown    | NSEventMaskRightMouseDown    | NSEventMaskOtherMouseDown    |
             NSEventMaskLeftMouseUp      | NSEventMaskRightMouseUp      | NSEventMaskOtherMouseUp      |
@@ -723,6 +734,18 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
             NSEventMaskScrollWheel      |
             // NSEventMaskMouseMoved    |
             NSEventMaskMouseEntered     | NSEventMaskMouseExited;
+
+        // Related: tdf#155266 stop delaying painting timer while swiping
+        // After fixing several flushing issues in tdf#155266, scrollbars
+        // still will not redraw until swiping has ended or paused when
+        // using Skia/Raster or Skia disabled. So, stop the delay by only
+        // including NSEventMaskScrollWheel if the current event type is
+        // not NSEventTypeScrollWheel.
+        NSEvent* pCurrentEvent = [NSApp currentEvent];
+        if( pCurrentEvent && [pCurrentEvent type] == NSEventTypeScrollWheel )
+            nEventMask &= ~NSEventMaskScrollWheel;
+    }
+
     if( nType & VclInputFlags::KEYBOARD)
         nEventMask |= NSEventMaskKeyDown | NSEventMaskKeyUp | NSEventMaskFlagsChanged;
     if( nType & VclInputFlags::OTHER)

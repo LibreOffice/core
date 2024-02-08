@@ -229,6 +229,8 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
     m_xSmZoom->set_value(rSet->Get(SID_SMEDITWINDOWZOOM).GetValue(), FieldUnit::PERCENT);
 
     m_xTitle->set_active(rSet->Get(SID_PRINTTITLE).GetValue());
+    m_xText->set_active(rSet->Get(GetWhich(SID_PRINTTEXT)).GetValue());
+    m_xFrame->set_active(rSet->Get(GetWhich(SID_PRINTFRAME)).GetValue());
     m_xNoRightSpaces->set_active(rSet->Get(SID_NO_RIGHT_SPACES).GetValue());
     m_xSaveOnlyUsedSymbols->set_active(rSet->Get(SID_SAVE_ONLY_USED_SYMBOLS).GetValue());
     m_xAutoCloseBrackets->set_active(rSet->Get(SID_AUTO_CLOSE_BRACKETS).GetValue());

@@ -166,7 +166,8 @@ class SwObjectFormatter
         */
         static bool FormatObj( SwAnchoredObject& _rAnchoredObj,
                                SwFrame* _pAnchorFrame = nullptr,
-                               const SwPageFrame* _pPageFrame = nullptr );
+                               const SwPageFrame* _pPageFrame = nullptr,
+                               SwLayAction* pLayAction = nullptr );
 };
 
 #endif

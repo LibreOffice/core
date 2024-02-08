@@ -1101,6 +1101,13 @@ void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
         maTabs[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
 }
 
+void ScDocument::GetBackColorArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
+                                   SCCOL& rEndCol, SCROW& rEndRow ) const
+{
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->GetBackColorArea( rStartCol, rStartRow, rEndCol, rEndRow );
+}
+
 bool ScDocument::GetDataAreaSubrange(ScRange& rRange) const
 {
     SCTAB nTab = rRange.aStart.Tab();
@@ -3255,12 +3262,16 @@ bool ScDocument::HasClipFilteredRows()
     if ( rClipRanges.empty() )
         return false;
 
-    for ( size_t i = 0, n = rClipRanges.size(); i < n; ++i )
+    if (maTabs.size() > 0)
     {
-        ScRange & rRange = rClipRanges[ i ];
-        bool bAnswer = maTabs[nCountTab]->HasFilteredRows(rRange.aStart.Row(), rRange.aEnd.Row());
-        if (bAnswer)
-            return true;
+        for (size_t i = 0, n = rClipRanges.size(); i < n; ++i)
+        {
+            ScRange& rRange = rClipRanges[i];
+            bool bAnswer
+                = maTabs[nCountTab]->HasFilteredRows(rRange.aStart.Row(), rRange.aEnd.Row());
+            if (bAnswer)
+                return true;
+        }
     }
     return false;
 }

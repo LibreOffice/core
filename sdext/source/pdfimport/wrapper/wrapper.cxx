@@ -911,9 +911,8 @@ static bool checkEncryption( std::u16string_view                           i_rPa
                              )
 {
     bool bSuccess = false;
-    OString aPDFFile = OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
 
-    std::unique_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
+    std::unique_ptr<pdfparse::PDFEntry> pEntry(pdfparse::PDFReader::read(i_rPath));
     if( pEntry )
     {
         pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());

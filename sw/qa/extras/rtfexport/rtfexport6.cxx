@@ -103,6 +103,9 @@ DECLARE_RTFEXPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[4]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[5]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(5, getPages()); // Word has 5
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo89496, "fdo89496.rtf")
@@ -155,6 +158,20 @@ DECLARE_RTFEXPORT_TEST(testTdf86814, "tdf86814.rtf")
     // This was awt::FontWeight::NORMAL, i.e. the first run wasn't bold, when it should be bold (applied paragraph style with direct formatting).
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
                          getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf108505_fieldCharFormat, "tdf108505_fieldCharFormat.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
+
+    // Character formatting can be defined inside the field for part of it. It wasn't being applied.
+    // Bold and green are specified. \fldrslt's "bogus result" (with italic/red) should be ignored.
+    uno::Reference<text::XTextRange> xRun = getRun(xPara, 3, "MZ");
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
+    // CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xRun, "CharColor"));
 }
 
 /** Make sure that the document variable "Unused", which is not referenced in the document,
@@ -556,10 +573,10 @@ DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
     assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject", 79);
 
     // Second page
-    assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject", 118);
+    assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject", 120);
 
     // Third page
-    assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject", 84);
+    assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject", 86);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128320)

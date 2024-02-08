@@ -104,6 +104,18 @@ void SwTableBoxFormula::TryBoxNmToPtr()
         BoxNmToPtr(&pTableNd->GetTable());
     }
 }
+
+void SwTableBoxFormula::TryRelBoxNm()
+{
+    const SwNode* pNd = GetNodeOfFormula();
+    if (!pNd || &pNd->GetNodes() != &pNd->GetDoc().GetNodes())
+        return;
+    if(const SwTableNode* pTableNd = pNd->FindTableNode())
+    {
+        ToRelBoxNm(&pTableNd->GetTable());
+    }
+}
+
 void SwTableBoxFormula::ToSplitMergeBoxNmWithHistory(SwTableFormulaUpdate& rUpdate, SwHistory* pHistory)
 {
     if(!pHistory)

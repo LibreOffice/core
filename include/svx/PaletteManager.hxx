@@ -33,7 +33,7 @@ namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace weld { class Window; }
 namespace model { class ColorSet; }
 
-class SVXCORE_DLLPUBLIC PaletteManager
+class SVXCORE_DLLPUBLIC PaletteManager : public std::enable_shared_from_this<PaletteManager>
 {
     const sal_uInt16        mnMaxRecentColors;
 

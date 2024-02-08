@@ -32,6 +32,7 @@ protected:
     /// helper to get the created xShape instance, override this
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) = 0;
     virtual OUString getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const = 0;
+    virtual OUString getMimeTypeFromImportContext(const SvXMLImportContext& rContext) const = 0;
     virtual css::uno::Reference<css::graphic::XGraphic> getGraphicFromImportContext(const SvXMLImportContext& rContext) const = 0;
 
 public:

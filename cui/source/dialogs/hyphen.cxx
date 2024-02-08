@@ -171,6 +171,8 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
                 aLeft = aLeft.replaceFirst( aTmp, "", &nPos );
                 if (nPos != -1)
                     ++m_nHyphenationPositionsOffset;
+                if (nPos >= aLeft.getLength()) // tdf#158837
+                    break;
             }
             aTxt = aTxt.replaceAt( 0, nPos2, aLeft );
         }

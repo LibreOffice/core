@@ -84,10 +84,10 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mpMenu( nullptr ),
     mnExtStyle( 0 ),
     mePointerStyle( PointerStyle::Arrow ),
-    mnTrackingRectTag( 0 ),
     mrClippingPath( nullptr ),
     mnICOptions( InputContextFlags::NONE ),
-    mnBlinkCursorDelay ( nMinBlinkCursorDelay )
+    mnBlinkCursorDelay( nMinBlinkCursorDelay ),
+    mbForceFlush( false )
 {
     mpParent = dynamic_cast<AquaSalFrame*>(pParent);
 
@@ -236,14 +236,27 @@ void AquaSalFrame::initWindowAndView()
     if( mnStyle & SalFrameStyleFlags::TOOLTIP )
         [mpNSWindow setIgnoresMouseEvents: YES];
     else
-        [mpNSWindow setAcceptsMouseMovedEvents: YES];
+        // Related: tdf#155092 mouse events are now handled by tracking areas
+        [mpNSWindow setAcceptsMouseMovedEvents: NO];
     [mpNSWindow setHasShadow: YES];
 
     [mpNSWindow setDelegate: static_cast<id<NSWindowDelegate> >(mpNSWindow)];
 
     [mpNSWindow setRestorable:NO];
-    const NSRect aRect = { NSZeroPoint, NSMakeSize(maGeometry.width(), maGeometry.height()) };
-    mnTrackingRectTag = [mpNSView addTrackingRect: aRect owner: mpNSView userData: nil assumeInside: NO];
+
+    // tdf#155092 use tracking areas instead of tracking rectangles
+    // Apparently, the older, tracking rectangles selectors cause
+    // unexpected window resizing upon the first mouse down after the
+    // window has been manually resized so switch to the newer,
+    // tracking areas selectors. Also, the NSTrackingInVisibleRect
+    // option allows us to create one single tracking area that
+    // resizes itself automatically over the lifetime of the view.
+    // Note: for some unknown reason, both NSTrackingMouseMoved and
+    // NSTrackingAssumeInside are necessary options for this fix
+    // to work.
+    NSTrackingArea *pTrackingArea = [[NSTrackingArea alloc] initWithRect: [mpNSView bounds] options: ( NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways | NSTrackingAssumeInside | NSTrackingInVisibleRect ) owner: mpNSView userInfo: nil];
+    [mpNSView addTrackingArea: pTrackingArea];
+    [pTrackingArea release];
 
     maSysData.mpNSView = mpNSView;
 
@@ -1018,10 +1031,15 @@ void AquaSalFrame::Flush()
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
-    if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+    if( mbForceFlush || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
+        mbForceFlush = false;
         mpGraphics->Flush();
-        [mpNSView display];
+        // Related: tdf#155266 skip redisplay of the view when forcing flush
+        // It appears that calling -[NSView display] overwhelms some Intel Macs
+        // so only flush the graphics and skip immediate redisplay of the view.
+        if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+            [mpNSView display];
     }
 }
 
@@ -1039,10 +1057,15 @@ void AquaSalFrame::Flush( const tools::Rectangle& rRect )
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
-    if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+    if( mbForceFlush || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
+        mbForceFlush = false;
         mpGraphics->Flush( rRect );
-        [mpNSView display];
+        // Related: tdf#155266 skip redisplay of the view when forcing flush
+        // It appears that calling -[NSView display] overwhelms some Intel Macs
+        // so only flush the graphics and skip immediate redisplay of the view.
+        if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+            [mpNSView display];
     }
 }
 
@@ -1828,7 +1851,6 @@ void AquaSalFrame::SetParent( SalFrame* pNewParent )
 
 void AquaSalFrame::UpdateFrameGeometry()
 {
-    bool bFirstTime = (mnTrackingRectTag == 0);
     mbGeometryDidChange = false;
 
     if ( !mpNSWindow )
@@ -1844,7 +1866,7 @@ void AquaSalFrame::UpdateFrameGeometry()
     if( pScreen )
     {
         NSRect aNewScreenRect = [pScreen frame];
-        if (bFirstTime || !NSEqualRects(maScreenRect, aNewScreenRect))
+        if (!NSEqualRects(maScreenRect, aNewScreenRect))
         {
             mbGeometryDidChange = true;
             maScreenRect = aNewScreenRect;
@@ -1853,7 +1875,7 @@ void AquaSalFrame::UpdateFrameGeometry()
         if( pScreens )
         {
             unsigned int nNewDisplayScreenNumber = [pScreens indexOfObject: pScreen];
-            if (bFirstTime || maGeometry.screen() != nNewDisplayScreenNumber)
+            if (maGeometry.screen() != nNewDisplayScreenNumber)
             {
                 mbGeometryDidChange = true;
                 maGeometry.setScreen(nNewDisplayScreenNumber);
@@ -1866,22 +1888,17 @@ void AquaSalFrame::UpdateFrameGeometry()
 
     NSRect aTrackRect = { NSZeroPoint, aContentRect.size };
 
-    if (bFirstTime || !NSEqualRects(maTrackingRect, aTrackRect))
+    if (!NSEqualRects(maTrackingRect, aTrackRect))
     {
         mbGeometryDidChange = true;
         maTrackingRect = aTrackRect;
-
-        // release old track rect
-        [mpNSView removeTrackingRect: mnTrackingRectTag];
-        // install the new track rect
-        mnTrackingRectTag = [mpNSView addTrackingRect: aTrackRect owner: mpNSView userData: nil assumeInside: NO];
     }
 
     // convert to vcl convention
     CocoaToVCL( aFrameRect );
     CocoaToVCL( aContentRect );
 
-    if (bFirstTime || !NSEqualRects(maContentRect, aContentRect) || !NSEqualRects(maFrameRect, aFrameRect))
+    if (!NSEqualRects(maContentRect, aContentRect) || !NSEqualRects(maFrameRect, aFrameRect))
     {
         mbGeometryDidChange = true;
 

@@ -440,11 +440,16 @@ namespace
 
         ::sw::UndoGuard const undoGuard(rDestDoc.GetIDocumentUndoRedo());
 
+        // At this point, pDelPam points to the last of maybe several disjoint selections, organized
+        // in reverse order in document (so every GetNext() returns a PaM closer to document start,
+        // until wrap to pDelPam). Removal of the selections must be from last in document to first,
+        // to avoid situations when another PaM in chain points into the node that will be destroyed
+        // (joined to previous) by removal of the currently processed PaM.
         do {
-            rDestDoc.getIDocumentContentOperations().DeleteAndJoin( *pDelPam->GetNext() );
+            rDestDoc.getIDocumentContentOperations().DeleteAndJoin(*pDelPam);
             if( !pDelPam->IsMultiSelection() )
                 break;
-            delete pDelPam->GetNext();
+            pDelPam.reset(pDelPam->GetNext());
         } while( true );
 
         rDestDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
@@ -4433,7 +4438,8 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
         pEnd->GetNode(),
         nullptr,
         pStt->GetContentIndex(),
-        pEnd->GetContentIndex());
+        pEnd->GetContentIndex(),
+        bool(flags & SwDeleteFlags::ArtificialSelection));
 
     SwNodeIndex aSttIdx( pStt->GetNode() );
     SwContentNode * pCNd = aSttIdx.GetNode().GetContentNode();

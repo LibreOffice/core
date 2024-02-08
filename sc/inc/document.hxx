@@ -1508,6 +1508,13 @@ public:
                                              bool bIncludeOld, bool bOnlyDown ) const;
 
     /**
+     * Return the extended area containing at least all contiguous cells
+     * having background color.
+     */
+    SC_DLLPUBLIC void GetBackColorArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
+                                        SCCOL& rEndCol, SCROW& rEndRow ) const;
+
+    /**
      * Returns true if there is a non-empty subrange in the range given as input.
      * In that case it also modifies rRange to largest subrange that does not
      * have empty col/row inrange-segments in the beginning/end.
@@ -2698,8 +2705,6 @@ public:
     const ScTable* FetchTable( SCTAB nTab ) const;
 
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );
-
-    void SharePooledResources( const ScDocument* pSrcDoc );
 private:
     ScRefCellValue GetRefCellValue( const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
@@ -2708,6 +2713,8 @@ private:
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol ) const;
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     void   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
+
+    void SharePooledResources( const ScDocument* pSrcDoc );
 
     void EndListeningIntersectedGroup(
         sc::EndListeningContext& rCxt, const ScAddress& rPos, std::vector<ScAddress>* pGroupPos );

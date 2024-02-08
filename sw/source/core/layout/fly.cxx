@@ -99,10 +99,10 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
         return 0;
     }
 
-    const auto& rFrameFormat = pFly->GetFrameFormat();
-    const IDocumentSettingAccess& rIDSA = rFrameFormat.getIDocumentSettingAccess();
+    const auto* pFrameFormat = pFly->GetFrameFormat();
+    const IDocumentSettingAccess& rIDSA = pFrameFormat->getIDocumentSettingAccess();
     // Allow overlap with bottom margin / footer only in case we're relative to the page frame.
-    bool bVertPageFrame = rFrameFormat.GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME;
+    bool bVertPageFrame = pFrameFormat->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME;
     bool bInBody = rAnchor.IsInDocBody();
     bool bLegacy = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) && (bVertPageFrame || !bInBody);
     if (bLegacy)
@@ -1273,7 +1273,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
     const SwTextFrame *pAutoFrame = nullptr;
     // #i34948# - handle also at-page and at-fly anchored
     // Writer fly frames
-    const RndStdIds eAnchorType = GetFrameFormat().GetAnchor().GetAnchorId();
+    const RndStdIds eAnchorType = GetFrameFormat()->GetAnchor().GetAnchorId();
     if ( eAnchorType == RndStdIds::FLY_AT_PAGE )
     {
         aVert.SetVertOrient( text::VertOrientation::NONE );
@@ -1443,9 +1443,19 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
                 SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
                 SwTwips nBottom = aRectFnSet.GetTop(getFrameArea()) + nRemaining;
-                if (nBottom > nDeadline && nDeadline > nTop)
+                if (nBottom > nDeadline)
                 {
-                    nRemaining = nDeadline - nTop;
+                    if (nDeadline > nTop)
+                    {
+                        nRemaining = nDeadline - nTop;
+                    }
+                    else
+                    {
+                        // Even the top is below the deadline, set size to empty and mark it as
+                        // clipped so we re-format later.
+                        nRemaining = 0;
+                        m_bHeightClipped = true;
+                    }
                 }
             }
 
@@ -1568,7 +1578,8 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 //                          Thus, <bNoCalcFollow> no longer used by <FormatWidthCols(..)>.
 void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 {
-    vcl::RenderContext* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
+    SwViewShell & rShell(*pLay->getRootFrame()->GetCurrShell());
+    vcl::RenderContext* pRenderContext = rShell.GetOut();
     SwSectionFrame* pSect;
     bool bCollect = false;
     if( pLay->IsSctFrame() )
@@ -1729,7 +1740,8 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                             }
                         }
 
-                        if ( !SwObjectFormatter::FormatObj( *pAnchoredObj, pAnchorFrame, pAnchorPageFrame ) )
+                        if (!SwObjectFormatter::FormatObj(*pAnchoredObj, pAnchorFrame, pAnchorPageFrame,
+                                rShell.Imp()->IsAction() ? &rShell.Imp()->GetLayAction() : nullptr))
                         {
                             bRestartLayoutProcess = true;
                             break;
@@ -1749,13 +1761,13 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                             {
                                 OSL_FAIL( "::CalcContent(..) - loop detected, perform attribute changes to avoid the loop" );
                                 // Prevent oscillation
-                                SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-                                SwFormatSurround aAttr( rFormat.GetSurround() );
+                                SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+                                SwFormatSurround aAttr( pFormat->GetSurround() );
                                 if( css::text::WrapTextMode_THROUGH != aAttr.GetSurround() )
                                 {
                                     // When on auto position, we can only set it to
                                     // flow through
-                                    if ((rFormat.GetAnchor().GetAnchorId() ==
+                                    if ((pFormat->GetAnchor().GetAnchorId() ==
                                             RndStdIds::FLY_AT_CHAR) &&
                                         (css::text::WrapTextMode_PARALLEL ==
                                             aAttr.GetSurround()))
@@ -1766,9 +1778,9 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                                     {
                                         aAttr.SetSurround( css::text::WrapTextMode_PARALLEL );
                                     }
-                                    rFormat.LockModify();
-                                    rFormat.SetFormatAttr( aAttr );
-                                    rFormat.UnlockModify();
+                                    pFormat->LockModify();
+                                    pFormat->SetFormatAttr( aAttr );
+                                    pFormat->UnlockModify();
                                 }
                             }
                             else
@@ -2044,7 +2056,7 @@ bool SwFlyFrame::IsShowUnfloatButton(SwWrtShell* pWrtSh) const
     if (pWrtSh->GetViewOptions()->IsReadonly())
         return false;
 
-    const SdrObject *pObj = GetFrameFormat().FindRealSdrObject();
+    const SdrObject *pObj = GetFrameFormat()->FindRealSdrObject();
     if (pObj == nullptr)
         return false;
 
@@ -2584,12 +2596,15 @@ void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
 {
     // Notify accessible layout.
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    SwViewShell* pSh = getRootFrame()->GetCurrShell();
-    if( pSh )
+    if (!mbInDtor)
     {
-        SwRootFrame* pLayout = getRootFrame();
-        if (pLayout && pLayout->IsAnyShellAccessible())
-            pSh->Imp()->DisposeAccessibleObj(_rToRemoveObj.GetDrawObj(), false);
+        SwViewShell* pSh = getRootFrame()->GetCurrShell();
+        if (pSh)
+        {
+            SwRootFrame* pLayout = getRootFrame();
+            if (pLayout && pLayout->IsAnyShellAccessible())
+                pSh->Imp()->DisposeAccessibleObj(_rToRemoveObj.GetDrawObj(), false);
+        }
     }
 #endif
 
@@ -2621,7 +2636,7 @@ void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )
     for (SwAnchoredObject* pAnchoredObj : *GetDrawObjs())
     {
         if ( _bNoInvaOfAsCharAnchoredObjs &&
-             (pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
+             (pAnchoredObj->GetFrameFormat()->GetAnchor().GetAnchorId()
                 == RndStdIds::FLY_AS_CHAR) )
         {
             continue;
@@ -2728,7 +2743,7 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             bool isPositionedByHF(false);
             if (IsHeaderFrame() || IsFooterFrame())
             {
-                auto const nO(pObj->GetFrameFormat().GetVertOrient().GetRelationOrient());
+                auto const nO(pObj->GetFrameFormat()->GetVertOrient().GetRelationOrient());
                 if (nO == text::RelOrientation::PAGE_PRINT_AREA
                     || nO == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM
                     || nO == text::RelOrientation::PAGE_PRINT_AREA_TOP)
@@ -3083,17 +3098,17 @@ void SwFlyFrame::InvalidateObjPos()
     InvalidateObjRectWithSpaces();
 }
 
-SwFrameFormat& SwFlyFrame::GetFrameFormat()
+SwFrameFormat* SwFlyFrame::GetFrameFormat()
 {
     OSL_ENSURE( GetFormat(),
             "<SwFlyFrame::GetFrameFormat()> - missing frame format -> crash." );
-    return *GetFormat();
+    return GetFormat();
 }
-const SwFrameFormat& SwFlyFrame::GetFrameFormat() const
+const SwFrameFormat* SwFlyFrame::GetFrameFormat() const
 {
     OSL_ENSURE( GetFormat(),
             "<SwFlyFrame::GetFrameFormat()> - missing frame format -> crash." );
-    return *GetFormat();
+    return GetFormat();
 }
 
 SwRect SwFlyFrame::GetObjRect() const

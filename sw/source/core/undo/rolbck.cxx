@@ -645,52 +645,42 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 
     SwNodes& rNds = pDoc->GetNodes();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    std::optional<SwPaM> pPam;
+    std::optional<SwPaM> oPam;
     ::sw::mark::IMark* pMark = nullptr;
 
+    // now the situation is that m_bSavePos and m_bSaveOtherPos don't determine
+    // whether the mark was deleted
+    if (auto const iter = pMarkAccess->findMark(m_aName); iter != pMarkAccess->getAllMarksEnd())
+    {
+        pMark = *iter;
+    }
     if(m_bSavePos)
     {
         SwContentNode* const pContentNd = rNds[m_nNode]->GetContentNode();
-        OSL_ENSURE(pContentNd,
-            "<SwHistoryBookmark::SetInDoc(..)>"
-            " - wrong node for a mark");
-
-        // #111660# don't crash when nNode1 doesn't point to content node.
-        if(pContentNd)
-            pPam.emplace(*pContentNd, m_nContent);
+        assert(pContentNd);
+        oPam.emplace(*pContentNd, m_nContent);
     }
     else
     {
-        pMark = *pMarkAccess->findMark(m_aName);
-        pPam.emplace(pMark->GetMarkPos());
+        assert(pMark);
+        oPam.emplace(pMark->GetMarkPos());
     }
+    assert(oPam);
 
     if(m_bSaveOtherPos)
     {
         SwContentNode* const pContentNd = rNds[m_nOtherNode]->GetContentNode();
-        OSL_ENSURE(pContentNd,
-            "<SwHistoryBookmark::SetInDoc(..)>"
-            " - wrong node for a mark");
-
-        if (pPam && pContentNd)
-        {
-            pPam->SetMark();
-            pPam->GetMark()->Assign(*pContentNd, m_nOtherContent);
-        }
+        assert(pContentNd);
+        oPam->SetMark();
+        oPam->GetMark()->Assign(*pContentNd, m_nOtherContent);
     }
     else if(m_bHadOtherPos)
     {
-        if(!pMark)
-            pMark = *pMarkAccess->findMark(m_aName);
-        OSL_ENSURE(pMark->IsExpanded(),
-            "<SwHistoryBookmark::SetInDoc(..)>"
-            " - missing pos on old mark");
-        pPam->SetMark();
-        *pPam->GetMark() = pMark->GetOtherMarkPos();
+        assert(pMark);
+        assert(pMark->IsExpanded());
+        oPam->SetMark();
+        *oPam->GetMark() = pMark->GetOtherMarkPos();
     }
-
-    if (!pPam)
-        return;
 
     if ( pMark != nullptr )
     {
@@ -698,7 +688,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     }
     ::sw::mark::IBookmark* const pBookmark =
         dynamic_cast<::sw::mark::IBookmark*>(
-            pMarkAccess->makeMark(*pPam, m_aName, m_eBkmkType, sw::mark::InsertMode::New));
+            pMarkAccess->makeMark(*oPam, m_aName, m_eBkmkType, sw::mark::InsertMode::New));
     if ( pBookmark == nullptr )
         return;
 

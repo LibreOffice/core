@@ -16,18 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
-#ifndef INCLUDED_VCL_INC_CHECKSUM_HXX
-#define INCLUDED_VCL_INC_CHECKSUM_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 
-#define BITMAP_CHECKSUM_SIZE 8
+#define BITMAP_CHECKSUM_SIZE 4
 
-typedef sal_uInt64   BitmapChecksum;
+typedef sal_uInt32   BitmapChecksum;
 typedef sal_uInt8   BitmapChecksumOctetArray[BITMAP_CHECKSUM_SIZE];
 
 template< sal_uInt8 N = 0 >
@@ -42,43 +39,5 @@ inline void BCToBCOA< BITMAP_CHECKSUM_SIZE >( BitmapChecksum, BitmapChecksumOcte
 {
     return;
 }
-
-extern "C" {
-
-/*========================================================================
- *
- * vcl_crc64 interface.
- *
- *======================================================================*/
-/** Evaluate CRC64 over given data.
-
-    This function evaluates the CRC polynomial 0xEDB88320.
-
-    @param  Crc    [in] CRC64 over previous data or zero.
-    @param  Data   [in] data buffer.
-    @param  DatLen [in] data buffer length.
-    @return new CRC64 value.
- */
-VCL_DLLPUBLIC sal_uInt64 vcl_crc64 (
-    sal_uInt64  Crc,
-    const void *Data, sal_uInt32 DatLen
-)   SAL_THROW_EXTERN_C();
-
-
-const sal_uInt64* vcl_get_crc64_table();
-
-}
-
-inline BitmapChecksum vcl_get_checksum (
-    BitmapChecksum  Checksum,
-    const void *Data,
-    sal_uInt32 DatLen
-)
-{
-    return static_cast<BitmapChecksum>(vcl_crc64( Checksum, Data, DatLen ));
-}
-
-
-#endif // INCLUDED_VCL_INC_CHECKSUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

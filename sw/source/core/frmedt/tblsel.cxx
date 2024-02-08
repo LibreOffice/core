@@ -2383,7 +2383,9 @@ void FndBox_::MakeFrames( SwTable &rTable )
             for ( sal_uInt16 j = nStPos; j <= nEndPos; ++j )
             {
                 SwTableLine * pLine = rTable.GetTabLines()[j];
-                if ( !bHideChanges || !pLine->IsDeleted(nRedlinePos) )
+                if ( ( !bHideChanges || !pLine->IsDeleted(nRedlinePos) ) &&
+                            // tdf#159026 fix Undo crash with floating tables
+                            pUpperFrame->GetUpper() )
                     ::lcl_InsertRow( *pLine,
                                 static_cast<SwLayoutFrame*>(pUpperFrame), pSibling );
             }

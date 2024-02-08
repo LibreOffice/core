@@ -3593,9 +3593,9 @@ struct hash<::rtl::OUString>
         if constexpr (sizeof(std::size_t) == 8)
         {
             // return a hash that uses the full 64-bit range instead of a 32-bit value
-            size_t n = 0;
+            size_t n = s.getLength();
             for (sal_Int32 i = 0, len = s.getLength(); i < len; ++i)
-                n = 31 * n + s[i];
+                n = 37 * n + s[i];
             return n;
         }
         else

@@ -78,7 +78,6 @@ public:
 
     PointerStyle                    mePointerStyle;         // currently active pointer style
 
-    NSTrackingRectTag               mnTrackingRectTag;      // used to get enter/leave messages
     NSRect                          maTrackingRect;
 
     CGMutablePathRef                mrClippingPath;         // used for "shaping"
@@ -97,6 +96,9 @@ public:
     bool                            mbGeometryDidChange;
 
     int                             mnBlinkCursorDelay;
+
+    // tdf#155266 force flush after scrolling
+    bool                            mbForceFlush;
 
 public:
     /** Constructor

@@ -10,8 +10,11 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <string_view>
 
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/configuration/ReadOnlyAccess.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
@@ -21,16 +24,12 @@
 #include <com/sun/star/container/XHierarchicalNameReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/util/XChangesListener.hpp>
-#include <com/sun/star/util/XChangesNotifier.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -107,67 +106,12 @@ comphelper::detail::ConfigurationWrapper::get()
     return WRAPPER;
 }
 
-class comphelper::detail::ConfigurationChangesListener
-    : public ::cppu::WeakImplHelper<css::util::XChangesListener>
-{
-     comphelper::detail::ConfigurationWrapper& mrConfigurationWrapper;
-public:
-    ConfigurationChangesListener(comphelper::detail::ConfigurationWrapper& rWrapper)
-        : mrConfigurationWrapper(rWrapper)
-    {}
-    // util::XChangesListener
-    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& ) override
-    {
-        std::scoped_lock aGuard(mrConfigurationWrapper.maMutex);
-        mrConfigurationWrapper.maPropertyCache.clear();
-    }
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
-    {
-        std::scoped_lock aGuard(mrConfigurationWrapper.maMutex);
-        mrConfigurationWrapper.mbDisposed = true;
-        mrConfigurationWrapper.maPropertyCache.clear();
-        mrConfigurationWrapper.maNotifier.clear();
-        mrConfigurationWrapper.maListener.clear();
-    }
-};
-
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
     context_(comphelper::getProcessComponentContext()),
-    access_(css::configuration::ReadWriteAccess::create(context_, "*")),
-    mbDisposed(false)
-{
-    // Set up a configuration notifier to invalidate the cache as needed.
-    try
-    {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-            css::configuration::theDefaultProvider::get( context_ ) );
+    access_(css::configuration::ReadWriteAccess::create(context_, "*"))
+{}
 
-        // set root path
-        css::uno::Sequence< css::uno::Any > params {
-            css::uno::Any( css::beans::NamedValue{ "nodepath", css::uno::Any( OUString("/"))} ),
-            css::uno::Any( css::beans::NamedValue{ "locale", css::uno::Any( OUString("*"))} ) };
-
-        css::uno::Reference< css::uno::XInterface > xCfg
-            = xConfigProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess",
-                params);
-
-        maNotifier = css::uno::Reference< css::util::XChangesNotifier >(xCfg, css::uno::UNO_QUERY);
-        assert(maNotifier.is());
-        maListener = css::uno::Reference< ConfigurationChangesListener >(new ConfigurationChangesListener(*this));
-        maNotifier->addChangesListener(maListener);
-    }
-    catch(const css::uno::Exception&)
-    {
-        assert(false);
-    }
-}
-
-comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper()
-{
-    maPropertyCache.clear();
-    maNotifier.clear();
-    maListener.clear();
-}
+comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
 
 bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
     const
@@ -178,26 +122,31 @@ bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
         != 0;
 }
 
-css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(OUString const& path) const
+css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(std::u16string_view path) const
 {
-    std::scoped_lock aGuard(maMutex);
-    if (mbDisposed)
-        throw css::lang::DisposedException();
     // Cache the configuration access, since some of the keys are used in hot code.
-    auto it = maPropertyCache.find(path);
-    if( it != maPropertyCache.end())
-        return it->second;
+    // Note that this cache is only used by the officecfg:: auto-generated code, using it for anything
+    // else would be unwise because the cache could end up containing stale entries.
+    static std::mutex gMutex;
+    static std::map<OUString, css::uno::Reference< css::container::XNameAccess >> gAccessMap;
 
-    sal_Int32 idx = path.lastIndexOf("/");
+    sal_Int32 idx = path.rfind('/');
     assert(idx!=-1);
-    OUString parentPath = path.copy(0, idx);
-    OUString childName = path.copy(idx+1);
+    OUString parentPath(path.substr(0, idx));
+    OUString childName(path.substr(idx+1));
 
-    css::uno::Reference<css::container::XNameAccess> access(
-        access_->getByHierarchicalName(parentPath), css::uno::UNO_QUERY_THROW);
-    css::uno::Any property = access->getByName(childName);
-    maPropertyCache.emplace(path, property);
-    return property;
+    std::scoped_lock aGuard(gMutex);
+
+    // check cache
+    auto it = gAccessMap.find(parentPath);
+    if (it == gAccessMap.end())
+    {
+        // not in the cache, look it up
+        css::uno::Reference<css::container::XNameAccess> access(
+            access_->getByHierarchicalName(parentPath), css::uno::UNO_QUERY_THROW);
+        it = gAccessMap.emplace(parentPath, access).first;
+    }
+    return it->second->getByName(childName);
 }
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(

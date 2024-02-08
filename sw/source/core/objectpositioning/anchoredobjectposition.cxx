@@ -106,7 +106,7 @@ void SwAnchoredObjectPosition::GetInfoAboutObj()
     // determine format the object belongs to
     {
         // #i28701#
-        mpFrameFormat = &mpAnchoredObj->GetFrameFormat();
+        mpFrameFormat = mpAnchoredObj->GetFrameFormat();
         assert(mpFrameFormat &&
                 "<SwAnchoredObjectPosition::GetInfoAboutObj() - missing frame format.");
     }

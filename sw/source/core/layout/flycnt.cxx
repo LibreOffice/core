@@ -161,13 +161,13 @@ void SwFlyAtContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
         // of the given fly frame format is registered.
         if(bFound && pContent && pContent->GetDrawObjs())
         {
-            SwFrameFormat* pMyFlyFrameFormat(&GetFrameFormat());
+            SwFrameFormat* pMyFlyFrameFormat(GetFrameFormat());
             SwSortedObjs &rObjs = *pContent->GetDrawObjs();
             for(SwAnchoredObject* rObj : rObjs)
             {
                 SwFlyFrame* pFlyFrame = rObj->DynCastFlyFrame();
                 if (pFlyFrame &&
-                     &(pFlyFrame->GetFrameFormat()) == pMyFlyFrameFormat)
+                     pFlyFrame->GetFrameFormat() == pMyFlyFrameFormat)
                 {
                     bFound = false;
                     break;
@@ -329,7 +329,8 @@ bool SwOszControl::ChkOsz()
 |*/
 void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
-    if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    const SwDoc& rDoc = *(GetFormat()->GetDoc());
+    if (!rDoc.getIDocumentDrawModelAccess().IsVisibleLayerId(GetVirtDrawObj()->GetLayer()))
     {
         return;
     }
@@ -449,7 +450,6 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
                 bool bInsert( true );
                 sal_uInt32 nAnchorFrameToPageNum( 0 );
-                const SwDoc& rDoc = *(GetFrameFormat().GetDoc());
                 if ( SwLayouter::FrameMovedFwdByObjPos(
                                         rDoc, *pAnchorTextFrame, nAnchorFrameToPageNum ) )
                 {
@@ -517,7 +517,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
               !bConsiderWrapInfluenceDueToOverlapPrevCol &&
               // #i40444#
               !bConsiderWrapInfluenceDueToMovedFwdAnchor &&
-              GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
+              rDoc.getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
     // #i3317# - instead of attribute change apply
     // temporarily the 'straightforward positioning process'.

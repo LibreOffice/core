@@ -15,9 +15,11 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <IDocumentDrawModelAccess.hxx>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
@@ -234,6 +236,62 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
     pXmlDoc = parseLayoutDump();
     // This was 1
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159026)
+{
+    // load a floating table (tables in DOCX footnotes
+    // imported as floating tables in Writer)
+    createSwDoc("tdf159026.docx");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    // hide changes
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    // select table with SelectionSupplier
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
+                                                          uno::UNO_QUERY_THROW);
+    // select floating table (table in a frame)
+    xSelSupplier->select(xIndexAccess->getByIndex(0));
+
+    // delete table with track changes
+    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+
+    // tracked table deletion
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    // hidden table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//tab", 0);
+
+    // delete frame
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess2(xTextFramesSupplier->getTextFrames(),
+                                                          uno::UNO_QUERY);
+    xSelSupplier->select(xIndexAccess2->getByIndex(0));
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    // undo frame deletion
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // undo tracked table deletion
+
+    // This resulted crashing
+    dispatchCommand(mxComponent, ".uno:Undo", {});
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
@@ -1504,7 +1562,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157132)
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
@@ -1519,6 +1577,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157132)
     // - Actual  : 2
     CPPUNIT_ASSERT_EQUAL(OUString("6"), xCellA4->getString());
     uno::Reference<text::XTextRange> xCellA5(xTextTable->getCellByName("A5"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("7"), xCellA5->getString());
+
+    xTextTable.set(xTables->getByIndex(1), uno::UNO_QUERY);
+
+    xCellA2.set(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+
+    // tdf#158336: Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : ** Expression is faulty **
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), xCellA2->getString());
+    xCellA3.set(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xCellA3->getString());
+    xCellA4.set(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), xCellA4->getString());
+    xCellA5.set(xTextTable->getCellByName("A5"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("7"), xCellA5->getString());
 }
 
@@ -2750,6 +2823,48 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
     // Without the fix in place, the autostyle had no parent
     assertXPath(pXml, para_style_path, "parent-style-name", "Standard");
     assertXPath(pXml, para_style_path, "master-page-name", "Right_20_Page");
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158459)
+{
+    createSwDoc("tdf158459_tracked_changes_across_nodes.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->FwdPara(); // Skip first paragraph
+    pWrtShell->EndOfSection(true); // Select everything to the end
+
+    SwDoc aClipboard;
+    pWrtShell->Copy(aClipboard); // This must not crash
+
+    pWrtShell->SelAll();
+    pWrtShell->Delete();
+    pWrtShell->Paste(aClipboard); // Replace everything with the copied stuff
+
+    SwNodes& rNodes = pDoc->GetNodes();
+    SwNodeIndex aIdx(rNodes.GetEndOfExtras());
+    SwContentNode* pContentNode = rNodes.GoNext(&aIdx);
+    CPPUNIT_ASSERT(pContentNode);
+    SwTextNode* pTextNode = pContentNode->GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    // Check that deleted parts (paragraph break, "c", "e") haven't been pasted
+    CPPUNIT_ASSERT_EQUAL(OUString("abdf"), pTextNode->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158703)
+{
+    // Given a document with French text, consisting of a word and several spaces:
+    createSwDoc("tdf158703.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+
+    // Typing ":" after the spaces should start auto-correction, which is expected to
+    // remove the spaces, and insert an NBSP instead. It must not crash.
+    emulateTyping(*pTextDoc, u":");
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Foo\u00A0:"), getParagraph(1)->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

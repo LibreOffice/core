@@ -98,6 +98,7 @@ private:
     SwXFlatParagraph & operator = ( const SwXFlatParagraph & ) = delete;
 
     OUString maExpandText;
+    OUString maOrigText;
 };
 
 class SwXFlatParagraphIterator final :

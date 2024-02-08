@@ -31,7 +31,12 @@ public:
         minutes and seconds values here though. */
     Duration(const Time& rStart, const Time& rEnd);
 
+    constexpr static sal_uInt64 kAccuracyEpsilonNanoseconds = 300;
+    constexpr static sal_uInt64 kAccuracyEpsilonNanosecondsMicroseconds = 999;
+
     /** Difference in days, like DateTime()-DateTime().
+
+        Can also be used to round a date+time value to, for example, microseconds.
 
         @param  nAccuracyEpsilonNanoseconds
                 Round for example by 1 nanosecond if it's just 1 off to a
@@ -41,7 +46,8 @@ public:
                 accuracy epsilon (=unsharpness) of ~300 is required. Hence default.
                 Must be 0 <= nAccuracyEpsilonNanoseconds <= Time::nanoSecPerSec - 1.
      */
-    explicit Duration(double fTimeInDays, sal_uInt64 nAccuracyEpsilonNanoseconds = 300);
+    explicit Duration(double fTimeInDays,
+                      sal_uInt64 nAccuracyEpsilonNanoseconds = kAccuracyEpsilonNanoseconds);
 
     /** Time can be a limited duration as well and can have out-of-range
         values, it will be normalized. Sign of both days and Time must be equal

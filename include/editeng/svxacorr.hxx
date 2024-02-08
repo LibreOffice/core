@@ -411,7 +411,9 @@ public:
     bool FnChgToEnEmDash( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
-    bool FnAddNonBrkSpace( SvxAutoCorrDoc&, std::u16string_view,
+    // Returns an updated position, at which the insertion/removal happened. It may be
+    // a smaller value, if leading spaces were removed. If unsuccessful, returns -1.
+    sal_Int32 FnAddNonBrkSpace( SvxAutoCorrDoc&, std::u16string_view,
                                 sal_Int32 nEndPos,
                                 LanguageType eLang, bool& io_bNbspRunNext );
     bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,

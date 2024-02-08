@@ -47,8 +47,11 @@
 #include <fldbas.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
+#include "../text/inftxt.hxx"
+#include "../text/itrpaint.hxx"
 #include <ndtxt.hxx>
 #include <undobj.hxx>
+#include <flyfrms.hxx>
 
 #include <swselectionlist.hxx>
 #include <comphelper/lok.hxx>
@@ -67,8 +70,9 @@ namespace {
             const SwVirtFlyDrawObj* pObj =
                                 static_cast<const SwVirtFlyDrawObj*>(aIter());
             const SwAnchoredObject* pAnchoredObj = GetUserCall( aIter() )->GetAnchoredObj( aIter() );
-            const SwFormatSurround& rSurround = pAnchoredObj->GetFrameFormat().GetSurround();
-            const SvxOpaqueItem& rOpaque = pAnchoredObj->GetFrameFormat().GetOpaque();
+            const SwFrameFormat* pObjFormat = pAnchoredObj->GetFrameFormat();
+            const SwFormatSurround& rSurround = pObjFormat->GetSurround();
+            const SvxOpaqueItem& rOpaque = pObjFormat->GetOpaque();
             bool bInBackground = ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH ) && !rOpaque.GetValue();
 
             bool bBackgroundMatches = bInBackground == bSearchBackground;
@@ -164,8 +168,17 @@ bool SwLayoutFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoin
                                  pFrame->UnionFrame() :
                                  pFrame->GetPaintArea() );
 
+        auto pTextFrame = pFrame->DynCastTextFrame();
+        bool bSplitFly = false;
+        if (pTextFrame && pTextFrame->HasNonLastSplitFlyDrawObj())
+        {
+            // Don't consider a non-last anchor of the split fly, so the view point can be corrected
+            // to go to the nearest fly, instead of the last anchor on a later page.
+            bSplitFly = true;
+        }
+
         if ( aPaintRect.Contains( rPoint ) &&
-             ( bContentCheck || pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS ) ) )
+             ( bContentCheck || pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS ) ) && !bSplitFly )
             bRet = true;
         else
             pFrame = pFrame->GetNext();
@@ -217,6 +230,19 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
             }
 
             const SwContentFrame *pCnt = GetContentPos( aPoint, false, false, pCMS, false );
+
+            auto pTextFrame = pCnt ? pCnt->DynCastTextFrame() : nullptr;
+            if (pTextFrame)
+            {
+                SwFlyAtContentFrame* pFly = pTextFrame->HasNonLastSplitFlyDrawObj();
+                if (pFly)
+                {
+                    // No exact match, looking for a nearest doc model position. Consider our fly
+                    // frame.
+                    pCnt = pFly->GetContentPos( aPoint, false, false, pCMS, false );
+                }
+            }
+
             // GetContentPos may have modified pCMS
             if ( pCMS && pCMS->m_bStop )
                 return false;
@@ -2016,7 +2042,7 @@ static void Add( SwRegionRects& rRegion, const SwRect& rRect )
  *              inverted rectangles are available.
  *              In the end the Flys are cut out of the section.
  */
-void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
+void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects, RectsMode const eMode)
 {
     auto [pStartPos, pEndPos] = rCursor.StartEnd(); // SwPosition*
 
@@ -2572,7 +2598,55 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     const SwPageFrame *pPage      = pStartFrame->FindPageFrame();
     const SwPageFrame *pEndPage   = pEndFrame->FindPageFrame();
 
-    while ( pPage )
+    // for link rectangles: just remove all the fly portions - this prevents
+    // splitting of portions vertically (causes spurious extra PDF annotations)
+    if (eMode == RectsMode::NoAnchoredFlys)
+    {
+        for (SwContentFrame * pFrame = pStartFrame; ; pFrame = pFrame->GetFollow())
+        {
+            assert(pFrame->IsTextFrame());
+            SwTextGridItem const*const pGrid(GetGridItem(pFrame->FindPageFrame()));
+            SwTextPaintInfo info(static_cast<SwTextFrame*>(pFrame), pFrame->FindPageFrame()->getFrameArea());
+            SwTextPainter painter(static_cast<SwTextFrame*>(pFrame), &info);
+            // because nothing outside the start/end has been added, it doesn't
+            // matter to match exactly the start/end, subtracting outside is no-op
+            if (pFrame == pStartFrame)
+            {
+                painter.CharToLine(static_cast<SwTextFrame*>(pFrame)->MapModelToViewPos(*pStartPos));
+            }
+            do
+            {
+                info.SetPos(painter.GetTopLeft());
+                bool const bAdjustBaseLine(
+                    painter.GetLineInfo().HasSpecialAlign(pFrame->IsVertical())
+                    || nullptr != pGrid || painter.GetCurr()->GetHangingBaseline());
+                SwTwips nAscent, nHeight;
+                painter.CalcAscentAndHeight(nAscent, nHeight);
+                SwTwips const nOldY(info.Y());
+                for (SwLinePortion const* pLP = painter.GetCurr()->GetFirstPortion();
+                        pLP; pLP = pLP->GetNextPortion())
+                {
+                    if (pLP->IsFlyPortion())
+                    {
+                        info.Y(info.Y() + (bAdjustBaseLine
+                                ? painter.AdjustBaseLine(*painter.GetCurr(), pLP)
+                                : nAscent));
+                        SwRect flyPortion;
+                        info.CalcRect(*pLP, &flyPortion);
+                        Sub(aRegion, flyPortion);
+                        info.Y(nOldY);
+                    }
+                    pLP->Move(info);
+                }
+            }
+            while (painter.Next());
+            if (pFrame == pEndFrame)
+            {
+                break;
+            }
+        }
+    }
+    else while (pPage)
     {
         if ( pPage->GetSortedObjs() )
         {
@@ -2584,7 +2658,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                     continue;
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
-                SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat().GetAnchor());
+                SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat()->GetAnchor());
                 const SwPosition* anchoredAt = rAnchor.GetContentAnchor();
                 bool inSelection = (
                             anchoredAt != nullptr
@@ -2592,7 +2666,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                                 && IsDestroyFrameAnchoredAtChar(*anchoredAt, *pStartPos, *pEndPos))
                             || (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
                                 && IsSelectFrameAnchoredAtPara(*anchoredAt, *pStartPos, *pEndPos))));
-                if( inSelection )
+                if (eMode != RectsMode::NoAnchoredFlys && inSelection)
                         Add( aRegion, pFly->getFrameArea() );
                 else if ( !pFly->IsAnLower( pStartFrame ) &&
                     (rSur.GetSurround() != css::text::WrapTextMode_THROUGH &&
@@ -2644,7 +2718,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             Sub( aRegion, aDropRect );
     }
 
-    rCursor.assign( aRegion.begin(), aRegion.end() );
+    rRects.assign( aRegion.begin(), aRegion.end() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1527,7 +1527,11 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                     --nCurrStart;
             }
         }
-        return nCurrStart;
+        if (!pPor->InFieldGrp() || !static_cast<SwFieldPortion const*>(pPor)->IsFollow()
+            || !pCMS || !pCMS->m_pSpecialPos)
+        {
+            return nCurrStart;
+        }
     }
     if (TextFrameIndex(1) == nLength || pPor->InFieldGrp())
     {
@@ -1606,8 +1610,11 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
 
     // Skip space at the end of the line
     if( bLastPortion && (m_pCurr->GetNext() || m_pFrame->GetFollow() )
-        && rText[sal_Int32(nCurrStart + nLength) - 1] == ' ' )
+        && sal_Int32(nLength) != 0
+        && rText[sal_Int32(nCurrStart + nLength) - 1] == ' ')
+    {
         --nLength;
+    }
 
     if( nWidth > nX ||
       ( nWidth == nX && pPor->IsMultiPortion() && static_cast<SwMultiPortion*>(pPor)->IsDouble() ) )
@@ -1757,18 +1764,56 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                 if ( pPor->InFieldGrp() && pCMS && pCMS->m_pSpecialPos )
                 {
                     pCMS->m_pSpecialPos->nCharOfst = sal_Int32(nLength);
+                    // follow portions: need to add the length of all previous
+                    // portions for the same field
+                    if (static_cast<SwFieldPortion const*>(pPor)->IsFollow())
+                    {
+                        int nLines(0);
+                        std::vector<SwFieldPortion const*> portions;
+                        for (SwLineLayout const* pLine = GetInfo().GetParaPortion();
+                                true; pLine = pLine->GetNext())
+                        {
+                            for (SwLinePortion const* pLP = pLine; pLP && pLP != pPor; pLP = pLP->GetNextPortion())
+                            {
+                                if (pLP->InFieldGrp())
+                                {
+                                    SwFieldPortion const* pField(static_cast<SwFieldPortion const*>(pLP));
+                                    if (!pField->IsFollow())
+                                    {
+                                        nLines = 0;
+                                        portions.clear();
+                                    }
+                                    if (pLine == m_pCurr)
+                                    {
+                                        portions.emplace_back(pField);
+                                    }
+                                }
+                            }
+                            if (pLine == m_pCurr)
+                            {
+                                break;
+                            }
+                            ++nLines;
+                        }
+                        for (SwFieldPortion const* pField : portions)
+                        {
+                            pCMS->m_pSpecialPos->nCharOfst += pField->GetExp().getLength();
+                        }
+                        pCMS->m_pSpecialPos->nLineOfst = nLines;
+                    }
                     nLength = TextFrameIndex(0);
+                }
+                else if (bFieldInfo && nLength == pPor->GetLen() &&
+                         (! pPor->GetNextPortion() ||
+                          ! pPor->GetNextPortion()->IsPostItsPortion()))
+                {
+                    --nLength;
                 }
 
                 // set cursor bidi level
                 if ( pCMS )
                     pCMS->m_nCursorBidiLevel =
                         aDrawInf.GetCursorBidiLevel();
-
-                if( bFieldInfo && nLength == pPor->GetLen() &&
-                    ( ! pPor->GetNextPortion() ||
-                      ! pPor->GetNextPortion()->IsPostItsPortion() ) )
-                    --nLength;
             }
             if( nOldProp )
                 const_cast<SwFont*>(GetFnt())->SetProportion( nOldProp );

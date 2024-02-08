@@ -16,7 +16,10 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <osl/file.hxx>
 #include <sfx2/docfac.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
@@ -31,6 +34,11 @@ using namespace com::sun::star;
 
 namespace
 {
+bool supportsService(const uno::Reference<lang::XComponent>& x, const OUString& s)
+{
+    return uno::Reference<lang::XServiceInfo>(x, uno::UNO_QUERY_THROW)->supportsService(s);
+}
+
 /// Test class for PlainTextFilterDetect.
 class TextFilterDetectTest : public UnoApiTest
 {
@@ -63,10 +71,6 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428)
 
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
 {
-    auto supportsService = [](const uno::Reference<lang::XComponent>& x, const OUString& s) {
-        return uno::Reference<lang::XServiceInfo>(x, uno::UNO_QUERY_THROW)->supportsService(s);
-    };
-
     // Given an empty file, with a pptx extension
     // When loading the file
     loadFromURL(u"empty.pptx");
@@ -172,6 +176,63 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         CPPUNIT_ASSERT_EQUAL(OUString(u"Writer template’s first line"), xParagraph->getString());
     }
 }
+
+// The unit test fails on some Linux systems. Until it is found out why the file URLs are broken
+// there, let it be Windows-only, since the original issue tested here was Windows-specific.
+// See https://lists.freedesktop.org/archives/libreoffice/2023-December/091265.html for details.
+#ifdef _WIN32
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
+{
+    // Make sure that file locking is ON
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::set(true, xChanges);
+        xChanges->commit();
+    }
+
+    // Given a hybrid PDF file
+
+    {
+        // Created in Writer
+        utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
+        nonAsciiName.EnableKillingFile();
+        CPPUNIT_ASSERT_EQUAL(
+            osl::FileBase::E_None,
+            osl::File::copy(createFileURL(u"hybrid_writer.pdf"), nonAsciiName.GetURL()));
+        load(nonAsciiName.GetURL());
+        // Make sure it opens in Writer.
+        // Without the accompanying fix in place, this test would have failed on Windows, as it was
+        // opened in Draw instead.
+        CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
+    }
+
+    {
+        // Created in Calc
+        utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
+        nonAsciiName.EnableKillingFile();
+        CPPUNIT_ASSERT_EQUAL(
+            osl::FileBase::E_None,
+            osl::File::copy(createFileURL(u"hybrid_calc.pdf"), nonAsciiName.GetURL()));
+        load(nonAsciiName.GetURL());
+        // Make sure it opens in Calc.
+        CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.sheet.SpreadsheetDocument"));
+    }
+
+    {
+        // Created in Impress
+        utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
+        nonAsciiName.EnableKillingFile();
+        CPPUNIT_ASSERT_EQUAL(
+            osl::FileBase::E_None,
+            osl::File::copy(createFileURL(u"hybrid_impress.pdf"), nonAsciiName.GetURL()));
+        load(nonAsciiName.GetURL());
+        // Make sure it opens in Impress.
+        CPPUNIT_ASSERT(
+            supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
+    }
+}
+#endif // _WIN32
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

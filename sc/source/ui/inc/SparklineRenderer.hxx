@@ -72,7 +72,7 @@ public:
     size_t mnLastIndex = 0;
 
     double mfMinimum = std::numeric_limits<double>::max();
-    double mfMaximum = std::numeric_limits<double>::min();
+    double mfMaximum = std::numeric_limits<double>::lowest();
 
     std::vector<SparklineValue> const& getValuesList() const { return maValueList; }
 

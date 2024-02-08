@@ -957,9 +957,42 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
 
     // check macro security
     const bool bHasValidContentSignature = HasValidSignatures();
-    pImpl->aMacroMode.checkMacrosOnLoading( xInteraction, bHasValidContentSignature );
+    const bool bHasMacros = pImpl->aMacroMode.hasMacros();
+    pImpl->aMacroMode.checkMacrosOnLoading( xInteraction, bHasValidContentSignature, bHasMacros );
+    pImpl->m_bHadCheckedMacrosOnLoad = bHasMacros;
 }
 
+bool SfxObjectShell::GetHadCheckedMacrosOnLoad() const
+{
+    return pImpl->m_bHadCheckedMacrosOnLoad;
+}
+
+bool SfxObjectShell::AllowedLinkProtocolFromDocument(const OUString& rUrl, SfxObjectShell* pObjShell, weld::Window* pDialogParent)
+{
+    if (!INetURLObject(rUrl).IsExoticProtocol())
+        return true;
+    // Default to ignoring exotic protocols
+    bool bAllow = false;
+    if (pObjShell)
+    {
+        // If the document had macros when loaded then follow the allowed macro-mode
+        if (pObjShell->GetHadCheckedMacrosOnLoad())
+            bAllow = pObjShell->AdjustMacroMode();
+        else // otherwise ask the user, defaulting to cancel
+        {
+            //Reuse URITools::onOpenURI warning string
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pDialogParent,
+                                                           VclMessageType::Warning, VclButtonsType::YesNo,
+                                                           SfxResId(STR_DANGEROUS_TO_OPEN)));
+            xQueryBox->set_primary_text(xQueryBox->get_primary_text().replaceFirst("$(ARG1)",
+                INetURLObject::decode(rUrl, INetURLObject::DecodeMechanism::Unambiguous)));
+            xQueryBox->set_default_response(RET_NO);
+            bAllow = xQueryBox->run() == RET_YES;
+        }
+    }
+    SAL_WARN_IF(!bAllow, "sfx.appl", "SfxObjectShell::AllowedLinkProtocolFromDocument ignoring: " << rUrl);
+    return bAllow;
+}
 
 void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
@@ -1797,7 +1830,8 @@ SignatureState SfxObjectShell_Impl::getScriptingSignatureState()
     return nSignatureState;
 }
 
-bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor )
+bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
+    const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction)
 {
     bool bResult = false;
 
@@ -1833,22 +1867,15 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
                         [&xSigner](const security::DocumentSignatureInformation& rInfo) {
                             return xSigner->isAuthorTrusted( rInfo.Signer ); });
 
-                    if ( !bResult && bAllowUIToAddAuthor )
+                    if (!bResult && _rxInteraction)
                     {
-                        uno::Reference< task::XInteractionHandler > xInteraction;
-                        if ( rDocShell.GetMedium() )
-                            xInteraction = rDocShell.GetMedium()->GetInteractionHandler();
-
-                        if ( xInteraction.is() )
-                        {
-                            task::DocumentMacroConfirmationRequest aRequest;
-                            aRequest.DocumentURL = getDocumentLocation();
-                            aRequest.DocumentStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
-                            aRequest.DocumentSignatureInformation = aInfo;
-                            aRequest.DocumentVersion = aVersion;
-                            aRequest.Classification = task::InteractionClassification_QUERY;
-                            bResult = SfxMedium::CallApproveHandler( xInteraction, uno::Any( aRequest ), true );
-                        }
+                        task::DocumentMacroConfirmationRequest aRequest;
+                        aRequest.DocumentURL = getDocumentLocation();
+                        aRequest.DocumentStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
+                        aRequest.DocumentSignatureInformation = aInfo;
+                        aRequest.DocumentVersion = aVersion;
+                        aRequest.Classification = task::InteractionClassification_QUERY;
+                        bResult = SfxMedium::CallApproveHandler( _rxInteraction, uno::Any( aRequest ), true );
                     }
                 }
             }

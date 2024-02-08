@@ -56,96 +56,91 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
 
-    static ODatabaseMetaDataResultSet::ORows aRows = []()
+    ODatabaseMetaDataResultSet::ORows aRows;
+    aRows.reserve(10);
+    ODatabaseMetaDataResultSet::ORow aRow
     {
-        ODatabaseMetaDataResultSet::ORows aTmp;
-        aTmp.reserve(10);
-        ODatabaseMetaDataResultSet::ORow aRow
-        {
-            ODatabaseMetaDataResultSet::getEmptyValue(),
-            new ORowSetValueDecorator(OUString("VARCHAR")),
-            new ORowSetValueDecorator(DataType::VARCHAR),
-            new ORowSetValueDecorator(sal_Int32(254)),
-            ODatabaseMetaDataResultSet::getQuoteValue(),
-            ODatabaseMetaDataResultSet::getQuoteValue(),
-            new ORowSetValueDecorator(OUString("length")),
-            new ORowSetValueDecorator(sal_Int32(ColumnValue::NULLABLE)),
-            ODatabaseMetaDataResultSet::get1Value(),
-            new ORowSetValueDecorator(sal_Int32(ColumnSearch::FULL)),
-            ODatabaseMetaDataResultSet::get1Value(),
-            ODatabaseMetaDataResultSet::get0Value(),
-            ODatabaseMetaDataResultSet::get0Value(),
-            new ORowSetValueDecorator(OUString("C")),
-            ODatabaseMetaDataResultSet::get0Value(),
-            ODatabaseMetaDataResultSet::get0Value(),
-            ODatabaseMetaDataResultSet::getEmptyValue(),
-            ODatabaseMetaDataResultSet::getEmptyValue(),
-            new ORowSetValueDecorator(sal_Int32(10))
-        };
+        ODatabaseMetaDataResultSet::getEmptyValue(),
+        new ORowSetValueDecorator(OUString("VARCHAR")),
+        new ORowSetValueDecorator(DataType::VARCHAR),
+        new ORowSetValueDecorator(sal_Int32(254)),
+        ODatabaseMetaDataResultSet::getQuoteValue(),
+        ODatabaseMetaDataResultSet::getQuoteValue(),
+        new ORowSetValueDecorator(OUString("length")),
+        new ORowSetValueDecorator(sal_Int32(ColumnValue::NULLABLE)),
+        ODatabaseMetaDataResultSet::get1Value(),
+        new ORowSetValueDecorator(sal_Int32(ColumnSearch::FULL)),
+        ODatabaseMetaDataResultSet::get1Value(),
+        ODatabaseMetaDataResultSet::get0Value(),
+        ODatabaseMetaDataResultSet::get0Value(),
+        new ORowSetValueDecorator(OUString("C")),
+        ODatabaseMetaDataResultSet::get0Value(),
+        ODatabaseMetaDataResultSet::get0Value(),
+        ODatabaseMetaDataResultSet::getEmptyValue(),
+        ODatabaseMetaDataResultSet::getEmptyValue(),
+        new ORowSetValueDecorator(sal_Int32(10))
+    };
 
-        aTmp.push_back(aRow);
+    aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("LONGVARCHAR"));
-        aRow[2] = new ORowSetValueDecorator(DataType::LONGVARCHAR);
-        aRow[3] = new ORowSetValueDecorator(sal_Int32(2147483647));
-        aRow[6] = new ORowSetValueDecorator();
-        aRow[13] = new ORowSetValueDecorator(OUString("M"));
-        aTmp.push_back(aRow);
+    aRow[1] = new ORowSetValueDecorator(OUString("LONGVARCHAR"));
+    aRow[2] = new ORowSetValueDecorator(DataType::LONGVARCHAR);
+    aRow[3] = new ORowSetValueDecorator(sal_Int32(2147483647));
+    aRow[6] = new ORowSetValueDecorator();
+    aRow[13] = new ORowSetValueDecorator(OUString("M"));
+    aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
-        aRow[2] = new ORowSetValueDecorator(DataType::DATE);
-        aRow[3] = new ORowSetValueDecorator(sal_Int32(10));
-        aRow[13] = new ORowSetValueDecorator(OUString("D"));
-        aTmp.push_back(aRow);
+    aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
+    aRow[2] = new ORowSetValueDecorator(DataType::DATE);
+    aRow[3] = new ORowSetValueDecorator(sal_Int32(10));
+    aRow[13] = new ORowSetValueDecorator(OUString("D"));
+    aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
-        aRow[2] = new ORowSetValueDecorator(DataType::BIT);
-        aRow[3] = ODatabaseMetaDataResultSet::get1Value();
-        aRow[4] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[6] = new ORowSetValueDecorator(OUString());
-        aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
-        aRow[13] = new ORowSetValueDecorator(OUString("L"));
-        aTmp.push_back(aRow);
+    aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
+    aRow[2] = new ORowSetValueDecorator(DataType::BIT);
+    aRow[3] = ODatabaseMetaDataResultSet::get1Value();
+    aRow[4] = ODatabaseMetaDataResultSet::getEmptyValue();
+    aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
+    aRow[6] = new ORowSetValueDecorator(OUString());
+    aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
+    aRow[13] = new ORowSetValueDecorator(OUString("L"));
+    aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("DOUBLE"));
-        aRow[2] = new ORowSetValueDecorator(DataType::DOUBLE);
-        aRow[3] = new ORowSetValueDecorator(sal_Int32(8));
-        aRow[13] = new ORowSetValueDecorator(OUString("B"));
-        aTmp.push_back(aRow);
+    aRow[1] = new ORowSetValueDecorator(OUString("DOUBLE"));
+    aRow[2] = new ORowSetValueDecorator(DataType::DOUBLE);
+    aRow[3] = new ORowSetValueDecorator(sal_Int32(8));
+    aRow[13] = new ORowSetValueDecorator(OUString("B"));
+    aRows.push_back(aRow);
 
-        aRow[11] = new ORowSetValueDecorator(ORowSetValue(true));
-        aRow[13] = new ORowSetValueDecorator(OUString("Y"));
-        aTmp.push_back(aRow);
+    aRow[11] = new ORowSetValueDecorator(ORowSetValue(true));
+    aRow[13] = new ORowSetValueDecorator(OUString("Y"));
+    aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
-        aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-        aRow[11] = new ORowSetValueDecorator(ORowSetValue(false));
-        aRow[13] = new ORowSetValueDecorator(OUString("T"));
-        aTmp.push_back(aRow);
+    aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
+    aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
+    aRow[11] = new ORowSetValueDecorator(ORowSetValue(false));
+    aRow[13] = new ORowSetValueDecorator(OUString("T"));
+    aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
-        aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
-        aRow[3] = new ORowSetValueDecorator(sal_Int32(10));
-        aRow[13] = new ORowSetValueDecorator(OUString("I"));
-        aTmp.push_back(aRow);
+    aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
+    aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
+    aRow[3] = new ORowSetValueDecorator(sal_Int32(10));
+    aRow[13] = new ORowSetValueDecorator(OUString("I"));
+    aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
-        aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
-        aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
-        aRow[6] = new ORowSetValueDecorator(OUString("length,scale"));
-        aRow[13] = new ORowSetValueDecorator(OUString("F"));
-        aTmp.push_back(aRow);
+    aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
+    aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
+    aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
+    aRow[6] = new ORowSetValueDecorator(OUString("length,scale"));
+    aRow[13] = new ORowSetValueDecorator(OUString("F"));
+    aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(OUString("NUMERIC"));
-        aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
-        aRow[3] = new ORowSetValueDecorator(sal_Int32(16));
-        aRow[13] = new ORowSetValueDecorator(OUString("N"));
-        aRow[15] = new ORowSetValueDecorator(sal_Int32(16));
-        aTmp.push_back(aRow);
-
-        return aTmp;
-    }();
+    aRow[1] = new ORowSetValueDecorator(OUString("NUMERIC"));
+    aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
+    aRow[3] = new ORowSetValueDecorator(sal_Int32(16));
+    aRow[13] = new ORowSetValueDecorator(OUString("N"));
+    aRow[15] = new ORowSetValueDecorator(sal_Int32(16));
+    aRows.push_back(aRow);
 
     pResult->setRows(std::move(aRows));
     return pResult;

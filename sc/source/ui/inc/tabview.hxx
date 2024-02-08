@@ -216,6 +216,8 @@ private:
 
     double              mfLastZoomScale = 0;
     double              mfAccumulatedZoom = 0;
+    tools::Long         mnPendingaHScrollLeftDelta = 0;
+    tools::Long         mnPendingaHScrollRightDelta = 0;
 
     void            Init();
 

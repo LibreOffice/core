@@ -8,10 +8,12 @@
  */
 
 #include "../helper/qahelper.hxx"
+#include <editeng/brushitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
+#include <stlsheet.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -26,8 +28,10 @@
 #include <inputopt.hxx>
 #include <postit.hxx>
 #include <rangeutl.hxx>
+#include <scitems.hxx>
 #include <scmod.hxx>
 #include <tabvwsh.hxx>
+#include <undomanager.hxx>
 #include <viewdata.hxx>
 
 using namespace ::com::sun::star;
@@ -82,6 +86,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf150499)
     dispatchCommand(mxComponent, ".uno:Remove", aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf158254)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    goToCell("A:G");
+    dispatchCommand(mxComponent,
+                    ".uno:StyleApply?Style:string=Accent%201&FamilyName:string=CellStyles", {});
+
+    const ScPatternAttr* pPattern = pDoc->GetPattern(5, 0, 0);
+    ScStyleSheet* pStyleSheet = const_cast<ScStyleSheet*>(pPattern->GetStyleSheet());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Accent 1
+    // - Actual  : Default
+    CPPUNIT_ASSERT_EQUAL(OUString("Accent 1"), pStyleSheet->GetName());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    pPattern = pDoc->GetPattern(5, 0, 0);
+    pStyleSheet = const_cast<ScStyleSheet*>(pPattern->GetStyleSheet());
+    CPPUNIT_ASSERT_EQUAL(OUString("Default"), pStyleSheet->GetName());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf133326)
@@ -1470,6 +1498,83 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf155796)
     // - Expected: Sheet1.A1:Sheet1.A3
     // - Actual  : Sheet1.A1:Sheet1.A5
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.A1:Sheet1.A3"), aMarkedAreaString);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf154044)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    auto getBackColor = [pDoc](SCCOL c) {
+        const ScPatternAttr* pattern = pDoc->GetPattern(c, 0, 0);
+        const SvxBrushItem& brush = pattern->GetItemSet().Get(ATTR_BACKGROUND);
+        return brush.GetColor();
+    };
+
+    CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, pDoc->GetAllocatedColumnsCount(0));
+    for (SCCOL i = 0; i <= pDoc->MaxCol(); ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_AUTO, getBackColor(i));
+    }
+
+    // Set the background color of A1:CV1
+    auto aColorArg(
+        comphelper::InitPropertySequence({ { "BackgroundColor", uno::Any(COL_LIGHTBLUE) } }));
+    goToCell("A1:CV1");
+    dispatchCommand(mxComponent, ".uno:BackgroundColor", aColorArg);
+
+    // Partial row range allocates necessary columns
+    CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
+
+    // Check that settings are applied
+    for (SCCOL i = 0; i < 100; ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_LIGHTBLUE, getBackColor(i));
+    }
+
+    // Undo
+    SfxUndoManager* pUndoMgr = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    // Check that all the cells have restored the setting
+    for (SCCOL i = 0; i < 100; ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        // Without the fix in place, this would fail with
+        // - Expected: rgba[ffffff00]
+        // - Actual  : rgba[0000ffff]
+        // - i=1
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_AUTO, getBackColor(i));
+    }
+
+    // Also check the whole row selection case - it is handled specially: columns are not allocated.
+    // See commit 3db91487e57277f75d64d95d06d4ddcc29f1c4e0 (set properly attributes for cells in
+    // unallocated Calc columns, 2022-03-04).
+    goToCell("A1:" + pDoc->MaxColAsString() + "1");
+    dispatchCommand(mxComponent, ".uno:BackgroundColor", aColorArg);
+
+    // Check that settings are applied
+    for (SCCOL i = 0; i <= pDoc->MaxCol(); ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_LIGHTBLUE, getBackColor(i));
+    }
+
+    // Undo
+    pUndoMgr->Undo();
+
+    // No additional columns have been allocated for whole-row range
+    CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
+
+    // Check that all the cells have restored the setting
+    for (SCCOL i = 0; i <= pDoc->MaxCol(); ++i)
+    {
+        OString msg = "i=" + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_AUTO, getBackColor(i));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

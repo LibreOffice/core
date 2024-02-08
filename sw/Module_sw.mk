@@ -67,6 +67,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_rtfexport5 \
     CppunitTest_sw_rtfexport6 \
     CppunitTest_sw_rtfexport7 \
+    CppunitTest_sw_rtfexport8 \
     CppunitTest_sw_docbookexport \
     CppunitTest_sw_fodfexport \
     CppunitTest_sw_htmlexport \
@@ -93,6 +94,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlexport17 \
     CppunitTest_sw_ooxmlexport18 \
     CppunitTest_sw_ooxmlexport19 \
+    CppunitTest_sw_ooxmlexport21 \
     CppunitTest_sw_ooxmlexport_template \
     CppunitTest_sw_ooxmlfieldexport \
     CppunitTest_sw_ooxmllinks \
@@ -121,6 +123,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_uiwriter6 \
     CppunitTest_sw_uiwriter7 \
     CppunitTest_sw_uiwriter8 \
+    CppunitTest_sw_uiwriter9 \
     CppunitTest_sw_layoutwriter \
     CppunitTest_sw_layoutwriter2 \
     CppunitTest_sw_layoutwriter3 \

@@ -75,8 +75,8 @@ CPPUNIT_TARBALL := cppunit-1.15.1.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CURL_SHA256SUM := 16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d
-CURL_TARBALL := curl-8.4.0.tar.xz
+CURL_SHA256SUM := 3ccd55d91af9516539df80625f818c734dc6f2ecf9bada33c76765e99121db15
+CURL_TARBALL := curl-8.6.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -428,8 +428,8 @@ OPENSSL_TARBALL := openssl-3.0.11.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ORCUS_SHA256SUM := 6006b9f1576315e313df715a7e72a17f3e0b17d7b6bd119cfa8a0b608ce971eb
-ORCUS_TARBALL := liborcus-0.18.1.tar.xz
+ORCUS_SHA256SUM := 69ed26a00d4aaa7688e62a6e003cbc81928521a45e96605e53365aa499719e39
+ORCUS_TARBALL := liborcus-0.19.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

@@ -47,10 +47,9 @@ void ScColContainer::Clear()
 void ScColContainer::resize( ScSheetLimits const & rSheetLimits, const size_t aNewColSize )
 {
     size_t aOldColSize = aCols.size();
-    if (aNewColSize > aCols.capacity())
-        aCols.reserve( aNewColSize );
+    aCols.resize( aNewColSize );
     for ( size_t nCol = aOldColSize; nCol < aNewColSize; ++nCol )
-        aCols.emplace_back(new ScColumn(rSheetLimits));
+        aCols[nCol].reset(new ScColumn(rSheetLimits));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

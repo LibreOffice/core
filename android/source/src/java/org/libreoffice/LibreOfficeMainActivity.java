@@ -350,7 +350,11 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType(FileUtilities.MIMETYPE_PDF);
+        // suggest directory and file name based on the doc
         intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, mDocumentUri);
+        final String displayName = toolbarTop.getTitle().toString();
+        final String suggestedFileName = FileUtilities.stripExtensionFromFileName(displayName) + ".pdf";
+        intent.putExtra(Intent.EXTRA_TITLE, suggestedFileName);
 
         startActivityForResult(intent, REQUEST_CODE_EXPORT_TO_PDF);
     }
@@ -416,7 +420,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     public void saveFileToOriginalSource() {
-        if (isReadOnlyMode() || mTempFile == null || mDocumentUri == null || !mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
+        if (mTempFile == null || mDocumentUri == null || !mDocumentUri.getScheme().equals(ContentResolver.SCHEME_CONTENT))
             return;
 
         boolean copyOK = false;

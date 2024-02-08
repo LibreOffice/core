@@ -579,7 +579,7 @@ Event& Entity::getEvent( CallbackType aType )
 OUString lclGetErrorMessage( xmlParserCtxtPtr ctxt, std::u16string_view sSystemId, sal_Int32 nLine )
 {
     const char* pMessage;
-    xmlErrorPtr error = xmlCtxtGetLastError( ctxt );
+    const xmlError* error = xmlCtxtGetLastError( ctxt );
     if( error && error->message )
         pMessage = error->message;
     else

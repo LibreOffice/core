@@ -344,6 +344,40 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
     return true;
 };
 
+// tdf#157816: try to check if the rectangle contains actual text
+::std::vector<SwRect> GetCursorRectsContainingText(SwCursorShell const& rShell)
+{
+    ::std::vector<SwRect> ret;
+    SwRects rects;
+    rShell.GetLayout()->CalcFrameRects(*rShell.GetCursor_(), rects, SwRootFrame::RectsMode::NoAnchoredFlys);
+    for (SwRect const& rRect : rects)
+    {
+        Point center(rRect.Center());
+        SwSpecialPos special;
+        SwCursorMoveState cms(CursorMoveState::NONE);
+        cms.m_pSpecialPos = &special;
+        cms.m_bFieldInfo = true;
+        SwPosition pos(rShell.GetDoc()->GetNodes());
+        auto const [pStart, pEnd] = rShell.GetCursor_()->StartEnd();
+        if (rShell.GetLayout()->GetModelPositionForViewPoint(&pos, center, &cms)
+            && *pStart <= pos && pos <= *pEnd)
+        {
+            SwRect charRect;
+            std::pair<Point, bool> const tmp(center, false);
+            SwContentFrame const*const pFrame(
+                pos.nNode.GetNode().GetTextNode()->getLayoutFrame(rShell.GetLayout(), &pos, &tmp));
+            if (pFrame->GetCharRect(charRect, pos, &cms, false)
+                && rRect.Overlaps(charRect))
+            {
+                ret.push_back(rRect);
+            }
+        }
+        // reset stupid static var that may have gotten set now
+        SwTextCursor::SetRightMargin(false); // WTF is this crap
+    }
+    return ret;
+}
+
 } // end namespace
 
 SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
@@ -1550,7 +1584,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             {
                 const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pFrame);
                 if (pFly->GetAnchorFrame()->FindFooterOrHeader() != nullptr
-                    || pFly->GetFrameFormat().GetAttrSet().Get(RES_DECORATIVE).GetValue())
+                    || pFly->GetFrameFormat()->GetAttrSet().Get(RES_DECORATIVE).GetValue())
                 {
                     nPDFType = vcl::PDFWriter::NonStructElement;
                 }
@@ -1620,6 +1654,20 @@ void SwTaggedPDFHelper::EndStructureElements()
     }
 
     CheckRestoreTag();
+}
+
+void SwTaggedPDFHelper::EndCurrentLink(OutputDevice const& rOut)
+{
+    vcl::PDFExtOutDevData *const pPDFExtOutDevData(
+        dynamic_cast<vcl::PDFExtOutDevData *>(rOut.GetExtOutDevData()));
+    if (pPDFExtOutDevData && pPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+    {
+        pPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
+        pPDFExtOutDevData->EndStructureElement();
+#if OSL_DEBUG_LEVEL > 1
+    aStructStack.pop_back();
+#endif
+    }
 }
 
 void SwTaggedPDFHelper::EndCurrentSpan()
@@ -1736,6 +1784,17 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case PortionType::SoftHyphenStr :
             nPDFType = vcl::PDFWriter::Span;
             aPDFType = aSpanString;
+            break;
+
+        case PortionType::Fly:
+            // if a link is split by a fly overlap, then there will be multiple
+            // annotations for the link, and hence there must be multiple SEs,
+            // so every annotation has its own SE.
+            if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+            {
+                mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
+                EndTag();
+            }
             break;
 
         case PortionType::Lay :
@@ -2062,8 +2121,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     // selection can be easily obtained:
                     // Note: We make a copy of the rectangles, because they may
                     // be deleted again in JumpToSwMark.
-                    SwRects aTmp;
-                    aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
+                    SwRects const aTmp(GetCursorRectsContainingText(mrSh));
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
                     OUString const altText(mrSh.GetSelText());
 
@@ -2294,8 +2352,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 mrSh.SwCursorShell::Right( 1, SwCursorSkipMode::Chars );
 
                 // Link Rectangles
-                SwRects aTmp;
-                aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
+                SwRects const aTmp(GetCursorRectsContainingText(mrSh));
                 OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
                 mrSh.SwCursorShell::ClearMark();
@@ -2668,7 +2725,10 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
                         }
                     }
                 }
-                mrSh.MovePara(GoNextPara, fnParaStart);
+                if (!mrSh.MovePara(GoNextPara, fnParaStart))
+                { // Cursor is stuck in the TOX due to document ending immediately afterwards
+                    break;
+                }
             }
         }
     }
@@ -2717,7 +2777,8 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             mrSh.SwCursorShell::Right(1, SwCursorSkipMode::Chars);
 
             // Create the links.
-            for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())
+            SwRects const rects(GetCursorRectsContainingText(mrSh));
+            for (const auto& rLinkRect : rects)
             {
                 for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
                 {
@@ -2767,7 +2828,8 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             mrSh.SwCursorShell::Right(1, SwCursorSkipMode::Chars);
 
             // Create the links.
-            for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())
+            SwRects const rects(GetCursorRectsContainingText(mrSh));
+            for (const auto& rLinkRect : rects)
             {
                 for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
                 {

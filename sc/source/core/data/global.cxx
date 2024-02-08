@@ -822,7 +822,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
 
     OUString aUrlName( rURL );
     SfxViewFrame* pFrame = nullptr;
-    const SfxObjectShell* pObjShell = nullptr;
+    SfxObjectShell* pObjShell = nullptr;
     OUString aReferName;
     if ( pScActiveViewShell )
     {
@@ -855,6 +855,9 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
         if (!aNewUrlName.isEmpty())
             aUrlName = aNewUrlName;
     }
+
+    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(aUrlName, pObjShell, pFrame ? pFrame->GetFrameWeld() : nullptr))
+        return;
 
     SfxStringItem aUrl( SID_FILE_NAME, aUrlName );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );

@@ -148,7 +148,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 _rAnchoredObj.RestartLayoutProcess() &&
                 !( _rAnchoredObj.PositionLocked() &&
                    _rAnchoredObj.GetAnchorFrame()->IsInFly() &&
-                   _rAnchoredObj.GetFrameFormat().GetFollowTextFlow().GetValue() );
+                   _rAnchoredObj.GetFrameFormat()->GetFollowTextFlow().GetValue() );
         if ( bRestart )
         {
             bSuccess = false;
@@ -168,7 +168,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         if ( bSuccess &&
              _rAnchoredObj.ConsiderObjWrapInfluenceOnObjPos() &&
              ( _bCheckForMovedFwd ||
-               _rAnchoredObj.GetFrameFormat().GetWrapInfluenceOnObjPos().
+               _rAnchoredObj.GetFrameFormat()->GetWrapInfluenceOnObjPos().
                     // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                     GetWrapInfluenceOnObjPos( true ) ==
                         // #i35017# - constant name has changed
@@ -481,10 +481,11 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
 
 void SwObjectFormatterTextFrame::InvalidatePrevObjs( SwAnchoredObject& _rAnchoredObj )
 {
+    const SwFrameFormat* pObjFormat = _rAnchoredObj.GetFrameFormat();
     // invalidate all previous objects, whose wrapping influence on the object
     // positioning is <NONE_CONCURRENT_POSITIONED>.
     // Note: list of objects at anchor frame is sorted by this property.
-    if ( _rAnchoredObj.GetFrameFormat().GetWrapInfluenceOnObjPos().
+    if (pObjFormat->GetWrapInfluenceOnObjPos().
                 // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                 GetWrapInfluenceOnObjPos( true ) !=
                             // #i35017# - constant name has changed
@@ -501,7 +502,7 @@ void SwObjectFormatterTextFrame::InvalidatePrevObjs( SwAnchoredObject& _rAnchore
     {
         --i;
         SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-        if ( pAnchoredObj->GetFrameFormat().GetWrapInfluenceOnObjPos().
+        if (pObjFormat->GetWrapInfluenceOnObjPos().
                 // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                 GetWrapInfluenceOnObjPos( true ) ==
                     // #i35017# - constant name has changed
@@ -546,7 +547,7 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
     {
         SwAnchoredObject* pAnchoredObj = GetCollectedObj(i);
         if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() &&
-             pAnchoredObj->GetFrameFormat().GetWrapInfluenceOnObjPos().
+             pAnchoredObj->GetFrameFormat()->GetWrapInfluenceOnObjPos().
                     // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                     GetWrapInfluenceOnObjPos( true ) == _nWrapInfluenceOnPosition )
         {
@@ -648,8 +649,8 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
     // which will be on the next page.
     if ( !bAnchorIsMovedForward &&
          _bAnchoredAtMasterBeforeFormatAnchor &&
-        ((_rAnchoredObj.GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
-         (_rAnchoredObj.GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA)))
+        ((_rAnchoredObj.GetFrameFormat()->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
+         (_rAnchoredObj.GetFrameFormat()->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA)))
     {
         SwFrame* pAnchorFrame = _rAnchoredObj.GetAnchorFrameContainingAnchPos();
         OSL_ENSURE( pAnchorFrame->IsTextFrame(),
@@ -703,7 +704,7 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                 if ((pObjAnchorPage == &rFromPageFrame
                         ? _boInFollow // same-page but will move forward
                         : rFromPageFrame.GetPhyPageNum() < pObjAnchorPage->GetPhyPageNum())
-                    && pObj->GetFrameFormat().GetAnchor().GetAnchorId()
+                    && pObj->GetFrameFormat()->GetAnchor().GetAnchorId()
                         != RndStdIds::FLY_AS_CHAR)
                 {
                     if (pPageFrameOfAnchor->GetPhyPageNum() < pObjAnchorPage->GetPhyPageNum())

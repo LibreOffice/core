@@ -111,8 +111,6 @@ namespace sfx2
 
     bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature )
     {
-        sal_uInt16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
-
         if ( SvtSecurityOptions::IsMacroDisabled() )
         {
             // no macro should be executed at all
@@ -128,6 +126,7 @@ namespace sfx2
         };
         AutoConfirmation eAutoConfirm( eNoAutoConfirm );
 
+        sal_Int16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
         if  (   ( nMacroExecutionMode == MacroExecMode::USE_CONFIG )
             ||  ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
             ||  ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
@@ -141,16 +140,16 @@ namespace sfx2
 
             switch ( SvtSecurityOptions::GetMacroSecurityLevel() )
             {
-                case 3:
+                case 3: // "Very high"
                     nMacroExecutionMode = MacroExecMode::FROM_LIST_NO_WARN;
                     break;
-                case 2:
+                case 2: // "High"
                     nMacroExecutionMode = MacroExecMode::FROM_LIST_AND_SIGNED_WARN;
                     break;
-                case 1:
+                case 1: // "Medium"
                     nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE;
                     break;
-                case 0:
+                case 0: // "Low"
                     nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
                     break;
                 default:
@@ -160,11 +159,12 @@ namespace sfx2
         }
 
         if ( nMacroExecutionMode == MacroExecMode::NEVER_EXECUTE )
-            return false;
+            return disallowMacroExecution();
 
         if ( nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
-            return true;
+            return allowMacroExecution();
 
+        SignatureState nSignatureState = SignatureState::UNKNOWN;
         const OUString sURL(m_xData->m_rDocumentAccess.getDocumentLocation());
         try
         {
@@ -173,9 +173,7 @@ namespace sfx2
             Reference< XDocumentDigitalSignatures > xSignatures(DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
             INetURLObject aURLReferer(sURL);
 
-            OUString aLocation;
-            if ( aURLReferer.removeSegment() )
-                aLocation = aURLReferer.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+            OUString aLocation = aURLReferer.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             if ( !aLocation.isEmpty() && xSignatures->isLocationTrusted( aLocation ) )
             {
@@ -191,26 +189,39 @@ namespace sfx2
             // check whether the document is signed with trusted certificate
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
-                // the trusted macro check will also retrieve the signature state ( small optimization )
-                const bool bAllowUIToAddAuthor = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
-                                                 && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
-                                                     || !SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors));
-                const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUIToAddAuthor);
+                nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
 
-                SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
-                if ( nSignatureState == SignatureState::BROKEN )
+                if (!bHasValidContentSignature
+                    && (nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
+                        || nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN)
+                    && m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
                 {
+                    // When macros are required to be signed, and the document has events which call
+                    // macros, the document content needs to be signed, too. Do it here, and avoid
+                    // possible UI asking to always trust certificates, after which the user's choice
+                    // to allow macros would be ignored anyway.
+                    m_xData->m_bHasUnsignedContentError
+                        = nSignatureState == SignatureState::OK
+                          || nSignatureState == SignatureState::NOTVALIDATED;
                     return disallowMacroExecution();
                 }
-                else if ( m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading() &&
-                          bHasTrustedMacroSignature &&
-                          !bHasValidContentSignature)
-                {
-                    // When macros are signed, and the document has events which call macros, the document content needs to be signed too.
-                    m_xData->m_bHasUnsignedContentError = true;
-                    return disallowMacroExecution();
-                }
-                else if ( bHasTrustedMacroSignature )
+
+                // At this point, the possible values of nMacroExecutionMode are: ALWAYS_EXECUTE,
+                // FROM_LIST_AND_SIGNED_WARN (the default), FROM_LIST_AND_SIGNED_NO_WARN.
+                // ALWAYS_EXECUTE corresponds to the Medium security level; it should ask for
+                // confirmation when macros are unsigned or untrusted. FROM_LIST_AND_SIGNED_NO_WARN
+                // should not ask any confirmations. FROM_LIST_AND_SIGNED_WARN should only allow
+                // trusted signed macros at this point; so it may only ask for confirmation to add
+                // certificates to trusted, and shouldn't show UI when trusted list is read-only.
+                const bool bAllowUI
+                    = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
+                      && eAutoConfirm == eNoAutoConfirm
+                      && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
+                          || !SvtSecurityOptions::IsReadOnly(
+                              SvtSecurityOptions::EOption::MacroTrustedAuthors));
+                const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUI ? rxInteraction : nullptr);
+
+                if (bHasTrustedMacroSignature)
                 {
                     // there is trusted macro signature, allow macro execution
                     return allowMacroExecution();
@@ -219,27 +230,35 @@ namespace sfx2
                        || nSignatureState == SignatureState::NOTVALIDATED )
                 {
                     // there is valid signature, but it is not from the trusted author
-                    return disallowMacroExecution();
+                    if (eAutoConfirm == eAutoConfirmApprove
+                        && nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE)
+                    {
+                        // For ALWAYS_EXECUTE + eAutoConfirmApprove (USE_CONFIG_APPROVE_CONFIRMATION
+                        // in Medium security mode), do not approve it right here; let Security Zone
+                        // check below do its job first.
+                    }
+                    else
+                    {
+                        // All other cases of valid but untrusted signatures should result in denied
+                        // macros here. This includes explicit reject from user in the UI in cases
+                        // of FROM_LIST_AND_SIGNED_WARN and ALWAYS_EXECUTE
+                        return disallowMacroExecution();
+                    }
                 }
-            }
-
-            // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
-            if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                )
-            {
-                return disallowMacroExecution();
+                // Other values of nSignatureState would result in either rejected macros
+                // (FROM_LIST_AND_SIGNED_*), or a confirmation.
             }
         }
         catch ( const Exception& )
         {
-            if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
-                ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                )
-            {
-                return disallowMacroExecution();
-            }
+            DBG_UNHANDLED_EXCEPTION("sfx.doc");
+        }
+
+        // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
+        if ((nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN)
+            || (nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN))
+        {
+            return disallowMacroExecution();
         }
 
 #if defined(_WIN32)
@@ -249,9 +268,9 @@ namespace sfx2
         osl::FileBase::getSystemPathFromFileURL(sURL, sFilePath);
         sal::systools::COMReference<IZoneIdentifier> pZoneId;
         pZoneId.CoCreateInstance(CLSID_PersistentZoneIdentifier);
-        sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY_THROW);
+        sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY);
         DWORD dwZone;
-        if (!SUCCEEDED(pPersist->Load(o3tl::toW(sFilePath.getStr()), STGM_READ)) ||
+        if (!pPersist || !SUCCEEDED(pPersist->Load(o3tl::toW(sFilePath.getStr()), STGM_READ)) ||
             !SUCCEEDED(pZoneId->GetId(&dwZone)))
         {
             // no Security Zone info found -> assume a local file, not
@@ -289,7 +308,10 @@ namespace sfx2
             case 0: // Ask
                 break;
             case 1: // Allow
-                return allowMacroExecution();
+                if (nSignatureState != SignatureState::BROKEN
+                    && nSignatureState != SignatureState::INVALID)
+                    return allowMacroExecution();
+                break;
             case 2: // Deny
                 return disallowMacroExecution();
         }
@@ -300,10 +322,7 @@ namespace sfx2
         if ( eAutoConfirm == eNoAutoConfirm )
         {
             OUString sReferrer(sURL);
-
-            OUString aSystemFileURL;
-            if ( osl::FileBase::getSystemPathFromFileURL( sReferrer, aSystemFileURL ) == osl::FileBase::E_None )
-                sReferrer = aSystemFileURL;
+            osl::FileBase::getSystemPathFromFileURL(sReferrer, sReferrer);
 
             bSecure = lcl_showMacroWarning( rxInteraction, sReferrer );
         }
@@ -415,8 +434,12 @@ namespace sfx2
         return bHasMacros;
     }
 
+    bool DocumentMacroMode::hasMacros() const
+    {
+        return m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() || m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading();
+    }
 
-    bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature )
+    bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature, bool bHasMacros )
     {
         bool bAllow = false;
         if ( SvtSecurityOptions::IsMacroDisabled() )
@@ -426,7 +449,7 @@ namespace sfx2
         }
         else
         {
-            if (m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() || m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
+            if (bHasMacros)
             {
                 bAllow = adjustMacroMode( rxInteraction, bHasValidContentSignature );
             }

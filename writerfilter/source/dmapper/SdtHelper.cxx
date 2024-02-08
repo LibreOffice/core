@@ -387,7 +387,7 @@ void SdtHelper::createDateContentControl()
         // tdf#138093: Date selector reset, if placed inside table
         // Modified to XOR relationship and adding dummy paragraph conditions
         bool bIsInTable = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
-                              != (m_rDM_Impl.m_nTableDepth > 0)
+                              != (0 < m_rDM_Impl.m_StreamStateStack.top().nTableDepth)
                           && m_rDM_Impl.GetIsDummyParaAddedForTableInSection();
         if (bIsInTable)
             xCrsr->goRight(1, false);

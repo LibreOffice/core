@@ -272,6 +272,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     bool m_bIsHighlightCharDF = false;
 
+    bool m_bDying = false;
+
     static constexpr sal_uInt16 MAX_ZOOM_PERCENT = 600;
     static constexpr sal_uInt16 MIN_ZOOM_PERCENT = 20;
 
@@ -352,6 +354,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
 public: // #i123922# Needs to be called from a 2nd place now as a helper method
     SAL_DLLPRIVATE bool          InsertGraphicDlg( SfxRequest& );
+    void            SetFormShell( FmFormShell* pSh )    { m_pFormShell = pSh; }
+    virtual void    SelectShell();
 
 protected:
 
@@ -364,9 +368,6 @@ protected:
 
     // for SwWebView
     void            SetShell( SfxShell* pS )            { m_pShell = pS; }
-    void            SetFormShell( FmFormShell* pSh )    { m_pFormShell = pSh; }
-
-    virtual void    SelectShell();
 
     virtual void    Activate(bool) override;
     virtual void    Deactivate(bool) override;
@@ -622,6 +623,8 @@ public:
 
     SwView(SfxViewFrame& rFrame, SfxViewShell*);
     virtual ~SwView() override;
+
+    void SetDying() override;
 
     void NotifyDBChanged();
 

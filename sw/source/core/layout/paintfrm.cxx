@@ -2902,18 +2902,20 @@ void SwTabFramePainter::InsertFollowTopBorder(const SwFrame& rFrame, const SvxBo
     }
 
     const SwFrame* pLastCell = pLastRow->GetLower();
+    if (!pLastCell)
+    {
+        return;
+    }
+
     for (int i = 0; i < nCol; ++i)
     {
-        if (!pLastCell)
+        if (!pLastCell->GetNext())
         {
+            // Reference row has merged cells, work with the last possible one.
             break;
         }
 
         pLastCell = pLastCell->GetNext();
-    }
-    if (!pLastCell)
-    {
-        return;
     }
 
     SwBorderAttrAccess aAccess(SwFrame::GetCache(), pLastCell);
@@ -2975,18 +2977,20 @@ void SwTabFramePainter::InsertMasterBottomBorder(const SwFrame& rFrame, const Sv
     }
 
     const SwFrame* pFirstCell = pFirstRow->GetLower();
+    if (!pFirstCell)
+    {
+        return;
+    }
+
     for (int i = 0; i < nCol; ++i)
     {
-        if (!pFirstCell)
+        if (!pFirstCell->GetNext())
         {
+            // Reference row has merged cells, work with the last possible one.
             break;
         }
 
         pFirstCell = pFirstCell->GetNext();
-    }
-    if (!pFirstCell)
-    {
-        return;
     }
 
     SwBorderAttrAccess aAccess(SwFrame::GetCache(), pFirstCell);

@@ -641,6 +641,9 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
         // is called below (s. tdf#122053)
         if (!pEvent->spontaneous())
         {
+            // accept event so shortcut action (from menu) isn't triggered in addition
+            // to the processing for the spontaneous event further below
+            pEvent->accept();
             return false;
         }
 

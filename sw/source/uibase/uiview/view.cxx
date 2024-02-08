@@ -254,7 +254,8 @@ void SwView::SelectShell()
 {
     // Attention: Maintain the SelectShell for the WebView additionally
 
-    if(m_bInDtor)
+    // In case of m_bDying, our SfxShells are already gone, don't try to select a shell at all.
+    if(m_bInDtor || m_bDying)
         return;
 
     // Decision if the UpdateTable has to be called
@@ -1176,6 +1177,11 @@ SwView::~SwView()
     m_pEditWin.disposeAndClear();
 
     m_pFormatClipboard.reset();
+}
+
+void SwView::SetDying()
+{
+    m_bDying = true;
 }
 
 void SwView::afterCallbackRegistered()

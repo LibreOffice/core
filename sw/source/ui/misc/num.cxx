@@ -81,6 +81,10 @@ SwNumPositionTabPage::SwNumPositionTabPage(weld::Container* pPage, weld::DialogC
 {
     SetExchangeSupport();
 
+    m_xAlignedAtMF->set_range(0, SAL_MAX_INT32, FieldUnit::NONE);
+    m_xListtabMF->set_range(0, SAL_MAX_INT32, FieldUnit::NONE);
+    m_xIndentAtMF->set_range(0, SAL_MAX_INT32, FieldUnit::NONE);
+
     m_xLevelLB->set_selection_mode(SelectionMode::Multiple);
 
     m_xRelativeCB->set_active(true);
@@ -494,9 +498,6 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     m_xDistBorderMF->set_max(m_xDistBorderMF->normalize( nWidth ), FieldUnit::TWIP );
     m_xDistNumMF->set_max(m_xDistNumMF->normalize( nWidth ), FieldUnit::TWIP);
     m_xIndentMF->set_max(m_xIndentMF->normalize( nWidth ), FieldUnit::TWIP );
-    m_xListtabMF->set_max(m_xListtabMF->normalize( nWidth ), FieldUnit::TWIP );
-    m_xAlignedAtMF->set_max(m_xAlignedAtMF->normalize( nWidth ), FieldUnit::TWIP );
-    m_xIndentAtMF->set_max(m_xIndentAtMF->normalize( nWidth ), FieldUnit::TWIP );
 
     const SwRect& rPrtRect = m_pWrtSh->GetAnyCurRect(CurRectType::Page);
     m_aPreviewWIN.SetPageWidth(rPrtRect.Width());

@@ -1673,7 +1673,7 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
                 assert(pAnchorPage);
                 if (pAnchorPage != pPage
                     && pPage->GetPhyPageNum() < pAnchorPage->GetPhyPageNum()
-                    && pObj->GetFrameFormat().GetAnchor().GetAnchorId()
+                    && pObj->GetFrameFormat()->GetAnchor().GetAnchorId()
                         != RndStdIds::FLY_AS_CHAR)
                 {
                     moved.emplace_back(pObj, pAnchorPage);
@@ -2185,7 +2185,7 @@ bool SwLayIdle::isJobEnabled(IdleJobType eJob, const SwViewShell* pViewShell)
         case IdleJobType::SMART_TAGS:
         {
             const SwDoc* pDoc = pViewShell->GetDoc();
-            if (!pDoc->GetDocShell()->IsHelpDocument() || pDoc->isXForms() || !SwSmartTagMgr::Get().IsSmartTagsEnabled())
+            if (pDoc->GetDocShell()->IsHelpDocument() || pDoc->isXForms() || !SwSmartTagMgr::Get().IsSmartTagsEnabled())
                 return false;
             return true;
         }

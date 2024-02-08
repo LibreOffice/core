@@ -41,6 +41,17 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 
 
+static void ChangeTypeKeepingValue(SbxVariable& var, SbxDataType to)
+{
+    SbxValues val(to);
+    var.Get(val);
+    bool bSetFlag = var.IsSet(SbxFlagBits::Fixed);
+    var.ResetFlag(SbxFlagBits::Fixed);
+    var.Put(val);
+    if (bSetFlag)
+        var.SetFlag(SbxFlagBits::Fixed);
+}
+
 namespace basprov
 {
 
@@ -218,14 +229,14 @@ constexpr OUStringLiteral BASSCRIPT_PROPERTY_CALLER = u"Caller";
                             {
                                 sal_Int32 val = xSbxVar->GetLong();
                                 if (val >= -16777216 && val <= 16777215)
-                                    xSbxVar->SetType(t);
+                                    ChangeTypeKeepingValue(*xSbxVar, t);
                             }
                             else if (t == SbxDOUBLE && (a == SbxINTEGER || a == SbxLONG))
-                                xSbxVar->SetType(t);
+                                ChangeTypeKeepingValue(*xSbxVar, t);
                             else if (t == SbxLONG && a == SbxINTEGER)
-                                xSbxVar->SetType(t);
+                                ChangeTypeKeepingValue(*xSbxVar, t);
                             else if (t == SbxULONG && a == SbxUSHORT)
-                                xSbxVar->SetType(t);
+                                ChangeTypeKeepingValue(*xSbxVar, t);
                             // Enable passing by ref
                             if (t != SbxVARIANT)
                                 xSbxVar->SetFlag(SbxFlagBits::Fixed);

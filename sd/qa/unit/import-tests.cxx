@@ -34,6 +34,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
@@ -201,6 +202,75 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
             }
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTableStyle)
+{
+    createSdImpressDoc("pptx/tdf156718.pptx");
+    const SdrPage* pPage = GetPage(1);
+
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj);
+
+    uno::Reference<table::XCellRange> xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCellPropSet;
+    uno::Reference<beans::XPropertySet> xRunPropSet;
+    uno::Reference<text::XTextRange> xParagraph;
+    uno::Reference<text::XTextRange> xRun;
+    table::BorderLine2 aBorderLine;
+    Color nFillColor, nCharColor;
+    float nFontWeight;
+
+    xCellPropSet.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xParagraph.set(getParagraphFromShape(0, xCellPropSet));
+    xRun.set(getRunFromParagraph(0, xParagraph));
+    xRunPropSet.set(xRun, uno::UNO_QUERY_THROW);
+    xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
+    xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The bottom border is missing!", true, aBorderLine.LineWidth > 0);
+
+    xCellPropSet.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
+    xParagraph.set(getParagraphFromShape(0, xCellPropSet));
+    xRun.set(getRunFromParagraph(0, xParagraph));
+    xRunPropSet.set(xRun, uno::UNO_QUERY_THROW);
+    xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
+
+    xCellPropSet.set(xTable->getCellByPosition(2, 0), uno::UNO_QUERY_THROW);
+    xParagraph.set(getParagraphFromShape(0, xCellPropSet));
+    xRun.set(getRunFromParagraph(0, xParagraph));
+    xRunPropSet.set(xRun, uno::UNO_QUERY_THROW);
+    xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
+
+    xCellPropSet.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
+    xParagraph.set(getParagraphFromShape(0, xCellPropSet));
+    xRun.set(getRunFromParagraph(0, xParagraph));
+    xRunPropSet.set(xRun, uno::UNO_QUERY_THROW);
+    xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
+    xCellPropSet->getPropertyValue("FillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
+    CPPUNIT_ASSERT_EQUAL(Color(0x5b9bd5), nFillColor);
+
+    xCellPropSet.set(xTable->getCellByPosition(2, 1), uno::UNO_QUERY_THROW);
+    xParagraph.set(getParagraphFromShape(0, xCellPropSet));
+    xRun.set(getRunFromParagraph(0, xParagraph));
+    xRunPropSet.set(xRun, uno::UNO_QUERY_THROW);
+    xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
+    xCellPropSet->getPropertyValue("FillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
+    CPPUNIT_ASSERT_EQUAL(Color(0x5b9bd5), nFillColor);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testFreeformShapeGluePoints)

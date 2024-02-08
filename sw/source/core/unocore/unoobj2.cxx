@@ -121,9 +121,9 @@ struct FrameClientSortListLess
             return;
         for(const auto pAnchoredObj : *pObjs)
         {
-            SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
+            SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
             // Filter out textboxes, which are not interesting at a UNO level.
-            if(SwTextBoxHelper::isTextBox(&rFormat, RES_FLYFRMFMT))
+            if(SwTextBoxHelper::isTextBox(pFormat, RES_FLYFRMFMT))
                 continue;
 
             if (nAnchorType == RndStdIds::FLY_AT_PARA)
@@ -141,11 +141,11 @@ struct FrameClientSortListLess
                 }
             }
 
-            if(rFormat.GetAnchor().GetAnchorId() == nAnchorType)
+            if(pFormat->GetAnchor().GetAnchorId() == nAnchorType)
             {
-                const sal_Int32 nIdx = rFormat.GetAnchor().GetAnchorContentOffset();
-                const auto nOrder = rFormat.GetAnchor().GetOrder();
-                rFrames.emplace_back(nIdx, nOrder, std::make_unique<sw::FrameClient>(&rFormat));
+                const sal_Int32 nIdx = pFormat->GetAnchor().GetAnchorContentOffset();
+                const auto nOrder = pFormat->GetAnchor().GetOrder();
+                rFrames.emplace_back(nIdx, nOrder, std::make_unique<sw::FrameClient>(pFormat));
             }
         }
     }

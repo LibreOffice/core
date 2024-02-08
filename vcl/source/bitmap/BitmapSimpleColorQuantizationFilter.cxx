@@ -19,7 +19,7 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
 {
     Bitmap aBitmap = aBitmapEx.GetBitmap();
 
-    if (vcl::numberOfColors(aBitmap.getPixelFormat()) > sal_Int64(mnNewColorCount))
+    if (vcl::numberOfColors(aBitmap.getPixelFormat()) <= sal_Int64(mnNewColorCount))
         return BitmapEx(aBitmap);
 
     Bitmap aNewBmp;

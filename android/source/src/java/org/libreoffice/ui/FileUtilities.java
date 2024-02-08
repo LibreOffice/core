@@ -124,6 +124,11 @@ public class FileUtilities {
         return mimeType != null && mimeType.endsWith("template");
     }
 
+    public static String stripExtensionFromFileName(final String fileName)
+    {
+        return fileName.split("\\.[A-Za-z0-9]*$")[0];
+    }
+
     /**
      * Tries to retrieve the display (which should be the document name)
      * for the given URI using the given resolver.

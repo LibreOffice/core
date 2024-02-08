@@ -292,10 +292,7 @@ struct PDFReader
 {
     PDFReader() = delete;
 
-    static std::unique_ptr<PDFEntry> read( const char* pFileName );
-#ifdef _WIN32
-    static std::unique_ptr<PDFEntry> read( const char* pBuffer, unsigned int nLen );
-#endif
+    static std::unique_ptr<PDFEntry> read(std::u16string_view aFileName);
 };
 
 } // namespace

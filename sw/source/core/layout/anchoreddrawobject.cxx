@@ -214,13 +214,13 @@ SwAnchoredDrawObject::~SwAnchoredDrawObject()
 // --> #i62875#
 void SwAnchoredDrawObject::UpdateLayoutDir()
 {
-    SwFrameFormat::tLayoutDir nOldLayoutDir( GetFrameFormat().GetLayoutDir() );
+    SwFrameFormat::tLayoutDir nOldLayoutDir( GetFrameFormat()->GetLayoutDir() );
 
     SwAnchoredObject::UpdateLayoutDir();
 
     if ( !NotYetPositioned() &&
-         GetFrameFormat().GetLayoutDir() != nOldLayoutDir &&
-         GetFrameFormat().GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
+         GetFrameFormat()->GetLayoutDir() != nOldLayoutDir &&
+         GetFrameFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          !IsOutsidePage() )
     {
         mbCaptureAfterLayoutDirChange = true;
@@ -284,7 +284,7 @@ void SwAnchoredDrawObject::MakeObjPos()
         // #i44334#, #i44681# - check, if positioning
         // attributes already have been set.
         if ( dynamic_cast< const SwDrawVirtObj* >(GetDrawObj()) ==  nullptr &&
-             !static_cast<SwDrawFrameFormat&>(GetFrameFormat()).IsPosAttrSet() )
+             !static_cast<SwDrawFrameFormat*>(GetFrameFormat())->IsPosAttrSet() )
         {
             SetPositioningAttr();
         }
@@ -395,7 +395,7 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
 
     // Format of anchor is needed for (vertical) fly offsets, otherwise the
     // lack of fly portions will result in an incorrect 0 offset.
-    bool bAddVerticalFlyOffsets = GetFrameFormat().getIDocumentSettingAccess().get(
+    bool bAddVerticalFlyOffsets = GetFrameFormat()->getIDocumentSettingAccess().get(
         DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
     bool bFormatAnchorOnce = !bJoinLocked && bAddVerticalFlyOffsets;
 
@@ -518,11 +518,12 @@ void SwAnchoredDrawObject::SetDrawObjAnchor()
         // correct object position, caused by setting new anchor position
         DrawObj()->Move( aMove );
         // Sync textbox if it wasn't done at move
-        if ( SwTextBoxHelper::isTextBox(&GetFrameFormat(), RES_DRAWFRMFMT) && GetFrameFormat().GetDoc() &&
-            GetFrameFormat().GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() &&
-            GetFrameFormat().GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor())
+        SwFrameFormat* pObjFormat = GetFrameFormat();
+        if ( SwTextBoxHelper::isTextBox(pObjFormat, RES_DRAWFRMFMT) && pObjFormat->GetDoc() &&
+            pObjFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() &&
+            pObjFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor())
         {
-            SwTextBoxHelper::changeAnchor(&GetFrameFormat(), GetFrameFormat().FindRealSdrObject());
+            SwTextBoxHelper::changeAnchor(pObjFormat, pObjFormat->FindRealSdrObject());
         }
         // --> #i70122# - missing invalidation
         InvalidateObjRectWithSpaces();
@@ -543,7 +544,7 @@ void SwAnchoredDrawObject::InvalidatePage_( SwPageFrame* _pPageFrame )
 
     // --> #i35007# - correct invalidation for as-character
     // anchored objects.
-    if ( GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR )
+    if ( GetFrameFormat()->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR )
     {
         _pPageFrame->InvalidateFlyInCnt();
     }
@@ -582,13 +583,14 @@ void SwAnchoredDrawObject::InvalidateObjPos()
     // anchored object, because its positioned by the format of its anchor frame.
     // --> #i44559# - assure, that text hint is already
     // existing in the text frame
+    const SwFrameFormat* pObjFormat = GetFrameFormat();
     if ( GetAnchorFrame()->DynCastTextFrame() != nullptr &&
-         (GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
+         (pObjFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
     {
         SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
-        if (pAnchorTextFrame->CalcFlyPos(&GetFrameFormat()) != TextFrameIndex(COMPLETE_STRING))
+        if (pAnchorTextFrame->CalcFlyPos(pObjFormat) != TextFrameIndex(COMPLETE_STRING))
         {
-            AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, &GetFrameFormat() );
+            AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, pObjFormat);
         }
     }
 
@@ -615,15 +617,17 @@ void SwAnchoredDrawObject::InvalidateObjPos()
     }
 }
 
-SwFrameFormat& SwAnchoredDrawObject::GetFrameFormat()
+SwFrameFormat* SwAnchoredDrawObject::GetFrameFormat()
 {
-    assert(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
-    return *(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
+    if (SwDrawContact* pDC = static_cast<SwDrawContact*>(GetUserCall(GetDrawObj())))
+        return pDC->GetFormat();
+    return nullptr;
 }
-const SwFrameFormat& SwAnchoredDrawObject::GetFrameFormat() const
+const SwFrameFormat* SwAnchoredDrawObject::GetFrameFormat() const
 {
-    assert(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
-    return *(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFormat());
+    if (SwDrawContact* pDC = static_cast<SwDrawContact*>(GetUserCall(GetDrawObj())))
+        return pDC->GetFormat();
+    return nullptr;
 }
 
 SwRect SwAnchoredDrawObject::GetObjRect() const
@@ -807,10 +811,11 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrame* _pNewAnchorFram
 
     SwFormatHoriOrient hori(nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME);
     SwFormatVertOrient vert(nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME);
-    SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> items(GetFrameFormat().GetDoc()->GetAttrPool());
+    SwFrameFormat* pObjFormat = GetFrameFormat();
+    SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> items(pObjFormat->GetDoc()->GetAttrPool());
     items.Put(hori);
     items.Put(vert);
-    GetFrameFormat().GetDoc()->SetAttr(items, GetFrameFormat());
+    pObjFormat->GetDoc()->SetAttr(items, *pObjFormat);
 }
 
 // --> #i34748# - change return type.
@@ -845,6 +850,7 @@ void SwAnchoredDrawObject::SetPositioningAttr()
     SwDrawContact* pDrawContact =
                         static_cast<SwDrawContact*>(GetUserCall( GetDrawObj() ));
 
+    SwFrameFormat* pObjFormat = GetFrameFormat();
     if ( !pDrawContact->ObjAnchoredAsChar() )
     {
         SwRect aObjRect( GetObjRect() );
@@ -853,10 +859,10 @@ void SwAnchoredDrawObject::SetPositioningAttr()
         SwTwips nVertPos = aObjRect.Top();
         // #i44334#, #i44681#
         // perform conversion only if position is in horizontal-left-to-right-layout.
-        if ( GetFrameFormat().GetPositionLayoutDir() ==
+        if (pObjFormat->GetPositionLayoutDir() ==
                 text::PositionLayoutDir::PositionInHoriL2R )
         {
-            SwFrameFormat::tLayoutDir eLayoutDir = GetFrameFormat().GetLayoutDir();
+            SwFrameFormat::tLayoutDir eLayoutDir = pObjFormat->GetLayoutDir();
             switch ( eLayoutDir )
             {
                 case SwFrameFormat::HORI_L2R:
@@ -885,28 +891,28 @@ void SwAnchoredDrawObject::SetPositioningAttr()
         // --> #i71182#
         // only change position - do not lose other attributes
 
-        SwFormatHoriOrient aHori( GetFrameFormat().GetHoriOrient() );
+        SwFormatHoriOrient aHori(pObjFormat->GetHoriOrient());
         if (nHoriPos != aHori.GetPos()) {
             aHori.SetPos( nHoriPos );
             InvalidateObjRectWithSpaces();
-            GetFrameFormat().SetFormatAttr( aHori );
+            pObjFormat->SetFormatAttr(aHori);
         }
 
-        SwFormatVertOrient aVert( GetFrameFormat().GetVertOrient() );
+        SwFormatVertOrient aVert(pObjFormat->GetVertOrient());
         if (nVertPos != aVert.GetPos()) {
             aVert.SetPos( nVertPos );
             InvalidateObjRectWithSpaces();
-            GetFrameFormat().SetFormatAttr( aVert );
+            pObjFormat->SetFormatAttr(aVert);
         }
 
         // --> #i36010# - set layout direction of the position
-        GetFrameFormat().SetPositionLayoutDir(
+        pObjFormat->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
     }
     // --> #i65798# - also for as-character anchored objects
     // --> #i45952# - indicate that position
     // attributes are set now.
-    static_cast<SwDrawFrameFormat&>(GetFrameFormat()).PosAttrSet();
+    static_cast<SwDrawFrameFormat*>(pObjFormat)->PosAttrSet();
 }
 
 void SwAnchoredDrawObject::NotifyBackground( SwPageFrame* _pPageFrame,

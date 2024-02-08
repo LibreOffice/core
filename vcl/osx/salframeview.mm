@@ -194,6 +194,21 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
     return pRet;
 }
 
+// Update ImplGetSVData()->mpWinData->mbIsLiveResize
+static void updateWinDataInLiveResize(bool bInLiveResize)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    assert( pSVData );
+    if ( pSVData )
+    {
+        if ( pSVData->mpWinData->mbIsLiveResize != bInLiveResize )
+        {
+            pSVData->mpWinData->mbIsLiveResize = bInLiveResize;
+            Scheduler::Wakeup();
+        }
+    }
+}
+
 @interface NSResponder (SalFrameWindow)
 -(BOOL)accessibilityIsIgnored;
 @end
@@ -202,7 +217,6 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
     mDraggingDestinationHandler = nil;
-    mbInLiveResize = NO;
     mbInWindowDidResize = NO;
     mpLiveResizeTimer = nil;
     mpFrame = pFrame;
@@ -384,23 +398,9 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Resize, nullptr );
 
-        bool bInLiveResize = [self inLiveResize];
-        ImplSVData* pSVData = ImplGetSVData();
-        assert( pSVData );
-        if ( pSVData )
+        updateWinDataInLiveResize( [self inLiveResize] );
+        if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
         {
-            const bool bWasLiveResize = pSVData->mpWinData->mbIsLiveResize;
-            if ( bWasLiveResize != bInLiveResize )
-            {
-                pSVData->mpWinData->mbIsLiveResize = bInLiveResize;
-                Scheduler::Wakeup();
-            }
-        }
-
-        if ( bInLiveResize || mbInLiveResize )
-        {
-            mbInLiveResize = bInLiveResize;
-
 #if HAVE_FEATURE_SKIA
             // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
             // The window will clear its background so when Skia/Metal is
@@ -439,7 +439,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
             [self setMinSize:aMinSize];
             [self setMaxSize:aMaxSize];
 
-            if ( mbInLiveResize )
+            if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
             {
                 // tdf#152703 Force repaint after live resizing ends
                 // Repost this notification so that this selector will be called
@@ -463,8 +463,12 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
         else
         {
             [self clearLiveResizeTimer];
-            mpFrame->SendPaintEvent();
         }
+
+        // tdf#158461 eliminate flicker during live resizing
+        // When using Skia/Metal, the window content will flicker while
+        // live resizing a window if we don't send a paint event.
+        mpFrame->SendPaintEvent();
     }
 
     mbInWindowDidResize = NO;
@@ -558,6 +562,20 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
         }
     }
 #endif
+}
+
+-(void)windowWillStartLiveResize:(NSNotification *)pNotification
+{
+    SolarMutexGuard aGuard;
+
+    updateWinDataInLiveResize(true);
+}
+
+-(void)windowDidEndLiveResize:(NSNotification *)pNotification
+{
+    SolarMutexGuard aGuard;
+
+    updateWinDataInLiveResize(false);
 }
 
 -(void)dockMenuItemTriggered: (id)sender
@@ -761,13 +779,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
     if (!mpFrame || !AquaSalFrame::isAlive(mpFrame))
         return;
 
-    const bool bIsLiveResize = [self inLiveResize];
-    const bool bWasLiveResize = pSVData->mpWinData->mbIsLiveResize;
-    if (bWasLiveResize != bIsLiveResize)
-    {
-        pSVData->mpWinData->mbIsLiveResize = bIsLiveResize;
-        Scheduler::Wakeup();
-    }
+    updateWinDataInLiveResize([self inLiveResize]);
 
     AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
     if (pGraphics)
@@ -859,6 +871,10 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
             aEvent.mnX = pDispatchFrame->maGeometry.width() - 1 - aEvent.mnX;
 
         pDispatchFrame->CallCallback( nEvent, &aEvent );
+
+        // tdf#155266 force flush after scrolling
+        if (nButton == MOUSE_LEFT && nEvent == SalEvent::MouseMove)
+            mpFrame->mbForceFlush = true;
     }
 }
 
@@ -1077,7 +1093,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
 
         if( dX != 0.0 )
         {
-            aEvent.mnDelta = static_cast<tools::Long>(floor(dX));
+            aEvent.mnDelta = static_cast<tools::Long>(dX < 0 ? floor(dX) : ceil(dX));
             aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -1087,7 +1103,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ))
         {
-            aEvent.mnDelta = static_cast<tools::Long>(floor(dY));
+            aEvent.mnDelta = static_cast<tools::Long>(dY < 0 ? floor(dY) : ceil(dY));
             aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -1136,7 +1152,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
 
         if( dX != 0.0 )
         {
-            aEvent.mnDelta = static_cast<tools::Long>(floor(dX));
+            aEvent.mnDelta = static_cast<tools::Long>(dX < 0 ? floor(dX) : ceil(dX));
             aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -1150,7 +1166,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ) )
         {
-            aEvent.mnDelta = static_cast<tools::Long>(floor(dY));
+            aEvent.mnDelta = static_cast<tools::Long>(dY < 0 ? floor(dY) : ceil(dY));
             aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -1162,6 +1178,9 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
 
             mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
         }
+
+        // tdf#155266 force flush after scrolling
+        mpFrame->mbForceFlush = true;
     }
 }
 
