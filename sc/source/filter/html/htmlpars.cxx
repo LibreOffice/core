@@ -75,7 +75,7 @@ using namespace ::com::sun::star;
 namespace
 {
 /// data-sheets-value from google sheets, value is a JSON.
-void ParseDataSheetsValue(const OUString& rDataSheetsValue, sal_uInt32& rNumberFormat)
+void ParseDataSheetsValue(const OUString& rDataSheetsValue, std::optional<OUString>& rVal, std::optional<OUString>& rNum)
 {
     // data-sheets-value from google sheets, value is a JSON.
     OString aEncodedOption = rDataSheetsValue.toUtf8();
@@ -88,10 +88,27 @@ void ParseDataSheetsValue(const OUString& rDataSheetsValue, sal_uInt32& rNumberF
     if (it != aTree.not_found())
     {
         int nValueType = std::stoi(it->second.get_value<std::string>());
-        // 2 is text.
-        if (nValueType == 2)
+        switch (nValueType)
         {
-            rNumberFormat = NF_STANDARD_FORMAT_TEXT;
+            case 2:
+            {
+                // 2 is text.
+                // See SfxHTMLParser::GetTableDataOptionsValNum(), we leave the parse and a number
+                // language unspecified.
+                rNum = ";;@";
+                break;
+            }
+            case 4:
+            {
+                // 4 is boolean.
+                it = aTree.find("4");
+                if (it != aTree.not_found())
+                {
+                    rVal = OUString::fromUtf8(it->second.get_value<std::string>());
+                }
+                rNum = ";;BOOLEAN";
+                break;
+            }
         }
     }
 }
@@ -936,7 +953,6 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
     bInCell = true;
     bool bHorJustifyCenterTH = (pInfo->nToken == HtmlTokenId::TABLEHEADER_ON);
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
-    sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
     for (const auto & rOption : rOptions)
     {
         switch( rOption.GetToken() )
@@ -1007,15 +1023,12 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             break;
             case HtmlOptionId::DSVAL:
             {
-                ParseDataSheetsValue(rOption.GetString(), nNumberFormat);
+                ParseDataSheetsValue(rOption.GetString(), mxActEntry->pValStr, mxActEntry->pNumStr);
             }
             break;
             default: break;
         }
     }
-
-    if (nNumberFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
-        mxActEntry->aItemSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat));
 
     mxActEntry->nCol = nColCnt;
     mxActEntry->nRow = nRowCnt;
@@ -2153,7 +2166,7 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                 break;
                 case HtmlOptionId::DSVAL:
                 {
-                    ParseDataSheetsValue(rOption.GetString(), nNumberFormat);
+                    ParseDataSheetsValue(rOption.GetString(), pValStr, pNumStr);
                 }
                 break;
                 default: break;
