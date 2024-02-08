@@ -29,7 +29,7 @@ namespace com::sun::star::drawing { struct Direction3D; }
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTVIEW DataPointSymbolSupplier
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTVIEW) DataPointSymbolSupplier
 {
 public:
     static rtl::Reference< SvxShapeGroup >

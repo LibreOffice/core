@@ -28,7 +28,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
 
-class VCL_DLLPUBLIC FixedText : public Control
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FixedText : public Control
 {
 private:
     sal_Int32 m_nMaxWidthChars;
@@ -86,7 +86,7 @@ public:
     virtual void    DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
-class VCL_DLLPUBLIC FixedLine final : public Control
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FixedLine final : public Control
 {
 private:
     using Control::ImplInitSettings;

@@ -9,13 +9,14 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
 class XMLTextImportHelper;
 
 /// Handles <text:line-break loext:clear="..."> when the attribute is present.
-class XMLOFF_DLLPUBLIC SvXMLLineBreakContext : public SvXMLImportContext
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) SvXMLLineBreakContext : public SvXMLImportContext
 {
     XMLTextImportHelper& m_rHelper;
 

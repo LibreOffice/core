@@ -9,13 +9,14 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <xmloff/dllapi.h>
 
 #include <xmloff/XMLElementPropertyContext.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 
-class XMLOFF_DLLPUBLIC XMLComplexColorImport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLComplexColorImport
 {
 private:
     model::ComplexColor& mrComplexColor;

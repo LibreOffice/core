@@ -60,7 +60,7 @@ typedef ::cppu::WeakImplHelper<
     DataSeries_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS DataSeries
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) DataSeries
     final
     : public impl::DataSeries_Base
     , public ::property::OPropertySet

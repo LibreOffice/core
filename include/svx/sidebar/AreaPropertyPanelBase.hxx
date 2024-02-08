@@ -48,7 +48,7 @@ class XFillBitmapItem;
 
 namespace svx::sidebar {
 
-class SVX_DLLPUBLIC AreaPropertyPanelBase
+class UNLESS_MERGELIBS(SVX_DLLPUBLIC) AreaPropertyPanelBase
 :   public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <rtl/ref.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
@@ -93,7 +94,7 @@ public:
     virtual const SfxPoolItem* getItem() const override { return m_pItem.get(); }
 };
 
-class SVL_DLLPUBLIC ItemInfoUser : public ItemInfo
+class UNLESS_MERGELIBS(SVL_DLLPUBLIC) ItemInfoUser : public ItemInfo
 {
     const SfxPoolItem* m_pItem;
 

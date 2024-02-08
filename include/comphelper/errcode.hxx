@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <ostream>
@@ -140,7 +141,7 @@ public:
     }
 
     /// Return a string suitable for debug output, the same as the operator<< function
-    COMPHELPER_DLLPUBLIC OUString toString() const;
+    UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OUString toString() const;
     
     template <typename... Args> bool anyOf(Args... args) const
     {
@@ -230,7 +231,7 @@ public:
     bool operator!=(const ErrCodeMsg& rOther) const { return mnCode != rOther.mnCode; }
 
     /// Return a string suitable for debug output, the same as the operator<< function
-    COMPHELPER_DLLPUBLIC OUString toString() const;
+    UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OUString toString() const;
 
 private:
     ErrCode mnCode;

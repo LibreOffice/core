@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "FastPropertyIdRanges.hxx"
 #include "charttoolsdllapi.hxx"
 
@@ -45,7 +46,7 @@ namespace UserDefinedProperties
         PROP_XML_USERDEF
     };
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddPropertiesToVector(
         std::vector< css::beans::Property > & rOutProperties );
 }
 

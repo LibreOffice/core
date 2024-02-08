@@ -199,7 +199,7 @@ friend class SfxStyleControllerItem_Impl;
 
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
-class SVXCORE_DLLPUBLIC SvxColorToolBoxControl final : public cppu::ImplInheritanceHelper< svt::PopupWindowController,
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxColorToolBoxControl final : public cppu::ImplInheritanceHelper< svt::PopupWindowController,
                                                                                  css::frame::XSubToolbarController >
 {
     std::unique_ptr<svx::ToolboxButtonColorUpdaterBase> m_xBtnUpdater;

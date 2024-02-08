@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -39,7 +40,7 @@ class DataSource;
 class Diagram;
 class LabeledDataSequence;
 
-class OOO_DLLPUBLIC_CHARTTOOLS DataSourceHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) DataSourceHelper
 {
 public:
         static css::uno::Reference< css::chart2::data::XDataSequence >

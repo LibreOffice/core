@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/util/Color.hpp>
@@ -17,7 +18,7 @@
 #include <docmodel/dllapi.h>
 #include <docmodel/color/ComplexColor.hxx>
 
-class DOCMODEL_DLLPUBLIC UnoComplexColor final
+class UNLESS_MERGELIBS(DOCMODEL_DLLPUBLIC) UnoComplexColor final
     : public cppu::WeakImplHelper<css::util::XComplexColor>
 {
 private:

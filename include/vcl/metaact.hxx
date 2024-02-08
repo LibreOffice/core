@@ -1568,7 +1568,7 @@ public:
     bool                IsTransparent() const override { return true; }
 };
 
-class VCL_DLLPUBLIC MetaFloatTransparentAction final : public MetaAction
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaFloatTransparentAction final : public MetaAction
 {
 private:
 
@@ -1614,7 +1614,7 @@ public:
     void addSVGTransparencyColorStops(const basegfx::BColorStops& rSVGTransparencyColorStops);
 };
 
-class VCL_DLLPUBLIC MetaEPSAction final : public MetaAction
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaEPSAction final : public MetaAction
 {
 private:
 

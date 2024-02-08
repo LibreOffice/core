@@ -381,7 +381,7 @@ namespace basegfx
 
     /** mix a part of the original color with randomized color (mainly for debug visualizations)
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_randomize final : public BColorModifier
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_randomize final : public BColorModifier
     {
     private:
         // [0.0 .. 1.0] where 0.0 is no randomize, 1.0 is all random and in-between

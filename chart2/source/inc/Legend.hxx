@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
     Legend_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS Legend final :
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) Legend final :
     public impl::Legend_Base,
     public ::property::OPropertySet
 {

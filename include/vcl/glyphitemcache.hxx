@@ -68,7 +68,7 @@ public:
     }
 
 private:
-    struct CachedGlyphsKey
+    struct SAL_DLLPRIVATE CachedGlyphsKey
     {
         OUString text;
         sal_Int32 index;
@@ -93,7 +93,7 @@ private:
     {
         size_t operator()(const CachedGlyphsKey& key) const { return key.hashValue; }
     };
-    struct GlyphsCost
+    struct SAL_DLLPRIVATE GlyphsCost
     {
         size_t operator()(const SalLayoutGlyphs&) const;
     };

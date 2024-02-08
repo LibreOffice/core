@@ -35,7 +35,7 @@ typedef std::function<bool(const OUString&, const css::uno::Any&)> LineStyleSele
 typedef std::function<void(bool)> LineStyleIsNoneFunction;
 
 // SvxLineStyleController:
-class SVXCORE_DLLPUBLIC SvxLineStyleToolBoxControl final : public svt::PopupWindowController
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxLineStyleToolBoxControl final : public svt::PopupWindowController
 {
 private:
     std::unique_ptr<svx::ToolboxButtonLineStyleUpdater> m_xBtnUpdater;

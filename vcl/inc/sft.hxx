@@ -40,6 +40,7 @@
 #ifndef INCLUDED_VCL_INC_SFT_HXX
 #define INCLUDED_VCL_INC_SFT_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
@@ -643,7 +644,7 @@ constexpr int O_fpgm = 14;   /* 'fpgm' - only used in TT->TT generation */
 constexpr int O_CFF = 15;   /* 'CFF' */
 constexpr int NUM_TAGS = 16;
 
-class VCL_DLLPUBLIC AbstractTrueTypeFont
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) AbstractTrueTypeFont
 {
     std::string m_sFileName;
     sal_uInt32 m_nGlyphs;

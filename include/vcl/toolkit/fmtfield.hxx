@@ -26,7 +26,7 @@
 #include <vcl/formatter.hxx>
 #include <vcl/toolkit/spinfld.hxx>
 
-class VCL_DLLPUBLIC FormattedField : public SpinField
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FormattedField : public SpinField
 {
 public:
     FormattedField(vcl::Window* pParent, WinBits nStyle);

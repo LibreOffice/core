@@ -24,7 +24,7 @@
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS WrappedDefaultProperty : public WrappedProperty
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedDefaultProperty : public WrappedProperty
 {
 public:
     explicit WrappedDefaultProperty(

@@ -26,7 +26,7 @@
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS WrappedIgnoreProperty final : public WrappedProperty
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedIgnoreProperty final : public WrappedProperty
 {
 public:
     WrappedIgnoreProperty( const OUString& rOuterName, const css::uno::Any& rDefaultValue );
@@ -47,7 +47,7 @@ private:
     mutable css::uno::Any  m_aCurrentValue;
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS WrappedIgnoreProperties
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedIgnoreProperties
 {
 public:
     static void addIgnoreLineProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );

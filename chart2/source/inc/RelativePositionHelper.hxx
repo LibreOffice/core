@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/drawing/Alignment.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -30,7 +31,7 @@ namespace com::sun::star::chart2 { struct RelativeSize; }
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS RelativePositionHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) RelativePositionHelper
 {
 public:
     /** returns the upper left corner of an object that has size aObjectSize and

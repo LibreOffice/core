@@ -35,7 +35,7 @@ class SdrObject;
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTVIEW DrawModelWrapper final : private SdrModel
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTVIEW) DrawModelWrapper final : private SdrModel
 {
 private:
     rtl::Reference<SvxDrawPage> m_xMainDrawPage;

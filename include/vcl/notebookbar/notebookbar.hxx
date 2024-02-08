@@ -23,7 +23,7 @@ class SystemWindow;
 class SfxViewShell;
 
 /// This implements Widget Layout-based notebook-like menu bar.
-class VCL_DLLPUBLIC NotebookBar final : public Control, public VclBuilderContainer
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NotebookBar final : public Control, public VclBuilderContainer
 {
 friend class NotebookBarContextChangeEventListener;
 public:

@@ -102,7 +102,7 @@ public:
 
 // **********************************************************************
 
-class VCL_DLLPUBLIC SvLBoxString : public SvLBoxItem
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvLBoxString : public SvLBoxItem
 {
 private:
     bool mbEmphasized;
@@ -229,7 +229,7 @@ inline void SvLBoxButton::SetStateHilighted( bool bHilight )
 
 struct SvLBoxContextBmp_Impl;
 
-class VCL_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvLBoxContextBmp : public SvLBoxItem
 {
     std::unique_ptr<SvLBoxContextBmp_Impl>  m_pImpl;
 public:

@@ -25,7 +25,7 @@
 
 class Fraction;
 
-class VCL_DLLPUBLIC IMapPolygonObject final : public IMapObject
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IMapPolygonObject final : public IMapObject
 {
     tools::Polygon aPoly;
     tools::Rectangle           aEllipse;

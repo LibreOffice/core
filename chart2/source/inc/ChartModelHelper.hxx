@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/awt/Size.hpp>
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
@@ -43,7 +44,7 @@ class DataSeries;
 class Diagram;
 class InternalDataProvider;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartModelHelper
 {
 public:
     static rtl::Reference< InternalDataProvider > createInternalDataProvider(

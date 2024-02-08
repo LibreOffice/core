@@ -397,7 +397,7 @@ public:
 };
 
 /// A one-liner comment.
-class VCL_DLLPUBLIC PDFCommentElement final : public PDFElement
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PDFCommentElement final : public PDFElement
 {
     PDFDocument& m_rDoc;
     OString m_aComment;
@@ -423,7 +423,7 @@ public:
 };
 
 /// End of a stream: 'endstream' keyword.
-class VCL_DLLPUBLIC PDFEndStreamElement final : public PDFElement
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PDFEndStreamElement final : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
@@ -455,7 +455,7 @@ public:
 };
 
 /// Boolean object: a 'true' or a 'false'.
-class VCL_DLLPUBLIC PDFBooleanElement final : public PDFElement
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PDFBooleanElement final : public PDFElement
 {
     bool m_aValue;
 
@@ -474,7 +474,7 @@ public:
 };
 
 /// Null object: the 'null' singleton.
-class VCL_DLLPUBLIC PDFNullElement final : public PDFElement
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PDFNullElement final : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_CHRTITEM_HXX
 #define INCLUDED_SVX_CHRTITEM_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svl/eitem.hxx>
@@ -77,7 +78,7 @@ enum class SvxChartRegress
 
 #define CHREGRESS_COUNT (sal_uInt16(SvxChartRegress::Unknown) + 1)
 
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartRegressItem final : public SfxEnumItem<SvxChartRegress>
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartRegressItem final : public SfxEnumItem<SvxChartRegress>
 {
 public:
     SvxChartRegressItem(SvxChartRegress eRegress /*= SvxChartRegress::Linear*/,
@@ -88,7 +89,7 @@ public:
     sal_uInt16 GetValueCount() const override { return CHREGRESS_COUNT; }
 };
 
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartTextOrderItem final : public SfxEnumItem<SvxChartTextOrder>
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartTextOrderItem final : public SfxEnumItem<SvxChartTextOrder>
 {
 public:
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= SvxChartTextOrder::SideBySide*/,
@@ -102,7 +103,7 @@ public:
     sal_uInt16 GetValueCount() const override { return CHTXTORDER_COUNT; }
 };
 
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartKindErrorItem final : public SfxEnumItem<SvxChartKindError>
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartKindErrorItem final : public SfxEnumItem<SvxChartKindError>
 {
 public:
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = SvxChartKindError::NONE*/,
@@ -113,7 +114,7 @@ public:
     sal_uInt16 GetValueCount() const override { return CHERROR_COUNT; }
 };
 
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartIndicateItem final : public SfxEnumItem<SvxChartIndicate>
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartIndicateItem final : public SfxEnumItem<SvxChartIndicate>
 {
 public:
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= SvxChartIndicate::NONE*/,

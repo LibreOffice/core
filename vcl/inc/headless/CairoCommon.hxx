@@ -89,7 +89,7 @@ VCL_DLLPUBLIC size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rP
                                       const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap,
                                       bool bPixelSnapHairline);
 
-class VCL_DLLPUBLIC PixelSnapper
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PixelSnapper
 {
 public:
     basegfx::B2DPoint snap(const basegfx::B2DPolygon& rPolygon,
@@ -240,7 +240,7 @@ private:
                         sal_Int32 nWidth) const;
 };
 
-class VCL_DLLPUBLIC SurfaceHelper
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SurfaceHelper
 {
 private:
     cairo_surface_t* pSurface;

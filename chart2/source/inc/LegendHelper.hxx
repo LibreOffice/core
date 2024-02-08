@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include "charttoolsdllapi.hxx"
@@ -32,7 +33,7 @@ namespace chart
 class Diagram;
 class Legend;
 
-class OOO_DLLPUBLIC_CHARTTOOLS LegendHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) LegendHelper
 {
 public:
     static rtl::Reference< ::chart::Legend >

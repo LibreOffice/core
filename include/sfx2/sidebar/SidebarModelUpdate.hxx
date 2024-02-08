@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <sfx2/dllapi.h>
 
 namespace com::sun::star::frame
@@ -22,7 +23,7 @@ template <typename> class Reference;
 
 namespace sfx2::sidebar
 {
-class SFX2_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SidebarModelUpdate
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("crosscast") SidebarModelUpdate
 {
 public:
     virtual ~SidebarModelUpdate();

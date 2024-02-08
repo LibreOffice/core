@@ -120,14 +120,14 @@ namespace CharacterProperties
         FAST_PROPERTY_ID_END_CHAR_PROP
     };
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddPropertiesToVector(
         std::vector< css::beans::Property > & rOutProperties );
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
-    OOO_DLLPUBLIC_CHARTTOOLS bool IsCharacterPropertyHandle( sal_Int32 nHandle );
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool IsCharacterPropertyHandle( sal_Int32 nHandle );
 
-    OOO_DLLPUBLIC_CHARTTOOLS css::awt::FontDescriptor createFontDescriptorFromPropertySet(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) css::awt::FontDescriptor createFontDescriptorFromPropertySet(
         const css::uno::Reference< css::beans::XMultiPropertySet > & xMultiPropSet );
 }
 

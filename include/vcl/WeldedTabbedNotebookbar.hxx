@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SFX2_NOTEBOOKBAR_WRITERTABBEDNOTEBOOKBAR_HXX
 #define INCLUDED_SFX2_NOTEBOOKBAR_WRITERTABBEDNOTEBOOKBAR_HXX
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <vcl/weld.hxx>
@@ -18,7 +19,7 @@
 /**
  * Welded wrapper for NotebookBar used for online
 */
-class VCL_DLLPUBLIC WeldedTabbedNotebookbar
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) WeldedTabbedNotebookbar
 {
     std::unique_ptr<weld::Builder> m_xBuilder;
 

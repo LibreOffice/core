@@ -72,7 +72,7 @@ typedef ::cppu::WeakImplHelper<
     Diagram_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS Diagram
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) Diagram
     final
     : public impl::Diagram_Base
     , public ::property::OPropertySet

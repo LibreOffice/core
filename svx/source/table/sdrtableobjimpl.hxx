@@ -37,7 +37,7 @@
 
 namespace sdr::table {
 
-class SVXCORE_DLLPUBLIC SdrTableObjImpl : public ::cppu::WeakImplHelper< css::util::XModifyListener >
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrTableObjImpl : public ::cppu::WeakImplHelper< css::util::XModifyListener >
 {
 public:
     CellRef mxActiveCell;

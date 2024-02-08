@@ -12,11 +12,12 @@
 #ifndef INCLUDED_VCL_OPENGL_OPENGLWRAPPER_HXX
 #define INCLUDED_VCL_OPENGL_OPENGLWRAPPER_HXX
 
+#include <config_options.h>
 #include <config_features.h>
 #include <vcl/dllapi.h>
 
 // All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
-struct VCL_DLLPUBLIC OpenGLWrapper
+struct UNLESS_MERGELIBS(VCL_DLLPUBLIC) OpenGLWrapper
 {
     OpenGLWrapper() = delete; // Should not be instantiated
 

@@ -34,7 +34,7 @@ namespace basegfx {
 
 namespace sdr::contact {
 
-class SVXCORE_DLLPUBLIC ViewContactOfE3dScene final : public ViewContactOfSdrObj
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) ViewContactOfE3dScene final : public ViewContactOfSdrObj
 {
 public:
     // basic constructor, used from SdrObject.

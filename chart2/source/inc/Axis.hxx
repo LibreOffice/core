@@ -47,7 +47,7 @@ typedef ::cppu::WeakImplHelper<
     Axis_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS Axis final :
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) Axis final :
     public impl::Axis_Base,
     public ::property::OPropertySet
 {

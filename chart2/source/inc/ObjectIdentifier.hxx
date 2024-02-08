@@ -79,7 +79,7 @@ enum ObjectType
     OBJECTTYPE_UNKNOWN
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS ObjectIdentifier
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ObjectIdentifier
 {
     //CID == ClassifiedIdentifier <--> name of shape
     //semicolon, colon, equal sign and slash have special meanings in a CID

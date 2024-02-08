@@ -28,7 +28,7 @@
  * Contains two sides. Left side contains the simplified DOM tree and
  * the right side the object inspector tree.
  */
-class SFX2_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) DevelopmentToolDockingWindow final : public SfxDockingWindow
 {
 private:
     std::unique_ptr<ObjectInspectorWidgets> mpObjectInspectorWidgets;

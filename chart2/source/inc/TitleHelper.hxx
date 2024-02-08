@@ -33,7 +33,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS TitleHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) TitleHelper
 {
 public:
     enum eTitleType

@@ -32,7 +32,8 @@ class MediaItem;
 
 namespace sdr::contact
 {
-class SVXCORE_DLLPUBLIC ViewContactOfSdrMediaObj final : public ViewContactOfSdrObj
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) ViewContactOfSdrMediaObj final
+    : public ViewContactOfSdrObj
 {
     friend class ViewObjectContactOfSdrMediaObj;
 

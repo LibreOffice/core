@@ -48,10 +48,10 @@ namespace LinePropertiesHelper
         PROP_LINE_CAP
     };
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddPropertiesToVector(
         std::vector< css::beans::Property > & rOutProperties );
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
     bool IsLineVisible( const css::uno::Reference<
         css::beans::XPropertySet >& xLineProperties );

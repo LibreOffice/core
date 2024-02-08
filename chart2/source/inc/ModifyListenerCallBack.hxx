@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <tools/link.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -32,7 +33,7 @@ without becoming a XModifyListener yourself
 
 class ModifyListenerCallBack_impl;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ModifyListenerCallBack final
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ModifyListenerCallBack final
 {
 public:
     explicit ModifyListenerCallBack(const Link<void*, void>& rCallBack);

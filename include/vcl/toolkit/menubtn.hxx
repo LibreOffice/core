@@ -31,7 +31,7 @@
 class Timer;
 class PopupMenu;
 
-class VCL_DLLPUBLIC MenuButton : public PushButton
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MenuButton : public PushButton
 {
 private:
     friend class VclBuilder;

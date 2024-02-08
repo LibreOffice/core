@@ -25,7 +25,7 @@
 
 class Fraction;
 
-class VCL_DLLPUBLIC IMapCircleObject final : public IMapObject
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IMapCircleObject final : public IMapObject
 {
     Point               aCenter;
     sal_Int32           nRadius;

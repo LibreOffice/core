@@ -18,7 +18,7 @@ enum class LabelItemWindowType
     Info,
 };
 
-class SVXCORE_DLLPUBLIC LabelItemWindow final : public InterimItemWindow
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) LabelItemWindow final : public InterimItemWindow
 {
 private:
     std::unique_ptr<weld::Box> m_xBox;

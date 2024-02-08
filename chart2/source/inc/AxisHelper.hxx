@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/chart2/ScaleData.hpp>
 #include <rtl/ref.hxx>
@@ -44,7 +45,7 @@ class ChartType;
 class Diagram;
 class GridProperties;
 
-class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) AxisHelper
 {
 public:
     static css::uno::Reference< css::chart2::XScaling > createLinearScaling();

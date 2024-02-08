@@ -59,7 +59,7 @@ typedef ::cppu::WeakImplHelper<
     ChartType_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS ChartType :
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartType :
     public impl::ChartType_Base,
     public ::property::OPropertySet
 {

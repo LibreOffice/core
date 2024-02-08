@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_DIAGRAM_DATAMODEL_HXX
 #define INCLUDED_SVX_DIAGRAM_DATAMODEL_HXX
 
+#include <config_options.h>
+
 #include <vector>
 #include <optional>
 #include <map>
@@ -157,7 +159,7 @@ typedef std::vector< Point >        Points;
 
 /** Snippet of Diagram ModelData for Diagram-defining data undo/redo
  */
-class SVXCORE_DLLPUBLIC DiagramDataState
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DiagramDataState
 {
     Connections maConnections;
     Points maPoints;

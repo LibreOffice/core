@@ -23,7 +23,7 @@
 
 namespace chart
 {
-class OOO_DLLPUBLIC_CHARTTOOLS WrappedDirectStateProperty : public WrappedProperty
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedDirectStateProperty : public WrappedProperty
 {
 public:
     explicit WrappedDirectStateProperty(const OUString& rOuterName, const OUString& rInnerName);

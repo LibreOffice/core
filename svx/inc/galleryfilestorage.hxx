@@ -41,7 +41,7 @@ class FmFormModel;
 class GalleryTheme;
 class GalleryThemeEntry;
 
-class SVXCORE_DLLPUBLIC GalleryFileStorage final
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) GalleryFileStorage final
 {
 private:
     tools::SvRef<SotStorage> m_aSvDrawStorageRef;

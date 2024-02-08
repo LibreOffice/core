@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
@@ -22,7 +23,7 @@ enum class RectangleAlignment;
     e.g. Top Left, Top, Top Right, Center.
     @see model::RectangleAlignment
  */
-class SVXCORE_DLLPUBLIC SvxRectangleAlignmentItem final
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxRectangleAlignmentItem final
     : public SfxEnumItem<model::RectangleAlignment>
 {
 public:

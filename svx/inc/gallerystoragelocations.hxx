@@ -19,10 +19,11 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
 
-class SVXCORE_DLLPUBLIC GalleryStorageLocations final
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) GalleryStorageLocations final
 {
 private:
     INetURLObject maThmURL;

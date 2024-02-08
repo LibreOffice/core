@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::awt { struct Size; }
@@ -28,7 +29,7 @@ class SvxShapeText;
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS RelativeSizeHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) RelativeSizeHelper
 {
 public:
     static double calculate(

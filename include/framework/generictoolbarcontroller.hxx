@@ -26,7 +26,7 @@
 namespace framework
 {
 
-class FWK_DLLPUBLIC GenericToolbarController final : public svt::ToolboxController
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) GenericToolbarController final : public svt::ToolboxController
 {
     public:
         GenericToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -67,7 +67,7 @@ class FWK_DLLPUBLIC GenericToolbarController final : public svt::ToolboxControll
         OUString            m_aEnumCommand;
 };
 
-class FWK_DLLPUBLIC ImageOrientationController final : public svt::ToolboxController
+class UNLESS_MERGELIBS(FWK_DLLPUBLIC) ImageOrientationController final : public svt::ToolboxController
 {
 public:
     ImageOrientationController(const css::uno::Reference<css::uno::XComponentContext>& rContext,

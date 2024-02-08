@@ -33,7 +33,8 @@ namespace drawinglayer::primitive2d
     For discussion please refer to BufferedDecompositionPrimitive2D, this is the same
     but for GroupPrimitive2D which want to buffer their decomposition
  */
-class DRAWINGLAYER_DLLPUBLIC BufferedDecompositionGroupPrimitive2D : public GroupPrimitive2D
+class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) BufferedDecompositionGroupPrimitive2D
+    : public GroupPrimitive2D
 {
 private:
     // exclusive helper for Primitive2DFlusher

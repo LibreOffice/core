@@ -18,6 +18,8 @@
  */
 #pragma once
 
+
+#include <config_options.h>
 // helper classes
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -34,7 +36,7 @@
 namespace property
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OPropertySet :
     protected cppu::BaseMutex,
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet

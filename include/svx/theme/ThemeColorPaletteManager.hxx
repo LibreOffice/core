@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
 #include <array>
@@ -54,7 +55,7 @@ struct SVXCORE_DLLPUBLIC ThemePaletteCollection
     std::array<ThemePaletteColorData, 12> maColors;
 };
 
-class SVXCORE_DLLPUBLIC ThemeColorPaletteManager final
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) ThemeColorPaletteManager final
 {
     std::shared_ptr<model::ColorSet> m_pColorSet;
 

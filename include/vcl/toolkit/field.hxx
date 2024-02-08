@@ -90,7 +90,7 @@ public:
     bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
 };
 
-class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") NumericFormatter : public FormatterBase
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("crosscast") NumericFormatter : public FormatterBase
 {
 public:
     virtual                 ~NumericFormatter() override;
@@ -160,7 +160,7 @@ private:
 
 };
 
-class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetricFormatter : public NumericFormatter
 {
 public:
     virtual                 ~MetricFormatter() override;
@@ -236,7 +236,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
-class VCL_DLLPUBLIC MetricBox final : public ComboBox, public MetricFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetricBox final : public ComboBox, public MetricFormatter
 {
 public:
     explicit                MetricBox( vcl::Window* pParent, WinBits nWinStyle );

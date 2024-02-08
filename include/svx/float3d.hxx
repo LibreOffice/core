@@ -45,7 +45,7 @@ class ColorListBox;
 
 struct Svx3DWinImpl;
 
-class SVX_DLLPUBLIC LightButton final
+class UNLESS_MERGELIBS(SVX_DLLPUBLIC) LightButton final
 {
 public:
     explicit LightButton(std::unique_ptr<weld::ToggleButton> xButton);

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UCBHELPER_INTERACTIONREQUEST_HXX
 #define INCLUDED_UCBHELPER_INTERACTIONREQUEST_HXX
 
+#include <config_options.h>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -129,7 +130,7 @@ public:
   * method the way that they simply call recordSelection() which is provided by
   * this class.
   */
-class UCBHELPER_DLLPUBLIC InteractionContinuation : public cppu::OWeakObject
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionContinuation : public cppu::OWeakObject
 {
     InteractionRequest* m_pRequest;
 
@@ -155,7 +156,7 @@ public:
   * along with an interaction request to indicate the possibility to abort
   * the operation that caused the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionAbort final : public InteractionContinuation,
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionAbort final : public InteractionContinuation,
                          public css::lang::XTypeProvider,
                          public css::task::XInteractionAbort
 {
@@ -188,7 +189,7 @@ public:
   * along with an interaction request to indicate the possibility to retry
   * the operation that caused the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionRetry final : public InteractionContinuation,
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionRetry final : public InteractionContinuation,
                          public css::lang::XTypeProvider,
                          public css::task::XInteractionRetry
 {

@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -43,7 +44,7 @@ namespace com::sun::star::io { class XStream; }
 namespace apphelper
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS MediaDescriptorHelper final
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) MediaDescriptorHelper final
 {
 public:
     MediaDescriptorHelper( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );

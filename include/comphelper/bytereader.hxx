@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <comphelper/comphelperdllapi.h>
 
@@ -17,7 +18,7 @@ namespace comphelper
  * Interface that we can cast to, to bypass the inefficiency of using Sequence<sal_Int8>
  * when reading via XInputStream.
  */
-class COMPHELPER_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ByteReader
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("crosscast") ByteReader
 {
 public:
     virtual ~ByteReader();
@@ -28,7 +29,7 @@ public:
  * Interface that we can cast to, to bypass the inefficiency of using Sequence<sal_Int8>
  * when writing via XOutputStream.
  */
-class COMPHELPER_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ByteWriter
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("crosscast") ByteWriter
 {
 public:
     virtual ~ByteWriter();

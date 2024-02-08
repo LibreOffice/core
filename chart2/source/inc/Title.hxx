@@ -40,7 +40,7 @@ typedef ::cppu::WeakImplHelper<
     Title_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS Title final :
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) Title final :
     public impl::Title_Base,
     public ::property::OPropertySet
 {

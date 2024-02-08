@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_AXCONTROL_HXX
 #define INCLUDED_OOX_OLE_AXCONTROL_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <vector>
 
@@ -557,7 +558,7 @@ public: // direct access needed for legacy VML drawing controls
 
 
 /** Model for a Forms 2.0 image. */
-class OOX_DLLPUBLIC AxImageModel final : public AxControlModelBase
+class UNLESS_MERGELIBS(OOX_DLLPUBLIC) AxImageModel final : public AxControlModelBase
 {
 public:
     explicit            AxImageModel();
@@ -583,7 +584,7 @@ private:
     bool                mbPicTiling;        ///< True = picture is repeated.
 };
 
-class OOX_DLLPUBLIC AxTabStripModel final : public AxFontDataModel
+class UNLESS_MERGELIBS(OOX_DLLPUBLIC) AxTabStripModel final : public AxFontDataModel
 {
 public:
     explicit            AxTabStripModel();
@@ -640,7 +641,7 @@ public: // direct access needed for legacy VML drawing controls
 
 
 /** Model for a Forms 2.0 toggle button. */
-class OOX_DLLPUBLIC AxToggleButtonModel final : public AxMorphDataModelBase
+class UNLESS_MERGELIBS(OOX_DLLPUBLIC) AxToggleButtonModel final : public AxMorphDataModelBase
 {
 public:
     explicit            AxToggleButtonModel();
@@ -841,7 +842,7 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
 };
 
-class OOX_DLLPUBLIC AxPageModel final : public AxContainerModelBase
+class UNLESS_MERGELIBS(OOX_DLLPUBLIC) AxPageModel final : public AxContainerModelBase
 {
 public:
     explicit            AxPageModel();
@@ -850,7 +851,7 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
 };
 
-class OOX_DLLPUBLIC AxMultiPageModel final : public AxContainerModelBase
+class UNLESS_MERGELIBS(OOX_DLLPUBLIC) AxMultiPageModel final : public AxContainerModelBase
 {
 public:
     explicit            AxMultiPageModel();
@@ -865,7 +866,7 @@ public:
 
 
 /** Model for a Forms 2.0 user form. */
-class OOX_DLLPUBLIC AxUserFormModel final : public AxContainerModelBase
+class UNLESS_MERGELIBS(OOX_DLLPUBLIC) AxUserFormModel final : public AxContainerModelBase
 {
 public:
     explicit            AxUserFormModel();

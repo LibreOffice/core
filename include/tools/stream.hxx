@@ -103,7 +103,7 @@ struct SvLockBytesStat
 to allow UCB to do delayed feeding of data into a SvStream i.e. a kind of a pipe
 mechanism to allow asynchronous fetching of data.
 */
-class TOOLS_DLLPUBLIC SvLockBytes: public SvRefBase
+class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) SvLockBytes: public SvRefBase
 {
     SvStream * m_pStream;
     bool m_bOwner;

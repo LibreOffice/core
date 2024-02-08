@@ -44,7 +44,7 @@ struct SVXCORE_DLLPUBLIC GalleryObject
     OUString maPath;
 };
 
-class SVXCORE_DLLPUBLIC GalleryObjectCollection
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) GalleryObjectCollection
 {
 private:
     std::vector<std::unique_ptr<GalleryObject>> m_aObjectList;

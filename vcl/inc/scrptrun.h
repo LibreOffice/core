@@ -37,6 +37,7 @@
 #ifndef INCLUDED_VCL_INC_SCRPTRUN_H
 #define INCLUDED_VCL_INC_SCRPTRUN_H
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <vcl/dllapi.h>
@@ -58,7 +59,7 @@ struct ParenStackEntry
     }
 };
 
-class VCL_DLLPUBLIC ScriptRun final : public icu::UObject
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ScriptRun final : public icu::UObject
 {
 public:
     ScriptRun(const UChar chars[], int32_t length);

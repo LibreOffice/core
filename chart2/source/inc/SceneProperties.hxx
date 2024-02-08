@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "PropertyHelper.hxx"
 #include "FastPropertyIdRanges.hxx"
 #include "charttoolsdllapi.hxx"
@@ -71,10 +72,10 @@ namespace SceneProperties
         PROP_SCENE_LIGHT_ON_8
     };
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddPropertiesToVector(
         std::vector< css::beans::Property > & rOutProperties );
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 }
 
 } //  namespace chart

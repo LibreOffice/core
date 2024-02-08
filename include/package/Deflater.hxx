@@ -20,6 +20,7 @@
 #ifndef INCLUDED_PACKAGE_DEFLATER_HXX
 #define INCLUDED_PACKAGE_DEFLATER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <package/packagedllapi.hxx>
 #include <memory>
@@ -28,7 +29,7 @@ struct z_stream_s;
 
 namespace ZipUtils {
 
-class DLLPUBLIC_PACKAGE Deflater final
+class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) Deflater final
 {
     typedef struct z_stream_s z_stream;
 

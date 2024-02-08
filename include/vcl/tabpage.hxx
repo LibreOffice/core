@@ -26,7 +26,7 @@
 
 class ScrollBar;
 
-class VCL_DLLPUBLIC TabPage final
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TabPage final
     : public vcl::Window
     , public vcl::IContext
 {

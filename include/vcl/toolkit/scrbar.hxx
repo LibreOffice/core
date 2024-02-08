@@ -135,7 +135,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC ScrollBarBox final : public vcl::Window
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ScrollBarBox final : public vcl::Window
 {
 private:
     using Window::ImplInit;

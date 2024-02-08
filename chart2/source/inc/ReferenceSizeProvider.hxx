@@ -38,7 +38,7 @@ namespace com::sun::star {
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS ReferenceSizeProvider
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ReferenceSizeProvider
 {
 public:
 

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_RESMGR_HXX
 #define INCLUDED_UNOTOOLS_RESMGR_HXX
 
+#include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustring.hxx>
@@ -48,7 +49,7 @@ struct UNOTOOLS_DLLPUBLIC TranslateId
     inline bool operator!=(const TranslateId& other) const { return !operator==(other); }
 };
 
-struct UNOTOOLS_DLLPUBLIC TranslateNId
+struct UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) TranslateNId
 {
     const char* mpContext;
     const char* mpSingular;

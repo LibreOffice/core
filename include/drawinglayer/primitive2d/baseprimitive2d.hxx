@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
@@ -171,7 +172,8 @@ public:
   object, we just wrap the top level BasePrimitive2D in this class when we need
   to pass them over UNO
 */
-class DRAWINGLAYERCORE_DLLPUBLIC UnoPrimitive2D final : public BasePrimitive2DImplBase
+class UNLESS_MERGELIBS(DRAWINGLAYERCORE_DLLPUBLIC) UnoPrimitive2D final
+    : public BasePrimitive2DImplBase
 {
     UnoPrimitive2D(const UnoPrimitive2D&) = delete;
     UnoPrimitive2D& operator=(const UnoPrimitive2D&) = delete;

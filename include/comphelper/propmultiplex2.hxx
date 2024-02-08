@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -39,7 +40,7 @@ class OPropertyChangeMultiplexer2;
 //= OPropertyChangeListener
 
 /// simple listener adapter for property sets
-class COMPHELPER_DLLPUBLIC OPropertyChangeListener2
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertyChangeListener2
 {
     friend class OPropertyChangeMultiplexer2;
 
@@ -70,7 +71,7 @@ class SAL_DLLPUBLIC_TEMPLATE OPropertyChangeMultiplexer_Base2
     : public cppu::WeakImplHelper<css::beans::XPropertyChangeListener>
 {
 };
-class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer2 final
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertyChangeMultiplexer2 final
     : public OPropertyChangeMultiplexer_Base2
 {
     friend class OPropertyChangeListener2;

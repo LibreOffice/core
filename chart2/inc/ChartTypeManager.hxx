@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -31,7 +32,7 @@ namespace chart
 {
 class ChartTypeTemplate;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeManager final :
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartTypeManager final :
         public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XMultiServiceFactory,

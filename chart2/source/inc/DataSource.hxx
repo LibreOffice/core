@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
@@ -29,7 +30,7 @@ namespace chart
 {
 class LabeledDataSequence;
 
-class OOO_DLLPUBLIC_CHARTTOOLS DataSource final : public
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) DataSource final : public
     ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::chart2::data::XDataSource,

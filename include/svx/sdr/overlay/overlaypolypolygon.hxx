@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX
 #define INCLUDED_SVX_SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX
 
+#include <config_options.h>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -43,7 +44,7 @@ namespace sdr::overlay
             virtual ~OverlayPolyPolygon() override;
         };
 
-        class SVXCORE_DLLPUBLIC OverlayPolyPolygonStripedAndFilled final : public OverlayObject
+        class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OverlayPolyPolygonStripedAndFilled final : public OverlayObject
         {
             // geometry
             basegfx::B2DPolyPolygon             maLinePolyPolygon;

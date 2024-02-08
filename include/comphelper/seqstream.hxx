@@ -33,7 +33,7 @@ namespace comphelper
 {
 
 /** Base class for wrappers around memory data that want to be exposed as an XInputStream */
-class COMPHELPER_DLLPUBLIC MemoryInputStream
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) MemoryInputStream
     : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >,
       public comphelper::ByteReader
 {

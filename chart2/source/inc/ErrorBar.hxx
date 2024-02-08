@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "charttoolsdllapi.hxx"
 
 #include <cppuhelper/implbase.hxx>
@@ -74,7 +75,7 @@ private:
     sal_Int32 meStyle;
 
 public:
-    OOO_DLLPUBLIC_CHARTTOOLS explicit ErrorBar();
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) explicit ErrorBar();
     virtual ~ErrorBar() override;
 
     /// XServiceInfo declarations

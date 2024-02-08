@@ -112,7 +112,7 @@ public:
     bool    IsEditable() const { return bool(nFlags & SvLBoxTabFlags::EDITABLE); }
 };
 
-class VCL_DLLPUBLIC SvLBoxItem
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvLBoxItem
 {
 protected:
     bool mbDisabled;

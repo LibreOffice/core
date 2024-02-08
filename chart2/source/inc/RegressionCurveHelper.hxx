@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <svx/chrtitem.hxx>
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
@@ -46,20 +47,20 @@ namespace chart::RegressionCurveHelper
     rtl::Reference<::chart::RegressionCurveModel>
         createRegressionCurveByServiceName( std::u16string_view aServiceName );
 
-    OOO_DLLPUBLIC_CHARTTOOLS bool hasMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool hasMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
-    OOO_DLLPUBLIC_CHARTTOOLS bool hasMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool hasMeanValueLine(
         const rtl::Reference<::chart::DataSeries> & xRegCnt );
 
-    OOO_DLLPUBLIC_CHARTTOOLS bool isMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool isMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurve> & xRegCurve );
-    OOO_DLLPUBLIC_CHARTTOOLS bool isMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool isMeanValueLine(
         const rtl::Reference<::chart::RegressionCurveModel> & xRegCurve );
 
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveModel>
         getMeanValueLine(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveModel>
         getMeanValueLine(
             const rtl::Reference<::chart::DataSeries> & xRegCnt );
 
@@ -68,31 +69,31 @@ namespace chart::RegressionCurveHelper
          @param xSeriesProp
              If set, this property-set will be used to apply a line color
      */
-    OOO_DLLPUBLIC_CHARTTOOLS void addMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void addMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt,
         const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
-    OOO_DLLPUBLIC_CHARTTOOLS void addMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void addMeanValueLine(
         rtl::Reference<::chart::DataSeries> const & xRegCnt,
         const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
 
-    OOO_DLLPUBLIC_CHARTTOOLS void removeMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void removeMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt );
-    OOO_DLLPUBLIC_CHARTTOOLS void removeMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void removeMeanValueLine(
         rtl::Reference<::chart::DataSeries> const & xRegCnt );
 
     /** Returns the first regression curve found that is not of type
         mean-value line
      */
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveModel>
         getFirstCurveNotMeanValueLine(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveModel>
         getFirstCurveNotMeanValueLine(
             const rtl::Reference<::chart::DataSeries>& xCurveContainer );
 
     /** Returns the regression curve found at the index provided.
      */
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveModel>
         getRegressionCurveAtIndex(
             const rtl::Reference<::chart::DataSeries>& xCurveContainer,
             sal_Int32 aIndex);
@@ -100,10 +101,10 @@ namespace chart::RegressionCurveHelper
     /** Returns the type of the first regression curve found that is not of type
         mean-value line
      */
-    OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getFirstRegressTypeNotMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) SvxChartRegress getFirstRegressTypeNotMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
-    OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getRegressionType(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) SvxChartRegress getRegressionType(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /** @param xPropertySource is taken as source to copy all properties from if
@@ -111,7 +112,7 @@ namespace chart::RegressionCurveHelper
         @param xEquationProperties is set at the new regression curve as
                equation properties if not null
     */
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveModel>
         addRegressionCurve(
             SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer,
@@ -119,7 +120,7 @@ namespace chart::RegressionCurveHelper
                     css::uno::Reference<css::beans::XPropertySet>(),
             const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
                     css::uno::Reference<css::beans::XPropertySet>() );
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveModel>
         addRegressionCurve(
             SvxChartRegress eType,
             rtl::Reference<::chart::DataSeries> const & xCurveContainer,
@@ -128,20 +129,20 @@ namespace chart::RegressionCurveHelper
             const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
                     css::uno::Reference<css::beans::XPropertySet>() );
 
-    OOO_DLLPUBLIC_CHARTTOOLS bool removeAllExceptMeanValueLine(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool removeAllExceptMeanValueLine(
         rtl::Reference<::chart::DataSeries> const & xCurveContainer );
 
-    OOO_DLLPUBLIC_CHARTTOOLS void removeEquations(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void removeEquations(
         rtl::Reference<::chart::DataSeries> const & xCurveContainer );
 
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveModel>
         changeRegressionCurveType(
             SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegressionCurveContainer,
             css::uno::Reference<css::chart2::XRegressionCurve> const & xRegressionCurve );
 
     /// returns a calculator object for regression curves (used by the view)
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveCalculator>
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) rtl::Reference<::chart::RegressionCurveCalculator>
         createRegressionCurveCalculatorByServiceName( std::u16string_view aServiceName );
 
     /** recalculates the regression parameters according to the data given in
@@ -169,33 +170,33 @@ namespace chart::RegressionCurveHelper
         necessary that the data::XDataSource is an XDataSeries, thus this parameter
         also changed.
      */
-    OOO_DLLPUBLIC_CHARTTOOLS void initializeCurveCalculator(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void initializeCurveCalculator(
         const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
         const rtl::Reference<::chart::DataSeries>& xSeries,
         const rtl::Reference<::chart::ChartModel>& xModel );
 
-    OOO_DLLPUBLIC_CHARTTOOLS OUString getUINameForRegressionCurve(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString getUINameForRegressionCurve(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    OOO_DLLPUBLIC_CHARTTOOLS OUString getRegressionCurveName(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString getRegressionCurveName(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    OOO_DLLPUBLIC_CHARTTOOLS OUString getRegressionCurveGenericName(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString getRegressionCurveGenericName(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    OOO_DLLPUBLIC_CHARTTOOLS OUString getRegressionCurveSpecificName(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString getRegressionCurveSpecificName(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    OOO_DLLPUBLIC_CHARTTOOLS void resetEquationPosition(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void resetEquationPosition(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /// @return the index of the given curve in the given container. -1 if not contained
-    OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getRegressionCurveIndex(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) sal_Int32 getRegressionCurveIndex(
         const rtl::Reference<::chart::DataSeries>& xContainer,
         const rtl::Reference<::chart::RegressionCurveModel>& xCurve );
 
-    OOO_DLLPUBLIC_CHARTTOOLS bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
-    OOO_DLLPUBLIC_CHARTTOOLS bool MayHaveCorrelationCoefficient(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool MayHaveCorrelationCoefficient(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
 } //  namespace chart
 

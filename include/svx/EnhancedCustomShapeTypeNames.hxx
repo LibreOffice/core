@@ -19,15 +19,17 @@
 
 #ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPETYPENAMES_HXX
 #define INCLUDED_SVX_ENHANCEDCUSTOMSHAPETYPENAMES_HXX
+
+#include <config_options.h>
 #include <svx/msdffdef.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
 
 namespace EnhancedCustomShapeTypeNames
 {
-SVXCORE_DLLPUBLIC MSO_SPT Get(const OUString&);
-SVXCORE_DLLPUBLIC OUString Get(const MSO_SPT);
-SVXCORE_DLLPUBLIC const OUString& GetAccName(const OUString&);
+UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) MSO_SPT Get(const OUString&);
+UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OUString Get(const MSO_SPT);
+UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) const OUString& GetAccName(const OUString&);
 }
 
 #endif

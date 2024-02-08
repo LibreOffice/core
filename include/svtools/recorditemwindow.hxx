@@ -39,7 +39,8 @@ private:
     void FirePosition(bool bForce);
 };
 
-class SVT_DLLPUBLIC RecordItemWindow : public InterimItemWindow, public RecordItemWindowBase
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) RecordItemWindow : public InterimItemWindow,
+                                                         public RecordItemWindowBase
 {
 public:
     RecordItemWindow(vcl::Window* pParent);

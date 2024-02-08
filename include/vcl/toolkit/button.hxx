@@ -494,7 +494,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
-class VCL_DLLPUBLIC ImageButton final : public PushButton
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ImageButton final : public PushButton
 {
 private:
     using PushButton::ImplInitStyle;

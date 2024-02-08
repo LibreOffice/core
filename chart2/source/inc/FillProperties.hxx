@@ -63,10 +63,10 @@ namespace FillProperties
         , PROP_FILL_BACKGROUND
     };
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddPropertiesToVector(
         std::vector< css::beans::Property > & rOutProperties );
 
-    OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 }
 
 } //  namespace chart

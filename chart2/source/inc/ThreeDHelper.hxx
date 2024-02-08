@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <rtl/ref.hxx>
 #include "charttoolsdllapi.hxx"
@@ -47,7 +48,7 @@ enum CuboidPlanePosition
     CuboidPlanePosition_Back
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS ThreeDHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ThreeDHelper
 {
 public:
 

@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <mutex>
 #include <osl/conditn.hxx>
 #include <comphelper/interfacecontainer4.hxx>
@@ -35,7 +36,7 @@ namespace com::sun::star::view { class XSelectionChangeListener; }
 namespace apphelper
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS LifeTimeManager
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) LifeTimeManager
 {
 friend class LifeTimeGuard;
 public:

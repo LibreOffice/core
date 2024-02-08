@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
@@ -40,7 +41,7 @@ typedef cppu::WeakImplHelper<
     LabeledDataSequence_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS LabeledDataSequence final :
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) LabeledDataSequence final :
         public impl::LabeledDataSequence_Base
 {
 public:

@@ -176,7 +176,7 @@ class SAL_DLLPUBLIC_TEMPLATE WidgetStatusListener_Base
 {
 };
 
-class VCL_DLLPUBLIC WidgetStatusListener final : public WidgetStatusListener_Base
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) WidgetStatusListener final : public WidgetStatusListener_Base
 {
 public:
     WidgetStatusListener(weld::Widget* widget, const OUString& rCommand);
@@ -255,7 +255,7 @@ private:
     SAL_DLLPRIVATE virtual void UpdateCurrentValue(double dCurrentValue) override;
 };
 
-class VCL_DLLPUBLIC DoubleNumericFormatter final : public EntryFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DoubleNumericFormatter final : public EntryFormatter
 {
 public:
     DoubleNumericFormatter(weld::Entry& rEntry);

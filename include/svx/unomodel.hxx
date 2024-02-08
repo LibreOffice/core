@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_UNOMODEL_HXX
 #define INCLUDED_SVX_UNOMODEL_HXX
 
+#include <config_options.h>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
@@ -32,7 +33,7 @@
 
 class SdrModel;
 
-class SVXCORE_DLLPUBLIC SvxUnoDrawingModel
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxUnoDrawingModel
 :   public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
     public SvxFmMSFactory,
     public css::drawing::XDrawPagesSupplier,

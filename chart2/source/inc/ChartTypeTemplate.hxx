@@ -79,7 +79,7 @@ class LabeledDataSequence;
 
     * create an XLegend via the global service factory, set it at the diagram.
  */
-class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeTemplate : public ::cppu::WeakImplHelper<
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartTypeTemplate : public ::cppu::WeakImplHelper<
         css::chart2::XChartTypeTemplate,
         css::lang::XServiceName >
 {

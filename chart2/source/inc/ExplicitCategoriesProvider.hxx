@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "charttoolsdllapi.hxx"
 #include <unotools/weakref.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -55,7 +56,7 @@ public:
     virtual css::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider final
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ExplicitCategoriesProvider final
 {
 public:
     ExplicitCategoriesProvider( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSysModel

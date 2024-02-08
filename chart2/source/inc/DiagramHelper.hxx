@@ -51,7 +51,7 @@ class DataSeries;
 class Diagram;
 class LabeledDataSequence;
 
-class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) DiagramHelper
 {
 public:
 

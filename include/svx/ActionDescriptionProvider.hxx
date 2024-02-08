@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 #define INCLUDED_SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 
@@ -29,7 +30,7 @@ The strings are intended to be provided to the user e.g. as description for undo
 The name of the object acted on and the type of action needs to be given as input parameter.
 */
 
-class SVX_DLLPUBLIC ActionDescriptionProvider
+class UNLESS_MERGELIBS(SVX_DLLPUBLIC) ActionDescriptionProvider
 {
 public:
     enum class ActionType

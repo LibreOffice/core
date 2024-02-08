@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 
@@ -36,7 +37,7 @@ namespace chart
     unlockControllers in the DTOR.  Using this ensures that controllers do not
     remain locked when leaving a function even in case an exception is thrown.
  */
-class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuardUNO
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ControllerLockGuardUNO
 {
 public:
     explicit ControllerLockGuardUNO(rtl::Reference<::chart::ChartModel> xModel);
@@ -62,7 +63,7 @@ private:
     Use the ControllerLockHelperGuard to lock/unlock the model during a block of
     instructions.
  */
-class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ControllerLockHelper
 {
 public:
     explicit ControllerLockHelper(rtl::Reference<::chart::ChartModel> xModel);
@@ -80,7 +81,7 @@ private:
     do not remain locked when leaving a function even in case an exception is
     thrown.
  */
-class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelperGuard
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ControllerLockHelperGuard
 {
 public:
     explicit ControllerLockHelperGuard(ControllerLockHelper& rHelper);

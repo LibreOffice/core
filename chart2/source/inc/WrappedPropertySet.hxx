@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include "WrappedProperty.hxx"
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -36,7 +37,7 @@ namespace cppu { class OPropertyArrayHelper; }
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS WrappedPropertySet :
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedPropertySet :
                          public ::cppu::WeakImplHelper
                          < css::beans::XPropertySet
                          , css::beans::XMultiPropertySet

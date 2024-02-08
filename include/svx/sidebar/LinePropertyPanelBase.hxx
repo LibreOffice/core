@@ -43,7 +43,7 @@ namespace svx::sidebar
 {
 class LineStyleNoneChange;
 
-class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
+class UNLESS_MERGELIBS(SVX_DLLPUBLIC) LinePropertyPanelBase : public PanelLayout
 {
 public:
     virtual ~LinePropertyPanelBase() override;

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
@@ -31,7 +32,7 @@ namespace chart
 class ChartType;
 class DataSeries;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartTypeHelper
 {
 public:
     static bool isSupportingGeometryProperties(  const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );

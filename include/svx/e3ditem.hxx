@@ -20,11 +20,12 @@
 #ifndef INCLUDED_SVX_E3DITEM_HXX
 #define INCLUDED_SVX_E3DITEM_HXX
 
+#include <config_options.h>
 #include <svl/poolitem.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <svx/svxdllapi.h>
 
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxB3DVectorItem final : public SfxPoolItem
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxB3DVectorItem final : public SfxPoolItem
 {
     basegfx::B3DVector  aVal;
 

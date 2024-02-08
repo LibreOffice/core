@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 
@@ -29,7 +30,7 @@ namespace chart
 {
 class DataSeries;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ColorPerPointHelper
+class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ColorPerPointHelper
 {
 public:
     static bool hasPointOwnColor(
