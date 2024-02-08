@@ -56,6 +56,9 @@ enum class SvxFrameDirection
 
     /** Vertical, from top to bottom, from right to left (vert="vert"). */
     Vertical_RL_TB90 = css::text::WritingMode2::TB_RL90,
+
+    /** Stacked, from top to bottom, 1 char per line (vert="wordArtVert"). */
+    Stacked = css::text::WritingMode2::STACKED,
 };
 
 TranslateId getFrmDirResId(size_t nIndex);

@@ -4675,6 +4675,9 @@ bool SvxFrameDirectionItem::PutValue( const css::uno::Any& rVal,
             case text::WritingMode2::PAGE:
                 SetValue( SvxFrameDirection::Environment );
                 break;
+            case text::WritingMode2::STACKED:
+                SetValue(SvxFrameDirection::Stacked);
+                break;
             default:
                 bRet = false;
                 break;
@@ -4713,6 +4716,9 @@ bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
             break;
         case SvxFrameDirection::Environment:
             nVal = text::WritingMode2::PAGE;
+            break;
+        case SvxFrameDirection::Stacked:
+            nVal = text::WritingMode2::STACKED;
             break;
         default:
             OSL_FAIL("Unknown SvxFrameDirection value!");

@@ -42,6 +42,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/numitem.hxx>
@@ -693,6 +694,14 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     {
         return false;
     }
+
+    //If the paragraph SvxFrameDirection is Stacked, use ONECHARPERLINE
+    const SvxFrameDirectionItem* pFrameDirItem = &GetParaAttrib(nPara, EE_PARA_WRITINGDIR);
+    bool bStacked = pFrameDirItem->GetValue() == SvxFrameDirection::Stacked;
+    if (bStacked)
+        maStatus.TurnOnFlags(EEControlBits::ONECHARPERLINE);
+    else
+        maStatus.TurnOffFlags(EEControlBits::ONECHARPERLINE);
 
     // Initialization...
 

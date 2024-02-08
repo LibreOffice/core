@@ -146,7 +146,12 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
         {
             mrTextBodyProp.maPropertyMap.setProperty(PROP_WritingMode, text::WritingMode2::BT_LR);
         }
-        else {
+        else if (tVert == XML_wordArtVert) // what about XML_wordArtVertRtl ?
+        {
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_WritingMode, text::WritingMode2::STACKED);
+        }
+        else
+        {
             bool bRtl = rAttribs.getBool( XML_rtl, false );
             mrTextBodyProp.maPropertyMap.setProperty( PROP_TextWritingMode,
                 ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB ));

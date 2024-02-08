@@ -91,6 +91,16 @@ published constants WritingMode2
         @since LibreOffice 7.5
     */
     const short TB_RL90 = 6;
+
+    /** 'T' text within a line is written top-to-bottom, but characters are
+        'E' not rotated.
+        'X' This is like LR_TB where 1 Character fit in every line.
+        'T' Only 1 line display is implemented.
+        This corresponds to OOXML attribute vert="wordArtVert" for shapes.
+
+        @since LibreOffice 24.8
+    */
+    const short STACKED = 7;
 };
 
 

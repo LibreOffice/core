@@ -607,19 +607,25 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
                 sal_Int32 nVert = rAttribs.getToken(XML_vert, XML_horz);
-                // Values 'wordArtVert' and 'wordArtVertRtl' are not implemented.
-                // Map them to other vert values.
-                if (nVert == XML_eaVert || nVert == XML_wordArtVertRtl)
+                if (nVert == XML_eaVert)
                 {
                     xPropertySet->setPropertyValue("TextWritingMode",
                                                    uno::Any(text::WritingMode_TB_RL));
                     xPropertySet->setPropertyValue("WritingMode",
                                                    uno::Any(text::WritingMode2::TB_RL));
                 }
-                else if (nVert == XML_mongolianVert || nVert == XML_wordArtVert)
+                else if (nVert == XML_mongolianVert)
                 {
                     xPropertySet->setPropertyValue("WritingMode",
                                                    uno::Any(text::WritingMode2::TB_LR));
+                }
+                else if (nVert == XML_wordArtVert || nVert == XML_wordArtVertRtl)
+                {
+                    // Multiline wordArtVert is not implemented yet.
+                    // It will render all the text in 1 line.
+                    // Map 'wordArtVertRtl' to 'wordArtVert', as they are the same now.
+                    xPropertySet->setPropertyValue("WritingMode",
+                                                   uno::Any(text::WritingMode2::STACKED));
                 }
                 else if (nVert != XML_horz) // cases XML_vert and XML_vert270
                 {

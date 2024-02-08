@@ -3774,6 +3774,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 sWritingMode = "vert";
             else if (nWritingMode == text::WritingMode2::TB_LR)
                 sWritingMode = "mongolianVert";
+            else if (nWritingMode == text::WritingMode2::STACKED)
+                sWritingMode = "wordArtVert";
         }
     }
 

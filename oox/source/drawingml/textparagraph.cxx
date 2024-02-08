@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <drawingml/textparagraph.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textcharacterproperties.hxx>
@@ -31,6 +32,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <oox/token/properties.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -173,6 +175,14 @@ void TextParagraph::insertAt(
                     aBulletSize.Width = aBulletSize.Height = std::lround(fBulletSizeRel * nFirstCharHeightMm * OOX_BULLET_LIST_SCALE_FACTOR);
 
                 aioBulletList.setProperty( PROP_GraphicSize, aBulletSize);
+            }
+
+            // If the shape is Stacked then set Stacked into the TextParagraphProperties
+            Reference<XPropertySet> xProps2(xText, UNO_QUERY);
+            sal_Int16 nWritingMode = xProps2->getPropertyValue("WritingMode").get<sal_Int16>();
+            if (nWritingMode == text::WritingMode2::STACKED)
+            {
+                aParaProp.getTextParagraphPropertyMap().setProperty(PROP_WritingMode, nWritingMode);
             }
 
             float fCharacterSize = nCharHeight > 0 ? GetFontHeight ( nCharHeight ) : pTextParagraphStyle->getCharHeightPoints( 12 );
