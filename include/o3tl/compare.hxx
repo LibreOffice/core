@@ -12,13 +12,17 @@
 #include <sal/config.h>
 
 #include <compare>
+#include <concepts>
+#include <cstdint>
+#include <cstring>
+#include <limits>
 
 #include <config_global.h>
 
 namespace o3tl
 {
-// A poor approximation of C++20 <compare> std::strong_order, falling back to operator <=> (so e.g.
-// not providing a strict weak ordering for floating-point types with NaN):
+// An approximation of C++20 <compare> std::strong_order that should work at least for IEC559 float
+// and double on platforms that have correspondingly-sized std::int32_t and std::int64_t:
 #if HAVE_CPP_STRONG_ORDER
 
 inline constexpr auto strong_order = std::strong_order;
@@ -27,9 +31,25 @@ inline constexpr auto strong_order = std::strong_order;
 
 namespace detail
 {
+template<typename To, typename From> To bit_cast(From val) requires (sizeof (To) == sizeof (From)) {
+    char buf alignas(To)[sizeof (From)];
+    std::memcpy(buf, &val, sizeof (From));
+    return *reinterpret_cast<To const *>(buf);
+}
+
 struct strong_order
 {
-    auto operator()(auto x, auto y) const { return x <=> y; }
+    template <typename T> auto operator ()(T x, T y) const
+        requires std::same_as<T, float> && std::numeric_limits<T>::is_iec559
+    {
+        return bit_cast<std::int32_t>(x) <=> bit_cast<std::int32_t>(y);
+    }
+
+    template <typename T> auto operator ()(T x, T y) const
+        requires std::same_as<T, double> && std::numeric_limits<T>::is_iec559
+    {
+        return bit_cast<std::int64_t>(x) <=> bit_cast<std::int64_t>(y);
+    }
 };
 }
 
