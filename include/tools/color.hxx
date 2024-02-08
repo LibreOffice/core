@@ -258,15 +258,6 @@ public:
         return mValue == rColor.mValue;
     }
 
-    /** Check if the color value is unequal than rColor.
-      * @param rColor
-      * @return is unequal
-      */
-    bool operator!=(const Color& rColor) const
-    {
-        return mValue != rColor.mValue;
-    }
-
     /** Gets the color error compared to another.
       * It describes how different they are.
       * It takes the abs of differences in parameters.
