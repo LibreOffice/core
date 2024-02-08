@@ -1324,10 +1324,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     AddTabPage("general", SfxDocumentPage::Create, nullptr);
     AddTabPage("description", SfxDocumentDescPage::Create, nullptr);
 
-    if (!comphelper::LibreOfficeKit::isActive())
-        AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
-    else
-        RemoveTabPage("customprops");
+    AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
 
     if (rInfoItem.isCmisDocument())
         AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
