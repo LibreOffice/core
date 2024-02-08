@@ -7675,24 +7675,51 @@ void ScInterpreter::ScXLookup()
 
     // 3rd argument is return value array
     ScMatrixRef prMat = nullptr;
+    SCCOL nSearchCol1 = 0;
+    SCROW nSearchRow1 = 0;
+    SCTAB nSearchTab1 = 0;
+    SCCOL nSearchCol2 = 0;
+    SCROW nSearchRow2 = 0;
+    SCTAB nSearchTab2 = 0;
     SCSIZE nrC = 0, nrR = 0;
-    StackVar eType = GetStackType();
-    switch ( eType )
+
+    switch ( GetStackType() )
     {
-        case svDoubleRef :
         case svSingleRef :
-        case svExternalDoubleRef :
-        case svExternalSingleRef :
-        case svMatrix :
-            prMat = GetMatrix();
-            if ( prMat )
-                prMat->GetDimensions( nrC, nrR );
-            else
+            PopSingleRef(nSearchCol1, nSearchRow1, nSearchTab1);
+            nSearchCol2 = nSearchCol1;
+            nSearchRow2 = nSearchRow1;
+            nrC = nSearchCol2 - nSearchCol1 + 1;
+            nrR = nSearchRow2 - nSearchRow1 + 1;
+        break;
+        case svDoubleRef:
+        {
+            PopDoubleRef(nSearchCol1, nSearchRow1, nSearchTab1, nSearchCol2, nSearchRow2, nSearchTab2);
+            if (nSearchTab1 != nSearchTab2)
             {
                 PushIllegalParameter();
                 return;
             }
-            break;
+            nrC = nSearchCol2 - nSearchCol1 + 1;
+            nrR = nSearchRow2 - nSearchRow1 + 1;
+        }
+        break;
+        case svMatrix :
+        case svExternalDoubleRef :
+        {
+            if (GetStackType() == svMatrix)
+                prMat = PopMatrix();
+            else
+                PopExternalDoubleRef(prMat);
+
+            if (!prMat)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            prMat->GetDimensions(nrC, nrR);
+        }
+        break;
 
         default :
             PushIllegalParameter();
@@ -7858,50 +7885,56 @@ void ScInterpreter::ScXLookup()
             nResCols = 1;
             nResRows = nrR;
         }
-        // if result matrix has more than one row or column push matrix else push single value
+        // if result has more than one row or column push double ref or matrix, else push single ref
         if ( nResCols > 1 || nResRows > 1 )
         {
-            // result is matrix, make/fill matrix with output and push that
-            ScMatrixRef pResMat = GetNewMat( nResCols, nResRows, /*bEmpty*/true );
-            if ( pResMat )
+            if (prMat)
             {
-                for ( SCSIZE i = 0; i < nResCols; i++ )
+                // result is matrix, make / fill matrix with output and push that
+                ScMatrixRef pResMat = GetNewMat(nResCols, nResRows, /*bEmpty*/true);
+                if (pResMat)
                 {
-                    for ( SCSIZE j = 0; j < nResRows; j++ )
+                    for (SCSIZE i = 0; i < nResCols; i++)
                     {
-                        SCSIZE ri;
-                        SCSIZE rj;
-                        if ( vsa.bVLookup )
+                        for (SCSIZE j = 0; j < nResRows; j++)
                         {
-                            ri = nX + i;
-                            rj = nY;
+                            SCSIZE ri;
+                            SCSIZE rj;
+                            if (vsa.bVLookup)
+                            {
+                                ri = nX + i;
+                                rj = nY;
+                            }
+                            else
+                            {
+                                ri = nX;
+                                rj = nY + j;
+                            }
+                            if (prMat->IsStringOrEmpty(ri, rj))
+                                pResMat->PutString(prMat->GetString(ri, rj), i, j);
+                            else
+                                pResMat->PutDouble(prMat->GetDouble(ri, rj), i, j);
                         }
-                        else
-                        {
-                            ri = nX;
-                            rj = nY + j;
-                        }
-                        if ( prMat->IsStringOrEmpty( ri, rj ) )
-                            pResMat->PutString( prMat->GetString( ri, rj ), i, j );
-                        else
-                            pResMat->PutDouble( prMat->GetDouble( ri, rj ), i, j );
                     }
+                    PushMatrix(pResMat);
                 }
-                PushMatrix( pResMat );
+                else
+                {
+                    PushIllegalParameter();
+                    return;
+                }
             }
             else
             {
-                PushIllegalParameter();
-                return;
+                // result is a double ref
+                PushDoubleRef(nSearchCol1 + nX, nSearchRow1 + nY, nSearchTab1,
+                    nSearchCol1 + (nResCols - 1) + nX, nSearchRow1 + (nResRows - 1) + nY, nSearchTab1);
             }
         }
         else
         {
-            // result is a single value
-            if ( prMat->IsStringOrEmpty( nX, nY) )
-                PushString( prMat->GetString( nX, nY ).getString() );
-            else
-                PushDouble( prMat->GetDouble( nX, nY ) );
+            // result is a single ref
+            PushSingleRef(nSearchCol1 + nX, nSearchRow1 + nY, nSearchTab1);
         }
     }
     else
