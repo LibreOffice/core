@@ -37,6 +37,7 @@
 #include <o3tl/string_view.hxx>
 
 #include "rtti.hxx"
+#include "share.hxx"
 
 namespace {
 

@@ -35,6 +35,10 @@
 #include "call.hxx"
 #include "share.hxx"
 
+#if !ENABLE_RUNTIME_OPTIMIZATIONS
+#include "rtti.hxx"
+#endif
+
 using namespace ::com::sun::star::uno;
 
 // Perform the UNO call
