@@ -91,7 +91,7 @@ namespace comphelper
         std::scoped_lock aGuard( m_xImpl->aMutex );
 
         // remove all events for this processor
-        m_xImpl->aEvents.erase(std::remove_if( m_xImpl->aEvents.begin(), m_xImpl->aEvents.end(), EqualProcessor( _xProcessor ) ), m_xImpl->aEvents.end());
+        std::erase_if( m_xImpl->aEvents, EqualProcessor( _xProcessor ) );
     }
 
 
