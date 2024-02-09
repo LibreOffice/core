@@ -371,6 +371,9 @@ void SbRtl_CurDir(StarBASIC *, SbxArray & rPar, bool)
     // there's no possibility to detect the current one in a way that a virtual URL
     // could be delivered.
 
+    if (rPar.Count() > 2)
+       return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
 #if defined(_WIN32)
     int nCurDir = 0;  // Current dir // JSM
     if (rPar.Count() == 2)
