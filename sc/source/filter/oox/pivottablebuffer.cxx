@@ -396,13 +396,18 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
         // try to get the source field and its name from passed DataPilot descriptor
         Reference< XIndexAccess > xDPFieldsIA( rxDPDesc->getDataPilotFields(), UNO_SET_THROW );
         xDPField.set( xDPFieldsIA->getByIndex( nDatabaseIdx ), UNO_QUERY_THROW );
-        Reference< XNamed > xDPFieldName( xDPField, UNO_QUERY_THROW );
-        maDPFieldName = xDPFieldName->getName();
-        OSL_ENSURE( !maDPFieldName.isEmpty(), "PivotTableField::finalizeImport - no field name in source data found" );
+    }
+    catch( Exception& )
+    {
+    }
 
+    try
+    {
         // try to convert grouping settings
         if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
         {
+            maDPFieldName = pCacheField->getName();
+
             // numeric grouping is done inplace, no nested group fields will appear
             if( pCacheField->hasNumericGrouping() )
             {
@@ -427,6 +432,13 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
                 // create all nested group fields (if any)
                 mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, aItemNames );
             }
+        }
+        else
+        {
+            // No choice - check the sheet for field name
+            Reference< XNamed > xDPFieldName( xDPField, UNO_QUERY_THROW );
+            maDPFieldName = xDPFieldName->getName();
+            OSL_ENSURE( !maDPFieldName.isEmpty(), "PivotTableField::finalizeImport - no field name in source data found" );
         }
     }
     catch( Exception& )
