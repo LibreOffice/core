@@ -71,6 +71,7 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace com::sun::star;
 
@@ -1518,6 +1519,22 @@ tools::Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW 
                             GetEditArea( pPattern, bForceToTop );
 }
 
+namespace {
+
+void notifyCellCursorAt(const ScTabViewShell* pViewShell, SCCOL nCol, SCROW nRow,
+                        const tools::Rectangle& rCursor)
+{
+    std::stringstream ss;
+    ss << rCursor.getX() << ", " << rCursor.getY() << ", " << rCursor.GetWidth() << ", "
+       << rCursor.GetHeight() << ", " << nCol << ", " << nRow;
+
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, ss.str().c_str());
+    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle",
+                                   ss.str().c_str());
+}
+
+}
+
 void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                 ScEditEngineDefaulter* pNewEngine,
                                 vcl::Window* pWin, SCCOL nNewX, SCROW nNewY )
@@ -1632,6 +1649,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
     pEditView[eWhich]->SetOutputArea( aOutputArea );
+
+    if (bLOKPrintTwips)
+        notifyCellCursorAt(GetViewShell(), nNewX, nNewY, aPTwipsRect);
 
     if ( bActive && eWhich == GetActivePart() )
     {
@@ -2119,6 +2139,9 @@ void ScViewData::EditGrowX()
 
     pCurView->SetOutputArea(aArea);
 
+    if (bLOKPrintTwips)
+        notifyCellCursorAt(GetViewShell(), nEditCol, nEditRow, aAreaPTwips);
+
     //  In vertical mode, the whole text is moved to the next cell (right-aligned),
     //  so everything must be repainted. Otherwise, paint only the new area.
     //  If growing in centered alignment, if the cells left and right have different sizes,
@@ -2231,6 +2254,9 @@ void ScViewData::EditGrowY( bool bInitial )
         pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
 
     pCurView->SetOutputArea(aArea);
+
+    if (bLOKPrintTwips)
+        notifyCellCursorAt(GetViewShell(), nEditCol, nEditRow, aAreaPTwips);
 
     if (nEditEndRow >= nBottom || bMaxReached)
     {
