@@ -1911,11 +1911,25 @@ void DocxExport::WriteMainText()
     // Write background page color
     if (std::unique_ptr<SvxBrushItem> oBrush = getBackground(); oBrush)
     {
-        Color backgroundColor = oBrush->GetColor();
-        OString aBackgroundColorStr = msfilter::util::ConvertColor(backgroundColor);
+        m_pDocumentFS->startElementNS(XML_w, XML_background, FSNS(XML_w, XML_color),
+                                      msfilter::util::ConvertColor(oBrush->GetColor()));
 
-        m_pDocumentFS->singleElementNS(XML_w, XML_background, FSNS(XML_w, XML_color),
-                                       aBackgroundColorStr);
+        const GraphicObject* pGraphicObj = oBrush->GetGraphicObject();
+        if (pGraphicObj) // image/pattern/texture
+        {
+            const OUString aRelId = m_pDrawingML->writeGraphicToStorage(pGraphicObj->GetGraphic());
+            if (!aRelId.isEmpty())
+            {
+                m_pDocumentFS->startElementNS(XML_v, XML_background);
+
+                m_pDocumentFS->singleElementNS(XML_v, XML_fill, FSNS(XML_r, XML_id), aRelId,
+                                            XML_type, "frame");
+
+                m_pDocumentFS->endElementNS(XML_v, XML_background);
+            }
+        }
+
+        m_pDocumentFS->endElementNS(XML_w, XML_background);
     }
 
     // body

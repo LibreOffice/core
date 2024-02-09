@@ -387,6 +387,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126533_pageGradient)
                          getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
+{
+    // given a document with a page background image
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+                         getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
+
+    if (!isExported())
+        return;
+
+    xmlDocUniquePtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    assertXPath(pXmlDocRels,
+                "/rels:Relationships/rels:Relationship[@Target='media/image1.jpeg']"_ostr, 1);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
