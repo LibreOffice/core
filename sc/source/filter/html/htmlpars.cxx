@@ -77,7 +77,6 @@ namespace
 /// data-sheets-value from google sheets, value is a JSON.
 void ParseDataSheetsValue(const OUString& rDataSheetsValue, std::optional<OUString>& rVal, std::optional<OUString>& rNum)
 {
-    // data-sheets-value from google sheets, value is a JSON.
     OString aEncodedOption = rDataSheetsValue.toUtf8();
     const char* pEncodedOption = aEncodedOption.getStr();
     std::stringstream aStream(pEncodedOption);
@@ -98,6 +97,16 @@ void ParseDataSheetsValue(const OUString& rDataSheetsValue, std::optional<OUStri
                 rNum = ";;@";
                 break;
             }
+            case 3:
+            {
+                // 3 is number.
+                it = aTree.find("3");
+                if (it != aTree.not_found())
+                {
+                    rVal = OUString::fromUtf8(it->second.get_value<std::string>());
+                }
+                break;
+            }
             case 4:
             {
                 // 4 is boolean.
@@ -107,6 +116,37 @@ void ParseDataSheetsValue(const OUString& rDataSheetsValue, std::optional<OUStri
                     rVal = OUString::fromUtf8(it->second.get_value<std::string>());
                 }
                 rNum = ";;BOOLEAN";
+                break;
+            }
+        }
+    }
+}
+
+/// data-sheets-numberformat from google sheets, value is a JSON.
+void ParseDataSheetsNumberformat(const OUString& rDataSheetsValue, std::optional<OUString>& rNum)
+{
+    OString aEncodedOption = rDataSheetsValue.toUtf8();
+    const char* pEncodedOption = aEncodedOption.getStr();
+    std::stringstream aStream(pEncodedOption);
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // The "1" key describes the other keys.
+    auto it = aTree.find("1");
+    if (it != aTree.not_found())
+    {
+        int nType = std::stoi(it->second.get_value<std::string>());
+        switch (nType)
+        {
+            case 2:
+            {
+                // 2 is number format.
+                it = aTree.find("2");
+                if (it != aTree.not_found())
+                {
+                    // Leave the parse and a number language unspecified.
+                    OUString aNum = ";;" + OUString::fromUtf8(it->second.get_value<std::string>());
+                    rNum = aNum;
+                }
                 break;
             }
         }
@@ -1024,6 +1064,11 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             case HtmlOptionId::DSVAL:
             {
                 ParseDataSheetsValue(rOption.GetString(), mxActEntry->pValStr, mxActEntry->pNumStr);
+            }
+            break;
+            case HtmlOptionId::DSNUM:
+            {
+                ParseDataSheetsNumberformat(rOption.GetString(), mxActEntry->pNumStr);
             }
             break;
             default: break;
