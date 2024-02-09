@@ -2647,6 +2647,69 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableCompactLayoutXLSX)
     testThis(*getScDoc());
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest,
+                     testPivotTableXLSX_OutOfSyncPivotTableCachedDefinitionImport)
+{
+    // This tests that a out-of-sync sheet data and pivot table cached definitions
+    // still get imported correctly as expected.
+
+    // It is perfectly valid that the sheet data and pivot table are out-of-sync,
+    // but even if the sheet data is heavily modified, the pivot table should still
+    // be imported.
+
+    // The test document has columns named A-K where only A and K are used in the
+    // pivot table. The columns B-J were removed in the sheet data, but the pivot table
+    // was not updated, so the cached data still has those and the pivot table
+    // description still relies on those columns to be present.
+
+    auto testThis = [](ScDocument& rDocument) {
+        ScDPCollection* pDPs = rDocument.GetDPCollection();
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one pivot table instance.", size_t(1),
+                                     pDPs->GetCount());
+
+        const ScDPObject* pDPObj = &(*pDPs)[0];
+        CPPUNIT_ASSERT(pDPObj);
+        ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+        CPPUNIT_ASSERT(pSaveData);
+
+        // Do we have a dim named "A"
+        ScDPSaveDimension* pSaveDimA = pSaveData->GetExistingDimensionByName(u"A");
+        CPPUNIT_ASSERT(pSaveDimA);
+
+        // Do we have a dim named "K"
+        ScDPSaveDimension* pSaveDimK = pSaveData->GetExistingDimensionByName(u"K");
+        CPPUNIT_ASSERT(pSaveDimK);
+
+        // Check the headers
+        CPPUNIT_ASSERT_EQUAL(OUString("K"), rDocument.GetString(ScAddress(0, 2, 0))); // A3
+        CPPUNIT_ASSERT_EQUAL(OUString("Sum of A"), rDocument.GetString(ScAddress(1, 2, 0))); //B3
+
+        // Check the values
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), rDocument.GetString(ScAddress(0, 3, 0))); //A4
+        CPPUNIT_ASSERT_EQUAL(OUString("2"), rDocument.GetString(ScAddress(0, 4, 0))); //A5
+        CPPUNIT_ASSERT_EQUAL(OUString("5"), rDocument.GetString(ScAddress(1, 3, 0))); //B4
+        CPPUNIT_ASSERT_EQUAL(OUString("5"), rDocument.GetString(ScAddress(1, 4, 0))); //B5
+    };
+
+    // test document with sheet data and pivot table in sync
+    createScDoc("xlsx/PivotTable_CachedDefinitionAndDataInSync.xlsx");
+    testThis(*getScDoc());
+
+    // test document with sheet data and pivot table in out-of-sync - B-J columns removed,
+    // but the pivot table cache still hass all the data
+    createScDoc(
+        "xlsx/PivotTable_CachedDefinitionAndDataNotInSync_SheetColumnsRemoved_WithCacheData.xlsx");
+    testThis(*getScDoc());
+
+    // test document with sheet data and pivot table in out-of-sync - B-J columns removed,
+    // but the pivot table cache is not saved, only the cached definitions are available
+    createScDoc("xlsx/"
+                "PivotTable_CachedDefinitionAndDataNotInSync_SheetColumnsRemoved_WithoutCacheData."
+                "xlsx");
+    testThis(*getScDoc());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
