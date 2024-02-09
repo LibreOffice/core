@@ -12,6 +12,7 @@
 #include <string>
 #include <string_view>
 #include <list>
+#include <mutex>
 
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/lokhelper.hxx>
