@@ -1153,8 +1153,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
             // keep into account the zoom factor
             static const double twipFactor = 15 * 1.76388889; // 26.45833335
-            Point aNewOrigin = Point((aOriginAbsPx.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
-                                     (aOriginAbsPx.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
+            Point aNewOrigin((aOriginAbsPx.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
+                             (aOriginAbsPx.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
 
             MapMode aNewMM = rDevice.GetMapMode();
             aNewMM.SetOrigin(aNewOrigin);

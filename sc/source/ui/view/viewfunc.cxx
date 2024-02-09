@@ -134,6 +134,8 @@ ScViewFunc::~ScViewFunc()
 {
 }
 
+namespace {
+
 struct FormulaProcessingContext
 {
     std::shared_ptr<ScAddress> aPos;
@@ -173,8 +175,6 @@ struct FormulaProcessingContext
         return GetViewData().GetDocument();
     }
 };
-
-namespace {
 
 void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUString& rAction)
 {
@@ -442,7 +442,7 @@ namespace
 {
     void runAutoCorrectQueryAsync(std::shared_ptr<FormulaProcessingContext> context);
 
-    void performAutoFormatAndUpdate(const OUString& rString, const ScMarkData& rMark, SCCOL nCol,
+    void performAutoFormatAndUpdate(std::u16string_view rString, const ScMarkData& rMark, SCCOL nCol,
                                     SCROW nRow, SCTAB nTab, bool bNumFmtChanged, bool bRecord,
                                     const std::shared_ptr<ScDocShellModificator>& pModificator,
                                     ScViewFunc& rViewFunc)
@@ -456,7 +456,7 @@ namespace
         ScDocShell* pDocSh = rViewData.GetDocShell();
         pDocSh->UpdateOle(rViewData);
 
-        const OUString aType(rString.isEmpty() ? u"delete-content" : u"cell-change");
+        const OUString aType(rString.empty() ? u"delete-content" : u"cell-change");
         HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow, aType);
 
         if (bRecord)
@@ -630,7 +630,7 @@ namespace
     void runAutoCorrectQueryAsync(std::shared_ptr<FormulaProcessingContext> context)
     {
         auto aQueryBox = std::make_shared<AutoCorrectQuery>(context->GetViewData().GetDialogParent(), context->aCorrectedFormula);
-        aQueryBox->runAsync(aQueryBox, [context] (int nResult)
+        weld::DialogController::runAsync(aQueryBox, [context] (int nResult)
         {
             if (nResult == RET_YES) {
                 context->aFormula = context->aCorrectedFormula;
