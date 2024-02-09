@@ -164,7 +164,11 @@ void SwFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
     for(const auto pFormatField: vFields)
-        pFormatField->dumpAsXml(pWriter);
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatField"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pFormatField);
+        (void)xmlTextWriterEndElement(pWriter);
+    }
     (void)xmlTextWriterEndElement(pWriter);
 }
 
