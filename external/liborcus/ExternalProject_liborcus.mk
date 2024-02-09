@@ -46,6 +46,11 @@ endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=$(gb_STDLIBS)
 endif
+ifeq ($(COM),GCC)
+# fix std::filesystem linker error:
+# https://stackoverflow.com/questions/33149878/experimentalfilesystem-linker-error
+liborcus_LIBS+=-lstdc++fs
+endif
 
 liborcus_CPPFLAGS=$(CPPFLAGS)
 ifeq ($(SYSTEM_ZLIB),)
