@@ -7,6 +7,9 @@ excludelist:
     bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx:
     # No .hxx -> .h replacement in URE headers
     - typelib/typedescription.hxx
+    bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.cxx:
+    # Actually needed for ifdefs to work in all cases
+    - share.hxx
     bridges/source/cpp_uno/gcc3_linux_x86-64/uno2cpp.cxx:
     # Actually needed
     - callvirtualmethod.hxx
