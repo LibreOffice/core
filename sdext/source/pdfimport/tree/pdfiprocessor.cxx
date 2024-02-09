@@ -28,6 +28,8 @@
 
 #include <sal/log.hxx>
 
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
+
 #include <comphelper/sequence.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -383,13 +385,55 @@ void PDFIProcessor::drawAlphaMaskedImage(const uno::Sequence<beans::PropertyValu
 
 }
 
-void PDFIProcessor::tilingPatternFill(int /*nX0*/, int /*nY0*/, int /*nX1*/, int /*nY1*/,
-                                      double /*nxStep*/, double /*nyStep*/,
+void PDFIProcessor::tilingPatternFill(int nX0, int nY0, int nX1, int nY1,
+                                      double nxStep, double nyStep,
                                       int /* nPaintType */,
-                                      css::geometry::AffineMatrix2D& /*rMat*/,
+                                      css::geometry::AffineMatrix2D& rMat,
                                       const css::uno::Sequence<css::beans::PropertyValue>& /*xTile*/)
 {
-    // TODO
+    const GraphicsContext& rGC(getCurrentContext());
+
+    basegfx::B2DTuple aScale, aTranslation;
+    double fRotate, fShearX;
+    auto rTfm = rGC.Transformation;
+    rTfm.decompose(aScale, aTranslation, fRotate, fShearX);
+
+    // Build a poly covering the whole fill area
+    double np0x = nX0 * nxStep;
+    double np0y = nY0 * nyStep;
+    double np1x = nX1 * nxStep;
+    double np1y = nY1 * nyStep;
+
+    // Transform with the rMat passed in
+    double tmpx, tmpy;
+    tmpx = np0x * rMat.m00 + np0y * rMat.m01 + rMat.m02;
+    tmpy = np0x * rMat.m10 + np0y * rMat.m11 + rMat.m12;
+    np0x = tmpx;
+    np0y = tmpy;
+    tmpx = np1x * rMat.m00 + np1y * rMat.m01 + rMat.m02;
+    tmpy = np1x * rMat.m10 + np1y * rMat.m11 + rMat.m12;
+    np1x = tmpx;
+    np1y = tmpy;
+
+    auto aB2DPoly = basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(basegfx::B2DRange(np0x, np0y, np1x, np1y)));
+    aB2DPoly.transform(getCurrentContext().Transformation);
+
+    // Clip against current clip path, if any
+    basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
+    if( aCurClip.count() ) {
+        aB2DPoly = basegfx::utils::clipPolyPolygonOnPolyPolygon( aB2DPoly, aCurClip,
+                       true, /* bInside, keep parts inside the clip */
+                       false /* bStroke, filled not stroked */ );
+    }
+    // TODO: That clipping might shift the fill pattern offsets
+
+    auto pPolyElement = ElementFactory::createPolyPolyElement(
+        m_pCurElement,
+        getGCId(getCurrentContext()),
+        aB2DPoly,
+        PATH_EOFILL ); // Hmm how do I know if this should be EO or not?
+    pPolyElement->updateGeometry();
+    pPolyElement->ZOrder = m_nNextZOrder++;
 }
 
 void PDFIProcessor::strokePath( const uno::Reference< rendering::XPolyPolygon2D >& rPath )
