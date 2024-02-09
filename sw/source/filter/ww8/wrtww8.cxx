@@ -1517,7 +1517,7 @@ std::unique_ptr<SvxBrushItem> MSWordExportBase::getBackground()
     if (SfxItemState::SET == eState)
     {
         // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
-        if (aBrush->GetColor() != COL_AUTO)
+        if (aBrush->GetColor() != COL_AUTO || aBrush->GetGraphicObject())
             return aBrush;
     }
     return nullptr;
