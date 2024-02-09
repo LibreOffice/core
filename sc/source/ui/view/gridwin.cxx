@@ -6179,6 +6179,8 @@ void ScGridWindow::UpdateAllOverlays()
 
 void ScGridWindow::DeleteCursorOverlay()
 {
+    if (comphelper::LibreOfficeKit::isActive() && mrViewData.HasEditView(eWhich))
+        return;
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY"_ostr);
     SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
