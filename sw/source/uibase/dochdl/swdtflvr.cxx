@@ -382,7 +382,8 @@ const Graphic* SwTransferable::FindOLEReplacementGraphic() const
 void SwTransferable::RemoveDDELinkFormat(vcl::Window& rWin)
 {
     RemoveFormat( SotClipboardFormatId::LINK );
-    CopyToClipboard(&rWin);
+    if (rWin.GetClipboard()->getContents().get() == this)
+        CopyToClipboard(&rWin);
 }
 
 void SwTransferable::DisconnectDDE()
