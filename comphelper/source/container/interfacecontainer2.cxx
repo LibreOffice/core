@@ -248,14 +248,10 @@ Reference<XInterface> OInterfaceContainerHelper2::getInterface( sal_Int32 nIndex
 {
     MutexGuard aGuard( rMutex );
 
-    if( bIsList )
+    if (bIsList)
         return (*aData.pAsVector)[nIndex];
-    else if( aData.pAsInterface )
-    {
-        if (nIndex == 0)
-            return aData.pAsInterface;
-    }
-    throw std::out_of_range("index out of range");
+    assert(aData.pAsInterface && nIndex == 0);
+    return aData.pAsInterface;
 }
 
 void OInterfaceContainerHelper2::disposeAndClear( const EventObject & rEvt )
