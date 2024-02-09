@@ -162,11 +162,7 @@ extern "C" { static void thisModule() {} }
 
 TextToPronounce_zh::TextToPronounce_zh(const char* func_name)
 {
-#ifdef SAL_DLLPREFIX
-    OUString lib(SAL_DLLPREFIX"index_data" SAL_DLLEXTENSION);
-#else
-    OUString lib("index_data" SAL_DLLEXTENSION);
-#endif
+    constexpr OUString lib( u"" SAL_MODULENAME( "index_data" ) ""_ustr );
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
     idx=nullptr;

@@ -156,14 +156,10 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             size_t (*funclen)() = nullptr;
 
 #ifndef DISABLE_DYNLOADING
-            OUStringBuffer aBuf;
-#ifdef SAL_DLLPREFIX
-            aBuf.append(SAL_DLLPREFIX);
-#endif
-            aBuf.append( "collator_data" SAL_DLLEXTENSION );
-            hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
+            constexpr OUString sModuleName( u"" SAL_MODULENAME( "i18npool" ) ""_ustr );
+            hModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_DEFAULT );
             if (hModule) {
-                aBuf.append("get_" + rLocale.Language + "_");
+                OUStringBuffer aBuf("get_" + rLocale.Language + "_");
                 if ( rLocale.Language == "zh" ) {
                     OUString func_base = aBuf.makeStringAndClear();
                     if (OUString("TW HK MO").indexOf(rLocale.Country) >= 0)

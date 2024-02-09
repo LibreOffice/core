@@ -34,11 +34,7 @@ TextConversionService::TextConversionService(const char *pImplName)
     : implementationName(pImplName)
 {
 #ifndef DISABLE_DYNLOADING
-#ifdef SAL_DLLPREFIX
-    OUString lib(SAL_DLLPREFIX"textconv_dict" SAL_DLLEXTENSION);
-#else
-    OUString lib("textconv_dict" SAL_DLLEXTENSION);
-#endif
+    constexpr OUString lib( u"" SAL_MODULENAME( "textconv_dict" ) ""_ustr );
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
 #endif

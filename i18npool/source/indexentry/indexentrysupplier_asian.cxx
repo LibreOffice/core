@@ -41,11 +41,7 @@ IndexEntrySupplier_asian::IndexEntrySupplier_asian(
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_asian";
 #ifndef DISABLE_DYNLOADING
-#ifdef SAL_DLLPREFIX
-    OUString lib(SAL_DLLPREFIX"index_data" SAL_DLLEXTENSION);
-#else
-    OUString lib("index_data" SAL_DLLEXTENSION);
-#endif
+    constexpr OUString lib( u"" SAL_MODULENAME( "index_data" ) ""_ustr );
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
 #endif
