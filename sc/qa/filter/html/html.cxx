@@ -116,6 +116,33 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsBools)
     CPPUNIT_ASSERT_EQUAL(OUString("BOOLEAN"), pNumberFormat->GetFormatstring());
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(0), pDoc->GetValue(/*col=*/0, /*row=*/1, /*tab=*/0));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsFormattedNumber)
+{
+    // Given an empty document:
+    createScDoc();
+
+    // When pasting HTML with cells containing formatted numbers:
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    ScImportExport aImporter(*pDoc, aCellPos);
+    SvFileStream aFile(createFileURL(u"numberformat.html"), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    aMemory.Seek(0);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aMemory, OUString(), SotClipboardFormatId::HTML));
+
+    // Then make sure A1's type is a formatted number, value is 1000:
+    sal_uInt32 nNumberFormat = pDoc->GetNumberFormat(/*col=*/0, /*row=*/0, /*tab=*/0);
+    const SvNumberformat* pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: #,##0.00
+    // - Actual  : General
+    // i.e. the number was wasted without a matching number format.
+    CPPUNIT_ASSERT_EQUAL(OUString("#,##0.00"), pNumberFormat->GetFormatstring());
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(1000),
+                         pDoc->GetValue(/*col=*/0, /*row=*/0, /*tab=*/0));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
