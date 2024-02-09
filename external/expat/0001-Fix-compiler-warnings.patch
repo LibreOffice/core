@@ -1,0 +1,47 @@
+From 3f60a47cb5716bb810789a12ef6024c1dc448164 Mon Sep 17 00:00:00 2001
+From: Taichi Haradaguchi <20001722@ymail.ne.jp>
+Date: Fri, 9 Feb 2024 19:28:35 +0900
+Subject: [PATCH] Fix compiler warnings
+
+> In file included from ./../lib/internal.h:149,
+>                  from codepage.c:38:
+> ./../lib/expat.h:1045:5: warning: "XML_GE" is not defined, evaluates to 0 [-Wundef]
+>  1045 | #if XML_GE == 1
+>       |     ^~~~~~
+> ./../lib/internal.h:158:5: warning: "XML_GE" is not defined, evaluates to 0 [-Wundef]
+>   158 | #if XML_GE == 1
+>       |     ^~~~~~
+---
+ expat/lib/expat.h    | 2 +-
+ expat/lib/internal.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/expat/lib/expat.h b/expat/lib/expat.h
+index 95464b0d..79bbfb61 100644
+--- a/expat/lib/expat.h
++++ b/expat/lib/expat.h
+@@ -1042,7 +1042,7 @@ typedef struct {
+ XMLPARSEAPI(const XML_Feature *)
+ XML_GetFeatureList(void);
+ 
+-#if XML_GE == 1
++#if defined(XML_GE) && XML_GE == 1
+ /* Added in Expat 2.4.0 for XML_DTD defined and
+  * added in Expat 2.6.0 for XML_GE == 1. */
+ XMLPARSEAPI(XML_Bool)
+diff --git a/expat/lib/internal.h b/expat/lib/internal.h
+index cce71e4c..208c6b67 100644
+--- a/expat/lib/internal.h
++++ b/expat/lib/internal.h
+@@ -155,7 +155,7 @@ extern "C" {
+ void _INTERNAL_trim_to_complete_utf8_characters(const char *from,
+                                                 const char **fromLimRef);
+ 
+-#if XML_GE == 1
++#if defined(XML_GE) && XML_GE == 1
+ unsigned long long testingAccountingGetCountBytesDirect(XML_Parser parser);
+ unsigned long long testingAccountingGetCountBytesIndirect(XML_Parser parser);
+ const char *unsignedCharToPrintable(unsigned char c);
+-- 
+2.43.1
+
