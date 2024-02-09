@@ -346,6 +346,7 @@ STRING_START        = BOOL_END,
     SDVAL, // StarDiv NumberValue
     DSVAL,
     SDNUM, // StarDiv NumberFormat
+    DSNUM,
     SDLIBRARY,
     SDMODULE,
 STRING_END,
