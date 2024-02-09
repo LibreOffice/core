@@ -1136,18 +1136,6 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         return;
     }
 
-    if (m_rImport.isInBackground())
-    {
-        RTFSprms aAttributes;
-        aAttributes.set(NS_ooxml::LN_CT_Background_color,
-                        new RTFValue(xPropertySet->getPropertyValue("FillColor").get<sal_Int32>()));
-        m_rImport.Mapper().props(new RTFReferenceProperties(std::move(aAttributes)));
-
-        uno::Reference<lang::XComponent> xComponent(xShape, uno::UNO_QUERY);
-        xComponent->dispose();
-        return;
-    }
-
     // Send it to dmapper
     if (xShape.is())
     {
@@ -1156,6 +1144,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         {
             m_rImport.Mapper().endShape();
         }
+    }
+
+    if (m_rImport.isInBackground())
+    {
+        RTFSprms aSprms;
+        aSprms.set(NS_ooxml::LN_background_background, new RTFValue()); // action="end"
+        m_rImport.Mapper().props(new RTFReferenceProperties(RTFSprms(), std::move(aSprms)));
     }
 
     // If the shape has an inner shape, the inner object's properties should not be influenced by
