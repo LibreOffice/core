@@ -13,7 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,expat,$(EXPAT_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,expat,conftools))
 
+# * external/expat/0001-Fix-compiler-warnings.patch was sent to upstream as
+#   <https://github.com/libexpat/libexpat/pull/819> "Fix compiler warnings":
 $(eval $(call gb_UnpackedTarball_add_patches,expat,\
+	external/expat/0001-Fix-compiler-warnings.patch \
 	external/expat/expat-winapi.patch \
 ))
 
