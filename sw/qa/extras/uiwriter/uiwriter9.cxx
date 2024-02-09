@@ -122,6 +122,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf135083)
     CPPUNIT_ASSERT(!getProperty<OUString>(xLastPara, u"ListId"_ustr).isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionsAroundPageBreak)
+{
+    createSwDoc("hiddenSectionsAroundPageBreak.fodt");
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    auto xModel(mxComponent.queryThrow<frame::XModel>());
+    auto xTextViewCursorSupplier(
+        xModel->getCurrentController().queryThrow<text::XTextViewCursorSupplier>());
+    auto xCursor(xTextViewCursorSupplier->getViewCursor().queryThrow<text::XPageCursor>());
+
+    // Make sure that the page style is set correctly
+    xCursor->jumpToFirstPage();
+    CPPUNIT_ASSERT_EQUAL(u"Landscape"_ustr, getProperty<OUString>(xCursor, "PageStyleName"));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

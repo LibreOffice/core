@@ -944,14 +944,14 @@ bool SwCursorShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
     return bRet;
 }
 
-bool SwCursorShell::isInHiddenTextFrame(SwShellCursor* pShellCursor)
+bool SwCursorShell::isInHiddenFrame(SwShellCursor* pShellCursor)
 {
     SwContentNode *pCNode = pShellCursor->GetPointContentNode();
     std::pair<Point, bool> tmp(pShellCursor->GetPtPos(), false);
     SwContentFrame *const pFrame = pCNode
         ? pCNode->getLayoutFrame(GetLayout(), pShellCursor->GetPoint(), &tmp)
         : nullptr;
-    return !pFrame || (pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsHiddenNow());
+    return !pFrame || pFrame->IsHiddenNow();
 }
 
 // sw_redlinehide: this should work for all cases: GoCurrPara, GoNextPara, GoPrevPara
@@ -992,7 +992,7 @@ bool SwCursorShell::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const &
         //which is what SwCursorShell::UpdateCursorPos will reset
         //the position to if we pass it a position in an
         //invisible hidden paragraph field
-        while (isInHiddenTextFrame(pTmpCursor)
+        while (isInHiddenFrame(pTmpCursor)
                 || !IsAtStartOrEndOfFrame(this, pTmpCursor, fnPosPara))
         {
             if (!pTmpCursor->MovePara(fnWhichPara, fnPosPara))
@@ -1796,7 +1796,7 @@ void SwCursorShell::UpdateCursorPos()
     SwShellCursor* pShellCursor = getShellCursor( true );
     Size aOldSz( GetDocSize() );
 
-    if (isInHiddenTextFrame(pShellCursor) && !ExtendedSelectedAll())
+    if (isInHiddenFrame(pShellCursor) && !ExtendedSelectedAll())
     {
         SwCursorMoveState aTmpState(CursorMoveState::SetOnlyText);
         aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
@@ -1805,14 +1805,14 @@ void SwCursorShell::UpdateCursorPos()
         pShellCursor->DeleteMark();
         // kde45196-1.html: try to get to a non-hidden paragraph, there must
         // be one in the document body
-        while (isInHiddenTextFrame(pShellCursor))
+        while (isInHiddenFrame(pShellCursor))
         {
             if (!pShellCursor->MovePara(GoNextPara, fnParaStart))
             {
                 break;
             }
         }
-        while (isInHiddenTextFrame(pShellCursor))
+        while (isInHiddenFrame(pShellCursor))
         {
             if (!pShellCursor->MovePara(GoPrevPara, fnParaStart))
             {

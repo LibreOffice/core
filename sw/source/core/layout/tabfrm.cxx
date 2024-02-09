@@ -1454,6 +1454,8 @@ namespace
 
     auto IsAllHiddenSection(SwSectionFrame const& rSection) -> bool
     {
+        if (rSection.IsHiddenNow())
+            return true;
         for (SwFrame const* pFrame = rSection.Lower(); pFrame; pFrame = pFrame->GetNext())
         {
             if (pFrame->IsColumnFrame())
@@ -1474,7 +1476,7 @@ namespace
             }
             else if (pFrame->IsTextFrame())
             {
-                if (!static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow())
+                if (!pFrame->IsHiddenNow())
                 {
                     return false;
                 }
@@ -1509,7 +1511,7 @@ namespace
             }
             else if (pFrame->IsTextFrame())
             {
-                if (!static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow())
+                if (!pFrame->IsHiddenNow())
                 {
                     return false;
                 }
