@@ -146,16 +146,13 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
 
     basegfx::B2DPolygon aPoly(basegfx::utils::createPolygonFromRect(rRange));
 
-    drawinglayer::primitive2d::Primitive2DReference aBg(
+    // background
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPoly), getBaseColor().getBColor()));
-
-    basegfx::BColor aBorderColor(0.5, 0.5, 0.5);
-    drawinglayer::primitive2d::Primitive2DReference aBorder(
+    // border
+    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-            std::move(aPoly), aBorderColor));
-
-    aSeq[0] = aBg;
-    aSeq[1] = aBorder;
+            std::move(aPoly), basegfx::BColor(0.5, 0.5, 0.5)));
 
     return aSeq;
 }
