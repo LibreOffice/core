@@ -515,10 +515,10 @@ sal_uInt32 ViewContactOfSdrPage::GetObjectCount() const
 {
     // Fixed count of content. It contains PageBackground (Wiese), PageShadow, PageFill,
     // then - depending on if the page has a MasterPage - either MasterPage Hierarchy
-    // or MPBGO. Also OuterPageBorder, InnerPageBorder and two pairs of Grid and Helplines
-    // (for front and back) which internally are visible or not depending on the current
+    // or MPBGO. Also OuterPageBorder, InnerPageBorder, PageHierarchy and two pairs of Grid and
+    // Helplines (for front and back) which internally are visible or not depending on the current
     // front/back setting for those.
-    return 10;
+    return 11;
 }
 
 ViewContact& ViewContactOfSdrPage::GetViewContact(sal_uInt32 nIndex) const
