@@ -90,7 +90,7 @@ namespace chart
 
 void ChartController::executeDispatch_InsertAxes()
 {
-    auto aUndoGuard = std::make_shared<UndoGuard>(
+    auto xUndoGuard = std::make_shared<UndoGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_AXES )),
         m_xUndoManager );
@@ -104,7 +104,7 @@ void ChartController::executeDispatch_InsertAxes()
 
         SolarMutexGuard aGuard;
         auto aDlg = std::make_shared<SchAxisDlg>(GetChartFrame(), *aDialogInput);
-        weld::DialogController::runAsync(aDlg, [this, aDlg, aDialogInput, aUndoGuard](int nResult) {
+        weld::DialogController::runAsync(aDlg, [this, aDlg, aDialogInput, xUndoGuard=std::move(xUndoGuard)](int nResult) {
             if ( nResult == RET_OK )
             {
                 // lock controllers till end of block
@@ -117,7 +117,7 @@ void ChartController::executeDispatch_InsertAxes()
                     , aDialogInput->aExistenceList, aDialogOutput.aExistenceList, m_xCC
                     , &aRefSizeProvider );
                 if( bChanged )
-                    aUndoGuard->commit();
+                    xUndoGuard->commit();
             }
         });
     }
@@ -276,7 +276,7 @@ void ChartController::executeDispatch_DeleteDataTable()
 
 void ChartController::executeDispatch_InsertTitles()
 {
-    auto aUndoGuard = std::make_shared<UndoGuard>(
+    auto xUndoGuard = std::make_shared<UndoGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_TITLES )),
         m_xUndoManager );
@@ -288,7 +288,7 @@ void ChartController::executeDispatch_InsertTitles()
 
         SolarMutexGuard aGuard;
         auto aDlg = std::make_shared<SchTitleDlg>(GetChartFrame(), *aDialogInput);
-        weld::DialogController::runAsync(aDlg, [this, aDlg, aDialogInput, aUndoGuard](int nResult){
+        weld::DialogController::runAsync(aDlg, [this, aDlg, aDialogInput, xUndoGuard=std::move(xUndoGuard)](int nResult){
             if ( nResult == RET_OK )
             {
                 // lock controllers till end of block
@@ -297,7 +297,7 @@ void ChartController::executeDispatch_InsertTitles()
                 aDlg->getResult( aDialogOutput );
                 bool bChanged = aDialogOutput.writeDifferenceToModel( getChartModel(), m_xCC, aDialogInput.get() );
                 if( bChanged )
-                    aUndoGuard->commit();
+                    xUndoGuard->commit();
             }
         });
     }
@@ -474,7 +474,7 @@ void ChartController::executeDispatch_InsertTrendline()
     if( !xRegressionCurveContainer.is() )
         return;
 
-    auto aUndoGuard = std::make_shared<UndoLiveUpdateGuard>(
+    auto xUndoGuard = std::make_shared<UndoLiveUpdateGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_CURVE )),
         m_xUndoManager );
@@ -507,7 +507,7 @@ void ChartController::executeDispatch_InsertTrendline()
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
-    SfxTabDialogController::runAsync(aDialog, [this, aDialog, aItemConverter, aUndoGuard](int nResult) {
+    SfxTabDialogController::runAsync(aDialog, [this, aDialog, aItemConverter, xUndoGuard=std::move(xUndoGuard)](int nResult) {
         if ( nResult == RET_OK || aDialog->DialogWasClosedWithOK() )
         {
             const SfxItemSet* pOutItemSet = aDialog->GetOutputItemSet();
@@ -516,7 +516,7 @@ void ChartController::executeDispatch_InsertTrendline()
                 ControllerLockGuardUNO aCLGuard( getChartModel() );
                 aItemConverter->ApplyItemSet( *pOutItemSet );
             }
-            aUndoGuard->commit();
+            xUndoGuard->commit();
         }
     });
 }
@@ -531,7 +531,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
     if( xSeries.is())
     {
-        auto aUndoGuard = std::make_shared<UndoLiveUpdateGuard>(
+        auto xUndoGuard = std::make_shared<UndoLiveUpdateGuard>(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert,
                 SchResId( bYError ? STR_OBJECT_ERROR_BARS_Y : STR_OBJECT_ERROR_BARS_X )),
@@ -569,7 +569,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
         // note: when a user pressed "OK" but didn't change any settings in the
         // dialog, the SfxTabDialog returns "Cancel"
-        SfxTabDialogController::runAsync(aDlg, [this, aDlg, aItemConverter, aUndoGuard](int nResult) {
+        SfxTabDialogController::runAsync(aDlg, [this, aDlg, aItemConverter, xUndoGuard=std::move(xUndoGuard)](int nResult) {
             if ( nResult == RET_OK || aDlg->DialogWasClosedWithOK() )
             {
                 const SfxItemSet* pOutItemSet = aDlg->GetOutputItemSet();
@@ -578,14 +578,14 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                     ControllerLockGuardUNO aCLGuard( getChartModel() );
                     aItemConverter->ApplyItemSet( *pOutItemSet );
                 }
-                aUndoGuard->commit();
+                xUndoGuard->commit();
             }
         });
     }
     else
     {
         //if no series is selected insert error bars for all series
-        auto aUndoGuard = std::make_shared<UndoGuard>(
+        auto xUndoGuard = std::make_shared<UndoGuard>(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert,
                 ObjectNameProvider::getName_ObjectForAllSeries( objType ) ),
@@ -608,7 +608,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
             aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(), m_xChartView, u"" ) );
 
-            weld::DialogController::runAsync(aDlg, [this, aDlg, aItemConverter, aUndoGuard](int nResult) {
+            weld::DialogController::runAsync(aDlg, [this, aDlg, aItemConverter, xUndoGuard=std::move(xUndoGuard)](int nResult) {
                 if ( nResult == RET_OK )
                 {
                     SfxItemSet aOutItemSet = aItemConverter->CreateEmptyItemSet();
@@ -618,7 +618,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                     ControllerLockGuardUNO aCLGuard( getChartModel() );
                     bool bChanged = aItemConverter->ApplyItemSet( aOutItemSet );//model should be changed now
                     if( bChanged )
-                        aUndoGuard->commit();
+                        xUndoGuard->commit();
                 }
             });
         }
