@@ -1699,6 +1699,9 @@ SwXText::convertToTextFrame(
         // see testFlyInFly for why this checks only the edges of the selection,
         // and testFloatingTablesAnchor for why it excludes pre/post table
         // added nodes
+        // TODO: isGraphicNode here looks dubious; see also tdf#47036 fix;
+        // this needs more investigation when exactly Word considers something
+        // anchored in text frame vs. anchored in body.
         if (!isGraphicNode(pFrameFormat)
             && (IsAtParaMatch(*oAnchorCheckPam, rAnchor)
                 || (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()
