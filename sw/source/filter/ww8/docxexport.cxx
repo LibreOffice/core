@@ -55,6 +55,7 @@
 #include <oox/ole/olehelper.hxx>
 
 #include <svx/svdpage.hxx>
+#include <svx/xflbmtit.hxx>
 
 #include <map>
 #include <algorithm>
@@ -1914,6 +1915,7 @@ void DocxExport::WriteMainText()
         m_pDocumentFS->startElementNS(XML_w, XML_background, FSNS(XML_w, XML_color),
                                       msfilter::util::ConvertColor(oBrush->GetColor()));
 
+        const SwAttrSet& rPageStyleAttrSet = m_rDoc.GetPageDesc(0).GetMaster().GetAttrSet();
         const GraphicObject* pGraphicObj = oBrush->GetGraphicObject();
         if (pGraphicObj) // image/pattern/texture
         {
@@ -1922,8 +1924,12 @@ void DocxExport::WriteMainText()
             {
                 m_pDocumentFS->startElementNS(XML_v, XML_background);
 
+                // Although MSO treats everything as tile, it is better for LO to not always tile
+                OString sType = "frame"_ostr; // single image
+                if (rPageStyleAttrSet.Get(XATTR_FILLBMP_TILE).GetValue())
+                    sType = "tile"_ostr; // primarily for patterns / textures
                 m_pDocumentFS->singleElementNS(XML_v, XML_fill, FSNS(XML_r, XML_id), aRelId,
-                                            XML_type, "frame");
+                                            XML_type, sType);
 
                 m_pDocumentFS->endElementNS(XML_v, XML_background);
             }
