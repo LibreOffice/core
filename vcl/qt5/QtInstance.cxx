@@ -310,7 +310,7 @@ void QtInstance::AfterAppInit()
     // set the default application icon via desktop file just on Wayland,
     // as this otherwise overrides the individual desktop icons on X11.
     if (QGuiApplication::platformName() == "wayland")
-        QGuiApplication::setDesktopFileName(QStringLiteral("libreoffice-startcenter.desktop"));
+        QGuiApplication::setDesktopFileName(QStringLiteral("libreoffice-startcenter"));
     QGuiApplication::setLayoutDirection(AllSettings::GetLayoutRTL() ? Qt::RightToLeft
                                                                     : Qt::LeftToRight);
 }
