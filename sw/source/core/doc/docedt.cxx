@@ -553,7 +553,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                     {
                         nCurrNd = pNd->EndOfSectionIndex();
                     }
-                    else if( !static_cast<SwTextFrame*>(pContentFrame)->IsHiddenNow() )
+                    else if( !pContentFrame->IsHiddenNow() )
                     {
                         if( pPageCnt && *pPageCnt && pPageSt )
                         {
@@ -766,7 +766,7 @@ static bool lcl_HyphenateNode( SwNode* pNd, void* pArgs )
         // sw_redlinehide: this will be called once per node for merged nodes;
         // the fully deleted ones won't have frames so are skipped.
         SwContentFrame* pContentFrame = pNode->getLayoutFrame( pNode->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
-        if( pContentFrame && !static_cast<SwTextFrame*>(pContentFrame)->IsHiddenNow() )
+        if( pContentFrame && !pContentFrame->IsHiddenNow() )
         {
             sal_uInt16 *pPageSt = pHyphArgs->GetPageSt();
             sal_uInt16 *pPageCnt = pHyphArgs->GetPageCnt();

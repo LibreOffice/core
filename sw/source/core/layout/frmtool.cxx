@@ -844,11 +844,7 @@ void SwContentNotify::ImplDestroy()
         SwFrame* pPrevFrame = pCnt->FindPrev();
         // skip empty section frames and hidden text frames
         {
-            while ( pPrevFrame &&
-                    ( ( pPrevFrame->IsSctFrame() &&
-                        !static_cast<SwSectionFrame*>(pPrevFrame)->GetSection() ) ||
-                      ( pPrevFrame->IsTextFrame() &&
-                        static_cast<SwTextFrame*>(pPrevFrame)->IsHiddenNow() ) ) )
+            while (pPrevFrame && pPrevFrame->IsHiddenNow())
             {
                 pPrevFrame = pPrevFrame->FindPrev();
             }
@@ -1608,7 +1604,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             pFrame = pNode->IsTextNode()
                         ? sw::MakeTextFrame(*pNode->GetTextNode(), pLay, eMode)
                         : pNode->MakeFrame(pLay);
-            if( pPageMaker )
+            if (pPageMaker && !pLay->IsHiddenNow())
                 pPageMaker->CheckInsert( nIndex );
 
             pFrame->InsertBehind( pLay, pPrv );
@@ -1766,15 +1762,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 continue; // skip it
             }
             SwSectionNode *pNode = static_cast<SwSectionNode*>(pNd);
-            if( pNode->GetSection().CalcHiddenFlag() )
-                // is hidden, skip the area
-                nIndex = pNode->EndOfSectionIndex();
-            else
             {
                 if (pActualSection)
                     pActualSection->SetLastPos(pPrv);
 
-                pFrame = pNode->MakeFrame( pLay );
+                pFrame = pNode->MakeFrame(pLay, pNode->GetSection().CalcHiddenFlag());
                 pActualSection.reset( new SwActualSection( pActualSection.release(),
                                                 static_cast<SwSectionFrame*>(pFrame), pNode ) );
                 if ( pActualSection->GetUpper() )
@@ -1945,7 +1937,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 }
                 else
                 {
-                    pFrame = pActualSection->GetSectionNode()->MakeFrame( pLay );
+                    pFrame = pActualSection->GetSectionNode()->MakeFrame(
+                        pLay, pActualSection->GetSectionNode()->GetSection().IsHiddenFlag());
                     pFrame->InsertBehind( pLay, pPrv );
                     static_cast<SwSectionFrame*>(pFrame)->Init();
 
@@ -2523,8 +2516,7 @@ void SwBorderAttrs::CalcJoinedWithPrev( const SwFrame& _rFrame,
         // one as previous frame.
         const SwFrame* pPrevFrame = _pPrevFrame ? _pPrevFrame : _rFrame.GetPrev();
         // OD 2004-02-13 #i25029# - skip hidden text frames.
-        while ( pPrevFrame && pPrevFrame->IsTextFrame() &&
-                static_cast<const SwTextFrame*>(pPrevFrame)->IsHiddenNow() )
+        while (pPrevFrame && pPrevFrame->IsHiddenNow())
         {
             pPrevFrame = pPrevFrame->GetPrev();
         }
@@ -2555,8 +2547,7 @@ void SwBorderAttrs::CalcJoinedWithNext( const SwFrame& _rFrame ) const
         // corresponding attribute set is set at current text frame.
         // OD 2004-02-13 #i25029# - get next frame, but skip hidden text frames.
         const SwFrame* pNextFrame = _rFrame.GetNext();
-        while ( pNextFrame && pNextFrame->IsTextFrame() &&
-                static_cast<const SwTextFrame*>(pNextFrame)->IsHiddenNow() )
+        while (pNextFrame && pNextFrame->IsHiddenNow())
         {
             pNextFrame = pNextFrame->GetNext();
         }

@@ -177,7 +177,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
 
             if ( nMoveAnyway < 3 )
             {
-                if ( nSpace )
+                if (nSpace || IsHiddenNow())
                 {
                     // Do not notify footnotes which are stuck to the paragraph:
                     // This would require extremely confusing code, taking into
@@ -209,7 +209,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
             }
 
             // Check for space left in new upper
-            return nSpace != 0;
+            return nSpace != 0 || IsHiddenNow();
         }
     }
     return false;
@@ -532,7 +532,7 @@ static SwFrame* lcl_NotHiddenPrev( SwFrame* pFrame )
     do
     {
         pRet = lcl_Prev( pRet );
-    } while ( pRet && pRet->IsTextFrame() && static_cast<SwTextFrame*>(pRet)->IsHiddenNow() );
+    } while ( pRet && pRet->IsHiddenNow() );
     return pRet;
 }
 
@@ -1083,9 +1083,8 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 
     setFramePrintAreaValid(true);
     SwRectFnSet aRectFnSet(this);
-    const bool bTextFrame = IsTextFrame();
     SwTwips nUpper = 0;
-    if ( bTextFrame && static_cast<SwTextFrame*>(this)->IsHiddenNow() )
+    if (IsTextFrame() && IsHiddenNow())
     {
         if ( static_cast<SwTextFrame*>(this)->HasFollow() )
             static_cast<SwTextFrame*>(this)->JoinFrame();
@@ -1715,7 +1714,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     const bool bMoveFwdInvalid = nullptr != GetIndNext();
                     const bool bNxtNew =
                         ( 0 == aRectFnSet.GetHeight(pNxt->getFramePrintArea()) ) &&
-                        (!pNxt->IsTextFrame() ||!static_cast<SwTextFrame*>(pNxt)->IsHiddenNow());
+                        !pNxt->IsHiddenNow();
 
                     pNxt->Calc(getRootFrame()->GetCurrShell()->GetOut());
 
@@ -2217,7 +2216,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                     pTmpPrev = nullptr;
                 else
                 {
-                    if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsHiddenNow() )
+                    if (pFrame->IsHiddenNow())
                         pTmpPrev = lcl_NotHiddenPrev( pFrame );
                     else
                         pTmpPrev = pFrame;
