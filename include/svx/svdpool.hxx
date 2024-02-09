@@ -19,20 +19,22 @@
 
 #pragma once
 
-#include <svx/xpool.hxx>
+#include <svx/svxdllapi.h>
+#include <svl/itempool.hxx>
 
 class XLineAttrSetItem;
 class XFillAttrSetItem;
 
-class SVXCORE_DLLPUBLIC SdrItemPool final : public XOutdevItemPool
+class SVXCORE_DLLPUBLIC SdrItemPool final : public SfxItemPool
 {
 public:
     SdrItemPool(SfxItemPool* pMaster = nullptr);
     SdrItemPool(const SdrItemPool& rPool);
+
 private:
     virtual ~SdrItemPool() override;
-public:
 
+public:
     virtual rtl::Reference<SfxItemPool> Clone() const override;
     virtual bool GetPresentation(const SfxPoolItem& rItem,
                                  MapUnit ePresentationMetric,

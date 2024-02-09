@@ -87,241 +87,191 @@ SvxFontItem* getDefaultFontItem(LanguageType eLang, DefaultFontType nFontType, s
 
 }
 
-SfxItemInfo const  aItemInfos[] =
+static ItemInfoPackage& getItemInfoPackageScDocument()
 {
-    // _nItemInfoSlotID, _nItemInfoFlags
-    { SID_ATTR_CHAR_FONT,                   SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_FONT
-    { SID_ATTR_CHAR_FONTHEIGHT,             SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_HEIGHT
-    { SID_ATTR_CHAR_WEIGHT,                 SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_WEIGHT
-    { SID_ATTR_CHAR_POSTURE,                SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_POSTURE
-    { SID_ATTR_CHAR_UNDERLINE,              SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_UNDERLINE
-    { SID_ATTR_CHAR_OVERLINE,               SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_OVERLINE
-    { SID_ATTR_CHAR_STRIKEOUT,              SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_CROSSEDOUT
-    { SID_ATTR_CHAR_CONTOUR,                SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_CONTOUR
-    { SID_ATTR_CHAR_SHADOWED,               SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_SHADOWED
-    { SID_ATTR_CHAR_COLOR,                  SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_FONT_COLOR
-    { SID_ATTR_CHAR_LANGUAGE,               SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_LANGUAGE
-    { SID_ATTR_CHAR_CJK_FONT,               SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_CJK_FONT            from 614
-    { SID_ATTR_CHAR_CJK_FONTHEIGHT,         SFX_ITEMINFOFLAG_NONE },    // ATTR_CJK_FONT_HEIGHT     from 614
-    { SID_ATTR_CHAR_CJK_WEIGHT,             SFX_ITEMINFOFLAG_NONE },    // ATTR_CJK_FONT_WEIGHT     from 614
-    { SID_ATTR_CHAR_CJK_POSTURE,            SFX_ITEMINFOFLAG_NONE },    // ATTR_CJK_FONT_POSTURE    from 614
-    { SID_ATTR_CHAR_CJK_LANGUAGE,           SFX_ITEMINFOFLAG_NONE },    // ATTR_CJK_FONT_LANGUAGE   from 614
-    { SID_ATTR_CHAR_CTL_FONT,               SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_CTL_FONT            from 614
-    { SID_ATTR_CHAR_CTL_FONTHEIGHT,         SFX_ITEMINFOFLAG_NONE },    // ATTR_CTL_FONT_HEIGHT     from 614
-    { SID_ATTR_CHAR_CTL_WEIGHT,             SFX_ITEMINFOFLAG_NONE },    // ATTR_CTL_FONT_WEIGHT     from 614
-    { SID_ATTR_CHAR_CTL_POSTURE,            SFX_ITEMINFOFLAG_NONE },    // ATTR_CTL_FONT_POSTURE    from 614
-    { SID_ATTR_CHAR_CTL_LANGUAGE,           SFX_ITEMINFOFLAG_NONE },    // ATTR_CTL_FONT_LANGUAGE   from 614
-    { SID_ATTR_CHAR_EMPHASISMARK,           SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_EMPHASISMARK   from 614
-    { 0,                                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_USERDEF             from 614 / 641c
-    { SID_ATTR_CHAR_WORDLINEMODE,           SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_WORDLINE       from 632b
-    { SID_ATTR_CHAR_RELIEF,                 SFX_ITEMINFOFLAG_NONE },    // ATTR_FONT_RELIEF         from 632b
-    { SID_ATTR_ALIGN_HYPHENATION,           SFX_ITEMINFOFLAG_NONE },    // ATTR_HYPHENATE           from 632b
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_SCRIPTSPACE         from 614d
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_HANGPUNCTUATION     from 614d
-    { SID_ATTR_PARA_FORBIDDEN_RULES,        SFX_ITEMINFOFLAG_NONE },    // ATTR_FORBIDDEN_RULES     from 614d
-    { SID_ATTR_ALIGN_HOR_JUSTIFY,           SFX_ITEMINFOFLAG_NONE },    // ATTR_HOR_JUSTIFY
-    { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD,    SFX_ITEMINFOFLAG_NONE }, // ATTR_HOR_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_INDENT,                SFX_ITEMINFOFLAG_NONE },    // ATTR_INDENT          from 350
-    { SID_ATTR_ALIGN_VER_JUSTIFY,           SFX_ITEMINFOFLAG_NONE },    // ATTR_VER_JUSTIFY
-    { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD,    SFX_ITEMINFOFLAG_NONE }, // ATTR_VER_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_STACKED,               SFX_ITEMINFOFLAG_NONE },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
-    { SID_ATTR_ALIGN_DEGREES,               SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_ROTATE_VALUE    from 367
-    { SID_ATTR_ALIGN_LOCKPOS,               SFX_ITEMINFOFLAG_NONE },    // ATTR_ROTATE_MODE     from 367
-    { SID_ATTR_ALIGN_ASIANVERTICAL,         SFX_ITEMINFOFLAG_NONE },    // ATTR_VERTICAL_ASIAN  from 642
-    { SID_ATTR_FRAMEDIRECTION,              SFX_ITEMINFOFLAG_NONE },    // ATTR_WRITINGDIR      from 643
-    { SID_ATTR_ALIGN_LINEBREAK,             SFX_ITEMINFOFLAG_NONE },    // ATTR_LINEBREAK
-    { SID_ATTR_ALIGN_SHRINKTOFIT,           SFX_ITEMINFOFLAG_NONE },    // ATTR_SHRINKTOFIT     from 680/dr14
-    { SID_ATTR_BORDER_DIAG_TLBR,            SFX_ITEMINFOFLAG_NONE },    // ATTR_BORDER_TLBR     from 680/dr14
-    { SID_ATTR_BORDER_DIAG_BLTR,            SFX_ITEMINFOFLAG_NONE },    // ATTR_BORDER_BLTR     from 680/dr14
-    { SID_ATTR_ALIGN_MARGIN,                SFX_ITEMINFOFLAG_NONE },    // ATTR_MARGIN
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_MERGE
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_MERGE_FLAG
-    { SID_ATTR_NUMBERFORMAT_VALUE,          SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_VALUE_FORMAT
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_LANGUAGE_FORMAT from 329, is combined with SID_ATTR_NUMBERFORMAT_VALUE in the dialog
-    { SID_ATTR_BRUSH,                       SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_BACKGROUND
-    { SID_SCATTR_PROTECTION,                SFX_ITEMINFOFLAG_NONE },    // ATTR_PROTECTION
-    { SID_ATTR_BORDER_OUTER,                SFX_ITEMINFOFLAG_NONE },    // ATTR_BORDER
-    { SID_ATTR_BORDER_INNER,                SFX_ITEMINFOFLAG_NONE },    // ATTR_BORDER_INNER
-    { SID_ATTR_BORDER_SHADOW,               SFX_ITEMINFOFLAG_NONE },    // ATTR_SHADOW
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_VALIDDATA
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_CONDITIONAL
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_HYPERLINK
-    { SID_ATTR_LRSPACE,                     SFX_ITEMINFOFLAG_NONE },    // ATTR_LRSPACE
-    { SID_ATTR_ULSPACE,                     SFX_ITEMINFOFLAG_NONE },    // ATTR_ULSPACE
-    { SID_ATTR_PAGE,                        SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE
-    { SID_ATTR_PAGE_PAPERBIN,               SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_PAPERBIN
-    { SID_ATTR_PAGE_SIZE,                   SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_SIZE
-    { SID_ATTR_PAGE_EXT1,                   SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_HORCENTER
-    { SID_ATTR_PAGE_EXT2,                   SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_VERCENTER
-    { SID_ATTR_PAGE_ON,                     SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_ON
-    { SID_ATTR_PAGE_DYNAMIC,                SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_DYNAMIC
-    { SID_ATTR_PAGE_SHARED,                 SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_SHARED
-    { SID_ATTR_PAGE_SHARED_FIRST,           SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_SHARED_FIRST
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_NOTES aka. SID_SCATTR_PAGE_NOTES
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_GRID aka. SID_SCATTR_PAGE_GRID
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_HEADERS aka. SID_SCATTR_PAGE_HEADERS
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_CHARTS aka. SID_SCATTR_PAGE_CHARTS
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_OBJECTS aka. SID_SCATTR_PAGE_OBJECTS
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_DRAWINGS aka. SID_SCATTR_PAGE_DRAWINGS
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_TOPDOWN aka. SID_SCATTR_PAGE_TOPDOWN
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_SCALE aka SID_SCATTR_PAGE_SCALE
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_SCALETOPAGES aka SID_SCATTR_PAGE_SCALETOPAGES
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_FIRSTPAGENO aka SID_SCATTR_PAGE_FIRSTPAGENO
-    { 0,                                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_PAGE_HEADERLEFT aka SID_SCATTR_PAGE_HEADERLEFT
-    { 0,                                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_PAGE_FOOTERLEFT aka SID_SCATTR_PAGE_FOOTERLEFT
-    { 0,                                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_PAGE_HEADERRIGHT aka SID_SCATTR_PAGE_HEADERRIGHT
-    { 0,                                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_PAGE_FOOTERRIGHT aka. SID_SCATTR_PAGE_FOOTERRIGHT
-    { 0,                                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_PAGE_HEADERFIRST aka. SID_SCATTR_PAGE_HEADERFIRST
-    { 0,                                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },    // ATTR_PAGE_FOOTERFIRST aka. SID_SCATTR_PAGE_FOOTERFIRST`
-    { SID_ATTR_PAGE_HEADERSET,              SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_HEADERSET
-    { SID_ATTR_PAGE_FOOTERSET,              SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_FOOTERSET
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_FORMULAS aka. SID_SCATTR_PAGE_FORMULAS
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_NULLVALS aka. SID_SCATTR_PAGE_NULLVALS
-    { 0,                                    SFX_ITEMINFOFLAG_NONE },    // ATTR_PAGE_SCALETO aka. SID_SCATTR_PAGE_SCALETO
-    { 0,                                    SFX_ITEMINFOFLAG_NONE }     // ATTR_HIDDEN
-};
-static_assert(
-    SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1, "these must match");
+    class ItemInfoPackageScDocument : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, ATTR_ENDINDEX - ATTR_STARTINDEX + 1> ItemInfoArrayScDocument;
+        ItemInfoArrayScDocument maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { ATTR_FONT, nullptr, SID_ATTR_CHAR_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_FONT_HEIGHT, new SvxFontHeightItem( 200, 100, ATTR_FONT_HEIGHT ), SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_WEIGHT, new SvxWeightItem( WEIGHT_NORMAL, ATTR_FONT_WEIGHT ), SID_ATTR_CHAR_WEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_POSTURE, new SvxPostureItem( ITALIC_NONE, ATTR_FONT_POSTURE ), SID_ATTR_CHAR_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_UNDERLINE, new SvxUnderlineItem( LINESTYLE_NONE, ATTR_FONT_UNDERLINE ), SID_ATTR_CHAR_UNDERLINE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_OVERLINE, new SvxOverlineItem( LINESTYLE_NONE, ATTR_FONT_OVERLINE ), SID_ATTR_CHAR_OVERLINE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_CROSSEDOUT, new SvxCrossedOutItem( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT ), SID_ATTR_CHAR_STRIKEOUT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_CONTOUR, new SvxContourItem( false, ATTR_FONT_CONTOUR ), SID_ATTR_CHAR_CONTOUR, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_SHADOWED, new SvxShadowedItem( false, ATTR_FONT_SHADOWED ), SID_ATTR_CHAR_SHADOWED, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_COLOR, new SvxColorItem( COL_AUTO, ATTR_FONT_COLOR ), SID_ATTR_CHAR_COLOR, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_FONT_LANGUAGE, new SvxLanguageItem( LANGUAGE_DONTKNOW, ATTR_FONT_LANGUAGE ), SID_ATTR_CHAR_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CJK_FONT, nullptr, SID_ATTR_CHAR_CJK_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_CJK_FONT_HEIGHT, new SvxFontHeightItem( 200, 100, ATTR_CJK_FONT_HEIGHT ), SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CJK_FONT_WEIGHT, new SvxWeightItem( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT ), SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CJK_FONT_POSTURE, new SvxPostureItem( ITALIC_NONE, ATTR_CJK_FONT_POSTURE ), SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CJK_FONT_LANGUAGE, new SvxLanguageItem( LANGUAGE_DONTKNOW, ATTR_CJK_FONT_LANGUAGE ), SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CTL_FONT, nullptr, SID_ATTR_CHAR_CTL_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_CTL_FONT_HEIGHT, new SvxFontHeightItem( 200, 100, ATTR_CTL_FONT_HEIGHT ), SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CTL_FONT_WEIGHT, new SvxWeightItem( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT ), SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CTL_FONT_POSTURE, new SvxPostureItem( ITALIC_NONE, ATTR_CTL_FONT_POSTURE ), SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CTL_FONT_LANGUAGE, new SvxLanguageItem( LANGUAGE_DONTKNOW, ATTR_CTL_FONT_LANGUAGE ), SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_EMPHASISMARK, new SvxEmphasisMarkItem( FontEmphasisMark::NONE, ATTR_FONT_EMPHASISMARK ), SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_USERDEF, new SvXMLAttrContainerItem( ATTR_USERDEF ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_FONT_WORDLINE, new SvxWordLineModeItem(false, ATTR_FONT_WORDLINE ), SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FONT_RELIEF, new SvxCharReliefItem( FontRelief::NONE, ATTR_FONT_RELIEF ), SID_ATTR_CHAR_RELIEF, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_HYPHENATE, new ScHyphenateCell(), SID_ATTR_ALIGN_HYPHENATION, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_SCRIPTSPACE, new SvxScriptSpaceItem( false, ATTR_SCRIPTSPACE), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_HANGPUNCTUATION, new SvxHangingPunctuationItem( false, ATTR_HANGPUNCTUATION), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_FORBIDDEN_RULES, new SvxForbiddenRuleItem( false, ATTR_FORBIDDEN_RULES), SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_HOR_JUSTIFY, new SvxHorJustifyItem( SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY), SID_ATTR_ALIGN_HOR_JUSTIFY, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_HOR_JUSTIFY_METHOD, new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, ATTR_HOR_JUSTIFY_METHOD), SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_INDENT, new ScIndentItem( 0 ), SID_ATTR_ALIGN_INDENT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_VER_JUSTIFY, new SvxVerJustifyItem( SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY), SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_VER_JUSTIFY_METHOD, new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, ATTR_VER_JUSTIFY_METHOD), SID_ATTR_ALIGN_VER_JUSTIFY_METHOD, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_STACKED, new ScVerticalStackCell(false), SID_ATTR_ALIGN_STACKED, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_ROTATE_VALUE, new ScRotateValueItem( 0_deg100 ), SID_ATTR_ALIGN_DEGREES, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_ROTATE_MODE, new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE ), SID_ATTR_ALIGN_LOCKPOS, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_VERTICAL_ASIAN, new SfxBoolItem( ATTR_VERTICAL_ASIAN ), SID_ATTR_ALIGN_ASIANVERTICAL, SFX_ITEMINFOFLAG_NONE },
+
+            //  The default for the ATTR_WRITINGDIR cell attribute must by SvxFrameDirection::Environment,
+            //  so that value is returned when asking for a default cell's attributes.
+            //  The value from the page style is set as DefaultHorizontalTextDirection for the EditEngine.
+            { ATTR_WRITINGDIR, new SvxFrameDirectionItem( SvxFrameDirection::Environment, ATTR_WRITINGDIR ), SID_ATTR_FRAMEDIRECTION, SFX_ITEMINFOFLAG_NONE },
+
+            { ATTR_LINEBREAK, new ScLineBreakCell(), SID_ATTR_ALIGN_LINEBREAK, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_SHRINKTOFIT, new ScShrinkToFitCell(), SID_ATTR_ALIGN_SHRINKTOFIT, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_BORDER_TLBR, new SvxLineItem( ATTR_BORDER_TLBR ), SID_ATTR_BORDER_DIAG_TLBR, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_BORDER_BLTR, new SvxLineItem( ATTR_BORDER_BLTR ), SID_ATTR_BORDER_DIAG_BLTR, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_MARGIN, new SvxMarginItem( ATTR_MARGIN ), SID_ATTR_ALIGN_MARGIN, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_MERGE, new ScMergeAttr, 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_MERGE_FLAG, new ScMergeFlagAttr, 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_VALUE_FORMAT, new SfxUInt32Item( ATTR_VALUE_FORMAT, 0 ), SID_ATTR_NUMBERFORMAT_VALUE, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_LANGUAGE_FORMAT, new SvxLanguageItem( ScGlobal::eLnge, ATTR_LANGUAGE_FORMAT ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_BACKGROUND, new SvxBrushItem( COL_TRANSPARENT, ATTR_BACKGROUND ), SID_ATTR_BRUSH, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_PROTECTION, new ScProtectionAttr, SID_SCATTR_PROTECTION, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_BORDER, new SvxBoxItem( ATTR_BORDER ), SID_ATTR_BORDER_OUTER, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_BORDER_INNER,nullptr, SID_ATTR_BORDER_INNER, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_SHADOW, new SvxShadowItem( ATTR_SHADOW ), SID_ATTR_BORDER_SHADOW, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_VALIDDATA, new SfxUInt32Item( ATTR_VALIDDATA, 0 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_CONDITIONAL, new ScCondFormatItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_HYPERLINK, new SfxStringItem( ATTR_HYPERLINK, OUString() ) , 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_LRSPACE, new SvxLRSpaceItem( ATTR_LRSPACE ), SID_ATTR_LRSPACE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_ULSPACE, new SvxULSpaceItem( ATTR_ULSPACE ), SID_ATTR_ULSPACE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE, new SvxPageItem( ATTR_PAGE ), SID_ATTR_PAGE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_PAPERBIN, new SvxPaperBinItem( ATTR_PAGE_PAPERBIN ), SID_ATTR_PAGE_PAPERBIN, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_SIZE, new SvxSizeItem( ATTR_PAGE_SIZE ), SID_ATTR_PAGE_SIZE, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_HORCENTER, new SfxBoolItem( ATTR_PAGE_HORCENTER ), SID_ATTR_PAGE_EXT1, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_VERCENTER, new SfxBoolItem( ATTR_PAGE_VERCENTER ), SID_ATTR_PAGE_EXT2, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_ON, new SfxBoolItem( ATTR_PAGE_ON, true ), SID_ATTR_PAGE_ON, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_DYNAMIC, new SfxBoolItem( ATTR_PAGE_DYNAMIC, true ), SID_ATTR_PAGE_DYNAMIC, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_SHARED, new SfxBoolItem( ATTR_PAGE_SHARED, true ), SID_ATTR_PAGE_SHARED, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_SHARED_FIRST, new SfxBoolItem( ATTR_PAGE_SHARED_FIRST, true ), SID_ATTR_PAGE_SHARED_FIRST, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_NOTES, new SfxBoolItem( ATTR_PAGE_NOTES, false ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_GRID, new SfxBoolItem( ATTR_PAGE_GRID, false ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_HEADERS, new SfxBoolItem( ATTR_PAGE_HEADERS, false ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_CHARTS, new ScViewObjectModeItem( ATTR_PAGE_CHARTS ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_OBJECTS, new ScViewObjectModeItem( ATTR_PAGE_OBJECTS ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_DRAWINGS, new ScViewObjectModeItem( ATTR_PAGE_DRAWINGS ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_TOPDOWN, new SfxBoolItem( ATTR_PAGE_TOPDOWN, true ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_SCALE, new SfxUInt16Item( ATTR_PAGE_SCALE, 100 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_SCALETOPAGES, new SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 1 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_FIRSTPAGENO, new SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 1 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_HEADERLEFT, new ScPageHFItem( ATTR_PAGE_HEADERLEFT ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_PAGE_FOOTERLEFT, new ScPageHFItem( ATTR_PAGE_FOOTERLEFT ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_PAGE_HEADERRIGHT, new ScPageHFItem( ATTR_PAGE_HEADERRIGHT ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_PAGE_FOOTERRIGHT, new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_PAGE_HEADERFIRST, new ScPageHFItem( ATTR_PAGE_HEADERFIRST ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_PAGE_FOOTERFIRST, new ScPageHFItem( ATTR_PAGE_FOOTERFIRST ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { ATTR_PAGE_HEADERSET, nullptr, SID_ATTR_PAGE_HEADERSET, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_FOOTERSET, nullptr, SID_ATTR_PAGE_FOOTERSET, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_FORMULAS, new SfxBoolItem( ATTR_PAGE_FORMULAS, false ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_NULLVALS, new SfxBoolItem( ATTR_PAGE_NULLVALS, true ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_PAGE_SCALETO, new ScPageScaleToItem( 1, 1 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { ATTR_HIDDEN, new SfxBoolItem( ATTR_HIDDEN, false ), 0, SFX_ITEMINFOFLAG_NONE }
+        }};
+
+    public:
+        ItemInfoPackageScDocument()
+        {
+            LanguageType nDefLang, nCjkLang, nCtlLang;
+            bool bAutoSpell;
+            ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
+
+            //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
+            SvxFontItem* pStdFont = getDefaultFontItem(nDefLang, DefaultFontType::LATIN_SPREADSHEET, ATTR_FONT);
+            SvxFontItem* pCjkFont = getDefaultFontItem(nCjkLang, DefaultFontType::CJK_SPREADSHEET, ATTR_CJK_FONT);
+            SvxFontItem* pCtlFont = getDefaultFontItem(nCtlLang, DefaultFontType::CTL_SPREADSHEET, ATTR_CTL_FONT);
+            setItemAtItemInfoStatic(pStdFont, maItemInfos[ATTR_FONT - ATTR_STARTINDEX]);
+            setItemAtItemInfoStatic(pCjkFont, maItemInfos[ATTR_CJK_FONT - ATTR_STARTINDEX]);
+            setItemAtItemInfoStatic(pCtlFont, maItemInfos[ATTR_CTL_FONT - ATTR_STARTINDEX]);
+
+            SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
+            pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::HORI);
+            pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::VERT);
+            pGlobalBorderInnerAttr->SetTable(true);
+            pGlobalBorderInnerAttr->SetDist(true);
+            pGlobalBorderInnerAttr->SetMinDist(false);
+            setItemAtItemInfoStatic(pGlobalBorderInnerAttr, maItemInfos[ATTR_BORDER_INNER - ATTR_STARTINDEX]);
+        }
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& rPool) override
+        {
+            const ItemInfo& rRetval(maItemInfos[nIndex]);
+
+            // return immediately if we have the static entry and Item
+            if (nullptr != rRetval.getItem())
+                return rRetval;
+
+            if (ATTR_PAGE_HEADERSET == rRetval.getWhich())
+            {
+                SfxItemSet aSetItemItemSet(rPool,
+                    svl::Items<
+                        ATTR_BACKGROUND, ATTR_BACKGROUND,
+                        ATTR_BORDER, ATTR_SHADOW,
+                        ATTR_LRSPACE, ATTR_ULSPACE,
+                        ATTR_PAGE_SIZE,  ATTR_PAGE_SIZE,
+                        ATTR_PAGE_ON, ATTR_PAGE_SHARED_FIRST>);
+                return *new ItemInfoDynamic(rRetval, new SvxSetItem(ATTR_PAGE_HEADERSET, aSetItemItemSet));
+            }
+
+            if (ATTR_PAGE_FOOTERSET == rRetval.getWhich())
+            {
+                SfxItemSet aSetItemItemSet(rPool,
+                    svl::Items<
+                        ATTR_BACKGROUND, ATTR_BACKGROUND,
+                        ATTR_BORDER, ATTR_SHADOW,
+                        ATTR_LRSPACE, ATTR_ULSPACE,
+                        ATTR_PAGE_SIZE,  ATTR_PAGE_SIZE,
+                        ATTR_PAGE_ON, ATTR_PAGE_SHARED_FIRST>);
+                return *new ItemInfoDynamic(rRetval, new SvxSetItem(ATTR_PAGE_FOOTERSET, aSetItemItemSet));
+            }
+
+            // return in any case
+            return rRetval;
+        }
+    };
+
+    static std::unique_ptr<ItemInfoPackageScDocument> g_aItemInfoPackageScDocument;
+    if (!g_aItemInfoPackageScDocument)
+        g_aItemInfoPackageScDocument.reset(new ItemInfoPackageScDocument);
+    return *g_aItemInfoPackageScDocument;
+}
 
 ScDocumentPool::ScDocumentPool()
-: SfxItemPool ( "ScDocumentPool", ATTR_STARTINDEX, ATTR_ENDINDEX, aItemInfos, nullptr )
-, mvPoolDefaults(ATTR_ENDINDEX-ATTR_STARTINDEX+1)
+: SfxItemPool("ScDocumentPool")
 {
-
-    LanguageType nDefLang, nCjkLang, nCtlLang;
-    bool bAutoSpell;
-    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
-
-    //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
-    SvxFontItem* pStdFont = getDefaultFontItem(nDefLang, DefaultFontType::LATIN_SPREADSHEET, ATTR_FONT);
-    SvxFontItem* pCjkFont = getDefaultFontItem(nCjkLang, DefaultFontType::CJK_SPREADSHEET, ATTR_CJK_FONT);
-    SvxFontItem* pCtlFont = getDefaultFontItem(nCtlLang, DefaultFontType::CTL_SPREADSHEET, ATTR_CTL_FONT);
-
-    SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
-    SfxItemSet      aSetItemItemSet( *this,
-                                     svl::Items<ATTR_BACKGROUND, ATTR_BACKGROUND,
-                                     ATTR_BORDER,     ATTR_SHADOW,
-                                     ATTR_LRSPACE,    ATTR_ULSPACE,
-                                     ATTR_PAGE_SIZE,  ATTR_PAGE_SIZE,
-                                     ATTR_PAGE_ON,    ATTR_PAGE_SHARED_FIRST> );
-
-    pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::HORI);
-    pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::VERT);
-    pGlobalBorderInnerAttr->SetTable(true);
-    pGlobalBorderInnerAttr->SetDist(true);
-    pGlobalBorderInnerAttr->SetMinDist(false);
-
-    mvPoolDefaults[ ATTR_FONT            - ATTR_STARTINDEX ] = pStdFont;
-    mvPoolDefaults[ ATTR_FONT_HEIGHT     - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_FONT_HEIGHT );       // 10 pt;
-    mvPoolDefaults[ ATTR_FONT_WEIGHT     - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_FONT_WEIGHT );
-    mvPoolDefaults[ ATTR_FONT_POSTURE    - ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_FONT_POSTURE );
-    mvPoolDefaults[ ATTR_FONT_UNDERLINE  - ATTR_STARTINDEX ] = new SvxUnderlineItem( LINESTYLE_NONE, ATTR_FONT_UNDERLINE );
-    mvPoolDefaults[ ATTR_FONT_OVERLINE   - ATTR_STARTINDEX ] = new SvxOverlineItem( LINESTYLE_NONE, ATTR_FONT_OVERLINE );
-    mvPoolDefaults[ ATTR_FONT_CROSSEDOUT - ATTR_STARTINDEX ] = new SvxCrossedOutItem( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT );
-    mvPoolDefaults[ ATTR_FONT_CONTOUR    - ATTR_STARTINDEX ] = new SvxContourItem( false, ATTR_FONT_CONTOUR );
-    mvPoolDefaults[ ATTR_FONT_SHADOWED   - ATTR_STARTINDEX ] = new SvxShadowedItem( false, ATTR_FONT_SHADOWED );
-    mvPoolDefaults[ ATTR_FONT_COLOR      - ATTR_STARTINDEX ] = new SvxColorItem( COL_AUTO, ATTR_FONT_COLOR );
-    mvPoolDefaults[ ATTR_FONT_LANGUAGE   - ATTR_STARTINDEX ] = new SvxLanguageItem( LANGUAGE_DONTKNOW, ATTR_FONT_LANGUAGE );
-    mvPoolDefaults[ ATTR_CJK_FONT        - ATTR_STARTINDEX ] = pCjkFont;
-    mvPoolDefaults[ ATTR_CJK_FONT_HEIGHT - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_CJK_FONT_HEIGHT );
-    mvPoolDefaults[ ATTR_CJK_FONT_WEIGHT - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT );
-    mvPoolDefaults[ ATTR_CJK_FONT_POSTURE- ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_CJK_FONT_POSTURE );
-    mvPoolDefaults[ ATTR_CJK_FONT_LANGUAGE-ATTR_STARTINDEX ] = new SvxLanguageItem( LANGUAGE_DONTKNOW, ATTR_CJK_FONT_LANGUAGE );
-    mvPoolDefaults[ ATTR_CTL_FONT        - ATTR_STARTINDEX ] = pCtlFont;
-    mvPoolDefaults[ ATTR_CTL_FONT_HEIGHT - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_CTL_FONT_HEIGHT );
-    mvPoolDefaults[ ATTR_CTL_FONT_WEIGHT - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT );
-    mvPoolDefaults[ ATTR_CTL_FONT_POSTURE- ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_CTL_FONT_POSTURE );
-    mvPoolDefaults[ ATTR_CTL_FONT_LANGUAGE-ATTR_STARTINDEX ] = new SvxLanguageItem( LANGUAGE_DONTKNOW, ATTR_CTL_FONT_LANGUAGE );
-    mvPoolDefaults[ ATTR_FONT_EMPHASISMARK-ATTR_STARTINDEX ] = new SvxEmphasisMarkItem( FontEmphasisMark::NONE, ATTR_FONT_EMPHASISMARK );
-    mvPoolDefaults[ ATTR_USERDEF         - ATTR_STARTINDEX ] = new SvXMLAttrContainerItem( ATTR_USERDEF );
-    mvPoolDefaults[ ATTR_FONT_WORDLINE   - ATTR_STARTINDEX ] = new SvxWordLineModeItem(false, ATTR_FONT_WORDLINE );
-    mvPoolDefaults[ ATTR_FONT_RELIEF     - ATTR_STARTINDEX ] = new SvxCharReliefItem( FontRelief::NONE, ATTR_FONT_RELIEF );
-    mvPoolDefaults[ ATTR_HYPHENATE       - ATTR_STARTINDEX ] = new ScHyphenateCell();
-    mvPoolDefaults[ ATTR_SCRIPTSPACE     - ATTR_STARTINDEX ] = new SvxScriptSpaceItem( false, ATTR_SCRIPTSPACE);
-    mvPoolDefaults[ ATTR_HANGPUNCTUATION - ATTR_STARTINDEX ] = new SvxHangingPunctuationItem( false, ATTR_HANGPUNCTUATION);
-    mvPoolDefaults[ ATTR_FORBIDDEN_RULES - ATTR_STARTINDEX ] = new SvxForbiddenRuleItem( false, ATTR_FORBIDDEN_RULES);
-    mvPoolDefaults[ ATTR_HOR_JUSTIFY     - ATTR_STARTINDEX ] = new SvxHorJustifyItem( SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY);
-    mvPoolDefaults[ ATTR_HOR_JUSTIFY_METHOD - ATTR_STARTINDEX ] = new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, ATTR_HOR_JUSTIFY_METHOD);
-    mvPoolDefaults[ ATTR_INDENT          - ATTR_STARTINDEX ] = new ScIndentItem( 0 );
-    mvPoolDefaults[ ATTR_VER_JUSTIFY     - ATTR_STARTINDEX ] = new SvxVerJustifyItem( SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY);
-    mvPoolDefaults[ ATTR_VER_JUSTIFY_METHOD - ATTR_STARTINDEX ] = new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, ATTR_VER_JUSTIFY_METHOD);
-    mvPoolDefaults[ ATTR_STACKED         - ATTR_STARTINDEX ] = new ScVerticalStackCell(false);
-    mvPoolDefaults[ ATTR_ROTATE_VALUE    - ATTR_STARTINDEX ] = new ScRotateValueItem( 0_deg100 );
-    mvPoolDefaults[ ATTR_ROTATE_MODE     - ATTR_STARTINDEX ] = new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE );
-    mvPoolDefaults[ ATTR_VERTICAL_ASIAN  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_VERTICAL_ASIAN );
-    //  The default for the ATTR_WRITINGDIR cell attribute must by SvxFrameDirection::Environment,
-    //  so that value is returned when asking for a default cell's attributes.
-    //  The value from the page style is set as DefaultHorizontalTextDirection for the EditEngine.
-    mvPoolDefaults[ ATTR_WRITINGDIR      - ATTR_STARTINDEX ] = new SvxFrameDirectionItem( SvxFrameDirection::Environment, ATTR_WRITINGDIR );
-    mvPoolDefaults[ ATTR_LINEBREAK       - ATTR_STARTINDEX ] = new ScLineBreakCell();
-    mvPoolDefaults[ ATTR_SHRINKTOFIT     - ATTR_STARTINDEX ] = new ScShrinkToFitCell();
-    mvPoolDefaults[ ATTR_BORDER_TLBR     - ATTR_STARTINDEX ] = new SvxLineItem( ATTR_BORDER_TLBR );
-    mvPoolDefaults[ ATTR_BORDER_BLTR     - ATTR_STARTINDEX ] = new SvxLineItem( ATTR_BORDER_BLTR );
-    mvPoolDefaults[ ATTR_MARGIN          - ATTR_STARTINDEX ] = new SvxMarginItem( ATTR_MARGIN );
-    mvPoolDefaults[ ATTR_MERGE           - ATTR_STARTINDEX ] = new ScMergeAttr;
-    mvPoolDefaults[ ATTR_MERGE_FLAG      - ATTR_STARTINDEX ] = new ScMergeFlagAttr;
-    mvPoolDefaults[ ATTR_VALUE_FORMAT    - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_VALUE_FORMAT, 0 );
-    mvPoolDefaults[ ATTR_LANGUAGE_FORMAT - ATTR_STARTINDEX ] = new SvxLanguageItem( ScGlobal::eLnge, ATTR_LANGUAGE_FORMAT );
-    mvPoolDefaults[ ATTR_BACKGROUND      - ATTR_STARTINDEX ] = new SvxBrushItem( COL_TRANSPARENT, ATTR_BACKGROUND );
-    mvPoolDefaults[ ATTR_PROTECTION      - ATTR_STARTINDEX ] = new ScProtectionAttr;
-    mvPoolDefaults[ ATTR_BORDER          - ATTR_STARTINDEX ] = new SvxBoxItem( ATTR_BORDER );
-    mvPoolDefaults[ ATTR_BORDER_INNER    - ATTR_STARTINDEX ] = pGlobalBorderInnerAttr;
-    mvPoolDefaults[ ATTR_SHADOW          - ATTR_STARTINDEX ] = new SvxShadowItem( ATTR_SHADOW );
-    mvPoolDefaults[ ATTR_VALIDDATA       - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_VALIDDATA, 0 );
-    mvPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new ScCondFormatItem;
-    mvPoolDefaults[ ATTR_HYPERLINK       - ATTR_STARTINDEX ] = new SfxStringItem( ATTR_HYPERLINK, OUString() ) ;
-    mvPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
-    mvPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );
-    mvPoolDefaults[ ATTR_PAGE            - ATTR_STARTINDEX ] = new SvxPageItem( ATTR_PAGE );
-    mvPoolDefaults[ ATTR_PAGE_PAPERBIN   - ATTR_STARTINDEX ] = new SvxPaperBinItem( ATTR_PAGE_PAPERBIN );
-    mvPoolDefaults[ ATTR_PAGE_SIZE       - ATTR_STARTINDEX ] = new SvxSizeItem( ATTR_PAGE_SIZE );
-    mvPoolDefaults[ ATTR_PAGE_HORCENTER  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HORCENTER );
-    mvPoolDefaults[ ATTR_PAGE_VERCENTER  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_VERCENTER );
-    mvPoolDefaults[ ATTR_PAGE_ON         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_ON, true );
-    mvPoolDefaults[ ATTR_PAGE_DYNAMIC    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_DYNAMIC, true );
-    mvPoolDefaults[ ATTR_PAGE_SHARED     - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_SHARED, true );
-    mvPoolDefaults[ ATTR_PAGE_SHARED_FIRST- ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_SHARED_FIRST, true );
-    mvPoolDefaults[ ATTR_PAGE_NOTES      - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NOTES, false );
-    mvPoolDefaults[ ATTR_PAGE_GRID       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_GRID, false );
-    mvPoolDefaults[ ATTR_PAGE_HEADERS    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HEADERS, false );
-    mvPoolDefaults[ ATTR_PAGE_CHARTS     - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_CHARTS );
-    mvPoolDefaults[ ATTR_PAGE_OBJECTS    - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_OBJECTS );
-    mvPoolDefaults[ ATTR_PAGE_DRAWINGS   - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_DRAWINGS );
-    mvPoolDefaults[ ATTR_PAGE_TOPDOWN    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_TOPDOWN, true );
-    mvPoolDefaults[ ATTR_PAGE_SCALE      - ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_SCALE, 100 );
-    mvPoolDefaults[ ATTR_PAGE_SCALETOPAGES-ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 1 );
-    mvPoolDefaults[ ATTR_PAGE_FIRSTPAGENO- ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 1 );
-    mvPoolDefaults[ ATTR_PAGE_HEADERLEFT - ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_HEADERLEFT );
-    mvPoolDefaults[ ATTR_PAGE_FOOTERLEFT - ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERLEFT );
-    mvPoolDefaults[ ATTR_PAGE_HEADERRIGHT- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
-    mvPoolDefaults[ ATTR_PAGE_FOOTERRIGHT- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
-    mvPoolDefaults[ ATTR_PAGE_HEADERFIRST- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_HEADERFIRST );
-    mvPoolDefaults[ ATTR_PAGE_FOOTERFIRST- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERFIRST );
-    mvPoolDefaults[ ATTR_PAGE_HEADERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_HEADERSET, aSetItemItemSet );
-    mvPoolDefaults[ ATTR_PAGE_FOOTERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_FOOTERSET, aSetItemItemSet );
-    mvPoolDefaults[ ATTR_PAGE_FORMULAS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_FORMULAS, false );
-    mvPoolDefaults[ ATTR_PAGE_NULLVALS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NULLVALS, true );
-    mvPoolDefaults[ ATTR_PAGE_SCALETO    - ATTR_STARTINDEX ] = new ScPageScaleToItem( 1, 1 );
-    mvPoolDefaults[ ATTR_HIDDEN          - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_HIDDEN, false );
-
-    SetPoolDefaults( &mvPoolDefaults );
+    registerItemInfoPackage(getItemInfoPackageScDocument());
 }
 
 ScDocumentPool::~ScDocumentPool()
 {
-    Delete();
+    sendShutdownHint();
     SetSecondaryPool(nullptr);
-
-    for ( sal_uInt16 i=0; i < ATTR_ENDINDEX-ATTR_STARTINDEX+1; i++ )
-    {
-        ClearRefCount( *mvPoolDefaults[i] );
-        delete mvPoolDefaults[i];
-    }
 }
 
 rtl::Reference<SfxItemPool> ScDocumentPool::Clone() const
 {
-    return new SfxItemPool (*this, true);
+    return new SfxItemPool(*this);
 }
 
 static bool lcl_HFPresentation

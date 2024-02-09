@@ -817,7 +817,6 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
             if (!mpEditEngine)
             {
                 rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-                pEnginePool->FreezeIdRanges();
                 mpEditEngine = new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true);
                 mbEditEngineCreated = true;
                 mpEditEngine->EnableUndo( false );
@@ -1021,7 +1020,6 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         else
         {
             rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-            pEnginePool->FreezeIdRanges();
             pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
         }
         pEditEngine->EnableUndo( false );
@@ -1122,7 +1120,6 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
     if (!mpEditEngine)
     {
         rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-        pEnginePool->FreezeIdRanges();
         std::unique_ptr<ScHeaderEditEngine> pHdrEngine(new ScHeaderEditEngine( pEnginePool.get() ));
 
         pHdrEngine->EnableUndo( false );
@@ -1250,7 +1247,6 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         else
         {
             rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-            pEnginePool->FreezeIdRanges();
             mpEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
         }
         mpEditEngine->EnableUndo( false );

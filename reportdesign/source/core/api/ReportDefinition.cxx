@@ -587,7 +587,6 @@ void OReportDefinition::init()
     try
     {
         m_pImpl->m_pReportModel = std::make_shared<OReportModel>(this);
-        m_pImpl->m_pReportModel->GetItemPool().FreezeIdRanges();
         m_pImpl->m_pReportModel->SetScaleUnit( MapUnit::Map100thMM );
         SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetLayerAdmin();
         rAdmin.NewLayer("front", RPT_LAYER_FRONT.get());

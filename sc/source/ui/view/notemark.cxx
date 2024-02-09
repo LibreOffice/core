@@ -80,7 +80,6 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
         m_pModel->SetScaleUnit(MapUnit::Map100thMM);
         SfxItemPool& rPool = m_pModel->GetItemPool();
         rPool.SetDefaultMetric(MapUnit::Map100thMM);
-        rPool.FreezeIdRanges();
 
         OutputDevice* pPrinter = m_pDoc->GetRefDevice();
         if (pPrinter)

@@ -472,7 +472,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xattrbmp \
     svx/source/xoutdev/_xoutbmp \
     svx/source/xoutdev/_xpoly \
-    svx/source/xoutdev/xpool \
     svx/source/xoutdev/xtabbtmp \
     svx/source/xoutdev/xtabcolr \
     svx/source/xoutdev/xtabdash \

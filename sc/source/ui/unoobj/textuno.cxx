@@ -165,7 +165,6 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
     if (!pEditEngine)
     {
         rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-        pEnginePool->FreezeIdRanges();
         std::unique_ptr<ScHeaderEditEngine> pHdrEngine(new ScHeaderEditEngine( pEnginePool.get() ));
 
         pHdrEngine->EnableUndo( false );
@@ -698,8 +697,6 @@ ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
 {
     rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
     pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
-    pEnginePool->FreezeIdRanges();
-
     pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );     // TRUE: become owner of pool
     pForwarder.reset( new SvxEditEngineForwarder( *pEditEngine ) );
     pOriginalSource.reset( new ScSimpleEditSource( pForwarder.get() ) );
@@ -785,7 +782,6 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         else
         {
             rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-            pEnginePool->FreezeIdRanges();
             pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool.get(), nullptr, true) );
         }
         //  currently, GetPortions doesn't work if UpdateMode is sal_False,

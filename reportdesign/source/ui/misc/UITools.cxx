@@ -545,6 +545,107 @@ namespace
     }
 }
 
+static ItemInfoPackage& getItemInfoPackageOpenCharDlg()
+{
+    class ItemInfoPackageOpenCharDlg : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, ITEMID_WEIGHT_COMPLEX - XATTR_FILL_FIRST + 1> ItemInfoArrayOpenCharDlg;
+        // const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
+        // const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
+        // const basegfx::BGradient aNullGrad;
+        // const XHatch aNullHatch(Color(COL_DEFAULT_SHAPE_STROKE));
+        ItemInfoArrayOpenCharDlg maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { XATTR_FILLSTYLE, new XFillStyleItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLCOLOR, new XFillColorItem("", COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_FILLGRADIENT, new XFillGradientItem(basegfx::BGradient()), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLHATCH, new XFillHatchItem(COL_DEFAULT_SHAPE_STROKE), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBITMAP, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLTRANSPARENCE, new XFillTransparenceItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_GRADIENTSTEPCOUNT, new XGradientStepCountItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILE, new XFillBmpTileItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POS, new XFillBmpPosItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZEX, new XFillBmpSizeXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZEY, new XFillBmpSizeYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLFLOATTRANSPARENCE, new XFillFloatTransparenceItem(basegfx::BGradient(), false), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_SECONDARYFILLCOLOR, new XSecondaryFillColorItem("", COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZELOG, new XFillBmpSizeLogItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILEOFFSETX, new XFillBmpTileOffsetXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILEOFFSETY, new XFillBmpTileOffsetYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_STRETCH, new XFillBmpStretchItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POSOFFSETX, new XFillBmpPosOffsetXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POSOFFSETY, new XFillBmpPosOffsetYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBACKGROUND, new XFillBackgroundItem, 0, SFX_ITEMINFOFLAG_NONE },
+
+            { ITEMID_FONT, new SvxFontItem(ITEMID_FONT), SID_ATTR_CHAR_FONT, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_FONTHEIGHT, new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT), SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_LANGUAGE, new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE), SID_ATTR_CHAR_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_POSTURE, new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE), SID_ATTR_CHAR_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_WEIGHT, new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT), SID_ATTR_CHAR_WEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_SHADOWED, new SvxShadowedItem(false,ITEMID_SHADOWED), SID_ATTR_CHAR_SHADOWED, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_WORDLINEMODE, new SvxWordLineModeItem(false,ITEMID_WORDLINEMODE), SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_CONTOUR, new SvxContourItem(false,ITEMID_CONTOUR), SID_ATTR_CHAR_CONTOUR, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_CROSSEDOUT, new SvxCrossedOutItem(STRIKEOUT_NONE,ITEMID_CROSSEDOUT), SID_ATTR_CHAR_STRIKEOUT, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_UNDERLINE, new SvxUnderlineItem(LINESTYLE_NONE,ITEMID_UNDERLINE), SID_ATTR_CHAR_UNDERLINE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_COLOR, new SvxColorItem(ITEMID_COLOR), SID_ATTR_CHAR_COLOR, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_KERNING, new SvxKerningItem(0,ITEMID_KERNING), SID_ATTR_CHAR_KERNING, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_CASEMAP, new SvxCaseMapItem(SvxCaseMap::NotMapped,ITEMID_CASEMAP), SID_ATTR_CHAR_CASEMAP, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_ESCAPEMENT, new SvxEscapementItem(ITEMID_ESCAPEMENT), SID_ATTR_CHAR_ESCAPEMENT, SFX_ITEMINFOFLAG_NONE },
+
+            // needs to be a on-demand item created in the callback
+            { ITEMID_FONTLIST, nullptr, SID_ATTR_CHAR_FONTLIST, SFX_ITEMINFOFLAG_NONE },
+
+            { ITEMID_AUTOKERN, new SvxAutoKernItem(false,ITEMID_AUTOKERN), SID_ATTR_CHAR_AUTOKERN, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_COLOR_TABLE, new SvxColorListItem(XColorList::CreateStdColorList(),ITEMID_COLOR_TABLE), SID_COLOR_TABLE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_BLINK, new SvxBlinkItem(false,ITEMID_BLINK), SID_ATTR_FLASH, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_EMPHASISMARK, new SvxEmphasisMarkItem(FontEmphasisMark::NONE,ITEMID_EMPHASISMARK), SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_TWOLINES, new SvxTwoLinesItem(true,0,0,ITEMID_TWOLINES), SID_ATTR_CHAR_TWO_LINES, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_CHARROTATE, new SvxCharRotateItem(0_deg10,false,ITEMID_CHARROTATE), SID_ATTR_CHAR_ROTATED, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_CHARSCALE_W, new SvxCharScaleWidthItem(100,ITEMID_CHARSCALE_W), SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_CHARRELIEF, new SvxCharReliefItem(FontRelief::NONE,ITEMID_CHARRELIEF), SID_ATTR_CHAR_RELIEF, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_CHARHIDDEN, new SvxCharHiddenItem(false,ITEMID_CHARHIDDEN), SID_ATTR_CHAR_HIDDEN, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_BRUSH, new SvxBrushItem(ITEMID_BRUSH), SID_ATTR_BRUSH, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_HORJUSTIFY, new SvxHorJustifyItem(ITEMID_HORJUSTIFY), SID_ATTR_ALIGN_HOR_JUSTIFY, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_VERJUSTIFY, new SvxVerJustifyItem(ITEMID_VERJUSTIFY), SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEMINFOFLAG_NONE },
+
+            // Asian
+            { ITEMID_FONT_ASIAN , new SvxFontItem(ITEMID_FONT_ASIAN), SID_ATTR_CHAR_CJK_FONT, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_FONTHEIGHT_ASIAN , new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT_ASIAN), SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_LANGUAGE_ASIAN , new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE_ASIAN), SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_POSTURE_ASIAN , new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE_ASIAN), SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_WEIGHT_ASIAN , new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT_ASIAN), SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEMINFOFLAG_NONE },
+
+            // Complex
+            { ITEMID_FONT_COMPLEX , new SvxFontItem(ITEMID_FONT_COMPLEX), SID_ATTR_CHAR_CTL_FONT, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_FONTHEIGHT_COMPLEX , new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT_COMPLEX), SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_LANGUAGE_COMPLEX , new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE_COMPLEX), SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_POSTURE_COMPLEX , new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE_COMPLEX), SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { ITEMID_WEIGHT_COMPLEX , new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT_COMPLEX), SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEMINFOFLAG_NONE }
+        }};
+
+    public:
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override
+        {
+            const ItemInfo& rRetval(maItemInfos[nIndex]);
+
+            // return immediately if we have the static entry and Item
+            if (nullptr != rRetval.getItem())
+                return rRetval;
+
+            if (XATTR_FILLBITMAP == rRetval.getWhich())
+                return *new ItemInfoDynamic(rRetval, new XFillBitmapItem(Graphic()));
+
+            // return in any case
+            return rRetval;
+        }
+    };
+
+    static std::unique_ptr<ItemInfoPackageOpenCharDlg> g_aItemInfoPackageOpenCharDlg;
+    if (!g_aItemInfoPackageOpenCharDlg)
+        g_aItemInfoPackageOpenCharDlg.reset(new ItemInfoPackageOpenCharDlg);
+    return *g_aItemInfoPackageOpenCharDlg;
+}
 
 bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         const uno::Reference< awt::XWindow>& _rxParentWindow, uno::Sequence< beans::NamedValue >& _out_rNewValues )
@@ -555,158 +656,28 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     _out_rNewValues = uno::Sequence< beans::NamedValue >();
 
-
     // UNO->ItemSet
-    static SfxItemInfo aItemInfos[] =
-    {
-        // _nItemInfoSlotID, _nItemInfoFlags
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLSTYLE
-        { 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // XATTR_FILLCOLOR
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLGRADIENT
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLHATCH
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBITMAP
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLTRANSPARENCE
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_GRADIENTSTEPCOUNT
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILE
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POS
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZEX
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZEY
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLFLOATTRANSPARENCE
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_SECONDARYFILLCOLOR
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZELOG
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILEOFFSETX
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILEOFFSETY
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_STRETCH
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POSOFFSETX
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POSOFFSETY
-        { 0, SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBACKGROUND
-
-        { SID_ATTR_CHAR_FONT,           SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_FONTHEIGHT,     SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_LANGUAGE,       SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_POSTURE,        SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_WEIGHT,         SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_SHADOWED,       SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_WORDLINEMODE,   SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CONTOUR,        SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_STRIKEOUT,      SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_UNDERLINE,      SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_COLOR,          SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_KERNING,        SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CASEMAP,        SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_ESCAPEMENT,     SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_FONTLIST,       SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_AUTOKERN,       SFX_ITEMINFOFLAG_NONE },
-        { SID_COLOR_TABLE,              SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_FLASH,               SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_EMPHASISMARK,   SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_TWO_LINES,      SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_ROTATED,        SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_SCALEWIDTH,     SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_RELIEF,         SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_HIDDEN,         SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_BRUSH,               SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_ALIGN_VER_JUSTIFY,   SFX_ITEMINFOFLAG_NONE },
-
-        // Asian
-        { SID_ATTR_CHAR_CJK_FONT,       SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CJK_LANGUAGE,   SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CJK_POSTURE,    SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CJK_WEIGHT,     SFX_ITEMINFOFLAG_NONE },
-        // Complex
-        { SID_ATTR_CHAR_CTL_FONT,       SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CTL_LANGUAGE,   SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CTL_POSTURE,    SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_CHAR_CTL_WEIGHT,     SFX_ITEMINFOFLAG_NONE }
-    };
-    FontList aFontList(Application::GetDefaultDevice());
-    XColorListRef pColorList( XColorList::CreateStdColorList() );
-    const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
-    const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
-    // basegfx::BGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
-    const basegfx::BGradient aNullGrad;
-
-    const XHatch aNullHatch(aNullLineCol);
-    std::vector<SfxPoolItem*> pDefaults
-    {
-        new XFillStyleItem,
-        new XFillColorItem("", aNullFillCol),
-        new XFillGradientItem(aNullGrad),
-        new XFillHatchItem(aNullHatch),
-        new XFillBitmapItem(Graphic()),
-        new XFillTransparenceItem,
-        new XGradientStepCountItem,
-        new XFillBmpTileItem,
-        new XFillBmpPosItem,
-        new XFillBmpSizeXItem,
-        new XFillBmpSizeYItem,
-        new XFillFloatTransparenceItem(aNullGrad, false),
-        new XSecondaryFillColorItem("", aNullFillCol),
-        new XFillBmpSizeLogItem,
-        new XFillBmpTileOffsetXItem,
-        new XFillBmpTileOffsetYItem,
-        new XFillBmpStretchItem,
-        new XFillBmpPosOffsetXItem,
-        new XFillBmpPosOffsetYItem,
-        new XFillBackgroundItem,
-
-        new SvxFontItem(ITEMID_FONT),
-        new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT),
-        new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE),
-        new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE),
-        new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT),
-
-        new SvxShadowedItem(false,ITEMID_SHADOWED),
-        new SvxWordLineModeItem(false,ITEMID_WORDLINEMODE),
-        new SvxContourItem(false,ITEMID_CONTOUR),
-        new SvxCrossedOutItem(STRIKEOUT_NONE,ITEMID_CROSSEDOUT),
-        new SvxUnderlineItem(LINESTYLE_NONE,ITEMID_UNDERLINE),
-
-        new SvxColorItem(ITEMID_COLOR),
-        new SvxKerningItem(0,ITEMID_KERNING),
-        new SvxCaseMapItem(SvxCaseMap::NotMapped,ITEMID_CASEMAP),
-        new SvxEscapementItem(ITEMID_ESCAPEMENT),
-        new SvxFontListItem(&aFontList,ITEMID_FONTLIST),
-        new SvxAutoKernItem(false,ITEMID_AUTOKERN),
-        new SvxColorListItem(pColorList,ITEMID_COLOR_TABLE),
-        new SvxBlinkItem(false,ITEMID_BLINK),
-        new SvxEmphasisMarkItem(FontEmphasisMark::NONE,ITEMID_EMPHASISMARK),
-        new SvxTwoLinesItem(true,0,0,ITEMID_TWOLINES),
-        new SvxCharRotateItem(0_deg10,false,ITEMID_CHARROTATE),
-        new SvxCharScaleWidthItem(100,ITEMID_CHARSCALE_W),
-        new SvxCharReliefItem(FontRelief::NONE,ITEMID_CHARRELIEF),
-        new SvxCharHiddenItem(false,ITEMID_CHARHIDDEN),
-        new SvxBrushItem(ITEMID_BRUSH),
-        new SvxHorJustifyItem(ITEMID_HORJUSTIFY),
-        new SvxVerJustifyItem(ITEMID_VERJUSTIFY),
-// Asian
-        new SvxFontItem(ITEMID_FONT_ASIAN),
-        new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT_ASIAN),
-        new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE_ASIAN),
-        new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE_ASIAN),
-        new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT_ASIAN),
-// Complex
-        new SvxFontItem(ITEMID_FONT_COMPLEX),
-        new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT_COMPLEX),
-        new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE_COMPLEX),
-        new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE_COMPLEX),
-        new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT_COMPLEX)
-
-    };
-
-    OSL_ASSERT( pDefaults.size() == SAL_N_ELEMENTS(aItemInfos) );
-
     static const WhichRangesContainer pRanges(svl::Items<
         XATTR_FILLSTYLE, XATTR_FILLBACKGROUND,
         ITEMID_FONT, ITEMID_WEIGHT_COMPLEX
     >);
 
-    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ReportCharProperties", XATTR_FILL_FIRST,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults));
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ReportCharProperties"));
     // not needed for font height pPool->SetDefaultMetric( MapUnit::Map100thMM );  // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
+
+    // here we have to use the callback to create all needed default entries.
+    // this uses local aFontList for temporary SvxFontListItem
+    FontList aFontList(Application::GetDefaultDevice());
+    pPool->registerItemInfoPackage(
+        getItemInfoPackageOpenCharDlg(),
+        [&aFontList](sal_uInt16 nWhich)
+        {
+            SfxPoolItem* pRetval(nullptr);
+            if (ITEMID_FONTLIST == nWhich)
+                pRetval = new SvxFontListItem(&aFontList, ITEMID_FONTLIST);
+            return pRetval;
+        });
+
     bool bSuccess = false;
     try
     {
@@ -733,8 +704,6 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     }
 
     pPool.clear();
-    for (SfxPoolItem* pDefault : pDefaults)
-        delete pDefault;
 
     return bSuccess;
 }

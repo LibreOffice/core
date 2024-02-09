@@ -57,7 +57,6 @@ DrawModelWrapper::DrawModelWrapper()
 
     // append chart pool to end of pool chain
     pMasterPool->GetLastPoolInChain()->SetSecondaryPool(m_xChartItemPool.get());
-    pMasterPool->FreezeIdRanges();
     SetTextDefaults();
 
     //this factory needs to be created before first use of 3D scenes once upon an office runtime

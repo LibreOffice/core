@@ -264,171 +264,133 @@ void ODbAdminDialog::clearPassword()
     m_pImpl->clearPassword();
 }
 
-void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
+static ItemInfoPackage& getItemInfoPackageAdminDlg()
+{
+    class ItemInfoPackageAdminDlg : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1> ItemInfoArrayAdminDlg;
+        ItemInfoArrayAdminDlg maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { DSID_NAME, new SfxStringItem(DSID_NAME, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_ORIGINALNAME, new SfxStringItem(DSID_ORIGINALNAME, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONNECTURL, new SfxStringItem(DSID_CONNECTURL, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+
+            // gets added in costructor below once for LO runtime as static default
+            { DSID_TABLEFILTER, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
+
+            // gets added by callback for each new Pool as dynamic default
+            { DSID_TYPECOLLECTION, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
+
+            { DSID_INVALID_SELECTION, new SfxBoolItem(DSID_INVALID_SELECTION, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_READONLY, new SfxBoolItem(DSID_READONLY, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_USER, new SfxStringItem(DSID_USER, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_PASSWORD, new SfxStringItem(DSID_PASSWORD, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_ADDITIONALOPTIONS, new SfxStringItem(DSID_ADDITIONALOPTIONS, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CHARSET, new SfxStringItem(DSID_CHARSET, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_PASSWORDREQUIRED, new SfxBoolItem(DSID_PASSWORDREQUIRED, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_SHOWDELETEDROWS, new SfxBoolItem(DSID_SHOWDELETEDROWS, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_ALLOWLONGTABLENAMES, new SfxBoolItem(DSID_ALLOWLONGTABLENAMES, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_JDBCDRIVERCLASS, new SfxStringItem(DSID_JDBCDRIVERCLASS, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_FIELDDELIMITER, new SfxStringItem(DSID_FIELDDELIMITER, OUString(',')), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_TEXTDELIMITER, new SfxStringItem(DSID_TEXTDELIMITER, OUString('"')), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_DECIMALDELIMITER, new SfxStringItem(DSID_DECIMALDELIMITER, OUString('.')), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_THOUSANDSDELIMITER, new SfxStringItem(DSID_THOUSANDSDELIMITER, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_TEXTFILEEXTENSION, new SfxStringItem(DSID_TEXTFILEEXTENSION, "txt"), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_TEXTFILEHEADER, new SfxBoolItem(DSID_TEXTFILEHEADER, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_PARAMETERNAMESUBST, new SfxBoolItem(DSID_PARAMETERNAMESUBST, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_PORTNUMBER, new SfxInt32Item(DSID_CONN_PORTNUMBER, 8100), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_SUPPRESSVERSIONCL, new SfxBoolItem(DSID_SUPPRESSVERSIONCL, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_SHUTSERVICE, new SfxBoolItem(DSID_CONN_SHUTSERVICE, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_DATAINC, new SfxInt32Item(DSID_CONN_DATAINC, 20), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_CACHESIZE, new SfxInt32Item(DSID_CONN_CACHESIZE, 20), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_CTRLUSER, new SfxStringItem(DSID_CONN_CTRLUSER, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_CTRLPWD, new SfxStringItem(DSID_CONN_CTRLPWD, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_USECATALOG, new SfxBoolItem(DSID_USECATALOG, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_HOSTNAME, new SfxStringItem(DSID_CONN_HOSTNAME, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_LDAP_BASEDN, new SfxStringItem(DSID_CONN_LDAP_BASEDN, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_LDAP_PORTNUMBER, new SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, 389), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_LDAP_ROWCOUNT, new SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, 100), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_SQL92CHECK, new SfxBoolItem(DSID_SQL92CHECK, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_AUTOINCREMENTVALUE, new SfxStringItem(DSID_AUTOINCREMENTVALUE, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_AUTORETRIEVEVALUE, new SfxStringItem(DSID_AUTORETRIEVEVALUE, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_AUTORETRIEVEENABLED, new SfxBoolItem(DSID_AUTORETRIEVEENABLED, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_APPEND_TABLE_ALIAS, new SfxBoolItem(DSID_APPEND_TABLE_ALIAS, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_MYSQL_PORTNUMBER, new SfxInt32Item(DSID_MYSQL_PORTNUMBER, 3306), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_IGNOREDRIVER_PRIV, new SfxBoolItem(DSID_IGNOREDRIVER_PRIV, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_BOOLEANCOMPARISON, new SfxInt32Item(DSID_BOOLEANCOMPARISON, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_ORACLE_PORTNUMBER, new SfxInt32Item(DSID_ORACLE_PORTNUMBER, 1521), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_ENABLEOUTERJOIN, new SfxBoolItem(DSID_ENABLEOUTERJOIN, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CATALOG, new SfxBoolItem(DSID_CATALOG, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_SCHEMA, new SfxBoolItem(DSID_SCHEMA, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_INDEXAPPENDIX, new SfxBoolItem(DSID_INDEXAPPENDIX, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_LDAP_USESSL, new SfxBoolItem(DSID_CONN_LDAP_USESSL, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_DOCUMENT_URL, new SfxStringItem(DSID_DOCUMENT_URL, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_DOSLINEENDS, new SfxBoolItem(DSID_DOSLINEENDS, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_DATABASENAME, new SfxStringItem(DSID_DATABASENAME, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_AS_BEFORE_CORRNAME, new SfxBoolItem(DSID_AS_BEFORE_CORRNAME, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CHECK_REQUIRED_FIELDS, new SfxBoolItem(DSID_CHECK_REQUIRED_FIELDS, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_IGNORECURRENCY, new SfxBoolItem(DSID_IGNORECURRENCY, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_CONN_SOCKET, new SfxStringItem(DSID_CONN_SOCKET, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_ESCAPE_DATETIME, new SfxBoolItem(DSID_ESCAPE_DATETIME, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_NAMED_PIPE, new SfxStringItem(DSID_NAMED_PIPE, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_PRIMARY_KEY_SUPPORT, new OptionalBoolItem( DSID_PRIMARY_KEY_SUPPORT ), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_MAX_ROW_SCAN, new SfxInt32Item(DSID_MAX_ROW_SCAN, 100), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_RESPECTRESULTSETTYPE, new SfxBoolItem( DSID_RESPECTRESULTSETTYPE,false ), 0, SFX_ITEMINFOFLAG_NONE },
+            { DSID_POSTGRES_PORTNUMBER, new SfxInt32Item(DSID_POSTGRES_PORTNUMBER, 5432), 0, SFX_ITEMINFOFLAG_NONE }
+        }};
+
+    public:
+        ItemInfoPackageAdminDlg()
+        {
+            static constexpr OUString sFilterAll( u"%"_ustr );
+            setItemAtItemInfoStatic(
+                new OStringListItem(DSID_TABLEFILTER, Sequence< OUString >{sFilterAll}),
+                maItemInfos[DSID_TABLEFILTER - DSID_FIRST_ITEM_ID]);
+        }
+
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }
+    };
+
+    static std::unique_ptr<ItemInfoPackageAdminDlg> g_aItemInfoPackageAdminDlg;
+    if (!g_aItemInfoPackageAdminDlg)
+        g_aItemInfoPackageAdminDlg.reset(new ItemInfoPackageAdminDlg);
+    return *g_aItemInfoPackageAdminDlg;
+}
+
+void ODbAdminDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
 {
     // just to be sure...
     _rpSet = nullptr;
     _rpPool = nullptr;
-    _rpDefaults = nullptr;
+    _rpPool = new SfxItemPool("DSAItemPool");
 
-    static constexpr OUString sFilterAll( u"%"_ustr );
-    // create and initialize the defaults
-    _rpDefaults = new std::vector<SfxPoolItem*>(DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1);
-    SfxPoolItem** pCounter = _rpDefaults->data();  // want to modify this without affecting the out param _rppDefaults
-    *pCounter++ = new SfxStringItem(DSID_NAME, OUString());
-    *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, OUString());
-    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, OUString());
-    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< OUString >{sFilterAll});
-    *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
-    *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, false);
-    *pCounter++ = new SfxBoolItem(DSID_READONLY, false);
-    *pCounter++ = new SfxStringItem(DSID_USER, OUString());
-    *pCounter++ = new SfxStringItem(DSID_PASSWORD, OUString());
-    *pCounter++ = new SfxStringItem(DSID_ADDITIONALOPTIONS, OUString());
-    *pCounter++ = new SfxStringItem(DSID_CHARSET, OUString());
-    *pCounter++ = new SfxBoolItem(DSID_PASSWORDREQUIRED, false);
-    *pCounter++ = new SfxBoolItem(DSID_SHOWDELETEDROWS, false);
-    *pCounter++ = new SfxBoolItem(DSID_ALLOWLONGTABLENAMES, false);
-    *pCounter++ = new SfxStringItem(DSID_JDBCDRIVERCLASS, OUString());
-    *pCounter++ = new SfxStringItem(DSID_FIELDDELIMITER, OUString(','));
-    *pCounter++ = new SfxStringItem(DSID_TEXTDELIMITER, OUString('"'));
-    *pCounter++ = new SfxStringItem(DSID_DECIMALDELIMITER, OUString('.'));
-    *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, OUString());
-    *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, "txt");
-    *pCounter++ = new SfxBoolItem(DSID_TEXTFILEHEADER, true);
-    *pCounter++ = new SfxBoolItem(DSID_PARAMETERNAMESUBST, false);
-    *pCounter++ = new SfxInt32Item(DSID_CONN_PORTNUMBER, 8100);
-    *pCounter++ = new SfxBoolItem(DSID_SUPPRESSVERSIONCL, false);
-    *pCounter++ = new SfxBoolItem(DSID_CONN_SHUTSERVICE, false);
-    *pCounter++ = new SfxInt32Item(DSID_CONN_DATAINC, 20);
-    *pCounter++ = new SfxInt32Item(DSID_CONN_CACHESIZE, 20);
-    *pCounter++ = new SfxStringItem(DSID_CONN_CTRLUSER, OUString());
-    *pCounter++ = new SfxStringItem(DSID_CONN_CTRLPWD, OUString());
-    *pCounter++ = new SfxBoolItem(DSID_USECATALOG, false);
-    *pCounter++ = new SfxStringItem(DSID_CONN_HOSTNAME, OUString());
-    *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_BASEDN, OUString());
-    *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, 389);
-    *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, 100);
-    *pCounter++ = new SfxBoolItem(DSID_SQL92CHECK, false);
-    *pCounter++ = new SfxStringItem(DSID_AUTOINCREMENTVALUE, OUString());
-    *pCounter++ = new SfxStringItem(DSID_AUTORETRIEVEVALUE, OUString());
-    *pCounter++ = new SfxBoolItem(DSID_AUTORETRIEVEENABLED, false);
-    *pCounter++ = new SfxBoolItem(DSID_APPEND_TABLE_ALIAS, false);
-    *pCounter++ = new SfxInt32Item(DSID_MYSQL_PORTNUMBER, 3306);
-    *pCounter++ = new SfxBoolItem(DSID_IGNOREDRIVER_PRIV, true);
-    *pCounter++ = new SfxInt32Item(DSID_BOOLEANCOMPARISON, 0);
-    *pCounter++ = new SfxInt32Item(DSID_ORACLE_PORTNUMBER, 1521);
-    *pCounter++ = new SfxBoolItem(DSID_ENABLEOUTERJOIN, true);
-    *pCounter++ = new SfxBoolItem(DSID_CATALOG, true);
-    *pCounter++ = new SfxBoolItem(DSID_SCHEMA, true);
-    *pCounter++ = new SfxBoolItem(DSID_INDEXAPPENDIX, true);
-    *pCounter++ = new SfxBoolItem(DSID_CONN_LDAP_USESSL, false);
-    *pCounter++ = new SfxStringItem(DSID_DOCUMENT_URL, OUString());
-    *pCounter++ = new SfxBoolItem(DSID_DOSLINEENDS, false);
-    *pCounter++ = new SfxStringItem(DSID_DATABASENAME, OUString());
-    *pCounter++ = new SfxBoolItem(DSID_AS_BEFORE_CORRNAME, false);
-    *pCounter++ = new SfxBoolItem(DSID_CHECK_REQUIRED_FIELDS, true);
-    *pCounter++ = new SfxBoolItem(DSID_IGNORECURRENCY, false);
-    *pCounter++ = new SfxStringItem(DSID_CONN_SOCKET, OUString());
-    *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, true);
-    *pCounter++ = new SfxStringItem(DSID_NAMED_PIPE, OUString());
-    *pCounter++ = new OptionalBoolItem( DSID_PRIMARY_KEY_SUPPORT );
-    *pCounter++ = new SfxInt32Item(DSID_MAX_ROW_SCAN, 100);
-    *pCounter++ = new SfxBoolItem( DSID_RESPECTRESULTSETTYPE,false );
-    *pCounter++ = new SfxInt32Item(DSID_POSTGRES_PORTNUMBER, 5432);
-
-    // create the pool
-    static SfxItemInfo const aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
-    {
-        // _nItemInfoSlotID, _nItemInfoFlags
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-        {0, SFX_ITEMINFOFLAG_NONE },
-    };
-
-    OSL_ENSURE(std::size(aItemInfos) == sal_uInt16(DSID_LAST_ITEM_ID),"Invalid Ids!");
-    _rpPool = new SfxItemPool("DSAItemPool", DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
-        aItemInfos, _rpDefaults);
-    _rpPool->FreezeIdRanges();
+    // here we have to use the callback to create all needed default entries since
+    // the DSID_TYPECOLLECTION needs the local given _pTypeCollection. Thus this will
+    // be a ItemInfoDynamic created by SfxItemPool::registerItemInfoPackage. That
+    // (and the contained Item) will be owned by the Pool and cleaned up when it goes
+    // down (see SfxItemPool::cleanupItemInfos())
+    _rpPool->registerItemInfoPackage(
+        getItemInfoPackageAdminDlg(),
+        [&_pTypeCollection](sal_uInt16 nWhich)
+        {
+            SfxPoolItem* pRetval(nullptr);
+            if (DSID_TYPECOLLECTION == nWhich)
+                pRetval = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
+            return pRetval;
+        });
 
     // and, finally, the set
     _rpSet.reset(new SfxItemSet(*_rpPool));
 }
 
-void ODbAdminDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
+void ODbAdminDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool)
 {
     // _first_ delete the set (referring the pool)
     _rpSet.reset();
 
     // delete the pool
-    if (_rpPool)
-    {
-        _rpPool->ReleasePoolDefaults(true);
-            // the "true" means delete the items, too
-        _rpPool = nullptr;
-    }
-
-    // reset the defaults ptr
-    _rpDefaults = nullptr;
-        // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
+    _rpPool = nullptr;
 }
 
 }   // namespace dbaui

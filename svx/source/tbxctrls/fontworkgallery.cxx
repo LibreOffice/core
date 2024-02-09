@@ -161,7 +161,6 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         return;
 
     FmFormModel aModel;
-    aModel.GetItemPool().FreezeIdRanges();
 
     if( !GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, &aModel ) )
         return;

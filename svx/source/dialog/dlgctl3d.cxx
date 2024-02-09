@@ -77,7 +77,6 @@ void Svx3DPreviewControl::Construct()
 
     // Model
     mpModel.reset(new FmFormModel());
-    mpModel->GetItemPool().FreezeIdRanges();
 
     // Page
     mxFmPage = new FmFormPage( *mpModel );

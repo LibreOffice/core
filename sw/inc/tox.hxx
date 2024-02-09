@@ -84,6 +84,8 @@ class SW_DLLPUBLIC SwTOXMark final
 {
     friend void InitCore();
     friend class SwTextTOXMark;
+    friend SwTOXMark* createSwTOXMarkForItemInfoPackage();
+    // friend class ItemInfoPackageSwAttributes;
 
     const SwTOXType* m_pType;
     OUString m_aAltText;    // Text of caption is different.

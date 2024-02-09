@@ -618,7 +618,6 @@ namespace svx
             return;
 
         rtl::Reference<SfxItemPool> pPool(EditEngine::CreatePool());
-        pPool->FreezeIdRanges();
         std::optional< SfxItemSet > xPureItems(( SfxItemSet( *pPool ) ));
 
         // put the current states of the items into the set

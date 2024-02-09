@@ -21,17 +21,33 @@ class StylePoolTest : public CppUnit::TestFixture
 {
 };
 
+ItemInfoPackage& getItemInfoPackageTest()
+{
+    class ItemInfoPackageTest : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, 1> ItemInfoArrayTest;
+        ItemInfoArrayTest maItemInfos{ { // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+                                         { 1, new SfxStringItem(1), 2, SFX_ITEMINFOFLAG_NONE } } };
+
+    public:
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override
+        {
+            return maItemInfos[nIndex];
+        }
+    };
+
+    static std::unique_ptr<ItemInfoPackageTest> g_aItemInfoPackageTest;
+    if (!g_aItemInfoPackageTest)
+        g_aItemInfoPackageTest.reset(new ItemInfoPackageTest);
+    return *g_aItemInfoPackageTest;
+}
+
 CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
 {
     // Set up a style pool with multiple parents.
-    SfxStringItem aDefault1(1);
-    std::vector<SfxPoolItem*> aDefaults{ &aDefault1 };
-    SfxItemInfo const aItems[] = { // _nItemInfoSlotID, _nItemInfoFlags
-                                   { 2, SFX_ITEMINFOFLAG_NONE }
-    };
-
-    rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test", 1, 1, aItems);
-    pPool->SetPoolDefaults(&aDefaults);
+    rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test");
+    pPool->registerItemInfoPackage(getItemInfoPackageTest());
     {
         // Set up parents in mixed order to make sure we do not sort by pointer address.
         SfxItemSet aParent1(*pPool, svl::Items<1, 1>);
@@ -82,17 +98,12 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
 
 CPPUNIT_TEST_FIXTURE(StylePoolTest, testFixedItemSet)
 {
-    SfxStringItem aDefault1(1);
-    std::vector<SfxPoolItem*> aDefaults{ &aDefault1 };
-    SfxItemInfo const aItems[] = { // _nItemInfoSlotID, _nItemInfoFlags
-                                   { 2, SFX_ITEMINFOFLAG_NONE }
-    };
-    rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test", 1, 1, aItems);
-    pPool->SetPoolDefaults(&aDefaults);
+    rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test");
+    pPool->registerItemInfoPackage(getItemInfoPackageTest());
 
     SfxItemSetFixed<1, 2> aItemSet1(*pPool);
-
     SfxItemSetFixed<1, 2> aItemSet2(aItemSet1); // test copy constructor
+
     assert(aItemSet2.IsItemsFixed());
 }
 }

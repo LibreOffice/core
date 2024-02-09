@@ -31,11 +31,10 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
 
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XComponentContext >& _rxORB)
-    :ODatabaseAdministrationDialogBase(_rxORB)
-    ,m_pItemPoolDefaults(nullptr)
+: ODatabaseAdministrationDialogBase(_rxORB)
 {
     m_pCollection.reset( new ::dbaccess::ODsnTypeCollection(_rxORB) );
-    ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection.get());
+    ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pCollection.get());
 }
 
 ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
@@ -43,7 +42,7 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
    ::osl::MutexGuard aGuard(m_aMutex);
    if (m_xDialog)
       destroyDialog();
-   ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults);
+   ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool);
 }
 
 void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)

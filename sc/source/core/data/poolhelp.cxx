@@ -30,8 +30,6 @@
 ScPoolHelper::ScPoolHelper( ScDocument& rSourceDoc )
     : pDocPool(new ScDocumentPool)
 {
-    pDocPool->FreezeIdRanges();
-
     mxStylePool = new ScStyleSheetPool( *pDocPool, &rSourceDoc );
 }
 
@@ -50,7 +48,6 @@ SfxItemPool* ScPoolHelper::GetEditPool() const
     {
         pEditPool = EditEngine::CreatePool();
         pEditPool->SetDefaultMetric( MapUnit::Map100thMM );
-        pEditPool->FreezeIdRanges();
     }
     return pEditPool.get();
 }
@@ -61,7 +58,6 @@ SfxItemPool* ScPoolHelper::GetEnginePool() const
     {
         pEnginePool = EditEngine::CreatePool();
         pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
-        pEnginePool->FreezeIdRanges();
     } // ifg ( pEnginePool )
     return pEnginePool.get();
 }

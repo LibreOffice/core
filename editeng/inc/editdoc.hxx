@@ -225,8 +225,6 @@ void CheckOrderedList(const CharAttribList::AttribsType& rAttribs);
 
 class EditEngineItemPool final : public SfxItemPool
 {
-private:
-    std::shared_ptr<DefItems> m_xDefItems;
 public:
     EditEngineItemPool();
 private:

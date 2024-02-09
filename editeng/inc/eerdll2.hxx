@@ -39,26 +39,13 @@ namespace editeng
     };
 }
 
-class DefItems
-{
-public:
-    DefItems();
-    std::vector<SfxPoolItem*> & getDefaults() { return mvDefItems; }
-    ~DefItems();
-private:
-    std::vector<SfxPoolItem*> mvDefItems;
-};
-
 class GlobalEditData
 {
 private:
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  xLanguageGuesser;
-    std::weak_ptr<DefItems> m_xDefItems;
     std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
 public:
-    std::shared_ptr<DefItems> GetDefItems();
-
     std::shared_ptr<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
     void            SetForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const & GetLanguageGuesser();

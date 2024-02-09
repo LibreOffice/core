@@ -142,7 +142,6 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
         else
         {
             rtl::Reference<SfxItemPool> pEnginePool = EditEngine::CreatePool();
-            pEnginePool->FreezeIdRanges();
             pEditEngine.reset( new ScEditEngineDefaulter( pEnginePool.get(), true ) );
         }
         pForwarder.reset( new SvxEditEngineForwarder(*pEditEngine) );

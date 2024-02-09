@@ -2321,101 +2321,95 @@ void OReportController::OnInvalidateClipboard()
     InvalidateFeature(SID_PASTE);
 }
 
+static ItemInfoPackage& getItemInfoPackageOpenPageDlg()
+{
+    class ItemInfoPackageOpenPageDlg : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, RPTUI_ID_METRIC - RPTUI_ID_LRSPACE + 1> ItemInfoArrayOpenPageDlg;
+        ItemInfoArrayOpenPageDlg maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { RPTUI_ID_LRSPACE, new SvxLRSpaceItem(RPTUI_ID_LRSPACE), SID_ATTR_LRSPACE, SFX_ITEMINFOFLAG_NONE },
+            { RPTUI_ID_ULSPACE, new SvxULSpaceItem(RPTUI_ID_ULSPACE), SID_ATTR_ULSPACE, SFX_ITEMINFOFLAG_NONE },
+            { RPTUI_ID_PAGE, new SvxPageItem(RPTUI_ID_PAGE), SID_ATTR_PAGE, SFX_ITEMINFOFLAG_NONE },
+            { RPTUI_ID_SIZE, new SvxSizeItem(RPTUI_ID_SIZE), SID_ATTR_PAGE_SIZE, SFX_ITEMINFOFLAG_NONE },
+            { RPTUI_ID_PAGE_MODE, new SfxUInt16Item(RPTUI_ID_PAGE_MODE,SVX_PAGE_MODE_STANDARD), SID_ENUM_PAGE_MODE, SFX_ITEMINFOFLAG_NONE },
+            { RPTUI_ID_START, new SfxUInt16Item(RPTUI_ID_START,PAPER_A4), SID_PAPER_START, SFX_ITEMINFOFLAG_NONE },
+            { RPTUI_ID_END, new SfxUInt16Item(RPTUI_ID_END,PAPER_E), SID_PAPER_END, SFX_ITEMINFOFLAG_NONE },
+            { RPTUI_ID_BRUSH, new SvxBrushItem(RPTUI_ID_BRUSH), SID_ATTR_BRUSH, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLSTYLE, new XFillStyleItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLCOLOR, new XFillColorItem("", COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_FILLGRADIENT, new XFillGradientItem(basegfx::BGradient()), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLHATCH, new XFillHatchItem(XHatch(COL_DEFAULT_SHAPE_STROKE)), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBITMAP, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLTRANSPARENCE, new XFillTransparenceItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_GRADIENTSTEPCOUNT, new XGradientStepCountItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILE, new XFillBmpTileItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POS, new XFillBmpPosItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZEX, new XFillBmpSizeXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZEY, new XFillBmpSizeYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLFLOATTRANSPARENCE, new XFillFloatTransparenceItem(basegfx::BGradient(), false), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_SECONDARYFILLCOLOR, new XSecondaryFillColorItem("", COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZELOG, new XFillBmpSizeLogItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILEOFFSETX, new XFillBmpTileOffsetXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILEOFFSETY, new XFillBmpTileOffsetYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_STRETCH, new XFillBmpStretchItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POSOFFSETX, new XFillBmpPosOffsetXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POSOFFSETY, new XFillBmpPosOffsetYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBACKGROUND, new XFillBackgroundItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { RPTUI_ID_METRIC, nullptr, SID_ATTR_METRIC, SFX_ITEMINFOFLAG_NONE },
+        }};
+
+    public:
+        ItemInfoPackageOpenPageDlg()
+        {
+            const MeasurementSystem eSystem(SvtSysLocale().GetLocaleData().getMeasurementSystemEnum());
+            const FieldUnit eUserMetric(MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH);
+            setItemAtItemInfoStatic(
+                new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric)),
+                maItemInfos[RPTUI_ID_METRIC - RPTUI_ID_LRSPACE]);
+        }
+
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override
+        {
+            const ItemInfo& rRetval(maItemInfos[nIndex]);
+
+            // return immediately if we have the static entry and Item
+            if (nullptr != rRetval.getItem())
+                return rRetval;
+
+            if (XATTR_FILLBITMAP == rRetval.getWhich())
+                return *new ItemInfoDynamic(rRetval, new XFillBitmapItem(Graphic()));
+
+            // return in any case
+            return rRetval;
+        }
+    };
+
+    static std::unique_ptr<ItemInfoPackageOpenPageDlg> g_aItemInfoPackageOpenPageDlg;
+    if (!g_aItemInfoPackageOpenPageDlg)
+        g_aItemInfoPackageOpenPageDlg.reset(new ItemInfoPackageOpenPageDlg);
+    return *g_aItemInfoPackageOpenPageDlg;
+}
+
 void OReportController::openPageDialog(const uno::Reference<report::XSection>& _xSection)
 {
     if ( !m_xReportDefinition.is() )
         return;
 
     // UNO->ItemSet
-    static SfxItemInfo aItemInfos[] =
-    {
-        // _nItemInfoSlotID, _nItemInfoFlags
-        { SID_ATTR_LRSPACE,     SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_ULSPACE,     SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_PAGE,        SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_PAGE_SIZE,   SFX_ITEMINFOFLAG_NONE },
-        { SID_ENUM_PAGE_MODE,   SFX_ITEMINFOFLAG_NONE },
-        { SID_PAPER_START,      SFX_ITEMINFOFLAG_NONE },
-        { SID_PAPER_END,        SFX_ITEMINFOFLAG_NONE },
-        { SID_ATTR_BRUSH,       SFX_ITEMINFOFLAG_NONE },
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLSTYLE
-        { 0,                    SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // XATTR_FILLCOLOR
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLGRADIENT
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLHATCH
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBITMAP
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLTRANSPARENCE
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_GRADIENTSTEPCOUNT
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILE
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POS
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZEX
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZEY
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLFLOATTRANSPARENCE
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_SECONDARYFILLCOLOR
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_SIZELOG
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILEOFFSETX
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_TILEOFFSETY
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_STRETCH
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POSOFFSETX
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBMP_POSOFFSETY
-        { 0,                    SFX_ITEMINFOFLAG_NONE }, // XATTR_FILLBACKGROUND
-        { SID_ATTR_METRIC,      SFX_ITEMINFOFLAG_NONE }
-    };
-
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     FieldUnit eUserMetric = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
-    static const WhichRangesContainer pRanges(svl::Items<
-        RPTUI_ID_LRSPACE, XATTR_FILL_LAST,
-        SID_ATTR_METRIC,SID_ATTR_METRIC
-    >);
-    rtl::Reference<SfxItemPool> pPool( new SfxItemPool("ReportPageProperties", RPTUI_ID_LRSPACE, RPTUI_ID_METRIC, aItemInfos ) );
-
-    const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
-    const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
-    // basegfx::BGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
-    const basegfx::BGradient aNullGrad;
-    const XHatch aNullHatch(aNullLineCol);
-
-    std::vector<SfxPoolItem*> pDefaults
-    {
-        new SvxLRSpaceItem(RPTUI_ID_LRSPACE),
-        new SvxULSpaceItem(RPTUI_ID_ULSPACE),
-        new SvxPageItem(RPTUI_ID_PAGE),
-        new SvxSizeItem(RPTUI_ID_SIZE),
-        new SfxUInt16Item(RPTUI_ID_PAGE_MODE,SVX_PAGE_MODE_STANDARD),
-        new SfxUInt16Item(RPTUI_ID_START,PAPER_A4),
-        new SfxUInt16Item(RPTUI_ID_END,PAPER_E),
-        new SvxBrushItem(RPTUI_ID_BRUSH),
-        new XFillStyleItem,
-        new XFillColorItem("", aNullFillCol),
-        new XFillGradientItem(aNullGrad),
-        new XFillHatchItem(aNullHatch),
-        new XFillBitmapItem(Graphic()),
-        new XFillTransparenceItem,
-        new XGradientStepCountItem,
-        new XFillBmpTileItem,
-        new XFillBmpPosItem,
-        new XFillBmpSizeXItem,
-        new XFillBmpSizeYItem,
-        new XFillFloatTransparenceItem(aNullGrad, false),
-        new XSecondaryFillColorItem("", aNullFillCol),
-        new XFillBmpSizeLogItem,
-        new XFillBmpTileOffsetXItem,
-        new XFillBmpTileOffsetYItem,
-        new XFillBmpStretchItem,
-        new XFillBmpPosOffsetXItem,
-        new XFillBmpPosOffsetYItem,
-        new XFillBackgroundItem,
-        new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
-    };
-
-    pPool->SetPoolDefaults(&pDefaults);
-
-
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ReportPageProperties"));
+    pPool->registerItemInfoPackage(getItemInfoPackageOpenPageDlg());
     pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
 
     try
     {
+        static const WhichRangesContainer pRanges(svl::Items<
+            RPTUI_ID_LRSPACE, XATTR_FILL_LAST,
+            SID_ATTR_METRIC,SID_ATTR_METRIC
+        >);
         SfxItemSet aDescriptor(*pPool, pRanges);
         // fill it
         if ( _xSection.is() )
@@ -2509,10 +2503,6 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
     pPool.clear();
-
-    for (SfxPoolItem* pDefault : pDefaults)
-        delete pDefault;
-
 }
 
 
@@ -4181,23 +4171,34 @@ OSectionWindow* OReportController::getSectionWindow(const css::uno::Reference< c
     return nullptr;
 }
 
+static ItemInfoPackage& getItemInfoPackageOpenZoomDlg()
+{
+    class ItemInfoPackageOpenZoomDlg : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, 1> ItemInfoArrayOpenZoomDlg;
+        ItemInfoArrayOpenZoomDlg maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { SID_ATTR_ZOOM, new SvxZoomItem, 0, SFX_ITEMINFOFLAG_NONE }
+        }};
+
+    public:
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }
+    };
+
+    static std::unique_ptr<ItemInfoPackageOpenZoomDlg> g_aItemInfoPackageOpenZoomDlg;
+    if (!g_aItemInfoPackageOpenZoomDlg)
+        g_aItemInfoPackageOpenZoomDlg.reset(new ItemInfoPackageOpenZoomDlg);
+    return *g_aItemInfoPackageOpenZoomDlg;
+}
 
 void OReportController::openZoomDialog()
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-
-    static SfxItemInfo aItemInfos[] =
-    {
-        // _nItemInfoSlotID, _nItemInfoFlags
-        { SID_ATTR_ZOOM, SFX_ITEMINFOFLAG_NONE }
-    };
-    std::vector<SfxPoolItem*> pDefaults
-    {
-        new SvxZoomItem()
-    };
-    rtl::Reference<SfxItemPool> pPool( new SfxItemPool("ZoomProperties", SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, &pDefaults) );
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ZoomProperties"));
+    pPool->registerItemInfoPackage(getItemInfoPackageOpenZoomDlg());
     pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
+
     try
     {
         SfxItemSetFixed<SID_ATTR_ZOOM,SID_ATTR_ZOOM> aDescriptor(*pPool);
@@ -4226,9 +4227,6 @@ void OReportController::openZoomDialog()
         DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
     pPool.clear();
-
-    for (SfxPoolItem* pDefault : pDefaults)
-        delete pDefault;
 }
 
 

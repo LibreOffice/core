@@ -66,6 +66,8 @@
 #include <editeng/justifyitem.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/lazydelete.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/editids.hrc>
 
 using namespace ::com::sun::star;
 
@@ -80,97 +82,132 @@ EditDLL& EditDLL::Get()
     return *gaEditDll.get();
 }
 
-DefItems::DefItems()
-    : mvDefItems(EDITITEMCOUNT)
+ItemInfoPackage& getItemInfoPackageEditEngine()
 {
-    std::vector<SfxPoolItem*>& rDefItems = mvDefItems;
-
-    // Paragraph attributes:
-    SvxNumRule aDefaultNumRule( SvxNumRuleFlags::NONE, 0, false );
-
-    rDefItems[0]  = new SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR );
-    rDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
-    rDefItems[2]  = new SvxHangingPunctuationItem(false, EE_PARA_HANGINGPUNCTUATION);
-    rDefItems[3]  = new SvxForbiddenRuleItem(true, EE_PARA_FORBIDDENRULES);
-    rDefItems[4]  = new SvxScriptSpaceItem( true, EE_PARA_ASIANCJKSPACING );
-    rDefItems[5]  = new SvxNumBulletItem( aDefaultNumRule, EE_PARA_NUMBULLET );
-    rDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, false );
-    rDefItems[7]  = new SfxBoolItem( EE_PARA_HYPHENATE_NO_CAPS, false );
-    rDefItems[8]  = new SfxBoolItem( EE_PARA_HYPHENATE_NO_LAST_WORD, false );
-    rDefItems[9]  = new SfxBoolItem( EE_PARA_BULLETSTATE, true );
-    rDefItems[10]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
-    rDefItems[11]  = new SfxInt16Item( EE_PARA_OUTLLEVEL, -1 );
-    rDefItems[12] = new SvxBulletItem( EE_PARA_BULLET );
-    rDefItems[13] = new SvxLRSpaceItem( EE_PARA_LRSPACE );
-    rDefItems[14] = new SvxULSpaceItem( EE_PARA_ULSPACE );
-    rDefItems[15] = new SvxLineSpacingItem( 0, EE_PARA_SBL );
-    rDefItems[16] = new SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST );
-    rDefItems[17] = new SvxTabStopItem( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS );
-    rDefItems[18] = new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, EE_PARA_JUST_METHOD );
-    rDefItems[19] = new SvxVerJustifyItem( SvxCellVerJustify::Standard, EE_PARA_VER_JUST );
-
-    // Character attributes:
-    rDefItems[20] = new SvxColorItem( COL_AUTO, EE_CHAR_COLOR );
-    rDefItems[21] = new SvxFontItem( EE_CHAR_FONTINFO );
-    rDefItems[22] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT );
-    rDefItems[23] = new SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH );
-    rDefItems[24] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT );
-    rDefItems[25] = new SvxUnderlineItem( LINESTYLE_NONE, EE_CHAR_UNDERLINE );
-    rDefItems[26] = new SvxCrossedOutItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );
-    rDefItems[27] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC );
-    rDefItems[28] = new SvxContourItem( false, EE_CHAR_OUTLINE );
-    rDefItems[29] = new SvxShadowedItem( false, EE_CHAR_SHADOW );
-    rDefItems[30] = new SvxEscapementItem( 0, 100, EE_CHAR_ESCAPEMENT );
-    rDefItems[31] = new SvxAutoKernItem( false, EE_CHAR_PAIRKERNING );
-    rDefItems[32] = new SvxKerningItem( 0, EE_CHAR_KERNING );
-    rDefItems[33] = new SvxWordLineModeItem( false, EE_CHAR_WLM );
-    rDefItems[34] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE );
-    rDefItems[35] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
-    rDefItems[36] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
-    rDefItems[37] = new SvxFontItem( EE_CHAR_FONTINFO_CJK );
-    rDefItems[38] = new SvxFontItem( EE_CHAR_FONTINFO_CTL );
-    rDefItems[39] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CJK );
-    rDefItems[40] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CTL );
-    rDefItems[41] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK );
-    rDefItems[42] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL );
-    rDefItems[43] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
-    rDefItems[44] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
-    rDefItems[45] = new SvxEmphasisMarkItem( FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK );
-    rDefItems[46] = new SvxCharReliefItem( FontRelief::NONE, EE_CHAR_RELIEF );
-    rDefItems[47] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
-    rDefItems[48] = new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
-    rDefItems[49] = new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP );
-    rDefItems[50] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
-    rDefItems[51] = new SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR );
-    // Features
-    rDefItems[52] = new SfxVoidItem( EE_FEATURE_TAB );
-    rDefItems[53] = new SfxVoidItem( EE_FEATURE_LINEBR );
-    rDefItems[54] = new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV );
-    rDefItems[55] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
-
-    assert(EDITITEMCOUNT == 56 && "ITEMCOUNT changed, adjust DefItems!");
-
-    // Init DefFonts:
-    GetDefaultFonts( *static_cast<SvxFontItem*>(rDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START]),
-                     *static_cast<SvxFontItem*>(rDefItems[EE_CHAR_FONTINFO_CJK - EE_ITEMS_START]),
-                     *static_cast<SvxFontItem*>(rDefItems[EE_CHAR_FONTINFO_CTL - EE_ITEMS_START]) );
-}
-
-DefItems::~DefItems()
-{
-    for (const auto& rItem : mvDefItems)
-        delete rItem;
-}
-
-std::shared_ptr<DefItems> GlobalEditData::GetDefItems()
-{
-    auto xDefItems = m_xDefItems.lock();
-    if (!xDefItems)
+    class ItemInfoPackageEditEngine : public ItemInfoPackage
     {
-        xDefItems = std::make_shared<DefItems>();
-        m_xDefItems = xDefItems;
-    }
-    return xDefItems;
+        typedef std::array<ItemInfoStatic, EE_ITEMS_END - EE_ITEMS_START + 1> ItemInfoArrayEditEngine;
+        ItemInfoArrayEditEngine maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { EE_PARA_WRITINGDIR, new SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ), SID_ATTR_FRAMEDIRECTION, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_XMLATTRIBS, new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
+            { EE_PARA_HANGINGPUNCTUATION, new SvxHangingPunctuationItem(false, EE_PARA_HANGINGPUNCTUATION), SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_FORBIDDENRULES, new SvxForbiddenRuleItem(true, EE_PARA_FORBIDDENRULES), SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_ASIANCJKSPACING, new SvxScriptSpaceItem( true, EE_PARA_ASIANCJKSPACING ), SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEMINFOFLAG_NONE  },
+
+            // need to use dynamic default for this Item, the office tends to crash at shutdown
+            // due to static stuff/cleanup at ~SvxNumRule (pStdNumFmt/pStdOutlineNumFmt)
+            { EE_PARA_NUMBULLET, nullptr, SID_ATTR_NUMBERING_RULE, SFX_ITEMINFOFLAG_NONE  },
+
+            { EE_PARA_HYPHENATE, new SfxBoolItem( EE_PARA_HYPHENATE, false ), 0, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_HYPHENATE_NO_CAPS, new SfxBoolItem( EE_PARA_HYPHENATE_NO_CAPS, false ), 0, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_HYPHENATE_NO_LAST_WORD, new SfxBoolItem( EE_PARA_HYPHENATE_NO_LAST_WORD, false ), 0, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_BULLETSTATE, new SfxBoolItem( EE_PARA_BULLETSTATE, true ), 0, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_OUTLLRSPACE, new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE ), 0, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_OUTLLEVEL, new SfxInt16Item( EE_PARA_OUTLLEVEL, -1 ), SID_ATTR_PARA_OUTLLEVEL, SFX_ITEMINFOFLAG_NONE  },
+
+            // needs on-demand initialization
+            { EE_PARA_BULLET, nullptr, SID_ATTR_PARA_BULLET, SFX_ITEMINFOFLAG_NONE  },
+
+            { EE_PARA_LRSPACE, new SvxLRSpaceItem( EE_PARA_LRSPACE ), SID_ATTR_LRSPACE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_ULSPACE, new SvxULSpaceItem( EE_PARA_ULSPACE ), SID_ATTR_ULSPACE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_SBL, new SvxLineSpacingItem( 0, EE_PARA_SBL ), SID_ATTR_PARA_LINESPACE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_JUST, new SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ), SID_ATTR_PARA_ADJUST, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_TABS, new SvxTabStopItem( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS ), SID_ATTR_TABSTOP, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_JUST_METHOD, new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, EE_PARA_JUST_METHOD ), SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEMINFOFLAG_NONE  },
+            { EE_PARA_VER_JUST, new SvxVerJustifyItem( SvxCellVerJustify::Standard, EE_PARA_VER_JUST ), SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_COLOR, new SvxColorItem( COL_AUTO, EE_CHAR_COLOR ), SID_ATTR_CHAR_COLOR, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
+
+            // EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK and EE_CHAR_FONTINFO_CTL need on-demand initialization
+            { EE_CHAR_FONTINFO, nullptr, SID_ATTR_CHAR_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
+
+            { EE_CHAR_FONTHEIGHT, new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ), SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_FONTWIDTH, new SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH ), SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_WEIGHT, new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ), SID_ATTR_CHAR_WEIGHT, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_UNDERLINE, new SvxUnderlineItem( LINESTYLE_NONE, EE_CHAR_UNDERLINE ), SID_ATTR_CHAR_UNDERLINE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_STRIKEOUT, new SvxCrossedOutItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ), SID_ATTR_CHAR_STRIKEOUT, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_ITALIC, new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ), SID_ATTR_CHAR_POSTURE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_OUTLINE, new SvxContourItem( false, EE_CHAR_OUTLINE ), SID_ATTR_CHAR_CONTOUR, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_SHADOW, new SvxShadowedItem( false, EE_CHAR_SHADOW ), SID_ATTR_CHAR_SHADOWED, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_ESCAPEMENT, new SvxEscapementItem( 0, 100, EE_CHAR_ESCAPEMENT ), SID_ATTR_CHAR_ESCAPEMENT, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_PAIRKERNING, new SvxAutoKernItem( false, EE_CHAR_PAIRKERNING ), SID_ATTR_CHAR_AUTOKERN, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_KERNING, new SvxKerningItem( 0, EE_CHAR_KERNING ), SID_ATTR_CHAR_KERNING, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_WLM, new SvxWordLineModeItem( false, EE_CHAR_WLM ), SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_LANGUAGE, new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE ), SID_ATTR_CHAR_LANGUAGE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_LANGUAGE_CJK, new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK ), SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_LANGUAGE_CTL, new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL ), SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEMINFOFLAG_NONE  },
+
+            // see EE_CHAR_FONTINFO above
+            { EE_CHAR_FONTINFO_CJK, nullptr, SID_ATTR_CHAR_CJK_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
+            { EE_CHAR_FONTINFO_CTL, nullptr, SID_ATTR_CHAR_CTL_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
+
+            { EE_CHAR_FONTHEIGHT_CJK, new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CJK ), SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_FONTHEIGHT_CTL, new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CTL ), SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_WEIGHT_CJK, new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ), SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_WEIGHT_CTL, new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ), SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_ITALIC_CJK, new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ), SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_ITALIC_CTL, new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ), SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_EMPHASISMARK, new SvxEmphasisMarkItem( FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ), SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_RELIEF, new SvxCharReliefItem( FontRelief::NONE, EE_CHAR_RELIEF ), SID_ATTR_CHAR_RELIEF, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_XMLATTRIBS, new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
+            { EE_CHAR_OVERLINE, new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE ), SID_ATTR_CHAR_OVERLINE, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_CASEMAP, new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP ), SID_ATTR_CHAR_CASEMAP, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_GRABBAG, new SfxGrabBagItem( EE_CHAR_GRABBAG ), SID_ATTR_CHAR_GRABBAG, SFX_ITEMINFOFLAG_NONE  },
+            { EE_CHAR_BKGCOLOR, new SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ), SID_ATTR_CHAR_BACK_COLOR, SFX_ITEMINFOFLAG_NONE  },
+            { EE_FEATURE_TAB, new SfxVoidItem( EE_FEATURE_TAB ), 0, SFX_ITEMINFOFLAG_NONE  },
+            { EE_FEATURE_LINEBR, new SfxVoidItem( EE_FEATURE_LINEBR ), 0, SFX_ITEMINFOFLAG_NONE  },
+            { EE_FEATURE_NOTCONV, new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV ), SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEMINFOFLAG_NONE  },
+            { EE_FEATURE_FIELD, new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD ), SID_FIELD, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  }
+        }};
+
+    public:
+        ItemInfoPackageEditEngine()
+        {
+            // on-demand (but only once) as static defaults - above (and also
+            // in constructor) the needed OutputDevice::Font stuff is not yet
+            // initialized
+            setItemAtItemInfoStatic(
+                new SvxBulletItem(EE_PARA_BULLET),
+                maItemInfos[EE_PARA_BULLET - EE_ITEMS_START]);
+
+            // same for EE_CHAR_FONTINFO/EE_CHAR_FONTINFO_CJK/EE_CHAR_FONTINFO_CTL
+            // doing here as static default will be done only once for LO runtime
+            SvxFontItem* pFont(new SvxFontItem(EE_CHAR_FONTINFO));
+            SvxFontItem* pFontCJK(new SvxFontItem(EE_CHAR_FONTINFO_CJK));
+            SvxFontItem* pFontCTL(new SvxFontItem(EE_CHAR_FONTINFO_CTL));
+
+            // Init DefFonts:
+            GetDefaultFonts(*pFont, *pFontCJK, *pFontCTL);
+
+            setItemAtItemInfoStatic(pFont, maItemInfos[EE_CHAR_FONTINFO - EE_ITEMS_START]);
+            setItemAtItemInfoStatic(pFontCJK, maItemInfos[EE_CHAR_FONTINFO_CJK - EE_ITEMS_START]);
+            setItemAtItemInfoStatic(pFontCTL, maItemInfos[EE_CHAR_FONTINFO_CTL - EE_ITEMS_START]);
+        }
+
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override
+        {
+            const ItemInfo& rRetval(maItemInfos[nIndex]);
+
+            // return immediately if we have the static entry and Item
+            if (nullptr != rRetval.getItem())
+                return rRetval;
+
+            // check for dynamic ItemInfo creation, needed here for SvxNumBulletItem
+            if (EE_PARA_NUMBULLET == rRetval.getWhich())
+                return *new ItemInfoDynamic(
+                    rRetval,
+                    new SvxNumBulletItem( SvxNumRule( SvxNumRuleFlags::NONE, 0, false ), EE_PARA_NUMBULLET ));
+
+            // return in any case
+            return rRetval;
+        }
+    };
+
+    static std::unique_ptr<ItemInfoPackageEditEngine> g_aItemInfoPackageEditEngine;
+    if (!g_aItemInfoPackageEditEngine)
+        g_aItemInfoPackageEditEngine.reset(new ItemInfoPackageEditEngine);
+    return *g_aItemInfoPackageEditEngine;
 }
 
 std::shared_ptr<SvxForbiddenCharactersTable> const & GlobalEditData::GetForbiddenCharsTable()

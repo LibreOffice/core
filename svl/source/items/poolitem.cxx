@@ -511,7 +511,6 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 #endif
     , m_bStaticDefault(false)
     , m_bDynamicDefault(false)
-    , m_bUserDefault(false)
     , m_bIsSetItem(false)
     , m_bShareable(true)
 #ifdef DBG_UTIL

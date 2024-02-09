@@ -50,7 +50,6 @@ void CuiDialogsTest::initialize()
 {
     mpFact = SvxAbstractDialogFactory::Create();
     mxModel.reset(new SdrModel(nullptr, nullptr, true));
-    mxModel->GetItemPool().FreezeIdRanges();
     mxAttr.reset(new SfxItemSet(mxModel->GetItemPool()));
 }
 

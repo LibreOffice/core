@@ -24,7 +24,6 @@
 
 class SfxItemSet;
 class SfxItemPool;
-class SfxPoolItem;
 
 namespace pcr
 {
@@ -45,8 +44,6 @@ namespace pcr
 
         std::unique_ptr<SfxItemSet> m_pFontItems;       // item set for the dialog
         rtl::Reference<SfxItemPool> m_pItemPool;            // item pool for the item set for the dialog
-        std::vector<SfxPoolItem*>*
-                                m_pItemPoolDefaults;    // pool defaults
 
     public:
         explicit OControlFontDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);

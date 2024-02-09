@@ -751,6 +751,29 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
     }
 }
 
+static ItemInfoPackage& getItemInfoPackageColumnFormatDialog()
+{
+    class ItemInfoPackageColumnFormatDialog : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, SBA_ATTR_ALIGN_HOR_JUSTIFY - SBA_DEF_RANGEFORMAT + 1> ItemInfoArrayColumnFormatDialog;
+        ItemInfoArrayColumnFormatDialog maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { SBA_DEF_RANGEFORMAT, new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY), 0, SFX_ITEMINFOFLAG_NONE },
+            { SBA_DEF_FMTVALUE, new SfxUInt32Item(SBA_DEF_FMTVALUE), SID_ATTR_NUMBERFORMAT_VALUE, SFX_ITEMINFOFLAG_NONE },
+            { SBA_ATTR_ALIGN_HOR_JUSTIFY, new SvxHorJustifyItem(SvxCellHorJustify::Standard, SBA_ATTR_ALIGN_HOR_JUSTIFY), SID_ATTR_ALIGN_HOR_JUSTIFY, SFX_ITEMINFOFLAG_NONE },
+        }};
+
+    public:
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }
+    };
+
+    static std::unique_ptr<ItemInfoPackageColumnFormatDialog> g_aItemInfoPackageColumnFormatDialog;
+    if (!g_aItemInfoPackageColumnFormatDialog)
+        g_aItemInfoPackageColumnFormatDialog.reset(new ItemInfoPackageColumnFormatDialog);
+    return *g_aItemInfoPackageColumnFormatDialog;
+}
+
 bool callColumnFormatDialog(weld::Widget* _pParent,
                                 SvNumberFormatter* _pFormatter,
                                 sal_Int32 _nDataType,
@@ -761,33 +784,15 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
     bool bRet = false;
 
     // UNO->ItemSet
-    static SfxItemInfo aItemInfos[] =
-    {
-        // _nItemInfoSlotID, _nItemInfoFlags
-        { 0,                                SFX_ITEMINFOFLAG_NONE },    // SBA_DEF_RANGEFORMAT
-        { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEMINFOFLAG_NONE },    // SBA_DEF_FMTVALUE
-        { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEMINFOFLAG_NONE },    // SBA_ATTR_ALIGN_HOR_JUSTIFY
-        { SID_ATTR_NUMBERFORMAT_INFO,       SFX_ITEMINFOFLAG_NONE },    // SID_ATTR_NUMBERFORMAT_INFO
-        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEMINFOFLAG_NONE }     // SID_ATTR_NUMBERFORMAT_ONE_AREA
-    };
     static const auto aAttrMap = svl::Items<
         SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
         SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
         SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA
     >;
 
-    std::vector<SfxPoolItem*> pDefaults
-    {
-        new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-        new SfxUInt32Item(SBA_DEF_FMTVALUE),
-        new SvxHorJustifyItem(SvxCellHorJustify::Standard, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-        new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO),
-        new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, false)
-    };
-
-    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("GridBrowserProperties", SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, &pDefaults));
+    rtl::Reference<SfxItemPool> pPool(new SfxItemPool("GridBrowserProperties"));
+    pPool->registerItemInfoPackage(getItemInfoPackageColumnFormatDialog());
     pPool->SetDefaultMetric( MapUnit::MapTwip );    // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
 
     std::optional<SfxItemSet> pFormatDescriptor(SfxItemSet(*pPool, aAttrMap));
     // fill it
@@ -853,8 +858,6 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
 
     pFormatDescriptor.reset();
     pPool.clear();
-    for (SfxPoolItem* pDefault : pDefaults)
-        delete pDefault;
 
     return bRet;
 }

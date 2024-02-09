@@ -11845,7 +11845,6 @@ svx/source/xoutdev/_xpoly.cxx
 svx/source/xoutdev/xattr.cxx
 svx/source/xoutdev/xattr2.cxx
 svx/source/xoutdev/xattrbmp.cxx
-svx/source/xoutdev/xpool.cxx
 svx/source/xoutdev/xtabbtmp.cxx
 svx/source/xoutdev/xtabcolr.cxx
 svx/source/xoutdev/xtabdash.cxx

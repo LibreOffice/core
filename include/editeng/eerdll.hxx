@@ -31,6 +31,9 @@ namespace editeng
 class SharedVclResources;
 }
 
+class ItemInfoPackage;
+ItemInfoPackage& getItemInfoPackageEditEngine();
+
 OUString EDITENG_DLLPUBLIC EditResId(TranslateId aId);
 
 class EditDLL

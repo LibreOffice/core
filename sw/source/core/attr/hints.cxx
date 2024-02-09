@@ -22,6 +22,7 @@
 #include <hints.hxx>
 #include <ndtxt.hxx>
 #include <swtypes.hxx>
+#include <init.hxx>
 #include <svl/languageoptions.hxx>
 #include <utility>
 #include <vcl/outdev.hxx>
@@ -155,21 +156,17 @@ SwMsgPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
     return nullptr;
 }
 
-#if OSL_DEBUG_LEVEL > 0
-const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
+const SfxPoolItem* GetDfltAttr(sal_uInt16 nWhich)
 {
-    OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
-
-    SfxPoolItem *pHt = aAttrTab[ nWhich - POOLATTR_BEGIN ];
-    OSL_ENSURE( pHt, "GetDfltFormatAttr(): Dflt == 0" );
-    return pHt;
-}
+#ifdef DBG_UTIL
+    OSL_ASSERT(nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN);
+    const SfxPoolItem* pRetval(getItemInfoPackageSwAttributes().getExistingItemInfo(nWhich - POOLATTR_BEGIN).getItem());
+    OSL_ENSURE(pRetval, "GetDfltFormatAttr(): Dflt == 0");
+    return pRetval;
 #else
-const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
-{
-    return aAttrTab[ nWhich - POOLATTR_BEGIN ];
-}
+    return getItemInfoPackageSwAttributes().getExistingItemInfo(nWhich - POOLATTR_BEGIN).getItem();
 #endif
+}
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
     : SwMsgPoolItem( RES_FINDNEARESTNODE ), m_pNode( &rNd ), m_pFound( nullptr )

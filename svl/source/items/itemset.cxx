@@ -209,18 +209,16 @@ bool SfxPoolItemHolder::operator==(const SfxPoolItemHolder &rHolder) const
  *
  * For Sfx programmers: an SfxItemSet constructed in this way cannot
  * contain any Items with SlotIds as Which values.
- *
- * Don't create ItemSets with full range before FreezeIdRanges()!
  */
 SfxItemSet::SfxItemSet(SfxItemPool& rPool)
     : m_pPool(&rPool)
     , m_pParent(nullptr)
     , m_nCount(0)
     , m_nRegister(0)
-    , m_nTotalCount(svl::detail::CountRanges(rPool.GetFrozenIdRanges()))
+    , m_nTotalCount(svl::detail::CountRanges(rPool.GetMergedIdRanges()))
     , m_bItemsFixed(false)
     , m_ppItems(new SfxPoolItem const *[m_nTotalCount]{})
-    , m_pWhichRanges(rPool.GetFrozenIdRanges())
+    , m_pWhichRanges(rPool.GetMergedIdRanges())
     , m_aCallback()
 {
 #ifdef DBG_UTIL
@@ -497,16 +495,17 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         // just use pSource which equals DISABLED_POOL_ITEM
         return pSource;
 
-    // CAUTION: static default items are not *that* static as it seems
-    // (or: should be). If they are freed with the Pool (see
-    // ::ReleaseDefaults) they will be deleted. Same is true for
-    // dynamic defaults. Thus currently no default can be shared
-    // at all since these may be deleted with the pool owning them.
-    // That these are not shared but cloned is ensured by those
-    // having a default RefCount of zero, so these are used merely as
-    // templates.
-    // if (IsStaticDefaultItem(pSource))
-    //     return pSource;
+    if (pSource->isStaticDefault())
+        // static default Items can just be used without RefCounting
+        return pSource;
+
+    if (pSource->isDynamicDefault() && !pSource->isSetItem())
+    {
+        // dynamic default Items can only be used without RefCounting
+        // when same pool, else it has to be cloned (below)
+        if (static_cast<const SfxSetItem*>(pSource)->GetItemSet().GetPool() == &rPool)
+            return pSource;
+    }
 
     if (0 == pSource->Which())
     {
@@ -690,6 +689,17 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
         // nothing to do for disabled item entries
         return;
 
+    if (pSource->isStaticDefault())
+        // static default Items can just be used without RefCounting
+        return;
+
+    if (pSource->isDynamicDefault())
+        // dynamic default Items can only be used without RefCounting
+        // when same pool. this is already checked at implCreateItemEntry,
+        // so it would have been cloned (and would no longer have this
+        // flag). So we can just return here
+        return;
+
     if (0 == pSource->Which())
     {
         // There should be no Items with 0 == WhichID, but there are some
@@ -712,10 +722,6 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
         pSource->ReleaseRef();
         return;
     }
-
-    if (IsDefaultItem(pSource))
-        // default items (static and dynamic) are owned by the pool, do not delete
-        return;
 
     // try to get an ItemInstanceManager for global Item instance sharing
     ItemInstanceManager* pManager(aInstanceManagerHelper.getExistingItemInstanceManager(*pSource));

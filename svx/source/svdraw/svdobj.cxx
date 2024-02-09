@@ -542,7 +542,6 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
         rtl::Reference<SfxItemPool> pGlobalOutlPool = EditEngine::CreatePool();
         mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool.get());
         mpGlobalItemPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
-        mpGlobalItemPool->FreezeIdRanges();
         if (comphelper::IsFuzzing())
             mpGlobalItemPool->acquire();
         else

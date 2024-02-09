@@ -28,9 +28,11 @@
 
 class SvGlobalName;
 class SwViewShell;
+class ItemInfoPackage;
 
 void InitCore();   // bastyp/init.cxx
 void FinitCore();
+ItemInfoPackage& getItemInfoPackageSwAttributes();
 
 namespace sw {
 

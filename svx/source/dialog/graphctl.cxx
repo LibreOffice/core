@@ -121,7 +121,6 @@ void GraphCtrl::InitSdrModel()
 
     // Creating a Model
     pModel.reset(new SdrModel(nullptr, nullptr, true));
-    pModel->GetItemPool().FreezeIdRanges();
     pModel->SetScaleUnit(aMap100.GetMapUnit());
     pModel->SetDefaultFontHeight( 500 );
 

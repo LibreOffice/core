@@ -34,6 +34,7 @@
 #include <numrule.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
+#include <init.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <svl/whiter.hxx>
@@ -42,12 +43,14 @@
 #include <svx/sxenditm.hxx>
 #include <svx/sdsxyitm.hxx>
 
-SwAttrPool::SwAttrPool( SwDoc* pD )
-    : SfxItemPool( "SWG",
-                    POOLATTR_BEGIN, POOLATTR_END-1,
-                    aSlotTab, &aAttrTab ),
-    m_pDoc( pD )
+
+
+SwAttrPool::SwAttrPool(SwDoc* pD)
+: SfxItemPool("SWG")
+, m_pDoc(pD)
 {
+    registerItemInfoPackage(getItemInfoPackageSwAttributes());
+
     // create SfxItemPool and EditEngine pool and add these in a chain. These
     // belong us and will be removed/destroyed in removeAndDeleteSecondaryPools() used from
     // the destructor
@@ -72,23 +75,15 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     rtl::Reference<SfxItemPool> pEEgPool = EditEngine::CreatePool();
 
     pSdrPool->SetSecondaryPool(pEEgPool.get());
-
-    if(GetFrozenIdRanges().empty())
-    {
-        FreezeIdRanges();
-    }
-    else
-    {
-        pSdrPool->FreezeIdRanges();
-    }
 }
 
 SwAttrPool::~SwAttrPool()
 {
     // cleanup secondary pools
-    SfxItemPool *pSdrPool = GetSecondaryPool();
+    SfxItemPool* pSdrPool(GetSecondaryPool());
+
     // first delete the items, then break the linking
-    pSdrPool->Delete();
+    pSdrPool->sendShutdownHint();
     SetSecondaryPool(nullptr);
 }
 

@@ -644,7 +644,6 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
 {
     // pPool is foisted on SvxRTFParser at RtfImportState::Start later on
     pPool->SetSecondaryPool( pDocPool.get() );
-    pPool->FreezeIdRanges();
     NewActEntry( nullptr );
 }
 

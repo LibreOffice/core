@@ -2834,8 +2834,7 @@ namespace pcr
         // create an item set for use with the dialog
         std::unique_ptr<SfxItemSet> pSet;
         rtl::Reference<SfxItemPool> pPool;
-        std::vector<SfxPoolItem*>* pDefaults = nullptr;
-        ControlCharacterDialog::createItemSet(pSet, pPool, pDefaults);
+        ControlCharacterDialog::createItemSet(pSet, pPool);
         ControlCharacterDialog::translatePropertiesToItems(m_xComponent, pSet.get());
 
         {   // do this in an own block. The dialog needs to be destroyed before we call
@@ -2855,7 +2854,7 @@ namespace pcr
             }
         }
 
-        ControlCharacterDialog::destroyItemSet(pSet, pPool, pDefaults);
+        ControlCharacterDialog::destroyItemSet(pSet, pPool);
         return bSuccess;
     }
 

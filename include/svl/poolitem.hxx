@@ -118,6 +118,8 @@ class SVL_DLLPUBLIC SfxPoolItem
     friend class SfxItemPool;
     friend class SfxItemSet;
     friend class InstanceManagerHelper;
+    friend class ItemInfoStatic;
+    friend class ItemInfoDynamic;
 
     // allow ItemSetTooling to access
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
@@ -142,38 +144,34 @@ class SVL_DLLPUBLIC SfxPoolItem
     //     these are not really 'static', but should be)
     //   m_bDynamicDefault: dynamic pool item, e.g.
     //     SfxSetItems which are Pool dependent
-    //   m_bUserDefault: set by user using
-    //     SetUserDefaultItem
-    bool        m_bStaticDefault : 1;       // bit 0
-    bool        m_bDynamicDefault : 1;      // bit 1
-    bool        m_bUserDefault : 1;         // bit 2
+    bool        m_bStaticDefault : 1;
+    bool        m_bDynamicDefault : 1;
 
     // Item is derived from SfxSetItem -> is Pool-dependent
-    bool        m_bIsSetItem : 1;           // bit 3
+    bool        m_bIsSetItem : 1;
 
     // Defines if the Item can be shared/RefCounted else it will be cloned.
     // Default is true - as it should be for all Items. It is needed by some
     // SW items, so protected to let them set it in constructor. If this could
     // be fixed at that Items we may remove this again.
-    bool        m_bShareable : 1;           // bit 4
+    bool        m_bShareable : 1;
 
 protected:
 #ifdef DBG_UTIL
     // this flag will make debugging item stuff much simpler
-    bool        m_bDeleted : 1;             // bit 5
+    bool        m_bDeleted : 1;
 #endif
 
 private:
     inline void SetRefCount(sal_uInt32 n)
     {
         m_nRefCount = n;
-        m_bStaticDefault = m_bDynamicDefault = m_bUserDefault = false;
+        m_bStaticDefault = m_bDynamicDefault = false;
     }
 
 protected:
     void setStaticDefault() { m_bStaticDefault = true; }
     void setDynamicDefault() { m_bDynamicDefault = true; }
-    void setUserDefault() { m_bUserDefault = true; }
     void setIsSetItem() { m_bIsSetItem = true; }
     void setNonShareable() { m_bShareable = false; }
 
@@ -199,7 +197,6 @@ public:
 
     bool isStaticDefault() const { return m_bStaticDefault; }
     bool isDynamicDefault() const { return m_bDynamicDefault; }
-    bool isUserDefault() const { return m_bUserDefault; }
     bool isSetItem() const { return m_bIsSetItem; }
     bool isShareable() const { return m_bShareable; }
 
@@ -349,11 +346,6 @@ private:
     virtual void remove(const SfxPoolItem&) override;
 };
 
-inline bool IsUserDefaultItem(const SfxPoolItem *pItem )
-{
-    return pItem && pItem->isUserDefault();
-}
-
 inline bool IsStaticDefaultItem(const SfxPoolItem *pItem )
 {
     return pItem && pItem->isStaticDefault();
@@ -366,7 +358,7 @@ inline bool IsDynamicDefaultItem(const SfxPoolItem *pItem )
 
 inline bool IsDefaultItem( const SfxPoolItem *pItem )
 {
-    return pItem && (pItem->isUserDefault() || pItem->isStaticDefault() || pItem->isDynamicDefault());
+    return pItem && (pItem->isStaticDefault() || pItem->isDynamicDefault());
 }
 
 inline bool IsPooledItem( const SfxPoolItem *pItem )

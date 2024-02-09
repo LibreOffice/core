@@ -102,6 +102,8 @@ class SW_DLLPUBLIC SwFormatField final
     , public sw::BroadcastingModify
     , public SfxBroadcaster
 {
+    friend SwFormatField* createSwFormatFieldForItemInfoPackage(sal_uInt16);
+    // friend class ItemInfoPackageSwAttributes;
     friend void InitCore();
     SwFormatField( sal_uInt16 nWhich ); // for default-Attribute
 

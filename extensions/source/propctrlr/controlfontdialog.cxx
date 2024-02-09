@@ -36,8 +36,7 @@ namespace pcr
     using namespace ::com::sun::star::beans;
 
     OControlFontDialog::OControlFontDialog(const Reference< XComponentContext >& _rxContext )
-        :OGenericUnoDialog( _rxContext )
-        ,m_pItemPoolDefaults(nullptr)
+    : OGenericUnoDialog( _rxContext )
     {
         registerProperty(PROPERTY_INTROSPECTEDOBJECT, static_cast<sal_Int32>(OwnPropertyId::INTROSPECTEDOBJECT),
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
@@ -53,7 +52,7 @@ namespace pcr
             if (m_xDialog)
             {
                 destroyDialog();
-                ControlCharacterDialog::destroyItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
+                ControlCharacterDialog::destroyItemSet(m_pFontItems, m_pItemPool);
             }
         }
     }
@@ -112,7 +111,7 @@ namespace pcr
 
     std::unique_ptr<weld::DialogController> OControlFontDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        ControlCharacterDialog::createItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
+        ControlCharacterDialog::createItemSet(m_pFontItems, m_pItemPool);
 
         OSL_ENSURE(m_xControlModel.is(), "OControlFontDialog::createDialog: no introspectee set!");
         if (m_xControlModel.is())

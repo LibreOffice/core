@@ -340,8 +340,6 @@ static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem
         if ( aObjList[ i ].equalsIgnoreAsciiCase( rCustomShape ) )
         {
             FmFormModel aFormModel;
-            SfxItemPool& rPool(aFormModel.GetItemPool());
-            rPool.FreezeIdRanges();
 
             if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aFormModel ) )
             {

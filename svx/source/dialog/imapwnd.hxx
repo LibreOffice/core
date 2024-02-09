@@ -85,7 +85,6 @@ class IMapWindow final : public GraphCtrl
     TargetList          aTargetList;
     Link<IMapWindow&,void> aInfoLink;
     rtl::Reference<SfxItemPool> pIMapPool;
-    SfxItemInfo         maItemInfos[1] = {};
     css::uno::Reference< css::frame::XFrame >
                         mxDocumentFrame;
     std::unique_ptr<IMapDropTargetHelper> mxDropTargetHelper;

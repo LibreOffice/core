@@ -23,60 +23,49 @@
 #include <docpool.hxx>
 #include <msgpool.hxx>
 
-SfxItemInfo const aMsgItemInfos[] =
+static ItemInfoPackage& getItemInfoPackageScMessage()
 {
-    // _nItemInfoSlotID, _nItemInfoFlags
-    { 0,                         SFX_ITEMINFOFLAG_NONE },   // SCITEM_STRING
-    { 0,                         SFX_ITEMINFOFLAG_NONE },   // SCITEM_SEARCHDATA - stop using this!
-    { SID_SORT,                  SFX_ITEMINFOFLAG_NONE },   // SCITEM_SORTDATA
-    { SID_QUERY,                 SFX_ITEMINFOFLAG_NONE },   // SCITEM_QUERYDATA
-    { SID_SUBTOTALS,             SFX_ITEMINFOFLAG_NONE },   // SCITEM_SUBTDATA
-    { SID_CONSOLIDATE,           SFX_ITEMINFOFLAG_NONE },   // SCITEM_CONSOLIDATEDATA
-    { SID_PIVOT_TABLE,           SFX_ITEMINFOFLAG_NONE },   // SCITEM_PIVOTDATA
-    { SID_SOLVE,                 SFX_ITEMINFOFLAG_NONE },   // SCITEM_SOLVEDATA
-    { SID_SCUSERLISTS,           SFX_ITEMINFOFLAG_NONE },   // SCITEM_USERLIST
-};
+    class ItemInfoPackageScMessage : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, MSGPOOL_END - MSGPOOL_START + 1> ItemInfoArrayScMessage;
+        ItemInfoArrayScMessage maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { SCITEM_STRING, new SfxStringItem(SCITEM_STRING, OUString() ), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_SEARCHDATA, new SvxSearchItem(SCITEM_SEARCHDATA ), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_SORTDATA, new ScSortItem(SCITEM_SORTDATA, nullptr ), SID_SORT, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_QUERYDATA, new ScQueryItem(SCITEM_QUERYDATA, nullptr, nullptr ), SID_QUERY, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_SUBTDATA, new ScSubTotalItem(SCITEM_SUBTDATA, nullptr, nullptr ), SID_SUBTOTALS, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_CONSOLIDATEDATA, new ScConsolidateItem(SCITEM_CONSOLIDATEDATA, nullptr ), SID_CONSOLIDATE, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_PIVOTDATA, new ScPivotItem(SCITEM_PIVOTDATA, nullptr, nullptr, false ), SID_PIVOT_TABLE, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_SOLVEDATA, new ScSolveItem(SCITEM_SOLVEDATA, nullptr ), SID_SOLVE, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_USERLIST, new ScUserListItem(SCITEM_USERLIST ), SID_SCUSERLISTS, SFX_ITEMINFOFLAG_NONE }
+        }};
+
+    public:
+
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }
+    };
+
+    static std::unique_ptr<ItemInfoPackageScMessage> g_aItemInfoPackageScMessage;
+    if (!g_aItemInfoPackageScMessage)
+        g_aItemInfoPackageScMessage.reset(new ItemInfoPackageScMessage);
+    return *g_aItemInfoPackageScMessage;
+}
 
 ScMessagePool::ScMessagePool()
-    :   SfxItemPool         ( "ScMessagePool",
-                              MSGPOOL_START, MSGPOOL_END,
-                              aMsgItemInfos, nullptr ),
-
-    aGlobalStringItem       ( SfxStringItem         ( SCITEM_STRING, OUString() ) ),
-    aGlobalSearchItem       ( SvxSearchItem         ( SCITEM_SEARCHDATA ) ),
-    aGlobalSortItem         ( ScSortItem            ( SCITEM_SORTDATA, nullptr ) ),
-    aGlobalQueryItem        ( ScQueryItem           ( SCITEM_QUERYDATA, nullptr, nullptr ) ),
-    aGlobalSubTotalItem     ( ScSubTotalItem        ( SCITEM_SUBTDATA, nullptr, nullptr ) ),
-    aGlobalConsolidateItem  ( ScConsolidateItem     ( SCITEM_CONSOLIDATEDATA, nullptr ) ),
-    aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, nullptr, nullptr, false ) ),
-    aGlobalSolveItem        ( ScSolveItem           ( SCITEM_SOLVEDATA, nullptr ) ),
-    aGlobalUserListItem     ( ScUserListItem        ( SCITEM_USERLIST ) ),
-
-    mvPoolDefaults(MSGPOOL_END - MSGPOOL_START + 1),
+: SfxItemPool("ScMessagePool"),
     pDocPool(new ScDocumentPool)
 {
-    mvPoolDefaults[SCITEM_STRING            - MSGPOOL_START] = &aGlobalStringItem;
-    mvPoolDefaults[SCITEM_SEARCHDATA        - MSGPOOL_START] = &aGlobalSearchItem;
-    mvPoolDefaults[SCITEM_SORTDATA          - MSGPOOL_START] = &aGlobalSortItem;
-    mvPoolDefaults[SCITEM_QUERYDATA         - MSGPOOL_START] = &aGlobalQueryItem;
-    mvPoolDefaults[SCITEM_SUBTDATA          - MSGPOOL_START] = &aGlobalSubTotalItem;
-    mvPoolDefaults[SCITEM_CONSOLIDATEDATA   - MSGPOOL_START] = &aGlobalConsolidateItem;
-    mvPoolDefaults[SCITEM_PIVOTDATA         - MSGPOOL_START] = &aGlobalPivotItem;
-    mvPoolDefaults[SCITEM_SOLVEDATA         - MSGPOOL_START] = &aGlobalSolveItem;
-    mvPoolDefaults[SCITEM_USERLIST          - MSGPOOL_START] = &aGlobalUserListItem;
-
-    SetPoolDefaults( &mvPoolDefaults );
+    registerItemInfoPackage(getItemInfoPackageScMessage());
 
     SetSecondaryPool( pDocPool.get() );
 }
 
 ScMessagePool::~ScMessagePool()
 {
-    Delete();
-    SetSecondaryPool( nullptr ); // before deleting defaults (accesses defaults)
-
-    for ( sal_uInt16 i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
-        ClearRefCount( *mvPoolDefaults[i] );
+    sendShutdownHint();
+    SetSecondaryPool(nullptr); // before deleting defaults (accesses defaults)
 }
 
 MapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const

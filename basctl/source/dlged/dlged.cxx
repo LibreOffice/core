@@ -203,7 +203,6 @@ DlgEditor::DlgEditor (
     ,mnPaintGuard(0)
     ,m_xDocument( xModel )
 {
-    pDlgEdModel->GetItemPool().FreezeIdRanges();
     pDlgEdView.reset(new DlgEdView(*pDlgEdModel, *rWindow_.GetOutDev(), *this));
     pDlgEdModel->SetScaleUnit( MapUnit::Map100thMM );
 

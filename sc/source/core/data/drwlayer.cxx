@@ -294,8 +294,6 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
         rPool.GetSecondaryPool()->SetUserDefaultItem( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
     }
 
-    rPool.FreezeIdRanges();                         // the pool is also used directly
-
     SetStyleSheetPool(pDocument ? pDocument->GetStyleSheetPool() : new ScStyleSheetPool(rPool, pDocument));
 
     SdrLayerAdmin& rAdmin = GetLayerAdmin();

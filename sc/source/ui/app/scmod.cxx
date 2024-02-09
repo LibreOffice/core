@@ -148,7 +148,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     m_aIdleTimer.Start();
 
     m_pMessagePool = new ScMessagePool;
-    m_pMessagePool->FreezeIdRanges();
     SetPool( m_pMessagePool.get() );
 
     ScGlobal::InitTextHeight( *m_pMessagePool );

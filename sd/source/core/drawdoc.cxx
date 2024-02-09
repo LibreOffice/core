@@ -167,7 +167,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SetDefaultFontHeight(o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100));
 
     m_pItemPool->SetDefaultMetric(MapUnit::Map100thMM);
-    m_pItemPool->FreezeIdRanges();
     SetTextDefaults();
 
     // DrawingEngine has to know where it is...

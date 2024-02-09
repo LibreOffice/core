@@ -310,8 +310,6 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                     ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
                     FmFormModel*    pModel = new FmFormModel();
 
-                    pModel->GetItemPool().FreezeIdRanges();
-
                     if( pGalTheme && pGalTheme->GetModel( pGalTheme->maGalleryObjectCollection.searchPosWithObject( implGetObject() ), *pModel ) )
                     {
                         rtl::Reference< GalleryDrawingModel > xDrawing( new GalleryDrawingModel( pModel ) );

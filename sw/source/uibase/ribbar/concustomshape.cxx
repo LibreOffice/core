@@ -110,8 +110,6 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
                 if ( aObjList[ i ].equalsIgnoreAsciiCase( m_aCustomShape ) )
                 {
                     FmFormModel aFormModel;
-                    SfxItemPool& rPool(aFormModel.GetItemPool());
-                    rPool.FreezeIdRanges();
 
                     if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aFormModel ) )
                     {

@@ -522,9 +522,6 @@ class SfxPoolItem;
 struct SfxItemInfo;
 typedef std::vector<SfxPoolItem*> SwDfltAttrTab;
 
-extern SwDfltAttrTab aAttrTab;
-extern SfxItemInfo aSlotTab[];
-
 /** Get the default attribute from corresponding default attribute table.
 
     @param[in] nWhich Position in table

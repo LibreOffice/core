@@ -26,9 +26,6 @@ namespace chart
 {
 class ChartItemPool : public SfxItemPool
 {
-private:
-    std::unique_ptr<SfxItemInfo[]> pItemInfos;
-
 public:
     ChartItemPool();
     ChartItemPool(const ChartItemPool& rPool);

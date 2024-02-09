@@ -20,7 +20,6 @@
 #pragma once
 
 #include <svl/srchitem.hxx>
-
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 
@@ -30,17 +29,6 @@ class ScDocumentPool;
 
 class ScMessagePool final : public SfxItemPool
 {
-    SfxStringItem       aGlobalStringItem;
-    SvxSearchItem       aGlobalSearchItem;
-    ScSortItem          aGlobalSortItem;
-    ScQueryItem         aGlobalQueryItem;
-    ScSubTotalItem      aGlobalSubTotalItem;
-    ScConsolidateItem   aGlobalConsolidateItem;
-    ScPivotItem         aGlobalPivotItem;
-    ScSolveItem         aGlobalSolveItem;
-    ScUserListItem      aGlobalUserListItem;
-
-    std::vector<SfxPoolItem*>    mvPoolDefaults;
     rtl::Reference<ScDocumentPool> pDocPool;
 
 public:

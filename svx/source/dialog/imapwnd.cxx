@@ -51,13 +51,33 @@ using ::com::sun::star::uno::Reference;
 
 #define TRANSCOL COL_WHITE
 
+static ItemInfoPackage& getItemInfoPackageIMapWindow()
+{
+    class ItemInfoPackageIMapWindow : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, 1> ItemInfoArrayIMapWindow;
+        ItemInfoArrayIMapWindow maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { SID_ATTR_MACROITEM, new SvxMacroItem(SID_ATTR_MACROITEM), 0, SFX_ITEMINFOFLAG_NONE }
+        }};
+
+    public:
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }
+    };
+
+    static std::unique_ptr<ItemInfoPackageIMapWindow> g_aItemInfoPackageIMapWindow;
+    if (!g_aItemInfoPackageIMapWindow)
+        g_aItemInfoPackageIMapWindow.reset(new ItemInfoPackageIMapWindow);
+    return *g_aItemInfoPackageIMapWindow;
+}
+
 IMapWindow::IMapWindow(const Reference< XFrame >& rxDocumentFrame, weld::Dialog* pDialog)
     : GraphCtrl(pDialog)
     , mxDocumentFrame(rxDocumentFrame)
 {
-    pIMapPool = new SfxItemPool( "IMapItemPool",
-                                 SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, maItemInfos );
-    pIMapPool->FreezeIdRanges();
+    pIMapPool = new SfxItemPool("IMapItemPool");
+    pIMapPool->registerItemInfoPackage(getItemInfoPackageIMapWindow());
 }
 
 IMapWindow::~IMapWindow()

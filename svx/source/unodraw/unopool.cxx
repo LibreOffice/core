@@ -57,7 +57,6 @@ void SvxUnoDrawPool::init()
 
     SdrModel::SetTextDefaults( mpDefaultsPool.get(), SdrEngineDefaults::GetFontHeight() );
     mpDefaultsPool->SetDefaultMetric(SdrEngineDefaults::GetMapUnit());
-    mpDefaultsPool->FreezeIdRanges();
 }
 
 SfxItemPool* SvxUnoDrawPool::getModelPool( bool bReadOnly ) noexcept

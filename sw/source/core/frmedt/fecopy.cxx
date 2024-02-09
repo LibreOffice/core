@@ -1357,8 +1357,6 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
             nullptr,
             GetDoc()->GetDocShell()));
 
-    pModel->GetItemPool().FreezeIdRanges();
-
     rStrm.Seek(0);
 
     uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rStrm ) );

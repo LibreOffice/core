@@ -588,8 +588,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
             {
                 auto i = static_cast<sal_uInt32>(std::distance(aObjList.begin(), aIter));
                 OReportModel aReportModel(nullptr);
-                SfxItemPool& rPool = aReportModel.GetItemPool();
-                rPool.FreezeIdRanges();
+
                 if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aReportModel ) )
                 {
                     const SdrObject* pSourceObj = aReportModel.GetPage( 0 )->GetObj( 0 );

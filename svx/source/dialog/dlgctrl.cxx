@@ -1295,8 +1295,6 @@ void SvxPreviewBase::InitSettings()
 SvxPreviewBase::SvxPreviewBase()
     : mpModel(new SdrModel(nullptr, nullptr, true))
 {
-    // init model
-    mpModel->GetItemPool().FreezeIdRanges();
 }
 
 void SvxPreviewBase::SetDrawingArea(weld::DrawingArea* pDrawingArea)

@@ -45,6 +45,52 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <svx/xflbckit.hxx>
+#include <xftshtit.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xsflclit.hxx>
+#include <svx/xlntrit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xgrscit.hxx>
+#include <svx/xflasit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbmpit.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflbmsli.hxx>
+#include <svx/xflbtoxy.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
+#include <svx/xtextit0.hxx>
+#include <svx/xlnasit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstcit.hxx>
+#include <svx/xlnedcit.hxx>
+#include <svx/svddef.hxx>
+#include <svl/itemset.hxx>
+#include <svx/xftadit.hxx>
+#include <svx/xftdiit.hxx>
+#include <svx/xftstit.hxx>
+#include <svx/xftmrit.hxx>
+#include <svx/xftouit.hxx>
+#include <svx/xftshit.hxx>
+#include <svx/xftshcit.hxx>
+#include <svx/xftshxy.hxx>
+
 #include <svl/grabbagitem.hxx>
 #include <svl/voiditem.hxx>
 
@@ -115,273 +161,341 @@
 
 using namespace ::com::sun::star;
 
-SdrItemPool::SdrItemPool(
-    SfxItemPool* _pMaster)
-:   XOutdevItemPool(_pMaster)
+static ItemInfoPackage& getItemInfoPackageSdr()
 {
-    // prepare some constants
-    const Color aNullCol(COL_BLACK);
-    const sal_Int32 nDefEdgeDist(500); // Defaulting hard for Draw (100TH_MM) currently. MapMode will have to be taken into account in the future.
-
-    // init the non-persistent items
-    for(sal_uInt16 i(SDRATTR_NOTPERSIST_FIRST); i <= SDRATTR_NOTPERSIST_LAST; i++)
+    class ItemInfoPackageSdr : public ItemInfoPackage
     {
-        mpLocalItemInfos[i - SDRATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_NONE;
-    }
+        typedef std::array<ItemInfoStatic, SDRATTR_END - SDRATTR_START + 1> ItemInfoArraySdr;
+        ItemInfoArraySdr maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { XATTR_LINESTYLE, new XLineStyleItem, SID_ATTR_LINE_STYLE, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_LINEDASH, new XLineDashItem(XDash()), SID_ATTR_LINE_DASH, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_LINEWIDTH, new XLineWidthItem, SID_ATTR_LINE_WIDTH, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_LINECOLOR, new XLineColorItem(OUString(), COL_DEFAULT_SHAPE_STROKE), SID_ATTR_LINE_COLOR, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_LINESTART, new XLineStartItem(basegfx::B2DPolyPolygon()), SID_ATTR_LINE_START, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_LINEEND, new XLineEndItem  (basegfx::B2DPolyPolygon()), SID_ATTR_LINE_END, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_LINESTARTWIDTH, new XLineStartWidthItem, SID_ATTR_LINE_STARTWIDTH, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_LINEENDWIDTH, new XLineEndWidthItem, SID_ATTR_LINE_ENDWIDTH, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_LINESTARTCENTER, new XLineStartCenterItem, SID_ATTR_LINE_STARTCENTER, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_LINEENDCENTER, new XLineEndCenterItem, SID_ATTR_LINE_ENDCENTER, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_LINETRANSPARENCE, new XLineTransparenceItem, SID_ATTR_LINE_TRANSPARENCE, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_LINEJOINT, new XLineJointItem, SID_ATTR_LINE_JOINT, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_LINECAP, new XLineCapItem, SID_ATTR_LINE_CAP, SFX_ITEMINFOFLAG_NONE },
+            { XATTRSET_LINE, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLSTYLE, new XFillStyleItem, SID_ATTR_FILL_STYLE, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLCOLOR, new XFillColorItem   (OUString(), COL_DEFAULT_SHAPE_FILLING), SID_ATTR_FILL_COLOR, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_FILLGRADIENT, new XFillGradientItem(basegfx::BGradient()), SID_ATTR_FILL_GRADIENT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_FILLHATCH, new XFillHatchItem   (XHatch(COL_DEFAULT_SHAPE_STROKE)), SID_ATTR_FILL_HATCH, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_FILLBITMAP, nullptr, SID_ATTR_FILL_BITMAP, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_FILLTRANSPARENCE, new XFillTransparenceItem, SID_ATTR_FILL_TRANSPARENCE, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_GRADIENTSTEPCOUNT, new XGradientStepCountItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILE, new XFillBmpTileItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POS, new XFillBmpPosItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZEX, new XFillBmpSizeXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZEY, new XFillBmpSizeYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLFLOATTRANSPARENCE, new XFillFloatTransparenceItem(basegfx::BGradient(basegfx::BColorStops(COL_BLACK.getBColor(), COL_BLACK.getBColor())), false), SID_ATTR_FILL_FLOATTRANSPARENCE, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { XATTR_SECONDARYFILLCOLOR, new XSecondaryFillColorItem(OUString(), COL_DEFAULT_SHAPE_FILLING), 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_SIZELOG, new XFillBmpSizeLogItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILEOFFSETX, new XFillBmpTileOffsetXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_TILEOFFSETY, new XFillBmpTileOffsetYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_STRETCH, new XFillBmpStretchItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POSOFFSETX, new XFillBmpPosOffsetXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBMP_POSOFFSETY, new XFillBmpPosOffsetYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLBACKGROUND, new XFillBackgroundItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FILLUSESLIDEBACKGROUND, new XFillUseSlideBackgroundItem, SID_ATTR_FILL_USE_SLIDE_BACKGROUND, SFX_ITEMINFOFLAG_NONE },
+            { XATTRSET_FILL, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTSTYLE, new XFormTextStyleItem, SID_FORMTEXT_STYLE, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTADJUST, new XFormTextAdjustItem, SID_FORMTEXT_ADJUST, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTDISTANCE, new XFormTextDistanceItem, SID_FORMTEXT_DISTANCE, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTSTART, new XFormTextStartItem, SID_FORMTEXT_START, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTMIRROR, new XFormTextMirrorItem, SID_FORMTEXT_MIRROR, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTOUTLINE, new XFormTextOutlineItem, SID_FORMTEXT_OUTLINE, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTSHADOW, new XFormTextShadowItem, SID_FORMTEXT_SHADOW, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTSHDWCOLOR, new XFormTextShadowColorItem(OUString(),COL_LIGHTGRAY), SID_FORMTEXT_SHDWCOLOR, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTSHDWXVAL, new XFormTextShadowXValItem, SID_FORMTEXT_SHDWXVAL, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTSHDWYVAL, new XFormTextShadowYValItem, SID_FORMTEXT_SHDWYVAL, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTHIDEFORM, new XFormTextHideFormItem, SID_FORMTEXT_HIDEFORM, SFX_ITEMINFOFLAG_NONE },
+            { XATTR_FORMTXTSHDWTRANSP, new XFormTextShadowTranspItem, 0, SFX_ITEMINFOFLAG_NONE },
 
-    // these slots need SFX_ITEMINFOFLAG_SUPPORT_SURROGATE, see
-    // text @svl/source/items/itempool.cxx
-    mpLocalItemInfos[SDRATTR_XMLATTRIBUTES -SDRATTR_START]._nItemInfoFlags = SFX_ITEMINFOFLAG_SUPPORT_SURROGATE;
+            { SDRATTR_SHADOW, new SdrOnOffItem(SDRATTR_SHADOW, false), SID_ATTR_FILL_SHADOW, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWCOLOR, new XColorItem(SDRATTR_SHADOWCOLOR, COL_BLACK), SID_ATTR_SHADOW_COLOR, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWXDIST, new SdrMetricItem(SDRATTR_SHADOWXDIST, 0), SID_ATTR_SHADOW_XDISTANCE, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWYDIST, new SdrMetricItem(SDRATTR_SHADOWYDIST, 0), SID_ATTR_SHADOW_YDISTANCE, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWTRANSPARENCE, new SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE, 0), SID_ATTR_SHADOW_TRANSPARENCE, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOW3D, new SfxVoidItem(SDRATTR_SHADOW3D), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWPERSP, new SfxVoidItem(SDRATTR_SHADOWPERSP), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWSIZEX, new SdrMetricItem(SDRATTR_SHADOWSIZEX, 100000), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWSIZEY, new SdrMetricItem(SDRATTR_SHADOWSIZEY, 100000), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWBLUR, new SdrMetricItem(SDRATTR_SHADOWBLUR, 0), SID_ATTR_SHADOW_BLUR, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOWALIGNMENT, new SvxRectangleAlignmentItem(SDRATTR_SHADOWALIGNMENT, model::RectangleAlignment::Unset), 0, SFX_ITEMINFOFLAG_NONE },
 
-    // init own PoolDefaults
-    std::vector<SfxPoolItem*>& rPoolDefaults = *mpLocalPoolDefaults;
-    rPoolDefaults[SDRATTR_SHADOW            -SDRATTR_START]=new SdrOnOffItem(SDRATTR_SHADOW, false);
-    rPoolDefaults[SDRATTR_SHADOWCOLOR       -SDRATTR_START]=new XColorItem(SDRATTR_SHADOWCOLOR, aNullCol);
-    rPoolDefaults[SDRATTR_SHADOWXDIST       -SDRATTR_START]=new SdrMetricItem(SDRATTR_SHADOWXDIST, 0);
-    rPoolDefaults[SDRATTR_SHADOWYDIST       -SDRATTR_START]=new SdrMetricItem(SDRATTR_SHADOWYDIST, 0);
-    rPoolDefaults[SDRATTR_SHADOWSIZEX       -SDRATTR_START]=new SdrMetricItem(SDRATTR_SHADOWSIZEX, 100000);
-    rPoolDefaults[SDRATTR_SHADOWSIZEY       -SDRATTR_START]=new SdrMetricItem(SDRATTR_SHADOWSIZEY, 100000);
-    rPoolDefaults[SDRATTR_SHADOWTRANSPARENCE-SDRATTR_START]=new SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE, 0);
-    rPoolDefaults[SDRATTR_SHADOWBLUR        -SDRATTR_START]=new SdrMetricItem(SDRATTR_SHADOWBLUR, 0);
-    rPoolDefaults[SDRATTR_SHADOWALIGNMENT   -SDRATTR_START]=new SvxRectangleAlignmentItem(SDRATTR_SHADOWALIGNMENT, model::RectangleAlignment::Unset);
-    rPoolDefaults[SDRATTR_SHADOW3D          -SDRATTR_START]=new SfxVoidItem(SDRATTR_SHADOW3D    );
-    rPoolDefaults[SDRATTR_SHADOWPERSP       -SDRATTR_START]=new SfxVoidItem(SDRATTR_SHADOWPERSP );
-    rPoolDefaults[SDRATTR_CAPTIONTYPE      -SDRATTR_START]=new SdrCaptionTypeItem      ;
-    rPoolDefaults[SDRATTR_CAPTIONFIXEDANGLE-SDRATTR_START]=new SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE, true);
-    rPoolDefaults[SDRATTR_CAPTIONANGLE     -SDRATTR_START]=new SdrCaptionAngleItem     ;
-    rPoolDefaults[SDRATTR_CAPTIONGAP       -SDRATTR_START]=new SdrCaptionGapItem       ;
-    rPoolDefaults[SDRATTR_CAPTIONESCDIR    -SDRATTR_START]=new SdrCaptionEscDirItem    ;
-    rPoolDefaults[SDRATTR_CAPTIONESCISREL  -SDRATTR_START]=new SdrCaptionEscIsRelItem  ;
-    rPoolDefaults[SDRATTR_CAPTIONESCREL    -SDRATTR_START]=new SdrCaptionEscRelItem    ;
-    rPoolDefaults[SDRATTR_CAPTIONESCABS    -SDRATTR_START]=new SdrCaptionEscAbsItem    ;
-    rPoolDefaults[SDRATTR_CAPTIONLINELEN   -SDRATTR_START]=new SdrCaptionLineLenItem   ;
-    rPoolDefaults[SDRATTR_CAPTIONFITLINELEN-SDRATTR_START]=new SdrCaptionFitLineLenItem;
-    rPoolDefaults[SDRATTR_CORNER_RADIUS    -SDRATTR_START]=new SdrMetricItem(SDRATTR_CORNER_RADIUS, 0);
-    rPoolDefaults[SDRATTR_TEXT_MINFRAMEHEIGHT    -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, 0);
-    rPoolDefaults[SDRATTR_TEXT_AUTOGROWHEIGHT    -SDRATTR_START]=new SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, true);
-    rPoolDefaults[SDRATTR_TEXT_FITTOSIZE     -SDRATTR_START]=new SdrTextFitToSizeTypeItem;
-    rPoolDefaults[SDRATTR_TEXT_LEFTDIST      -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_LEFTDIST, 0);
-    rPoolDefaults[SDRATTR_TEXT_RIGHTDIST     -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, 0);
-    rPoolDefaults[SDRATTR_TEXT_UPPERDIST     -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_UPPERDIST, 0);
-    rPoolDefaults[SDRATTR_TEXT_LOWERDIST     -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_LOWERDIST, 0);
-    rPoolDefaults[SDRATTR_TEXT_VERTADJUST        -SDRATTR_START]=new SdrTextVertAdjustItem;
-    rPoolDefaults[SDRATTR_TEXT_MAXFRAMEHEIGHT    -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT, 0);
-    rPoolDefaults[SDRATTR_TEXT_MINFRAMEWIDTH -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, 0);
-    rPoolDefaults[SDRATTR_TEXT_MAXFRAMEWIDTH -SDRATTR_START]=new SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH, 0);
-    rPoolDefaults[SDRATTR_TEXT_AUTOGROWWIDTH -SDRATTR_START]=new SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, false);
-    rPoolDefaults[SDRATTR_TEXT_HORZADJUST        -SDRATTR_START]=new SdrTextHorzAdjustItem;
-    rPoolDefaults[SDRATTR_TEXT_ANIKIND           -SDRATTR_START]=new SdrTextAniKindItem;
-    rPoolDefaults[SDRATTR_TEXT_ANIDIRECTION  -SDRATTR_START]=new SdrTextAniDirectionItem;
-    rPoolDefaults[SDRATTR_TEXT_ANISTARTINSIDE    -SDRATTR_START]=new SdrTextAniStartInsideItem;
-    rPoolDefaults[SDRATTR_TEXT_ANISTOPINSIDE -SDRATTR_START]=new SdrTextAniStopInsideItem;
-    rPoolDefaults[SDRATTR_TEXT_ANICOUNT      -SDRATTR_START]=new SdrTextAniCountItem;
-    rPoolDefaults[SDRATTR_TEXT_ANIDELAY      -SDRATTR_START]=new SdrTextAniDelayItem;
-    rPoolDefaults[SDRATTR_TEXT_ANIAMOUNT     -SDRATTR_START]=new SdrTextAniAmountItem;
-    rPoolDefaults[SDRATTR_TEXT_CONTOURFRAME  -SDRATTR_START]=new SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME, false);
-    rPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
-    rPoolDefaults[SDRATTR_TEXT_CHAINNEXTNAME    -SDRATTR_START]=new SfxStringItem(SDRATTR_TEXT_CHAINNEXTNAME, "");
-    rPoolDefaults[SDRATTR_TEXT_USEFIXEDCELLHEIGHT -SDRATTR_START]=new SdrTextFixedCellHeightItem;
-    rPoolDefaults[SDRATTR_TEXT_WORDWRAP         -SDRATTR_START]=new SdrOnOffItem(SDRATTR_TEXT_WORDWRAP, true);
-    rPoolDefaults[SDRATTR_TEXT_CLIPVERTOVERFLOW-SDRATTR_START]=new SdrOnOffItem(SDRATTR_TEXT_CLIPVERTOVERFLOW, false);
-    rPoolDefaults[SDRATTR_EDGEKIND         -SDRATTR_START]=new SdrEdgeKindItem;
-    rPoolDefaults[SDRATTR_EDGENODE1HORZDIST-SDRATTR_START]=new SdrEdgeNode1HorzDistItem(nDefEdgeDist);
-    rPoolDefaults[SDRATTR_EDGENODE1VERTDIST-SDRATTR_START]=new SdrEdgeNode1VertDistItem(nDefEdgeDist);
-    rPoolDefaults[SDRATTR_EDGENODE2HORZDIST-SDRATTR_START]=new SdrEdgeNode2HorzDistItem(nDefEdgeDist);
-    rPoolDefaults[SDRATTR_EDGENODE2VERTDIST-SDRATTR_START]=new SdrEdgeNode2VertDistItem(nDefEdgeDist);
-    rPoolDefaults[SDRATTR_EDGENODE1GLUEDIST-SDRATTR_START]=new SdrEdgeNode1GlueDistItem;
-    rPoolDefaults[SDRATTR_EDGENODE2GLUEDIST-SDRATTR_START]=new SdrEdgeNode2GlueDistItem;
-    rPoolDefaults[SDRATTR_EDGELINEDELTACOUNT-SDRATTR_START]=new SdrEdgeLineDeltaCountItem;
-    rPoolDefaults[SDRATTR_EDGELINE1DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE1DELTA, 0);
-    rPoolDefaults[SDRATTR_EDGELINE2DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE2DELTA, 0);
-    rPoolDefaults[SDRATTR_EDGELINE3DELTA   -SDRATTR_START]=new SdrMetricItem(SDRATTR_EDGELINE3DELTA, 0);
-    rPoolDefaults[SDRATTR_EDGEOOXMLCURVE   -SDRATTR_START]=new SfxBoolItem(SDRATTR_EDGEOOXMLCURVE, false);
-    rPoolDefaults[SDRATTR_MEASUREKIND             -SDRATTR_START]=new SdrMeasureKindItem;
-    rPoolDefaults[SDRATTR_MEASURETEXTHPOS         -SDRATTR_START]=new SdrMeasureTextHPosItem;
-    rPoolDefaults[SDRATTR_MEASURETEXTVPOS         -SDRATTR_START]=new SdrMeasureTextVPosItem;
-    rPoolDefaults[SDRATTR_MEASURELINEDIST         -SDRATTR_START]=new SdrMetricItem(SDRATTR_MEASURELINEDIST, 800);
-    rPoolDefaults[SDRATTR_MEASUREHELPLINEOVERHANG -SDRATTR_START]=new SdrMetricItem(SDRATTR_MEASUREHELPLINEOVERHANG, 200);
-    rPoolDefaults[SDRATTR_MEASUREHELPLINEDIST     -SDRATTR_START]=new SdrMetricItem(SDRATTR_MEASUREHELPLINEDIST, 100);
-    rPoolDefaults[SDRATTR_MEASUREHELPLINE1LEN     -SDRATTR_START]=new SdrMetricItem(SDRATTR_MEASUREHELPLINE1LEN, 0);
-    rPoolDefaults[SDRATTR_MEASUREHELPLINE2LEN     -SDRATTR_START]=new SdrMetricItem(SDRATTR_MEASUREHELPLINE2LEN, 0);
-    rPoolDefaults[SDRATTR_MEASUREBELOWREFEDGE     -SDRATTR_START]=new SdrMeasureBelowRefEdgeItem;
-    rPoolDefaults[SDRATTR_MEASURETEXTROTA90       -SDRATTR_START]=new SdrMeasureTextRota90Item;
-    rPoolDefaults[SDRATTR_MEASURETEXTUPSIDEDOWN   -SDRATTR_START]=new SdrMeasureTextUpsideDownItem;
-    rPoolDefaults[SDRATTR_MEASUREOVERHANG         -SDRATTR_START]=new SdrMeasureOverhangItem(600);
-    rPoolDefaults[SDRATTR_MEASUREUNIT             -SDRATTR_START]=new SdrMeasureUnitItem;
-    rPoolDefaults[SDRATTR_MEASURESCALE            -SDRATTR_START]=new SdrMeasureScaleItem;
-    rPoolDefaults[SDRATTR_MEASURESHOWUNIT         -SDRATTR_START]=new SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, false);
-    rPoolDefaults[SDRATTR_MEASUREFORMATSTRING     -SDRATTR_START]=new SdrMeasureFormatStringItem();
-    rPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLE    -SDRATTR_START]=new SdrMeasureTextAutoAngleItem();
-    rPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLEVIEW-SDRATTR_START]=new SdrMeasureTextAutoAngleViewItem();
-    rPoolDefaults[SDRATTR_MEASURETEXTISFIXEDANGLE -SDRATTR_START]=new SdrMeasureTextIsFixedAngleItem();
-    rPoolDefaults[SDRATTR_MEASURETEXTFIXEDANGLE   -SDRATTR_START]=new SdrMeasureTextFixedAngleItem();
-    rPoolDefaults[SDRATTR_MEASUREDECIMALPLACES    -SDRATTR_START]=new SdrMeasureDecimalPlacesItem();
-    rPoolDefaults[SDRATTR_CIRCKIND      -SDRATTR_START]=new SdrCircKindItem;
-    rPoolDefaults[SDRATTR_CIRCSTARTANGLE-SDRATTR_START]=new SdrAngleItem(SDRATTR_CIRCSTARTANGLE, 0_deg100);
-    rPoolDefaults[SDRATTR_CIRCENDANGLE  -SDRATTR_START]=new SdrAngleItem(SDRATTR_CIRCENDANGLE, 36000_deg100);
-    rPoolDefaults[SDRATTR_OBJMOVEPROTECT -SDRATTR_START]=new SdrYesNoItem(SDRATTR_OBJMOVEPROTECT, false);
-    rPoolDefaults[SDRATTR_OBJSIZEPROTECT -SDRATTR_START]=new SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, false);
-    rPoolDefaults[SDRATTR_OBJPRINTABLE   -SDRATTR_START]=new SdrObjPrintableItem;
-    rPoolDefaults[SDRATTR_OBJVISIBLE     -SDRATTR_START]=new SdrObjVisibleItem;
-    rPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem(SdrLayerID(0));
-    rPoolDefaults[SDRATTR_LAYERNAME      -SDRATTR_START]=new SdrLayerNameItem;
-    rPoolDefaults[SDRATTR_OBJECTNAME     -SDRATTR_START]=new SfxStringItem(SDRATTR_OBJECTNAME);
-    rPoolDefaults[SDRATTR_ALLPOSITIONX   -SDRATTR_START]=new SdrAllPositionXItem;
-    rPoolDefaults[SDRATTR_ALLPOSITIONY   -SDRATTR_START]=new SdrAllPositionYItem;
-    rPoolDefaults[SDRATTR_ALLSIZEWIDTH   -SDRATTR_START]=new SdrAllSizeWidthItem;
-    rPoolDefaults[SDRATTR_ALLSIZEHEIGHT  -SDRATTR_START]=new SdrAllSizeHeightItem;
-    rPoolDefaults[SDRATTR_ONEPOSITIONX   -SDRATTR_START]=new SdrOnePositionXItem;
-    rPoolDefaults[SDRATTR_ONEPOSITIONY   -SDRATTR_START]=new SdrOnePositionYItem;
-    rPoolDefaults[SDRATTR_ONESIZEWIDTH   -SDRATTR_START]=new SdrOneSizeWidthItem;
-    rPoolDefaults[SDRATTR_ONESIZEHEIGHT  -SDRATTR_START]=new SdrOneSizeHeightItem;
-    rPoolDefaults[SDRATTR_LOGICSIZEWIDTH -SDRATTR_START]=new SdrLogicSizeWidthItem;
-    rPoolDefaults[SDRATTR_LOGICSIZEHEIGHT-SDRATTR_START]=new SdrLogicSizeHeightItem;
-    rPoolDefaults[SDRATTR_ROTATEANGLE    -SDRATTR_START]=new SdrAngleItem(SDRATTR_ROTATEANGLE, 0_deg100);
-    rPoolDefaults[SDRATTR_SHEARANGLE     -SDRATTR_START]=new SdrShearAngleItem;
-    rPoolDefaults[SDRATTR_MOVEX          -SDRATTR_START]=new SdrMoveXItem;
-    rPoolDefaults[SDRATTR_MOVEY          -SDRATTR_START]=new SdrMoveYItem;
-    rPoolDefaults[SDRATTR_RESIZEXONE     -SDRATTR_START]=new SdrResizeXOneItem;
-    rPoolDefaults[SDRATTR_RESIZEYONE     -SDRATTR_START]=new SdrResizeYOneItem;
-    rPoolDefaults[SDRATTR_ROTATEONE      -SDRATTR_START]=new SdrRotateOneItem;
-    rPoolDefaults[SDRATTR_HORZSHEARONE   -SDRATTR_START]=new SdrHorzShearOneItem;
-    rPoolDefaults[SDRATTR_VERTSHEARONE   -SDRATTR_START]=new SdrVertShearOneItem;
-    rPoolDefaults[SDRATTR_RESIZEXALL     -SDRATTR_START]=new SdrResizeXAllItem;
-    rPoolDefaults[SDRATTR_RESIZEYALL     -SDRATTR_START]=new SdrResizeYAllItem;
-    rPoolDefaults[SDRATTR_ROTATEALL      -SDRATTR_START]=new SdrRotateAllItem;
-    rPoolDefaults[SDRATTR_HORZSHEARALL   -SDRATTR_START]=new SdrHorzShearAllItem;
-    rPoolDefaults[SDRATTR_VERTSHEARALL   -SDRATTR_START]=new SdrVertShearAllItem;
-    rPoolDefaults[SDRATTR_TRANSFORMREF1X -SDRATTR_START]=new SdrTransformRef1XItem;
-    rPoolDefaults[SDRATTR_TRANSFORMREF1Y -SDRATTR_START]=new SdrTransformRef1YItem;
-    rPoolDefaults[SDRATTR_TRANSFORMREF2X -SDRATTR_START]=new SdrTransformRef2XItem;
-    rPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
-    rPoolDefaults[SDRATTR_TEXTDIRECTION  -SDRATTR_START]=new SvxWritingModeItem(css::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION);
-    rPoolDefaults[ SDRATTR_GRAFRED               - SDRATTR_START] = new SdrGrafRedItem;
-    rPoolDefaults[ SDRATTR_GRAFGREEN         - SDRATTR_START] = new SdrGrafGreenItem;
-    rPoolDefaults[ SDRATTR_GRAFBLUE          - SDRATTR_START] = new SdrGrafBlueItem;
-    rPoolDefaults[ SDRATTR_GRAFLUMINANCE     - SDRATTR_START] = new SdrGrafLuminanceItem;
-    rPoolDefaults[ SDRATTR_GRAFCONTRAST      - SDRATTR_START] = new SdrGrafContrastItem;
-    rPoolDefaults[ SDRATTR_GRAFGAMMA         - SDRATTR_START] = new SdrGrafGamma100Item;
-    rPoolDefaults[ SDRATTR_GRAFTRANSPARENCE  - SDRATTR_START] = new SdrGrafTransparenceItem;
-    rPoolDefaults[ SDRATTR_GRAFINVERT            - SDRATTR_START] = new SdrGrafInvertItem;
-    rPoolDefaults[ SDRATTR_GRAFMODE          - SDRATTR_START] = new SdrGrafModeItem;
-    rPoolDefaults[ SDRATTR_GRAFCROP          - SDRATTR_START] = new SdrGrafCropItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_PERCENT_DIAGONAL - SDRATTR_START ] = new SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, 10);
-    rPoolDefaults[ SDRATTR_3DOBJ_BACKSCALE - SDRATTR_START ] = new SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, 100);
-    rPoolDefaults[ SDRATTR_3DOBJ_DEPTH - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, 1000);
-    rPoolDefaults[ SDRATTR_3DOBJ_HORZ_SEGS - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, 24);
-    rPoolDefaults[ SDRATTR_3DOBJ_VERT_SEGS - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, 24);
-    rPoolDefaults[ SDRATTR_3DOBJ_END_ANGLE - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, 3600);
-    rPoolDefaults[ SDRATTR_3DOBJ_DOUBLE_SIDED - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, false);
-    rPoolDefaults[ SDRATTR_3DOBJ_NORMALS_KIND - SDRATTR_START ] = new Svx3DNormalsKindItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_NORMALS_INVERT - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, false);
-    rPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_X - SDRATTR_START ] = new Svx3DTextureProjectionXItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_Y - SDRATTR_START ] = new Svx3DTextureProjectionYItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_SHADOW_3D - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, false);
-    rPoolDefaults[ SDRATTR_3DOBJ_MAT_COLOR - SDRATTR_START ] = new SvxColorItem(Color(0x0000b8ff), SDRATTR_3DOBJ_MAT_COLOR);
-    rPoolDefaults[ SDRATTR_3DOBJ_MAT_EMISSION - SDRATTR_START ] = new SvxColorItem(Color(0x00000000), SDRATTR_3DOBJ_MAT_EMISSION);
-    rPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR - SDRATTR_START ] = new SvxColorItem(Color(0x00ffffff), SDRATTR_3DOBJ_MAT_SPECULAR);
-    rPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY - SDRATTR_START ] = new SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, 15);
-    rPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_KIND - SDRATTR_START ] = new Svx3DTextureKindItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_MODE - SDRATTR_START ] = new Svx3DTextureModeItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_FILTER - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DOBJ_TEXTURE_FILTER, false);
-    rPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_NORMALS - SDRATTR_START ] = new Svx3DSmoothNormalsItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_LIDS - SDRATTR_START ] = new Svx3DSmoothLidsItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_CHARACTER_MODE - SDRATTR_START ] = new Svx3DCharacterModeItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_CLOSE_FRONT - SDRATTR_START ] = new Svx3DCloseFrontItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_CLOSE_BACK - SDRATTR_START ] = new Svx3DCloseBackItem;
-    rPoolDefaults[ SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY - SDRATTR_START ] = new Svx3DReducedLineGeometryItem;
-    rPoolDefaults[ SDRATTR_3DSCENE_PERSPECTIVE - SDRATTR_START ] = new Svx3DPerspectiveItem;
-    rPoolDefaults[ SDRATTR_3DSCENE_DISTANCE - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, 100);
-    rPoolDefaults[ SDRATTR_3DSCENE_FOCAL_LENGTH - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, 100);
-    rPoolDefaults[ SDRATTR_3DSCENE_TWO_SIDED_LIGHTING - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, false);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_1 - SDRATTR_START ] = new SvxColorItem(Color(ColorTransparency, 0xffcccccc), SDRATTR_3DSCENE_LIGHTCOLOR_1);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_2 - SDRATTR_START ] = new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_2);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_3 - SDRATTR_START ] = new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_3);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_4 - SDRATTR_START ] = new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_4);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_5 - SDRATTR_START ] = new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_5);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_6 - SDRATTR_START ] = new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_6);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_7 - SDRATTR_START ] = new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_7);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_8 - SDRATTR_START ] = new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_8);
-    rPoolDefaults[ SDRATTR_3DSCENE_AMBIENTCOLOR - SDRATTR_START ] = new SvxColorItem(Color(0x00666666), SDRATTR_3DSCENE_AMBIENTCOLOR);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_1 - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_1, true);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_2 - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_2, false);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_3 - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_3, false);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_4 - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_4, false);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_5 - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_5, false);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_6 - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_6, false);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_7 - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_7, false);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_8 - SDRATTR_START ] = new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, false);
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_1 - SDRATTR_START ] = new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, basegfx::B3DVector(0.57735026918963, 0.57735026918963, 0.57735026918963));
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_2 - SDRATTR_START ] = new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, basegfx::B3DVector(0.0,0.0,1.0));
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_3 - SDRATTR_START ] = new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, basegfx::B3DVector(0.0,0.0,1.0));
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_4 - SDRATTR_START ] = new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, basegfx::B3DVector(0.0,0.0,1.0));
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_5 - SDRATTR_START ] = new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, basegfx::B3DVector(0.0,0.0,1.0));
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_6 - SDRATTR_START ] = new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, basegfx::B3DVector(0.0,0.0,1.0));
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_7 - SDRATTR_START ] = new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, basegfx::B3DVector(0.0,0.0,1.0));
-    rPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_8 - SDRATTR_START ] = new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, basegfx::B3DVector(0.0,0.0,1.0));
-    rPoolDefaults[ SDRATTR_3DSCENE_SHADOW_SLANT - SDRATTR_START ] = new SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, 0);
-    rPoolDefaults[ SDRATTR_3DSCENE_SHADE_MODE - SDRATTR_START ] = new Svx3DShadeModeItem;
-    rPoolDefaults[ SDRATTR_CUSTOMSHAPE_ENGINE - SDRATTR_START ] = new SfxStringItem(SDRATTR_CUSTOMSHAPE_ENGINE, "");
-    rPoolDefaults[ SDRATTR_CUSTOMSHAPE_DATA - SDRATTR_START ] = new SfxStringItem(SDRATTR_CUSTOMSHAPE_DATA, "");
-    rPoolDefaults[ SDRATTR_CUSTOMSHAPE_GEOMETRY - SDRATTR_START ] = new SdrCustomShapeGeometryItem;
+            { SDRATTR_CAPTIONTYPE, new SdrCaptionTypeItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONFIXEDANGLE, new SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONANGLE, new SdrCaptionAngleItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONGAP, new SdrCaptionGapItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONESCDIR, new SdrCaptionEscDirItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONESCISREL, new SdrCaptionEscIsRelItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONESCREL, new SdrCaptionEscRelItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONESCABS, new SdrCaptionEscAbsItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONLINELEN, new SdrCaptionLineLenItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CAPTIONFITLINELEN, new SdrCaptionFitLineLenItem, 0, SFX_ITEMINFOFLAG_NONE },
 
-    SvxBoxItem* pboxItem = new SvxBoxItem( SDRATTR_TABLE_BORDER );
-    pboxItem->SetAllDistances( 100 );
-    rPoolDefaults[ SDRATTR_TABLE_BORDER - SDRATTR_START ] = pboxItem;
+            { SDRATTR_CORNER_RADIUS, new SdrMetricItem(SDRATTR_CORNER_RADIUS, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_MINFRAMEHEIGHT, new SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_AUTOGROWHEIGHT, new SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_FITTOSIZE, new SdrTextFitToSizeTypeItem, SID_ATTR_TEXT_FITTOSIZE, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_LEFTDIST, new SdrMetricItem(SDRATTR_TEXT_LEFTDIST, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_RIGHTDIST, new SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_UPPERDIST, new SdrMetricItem(SDRATTR_TEXT_UPPERDIST, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_LOWERDIST, new SdrMetricItem(SDRATTR_TEXT_LOWERDIST, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_VERTADJUST, new SdrTextVertAdjustItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_MAXFRAMEHEIGHT, new SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_MINFRAMEWIDTH, new SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_MAXFRAMEWIDTH, new SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_AUTOGROWWIDTH, new SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_HORZADJUST, new SdrTextHorzAdjustItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_ANIKIND, new SdrTextAniKindItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_ANIDIRECTION, new SdrTextAniDirectionItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_ANISTARTINSIDE, new SdrTextAniStartInsideItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_ANISTOPINSIDE, new SdrTextAniStopInsideItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_ANICOUNT, new SdrTextAniCountItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_ANIDELAY, new SdrTextAniDelayItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_ANIAMOUNT, new SdrTextAniAmountItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_CONTOURFRAME, new SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_XMLATTRIBUTES, new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { SDRATTR_TEXT_USEFIXEDCELLHEIGHT, new SdrTextFixedCellHeightItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_WORDWRAP, new SdrOnOffItem(SDRATTR_TEXT_WORDWRAP, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_CHAINNEXTNAME, new SfxStringItem(SDRATTR_TEXT_CHAINNEXTNAME, ""), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXT_CLIPVERTOVERFLOW, new SdrOnOffItem(SDRATTR_TEXT_CLIPVERTOVERFLOW, false), 0, SFX_ITEMINFOFLAG_NONE },
 
-    SvxBoxInfoItem* pBoxInfoItem = new SvxBoxInfoItem( SDRATTR_TABLE_BORDER_INNER );
+            { SDRATTR_EDGEKIND, new SdrEdgeKindItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGENODE1HORZDIST, new SdrEdgeNode1HorzDistItem(500), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGENODE1VERTDIST, new SdrEdgeNode1VertDistItem(500), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGENODE2HORZDIST, new SdrEdgeNode2HorzDistItem(500), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGENODE2VERTDIST, new SdrEdgeNode2VertDistItem(500), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGENODE1GLUEDIST, new SdrEdgeNode1GlueDistItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGENODE2GLUEDIST, new SdrEdgeNode2GlueDistItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGELINEDELTACOUNT, new SdrEdgeLineDeltaCountItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGELINE1DELTA, new SdrMetricItem(SDRATTR_EDGELINE1DELTA, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGELINE2DELTA, new SdrMetricItem(SDRATTR_EDGELINE2DELTA, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_EDGELINE3DELTA, new SdrMetricItem(SDRATTR_EDGELINE3DELTA, 0), 0, SFX_ITEMINFOFLAG_NONE },
 
-    pBoxInfoItem->SetTable( true );
-    pBoxInfoItem->SetDist( true);        // always show margin field
-    pBoxInfoItem->SetValid( SvxBoxInfoItemValidFlags::DISABLE ); // some lines may have DontCare state only in tables
+            { SDRATTR_MEASUREKIND, new SdrMeasureKindItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURETEXTHPOS, new SdrMeasureTextHPosItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURETEXTVPOS, new SdrMeasureTextVPosItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURELINEDIST, new SdrMetricItem(SDRATTR_MEASURELINEDIST, 800), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREHELPLINEOVERHANG, new SdrMetricItem(SDRATTR_MEASUREHELPLINEOVERHANG, 200), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREHELPLINEDIST, new SdrMetricItem(SDRATTR_MEASUREHELPLINEDIST, 100), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREHELPLINE1LEN, new SdrMetricItem(SDRATTR_MEASUREHELPLINE1LEN, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREHELPLINE2LEN, new SdrMetricItem(SDRATTR_MEASUREHELPLINE2LEN, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREBELOWREFEDGE, new SdrMeasureBelowRefEdgeItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURETEXTROTA90, new SdrMeasureTextRota90Item, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURETEXTUPSIDEDOWN, new SdrMeasureTextUpsideDownItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREOVERHANG, new SdrMeasureOverhangItem(600), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREUNIT, new SdrMeasureUnitItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURESCALE, new SdrMeasureScaleItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURESHOWUNIT, new SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREFORMATSTRING, new SdrMeasureFormatStringItem(), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURETEXTAUTOANGLE, new SdrMeasureTextAutoAngleItem(), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURETEXTAUTOANGLEVIEW, new SdrMeasureTextAutoAngleViewItem(), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURETEXTISFIXEDANGLE, new SdrMeasureTextIsFixedAngleItem(), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASURETEXTFIXEDANGLE, new SdrMeasureTextFixedAngleItem(), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MEASUREDECIMALPLACES, new SdrMeasureDecimalPlacesItem(), 0, SFX_ITEMINFOFLAG_NONE },
 
-    rPoolDefaults[ SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ] =  pBoxInfoItem;
-    rPoolDefaults[ SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR );
-    rPoolDefaults[ SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR );
-    rPoolDefaults[ SDRATTR_TABLE_TEXT_ROTATION - SDRATTR_START ] = new SvxTextRotateItem(0_deg10, SDRATTR_TABLE_TEXT_ROTATION);
-    rPoolDefaults[ SDRATTR_TABLE_CELL_GRABBAG - SDRATTR_START ] = new SfxGrabBagItem(SDRATTR_TABLE_CELL_GRABBAG);
+            { SDRATTR_CIRCKIND, new SdrCircKindItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CIRCSTARTANGLE, new SdrAngleItem(SDRATTR_CIRCSTARTANGLE, 0_deg100), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CIRCENDANGLE, new SdrAngleItem(SDRATTR_CIRCENDANGLE, 36000_deg100), 0, SFX_ITEMINFOFLAG_NONE },
 
-    rPoolDefaults[ SDRATTR_GLOW_RADIUS - SDRATTR_START ] = new SdrMetricItem(SDRATTR_GLOW_RADIUS, 0);
-    rPoolDefaults[ SDRATTR_GLOW_COLOR - SDRATTR_START ] = new XColorItem(SDRATTR_GLOW_COLOR, aNullCol);
-    rPoolDefaults[ SDRATTR_GLOW_TRANSPARENCY - SDRATTR_START ] = new SdrPercentItem(SDRATTR_GLOW_TRANSPARENCY, 0);
+            { SDRATTR_OBJMOVEPROTECT, new SdrYesNoItem(SDRATTR_OBJMOVEPROTECT, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_OBJSIZEPROTECT, new SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_OBJPRINTABLE, new SdrObjPrintableItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_LAYERID, new SdrLayerIdItem(SdrLayerID(0)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_LAYERNAME, new SdrLayerNameItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_OBJECTNAME, new SfxStringItem(SDRATTR_OBJECTNAME), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ALLPOSITIONX, new SdrAllPositionXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ALLPOSITIONY, new SdrAllPositionYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ALLSIZEWIDTH, new SdrAllSizeWidthItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ALLSIZEHEIGHT, new SdrAllSizeHeightItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ONEPOSITIONX, new SdrOnePositionXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ONEPOSITIONY, new SdrOnePositionYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ONESIZEWIDTH, new SdrOneSizeWidthItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ONESIZEHEIGHT, new SdrOneSizeHeightItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_LOGICSIZEWIDTH, new SdrLogicSizeWidthItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_LOGICSIZEHEIGHT, new SdrLogicSizeHeightItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ROTATEANGLE, new SdrAngleItem(SDRATTR_ROTATEANGLE, 0_deg100), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHEARANGLE, new SdrShearAngleItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MOVEX, new SdrMoveXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_MOVEY, new SdrMoveYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_RESIZEXONE, new SdrResizeXOneItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_RESIZEYONE, new SdrResizeYOneItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ROTATEONE, new SdrRotateOneItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_HORZSHEARONE, new SdrHorzShearOneItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_VERTSHEARONE, new SdrVertShearOneItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_RESIZEXALL, new SdrResizeXAllItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_RESIZEYALL, new SdrResizeYAllItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_ROTATEALL, new SdrRotateAllItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_HORZSHEARALL, new SdrHorzShearAllItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_VERTSHEARALL, new SdrVertShearAllItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TRANSFORMREF1X, new SdrTransformRef1XItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TRANSFORMREF1Y, new SdrTransformRef1YItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TRANSFORMREF2X, new SdrTransformRef2XItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TRANSFORMREF2Y, new SdrTransformRef2YItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXTDIRECTION, new SvxWritingModeItem(css::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_OBJVISIBLE, new SdrObjVisibleItem, 0, SFX_ITEMINFOFLAG_NONE },
 
-    rPoolDefaults[SDRATTR_SOFTEDGE_RADIUS - SDRATTR_START] = new SdrMetricItem(SDRATTR_SOFTEDGE_RADIUS, 0);
+            { SDRATTR_GRAFRED, new SdrGrafRedItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFGREEN, new SdrGrafGreenItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFBLUE, new SdrGrafBlueItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFLUMINANCE, new SdrGrafLuminanceItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFCONTRAST, new SdrGrafContrastItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFGAMMA, new SdrGrafGamma100Item, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFTRANSPARENCE, new SdrGrafTransparenceItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFINVERT, new SdrGrafInvertItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFMODE, new SdrGrafModeItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GRAFCROP, new SdrGrafCropItem, SID_ATTR_GRAF_CROP, SFX_ITEMINFOFLAG_NONE },
 
-    rPoolDefaults[SDRATTR_TEXTCOLUMNS_NUMBER - SDRATTR_START] = new SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, 1);
-    rPoolDefaults[SDRATTR_TEXTCOLUMNS_SPACING - SDRATTR_START] = new SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, 0);
+            { SDRATTR_3DOBJ_PERCENT_DIAGONAL, new SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, 10), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_BACKSCALE, new SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, 100), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_DEPTH, new SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, 1000), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_HORZ_SEGS, new SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, 24), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_VERT_SEGS, new SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, 24), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_END_ANGLE, new SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, 3600), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_DOUBLE_SIDED, new SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_NORMALS_KIND, new Svx3DNormalsKindItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_NORMALS_INVERT, new SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_TEXTURE_PROJ_X, new Svx3DTextureProjectionXItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_TEXTURE_PROJ_Y, new Svx3DTextureProjectionYItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_SHADOW_3D, new SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_MAT_COLOR, new SvxColorItem(Color(0x0000b8ff), SDRATTR_3DOBJ_MAT_COLOR), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_MAT_EMISSION, new SvxColorItem(Color(0x00000000), SDRATTR_3DOBJ_MAT_EMISSION), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_MAT_SPECULAR, new SvxColorItem(Color(0x00ffffff), SDRATTR_3DOBJ_MAT_SPECULAR), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, new SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, 15), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_TEXTURE_KIND, new Svx3DTextureKindItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_TEXTURE_MODE, new Svx3DTextureModeItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_TEXTURE_FILTER, new SfxBoolItem(SDRATTR_3DOBJ_TEXTURE_FILTER, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_SMOOTH_NORMALS, new Svx3DSmoothNormalsItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_SMOOTH_LIDS, new Svx3DSmoothLidsItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_CHARACTER_MODE, new Svx3DCharacterModeItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_CLOSE_FRONT, new Svx3DCloseFrontItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_CLOSE_BACK, new Svx3DCloseBackItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, new Svx3DReducedLineGeometryItem, 0, SFX_ITEMINFOFLAG_NONE },
 
-    rPoolDefaults[SDRATTR_WRITINGMODE2 - SDRATTR_START] = new SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, SDRATTR_WRITINGMODE2);
+            { SDRATTR_3DSCENE_PERSPECTIVE, new Svx3DPerspectiveItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_DISTANCE, new SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, 100), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_FOCAL_LENGTH, new SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, 100), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, new SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTCOLOR_1, new SvxColorItem(Color(ColorTransparency, 0xffcccccc), SDRATTR_3DSCENE_LIGHTCOLOR_1), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTCOLOR_2, new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_2), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTCOLOR_3, new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_3), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTCOLOR_4, new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_4), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTCOLOR_5, new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_5), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTCOLOR_6, new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_6), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTCOLOR_7, new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_7), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTCOLOR_8, new SvxColorItem(Color(0x00000000), SDRATTR_3DSCENE_LIGHTCOLOR_8), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_AMBIENTCOLOR, new SvxColorItem(Color(0x00666666), SDRATTR_3DSCENE_AMBIENTCOLOR), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTON_1, new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_1, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTON_2, new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_2, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTON_3, new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_3, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTON_4, new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_4, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTON_5, new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_5, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTON_6, new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_6, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTON_7, new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_7, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTON_8, new SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTDIRECTION_1, new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, basegfx::B3DVector(0.57735026918963, 0.57735026918963, 0.57735026918963)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTDIRECTION_2, new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, basegfx::B3DVector(0.0,0.0,1.0)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTDIRECTION_3, new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, basegfx::B3DVector(0.0,0.0,1.0)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTDIRECTION_4, new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, basegfx::B3DVector(0.0,0.0,1.0)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTDIRECTION_5, new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, basegfx::B3DVector(0.0,0.0,1.0)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTDIRECTION_6, new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, basegfx::B3DVector(0.0,0.0,1.0)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTDIRECTION_7, new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, basegfx::B3DVector(0.0,0.0,1.0)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_LIGHTDIRECTION_8, new SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, basegfx::B3DVector(0.0,0.0,1.0)), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_SHADOW_SLANT, new SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_3DSCENE_SHADE_MODE, new Svx3DShadeModeItem, 0, SFX_ITEMINFOFLAG_NONE },
 
-    // set own ItemInfos
-    mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nItemInfoSlotID=SID_ATTR_FILL_SHADOW;
-    mpLocalItemInfos[SDRATTR_SHADOWCOLOR-SDRATTR_START]._nItemInfoSlotID=SID_ATTR_SHADOW_COLOR;
-    mpLocalItemInfos[SDRATTR_SHADOWTRANSPARENCE-SDRATTR_START]._nItemInfoSlotID=SID_ATTR_SHADOW_TRANSPARENCE;
-    mpLocalItemInfos[SDRATTR_SHADOWBLUR-SDRATTR_START]._nItemInfoSlotID=SID_ATTR_SHADOW_BLUR;
-    mpLocalItemInfos[SDRATTR_SHADOWXDIST-SDRATTR_START]._nItemInfoSlotID=SID_ATTR_SHADOW_XDISTANCE;
-    mpLocalItemInfos[SDRATTR_SHADOWYDIST-SDRATTR_START]._nItemInfoSlotID=SID_ATTR_SHADOW_YDISTANCE;
-    mpLocalItemInfos[SDRATTR_TEXT_FITTOSIZE-SDRATTR_START]._nItemInfoSlotID=SID_ATTR_TEXT_FITTOSIZE;
-    mpLocalItemInfos[SDRATTR_GRAFCROP-SDRATTR_START]._nItemInfoSlotID=SID_ATTR_GRAF_CROP;
-    mpLocalItemInfos[SDRATTR_TABLE_BORDER - SDRATTR_START ]._nItemInfoSlotID = SID_ATTR_BORDER_OUTER;
-    mpLocalItemInfos[SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ]._nItemInfoSlotID = SID_ATTR_BORDER_INNER;
-    mpLocalItemInfos[SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ]._nItemInfoSlotID = SID_ATTR_BORDER_DIAG_TLBR;
-    mpLocalItemInfos[SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ]._nItemInfoSlotID = SID_ATTR_BORDER_DIAG_BLTR;
-    mpLocalItemInfos[SDRATTR_GLOW_RADIUS - SDRATTR_START]._nItemInfoSlotID = SID_ATTR_GLOW_RADIUS;
-    mpLocalItemInfos[SDRATTR_GLOW_COLOR - SDRATTR_START]._nItemInfoSlotID = SID_ATTR_GLOW_COLOR;
-    mpLocalItemInfos[SDRATTR_GLOW_TRANSPARENCY - SDRATTR_START]._nItemInfoSlotID = SID_ATTR_GLOW_TRANSPARENCY;
-    mpLocalItemInfos[SDRATTR_SOFTEDGE_RADIUS - SDRATTR_START]._nItemInfoSlotID = SID_ATTR_SOFTEDGE_RADIUS;
-    mpLocalItemInfos[SDRATTR_TEXTCOLUMNS_NUMBER - SDRATTR_START]._nItemInfoSlotID = 0 /*TODO*/;
-    mpLocalItemInfos[SDRATTR_TEXTCOLUMNS_SPACING - SDRATTR_START]._nItemInfoSlotID = 0 /*TODO*/;
-    mpLocalItemInfos[SDRATTR_WRITINGMODE2 - SDRATTR_START]._nItemInfoSlotID = 0 /*TODO*/;
+            { SDRATTR_CUSTOMSHAPE_ENGINE, new SfxStringItem(SDRATTR_CUSTOMSHAPE_ENGINE, ""), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CUSTOMSHAPE_DATA, new SfxStringItem(SDRATTR_CUSTOMSHAPE_DATA, ""), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_CUSTOMSHAPE_GEOMETRY, new SdrCustomShapeGeometryItem, 0, SFX_ITEMINFOFLAG_NONE },
 
-    // it's my own creation level, set Defaults and ItemInfos
-    SetPoolDefaults(mpLocalPoolDefaults);
-    SetItemInfos(mpLocalItemInfos.get());
+            { SDRATTR_TABLE_BORDER, nullptr, SID_ATTR_BORDER_OUTER, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TABLE_BORDER_INNER, nullptr, SID_ATTR_BORDER_INNER, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TABLE_BORDER_TLBR, new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR ), SID_ATTR_BORDER_DIAG_TLBR, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TABLE_BORDER_BLTR, new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR ), SID_ATTR_BORDER_DIAG_BLTR, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TABLE_TEXT_ROTATION, new SvxTextRotateItem(0_deg10, SDRATTR_TABLE_TEXT_ROTATION), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TABLE_CELL_GRABBAG, new SfxGrabBagItem(SDRATTR_TABLE_CELL_GRABBAG), 0, SFX_ITEMINFOFLAG_NONE },
+
+            { SDRATTR_GLOW_RADIUS, new SdrMetricItem(SDRATTR_GLOW_RADIUS, 0), SID_ATTR_GLOW_RADIUS, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GLOW_COLOR, new XColorItem(SDRATTR_GLOW_COLOR, COL_BLACK), SID_ATTR_GLOW_COLOR, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GLOW_TRANSPARENCY, new SdrPercentItem(SDRATTR_GLOW_TRANSPARENCY, 0), SID_ATTR_GLOW_TRANSPARENCY, SFX_ITEMINFOFLAG_NONE },
+
+            { SDRATTR_SOFTEDGE_RADIUS, new SdrMetricItem(SDRATTR_SOFTEDGE_RADIUS, 0), SID_ATTR_SOFTEDGE_RADIUS, SFX_ITEMINFOFLAG_NONE },
+
+            { SDRATTR_TEXTCOLUMNS_NUMBER, new SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, 1), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_TEXTCOLUMNS_SPACING, new SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, 0), 0, SFX_ITEMINFOFLAG_NONE },
+
+            { SDRATTR_WRITINGMODE2, new SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, SDRATTR_WRITINGMODE2), 0, SFX_ITEMINFOFLAG_NONE },
+
+            { SDRATTR_EDGEOOXMLCURVE, new SfxBoolItem(SDRATTR_EDGEOOXMLCURVE, false), 0, SFX_ITEMINFOFLAG_NONE }
+        }};
+
+    public:
+        ItemInfoPackageSdr()
+        {
+            SvxBoxItem* pboxItem(new SvxBoxItem(SDRATTR_TABLE_BORDER));
+            pboxItem->SetAllDistances(100);
+            setItemAtItemInfoStatic(pboxItem, maItemInfos[SDRATTR_TABLE_BORDER - SDRATTR_START]);
+
+            SvxBoxInfoItem* pBoxInfoItem = new SvxBoxInfoItem(SDRATTR_TABLE_BORDER_INNER);
+            pBoxInfoItem->SetTable(true);
+            pBoxInfoItem->SetDist(true); // always show margin field
+            // some lines may have DontCare state only in tables
+            pBoxInfoItem->SetValid(SvxBoxInfoItemValidFlags::DISABLE);
+            setItemAtItemInfoStatic(pBoxInfoItem, maItemInfos[SDRATTR_TABLE_BORDER_INNER - SDRATTR_START]);
+        }
+
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& rPool) override
+        {
+            const ItemInfo& rRetval(maItemInfos[nIndex]);
+
+            // return immediately if we have the static entry and Item
+            if (nullptr != rRetval.getItem())
+                return rRetval;
+
+            if (XATTRSET_LINE == rRetval.getWhich())
+                return *new ItemInfoDynamic(rRetval, new XLineAttrSetItem(SfxItemSetFixed<XATTR_LINE_FIRST, XATTR_LINE_LAST>(rPool)));
+
+            if (XATTRSET_FILL == rRetval.getWhich())
+                return *new ItemInfoDynamic(rRetval, new XFillAttrSetItem(SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>(rPool)));
+
+            if (XATTR_FILLBITMAP == rRetval.getWhich())
+                return *new ItemInfoDynamic(rRetval, new XFillBitmapItem(Graphic()));
+
+            // return in any case
+            return rRetval;
+        }
+    };
+
+    static std::unique_ptr<ItemInfoPackageSdr> g_aItemInfoPackageSdr;
+    if (!g_aItemInfoPackageSdr)
+        g_aItemInfoPackageSdr.reset(new ItemInfoPackageSdr);
+    return *g_aItemInfoPackageSdr;
 }
 
-// copy ctor, so that static defaults are cloned
-//            (Parameter 2 = sal_True)
+SdrItemPool::SdrItemPool(SfxItemPool* _pMaster)
+: SfxItemPool("SdrItemPool")
+{
+    // registerItemInfoPackage(getItemInfoPackageXOutdev());
+    registerItemInfoPackage(getItemInfoPackageSdr());
+
+    // get master pointer, evtl. add myself to the end of the pools
+    if(nullptr != _pMaster)
+    {
+        _pMaster->GetLastPoolInChain()->SetSecondaryPool(this);
+    }
+}
+
 SdrItemPool::SdrItemPool(const SdrItemPool& rPool)
-:   XOutdevItemPool(rPool)
+: SfxItemPool(rPool)
 {
 }
 
@@ -394,6 +508,7 @@ SdrItemPool::~SdrItemPool()
 {
     // split pools before destroying
     SetSecondaryPool(nullptr);
+    sendShutdownHint();
 }
 
 bool SdrItemPool::GetPresentation(
@@ -412,7 +527,8 @@ bool SdrItemPool::GetPresentation(
             return true;
         }
     }
-    return XOutdevItemPool::GetPresentation(rItem,ePresentationMetric,rText,rIntlWrapper);
+
+    return SfxItemPool::GetPresentation(rItem,ePresentationMetric,rText,rIntlWrapper);
 }
 
 OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)

@@ -260,187 +260,244 @@ WhichRangesContainer const aPgFrameFormatSetRange(svl::Items<
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
 >);
 
-// create table for accessing default format attributes
-SwDfltAttrTab aAttrTab( POOLATTR_END - POOLATTR_BEGIN, nullptr );
-
-SfxItemInfo aSlotTab[] =
+SwFormatField* createSwFormatFieldForItemInfoPackage(sal_uInt16 nWhich)
 {
-    // _nItemInfoSlotID, _nItemInfoFlags
-    { SID_ATTR_CHAR_CASEMAP,            SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CASEMAP
-    { SID_ATTR_CHAR_CHARSETCOLOR,       SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CHARSETCOLOR
-    { SID_ATTR_CHAR_COLOR,              SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_COLOR
-    { SID_ATTR_CHAR_CONTOUR,            SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CONTOUR
-    { SID_ATTR_CHAR_STRIKEOUT,          SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CROSSEDOUT
-    { SID_ATTR_CHAR_ESCAPEMENT,         SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_ESCAPEMENT
-    { SID_ATTR_CHAR_FONT,               SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_FONT
-    { SID_ATTR_CHAR_FONTHEIGHT,         SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_FONTSIZE
-    { SID_ATTR_CHAR_KERNING,            SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_KERNING
-    { SID_ATTR_CHAR_LANGUAGE,           SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_LANGUAGE
-    { SID_ATTR_CHAR_POSTURE,            SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_POSTURE
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_UNUSED1
-    { SID_ATTR_CHAR_SHADOWED,           SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_SHADOWED
-    { SID_ATTR_CHAR_UNDERLINE,          SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_UNDERLINE
-    { SID_ATTR_CHAR_WEIGHT,             SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_WEIGHT
-    { SID_ATTR_CHAR_WORDLINEMODE,       SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_WORDLINEMODE
-    { SID_ATTR_CHAR_AUTOKERN,           SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_AUTOKERN
-    { SID_ATTR_FLASH,                   SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_BLINK
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_UNUSED2
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_NOHYPHEN
-    { SID_ATTR_BRUSH_CHAR,              SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_BACKGROUND
-    { SID_ATTR_CHAR_CJK_FONT,           SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_CJK_FONT
-    { SID_ATTR_CHAR_CJK_FONTHEIGHT,     SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CJK_FONTSIZE
-    { SID_ATTR_CHAR_CJK_LANGUAGE,       SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CJK_LANGUAGE
-    { SID_ATTR_CHAR_CJK_POSTURE,        SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CJK_POSTURE
-    { SID_ATTR_CHAR_CJK_WEIGHT,         SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CJK_WEIGHT
-    { SID_ATTR_CHAR_CTL_FONT,           SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_CTL_FONT
-    { SID_ATTR_CHAR_CTL_FONTHEIGHT,     SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CTL_FONTSIZE
-    { SID_ATTR_CHAR_CTL_LANGUAGE,       SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CTL_LANGUAGE
-    { SID_ATTR_CHAR_CTL_POSTURE,        SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CTL_POSTURE
-    { SID_ATTR_CHAR_CTL_WEIGHT,         SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_CTL_WEIGHT
-    { SID_ATTR_CHAR_ROTATED,            SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_ROTATE
-    { SID_ATTR_CHAR_EMPHASISMARK,       SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_EMPHASIS_MARK
-    { SID_ATTR_CHAR_TWO_LINES,          SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_TWO_LINES
-    { SID_ATTR_CHAR_SCALEWIDTH,         SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_SCALEW
-    { SID_ATTR_CHAR_RELIEF,             SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_RELIEF
-    { SID_ATTR_CHAR_HIDDEN,             SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_HIDDEN
-    { SID_ATTR_CHAR_OVERLINE,           SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_OVERLINE
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_RSID
-    { SID_ATTR_CHAR_BOX,                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_BOX
-    { SID_ATTR_CHAR_SHADOW,             SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_SHADOW
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_CHRATR_HIGHLIGHT
-    { SID_ATTR_CHAR_GRABBAG,            SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_GRABBAG
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_BIDIRTL
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_CHRATR_IDCTHINT
+    return new SwFormatField(nWhich);
+}
 
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // RES_TXTATR_REFMARK
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // RES_TXTATR_TOXMARK
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_TXTATR_META
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_TXTATR_METAFIELD
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_TXTATR_AUTOFMT
-    { FN_TXTATR_INET,                   SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // RES_TXTATR_INETFMT
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_TXTATR_CHARFMT
-    { SID_ATTR_CHAR_CJK_RUBY,           SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // RES_TXTATR_CJK_RUBY
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_TXTATR_UNKNOWN_CONTAINER
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // RES_TXTATR_INPUTFIELD
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_TXTATR_CONTENTCONTROL
+SwTOXMark* createSwTOXMarkForItemInfoPackage()
+{
+    return new SwTOXMark();
+}
 
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // RES_TXTATR_FIELD
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_TXTATR_FLYCNT
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_TXTATR_FTN
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_TXTATR_ANNOTATION
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_TXTATR_LINEBREAK
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_TXTATR_DUMMY1
+ItemInfoPackage& getItemInfoPackageSwAttributes()
+{
+    class ItemInfoPackageSwAttributes : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, POOLATTR_END - POOLATTR_BEGIN> ItemInfoArrayWriter;
+        ItemInfoArrayWriter maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { RES_CHRATR_CASEMAP, new SvxCaseMapItem( SvxCaseMap::NotMapped, RES_CHRATR_CASEMAP), SID_ATTR_CHAR_CASEMAP, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CHARSETCOLOR, new SvxColorItem(RES_CHRATR_CHARSETCOLOR), SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_COLOR, new SvxColorItem(RES_CHRATR_COLOR), SID_ATTR_CHAR_COLOR, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_CONTOUR, new SvxContourItem( false, RES_CHRATR_CONTOUR ), SID_ATTR_CHAR_CONTOUR, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CROSSEDOUT, new SvxCrossedOutItem( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ), SID_ATTR_CHAR_STRIKEOUT, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_ESCAPEMENT, new SvxEscapementItem( RES_CHRATR_ESCAPEMENT ), SID_ATTR_CHAR_ESCAPEMENT, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_FONT, nullptr, SID_ATTR_CHAR_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_FONTSIZE, new SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE ), SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_KERNING, new SvxKerningItem( 0, RES_CHRATR_KERNING ), SID_ATTR_CHAR_KERNING, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_LANGUAGE, new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_LANGUAGE ), SID_ATTR_CHAR_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_POSTURE, new SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE ), SID_ATTR_CHAR_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_UNUSED1, new SfxVoidItem( RES_CHRATR_UNUSED1 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_SHADOWED, new SvxShadowedItem( false, RES_CHRATR_SHADOWED ), SID_ATTR_CHAR_SHADOWED, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_UNDERLINE, new SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE ), SID_ATTR_CHAR_UNDERLINE, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_WEIGHT, new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT ), SID_ATTR_CHAR_WEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_WORDLINEMODE, new SvxWordLineModeItem( false, RES_CHRATR_WORDLINEMODE ), SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_AUTOKERN, new SvxAutoKernItem( false, RES_CHRATR_AUTOKERN ), SID_ATTR_CHAR_AUTOKERN, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_BLINK, new SvxBlinkItem( false, RES_CHRATR_BLINK ), SID_ATTR_FLASH, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_NOHYPHEN, new SvxNoHyphenItem( false, RES_CHRATR_NOHYPHEN ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_UNUSED2, new SfxVoidItem( RES_CHRATR_UNUSED2 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_BACKGROUND, new SvxBrushItem( RES_CHRATR_BACKGROUND ), SID_ATTR_BRUSH_CHAR, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
 
-    { SID_ATTR_PARA_LINESPACE,          SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_LINESPACING
-    { SID_ATTR_PARA_ADJUST,             SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_ADJUST
-    { SID_ATTR_PARA_SPLIT,              SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_SPLIT
-    { SID_ATTR_PARA_ORPHANS,            SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_ORPHANS
-    { SID_ATTR_PARA_WIDOWS,             SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_WIDOWS
-    { SID_ATTR_TABSTOP,                 SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },  // RES_PARATR_TABSTOP
-    { SID_ATTR_PARA_HYPHENZONE,         SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_HYPHENZONE
-    { FN_FORMAT_DROPCAPS,               SFX_ITEMINFOFLAG_NONE  }, // RES_PARATR_DROP
-    { SID_ATTR_PARA_REGISTER,           SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_REGISTER
-    { SID_ATTR_PARA_NUMRULE,            SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_NUMRULE
-    { SID_ATTR_PARA_SCRIPTSPACE,        SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_SCRIPTSPACE
-    { SID_ATTR_PARA_HANGPUNCTUATION,    SFX_ITEMINFOFLAG_NONE  },  // RES_PARATR_HANGINGPUNCTUATION
+            // CJK-Attributes
+            { RES_CHRATR_CJK_FONT, nullptr, SID_ATTR_CHAR_CJK_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_CJK_FONTSIZE, new SvxFontHeightItem( 240, 100, RES_CHRATR_CJK_FONTSIZE ), SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CJK_LANGUAGE, new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_CJK_LANGUAGE), SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CJK_POSTURE, new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CJK_POSTURE ), SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CJK_WEIGHT, new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT ), SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEMINFOFLAG_NONE },
 
-    { SID_ATTR_PARA_FORBIDDEN_RULES,    SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_FORBIDDEN_RULES
-    { SID_PARA_VERTALIGN,               SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_VERTALIGN
-    { SID_ATTR_PARA_SNAPTOGRID,         SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_SNAPTOGRID
-    { SID_ATTR_BORDER_CONNECT,          SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_CONNECT_BORDER
+            // CTL-Attributes
+            { RES_CHRATR_CTL_FONT, nullptr, SID_ATTR_CHAR_CTL_FONT, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_CTL_FONTSIZE, new SvxFontHeightItem(  240, 100,  RES_CHRATR_CTL_FONTSIZE ), SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CTL_LANGUAGE, new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_CTL_LANGUAGE), SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CTL_POSTURE, new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CTL_POSTURE ), SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_CTL_WEIGHT, new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ), SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEMINFOFLAG_NONE },
 
-    { SID_ATTR_PARA_OUTLINE_LEVEL,      SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_OUTLINELEVEL //#outline level
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_RSID
-    { SID_ATTR_PARA_GRABBAG,            SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_GRABBAG
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_LIST_ID
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_LIST_LEVEL
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_LIST_ISRESTART
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_LIST_RESTARTVALUE
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_LIST_ISCOUNTED
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_PARATR_LIST_AUTOFMT
+            { RES_CHRATR_ROTATE, new SvxCharRotateItem( 0_deg10, false, RES_CHRATR_ROTATE ), SID_ATTR_CHAR_ROTATED, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_EMPHASIS_MARK, new SvxEmphasisMarkItem( FontEmphasisMark::NONE, RES_CHRATR_EMPHASIS_MARK ), SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_TWO_LINES, new SvxTwoLinesItem( false, 0, 0, RES_CHRATR_TWO_LINES ), SID_ATTR_CHAR_TWO_LINES, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_SCALEW, new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW ), SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_RELIEF, new SvxCharReliefItem( FontRelief::NONE, RES_CHRATR_RELIEF ), SID_ATTR_CHAR_RELIEF, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_HIDDEN, new SvxCharHiddenItem( false, RES_CHRATR_HIDDEN ), SID_ATTR_CHAR_HIDDEN, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_OVERLINE, new SvxOverlineItem( LINESTYLE_NONE, RES_CHRATR_OVERLINE ), SID_ATTR_CHAR_OVERLINE, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_RSID, new SvxRsidItem( 0, RES_CHRATR_RSID ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_BOX, new SvxBoxItem( RES_CHRATR_BOX ), SID_ATTR_CHAR_BOX, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_SHADOW, new SvxShadowItem( RES_CHRATR_SHADOW ), SID_ATTR_CHAR_SHADOW, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_HIGHLIGHT, new SvxBrushItem( RES_CHRATR_HIGHLIGHT ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_GRABBAG, new SfxGrabBagItem( RES_CHRATR_GRABBAG ), SID_ATTR_CHAR_GRABBAG, SFX_ITEMINFOFLAG_NONE },
 
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_FILL_ORDER
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_FRM_SIZE
-    { SID_ATTR_PAGE_PAPERBIN,           SFX_ITEMINFOFLAG_NONE },  // RES_PAPER_BIN
-    { SID_ATTR_PARA_FIRSTLINESPACE,     SFX_ITEMINFOFLAG_NONE },  // RES_MARGIN_FIRSTLINE
-    { SID_ATTR_PARA_LEFTSPACE,          SFX_ITEMINFOFLAG_NONE },  // RES_MARGIN_TEXTLEFT
-    { SID_ATTR_PARA_RIGHTSPACE,         SFX_ITEMINFOFLAG_NONE },  // RES_MARGIN_RIGHT
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_MARGIN_LEFT
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_MARGIN_GUTTER
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_MARGIN_GUTTER_RIGHT
-    { SID_ATTR_LRSPACE,                 SFX_ITEMINFOFLAG_NONE },  // RES_LR_SPACE
-    { SID_ATTR_ULSPACE,                 SFX_ITEMINFOFLAG_NONE },  // RES_UL_SPACE
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // RES_PAGEDESC
-    { SID_ATTR_PARA_PAGEBREAK,          SFX_ITEMINFOFLAG_NONE },  // RES_BREAK
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_CNTNT
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_HEADER
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_FOOTER
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_PRINT
-    { FN_OPAQUE,                        SFX_ITEMINFOFLAG_NONE },  // RES_OPAQUE
-    { FN_SET_PROTECT,                   SFX_ITEMINFOFLAG_NONE },  // RES_PROTECT
-    { FN_SURROUND,                      SFX_ITEMINFOFLAG_NONE },  // RES_SURROUND
-    { FN_VERT_ORIENT,                   SFX_ITEMINFOFLAG_NONE },  // RES_VERT_ORIENT
-    { FN_HORI_ORIENT,                   SFX_ITEMINFOFLAG_NONE },  // RES_HORI_ORIENT
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_ANCHOR
-    { SID_ATTR_BRUSH,                   SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_BACKGROUND
-    { SID_ATTR_BORDER_OUTER,            SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_BOX
-    { SID_ATTR_BORDER_SHADOW,           SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_SHADOW
-    { SID_ATTR_MACROITEM,               SFX_ITEMINFOFLAG_NONE },  // RES_FRMMACRO
-    { FN_ATTR_COLUMNS,                  SFX_ITEMINFOFLAG_NONE },  // RES_COL
-    { SID_ATTR_PARA_KEEP,               SFX_ITEMINFOFLAG_NONE },  // RES_KEEP
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },  // RES_URL
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_EDIT_IN_READONLY
+            // CharacterAttr - MSWord weak char direction/script override emulation
+            { RES_CHRATR_BIDIRTL, new SfxInt16Item( RES_CHRATR_BIDIRTL, sal_Int16(-1) ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHRATR_IDCTHINT, new SfxInt16Item( RES_CHRATR_IDCTHINT, sal_Int16(-1) ), 0, SFX_ITEMINFOFLAG_NONE },
 
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_LAYOUT_SPLIT
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_CHAIN
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_TEXTGRID
-    { FN_FORMAT_LINENUMBER,             SFX_ITEMINFOFLAG_NONE },  // RES_LINENUMBER
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_FTN_AT_TXTEND
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_END_AT_TXTEND
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_COLUMNBALANCE
+            { RES_TXTATR_REFMARK, new SwFormatRefMark( OUString() ),  0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_TXTATR_TOXMARK, createSwTOXMarkForItemInfoPackage(),  0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_TXTATR_META, SwFormatMeta::CreatePoolDefault(RES_TXTATR_META),  0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TXTATR_METAFIELD, SwFormatMeta::CreatePoolDefault(RES_TXTATR_METAFIELD),  0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TXTATR_AUTOFMT, new SwFormatAutoFormat,  0, SFX_ITEMINFOFLAG_NONE },
 
-    { SID_ATTR_FRAMEDIRECTION,          SFX_ITEMINFOFLAG_NONE },  // RES_FRAMEDIR
+            // We cannot yet create the SwFormatINetFormat, that would crash since SW_MOD
+            // is not initialized and the translated ressource strings would not be available.
+            // Luckily this mechanism allows to also flag this ItemInfo as 'incomplete' using
+            // a nullptr as ItemPtr and implementing on-demand creation, see ::getItemInfo
+            { RES_TXTATR_INETFMT, nullptr,  FN_TXTATR_INET, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
 
-    { SID_ATTR_HDFT_DYNAMIC_SPACING,    SFX_ITEMINFOFLAG_NONE },  // RES_HEADER_FOOTER_EAT_SPACING
-    { FN_TABLE_ROW_SPLIT,               SFX_ITEMINFOFLAG_NONE },  // RES_ROW_SPLIT
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_FLY_SPLIT
-    // #i18732# - use slot-id define in svx
-    { SID_SW_FOLLOW_TEXT_FLOW,          SFX_ITEMINFOFLAG_NONE },  // RES_FOLLOW_TEXT_FLOW
-    // #i29550#
-    { SID_SW_COLLAPSING_BORDERS,        SFX_ITEMINFOFLAG_NONE },  // RES_COLLAPSING_BORDERS
-    // #i28701#
-    { SID_SW_WRAP_INFLUENCE_ON_OBJPOS,  SFX_ITEMINFOFLAG_NONE },  // RES_WRAP_INFLUENCE_ON_OBJPOS
-    { 0,                                SFX_ITEMINFOFLAG_NONE }, // RES_AUTO_STYLE
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_FRMATR_STYLE_NAME
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_FRMATR_CONDITIONAL_STYLE_NAME
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_FRMATR_GRABBAG
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_TEXT_VERT_ADJUST
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_BACKGROUND_FULL_SIZE
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_RTL_GUTTER
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_DECORATIVE
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_WRAP_TEXT_AT_FLY_START
+            { RES_TXTATR_CHARFMT, new SwFormatCharFormat( nullptr ),  0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TXTATR_CJK_RUBY, new SwFormatRuby( OUString() ),  SID_ATTR_CHAR_CJK_RUBY, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_TXTATR_UNKNOWN_CONTAINER, new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER ),  0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_TXTATR_INPUTFIELD, createSwFormatFieldForItemInfoPackage( RES_TXTATR_INPUTFIELD ),  0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_TXTATR_CONTENTCONTROL, new SwFormatContentControl( RES_TXTATR_CONTENTCONTROL ),  0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TXTATR_FIELD, createSwFormatFieldForItemInfoPackage( RES_TXTATR_FIELD ),  0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_TXTATR_FLYCNT, new SwFormatFlyCnt( nullptr ),  0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TXTATR_FTN, new SwFormatFootnote,  0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TXTATR_ANNOTATION, createSwFormatFieldForItemInfoPackage( RES_TXTATR_ANNOTATION ),  0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TXTATR_LINEBREAK, new SwFormatLineBreak(SwLineBreakClear::NONE),  0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TXTATR_DUMMY1, new SfxBoolItem( RES_TXTATR_DUMMY1 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_LINESPACING, new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING ), SID_ATTR_PARA_LINESPACE, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_ADJUST, new SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ), SID_ATTR_PARA_ADJUST, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_SPLIT, new SvxFormatSplitItem( true, RES_PARATR_SPLIT ), SID_ATTR_PARA_SPLIT, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_ORPHANS, new SvxOrphansItem( 0, RES_PARATR_ORPHANS ), SID_ATTR_PARA_ORPHANS, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_WIDOWS, new SvxWidowsItem( 0, RES_PARATR_WIDOWS ), SID_ATTR_PARA_WIDOWS, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_TABSTOP, new SvxTabStopItem( 1, SVX_TAB_DEFDIST, SvxTabAdjust::Default, RES_PARATR_TABSTOP ), SID_ATTR_TABSTOP, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
 
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_MIRRORGRF
-    { SID_ATTR_GRAF_CROP,               SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_CROPGRF
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_ROTATION,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_LUMINANCE,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_CONTRAST,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_CHANNELR,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_CHANNELG,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_CHANNELB,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_GAMMA,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_INVERT,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_TRANSPARENCY,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_DUMMY4,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_DUMMY5,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_GRFATR_DUMMY6,
+            // for this at the Item GetMaxHyphens() = 0 was called, do this now on-demand at construction time
+            // it willl get added in costructor below once for LO runtime as static default
+            { RES_PARATR_HYPHENZONE, nullptr, SID_ATTR_PARA_HYPHENZONE, SFX_ITEMINFOFLAG_NONE  },
 
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_BOXATR_FORMAT
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }, // RES_BOXATR_FORMULA,
-    { 0,                                SFX_ITEMINFOFLAG_NONE },  // RES_BOXATR_VALUE
+            { RES_PARATR_DROP, new SwFormatDrop, FN_FORMAT_DROPCAPS, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_REGISTER, new SwRegisterItem( false ), SID_ATTR_PARA_REGISTER, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_NUMRULE, new SwNumRuleItem( OUString() ), SID_ATTR_PARA_NUMRULE, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_SCRIPTSPACE, new SvxScriptSpaceItem( true, RES_PARATR_SCRIPTSPACE ), SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_HANGINGPUNCTUATION, new SvxHangingPunctuationItem( true, RES_PARATR_HANGINGPUNCTUATION ), SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEMINFOFLAG_NONE  },
+            { RES_PARATR_FORBIDDEN_RULES, new SvxForbiddenRuleItem( true, RES_PARATR_FORBIDDEN_RULES ), SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_VERTALIGN, new SvxParaVertAlignItem( SvxParaVertAlignItem::Align::Automatic, RES_PARATR_VERTALIGN ), SID_PARA_VERTALIGN, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_SNAPTOGRID, new SvxParaGridItem( true, RES_PARATR_SNAPTOGRID ), SID_ATTR_PARA_SNAPTOGRID, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_CONNECT_BORDER, new SwParaConnectBorderItem, SID_ATTR_BORDER_CONNECT, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_OUTLINELEVEL, new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 ), SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_RSID, new SvxRsidItem( 0, RES_PARATR_RSID ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_GRABBAG, new SfxGrabBagItem( RES_PARATR_GRABBAG ), SID_ATTR_PARA_GRABBAG, SFX_ITEMINFOFLAG_NONE },
 
-    { 0,                                SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }   // RES_UNKNOWNATR_CONTAINER
-};
+            { RES_PARATR_LIST_ID, new SfxStringItem( RES_PARATR_LIST_ID, OUString() ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_LIST_LEVEL, new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_LIST_ISRESTART, new SfxBoolItem( RES_PARATR_LIST_ISRESTART, false ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_LIST_RESTARTVALUE, new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_LIST_ISCOUNTED, new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, true ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PARATR_LIST_AUTOFMT, new SwFormatAutoFormat(RES_PARATR_LIST_AUTOFMT), 0, SFX_ITEMINFOFLAG_NONE },
+
+            { RES_FILL_ORDER, new SwFormatFillOrder, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FRM_SIZE, new SwFormatFrameSize, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PAPER_BIN, new SvxPaperBinItem( RES_PAPER_BIN ), SID_ATTR_PAGE_PAPERBIN, SFX_ITEMINFOFLAG_NONE },
+            { RES_MARGIN_FIRSTLINE, new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE), SID_ATTR_PARA_FIRSTLINESPACE, SFX_ITEMINFOFLAG_NONE },
+            { RES_MARGIN_TEXTLEFT, new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT), SID_ATTR_PARA_LEFTSPACE, SFX_ITEMINFOFLAG_NONE },
+            { RES_MARGIN_RIGHT, new SvxRightMarginItem(RES_MARGIN_RIGHT), SID_ATTR_PARA_RIGHTSPACE, SFX_ITEMINFOFLAG_NONE },
+            { RES_MARGIN_LEFT, new SvxLeftMarginItem(RES_MARGIN_LEFT), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_MARGIN_GUTTER, new SvxGutterLeftMarginItem(RES_MARGIN_GUTTER), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_MARGIN_GUTTER_RIGHT, new SvxGutterRightMarginItem(RES_MARGIN_GUTTER_RIGHT), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_LR_SPACE, new SvxLRSpaceItem( RES_LR_SPACE ), SID_ATTR_LRSPACE, SFX_ITEMINFOFLAG_NONE },
+            { RES_UL_SPACE, new SvxULSpaceItem( RES_UL_SPACE ), SID_ATTR_ULSPACE, SFX_ITEMINFOFLAG_NONE },
+            { RES_PAGEDESC, new SwFormatPageDesc, 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_BREAK, new SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK), SID_ATTR_PARA_PAGEBREAK, SFX_ITEMINFOFLAG_NONE },
+            { RES_CNTNT, new SwFormatContent, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_HEADER, new SwFormatHeader, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FOOTER, new SwFormatFooter, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_PRINT, new SvxPrintItem( RES_PRINT ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_OPAQUE, new SvxOpaqueItem( RES_OPAQUE ), FN_OPAQUE, SFX_ITEMINFOFLAG_NONE },
+            { RES_PROTECT, new SvxProtectItem( RES_PROTECT ), FN_SET_PROTECT, SFX_ITEMINFOFLAG_NONE },
+            { RES_SURROUND, new SwFormatSurround, FN_SURROUND, SFX_ITEMINFOFLAG_NONE },
+            { RES_VERT_ORIENT, new SwFormatVertOrient, FN_VERT_ORIENT, SFX_ITEMINFOFLAG_NONE },
+            { RES_HORI_ORIENT, new SwFormatHoriOrient, FN_HORI_ORIENT, SFX_ITEMINFOFLAG_NONE },
+            { RES_ANCHOR, new SwFormatAnchor, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_BACKGROUND, new SvxBrushItem( RES_BACKGROUND ), SID_ATTR_BRUSH, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_BOX, new SvxBoxItem( RES_BOX ), SID_ATTR_BORDER_OUTER, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_SHADOW, new SvxShadowItem( RES_SHADOW ), SID_ATTR_BORDER_SHADOW, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_FRMMACRO, new SvxMacroItem( RES_FRMMACRO ), SID_ATTR_MACROITEM, SFX_ITEMINFOFLAG_NONE },
+            { RES_COL, new SwFormatCol, FN_ATTR_COLUMNS, SFX_ITEMINFOFLAG_NONE },
+            { RES_KEEP, new SvxFormatKeepItem( false, RES_KEEP ), SID_ATTR_PARA_KEEP, SFX_ITEMINFOFLAG_NONE },
+            { RES_URL, new SwFormatURL(), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_EDIT_IN_READONLY, new SwFormatEditInReadonly, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_LAYOUT_SPLIT, new SwFormatLayoutSplit, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_CHAIN, new SwFormatChain, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TEXTGRID, new SwTextGridItem, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_LINENUMBER, new SwFormatLineNumber, FN_FORMAT_LINENUMBER, SFX_ITEMINFOFLAG_NONE },
+            { RES_FTN_AT_TXTEND, new SwFormatFootnoteAtTextEnd, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_END_AT_TXTEND, new SwFormatEndAtTextEnd, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_COLUMNBALANCE, new SwFormatNoBalancedColumns, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FRAMEDIR, new SvxFrameDirectionItem( SvxFrameDirection::Environment, RES_FRAMEDIR ), SID_ATTR_FRAMEDIRECTION, SFX_ITEMINFOFLAG_NONE },
+            { RES_HEADER_FOOTER_EAT_SPACING, new SwHeaderAndFooterEatSpacingItem, SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEMINFOFLAG_NONE },
+            { RES_ROW_SPLIT, new SwFormatRowSplit, FN_TABLE_ROW_SPLIT, SFX_ITEMINFOFLAG_NONE },
+            { RES_FLY_SPLIT, new SwFormatFlySplit, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FOLLOW_TEXT_FLOW, new SwFormatFollowTextFlow(false), SID_SW_FOLLOW_TEXT_FLOW, SFX_ITEMINFOFLAG_NONE },
+            { RES_COLLAPSING_BORDERS, new SfxBoolItem( RES_COLLAPSING_BORDERS, false ), SID_SW_COLLAPSING_BORDERS, SFX_ITEMINFOFLAG_NONE },
+            { RES_WRAP_INFLUENCE_ON_OBJPOS, new SwFormatWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT ), SID_SW_WRAP_INFLUENCE_ON_OBJPOS, SFX_ITEMINFOFLAG_NONE },
+            { RES_AUTO_STYLE, new SwFormatAutoFormat( RES_AUTO_STYLE ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FRMATR_STYLE_NAME, new SfxStringItem( RES_FRMATR_STYLE_NAME, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FRMATR_CONDITIONAL_STYLE_NAME, new SfxStringItem( RES_FRMATR_CONDITIONAL_STYLE_NAME, OUString() ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_FRMATR_GRABBAG, new SfxGrabBagItem(RES_FRMATR_GRABBAG), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_TEXT_VERT_ADJUST, new SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP,RES_TEXT_VERT_ADJUST), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_BACKGROUND_FULL_SIZE, new SfxBoolItem(RES_BACKGROUND_FULL_SIZE, true), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_RTL_GUTTER, new SfxBoolItem(RES_RTL_GUTTER, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_DECORATIVE, new SfxBoolItem(RES_DECORATIVE, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_WRAP_TEXT_AT_FLY_START, new SwFormatWrapTextAtFlyStart, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_MIRRORGRF, new SwMirrorGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_CROPGRF, new SwCropGrf, SID_ATTR_GRAF_CROP, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_ROTATION, new SwRotationGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_LUMINANCE, new SwLuminanceGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_CONTRAST, new SwContrastGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_CHANNELR, new SwChannelRGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_CHANNELG, new SwChannelGGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_CHANNELB, new SwChannelBGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_GAMMA, new SwGammaGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_INVERT, new SwInvertGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_TRANSPARENCY, new SwTransparencyGrf, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_DRAWMODE, new SwDrawModeGrf, 0, SFX_ITEMINFOFLAG_NONE },
+
+            // GraphicAttr - Dummies
+            { RES_GRFATR_DUMMY4, new SfxBoolItem( RES_GRFATR_DUMMY4 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_GRFATR_DUMMY5, new SfxBoolItem( RES_GRFATR_DUMMY5 ), 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_BOXATR_FORMAT, new SwTableBoxNumFormat, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_BOXATR_FORMULA, new SwTableBoxFormula( OUString() ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_BOXATR_VALUE, new SwTableBoxValue, 0, SFX_ITEMINFOFLAG_NONE },
+            { RES_UNKNOWNATR_CONTAINER, new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }
+        }};
+
+    public:
+        ItemInfoPackageSwAttributes()
+        {
+            SvxHyphenZoneItem* pSvxHyphenZoneItem(new SvxHyphenZoneItem(false, RES_PARATR_HYPHENZONE));
+            pSvxHyphenZoneItem->GetMaxHyphens() = 0; // Default: 0
+            setItemAtItemInfoStatic(pSvxHyphenZoneItem, maItemInfos[RES_PARATR_HYPHENZONE - POOLATTR_BEGIN]);
+
+            SvxFontItem* pFont(new SvxFontItem(RES_CHRATR_FONT));
+            SvxFontItem* pFontCJK(new SvxFontItem(RES_CHRATR_CJK_FONT));
+            SvxFontItem* pFontCTL(new SvxFontItem(RES_CHRATR_CTL_FONT));
+
+            // Init DefFonts:
+            GetDefaultFonts(*pFont, *pFontCJK, *pFontCTL);
+
+            setItemAtItemInfoStatic(pFont, maItemInfos[RES_CHRATR_FONT - POOLATTR_BEGIN]);
+            setItemAtItemInfoStatic(pFontCJK, maItemInfos[RES_CHRATR_CJK_FONT - POOLATTR_BEGIN]);
+            setItemAtItemInfoStatic(pFontCTL, maItemInfos[RES_CHRATR_CTL_FONT - POOLATTR_BEGIN]);
+
+            // as described above, this Item gets created on-demand.
+            setItemAtItemInfoStatic(
+                new SwFormatINetFormat(OUString(), OUString()),
+                maItemInfos[RES_TXTATR_INETFMT - POOLATTR_BEGIN]);
+        }
+
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }
+        virtual const ItemInfo& getExistingItemInfo(size_t nIndex) override
+        {
+            return maItemInfos[nIndex];
+        }
+    };
+
+
+    static std::unique_ptr<ItemInfoPackageSwAttributes> g_aItemInfoPackageSwAttributes;
+    if (!g_aItemInfoPackageSwAttributes)
+        g_aItemInfoPackageSwAttributes.reset(new ItemInfoPackageSwAttributes);
+    return *g_aItemInfoPackageSwAttributes;
+}
 
 std::vector<SvGlobalName> *pGlobalOLEExcludeList = nullptr;
 
@@ -461,206 +518,6 @@ SwCalendarWrapper& s_getCalendarWrapper()
 
 void InitCore()
 {
-    SfxPoolItem* pItem;
-
-    aAttrTab[ RES_CHRATR_CASEMAP- POOLATTR_BEGIN ] =        new SvxCaseMapItem( SvxCaseMap::NotMapped, RES_CHRATR_CASEMAP);
-    aAttrTab[ RES_CHRATR_CHARSETCOLOR- POOLATTR_BEGIN ] =   new SvxColorItem(RES_CHRATR_CHARSETCOLOR);
-    aAttrTab[ RES_CHRATR_COLOR- POOLATTR_BEGIN ] =          new SvxColorItem(RES_CHRATR_COLOR);
-    aAttrTab[ RES_CHRATR_CONTOUR- POOLATTR_BEGIN ] =        new SvxContourItem( false, RES_CHRATR_CONTOUR );
-    aAttrTab[ RES_CHRATR_CROSSEDOUT- POOLATTR_BEGIN ] =     new SvxCrossedOutItem( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT );
-    aAttrTab[ RES_CHRATR_ESCAPEMENT- POOLATTR_BEGIN ] =     new SvxEscapementItem( RES_CHRATR_ESCAPEMENT );
-    aAttrTab[ RES_CHRATR_FONT- POOLATTR_BEGIN ] =           new SvxFontItem( RES_CHRATR_FONT );
-
-    aAttrTab[ RES_CHRATR_FONTSIZE- POOLATTR_BEGIN ] =       new SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE );
-    aAttrTab[ RES_CHRATR_KERNING- POOLATTR_BEGIN ] =        new SvxKerningItem( 0, RES_CHRATR_KERNING );
-    aAttrTab[ RES_CHRATR_LANGUAGE- POOLATTR_BEGIN ] =       new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_LANGUAGE );
-    aAttrTab[ RES_CHRATR_POSTURE- POOLATTR_BEGIN ] =        new SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
-    aAttrTab[ RES_CHRATR_UNUSED1- POOLATTR_BEGIN ] =        new SfxVoidItem( RES_CHRATR_UNUSED1 );
-    aAttrTab[ RES_CHRATR_SHADOWED- POOLATTR_BEGIN ] =       new SvxShadowedItem( false, RES_CHRATR_SHADOWED );
-    aAttrTab[ RES_CHRATR_UNDERLINE- POOLATTR_BEGIN ] =      new SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE );
-    aAttrTab[ RES_CHRATR_WEIGHT- POOLATTR_BEGIN ] =         new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
-    aAttrTab[ RES_CHRATR_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_CHRATR_RSID );
-    aAttrTab[ RES_CHRATR_WORDLINEMODE- POOLATTR_BEGIN ] =   new SvxWordLineModeItem( false, RES_CHRATR_WORDLINEMODE );
-    aAttrTab[ RES_CHRATR_AUTOKERN- POOLATTR_BEGIN ] =       new SvxAutoKernItem( false, RES_CHRATR_AUTOKERN );
-    aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ] =         new SvxBlinkItem( false, RES_CHRATR_BLINK );
-    aAttrTab[ RES_CHRATR_NOHYPHEN - POOLATTR_BEGIN ] =      new SvxNoHyphenItem( false, RES_CHRATR_NOHYPHEN );
-    aAttrTab[ RES_CHRATR_UNUSED2- POOLATTR_BEGIN ] =        new SfxVoidItem( RES_CHRATR_UNUSED2 );
-    aAttrTab[ RES_CHRATR_BACKGROUND - POOLATTR_BEGIN ] =    new SvxBrushItem( RES_CHRATR_BACKGROUND );
-
-    // CJK-Attributes
-    aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ] =      new SvxFontItem( RES_CHRATR_CJK_FONT );
-    aAttrTab[ RES_CHRATR_CJK_FONTSIZE - POOLATTR_BEGIN ] =  new SvxFontHeightItem( 240, 100, RES_CHRATR_CJK_FONTSIZE );
-    aAttrTab[ RES_CHRATR_CJK_LANGUAGE - POOLATTR_BEGIN ] =  new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_CJK_LANGUAGE);
-    aAttrTab[ RES_CHRATR_CJK_POSTURE - POOLATTR_BEGIN ] =   new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CJK_POSTURE );
-    aAttrTab[ RES_CHRATR_CJK_WEIGHT - POOLATTR_BEGIN ] =    new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT );
-
-    // CTL-Attributes
-    aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ] =      new SvxFontItem( RES_CHRATR_CTL_FONT );
-    aAttrTab[ RES_CHRATR_CTL_FONTSIZE - POOLATTR_BEGIN ] =  new SvxFontHeightItem(  240, 100,  RES_CHRATR_CTL_FONTSIZE );
-    aAttrTab[ RES_CHRATR_CTL_LANGUAGE - POOLATTR_BEGIN ] =  new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_CTL_LANGUAGE);
-    aAttrTab[ RES_CHRATR_CTL_POSTURE - POOLATTR_BEGIN ] =   new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CTL_POSTURE );
-    aAttrTab[ RES_CHRATR_CTL_WEIGHT - POOLATTR_BEGIN ] =    new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT );
-
-    aAttrTab[ RES_CHRATR_ROTATE - POOLATTR_BEGIN ] =        new SvxCharRotateItem( 0_deg10, false, RES_CHRATR_ROTATE );
-    aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] = new SvxEmphasisMarkItem( FontEmphasisMark::NONE, RES_CHRATR_EMPHASIS_MARK );
-    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] =     new SvxTwoLinesItem( false, 0, 0, RES_CHRATR_TWO_LINES );
-    aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] =        new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW );
-    aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] =        new SvxCharReliefItem( FontRelief::NONE, RES_CHRATR_RELIEF );
-    aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] =        new SvxCharHiddenItem( false, RES_CHRATR_HIDDEN );
-    aAttrTab[ RES_CHRATR_OVERLINE- POOLATTR_BEGIN ] =       new SvxOverlineItem( LINESTYLE_NONE, RES_CHRATR_OVERLINE );
-    aAttrTab[ RES_CHRATR_BOX - POOLATTR_BEGIN ] =           new SvxBoxItem( RES_CHRATR_BOX );
-    aAttrTab[ RES_CHRATR_SHADOW - POOLATTR_BEGIN ] =        new SvxShadowItem( RES_CHRATR_SHADOW );
-    aAttrTab[ RES_CHRATR_HIGHLIGHT - POOLATTR_BEGIN ] =     new SvxBrushItem( RES_CHRATR_HIGHLIGHT );
-    aAttrTab[ RES_CHRATR_GRABBAG - POOLATTR_BEGIN ] =       new SfxGrabBagItem( RES_CHRATR_GRABBAG );
-
-// CharacterAttr - MSWord weak char direction/script override emulation
-    aAttrTab[ RES_CHRATR_BIDIRTL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_BIDIRTL, sal_Int16(-1) );
-    aAttrTab[ RES_CHRATR_IDCTHINT - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_IDCTHINT, sal_Int16(-1) );
-
-    aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFormatRefMark( OUString() );
-    aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] =       new SwTOXMark;
-    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] =          SwFormatMeta::CreatePoolDefault(RES_TXTATR_META);
-    aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] =     SwFormatMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
-    aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] =        new SwFormatAutoFormat;
-    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFormatINetFormat( OUString(), OUString() );
-    aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] =        new SwFormatCharFormat( nullptr );
-    aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] =      new SwFormatRuby( OUString() );
-    aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
-    aAttrTab[ RES_TXTATR_INPUTFIELD - POOLATTR_BEGIN ] = new SwFormatField( RES_TXTATR_INPUTFIELD );
-    aAttrTab[ RES_TXTATR_CONTENTCONTROL - POOLATTR_BEGIN ] = new SwFormatContentControl( RES_TXTATR_CONTENTCONTROL );
-
-    aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] =          new SwFormatField( RES_TXTATR_FIELD );
-    aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFormatFlyCnt( nullptr );
-    aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] =           new SwFormatFootnote;
-    aAttrTab[ RES_TXTATR_ANNOTATION - POOLATTR_BEGIN ] = new SwFormatField( RES_TXTATR_ANNOTATION );
-    aAttrTab[RES_TXTATR_LINEBREAK - POOLATTR_BEGIN] = new SwFormatLineBreak(SwLineBreakClear::NONE);
-
-// TextAttr - Dummies
-    aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY1 );
-
-    aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] =    new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
-    aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] =         new SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST );
-    aAttrTab[ RES_PARATR_SPLIT- POOLATTR_BEGIN ] =          new SvxFormatSplitItem( true, RES_PARATR_SPLIT );
-    aAttrTab[ RES_PARATR_WIDOWS- POOLATTR_BEGIN ] =         new SvxWidowsItem( 0, RES_PARATR_WIDOWS );
-    aAttrTab[ RES_PARATR_ORPHANS- POOLATTR_BEGIN ] =        new SvxOrphansItem( 0, RES_PARATR_ORPHANS );
-    aAttrTab[ RES_PARATR_TABSTOP- POOLATTR_BEGIN ] =        new SvxTabStopItem( 1, SVX_TAB_DEFDIST, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
-
-    pItem = new SvxHyphenZoneItem( false, RES_PARATR_HYPHENZONE );
-    static_cast<SvxHyphenZoneItem*>(pItem)->GetMaxHyphens() = 0; // Default: 0
-    aAttrTab[ RES_PARATR_HYPHENZONE- POOLATTR_BEGIN ] =     pItem;
-
-    aAttrTab[ RES_PARATR_DROP- POOLATTR_BEGIN ] =           new SwFormatDrop;
-    aAttrTab[ RES_PARATR_REGISTER - POOLATTR_BEGIN ] =      new SwRegisterItem( false );
-    aAttrTab[ RES_PARATR_NUMRULE - POOLATTR_BEGIN ] =       new SwNumRuleItem( OUString() );
-
-    aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =   new SvxScriptSpaceItem( true, RES_PARATR_SCRIPTSPACE );
-    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] = new SvxHangingPunctuationItem( true, RES_PARATR_HANGINGPUNCTUATION );
-    aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] = new SvxForbiddenRuleItem( true, RES_PARATR_FORBIDDEN_RULES );
-    aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =     new SvxParaVertAlignItem( SvxParaVertAlignItem::Align::Automatic, RES_PARATR_VERTALIGN );
-    aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =    new SvxParaGridItem( true, RES_PARATR_SNAPTOGRID );
-    aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
-
-    aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] =  new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );
-    aAttrTab[ RES_PARATR_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_PARATR_RSID );
-    aAttrTab[ RES_PARATR_GRABBAG - POOLATTR_BEGIN ] =       new SfxGrabBagItem( RES_PARATR_GRABBAG );
-
-    aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] =       new SfxStringItem( RES_PARATR_LIST_ID, OUString() );
-    aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] =    new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );
-    aAttrTab[ RES_PARATR_LIST_ISRESTART - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISRESTART, false );
-    aAttrTab[ RES_PARATR_LIST_RESTARTVALUE - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 );
-    aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, true );
-    aAttrTab[ RES_PARATR_LIST_AUTOFMT - POOLATTR_BEGIN ] = new SwFormatAutoFormat(RES_PARATR_LIST_AUTOFMT);//new SfxSetItem(RES_PARATR_LIST_AUTOFMT, std::make_unique<SfxItemSet>(aCharAutoFormatSetRange));
-
-    aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] =            new SwFormatFillOrder;
-    aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] =              new SwFormatFrameSize;
-    aAttrTab[ RES_PAPER_BIN- POOLATTR_BEGIN ] =             new SvxPaperBinItem( RES_PAPER_BIN );
-    aAttrTab[ RES_MARGIN_FIRSTLINE - POOLATTR_BEGIN ] =     new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE);
-    aAttrTab[ RES_MARGIN_TEXTLEFT - POOLATTR_BEGIN ] =      new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT);
-    aAttrTab[ RES_MARGIN_RIGHT - POOLATTR_BEGIN ] =         new SvxRightMarginItem(RES_MARGIN_RIGHT);
-    aAttrTab[ RES_MARGIN_LEFT - POOLATTR_BEGIN ] =          new SvxLeftMarginItem(RES_MARGIN_LEFT);
-    aAttrTab[ RES_MARGIN_GUTTER - POOLATTR_BEGIN ] =        new SvxGutterLeftMarginItem(RES_MARGIN_GUTTER);
-    aAttrTab[ RES_MARGIN_GUTTER_RIGHT - POOLATTR_BEGIN ] =  new SvxGutterRightMarginItem(RES_MARGIN_GUTTER_RIGHT);
-    aAttrTab[ RES_LR_SPACE- POOLATTR_BEGIN ] =              new SvxLRSpaceItem( RES_LR_SPACE );
-    aAttrTab[ RES_UL_SPACE- POOLATTR_BEGIN ] =              new SvxULSpaceItem( RES_UL_SPACE );
-    aAttrTab[ RES_PAGEDESC- POOLATTR_BEGIN ] =              new SwFormatPageDesc;
-    aAttrTab[ RES_BREAK- POOLATTR_BEGIN ] =                 new SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK);
-    aAttrTab[ RES_CNTNT- POOLATTR_BEGIN ] =                 new SwFormatContent;
-    aAttrTab[ RES_HEADER- POOLATTR_BEGIN ] =                new SwFormatHeader;
-    aAttrTab[ RES_FOOTER- POOLATTR_BEGIN ] =                new SwFormatFooter;
-    aAttrTab[ RES_PRINT- POOLATTR_BEGIN ] =                 new SvxPrintItem( RES_PRINT );
-    aAttrTab[ RES_OPAQUE- POOLATTR_BEGIN ] =                new SvxOpaqueItem( RES_OPAQUE );
-    aAttrTab[ RES_PROTECT- POOLATTR_BEGIN ] =               new SvxProtectItem( RES_PROTECT );
-    aAttrTab[ RES_SURROUND- POOLATTR_BEGIN ] =              new SwFormatSurround;
-    aAttrTab[ RES_VERT_ORIENT- POOLATTR_BEGIN ] =           new SwFormatVertOrient;
-    aAttrTab[ RES_HORI_ORIENT- POOLATTR_BEGIN ] =           new SwFormatHoriOrient;
-    aAttrTab[ RES_ANCHOR- POOLATTR_BEGIN ] =                new SwFormatAnchor;
-    aAttrTab[ RES_BACKGROUND- POOLATTR_BEGIN ] =            new SvxBrushItem( RES_BACKGROUND );
-    aAttrTab[ RES_BOX- POOLATTR_BEGIN ] =                   new SvxBoxItem( RES_BOX );
-    aAttrTab[ RES_SHADOW- POOLATTR_BEGIN ] =                new SvxShadowItem( RES_SHADOW );
-    aAttrTab[ RES_FRMMACRO- POOLATTR_BEGIN ] =              new SvxMacroItem( RES_FRMMACRO );
-    aAttrTab[ RES_COL- POOLATTR_BEGIN ] =                   new SwFormatCol;
-    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] =                 new SvxFormatKeepItem( false, RES_KEEP );
-    aAttrTab[ RES_URL - POOLATTR_BEGIN ] =                  new SwFormatURL();
-    aAttrTab[ RES_EDIT_IN_READONLY - POOLATTR_BEGIN ] =     new SwFormatEditInReadonly;
-    aAttrTab[ RES_LAYOUT_SPLIT - POOLATTR_BEGIN ] =         new SwFormatLayoutSplit;
-    aAttrTab[ RES_CHAIN - POOLATTR_BEGIN ] =                new SwFormatChain;
-    aAttrTab[ RES_TEXTGRID - POOLATTR_BEGIN ] =             new SwTextGridItem;
-    aAttrTab[ RES_HEADER_FOOTER_EAT_SPACING - POOLATTR_BEGIN ] = new SwHeaderAndFooterEatSpacingItem;
-    aAttrTab[ RES_LINENUMBER - POOLATTR_BEGIN ] =           new SwFormatLineNumber;
-    aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] =        new SwFormatFootnoteAtTextEnd;
-    aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] =        new SwFormatEndAtTextEnd;
-    aAttrTab[ RES_COLUMNBALANCE - POOLATTR_BEGIN ] =        new SwFormatNoBalancedColumns;
-    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] =             new SvxFrameDirectionItem( SvxFrameDirection::Environment, RES_FRAMEDIR );
-    aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] =            new SwFormatRowSplit;
-    aAttrTab[ RES_FLY_SPLIT - POOLATTR_BEGIN ] =            new SwFormatFlySplit;
-
-    // #i18732#
-    aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] =     new SwFormatFollowTextFlow(false);
-    // collapsing borders #i29550#
-    aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] =   new SfxBoolItem( RES_COLLAPSING_BORDERS, false );
-    // #i28701#
-    // #i35017# - constant name has changed
-    aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] = new SwFormatWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
-
-    aAttrTab[ RES_AUTO_STYLE - POOLATTR_BEGIN ] =           new SwFormatAutoFormat( RES_AUTO_STYLE );
-    aAttrTab[ RES_FRMATR_STYLE_NAME - POOLATTR_BEGIN ] =    new SfxStringItem( RES_FRMATR_STYLE_NAME, OUString());
-    aAttrTab[ RES_FRMATR_CONDITIONAL_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_CONDITIONAL_STYLE_NAME, OUString() );
-    aAttrTab[ RES_FRMATR_GRABBAG - POOLATTR_BEGIN ] = new SfxGrabBagItem(RES_FRMATR_GRABBAG);
-    aAttrTab[ RES_TEXT_VERT_ADJUST - POOLATTR_BEGIN ] = new SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP,RES_TEXT_VERT_ADJUST);
-    aAttrTab[ RES_BACKGROUND_FULL_SIZE - POOLATTR_BEGIN ] = new SfxBoolItem(RES_BACKGROUND_FULL_SIZE, true);
-    aAttrTab[ RES_RTL_GUTTER - POOLATTR_BEGIN ] = new SfxBoolItem(RES_RTL_GUTTER, false);
-    aAttrTab[ RES_DECORATIVE - POOLATTR_BEGIN ] = new SfxBoolItem(RES_DECORATIVE, false);
-    aAttrTab[ RES_WRAP_TEXT_AT_FLY_START - POOLATTR_BEGIN ] = new SwFormatWrapTextAtFlyStart;
-
-    aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] =      new SwMirrorGrf;
-    aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] =        new SwCropGrf;
-    aAttrTab[ RES_GRFATR_ROTATION - POOLATTR_BEGIN ] =      new SwRotationGrf;
-    aAttrTab[ RES_GRFATR_LUMINANCE - POOLATTR_BEGIN ] =     new SwLuminanceGrf;
-    aAttrTab[ RES_GRFATR_CONTRAST - POOLATTR_BEGIN ] =      new SwContrastGrf;
-    aAttrTab[ RES_GRFATR_CHANNELR - POOLATTR_BEGIN ] =      new SwChannelRGrf;
-    aAttrTab[ RES_GRFATR_CHANNELG - POOLATTR_BEGIN ] =      new SwChannelGGrf;
-    aAttrTab[ RES_GRFATR_CHANNELB - POOLATTR_BEGIN ] =      new SwChannelBGrf;
-    aAttrTab[ RES_GRFATR_GAMMA - POOLATTR_BEGIN ] =         new SwGammaGrf;
-    aAttrTab[ RES_GRFATR_INVERT - POOLATTR_BEGIN ] =        new SwInvertGrf;
-    aAttrTab[ RES_GRFATR_TRANSPARENCY - POOLATTR_BEGIN ] =  new SwTransparencyGrf;
-    aAttrTab[ RES_GRFATR_DRAWMODE - POOLATTR_BEGIN ] =      new SwDrawModeGrf;
-
-// GraphicAttr - Dummies
-    aAttrTab[ RES_GRFATR_DUMMY4 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY4 );
-    aAttrTab[ RES_GRFATR_DUMMY5 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY5 );
-
-    aAttrTab[ RES_BOXATR_FORMAT- POOLATTR_BEGIN ] =         new SwTableBoxNumFormat;
-    aAttrTab[ RES_BOXATR_FORMULA- POOLATTR_BEGIN ] =        new SwTableBoxFormula( OUString() );
-    aAttrTab[ RES_BOXATR_VALUE- POOLATTR_BEGIN ] =          new SwTableBoxValue;
-
-    aAttrTab[ RES_UNKNOWNATR_CONTAINER- POOLATTR_BEGIN ] =
-                new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER );
-
-    // get the correct fonts:
-    ::GetDefaultFonts( (aAttrTab[ RES_CHRATR_FONT- POOLATTR_BEGIN ])->StaticWhichCast(RES_CHRATR_FONT),
-                       (aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ])->StaticWhichCast(RES_CHRATR_CJK_FONT),
-                       (aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ])->StaticWhichCast(RES_CHRATR_CTL_FONT) );
-
     SwBreakIt::Create_( ::comphelper::getProcessComponentContext() );
     pCheckIt = nullptr;
 
@@ -704,18 +561,7 @@ void FinitCore()
 
     delete SwEditShell::s_pAutoFormatFlags;
 
-#if OSL_DEBUG_LEVEL > 0
-    // free defaults to prevent assertions
-    if ( aAttrTab[0]->GetRefCount() )
-        SfxItemPool::ReleasePoolDefaults( &aAttrTab );
-#endif
     delete SwDoc::s_pAutoCompleteWords;
-
-    // delete all default attributes
-    for(SfxPoolItem* pHt : aAttrTab)
-    {
-        delete pHt;
-    }
 
     delete pGlobalOLEExcludeList;
 }

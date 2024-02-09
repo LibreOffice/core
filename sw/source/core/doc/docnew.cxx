@@ -112,6 +112,7 @@
 #include <svx/xfillit0.hxx>
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <svl/setitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
@@ -868,9 +869,21 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
         for (sal_uInt16 nWhich = rPair.first;
              nWhich <= rPair.second; ++nWhich)
         {
-            const SfxPoolItem& rSourceAttr =
-                rSource.mpAttrPool->GetUserOrPoolDefaultItem(nWhich);
-            if (rSourceAttr != mpAttrPool->GetUserOrPoolDefaultItem(nWhich))
+            const SfxPoolItem& rSourceAttr(rSource.mpAttrPool->GetUserOrPoolDefaultItem(nWhich));
+            const SfxPoolItem& rDestAttr(mpAttrPool->GetUserOrPoolDefaultItem(nWhich));
+            bool bEqual(SfxPoolItem::areSame(rSourceAttr, rDestAttr));
+
+            if (!bEqual && rSourceAttr.isSetItem() && rDestAttr.isSetItem())
+            {
+                // the normal SfxSetItem::operator== returns false when pools are different,
+                // which will always be the case here. Use the compare without pool
+                // comparison - the chances that the defaults in pools of the same type are
+                // equal are high, and cloning them is expensive
+                bEqual = static_cast<const SfxSetItem&>(rSourceAttr).GetItemSet().Equals(
+                    static_cast<const SfxSetItem&>(rDestAttr).GetItemSet(), false);
+            }
+
+            if (!bEqual)
                 aNewDefaults.Put(rSourceAttr);
         }
     }

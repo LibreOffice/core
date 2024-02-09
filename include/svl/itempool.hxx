@@ -27,6 +27,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <o3tl/sorted_vector.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -42,22 +43,90 @@
 // GetItemSurrogates impl that will mention that
 #define SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  0x0001
 
-struct SfxItemInfo
+class SVL_DLLPUBLIC ItemInfo
 {
-    // Defines a mapping between WhichID <-> SlotID
-    sal_uInt16  _nItemInfoSlotID;
+    sal_uInt16          m_nWhich;
+    sal_uInt16          m_nSlotID;
+    sal_uInt16          m_nItemInfoFlags;
 
-    // Pool-dependent Item-Attributes, please use
-    // SFX_ITEMINFOFLAG_* to create/set. Now using a
-    // sal_uInt16 and not separate bools so changes
-    // will be easier
-    sal_uInt16  _nItemInfoFlags;
+public:
+    ItemInfo(sal_uInt16 nWhich, sal_uInt16 nSlotID, sal_uInt16 nItemInfoFlags)
+    : m_nWhich(nWhich), m_nSlotID(nSlotID), m_nItemInfoFlags(nItemInfoFlags) {}
+    ItemInfo(const ItemInfo& rIemInfo) = default;
+    virtual ~ItemInfo() = default;
+
+    sal_uInt16 getWhich() const { return m_nWhich; }
+    virtual const SfxPoolItem* getItem() const = 0;
+    sal_uInt16 getSlotID() const { return m_nSlotID; }
+    sal_uInt16 getItemInfoFlags() const { return m_nItemInfoFlags; }
+};
+
+class SVL_DLLPUBLIC ItemInfoStatic : public ItemInfo
+{
+    friend class ItemInfoPackage;
+    void setItem(SfxPoolItem* pItem)
+    {
+        if (nullptr != pItem)
+            pItem->setStaticDefault();
+        m_pItem.reset(pItem);
+    }
+
+    std::unique_ptr<const SfxPoolItem> m_pItem;
+
+public:
+    ItemInfoStatic(sal_uInt16 nWhich, SfxPoolItem* pItem, sal_uInt16 nSlotID, sal_uInt16 nItemInfoFlags)
+    : ItemInfo(nWhich, nSlotID, nItemInfoFlags)
+    , m_pItem(pItem) { if(nullptr != pItem) pItem->setStaticDefault(); }
+
+    virtual const SfxPoolItem* getItem() const override { return m_pItem.get(); }
+};
+
+class SVL_DLLPUBLIC ItemInfoDynamic : public ItemInfo
+{
+    std::unique_ptr<const SfxPoolItem> m_pItem;
+
+public:
+    ItemInfoDynamic(const ItemInfo& rItemInfo, SfxPoolItem* pItem)
+    : ItemInfo(rItemInfo)
+    , m_pItem(pItem) { if(nullptr != pItem) pItem->setDynamicDefault(); }
+
+    virtual const SfxPoolItem* getItem() const override { return m_pItem.get(); }
+};
+
+class SVL_DLLPUBLIC ItemInfoUser : public ItemInfo
+{
+    const SfxPoolItem* m_pItem;
+
+public:
+    ItemInfoUser(const ItemInfo& rItemInfo, SfxItemPool& rItemPool, const SfxPoolItem& rItem, bool bPassingOwnership = false);
+    virtual ~ItemInfoUser();
+
+    virtual const SfxPoolItem* getItem() const override { return m_pItem; }
+};
+
+class SVL_DLLPUBLIC ItemInfoPackage
+{
+protected:
+    // this is needed for on-demand creation of static entries in constructors
+    // derived from ItemInfoPackage or implementations of ::getItemInfo(). This
+    // takes ownership of the item
+    static void setItemAtItemInfoStatic(SfxPoolItem* pItem, ItemInfoStatic& rItemInfo) { rItemInfo.setItem(pItem); }
+
+public:
+    ItemInfoPackage() = default;
+    virtual ~ItemInfoPackage() = default;
+
+    virtual size_t size() const = 0;
+    virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& rPool) = 0;
+    virtual const ItemInfo& getExistingItemInfo(size_t /*nIndex*/);
 };
 
 typedef std::unordered_set<SfxItemSet*> registeredSfxItemSets;
 class SfxPoolItemHolder;
 typedef std::unordered_set<SfxPoolItemHolder*> registeredSfxPoolItemHolders;
 typedef std::vector<const SfxPoolItem*> ItemSurrogates;
+typedef std::unordered_map<sal_uInt16, const ItemInfo*> userItemInfos;
+typedef std::vector<const ItemInfo*> itemInfoVector;
 
 /** Base class for providers of defaults of SfxPoolItems.
  *
@@ -76,30 +145,48 @@ class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
     friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
-    const SfxItemInfo*              pItemInfos;
     SfxBroadcaster                  aBC;
     OUString                        aName;
-    std::vector<SfxPoolItem*>       maUserDefaults;
-    std::vector<SfxPoolItem*>*      mpPoolDefaults;
     SfxItemPool*                    mpMaster;
     rtl::Reference<SfxItemPool>     mpSecondary;
-    WhichRangesContainer            mpPoolRanges;
+    mutable WhichRangesContainer    maPoolRanges;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     MapUnit                         eDefMetric;
 
     registeredSfxItemSets maRegisteredSfxItemSets;
     registeredSfxPoolItemHolders maRegisteredSfxPoolItemHolders;
-    bool mbPreDeleteDone;
+    bool mbShutdownHintSent;
+
+    itemInfoVector maItemInfos;
+    userItemInfos maUserItemInfos;
+
+public:
+    void registerItemInfoPackage(
+        ItemInfoPackage& rPackage,
+        const std::function<SfxPoolItem*(sal_uInt16)>& rCallback = std::function<SfxPoolItem*(sal_uInt16)>());
+protected:
+    const ItemInfo* impCheckItemInfoForClone(const ItemInfo* pInfo);
+    void impClearUserDefault(userItemInfos::iterator& rHit);
+    void impCreateUserDefault(const SfxPoolItem& rItem);
+private:
+    void cleanupItemInfos();
 
 private:
-    sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
-    sal_uInt16                      GetSize_Impl() const;
+    sal_uInt16 GetIndex_Impl(sal_uInt16 nWhich) const
+    {
+        if (IsInRange(nWhich))
+            return nWhich - mnStart;
+        assert(false && "missing bounds check before use");
+        return 0;
+    }
+    sal_uInt16 GetSize_Impl() const { return mnEnd - mnStart + 1; }
+    SfxItemPool* getTargetPool(sal_uInt16 nWhich) const;
 
     // moved to private: use the access methods, e.g. NeedsSurrogateSupport
     SVL_DLLPRIVATE bool CheckItemInfoFlag(sal_uInt16 nWhich, sal_uInt16 nMask) const;
     SVL_DLLPRIVATE bool CheckItemInfoFlag_Impl(sal_uInt16 nPos, sal_uInt16 nMask) const
-        { return pItemInfos[nPos]._nItemInfoFlags & nMask; }
+        { return maItemInfos[nPos]->getItemInfoFlags() & nMask; }
 
     void registerItemSet(SfxItemSet& rSet);
     void unregisterItemSet(SfxItemSet& rSet);
@@ -109,8 +196,7 @@ private:
 
 public:
     // for default SfxItemSet::CTOR, set default WhichRanges
-    void                            FillItemIdRanges_Impl( WhichRangesContainer& pWhichRanges ) const;
-    const WhichRangesContainer &    GetFrozenIdRanges() const;
+    const WhichRangesContainer& GetMergedIdRanges() const;
 
 protected:
     static inline void              ClearRefCount(SfxPoolItem& rItem);
@@ -118,14 +204,9 @@ protected:
     static inline sal_uInt32        ReleaseRef(const SfxPoolItem& rItem, sal_uInt32 n = 1);
 
 public:
-                                    SfxItemPool( const SfxItemPool &rPool,
-                                                 bool bCloneStaticDefaults = false );
-                                    SfxItemPool( const OUString &rName,
-                                                 sal_uInt16 nStart, sal_uInt16 nEnd,
-                                                 const SfxItemInfo *pItemInfos,
-                                                 std::vector<SfxPoolItem*> *pDefaults = nullptr );
-
-    virtual                         ~SfxItemPool();
+    SfxItemPool(const SfxItemPool &rPool);
+    SfxItemPool(const OUString &rName);
+    virtual ~SfxItemPool();
 
     SfxBroadcaster&                 BC();
 
@@ -141,10 +222,6 @@ public:
     // PoolDefaults: Owned by the pool. The read access will only return
     // nullptr if the WhichID asked for is not in the range of the pool,
     // making the request invalid.
-    void                            SetPoolDefaults(std::vector<SfxPoolItem*>* pDefaults);
-    void                            ClearPoolDefaults();
-    void                            ReleasePoolDefaults( bool bDelete = false );
-    static void                     ReleasePoolDefaults( std::vector<SfxPoolItem*> *pDefaults, bool bDelete = false );
     const SfxPoolItem *             GetPoolDefaultItem(sal_uInt16 nWhich) const;
     template<class T> const T*      GetPoolDefaultItem( TypedWhichId<T> nWhich ) const
     { return static_cast<const T*>(GetPoolDefaultItem(sal_uInt16(nWhich))); }
@@ -161,7 +238,7 @@ public:
 
     virtual MapUnit                 GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( MapUnit eNewMetric );
-    MapUnit                         GetDefaultMetric() const;
+    MapUnit GetDefaultMetric() const { return eDefMetric; }
 
     /** Request string representation of pool items.
 
@@ -194,7 +271,7 @@ public:
                                                      OUString& rText,
                                                      const IntlWrapper& rIntlWrapper ) const;
     virtual rtl::Reference<SfxItemPool> Clone() const;
-    const OUString&                 GetName() const;
+    const OUString& GetName() const { return aName; }
 
 public:
     // SurrogateData callback helper for iterateItemSurrogates
@@ -225,23 +302,22 @@ public:
     // Read commit text for more information
     void GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) const;
 
-    sal_uInt16                      GetFirstWhich() const;
-    sal_uInt16                      GetLastWhich() const;
-    bool                            IsInRange( sal_uInt16 nWhich ) const;
+    sal_uInt16 GetFirstWhich() const { return mnStart; }
+    sal_uInt16 GetLastWhich() const { return mnEnd; }
+    bool IsInRange( sal_uInt16 nWhich ) const { return nWhich >= mnStart && nWhich <= mnEnd; }
+
     void                            SetSecondaryPool( SfxItemPool *pPool );
-    SfxItemPool*                    GetSecondaryPool() const;
+    SfxItemPool* GetSecondaryPool() const { return mpSecondary.get(); }
     /* get the last pool by following the GetSecondaryPool chain */
     SfxItemPool*                    GetLastPoolInChain();
-    SfxItemPool*                    GetMasterPool() const;
-    void                            FreezeIdRanges();
-    void                            Delete();
+    SfxItemPool* GetMasterPool() const { return mpMaster; }
+    void sendShutdownHint();
 
     // syntactical sugar: direct call to not have to use the flag define
     // and make the intention clearer
     bool NeedsSurrogateSupport(sal_uInt16 nWhich) const
         { return CheckItemInfoFlag(nWhich, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE); }
 
-    void                            SetItemInfos( const SfxItemInfo *pInfos );
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     template<class T>
     TypedWhichId<T>                 GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const

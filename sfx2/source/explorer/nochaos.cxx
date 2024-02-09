@@ -30,29 +30,6 @@
 
 
 namespace {
-
-class CntItemPool;
-
-class CntStaticPoolDefaults_Impl
-{
-    static const sal_uInt32  m_nItems = 1;
-    std::vector<SfxPoolItem*> mvDefaults;
-    std::unique_ptr<SfxItemInfo[]>  m_pItemInfos;
-
-private:
-    inline void Insert( SfxPoolItem* pItem );
-
-public:
-    explicit CntStaticPoolDefaults_Impl();
-    ~CntStaticPoolDefaults_Impl();
-    CntStaticPoolDefaults_Impl(const CntStaticPoolDefaults_Impl&) = delete;
-    CntStaticPoolDefaults_Impl& operator=(const CntStaticPoolDefaults_Impl&) = delete;
-
-    std::vector<SfxPoolItem*>*  GetDefaults() { return &mvDefaults; }
-    const SfxItemInfo*          GetItemInfos() const { return m_pItemInfos.get(); }
-};
-
-
 class CntItemPool: public SfxItemPool
 {
     static CntItemPool* _pThePool;
@@ -86,36 +63,44 @@ sal_uInt16 NoChaos::ReleaseItemPool()
 
 
 //  CntItemPool implementation
+static ItemInfoPackage& getItemInfoPackageNoChaos()
+{
+    class ItemInfoPackageNoChaos : public ItemInfoPackage
+    {
+        typedef std::array<ItemInfoStatic, 1> ItemInfoArrayNoChaos;
+        ItemInfoArrayNoChaos maItemInfos {{
+            // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
+            { WID_CHAOS_START, new SfxStringItem(WID_CHAOS_START, OUString()), 0, SFX_ITEMINFOFLAG_NONE }
+        }};
+
+    public:
+        virtual size_t size() const override { return maItemInfos.size(); }
+        virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }
+    };
+
+    static std::unique_ptr<ItemInfoPackageNoChaos> g_aItemInfoPackageNoChaos;
+    if (!g_aItemInfoPackageNoChaos)
+        g_aItemInfoPackageNoChaos.reset(new ItemInfoPackageNoChaos);
+    return *g_aItemInfoPackageNoChaos;
+}
 
 
-static CntStaticPoolDefaults_Impl* pPoolDefs_Impl = nullptr;
+// static CntStaticPoolDefaults_Impl* pPoolDefs_Impl = nullptr;
 
 // static member!
 CntItemPool* CntItemPool::_pThePool = nullptr;
 
-
 CntItemPool::CntItemPool()
-: SfxItemPool( "chaos", WID_CHAOS_START, WID_CHAOS_START, nullptr ),
-  _nRefs( 0 )
+: SfxItemPool("chaos")
+, _nRefs(0)
 {
-    FreezeIdRanges();
-
-    // Create static defaults.
-    pPoolDefs_Impl = new CntStaticPoolDefaults_Impl;
-
-    // Set item infos.
-    SetItemInfos( pPoolDefs_Impl->GetItemInfos() );
-
-    // Set static pool default items.
-    SetPoolDefaults( pPoolDefs_Impl->GetDefaults() );
+    registerItemInfoPackage(getItemInfoPackageNoChaos());
 }
 
 
 //virtual
 CntItemPool::~CntItemPool()
 {
-    // Release static pool default items.
-    ReleasePoolDefaults();
 }
 
 
@@ -146,42 +131,10 @@ sal_uInt16 CntItemPool::Release()
     {
         delete _pThePool;
         _pThePool = nullptr;
-        delete pPoolDefs_Impl;
-        pPoolDefs_Impl = nullptr;
         return 0;
     }
 
     return nRefs;
-}
-
-
-// CntStaticPoolDefaults_Impl implementation.
-
-
-inline void CntStaticPoolDefaults_Impl::Insert(
-         SfxPoolItem* pItem        /* Static Pool Default Item */ )
-{
-    sal_uInt16 nPos = pItem->Which() - WID_CHAOS_START;
-
-    mvDefaults[ nPos ]         = pItem;
-    m_pItemInfos[ nPos ]._nItemInfoSlotID   = 0;
-    m_pItemInfos[ nPos ]._nItemInfoFlags = SFX_ITEMINFOFLAG_NONE;
-}
-
-
-CntStaticPoolDefaults_Impl::~CntStaticPoolDefaults_Impl()
-{
-    for ( sal_uInt32 n = 0; n < m_nItems; ++n )
-        delete mvDefaults[ n ];
-}
-
-
-CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl()
-: mvDefaults( m_nItems, nullptr ),
-  m_pItemInfos( new SfxItemInfo  [ m_nItems ] )
-{
-    memset( m_pItemInfos.get(), 0, sizeof( SfxItemInfo ) * m_nItems );
-    Insert( new SfxStringItem( WID_CHAOS_START, OUString() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
