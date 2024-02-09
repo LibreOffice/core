@@ -1401,15 +1401,18 @@ namespace osl_Forbidden
 
         void open()
         {
+#if 0
             File::setAllowedPaths(maScratchGood);
             File testFile(maScratchBad + "/open");
             auto nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("disabled path allowed", osl::FileBase::E_ACCES, nError1);
             deleteTestFile(testFile.getURL());
+#endif
         }
 
         void copy()
         {
+#if 0
             File::setAllowedPaths("w:" + maScratchGood);
             File testGood(maScratchGood + "/good");
             File testGoodTo(maScratchGood + "/good_to");
@@ -1426,6 +1429,7 @@ namespace osl_Forbidden
 
             deleteTestFile(maScratchGood + "/good_to");
             deleteTestFile(maScratchGood + "/good");
+#endif
         }
 
         void nextTests()
@@ -1444,9 +1448,9 @@ namespace osl_Forbidden
 
         CPPUNIT_TEST_SUITE(Forbidden);
         CPPUNIT_TEST(forbidden);
-//        CPPUNIT_TEST(open);
-//        CPPUNIT_TEST(copy);
-//        CPPUNIT_TEST(nextTests);
+        CPPUNIT_TEST(open);
+        CPPUNIT_TEST(copy);
+        CPPUNIT_TEST(nextTests);
         CPPUNIT_TEST_SUITE_END();
     };
 
