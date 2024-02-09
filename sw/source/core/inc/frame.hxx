@@ -861,6 +861,8 @@ public:
     // Fly in ... and footnotes
     bool IsProtected() const;
 
+    virtual bool IsHiddenNow() const;
+
     bool IsColLocked()  const { return mbColLocked; }
     virtual bool IsDeleteForbidden() const { return mnForbidDelete > 0; }
 

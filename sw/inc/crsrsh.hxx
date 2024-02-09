@@ -260,7 +260,7 @@ private:
     SAL_DLLPRIVATE bool LRMargin( bool, bool bAPI = false );
     SAL_DLLPRIVATE bool IsAtLRMargin( bool, bool bAPI = false ) const;
 
-    SAL_DLLPRIVATE bool isInHiddenTextFrame(SwShellCursor* pShellCursor);
+    SAL_DLLPRIVATE bool isInHiddenFrame(SwShellCursor* pShellCursor);
 
     SAL_DLLPRIVATE bool GoStartWordImpl();
     SAL_DLLPRIVATE bool GoEndWordImpl();

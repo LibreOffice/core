@@ -541,7 +541,7 @@ public:
     const SwSection& GetSection() const { return *m_pSection; }
           SwSection& GetSection()       { return *m_pSection; }
 
-    SwFrame *MakeFrame( SwFrame* );
+    SwFrame* MakeFrame(SwFrame* pSib, bool bHidden);
 
     /** Creates the frms for the SectionNode (i.e. the SectionFrames).
        On default the frames are created until the end of the range.

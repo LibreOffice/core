@@ -75,6 +75,8 @@ public:
     virtual void Cut() override;
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 
+    virtual bool IsHiddenNow() const override;
+
     inline const SwSectionFrame *GetFollow() const;
     inline       SwSectionFrame *GetFollow();
     SwSectionFrame* FindMaster() const;

@@ -49,6 +49,7 @@
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
+#include <sectfrm.hxx>
 
 #include <cfloat>
 #include <swselectionlist.hxx>
@@ -801,8 +802,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
         //If I'm in the DocumentBody, I want to stay there.
         if ( pStart->IsInDocBody() )
         {
-            while ( pCnt && (!pCnt->IsInDocBody() ||
-                             (pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow())))
+            while (pCnt && (!pCnt->IsInDocBody() || pCnt->IsHiddenNow()))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTableSel );
@@ -813,8 +813,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
         //case of necessity.
         else if ( pStart->IsInFootnote() )
         {
-            while ( pCnt && (!pCnt->IsInFootnote() ||
-                            (pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow())))
+            while (pCnt && (!pCnt->IsInFootnote() || pCnt->IsHiddenNow()))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTableSel );
@@ -824,7 +823,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
         //In Flys we can go ahead blindly as long as we find a Content.
         else if ( pStart->IsInFly() )
         {
-            if ( pCnt && pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow() )
+            if (pCnt && pCnt->IsHiddenNow())
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTableSel );
@@ -848,7 +847,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
             }
             if ( !bSame )
                 pCnt = nullptr;
-            else if (pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow()) // i73332
+            else if (pCnt->IsHiddenNow()) // i73332
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTableSel );
@@ -931,8 +930,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
             }
         }
 
-    } while ( !bEnd ||
-              (pCnt && pCnt->IsTextFrame() && static_cast<const SwTextFrame*>(pCnt)->IsHiddenNow()));
+    } while (!bEnd || (pCnt && pCnt->IsHiddenNow()));
 
     if (pCnt == nullptr)
     {
@@ -1219,7 +1217,7 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
                 if ( pComp != pContent )
                     continue;
 
-                if ( !pContent->IsTextFrame() || !static_cast<const SwTextFrame*>(pContent)->IsHiddenNow() )
+                if (!pContent->IsHiddenNow())
                 {
                     SwRect aContentFrame( pContent->UnionFrame() );
                     if ( aContentFrame.IsInside( rPoint ) )
@@ -1682,6 +1680,15 @@ bool SwFrame::IsProtected() const
             pFrame = pFrame->GetUpper();
 
     } while ( pFrame );
+
+    return false;
+}
+
+// virtual
+bool SwFrame::IsHiddenNow() const
+{
+    if (const auto* pSectFrame = FindSctFrame())
+        return pSectFrame->IsHiddenNow();
 
     return false;
 }

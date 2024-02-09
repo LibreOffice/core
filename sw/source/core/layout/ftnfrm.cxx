@@ -2955,13 +2955,9 @@ SwContentFrame* SwFootnoteFrame::FindLastContent()
     while ( pTmpLastLower && pTmpLastLower->GetNext() )
     {
         pTmpLastLower = pTmpLastLower->GetNext();
-        if ( ( pTmpLastLower->IsTextFrame() &&
-               !static_cast<SwTextFrame*>(pTmpLastLower)->IsHiddenNow() ) ||
-             ( pTmpLastLower->IsSctFrame() &&
-               static_cast<SwSectionFrame*>(pTmpLastLower)->GetSection() &&
-               static_cast<SwSectionFrame*>(pTmpLastLower)->ContainsContent() ) ||
-             ( pTmpLastLower->IsTabFrame() &&
-               static_cast<SwTabFrame*>(pTmpLastLower)->ContainsContent() ) )
+        if (!pTmpLastLower->IsHiddenNow()
+            && (!pTmpLastLower->IsLayoutFrame()
+                || static_cast<SwLayoutFrame*>(pTmpLastLower)->ContainsContent()))
         {
             pLastLowerOfFootnote = pTmpLastLower;
         }

@@ -1013,9 +1013,9 @@ SwSectionNode::~SwSectionNode()
     }
 }
 
-SwFrame *SwSectionNode::MakeFrame( SwFrame *pSib )
+SwFrame* SwSectionNode::MakeFrame(SwFrame* pSib, bool bHidden)
 {
-    m_pSection->m_Data.SetHiddenFlag(false);
+    m_pSection->m_Data.SetHiddenFlag(bHidden);
     return new SwSectionFrame( *m_pSection, pSib );
 }
 

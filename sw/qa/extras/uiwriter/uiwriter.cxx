@@ -8190,6 +8190,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf114973)
     CPPUNIT_ASSERT_EQUAL(OUString("hidden last paragraph"), getParagraph(3)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testHiddenSectionsAroundPageBreak)
+{
+    createDoc("hiddenSectionsAroundPageBreak.fodt");
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    // Make sure that the page style is set correctly
+    xCursor->jumpToFirstPage();
+    CPPUNIT_ASSERT_EQUAL(OUString("Landscape"), getProperty<OUString>(xCursor, "PageStyleName"));
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 

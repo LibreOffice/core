@@ -398,7 +398,7 @@ bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
             SwContentNode const*const pSaveNode(rNds[m_vSavePos.back().nNode]->GetContentNode());
             // if the old position already didn't have a frame, allow moving
             // anyway, hope the caller can handle that
-            if (pSaveNode && pSaveNode->getLayoutFrame(rDoc.getIDocumentLayoutAccess().GetCurrentLayout()))
+            if (pSaveNode && pSaveNode->getLayoutFrame(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()))
             {
                 DeleteMark();
                 RestoreSavePos();

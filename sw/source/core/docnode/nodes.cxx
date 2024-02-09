@@ -1940,7 +1940,7 @@ SwContentNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
         if (SwNodeType::Section == pNd->GetNodeType())
         {
             const SwSection& rSect = static_cast<const SwSectionNode*>(pNd)->GetSection();
-            if( (bSkipHidden && rSect.IsHiddenFlag()) ||
+            if( (bSkipHidden && rSect.CalcHiddenFlag()) ||
                 (bSkipProtect && rSect.IsProtectFlag()) )
                 // than skip the section
                 aTmp = *pNd->EndOfSectionNode();
@@ -1951,7 +1951,7 @@ SwContentNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
             {
                 const SwSection& rSect = static_cast<SwSectionNode*>(pNd->
                                 m_pStartOfSection)->GetSection();
-                if( (bSkipHidden && rSect.IsHiddenFlag()) ||
+                if( (bSkipHidden && rSect.CalcHiddenFlag()) ||
                     (bSkipProtect && rSect.IsProtectFlag()) )
                     // than skip the section
                     aTmp = *pNd->EndOfSectionNode();
@@ -1962,7 +1962,7 @@ SwContentNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
             const SwSectionNode* pSectNd;
             if( ( bSkipHidden || bSkipProtect ) &&
                 nullptr != (pSectNd = pNd->FindSectionNode() ) &&
-                ( ( bSkipHidden && pSectNd->GetSection().IsHiddenFlag() ) ||
+                ( ( bSkipHidden && pSectNd->GetSection().CalcHiddenFlag() ) ||
                   ( bSkipProtect && pSectNd->GetSection().IsProtectFlag() )) )
             {
                 aTmp = *pSectNd->EndOfSectionNode();

@@ -1373,6 +1373,9 @@ bool SwTextFrame::IsHiddenNow() const
         return true;
     }
 
+    if (SwContentFrame::IsHiddenNow())
+        return true;
+
     bool bHiddenCharsHidePara(false);
     bool bHiddenParaField(false);
     if (m_pMergedPara)
@@ -1442,23 +1445,15 @@ bool SwTextFrame::IsHiddenNow() const
             // be visible - check this for the 1st body paragraph
             if (IsInDocBody() && FindPrevCnt() == nullptr)
             {
-                bool isAllHidden(true);
                 for (SwContentFrame const* pNext = FindNextCnt(true);
                         pNext != nullptr; pNext = pNext->FindNextCnt(true))
                 {
-                    if (!pNext->IsTextFrame()
-                        || !static_cast<SwTextFrame const*>(pNext)->IsHiddenNow())
-                    {
-                        isAllHidden = false;
-                        break;
+                    if (!pNext->IsHiddenNow())
+                        return true;
                     }
-                }
-                if (isAllHidden)
-                {
                     SAL_INFO("sw.core", "unhiding one body paragraph");
                     return false;
                 }
-            }
             return true;
         }
     }

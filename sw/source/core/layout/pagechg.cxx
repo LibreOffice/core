@@ -775,7 +775,10 @@ SwPageDesc *SwPageFrame::FindPageDesc()
         return pRet;
     }
 
-    SwFrame *pFlow = FindFirstBodyContent();
+    SwContentFrame* pFirstContent = FindFirstBodyContent();
+    while (pFirstContent && pFirstContent->IsHiddenNow())
+        pFirstContent = pFirstContent->GetNextContentFrame();
+    SwFrame* pFlow = pFirstContent;
     if ( pFlow && pFlow->IsInTab() )
         pFlow = pFlow->FindTabFrame();
 

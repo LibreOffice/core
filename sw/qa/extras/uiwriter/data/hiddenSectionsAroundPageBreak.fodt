@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:master-page-name="Landscape">
+   <style:paragraph-properties style:page-number="auto" fo:break-before="page"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:section text:name="Section 1" text:display="none"/>
+   <text:section text:name="Section 2">
+    <text:p text:style-name="P1">A paragraph with a page-break-before</text:p>
+   </text:section>
+   <text:section text:name="Section 3" text:display="none"/>
+   <text:section text:name="Section 4">
+    <text:p>Lorem</text:p>
+   </text:section>
+  </office:text>
+ </office:body>
+</office:document>

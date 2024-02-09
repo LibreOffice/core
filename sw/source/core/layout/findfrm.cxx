@@ -896,7 +896,7 @@ SwFrame *SwFrame::FindNext_()
             (!bFootnote || pSct->IsInFootnote() ) )
             return pSct;
     }
-    return pRet;
+    return pRet == this ? nullptr : pRet;
 }
 
 // #i27138# - add parameter <_bInSameFootnote>
@@ -1282,11 +1282,7 @@ void SwFrame::InvalidateNextPrtArea()
     SwFrame* pNextFrame = FindNext();
     // skip empty section frames and hidden text frames
     {
-        while ( pNextFrame &&
-                ( ( pNextFrame->IsSctFrame() &&
-                    !static_cast<SwSectionFrame*>(pNextFrame)->GetSection() ) ||
-                  ( pNextFrame->IsTextFrame() &&
-                    static_cast<SwTextFrame*>(pNextFrame)->IsHiddenNow() ) ) )
+        while (pNextFrame && pNextFrame->IsHiddenNow())
         {
             pNextFrame = pNextFrame->FindNext();
         }

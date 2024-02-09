@@ -182,6 +182,13 @@ SwSectionFrame::~SwSectionFrame()
 {
 }
 
+//virtual
+bool SwSectionFrame::IsHiddenNow() const
+{
+    const auto* pSection = GetSection();
+    return !pSection || pSection->CalcHiddenFlag();
+}
+
 void SwSectionFrame::DelEmpty( bool bRemove )
 {
     if( IsColLocked() )
@@ -1341,6 +1348,20 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
 
     SwRectFnSet aRectFnSet(this);
 
+    if (GetSection()->CalcHiddenFlag())
+    {
+        {
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+            aRectFnSet.SetHeight(aFrm, 0);
+        }
+        {
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aRectFnSet.SetHeight(aPrt, 0);
+        }
+        setFrameAreaSizeValid(true);
+        setFramePrintAreaValid(true);
+    }
+
     if ( !isFramePrintAreaValid() )
     {
         PROTOCOL( this, PROT::PrintArea, DbgAction::NONE, nullptr )
@@ -2148,6 +2169,11 @@ bool SwSectionFrame::Growable() const
 
 SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
 {
+    if (GetSection()->CalcHiddenFlag())
+    {
+        return 0;
+    }
+
     if ( !IsColLocked() && !HasFixSize() )
     {
         SwRectFnSet aRectFnSet(this);
@@ -2584,6 +2610,18 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         } while (pNItem);
         if ( aOldSet.Count() || aNewSet.Count() )
             SwLayoutFrame::Modify( &aOldSet, &aNewSet );
+    }
+    else if (pNew && (RES_SECTION_HIDDEN == pNew->Which()
+                        || RES_SECTION_NOT_HIDDEN == pNew->Which()))
+    {
+        InvalidateAll();
+        InvalidateObjs(false);
+
+        for (SwFrame* pLowerFrame = Lower(); pLowerFrame; pLowerFrame = pLowerFrame->GetNext())
+        {
+            pLowerFrame->InvalidateAll();
+            pLowerFrame->InvalidateObjs(false);
+        }
     }
     else
         UpdateAttr_( pOld, pNew, nInvFlags );
