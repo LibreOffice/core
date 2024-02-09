@@ -3632,13 +3632,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf119875)
 {
     createSwDoc("tdf119875.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nFirstTop
-        = getXPath(pXmlDoc, "/root/page[2]/body/section[1]/infos/bounds", "top").toInt32();
-    sal_Int32 nSecondTop
-        = getXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds", "top").toInt32();
-    // The first section had the same top value as the second one, so they
-    // overlapped.
-    CPPUNIT_ASSERT_LESS(nSecondTop, nFirstTop);
+
+    // formatName is yet unavailable in 7.5 branch, commented out in backport
+    // assertXPath(pXmlDoc, "//page[2]/body/section[1]", "formatName", u"S10");
+    // assertXPath(pXmlDoc, "//page[2]/body/section[2]", "formatName", u"S11");
+    // assertXPath(pXmlDoc, "//page[2]/body/section[3]", "formatName", u"S13");
+    // assertXPath(pXmlDoc, "//page[2]/body/section[4]", "formatName", u"S14");
+    // Sections "S10" and "S13" are hidden -> their frames are zero-height
+    assertXPath(pXmlDoc, "//page[2]/body/section[1]/infos/bounds", "height", u"0");
+    assertXPath(pXmlDoc, "//page[2]/body/section[3]/infos/bounds", "height", u"0");
+
+    OUString S10Top = getXPath(pXmlDoc, "//page[2]/body/section[1]/infos/bounds", "top");
+    OUString S11Top = getXPath(pXmlDoc, "//page[2]/body/section[2]/infos/bounds", "top");
+    OUString S13Top = getXPath(pXmlDoc, "//page[2]/body/section[3]/infos/bounds", "top");
+    OUString S14Top = getXPath(pXmlDoc, "//page[2]/body/section[4]/infos/bounds", "top");
+
+    CPPUNIT_ASSERT_EQUAL(S10Top, S11Top);
+    CPPUNIT_ASSERT_EQUAL(S13Top, S14Top);
+
+    // Section "S11" had the same top value as section "S14", so they overlapped.
+    CPPUNIT_ASSERT_LESS(S14Top.toInt32(), S11Top.toInt32());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287)

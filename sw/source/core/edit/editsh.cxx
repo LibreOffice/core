@@ -796,7 +796,7 @@ void SwEditShell::SetNumberingRestart()
                     if( nullptr != pContentFrame )
                     {
                         // skip hidden frames - ignore protection!
-                        if( !static_cast<SwTextFrame*>(pContentFrame)->IsHiddenNow() )
+                        if( !pContentFrame->IsHiddenNow() )
                         {
                             // if the node is numbered and the starting value of the numbering equals the
                             // start value of the numbering rule then set this value as hard starting value

@@ -1037,7 +1037,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                     (
                         nullptr == pFrame ||
                         ( !bInReadOnly && pFrame->IsProtected() ) ||
-                        (pFrame->IsTextFrame() && static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow())
+                        pFrame->IsHiddenNow()
                     ) ||
                     ( !bInReadOnly && pNd->FindSectionNode() &&
                         pNd->FindSectionNode()->GetSection().IsProtect()
@@ -1078,8 +1078,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                         SwContentFrame const*const pFrame(pNd->getLayoutFrame(pLayout));
                         if (nullptr == pFrame ||
                             ( !bInReadOnly && pFrame->IsProtected() ) ||
-                            ( pFrame->IsTextFrame() &&
-                                static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow()))
+                            pFrame->IsHiddenNow())
                         {
                             pNd = nullptr;
                             continue;

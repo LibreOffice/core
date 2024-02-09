@@ -2636,6 +2636,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
     assertXPath(pXml, para_style_path, "master-page-name", "Right_20_Page");
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testHiddenSectionsAroundPageBreak)
+{
+    createSwDoc("hiddenSectionsAroundPageBreak.fodt");
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY_THROW);
+
+    // Make sure that the page style is set correctly
+    xCursor->jumpToFirstPage();
+    CPPUNIT_ASSERT_EQUAL(OUString("Landscape"), getProperty<OUString>(xCursor, "PageStyleName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

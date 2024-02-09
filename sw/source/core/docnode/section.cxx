@@ -291,14 +291,11 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
             // Tell all Children that they are hidden
             const sw::SectionHidden aHint;
             pFormat->CallSwClientNotify(aHint);
-
-            // Delete all Frames
-            pFormat->DelFrames();
         }
     }
     else if (m_Data.IsHiddenFlag()) // show Nodes again
     {
-        // Show all Frames (Child Sections are accounted for by MakeFrames)
+        // Show all Frames
         // Only if the Parent Section is not restricting us!
         SwSection* pParentSect = pFormat->GetParentSection();
         if( !pParentSect || !pParentSect->IsHiddenFlag() )
@@ -306,8 +303,6 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
             // Tell all Children that the Parent is not hidden anymore
             const sw::SectionHidden aHint(false);
             pFormat->CallSwClientNotify(aHint);
-
-            pFormat->MakeFrames();
         }
     }
 }
