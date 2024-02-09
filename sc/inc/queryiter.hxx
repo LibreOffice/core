@@ -183,7 +183,6 @@ protected:
     sal_uInt8            nSortedBinarySearch;
     bool            bAdvanceQuery;
     bool            bIgnoreMismatchOnLeadingStrings;
-    bool            bSortedBinarySearch;
     bool            bXLookUp;
     SCCOL           nBestFitCol;
     SCROW           nBestFitRow;
