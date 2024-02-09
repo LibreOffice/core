@@ -34,9 +34,7 @@ class QtTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfera
     QtTransferable(const QtTransferable&) = delete;
 
     const QMimeData* m_pMimeData;
-    osl::Mutex m_aMutex;
     bool m_bProvideUTF16FromOtherEncoding;
-    css::uno::Sequence<css::datatransfer::DataFlavor> m_aMimeTypeSeq;
 
 public:
     QtTransferable(const QMimeData* pMimeData);
