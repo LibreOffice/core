@@ -50,16 +50,6 @@ QtTransferable::QtTransferable(const QMimeData* pMimeData)
 
 css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTransferDataFlavors()
 {
-    // it's just filled once, ever, so just try to get it without locking first
-    if (m_aMimeTypeSeq.hasElements())
-        return m_aMimeTypeSeq;
-
-    // better safe then sorry; preventing broken usage
-    // DnD should not be shared and Clipboard access runs in the GUI thread
-    osl::MutexGuard aGuard(m_aMutex);
-    if (m_aMimeTypeSeq.hasElements())
-        return m_aMimeTypeSeq;
-
     QStringList aFormatList(m_pMimeData->formats());
     // we might add the UTF-16 mime text variant later
     const int nMimeTypeSeqSize = aFormatList.size() + 1;
@@ -113,8 +103,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
 
     aMimeTypeSeq.realloc(nMimeTypeCount);
 
-    m_aMimeTypeSeq = aMimeTypeSeq;
-    return m_aMimeTypeSeq;
+    return aMimeTypeSeq;
 }
 
 sal_Bool SAL_CALL
