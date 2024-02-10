@@ -1033,6 +1033,7 @@ void PrintDialog::updatePageSize(int nOrientation)
         if ((nOrientation == ORIENTATION_PORTRAIT && aSize.Width() > aSize.Height())
             || (nOrientation == ORIENTATION_LANDSCAPE && aSize.Width() < aSize.Height()))
         {
+            // coverity[swapped_arguments : FALSE] - this is in the intended order
             aSize = Size(aSize.Height(), aSize.Width());
         }
     }
