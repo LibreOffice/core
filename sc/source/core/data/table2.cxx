@@ -1022,12 +1022,10 @@ void ScTable::TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
 static void lcl_SetTransposedPatternInRows(ScTable* pTransClip, SCROW nAttrRow1, SCROW nAttrRow2,
                                            SCCOL nCol1, SCROW nRow1, SCROW nCombinedStartRow, SCCOL nCol,
-                                           const ScPatternAttr& rPatternAttr, bool bIncludeFiltered,
+                                           const CellAttributeHolder& rPatternHolder, bool bIncludeFiltered,
                                            const std::vector<SCROW>& rFilteredRows,
                                            SCROW nRowDestOffset)
 {
-    const CellAttributeHolder aPatternHolder(&rPatternAttr);
-
     for (SCROW nRow = nAttrRow1; nRow <= nAttrRow2; nRow++)
     {
         size_t nFilteredRowAdjustment = 0;
@@ -1048,7 +1046,7 @@ static void lcl_SetTransposedPatternInRows(ScTable* pTransClip, SCROW nAttrRow1,
 
         pTransClip->SetPattern(
             static_cast<SCCOL>(nCol1 + nRow - nRow1 - nFilteredRowAdjustment + nRowDestOffset),
-            static_cast<SCROW>(nCombinedStartRow + nCol - nCol1), aPatternHolder);
+            static_cast<SCROW>(nCombinedStartRow + nCol - nCol1), rPatternHolder);
     }
 }
 
@@ -1072,8 +1070,9 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                 {
                     // Set pattern in cells from nAttrRow1 to nAttrRow2
                     // no borders or merge items involved - use pattern as-is
+                    const CellAttributeHolder aPatternHolder(pPattern);
                     lcl_SetTransposedPatternInRows(pTransClip, nAttrRow1, nAttrRow2, nCol1, nRow1,
-                                                   nCombinedStartRow, nCol, *pPattern,
+                                                   nCombinedStartRow, nCol, aPatternHolder,
                                                    bIncludeFiltered, rFilteredRows, nRowDestOffset);
                 }
                 else
@@ -1116,8 +1115,9 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                     }
 
                     // Set pattern in cells from nAttrRow1 to nAttrRow2
+                    const CellAttributeHolder aPatternHolder(&aNewPattern);
                     lcl_SetTransposedPatternInRows(pTransClip, nAttrRow1, nAttrRow2, nCol1, nRow1,
-                                                   nCombinedStartRow, nCol, aNewPattern,
+                                                   nCombinedStartRow, nCol, aPatternHolder,
                                                    bIncludeFiltered, rFilteredRows, nRowDestOffset);
                 }
             }
