@@ -61,7 +61,7 @@ struct NotebookBarViewData
 };
 
 /** Notebookbar instance manager is a singleton that is used for track the
- *  per-view instances of view specifc data contained in NotebookBarViewData
+ *  per-view instances of view specific data contained in NotebookBarViewData
  *  class.
  **/
 class NotebookBarViewManager final
@@ -81,8 +81,8 @@ public:
     // Singleton get method - creates an instance on first get() call
     static NotebookBarViewManager& get()
     {
-        static NotebookBarViewManager gManager;
-        return gManager;
+        static NotebookBarViewManager gNotebookBarManager;
+        return gNotebookBarManager;
     }
 
     NotebookBarViewData& getViewData(const SfxViewShell* pViewShell)
