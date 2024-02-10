@@ -831,9 +831,9 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                         nScript = ScGlobal::GetDefaultScriptType();
 
                     const ScPatternAttr* pPattern = GetPattern(nRow);
-                    aOptions.aPattern.setScPatternAttr(pPattern);
                     aOptions.bGetFont = (!ScPatternAttr::areSame(pPattern, pOldPattern) || nScript != SvtScriptType::NONE);
-                    pOldPattern = pPattern;
+                    aOptions.aPattern.setScPatternAttr(pPattern);
+                    pOldPattern = aOptions.aPattern.getScPatternAttr();
                     sal_uInt16 nThis = static_cast<sal_uInt16>(GetNeededSize(
                         nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern));
                     if (nThis && (nThis > nWidth || !bFound))
