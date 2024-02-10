@@ -169,13 +169,4 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
     return reinterpret_cast<HINSTANCE>(GetWindowLongPtrW( hWnd, GWLP_HINSTANCE ));
 }
 
-
-#define MOUSEZ_CLASSNAME  L"MouseZ"            // wheel window class
-#define MOUSEZ_TITLE      L"Magellan MSWHEEL"  // wheel window title
-
-#define MSH_WHEELMODULE_CLASS (MOUSEZ_CLASSNAME)
-#define MSH_WHEELMODULE_TITLE (MOUSEZ_TITLE)
-
-#define MSH_SCROLL_LINES L"MSH_SCROLL_LINES_MSG"
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
