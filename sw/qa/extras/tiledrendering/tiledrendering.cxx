@@ -4133,7 +4133,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
         }
     );
     comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
-    CPPUNIT_ASSERT_EQUAL(OString("S;Dark"), pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXTextDocument->getViewRenderState());
 
     Bitmap aBitmap(getTile(pXTextDocument));
     Size aSize = aBitmap.GetSizePixel();
@@ -4147,9 +4147,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
     int nBlackPixels = 0;
     int nWhitePixels = 0;
     BitmapScopedReadAccess pAccess(aBitmap);
-    for (int x = 0; x < aSize.Width(); ++x)
+    for (tools::Long x = 0; x < aSize.Width(); ++x)
     {
-        for (int y = 0; y < aSize.Height(); ++y)
+        for (tools::Long y = 0; y < aSize.Height(); ++y)
         {
             Color aActualColor(pAccess->GetPixel(y, x));
             if (aActualColor.IsDark()) // ignore antialiasing
