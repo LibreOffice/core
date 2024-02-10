@@ -124,6 +124,8 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     m_nRolloveredItem = ITEMPOS_INVALID;
     mbAutoPopup = true;
     m_bIgnoreFirstMove = true;
+    SetMBWHideAccel(true);
+    SetMBWMenuKey(false);
 
     m_aCloseBtn->maImage = Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC);
 
@@ -390,6 +392,7 @@ void MenuBarWindow::PopupClosed( Menu const * pPopup )
 void MenuBarWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     mbAutoPopup = true;
+    SetMBWMenuKey(false);
     sal_uInt16 nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID ) && !m_pActivePopup )
     {
@@ -414,7 +417,18 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeaveWindow() )
     {
         if ( m_nRolloveredItem != ITEMPOS_INVALID && m_nRolloveredItem != m_nHighlightedItem )
-            Invalidate(); //HighlightItem( nRolloveredItem, false );
+        {
+            // there is a spurious MouseMove generated after a menu is launched from the keyboard, hence this...
+            if (m_nHighlightedItem != ITEMPOS_INVALID)
+            {
+                bool hide = GetMBWHideAccel();
+                SetMBWHideAccel(true);
+                Invalidate(); //HighlightItem( nRolloveredItem, false );
+                SetMBWHideAccel(hide);
+            }
+            else
+                Invalidate(); //HighlightItem( nRolloveredItem, false );
+        }
 
         m_nRolloveredItem = ITEMPOS_INVALID;
         return;
@@ -450,6 +464,8 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
 {
     if( ! m_pMenu )
         return;
+
+    SetMBWHideAccel(n == ITEMPOS_INVALID);
 
     // #57934# close active popup if applicable, as TH's background storage works.
     MenuItemData* pNextData = m_pMenu->pItemList->GetDataFromPos( n );
@@ -834,6 +850,8 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         }
     }
 
+    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
+
     if ( !bDone && ( bFromMenu || rKEvent.GetKeyCode().IsMod2() ) )
     {
         sal_Unicode nCharCode = rKEvent.GetCharCode();
@@ -848,6 +866,15 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                 bDone = true;
             }
         }
+    }
+
+    const bool bShowAccels = nCode != KEY_ESCAPE;
+    if (GetMBWMenuKey() != bShowAccels)
+    {
+        SetMBWMenuKey(bShowAccels);
+        SetMBWHideAccel(!bShowAccels);
+        if (autoacc)
+            Invalidate(InvalidateFlags::Update);
     }
 
     return bDone;

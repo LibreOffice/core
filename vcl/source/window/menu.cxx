@@ -1948,7 +1948,13 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     aTmpPos.setX( aPos.X() + nTextPos );
                     aTmpPos.setY( aPos.Y() );
                     aTmpPos.AdjustY(nTextOffsetY );
-                    DrawTextFlags nStyle = nTextStyle | DrawTextFlags::Mnemonic;
+                    DrawTextFlags nStyle = nTextStyle;
+
+                    const Menu *pMenu = this;
+                    while (!pMenu->IsMenuBar() && pMenu->pStartedFrom)
+                        pMenu = pMenu->pStartedFrom;
+                    if (!pMenu->IsMenuBar() || !static_cast<MenuBarWindow*>(pMenu->pWindow.get())->GetMBWHideAccel())
+                        nStyle |= DrawTextFlags::Mnemonic;
 
                     if (pData->bIsTemporary)
                         nStyle |= DrawTextFlags::Disable;
@@ -2546,6 +2552,32 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent )
     return bDone;
 }
 
+bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
+{
+    // No keyboard processing when system handles the menu or our menubar is invisible
+    if( !IsDisplayable() ||
+        ( ImplGetSalMenu() && ImplGetSalMenu()->VisibleMenuBar() ) )
+        return false;
+
+    // check for enabled, if this method is called from another window...
+    MenuBarWindow* pWin = static_cast<MenuBarWindow*>(ImplGetWindow());
+    if ( pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && ! pWin->IsInModalMode() )
+    {
+        if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
+        {
+            const CommandModKeyData* pCData = rCEvent.GetModKeyData ();
+            if (pWin->m_nHighlightedItem == ITEMPOS_INVALID)
+            {
+                if (pCData && pCData->IsMod2() && pCData->IsDown())
+                    pWin->SetMBWHideAccel(false);
+                pWin->Invalidate(InvalidateFlags::Update);
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
 void MenuBar::SelectItem(sal_uInt16 nId)
 {
     if (!pWindow)
@@ -2828,6 +2860,13 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
     const sal_uInt16 nItemCount = GetItemCount();
     if (!pSFrom && (vcl::IsInPopupMenuExecute() || !nItemCount))
         return false;
+
+    // set the flag to hide or show accelerators in the menu depending on whether the menu was launched by mouse or keyboard shortcut
+    if( pSFrom && pSFrom->IsMenuBar())
+    {
+        auto pMenuBarWindow = static_cast<MenuBarWindow*>(pSFrom->pWindow.get());
+        pMenuBarWindow->SetMBWHideAccel( !(pMenuBarWindow->GetMBWMenuKey()) );
+    }
 
     mpLayoutData.reset();
 

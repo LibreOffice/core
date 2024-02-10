@@ -76,6 +76,8 @@ private:
     VclPtr<vcl::Window> m_xSaveFocusId;
     bool            mbAutoPopup;
     bool            m_bIgnoreFirstMove;
+    bool            mbHideAccel;
+    bool            mbMenuKey;
 
     VclPtr<DecoToolBox>  m_aCloseBtn;
     VclPtr<PushButton>   m_aFloatBtn;
@@ -136,6 +138,10 @@ public:
     tools::Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId);
     void RemoveMenuBarButton(sal_uInt16 nId);
     bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId);
+    void SetMBWHideAccel(bool val) { mbHideAccel = val; }
+    bool GetMBWHideAccel() const { return mbHideAccel; }
+    void SetMBWMenuKey(bool val) { mbMenuKey = val; }
+    bool GetMBWMenuKey() const { return mbMenuKey; }
     bool CanGetFocus() const;
 };
 

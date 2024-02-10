@@ -179,7 +179,8 @@ bool SystemWindow::EventNotify( NotifyEvent& rNEvt )
         ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
 
     // capture KeyEvents for menu handling
-    if (rNEvt.GetType() == NotifyEventType::KEYINPUT)
+    if (rNEvt.GetType() == NotifyEventType::KEYINPUT ||
+        rNEvt.GetType() == NotifyEventType::COMMAND)
     {
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WindowType::FLOATINGWINDOW ) )
@@ -188,7 +189,15 @@ bool SystemWindow::EventNotify( NotifyEvent& rNEvt )
             if( pWin && pWin->IsSystemWindow() )
                 pMBar = static_cast<SystemWindow*>(pWin)->GetMenuBar();
         }
-        if (pMBar && pMBar->ImplHandleKeyEvent(*rNEvt.GetKeyEvent()))
+        bool bDone(false);
+        if (pMBar)
+        {
+            if (rNEvt.GetType() == NotifyEventType::COMMAND)
+                bDone = pMBar->ImplHandleCmdEvent(*rNEvt.GetCommandEvent());
+            else
+                bDone = pMBar->ImplHandleKeyEvent(*rNEvt.GetKeyEvent());
+        }
+        if (bDone)
             return true;
     }
 
