@@ -2697,7 +2697,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest,
     testThis(*getScDoc());
 
     // test document with sheet data and pivot table in out-of-sync - B-J columns removed,
-    // but the pivot table cache still hass all the data
+    // but the pivot table cache still has all the data
     createScDoc(
         "xlsx/PivotTable_CachedDefinitionAndDataNotInSync_SheetColumnsRemoved_WithCacheData.xlsx");
     testThis(*getScDoc());
