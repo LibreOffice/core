@@ -1072,7 +1072,7 @@ void ScColumn::GetOptimalHeight(
                         if (rCxt.isForceAutoSize() || !(rDocument.GetRowFlags(nRow, nTab) & CRFlags::ManualSize) )
                         {
                             aOptions.aPattern.setScPatternAttr(pPattern);
-                            aOldPattern.setScPatternAttr(pPattern);
+                            aOldPattern.setScPatternAttr(aOptions.aPattern.getScPatternAttr());
                             sal_uInt16 nHeight = static_cast<sal_uInt16>(
                                 std::min(
                                     GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
