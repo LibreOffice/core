@@ -190,7 +190,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
     PropertyMap aProps( rStyle.Properties );
     if( !rStyle.IsSubStyle )
         aProps[ "style:name" ] = getStyleName( nStyleId );
-    if (rStyle.Name == "draw:stroke-dash")
+    if (rStyle.Name == "draw:stroke-dash" || rStyle.Name == "draw:fill-image")
         aProps[ "draw:name" ] = aProps[ "style:name" ];
     rContext.rEmitter.beginTag( rStyle.Name.getStr(), aProps );
 
