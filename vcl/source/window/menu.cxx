@@ -2861,13 +2861,6 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
     if (!pSFrom && (vcl::IsInPopupMenuExecute() || !nItemCount))
         return false;
 
-    // set the flag to hide or show accelerators in the menu depending on whether the menu was launched by mouse or keyboard shortcut
-    if( pSFrom && pSFrom->IsMenuBar())
-    {
-        auto pMenuBarWindow = static_cast<MenuBarWindow*>(pSFrom->pWindow.get());
-        pMenuBarWindow->SetMBWHideAccel( !(pMenuBarWindow->GetMBWMenuKey()) );
-    }
-
     mpLayoutData.reset();
 
     ImplSVData* pSVData = ImplGetSVData();

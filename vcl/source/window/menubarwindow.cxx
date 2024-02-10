@@ -465,7 +465,8 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
     if( ! m_pMenu )
         return;
 
-    SetMBWHideAccel(n == ITEMPOS_INVALID);
+    if (n == ITEMPOS_INVALID)
+        SetMBWHideAccel(true);
 
     // #57934# close active popup if applicable, as TH's background storage works.
     MenuItemData* pNextData = m_pMenu->pItemList->GetDataFromPos( n );
@@ -850,8 +851,6 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         }
     }
 
-    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
-
     if ( !bDone && ( bFromMenu || rKEvent.GetKeyCode().IsMod2() ) )
     {
         sal_Unicode nCharCode = rKEvent.GetCharCode();
@@ -866,15 +865,6 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                 bDone = true;
             }
         }
-    }
-
-    const bool bShowAccels = nCode != KEY_ESCAPE;
-    if (GetMBWMenuKey() != bShowAccels)
-    {
-        SetMBWMenuKey(bShowAccels);
-        SetMBWHideAccel(!bShowAccels);
-        if (autoacc)
-            Invalidate(InvalidateFlags::Update);
     }
 
     return bDone;
