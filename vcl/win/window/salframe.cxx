@@ -4368,8 +4368,7 @@ static bool ImplHandleShutDownMsg( HWND hWnd )
     return nRet;
 }
 
-static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
-                                         WPARAM wParam, LPARAM lParam )
+static void ImplHandleSettingsChangeMsg(HWND hWnd, UINT nMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
     SalEvent nSalEvent = SalEvent::SettingsChanged;
 
@@ -4379,21 +4378,15 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
         nSalEvent = SalEvent::DisplayChanged;
     else if ( nMsg == WM_FONTCHANGE )
         nSalEvent = SalEvent::FontChanged;
-    else if ( nMsg == WM_WININICHANGE )
+    else if ( nMsg == WM_SETTINGCHANGE )
     {
-        if ( lParam )
+        if (const auto* paramStr = o3tl::toU(reinterpret_cast<const wchar_t*>(lParam)))
         {
-            if ( ImplSalWICompareAscii( reinterpret_cast<const wchar_t*>(lParam), "devices" ) == 0 )
+            if (rtl_ustr_ascii_compareIgnoreAsciiCase(paramStr, "devices") == 0)
                 nSalEvent = SalEvent::PrinterChanged;
         }
-    }
-
-    if ( nMsg == WM_SETTINGCHANGE )
-    {
-        if ( wParam == SPI_SETWHEELSCROLLLINES )
-            aSalShlData.mnWheelScrollLines = ImplSalGetWheelScrollLines();
-        else if( wParam == SPI_SETWHEELSCROLLCHARS )
-            aSalShlData.mnWheelScrollChars = ImplSalGetWheelScrollChars();
+        aSalShlData.mnWheelScrollLines = ImplSalGetWheelScrollLines();
+        aSalShlData.mnWheelScrollChars = ImplSalGetWheelScrollChars();
         UpdateDarkMode(hWnd);
         GetSalData()->mbThemeChanged = true;
     }
@@ -4405,7 +4398,7 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
     if (!pFrame)
         return;
 
-    if (((nMsg == WM_DISPLAYCHANGE) || (nMsg == WM_WININICHANGE)) && pFrame->isFullScreen())
+    if (((nMsg == WM_DISPLAYCHANGE) || (nMsg == WM_SETTINGCHANGE)) && pFrame->isFullScreen())
         ImplSalFrameFullScreenPos(pFrame);
 
     pFrame->CallCallback(nSalEvent, nullptr);
