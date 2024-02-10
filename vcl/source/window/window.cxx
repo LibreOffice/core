@@ -1808,15 +1808,17 @@ void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const
 
 void Window::KeyInput( const KeyEvent& rKEvt )
 {
+#ifndef _WIN32 // On Windows, dialogs react to accelerators  without Alt (tdf#157649)
     KeyCode cod = rKEvt.GetKeyCode ();
-    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
 
     // do not respond to accelerators unless Alt or Ctrl is held
     if (cod.GetCode () >= 0x200 && cod.GetCode () <= 0x219)
     {
+        bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
         if (autoacc && cod.GetModifier () != KEY_MOD2 && !(cod.GetModifier() & KEY_MOD1))
             return;
     }
+#endif
 
     NotifyEvent aNEvt( NotifyEventType::KEYINPUT, this, &rKEvt );
     if ( !CompatNotify( aNEvt ) )

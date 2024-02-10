@@ -301,6 +301,15 @@ static void UpdateDarkMode(HWND hWnd)
     DwmSetWindowAttribute(hWnd, 20, &bDarkMode, sizeof(bDarkMode));
 }
 
+static void UpdateAutoAccel()
+{
+    BOOL bUnderline = FALSE;
+    SystemParametersInfoW(SPI_GETKEYBOARDCUES, 0, &bUnderline, 0);
+
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maNWFData.mbAutoAccel = !bUnderline;
+}
+
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
                               HWND hWndParent, SalFrameStyleFlags nSalFrameStyle )
 {
@@ -3578,7 +3587,7 @@ static bool HandleAltNumPadCode(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
                 if (!(keyFlags & KF_REPEAT))
                     state.clear();
                 state.started = true;
-                return true;
+                return false; // This must be processed further - e.g., to show accelerators
             }
 
             if (!state.started)
@@ -3637,8 +3646,6 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     static WPARAM       nDeadChar       = 0;
     static WPARAM       nLastVKChar     = 0;
     static sal_uInt16   nLastChar       = 0;
-    static ModKeyFlags  nLastModKeyCode = ModKeyFlags::NONE;
-    static bool         bWaitForModKeyRelease = false;
     sal_uInt16          nRepeat         = LOWORD( lParam );
     if (nRepeat)
         --nRepeat;
@@ -3774,14 +3781,11 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     // MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition ends
     else
     {
+        static ModKeyFlags nLastModKeyCode = ModKeyFlags::NONE;
+
         // for shift, control and menu we issue a KeyModChange event
         if ( (wParam == VK_SHIFT) || (wParam == VK_CONTROL) || (wParam == VK_MENU) )
         {
-            SalKeyModEvent aModEvt;
-            aModEvt.mbDown = false; // auto-accelerator feature not supported here.
-            aModEvt.mnCode = nModCode;
-            aModEvt.mnModKeyCode = ModKeyFlags::NONE;   // no command events will be sent if this member is 0
-
             ModKeyFlags tmpCode = ModKeyFlags::NONE;
             if( GetKeyState( VK_LSHIFT )  & 0x8000 )
                 tmpCode |= ModKeyFlags::LeftShift;
@@ -3796,22 +3800,16 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             if( GetKeyState( VK_RMENU )  & 0x8000 )
                 tmpCode |= ModKeyFlags::RightMod2;
 
-            if( tmpCode < nLastModKeyCode )
+            if (tmpCode != nLastModKeyCode)
             {
-                aModEvt.mnModKeyCode = nLastModKeyCode;
-                nLastModKeyCode = ModKeyFlags::NONE;
-                bWaitForModKeyRelease = true;
+                SalKeyModEvent aModEvt;
+                aModEvt.mbDown = nMsg == WM_KEYDOWN || nMsg == WM_SYSKEYDOWN;
+                aModEvt.mnCode = nModCode;
+                aModEvt.mnModKeyCode = tmpCode < nLastModKeyCode ? nLastModKeyCode : tmpCode;
+                nLastModKeyCode = tmpCode;
+                return pFrame->CallCallback(SalEvent::KeyModChange, &aModEvt);
             }
-            else
-            {
-                if( !bWaitForModKeyRelease )
-                    nLastModKeyCode = tmpCode;
-            }
-
-            if( tmpCode == ModKeyFlags::NONE )
-                bWaitForModKeyRelease = false;
-
-            return pFrame->CallCallback( SalEvent::KeyModChange, &aModEvt );
+            return false;
         }
         else
         {
@@ -3822,6 +3820,21 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             UINT            nCharMsg = WM_CHAR;
             bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
+            comphelper::ScopeGuard aEndModKeyCodes(
+                [nModCode, pFrame, listener = vcl::DeletionListener(pFrame)]
+                {
+                    if (listener.isDeleted())
+                        return;
+                    // Send SalEvent::KeyModChange, to make sure that this window ends special mode
+                    // (e.g., hides mnemonics if auto-accelerator feature is active)
+                    SalKeyModEvent aModEvt;
+                    aModEvt.mbDown = false;
+                    aModEvt.mnCode = nModCode;
+                    aModEvt.mnModKeyCode = nLastModKeyCode;
+                    pFrame->CallCallback(SalEvent::KeyModChange, &aModEvt);
+                });
+            if (nLastModKeyCode == ModKeyFlags::NONE)
+                aEndModKeyCodes.dismiss();
             nLastModKeyCode = ModKeyFlags::NONE; // make sure no modkey messages are sent if they belong to a hotkey (see above)
             aKeyEvt.mnCharCode = 0;
             aKeyEvt.mnCode = ImplSalGetKeyCode( wParam );
@@ -4376,6 +4389,7 @@ static void ImplHandleSettingsChangeMsg(HWND hWnd, UINT nMsg, WPARAM /*wParam*/,
         }
         aSalShlData.mnWheelScrollLines = ImplSalGetWheelScrollLines();
         aSalShlData.mnWheelScrollChars = ImplSalGetWheelScrollChars();
+        UpdateAutoAccel();
         UpdateDarkMode(hWnd);
         GetSalData()->mbThemeChanged = true;
     }
@@ -5782,6 +5796,7 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
         {
             SetWindowPtr( hWnd, pFrame );
 
+            UpdateAutoAccel();
             UpdateDarkMode(hWnd);
 
             // Set HWND already here, as data might be used already

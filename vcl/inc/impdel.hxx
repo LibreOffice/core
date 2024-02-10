@@ -57,6 +57,12 @@ class DeletionListener
            if( m_pNotifier )
                m_pNotifier->addDel( this );
        }
+    DeletionListener(const DeletionListener& rOther)
+    :  m_pNotifier(rOther.m_pNotifier)
+       {
+           if (m_pNotifier)
+               m_pNotifier->addDel(this);
+       }
    ~DeletionListener()
    {
        if( m_pNotifier )
