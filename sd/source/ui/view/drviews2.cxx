@@ -193,6 +193,8 @@
 #include <ViewShellBase.hxx>
 #include <memory>
 
+#include <sfx2/newstyle.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -3163,7 +3165,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
-            if( rReq.GetSlot() == SID_STYLE_EDIT && !rReq.GetArgs() )
+            if (!rReq.GetArgs()
+                && (nSId == SID_STYLE_EDIT || nSId == SID_STYLE_UPDATE_BY_EXAMPLE
+                     || nSId == SID_STYLE_NEW_BY_EXAMPLE))
             {
                 SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
                 if( pStyleSheet && pStyleSheet->GetFamily() == SfxStyleFamily::Page)
@@ -3186,11 +3190,28 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SfxAllItemSet aSet(GetDoc()->GetPool());
 
-                SfxStringItem aStyleNameItem( SID_STYLE_EDIT, pStyleSheet->GetName() );
-                aSet.Put(aStyleNameItem);
+                aSet.Put(SfxUInt16Item(SID_STYLE_FAMILY,
+                                       static_cast<sal_uInt16>(pStyleSheet->GetFamily())));
 
-                SfxUInt16Item aStyleFamilyItem( SID_STYLE_FAMILY, static_cast<sal_uInt16>(pStyleSheet->GetFamily()) );
-                aSet.Put(aStyleFamilyItem);
+                if (nSId == SID_STYLE_NEW_BY_EXAMPLE)
+                {
+                    weld::Window* pWindow = GetViewFrame()->GetFrameWeld();
+                    SfxNewStyleDlg aDlg(pWindow, *pStyleSheet->GetPool(), pStyleSheet->GetFamily());
+                    auto nResult = aDlg.run();
+                    if (nResult == RET_OK)
+                    {
+                        aSet.Put(SfxStringItem(SID_STYLE_NEW_BY_EXAMPLE, aDlg.GetName()));
+                        aSet.Put(SfxStringItem(SID_STYLE_REFERENCE, pStyleSheet->GetName()));
+                    }
+                    else
+                    {
+                        Cancel();
+                        rReq.Ignore();
+                        break;
+                    }
+                }
+                else
+                    aSet.Put(SfxStringItem(nSId, pStyleSheet->GetName()));
 
                 rReq.SetArgs(aSet);
             }
