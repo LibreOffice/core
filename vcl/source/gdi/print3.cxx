@@ -514,6 +514,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             PrintDialog aDlg(xController->getWindow(), xController);
             if (!aDlg.run())
             {
+                xController->getPrinter()->SetUsePrintDialogSetting(false);
                 xController->abortJob();
                 return false;
             }
