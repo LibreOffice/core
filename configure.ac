@@ -14767,13 +14767,13 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
         auto s5 = S5().f();
 
         struct S6 {
-            consteval S6(char const (&lit)[2]) {
-                buf[0] = lit[0];
-                buf[1] = lit[1];
+            consteval S6(char const (&lit)[[2]]) {
+                buf[[0]] = lit[[0]];
+                buf[[1]] = lit[[1]];
             }
             union {
                 int x;
-                char buf[2];
+                char buf[[2]];
             };
         };
         void f6() { S6("a"); }
