@@ -14,7 +14,7 @@
 
 #include <oslrandom.h>
 
-int osl_get_system_random_data(char* buffer, size_t desired_len)
+bool osl_get_system_random_data(char* buffer, size_t desired_len)
 {
     unsigned int val;
 
@@ -29,7 +29,7 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
         }
         if (rand_s(&val))
         {
-            return 0;
+            return false;
         }
         memcpy(buffer, &val, len);
         buffer += len;
@@ -40,7 +40,7 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
     {
         if (rand_s(reinterpret_cast<unsigned int*>(buffer)))
         {
-            return 0;
+            return false;
         }
         else
         {
@@ -53,11 +53,11 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
     {
         if (rand_s(&val))
         {
-            return 0;
+            return false;
         }
         memcpy(buffer, &val, desired_len);
     }
-    return 1;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

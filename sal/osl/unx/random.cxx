@@ -14,7 +14,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int osl_get_system_random_data(char* buffer, size_t desired_len)
+bool osl_get_system_random_data(char* buffer, size_t desired_len)
 {
     int fd;
 

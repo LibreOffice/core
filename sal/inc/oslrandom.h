@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-int osl_get_system_random_data(char* buffer, size_t desired_len);
+bool osl_get_system_random_data(char* buffer, size_t desired_len);
 
 #if defined __cplusplus
 }
