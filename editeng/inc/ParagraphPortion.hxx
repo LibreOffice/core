@@ -111,7 +111,7 @@ public:
     void SetVisible(bool bVisible) { mbVisible = bVisible; }
     bool IsVisible() const { return mbVisible; }
 
-    bool IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0].GetLen() == 0; }
+    bool IsEmpty() { return GetTextPortions().isEmpty(); }
 
     tools::Long GetHeight() const { return mbVisible ? mnHeight : 0; }
     sal_Int32 GetFirstLineOffset() const { return mbVisible ? mnFirstLineOffset : 0; }

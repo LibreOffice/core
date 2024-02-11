@@ -57,6 +57,8 @@ public:
     void Remove(sal_Int32 nPosition) { maPortions.erase(maPortions.begin() + nPosition); }
 
     sal_Int32 GetPos(const TextPortion* p) const;
+
+    bool isEmpty() { return Count() == 1 && maPortions[0]->GetLen() == 0; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
