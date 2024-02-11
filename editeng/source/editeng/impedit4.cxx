@@ -1323,9 +1323,9 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 const XParaPortion& rXP = (*pPortionInfo)[n];
                 ParaPortion* pParaPortion = GetParaPortions().SafeGetObject(nPara);
                 DBG_ASSERT( pParaPortion, "InsertBinTextObject: ParaPortion?" );
-                pParaPortion->nHeight = rXP.nHeight;
-                pParaPortion->nFirstLineOffset = rXP.nFirstLineOffset;
-                pParaPortion->bForceRepaint = true;
+                pParaPortion->mnHeight = rXP.nHeight;
+                pParaPortion->mnFirstLineOffset = rXP.nFirstLineOffset;
+                pParaPortion->mbForceRepaint = true;
                 pParaPortion->SetValid();   // Do not format
 
                 // The Text Portions

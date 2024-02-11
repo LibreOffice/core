@@ -2601,15 +2601,13 @@ void ImpEditEngine::CreateTextPortions(ParaPortion& rParaPortion, sal_Int32& rSt
     }
     aPositions.insert( pNode->Len() );
 
-    if (rParaPortion.aScriptInfos.empty())
+    if (rParaPortion.getScriptTypePosInfos().empty())
         InitScriptTypes(GetParaPortions().GetPos(&rParaPortion));
 
-    const ScriptTypePosInfos& rTypes = rParaPortion.aScriptInfos;
-    for (const ScriptTypePosInfo& rType : rTypes)
+    for (const ScriptTypePosInfo& rType : rParaPortion.getScriptTypePosInfos())
         aPositions.insert( rType.nStartPos );
 
-    const WritingDirectionInfos& rWritingDirections = rParaPortion.aWritingDirectionInfos;
-    for (const WritingDirectionInfo & rWritingDirection : rWritingDirections)
+    for (const WritingDirectionInfo& rWritingDirection : rParaPortion.getWritingDirectionInfos())
         aPositions.insert( rWritingDirection.nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
@@ -4213,7 +4211,7 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
         // If anyway, then save as sal_False before SetVisible !
     }
 
-    if ( bShow && ( pPPortion->IsInvalid() || !pPPortion->nHeight ) )
+    if (bShow && (pPPortion->IsInvalid() || !pPPortion->getHeight()))
     {
         if ( !GetTextRanger() )
         {

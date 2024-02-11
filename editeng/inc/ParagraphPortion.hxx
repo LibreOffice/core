@@ -58,73 +58,80 @@ class ParaPortion
 {
     friend class ImpEditEngine; // to adjust the height
 private:
-    EditLineList aLineList;
-    TextPortionList aTextPortionList;
-    ContentNode* pNode = nullptr;
-    tools::Long nHeight = 0;
+    EditLineList maLineList;
+    TextPortionList maTextPortionList;
+    ContentNode* mpNode = nullptr;
+    tools::Long mnHeight = 0;
 
-    ScriptTypePosInfos aScriptInfos;
-    WritingDirectionInfos aWritingDirectionInfos;
+    ScriptTypePosInfos maScriptInfos;
+    WritingDirectionInfos maWritingDirectionInfos;
 
-    sal_Int32 nInvalidPosStart = 0;
-    sal_Int32 nFirstLineOffset = 0; // For Writer-LineSpacing-Interpretation
-    sal_Int32 nBulletX = 0;
-    sal_Int32 nInvalidDiff = 0;
+    sal_Int32 mnInvalidPosStart = 0;
+    sal_Int32 mnFirstLineOffset = 0; // For Writer-LineSpacing-Interpretation
+    sal_Int32 mnBulletX = 0;
+    sal_Int32 mnInvalidDiff = 0;
 
-    bool bInvalid : 1 = true;
-    bool bSimple : 1 = false; // only linear Tap
-    bool bVisible : 1 = true; // Belongs to the node!
-    bool bForceRepaint : 1 = false;
+    bool mbInvalid : 1 = true;
+    bool mbSimple : 1 = false; // only linear Tap
+    bool mbVisible : 1 = true; // Belongs to the node!
+    bool mbForceRepaint : 1 = false;
 
     ParaPortion(const ParaPortion&) = delete;
 
 public:
-    ParaPortion(ContentNode* pN)
-        : pNode(pN)
+    ParaPortion(ContentNode* pNode)
+        : mpNode(pNode)
     {
     }
+
+    tools::Long getHeight() { return mnHeight; }
 
     sal_Int32 GetLineNumber(sal_Int32 nIndex) const;
 
-    EditLineList& GetLines() { return aLineList; }
-    const EditLineList& GetLines() const { return aLineList; }
+    EditLineList& GetLines() { return maLineList; }
+    const EditLineList& GetLines() const { return maLineList; }
 
-    bool IsInvalid() const { return bInvalid; }
-    bool IsSimpleInvalid() const { return bSimple; }
+    bool IsInvalid() const { return mbInvalid; }
+    bool IsSimpleInvalid() const { return mbSimple; }
     void SetValid()
     {
-        bInvalid = false;
-        bSimple = true;
+        mbInvalid = false;
+        mbSimple = true;
     }
 
-    bool MustRepaint() const { return bForceRepaint; }
-    void SetMustRepaint(bool bRP) { bForceRepaint = bRP; }
+    bool MustRepaint() const { return mbForceRepaint; }
+    void SetMustRepaint(bool bRP) { mbForceRepaint = bRP; }
 
-    sal_Int32 GetBulletX() const { return nBulletX; }
-    void SetBulletX(sal_Int32 n) { nBulletX = n; }
+    sal_Int32 GetBulletX() const { return mnBulletX; }
+    void SetBulletX(sal_Int32 nBulletX) { mnBulletX = nBulletX; }
 
     void MarkInvalid(sal_Int32 nStart, sal_Int32 nDiff);
     void MarkSelectionInvalid(sal_Int32 nStart);
 
-    void SetVisible(bool bVisible);
-    bool IsVisible() const { return bVisible; }
+    void SetVisible(bool bVisible) { mbVisible = bVisible; }
+    bool IsVisible() const { return mbVisible; }
 
     bool IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0].GetLen() == 0; }
 
-    tools::Long GetHeight() const { return (bVisible ? nHeight : 0); }
-    sal_Int32 GetFirstLineOffset() const { return (bVisible ? nFirstLineOffset : 0); }
+    tools::Long GetHeight() const { return mbVisible ? mnHeight : 0; }
+    sal_Int32 GetFirstLineOffset() const { return mbVisible ? mnFirstLineOffset : 0; }
     void ResetHeight()
     {
-        nHeight = 0;
-        nFirstLineOffset = 0;
+        mnHeight = 0;
+        mnFirstLineOffset = 0;
     }
 
-    ContentNode* GetNode() const { return pNode; }
-    TextPortionList& GetTextPortions() { return aTextPortionList; }
-    const TextPortionList& GetTextPortions() const { return aTextPortionList; }
+    ScriptTypePosInfos& getScriptTypePosInfos() { return maScriptInfos; }
+    ScriptTypePosInfos const& getScriptTypePosInfos() const { return maScriptInfos; }
 
-    sal_Int32 GetInvalidPosStart() const { return nInvalidPosStart; }
-    short GetInvalidDiff() const { return nInvalidDiff; }
+    WritingDirectionInfos& getWritingDirectionInfos() { return maWritingDirectionInfos; }
+
+    ContentNode* GetNode() const { return mpNode; }
+    TextPortionList& GetTextPortions() { return maTextPortionList; }
+    const TextPortionList& GetTextPortions() const { return maTextPortionList; }
+
+    sal_Int32 GetInvalidPosStart() const { return mnInvalidPosStart; }
+    short GetInvalidDiff() const { return mnInvalidDiff; }
 
     void CorrectValuesBehindLastFormattedLine(sal_Int32 nLastFormattedLine);
 #if OSL_DEBUG_LEVEL > 0

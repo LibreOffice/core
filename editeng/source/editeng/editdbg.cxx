@@ -507,11 +507,12 @@ bool ParaPortion::DbgCheckTextPortions(ParaPortion const& rPara)
 {
     // check, if Portion length ok:
     sal_uInt16 nXLen = 0;
-    for (sal_Int32 nPortion = 0; nPortion < rPara.aTextPortionList.Count(); nPortion++)
+
+    for (sal_Int32 nPortion = 0; nPortion < rPara.maTextPortionList.Count(); nPortion++)
     {
-        nXLen = nXLen + rPara.aTextPortionList[nPortion].GetLen();
+        nXLen = nXLen + rPara.maTextPortionList[nPortion].GetLen();
     }
-    return nXLen == rPara.pNode->Len();
+    return nXLen == rPara.mpNode->Len();
 }
 #endif
 

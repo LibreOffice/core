@@ -366,88 +366,82 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
     return nullptr;
 }
 
-void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
+void ParaPortion::MarkInvalid(sal_Int32 nStart, sal_Int32 nDiff)
 {
-    if ( !bInvalid )
+    if (!mbInvalid)
     {
-//      nInvalidPosEnd = nStart;    // ??? => CreateLines
-        nInvalidPosStart = ( nDiff >= 0 ) ? nStart : ( nStart + nDiff );
-        nInvalidDiff = nDiff;
+//      mnInvalidPosEnd = nStart;    // ??? => CreateLines
+        mnInvalidPosStart = nDiff >= 0 ? nStart : nStart + nDiff;
+        mnInvalidDiff = nDiff;
     }
     else
     {
         // Simple tap in succession
-        if ( ( nDiff > 0 ) && ( nInvalidDiff > 0 ) &&
-             ( ( nInvalidPosStart+nInvalidDiff ) == nStart ) )
+        if (nDiff > 0 && mnInvalidDiff > 0 && (mnInvalidPosStart + mnInvalidDiff) == nStart)
         {
-            nInvalidDiff = nInvalidDiff + nDiff;
+            mnInvalidDiff = mnInvalidDiff + nDiff;
         }
         // Simple delete in succession
-        else if ( ( nDiff < 0 ) && ( nInvalidDiff < 0 ) && ( nInvalidPosStart == nStart ) )
+        else if (nDiff < 0 && mnInvalidDiff < 0 && mnInvalidPosStart == nStart)
         {
-            nInvalidPosStart = nInvalidPosStart + nDiff;
-            nInvalidDiff = nInvalidDiff + nDiff;
+            mnInvalidPosStart = mnInvalidPosStart + nDiff;
+            mnInvalidDiff = mnInvalidDiff + nDiff;
         }
         else
         {
-//          nInvalidPosEnd = pNode->Len();
-            DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
-            nInvalidPosStart = std::min( nInvalidPosStart, ( nDiff < 0 ? nStart+nDiff : nDiff ) );
-            nInvalidDiff = 0;
-            bSimple = false;
+//          mnInvalidPosEnd = pNode->Len();
+            DBG_ASSERT(nDiff >= 0 || (nStart + nDiff) >= 0, "MarkInvalid: Diff out of Range");
+            mnInvalidPosStart = std::min(mnInvalidPosStart, nDiff < 0 ? nStart + nDiff : nDiff);
+            mnInvalidDiff = 0;
+            mbSimple = false;
         }
     }
-    bInvalid = true;
-    aScriptInfos.clear();
-    aWritingDirectionInfos.clear();
+    mbInvalid = true;
+    maScriptInfos.clear();
+    maWritingDirectionInfos.clear();
 }
 
-void ParaPortion::MarkSelectionInvalid( sal_Int32 nStart )
+void ParaPortion::MarkSelectionInvalid(sal_Int32 nStart)
 {
-    if ( !bInvalid )
+    if ( !mbInvalid )
     {
-        nInvalidPosStart = nStart;
+        mnInvalidPosStart = nStart;
     }
     else
     {
-        nInvalidPosStart = std::min( nInvalidPosStart, nStart );
+        mnInvalidPosStart = std::min(mnInvalidPosStart, nStart);
     }
-    nInvalidDiff = 0;
-    bInvalid = true;
-    bSimple = false;
-    aScriptInfos.clear();
-    aWritingDirectionInfos.clear();
+    mnInvalidDiff = 0;
+    mbInvalid = true;
+    mbSimple = false;
+    maScriptInfos.clear();
+    maWritingDirectionInfos.clear();
 }
 
 sal_Int32 ParaPortion::GetLineNumber( sal_Int32 nIndex ) const
 {
-    SAL_WARN_IF( !aLineList.Count(), "editeng", "Empty ParaPortion in GetLine!" );
-    DBG_ASSERT( bVisible, "Why GetLine() on an invisible paragraph?" );
+    SAL_WARN_IF(!maLineList.Count(), "editeng", "Empty ParaPortion in GetLine!");
+    DBG_ASSERT(mbVisible, "Why GetLine() on an invisible paragraph?");
 
-    for ( sal_Int32 nLine = 0; nLine < aLineList.Count(); nLine++ )
+    for ( sal_Int32 nLine = 0; nLine < maLineList.Count(); nLine++ )
     {
-        if ( aLineList[nLine].IsIn( nIndex ) )
+        if (maLineList[nLine].IsIn(nIndex))
             return nLine;
     }
 
     // Then it should be at the end of the last line!
-    DBG_ASSERT( nIndex == aLineList[ aLineList.Count() - 1 ].GetEnd(), "Index dead wrong!" );
-    return (aLineList.Count()-1);
-}
-
-void ParaPortion::SetVisible( bool bMakeVisible )
-{
-    bVisible = bMakeVisible;
+    DBG_ASSERT(nIndex == maLineList[maLineList.Count() - 1].GetEnd(), "Index dead wrong!");
+    return (maLineList.Count() - 1);
 }
 
 void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormattedLine )
 {
-    sal_Int32 nLines = aLineList.Count();
+    sal_Int32 nLines = maLineList.Count();
     DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Empty Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
-        const EditLine& rLastFormatted = aLineList[ nLastFormattedLine ];
-        const EditLine& rUnformatted = aLineList[ nLastFormattedLine+1 ];
+        const EditLine& rLastFormatted = maLineList[ nLastFormattedLine ];
+        const EditLine& rUnformatted = maLineList[ nLastFormattedLine+1 ];
         sal_Int32 nPortionDiff = rUnformatted.GetStartPortion() - rLastFormatted.GetEndPortion();
         sal_Int32 nTextDiff = rUnformatted.GetStart() - rLastFormatted.GetEnd();
         nTextDiff++;    // LastFormatted->GetEnd() was included => 1 deducted too much!
@@ -462,7 +456,7 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
         {
             for ( sal_Int32 nL = nLastFormattedLine+1; nL < nLines; nL++ )
             {
-                EditLine& rLine = aLineList[ nL ];
+                EditLine& rLine = maLineList[ nL ];
 
                 rLine.GetStartPortion() = rLine.GetStartPortion() + nPDiff;
                 rLine.GetEndPortion() = rLine.GetEndPortion() + nPDiff;
@@ -474,7 +468,7 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
             }
         }
     }
-    DBG_ASSERT( aLineList[ aLineList.Count()-1 ].GetEnd() == pNode->Len(), "CorrectLines: The end is not right!" );
+    DBG_ASSERT(maLineList[maLineList.Count() - 1].GetEnd() == mpNode->Len(), "CorrectLines: The end is not right!");
 }
 
 // Shared reverse lookup acceleration pieces ...
@@ -1013,13 +1007,12 @@ EditPaM EditDoc::GetEndPaM() const
 
 sal_Int32 EditDoc::GetTextLen() const
 {
-    sal_Int32 nLen = 0;
-    for ( sal_Int32 nNode = 0; nNode < Count(); nNode++ )
+    sal_Int32 nLength = 0;
+    for (auto const& pContent : maContents)
     {
-        const ContentNode* pNode = GetObject( nNode );
-        nLen += pNode->GetExpandedLen();
+        nLength += pContent->GetExpandedLen();
     }
-    return nLen;
+    return nLength;
 }
 
 EditPaM EditDoc::Clear()

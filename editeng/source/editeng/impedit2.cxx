@@ -1659,7 +1659,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
     if (!pParaPortion)
         return;
 
-    ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+    ScriptTypePosInfos& rTypes = pParaPortion->getScriptTypePosInfos();
     rTypes.clear();
 
     ContentNode* pNode = pParaPortion->GetNode();
@@ -1751,11 +1751,11 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         rTypes[0].nScriptType = ( rTypes.size() > 1 ) ? rTypes[1].nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 
     // create writing direction information:
-    if ( pParaPortion->aWritingDirectionInfos.empty() )
+    WritingDirectionInfos& rDirInfos = pParaPortion->getWritingDirectionInfos();
+    if (rDirInfos.empty())
         InitWritingDirections( nPara );
 
     // i89825: Use CTL font for numbers embedded into an RTL run:
-    WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
     for (const WritingDirectionInfo & rDirInfo : rDirInfos)
     {
         const sal_Int32 nStart = rDirInfo.nStartPos;
@@ -1830,10 +1830,10 @@ sal_uInt16 ImpEditEngine::GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEn
         const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
         if (pParaPortion)
         {
-            if ( pParaPortion->aScriptInfos.empty() )
-                const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
+            const ScriptTypePosInfos& rTypes = pParaPortion->getScriptTypePosInfos();
 
-            const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+            if (rTypes.empty())
+                const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
             const sal_Int32 nPos = rPaM.GetIndex();
             ScriptTypePosInfos::const_iterator itr = std::find_if(rTypes.begin(), rTypes.end(), FindByPos(nPos));
@@ -1864,10 +1864,10 @@ SvtScriptType ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) cons
         if (!pParaPortion)
             continue;
 
-        if ( pParaPortion->aScriptInfos.empty() )
-            const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
+        ScriptTypePosInfos const& rTypes = pParaPortion->getScriptTypePosInfos();
 
-        const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+        if (rTypes.empty())
+            const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
         // find all the scripts of this range
         sal_Int32 nS = ( nPara == nStartPara ) ? aSel.Min().GetIndex() : 0;
@@ -1910,10 +1910,11 @@ bool ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
         const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
         if (pParaPortion)
         {
-            if ( pParaPortion->aScriptInfos.empty() )
+            ScriptTypePosInfos const& rTypes = pParaPortion->getScriptTypePosInfos();
+
+            if (rTypes.empty())
                 const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
-            const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
             const sal_Int32 nPos = rPaM.GetIndex();
             for (const ScriptTypePosInfo & rType : rTypes)
             {
@@ -1935,10 +1936,11 @@ bool ImpEditEngine::HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const
     const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
     if (pParaPortion)
     {
-        if ( pParaPortion->aScriptInfos.empty() )
+        const ScriptTypePosInfos& rTypes = pParaPortion->getScriptTypePosInfos();
+
+        if (rTypes.empty())
             const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
-        const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
         for ( size_t n = rTypes.size(); n && !bTypeFound; )
         {
             if ( rTypes[--n].nScriptType == nType )
@@ -1954,7 +1956,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
     if (!pParaPortion)
         return;
 
-    WritingDirectionInfos& rInfos = pParaPortion->aWritingDirectionInfos;
+    WritingDirectionInfos& rInfos = pParaPortion->getWritingDirectionInfos();
     rInfos.clear();
 
     if (pParaPortion->GetNode()->Len() && !mbFuzzing)
@@ -2060,10 +2062,10 @@ sal_uInt8 ImpEditEngine::GetRightToLeft( sal_Int32 nPara, sal_Int32 nPos, sal_In
         ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
         if (pParaPortion)
         {
-            if ( pParaPortion->aWritingDirectionInfos.empty() )
+            WritingDirectionInfos& rDirInfos = pParaPortion->getWritingDirectionInfos();
+            if (rDirInfos.empty())
                 InitWritingDirections( nPara );
 
-            WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
             for (const WritingDirectionInfo & rDirInfo : rDirInfos)
             {
                 if ( ( rDirInfo.nStartPos <= nPos ) && ( rDirInfo.nEndPos >= nPos ) )
@@ -4386,15 +4388,15 @@ tools::Long ImpEditEngine::GetXPos(ParaPortion const& rParaPortion, EditLine con
 
 void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
 {
-    rPortion.nHeight = 0;
-    rPortion.nFirstLineOffset = 0;
+    rPortion.mnHeight = 0;
+    rPortion.mnFirstLineOffset = 0;
 
     if (!rPortion.IsVisible())
         return;
 
     OSL_ENSURE(rPortion.GetLines().Count(), "Paragraph with no lines in ParaPortion::CalcHeight");
     for (sal_Int32 nLine = 0; nLine < rPortion.GetLines().Count(); ++nLine)
-        rPortion.nHeight += rPortion.GetLines()[nLine].GetHeight();
+        rPortion.mnHeight += rPortion.GetLines()[nLine].GetHeight();
 
     if (maStatus.IsOutliner())
         return;
@@ -4406,22 +4408,22 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
     if ( nSBL )
     {
         if (rPortion.GetLines().Count() > 1)
-            rPortion.nHeight += (rPortion.GetLines().Count() - 1) * nSBL;
+            rPortion.mnHeight += (rPortion.GetLines().Count() - 1) * nSBL;
         if (maStatus.ULSpaceSummation())
-            rPortion.nHeight += nSBL;
+            rPortion.mnHeight += nSBL;
     }
 
     sal_Int32 nPortion = GetParaPortions().GetPos(&rPortion);
     if ( nPortion )
     {
         sal_uInt16 nUpper = scaleYSpacingValue(rULItem.GetUpper());
-        rPortion.nHeight += nUpper;
-        rPortion.nFirstLineOffset = nUpper;
+        rPortion.mnHeight += nUpper;
+        rPortion.mnFirstLineOffset = nUpper;
     }
 
     if (nPortion != GetParaPortions().lastIndex())
     {
-        rPortion.nHeight += scaleYSpacingValue(rULItem.GetLower());   // not in the last
+        rPortion.mnHeight += scaleYSpacingValue(rULItem.GetLower());   // not in the last
     }
 
 
@@ -4442,28 +4444,28 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
 
     // check if distance by LineSpacing > Upper:
     sal_uInt16 nExtraSpace = scaleYSpacingValue(lcl_CalcExtraSpace(rLSItem));
-    if (nExtraSpace > rPortion.nFirstLineOffset)
+    if (nExtraSpace > rPortion.mnFirstLineOffset)
     {
         // Paragraph becomes 'bigger':
-        rPortion.nHeight += (nExtraSpace - rPortion.nFirstLineOffset);
-        rPortion.nFirstLineOffset = nExtraSpace;
+        rPortion.mnHeight += (nExtraSpace - rPortion.mnFirstLineOffset);
+        rPortion.mnFirstLineOffset = nExtraSpace;
     }
 
     // Determine nFirstLineOffset now f(pNode) => now f(pNode, pPrev):
     sal_uInt16 nPrevLower = scaleYSpacingValue(rPrevULItem.GetLower());
 
     // This PrevLower is still in the height of PrevPortion ...
-    if (nPrevLower > rPortion.nFirstLineOffset)
+    if (nPrevLower > rPortion.mnFirstLineOffset)
     {
         // Paragraph is 'small':
-        rPortion.nHeight -= rPortion.nFirstLineOffset;
-        rPortion.nFirstLineOffset = 0;
+        rPortion.mnHeight -= rPortion.mnFirstLineOffset;
+        rPortion.mnFirstLineOffset = 0;
     }
     else if ( nPrevLower )
     {
         // Paragraph becomes 'somewhat smaller':
-        rPortion.nHeight -= nPrevLower;
-        rPortion.nFirstLineOffset = rPortion.nFirstLineOffset - nPrevLower;
+        rPortion.mnHeight -= nPrevLower;
+        rPortion.mnFirstLineOffset = rPortion.mnFirstLineOffset - nPrevLower;
     }
     // I find it not so good, but Writer3 feature:
     // Check if distance by LineSpacing > Lower: this value is not
@@ -4476,10 +4478,10 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
     {
         sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;
         // Paragraph becomes 'bigger', 'grows' downwards:
-        if ( nMoreLower > rPortion.nFirstLineOffset )
+        if ( nMoreLower > rPortion.mnFirstLineOffset )
         {
-            rPortion.nHeight += (nMoreLower - rPortion.nFirstLineOffset);
-            rPortion.nFirstLineOffset = nMoreLower;
+            rPortion.mnHeight += (nMoreLower - rPortion.mnFirstLineOffset);
+            rPortion.mnFirstLineOffset = nMoreLower;
         }
     }
 }
