@@ -59,6 +59,11 @@ public:
     sal_Int32 GetPos(const TextPortion* p) const;
 
     bool isEmpty() { return Count() == 1 && maPortions[0]->GetLen() == 0; }
+
+    PortionsType::iterator begin() { return maPortions.begin(); }
+    PortionsType::iterator end() { return maPortions.end(); }
+    PortionsType::const_iterator cbegin() const { return maPortions.cbegin(); }
+    PortionsType::const_iterator cend() const { return maPortions.cend(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

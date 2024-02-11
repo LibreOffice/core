@@ -724,27 +724,28 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     const sal_Int32 nInvalidEnd =  nInvalidStart + std::abs( nInvalidDiff );
 
     bool bQuickFormat = false;
-    if ( !bEmptyNodeWithPolygon && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
+
+    // Determine if quick formt should be used
+    if (!bEmptyNodeWithPolygon && !HasScriptType(nPara, i18n::ScriptType::COMPLEX))
     {
-        if ( ( rParaPortion.IsSimpleInvalid() ) && ( nInvalidDiff > 0 ) &&
-             ( pNode->GetString().indexOf( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
+        if (rParaPortion.IsSimpleInvalid() &&
+            rParaPortion.GetInvalidDiff() > 0 &&
+            pNode->GetString().indexOf(CH_FEATURE, nInvalidStart) > nInvalidEnd)
         {
             bQuickFormat = true;
         }
-        else if ( ( rParaPortion.IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
+        else if (rParaPortion.IsSimpleInvalid() && nInvalidDiff < 0)
         {
             // check if delete over the portion boundaries was done...
             sal_Int32 nStart = nInvalidStart;  // DOUBLE !!!!!!!!!!!!!!!
             sal_Int32 nEnd = nStart - nInvalidDiff;  // negative
             bQuickFormat = true;
             sal_Int32 nPos = 0;
-            sal_Int32 nPortions = rParaPortion.GetTextPortions().Count();
-            for ( sal_Int32 nTP = 0; nTP < nPortions; nTP++ )
+            for (auto const& pTextPortion : rParaPortion.GetTextPortions())
             {
                 // There must be no start / end in the deleted area.
-                const TextPortion& rTP = rParaPortion.GetTextPortions()[ nTP ];
-                nPos = nPos + rTP.GetLen();
-                if ( ( nPos > nStart ) && ( nPos < nEnd ) )
+                nPos = nPos + pTextPortion->GetLen();
+                if (nPos > nStart && nPos < nEnd)
                 {
                     bQuickFormat = false;
                     break;
