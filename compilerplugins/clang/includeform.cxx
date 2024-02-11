@@ -36,7 +36,11 @@ private:
 #else
         FileEntry const * File,
 #endif
-        StringRef SearchPath, StringRef, clang::Module const *, SrcMgr::CharacteristicKind) override
+        StringRef SearchPath, StringRef, clang::Module const *,
+#if CLANG_VERSION >= 190000
+        bool,
+#endif
+        SrcMgr::CharacteristicKind) override
     {
         if (ignoreLocation(HashLoc)) {
             return;
