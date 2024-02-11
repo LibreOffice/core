@@ -67,7 +67,7 @@ ScQueryCellIteratorBase< accessType, queryType >::ScQueryCellIteratorBase(ScDocu
     , nSortedBinarySearch( nBinarySearchDisabled )
     , bAdvanceQuery( false )
     , bIgnoreMismatchOnLeadingStrings( false )
-    , bXLookUp( false )
+    , nSearchOpCode( SC_OPCODE_NONE )
     , nBestFitCol(SCCOL_MAX)
     , nBestFitRow(SCROW_MAX)
 {
@@ -207,7 +207,8 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                     return;
 
                 // XLookUp: Forward/asc/backward/desc search for best fit value, except if we have an exact match
-                if (bXLookUp && (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL) &&
+                if (nSearchOpCode == SC_OPCODE_X_LOOKUP &&
+                    (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL) &&
                     (nBestFitCol != nCol || nBestFitRow != nRow))
                 {
                     bool bNumSearch = rItem.meType == ScQueryEntry::ByValue && aCell.hasNumeric();
@@ -315,7 +316,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
                 // is the one after it.
                 lastRow = nRow;
                 // BinarySearch() looks for the first match for XLOOKUP
-                if (!bXLookUp)
+                if (nSearchOpCode != SC_OPCODE_X_LOOKUP)
                 {
                     ScQueryOp saveOp = op;
                     op = SC_LESS;
@@ -341,7 +342,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
             if( BinarySearch( nCol ))
                 lastRow = nRow;
         }
-        AccessBase::InitPosFinish(beforeRow, lastRow, bXLookUp);
+        AccessBase::InitPosFinish(beforeRow, lastRow, (nSearchOpCode == SC_OPCODE_X_LOOKUP));
     }
 }
 
@@ -545,7 +546,9 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
                 {
                     if (fLastInRangeValue <= nCellVal)
                     {
-                        if (bXLookUp && nSortedBinarySearch != nSearchbDesc && fLastInRangeValue == nCellVal && aIndexer.getLowIndex() != i)
+                        if (nSearchOpCode  == SC_OPCODE_X_LOOKUP &&
+                            nSortedBinarySearch != nSearchbDesc &&
+                            fLastInRangeValue == nCellVal && aIndexer.getLowIndex() != i)
                             bDone = true;
                         else
                         {
@@ -593,7 +596,9 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
                         aCellStr);
                 if (nTmp <= 0)
                 {
-                    if (bXLookUp && nSortedBinarySearch != nSearchbDesc && nTmp == 0 && aIndexer.getLowIndex() != i)
+                    if (nSearchOpCode == SC_OPCODE_X_LOOKUP &&
+                        nSortedBinarySearch != nSearchbDesc &&
+                        nTmp == 0 && aIndexer.getLowIndex() != i)
                         bDone = true;
                     else
                     {
@@ -667,7 +672,8 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
             {
                 found = i;
                 nLastInRange = i;
-                if (bXLookUp && (nSortedBinarySearch == nSearchbAscd && (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_EQUAL)))
+                if (nSearchOpCode == SC_OPCODE_X_LOOKUP && (nSortedBinarySearch == nSearchbAscd &&
+                    (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_EQUAL)))
                     bDone = true;
                 else // But keep searching to find the last matching one.
                     nLo = nMid + 1;
@@ -747,7 +753,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
     nFoundCol = rDoc.MaxCol()+1;
     nFoundRow = rDoc.MaxRow()+1;
 
-    if (bXLookUp && nSortedBinarySearch == nBinarySearchDisabled)
+    if (nSearchOpCode == SC_OPCODE_X_LOOKUP && nSortedBinarySearch == nBinarySearchDisabled)
         SetStopOnMismatch( false ); // assume not sorted keys for XLookup
     else
         SetStopOnMismatch( true ); // assume sorted keys
@@ -762,7 +768,8 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
         (maParam.GetEntry(0).eOp == SC_LESS_EQUAL || maParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
 
     // assume not sorted properly if we are using XLookup with forward or backward search
-    if (bBinary && bXLookUp && nSortedBinarySearch == nBinarySearchDisabled)
+    if (bBinary && nSearchOpCode == SC_OPCODE_X_LOOKUP &&
+        nSortedBinarySearch == nBinarySearchDisabled)
         bBinary = false;
 
     bool bFound = false;
@@ -855,7 +862,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
             }
         }
     }
-    if ( IsEqualConditionFulfilled() && !bXLookUp )
+    if ( IsEqualConditionFulfilled() && nSearchOpCode != SC_OPCODE_X_LOOKUP )
     {
         // Position on last equal entry, except for XLOOKUP,
         // which looking for the first equal entry

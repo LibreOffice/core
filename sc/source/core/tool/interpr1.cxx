@@ -4920,7 +4920,7 @@ void ScInterpreter::ScMatch()
         return;
 
     VectorSearchArguments vsa;
-    vsa.isXLookup   = false;
+    vsa.nSearchOpCode = SC_OPCODE_MATCH;
 
     // get match mode
     double fType = ( nParamCount == 3 ? GetDouble() : 1.0 );
@@ -7545,7 +7545,8 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         else
         {
             ScAddress aResultPos( nCol1, nRow1, nTab1);
-            bFound = LookupQueryWithCache( aResultPos, aParam, refData, 0, false );
+            bFound = LookupQueryWithCache( aResultPos, aParam, refData, 0,
+                         ( bHLookup ? SC_OPCODE_H_LOOKUP : SC_OPCODE_V_LOOKUP ) );
             nRow = aResultPos.Row();
             nCol = nSpIndex;
         }
@@ -7638,7 +7639,7 @@ void ScInterpreter::ScXLookup()
         return;
 
     VectorSearchArguments vsa;
-    vsa.isXLookup   = true;
+    vsa.nSearchOpCode = SC_OPCODE_X_LOOKUP;
 
     if ( nParamCount == 6 )
     {
@@ -10663,7 +10664,7 @@ bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryPara
                     rParam.bByRow = true;
                     ScAddress aResultPos( vsa.nCol1, vsa.nRow1, vsa.nTab1 );
                     const ScComplexRefData* refData = nullptr;
-                    if ( LookupQueryWithCache( aResultPos, rParam, refData, vsa.eSearchMode, vsa.isXLookup ) )
+                    if ( LookupQueryWithCache( aResultPos, rParam, refData, vsa.eSearchMode, vsa.nSearchOpCode ) )
                         vsa.nHitIndex = aResultPos.Row() - vsa.nRow1 + 1;
                 }
                 else
@@ -10674,7 +10675,7 @@ bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryPara
                     ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, vsa.nTab1, rParam, false, bReverseSearch);
                     // Advance Entry.nField in Iterator if column changed
                     aCellIter.SetAdvanceQueryParamEntryField(true);
-                    aCellIter.SetXlookupMode(vsa.isXLookup);
+                    aCellIter.SetLookupMode(vsa.nSearchOpCode);
                     // TODO: no binary search for column (horizontal) search (use linear)
                     aCellIter.SetSortedBinarySearchMode(vsa.eSearchMode);
                     if (rEntry.eOp == SC_EQUAL)
@@ -10741,7 +10742,7 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
 
         case wildcard :
             // this mode can only used with XLOOKUP
-            if ( vsa.isXLookup )
+            if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP )
             {
                 rEntry.eOp = SC_EQUAL;
                 if ( vsa.isStringSearch )
@@ -10774,7 +10775,7 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
     {
         rItem.meType   = ScQueryEntry::ByString;
         rItem.maString = vsa.sSearchStr;
-        if ( !vsa.isXLookup )
+        if ( vsa.nSearchOpCode == SC_OPCODE_MATCH )
         {
             if ( mrDoc.IsInVBAMode() )
                 rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
@@ -10805,12 +10806,12 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
     // MATCH expects index starting with 1, XLOOKUP expects index starting with 0
     if ( vsa.nHitIndex > 0 )
     {
-        vsa.nIndex = ( vsa.isXLookup ? --vsa.nHitIndex : vsa.nHitIndex );
+        vsa.nIndex = ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP ? --vsa.nHitIndex : vsa.nHitIndex );
         return true;
     }
     else  if ( vsa.nHitIndex == 0 && vsa.nBestFit != SCSIZE_MAX )
     {
-        if ( vsa.isXLookup )
+        if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP )
         {
             vsa.nIndex = vsa.nBestFit;
             if ( !vsa.pMatSrc )
@@ -10832,7 +10833,7 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
 
 static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInterpreterContext& rContext,
         const ScQueryParam & rParam, const ScQueryEntry & rEntry, const ScFormulaCell* cell,
-        const ScComplexRefData* refData, sal_Int8 nSearchMode, bool bXlookupMode )
+        const ScComplexRefData* refData, sal_Int8 nSearchMode, sal_Int16 nOpCode )
 {
     if (rEntry.eOp != SC_EQUAL)
     {
@@ -10849,7 +10850,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
             // search for the first GreaterOrEqual value if SearchMode is asc
             ScQueryCellIteratorSortedCache aCellIter(rDoc, rContext, rParam.nTab, rParam, false, false);
             aCellIter.SetSortedBinarySearchMode(nSearchMode);
-            aCellIter.SetXlookupMode(bXlookupMode);
+            aCellIter.SetLookupMode(nOpCode);
             if (aCellIter.GetFirst())
             {
                 o_rResultPos.SetCol(aCellIter.GetCol());
@@ -10864,7 +10865,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
             ScQueryCellIteratorDirect aCellIter(rDoc, rContext, rParam.nTab, rParam, false, bReverse);
 
             aCellIter.SetSortedBinarySearchMode(nSearchMode);
-            aCellIter.SetXlookupMode(bXlookupMode);
+            aCellIter.SetLookupMode(nOpCode);
             if (aCellIter.FindEqualOrSortedLastInRange(nCol, nRow))
             {
                 o_rResultPos.SetCol(nCol);
@@ -10886,7 +10887,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         {
             ScQueryCellIteratorSortedCache aCellIter( rDoc, rContext, rParam.nTab, rParam, false, false );
             aCellIter.SetSortedBinarySearchMode(nSearchMode);
-            aCellIter.SetXlookupMode(bXlookupMode);
+            aCellIter.SetLookupMode(nOpCode);
             if (aCellIter.GetFirst())
             {
                 o_rResultPos.SetCol( aCellIter.GetCol());
@@ -10899,7 +10900,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
             ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false,
                 static_cast<SearchMode>(nSearchMode) == searchrev);
             aCellIter.SetSortedBinarySearchMode(nSearchMode);
-            aCellIter.SetXlookupMode(bXlookupMode);
+            aCellIter.SetLookupMode(nOpCode);
             if (aCellIter.GetFirst())
             {
                 o_rResultPos.SetCol( aCellIter.GetCol());
@@ -10951,7 +10952,7 @@ static SCROW lcl_getPrevRowWithEmptyValueLookup( const ScLookupCache& rCache,
 
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam, const ScComplexRefData* refData,
-        sal_Int8 nSearchMode, bool bXlookupMode ) const
+        sal_Int8 nSearchMode, sal_Int16 nOpCode ) const
 {
     bool bFound = false;
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -10964,7 +10965,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
      * parameter so it would affect only the lookup range parameter. */
     if (!bColumnsMatch || GetVolatileType() != NOT_VOLATILE)
         bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry, pMyFormulaCell,
-            refData, nSearchMode, bXlookupMode );
+            refData, nSearchMode, nOpCode );
     else
     {
         ScRange aLookupRange( rParam.nCol1, rParam.nRow1, rParam.nTab,
@@ -10996,7 +10997,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
             case ScLookupCache::NOT_CACHED :
             case ScLookupCache::CRITERIA_DIFFERENT :
                 bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry,
-                    pMyFormulaCell, refData, nSearchMode, bXlookupMode );
+                    pMyFormulaCell, refData, nSearchMode, nOpCode );
                 if (eCacheResult == ScLookupCache::NOT_CACHED)
                     rCache.insert( o_rResultPos, aCriteria, aPos, bFound);
                 break;
