@@ -236,7 +236,7 @@ SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
 {
     static vcl::DeleteOnDeinit<SalLayoutGlyphsCache> cache(
         !comphelper::IsFuzzing() ? officecfg::Office::Common::Cache::Font::GlyphsCacheSize::get()
-                                 : 20000);
+                                 : 20000000);
     return cache.get();
 }
 
