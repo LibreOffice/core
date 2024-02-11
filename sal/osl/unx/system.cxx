@@ -48,11 +48,6 @@ int macxp_resolveAlias(char *path, int buflen)
   (void) buflen;
   return 0;
 #else
-  CFStringRef cfpath;
-  CFURLRef cfurl;
-  CFErrorRef cferror;
-  CFDataRef cfbookmark;
-
   // Don't even try anything for files inside the app bundle. Just a
   // waste of time.
 
@@ -74,12 +69,19 @@ int macxp_resolveAlias(char *path, int buflen)
       if ( unprocessedPath )
           *unprocessedPath = '\0';
 
-      cfpath = CFStringCreateWithCString( nullptr, path, kCFStringEncodingUTF8 );
-      cfurl = CFURLCreateWithFileSystemPath( nullptr, cfpath, kCFURLPOSIXPathStyle, false );
-      CFRelease( cfpath );
-      cferror = nullptr;
-      cfbookmark = CFURLCreateBookmarkDataFromFile( nullptr, cfurl, &cferror );
-      CFRelease( cfurl );
+      // tdf#155710 handle conversion failures due to non-UTF8 strings
+      // Windows and Linux paths can be passed as parameters to this function
+      // and those paths may not always be UTF8 encoded like macOS paths.
+      CFStringRef cfpath = CFStringCreateWithCString( nullptr, path, kCFStringEncodingUTF8 );
+      CFErrorRef cferror = nullptr;
+      CFDataRef cfbookmark = nullptr;
+      if (cfpath)
+      {
+          CFURLRef cfurl = CFURLCreateWithFileSystemPath( nullptr, cfpath, kCFURLPOSIXPathStyle, false );
+          CFRelease( cfpath );
+          cfbookmark = CFURLCreateBookmarkDataFromFile( nullptr, cfurl, &cferror );
+          CFRelease( cfurl );
+      }
 
       if ( cfbookmark == nullptr )
       {
@@ -91,7 +93,7 @@ int macxp_resolveAlias(char *path, int buflen)
       else
       {
           Boolean isStale;
-          cfurl = CFURLCreateByResolvingBookmarkData( nullptr, cfbookmark, kCFBookmarkResolutionWithoutUIMask,
+          CFURLRef cfurl = CFURLCreateByResolvingBookmarkData( nullptr, cfbookmark, kCFBookmarkResolutionWithoutUIMask,
                                                       nullptr, nullptr, &isStale, &cferror );
           CFRelease( cfbookmark );
           if ( cfurl == nullptr )
