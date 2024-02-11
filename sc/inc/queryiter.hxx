@@ -183,7 +183,7 @@ protected:
     sal_uInt8            nSortedBinarySearch;
     bool            bAdvanceQuery;
     bool            bIgnoreMismatchOnLeadingStrings;
-    bool            bXLookUp;
+    sal_uInt16      nSearchOpCode;
     SCCOL           nBestFitCol;
     SCROW           nBestFitRow;
 
@@ -276,8 +276,8 @@ public:
                                 nSearchbAscd : (nSearchMode == -2 ? nSearchbDesc : nBinarySearchDisabled));
                         }
 
-    void            SetXlookupMode( bool bVal )
-                        { bXLookUp = bVal; }
+    void            SetLookupMode( sal_uInt16 nVal )
+                        { nSearchOpCode = nVal; }
 };
 
 
@@ -325,7 +325,7 @@ class ScQueryCellIterator
     using Base::getThisResult;
     using Base::nBestFitCol;
     using Base::nBestFitRow;
-    using Base::bXLookUp;
+    using Base::nSearchOpCode;
 
     bool GetThis();
 

@@ -62,8 +62,8 @@ enum SearchMode{ searchfwd=1, searchrev=-1, searchbasc=2, searchbdesc=-2 };
 struct VectorSearchArguments
 {
     // struct contains the contents of the function arguments
-    // Struct owner, ScMatch or ScXLookup
-    bool isXLookup = false;
+    // OpCode of struct owner
+    sal_uInt16 nSearchOpCode = SC_OPCODE_NONE;
 
     // match mode (common, enum values are from XLOOKUP)
     // optional 5th argument to set match mode
@@ -548,7 +548,7 @@ private:
     inline void TreatDoubleError( double& rVal );
     // Lookup using ScLookupCache, @returns true if found and result address
     bool LookupQueryWithCache( ScAddress & o_rResultPos, const ScQueryParam & rParam,
-            const ScComplexRefData* refData, sal_Int8 nSearchMode, bool bXlookupMode ) const;
+            const ScComplexRefData* refData, sal_Int8 nSearchMode, sal_Int16 nOpCode ) const;
 
     void ScIfJump();
     void ScIfError( bool bNAonly );
