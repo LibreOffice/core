@@ -65,7 +65,8 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
     }
     catch (Exception const&)
     {
-        TOOLS_WARN_EXCEPTION("oox.storage", "ZipStorage::ZipStorage exception opening input storage");
+        // this is normally a noise exception, because it happens during file format detection
+        TOOLS_INFO_EXCEPTION("oox.storage", "ZipStorage::ZipStorage exception opening input storage");
     }
 }
 
