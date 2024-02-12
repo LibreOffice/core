@@ -376,6 +376,20 @@ void QtFrame::SetIcon(sal_uInt16 nIcon)
 
     QIcon aIcon = QIcon::fromTheme(appicon);
     m_pQWidget->window()->setWindowIcon(aIcon);
+
+    if (QGuiApplication::platformName() == "wayland" && m_pQWidget->window()->isVisible())
+    {
+        // Qt currently doesn't provide API to directly set the app_id for a single
+        // window/toplevel on Wayland, but the one set for the application is picked up
+        // on hide/show, so do that.
+        // An alternative would be to use private Qt API and low-level wayland API to set the
+        // app_id directly, s. discussion in QTBUG-77182.
+        const QString sOrigDesktopFileName = QGuiApplication::desktopFileName();
+        QGuiApplication::setDesktopFileName(appicon);
+        m_pQWidget->window()->hide();
+        m_pQWidget->window()->show();
+        QGuiApplication::setDesktopFileName(sOrigDesktopFileName);
+    }
 }
 
 void QtFrame::SetMenu(SalMenu*) {}
