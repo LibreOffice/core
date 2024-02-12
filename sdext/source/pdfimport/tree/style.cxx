@@ -197,7 +197,11 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
     for(sal_Int32 nSubStyle : rStyle.SubStyles)
         impl_emitStyle( nSubStyle, rContext, rContainedElemVisitor );
     if( !rStyle.Contents.isEmpty() )
+    {
+        rContext.rEmitter.beginTag( "office:binary-data", PropertyMap() );
         rContext.rEmitter.write( rStyle.Contents );
+        rContext.rEmitter.endTag( "office:binary-data" );
+    }
     if( rStyle.ContainedElement )
         rStyle.ContainedElement->visitedBy( rContainedElemVisitor,
                                             std::list<std::unique_ptr<Element>>::iterator() );
