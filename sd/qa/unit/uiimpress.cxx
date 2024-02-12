@@ -285,6 +285,27 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf124708)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(16), pActualPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf159666)
+{
+    createSdDrawDoc("tdf159666.odg");
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), pActualPage->GetObjCount());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pActualPage->GetObjCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), pActualPage->GetObjCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
 {
     createSdImpressDoc();
