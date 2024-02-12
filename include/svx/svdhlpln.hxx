@@ -59,7 +59,7 @@ public:
 #define SDRHELPLINE_NOTFOUND 0xFFFF
 
 class SVXCORE_DLLPUBLIC SdrHelpLineList {
-    std::vector<std::unique_ptr<SdrHelpLine>> aList;
+    std::vector<std::unique_ptr<SdrHelpLine>> m_aList;
 
 public:
     SdrHelpLineList() {}
@@ -67,21 +67,21 @@ public:
     SdrHelpLineList&   operator=(const SdrHelpLineList& rSrcList);
     bool operator==(const SdrHelpLineList& rCmp) const;
     bool operator!=(const SdrHelpLineList& rCmp) const                 { return !operator==(rCmp); }
-    sal_uInt16         GetCount() const                                    { return sal_uInt16(aList.size()); }
-    void               Insert(const SdrHelpLine& rHL)                          { aList.emplace_back(new SdrHelpLine(rHL)); }
+    sal_uInt16         GetCount() const                                    { return sal_uInt16(m_aList.size()); }
+    void               Insert(const SdrHelpLine& rHL)                          { m_aList.emplace_back(new SdrHelpLine(rHL)); }
     void               Insert(const SdrHelpLine& rHL, sal_uInt16 nPos)
     {
         if(nPos==0xFFFF)
-            aList.emplace_back(new SdrHelpLine(rHL));
+            m_aList.emplace_back(new SdrHelpLine(rHL));
         else
-            aList.emplace(aList.begin() + nPos, new SdrHelpLine(rHL));
+            m_aList.emplace(m_aList.begin() + nPos, new SdrHelpLine(rHL));
     }
     void               Delete(sal_uInt16 nPos)
     {
-        aList.erase(aList.begin() + nPos);
+        m_aList.erase(m_aList.begin() + nPos);
     }
-    SdrHelpLine&       operator[](sal_uInt16 nPos)                             { return *aList[nPos]; }
-    const SdrHelpLine& operator[](sal_uInt16 nPos) const                       { return *aList[nPos]; }
+    SdrHelpLine&       operator[](sal_uInt16 nPos)                             { return *m_aList[nPos]; }
+    const SdrHelpLine& operator[](sal_uInt16 nPos) const                       { return *m_aList[nPos]; }
     sal_uInt16             HitTest(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
 };
 
