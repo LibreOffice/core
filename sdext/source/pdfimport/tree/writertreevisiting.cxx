@@ -995,10 +995,29 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uni
         aGCProps[ "draw:stroke" ] = "none";
     }
 
+    if (elem.FillImage != -1)
+    {
+        PropertyMap props;
+        // The image isn't actually in a prop, it's in an extra chunk inside.
+        StyleContainer::Style style("draw:fill-image"_ostr, std::move(props));
+        style.Contents = m_rProcessor.getImages().asBase64EncodedString(elem.FillImage);
+        aGCProps[ "draw:fill-image-name" ] =
+            m_rStyleContainer.getStyleName(
+            m_rStyleContainer.getStyleId(style));
+
+    }
+
     // TODO(F1): check whether stuff could be emulated by gradient/bitmap/hatch
     if( elem.Action & (PATH_FILL | PATH_EOFILL) )
     {
-        aGCProps[ "draw:fill" ]   = "solid";
+        if (elem.FillImage == -1)
+        {
+            aGCProps[ "draw:fill" ]   = "solid";
+        }
+        else
+        {
+            aGCProps[ "draw:fill" ]   = "bitmap";
+        }
         aGCProps[ "draw:fill-color" ] = getColorString( rGC.FillColor );
     }
     else
