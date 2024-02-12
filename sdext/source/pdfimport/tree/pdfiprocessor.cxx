@@ -389,9 +389,10 @@ void PDFIProcessor::tilingPatternFill(int nX0, int nY0, int nX1, int nY1,
                                       double nxStep, double nyStep,
                                       int /* nPaintType */,
                                       css::geometry::AffineMatrix2D& rMat,
-                                      const css::uno::Sequence<css::beans::PropertyValue>& /*xTile*/)
+                                      const css::uno::Sequence<css::beans::PropertyValue>& xTile)
 {
     const GraphicsContext& rGC(getCurrentContext());
+    auto nTile = m_aImages.addImage(xTile);
 
     basegfx::B2DTuple aScale, aTranslation;
     double fRotate, fShearX;
@@ -431,7 +432,8 @@ void PDFIProcessor::tilingPatternFill(int nX0, int nY0, int nX1, int nY1,
         m_pCurElement,
         getGCId(getCurrentContext()),
         aB2DPoly,
-        PATH_EOFILL ); // Hmm how do I know if this should be EO or not?
+        PATH_EOFILL, // Hmm how do I know if this should be EO or not?
+        nTile );
     pPolyElement->updateGeometry();
     pPolyElement->ZOrder = m_nNextZOrder++;
 }
@@ -445,7 +447,8 @@ void PDFIProcessor::strokePath( const uno::Reference< rendering::XPolyPolygon2D 
         m_pCurElement,
         getGCId(getCurrentContext()),
         aPoly,
-        PATH_STROKE );
+        PATH_STROKE,
+        -1 );
     pPoly->updateGeometry();
     pPoly->ZOrder = m_nNextZOrder++;
 }
@@ -459,7 +462,8 @@ void PDFIProcessor::fillPath( const uno::Reference< rendering::XPolyPolygon2D >&
         m_pCurElement,
         getGCId(getCurrentContext()),
         aPoly,
-        PATH_FILL );
+        PATH_FILL,
+        -1 );
     pPoly->updateGeometry();
     pPoly->ZOrder = m_nNextZOrder++;
 }
@@ -473,7 +477,8 @@ void PDFIProcessor::eoFillPath( const uno::Reference< rendering::XPolyPolygon2D 
         m_pCurElement,
         getGCId(getCurrentContext()),
         aPoly,
-        PATH_EOFILL );
+        PATH_EOFILL,
+        -1 );
     pPoly->updateGeometry();
     pPoly->ZOrder = m_nNextZOrder++;
 }

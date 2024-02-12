@@ -124,10 +124,12 @@ void ImageElement::visitedBy( ElementTreeVisitor&                          rVisi
 PolyPolyElement::PolyPolyElement( Element*                       pParent,
                                   sal_Int32                      nGCId,
                                   const basegfx::B2DPolyPolygon& rPolyPoly,
-                                  sal_Int8                       nAction )
+                                  sal_Int8                       nAction,
+                                  ImageId                        nFillImage )
     : DrawElement( pParent, nGCId ),
       PolyPoly( rPolyPoly ),
-      Action( nAction )
+      Action( nAction ),
+      FillImage( nFillImage )
 {
 }
 
