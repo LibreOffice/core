@@ -420,7 +420,12 @@ public:
         bool bIsSensitive = BaseInstanceClass::get_sensitive();
         BaseInstanceClass::set_sensitive(sensitive);
         if (bIsSensitive != sensitive)
-            sendUpdate();
+        {
+            std::unique_ptr<jsdialog::ActionDataMap> pMap
+                = std::make_unique<jsdialog::ActionDataMap>();
+            (*pMap)[ACTION_TYPE ""_ostr] = (sensitive ? u"enable" : u"disable");
+            sendAction(std::move(pMap));
+        }
     }
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
