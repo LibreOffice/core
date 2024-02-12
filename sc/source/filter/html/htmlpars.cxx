@@ -155,6 +155,14 @@ void ParseDataSheetsNumberformat(const OUString& rDataSheetsValue, std::optional
         }
     }
 }
+
+/// data-sheets-formula from google sheets, grammar is R1C1 reference style.
+void ParseDataSheetsFormula(const OUString& rDataSheetsFormula, std::optional<OUString>& rVal,
+                            std::optional<formula::FormulaGrammar::Grammar>& rGrammar)
+{
+    rVal = rDataSheetsFormula;
+    rGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
+}
 }
 
 ScHTMLStyles::ScHTMLStyles() : maEmpty() {}
@@ -1072,6 +1080,12 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             case HtmlOptionId::DSNUM:
             {
                 ParseDataSheetsNumberformat(rOption.GetString(), mxActEntry->pNumStr);
+            }
+            break;
+            case HtmlOptionId::DSFORMULA:
+            {
+                ParseDataSheetsFormula(rOption.GetString(), mxActEntry->moFormulaStr,
+                                       mxActEntry->moFormulaGrammar);
             }
             break;
             default: break;
