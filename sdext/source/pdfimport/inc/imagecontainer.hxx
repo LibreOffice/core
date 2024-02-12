@@ -42,6 +42,7 @@ namespace pdfi
         ImageId addImage( const css::uno::Sequence<
                                 css::beans::PropertyValue>& xBitmap );
         void writeBase64EncodedStream( ImageId nImageId, EmitContext& rContext );
+        OUString asBase64EncodedString( ImageId nId ) const;
     };
 }
 

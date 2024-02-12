@@ -141,6 +141,37 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
     rContext.rEmitter.write( encodeBase64( aData.getConstArray(), aData.getLength() ));
 }
 
+OUString ImageContainer::asBase64EncodedString( ImageId nId ) const
+{
+    OSL_ASSERT( nId >= 0 && o3tl::make_unsigned(nId) < m_aImages.size() );
+
+    const uno::Sequence<beans::PropertyValue>& rEntry( m_aImages[nId] );
+
+    // find "InputSequence" property
+    const beans::PropertyValue* pAry(rEntry.getConstArray());
+    const sal_Int32             nLen(rEntry.getLength());
+    const beans::PropertyValue* pValue(
+        std::find_if(pAry, pAry+nLen,
+            [] (beans::PropertyValue const& v) -> bool {
+                return v.Name == "InputSequence";
+            }));
+
+    if (pValue == pAry + nLen )
+    {
+        SAL_WARN("sdext.pdfimport", "InputSequence not found");
+        return "";
+    }
+
+    uno::Sequence<sal_Int8> aData;
+    if( !(pValue->Value >>= aData) )
+    {
+        SAL_WARN("sdext.pdfimport", "Wrong data type");
+        return "";
+    }
+
+    return encodeBase64( aData.getConstArray(), aData.getLength() );
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
