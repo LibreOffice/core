@@ -15,7 +15,6 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
--o sw.SwXTextTable
 -o sw.SwXTextTableCursor
 -o sw.SwXTextTableRow
 #i85580 -o sw.SwXTextView

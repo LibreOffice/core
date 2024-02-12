@@ -137,9 +137,6 @@ sw.SwAccessibleTextGraphicObject::com::sun::star::accessibility::XAccessibleImag
 ### i88262 ###
 sw.SwXTextFrame::com::sun::star::text::BaseFrameProperties
 
-### i88374 ###
-sw.SwXTextTable::com::sun::star::table::XAutoFormattable
-
 ### i88310 ###
 sw.SwAccessibleTextGraphicObject::com::sun::star::accessibility::XAccessibleComponent
 
