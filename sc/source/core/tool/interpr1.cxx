@@ -5075,6 +5075,178 @@ void ScInterpreter::ScMatch()
         PushIllegalParameter();
 }
 
+void ScInterpreter::ScXMatch()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 2, 4))
+        return;
+
+    VectorSearchArguments vsa;
+    vsa.nSearchOpCode = SC_OPCODE_X_MATCH;
+
+    // get search mode
+    if (nParamCount == 4)
+    {
+        sal_Int16 k = GetInt16();
+        if (k >= -2 && k <= 2 && k != 0)
+            vsa.eSearchMode = static_cast<SearchMode>(k);
+        else
+        {
+            PushIllegalParameter();
+            return;
+        }
+    }
+    else
+        vsa.eSearchMode = searchfwd;
+
+    // get match mode
+    if (nParamCount >= 3)
+    {
+        sal_Int16 k = GetInt16();
+        if (k >= -1 && k <= 2)
+            vsa.eMatchMode = static_cast<MatchMode>(k);
+        else
+        {
+            PushIllegalParameter();
+            return;
+        }
+    }
+    else
+        vsa.eMatchMode = exactorNA;
+
+    // get vector to be searched
+    switch (GetStackType())
+    {
+        case svSingleRef:
+        {
+            PopSingleRef(vsa.nCol1, vsa.nRow1, vsa.nTab1);
+            vsa.nCol2 = vsa.nCol1;
+            vsa.nRow2 = vsa.nRow1;
+            vsa.pMatSrc = nullptr;
+        }
+        break;
+        case svDoubleRef:
+        {
+            vsa.pMatSrc = nullptr;
+            SCTAB nTab2 = 0;
+            PopDoubleRef(vsa.nCol1, vsa.nRow1, vsa.nTab1, vsa.nCol2, vsa.nRow2, nTab2);
+            if (vsa.nTab1 != nTab2 || (vsa.nCol1 != vsa.nCol2 && vsa.nRow1 != vsa.nRow2))
+            {
+                PushIllegalParameter();
+                return;
+            }
+        }
+        break;
+        case svMatrix:
+        case svExternalDoubleRef:
+        {
+            if (GetStackType() == svMatrix)
+                vsa.pMatSrc = PopMatrix();
+            else
+                PopExternalDoubleRef(vsa.pMatSrc);
+
+            if (!vsa.pMatSrc)
+            {
+                PushIllegalParameter();
+                return;
+            }
+        }
+        break;
+        default:
+            PushIllegalParameter();
+            return;
+    }
+
+    // get search value
+    if (nGlobalError == FormulaError::NONE)
+    {
+        switch (GetStackType())
+        {
+            case svDouble:
+            {
+                vsa.isStringSearch = false;
+                vsa.fSearchVal = GetDouble();
+            }
+            break;
+            case svString:
+            {
+                vsa.isStringSearch = true;
+                vsa.sSearchStr = GetString();
+            }
+            break;
+            case svDoubleRef:
+            case svSingleRef:
+            {
+                ScAddress aAdr;
+                if (!PopDoubleRefOrSingleRef(aAdr))
+                {
+                    PushInt(0);
+                    return;
+                }
+                ScRefCellValue aCell(mrDoc, aAdr);
+                if (aCell.hasNumeric())
+                {
+                    vsa.isStringSearch = false;
+                    vsa.fSearchVal = GetCellValue(aAdr, aCell);
+                }
+                else
+                {
+                    vsa.isStringSearch = true;
+                    GetCellString(vsa.sSearchStr, aCell);
+                }
+            }
+            break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                PopExternalSingleRef(pToken);
+                if (nGlobalError != FormulaError::NONE)
+                {
+                    PushError(nGlobalError);
+                    return;
+                }
+                if (pToken->GetType() == svDouble)
+                {
+                    vsa.isStringSearch = false;
+                    vsa.fSearchVal = pToken->GetDouble();
+                }
+                else
+                {
+                    vsa.isStringSearch = true;
+                    vsa.sSearchStr = pToken->GetString();
+                }
+            }
+            break;
+            case svExternalDoubleRef:
+            case svMatrix:
+            {
+                ScMatValType nType = GetDoubleOrStringFromMatrix(
+                    vsa.fSearchVal, vsa.sSearchStr);
+                vsa.isStringSearch = ScMatrix::IsNonValueType(nType);
+            }
+            break;
+            default:
+            {
+                PushIllegalParameter();
+                return;
+            }
+        }
+
+        // execute search
+        if (SearchVectorForValue(vsa))
+            PushDouble(vsa.nIndex);
+        else
+        {
+            if (vsa.isResultNA)
+                PushNA();
+            else
+                return; // error occurred and has already been pushed
+        }
+    }
+    else
+        PushIllegalParameter();
+}
+
 namespace {
 
 bool isCellContentEmpty( const ScRefCellValue& rCell )
@@ -10741,8 +10913,8 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
             break;
 
         case wildcard :
-            // this mode can only used with XLOOKUP
-            if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP )
+            // this mode can only used with XLOOKUP/XMATCH
+            if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP || vsa.nSearchOpCode == SC_OPCODE_X_MATCH )
             {
                 rEntry.eOp = SC_EQUAL;
                 if ( vsa.isStringSearch )
@@ -10833,7 +11005,7 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
 
 static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInterpreterContext& rContext,
         const ScQueryParam & rParam, const ScQueryEntry & rEntry, const ScFormulaCell* cell,
-        const ScComplexRefData* refData, sal_Int8 nSearchMode, sal_Int16 nOpCode )
+        const ScComplexRefData* refData, sal_Int8 nSearchMode, sal_uInt16 nOpCode )
 {
     if (rEntry.eOp != SC_EQUAL)
     {
@@ -10952,7 +11124,7 @@ static SCROW lcl_getPrevRowWithEmptyValueLookup( const ScLookupCache& rCache,
 
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam, const ScComplexRefData* refData,
-        sal_Int8 nSearchMode, sal_Int16 nOpCode ) const
+        sal_Int8 nSearchMode, sal_uInt16 nOpCode ) const
 {
     bool bFound = false;
     const ScQueryEntry& rEntry = rParam.GetEntry(0);

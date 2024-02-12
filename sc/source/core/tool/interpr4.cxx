@@ -4317,6 +4317,7 @@ StackVar ScInterpreter::Interpret()
                 case ocIndirect         : ScIndirect();                 break;
                 case ocAddress          : ScAddressFunc();              break;
                 case ocMatch            : ScMatch();                    break;
+                case ocXMatch           : ScXMatch();                   break;
                 case ocCountEmptyCells  : ScCountEmptyCells();          break;
                 case ocCountIf          : ScCountIf();                  break;
                 case ocSumIf            : ScSumIf();                    break;

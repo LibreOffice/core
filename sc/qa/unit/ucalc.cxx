@@ -2924,6 +2924,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "STYLE",
         "VLOOKUP",
         "XLOOKUP",
+        "XMATCH",
         nullptr
     };
 
