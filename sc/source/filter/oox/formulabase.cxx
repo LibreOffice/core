@@ -875,7 +875,8 @@ const FunctionData saFuncTable2016[] =
 /* FIXME: BIFF?? function identifiers available? Where to obtain? */
 const FunctionData saFuncTable2021[] =
 {
-    { "COM.MICROSOFT.XLOOKUP",             "XLOOKUP",             NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FuncFlags::MACROCALL_NEW }
+    { "COM.MICROSOFT.XLOOKUP",             "XLOOKUP",             NOID,   NOID,   3,  6,  R, { VR, VA, VR }, FuncFlags::MACROCALL_NEW },
+    { "COM.MICROSOFT.XMATCH",              "XMATCH",              NOID,   NOID,   2,  4,  V, { VR, VA }, FuncFlags::MACROCALL_NEW }
 };
 
 

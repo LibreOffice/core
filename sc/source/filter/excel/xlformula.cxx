@@ -601,7 +601,8 @@ const XclFunctionInfo saFuncTable_2016[] =
  */
 const XclFunctionInfo saFuncTable_2021[] =
 {
-    EXC_FUNCENTRY_V_VR(  ocXLookup,    3,  6,  0,  "XLOOKUP" )
+    EXC_FUNCENTRY_V_VR(  ocXLookup,    3,  6,  0,  "XLOOKUP" ),
+    EXC_FUNCENTRY_V_VR(  ocXMatch,     2,  4,  0,  "XMATCH" )
 };
 
 

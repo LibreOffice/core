@@ -74,6 +74,7 @@ https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocume
   * HLOOKUP
   * LOOKUP
   * MATCH
+  * XMATCH
   * VLOOKUP
   * XLOOKUP
 * Mathematical Functions

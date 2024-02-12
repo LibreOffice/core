@@ -307,6 +307,7 @@ enum OpCode : sal_uInt16
         ocIndirect          = SC_OPCODE_INDIRECT,
         ocAddress           = SC_OPCODE_ADDRESS,
         ocMatch             = SC_OPCODE_MATCH,
+        ocXMatch            = SC_OPCODE_X_MATCH,
         ocCountEmptyCells   = SC_OPCODE_COUNT_EMPTY_CELLS,
         ocCountIf           = SC_OPCODE_COUNT_IF,
         ocSumIf             = SC_OPCODE_SUM_IF,
@@ -790,6 +791,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocIndirect: return "Indirect";
     case ocAddress: return "Address";
     case ocMatch: return "Match";
+    case ocXMatch: return "XMatch";
     case ocCountEmptyCells: return "CountEmptyCells";
     case ocCountIf: return "CountIf";
     case ocSumIf: return "SumIf";

@@ -3443,6 +3443,20 @@ const TranslateId SC_OPCODE_MATCH_ARY[] =
     NC_("SC_OPCODE_MATCH", "Type can take the value 1 (first column array ascending), 0 (exact match or wildcard or regular expression match) or -1 (first column array descending) and determines the criteria to be used for comparison purposes.")
 };
 
+// -=*# Resource for function XMATCH #*=-
+const TranslateId SC_OPCODE_X_MATCH_ARY[] =
+{
+    NC_("SC_OPCODE_X_MATCH", "Defines a relative position in an array or range of cells after comparing values."),
+    NC_("SC_OPCODE_X_MATCH", "Search criterion"),
+    NC_("SC_OPCODE_X_MATCH", "The value to be used for comparison."),
+    NC_("SC_OPCODE_X_MATCH", "Search Array"),
+    NC_("SC_OPCODE_X_MATCH", "The array or range to search."),
+    NC_("SC_OPCODE_X_MATCH", "Match Mode"),
+    NC_("SC_OPCODE_X_MATCH", "0, -1, 1 or 2 "), // TODO : add explanation of values
+    NC_("SC_OPCODE_X_MATCH", "Search Mode"),
+    NC_("SC_OPCODE_X_MATCH", "1, -1, 2 or -2 ") // TODO : add explanation of values
+};
+
 // -=*# Resource for function OFFSET #*=-
 const TranslateId SC_OPCODE_OFFSET_ARY[] =
 {

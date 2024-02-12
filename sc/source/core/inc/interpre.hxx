@@ -548,7 +548,7 @@ private:
     inline void TreatDoubleError( double& rVal );
     // Lookup using ScLookupCache, @returns true if found and result address
     bool LookupQueryWithCache( ScAddress & o_rResultPos, const ScQueryParam & rParam,
-            const ScComplexRefData* refData, sal_Int8 nSearchMode, sal_Int16 nOpCode ) const;
+            const ScComplexRefData* refData, sal_Int8 nSearchMode, sal_uInt16 nOpCode ) const;
 
     void ScIfJump();
     void ScIfError( bool bNAonly );
@@ -678,6 +678,7 @@ private:
     void ScRow();
     void ScSheet();
     void ScMatch();
+    void ScXMatch();
     void IterateParametersIf( ScIterFuncIf );
     void ScCountIf();
     void ScSumIf();
