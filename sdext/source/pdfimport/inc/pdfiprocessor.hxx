@@ -71,6 +71,7 @@ namespace pdfi
         const GraphicsContext& getGraphicsContext( sal_Int32 nGCId ) const;
         GraphicsContext& getCurrentContext() { return m_aGCStack.back(); }
         const GraphicsContext& getCurrentContext() const { return m_aGCStack.back(); }
+        const ImageContainer& getImages() const { return m_aImages; };
 
         const css::uno::Reference< css::task::XStatusIndicator >& getStatusIndicator() const
         { return m_xStatusIndicator; }
