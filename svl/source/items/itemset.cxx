@@ -499,13 +499,12 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         // static default Items can just be used without RefCounting
         return pSource;
 
-    if (pSource->isDynamicDefault() && !pSource->isSetItem())
-    {
-        // dynamic default Items can only be used without RefCounting
-        // when same pool, else it has to be cloned (below)
-        if (static_cast<const SfxSetItem*>(pSource)->GetItemSet().GetPool() == &rPool)
-            return pSource;
-    }
+    if (pSource->isDynamicDefault()
+        && pSource->isSetItem()
+        && static_cast<const SfxSetItem*>(pSource)->GetItemSet().GetPool() == &rPool)
+        // only use without RefCounting when SfxSetItem and the Pool is correct.
+        // all other cases just clone (as before)
+        return pSource;
 
     if (0 == pSource->Which())
     {

@@ -103,6 +103,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <vcl/svapp.hxx>
 
 #include <limits>
 #include <memory>
@@ -2834,7 +2835,8 @@ namespace pcr
         // create an item set for use with the dialog
         std::unique_ptr<SfxItemSet> pSet;
         rtl::Reference<SfxItemPool> pPool;
-        ControlCharacterDialog::createItemSet(pSet, pPool);
+        FontList aFontList(Application::GetDefaultDevice());
+        ControlCharacterDialog::createItemSet(pSet, pPool, aFontList);
         ControlCharacterDialog::translatePropertiesToItems(m_xComponent, pSet.get());
 
         {   // do this in an own block. The dialog needs to be destroyed before we call

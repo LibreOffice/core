@@ -37,6 +37,7 @@ namespace pcr
 
     OControlFontDialog::OControlFontDialog(const Reference< XComponentContext >& _rxContext )
     : OGenericUnoDialog( _rxContext )
+    , maFontList(Application::GetDefaultDevice())
     {
         registerProperty(PROPERTY_INTROSPECTEDOBJECT, static_cast<sal_Int32>(OwnPropertyId::INTROSPECTEDOBJECT),
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
@@ -111,7 +112,7 @@ namespace pcr
 
     std::unique_ptr<weld::DialogController> OControlFontDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        ControlCharacterDialog::createItemSet(m_pFontItems, m_pItemPool);
+        ControlCharacterDialog::createItemSet(m_pFontItems, m_pItemPool, maFontList);
 
         OSL_ENSURE(m_xControlModel.is(), "OControlFontDialog::createDialog: no introspectee set!");
         if (m_xControlModel.is())

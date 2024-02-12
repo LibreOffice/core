@@ -21,6 +21,7 @@
 
 #include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
+#include <svtools/ctrltool.hxx>
 
 class SfxItemSet;
 class SfxItemPool;
@@ -44,6 +45,7 @@ namespace pcr
 
         std::unique_ptr<SfxItemSet> m_pFontItems;       // item set for the dialog
         rtl::Reference<SfxItemPool> m_pItemPool;            // item pool for the item set for the dialog
+        FontList maFontList;
 
     public:
         explicit OControlFontDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);

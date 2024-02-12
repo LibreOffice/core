@@ -529,24 +529,7 @@ namespace pcr
 
         public:
             virtual size_t size() const override { return maItemInfos.size(); }
-            virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override
-            {
-                const ItemInfo& rRetval(maItemInfos[nIndex]);
-
-                // return immediately if we have the static entry and Item
-                if (nullptr != rRetval.getItem())
-                    return rRetval;
-
-                // check for dynamic ItemInfo creation, needed here for FontList.
-                // this will be deleted when the Pool where it gets used goes down,
-                // thus may happen multiple times. ownership will be at the pool.
-                if (FontItemIds::CFID_FONTLIST == rRetval.getWhich())
-                    return *new ItemInfoDynamic(
-                        rRetval,
-                        new SvxFontListItem(new FontList(Application::GetDefaultDevice()), FontItemIds::CFID_FONTLIST));
-
-                return rRetval;
-            }
+            virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }
         };
 
         static std::unique_ptr<ItemInfoPackageCntChrDlg> g_aItemInfoPackageCntChrDlg;
@@ -555,13 +538,21 @@ namespace pcr
         return *g_aItemInfoPackageCntChrDlg;
     }
 
-    void ControlCharacterDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool)
+    void ControlCharacterDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, FontList& rFontList)
     {
         // just to be sure...
         _rpSet = nullptr;
         _rpPool = nullptr;
         _rpPool = new SfxItemPool("PCRControlFontItemPool");
-        _rpPool->registerItemInfoPackage(getItemInfoPackageCntChrDlg());
+        _rpPool->registerItemInfoPackage(
+            getItemInfoPackageCntChrDlg(),
+            [&rFontList](sal_uInt16 nWhich)
+            {
+                SfxPoolItem* pRetval(nullptr);
+                if (FontItemIds::CFID_FONTLIST == nWhich)
+                    pRetval = new SvxFontListItem(&rFontList, FontItemIds::CFID_FONTLIST);
+                return pRetval;
+            });
 
         // and, finally, the set
         _rpSet.reset(new SfxItemSet(*_rpPool));
@@ -569,17 +560,11 @@ namespace pcr
 
     void ControlCharacterDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool)
     {
-        // from the pool, get and remember the font list (needs to be deleted)
-        const SvxFontListItem& rFontListItem = static_cast<const SvxFontListItem&>(_rpPool->GetUserOrPoolDefaultItem(FontItemIds::CFID_FONTLIST));
-        const FontList* pFontList = rFontListItem.GetFontList();
-
         // _first_ delete the set (referring the pool)
         _rpSet.reset();
 
         // delete the pool
         _rpPool = nullptr;
-
-        delete pFontList;
     }
 
     void ControlCharacterDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)

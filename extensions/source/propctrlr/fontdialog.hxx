@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <svtools/ctrltool.hxx>
 
 
 namespace pcr
@@ -36,7 +37,7 @@ namespace pcr
         virtual ~ControlCharacterDialog() override;
 
         /// creates an item set to be used with this dialog
-        static void         createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool);
+        static void         createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool, FontList& rFontList);
 
         /// destroys an item previously created with <method>createItemSet</method>
         static void         destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, rtl::Reference<SfxItemPool>& _rpPool);
