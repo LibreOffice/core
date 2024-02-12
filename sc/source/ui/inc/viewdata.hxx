@@ -115,6 +115,7 @@ class ScExtDocOptions;
 class ScViewData;
 class ScMarkData;
 class ScGridWindow;
+class ScSizeDeviceProvider;
 
 class ScPositionHelper
 {
@@ -698,6 +699,8 @@ public:
     static void     AddPixelsWhileBackward( tools::Long & rScrY, tools::Long nEndPixels,
                                     SCROW & rPosY, SCROW nStartRow, double nPPTY,
                                     const ScDocument * pDoc, SCTAB nTabNo );
+
+    void setupSizeDeviceProviderForColWidth(ScSizeDeviceProvider& rProv, Fraction& rZoomX, Fraction& rZoomY, double& rPPTX, double &rPPTY);
 };
 
 inline tools::Long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )

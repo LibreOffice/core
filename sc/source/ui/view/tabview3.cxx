@@ -2390,7 +2390,7 @@ void ScTabView::UpdateFormulas(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //  PaintArea - repaint block
 
 void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                            ScUpdateMode eMode, tools::Long nMaxWidthAffectedHint )
+                            ScUpdateMode eMode, tools::Long nMaxWidthAffectedHintTwip )
 {
     SCCOL nCol1;
     SCROW nRow1;
@@ -2468,8 +2468,10 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 
         if ( eMode == ScUpdateMode::All )
         {
-            if (nMaxWidthAffectedHint != -1)
+            if (nMaxWidthAffectedHintTwip != -1)
             {
+                tools::Long nMaxWidthAffectedHint = ScViewData::ToPixel(nMaxWidthAffectedHintTwip, aViewData.GetPPTX());
+
                 // If we know the max text width affected then just invalidate
                 // the max of the cell width and hint of affected cell width
                 // (where affected with is in terms of max width of optimal cell
