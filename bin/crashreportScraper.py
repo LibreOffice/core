@@ -71,19 +71,6 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
         td_list = tr.find_all("td")
         count += int(td_list[1].text.strip())
 
-    # There are 50 reports on each page.
-    # Go to the last page based on the total count to get a recent report
-    last_page = math.ceil( count / 50 )
-
-    if last_page > 1:
-        url = url + "?page=" + str(last_page)
-        try:
-            html_text = requests.get(url, timeout=200).text
-            soup = BeautifulSoup(html_text, 'html.parser')
-        except requests.exceptions.Timeout:
-            print("Timeout")
-            raise
-
     reports = soup.find("div", {"id": "reports"}).tbody
     ID, currentID = "", ""
     version, currentVersion = "", ""
