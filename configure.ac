@@ -13499,7 +13499,7 @@ then
         AC_MSG_ERROR([KF6 libraries not found.  Please specify the root of your KF6 installation by exporting KF6DIR before running "configure".])
     fi
 
-    KF6_CFLAGS="-I$kf6_incdir -I$kf6_incdir/KCoreAddons -I$kf6_incdir/KI18n -I$kf6_incdir/KConfigCore -I$kf6_incdir/KWindowSystem -I$kf6_incdir/KIO -I$kf6_incdir/KIOCore -I$kf6_incdir/KIOWidgets -I$kf6_incdir/KIOFileWidgets -I$qt6_incdir -I$qt6_incdir/QtCore -I$qt6_incdir/QtGui -I$qt6_incdir/QtWidgets -I$qt6_incdir/QtNetwork -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
+    KF6_CFLAGS="-I$kf6_incdir -I$kf6_incdir/KCoreAddons -I$kf6_incdir/KI18n -I$kf6_incdir/KConfig -I$kf6_incdir/KConfigCore -I$kf6_incdir/KWindowSystem -I$kf6_incdir/KIO -I$kf6_incdir/KIOCore -I$kf6_incdir/KIOWidgets -I$kf6_incdir/KIOFileWidgets -I$qt6_incdir -I$qt6_incdir/QtCore -I$qt6_incdir/QtGui -I$qt6_incdir/QtWidgets -I$qt6_incdir/QtNetwork -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
     KF6_LIBS="-L$kf6_libdir -lKF6CoreAddons -lKF6I18n -lKF6ConfigCore -lKF6WindowSystem -lKF6KIOCore -lKF6KIOWidgets -lKF6KIOFileWidgets -L$qt6_libdir -lQt6Core -lQt6Gui -lQt6Widgets -lQt6Network"
     KF6_CFLAGS=$(printf '%s' "$KF6_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
