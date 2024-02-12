@@ -1841,7 +1841,19 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     xImporter->setTargetDocument(xModel);
 
     uno::Reference<document::XFilter> xFODTFilter(xInterface, uno::UNO_QUERY_THROW);
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(xModel.get());
+    SfxObjectShell* pObjSh = pTextDoc ? pTextDoc->GetDocShell() : nullptr;
+
+    //SetLoading hack because the document properties will be re-initted
+    //by the xml filter and during the init, while it's considered uninitialized,
+    //setting a property will inform the document it's modified, which attempts
+    //to update the properties, which throws cause the properties are uninitialized
+    if (pObjSh)
+        pObjSh->SetLoading(SfxLoadedFlags::NONE);
     bool ret = xFODTFilter->filter(aArgs);
+    if (pObjSh)
+        pObjSh->SetLoading(SfxLoadedFlags::ALL);
 
     if (ret)
     {
