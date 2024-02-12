@@ -340,6 +340,11 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
 
                 if (!aValStr.isEmpty())
                     mpDoc->SetValue( nCol, nRow, nTab, fVal );
+                else if (pE->moFormulaStr && pE->moFormulaGrammar)
+                {
+                    mpDoc->SetFormula(ScAddress(nCol, nRow, nTab), *pE->moFormulaStr,
+                                      *pE->moFormulaGrammar);
+                }
                 else if ( !pE->aSel.HasRange() )
                 {
                     // maybe ALT text of IMG or similar
