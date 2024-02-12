@@ -671,24 +671,22 @@ bool ScDocFunc::DeleteContents(
     return true;
 }
 
-tools::Long ScDocShell::GetPixelWidthHint(const ScAddress& rPos)
+tools::Long ScDocShell::GetTwipWidthHint(const ScAddress& rPos)
 {
     ScViewData* pViewData = GetViewData();
     if (!pViewData)
         return -1;
 
     ScSizeDeviceProvider aProv(this);
-    OutputDevice* pDev = aProv.GetDevice();         // has pixel MapMode
-    double nPPTX = aProv.GetPPTX();
-    double nPPTY = aProv.GetPPTY();
+    Fraction aZoomX, aZoomY;
+    double nPPTX, nPPTY;
+    pViewData->setupSizeDeviceProviderForColWidth(aProv, aZoomX, aZoomY, nPPTX, nPPTY);
 
     ScDocument& rDoc = GetDocument();
-    Fraction aInvX(pViewData->GetZoomX().GetDenominator(),
-                   pViewData->GetZoomX().GetNumerator());
-    Fraction aInvY(pViewData->GetZoomY().GetDenominator(),
-                   pViewData->GetZoomY().GetNumerator());
-    return rDoc.GetNeededSize(rPos.Col(), rPos.Row(), rPos.Tab(), pDev,
-                              nPPTX, nPPTY, aInvX, aInvY, true /*bWidth*/);
+    tools::Long nWidth = rDoc.GetNeededSize(rPos.Col(), rPos.Row(), rPos.Tab(), aProv.GetDevice(),
+                                            nPPTX, nPPTY, aZoomX, aZoomY, true /*bWidth*/);
+
+    return (nWidth + 2) / nPPTX; // same as ScColumn::GetOptimalColWidth
 }
 
 bool ScDocFunc::DeleteCell(
@@ -739,7 +737,7 @@ bool ScDocFunc::DeleteCell(
         pDataSpans = sc::DocFuncUtil::getNonEmptyCellSpans(rDoc, rMark, rPos);
     }
 
-    tools::Long nBefore(rDocShell.GetPixelWidthHint(rPos));
+    tools::Long nBefore(rDocShell.GetTwipWidthHint(rPos));
     rDoc.DeleteArea(rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark, nFlags);
 
     if (bRecord)
@@ -854,9 +852,9 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
         aOldValues.push_back(aOldValue);
     }
 
-    tools::Long nBefore(rDocShell.GetPixelWidthHint(rPos));
+    tools::Long nBefore(rDocShell.GetTwipWidthHint(rPos));
     o_rbNumFmtSet = rDoc.SetString( rPos.Col(), rPos.Row(), rPos.Tab(), rText );
-    tools::Long nAfter(rDocShell.GetPixelWidthHint(rPos));
+    tools::Long nAfter(rDocShell.GetTwipWidthHint(rPos));
 
     if (bUndo)
     {
