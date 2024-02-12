@@ -408,6 +408,9 @@ public:
 
     bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 
+    void    FinishProtectTable();
+    void    ExecProtectTable( SfxRequest& rReq );
+
     using ScTabView::ShowCursor;
 
     bool IsActive() const { return bIsActive; }
