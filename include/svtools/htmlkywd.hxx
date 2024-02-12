@@ -448,6 +448,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_DSval "data-sheets-value"
 #define OOO_STRING_SVTOOLS_HTML_O_SDnum "sdnum"
 #define OOO_STRING_SVTOOLS_HTML_O_DSnum "data-sheets-numberformat"
+#define OOO_STRING_SVTOOLS_HTML_O_DSformula "data-sheets-formula"
 #define OOO_STRING_SVTOOLS_HTML_O_sdlibrary "sdlibrary"
 #define OOO_STRING_SVTOOLS_HTML_O_sdmodule "sdmodule"
 #define OOO_STRING_SVTOOLS_HTML_O_sdevent "sdevent-"
