@@ -2775,7 +2775,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             aLine.setLength(0);
             aLine.append(OString::number(nStream)
                 + " 0 obj\n<</Length "
-                + OString::number(aContents.getLength())
+                + OString::number(aContents.getLength() - 1) // Trailing newline doesn't count
                 + ">>\nstream\n");
             if (!writeBuffer(aLine))
                 return false;
