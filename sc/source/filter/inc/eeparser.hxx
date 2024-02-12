@@ -56,6 +56,8 @@ struct ScEEParseEntry
     ESelection          aSel;           // Selection in EditEngine
     std::optional<OUString>
                         pValStr;        // HTML possibly SDVAL string
+    std::optional<OUString> moFormulaStr;
+    std::optional<formula::FormulaGrammar::Grammar> moFormulaGrammar;
     std::optional<OUString>
                         pNumStr;        // HTML possibly SDNUM string
     std::optional<OUString>

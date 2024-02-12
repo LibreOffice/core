@@ -143,6 +143,31 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsFormattedNumber)
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(1000),
                          pDoc->GetValue(/*col=*/0, /*row=*/0, /*tab=*/0));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteTdAsFormula)
+{
+    // Given an empty document:
+    createScDoc();
+
+    // When pasting HTML with cells containing a formula:
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    ScImportExport aImporter(*pDoc, aCellPos);
+    SvFileStream aFile(createFileURL(u"formula.html"), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    aMemory.Seek(0);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aMemory, OUString(), SotClipboardFormatId::HTML));
+
+    // Then make sure C1 is a sum and it evaluates to 3:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: =SUM(A1:B1)
+    // - Actual  :
+    // i.e. only the formula result was imported, not the formula.
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:B1)"),
+                         pDoc->GetFormula(/*col=*/2, /*row=*/0, /*tab=*/0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(3), pDoc->GetValue(/*col=*/2, /*row=*/0, /*tab=*/0));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
