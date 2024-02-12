@@ -169,6 +169,118 @@ namespace
     }
 }
 
+void ScTabViewShell::FinishProtectTable()
+{
+    TabChanged();
+    UpdateInputHandler(true);   // to immediately enable input again
+    SelectionChanged();
+}
+
+void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
+{
+    ScModule*           pScMod      = SC_MOD();
+    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
+    ScDocument&         rDoc = GetViewData().GetDocument();
+    SCTAB               nTab = GetViewData().GetTabNo();
+    bool                bOldProtection = rDoc.IsTabProtected(nTab);
+
+    if( pReqArgs )
+    {
+        const SfxPoolItem* pItem;
+        bool bNewProtection = !bOldProtection;
+        if( pReqArgs->HasItem( FID_PROTECT_TABLE, &pItem ) )
+            bNewProtection = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        if( bNewProtection == bOldProtection )
+        {
+            rReq.Ignore();
+            return;
+        }
+    }
+
+    if (bOldProtection)
+    {
+        // Unprotect a protected sheet.
+
+        const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+        if (pProtect && pProtect->isProtectedWithPass())
+        {
+            std::shared_ptr<SfxRequest> xRequest;
+            if (!pReqArgs)
+            {
+                xRequest = std::make_shared<SfxRequest>(rReq);
+                rReq.Ignore(); // the 'old' request is not relevant any more
+            }
+
+            OUString aText( ScResId(SCSTR_PASSWORDOPT) );
+            auto pDlg = std::make_shared<SfxPasswordDialog>(GetFrameWeld(), &aText);
+            pDlg->set_title(ScResId(SCSTR_UNPROTECTTAB));
+            pDlg->SetMinLen(0);
+            pDlg->set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand());
+            pDlg->SetEditHelpId(HID_PASSWD_TABLE);
+
+            pDlg->PreRun();
+
+            weld::DialogController::runAsync(pDlg, [this, nTab, pDlg, xRequest](sal_Int32 response) {
+                if (response == RET_OK)
+                {
+                    OUString aPassword = pDlg->GetPassword();
+                    Unprotect(nTab, aPassword);
+                }
+                if (xRequest)
+                {
+                    xRequest->AppendItem( SfxBoolItem(FID_PROTECT_TABLE, false) );
+                    xRequest->Done();
+                }
+                FinishProtectTable();
+            });
+            return;
+        }
+        else
+            // this sheet is not password-protected.
+            Unprotect(nTab, OUString());
+
+        if (!pReqArgs)
+        {
+            rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, false) );
+            rReq.Done();
+        }
+    }
+    else
+    {
+        // Protect a current sheet.
+        std::shared_ptr<SfxRequest> xRequest;
+        if (!pReqArgs)
+        {
+            xRequest = std::make_shared<SfxRequest>(rReq);
+            rReq.Ignore(); // the 'old' request is not relevant any more
+        }
+
+        auto pDlg = std::make_shared<ScTableProtectionDlg>(GetFrameWeld());
+
+        const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+        if (pProtect)
+            pDlg->SetDialogData(*pProtect);
+        weld::DialogController::runAsync(pDlg, [this, pDlg, pScMod, nTab, xRequest](sal_uInt32 nResult) {
+            if (nResult == RET_OK)
+            {
+                pScMod->InputEnterHandler();
+
+                ScTableProtection aNewProtect;
+                pDlg->WriteData(aNewProtect);
+                ProtectSheet(nTab, aNewProtect);
+                if (xRequest)
+                {
+                    xRequest->AppendItem( SfxBoolItem(FID_PROTECT_TABLE, true) );
+                    xRequest->Done();
+                }
+            }
+            FinishProtectTable();
+        });
+        return;
+    }
+    FinishProtectTable();
+}
+
 void ScTabViewShell::Execute( SfxRequest& rReq )
 {
     SfxViewFrame*       pThisFrame  = GetViewFrame();
@@ -1263,83 +1375,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case FID_PROTECT_TABLE:
-        {
-            ScDocument& rDoc = GetViewData().GetDocument();
-            SCTAB       nTab = GetViewData().GetTabNo();
-            bool        bOldProtection = rDoc.IsTabProtected(nTab);
+            ExecProtectTable( rReq );
+            break;
 
-            if( pReqArgs )
-            {
-                const SfxPoolItem* pItem;
-                bool bNewProtection = !bOldProtection;
-                if( pReqArgs->HasItem( FID_PROTECT_TABLE, &pItem ) )
-                    bNewProtection = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-                if( bNewProtection == bOldProtection )
-                {
-                    rReq.Ignore();
-                    break;
-                }
-            }
-
-            if (bOldProtection)
-            {
-                // Unprotect a protected sheet.
-
-                const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
-                if (pProtect && pProtect->isProtectedWithPass())
-                {
-                    OUString aText( ScResId(SCSTR_PASSWORDOPT) );
-                    SfxPasswordDialog aDlg(GetFrameWeld(), &aText);
-                    aDlg.set_title(ScResId(SCSTR_UNPROTECTTAB));
-                    aDlg.SetMinLen(0);
-                    aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand());
-                    aDlg.SetEditHelpId(HID_PASSWD_TABLE);
-
-                    if (aDlg.run() == RET_OK)
-                    {
-                        OUString aPassword = aDlg.GetPassword();
-                        Unprotect(nTab, aPassword);
-                    }
-                }
-                else
-                    // this sheet is not password-protected.
-                    Unprotect(nTab, OUString());
-
-                if (!pReqArgs)
-                {
-                    rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, false) );
-                    rReq.Done();
-                }
-            }
-            else
-            {
-                // Protect a current sheet.
-
-                ScTableProtectionDlg aDlg(GetFrameWeld());
-
-                const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
-                if (pProtect)
-                    aDlg.SetDialogData(*pProtect);
-
-                if (aDlg.run() == RET_OK)
-                {
-                    pScMod->InputEnterHandler();
-
-                    ScTableProtection aNewProtect;
-                    aDlg.WriteData(aNewProtect);
-                    ProtectSheet(nTab, aNewProtect);
-                    if (!pReqArgs)
-                    {
-                        rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, true) );
-                        rReq.Done();
-                    }
-                }
-            }
-            TabChanged();
-            UpdateInputHandler(true);   // to immediately enable input again
-            SelectionChanged();
-        }
-        break;
         case SID_THEME_DIALOG:
         {
             MakeDrawLayer();
