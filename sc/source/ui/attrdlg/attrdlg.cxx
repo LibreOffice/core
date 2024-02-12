@@ -30,7 +30,6 @@
 #include <editeng/editids.hrc>
 #include <editeng/flstitem.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/lok.hxx>
 
 ScAttrDlg::ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
     : SfxTabDialogController(pParent, "modules/scalc/ui/formatcellsdialog.ui",
@@ -58,11 +57,7 @@ ScAttrDlg::ScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
     AddTabPage( "borders",      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     nullptr );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), "GetTabPageCreatorFunc fail!");
     AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
-
-    if (!comphelper::LibreOfficeKit::isActive())
-        AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    nullptr );
-    else
-        RemoveTabPage( "cellprotection" );
+    AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    nullptr );
 }
 
 ScAttrDlg::~ScAttrDlg()
