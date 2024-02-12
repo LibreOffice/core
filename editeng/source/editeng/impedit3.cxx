@@ -4290,7 +4290,7 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
         // If anyway, then save as sal_False before SetVisible !
     }
 
-    if (bShow && (pPPortion->IsInvalid() || !pPPortion->getHeight()))
+    if (bShow && (pPPortion->IsInvalid() || !pPPortion->GetHeight()))
     {
         if ( !GetTextRanger() )
         {

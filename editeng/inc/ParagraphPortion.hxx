@@ -84,8 +84,6 @@ public:
     {
     }
 
-    tools::Long getHeight() { return mnHeight; }
-
     sal_Int32 GetLineNumber(sal_Int32 nIndex) const;
 
     EditLineList& GetLines() { return maLineList; }
