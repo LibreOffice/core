@@ -1272,7 +1272,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     const bool bSingleCellBefore = nStartCol == nEndCol &&
                                    nStartRow == nEndRow &&
                                    nStartTab == nEndTab;
-    tools::Long nBeforeHint(bSingleCellBefore ? pDocSh->GetPixelWidthHint(ScAddress(nStartCol, nStartRow, nStartTab)) : -1);
+    tools::Long nBeforeHint(bSingleCellBefore ? pDocSh->GetTwipWidthHint(ScAddress(nStartCol, nStartRow, nStartTab)) : -1);
 
     sal_uInt16 nExtFlags = 0;
     pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab,
@@ -1456,7 +1456,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                                   nStartTab == nEndTab;
     if (bSingleCellBefore && bSingleCellAfter)
     {
-        tools::Long nAfterHint(pDocSh->GetPixelWidthHint(ScAddress(nStartCol, nStartRow, nStartTab)));
+        tools::Long nAfterHint(pDocSh->GetTwipWidthHint(ScAddress(nStartCol, nStartRow, nStartTab)));
         nMaxWidthAffectedHint = std::max(nBeforeHint, nAfterHint);
     }
 

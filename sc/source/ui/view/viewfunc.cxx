@@ -287,24 +287,34 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
 //      additional routines
 
+void ScViewData::setupSizeDeviceProviderForColWidth(ScSizeDeviceProvider& rProv, Fraction& rZoomX, Fraction& rZoomY, double& rPPTX, double &rPPTY)
+{
+    if (rProv.IsPrinter())
+    {
+        rPPTX = rProv.GetPPTX();
+        rPPTY = rProv.GetPPTY();
+        rZoomX = rZoomY = Fraction(1, 1);
+    }
+    else
+    {
+        rPPTX = GetPPTX();
+        rPPTY = GetPPTY();
+        rZoomX = GetZoomX();
+        rZoomY = GetZoomY();
+    }
+}
+
 sal_uInt16 ScViewFunc::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
 
-    double nPPTX = GetViewData().GetPPTX();
-    double nPPTY = GetViewData().GetPPTY();
-    Fraction aZoomX = GetViewData().GetZoomX();
-    Fraction aZoomY = GetViewData().GetZoomY();
-
     ScSizeDeviceProvider aProv(pDocSh);
-    if (aProv.IsPrinter())
-    {
-        nPPTX = aProv.GetPPTX();
-        nPPTY = aProv.GetPPTY();
-        aZoomX = aZoomY = Fraction( 1, 1 );
-    }
+
+    Fraction aZoomX, aZoomY;
+    double nPPTX, nPPTY;
+    GetViewData().setupSizeDeviceProviderForColWidth(aProv, aZoomX, aZoomY, nPPTX, nPPTY);
 
     sal_uInt16 nTwips = rDoc.GetOptimalColWidth( nCol, nTab, aProv.GetDevice(),
                                 nPPTX, nPPTY, aZoomX, aZoomY, bFormula, &rMark );

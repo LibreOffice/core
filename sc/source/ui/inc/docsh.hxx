@@ -315,7 +315,7 @@ public:
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 
-    tools::Long     GetPixelWidthHint(const ScAddress& rPos);
+    tools::Long     GetTwipWidthHint(const ScAddress& rPos);
 
     void            PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, PaintPartFlags nPart,
