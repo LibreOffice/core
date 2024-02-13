@@ -616,6 +616,7 @@ OUString ScModelObj::getPartInfo( int nPart )
         return OUString();
 
     const bool bIsVisible = pViewData->GetDocument().IsVisible(nPart);
+    const bool bIsProtected = pViewData->GetDocument().IsTabProtected(nPart);
     //FIXME: Implement IsSelected().
     const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
     const bool bIsRTLLayout = pViewData->GetDocument().IsLayoutRTL(nPart);
@@ -626,6 +627,8 @@ OUString ScModelObj::getPartInfo( int nPart )
         OUString::number(static_cast<unsigned int>(bIsSelected)) +
         "\", \"rtllayout\": \"" +
         OUString::number(static_cast<unsigned int>(bIsRTLLayout)) +
+        "\", \"protected\": \"" +
+        OUString::number(static_cast<unsigned int>(bIsProtected)) +
         "\" }";
     return aPartInfo;
 }
