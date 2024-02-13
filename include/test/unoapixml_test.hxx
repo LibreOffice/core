@@ -23,6 +23,13 @@ public:
     UnoApiXmlTest(OUString path);
 
     xmlDocUniquePtr parseExport(OUString const& rStreamName);
+
+    /**
+     * Returns an xml stream of an exported file.
+     * To be used when the exporter doesn't create zip archives, but single files
+     * (like Flat ODF Export)
+     */
+    xmlDocUniquePtr parseExportedFile();
 };
 
 #endif // INCLUDED_TEST_UNOAPIXML_TEST_HXX
