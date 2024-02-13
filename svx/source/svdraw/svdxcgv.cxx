@@ -599,42 +599,45 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
 {
     Graphic aRet;
 
-    // try to get a graphic from the object first
-    const SdrGrafObj* pSdrGrafObj(dynamic_cast< const SdrGrafObj* >(&rSdrObject));
-    const SdrOle2Obj* pSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(&rSdrObject));
-
-    if(pSdrGrafObj)
+    if (!rSdrObject.HasText())
     {
-        if(pSdrGrafObj->isEmbeddedVectorGraphicData())
+        // try to get a graphic from the object first
+        const SdrGrafObj* pSdrGrafObj(dynamic_cast<const SdrGrafObj*>(&rSdrObject));
+        const SdrOle2Obj* pSdrOle2Obj(dynamic_cast<const SdrOle2Obj*>(&rSdrObject));
+
+        if (pSdrGrafObj)
         {
-            // get Metafile for Svg content
-            aRet = pSdrGrafObj->getMetafileFromEmbeddedVectorGraphicData();
+            if (pSdrGrafObj->isEmbeddedVectorGraphicData())
+            {
+                // get Metafile for Svg content
+                aRet = pSdrGrafObj->getMetafileFromEmbeddedVectorGraphicData();
+            }
+            else
+            {
+                // Make behaviour coherent with metafile
+                // recording below (which of course also takes
+                // view-transformed objects)
+                aRet = pSdrGrafObj->GetTransformedGraphic();
+            }
+        }
+        else if (pSdrOle2Obj)
+        {
+            if (pSdrOle2Obj->GetGraphic())
+            {
+                aRet = *pSdrOle2Obj->GetGraphic();
+            }
         }
         else
         {
-            // Make behaviour coherent with metafile
-            // recording below (which of course also takes
-            // view-transformed objects)
-            aRet = pSdrGrafObj->GetTransformedGraphic();
-        }
-    }
-    else if(pSdrOle2Obj)
-    {
-        if(pSdrOle2Obj->GetGraphic())
-        {
-            aRet = *pSdrOle2Obj->GetGraphic();
-        }
-    }
-    else
-    {
-        // Support extracting a snapshot from video media, if possible.
-        const SdrMediaObj* pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(&rSdrObject);
-        if (pSdrMediaObj)
-        {
-            const css::uno::Reference<css::graphic::XGraphic>& xGraphic
-                = pSdrMediaObj->getSnapshot();
-            if (xGraphic.is())
-                aRet = Graphic(xGraphic);
+            // Support extracting a snapshot from video media, if possible.
+            const SdrMediaObj* pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(&rSdrObject);
+            if (pSdrMediaObj)
+            {
+                const css::uno::Reference<css::graphic::XGraphic>& xGraphic
+                    = pSdrMediaObj->getSnapshot();
+                if (xGraphic.is())
+                    aRet = Graphic(xGraphic);
+            }
         }
     }
 
