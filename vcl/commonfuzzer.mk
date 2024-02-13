@@ -148,8 +148,6 @@ fuzzer_core_libraries = \
     i18nlangtag \
     xmlreader \
     unoidl \
-    reg \
-    store \
     gcc3_uno \
     salhelper \
     sal \

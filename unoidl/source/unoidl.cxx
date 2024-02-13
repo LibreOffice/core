@@ -14,6 +14,8 @@
 #include <utility>
 #include <vector>
 
+#include <config_fuzzers.h>
+
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -21,7 +23,9 @@
 #include <rtl/ustring.hxx>
 #include <unoidl/unoidl.hxx>
 
+#if !ENABLE_FUZZERS
 #include "legacyprovider.hxx"
+#endif
 #include "sourcefileprovider.hxx"
 #include "sourcetreeprovider.hxx"
 #include "unoidlprovider.hxx"
@@ -211,11 +215,16 @@ rtl::Reference< Provider > Manager::loadProvider(OUString const & uri) {
     try {
         return new detail::UnoidlProvider(uri);
     } catch (FileFormatException & e) {
+#if !ENABLE_FUZZERS
         SAL_INFO(
             "unoidl",
             "FileFormatException \"" << e.getDetail() << "\", retrying <" << uri
                 << "> as legacy format");
         return new detail::LegacyProvider(*this, uri);
+#else
+        (void)e;
+        return nullptr;
+#endif
     }
 }
 

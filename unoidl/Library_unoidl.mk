@@ -12,12 +12,18 @@ $(eval $(call gb_Library_Library,unoidl))
 $(eval $(call gb_Library_add_defs,unoidl,-DLO_DLLIMPLEMENTATION_UNOIDL))
 
 $(eval $(call gb_Library_add_exception_objects,unoidl, \
-    unoidl/source/legacyprovider \
     unoidl/source/sourcefileprovider \
     unoidl/source/sourcetreeprovider \
     unoidl/source/unoidl \
     unoidl/source/unoidlprovider \
 ))
+
+# drop legacy provider for fuzzing
+ifeq (,$(filter FUZZERS,$(BUILD_TYPE)))
+$(eval $(call gb_Library_add_exception_objects,unoidl, \
+    unoidl/source/legacyprovider \
+))
+endif
 
 $(eval $(call gb_Library_add_grammars,unoidl, \
     unoidl/source/sourceprovider-parser \

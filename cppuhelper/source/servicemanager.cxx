@@ -17,6 +17,8 @@
 #include <utility>
 #include <vector>
 
+#include <config_fuzzers.h>
+
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
@@ -1364,7 +1366,9 @@ void cppuhelper::ServiceManager::readRdbFile(
                 static_cast< cppu::OWeakObject * >(this));
         }
         SAL_INFO("cppuhelper", "Ignored optional " << uri);
-    } catch (css::registry::InvalidRegistryException & e) {
+    }
+#if !ENABLE_FUZZERS
+    catch (css::registry::InvalidRegistryException & e) {
         if (!readLegacyRdbFile(uri)) {
             throw css::uno::DeploymentException(
                 "InvalidRegistryException: " + e.Message,
@@ -1375,8 +1379,10 @@ void cppuhelper::ServiceManager::readRdbFile(
             throw;
         }
     }
+#endif
 }
 
+#if !ENABLE_FUZZERS
 bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
     Registry reg;
     switch (reg.open(uri, RegAccessMode::READONLY)) {
@@ -1511,6 +1517,7 @@ void cppuhelper::ServiceManager::readLegacyRdbStrings(
         strings->push_back(names.getElement(i).copy(prefix.getLength()));
     }
 }
+#endif
 
 void cppuhelper::ServiceManager::insertRdbFiles(
     std::vector< OUString > const & uris,
