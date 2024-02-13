@@ -275,7 +275,7 @@ static ItemInfoPackage& getItemInfoPackageAdminDlg()
             { DSID_ORIGINALNAME, new SfxStringItem(DSID_ORIGINALNAME, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
             { DSID_CONNECTURL, new SfxStringItem(DSID_CONNECTURL, OUString()), 0, SFX_ITEMINFOFLAG_NONE },
 
-            // gets added in costructor below once for LO runtime as static default
+            // gets added in constructor below once for LO runtime as static default
             { DSID_TABLEFILTER, nullptr, 0, SFX_ITEMINFOFLAG_NONE },
 
             // gets added by callback for each new Pool as dynamic default
