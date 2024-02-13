@@ -532,14 +532,6 @@ struct PicDefEmbed
     char  embname[16];
 };
 
-/**
- * @short Win32 ole object
- */
-struct PicDefOle
-{
-    char  embname[16];
-};
-
 struct HWPDrawingObject;
 
 /**
@@ -564,7 +556,6 @@ struct PicDefUnknown
 typedef union
 {
     PicDefEmbed       picembed;
-    PicDefOle     picole;
     PicDefDraw        picdraw;
     PicDefUnknown     picun;
 } PicDef;

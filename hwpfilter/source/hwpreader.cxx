@@ -3840,7 +3840,7 @@ void HwpReader::makePicture(Picture * hbox)
                              LPUNKNOWN pObj;
                              wchar_t pathname[200];
 
-                             MultiByteToWideChar(CP_ACP, 0, hbox->picinfo.picole.embname, -1, pathname, 200);
+                             MultiByteToWideChar(CP_ACP, 0, hbox->picinfo.picembed.embname, -1, pathname, 200);
                              int rc = hwpfile.oledata->pis->OpenStorage(pathname, nullptr,
                                      STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_TRANSACTED, nullptr, 0, &srcsto);
                              if (rc != S_OK) {
