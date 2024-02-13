@@ -989,6 +989,34 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, HtmlImportInfo&, rInfo, void )
     }
 }
 
+void ScHTMLLayoutParser::HandleDataSheetsAttributes(const HTMLOptions& rOptions)
+{
+    for (const auto& rOption : rOptions)
+    {
+        switch (rOption.GetToken())
+        {
+            case HtmlOptionId::DSVAL:
+            {
+                ParseDataSheetsValue(rOption.GetString(), mxActEntry->pValStr, mxActEntry->pNumStr);
+                break;
+            }
+            case HtmlOptionId::DSNUM:
+            {
+                ParseDataSheetsNumberformat(rOption.GetString(), mxActEntry->pNumStr);
+                break;
+            }
+            case HtmlOptionId::DSFORMULA:
+            {
+                ParseDataSheetsFormula(rOption.GetString(), mxActEntry->moFormulaStr,
+                                       mxActEntry->moFormulaGrammar);
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
 void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
 {
     if ( bInCell )
@@ -1069,25 +1097,11 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                 mxActEntry->pNumStr = rOption.GetString();
             }
             break;
-            case HtmlOptionId::DSVAL:
-            {
-                ParseDataSheetsValue(rOption.GetString(), mxActEntry->pValStr, mxActEntry->pNumStr);
-            }
-            break;
-            case HtmlOptionId::DSNUM:
-            {
-                ParseDataSheetsNumberformat(rOption.GetString(), mxActEntry->pNumStr);
-            }
-            break;
-            case HtmlOptionId::DSFORMULA:
-            {
-                ParseDataSheetsFormula(rOption.GetString(), mxActEntry->moFormulaStr,
-                                       mxActEntry->moFormulaGrammar);
-            }
-            break;
             default: break;
         }
     }
+
+    HandleDataSheetsAttributes(rOptions);
 
     mxActEntry->nCol = nColCnt;
     mxActEntry->nRow = nRowCnt;
@@ -1096,6 +1110,12 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
     if ( bHorJustifyCenterTH )
         mxActEntry->aItemSet.Put(
             SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY) );
+}
+
+void ScHTMLLayoutParser::SpanOn(HtmlImportInfo* pInfo)
+{
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+    HandleDataSheetsAttributes(rOptions);
 }
 
 void ScHTMLLayoutParser::TableRowOn( const HtmlImportInfo* pInfo )
@@ -1626,6 +1646,11 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         case HtmlTokenId::TABLEDATA_ON:         // Opens cell
         {
             TableDataOn( pInfo );
+        }
+        break;
+        case HtmlTokenId::SPAN_ON:
+        {
+            SpanOn(pInfo);
         }
         break;
         case HtmlTokenId::TABLEHEADER_OFF:

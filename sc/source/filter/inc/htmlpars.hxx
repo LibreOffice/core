@@ -28,6 +28,7 @@
 #include <utility>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
+#include <svtools/parhtml.hxx>
 
 #include <rangelst.hxx>
 #include "eeparser.hxx"
@@ -212,6 +213,9 @@ private:
     void                Image( HtmlImportInfo* );
     void                AnchorOn( HtmlImportInfo* );
     void                FontOn( HtmlImportInfo* );
+    void SpanOn(HtmlImportInfo* pInfo);
+    /// Handles the various data-sheets-* attributes on <td> and <span>.
+    void HandleDataSheetsAttributes(const HTMLOptions& rOptions);
 
 public:
                         ScHTMLLayoutParser( EditEngine*, OUString aBaseURL, const Size& aPageSize, ScDocument* );
