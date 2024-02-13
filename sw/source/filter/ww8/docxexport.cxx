@@ -55,6 +55,7 @@
 #include <oox/ole/olehelper.hxx>
 
 #include <svx/svdpage.hxx>
+#include <svx/xfillit0.hxx>
 #include <svx/xflbmtit.hxx>
 
 #include <map>
@@ -1916,6 +1917,7 @@ void DocxExport::WriteMainText()
                                       msfilter::util::ConvertColor(oBrush->GetColor()));
 
         const SwAttrSet& rPageStyleAttrSet = m_rDoc.GetPageDesc(0).GetMaster().GetAttrSet();
+        const drawing::FillStyle eFillType = rPageStyleAttrSet.Get(XATTR_FILLSTYLE).GetValue();
         const GraphicObject* pGraphicObj = oBrush->GetGraphicObject();
         if (pGraphicObj) // image/pattern/texture
         {
@@ -1933,6 +1935,25 @@ void DocxExport::WriteMainText()
 
                 m_pDocumentFS->endElementNS(XML_v, XML_background);
             }
+        }
+        else if (eFillType == drawing::FillStyle_GRADIENT)
+        {
+            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet(m_rDoc.GetAttrPool());
+            aSet.Set(rPageStyleAttrSet);
+
+            // Collect all of the gradient attributes into SdrExporter() AttrLists
+            m_pAttrOutput->OutputStyleItemSet(aSet, /*TestForDefault=*/true);
+            assert(SdrExporter().getFlyAttrList().is() && "type and fillcolor are always provided");
+            assert(SdrExporter().getFlyFillAttrList().is() && "color2 is always provided");
+
+            rtl::Reference<FastAttributeList> xFlyAttrList(SdrExporter().getFlyAttrList());
+            rtl::Reference<FastAttributeList> xFillAttrList(SdrExporter().getFlyFillAttrList());
+            m_pDocumentFS->startElementNS(XML_v, XML_background, xFlyAttrList);
+            m_pDocumentFS->singleElementNS(XML_v, XML_fill, xFillAttrList);
+            m_pDocumentFS->endElementNS(XML_v, XML_background);
+
+            SdrExporter().getFlyAttrList().clear();
+            SdrExporter().getFlyFillAttrList().clear();
         }
 
         m_pDocumentFS->endElementNS(XML_w, XML_background);
