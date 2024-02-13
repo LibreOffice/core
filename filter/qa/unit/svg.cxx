@@ -19,6 +19,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/stream.hxx>
@@ -53,18 +54,13 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
     dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
 
     // Export the selection to SVG.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_svg_Export");
-    aMediaDescriptor["SelectionOnly"] <<= true;
-    aMediaDescriptor["OutputStream"] <<= xOut;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    saveWithParams({
+        comphelper::makePropertyValue("FilterName", u"writer_svg_Export"_ustr),
+        comphelper::makePropertyValue("SelectionOnly", true),
+    });
 
     // Make sure that the original JPG data is reused and we don't perform a PNG re-compress.
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
     OUString aAttributeValue = getXPath(pXmlDoc, "//svg:image"_ostr, "href"_ostr);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -81,17 +77,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
     loadFromFile(u"semi-transparent-line.odg");
 
     // Export it to SVG.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
-    aMediaDescriptor["OutputStream"] <<= xOut;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    save("draw_svg_Export");
 
     // Get the style of the group around the actual <path> element.
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
     OUString aStyle = getXPath(
         pXmlDoc, "//svg:g[@class='com.sun.star.drawing.LineShape']/svg:g/svg:g"_ostr, "style"_ostr);
     // Without the accompanying fix in place, this test would have failed, as the style was
@@ -108,17 +97,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentFillWithTransparentLine)
     loadFromFile(u"semi-transparent-fill.odg");
 
     // Export it to SVG.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
-    aMediaDescriptor["OutputStream"] <<= xOut;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    save("draw_svg_Export");
 
     // Get the style of the group around the actual <path> element.
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
     OUString aStyle
         = getXPath(pXmlDoc, "//svg:g[@class='com.sun.star.drawing.EllipseShape']/svg:g/svg:g"_ostr,
                    "style"_ostr);
@@ -146,18 +128,9 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
     loadFromFile(u"TransparentText.odg");
 
     // Export to SVG.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    save("draw_svg_Export");
 
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
-    aMediaDescriptor["OutputStream"] <<= xOut;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
-
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
-
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
     // We expect 2 groups of class "TextShape" that
     // have some svg:text node inside.
     // Without the accompanying fix in place, this test would have failed with:
@@ -198,17 +171,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
     xShapeProps->setPropertyValue("CharTransparence", uno::Any(static_cast<sal_Int16>(20)));
 
     // When exporting to SVG:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
-    aMediaDescriptor["OutputStream"] <<= xOut;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    save("draw_svg_Export");
 
     // Then make sure that the two semi-transparent paragraphs have the same X position:
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
     assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[1]"_ostr,
                 "x"_ostr, "250");
     assertXPath(pXmlDoc,
@@ -250,17 +216,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
     loadFromFile(u"custom-bullet.fodp");
 
     // When exporting that to SVG:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
-    aMediaDescriptor["OutputStream"] <<= xOut;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    save("impress_svg_Export");
 
     // Then make sure the bullet glyph is not lost:
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -278,17 +237,9 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
     loadFromFile(u"attributeRedefinedTest.odp");
 
     // Export to SVG.
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
-    aMediaDescriptor["OutputStream"] <<= xOut;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    save("impress_svg_Export");
 
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
-
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
     // We expect four paragraph
     // 2 empty paragraphs with ids
     // 2 paragraphs with text
@@ -331,17 +282,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
     xShapeText->setString("A\tB");
 
     // When exporting that document to SVG:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
-    aMediaDescriptor["OutputStream"] <<= xOut;
-    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    save("impress_svg_Export");
 
     // Then make sure the tab is not lost:
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 1
