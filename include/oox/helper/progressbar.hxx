@@ -37,7 +37,7 @@ namespace oox {
 
 /** Interface for progress bar classes.
  */
-class UNLESS_MERGELIBS(OOX_DLLPUBLIC) IProgressBar
+class OOX_DLLPUBLIC IProgressBar
 {
 public:
     virtual             ~IProgressBar();
