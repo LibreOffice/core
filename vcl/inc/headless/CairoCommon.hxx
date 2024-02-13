@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
-
+#include <config_options.h>
 #include <cairo.h>
 
 #include <vcl/dllapi.h>

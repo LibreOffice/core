@@ -21,7 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/runtimetooustring.hxx>
 
-COMPHELPER_DLLPUBLIC OUString ErrCode::toString() const
+UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OUString ErrCode::toString() const
 {
     std::u16string_view pWarningError;
     if (IsWarning())
@@ -150,7 +150,7 @@ COMPHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& e
     return os;
 }
 
-COMPHELPER_DLLPUBLIC OUString ErrCodeMsg::toString() const
+UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OUString ErrCodeMsg::toString() const
 {
     OUString s = mnCode.toString();
     if (!maArg1.isEmpty())

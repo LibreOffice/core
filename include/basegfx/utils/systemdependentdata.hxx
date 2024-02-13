@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
 #include <memory>
@@ -42,7 +41,7 @@ namespace basegfx
         virtual void flushAll() = 0;
     };
 
-    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) SystemDependentData
+    class BASEGFX_DLLPUBLIC SystemDependentData
     {
     private:
         // noncopyable

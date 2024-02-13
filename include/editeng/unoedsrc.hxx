@@ -138,7 +138,7 @@ public:
     SvxEditSource::UpdateData(). This copies back the data to the model's
     EditTextObject/OutlinerParaObject.
  */
-class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvxTextForwarder
+class EDITENG_DLLPUBLIC SvxTextForwarder
 {
 public:
     virtual             ~SvxTextForwarder() COVERITY_NOEXCEPT_FALSE;

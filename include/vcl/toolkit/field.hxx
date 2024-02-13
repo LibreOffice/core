@@ -160,7 +160,7 @@ private:
 
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetricFormatter : public NumericFormatter
+class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
 {
 public:
     virtual                 ~MetricFormatter() override;
