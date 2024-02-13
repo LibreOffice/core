@@ -439,7 +439,7 @@ static bool UselessScaleForMapMode(const Fraction& rScale)
     // cannot be expressed as an int
     if (rScale.GetNumerator() == std::numeric_limits<sal_Int32>::min())
         return true;
-    if (static_cast<double>(rScale) < 0.0)
+    if (static_cast<double>(rScale) <= 0.0)
         return true;
     return false;
 }
