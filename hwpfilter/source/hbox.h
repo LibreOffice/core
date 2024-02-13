@@ -538,7 +538,6 @@ struct PicDefEmbed
 struct PicDefOle
 {
     char  embname[16];
-    void  *hwpole;
 };
 
 struct HWPDrawingObject;
