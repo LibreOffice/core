@@ -22,12 +22,10 @@
 
 class SdAbstractDialogFactory;
 
-extern "C" {
-SAL_DLLPUBLIC_EXPORT SdAbstractDialogFactory* SdCreateDialogFactory()
+SdAbstractDialogFactory* SdCreateDialogFactory()
 {
     static SdAbstractDialogFactory_Impl aFactory;
     return &aFactory;
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

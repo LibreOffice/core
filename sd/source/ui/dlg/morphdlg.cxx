@@ -21,11 +21,13 @@
 
 #include <sdmod.hxx>
 #include <sdiocmpt.hxx>
+#include <sot/storage.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/itemset.hxx>
+#include <tools/ref.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace com::sun::star;
@@ -65,7 +67,7 @@ MorphDlg::~MorphDlg()
 
 void MorphDlg::LoadSettings()
 {
-    tools::SvRef<SotStorageStream>  xIStm( SD_MOD()->GetOptionStream( SD_OPTION_MORPHING ,
+    ::tools::SvRef<SotStorageStream>  xIStm( SD_MOD()->GetOptionStream( SD_OPTION_MORPHING ,
                                SdOptionStreamMode::Load ) );
     sal_uInt16              nSteps;
     bool                bOrient, bAttrib;
@@ -89,7 +91,7 @@ void MorphDlg::LoadSettings()
 
 void MorphDlg::SaveSettings() const
 {
-    tools::SvRef<SotStorageStream> xOStm( SD_MOD()->GetOptionStream( SD_OPTION_MORPHING ,
+    ::tools::SvRef<SotStorageStream> xOStm( SD_MOD()->GetOptionStream( SD_OPTION_MORPHING ,
                                SdOptionStreamMode::Store ) );
 
     if( xOStm.is() )

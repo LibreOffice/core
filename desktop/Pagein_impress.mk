@@ -11,7 +11,6 @@ $(eval $(call gb_Pagein_Pagein,impress))
 
 $(eval $(call gb_Pagein_add_objects,impress,\
     sd \
-    sdui \
     svx \
     svxcore \
 ))

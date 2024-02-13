@@ -49,7 +49,6 @@ $(eval $(call gb_Library_set_include,sd,\
 
 $(eval $(call gb_Library_add_defs,sd,\
 	-DSD_DLLIMPLEMENTATION \
-	-DSDUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,sdui))\" \
 ))
 
 ifneq ($(strip $(dbg_anim_log)$(DBG_ANIM_LOG)),)
@@ -78,6 +77,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	drawinglayercore \
 	drawinglayer \
 	editeng \
+	fwk \
 	i18nlangtag \
 	i18nutil \
 	icg \
@@ -602,5 +602,68 @@ $(eval $(call gb_Library_use_externals,sd,\
 endif # ENABLE_SDREMOTE_BLUETOOTH=TRUE
 
 endif # ENABLE_SDREMOTE=TRUE
+
+$(eval $(call gb_Library_add_exception_objects,sd,\
+    sd/source/ui/dlg/brkdlg \
+    sd/source/ui/dlg/copydlg \
+    sd/source/ui/dlg/custsdlg \
+    sd/source/ui/dlg/dlgchar \
+    sd/source/ui/dlg/dlgfield \
+    sd/source/ui/dlg/dlgolbul \
+    sd/source/ui/dlg/dlgpage \
+    sd/source/ui/dlg/dlgsnap \
+    sd/source/ui/dlg/headerfooterdlg \
+    sd/source/ui/dlg/inspagob \
+    sd/source/ui/dlg/masterlayoutdlg \
+    sd/source/ui/dlg/morphdlg \
+    sd/source/ui/dlg/paragr \
+    sd/source/ui/dlg/present \
+    sd/source/ui/dlg/prltempl \
+    sd/source/ui/dlg/prntopts \
+    sd/source/ui/dlg/RemoteDialog \
+    sd/source/ui/dlg/RemoteDialogClientBox \
+    sd/source/ui/dlg/sddlgfact \
+    sd/source/ui/dlg/sdpreslt \
+    sd/source/ui/dlg/sduiexp \
+    sd/source/ui/dlg/tabtempl \
+    sd/source/ui/dlg/tpaction \
+    sd/source/ui/dlg/tpoption \
+    sd/source/ui/dlg/vectdlg \
+    sd/source/ui/dlg/PhotoAlbumDialog \
+    sd/source/ui/dlg/BulletAndPositionDlg \
+    sd/source/console/PresenterAccessibility \
+    sd/source/console/PresenterBitmapContainer \
+    sd/source/console/PresenterButton \
+    sd/source/console/PresenterCanvasHelper \
+    sd/source/console/PresenterConfigurationAccess \
+    sd/source/console/PresenterController \
+    sd/source/console/PresenterCurrentSlideObserver \
+    sd/source/console/PresenterFrameworkObserver \
+    sd/source/console/PresenterGeometryHelper \
+    sd/source/console/PresenterHelpView \
+    sd/source/console/PresenterHelper \
+    sd/source/console/PresenterNotesView \
+    sd/source/console/PresenterPaintManager \
+    sd/source/console/PresenterPane \
+    sd/source/console/PresenterPaneBase \
+    sd/source/console/PresenterPaneBorderPainter \
+    sd/source/console/PresenterPaneContainer \
+    sd/source/console/PresenterPaneFactory \
+    sd/source/console/PresenterProtocolHandler \
+    sd/source/console/PresenterScreen \
+    sd/source/console/PresenterScrollBar \
+    sd/source/console/PresenterSlidePreview \
+    sd/source/console/PresenterSlideShowView \
+    sd/source/console/PresenterSlideSorter \
+    sd/source/console/PresenterSprite \
+    sd/source/console/PresenterSpritePane \
+    sd/source/console/PresenterTextView \
+    sd/source/console/PresenterTheme \
+    sd/source/console/PresenterTimer \
+    sd/source/console/PresenterToolBar \
+    sd/source/console/PresenterUIPainter \
+    sd/source/console/PresenterViewFactory \
+    sd/source/console/PresenterWindowManager \
+))
 
 # vim: set noet sw=4 ts=4:

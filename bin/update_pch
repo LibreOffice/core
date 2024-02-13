@@ -92,7 +92,6 @@ DEFAULTS = \
     'sc.scui'                           : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #  15.0
     'sc.vbaobj'                         : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #  17.3
     'sd.sd'                             : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #  47.4
-    'sd.sdui'                           : ( 4, EXCLUDE, INCLUDE, INCLUDE), #   9.4
     'sdext.PresentationMinimizer'       : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   4.1
     'sdext.PresenterScreen'             : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   7.1
     'sfx2.sfx'                          : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #  27.4

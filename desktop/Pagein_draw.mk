@@ -11,7 +11,6 @@ $(eval $(call gb_Pagein_Pagein,draw))
 
 $(eval $(call gb_Pagein_add_objects,draw,\
     sd \
-    sdui \
     svx \
     svxcore \
 ))

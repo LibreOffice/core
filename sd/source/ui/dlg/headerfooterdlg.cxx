@@ -26,6 +26,7 @@
 #include <editeng/outlobj.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
+#include <tools/long.hxx>
 
 #include <Outliner.hxx>
 #include <headerfooterdlg.hxx>
@@ -708,12 +709,12 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     if( maPageSize.Width() > maPageSize.Height() )
     {
         nWidth = maOutRect.GetWidth();
-        nHeight = maPageSize.Width() == 0 ? 0 : tools::Long( static_cast<double>(nWidth * maPageSize.Height()) / static_cast<double>(maPageSize.Width()) );
+        nHeight = maPageSize.Width() == 0 ? 0 : ::tools::Long( static_cast<double>(nWidth * maPageSize.Height()) / static_cast<double>(maPageSize.Width()) );
     }
     else
     {
         nHeight = maOutRect.GetHeight();
-        nWidth = maPageSize.Height() == 0 ? 0 : tools::Long( static_cast<double>(nHeight * maPageSize.Width()) / static_cast<double>(maPageSize.Height()) );
+        nWidth = maPageSize.Height() == 0 ? 0 : ::tools::Long( static_cast<double>(nHeight * maPageSize.Width()) / static_cast<double>(maPageSize.Height()) );
     }
 
     maOutRect.AdjustLeft((maOutRect.GetWidth() - nWidth) >> 1 );
