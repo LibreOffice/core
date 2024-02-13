@@ -361,7 +361,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_PARATR_TABSTOP, new SvxTabStopItem( 1, SVX_TAB_DEFDIST, SvxTabAdjust::Default, RES_PARATR_TABSTOP ), SID_ATTR_TABSTOP, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  },
 
             // for this at the Item GetMaxHyphens() = 0 was called, do this now on-demand at construction time
-            // it will get added in costructor below once for LO runtime as static default
+            // it will get added in constructor below once for LO runtime as static default
             { RES_PARATR_HYPHENZONE, nullptr, SID_ATTR_PARA_HYPHENZONE, SFX_ITEMINFOFLAG_NONE  },
 
             { RES_PARATR_DROP, new SwFormatDrop, FN_FORMAT_DROPCAPS, SFX_ITEMINFOFLAG_NONE  },
