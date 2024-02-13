@@ -138,15 +138,9 @@ gb_MERGE_LIBRARY_LIST += \
 	) \
 	graphicfilter \
 	hwp \
-	$(if $(filter WNT,$(OS)), \
-		inprocserv \
-	) \
 	log \
 	$(if $(ENABLE_LWP),lwpft) \
 	msforms \
-	$(if $(filter WNT,$(OS)), \
-		oleautobridge \
-	) \
 	pdffilter \
 	pricing \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
@@ -159,9 +153,6 @@ gb_MERGE_LIBRARY_LIST += \
 	svgfilter \
 	t602filter \
 	textconversiondlgs \
-	$(if $(filter WNT,$(OS)), \
-		UAccCOM \
-	) \
 	$(call gb_Helper_optional,XMLHELP,ucpchelp1) \
 	$(if $(ENABLE_LIBCMIS),ucpcmis1) \
 	$(if $(WITH_WEBDAV),ucpdav1) \
