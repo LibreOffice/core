@@ -164,11 +164,15 @@ QtClipboardTransferable::QtClipboardTransferable(const QClipboard::Mode aMode,
 {
 }
 
-bool QtClipboardTransferable::hasInFlightChanged() const
+void QtClipboardTransferable::ensureConsistencyWithSystemClipboard()
 {
-    const bool bChanged(mimeData() != QApplication::clipboard()->mimeData(m_aMode));
-    SAL_WARN_IF(bChanged, "vcl.qt", "In flight clipboard change detected - broken clipboard read!");
-    return bChanged;
+    const QMimeData* pCurrentClipboardData = QApplication::clipboard()->mimeData(m_aMode);
+    if (mimeData() != pCurrentClipboardData)
+    {
+        SAL_WARN("vcl.qt", "In flight clipboard change detected - updating mime data with current "
+                           "clipboard contents.");
+        setMimeData(pCurrentClipboardData);
+    }
 }
 
 css::uno::Any SAL_CALL
@@ -178,8 +182,8 @@ QtClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rF
     auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
-        if (!hasInFlightChanged())
-            aAny = QtTransferable::getTransferData(rFlavor);
+        ensureConsistencyWithSystemClipboard();
+        aAny = QtTransferable::getTransferData(rFlavor);
     });
     return aAny;
 }
@@ -191,8 +195,8 @@ css::uno::Sequence<css::datatransfer::DataFlavor>
     auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
-        if (!hasInFlightChanged())
-            aSeq = QtTransferable::getTransferDataFlavors();
+        ensureConsistencyWithSystemClipboard();
+        aSeq = QtTransferable::getTransferDataFlavors();
     });
     return aSeq;
 }
@@ -204,8 +208,8 @@ QtClipboardTransferable::isDataFlavorSupported(const css::datatransfer::DataFlav
     auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
-        if (!hasInFlightChanged())
-            bIsSupported = QtTransferable::isDataFlavorSupported(rFlavor);
+        ensureConsistencyWithSystemClipboard();
+        bIsSupported = QtTransferable::isDataFlavorSupported(rFlavor);
     });
     return bIsSupported;
 }

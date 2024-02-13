@@ -36,6 +36,14 @@ class QtTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfera
     const QMimeData* m_pMimeData;
     bool m_bProvideUTF16FromOtherEncoding;
 
+protected:
+    /** Sets new mime data.
+     *  Since data flavors supported by this class depend on the mime data,
+     *  results from previous calls to the public methods of this
+     *  class are no longer valid after setting new mime data using this method.
+     */
+    void setMimeData(const QMimeData* pMimeData) { m_pMimeData = pMimeData; }
+
 public:
     QtTransferable(const QMimeData* pMimeData);
     const QMimeData* mimeData() const { return m_pMimeData; }
@@ -52,17 +60,17 @@ public:
  * the QClipboard's object thread, which is the QApplication's thread, so all of
  * the access has to go through RunInMainThread().
  *
- * If we detect a QMimeData change, we simply drop reporting any content. In theory
- * we can recover in the case where there hadn't been any calls of the XTransferable
- * interface, but currently we don't. But we ensure to never report mixed content,
- * so we'll just cease operation on QMimeData change.
+ * If we detect a QMimeData change, the mime data is updated with the new one from
+ * the system clipboard. Note however that this means that results of any previous
+ * calls of the XTransferable interface will be out of sync with the newly set mime
+ * data, so this scenario should generally be avoided.
  **/
 class QtClipboardTransferable final : public QtTransferable
 {
     // to detect in-flight QMimeData changes
     const QClipboard::Mode m_aMode;
 
-    bool hasInFlightChanged() const;
+    void ensureConsistencyWithSystemClipboard();
 
 public:
     explicit QtClipboardTransferable(const QClipboard::Mode aMode, const QMimeData* pMimeData);
