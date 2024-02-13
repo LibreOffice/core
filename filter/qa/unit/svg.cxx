@@ -346,6 +346,31 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
     assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition']", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, textInImage)
+{
+    // Load document containing empty paragraphs with ids.
+    loadFromURL(u"text-in-image.odp");
+
+    // Export to SVG.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+
+    // We expect the Graphic to have an image and a text
+    assertXPath(pXmlDoc, "//svg:g[@class='Graphic']//svg:image", 1);
+    assertXPath(pXmlDoc, "//svg:g[@class='Graphic']//svg:text", 1);
+    // Without the accomanying fix, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
