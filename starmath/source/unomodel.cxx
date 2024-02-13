@@ -916,7 +916,9 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 {
                     pDocSh->ArrangeFormula();
 
-                    *pValue <<= static_cast<sal_Int32>( pDocSh->GetFormulaTree()->GetFormulaBaseline() );
+                    *pValue <<= static_cast<sal_Int32>(
+                        o3tl::convert(pDocSh->GetFormulaTree()->GetFormulaBaseline(),
+                                      SmO3tlLengthUnit(), o3tl::Length::mm100));
                 }
                 break;
             }
