@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_SALGRADIENT_HXX
-#define INCLUDED_VCL_INC_SALGRADIENT_HXX
+#pragma once
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <tools/color.hxx>
@@ -31,7 +30,5 @@ struct SalGradient
     basegfx::B2DPoint maPoint2;
     std::vector<SalGradientStop> maStops;
 };
-
-#endif // INCLUDED_VCL_INC_SALGRADIENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
