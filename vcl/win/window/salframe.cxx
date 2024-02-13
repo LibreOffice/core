@@ -1959,7 +1959,7 @@ static bool EnableAttachThreadInputHack()
         bEnabled = s == "true";
     } else {
         // For backwards compatibility, for now also try to read the value from a [Win32] section of
-        // bootstrap.ini if it is not set as a boostrap variable:
+        // bootstrap.ini if it is not set as a bootstrap variable:
         bEnabled = false;
         OUString aBootstrapUri;
         if (osl_getProcessWorkingDir(&aBootstrapUri.pData) == osl_Process_E_None) {
