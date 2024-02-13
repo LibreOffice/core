@@ -371,8 +371,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
     CPPUNIT_ASSERT_EQUAL(u"red2yellow"_ustr, sGradientName);
     awt::Gradient2 aGradient;
     xShapeProperties->getPropertyValue("FillGradient") >>= aGradient;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFF00), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, Color(ColorTransparency, aGradient.EndColor));
 
     // Test new properties
     auto aColorStopSeq = aGradient.ColorStops;
@@ -427,8 +427,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
     // The old properties need to be still available, as they might be used in macros.
     awt::Gradient2 aGradient;
     xShapeProperties->getPropertyValue("FillTransparenceGradient") >>= aGradient;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xE5E5E5), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0xE5E5E5), Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aGradient.EndColor));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(20), aGradient.Border);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.YOffset);
@@ -493,8 +493,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     CPPUNIT_ASSERT_EQUAL(u"threeStops"_ustr, sGradientName);
     awt::Gradient2 aGradient;
     xShapeProperties->getPropertyValue("FillGradient") >>= aGradient;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFF00), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, Color(ColorTransparency, aGradient.EndColor));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_SQUARE, aGradient.Style);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aGradient.XOffset);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.YOffset);
