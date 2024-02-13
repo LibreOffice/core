@@ -33,4 +33,10 @@ xmlDocUniquePtr UnoApiXmlTest::parseExport(OUString const& rStreamName)
     return pXmlDoc;
 }
 
+xmlDocUniquePtr UnoApiXmlTest::parseExportedFile()
+{
+    auto stream(SvFileStream(maTempFile.GetURL(), StreamMode::READ | StreamMode::TEMPORARY));
+    return parseXmlStream(&stream);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

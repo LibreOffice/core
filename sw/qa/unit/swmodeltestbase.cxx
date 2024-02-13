@@ -493,12 +493,6 @@ int SwModelTestBase::getShapes() const
     return xDraws->getCount();
 }
 
-xmlDocUniquePtr SwModelTestBase::parseExportedFile()
-{
-    auto stream(SvFileStream(maTempFile.GetURL(), StreamMode::READ | StreamMode::TEMPORARY));
-    return parseXmlStream(&stream);
-}
-
 void SwModelTestBase::createSwDoc(const char* pName, const char* pPassword)
 {
     if (!pName)

@@ -22,34 +22,38 @@ public:
     }
 };
 
-DECLARE_FODFEXPORT_TEST(testTdf113696, "tdf113696.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf113696)
 {
+    loadFromFile(u"tdf113696.odt");
+
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    save("OpenDocument Text Flat XML");
     // Test that an image which is written in svm format (image/x-vclgraphic)
     // is accompanied by a png fallback graphic.
-    if (xmlDocUniquePtr pXmlDoc = parseExportedFile())
-    {
-        assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                             "draw:image[@draw:mime-type='image/x-vclgraphic']"_ostr);
-        assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                             "draw:image[@draw:mime-type='image/png']"_ostr);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
+                         "draw:image[@draw:mime-type='image/x-vclgraphic']"_ostr);
+    assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
+                         "draw:image[@draw:mime-type='image/png']"_ostr);
 }
 
-DECLARE_FODFEXPORT_TEST(testTdf113696WriterImage, "tdf113696-writerimage.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf113696WriterImage)
 {
+    loadFromFile(u"tdf113696-writerimage.odt");
+
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    save("OpenDocument Text Flat XML");
     // Same as testTdf113696, but with a writer image instead of a draw image
     // (they use different code paths).
-    if (xmlDocUniquePtr pXmlDoc = parseExportedFile())
-    {
-        assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                             "draw:image[@draw:mime-type='image/x-vclgraphic']"_ostr);
-        assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                             "draw:image[@draw:mime-type='image/png']"_ostr);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
+                         "draw:image[@draw:mime-type='image/x-vclgraphic']"_ostr);
+    assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
+                         "draw:image[@draw:mime-type='image/png']"_ostr);
 }
 
 DECLARE_FODFEXPORT_TEST(testSvgImageRoundtrip, "SvgImageTest.fodt")
