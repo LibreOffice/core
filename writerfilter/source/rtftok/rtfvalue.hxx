@@ -11,6 +11,10 @@
 
 #include <dmapper/resourcemodel.hxx>
 
+#include <com/sun/star/text/GraphicCrop.hpp>
+
+#include <optional>
+
 namespace com::sun::star
 {
 namespace embed
@@ -49,6 +53,7 @@ public:
     explicit RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> xObject);
     explicit RTFValue(const RTFShape& aShape);
     explicit RTFValue(const RTFPicture& rPicture);
+    explicit RTFValue(css::text::GraphicCrop const& rCrop);
     ~RTFValue() override;
     void setString(const OUString& sValue);
     int getInt() const override;
@@ -79,6 +84,7 @@ private:
     bool m_bForceString = false;
     mutable tools::SvRef<RTFShape> m_pShape;
     mutable tools::SvRef<RTFPicture> m_pPicture;
+    ::std::optional<css::text::GraphicCrop> m_oCrop;
 };
 } // namespace writerfilter::rtftok
 
