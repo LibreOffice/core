@@ -9,9 +9,10 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -46,6 +47,28 @@ public:
     {
     }
 };
+
+DECLARE_RTFEXPORT_TEST(testTdf155663, "piccrop.rtf")
+{
+    auto const xShape(getShape(1));
+    if (!isExported())
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2004), xShape->getSize().Height);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2004), xShape->getSize().Width);
+    }
+    else // bit of rounding loss?
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2013), xShape->getSize().Height);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2013), xShape->getSize().Width);
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(123), getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Top);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
+                         getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Bottom);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
+                         getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Left);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(123),
+                         getProperty<text::GraphicCrop>(xShape, "GraphicCrop").Right);
+}
 
 DECLARE_RTFEXPORT_TEST(testTdf158586_0, "tdf158586_pageBreak0.rtf")
 {

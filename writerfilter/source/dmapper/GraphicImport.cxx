@@ -271,6 +271,7 @@ public:
     std::optional<sal_Int32> m_oEffectExtentTop;
     std::optional<sal_Int32> m_oEffectExtentRight;
     std::optional<sal_Int32> m_oEffectExtentBottom;
+    std::optional<text::GraphicCrop> m_oCrop;
 
     GraphicImport_Impl(GraphicImportType & rImportType, DomainMapper& rDMapper,
             std::pair<OUString, OUString>& rPositionOffsets,
@@ -796,6 +797,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_WrapSquare_wrapText: //90928;
             handleWrapTextValue(rValue.getInt());
             break;
+        case NS_ooxml::LN_CT_BlipFillProperties_srcRect:
+            m_pImpl->m_oCrop.emplace(rValue.getAny().get<text::GraphicCrop>());
+            break;
         case NS_ooxml::LN_shape:
             {
                 uno::Reference< drawing::XShape> xShape;
@@ -858,7 +862,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
                             uno::Reference< beans::XPropertySet > xSourceGraphProps( xShape, uno::UNO_QUERY );
                             uno::Any aAny = xSourceGraphProps->getPropertyValue("GraphicCrop");
-                            if(aAny >>= aGraphicCrop) {
+                            if (m_pImpl->m_oCrop)
+                            {   // RTF: RTFValue from resolvePict()
+                                xGraphProps->setPropertyValue("GraphicCrop",
+                                        uno::Any(*m_pImpl->m_oCrop));
+                            }
+                            else if (aAny >>= aGraphicCrop)
+                            {   // DOCX: imported in oox BlipFillContext
                                 xGraphProps->setPropertyValue("GraphicCrop",
                                     uno::Any( aGraphicCrop ) );
                             }
