@@ -38,7 +38,9 @@ endif
 gb_COMPILER_SETUP :=
 
 ifeq ($(strip $(gb_COMPILEROPTFLAGS)),)
-gb_COMPILEROPTFLAGS := -O2
+gb_COMPILEROPTFLAGS := \
+	-O2 -mtune=generic \
+	$(if $(HARDENING_OPT_CFLAGS),$(HARDENING_OPT_CFLAGS))
 endif
 
 gb_AFLAGS := $(AFLAGS)
@@ -74,6 +76,7 @@ gb_CFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
+	$(if $(ENABLE_HARDENING_FLAGS),$(HARDENING_CFLAGS)) \
 	$(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong) \
 
 gb_CXXFLAGS_COMMON := \
@@ -90,6 +93,7 @@ gb_CXXFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
+	$(if $(ENABLE_HARDENING_FLAGS),$(HARDENING_CFLAGS)) \
 	$(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong) \
 
 ifeq ($(HAVE_WDEPRECATED_COPY_DTOR),TRUE)
