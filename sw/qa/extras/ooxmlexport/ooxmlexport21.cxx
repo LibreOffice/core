@@ -377,10 +377,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.doc
                          getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf126533_pageGradient)
+DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageGradient, "fill.docx")
 {
     // given a document with a gradient page background
-    loadFromFile(u"fill.docx");
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
