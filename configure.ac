@@ -1910,6 +1910,13 @@ libo_FUZZ_ARG_ENABLE(release-build,
          See https://wiki.documentfoundation.org/Development/DevBuild]),
 ,)
 
+libo_FUZZ_ARG_ENABLE(hardening-flags,
+    AS_HELP_STRING([--enable-hardening-flags],
+        [Enable automatically using hardening compiler flags. Distros should typically
+         use their default configuration via CXXFLAGS, etc. But this provides a
+         convenient default set of hardening flags]),
+,)
+
 AC_ARG_ENABLE(windows-build-signing,
     AS_HELP_STRING([--enable-windows-build-signing],
         [Enable signing of windows binaries (*.exe, *.dll)]),
@@ -2930,6 +2937,19 @@ else
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
 AC_SUBST(GET_TASK_ALLOW_ENTITLEMENT)
+
+dnl ===================================================================
+dnl Test whether build should auto use hardening compiler flags
+dnl ===================================================================
+AC_MSG_CHECKING([whether build should auto use hardening compiler flags])
+if test "$enable_hardening_flags" = "" -o "$enable_hardening_flags" = "no"; then
+    AC_MSG_RESULT([no])
+    ENABLE_HARDENING_FLAGS=
+else
+    AC_MSG_RESULT([yes])
+    ENABLE_HARDENING_FLAGS=TRUE
+fi
+AC_SUBST(ENABLE_HARDENING_FLAGS)
 
 AC_MSG_CHECKING([whether to build a Community flavor])
 if test -z "$enable_community_flavor" -o "$enable_community_flavor" = "yes"; then
@@ -7356,13 +7376,51 @@ dnl ===================================================================
 dnl GCC features
 dnl ===================================================================
 HAVE_GCC_STACK_CLASH_PROTECTION=
+HARDENING_CFLAGS=
+HARDENING_OPT_CFLAGS=
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
+    AC_MSG_CHECKING([whether $CC_BASE supports -grecord-gcc-switches])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -grecord-gcc-switches"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -grecord-gcc-switches"],
+        [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
+    AC_MSG_CHECKING([whether $CC_BASE supports -D_FORTIFY_SOURCE=2])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=2"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_OPT_CFLAGS="$HARDENING_OPT_CFLAGS -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=2"],
+        [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
+    AC_MSG_CHECKING([whether $CC_BASE supports -D_GLIBCXX_ASSERTIONS])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -Wp,-D_GLIBCXX_ASSERTIONS"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"],
+        [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
     AC_MSG_CHECKING([whether $CC_BASE supports -fstack-clash-protection])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -fstack-clash-protection"
     AC_LINK_IFELSE(
         [AC_LANG_PROGRAM(, [[return 0;]])],
-        [AC_MSG_RESULT([yes]); HAVE_GCC_STACK_CLASH_PROTECTION=TRUE],
+        [AC_MSG_RESULT([yes]); HAVE_GCC_STACK_CLASH_PROTECTION=TRUE; HARDENING_CFLAGS="$HARDENING_CFLAGS -fstack-clash-protection"],
+        [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
+    AC_MSG_CHECKING([whether $CC_BASE supports -fcf-protection])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -fcf-protection"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -fcf-protection"],
         [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
@@ -7516,6 +7574,8 @@ fi
 AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 AC_SUBST(HAVE_GCC_STACK_CLASH_PROTECTION)
+AC_SUBST(HARDENING_CFLAGS)
+AC_SUBST(HARDENING_OPT_CFLAGS)
 
 dnl ===================================================================
 dnl Identify the C++ library
