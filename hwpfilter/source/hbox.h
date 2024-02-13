@@ -523,15 +523,6 @@ enum pictype
     PICTYPE_FILE, PICTYPE_OLE, PICTYPE_EMBED,
     PICTYPE_DRAW, PICTYPE_UNKNOWN
 };
-/**
- * @short External image file
- */
-struct PicDefFile
-{
-    char path[256];
-    void *img;
-    bool skipfind;
-};
 
 /**
  * @short Embedded image file
@@ -573,7 +564,6 @@ struct PicDefUnknown
 
 typedef union
 {
-    PicDefFile        picfile;
     PicDefEmbed       picembed;
     PicDefOle     picole;
     PicDefDraw        picdraw;
