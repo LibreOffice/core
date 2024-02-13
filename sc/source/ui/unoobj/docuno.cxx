@@ -1077,6 +1077,9 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     pViewData->SetZoom(newZoomX, newZoomY, true);
     if (ScTabViewShell* pViewShell = pViewData->GetViewShell())
         pViewShell->SyncGridWindowMapModeFromDrawMapMode();
+    // sync zoom to Input Handler like ScTabViewShell::Activate does
+    if (ScInputHandler* pHdl = SC_MOD()->GetInputHdl())
+        pHdl->SetRefScale(pViewData->GetZoomX(), pViewData->GetZoomY());
 
     // refresh our view's take on other view's cursors & selections
     pViewData->GetActiveWin()->updateKitOtherCursors();

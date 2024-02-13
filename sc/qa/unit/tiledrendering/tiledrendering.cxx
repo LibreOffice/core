@@ -176,6 +176,7 @@ public:
     void testNoInvalidateOnSave();
     void testCellMinimalInvalidations();
     void testCellInvalidationDocWithExistingZoom();
+    void testInputHandlerSyncedZoom();
     void testOptimalRowHeight();
     void testExtendedAreasDontOverlap();
     void testEditShapeText();
@@ -256,6 +257,7 @@ public:
     CPPUNIT_TEST(testNoInvalidateOnSave);
     CPPUNIT_TEST(testCellMinimalInvalidations);
     CPPUNIT_TEST(testCellInvalidationDocWithExistingZoom);
+    CPPUNIT_TEST(testInputHandlerSyncedZoom);
     CPPUNIT_TEST(testOptimalRowHeight);
     CPPUNIT_TEST(testExtendedAreasDontOverlap);
     CPPUNIT_TEST(testEditShapeText);
@@ -3879,6 +3881,43 @@ void ScTiledRenderingTest::testCellInvalidationDocWithExistingZoom()
                                           aView2.m_aInvalidations[0],
                                           aView1.m_aInvalidations[0],
                                           50);
+}
+
+void ScTiledRenderingTest::testInputHandlerSyncedZoom()
+{
+    ScModelObj* pModelObj = createDoc("cell-edit-300zoom-settings.ods");
+
+    // Set View #1 to initial 150%
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 17933, 4853));
+    // Before the fix, this zoom would leave the EditEngine reference device
+    // at the zoom level stored in the document, so normal rendering and
+    // editing rendering happened with different MapModes
+    pModelObj->setClientZoom(256, 256, 1333, 1333);
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    pView->SetCursor(0, 4); // A5
+
+    Scheduler::ProcessEventsToIdle();
+
+    // Activate edit mode in that A5 cell
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+
+    const ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // Get that active EditView
+    EditView* pEditView = pViewData->GetEditView(SC_SPLIT_BOTTOMLEFT);
+    CPPUNIT_ASSERT(pEditView);
+    EditEngine* pEditEngine = pEditView->GetEditEngine();
+    CPPUNIT_ASSERT(pEditEngine);
+    // These must match, if they don't then text will have a different width in edit and view modes
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
+                                 pViewData->GetZoomX(), pEditEngine->GetRefMapMode().GetScaleX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
+                                 pViewData->GetZoomY(), pEditEngine->GetRefMapMode().GetScaleY());
 }
 
 void ScTiledRenderingTest::testOptimalRowHeight()
