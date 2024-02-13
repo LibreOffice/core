@@ -48,14 +48,14 @@ void fillSuffixList(OUStringList& aSuffixList, std::u16string_view suffixString)
 
 #pragma mark FilterEntry
 
-FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
+AquaFilterEntry::AquaFilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
 :m_sTitle( _rTitle )
 ,m_aSubFilters( _rSubFilters )
 {
 }
 
 
-bool FilterEntry::hasSubFilters() const
+bool AquaFilterEntry::hasSubFilters() const
 {
     bool bReturn = ( 0 < m_aSubFilters.getLength() );
 
@@ -63,7 +63,7 @@ bool FilterEntry::hasSubFilters() const
 }
 
 
-sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
+sal_Int32 AquaFilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 {
     _rSubFilterList = m_aSubFilters;
     sal_Int32 nReturn = m_aSubFilters.getLength();
@@ -135,7 +135,7 @@ public:
         FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
 
-        bool operator () ( const FilterEntry& _rEntry )
+        bool operator () ( const AquaFilterEntry& _rEntry )
         {
             bool bMatch;
             if( !_rEntry.hasSubFilters() ) {
@@ -274,7 +274,7 @@ void FilterHelper::appendFilter(const OUString& aTitle, std::u16string_view aFil
     // append the filter
     OUStringList suffixList;
     fillSuffixList(suffixList, aFilterString);
-    m_pFilterList->push_back(FilterEntry( aTitle, suffixList ) );
+    m_pFilterList->push_back(AquaFilterEntry( aTitle, suffixList ) );
 }
 
 void FilterHelper::setCurrentFilter( const OUString& aTitle )
@@ -305,7 +305,7 @@ void FilterHelper::appendFilterGroup( const css::uno::Sequence< css::beans::Stri
     // append the filter
     if (bPrependSeparator) {
         OUStringList emptyList;
-        m_pFilterList->push_back(FilterEntry("-", emptyList));
+        m_pFilterList->push_back(AquaFilterEntry("-", emptyList));
     }
 
     const css::beans::StringPair* pSubFilters   = aFilters.getConstArray();
@@ -391,7 +391,7 @@ void FilterHelper::SetFilterAtIndex(unsigned index)
     if (m_pFilterList->size() <= index) {
         index = 0;
     }
-    FilterEntry entry = m_pFilterList->at(index);
+    AquaFilterEntry entry = m_pFilterList->at(index);
     SetCurFilter(entry.getTitle());
 }
 

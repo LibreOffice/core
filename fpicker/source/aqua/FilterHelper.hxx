@@ -39,7 +39,7 @@ typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transpo
 typedef ::std::list<NSString *> NSStringList;
 typedef ::std::list<OUString> OUStringList;
 
-struct FilterEntry
+struct AquaFilterEntry
 {
 protected:
     OUString            m_sTitle;
@@ -47,13 +47,13 @@ protected:
     UnoFilterList       m_aSubFilters;
 
 public:
-    FilterEntry( const OUString& _rTitle, const OUStringList _rFilter )
+    AquaFilterEntry( const OUString& _rTitle, const OUStringList _rFilter )
     : m_sTitle( _rTitle )
     , m_sFilterSuffixList( _rFilter )
     {
     }
 
-    FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters );
+    AquaFilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters );
 
     OUString const & getTitle() const { return m_sTitle; }
     OUStringList const & getFilterSuffixList() const { return m_sFilterSuffixList; }
@@ -72,7 +72,7 @@ public:
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
-typedef ::std::vector < FilterEntry >       FilterList;
+typedef ::std::vector < AquaFilterEntry >       FilterList;
 
 class FilterHelper {
 
