@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -19,17 +19,18 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
 
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Tests for writerfilter/source/dmapper/DomainMapperTableHandler.cxx.
-class Test : public UnoApiTest
+class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiTest("/writerfilter/qa/cppunittests/dmapper/data/")
+        : UnoApiXmlTest("/writerfilter/qa/cppunittests/dmapper/data/")
     {
     }
 };
@@ -196,6 +197,35 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableFootnoteRedline)
     uno::Reference<drawing::XDrawPageSupplier> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xModel->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHeaderBodyOverlap)
+{
+    // Given a document with a floating table in a header, the floating table extends the header
+    // frame:
+    // When importing that document:
+    loadFromURL(u"floattable-header-overlap.docx");
+
+    // Then make sure the fly bottom is less than the top of the body text:
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
+    OString aDump = xDumper->dump("layout").toUtf8();
+    auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
+    xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
+    sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds", "bottom").toInt32();
+    // Body text top is body top + height of the first line, that's just a fly portion (kind of a
+    // top margin).
+    sal_Int32 nBodyTop = getXPath(pXmlDoc, "//page[1]/body/txt[1]/infos/bounds", "top").toInt32();
+    // Without the accompanying fix in place, this test would have failed, the first line was not a
+    // fly portion but it was actual text, above the floating table.
+    assertXPath(pXmlDoc, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/child::*", "type",
+                "PortionType::Fly");
+    sal_Int32 nBodyFlyPortionHeight
+        = getXPath(pXmlDoc, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "height")
+              .toInt32();
+    sal_Int32 nBodyTextTop = nBodyTop + nBodyFlyPortionHeight;
+    // Fly bottom was 3063, body text top was 7148.
+    CPPUNIT_ASSERT_LESS(nBodyTextTop, nFlyBottom);
 }
 }
 

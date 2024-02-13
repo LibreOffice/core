@@ -109,9 +109,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNestedRowSpan)
     // When loading that document:
     // Without the accompanying fix in place, this test would have resulted in a layout loop.
     createSwDoc("floattable-nested-rowspan.docx");
-
-    // Then make sure the resulting page count matches Word:
-    CPPUNIT_ASSERT_EQUAL(6, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableJoin)

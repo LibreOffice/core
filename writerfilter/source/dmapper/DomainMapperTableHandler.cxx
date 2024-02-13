@@ -39,6 +39,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -1588,8 +1589,25 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 // Floating tables inside a table always stay inside the cell.
                 // Also extend the header/footer area if needed, so an in-header floating table
                 // typically doesn't overlap with body test.
+                bool bIsFollowingTextFlow = true;
+
+                sal_Int16 nVertOrientRelation{};
+                auto it = std::find_if(aFrameProperties.begin(), aFrameProperties.end(),
+                                       [](const beans::PropertyValue& rPropertyValue) -> bool
+                                       { return rPropertyValue.Name == "VertOrientRelation"; });
+                if (it != aFrameProperties.end())
+                {
+                    it->Value >>= nVertOrientRelation;
+                    if (nVertOrientRelation == text::RelOrientation::PAGE_FRAME)
+                    {
+                        // If vertical relation is page, follow-text-flow is not useful and causes
+                        // unwanted wrap of body text around in-header floating table, so avoid it.
+                        bIsFollowingTextFlow = false;
+                    }
+                }
+
                 aFrameProperties.push_back(
-                    comphelper::makePropertyValue("IsFollowingTextFlow", true));
+                    comphelper::makePropertyValue("IsFollowingTextFlow", bIsFollowingTextFlow));
             }
 
             // A text frame created for floating tables is always allowed to split.
