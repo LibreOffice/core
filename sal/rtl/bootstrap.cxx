@@ -219,19 +219,18 @@ static OUString getIniFileName(bool overriding) {
     fileName = OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
     resolvePathnameUrl(&fileName);
 #elif defined ANDROID
-        // Apps are self-contained on Android, too, can as well hardcode
-        // it as "rc" in the "/assets" directory, i.e.  inside the app's
-        // .apk (zip) archive as the /assets/rc file.
-        fileName = overriding
-            ? OUString("vnd.sun.star.pathname:/assets/fundamental.override.ini")
-            : OUString("vnd.sun.star.pathname:/assets/rc");
-        fileName = OUString("vnd.sun.star.pathname:/assets/rc");
-        resolvePathnameUrl(&fileName);
+    // Apps are self-contained on Android, too, can as well hardcode
+    // it as "rc" in the "/assets" directory, i.e.  inside the app's
+    // .apk (zip) archive as the /assets/rc file.
+    fileName = overriding
+        ? OUString("vnd.sun.star.pathname:/assets/fundamental.override.ini")
+        : OUString("vnd.sun.star.pathname:/assets/rc");
+    resolvePathnameUrl(&fileName);
 #elif defined(EMSCRIPTEN)
-        fileName = overriding
-            ? OUString("vnd.sun.star.pathname:/instdir/program/fundamental.override.ini")
-            : OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
-        resolvePathnameUrl(&fileName);
+    fileName = overriding
+        ? OUString("vnd.sun.star.pathname:/instdir/program/fundamental.override.ini")
+        : OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
+    resolvePathnameUrl(&fileName);
 #else
     if (!overriding && getFromCommandLineArgs("INIFILENAME", &fileName))
     {
@@ -265,11 +264,11 @@ static OUString getIniFileName(bool overriding) {
         }
 
 #ifdef MACOSX
-            // We keep only executables in the MacOS folder, and all
-            // rc files in LIBO_ETC_FOLDER (typically "Resources").
-            sal_Int32 off = fileName.lastIndexOf( "/MacOS/" );
-            if (off != -1)
-                fileName = fileName.replaceAt(off + 1, strlen("MacOS"), u"" LIBO_ETC_FOLDER);
+        // We keep only executables in the MacOS folder, and all
+        // rc files in LIBO_ETC_FOLDER (typically "Resources").
+        sal_Int32 off = fileName.lastIndexOf( "/MacOS/" );
+        if (off != -1)
+            fileName = fileName.replaceAt(off + 1, strlen("MacOS"), u"" LIBO_ETC_FOLDER);
 #endif
     }
 #endif
