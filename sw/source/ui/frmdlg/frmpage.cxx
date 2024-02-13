@@ -76,8 +76,6 @@
 #include <comphelper/lok.hxx>
 #include <memory>
 
-#include <bitmaps.hlst>
-
 using namespace ::com::sun::star;
 using namespace ::sfx2;
 
