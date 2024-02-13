@@ -114,7 +114,7 @@ Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
 
 sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& aName )
 {
-    return maPropertyMap.find( aName ) != maPropertyMap.end();
+    return maPropertyMap.contains( aName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

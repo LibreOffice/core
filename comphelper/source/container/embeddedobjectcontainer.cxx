@@ -248,7 +248,7 @@ bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )
 
 bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
-    return pImpl->maObjectToNameMap.find(xObj) != pImpl->maObjectToNameMap.end();
+    return pImpl->maObjectToNameMap.contains(xObj);
 }
 
 bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rName )

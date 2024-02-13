@@ -31,7 +31,7 @@ ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo const * pMap )
     for( ; !pMap->maName.isEmpty(); ++pMap )
     {
         SAL_WARN_IF(
-            maMap.find(pMap->maName) != maMap.end(),
+            maMap.contains(pMap->maName),
             "comphelper", "Duplicate property name \"" << pMap->maName << "\"");
         maMap[pMap->maName] = pMap;
     }
