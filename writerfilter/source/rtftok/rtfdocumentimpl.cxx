@@ -1070,6 +1070,16 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     RTFSprms aAttributes;
     // shape attribute
     RTFSprms aPicAttributes;
+    if (m_aStates.top().getPicture().nCropT != 0 || m_aStates.top().getPicture().nCropB != 0
+        || m_aStates.top().getPicture().nCropL != 0 || m_aStates.top().getPicture().nCropR != 0)
+    {
+        text::GraphicCrop const crop{ m_aStates.top().getPicture().nCropT,
+                                      m_aStates.top().getPicture().nCropB,
+                                      m_aStates.top().getPicture().nCropL,
+                                      m_aStates.top().getPicture().nCropR };
+        auto const pCrop = new RTFValue(crop);
+        aPicAttributes.set(NS_ooxml::LN_CT_BlipFillProperties_srcRect, pCrop);
+    }
     auto pShapeValue = new RTFValue(xShape);
     aPicAttributes.set(NS_ooxml::LN_shape, pShapeValue);
     // pic sprm
