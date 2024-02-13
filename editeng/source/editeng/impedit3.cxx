@@ -725,7 +725,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     bool bQuickFormat = false;
 
-    // Determine if quick formt should be used
+    // Determine if quick format should be used
     if (!bEmptyNodeWithPolygon && !HasScriptType(nPara, i18n::ScriptType::COMPLEX))
     {
         if (rParaPortion.IsSimpleInvalid() &&
