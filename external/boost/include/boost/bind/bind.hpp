@@ -27,5 +27,5 @@
 #pragma GCC diagnostic ignored "-Wunused-macros"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-variable"
-#include_next <boost/io/ios_state.hpp>
+#include_next <boost/bind/bind.hpp>
 #pragma GCC diagnostic pop
