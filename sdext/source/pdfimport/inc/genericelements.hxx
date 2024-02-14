@@ -213,7 +213,8 @@ namespace pdfi
         friend class ElementFactory;
         PolyPolyElement( Element* pParent, sal_Int32 nGCId,
                          const basegfx::B2DPolyPolygon& rPolyPoly,
-                         sal_Int8 nAction, ImageId nFillImage );
+                         sal_Int8 nAction, ImageId nFillImage,
+                         double nTileWidth, double nTileHeight );
     public:
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt ) override;
 
@@ -226,6 +227,8 @@ namespace pdfi
         basegfx::B2DPolyPolygon PolyPoly;
         sal_Int8                Action;
         ImageId                 FillImage;
+        double                  TileWidth;
+        double                  TileHeight;
     };
 
     struct ImageElement final : public DrawElement
@@ -300,8 +303,10 @@ namespace pdfi
             createPolyPolyElement( Element* pParent,
                                    sal_Int32 nGCId,
                                    const basegfx::B2DPolyPolygon& rPolyPoly,
-                                   sal_Int8 nAction, ImageId nFillImage )
-        { return new PolyPolyElement( pParent, nGCId, rPolyPoly, nAction, nFillImage ); }
+                                   sal_Int8 nAction, ImageId nFillImage,
+                                   double nTileWidth, double nTileHeight )
+        { return new PolyPolyElement( pParent, nGCId, rPolyPoly, nAction,
+                                      nFillImage, nTileWidth, nTileHeight ); }
         static ImageElement* createImageElement( Element* pParent, sal_Int32 nGCId, ImageId nImage )
         { return new ImageElement( pParent, nGCId, nImage ); }
 

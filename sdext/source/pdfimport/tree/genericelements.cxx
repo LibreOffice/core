@@ -125,11 +125,15 @@ PolyPolyElement::PolyPolyElement( Element*                       pParent,
                                   sal_Int32                      nGCId,
                                   const basegfx::B2DPolyPolygon& rPolyPoly,
                                   sal_Int8                       nAction,
-                                  ImageId                        nFillImage )
+                                  ImageId                        nFillImage,
+                                  double                         nTileWidth,
+                                  double                         nTileHeight )
     : DrawElement( pParent, nGCId ),
       PolyPoly( rPolyPoly ),
       Action( nAction ),
-      FillImage( nFillImage )
+      FillImage( nFillImage ),
+      TileWidth( nTileWidth ),
+      TileHeight( nTileHeight )
 {
 }
 

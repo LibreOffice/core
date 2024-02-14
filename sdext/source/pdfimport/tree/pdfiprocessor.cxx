@@ -433,7 +433,7 @@ void PDFIProcessor::tilingPatternFill(int nX0, int nY0, int nX1, int nY1,
         getGCId(getCurrentContext()),
         aB2DPoly,
         PATH_EOFILL, // Hmm how do I know if this should be EO or not?
-        nTile );
+        nTile, 0, 0 );
     pPolyElement->updateGeometry();
     pPolyElement->ZOrder = m_nNextZOrder++;
 }
@@ -448,7 +448,7 @@ void PDFIProcessor::strokePath( const uno::Reference< rendering::XPolyPolygon2D 
         getGCId(getCurrentContext()),
         aPoly,
         PATH_STROKE,
-        -1 );
+        -1, 0, 0 );
     pPoly->updateGeometry();
     pPoly->ZOrder = m_nNextZOrder++;
 }
@@ -463,7 +463,7 @@ void PDFIProcessor::fillPath( const uno::Reference< rendering::XPolyPolygon2D >&
         getGCId(getCurrentContext()),
         aPoly,
         PATH_FILL,
-        -1 );
+        -1, 0, 0 );
     pPoly->updateGeometry();
     pPoly->ZOrder = m_nNextZOrder++;
 }
@@ -478,7 +478,7 @@ void PDFIProcessor::eoFillPath( const uno::Reference< rendering::XPolyPolygon2D 
         getGCId(getCurrentContext()),
         aPoly,
         PATH_EOFILL,
-        -1 );
+        -1, 0, 0 );
     pPoly->updateGeometry();
     pPoly->ZOrder = m_nNextZOrder++;
 }
