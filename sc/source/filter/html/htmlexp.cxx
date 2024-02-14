@@ -86,6 +86,8 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <rtl/strbuf.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <tools/json_writer.hxx>
+#include <comphelper/lok.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -670,6 +672,20 @@ void ScHTMLExport::WriteBody()
         }
 
         rStrm.WriteChar( '>' ); OUT_LF();
+
+        // A marker right after <body> can be used, so that data-sheets-* attributes are considered
+        // at all. This is disabled by default.
+        OString aMarker;
+        char* pEnv = getenv("SC_DEBUG_HTML_MARKER");
+        if (pEnv)
+        {
+            aMarker = pEnv;
+        }
+        else if (comphelper::LibreOfficeKit::isActive())
+        {
+            aMarker = "<google-sheets-html-origin/>";
+        }
+        rStrm.WriteOString(aMarker);
     }
 
     if ( bAll )
@@ -1127,6 +1143,18 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
 
     aStrTD.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValueData, fVal,
         nFormat, *pFormatter, &aNonConvertibleChars));
+
+    if (!bValueData)
+    {
+        // 2 is text.
+        tools::JsonWriter aJson;
+        aJson.put("1", static_cast<sal_Int32>(2));
+        aJson.put("2", pDoc->GetString(aPos));
+        std::unique_ptr<char, o3tl::free_delete> aJsonResult(aJson.extractData());
+        OUString aJsonString = OUString::fromUtf8(aJsonResult.get());
+        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_DSval "=\""
+                      + HTMLOutFuncs::ConvertStringToHTML(aJsonString) + "\"");
+    }
 
     TAG_ON(aStrTD.makeStringAndClear().getStr());
 

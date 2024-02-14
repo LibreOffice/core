@@ -192,6 +192,28 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteSingleCell)
                          pDoc->GetFormula(/*col=*/2, /*row=*/0, /*tab=*/0));
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(3), pDoc->GetValue(/*col=*/2, /*row=*/0, /*tab=*/0));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testCopyText)
+{
+    // Given a document with 01 in A1:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    pDoc->SetString(aCellPos, "'01");
+
+    // When copying that text from A1:
+    ScImportExport aExporter(*pDoc, aCellPos);
+    SvMemoryStream aStream;
+    CPPUNIT_ASSERT(aExporter.ExportStream(aStream, OUString(), SotClipboardFormatId::HTML));
+
+    // Then make sure A1 is text:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//td' no attribute 'data-sheets-value' exist
+    // i.e. metadata was missing to avoid converting 01 to 1 (number).
+    aStream.Seek(0);
+    htmlDocUniquePtr pHtmlDoc = parseHtmlStream(&aStream);
+    assertXPath(pHtmlDoc, "//td", "data-sheets-value", "{ \"1\": 2, \"2\": \"01\"}");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
