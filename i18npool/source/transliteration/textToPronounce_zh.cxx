@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <textToPronounce_zh.hxx>
+#include <indexentrysupplier_asian.hxx>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -123,70 +124,27 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
     return (nCount1 == nCount2);
 }
 
-#ifdef DISABLE_DYNLOADING
-
-extern "C" {
-
-sal_uInt16 const ** get_zh_zhuyin(sal_Int16 & max_index);
-sal_uInt16 const ** get_zh_pinyin(sal_Int16 & max_index);
-
-}
-
-#endif
-
 TextToPinyin_zh_CN::TextToPinyin_zh_CN() :
-#ifndef DISABLE_DYNLOADING
-    TextToPronounce_zh("get_zh_pinyin")
-#else
     TextToPronounce_zh(get_zh_pinyin)
-#endif
 {
         transliterationName = "ChineseCharacterToPinyin";
         implementationName = "com.sun.star.i18n.Transliteration.TextToPinyin_zh_CN";
 }
 
 TextToChuyin_zh_TW::TextToChuyin_zh_TW() :
-#ifndef DISABLE_DYNLOADING
-    TextToPronounce_zh("get_zh_zhuyin")
-#else
     TextToPronounce_zh(get_zh_zhuyin)
-#endif
 {
         transliterationName = "ChineseCharacterToChuyin";
         implementationName = "com.sun.star.i18n.Transliteration.TextToChuyin_zh_TW";
 }
-
-#ifndef DISABLE_DYNLOADING
-
-extern "C" { static void thisModule() {} }
-
-TextToPronounce_zh::TextToPronounce_zh(const char* func_name)
-{
-    constexpr OUString lib( u"" SAL_MODULENAME( "index_data" ) ""_ustr );
-    hModule = osl_loadModuleRelative(
-        &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
-    idx=nullptr;
-    if (hModule) {
-        sal_uInt16 const ** (*function)(sal_Int16 &) = reinterpret_cast<sal_uInt16 const ** (*)(sal_Int16 &)>(osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData));
-        if (function)
-            idx=function(o3tl::temporary(sal_Int16()));
-    }
-}
-
-#else
 
 TextToPronounce_zh::TextToPronounce_zh(sal_uInt16 const ** (*function)(sal_Int16 &))
 {
     idx = function(o3tl::temporary(sal_Int16()));
 }
 
-#endif
-
 TextToPronounce_zh::~TextToPronounce_zh()
 {
-#ifndef DISABLE_DYNLOADING
-    if (hModule) osl_unloadModule(hModule);
-#endif
 }
 }
 

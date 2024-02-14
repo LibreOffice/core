@@ -159,4 +159,11 @@ $(eval $(call gb_Library_add_generated_cobjects,i18npool,\
 	$(if $(filter GCC,$(COM)),-Wno-unused-macros) \
 ))
 
+# index data
+$(eval $(call gb_Library_add_generated_exception_objects,i18npool,\
+	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/indexentry/data/*.txt),\
+		CustomTarget/i18npool/indexentry/$(notdir $(basename $(txt)))) \
+))
+
+
 # vim: set noet sw=4 ts=4:

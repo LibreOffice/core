@@ -20,7 +20,6 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 		Library_dict_zh) \
 	Library_i18npool \
 	Library_i18nsearch \
-	Library_index_data \
 	Library_localedata_en \
 	Library_localedata_es \
 	Library_localedata_euro \

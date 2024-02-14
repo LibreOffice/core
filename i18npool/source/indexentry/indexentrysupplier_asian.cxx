@@ -30,49 +30,15 @@ using namespace ::com::sun::star::lang;
 
 namespace i18npool {
 
-#ifndef DISABLE_DYNLOADING
-
-extern "C" { static void thisModule() {} }
-
-#endif
-
 IndexEntrySupplier_asian::IndexEntrySupplier_asian(
     const Reference < XComponentContext >& rxContext ) : IndexEntrySupplier_Common(rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_asian";
-#ifndef DISABLE_DYNLOADING
-    constexpr OUString lib( u"" SAL_MODULENAME( "index_data" ) ""_ustr );
-    hModule = osl_loadModuleRelative(
-        &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
-#endif
 }
 
 IndexEntrySupplier_asian::~IndexEntrySupplier_asian()
 {
-#ifndef DISABLE_DYNLOADING
-    if (hModule) osl_unloadModule(hModule);
-#endif
 }
-
-#ifdef DISABLE_DYNLOADING
-
-extern "C" {
-
-sal_uInt16** get_indexdata_ko_dict(sal_Int16*);
-sal_uInt16** get_indexdata_zh_TW_radical(sal_Int16*);
-sal_uInt16** get_indexdata_zh_TW_stroke(sal_Int16*);
-sal_uInt16** get_indexdata_zh_pinyin(sal_Int16*);
-sal_uInt16** get_indexdata_zh_radical(sal_Int16*);
-sal_uInt16** get_indexdata_zh_stroke(sal_Int16*);
-sal_uInt16** get_indexdata_zh_zhuyin(sal_Int16*);
-
-sal_uInt16** get_ko_phonetic(sal_Int16*);
-sal_uInt16** get_zh_pinyin(sal_Int16*);
-sal_uInt16** get_zh_zhuyin(sal_Int16*);
-
-}
-
-#endif
 
 OUString SAL_CALL
 IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
@@ -80,16 +46,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
 {
     sal_uInt32 ch = rIndexEntry.iterateCodePoints(&o3tl::temporary(sal_Int32(0)), 0);
 
-    sal_uInt16** (*func)(sal_Int16*)=nullptr;
-#ifndef DISABLE_DYNLOADING
-    if (hModule) {
-        OUString get("get_indexdata_");
-        if ( rLocale.Language == "zh" && OUString( "TW HK MO" ).indexOf(rLocale.Country) >= 0 )
-            func=reinterpret_cast<sal_uInt16** (*)(sal_Int16*)>(osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+"_TW_"+rAlgorithm).pData));
-        if (!func)
-            func=reinterpret_cast<sal_uInt16** (*)(sal_Int16*)>(osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+"_"+rAlgorithm).pData));
-    }
-#else
+    const sal_uInt16** (*func)(sal_Int16&)=nullptr;
     if ( rLocale.Language == "zh" && OUString( "TW HK MO" ).indexOf(rLocale.Country) >= 0 ) {
         if ( rAlgorithm == "radical" )
             func = get_indexdata_zh_TW_radical;
@@ -111,17 +68,16 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
                 func = get_indexdata_zh_zhuyin;
         }
     }
-#endif
     if (func) {
         sal_Int16 max_index;
-        sal_uInt16** idx=func(&max_index);
+        const sal_uInt16** idx=func(max_index);
         if (static_cast<sal_Int16>(ch >> 8) <= max_index) {
             sal_uInt16 address=idx[0][ch >> 8];
             if (address != 0xFFFF) {
                 address=idx[1][address+(ch & 0xFF)];
                 return idx[2]
                     ? OUString(
-                        reinterpret_cast<sal_Unicode *>(&idx[2][address]))
+                        reinterpret_cast<const sal_Unicode *>(&idx[2][address]))
                     : OUString(sal_Unicode(address));
             }
         }
@@ -159,28 +115,16 @@ OUString SAL_CALL
 IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         const Locale& rLocale )
 {
-    sal_uInt16 **(*func)(sal_Int16*)=nullptr;
-#ifndef DISABLE_DYNLOADING
-    if (hModule) {
-        const char *func_name=nullptr;
-        if ( rLocale.Language == "zh" )
-            func_name=(OUString("TW HK MO").indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
-        else if ( rLocale.Language == "ko" )
-            func_name="get_ko_phonetic";
-        if (func_name)
-            func=reinterpret_cast<sal_uInt16 **(*)(sal_Int16*)>(osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData));
-    }
-#else
+    sal_uInt16 const **(*func)(sal_Int16&)=nullptr;
     if ( rLocale.Language == "zh" )
         func = (OUString("TW HK MO").indexOf(rLocale.Country) >= 0) ?  get_zh_zhuyin : get_zh_pinyin;
     else if ( rLocale.Language == "ko" )
         func = get_ko_phonetic;
 
-#endif
     if (func) {
         OUStringBuffer candidate;
         sal_Int16 max_index;
-        sal_uInt16** idx=func(&max_index);
+        sal_uInt16 const ** idx=func(max_index);
         for (sal_Int32 i=0,j=0; i < rIndexEntry.getLength(); i=j) {
             sal_uInt32 ch = rIndexEntry.iterateCodePoints(&j);
             if (static_cast<sal_Int16>(ch>>8) <= max_index) {
@@ -191,7 +135,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
                         candidate.append(" ");
                     if (idx[2])
                         candidate.append(
-                            reinterpret_cast<sal_Unicode *>(&idx[2][address]));
+                            reinterpret_cast<const sal_Unicode *>(&idx[2][address]));
                     else
                         candidate.append(sal_Unicode(address));
                 } else

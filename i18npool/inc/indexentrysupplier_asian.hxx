@@ -21,7 +21,6 @@
 
 
 #include "indexentrysupplier_common.hxx"
-#include <osl/module.h>
 
 namespace i18npool {
 
@@ -44,12 +43,25 @@ public:
             const css::lang::Locale& rLocale2 ) override;
     OUString SAL_CALL getPhoneticCandidate( const OUString& rIndexEntry,
             const css::lang::Locale& rLocale ) override;
-#ifndef DISABLE_DYNLOADING
-private:
-    oslModule hModule;
-#endif
 };
 
 }
+
+extern "C" {
+
+const sal_uInt16** get_indexdata_ko_dict(sal_Int16&);
+const sal_uInt16** get_indexdata_zh_TW_radical(sal_Int16&);
+const sal_uInt16** get_indexdata_zh_TW_stroke(sal_Int16&);
+const sal_uInt16** get_indexdata_zh_pinyin(sal_Int16&);
+const sal_uInt16** get_indexdata_zh_radical(sal_Int16&);
+const sal_uInt16** get_indexdata_zh_stroke(sal_Int16&);
+const sal_uInt16** get_indexdata_zh_zhuyin(sal_Int16&);
+
+const sal_uInt16** get_ko_phonetic(sal_Int16&);
+const sal_uInt16** get_zh_pinyin(sal_Int16&);
+const sal_uInt16** get_zh_zhuyin(sal_Int16&);
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

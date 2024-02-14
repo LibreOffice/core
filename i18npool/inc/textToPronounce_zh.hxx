@@ -20,25 +20,17 @@
 #pragma once
 
 #include "transliteration_Ignore.hxx"
-#include <osl/module.hxx>
 
 namespace i18npool {
 
 class TextToPronounce_zh : public transliteration_Ignore
 {
 protected:
-#ifndef DISABLE_DYNLOADING
-        oslModule hModule;
-#endif
         sal_uInt16 const **idx;
         const sal_Unicode* getPronounce(const sal_Unicode ch);
 
 public:
-#ifndef DISABLE_DYNLOADING
-        TextToPronounce_zh(const char* func_name);
-#else
         TextToPronounce_zh(sal_uInt16 const ** (*function)(sal_Int16 &));
-#endif
         virtual ~TextToPronounce_zh() override;
 
         OUString
