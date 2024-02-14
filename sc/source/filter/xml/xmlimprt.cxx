@@ -42,6 +42,7 @@
 #include <svl/languageoptions.hxx>
 #include <editeng/editstat.hxx>
 #include <formula/errorcodes.hxx>
+#include <formulaopt.hxx>
 #include <vcl/svapp.hxx>
 
 #include <appluno.hxx>
@@ -50,12 +51,16 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <docuno.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <scmod.hxx>
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
 #include <ViewSettingsSequenceDefines.hxx>
 #include <userdat.hxx>
 
 #include <compiler.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include "XMLConverter.hxx"
 #include "XMLDetectiveContext.hxx"
@@ -1201,6 +1206,76 @@ sal_Int32 ScXMLImport::GetRangeType(std::u16string_view sRangeType)
     return nRangeType;
 }
 
+namespace {
+
+class MessageWithCheck : public weld::MessageDialogController
+{
+private:
+    std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
+public:
+    MessageWithCheck(weld::Window *pParent, const OUString& rUIFile, const OUString& rDialogId)
+        : MessageDialogController(pParent, rUIFile, rDialogId, "ask")
+        , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
+    {
+    }
+    bool get_active() const { return m_xWarningOnBox->get_active(); }
+    void hide_ask() const { m_xWarningOnBox->set_visible(false); };
+};
+
+}
+
+bool ScXMLImport::GetRecalcRowHeightsMode()
+{
+    ScRecalcOptions nRecalcMode =
+        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::RecalcOptimalRowHeightMode::get());
+
+    bool bHardRecalc = false;
+    switch (nRecalcMode)
+    {
+        case RECALC_ASK:
+        {
+            if (pDoc->IsUserInteractionEnabled())
+            {
+                // Ask if the user wants to perform full re-calculation.
+                MessageWithCheck aQueryBox(ScDocShell::GetActiveDialogParent(),
+                    "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
+                aQueryBox.set_primary_text(ScResId(STR_QUERY_OPT_ROW_HEIGHT_RECALC_ONLOAD));
+                aQueryBox.set_default_response(RET_YES);
+
+                if (officecfg::Office::Calc::Formula::Load::RecalcOptimalRowHeightMode::isReadOnly())
+                    aQueryBox.hide_ask();
+
+                bHardRecalc = aQueryBox.run() == RET_YES;
+
+                if (aQueryBox.get_active())
+                {
+                    // Always perform selected action in the future.
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Calc::Formula::Load::RecalcOptimalRowHeightMode::set(
+                        bHardRecalc ? static_cast<sal_Int32>(RECALC_ALWAYS) : static_cast<sal_Int32>(RECALC_NEVER), batch);
+
+                    ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
+                    aOpt.SetReCalcOptiRowHeights(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
+                    SC_MOD()->SetFormulaOptions(aOpt);
+
+                    batch->commit();
+                }
+            }
+        }
+        break;
+        case RECALC_ALWAYS:
+            bHardRecalc = true;
+            break;
+        case RECALC_NEVER:
+            bHardRecalc = false;
+            break;
+        default:
+            SAL_WARN("sc", "unknown optimal row height recalc option!");
+    }
+
+    return bHardRecalc;
+}
+
 void ScXMLImport::SetLabelRanges()
 {
     if (maMyLabelRanges.empty())
@@ -1420,7 +1495,7 @@ void SAL_CALL ScXMLImport::endDocument()
         }
 
         // There are rows with optimal height which need to be updated
-        if (pDoc && !maRecalcRowRanges.empty())
+        if (pDoc && !maRecalcRowRanges.empty() && GetRecalcRowHeightsMode())
         {
             bool bLockHeight = pDoc->IsAdjustHeightLocked();
             if (bLockHeight)

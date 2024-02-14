@@ -305,6 +305,7 @@ public:
     void SetRangeOverflowType(ErrCode nType);
 
     static sal_Int32 GetRangeType(std::u16string_view sRangeType);
+    bool GetRecalcRowHeightsMode();
     void SetNamedRanges();
     void SetSheetNamedRanges();
     void SetLabelRanges();

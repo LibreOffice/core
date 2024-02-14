@@ -30,6 +30,7 @@ private:
 
     ScRecalcOptions meOOXMLRecalc;
     ScRecalcOptions meODFRecalc;
+    ScRecalcOptions meReCalcOptiRowHeights;
 
 public:
     ScFormulaOptions();
@@ -63,6 +64,9 @@ public:
 
     void SetODFRecalcOptions( ScRecalcOptions eOpt ) { meODFRecalc = eOpt; }
     ScRecalcOptions GetODFRecalcOptions() const { return meODFRecalc; }
+
+    void SetReCalcOptiRowHeights( ScRecalcOptions eOpt ) { meReCalcOptiRowHeights = eOpt; }
+    ScRecalcOptions GetReCalcOptiRowHeights() const { return meReCalcOptiRowHeights; }
 
     void ResetFormulaSeparators();
 
