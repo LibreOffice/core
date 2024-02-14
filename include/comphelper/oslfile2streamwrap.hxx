@@ -58,7 +58,7 @@ private:
 class OSLOutputStreamWrapper final : public ::cppu::WeakImplHelper<css::io::XOutputStream>
 {
 public:
-    UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OSLOutputStreamWrapper(::osl::File& _rFile);
+    COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper(::osl::File& _rFile);
 
 private:
     virtual ~OSLOutputStreamWrapper() override;
