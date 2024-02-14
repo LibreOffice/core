@@ -777,15 +777,18 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                     sal_Int32 nVmlAngle = getIntervalValue< sal_Int32, sal_Int32 >( moAngle.value_or( 0 ), 0, 360 );
 
                     // focus of -50% or 50% is axial gradient
+                    // so approximate anything with a similar focus by using LO's axial gradient,
+                    // (otherwise drop the radial aspect; linear gradient becomes the closest match)
                     if( ((-0.75 <= fFocus) && (fFocus <= -0.25)) || ((0.25 <= fFocus) && (fFocus <= 0.75)) )
                     {
-                        /*  According to spec, focus of 50% is outer-to-inner,
+                        /*  According to spec, a focus of positive 50% is outer-to-inner,
                             and -50% is inner-to-outer (color to color2).
-                            BUT: For angles >= 180 deg., the behaviour is
-                            reversed... that's not spec'ed of course. So,
-                            [0;180) deg. and 50%, or [180;360) deg. and -50% is
-                            outer-to-inner in fact. */
-                        bool bOuterToInner = (fFocus > 0.0) == (nVmlAngle < 180);
+                            If the angle was provided as a negative,
+                            then the colors are also (again) reversed. */
+                        bool bOuterToInner = fFocus > 0.0;
+                        if (moAngle.value_or(0) < 0)
+                            bOuterToInner = !bOuterToInner;
+
                         // simulate axial gradient by 3-step DrawingML gradient
                         const Color& rOuterColor = bOuterToInner ? aColor1 : aColor2;
                         const Color& rInnerColor = bOuterToInner ? aColor2 : aColor1;
@@ -797,13 +800,15 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                     }
                     else    // focus of -100%, 0%, and 100% is linear gradient
                     {
-                        /*  According to spec, focus of -100% or 100% swaps the
-                            start and stop colors, effectively reversing the
-                            gradient. BUT: For angles >= 180 deg., the
-                            behaviour is reversed. This means that in this case
-                            a focus of 0% swaps the gradient. */
+                        /*  According to spec, a focus of -100% or 100% swaps the
+                            start and stop colors, effectively reversing the gradient.
+                            If the angle was provided as a negative,
+                            then the colors are also (again) reversed. */
                         if( fFocus < -0.5 || fFocus > 0.5 )
                             nVmlAngle = (nVmlAngle + 180) % 360;
+                        if (moAngle.value_or(0) < 0)
+                            nVmlAngle = (nVmlAngle + 180) % 360;
+
                         // set the start and stop colors
                         lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.0, aColor1 );
                         lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 1.0, aColor2 );

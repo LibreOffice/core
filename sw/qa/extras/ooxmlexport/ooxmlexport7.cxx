@@ -9,14 +9,18 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/Gradient2.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
+#include <basegfx/utils/gradienttools.hxx>
 #include <config_fonts.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -618,6 +622,47 @@ CPPUNIT_TEST_FIXTURE(Test, test77219)
 DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape.docx")
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", false, getProperty<bool>(getShape(1), "Opaque"));
+
+    // tdf#126533: gradient is purple foreground to white background (top-right to bottom-left)
+    uno::Reference<beans::XPropertySet> xRectangle(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xRectangle, "FillStyle"));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xRectangle, "FillGradient");
+
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x5f497a), Color(aColorStops[0].getStopColor()));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+    // without the fix, this was 1350 (visually the colors were reversed)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3150), aGradient.Angle);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf126533_negativeAxialAngle, "tdf126533_negativeAxialAngle.docx")
+{
+    if (isExported())
+        return;
+
+    // axiel gradient is purple foreground/lime background in the middle (top-left to bottom-right)
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xPageStyle, "FillGradient");
+
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, Color(aColorStops[0].getStopColor()));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, Color(aColorStops[2].getStopColor()));
+    // without the fix, this was 1350 (visually the colors were reversed)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(450), aGradient.Angle);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf77219_foregroundShape, "tdf77219_foregroundShape.docx")
