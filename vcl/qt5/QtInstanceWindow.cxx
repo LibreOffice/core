@@ -10,17 +10,16 @@
 #include <QtInstanceWindow.hxx>
 
 QtInstanceWindow::QtInstanceWindow(QWidget* pWidget)
-    : m_pWidget(pWidget)
+    : QtInstanceContainer(pWidget)
 {
-    assert(m_pWidget);
 }
 
 void QtInstanceWindow::set_title(const OUString& rTitle)
 {
-    m_pWidget->setWindowTitle(toQString(rTitle));
+    getQWidget()->setWindowTitle(toQString(rTitle));
 }
 
-OUString QtInstanceWindow::get_title() const { return toOUString(m_pWidget->windowTitle()); }
+OUString QtInstanceWindow::get_title() const { return toOUString(getQWidget()->windowTitle()); }
 
 void QtInstanceWindow::window_move(int, int) {}
 

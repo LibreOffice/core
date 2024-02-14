@@ -21,7 +21,13 @@
 
 class QtInstanceWidget : public virtual weld::Widget
 {
+    QWidget* m_pWidget;
+
 public:
+    QtInstanceWidget(QWidget* pWidget);
+
+    QWidget* getQWidget() const { return m_pWidget; }
+
     virtual void set_sensitive(bool) override;
 
     virtual bool get_sensitive() const override;

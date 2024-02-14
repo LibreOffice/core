@@ -14,6 +14,8 @@
 class QtInstanceContainer : public QtInstanceWidget, public virtual weld::Container
 {
 public:
+    QtInstanceContainer(QWidget* pWidget);
+
     virtual void move(weld::Widget*, weld::Container*) override;
 
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override;

@@ -9,6 +9,11 @@
 
 #include <QtInstanceContainer.hxx>
 
+QtInstanceContainer::QtInstanceContainer(QWidget* pWidget)
+    : QtInstanceWidget(pWidget)
+{
+}
+
 void QtInstanceContainer::move(weld::Widget*, weld::Container*) {}
 
 css::uno::Reference<css::awt::XWindow> QtInstanceContainer::CreateChildFrame()

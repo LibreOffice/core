@@ -13,8 +13,6 @@
 
 class QtInstanceWindow : public QtInstanceContainer, public virtual weld::Window
 {
-    QWidget* m_pWidget;
-
 public:
     QtInstanceWindow(QWidget* pWidget);
 

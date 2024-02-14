@@ -9,6 +9,12 @@
 
 #include <QtInstanceWidget.hxx>
 
+QtInstanceWidget::QtInstanceWidget(QWidget* pWidget)
+    : m_pWidget(pWidget)
+{
+    assert(pWidget);
+}
+
 void QtInstanceWidget::set_sensitive(bool) {}
 
 bool QtInstanceWidget::get_sensitive() const { return true; }
