@@ -1336,34 +1336,68 @@ SwContentNode* SwNodes::GoNext(SwPosition *pIdx) const
     return static_cast<SwContentNode*>(pNd);
 }
 
-SwContentNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
+SwNodeOffset SwNodes::StartOfGlobalSection(const SwNode& node) const
+{
+    const SwNodeOffset pos = node.GetIndex();
+    if (GetEndOfExtras().GetIndex() < pos)
+        // Regular ContentSection
+        return GetEndOfExtras().GetIndex() + SwNodeOffset(1);
+    if (GetEndOfAutotext().GetIndex() < pos)
+        // Redlines
+        return GetEndOfAutotext().GetIndex() + SwNodeOffset(1);
+    if (GetEndOfInserts().GetIndex() < pos)
+    {
+        // Flys/Headers/Footers
+        if (auto* p = node.FindFlyStartNode())
+            return p->GetIndex();
+        if (auto* p = node.FindHeaderStartNode())
+            return p->GetIndex();
+        if (auto* p = node.FindFooterStartNode())
+            return p->GetIndex();
+        return GetEndOfInserts().GetIndex() + SwNodeOffset(1);
+    }
+    if (GetEndOfPostIts().GetIndex() < pos)
+    {
+        // Footnotes
+        if (auto* p = node.FindFootnoteStartNode())
+            return p->GetIndex();
+        return GetEndOfPostIts().GetIndex() + SwNodeOffset(1);
+    }
+    return SwNodeOffset(0);
+}
+
+SwContentNode* SwNodes::GoPrevious(SwNodeIndex* pIdx, bool canCrossBoundary)
 {
     if( !pIdx->GetIndex() )
         return nullptr;
 
     SwNodeIndex aTmp( *pIdx, -1 );
+    SwNodeOffset aGlobalStart(
+        canCrossBoundary ? SwNodeOffset(0) : aTmp.GetNodes().StartOfGlobalSection(pIdx->GetNode()));
     SwNode* pNd = nullptr;
-    while( aTmp.GetIndex() && !( pNd = &aTmp.GetNode())->IsContentNode() )
+    while (aTmp > aGlobalStart && !(pNd = &aTmp.GetNode())->IsContentNode())
         --aTmp;
 
-    if( !aTmp.GetIndex() )
+    if (aTmp <= aGlobalStart)
         pNd = nullptr;
     else
         (*pIdx) = aTmp;
     return static_cast<SwContentNode*>(pNd);
 }
 
-SwContentNode* SwNodes::GoPrevious(SwPosition *pIdx)
+SwContentNode* SwNodes::GoPrevious(SwPosition* pIdx, bool canCrossBoundary)
 {
     if( !pIdx->GetNodeIndex() )
         return nullptr;
 
     SwNodeIndex aTmp( pIdx->GetNode(), -1 );
+    SwNodeOffset aGlobalStart(
+        canCrossBoundary ? SwNodeOffset(0) : aTmp.GetNodes().StartOfGlobalSection(pIdx->GetNode()));
     SwNode* pNd = nullptr;
-    while( aTmp.GetIndex() && !( pNd = &aTmp.GetNode())->IsContentNode() )
+    while( aTmp > aGlobalStart && !( pNd = &aTmp.GetNode())->IsContentNode() )
         --aTmp;
 
-    if( !aTmp.GetIndex() )
+    if (aTmp <= aGlobalStart)
         pNd = nullptr;
     else
         pIdx->Assign(aTmp);
@@ -2072,8 +2106,9 @@ SwContentNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
 {
     bool bFirst = true;
     SwNodeIndex aTmp( *pIdx );
+    SwNodeOffset aGlobalStart(aTmp.GetNodes().StartOfGlobalSection(pIdx->GetNode()));
     const SwNode* pNd;
-    while( aTmp > SwNodeOffset(0) )
+    while (aTmp > aGlobalStart)
     {
         pNd = & aTmp.GetNode();
         if (SwNodeType::End == pNd->GetNodeType())
@@ -2129,8 +2164,9 @@ SwContentNode* SwNodes::GoPrevSection( SwPosition * pIdx,
 {
     bool bFirst = true;
     SwNodeIndex aTmp( pIdx->GetNode() );
+    SwNodeOffset aGlobalStart(aTmp.GetNodes().StartOfGlobalSection(pIdx->GetNode()));
     const SwNode* pNd;
-    while( aTmp > SwNodeOffset(0) )
+    while (aTmp > aGlobalStart)
     {
         pNd = & aTmp.GetNode();
         if (SwNodeType::End == pNd->GetNodeType())

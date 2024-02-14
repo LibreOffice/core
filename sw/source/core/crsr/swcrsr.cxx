@@ -913,7 +913,7 @@ static bool lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
 
     rPam.SetMark();
     rPam.GetPoint()->Assign(rEndNd);
-    pCNd = SwNodes::GoPrevious( rPam.GetPoint() );
+    pCNd = SwNodes::GoPrevious(rPam.GetPoint(), true);
     if( !pCNd )
         return false;
     rPam.GetPoint()->AssignEndIndex(*pCNd);
@@ -933,7 +933,7 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     if( !bFirst )
     {
         rPam.GetPoint()->Assign(rSttNd);
-        pCNd = SwNodes::GoPrevious( rPam.GetPoint() );
+        pCNd = SwNodes::GoPrevious(rPam.GetPoint(), true);
         if( !pCNd )
             return false;
         rPam.GetPoint()->AssignEndIndex(*pCNd);
