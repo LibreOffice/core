@@ -792,7 +792,21 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
     }
     else
     {
-        QMessageBox* pMessageBox = new QMessageBox();
+        QWidget* pQtParent = nullptr;
+        if (pParent)
+        {
+            if (QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pParent))
+            {
+                pQtParent = pQtInstanceWidget->getQWidget();
+            }
+            else
+            {
+                // the parent is not welded/not a native Qt widget; fall back to currently active window
+                pQtParent = QApplication::activeWindow();
+            }
+        }
+
+        QMessageBox* pMessageBox = new QMessageBox(pQtParent);
         pMessageBox->setText(toQString(rPrimaryMessage));
         pMessageBox->setIcon(vclMessageTypeToQtIcon(eMessageType));
         pMessageBox->setWindowTitle(vclMessageTypeToQtTitle(eMessageType));
