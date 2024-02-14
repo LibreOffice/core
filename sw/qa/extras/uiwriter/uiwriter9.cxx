@@ -16,6 +16,8 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
 #include <comphelper/propertysequence.hxx>
 #include <swdtflvr.hxx>
 #include <o3tl/string_view.hxx>
@@ -136,6 +138,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionsAroundPageBreak)
     // Make sure that the page style is set correctly
     xCursor->jumpToFirstPage();
     CPPUNIT_ASSERT_EQUAL(u"Landscape"_ustr, getProperty<OUString>(xCursor, "PageStyleName"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159565)
+{
+    // Given a document with a hidden section in the beginning, additionally containing a frame
+    createSwDoc("FrameInHiddenSection.fodt");
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    // Check that the selection covers the whole visible text
+    auto xModel(mxComponent.queryThrow<css::frame::XModel>());
+    auto xSelSupplier(xModel->getCurrentController().queryThrow<css::view::XSelectionSupplier>());
+    auto xSelections(xSelSupplier->getSelection().queryThrow<css::container::XIndexAccess>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelections->getCount());
+    auto xSelection(xSelections->getByIndex(0).queryThrow<css::text::XTextRange>());
+
+    // Without the fix, this would fail - there was no selection
+    CPPUNIT_ASSERT_EQUAL(u"" SAL_NEWLINE_STRING SAL_NEWLINE_STRING "ipsum"_ustr,
+                         xSelection->getString());
 }
 
 } // end of anonymous namespace
