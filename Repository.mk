@@ -517,6 +517,7 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     cui \
     $(if $(USING_X11),desktop_detector) \
     icg \
+    sdui \
     $(if $(ENABLE_GEN),vclplug_gen) \
     $(if $(filter $(OS),WNT),vclplug_win) \
     $(if $(filter $(OS),MACOSX),vclplug_osx) \

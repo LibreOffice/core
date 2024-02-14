@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_dialogs_test, \
     salhelper \
     sax \
     sd \
+    sdui \
     sfx \
     sot \
     svl \

@@ -19,6 +19,37 @@
 
 #include <sdabstdlg.hxx>
 
-SdAbstractDialogFactory* SdAbstractDialogFactory::Create() { return SdCreateDialogFactory(); }
+#include <osl/module.hxx>
+
+typedef SdAbstractDialogFactory* (*SdFuncPtrCreateDialogFactory)();
+
+#ifndef DISABLE_DYNLOADING
+
+extern "C" {
+static void thisModule() {}
+}
+
+#else
+
+extern "C" SdAbstractDialogFactory* SdCreateDialogFactory();
+
+#endif
+
+SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
+{
+    SdFuncPtrCreateDialogFactory fp = nullptr;
+#ifndef DISABLE_DYNLOADING
+    static ::osl::Module aDialogLibrary;
+    static constexpr OUStringLiteral sLibName(u"" SDUI_DLL_NAME);
+    if (aDialogLibrary.is() || aDialogLibrary.loadRelative(&thisModule, sLibName))
+        fp = reinterpret_cast<SdAbstractDialogFactory*(SAL_CALL*)()>(
+            aDialogLibrary.getFunctionSymbol("SdCreateDialogFactory"));
+#else
+    fp = SdCreateDialogFactory;
+#endif
+    if (fp)
+        return fp();
+    return nullptr;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
