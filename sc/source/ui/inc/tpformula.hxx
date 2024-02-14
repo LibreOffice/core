@@ -82,6 +82,7 @@ private:
 
     std::unique_ptr<weld::ComboBox> mxLbOOXMLRecalcOptions;
     std::unique_ptr<weld::ComboBox> mxLbODFRecalcOptions;
+    std::unique_ptr<weld::ComboBox> mxLbRowHeightReCalcOptions;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
