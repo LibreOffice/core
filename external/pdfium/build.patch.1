@@ -1,61 +1,4 @@
 -*- Mode: diff -*-
-diff --git a/core/fpdfapi/font/cpdf_cidfont.cpp b/core/fpdfapi/font/cpdf_cidfont.cpp
-index 7d2d549b8..c4864060a 100644
---- a/core/fpdfapi/font/cpdf_cidfont.cpp
-+++ b/core/fpdfapi/font/cpdf_cidfont.cpp
-@@ -754,7 +754,7 @@ int CPDF_CIDFont::GlyphFromCharCode(uint32_t charcode, bool* pVertGlyph) {
-         uint32_t maccode = CharCodeFromUnicodeForFreetypeEncoding(
-             FT_ENCODING_APPLE_ROMAN, name_unicode);
-         index = maccode ? FT_Get_Char_Index(face, maccode)
--                        : FT_Get_Name_Index(face, name);
-+                        : FT_Get_Name_Index(face, const_cast<char*>(name));
-       }
-       if (index == 0 || index == 0xffff)
-         return charcode ? static_cast<int>(charcode) : -1;
-diff --git a/core/fpdfapi/font/cpdf_truetypefont.cpp b/core/fpdfapi/font/cpdf_truetypefont.cpp
-index f19ace9d0..562b015f0 100644
---- a/core/fpdfapi/font/cpdf_truetypefont.cpp
-+++ b/core/fpdfapi/font/cpdf_truetypefont.cpp
-@@ -90,7 +90,7 @@ void CPDF_TrueTypeFont::LoadGlyphMap() {
-               FT_ENCODING_APPLE_ROMAN,
-               m_Encoding.UnicodeFromCharCode(charcode));
-           if (!maccode) {
--            m_GlyphIndex[charcode] = FT_Get_Name_Index(face, name);
-+            m_GlyphIndex[charcode] = FT_Get_Name_Index(face, const_cast<char*>(name));
-           } else {
-             m_GlyphIndex[charcode] = FT_Get_Char_Index(face, maccode);
-           }
-@@ -104,7 +104,7 @@ void CPDF_TrueTypeFont::LoadGlyphMap() {
-         m_GlyphIndex[charcode] = FT_Get_Char_Index(face, 32);
-         continue;
-       }
--      m_GlyphIndex[charcode] = FT_Get_Name_Index(face, name);
-+      m_GlyphIndex[charcode] = FT_Get_Name_Index(face, const_cast<char*>(name));
-       if (m_GlyphIndex[charcode] != 0 || !bToUnicode)
-         continue;
- 
-diff --git a/core/fpdfapi/font/cpdf_type1font.cpp b/core/fpdfapi/font/cpdf_type1font.cpp
-index 55510e7d7..2f13f00b8 100644
---- a/core/fpdfapi/font/cpdf_type1font.cpp
-+++ b/core/fpdfapi/font/cpdf_type1font.cpp
-@@ -263,7 +263,7 @@ void CPDF_Type1Font::LoadGlyphMap() {
-                                           static_cast<uint32_t>(charcode));
-       if (name) {
-         m_Encoding.SetUnicode(charcode, UnicodeFromAdobeName(name));
--        m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), name);
-+        m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), const_cast<char*>(name));
-       } else {
-         m_GlyphIndex[charcode] = FT_Get_Char_Index(
-             m_Font.GetFaceRec(), static_cast<uint32_t>(charcode));
-@@ -294,7 +294,7 @@ void CPDF_Type1Font::LoadGlyphMap() {
-       continue;
- 
-     m_Encoding.SetUnicode(charcode, UnicodeFromAdobeName(name));
--    m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), name);
-+    m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), const_cast<char*>(name));
-     if (m_GlyphIndex[charcode] != 0)
-       continue;
- 
 diff --git a/core/fpdfdoc/cpdf_metadata.cpp b/core/fpdfdoc/cpdf_metadata.cpp
 index 31564f45f..5858549ef 100644
 --- a/core/fpdfdoc/cpdf_metadata.cpp
@@ -69,19 +12,6 @@ index 31564f45f..5858549ef 100644
  
    std::vector<UnsupportedFeature> unsupported;
    CheckForSharedFormInternal(/*depth=*/0, doc->GetRoot(), &unsupported);
-diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
-index 2e7a72aa1..65fb3deaa 100644
---- a/core/fxcodec/jpx/cjpx_decoder.cpp
-+++ b/core/fxcodec/jpx/cjpx_decoder.cpp
-@@ -74,7 +74,7 @@ absl::optional<OpjImageRgbData> alloc_rgb(size_t size) {
-   if (!data.b)
-     return absl::nullopt;
- 
--  return data;
-+  return std::move(data);
- }
- 
- void sycc_to_rgb(int offset,
 diff --git a/third_party/base/containers/span.h b/third_party/base/containers/span.h
 index 435fafa85..d8e8bfbc4 100644
 --- a/third_party/base/containers/span.h
@@ -130,3 +60,16 @@ index 9dd4256d7..949d65830 100644
          OPJ_BOOL strict)
  {
      if (p_codec) {
+diff --git a/core/fxge/cfx_face.cpp b/core/fxge/cfx_face.cpp
+index 7d9cd0f44..0d0a311aa 100644
+--- a/core/fxge/cfx_face.cpp
++++ b/core/fxge/cfx_face.cpp
+@@ -654,7 +654,7 @@ int CFX_Face::GetCharIndex(uint32_t code) {
+ }
+ 
+ int CFX_Face::GetNameIndex(const char* name) {
+-  return FT_Get_Name_Index(GetRec(), name);
++  return FT_Get_Name_Index(GetRec(), const_cast<char*>(name));
+ }
+ 
+ FX_RECT CFX_Face::GetCharBBox(uint32_t code, int glyph_index) {
