@@ -13,6 +13,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import type_text
 
 from libreoffice.linguistic.linguservice import get_spellchecker
+from libreoffice.uno.propertyvalue import mkPropertyValues
 from com.sun.star.lang import Locale
 
 class SpellingAndGrammarDialog(UITestCase):
@@ -180,5 +181,24 @@ frog, dogg, catt"""
 
             # This was False (lost comment)
             self.assertEqual(True, has_comment)
+
+    def test_tdf157992(self):
+        supported_locale = self.is_supported_locale("en", "US")
+        if not supported_locale:
+            self.skipTest("no dictionary support for en_US available")
+
+        with self.ui_test.load_file(get_url_for_data_file("tdf157992.odt")) as document:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="") as xDialog:
+                sentence = xDialog.getChild('sentence')
+                sentence.executeAction('TYPE', mkPropertyValues({'KEYCODE':'KEY_RIGHT'}))
+                sentence.executeAction('TYPE', mkPropertyValues({'KEYCODE':'DELETE'}))
+                sentence.executeAction('TYPE', mkPropertyValues({'KEYCODE':'DELETE'}))
+                sentence.executeAction('TYPE', mkPropertyValues({'TEXT':'oo'}))
+                change = xDialog.getChild('change')
+                with self.ui_test.execute_blocking_action(
+                        change.executeAction, args=('CLICK', ()), close_button="ok"):
+                    footnotes = document.getFootnotes()
+                    self.assertTrue(len(footnotes) == 1)
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
