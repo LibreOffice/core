@@ -20,6 +20,7 @@
 #include <frmfmt.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
+#include <txtfld.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -40,6 +41,7 @@
 #include <swmodule.hxx>
 #include <osl/diagnose.h>
 #include <editeng/prntitem.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -383,8 +385,14 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     // fields last - SwGetRefField::UpdateField requires up-to-date frames
     UpdateFieldsForRedline(rDoc.getIDocumentFieldsAccess()); // after footnotes
 
-    // update SwPostItMgr / notes in the margin
-    rDoc.GetDocShell()->Broadcast(
+    const SwTextNode *pTextNode = rPam.GetPointNode().GetTextNode();
+    SwTextAttr* pTextAttr = pTextNode ? pTextNode->GetFieldTextAttrAt(rPam.GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default) : nullptr;
+    SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pTextAttr));
+    if (pTextField && comphelper::LibreOfficeKit::isActive() )
+        rDoc.GetDocShell()->Broadcast(
+            SwFormatFieldHint(&pTextField->GetFormatField(), SwFormatFieldHintWhich::INSERTED));
+    else
+        rDoc.GetDocShell()->Broadcast(
             SwFormatFieldHint(nullptr, SwFormatFieldHintWhich::INSERTED) );
 }
 
