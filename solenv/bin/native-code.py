@@ -144,7 +144,7 @@ core_constructor_list = [
     ("com_sun_star_comp_extensions_PlainTextFormatter", "#ifdef ANDROID"),
     ("com_sun_star_comp_extensions_SimpleTextFormatter", "#ifdef ANDROID"),
 # extensions/source/bibliography/bib.component
-    "extensions_BibliographyLoader_get_implementation",
+    ("extensions_BibliographyLoader_get_implementation", "#if !ENABLE_FUZZERS"),
 # filter/source/config/cache/filterconfig1.component
     "filter_ConfigFlush_get_implementation",
     "filter_TypeDetection_get_implementation",

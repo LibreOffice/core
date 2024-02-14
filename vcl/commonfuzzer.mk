@@ -57,7 +57,6 @@ fuzzer_core_libraries = \
         basctl \
         basprov \
     ) \
-    bib \
     canvastools \
     configmgr \
     cppcanvas \
