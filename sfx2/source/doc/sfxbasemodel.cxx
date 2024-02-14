@@ -2229,6 +2229,28 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             else
                 throw datatransfer::UnsupportedFlavorException();
         }
+        else if ( aFlavor.MimeType == "image/svg+xml" )
+        {
+            if ( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
+                throw datatransfer::UnsupportedFlavorException();
+
+            std::shared_ptr<GDIMetaFile> xMetaFile =
+                m_pData->m_pObjectShell->GetPreviewMetaFile( true );
+
+            if (xMetaFile)
+            {
+                std::unique_ptr<SvMemoryStream> xStream(
+                    GraphicHelper::getFormatStrFromGDI_Impl(
+                        xMetaFile.get(), ConvertDataFormat::SVG ) );
+
+                if (xStream)
+                {
+                    xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+                    aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
+                                                    xStream->TellEnd() );
+                }
+            }
+        }
         else if ( aFlavor.MimeType == "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )
         {
             if ( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
@@ -2288,7 +2310,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
 {
     SfxModelGuard aGuard( *this );
 
-    const sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 10 : 8;
+    const sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 11 : 9;
     Sequence< datatransfer::DataFlavor > aFlavorSeq( nSuppFlavors );
     auto pFlavorSeq = aFlavorSeq.getArray();
 
@@ -2331,17 +2353,21 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
     pFlavorSeq[7].HumanPresentableName = "PNG";
     pFlavorSeq[7].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    if ( nSuppFlavors == 10 )
-    {
-        pFlavorSeq[8].MimeType =
-            "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
-        pFlavorSeq[8].HumanPresentableName = "Enhanced Windows MetaFile";
-        pFlavorSeq[8].DataType = cppu::UnoType<sal_uInt64>::get();
+    pFlavorSeq[8].MimeType = "image/svg+xml";
+    pFlavorSeq[8].HumanPresentableName = "SVG";
+    pFlavorSeq[8].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
+    if ( nSuppFlavors == 11 )
+    {
         pFlavorSeq[9].MimeType =
-            "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
-        pFlavorSeq[9].HumanPresentableName = "Windows MetaFile";
+            "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
+        pFlavorSeq[9].HumanPresentableName = "Enhanced Windows MetaFile";
         pFlavorSeq[9].DataType = cppu::UnoType<sal_uInt64>::get();
+
+        pFlavorSeq[10].MimeType =
+            "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
+        pFlavorSeq[10].HumanPresentableName = "Windows MetaFile";
+        pFlavorSeq[10].DataType = cppu::UnoType<sal_uInt64>::get();
     }
 
     return aFlavorSeq;
@@ -2379,6 +2405,11 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
             return true;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
+            return true;
+    }
+    else if ( aFlavor.MimeType == "image/svg+xml" )
+    {
+        if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
             return true;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" )

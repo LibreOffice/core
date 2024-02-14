@@ -413,6 +413,37 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                     }
                 }
             }
+            else if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::SVG, aSubstFlavor ) &&
+                     TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
+                     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aSubstFlavor ) )
+            {
+                GetData(aSubstFlavor, rDestDoc);
+
+                if( maAny.hasValue() )
+                {
+                    Sequence< sal_Int8 > aSeq;
+
+                    if( maAny >>= aSeq )
+                    {
+                        GDIMetaFile     aMtf;
+                        {
+                            SvMemoryStream aSrcStm( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC );
+                            SvmReader aReader( aSrcStm );
+                            aReader.Read( aMtf );
+                        }
+
+                        SvMemoryStream  aDstStm( 65535, 65535 );
+                        Graphic         aGraphic( aMtf );
+
+                        if( GraphicConverter::Export( aDstStm, aGraphic, ConvertDataFormat::SVG ) == ERRCODE_NONE )
+                        {
+                            maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aDstStm.GetData() ),
+                                                            aDstStm.TellEnd() );
+                            bDone = true;
+                        }
+                    }
+                }
+            }
 
             // reset Any if substitute doesn't work
             if( !bDone && maAny.hasValue() )
@@ -620,6 +651,7 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
     {
         AddFormat( SotClipboardFormatId::EMF );
         AddFormat( SotClipboardFormatId::WMF );
+        AddFormat( SotClipboardFormatId::SVG );
     }
 }
 
@@ -1235,7 +1267,9 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                     rDataFlavorExVector.push_back( aFlavorEx );
                 }
             }
-            else if( SotClipboardFormatId::WMF == aFlavorEx.mnSotId || SotClipboardFormatId::EMF == aFlavorEx.mnSotId )
+            else if( SotClipboardFormatId::WMF == aFlavorEx.mnSotId
+                     || SotClipboardFormatId::EMF == aFlavorEx.mnSotId
+                     || SotClipboardFormatId::SVG == aFlavorEx.mnSotId )
             {
                 if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aFlavorEx ) )
                 {
