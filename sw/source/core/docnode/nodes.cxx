@@ -1295,17 +1295,49 @@ SwContentNode* SwNodes::GoNext(SwNodeIndex *pIdx) const
     return static_cast<SwContentNode*>(pNd);
 }
 
-SwContentNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
+sal_uLong SwNodes::StartOfGlobalSection(const SwNode& node) const
+{
+    const sal_uLong pos = node.GetIndex();
+    if (GetEndOfExtras().GetIndex() < pos)
+        // Regular ContentSection
+        return GetEndOfExtras().GetIndex() + sal_uLong(1);
+    if (GetEndOfAutotext().GetIndex() < pos)
+        // Redlines
+        return GetEndOfAutotext().GetIndex() + sal_uLong(1);
+    if (GetEndOfInserts().GetIndex() < pos)
+    {
+        // Flys/Headers/Footers
+        if (auto* p = node.FindFlyStartNode())
+            return p->GetIndex();
+        if (auto* p = node.FindHeaderStartNode())
+            return p->GetIndex();
+        if (auto* p = node.FindFooterStartNode())
+            return p->GetIndex();
+        return GetEndOfInserts().GetIndex() + sal_uLong(1);
+    }
+    if (GetEndOfPostIts().GetIndex() < pos)
+    {
+        // Footnotes
+        if (auto* p = node.FindFootnoteStartNode())
+            return p->GetIndex();
+        return GetEndOfPostIts().GetIndex() + sal_uLong(1);
+    }
+    return sal_uLong(0);
+}
+
+SwContentNode* SwNodes::GoPrevious(SwNodeIndex* pIdx, bool canCrossBoundary)
 {
     if( !pIdx->GetIndex() )
         return nullptr;
 
     SwNodeIndex aTmp( *pIdx, -1 );
+    sal_uLong aGlobalStart(
+        canCrossBoundary ? sal_uLong(0) : aTmp.GetNodes().StartOfGlobalSection(pIdx->GetNode()));
     SwNode* pNd = nullptr;
-    while( aTmp.GetIndex() && !( pNd = &aTmp.GetNode())->IsContentNode() )
+    while (aTmp > aGlobalStart && !(pNd = &aTmp.GetNode())->IsContentNode())
         --aTmp;
 
-    if( !aTmp.GetIndex() )
+    if (aTmp <= aGlobalStart)
         pNd = nullptr;
     else
         (*pIdx) = aTmp;
@@ -1985,8 +2017,9 @@ SwContentNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
 {
     bool bFirst = true;
     SwNodeIndex aTmp( *pIdx );
+    sal_uLong aGlobalStart(aTmp.GetNodes().StartOfGlobalSection(pIdx->GetNode()));
     const SwNode* pNd;
-    while( aTmp > 0 )
+    while (aTmp > aGlobalStart)
     {
         pNd = & aTmp.GetNode();
         if (SwNodeType::End == pNd->GetNodeType())

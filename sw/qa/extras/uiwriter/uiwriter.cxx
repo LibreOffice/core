@@ -94,11 +94,13 @@
 #include <com/sun/star/util/XPropertyReplace.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <o3tl/deleter.hxx>
 #include <osl/file.hxx>
@@ -8203,6 +8205,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testHiddenSectionsAroundPageBreak)
     // Make sure that the page style is set correctly
     xCursor->jumpToFirstPage();
     CPPUNIT_ASSERT_EQUAL(OUString("Landscape"), getProperty<OUString>(xCursor, "PageStyleName"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf159565)
+{
+    // Given a document with a hidden section in the beginning, additionally containing a frame
+    createDoc("FrameInHiddenSection.fodt");
+
+    lcl_dispatchCommand(mxComponent, u".uno:SelectAll", {});
+
+    // Check that the selection covers the whole visible text
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSelections(xSelSupplier->getSelection(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelections->getCount());
+    uno::Reference<text::XTextRange> xSelection(xSelections->getByIndex(0), uno::UNO_QUERY);
+
+    // Without the fix, this would fail - there was no selection
+    CPPUNIT_ASSERT_EQUAL(OUString(u"" SAL_NEWLINE_STRING SAL_NEWLINE_STRING "ipsum"),
+                         xSelection->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

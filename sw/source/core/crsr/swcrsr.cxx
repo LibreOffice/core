@@ -888,7 +888,7 @@ static bool lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
 
     rPam.SetMark();
     rPam.GetPoint()->nNode = rEndNd;
-    pCNd = SwNodes::GoPrevious( &rPam.GetPoint()->nNode );
+    pCNd = SwNodes::GoPrevious(&rPam.GetPoint()->nNode, true);
     if( !pCNd )
         return false;
     pCNd->MakeEndIndex( &rPam.GetPoint()->nContent );
@@ -908,7 +908,7 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     if( !bFirst )
     {
         rPam.GetPoint()->nNode = rSttNd;
-        pCNd = SwNodes::GoPrevious( &rPam.GetPoint()->nNode );
+        pCNd = SwNodes::GoPrevious(&rPam.GetPoint()->nNode, true);
         if( !pCNd )
             return false;
         pCNd->MakeEndIndex( &rPam.GetPoint()->nContent );

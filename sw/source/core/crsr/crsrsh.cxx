@@ -758,6 +758,8 @@ static typename SwCursorShell::StartsWith StartsWith(SwStartNode const& rStart)
         switch (rNode.GetNodeType())
         {
             case SwNodeType::Section:
+                if (rNode.GetSectionNode()->GetSection().IsHidden())
+                    return SwCursorShell::StartsWith::HiddenSection;
                 continue;
             case SwNodeType::Table:
                 return SwCursorShell::StartsWith::Table;
@@ -782,11 +784,16 @@ static typename SwCursorShell::StartsWith EndsWith(SwStartNode const& rStart)
         switch (rNode.GetNodeType())
         {
             case SwNodeType::End:
-                if (rNode.StartOfSectionNode()->IsTableNode())
+                if (auto pStartNode = rNode.StartOfSectionNode(); pStartNode->IsTableNode())
                 {
                     return SwCursorShell::StartsWith::Table;
                 }
-//TODO buggy SwUndoRedline in testTdf137503?                assert(rNode.StartOfSectionNode()->IsSectionNode());
+                else if (pStartNode->IsSectionNode())
+                {
+                    if (pStartNode->GetSectionNode()->GetSection().IsHidden())
+                        return SwCursorShell::StartsWith::HiddenSection;
+                }
+                    //TODO buggy SwUndoRedline in testTdf137503?                assert(rNode.StartOfSectionNode()->IsSectionNode());
             break;
             case SwNodeType::Text:
                 if (rNode.GetTextNode()->IsHidden())
@@ -3401,7 +3408,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
         GetDoc()->GetDocShell()->IsReadOnlyUI() )
         return true;
 
-    if( m_pCurrentCursor->HasMark() )
+    if( m_pCurrentCursor->HasMark() && !mbSelectAll )
         ClearMark();
 
     // first check for frames

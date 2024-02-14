@@ -133,6 +133,11 @@ class SW_DLLPUBLIC SwNodes final
 
     SwNodes( SwDoc* pDoc );
 
+    // Returns start of the document section (PostIts/Inserts/Autotext/Redlines/Content),
+    // or of a specific fly / header / footer / footnote, where this node is, which must not
+    // be crossed when moving backwards
+    sal_uLong StartOfGlobalSection(const SwNode& node) const;
+
 public:
     ~SwNodes();
 
@@ -188,7 +193,7 @@ public:
     static void GoEndOfSection(SwNodeIndex *);
 
     SwContentNode* GoNext(SwNodeIndex *) const;
-    static SwContentNode* GoPrevious(SwNodeIndex *);
+    static SwContentNode* GoPrevious(SwNodeIndex *, bool canCrossBoundary = false);
 
     /** Go to next content-node that is not protected or hidden
        (Both set FALSE ==> GoNext/GoPrevious!!!). */
