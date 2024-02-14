@@ -159,7 +159,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             constexpr OUString sModuleName( u"" SAL_MODULENAME( "i18npool" ) ""_ustr );
             hModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_DEFAULT );
             if (hModule) {
-                OUStringBuffer aBuf("get_" + rLocale.Language + "_");
+                OUStringBuffer aBuf("get_collator_data_" + rLocale.Language + "_");
                 if ( rLocale.Language == "zh" ) {
                     OUString func_base = aBuf.makeStringAndClear();
                     if (OUString("TW HK MO").indexOf(rLocale.Country) >= 0)
