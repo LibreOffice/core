@@ -2510,7 +2510,7 @@ void SAL_CALL SfxBaseModel::removeEventListener( const Reference< document::XEve
 {
     SfxModelGuard aGuard( *this );
 
-    m_pData->m_aEventListeners.removeInterface( aListener );
+    m_pData->m_aDocumentEventListeners1.removeInterface( aListener );
 }
 
 //  XShapeEventBroadcaster
