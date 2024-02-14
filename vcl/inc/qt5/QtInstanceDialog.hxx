@@ -37,7 +37,7 @@ public:
 
     virtual void add_button(const OUString&, int, const OUString& rHelpId = {}) override;
 
-    virtual void set_modal(bool) override;
+    virtual void set_modal(bool bModal) override;
 
     virtual bool get_modal() const override;
 

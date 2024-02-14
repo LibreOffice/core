@@ -41,9 +41,9 @@ void QtInstanceDialog::response(int) {}
 
 void QtInstanceDialog::add_button(const OUString&, int, const OUString&) {}
 
-void QtInstanceDialog::set_modal(bool) {}
+void QtInstanceDialog::set_modal(bool bModal) { m_pDialog->setModal(bModal); }
 
-bool QtInstanceDialog::get_modal() const { return true; }
+bool QtInstanceDialog::get_modal() const { return m_pDialog->isModal(); }
 
 weld::Button* QtInstanceDialog::weld_widget_for_response(int) { return nullptr; }
 
