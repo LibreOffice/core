@@ -1766,7 +1766,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     aDstClipRegion = aSrcClipRegion = vcl::Region();
 
     vcl::Font aFont;
-    aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );
+    aFont.SetCharSet(RTL_TEXTENCODING_MS_1252);
     aFont.SetColor( COL_WHITE );
     aFont.SetAlignment( ALIGN_BASELINE );
     aDstFont = aSrcFont = aFont;
