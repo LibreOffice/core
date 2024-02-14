@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
@@ -384,6 +385,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageGradient, "fill.docx")
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
                          getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
+
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xPageStyle, "FillGradient");
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
