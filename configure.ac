@@ -12246,7 +12246,7 @@ if test "$ENABLE_PDFIUM" = "TRUE"; then
         AC_MSG_RESULT([external])
         SYSTEM_ABSEIL=TRUE
         AC_LANG_PUSH([C++])
-        PKG_CHECK_MODULES(ABSEIL, absl_bad_optional_access absl_bad_variant_access absl_inlined_vector )
+        PKG_CHECK_MODULES(ABSEIL, absl_bad_variant_access )
         AC_LANG_POP([C++])
         ABSEIL_CFLAGS=$(printf '%s' "$ABSEIL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${ABSEIL_LIBS}"
