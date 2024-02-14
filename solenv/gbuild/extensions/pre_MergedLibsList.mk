@@ -130,6 +130,11 @@ gb_MERGE_LIBRARY_LIST += \
 	date \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
 	dlgprov \
+	$(if $(ENABLE_EVOAB2),evoab) \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		flat \
+		file) \
+	$(if $(ENABLE_FIREBIRD_SDBC),firebird_sdbc) \
 	$(if $(filter WNT,$(OS)), \
 		fps \
 	) \
@@ -138,13 +143,26 @@ gb_MERGE_LIBRARY_LIST += \
 	) \
 	graphicfilter \
 	hwp \
+	$(if $(ENABLE_JAVA),hsqldb) \
 	log \
 	$(if $(ENABLE_LWP),lwpft) \
+	$(if $(filter $(OS),MACOSX), \
+		macab1 \
+		macabdrv1 \
+	) \
+	mozbootstrap \
 	msforms \
+	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
+	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
+	odbc \
 	pdffilter \
+	$(if $(BUILD_POSTGRESQL_SDBC), \
+		postgresql-sdbc \
+		postgresql-sdbc-impl) \
 	pricing \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
+	sdbc2 \
 	slideshow \
 	$(if $(filter WNT,$(OS)), \
 		smplmail \
