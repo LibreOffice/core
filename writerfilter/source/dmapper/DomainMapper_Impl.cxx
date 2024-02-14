@@ -2533,6 +2533,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     lcl_AddRange(pToBeSavedProperties, xTextAppend, rAppendContext);
                 }
             }
+            applyToggleAttributes(pPropertyMap); // for paragraph marker formatting
             std::vector<beans::PropertyValue> aProperties;
             if (pPropertyMap)
             {
@@ -3011,6 +3012,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
 }
 
+// TODO this does not yet take table styles into account
 void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap)
 {
     std::optional<PropertyMap::Property> charStyleProperty = pPropertyMap->getProperty(PROP_CHAR_STYLE_NAME);
