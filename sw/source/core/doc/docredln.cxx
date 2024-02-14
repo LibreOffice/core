@@ -1305,6 +1305,19 @@ OUString SwRedlineData::GetDescr() const
 
 sal_uInt32 SwRangeRedline::s_nLastId = 1;
 
+void lcl_LOKBroadcastCommentOperation(RedlineType type, const SwPaM& rPam)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        auto eHintType = RedlineType::Delete == type ? SwFormatFieldHintWhich::REDLINED_DELETION: SwFormatFieldHintWhich::INSERTED;
+        const SwTextNode *pTextNode = rPam.GetPointNode().GetTextNode();
+        SwTextAttr* pTextAttr = pTextNode ? pTextNode->GetFieldTextAttrAt(rPam.GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default) : nullptr;
+        SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pTextAttr));
+        if (pTextField)
+            const_cast<SwFormatField&>(pTextField->GetFormatField()).Broadcast(SwFormatFieldHint(&pTextField->GetFormatField(), eHintType));
+    }
+}
+
 SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam, sal_uInt32 nMovedID )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ), m_pRedlineData(
           new SwRedlineData(eTyp, GetDoc().getIDocumentRedlineAccess().GetRedlineAuthor(), nMovedID ) )
@@ -1326,15 +1339,7 @@ SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam, sal_uInt32 n
             ? SwResId(STR_REDLINE_COMMENT_DELETED)
             : SwResId(STR_REDLINE_COMMENT_ADDED) );
 
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            auto eHintType = RedlineType::Delete == eTyp ? SwFormatFieldHintWhich::REDLINED_DELETION: SwFormatFieldHintWhich::INSERTED;
-            const SwTextNode *pTextNode = rPam.GetPointNode().GetTextNode();
-            SwTextAttr* pTextAttr = pTextNode ? pTextNode->GetFieldTextAttrAt(rPam.GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default) : nullptr;
-            SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pTextAttr));
-            if (pTextField)
-                const_cast<SwFormatField&>(pTextField->GetFormatField()).Broadcast(SwFormatFieldHint(&pTextField->GetFormatField(), eHintType));
-        }
+        lcl_LOKBroadcastCommentOperation(eTyp, rPam);
     }
 }
 
@@ -1350,6 +1355,16 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
     m_bIsVisible = true;
     if( !rPam.HasMark() )
         DeleteMark();
+
+    // set default comment for single annotations added or deleted
+    if ( IsAnnotation() )
+    {
+        SetComment( RedlineType::Delete == rData.m_eType
+            ? SwResId(STR_REDLINE_COMMENT_DELETED)
+            : SwResId(STR_REDLINE_COMMENT_ADDED) );
+
+        lcl_LOKBroadcastCommentOperation(rData.m_eType, rPam);
+    }
 }
 
 SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos )
