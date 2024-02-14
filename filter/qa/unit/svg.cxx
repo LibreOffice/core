@@ -306,7 +306,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, textInImage)
     // We expect the Graphic to have an image and a text
     assertXPath(pXmlDoc, "//svg:g[@class='Graphic']//svg:image"_ostr, 1);
     assertXPath(pXmlDoc, "//svg:g[@class='Graphic']//svg:text"_ostr, 1);
-    // Without the accomanying fix, this test would have failed with:
+    // Without the accompanying fix, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
 }
