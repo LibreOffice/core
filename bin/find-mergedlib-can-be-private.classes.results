@@ -14,8 +14,6 @@ DropdownDockingWindow
 E3dCompoundObject
 EditUndo
 EnhancedCustomShape
-ErrCode
-ErrCodeMsg
 FixedBitmap
 FixedImage
 FocusListenerMultiplexer
@@ -38,6 +36,7 @@ MetaPolyPolygonAction
 MetaPolygonAction
 MetaTextArrayAction
 MetaWallpaperAction
+MetricFormatter
 MouseListenerMultiplexer
 MouseMotionListenerMultiplexer
 MyThes
@@ -63,6 +62,7 @@ SvxCharView
 SvxShapeGroupAnyD
 SvxShowText
 SvxTPage
+SvxTextForwarder
 SyntaxHighlighter::Tokenizer
 SystemWindow::ImplData
 TBCExtraInfo
@@ -76,11 +76,14 @@ VclDrawingArea
 VclGrid
 WindowListenerMultiplexer
 basegfx::BColorModifier
+basegfx::SystemDependentData
 basegfx::SystemDependentDataHolder
 basegfx::SystemDependentDataManager
 basic::vba
 canvas
 chart
+comphelper::MemoryInputStream
+comphelper::OSLOutputStreamWrapper
 comphelper::date
 connectivity::sdbcx::IObjectCollection
 connectivity::sdbcx::OGroup
@@ -104,6 +107,7 @@ drawinglayer::primitive3d::SdrPrimitive3D
 formula::FormulaTokenIterator::Item
 legacy::CntInt32
 legacy::SfxBool
+oox::IProgressBar
 oox::drawingml::ShapePropertyInfo
 oox::ole::AxControlModelBase
 sdr::SelectionController
@@ -118,3 +122,4 @@ utl::DefaultFontConfiguration
 utl::detail::Options
 vcl::ExtOutDevData
 vcl::ILibreOfficeKitNotifier
+vcl::PrinterController
