@@ -77,10 +77,10 @@ index 3da0372..e09ca61 100644
  
  using ScopedFXFTFaceRec = std::unique_ptr<FXFT_FaceRec, FXFTFaceRecDeleter>;
 @@ -76,6 +76,7 @@
- #define FXFT_Get_Face_Ascender(face) (face)->ascender
- #define FXFT_Get_Face_Descender(face) (face)->descender
- #define FXFT_Get_Glyph_HoriAdvance(face) (face)->glyph->metrics.horiAdvance
+ #define FXFT_Get_Glyph_HoriBearingX(face) (face)->glyph->metrics.horiBearingX
+ #define FXFT_Get_Glyph_HoriBearingY(face) (face)->glyph->metrics.horiBearingY
+ #define FXFT_Get_Glyph_Width(face) (face)->glyph->metrics.width
 +#define FXFT_Free(face, p) (face)->memory->free((face)->memory, p)
- #define FXFT_Get_Glyph_Outline(face) &((face)->glyph->outline)
- #define FXFT_Get_Glyph_Bitmap(face) (face)->glyph->bitmap
- #define FXFT_Get_Bitmap_Width(bitmap) (bitmap).width
+ #define FXFT_Get_Glyph_Height(face) (face)->glyph->metrics.height
+ #define FXFT_Get_Glyph_HoriAdvance(face) (face)->glyph->metrics.horiAdvance
+ 

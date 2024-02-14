@@ -46,6 +46,7 @@
 #include <memory>
 #include <new>
 #include <numeric>
+#include <optional>
 #include <ostream>
 #include <queue>
 #include <set>
@@ -309,9 +310,7 @@
 #include <core/fxcrt/css/cfx_cssvaluelistparser.h>
 #include <core/fxcrt/data_vector.h>
 #include <core/fxcrt/fileaccess_iface.h>
-#include <core/fxcrt/fixed_try_alloc_zeroed_data_vector.h>
-#include <core/fxcrt/fixed_uninit_data_vector.h>
-#include <core/fxcrt/fixed_zeroed_data_vector.h>
+#include <core/fxcrt/fixed_size_data_vector.h>
 #include <core/fxcrt/fx_2d_size.h>
 #include <core/fxcrt/fx_bidi.h>
 #include <core/fxcrt/fx_codepage.h>
@@ -390,6 +389,7 @@
 #include <core/fxge/fontdata/chromefontdata/chromefontdata.h>
 #include <core/fxge/freetype/fx_freetype.h>
 #include <core/fxge/fx_font.h>
+#include <core/fxge/fx_fontencoding.h>
 #include <core/fxge/renderdevicedriver_iface.h>
 #include <core/fxge/scoped_font_transform.h>
 #include <core/fxge/systemfontinfo_iface.h>
@@ -458,8 +458,6 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
-#include <third_party/abseil-cpp/absl/container/inlined_vector.h>
-#include <third_party/abseil-cpp/absl/types/optional.h>
 #include <third_party/abseil-cpp/absl/types/variant.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
