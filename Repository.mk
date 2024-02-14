@@ -920,6 +920,7 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 		odk_javadoc \
 		odk_uno_loader_classes \
 	) \
+	odk_scripts \
 ))
 
 ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
