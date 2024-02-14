@@ -1138,9 +1138,6 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
                                             int nType,
                                             const char* pText);
-
-static char* doc_hyperlinkInfoAtPosition(LibreOfficeKitDocument *pThis, int x, int y);
-
 static void doc_removeTextContext(LibreOfficeKitDocument* pThis,
                                   unsigned nLOKWindowId,
                                   int nCharBefore,
@@ -1426,7 +1423,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->registerCallback = doc_registerCallback;
         m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
         m_pDocumentClass->postWindowExtTextInputEvent = doc_postWindowExtTextInputEvent;
-        m_pDocumentClass->hyperlinkInfoAtPosition = doc_hyperlinkInfoAtPosition;
         m_pDocumentClass->removeTextContext = doc_removeTextContext;
         m_pDocumentClass->postWindowKeyEvent = doc_postWindowKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
@@ -4716,20 +4712,6 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
     }
 
     SfxLokHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(std::string_view(pText, strlen(pText))));
-}
-
-static char* doc_hyperlinkInfoAtPosition(LibreOfficeKitDocument* pThis, int x, int y)
-{
-    SolarMutexGuard aGuard;
-
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
-        return nullptr;
-    }
-
-    return convertOUString(pDoc->hyperlinkInfoAtPosition(x, y));
 }
 
 static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)

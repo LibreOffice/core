@@ -3726,25 +3726,6 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
     }
 }
 
-OUString SwXTextDocument::hyperlinkInfoAtPosition(int x, int y)
-{
-    SolarMutexGuard aGuard;
-    SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
-
-    if (pWrtShell)
-    {
-        const Point point(x, y);
-        SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
-
-        if (pWrtShell->GetContentAtPos(point, aContentAtPos))
-        {
-            return static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)->GetValue();
-        }
-    }
-
-    return OUString();
-}
-
 uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
 {
     SolarMutexGuard aGuard;

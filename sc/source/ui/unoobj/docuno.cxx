@@ -920,24 +920,6 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     }
 }
 
-OUString ScModelObj::hyperlinkInfoAtPosition(int x, int y)
-{
-    if (ScViewData* pViewData = ScDocShell::GetViewData())
-    {
-        ScGridWindow* pGridWindow = pViewData->GetActiveWin();
-        if (pGridWindow)
-        {
-            const Point point(x * pViewData->GetPPTX(), y * pViewData->GetPPTY());
-            OUString name;
-            OUString url;
-            (void)pGridWindow->GetEditUrl(point, &name, &url);
-            return url;
-        }
-    }
-
-    return OUString();
-}
-
 uno::Reference<datatransfer::XTransferable> ScModelObj::getSelection()
 {
     SolarMutexGuard aGuard;
