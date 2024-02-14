@@ -266,6 +266,8 @@ public:
     void            ErrorMessage(TranslateId pGlobStrId);
     bool            IsEditable() const;
 
+    /// check config if on file-open optimal row heights should run, or if the user should be asked
+    bool            GetRecalcRowHeightsMode();
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
     void            UpdateAllRowHeights( const ScMarkData* pTabMark = nullptr );
     void            UpdateAllRowHeights(const bool bOnlyUsedRows);

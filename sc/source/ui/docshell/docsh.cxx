@@ -504,6 +504,62 @@ public:
 
 }
 
+bool ScDocShell::GetRecalcRowHeightsMode()
+{
+    const ScRecalcOptions nRecalcMode = static_cast<ScRecalcOptions>(
+        officecfg::Office::Calc::Formula::Load::RecalcOptimalRowHeightMode::get());
+
+    bool bHardRecalc = false;
+    switch (nRecalcMode)
+    {
+        case RECALC_ASK:
+        {
+            if (m_pDocument->IsUserInteractionEnabled())
+            {
+                // Ask if the user wants to perform full re-calculation.
+                MessageWithCheck aQueryBox(ScDocShell::GetActiveDialogParent(),
+                                           "modules/scalc/ui/recalcquerydialog.ui",
+                                           "RecalcQueryDialog");
+                aQueryBox.set_primary_text(ScResId(STR_QUERY_OPT_ROW_HEIGHT_RECALC_ONLOAD));
+                aQueryBox.set_default_response(RET_YES);
+
+                if (officecfg::Office::Calc::Formula::Load::RecalcOptimalRowHeightMode::isReadOnly())
+                    aQueryBox.hide_ask();
+
+                bHardRecalc = aQueryBox.run() == RET_YES;
+
+                if (aQueryBox.get_active())
+                {
+                    // Always perform selected action in the future.
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                        comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Calc::Formula::Load::RecalcOptimalRowHeightMode::set(
+                        bHardRecalc ? static_cast<sal_Int32>(RECALC_ALWAYS)
+                                    : static_cast<sal_Int32>(RECALC_NEVER),
+                        batch);
+
+                    ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
+                    aOpt.SetReCalcOptiRowHeights(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
+                    SC_MOD()->SetFormulaOptions(aOpt);
+
+                    batch->commit();
+                }
+            }
+        }
+        break;
+        case RECALC_ALWAYS:
+            bHardRecalc = true;
+            break;
+        case RECALC_NEVER:
+            bHardRecalc = false;
+            break;
+        default:
+            SAL_WARN("sc", "unknown optimal row height recalc option!");
+    }
+
+    return bHardRecalc;
+}
+
 bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css::embed::XStorage >& xStor )
 {
     LoadMediumGuard aLoadGuard(m_pDocument.get());

@@ -1532,6 +1532,30 @@
           </constraints>
           <value>1</value>
         </prop>
+        <prop oor:name="RecalcOptimalRowHeightMode" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHint: Tools - Options - Spreadsheet - Formula -->
+          <info>
+            <desc>Specifies whether to force a hard recalc after load on optimal row heights.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Recalc always</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Recalc never</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Ask before Recalc</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
       </group>
     </group>
     <group oor:name="Revision">
