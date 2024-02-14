@@ -79,6 +79,10 @@ namespace
     }
 }
 
+extern "C" void* CreateDialogFactory() { return nullptr; }
+
+extern "C" bool GetSpecialCharsForEdit() { return false; }
+
 extern "C"
 {
     __attribute__((weak)) void __lsan_disable();

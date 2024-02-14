@@ -113,7 +113,6 @@ fuzzer_core_libraries = \
     xmlscript \
     xo \
     xstor \
-    cui \
     chartcontroller \
     chartcore \
     sm \
