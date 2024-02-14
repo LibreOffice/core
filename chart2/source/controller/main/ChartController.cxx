@@ -1416,17 +1416,17 @@ void ChartController::executeDispatch_SourceData()
             rModel.attachDataProvider(xDataProvider);
         }
     }
-
-    UndoLiveUpdateGuard aUndoGuard(
-        SchResId(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager);
-
+    auto aUndoGuard = std::make_shared<UndoLiveUpdateGuard>(SchResId(STR_ACTION_EDIT_DATA_RANGES),
+                                                            m_xUndoManager);
     SolarMutexGuard aSolarGuard;
-    ::chart::DataSourceDialog aDlg(GetChartFrame(), xChartDoc);
-    if (aDlg.run() == RET_OK)
-    {
-        impl_adaptDataSeriesAutoResize();
-        aUndoGuard.commit();
-    }
+    auto aDlg = std::make_shared<DataSourceDialog>(GetChartFrame(), xChartDoc);
+    weld::DialogController::runAsync(aDlg, [this, aUndoGuard](int nResult) {
+        if (nResult == RET_OK)
+        {
+            impl_adaptDataSeriesAutoResize();
+            aUndoGuard->commit();
+        }
+    });
 }
 
 void ChartController::executeDispatch_MoveSeries( bool bForward )
