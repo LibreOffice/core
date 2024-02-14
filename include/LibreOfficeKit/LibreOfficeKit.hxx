@@ -362,11 +362,6 @@ public:
         mpDoc->pClass->setTextSelection(mpDoc, nType, nX, nY);
     }
 
-    char* hyperlinkInfoAtPosition(int x, int y)
-    {
-        return mpDoc->pClass->hyperlinkInfoAtPosition(mpDoc, x, y);
-    }
-
     /**
      * Gets the currently selected text.
      *

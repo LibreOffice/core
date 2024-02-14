@@ -514,9 +514,6 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getA11yCaretPosition.
     int (*getA11yCaretPosition) (LibreOfficeKitDocument* pThis);
 
-    /// @see lok::Document::hyperlinkInfoAtPosition().
-    char* (*hyperlinkInfoAtPosition) (LibreOfficeKitDocument* pThis, int x,int y);
-
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -166,12 +166,6 @@ public:
      */
     virtual void setTextSelection(int nType, int nX, int nY) = 0;
 
-    /*
-    * Gets the info of hyperlink under the mouse position if any.
-    * @see lok::Document::hyperlinkInfoAtPosition().
-    */
-    virtual OUString hyperlinkInfoAtPosition(int x, int y) = 0;
-
     /**
      * Gets the selection as a transferable for later processing
      */
