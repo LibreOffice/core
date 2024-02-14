@@ -23,9 +23,9 @@
 #include <viewsh.hxx>
 #include <accmap.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <mutex>
 
 namespace sw::sidebarwindows {
 
@@ -47,7 +47,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
         void ChangeAnchor( const SwFrame* pAnchorFrame )
         {
-            std::scoped_lock aGuard(maMutex);
+            SolarMutexGuard aGuard;
 
             mpAnchorFrame = pAnchorFrame;
         }
@@ -55,7 +55,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
             getAccessibleParent() override
         {
-            std::scoped_lock aGuard(maMutex);
+            SolarMutexGuard aGuard;
 
             css::uno::Reference< css::accessibility::XAccessible > xAccParent;
 
@@ -70,7 +70,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
         virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override
         {
-            std::scoped_lock aGuard(maMutex);
+            SolarMutexGuard aGuard;
 
             sal_Int64 nIndex( -1 );
 
@@ -87,8 +87,6 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
     private:
         SwViewShell& mrViewShell;
         const SwFrame* mpAnchorFrame;
-
-        std::mutex maMutex;
 };
 
 }
