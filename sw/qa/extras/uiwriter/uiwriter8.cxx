@@ -18,6 +18,8 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
@@ -2651,6 +2653,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testHiddenSectionsAroundPageBreak)
     // Make sure that the page style is set correctly
     xCursor->jumpToFirstPage();
     CPPUNIT_ASSERT_EQUAL(OUString("Landscape"), getProperty<OUString>(xCursor, "PageStyleName"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159565)
+{
+    // Given a document with a hidden section in the beginning, additionally containing a frame
+    createSwDoc("FrameInHiddenSection.fodt");
+
+    dispatchCommand(mxComponent, u".uno:SelectAll", {});
+
+    // Check that the selection covers the whole visible text
+    uno::Reference<css::frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<css::view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
+                                                               uno::UNO_QUERY_THROW);
+    uno::Reference<css::container::XIndexAccess> xSelections(xSelSupplier->getSelection(),
+                                                             uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelections->getCount());
+    uno::Reference<css::text::XTextRange> xSelection(xSelections->getByIndex(0),
+                                                     uno::UNO_QUERY_THROW);
+
+    // Without the fix, this would fail - there was no selection
+    CPPUNIT_ASSERT_EQUAL(OUString("" SAL_NEWLINE_STRING SAL_NEWLINE_STRING "ipsum"),
+                         xSelection->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
