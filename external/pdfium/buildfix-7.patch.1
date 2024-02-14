@@ -11,3 +11,23 @@ pdfium/core/fpdfdoc/cpdf_formcontrol.cpp:134: undefined reference to `fxcrt::Str
        : m_Span(reinterpret_cast<const UnsignedType*>(&ch), 1u) {}
  
    StringViewTemplate& operator=(const CharType* src) {
+--- pdfium/core/fxge/cfx_face.cpp.orig	2025-11-11 13:42:28.181052508 +0100
++++ pdfium/core/fxge/cfx_face.cpp	2025-11-11 13:45:12.583343976 +0100
+@@ -227,7 +227,7 @@
+     case fxge::FontEncoding::kBig5:
+       return FT_ENCODING_BIG5;
+     case fxge::FontEncoding::kGB2312:
+-      return FT_ENCODING_PRC;
++      return FT_ENCODING_GB2312;
+     case fxge::FontEncoding::kJohab:
+       return FT_ENCODING_JOHAB;
+     case fxge::FontEncoding::kLatin1:
+@@ -259,7 +259,7 @@
+       return fxge::FontEncoding::kAppleRoman;
+     case FT_ENCODING_BIG5:
+       return fxge::FontEncoding::kBig5;
+-    case FT_ENCODING_PRC:
++    case FT_ENCODING_GB2312:
+       return fxge::FontEncoding::kGB2312;
+     case FT_ENCODING_JOHAB:
+       return fxge::FontEncoding::kJohab;
