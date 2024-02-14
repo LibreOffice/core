@@ -145,6 +145,7 @@ typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
 class FontCfgWrapper
 {
     FcFontSet* m_pFontSet;
+    bool m_bRestrictFontSetToApplicationFonts;
 
     FontCfgWrapper();
     ~FontCfgWrapper();
@@ -159,6 +160,11 @@ public:
     void replaceFontSet(FcFontSet* pFilteredFontSet);
 
     void clear();
+
+    bool isRestrictingFontSetForTesting() const
+    {
+        return m_bRestrictFontSetToApplicationFonts;
+    }
 
 public:
     FcResult LocalizedElementFromPattern(FcPattern const * pPattern, FcChar8 **family,
@@ -176,7 +182,8 @@ private:
 }
 
 FontCfgWrapper::FontCfgWrapper()
-    : m_pFontSet( nullptr )
+    : m_pFontSet(nullptr)
+    , m_bRestrictFontSetToApplicationFonts(false)
 {
     FcInit();
 }
@@ -311,9 +318,8 @@ FcFontSet* FontCfgWrapper::getFontSet()
     if( !m_pFontSet )
     {
         m_pFontSet = FcFontSetCreate();
-        bool bRestrictFontSetToApplicationFonts = false;
 #if HAVE_MORE_FONTS
-        bRestrictFontSetToApplicationFonts = [] {
+        m_bRestrictFontSetToApplicationFonts = [] {
             return getenv("SAL_NON_APPLICATION_FONT_USE") != nullptr;
         }();
 #endif
@@ -324,7 +330,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
         // prefer via stable-sort the first one we see. Load application fonts
         // first to prefer the one we bundle in the application in that case.
         addFontSet( FcSetApplication );
-        if (!bRestrictFontSetToApplicationFonts)
+        if (!m_bRestrictFontSetToApplicationFonts)
             addFontSet( FcSetSystem );
 
         std::stable_sort(m_pFontSet->fonts,m_pFontSet->fonts+m_pFontSet->nfont,SortFont());
@@ -1007,6 +1013,19 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
 
     if (!aLangAttrib.isEmpty())
         FcPatternAddString(pPattern, FC_LANG, reinterpret_cast<FcChar8 const *>(aLangAttrib.getStr()));
+
+    // bodge: testTdf153440 wants a fallback to an emoji font it adds as a temp
+    // testing font which has the required glyphs, but that emoji font is not
+    // seen as a "color" font, while it is possible that OpenDyslexic can be
+    // bundled, which *is* a "color" font. The default rules (See in Fedora 38
+    // at least) then prefer a color font *without* the glyphs over a non-color
+    // font *with* the glyphs, which seems like a bug to me.
+    // Maybe this is an attempt to prefer color emoji fonts over non-color emoji
+    // containing fonts like Symbola which has gone awry?
+    // For testing purposes (isRestrictingFontSetForTesting is true) force a
+    // preference for non-color fonts.
+    if (rWrapper.isRestrictingFontSetForTesting())
+        FcPatternAddBool(pPattern, FC_COLOR, FcFalse);
 
     addtopattern(pPattern, rPattern.GetItalic(), rPattern.GetWeight(),
         rPattern.GetWidthType(), rPattern.GetPitch());
