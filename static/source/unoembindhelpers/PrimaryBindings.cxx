@@ -9,6 +9,7 @@
 #ifdef EMSCRIPTEN
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <emscripten.h>
 #include <emscripten/bind.h>
 
 #include <comphelper/processfactory.hxx>
@@ -22,6 +23,58 @@
 using namespace emscripten;
 using namespace css::uno;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winvalid-pp-token"
+EM_JS(void, jsRegisterString, (std::type_info const* raw),
+// clang-format off
+{
+    Module.registerType(raw, {
+        name: 'rtl::OUString',
+        fromWireType(ptr) {
+            let data = Module.HEAPU32[ptr >> 2];
+            let length = Module.HEAPU32[(data >> 2) + 1];
+            let buffer = data + 8;
+            let str = '';
+            for (let i = 0; i < length; ++i) {
+                let c = Module.HEAPU16[(buffer >> 1) + i];
+                str += String.fromCharCode(c);
+            }
+            Module.rtl_uString_release(data);
+            Module._free(ptr);
+            return str;
+        },
+        toWireType(destructors, value) {
+            if (typeof value != 'string') {
+                Module.throwBindingError('Cannot pass non-string to C++ OUString');
+            }
+            let data = Module._malloc(8 + (value.length + 1) * 2);
+            Module.HEAPU32[data >> 2] = 1;
+            Module.HEAPU32[(data >> 2) + 1] = value.length;
+            let buffer = data + 8;
+            for (let i = 0; i < value.length; ++i) {
+                Module.HEAPU16[(buffer >> 1) + i] = value.charCodeAt(i);
+            }
+            Module.HEAPU16[(buffer >> 1) + value.length] = 0;
+            let ptr = Module._malloc(4);
+            Module.HEAPU32[ptr >> 2] = data;
+            if (destructors !== null) {
+                destructors.push(Module._free, ptr);
+            }
+            return ptr;
+        },
+        argPackAdvance: 8,
+        readValueFromPointer(pointer) {
+            return this.fromWireType(Module.HEAPU32[((pointer)>>2)]);
+        },
+        destructorFunction(ptr) {
+            Module._free(ptr);
+        },
+    });
+}
+// clang-format on
+);
+#pragma clang diagnostic pop
+
 namespace
 {
 template <typename T> void registerInOutParam(char const* name)
@@ -29,8 +82,6 @@ template <typename T> void registerInOutParam(char const* name)
     class_<unoembindhelpers::UnoInOutParam<T>>(name).constructor().constructor<T>().property(
         "val", &unoembindhelpers::UnoInOutParam<T>::get, &unoembindhelpers::UnoInOutParam<T>::set);
 }
-
-std::uintptr_t getOUStringRawType() { return reinterpret_cast<std::uintptr_t>(&typeid(OUString)); }
 
 Reference<css::frame::XModel> getCurrentModelFromViewSh()
 {
@@ -112,10 +163,11 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     registerInOutParam<char16_t>("uno_InOutParam_char");
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
-    function("getOUStringRawType", &getOUStringRawType);
     function("getUnoComponentContext", &comphelper::getProcessComponentContext);
     function("rtl_uString_release",
              +[](std::uintptr_t ptr) { rtl_uString_release(reinterpret_cast<rtl_uString*>(ptr)); });
+
+    jsRegisterString(&typeid(OUString));
 }
 #endif
 
