@@ -307,6 +307,7 @@ std::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetAutoCharS
         { UNO_NAME_CHAR_BORDER_TOP_COMPLEX_COLOR, RES_CHRATR_BOX,    cppu::UnoType<css::util::XComplexColor>::get(),  PropertyAttribute::MAYBEVOID, MID_BORDER_TOP_COLOR },
         { UNO_NAME_CHAR_BORDER_BOTTOM_COMPLEX_COLOR, RES_CHRATR_BOX, cppu::UnoType<css::util::XComplexColor>::get(),  PropertyAttribute::MAYBEVOID, MID_BORDER_BOTTOM_COLOR },
         { UNO_NAME_CHAR_SHADOW_FORMAT, RES_CHRATR_SHADOW, cppu::UnoType<css::table::ShadowFormat>::get(), PROPERTY_NONE, CONVERT_TWIPS},
+        { UNO_NAME_CHAR_STYLE_NAME, RES_TXTATR_CHARFMT, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0 },
     };
 
     return aAutoCharStyleMap;
