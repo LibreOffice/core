@@ -14,7 +14,6 @@ include $(GBUILDDIR)/platform/unxgcc.mk
 # don't sort; later can override previous settings!
 gb_EMSCRIPTEN_PRE_JS_FILES = \
     $(SRCDIR)/static/emscripten/environment.js \
-    $(SRCDIR)/static/emscripten/registeroustring.js \
     $(call gb_CustomTarget_get_workdir,static/emscripten_fs_image)/soffice.data.js.link \
 
 gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
