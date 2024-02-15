@@ -93,7 +93,7 @@ DECLARE_RTFEXPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
     uno::Reference<text::XFootnote> xFootnote;
     xFootnotes->getByIndex(0) >>= xFootnote;
     // The color of the footnote anchor was black (0x000000)
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote Character color", Color(0xFF0000),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote Character color", COL_LIGHTRED,
                                  getProperty<Color>(xFootnote->getAnchor(), "CharColor"));
 }
 
@@ -294,7 +294,7 @@ DECLARE_RTFEXPORT_TEST(testTdf112520, "tdf112520.docx")
         return;
 
     // Assert that the white shape is on top of the yellow one.
-    CPPUNIT_ASSERT_EQUAL(Color(0xffff00), getProperty<Color>(getShape(2), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(getShape(2), "FillColor"));
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
                          getProperty<text::TextContentAnchorType>(getShape(2), "AnchorType"));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getShape(3), "FillColor"));

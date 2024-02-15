@@ -132,12 +132,12 @@ bool checkBitmap(Graphic& rGraphic)
                 {
                     sal_uInt32 nIndex = pReadAccess->GetPixelIndex(y, x);
                     Color aColor = pReadAccess->GetPaletteColor(nIndex);
-                    bResult &= (aColor == Color(0xff, 0x00, 0x00));
+                    bResult &= (aColor == COL_LIGHTRED);
                 }
                 else
                 {
                     Color aColor = pReadAccess->GetPixel(y, x);
-                    bResult &= (aColor == Color(0xff, 0x00, 0x00));
+                    bResult &= (aColor == COL_LIGHTRED);
                 }
             }
         }

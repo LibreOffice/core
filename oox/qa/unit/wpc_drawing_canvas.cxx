@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <tools/color.hxx>
 #include <test/unoapixml_test.hxx>
 
 #include <docmodel/color/ComplexColor.hxx>
@@ -127,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Glow)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(564), nGlowEffectRad); // 16 pt = 564.444... mm/100
     Color nGlowEffectColor;
     xShapeProps->getPropertyValue(u"GlowEffectColor"_ustr) >>= nGlowEffectColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFF00), nGlowEffectColor); // "Yellow"
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, nGlowEffectColor);
     sal_Int16 nGlowEffectTransparency = 0;
     xShapeProps->getPropertyValue(u"GlowEffectTransparency"_ustr) >>= nGlowEffectTransparency;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(10), nGlowEffectTransparency); // 10%
@@ -253,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_Shadow)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(224), nValue);
     Color nColor;
     xShapeProps->getPropertyValue(UNO_NAME_SHADOWCOLOR) >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x808080), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_GRAY, nColor);
 }
 
 CPPUNIT_TEST_FIXTURE(TestWPC, WPC_tdf158339_shape_text_in_group)

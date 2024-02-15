@@ -1147,7 +1147,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
 
     sal_Int32 nStyleCount = pDoc->GetTableStyles().size();
     SwTableAutoFormat* pStyle = pDoc->MakeTableStyle("Test Style");
-    SvxBrushItem aBackground(Color(0xFF00FF), RES_BACKGROUND);
+    SvxBrushItem aBackground(COL_LIGHTMAGENTA, RES_BACKGROUND);
     pStyle->GetBoxFormat(0).SetBackground(aBackground);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
@@ -1179,7 +1179,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
 
     SwTableAutoFormat aNewStyle("Test Style2");
-    SvxBrushItem aBackground2(Color(0x00FF00), RES_BACKGROUND);
+    SvxBrushItem aBackground2(COL_LIGHTGREEN, RES_BACKGROUND);
     aNewStyle.GetBoxFormat(0).SetBackground(aBackground2);
 
     pDoc->ChgTableStyle("Test Style", aNewStyle);

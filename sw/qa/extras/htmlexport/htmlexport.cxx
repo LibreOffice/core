@@ -2284,13 +2284,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
                                              /*nRowsToRepeat=*/0);
     pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/1, /*nCols=*/1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
-    SvxBrushItem aBrush(Color(0xff0000), RES_BACKGROUND);
+    SvxBrushItem aBrush(COL_LIGHTRED, RES_BACKGROUND);
     pWrtShell->SetTabBackground(aBrush);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->SplitNode();
     pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/2, /*nCols=*/1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
-    aBrush.SetColor(0x00ff00);
+    aBrush.SetColor(COL_LIGHTGREEN);
     pWrtShell->SetRowBackground(aBrush);
     pWrtShell->Down(/*bSelect=*/false);
     // Second row has an explicit transparent background.

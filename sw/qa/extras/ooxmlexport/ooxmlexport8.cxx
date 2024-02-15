@@ -1075,8 +1075,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo46361, "fdo46361.docx")
                          static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(
                              getParagraphOfText(1, xTextBox->getText()), "ParaAdjust")));
     // This was BLACK
-    CPPUNIT_ASSERT_EQUAL(
-        Color(0x008000),
+    CPPUNIT_ASSERT_EQUAL(COL_GREEN,
               getProperty<Color>(getRun(getParagraphOfText(1, xTextBox->getText()), 1),
                                      "CharColor"));
     // Count the paragraphs

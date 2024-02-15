@@ -836,7 +836,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
     sal_Int32 nLineColor = getXPath(pXmlDocument,
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr"_ostr,
             "val"_ostr).toInt32(16);
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(ColorTransparency, nLineColor));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, nLineColor));
 
     // check direct line type assignments have been preserved
     sal_Int32 nLineWidth = getXPath(pXmlDocument,
@@ -860,7 +860,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
     CPPUNIT_ASSERT_EQUAL(Color(0x00b050), getProperty<Color>(xShape3, "FillColor"));
     CPPUNIT_ASSERT_EQUAL(Color(0x3a5f8b), getProperty<Color>(xShape1, "LineColor"));
     CPPUNIT_ASSERT_EQUAL(Color(0x4f6228), getProperty<Color>(xShape2, "LineColor"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getProperty<Color>(xShape3, "LineColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xShape3, "LineColor"));
 
     // check line properties are properly applied to shapes on import
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape1, "LineStyle"));

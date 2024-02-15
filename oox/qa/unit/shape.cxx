@@ -389,8 +389,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
     CPPUNIT_ASSERT_EQUAL(uno::Any(u"mso-spt158"_ustr), aGeoPropMap.getValue(u"Type"_ustr));
 
     // Are properties correctly copied to shape?
-    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0, 0, 255)),
-                         xShapeProps->getPropertyValue(u"FillColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(COL_LIGHTBLUE), xShapeProps->getPropertyValue(u"FillColor"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_SOLID),
                          xShapeProps->getPropertyValue(u"FillStyle"_ustr));
@@ -483,7 +482,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(aColorStops[0].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
         CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops[1].getStopColor()));
 
@@ -509,7 +508,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.40000000000000002));
         CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops[1].getStopColor()));
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aGradient.Angle);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
@@ -533,7 +532,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
         CPPUNIT_ASSERT_EQUAL(Color(0xf79646), Color(aColorStops[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(aColorStops[1].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(aColorStops[1].getStopColor()));
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aGradient.Angle);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.XOffset);
@@ -567,8 +566,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkNonAccentColor)
     uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(0)),
                          xShape1Props->getPropertyValue(u"FillColorTheme"_ustr));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(255, 0, 0)),
-                         xShape1Props->getPropertyValue(u"FillColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(COL_LIGHTRED), xShape1Props->getPropertyValue(u"FillColor"_ustr));
 
     // background 2 = lt2 = ID 3
     uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getByIndex(2), uno::UNO_QUERY);
@@ -703,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         // Transparency is encoded in gray color.
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-        CPPUNIT_ASSERT_EQUAL(Color(0x666666), Color(aColorStops[0].getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(COL_GRAY7, Color(aColorStops[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
         CPPUNIT_ASSERT_EQUAL(Color(0x4d4d4d), Color(aColorStops[1].getStopColor()));
 

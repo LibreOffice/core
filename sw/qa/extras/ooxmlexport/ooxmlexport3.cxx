@@ -339,7 +339,7 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar5, "calendar5.docx")
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // text portions with direct formatting
     CPPUNIT_ASSERT_EQUAL(Color(0x2E74B5), getProperty<Color>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharColor"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), getProperty<Color>(getRun(getParagraphOfText(1, xCell->getText()), 2), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(getRun(getParagraphOfText(1, xCell->getText()), 2), "CharColor"));
     // default paragraph text color
     CPPUNIT_ASSERT_EQUAL(Color(0x5B9BD5), getProperty<Color>(getRun(getParagraphOfText(1, xCell->getText()), 3), "CharColor"));
     // text portions with direct formatting

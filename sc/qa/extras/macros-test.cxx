@@ -724,7 +724,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
         const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
         const Color& rColor = rBackground.GetColor();
 
-        CPPUNIT_ASSERT_EQUAL(Color(0x0, 0x0, 0x80), rColor);
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, rColor);
     }
 
     for (SCROW i = 1; i < 13; ++i)
@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
         const SvxBrushItem& rBackground2 = static_cast<const SvxBrushItem&>(rItem2);
         const Color& rColor2 = rBackground2.GetColor();
 
-        CPPUNIT_ASSERT_EQUAL(Color(0xcc, 0xcc, 0xcc), rColor2);
+        CPPUNIT_ASSERT_EQUAL(COL_GRAY3, rColor2);
     }
 }
 

@@ -1124,7 +1124,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
 
     pBoxItem = static_cast<const SvxBoxItem*>(pItem);
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pBoxItem->GetLeft()->GetColor());
-    CPPUNIT_ASSERT_EQUAL(Color(255, 0, 0), pBoxItem->GetRight()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pBoxItem->GetRight()->GetColor());
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pBoxItem->GetLeft()->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOTTED, pBoxItem->GetRight()->GetBorderLineStyle());
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with left width", 0, pBoxItem->GetLeft()->GetWidth());
@@ -1232,7 +1232,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
                            pStyleSheet->GetItemSet().HasItem(ATTR_FONT_COLOR, &pItem));
 
     const SvxColorItem* pFontColorItem = static_cast<const SvxColorItem*>(pItem);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name6 :Error with Font Color", Color(128, 128, 128),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name6 :Error with Font Color", COL_GRAY,
                                  pFontColorItem->GetValue());
 
     CPPUNIT_ASSERT_MESSAGE("Style Name6 : Doesn't have Attribute Underline, but it should have.",
@@ -1241,8 +1241,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
     const SvxUnderlineItem* pUnderlineItem = static_cast<const SvxUnderlineItem*>(pItem);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name6 :Error with Font Underline Style", LINESTYLE_SINGLE,
                                  pUnderlineItem->GetLineStyle());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name6 :Error with Font Underline Color",
-                                 Color(128, 128, 128), pUnderlineItem->GetColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name6 :Error with Font Underline Color", COL_GRAY,
+                                 pUnderlineItem->GetColor());
 
     /* Test for Style Name "7"
      * Has strikethrough single

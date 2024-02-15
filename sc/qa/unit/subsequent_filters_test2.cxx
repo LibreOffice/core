@@ -837,7 +837,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf130132)
         const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
         const Color& rColor = rBackground.GetColor();
         // background colour is yellow
-        CPPUNIT_ASSERT_EQUAL(Color(255, 255, 0), rColor);
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, rColor);
     }
 }
 
@@ -856,7 +856,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf133327)
     // Without the fix in place, this test would have failed with
     // - Expected: Color: R:255 G:255 B: 0
     // - Actual  : Color: R:255 G:255 B: 255
-    CPPUNIT_ASSERT_EQUAL(Color(255, 255, 0), rColor);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, rColor);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testColumnStyle2XLSX)
@@ -1313,9 +1313,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testBackgroundColorStandardXLSXML)
     const std::vector<Check> aChecks = {
         { OUString("Background Color"), COL_BLACK, COL_TRANSPARENT },
         { OUString("Dark Red"), COL_WHITE, Color(192, 0, 0) },
-        { OUString("Red"), COL_WHITE, Color(255, 0, 0) },
+        { OUString("Red"), COL_WHITE, COL_LIGHTRED },
         { OUString("Orange"), COL_WHITE, Color(255, 192, 0) },
-        { OUString("Yellow"), COL_WHITE, Color(255, 255, 0) },
+        { OUString("Yellow"), COL_WHITE, COL_YELLOW },
         { OUString("Light Green"), COL_WHITE, Color(146, 208, 80) },
         { OUString("Green"), COL_WHITE, Color(0, 176, 80) },
         { OUString("Light Blue"), COL_WHITE, Color(0, 176, 240) },

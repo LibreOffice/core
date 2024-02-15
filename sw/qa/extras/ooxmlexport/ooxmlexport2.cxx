@@ -585,7 +585,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
     aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aGradient.StartColor));
-    CPPUNIT_ASSERT_EQUAL(Color(0x666666), Color(ColorTransparency, aGradient.EndColor));
+    CPPUNIT_ASSERT_EQUAL(COL_GRAY7, Color(ColorTransparency, aGradient.EndColor));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 
     // Left / right margin was incorrect: the attribute was missing and we
@@ -796,7 +796,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo56679, "fdo56679.docx")
     uno::Reference< text::XTextRange > xText = getRun( xParagraph, 2, "This is a simple sentence.");
 
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xText, "CharUnderlineHasColor"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), getProperty<Color>(xText, "CharUnderlineColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xText, "CharUnderlineColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65400, "fdo65400.docx")
@@ -965,7 +965,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo60990)
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
-    CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), getProperty<Color>(getRun(xParagraph, 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(getRun(xParagraph, 1), "CharColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65718, "fdo65718.docx")
@@ -1106,7 +1106,7 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 {
     uno::Reference<drawing::XShape> xPicture = getShape(1);
     sal_Int16 nShadowTransparence = getProperty<sal_Int16>(xPicture, "ShadowTransparence");
-    CPPUNIT_ASSERT_EQUAL(Color(0x808080), getProperty<Color>(xPicture, "ShadowColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_GRAY, getProperty<Color>(xPicture, "ShadowColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), nShadowTransparence);
 }
 

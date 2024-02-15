@@ -165,8 +165,8 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
 
     pVDev->DrawBitmapEx(Point(), aBitmapEx);
 
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF), pVDev->GetPixel(Point(0, 0)));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0x00), pVDev->GetPixel(Point(1, 1)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pVDev->GetPixel(Point(1, 1)));
 
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
     // sometimes on Windows we get rounding error in blending so let's ignore this on Windows for now.

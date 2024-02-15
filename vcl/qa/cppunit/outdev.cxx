@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <tools/color.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/outputdevice.hxx>
 
@@ -486,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDefaultFillColor)
     aMtf.Record(pVDev.get());
 
     CPPUNIT_ASSERT(pVDev->IsFillColor());
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF), pVDev->GetFillColor());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetFillColor());
 
     pVDev->SetFillColor();
     CPPUNIT_ASSERT(!pVDev->IsFillColor());
@@ -507,7 +508,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testTransparentFillColor)
     aMtf.Record(pVDev.get());
 
     CPPUNIT_ASSERT(pVDev->IsFillColor());
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF), pVDev->GetFillColor());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetFillColor());
 
     pVDev->SetFillColor(COL_TRANSPARENT);
     CPPUNIT_ASSERT(!pVDev->IsFillColor());
@@ -528,7 +529,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testFillColor)
     aMtf.Record(pVDev.get());
 
     CPPUNIT_ASSERT(pVDev->IsFillColor());
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xFF, 0xFF), pVDev->GetFillColor());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetFillColor());
 
     pVDev->SetFillColor(COL_RED);
     CPPUNIT_ASSERT(pVDev->IsFillColor());

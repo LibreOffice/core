@@ -414,7 +414,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableStyleCellBackColor, "table-style-cell-back-col
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
     // This was 0xffffff.
-    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getProperty<Color>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xCell, "BackColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableStyleBorder, "table-style-border.docx")

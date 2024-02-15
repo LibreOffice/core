@@ -343,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103876)
     // Check character color
     Color nCharColor;
     xShape->getPropertyValue("CharColor") >>= nCharColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nCharColor);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf79007)
@@ -488,7 +488,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104015)
         const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
-        CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rColorItem.GetColorValue());
     }
     // Should have a blue line
     {
@@ -496,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104015)
         CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, rStyleItem.GetValue());
 
         const XLineColorItem& rColorItem = pObj->GetMergedItem(XATTR_LINECOLOR);
-        CPPUNIT_ASSERT_EQUAL(Color(0x0000FF), rColorItem.GetColorValue());
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, rColorItem.GetColorValue());
     }
     // Should have some shadow
     {
@@ -521,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104201)
         const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
-        CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), rColorItem.GetColorValue());
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, rColorItem.GetColorValue());
     }
     // Second shape has blue fill, but this should be overwritten by green group fill
     {
@@ -530,7 +530,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104201)
         const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
-        CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), rColorItem.GetColorValue());
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, rColorItem.GetColorValue());
     }
 }
 
@@ -645,8 +645,8 @@ bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
 {
     bool bResult = true;
 
-    const Color aFGColor(0xFF0000);
-    const Color aBGColor(0xFFFFFF);
+    const Color aFGColor(COL_LIGHTRED);
+    const Color aBGColor(COL_WHITE);
 
     BitmapScopedReadAccess pAccess(rBitmap);
     for (tools::Long y = 0; y < pAccess->Height(); ++y)

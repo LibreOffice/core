@@ -62,7 +62,7 @@ void checkSparklines(ScDocument& rDocument)
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorAxis().getFinalColor());
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorMarkers().getFinalColor());
         CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), rAttributes.getColorFirst().getFinalColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), rAttributes.getColorLast().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rAttributes.getColorLast().getFinalColor());
         CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorHigh().getFinalColor());
         CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), rAttributes.getColorLow().getFinalColor());
 
@@ -91,7 +91,7 @@ void checkSparklines(ScDocument& rDocument)
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, rAttributes.getType());
 
         CPPUNIT_ASSERT_EQUAL(Color(0x376092), rAttributes.getColorSeries().getFinalColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), rAttributes.getColorNegative().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rAttributes.getColorNegative().getFinalColor());
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorAxis().getFinalColor());
         CPPUNIT_ASSERT_EQUAL(Color(0xd00000), rAttributes.getColorMarkers().getFinalColor());
         CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorFirst().getFinalColor());

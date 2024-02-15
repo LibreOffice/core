@@ -665,7 +665,7 @@ public:
         aMatrix.scale(16, 16);
         device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
         BitmapEx result = device->GetBitmapEx(Point(0, 0), Size(16, 16));
-        CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x80, 0x80), result.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_GRAY, result.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(15, 15));
         // Draw rotated and move to the bottom-left corner.
         device->Erase();
@@ -676,7 +676,7 @@ public:
         device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
         result = device->GetBitmap(Point(0, 0), Size(16, 16));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(0, 0));
-        CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x80, 0x80), result.GetPixelColor(0, 15));
+        CPPUNIT_ASSERT_EQUAL(COL_GRAY, result.GetPixelColor(0, 15));
     }
 
     void testClipRectangle()

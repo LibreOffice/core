@@ -413,7 +413,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc887230)
     // Without the fix in place, this test would have failed with
     //- Expected: 255
     //- Actual  : 13421823
-    checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff), EE_CHAR_COLOR);
+    checkFontAttributes<Color, SvxColorItem>(pObj, COL_LIGHTBLUE, EE_CHAR_COLOR);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc870233_1)
@@ -428,14 +428,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc870233_1)
     // First shape has red, bold font
     {
         const SdrTextObj* pObj = DynCastSdrTextObj(pPage->GetObj(0));
-        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0xff0000), EE_CHAR_COLOR);
+        checkFontAttributes<Color, SvxColorItem>(pObj, COL_LIGHTRED, EE_CHAR_COLOR);
         checkFontAttributes<FontWeight, SvxWeightItem>(pObj, WEIGHT_BOLD, EE_CHAR_WEIGHT);
     }
 
     // Second shape has blue, italic font
     {
         const SdrTextObj* pObj = DynCastSdrTextObj(pPage->GetObj(1));
-        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff), EE_CHAR_COLOR);
+        checkFontAttributes<Color, SvxColorItem>(pObj, COL_LIGHTBLUE, EE_CHAR_COLOR);
         checkFontAttributes<FontItalic, SvxPostureItem>(pObj, ITALIC_NORMAL, EE_CHAR_ITALIC);
     }
 }
@@ -454,7 +454,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc870233_2)
         const SdrObjGroup* pObjGroup = dynamic_cast<SdrObjGroup*>(pPage->GetObj(0));
         CPPUNIT_ASSERT(pObjGroup);
         const SdrTextObj* pObj = DynCastSdrTextObj(pObjGroup->GetSubList()->GetObj(1));
-        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff), EE_CHAR_COLOR);
+        checkFontAttributes<Color, SvxColorItem>(pObj, COL_LIGHTBLUE, EE_CHAR_COLOR);
     }
 
     // Second smart art has "dk2" font color (style)
@@ -470,7 +470,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc870233_2)
         const SdrObjGroup* pObjGroup = dynamic_cast<SdrObjGroup*>(pPage->GetObj(2));
         CPPUNIT_ASSERT(pObjGroup);
         const SdrTextObj* pObj = DynCastSdrTextObj(pObjGroup->GetSubList()->GetObj(1));
-        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0xffffff), EE_CHAR_COLOR);
+        checkFontAttributes<Color, SvxColorItem>(pObj, COL_WHITE, EE_CHAR_COLOR);
     }
 }
 
@@ -686,14 +686,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBnc880763)
     const SdrObject* pObj = pObjGroup->GetSubList()->GetObj(1);
     CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL(
-        Color(0x0000ff),
+        COL_LIGHTBLUE,
         (static_cast<const XColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue());
 
     // Second object at the front has green background color
     pObj = pPage->GetObj(1);
     CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL(
-        Color(0x00ff00),
+        COL_LIGHTGREEN,
         (static_cast<const XColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue());
 }
 
@@ -956,7 +956,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletColor)
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bullet's color is wrong!", Color(0xff0000),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bullet's color is wrong!", COL_LIGHTRED,
                                  pNumFmt->GetNumRule().GetLevel(0).GetBulletColor());
 }
 

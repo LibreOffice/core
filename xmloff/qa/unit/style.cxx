@@ -379,12 +379,12 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
     {
         awt::ColorStop aColorStop = aColorStopSeq[0];
         CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopOffset);
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), asColor(aColorStop.StopColor));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, asColor(aColorStop.StopColor));
     }
     {
         awt::ColorStop aColorStop = aColorStopSeq[1];
         CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
-        CPPUNIT_ASSERT_EQUAL(Color(0xffff00), asColor(aColorStop.StopColor));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, asColor(aColorStop.StopColor));
     }
 }
 
@@ -506,7 +506,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     {
         awt::ColorStop aColorStop = aColorStopSeq[0];
         CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopOffset);
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), asColor(aColorStop.StopColor));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, asColor(aColorStop.StopColor));
     }
     {
         awt::ColorStop aColorStop = aColorStopSeq[1];
@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     {
         awt::ColorStop aColorStop = aColorStopSeq[2];
         CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
-        CPPUNIT_ASSERT_EQUAL(Color(0xffff00), asColor(aColorStop.StopColor));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, asColor(aColorStop.StopColor));
     }
 }
 

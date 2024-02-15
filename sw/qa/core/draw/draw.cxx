@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTdf107727FrameBorder)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(127), nBorderWidth);
     // Without patch it failed with Expected Color: R:0 G:0 B:255 A:0, Actual Color: R:0 G:0 B:0 A:0.
     // Default border color was used.
-    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(ColorTransparency, aBorder.Color));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(ColorTransparency, aBorder.Color));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testSdtTextboxHeader)

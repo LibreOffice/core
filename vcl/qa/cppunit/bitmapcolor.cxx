@@ -125,7 +125,7 @@ void BitmapColorTest::colorClassConstructor()
     }
 
     {
-        BitmapColor aBmpColor(Color(255, 255, 255));
+        BitmapColor aBmpColor(COL_WHITE);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Red wrong", static_cast<sal_uInt8>(255), aBmpColor.GetRed());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", static_cast<sal_uInt8>(255),

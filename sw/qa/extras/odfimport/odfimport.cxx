@@ -647,7 +647,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo75872_aoo40)
     createSwDoc("fdo75872_aoo40.odt");
     // graphics default style: line color and fill color changed
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    CPPUNIT_ASSERT_EQUAL(Color(0x808080),
+    CPPUNIT_ASSERT_EQUAL(COL_GRAY,
            getProperty<Color>(xShape, "LineColor"));
     CPPUNIT_ASSERT_EQUAL(Color(0xcfe7f5),
            getProperty<Color>(xShape, "FillColor"));
@@ -945,7 +945,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf96113)
 {
     createSwDoc("tdf96113.odt");
     // Background of the formula frame was white (0xffffff), not green.
-    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getProperty<Color>(getShape(1), "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(getShape(1), "BackColor"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo47267)

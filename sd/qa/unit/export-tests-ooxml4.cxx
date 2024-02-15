@@ -349,7 +349,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127379)
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(aColorStops[0].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
     CPPUNIT_ASSERT_EQUAL(Color(0x2a6099), Color(aColorStops[1].getStopColor()));
 }

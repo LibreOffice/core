@@ -169,14 +169,14 @@ void SdActiveXControlsTest::testLabelProperties()
     CPPUNIT_ASSERT_EQUAL(Color(0xE0E0E0), nColor);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x0000FF), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, nColor);
 
     xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nBorderStyle);
 
     Color nBorderColor;
     xPropertySet->getPropertyValue("BorderColor") >>= nBorderColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), nBorderColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, nBorderColor);
 
     xPropertySet->getPropertyValue("Align") >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
@@ -382,7 +382,7 @@ void SdActiveXControlsTest::testSpinButtonProperties()
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFF00), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, nColor);
 
     xPropertySet->getPropertyValue("SpinValueMax") >>= nMax;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(320), nMax);
@@ -400,7 +400,7 @@ void SdActiveXControlsTest::testSpinButtonProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(123), nDelay);
 
     xPropertySet->getPropertyValue("SymbolColor") >>= nArrowColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), nArrowColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, nArrowColor);
 
     xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::VERTICAL), nOrientation);
@@ -465,7 +465,7 @@ void SdActiveXControlsTest::testCommandButtonProperties()
     CPPUNIT_ASSERT_EQUAL(true, bMultiLine);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x0000FF), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFFFF80), nColor);
@@ -548,10 +548,10 @@ void SdActiveXControlsTest::testScrollBarProperties()
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x00FFFF), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTCYAN, nColor);
 
     xPropertySet->getPropertyValue("SymbolColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
     xPropertySet->getPropertyValue("RepeatDelay") >>= nDelay;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(230), nDelay);
@@ -645,7 +645,7 @@ void SdActiveXControlsTest::testCheckBoxProperties()
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFF80FF), nColor);
@@ -732,10 +732,10 @@ void SdActiveXControlsTest::testOptionButtonProperties()
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x00FFFF), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTCYAN, nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
     xPropertySet->getPropertyValue("MultiLine") >>= bMultiLine;
     CPPUNIT_ASSERT_EQUAL(false, bMultiLine);
@@ -826,7 +826,7 @@ void SdActiveXControlsTest::testComboBoxProperties()
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x800000), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_RED, nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nColor);
@@ -930,16 +930,16 @@ void SdActiveXControlsTest::testListBoxProperties()
     CPPUNIT_ASSERT_EQUAL(false, bEnabled);
 
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFF00), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
 
     xPropertySet->getPropertyValue("Border") >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nBorderStyle);
 
     xPropertySet->getPropertyValue("BorderColor") >>= nBorderColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF00FF), nBorderColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, nBorderColor);
 
     xPropertySet->getPropertyValue("MultiSelection") >>= bMultiSelection;
     CPPUNIT_ASSERT_EQUAL(true, bMultiSelection);
@@ -1017,7 +1017,7 @@ void SdActiveXControlsTest::testToggleButtonProperties()
     CPPUNIT_ASSERT_EQUAL(Color(0xFF80FF), nColor);
 
     xPropertySet->getPropertyValue("TextColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x808080), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_GRAY, nColor);
 
     xPropertySet->getPropertyValue("Toggle") >>= bToggle;
     CPPUNIT_ASSERT_EQUAL(true, bToggle);

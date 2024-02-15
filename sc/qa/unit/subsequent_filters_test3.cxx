@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testBorderColorsXLSXML)
     const editeng::SvxBorderLine* pLine = pPat->GetItem(ATTR_BORDER).GetRight();
     CPPUNIT_ASSERT(pLine);
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
-    CPPUNIT_ASSERT_EQUAL(Color(255, 0, 0), pLine->GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pLine->GetColor());
 
     // B4 - blue
     pPat = pDoc->GetPattern(ScAddress(1, 3, 0));
@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testBorderColorsXLSXML)
     pLine = pPat->GetItem(ATTR_BORDER).GetLeft();
     CPPUNIT_ASSERT(pLine);
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
-    CPPUNIT_ASSERT_EQUAL(Color(255, 255, 0), pLine->GetColor()); // yellow
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pLine->GetColor());
 
     pLine = pPat->GetItem(ATTR_BORDER).GetRight();
     CPPUNIT_ASSERT(pLine);
@@ -1706,7 +1706,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, rStyleItemK2.GetValue());
         const XFillHatchItem& rHatchItem = pCaptionK2->GetMergedItem(XATTR_FILLHATCH);
-        CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem.GetHatchValue().GetColor());
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, rHatchItem.GetHatchValue().GetColor());
 
         SdrCaptionObj* const pCaptionK9 = checkCaption(*pDoc, ScAddress(10, 8, 0), false);
 
@@ -1714,7 +1714,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, rStyleItemK9.GetValue());
         const XFillHatchItem& rHatchItem2 = pCaptionK9->GetMergedItem(XATTR_FILLHATCH);
-        CPPUNIT_ASSERT_EQUAL(Color(0x000080), rHatchItem2.GetHatchValue().GetColor());
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, rHatchItem2.GetHatchValue().GetColor());
     }
 
     {

@@ -552,9 +552,9 @@ DECLARE_RTFEXPORT_TEST(testShpzDhgt, "shpz-dhgt.rtf")
 {
     // Test that shpz has priority over dhgt and not the other way around.
     // Drawpage is sorted by ZOrder, so first should be red (back).
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getProperty<Color>(getShape(1), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(getShape(1), "FillColor"));
     // Second (front) should be green.
-    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getProperty<Color>(getShape(2), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(getShape(2), "FillColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testLevelfollow, "levelfollow.rtf")

@@ -2185,7 +2185,7 @@ void Test::testDateFormFieldCharacterFormatting()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 3), "CharWeight"));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_AUTO, getProperty<Color>(getRun(getParagraph(1), 3), "CharColor"));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 4), "CharWeight"));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), getProperty<Color>(getRun(getParagraph(1), 4), "CharColor"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTRED, getProperty<Color>(getRun(getParagraph(1), 4), "CharColor"));
         }
         else
         {
@@ -2210,7 +2210,7 @@ void Test::testDateFormFieldCharacterFormatting()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_AUTO, getProperty<Color>(xTextPortion, "CharColor"));
             xTextPortion.set(xContentControlEnum->nextElement(), uno::UNO_QUERY);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(xTextPortion, "CharWeight"));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), getProperty<Color>(xTextPortion, "CharColor"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_LIGHTRED, getProperty<Color>(xTextPortion, "CharColor"));
         }
     }
 }

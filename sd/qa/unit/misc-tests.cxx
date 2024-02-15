@@ -273,8 +273,8 @@ void SdMiscTest::testFillGradient()
     uno::Reference<beans::XPropertySet> xPropSet(xShape1, uno::UNO_QUERY_THROW);
     // Set FillStyle and FillGradient
     awt::Gradient aGradient;
-    aGradient.StartColor = sal_Int32(Color(255, 0, 0));
-    aGradient.EndColor = sal_Int32(Color(0, 255, 0));
+    aGradient.StartColor = sal_Int32(COL_LIGHTRED);
+    aGradient.EndColor = sal_Int32(COL_LIGHTGREEN);
     xPropSet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_GRADIENT));
     xPropSet->setPropertyValue("FillGradient", uno::Any(aGradient));
     // Add the rectangle to the page.
@@ -296,9 +296,9 @@ void SdMiscTest::testFillGradient()
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(aColorStops[0].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, Color(aColorStops[1].getStopColor()));
 }
 
 void SdMiscTest::testTdf44774()

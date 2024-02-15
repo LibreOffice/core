@@ -807,7 +807,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, eXFS);
 
     Color aColor = rPageAttr.GetItem(XATTR_FILLCOLOR)->GetColorValue();
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColor);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
@@ -841,9 +841,9 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(rColorStops[0].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(rColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(rColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(rColorStops[1].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)

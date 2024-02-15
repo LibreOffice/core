@@ -221,7 +221,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, paragraphProperties)
     uno::Reference<beans::XPropertySet> xPropertySet7(xParagraph7, uno::UNO_QUERY);
     Color nParaBackColor;
     xPropertySet7->getPropertyValue("ParaBackColor") >>= nParaBackColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), nParaBackColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nParaBackColor);
 
     table::BorderLine2 aTopBorder;
     xPropertySet7->getPropertyValue("TopBorder") >>= aTopBorder;
@@ -295,7 +295,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, paragraphProperties)
     uno::Reference<beans::XPropertySet> xPropertySet13(xParagraph13, uno::UNO_QUERY);
     Color nCharColor;
     xPropertySet13->getPropertyValue("CharColor") >>= nCharColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, nCharColor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

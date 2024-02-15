@@ -304,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
         CPPUNIT_ASSERT(bShadow);
         Color nColor;
         CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowColor") >>= nColor);
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), nColor);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
     };
     loadFromFile(u"table-shadow.pptx");
     // Without the accompanying fix in place, this test would have failed, because shadow on a table

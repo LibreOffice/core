@@ -203,7 +203,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
         {
             pReturnDialog = mpFact->CreateScTabBgColorDlg(mpViewShell->GetFrameWeld(),
                                 ScResId(SCSTR_SET_TAB_BG_COLOR),
-                                ScResId(SCSTR_NO_TAB_BG_COLOR), Color(0xff00ff) );
+                                ScResId(SCSTR_NO_TAB_BG_COLOR), COL_LIGHTMAGENTA );
             break;
         }
 

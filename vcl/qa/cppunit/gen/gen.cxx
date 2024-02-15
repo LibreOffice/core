@@ -64,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf107966)
     aMapMode.SetMapUnit(MapUnit::MapTwip);
     pVirtualDevice->SetMapMode(aMapMode);
     pVirtualDevice->SetOutputSizePixel(Size(90, 15));
-    pVirtualDevice->SetFillColor(Color(255, 255, 255));
+    pVirtualDevice->SetFillColor(COL_WHITE);
     pVirtualDevice->DrawRect(tools::Rectangle(Point(), Size(1350, 225)));
     pVirtualDevice->SetFillColor(COL_BLACK);
     AntialiasingFlags nOldAA = pVirtualDevice->GetAntialiasing();

@@ -824,7 +824,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testHyperlinkColor)
 
     // Hyperlink colors should be blue, red, green.
     CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), nCharColorBlue);
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), nCharColorRed);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nCharColorRed);
     CPPUNIT_ASSERT_EQUAL(Color(0x548235), nCharColorGreen);
 }
 
@@ -1359,7 +1359,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testPredefinedTableStyle)
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xcccccc), nColor);
+    CPPUNIT_ASSERT_EQUAL(COL_GRAY3, nColor);
 
     xCell.set(xTable->getCellByPosition(0, 2), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
@@ -1524,7 +1524,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc904423)
         const XFillStyleItem& rStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
         const XFillColorItem& rColorItem = pObj->GetMergedItem(XATTR_FILLCOLOR);
-        CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rColorItem.GetColorValue());
     }
 }
 
@@ -1544,7 +1544,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testShapeLineStyle)
         CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
 
         const XLineColorItem& rColorItem = pObj->GetMergedItem(XATTR_LINECOLOR);
-        CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), rColorItem.GetColorValue());
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rColorItem.GetColorValue());
 
         const XLineWidthItem& rWidthItem = pObj->GetMergedItem(XATTR_LINEWIDTH);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(132), rWidthItem.GetValue());
@@ -1884,7 +1884,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf127129)
     // Without the accompanying fix in place, the highlight would be -1
     Color nCharBackColor;
     xPropSet->getPropertyValue("CharBackColor") >>= nCharBackColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF00), nCharBackColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, nCharBackColor);
 }
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf93097)
 {

@@ -166,7 +166,7 @@ namespace vclcanvas
                 if( mbShowSpriteBounds )
                 {
                     // Paint green sprite clip area
-                    rTargetSurface.SetLineColor( Color( 0,255,0 ) );
+                    rTargetSurface.SetLineColor( COL_LIGHTGREEN );
                     rTargetSurface.SetFillColor();
 
                     rTargetSurface.DrawPolyPolygon(::tools::PolyPolygon(aClipPoly)); // #i76339#

@@ -794,7 +794,7 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x666666), Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_GRAY7, Color(aColorStops[1].getStopColor()));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 
@@ -2621,7 +2621,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
     uno::Reference<beans::XPropertySet> xCell1Style;
 
     xTableStyle->getByName("first-row-start-column") >>= xCell1Style;
-    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getProperty<Color>(xCell1Style, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xCell1Style, "BackColor"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableStyles5)
@@ -2676,7 +2676,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129568)
     // Test that export doesn't fail, and that style is imported and in use.
     uno::Reference<style::XStyle> xStyle(getStyles("CellStyles")->getByName("Default Style.1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStyle->isInUse());
-    CPPUNIT_ASSERT_EQUAL(Color(0xffff00), getProperty<Color>(xStyle, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(xStyle, "BackColor"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129568ui)
@@ -2685,7 +2685,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129568ui)
     // Same as above, but styles referenced by UI name.
     uno::Reference<style::XStyle> xStyle(getStyles("CellStyles")->getByName("Default Style.1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStyle->isInUse());
-    CPPUNIT_ASSERT_EQUAL(Color(0xffff00), getProperty<Color>(xStyle, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(xStyle, "BackColor"));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextTable.odt")

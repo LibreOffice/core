@@ -440,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf111789)
         CPPUNIT_ASSERT_EQUAL(static_cast<double>(274), fShadowDist);
         Color nColor;
         xShape->getPropertyValue("ShadowColor") >>= nColor;
-        CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), nColor);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
         sal_Int32 nTransparency = 0;
         xShape->getPropertyValue("ShadowTransparence") >>= nTransparency;
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7), nTransparency);
