@@ -30,7 +30,7 @@
 #include <token.hxx>
 #include <math.hxx>
 #include <kahan.hxx>
-#include <queryiter.hxx>
+#include <queryentry.hxx>
 #include "parclass.hxx"
 
 #include <map>
@@ -47,7 +47,6 @@ class ScFormulaCell;
 class ScDBRangeBase;
 struct ScQueryParam;
 struct ScDBQueryParamBase;
-struct ScQueryEntry;
 
 struct ScSingleRefData;
 struct ScComplexRefData;

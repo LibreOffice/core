@@ -62,6 +62,7 @@
 #include <doubleref.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
+#include <queryiter.hxx>
 #include <tokenarray.hxx>
 #include <compare.hxx>
 #include <comphelper/lok.hxx>
