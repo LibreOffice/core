@@ -428,12 +428,17 @@ void PDFIProcessor::tilingPatternFill(int nX0, int nY0, int nX1, int nY1,
     }
     // TODO: That clipping might shift the fill pattern offsets
 
+    double transformedxStep = nxStep * rMat.m00 + nyStep * rMat.m01;
+    double transformedyStep = nxStep * rMat.m10 + nyStep * rMat.m11;
+
     auto pPolyElement = ElementFactory::createPolyPolyElement(
         m_pCurElement,
         getGCId(getCurrentContext()),
         aB2DPoly,
         PATH_EOFILL, // Hmm how do I know if this should be EO or not?
-        nTile, 0, 0 );
+        nTile,
+        transformedxStep * aScale.getX(),
+        transformedyStep * -aScale.getY());
     pPolyElement->updateGeometry();
     pPolyElement->ZOrder = m_nNextZOrder++;
 }

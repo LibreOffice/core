@@ -1004,7 +1004,8 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uni
         aGCProps[ "draw:fill-image-name" ] =
             m_rStyleContainer.getStyleName(
             m_rStyleContainer.getStyleId(style));
-
+        aGCProps[ "draw:fill-image-width" ] = unitMMString(convPx2mm(elem.TileWidth));
+        aGCProps[ "draw:fill-image-height" ] = unitMMString(convPx2mm(elem.TileHeight));
     }
 
     // TODO(F1): check whether stuff could be emulated by gradient/bitmap/hatch
