@@ -50,6 +50,9 @@ QtTransferable::QtTransferable(const QMimeData* pMimeData)
 
 css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTransferDataFlavors()
 {
+    if (!m_pMimeData)
+        return css::uno::Sequence<css::datatransfer::DataFlavor>();
+
     QStringList aFormatList(m_pMimeData->formats());
     // we might add the UTF-16 mime text variant later
     const int nMimeTypeSeqSize = aFormatList.size() + 1;
