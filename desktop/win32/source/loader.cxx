@@ -218,8 +218,6 @@ int officeloader_impl(bool bAllowConsole)
     // read limit values from fundamental.override.ini
     unsigned int nMaxMemoryInMB = 0;
     bool bExcludeChildProcesses = true;
-    bool fallbackForMaxMemoryInMB = true;
-    bool fallbackForExcludeChildProcesses = true;
 
     try
     {
@@ -227,33 +225,11 @@ int officeloader_impl(bool bAllowConsole)
         std::ifstream aFile(szIniDirectory + L"\\fundamental.override.ini");
         boost::property_tree::ini_parser::read_ini(aFile, pt);
         nMaxMemoryInMB = pt.get("Bootstrap.LimitMaximumMemoryInMB", nMaxMemoryInMB);
-        fallbackForMaxMemoryInMB = !pt.get_child_optional("Bootstrap.LimitMaximumMemoryInMB");
         bExcludeChildProcesses = pt.get("Bootstrap.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
-        fallbackForExcludeChildProcesses
-            = !pt.get_child_optional("Bootstrap.ExcludeChildProcessesFromLimit");
     }
     catch (...)
     {
         nMaxMemoryInMB = 0;
-    }
-    // For backwards compatibility, for now also try to read the values from bootstrap.ini if
-    // fundamental.override.ini does not provide them:
-    if (fallbackForMaxMemoryInMB || fallbackForExcludeChildProcesses) {
-        try
-        {
-            boost::property_tree::ptree pt;
-            std::ifstream aFile(szIniDirectory + L"\\bootstrap.ini");
-            boost::property_tree::ini_parser::read_ini(aFile, pt);
-            if (fallbackForMaxMemoryInMB) {
-                nMaxMemoryInMB = pt.get("Win32.LimitMaximumMemoryInMB", nMaxMemoryInMB);
-            }
-            if (fallbackForExcludeChildProcesses) {
-                bExcludeChildProcesses = pt.get("Win32.ExcludeChildProcessesFromLimit", bExcludeChildProcesses);
-            }
-        }
-        catch (...)
-        {
-        }
     }
 
     // create a Windows JobObject with a memory limit

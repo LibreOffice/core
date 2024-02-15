@@ -32,12 +32,6 @@
 
 #include <comphelper/windowserrorstring.hxx>
 
-#include <fstream>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
-#include <osl/file.hxx>
-#include <osl/process.h>
-
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
 #include <rtl/string.h>
@@ -1958,38 +1952,7 @@ static bool EnableAttachThreadInputHack()
 {
     OUString s("$EnableAttachThreadInputHack");
     rtl::Bootstrap::expandMacros(s);
-    bool bEnabled;
-    if (!s.isEmpty()) {
-        bEnabled = s == "true";
-    } else {
-        // For backwards compatibility, for now also try to read the value from a [Win32] section of
-        // bootstrap.ini if it is not set as a bootstrap variable:
-        bEnabled = false;
-        OUString aBootstrapUri;
-        if (osl_getProcessWorkingDir(&aBootstrapUri.pData) == osl_Process_E_None) {
-            aBootstrapUri += "/bootstrap.ini";
-
-            OUString aSystemFileName;
-            if (osl::FileBase::getSystemPathFromFileURL(aBootstrapUri, aSystemFileName)
-                    == osl::FileBase::E_None
-                && aSystemFileName.getLength() <= MAX_PATH)
-            {
-                // this uses the Boost ini parser, instead of tools::Config, as we already use it to
-                // read other values from bootstrap.ini in desktop/win32/source/loader.cxx, because
-                // that watchdog process can't access LO libs. This way the handling is consistent.
-                try
-                {
-                    boost::property_tree::ptree pt;
-                    std::ifstream aFile(o3tl::toW(aSystemFileName.getStr()));
-                    boost::property_tree::ini_parser::read_ini(aFile, pt);
-                    bEnabled = pt.get("Win32.EnableAttachThreadInputHack", false);
-                }
-                catch (...)
-                {
-                }
-            }
-        }
-    }
+    const bool bEnabled = s == "true";
     SAL_WARN_IF(bEnabled, "vcl", "AttachThreadInput hack is enabled. Watch out for deadlocks!");
     return bEnabled;
 }
