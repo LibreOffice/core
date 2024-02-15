@@ -658,6 +658,10 @@ Fraction GetZoom(const ScViewData& rViewData, int i)
     };
     return (rViewData.*GetZooms[i])();
 }
+
+// Multiplying by this is basically equivalent to o3tl::convert(foo, o3tl::Length::px, o3tl::Length::mm100)
+// Where there are 15 twips in an ideal pixel and 1 twip is 0.0017638889 cm
+constexpr double twipFactor = 15 * 1.76388889; // 26.45833335
 }
 
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
@@ -1058,7 +1062,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                 aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
                              + aOutputData.nScrY);
-                const double twipFactor = 15 * 1.76388889; // 26.45833335
                 aOrigin = Point(aOrigin.getX() * twipFactor,
                                 aOrigin.getY() * twipFactor);
                 MapMode aNew = rDevice.GetMapMode();
@@ -1154,7 +1157,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             rDevice.SetMapMode(aDrawMode);
 
             // keep into account the zoom factor
-            static const double twipFactor = 15 * 1.76388889; // 26.45833335
             Point aNewOrigin((aOriginAbsPx.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
                              (aOriginAbsPx.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
 
