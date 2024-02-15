@@ -42,7 +42,7 @@
 #define STR_AUTOMATICVERSION                    NC_("STR_AUTOMATICVERSION", "Automatically saved version")
 #define STR_EXPORTBUTTON                        NC_("STR_EXPORTBUTTON", "Export")
 #define STR_LABEL_FILEFORMAT                    NC_("STR_LABEL_FILEFORMAT", "File format:")
-#define STR_HIDDENINFO_CONTAINS                 NC_("STR_HIDDENINFO_CONTAINS", "This document contains:\n\n")
+#define STR_HIDDENINFO_CONTAINS                 NC_("STR_HIDDENINFO_CONTAINS", "The document contains the following potentially sensitive elements:")
 #define STR_HIDDENINFO_RECORDCHANGES            NC_("STR_HIDDENINFO_RECORDCHANGES", "Recorded changes")
 #define STR_HIDDENINFO_NOTES                    NC_("STR_HIDDENINFO_NOTES", "Notes")
 #define STR_HIDDENINFO_DOCVERSIONS              NC_("STR_HIDDENINFO_DOCVERSIONS", "Document versions")
