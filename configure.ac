@@ -14724,6 +14724,7 @@ dnl `cast<PointerType>(getOperand(1)->getType())->isOpaqueOrPointeeTypeMatches(g
 dnl && "Ptr must be a pointer to Val type!"' failed." (which should be fixed since Clang 17), or
 dnl <https://developercommunity.visualstudio.com/t/Bogus-error-C2440-with-consteval-constru/10579616>
 dnl "Bogus error C2440 with consteval constructor (/std:c++20)":
+have_cpp_consteval=
 AC_LANG_PUSH([C++])
 save_CXX=$CXX
 if test "$COM" = MSC && test "$COM_IS_CLANG" != TRUE; then
@@ -14783,12 +14784,45 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
     ], [
         return (s.i == 1) ? 0 : 1;
     ])], [
-        AC_DEFINE([HAVE_CPP_CONSTEVAL],[1])
+        have_cpp_consteval=1
         AC_MSG_RESULT([yes])
     ], [AC_MSG_RESULT([no])], [AC_MSG_RESULT([assumed no (cross compiling)])])
 CXX=$save_CXX
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
+if test -n "$have_cpp_consteval" && test "$COM_IS_CLANG" = TRUE && test -n "$BUILDING_PCH_WITH_OBJ"
+then
+    AC_MSG_CHECKING([whether $CXX_BASE has working consteval in combination with PCH])
+    dnl ...that does not suffer from <https://github.com/llvm/llvm-project/issues/81745> "undefined
+    dnl reference to consteval constructor exported from module" (which also affects PCH, see
+    dnl <https://lists.freedesktop.org/archives/libreoffice/2024-February/091564.html> "Our Clang
+    dnl --enable-pch setup is known broken"):
+    printf 'export module M;\nexport struct S1 { consteval S1(int) {} };' >conftest.cppm
+    $CXX $CXXFLAGS $CXXFLAGS_CXX11 --precompile conftest.cppm
+    rm conftest.cppm
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    save_LDFLAGS=$LDFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+    LDFLAGS="$LDFLAGS -fmodule-file=M=conftest.pcm conftest.pcm"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([
+        import M;
+    ], [
+        struct S2 { S1 s = 0; };
+        S2 s;
+    ])], [
+        AC_MSG_RESULT([yes])
+    ], [
+        have_cpp_consteval=
+        AC_MSG_RESULT([no])])
+    CXXFLAGS=$save_CXXFLAGS
+    LDFLAGS=$save_LDFLAGS
+    AC_LANG_POP([C++])
+    rm confetst.pcm
+fi
+if test -n "$have_cpp_consteval"; then
+    AC_DEFINE([HAVE_CPP_CONSTEVAL],[1])
+fi
 
 AC_MSG_CHECKING([whether $CXX_BASE supports a working C++20 std::strong_order])
 dnl ...which is known to not be implemented in libc++ prior to
