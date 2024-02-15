@@ -51,8 +51,6 @@ public:
              return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/core/layout/ssfrm.cxx")) // ~SwFrame calling IsDeleteForbidden
              return false;
-        if (loplugin::isSamePathname(fn, SRCDIR "/chart2/source/model/template/CandleStickChartType.cxx")) // to ignore <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100797> "[10/11/12 Regression] using declaration causing virtual call with wrongly adjusted this pointer" workaround
-             return false;
 
         return true;
     }
