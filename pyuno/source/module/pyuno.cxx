@@ -939,7 +939,7 @@ static int lcl_setitem_index( PyUNO const *me, PyObject *pKey, PyObject *pValue 
     }
 
     PyErr_SetString( PyExc_TypeError, "cannot assign to object" );
-    return 1;
+    return -1;
 }
 
 static int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue )
@@ -979,27 +979,27 @@ static int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue 
         if ( !PyTuple_Check (pValue) )
         {
             PyErr_SetString( PyExc_TypeError, "value is not a tuple" );
-            return 1;
+            return -1;
         }
 
         Py_ssize_t nTupleLength_ssize = PyTuple_Size( pValue );
         if ( nTupleLength_ssize > SAL_MAX_INT32 )
         {
             PyErr_SetString( PyExc_ValueError, "tuple too large" );
-            return 1;
+            return -1;
         }
         sal_Int32 nTupleLength = static_cast<sal_Int32>(nTupleLength_ssize);
 
         if ( (nTupleLength != nSliceLength) && (nStep != 1) )
         {
             PyErr_SetString( PyExc_ValueError, "number of items assigned must be equal" );
-            return 1;
+            return -1;
         }
 
         if ( (nTupleLength != nSliceLength) && !xIndexContainer.is() )
         {
             PyErr_SetString( PyExc_ValueError, "cannot change length" );
-            return 1;
+            return -1;
         }
 
         sal_Int32 nCur, i;
@@ -1057,7 +1057,7 @@ static int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue 
     }
 
     PyErr_SetString( PyExc_TypeError, "cannot assign to object" );
-    return 1;
+    return -1;
 }
 
 static int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue )
@@ -1129,7 +1129,7 @@ static int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue
     }
 
     PyErr_SetString( PyExc_TypeError, "cannot assign to object" );
-    return 1;
+    return -1;
 }
 
 static int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
@@ -1182,7 +1182,7 @@ static int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
         raisePyExceptionWithAny( css::uno::Any( e ) );
     }
 
-    return 1;
+    return -1;
 }
 
 static PyObject* PyUNO_iter( PyObject *self )
@@ -1461,25 +1461,25 @@ static int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
     catch( const css::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( e.TargetException );
-        return 1;
+        return -1;
     }
     catch( const css::beans::UnknownPropertyException & e )
     {
         raisePyExceptionWithAny( Any(e) );
-        return 1;
+        return -1;
     }
     catch( const css::script::CannotConvertException &e )
     {
         raisePyExceptionWithAny( Any(e) );
-        return 1;
+        return -1;
     }
     catch( const RuntimeException & e )
     {
         raisePyExceptionWithAny( Any( e ) );
-        return 1;
+        return -1;
     }
     PyErr_SetString (PyExc_AttributeError, name);
-    return 1; //as above.
+    return -1; //as above.
 }
 
 static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
