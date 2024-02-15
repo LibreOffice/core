@@ -70,7 +70,8 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
             if (m_aBoxType==COMBOBOX)
             {
                 VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
-                if (pComboBox && pChildWindow && pChildWindow == pComboBox->GetSubEdit())
+                if (pComboBox && pChildWindow && pChildWindow == pComboBox->GetSubEdit()
+                    && m_xText.is())
                 {
                     if (rVclWindowEvent.GetId() == VclEventId::WindowShow)
                     {
