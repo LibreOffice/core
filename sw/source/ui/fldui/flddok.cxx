@@ -601,7 +601,7 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
         }
 
         case SwFieldTypesEnum::Chapter:
-            aVal = OUString::number(m_xLevelED->get_active());
+            aVal = m_xLevelED->get_active_text();
             break;
 
         default:
