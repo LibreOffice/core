@@ -159,9 +159,6 @@ namespace accessibility
         // Process event queue
         void ProcessQueue();
 
-        // syntactic sugar for FireEvent
-        void GotPropertyEvent( const uno::Any& rNewValue, const sal_Int16 nEventId ) const { FireEvent( nEventId, rNewValue ); }
-
         // shutdown usage of current edit source on myself and the children.
         void ShutdownEditSource();
 
@@ -407,7 +404,7 @@ namespace accessibility
             {
                 AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
                 if ( !pAccessibleCell )
-                    GotPropertyEvent( uno::Any(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                    FireEvent(AccessibleEventId::STATE_CHANGED, uno::Any(AccessibleStateType::FOCUSED));
                 else    // the focus event on cell should be fired on table directly
                 {
                     AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
@@ -768,9 +765,8 @@ namespace accessibility
                     // child not yet created?
                     if (!maParaManager.HasCreatedChild(nCurrPara))
                     {
-                        GotPropertyEvent( uno::Any( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
-                                                                                   mxFrontEnd, GetEditSource(), nCurrPara ).first ),
-                                          AccessibleEventId::CHILD );
+                        FireEvent(AccessibleEventId::CHILD, uno::Any(maParaManager.CreateChild(nCurrPara - mnFirstVisibleChild,
+                                                                                               mxFrontEnd, GetEditSource(), nCurrPara).first));
                     }
                 }
             }
@@ -1054,9 +1050,8 @@ namespace accessibility
                 // #109864# Enforce creation of this paragraph
                 try
                 {
-                    GotPropertyEvent( uno::Any( getAccessibleChild( aFunctor.GetParaIndex() -
-                                                                        mnFirstVisibleChild + GetStartIndex() ) ),
-                                      AccessibleEventId::CHILD );
+                    FireEvent(AccessibleEventId::CHILD, uno::Any(getAccessibleChild(aFunctor.GetParaIndex() -
+                                                                                    mnFirstVisibleChild + GetStartIndex())));
                 }
                 catch( const uno::Exception& )
                 {
