@@ -889,6 +889,7 @@ executeMessageBox(
             aResult = DialogMask::ButtonsNo;
             break;
         default:
+            SAL_WARN("uui", "executeMessageBox: nMessResult is " << nMessResult);
             assert(false);
     }
 
