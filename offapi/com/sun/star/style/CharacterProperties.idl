@@ -193,7 +193,8 @@ published service CharacterProperties
     [optional, property] short CharFontType;
 
 
-    /** This optional property specifies the name of the style of the font.
+    /** This optional property specifies the name of the applied
+        character style.
      */
     [optional, property] string CharStyleName;
 
