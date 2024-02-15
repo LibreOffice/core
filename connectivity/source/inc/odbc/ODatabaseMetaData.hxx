@@ -29,7 +29,7 @@ namespace connectivity::odbc
         //************ Class: ODatabaseMetaData
 
 
-        class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaData final :
+        class ODatabaseMetaData final :
             public ODatabaseMetaDataBase
         {
             SQLHANDLE       m_aConnectionHandle;

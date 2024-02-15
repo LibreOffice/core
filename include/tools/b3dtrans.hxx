@@ -30,7 +30,7 @@
 #include <tools/toolsdllapi.h>
 
 /// Transformation sets for 3D output
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dTransformationSet
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI B3dTransformationSet
 {
 private:
     // Object Matrix Object -> World
@@ -106,16 +106,16 @@ public:
 
     // aspect ratio accessors and the defined method of keeping defined aspect ratio
     double GetRatio() const { return mfRatio; }
-    void SetRatio(double fNew);
+    TOOLS_DLLPUBLIC void SetRatio(double fNew);
 
     // Parameters of ViewportTransformation
-    void SetDeviceRectangle(double fL=-1.0, double fR=1.0,
+    TOOLS_DLLPUBLIC void SetDeviceRectangle(double fL=-1.0, double fR=1.0,
                             double fB=-1.0, double fT=1.0);
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
 
-    void SetPerspective(bool bNew);
+    TOOLS_DLLPUBLIC void SetPerspective(bool bNew);
 
-    void SetViewportRectangle(tools::Rectangle const & rRect, tools::Rectangle const & rVisible);
+    TOOLS_DLLPUBLIC void SetViewportRectangle(tools::Rectangle const & rRect, tools::Rectangle const & rVisible);
     void SetViewportRectangle(tools::Rectangle const & rRect) { SetViewportRectangle(rRect, rRect); }
 
     void CalcViewport();

@@ -143,9 +143,9 @@ basegfx::B2DRange getClippedStrokeDamage(cairo_t* cr)
 // for Chart-content visualization. CAUTION: It's not the same as PixelSnap (!)
 // tdf#129845 add reply value to allow counting a point/byte/size measurement to
 // be included
-size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
-                        const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap,
-                        bool bPixelSnapHairline)
+static size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
+                               const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap,
+                               bool bPixelSnapHairline)
 {
     // short circuit if there is nothing to do
     const sal_uInt32 nPointCount(rPolygon.count());

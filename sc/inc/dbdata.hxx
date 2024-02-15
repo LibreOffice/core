@@ -232,7 +232,7 @@ private:
     void InvalidateTableColumnNames( bool bSwapToEmptyNames );
 };
 
-class SC_DLLPUBLIC ScDBCollection
+class ScDBCollection
 {
 public:
     enum RangeType { GlobalNamed, GlobalAnonymous, SheetAnonymous };
@@ -282,7 +282,7 @@ public:
     /**
      * Stores global anonymous database ranges.
      */
-    class SAL_DLLPRIVATE AnonDBs
+    class AnonDBs
     {
         typedef ::std::vector<std::unique_ptr<ScDBData>> DBsType;
         DBsType m_DBs;
@@ -331,9 +331,9 @@ public:
     const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
-    ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-    ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
-    std::vector<ScDBData*> GetAllDBsFromTab(SCTAB nTab);
+    SC_DLLPUBLIC ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    SC_DLLPUBLIC ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
+    SC_DLLPUBLIC std::vector<ScDBData*> GetAllDBsFromTab(SCTAB nTab);
 
     void RefreshDirtyTableColumnNames();
 
@@ -349,7 +349,7 @@ public:
                         { aRefreshHandler = rLink; }
     const Link<Timer *, void>& GetRefreshHandler() const { return aRefreshHandler; }
 
-    bool empty() const;
+    SC_DLLPUBLIC bool empty() const;
     bool operator== (const ScDBCollection& r) const;
 };
 

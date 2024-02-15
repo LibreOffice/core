@@ -55,17 +55,17 @@ namespace dbaui
 
     struct UndoManager_Impl;
     typedef ::cppu::ImplHelper1< css::document::XUndoManager > UndoManager_Base;
-    class DBACCESS_DLLPUBLIC UndoManager final : public UndoManager_Base
+    class UndoManager final : public UndoManager_Base
     {
     public:
-        UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );
+        DBACCESS_DLLPUBLIC UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );
         virtual ~UndoManager();
 
-        SfxUndoManager& GetSfxUndoManager() const;
+        DBACCESS_DLLPUBLIC SfxUndoManager& GetSfxUndoManager() const;
 
         // XInterface
-        virtual void SAL_CALL acquire(  ) noexcept override;
-        virtual void SAL_CALL release(  ) noexcept override;
+        DBACCESS_DLLPUBLIC virtual void SAL_CALL acquire(  ) noexcept override;
+        DBACCESS_DLLPUBLIC virtual void SAL_CALL release(  ) noexcept override;
 
         // XComponent equivalents
         void disposing();

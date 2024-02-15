@@ -42,6 +42,8 @@ SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)
 {
 }
 
+SvxCharView::~SvxCharView() {}
+
 void SvxCharView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);

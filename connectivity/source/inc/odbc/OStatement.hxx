@@ -52,11 +52,11 @@ namespace connectivity::odbc
 
         //************ Class: java.sql.Statement
 
-        class OOO_DLLPUBLIC_ODBCBASE OStatement_Base :
-                                        public cppu::BaseMutex,
-                                        public  OStatement_BASE,
-                                        public  ::cppu::OPropertySetHelper,
-                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
+        class OStatement_Base :
+                                public cppu::BaseMutex,
+                                public  OStatement_BASE,
+                                public  ::cppu::OPropertySetHelper,
+                                public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
 
         {
             css::sdbc::SQLWarning                             m_aLastWarning;
@@ -218,10 +218,10 @@ namespace connectivity::odbc
             virtual void SAL_CALL disposing() override;
         };
 
-        class OOO_DLLPUBLIC_ODBCBASE OStatement :
-                            public OStatement_BASE2,
-                            public css::sdbc::XBatchExecution,
-                            public css::lang::XServiceInfo
+        class OStatement :
+                        public OStatement_BASE2,
+                        public css::sdbc::XBatchExecution,
+                        public css::lang::XServiceInfo
         {
         protected:
             virtual ~OStatement() override {}

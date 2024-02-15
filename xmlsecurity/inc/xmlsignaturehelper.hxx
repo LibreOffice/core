@@ -60,7 +60,7 @@ namespace com::sun::star::xml::sax { class XWriter; }
 
  **********************************************************/
 
-class XMLSECURITY_DLLPUBLIC XMLSignatureHelper
+class XMLSignatureHelper
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
@@ -83,7 +83,7 @@ public:
     // Set the storage which should be used by the default UriBinding
     // Must be set before StartMission().
     //sODFVersion indicates  the ODF version
-    void        SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStorage, std::u16string_view sODFVersion );
+    XMLSECURITY_DLLPUBLIC void SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStorage, std::u16string_view sODFVersion );
 
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.

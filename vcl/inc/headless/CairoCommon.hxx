@@ -85,10 +85,6 @@ public:
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
 
-VCL_DLLPUBLIC size_t AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon,
-                                      const basegfx::B2DHomMatrix& rObjectToDevice, bool bPixelSnap,
-                                      bool bPixelSnapHairline);
-
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PixelSnapper
 {
 public:

@@ -38,7 +38,7 @@ namespace connectivity::odbc
                                         css::sdbc::XResultSetMetaDataSupplier,
                                         css::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OOO_DLLPUBLIC_ODBCBASE OPreparedStatement final :
+        class OPreparedStatement final :
                                     public  OStatement_BASE2,
                                     public  OPreparedStatement_BASE
         {

@@ -26,7 +26,7 @@
 #include <vcl/weld.hxx>
 #include <deque>
 
-class SFX2_DLLPUBLIC SvxCharView final : public weld::CustomWidgetController
+class SAL_DLLPUBLIC_RTTI SvxCharView final : public weld::CustomWidgetController
 {
 private:
     VclPtr<VirtualDevice> mxVirDev;
@@ -52,6 +52,7 @@ private:
     bool GetDecimalValueAndCharName(sal_UCS4& rDecimalValue, OUString& rCharName);
 public:
     SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
+    SFX2_DLLPUBLIC virtual ~SvxCharView() override;
 
     void            SetFont( const vcl::Font& rFont );
     vcl::Font const & GetFont() const { return maFont; }

@@ -82,7 +82,7 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class REPORTDESIGN_DLLPUBLIC OReportDefinition  final :public ::cppu::BaseMutex
+    class OReportDefinition  final :public ::cppu::BaseMutex
                                                     ,public ReportDefinitionBase
                                                     ,public ReportDefinitionPropertySet
                                                     ,public ::comphelper::IEmbeddedHelper
@@ -189,7 +189,7 @@ namespace reportdesign
     public:
         //TTTT Needed? Or same as above?
         static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-        static std::shared_ptr<rptui::OReportModel> getSdrModel(const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
+        REPORTDESIGN_DLLPUBLIC static std::shared_ptr<rptui::OReportModel> getSdrModel(const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
 
     private:
         DECLARE_XINTERFACE( )

@@ -37,7 +37,7 @@ namespace com::sun::star::uno {
 
 /** DropTargetListener that takes care of opening a file when it is dropped in the frame.
 */
-class UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener >
+class OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener >
 {
     private:
         /// uno service manager to create necessary services
@@ -50,7 +50,7 @@ class UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener final : public 
         DataFlavorExVector m_aFormats;
 
     public:
-        OpenFileDropTargetListener( css::uno::Reference< css::uno::XComponentContext > xContext,
+        UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener( css::uno::Reference< css::uno::XComponentContext > xContext,
                                     const css::uno::Reference< css::frame::XFrame >& xFrame );
         virtual ~OpenFileDropTargetListener() override;
 

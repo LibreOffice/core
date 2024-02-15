@@ -93,14 +93,14 @@ namespace desktop {
     };
 
     /// One instance of this per view, handles flushing callbacks
-    class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
+    class CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
     {
     public:
-        explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);
-        virtual ~CallbackFlushHandler() override;
+        DESKTOP_DLLPUBLIC explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);
+        DESKTOP_DLLPUBLIC virtual ~CallbackFlushHandler() override;
         virtual void Invoke() override;
         // TODO This should be dropped and the binary libreOfficeKitViewCallback() variants should be called?
-        void queue(const int type, const OString& data);
+        DESKTOP_DLLPUBLIC void queue(const int type, const OString& data);
 
         /// Disables callbacks on this handler. Must match with identical count
         /// of enableCallbacks. Used during painting and changing views.
@@ -119,7 +119,7 @@ namespace desktop {
         // SfxLockCallbackInterface
         virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) override;
         virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) override;
-        virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) override;
+        DESKTOP_DLLPUBLIC virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) override;
         virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
         virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
         virtual void libreOfficeKitViewAddPendingInvalidateTiles() override;

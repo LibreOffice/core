@@ -33,7 +33,7 @@
 
 #include <libxml/tree.h>
 
-class XSECXMLSEC_DLLPUBLIC XMLDocumentWrapper_XmlSecImpl final : public cppu::WeakImplHelper
+class XMLDocumentWrapper_XmlSecImpl final : public cppu::WeakImplHelper
 <
     css::xml::wrapper::XXMLDocumentWrapper,
     css::xml::sax::XDocumentHandler,
@@ -116,7 +116,7 @@ private:
     void rebuildIDLink( xmlNodePtr pNode ) const;
 
 public:
-    XMLDocumentWrapper_XmlSecImpl();
+    XSECXMLSEC_DLLPUBLIC XMLDocumentWrapper_XmlSecImpl();
     virtual ~XMLDocumentWrapper_XmlSecImpl() override;
 
     /* css::xml::wrapper::XXMLDocumentWrapper */

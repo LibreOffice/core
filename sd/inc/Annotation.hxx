@@ -73,7 +73,7 @@ struct SD_DLLPUBLIC CustomAnnotationMarker
     std::vector<basegfx::B2DPolygon> maPolygons;
 };
 
-class SD_DLLPUBLIC Annotation final : private ::cppu::BaseMutex,
+class Annotation final : private ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
                    public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
@@ -104,17 +104,17 @@ public:
 
     // css::office::XAnnotation:
     virtual css::uno::Any SAL_CALL getAnchor() override;
-    virtual css::geometry::RealPoint2D SAL_CALL getPosition() override;
+    SD_DLLPUBLIC virtual css::geometry::RealPoint2D SAL_CALL getPosition() override;
     virtual void SAL_CALL setPosition(const css::geometry::RealPoint2D & the_value) override;
     virtual css::geometry::RealSize2D SAL_CALL getSize() override;
     virtual void SAL_CALL setSize(const css::geometry::RealSize2D& _size) override;
-    virtual OUString SAL_CALL getAuthor() override;
+    SD_DLLPUBLIC virtual OUString SAL_CALL getAuthor() override;
     virtual void SAL_CALL setAuthor(const OUString & the_value) override;
-    virtual OUString SAL_CALL getInitials() override;
+    SD_DLLPUBLIC virtual OUString SAL_CALL getInitials() override;
     virtual void SAL_CALL setInitials(const OUString & the_value) override;
-    virtual css::util::DateTime SAL_CALL getDateTime() override;
+    SD_DLLPUBLIC virtual css::util::DateTime SAL_CALL getDateTime() override;
     virtual void SAL_CALL setDateTime(const css::util::DateTime & the_value) override;
-    virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
+    SD_DLLPUBLIC virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
 
     void createChangeUndo();
 

@@ -35,7 +35,7 @@ class E3dDefaultAttributes;
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) E3dExtrudeObj final : public E3dCompoundObject
+class SAL_WARN_UNUSED E3dExtrudeObj final : public E3dCompoundObject
 {
 private:
     // to allow sdr::properties::E3dExtrudeProperties access to SetGeometryValid()
@@ -53,7 +53,7 @@ private:
     virtual ~E3dExtrudeObj() override;
 
 public:
-    E3dExtrudeObj(
+    SVXCORE_DLLPUBLIC E3dExtrudeObj(
         SdrModel& rSdrModel,
         const E3dDefaultAttributes& rDefault,
         basegfx::B2DPolyPolygon aPP,

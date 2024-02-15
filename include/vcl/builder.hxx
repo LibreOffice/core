@@ -409,24 +409,24 @@ private:
 namespace BuilderUtils
 {
     //apply the properties of rProps to pWindow
-    UNLESS_MERGELIBS(VCL_DLLPUBLIC) void set_properties(vcl::Window *pWindow, const VclBuilder::stringmap &rProps);
+    void set_properties(vcl::Window *pWindow, const VclBuilder::stringmap &rProps);
 
     //Convert _ gtk markup to ~ vcl markup
-    UNLESS_MERGELIBS(VCL_DLLPUBLIC) OUString convertMnemonicMarkup(std::u16string_view rIn);
+    OUString convertMnemonicMarkup(std::u16string_view rIn);
 
-    UNLESS_MERGELIBS(VCL_DLLPUBLIC) OUString extractCustomProperty(VclBuilder::stringmap &rMap);
+    OUString extractCustomProperty(VclBuilder::stringmap &rMap);
 
-    UNLESS_MERGELIBS(VCL_DLLPUBLIC) bool extractDropdown(VclBuilder::stringmap &rMap);
+    bool extractDropdown(VclBuilder::stringmap &rMap);
 
     //add a default value of 25 width-chars to a map if width-chars not set
-    UNLESS_MERGELIBS(VCL_DLLPUBLIC) void ensureDefaultWidthChars(VclBuilder::stringmap &rMap);
+    void ensureDefaultWidthChars(VclBuilder::stringmap &rMap);
 
     //Helpers to retrofit all the existing code to the builder
-    UNLESS_MERGELIBS(VCL_DLLPUBLIC) void reorderWithinParent(std::vector< vcl::Window*>& rChilds, bool bIsButtonBox);
-    UNLESS_MERGELIBS(VCL_DLLPUBLIC) void reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
+    void reorderWithinParent(std::vector< vcl::Window*>& rChilds, bool bIsButtonBox);
+    void reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
 
     //Convert an accessibility role name to accessibility role number
-    UNLESS_MERGELIBS(VCL_DLLPUBLIC) sal_Int16 getRoleFromName(const OUString& roleName);
+    sal_Int16 getRoleFromName(const OUString& roleName);
 }
 
 template <typename T>

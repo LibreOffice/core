@@ -52,19 +52,19 @@ namespace svx
     class SvxShowCharSetAcc;
 }
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxShowCharSet : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SvxShowCharSet : public weld::CustomWidgetController
 {
 protected:
     VclPtr<VirtualDevice> mxVirDev;
     vcl::Font maFont;
     std::unique_ptr<weld::ScrolledWindow> mxScrollArea;
 public:
-    SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrollArea, const VclPtr<VirtualDevice>& rVirDev);
+    SVX_DLLPUBLIC SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrollArea, const VclPtr<VirtualDevice>& rVirDev);
     virtual ~SvxShowCharSet() override;
 
     virtual void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
-    void                    SelectCharacter( sal_UCS4 cNew );
+    SVX_DLLPUBLIC void      SelectCharacter( sal_UCS4 cNew );
     virtual sal_UCS4        GetSelectCharacter() const;
     virtual sal_UCS4        GetCharFromIndex(int index) const;
     void                    createContextMenu(const Point& rPosition);
@@ -76,9 +76,9 @@ public:
     void            SetPreSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aPreSelectHdl = rHdl; }
     void            SetFavClickHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aFavClickHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
-    void            SetFont( const vcl::Font& rFont );
+    SVX_DLLPUBLIC void SetFont( const vcl::Font& rFont );
     vcl::Font const & GetFont() const { return maFont; }
-    FontCharMapRef const & GetFontCharMap();
+    SVX_DLLPUBLIC FontCharMapRef const & GetFontCharMap();
     bool            isFavChar(std::u16string_view sTitle, std::u16string_view rFont);
     void            getFavCharacterList(); //gets both Fav char and Fav char font list
     void            updateFavCharacterList(const OUString& rChar, const OUString& rFont);
@@ -153,7 +153,7 @@ protected:
     void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
-    DECL_DLLPRIVATE_LINK(VscrollHdl, weld::ScrolledWindow&, void);
+    DECL_LINK(VscrollHdl, weld::ScrolledWindow&, void);
     void ContextMenuSelect(std::u16string_view rIdent);
 
     void            init();

@@ -30,7 +30,7 @@
 
 namespace vcl::unotools
 {
-    class VCL_DLLPUBLIC VclCanvasBitmap final :
+    class VclCanvasBitmap final :
         public cppu::WeakImplHelper< css::rendering::XIntegerReadOnlyBitmap,
                                      css::rendering::XBitmapPalette,
                                      css::rendering::XIntegerBitmapColorSpace >
@@ -55,7 +55,7 @@ namespace vcl::unotools
         sal_Int32                                      m_nIndexIndex;
         bool                                           m_bPalette;
 
-        SAL_DLLPRIVATE void setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift );
+        void setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift );
         BitmapScopedReadAccess& getBitmapReadAccess();
         BitmapScopedReadAccess& getAlphaReadAccess();
 
@@ -63,15 +63,15 @@ namespace vcl::unotools
 
     public:
         // XBitmap
-        virtual css::geometry::IntegerSize2D SAL_CALL getSize() override;
-        virtual sal_Bool SAL_CALL hasAlpha(  ) override;
-        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize, sal_Bool beFast ) override;
+        VCL_DLLPUBLIC virtual css::geometry::IntegerSize2D SAL_CALL getSize() override;
+        VCL_DLLPUBLIC virtual sal_Bool SAL_CALL hasAlpha(  ) override;
+        VCL_DLLPUBLIC virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize, sal_Bool beFast ) override;
 
         // XIntegerReadOnlyBitmap
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerRectangle2D& rect ) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerPoint2D& pos ) override;
+        VCL_DLLPUBLIC virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerRectangle2D& rect ) override;
+        VCL_DLLPUBLIC virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerPoint2D& pos ) override;
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::rendering::XBitmapPalette > getPalette(  );
+        VCL_DLLPUBLIC css::uno::Reference< css::rendering::XBitmapPalette > getPalette(  );
         virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) override;
 
         // XBitmapPalette
@@ -97,11 +97,11 @@ namespace vcl::unotools
         virtual ::sal_Int8 SAL_CALL getEndianness(  ) override;
         virtual css::uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const css::uno::Sequence< ::sal_Int8 >& deviceColor, const css::uno::Reference< css::rendering::XColorSpace >& targetColorSpace ) override;
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const css::uno::Sequence< ::sal_Int8 >& deviceColor, const css::uno::Reference< css::rendering::XIntegerBitmapColorSpace >& targetColorSpace ) override;
-        virtual css::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertIntegerToRGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
-        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
+        VCL_DLLPUBLIC virtual css::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertIntegerToRGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
+        VCL_DLLPUBLIC virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
         virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const css::uno::Sequence< css::rendering::RGBColor >& rgbColor ) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
+        VCL_DLLPUBLIC virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const css::uno::Sequence< css::rendering::RGBColor >& rgbColor ) override;
+        VCL_DLLPUBLIC virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
 
         /** Create API wrapper for given BitmapEx
@@ -110,7 +110,7 @@ namespace vcl::unotools
             Bitmap to wrap. As usual, changes to the original bitmap
             are not reflected in this object (copy on write).
          */
-        explicit VclCanvasBitmap( const BitmapEx& rBitmap );
+        VCL_DLLPUBLIC  explicit VclCanvasBitmap( const BitmapEx& rBitmap );
 
         /// Retrieve contained bitmap. Call me with locked Solar mutex!
         const BitmapEx& getBitmapEx() const { return m_aBmpEx; }

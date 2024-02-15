@@ -198,7 +198,7 @@ enum class SwTab
 class SdrDropMarkerOverlay;
 struct SwColCache;
 
-class SW_DLLPUBLIC SwFEShell : public SwEditShell
+class SwFEShell : public SwEditShell
 {
 private:
     mutable std::unique_ptr<SwColCache> m_pColumnCache;
@@ -212,38 +212,38 @@ private:
     /// table copied to the clipboard by the last private copy
     bool m_bTableCopied;
 
-    SAL_DLLPRIVATE SwFlyFrame *FindFlyFrame( const css::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
+    SwFlyFrame *FindFlyFrame( const css::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
 
     /// Terminate actions for all shells and call ChangeLink.
-    SAL_DLLPRIVATE void EndAllActionAndCall();
+    void EndAllActionAndCall();
 
-    SAL_DLLPRIVATE void ScrollTo( const Point &rPt );
+    void ScrollTo( const Point &rPt );
 
-    SAL_DLLPRIVATE void ChangeOpaque( SdrLayerID nLayerId );
+    void ChangeOpaque( SdrLayerID nLayerId );
 
     /** Used for mouse operations on a table:
      @return a cell frame that is 'close' to rPt. */
-    SAL_DLLPRIVATE const SwFrame *GetBox( const Point &rPt, bool* pbRow = nullptr, bool* pbCol = nullptr ) const;
+    const SwFrame *GetBox( const Point &rPt, bool* pbRow = nullptr, bool* pbCol = nullptr ) const;
 
     // 0 == not in any column.
-    SAL_DLLPRIVATE static sal_uInt16 GetCurColNum_( const SwFrame *pFrame,
+    static sal_uInt16 GetCurColNum_( const SwFrame *pFrame,
                           SwGetCurColNumPara* pPara );
 
-    SAL_DLLPRIVATE void GetTabCols_(SwTabCols &rToFill, const SwFrame *pBox) const;
-    SAL_DLLPRIVATE void GetTabRows_(SwTabCols &rToFill, const SwFrame *pBox) const;
+    void GetTabCols_(SwTabCols &rToFill, const SwFrame *pBox) const;
+    void GetTabRows_(SwTabCols &rToFill, const SwFrame *pBox) const;
 
-    SAL_DLLPRIVATE bool ImpEndCreate();
+    bool ImpEndCreate();
 
     /// Methods for copying of draw objects.
-    SAL_DLLPRIVATE bool CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
+    bool CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                                 const Point& rInsPt, bool bIsMove,
                                 bool bSelectInsert );
 
     /// Get list of marked SdrObjects;
     /// helper method for GetSelFrameType, IsSelContainsControl.
-    SAL_DLLPRIVATE const SdrMarkList* GetMarkList_() const;
+    const SdrMarkList* GetMarkList_() const;
 
-    SAL_DLLPRIVATE bool CheckHeadline( bool bRepeat ) const;
+    bool CheckHeadline( bool bRepeat ) const;
 
     using SwEditShell::Copy;
 
@@ -256,27 +256,27 @@ public:
     virtual ~SwFEShell() override;
 
     /// Copy and Paste methods for internal clipboard.
-    void Copy( SwDoc& rClpDoc, const OUString* pNewClpText = nullptr );
-    bool Paste( SwDoc& rClpDoc, bool bNestedTable = false );
+    SW_DLLPUBLIC void Copy( SwDoc& rClpDoc, const OUString* pNewClpText = nullptr );
+    SW_DLLPUBLIC bool Paste( SwDoc& rClpDoc, bool bNestedTable = false );
 
     /// Paste some pages into another doc - used in mailmerge.
-    void PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
+    SW_DLLPUBLIC void PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
 
     /// Copy-Method for Drag&Drop
-    bool Copy( SwFEShell&, const Point& rSttPt, const Point& rInsPt,
+    SW_DLLPUBLIC bool Copy( SwFEShell&, const Point& rSttPt, const Point& rInsPt,
                bool bIsMove = false, bool bSelectInsert = true );
 
     void SelectFlyFrame( SwFlyFrame& rFrame );
 
-    void UnfloatFlyFrame();
+    SW_DLLPUBLIC void UnfloatFlyFrame();
 
     /// Is selected frame within another frame?
-    const SwFrameFormat* IsFlyInFly();
+    SW_DLLPUBLIC const SwFrameFormat* IsFlyInFly();
 
     /** If an object has been given, exactly this object is selected
      (instead of searching over position). */
-    bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = nullptr );
-    void DelSelectedObj();
+    SW_DLLPUBLIC bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = nullptr );
+    SW_DLLPUBLIC void DelSelectedObj();
 
     /** Move selection upwards or downwards (Z-Order).
      TRUE = to top or bottom.
@@ -304,13 +304,13 @@ public:
     /** @return if Upper of frame at current position is section frame
      Currently only used by the rules. To be replaced by something more
      sophisticated one day. */
-    bool IsDirectlyInSection() const;
+    SW_DLLPUBLIC bool IsDirectlyInSection() const;
 
     /** For return values see above FrameType.
      pPt: Cursr or DocPos respectively; bStopAtFly: Stop at flys or continue over anchor.
      Although (0,TRUE) is kind of a standard, the parameters are not defaulted here
      in order to force more conscious use especially of bStopAtFly. */
-    FrameTypeFlags GetFrameType( const Point *pPt, bool bStopAtFly ) const;
+    SW_DLLPUBLIC FrameTypeFlags GetFrameType( const Point *pPt, bool bStopAtFly ) const;
     FrameTypeFlags GetSelFrameType() const;               //Selection (Drawing)
 
     /** check whether selected frame contains a control;
@@ -326,12 +326,12 @@ public:
     SwRect  GetObjRect() const;
 
     /// For moving flys with keyboard.
-    SwRect  GetFlyRect() const;
+    SW_DLLPUBLIC SwRect  GetFlyRect() const;
     /** i#17567 - adjustments to allow negative vertical positions for fly frames anchored
               to paragraph or to character.
      i#18732 - adjustments for new option 'FollowTextFlow'
      i#22341 - adjustments for new vertical alignment at top of line */
-    void CalcBoundRect( SwRect& _orRect,
+    SW_DLLPUBLIC void CalcBoundRect( SwRect& _orRect,
                         const RndStdIds _nAnchorId,
                         const sal_Int16 _eHoriRelOrient = css::text::RelOrientation::FRAME,
                         const sal_Int16 _eVertRelOrient = css::text::RelOrientation::FRAME,
@@ -370,7 +370,7 @@ public:
     const SwFrameFormat* GetFormatFromAnyObj( const Point& rPt ) const;
 
     /** Which Protection is set at selected object? */
-    FlyProtectFlags IsSelObjProtected( FlyProtectFlags eType ) const;
+    SW_DLLPUBLIC FlyProtectFlags IsSelObjProtected( FlyProtectFlags eType ) const;
 
     /** Deliver graphic in rName besides graphic name. If graphic is
      linked give name with path. rbLink is TRUE if graphic is linked. */
@@ -384,29 +384,29 @@ public:
     bool IsObjDecorative() const;
     void SetObjDecorative(bool isDecorative);
 
-    bool IsFrameSelected() const;
+    SW_DLLPUBLIC bool IsFrameSelected() const;
     bool GetFlyFrameAttr( SfxItemSet &rSet ) const;
-    bool SetFlyFrameAttr( SfxItemSet &rSet );
+    SW_DLLPUBLIC bool SetFlyFrameAttr( SfxItemSet &rSet );
     static SfxItemSetFixed<RES_VERT_ORIENT, RES_ANCHOR> makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor);
     void ResetFlyFrameAttr( const SfxItemSet* pSet );
-    const SwFrameFormat *NewFlyFrame( const SfxItemSet &rSet, bool bAnchValid = false,
+    SW_DLLPUBLIC const SwFrameFormat *NewFlyFrame( const SfxItemSet &rSet, bool bAnchValid = false,
                          SwFrameFormat *pParent = nullptr );
-    void SetFlyPos( const Point &rAbsPos);
-    Point FindAnchorPos( const Point &rAbsPos, bool bMoveIt = false );
+    SW_DLLPUBLIC void SetFlyPos( const Point &rAbsPos);
+    SW_DLLPUBLIC Point FindAnchorPos( const Point &rAbsPos, bool bMoveIt = false );
 
     /** Determines whether a frame or its environment is vertically formatted and right-to-left.
      also determines, if frame or its environment is in Mongolian layout (vertical left-to-right)
      - add output parameter <bVertL2R> */
-    bool IsFrameVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
+    SW_DLLPUBLIC bool IsFrameVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
 
     SwFrameFormat* GetSelectedFrameFormat() const; ///< If frame then frame style, else 0.
     void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point const * pDocPos = nullptr ); ///< If frame then set frame style.
 
     // Get selected fly
-    SwFlyFrame* GetSelectedFlyFrame() const;
+    SW_DLLPUBLIC SwFlyFrame* GetSelectedFlyFrame() const;
 
     // Get current fly in which the cursor is positioned
-    SwFlyFrame* GetCurrFlyFrame(const bool bCalcFrame = true) const;
+    SW_DLLPUBLIC SwFlyFrame* GetCurrFlyFrame(const bool bCalcFrame = true) const;
 
     // Get selected fly, but if none Get current fly in which the cursor is positioned
     SwFlyFrame* GetSelectedOrCurrFlyFrame() const;
@@ -421,7 +421,7 @@ public:
                                 { return GotoObj( false, eType); }
 
     /// Iterate over flys  - for Basic-collections.
-    size_t GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes = false ) const;
+    SW_DLLPUBLIC size_t GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes = false ) const;
     const SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes = false) const;
 
     std::vector<SwFrameFormat const*> GetFlyFrameFormats(
@@ -432,7 +432,7 @@ public:
 
     /// Get FlyFrameFormat; for UI macro linkage at Flys
     const SwFrameFormat* GetFlyFrameFormat() const;
-          SwFrameFormat* GetFlyFrameFormat();
+    SW_DLLPUBLIC SwFrameFormat* GetFlyFrameFormat();
 
     /** OLE. Server requires new size. Desired values are adjusted as frame attributes.
      If the values are not allowed, the formatting clips and determines scaling.
@@ -463,16 +463,16 @@ public:
     void SetCheckForOLEInCaption( bool bFlag )  { m_bCheckForOLEInCaption = bFlag; }
 
     /// Set name at selected FlyFrame.
-    void SetFlyName( const OUString& rName );
+    SW_DLLPUBLIC void SetFlyName( const OUString& rName );
     OUString GetFlyName() const;
 
     /// get reference to OLE object (if there is one) for selected FlyFrame
     css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef() const;
 
     /// Created unique name for frame.
-    OUString GetUniqueGrfName() const;
-    OUString GetUniqueOLEName() const;
-    OUString GetUniqueFrameName() const;
+    SW_DLLPUBLIC OUString GetUniqueGrfName() const;
+    SW_DLLPUBLIC OUString GetUniqueOLEName() const;
+    SW_DLLPUBLIC OUString GetUniqueFrameName() const;
 
     /// Jump to named Fly (graphic/OLE).
     bool GotoFly( const OUString& rName, FlyCntType eType,
@@ -504,7 +504,7 @@ public:
     const SdrObject* GetBestObject(bool bNext, GotoObjFlags eType, bool bFlat = true,
                                    const svx::ISdrObjectFilter* pFilter = nullptr,
                                    bool* pbWrapped = nullptr);
-    bool GotoObj( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny);
+    SW_DLLPUBLIC bool GotoObj( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny);
 
     /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
     void SetDragMode( SdrDragMode eSdrDragMode );
@@ -518,12 +518,12 @@ public:
     // RotGrfFlyFrame: check if RotationMode is possible
     bool IsRotationOfSwGrfNodePossible() const;
 
-    size_t IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
+    SW_DLLPUBLIC size_t IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
     bool IsObjSelected( const SdrObject& rObj ) const;
     bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
     const SdrMarkList* GetMarkList() const{ return GetMarkList_(); };
 
-    void EndTextEdit();             ///< Deletes object if required.
+    SW_DLLPUBLIC void EndTextEdit();             ///< Deletes object if required.
 
     /** Anchor type of selected object, RndStdIds::UNKNOWN if ambiguous or in case of frame selection.
      Else RndStdIds::FLY_AT_PAGE or RndStdIds::FLY_AT_PARA. */
@@ -534,10 +534,10 @@ public:
      or SdrCreateCmd::NextPoint for a polygon may be relevant.
      After RESTRAINTEND the object is created and selected.
      BreakCreate interrupts the process. In this case no object is selected. */
-    bool BeginCreate( SdrObjKind eSdrObjectKind, const Point &rPos );
+    SW_DLLPUBLIC bool BeginCreate( SdrObjKind eSdrObjectKind, const Point &rPos );
     bool BeginCreate( SdrObjKind eSdrObjectKind, SdrInventor eObjInventor, const Point &);
-    void MoveCreate ( const Point &rPos );
-    bool EndCreate  ( SdrCreateCmd eSdrCreateCmd );
+    SW_DLLPUBLIC void MoveCreate ( const Point &rPos );
+    SW_DLLPUBLIC bool EndCreate  ( SdrCreateCmd eSdrCreateCmd );
     void BreakCreate();
     bool IsDrawCreate() const;
     void CreateDefaultShape(SdrObjKind eSdrObjectKind, const tools::Rectangle& rRect, sal_uInt16 nSlotId);
@@ -561,7 +561,7 @@ public:
     /** frmatr.hxx. Here no enum because of dependencies.
      bool value only for internal use! Anchor is newly set according
      to current document position. Anchor is not re-set. */
-    void ChgAnchor( RndStdIds eAnchorId, bool bSameOnly = false,
+    SW_DLLPUBLIC void ChgAnchor( RndStdIds eAnchorId, bool bSameOnly = false,
                                    bool bPosCorr = true );
 
     bool SetDrawingAttr( SfxItemSet &rSet );
@@ -578,7 +578,7 @@ public:
     bool IsAlignPossible() const;
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
-    void Insert(const OUString& rGrfName,
+    SW_DLLPUBLIC void Insert(const OUString& rGrfName,
                 const OUString& rFltName,
                 const Graphic* pGraphic,
                 const SfxItemSet* pFlyAttrSet );
@@ -604,50 +604,50 @@ public:
     Point GetRelativePagePosition(const Point& rDocPos);
 
     /// Hide or show layout-selection and pass call to CursorSh.
-    void ShellLoseFocus();
+    SW_DLLPUBLIC void ShellLoseFocus();
     void ShellGetFocus();
 
     /// PageDescriptor-interface
     void   ChgCurPageDesc( const SwPageDesc& );
-    size_t GetCurPageDesc( const bool bCalcFrame = true ) const;
+    SW_DLLPUBLIC size_t GetCurPageDesc( const bool bCalcFrame = true ) const;
     size_t GetMousePageDesc( const Point &rPt ) const;
-    size_t GetPageDescCnt() const;
-    SwPageDesc* FindPageDescByName( const OUString& rName,
+    SW_DLLPUBLIC size_t GetPageDescCnt() const;
+    SW_DLLPUBLIC SwPageDesc* FindPageDescByName( const OUString& rName,
                                     bool bGetFromPool = false,
                                     size_t* pPos = nullptr );
 
-    const SwPageDesc& GetPageDesc( size_t i ) const;
-    void  ChgPageDesc( size_t i, const SwPageDesc& );
+    SW_DLLPUBLIC const SwPageDesc& GetPageDesc( size_t i ) const;
+    SW_DLLPUBLIC void  ChgPageDesc( size_t i, const SwPageDesc& );
     /** if inside all selection only one PageDesc, @return this.
      Otherwise @return 0 pointer */
-    const SwPageDesc* GetSelectedPageDescs() const;
+    SW_DLLPUBLIC const SwPageDesc* GetSelectedPageDescs() const;
 
-    const SwRect& GetAnyCurRect( CurRectType eType,
+    SW_DLLPUBLIC const SwRect& GetAnyCurRect( CurRectType eType,
                                  const Point* pPt = nullptr,
                                  const css::uno::Reference < css::embed::XEmbeddedObject >& =
                                  css::uno::Reference < css::embed::XEmbeddedObject >() ) const;
 
     /// Page number of the page containing Point, O if no page.
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;
-    bool GetPageNumber( tools::Long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
+    SW_DLLPUBLIC bool GetPageNumber( tools::Long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
                 SfxItemSet* pFlyAttrSet );
     bool    FinishOLEObj(); ///< Shutdown server.
 
     void GetTableAttr( SfxItemSet & ) const;
-    void SetTableAttr( const SfxItemSet & );
+    SW_DLLPUBLIC void SetTableAttr( const SfxItemSet & );
 
     bool HasWholeTabSelection() const;
 
     /// Is content of a table cell or at least a table cell completely selected?
     bool HasBoxSelection() const;
 
-    void InsertRow( sal_uInt16 nCnt, bool bBehind );
-    void InsertCol( sal_uInt16 nCnt, bool bBehind );  // 0 == at the end.
-    bool DeleteCol();
+    SW_DLLPUBLIC void InsertRow( sal_uInt16 nCnt, bool bBehind );
+    SW_DLLPUBLIC void InsertCol( sal_uInt16 nCnt, bool bBehind );  // 0 == at the end.
+    SW_DLLPUBLIC bool DeleteCol();
     void DeleteTable();
-    bool DeleteRow(bool bCompleteTable = false);
+    SW_DLLPUBLIC bool DeleteRow(bool bCompleteTable = false);
 
     SwTable::SearchType GetTableInsertMode() const         { return m_eTableInsertMode; }
     void SetTableInsertMode( SwTable::SearchType eFlag )  { m_eTableInsertMode = eFlag; }
@@ -661,12 +661,12 @@ public:
 
     /// Split cell vertically or horizontally.
     void SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight );
-    bool Sort(const SwSortOptions&);    // sorting
+    SW_DLLPUBLIC bool Sort(const SwSortOptions&);    // sorting
 
-    void SetRowHeight( const SwFormatFrameSize &rSz );
+    SW_DLLPUBLIC void SetRowHeight( const SwFormatFrameSize &rSz );
 
     /// Pointer must be destroyed by caller != 0.
-    std::unique_ptr<SwFormatFrameSize> GetRowHeight() const;
+    SW_DLLPUBLIC std::unique_ptr<SwFormatFrameSize> GetRowHeight() const;
 
     void SetRowSplit( const SwFormatRowSplit &rSz );
     std::unique_ptr<SwFormatRowSplit> GetRowSplit() const;
@@ -680,16 +680,16 @@ public:
     void GetTabBorders(       SfxItemSet& rSet) const;
     void SetTabLineStyle(const Color* pColor, bool bSetLine = false, const editeng::SvxBorderLine* pBorderLine = nullptr);
 
-    void SetTabBackground( const SvxBrushItem &rNew );
+    SW_DLLPUBLIC void SetTabBackground( const SvxBrushItem &rNew );
     void GetTabBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const;
 
-    void SetBoxBackground( const SvxBrushItem &rNew );
+    SW_DLLPUBLIC void SetBoxBackground( const SvxBrushItem &rNew );
     bool GetBoxBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const; ///< FALSE ambiguous.
 
     void SetBoxDirection( const SvxFrameDirectionItem& rNew );
     bool GetBoxDirection( std::unique_ptr<SvxFrameDirectionItem>& rToFill ) const; ///< FALSE ambiguous.
 
-    void SetRowBackground( const SvxBrushItem &rNew );
+    SW_DLLPUBLIC void SetRowBackground( const SvxBrushItem &rNew );
     bool GetRowBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const; ///< FALSE ambiguous.
 
     SwTab WhichMouseTabCol( const Point &rPt ) const;
@@ -707,16 +707,16 @@ public:
     void GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const;
     void SetMouseTabRows( const SwTabCols &rNew, bool bCurColOnly, const Point &rPt );
 
-    void ProtectCells();    /**< If a table selection exists it is destroyed in case
+    SW_DLLPUBLIC void ProtectCells();    /**< If a table selection exists it is destroyed in case
                              cursor is not allowed in readonly. */
-    void UnProtectCells();  ///< Refers to table selection.
+    SW_DLLPUBLIC void UnProtectCells();  ///< Refers to table selection.
     void UnProtectTables();   ///< Unprotect all tables in selection.
     bool HasTableAnyProtection( const OUString* pTableName,
                               bool* pFullTableProtection );
     bool CanUnProtectCells() const;
 
     sal_uInt16 GetRowsToRepeat() const;
-    void SetRowsToRepeat( sal_uInt16 nNumOfRows );
+    SW_DLLPUBLIC void SetRowsToRepeat( sal_uInt16 nNumOfRows );
     sal_uInt16 GetVirtPageNum() const;
 
     /** @return the number of table rows currently selected
@@ -733,7 +733,7 @@ public:
 
     /// Set table style of the current table.
     void SetTableStyle(const OUString& rStyleName);
-    bool SetTableStyle(const SwTableAutoFormat& rNew);
+    SW_DLLPUBLIC bool SetTableStyle(const SwTableAutoFormat& rNew);
 
     /// Update the direct formatting according to the current table style.
     /// @param pTableNode Table node to update.  When nullptr, current cursor position is used.
@@ -741,7 +741,7 @@ public:
     /// @param pStyleName new style to apply
     bool UpdateTableStyleFormatting(SwTableNode *pTableNode = nullptr, bool bResetDirect = false, OUString const* pStyleName = nullptr);
 
-    bool GetTableAutoFormat( SwTableAutoFormat& rGet );
+    SW_DLLPUBLIC bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 
     void SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 nDiff );
 
@@ -749,7 +749,7 @@ public:
 
     /** Phy: real page count.
      Virt: consider offset that may have been set by user. */
-    sal_uInt16  GetPhyPageNum() const;
+    SW_DLLPUBLIC sal_uInt16 GetPhyPageNum() const;
 
     void SetNewPageOffset( sal_uInt16 nOffset );
     void SetPageOffset( sal_uInt16 nOffset );   ///< Changes last page offset.
@@ -762,23 +762,23 @@ public:
                       const bool bCpyBrd );
 
     /// The ruler needs some information too.
-    sal_uInt16 GetCurColNum( SwGetCurColNumPara* pPara = nullptr ) const; //0 == not in any column.
+    SW_DLLPUBLIC sal_uInt16 GetCurColNum( SwGetCurColNumPara* pPara = nullptr ) const; //0 == not in any column.
     sal_uInt16 GetCurMouseColNum( const Point &rPt ) const;
     size_t GetCurTabColNum() const;     //0 == not in any table.
     size_t GetCurMouseTabColNum( const Point &rPt ) const;
     sal_uInt16 GetCurOutColNum() const;  ///< Current outer column.
 
     bool IsColRightToLeft() const;
-    bool IsTableRightToLeft() const;
+    SW_DLLPUBLIC bool IsTableRightToLeft() const;
     bool IsMouseTableRightToLeft( const Point &rPt ) const;
     bool IsTableVertical() const;
 
     bool IsLastCellInRow() const;
 
     /// Width of current range for column-dialog.
-    tools::Long GetSectionWidth( SwFormat const & rFormat ) const;
+    SW_DLLPUBLIC tools::Long GetSectionWidth( SwFormat const & rFormat ) const;
 
-    void GetConnectableFrameFormats
+    SW_DLLPUBLIC void GetConnectableFrameFormats
     (SwFrameFormat & rFormat, const OUString & rReference, bool bSuccessors,
      std::vector< OUString > & aPrevPageVec,
      std::vector< OUString > & aThisPageVec,
@@ -819,7 +819,7 @@ public:
     void ToggleHeaderFooterEdit( );
     static void SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj, sal_uInt16 nSlotId);
 
-    SAL_DLLPRIVATE void ClearColumnRowCache(SwTabFrame const*);
+    void ClearColumnRowCache(SwTabFrame const*);
 };
 
 void ClearFEShellTabCols(SwDoc & rDoc, SwTabFrame const*const pFrame);

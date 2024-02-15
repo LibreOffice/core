@@ -56,7 +56,7 @@ struct ResultSet_Impl;
  *
  * @see ResultSetDataSupplier
  */
-class UCBHELPER_DLLPUBLIC ResultSet final :
+class ResultSet final :
                 public cppu::WeakImplHelper<
                     css::lang::XServiceInfo,
                     css::lang::XComponent,
@@ -78,7 +78,7 @@ public:
       *        shall be able to obtain the values.
       * @param rDataSupplier is a supplier for the resultset data.
       */
-    ResultSet(
+    UCBHELPER_DLLPUBLIC ResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier );
@@ -92,7 +92,7 @@ public:
       * @param rxEnv is the environment for interactions, progress propagation,
       *        ...
       */
-    ResultSet(
+    UCBHELPER_DLLPUBLIC ResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
@@ -253,13 +253,13 @@ public:
       * @param nOld is the old count of rows; must be non-negative.
       * @param nnew is the new count of rows; must be non-negative.
       */
-    void rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew );
+    UCBHELPER_DLLPUBLIC void rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew );
 
     /**
       * This method should be called by the data supplier for the result set
       * to indicate that there were all rows obtained from the data source.
       */
-    void rowCountFinal();
+    UCBHELPER_DLLPUBLIC void rowCountFinal();
 
     /**
       * This method returns a sequence containing all properties ( not the
@@ -267,7 +267,7 @@ public:
       *
       * @return a sequence of properties.
       */
-    const css::uno::Sequence< css::beans::Property >&
+    UCBHELPER_DLLPUBLIC const css::uno::Sequence< css::beans::Property >&
     getProperties() const;
 
     /**
@@ -276,7 +276,7 @@ public:
       *
       * @return an environment or an empty reference.
       */
-    const css::uno::Reference< css::ucb::XCommandEnvironment >&
+    UCBHELPER_DLLPUBLIC const css::uno::Reference< css::ucb::XCommandEnvironment >&
     getEnvironment() const;
 };
 

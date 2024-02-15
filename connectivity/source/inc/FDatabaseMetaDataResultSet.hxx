@@ -54,11 +54,11 @@ namespace connectivity
     //  typedef ORefVector<ORowSetValue>    ORow;
     //  typedef ORefVector<ORow>            ORows;
 
-    class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSet :
-                                        public cppu::BaseMutex,
-                                        public  ODatabaseMetaDataResultSet_BASE,
-                                        public  ::comphelper::OPropertyContainer,
-                                        public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
+    class ODatabaseMetaDataResultSet :
+                                public cppu::BaseMutex,
+                                public  ODatabaseMetaDataResultSet_BASE,
+                                public  ::comphelper::OPropertyContainer,
+                                public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
     {
 
     public:
@@ -130,22 +130,22 @@ namespace connectivity
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex);
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
+        OOO_DLLPUBLIC_DBTOOLS virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        OOO_DLLPUBLIC_DBTOOLS virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
         virtual ~ODatabaseMetaDataResultSet() override;
     public:
 
-        virtual void    SAL_CALL acquire() noexcept override;
-        virtual void    SAL_CALL release() noexcept override;
+        OOO_DLLPUBLIC_DBTOOLS virtual void    SAL_CALL acquire() noexcept override;
+        OOO_DLLPUBLIC_DBTOOLS virtual void    SAL_CALL release() noexcept override;
 
         /// default construction
         ODatabaseMetaDataResultSet();
         /// construction of a pre-defined result set type
-        ODatabaseMetaDataResultSet( MetaDataResultSetType _eType );
+        OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSet( MetaDataResultSetType _eType );
 
-        void setRows(ORows&& _rRows);
+        OOO_DLLPUBLIC_DBTOOLS void setRows(ORows&& _rRows);
 
         // XServiceInfo
 
@@ -156,11 +156,11 @@ namespace connectivity
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        OOO_DLLPUBLIC_DBTOOLS virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         //XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        OOO_DLLPUBLIC_DBTOOLS virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
         // XResultSet
         virtual sal_Bool SAL_CALL next(  ) override;
         virtual sal_Bool SAL_CALL isBeforeFirst(  ) override;
@@ -238,31 +238,31 @@ namespace connectivity
         // some methods to get already defined ORowSetValues
         // this increase the reuse of ORowSetValues
         /// return an empty ORowSetValueDecorator
-        static ORowSetValueDecoratorRef const & getEmptyValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getEmptyValue();
         /// return an ORowSetValueDecorator with 0 as value
-        static ORowSetValueDecoratorRef const & get0Value();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & get0Value();
         /// return an ORowSetValueDecorator with 1 as value
-        static ORowSetValueDecoratorRef const & get1Value();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & get1Value();
         /// return an ORowSetValueDecorator with ColumnSearch::BASIC as value
-        static ORowSetValueDecoratorRef const & getBasicValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getBasicValue();
         /// return an ORowSetValueDecorator with string SELECT as value
-        static ORowSetValueDecoratorRef const & getSelectValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getSelectValue();
         /// return an ORowSetValueDecorator with string INSERT as value
-        static ORowSetValueDecoratorRef const & getInsertValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getInsertValue();
         /// return an ORowSetValueDecorator with string DELETE as value
-        static ORowSetValueDecoratorRef const & getDeleteValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getDeleteValue();
         /// return an ORowSetValueDecorator with string UPDATE as value
-        static ORowSetValueDecoratorRef const & getUpdateValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getUpdateValue();
         /// return an ORowSetValueDecorator with string CREATE as value
-        static ORowSetValueDecoratorRef const & getCreateValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getCreateValue();
         /// return an ORowSetValueDecorator with string READ as value
-        static ORowSetValueDecoratorRef const & getReadValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getReadValue();
         /// return an ORowSetValueDecorator with string ALTER as value
-        static ORowSetValueDecoratorRef const & getAlterValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getAlterValue();
         /// return an ORowSetValueDecorator with string DROP as value
-        static ORowSetValueDecoratorRef const & getDropValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getDropValue();
         /// return an ORowSetValueDecorator with string ' as value
-        static ORowSetValueDecoratorRef const & getQuoteValue();
+        OOO_DLLPUBLIC_DBTOOLS static ORowSetValueDecoratorRef const & getQuoteValue();
 
     };
 }

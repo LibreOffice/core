@@ -53,7 +53,7 @@ namespace connectivity::odbc
                                                    css::sdbc::XCloseable,
                                                    css::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
-        class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaDataResultSet :
+        class ODatabaseMetaDataResultSet :
                                     public cppu::BaseMutex,
                                     public  ODatabaseMetaDataResultSet_BASE,
                                     public  ::cppu::OPropertySetHelper,

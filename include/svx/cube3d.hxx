@@ -44,7 +44,7 @@ class E3dDefaultAttributes;
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC E3dCubeObj final : public E3dCompoundObject
+class SAL_WARN_UNUSED E3dCubeObj final : public E3dCompoundObject
 {
     // Parameter
     basegfx::B3DPoint                   aCubePos;
@@ -61,7 +61,7 @@ private:
     virtual ~E3dCubeObj() override;
 
 public:
-    E3dCubeObj(SdrModel& rSdrModel,
+    SVXCORE_DLLPUBLIC E3dCubeObj(SdrModel& rSdrModel,
         const E3dDefaultAttributes& rDefault,
         const basegfx::B3DPoint& aPos,
         const basegfx::B3DVector& r3DSize);

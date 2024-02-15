@@ -39,7 +39,7 @@ enum ScColorScaleEntryType
     COLORSCALE_FORMULA,
 };
 
-class SC_DLLPUBLIC ScColorScaleEntry
+class ScColorScaleEntry
 {
 private:
     double mnVal;
@@ -52,17 +52,17 @@ private:
     void setListener();
 
 public:
-    ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType = COLORSCALE_VALUE);
-    ScColorScaleEntry();
+    SC_DLLPUBLIC ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType = COLORSCALE_VALUE);
+    SC_DLLPUBLIC ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
     ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
-    ~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE;
+    SC_DLLPUBLIC ~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE;
 
     const Color& GetColor() const { return maColor;}
     void SetColor(const Color&);
-    double GetValue() const;
-    void SetValue(double nValue);
-    void SetFormula(const OUString& rFormula, ScDocument& rDoc, const ScAddress& rAddr,
+    SC_DLLPUBLIC double GetValue() const;
+    SC_DLLPUBLIC void SetValue(double nValue);
+    SC_DLLPUBLIC void SetFormula(const OUString& rFormula, ScDocument& rDoc, const ScAddress& rAddr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
 
     void UpdateReference( const sc::RefUpdateContext& rCxt );
@@ -70,11 +70,11 @@ public:
     void UpdateDeleteTab( const sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( const sc::RefUpdateMoveTabContext& rCxt );
 
-    const ScTokenArray* GetFormula() const;
-    OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;
+    SC_DLLPUBLIC const ScTokenArray* GetFormula() const;
+    SC_DLLPUBLIC OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;
 
     ScColorScaleEntryType GetType() const { return meType;}
-    void SetType( ScColorScaleEntryType eType );
+    SC_DLLPUBLIC void SetType( ScColorScaleEntryType eType );
 
     void SetRepaintCallback(ScConditionalFormat* pParent);
     void SetRepaintCallback(const std::function<void()>& func);

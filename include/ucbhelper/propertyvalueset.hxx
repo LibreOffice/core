@@ -54,7 +54,7 @@ class PropertyValues;
   * values to return can easily appended to a valueset object. That object can
   * directly be returned by the implementation of the command.
   */
-class UCBHELPER_DLLPUBLIC PropertyValueSet final :
+class PropertyValueSet final :
                 public cppu::WeakImplHelper<
                     css::sdbc::XRow,
                     css::sdbc::XColumnLocate>
@@ -67,7 +67,7 @@ class UCBHELPER_DLLPUBLIC PropertyValueSet final :
     bool        m_bTriedToGetTypeConverter;
 
 private:
-    UCBHELPER_DLLPRIVATE const css::uno::Reference< css::script::XTypeConverter >&
+    const css::uno::Reference< css::script::XTypeConverter >&
     getTypeConverter();
 
     template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
@@ -77,7 +77,7 @@ private:
     void appendValue(const OUString& rPropName, PropsSet nTypeName, const T& rValue);
 
 public:
-    PropertyValueSet(
+    UCBHELPER_DLLPUBLIC PropertyValueSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~PropertyValueSet() override;
 
@@ -138,37 +138,37 @@ public:
 
     // Non-interface methods
 
-    void appendString( const OUString& rPropName, const OUString& rValue );
+    UCBHELPER_DLLPUBLIC void appendString( const OUString& rPropName, const OUString& rValue );
     void appendString( const css::beans::Property& rProp, const OUString& rValue )
     {
         appendString( rProp.Name, rValue );
     }
 
-    void appendBoolean( const OUString& rPropName, bool bValue );
+    UCBHELPER_DLLPUBLIC void appendBoolean( const OUString& rPropName, bool bValue );
     void appendBoolean( const css::beans::Property& rProp, bool bValue )
     {
         appendBoolean( rProp.Name, bValue );
     }
 
-    void appendLong( const OUString& rPropName, sal_Int64 nValue );
+    UCBHELPER_DLLPUBLIC void appendLong( const OUString& rPropName, sal_Int64 nValue );
     void appendLong( const css::beans::Property& rProp, sal_Int64 nValue )
     {
         appendLong( rProp.Name, nValue );
     }
 
-    void appendTimestamp( const OUString& rPropName, const css::util::DateTime& rValue );
+    UCBHELPER_DLLPUBLIC void appendTimestamp( const OUString& rPropName, const css::util::DateTime& rValue );
     void appendTimestamp( const css::beans::Property& rProp, const css::util::DateTime& rValue )
     {
         appendTimestamp( rProp.Name, rValue );
     }
 
-    void appendObject( const OUString& rPropName, const css::uno::Any& rValue );
+    UCBHELPER_DLLPUBLIC void appendObject( const OUString& rPropName, const css::uno::Any& rValue );
     void appendObject( const css::beans::Property& rProp, const css::uno::Any& rValue )
     {
         appendObject( rProp.Name, rValue );
     }
 
-    void appendVoid( const OUString& rPropName );
+    UCBHELPER_DLLPUBLIC void appendVoid( const OUString& rPropName );
     void appendVoid( const css::beans::Property& rProp )
     {
         appendVoid( rProp.Name );
@@ -180,7 +180,7 @@ public:
       *
        *    @param  rSet is a property set containing the property values.
       */
-    void appendPropertySet( const css::uno::Reference< css::beans::XPropertySet >& rSet );
+    UCBHELPER_DLLPUBLIC void appendPropertySet( const css::uno::Reference< css::beans::XPropertySet >& rSet );
 
     /** This method tries to append a single property value contained in a
       * property set to the value set.
@@ -191,7 +191,7 @@ public:
        *    @return False, if the property value cannot be obtained from the
       *         given property pet. True, otherwise.
        */
-    bool appendPropertySetValue(
+    UCBHELPER_DLLPUBLIC bool appendPropertySetValue(
                         const css::uno::Reference< css::beans::XPropertySet >& rSet,
                         const css::beans::Property& rProperty );
 };

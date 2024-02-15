@@ -56,7 +56,7 @@ enum class GraphicContentType : sal_Int32
     Vector
 };
 
-class VCL_DLLPUBLIC ImpGraphic final
+class ImpGraphic final
 {
     friend class Graphic;
     friend class GraphicID;
@@ -215,9 +215,9 @@ private:
 public:
     void resetChecksum() { mnChecksum = 0; }
     bool swapIn();
-    bool swapOut();
+    VCL_DLLPUBLIC bool swapOut();
     bool isSwappedOut() const { return mbSwapOut; }
-    SvStream* getSwapFileStream() const;
+    VCL_DLLPUBLIC SvStream* getSwapFileStream() const;
     // public only because of use in GraphicFilter
     void updateFromLoadedGraphic(const ImpGraphic* graphic);
     void dumpState(rtl::OStringBuffer &rState);

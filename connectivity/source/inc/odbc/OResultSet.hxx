@@ -102,12 +102,12 @@ namespace connectivity::odbc
 
         typedef std::map< css::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
 
-        class OOO_DLLPUBLIC_ODBCBASE OResultSet :
-                            public  cppu::BaseMutex,
-                            public  ::connectivity::IResultSetHelper,
-                            public  OResultSet_BASE,
-                            public  ::cppu::OPropertySetHelper,
-                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
+        class OResultSet :
+                        public  cppu::BaseMutex,
+                        public  ::connectivity::IResultSetHelper,
+                        public  OResultSet_BASE,
+                        public  ::cppu::OPropertySetHelper,
+                        public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
             TBookmarkPosMap                             m_aPosToBookmarks;

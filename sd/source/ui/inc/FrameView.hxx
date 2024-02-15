@@ -31,7 +31,7 @@ namespace sd {
 /**
  * View for MDIFrame
  */
-class SD_DLLPUBLIC FrameView final
+class FrameView final
     : public SdrView
 {
 public:

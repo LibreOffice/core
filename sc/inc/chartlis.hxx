@@ -38,10 +38,10 @@ class Timer;
 class ScDocument;
 class ScChartUnoData;
 
-class SC_DLLPUBLIC ScChartListener final : public SvtListener
+class ScChartListener final : public SvtListener
 {
 public:
-    class SAL_DLLPRIVATE ExternalRefListener final : public ScExternalRefManager::LinkListener
+    class ExternalRefListener final : public ScExternalRefManager::LinkListener
     {
     public:
         ExternalRefListener(ScChartListener& rParent, ScDocument& rDoc);
@@ -75,10 +75,10 @@ private:
 public:
     ScChartListener( OUString aName, ScDocument& rDoc,
                      const ScRangeListRef& rRangeListRef );
-    ScChartListener( OUString aName, ScDocument& rDoc,
+    SC_DLLPUBLIC ScChartListener( OUString aName, ScDocument& rDoc,
                      ::std::vector<ScTokenRef> aTokens );
     ScChartListener( const ScChartListener& ) = delete;
-    virtual ~ScChartListener() override;
+    SC_DLLPUBLIC virtual ~ScChartListener() override;
 
     const OUString& GetName() const { return maName;}
 
@@ -90,7 +90,7 @@ public:
     bool            IsUno() const   { return (pUnoData != nullptr); }
 
     virtual void Notify( const SfxHint& rHint ) override;
-    void            StartListeningTo();
+    SC_DLLPUBLIC void StartListeningTo();
     void            EndListeningTo();
     void            ChangeListening( const ScRangeListRef& rRangeListRef,
                                     bool bDirty );

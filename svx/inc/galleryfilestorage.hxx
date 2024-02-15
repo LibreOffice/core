@@ -41,7 +41,7 @@ class FmFormModel;
 class GalleryTheme;
 class GalleryThemeEntry;
 
-class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) GalleryFileStorage final
+class GalleryFileStorage final
 {
 private:
     tools::SvRef<SotStorage> m_aSvDrawStorageRef;
@@ -58,22 +58,23 @@ private:
 public:
     GalleryFileStorage(const GalleryStorageLocations& rGalleryStorageLocations,
                        GalleryObjectCollection& rGalleryObjectCollection, bool bReadOnly);
-    SAL_DLLPRIVATE ~GalleryFileStorage();
+    ~GalleryFileStorage();
 
     void clearSotStorage();
 
     void setDestDir(const OUString& rDestDir, bool bRelative);
 
-    SAL_DLLPRIVATE void ImplCreateSvDrawStorage();
-    SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
+    void ImplCreateSvDrawStorage();
+    const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
 
     const INetURLObject& getThemeURL() const { return maGalleryStorageLocations.getThemeURL(); }
 
-    SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm);
+    bool implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm);
 
     void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, sal_uInt32 nInsertPos);
     void removeObject(const std::unique_ptr<GalleryObject>& pEntry);
 
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC)
     std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
     bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry);
 

@@ -128,7 +128,7 @@ private:
 };
 
 
-class OOX_DLLPUBLIC ChartExport final : public DrawingML {
+class ChartExport final : public DrawingML {
 
 public:
     // first: data sequence for label, second: data sequence for values.
@@ -257,18 +257,18 @@ private:
 
 public:
 
-    ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel > const & xModel,
+    OOX_DLLPUBLIC ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel > const & xModel,
                  ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType );
     virtual ~ChartExport() {}
 
-    void SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer);
+    OOX_DLLPUBLIC void SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer);
 
     const css::uno::Reference< css::frame::XModel >& getModel() const { return mxChartModel; }
 
-    void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nID, sal_Int32 nChartCount );
+    OOX_DLLPUBLIC void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nID, sal_Int32 nChartCount );
     void exportTextProps(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
 
-    void ExportContent();
+    OOX_DLLPUBLIC void ExportContent();
     void InitRangeSegmentationProperties(
         const css::uno::Reference<
             css::chart2::XChartDocument > & xChartDoc );

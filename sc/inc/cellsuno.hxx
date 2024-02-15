@@ -372,7 +372,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class UNLESS_MERGELIBS(SC_DLLPUBLIC) ScCellRangesObj final : public ScCellRangesBase,
+class ScCellRangesObj final : public ScCellRangesBase,
                         public css::sheet::XSheetCellRangeContainer,
                         public css::container::XNameContainer,
                         public css::container::XEnumerationAccess
@@ -391,8 +391,7 @@ private:
     rtl::Reference<ScCellRangeObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
-    IF_MERGELIBS(SC_DLLPUBLIC)
-                            ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
+    SC_DLLPUBLIC ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
     virtual                 ~ScCellRangesObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;

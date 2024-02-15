@@ -34,7 +34,7 @@ namespace comphelper
 
 typedef ::std::map< OUString, css::uno::Reference< css::uno::XInterface > > IdMap_t;
 
-class XMLOFF_DLLPUBLIC UnoInterfaceToUniqueIdentifierMapper
+class UnoInterfaceToUniqueIdentifierMapper
 {
     typedef std::deque< OUString > Reserved_t;
 
@@ -44,7 +44,7 @@ public:
     /** returns a unique identifier for the given uno object. If a UNO object is
         registered more than once, the returned identifier is always the same.
     */
-    const OUString& registerReference( const css::uno::Reference< css::uno::XInterface >& rInterface );
+    XMLOFF_DLLPUBLIC const OUString& registerReference( const css::uno::Reference< css::uno::XInterface >& rInterface );
 
     /** registers the given uno object with the given identifier.
 
@@ -68,7 +68,7 @@ public:
             the identifier for the given uno object. If this uno object is not already
             registered, an empty string is returned
     */
-    const OUString& getIdentifier( const css::uno::Reference< css::uno::XInterface >& rInterface ) const;
+    XMLOFF_DLLPUBLIC const OUString& getIdentifier( const css::uno::Reference< css::uno::XInterface >& rInterface ) const;
 
     /** @returns
         the uno object that is registered with the given identifier. If no uno object

@@ -38,7 +38,7 @@ namespace sw {
  * It contains a stack of SwUndo actions, each of which represents one user-visible
  * undo / redo step.
  */
-class SW_DLLPUBLIC UndoManager final
+class UndoManager final
     : public IDocumentUndoRedo
     , public SdrUndoManager
 {
@@ -63,9 +63,9 @@ public:
     virtual void SetUndoNoResetModified() override;
     virtual bool IsUndoNoResetModified() const override;
 
-    virtual SwUndoId StartUndo(SwUndoId const eUndoId,
+    SW_DLLPUBLIC virtual SwUndoId StartUndo(SwUndoId const eUndoId,
                                SwRewriter const*const pRewriter) override;
-    virtual SwUndoId EndUndo(SwUndoId const eUndoId,
+    SW_DLLPUBLIC virtual SwUndoId EndUndo(SwUndoId const eUndoId,
                              SwRewriter const*const pRewriter) override;
     virtual void DelAllUndoObj() override;
     virtual bool GetLastUndoInfo(OUString *const o_pStr,
@@ -82,16 +82,16 @@ public:
     virtual void AppendUndo(std::unique_ptr<SwUndo> pUndo) override;
     virtual void ClearRedo() override;
     virtual bool IsUndoNodes(SwNodes const& rNodes) const override;
-    virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const override;
+    SW_DLLPUBLIC virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const override;
     size_t GetRedoActionCount(const bool bCurrentLevel = true) const override;
-    void SetView(SwView* pView) override;
+    SW_DLLPUBLIC void SetView(SwView* pView) override;
     bool UndoWithOffset(size_t nUndoOffset) override;
 
     // SfxUndoManager
     virtual void AddUndoAction(std::unique_ptr<SfxUndoAction> pAction,
                                    bool bTryMerg = false) override;
-    virtual bool Undo() override;
-    virtual bool Redo() override;
+    SW_DLLPUBLIC virtual bool Undo() override;
+    SW_DLLPUBLIC virtual bool Redo() override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     SwUndo * RemoveLastUndo();

@@ -53,7 +53,7 @@ namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 class ScDocument;
 
 // DataProvider
-class SC_DLLPUBLIC ScChart2DataProvider final : public
+class ScChart2DataProvider final : public
                 ::cppu::WeakImplHelper<
                     css::chart2::data::XDataProvider,
                     css::chart2::data::XSheetDataProvider,
@@ -64,7 +64,7 @@ class SC_DLLPUBLIC ScChart2DataProvider final : public
 {
 public:
 
-    explicit ScChart2DataProvider( ScDocument* pDoc );
+    SC_DLLPUBLIC explicit ScChart2DataProvider( ScDocument* pDoc );
     virtual ~ScChart2DataProvider() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

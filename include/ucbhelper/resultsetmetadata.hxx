@@ -69,7 +69,7 @@ ResultSetColumnData::ResultSetColumnData()
  * css::sdbc::XResultSetMetaDataSupplier, which is required for
  * implementations of service com.sun.star.ucb.ContentResultSet.
  */
-class UCBHELPER_DLLPUBLIC ResultSetMetaData final :
+class ResultSetMetaData final :
                 public cppu::WeakImplHelper<css::sdbc::XResultSetMetaData>
 {
     std::unique_ptr<ucbhelper_impl::ResultSetMetaData_Impl> m_pImpl;
@@ -85,7 +85,7 @@ public:
       * @param rProps is a sequence of properties (partially) describing the
       *        columns of a resultset.
       */
-    ResultSetMetaData(
+    UCBHELPER_DLLPUBLIC ResultSetMetaData(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Sequence< css::beans::Property >& rProps );
 
@@ -102,7 +102,7 @@ public:
       *        rColumnData[ 0 ] corresponds to data in rProps[ 0 ],
       *        rColumnData[ 1 ] corresponds to data in rProps[ 1 ], ...
       */
-    ResultSetMetaData(
+    UCBHELPER_DLLPUBLIC ResultSetMetaData(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Sequence< css::beans::Property >& rProps,
             std::vector< ResultSetColumnData >&& rColumnData );

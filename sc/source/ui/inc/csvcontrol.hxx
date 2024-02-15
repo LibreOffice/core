@@ -219,7 +219,7 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 }
 
 /** Base class for the CSV ruler and the data grid control. Implements command handling. */
-class SC_DLLPUBLIC ScCsvControl : public weld::CustomWidgetController
+class ScCsvControl : public weld::CustomWidgetController
 {
 private:
     Link<ScCsvControl&,void>    maCmdHdl;           /// External command handler.
@@ -284,7 +284,7 @@ public:
     const ScCsvCmd&      GetCmd() const { return maCmd; }
 
     /** Executes a command by calling command handler. */
-    void                        Execute(
+    SC_DLLPUBLIC void    Execute(
                                     ScCsvCmdType eType,
                                     sal_Int32 nParam1 = CSV_POS_INVALID,
                                     sal_Int32 nParam2 = CSV_POS_INVALID );
@@ -330,7 +330,7 @@ public:
     /** Returns the number of data lines. */
     sal_Int32            GetLineCount() const { return mrData.mnLineCount; }
     /** Returns the number of visible lines (including partly visible bottom line). */
-    sal_Int32                   GetVisLineCount() const;
+    SC_DLLPUBLIC sal_Int32      GetVisLineCount() const;
     /** Returns index of first visible line. */
     sal_Int32            GetFirstVisLine() const { return mrData.mnLineOffset; }
     /** Returns index of last visible line. */

@@ -44,7 +44,7 @@ public:
     ColumnBlockPositionSet* getBlockPositionSet() { return mpSet.get(); }
 };
 
-class SC_DLLPUBLIC CopyFromClipContext final : public ClipContextBase
+class CopyFromClipContext final : public ClipContextBase
 {
     /** Tracks modified formula group spans. */
     sc::ColumnSpanSet maListeningFormulaSpans;
@@ -83,18 +83,18 @@ public:
     };
 
     CopyFromClipContext() = delete;
-    CopyFromClipContext(ScDocument& rDoc,
+    SC_DLLPUBLIC CopyFromClipContext(ScDocument& rDoc,
         ScDocument* pRefUndoDoc, ScDocument* pClipDoc, InsertDeleteFlags nInsertFlag,
         bool bAsLink, bool bSkipAttrForEmptyCells);
 
-    virtual ~CopyFromClipContext() override;
+    SC_DLLPUBLIC virtual ~CopyFromClipContext() override;
 
-    void setTabRange(SCTAB nStart, SCTAB nEnd);
+    SC_DLLPUBLIC void setTabRange(SCTAB nStart, SCTAB nEnd);
 
     SCTAB getTabStart() const;
     SCTAB getTabEnd() const;
 
-    void setDestRange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+    SC_DLLPUBLIC void setDestRange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     Range getDestRange() const;
 
     ScDocument* getUndoDoc();

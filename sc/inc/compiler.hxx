@@ -177,7 +177,7 @@ public:
     formula::FormulaToken* CreateToken(ScSheetLimits& rLimits) const;   // create typified token
 };
 
-class SC_DLLPUBLIC ScCompiler final : public formula::FormulaCompiler
+class ScCompiler final : public formula::FormulaCompiler
 {
 public:
 
@@ -188,7 +188,7 @@ public:
         EXTENDED_ERROR_DETECTION_NAME_NO_BREAK  // name error on unknown symbols, don't break, continue
     };
 
-    struct SAL_DLLPRIVATE Convention
+    struct Convention
     {
         const formula::FormulaGrammar::AddressConvention meConv;
 
@@ -388,26 +388,26 @@ public:
 
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of rDocument is used,
      */
-    ScCompiler( ScDocument& rDocument, const ScAddress&,
+    SC_DLLPUBLIC ScCompiler( ScDocument& rDocument, const ScAddress&,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
             bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
-    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
+    SC_DLLPUBLIC ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
             bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of rDocument is used,
      */
-    ScCompiler( ScDocument& rDocument, const ScAddress&, ScTokenArray& rArr,
+    SC_DLLPUBLIC ScCompiler( ScDocument& rDocument, const ScAddress&, ScTokenArray& rArr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
             bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
-    virtual ~ScCompiler() override;
+    SC_DLLPUBLIC virtual ~ScCompiler() override;
 
 public:
     static void DeInit();               /// all
 
     // for ScAddress::Format()
-    static void CheckTabQuotes( OUString& aTabName,
+    SC_DLLPUBLIC static void CheckTabQuotes( OUString& aTabName,
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     /** Analyzes a string for a 'Doc'#Tab construct, or 'Do''c'#Tab etc...
@@ -417,7 +417,7 @@ public:
     static sal_Int32 GetDocTabPos( const OUString& rString );
 
     // Check if it is a valid english function name
-    static bool IsEnglishSymbol( const OUString& rName );
+    SC_DLLPUBLIC static bool IsEnglishSymbol( const OUString& rName );
 
     bool ParseErrorConstant( const OUString& );
     bool ParseTableRefItem( const OUString& );
@@ -445,9 +445,9 @@ public:
     /// Set symbol map if not empty.
     void            SetFormulaLanguage( const OpCodeMapPtr & xMap );
 
-    void            SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
+    SC_DLLPUBLIC void SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
 
-    void SetNumberFormatter( SvNumberFormatter* pFormatter );
+    SC_DLLPUBLIC void SetNumberFormatter( SvNumberFormatter* pFormatter );
 
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()
@@ -487,18 +487,18 @@ public:
      * @return heap allocated token array object. The caller <i>must</i>
      *         manage the life cycle of this object.
      */
-    std::unique_ptr<ScTokenArray> CompileString( const OUString& rFormula );
+    SC_DLLPUBLIC std::unique_ptr<ScTokenArray> CompileString( const OUString& rFormula );
     std::unique_ptr<ScTokenArray> CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
     const ScAddress& GetPos() const { return aPos; }
 
     void MoveRelWrap();
-    static void MoveRelWrap( const ScTokenArray& rArr, const ScDocument& rDoc, const ScAddress& rPos,
+    SC_DLLPUBLIC static void MoveRelWrap( const ScTokenArray& rArr, const ScDocument& rDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
     /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
         bits) for all known address conventions. If more than one bit is given
         in nFlags, all bits must match. */
-    static bool IsCharFlagAllConventions(
+    SC_DLLPUBLIC static bool IsCharFlagAllConventions(
         OUString const & rStr, sal_Int32 nPos, ScCharFlags nFlags );
 
     /** TODO : Move this to somewhere appropriate. */

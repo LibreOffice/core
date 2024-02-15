@@ -78,7 +78,7 @@ class VCL_DLLPUBLIC PDFOutputStream
     virtual void write( const css::uno::Reference< css::io::XOutputStream >& xStream ) = 0;
 };
 
-class VCL_DLLPUBLIC PDFWriter
+class PDFWriter
 {
     ScopedVclPtr<PDFWriterImpl> xImplementation;
 
@@ -688,8 +688,8 @@ The following structure describes the permissions used in PDF security
         {}
     };
 
-    PDFWriter( const PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >& );
-    ~PDFWriter();
+    VCL_DLLPUBLIC PDFWriter( const PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >& );
+    VCL_DLLPUBLIC ~PDFWriter();
 
     /** Returns an OutputDevice for formatting
         This Output device is guaranteed to use the same
@@ -698,7 +698,7 @@ The following structure describes the permissions used in PDF security
         @returns
         the reference output device
     */
-    OutputDevice* GetReferenceDevice();
+    VCL_DLLPUBLIC OutputDevice* GetReferenceDevice();
 
     /** Creates a new page to fill
         If width and height are not set the page size
@@ -708,7 +708,7 @@ The following structure describes the permissions used in PDF security
         Colors and other state information MUST
         be set again or are undefined.
     */
-    void NewPage( double nPageWidth, double nPageHeight, Orientation eOrientation = Orientation::Inherit );
+    VCL_DLLPUBLIC void NewPage( double nPageWidth, double nPageHeight, Orientation eOrientation = Orientation::Inherit );
     /** Play a metafile like an outputdevice would do
     */
     struct PlayMetafileContext
@@ -726,36 +726,36 @@ The following structure describes the permissions used in PDF security
         {}
 
     };
-    void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = nullptr );
+    VCL_DLLPUBLIC void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = nullptr );
 
     /* sets the document locale originally passed with the context to a new value
      * only affects the output if used before calling Emit.
      */
-    void SetDocumentLocale( const css::lang::Locale& rDocLocale );
+    VCL_DLLPUBLIC void SetDocumentLocale( const css::lang::Locale& rDocLocale );
 
     /* finishes the file */
-    bool Emit();
+    VCL_DLLPUBLIC bool Emit();
 
     /*
      * Get a list of errors that occurred during processing
      * this should enable the producer to give feedback about
      * any anomalies that might have occurred
      */
-    std::set< ErrorCode > const & GetErrors() const;
+    VCL_DLLPUBLIC std::set< ErrorCode > const & GetErrors() const;
 
     // uses 128bit encryption
-    static css::uno::Reference< css::beans::XMaterialHolder >
+    VCL_DLLPUBLIC static css::uno::Reference< css::beans::XMaterialHolder >
            InitEncryption( const OUString& i_rOwnerPassword,
                            const OUString& i_rUserPassword
                          );
 
     /* functions for graphics state */
     /* flag values: see vcl/outdev.hxx */
-    void                Push( PushFlags nFlags = PushFlags::ALL );
-    void                Pop();
+    VCL_DLLPUBLIC void Push( PushFlags nFlags = PushFlags::ALL );
+    VCL_DLLPUBLIC void Pop();
 
-    void               SetClipRegion();
-    void               SetClipRegion( const basegfx::B2DPolyPolygon& rRegion );
+    VCL_DLLPUBLIC void SetClipRegion();
+    VCL_DLLPUBLIC void SetClipRegion( const basegfx::B2DPolyPolygon& rRegion );
     void               MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove );
     void               IntersectClipRegion( const tools::Rectangle& rRect );
     void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
@@ -769,8 +769,8 @@ The following structure describes the permissions used in PDF security
     void               SetFillColor( const Color& rColor );
     void               SetFillColor() { SetFillColor( COL_TRANSPARENT ); }
 
-    void               SetFont( const vcl::Font& rNewFont );
-    void               SetTextColor( const Color& rColor );
+    VCL_DLLPUBLIC void SetFont( const vcl::Font& rNewFont );
+    VCL_DLLPUBLIC void SetTextColor( const Color& rColor );
     void               SetTextFillColor();
     void               SetTextFillColor( const Color& rColor );
 
@@ -780,11 +780,11 @@ The following structure describes the permissions used in PDF security
     void               SetOverlineColor( const Color& rColor );
     void               SetTextAlign( ::TextAlign eAlign );
 
-    void               SetMapMode( const MapMode& rNewMapMode );
+    VCL_DLLPUBLIC void SetMapMode( const MapMode& rNewMapMode );
 
 
     /* actual drawing functions */
-    void                DrawText( const Point& rPos, const OUString& rText );
+    VCL_DLLPUBLIC void  DrawText( const Point& rPos, const OUString& rText );
 
     void                DrawTextLine( const Point& rPos, tools::Long nWidth,
                                       FontStrikeout eStrikeout,
@@ -798,7 +798,7 @@ The following structure describes the permissions used in PDF security
     void                DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,
                                          const OUString& rStr,
                                          sal_Int32 nIndex, sal_Int32 nLen );
-    void                DrawText( const tools::Rectangle& rRect,
+    VCL_DLLPUBLIC void  DrawText( const tools::Rectangle& rRect,
                                   const OUString& rStr, DrawTextFlags nStyle );
 
     void                DrawPixel( const Point& rPt, const Color& rColor );
@@ -808,7 +808,7 @@ The following structure describes the permissions used in PDF security
     void                DrawLine( const Point& rStartPt, const Point& rEndPt );
     void                DrawLine( const Point& rStartPt, const Point& rEndPt,
                                   const LineInfo& rLineInfo );
-    void                DrawPolyLine( const tools::Polygon& rPoly );
+    VCL_DLLPUBLIC void  DrawPolyLine( const tools::Polygon& rPoly );
     void                DrawPolyLine( const tools::Polygon& rPoly,
                                       const LineInfo& rLineInfo );
     void                DrawPolyLine( const tools::Polygon& rPoly, const ExtLineInfo& rInfo );
@@ -858,7 +858,7 @@ The following structure describes the permissions used in PDF security
     will be ignored if the produced PDF has a lower version. The drawing
     operations will be emitted normally.
     */
-    void                BeginTransparencyGroup();
+    VCL_DLLPUBLIC void BeginTransparencyGroup();
 
     /** End a transparency group with constant transparency factor
 
@@ -871,7 +871,7 @@ The following structure describes the permissions used in PDF security
     @param nTransparencePercent
     The transparency factor
     */
-    void                EndTransparencyGroup( const tools::Rectangle& rBoundRect, sal_uInt16 nTransparencePercent );
+    VCL_DLLPUBLIC void EndTransparencyGroup( const tools::Rectangle& rBoundRect, sal_uInt16 nTransparencePercent );
 
     /** Insert a JPG encoded image (optionally with mask)
 
@@ -1109,9 +1109,9 @@ The following structure describes the permissions used in PDF security
     @returns
     the new structure element's id for use in SetCurrentStructureElement
      */
-    void BeginStructureElement(sal_Int32 id);
-    sal_Int32 EnsureStructureElement();
-    void InitStructureElement(sal_Int32 id, PDFWriter::StructElement eType, std::u16string_view rAlias);
+    VCL_DLLPUBLIC void BeginStructureElement(sal_Int32 id);
+    VCL_DLLPUBLIC sal_Int32 EnsureStructureElement();
+    VCL_DLLPUBLIC void InitStructureElement(sal_Int32 id, PDFWriter::StructElement eType, std::u16string_view rAlias);
 
     /** end the current logical structure element
 
@@ -1120,7 +1120,7 @@ The following structure describes the permissions used in PDF security
 
     @see BeginStructureElement
      */
-    void EndStructureElement();
+    VCL_DLLPUBLIC void EndStructureElement();
     /** set the current structure element
 
     For different purposes it may be useful to paint a structure element's
@@ -1148,7 +1148,7 @@ The following structure describes the permissions used in PDF security
     @param eVal
     the value to set the attribute to
      */
-    void SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal );
+    VCL_DLLPUBLIC void SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal );
     /** set a structure attribute on the current structural element
 
     SetStructureAttributeNumerical sets an attribute of the current structural element
@@ -1249,7 +1249,7 @@ The following structure describes the permissions used in PDF security
     @param pStream
     the interface to the additional stream
     */
-    void AddAttachedFile(OUString const& rFileName, OUString const& rMimeType, OUString const& rDescription, std::unique_ptr<PDFOutputStream> pStream);
+    VCL_DLLPUBLIC void AddAttachedFile(OUString const& rFileName, OUString const& rMimeType, OUString const& rDescription, std::unique_ptr<PDFOutputStream> pStream);
 
     /// Write rString as a PDF hex string into rBuffer.
     static void AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);

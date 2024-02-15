@@ -241,7 +241,7 @@ OUString lcl_ConvertParagraphAdjust(css::style::ParagraphAdjust eParaAdjust)
 }
 }
 
-OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
+static OUString ConvertUnoToIAccessible2TextAttributes(
     const css::uno::Sequence<css::beans::PropertyValue>& rUnoAttributes,
     IA2AttributeType eAttributeType)
 {
@@ -336,8 +336,9 @@ OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
 }
 
 OUString AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
-    css::uno::Reference<css::accessibility::XAccessibleText> xText, IA2AttributeType eAttributeType,
-    sal_Int32 nOffset, sal_Int32& rStartOffset, sal_Int32& rEndOffset)
+    const css::uno::Reference<css::accessibility::XAccessibleText>& xText,
+    IA2AttributeType eAttributeType, sal_Int32 nOffset, sal_Int32& rStartOffset,
+    sal_Int32& rEndOffset)
 {
     assert(xText.is());
 

@@ -51,7 +51,7 @@ typedef std::list< CustomAnimationEffectPtr > EffectSequence;
 
 class EffectSequenceHelper;
 
-class SD_DLLPUBLIC CustomAnimationEffect final
+class CustomAnimationEffect final
 {
     friend class MainSequence;
     friend class EffectSequenceHelper;
@@ -60,118 +60,118 @@ public:
     CustomAnimationEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     ~CustomAnimationEffect();
 
-    SAL_DLLPRIVATE const css::uno::Reference< css::animations::XAnimationNode >& getNode() const { return mxNode; }
-    SAL_DLLPRIVATE void setNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    SAL_DLLPRIVATE void replaceNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    const css::uno::Reference< css::animations::XAnimationNode >& getNode() const { return mxNode; }
+    void setNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void replaceNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    SAL_DLLPRIVATE CustomAnimationEffectPtr clone() const;
+    CustomAnimationEffectPtr clone() const;
 
     // attributes
-    SAL_DLLPRIVATE const OUString&    getPresetId() const { return maPresetId; }
-    SAL_DLLPRIVATE const OUString&    getPresetSubType() const { return maPresetSubType; }
-    SAL_DLLPRIVATE const OUString&    getProperty() const { return maProperty; }
+    const OUString&    getPresetId() const { return maPresetId; }
+    const OUString&    getPresetSubType() const { return maPresetSubType; }
+    const OUString&    getProperty() const { return maProperty; }
 
-    SAL_DLLPRIVATE sal_Int16       getPresetClass() const { return mnPresetClass; }
-    SAL_DLLPRIVATE void            setPresetClassAndId( sal_Int16 nPresetClass, const OUString& rPresetId );
+    sal_Int16       getPresetClass() const { return mnPresetClass; }
+    void            setPresetClassAndId( sal_Int16 nPresetClass, const OUString& rPresetId );
 
-    SAL_DLLPRIVATE sal_Int16       getNodeType() const { return mnNodeType; }
+    sal_Int16       getNodeType() const { return mnNodeType; }
     void                           setNodeType( sal_Int16 nNodeType );
 
-    SAL_DLLPRIVATE css::uno::Any   getRepeatCount() const;
-    SAL_DLLPRIVATE void            setRepeatCount( const css::uno::Any& rRepeatCount );
+    css::uno::Any   getRepeatCount() const;
+    void            setRepeatCount( const css::uno::Any& rRepeatCount );
 
-    SAL_DLLPRIVATE css::uno::Any   getEnd() const;
-    SAL_DLLPRIVATE void            setEnd( const css::uno::Any& rEnd );
+    css::uno::Any   getEnd() const;
+    void            setEnd( const css::uno::Any& rEnd );
 
-    SAL_DLLPRIVATE sal_Int16       getFill() const { return mnFill; }
-    SAL_DLLPRIVATE void            setFill( sal_Int16 nFill );
+    sal_Int16       getFill() const { return mnFill; }
+    void            setFill( sal_Int16 nFill );
 
-    SAL_DLLPRIVATE double          getBegin() const { return mfBegin; }
+    double          getBegin() const { return mfBegin; }
     void                           setBegin( double fBegin );
 
-    SAL_DLLPRIVATE double          getDuration() const { return mfDuration; }
+    double          getDuration() const { return mfDuration; }
     void                           setDuration( double fDuration );
 
-    SAL_DLLPRIVATE double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
+    double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
 
-    SAL_DLLPRIVATE sal_Int16       getIterateType() const { return mnIterateType; }
+    sal_Int16       getIterateType() const { return mnIterateType; }
     void                           setIterateType( sal_Int16 nIterateType );
 
-    SAL_DLLPRIVATE double          getIterateInterval() const { return mfIterateInterval; }
+    double          getIterateInterval() const { return mfIterateInterval; }
     void                           setIterateInterval( double fIterateInterval );
 
-    SAL_DLLPRIVATE const css::uno::Any& getTarget() const { return maTarget; }
+    const css::uno::Any& getTarget() const { return maTarget; }
     void                          setTarget( const css::uno::Any& rTarget );
 
-    SAL_DLLPRIVATE bool             hasAfterEffect() const { return mbHasAfterEffect; }
-    SAL_DLLPRIVATE void            setHasAfterEffect( bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
+    bool             hasAfterEffect() const { return mbHasAfterEffect; }
+    void            setHasAfterEffect( bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
 
-    SAL_DLLPRIVATE const css::uno::Any& getDimColor() const { return maDimColor; }
-    SAL_DLLPRIVATE void            setDimColor( const css::uno::Any& rDimColor ) { maDimColor = rDimColor; }
+    const css::uno::Any& getDimColor() const { return maDimColor; }
+    void            setDimColor( const css::uno::Any& rDimColor ) { maDimColor = rDimColor; }
 
-    SAL_DLLPRIVATE bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
-    SAL_DLLPRIVATE void            setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }
+    bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
+    void            setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }
 
-    SAL_DLLPRIVATE sal_Int32       getParaDepth() const { return mnParaDepth; }
+    sal_Int32       getParaDepth() const { return mnParaDepth; }
 
-    SAL_DLLPRIVATE bool            hasText() const { return mbHasText; }
+    bool            hasText() const { return mbHasText; }
 
-    SAL_DLLPRIVATE sal_Int16       getCommand() const { return mnCommand; }
+    sal_Int16       getCommand() const { return mnCommand; }
 
-    SAL_DLLPRIVATE double          getAcceleration() const { return mfAcceleration; }
-    SAL_DLLPRIVATE void            setAcceleration( double fAcceleration );
+    double          getAcceleration() const { return mfAcceleration; }
+    void            setAcceleration( double fAcceleration );
 
-    SAL_DLLPRIVATE double          getDecelerate() const { return mfDecelerate; }
-    SAL_DLLPRIVATE void            setDecelerate( double fDecelerate );
+    double          getDecelerate() const { return mfDecelerate; }
+    void            setDecelerate( double fDecelerate );
 
-    SAL_DLLPRIVATE bool            getAutoReverse() const { return mbAutoReverse; }
-    SAL_DLLPRIVATE void            setAutoReverse( bool bAutoReverse );
+    bool            getAutoReverse() const { return mbAutoReverse; }
+    void            setAutoReverse( bool bAutoReverse );
 
-    SAL_DLLPRIVATE css::uno::Any  getProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue );
-    SAL_DLLPRIVATE bool           setProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue, const css::uno::Any& rValue );
+    css::uno::Any  getProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue );
+    bool           setProperty( sal_Int32 nNodeType, std::u16string_view rAttributeName, EValue eValue, const css::uno::Any& rValue );
 
-    SAL_DLLPRIVATE css::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
-    SAL_DLLPRIVATE bool           setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const css::uno::Any& rValue );
+    css::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
+    bool           setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const css::uno::Any& rValue );
 
-    SAL_DLLPRIVATE css::uno::Any  getColor( sal_Int32 nIndex );
-    SAL_DLLPRIVATE void            setColor( sal_Int32 nIndex, const css::uno::Any& rColor );
+    css::uno::Any  getColor( sal_Int32 nIndex );
+    void            setColor( sal_Int32 nIndex, const css::uno::Any& rColor );
 
-    SAL_DLLPRIVATE sal_Int32       getGroupId() const { return mnGroupId; }
-    SAL_DLLPRIVATE void            setGroupId( sal_Int32 nGroupId );
+    sal_Int32       getGroupId() const { return mnGroupId; }
+    void            setGroupId( sal_Int32 nGroupId );
 
-    SAL_DLLPRIVATE sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
+    sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
     void                           setTargetSubItem( sal_Int16 nSubItem );
 
-    SAL_DLLPRIVATE OUString getPath() const;
-    SAL_DLLPRIVATE void setPath( const OUString& rPath );
+    OUString getPath() const;
+    void setPath( const OUString& rPath );
 
-    SAL_DLLPRIVATE bool checkForText( const std::vector<sal_Int32>* paragraphNumberingLevel = nullptr );
-    SAL_DLLPRIVATE bool calculateIterateDuration();
+    bool checkForText( const std::vector<sal_Int32>* paragraphNumberingLevel = nullptr );
+    bool calculateIterateDuration();
 
-    SAL_DLLPRIVATE void setAudio( const css::uno::Reference< css::animations::XAudio >& xAudio );
-    SAL_DLLPRIVATE bool getStopAudio() const;
+    void setAudio( const css::uno::Reference< css::animations::XAudio >& xAudio );
+    bool getStopAudio() const;
     void setStopAudio();
     void createAudio( const css::uno::Any& rSource );
-    SAL_DLLPRIVATE void removeAudio();
-    SAL_DLLPRIVATE const css::uno::Reference< css::animations::XAudio >& getAudio() const { return mxAudio; }
+    void removeAudio();
+    const css::uno::Reference< css::animations::XAudio >& getAudio() const { return mxAudio; }
 
-    SAL_DLLPRIVATE EffectSequenceHelper*   getEffectSequence() const { return mpEffectSequence; }
+    EffectSequenceHelper*   getEffectSequence() const { return mpEffectSequence; }
 
     // helper
     /// @throws css::uno::Exception
-    SAL_DLLPRIVATE css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNode() const;
-    SAL_DLLPRIVATE css::uno::Reference< css::drawing::XShape > getTargetShape() const;
+    css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNode() const;
+    css::uno::Reference< css::drawing::XShape > getTargetShape() const;
 
     // static helpers
-    SAL_DLLPRIVATE static sal_Int32 get_node_type( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    SAL_DLLPRIVATE static sal_Int32 getNumberOfSubitems( const css::uno::Any& aTarget, sal_Int16 nIterateType );
+    static sal_Int32 get_node_type( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    static sal_Int32 getNumberOfSubitems( const css::uno::Any& aTarget, sal_Int16 nIterateType );
 
-    SAL_DLLPRIVATE rtl::Reference<SdrPathObj> createSdrPathObjFromPath(SdrModel& rTargetModel);
-    SAL_DLLPRIVATE void updateSdrPathObjFromPath( SdrPathObj& rPathObj );
-    SAL_DLLPRIVATE void updatePathFromSdrPathObj( const SdrPathObj& rPathObj );
+    rtl::Reference<SdrPathObj> createSdrPathObjFromPath(SdrModel& rTargetModel);
+    void updateSdrPathObjFromPath( SdrPathObj& rPathObj );
+    void updatePathFromSdrPathObj( const SdrPathObj& rPathObj );
 
 private:
-    SAL_DLLPRIVATE void setEffectSequence( EffectSequenceHelper* pSequence ) { mpEffectSequence = pSequence; }
+    void setEffectSequence( EffectSequenceHelper* pSequence ) { mpEffectSequence = pSequence; }
 
     sal_Int16       mnNodeType;
     OUString        maPresetId;
@@ -368,7 +368,7 @@ private:
 typedef std::shared_ptr< InteractiveSequence > InteractiveSequencePtr;
 typedef std::vector< InteractiveSequencePtr > InteractiveSequenceVector;
 
-class SD_DLLPUBLIC MainSequence final : public EffectSequenceHelper, public ISequenceListener
+class MainSequence final : public EffectSequenceHelper, public ISequenceListener
 {
     friend class UndoAnimation;
     friend class MainSequenceRebuildGuard;
@@ -414,7 +414,7 @@ private:
     void lockRebuilds();
     void unlockRebuilds();
 
-    DECL_DLLPRIVATE_LINK(onTimerHdl, Timer *, void);
+    DECL_LINK(onTimerHdl, Timer *, void);
 
     virtual void implRebuild() override;
 

@@ -236,15 +236,15 @@ namespace ucbhelper
 
 class UCBStorage_Impl;
 struct UCBStorageElement_Impl;
-class SOT_DLLPUBLIC UCBStorage final : public BaseStorage
+class UCBStorage final : public BaseStorage
 {
     UCBStorage_Impl*            pImp;
 
                                 virtual ~UCBStorage() override;
 public:
-    static bool                 IsStorageFile( SvStream* );
+    SOT_DLLPUBLIC static bool   IsStorageFile( SvStream* );
 
-                                UCBStorage( const ::ucbhelper::Content& rContent,
+    SOT_DLLPUBLIC               UCBStorage( const ::ucbhelper::Content& rContent,
                                             const OUString& rName,
                                             StreamMode nMode,
                                             bool bDirect,

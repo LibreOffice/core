@@ -61,7 +61,7 @@ struct BlockInfo final
                  mvData;               ///< data block
 };
 
-class SW_DLLPUBLIC BigPtrArray
+class BigPtrArray
 {
 protected:
     std::unique_ptr<BlockInfo*[]>
@@ -91,7 +91,7 @@ public:
     void Move( sal_Int32 from, sal_Int32 to );
     void Replace( sal_Int32 pos, BigPtrEntry* p);
 
-    BigPtrEntry* operator[]( sal_Int32 ) const;
+    SW_DLLPUBLIC BigPtrEntry* operator[]( sal_Int32 ) const;
 };
 
 inline sal_Int32 BigPtrEntry::GetPos() const

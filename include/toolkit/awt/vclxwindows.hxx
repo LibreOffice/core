@@ -535,25 +535,25 @@ protected:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class TOOLKIT_DLLPUBLIC SVTXNumericField final : public cppu::ImplInheritanceHelper<SVTXFormattedField, css::awt::XNumericField>
+class SVTXNumericField final : public cppu::ImplInheritanceHelper<SVTXFormattedField, css::awt::XNumericField>
 {
 public:
                     SVTXNumericField();
                     virtual ~SVTXNumericField() override;
 
     // css::awt::XNumericField
-    void SAL_CALL setValue( double Value ) override;
-    double SAL_CALL getValue(  ) override;
+    TOOLKIT_DLLPUBLIC void SAL_CALL setValue( double Value ) override;
+    TOOLKIT_DLLPUBLIC double SAL_CALL getValue(  ) override;
     void SAL_CALL setMin( double Value ) override;
-    double SAL_CALL getMin(  ) override;
+    TOOLKIT_DLLPUBLIC double SAL_CALL getMin(  ) override;
     void SAL_CALL setMax( double Value ) override;
-    double SAL_CALL getMax(  ) override;
+    TOOLKIT_DLLPUBLIC double SAL_CALL getMax(  ) override;
     void SAL_CALL setFirst( double Value ) override;
     double SAL_CALL getFirst(  ) override;
     void SAL_CALL setLast( double Value ) override;
     double SAL_CALL getLast(  ) override;
     void SAL_CALL setSpinSize( double Value ) override;
-    double SAL_CALL getSpinSize(  ) override;
+    TOOLKIT_DLLPUBLIC double SAL_CALL getSpinSize(  ) override;
     void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
     sal_Int16 SAL_CALL getDecimalDigits(  ) override;
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;

@@ -27,7 +27,7 @@
 
 #include <headless/CairoCommon.hxx>
 
-class VCL_DLLPUBLIC SvpGraphicsBackend final : public SalGraphicsImpl
+class SvpGraphicsBackend final : public SalGraphicsImpl
 {
     CairoCommon& m_rCairoCommon;
 
@@ -132,8 +132,8 @@ public:
 
     bool supportsOperation(OutDevSupportType eType) const override;
 
-    void drawBitmapBuffer(const SalTwoRect& rPosAry, const BitmapBuffer* pBuffer,
-                          cairo_operator_t eOp);
+    void VCL_DLLPUBLIC drawBitmapBuffer(const SalTwoRect& rPosAry, const BitmapBuffer* pBuffer,
+                                        cairo_operator_t eOp);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

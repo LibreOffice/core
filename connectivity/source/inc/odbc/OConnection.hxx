@@ -41,7 +41,7 @@ namespace connectivity::odbc
         typedef connectivity::OMetaConnection OConnection_BASE;
         typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
 
-        class OOO_DLLPUBLIC_ODBCBASE OConnection final :
+        class OConnection final :
                             public OConnection_BASE,
                             public OAutoRetrievingBase
         {

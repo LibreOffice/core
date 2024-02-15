@@ -76,7 +76,7 @@ namespace connectivity
 
     struct OSQLParseTreeIteratorImpl;
 
-    class OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator final
+    class OSQLParseTreeIterator final
     {
     private:
         std::optional<css::sdbc::SQLException>              m_xErrors;          // contains the error while iterating through the statement
@@ -155,29 +155,29 @@ namespace connectivity
         OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter) = delete;
 
       public:
-        OSQLParseTreeIterator(
+        OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator(
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const css::uno::Reference< css::container::XNameAccess >& _rxTables,
             const OSQLParser& _rParser );
-        ~OSQLParseTreeIterator();
+        OOO_DLLPUBLIC_DBTOOLS ~OSQLParseTreeIterator();
 
-        void dispose();
-        bool isCaseSensitive() const;
+        OOO_DLLPUBLIC_DBTOOLS void dispose();
+        OOO_DLLPUBLIC_DBTOOLS bool isCaseSensitive() const;
         // The parse tree to be analysed/traversed:
         // If NULL is passed, the current parse tree will be deleted and the error status cleared.
-        void setParseTree(const OSQLParseNode * pNewParseTree);
+        OOO_DLLPUBLIC_DBTOOLS void setParseTree(const OSQLParseNode * pNewParseTree);
         const OSQLParseNode * getParseTree() const { return m_pParseTree; };
 
         // subtrees in case of a select statement
-        const OSQLParseNode* getWhereTree() const;
-        const OSQLParseNode* getOrderTree() const;
+        OOO_DLLPUBLIC_DBTOOLS const OSQLParseNode* getWhereTree() const;
+        OOO_DLLPUBLIC_DBTOOLS const OSQLParseNode* getOrderTree() const;
         const OSQLParseNode* getGroupByTree() const;
         const OSQLParseNode* getHavingTree() const;
 
-        const OSQLParseNode* getSimpleWhereTree() const;
-        const OSQLParseNode* getSimpleOrderTree() const;
-        const OSQLParseNode* getSimpleGroupByTree() const;
-        const OSQLParseNode* getSimpleHavingTree() const;
+        OOO_DLLPUBLIC_DBTOOLS const OSQLParseNode* getSimpleWhereTree() const;
+        OOO_DLLPUBLIC_DBTOOLS const OSQLParseNode* getSimpleOrderTree() const;
+        OOO_DLLPUBLIC_DBTOOLS const OSQLParseNode* getSimpleGroupByTree() const;
+        OOO_DLLPUBLIC_DBTOOLS const OSQLParseNode* getSimpleHavingTree() const;
 
         /** returns the errors which occurred during parsing.
 
@@ -195,10 +195,10 @@ namespace connectivity
             Implemented by calling the single traverse* methods in the proper
             order (depending on the statement type).
         */
-        void traverseAll();
+        OOO_DLLPUBLIC_DBTOOLS void traverseAll();
 
         // The TableRangeMap contains all tables associated with the range name found first.
-        const OSQLTables& getTables() const;
+        OOO_DLLPUBLIC_DBTOOLS const OSQLTables& getTables() const;
 
         const ::rtl::Reference<OSQLColumns>& getSelectColumns() const { return m_aSelectColumns;}
         const ::rtl::Reference<OSQLColumns>& getGroupColumns() const { return m_aGroupColumns;}
@@ -213,7 +213,7 @@ namespace connectivity
             @param  _rTableRange
                 The table range to be set.
         */
-        void getColumnRange(    const OSQLParseNode* _pColumnRef,
+        OOO_DLLPUBLIC_DBTOOLS void getColumnRange( const OSQLParseNode* _pColumnRef,
                                 OUString &_rColumnName,
                                 OUString& _rTableRange) const;
 
@@ -241,7 +241,7 @@ namespace connectivity
             @return
                 The alias name of the column or an empty string.
         */
-        static OUString getColumnAlias(const OSQLParseNode* _pDerivedColumn);
+        OOO_DLLPUBLIC_DBTOOLS static OUString getColumnAlias(const OSQLParseNode* _pDerivedColumn);
 
         /** return the columname and the table range
             @param  _pColumnRef
@@ -253,19 +253,19 @@ namespace connectivity
             @param  _rTableRange
                 The table range to be set.
         */
-        static void getColumnRange( const OSQLParseNode* _pColumnRef,
+        OOO_DLLPUBLIC_DBTOOLS static void getColumnRange( const OSQLParseNode* _pColumnRef,
                                     const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                                     OUString &_rColumnName,
                                     OUString& _rTableRange);
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
-        static bool isTableNode(const OSQLParseNode* _pTableNode);
+        OOO_DLLPUBLIC_DBTOOLS static bool isTableNode(const OSQLParseNode* _pTableNode);
 
         // tries to find the correct type of the function
         sal_Int32 getFunctionReturnType(const OSQLParseNode* _pNode );
 
         // returns a lis of all joined columns
-        ::std::vector< TNodePair >& getJoinConditions() const;
+        OOO_DLLPUBLIC_DBTOOLS ::std::vector< TNodePair >& getJoinConditions() const;
 
     private:
 

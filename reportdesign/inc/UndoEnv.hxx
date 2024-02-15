@@ -37,7 +37,7 @@ namespace rptui
     class OXUndoEnvironmentImpl;
 
 
-    class REPORTDESIGN_DLLPUBLIC OXUndoEnvironment final
+    class OXUndoEnvironment final
         : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                         ,   css::container::XContainerListener
                                         ,   css::util::XModifyListener
@@ -51,7 +51,7 @@ namespace rptui
 
         virtual ~OXUndoEnvironment() override;
 
-        void SetUndoMode(bool _bUndo);
+        REPORTDESIGN_DLLPUBLIC void SetUndoMode(bool _bUndo);
 
     public:
         OXUndoEnvironment(OReportModel& _rModel);
@@ -89,8 +89,8 @@ namespace rptui
             }
         };
 
-        void Lock();
-        void UnLock();
+        REPORTDESIGN_DLLPUBLIC void Lock();
+        REPORTDESIGN_DLLPUBLIC void UnLock();
         bool IsLocked() const;
 
         // returns sal_True is we are in UNDO
@@ -100,8 +100,8 @@ namespace rptui
         struct Accessor { friend class OReportModel; private: Accessor() { } };
         void Clear(const Accessor& _r);
 
-        void AddElement(const css::uno::Reference< css::uno::XInterface>& Element);
-        void RemoveElement(const css::uno::Reference< css::uno::XInterface>& Element);
+        REPORTDESIGN_DLLPUBLIC void AddElement(const css::uno::Reference< css::uno::XInterface>& Element);
+        REPORTDESIGN_DLLPUBLIC void RemoveElement(const css::uno::Reference< css::uno::XInterface>& Element);
 
         void AddSection( const css::uno::Reference< css::report::XSection>& _xSection);
         void RemoveSection( const css::uno::Reference< css::report::XSection>& _xSection );
