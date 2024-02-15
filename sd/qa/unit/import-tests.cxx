@@ -10,6 +10,7 @@
 #include <config_poppler.h>
 
 #include "sdmodeltestbase.hxx"
+#include <tools/color.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
@@ -228,7 +229,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTableStyle)
     xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
     xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nCharColor);
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The bottom border is missing!", true, aBorderLine.LineWidth > 0);
 
@@ -238,7 +239,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTableStyle)
     xRunPropSet.set(xRun, uno::UNO_QUERY_THROW);
     xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
     xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nCharColor);
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
 
     xCellPropSet.set(xTable->getCellByPosition(2, 0), uno::UNO_QUERY_THROW);
@@ -247,7 +248,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTableStyle)
     xRunPropSet.set(xRun, uno::UNO_QUERY_THROW);
     xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
     xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nCharColor);
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
 
     xCellPropSet.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
@@ -257,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTableStyle)
     xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
     xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
     xCellPropSet->getPropertyValue("FillColor") >>= nFillColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nCharColor);
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
     CPPUNIT_ASSERT_EQUAL(Color(0x5b9bd5), nFillColor);
 
@@ -268,7 +269,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTableStyle)
     xRunPropSet->getPropertyValue("CharColor") >>= nCharColor;
     xRunPropSet->getPropertyValue("CharWeight") >>= nFontWeight;
     xCellPropSet->getPropertyValue("FillColor") >>= nFillColor;
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, nCharColor);
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, nFontWeight);
     CPPUNIT_ASSERT_EQUAL(Color(0x5b9bd5), nFillColor);
 }
@@ -948,7 +949,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testN862510_4)
         {
             const SvxColorItem* pC = dynamic_cast<const SvxColorItem*>((*it).pAttr);
             CPPUNIT_ASSERT_MESSAGE("gradfill for text color not handled!",
-                                   !(pC && pC->GetValue() == Color(0)));
+                                   !(pC && pC->GetValue() == COL_BLACK));
         }
     }
 }

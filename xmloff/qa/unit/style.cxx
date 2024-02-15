@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <tools/color.hxx>
 #include <sal/config.h>
 
 #include <test/unoapixml_test.hxx>
@@ -443,7 +444,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
     {
         awt::ColorStop aColorStop = aColorStopSeq[1];
         CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
-        CPPUNIT_ASSERT_EQUAL(Color(0x000000), asColor(aColorStop.StopColor));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, asColor(aColorStop.StopColor));
     }
 }
 

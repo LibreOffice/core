@@ -1123,7 +1123,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
                            pStyleSheet->GetItemSet().HasItem(ATTR_BORDER, &pItem));
 
     pBoxItem = static_cast<const SvxBoxItem*>(pItem);
-    CPPUNIT_ASSERT_EQUAL(Color(0, 0, 0), pBoxItem->GetLeft()->GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pBoxItem->GetLeft()->GetColor());
     CPPUNIT_ASSERT_EQUAL(Color(255, 0, 0), pBoxItem->GetRight()->GetColor());
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pBoxItem->GetLeft()->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOTTED, pBoxItem->GetRight()->GetBorderLineStyle());

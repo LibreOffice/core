@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <tools/color.hxx>
 #include <test/unoapi_test.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -65,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf107966)
     pVirtualDevice->SetOutputSizePixel(Size(90, 15));
     pVirtualDevice->SetFillColor(Color(255, 255, 255));
     pVirtualDevice->DrawRect(tools::Rectangle(Point(), Size(1350, 225)));
-    pVirtualDevice->SetFillColor(Color(0, 0, 0));
+    pVirtualDevice->SetFillColor(COL_BLACK);
     AntialiasingFlags nOldAA = pVirtualDevice->GetAntialiasing();
     pVirtualDevice->SetAntialiasing(nOldAA & ~AntialiasingFlags::Enable);
 

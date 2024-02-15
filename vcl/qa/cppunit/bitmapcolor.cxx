@@ -18,6 +18,7 @@
  */
 
 // bootstrap stuff
+#include <tools/color.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/BitmapColor.hxx>
@@ -101,7 +102,7 @@ void BitmapColorTest::colorValueConstructor()
 void BitmapColorTest::colorClassConstructor()
 {
     {
-        BitmapColor aBmpColor(Color(0, 0, 0));
+        BitmapColor aBmpColor(COL_BLACK);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Red wrong", static_cast<sal_uInt8>(0), aBmpColor.GetRed());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", static_cast<sal_uInt8>(0),

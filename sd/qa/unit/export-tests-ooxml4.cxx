@@ -8,6 +8,7 @@
  */
 
 #include "sdmodeltestbase.hxx"
+#include <tools/color.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
@@ -315,9 +316,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127372)
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), Color(aColorStops[0].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aColorStops[1].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127379)

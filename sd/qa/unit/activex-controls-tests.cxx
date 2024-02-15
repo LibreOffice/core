@@ -8,6 +8,7 @@
  */
 
 #include "sdmodeltestbase.hxx"
+#include <tools/color.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -90,12 +91,12 @@ void SdActiveXControlsTest::testBackgroundColor()
         0xECE9D8, // Button Face
         0xACA899, // Button Shadow
         0xACA899, // Disabled Text
-        0x000000, // Button Text
+        COL_BLACK, // Button Text
         0xD8E4F8, // Inactive Title Bar Text
         0xFFFFFF, // Button Highlight
         0x716F64, // Button Dark Shadow
         0xF1EFE2, // Button Light Shadow
-        0x000000, // Tooltip Text
+        COL_BLACK, // Tooltip Text
         0xFFFFE1, // Tooltip
         0xFF0000, // Custom red color
     };

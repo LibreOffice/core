@@ -632,7 +632,7 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     const Color aColA(0xd99594);
     const Color aColB(0xc0504d);
     const Color aColC(0x666666);
-    const Color aColD(0x000000);
+    const Color aColD(COL_BLACK);
 
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
     CPPUNIT_ASSERT_EQUAL(aColB, Color(ColorTransparency, aGradient.StartColor));

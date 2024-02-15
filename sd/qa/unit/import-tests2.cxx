@@ -10,6 +10,7 @@
 #include <sdpage.hxx>
 
 #include "sdmodeltestbase.hxx"
+#include <tools/color.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
@@ -545,7 +546,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103477)
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bullet's color is wrong!", Color(0x000000),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bullet's color is wrong!", COL_BLACK,
                                  pNumFmt->GetNumRule().GetLevel(1).GetBulletColor());
 }
 
