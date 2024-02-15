@@ -499,13 +499,6 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         // static default Items can just be used without RefCounting
         return pSource;
 
-    if (pSource->isDynamicDefault()
-        && pSource->isSetItem()
-        && static_cast<const SfxSetItem*>(pSource)->GetItemSet().GetPool() == &rPool)
-        // only use without RefCounting when SfxSetItem and the Pool is correct.
-        // all other cases just clone (as before)
-        return pSource;
-
     if (0 == pSource->Which())
     {
         // There should be no Items with 0 == WhichID, but there are some
@@ -515,6 +508,14 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
             return pSource;
         return pSource->Clone();
     }
+
+    if (pSource->isDynamicDefault() && rPool.GetPoolDefaultItem(pSource->Which()) == pSource)
+        // dynamic defaults are not allowed to 'leave' the Pool they are
+        // defined for. We can check by comparing the PoolDefault (the
+        // PoolDefaultItem) to pSource by ptr compare (instance). When
+        // same Item we can use without RefCount. Else it will be cloned
+        // below the standard way.
+        return pSource;
 
 #ifdef DBG_UTIL
     // remember WhichID due to being able to assert Clone() error(s)
