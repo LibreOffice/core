@@ -74,7 +74,7 @@ bool SwCursor::GotoFootnoteText()
         SwCursorSaveState aSaveState( *this );
         GetPoint()->Assign( *static_cast<SwTextFootnote*>(pFootnote)->GetStartNode() );
 
-        SwContentNode* pCNd = GetDoc().GetNodes().GoNextSection(
+        SwContentNode* pCNd = SwNodes::GoNextSection(
                                             GetPoint(),
                                             true, !IsReadOnlyAvailable() );
         if( pCNd )

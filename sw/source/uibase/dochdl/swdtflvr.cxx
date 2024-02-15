@@ -1233,7 +1233,7 @@ bool SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr
 
     SwNodes& rNds = rCDoc.GetNodes();
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
-    SwContentNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to 1st ContentNode
+    SwContentNode* pCNd = SwNodes::GoNext(&aNodeIdx); // go to 1st ContentNode
     SwPaM aPam( *pCNd );
 
     rCDoc.getIDocumentFieldsAccess().LockExpFields();   // never update fields - leave text as it is

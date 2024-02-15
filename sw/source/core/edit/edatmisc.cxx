@@ -74,7 +74,7 @@ void SwEditShell::GCAttr()
                 if( pNd->IsTextNode() )
                     static_cast<SwTextNode*>(pNd)->GCAttr();
             }
-            while( nullptr != ( pNd = GetDoc()->GetNodes().GoNext( &aIdx )) &&
+            while( nullptr != ( pNd = SwNodes::GoNext( &aIdx )) &&
                     aIdx <= rEnd );
         }
     }

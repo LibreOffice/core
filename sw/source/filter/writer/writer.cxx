@@ -170,7 +170,7 @@ Writer::NewUnoCursor(SwDoc & rDoc, SwNodeOffset const nStartIdx, SwNodeOffset co
 
     SwNodeIndex aStt( *pNds, nStartIdx );
     SwContentNode* pCNode = aStt.GetNode().GetContentNode();
-    if( !pCNode && nullptr == pNds->GoNext( &aStt ) )
+    if (!pCNode && nullptr == SwNodes::GoNext(&aStt))
     {
         OSL_FAIL( "No more ContentNode at StartPos" );
     }

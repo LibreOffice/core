@@ -1075,7 +1075,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
         while (pTableNode)
         {
             rUnoCursor.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
-            SwContentNode* pCNode = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
+            SwContentNode* pCNode = SwNodes::GoNext(rUnoCursor.GetPoint());
             pTableNode = pCNode ? pCNode->FindTableNode() : nullptr;
         }
         SwStartNode const*const pTmp =
@@ -1086,7 +1086,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
                 static_cast<SwSectionNode const*>(pTmp);
             if (pSectionStartNode->GetSection().IsHiddenFlag())
             {
-                GetDoc()->GetNodes().GoNextSection(
+                SwNodes::GoNextSection(
                         rUnoCursor.GetPoint(), true, false);
             }
         }

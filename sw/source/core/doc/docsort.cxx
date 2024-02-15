@@ -684,7 +684,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 
     // Set Pam source to the first ContentNode
     SwNodeRange aRg( *pSource->GetSttNd(), SwNodeOffset(0), *pSource->GetSttNd() );
-    SwNode* pNd = pDoc->GetNodes().GoNext( &aRg.aStart );
+    SwNode* pNd = SwNodes::GoNext(&aRg.aStart);
 
     // If the Cell (Source) wasn't moved
     // -> insert an empty Node and move the rest or the Mark
@@ -697,7 +697,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     // If the Target is empty (there is one empty Node)
     // -> move and delete it
     SwNodeIndex aTar( *pTar->GetSttNd() );
-    pNd = pDoc->GetNodes().GoNext( &aTar );     // next ContentNode
+    pNd = SwNodes::GoNext(&aTar); // next ContentNode
     SwNodeOffset nCount = pNd->EndOfSectionIndex() - pNd->StartOfSectionIndex();
 
     bool bDelFirst = false;

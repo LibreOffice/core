@@ -682,7 +682,7 @@ bool SwCursorShell::TrySelectOuterTable()
     pOuterTable->GetTable().CreateSelection(&firstCell.GetNode(), &lastCell.GetNode(),
             aNew, SwTable::SEARCH_NONE, false);
     // set table cursor to 1st / last content which may be in inner table
-    SwContentNode *const pStart = rNodes.GoNext(&firstCell);
+    SwContentNode* const pStart = SwNodes::GoNext(&firstCell);
     assert(pStart); // must at least find the previous point node
     lastCell = *lastCell.GetNode().EndOfSectionNode();
     SwContentNode *const pEnd = SwNodes::GoPrevious(&lastCell);
@@ -737,7 +737,7 @@ bool SwCursorShell::MoveStartText()
     assert(pStartNode);
     SwTableNode const*const pTable(pStartNode->FindTableNode());
     m_pCurrentCursor->GetPoint()->Assign(*pStartNode);
-    GetDoc()->GetNodes().GoNext(m_pCurrentCursor->GetPoint());
+    SwNodes::GoNext(m_pCurrentCursor->GetPoint());
     while (m_pCurrentCursor->GetPoint()->GetNode().FindTableNode() != pTable
         && (!pTable || pTable->GetIndex() < m_pCurrentCursor->GetPoint()->GetNode().FindTableNode()->GetIndex())
         && MoveOutOfTable());
@@ -759,7 +759,7 @@ void SwCursorShell::ExtendedSelectAll(bool bFootnotes)
     m_pCurrentCursor->Normalize(true);
     SwPosition* pPos = m_pCurrentCursor->GetPoint();
     pPos->Assign(bFootnotes ? rNodes.GetEndOfPostIts() : static_cast<SwNode const&>(*pStartNode));
-    rNodes.GoNext( pPos );
+    SwNodes::GoNext(pPos);
     pPos = m_pCurrentCursor->GetMark();
     pPos->Assign(bFootnotes ? rNodes.GetEndOfContent() : static_cast<SwNode const&>(*pStartNode->EndOfSectionNode()));
     SwContentNode* pCNd = SwNodes::GoPrevious( pPos );
@@ -840,7 +840,7 @@ SwCursorShell::ExtendedSelectedAll() const
     SwStartNode const* pStartNode(FindParentText(*pShellCursor));
 
     SwNodeIndex nNode(*pStartNode);
-    SwContentNode* pStart = rNodes.GoNext(&nNode);
+    SwContentNode* pStart = SwNodes::GoNext(&nNode);
     if (!pStart)
     {
         return {};
@@ -1865,7 +1865,7 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
     SwTextNode* pTextNd = aTmp.GetNode().GetTextNode();
     while( pTextNd && pTextNd->HasHiddenCharAttribute( true ) )
     {
-        SwContentNode* pContent = aTmp.GetNodes().GoNext( &aTmp );
+        SwContentNode* pContent = SwNodes::GoNext(&aTmp);
         if ( pContent && pContent->IsTextNode() )
             pTextNd = pContent->GetTextNode();
         else
@@ -3117,7 +3117,7 @@ bool SwCursorShell::IsStartOfDoc() const
     // after EndOfIcons comes the content selection (EndNd+StNd+ContentNd)
     SwNodeIndex aIdx( GetDoc()->GetNodes().GetEndOfExtras(), 2 );
     if( !aIdx.GetNode().IsContentNode() )
-        GetDoc()->GetNodes().GoNext( &aIdx );
+        SwNodes::GoNext(&aIdx);
     return aIdx == m_pCurrentCursor->GetPoint()->GetNode();
 }
 
@@ -3345,7 +3345,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     SwNodes& rNds = rDoc.GetNodes();
 
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
-    SwContentNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to the first ContentNode
+    SwContentNode* pCNd = SwNodes::GoNext(&aNodeIdx); // go to the first ContentNode
 
     m_pCurrentCursor = new SwShellCursor( *this, SwPosition( aNodeIdx, pCNd, 0 ) );
 
@@ -3518,7 +3518,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
     {
         // set to beginning of document
         rNdPos.Assign( mxDoc->GetNodes().GetEndOfExtras() );
-        mxDoc->GetNodes().GoNext( &rNdPos );
+        SwNodes::GoNext(&rNdPos);
         nNdIdx = rNdPos.GetNodeIndex();
     }
 
@@ -3572,7 +3572,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
                 for (;;)
                 {
                     if (bGoNextSection)
-                        pCNd = rNds.GoNextSection( &rNdPos,
+                        pCNd = SwNodes::GoNextSection( &rNdPos,
                                             true, !IsReadOnlyAvailable() );
                     else
                         pCNd = SwNodes::GoPrevSection( &rNdPos,
@@ -4002,9 +4002,8 @@ void SwCursorShell::ClearUpCursors()
     {
         // tdf#106959: When cursor points to start of a table, the proper content
         // node is the first one inside the table, not the previous one
-        SwNodes& aNodes = GetDoc()->GetNodes();
         SwNodeIndex aIdx(pStartCursor->GetPoint()->GetNode());
-        if (SwNode* pNode = aNodes.GoNext(&aIdx))
+        if (SwNode* pNode = SwNodes::GoNext(&aIdx))
         {
             SwPaM aTmpPam(*pNode);
             *pStartCursor = aTmpPam;
@@ -4019,14 +4018,14 @@ void SwCursorShell::ClearUpCursors()
         SwNode * pNode = SwNodes::GoPrevious(&aIdx);
         if( pNode == nullptr || lcl_NodeContext( *pNode ) != pStart )
         {
-            pNode = aNodes.GoNext( &aIdx );
+            pNode = SwNodes::GoNext(&aIdx);
             if( pNode == nullptr || lcl_NodeContext( *pNode ) != pStart )
             {
                 // If the start entry of the ring is invalid replace it with a
                 // cursor pointing to the beginning of the first content node in the
                 // document.
                 aIdx = *(aNodes.GetEndOfContent().StartOfSectionNode());
-                pNode = aNodes.GoNext( &aIdx );
+                pNode = SwNodes::GoNext(&aIdx);
             }
         }
         bool bFound = (pNode != nullptr);

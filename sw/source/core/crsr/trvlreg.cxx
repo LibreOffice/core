@@ -73,8 +73,7 @@ bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
             else if( &fnPosRegion == &fnMoveForward )
             {
                 aIdx = *pNd;
-                SwContentNode* pCNd = pNd->GetNodes().GoNextSection( &aIdx,
-                                                true, !bInReadOnly );
+                SwContentNode* pCNd = SwNodes::GoNextSection(&aIdx, true, !bInReadOnly);
                 if( !pCNd )
                 {
                     --aIdx;
@@ -148,8 +147,7 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
             else if( &fnPosRegion == &fnMoveForward )
             {
                 aIdx = *pNd;
-                SwContentNode* pCNd = pNd->GetNodes().GoNextSection( &aIdx,
-                                                true, !bInReadOnly );
+                SwContentNode* pCNd = SwNodes::GoNextSection(&aIdx, true, !bInReadOnly);
                 if( !pCNd )
                 {
                     aIdx.Assign( *pNd->EndOfSectionNode(), +1 );
@@ -203,7 +201,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurrentCursor, SwMoveFnCollection const & fn
         else
         {
             SwNodeIndex aIdx( *pNd );
-            pCNd = pNd->GetNodes().GoNextSection( &aIdx, true, !bInReadOnly );
+            pCNd = SwNodes::GoNextSection(&aIdx, true, !bInReadOnly);
             if( !pCNd )
                 return false;
             pPos->Assign( aIdx );

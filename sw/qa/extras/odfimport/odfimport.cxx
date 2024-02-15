@@ -760,7 +760,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo37606)
         // And make sure the table got deleted as well.
         SwNodes& rNodes = pWrtShell->GetDoc()->GetNodes();
         SwNodeIndex nNode(rNodes.GetEndOfExtras());
-        SwContentNode* pContentNode = rNodes.GoNext(&nNode);
+        SwContentNode* pContentNode = SwNodes::GoNext(&nNode);
         // First content node was in a table -> table wasn't deleted.
         CPPUNIT_ASSERT(!pContentNode->FindTableNode());
     }

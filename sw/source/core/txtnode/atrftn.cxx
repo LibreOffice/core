@@ -197,7 +197,7 @@ OUString SwFormatFootnote::GetFootnoteText(SwRootFrame const& rLayout) const
         SwNodeIndex aIdx( *m_pTextAttr->GetStartNode(), 1 );
         SwContentNode* pCNd = aIdx.GetNode().GetTextNode();
         if( !pCNd )
-            pCNd = aIdx.GetNodes().GoNext( &aIdx );
+            pCNd = SwNodes::GoNext(&aIdx);
 
         if( pCNd->IsTextNode() ) {
             buf.append(static_cast<SwTextNode*>(pCNd)->GetExpandText(&rLayout));
@@ -508,7 +508,7 @@ void SwTextFootnote::DelFrames(SwRootFrame const*const pRoot)
         return;
 
     SwNodeIndex aIdx( *m_oStartNode );
-    SwContentNode* pCNd = m_pTextNode->GetNodes().GoNext( &aIdx );
+    SwContentNode* pCNd = SwNodes::GoNext(&aIdx);
     if( !pCNd )
         return;
 

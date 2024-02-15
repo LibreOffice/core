@@ -1355,7 +1355,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     paragraph indent to be relative to the new paragraph indent
                 */
                 SwPaM aRegion(rTmpPos);
-                if (rEntry.MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
+                if (rEntry.MakeRegion(aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SvxFirstLineIndentItem firstLineNew(RES_MARGIN_FIRSTLINE);
                     SvxTextLeftMarginItem leftMarginNew(RES_MARGIN_TEXTLEFT);
@@ -1449,7 +1449,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         case RES_TXTATR_INETFMT:
             {
                 SwPaM aRegion(rTmpPos);
-                if (rEntry.MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
+                if (rEntry.MakeRegion(aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SwFrameFormat *pFrame;
                     // If we have just one single inline graphic then

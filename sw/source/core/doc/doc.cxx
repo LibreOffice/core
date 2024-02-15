@@ -1559,7 +1559,7 @@ bool SwDoc::RemoveInvisibleContent()
                         pSectNd->EndOfSectionIndex() + 1 )
                     {
                         // only delete the content
-                        SwContentNode* pCNd = GetNodes().GoNext( aPam.GetPoint() );
+                        SwContentNode* pCNd = SwNodes::GoNext(aPam.GetPoint());
                         aPam.SetMark();
                         aPam.GetPoint()->Assign( *pSectNd->EndOfSectionNode() );
                         pCNd = SwNodes::GoPrevious( aPam.GetPoint() );

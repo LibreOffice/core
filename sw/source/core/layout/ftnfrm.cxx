@@ -1235,8 +1235,7 @@ void SwFootnoteBossFrame::ResetFootnote( const SwFootnoteFrame *pCheck )
     SwNodeIndex aIdx( *pCheck->GetAttr()->GetStartNode(), 1 );
     SwContentNode *pNd = aIdx.GetNode().GetContentNode();
     if ( !pNd )
-        pNd = pCheck->GetFormat()->GetDoc()->
-              GetNodes().GoNextSection( &aIdx, true, false );
+        pNd = SwNodes::GoNextSection(&aIdx, true, false);
     SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pNd);
     SwFrame* pFrame = aIter.First();
     while( pFrame )
@@ -1735,8 +1734,7 @@ SwFootnoteFrame *SwFootnoteBossFrame::FindFootnote( const SwContentFrame *pRef, 
     SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
     SwContentNode *pNd = aIdx.GetNode().GetContentNode();
     if ( !pNd )
-        pNd = pRef->GetAttrSet()->GetDoc()->
-              GetNodes().GoNextSection( &aIdx, true, false );
+        pNd = SwNodes::GoNextSection(&aIdx, true, false);
     if ( !pNd )
         return nullptr;
     SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti> aIter(*pNd);

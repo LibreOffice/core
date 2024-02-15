@@ -394,7 +394,7 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
     if( SwNodeType::Start & m_nNodeType )
     {
         SwNodeIndex aIdx( *this );
-        pNd = GetNodes().GoNext( &aIdx );
+        pNd = SwNodes::GoNext(&aIdx);
     }
     else if( SwNodeType::End & m_nNodeType )
     {
@@ -504,7 +504,7 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
     if( SwNodeType::Start & m_nNodeType )
     {
         SwNodeIndex aIdx( *this );
-        pNode = GetNodes().GoNext( &aIdx );
+        pNode = SwNodes::GoNext(&aIdx);
     }
     else if( SwNodeType::End & m_nNodeType )
     {
@@ -994,9 +994,8 @@ void SwStartNode::CheckSectionCondColl() const
 {
     SwNodeIndex aIdx( *this );
     SwNodeOffset nEndIdx = EndOfSectionIndex();
-    const SwNodes& rNds = GetNodes();
     SwContentNode* pCNd;
-    while( nullptr != ( pCNd = rNds.GoNext( &aIdx )) && pCNd->GetIndex() < nEndIdx )
+    while (nullptr != (pCNd = SwNodes::GoNext(&aIdx)) && pCNd->GetIndex() < nEndIdx)
         pCNd->ChkCondColl();
 }
 

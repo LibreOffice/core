@@ -919,7 +919,7 @@ tools::Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
     {
         // Preview: set VisArea to the first page.
         SwNodeIndex aIdx( m_xDoc->GetNodes().GetEndOfExtras(), 1 );
-        SwContentNode* pNd = m_xDoc->GetNodes().GoNext( &aIdx );
+        SwContentNode* pNd = SwNodes::GoNext(&aIdx);
 
         const SwRect aPageRect = pNd->FindPageFrameRect();
         if (aPageRect.IsEmpty())

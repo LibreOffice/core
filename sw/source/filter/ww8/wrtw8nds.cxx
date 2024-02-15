@@ -2439,7 +2439,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 {
                     pTOXSect = &pTOXSectNd->GetSection();
 
-                    const SwNode* pNxt = rNode.GetNodes().GoNext( &aIdx );
+                    const SwNode* pNxt = SwNodes::GoNext(&aIdx);
                     if( pNxt && pNxt->FindSectionNode() == pTOXSectNd )
                         pTOXSect = nullptr;
                 }

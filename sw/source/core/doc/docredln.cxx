@@ -497,7 +497,7 @@ std::vector<std::unique_ptr<SwRangeRedline>> GetAllValidRanges(std::unique_ptr<S
 
     if( !aNewStt.GetNode().IsContentNode() )
     {
-        pC = rNds.GoNext( &aNewStt );
+        pC = SwNodes::GoNext(&aNewStt);
         if( !pC )
             aNewStt.Assign(rNds.GetEndOfContent());
     }
@@ -588,7 +588,7 @@ std::vector<std::unique_ptr<SwRangeRedline>> GetAllValidRanges(std::unique_ptr<S
 
         if( aNewStt >= *pEnd )
             break;
-        pC = rNds.GoNext( &aNewStt );
+        pC = SwNodes::GoNext(&aNewStt);
         if( !pC )
             break;
     } while( aNewStt < *pEnd );

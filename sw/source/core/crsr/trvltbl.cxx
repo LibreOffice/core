@@ -359,12 +359,11 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
 
     const SwNode* pTableEndNode = pTableNd->EndOfSectionNode();
 
-    SwNodes& rNds = aTmp.GetNode().GetNodes();
     SwContentNode* pCNd = aTmp.GetNode().GetContentNode();
 
     // no content node => go to next content node
     if( !pCNd )
-        pCNd = rNds.GoNext( &aTmp );
+        pCNd = SwNodes::GoNext(&aTmp);
 
     // robust
     if ( !pCNd )
@@ -395,7 +394,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
             // ok, get the next content node:
             pCNd = aTmp.GetNode().GetContentNode();
             if( nullptr == pCNd )
-                pCNd = rNds.GoNext( &aTmp );
+                pCNd = SwNodes::GoNext(&aTmp);
 
             // robust:
             if ( !pCNd )

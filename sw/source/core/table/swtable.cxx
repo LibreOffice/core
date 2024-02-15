@@ -137,7 +137,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
     SwNodeIndex aIdx( *pBox->GetSttNd(), +1 );
     SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
     if( !pCNd )
-        pCNd = rDoc.GetNodes().GoNext( &aIdx );
+        pCNd = SwNodes::GoNext(&aIdx);
     OSL_ENSURE( pCNd, "Box with no content node" );
 
     if( pCNd->IsTextNode() )

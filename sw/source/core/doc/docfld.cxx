@@ -144,7 +144,7 @@ SetGetExpField::SetGetExpField( const SwTableBox& rTBox )
     if( rTBox.GetSttNd() )
     {
         SwNodeIndex aIdx( *rTBox.GetSttNd() );
-        const SwContentNode* pNd = aIdx.GetNode().GetNodes().GoNext( &aIdx );
+        const SwContentNode* pNd = SwNodes::GoNext(&aIdx);
         if( pNd )
             m_nNode = pNd->GetIndex();
     }
@@ -326,14 +326,14 @@ const SwNode* SetGetExpField::GetNodeFromContent() const
             if( m_CNTNT.pTBox->GetSttNd() )
             {
                 SwNodeIndex aIdx( *m_CNTNT.pTBox->GetSttNd() );
-                pRet = aIdx.GetNode().GetNodes().GoNext( &aIdx );
+                pRet = SwNodes::GoNext(&aIdx);
             }
             break;
 
         case FLYFRAME:
             {
                 SwNodeIndex aIdx( *m_CNTNT.pFlyFormat->GetContent().GetContentIdx() );
-                pRet = aIdx.GetNode().GetNodes().GoNext( &aIdx );
+                pRet = SwNodes::GoNext(&aIdx);
             }
             break;
         }
@@ -1138,7 +1138,7 @@ void SwDocUpdateField::GetBodyNodeGeneric(SwNode const& rNode, T const& rCond)
             // create index to determine the TextNode
             SwPosition aPos(rNode);
             SwContentNode const*const pCNd = rNode.IsSectionNode()
-                ? rDoc.GetNodes().GoNext(&aPos.nNode) // to the next ContentNode
+                ? SwNodes::GoNext(&aPos.nNode) // to the next ContentNode
                 : rNode.GetContentNode();
 
             if( !pCNd || !pCNd->IsTextNode() )

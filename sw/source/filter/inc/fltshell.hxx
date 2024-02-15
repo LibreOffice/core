@@ -99,8 +99,8 @@ public:
 
     enum class RegionMode { NoCheck = 0, CheckNodes = 1<<0, CheckFieldmark = 1<<1 };
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
-    SW_DLLPUBLIC bool MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode eCheck) const;
-    SW_DLLPUBLIC static bool MakeRegion(SwDoc& rDoc, SwPaM& rRegion,
+    SW_DLLPUBLIC bool MakeRegion(SwPaM& rRegion, RegionMode eCheck) const;
+    SW_DLLPUBLIC static bool MakeRegion(SwPaM& rRegion,
         RegionMode eCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos,
         sal_uInt16 nWhich=0);
 };

@@ -790,7 +790,7 @@ namespace sw
         void SetInDocAndDelete::operator()(std::unique_ptr<SwFltStackEntry>& pEntry)
         {
             SwPaM aRegion(pEntry->m_aMkPos.m_nNode);
-            if (pEntry->MakeRegion(mrDoc, aRegion,
+            if (pEntry->MakeRegion(aRegion,
                     SwFltStackEntry::RegionMode::CheckNodes|SwFltStackEntry::RegionMode::CheckFieldmark) &&
                 (*aRegion.GetPoint() != *aRegion.GetMark())
             )

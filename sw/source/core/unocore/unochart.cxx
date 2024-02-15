@@ -2352,7 +2352,7 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
             // therefore call GoNext
             SwContentNode *pCNd = aIdx.GetNode().GetContentNode();
             if (!pCNd)
-                pCNd = GetFrameFormat()->GetDoc()->GetNodes().GoNext( &aIdx );
+                pCNd = SwNodes::GoNext(&aIdx);
             // and then one can e.g. create a SwPosition:
             SwPosition aNewPos( *pCNd );   // new position to be used with cursor
 

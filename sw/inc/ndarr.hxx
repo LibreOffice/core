@@ -131,11 +131,6 @@ class SW_DLLPUBLIC SwNodes final
 
     SwNodes(SwDoc& rDoc);
 
-    // Returns start of the document section (PostIts/Inserts/Autotext/Redlines/Content),
-    // or of a specific fly / header / footer / footnote, where this node is, which must not
-    // be crossed when moving backwards
-    SwNodeOffset StartOfGlobalSection(const SwNode& node) const;
-
 public:
     ~SwNodes();
 
@@ -191,17 +186,17 @@ public:
     static void GoStartOfSection(SwNodeIndex *);
     static void GoEndOfSection(SwNodeIndex *);
 
-    SwContentNode* GoNext(SwNodeIndex *) const;
-    SwContentNode* GoNext(SwPosition *) const;
+    static SwContentNode* GoNext(SwNodeIndex*);
+    static SwContentNode* GoNext(SwPosition*);
     static SwContentNode* GoPrevious(SwNodeIndex *, bool canCrossBoundary = false);
     static SwContentNode* GoPrevious(SwPosition *, bool canCrossBoundary = false);
 
     /** Go to next content-node that is not protected or hidden
        (Both set FALSE ==> GoNext/GoPrevious!!!). */
-    SwContentNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = true,
-                                           bool bSkipProtect = true ) const;
-    SwContentNode* GoNextSection( SwPosition *, bool bSkipHidden  = true,
-                                           bool bSkipProtect = true ) const;
+    static SwContentNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = true,
+                                           bool bSkipProtect = true );
+    static SwContentNode* GoNextSection( SwPosition *, bool bSkipHidden  = true,
+                                           bool bSkipProtect = true );
     static SwContentNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true );
     static SwContentNode* GoPrevSection( SwPosition *, bool bSkipHidden  = true,

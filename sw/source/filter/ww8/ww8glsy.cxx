@@ -217,7 +217,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                 if( !aIdx.GetNode().IsTextNode() )
                 {
                     OSL_ENSURE( false, "Where is the TextNode?" );
-                    pD->GetNodes().GoNext( &aIdx );
+                    SwNodes::GoNext(&aIdx);
                 }
                 SwPaM aPamo( aIdx );
                 std::unique_ptr<SwWW8ImplReader> xRdr(new SwWW8ImplReader(

@@ -124,7 +124,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc& rDoc )
         SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfExtras(), +2 );
         SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
         if( !pCNd )
-            pCNd = rDoc.GetNodes().GoNext( &aIdx );
+            pCNd = SwNodes::GoNext(&aIdx);
 
         SwPosition pos(aIdx.GetNode());
         aAnchor.SetAnchor( &pos );

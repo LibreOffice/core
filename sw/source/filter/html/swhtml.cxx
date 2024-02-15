@@ -2825,7 +2825,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         pAttr = pPrev;
                         continue;
                     }
-                    pCNd = m_xDoc->GetNodes().GoNext( &(pAttr->m_nStartPara) );
+                    pCNd = SwNodes::GoNext(&(pAttr->m_nStartPara));
                     if( pCNd )
                         pAttr->m_nStartContent = 0;
                     else

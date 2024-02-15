@@ -465,7 +465,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
                 SwDoc* pAutoDoc = aTBlks.GetDoc();
                 SwNodeIndex aSttIdx( pAutoDoc->GetNodes().GetEndOfExtras(), 1 );
-                SwContentNode* pContentNd = pAutoDoc->GetNodes().GoNext( &aSttIdx );
+                SwContentNode* pContentNd = SwNodes::GoNext(&aSttIdx);
                 SwPaM aCpyPam( aSttIdx );
 
                 const SwTableNode* pTableNd = pContentNd->FindTableNode();

@@ -583,7 +583,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
             SwNodeIndex aIdx( GetDoc()->GetNodes(), nIdx );
             SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
             if( !pCNd )
-                pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
+                pCNd = SwNodes::GoNext(&aIdx);
 
             // remove row frames in Hide Changes mode (and table frames, if needed)
             if ( bRecordAndHideChanges )
@@ -1361,7 +1361,7 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
             SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
             SwTextNode* pCNd = aIdx.GetNode().GetTextNode();
             if( !pCNd )
-                pCNd = static_cast<SwTextNode*>(GetDoc()->GetNodes().GoNext( &aIdx ));
+                pCNd = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
 
             while ( pCNd )
             {

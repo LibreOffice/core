@@ -1009,7 +1009,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 {
                     // exit first the complete table
                     // ???? what about only table in a frame ?????
-                    SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
+                    SwContentNode* pCNd = SwNodes::GoNext(&aNdIdx);
                     SwPosition aPos( aNdIdx, pCNd, 0 );
                     // #i59539: Don't remove all redline
                     SwPaM const tmpPaM(*pDestNd, *pDestNd->EndOfSectionNode());
@@ -1024,7 +1024,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 {
                     // return to the box
                     aNdIdx = *pSttNd;
-                    SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
+                    SwContentNode* pCNd = SwNodes::GoNext(&aNdIdx);
                     SwPosition aPos( aNdIdx, pCNd, 0 );
                     // #i59539: Don't remove all redline
                     SwNode & rNode(rPaM.GetPoint()->GetNode());

@@ -676,7 +676,7 @@ void SwSectionFormat::DelFrames()
     // Paste of the Frame itself would need to do this. But that leads
     // to subsequent errors, which we'd need to solve at run-time.
     SwNodeIndex aNextNd( *pIdx );
-    SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, true, false );
+    SwContentNode* pCNd = SwNodes::GoNextSection(&aNextNd, true, false);
     if( pCNd )
     {
         const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get(RES_PAGEDESC);

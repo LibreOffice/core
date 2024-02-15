@@ -324,8 +324,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
             SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
             SwContentNode *pNd = aIdx.GetNode().GetContentNode();
             if ( !pNd )
-                pNd = pFrame->GetAttrSet()->GetDoc()->
-                        GetNodes().GoNextSection( &aIdx, true, false );
+                pNd = SwNodes::GoNextSection(&aIdx, true, false);
             if ( !pNd )
                 continue;
 

@@ -1159,7 +1159,6 @@ void SwShellTableCursor::FillRects()
     SwRegionRects aReg( comphelper::LibreOfficeKit::isActive()
         ? GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->getFrameArea()
         : GetShell()->VisArea() );
-    SwNodes& rNds = GetDoc().GetNodes();
     SwFrame* pEndFrame = nullptr;
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
@@ -1167,7 +1166,7 @@ void SwShellTableCursor::FillRects()
         const SwTableNode* pSelTableNd = pSttNd->FindTableNode();
 
         SwNodeIndex aIdx( *pSttNd );
-        SwContentNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
+        SwContentNode* pCNd = SwNodes::GoNextSection(&aIdx, true, false);
 
         // table in table
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
@@ -1176,7 +1175,7 @@ void SwShellTableCursor::FillRects()
         while ( pSelTableNd != pCurTableNd && pCurTableNd )
         {
             aIdx = pCurTableNd->EndOfSectionIndex();
-            pCNd = rNds.GoNextSection( &aIdx, true, false );
+            pCNd = SwNodes::GoNextSection(&aIdx, true, false);
             pCurTableNd = pCNd->FindTableNode();
         }
 
@@ -1225,11 +1224,10 @@ bool SwShellTableCursor::Contains( const Point& rPt ) const
     if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->GetNodeIndex())
         return false;
 
-    SwNodes& rNds = GetDoc().GetNodes();
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
         SwNodeIndex aIdx( *m_SelectedBoxes[n]->GetSttNd() );
-        SwContentNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
+        SwContentNode* pCNd = SwNodes::GoNextSection(&aIdx, true, false);
         if( !pCNd )
             continue;
 

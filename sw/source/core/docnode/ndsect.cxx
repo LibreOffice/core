@@ -63,9 +63,7 @@
 // #i21457# - new implementation of local method <lcl_IsInSameTableBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
 // for which previous/next is checked, if it's visible.
-static bool lcl_IsInSameTableBox( SwNodes const & _rNds,
-                         const SwNode& _rNd,
-                         const bool _bPrev )
+static bool lcl_IsInSameTableBox(const SwNode& _rNd, const bool _bPrev)
 {
     const SwTableNode* pTableNd = _rNd.FindTableNode();
     if ( !pTableNd )
@@ -84,7 +82,7 @@ static bool lcl_IsInSameTableBox( SwNodes const & _rNds,
     {
         if ( _bPrev
                 ? !SwNodes::GoPrevSection( &aChkIdx, false, false )
-                : !_rNds.GoNextSection( &aChkIdx, false, false ) )
+                : !SwNodes::GoNextSection( &aChkIdx, false, false ) )
         {
             OSL_FAIL( "<lcl_IsInSameTableBox(..)> - no previous/next!" );
             return false;
@@ -124,20 +122,20 @@ static bool lcl_IsInSameTableBox( SwNodes const & _rNds,
     return true;
 }
 
-static void lcl_CheckEmptyLayFrame( SwNodes const & rNds, SwSectionData& rSectionData,
+static void lcl_CheckEmptyLayFrame( SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );
     if( !SwNodes::GoPrevSection( &aIdx, true, false ) ||
         !CheckNodesRange( rStt, aIdx.GetNode(), true ) ||
         // #i21457#
-        !lcl_IsInSameTableBox( rNds, rStt, true ))
+        !lcl_IsInSameTableBox( rStt, true ))
     {
         aIdx = rEnd;
-        if( !rNds.GoNextSection( &aIdx, true, false ) ||
+        if( !SwNodes::GoNextSection( &aIdx, true, false ) ||
             !CheckNodesRange( rEnd, aIdx.GetNode(), true ) ||
             // #i21457#
-            !lcl_IsInSameTableBox( rNds, rEnd, false ))
+            !lcl_IsInSameTableBox( rEnd, false ))
         {
             rSectionData.SetHidden( false );
         }
@@ -171,7 +169,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             pEnd->GetNode().GetContentNode()->Len() ==
             pEnd->GetContentIndex() )
         {
-            ::lcl_CheckEmptyLayFrame( GetNodes(),
+            ::lcl_CheckEmptyLayFrame(
                                     rNewData,
                                     pStt->GetNode(),
                                     pEnd->GetNode() );
@@ -650,7 +648,7 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
                     pIdx->GetNode().GetSectionNode();
                 if (pSectNd)
                 {
-                    ::lcl_CheckEmptyLayFrame( GetNodes(), rNewData,
+                    ::lcl_CheckEmptyLayFrame( rNewData,
                                 *pSectNd, *pSectNd->EndOfSectionNode() );
                 }
             }
@@ -1040,7 +1038,7 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
     if (GetSection().IsHiddenFlag() || IsContentHidden())
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
-        SwContentNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
+        SwContentNode* pCNd = SwNodes::GoNextSection(&aIdx, true, false);
         if( !pCNd )
         {
             aIdx = *this;
@@ -1180,7 +1178,6 @@ void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/, bool const
         return ;
     }
 
-    SwNodes& rNds = GetNodes();
     m_pSection->GetFormat()->DelFrames();
 
     // Update our Flag
@@ -1196,13 +1193,13 @@ void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/, bool const
     if( !SwNodes::GoPrevSection( &aIdx, true, false ) ||
         !CheckNodesRange( *this, aIdx.GetNode(), true ) ||
         // #i21457#
-        !lcl_IsInSameTableBox( rNds, *this, true ))
+        !lcl_IsInSameTableBox( *this, true ))
     {
         aIdx = *EndOfSectionNode();
-        if( !rNds.GoNextSection( &aIdx, true, false ) ||
+        if( !SwNodes::GoNextSection( &aIdx, true, false ) ||
             !CheckNodesRange( *EndOfSectionNode(), aIdx.GetNode(), true ) ||
             // #i21457#
-            !lcl_IsInSameTableBox( rNds, *EndOfSectionNode(), false ))
+            !lcl_IsInSameTableBox( *EndOfSectionNode(), false ))
         {
             m_pSection->m_Data.SetHiddenFlag(false);
         }

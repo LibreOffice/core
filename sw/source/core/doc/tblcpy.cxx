@@ -562,7 +562,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             if( !pCNd )
             {
                 SwNodeIndex aTmp( aInsIdx );
-                pCNd = pDoc->GetNodes().GoNext( &aTmp );
+                pCNd = SwNodes::GoNext(&aTmp);
             }
 
             if( pCNd &&

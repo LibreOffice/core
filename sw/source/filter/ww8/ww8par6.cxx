@@ -3536,7 +3536,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
         SwFltPosition aPtPos(*m_pPaM->GetPoint());
 
         SwFrameFormat *pFlyFormat = nullptr;
-        if (SwFltStackEntry::MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck, aMkPos, aPtPos)
+        if (SwFltStackEntry::MakeRegion(aRegion, SwFltStackEntry::RegionMode::NoCheck, aMkPos, aPtPos)
             && nullptr != (pFlyFormat = ContainsSingleInlineGraphic(aRegion)))
         {
             m_xCtrlStck->DeleteAndDestroy(nPos);

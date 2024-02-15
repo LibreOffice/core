@@ -237,7 +237,7 @@ bool SwCursorShell::SetCursorInHdFt(size_t nDescNo, bool bInHeader, bool bEven, 
     SwNodeIndex aIdx( *pCnt->GetContentIdx(), 1 );
     SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
     if( !pCNd )
-        pCNd = pMyDoc->GetNodes().GoNext( &aIdx );
+        pCNd = SwNodes::GoNext(&aIdx);
 
     Point aPt( m_pCurrentCursor->GetPtPos() );
 
@@ -283,7 +283,7 @@ bool SwCursorShell::GotoNextTOXBase( const OUString* pName )
                 SwNodeIndex aIdx(*pSectNd, 1);
                 SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
                 if (!pCNd)
-                    pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
+                    pCNd = SwNodes::GoNext(&aIdx);
                 if (pCNd &&
                     pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex())
                 {
@@ -330,7 +330,7 @@ bool SwCursorShell::GotoPrevTOXBase( const OUString* pName )
                 SwNodeIndex aIdx(*pSectNd, 1);
                 SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
                 if (!pCNd)
-                    pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
+                    pCNd = SwNodes::GoNext(&aIdx);
                 if (pCNd &&
                     pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex())
                 {
@@ -437,7 +437,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                       !pFormulaItem->HasValidBoxes() ) )
                 {
                     SwNodeIndex aIdx( *pTBox->GetSttNd() );
-                    const SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
+                    const SwContentNode* pCNd = SwNodes::GoNext(&aIdx);
                     std::pair<Point, bool> const tmp(aPt, false);
                     if (pCNd)
                     {
@@ -1693,7 +1693,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         SwCallLink aLk( *this ); // watch Cursor-Moves
                         SwCursorSaveState aSaveState( *m_pCurrentCursor );
                         m_pCurrentCursor->GetPoint()->Assign( *static_cast<SwTextFootnote*>(pTextAttr)->GetStartNode() );
-                        SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection(
+                        SwContentNode* pCNd = SwNodes::GoNextSection(
                             m_pCurrentCursor->GetPoint(),
                             true, !IsReadOnlyAvailable() );
 
@@ -2563,7 +2563,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline_( SwRedlineTable::size_type nAr
     SwPosition* pPtPos = m_pCurrentCursor->GetPoint();
     if( !pPtPos->GetNode().IsContentNode() )
     {
-        SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection( pPtPos,
+        SwContentNode* pCNd = SwNodes::GoNextSection(pPtPos,
                                 true, IsReadOnlyAvailable() );
         if( pCNd )
         {

@@ -772,7 +772,7 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, std::u16string_view rNm )
 static const SwFrame* lcl_GetBoxFrame( const SwTableBox& rBox )
 {
     SwNodeIndex aIdx( *rBox.GetSttNd() );
-    SwContentNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
+    SwContentNode* pCNd = SwNodes::GoNext(&aIdx);
     OSL_ENSURE( pCNd, "Box has no TextNode" );
     Point aPt;      // get the first frame of the layout - table headline
     std::pair<Point, bool> const tmp(aPt, false);

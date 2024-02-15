@@ -742,7 +742,7 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
             SwNodeIndex aCNdIdx( *pTableNd, +2 );
             SwContentNode* pCNd = aCNdIdx.GetNode().GetContentNode();
             if( !pCNd )
-                pCNd = m_rDoc.GetNodes().GoNext( &aCNdIdx );
+                pCNd = SwNodes::GoNext(&aCNdIdx);
 
             if (pCNd)
             {

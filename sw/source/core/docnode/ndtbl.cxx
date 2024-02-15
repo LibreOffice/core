@@ -874,7 +874,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
         SwPaM& rTmp = const_cast<SwPaM&>(rRange); // Point always at the Start
         rTmp.DeleteMark();
         rTmp.GetPoint()->Assign( *pTableNd );
-        GetNodes().GoNext( rTmp.GetPoint() );
+        SwNodes::GoNext(rTmp.GetPoint());
     }
 
     if( pUndo )
@@ -1883,7 +1883,7 @@ void SwDoc::DeleteRow( const SwCursor& rCursor )
         SwNodeIndex aIdx( GetNodes(), nIdx );
         SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
         if( !pCNd )
-            pCNd = GetNodes().GoNext( &aIdx );
+            pCNd = SwNodes::GoNext(&aIdx);
 
         if( pCNd )
         {
@@ -3098,9 +3098,9 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
                 SwNodeIndex aIdx( *pSrcBox->GetSttNd(), 1 );
                 SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
                 if( !pCNd )
-                    pCNd = aIdx.GetNodes().GoNext( &aIdx );
+                    pCNd = SwNodes::GoNext(&aIdx);
                 aIdx = *pBox->GetSttNd();
-                SwContentNode* pDNd = aIdx.GetNodes().GoNext( &aIdx );
+                SwContentNode* pDNd = SwNodes::GoNext(&aIdx);
 
                 // If the Node is alone in the Section
                 if( SwNodeOffset(2) == pDNd->EndOfSectionIndex() -
@@ -3880,7 +3880,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
             SwNodeIndex aIdx( *pFBox->GetSttNd(), 1 );
             SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
             if( !pCNd )
-                pCNd = GetNodes().GoNext( &aIdx );
+                pCNd = SwNodes::GoNext(&aIdx);
 
             if( pCNd )
                 rGet.UpdateFromSet( nPos, pCNd->GetSwAttrSet(),
@@ -4402,7 +4402,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         if( bCorrPos )
         {
             rInsPos.Assign( *pSttNd );
-            GetNodes().GoNext( &rInsPos );
+            SwNodes::GoNext(&rInsPos);
         }
         getIDocumentRedlineAccess().SetRedlineFlags( eOld );
     }

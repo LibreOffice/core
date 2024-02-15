@@ -1360,7 +1360,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                         SwNodeIndex aIdx( *pIdx, 1 );
                         pTextNd = aIdx.GetNode().GetTextNode();
                         if( nullptr == pTextNd )
-                            pTextNd = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext( &aIdx ));
+                            pTextNd = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
                     }
                     *pStt = 0;
                     if( pEnd )
@@ -1391,8 +1391,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                         SwNodeIndex aIdx(*pIdx, 1);
                         SwTextNode* pFootnoteNode = aIdx.GetNode().GetTextNode();
                         if (nullptr == pFootnoteNode)
-                            pFootnoteNode
-                                = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+                            pFootnoteNode = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
 
                         if (*pSelf == *pFootnoteNode)
                         {

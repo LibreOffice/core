@@ -238,7 +238,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             }
             SwNodeIndex tmp(*pLast);
             // skip over hidden sections!
-            pNode = static_cast<SwTextNode*>(pLast->GetNodes().GoNextSection(&tmp, /*bSkipHidden=*/true, /*bSkipProtect=*/false));
+            pNode = static_cast<SwTextNode*>(SwNodes::GoNextSection(&tmp, /*bSkipHidden=*/true, /*bSkipProtect=*/false));
         }
         while (pNode && pNode->GetIndex() <= rPam.End()->GetNodeIndex());
     }
@@ -364,7 +364,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             }
             SwNodeIndex tmp(*pLast);
             // skip over hidden sections!
-            pNode = static_cast<SwTextNode*>(pLast->GetNodes().GoNextSection(&tmp, /*bSkipHidden=*/true, /*bSkipProtect=*/false));
+            pNode = static_cast<SwTextNode*>(SwNodes::GoNextSection(&tmp, /*bSkipHidden=*/true, /*bSkipProtect=*/false));
         }
         while (pNode && pNode->GetIndex() <= rPam.End()->GetNodeIndex());
     }
@@ -3624,7 +3624,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
             SwPosition* pPos = rPam.GetMark();
             if( !pPos->GetNode().IsContentNode() )
             {
-                pCNd = m_rDoc.GetNodes().GoNextSection( pPos );
+                pCNd = SwNodes::GoNextSection(pPos);
                 if( pCNd )
                 {
                     if( pPos->GetNode() <= rPam.GetPoint()->GetNode() )
@@ -3691,7 +3691,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
         if( !pStt->GetNode().IsContentNode() )
         {
             SwNodeIndex aTmp( pStt->GetNode() );
-            SwContentNode* pCNd = m_rDoc.GetNodes().GoNextSection( &aTmp );
+            SwContentNode* pCNd = SwNodes::GoNextSection(&aTmp);
             if( !pCNd || ( aTmp == rSttPos.GetNode() &&
                 !rSttPos.GetContentIndex() ))
                 pFnd = nullptr;
@@ -3766,7 +3766,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
                 pPos = rPam.GetPoint();
                 if( !pPos->GetNode().IsContentNode() )
                 {
-                    pCNd = m_rDoc.GetNodes().GoNextSection( pPos );
+                    pCNd = SwNodes::GoNextSection(pPos);
                     if( pCNd )
                     {
                         if( pPos->GetNode() <= rPam.GetMark()->GetNode() )

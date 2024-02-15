@@ -461,7 +461,7 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
             SwNodeIndex aIdx( *pIdx, 1 );
             SwTextNode* pTextNd = aIdx.GetNode().GetTextNode();
             if( !pTextNd )
-                pTextNd = static_cast<SwTextNode*>(mxDoc->GetNodes().GoNext( &aIdx ));
+                pTextNd = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
 
             if( pTextNd )
             {

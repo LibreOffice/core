@@ -2410,7 +2410,7 @@ rtl::Reference<SwXTextCursor> SwXBodyText::CreateTextCursor(const bool bIgnoreTa
         while (pTableNode)
         {
             aPam.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
-            SwContentNode* pCont = GetDoc()->GetNodes().GoNext(aPam.GetPoint());
+            SwContentNode* pCont = SwNodes::GoNext(aPam.GetPoint());
             pTableNode = pCont->FindTableNode();
         }
     }
@@ -2633,7 +2633,7 @@ rtl::Reference<SwXTextCursor> SwXHeadFootText::CreateTextCursor(const bool bIgno
         while (pTableNode)
         {
             rUnoCursor.GetPoint()->Assign(*pTableNode->EndOfSectionNode());
-            SwContentNode* pCont = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
+            SwContentNode* pCont = SwNodes::GoNext(rUnoCursor.GetPoint());
             pTableNode = pCont->FindTableNode();
         }
     }

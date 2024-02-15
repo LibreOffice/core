@@ -99,7 +99,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
         SwPaM* pCursor = GetCursor();
 
         SwNodeIndex aStt( pMyDoc->GetNodes().GetEndOfExtras(), 1 );
-        SwContentNode* pContentNd = pMyDoc->GetNodes().GoNext( &aStt );
+        SwContentNode* pContentNd = SwNodes::GoNext(&aStt);
         const SwNode* pNd = pContentNd->FindTableNode();
         if( !pNd )
             pNd = pContentNd;
@@ -124,7 +124,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
         if( rBlock.BeginPutDoc( rShortName, rName ) )
         {
             SwNodeIndex aStt( pMyDoc->GetNodes().GetEndOfExtras(), 1 );
-            SwContentNode* pContentNd = pMyDoc->GetNodes().GoNext( &aStt );
+            SwContentNode* pContentNd = SwNodes::GoNext(&aStt);
             const SwNode* pNd = pContentNd->FindTableNode();
             if( !pNd ) pNd = pContentNd;
             SwPaM aCpyPam( *pNd );
@@ -137,7 +137,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
                 aCpyPam.GetPoint()->SetContent( pContentNd->Len() );
 
             aStt = pGDoc->GetNodes().GetEndOfExtras();
-            pContentNd = pGDoc->GetNodes().GoNext( &aStt );
+            pContentNd = SwNodes::GoNext(&aStt);
             SwPosition aInsPos( aStt );
             pMyDoc->getIDocumentContentOperations().CopyRange(aCpyPam, aInsPos, SwCopyFlags::CheckPosInFly);
 

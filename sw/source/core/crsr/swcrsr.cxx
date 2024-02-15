@@ -255,12 +255,12 @@ bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
             sal_Int32 nContentPos = m_vSavePos.back().nContent;
             bool bGoNxt = m_vSavePos.back().nNode < rPtPos.GetNodeIndex();
             SwContentNode* pCNd = bGoNxt
-                ? rNds.GoNextSection( &rPtPos, bSkipOverHiddenSections, bSkipOverProtectSections)
+                ? SwNodes::GoNextSection( &rPtPos, bSkipOverHiddenSections, bSkipOverProtectSections)
                 : SwNodes::GoPrevSection( &rPtPos, bSkipOverHiddenSections, bSkipOverProtectSections);
             if( !pCNd && ( SwCursorSelOverFlags::EnableRevDirection & eFlags ))
             {
                 bGoNxt = !bGoNxt;
-                pCNd = bGoNxt ? rNds.GoNextSection( &rPtPos, bSkipOverHiddenSections, bSkipOverProtectSections)
+                pCNd = bGoNxt ? SwNodes::GoNextSection( &rPtPos, bSkipOverHiddenSections, bSkipOverProtectSections)
                     : SwNodes::GoPrevSection( &rPtPos, bSkipOverHiddenSections, bSkipOverProtectSections);
             }
 
@@ -281,7 +281,7 @@ bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
                     {
                         // then to the beginning of the document
                         rPtPos.Assign( rNds.GetEndOfExtras() );
-                        pCNd = rNds.GoNext( &rPtPos );
+                        pCNd = SwNodes::GoNext(&rPtPos);
                     }
                 }
             }
@@ -517,7 +517,7 @@ bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
             {
                 pMyNd = bSelTop
                     ? SwNodes::GoPrevSection( GetPoint(),true,false )
-                    : rNds.GoNextSection( GetPoint(),true,false );
+                    : SwNodes::GoNextSection( GetPoint(),true,false );
 
                 /* #i12312# Handle failure of Go{Prev|Next}Section */
                 if ( nullptr == pMyNd)
@@ -623,7 +623,7 @@ GoNextCell:
             ++aCellStt;
             pCNd = aCellStt.GetNode().GetContentNode();
             if( !pCNd )
-                pCNd = aCellStt.GetNodes().GoNext( &aCellStt );
+                pCNd = SwNodes::GoNext(&aCellStt);
             bProt = pCNd->IsProtect();
             if( !bProt )
                 break;
@@ -678,7 +678,7 @@ GoPrevCell:
             aCellStt.Assign( *pNd->StartOfSectionNode(), +1 );
             pCNd = aCellStt.GetNode().GetContentNode();
             if( !pCNd )
-                pCNd = pNd->GetNodes().GoNext( &aCellStt );
+                pCNd = SwNodes::GoNext(&aCellStt);
             bProt = pCNd->IsProtect();
             if( !bProt )
                 break;
@@ -895,13 +895,12 @@ static bool lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     if( rSttNd.GetIndex() + 1 == rEndNd.GetIndex() )
         return false;
 
-    SwNodes& rNds = rPam.GetDoc().GetNodes();
     rPam.DeleteMark();
     SwContentNode* pCNd;
     if( !bFirst )
     {
         rPam.GetPoint()->Assign(rSttNd);
-        pCNd = rNds.GoNext( rPam.GetPoint() );
+        pCNd = SwNodes::GoNext(rPam.GetPoint());
         if( !pCNd )
             return false;
         rPam.GetPoint()->AssignStartIndex(*pCNd);
@@ -927,7 +926,6 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     if( rEndNd.GetIndex() + 1 == rSttNd.GetIndex() )
         return false;
 
-    SwNodes& rNds = rPam.GetDoc().GetNodes();
     rPam.DeleteMark();
     SwContentNode* pCNd;
     if( !bFirst )
@@ -944,7 +942,7 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
 
     rPam.SetMark();
     rPam.GetPoint()->Assign(rEndNd);
-    pCNd = rNds.GoNext( rPam.GetPoint() );
+    pCNd = SwNodes::GoNext(rPam.GetPoint());
     if( !pCNd )
         return false;
     rPam.GetPoint()->SetContent(0);
@@ -1117,7 +1115,7 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
     {
     case SwDocPositions::Start:
         rPos.Assign(*rNds.GetEndOfContent().StartOfSectionNode());
-        pCNd = rNds.GoNext( &rPos );
+        pCNd = SwNodes::GoNext(&rPos);
         break;
     case SwDocPositions::End:
         rPos.Assign(rNds.GetEndOfContent());
@@ -1126,7 +1124,7 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
         break;
     case SwDocPositions::OtherStart:
         rPos.Assign( *rNds[ SwNodeOffset(0) ] );
-        pCNd = rNds.GoNext( &rPos );
+        pCNd = SwNodes::GoNext(&rPos);
         break;
     case SwDocPositions::OtherEnd:
         rPos.Assign( *rNds.GetEndOfContent().StartOfSectionNode() );
@@ -1890,7 +1888,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                     SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                     rPtPos.Assign( aNewIdx );
 
-                    GetDoc().GetNodes().GoNextSection( &rPtPos, false, false );
+                    SwNodes::GoNextSection(&rPtPos, false, false);
                     SwContentNode* pContentNode = GetPointContentNode();
                     if ( pContentNode )
                     {
@@ -1923,7 +1921,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                 rPtPos.Assign( aNewIdx );
 
-                GetDoc().GetNodes().GoNextSection( &rPtPos, false, false );
+                SwNodes::GoNextSection(&rPtPos, false, false);
                 SwContentNode* pContentNode = GetPointContentNode();
                 if ( pContentNode )
                 {
@@ -2244,7 +2242,7 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
 
     rPtPos.Adjust(SwNodeOffset(1));
     if( !rPtPos.GetNode().IsContentNode() )
-        GetDoc().GetNodes().GoNextSection( &rPtPos, true, false );
+        SwNodes::GoNextSection(&rPtPos, true, false);
     GetPoint()->SetContent( 0 );
 
     return !IsInProtectTable( true );
@@ -2451,7 +2449,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
                 SwNodeIndex aIdx( *pSttNd, 1 );
                 const SwNode* pNd = &aIdx.GetNode();
                 if( !pNd->IsContentNode() )
-                    pNd = rNds.GoNextSection( &aIdx, true, false );
+                    pNd = SwNodes::GoNextSection(&aIdx, true, false);
 
                 SwPosition* pPos = pCur->GetMark();
                 if( pNd != &pPos->GetNode() )
@@ -2496,7 +2494,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
                 break;
             SwNode* pNd = &aIdx.GetNode();
             if( !pNd->IsContentNode() )
-                pNd = rNds.GoNextSection( &aIdx, true, false );
+                pNd = SwNodes::GoNextSection(&aIdx, true, false);
 
             SwPaM *const pNew = (!pCurrentCursor->IsMultiSelection() && !pCurrentCursor->HasMark())
                 ? pCurrentCursor

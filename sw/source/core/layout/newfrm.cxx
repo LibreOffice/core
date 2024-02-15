@@ -465,7 +465,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
 
     SwDoc* pDoc = pFormat->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-    SwContentNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, true, false );
+    SwContentNode* pNode = SwNodes::GoNextSection(&aIndex, true, false);
     // #123067# pNode = 0 can really happen
     SwTableNode *pTableNd= pNode ? pNode->FindTableNode() : nullptr;
 

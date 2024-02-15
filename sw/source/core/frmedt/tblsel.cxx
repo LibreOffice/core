@@ -433,7 +433,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     SwNodeIndex aIdx( rSttNd );
     const SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, false, false );
+        pCNd = SwNodes::GoNextSection(&aIdx, false, false);
 
     // if table is invisible, return
     // (layout needed for forming table selection further down, so we can't
@@ -453,7 +453,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     aIdx = rEndNd;
     pCNd = aIdx.GetNode().GetContentNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, false, false );
+        pCNd = SwNodes::GoNextSection(&aIdx, false, false);
 
     // #i22135# - Robust: check, if content was found and if it's visible
     if ( !pCNd || pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) == nullptr )

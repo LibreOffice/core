@@ -3473,7 +3473,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     pTCntxt->SetFrameFormat( pFrameFormat );
                     const SwFormatContent& rFlyContent = pFrameFormat->GetContent();
                     m_pPam->GetPoint()->Assign( *rFlyContent.GetContentIdx() );
-                    m_xDoc->GetNodes().GoNext( m_pPam->GetPoint() );
+                    SwNodes::GoNext(m_pPam->GetPoint());
                 }
 
                 // create a SwTable with a box and set the PaM to the content of

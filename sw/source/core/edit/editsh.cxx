@@ -863,7 +863,7 @@ sal_Int32 SwEditShell::GetLineCount()
 
     aStart = SwNodeOffset(0);
 
-    while( nullptr != ( pCNd = GetDoc()->GetNodes().GoNextSection(
+    while (nullptr != (pCNd = SwNodes::GoNextSection(
                 &aStart, true, false )) )
     {
         if( nullptr != ( pContentFrame = pCNd->getLayoutFrame( GetLayout() ) ) && pContentFrame->IsTextFrame() )

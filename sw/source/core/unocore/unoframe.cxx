@@ -3309,7 +3309,7 @@ rtl::Reference<SwXTextCursor>  SwXTextFrame::createXTextCursor()
     while( pTableNode )
     {
         aPam.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
-        SwContentNode* pCont = GetDoc()->GetNodes().GoNext(aPam.GetPoint());
+        SwContentNode* pCont = SwNodes::GoNext(aPam.GetPoint());
         pTableNode = pCont->FindTableNode();
     }
 

@@ -203,7 +203,7 @@ namespace
         SwNodeIndex aIdx(*rTextFootnote.GetStartNode(), 1);
         SwContentNode* pCNd = aIdx.GetNode().GetTextNode();
         if(!pCNd)
-            pCNd = aIdx.GetNodes().GoNext(&aIdx);
+            pCNd = SwNodes::GoNext(&aIdx);
         return pCNd->IsTextNode() ? static_cast<SwTextNode*>(pCNd)->GetText() : OUString();
     }
 
@@ -1488,7 +1488,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
 
         // selected
         SwNodeIndex aIdx(*pSttNd);
-        if (rNodes.GoNext(&aIdx) != pEndNd)
+        if (SwNodes::GoNext(&aIdx) != pEndNd)
             bHasContent = true;
 
         // descendants
@@ -1504,7 +1504,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
 
                 // test for content in outline node
                 aIdx.Assign(*pSttNd);
-                if (rNodes.GoNext(&aIdx) != pEndNd)
+                if (SwNodes::GoNext(&aIdx) != pEndNd)
                 {
                     bHasContent = true;
                     break;
@@ -1530,7 +1530,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
                 pEndNd = rOutlineNodes[nPos + 1];
 
             SwNodeIndex aIdx(*pSttNd);
-            if (rNodes.GoNext(&aIdx) != pEndNd)
+            if (SwNodes::GoNext(&aIdx) != pEndNd)
                 break;
             nPos++;
         }
@@ -1548,7 +1548,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
                 pEndNd = rOutlineNodes[nPos + 1];
 
             SwNodeIndex aIdx(*pSttNd);
-            if (rNodes.GoNext(&aIdx) == pEndNd)
+            if (SwNodes::GoNext(&aIdx) == pEndNd)
                 continue; // skip if no content
 
             if (!pThis->GetWrtShell()->IsOutlineContentVisible(nPos))

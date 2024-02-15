@@ -118,7 +118,7 @@ bool SwUnoCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                             rPtPos.Assign( *pInvalidNode->EndOfSectionNode(), 1 );
 
                             if( !rPtPos.GetNode().IsContentNode() &&
-                                ( !rDoc.GetNodes().GoNextSection( &rPtPos ) ||
+                                ( !SwNodes::GoNextSection( &rPtPos ) ||
                                   rPtPos.GetNode() > *pOldSttNd->EndOfSectionNode() ) )
                                 break;
                         }

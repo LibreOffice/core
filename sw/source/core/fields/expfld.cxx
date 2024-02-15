@@ -142,7 +142,7 @@ static SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
         const SwNodes& rNodes = rDoc.GetNodes();
         rPos.Assign( *rNodes.GetEndOfContent().StartOfSectionNode() );
         SwContentNode* pCNd;
-        while( nullptr != (pCNd = rNodes.GoNext( &rPos ) ) &&
+        while( nullptr != (pCNd = SwNodes::GoNext( &rPos ) ) &&
                 nullptr == ( pTextNode = pCNd->GetTextNode() ) )
                         ;
         OSL_ENSURE( pTextNode, "Where is the 1. TextNode?" );

@@ -111,7 +111,7 @@ rtl::Reference< SwXTextCursor > SwXRedlineText::createXTextCursor()
     while( pTableNode != nullptr )
     {
         rUnoCursor.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
-        SwContentNode* pContentNode = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
+        SwContentNode* pContentNode = SwNodes::GoNext(rUnoCursor.GetPoint());
         pTableNode = pContentNode->FindTableNode();
     }
     if( bTable && rUnoCursor.GetPointNode().FindSttNodeByType( SwNormalStartNode )
@@ -544,7 +544,7 @@ rtl::Reference< SwXTextCursor >  SwXRedline::createXTextCursor()
     while( pTableNode )
     {
         rUnoCursor.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
-        SwContentNode* pCont = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
+        SwContentNode* pCont = SwNodes::GoNext(rUnoCursor.GetPoint());
         pTableNode = pCont->FindTableNode();
     }
 

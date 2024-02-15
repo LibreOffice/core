@@ -3014,7 +3014,7 @@ void SwFlyFrameFormat::MakeFrames()
             //In such a situation we also need to search from StartNode to
             //FrameFormat.
             SwNodeIndex aIdx( *aAnchorAttr.GetAnchorNode() );
-            SwContentNode *pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
+            SwContentNode* pCNd = SwNodes::GoNext(&aIdx);
             // #i105535#
             if ( pCNd == nullptr )
             {

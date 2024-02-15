@@ -542,7 +542,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                 SwNodeIndex aDocEnd(m_rDoc.GetNodes().GetEndOfContent());
                 SwNodeIndex aStart(*aDocEnd.GetNode().StartOfSectionNode());
                 // Set aStart to the first content node in the section
-                m_rDoc.GetNodes().GoNext(&aStart);
+                SwNodes::GoNext(&aStart);
                 assert(aStart <= aDocEnd && "impossible: end section must have one content node");
                 if (rNd.GetIndex() > aStart.GetNode().GetIndex())
                    AttrOutput().OutputItem(SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK));

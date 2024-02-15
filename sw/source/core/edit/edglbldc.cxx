@@ -338,10 +338,9 @@ void SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     SwPosition& rCursorPos = *pCursor->GetPoint();
     rCursorPos.Assign(rPos.GetDocPos());
 
-    SwDoc* pMyDoc = GetDoc();
     SwContentNode * pCNd = rCursorPos.GetNode().GetContentNode();
     if( !pCNd )
-        pCNd = pMyDoc->GetNodes().GoNext( &rCursorPos );
+        pCNd = SwNodes::GoNext(&rCursorPos);
 
     EndCursorMove();
 }

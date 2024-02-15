@@ -2896,7 +2896,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158459)
 
     SwNodes& rNodes = pDoc->GetNodes();
     SwNodeIndex aIdx(rNodes.GetEndOfExtras());
-    SwContentNode* pContentNode = rNodes.GoNext(&aIdx);
+    SwContentNode* pContentNode = SwNodes::GoNext(&aIdx);
     CPPUNIT_ASSERT(pContentNode);
     SwTextNode* pTextNode = pContentNode->GetTextNode();
     CPPUNIT_ASSERT(pTextNode);

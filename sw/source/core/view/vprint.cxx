@@ -366,7 +366,7 @@ void SwViewShell::FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt)
     if( !pFESh->IsTableMode() && pActCursor && pActCursor->HasMark() )
     {   // Tweak paragraph attributes of last paragraph
         SwNodeIndex aNodeIdx( *rPrtDoc.GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwTextNode* pTextNd = rPrtDoc.GetNodes().GoNext( &aNodeIdx )->GetTextNode();
+        SwTextNode* pTextNd = SwNodes::GoNext(&aNodeIdx)->GetTextNode();
         SwContentNode *pLastNd =
             (*pActCursor->GetMark()) <= (*pActCursor->GetPoint())
             ? pActCursor->GetPointContentNode()
@@ -382,7 +382,7 @@ void SwViewShell::FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt)
     // set the page style at the first paragraph
     {
         SwNodeIndex aNodeIdx( *rPrtDoc.GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwContentNode* pCNd = rPrtDoc.GetNodes().GoNext( &aNodeIdx ); // go to 1st ContentNode
+        SwContentNode* pCNd = SwNodes::GoNext(&aNodeIdx); // go to 1st ContentNode
         if( pFESh->IsTableMode() )
         {
             SwTableNode* pTNd = pCNd->FindTableNode();

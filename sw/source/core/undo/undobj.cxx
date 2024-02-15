@@ -1617,9 +1617,8 @@ static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
 
 static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
 {
-    SwNodes const& rNodes(rAnchorPos.GetNodes());
     SwNodeIndex node(*rAnchorPos.GetNode().StartOfSectionNode());
-    SwContentNode *const pNode(rNodes.GoNext(&node));
+    SwContentNode* const pNode(SwNodes::GoNext(&node));
     assert(pNode);
     (void) pNode;
     assert(node <= rAnchorPos.GetNode());

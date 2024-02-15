@@ -395,7 +395,7 @@ bool GoPrevious( SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode )
 SwContentNode* GoNextNds( SwNodeIndex* pIdx, bool bChk )
 {
     SwNodeIndex aIdx( *pIdx );
-    SwContentNode* pNd = aIdx.GetNodes().GoNext( &aIdx );
+    SwContentNode* pNd = SwNodes::GoNext(&aIdx);
     if( pNd )
     {
         if( bChk && SwNodeOffset(1) != aIdx.GetIndex() - pIdx->GetIndex() &&
@@ -425,7 +425,7 @@ SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
 SwContentNode* GoNextPos( SwPosition* pIdx, bool bChk )
 {
     SwNodeIndex aIdx( pIdx->GetNode() );
-    SwContentNode* pNd = aIdx.GetNodes().GoNext( &aIdx );
+    SwContentNode* pNd = SwNodes::GoNext(&aIdx);
     if( pNd )
     {
         if( bChk && SwNodeOffset(1) != aIdx.GetIndex() - pIdx->GetNodeIndex() &&
@@ -1076,7 +1076,6 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
         {
             SwPosition aPos( *rPam.GetPoint() );
             bool bSrchForward = &fnMove == &fnMoveForward;
-            SwNodes& rNodes = aPos.GetNodes();
 
             // go to next/previous ContentNode
             while( true )
@@ -1088,7 +1087,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                 }
 
                 pNd = bSrchForward
-                        ? rNodes.GoNextSection( &aPos, true, !bInReadOnly )
+                        ? SwNodes::GoNextSection( &aPos, true, !bInReadOnly )
                         : SwNodes::GoPrevSection( &aPos, true, !bInReadOnly );
                 if( pNd )
                 {
@@ -1124,7 +1123,7 @@ void GoStartDoc( SwPosition * pPos )
     SwNodes& rNodes = pPos->GetNodes();
     pPos->Assign( *rNodes.GetEndOfContent().StartOfSectionNode() );
     // we always need to find a ContentNode!
-    rNodes.GoNext( pPos );
+    SwNodes::GoNext(pPos);
 }
 
 void GoEndDoc( SwPosition * pPos )

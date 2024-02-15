@@ -579,17 +579,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfContents)
     SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
     // skip the title
-    pDoc->GetNodes().GoNext(&aIdx);
+    SwNodes::GoNext(&aIdx);
 
     // skip the first header. No attributes there.
     // next node should contain superscript
-    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    SwTextNode* pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
     CPPUNIT_ASSERT(pNext->HasHints());
     sal_uInt16 nAttrType = lcl_getAttributeIDFromHints(pNext->GetSwpHints());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType);
 
     // next node should contain subscript
-    pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
     CPPUNIT_ASSERT(pNext->HasHints());
     nAttrType = lcl_getAttributeIDFromHints(pNext->GetSwpHints());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType);
@@ -609,13 +609,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfFigures)
 
     // skip the title
     // next node should contain subscript
-    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    SwTextNode* pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
     CPPUNIT_ASSERT(pNext->HasHints());
     sal_uInt16 nAttrType = lcl_getAttributeIDFromHints(pNext->GetSwpHints());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType);
 
     // next node should contain superscript
-    pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
     CPPUNIT_ASSERT(pNext->HasHints());
     nAttrType = lcl_getAttributeIDFromHints(pNext->GetSwpHints());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType);
@@ -635,13 +635,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfTables)
 
     // skip the title
     // next node should contain superscript
-    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    SwTextNode* pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
     CPPUNIT_ASSERT(pNext->HasHints());
     sal_uInt16 nAttrType = lcl_getAttributeIDFromHints(pNext->GetSwpHints());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType);
 
     // next node should contain subscript
-    pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
     CPPUNIT_ASSERT(pNext->HasHints());
     nAttrType = lcl_getAttributeIDFromHints(pNext->GetSwpHints());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType);

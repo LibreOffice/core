@@ -846,7 +846,7 @@ bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos ) const
     if( pSectNd )
     {
         rPos.Assign(*pSectNd);
-        pSectNd->GetDoc().GetNodes().GoNext( &rPos );
+        SwNodes::GoNext(&rPos);
         bRet = true;
     }
     return bRet;
@@ -903,7 +903,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         {
             // determine page description of content after table-of-content
             SwNodeIndex aIdx( *(pSectNd->EndOfSectionNode()) );
-            const SwContentNode* pNdAfterTOX = pSectNd->GetNodes().GoNext( &aIdx );
+            const SwContentNode* pNdAfterTOX = SwNodes::GoNext(&aIdx);
             const SwAttrSet& aNdAttrSet = pNdAfterTOX->GetSwAttrSet();
             const SvxBreak eBreak = aNdAttrSet.GetBreak().GetBreak();
             if ( eBreak != SvxBreak::PageBefore && eBreak != SvxBreak::PageBoth )
@@ -1008,7 +1008,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             SwNodeIndex aNxtIdx( aSttIdx );
             const SwContentNode* pCNd = aNxtIdx.GetNode().GetContentNode();
             if( !pCNd )
-                pCNd = rDoc.GetNodes().GoNext( &aNxtIdx );
+                pCNd = SwNodes::GoNext(&aNxtIdx);
             assert(pCNd != pFirstEmptyNd);
             assert(pCNd->GetIndex() < pFirstEmptyNd->GetIndex());
             if( pCNd->HasSwAttrSet() )
@@ -1141,7 +1141,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 aEndIdx = *pSectNd;
             else
                 aEndIdx = *pFirstEmptyNd;
-            SwContentNode* pCNd = rDoc.GetNodes().GoNext( &aEndIdx );
+            SwContentNode* pCNd = SwNodes::GoNext(&aEndIdx);
             if( pCNd ) // Robust against defect documents, e.g. i60336
                 pCNd->SetAttr( *pFirstEmptyNd->GetpSwAttrSet() );
         }
@@ -1270,7 +1270,7 @@ void SwTOXBaseSection::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         SwNodeIndex aIdx(*pSectNd, 1);
         SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
         if(!pCNd)
-            pCNd = pFindHint->m_rDoc.GetNodes().GoNext(&aIdx);
+            pCNd = SwNodes::GoNext(&aIdx);
         if(!pCNd)
             return;
         if(pCNd->EndOfSectionIndex() >= pSectNd->EndOfSectionIndex())
@@ -1537,7 +1537,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
                 if( !pCNd )
                 {
                     SwNodeIndex aTmp( *pNd );
-                    pCNd = rNds.GoNext( &aTmp );
+                    pCNd = SwNodes::GoNext(&aTmp);
                 }
             }
             break;
@@ -1621,7 +1621,6 @@ void SwTOXBaseSection::UpdateTable(const SwTextNode* pOwnChapterNode,
         SwRootFrame const*const pLayout)
 {
     SwDoc* pDoc = GetFormat()->GetDoc();
-    SwNodes& rNds = pDoc->GetNodes();
 
     for(SwTableFormat* pFrameFormat: *pDoc->GetTableFrameFormats())
     {
@@ -1636,7 +1635,7 @@ void SwTOXBaseSection::UpdateTable(const SwTextNode* pOwnChapterNode,
             SwNodeIndex aContentIdx( *pTableNd, 1 );
 
             SwContentNode* pCNd;
-            while( nullptr != ( pCNd = rNds.GoNext( &aContentIdx ) ) &&
+            while( nullptr != ( pCNd = SwNodes::GoNext( &aContentIdx ) ) &&
                 aContentIdx.GetIndex() < pTableNd->EndOfSectionIndex() )
             {
                 if (pCNd->getLayoutFrame(pLayout)

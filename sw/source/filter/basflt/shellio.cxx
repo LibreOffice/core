@@ -212,7 +212,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
             --aEndPos;
             pCNd = aEndPos.GetNode().GetContentNode();
             if( !pCNd && nullptr == ( pCNd = SwNodes::GoPrevious( &aEndPos ) ))
-                pCNd = mxDoc->GetNodes().GoNext( &aEndPos );
+                pCNd = SwNodes::GoNext(&aEndPos);
 
             const sal_Int32 nLen = pCNd->Len();
             if( nLen < nEndContent )
@@ -913,7 +913,7 @@ bool SetHTMLTemplate( SwDoc & rDoc )
 
     SwNodes& rNds = rDoc.GetNodes();
     SwNodeIndex aIdx( rNds.GetEndOfExtras(), 1 );
-    SwContentNode* pCNd = rNds.GoNext( &aIdx );
+    SwContentNode* pCNd = SwNodes::GoNext(&aIdx);
     if( pCNd )
     {
         pCNd->SetAttr

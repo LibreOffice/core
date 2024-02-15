@@ -674,7 +674,7 @@ void SwUndoTableToText::RedoImpl(::sw::UndoRedoContext & rContext)
 
     ++aSaveIdx;
     SwContentNode* pCNd = aSaveIdx.GetNode().GetContentNode();
-    if( !pCNd && nullptr == ( pCNd = rDoc.GetNodes().GoNext( &aSaveIdx ) ) &&
+    if( !pCNd && nullptr == ( pCNd = SwNodes::GoNext( &aSaveIdx ) ) &&
         nullptr == ( pCNd = SwNodes::GoPrevious( &aSaveIdx )) )
     {
         OSL_FAIL( "Where is the TextNode now?" );
@@ -2041,7 +2041,7 @@ void SwUndoTableMerge::SaveCollection( const SwTableBox& rBox )
     SwNodeIndex aIdx( *rBox.GetSttNd(), 1 );
     SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNext( &aIdx );
+        pCNd = SwNodes::GoNext(&aIdx);
 
     m_pHistory->AddColl(pCNd->GetFormatColl(), aIdx.GetIndex(), pCNd->GetNodeType());
     if( pCNd->HasSwAttrSet() )
@@ -2300,7 +2300,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 
     if( !pNd->IsContentNode() )
-        pNd = rDoc.GetNodes().GoNext( pPam->GetPoint() );
+        pNd = SwNodes::GoNext(pPam->GetPoint());
 }
 
 void SwUndoTableNumFormat::SetBox( const SwTableBox& rBox )
@@ -3002,7 +3002,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
     pNew->MakeOwnFrames();
 
     // position cursor somewhere in content
-    pDoc->GetNodes().GoNext( &rPtPos );
+    SwNodes::GoNext(&rPtPos);
 
     ClearFEShellTabCols(*pDoc, nullptr);
 

@@ -787,7 +787,7 @@ void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     else
     {
         SwNodeIndex aIdx(*pAnch->GetAnchorNode());
-        SwContentFrame* pContent = GetFormat()->GetDoc()->GetNodes().GoNext(&aIdx)->
+        SwContentFrame* pContent = SwNodes::GoNext(&aIdx)->
                 GetContentNode()->getLayoutFrame(getRootFrame(), nullptr, nullptr);
         if(pContent)
         {

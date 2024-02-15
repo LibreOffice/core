@@ -1014,7 +1014,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
 
     // table of contents node shouldn't contain tracked deletion
     // This was "Text InsertedDeleted\t1"
-    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    SwTextNode* pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
     CPPUNIT_ASSERT_EQUAL(OUString("Text Inserted\t1"), pNext->GetText());
 }
 
@@ -1063,7 +1063,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
 
     // table of contents node shouldn't contain invisible text
     // This was "Text Hidden\t1"
-    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    SwTextNode* pNext = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
     CPPUNIT_ASSERT_EQUAL(OUString("Text\t1"), pNext->GetText());
 }
 
