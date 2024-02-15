@@ -214,6 +214,31 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyText)
     htmlDocUniquePtr pHtmlDoc = parseHtmlStream(&aStream);
     assertXPath(pHtmlDoc, "//td"_ostr, "data-sheets-value"_ostr, "{ \"1\": 2, \"2\": \"01\"}");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testCopyBoolean)
+{
+    // Given a document with boolean values in A1-A2:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos1(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    pDoc->SetString(aCellPos1, "TRUE");
+    ScAddress aCellPos2(/*nColP=*/0, /*nRowP=*/1, /*nTabP=*/0);
+    pDoc->SetString(aCellPos2, "FALSE");
+
+    // When copying those values:
+    ScImportExport aExporter(*pDoc, ScRange(aCellPos1, aCellPos2));
+    SvMemoryStream aStream;
+    CPPUNIT_ASSERT(aExporter.ExportStream(aStream, OUString(), SotClipboardFormatId::HTML));
+
+    // Then make sure the values are booleans:
+    aStream.Seek(0);
+    htmlDocUniquePtr pHtmlDoc = parseHtmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//td' no attribute 'data-sheets-value' exist
+    // i.e. metadata was missing to avoid converting TRUE to text.
+    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 4, \"4\": 1}");
+    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 4, \"4\": 0}");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
