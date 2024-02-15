@@ -294,7 +294,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="removepersonal-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|removepersonal">Select to always remove user data from the file properties. If this option is not selected, you can still remove the personal information for the current document with the Reset Properties button on File - Properties - General.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|removepersonal">Select to always remove user data from the file properties.</property>
                           </object>
                         </child>
                       </object>
