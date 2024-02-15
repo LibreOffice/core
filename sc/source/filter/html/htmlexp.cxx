@@ -88,6 +88,8 @@
 #include <rtl/strbuf.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/json_writer.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -1143,13 +1145,36 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     aStrTD.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValueData, fVal,
         nFormat, *pFormatter, &aNonConvertibleChars));
 
-    if (!bValueData)
+    std::optional<tools::JsonWriter> oJson;
+    if (bValueData)
+    {
+        if (nFormat)
+        {
+            const SvNumberformat* pFormatEntry = pFormatter->GetEntry(nFormat);
+            if (pFormatEntry)
+            {
+                OUString aNumStr = pFormatEntry->GetFormatstring();
+                if (aNumStr == "BOOLEAN")
+                {
+                    // 4 is boolean.
+                    oJson.emplace();
+                    oJson->put("1", static_cast<sal_Int32>(4));
+                    oJson->put("4", static_cast<sal_Int32>(fVal));
+                }
+            }
+        }
+    }
+    else
     {
         // 2 is text.
-        tools::JsonWriter aJson;
-        aJson.put("1", static_cast<sal_Int32>(2));
-        aJson.put("2", pDoc->GetString(aPos));
-        OUString aJsonString = OUString::fromUtf8(aJson.finishAndGetAsOString());
+        oJson.emplace();
+        oJson->put("1", static_cast<sal_Int32>(2));
+        oJson->put("2", pDoc->GetString(aPos));
+    }
+
+    if (oJson)
+    {
+        OUString aJsonString = OUString::fromUtf8(oJson->finishAndGetAsOString());
         aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_DSval "=\""
                       + HTMLOutFuncs::ConvertStringToHTML(aJsonString) + "\"");
     }
