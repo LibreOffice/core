@@ -1325,7 +1325,7 @@ OUString SwPaM::GetText() const
             }
             const OUString& aTmpStr = pTextNode->GetText();
 
-            if (bIsStartNode || bIsEndNode)
+            if (aTmpStr.getLength() > 0 && (bIsStartNode || bIsEndNode))
             {
                 // Handle corner cases of start/end node(s)
                 const sal_Int32 nStart = bIsStartNode
