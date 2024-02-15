@@ -70,26 +70,25 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
             if (m_aBoxType==COMBOBOX)
             {
                 VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
-                if ( ( pComboBox != nullptr ) && ( pChildWindow != nullptr ) )
-                    if (pChildWindow == pComboBox->GetSubEdit())
+                if (pComboBox && pChildWindow && pChildWindow == pComboBox->GetSubEdit())
+                {
+                    if (rVclWindowEvent.GetId() == VclEventId::WindowShow)
                     {
-                        if (rVclWindowEvent.GetId() == VclEventId::WindowShow)
-                        {
-                            // Instantiate text field.
-                            getAccessibleChild (0);
-                            aNewValue <<= m_xText;
-                        }
-                        else
-                        {
-                            // Release text field.
-                            aOldValue <<= m_xText;
-                            m_xText = nullptr;
-                        }
-                        // Tell the listeners about the new/removed child.
-                        NotifyAccessibleEvent (
-                            AccessibleEventId::CHILD,
-                            aOldValue, aNewValue);
+                        // Instantiate text field.
+                        getAccessibleChild (0);
+                        aNewValue <<= m_xText;
                     }
+                    else
+                    {
+                        // Release text field.
+                        aOldValue <<= m_xText;
+                        m_xText = nullptr;
+                    }
+                    // Tell the listeners about the new/removed child.
+                    NotifyAccessibleEvent (
+                        AccessibleEventId::CHILD,
+                        aOldValue, aNewValue);
+                }
 
             }
         }
