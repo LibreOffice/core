@@ -1063,8 +1063,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                 aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
                              + aOutputData.nScrY);
-                aOrigin = Point(aOrigin.getX() * twipFactor,
-                                aOrigin.getY() * twipFactor);
+
+                // keep into account the zoom factor
+                aOrigin = Point((aOrigin.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
+                                 (aOrigin.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
+
                 MapMode aNew = rDevice.GetMapMode();
                 aNew.SetOrigin(aOrigin);
                 rDevice.SetMapMode(aNew);

@@ -3712,6 +3712,60 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtendedAreasDontOverlap)
                          aView1.m_aInvalidations[1].Top());
 }
 
+static Bitmap getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY, tools::Long nTileWidth, tools::Long nTileHeight)
+{
+    size_t nCanvasSize = 1024;
+    size_t nTileSize = 256;
+    std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
+    xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    xDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
+            Fraction(1.0), Point(), aPixmap.data());
+    pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    xDevice->EnableMapMode(false);
+    return xDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+}
+
+// Ensure that editing a shape not in the topleft tile has its text shown inside the shape
+// center while editing
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditShapeText)
+{
+    ScModelObj* pModelObj = createDoc("edit-shape-text.ods");
+
+    // Set View to initial 100%
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 28050, 10605));
+    pModelObj->setClientZoom(256, 256, 1920, 1920);
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    const bool bShapeSelected = pView->SelectObject(u"Shape 1");
+    CPPUNIT_ASSERT(bShapeSelected);
+
+    CPPUNIT_ASSERT(ScDocShell::GetViewData()->GetScDrawView()->AreObjectsMarked());
+
+    Scheduler::ProcessEventsToIdle();
+
+    // Enter editing mode, shape start with no text
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // Grab a snapshot of the center of the shape
+    Bitmap aBitmapBefore = getTile(pModelObj, 4096, 3584, 15360, 7680);
+
+    // reuse this to type into the active shape edit
+    lcl_typeCharsInCell("MMMMMMM", 0, 0, pView, pModelObj, true, false);
+
+    // Grab a new snapshot of the center of the shape
+    Bitmap aBitmapAfter = getTile(pModelObj, 4096, 3584, 15360, 7680);
+
+    // Without the fix, the text is not inside this tile and the before and
+    // after are the same.
+    CPPUNIT_ASSERT_MESSAGE("Text is not visible", aBitmapBefore != aBitmapAfter);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
