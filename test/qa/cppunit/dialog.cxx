@@ -10,7 +10,8 @@
 #include <test/a11y/accessibletestbase.hxx>
 
 // FIXME: dialog API doesn't work on macos yet
-#if !defined(MACOSX)
+// and this test crashes on some jenkins Windows boxes
+#if !defined(MACOSX) && !defined(_WIN32)
 
 /* Checks an unexpected dialog opening (instead of the expected one) is properly caught, as it would
  * otherwise block the test potentially indefinitely */
