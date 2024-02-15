@@ -1284,6 +1284,11 @@ bool ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
     }
 }
 
+template
+bool ScQueryCellIteratorAccessSpecific<ScQueryCellIteratorAccess::SortedCache>::IncPosImpl<false>();
+template
+bool ScQueryCellIteratorAccessSpecific<ScQueryCellIteratorAccess::SortedCache>::IncPosImpl<true>();
+
 // Helper that allows binary search of unsorted cells using ScSortedRangeCache.
 // Rows in the given range are kept in a sorted vector and that vector is binary-searched.
 class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::SortedCacheIndexer
