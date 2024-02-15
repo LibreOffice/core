@@ -14818,7 +14818,7 @@ then
     CXXFLAGS=$save_CXXFLAGS
     LDFLAGS=$save_LDFLAGS
     AC_LANG_POP([C++])
-    rm confetst.pcm
+    rm conftest.pcm
 fi
 if test -n "$have_cpp_consteval"; then
     AC_DEFINE([HAVE_CPP_CONSTEVAL],[1])
