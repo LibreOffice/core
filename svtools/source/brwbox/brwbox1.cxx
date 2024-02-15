@@ -40,9 +40,9 @@
 
 #define SCROLL_FLAGS (ScrollFlags::Clip | ScrollFlags::NoChildren)
 
-using namespace com::sun::star::accessibility::AccessibleEventId;
 using namespace com::sun::star::accessibility::AccessibleTableModelChangeType;
 using com::sun::star::accessibility::AccessibleTableModelChange;
+using namespace com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace svt;
 
@@ -499,7 +499,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
         return;
 
     commitTableEvent(
-        TABLE_MODEL_CHANGED,
+        AccessibleEventId::TABLE_MODEL_CHANGED,
         Any( AccessibleTableModelChange(
                     COLUMNS_REMOVED,
                     -1,
@@ -512,7 +512,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
     );
 
     commitTableEvent(
-        TABLE_MODEL_CHANGED,
+        AccessibleEventId::TABLE_MODEL_CHANGED,
         Any( AccessibleTableModelChange(
                     COLUMNS_INSERTED,
                     -1,
@@ -562,7 +562,7 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
 
     if ( isAccessibleAlive() )
     {
-        commitTableEvent(   TABLE_COLUMN_DESCRIPTION_CHANGED,
+        commitTableEvent(AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED,
             Any( rTitle ),
             Any( sOld )
         );
@@ -745,7 +745,7 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
         return;
 
     commitTableEvent(
-        TABLE_MODEL_CHANGED,
+        AccessibleEventId::TABLE_MODEL_CHANGED,
         Any( AccessibleTableModelChange(COLUMNS_REMOVED,
                                                 -1,
                                                 -1,
@@ -757,7 +757,7 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
     );
 
     commitHeaderBarEvent(
-        CHILD,
+        AccessibleEventId::CHILD,
         Any(),
         Any( CreateAccessibleColumnHeader( nPos ) ),
         true
@@ -805,21 +805,21 @@ void BrowseBox::RemoveColumns()
     // all columns should be removed, so we remove the column header bar and append it again
     // to avoid to notify every column remove
     commitBrowseBoxEvent(
-        CHILD,
+        AccessibleEventId::CHILD,
         Any(),
         Any(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar))
     );
 
     // and now append it again
     commitBrowseBoxEvent(
-        CHILD,
+        AccessibleEventId::CHILD,
         Any(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar)),
         Any()
     );
 
     // notify a table model change
     commitTableEvent(
-        TABLE_MODEL_CHANGED,
+        AccessibleEventId::TABLE_MODEL_CHANGED,
         Any ( AccessibleTableModelChange( COLUMNS_REMOVED,
                         -1,
                         -1,
@@ -1125,21 +1125,21 @@ void BrowseBox::Clear()
         return;
 
     commitBrowseBoxEvent(
-        CHILD,
+        AccessibleEventId::CHILD,
         Any(),
         Any( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) )
     );
 
     // and now append it again
     commitBrowseBoxEvent(
-        CHILD,
+        AccessibleEventId::CHILD,
         Any( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) ),
         Any()
     );
 
     // notify a table model change
     commitTableEvent(
-        TABLE_MODEL_CHANGED,
+        AccessibleEventId::TABLE_MODEL_CHANGED,
         Any( AccessibleTableModelChange(ROWS_REMOVED,
             0,
             nOldRowCount,
@@ -1225,7 +1225,7 @@ void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, 
     if ( isAccessibleAlive() )
     {
         commitTableEvent(
-            TABLE_MODEL_CHANGED,
+            AccessibleEventId::TABLE_MODEL_CHANGED,
             Any( AccessibleTableModelChange(
                         ROWS_INSERTED,
                         nRow,
@@ -1240,7 +1240,7 @@ void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, 
         for (tools::Long i = nRow+1 ; i <= nRowCount ; ++i)
         {
             commitHeaderBarEvent(
-                CHILD,
+                AccessibleEventId::CHILD,
                 Any( CreateAccessibleRowHeader( i ) ),
                 Any(),
                 false
@@ -1368,26 +1368,26 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
             // all columns should be removed, so we remove the column header bar and append it again
             // to avoid to notify every column remove
             commitBrowseBoxEvent(
-                CHILD,
+                AccessibleEventId::CHILD,
                 Any(),
                 Any( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) )
             );
 
             // and now append it again
             commitBrowseBoxEvent(
-                CHILD,
+                AccessibleEventId::CHILD,
                 Any(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar)),
                 Any()
             );
             commitBrowseBoxEvent(
-                CHILD,
+                AccessibleEventId::CHILD,
                 Any(),
                 Any( m_pImpl->getAccessibleTable() )
             );
 
             // and now append it again
             commitBrowseBoxEvent(
-                CHILD,
+                AccessibleEventId::CHILD,
                 Any( m_pImpl->getAccessibleTable() ),
                 Any()
             );
@@ -1395,7 +1395,7 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
         else
         {
             commitTableEvent(
-                TABLE_MODEL_CHANGED,
+                AccessibleEventId::TABLE_MODEL_CHANGED,
                 Any( AccessibleTableModelChange(
                             ROWS_REMOVED,
                             nRow,
@@ -1410,7 +1410,7 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
             for (tools::Long i = nRow+1 ; i <= (nRow+nNumRows) ; ++i)
             {
                 commitHeaderBarEvent(
-                    CHILD,
+                    AccessibleEventId::CHILD,
                     Any(),
                     Any( CreateAccessibleRowHeader( i ) ),
                     false
@@ -1642,7 +1642,7 @@ void BrowseBox::SetNoSelection()
     if ( isAccessibleAlive() )
     {
         commitTableEvent(
-            SELECTION_CHANGED,
+            AccessibleEventId::SELECTION_CHANGED,
             Any(),
             Any()
         );
@@ -1695,19 +1695,19 @@ void BrowseBox::SelectAll()
         return;
 
     commitTableEvent(
-        SELECTION_CHANGED,
+        AccessibleEventId::SELECTION_CHANGED,
         Any(),
         Any()
     );
     commitHeaderBarEvent(
-        SELECTION_CHANGED,
+        AccessibleEventId::SELECTION_CHANGED,
         Any(),
         Any(),
         true
     ); // column header event
 
     commitHeaderBarEvent(
-        SELECTION_CHANGED,
+        AccessibleEventId::SELECTION_CHANGED,
         Any(),
         Any(),
         false
@@ -1774,12 +1774,12 @@ void BrowseBox::SelectRow( sal_Int32 nRow, bool _bSelect, bool bExpand )
         return;
 
     commitTableEvent(
-        SELECTION_CHANGED,
+        AccessibleEventId::SELECTION_CHANGED,
         Any(),
         Any()
     );
     commitHeaderBarEvent(
-        SELECTION_CHANGED,
+        AccessibleEventId::SELECTION_CHANGED,
         Any(),
         Any(),
         false
@@ -1841,12 +1841,12 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMak
         if ( isAccessibleAlive() )
         {
             commitTableEvent(
-                SELECTION_CHANGED,
+                AccessibleEventId::SELECTION_CHANGED,
                 Any(),
                 Any()
             );
             commitHeaderBarEvent(
-                SELECTION_CHANGED,
+                AccessibleEventId::SELECTION_CHANGED,
                 Any(),
                 Any(),
                 true
@@ -2340,7 +2340,7 @@ void BrowseBox::CursorMoved()
 
     if ( isAccessibleAlive() && HasFocus() )
         commitTableEvent(
-            ACTIVE_DESCENDANT_CHANGED,
+            AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
             Any( CreateAccessibleCell( GetCurRow(),GetColumnPos( GetCurColumnId() ) ) ),
             Any()
         );

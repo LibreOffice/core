@@ -50,8 +50,9 @@ namespace svt
         }
     }
 
+    using namespace com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;
-    using namespace com::sun::star::accessibility::AccessibleEventId;
+
 
 
     IEditImplementation::~IEditImplementation()
@@ -953,7 +954,7 @@ namespace svt
             if ( isAccessibleAlive() && HasFocus() )
             {
                 commitTableEvent(
-                    ACTIVE_DESCENDANT_CHANGED,
+                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
                     Any( CreateAccessibleCell( nRow, GetColumnPos( nCol -1) ) ),
                     Any()
                 );
@@ -969,7 +970,7 @@ namespace svt
 
         if ( isAccessibleAlive() && m_aImpl->m_xActiveCell)
         {
-            commitBrowseBoxEvent( CHILD, Any(), Any( m_aImpl->m_xActiveCell ) );
+            commitBrowseBoxEvent(AccessibleEventId::CHILD, Any(), Any(m_aImpl->m_xActiveCell));
             m_aImpl->clearActiveCell();
         }
 
