@@ -412,4 +412,7 @@
 #define STR_CONDITION_CONTAINS_TEXT                 NC_("STR_CONDITION_CONTAINS_TEXT", "containing text")
 #define STR_CONDITION_NOT_CONTAINS_TEXT             NC_("STR_CONDITION_NOT_CONTAINS_TEXT", "not containing text")
 
+#define STR_CONTENT_WITH_UNKNOWN_ENCRYPTION NC_("STR_CONTENT_WITH_UNKNOWN_ENCRYPTION", "Document contains DRM content that is encrypted with an unknown encryption method. Only the un-encrypted content will be shown.")
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

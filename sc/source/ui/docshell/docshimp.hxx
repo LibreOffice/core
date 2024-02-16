@@ -21,6 +21,7 @@
 #include <svtools/ctrltool.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/infobar.hxx>
 
 struct DocShell_Impl
 {
@@ -28,6 +29,8 @@ struct DocShell_Impl
     std::unique_ptr<FontList>               pFontList;
     std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
     std::unique_ptr<SfxRequest>             pRequest;
+
+    std::vector<InfobarData> mpDelayedInfobarEntry;
 
     DocShell_Impl() :
           bIgnoreLostRedliningWarning( false )

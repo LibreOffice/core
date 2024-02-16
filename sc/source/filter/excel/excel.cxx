@@ -165,6 +165,8 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
     SvStream* pBookStrm = nullptr;            // The "Book"/"Workbook" stream containing main data.
     XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.
 
+    bool bUnableToDecryptContent = false;
+
     // try to open an OLE storage
     tools::SvRef<SotStorage> xRootStrg;
     tools::SvRef<SotStorageStream> xStrgStrm;
@@ -186,6 +188,10 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
             auto pDecryptedStorage = lcl_DRMDecrypt(rMedium, xRootStrg, aNewStorageStrm);
             if (pDecryptedStorage)
                 xRootStrg = pDecryptedStorage;
+            else
+            {
+                bUnableToDecryptContent = true;
+            }
         }
 
         // try to open the "Book" stream
@@ -249,6 +255,9 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
 
         eRet = xFilter ? xFilter->Read() : SCERR_IMPORT_INTERNAL;
     }
+
+    if (bUnableToDecryptContent && eRet == ERRCODE_NONE)
+        eRet = SCWARN_IMPORT_UNKNOWN_ENCRYPTION;
 
     return eRet;
 }

@@ -47,6 +47,7 @@
 #define SCERR_IMPORT_FILE_ROWCOL    ErrCode( ErrCodeArea::Sc, ErrCodeClass::Read, 16 )
 #define SCERR_IMPORT_FORMAT_ROWCOL  ErrCode( ErrCodeArea::Sc, ErrCodeClass::Read, 17 )
 #define SCWARN_IMPORT_FILE_ROWCOL   ErrCode( WarningFlag::Yes, ErrCodeArea::Sc, ErrCodeClass::Read, 18 )
+#define SCWARN_IMPORT_UNKNOWN_ENCRYPTION ErrCode(WarningFlag::Yes, ErrCodeArea::Sc, ErrCodeClass::Read, 19)
 
 // ErrCodeClass::Write - file related, displays "Write-Error" in MsgBox
 #define SCERR_EXPORT_CONNECT        ErrCode( ErrCodeArea::Sc,  ErrCodeClass::Write, 1 )

@@ -48,6 +48,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/infobar.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/fstathelper.hxx>
 #include <svl/sharecontrolfile.hxx>
@@ -775,6 +776,11 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         }
                     }
 #endif
+
+                    ScViewData* pViewData = GetViewData();
+                    SfxViewShell* pViewShell = pViewData ? pViewData->GetViewShell() : nullptr;
+                    SfxViewFrame* pViewFrame = pViewShell ? &pViewShell->GetViewFrame() : nullptr;
+
                     try
                     {
                         uno::Reference< uno::XComponentContext > xContext(
@@ -795,9 +801,6 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 if ( xFactory.is() )
                                 {
                                     uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
-                                    ScViewData* pViewData = GetViewData();
-                                    SfxViewShell* pViewShell = ( pViewData ? pViewData->GetViewShell() : nullptr );
-                                    SfxViewFrame* pViewFrame = ( pViewShell ? &pViewShell->GetViewFrame() : nullptr );
                                     SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : nullptr );
                                     uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : nullptr );
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
@@ -809,6 +812,16 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     }
                     catch ( uno::Exception & )
                     {
+                    }
+
+                    // Show delayed infobar entries
+                    if (pViewFrame)
+                    {
+                        for (auto const& r : m_pImpl->mpDelayedInfobarEntry)
+                        {
+                            pViewFrame->AppendInfoBar(r.msId, r.msPrimaryMessage, r.msSecondaryMessage, r.maInfobarType, r.mbShowCloseButton);
+                        }
+                        m_pImpl->mpDelayedInfobarEntry.clear();
                     }
                 }
                 break;
@@ -1258,6 +1271,13 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             // all graphics objects must have names
             m_pDocument->EnsureGraphicNames();
+
+            if (eError == SCWARN_IMPORT_UNKNOWN_ENCRYPTION)
+            {
+
+                m_pImpl->mpDelayedInfobarEntry.push_back({ "UnknownEncryption", ScResId(STR_CONTENT_WITH_UNKNOWN_ENCRYPTION), "", InfobarType::INFO, true });
+                eError = ERRCODE_NONE;
+            }
 
             if (eError != ERRCODE_NONE)
             {

@@ -101,7 +101,7 @@ const ErrMsgCode RID_ERRHDLSC[] =
       SCWARN_EXPORT_NONCONVERTIBLE_CHARS },
     { NC_("RID_ERRHDLSC", "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."),
       SCWARN_IMPORT_FILE_ROWCOL },
-    { NC_("RID_ERRHDLSC", "Not all attributes could be read.") ,
+    { NC_("RID_ERRHDLSC", "Not all attributes could be read."),
       SCWARN_IMPORT_FEATURES_LOST },
     { {}, ERRCODE_NONE }
 };
