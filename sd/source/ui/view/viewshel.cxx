@@ -316,7 +316,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
         rBindings.Invalidate( SID_3D_STATE, true );
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-        if (xSlideShow.is() && xSlideShow->isRunning())
+        if (xSlideShow.is() && xSlideShow->isRunning()) //IASS
         {
             bool bSuccess = xSlideShow->activate(GetViewShellBase());
             assert(bSuccess && "can only return false with a PresentationViewShell"); (void)bSuccess;
@@ -368,7 +368,7 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
     if (bIsMDIActivate)
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-        if(xSlideShow.is() && xSlideShow->isRunning() )
+        if(xSlideShow.is() && xSlideShow->isRunning() ) //IASS
             xSlideShow->deactivate();
 
         if(HasCurrentFunction())
@@ -404,7 +404,18 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     if(!bReturn)
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-        if(xSlideShow.is() && xSlideShow->isRunning())
+        const bool bSlideShowRunning(xSlideShow.is() && xSlideShow->isRunning());
+        bool bUseForSlideShow(bSlideShowRunning);
+
+        if(bSlideShowRunning && SlideShow::IsInteractiveSlideshow())
+        {
+            // IASS
+            OutputDevice* pShOut(xSlideShow->getShowWindow());
+            vcl::Window* pShWin(pShOut ? pShOut->GetOwnerWindow() : nullptr);
+            bUseForSlideShow = pShWin && pShWin->HasFocus();
+        }
+
+        if(bUseForSlideShow) //IASS
         {
             bReturn = xSlideShow->keyInput(rKEvt);
         }
@@ -809,7 +820,10 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
 void ViewShell::SetupRulers()
 {
-    if(!mbHasRulers || !mpContentWindow || SlideShow::IsRunning(GetViewShellBase()))
+    if(!mbHasRulers || !mpContentWindow )
+        return;
+
+    if( SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow()) // IASS
         return;
 
     ::tools::Long nHRulerOfs = 0;
@@ -1026,7 +1040,8 @@ void ViewShell::ArrangeGUIElements()
 
     // The size of the window of the center pane is set differently from
     // that of the windows in the docking windows.
-    bool bSlideShowActive = (xSlideShow.is() && xSlideShow->isRunning()) && !xSlideShow->isFullScreen() && xSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
+    bool bSlideShowActive = (xSlideShow.is() && xSlideShow->isRunning()) //IASS
+        && !xSlideShow->isFullScreen() && xSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
     if ( !bSlideShowActive)
     {
         OSL_ASSERT (GetViewShell()!=nullptr);

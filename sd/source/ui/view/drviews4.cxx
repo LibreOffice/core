@@ -530,7 +530,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     if( GetView() &&GetView()->getSmartTags().Command(rCEvt) )
         return;
 
-    const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase()));
+    const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow()); // IASS
 
     if( rCEvt.GetCommand() == CommandEventId::PasteSelection && !bNativeShow )
     {
