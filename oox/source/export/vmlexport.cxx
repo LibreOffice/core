@@ -741,8 +741,11 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         Graphic aGraphic;
                         GraphicConverter::Import(aStream, aGraphic);
                         OUString aImageId = m_pTextExport->GetDrawingML().writeGraphicToStorage(aGraphic, false);
-                        pAttrList->add(FSNS(XML_r, XML_id), aImageId);
-                        imageData = true;
+                        if (!aImageId.isEmpty())
+                        {
+                            pAttrList->add(FSNS(XML_r, XML_id), aImageId);
+                            imageData = true;
+                        }
                     }
 
                     if (rProps.GetOpt(ESCHER_Prop_fNoFillHitTest, nValue))
