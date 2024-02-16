@@ -2773,12 +2773,9 @@ SwPostItMgr* SwViewShell::GetPostItMgr()
     return nullptr;
 }
 
-void SwViewShell::GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers)
+void SwViewShell::GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers, SwView& rView)
 {
-    SwView* pView = GetDoc()->GetDocShell() ? GetDoc()->GetDocShell()->GetView() : nullptr;
-    if (!pView)
-        return;
-    SwRect rViewVisArea(pView->GetVisArea());
+    SwRect rViewVisArea(rView.GetVisArea());
     vcl::RenderContext* pRenderContext = GetOut();
     const SwPageFrame* pPageFrame = Imp()->GetFirstVisPage(pRenderContext);
     SwRect rPageRect = pPageFrame->getFrameArea();
