@@ -1040,11 +1040,13 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (GetStartNodeType() == SwTableBoxStartNode)
     {
         if (SwTableBox* pBox = GetTableBox())
+        {
+            (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableBox"));
+            (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pBox);
             (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("rowspan"), BAD_CAST(OString::number(pBox->getRowSpan()).getStr()));
-        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("attrset"));
-        if (SwTableBox* pBox = GetTableBox())
-            pBox->GetFrameFormat()->GetAttrSet().dumpAsXml(pWriter);
-        (void)xmlTextWriterEndElement(pWriter);
+            pBox->GetFrameFormat()->dumpAsXml(pWriter);
+            (void)xmlTextWriterEndElement(pWriter);
+        }
     }
 
     // (void)xmlTextWriterEndElement(pWriter); - it is a start node, so don't end, will make xml better nested
