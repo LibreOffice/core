@@ -183,7 +183,9 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
         tools::SvRef<SotStorageStream> xDRMStrm = ScfTools::OpenStorageStreamRead(xRootStrg, "\011DRMContent");
         if (xDRMStrm.is())
         {
-            xRootStrg = lcl_DRMDecrypt(rMedium, xRootStrg, aNewStorageStrm);
+            auto pDecryptedStorage = lcl_DRMDecrypt(rMedium, xRootStrg, aNewStorageStrm);
+            if (pDecryptedStorage)
+                xRootStrg = pDecryptedStorage;
         }
 
         // try to open the "Book" stream
