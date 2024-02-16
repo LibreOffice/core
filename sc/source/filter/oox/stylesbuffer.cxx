@@ -794,9 +794,19 @@ void Font::finalizeImport()
     if( !maUsedFlags.mbNameUsed )
         return;
 
+    // For caching if the font has glyphs then the underline and strike-through don't matter.
+    // Those aren't differences in the actual font, so just zero those out for the cache.
+    // The weight and pitch are different faces though, and there are some fonts with glyphs
+    // missing in one or other variant.
+    css::awt::FontDescriptor aGlyphDesc = maApiData.maDesc;
+    aGlyphDesc.Strikeout = css::awt::FontStrikeout::NONE;
+    aGlyphDesc.Underline = css::awt::FontUnderline::NONE;
+    // Never seen that to be the case for font *sizes* however, so we can use a uniform 10pt size
+    aGlyphDesc.Height = 200;
+
     bool bHasAsian(false), bHasCmplx(false), bHasLatin(false);
     FontClassificationMap& rFontClassificationCache = getFontClassificationCache();
-    if (auto found = rFontClassificationCache.find(maApiData.maDesc); found != rFontClassificationCache.end())
+    if (auto found = rFontClassificationCache.find(aGlyphDesc); found != rFontClassificationCache.end())
     {
         FontClassification eClassification = found->second;
         bHasAsian = bool(eClassification & FontClassification::Asian);
@@ -810,7 +820,7 @@ void Font::finalizeImport()
         if( !xDevice.is() )
             return;
 
-        Reference< XFont2 > xFont( xDevice->getFont( maApiData.maDesc ), UNO_QUERY );
+        Reference< XFont2 > xFont( xDevice->getFont(aGlyphDesc), UNO_QUERY );
         if( !xFont.is() )
             return;
 
@@ -851,7 +861,7 @@ void Font::finalizeImport()
             eClassification = eClassification | FontClassification::Cmplx;
         if (bHasLatin)
             eClassification = eClassification | FontClassification::Latin;
-        rFontClassificationCache.emplace(maApiData.maDesc, eClassification);
+        rFontClassificationCache.emplace(aGlyphDesc, eClassification);
     }
 
     lclSetFontName( maApiData.maLatinFont, maApiData.maDesc, bHasLatin );
