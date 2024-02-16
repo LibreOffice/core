@@ -347,7 +347,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         {
             tools::Long nYPos;
             SwVisiblePageNumbers aVisiblePageNumbers;
-            rSh.GetFirstLastVisPageNumbers(aVisiblePageNumbers);
+            rSh.GetFirstLastVisPageNumbers(aVisiblePageNumbers, rSh.GetView());
             if ((bNext && aVisiblePageNumbers.nLastPhy + 1 > rSh.GetPageCnt()) ||
                 (!bNext && aVisiblePageNumbers.nFirstPhy == 1))
             {

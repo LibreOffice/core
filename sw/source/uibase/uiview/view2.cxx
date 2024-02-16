@@ -1755,7 +1755,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 OUString aPageStr;
 
                 SwVisiblePageNumbers aVisiblePageNumbers;
-                m_pWrtShell->GetFirstLastVisPageNumbers(aVisiblePageNumbers);
+                m_pWrtShell->GetFirstLastVisPageNumbers(aVisiblePageNumbers, m_pWrtShell->GetView());
 
                 // convert to strings and define references
                 OUString sFirstPhy = OUString::number(aVisiblePageNumbers.nFirstPhy);
