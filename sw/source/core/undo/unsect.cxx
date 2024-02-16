@@ -182,7 +182,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
 
-    const SwTOXBaseSection* pUpdateTOX = nullptr;
+    SwTOXBaseSection* pUpdateTOX = nullptr;
     if (m_xTOXBase)
     {
         SwRootFrame const* pLayout(nullptr);
@@ -257,7 +257,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
             pESh->CalcLayout();
 
         // insert page numbers
-        const_cast<SwTOXBaseSection*>(pUpdateTOX)->UpdatePageNum();
+        pUpdateTOX->UpdatePageNum();
     }
 }
 
@@ -295,7 +295,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, SwNodeOffset nNode )
 }
 
 void
-SwUndoInsSection::SaveSplitNode(SwTextNode *const pTextNd, bool const bAtStart)
+SwUndoInsSection::SaveSplitNode(SwTextNode const* pTextNd, bool const bAtStart)
 {
     if( pTextNd->GetpSwpHints() )
     {

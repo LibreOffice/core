@@ -66,7 +66,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void SetSectNdPos(SwNodeOffset const nPos)     { m_nSectionNodePos = nPos; }
-    void SaveSplitNode(SwTextNode *const pTextNd, bool const bAtStart);
+    void SaveSplitNode(SwTextNode const* pTextNd, bool bAtStart);
     void SetUpdateFootnoteFlag(bool const bFlag)   { m_bUpdateFootnote = bFlag; }
 };
 

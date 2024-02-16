@@ -300,10 +300,9 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         }
         else
         {
-            if( pUndoInsSect && pCNd->IsTextNode() )
-            {
-                pUndoInsSect->SaveSplitNode( const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pCNd)), true );
-            }
+            if (pUndoInsSect)
+                if (const SwTextNode* pTextNode = pCNd->GetTextNode())
+                    pUndoInsSect->SaveSplitNode(pTextNode, true);
             getIDocumentContentOperations().SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertTextSection(
                 pPos->GetNode(), *pFormat, rNewData, pTOXBase, nullptr);
@@ -489,9 +488,9 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
 
 SwSection* SwDoc::GetCurrSection( const SwPosition& rPos )
 {
-    const SwSectionNode* pSectNd = rPos.GetNode().FindSectionNode();
+    SwSectionNode* pSectNd = rPos.GetNode().FindSectionNode();
     if( pSectNd )
-        return const_cast<SwSection*>(&pSectNd->GetSection());
+        return &pSectNd->GetSection();
     return nullptr;
 }
 
@@ -516,7 +515,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
         if( !pFootnoteEndAtTextEnd )
             pFootnoteEndAtTextEnd = pFormat->GetItemIfSet(RES_END_AT_TXTEND);
 
-        const SwSectionNode* pSectNd;
+        SwSectionNode* pSectNd;
 
         if( GetIDocumentUndoRedo().DoesUndo() )
         {
@@ -539,7 +538,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
                 nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
             SwNodeIndex aUpdIdx( *pIdx );
-            getIDocumentContentOperations().DeleteSection( const_cast<SwNode*>(static_cast<SwNode const *>(pSectNd)) );
+            getIDocumentContentOperations().DeleteSection(pSectNd);
             if( pFootnoteEndAtTextEnd )
                 GetFootnoteIdxs().UpdateFootnote( aUpdIdx.GetNode() );
             getIDocumentState().SetModified();
