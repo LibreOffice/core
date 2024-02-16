@@ -106,6 +106,8 @@ struct SwVisiblePageNumbers
     OUString sFirstCustomVirt, sLastCustomVirt;
 };
 
+class SwView;
+
 class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
@@ -603,7 +605,7 @@ public:
     bool isOutputToWindow() const;
     void OnGraphicArrived(const SwRect&);
 
-    void GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers);
+    void GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers, SwView& rView);
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
