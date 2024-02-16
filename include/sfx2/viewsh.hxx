@@ -221,6 +221,7 @@ private:
 
     LOKDocumentFocusListener& GetLOKDocumentFocusListener();
     const LOKDocumentFocusListener& GetLOKDocumentFocusListener() const;
+    bool                        lokReadOnlyView = false; // When true, this is a LOK readonly view.
 
 public:
 
@@ -243,6 +244,9 @@ public:
 
     void                        JumpToMark( const OUString& rMark );
     void                        VisAreaChanged();
+
+    void                        SetLokReadOnlyView(bool readOnlyView) { lokReadOnlyView = readOnlyView; };
+    bool                        IsLokReadOnlyView() const { return lokReadOnlyView; };
 
     // Misc
 

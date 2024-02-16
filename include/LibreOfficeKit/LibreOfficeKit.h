@@ -514,6 +514,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getA11yCaretPosition.
     int (*getA11yCaretPosition) (LibreOfficeKitDocument* pThis);
 
+    /// @see lok::Document::setViewReadOnly().
+    void (*setViewReadOnly) (LibreOfficeKitDocument* pThis, int nId, const bool readOnly);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
