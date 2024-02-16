@@ -1291,6 +1291,8 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
 
 static void doc_setViewTimezone(LibreOfficeKitDocument* pThis, int nId, const char* timezone);
 
+static void doc_setViewReadOnly(LibreOfficeKitDocument* pThis, int nId, const bool readonly);
+
 static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
 
 static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis);
@@ -1488,6 +1490,8 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
 
         m_pDocumentClass->getA11yFocusedParagraph = doc_getA11yFocusedParagraph;
         m_pDocumentClass->getA11yCaretPosition = doc_getA11yCaretPosition;
+
+        m_pDocumentClass->setViewReadOnly = doc_setViewReadOnly;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -7190,6 +7194,17 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
         OUString sTimezone = OStringToOUString(pTimezone, RTL_TEXTENCODING_UTF8);
         SfxLokHelper::setViewTimezone(nId, true, sTimezone);
     }
+}
+
+static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, const bool readOnly)
+{
+    comphelper::ProfileZone aZone("doc_setViewReadOnly");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    doc_setView(pThis, nId);
+    SfxViewShell::Current()->SetLokReadOnlyView(readOnly);
 }
 
 static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)

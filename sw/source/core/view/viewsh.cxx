@@ -2498,11 +2498,11 @@ void SwViewShell::SetReadonlyOption(bool bSet)
     {
         StartAction();
         Reformat();
-        if ( GetWin() )
+        if ( GetWin() && !comphelper::LibreOfficeKit::isActive() )
             GetWin()->Invalidate();
         EndAction();
     }
-    else if ( GetWin() )
+    else if ( GetWin() && !comphelper::LibreOfficeKit::isActive() )
         GetWin()->Invalidate();
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if( Imp()->IsAccessible() )

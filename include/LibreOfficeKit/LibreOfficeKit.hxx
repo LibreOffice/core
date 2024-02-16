@@ -859,6 +859,16 @@ public:
         mpDoc->pClass->setViewTimezone(mpDoc, nId, timezone);
     }
 
+    /** Set if the view should be treated as readonly or not.
+     *
+     * @param nId view ID
+     * @param readOnly
+    */
+    void setViewReadOnly(int nId, const bool readOnly)
+    {
+        mpDoc->pClass->setViewReadOnly(mpDoc, nId, readOnly);
+    }
+
     /**
      * Enable/Disable accessibility support for the window with the specified nId.
      *
