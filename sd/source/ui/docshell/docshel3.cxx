@@ -129,7 +129,7 @@ static void lcl_setLanguage( const SdDrawDocument *pDoc, std::u16string_view rLa
  */
 void DrawDocShell::Execute( SfxRequest& rReq )
 {
-    if(mpViewShell && SlideShow::IsRunning( mpViewShell->GetViewShellBase() ))
+    if(mpViewShell && SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow() ) // IASS
     {
         // during a running presentation no slot will be executed
         return;

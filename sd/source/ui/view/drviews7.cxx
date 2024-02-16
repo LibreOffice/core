@@ -1300,7 +1300,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-    if( (xSlideshow.is() && xSlideshow->isRunning() && (xSlideshow->getAnimationMode() != ANIMATIONMODE_PREVIEW) ) || GetDocSh()->IsPreview() )
+    if( (xSlideshow.is() && xSlideshow->isRunning() && !SlideShow::IsInteractiveSlideshow() // IASS
+        && (xSlideshow->getAnimationMode() != ANIMATIONMODE_PREVIEW) ) || GetDocSh()->IsPreview() )
     {
         // Own Slots
         rSet.DisableItem( SID_PRESENTATION );
@@ -1323,7 +1324,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DELETE_PAGE );
         rSet.DisableItem( SID_PAGESETUP );
 
-        if( xSlideshow.is() && xSlideshow->isRunning() )
+        if( xSlideshow.is() && xSlideshow->isRunning() && !SlideShow::IsInteractiveSlideshow() ) // IASS
         {
             rSet.ClearItem(SID_INSERTFILE);
             rSet.ClearItem(SID_OBJECT_ROTATE);
@@ -1642,7 +1643,7 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
-    const bool bIsRunning = SlideShow::IsRunning(GetViewShellBase());
+    const bool bIsRunning = SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(); // IASS
 
     if (GetViewFrame()->GetFrame().IsInPlace() || bIsRunning)
     {
@@ -1934,7 +1935,7 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
 
 void DrawViewShell::Execute (SfxRequest& rReq)
 {
-    if(SlideShow::IsRunning(GetViewShellBase()))
+    if(SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow()) // IASS
     {
         // Do not execute anything during a native slide show.
         return;

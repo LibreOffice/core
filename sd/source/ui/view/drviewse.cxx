@@ -142,7 +142,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
     // We do not execute a thing during a native slide show
 
-    if (SlideShow::IsRunning(GetViewShellBase()))
+    if (SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow()) // IASS
         return;
 
     sal_uInt16 nSId = rReq.GetSlot();
@@ -738,9 +738,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         GetDocSh()->SetStyleFamily(static_cast<SfxStyleFamily>(rReq.GetArgs()->Get( SID_STYLE_FAMILY ).GetValue()));
 
     // We do not execute a thing during a native slide show
-    if(SlideShow::IsRunning(GetViewShellBase()) &&
-        (rReq.GetSlot() != SID_PRESENTATION_END &&
-         rReq.GetSlot() != SID_SIZE_PAGE))
+    if((SlideShow::IsRunning(GetViewShellBase())
+        && !SlideShow::IsInteractiveSlideshow()) // IASS
+        && (rReq.GetSlot() != SID_PRESENTATION_END && rReq.GetSlot() != SID_SIZE_PAGE))
         return;
 
     CheckLineTo (rReq);
