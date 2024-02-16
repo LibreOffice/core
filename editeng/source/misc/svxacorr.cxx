@@ -2114,7 +2114,7 @@ bool SvxAutoCorrect::FindInWordStartExceptList( LanguageType eLang,
 
 static bool lcl_FindAbbreviation(const SvStringsISortDtor* pList, const OUString& sWord)
 {
-    SvStringsISortDtor::const_iterator it = pList->find( "~" );
+    SvStringsISortDtor::const_iterator it = pList->find(u"~"_ustr);
     SvStringsISortDtor::size_type nPos = it - pList->begin();
     if( nPos < pList->size() )
     {

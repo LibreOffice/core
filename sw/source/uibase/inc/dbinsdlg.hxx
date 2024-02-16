@@ -73,7 +73,7 @@ struct SwInsDBColumn
     bool operator<( const SwInsDBColumn& rCmp ) const;
 };
 
-class SwInsDBColumns : public o3tl::sorted_vector<std::unique_ptr<SwInsDBColumn>, o3tl::less_uniqueptr_to<SwInsDBColumn> >
+class SwInsDBColumns : public o3tl::sorted_vector<std::unique_ptr<SwInsDBColumn>, o3tl::less_ptr_to >
 {
 };
 

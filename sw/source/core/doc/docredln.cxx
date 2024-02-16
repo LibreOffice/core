@@ -646,7 +646,7 @@ bool SwRedlineTable::InsertWithValidRanges(SwRangeRedline*& p, size_type* pInsPo
     return bAnyIns;
 }
 
-bool CompareSwRedlineTable::operator()(SwRangeRedline* const &lhs, SwRangeRedline* const &rhs) const
+bool CompareSwRedlineTable::operator()(const SwRangeRedline* lhs, const SwRangeRedline* rhs) const
 {
     return *lhs < *rhs;
 }

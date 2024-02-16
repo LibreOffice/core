@@ -49,7 +49,7 @@ public:
     bool operator< ( const SwBlockName& r ) const { return m_aShort <  r.m_aShort; }
 };
 
-class SwBlockNames : public o3tl::sorted_vector<std::unique_ptr<SwBlockName>, o3tl::less_uniqueptr_to<SwBlockName> > {};
+class SwBlockNames : public o3tl::sorted_vector<std::unique_ptr<SwBlockName>, o3tl::less_ptr_to > {};
 
 class SwImpBlocks
 {

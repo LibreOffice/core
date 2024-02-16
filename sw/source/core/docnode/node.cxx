@@ -796,9 +796,8 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel(sal_uInt8 const nLvl,
     if( MAXLEVEL > nLvl && !rONds.empty() )
     {
         SwOutlineNodes::size_type nPos;
-        SwNode* pNd = const_cast<SwNode*>(this);
         bool bCheckFirst = false;
-        if( !rONds.Seek_Entry( pNd, &nPos ))
+        if (!rONds.Seek_Entry(this, &nPos))
         {
             if (nPos == 0)
                 bCheckFirst = true;
@@ -2002,7 +2001,7 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
         const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
         if( !rOutlNds.empty() )
         {
-            if( !rOutlNds.Seek_Entry( const_cast<SwContentNode*>(this), &nPos ) && nPos )
+            if (!rOutlNds.Seek_Entry(this, &nPos) && nPos)
                 --nPos;
             if( nPos < rOutlNds.size() &&
                 rOutlNds[ nPos ]->GetIndex() < GetIndex() )

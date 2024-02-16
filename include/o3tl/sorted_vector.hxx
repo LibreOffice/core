@@ -21,9 +21,18 @@
 namespace o3tl
 {
 
-// forward declared because it's default template arg for sorted_vector
-template<class Value, class Compare>
-struct find_unique;
+/** the elements are totally ordered by Compare,
+    for no 2 elements !Compare(a,b) && !Compare(b,a) is true
+  */
+template <class Compare> struct find_unique
+{
+    template <typename Iterator, typename Comparable>
+    auto operator()(Iterator first, Iterator last, Comparable const& v)
+    {
+        auto const it = std::lower_bound(first, last, v, Compare());
+        return std::make_pair(it, (it != last && !Compare()(v, *it)));
+    }
+};
 
 /** Represents a sorted vector of values.
 
@@ -34,12 +43,11 @@ struct find_unique;
 template<
      typename Value,
      typename Compare = std::less<Value>,
-     template<typename, typename> class Find = find_unique,
-     bool = std::is_copy_constructible<Value>::value >
+     template<typename> class Find = find_unique >
 class sorted_vector
 {
 private:
-    typedef Find<Value, Compare> Find_t;
+    typedef Find<Compare> Find_t;
     typedef typename std::vector<Value> vector_t;
     typedef typename std::vector<Value>::iterator  iterator;
 public:
@@ -55,10 +63,10 @@ public:
         std::sort(m_vector.begin(), m_vector.end(), Compare());
     }
     sorted_vector() = default;
-    sorted_vector(sorted_vector const&) = default;
+    sorted_vector(sorted_vector const&) requires std::is_copy_constructible_v<Value> = default;
     sorted_vector(sorted_vector&&) = default;
 
-    sorted_vector& operator=(sorted_vector const&) = default;
+    sorted_vector& operator=(sorted_vector const&) requires std::is_copy_constructible_v<Value> = default;
     sorted_vector& operator=(sorted_vector&&) = default;
 
     // MODIFIERS
@@ -192,12 +200,12 @@ public:
 
     // OPERATIONS
 
-    const_iterator lower_bound( const Value& x ) const
+    template <typename Comparable> const_iterator lower_bound(const Comparable& x) const
     {
         return std::lower_bound( m_vector.begin(), m_vector.end(), x, Compare() );
     }
 
-    const_iterator upper_bound( const Value& x ) const
+    template <typename Comparable> const_iterator upper_bound(const Comparable& x) const
     {
         return std::upper_bound( m_vector.begin(), m_vector.end(), x, Compare() );
     }
@@ -208,7 +216,7 @@ public:
      *
      * Only return a const iterator, so that the vector cannot be directly updated.
      */
-    const_iterator find( const Value& x ) const
+    template <typename Comparable> const_iterator find(const Comparable& x) const
     {
         std::pair<const_iterator, bool> const ret(Find_t()(m_vector.begin(), m_vector.end(), x));
         return (ret.second) ? ret.first : m_vector.end();
@@ -229,7 +237,7 @@ public:
         return m_vector != other.m_vector;
     }
 
-    void insert(sorted_vector<Value,Compare,Find> const& rOther)
+    void insert(const sorted_vector& rOther)
     {
         // optimization for the rather common case that we are overwriting this with the contents
         // of another sorted vector
@@ -301,122 +309,40 @@ private:
     vector_t m_vector;
 };
 
-/* Specialise the template for cases like Value = std::unique_ptr<T>, where
-   MSVC2017 needs some help
-*/
-template<
-     typename Value,
-     typename Compare,
-     template<typename, typename> class Find >
-class sorted_vector<Value,Compare,Find,false> : public sorted_vector<Value, Compare, Find, true>
-{
-public:
-    using sorted_vector<Value, Compare, Find, true>::sorted_vector;
-    typedef sorted_vector<Value, Compare, Find, true> super_sorted_vector;
-
-    sorted_vector(sorted_vector const&) = delete;
-    sorted_vector& operator=(sorted_vector const&) = delete;
-
-    sorted_vector() = default;
-    sorted_vector(sorted_vector&&) = default;
-    sorted_vector& operator=(sorted_vector&&) = default;
-
-    /**
-     * implement find for sorted_vectors containing std::unique_ptr
-     */
-    typename super_sorted_vector::const_iterator find( typename Value::element_type const * x ) const
-    {
-        Value tmp(const_cast<typename Value::element_type*>(x));
-        auto ret = super_sorted_vector::find(tmp);
-        // coverity[ resource_leak : FALSE] - this is only a pretend unique_ptr, to avoid allocating a temporary
-        tmp.release();
-        return ret;
-    }
-    /**
-     * implement upper_bound for sorted_vectors containing std::unique_ptr
-     */
-    typename super_sorted_vector::const_iterator upper_bound( typename Value::element_type const * x ) const
-    {
-        Value tmp(const_cast<typename Value::element_type*>(x));
-        auto ret = super_sorted_vector::upper_bound(tmp);
-        // coverity[ resource_leak : FALSE] - this is only a pretend unique_ptr, to avoid allocating a temporary
-        tmp.release();
-        return ret;
-    }
-    /**
-     * implement lower_bound for sorted_vectors containing std::unique_ptr
-     */
-    typename super_sorted_vector::const_iterator lower_bound( typename Value::element_type const * x ) const
-    {
-        Value tmp(const_cast<typename Value::element_type*>(x));
-        auto ret = super_sorted_vector::lower_bound(tmp);
-        // coverity[ resource_leak : FALSE] - this is only a pretend unique_ptr, to avoid allocating a temporary
-        tmp.release();
-        return ret;
-    }
-};
-
 
 /** Implements an ordering function over a pointer, where the comparison uses the < operator on the pointed-to types.
     Very useful for the cases where we put pointers to objects inside a sorted_vector.
 */
-template <class T> struct less_ptr_to
+struct less_ptr_to
 {
-    bool operator() ( T* const& lhs, T* const& rhs ) const
+    template <class T1, class T2> bool operator()(const T1& lhs, const T2& rhs) const
     {
         return (*lhs) < (*rhs);
-    }
-};
-
-template <class T> struct less_uniqueptr_to
-{
-    bool operator() ( std::unique_ptr<T> const& lhs, std::unique_ptr<T> const& rhs ) const
-    {
-        return (*lhs) < (*rhs);
-    }
-};
-
-/** the elements are totally ordered by Compare,
-    for no 2 elements !Compare(a,b) && !Compare(b,a) is true
-  */
-template<class Value, class Compare>
-struct find_unique
-{
-    typedef typename sorted_vector<Value, Compare,
-            o3tl::find_unique> ::const_iterator const_iterator;
-    std::pair<const_iterator, bool> operator()(
-            const_iterator first, const_iterator last,
-            Value const& v)
-    {
-        const_iterator const it = std::lower_bound(first, last, v, Compare());
-        return std::make_pair(it, (it != last && !Compare()(v, *it)));
     }
 };
 
 /** the elements are partially ordered by Compare,
     2 elements are allowed if they are not the same element (pointer equal)
   */
-template<class Value, class Compare>
-struct find_partialorder_ptrequals
+template <class Compare> struct find_partialorder_ptrequals
 {
-    typedef typename sorted_vector<Value, Compare,
-            o3tl::find_partialorder_ptrequals>::const_iterator const_iterator;
-    std::pair<const_iterator, bool> operator()(
-            const_iterator first, const_iterator last,
-            Value const& v)
+    template <typename Iterator, typename Comparable>
+    auto operator()(Iterator first, Iterator last, Comparable const& v)
     {
-        std::pair<const_iterator, const_iterator> const its =
-            std::equal_range(first, last, v, Compare());
-        for (const_iterator it = its.first; it != its.second; ++it)
+        auto const& [begin, end] = std::equal_range(first, last, v, Compare());
+        for (auto it = begin; it != end; ++it)
         {
-            if (v == *it)
+            if (&*v == &**it)
             {
                 return std::make_pair(it, true);
             }
         }
-        return std::make_pair(its.first, false);
+        return std::make_pair(begin, false);
     }
 };
+
+template <class Ref, class Referenced>
+concept is_reference_to = std::is_convertible_v<decltype(*std::declval<Ref>()), Referenced>;
 
 }   // namespace o3tl
 #endif

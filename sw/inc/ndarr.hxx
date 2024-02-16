@@ -72,7 +72,7 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
 struct CompareSwOutlineNodes
 {
-    bool operator()( SwNode* const& lhs, SwNode* const& rhs) const;
+    bool operator()(const SwNode* lhs, const SwNode* rhs) const;
 };
 
 class SwOutlineNodes : public o3tl::sorted_vector<SwNode*, CompareSwOutlineNodes>
@@ -80,7 +80,7 @@ class SwOutlineNodes : public o3tl::sorted_vector<SwNode*, CompareSwOutlineNodes
 public:
     static constexpr auto npos = std::numeric_limits<size_type>::max();
 
-    bool Seek_Entry(SwNode* rP, size_type* pnPos) const;
+    bool Seek_Entry(const SwNode* rP, size_type* pnPos) const;
 };
 
 struct SwTableToTextSave;

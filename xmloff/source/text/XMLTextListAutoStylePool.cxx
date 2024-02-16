@@ -120,9 +120,10 @@ namespace {
 
 struct XMLTextListAutoStylePoolEntryCmp_Impl
 {
-    bool operator()(
-            std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> const& r1,
-            std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> const& r2 ) const
+    template <typename T1, typename T2>
+        requires o3tl::is_reference_to<T1, XMLTextListAutoStylePoolEntry_Impl>
+                 && o3tl::is_reference_to<T2, XMLTextListAutoStylePoolEntry_Impl>
+    bool operator()(T1 const& r1, T2 const& r2) const
     {
         if( r1->IsNamed() )
         {

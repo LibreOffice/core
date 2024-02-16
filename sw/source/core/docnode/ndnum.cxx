@@ -24,12 +24,12 @@
 #include <fldbas.hxx>
 #include <osl/diagnose.h>
 
-bool CompareSwOutlineNodes::operator()( SwNode* const& lhs, SwNode* const& rhs) const
+bool CompareSwOutlineNodes::operator()(const SwNode* lhs, const SwNode* rhs) const
 {
     return lhs->GetIndex() < rhs->GetIndex();
 }
 
-bool SwOutlineNodes::Seek_Entry(SwNode* rP, size_type* pnPos) const
+bool SwOutlineNodes::Seek_Entry(const SwNode* rP, size_type* pnPos) const
 {
     const_iterator it = lower_bound(rP);
     *pnPos = it - begin();
@@ -79,10 +79,8 @@ void SwNodes::UpdateOutlineIdx( const SwNode& rNd )
     if( m_aOutlineNodes.empty() )     // no OutlineNodes present ?
         return;
 
-    SwNode* const pSrch = const_cast<SwNode*>(&rNd);
-
     SwOutlineNodes::size_type nPos;
-    if (!m_aOutlineNodes.Seek_Entry(pSrch, &nPos))
+    if (!m_aOutlineNodes.Seek_Entry(&rNd, &nPos))
         return;
     if( nPos == m_aOutlineNodes.size() )      // none present for updating ?
         return;

@@ -151,7 +151,7 @@ inline bool SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
 }
 
 using SwWriteTableRows
-    = o3tl::sorted_vector< std::unique_ptr<SwWriteTableRow>, o3tl::less_uniqueptr_to<SwWriteTableRow> >;
+    = o3tl::sorted_vector< std::unique_ptr<SwWriteTableRow>, o3tl::less_ptr_to >;
 
 class SwWriteTableCol
 {
@@ -199,7 +199,10 @@ inline bool SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
 }
 
 struct SwWriteTableColLess {
-    bool operator()(std::unique_ptr<SwWriteTableCol> const & lhs, std::unique_ptr<SwWriteTableCol> const & rhs) {
+    template <typename T1, typename T2>
+        requires o3tl::is_reference_to<T1, SwWriteTableCol>
+                 && o3tl::is_reference_to<T2, SwWriteTableCol>
+    bool operator()(T1 const& lhs, T2 const& rhs) const {
         return lhs->GetPos() < rhs->GetPos();
     }
 };

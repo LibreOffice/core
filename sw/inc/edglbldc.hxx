@@ -62,7 +62,7 @@ public:
         {   return GetDocPos() < rCmp.GetDocPos(); }
 };
 
-class SwGlblDocContents : public o3tl::sorted_vector<std::unique_ptr<SwGlblDocContent>, o3tl::less_uniqueptr_to<SwGlblDocContent> > {};
+class SwGlblDocContents : public o3tl::sorted_vector<std::unique_ptr<SwGlblDocContent>, o3tl::less_ptr_to > {};
 
 #endif
 

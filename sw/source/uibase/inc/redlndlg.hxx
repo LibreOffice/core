@@ -51,7 +51,7 @@ struct SwRedlineDataParent
                         { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
 };
 
-class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to<SwRedlineDataParent> > {};
+class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to > {};
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg final
 {

@@ -153,7 +153,7 @@ constexpr char NAVI_BOOKMARK_DELIM = '\x01';
 }
 
 class SwContentArr
-    : public o3tl::sorted_vector<std::unique_ptr<SwContent>, o3tl::less_uniqueptr_to<SwContent>,
+    : public o3tl::sorted_vector<std::unique_ptr<SwContent>, o3tl::less_ptr_to,
                 o3tl::find_partialorder_ptrequals>
 {
 };

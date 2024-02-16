@@ -121,7 +121,7 @@ public:
 
 class SwHTMLPosFlyFrames
     : public o3tl::sorted_vector<std::unique_ptr<SwHTMLPosFlyFrame>,
-                o3tl::less_uniqueptr_to<SwHTMLPosFlyFrame>,
+                o3tl::less_ptr_to,
                 o3tl::find_partialorder_ptrequals>
 {};
 

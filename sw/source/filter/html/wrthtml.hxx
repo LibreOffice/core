@@ -204,7 +204,7 @@ struct HTMLControl
     }
 };
 
-class HTMLControls : public o3tl::sorted_vector<std::unique_ptr<HTMLControl>, o3tl::less_uniqueptr_to<HTMLControl> > {
+class HTMLControls : public o3tl::sorted_vector<std::unique_ptr<HTMLControl>, o3tl::less_ptr_to > {
 };
 
 struct SwHTMLFormatInfo

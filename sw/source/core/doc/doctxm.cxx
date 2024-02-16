@@ -754,7 +754,7 @@ static bool IsHeadingContained(const SwTextNode* pChptrNd, const SwNode& rNd)
         bool bCheckFirst = false;
         SwOutlineNodes::size_type nPos;
 
-        if (!rONds.Seek_Entry(const_cast<SwNode*>(pNd), &nPos))
+        if (!rONds.Seek_Entry(pNd, &nPos))
         {
             if (nPos == 0)
                 bCheckFirst = true;
@@ -785,7 +785,7 @@ static bool IsHeadingContained(const SwTextNode* pChptrNd, const SwNode& rNd)
             if (bIsHeadingContained)
             {
                 const SwNode* aChptrNd = pChptrNd;
-                if (!rONds.Seek_Entry(const_cast<SwNode*>(aChptrNd), &nPos) && nPos)
+                if (!rONds.Seek_Entry(aChptrNd, &nPos) && nPos)
                     nPos--;
                 // Search for the next outline node with a larger level than the specified chapter node
                 while (nPos < rONds.size() - 1

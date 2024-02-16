@@ -209,7 +209,7 @@ public:
 
 struct CompareSwRedlineTable
 {
-    bool operator()(SwRangeRedline* const &lhs, SwRangeRedline* const &rhs) const;
+    bool operator()(const SwRangeRedline* lhs, const SwRangeRedline* rhs) const;
 };
 
 // Notification type for notifying about redlines to LOK clients

@@ -120,9 +120,10 @@ inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
 namespace {
 
 struct XMLFontAutoStylePoolEntryCmp_Impl {
-    bool operator()(
-        std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> const& r1,
-        std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> const& r2 ) const
+    template <typename T1, typename T2>
+        requires o3tl::is_reference_to<T1, XMLFontAutoStylePoolEntry_Impl>
+                 && o3tl::is_reference_to<T2, XMLFontAutoStylePoolEntry_Impl>
+    bool operator()(T1 const& r1, T2 const& r2) const
     {
         bool bEnc1(r1->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
         bool bEnc2(r2->GetEncoding() != RTL_TEXTENCODING_SYMBOL);

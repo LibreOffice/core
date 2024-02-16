@@ -111,8 +111,7 @@ void SwOutlineContentVisibilityWin::Set()
     SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
     const SwOutlineNodes& rOutlineNodes = rSh.GetNodes().GetOutLineNds();
 
-    (void)rOutlineNodes.Seek_Entry(static_cast<SwNode*>(const_cast<SwTextNode*>(pTextNode)),
-                                   &m_nOutlinePos);
+    (void)rOutlineNodes.Seek_Entry(pTextNode, &m_nOutlinePos);
 
     // set symbol displayed on button
     bool bVisible = true;

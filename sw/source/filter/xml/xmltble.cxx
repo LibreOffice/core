@@ -99,7 +99,7 @@ struct SwXMLTableColumnCmpWidth_Impl
     }
 };
 
-class SwXMLTableColumns_Impl : public o3tl::sorted_vector<std::unique_ptr<SwXMLTableColumn_Impl>, o3tl::less_uniqueptr_to<SwXMLTableColumn_Impl> > {
+class SwXMLTableColumns_Impl : public o3tl::sorted_vector<std::unique_ptr<SwXMLTableColumn_Impl>, o3tl::less_ptr_to > {
 };
 
 }
