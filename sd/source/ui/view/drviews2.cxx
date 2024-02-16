@@ -581,7 +581,9 @@ public:
 void DrawViewShell::FuTemporary(SfxRequest& rReq)
 {
     // during a native slide show nothing gets executed!
-    if(SlideShow::IsRunning( GetViewShellBase() ) && (rReq.GetSlot() != SID_NAVIGATOR))
+    if(SlideShow::IsRunning( GetViewShellBase() )
+        && !SlideShow::IsInteractiveSlideshow() // IASS
+        && (rReq.GetSlot() != SID_NAVIGATOR))
         return;
 
     DBG_ASSERT( mpDrawView, "sd::DrawViewShell::FuTemporary(), no draw view!" );
@@ -3933,7 +3935,7 @@ void DrawViewShell::DuplicateSelectedSlides (SfxRequest& rRequest)
 
 void DrawViewShell::ExecutePropPanelAttr (SfxRequest const & rReq)
 {
-    if(SlideShow::IsRunning( GetViewShellBase() ))
+    if(SlideShow::IsRunning( GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow()) // IASS
         return;
 
     SdDrawDocument* pDoc = GetDoc();

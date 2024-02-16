@@ -138,7 +138,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_SWITCHPAGE:  // BASIC
         {
             // switch page in running slide show
-            if(SlideShow::IsRunning(GetViewShellBase()) && rReq.GetArgs())
+            if(SlideShow::IsRunning(GetViewShellBase())
+                && !SlideShow::IsInteractiveSlideshow() // IASS
+                && rReq.GetArgs())
             {
                 if (const SfxUInt32Item* pWhatPage = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE))
                     SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber(static_cast<sal_Int32>((pWhatPage->GetValue()-1)>>1));

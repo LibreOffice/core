@@ -101,6 +101,9 @@ public:
     /// returns false even if there is a running presentation but in another ViewShell
     static bool IsRunning( const ViewShell& rViewShell );
 
+    /// returns true if the interactive slideshow mode is activated
+    static bool IsInteractiveSlideshow();
+
     // helper api
 
     void startPreview(

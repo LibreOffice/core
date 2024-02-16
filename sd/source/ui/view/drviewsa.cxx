@@ -371,7 +371,7 @@ void DrawViewShell::Shutdown()
 {
     ViewShell::Shutdown();
 
-    if(SlideShow::IsRunning( GetViewShellBase() ) )
+    if(SlideShow::IsRunning( GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow()) // IASS
     {
         // Turn off effects.
         GetDrawView()->SetAnimationMode(SdrAnimationMode::Disable);
@@ -551,7 +551,8 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
        or page) with the help of the ZoomItems !!!   */
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
-        if (GetDocSh()->IsUIActive() || SlideShow::IsRunning(GetViewShellBase())
+        if (GetDocSh()->IsUIActive()
+            || (SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow()) // IASS
             || !GetActiveWindow())
         {
             rSet.DisableItem( SID_ATTR_ZOOM );
@@ -582,7 +583,9 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
     {
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
-        if (GetDocSh()->IsUIActive() || (xSlideshow.is() && xSlideshow->isRunning()) || !GetActiveWindow() )
+        if (GetDocSh()->IsUIActive()
+            || (xSlideshow.is() && xSlideshow->isRunning() && !SlideShow::IsInteractiveSlideshow()) // IASS
+            || !GetActiveWindow() )
         {
             rSet.DisableItem( SID_ATTR_ZOOMSLIDER );
         }
