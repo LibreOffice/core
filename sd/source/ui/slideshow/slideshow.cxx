@@ -216,6 +216,13 @@ bool SlideShow::IsRunning( const ViewShell& rViewShell )
     return xSlideShow.is() && xSlideShow->isRunning() && (xSlideShow->mxController->getViewShell() == &rViewShell);
 }
 
+/// returns true if the interactive slideshow mode is activated
+bool SlideShow::IsInteractiveSlideshow()
+{
+    static bool g_bEnable_Interactive_Slideshow(getenv("ENABLE_INTERACTIVE_SLIDESHOW"));
+    return g_bEnable_Interactive_Slideshow;
+}
+
 void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, vcl::Window* pParentWindow )
 {
     SAL_INFO_IF( !mxController.is(), "sd.slideshow", "sd::SlideShow::CreateController(), clean up old controller first!" );

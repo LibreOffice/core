@@ -501,7 +501,8 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
             {
                 if( pShowWindow == pOutDev && mpViewSh )
                     xSlideshow->paint();
-                return;
+                if (!SlideShow::IsInteractiveSlideshow()) // IASS
+                    return;
             }
         }
     }

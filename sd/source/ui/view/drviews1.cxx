@@ -1347,7 +1347,7 @@ sal_Int8 DrawViewShell::AcceptDrop (
     sal_uInt16 /*nPage*/,
     SdrLayerID nLayer )
 {
-    if( SlideShow::IsRunning( GetViewShellBase() ) )
+    if( SlideShow::IsRunning( GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow() ) // IASS
         return DND_ACTION_NONE;
 
     return mpDrawView->AcceptDrop( rEvt, rTargetHelper, nLayer );
@@ -1367,7 +1367,7 @@ sal_Int8 DrawViewShell::ExecuteDrop (
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = GetDoc()->GetSdPage( nPage, mePageKind )->GetPageNum();
 
-    if( SlideShow::IsRunning( GetViewShellBase() ) )
+    if( SlideShow::IsRunning( GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow()) // IASS
         return DND_ACTION_NONE;
 
     Broadcast(ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
