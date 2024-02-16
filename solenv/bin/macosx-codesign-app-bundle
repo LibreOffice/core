@@ -59,7 +59,19 @@ if test -z "$MACOSX_CODESIGNING_IDENTITY"; then
     # set entitlements to allow Xcode's Instruments application to connect to
     # the application. Note: the following command fails on some Mac Intel
     # machines, and since this not a release build, ignore any failures.
-    codesign --force --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign - $entitlements "$APP_BUNDLE"
+    # Related: tdf#159529 fix increasing failures when setting entitlements
+    # Starting in one of the Xcode versions 15.2 or earlier, setting the
+    # entitlements without a certificate started failing on Mac Silicon. 
+    # The hacky solution is to make a copy of the application's executable,
+    # set the entitlements on that binary only, and then move the copied
+    # binary back.
+    rm -f "$APP_BUNDLE/Contents/MacOS/soffice.withentitlements"
+    cp "$APP_BUNDLE/Contents/MacOS/soffice" "$APP_BUNDLE/Contents/MacOS/soffice.withentitlements"
+    if codesign --force --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign - $entitlements "$APP_BUNDLE/Contents/MacOS/soffice.withentitlements"; then
+        mv "$APP_BUNDLE/Contents/MacOS/soffice.withentitlements" "$APP_BUNDLE/Contents/MacOS/soffice"
+    else
+        rm "$APP_BUNDLE/Contents/MacOS/soffice.withentitlements"
+    fi
     exit 0
 fi
 
