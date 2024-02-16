@@ -1,5 +1,16 @@
 Contains the Network Security Services (NSS) libraries from Mozilla
 
+== ESR versions ==
+
+Upstream releases both regular and "ESR" versions, the latter go into Firefox
+ESR and Thunderbird.
+
+There is a new ESR version about once a year, and a ESR version gets micro
+updates only when there are security issues to fix, and it's not always obvious
+from the release notes of a regular release if there are security issues that
+are relevant to LibreOffice, hence it's probably best to bundle only the ESR
+versions and upgrade for every micro release (as recommended by upstream).
+
 == Fips 140 and signed libraries ==
 
 Fips 140 mode is not supported. That is, the *.chk files containing the
@@ -19,19 +30,4 @@ See also
 With all supported macOS SDK we use
 NSS_USE_SYSTEM_SQLITE=1
 to build using the system sqlite.
-
-== system NSS on Linux ==
-
-Note that different Linux distributions use different SONAMEs for the
-NSS libraries, so it is not possible to use --with-system-nss and build
-a portable generic LO installation set, despite NSS upstream apparently
-maintaining ABI compatibility.
-
-Debian Squeeze:
-0x000000000000000e (SONAME)             Library soname: [libnss3.so.1d]
-Fedora 20:
-0x000000000000000e (SONAME)             Library soname: [libnss3.so]
-
-For the record, the LSB specified SONAME is libnss3.so
-http://refspecs.linuxfoundation.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/libnss3.html
 
