@@ -965,12 +965,9 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
 
 SwSectionNode* SwNode::FindSectionNode()
 {
-    if( IsSectionNode() )
-        return GetSectionNode();
-    SwStartNode* pTmp = m_pStartOfSection;
-    while( !pTmp->IsSectionNode() && pTmp->GetIndex() )
-        pTmp = pTmp->m_pStartOfSection;
-    return pTmp->GetSectionNode();
+    for (SwNode* tmp = this;; tmp = tmp->StartOfSectionNode())
+        if (SwSectionNode* sectNode = tmp->GetSectionNode(); sectNode || !tmp->GetIndex())
+            return sectNode;
 }
 
 // SwSectionNode
