@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/configurable-z-option.patch.0 \
 	external/openssl/openssl-no-ipc-cmd.patch.0 \
 	external/openssl/system-cannot-find-path-for-move.patch.0 \
+	external/openssl/openssl-fix-CC.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,12 @@
+--- Configurations/windows-makefile.tmpl.orig        2024-02-19 21:02:37.162066700 +0000
++++ Configurations/windows-makefile.tmpl   2024-02-19 21:03:59.208212100 +0000
+@@ -251,7 +251,7 @@
+
+ ##### User defined commands and flags ################################
+
+-CC="{- $config{CC} -}"
++CC={- $config{CC} -}
+ CPP={- $config{CPP} -}
+ CPPFLAGS={- our $cppflags1 = join(" ",
+                                   (map { "-D".$_} @{$config{CPPDEFINES}}),
+
