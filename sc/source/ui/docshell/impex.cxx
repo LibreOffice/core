@@ -2493,8 +2493,17 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     return rStrm.GetError() == ERRCODE_NONE;
 }
 
-bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
+bool ScImportExport::Doc2HTML( SvStream& rStream, const OUString& rBaseURL )
 {
+    std::optional<SvFileStream> oStream;
+    char* pEnv = getenv("SC_DEBUG_HTML_COPY_TO");
+    if (pEnv)
+    {
+        OUString aURL;
+        osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pEnv), aURL);
+        oStream.emplace(aURL, StreamMode::WRITE);
+    }
+    SvStream& rStrm = pEnv ? *oStream : rStream;
     // rtl_TextEncoding is ignored in ScExportHTML, read from Load/Save HTML options
     ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, &rDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
         aStreamPath, aNonConvertibleChars, maFilterOptions );
