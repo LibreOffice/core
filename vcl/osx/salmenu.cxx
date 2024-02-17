@@ -113,6 +113,7 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = nullptr;
 
 // FIXME: currently this is leaked
 static MainMenuSelector* pMainMenuSelector = nil;
+static SalNSMainMenuDelegate* pMainMenuDelegate = nil;
 
 static void initAppMenu()
 {
@@ -134,6 +135,10 @@ static void initAppMenu()
     [NSApp setMainMenu: pMainMenu];
 
     pMainMenuSelector = [[MainMenuSelector alloc] init];
+    pMainMenuDelegate = [[SalNSMainMenuDelegate alloc] init];
+
+    // tdf#126638 set a special delegate for the main menu
+    [pMainMenu setDelegate: reinterpret_cast< id<NSMenuDelegate> >(pMainMenuDelegate)];
 
     // about
     NSString* pString = CreateNSString(VclResId(SV_STDTEXT_ABOUT));
@@ -230,12 +235,19 @@ AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
     {
         mpMenu = [[SalNSMenu alloc] initWithMenu: this];
         [mpMenu setDelegate: reinterpret_cast< id<NSMenuDelegate> >(mpMenu)];
+
+        // Related: tdf#126638 enable the menu's "autoenabledItems" property
+        // Enable the menu's "autoenabledItems" property so that
+        // -[SalNSMenuItem validateMenuItem:] will be called before handling
+        // a key shortcut and the menu item can be temporarily disabled if a
+        // modal window is displayed.
+        [mpMenu setAutoenablesItems: YES];
     }
     else
     {
         mpMenu = [NSApp mainMenu];
+        [mpMenu setAutoenablesItems: NO];
     }
-    [mpMenu setAutoenablesItems: NO];
 }
 
 AquaSalMenu::~AquaSalMenu()
