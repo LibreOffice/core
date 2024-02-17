@@ -143,7 +143,6 @@ job208=sw.SwXDocumentIndexMark
 job209=sw.SwXEndnoteProperties
 job211=sw.SwXFieldMaster
 job212=sw.SwXFootnote
-job213=sw.SwXFootnoteProperties
 job215=sw.SwXFootnoteText
 job216=sw.SwXFrames
 job217=sw.SwXHeadFootText

@@ -1094,7 +1094,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXEndnoteProperties \
     qadevOOo/tests/java/mod/_sw/SwXFieldMaster \
     qadevOOo/tests/java/mod/_sw/SwXFootnote \
-    qadevOOo/tests/java/mod/_sw/SwXFootnoteProperties \
     qadevOOo/tests/java/mod/_sw/SwXFootnoteText \
     qadevOOo/tests/java/mod/_sw/SwXFrames \
     qadevOOo/tests/java/mod/_sw/SwXHeadFootText \
