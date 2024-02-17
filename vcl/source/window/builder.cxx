@@ -2799,8 +2799,6 @@ void VclBuilder::tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentC
 
 void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlreader::XmlReader &reader)
 {
-    vcl::Window *pCurrentChild = nullptr;
-
     xmlreader::Span name;
     int nsId;
     OString sType, sInternalChild;
@@ -2825,6 +2823,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlread
         return;
     }
 
+    VclPtr<vcl::Window> pCurrentChild;
     int nLevel = 1;
     while(true)
     {
@@ -2835,7 +2834,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlread
         {
             if (name == "object" || name == "placeholder")
             {
-                pCurrentChild = handleObject(pParent, pAtkProps, reader).get();
+                pCurrentChild = handleObject(pParent, pAtkProps, reader);
 
                 bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
                 if (bObjectInserted)
