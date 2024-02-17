@@ -2478,6 +2478,14 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             bool bStartedPostponedRunProperties = false;
             OUString aSavedSnippet ;
 
+            // Don't redline content-controls--Word doesn't do them.
+            SwTextAttr* pAttr = rNode.GetTextAttrAt(nCurrentPos, RES_TXTATR_CONTENTCONTROL,
+                                                    sw::GetTextAttrMode::Default);
+            if (pAttr && pAttr->GetStart() == nCurrentPos)
+            {
+                pRedlineData = nullptr;
+            }
+
             sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nCurrentPos );
 
             // Skip un-exportable attributes.
