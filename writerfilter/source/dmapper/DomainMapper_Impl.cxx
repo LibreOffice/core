@@ -1014,7 +1014,40 @@ void DomainMapper_Impl::PopSdt()
     uno::Reference<text::XTextRange> xStart = aPosition.m_xTextRange;
     uno::Reference<text::XTextRange> xEnd = GetTopTextAppend()->getEnd();
     uno::Reference<text::XText> xText = xEnd->getText();
-    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursorByRange(xStart);
+
+    uno::Reference<text::XTextCursor> xCursor;
+    try
+    {
+        xCursor = xText->createTextCursorByRange(xStart);
+    }
+    catch (const uno::RuntimeException&)
+    {
+        // We redline form controls and that gets us confused when
+        // we process the SDT around the placeholder. What seems to
+        // happen is we lose the text-range when we pop the SDT position.
+        // Here, we reset the text-range when we fail to create the
+        // cursor from the top SDT position.
+        if (m_aTextAppendStack.empty())
+        {
+            return;
+        }
+
+        uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+        if (!xTextAppend.is())
+        {
+            return;
+        }
+
+        uno::Reference<text::XText> xText2 = xTextAppend->getText();
+        if (!xText2.is())
+        {
+            return;
+        }
+
+        // Reset to the start.
+        xCursor = xText2->createTextCursorByRange(xTextAppend->getStart());
+    }
+
     if (!xCursor)
     {
         SAL_WARN("writerfilter.dmapper", "DomainMapper_Impl::PopSdt: no start position");
