@@ -962,7 +962,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
     else
     {   // set the Point on the Content-Node
         assert(pCnt->IsNoTextFrame());
-        SwContentNode *const pCNd = const_cast<SwContentNode*>(static_cast<SwNoTextFrame const*>(pCnt)->GetNode());
+        const SwContentNode* const pCNd = static_cast<SwNoTextFrame const*>(pCnt)->GetNode();
         if ( fnNxtPrv == lcl_GetPrvCnt )
             pPam->GetPoint()->AssignEndIndex(*pCNd);
         else
@@ -1768,9 +1768,9 @@ bool SwFrame::WannaRightPage() const
     }
     if ( !pDesc )
     {
-        SwPageFrame *pPrv = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(pPage->GetPrev()));
+        const SwPageFrame* pPrv = static_cast<const SwPageFrame*>(pPage->GetPrev());
         if( pPrv && pPrv->IsEmptyPage() )
-            pPrv = static_cast<SwPageFrame*>(pPrv->GetPrev());
+            pPrv = static_cast<const SwPageFrame*>(pPrv->GetPrev());
         if( pPrv )
             pDesc = pPrv->GetPageDesc()->GetFollow();
         else
@@ -1864,7 +1864,7 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
 
         if ( pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
         {
-            auto pMod = const_cast<sw::BroadcastingModify*>(pDesc->GetDefinedIn());
+            auto pMod = pDesc->GetDefinedIn();
             sw::VirtPageNumHint aHint(pPage);
             pMod->CallSwClientNotify(aHint);
             if(aHint.GetPage())
@@ -1947,9 +1947,9 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
             const SwTabFrame *pTable = rUnion.GetTable();
 
             // Skip any repeated headlines in the follow:
-            SwLayoutFrame* pRow = pTable->IsFollow() ?
+            const SwLayoutFrame* pRow = pTable->IsFollow() ?
                                 pTable->GetFirstNonHeadlineRow() :
-                                const_cast<SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(pTable->Lower()));
+                                static_cast<const SwLayoutFrame*>(pTable->Lower());
 
             while ( pRow )
             {
@@ -1993,7 +1993,7 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
                         }
                     }
                 }
-                pRow = static_cast<SwLayoutFrame*>(pRow->GetNext());
+                pRow = static_cast<const SwLayoutFrame*>(pRow->GetNext());
             }
         }
 
@@ -2084,14 +2084,14 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
     SwSortedObjs aSortObjs;
     if ( pStartFrame->IsInFly() )
     {
-        const SwAnchoredObject* pObj = pStartFrame->FindFlyFrame();
+        SwAnchoredObject* pObj = pStartFrame->FindFlyFrame();
         OSL_ENSURE( pObj, "No Start Object." );
-        if (pObj) aSortObjs.Insert( *const_cast<SwAnchoredObject*>(pObj) );
-        const SwAnchoredObject* pObj2 = pEndFrame->FindFlyFrame();
+        if (pObj) aSortObjs.Insert( *pObj );
+        SwAnchoredObject* pObj2 = pEndFrame->FindFlyFrame();
         OSL_ENSURE( pObj2, "SwRootFrame::CalcFrameRects(..) - FlyFrame missing - looks like an invalid selection" );
         if ( pObj2 != nullptr && pObj2 != pObj )
         {
-            aSortObjs.Insert( *const_cast<SwAnchoredObject*>(pObj2) );
+            aSortObjs.Insert(*pObj2);
         }
     }
 

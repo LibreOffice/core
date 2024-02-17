@@ -1075,7 +1075,7 @@ SwContentFrame *SwFrame::FindNextCnt_( const bool _bInSameFootnote )
                 // handling for environments 'each footnote':
                 // Assure that found next content frame belongs to the same footnotes
                 const SwFootnoteFrame* pFootnoteFrameOfNext( pNxtCnt->FindFootnoteFrame() );
-                const SwFootnoteFrame* pFootnoteFrameOfCurr( pThis->FindFootnoteFrame() );
+                SwFootnoteFrame* pFootnoteFrameOfCurr(pThis->FindFootnoteFrame());
                 OSL_ENSURE( pFootnoteFrameOfCurr,
                         "<SwFrame::FindNextCnt_() - unknown layout situation: current frame has to have an upper footnote frame." );
                 if ( pFootnoteFrameOfNext == pFootnoteFrameOfCurr )
@@ -1086,8 +1086,7 @@ SwContentFrame *SwFrame::FindNextCnt_( const bool _bInSameFootnote )
                 {
                     // next content frame has to be the first content frame
                     // in the follow footnote, which contains a content frame.
-                    SwFootnoteFrame* pFollowFootnoteFrameOfCurr(
-                                        const_cast<SwFootnoteFrame*>(pFootnoteFrameOfCurr) );
+                    SwFootnoteFrame* pFollowFootnoteFrameOfCurr(pFootnoteFrameOfCurr);
                     pNxtCnt = nullptr;
                     do {
                         pFollowFootnoteFrameOfCurr = pFollowFootnoteFrameOfCurr->GetFollow();
@@ -1219,13 +1218,12 @@ SwContentFrame* SwFrame::FindPrevCnt_()
                     // handling for environments 'each footnote':
                     // Assure that found next content frame belongs to the same footnotes
                     const SwFootnoteFrame* pFootnoteFrameOfPrev( pPrevContentFrame->FindFootnoteFrame() );
-                    const SwFootnoteFrame* pFootnoteFrameOfCurr( pCurrContentFrame->FindFootnoteFrame() );
+                    SwFootnoteFrame* pFootnoteFrameOfCurr(pCurrContentFrame->FindFootnoteFrame());
                     if ( pFootnoteFrameOfPrev != pFootnoteFrameOfCurr )
                     {
                         if ( pFootnoteFrameOfCurr->GetMaster() )
                         {
-                            SwFootnoteFrame* pMasterFootnoteFrameOfCurr(
-                                        const_cast<SwFootnoteFrame*>(pFootnoteFrameOfCurr) );
+                            SwFootnoteFrame* pMasterFootnoteFrameOfCurr(pFootnoteFrameOfCurr);
                             pPrevContentFrame = nullptr;
                             // correct wrong loop-condition
                             do {
@@ -1507,7 +1505,7 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
                 {
                     // if fly frame has a follow (next linked fly frame) or can split,
                     // frame is moveable.
-                    SwFlyFrame* pFlyFrame = const_cast<SwLayoutFrame*>(_pLayoutFrame)->FindFlyFrame();
+                    const SwFlyFrame* pFlyFrame = _pLayoutFrame->FindFlyFrame();
                     if ( pFlyFrame->GetNextLink() || pFlyFrame->IsFlySplitAllowed() )
                     {
                         bRetVal = true;

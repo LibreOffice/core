@@ -859,7 +859,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 {
     if (!GetFormat())
         return;
-    SwSectionNode const*const pSectNd(GetFormat()->GetSectionNode());
+    SwSectionNode* const pSectNd(GetFormat()->GetSectionNode());
     if (nullptr == pSectNd ||
         !pSectNd->GetNodes().IsDocNodes() ||
         IsHiddenFlag() ||
@@ -873,7 +873,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         maMSTOCExpression.clear();
     }
 
-    SwDoc& rDoc = const_cast<SwDoc&>(pSectNd->GetDoc());
+    SwDoc& rDoc = pSectNd->GetDoc();
 
     if (pAttr && GetFormat())
         rDoc.ChgFormat(*GetFormat(), *pAttr);
@@ -949,7 +949,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         : nullptr;
 
     SwNode2LayoutSaveUpperFrames aN2L(*pSectNd);
-    const_cast<SwSectionNode*>(pSectNd)->DelFrames();
+    pSectNd->DelFrames();
 
     // This would be a good time to update the Numbering
     rDoc.UpdateNumRule();

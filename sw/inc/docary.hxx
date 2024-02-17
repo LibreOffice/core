@@ -131,7 +131,7 @@ public:
         erase( begin() + aStartIdx, begin() + aEndIdx);
     }
 
-    size_t GetPos(Value const& p) const
+    size_t GetPos(typename std::remove_pointer_t<Value> const* const p) const
     {
         const_iterator const it = std::find(begin(), end(), p);
         return it == end() ? SIZE_MAX : it - begin();
@@ -158,9 +158,6 @@ public:
 
     virtual Value GetFormat(size_t idx) const override
         { return SwVectorModifyBase<Value>::operator[](idx); }
-
-    size_t GetPos(const SwFormat *p) const
-        { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFormat*>( p ) ) ); }
 
     // Override return type to reduce casting
     virtual Value FindFormatByName(const OUString& rName) const override
@@ -230,7 +227,7 @@ private:
     mutable sal_uInt32 m_nMaxMovedID = 1;   //every move-redline pair get a unique ID, so they can find each other.
 public:
     ~SwRedlineTable();
-    bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline*>(p)) != maVector.end(); }
+    bool Contains(const SwRangeRedline* p) const { return maVector.find(p) != maVector.end(); }
     size_type GetPos(const SwRangeRedline* p) const;
 
     bool Insert(SwRangeRedline*& p);

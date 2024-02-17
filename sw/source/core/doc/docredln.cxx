@@ -658,7 +658,7 @@ SwRedlineTable::~SwRedlineTable()
 
 SwRedlineTable::size_type SwRedlineTable::GetPos(const SwRangeRedline* p) const
 {
-    vector_type::const_iterator it = maVector.find(const_cast<SwRangeRedline*>(p));
+    vector_type::const_iterator it = maVector.find(p);
     if( it == maVector.end() )
         return npos;
     return it - maVector.begin();

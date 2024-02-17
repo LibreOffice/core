@@ -3986,15 +3986,15 @@ SwFrame *SwTabFrame::FindLastContentOrTable()
             // We have to find the last content the hard way:
 
             OSL_ENSURE( pRet->IsCellFrame(), "SwTabFrame::FindLastContent failed" );
-            const SwFrame* pRow = pRet->GetUpper();
+            SwFrame* pRow = pRet->GetUpper();
             while ( pRow && !pRow->GetUpper()->IsTabFrame() )
                 pRow = pRow->GetUpper();
-            const SwContentFrame* pContentFrame = pRow ? static_cast<const SwLayoutFrame*>(pRow)->ContainsContent() : nullptr;
+            SwContentFrame* pContentFrame = pRow ? static_cast<SwLayoutFrame*>(pRow)->ContainsContent() : nullptr;
             pRet = nullptr;
 
             while ( pContentFrame && static_cast<const SwLayoutFrame*>(pRow)->IsAnLower( pContentFrame ) )
             {
-                pRet = const_cast<SwContentFrame*>(pContentFrame);
+                pRet = pContentFrame;
                 pContentFrame = pContentFrame->GetNextContentFrame();
             }
         }
@@ -4831,7 +4831,7 @@ static sal_uInt16 lcl_GetTopSpace( const SwRowFrame& rRow )
             nTmpTopSpace = lcl_GetTopSpace( *static_cast<const SwRowFrame*>(pCurrLower->Lower()) );
         else
         {
-            const SwAttrSet& rSet = const_cast<SwCellFrame*>(pCurrLower)->GetFormat()->GetAttrSet();
+            const SwAttrSet& rSet = pCurrLower->GetFormat()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpTopSpace = rBoxItem.CalcLineSpace( SvxBoxItemLine::TOP, true );
         }
@@ -4852,7 +4852,7 @@ static sal_uInt16 lcl_GetTopLineDist( const SwRowFrame& rRow )
             nTmpTopLineDist = lcl_GetTopLineDist( *static_cast<const SwRowFrame*>(pCurrLower->Lower()) );
         else
         {
-            const SwAttrSet& rSet = const_cast<SwCellFrame*>(pCurrLower)->GetFormat()->GetAttrSet();
+            const SwAttrSet& rSet = pCurrLower->GetFormat()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpTopLineDist = rBoxItem.GetDistance( SvxBoxItemLine::TOP );
         }
@@ -4876,7 +4876,7 @@ static sal_uInt16 lcl_GetBottomLineSize( const SwRowFrame& rRow )
         }
         else
         {
-            const SwAttrSet& rSet = const_cast<SwCellFrame*>(pCurrLower)->GetFormat()->GetAttrSet();
+            const SwAttrSet& rSet = pCurrLower->GetFormat()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpBottomLineSize = rBoxItem.CalcLineSpace( SvxBoxItemLine::BOTTOM, true ) -
                                  rBoxItem.GetDistance( SvxBoxItemLine::BOTTOM );
@@ -4901,7 +4901,7 @@ static sal_uInt16 lcl_GetBottomLineDist( const SwRowFrame& rRow )
         }
         else
         {
-            const SwAttrSet& rSet = const_cast<SwCellFrame*>(pCurrLower)->GetFormat()->GetAttrSet();
+            const SwAttrSet& rSet = pCurrLower->GetFormat()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpBottomLineDist = rBoxItem.GetDistance( SvxBoxItemLine::BOTTOM );
         }
