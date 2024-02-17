@@ -9,6 +9,9 @@
 
 #include <test/unoapixml_test.hxx>
 
+#include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+
 using namespace ::com::sun::star;
 
 namespace
@@ -108,14 +111,30 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
     {
         loadFromURL(u"dml-groupshape-polygon.docx");
 
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XText> xText = xTextDocument->getText();
+        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
         // With TrackChanges, the Checkbox causes an assertion in the sax serializer,
         // in void sax_fastparser::FastSaxSerializer::endFastElement(sal_Int32).
         // Element == maMarkStack.top()->m_DebugStartedElements.back()
         // sax/source/tools/fastserializer.cxx#402
         dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+        xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+
         dispatchCommand(mxComponent, ".uno:InsertCheckboxContentControl", {});
 
-        save("Office Open XML Text");
+        // Loading should not show the "corrupted" dialog, which would assert.
+        saveAndReload("Office Open XML Text");
+
+        // Now that we loaded it successfully, delete the controls,
+        // still with change-tracking enabled, and save.
+        dispatchCommand(mxComponent, ".uno:SelectAll", {});
+        dispatchCommand(mxComponent, ".uno:Delete", {});
+
+        // Loading should not show the "corrupted" dialog, which would assert.
+        saveAndReload("Office Open XML Text");
     }
 }
 

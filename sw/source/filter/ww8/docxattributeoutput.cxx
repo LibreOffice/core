@@ -1919,7 +1919,22 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     }
 
     // if there is some redlining in the document, output it
-    StartRedline( m_pRedlineData, bLastRun );
+    bool bSkipRedline = false;
+    if (nLen == 1)
+    {
+        // Don't redline content-controls--Word doesn't do them.
+        SwTextAttr* pAttr
+            = pNode->GetTextAttrAt(nPos, RES_TXTATR_CONTENTCONTROL, sw::GetTextAttrMode::Default);
+        if (pAttr && pAttr->GetStart() == nPos)
+        {
+            bSkipRedline = true;
+        }
+    }
+
+    if (!bSkipRedline)
+    {
+        StartRedline(m_pRedlineData, bLastRun);
+    }
 
     // XML_r node should be surrounded with bookmark-begin and bookmark-end nodes if it has bookmarks.
     // The same is applied for permission ranges.
@@ -1992,6 +2007,13 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     // append the actual run end
     m_pSerializer->endElementNS( XML_w, XML_r );
 
+    // if there is some redlining in the document, output it
+    // (except in the case of fields with multiple runs)
+    if (!bSkipRedline)
+    {
+        EndRedline(m_pRedlineData, bLastRun);
+    }
+
     if (nLen != -1)
     {
         sal_Int32 nEnd = nPos + nLen;
@@ -2001,10 +2023,6 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
             WriteContentControlEnd();
         }
     }
-
-    // if there is some redlining in the document, output it
-    // (except in the case of fields with multiple runs)
-    EndRedline( m_pRedlineData, bLastRun );
 
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
     // (so on export sdt blocks are never nested ATM)
