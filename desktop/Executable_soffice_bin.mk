@@ -66,27 +66,4 @@ endif
 
 endif
 
-ifeq ($(OS),MACOSX)
-ifeq ($(CPUNAME),X86_64)
-
-# tdf#152524 Add a __objc_fork_ok data section for Mac Intel executable
-# This attempts to fix a particularly difficult to debug crash due to
-# memory corruption when gpgme tries to fork and exec a gpg command.
-# For more background, see the following bug comment:
-#   https://bugs.documentfoundation.org/show_bug.cgi?id=152524#c39
-# This data section is only added in Mac Intel builds as it is a
-# controversial approach and I have not seen any reports of this bug
-# on Mac Silicon yet. So limit the fix only to Mac Intel in the hope
-# that this controversial approach will automatically phase itself
-# out when Apple eventually stops releasing new versions of macOS
-# for Mac Intel.
-# Note: the Objective C runtime doesn't appear to check the value of
-# this data section, but set it to 1 in case that changes in the future.
-$(eval $(call gb_Executable_add_ldflags,soffice_bin,\
-    -sectcreate __DATA __objc_fork_ok $(SRCDIR)/desktop/util/macos/__objc_fork_ok_data.txt \
-))
-
-endif
-endif
-
 # vim: set ts=4 sw=4 et:
