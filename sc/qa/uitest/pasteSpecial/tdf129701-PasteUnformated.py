@@ -37,7 +37,7 @@ class tdf129701(UITestCase):
                     xMergeDelimiters.executeAction("CLICK", tuple())
                 if get_state_as_dict(xSkipEmtyCells)['Selected'] == 'true':
                     xSkipEmtyCells.executeAction("CLICK", tuple())
-                # Check wether Skip empty cells is unselected
+                # Check whether Skip empty cells is unselected
                 self.assertEqual('false', get_state_as_dict(xSkipEmtyCells)['Selected'])
 
             document = self.ui_test.get_component()
