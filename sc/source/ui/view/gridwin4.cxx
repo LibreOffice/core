@@ -936,9 +936,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     {
         // Tiled offset nScrX, nScrY
         MapMode aMap( MapUnit::MapPixel );
-        Point aOrigin = aOriginalMode.GetOrigin();
-        aOrigin.setX(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px) + nScrX);
-        aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px) + nScrY);
+        Point aOrigin(o3tl::convert(aOriginalMode.GetOrigin(), o3tl::Length::twip, o3tl::Length::px));
+        aOrigin.Move(nScrX, nScrY);
         aMap.SetOrigin(aOrigin);
         pContentDev->SetMapMode(aMap);
     }
@@ -983,11 +982,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     const MapMode aOrig = pContentDev->GetMapMode();
     if (bIsTiledRendering)
     {
-        Point aOrigin = aOriginalMode.GetOrigin();
-        tools::Long nXOffset = bLayoutRTL ?
-            (-o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px) + aOutputData.GetScrW()) :
-            o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px);
-        Size aPixelOffset(nXOffset, o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px));
+        Point aOrigin(o3tl::convert(aOriginalMode.GetOrigin(), o3tl::Length::twip, o3tl::Length::px));
+        tools::Long nXOffset = bLayoutRTL ? -aOrigin.getX() + aOutputData.GetScrW()
+                                          : aOrigin.getX();
+        Size aPixelOffset(nXOffset, aOrigin.getY());
         pContentDev->SetPixelOffset(aPixelOffset);
         comphelper::LibreOfficeKit::setLocalRendering();
     }
