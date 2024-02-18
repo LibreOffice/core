@@ -32,6 +32,7 @@
 #include <vcl/settings.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
+#include <tools/UnitConversion.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -1170,8 +1171,12 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             // paint the background
             rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
 
+            OutputDevice& rOtherWin = pOtherEditView->GetOutputDevice();
+            const MapMode aOrigMapMode = rOtherWin.GetMapMode();
+            const o3tl::Length aOrigOutputAreaUnit = MapToO3tlLength(aOrigMapMode.GetMapUnit());
+
             // paint text
-            const tools::Rectangle aOrigOutputAreaTw(pOtherEditView->GetOutputArea()); // Not in pixels.
+            const tools::Rectangle aOrigOutputArea(pOtherEditView->GetOutputArea()); // Not in pixels.
 
             tools::Rectangle aNewOutputArea;
             // compute output area for view with a different zoom level wrt the view used for painting
@@ -1180,17 +1185,26 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             {
                 Point aOtherStart = rOtherViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
                 Point aOtherEnd = rOtherViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
-                tools::Rectangle aOtherEditRectPx(aOtherStart, aOtherEnd);
+                tools::Rectangle aOtherEditRect(
+                    o3tl::convert(tools::Rectangle(aOtherStart, aOtherEnd), o3tl::Length::px,
+                                  aOrigOutputAreaUnit));
 
                 tools::Long sides[4];
                 for (auto i: {0, 1, 2, 3})
                 {
-                    sides[i] = static_cast<tools::Long>(
-                        GetSide(aEditRectPx, i)
-                        + double(::GetZoom(mrViewData, i) / ::GetZoom(rOtherViewData, i))
-                              * (double(::GetZoom(rOtherViewData, i)) * GetSide(aOrigOutputAreaTw, i)
-                                 - GetSide(aOtherEditRectPx, i) * twipFactor)
-                              / twipFactor);
+                    const Fraction zoomThis = ::GetZoom(mrViewData, i);
+                    const Fraction zoomOther = ::GetZoom(rOtherViewData, i);
+
+                    const auto unscaledOtherEditRectSide
+                        = o3tl::convert(GetSide(aOtherEditRect, i),
+                                        zoomOther.GetDenominator(), zoomOther.GetNumerator());
+
+                    const auto scaledAdd
+                        = o3tl::convert(GetSide(aOrigOutputArea, i) - unscaledOtherEditRectSide,
+                                        zoomThis.GetNumerator(), zoomThis.GetDenominator());
+
+                    sides[i] = GetSide(aEditRectPx, i)
+                               + o3tl::convert(scaledAdd, aOrigOutputAreaUnit, o3tl::Length::px);
                 }
 
                 aNewOutputArea = tools::Rectangle(sides[0], sides[1], sides[2], sides[3]);
@@ -1202,7 +1216,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 if (aNewOutputArea.IsEmpty())
                 {
                     // same zoom level as view used for painting
-                    aNewOutputArea = rDevice.LogicToPixel(aOrigOutputAreaTw);
+                    aNewOutputArea = rDevice.LogicToPixel(aOrigOutputArea);
                 }
                 // a small workaround for getting text position matching cursor position horizontally.
                 const tools::Long nCursorGapPx = 2;
@@ -1227,8 +1241,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
                 // attached to the EditView, so we have to change its mapmode too (temporarily). We save the
                 // original mapmode and 'output area' and roll them back when we finish painting to rDevice.
-                OutputDevice& rOtherWin = pOtherEditView->GetOutputDevice();
-                const MapMode aOrigMapMode = rOtherWin.GetMapMode();
                 rOtherWin.SetMapMode(rDevice.GetMapMode());
 
                 // Avoid sending wrong cursor/selection messages by the 'other' view, as the output-area is going
@@ -1266,7 +1278,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                 // Rollback the mapmode and 'output area'.
                 rOtherWin.SetMapMode(aOrigMapMode);
-                pOtherEditView->SetOutputArea(aOrigOutputAreaTw);
+                pOtherEditView->SetOutputArea(aOrigOutputArea);
             }
             rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
         }
