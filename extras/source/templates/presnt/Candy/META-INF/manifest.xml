@@ -2,8 +2,6 @@
 <manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.3" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0">
  <manifest:file-entry manifest:full-path="/" manifest:version="1.3" manifest:media-type="application/vnd.oasis.opendocument.presentation-template"/>
  <manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="Pictures/100002010000070E0000007A072587FC46AD7996.png" manifest:media-type="image/png"/>
- <manifest:file-entry manifest:full-path="Pictures/100002010000078100000028E4140FADDA6D818B.png" manifest:media-type="image/png"/>
  <manifest:file-entry manifest:full-path="Pictures/10000000000007800000043870026B1FACED0D1B.png" manifest:media-type="image/png"/>
  <manifest:file-entry manifest:full-path="Pictures/10000000000005000000050014DEA376B6E67205.png" manifest:media-type="image/png"/>
  <manifest:file-entry manifest:full-path="Pictures/1000000000000780000004383B6CE268A9802A07.png" manifest:media-type="image/png"/>
