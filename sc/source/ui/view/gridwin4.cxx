@@ -659,10 +659,6 @@ Fraction GetZoom(const ScViewData& rViewData, int i)
     };
     return (rViewData.*GetZooms[i])();
 }
-
-// Multiplying by this is basically equivalent to o3tl::convert(foo, o3tl::Length::px, o3tl::Length::mm100)
-// Where there are 15 twips in an ideal pixel and 1 twip is 0.0017638889 cm
-constexpr double twipFactor = 15 * 1.76388889; // 26.45833335
 }
 
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
@@ -1055,18 +1051,17 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             {
                 Point aOrigin = aOriginalMode.GetOrigin();
                 if (bLayoutRTL)
-                    aOrigin.setX(-o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
-                                 + aOutputData.nScrX + aOutputData.GetScrW());
+                    aOrigin.setX(-aOrigin.getX()
+                                 + o3tl::toTwips(aOutputData.nScrX + aOutputData.GetScrW(), o3tl::Length::px));
                 else
-                    aOrigin.setX(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
-                                 + aOutputData.nScrX);
+                    aOrigin.AdjustX(o3tl::toTwips(aOutputData.nScrX, o3tl::Length::px));
 
-                aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
-                             + aOutputData.nScrY);
-
+                aOrigin.AdjustY(o3tl::toTwips(aOutputData.nScrY, o3tl::Length::px));
+                aOrigin = o3tl::convert(aOrigin, o3tl::Length::twip, o3tl::Length::mm100);
                 // keep into account the zoom factor
-                aOrigin = Point((aOrigin.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
-                                 (aOrigin.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
+                aOrigin = aOrigin.scale(
+                    aDrawMode.GetScaleX().GetDenominator(), aDrawMode.GetScaleX().GetNumerator(),
+                    aDrawMode.GetScaleY().GetDenominator(), aDrawMode.GetScaleY().GetNumerator());
 
                 MapMode aNew = rDevice.GetMapMode();
                 aNew.SetOrigin(aOrigin);
@@ -1155,14 +1150,16 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
             // Need to draw the background in absolute coords.
             Point aOriginTw = aOriginalMode.GetOrigin();
-            Point aOriginPx = o3tl::convert(aOriginTw, o3tl::Length::twip, o3tl::Length::px);
-            Point aOriginAbsPx = aOriginPx + aTileRectPx.GetPos();
+            Point aOriginAbsTw = aOriginTw + o3tl::toTwips(aTileRectPx.GetPos(), o3tl::Length::px);
+            Point aOriginAbsPx = o3tl::convert(aOriginAbsTw, o3tl::Length::twip, o3tl::Length::px);
             aBackground += aOriginAbsPx;
             rDevice.SetMapMode(aDrawMode);
 
             // keep into account the zoom factor
-            Point aNewOrigin((aOriginAbsPx.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
-                             (aOriginAbsPx.getY() * twipFactor) / static_cast<double>(aDrawMode.GetScaleY()));
+            Point aNewOrigin(o3tl::convert(aOriginAbsTw, o3tl::Length::twip, o3tl::Length::mm100));
+            aNewOrigin = aNewOrigin.scale(
+                aDrawMode.GetScaleX().GetDenominator(), aDrawMode.GetScaleX().GetNumerator(),
+                aDrawMode.GetScaleY().GetDenominator(), aDrawMode.GetScaleY().GetNumerator());
 
             MapMode aNewMM = rDevice.GetMapMode();
             aNewMM.SetOrigin(aNewOrigin);
