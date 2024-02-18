@@ -432,8 +432,6 @@ static void writeImage_( OutputBuffer&     o_rOutputBuf,
 }
 
 // forwarders
-
-
 static void writeImageLF( OutputBuffer&     o_rOutputBuf,
                           Stream*           str,
                           int               width,
@@ -444,6 +442,45 @@ static void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          int               width,
                          int               height,
                          bool              bInvert ) { writeMask_(o_rOutputBuf,str,width,height,bInvert); }
+
+// Vertically flip the bitmap
+static void flipSplashBitmap(SplashBitmap *pBitmap)
+{
+    if (pBitmap->getRowSize() <= 0)
+        return;
+
+    auto nBitmapHeight = static_cast<size_t>(pBitmap->getHeight());
+    auto nRowSize = static_cast<size_t>(pBitmap->getRowSize());
+    auto nAlphaRowSize = static_cast<size_t>(pBitmap->getAlphaRowSize());
+
+    auto aTmpRow = new unsigned char[nRowSize];
+    auto aTmpAlphaRow = new unsigned char[nAlphaRowSize];
+
+    auto pBitmapData = pBitmap->getDataPtr();
+    auto pAlphaData = pBitmap->getAlphaPtr();
+
+    // Set up pairs of pointers working from each end of the bitmap
+    auto pCurRowA = pBitmapData;
+    auto pCurAlphaA = pAlphaData;
+    auto pCurRowB = pBitmapData+nRowSize*(nBitmapHeight-1);
+    auto pCurAlphaB = pAlphaData+nAlphaRowSize*(nBitmapHeight-1);
+
+    for (size_t nCur = 0;
+         nCur < nBitmapHeight/2;
+         nCur++, pCurRowA+=nRowSize, pCurRowB-=nRowSize,
+         pCurAlphaA+=nAlphaRowSize, pCurAlphaB-=nAlphaRowSize)
+    {
+        memcpy(aTmpRow, pCurRowA, nRowSize);
+        memcpy(pCurRowA, pCurRowB, nRowSize);
+        memcpy(pCurRowB, aTmpRow, nRowSize);
+
+        memcpy(aTmpAlphaRow, pCurAlphaA, nAlphaRowSize);
+        memcpy(pCurAlphaA, pCurAlphaB, nAlphaRowSize);
+        memcpy(pCurAlphaB, aTmpAlphaRow, nAlphaRowSize);
+    }
+    delete[] aTmpRow;
+    delete[] aTmpAlphaRow;
+}
 
 int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, const GfxState* state ) const
 {
@@ -1235,6 +1272,9 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
     delete pSplashGfxState;
     delete pSplashGfx;
     delete pSplashOut;
+
+    // Add a vertical flip, we can't do this in LO for an image filled poly
+    flipSplashBitmap(pSplashBitmap);
 
     auto nBitmapWidth = static_cast<size_t>(pSplashBitmap->getWidth());
     auto nBitmapHeight = static_cast<size_t>(pSplashBitmap->getHeight());
