@@ -86,6 +86,9 @@ bool Bitmap::Invert()
 
         if (pWriteAcc->GetPalette().IsGreyPalette8Bit())
         {
+            // For alpha masks, we need to actually invert the underlying data
+            // or the optimisations elsewhere do not always work right. If this is a bottleneck,
+            // probably better to try improving it inside the mxSalBmp->Invert() call above.
             for (tools::Long nY = 0; nY < nHeight; nY++)
             {
                 Scanline pScanline = pWriteAcc->GetScanline(nY);
