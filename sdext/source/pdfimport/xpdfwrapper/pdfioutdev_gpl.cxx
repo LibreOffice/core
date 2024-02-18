@@ -1182,13 +1182,15 @@ void PDFOutDev::setSkipImages( bool bSkipImages )
 }
 
 #if POPPLER_CHECK_VERSION(21, 3, 0)
-poppler_bool PDFOutDev::tilingPatternFill(GfxState *, Gfx *, Catalog *,
+poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
                                           GfxTilingPattern *tPat, const double *mat,
                                           int x0, int y0, int x1, int y1,
                                           double xStep, double yStep)
 {
     const double *pBbox = tPat->getBBox();
     const int nPaintType = tPat->getPaintType();
+    Dict *pResDict = tPat->getResDict();
+    Object *aStr = tPat->getContentStream();
     double nWidth = pBbox[2] - pBbox[0];
     double nHeight = pBbox[3] - pBbox[1];
 
@@ -1215,7 +1217,65 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *, Gfx *, Catalog *,
             normalize(mat[4]), normalize(mat[5])
             );
 
-    // TODO: Write the image
+    PDFRectangle aBox;
+    aBox.x1 = pBbox[0];
+    aBox.y1 = pBbox[1];
+    aBox.x2 = pBbox[2];
+    aBox.y2 = pBbox[3];
+
+    const int nDPI = 72; // GfxState seems to have 72.0 as magic for some reason
+    auto pSplashGfxState = new GfxState(nDPI, nDPI, &aBox, 0, false);
+    auto pSplashOut = new SplashOutputDev(splashModeRGB8, 1, false, nullptr);
+    pSplashOut->setEnableFreeType(false);
+    pSplashOut->startPage(0 /* pageNum */, pSplashGfxState, nullptr /* xref */);
+
+    auto pSplashGfx = new Gfx(m_pDoc, pSplashOut, pResDict, &aBox, nullptr);
+    pSplashGfx->display(aStr);
+    auto pSplashBitmap = pSplashOut->takeBitmap();
+    delete pSplashGfxState;
+    delete pSplashGfx;
+    delete pSplashOut;
+
+    auto nBitmapWidth = static_cast<size_t>(pSplashBitmap->getWidth());
+    auto nBitmapHeight = static_cast<size_t>(pSplashBitmap->getHeight());
+
+    char *pBitmapData = reinterpret_cast<char *>(pSplashBitmap->getDataPtr());
+    if (nPaintType == 2)
+    {
+        // My understanding is Type 2 fills are just bitmaps of *what* to fill
+        // in the current fill colour.
+        // sending it to LO as a flat colour image with the alpha map is easiest
+        GfxRGB aCurFill;
+        unsigned char r,g,b;
+        state->getFillColorSpace()->getRGB(state->getFillColor(), &aCurFill);
+        r = colToByte(aCurFill.r);
+        g = colToByte(aCurFill.g);
+        b = colToByte(aCurFill.b);
+
+        for(size_t i=0; i < (nBitmapWidth * nBitmapHeight * 3); i+=3)
+        {
+            pBitmapData[i  ] = r;
+            pBitmapData[i+1] = g;
+            pBitmapData[i+2] = b;
+        }
+    }
+
+    auto pRgbStr = new MemStream(pBitmapData, 0,
+        nBitmapWidth * nBitmapHeight * 3, Object(objNull));
+    auto pAlphaStr = new MemStream(reinterpret_cast<char *>(pSplashBitmap->getAlphaPtr()), 0,
+        nBitmapWidth * nBitmapHeight, Object(objNull));
+    auto aDecode = Object(objNull);
+    auto pRgbIdentityColorMap = new GfxImageColorMap(8, &aDecode, new GfxDeviceRGBColorSpace());
+    auto pGrayIdentityColorMap = new GfxImageColorMap(8, &aDecode, new GfxDeviceGrayColorSpace());
+
+    OutputBuffer aBuf; initBuf(aBuf);
+    writePng_(aBuf, pRgbStr, nBitmapWidth, nBitmapHeight, pRgbIdentityColorMap,
+        pAlphaStr, nBitmapWidth, nBitmapHeight, pGrayIdentityColorMap);
+    writeBinaryBuffer(aBuf);
+
+    delete pAlphaStr;
+    delete pRgbStr;
+    delete pSplashBitmap;
 
     // If we return false here we can fall back to the slow path
     return true;
