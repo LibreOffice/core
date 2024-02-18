@@ -2256,7 +2256,7 @@ void Test::testTdf154248MultilineFieldWrapping()
 
     // Get Field Item for inserting URLs in text
     SvxURLField aURLField("http://not.a.real.link",
-                          "Really long hyperlink text that wont fit in 1 line, no matter what.",
+                          "Really long hyperlink text that won't fit in 1 line, no matter what.",
                           SvxURLFormat::Repr);
     SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
 
