@@ -171,6 +171,11 @@ namespace pdfi
                                                 css::beans::PropertyValue>& xImage,
                                           const css::uno::Sequence<
                                                 css::beans::PropertyValue>& xMask) = 0;
+        virtual void tilingPatternFill(int nX0, int nY0, int nX1, int nY1,
+                                       double nxStep, double nyStep,
+                                       int nPaintType,
+                                       css::geometry::AffineMatrix2D& rMat,
+                                       const css::uno::Sequence<css::beans::PropertyValue>& xTile) = 0;
     };
 
     typedef std::shared_ptr<ContentSink> ContentSinkSharedPtr;

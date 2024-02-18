@@ -428,6 +428,14 @@ namespace
         {
         }
 
+        virtual void tilingPatternFill(int, int, int, int,
+                                       double, double,
+                                       int,
+                                       css::geometry::AffineMatrix2D&,
+                                       const css::uno::Sequence<css::beans::PropertyValue>&) override
+        {
+        }
+
         typedef std::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
         typedef std::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 

@@ -383,6 +383,15 @@ void PDFIProcessor::drawAlphaMaskedImage(const uno::Sequence<beans::PropertyValu
 
 }
 
+void PDFIProcessor::tilingPatternFill(int /*nX0*/, int /*nY0*/, int /*nX1*/, int /*nY1*/,
+                                      double /*nxStep*/, double /*nyStep*/,
+                                      int /* nPaintType */,
+                                      css::geometry::AffineMatrix2D& /*rMat*/,
+                                      const css::uno::Sequence<css::beans::PropertyValue>& /*xTile*/)
+{
+    // TODO
+}
+
 void PDFIProcessor::strokePath( const uno::Reference< rendering::XPolyPolygon2D >& rPath )
 {
     basegfx::B2DPolyPolygon aPoly=basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);

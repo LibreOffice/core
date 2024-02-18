@@ -838,10 +838,13 @@ void LineParser::readTilingPatternFill()
     readDouble(aMat.m12);
 
     // The tile is an image with alpha
-    [[maybe_unused]]const uno::Sequence<beans::PropertyValue> aTile ( readImageImpl() );
-    (void)aTile; // Unused until later patch
-    // TODO
-    //   use the parsed data
+    const uno::Sequence<beans::PropertyValue> aTile ( readImageImpl() );
+
+    m_parser.m_pSink->tilingPatternFill( nX0, nY0, nX1, nY1,
+         nXStep, nYStep,
+         nPaintType,
+         aMat,
+         aTile );
 }
 
 void Parser::parseLine( std::string_view aLine )
