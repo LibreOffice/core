@@ -86,7 +86,7 @@ MapUnit SvxLineWidthToolBoxControl::GetCoreMetric()
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
     SfxItemPool& rPool = pSh ? pSh->GetPool() : SfxGetpApp()->GetPool();
-    sal_uInt16 nWhich = rPool.GetWhich(SID_ATTR_LINE_WIDTH);
+    sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID(SID_ATTR_LINE_WIDTH);
     return rPool.GetMetric(nWhich);
 }
 

@@ -201,7 +201,7 @@ protected:
 
     sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
     {
-        return mpSet->GetPool()->GetWhich(nSlot, bDeep);
+        return mpSet->GetPool()->GetWhichIDFromSlotID(nSlot, bDeep);
     }
     template<class T>
     TypedWhichId<T> GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const

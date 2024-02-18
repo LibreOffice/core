@@ -195,7 +195,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             return;
         }
 
-        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhichIDFromSlotID(nSlotId);
         bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == MapUnit::MapTwip );
         pItem->SetWhich( nWhich );
         sal_uInt16 nSubCount = pType->nAttribs;
@@ -287,7 +287,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             return;
         }
 
-        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhichIDFromSlotID(rArg.nSlotId);
         bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == MapUnit::MapTwip );
         pItem->SetWhich( nWhich );
         const SfxType* pType = rArg.pType;
@@ -933,7 +933,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     if ( !pSlot->IsMode(SfxSlotMode::METHOD) )
     {
         // slot is a property
-        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhichIDFromSlotID(nSlotId);
         if ( rSet.GetItemState( nWhich ) == SfxItemState::SET ) //???
         {
             sal_uInt16 nSubCount = pType->nAttribs;
@@ -965,7 +965,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             // check every formal argument of the method
             const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArg] : pSlot->GetFormalArgument( nArg );
 
-            sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+            sal_uInt16 nWhich = rSet.GetPool()->GetWhichIDFromSlotID( rArg.nSlotId );
             if ( rSet.GetItemState( nWhich ) == SfxItemState::SET ) //???
             {
                 sal_uInt16 nSubCount = rArg.pType->nAttribs;
@@ -1131,7 +1131,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     // not really set
                     continue;
 
-                if ( !pSlot->IsMode(SfxSlotMode::METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
+                if ( !pSlot->IsMode(SfxSlotMode::METHOD) && nId == rSet.GetPool()->GetWhichIDFromSlotID( pSlot->GetSlotId() ) )
                     continue;
 
                 bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
@@ -1140,7 +1140,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 for ( nArg=0; nArg<nFormalArgs; ++nArg )
                 {
                     const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArg] : pSlot->GetFormalArgument( nArg );
-                    sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+                    sal_uInt16 nWhich = rSet.GetPool()->GetWhichIDFromSlotID( rArg.nSlotId );
                     if ( nId == nWhich )
                         break;
                 }
@@ -1294,7 +1294,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     if ( !pSlot->IsMode(SfxSlotMode::METHOD) )
     {
         // slot is a property
-        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhichIDFromSlotID(nSlotId);
         bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == MapUnit::MapTwip );
         const SfxPoolItem* pItem = rSet.GetItem<SfxPoolItem>(nWhich, false);
         if ( pItem ) //???
@@ -1339,7 +1339,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
     {
         const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-        sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhichIDFromSlotID( rArg.nSlotId );
         bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == MapUnit::MapTwip );
         const SfxPoolItem* pItem = rSet.GetItem<SfxPoolItem>(nWhich, false);
         if ( pItem ) //???

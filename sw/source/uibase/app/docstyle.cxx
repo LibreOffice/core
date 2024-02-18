@@ -203,7 +203,7 @@ public:
 
             auto nWhich = pItem->Which();
             auto nSlotId = rPool.GetSlotId(nWhich);
-            auto nNewWhich = rPool.GetSecondaryPool()->GetWhich(nSlotId);
+            auto nNewWhich = rPool.GetSecondaryPool()->GetWhichIDFromSlotID(nSlotId);
             if (nNewWhich != nSlotId)
                 rItemSet.Put(pItem->CloneSetWhich(nNewWhich));
             else if (nWhich == RES_MARGIN_FIRSTLINE)

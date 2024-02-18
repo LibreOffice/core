@@ -619,7 +619,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     case SID_ATTR_TABSTOP:
         if (pReqArgs)
         {
-            const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+            const sal_uInt16 nWhich = GetPool().GetWhichIDFromSlotID(nSlot);
             SvxTabStopItem aTabStops( static_cast<const SvxTabStopItem&>(pReqArgs->
                                                         Get( nWhich )));
             aTabStops.SetWhich(RES_PARATR_TABSTOP);

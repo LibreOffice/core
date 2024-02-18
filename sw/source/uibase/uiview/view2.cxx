@@ -1456,7 +1456,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_NAV_ELEMENT:
         {
-            pArgs->GetItemState(GetPool().GetWhich(FN_NAV_ELEMENT), false, &pItem);
+            pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(FN_NAV_ELEMENT), false, &pItem);
             if(pItem)
             {
                 SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);

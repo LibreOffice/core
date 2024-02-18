@@ -917,7 +917,7 @@ void SvxRTFParser::BuildWhichTable()
          };
     for (sal_uInt16 nWid : WIDS1)
     {
-        sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
+        sal_uInt16 nTrueWid = pAttrPool->GetTrueWhichIDFromSlotID(nWid, false);
         aPardMap.data[nWid] = nTrueWid;
         if (nTrueWid == 0)
             continue;
@@ -942,7 +942,7 @@ void SvxRTFParser::BuildWhichTable()
          };
     for (sal_uInt16 nWid : WIDS)
     {
-        sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
+        sal_uInt16 nTrueWid = pAttrPool->GetTrueWhichIDFromSlotID(nWid, false);
         aPlainMap.data[nWid] = nTrueWid;
         if (nTrueWid == 0)
             continue;

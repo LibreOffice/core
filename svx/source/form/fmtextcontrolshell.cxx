@@ -350,7 +350,7 @@ namespace svx
 
         void lcl_translateUnoStateToItem( SfxSlotId _nSlot, const Any& _rUnoState, SfxItemSet& _rSet )
         {
-            WhichId nWhich = _rSet.GetPool()->GetWhich( _nSlot );
+            WhichId nWhich = _rSet.GetPool()->GetWhichIDFromSlotID( _nSlot );
             if ( !_rUnoState.hasValue() )
             {
                 if  ( ( _nSlot != SID_CUT )
@@ -586,7 +586,7 @@ namespace svx
                 }
             }
 
-            WhichId nWhich = rPool.GetWhich( nSlotId );
+            WhichId nWhich = rPool.GetWhichIDFromSlotID( nSlotId );
             bool bIsInPool = rPool.IsInRange( nWhich );
             if ( bIsInPool )
             {
@@ -823,7 +823,7 @@ namespace svx
                 SfxItemSet aToggled( *_rReq.GetArgs() );
 
                 lcl_translateUnoStateToItem( nSlot, aFeaturePos->second->getFeatureState(), aToggled );
-                WhichId nWhich = aToggled.GetPool()->GetWhich( nSlot );
+                WhichId nWhich = aToggled.GetPool()->GetWhichIDFromSlotID( nSlot );
                 const SfxPoolItem* pItem = aToggled.GetItem( nWhich );
                 if ( ( SID_ATTR_CHAR_UNDERLINE == nSlot ) || ( SID_ATTR_CHAR_OVERLINE == nSlot ) )
                 {

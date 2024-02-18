@@ -232,7 +232,7 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 
     for ( size_t i = 0; i < size(); ++i )
         if ( IsInvalidItem( (*this)[i].pItemPtr ) )
-            rSet.InvalidateItem( pPool->GetWhich( (*this)[i].nSlot ) );
+            rSet.InvalidateItem( pPool->GetWhichIDFromSlotID( (*this)[i].nSlot ) );
         else
             rSet.Put( *(*this)[i].pItemPtr );
     return rSet;
@@ -1971,7 +1971,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
 
     aSet.MergeRange(SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL);
 
-    sal_uInt16 nBrushWhich = pSh->GetPool().GetWhich(SID_ATTR_BRUSH);
+    sal_uInt16 nBrushWhich = pSh->GetPool().GetWhichIDFromSlotID(SID_ATTR_BRUSH);
     aSet.MergeRange(nBrushWhich, nBrushWhich);
 
     aSet.MergeRange(XATTR_FILL_FIRST, XATTR_FILL_LAST);
@@ -1992,8 +1992,8 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
         pReplaceList->Get( aSet );
     }
     aSet.DisableItem(SID_ATTR_PARA_MODEL);
-    aSet.DisableItem(rPool.GetWhich(SID_ATTR_PARA_PAGEBREAK));
-    aSet.DisableItem(rPool.GetWhich(SID_ATTR_PARA_KEEP));
+    aSet.DisableItem(rPool.GetWhichIDFromSlotID(SID_ATTR_PARA_PAGEBREAK));
+    aSet.DisableItem(rPool.GetWhichIDFromSlotID(SID_ATTR_PARA_KEEP));
 
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

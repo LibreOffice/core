@@ -418,7 +418,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
 void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
 {
-    SvxMacroItem aItem ( SfxGetpApp()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
+    SvxMacroItem aItem ( SfxGetpApp()->GetPool().GetWhichIDFromSlotID( SID_ATTR_MACROITEM ) );
     ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
     if ( !pInfo->GetMacro().isEmpty() )
     {

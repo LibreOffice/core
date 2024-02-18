@@ -44,7 +44,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     , aStrColumn(ScResId(SCSTR_COLUMN_LETTER))
     , pViewData(nullptr)
     , pDoc(nullptr)
-    , nWhichSubTotals(rArgSet.GetPool()->GetWhich(SID_SUBTOTALS))
+    , nWhichSubTotals(rArgSet.GetPool()->GetWhichIDFromSlotID(SID_SUBTOTALS))
     , rSubTotalData(rArgSet.Get(nWhichSubTotals).GetSubTotalData())
     , nFieldCount(0)
     , mxLbGroup(m_xBuilder->weld_combo_box("group_by"))
@@ -442,7 +442,7 @@ ScTpSubTotalOptions::ScTpSubTotalOptions(weld::Container* pPage, weld::DialogCon
                               &rArgSet ),
             pViewData       ( nullptr ),
             pDoc            ( nullptr ),
-            nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
+            nWhichSubTotals ( rArgSet.GetPool()->GetWhichIDFromSlotID( SID_SUBTOTALS ) ),
             rSubTotalData   ( rArgSet.Get( nWhichSubTotals ).GetSubTotalData() )
     , m_xBtnPagebreak(m_xBuilder->weld_check_button("pagebreak"))
     , m_xBtnCase(m_xBuilder->weld_check_button("case"))

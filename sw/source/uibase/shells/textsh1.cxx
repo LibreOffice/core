@@ -791,7 +791,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     const SfxPoolItem* pItem = nullptr;
     const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
+        pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem);
     switch( nSlot )
     {
         case SID_UNICODE_NOTATION_TOGGLE:
@@ -1285,7 +1285,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rACfg.Commit();
                 GetView().GetViewFrame().GetBindings().Invalidate( nSlot );
                 if ( !pItem )
-                    rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), bSet ) );
+                    rReq.AppendItem( SfxBoolItem( GetPool().GetWhichIDFromSlotID(nSlot), bSet ) );
                 rReq.Done();
             }
         }
@@ -1459,7 +1459,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_TXTATR_INET :
         case FN_INSERT_HYPERLINK:
         {
-            const sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
+            const sal_uInt16 nWhich = GetPool().GetWhichIDFromSlotID( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SfxItemState::SET )
                 bUseDialog = false;
             [[fallthrough]];
@@ -1490,7 +1490,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_DROP_TEXT:
         case SID_ATTR_PARA_LRSPACE:
         {
-            const sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
+            const sal_uInt16 nWhich = GetPool().GetWhichIDFromSlotID( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SfxItemState::SET )
                 bUseDialog = false;
             [[fallthrough]];
@@ -1501,7 +1501,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             if ( pArgs )
             {
-                const SwPaMItem* pPaMItem = pArgs->GetItemIfSet( GetPool().GetWhich( FN_PARAM_PAM ), false );
+                const SwPaMItem* pPaMItem = pArgs->GetItemIfSet( GetPool().GetWhichIDFromSlotID( FN_PARAM_PAM ), false );
                 if ( pPaMItem )
                     pPaM = pPaMItem->GetValue( );
             }

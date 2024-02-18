@@ -91,7 +91,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
     const sal_uInt16 nSlot = rReq.GetSlot();
 
-    const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+    const sal_uInt16 nWhich = GetPool().GetWhichIDFromSlotID(nSlot);
     std::unique_ptr<SfxItemSet> pNewAttrs(rReq.GetArgs() ? rReq.GetArgs()->Clone() : nullptr);
 
     bool bRestoreSelection = false;
@@ -153,7 +153,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
             if ( pNewAttrs )
             {
-                const SvxTextLineItem& rTextLineItem = static_cast< const SvxTextLineItem& >( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich(nSlot) ) );
+                const SvxTextLineItem& rTextLineItem = static_cast< const SvxTextLineItem& >( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhichIDFromSlotID(nSlot) ) );
                 aNewAttr.Put( SvxUnderlineItem( rTextLineItem.GetLineStyle(), EE_CHAR_UNDERLINE ) );
             }
             else
@@ -222,7 +222,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             if (pNewAttrs)
             {
                 SvxLineSpacingItem aLineSpace = static_cast<const SvxLineSpacingItem&>(pNewAttrs->Get(
-                                                            GetPool().GetWhich(nSlot)));
+                                                            GetPool().GetWhichIDFromSlotID(nSlot)));
                 aLineSpace.SetWhich( EE_PARA_SBL );
                 aNewAttr.Put( aLineSpace );
                 rReq.Done();
@@ -232,7 +232,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             if (pNewAttrs)
             {
                 SvxULSpaceItem aULSpace = static_cast<const SvxULSpaceItem&>(pNewAttrs->Get(
-                    GetPool().GetWhich(nSlot)));
+                    GetPool().GetWhichIDFromSlotID(nSlot)));
                 aULSpace.SetWhich( EE_PARA_ULSPACE );
                 aNewAttr.Put( aULSpace );
                 rReq.Done();
@@ -617,7 +617,7 @@ void SwDrawTextShell::ExecutePost( SfxRequest& rReq, sal_uInt16 nEEWhich, SfxIte
     SwWrtShell &rSh = GetShell();
     const SfxItemSet *pNewAttrs = rReq.GetArgs();
     const sal_uInt16 nSlot = rReq.GetSlot();
-    const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+    const sal_uInt16 nWhich = GetPool().GetWhichIDFromSlotID(nSlot);
 
     if (nEEWhich && pNewAttrs)
     {

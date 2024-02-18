@@ -259,7 +259,7 @@ namespace sw
         {
             sal_uInt16 nSlotId = rSrcPool.GetSlotId(nWhich);
             if (IsValidSlotWhich(nSlotId, nWhich))
-                nWhich = rDestPool.GetWhich(nSlotId);
+                nWhich = rDestPool.GetWhichIDFromSlotID(nSlotId);
             else
                 nWhich = 0;
             return nWhich;

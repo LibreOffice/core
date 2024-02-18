@@ -355,7 +355,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case SID_ATTR_ULSPACE:
         case SID_ATTR_LRSPACE:
         {
-            if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem))
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem))
             {
                 aMgr.SetAttrSet( *pArgs );
                 bCopyToFormat = true;
@@ -491,12 +491,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 const SwRect &rPg = rSh.GetAnyCurRect(CurRectType::Page);
                 SwFormatFrameSize aFrameSize(SwFrameSize::Variable, rPg.Width(), rPg.Height());
-                aFrameSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
+                aFrameSize.SetWhich(GetPool().GetWhichIDFromSlotID(SID_ATTR_PAGE_SIZE));
                 aSet.Put(aFrameSize);
 
                 const SwRect &rPr = rSh.GetAnyCurRect(CurRectType::PagePrt);
                 SwFormatFrameSize aPrtSize(SwFrameSize::Variable, rPr.Width(), rPr.Height());
-                aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
+                aPrtSize.SetWhich(GetPool().GetWhichIDFromSlotID(FN_GET_PRINT_AREA));
                 aSet.Put(aPrtSize);
 
                 aSet.Put(aMgr.GetAttrSet());
@@ -783,7 +783,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
             case RES_PRINT:
             case RES_SURROUND:
             {
-                rSet.Put(aSet.Get(GetPool().GetWhich(nWhich)));
+                rSet.Put(aSet.Get(GetPool().GetWhichIDFromSlotID(nWhich)));
             }
             break;
             case SID_OBJECT_ALIGN:

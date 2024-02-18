@@ -2539,7 +2539,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
     if (m_xScriptSpaceCB->get_sensitive() && m_xScriptSpaceCB->get_state_changed_from_saved())
     {
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone()));
+            pPool->GetWhichIDFromSlotID(SID_ATTR_PARA_SCRIPTSPACE)).Clone()));
         pNewItem->SetValue(m_xScriptSpaceCB->get_active());
         rSet->Put(std::move(pNewItem));
         bRet = true;
@@ -2547,7 +2547,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
     if (m_xHangingPunctCB->get_sensitive() && m_xHangingPunctCB->get_state_changed_from_saved())
     {
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone()));
+            pPool->GetWhichIDFromSlotID(SID_ATTR_PARA_HANGPUNCTUATION)).Clone()));
         pNewItem->SetValue(m_xHangingPunctCB->get_active());
         rSet->Put(std::move(pNewItem));
         bRet = true;
@@ -2555,7 +2555,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
     if (m_xForbiddenRulesCB->get_sensitive() && m_xForbiddenRulesCB->get_state_changed_from_saved())
     {
         std::unique_ptr<SfxBoolItem> pNewItem(static_cast<SfxBoolItem*>(rSet->Get(
-            pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone()));
+            pPool->GetWhichIDFromSlotID(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone()));
         pNewItem->SetValue(m_xForbiddenRulesCB->get_active());
         rSet->Put(std::move(pNewItem));
         bRet = true;
@@ -2565,7 +2565,7 @@ bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
 
 static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, weld::CheckButton& rBox)
 {
-    sal_uInt16 _nWhich = rSet.GetPool()->GetWhich(nSlotId);
+    sal_uInt16 _nWhich = rSet.GetPool()->GetWhichIDFromSlotID(nSlotId);
     SfxItemState eState = rSet.GetItemState(_nWhich);
     if( eState == SfxItemState::UNKNOWN || eState == SfxItemState::DISABLED )
         rBox.set_sensitive(false);

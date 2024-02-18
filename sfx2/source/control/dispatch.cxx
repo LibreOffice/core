@@ -760,7 +760,7 @@ static void MappedPut_Impl(SfxAllItemSet &rSet, const SfxPoolItem &rItem)
 {
     // Put with mapped Which-Id if needed
     if (SfxItemPool::IsSlot(rItem.Which()))
-        rSet.PutAsTargetWhich(rItem, rSet.GetPool()->GetWhich(rItem.Which()));
+        rSet.PutAsTargetWhich(rItem, rSet.GetPool()->GetWhichIDFromSlotID(rItem.Which()));
     else
         rSet.Put(rItem);
 }
@@ -2004,7 +2004,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
             {
                 sal_uInt16 nSubId( 0 );
                 SfxItemPool& rPool = pShell->GetPool();
-                sal_uInt16 nWhich = rPool.GetWhich( nSID );
+                sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSID );
                 if ( rPool.GetMetric( nWhich ) == MapUnit::MapTwip )
                     nSubId |= CONVERT_TWIPS;
                 aItem.getItem()->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );

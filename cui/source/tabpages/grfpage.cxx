@@ -124,7 +124,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     const SfxPoolItem* pItem;
     const SfxItemPool& rPool = *rSet->GetPool();
 
-    if(SfxItemState::SET == rSet->GetItemState( rPool.GetWhich(
+    if(SfxItemState::SET == rSet->GetItemState( rPool.GetWhichIDFromSlotID(
                                     SID_ATTR_GRAF_KEEP_ZOOM ), true, &pItem ))
     {
         if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
@@ -134,7 +134,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
         m_xZoomConstRB->save_state();
     }
 
-    sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
+    sal_uInt16 nW = rPool.GetWhichIDFromSlotID( SID_ATTR_GRAF_CROP );
     if( SfxItemState::SET == rSet->GetItemState( nW, true, &pItem))
     {
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
@@ -164,7 +164,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     m_xTopMF->save_value();
     m_xBottomMF->save_value();
 
-    nW = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
+    nW = rPool.GetWhichIDFromSlotID( SID_ATTR_PAGE_SIZE );
     if ( SfxItemState::SET == rSet->GetItemState( nW, false, &pItem ) )
     {
         // orientation and size from the PageItem
@@ -257,14 +257,14 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
 
         if (m_bSetOrigSize)
         {
-            bModified |= nullptr != rSet->Put( SvxSizeItem( rPool.GetWhich(
+            bModified |= nullptr != rSet->Put( SvxSizeItem( rPool.GetWhichIDFromSlotID(
                         SID_ATTR_GRAF_FRMSIZE_PERCENT ), Size( 0, 0 )) );
         }
     }
     if( m_xLeftMF->get_value_changed_from_saved() || m_xRightMF->get_value_changed_from_saved() ||
         m_xTopMF->get_value_changed_from_saved()  || m_xBottomMF->get_value_changed_from_saved() )
     {
-        sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
+        sal_uInt16 nW = rPool.GetWhichIDFromSlotID( SID_ATTR_GRAF_CROP );
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
         std::unique_ptr<SvxGrfCrop> pNew(static_cast<SvxGrfCrop*>(rSet->Get( nW ).Clone()));
 
@@ -277,7 +277,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
 
     if( m_xZoomConstRB->get_state_changed_from_saved() )
     {
-        bModified |= nullptr != rSet->Put( SfxBoolItem( rPool.GetWhich(
+        bModified |= nullptr != rSet->Put( SfxBoolItem( rPool.GetWhichIDFromSlotID(
                     SID_ATTR_GRAF_KEEP_ZOOM), m_xZoomConstRB->get_active() ) );
     }
 
@@ -362,7 +362,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, weld::MetricSpinButton&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
-    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
+    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
     if (&rField == m_xWidthZoomMF.get())
@@ -391,7 +391,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, weld::MetricSpinButton&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
-    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
+    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
     Size aSize( lcl_GetValue(*m_xWidthMF, eUnit),
@@ -427,7 +427,7 @@ IMPL_LINK( SvxGrfCropPage, CropModifyHdl, weld::MetricSpinButton&, rField, void 
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
-    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
+    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
     bool bZoom = m_xZoomConstRB->get_active();
@@ -512,7 +512,7 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl, weld::Button&, void)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
-    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
+    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
     tools::Long nWidth = m_aOrigSize.Width() -
@@ -561,7 +561,7 @@ void SvxGrfCropPage::CalcZoom()
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
-    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
+    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
     tools::Long nWidth = lcl_GetValue( *m_xWidthMF, eUnit );
@@ -590,7 +590,7 @@ void SvxGrfCropPage::CalcMinMaxBorder()
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
-    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
+    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ) );
     tools::Long nR = lcl_GetValue(*m_xRightMF, eUnit );
     tools::Long nMinWidth = (m_aOrigSize.Width() * 10) /11;
@@ -621,7 +621,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
     {
         SfxItemPool* pPool = GetItemSet().GetPool();
         DBG_ASSERT( pPool, "Where is the pool?" );
-        FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
+        FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhichIDFromSlotID(
                                                     SID_ATTR_GRAF_CROP ) ));
 
         sal_Int64 nSpin = m_xLeftMF->normalize(m_aOrigSize.Width()) / 20;

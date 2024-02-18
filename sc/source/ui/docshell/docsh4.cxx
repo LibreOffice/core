@@ -1188,11 +1188,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if (aLangText == "LANGUAGE_NONE")
                             {
                                 pNewSet->Put(SvxLanguageItem(LANGUAGE_NONE,
-                                                             pItemPool->GetWhich(SID_ATTR_CHAR_LANGUAGE)));
+                                                             pItemPool->GetWhichIDFromSlotID(SID_ATTR_CHAR_LANGUAGE)));
                                 pNewSet->Put(SvxLanguageItem(LANGUAGE_NONE,
-                                                             pItemPool->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE)));
+                                                             pItemPool->GetWhichIDFromSlotID(SID_ATTR_CHAR_CJK_LANGUAGE)));
                                 pNewSet->Put(SvxLanguageItem(LANGUAGE_NONE,
-                                                             pItemPool->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE)));
+                                                             pItemPool->GetWhichIDFromSlotID(SID_ATTR_CHAR_CTL_LANGUAGE)));
                             }
                             else
                             {
@@ -1201,13 +1201,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType);
                                 if (nScriptType == SvtScriptType::LATIN)
                                     pNewSet->Put(SvxLanguageItem(nLangType,
-                                                                 pItemPool->GetWhich(SID_ATTR_CHAR_LANGUAGE)));
+                                                                 pItemPool->GetWhichIDFromSlotID(SID_ATTR_CHAR_LANGUAGE)));
                                 if (nScriptType == SvtScriptType::COMPLEX)
                                     pNewSet->Put(SvxLanguageItem(nLangType,
-                                                                 pItemPool->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE)));
+                                                                 pItemPool->GetWhichIDFromSlotID(SID_ATTR_CHAR_CTL_LANGUAGE)));
                                 if (nScriptType == SvtScriptType::ASIAN)
                                     pNewSet->Put(SvxLanguageItem(nLangType,
-                                                                 pItemPool->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE)));
+                                                                 pItemPool->GetWhichIDFromSlotID(SID_ATTR_CHAR_CJK_LANGUAGE)));
                             }
                             pViewShell->ApplyAttributes(*pNewSet, rOldSet);
                             pBindings->Invalidate(SID_LANGUAGE_STATUS);
@@ -2271,15 +2271,15 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                         if (pSelAttrs)
                         {
                             const SfxItemSet& rItemSet = pSelAttrs->GetItemSet();
-                            nLangWhich = rItemSet.GetPool()->GetWhich(SID_ATTR_CHAR_LANGUAGE);
+                            nLangWhich = rItemSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_CHAR_LANGUAGE);
                             if (SfxItemState::SET == rItemSet.GetItemState(nLangWhich))
                                 eLatin = static_cast<const SvxLanguageItem&>(rItemSet.Get(nLangWhich)).GetLanguage();
 
-                            nLangWhich = rItemSet.GetPool()->GetWhich(SID_ATTR_CHAR_CJK_LANGUAGE);
+                            nLangWhich = rItemSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_CHAR_CJK_LANGUAGE);
                             if (SfxItemState::SET == rItemSet.GetItemState(nLangWhich))
                                 eCjk = static_cast<const SvxLanguageItem&>(rItemSet.Get(nLangWhich)).GetLanguage();
 
-                            nLangWhich = rItemSet.GetPool()->GetWhich(SID_ATTR_CHAR_CTL_LANGUAGE);
+                            nLangWhich = rItemSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_CHAR_CTL_LANGUAGE);
                             if (SfxItemState::SET == rItemSet.GetItemState(nLangWhich))
                                 eCtl = static_cast<const SvxLanguageItem&>(rItemSet.Get(nLangWhich)).GetLanguage();
 

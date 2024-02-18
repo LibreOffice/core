@@ -477,7 +477,7 @@ namespace frm
         default:
         {
             const SfxItemPool& rPool = *pRichTextControl->getView().GetEmptyItemSet().GetPool();
-            bool bSupportedSlot = rPool.IsInRange( rPool.GetWhich( _nSlotId ) );
+            bool bSupportedSlot = rPool.IsInRange( rPool.GetWhichIDFromSlotID( _nSlotId ) );
 
             if ( !bSupportedSlot )
                 bSupportedSlot = RichTextControl::isMappableSlot( _nSlotId );

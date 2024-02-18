@@ -943,7 +943,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
         SfxItemPool& rPool = GetPool();
         SvxScriptSetItem aSetItem( nSlot, rPool );
-        sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+        sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlot );
         aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
 
         pView->SetAttributes( aSetItem.GetItemSet() );
@@ -963,7 +963,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     else if( nSlot == SID_ATTR_PARA_LINESPACE )
     {
         SvxLineSpacingItem aLineSpaceItem = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
-                                                            GetPool().GetWhich(nSlot)));
+                                                            GetPool().GetWhichIDFromSlotID(nSlot)));
         SfxItemSetFixed<EE_PARA_SBL, EE_PARA_SBL> aAttr( GetPool() );
         aAttr.Put( aLineSpaceItem );
         pView->SetAttributes( aAttr );
@@ -971,7 +971,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     else if( nSlot == SID_ATTR_PARA_ULSPACE )
     {
         SvxULSpaceItem aULSpaceItem = static_cast<const SvxULSpaceItem&>(pArgs->Get(
-                                                            GetPool().GetWhich(nSlot)));
+                                                            GetPool().GetWhichIDFromSlotID(nSlot)));
         SfxItemSetFixed<EE_PARA_ULSPACE, EE_PARA_ULSPACE> aAttr( GetPool() );
         aULSpaceItem.SetWhich(EE_PARA_ULSPACE);
         aAttr.Put( aULSpaceItem );

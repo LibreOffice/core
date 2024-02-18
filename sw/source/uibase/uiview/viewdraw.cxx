@@ -79,7 +79,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
     bool bDeselect = false;
 
     sal_uInt16 nSlotId = rReq.GetSlot();
-    if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
+    if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlotId), false, &pItem))
         pStringItem = dynamic_cast< const SfxStringItem*>(pItem);
 
     SdrObjKind eNewFormObjKind = SdrObjKind::NONE;

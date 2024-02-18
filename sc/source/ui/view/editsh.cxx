@@ -1029,7 +1029,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
                     SfxItemPool& rPool = GetPool();
                     SvxScriptSetItem aSetItem( nSlot, rPool );
-                    sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+                    sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlot );
                     aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
 
                     aSet.Put( aSetItem.GetItemSet(), false );
@@ -1041,7 +1041,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 if (pArgs)
                 {
-                    aSet.Put( pArgs->Get( pArgs->GetPool()->GetWhich( nSlot ) ) );
+                    aSet.Put( pArgs->Get( pArgs->GetPool()->GetWhichIDFromSlotID( nSlot ) ) );
                     rBindings.Invalidate( nSlot );
                 }
             }
@@ -1112,7 +1112,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                     case SID_ATTR_CHAR_UNDERLINE:
                         if ( pArgs )
                         {
-                            const SvxTextLineItem& rTextLineItem = static_cast< const SvxTextLineItem& >( pArgs->Get( pArgs->GetPool()->GetWhich(nSlot) ) );
+                            const SvxTextLineItem& rTextLineItem = static_cast< const SvxTextLineItem& >( pArgs->Get( pArgs->GetPool()->GetWhichIDFromSlotID(nSlot) ) );
                             eNew = rTextLineItem.GetLineStyle();
                         }
                         else
@@ -1190,7 +1190,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 if(pArgs)
                 {
-                    aSet.Put ( pArgs->Get(pArgs->GetPool()->GetWhich(nSlot)));
+                    aSet.Put ( pArgs->Get(pArgs->GetPool()->GetWhichIDFromSlotID(nSlot)));
                     rBindings.Invalidate( nSlot );
                 }
             }

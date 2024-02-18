@@ -606,7 +606,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             sal_uInt16 nSlotId = GetAttrPool().GetSlotId( nWhich );
             if( 0 != nSlotId && nSlotId != nWhich )
             {
-                sal_uInt16 nEdtWhich = pSdrPool->GetWhich( nSlotId );
+                sal_uInt16 nEdtWhich = pSdrPool->GetWhichIDFromSlotID( nSlotId );
                 if( 0 != nEdtWhich && nSlotId != nEdtWhich )
                 {
                     std::unique_ptr<SfxPoolItem> pCpy(pItem->Clone());

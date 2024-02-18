@@ -300,7 +300,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             const SwRect* pRect = &rSh.GetAnyCurRect(CurRectType::Page);
             SwFormatFrameSize aFrameSize( SwFrameSize::Variable, pRect->Width(), pRect->Height());
-            aFrameSize.SetWhich( GetPool().GetWhich( SID_ATTR_PAGE_SIZE ) );
+            aFrameSize.SetWhich( GetPool().GetWhichIDFromSlotID( SID_ATTR_PAGE_SIZE ) );
             aSet.Put( aFrameSize );
 
             aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
@@ -314,7 +314,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             pRect = &rSh.GetAnyCurRect(CurRectType::PagePrt);
             aFrameSize.SetWidth( pRect->Width() );
             aFrameSize.SetHeight( pRect->Height() );
-            aFrameSize.SetWhich( GetPool().GetWhich(FN_GET_PRINT_AREA) );
+            aFrameSize.SetWhich( GetPool().GetWhichIDFromSlotID(FN_GET_PRINT_AREA) );
             aSet.Put( aFrameSize );
 
             aSet.Put( aMgr.GetAttrSet() );

@@ -1504,7 +1504,7 @@ bool SfxItemSet::Set
 const SfxPoolItem* SfxItemSet::GetItem(sal_uInt16 nId, bool bSearchInParent) const
 {
     // evtl. Convert from SlotID to WhichId
-    const sal_uInt16 nWhich(GetPool()->GetWhich(nId));
+    const sal_uInt16 nWhich(GetPool()->GetWhichIDFromSlotID(nId));
 
     // Is the Item set or 'bDeep == true' available?
     const SfxPoolItem *pItem(nullptr);

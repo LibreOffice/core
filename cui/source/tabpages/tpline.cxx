@@ -623,8 +623,8 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     if(m_nSymbolType!=SVX_SYMBOLTYPE_UNKNOWN || m_bNewSize)
     {
         // Was set by selection or the size is different
-        SvxSizeItem  aSItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),m_aSymbolSize);
-        const SfxPoolItem* pSOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE) );
+        SvxSizeItem  aSItem(rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_SYMBOLSIZE),m_aSymbolSize);
+        const SfxPoolItem* pSOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_SYMBOLSIZE) );
         m_bNewSize  = pSOld ? *static_cast<const SvxSizeItem *>(pSOld) != aSItem : m_bNewSize ;
         if(m_bNewSize)
         {
@@ -632,8 +632,8 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             bModified=true;
         }
 
-        SfxInt32Item aTItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),m_nSymbolType);
-        const SfxPoolItem* pTOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE) );
+        SfxInt32Item aTItem(rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_SYMBOLTYPE),m_nSymbolType);
+        const SfxPoolItem* pTOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_SYMBOLTYPE) );
         bool bNewType = pTOld == nullptr || *static_cast<const SfxInt32Item*>(pTOld) != aTItem;
         if(bNewType && m_nSymbolType==SVX_SYMBOLTYPE_UNKNOWN)
             bNewType=false; // a small fix, type wasn't set -> don't create a type item after all!
@@ -645,8 +645,8 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
 
         if(m_nSymbolType!=SVX_SYMBOLTYPE_NONE)
         {
-            SvxBrushItem aBItem(m_aSymbolGraphic,GPOS_MM,rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH));
-            const SfxPoolItem* pBOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH) );
+            SvxBrushItem aBItem(m_aSymbolGraphic,GPOS_MM,rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_BRUSH));
+            const SfxPoolItem* pBOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_BRUSH) );
             bool bNewBrush =
                 pBOld == nullptr || *static_cast<const SvxBrushItem*>(pBOld) != aBItem;
             if(bNewBrush)
@@ -794,7 +794,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     bool bEnable=true;
     bool bIgnoreGraphic=false;
     bool bIgnoreSize=false;
-    if(const SfxInt32Item* pSymbolTypeItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE)))
+    if(const SfxInt32Item* pSymbolTypeItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_SYMBOLTYPE)))
     {
         nSymType = pSymbolTypeItem->GetValue();
     }
@@ -880,7 +880,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         }
         }
     }
-    if(const SvxBrushItem* pBrushItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH)))
+    if(const SvxBrushItem* pBrushItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_BRUSH)))
     {
         const Graphic* pGraphic = pBrushItem->GetGraphic();
         if( pGraphic )
@@ -899,7 +899,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         }
     }
 
-    if(const SvxSizeItem* pSymbolSizeItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE)))
+    if(const SvxSizeItem* pSymbolSizeItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhichIDFromSlotID(SID_ATTR_SYMBOLSIZE)))
     {
         m_aSymbolSize = pSymbolSizeItem->GetSize();
     }

@@ -262,21 +262,21 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     auto const & rSize = rSet.Get( RES_FRM_SIZE );
     m_lMaxHeight = rSize.GetHeight();
 
-    if( const SvxSetItem* pHeaderSetItem = rSet.GetItemIfSet( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_HEADERSET), false ) )
+    if( const SvxSetItem* pHeaderSetItem = rSet.GetItemIfSet( rSet.GetPool()->GetWhichIDFromSlotID( SID_ATTR_PAGE_HEADERSET), false ) )
     {
         const SfxItemSet& rHeaderSet = pHeaderSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            rHeaderSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_ON ) );
+            rHeaderSet.Get( rSet.GetPool()->GetWhichIDFromSlotID( SID_ATTR_PAGE_ON ) );
 
         if ( rHeaderOn.GetValue() )
         {
             const SvxSizeItem& rSizeItem =
-                rHeaderSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE));
+                rHeaderSet.Get(rSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_PAGE_SIZE));
             m_lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
 
-    if( const SvxSetItem* pFooterSetItem = rSet.GetItemIfSet( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_FOOTERSET),
+    if( const SvxSetItem* pFooterSetItem = rSet.GetItemIfSet( rSet.GetPool()->GetWhichIDFromSlotID( SID_ATTR_PAGE_FOOTERSET),
             false ) )
     {
         const SfxItemSet& rFooterSet = pFooterSetItem->GetItemSet();
@@ -285,7 +285,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
         if ( rFooterOn.GetValue() )
         {
             const SvxSizeItem& rSizeItem =
-                rFooterSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_SIZE ) );
+                rFooterSet.Get( rSet.GetPool()->GetWhichIDFromSlotID( SID_ATTR_PAGE_SIZE ) );
             m_lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }

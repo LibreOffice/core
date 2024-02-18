@@ -164,7 +164,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
     const sal_uInt16 nSlot = rReq.GetSlot();
-    const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+    const sal_uInt16 nWhich = GetPool().GetWhichIDFromSlotID(nSlot);
     const SfxItemSet *pNewAttrs = rReq.GetArgs();
     sal_uInt16 nEEWhich = 0;
     switch (nSlot)
@@ -206,7 +206,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_ATTR_PARA_LINESPACE:
             {
                 SvxLineSpacingItem aParaMargin = static_cast<const SvxLineSpacingItem&>(pNewAttrs->Get(
-                                                            GetPool().GetWhich(nSlot)));
+                                                            GetPool().GetWhichIDFromSlotID(nSlot)));
                 aParaMargin.SetWhich( EE_PARA_SBL );
 
                 aNewAttr.Put(aParaMargin);
@@ -216,7 +216,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_ATTR_PARA_ULSPACE:
             {
                 SvxULSpaceItem aULSpace = static_cast<const SvxULSpaceItem&>(pNewAttrs->Get(
-                    GetPool().GetWhich(nSlot)));
+                    GetPool().GetWhichIDFromSlotID(nSlot)));
                 aULSpace.SetWhich( EE_PARA_ULSPACE );
                 aNewAttr.Put( aULSpace );
                 rReq.Done();
@@ -596,7 +596,7 @@ void SwAnnotationShell::ExecPost( SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItem
 {
     const SfxItemSet *pNewAttrs = rReq.GetArgs();
     const sal_uInt16 nSlot = rReq.GetSlot();
-    const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+    const sal_uInt16 nWhich = GetPool().GetWhichIDFromSlotID(nSlot);
 
     if(nEEWhich && pNewAttrs)
     {

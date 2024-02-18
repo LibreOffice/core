@@ -514,7 +514,7 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
             sal_uInt16 nSlotId = m_rDoc.GetAttrPool().GetSlotId(nWhich);
             if (
                 nSlotId && nWhich != nSlotId &&
-                0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
+                0 != (nWhich = pEditPool->GetWhichIDFromSlotID(nSlotId)) &&
                 nWhich != nSlotId &&
                 ( SfxItemState::SET != rS.GetItemState(nWhich, false) )
                )
@@ -741,7 +741,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                         }
                         else if (
                             nSlotId && nWhich != nSlotId &&
-                            0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
+                            0 != (nWhich = pEditPool->GetWhichIDFromSlotID(nSlotId)) &&
                             nWhich != nSlotId
                         )
                         {

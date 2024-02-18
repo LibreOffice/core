@@ -224,7 +224,7 @@ ScHFEditActiveDlg::ScHFEditActiveDlg(
 {
     const SvxPageItem&  rPageItem =
                 rCoreSet.Get(
-                    rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
+                    rCoreSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_PAGE) );
 
     bool bRightPage = SvxPageUsage::Left != rPageItem.GetPageUsage();
 

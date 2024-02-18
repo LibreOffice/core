@@ -2878,9 +2878,9 @@ void SvxScriptSetItem::GetWhichIds( sal_uInt16 nSlotId, const SfxItemSet& rSet, 
 {
     const SfxItemPool& rPool = *rSet.GetPool();
     GetSlotIds( nSlotId, rLatin, rAsian, rComplex );
-    rLatin = rPool.GetWhich( rLatin );
-    rAsian = rPool.GetWhich( rAsian );
-    rComplex = rPool.GetWhich( rComplex );
+    rLatin = rPool.GetWhichIDFromSlotID( rLatin );
+    rAsian = rPool.GetWhichIDFromSlotID( rAsian );
+    rComplex = rPool.GetWhichIDFromSlotID( rComplex );
 }
 
 void SvxScriptSetItem::GetWhichIds( sal_uInt16& rLatin, sal_uInt16& rAsian,

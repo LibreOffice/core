@@ -295,7 +295,7 @@ void SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                pFrame->MapViewToModelPos(TextFrameIndex(nEnd)));
 
     SfxItemPool& rPool = m_rEditSh.GetDoc()->GetAttrPool();
-    sal_uInt16 nWhich = rPool.GetWhich( nSlotId, false );
+    sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlotId, false );
     if( nWhich )
     {
         rItem.SetWhich( nWhich );

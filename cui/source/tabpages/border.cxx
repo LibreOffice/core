@@ -634,7 +634,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::TLBR))
     {
-        sal_uInt16 nBorderDiagId = pPool->GetWhich(SID_ATTR_BORDER_DIAG_TLBR);
+        sal_uInt16 nBorderDiagId = pPool->GetWhichIDFromSlotID(SID_ATTR_BORDER_DIAG_TLBR);
         if (const SvxLineItem* pLineItem = static_cast<const SvxLineItem*>(rSet->GetItem(nBorderDiagId)))
             m_aFrameSel.ShowBorder(svx::FrameBorderType::TLBR, pLineItem->GetLine());
         else
@@ -643,7 +643,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::BLTR))
     {
-        sal_uInt16 nBorderDiagId = pPool->GetWhich(SID_ATTR_BORDER_DIAG_BLTR);
+        sal_uInt16 nBorderDiagId = pPool->GetWhichIDFromSlotID(SID_ATTR_BORDER_DIAG_BLTR);
         if (const SvxLineItem* pLineItem = static_cast<const SvxLineItem*>(rSet->GetItem(nBorderDiagId)))
             m_aFrameSel.ShowBorder(svx::FrameBorderType::BLTR, pLineItem->GetLine());
         else
@@ -652,7 +652,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     if (m_xShadowControls)
     {
-        sal_uInt16 nShadowId = pPool->GetWhich(mnShadowSlot);
+        sal_uInt16 nShadowId = pPool->GetWhichIDFromSlotID(mnShadowSlot);
         const SfxPoolItem* pItem = rSet->GetItem(nShadowId);
         if (pItem)
             m_xShadowControls->SetControlValue(*static_cast<const SvxShadowItem*>(pItem));
@@ -662,7 +662,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     if (m_xMarginControls)
     {
-        sal_uInt16 nAlignMarginId = pPool->GetWhich(SID_ATTR_ALIGN_MARGIN);
+        sal_uInt16 nAlignMarginId = pPool->GetWhichIDFromSlotID(SID_ATTR_ALIGN_MARGIN);
         const SfxPoolItem* pItem = rSet->GetItem(nAlignMarginId);
         if (pItem)
             m_xMarginControls->SetControlValue(*static_cast<const SvxMarginItem*>(pItem));
@@ -670,7 +670,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             m_xMarginControls->SetControlDontKnow();
     }
 
-    sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhich(SID_SW_COLLAPSING_BORDERS);
+    sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhichIDFromSlotID(SID_SW_COLLAPSING_BORDERS);
     const SfxBoolItem *pMergeAdjacentBorders = static_cast<const SfxBoolItem*>(rSet->GetItem(nMergeAdjacentBordersId));
     if (!pMergeAdjacentBorders)
         m_xMergeAdjacentBordersCB->set_state(TRISTATE_INDET);
@@ -678,7 +678,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         m_xMergeAdjacentBordersCB->set_active(pMergeAdjacentBorders->GetValue());
     m_xMergeAdjacentBordersCB->save_state();
 
-    sal_uInt16 nMergeWithNextId = pPool->GetWhich(SID_ATTR_BORDER_CONNECT);
+    sal_uInt16 nMergeWithNextId = pPool->GetWhichIDFromSlotID(SID_ATTR_BORDER_CONNECT);
     const SfxBoolItem *pMergeWithNext = static_cast<const SfxBoolItem*>(rSet->GetItem(nMergeWithNextId));
     if (!pMergeWithNext)
         m_xMergeWithNextCB->set_state(TRISTATE_INDET);
@@ -953,7 +953,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         auto nState = m_xMergeAdjacentBordersCB->get_state();
         if (nState == TRISTATE_INDET)
         {
-            sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhich(SID_SW_COLLAPSING_BORDERS);
+            sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhichIDFromSlotID(SID_SW_COLLAPSING_BORDERS);
             rCoreAttrs->ClearItem(nMergeAdjacentBordersId);
         }
         else
@@ -973,7 +973,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         auto nState = m_xMergeWithNextCB->get_state();
         if (nState == TRISTATE_INDET)
         {
-            sal_uInt16 nMergeWithNextId = pPool->GetWhich(SID_ATTR_BORDER_CONNECT);
+            sal_uInt16 nMergeWithNextId = pPool->GetWhichIDFromSlotID(SID_ATTR_BORDER_CONNECT);
             rCoreAttrs->ClearItem(nMergeWithNextId);
         }
         else
@@ -990,7 +990,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     bool                  bPut          = true;
     sal_uInt16            nBoxWhich     = GetWhich( mnBoxSlot );
-    sal_uInt16            nBoxInfoWhich = pPool->GetWhich( SID_ATTR_BORDER_INNER, false );
+    sal_uInt16            nBoxInfoWhich = pPool->GetWhichIDFromSlotID( SID_ATTR_BORDER_INNER, false );
     const SfxItemSet&     rOldSet       = GetItemSet();
     SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );

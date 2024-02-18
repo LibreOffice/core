@@ -431,7 +431,7 @@ void FontPrevWin_Impl::ScaleFontWidth(vcl::RenderContext const & rOutDev)
 
 static bool GetWhich (const SfxItemSet& rSet, sal_uInt16 nSlot, sal_uInt16& rWhich)
 {
-    rWhich = rSet.GetPool()->GetWhich(nSlot);
+    rWhich = rSet.GetPool()->GetWhichIDFromSlotID(nSlot);
     return rSet.GetItemState(rWhich) >= SfxItemState::DEFAULT;
 }
 

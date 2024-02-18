@@ -102,7 +102,7 @@ namespace frm
         if ( aParameterSet.Count() )
         {
             OSL_ENSURE( aParameterSet.Count() == 1, "OParametrizedAttributeDispatcher::convertDispatchArgsToItem: Arguments which form more than 1 item? How this?" );
-            WhichId nAttributeWhich = aParameterSet.GetPool()->GetWhich( nSlotId );
+            WhichId nAttributeWhich = aParameterSet.GetPool()->GetWhichIDFromSlotID( nSlotId );
             pArgument = aParameterSet.GetItem( nAttributeWhich );
             OSL_ENSURE( pArgument, "OParametrizedAttributeDispatcher::convertDispatchArgsToItem: suspicious: there were arguments, but they're not for my slot!" );
         }

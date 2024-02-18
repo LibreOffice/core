@@ -716,7 +716,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                 SfxItemPool& rPool = mpView->GetDoc().GetPool();
                 SvxScriptSetItem aSvxScriptSetItem( nSlot, rPool );
-                aSvxScriptSetItem.PutItemForScriptType( nScriptType, pArgs->Get( rPool.GetWhich( nSlot ) ) );
+                aSvxScriptSetItem.PutItemForScriptType( nScriptType, pArgs->Get( rPool.GetWhichIDFromSlotID( nSlot ) ) );
                 aNewAttr.Put( aSvxScriptSetItem.GetItemSet() );
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
@@ -754,7 +754,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             }
             else if(nSlot == SID_ATTR_CHAR_KERNING)
             {
-                aNewAttr.Put(pArgs->Get(pArgs->GetPool()->GetWhich(nSlot)));
+                aNewAttr.Put(pArgs->Get(pArgs->GetPool()->GetWhichIDFromSlotID(nSlot)));
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
             }

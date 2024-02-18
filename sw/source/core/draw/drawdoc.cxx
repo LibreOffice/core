@@ -66,7 +66,7 @@ SwDrawModel::SwDrawModel(SwDoc& rDoc)
                 if( nullptr != (pItem = rDocPool.GetUserDefaultItem( nW )) &&
                     0 != (nSlotId = rDocPool.GetSlotId( nW ) ) &&
                     nSlotId != nW &&
-                    0 != (nEdtWhich = pSdrPool->GetWhich( nSlotId )) &&
+                    0 != (nEdtWhich = pSdrPool->GetWhichIDFromSlotID( nSlotId )) &&
                     nSlotId != nEdtWhich )
                 {
                     std::unique_ptr<SfxPoolItem> pCpy(pItem->Clone());

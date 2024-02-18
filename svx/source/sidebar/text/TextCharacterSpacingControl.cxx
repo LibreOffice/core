@@ -216,7 +216,7 @@ IMPL_LINK_NOARG(TextCharacterSpacingControl, KerningModifyHdl, weld::MetricSpinB
 MapUnit TextCharacterSpacingControl::GetCoreMetric()
 {
     SfxItemPool &rPool = SfxGetpApp()->GetPool();
-    sal_uInt16 nWhich = rPool.GetWhich(SID_ATTR_CHAR_KERNING);
+    sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID(SID_ATTR_CHAR_KERNING);
     return rPool.GetMetric(nWhich);
 }
 

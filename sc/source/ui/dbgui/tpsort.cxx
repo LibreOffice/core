@@ -79,7 +79,7 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
         aStrRowLabel    ( ScResId( SCSTR_ROW_LABEL ) ),
         aStrColLabel    ( ScResId( SCSTR_COL_LABEL ) ),
 
-        nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
+        nWhichSort      ( rArgSet.GetPool()->GetWhichIDFromSlotID( SID_SORT ) ),
         pViewData       ( nullptr ),
         aSortData       ( rArgSet.Get( nWhichSort ).GetSortData() ),
         nFieldCount     ( 0 ),
@@ -496,7 +496,7 @@ ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogC
     , aStrCommentsColLabel(ScResId(SCSTR_NOTES_COL_LABEL))
     , aStrImgRowLabel(ScResId(SCSTR_IMAGES_ROW_LABEL))
     , aStrImgColLabel(ScResId(SCSTR_IMAGES_COL_LABEL))
-    , nWhichSort(rArgSet.GetPool()->GetWhich(SID_SORT))
+    , nWhichSort(rArgSet.GetPool()->GetWhichIDFromSlotID(SID_SORT))
     , aSortData(rArgSet.Get(nWhichSort).GetSortData())
     , pViewData(nullptr)
     , pDoc(nullptr)

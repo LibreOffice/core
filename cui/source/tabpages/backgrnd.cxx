@@ -109,14 +109,14 @@ void SvxBkgTabPage::Reset(const SfxItemSet* pItemSet)
     }
     else if (m_bCharBackColor)
     {
-        sal_uInt16 nWhich(pItemSet->GetPool()->GetWhich(SID_ATTR_CHAR_BACK_COLOR));
+        sal_uInt16 nWhich(pItemSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_CHAR_BACK_COLOR));
         Color aBackColor(static_cast<const SvxColorItem&>(pItemSet->Get(nWhich)).GetValue());
         SvxBrushItem aBrushItem(SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR));
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, m_aAttrSet);
     }
     else
     {
-        sal_uInt16 nWhich(pItemSet->GetPool()->GetWhich(m_bHighlighting ? SID_ATTR_BRUSH_CHAR : SID_ATTR_BRUSH));
+        sal_uInt16 nWhich(pItemSet->GetPool()->GetWhichIDFromSlotID(m_bHighlighting ? SID_ATTR_BRUSH_CHAR : SID_ATTR_BRUSH));
         SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(pItemSet->Get(nWhich)));
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, m_aAttrSet);
     }
@@ -194,7 +194,7 @@ bool SvxBkgTabPage::FillItemSet(SfxItemSet* pCoreSet)
     // *Put* in the core set all table brushes that are *SET* in the m_aAttrSet
     if (nSlot != SID_ATTR_BRUSH)
     {
-        nWhich = m_aAttrSet.GetPool()->GetWhich(SID_ATTR_BRUSH);
+        nWhich = m_aAttrSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_BRUSH);
         if (SfxItemState::SET == m_aAttrSet.GetItemState(nWhich))
         {
             SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(m_aAttrSet.Get(nWhich)));
@@ -310,7 +310,7 @@ void SvxBkgTabPage::SetActiveTableDestinationBrushItem()
         return;
     }
 
-    XFillStyleItem aFillStyleItem(m_aAttrSet.Get(m_aAttrSet.GetPool()->GetWhich(XATTR_FILLSTYLE)));
+    XFillStyleItem aFillStyleItem(m_aAttrSet.Get(m_aAttrSet.GetPool()->GetWhichIDFromSlotID(XATTR_FILLSTYLE)));
     drawing::FillStyle eXFS = aFillStyleItem.GetValue();
     switch(eXFS)
     {

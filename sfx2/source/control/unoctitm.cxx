@@ -493,7 +493,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
 
 MapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool const & rPool, sal_uInt16 nSlotId )
 {
-    sal_uInt16 nWhich = rPool.GetWhich( nSlotId );
+    sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlotId );
     return rPool.GetMetric( nWhich );
 }
 

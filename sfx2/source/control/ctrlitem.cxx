@@ -326,7 +326,7 @@ MapUnit SfxControllerItem::GetCoreMetric() const
             if (SfxShell *pSh = pDispat->GetShell( pServer->GetShellLevel() ))
             {
                 SfxItemPool &rPool = pSh->GetPool();
-                sal_uInt16 nWhich = rPool.GetWhich( nId );
+                sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nId );
 
                 // invalidate slot and its message|slot server as 'global' information
                 // about the validated message|slot server is not made available

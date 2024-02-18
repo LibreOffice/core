@@ -717,7 +717,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             if (pArgs)
             {
                 SvxLineSpacingItem aParaLineSP = pArgs->Get(
-                    GetPool().GetWhich(SID_ATTR_PARA_LINESPACE));
+                    GetPool().GetWhichIDFromSlotID(SID_ATTR_PARA_LINESPACE));
 
                 SfxItemSetFixed<EE_PARA_SBL, EE_PARA_SBL> aEditAttr( GetPool() );
                 aParaLineSP.SetWhich( EE_PARA_SBL );

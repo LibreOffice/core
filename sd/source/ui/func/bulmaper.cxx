@@ -37,7 +37,7 @@
 
 #include <bulmaper.hxx>
 
-#define GetWhich(nSlot) rSet.GetPool()->GetWhich( nSlot )
+#define GetWhichIDFromSlotID(nSlot) rSet.GetPool()->GetWhichIDFromSlotID( nSlot )
 
 void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& rSet )
 {
@@ -55,34 +55,34 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             // to be implemented if module supports CJK
 
             vcl::Font aMyFont;
-            const SvxFontItem& rFItem = rSet.Get(GetWhich( SID_ATTR_CHAR_FONT ));
+            const SvxFontItem& rFItem = rSet.Get(GetWhichIDFromSlotID( SID_ATTR_CHAR_FONT ));
             aMyFont.SetFamily(rFItem.GetFamily());
             aMyFont.SetFamilyName(rFItem.GetFamilyName());
             aMyFont.SetCharSet(rFItem.GetCharSet());
             aMyFont.SetPitch(rFItem.GetPitch());
 
-            const SvxFontHeightItem& rFHItem = rSet.Get(GetWhich( SID_ATTR_CHAR_FONTHEIGHT ));
+            const SvxFontHeightItem& rFHItem = rSet.Get(GetWhichIDFromSlotID( SID_ATTR_CHAR_FONTHEIGHT ));
             aMyFont.SetFontSize(Size(0, rFHItem.GetHeight()));
 
-            const SvxWeightItem& rWItem = rSet.Get(GetWhich( SID_ATTR_CHAR_WEIGHT ));
+            const SvxWeightItem& rWItem = rSet.Get(GetWhichIDFromSlotID( SID_ATTR_CHAR_WEIGHT ));
             aMyFont.SetWeight(rWItem.GetWeight());
 
-            const SvxPostureItem& rPItem = rSet.Get(GetWhich(SID_ATTR_CHAR_POSTURE));
+            const SvxPostureItem& rPItem = rSet.Get(GetWhichIDFromSlotID(SID_ATTR_CHAR_POSTURE));
             aMyFont.SetItalic(rPItem.GetPosture());
 
-            const SvxUnderlineItem& rUItem = rSet.Get(GetWhich(SID_ATTR_CHAR_UNDERLINE));
+            const SvxUnderlineItem& rUItem = rSet.Get(GetWhichIDFromSlotID(SID_ATTR_CHAR_UNDERLINE));
             aMyFont.SetUnderline(rUItem.GetLineStyle());
 
-            const SvxOverlineItem& rOItem = rSet.Get(GetWhich(SID_ATTR_CHAR_OVERLINE));
+            const SvxOverlineItem& rOItem = rSet.Get(GetWhichIDFromSlotID(SID_ATTR_CHAR_OVERLINE));
             aMyFont.SetOverline(rOItem.GetLineStyle());
 
-            const SvxCrossedOutItem& rCOItem = rSet.Get(GetWhich(SID_ATTR_CHAR_STRIKEOUT));
+            const SvxCrossedOutItem& rCOItem = rSet.Get(GetWhichIDFromSlotID(SID_ATTR_CHAR_STRIKEOUT));
             aMyFont.SetStrikeout(rCOItem.GetStrikeout());
 
-            const SvxContourItem& rCItem = rSet.Get(GetWhich(SID_ATTR_CHAR_CONTOUR));
+            const SvxContourItem& rCItem = rSet.Get(GetWhichIDFromSlotID(SID_ATTR_CHAR_CONTOUR));
             aMyFont.SetOutline(rCItem.GetValue());
 
-            const SvxShadowedItem& rSItem = rSet.Get(GetWhich(SID_ATTR_CHAR_SHADOWED));
+            const SvxShadowedItem& rSItem = rSet.Get(GetWhichIDFromSlotID(SID_ATTR_CHAR_SHADOWED));
             aMyFont.SetShadow(rSItem.GetValue());
 
             aNewLevel.SetBulletFont(&aMyFont);

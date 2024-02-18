@@ -488,7 +488,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
     const SfxPoolItem* pItem = nullptr;
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
+        pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem);
     bool bCallDone = false;
     switch ( nSlot )
     {
@@ -1786,7 +1786,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest const & rReq)
     const SfxPoolItem* pItem = nullptr;
     const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
+        pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem);
 
     // Always acquire the language from the current cursor position.
     LanguageType eLang = rSh.GetCurLang();

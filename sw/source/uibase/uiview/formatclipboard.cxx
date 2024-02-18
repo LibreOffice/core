@@ -174,32 +174,32 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     if(pFrameFormat)
     {
         //RES_SHADOW
-        const SfxPoolItem* pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_SHADOW), false);
+        const SfxPoolItem* pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhichIDFromSlotID(RES_SHADOW), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_BREAK
-        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_BREAK), false);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhichIDFromSlotID(RES_BREAK), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_PAGEDESC
-        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_PAGEDESC), false);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhichIDFromSlotID(RES_PAGEDESC), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_LAYOUT_SPLIT
-        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), false);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhichIDFromSlotID(RES_LAYOUT_SPLIT), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_KEEP
-        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_KEEP), false);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhichIDFromSlotID(RES_KEEP), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_FRAMEDIR
-        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhich(RES_FRAMEDIR), false);
+        pItem = rSet.GetItemIfSet(rSet.GetPool()->GetWhichIDFromSlotID(RES_FRAMEDIR), false);
         if(pItem)
             pFrameFormat->SetFormatAttr( *pItem );
     }

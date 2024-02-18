@@ -595,7 +595,7 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
             if( pSet )
             {
                 const SfxPoolItem* pItem = nullptr;
-                if( pSet->GetItemState(GetPool().GetWhich(nSlot), true, &pItem  ) == SfxItemState::SET )
+                if( pSet->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), true, &pItem  ) == SfxItemState::SET )
                 {
 
                     switch ( nSlot )
@@ -1006,7 +1006,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_PREVIEW_FONT:
             {
                 SfxItemPool& rPool = GetPool();
-                sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+                sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlot );
                 const SvxFontItem& rFont = static_cast<const SvxFontItem&>(pNewAttrs->Get( nWhich ));
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, rPool );
                 SvtScriptType nScript = pTabViewShell->GetSelectionScriptType();
@@ -1035,14 +1035,14 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_CONTOUR:
             case SID_ATTR_CHAR_SHADOWED:
             case SID_ATTR_CHAR_RELIEF:
-                pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot ) ) );
+                pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhichIDFromSlotID( nSlot ) ) );
                 rBindings.Invalidate( nSlot );
                 rBindings.Update( nSlot );
                 break;
             case SID_ATTR_CHAR_COLOR:
             case SID_SCATTR_PROTECTION :
             {
-                pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot) ), false);
+                pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhichIDFromSlotID( nSlot) ), false);
 
                 rBindings.Invalidate( nSlot );
                 rBindings.Update( nSlot );
@@ -1060,7 +1060,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
                     SfxItemPool& rPool = GetPool();
                     SvxScriptSetItem aSetItem( nSlot, rPool );
-                    sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+                    sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlot );
                     aSetItem.PutItemForScriptType( nScript, pNewAttrs->Get( nWhich ) );
 
                     pTabViewShell->ApplyUserItemSet( aSetItem.GetItemSet() );
@@ -1237,7 +1237,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     SvxBrushItem        aBrushItem( pTabViewShell->GetSelectionPattern()->
                                                 GetItem( ATTR_BACKGROUND ) );
                     const SvxBrushItem& rNewBrushItem = static_cast<const SvxBrushItem&>(
-                                            pNewAttrs->Get( GetPool().GetWhich(nSlot) ) );
+                                            pNewAttrs->Get( GetPool().GetWhichIDFromSlotID(nSlot) ) );
                     aBrushItem.SetColor(rNewBrushItem.GetColor());
                     aBrushItem.setComplexColor(rNewBrushItem.getComplexColor());
                     pTabViewShell->ApplyAttr( aBrushItem );
@@ -1462,7 +1462,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             break;
             case SID_ATTR_BRUSH:
             {
-                rSet.Put( rBrushItem.CloneSetWhich(GetPool().GetWhich(nWhich)) );
+                rSet.Put( rBrushItem.CloneSetWhich(GetPool().GetWhichIDFromSlotID(nWhich)) );
             }
             break;
             case SID_SCATTR_CELLPROTECTION:

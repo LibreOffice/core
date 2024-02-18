@@ -285,12 +285,12 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
         {
             const SfxItemSet& rExtraSet = pItem->GetItemSet();
             const SfxBoolItem& rOn =
-                rExtraSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_ON ) );
+                rExtraSet.Get( rSet.GetPool()->GetWhichIDFromSlotID( SID_ATTR_PAGE_ON ) );
 
             if ( rOn.GetValue() )
             {
                 const SvxSizeItem& rSizeItem =
-                    rExtraSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE));
+                    rExtraSet.Get(rSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_PAGE_SIZE));
                 nDistanceUL += rSizeItem.GetSize().Height();
             }
         }

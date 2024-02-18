@@ -856,7 +856,7 @@ void SfxItemPool::GetItemSurrogates(ItemSurrogates& rTarget, sal_uInt16 nWhich) 
     rTarget = ItemSurrogates(aNewSurrogates.begin(), aNewSurrogates.end());
 }
 
-sal_uInt16 SfxItemPool::GetWhich(sal_uInt16 nSlotId, bool bDeep) const
+sal_uInt16 SfxItemPool::GetWhichIDFromSlotID(sal_uInt16 nSlotId, bool bDeep) const
 {
     if (!IsSlot(nSlotId))
         return nSlotId;
@@ -871,7 +871,7 @@ sal_uInt16 SfxItemPool::GetWhich(sal_uInt16 nSlotId, bool bDeep) const
     }
 
     if (mpSecondary && bDeep)
-        return mpSecondary->GetWhich(nSlotId);
+        return mpSecondary->GetWhichIDFromSlotID(nSlotId);
 
     return nSlotId;
 }
@@ -894,7 +894,7 @@ sal_uInt16 SfxItemPool::GetSlotId(sal_uInt16 nWhich) const
 }
 
 
-sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
+sal_uInt16 SfxItemPool::GetTrueWhichIDFromSlotID( sal_uInt16 nSlotId, bool bDeep ) const
 {
     if (!IsSlot(nSlotId))
         return 0;
@@ -909,7 +909,7 @@ sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
     }
 
     if (mpSecondary && bDeep)
-        return mpSecondary->GetTrueWhich(nSlotId);
+        return mpSecondary->GetTrueWhichIDFromSlotID(nSlotId);
 
     return 0;
 }

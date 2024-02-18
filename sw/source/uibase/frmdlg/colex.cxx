@@ -45,7 +45,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     }
 
     SfxItemPool* pPool = rSet.GetPool();
-    sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
+    sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID( SID_ATTR_PAGE );
     if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // alignment
@@ -53,7 +53,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
         SetUsage(rPage.GetPageUsage());
     }
 
-    nWhich = pPool->GetWhich( SID_ATTR_PAGE_SIZE );
+    nWhich = pPool->GetWhichIDFromSlotID( SID_ATTR_PAGE_SIZE );
 
     if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
@@ -94,20 +94,20 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     // evaluate header-attributes
     const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
+    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhichIDFromSlotID( SID_ATTR_PAGE_HEADERSET),
             false, &pItem ) )
     {
         const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            rHeaderSet.Get( pPool->GetWhich( SID_ATTR_PAGE_ON ) );
+            rHeaderSet.Get( pPool->GetWhichIDFromSlotID( SID_ATTR_PAGE_ON ) );
 
         if ( rHeaderOn.GetValue() )
         {
             const SvxSizeItem& rSize =
-                rHeaderSet.Get(pPool->GetWhich(SID_ATTR_PAGE_SIZE));
+                rHeaderSet.Get(pPool->GetWhichIDFromSlotID(SID_ATTR_PAGE_SIZE));
 
-            const SvxULSpaceItem& rUL = rHeaderSet.Get(pPool->GetWhich(SID_ATTR_ULSPACE));
-            const SvxLRSpaceItem& rLR = rHeaderSet.Get(pPool->GetWhich(SID_ATTR_LRSPACE));
+            const SvxULSpaceItem& rUL = rHeaderSet.Get(pPool->GetWhichIDFromSlotID(SID_ATTR_ULSPACE));
+            const SvxLRSpaceItem& rLR = rHeaderSet.Get(pPool->GetWhichIDFromSlotID(SID_ATTR_LRSPACE));
 
             SetHdHeight( rSize.GetSize().Height() - rUL.GetLower());
             SetHdDist( rUL.GetLower() );
@@ -131,7 +131,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetHeader( false );
     }
 
-    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
+    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhichIDFromSlotID( SID_ATTR_PAGE_FOOTERSET),
             false, &pItem ) )
     {
         const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
@@ -140,10 +140,10 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
         if ( rFooterOn.GetValue() )
         {
             const SvxSizeItem& rSize =
-                rFooterSet.Get( pPool->GetWhich( SID_ATTR_PAGE_SIZE ) );
+                rFooterSet.Get( pPool->GetWhichIDFromSlotID( SID_ATTR_PAGE_SIZE ) );
 
-            const SvxULSpaceItem& rUL = rFooterSet.Get(pPool->GetWhich( SID_ATTR_ULSPACE ) );
-            const SvxLRSpaceItem& rLR = rFooterSet.Get(pPool->GetWhich( SID_ATTR_LRSPACE ) );
+            const SvxULSpaceItem& rUL = rFooterSet.Get(pPool->GetWhichIDFromSlotID( SID_ATTR_ULSPACE ) );
+            const SvxLRSpaceItem& rLR = rFooterSet.Get(pPool->GetWhichIDFromSlotID( SID_ATTR_LRSPACE ) );
 
             SetFtHeight( rSize.GetSize().Height() - rUL.GetUpper());
             SetFtDist( rUL.GetUpper() );

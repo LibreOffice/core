@@ -477,7 +477,7 @@ void ScPivotLayoutDialog::ApplyChanges()
     SetDispatcherLock(false);
     SwitchToDocument();
 
-    sal_uInt16 nWhichPivot = SC_MOD()->GetPool().GetWhich(SID_PIVOT_TABLE);
+    sal_uInt16 nWhichPivot = SC_MOD()->GetPool().GetWhichIDFromSlotID(SID_PIVOT_TABLE);
     ScPivotItem aPivotItem(nWhichPivot, &aSaveData, &aDestinationRange, bToNewSheet);
     mpViewData->GetViewShell()->SetDialogDPObject(std::make_unique<ScDPObject>(maPivotTableObject));
 

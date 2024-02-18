@@ -67,7 +67,7 @@ namespace
     MapUnit lcl_GetUnit()
     {
         SfxItemPool &rPool = SfxGetpApp()->GetPool();
-        sal_uInt16 nWhich = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
+        sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( SID_ATTR_PAGE_SIZE );
         return rPool.GetMetric( nWhich );
     }
 

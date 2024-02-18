@@ -217,7 +217,7 @@ namespace frm
         _rScriptSetItem.GetItemSet().Put( m_pView->GetAttribs(), false );
         const SfxPoolItem* pNormalizedItem = _rScriptSetItem.GetItemOfScript( getSelectedScriptType() );
 
-        WhichId nNormalizedWhichId = _rScriptSetItem.GetItemSet().GetPool()->GetWhich( _rScriptSetItem.Which() );
+        WhichId nNormalizedWhichId = _rScriptSetItem.GetItemSet().GetPool()->GetWhichIDFromSlotID( _rScriptSetItem.Which() );
         if ( pNormalizedItem )
         {
             _rScriptSetItem.GetItemSet().Put( pNormalizedItem->CloneSetWhich(nNormalizedWhichId) );

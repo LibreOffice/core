@@ -246,7 +246,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot
 
 {
     const SfxItemPool* pPool = rSet.GetPool();
-    sal_uInt16 nWh = pPool->GetWhich( nSlot, bDeep );
+    sal_uInt16 nWh = pPool->GetWhichIDFromSlotID( nSlot, bDeep );
     const SfxPoolItem* pItem = nullptr;
     rSet.GetItemState( nWh, true, &pItem );
 
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
         while (nTmp && nTmp <= nTmpEnd)
         {
             // Iterate over the Range and set the Items
-            sal_uInt16 nWh = pPool->GetWhich(nTmp);
+            sal_uInt16 nWh = pPool->GetWhichIDFromSlotID(nTmp);
             const SfxPoolItem* pItem;
             if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
             {
@@ -506,7 +506,7 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
         while ( nTmp && nTmp <= nTmpEnd ) // guard against overflow
         {
             // Iterate over the Range and set the Items
-            sal_uInt16 nWh = pPool->GetWhich(nTmp);
+            sal_uInt16 nWh = pPool->GetWhichIDFromSlotID(nTmp);
             m_xExampleSet->ClearItem(nWh);
             aTmpSet.ClearItem(nWh);
             // At the Outset of InvalidateItem,
@@ -712,8 +712,8 @@ const WhichRangesContainer & SfxTabDialogController::GetInputRanges(const SfxIte
 
             for (const auto & rPair : pTmpRanges)
             {
-                sal_uInt16 nWidFrom = rPool.GetWhich(rPair.first);
-                sal_uInt16 nWidTo = rPool.GetWhich(rPair.second);
+                sal_uInt16 nWidFrom = rPool.GetWhichIDFromSlotID(rPair.first);
+                sal_uInt16 nWidTo = rPool.GetWhichIDFromSlotID(rPair.second);
                 aUS.MergeRange(nWidFrom, nWidTo); // Keep it valid
             }
         }

@@ -569,7 +569,7 @@ void EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
         pPool = pPool->GetSecondaryPool();
 
     }
-    sal_uInt16 nWhich = pPool->GetWhich( nSlotId );
+    sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID( nSlotId );
     if ( nWhich )
     {
         rItem.SetWhich( nWhich );

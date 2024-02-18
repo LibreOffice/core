@@ -151,7 +151,7 @@ const SfxItemSet* OutlineBulletDlg::GetBulletOutputItemSet() const
     m_xOutputSet->Put(aSet);
 
     const SfxPoolItem *pItem = nullptr;
-    if( SfxItemState::SET == m_xOutputSet->GetItemState(m_xOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
+    if( SfxItemState::SET == m_xOutputSet->GetItemState(m_xOutputSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE), false, &pItem ))
     {
         SdBulletMapper::MapFontsInNumRule(const_cast<SvxNumRule&>(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()), *m_xOutputSet);
         // #i35937 - removed EE_PARA_BULLETSTATE setting

@@ -278,7 +278,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
     SfxItemState eState = rSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState != SfxItemState::SET)
     {
-        nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        nNumItemId = rSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE);
         eState = rSet->GetItemState(nNumItemId, false, &pItem);
 
         if( eState != SfxItemState::SET )
@@ -419,7 +419,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
     const SvxNumBulletItem* pItem = rSet->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
     if(!pItem)
     {
-        nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        nNumItemId = rSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE);
         pItem = rSet->GetItemIfSet(nNumItemId, false);
 
         if( !pItem )
@@ -600,7 +600,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
     const SvxNumBulletItem* pItem = rSet->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
     if(!pItem)
     {
-        nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        nNumItemId = rSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE);
         pItem = rSet->GetItemIfSet(nNumItemId, false);
 
         if( !pItem )
@@ -740,7 +740,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
     m_xBtBrowseFile->connect_clicked(LINK(this, SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl));
 
-    eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+    eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
 
     // determine graphic name
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
@@ -848,7 +848,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
     const SvxNumBulletItem* pItem = rSet->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
     if(!pItem)
     {
-        nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        nNumItemId = rSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE);
         pItem = rSet->GetItemIfSet(nNumItemId, false);
 
         if( !pItem )
@@ -1102,7 +1102,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     aInvalidateTimer.SetInvokeHandler(LINK(this, SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl));
     aInvalidateTimer.SetTimeout(50);
 
-    eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+    eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
 
     // Fill ListBox with predefined / translated numbering types.
     sal_uInt32 nCount = SvxNumberingTypeTable::Count();
@@ -1221,7 +1221,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         rSet->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
     if(!pBulletItem)
     {
-        nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        nNumItemId = rSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE);
         pBulletItem = rSet->GetItemIfSet(nNumItemId, false);
 
         if( !pBulletItem )
@@ -2249,7 +2249,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(weld::Container* pPage, weld::Dialo
 
     m_xRelativeCB->set_active(bLastRelative);
     m_aPreviewWIN.SetPositionMode();
-    eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+    eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
 }
 
 SvxNumPositionTabPage::~SvxNumPositionTabPage()
@@ -2533,7 +2533,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
         rSet->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
     if(!pItem)
     {
-        nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        nNumItemId = rSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE);
         pItem = rSet->GetItemIfSet(nNumItemId, false);
 
         if( !pItem )

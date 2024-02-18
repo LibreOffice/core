@@ -1164,7 +1164,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
             const sal_uInt16 nSlotId = pSrcPool->GetSlotId(nWhich);
             if (nSlotId && nWhich != nSlotId)
             {
-                nWhich = rDstPool.GetWhich(nSlotId);
+                nWhich = rDstPool.GetWhichIDFromSlotID(nSlotId);
                 if (nWhich && nWhich != nSlotId &&
                     nWhich < RES_UNKNOWNATR_BEGIN &&
                     m_rExport.CollapseScriptsforWordOk(m_nScript,nWhich))
@@ -1295,7 +1295,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
         sal_uInt16 nSlotId = pSrcPool->GetSlotId(nWhich);
 
         if ( nSlotId && nWhich != nSlotId &&
-             0 != ( nWhich = pDstPool->GetWhich( nSlotId ) ) &&
+             0 != ( nWhich = pDstPool->GetWhichIDFromSlotID( nSlotId ) ) &&
              nWhich != nSlotId &&
              ( bCharAttr ? ( nWhich >= RES_CHRATR_BEGIN && nWhich < RES_TXTATR_END )
                          : ( nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END ) ) )

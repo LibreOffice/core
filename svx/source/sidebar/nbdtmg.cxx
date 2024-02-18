@@ -165,13 +165,13 @@ void NBOTypeMgrBase::SetItems(const SfxItemSet* pArg) {
     SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState == SfxItemState::SET)
     {
-        eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+        eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
     } else {
         //sd use different sid for numbering rule
         eState = pSet->GetItemState(EE_PARA_NUMBULLET, false, &pItem);
         if(eState == SfxItemState::SET)
         {
-            eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(EE_PARA_NUMBULLET));
+            eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhichIDFromSlotID(EE_PARA_NUMBULLET));
         }
     }
 }

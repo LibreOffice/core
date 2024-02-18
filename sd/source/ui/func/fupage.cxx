@@ -211,8 +211,8 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
                   SID_ATTR_PAGE_COLOR, SID_ATTR_PAGE_FILLSTYLE
               >  aNewAttr(mpDoc->GetPool());
     // Keep it sorted
-    aNewAttr.MergeRange(mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
-                        mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
+    aNewAttr.MergeRange(mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE),
+                        mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE));
 
     // Retrieve additional data for dialog
 
@@ -247,10 +247,10 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
     SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, static_cast<sal_uInt8>(mpPage->GetPaperBin()) );
     aNewAttr.Put( aPaperBinItem );
 
-    SvxLRSpaceItem aLRSpaceItem( static_cast<sal_uInt16>(mpPage->GetLeftBorder()), static_cast<sal_uInt16>(mpPage->GetRightBorder()), 0, mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE));
+    SvxLRSpaceItem aLRSpaceItem( static_cast<sal_uInt16>(mpPage->GetLeftBorder()), static_cast<sal_uInt16>(mpPage->GetRightBorder()), 0, mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE));
     aNewAttr.Put( aLRSpaceItem );
 
-    SvxULSpaceItem aULSpaceItem( static_cast<sal_uInt16>(mpPage->GetUpperBorder()), static_cast<sal_uInt16>(mpPage->GetLowerBorder()), mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
+    SvxULSpaceItem aULSpaceItem( static_cast<sal_uInt16>(mpPage->GetUpperBorder()), static_cast<sal_uInt16>(mpPage->GetLowerBorder()), mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE));
     aNewAttr.Put( aULSpaceItem );
 
     // Application
@@ -519,7 +519,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             bSetPageSizeAndBorder = true;
     }
 
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE),
                             true, &pPoolItem) == SfxItemState::SET )
     {
         nLeft = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetLeft();
@@ -530,7 +530,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
 
     }
 
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE),
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE),
                             true, &pPoolItem) == SfxItemState::SET )
     {
         nUpper = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetUpper();
@@ -540,7 +540,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             bSetPageSizeAndBorder = true;
     }
 
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT1), true, &pPoolItem) == SfxItemState::SET )
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_PAGE_EXT1), true, &pPoolItem) == SfxItemState::SET )
     {
         bScaleAll = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
     }
@@ -561,7 +561,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     // Paper Bin
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN), true, &pPoolItem) == SfxItemState::SET )
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_PAGE_PAPERBIN), true, &pPoolItem) == SfxItemState::SET )
     {
         nPaperBin = static_cast<const SvxPaperBinItem*>(pPoolItem)->GetValue();
 

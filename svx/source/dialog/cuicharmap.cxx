@@ -349,7 +349,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         const SfxItemPool* pPool = m_xOutputSet->GetPool();
         m_xOutputSet->Put( SfxStringItem( SID_CHARMAP, sGlyph ) );
         m_xOutputSet->Put( SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
-            aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
+            aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(), pPool->GetWhichIDFromSlotID(SID_ATTR_CHAR_FONT) ) );
         m_xOutputSet->Put( SfxStringItem( SID_FONT_NAME, aFont.GetFamilyName() ) );
         m_xOutputSet->Put( SfxInt32Item( SID_ATTR_CHAR, cChar ) );
     }

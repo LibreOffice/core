@@ -639,7 +639,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
         sal_uInt16 nSlot = pDestPool->GetTrueSlotId( nWhich );
         if ( nSlot )
         {
-            sal_uInt16 nW = pSourcePool->GetTrueWhich( nSlot );
+            sal_uInt16 nW = pSourcePool->GetTrueWhichIDFromSlotID( nSlot );
             if ( nW )
                 nSourceWhich = nW;
         }

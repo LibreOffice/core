@@ -55,7 +55,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, we
 
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/advancedfilterdialog.ui", "AdvancedFilterDialog")
     , aStrUndefined   ( ScResId(SCSTR_UNDEFINED) )
-    , nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) )
+    , nWhichQuery     ( rArgSet.GetPool()->GetWhichIDFromSlotID( SID_QUERY ) )
     , theQueryData    ( static_cast<const ScQueryItem&>(
                            rArgSet.Get( nWhichQuery )).GetQueryData() )
     , pViewData(nullptr)

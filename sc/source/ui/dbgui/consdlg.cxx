@@ -71,14 +71,14 @@ ScConsolidateDlg::ScConsolidateDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::W
     , aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) )
     , theConsData     ( static_cast<const ScConsolidateItem&>(
                          rArgSet.Get( rArgSet.GetPool()->
-                                          GetWhich( SID_CONSOLIDATE ) )
+                                          GetWhichIDFromSlotID( SID_CONSOLIDATE ) )
                                     ).GetData() )
     , rViewData       ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
                               GetViewData() )
     , rDoc            ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
                               GetViewData().GetDocument() )
     , nAreaDataCount  ( 0 )
-    , nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) )
+    , nWhichCons      ( rArgSet.GetPool()->GetWhichIDFromSlotID( SID_CONSOLIDATE ) )
     , bDlgLostFocus   ( false )
     , m_xLbFunc(m_xBuilder->weld_combo_box("func"))
     , m_xLbConsAreas(m_xBuilder->weld_tree_view("consareas"))

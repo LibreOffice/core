@@ -711,7 +711,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, OUString aBaseURL,
     // also initialize item IDs
     auto initTrueWhich = [&rPool, this](sal_uInt16 rWid)
     {
-        rWid = rPool.GetTrueWhich(rWid, false);
+        rWid = rPool.GetTrueWhichIDFromSlotID(rWid, false);
         m_aWhichMap = m_aWhichMap.MergeRange(rWid, rWid);
         return rWid;
     };

@@ -104,7 +104,7 @@ void SvxUnoDrawPool::getAny( SfxItemPool const * pPool, const comphelper::Proper
 
             // Assure, that ID is a Which-ID (it could be a Slot-ID.)
             // Thus, convert handle to Which-ID.
-            pPool->GetUserOrPoolDefaultItem( pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) ) ).QueryValue( rValue, nMemberId );
+            pPool->GetUserOrPoolDefaultItem( pPool->GetWhichIDFromSlotID( static_cast<sal_uInt16>(pEntry->mnHandle) ) ).QueryValue( rValue, nMemberId );
         }
     }
 
@@ -137,7 +137,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 
     // Assure, that ID is a Which-ID (it could be a Slot-ID.)
     // Thus, convert handle to Which-ID.
-    const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) );
+    const sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID( static_cast<sal_uInt16>(pEntry->mnHandle) );
     switch( nWhich )
     {
         case OWN_ATTR_FILLBMP_MODE:
@@ -214,7 +214,7 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
         {
             //Assure, that ID is a Which-ID (it could be a Slot-ID.)
             // Thus, convert handle to Which-ID.
-            const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>((*ppEntries)->mnHandle) );
+            const sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID( static_cast<sal_uInt16>((*ppEntries)->mnHandle) );
 
             switch( nWhich )
             {
@@ -278,7 +278,7 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
 
     // Assure, that ID is a Which-ID (it could be a Slot-ID.)
     // Thus, convert handle to Which-ID.
-    const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) );
+    const sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID( static_cast<sal_uInt16>(pEntry->mnHandle) );
     if ( pPool && pPool != mpDefaultsPool.get() )
     {
         // use method <ResetUserDefaultItem(..)> instead of using probably incompatible item pool <mpDefaultsPool>.
@@ -293,7 +293,7 @@ uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry
     // using probably incompatible item pool <mpDefaultsPool>
     uno::Any aAny;
     SfxItemPool* pPool = getModelPool( true );
-    const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) );
+    const sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID( static_cast<sal_uInt16>(pEntry->mnHandle) );
     const SfxPoolItem *pItem = pPool->GetUserDefaultItem ( nWhich );
     if (pItem)
     {

@@ -213,7 +213,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             pColl = nullptr;
     }
     SfxItemPool& rPool = GetPool();
-    sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+    sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlot );
     switch (nSlot)
     {
         case FN_TXTATR_INET:
@@ -346,15 +346,15 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 SET_ADJUST:
         {
             aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST));
-            rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), true ) );
+            rReq.AppendItem( SfxBoolItem( GetPool().GetWhichIDFromSlotID(nSlot), true ) );
         }
         break;
 
         case SID_ATTR_PARA_LINESPACE:
-            if(pArgs && SfxItemState::SET == pArgs->GetItemState( GetPool().GetWhich(nSlot) ))
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState( GetPool().GetWhichIDFromSlotID(nSlot) ))
             {
                 SvxLineSpacingItem aLineSpace = static_cast<const SvxLineSpacingItem&>( pArgs->Get(
-                                                            GetPool().GetWhich(nSlot)));
+                                                            GetPool().GetWhichIDFromSlotID(nSlot)));
                 aSet.Put( aLineSpace );
             }
         break;
@@ -457,7 +457,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
 
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
+        pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem);
     switch ( nSlot )
     {
         case FN_DROP_CHAR_STYLE_NAME:
@@ -803,7 +803,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case SID_ATTR_CHAR_KERNING:
             case RES_PARATR_DROP:
             {
-                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot)));
+                rSet.Put(aCoreSet.Get( GetPool().GetWhichIDFromSlotID(nSlot)));
                 nSlot = 0;
             }
             break;

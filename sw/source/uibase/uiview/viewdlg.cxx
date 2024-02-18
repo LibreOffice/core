@@ -32,7 +32,7 @@ void SwView::ExecDlg(SfxRequest const &rReq)
 
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState( GetPool().GetWhich(nSlot), false, &pItem );
+        pArgs->GetItemState( GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem );
 
     switch ( nSlot )
     {

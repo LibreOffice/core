@@ -117,7 +117,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
+        pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem);
 
     bool bMore = false;
     bool bIsText = true;

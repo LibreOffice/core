@@ -108,7 +108,7 @@ namespace frm
             case SID_ATTR_CHAR_LATIN_WEIGHT:    nWhich = EE_CHAR_WEIGHT;    break;
 
             default:
-                nWhich = _rPool.GetWhich( static_cast<SfxSlotId>(_nAttributeId) );
+                nWhich = _rPool.GetWhichIDFromSlotID( static_cast<SfxSlotId>(_nAttributeId) );
             }
             return nWhich;
         }

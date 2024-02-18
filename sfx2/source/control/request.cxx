@@ -586,7 +586,7 @@ void SfxRequest::Done_Impl
     {
         // get the property as SfxPoolItem
         const SfxPoolItem *pItem(nullptr);
-        const sal_uInt16 nWhich(rPool.GetWhich(pImpl->pSlot->GetSlotId()));
+        const sal_uInt16 nWhich(rPool.GetWhichIDFromSlotID(pImpl->pSlot->GetSlotId()));
         const bool bItemStateSet(nullptr != pSet);
         const SfxItemState eState(bItemStateSet ? pSet->GetItemState( nWhich, false, &pItem ) : SfxItemState::DEFAULT);
         SAL_WARN_IF( !bItemStateSet || SfxItemState::SET != eState, "sfx", "Recording property not available: "

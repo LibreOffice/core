@@ -475,7 +475,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_ATTR_CHAR_CTL_LANGUAGE:
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( GetPool().GetWhich(nSlot), true, &pItem ) )
+                if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( GetPool().GetWhichIDFromSlotID(nSlot), true, &pItem ) )
                 {
                     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
                     if ( pDocSh )

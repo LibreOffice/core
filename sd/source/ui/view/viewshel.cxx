@@ -871,7 +871,7 @@ const SvxNumBulletItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, TypedW
     if(pTmpItem)
         return pTmpItem;
 
-    nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+    nNumItemId = aNewAttr.GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE);
     pTmpItem = aNewAttr.GetItemIfSet(nNumItemId, false);
     if(pTmpItem)
         return pTmpItem;

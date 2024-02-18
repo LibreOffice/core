@@ -319,35 +319,39 @@ public:
     bool NeedsSurrogateSupport(sal_uInt16 nWhich) const
         { return CheckItemInfoFlag(nWhich, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE); }
 
-    sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
-    template<class T>
-    TypedWhichId<T>                 GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const
-    { return TypedWhichId<T>(GetWhich(sal_uInt16(nSlot), bDeep)); }
+    // tries to translate back from SlotID to WhichID. That may be
+    // expensive, it needs to linearly iterate over SfxItemInfo
+    // to evtl. find if a SlotID is defined for a WhichID
+    // If none is defined, return nSlot.
+    // If nSlot is not a SlotID, return nSlot.
+    sal_uInt16 GetWhichIDFromSlotID(sal_uInt16 nSlot, bool bDeep = true) const;
+    template<class T> TypedWhichId<T> GetWhichIDFromSlotID(TypedWhichId<T> nSlot, bool bDeep = true) const
+     { return TypedWhichId<T>(GetWhichIDFromSlotID(sal_uInt16(nSlot), bDeep)); }
 
     // get SlotID that may be registered in the SfxItemInfo for
     // the given WhichID.
     // If none is defined, return nWhich.
     // If nWhich is not a WhichID, return nWhich.
-    sal_uInt16                      GetSlotId( sal_uInt16 nWhich ) const;
+    sal_uInt16 GetSlotId( sal_uInt16 nWhich ) const;
 
-    // tries to translate back from SlotID to WhichID. That may be
-    // expensive, it needs to linearly iterate over SfxItemInfo
-    // to evtl. find if a SlotID is defined for a WhichID
-    sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
+    // same as GetWhichIDFromSlotID, but returns 0 in error cases, so:
+    // If none is defined, return 0.
+    // If nSlot is not a SlotID, return 0.
+    sal_uInt16 GetTrueWhichIDFromSlotID( sal_uInt16 nSlot, bool bDeep = true ) const;
 
     // same as GetSlotId, but returns 0 in error cases, so:
     // If none is defined, return 0.
     // If nWhich is not a WhichID, return 0.
-    sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich ) const;
+    sal_uInt16 GetTrueSlotId( sal_uInt16 nWhich ) const;
 
     static bool IsWhich(sal_uInt16 nId) { return nId && nId <= SFX_WHICH_MAX; }
     static bool IsSlot(sal_uInt16 nId) { return nId && nId > SFX_WHICH_MAX; }
 
 private:
-    const SfxItemPool&              operator=(const SfxItemPool &) = delete;
+    const SfxItemPool& operator=(const SfxItemPool &) = delete;
 
      //IDs below or equal are Which IDs, IDs above slot IDs
-    static const sal_uInt16         SFX_WHICH_MAX = 4999;
+    static const sal_uInt16 SFX_WHICH_MAX = 4999;
 };
 
 // only the pool may manipulate the reference counts

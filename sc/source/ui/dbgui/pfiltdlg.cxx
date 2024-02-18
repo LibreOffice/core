@@ -43,7 +43,7 @@ ScPivotFilterDlg::ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArg
     , aStrEmpty(ScResId(SCSTR_FILTER_EMPTY))
     , aStrNotEmpty(ScResId(SCSTR_FILTER_NOTEMPTY))
     , aStrColumn(ScResId(SCSTR_COLUMN_LETTER))
-    , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
+    , nWhichQuery(rArgSet.GetPool()->GetWhichIDFromSlotID(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
     , pViewData(nullptr)
     , pDoc(nullptr)

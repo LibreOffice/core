@@ -160,7 +160,8 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
         LINK(this, SvxBulletAndPositionDlg, PreviewInvalidateHdl_Impl));
     aInvalidateTimer.SetTimeout(50);
 
-    eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
+    eCoreUnit
+        = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
 
     // vertical alignment = fill makes the drawingarea expand the associated spinedits so we have to size it here
     const sal_Int16 aHeight
@@ -318,7 +319,7 @@ void SvxBulletAndPositionDlg::Reset(const SfxItemSet* rSet)
     // in Draw the item exists as WhichId, in Writer only as SlotId
     if (!pItem)
     {
-        nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        nNumItemId = rSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE);
         pItem = rSet->GetItemIfSet(nNumItemId, false);
 
         if (!pItem)

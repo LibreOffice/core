@@ -1527,7 +1527,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         return;
 
     pItem = nullptr;
-    pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
+    pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem);
     if(!pItem)
         return;
 
@@ -2355,7 +2355,7 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
         SwWrtShell &rSh = GetShell();
         std::unique_ptr<SvxScriptSetItem> pSSetItem;
         SfxItemPool& rPool = rSh.GetAttrPool();
-        sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+        sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlot );
         SvtScriptType nScripts = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
         SfxItemSetFixed<RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE,
                         RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_FONTSIZE,
@@ -2694,7 +2694,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         case RES_BACKGROUND:
         {
             assert(pArgs && "only SID_BACKGROUND_COLOR can have !pArgs, checked at entry");
-            aBrushItem.reset(static_cast<SvxBrushItem*>(pArgs->Get(GetPool().GetWhich(nSlot)).Clone()));
+            aBrushItem.reset(static_cast<SvxBrushItem*>(pArgs->Get(GetPool().GetWhichIDFromSlotID(nSlot)).Clone()));
             break;
         }
         default:
@@ -2792,7 +2792,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
     const SfxItemSet* pOutSet = nullptr;
     bool bDone = false;
     if(pArgs)
-        pArgs->GetItemState( GetPool().GetWhich(nSlot), false, &pItem );
+        pArgs->GetItemState( GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem );
 
     switch ( nSlot )
     {
