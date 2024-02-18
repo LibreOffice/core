@@ -4220,7 +4220,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     // Once more to hit the pImpl->bMsgDirty = false case in SfxBindings::NextJob_Impl().
     pWrtShell2->GetView().GetViewFrame().GetBindings().GetTimer().Invoke();
 
-    // Then maks sure the page number in view 2 is correct:
+    // Then make sure the page number in view 2 is correct:
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aView2.m_aStateChanges.size());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: .uno:StatePageNumber=Page 2 of 2
