@@ -2999,7 +2999,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
 
 void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
 {
-    OSL_ENSURE( pSav && pParent, "no Save or Parent provided for RestoreContent." );
+    assert(pSav && pParent && "no Save or Parent provided for RestoreContent.");
     SwRectFnSet aRectFnSet(pParent);
 
     // If there are already FlowFrames below the new parent, so add the chain (starting with pSav)
