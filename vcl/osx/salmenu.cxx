@@ -113,7 +113,6 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = nullptr;
 
 // FIXME: currently this is leaked
 static MainMenuSelector* pMainMenuSelector = nil;
-static SalNSMainMenuDelegate* pMainMenuDelegate = nil;
 
 static void initAppMenu()
 {
@@ -126,7 +125,9 @@ static void initAppMenu()
     NSMenu* pAppMenu = nil;
     NSMenuItem* pNewItem = nil;
 
-    NSMenu* pMainMenu = [[[NSMenu alloc] initWithTitle: @"Main Menu"] autorelease];
+    // Related: tdf#126638 use NSMenu subclass to catch and redirect key
+    // shortcuts when a modal window is displayed
+    SalNSMainMenu* pMainMenu = [[[SalNSMainMenu alloc] initWithTitle: @"Main Menu"] autorelease];
     pNewItem = [pMainMenu addItemWithTitle: @"Application"
         action: nil
         keyEquivalent: @""];
@@ -135,10 +136,6 @@ static void initAppMenu()
     [NSApp setMainMenu: pMainMenu];
 
     pMainMenuSelector = [[MainMenuSelector alloc] init];
-    pMainMenuDelegate = [[SalNSMainMenuDelegate alloc] init];
-
-    // tdf#126638 set a special delegate for the main menu
-    [pMainMenu setDelegate: reinterpret_cast< id<NSMenuDelegate> >(pMainMenuDelegate)];
 
     // about
     NSString* pString = CreateNSString(VclResId(SV_STDTEXT_ABOUT));

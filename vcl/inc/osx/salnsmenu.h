@@ -50,14 +50,10 @@ class AquaSalMenuItem;
 - (BOOL)validateMenuItem:(NSMenuItem*)pMenuItem;
 @end
 
-@interface SalNSMainMenuDelegate : NSObject
+@interface SalNSMainMenu : NSMenu
 {
 }
-- (id)init;
-- (BOOL)menuHasKeyEquivalent:(NSMenu*)pMenu
-                    forEvent:(NSEvent*)pEvent
-                      target:(id*)pTarget
-                      action:(SEL*)pAction;
+- (BOOL)performKeyEquivalent:(NSEvent*)pEvent;
 @end
 
 #endif // INCLUDED_VCL_INC_OSX_SALNSMENU_H

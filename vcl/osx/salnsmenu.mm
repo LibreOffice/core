@@ -317,27 +317,23 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 @end
 
-@implementation SalNSMainMenuDelegate
+@implementation SalNSMainMenu
 
--(id)init
+- (BOOL)performKeyEquivalent:(NSEvent*)pEvent
 {
-    return [super init];
-}
-
--(BOOL)menuHasKeyEquivalent: (NSMenu*)pMenu forEvent: (NSEvent*)pEvent target: (id*)pTarget action: (SEL*)pAction
-{
-    assert( pMenu == [NSApp mainMenu] );
+    BOOL bRet = [super performKeyEquivalent: pEvent];
 
     // tdf#126638 dispatch key shortcut events to modal windows
     // Some modal windows, such as the native Open and Save dialogs,
-    // ignore any key shortcut events so use the same existing special
-    // dispatching code that -[VCL_NSApplication sendEvent:] uses to
-    // dispatch key shortcuts to non-modal, non-LibreOffice windows.
-    if( [NSApp modalWindow] )
-        [SalNSMenu dispatchSpecialKeyEquivalents: pEvent];
+    // return NO from -[NSWindow performKeyEquivalent:]. Fortunately,
+    // the main menu's -[NSMenu performKeyEquivalent:] is then called
+    // so we can catch and redirect any modal window's key shortcut
+    // events without triggering the modal window's "disallowed
+    // action" beep.
+    if( !bRet && [NSApp modalWindow] )
+        bRet = [SalNSMenu dispatchSpecialKeyEquivalents: pEvent];
 
-    // Always return NO since the target and action are not set
-    return NO;
+    return bRet;
 }
 
 @end
