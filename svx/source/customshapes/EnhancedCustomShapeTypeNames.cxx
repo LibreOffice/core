@@ -368,7 +368,7 @@ const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "mso-spt53", mso_sptRibbon },
     { "mso-spt54", mso_sptRibbon2 },*/
     { "chevron", "Chevron" },
-    { "pentagon", "Regular Pentagon" },
+    { "pentagon", "Pentagon" },
     { "forbidden", "'No' Symbol" },
     { "star8", "8-Point Star" },
     /*{ "mso-spt59", mso_sptSeal16 },
