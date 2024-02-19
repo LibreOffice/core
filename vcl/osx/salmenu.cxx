@@ -125,7 +125,9 @@ static void initAppMenu()
     NSMenu* pAppMenu = nil;
     NSMenuItem* pNewItem = nil;
 
-    NSMenu* pMainMenu = [[[NSMenu alloc] initWithTitle: @"Main Menu"] autorelease];
+    // Related: tdf#126638 use NSMenu subclass to catch and redirect key
+    // shortcuts when a modal window is displayed
+    SalNSMainMenu* pMainMenu = [[[SalNSMainMenu alloc] initWithTitle: @"Main Menu"] autorelease];
     pNewItem = [pMainMenu addItemWithTitle: @"Application"
         action: nil
         keyEquivalent: @""];
@@ -230,12 +232,19 @@ AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
     {
         mpMenu = [[SalNSMenu alloc] initWithMenu: this];
         [mpMenu setDelegate: reinterpret_cast< id<NSMenuDelegate> >(mpMenu)];
+
+        // Related: tdf#126638 enable the menu's "autoenabledItems" property
+        // Enable the menu's "autoenabledItems" property so that
+        // -[SalNSMenuItem validateMenuItem:] will be called before handling
+        // a key shortcut and the menu item can be temporarily disabled if a
+        // modal window is displayed.
+        [mpMenu setAutoenablesItems: YES];
     }
     else
     {
         mpMenu = [NSApp mainMenu];
+        [mpMenu setAutoenablesItems: NO];
     }
-    [mpMenu setAutoenablesItems: NO];
 }
 
 AquaSalMenu::~AquaSalMenu()
