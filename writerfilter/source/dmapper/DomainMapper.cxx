@@ -706,10 +706,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->SetPageMarginTwip( PAGE_MAR_GUTTER, nIntValue );
         break;
         case NS_ooxml::LN_CT_PaperSource_first:
-            m_pImpl->SetPaperSource(PAPER_SOURCE_FIRST, nIntValue);
+            m_pImpl->SetPaperSource(PAPER_SOURCE_FIRST, sStringValue.toInt32());
         break;
         case NS_ooxml::LN_CT_PaperSource_other:
-            m_pImpl->SetPaperSource(PAPER_SOURCE_OTHER, nIntValue);
+            m_pImpl->SetPaperSource(PAPER_SOURCE_OTHER, sStringValue.toInt32());
         break;
         case NS_ooxml::LN_CT_Language_val: //90314
         case NS_ooxml::LN_CT_Language_eastAsia: //90315
