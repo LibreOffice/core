@@ -705,7 +705,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,PLAINLIBS_OOO,ooo, \
     localedata_es \
     localedata_euro \
     localedata_others \
-    textconv_dict \
 ))
 
 ifeq ($(OS),WNT)

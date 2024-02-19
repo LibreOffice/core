@@ -82,7 +82,7 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_layoutwriter$(1), \
 ))
 
 $(call gb_CppunitTest_get_target,sw_layoutwriter$(1)): \
-    $(call gb_Library_get_target,textconv_dict)
+    $(call gb_Library_get_target,i18npool)
 
 # assert if font/glyph fallback occurs
 $(eval $(call gb_CppunitTest_set_non_application_font_use,sw_layoutwriter$(1),abort))

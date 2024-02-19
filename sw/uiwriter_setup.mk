@@ -92,7 +92,7 @@ $(eval $(call gb_CppunitTest_use_packages,sw_uiwriter$(1),\
     sfx2_classification \
 ))
 
-$(call gb_CppunitTest_get_target,sw_uiwriter$(1)) : $(call gb_Library_get_target,textconv_dict)
+$(call gb_CppunitTest_get_target,sw_uiwriter$(1)) : $(call gb_Library_get_target,i18npool)
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_uiwriter$(1)))
 

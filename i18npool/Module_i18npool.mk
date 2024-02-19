@@ -24,7 +24,6 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	Library_localedata_es \
 	Library_localedata_euro \
 	Library_localedata_others \
-	Library_textconv_dict \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,i18npool,\

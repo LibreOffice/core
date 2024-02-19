@@ -165,5 +165,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,i18npool,\
 		CustomTarget/i18npool/indexentry/$(notdir $(basename $(txt)))) \
 ))
 
+# textconv_dict
+$(eval $(call gb_Library_add_generated_exception_objects,i18npool,\
+	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/textconversion/data/*.dic),\
+		CustomTarget/i18npool/textconversion/$(notdir $(basename $(txt)))) \
+))
 
 # vim: set noet sw=4 ts=4:

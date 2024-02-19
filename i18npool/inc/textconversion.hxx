@@ -21,7 +21,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/module.h>
 
 namespace com::sun::star::linguistic2 { class XConversionDictionary; }
 namespace com::sun::star::linguistic2 { class XConversionDictionaryList; }
@@ -66,11 +65,6 @@ public:
         getSupportedServiceNames() override;
 private:
     const char* implementationName;
-protected:
-#ifndef DISABLE_DYNLOADING
-    oslModule hModule;
-    oslGenericFunction getFunctionBySymbol(const char* func);
-#endif
 };
 
 // for Hangul2Hanja conversion
@@ -112,8 +106,8 @@ private:
         css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
         sal_Int32 maxLeftLength;
         sal_Int32 maxRightLength;
-        css::uno::Sequence< OUString >
-            getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toHanja);
+        static css::uno::Sequence< OUString >
+            getCharConversions(std::u16string_view aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toHanja);
 };
 
 
@@ -144,12 +138,36 @@ public:
 private:
         // user defined dictionary list
         css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
-        OUString getWordConversion(const OUString& aText,
+        OUString getWordConversion(std::u16string_view aText,
             sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions, css::uno::Sequence <sal_Int32>& offset);
-        rtl:: OUString getCharConversion(const rtl:: OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions);
+        static OUString getCharConversion(std::u16string_view aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions);
         css::lang::Locale aLocale;
 };
 
 } // i18npool
+
+extern "C" {
+
+const sal_Unicode* getHangul2HanjaData();
+const i18npool::Hangul_Index* getHangul2HanjaIndex();
+sal_Int16 getHangul2HanjaIndexCount();
+const sal_uInt16* getHanja2HangulIndex();
+const sal_Unicode* getHanja2HangulData();
+
+const sal_Unicode* getSTC_CharData_T2S();
+const sal_uInt16* getSTC_CharIndex_T2S();
+const sal_Unicode* getSTC_CharData_S2V();
+const sal_uInt16* getSTC_CharIndex_S2V();
+const sal_Unicode* getSTC_CharData_S2T();
+const sal_uInt16* getSTC_CharIndex_S2T();
+
+const sal_Unicode *getSTC_WordData(sal_Int32&);
+
+const sal_uInt16 *getSTC_WordIndex_T2S(sal_Int32&);
+const sal_uInt16 *getSTC_WordEntry_T2S();
+const sal_uInt16 *getSTC_WordIndex_S2T(sal_Int32&);
+const sal_uInt16 *getSTC_WordEntry_S2T();
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

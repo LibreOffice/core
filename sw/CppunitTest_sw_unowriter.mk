@@ -72,7 +72,7 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_unowriter, \
 ))
 
 $(call gb_CppunitTest_get_target,sw_unowriter): \
-    $(call gb_Library_get_target,textconv_dict)
+    $(call gb_Library_get_target,i18npool)
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_unowriter))
 
