@@ -327,7 +327,7 @@ const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "right-arrow", "Right Arrow" },
     //{ "mso-spt14", mso_sptThickArrow },
     { "pentagon-right", "Pentagon" },
-    { "cube", "Cube" },
+    { "cube", "Cuboid" },
     { "mso-spt21", "Doorplate" },
     /*{ "mso-spt17", mso_sptBalloon },
     { "mso-spt18", mso_sptSeal },
