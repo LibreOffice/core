@@ -633,9 +633,6 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
     osl::systemPathRemoveSeparator(sys_path);
 
-    // const_cast because sys_path is a local copy
-    // which we want to modify inplace instead of
-    // copy it into another buffer on the heap again
     return oslTranslateFileError(create_dir_recursively_(
         sys_path.pData, aDirectoryCreationCallbackFunc, pData));
 }
