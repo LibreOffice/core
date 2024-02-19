@@ -31,9 +31,7 @@ $(call gb_CustomTarget_get_workdir,i18npool/indexentry)/%.cxx : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IND,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),IND)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(call gb_Helper_execute,genindex_data) $< $@.tmp $* && \
-		sed 's/\(^.*get_\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
-		rm $@.tmp)
+		$(call gb_Helper_execute,genindex_data) $< $@ $*)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),IND)
 
 # vim: set noet sw=4 ts=4:
