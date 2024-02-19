@@ -22,7 +22,6 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/AuthorDisplayFormat.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <test/helper/transferable.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -55,7 +54,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <test/lokcallback.hxx>
-#include <sfx2/msgpool.hxx>
 
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
@@ -66,7 +64,6 @@
 #include <redline.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <IDocumentLayoutAccess.hxx>
 #include <flddat.hxx>
 #include <basesh.hxx>
 #include <unotxdoc.hxx>
@@ -780,7 +777,6 @@ namespace {
         boost::property_tree::ptree m_aRedlineTableModified;
         /// Post-it / annotation payload.
         boost::property_tree::ptree m_aComment;
-        std::vector<OString> m_aStateChanges;
         TestLokCallbackWrapper m_callbackWrapper;
 
         ViewCallback(SfxViewShell* pViewShell = nullptr, std::function<void(ViewCallback&)> const & rBeforeInstallFunc = {})
@@ -944,11 +940,6 @@ namespace {
                         m_aComment = m_aComment.get_child("comment");
                     }
                     break;
-                case LOK_CALLBACK_STATE_CHANGED:
-                    {
-                        m_aStateChanges.push_back(pPayload);
-                        break;
-                    }
             }
         }
     };
@@ -4172,61 +4163,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
     CPPUNIT_ASSERT(nBlackPixels > 0);
     CPPUNIT_ASSERT(nWhitePixels > 0);
     CPPUNIT_ASSERT(nBlackPixels > nWhitePixels);
-}
-
-CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
-{
-    // Given a document with 2 pages, first view on page 1, second view on page 2:
-    SwXTextDocument* pXTextDocument = createDoc();
-    int nView1 = SfxLokHelper::getView();
-    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell1->InsertPageBreak();
-    SwRootFrame* pLayout = pWrtShell1->getIDocumentLayoutAccess().GetCurrentLayout();
-    SwFrame* pPage1 = pLayout->GetLower();
-    CPPUNIT_ASSERT(pPage1);
-    SwFrame* pPage2 = pPage1->GetNext();
-    CPPUNIT_ASSERT(pPage2);
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxLokHelper::setView(nView1);
-    ViewCallback aView1;
-    pWrtShell1->SttEndDoc(/*bStt=*/true);
-    pWrtShell1->Insert("start");
-    pWrtShell1->GetView().SetVisArea(pPage1->getFrameArea().SVRect());
-    SfxLokHelper::setView(nView2);
-    ViewCallback aView2;
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell2->SttEndDoc(/*bStt=*/false);
-    pWrtShell2->Insert("end");
-    pWrtShell2->GetView().SetVisArea(pPage2->getFrameArea().SVRect());
-    {
-        // Listen to StatePageNumber changes in view 2:
-        SfxViewFrame& rFrame = pWrtShell2->GetView().GetViewFrame();
-        SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(&rFrame);
-        uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
-        util::URL aCommandURL;
-        aCommandURL.Complete = ".uno:StatePageNumber";
-        xParser->parseStrict(aCommandURL);
-        const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
-        rFrame.GetBindings().GetDispatch(pSlot, aCommandURL, false);
-    }
-    aView2.m_aStateChanges.clear();
-
-    // When deleting a character in view 2 and processing jobs with view 1 set to active:
-    pWrtShell2->DelLeft();
-    SfxLokHelper::setView(nView1);
-    pWrtShell2->GetView().GetViewFrame().GetBindings().GetTimer().Invoke();
-    // Once more to hit the pImpl->bMsgDirty = false case in SfxBindings::NextJob_Impl().
-    pWrtShell2->GetView().GetViewFrame().GetBindings().GetTimer().Invoke();
-
-    // Then make sure the page number in view 2 is correct:
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aView2.m_aStateChanges.size());
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: .uno:StatePageNumber=Page 2 of 2
-    // - Actual  : .uno:StatePageNumber=Page 1 of 2
-    // i.e. view 2 got the page number of view 1.
-    CPPUNIT_ASSERT_EQUAL(".uno:StatePageNumber=Page 2 of 2"_ostr, aView2.m_aStateChanges[0]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

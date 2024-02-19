@@ -174,6 +174,7 @@ ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_tiledrendering \
+    CppunitTest_sw_tiledrendering2 \
 ))
 endif
 endif
