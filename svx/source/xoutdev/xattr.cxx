@@ -2212,26 +2212,26 @@ SfxPoolItem* XFillGradientItem::CreateDefault() { return new XFillGradientItem; 
 XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
                                    const basegfx::BGradient& rTheGradient) :
     NameOrIndex(XATTR_FILLGRADIENT, nIndex),
-    aGradient(rTheGradient)
+    m_aGradient(rTheGradient)
 {
 }
 
 XFillGradientItem::XFillGradientItem(const OUString& rName,
                                    const basegfx::BGradient& rTheGradient, TypedWhichId<XFillGradientItem> nWhich)
     : NameOrIndex(nWhich, rName)
-    , aGradient(rTheGradient)
+    , m_aGradient(rTheGradient)
 {
 }
 
 XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem) :
     NameOrIndex(rItem),
-    aGradient(rItem.aGradient)
+    m_aGradient(rItem.m_aGradient)
 {
 }
 
 XFillGradientItem::XFillGradientItem( const basegfx::BGradient& rTheGradient )
 :   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
-    aGradient(rTheGradient)
+    m_aGradient(rTheGradient)
 {
 }
 
@@ -2243,16 +2243,16 @@ XFillGradientItem* XFillGradientItem::Clone(SfxItemPool* /*pPool*/) const
 bool XFillGradientItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-             aGradient == static_cast<const XFillGradientItem&>(rItem).aGradient );
+             m_aGradient == static_cast<const XFillGradientItem&>(rItem).m_aGradient );
 }
 
 const basegfx::BGradient& XFillGradientItem::GetGradientValue() const // GetValue -> GetGradientValue
 {
     if (!IsIndex())
-        return aGradient;
+        return m_aGradient;
     // ToDo: This should fail. We never called this code with a table so this should always
     // have failed. Thus, I'm thinking that XFillGradientItem can't be an Index.
-    return aGradient;
+    return m_aGradient;
 }
 
 bool XFillGradientItem::GetPresentation
@@ -2485,7 +2485,7 @@ std::unique_ptr<XFillGradientItem> XFillGradientItem::checkForUniqueItem( SdrMod
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return std::make_unique<XFillGradientItem>( aUniqueName, aGradient, TypedWhichId<XFillGradientItem>(Which()) );
+            return std::make_unique<XFillGradientItem>( aUniqueName, m_aGradient, TypedWhichId<XFillGradientItem>(Which()) );
     }
 
     return nullptr;

@@ -30,7 +30,7 @@ class SdrModel;
 
 class SVXCORE_DLLPUBLIC XFillGradientItem : public NameOrIndex
 {
-    basegfx::BGradient   aGradient;
+    basegfx::BGradient   m_aGradient;
 
 public:
             static SfxPoolItem* CreateDefault();
@@ -50,7 +50,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
     const basegfx::BGradient&        GetGradientValue() const; // GetValue -> GetGradientValue
-    void                    SetGradientValue(const basegfx::BGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
+    void                    SetGradientValue(const basegfx::BGradient& rNew) { m_aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillGradientItem> checkForUniqueItem( SdrModel* pModel ) const;
