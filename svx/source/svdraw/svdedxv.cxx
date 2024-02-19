@@ -2785,7 +2785,7 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
     }
 }
 
-static const WhichRangesContainer& GetFormatRangeImpl(bool bTextOnly)
+static const WhichRangesContainer& GetFormatRangeImpl(bool bTextOnly, bool withParagraphAttr = true)
 {
     static const WhichRangesContainer gFull(
         svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST, XATTR_FILL_FIRST, XATTRSET_FILL,
@@ -2796,10 +2796,13 @@ static const WhichRangesContainer& GetFormatRangeImpl(bool bTextOnly)
                    SDRATTR_SOFTEDGE_LAST, EE_PARA_START, EE_PARA_END, EE_CHAR_START, EE_CHAR_END>);
 
     static const WhichRangesContainer gTextOnly(
+        svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, EE_CHAR_START, EE_CHAR_END>);
+
+    static const WhichRangesContainer gParaTextOnly(
         svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, EE_PARA_START, EE_PARA_END, EE_CHAR_START,
                    EE_CHAR_END>);
 
-    return bTextOnly ? gTextOnly : gFull;
+    return bTextOnly ? withParagraphAttr ? gParaTextOnly : gTextOnly : gFull;
 }
 
 sal_Int32 SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSet)
@@ -2811,12 +2814,14 @@ sal_Int32 SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFor
 
     OutlinerView* pOLV = GetTextEditOutlinerView();
 
+    bool isParaSelection = pOLV ? pOLV->GetEditView().IsSelectionFullPara() : false;
     rFormatSet = std::make_shared<SfxItemSet>(GetModel().GetItemPool(),
-                                              GetFormatRangeImpl(pOLV != nullptr));
+                                              GetFormatRangeImpl(pOLV != nullptr, isParaSelection));
     if (pOLV)
     {
         rFormatSet->Put(pOLV->GetAttribs());
-        nDepth = pOLV->GetDepth();
+        if (isParaSelection)
+            nDepth = pOLV->GetDepth();
     }
     else
     {
@@ -2984,10 +2989,11 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, sal_Int16 nDe
             const EditEngine& rEditEngine = pOutliner->GetEditEngine();
 
             ESelection aSel(pOLV->GetSelection());
+            bool fullParaSelection
+                = aSel.nEndPara != aSel.nStartPara || pOLV->GetEditView().IsSelectionFullPara();
             if (!aSel.HasRange())
                 pOLV->SetSelection(rEditEngine.GetWord(aSel, css::i18n::WordType::DICTIONARY_WORD));
-
-            const bool bRemoveParaAttribs = !bNoParagraphFormats;
+            const bool bRemoveParaAttribs = !bNoParagraphFormats && !fullParaSelection;
             pOLV->RemoveAttribsKeepLanguages(bRemoveParaAttribs);
             SfxItemSet aSet(pOLV->GetAttribs());
             SfxItemSet aPaintSet(CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(),
