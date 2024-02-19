@@ -118,7 +118,6 @@ UNOTOOLS_DLLPUBLIC OUString GetTempNameBaseDirectory();
 */
 class UNOTOOLS_DLLPUBLIC TempFileNamed
 {
-friend UNOTOOLS_DLLPUBLIC OUString SetTempNameBaseDirectory( const OUString & );
     OUString    aName;
     std::unique_ptr<SvStream>
                 pStream;

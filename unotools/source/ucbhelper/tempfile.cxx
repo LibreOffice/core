@@ -567,7 +567,7 @@ OUString SetTempNameBaseDirectory( const OUString &rBaseName )
         TempFileNamed aBase( {}, true );
         if ( aBase.IsValid() )
             // use it in case of success
-            gTempNameBase_Impl = ensureTrailingSlash(aBase.aName);
+            gTempNameBase_Impl = ensureTrailingSlash(aBase.GetURL());
 
         // return system path of used directory
         osl::FileBase::getSystemPathFromFileURL(gTempNameBase_Impl, aTmp);
