@@ -1109,6 +1109,10 @@ void ScInputHandler::HideTip()
         pTipVisibleParent = nullptr;
     }
     aManualTip.clear();
+
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, "hidetip"_ostr);
 }
 void ScInputHandler::HideTipBelow()
 {
@@ -1134,11 +1138,6 @@ bool lcl_hasSingleToken(std::u16string_view s, sal_Unicode c)
 
 void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        return;
-    }
-
     if ( !pActiveViewSh )
         return;
 
@@ -1282,6 +1281,10 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                             ShowTipBelow( aNew );
                             bFound = true;
                         }
+
+                        const SfxViewShell* pViewShell = SfxViewShell::Current();
+                        if (comphelper::LibreOfficeKit::isActive() && pViewShell->isLOKDesktop())
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, aNew.toUtf8());
                     }
                 }
             }
@@ -1430,7 +1433,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive())
     {
-        if (rFuncStrVec.size() && pViewShell && pViewShell->isLOKMobilePhone())
+        if (rFuncStrVec.size() && pViewShell)
         {
             auto aPos = pFormulaData->begin();
             sal_uInt32 nCurIndex = std::distance(aPos, miAutoPosFormula);
@@ -1483,7 +1486,6 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
             OString s = aPayload.makeStringAndClear();
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s);
         }
-        // not tunnel tooltips in the lok case
         return;
     }
 
