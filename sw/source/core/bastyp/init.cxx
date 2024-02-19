@@ -460,6 +460,8 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_UNKNOWNATR_CONTAINER, new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }
         }};
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
     public:
         ItemInfoPackageSwAttributes()
         {

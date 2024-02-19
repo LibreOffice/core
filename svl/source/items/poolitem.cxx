@@ -466,9 +466,8 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #ifdef DBG_UTIL
-static size_t nAllocatedSfxPoolItemCount(0);
+// static size_t nAllocatedSfxPoolItemCount(0);
 static size_t nUsedSfxPoolItemCount(0);
-size_t getAllocatedSfxPoolItemCount() { return nAllocatedSfxPoolItemCount; }
 size_t getUsedSfxPoolItemCount() { return nUsedSfxPoolItemCount; }
 static std::unordered_set<const SfxPoolItem*>& incarnatedSfxPoolItems()
 {
@@ -476,14 +475,28 @@ static std::unordered_set<const SfxPoolItem*>& incarnatedSfxPoolItems()
     static std::unordered_set<const SfxPoolItem*> items;
     return items;
 }
+size_t getAllocatedSfxPoolItemCount()
+{
+    size_t aRetval(0);
+
+    // count globally allocated Items. Exclude Static/DynamicDefaults to
+    // get the number without the PoolDefaultItems that will be freed with
+    // the Pool. This also excludes the two InvalidOrDisabledItem's used
+    // for INVALID_POOL_ITEM/DISABLED_POOL_ITEM
+    for (const auto& rCandidate : incarnatedSfxPoolItems())
+        if (!rCandidate->isStaticDefault() && !rCandidate->isDynamicDefault())
+            aRetval++;
+    return aRetval;
+}
 void listAllocatedSfxPoolItems()
 {
     SAL_INFO("svl.items", "ITEM: List of still allocated SfxPoolItems:");
     for (const auto& rCandidate : incarnatedSfxPoolItems())
     {
-        SAL_INFO("svl.items", "  ITEM: WhichID: " << rCandidate->Which() << "  SerialNumber: "
-                                                  << rCandidate->getSerialNumber()
-                                                  << "  Class: " << typeid(*rCandidate).name());
+        if (!rCandidate->isStaticDefault() && !rCandidate->isDynamicDefault())
+            SAL_INFO("svl.items", "  ITEM: WhichID: " << rCandidate->Which() << "  SerialNumber: "
+                                                      << rCandidate->getSerialNumber()
+                                                      << "  Class: " << typeid(*rCandidate).name());
     }
 }
 #endif
@@ -518,7 +531,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 #endif
 {
 #ifdef DBG_UTIL
-    nAllocatedSfxPoolItemCount++;
+    // nAllocatedSfxPoolItemCount++;
     nUsedSfxPoolItemCount++;
     incarnatedSfxPoolItems().insert(this);
 #endif
@@ -528,7 +541,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 SfxPoolItem::~SfxPoolItem()
 {
 #ifdef DBG_UTIL
-    nAllocatedSfxPoolItemCount--;
+    // nAllocatedSfxPoolItemCount--;
     incarnatedSfxPoolItems().erase(this);
     m_bDeleted = true;
 #endif
@@ -707,6 +720,11 @@ class InvalidOrDisabledItem final : public SfxPoolItem
 {
     virtual bool operator==(const SfxPoolItem&) const override { return true; }
     virtual SfxPoolItem* Clone(SfxItemPool*) const override { return nullptr; }
+
+public:
+    // make it StaticDefaultItem to process similar to these
+    // which is plausible (never change and are not allowed to)
+    InvalidOrDisabledItem() { setStaticDefault(); }
 };
 InvalidOrDisabledItem aInvalidItem;
 InvalidOrDisabledItem aDisabledItem;

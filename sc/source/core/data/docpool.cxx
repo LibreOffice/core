@@ -190,6 +190,8 @@ static ItemInfoPackage& getItemInfoPackageScDocument()
             { ATTR_HIDDEN, new SfxBoolItem( ATTR_HIDDEN, false ), 0, SFX_ITEMINFOFLAG_NONE }
         }};
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
     public:
         ItemInfoPackageScDocument()
         {

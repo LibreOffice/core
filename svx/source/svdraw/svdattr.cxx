@@ -437,6 +437,8 @@ static ItemInfoPackage& getItemInfoPackageSdr()
             { SDRATTR_EDGEOOXMLCURVE, new SfxBoolItem(SDRATTR_EDGEOOXMLCURVE, false), 0, SFX_ITEMINFOFLAG_NONE }
         }};
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
     public:
         ItemInfoPackageSdr()
         {

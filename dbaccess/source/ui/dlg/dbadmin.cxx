@@ -339,6 +339,8 @@ static ItemInfoPackage& getItemInfoPackageAdminDlg()
             { DSID_POSTGRES_PORTNUMBER, new SfxInt32Item(DSID_POSTGRES_PORTNUMBER, 5432), 0, SFX_ITEMINFOFLAG_NONE }
         }};
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
     public:
         ItemInfoPackageAdminDlg()
         {

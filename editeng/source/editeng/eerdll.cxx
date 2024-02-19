@@ -160,6 +160,8 @@ ItemInfoPackage& getItemInfoPackageEditEngine()
             { EE_FEATURE_FIELD, new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD ), SID_FIELD, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  }
         }};
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
     public:
         ItemInfoPackageEditEngine()
         {

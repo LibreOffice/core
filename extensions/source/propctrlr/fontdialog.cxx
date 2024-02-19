@@ -527,6 +527,8 @@ namespace pcr
                 { FontItemIds::CFID_FONTLIST, nullptr, SID_ATTR_CHAR_FONTLIST, SFX_ITEMINFOFLAG_NONE }
             }};
 
+            virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
         public:
             virtual size_t size() const override { return maItemInfos.size(); }
             virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }

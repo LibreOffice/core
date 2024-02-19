@@ -105,6 +105,8 @@ public:
     virtual const SfxPoolItem* getItem() const override { return m_pItem; }
 };
 
+typedef std::unordered_map<sal_uInt16, sal_uInt16> SlotIDToWhichIDMap;
+
 class SVL_DLLPUBLIC ItemInfoPackage
 {
 protected:
@@ -113,6 +115,11 @@ protected:
     // takes ownership of the item
     static void setItemAtItemInfoStatic(SfxPoolItem* pItem, ItemInfoStatic& rItemInfo) { rItemInfo.setItem(pItem); }
 
+private:
+    // mechanism for buffered SlotIDToWhichIDMap
+    virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const = 0;
+    mutable SlotIDToWhichIDMap maSlotIDToWhichIDMap;
+
 public:
     ItemInfoPackage() = default;
     virtual ~ItemInfoPackage() = default;
@@ -120,6 +127,7 @@ public:
     virtual size_t size() const = 0;
     virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& rPool) = 0;
     virtual const ItemInfo& getExistingItemInfo(size_t /*nIndex*/);
+    const SlotIDToWhichIDMap& getSlotIDToWhichIDMap() const;
 };
 
 typedef std::unordered_set<SfxItemSet*> registeredSfxItemSets;
@@ -161,6 +169,7 @@ class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
 
     itemInfoVector maItemInfos;
     userItemInfos maUserItemInfos;
+    const SlotIDToWhichIDMap* mpSlotIDToWhichIDMap;
 
 public:
     void registerItemInfoPackage(
@@ -319,9 +328,7 @@ public:
     bool NeedsSurrogateSupport(sal_uInt16 nWhich) const
         { return CheckItemInfoFlag(nWhich, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE); }
 
-    // tries to translate back from SlotID to WhichID. That may be
-    // expensive, it needs to linearly iterate over SfxItemInfo
-    // to evtl. find if a SlotID is defined for a WhichID
+    // tries to translate back from SlotID to WhichID.
     // If none is defined, return nSlot.
     // If nSlot is not a SlotID, return nSlot.
     sal_uInt16 GetWhichIDFromSlotID(sal_uInt16 nSlot, bool bDeep = true) const;

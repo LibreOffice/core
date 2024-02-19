@@ -2359,6 +2359,8 @@ static ItemInfoPackage& getItemInfoPackageOpenPageDlg()
             { RPTUI_ID_METRIC, nullptr, SID_ATTR_METRIC, SFX_ITEMINFOFLAG_NONE },
         }};
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
     public:
         ItemInfoPackageOpenPageDlg()
         {
@@ -4180,6 +4182,8 @@ static ItemInfoPackage& getItemInfoPackageOpenZoomDlg()
             // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
             { SID_ATTR_ZOOM, new SvxZoomItem, 0, SFX_ITEMINFOFLAG_NONE }
         }};
+
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
 
     public:
         virtual size_t size() const override { return maItemInfos.size(); }

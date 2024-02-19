@@ -485,18 +485,19 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         // just use/return nullptr
         return nullptr;
 
-    if (IsInvalidItem(pSource))
-        // SfxItemState::DONTCARE aka INVALID_POOL_ITEM
-        // just use pSource which equals INVALID_POOL_ITEM
-        return pSource;
+    // if (IsInvalidItem(pSource))
+    //     // SfxItemState::DONTCARE aka INVALID_POOL_ITEM
+    //     // just use pSource which equals INVALID_POOL_ITEM
+    //     return pSource;
 
-    if (IsDisabledItem(pSource))
-        // SfxItemState::DISABLED aka DISABLED_POOL_ITEM
-        // just use pSource which equals DISABLED_POOL_ITEM
-        return pSource;
+    // if (IsDisabledItem(pSource))
+    //     // SfxItemState::DISABLED aka DISABLED_POOL_ITEM
+    //     // just use pSource which equals DISABLED_POOL_ITEM
+    //     return pSource;
 
     if (pSource->isStaticDefault())
         // static default Items can just be used without RefCounting
+        // NOTE: This now includes IsInvalidItem/IsDisabledItem
         return pSource;
 
     if (0 == pSource->Which())
@@ -679,25 +680,19 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
         // no entry, done
         return;
 
-    if (IsInvalidItem(pSource))
-        // SfxItemState::DONTCARE aka INVALID_POOL_ITEM
-        // nothing to do for invalid item entries
-        return;
+    // if (IsInvalidItem(pSource))
+    //     // SfxItemState::DONTCARE aka INVALID_POOL_ITEM
+    //     // nothing to do for invalid item entries
+    //     return;
 
-    if (IsDisabledItem(pSource))
-        // SfxItemState::DONTCARE aka DISABLED_POOL_ITEM
-        // nothing to do for disabled item entries
-        return;
+    // if (IsDisabledItem(pSource))
+    //     // SfxItemState::DONTCARE aka DISABLED_POOL_ITEM
+    //     // nothing to do for disabled item entries
+    //     return;
 
     if (pSource->isStaticDefault())
         // static default Items can just be used without RefCounting
-        return;
-
-    if (pSource->isDynamicDefault())
-        // dynamic default Items can only be used without RefCounting
-        // when same pool. this is already checked at implCreateItemEntry,
-        // so it would have been cloned (and would no longer have this
-        // flag). So we can just return here
+        // NOTE: This now includes IsInvalidItem/IsDisabledItem
         return;
 
     if (0 == pSource->Which())
@@ -708,6 +703,13 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
         delete pSource;
         return;
     }
+
+    if (pSource->isDynamicDefault())
+        // dynamic default Items can only be used without RefCounting
+        // when same pool. this is already checked at implCreateItemEntry,
+        // so it would have been cloned (and would no longer have this
+        // flag). So we can just return here
+        return;
 
     if (SfxItemPool::IsSlot(pSource->Which()))
     {

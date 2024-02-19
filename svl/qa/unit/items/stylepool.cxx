@@ -29,6 +29,11 @@ ItemInfoPackage& getItemInfoPackageTest()
         ItemInfoArrayTest maItemInfos{ { // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
                                          { 1, new SfxStringItem(1), 2, SFX_ITEMINFOFLAG_NONE } } };
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override
+        {
+            return maItemInfos[nIndex];
+        }
+
     public:
         virtual size_t size() const override { return maItemInfos.size(); }
         virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override

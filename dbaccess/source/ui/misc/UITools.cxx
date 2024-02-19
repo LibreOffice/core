@@ -763,6 +763,8 @@ static ItemInfoPackage& getItemInfoPackageColumnFormatDialog()
             { SBA_ATTR_ALIGN_HOR_JUSTIFY, new SvxHorJustifyItem(SvxCellHorJustify::Standard, SBA_ATTR_ALIGN_HOR_JUSTIFY), SID_ATTR_ALIGN_HOR_JUSTIFY, SFX_ITEMINFOFLAG_NONE },
         }};
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
     public:
         virtual size_t size() const override { return maItemInfos.size(); }
         virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override { return maItemInfos[nIndex]; }

@@ -623,6 +623,8 @@ static ItemInfoPackage& getItemInfoPackageOpenCharDlg()
             { ITEMID_WEIGHT_COMPLEX , new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT_COMPLEX), SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEMINFOFLAG_NONE }
         }};
 
+        virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
+
     public:
         virtual size_t size() const override { return maItemInfos.size(); }
         virtual const ItemInfo& getItemInfo(size_t nIndex, SfxItemPool& /*rPool*/) override

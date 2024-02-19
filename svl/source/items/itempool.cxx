@@ -197,6 +197,28 @@ ItemInfoUser::~ItemInfoUser()
     implCleanupItemEntry(m_pItem);
 }
 
+const SlotIDToWhichIDMap& ItemInfoPackage::getSlotIDToWhichIDMap() const
+{
+    if (maSlotIDToWhichIDMap.empty())
+    {
+        // will be filled only once per office runtime
+        for (size_t a(0); a < size(); a++)
+        {
+            const ItemInfoStatic& rCandidate(getItemInfoStatic(a));
+            if (0 != rCandidate.getSlotID())
+            {
+#ifdef DBG_UTIL
+                if (maSlotIDToWhichIDMap.find(rCandidate.getSlotID()) != maSlotIDToWhichIDMap.end())
+                    assert(false && "ITEM: SlotID used double in ItemInfoPackage (!)");
+#endif
+                maSlotIDToWhichIDMap[rCandidate.getSlotID()] = rCandidate.getWhich();
+            }
+        }
+    }
+
+    return maSlotIDToWhichIDMap;
+}
+
 const ItemInfo& ItemInfoPackage::getExistingItemInfo(size_t /*nIndex*/)
 {
     static ItemInfoStatic EMPTY(0, nullptr, 0, 0);
@@ -235,6 +257,9 @@ void SfxItemPool::registerItemInfoPackage(
     // use infos to fill local variables
     mnStart = maItemInfos.front()->getWhich();
     mnEnd = maItemInfos.back()->getWhich();
+
+    // set mapper for fast SlotIDToWhichID conversion
+    mpSlotIDToWhichIDMap = &rPackage.getSlotIDToWhichIDMap();
 
 #ifdef DBG_UTIL
     for (size_t a(1); a < maItemInfos.size(); a++)
@@ -462,6 +487,7 @@ SfxItemPool::SfxItemPool(const OUString& rName) /* Pool name to identify in the 
 , mbShutdownHintSent(false)
 , maItemInfos()
 , maUserItemInfos()
+, mpSlotIDToWhichIDMap(nullptr)
 {
     eDefMetric = MapUnit::MapTwip;
 }
@@ -486,6 +512,7 @@ SfxItemPool::SfxItemPool(const SfxItemPool& rPool) //  Copy from this instance
 , mbShutdownHintSent(false)
 , maItemInfos(rPool.maItemInfos)
 , maUserItemInfos(rPool.maUserItemInfos)
+, mpSlotIDToWhichIDMap(rPool.mpSlotIDToWhichIDMap)
 {
     // DynamicDefaults and UserDefaults need to be cloned for the new Pool
     for (itemInfoVector::iterator aInfo(maItemInfos.begin()); aInfo != maItemInfos.end(); aInfo++)
@@ -861,13 +888,12 @@ sal_uInt16 SfxItemPool::GetWhichIDFromSlotID(sal_uInt16 nSlotId, bool bDeep) con
     if (!IsSlot(nSlotId))
         return nSlotId;
 
-    for (auto& rInfo : maItemInfos)
+    if (nullptr != mpSlotIDToWhichIDMap)
     {
-        assert(nullptr != rInfo && "ITEM: access error to Defaults in Pool (!)");
-        if (nSlotId == rInfo->getSlotID())
-        {
-            return rInfo->getWhich();
-        }
+        // use the static global translation table -> near linear access time
+        SlotIDToWhichIDMap::const_iterator aHit(mpSlotIDToWhichIDMap->find(nSlotId));
+        if (aHit != mpSlotIDToWhichIDMap->end())
+            return aHit->second;
     }
 
     if (mpSecondary && bDeep)
@@ -899,13 +925,12 @@ sal_uInt16 SfxItemPool::GetTrueWhichIDFromSlotID( sal_uInt16 nSlotId, bool bDeep
     if (!IsSlot(nSlotId))
         return 0;
 
-    for (auto& rInfo : maItemInfos)
+    if (nullptr != mpSlotIDToWhichIDMap)
     {
-        assert(nullptr != rInfo && "ITEM: access error to Defaults in Pool (!)");
-        if (nSlotId == rInfo->getSlotID())
-        {
-            return rInfo->getWhich();
-        }
+        // use the static global translation table -> near linear access time
+        SlotIDToWhichIDMap::const_iterator aHit(mpSlotIDToWhichIDMap->find(nSlotId));
+        if (aHit != mpSlotIDToWhichIDMap->end())
+            return aHit->second;
     }
 
     if (mpSecondary && bDeep)

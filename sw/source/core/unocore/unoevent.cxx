@@ -212,12 +212,12 @@ void SwFrameStyleEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
     m_rStyle.SetItem(RES_FRMMACRO, rItem);
 }
 
-const SvxMacroItem aEmptyMacroItem(RES_FRMMACRO);
-
 const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 {
     const SfxPoolItem* pItem(m_rStyle.GetItem(RES_FRMMACRO));
-    return pItem ? static_cast<const SvxMacroItem&>(*pItem) : aEmptyMacroItem;
+    return pItem ?
+        static_cast<const SvxMacroItem&>(*pItem) :
+        *GetDfltAttr(RES_FRMMACRO);
 }
 
 OUString SwFrameStyleEventDescriptor::getImplementationName()
