@@ -60,64 +60,9 @@ OUString stripTrailingSlash(const OUString& url)
     return url;
 }
 
-OUString getParentName( std::u16string_view aFileName )
+bool okOrExists(osl::FileBase::RC ret)
 {
-    size_t lastIndex = aFileName.rfind( '/' );
-    OUString aParent;
-
-    if (lastIndex != std::u16string_view::npos)
-    {
-        aParent = aFileName.substr(0, lastIndex);
-
-        if (aParent.endsWith(":") && aParent.getLength() == 6)
-            aParent += "/";
-
-        if (aParent.equalsIgnoreAsciiCase("file://"))
-            aParent = "file:///";
-    }
-
-    return aParent;
-}
-
-bool ensuredir( const OUString& rUnqPath )
-{
-    OUString aPath;
-    if ( rUnqPath.isEmpty() )
-        return false;
-
-    // remove trailing slash
-    aPath = stripTrailingSlash(rUnqPath);
-
-    // HACK: create directory on a mount point with nobrowse option
-    // returns ENOSYS in any case !!
-    osl::Directory aDirectory( aPath );
-    osl::FileBase::RC nError = aDirectory.open();
-    aDirectory.close();
-    if( nError == osl::File::E_None )
-        return true;
-
-    // try to create the directory
-    nError = osl::Directory::create( aPath );
-    bool  bSuccess = ( nError == osl::File::E_None || nError == osl::FileBase::E_EXIST );
-    if( !bSuccess )
-    {
-        // perhaps parent(s) don't exist
-        OUString aParentDir = getParentName( aPath );
-        if ( aParentDir != aPath )
-        {
-            bSuccess = ensuredir( getParentName( aPath ) );
-
-            // After parent directory structure exists try it one's more
-            if ( bSuccess )
-            {
-                // Parent directory exists, retry creation of directory
-                nError = osl::Directory::create( aPath );
-                bSuccess =( nError == osl::File::E_None || nError == osl::FileBase::E_EXIST );
-            }
-        }
-    }
-
-    return bSuccess;
+    return ret == osl::FileBase::E_None || ret == osl::FileBase::E_EXIST;
 }
 
 const OUString& getTempNameBase_Impl()
@@ -129,7 +74,7 @@ const OUString& getTempNameBase_Impl()
         if (rc == osl::FileBase::E_None)
         {
             gTempNameBase_Impl = ensureTrailingSlash(ustrTempDirURL);
-            ensuredir(gTempNameBase_Impl);
+            osl::Directory::createPath(gTempNameBase_Impl);
         }
     }
     assert(gTempNameBase_Impl.isEmpty() || gTempNameBase_Impl.endsWith("/"));
@@ -171,7 +116,7 @@ OUString ConstructTempDir_Impl( const OUString* pParent, bool bCreateParentDirs 
     {
         // if no parent or invalid parent : use default directory
         aName = getTempNameBase_Impl();
-        ensuredir(aName); // tdf#159769: always make sure it exists
+        osl::Directory::createPath(aName); // tdf#159769: always make sure it exists
     }
 
     // Make sure that directory ends with a separator
@@ -268,8 +213,7 @@ OUString lcl_createName(
         else
             aDirName = aName;
         TempDirCreatedObserver observer;
-        osl::FileBase::RC err = osl::Directory::createPath(aDirName, &observer);
-        if (err != osl::FileBase::E_None && err != osl::FileBase::E_EXIST)
+        if (!okOrExists(osl::Directory::createPath(aDirName, &observer)))
             return OUString();
     }
     aName += rLeadingChars;
@@ -549,13 +493,7 @@ OUString SetTempNameBaseDirectory( const OUString &rBaseName )
     OUString aUnqPath(stripTrailingSlash(rBaseName));
 
     // try to create the directory
-    bool bRet = false;
-    osl::FileBase::RC err = osl::Directory::create( aUnqPath );
-    if (err != osl::FileBase::E_None && err != osl::FileBase::E_EXIST)
-        // perhaps parent(s) don't exist
-        bRet = ensuredir( aUnqPath );
-    else
-        bRet = true;
+    bool bRet = okOrExists(osl::Directory::createPath(aUnqPath));
 
     // failure to create base directory means returning an empty string
     OUString aTmp;
