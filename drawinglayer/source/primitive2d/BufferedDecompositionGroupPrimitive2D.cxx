@@ -53,7 +53,9 @@ namespace drawinglayer::primitive2d
 {
 void flushBufferedDecomposition(BufferedDecompositionGroupPrimitive2D& rTarget)
 {
+    rTarget.acquire();
     rTarget.setBuffered2DDecomposition(Primitive2DContainer());
+    rTarget.release();
 }
 
 const Primitive2DContainer&
