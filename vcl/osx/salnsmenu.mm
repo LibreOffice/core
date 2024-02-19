@@ -30,6 +30,53 @@
 #include <osx/salnsmenu.h>
 
 @implementation SalNSMenu
+
++(BOOL)dispatchSpecialKeyEquivalents: (NSEvent*)pEvent
+{
+    if( pEvent && [pEvent type] == NSEventTypeKeyDown )
+    {
+        unsigned int nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
+        if( nModMask == NSEventModifierFlagCommand )
+        {
+            if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"v"] )
+            {
+                if( [NSApp sendAction: @selector(paste:) to: nil from: nil] )
+                    return YES;
+            }
+            else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"c"] )
+            {
+                if( [NSApp sendAction: @selector(copy:) to: nil from: nil] )
+                    return YES;
+            }
+            else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"x"] )
+            {
+                if( [NSApp sendAction: @selector(cut:) to: nil from: nil] )
+                    return YES;
+            }
+            else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"a"] )
+            {
+                if( [NSApp sendAction: @selector(selectAll:) to: nil from: nil] )
+                    return YES;
+            }
+            else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"z"] )
+            {
+                if( [NSApp sendAction: @selector(undo:) to: nil from: nil] )
+                    return YES;
+            }
+        }
+        else if( nModMask == (NSEventModifierFlagCommand|NSEventModifierFlagShift) )
+        {
+            if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"Z"] )
+            {
+                if( [NSApp sendAction: @selector(redo:) to: nil from: nil] )
+                    return YES;
+            }
+        }
+    }
+
+    return NO;
+}
+
 -(id)initWithMenu: (AquaSalMenu*)pMenu
 {
     mpMenu = pMenu;
@@ -167,6 +214,19 @@
             OSL_FAIL( "menubar item without frame !" );
     }
 }
+
+-(BOOL)validateMenuItem: (NSMenuItem *)pMenuItem
+{
+    // Related: tdf#126638 disable all menu items when displaying modal windows
+    // For some unknown reason, key shortcuts are dispatched to the LibreOffice
+    // menu items instead of the modal window so disable all LibreOffice menu
+    // items while a native modal dialog such as the native Open, Save, or
+    // Print dialog is displayed.
+    if (!pMenuItem || [NSApp modalWindow])
+        return NO;
+
+    return [pMenuItem isEnabled];
+}
 @end
 
 @implementation OOStatusItemView
@@ -257,5 +317,25 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 @end
 
+@implementation SalNSMainMenu
+
+- (BOOL)performKeyEquivalent:(NSEvent*)pEvent
+{
+    BOOL bRet = [super performKeyEquivalent: pEvent];
+
+    // tdf#126638 dispatch key shortcut events to modal windows
+    // Some modal windows, such as the native Open and Save dialogs,
+    // return NO from -[NSWindow performKeyEquivalent:]. Fortunately,
+    // the main menu's -[NSMenu performKeyEquivalent:] is then called
+    // so we can catch and redirect any modal window's key shortcut
+    // events without triggering the modal window's "disallowed
+    // action" beep.
+    if( !bRet && [NSApp modalWindow] )
+        bRet = [SalNSMenu dispatchSpecialKeyEquivalents: pEvent];
+
+    return bRet;
+}
+
+@end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

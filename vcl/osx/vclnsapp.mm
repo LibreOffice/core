@@ -34,6 +34,7 @@
 #include <osx/salframe.h>
 #include <osx/salframeview.h>
 #include <osx/salinst.h>
+#include <osx/salnsmenu.h>
 #include <osx/vclnsapp.h>
 #include <quartz/utils.h>
 
@@ -170,44 +171,8 @@
             // precondition: this ONLY works because CMD-V (paste), CMD-C (copy) and CMD-X (cut) are
             // NOT localized, that is the same in all locales. Should this be
             // different in any locale, this hack will fail.
-            unsigned int nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
-            if( nModMask == NSEventModifierFlagCommand )
-            {
-
-                if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"v"] )
-                {
-                    if( [NSApp sendAction: @selector(paste:) to: nil from: nil] )
-                        return;
-                }
-                else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"c"] )
-                {
-                    if( [NSApp sendAction: @selector(copy:) to: nil from: nil] )
-                        return;
-                }
-                else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"x"] )
-                {
-                    if( [NSApp sendAction: @selector(cut:) to: nil from: nil] )
-                        return;
-                }
-                else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"a"] )
-                {
-                    if( [NSApp sendAction: @selector(selectAll:) to: nil from: nil] )
-                        return;
-                }
-                else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"z"] )
-                {
-                    if( [NSApp sendAction: @selector(undo:) to: nil from: nil] )
-                        return;
-                }
-            }
-            else if( nModMask == (NSEventModifierFlagCommand|NSEventModifierFlagShift) )
-            {
-                if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"Z"] )
-                {
-                    if( [NSApp sendAction: @selector(redo:) to: nil from: nil] )
-                        return;
-                }
-            }
+            if( [SalNSMenu dispatchSpecialKeyEquivalents:pEvent] )
+                return;
         }
     }
     [super sendEvent: pEvent];
@@ -315,6 +280,14 @@
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
 {
     (void)app;
+
+    // Related: tdf#126638 disable all menu items when displaying modal windows
+    // Although -[SalNSMenuItem validateMenuItem:] disables almost all menu
+    // items when a modal window is displayed, the standard Quit menu item
+    // does not get disabled so disable it here.
+    if ([NSApp modalWindow])
+        return NSTerminateCancel;
+
     NSApplicationTerminateReply aReply = NSTerminateNow;
     {
         SolarMutexGuard aGuard;
