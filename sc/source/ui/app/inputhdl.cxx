@@ -1113,6 +1113,12 @@ void ScInputHandler::HideTip()
         pTipVisibleParent = nullptr;
     }
     aManualTip.clear();
+
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pViewShell) {
+        OUString sHideMsg = "hidetip";
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, sHideMsg.toUtf8().getStr());
+    }
 }
 void ScInputHandler::HideTipBelow()
 {
@@ -1138,11 +1144,6 @@ bool lcl_hasSingleToken(std::u16string_view s, sal_Unicode c)
 
 void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        return;
-    }
-
     if ( !pActiveViewSh )
         return;
 
@@ -1286,6 +1287,10 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                             ShowTipBelow( aNew );
                             bFound = true;
                         }
+
+                        const SfxViewShell* pViewShell = SfxViewShell::Current();
+                        if (comphelper::LibreOfficeKit::isActive() && pViewShell->isLOKDesktop())
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, aNew.toUtf8().getStr());
                     }
                 }
             }
@@ -1434,7 +1439,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive())
     {
-        if (rFuncStrVec.size() && pViewShell && pViewShell->isLOKMobilePhone())
+        if (rFuncStrVec.size() && pViewShell)
         {
             auto aPos = pFormulaData->begin();
             sal_uInt32 nCurIndex = std::distance(aPos, miAutoPosFormula);
@@ -1488,7 +1493,6 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
             OString s = aPayload.makeStringAndClear();
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
         }
-        // not tunnel tooltips in the lok case
         return;
     }
 
