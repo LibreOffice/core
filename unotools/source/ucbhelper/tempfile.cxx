@@ -42,8 +42,6 @@
 #include <process.h>
 #endif
 
-using namespace osl;
-
 namespace
 {
 OUString gTempNameBase_Impl;
@@ -155,12 +153,12 @@ OUString ConstructTempDir_Impl( const OUString* pParent, bool bCreateParentDirs 
             && (osl::FileBase::getFileURLFromSystemPath(aRet, aRet)
                 == osl::FileBase::E_None))
         {
-            ::osl::DirectoryItem aItem;
+            osl::DirectoryItem aItem;
             sal_Int32 i = aRet.getLength();
             if ( aRet[i-1] == '/' )
                 i--;
 
-            if ( DirectoryItem::get( aRet.copy(0, i), aItem ) == FileBase::E_None || bCreateParentDirs )
+            if ( osl::DirectoryItem::get( aRet.copy(0, i), aItem ) == osl::FileBase::E_None || bCreateParentDirs )
                 aName = aRet;
         }
     }
@@ -245,12 +243,12 @@ private:
 
 sal_uInt32 UniqueTokens::globalValue = SAL_MAX_UINT32;
 
-    class TempDirCreatedObserver : public DirectoryCreationObserver
+    class TempDirCreatedObserver : public osl::DirectoryCreationObserver
     {
     public:
         virtual void DirectoryCreated(const OUString& aDirectoryUrl) override
         {
-            File::setAttributes( aDirectoryUrl, osl_File_Attribute_OwnRead |
+            osl::File::setAttributes( aDirectoryUrl, osl_File_Attribute_OwnRead |
                 osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnExe );
         };
     };
@@ -270,8 +268,8 @@ OUString lcl_createName(
         else
             aDirName = aName;
         TempDirCreatedObserver observer;
-        FileBase::RC err = Directory::createPath( aDirName, &observer );
-        if ( err != FileBase::E_None && err != FileBase::E_EXIST )
+        osl::FileBase::RC err = osl::Directory::createPath(aDirName, &observer);
+        if (err != osl::FileBase::E_None && err != osl::FileBase::E_EXIST)
             return OUString();
     }
     aName += rLeadingChars;
@@ -286,44 +284,44 @@ OUString lcl_createName(
             aTmp += ".tmp";
         if ( bDirectory )
         {
-            FileBase::RC err = Directory::create(
+            osl::FileBase::RC err = osl::Directory::create(
                 aTmp,
                 (osl_File_OpenFlag_Read | osl_File_OpenFlag_Write
                  | osl_File_OpenFlag_Private));
-            if ( err == FileBase::E_None )
+            if (err == osl::FileBase::E_None)
             {
                 // !bKeep: only for creating a name, not a file or directory
-                if ( bKeep || Directory::remove( aTmp ) == FileBase::E_None )
+                if (bKeep || osl::Directory::remove(aTmp) == osl::FileBase::E_None)
                     return aTmp;
                 else
                     return OUString();
             }
-            else if ( err != FileBase::E_EXIST )
+            else if (err != osl::FileBase::E_EXIST)
                 // if f.e. name contains invalid chars stop trying to create dirs
                 return OUString();
         }
         else
         {
             DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
-            File aFile( aTmp );
-            FileBase::RC err = aFile.open(
+            osl::File aFile(aTmp);
+            osl::FileBase::RC err = aFile.open(
                 osl_File_OpenFlag_Create | osl_File_OpenFlag_Private
                 | (bLock ? 0 : osl_File_OpenFlag_NoLock));
-            if ( err == FileBase::E_None || (bLock && err == FileBase::E_NOLCK) )
+            if (err == osl::FileBase::E_None || (bLock && err == osl::FileBase::E_NOLCK))
             {
                 aFile.close();
                 return aTmp;
             }
-            else if ( err != FileBase::E_EXIST )
+            else if (err != osl::FileBase::E_EXIST)
             {
                 // if f.e. name contains invalid chars stop trying to create dirs
                 // but if there is a folder with such name proceed further
 
-                DirectoryItem aTmpItem;
-                FileStatus aTmpStatus( osl_FileStatus_Mask_Type );
-                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
-                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
-                  || aTmpStatus.getFileType() != FileStatus::Directory )
+                osl::DirectoryItem aTmpItem;
+                osl::FileStatus aTmpStatus(osl_FileStatus_Mask_Type);
+                if (osl::DirectoryItem::get(aTmp, aTmpItem) != osl::FileBase::E_None
+                  || aTmpItem.getFileStatus(aTmpStatus) != osl::FileBase::E_None
+                  || aTmpStatus.getFileType() != osl::FileStatus::Directory)
                     return OUString();
             }
         }
@@ -395,7 +393,7 @@ OUString CreateTempName()
     // convert to file URL
     OUString aTmp;
     if ( !aName.isEmpty() )
-        FileBase::getSystemPathFromFileURL( aName, aTmp );
+        osl::FileBase::getSystemPathFromFileURL(aName, aTmp);
     return aTmp;
 }
 
@@ -440,7 +438,7 @@ void TempFileFast::CloseStream()
         // On other platforms, we need to explicitly delete it.
 #else
         if (!aName.isEmpty() && (osl::FileBase::getFileURLFromSystemPath(aName, aName) == osl::FileBase::E_None))
-            File::remove(aName);
+            osl::File::remove(aName);
 #endif
     }
 }
@@ -496,7 +494,7 @@ TempFileNamed::~TempFileNamed()
     }
     else
     {
-        File::remove( aName );
+        osl::File::remove(aName);
     }
 }
 
@@ -508,7 +506,7 @@ bool TempFileNamed::IsValid() const
 OUString TempFileNamed::GetFileName() const
 {
     OUString aTmp;
-    FileBase::getSystemPathFromFileURL(aName, aTmp);
+    osl::FileBase::getSystemPathFromFileURL(aName, aTmp);
     return aTmp;
 }
 
@@ -553,7 +551,7 @@ OUString SetTempNameBaseDirectory( const OUString &rBaseName )
     // try to create the directory
     bool bRet = false;
     osl::FileBase::RC err = osl::Directory::create( aUnqPath );
-    if ( err != FileBase::E_None && err != FileBase::E_EXIST )
+    if (err != osl::FileBase::E_None && err != osl::FileBase::E_EXIST)
         // perhaps parent(s) don't exist
         bRet = ensuredir( aUnqPath );
     else
@@ -572,7 +570,7 @@ OUString SetTempNameBaseDirectory( const OUString &rBaseName )
             gTempNameBase_Impl = ensureTrailingSlash(aBase.aName);
 
         // return system path of used directory
-        FileBase::getSystemPathFromFileURL(gTempNameBase_Impl, aTmp);
+        osl::FileBase::getSystemPathFromFileURL(gTempNameBase_Impl, aTmp);
     }
 
     return aTmp;
