@@ -190,7 +190,7 @@ frog, dogg, catt"""
         with self.ui_test.load_file(get_url_for_data_file("tdf157992.odt")) as document:
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="") as xDialog:
                 sentence = xDialog.getChild('sentence')
-                sentence.executeAction('TYPE', mkPropertyValues({'KEYCODE':'KEY_RIGHT'}))
+                sentence.executeAction('TYPE', mkPropertyValues({'KEYCODE':'RIGHT'}))
                 sentence.executeAction('TYPE', mkPropertyValues({'KEYCODE':'DELETE'}))
                 sentence.executeAction('TYPE', mkPropertyValues({'KEYCODE':'DELETE'}))
                 sentence.executeAction('TYPE', mkPropertyValues({'TEXT':'oo'}))
