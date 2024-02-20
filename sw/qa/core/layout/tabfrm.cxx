@@ -17,6 +17,7 @@
 #include <anchoredobject.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
+#include <frameformats.hxx>
 
 namespace
 {
@@ -217,6 +218,20 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineTableThenSplitFly)
     // i.e. "left" was on the right, its horizontal margin was not a small negative value but a
     // large positive one.
     CPPUNIT_ASSERT_LESS(static_cast<SwTwips>(0), nInlineLeft);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrappedByTableNested)
+{
+    // Given a document with 3 tables, one inline toplevel and two inner ones (one inline, one
+    // floating):
+    // When laying out that document:
+    // Without the accompanying fix in place, this test would have failed here with a layout loop.
+    createSwDoc("floattable-wrapped-by-table-nested.docx");
+
+    // Than make sure we have 3 tables, but only one of them is floating:
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pDoc->GetTableFrameFormats()->GetFormatCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetSpzFrameFormats()->GetFormatCount());
 }
 }
 

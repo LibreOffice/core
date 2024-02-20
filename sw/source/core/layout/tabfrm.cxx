@@ -3210,7 +3210,15 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                         }
                     }
                     bool bFlyHoriOrientLeft = text::HoriOrientation::LEFT == rHori.GetHoriOrient();
-                    if (bSplitFly && !bFlyHoriOrientLeft)
+
+                    bool bToplevelSplitFly = false;
+                    if (bSplitFly)
+                    {
+                        // Floating table wrapped by table: avoid this in the nested case.
+                        bToplevelSplitFly = !pFly->GetAnchorFrame()->IsInTab();
+                    }
+
+                    if (bToplevelSplitFly && !bFlyHoriOrientLeft)
                     {
                         // Only shift to the right if we don't have enough space on the left.
                         SwTwips nTabWidth = getFramePrintArea().Width();
