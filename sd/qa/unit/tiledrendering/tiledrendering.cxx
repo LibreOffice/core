@@ -778,6 +778,7 @@ public:
     bool m_bViewLock;
     bool m_bTilesInvalidated;
     std::vector<tools::Rectangle> m_aInvalidations;
+    std::vector<std::string> m_aStateChanged;
     std::map<int, bool> m_aViewCursorInvalidations;
     std::map<int, bool> m_aViewCursorVisibilities;
     bool m_bViewSelectionSet;
@@ -893,6 +894,13 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
+        }
+        break;
+        case LOK_CALLBACK_STATE_CHANGED:
+        {
+            std::stringstream aStream(pPayload);
+
+            m_aStateChanged.push_back(aStream.str());
         }
         break;
         }
@@ -2940,6 +2948,19 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         CPPUNIT_ASSERT_EQUAL(false, pView1->IsTextEdit());
         CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testStartPresentation)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("test.ppsx");
+    ViewCallback aView1;
+    CPPUNIT_ASSERT(pXImpressDocument->GetDoc()->IsStartWithPresentation());
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(aView1.m_aStateChanged.size() >= 1);
+
+    CPPUNIT_ASSERT(std::find(aView1.m_aStateChanged.begin(),
+        aView1.m_aStateChanged.end(), ".uno:StartWithPresentation=true") != aView1.m_aStateChanged.end());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -1023,6 +1023,12 @@ void ViewShellBase::afterCallbackRegistered()
         std::set<Color> aDocumentColors = pDocShell->GetDocColors();
         svx::theme::notifyLOK(pThemeColors, aDocumentColors);
     }
+
+    if (mpDocument && mpDocument->IsStartWithPresentation())
+    {
+        this->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                        ".uno:StartWithPresentation=true"_ostr);
+    }
 }
 
 void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
