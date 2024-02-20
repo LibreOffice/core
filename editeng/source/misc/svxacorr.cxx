@@ -614,7 +614,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
                             sImplEndSkipChars,(cCh = rTxt[ --n ])); )
                             ;
                     // found: "[A-z0-9][<AnyEndChars>] - [<AnySttChars>][A-z0-9]
-                    if( rCC.isLetterNumeric( OUString(cCh) ))
+                    if (rCC.isLetterNumeric(OUString(cCh)) || lcl_IsInArr(u".!?", cCh))
                     {
                         rDoc.Delete( nTmpPos, nTmpPos + nLen );
                         rDoc.Insert( nTmpPos, bAlwaysUseEmDash ? sEmDash : sEnDash );
