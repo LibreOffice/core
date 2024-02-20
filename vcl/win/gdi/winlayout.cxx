@@ -226,7 +226,7 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     const bool bVerticalScreenText
         = !mbPrinter && rLayout.GetFont().GetFontSelectPattern().mbVertical;
     const bool bRenderingModeNatural = rLayout.GetSubpixelPositioning();
-    const bool bUseDWrite = bVerticalScreenText || bRenderingModeNatural;
+    const bool bUseDWrite = false;
     DrawTextLayout(rLayout, hDC, bUseDWrite, bRenderingModeNatural);
 
     ::SelectFont(hDC, hOrigFont);
