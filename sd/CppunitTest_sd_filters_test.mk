@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
     editeng \
     i18nlangtag \
     i18nutil \
+    icg \
     msfilter \
     oox \
     sal \
@@ -70,9 +71,5 @@ $(eval $(call gb_CppunitTest_use_vcl,sd_filters_test))
 $(eval $(call gb_CppunitTest_use_rdb,sd_filters_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_filters_test))
-
-# sd dlopens libicg.so for cgm import, so ensure its built by now
-$(call gb_CppunitTest_get_target,sd_filters_test) : | \
-    $(call gb_Library_get_target,icg) \
 
 # vim: set noet sw=4 ts=4:
