@@ -392,6 +392,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             if(rMaster.GetFooter().IsActive())
             {
                 rMaster.SetFormatAttr(SwFormatFooter(false));
+                // why reset this? but not doing it causes testTdf112694 to fail
                 rPageDesc.ChgFooterShare(false);
             }
         }

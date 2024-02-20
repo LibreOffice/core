@@ -3902,6 +3902,11 @@ void DomainMapper_Impl::prepareHeaderFooterContent(uno::Reference<beans::XProper
         m_aHeaderFooterTextAppendStack.push(std::make_pair(TextAppendContext(xTextAppend, xTextCursor), ePagePartType));
 }
 
+bool DomainMapper_Impl::SeenHeaderFooter(PagePartType const partType, PageType const pageType) const
+{
+    return m_HeaderFooterSeen.find({partType, pageType}) != m_HeaderFooterSeen.end();
+}
+
 /** Checks if the header and footer content on the text appended stack is empty.
  */
 void DomainMapper_Impl::checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, PageType eType)
@@ -3960,7 +3965,10 @@ void DomainMapper_Impl::PopPageHeaderFooter(PagePartType ePagePartType, PageType
     // content is not copied from the previous section
     SectionPropertyMap* pSectionContext = GetSectionContext();
     if (pSectionContext)
+    {
         pSectionContext->clearHeaderFooterLinkToPrevious(ePagePartType, eType);
+        m_HeaderFooterSeen.emplace(ePagePartType, eType);
+    }
 
     if (!m_aTextAppendStack.empty())
     {
