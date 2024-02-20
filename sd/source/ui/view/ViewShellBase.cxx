@@ -19,6 +19,8 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <ViewShellBase.hxx>
 #include <algorithm>
 #include <EventMultiplexer.hxx>
@@ -1030,6 +1032,17 @@ void ViewShellBase::afterCallbackRegistered()
         std::shared_ptr<model::ColorSet> pThemeColors = pDocShell->GetThemeColors();
         std::set<Color> aDocumentColors = pDocShell->GetDocColors();
         svx::theme::notifyLOK(pThemeColors, aDocumentColors);
+    }
+
+    if (mpDocument && mpDocument->IsStartWithPresentation())
+    {
+        // Be consistent with SidebarController, emit JSON.
+        boost::property_tree::ptree aTree;
+        aTree.put("commandName", ".uno:StartWithPresentation");
+        aTree.put("state", "true");
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
     }
 }
 
