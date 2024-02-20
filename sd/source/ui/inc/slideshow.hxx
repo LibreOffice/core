@@ -106,6 +106,12 @@ public:
 
     // helper api
 
+    bool startInteractivePreview(
+        const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
+        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
+    bool isInteractiveSetup() const;
+    void endInteractivePreview();
+
     void startPreview(
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );

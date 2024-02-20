@@ -1879,7 +1879,8 @@ void CustomAnimationPane::onAdd()
 
     updateControls();
 
-    SlideShow::Stop( mrBase );
+    if (!SlideShow::IsInteractiveSlideshow()) // IASS
+        SlideShow::Stop( mrBase );
 }
 
 void CustomAnimationPane::onRemove()
