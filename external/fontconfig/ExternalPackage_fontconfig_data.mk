@@ -35,6 +35,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fontconfig_data,$(LIBO_SHARE
     conf.d/11-lcdfilter-default.conf \
     conf.d/11-lcdfilter-legacy.conf \
     conf.d/11-lcdfilter-light.conf \
+    conf.d/11-lcdfilter-none.conf \
     conf.d/20-unhint-small-vera.conf \
     conf.d/25-unhint-nonlatin.conf \
     conf.d/30-metric-aliases.conf \
