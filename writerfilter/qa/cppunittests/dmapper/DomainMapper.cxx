@@ -119,6 +119,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableThenTable)
     // Make sure the anchor text is the body text, not some cell.
     CPPUNIT_ASSERT_EQUAL(xBodyText, xAnchor->getText());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf158360)
+{
+    // just test that doc with annotation in TOC doesn't crash/assert
+    loadFromFile(u"tdf158360.docx");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
