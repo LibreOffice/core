@@ -36,4 +36,6 @@ enum SAL_DLLPUBLIC_RTTI DesktopType
     DESKTOP_LXQT
 }; // keep in sync with desktop_strings[] in salplug.cxx
 
+DesktopType get_desktop_environment();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

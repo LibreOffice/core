@@ -168,32 +168,11 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 #endif // !STATIC_SAL_INSTANCE
 
 #if UNIX_DESKTOP_DETECT
-#ifndef DISABLE_DYNLOADING
-extern "C" typedef DesktopType Fn_get_desktop_environment();
-#else
-extern "C" DesktopType get_desktop_environment();
-#endif
 
 DesktopType lcl_get_desktop_environment()
 {
     DesktopType ret = DESKTOP_UNKNOWN;
-#ifdef DISABLE_DYNLOADING
     ret = get_desktop_environment();
-#else
-    OUString aModule(DESKTOP_DETECTOR_DLL_NAME);
-    oslModule aMod = osl_loadModuleRelative(
-        reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
-        SAL_LOADMODULE_DEFAULT );
-    if( aMod )
-    {
-        Fn_get_desktop_environment * pSym
-            = reinterpret_cast<Fn_get_desktop_environment *>(
-                osl_getAsciiFunctionSymbol(aMod, "get_desktop_environment"));
-        if( pSym )
-            ret = pSym();
-    }
-    osl_unloadModule( aMod );
-#endif
     return ret;
 }
 

@@ -46,7 +46,6 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
     -DDLLIMPLEMENTATION_UITEST \
     -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
-    -DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,desktop_detector))\" \
     -DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
     $(if $(SYSTEM_LIBFIXMATH),-DSYSTEM_LIBFIXMATH) \
 ))
@@ -571,6 +570,7 @@ endif
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/unx/generic/desktopdetect/desktopdetector \
     vcl/unx/generic/window/sessioninhibitor \
     vcl/unx/generic/printer/cpdmgr \
 ))
@@ -586,6 +586,11 @@ $(eval $(call gb_Library_add_libs,vcl,\
 ))
 endif # USING_X11
 
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+$(eval $(call gb_Library_add_libs,vcl,\
+	-lm $(UNIX_DLAPI_LIBS) \
+))
+endif
 
 ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\

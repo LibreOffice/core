@@ -65,12 +65,6 @@
 #define VCLPLUG_WIN_PUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-#if defined DESKTOP_DETECTOR_IMPLEMENTATION
-#define DESKTOP_DETECTOR_PUBLIC SAL_DLLPUBLIC_EXPORT
-#else
-#define DESKTOP_DETECTOR_PUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

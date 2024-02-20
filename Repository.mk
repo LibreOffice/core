@@ -515,7 +515,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     acc \
     $(if $(ENABLE_CUSTOMTARGET_COMPONENTS),components) \
     cui \
-    $(if $(USING_X11),desktop_detector) \
     icg \
     sdui \
     $(if $(ENABLE_GEN),vclplug_gen) \
