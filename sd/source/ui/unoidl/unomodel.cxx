@@ -33,8 +33,10 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <officecfg/Office/Common.hxx>
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -2575,6 +2577,8 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
 {
     SolarMutexGuard aGuard;
 
+    OUString sThemeName;
+
     if (DrawViewShell* pViewShell = GetViewShell())
     {
         DrawView* pDrawView = pViewShell->GetDrawView();
@@ -2586,6 +2590,8 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
                 pDrawView->SetAuthor(rValue.Value.get<OUString>());
             else if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
                 mpDoc->SetOnlineSpell(rValue.Value.get<bool>());
+            else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
+                sThemeName = rValue.Value.get<OUString>();
         }
 
         // Disable comments if requested
@@ -2627,6 +2633,16 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
 
     if (!getenv("LO_TESTNAME"))
         SvtSlideSorterBarOptions().SetVisibleImpressView(true);
+
+    // if we know what theme the user wants, then we can dispatch that now early
+    if (!sThemeName.isEmpty())
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            { "NewTheme", uno::Any(sThemeName) }
+        }));
+        comphelper::dispatchCommand(".uno:ChangeTheme", aPropertyValues);
+    }
 }
 
 void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
