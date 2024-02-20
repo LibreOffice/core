@@ -516,9 +516,9 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
             pEngine.reset(new ScTextConversionEngine(
                 rDoc.GetEnginePool(), rViewData, rConvParam, pUndoDoc.get(), pRedoDoc.get() ));
         break;
-        default:
-            OSL_FAIL( "ScViewFunc::DoSheetConversion - unknown conversion type" );
     }
+
+    assert(pEngine && "all cases result in pEngine set");
 
     MakeEditView( pEngine.get(), nCol, nRow );
     pEngine->SetRefDevice( rViewData.GetActiveWin()->GetOutDev() );

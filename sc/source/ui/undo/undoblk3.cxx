@@ -1212,7 +1212,6 @@ OUString ScUndoConversion::GetComment() const
         case SC_CONVERSION_SPELLCHECK:      aText = ScResId( STR_UNDO_SPELLING );    break;
         case SC_CONVERSION_HANGULHANJA:     aText = ScResId( STR_UNDO_HANGULHANJA ); break;
         case SC_CONVERSION_CHINESE_TRANSL:  aText = ScResId( STR_UNDO_CHINESE_TRANSLATION ); break;
-        default: OSL_FAIL( "ScUndoConversion::GetComment - unknown conversion type" );
     }
     return aText;
 }
