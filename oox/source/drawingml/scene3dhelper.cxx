@@ -290,7 +290,7 @@ void Scene3DHelper::addExtrusionDepthToMap(const oox::drawingml::Shape3DProperti
     if (nDepthAmount == 0 && nZPosition != 0)
     {
         // We cannot express the position relative to the extrusion depth.
-        // Use an artifical, small depth of 1Hmm
+        // Use an artificial, small depth of 1Hmm
         fDepthRelPos = fZPosition;
         fDepthAmount = 1.0; // unit Hmm
     }
