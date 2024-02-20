@@ -515,7 +515,7 @@ void SectionPropertyMap::removeXTextContent(uno::Reference<text::XText> const& r
     xParagraph->dispose();
 }
 
-/** Set the header/footer sharing as defined by titlePage and eveoAndOdd flags
+/** Set the header/footer sharing as defined by titlePage and evenAndOdd flags
  *  in the document and clear the content of anything not written during the import.
  */
 void SectionPropertyMap::setHeaderFooterProperties(DomainMapper_Impl& rDM_Impl)
@@ -915,7 +915,9 @@ void copyHeaderFooterTextProperty(const uno::Reference<beans::XPropertySet>& xSo
 }
 
 // Copies all the header and footer content and relevant flags from the source style to the target.
-void completeCopyHeaderFooter(const uno::Reference<beans::XPropertySet>& xSourceStyle, const uno::Reference<beans::XPropertySet>& xTargetStyle)
+void completeCopyHeaderFooter(const uno::Reference<beans::XPropertySet>& xSourceStyle,
+        const uno::Reference<beans::XPropertySet>& xTargetStyle,
+        bool const bMissingHeader, bool const bMissingFooter)
 {
     if (!xSourceStyle.is() || !xTargetStyle.is())
         return;
@@ -960,6 +962,25 @@ void completeCopyHeaderFooter(const uno::Reference<beans::XPropertySet>& xSource
         if (!bSourceFooterIsShared)
             copyHeaderFooterTextProperty(xSourceStyle, xTargetStyle, PROP_FOOTER_TEXT_LEFT);
         copyHeaderFooterTextProperty(xSourceStyle, xTargetStyle, PROP_FOOTER_TEXT);
+    }
+    // tdf#153196 the copy is used for the first page, the source will be used
+    // on subsequent pages, so clear source's first page header/footer
+    if (!bSourceFirstIsShared)
+    {
+        xSourceStyle->setPropertyValue(sFirstIsShared, uno::Any(true));
+    }
+    // if there is *only* a first-footer, and no previous section from which
+    // to inherit a footer, the import process has created an empty footer
+    // that didn't exist in the file; remove it
+    if (bSourceHasHeader && bMissingHeader)
+    {
+        xSourceStyle->setPropertyValue(sHeaderIsOn, uno::Any(false));
+    }
+    if (bSourceHasFooter && bMissingFooter)
+    {
+        // setting "FooterIsShared" to true here does nothing, because it causes
+        // left footer to be stashed, which means it will be exported anyway
+        xSourceStyle->setPropertyValue(sFooterIsOn, uno::Any(false));
     }
 }
 
@@ -1460,7 +1481,14 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
     rDM_Impl.GetPageStyles()->insertByName(evenOddStyleName, uno::Any(evenOddStyle));
 
     if (rDM_Impl.IsNewDoc())
-        completeCopyHeaderFooter(pageProperties, evenOddStyle);
+    {
+        bool const bEvenAndOdd(rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders());
+        completeCopyHeaderFooter(pageProperties, evenOddStyle,
+            !rDM_Impl.SeenHeaderFooter(PagePartType::Header, PageType::RIGHT)
+                && (!bEvenAndOdd || !rDM_Impl.SeenHeaderFooter(PagePartType::Header, PageType::LEFT)),
+            !rDM_Impl.SeenHeaderFooter(PagePartType::Footer, PageType::RIGHT)
+                && (!bEvenAndOdd || !rDM_Impl.SeenHeaderFooter(PagePartType::Footer, PageType::LEFT)));
+    }
 
     if (eBreakType == PageBreakType::Even)
         evenOddStyle->setPropertyValue(getPropertyName(PROP_PAGE_STYLE_LAYOUT), uno::Any(style::PageStyleLayout_LEFT));

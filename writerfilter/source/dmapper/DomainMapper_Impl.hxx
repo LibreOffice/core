@@ -638,6 +638,8 @@ private:
 
     css::uno::Reference< css::text::XTextCursor > m_xTOCMarkerCursor;
 
+    ::std::set<::std::pair<PagePartType, PageType>> m_HeaderFooterSeen;
+
     //annotation import
     css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
     sal_Int32 m_nAnnotationId;
@@ -1214,6 +1216,8 @@ public:
     std::deque<css::uno::Any> m_aStoredRedlines[StoredRedlines::NONE];
 
     bool IsParaWithInlineObject() const { return m_StreamStateStack.top().bParaWithInlineObject; }
+
+    bool SeenHeaderFooter(PagePartType, PageType) const;
 
     css::uno::Reference< css::embed::XStorage > m_xDocumentStorage;
 
