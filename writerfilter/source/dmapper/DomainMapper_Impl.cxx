@@ -3253,7 +3253,10 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
                     {
                         xTOCTextCursor->goLeft(1, false);
                     }
-                    xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
+                    if (IsInComments())
+                        xTextRange = xTextAppend->finishParagraphInsert(aValues, xTOCTextCursor);
+                    else
+                        xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                     SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
                     if (!xTextRange.is())
                         throw uno::Exception("insertTextPortion failed", nullptr);

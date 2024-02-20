@@ -155,6 +155,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo78333)
     // just care that it doesn't crash/assert
     loadFromFile(u"fdo78333-1-minimized.docx");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf158360)
+{
+    // just test that doc with annotation in TOC doesn't crash/assert
+    loadFromFile(u"tdf158360.docx");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
