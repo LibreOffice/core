@@ -227,6 +227,14 @@ private:
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
         vcl::Window* pParent );
 
+    // methods for InterActiveSlideShow that support to
+    // re-use a running FullScreen presentation for previews IASS
+    void startInteractivePreview(
+        const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
+        const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode);
+    void endInteractivePreview();
+    bool isInteractiveSetup() const;
+
         /** forces an async call to update in the main thread */
     void startUpdateTimer();
 
@@ -317,6 +325,7 @@ private:
     VclPtr< ::sd::Window>   mpOldActiveWindow;
     Link<StarBASIC*,bool>   maStarBASICGlobalErrorHdl;
     ::tools::ULong    mnChildMask;
+
     bool            mbDisposed;
     bool            mbAutoSaveWasOn;
     bool            mbRehearseTimings;
@@ -348,6 +357,16 @@ private:
 
     css::uno::Reference< css::presentation::XPresentation2 > mxPresentation;
     ::rtl::Reference< SlideShowListenerProxy > mxListenerProxy;
+
+    // local variables to support preview for a running SlideShow IASS
+    css::uno::Reference< css::presentation::XSlideShow > mxShow2;
+    rtl::Reference<sd::SlideShowView> mxView2;
+    AnimationMode   meAnimationMode2;
+    bool            mbInterActiveSetup;
+    PresentationSettings maPresSettings2;
+    css::uno::Reference< css::drawing::XDrawPage > mxPreviewDrawPage2;
+    css::uno::Reference< css::animations::XAnimationNode > mxPreviewAnimationNode2;
+    ::sal_Int32 mnSlideIndex;
 };
 
 } // namespace ::sd

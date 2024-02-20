@@ -193,6 +193,16 @@ bool SlideShow::StartPreview( ViewShellBase const & rBase,
     if( !xSlideShow.is() )
         return false;
 
+    // end an already running IASS Preview (when someone is fast)
+    if (SlideShow::IsInteractiveSlideshow() && xSlideShow->isInteractiveSetup())
+        xSlideShow->endInteractivePreview();
+
+    // check if IASS re-use of running Slideshow can/should be done
+    // and do it
+    if (SlideShow::IsInteractiveSlideshow() && xSlideShow->isFullScreen()) // IASS
+        return xSlideShow->startInteractivePreview( xDrawPage, xAnimationNode );
+
+    // fallback to usual mode
     xSlideShow->startPreview( xDrawPage, xAnimationNode );
     return true;
 }
@@ -646,6 +656,13 @@ void SAL_CALL SlideShow::end()
 {
     SolarMutexGuard aGuard;
 
+    if (SlideShow::IsInteractiveSlideshow() && isInteractiveSetup())
+    {
+        // If IASS was active clean that up, but do not end SlideShow
+        endInteractivePreview();
+        return;
+    }
+
     // The mbIsInStartup flag should have been reset during the start of the
     // slide show.  Reset it here just in case that something has horribly
     // gone wrong.
@@ -909,6 +926,28 @@ void SlideShow::disposing(std::unique_lock<std::mutex>&)
     mpCurrentViewShellBase = nullptr;
     mpFullScreenViewShellBase = nullptr;
     mpDoc = nullptr;
+}
+
+bool SlideShow::startInteractivePreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
+{
+    if (!mxController.is())
+        return false;
+
+    mxController->startInteractivePreview(xDrawPage, xAnimationNode);
+    return mxController->isInteractiveSetup();
+}
+
+bool SlideShow::isInteractiveSetup() const
+{
+    if (!mxController.is())
+        return false;
+
+    return mxController->isInteractiveSetup();
+}
+
+void SlideShow::endInteractivePreview()
+{
+    mxController->endInteractivePreview();
 }
 
 void SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
