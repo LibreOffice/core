@@ -114,12 +114,6 @@ public:
     //to be applied post ctor
     void            setDeferredProperties();
 
-    /// return UI-File name (without '.ui')
-    const OUString& getUIFile() const
-    {
-        return m_sHelpRoot;
-    }
-
     static SymbolType mapStockToSymbol(std::u16string_view icon_name);
 
 private:
