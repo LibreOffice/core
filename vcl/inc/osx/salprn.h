@@ -84,6 +84,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     virtual OUString            GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uInt16 i_nPaperBin ) override;
     virtual sal_uInt16          GetPaperBinBySourceIndex(const ImplJobSetup* pSetupData,
                                                              sal_uInt16 nPaperSource) override;
+    virtual sal_uInt16          GetSourceIndexByPaperBin(const ImplJobSetup* pSetupData,
+                                                             sal_uInt16 nPaperBin) override;
     virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData ) override;
     virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData ) override;
 
