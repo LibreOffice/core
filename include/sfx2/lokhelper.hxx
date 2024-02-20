@@ -131,6 +131,8 @@ public:
     static LOKDeviceFormFactor getDeviceFormFactor();
     /// Set the device form factor that should be used for a new view.
     static void setDeviceFormFactor(std::u16string_view rDeviceFormFactor);
+    /// Get the document type
+    static OUString getDocumentType(const OUString& sDocumentService);
 
     /// Set timezone of the given view.
     /// @isSet true to use @rTimezone, even if it's empty. Otherwise, no timezone.

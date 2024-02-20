@@ -2784,7 +2784,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             comphelper::makePropertyValue("InteractionHandler", xInteraction),
             comphelper::makePropertyValue("MacroExecutionMode", nMacroExecMode),
             comphelper::makePropertyValue("AsTemplate", false),
-            comphelper::makePropertyValue("Silent", !aBatch.isEmpty())
+            comphelper::makePropertyValue("Silent", !aBatch.isEmpty()),
+            comphelper::makePropertyValue("Theme", extractParameter(aOptions, u"Theme"))
         };
 
         /* TODO
