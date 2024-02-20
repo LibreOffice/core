@@ -270,6 +270,11 @@ sal_uInt16 AquaSalInfoPrinter::GetPaperBinBySourceIndex( const ImplJobSetup*, sa
     return 0xffff;
 }
 
+sal_uInt16  AquaSalInfoPrinter::GetSourceIndexByPaperBin(const ImplJobSetup*, sal_uInt16)
+{
+    return 0;
+}
+
 sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapType i_nType )
 {
     switch( i_nType )

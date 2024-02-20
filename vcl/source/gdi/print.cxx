@@ -1487,6 +1487,14 @@ sal_uInt16 Printer::GetPaperBinBySourceIndex(sal_uInt16 nPaperSource) const
     return mpInfoPrinter->GetPaperBinBySourceIndex( &maJobSetup.ImplGetConstData(), nPaperSource );
 }
 
+sal_uInt16  Printer::GetSourceIndexByPaperBin(sal_uInt16 nPaperBin) const
+{
+    if (IsDisplayPrinter())
+        return 0;
+
+    return mpInfoPrinter->GetSourceIndexByPaperBin( &maJobSetup.ImplGetConstData(), nPaperBin);
+}
+
 void Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
 {
     mnCopyCount = nCopy;

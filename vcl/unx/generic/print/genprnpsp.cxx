@@ -643,6 +643,11 @@ sal_uInt16 PspSalInfoPrinter::GetPaperBinBySourceIndex( const ImplJobSetup*, sal
     return 0xffff;
 }
 
+sal_uInt16  PspSalInfoPrinter::GetSourceIndexByPaperBin(const ImplJobSetup*, sal_uInt16)
+{
+    return 0;
+}
+
 sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, PrinterCapType nType )
 {
     switch( nType )
