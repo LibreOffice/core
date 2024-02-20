@@ -634,34 +634,37 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     const Color aColC(0x666666);
     const Color aColD(0x000000);
 
-    // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
-
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColA, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
-    CPPUNIT_ASSERT_EQUAL(aColB, Color(aColorStops[1].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(aColA, Color(aColorStops[2].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+    CPPUNIT_ASSERT_EQUAL(aColB, Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(aColA, Color(ColorTransparency, aGradient.EndColor));
 
     xFrame.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
                          getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
     aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
-    // MCGR: Use the completely imported transparency gradient to check for correctness
-    aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+    CPPUNIT_ASSERT_EQUAL(aColD, Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(aColC, Color(ColorTransparency, aGradient.EndColor));
+}
 
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColC, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
-    CPPUNIT_ASSERT_EQUAL(aColD, Color(aColorStops[1].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(aColC, Color(aColorStops[2].getStopColor()));
+CPPUNIT_TEST_FIXTURE(Test, testTdf159824_axialGradient)
+{
+    // given a frame with an axial gradient (white - green - white)
+    loadAndReload("tdf159824_axialGradient.odt");
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+
+    const Color aColorGreen(0x127622); // green
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+    CPPUNIT_ASSERT_EQUAL(aColorGreen, Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, aGradient.EndColor));
 }
 
 DECLARE_RTFEXPORT_TEST(testRecordChanges, "record-changes.rtf")

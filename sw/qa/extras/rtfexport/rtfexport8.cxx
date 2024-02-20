@@ -198,18 +198,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159824_axialGradient)
     const Color aColA(0x127622); // green
     const Color aColB(0xffffff); // white
 
-    // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
-
-    // expected: a 3-color linear gradient (or better yet a 2-color AXIAL gradient)
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
-    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColB, Color(aColorStops[0].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
-    CPPUNIT_ASSERT_EQUAL(aColA, Color(aColorStops[1].getStopColor()));
-    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(aColB, Color(aColorStops[2].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+    CPPUNIT_ASSERT_EQUAL(aColA, Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(aColB, Color(ColorTransparency, aGradient.EndColor));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle1, "tdf159824_gradientAngle1.rtf")
