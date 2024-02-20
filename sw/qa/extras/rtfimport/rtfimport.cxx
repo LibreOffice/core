@@ -1602,6 +1602,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115242)
                          getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf153196)
+{
+    createSwDoc("tdf153196.rtf");
+
+    const auto& pLayout = parseLayoutDump();
+
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+
+    // TODO: Writer creates an empty page 1 here, which Word does not
+    assertXPath(pLayout, "/root/page[1]/footer"_ostr, 0);
+    assertXPath(pLayout, "/root/page[2]/footer"_ostr, 1);
+    // the first page (2) has a page style applied, which has a follow page
+    // style; the problem was that the follow page style had a footer.
+    assertXPath(pLayout, "/root/page[3]/footer"_ostr, 0);
+    assertXPath(pLayout, "/root/page[4]/footer"_ostr, 1);
+
+    // TODO exporting this, wrongly produces "even" footer from stashed one
+    // TODO importing that, wrongly creates a footer even without evenAndOddHeaders
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDefaultValues)
 {
     createSwDoc("default-values.rtf");
