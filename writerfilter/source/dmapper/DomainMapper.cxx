@@ -1501,7 +1501,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         || rProp.Name == "FillTransparenceGradientName"
                         || rProp.Name == "FillBitmapURL" || rProp.Name == "FillColor2")
                     {
-                        // silence exceptions for unsupported stuff when appling to page style
+                        // silence exceptions for unsupported stuff when applying to page style
                         continue;
                     }
                     if (!rProp.Name.startsWith("Fill"))
