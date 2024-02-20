@@ -101,7 +101,7 @@ public:
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                            const sal_Int32 nIdx, const sal_Int32 nLen,
-                           KernArray* pDXArray = nullptr ) const;
+                           KernArray* pDXArray = nullptr, bool bStacked = false ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const OUString &rTxt,

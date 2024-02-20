@@ -442,7 +442,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
 }
 
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, KernArray* pDXArray ) const
+                         const sal_Int32 nIdx, const sal_Int32 nLen, KernArray* pDXArray, bool bStacked ) const
 {
     if ( !IsCaseMap() && !IsFixKerning() )
     {
@@ -477,7 +477,7 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
     }
     SAL_INFO( "editeng.quicktextsize", "SvxFont::QuickGetTextSize after GetTextArray(): Text length: " << nLen << " Text size: " << aTxtSize.Width() << "x" << aTxtSize.Height());
 
-    if( IsFixKerning() && ( nLen > 1 ) )
+    if( IsFixKerning() && ( nLen > 1 ) && !bStacked)
     {
         auto nKern = GetFixKerning();
         tools::Long nOldValue = (*pDXArray)[0];

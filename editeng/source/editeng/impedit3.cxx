@@ -1249,14 +1249,14 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                 if (bContinueLastPortion)
                 {
-                     Size aSize = aTmpFont.QuickGetTextSize( GetRefDevice(), rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aCharPositionArray);
+                     Size aSize = aTmpFont.QuickGetTextSize( GetRefDevice(), rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aCharPositionArray, bStacked);
                      pPortion->adjustSize(aSize.Width(), 0);
                      if (pPortion->GetSize().Height() < aSize.Height())
                          pPortion->setHeight(aSize.Height());
                 }
                 else
                 {
-                    Size aSize = aTmpFont.QuickGetTextSize(GetRefDevice(), rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aCharPositionArray);
+                    Size aSize = aTmpFont.QuickGetTextSize(GetRefDevice(), rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aCharPositionArray, bStacked);
                     pPortion->SetSize(aSize);
                 }
 
