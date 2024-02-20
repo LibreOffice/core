@@ -22,11 +22,9 @@ $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_%_new.cxx : \
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SAX)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_print_on_error, \
-			$(call gb_Helper_execute,saxparser) $* $< $@.sax \
+			$(call gb_Helper_execute,saxparser) $* $< $@ \
 				-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER)) \
-				-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,saxparser))) && \
-		sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $@.sax > $@)
-	rm $@.sax
+				-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,saxparser))))
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SAX)
 
 .PRECIOUS: $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_%_new.cxx
