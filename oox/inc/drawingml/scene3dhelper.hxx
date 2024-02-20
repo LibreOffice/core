@@ -81,7 +81,7 @@ private:
         @param [in] p3DProperties a pointer to Shape3DProperties
         @param [in, out] rPropertyMap a map to add ProjectMode, Origin and Skew or ViewPoint
             properties.
-        @param [in] bIsParallel true for mode PARALLEL, false for PRERPECTIVE
+        @param [in] bIsParallel true for mode PARALLEL, false for PERSPECTIVE
         @param [in] rnMSOShapeRotation shape rotation in 1/60000 degree*/
     void addProjectionGeometryToMap(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
                                     oox::PropertyMap& rPropertyMap, const bool bIsParallel,
