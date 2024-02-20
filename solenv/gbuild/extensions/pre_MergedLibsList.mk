@@ -53,6 +53,7 @@ gb_MERGE_LIBRARY_LIST := \
 	i18nsearch \
 	i18npool \
 	i18nutil \
+	icg \
 	lng \
 	lnth \
 	localebe1 \
