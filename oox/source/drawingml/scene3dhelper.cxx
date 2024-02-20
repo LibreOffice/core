@@ -392,8 +392,8 @@ bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DProperti
     // or if there is no such rotation but we have a perspective projection with true depth,
     // or we have a parallel projection other than a 'front' type.
     // In other cases the rendering as normal shape is better than any current extrusion.
-    double fX;
-    double fY;
+    double fX = 0.0;
+    double fY = 0.0;
     Scene3DHelper::getAPIAnglesFrom3DProperties(p3DProperties, rnMSOShapeRotation, fX, fY, rRotZ);
     sal_Int32 nDepthAmount = (*p3DProperties).mnExtrusionH.value_or(0);
     bool bIsParallel = aPrstCameraValuesArray[mnPrstCameraIndex].mbIsParallel;
