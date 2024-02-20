@@ -31,8 +31,7 @@
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-const wchar_t BACKSLASH = '\\';
-const wchar_t SLASH = '/';
+#include <memory>
 
 BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
 {
@@ -163,7 +162,7 @@ void systemPathRemoveSeparator(/*inout*/ OUString& path)
         UNCComponents uncc;
 
         uncc.server_.begin_ = ppos;
-        while ((ppos < pend) && (*ppos != BACKSLASH))
+        while ((ppos < pend) && (*ppos != '\\'))
             ppos++;
 
         uncc.server_.end_ = ppos;
@@ -171,18 +170,15 @@ void systemPathRemoveSeparator(/*inout*/ OUString& path)
         if (ppos < pend)
         {
             uncc.share_.begin_ = ++ppos;
-            while ((ppos < pend) && (*ppos != BACKSLASH))
+            while ((ppos < pend) && (*ppos != '\\'))
                 ppos++;
 
             uncc.share_.end_ = ppos;
 
             if (ppos < pend)
             {
-                uncc.resource_.begin_ = ++ppos;
-                while (ppos < pend)
-                    ppos++;
-
-                uncc.resource_.end_ = ppos;
+                uncc.resource_.begin_ = ppos + 1;
+                uncc.resource_.end_ = pend;
             }
         }
 
@@ -289,7 +285,7 @@ typedef struct tagDRIVEENUM
 
 }
 
-static HANDLE WINAPI OpenLogicalDrivesEnum()
+static HANDLE OpenLogicalDrivesEnum()
 {
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(HeapAlloc( GetProcessHeap(), 0, sizeof(DRIVEENUM) ));
     if ( pEnum )
@@ -310,7 +306,7 @@ static HANDLE WINAPI OpenLogicalDrivesEnum()
     return pEnum ? static_cast<HANDLE>(pEnum) : INVALID_HANDLE_VALUE;
 }
 
-static bool WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
+static bool EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
 {
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(hEnum);
     if ( !pEnum )
@@ -331,7 +327,7 @@ static bool WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
     return true;
 }
 
-static bool WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
+static bool CloseLogicalDrivesEnum(HANDLE hEnum)
 {
     bool        fSuccess = false;
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(hEnum);
@@ -357,36 +353,26 @@ typedef struct tagDIRECTORY
 
 }
 
-static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
+static HANDLE OpenDirectory(const OUString& path)
 {
-    if ( !pPath )
+    if (path.isEmpty())
         return nullptr;
 
-    sal_uInt32 nLen = rtl_uString_getLength( pPath );
-    if ( !nLen )
-        return nullptr;
-
-    const WCHAR* pSuffix = nullptr;
-    sal_uInt32 nSuffLen = 0;
-    if ( pPath->buffer[nLen - 1] != L'\\' )
-    {
-        pSuffix = L"\\*.*";
-        nSuffLen = 4;
-    }
+    std::u16string_view suffix;
+    if (!path.endsWith(u"\\"))
+        suffix = u"*.*";
     else
-    {
-        pSuffix = L"*.*";
-        nSuffLen = 3;
-    }
+        suffix = u"\\*.*";
 
-    WCHAR* szFileMask = static_cast< WCHAR* >( malloc( sizeof( WCHAR ) * ( nLen + nSuffLen + 1 ) ) );
+    std::unique_ptr<WCHAR[]> szFileMask(new (std::nothrow) WCHAR[path.getLength() + suffix.length() + 1]);
     assert(szFileMask); // Don't handle OOM conditions
-    wcscpy( szFileMask, o3tl::toW(rtl_uString_getStr( pPath )) );
-    wcscat( szFileMask, pSuffix );
+    WCHAR* pos = std::copy_n(path.getStr(), path.getLength(), szFileMask.get());
+    pos = std::copy_n(suffix.data(), suffix.length(), pos);
+    *pos = 0;
 
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(HeapAlloc(GetProcessHeap(), 0, sizeof(DIRECTORY)));
     assert(pDirectory); // Don't handle OOM conditions
-    pDirectory->hFind = FindFirstFileW(szFileMask, &pDirectory->aFirstData);
+    pDirectory->hFind = FindFirstFileW(szFileMask.get(), &pDirectory->aFirstData);
 
     if (!IsValidHandle(pDirectory->hFind))
     {
@@ -396,12 +382,11 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
             pDirectory = nullptr;
         }
     }
-    free(szFileMask);
 
     return static_cast<HANDLE>(pDirectory);
 }
 
-static bool WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
+static bool EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
 {
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
     if ( !pDirectory )
@@ -435,7 +420,7 @@ static bool WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData
     return fSuccess;
 }
 
-static bool WINAPI CloseDirectory(HANDLE hDirectory)
+static bool CloseDirectory(HANDLE hDirectory)
 {
     bool        fSuccess = false;
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
@@ -466,7 +451,7 @@ static oslFileError osl_openLocalRoot(
     if ( osl_File_E_None != error )
         return error;
 
-    Directory_Impl* pDirImpl = new (std::nothrow) Directory_Impl;
+    std::unique_ptr<Directory_Impl> pDirImpl(new (std::nothrow) Directory_Impl);
     assert(pDirImpl); // Don't handle OOM conditions
     pDirImpl->m_sDirectoryPath = strSysPath;
 
@@ -487,34 +472,21 @@ static oslFileError osl_openLocalRoot(
     /* @@@ToDo
        Use IsValidHandle(...)
     */
-    if ( pDirImpl->hEnumDrives != INVALID_HANDLE_VALUE )
-    {
-        *pDirectory = static_cast<oslDirectory>(pDirImpl);
-        error = osl_File_E_None;
-    }
-    else
-    {
-        if ( pDirImpl )
-        {
-            delete pDirImpl;
-            pDirImpl = nullptr;
-        }
+    if (pDirImpl->hEnumDrives == INVALID_HANDLE_VALUE)
+        return oslTranslateFileError(GetLastError());
 
-        error = oslTranslateFileError( GetLastError() );
-    }
-    return error;
+    *pDirectory = pDirImpl.release();
+    return osl_File_E_None;
 }
 
 static oslFileError osl_openFileDirectory(
     rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
 {
-    oslFileError error = osl_File_E_None;
-
     if ( !pDirectory )
         return osl_File_E_INVAL;
     *pDirectory = nullptr;
 
-    Directory_Impl *pDirImpl = new (std::nothrow) Directory_Impl;
+    std::unique_ptr<Directory_Impl> pDirImpl(new (std::nothrow) Directory_Impl);
     assert(pDirImpl); // Don't handle OOM conditions
     pDirImpl->m_sDirectoryPath = strDirectoryPath;
 
@@ -528,18 +500,13 @@ static oslFileError osl_openFileDirectory(
         pDirImpl->m_sDirectoryPath += "\\";
 
     pDirImpl->uType = DIRECTORYTYPE_FILESYSTEM;
-    pDirImpl->hDirectory = OpenDirectory( pDirImpl->m_sDirectoryPath.pData );
+    pDirImpl->hDirectory = OpenDirectory(pDirImpl->m_sDirectoryPath);
 
     if ( !pDirImpl->hDirectory )
-    {
-        error = oslTranslateFileError( GetLastError() );
+        return oslTranslateFileError(GetLastError());
 
-        delete pDirImpl;
-        pDirImpl = nullptr;
-    }
-
-    *pDirectory = static_cast<oslDirectory>(pDirImpl);
-    return error;
+    *pDirectory = pDirImpl.release();
+    return osl_File_E_None;
 }
 
 static oslFileError osl_openNetworkServer(
@@ -595,7 +562,7 @@ static DWORD create_dir_with_callback(
     return GetLastError();
 }
 
-static int path_make_parent(sal_Unicode* path)
+static sal_Int32 path_make_parent(rtl_uString* path)
 {
     /*  Cut off the last part of the given path to
     get the parent only, e.g. 'c:\dir\subdir' ->
@@ -605,12 +572,13 @@ static int path_make_parent(sal_Unicode* path)
     If there are no more parents 0 will be returned,
     e.g. 'c:\' or '\\Share' have no more parents */
 
-    OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) == -1, "Path must not contain slashes");
-    OSL_PRECOND(has_path_parent(path), "Path must have a parent");
+    OSL_PRECOND(OUString::unacquired(&path).indexOf('/') == -1, "Path must not contain slashes");
+    OSL_PRECOND(has_path_parent(OUString::unacquired(&path)), "Path must have a parent");
 
-    sal_Unicode* pos_last_backslash = path + rtl_ustr_lastIndexOfChar(path, BACKSLASH);
-    *pos_last_backslash = 0;
-    return (pos_last_backslash - path);
+    sal_Int32 pos = OUString::unacquired(&path).lastIndexOf('\\');
+    assert(pos >= 0);
+    *(path->buffer + pos) = 0;
+    return pos;
 }
 
 static DWORD create_dir_recursively_(
@@ -618,21 +586,22 @@ static DWORD create_dir_recursively_(
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
-    OSL_PRECOND(
-        rtl_ustr_lastIndexOfChar_WithLength(dir_path->buffer, dir_path->length, BACKSLASH) != dir_path->length,
+    OSL_PRECOND(!OUString::unacquired(&dir_path).endsWith(u"\\"),
         "Path must not end with a backslash");
 
     DWORD w32_error = create_dir_with_callback(
         dir_path, aDirectoryCreationCallbackFunc, pData);
-    if ((w32_error != ERROR_PATH_NOT_FOUND) || !has_path_parent(dir_path->buffer))
+    if ((w32_error != ERROR_PATH_NOT_FOUND) || !has_path_parent(OUString::unacquired(&dir_path)))
         return w32_error;
 
-    int pos = path_make_parent(dir_path->buffer); // dir_path->buffer[pos] = 0, restore below
+    const sal_Int32 oldLen = dir_path->length;
+    dir_path->length = path_make_parent(dir_path); // dir_path->buffer[pos] = 0, restore below
 
     w32_error = create_dir_recursively_(
         dir_path, aDirectoryCreationCallbackFunc, pData);
 
-    dir_path->buffer[pos] = BACKSLASH; // restore
+    dir_path->buffer[dir_path->length] = '\\'; // restore
+    dir_path->length = oldLen;
 
     if (ERROR_SUCCESS != w32_error && ERROR_ALREADY_EXISTS != w32_error)
         return w32_error;
@@ -783,8 +752,6 @@ static oslFileError osl_getNextDrive(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
 {
     Directory_Impl      *pDirImpl = static_cast<Directory_Impl *>(Directory);
-    DirectoryItem_Impl  *pItemImpl = nullptr;
-    bool                fSuccess;
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -793,32 +760,23 @@ static oslFileError osl_getNextDrive(
     if ( !pDirImpl )
         return osl_File_E_INVAL;
 
-    pItemImpl = new (std::nothrow) DirectoryItem_Impl;
+    std::unique_ptr<DirectoryItem_Impl> pItemImpl(new (std::nothrow) DirectoryItem_Impl);
     if ( !pItemImpl )
         return osl_File_E_NOMEM;
 
     pItemImpl->uType = DIRECTORYITEM_DRIVE;
-    osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
-    fSuccess = EnumLogicalDrives( pDirImpl->hEnumDrives, pItemImpl->cDriveString );
+    osl_acquireDirectoryItem(pItemImpl.get());
+    if (!EnumLogicalDrives(pDirImpl->hEnumDrives, pItemImpl->cDriveString))
+        return oslTranslateFileError(GetLastError());
 
-    if ( fSuccess )
-    {
-        *pItem = pItemImpl;
-        return osl_File_E_None;
-    }
-    else
-    {
-        delete pItemImpl;
-        return oslTranslateFileError( GetLastError() );
-    }
+    *pItem = pItemImpl.release();
+    return osl_File_E_None;
 }
 
 static oslFileError osl_getNextFileItem(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/)
 {
     Directory_Impl      *pDirImpl = static_cast<Directory_Impl *>(Directory);
-    DirectoryItem_Impl  *pItemImpl = nullptr;
-    bool                fFound;
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -827,16 +785,12 @@ static oslFileError osl_getNextFileItem(
     if ( !pDirImpl )
         return osl_File_E_INVAL;
 
-    pItemImpl = new (std::nothrow) DirectoryItem_Impl;
+    std::unique_ptr<DirectoryItem_Impl> pItemImpl(new (std::nothrow) DirectoryItem_Impl);
     if ( !pItemImpl )
         return osl_File_E_NOMEM;
 
-    fFound = EnumDirectory( pDirImpl->hDirectory, &pItemImpl->FindData );
-    if ( !fFound )
-    {
-        delete pItemImpl;
+    if (!EnumDirectory(pDirImpl->hDirectory, &pItemImpl->FindData))
         return oslTranslateFileError( GetLastError() );
-    }
 
     pItemImpl->uType = DIRECTORYITEM_FILE;
     pItemImpl->nRefCount = 1;
@@ -844,7 +798,7 @@ static oslFileError osl_getNextFileItem(
     pItemImpl->m_sFullPath = pDirImpl->m_sDirectoryPath + o3tl::toU(pItemImpl->FindData.cFileName);
 
     pItemImpl->bFullPathNormalized = true;
-    *pItem = static_cast<oslDirectoryItem>(pItemImpl);
+    *pItem = pItemImpl.release();
     return osl_File_E_None;
 }
 
@@ -955,28 +909,25 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
             DirectoryItem_Impl* pItemImpl = new (std::nothrow) DirectoryItem_Impl;
 
             if ( !pItemImpl )
-                error = osl_File_E_NOMEM;
+                return osl_File_E_NOMEM;
 
-            if ( osl_File_E_None == error )
+            pItemImpl->uType = DIRECTORYITEM_SERVER;
+
+            osl_acquireDirectoryItem(pItemImpl);
+            pItemImpl->m_sFullPath = strSysFilePath;
+
+            // Assign a title anyway
             {
-                pItemImpl->uType = DIRECTORYITEM_SERVER;
+                int iSrc = 2;
+                int iDst = 0;
 
-                osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
-                pItemImpl->m_sFullPath = strSysFilePath;
-
-                // Assign a title anyway
+                while( iSrc < strSysFilePath.getLength() && strSysFilePath[iSrc] && strSysFilePath[iSrc] != '\\')
                 {
-                    int iSrc = 2;
-                    int iDst = 0;
-
-                    while( iSrc < strSysFilePath.getLength() && strSysFilePath[iSrc] && strSysFilePath[iSrc] != '\\')
-                    {
-                        pItemImpl->FindData.cFileName[iDst++] = strSysFilePath[iSrc++];
-                    }
+                    pItemImpl->FindData.cFileName[iDst++] = strSysFilePath[iSrc++];
                 }
-
-                *pItem = pItemImpl;
             }
+
+            *pItem = pItemImpl;
         }
         break;
     case PATHTYPE_VOLUME:
@@ -984,22 +935,20 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
             DirectoryItem_Impl* pItemImpl = new (std::nothrow) DirectoryItem_Impl;
 
             if ( !pItemImpl )
-                error = osl_File_E_NOMEM;
+                return osl_File_E_NOMEM;
 
-            if ( osl_File_E_None == error )
-            {
-                pItemImpl->uType = DIRECTORYITEM_DRIVE;
+            pItemImpl->uType = DIRECTORYITEM_DRIVE;
 
-                osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
+            osl_acquireDirectoryItem(pItemImpl);
 
-                wcscpy( pItemImpl->cDriveString, o3tl::toW(strSysFilePath.getStr()) );
-                pItemImpl->cDriveString[0] = rtl::toAsciiUpperCase( pItemImpl->cDriveString[0] );
+            auto pos = std::copy_n(strSysFilePath.getStr(), strSysFilePath.getLength(), pItemImpl->cDriveString);
+            pItemImpl->cDriveString[0] = rtl::toAsciiUpperCase( pItemImpl->cDriveString[0] );
 
-                if ( pItemImpl->cDriveString[wcslen(pItemImpl->cDriveString) - 1] != '\\' )
-                    wcscat( pItemImpl->cDriveString, L"\\" );
+            if (!strSysFilePath.endsWith(u"\\"))
+                *pos++ = '\\';
+            *pos = 0;
 
-                *pItem = pItemImpl;
-            }
+            *pItem = pItemImpl;
         }
         break;
     case PATHTYPE_SYNTAXERROR:
@@ -1314,11 +1263,11 @@ static oslFileError get_filesystem_attributes(
 
 static bool path_get_parent(OUString& path)
 {
-    OSL_PRECOND(path.lastIndexOf(SLASH) == -1, "Path must not have slashes");
+    OSL_PRECOND(path.lastIndexOf('/') == -1, "Path must not have slashes");
 
     if (!has_path_parent(path))
     {
-        sal_Int32 i = path.lastIndexOf(BACKSLASH);
+        sal_Int32 i = path.lastIndexOf('\\');
         if (-1 < i)
         {
             path = path.copy(0, i);
