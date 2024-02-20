@@ -13,64 +13,6 @@ exported_symbols = set()
 imported_symbols = set()
 
 
-# Copied from solenv/gbuild/extensions/pre_MergedLibsList.mk
-# TODO there has to be a way to run gmake and get it to dump this list for me
-merged_libs = { \
-    "avmedia" \
-    ,"basctl" \
-    ,"basprov" \
-    ,"basegfx" \
-    ,"canvasfactory" \
-    ,"canvastools" \
-    ,"comphelper" \
-    ,"configmgr" \
-    ,"cppcanvas" \
-    ,"crashreport)" \
-    ,"dbtools" \
-    ,"deployment" \
-    ,"deploymentmisc" \
-    ,"desktopbe1)" \
-    ,"desktop_detector)" \
-    ,"drawinglayer" \
-    ,"editeng" \
-    ,"filterconfig" \
-    ,"fsstorage" \
-    ,"fwk" \
-    ,"helplinker)" \
-    ,"i18npool" \
-    ,"i18nutil" \
-    ,"lng" \
-    ,"localebe1" \
-    ,"msfilter" \
-    ,"mtfrenderer" \
-    ,"opencl" \
-    ,"package2" \
-    ,"sax" \
-    ,"sb" \
-    ,"simplecanvas" \
-    ,"sfx" \
-    ,"sofficeapp" \
-    ,"sot" \
-    ,"spl" \
-    ,"stringresource" \
-    ,"svl" \
-    ,"svt" \
-    ,"svx" \
-    ,"svxcore" \
-    ,"tk" \
-    ,"tl" \
-    ,"ucb1" \
-    ,"ucbhelper" \
-    ,"ucpexpand1" \
-    ,"ucpfile1" \
-    ,"unoxml" \
-    ,"utl" \
-    ,"uui" \
-    ,"vcl" \
-    ,"xmlscript" \
-    ,"xo" \
-    ,"xstor" }
-
 # look for symbols exported by libmerged
 subprocess_nm = subprocess.Popen("nm -D instdir/program/libmergedlo.so", stdout=subprocess.PIPE, shell=True)
 with subprocess_nm.stdout as txt:
@@ -90,7 +32,6 @@ with subprocess_find.stdout as txt:
     for line in txt:
         sharedlib = line.strip().decode("utf-8")
         s = sharedlib[sharedlib.find("/lib") + 4 : len(sharedlib) - 3]
-        if s in merged_libs: continue
         # look for imported symbols
         subprocess_objdump = subprocess.Popen("objdump -T " + sharedlib, stdout=subprocess.PIPE, shell=True)
         with subprocess_objdump.stdout as txt2:
