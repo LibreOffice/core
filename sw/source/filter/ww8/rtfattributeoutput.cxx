@@ -94,6 +94,8 @@
 #include <formatflysplit.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include "rtfexport.hxx"
+#include <IDocumentDeviceAccess.hxx>
+#include <sfx2/printer.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -3329,9 +3331,14 @@ void RtfAttributeOutput::FormatFrameSize(const SwFormatFrameSize& rSize)
     }
 }
 
-void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem& /*rItem*/)
+void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem& rItem)
 {
-    SAL_INFO("sw.rtf", "TODO: " << __func__);
+    SfxPrinter* pPrinter = m_rExport.m_rDoc.getIDocumentDeviceAccess().getPrinter(true);
+    sal_Int16 nPaperSource = pPrinter->GetSourceIndexByPaperBin(rItem.GetValue());
+    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_BINFSXN);
+    m_aSectionBreaks.append(static_cast<sal_Int32>(nPaperSource));
+    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_BINSXN);
+    m_aSectionBreaks.append(static_cast<sal_Int32>(nPaperSource));
 }
 
 void RtfAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)

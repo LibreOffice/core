@@ -161,6 +161,8 @@
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
+#include <IDocumentDeviceAccess.hxx>
+#include <sfx2/printer.hxx>
 
 using ::editeng::SvxBorderLine;
 
@@ -9143,9 +9145,15 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
     }
 }
 
-void DocxAttributeOutput::FormatPaperBin( const SvxPaperBinItem& )
+void DocxAttributeOutput::FormatPaperBin(const SvxPaperBinItem& rPaperBin)
 {
-    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FormatPaperBin()" );
+    sal_Int8 nPaperBin = rPaperBin.GetValue();
+    rtl::Reference<FastAttributeList> attrList = FastSerializerHelper::createAttrList( );
+    SfxPrinter* pPrinter = m_rExport.m_rDoc.getIDocumentDeviceAccess().getPrinter(true);
+    sal_Int16 nPaperSource = pPrinter->GetSourceIndexByPaperBin(nPaperBin);
+    attrList->add( FSNS( XML_w, XML_first ), OString::number(nPaperSource) );
+    attrList->add( FSNS( XML_w, XML_other ), OString::number(nPaperSource) );
+    m_pSerializer->singleElementNS( XML_w, XML_paperSrc, attrList );
 }
 
 void DocxAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
