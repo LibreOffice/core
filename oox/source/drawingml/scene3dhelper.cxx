@@ -329,7 +329,7 @@ void Scene3DHelper::addProjectionGeometryToMap(
         // oblique projections (index [38..45]) need special treatment. MS Office rotates around the
         // z-axis after the projection was created. Thus the rotation affects the skew direction. ODF
         // rotates the shape before creating the projection. Thus we need to incorporate the shape
-        // rotation into the shew angle.
+        // rotation into the skew angle.
         if (38 <= mnPrstCameraIndex && mnPrstCameraIndex <= 45)
         {
             fSkewAngle -= rnMSOShapeRotation / 60000.0;
