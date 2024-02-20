@@ -31,7 +31,6 @@
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-const wchar_t UNC_PREFIX[] = L"\\\\";
 const wchar_t BACKSLASH = '\\';
 const wchar_t SLASH = '/';
 
@@ -99,18 +98,50 @@ BOOL FileTimeToTimeValue(const FILETIME *cpFTime, TimeValue *pTimeVal)
 
 namespace
 {
+// Returns whether a given path is only a logical drive pattern or not.
+// A logical drive pattern is something like "a:\", "c:\".
+// No logical drive pattern is something like "c:\test"
+bool systemPathIsLogicalDrivePattern(std::u16string_view path)
+{
+    // is [A-Za-z]:[/|\]\0
+    if (path.length() < 2 || !rtl::isAsciiAlpha(path[0]) || path[1] != ':')
+        return false;
+    auto rest = path.substr(2);
+    return rest.empty() // "c:"
+           || rest == u"\\" // "c:\"
+           || rest == u"/" // "c:/"
+           || rest == u".\\"; // "c:.\"
+               // degenerated case returned by the Windows FileOpen dialog
+               // when someone enters for instance "x:filename", the Win32
+               // API accepts this case
+}
+
+// Adds a trailing path separator to the given system path if not
+// already there and if the path is not the root path or a logical
+// drive alone
+void systemPathEnsureSeparator(/*inout*/ OUString& path)
+{
+    if (!path.endsWith(u"\\") && !path.endsWith(u"/"))
+        path += "\\";
+
+    SAL_WARN_IF(!path.endsWith(u"\\"), "sal.osl",
+                "systemPathEnsureSeparator: Post condition failed");
+}
+
+// Removes the last separator from the given system path if any and
+// if the path is not the root path '\'
+void systemPathRemoveSeparator(/*inout*/ OUString& path)
+{
+    if (!systemPathIsLogicalDrivePattern(path) && (path.endsWith(u"\\") || path.endsWith(u"/")))
+        path = path.copy(0, path.getLength() - 1);
+}
 
     struct Component
     {
-        Component() :
-            begin_(nullptr), end_(nullptr)
-        {}
+        bool isPresent() const { return begin_ < end_; }
 
-        bool isPresent() const
-        { return (static_cast<sal_IntPtr>(end_ - begin_) > 0); }
-
-        const sal_Unicode* begin_;
-        const sal_Unicode* end_;
+        const sal_Unicode* begin_ = nullptr;
+        const sal_Unicode* end_ = nullptr;
     };
 
     struct UNCComponents
@@ -120,47 +151,48 @@ namespace
         Component resource_;
     };
 
-    bool is_UNC_path(const sal_Unicode* path)
-    { return (0 == wcsncmp(UNC_PREFIX, o3tl::toW(path), SAL_N_ELEMENTS(UNC_PREFIX) - 1)); }
+    bool is_UNC_path(std::u16string_view path) { return path.starts_with(u"\\\\"); }
 
-    void parse_UNC_path(const sal_Unicode* path, UNCComponents* puncc)
+    UNCComponents parse_UNC_path(std::u16string_view path)
     {
         OSL_PRECOND(is_UNC_path(path), "Precondition violated: No UNC path");
-        OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) == -1, "Path must not contain slashes");
+        OSL_PRECOND(path.find('/') == std::u16string_view::npos, "Path must not contain slashes");
 
-        const sal_Unicode* pend = path + rtl_ustr_getLength(path);
-        const sal_Unicode* ppos = path + 2;
+        const sal_Unicode* pend = path.data() + path.length();
+        const sal_Unicode* ppos = path.data() + 2;
+        UNCComponents uncc;
 
-        puncc->server_.begin_ = ppos;
+        uncc.server_.begin_ = ppos;
         while ((ppos < pend) && (*ppos != BACKSLASH))
             ppos++;
 
-        puncc->server_.end_ = ppos;
+        uncc.server_.end_ = ppos;
 
-        if (BACKSLASH == *ppos)
+        if (ppos < pend)
         {
-            puncc->share_.begin_ = ++ppos;
+            uncc.share_.begin_ = ++ppos;
             while ((ppos < pend) && (*ppos != BACKSLASH))
                 ppos++;
 
-            puncc->share_.end_ = ppos;
+            uncc.share_.end_ = ppos;
 
-            if (BACKSLASH == *ppos)
+            if (ppos < pend)
             {
-                puncc->resource_.begin_ = ++ppos;
+                uncc.resource_.begin_ = ++ppos;
                 while (ppos < pend)
                     ppos++;
 
-                puncc->resource_.end_ = ppos;
+                uncc.resource_.end_ = ppos;
             }
         }
 
-        SAL_WARN_IF(!puncc->server_.isPresent() || !puncc->share_.isPresent(),
+        SAL_WARN_IF(!uncc.server_.isPresent() || !uncc.share_.isPresent(),
             "sal.osl",
             "Postcondition violated: Invalid UNC path detected");
+        return uncc;
     }
 
-    bool has_path_parent(const sal_Unicode* path)
+    bool has_path_parent(std::u16string_view path)
     {
         // Has the given path a parent or are we already there,
         // e.g. 'c:\' or '\\server\share\'?
@@ -168,20 +200,15 @@ namespace
         bool has_parent = false;
         if (is_UNC_path(path))
         {
-            UNCComponents unc_comp;
-            parse_UNC_path(path, &unc_comp);
+            UNCComponents unc_comp = parse_UNC_path(path);
             has_parent = unc_comp.resource_.isPresent();
         }
         else
         {
-            has_parent = !osl::systemPathIsLogicalDrivePattern(OUString(path));
+            has_parent = !systemPathIsLogicalDrivePattern(path);
         }
         return has_parent;
     }
-
-    bool has_path_parent(const OUString& path)
-    { return has_path_parent(path.getStr()); }
-
 }
 
 oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
@@ -597,9 +624,6 @@ static DWORD create_dir_recursively_(
 
     DWORD w32_error = create_dir_with_callback(
         dir_path, aDirectoryCreationCallbackFunc, pData);
-    if (w32_error == ERROR_SUCCESS)
-        return ERROR_SUCCESS;
-
     if ((w32_error != ERROR_PATH_NOT_FOUND) || !has_path_parent(dir_path->buffer))
         return w32_error;
 
@@ -613,7 +637,7 @@ static DWORD create_dir_recursively_(
     if (ERROR_SUCCESS != w32_error && ERROR_ALREADY_EXISTS != w32_error)
         return w32_error;
 
-    return create_dir_recursively_(dir_path, aDirectoryCreationCallbackFunc, pData);
+    return create_dir_with_callback(dir_path, aDirectoryCreationCallbackFunc, pData);
 }
 
 oslFileError SAL_CALL osl_createDirectoryPath(
@@ -631,7 +655,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     if (osl_error != osl_File_E_None)
         return osl_error;
 
-    osl::systemPathRemoveSeparator(sys_path);
+    systemPathRemoveSeparator(sys_path);
 
     return oslTranslateFileError(create_dir_recursively_(
         sys_path.pData, aDirectoryCreationCallbackFunc, pData));
@@ -1073,7 +1097,7 @@ static bool is_floppy_volume_mount_point(const OUString& path)
     static const LPCWSTR FLOPPY_B = L"B:\\";
 
     OUString p(path);
-    osl::systemPathEnsureSeparator(p);
+    systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
     if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
@@ -1109,7 +1133,7 @@ static bool is_floppy_drive(const OUString& path)
 static bool is_volume_mount_point(const OUString& path)
 {
     OUString p(path);
-    osl::systemPathRemoveSeparator(p);
+    systemPathRemoveSeparator(p);
 
     if (is_floppy_drive(p))
         return false;
@@ -1140,7 +1164,7 @@ static UINT get_volume_mount_point_drive_type(const OUString& path)
         return GetDriveTypeW(nullptr);
 
     OUString p(path);
-    osl::systemPathEnsureSeparator(p);
+    systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
     if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
@@ -1312,7 +1336,7 @@ static void path_travel_to_volume_root(const OUString& system_path, OUString& vo
         /**/;
 
     volume_root = sys_path;
-    osl::systemPathEnsureSeparator(volume_root);
+    systemPathEnsureSeparator(volume_root);
 }
 
 oslFileError SAL_CALL osl_getVolumeInformation(

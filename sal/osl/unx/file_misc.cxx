@@ -481,7 +481,7 @@ static int path_make_parent(char* path)
     return 0;
 }
 
-static int create_dir_with_callback(
+static oslFileError create_dir_with_callback(
     char* directory_path,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
@@ -494,9 +494,9 @@ static int create_dir_with_callback(
             osl::detail::convertPathnameToUrl(directory_path, &url);
             aDirectoryCreationCallbackFunc(pData, url.pData);
         }
-        return 0;
+        return osl_File_E_None;
     }
-    return errno;
+    return oslTranslateFileError(errno);
 }
 
 static oslFileError create_dir_recursively_(
@@ -507,14 +507,11 @@ static oslFileError create_dir_recursively_(
     OSL_PRECOND((rtl_str_getLength(dir_path) > 0) && ((dir_path + (rtl_str_getLength(dir_path) - 1)) != (dir_path + rtl_str_lastIndexOfChar(dir_path, '/'))),
     "Path must not end with a slash");
 
-    int native_err = create_dir_with_callback(
+    oslFileError osl_error = create_dir_with_callback(
         dir_path, aDirectoryCreationCallbackFunc, pData);
 
-    if (native_err == 0)
-        return osl_File_E_None;
-
-    if (native_err != ENOENT)
-        return oslTranslateFileError(native_err);
+    if (osl_error != osl_File_E_NOENT)
+        return osl_error;
 
     // we step back until '/a_dir' at maximum because
     // we should get an error unequal ENOENT when
@@ -522,7 +519,7 @@ static oslFileError create_dir_recursively_(
     // return before
     int pos = path_make_parent(dir_path);
 
-    oslFileError osl_error = create_dir_recursively_(
+    osl_error = create_dir_recursively_(
         dir_path, aDirectoryCreationCallbackFunc, pData);
 
     if (osl_error != osl_File_E_None && osl_error != osl_File_E_EXIST)
@@ -530,7 +527,7 @@ static oslFileError create_dir_recursively_(
 
     dir_path[pos] = '/';
 
-    return create_dir_recursively_(dir_path, aDirectoryCreationCallbackFunc, pData);
+    return create_dir_with_callback(dir_path, aDirectoryCreationCallbackFunc, pData);
 }
 
 oslFileError SAL_CALL osl_createDirectoryPath(

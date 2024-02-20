@@ -23,71 +23,19 @@
 #include <sal/config.h>
 
 #include <osl/diagnose.h>
-#include <rtl/ustring.h>
-#include <rtl/ustring.hxx>
 #include <sal/types.h>
-
-/**
- Adds a trailing path separator to the given system path if not
- already there and if the path is not the root path or a logical
- drive alone
-*/
-
-void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath);
-
-/**
- Removes the last separator from the given system path if any and
- if the path is not the root path '\'
-*/
-
-void osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath);
-
-/**
- Returns whether a given path is only a logical drive pattern or not.
- A logical drive pattern is something like "a:\", "c:\".
- No logical drive pattern is something like "c:\test"
-*/
-
-bool osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath);
 
 namespace osl
 {
-
-/**
- Adds a trailing path separator to the given system path if not
- already there and if the path is not the root path or a logical
- drive alone
-*/
-
-inline void systemPathEnsureSeparator(/*inout*/ OUString& Path)
-{
-    osl_systemPathEnsureSeparator(&Path.pData);
-}
-
-/**
- Removes the last separator from the given system path if any and
- if the path is not the root path '\'
-*/
-
-inline void systemPathRemoveSeparator(/*inout*/ OUString& Path)
-{
-    osl_systemPathRemoveSeparator(&Path.pData);
-}
-
-inline bool systemPathIsLogicalDrivePattern(/*in*/ const OUString& path)
-{
-    return osl_systemPathIsLogicalDrivePattern(path.pData);
-}
-
 template< class T >
 class LongPathBuffer
 {
     T* m_pBuffer;
     sal_uInt32 m_nCharNum;
 
-    LongPathBuffer();
-    LongPathBuffer( const LongPathBuffer& );
-    LongPathBuffer& operator=( const LongPathBuffer& );
+    LongPathBuffer() = delete;
+    LongPathBuffer(const LongPathBuffer&) = delete;
+    LongPathBuffer& operator=(const LongPathBuffer&) = delete;
 
 public:
     explicit LongPathBuffer( sal_uInt32 nCharNum )
