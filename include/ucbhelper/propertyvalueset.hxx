@@ -54,7 +54,7 @@ class PropertyValues;
   * values to return can easily appended to a valueset object. That object can
   * directly be returned by the implementation of the command.
   */
-class PropertyValueSet final :
+class SAL_DLLPUBLIC_RTTI PropertyValueSet final :
                 public cppu::WeakImplHelper<
                     css::sdbc::XRow,
                     css::sdbc::XColumnLocate>

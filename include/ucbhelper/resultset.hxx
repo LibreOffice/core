@@ -56,7 +56,7 @@ struct ResultSet_Impl;
  *
  * @see ResultSetDataSupplier
  */
-class ResultSet final :
+class SAL_DLLPUBLIC_RTTI ResultSet final :
                 public cppu::WeakImplHelper<
                     css::lang::XServiceInfo,
                     css::lang::XComponent,
