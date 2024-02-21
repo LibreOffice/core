@@ -390,6 +390,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         catch ( uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("comphelper", "Can not create SHA256 digest!" );
+            throw; // tdf#159519 DO NOT RETURN SUCCESS
         }
 
         // MS_1252 encoding was used for SO60 document format password encoding,
