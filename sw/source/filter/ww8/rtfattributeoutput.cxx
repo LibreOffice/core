@@ -3752,6 +3752,15 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
         "fillColor"_ostr, OString::number(wwUtility::RGBToBGR(aStartColor))));
 
+    // LO's angle is 180° different from VML/RTF. Copied docxattribute angle formula here.
+    sal_Int32 nReverseAngle = toDegrees(4500_deg10 - rGradient.GetAngle());
+    nReverseAngle = (270 - nReverseAngle) % 360;
+    if (nReverseAngle != 0)
+    {
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+            "fillAngle"_ostr, OString::number(nReverseAngle * 60000)));
+    }
+
     if (rColorStops.size() < 3)
     {
         // two-color version, use back as 2nd color
