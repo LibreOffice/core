@@ -3008,6 +3008,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106663HeaderTextFrameGoToNextPlacem
     CPPUNIT_ASSERT(pCursor->GetPoint()->GetNode().GetTextNode()->GetText().startsWith("Heading"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf159797)
+{
+    createSwDoc();
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
+
+    emulateTyping(rTextDoc, u"This - is replaced. - But this is not replaced.");
+    // Without the fix in place, this would fail with
+    // - Expected: This – is replaced. – But this is not replaced.
+    // - Actual  : This – is replaced. - But this is not replaced.
+    CPPUNIT_ASSERT_EQUAL(u"This – is replaced. – But this is not replaced."_ustr,
+                         getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155407)
 {
     createSwDoc();
