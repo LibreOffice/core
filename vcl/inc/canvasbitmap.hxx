@@ -30,7 +30,7 @@
 
 namespace vcl::unotools
 {
-    class VclCanvasBitmap final :
+    class SAL_DLLPUBLIC_RTTI VclCanvasBitmap final :
         public cppu::WeakImplHelper< css::rendering::XIntegerReadOnlyBitmap,
                                      css::rendering::XBitmapPalette,
                                      css::rendering::XIntegerBitmapColorSpace >
