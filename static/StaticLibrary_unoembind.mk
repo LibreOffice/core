@@ -22,6 +22,12 @@ $(eval $(call gb_StaticLibrary_use_api,unoembind,\
     udkapi \
 ))
 
+ifneq ($(ENABLE_DBGUTIL),)
+$(eval $(call gb_StaticLibrary_use_internal_api,unoembind, \
+    embindtest \
+))
+endif
+
 $(call gb_StaticLibrary_get_target,unoembind): $(call gb_CustomTarget_get_target,static/unoembind)
 
 # vim: set noet sw=4 ts=4:

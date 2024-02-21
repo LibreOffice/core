@@ -30,6 +30,13 @@ $(eval $(call gb_Module_add_targets,unotest,\
 ))
 endif
 endif
+
+ifeq ($(OS)-$(ENABLE_DBGUTIL),EMSCRIPTEN-TRUE)
+$(eval $(call gb_Module_add_targets,unotest, \
+    InternalUnoApi_embindtest \
+    Library_embindtest \
+))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
