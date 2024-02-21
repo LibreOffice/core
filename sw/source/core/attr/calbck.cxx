@@ -188,15 +188,6 @@ void SwModify::Add( SwClient* pDepend )
     if(pDepend->m_pRegisteredIn == this)
         return;
 
-#if OSL_DEBUG_LEVEL > 0
-    if(sw::ClientIteratorBase::s_pClientIters)
-    {
-        for(auto& rIter : sw::ClientIteratorBase::s_pClientIters->GetRingContainer())
-        {
-            SAL_WARN_IF(&rIter.m_rRoot == m_pWriterListeners, "sw.core", "a " << typeid(*pDepend).name() << " client added as listener to a " << typeid(*this).name() << " during client iteration.");
-        }
-    }
-#endif
     // deregister new client in case it is already registered elsewhere
     if( pDepend->m_pRegisteredIn != nullptr )
         pDepend->m_pRegisteredIn->Remove( pDepend );
