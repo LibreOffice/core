@@ -103,6 +103,7 @@ LinePropertyPanelBase::~LinePropertyPanelBase()
     mxMFTransparent.reset();
     mxLineStyleDispatch.reset();
     mxLineStyleTB.reset();
+    mxArrowHeadStyleDispatch.reset();
     mxArrowHeadStyleTB.reset();
     mxArrowHeadStyleFT.reset();
 }
