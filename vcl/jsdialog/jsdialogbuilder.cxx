@@ -1820,8 +1820,13 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
 
 JSMessageDialog::~JSMessageDialog()
 {
-    if (m_pOK || m_pCancel)
+    if (!m_pBuilder)
+    {
+        // For Message Dialogs created from Application::CreateMessageDialog
+        // (where there is no builder to take care of this for us) explicitly
+        // remove this window id on tear down
         JSInstanceBuilder::RemoveWindowWidget(m_sWindowId);
+    }
 }
 
 void JSMessageDialog::RememberMessageDialog()
