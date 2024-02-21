@@ -182,8 +182,27 @@ sal_Bool SAL_CALL DrawController::suspend( sal_Bool Suspend )
         {
             // do not allow suspend if a slideshow needs this controller!
             rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( *pViewShellBase ) );
-            if( xSlideShow.is() && xSlideShow->dependsOn(pViewShellBase) )
-                return false;
+            if (xSlideShow.is())
+            {
+                if (SlideShow::IsInteractiveSlideshow())
+                {
+                    // IASS mode: If preview mode, end it
+                    if (xSlideShow->isInteractiveSetup())
+                        xSlideShow->endInteractivePreview();
+
+                    // end the SlideShow
+                    xSlideShow->end();
+
+                    // use SfxBaseController::suspend( Suspend ) below
+                    // for normal processing and return value
+                }
+                else
+                {
+                    // original reaction - prevent exit
+                    if (xSlideShow->dependsOn(pViewShellBase))
+                        return false;
+                }
+            }
         }
     }
 
