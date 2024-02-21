@@ -75,7 +75,7 @@ public:
 
 /// Collection of SwLinePortion instances, representing one line of text.
 /// Typically owned by an SwParaPortion.
-class SW_DLLPUBLIC SwLineLayout : public SwTextPortion
+class SwLineLayout : public SwTextPortion
 {
 private:
     SwLineLayout *m_pNext;                // The next Line
@@ -114,7 +114,7 @@ public:
     // From SwLinePortion
     virtual SwLinePortion *Insert( SwLinePortion *pPortion ) override;
     virtual SwLinePortion *Append( SwLinePortion *pPortion ) override;
-    SwLinePortion *GetFirstPortion() const;
+    SW_DLLPUBLIC SwLinePortion *GetFirstPortion() const;
 
     // Flags
     void ResetFlags();

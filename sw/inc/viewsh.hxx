@@ -107,7 +107,7 @@ struct SwVisiblePageNumbers
 
 class SwView;
 
-class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
+class SAL_DLLPUBLIC_RTTI SwViewShell : public sw::Ring<SwViewShell>
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
     friend void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pOut,
@@ -169,27 +169,27 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SwRootFramePtr            mpLayout;
 
     // Initialization; called by the diverse constructors.
-    SAL_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
+    void Init( const SwViewOption *pNewOpt );
 
     inline void ResetInvalidRect();
 
 
 
-    SAL_DLLPRIVATE void PaintDesktop(const vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
+    void PaintDesktop(const vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
                                                         // and calling.
     // PaintDesktop split. This pars is also used by PreviewPage.
-    SAL_DLLPRIVATE void PaintDesktop_(const SwRegionRects &rRegion);
+    void PaintDesktop_(const SwRegionRects &rRegion);
 
-    SAL_DLLPRIVATE bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
+    bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
                                                                     // trigger an action.
 
-    SAL_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExport = false );
+    void PrepareForPrint( const SwPrintData &rOptions, bool bIsPDFExport = false );
 
-    SAL_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
+    void ImplApplyViewOptions( const SwViewOption &rOpt );
 
-    SAL_DLLPRIVATE void InvalidateAll(std::vector<LockPaintReason>& rReasons);
+    void InvalidateAll(std::vector<LockPaintReason>& rReasons);
 
-    SAL_DLLPRIVATE void InvalidatePageAndHFSubsidiaryLines();
+    void InvalidatePageAndHFSubsidiaryLines();
 
 protected:
     static ShellResource*      spShellRes;      ///< Resources for the Shell.
@@ -219,9 +219,9 @@ public:
 
     // Bracketing of actions belonging together.
     inline void StartAction();
-           void ImplStartAction();
+    SW_DLLPUBLIC void ImplStartAction();
     inline void EndAction( const bool bIdleEnd = false );
-           void ImplEndAction( const bool bIdleEnd );
+    SW_DLLPUBLIC void ImplEndAction( const bool bIdleEnd );
     sal_uInt16 ActionCount() const { return mnStartAction; }
     bool ActionPend() const { return mnStartAction != 0; }
     bool IsInEndAction() const { return mbInEndAction; }
@@ -241,7 +241,7 @@ public:
     void FlushPendingLOKInvalidateTiles();
 
     /// Invalidates complete Layout (ApplyViewOption).
-    void Reformat();
+    SW_DLLPUBLIC void Reformat();
 
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
@@ -295,33 +295,33 @@ public:
     // Invalidate first visible page for all Shells in ring.
     void SetFirstVisPageInvalid();
 
-    SwRootFrame   *GetLayout() const;
+    SW_DLLPUBLIC SwRootFrame* GetLayout() const;
     bool         IsNewLayout() const; // Has Layout been loaded or created?
 
      Size GetDocSize() const;   // Get document size.
 
     virtual void CalcLayout();  // Force complete formatting of layout.
 
-    sal_uInt16 GetPageCount() const;
+    SW_DLLPUBLIC sal_uInt16 GetPageCount() const;
 
-    Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
+    SW_DLLPUBLIC Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
     SwDoc *GetDoc()  const { return mxDoc.get(); }  //Never 0.
 
     /** Provides access to the document setting interface
      */
     const IDocumentSettingAccess& getIDocumentSettingAccess() const;
-          IDocumentSettingAccess& getIDocumentSettingAccess();
+    SW_DLLPUBLIC IDocumentSettingAccess& getIDocumentSettingAccess();
 
     /** Provides access to the document device interface
      */
     const IDocumentDeviceAccess& getIDocumentDeviceAccess() const;
-          IDocumentDeviceAccess& getIDocumentDeviceAccess();
+    SW_DLLPUBLIC IDocumentDeviceAccess& getIDocumentDeviceAccess();
 
     /** Provides access to the document bookmark interface
      */
     const IDocumentMarkAccess* getIDocumentMarkAccess() const;
-          IDocumentMarkAccess* getIDocumentMarkAccess();
+    SW_DLLPUBLIC IDocumentMarkAccess* getIDocumentMarkAccess();
 
     /** Provides access to the document draw model interface
      */
@@ -336,7 +336,7 @@ public:
     /** Provides access to the document layout interface
      */
     const IDocumentLayoutAccess& getIDocumentLayoutAccess() const;
-          IDocumentLayoutAccess& getIDocumentLayoutAccess();
+    SW_DLLPUBLIC IDocumentLayoutAccess& getIDocumentLayoutAccess();
 
     /** Provides access to the content operations interface
      */
@@ -344,7 +344,7 @@ public:
 
     /** Provides access to the document style pool interface
      */
-    IDocumentStylePoolAccess& getIDocumentStylePoolAccess();
+    SW_DLLPUBLIC IDocumentStylePoolAccess& getIDocumentStylePoolAccess();
 
     /** Provides access to the document statistics interface
      */
@@ -355,8 +355,8 @@ public:
     IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
     IDocumentUndoRedo      & GetIDocumentUndoRedo();
 
-    const IDocumentListItems* getIDocumentListItemsAccess() const;
-    const IDocumentOutlineNodes* getIDocumentOutlineNodesAccess() const;
+    SW_DLLPUBLIC const IDocumentListItems* getIDocumentListItemsAccess() const;
+    SW_DLLPUBLIC const IDocumentOutlineNodes* getIDocumentOutlineNodesAccess() const;
 
     // 1. GetRefDev:   Either the printer or the virtual device from the doc
     // 2. GetWin:      Available if we not printing
@@ -396,11 +396,11 @@ public:
     void CalcPagesForPrint( sal_uInt16 nMax );
 
     // All about fields.
-    void UpdateFields(bool bCloseDB = false);
+    SW_DLLPUBLIC void UpdateFields(bool bCloseDB = false);
     bool IsAnyFieldInDoc() const;
 
     /// Update the previews of all OLE objects.
-    void UpdateOleObjectPreviews();
+    SW_DLLPUBLIC void UpdateOleObjectPreviews();
 
     // Update all charts, for that exists any table.
     void UpdateAllCharts();
@@ -409,43 +409,43 @@ public:
     // DOCUMENT COMPATIBILITY FLAGS START
 
     // Add or maximize paragraph spacing?
-    void SetParaSpaceMax( bool bNew );
+    SW_DLLPUBLIC void SetParaSpaceMax( bool bNew );
 
     // Add or maximize paragraph spacing?
-    void SetParaSpaceMaxAtPages( bool bNew );
+    SW_DLLPUBLIC void SetParaSpaceMaxAtPages( bool bNew );
 
     // Compatible behaviour of tabs.
-    void SetTabCompat( bool bNew );
+    SW_DLLPUBLIC void SetTabCompat( bool bNew );
 
     // Font metric attribute "External Leading" should be considered.
-    void SetAddExtLeading( bool bNew );
+    SW_DLLPUBLIC void SetAddExtLeading( bool bNew );
 
     // Adding paragraph and table spacing at bottom
     // of table cells.
-    void SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells );
+    SW_DLLPUBLIC void SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells );
 
     // Former formatting of text lines with
     // proportional line spacing or not.
-    void SetUseFormerLineSpacing( bool _bUseFormerLineSpacing );
+    SW_DLLPUBLIC void SetUseFormerLineSpacing( bool _bUseFormerLineSpacing );
 
     // Former object positioning.
-    void SetUseFormerObjectPositioning( bool _bUseFormerObjPos );
+    SW_DLLPUBLIC void SetUseFormerObjectPositioning( bool _bUseFormerObjPos );
 
-    void SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos );
+    SW_DLLPUBLIC void SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos );
 
-    void SetUseFormerTextWrapping( bool _bUseFormerTextWrapping );
+    SW_DLLPUBLIC void SetUseFormerTextWrapping( bool _bUseFormerTextWrapping );
 
-    void SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak );
+    SW_DLLPUBLIC void SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak );
 
-    void SetProtectForm( bool _bProtectForm );
+    SW_DLLPUBLIC void SetProtectForm( bool _bProtectForm );
 
-    void SetMsWordCompTrailingBlanks( bool _bMsWordCompTrailingBlanks );
+    SW_DLLPUBLIC void SetMsWordCompTrailingBlanks( bool _bMsWordCompTrailingBlanks );
 
-    void SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys);
+    SW_DLLPUBLIC void SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys);
 
-    void SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara);
+    SW_DLLPUBLIC void SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara);
 
-    void SetNoGapAfterNoteNumber(bool bNew);
+    SW_DLLPUBLIC void SetNoGapAfterNoteNumber(bool bNew);
 
     // DOCUMENT COMPATIBILITY FLAGS END
 
@@ -463,10 +463,10 @@ public:
     const SwAccessibilityOptions* GetAccessibilityOptions() const { return mpAccOptions.get();}
 
     static void           SetShellRes( ShellResource* pRes ) { spShellRes = pRes; }
-    static ShellResource* GetShellRes();
+    SW_DLLPUBLIC static ShellResource* GetShellRes();
 
     static weld::Window*   CareChildWin(SwViewShell const & rVSh);
-    static void           SetCareDialog(const std::shared_ptr<weld::Window>& rNew);
+    SW_DLLPUBLIC static void SetCareDialog(const std::shared_ptr<weld::Window>& rNew);
     static weld::Window*  GetCareDialog(SwViewShell const & rVSh)
                           { return (*spCareDialog.get()) ? spCareDialog.get()->get() : CareChildWin(rVSh); }
 
@@ -507,7 +507,7 @@ public:
     bool HasDrawViewDrag() const;
 
     // DrawView may be used at UI.
-          SdrView *GetDrawView();
+    SW_DLLPUBLIC SdrView *GetDrawView();
     const SdrView *GetDrawView() const { return const_cast<SwViewShell*>(this)->GetDrawView(); }
 
     // Take care that MarkList is up-to-date in any case (Bug 57153).
@@ -515,7 +515,7 @@ public:
 
     // Query attribute pool.
     inline const SfxItemPool& GetAttrPool() const;
-                 SfxItemPool& GetAttrPool();
+    SW_DLLPUBLIC SfxItemPool& GetAttrPool();
 
     bool IsPreview() const { return mbPreview; }
 
@@ -584,7 +584,7 @@ public:
     void DeleteReplacementBitmaps();
 
     const SwPostItMgr* GetPostItMgr() const { return const_cast<SwViewShell*>(this)->GetPostItMgr(); }
-    SwPostItMgr* GetPostItMgr();
+    SW_DLLPUBLIC SwPostItMgr* GetPostItMgr();
 
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
     void ToggleHeaderFooterEdit();

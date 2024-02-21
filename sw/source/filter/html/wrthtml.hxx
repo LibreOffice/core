@@ -269,7 +269,7 @@ enum class Css1Background
 };
 }
 
-class SW_DLLPUBLIC SwHTMLWriter : public Writer
+class SwHTMLWriter : public Writer
 {
     SwHTMLPosFlyFrames m_aHTMLPosFlyFrames;
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;// current numbering
@@ -441,7 +441,7 @@ public:
 
     /// Construct an instance of SwHTMLWriter and optionally give it
     /// the filter options directly, which can also be set via SetupFilterOptions().
-    explicit SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilterOptions = std::u16string_view() );
+    SW_DLLPUBLIC explicit SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilterOptions = std::u16string_view() );
     virtual ~SwHTMLWriter() override;
 
     void Out_SwDoc( SwPaM* );       // write the marked range

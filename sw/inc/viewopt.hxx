@@ -244,7 +244,7 @@ struct SwViewColors
     ViewOptFlags m_nAppearanceFlags;
 };
 
-class SW_DLLPUBLIC SwViewOption
+class SwViewOption
 {
     SwViewColors m_aColorConfig;
     static SwViewColors s_aInitialColorConfig;
@@ -301,9 +301,9 @@ class SW_DLLPUBLIC SwViewOption
 #endif
 
 public:
-            SwViewOption();                     // CTOR
-            SwViewOption(const SwViewOption&);
-            ~SwViewOption();
+    SW_DLLPUBLIC SwViewOption();                     // CTOR
+    SW_DLLPUBLIC SwViewOption(const SwViewOption&);
+    SW_DLLPUBLIC ~SwViewOption();
 
     static void Init(const OutputDevice* pWin);        // Initializing of static data.
 
@@ -482,7 +482,7 @@ public:
     { m_nCoreOptions.bUseHeaderFooterMenu = b; }
 
     //show/hide outline content visibility button
-    bool IsShowOutlineContentVisibilityButton() const;
+    SW_DLLPUBLIC bool IsShowOutlineContentVisibilityButton() const;
     void SetShowOutlineContentVisibilityButton(bool b)
     { m_nCoreOptions.bShowOutlineContentVisibilityButton = b; }
 
@@ -830,8 +830,8 @@ public:
     bool        IsShowPlaceHolderFields() const { return m_bShowPlaceHolderFields; }
     void            SetShowPlaceHolderFields(bool bSet) { m_bShowPlaceHolderFields = bSet; }
 
-    const Color& GetDocColor() const;
-    const Color& GetDocBoundariesColor() const;
+    SW_DLLPUBLIC const Color& GetDocColor() const;
+    SW_DLLPUBLIC const Color& GetDocBoundariesColor() const;
     const Color& GetAppBackgroundColor() const;
     const Color& GetObjectBoundariesColor() const;
     const Color& GetTableBoundariesColor() const;
@@ -843,7 +843,7 @@ public:
     const Color& GetGrammarColor() const;
     const Color& GetSmarttagColor() const;
     const Color& GetShadowColor() const;
-    const Color& GetFontColor() const;
+    SW_DLLPUBLIC const Color& GetFontColor() const;
     const Color& GetFieldShadingsColor() const;
     const Color& GetSectionBoundColor() const;
     const Color& GetPageBreakColor() const;
@@ -882,7 +882,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     // Useful for when getting the current view SwViewOption is not possible otherwise
-    static const SwViewOption& GetCurrentViewOptions();
+    SW_DLLPUBLIC static const SwViewOption& GetCurrentViewOptions();
 
     void SyncLayoutRelatedViewOptions(const SwViewOption& rOpt);
 };

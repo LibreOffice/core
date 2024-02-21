@@ -70,7 +70,7 @@ namespace com::sun::star::linguistic2 { class XLanguageGuessing; }
 namespace com::sun::star::linguistic2 { class XLinguServiceEventListener; }
 namespace ooo::vba { class XSinkCaller; }
 
-class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
+class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     OUString            m_sActAuthor;
 
@@ -146,33 +146,33 @@ public:
     // Handler for slots.
     void                StateOther(SfxItemSet &);
 
-    void                ExecOther(SfxRequest &);    // Fields, formula...
+    SW_DLLPUBLIC void ExecOther(SfxRequest &);    // Fields, formula...
 
     // Modify user settings.
-    const SwMasterUsrPref *GetUsrPref(bool bWeb) const;
+    SW_DLLPUBLIC const SwMasterUsrPref *GetUsrPref(bool bWeb) const;
     const SwViewOption* GetViewOption(bool bWeb);
-    void                ApplyUsrPref(const SwViewOption &, SwView*,
+    SW_DLLPUBLIC void ApplyUsrPref(const SwViewOption &, SwView*,
                                      SvViewOpt nDest = SvViewOpt::DestView );
     void ApplyUserMetric( FieldUnit eMetric, bool bWeb );
     void ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb );
-    void ApplyFieldUpdateFlags(SwFieldUpdateFlags eFieldFlags);
-    void ApplyLinkMode(sal_Int32 nNewLinkMode);
+    SW_DLLPUBLIC void ApplyFieldUpdateFlags(SwFieldUpdateFlags eFieldFlags);
+    SW_DLLPUBLIC void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     // Default page mode for text grid.
-    void ApplyDefaultPageMode(bool bIsSquaredPageMode);
+    SW_DLLPUBLIC void ApplyDefaultPageMode(bool bIsSquaredPageMode);
 
     void ApplyUserCharUnit(bool bApplyChar, bool bWeb);  // apply_char_unit
 
     // Create ConfigItems.
     SwModuleOptions*    GetModuleConfig()       { return m_pModuleConfig.get();}
     SwPrintOptions*     GetPrtOptions(bool bWeb);
-    SwChapterNumRules*  GetChapterNumRules();
+    SW_DLLPUBLIC SwChapterNumRules*  GetChapterNumRules();
     SwStdFontConfig*    GetStdFontConfig()      { return m_pStdFontConfig.get(); }
     SwNavigationConfig* GetNavigationConfig();
     SwToolbarConfigItem*GetToolbarConfig()      { return m_pToolbarConfig.get();    }
     SwToolbarConfigItem*GetWebToolbarConfig()   { return m_pWebToolbarConfig.get(); }
-    SwDBConfig*         GetDBConfig();
-    svtools::ColorConfig&   GetColorConfig();
+    SW_DLLPUBLIC SwDBConfig* GetDBConfig();
+    SW_DLLPUBLIC svtools::ColorConfig& GetColorConfig();
     SvtUserOptions&     GetUserOptions();
 
     // Iterate over views.
@@ -193,8 +193,8 @@ public:
 
     // Redlining.
     std::size_t         GetRedlineAuthor();
-    OUString const &    GetRedlineAuthor(std::size_t nPos);
-    void ClearRedlineAuthors();
+    SW_DLLPUBLIC OUString const & GetRedlineAuthor(std::size_t nPos);
+    SW_DLLPUBLIC void ClearRedlineAuthors();
     /// See SwXTextDocument::getTrackedChangeAuthors().
     void                GetRedlineAuthorInfo(tools::JsonWriter& rJsonWriter);
     std::size_t         InsertRedlineAuthor(const OUString& rAuthor);
@@ -226,7 +226,7 @@ public:
     virtual std::optional<SfxItemSet> CreateItemSet( sal_uInt16 nId ) override;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
     virtual std::unique_ptr<SfxTabPage> CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet ) override;
-    virtual std::optional<SfxStyleFamilies> CreateStyleFamilies() override;
+    SW_DLLPUBLIC virtual std::optional<SfxStyleFamilies> CreateStyleFamilies() override;
 
     // Pool is created here and set at SfxShell.
     void    InitAttrPool();
@@ -243,7 +243,7 @@ public:
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const &
             GetLanguageGuesser();
 
-    void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
+    SW_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
 };
 

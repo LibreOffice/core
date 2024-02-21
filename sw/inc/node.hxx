@@ -391,7 +391,7 @@ class SwEndNode final : public SwNode
 
 // SwContentNode
 
-class SW_DLLPUBLIC SwContentNode: public sw::BroadcastingModify, public SwNode, public SwContentIndexReg
+class SAL_DLLPUBLIC_RTTI SwContentNode: public sw::BroadcastingModify, public SwNode, public SwContentIndexReg
 {
 
     sw::WriterMultiListener m_aCondCollListener;
@@ -430,23 +430,23 @@ public:
     virtual SwContentNode *JoinNext();
     /** Is it possible to join two nodes?
        In pIdx the second position can be returned. */
-    bool CanJoinNext( SwNodeIndex* pIdx = nullptr ) const;
+    SW_DLLPUBLIC bool CanJoinNext( SwNodeIndex* pIdx = nullptr ) const;
     bool CanJoinNext( SwPosition* pIdx ) const;
-    bool CanJoinPrev( SwNodeIndex* pIdx =nullptr ) const;
+    SW_DLLPUBLIC bool CanJoinPrev( SwNodeIndex* pIdx =nullptr ) const;
 
     bool GoNext(SwContentIndex *, SwCursorSkipMode nMode ) const;
     bool GoNext(SwPosition*, SwCursorSkipMode nMode ) const;
     bool GoPrevious(SwContentIndex *, SwCursorSkipMode nMode ) const;
 
     /// @see GetFrameOfModify
-    SwContentFrame *getLayoutFrame( const SwRootFrame*,
+    SW_DLLPUBLIC SwContentFrame *getLayoutFrame( const SwRootFrame*,
             const SwPosition *pPos = nullptr,
             std::pair<Point, bool> const* pViewPosAndCalcFrame = nullptr) const;
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
-    SwRect FindLayoutRect( const bool bPrtArea = false,
+    SW_DLLPUBLIC SwRect FindLayoutRect( const bool bPrtArea = false,
                             const Point* pPoint = nullptr  ) const;
-    SwRect FindPageFrameRect() const;
+    SW_DLLPUBLIC SwRect FindPageFrameRect() const;
 
     /** Method creates all views of document for given node. The content
        frames that are created are put in the respective layout. */
@@ -473,16 +473,16 @@ public:
     template<class T>
     const T& GetAttr( TypedWhichId<T> nWhich, bool bInParent=true ) const
     { return static_cast<const T&>(GetAttr(sal_uInt16(nWhich), bInParent)); }
-    bool GetAttr( SfxItemSet& rSet ) const;
+    SW_DLLPUBLIC bool GetAttr( SfxItemSet& rSet ) const;
     /// made virtual
-    virtual bool SetAttr( const SfxPoolItem& );
+    SW_DLLPUBLIC virtual bool SetAttr( const SfxPoolItem& );
     virtual bool SetAttr( const SfxItemSet& rSet );
     virtual bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
     virtual bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr );
     virtual sal_uInt16 ResetAllAttr();
 
     /// Obtains attribute that is not delivered via conditional style!
-    const SfxPoolItem* GetNoCondAttr( sal_uInt16 nWhich, bool bInParents ) const;
+    SW_DLLPUBLIC const SfxPoolItem* GetNoCondAttr( sal_uInt16 nWhich, bool bInParents ) const;
     template<class T>
     const T* GetNoCondAttr( TypedWhichId<T> nWhich, bool bInParents ) const
     { return static_cast<const T*>(GetNoCondAttr(sal_uInt16(nWhich), bInParents)); }

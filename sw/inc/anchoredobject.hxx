@@ -41,7 +41,7 @@ enum class RndStdIds;
     of Writer fly frames (derived classes of <SwFlyFrame>) and of drawing objects
     (derived classes of <SwAnchoredDrawObject>).
 */
-class SW_DLLPUBLIC SwAnchoredObject
+class SAL_DLLPUBLIC_RTTI SwAnchoredObject
 {
     private:
         // drawing object representing the anchored object in the drawing layer
@@ -214,7 +214,7 @@ class SW_DLLPUBLIC SwAnchoredObject
             and the anchor character frame for an at-character and as-character
             anchored object.
         */
-        SwFrame* GetAnchorFrameContainingAnchPos();
+        SW_DLLPUBLIC SwFrame* GetAnchorFrameContainingAnchPos();
 
         SwPageFrame* GetPageFrame() { return mpPageFrame; }
         const SwPageFrame* GetPageFrame() const { return mpPageFrame; }
@@ -336,7 +336,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         virtual void UpdateLayoutDir();
 
         /** method to determine object area inclusive its spacing */
-        const SwRect& GetObjRectWithSpaces() const;
+        SW_DLLPUBLIC const SwRect& GetObjRectWithSpaces() const;
 
         void InvalidateObjRectWithSpaces() const
         {

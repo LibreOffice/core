@@ -75,7 +75,7 @@ enum class PasteTableType
 
 class SwTransferDdeLink;
 
-class SW_DLLPUBLIC SwTransferable final : public TransferableHelper
+class SwTransferable final : public TransferableHelper
 {
     friend class SwView_Impl;
     SfxObjectShellLock              m_aDocShellRef;
@@ -168,7 +168,7 @@ class SW_DLLPUBLIC SwTransferable final : public TransferableHelper
     using TransferableHelper::StartDrag;
 
 public:
-    SwTransferable( SwWrtShell& );
+    SW_DLLPUBLIC SwTransferable( SwWrtShell& );
     virtual ~SwTransferable() override;
 
     static SotExchangeDest GetSotDestination( const SwWrtShell& rSh );
@@ -178,8 +178,8 @@ public:
     static void InitOle( SfxObjectShell* pDoc );
 
     // copy - methods and helper methods for the copy
-    int  Cut();
-    int  Copy( bool bIsCut = false );
+    SW_DLLPUBLIC int  Cut();
+    SW_DLLPUBLIC int  Copy( bool bIsCut = false );
     int  PrepareForCopy( bool bIsCut = false );
     void PrepareForCopyTextRange(SwPaM & rPaM);
     void  CalculateAndCopy();                // special for Calculator
@@ -192,7 +192,7 @@ public:
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
-    static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
+    SW_DLLPUBLIC static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
                           bool bIgnoreComments = false, PasteTableType ePasteTable = PasteTableType::PASTE_DEFAULT );
     static bool PasteData( const TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
@@ -215,7 +215,7 @@ public:
      * @param rFormatUsed
      */
     static void PrePasteSpecial( const SwWrtShell& rSh, const TransferableDataHelper&, const VclPtr<SfxAbstractPasteDialog>& pDlg );
-    static bool PasteFormat( SwWrtShell& rSh, const TransferableDataHelper& rData,
+    SW_DLLPUBLIC static bool PasteFormat( SwWrtShell& rSh, const TransferableDataHelper& rData,
                              SotClipboardFormatId nFormat );
 
     static void FillClipFormatItem( const SwWrtShell& rSh,
@@ -229,7 +229,7 @@ public:
     void SetCleanUp( bool bFlag )       { m_bCleanUp = bFlag; }
 
     // public only for testing
-    bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, bool bMove,
+    SW_DLLPUBLIC bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, bool bMove,
                         bool bIsXSelection );
 
     // Interfaces for Selection
@@ -242,7 +242,7 @@ public:
     // the related SwView is being closed and the SwTransferable is invalid now
     void    Invalidate() {m_pWrtShell = nullptr;}
 
-    static void SelectPasteFormat(TransferableDataHelper& rData, sal_uInt8& nAction,
+    SW_DLLPUBLIC static void SelectPasteFormat(TransferableDataHelper& rData, sal_uInt8& nAction,
                                   SotClipboardFormatId& nFormat);
 };
 

@@ -46,7 +46,7 @@ enum class SwNeighbourAdjust {
 
 typedef std::vector<SwFootnoteFrame*> SwFootnoteFrames;
 
-class SW_DLLPUBLIC SwFootnoteBossFrame: public SwLayoutFrame
+class SAL_DLLPUBLIC_RTTI SwFootnoteBossFrame: public SwLayoutFrame
 {
     // for private footnote operations
     friend class SwFrame;
@@ -73,7 +73,7 @@ public:
         , m_nMaxFootnoteHeight(0)
         {}
 
-                 SwLayoutFrame *FindBodyCont();
+    SW_DLLPUBLIC SwLayoutFrame *FindBodyCont();
     inline const SwLayoutFrame *FindBodyCont() const;
     void SetMaxFootnoteHeight( const SwTwips nNewMax ) { m_nMaxFootnoteHeight = nNewMax; }
 
@@ -81,7 +81,7 @@ public:
     void AppendFootnote( SwContentFrame *, SwTextFootnote * );
     bool RemoveFootnote(const SwContentFrame *, const SwTextFootnote *, bool bPrep = true);
     static       SwFootnoteFrame     *FindFootnote( const SwContentFrame *, const SwTextFootnote * );
-                 SwFootnoteContFrame *FindFootnoteCont();
+    SW_DLLPUBLIC SwFootnoteContFrame *FindFootnoteCont();
     inline const SwFootnoteContFrame *FindFootnoteCont() const;
            const SwFootnoteFrame     *FindFirstFootnote( SwContentFrame const * ) const;
                  SwFootnoteContFrame *FindNearestFootnoteCont( bool bDontLeave = false );

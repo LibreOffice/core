@@ -163,7 +163,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SW_DLLPUBLIC SwRangeRedline final : public SwPaM
+class SAL_DLLPUBLIC_RTTI SwRangeRedline final : public SwPaM
 {
     SwRedlineData* m_pRedlineData;
     std::optional<SwNodeIndex> m_oContentSect;
@@ -180,8 +180,8 @@ class SW_DLLPUBLIC SwRangeRedline final : public SwPaM
 public:
     static sal_uInt32 s_nLastId;
 
-    SwRangeRedline( RedlineType eType, const SwPaM& rPam, sal_uInt32 nMoveID = 0 );
-    SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
+    SW_DLLPUBLIC SwRangeRedline( RedlineType eType, const SwPaM& rPam, sal_uInt32 nMoveID = 0 );
+    SW_DLLPUBLIC SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // For sw3io: pData is taken over!
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
@@ -210,18 +210,18 @@ public:
     /// Do we have a valid selection?
     bool HasValidRange() const;
 
-    const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
+    SW_DLLPUBLIC const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
     bool operator!=( const SwRedlineData& rCmp ) const
         { return *m_pRedlineData != rCmp; }
     void SetAutoFormat() { m_pRedlineData->SetAutoFormat(); }
     bool IsAutoFormat() const { return m_pRedlineData->IsAutoFormat(); }
 
     sal_uInt16 GetStackCount() const;
-    std::size_t GetAuthor( sal_uInt16 nPos = 0) const;
-    OUString const & GetAuthorString( sal_uInt16 nPos = 0 ) const;
+    SW_DLLPUBLIC std::size_t GetAuthor( sal_uInt16 nPos = 0) const;
+    SW_DLLPUBLIC OUString const & GetAuthorString( sal_uInt16 nPos = 0 ) const;
     sal_uInt32 GetMovedID(sal_uInt16 nPos = 0) const;
     const DateTime& GetTimeStamp(sal_uInt16 nPos = 0) const;
-    RedlineType GetType( sal_uInt16 nPos = 0 ) const;
+    SW_DLLPUBLIC RedlineType GetType( sal_uInt16 nPos = 0 ) const;
     // text content of the redline is only an annotation placeholder
     // (i.e. a comment, but don't confuse it with comment of the redline)
     bool IsAnnotation() const;
@@ -277,7 +277,7 @@ public:
 
        bSimplified = simplified shortened text to show deletions on margin
      */
-    OUString GetDescr(bool bSimplified = false);
+    SW_DLLPUBLIC OUString GetDescr(bool bSimplified = false);
 
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

@@ -101,7 +101,7 @@ namespace sw
             SvtBroadcaster& GetNotifier() { return m_aNotifier; }
     };
     /// refactoring out the same of the more sane SwClient functionality
-    class SW_DLLPUBLIC WriterListener
+    class SAL_DLLPUBLIC_RTTI WriterListener
     {
         friend class ::SwModify;
         friend class ::sw::ClientIteratorBase;

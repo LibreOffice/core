@@ -32,7 +32,7 @@ class SwFormatFrameSize;
 class SwCellFrame;
 
 /// A layout frame is a frame that contains other frames (m_pLower), e.g. SwPageFrame or SwTabFrame.
-class SW_DLLPUBLIC SwLayoutFrame: public SwFrame
+class SAL_DLLPUBLIC_RTTI SwLayoutFrame: public SwFrame
 {
     // The SwFrame in disguise
     friend class SwFlowFrame;
@@ -100,7 +100,7 @@ public:
     const SwFrame *Lower() const { return m_pLower; }
           SwFrame *Lower()       { return m_pLower; }
     bool ContainsDeleteForbiddenLayFrame() const;
-    const SwContentFrame *ContainsContent() const;
+    SW_DLLPUBLIC const SwContentFrame *ContainsContent() const;
     inline SwContentFrame *ContainsContent();
     const SwCellFrame *FirstCell() const;
     inline SwCellFrame *FirstCell();
@@ -165,7 +165,7 @@ public:
     */
     bool IsBefore( const SwLayoutFrame* _pCheckRefLayFrame ) const;
 
-    const SwFrame* GetLastLower() const;
+    SW_DLLPUBLIC const SwFrame* GetLastLower() const;
     inline SwFrame* GetLastLower();
 
     virtual void PaintBreak() const;

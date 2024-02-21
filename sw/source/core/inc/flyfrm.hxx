@@ -76,7 +76,7 @@ namespace o3tl {
 
     #i26791# - inherit also from <SwAnchoredFlyFrame>
 */
-class SW_DLLPUBLIC SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
+class SAL_DLLPUBLIC_RTTI SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
 {
     // is allowed to lock, implemented in frmtool.cxx
     friend void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *const pFormat, const SwFormatAnchor & rAnch);
@@ -284,7 +284,7 @@ public:
     // (This is in order to skip on the otherwise necessary casting of the result to
     // 'SwFlyFrameFormat *' after calls to this function. The casting is now done in this function.)
     virtual const SwFlyFrameFormat *GetFormat() const override;
-    virtual       SwFlyFrameFormat *GetFormat() override;
+    SW_DLLPUBLIC virtual SwFlyFrameFormat *GetFormat() override;
 
     virtual void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 
@@ -296,15 +296,15 @@ public:
     void InvalidateContentPos();
 
     void SelectionHasChanged(SwFEShell* pShell);
-    bool IsShowUnfloatButton(SwWrtShell* pWrtSh) const;
+    SW_DLLPUBLIC bool IsShowUnfloatButton(SwWrtShell* pWrtSh) const;
 
     // For testing only (see uiwriter)
-    void ActiveUnfloatButton(SwWrtShell* pWrtSh);
+    SW_DLLPUBLIC void ActiveUnfloatButton(SwWrtShell* pWrtSh);
 
     virtual const SwFlyFrame* DynCastFlyFrame() const override;
     virtual SwFlyFrame* DynCastFlyFrame() override;
 
-    SwFlyAtContentFrame* DynCastFlyAtContentFrame();
+    SW_DLLPUBLIC SwFlyAtContentFrame* DynCastFlyAtContentFrame();
 
 private:
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;

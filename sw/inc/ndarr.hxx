@@ -86,7 +86,7 @@ public:
 struct SwTableToTextSave;
 using SwTableToTextSaves = std::vector<std::unique_ptr<SwTableToTextSave>>;
 
-class SW_DLLPUBLIC SwNodes final
+class SwNodes final
     : private BigPtrArray
 {
     friend class SwDoc;
@@ -166,7 +166,7 @@ public:
 
     /** Is the NodesArray the regular one of Doc? (and not the UndoNds, ...)
        Implementation in doc.hxx (because one needs to know Doc for it) ! */
-    bool IsDocNodes() const;
+    SW_DLLPUBLIC bool IsDocNodes() const;
 
     static sal_uInt16 GetSectionLevel(const SwNode &rIndex);
     void Delete(const SwNodeIndex &rPos, SwNodeOffset nNodes = SwNodeOffset(1));
@@ -186,7 +186,7 @@ public:
     static void GoStartOfSection(SwNodeIndex *);
     static void GoEndOfSection(SwNodeIndex *);
 
-    static SwContentNode* GoNext(SwNodeIndex*);
+    SW_DLLPUBLIC static SwContentNode* GoNext(SwNodeIndex*);
     static SwContentNode* GoNext(SwPosition*);
     static SwContentNode* GoPrevious(SwNodeIndex *, bool canCrossBoundary = false);
     static SwContentNode* GoPrevious(SwPosition *, bool canCrossBoundary = false);
@@ -209,10 +209,10 @@ public:
                                     SwStartNodeType = SwNormalStartNode );
 
     /// Implementations of "Make...Node" are in the given .cxx-files.
-    SwTextNode *MakeTextNode( SwNode& rWhere,
+    SW_DLLPUBLIC SwTextNode *MakeTextNode( SwNode& rWhere,
                             SwTextFormatColl *pColl,
                             bool bNewFrames = true); ///< in ndtxt.cxx
-    SwStartNode* MakeTextSection( const SwNode & rWhere,
+    SW_DLLPUBLIC SwStartNode* MakeTextSection( const SwNode & rWhere,
                             SwStartNodeType eSttNdTyp,
                             SwTextFormatColl *pColl );
 
@@ -279,7 +279,7 @@ public:
     /** Insert a new box in the line before InsPos. Its format
        is taken from the following one (or from the previous one if we are
        at the end). In the line there must be a box already. */
-    bool InsBoxen( SwTableNode*, SwTableLine*, SwTableBoxFormat*,
+    SW_DLLPUBLIC bool InsBoxen( SwTableNode*, SwTableLine*, SwTableBoxFormat*,
                         /// Formats for TextNode of box.
                         SwTextFormatColl*, const SfxItemSet* pAutoAttr,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );

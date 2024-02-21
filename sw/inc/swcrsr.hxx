@@ -67,7 +67,7 @@ namespace o3tl {
     template<> struct typed_flags<SwCursorSkipMode> : is_typed_flags<SwCursorSkipMode, 0x3> {};
 }
 
-class SW_DLLPUBLIC SwCursor : public SwPaM
+class SAL_DLLPUBLIC_RTTI SwCursor : public SwPaM
 {
     friend class SwCursorSaveState;
 
@@ -93,8 +93,8 @@ protected:
 
 public:
     // single argument ctors shall be explicit.
-    SwCursor( const SwPosition &rPos, SwPaM* pRing );
-    virtual ~SwCursor() override;
+    SW_DLLPUBLIC SwCursor( const SwPosition &rPos, SwPaM* pRing );
+    SW_DLLPUBLIC virtual ~SwCursor() override;
 
     inline SwCursor & operator =(SwCursor const &);
 
@@ -114,7 +114,7 @@ public:
                                         SwPaM* ) const;
 
     // note: DO NOT call it FindText because windows.h
-    sal_Int32 Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
+    SW_DLLPUBLIC sal_Int32 Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
@@ -166,7 +166,7 @@ public:
     bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, tools::Long nUpDownX, SwRootFrame & rLayout);
     bool LeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI);
     bool IsAtLeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI) const;
-    bool SttEndDoc( bool bSttDoc );
+    SW_DLLPUBLIC bool SttEndDoc( bool bSttDoc );
     bool GoPrevNextCell( bool bNext, sal_uInt16 nCnt );
 
     bool Left( sal_uInt16 nCnt )   { return LeftRight(true, nCnt, SwCursorSkipMode::Chars, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr, false); }
@@ -176,12 +176,12 @@ public:
     virtual bool GotoTable( const OUString& rName );
     bool GotoTableBox( const OUString& rName );
     bool GotoRegion( std::u16string_view rName );
-    bool GotoFootnoteAnchor();
+    SW_DLLPUBLIC bool GotoFootnoteAnchor();
     bool GotoFootnoteText();
     bool GotoNextFootnoteAnchor();
     bool GotoPrevFootnoteAnchor();
 
-    bool MovePara( SwWhichPara, SwMoveFnCollection const & );
+    SW_DLLPUBLIC bool MovePara( SwWhichPara, SwMoveFnCollection const & );
     bool MoveSection( SwWhichSection, SwMoveFnCollection const & );
     bool MoveTable( SwWhichTable, SwMoveFnCollection const & );
     bool MoveRegion( SwWhichRegion, SwMoveFnCollection const & );

@@ -103,7 +103,7 @@ public:
     void UpdateStyleReferences();
 };
 
-class SW_DLLPUBLIC SwGetRefField final : public SwField
+class SAL_DLLPUBLIC_RTTI SwGetRefField final : public SwField
 {
 private:
     OUString m_sSetRefName;
@@ -118,10 +118,10 @@ private:
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 public:
-    SwGetRefField( SwGetRefFieldType*, OUString aSetRef, OUString aReferenceLanguage,
+    SW_DLLPUBLIC SwGetRefField( SwGetRefFieldType*, OUString aSetRef, OUString aReferenceLanguage,
                     sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uLong nFormat );
 
-    virtual ~SwGetRefField() override;
+    SW_DLLPUBLIC virtual ~SwGetRefField() override;
 
     virtual OUString GetFieldName() const override;
 
@@ -142,14 +142,14 @@ public:
 
     /// Get/set sub type.
     virtual sal_uInt16      GetSubType() const override;
-    virtual void        SetSubType( sal_uInt16 n ) override;
+    SW_DLLPUBLIC virtual void SetSubType( sal_uInt16 n ) override;
 
     // --> #i81002#
-    bool IsRefToHeadingCrossRefBookmark() const;
-    bool IsRefToNumItemCrossRefBookmark() const;
-    const SwTextNode* GetReferencedTextNode(SwTextNode* pTextNode, SwFrame* pFrame) const;
+    SW_DLLPUBLIC bool IsRefToHeadingCrossRefBookmark() const;
+    SW_DLLPUBLIC bool IsRefToNumItemCrossRefBookmark() const;
+    SW_DLLPUBLIC const SwTextNode* GetReferencedTextNode(SwTextNode* pTextNode, SwFrame* pFrame) const;
     // #i85090#
-    OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout, SwTextNode* pTextNode, SwFrame* pFrame) const;
+    SW_DLLPUBLIC OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout, SwTextNode* pTextNode, SwFrame* pFrame) const;
 
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return m_nSeqNo; }
@@ -160,10 +160,10 @@ public:
     void                SetFlags( sal_uInt16 n )    { m_nFlags = n; }
 
     // Name of reference.
-    virtual OUString    GetPar1() const override;
+    SW_DLLPUBLIC virtual OUString GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
 
-    virtual OUString    GetPar2() const override;
+    SW_DLLPUBLIC virtual OUString GetPar2() const override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 

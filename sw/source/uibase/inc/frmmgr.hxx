@@ -47,7 +47,7 @@ enum class Frmmgr_Type
     ENVELP  = 0x10
 };
 
-class SW_DLLPUBLIC SwFlyFrameAttrMgr
+class SwFlyFrameAttrMgr
 {
     SfxItemSet  m_aSet;
     Point       m_aAbsPos;
@@ -60,18 +60,18 @@ class SW_DLLPUBLIC SwFlyFrameAttrMgr
     bool    m_bIsInVerticalL2R;
 
     // internal calculation for borders
-    SAL_DLLPRIVATE SwTwips           CalcTopSpace();
-    SAL_DLLPRIVATE SwTwips           CalcBottomSpace();
-    SAL_DLLPRIVATE SwTwips           CalcLeftSpace();
-    SAL_DLLPRIVATE SwTwips           CalcRightSpace();
+    SwTwips           CalcTopSpace();
+    SwTwips           CalcBottomSpace();
+    SwTwips           CalcLeftSpace();
+    SwTwips           CalcRightSpace();
 
-    SAL_DLLPRIVATE void UpdateFlyFrame_(); // post-treatment after insert or update
+    void UpdateFlyFrame_(); // post-treatment after insert or update
 
 public:
-    SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType, const SvGlobalName* pName );
+    SW_DLLPUBLIC SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType, const SvGlobalName* pName );
 
     //CopyCtor for dialogs to check the metrics
-    SwFlyFrameAttrMgr( bool bNew, SwWrtShell *pSh, SfxItemSet aSet );
+    SW_DLLPUBLIC SwFlyFrameAttrMgr( bool bNew, SwWrtShell *pSh, SfxItemSet aSet );
 
     void                SetAnchor(RndStdIds eId);
     inline RndStdIds    GetAnchor()  const;
@@ -109,12 +109,12 @@ public:
 
     // create new frame
     void                InsertFlyFrame();
-    void                InsertFlyFrame(RndStdIds      eAnchorType,
+    SW_DLLPUBLIC void   InsertFlyFrame(RndStdIds      eAnchorType,
                                    const Point    &rPos,
                                    const Size     &rSize);
 
     // check and change metrics
-    void                ValidateMetrics(SvxSwFrameValidation& rVal,
+    SW_DLLPUBLIC void   ValidateMetrics(SvxSwFrameValidation& rVal,
                             const SwFormatAnchor* pToCharContentPos,
                             bool bOnlyPercentRefValue = false);
 
@@ -126,7 +126,7 @@ public:
     void                     SetAttrSet(const SfxItemSet& rSet);
     void SetFrameSizeFromTable();
     /// Checks if we have a table selection and that covers exactly 1 full table.
-    static const SwTableFormat* SingleTableSelected(SwWrtShell& rWrtShell);
+    SW_DLLPUBLIC static const SwTableFormat* SingleTableSelected(SwWrtShell& rWrtShell);
 
     inline const SwFormatVertOrient &GetVertOrient() const;
     inline const SwFormatHoriOrient &GetHoriOrient() const;

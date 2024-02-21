@@ -109,7 +109,7 @@ using SwTableBoxes = std::vector<SwTableBox*>;
 class SwTableSortBoxes : public o3tl::sorted_vector<SwTableBox*> {};
 
 /// SwTable is one table in the document model, containing rows (which contain cells).
-class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrameFormat.
+class SAL_DLLPUBLIC_RTTI SwTable: public SwClient          //Client of FrameFormat.
 {
 
 protected:
@@ -209,9 +209,9 @@ public:
     SwTableFormat* GetFrameFormat()       { return static_cast<SwTableFormat*>(GetRegisteredIn()); }
     SwTableFormat* GetFrameFormat() const { return const_cast<SwTableFormat*>(static_cast<const SwTableFormat*>(GetRegisteredIn())); }
 
-    void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
+    SW_DLLPUBLIC void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
                      bool bHidden = false, bool bCurRowOnly = false ) const;
-    void SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
+    SW_DLLPUBLIC void SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
                      const SwTableBox *pStart, bool bCurRowOnly );
 
 // The following functions are for new table model only...
@@ -280,7 +280,7 @@ public:
     // #i80314#
     // add 2nd parameter in order to control validation check in called method
     // <GetBoxNum(..)>
-    const SwTableBox* GetTableBox( const OUString& rName,
+    SW_DLLPUBLIC const SwTableBox* GetTableBox( const OUString& rName,
                                  const bool bPerformValidCheck = false ) const;
     // Copy selected boxes to another document.
     bool MakeCopy( SwDoc&, const SwPosition&, const SwSelBoxes&,
@@ -301,7 +301,7 @@ public:
                         {   return const_cast<SwTable*>(this)->GetTableBox( nSttIdx );  }
 
     // Returns true if table contains nestings.
-    bool IsTableComplex() const;
+    SW_DLLPUBLIC bool IsTableComplex() const;
 
     // Returns true if table or selection is balanced.
     bool IsTableComplexForChart( std::u16string_view aSel ) const;
@@ -309,14 +309,14 @@ public:
     // Search all content-bearing boxes of the base line on which this box stands.
     // rBoxes as a return value for immediate use.
     // bToTop = true -> up to base line, false-> else only line of box.
-    static SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
+    SW_DLLPUBLIC static SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
                             SwSelBoxes& rBoxes, bool bToTop = true );
 
     // Get information from client.
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     // Search in format for registered table.
-    static SwTable * FindTable( SwFrameFormat const*const pFormat );
+    SW_DLLPUBLIC static SwTable * FindTable( SwFrameFormat const*const pFormat );
 
     // Clean up structure of subtables a bit:
     // convert row with 1 box with subtable; box with subtable with 1 row;
@@ -324,7 +324,7 @@ public:
     void GCLines();
 
     // Returns the table node via m_TabSortContentBoxes or pTableNode.
-    SwTableNode* GetTableNode() const;
+    SW_DLLPUBLIC SwTableNode* GetTableNode() const;
     void SetTableNode( SwTableNode* pNode ) { m_pTableNode = pNode; }
 
     // Data server methods.
@@ -347,7 +347,7 @@ public:
     void CheckConsistency() const;
 #endif
 
-    bool HasLayout() const;
+    SW_DLLPUBLIC bool HasLayout() const;
 
     bool CanConvertSubtables() const;
     void ConvertSubtables();
@@ -355,7 +355,7 @@ public:
     // is it a table deleted completely with change tracking
     bool IsDeleted() const;
     // is it a table with a deleted row or cell
-    bool HasDeletedRowOrCell() const;
+    SW_DLLPUBLIC bool HasDeletedRowOrCell() const;
     // it doesn't contain box content (except single empty nested tables of the boxes
     // which could remain after deletion of text content of the selected table)
     bool IsEmpty() const;

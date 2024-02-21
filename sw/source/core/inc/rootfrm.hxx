@@ -82,7 +82,7 @@ using SwFlyDestroyList = o3tl::sorted_vector<SwFlyFrame*>;
 
 /// The root element of a Writer document layout. Lower frames are expected to
 /// be SwPageFrame instances.
-class SW_DLLPUBLIC SwRootFrame final : public SwLayoutFrame
+class SAL_DLLPUBLIC_RTTI SwRootFrame final : public SwLayoutFrame
 {
     // Needs to disable the Superfluous temporarily
     friend void AdjustSizeChgNotify( SwRootFrame *pRoot );
@@ -237,10 +237,10 @@ public:
           SdrPage* GetDrawPage()       { return mpDrawPage; }
           void     SetDrawPage( SdrPage* pNew ){ mpDrawPage = pNew; }
 
-    virtual bool  GetModelPositionForViewPoint( SwPosition *, Point&,
+    SW_DLLPUBLIC virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                                SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const override;
+    SW_DLLPUBLIC virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const override;
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 #ifdef DBG_UTIL
@@ -434,13 +434,13 @@ public:
      * (this is layout-level redline hiding).
      */
     bool IsHideRedlines() const { return mbHideRedlines; }
-    void SetHideRedlines(bool);
+    SW_DLLPUBLIC void SetHideRedlines(bool);
     sw::FieldmarkMode GetFieldmarkMode() const { return m_FieldmarkMode; }
     void SetFieldmarkMode(sw::FieldmarkMode, sw::ParagraphBreakMode);
     sw::ParagraphBreakMode GetParagraphBreakMode() const { return m_ParagraphBreakMode; }
     bool HasMergedParas() const;
 
-    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
+    SW_DLLPUBLIC void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 inline tools::Long SwRootFrame::GetBrowseWidth() const

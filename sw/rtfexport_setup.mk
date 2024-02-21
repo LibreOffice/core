@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_rtfexport$(1), \
     cppu \
     cppuhelper \
     docmodel \
+    editeng \
     i18nlangtag \
     sal \
     sfx \

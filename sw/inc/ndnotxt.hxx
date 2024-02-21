@@ -26,7 +26,7 @@
 class Size;
 
 /// Layout frame for SwNoTextNode, i.e. graphics and OLE nodes (including charts).
-class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
+class SAL_DLLPUBLIC_RTTI SwNoTextNode : public SwContentNode
 {
     friend class SwNodes;
     friend class SwNoTextFrame;
@@ -61,14 +61,14 @@ public:
     virtual bool SavePersistentData();
     virtual bool RestorePersistentData();
 
-    OUString GetTitle() const;
+    SW_DLLPUBLIC OUString GetTitle() const;
     void SetTitle( const OUString& rTitle );
-    OUString GetDescription() const;
+    SW_DLLPUBLIC OUString GetDescription() const;
     void SetDescription( const OUString& rDescription );
 
-    void               SetContour( const tools::PolyPolygon *pPoly,
+    SW_DLLPUBLIC void  SetContour( const tools::PolyPolygon *pPoly,
                                    bool bAutomatic = false );
-    const tools::PolyPolygon *HasContour() const;
+    SW_DLLPUBLIC const tools::PolyPolygon *HasContour() const;
     bool               HasContour_() const { return bool(m_pContour); };
     void               GetContour( tools::PolyPolygon &rPoly ) const;
     void               CreateContour();
@@ -88,7 +88,7 @@ public:
     bool               IsContourMapModeValid() const { return m_bContourMapModeValid; }
 
     // Obtains the graphic with SwapIn for GrfNode via GetData for OLE.
-    Graphic GetGraphic() const;
+    SW_DLLPUBLIC Graphic GetGraphic() const;
 };
 
 // Inline methods from Node.hxx - we know TextNode only here!!

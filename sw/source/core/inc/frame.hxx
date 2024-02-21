@@ -311,7 +311,7 @@ namespace o3tl {
  * level: pages, headers, footers, etc. (Inside a paragraph SwLinePortion
  * instances are used.)
  */
-class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, public SfxBroadcaster
+class SAL_DLLPUBLIC_RTTI SwFrame : public SwFrameAreaDefinition, public SwClient, public SfxBroadcaster
 {
     // the hidden Frame
     friend class SwFlowFrame;
@@ -608,7 +608,7 @@ public:
     inline void ResetRetouche() const;
     bool IsRetouche() const { return mbRetouche; }
 
-    void SetInfFlags();
+    SW_DLLPUBLIC void SetInfFlags();
     void InvalidateInfFlags() { mbInfInvalid = true; }
     inline bool IsInDocBody() const;    // use InfoFlags, determine flags
     inline bool IsInFootnote() const;        // if necessary
@@ -687,13 +687,13 @@ public:
     SwFrame               *FindColFrame();
     SwRowFrame            *FindRowFrame();
     SwFootnoteBossFrame   *FindFootnoteBossFrame( bool bFootnotes = false );
-    SwTabFrame            *ImplFindTabFrame();
+    SW_DLLPUBLIC SwTabFrame *ImplFindTabFrame();
     SwFootnoteFrame       *ImplFindFootnoteFrame();
     SwFlyFrame            *ImplFindFlyFrame();
     SwSectionFrame        *ImplFindSctFrame();
     const SwBodyFrame     *ImplFindBodyFrame() const;
     SwFrame               *FindFooterOrHeader();
-    SwFrame               *GetLower();
+    SW_DLLPUBLIC SwFrame  *GetLower();
     const SwFrame         *GetNext()  const { return mpNext; }
     const SwFrame         *GetPrev()  const { return mpPrev; }
     const SwLayoutFrame   *GetUpper() const { return mpUpper; }
@@ -735,7 +735,7 @@ public:
     const SwFrame* GetIndNext() const { return const_cast<SwFrame*>(this)->GetIndNext(); }
 
     sal_uInt16 GetPhyPageNum() const;   // page number without offset
-    sal_uInt16 GetVirtPageNum() const;  // page number with offset
+    SW_DLLPUBLIC sal_uInt16 GetVirtPageNum() const;  // page number with offset
     bool OnRightPage() const { return 0 != GetPhyPageNum() % 2; };
     bool WannaRightPage() const;
     bool OnFirstPage() const;
@@ -752,7 +752,7 @@ public:
 
     // PaintArea is the area where content might be displayed.
     // The margin of a page or the space between columns belongs to it.
-    SwRect GetPaintArea() const;
+    SW_DLLPUBLIC SwRect GetPaintArea() const;
 
     // UnionFrame is the union of Frame- and PrtArea, normally identical
     // to the FrameArea except in case of negative Prt margins.
@@ -875,9 +875,9 @@ public:
     inline bool IsCellFrame() const;
     inline bool IsContentFrame() const;
     inline bool IsTextFrame() const;
-    SwTextFrame* DynCastTextFrame();
+    SW_DLLPUBLIC SwTextFrame* DynCastTextFrame();
     const SwTextFrame* DynCastTextFrame() const;
-    SwPageFrame* DynCastPageFrame();
+    SW_DLLPUBLIC SwPageFrame* DynCastPageFrame();
     const SwPageFrame* DynCastPageFrame() const;
     inline bool IsNoTextFrame() const;
     // Frames where its PrtArea depends on their neighbors and that are

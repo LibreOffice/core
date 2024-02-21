@@ -56,7 +56,7 @@ class SwTextFrame;
     To translate the pixel positions from the buffer OutputDevice to the real
     pixel positions, use the PixelToLogic methods of this class.
   */
-class SW_DLLPUBLIC SwEditWin final : public vcl::DocWindow,
+class SwEditWin final : public vcl::DocWindow,
                 public DropTargetHelper, public DragSourceHelper
 {
     friend class SwEditWinUIObject;
@@ -161,16 +161,16 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::DocWindow,
      * The selection is regularly increased towards the mouse
      * position.
      */
-    DECL_DLLPRIVATE_LINK( TimerHandler, Timer *, void );
+    DECL_LINK( TimerHandler, Timer *, void );
     void            StartDDTimer();
     void            StopDDTimer(SwWrtShell *, const Point &);
-    DECL_DLLPRIVATE_LINK( DDHandler, Timer *, void );
+    DECL_LINK( DDHandler, Timer *, void );
 
     // timer for ANY-KeyInut question without a following KeyInputEvent
-    DECL_DLLPRIVATE_LINK( KeyInputFlushHandler, Timer *, void );
+    DECL_LINK( KeyInputFlushHandler, Timer *, void );
 
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
-    DECL_DLLPRIVATE_LINK( TemplateTimerHdl, Timer *, void );
+    DECL_LINK( TemplateTimerHdl, Timer *, void );
 
     void            MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                                 const bool bOnlyText, bool bLockView );
@@ -207,7 +207,7 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::DocWindow,
     bool    IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& rControl, bool& bOverFly, bool& bPageAnchored ) const;
 
 public:
-    virtual void    KeyInput(const KeyEvent &rKEvt) override;
+    SW_DLLPUBLIC virtual void KeyInput(const KeyEvent &rKEvt) override;
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);
 
     bool            IsDrawSelMode() const;

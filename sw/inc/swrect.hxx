@@ -31,7 +31,7 @@ typedef struct _xmlTextWriter* xmlTextWriterPtr;
 /// This is half-open so m_Point.X() + m_Size.getWidth() is *not* included.
 /// Note the tools Rectangle is (usually? sometimes?) closed so there's a
 /// SVRect() to subtract 1 for the conversion.
-class SAL_WARN_UNUSED SW_DLLPUBLIC SwRect
+class SAL_WARN_UNUSED SwRect
 {
     Point m_Point;
     Size m_Size;

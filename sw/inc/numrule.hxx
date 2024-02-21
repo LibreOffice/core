@@ -90,7 +90,7 @@ public:
 };
 
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
-class SW_DLLPUBLIC SwNumRule
+class SwNumRule
 {
 
 public:
@@ -142,31 +142,31 @@ private:
 
 public:
     /// add parameter <eDefaultNumberFormatPositionAndSpaceMode>
-    SwNumRule( OUString aNm,
+    SW_DLLPUBLIC SwNumRule( OUString aNm,
                const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                SwNumRuleType = NUM_RULE );
 
-    SwNumRule( const SwNumRule& );
-    ~SwNumRule();
+    SW_DLLPUBLIC SwNumRule( const SwNumRule& );
+    SW_DLLPUBLIC ~SwNumRule();
 
-    SwNumRule& operator=( const SwNumRule& );
-    bool operator==( const SwNumRule& ) const;
+    SW_DLLPUBLIC SwNumRule& operator=( const SwNumRule& );
+    SW_DLLPUBLIC bool operator==( const SwNumRule& ) const;
     bool operator!=( const SwNumRule& r ) const { return !(*this == r); }
 
     void Reset( const OUString& rName );
 
-    const SwNumFormat* GetNumFormat( sal_uInt16 i ) const;
-    const SwNumFormat& Get( sal_uInt16 i ) const;
+    SW_DLLPUBLIC const SwNumFormat* GetNumFormat( sal_uInt16 i ) const;
+    SW_DLLPUBLIC const SwNumFormat& Get( sal_uInt16 i ) const;
 
     bool IsHidden( ) const { return mbHidden; }
     void SetHidden( bool bValue ) { mbHidden = bValue; }
 
     void Set( sal_uInt16 i, const SwNumFormat* );
-    void Set( sal_uInt16 i, const SwNumFormat& );
+    SW_DLLPUBLIC void Set( sal_uInt16 i, const SwNumFormat& );
     OUString MakeNumString( const SwNodeNum&, bool bInclStrings = true ) const;
     /** - add optional parameter <_nRestrictToThisLevel> in order to
          restrict returned string to this level. */
-    OUString MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
+    SW_DLLPUBLIC OUString MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                           const bool bInclStrings = true,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL,
                           const bool bHideNonNumerical = false,
@@ -272,7 +272,7 @@ public:
 
     void Validate(const SwDoc& rDoc);
     void dumpAsXml(xmlTextWriterPtr w) const;
-    void GetGrabBagItem(css::uno::Any& rVal) const;
+    SW_DLLPUBLIC void GetGrabBagItem(css::uno::Any& rVal) const;
     void SetGrabBagItem(const css::uno::Any& rVal);
 };
 
