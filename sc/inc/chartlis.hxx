@@ -38,7 +38,7 @@ class Timer;
 class ScDocument;
 class ScChartUnoData;
 
-class ScChartListener final : public SvtListener
+class SAL_DLLPUBLIC_RTTI ScChartListener final : public SvtListener
 {
 public:
     class ExternalRefListener final : public ScExternalRefManager::LinkListener

@@ -137,7 +137,7 @@ typedef std::vector<SwGetINetAttr> SwGetINetAttrs;
 #define CNT_HasGrf(USH) ((USH)&CNT_GRF)
 #define CNT_HasOLE(USH) ((USH)&CNT_OLE)
 
-class SwEditShell : public SwCursorShell
+class SAL_DLLPUBLIC_RTTI SwEditShell : public SwCursorShell
 {
     static SvxSwAutoFormatFlags* s_pAutoFormatFlags;
 

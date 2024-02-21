@@ -144,7 +144,7 @@ bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
 
 } // namespace sw
 
-class SwCursorShell
+class SAL_DLLPUBLIC_RTTI SwCursorShell
     : public SwViewShell
     , public sw::BroadcastingModify
     , public ::sw::IShellCursorSupplier

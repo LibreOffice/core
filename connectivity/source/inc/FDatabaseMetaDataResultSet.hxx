@@ -54,7 +54,7 @@ namespace connectivity
     //  typedef ORefVector<ORowSetValue>    ORow;
     //  typedef ORefVector<ORow>            ORows;
 
-    class ODatabaseMetaDataResultSet :
+    class SAL_DLLPUBLIC_RTTI ODatabaseMetaDataResultSet :
                                 public cppu::BaseMutex,
                                 public  ODatabaseMetaDataResultSet_BASE,
                                 public  ::comphelper::OPropertyContainer,

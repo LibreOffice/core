@@ -198,7 +198,7 @@ enum class SwTab
 class SdrDropMarkerOverlay;
 struct SwColCache;
 
-class SwFEShell : public SwEditShell
+class SAL_DLLPUBLIC_RTTI SwFEShell : public SwEditShell
 {
 private:
     mutable std::unique_ptr<SwColCache> m_pColumnCache;

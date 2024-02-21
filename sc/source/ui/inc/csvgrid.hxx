@@ -54,7 +54,7 @@ typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
 
 /** A data grid control for the CSV import dialog. The design of this control
     simulates a Calc spreadsheet with row and column headers. */
-class ScCsvGrid : public ScCsvControl, public utl::ConfigurationListener
+class SAL_DLLPUBLIC_RTTI ScCsvGrid : public ScCsvControl, public utl::ConfigurationListener
 {
 private:
     ScCsvTableBox*              mpTableBox;         /// Grid Parent

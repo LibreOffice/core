@@ -219,7 +219,7 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 }
 
 /** Base class for the CSV ruler and the data grid control. Implements command handling. */
-class ScCsvControl : public weld::CustomWidgetController
+class SAL_DLLPUBLIC_RTTI ScCsvControl : public weld::CustomWidgetController
 {
 private:
     Link<ScCsvControl&,void>    maCmdHdl;           /// External command handler.
