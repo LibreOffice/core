@@ -2880,6 +2880,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf146178)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pCursor->GetPoint()->GetContentIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf159797)
+{
+    createSwDoc();
+    SwXTextDocument& rTextDoc = dynamic_cast<SwXTextDocument&>(*mxComponent);
+
+    emulateTyping(rTextDoc, u"This - is replaced. - But this is not replaced.");
+    // Without the fix in place, this would fail with
+    // - Expected: This – is replaced. – But this is not replaced.
+    // - Actual  : This – is replaced. - But this is not replaced.
+    CPPUNIT_ASSERT_EQUAL(OUString(u"This – is replaced. – But this is not replaced."),
+                         getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155407)
 {
     createSwDoc();
