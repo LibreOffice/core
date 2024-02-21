@@ -34,6 +34,7 @@
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <rootfrm.hxx>
@@ -2634,6 +2635,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
     // Without the fix in place, the autostyle had no parent
     assertXPath(pXml, para_style_path, "parent-style-name", "Standard");
     assertXPath(pXml, para_style_path, "master-page-name", "Right_20_Page");
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159816)
+{
+    createSwDoc();
+
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Add 5 empty paragraphs
+    pWrtShell->SplitNode();
+    pWrtShell->SplitNode();
+    pWrtShell->SplitNode();
+    pWrtShell->SplitNode();
+    pWrtShell->SplitNode();
+
+    // Add a bookmark at the very end
+    IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
+    rIDMA.makeMark(*pWrtShell->GetCursor(), "Mark", IDocumentMarkAccess::MarkType::BOOKMARK,
+                   sw::mark::InsertMode::New);
+
+    // Get coordinates of the end point in the document
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pLastPara = pBody->GetLower()->GetNext()->GetNext()->GetNext()->GetNext()->GetNext();
+    Point ptTo = pLastPara->getFrameArea().BottomRight();
+
+    pWrtShell->SelAll();
+
+    // Drag-n-drop to its own end
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    // Without the fix, this would crash: either in CopyFlyInFlyImpl (tdf#159813):
+    // Assertion failed: !pCopiedPaM || pCopiedPaM->End()->GetNode() == rRg.aEnd.GetNode()
+    // or in BigPtrArray::operator[] (tdf#159816):
+    // Assertion failed: idx < m_nSize
+    xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
