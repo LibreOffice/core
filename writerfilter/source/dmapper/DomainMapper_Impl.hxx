@@ -775,6 +775,7 @@ public:
     bool isParaSdtEndDeferred() const;
 
     void finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove = false, const bool bNoNumbering = false);
+    void MergeAtContentImageRedlineWithNext(const css::uno::Reference<css::text::XTextAppend>& xTextAppend);
     void appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap );
     void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
     void appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOleHandler );

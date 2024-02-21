@@ -366,6 +366,51 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableSectend)
     // i.e. the first table was lost.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xTables->getCount());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testRedlinedShapeThenSdt)
+{
+    // Given a file with a second paragraph where text is followed by a redline, then an SDT:
+    // When importing that document:
+    loadFromURL(u"redlined-shape-sdt.docx");
+
+    // Then make sure the content control doesn't start at para start:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    uno::Reference<container::XEnumerationAccess> xPortionEnumAccess(xParaEnum->nextElement(),
+                                                                     uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPortionEnumAccess->createEnumeration();
+
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Text
+    // - Actual  : ContentControl
+    // i.e. the content control started at para start.
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+    xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    // Redline start+end pair, containing a pair of text portions with an anchored object in the
+    // middle.
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"),
+                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+    xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+    xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"),
+                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+    xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+    xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"),
+                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+    xPortion.set(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"),
+                         xPortion->getPropertyValue("TextPortionType").get<OUString>());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
