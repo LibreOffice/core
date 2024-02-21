@@ -67,7 +67,6 @@ gb_GenCxxObject_get_dwo_target = $(WORKDIR)/GenCxxObject/$(1).dwo
 gb_GenNasmObject_get_target = $(WORKDIR)/GenNasmObject/$(1).o
 gb_GenNasmObject_get_dwo_target = $(WORKDIR)/GenNasmObject/$(1).dwo
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
-gb_Executable_get_linktargetfile = $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$1))
 gb_Executable_get_runtime_target = $(WORKDIR_FOR_BUILD)/Executable/$(1).run
 gb_Extension_get_target = $(WORKDIR)/Extension/$(1).oxt
 gb_Extension_get_rootdir = $(WORKDIR)/Extension/$(1)/root
