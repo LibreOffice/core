@@ -666,6 +666,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     break;
             }
         }
+        else if (rProperty.first == "fillAngle")
+        {
+            aFillModel.moAngle = rProperty.second.toInt32() / 60000;
+        }
         else if (rProperty.first == "fillFocus")
             aFillModel.moFocus = rProperty.second.toDouble() / 100; // percent
         else if (rProperty.first == "fShadow" && xPropertySet.is())
