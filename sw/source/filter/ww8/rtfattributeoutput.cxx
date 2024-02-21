@@ -3754,6 +3754,12 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
         const Color aEndColor(rColorStops.back().getStopColor());
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
             "fillBackColor"_ostr, OString::number(wwUtility::RGBToBGR(aEndColor))));
+
+        if (rGradient.GetGradientStyle() == awt::GradientStyle_AXIAL)
+        {
+            m_aFlyProperties.push_back(
+                std::make_pair<OString, OString>("fillFocus"_ostr, OString::number(50)));
+        }
     }
     else
     {
