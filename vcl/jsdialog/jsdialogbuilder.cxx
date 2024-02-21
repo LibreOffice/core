@@ -1312,13 +1312,6 @@ JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMe
     pNotifier = xMessageDialog->GetLOKNotifier();
     if (pNotifier)
     {
-        tools::JsonWriter aJsonWriter;
-        xMessageDialog->DumpAsPropertyTree(aJsonWriter);
-        aJsonWriter.put("id", xMessageDialog->GetLOKWindowId());
-        aJsonWriter.put("jsontype", "dialog");
-        OString message(aJsonWriter.finishAndGetAsOString());
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message);
-
         OUString sWindowId = OUString::number(xMessageDialog->GetLOKWindowId());
         InsertWindowToMap(sWindowId);
         xMessageDialog->SetLOKTunnelingState(false);
