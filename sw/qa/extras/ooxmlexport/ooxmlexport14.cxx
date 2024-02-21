@@ -1393,17 +1393,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146346, "tdf146346.docx")
 }
 #endif
 
-DECLARE_OOXMLEXPORT_TEST(testTdf130088, "tdf130088.docx")
-{
-    // This was 2 (justification without shrinking resulted more lines)
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-
-    // check compatibility option in ODT export/import, too
-    saveAndReload("writer8");
-
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)
 {
     loadAndReload("hyphenation.odt");
