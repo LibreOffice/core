@@ -241,7 +241,6 @@ xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); x
 init_unoembind_uno(Module);
 let css = Module.unoembind_uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
-init_unoembind_uno(Module);
 xEnumAccess = new css.container.XEnumerationAccess(xText.$query());
 xParaEnumeration = xEnumAccess.createEnumeration();
 
