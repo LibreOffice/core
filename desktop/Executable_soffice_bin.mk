@@ -64,6 +64,19 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
 ))
 endif
 
+ifneq ($(ENABLE_DBGUTIL),)
+
+$(call gb_Executable_get_linktarget_target,soffice_bin): \
+    $(call gb_CustomTarget_get_workdir,static/unoembind)/bindings_uno.js \
+    $(SRCDIR)/unotest/source/embindtest/embindtest.js
+
+$(eval $(call gb_Executable_add_ldflags,soffice_bin, \
+    --post-js $(call gb_CustomTarget_get_workdir,static/unoembind)/bindings_uno.js \
+    --post-js $(SRCDIR)/unotest/source/embindtest/embindtest.js \
+))
+
+endif
+
 endif
 
 # vim: set ts=4 sw=4 et:

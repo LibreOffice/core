@@ -17,10 +17,12 @@ $(eval $(call gb_CustomTarget_register_targets,static/unoembind, \
 $(call gb_CustomTarget_get_workdir,static/unoembind)/bindings_uno.cxx \
 $(call gb_CustomTarget_get_workdir,static/unoembind)/bindings_uno.js: \
         $(call gb_Executable_get_target_for_build,embindmaker) $(call gb_UnoApi_get_target,udkapi) \
-        $(call gb_UnoApi_get_target,offapi)
+        $(call gb_UnoApi_get_target,offapi) \
+        $(if $(ENABLE_DBGUTIL),$(call gb_UnoApiTarget_get_target,embindtest))
 	$(call gb_Executable_get_command,embindmaker) uno \
         $(call gb_CustomTarget_get_workdir,static/unoembind)/bindings_uno.cxx \
         $(call gb_CustomTarget_get_workdir,static/unoembind)/bindings_uno.js \
-        +$(call gb_UnoApi_get_target,udkapi) +$(call gb_UnoApi_get_target,offapi)
+        +$(call gb_UnoApi_get_target,udkapi) +$(call gb_UnoApi_get_target,offapi) \
+        +$(if $(ENABLE_DBGUTIL),$(call gb_UnoApiTarget_get_target,embindtest))
 
 # vim: set noet sw=4 ts=4:
