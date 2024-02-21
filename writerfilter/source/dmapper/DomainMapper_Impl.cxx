@@ -984,6 +984,10 @@ void DomainMapper_Impl::PushSdt()
         return;
     }
 
+    // This may delete text, so call it early, before we would set our start position, which may be
+    // invalidated by a delete.
+    MergeAtContentImageRedlineWithNext(xTextAppend);
+
     uno::Reference<text::XText> xText = xTextAppend->getText();
     if (!xText.is())
     {
@@ -1022,6 +1026,7 @@ void DomainMapper_Impl::PopSdt()
     }
     catch (const uno::RuntimeException&)
     {
+        TOOLS_WARN_EXCEPTION("writerfilter", "DomainMapper_Impl::DomainMapper_Impl::PopSdt: createTextCursorByRange() failed");
         // We redline form controls and that gets us confused when
         // we process the SDT around the placeholder. What seems to
         // happen is we lose the text-range when we pop the SDT position.
@@ -3187,6 +3192,42 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
     }
 }
 
+void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Reference<css::text::XTextAppend>& xTextAppend)
+{
+    // remove workaround for change tracked images, if they are part of a redline,
+    // i.e. if the next run is a tracked change with the same type, author and date,
+    // as in the change tracking of the image.
+    if ( m_bRedlineImageInPreviousRun )
+    {
+        auto pCurrentRedline = m_aRedlines.top().size() > 0
+            ? m_aRedlines.top().back()
+            : GetTopContextOfType(CONTEXT_CHARACTER) &&
+            GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().size() > 0
+            ? GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().back()
+            : nullptr;
+        if ( m_previousRedline && pCurrentRedline &&
+                // same redline
+                (m_previousRedline->m_nToken & 0xffff) == (pCurrentRedline->m_nToken & 0xffff) &&
+                m_previousRedline->m_sAuthor == pCurrentRedline->m_sAuthor &&
+                m_previousRedline->m_sDate == pCurrentRedline->m_sDate )
+        {
+            uno::Reference< text::XTextCursor > xCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
+            assert(xCursor.is());
+            xCursor->gotoEnd(false);
+            xCursor->goLeft(2, true);
+            if ( xCursor->getString() == u"​​" )
+            {
+                xCursor->goRight(1, true);
+                xCursor->setString("");
+                xCursor->gotoEnd(false);
+                xCursor->goLeft(1, true);
+                xCursor->setString("");
+            }
+        }
+
+        m_bRedlineImageInPreviousRun = false;
+    }
+}
 
     void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
 {
@@ -3220,39 +3261,7 @@ void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap
                     rValue.Value <<= false;
             }
 
-        // remove workaround for change tracked images, if they are part of a redline,
-        // i.e. if the next run is a tracked change with the same type, author and date,
-        // as in the change tracking of the image.
-        if ( m_bRedlineImageInPreviousRun )
-        {
-            auto pCurrentRedline = m_aRedlines.top().size() > 0
-                    ? m_aRedlines.top().back()
-                    : GetTopContextOfType(CONTEXT_CHARACTER) &&
-                                GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().size() > 0
-                        ? GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().back()
-                        : nullptr;
-            if ( m_previousRedline && pCurrentRedline &&
-                   // same redline
-                   (m_previousRedline->m_nToken & 0xffff) == (pCurrentRedline->m_nToken & 0xffff) &&
-                    m_previousRedline->m_sAuthor == pCurrentRedline->m_sAuthor &&
-                    m_previousRedline->m_sDate == pCurrentRedline->m_sDate )
-            {
-                uno::Reference< text::XTextCursor > xCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
-                assert(xCursor.is());
-                xCursor->gotoEnd(false);
-                xCursor->goLeft(2, true);
-                if ( xCursor->getString() == u"​​" )
-                {
-                    xCursor->goRight(1, true);
-                    xCursor->setString("");
-                    xCursor->gotoEnd(false);
-                    xCursor->goLeft(1, true);
-                    xCursor->setString("");
-                }
-            }
-
-            m_bRedlineImageInPreviousRun = false;
-        }
+        MergeAtContentImageRedlineWithNext(xTextAppend);
 
         uno::Reference< text::XTextRange > xTextRange;
         if (m_aTextAppendStack.top().xInsertPosition.is())
