@@ -118,6 +118,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     uui/util/uui \
     vcl/vcl.common \
     xmloff/util/xo \
+    xmlsecurity/util/xsec_xmlsec \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_filters_test))
