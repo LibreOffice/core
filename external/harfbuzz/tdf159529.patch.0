@@ -1,0 +1,28 @@
+--- ./src/hb-ot-font.cc	2023-11-11 09:08:45
++++ ./src/hb-ot-font.cc	2024-02-20 18:53:55
+@@ -428,13 +428,23 @@
+   const hb_ot_face_t *ot_face = ot_font->ot_face;
+ 
+ #if !defined(HB_NO_OT_FONT_BITMAP) && !defined(HB_NO_COLOR)
+-  if (ot_face->sbix->get_extents (font, glyph, extents)) return true;
++  /* tdf#159529 clear the hb_ot_face_t's data after fetching 'sbix' table
++   * The 'sbix' table can be very large for color emoji fonts so clear any
++   * cached data in hb_ot_face_t after fetching that table's extents. */
++  bool sbixResult = ot_face->sbix->get_extents (font, glyph, extents);
++  const_cast<hb_ot_face_t*>(ot_face)->sbix.fini ();
++  if (sbixResult) return true;
+   if (ot_face->CBDT->get_extents (font, glyph, extents)) return true;
+ #endif
+ #if !defined(HB_NO_COLOR) && !defined(HB_NO_PAINT)
+   if (ot_face->COLR->get_extents (font, glyph, extents)) return true;
+ #endif
+-  if (ot_face->glyf->get_extents (font, glyph, extents)) return true;
++  /* tdf#159529 clear the hb_ot_face_t's data after fetching 'glyf' table
++   * The 'glyf' table can be very large for color emoji fonts so clear any
++   * cached data in hb_ot_face_t after fetching that table's extents. */
++  bool glyfResult = ot_face->glyf->get_extents (font, glyph, extents);
++  const_cast<hb_ot_face_t*>(ot_face)->glyf.fini ();
++  if (glyfResult) return true;
+ #ifndef HB_NO_OT_FONT_CFF
+   if (ot_face->cff2->get_extents (font, glyph, extents)) return true;
+   if (ot_face->cff1->get_extents (font, glyph, extents)) return true;
