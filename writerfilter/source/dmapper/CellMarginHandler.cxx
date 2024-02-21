@@ -62,7 +62,7 @@ void CellMarginHandler::lcl_attribute(Id rName, Value & rVal)
             m_nType = nIntValue;
         break;
         default:
-            SAL_WARN("writerfilter", "CellMarginHandler::lcl_attribute: unknown attribute");
+            SAL_INFO("writerfilter", "CellMarginHandler::lcl_attribute: unknown attribute");
     }
 }
 
