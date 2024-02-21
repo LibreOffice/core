@@ -1728,6 +1728,11 @@ uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
         for ( const auto& rKey : std::as_const(m_aStorageEncryptionKeys) )
             if ( rKey.Name == aNameToFind )
                 rKey.Value >>= aResult;
+
+        if (!aResult.hasElements() && m_aStorageEncryptionKeys.hasElements())
+        {   // tdf#159519 sanity check
+            throw uno::RuntimeException(THROW_WHERE "Expected key is missing!");
+        }
     }
     else
         aResult = m_aEncryptionKey;
