@@ -9653,16 +9653,34 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         switch (rGradient.GetGradientStyle())
         {
             case css::awt::GradientStyle_AXIAL:
-                AddToAttrList(m_rExport.SdrExporter().getFlyFillAttrList(), XML_type, "gradient");
-                AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_focus, "50%" );
-                // If it is an 'axial' gradient - swap the colors
-                // (because in the import process they were imported swapped)
-                sColor1 = sEndColor;
-                sColor2 = sStartColor;
-                break;
             case css::awt::GradientStyle_LINEAR:
+            {
+                bool bIsSymmetrical = rGradient.GetGradientStyle() == css::awt::GradientStyle_AXIAL;
+                if (!bIsSymmetrical)
+                {
+                    const basegfx::BColorStops& rColorStops = rGradient.GetColorStops();
+                    if (rColorStops.size() > 2 && rColorStops.isSymmetrical())
+                    {
+                        for (auto& rStop : rColorStops)
+                        {
+                            if (basegfx::fTools::less(rStop.getStopOffset(), 0.5))
+                                continue;
+                            if (basegfx::fTools::more(rStop.getStopOffset(), 0.5))
+                                break;
+
+                            // the color in the middle is considered the start color for focus 50
+                            sColor1 = msfilter::util::ConvertColor(Color(rStop.getStopColor()));
+                            bIsSymmetrical = true;
+                        }
+                    }
+                }
+
+                if (bIsSymmetrical)
+                    AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_focus, "50%" );
+
                 AddToAttrList(m_rExport.SdrExporter().getFlyFillAttrList(), XML_type, "gradient");
                 break;
+            }
             case css::awt::GradientStyle_RADIAL:
             case css::awt::GradientStyle_ELLIPTICAL:
             case css::awt::GradientStyle_SQUARE:

@@ -642,9 +642,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_negativeAxialAngle, "tdf126533_negativeAxialAngle.docx")
 {
-    if (isExported())
-        return;
-
     // axiel gradient is purple foreground/lime background in the middle (top-left to bottom-right)
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
