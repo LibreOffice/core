@@ -68,7 +68,6 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
     header();
     loadURL(createFileURL(OUString::createFromAscii(filename)), pPassword);
     verify();
-    postLoad(filename);
     saveAndReload(mpFilter, pPassword);
     verify();
     finish();
