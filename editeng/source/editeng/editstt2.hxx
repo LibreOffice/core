@@ -47,7 +47,9 @@ public:
                 { return bool( nControlBits & EEControlBits::UNDOATTRIBS ); }
 
     bool    OneCharPerLine() const
-                { return bool( nControlBits & EEControlBits::ONECHARPERLINE ); }
+    {
+        return bool(nControlBits & (EEControlBits::ONECHARPERLINE | EEControlBits::STACKED));
+    }
 
     bool    IsOutliner() const
                 { return bool( nControlBits & EEControlBits::OUTLINER ); }

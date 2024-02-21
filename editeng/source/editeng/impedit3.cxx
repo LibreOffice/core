@@ -695,13 +695,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         return false;
     }
 
-    //If the paragraph SvxFrameDirection is Stacked, use ONECHARPERLINE
+    //If the paragraph SvxFrameDirection is Stacked, use STACKED
     const SvxFrameDirectionItem* pFrameDirItem = &GetParaAttrib(nPara, EE_PARA_WRITINGDIR);
     bool bStacked = pFrameDirItem->GetValue() == SvxFrameDirection::Stacked;
     if (bStacked)
-        maStatus.TurnOnFlags(EEControlBits::ONECHARPERLINE);
+        maStatus.TurnOnFlags(EEControlBits::STACKED);
     else
-        maStatus.TurnOffFlags(EEControlBits::ONECHARPERLINE);
+        maStatus.TurnOffFlags(EEControlBits::STACKED);
 
     // Initialization...
 

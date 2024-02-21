@@ -32,7 +32,7 @@ enum class EEControlBits
     PASTESPECIAL       = 0x00000010,  // Allow PasteSpecial
     AUTOINDENTING      = 0x00000020,  // Automatic indenting
     UNDOATTRIBS        = 0x00000040,  // Undo for Attributes...
-    ONECHARPERLINE     = 0x00000080,  // One character per line
+    ONECHARPERLINE     = 0x00000080,  // One character per line (used in calc)
     NOCOLORS           = 0x00000100,  // Engine: No Color
     OUTLINER           = 0x00000200,  // Special treatment Outliner/Outline mode
     OUTLINER2          = 0x00000400,  // Special treatment Outliner/Page
@@ -51,10 +51,11 @@ enum class EEControlBits
     FORMAT100          = 0x01000000,  // Always format to 100%
     ULSPACESUMMATION   = 0x02000000,  // MS Compat: sum SA and SB, not maximum value
     SINGLELINE         = 0x04000000,  // One line for all text
+    STACKED            = 0x08000000,  // Same as ONECHARPERLINE (used in impress)
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x07ffffff> {};
+    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x0fffffff> {};
 }
 
 enum class EVControlBits
