@@ -1630,6 +1630,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	AccessibleTableModelChange \
 	AccessibleTableModelChangeType \
 	AccessibleTextType \
+	GetStandardAccessibleFactoryService \
 	IllegalAccessibleComponentStateException \
 	TextSegment \
     MSAAService \

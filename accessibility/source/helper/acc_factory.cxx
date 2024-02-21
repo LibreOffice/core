@@ -20,6 +20,7 @@
 #include <config_features.h>
 #include <config_feature_desktop.h>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/accessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
@@ -471,6 +472,35 @@ Reference< XAccessible > AccessibleFactory::createEditBrowseBoxTableCellAccess(
 } // anonymous namespace
 
 #if HAVE_FEATURE_DESKTOP
+
+/// anonymous implementation namespace
+namespace {
+
+class GetStandardAccessibleFactoryService:
+    public ::cppu::WeakImplHelper<
+        css::lang::XServiceInfo,
+        css::lang::XUnoTunnel>
+{
+public:
+    // css::lang::XServiceInfo:
+    virtual OUString SAL_CALL getImplementationName() override
+        { return "com.sun.star.accessibility.comp.GetStandardAccessibleFactoryService"; }
+    virtual sal_Bool SAL_CALL supportsService(const OUString & serviceName) override
+        { return cppu::supportsService(this, serviceName); }
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+        { return { "com.sun.star.accessibility.GetStandardAccessibleFactoryService" }; }
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::css::uno::Sequence< ::sal_Int8 >& /*aIdentifier*/ ) override
+    {
+        ::toolkit::IAccessibleFactory* pFactory = new AccessibleFactory;
+        pFactory->acquire();
+        return reinterpret_cast<sal_Int64>(pFactory);
+    }
+};
+
+} // closing anonymous implementation namespace
+
 /* this is the entry point to retrieve a factory for the toolkit-level Accessible/Contexts supplied
     by this library
 
@@ -479,11 +509,12 @@ Reference< XAccessible > AccessibleFactory::createEditBrowseBoxTableCellAccess(
 */
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void* getStandardAccessibleFactory()
+    SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+    com_sun_star_accessibility_GetStandardAccessibleFactoryService_get_implementation(
+        css::uno::XComponentContext *,
+        css::uno::Sequence<css::uno::Any> const &)
     {
-        ::toolkit::IAccessibleFactory* pFactory = new AccessibleFactory;
-        pFactory->acquire();
-        return pFactory;
+        return cppu::acquire(new GetStandardAccessibleFactoryService);
     }
 }
 

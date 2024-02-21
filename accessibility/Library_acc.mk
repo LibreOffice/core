@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,acc))
 
-$(eval $(call gb_Library_set_plugin_for,acc,tk))
+$(eval $(call gb_Library_set_componentfile,acc,accessibility/util/acc,services))
 
 $(eval $(call gb_Library_set_include,acc,\
     $$(INCLUDE) \
@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,acc,\
     sot \
     svl \
     svt \
+    tk \
     tl \
     utl \
     vcl \

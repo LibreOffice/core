@@ -23,13 +23,14 @@
 #include <sal/config.h>
 
 #include <toolkit/helper/accessiblefactory.hxx>
-#include <osl/module.h>
+#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <tools/svlibrary.h>
 
 #include <helper/accessibilityclient.hxx>
+#include <com/sun/star/accessibility/GetStandardAccessibleFactoryService.hpp>
 
 namespace toolkit
 {
@@ -38,14 +39,6 @@ namespace toolkit
 
     namespace
     {
-#ifndef DISABLE_DYNLOADING
-        oslModule                                s_hAccessibleImplementationModule = nullptr;
-#endif
-#if HAVE_FEATURE_DESKTOP
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
-        GetStandardAccComponentFactory           s_pAccessibleFactoryFunc = nullptr;
-#endif
-#endif
         ::rtl::Reference< IAccessibleFactory >   s_pFactory;
     }
 
@@ -58,16 +51,6 @@ namespace toolkit
     {
     }
 
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
-#if HAVE_FEATURE_DESKTOP
-#ifndef DISABLE_DYNLOADING
-    extern "C" { static void thisModule() {} }
-#else
-    extern "C" void *getStandardAccessibleFactory();
-#endif
-#endif // HAVE_FEATURE_DESKTOP
-#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
-
     void AccessibilityClient::ensureInitialized()
     {
         if ( m_bInitialized )
@@ -77,20 +60,12 @@ namespace toolkit
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
 #if HAVE_FEATURE_DESKTOP
-        // load the library implementing the factory
         if (!s_pFactory)
         {
-#ifndef DISABLE_DYNLOADING
-            s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, u"" SVLIBRARY( "acc" ) ""_ustr.pData, 0 );
-            assert(s_hAccessibleImplementationModule);
-            s_pAccessibleFactoryFunc = reinterpret_cast<GetStandardAccComponentFactory>(
-                osl_getFunctionSymbol( s_hAccessibleImplementationModule, u"getStandardAccessibleFactory"_ustr.pData ));
-#else
-            s_pAccessibleFactoryFunc = getStandardAccessibleFactory;
-#endif // DISABLE_DYNLOADING
-
-            assert(s_pAccessibleFactoryFunc);
-            IAccessibleFactory* pFactory = static_cast< IAccessibleFactory* >( (*s_pAccessibleFactoryFunc)() );
+            auto xService = css::accessibility::GetStandardAccessibleFactoryService::create(comphelper::getProcessComponentContext());
+            assert(xService);
+            // get a factory instance
+            IAccessibleFactory* pFactory = reinterpret_cast<IAccessibleFactory*>(xService->getSomething({}));
             assert(pFactory);
             s_pFactory = pFactory;
             pFactory->release();
