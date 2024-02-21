@@ -10,6 +10,8 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -21,7 +23,9 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 
+#include <basegfx/utils/gradienttools.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <tools/UnitConversion.hxx>
 #include <comphelper/propertyvalue.hxx>
 
@@ -176,6 +180,36 @@ DECLARE_RTFEXPORT_TEST(testTdf158826_extraCR, "tdf158826_extraCR.rtf")
 
     // There is a two-column floating table
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf159824_axialGradient)
+{
+    // given a frame with an axial gradient (white - green - white)
+    loadAndReload("tdf159824_axialGradient.odt");
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+
+    //const Color aColA(0x127622); // green
+    //const Color aColB(0xffffff); // white
+
+    // MCGR: Use the completely imported transparency gradient to check for correctness
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+
+    // expected: a 3-color linear gradient (or better yet a 2-color AXIAL gradient)
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    //CPPUNIT_ASSERT_EQUAL(aColB, Color(aColorStops[0].getStopColor()));
+    // CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
+    // CPPUNIT_ASSERT_EQUAL(aColA, Color(aColorStops[1].getStopColor()));
+    // CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
+    // CPPUNIT_ASSERT_EQUAL(aColB, Color(aColorStops[2].getStopColor()));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf158830, "tdf158830.rtf")
