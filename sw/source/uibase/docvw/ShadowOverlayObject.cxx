@@ -73,6 +73,8 @@ public:
 drawinglayer::primitive2d::Primitive2DReference ShadowPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
+    const Color aBgCol = svtools::ColorConfig().GetColorValue(svtools::WRITERSECTIONBOUNDARIES).nColor;
+    const Color aBgColInv = aBgCol.IsDark() ? COL_WHITE : COL_BLACK;
     // get logic sizes in object coordinate system
     basegfx::B2DRange aRange(maBasePosition);
     drawinglayer::primitive2d::Primitive2DReference xRet;
@@ -80,7 +82,7 @@ drawinglayer::primitive2d::Primitive2DReference ShadowPrimitive::create2DDecompo
     {
         case SS_NORMAL:
         {
-            aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (2.0 * getDiscreteUnit())));
+            aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (1.0 * getDiscreteUnit())));
 
             ::drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
                 css::awt::GradientStyle_LINEAR,
@@ -88,10 +90,7 @@ drawinglayer::primitive2d::Primitive2DReference ShadowPrimitive::create2DDecompo
                 0.5,
                 0.5,
                 M_PI,
-                basegfx::BColorStops(
-                    basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
-                    basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0)));
-
+                basegfx::BColorStops(aBgCol.getBColor(), aBgColInv.getBColor()));
             xRet =
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
@@ -100,17 +99,14 @@ drawinglayer::primitive2d::Primitive2DReference ShadowPrimitive::create2DDecompo
         }
         case SS_VIEW:
         {
-            aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
+            aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (2.0 * getDiscreteUnit())));
             drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
                 css::awt::GradientStyle_LINEAR,
                 0.0,
                 0.5,
                 0.5,
                 M_PI,
-                basegfx::BColorStops(
-                    basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
-                    basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0)));
-
+                basegfx::BColorStops(aBgCol.getBColor(), aBgColInv.getBColor()));
             xRet =
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
@@ -126,10 +122,7 @@ drawinglayer::primitive2d::Primitive2DReference ShadowPrimitive::create2DDecompo
                 0.5,
                 0.5,
                 M_PI,
-                basegfx::BColorStops(
-                    basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
-                    basegfx::BColor(83.0/255.0,83.0/255.0,83.0/255.0)));
-
+                basegfx::BColorStops(aBgCol.getBColor(), aBgColInv.getBColor()));
             xRet =
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
