@@ -93,7 +93,7 @@ namespace desktop {
     };
 
     /// One instance of this per view, handles flushing callbacks
-    class CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
+    class SAL_DLLPUBLIC_RTTI CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
     {
     public:
         DESKTOP_DLLPUBLIC explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);
