@@ -28,56 +28,47 @@
 
 namespace drawinglayer::processor2d
 {
+        void TextAsPolygonExtractor2D::processTextPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        {
+            // PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D
+            // TextDecoratedPortionPrimitive2D can produce the following primitives
+            // when being decomposed:
+            //
+            // - TextSimplePortionPrimitive2D
+            // - PolygonWavePrimitive2D
+            //      - PolygonStrokePrimitive2D
+            // - PolygonStrokePrimitive2D
+            //      - PolyPolygonColorPrimitive2D
+            //      - PolyPolygonHairlinePrimitive2D
+            //          - PolygonHairlinePrimitive2D
+            // - ShadowPrimitive2D
+            //      - ModifiedColorPrimitive2D
+            //      - TransformPrimitive2D
+            // - TextEffectPrimitive2D
+            //      - ModifiedColorPrimitive2D
+            //      - TransformPrimitive2D
+            //      - GroupPrimitive2D
+
+            // PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D
+            // TextSimplePortionPrimitive2D can produce the following primitives
+            // when being decomposed:
+            //
+            // - PolyPolygonColorPrimitive2D
+            // - TextEffectPrimitive2D
+            //      - ModifiedColorPrimitive2D
+            //      - TransformPrimitive2D
+            //      - GroupPrimitive2D
+
+            // encapsulate with flag and use decomposition
+            mnInText++;
+            process(rCandidate);
+            mnInText--;
+        }
+
         void TextAsPolygonExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            switch(rCandidate.getPrimitive2DID())
+            switch (rCandidate.getPrimitive2DID())
             {
-                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
-                {
-                    // TextDecoratedPortionPrimitive2D can produce the following primitives
-                    // when being decomposed:
-                    //
-                    // - TextSimplePortionPrimitive2D
-                    // - PolygonWavePrimitive2D
-                    //      - PolygonStrokePrimitive2D
-                    // - PolygonStrokePrimitive2D
-                    //      - PolyPolygonColorPrimitive2D
-                    //      - PolyPolygonHairlinePrimitive2D
-                    //          - PolygonHairlinePrimitive2D
-                    // - ShadowPrimitive2D
-                    //      - ModifiedColorPrimitive2D
-                    //      - TransformPrimitive2D
-                    // - TextEffectPrimitive2D
-                    //      - ModifiedColorPrimitive2D
-                    //      - TransformPrimitive2D
-                    //      - GroupPrimitive2D
-
-                    // encapsulate with flag and use decomposition
-                    mnInText++;
-                    process(rCandidate);
-                    mnInText--;
-
-                    break;
-                }
-                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
-                {
-                    // TextSimplePortionPrimitive2D can produce the following primitives
-                    // when being decomposed:
-                    //
-                    // - PolyPolygonColorPrimitive2D
-                    // - TextEffectPrimitive2D
-                    //      - ModifiedColorPrimitive2D
-                    //      - TransformPrimitive2D
-                    //      - GroupPrimitive2D
-
-                    // encapsulate with flag and use decomposition
-                    mnInText++;
-                    process(rCandidate);
-                    mnInText--;
-
-                    break;
-                }
-
                 // as can be seen from the TextSimplePortionPrimitive2D and the
                 // TextDecoratedPortionPrimitive2D, inside of the mnInText marks
                 // the following primitives can occur containing geometry data
@@ -190,29 +181,14 @@ namespace drawinglayer::processor2d
                     break;
                 }
 
-                // ignorable primitives
-                case PRIMITIVE2D_ID_SCENEPRIMITIVE2D :
-                case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
-                case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
-                case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D :
-                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
-                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
-                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
-                {
+                default:
+                    TextExtractor2D::processBasePrimitive2D(rCandidate);
                     break;
-                }
-
-                default :
-                {
-                    // process recursively
-                    process(rCandidate);
-                    break;
-                }
             }
         }
 
         TextAsPolygonExtractor2D::TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation)
-        :   BaseProcessor2D(rViewInformation),
+        :   TextExtractor2D(rViewInformation),
             maBColorModifierStack(),
             mnInText(0)
         {

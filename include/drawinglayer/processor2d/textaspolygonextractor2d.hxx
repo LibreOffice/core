@@ -22,7 +22,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/textextractor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -64,7 +64,7 @@ namespace drawinglayer::processor2d
 
             This processor extracts text in the fed primitives to filled polygons
          */
-        class DRAWINGLAYER_DLLPUBLIC TextAsPolygonExtractor2D final : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC TextAsPolygonExtractor2D final : public TextExtractor2D
         {
         private:
             // extraction target
@@ -78,6 +78,7 @@ namespace drawinglayer::processor2d
 
             // tooling methods
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
+            void processTextPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
 
         public:
             explicit TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation);
