@@ -530,40 +530,39 @@ namespace drawinglayer::primitive2d
             // Save chaining attributes
             bool bChainable = rTextObj.IsChainable();
 
+            // get OutlinerParaObject
+            std::optional<OutlinerParaObject> aOutlinerParaObject;
 
+            // 1st try to get from rText
             if(rText.GetOutlinerParaObject())
             {
-                // added TextEdit text suppression
-                bool bInEditMode(false);
+                aOutlinerParaObject.emplace(*rText.GetOutlinerParaObject());
+            }
 
-                if(rText.GetObject().getTextCount() > 1)
-                {
-                    bInEditMode = rTextObj.IsInEditMode() && rText.GetObject().getActiveText() == &rText;
-                }
-                else
-                {
-                    bInEditMode = rTextObj.IsInEditMode();
-                }
+            // added TextEdit text suppression - check if rText is in EditMode
+            bool bInEditMode(false);
 
-                OutlinerParaObject aOutlinerParaObject(*rText.GetOutlinerParaObject());
+            if(rText.GetObject().getTextCount() > 1)
+            {
+                bInEditMode = rTextObj.IsInEditMode() && rText.GetObject().getActiveText() == &rText;
+            }
+            else
+            {
+                bInEditMode = rTextObj.IsInEditMode();
+            }
 
-                if(bInEditMode)
-                {
-                    std::optional<OutlinerParaObject> pTempObj = rTextObj.CreateEditOutlinerParaObject();
+            if(bInEditMode)
+            {
+                // if yes, try to get OutlinerParaObject from active TextEdit
+                std::optional<OutlinerParaObject> aTextEditOutlinerParaObject(rTextObj.CreateEditOutlinerParaObject());
 
-                    if(pTempObj)
-                    {
-                        aOutlinerParaObject = *pTempObj;
-                    }
-                    else
-                    {
-                        // #i100537#
-                        // CreateEditOutlinerParaObject() returning no object does not mean that
-                        // text edit mode is not active. Do not reset the flag here
-                        // bInEditMode = false;
-                    }
-                }
+                if (aTextEditOutlinerParaObject)
+                    // if we got one, prefer text from active TextEdit
+                    aOutlinerParaObject = aTextEditOutlinerParaObject;
+            }
 
+            if(aOutlinerParaObject)
+            {
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
                 // #i107346#
@@ -572,7 +571,7 @@ namespace drawinglayer::primitive2d
 
                 return attribute::SdrTextAttribute(
                     rText,
-                    aOutlinerParaObject,
+                    *aOutlinerParaObject,
                     rSet.Get(XATTR_FORMTXTSTYLE).GetValue(),
                     pLeft ? *pLeft : rTextObj.GetTextLeftDistance(),
                     pUpper ? *pUpper : rTextObj.GetTextUpperDistance(),

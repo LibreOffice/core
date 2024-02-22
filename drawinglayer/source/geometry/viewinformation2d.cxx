@@ -87,6 +87,12 @@ protected:
     // the point in time
     double mfViewTime;
 
+    // a hint that the View that is being painted has an active TextEdit. This
+    // is important for handling of TextHierarchyEditPrimitive2D to suppress
+    // the text for objects in TextEdit - the text is visualized by the
+    // active EditEngine/Outliner overlay, so it would be double visualized
+    bool mbTextEditActive;
+
     // allow to reduce DisplayQuality (e.g. sw 3d fallback renderer for interactions)
     bool mbReducedDisplayQuality : 1;
 
@@ -106,6 +112,7 @@ public:
         , maDiscreteViewport()
         , mxVisualizedPage()
         , mfViewTime(0.0)
+        , mbTextEditActive(false)
         , mbReducedDisplayQuality(false)
         , mbUseAntiAliasing(ViewInformation2D::getGlobalAntiAliasing())
         , mbPixelSnapHairline(mbUseAntiAliasing && bForwardPixelSnapHairline)
@@ -190,6 +197,9 @@ public:
         mxVisualizedPage = rNew;
     }
 
+    bool getTextEditActive() const { return mbTextEditActive; }
+    void setTextEditActive(bool bNew) { mbTextEditActive = bNew; }
+
     bool getReducedDisplayQuality() const { return mbReducedDisplayQuality; }
     void setReducedDisplayQuality(bool bNew) { mbReducedDisplayQuality = bNew; }
 
@@ -206,6 +216,7 @@ public:
                 && maViewport == rCandidate.maViewport
                 && mxVisualizedPage == rCandidate.mxVisualizedPage
                 && mfViewTime == rCandidate.mfViewTime
+                && mbTextEditActive == rCandidate.mbTextEditActive
                 && mbReducedDisplayQuality == rCandidate.mbReducedDisplayQuality
                 && mbUseAntiAliasing == rCandidate.mbUseAntiAliasing
                 && mbPixelSnapHairline == rCandidate.mbPixelSnapHairline);
@@ -340,6 +351,16 @@ void ViewInformation2D::setUseAntiAliasing(bool bNew)
 {
     if (bNew != std::as_const(mpViewInformation2D)->getUseAntiAliasing())
         mpViewInformation2D->setUseAntiAliasing(bNew);
+}
+
+bool ViewInformation2D::getTextEditActive() const
+{
+    return mpViewInformation2D->getTextEditActive();
+}
+
+void ViewInformation2D::setTextEditActive(bool bNew)
+{
+    mpViewInformation2D->setTextEditActive(bNew);
 }
 
 bool ViewInformation2D::getPixelSnapHairline() const
