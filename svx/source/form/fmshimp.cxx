@@ -133,7 +133,7 @@ const sal_uInt16 DatabaseSlotMap[] =
 
 // is used for Invalidate -> maintain it as well
 // sort ascending !!!!!!
-const sal_Int16 DlgSlotMap[] =    // slots of the controller
+const sal_uInt16 DlgSlotMap[] =    // slots of the controller
 {
     SID_FM_CTL_PROPERTIES,
     SID_FM_PROPERTIES,
@@ -149,7 +149,7 @@ const sal_Int16 DlgSlotMap[] =    // slots of the controller
     0
 };
 
-const sal_Int16 SelObjectSlotMap[] =  // slots depending on the SelObject
+const sal_uInt16 SelObjectSlotMap[] =  // slots depending on the SelObject
 {
     SID_FM_CONVERTTO_EDIT,
     SID_FM_CONVERTTO_BUTTON,
