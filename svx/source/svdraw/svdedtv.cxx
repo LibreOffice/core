@@ -35,6 +35,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/xfillit0.hxx>
 #include <osl/diagnose.h>
+#include <sfx2/viewsh.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -648,7 +649,7 @@ void SdrEditView::CheckPossibilities()
     static_cast<SdrPolyEditView*>(this)->ImpCheckPolyPossibilities();
     m_bPossibilitiesDirty=false;
 
-    if (m_bReadOnly) {
+    if (m_bReadOnly || SfxViewShell::IsCurrentLokViewReadOnly() ) {
         bool bTemp=m_bGrpEnterPossible;
         ImpResetPossibilityFlags();
         m_bReadOnly=true;

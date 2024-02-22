@@ -291,6 +291,8 @@ public:
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicTwipPosition(bool bStart, const Point& rPosition);
 
+    bool IsViewReadonly() const;
+
     const SwTextFrame* GetSavedOutlineFrame() const { return m_pSavedOutlineFrame; }
     void SetSavedOutlineFrame(SwTextFrame* pFrame) { m_pSavedOutlineFrame = pFrame; }
     // bSubs set true, sets all sub level outline content to same visibility as nOutlinePos.

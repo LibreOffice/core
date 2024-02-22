@@ -7472,7 +7472,7 @@ SfxVoidItem TableChangeCurrentBorderPosition SID_TABLE_CHANGE_CURRENT_BORDER_POS
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,

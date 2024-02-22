@@ -209,6 +209,7 @@ public:
                                          bool bOnlyVisible = true,
                                          const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
     SAL_WARN_UNUSED_RESULT static SfxViewShell* Current();
+    SAL_WARN_UNUSED_RESULT static bool IsCurrentLokViewReadOnly();
 
     SAL_WARN_UNUSED_RESULT static SfxViewShell* Get( const css::uno::Reference< css::frame::XController>& i_rController );
 

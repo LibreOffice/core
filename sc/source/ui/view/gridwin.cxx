@@ -1716,7 +1716,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
     SfxInPlaceClient* pClient = mrViewData.GetViewShell()->GetIPClient();
     bool bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
-    if ( mrViewData.IsActive() && !bOleActive )
+    if ( mrViewData.IsActive() && !bOleActive && !mrViewData.GetViewShell()->IsLokReadOnlyView())
     {
         ScDocument& rDoc = mrViewData.GetDocument();
         SCTAB nTab = mrViewData.GetTabNo();

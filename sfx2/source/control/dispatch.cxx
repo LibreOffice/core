@@ -1958,7 +1958,7 @@ void SfxDispatcher::SetReadOnly_Impl( bool bOn )
 
 bool SfxDispatcher::GetReadOnly_Impl() const
 {
-    return xImp->bReadOnly;
+    return xImp->bReadOnly || SfxViewShell::IsCurrentLokViewReadOnly();
 }
 
 /** With 'bOn' the Dispatcher is quasi dead and transfers everything to the
@@ -2020,16 +2020,21 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
 
 bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
 {
+    bool bResult = true;
     sal_uInt16 nShellCount = xImp->aStack.size();
     if ( nShell < nShellCount )
     {
         SfxShell* pShell = *( xImp->aStack.rbegin() + nShell );
         if( dynamic_cast< const SfxModule *>( pShell ) != nullptr || dynamic_cast< const SfxApplication *>( pShell ) != nullptr || dynamic_cast< const SfxViewFrame *>( pShell ) !=  nullptr )
-            return false;
+            bResult = false;
         else
-            return xImp->bReadOnly;
+            bResult = xImp->bReadOnly;
     }
-    return true;
+
+    if (!bResult && SfxViewShell::IsCurrentLokViewReadOnly())
+            bResult = true;
+
+    return bResult;
 }
 
 void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )

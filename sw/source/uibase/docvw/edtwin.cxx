@@ -433,8 +433,8 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     bool bPrefSdrPointer = false;
     bool bHitHandle = false;
     bool bCntAtPos = false;
-    bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
-                          rSh.IsCursorReadonly();
+    bool bIsViewReadOnly = IsViewReadonly();
+
     m_aActHitType = SdrHitKind::NONE;
     PointerStyle eStyle = PointerStyle::Text;
     if ( !pSdrView )
@@ -542,7 +542,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     }
     if ( bPrefSdrPointer )
     {
-        if (bIsDocReadOnly || (rSh.IsObjSelected() && rSh.IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE))
+        if (bIsViewReadOnly || (rSh.IsObjSelected() && rSh.IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE))
             SetPointer( PointerStyle::NotAllowed );
         else
         {
@@ -1433,12 +1433,11 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     // if every key event stopped and started it again.
     comphelper::ScopeGuard keyInputFlushTimerStop([this]() { m_aKeyInputFlushTimer.Stop(); });
 
-    bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
-                          rSh.IsCursorReadonly();
+    bool bIsViewReadOnly = IsViewReadonly();
 
     //if the language changes the buffer must be flushed
     LanguageType eNewLanguage = GetInputLanguage();
-    if(!bIsDocReadOnly && m_eBufferLanguage != eNewLanguage && !m_aInBuffer.isEmpty())
+    if(!bIsViewReadOnly && m_eBufferLanguage != eNewLanguage && !m_aInBuffer.isEmpty())
     {
         FlushInBuffer();
     }
@@ -1452,7 +1451,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     }
 
     // OS:the DrawView also needs a readonly-Flag as well
-    if ( !bIsDocReadOnly && rSh.GetDrawView() && rSh.GetDrawView()->KeyInput( rKEvt, this ) )
+    if ( !bIsViewReadOnly && rSh.GetDrawView() && rSh.GetDrawView()->KeyInput( rKEvt, this ) )
     {
         rSh.GetView().GetViewFrame().GetBindings().InvalidateAll( false );
         rSh.SetModified();
@@ -1486,7 +1485,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     KeyEvent aKeyEvent( rKEvt );
     // look for vertical mappings
-    if( !bIsDocReadOnly && !rSh.IsSelFrameMode() && !rSh.IsObjSelected() )
+    if( !bIsViewReadOnly && !rSh.IsSelFrameMode() && !rSh.IsObjSelected() )
     {
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
             KEY_LEFT == nKey || KEY_RIGHT == nKey )
@@ -1700,7 +1699,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        GotoPrevFieldMark,
                        End };
 
-    SwKeyState eKeyState = bIsDocReadOnly ? SwKeyState::CheckDocReadOnlyKeys : SwKeyState::CheckKey;
+    SwKeyState eKeyState = bIsViewReadOnly ? SwKeyState::CheckDocReadOnlyKeys : SwKeyState::CheckKey;
     SwKeyState eNextKeyState = SwKeyState::End;
     sal_uInt8 nDir = 0;
 
@@ -2407,7 +2406,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     rSh.NumOrNoNum();
                 }
 
-                if( !m_aInBuffer.isEmpty() && ( !bNormalChar || bIsDocReadOnly ))
+                if( !m_aInBuffer.isEmpty() && ( !bNormalChar || bIsViewReadOnly ))
                     FlushInBuffer();
 
                 if (rSh.HasReadonlySel()
@@ -2430,7 +2429,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( rKeyCode.GetFunction() == KeyFuncType::COPY )
                         GetView().GetViewFrame().GetBindings().Execute(SID_COPY);
 
-                    if( !bIsDocReadOnly && bNormalChar )
+                    if( !bIsViewReadOnly && bNormalChar )
                     {
                         const SelectionType nSelectionType = rSh.GetSelectionType();
                         const bool bDrawObject = (nSelectionType & SelectionType::DrawObject) &&
@@ -3012,8 +3011,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     bool bPageAnchored = false;
     bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly, bPageAnchored );
 
-    bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly();
-    if (bOverHeaderFooterFly && (!bIsDocReadOnly && rSh.GetCurField()))
+    bool bIsViewReadOnly = m_rView.GetDocShell()->IsReadOnly() || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsLokReadOnlyView());
+    if (bOverHeaderFooterFly && (!bIsViewReadOnly && rSh.GetCurField()))
         // We have a field here, that should have priority over header/footer fly.
         bOverHeaderFooterFly = false;
 
@@ -3254,7 +3253,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 if( rSh.IsObjSelected() )
                 {
                     SdrHdl* pHdl;
-                    if( !bIsDocReadOnly &&
+                    if( !bIsViewReadOnly &&
                         !m_pAnchorMarker &&
                         pSdrView &&
                         nullptr != ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
@@ -3411,7 +3410,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     {
                         m_rView.NoRotate();
                         SdrHdl *pHdl;
-                        if( !bIsDocReadOnly && !m_pAnchorMarker && nullptr !=
+                        if( !bIsViewReadOnly && !m_pAnchorMarker && nullptr !=
                             ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
                                 ( pHdl->GetKind() == SdrHdlKind::Anchor ||
                                   pHdl->GetKind() == SdrHdlKind::Anchor_TR ) )
@@ -3477,7 +3476,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case 2:
                     {
                         g_bFrameDrag = false;
-                        if (!bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos)
+                        if (!bIsViewReadOnly && rSh.IsInsideSelectedObj(aDocPos)
                             && (FlyProtectFlags::NONE
                                     == rSh.IsSelObjProtected(FlyProtectFlags::Content
                                                              | FlyProtectFlags::Parent)
@@ -3534,7 +3533,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         SwField *pField;
                         bool bFootnote = false;
 
-                        if( !bIsDocReadOnly &&
+                        if( !bIsViewReadOnly &&
                             (nullptr != (pField = rSh.GetCurField(true)) ||
                               ( bFootnote = rSh.GetCurFootnote() )        ) )
                         {
@@ -4192,7 +4191,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         m_pShadCursor.reset();
     }
 
-    bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly();
+    bool bIsViewReadOnly = m_rView.GetDocShell()->IsReadOnly() || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsLokReadOnlyView());
 
     CurrShell aCurr( &rSh );
 
@@ -4212,7 +4211,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     const SwCallMouseEvent aLastCallEvent( m_aSaveCallEvent );
     m_aSaveCallEvent.Clear();
 
-    if ( !bIsDocReadOnly && pSdrView && pSdrView->MouseMove(rMEvt,GetOutDev()) )
+    if ( !bIsViewReadOnly && pSdrView && pSdrView->MouseMove(rMEvt,GetOutDev()) )
     {
         SetPointer( PointerStyle::Text );
         return; // evaluate SdrView's event
@@ -4304,7 +4303,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     }
 
     // determine if we only change the mouse pointer and return
-    if (!bIsDocReadOnly && bInsWin && !m_pApplyTempl && !rSh.IsInSelect() && changeMousePointer(aDocPt))
+    if (!bIsViewReadOnly && bInsWin && !m_pApplyTempl && !rSh.IsInSelect() && changeMousePointer(aDocPt))
     {
         return;
     }
@@ -4446,7 +4445,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     }
                     // event processing for resizing
 
-                    if( bIsDocReadOnly )
+                    if( bIsViewReadOnly )
                         break;
 
                     bool bResizeKeepRatio = rSh.GetSelectionType() & SelectionType::Graphic ||
@@ -4485,7 +4484,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     rSh.Drag( &aDocPt, rMEvt.IsShift() );
                     m_bIsInMove = true;
                 }
-                else if( bIsDocReadOnly )
+                else if( bIsViewReadOnly )
                     break;
 
                 if ( !bInsWin )
@@ -4608,7 +4607,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                                     aLastCallEvent, true );
                 }
 
-                if( bTstShdwCursor && bInsWin && !bIsDocReadOnly &&
+                if( bTstShdwCursor && bInsWin && !bIsViewReadOnly &&
                     !m_bInsFrame &&
                     !rSh.GetViewOptions()->getBrowseMode() &&
                     rSh.GetViewOptions()->IsShadowCursor() &&
@@ -5623,6 +5622,12 @@ void SwEditWin::LoseFocus()
         s_pQuickHlpData->Stop( m_rView.GetWrtShell() );
 }
 
+bool SwEditWin::IsViewReadonly() const
+{
+    SwWrtShell &rSh = m_rView.GetWrtShell();
+    return (m_rView.GetDocShell()->IsReadOnly() && rSh.IsCursorReadonly()) || (rSh.GetSfxViewShell() && rSh.GetSfxViewShell()->IsLokReadOnlyView());
+}
+
 void SwEditWin::Command( const CommandEvent& rCEvt )
 {
     if (isDisposed())
@@ -5762,9 +5767,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
     case CommandEventId::StartExtTextInput:
     {
-        bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
-                              rSh.IsCursorReadonly();
-        if(!bIsDocReadOnly)
+        bool bIsViewReadOnly = IsViewReadonly();
+        if(!bIsViewReadOnly)
         {
             if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
@@ -5785,9 +5789,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     }
     case CommandEventId::EndExtTextInput:
     {
-        bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
-                              rSh.IsCursorReadonly();
-        if(!bIsDocReadOnly)
+        bool bIsViewReadOnly = IsViewReadonly();
+
+        if(!bIsViewReadOnly)
         {
             if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
@@ -5836,9 +5840,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     break;
     case CommandEventId::ExtTextInput:
     {
-        bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
-                              rSh.IsCursorReadonly();
-        if (!bIsDocReadOnly && !rSh.HasReadonlySel())
+        bool bIsViewReadOnly = IsViewReadonly();
+
+        if (!bIsViewReadOnly && !rSh.HasReadonlySel())
         {
             if( s_pQuickHlpData->m_bIsDisplayed )
                 s_pQuickHlpData->Stop( rSh );

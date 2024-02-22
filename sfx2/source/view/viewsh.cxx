@@ -2843,6 +2843,13 @@ SfxViewShell* SfxViewShell::Current()
     return pCurrent ? pCurrent->GetViewShell() : nullptr;
 }
 
+bool SfxViewShell::IsCurrentLokViewReadOnly()
+{
+    if (!comphelper::LibreOfficeKit::isActive() || Current() == nullptr || !Current()->IsLokReadOnlyView())
+        return false;
+    else
+        return true;
+}
 
 SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
 {

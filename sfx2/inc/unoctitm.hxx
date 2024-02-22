@@ -138,6 +138,7 @@ public:
     void       dispatch( const css::util::URL& aURL,
                                   const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
                                   const css::uno::Reference< css::frame::XDispatchResultListener >& rListener );
+
     /// @throws css::uno::RuntimeException
     void       addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL);
     void                UnBindController();

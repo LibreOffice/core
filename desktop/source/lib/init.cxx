@@ -4686,6 +4686,10 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
 static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)
 {
     SolarMutexGuard aGuard;
+
+    if (SfxViewShell::IsCurrentLokViewReadOnly())
+        return;
+
     VclPtr<vcl::Window> pWindow;
     if (nLOKWindowId == 0)
     {
@@ -5067,6 +5071,23 @@ void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
     vcl::lok::dumpState(rState);
 }
 
+// We have special handling for some uno commands and it seems we need to check for readonly state.
+static bool isCommandAllowed(OUString& command) {
+    static constexpr OUString nonAllowedList[] = { u".uno:Save"_ustr, u".uno:TransformDialog"_ustr, u".uno:SidebarShow"_ustr, u".uno:SidebarHide"_ustr };
+
+    if (!SfxViewShell::IsCurrentLokViewReadOnly())
+        return true;
+    else
+    {
+        for (size_t i = 0; i < std::size(nonAllowedList); i++)
+        {
+            if (nonAllowedList[i] == command)
+                return false;
+        }
+        return true;
+    }
+}
+
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     comphelper::ProfileZone aZone("doc_postUnoCommand");
@@ -5076,6 +5097,10 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
+
+    if (!isCommandAllowed(aCommand))
+        return;
+
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
@@ -7132,6 +7157,9 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
     {
         return;
     }
+
+    if (SfxViewShell::IsCurrentLokViewReadOnly())
+        return;
 
     StringMap aMap(jsdialog::jsonToStringMap(pArguments));
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
