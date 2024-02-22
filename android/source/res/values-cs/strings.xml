@@ -59,4 +59,7 @@
     <string name="calc_adjust_height">Upravit výšku</string>
     <string name="pref_experimental_editing_summary">Povolí experimentální režim úprav. Použití na vlastní nebezpečí.</string>
     <string name="calc_optimal_height">Optimální výška</string>
+    <string name="search_find_next">Najít další</string>
+    <string name="search_find_previous">Najít předchozí</string>
+    <string name="action_save_as">Uložit jako…</string>
 </resources>
