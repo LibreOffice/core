@@ -565,6 +565,8 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mnEndShowEvent(nullptr)
 , mnContextMenuEvent(nullptr)
 , mnEventObjectChange(nullptr)
+, mnEventObjectInserted(nullptr)
+, mnEventObjectRemoved(nullptr)
 , mnEventPageOrderChange(nullptr)
 , mxPresentation( xPresentation )
 , mxListenerProxy()
@@ -658,6 +660,10 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
         Application::RemoveUserEvent( mnContextMenuEvent );
     if( mnEventObjectChange )
         Application::RemoveUserEvent( mnEventObjectChange );
+    if( mnEventObjectInserted )
+        Application::RemoveUserEvent( mnEventObjectInserted );
+    if( mnEventObjectRemoved )
+        Application::RemoveUserEvent( mnEventObjectRemoved );
     if( mnEventPageOrderChange )
         Application::RemoveUserEvent( mnEventPageOrderChange );
 
@@ -3305,53 +3311,104 @@ void SlideshowImpl::AsyncNotifyEvent(
     const uno::Reference< css::drawing::XDrawPage >& rXCurrentSlide,
     const SdrHintKind eHintKind)
 {
-    if (SdrHintKind::ObjectChange == eHintKind)
+    switch (eHintKind)
     {
-        mnEventObjectChange = nullptr;
-
-        // refresh single slide
-        gotoSlide(rXCurrentSlide);
-    }
-    else if (SdrHintKind::PageOrderChange == eHintKind)
-    {
-        mnEventPageOrderChange = nullptr;
-
-        // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
-        // rXCurrentSlide is the current slide before the change.
-        Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
-        Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
-        const sal_Int32 nNewSlideCount(xSlides.is() ? xSlides->getCount() : 0);
-
-        if (nNewSlideCount != mpSlideController->getSlideNumberCount())
+        case SdrHintKind::ObjectInserted:
         {
-            // need to reinitialize AnimationSlideController
-            OUString aPresSlide( maPresSettings.maPresPage );
-            createSlideList( maPresSettings.mbAll, aPresSlide );
-        }
+            mnEventObjectInserted = nullptr;
 
-        // Check if current slide before change is still valid (maybe removed)
-        const sal_Int32 nSlideCount(mpSlideController->getSlideNumberCount());
-        bool bSlideStillValid(false);
-
-        for (sal_Int32 nSlide(0); !bSlideStillValid && nSlide < nSlideCount; nSlide++)
-        {
-            if (rXCurrentSlide == mpSlideController->getSlideByNumber(nSlide))
-            {
-                bSlideStillValid = true;
-            }
-        }
-
-        if(bSlideStillValid)
-        {
-            // stay on that slide
+            // refresh single slide
             gotoSlide(rXCurrentSlide);
+            break;
         }
-        else
+        case SdrHintKind::ObjectRemoved:
         {
-            // not possible to stay on that slide, go to 1st slide (kinda restart)
-            gotoFirstSlide();
+            mnEventObjectRemoved = nullptr;
+
+            // refresh single slide
+            gotoSlide(rXCurrentSlide);
+            break;
+        }
+        case SdrHintKind::ObjectChange:
+        {
+            mnEventObjectChange = nullptr;
+
+            // refresh single slide
+            gotoSlide(rXCurrentSlide);
+            break;
+        }
+        case SdrHintKind::PageOrderChange:
+        {
+            mnEventPageOrderChange = nullptr;
+
+            // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
+            // rXCurrentSlide is the current slide before the change.
+            Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
+            Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
+            const sal_Int32 nNewSlideCount(xSlides.is() ? xSlides->getCount() : 0);
+
+            if (nNewSlideCount != mpSlideController->getSlideNumberCount())
+            {
+                // need to reinitialize AnimationSlideController
+                OUString aPresSlide( maPresSettings.maPresPage );
+                createSlideList( maPresSettings.mbAll, aPresSlide );
+            }
+
+            // Check if current slide before change is still valid (maybe removed)
+            const sal_Int32 nSlideCount(mpSlideController->getSlideNumberCount());
+            bool bSlideStillValid(false);
+
+            for (sal_Int32 nSlide(0); !bSlideStillValid && nSlide < nSlideCount; nSlide++)
+            {
+                if (rXCurrentSlide == mpSlideController->getSlideByNumber(nSlide))
+                {
+                    bSlideStillValid = true;
+                }
+            }
+
+            if(bSlideStillValid)
+            {
+                // stay on that slide
+                gotoSlide(rXCurrentSlide);
+            }
+            else
+            {
+                // not possible to stay on that slide, go to 1st slide (kinda restart)
+                gotoFirstSlide();
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+bool SlideshowImpl::isCurrentSlideInvolved(const SdrHint& rHint)
+{
+    // get current slide
+    uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
+    if (!XCurrentSlide.is())
+        return false;
+
+    SdrPage* pCurrentSlide(GetSdrPageFromXDrawPage(XCurrentSlide));
+    if (nullptr == pCurrentSlide)
+        return false;
+
+    const SdrPage* pHintPage(rHint.GetPage());
+    if (nullptr == pHintPage)
+        return false;
+
+    if (pHintPage->IsMasterPage())
+    {
+        if (pCurrentSlide->TRG_HasMasterPage())
+        {
+            // current slide uses MasterPage on which the change happened
+            return pHintPage == &pCurrentSlide->TRG_GetMasterPage();
         }
     }
+
+    // object on current slide was changed
+    return pHintPage == pCurrentSlide;
 }
 
 void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
@@ -3372,75 +3429,84 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         // no SlideShow instance or not running, nothing to do
         return;
 
-    const SdrHintKind eHintKind(static_cast<const SdrHint&>(rHint).GetKind());
+    const SdrHint& rSdrHint(static_cast<const SdrHint&>(rHint));
+    const SdrHintKind eHintKind(rSdrHint.GetKind());
 
-    if (SdrHintKind::ObjectChange == eHintKind)
+    switch (eHintKind)
     {
-        if (nullptr != mnEventObjectChange)
-            // avoid multiple events
-            return;
-
-        // Object changed, object & involved page included in rHint.
-        uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
-        if (!XCurrentSlide.is())
-            return;
-
-        SdrPage* pCurrentSlide(GetSdrPageFromXDrawPage(XCurrentSlide));
-        if (nullptr == pCurrentSlide)
-            return;
-
-        const SdrPage* pHintPage(static_cast<const SdrHint&>(rHint).GetPage());
-        if (nullptr == pHintPage)
-            return;
-
-        bool bCurrentSlideIsInvolved(false);
-
-        if (pHintPage->IsMasterPage())
+        case SdrHintKind::ObjectInserted:
         {
-            if (pCurrentSlide->TRG_HasMasterPage())
-            {
-                // current slide uses MasterPage on which the change happened
-                bCurrentSlideIsInvolved = (pHintPage == &pCurrentSlide->TRG_GetMasterPage());
-            }
+            if (nullptr != mnEventObjectChange)
+                // avoid multiple events
+                return;
+
+            if (!isCurrentSlideInvolved(rSdrHint))
+                // nothing to do when current slide is not involved
+                return;
+
+            // Refresh current slide
+            uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
+            mnEventObjectInserted = AsyncUpdateSlideshow_Impl::AsyncUpdateSlideshow(this, XCurrentSlide, eHintKind);
+            break;
         }
-        else
+        case SdrHintKind::ObjectRemoved:
         {
-            // object on current slide was changed
-            bCurrentSlideIsInvolved = (pHintPage == pCurrentSlide);
+            if (nullptr != mnEventObjectRemoved)
+                // avoid multiple events
+                return;
+
+            if (!isCurrentSlideInvolved(rSdrHint))
+                // nothing to do when current slide is not involved
+                return;
+
+            // Refresh current slide
+            uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
+            mnEventObjectRemoved = AsyncUpdateSlideshow_Impl::AsyncUpdateSlideshow(this, XCurrentSlide, eHintKind);
+            break;
         }
+        case SdrHintKind::ObjectChange:
+        {
+            if (nullptr != mnEventObjectChange)
+                // avoid multiple events
+                return;
 
-        if (!bCurrentSlideIsInvolved)
-            // nothing to do when current slide is not involved
-            return;
+            if (!isCurrentSlideInvolved(rSdrHint))
+                // nothing to do when current slide is not involved
+                return;
 
-        // Refresh current slide. Need to do that asynchronous, else e.g.
-        // text edit changes EditEngine/Outliner are not progressed far
-        // enough (ObjectChanged broadcast which we are in here seems
-        // to early for some cases)
-        mnEventObjectChange = AsyncUpdateSlideshow_Impl::AsyncUpdateSlideshow(this, XCurrentSlide, eHintKind);
+            // Refresh current slide. Need to do that asynchronous, else e.g.
+            // text edit changes EditEngine/Outliner are not progressed far
+            // enough (ObjectChanged broadcast which we are in here seems
+            // to early for some cases)
+            uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
+            mnEventObjectChange = AsyncUpdateSlideshow_Impl::AsyncUpdateSlideshow(this, XCurrentSlide, eHintKind);
+            break;
+        }
+        case SdrHintKind::PageOrderChange:
+        {
+            // Unfortunately we get multiple events, e.g. when drag/drop position change in
+            // slide sorter on left side of EditView. This includes some with page number +1,
+            // then again -1 (it's a position change). Problem is that in-between already
+            // a re-schedule seems to happen, so indeed AsyncNotifyEvent will change to +1/-1
+            // already. Since we get even more, at least try to take the last one. I found no
+            // good solution yet for this.
+            if (nullptr != mnEventPageOrderChange)
+                Application::RemoveUserEvent( mnEventPageOrderChange );
+
+            // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
+            uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
+            mnEventPageOrderChange = AsyncUpdateSlideshow_Impl::AsyncUpdateSlideshow(this, XCurrentSlide, eHintKind);
+            break;
+        }
+        case SdrHintKind::ModelCleared:
+        {
+            // immediately end presentation
+            endPresentation();
+            break;
+        }
+        default:
+            break;
     }
-    else if (SdrHintKind::PageOrderChange == eHintKind)
-    {
-        // Unfortunately we get multiple events, e.g. when drag/drop position change in
-        // slide sorter on left side of EditView. This includes some with page number +1,
-        // then again -1 (it's a position change). Problem is that in-between already
-        // a re-schedule seems to happen, so indeed AsyncNotifyEvent will change to +1/-1
-        // already. Since we get even more, at least try to take the last one. I found no
-        // good solution yet for this.
-        if (nullptr != mnEventPageOrderChange)
-            Application::RemoveUserEvent( mnEventPageOrderChange );
-
-        // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
-        uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
-        mnEventPageOrderChange = AsyncUpdateSlideshow_Impl::AsyncUpdateSlideshow(this, XCurrentSlide, eHintKind);
-    }
-    else if (SdrHintKind::ModelCleared == eHintKind)
-    {
-        // immediately end presentation
-        endPresentation();
-    }
-
-    // maybe need to add reactions here to other Hint-Types
 }
 
 Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow()

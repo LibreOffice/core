@@ -214,6 +214,9 @@ private:
 
     virtual ~SlideshowImpl() override;
 
+    // helper to check if given hint is associated with CurrentSlide
+    bool isCurrentSlideInvolved(const SdrHint& rHint);
+
     // override WeakComponentImplHelperBase::disposing()
     // This function is called upon disposing the component,
     // if your component needs special work when it becomes
@@ -353,6 +356,8 @@ private:
     ImplSVEvent * mnEndShowEvent;
     ImplSVEvent * mnContextMenuEvent;
     ImplSVEvent * mnEventObjectChange;
+    ImplSVEvent * mnEventObjectInserted;
+    ImplSVEvent * mnEventObjectRemoved;
     ImplSVEvent * mnEventPageOrderChange;
 
     css::uno::Reference< css::presentation::XPresentation2 > mxPresentation;
