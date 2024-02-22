@@ -105,7 +105,6 @@ void GraphicViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(
         sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
-    GetStaticInterface()->RegisterChildWindow(::sd::NotesChildWindow::GetChildWindowId());
 }
 
 } // end of namespace sd
