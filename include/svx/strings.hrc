@@ -1108,7 +1108,6 @@
 #define RID_SVXSTR_DEFAULT                                  NC_("RID_SVXSTR_DEFAULT", "Default")
 #define RID_SVXSTR_FRAME                                    NC_("RID_SVXSTR_FRAME", "Borders")
 #define RID_SVXSTR_FRAME_STYLE                              NC_("RID_SVXSTR_FRAME_STYLE", "Border Style")
-#define RID_SVXSTR_CUSTOMIZE                                NC_("RID_SVXSTR_CUSTOMIZE", "Customize...")
 #define RID_SVXSTR_BY_AUTHOR                                NC_("RID_SVXSTR_BY_AUTHOR", "By author")
 #define RID_SVXSTR_PAGES                                    NC_("RID_SVXSTR_PAGES", "Pages")
 #define RID_SVXSTR_CLEARFORM                                NC_("RID_SVXSTR_CLEARFORM", "Clear formatting")

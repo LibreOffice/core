@@ -107,7 +107,6 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     mxValueSet->SetOutputSizePixel(aSize);
     mxValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFieldColor());
 
-    OUString aMoreItemText = SvxResId( RID_SVXSTR_CUSTOMIZE );
     if ( mePageType == NumberingPageType::BULLET )
         AddStatusListener( ".uno:CurrentBulletListType" );
     else if ( mePageType == NumberingPageType::SINGLENUM )
@@ -117,7 +116,6 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
 
     auto xImage = vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:OutlineBullet", mrController.getFrameInterface());
     mxMoreButton->set_image(xImage);
-    mxMoreButton->set_label(aMoreItemText);
     mxMoreButton->connect_clicked(LINK(this, NumberingPopup, VSButtonClickSetHdl));
 
     mxValueSet->SetSelectHdl(LINK(this, NumberingPopup, VSSelectValueSetHdl));

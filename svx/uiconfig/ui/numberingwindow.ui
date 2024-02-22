@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image1">
@@ -51,6 +51,7 @@
         </child>
         <child>
           <object class="GtkButton" id="more">
+            <property name="label" translatable="yes" context="numberingwindow|more">Customize...</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
