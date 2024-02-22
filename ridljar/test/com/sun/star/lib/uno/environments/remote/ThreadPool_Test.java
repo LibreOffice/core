@@ -74,7 +74,7 @@ public class ThreadPool_Test {
         synchronized(workAt) {
             putJob(workAt, false, threadId, "notifyme");
 
-            while(!workAt._notified) {
+            while(!workAt.isNotified()) {
                 workAt.wait();
             }
         }
@@ -96,7 +96,7 @@ public class ThreadPool_Test {
         synchronized(workAt) {
             putJob(workAt, true, threadId, "notifyme");
 
-            while(!workAt._notified) {
+            while(!workAt.isNotified()) {
                 workAt.wait();
             }
         }
@@ -164,7 +164,7 @@ public class ThreadPool_Test {
         synchronized(workAt) {
             putJob(workAt, true, threadId, "notifyme");
 
-            while(!workAt._notified) {
+            while(!workAt.isNotified()) {
                 workAt.wait();
             }
         }
@@ -326,7 +326,7 @@ public class ThreadPool_Test {
         synchronized(workAt) {
             putJob(workAt, false, threadId, "notifyme");
 
-            while(!workAt._notified) {
+            while(!workAt.isNotified()) {
                 workAt.wait();
             }
         }

@@ -36,7 +36,7 @@ class TestWorkAt implements TestIWorkAt {
     int _async_counter;
 
     private boolean _passedAsync = true;
-    boolean _notified = false;
+    private boolean _notified = false;
 
     public synchronized void syncCall() throws Throwable {
         ++ _sync_counter;
@@ -69,6 +69,10 @@ class TestWorkAt implements TestIWorkAt {
         notifyAll();
 
         _notified = true;
+    }
+
+    public synchronized boolean isNotified() {
+        return _notified;
     }
 
     public synchronized boolean passedAsyncTest() {

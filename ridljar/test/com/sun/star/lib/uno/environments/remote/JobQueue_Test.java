@@ -150,7 +150,7 @@ public final class JobQueue_Test {
                                              "notifyme"),
                                         true, null, false, null, null)),
                             null);
-            while (!workAt._notified) {
+            while (!workAt.isNotified()) {
                 workAt.wait();
             }
         }
@@ -173,7 +173,7 @@ public final class JobQueue_Test {
                             __workAt_td.getMethodDescription("notifyme"),
                             true, null, false, null, null)),
                 null);
-            while (!workAt._notified) {
+            while (!workAt.isNotified()) {
                 workAt.wait();
             }
         }
