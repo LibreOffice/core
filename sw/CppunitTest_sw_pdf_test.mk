@@ -43,6 +43,8 @@ $(eval $(call gb_CppunitTest_use_externals,sw_pdf_test,\
     libxml2 \
 ))
 
+$(eval $(call gb_CppunitTest_use_executable,sw_pdf_test,xpdfimport))
+
 $(eval $(call gb_CppunitTest_set_include,sw_pdf_test,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
