@@ -45,16 +45,12 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <comphelper/servicehelper.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weakref.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
-#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <unotools/weakref.hxx>
 #include <array>
