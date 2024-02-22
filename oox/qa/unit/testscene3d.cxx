@@ -164,8 +164,8 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_obliqueTopRight)
     // MS Office applies the shape rotation after the camera rotations in case of oblique preset
     // camera types. That needs to be converted to the 'first shape rotation' specification of ODF.
     // That conversion results in angles not available in the UI of LibreOffice, but LO can
-    // render them. The shape has got these rotation in the UI of MS Office: 60° shape ,
-    // 50° on x-axis, 10° on y-axis and 40° on z-axis.
+    // render them. The shape has got these rotation in the UI of MS Office: 60Â° shape ,
+    // 50Â° on x-axis, 10Â° on y-axis and 40Â° on z-axis.
     loadFromFile(u"Scene3d_obliqueTopRight.pptx");
     uno::Reference<drawing::XShape> xShape(getShape(0, 0)); // shape 0 on page 0
 
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_obliqueTopRight)
     // Should be an oblique projection with non default skew values
     aExtrusionPropMap.getValue(u"Skew"_ustr) >>= aParaPair;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, aParaPair.First.Value.get<double>(), 1E-14);
-    // -135° from preset camera type, minus 60° shape rotation
+    // -135Â° from preset camera type, minus 60Â° shape rotation
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-195.0, aParaPair.Second.Value.get<double>(), 1E-14);
 
     // Because of the needed conversions the resulting angles are very different from
