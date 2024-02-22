@@ -3745,29 +3745,22 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
     // colors as start/end and - when more than two ColorStops are defined -
     // guess that GradientStyle_AXIAL is used and thus create a "fillFocus"
     // entry
-    // NOTE: I also found that loading file from testTextframeGradient
-    // "textframe-gradient.rtf" and save-as *inverts* the gradient, so I
-    // exchanged here fillColor/fillBackColor to get the correct order
-    const Color aStartColor(rColorStops.front().getStopColor());
-    m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-        "fillColor"_ostr, OString::number(wwUtility::RGBToBGR(aStartColor))));
 
-    // LO's angle is 180° different from VML/RTF. Copied docxattribute angle formula here.
-    sal_Int32 nReverseAngle = toDegrees(4500_deg10 - rGradient.GetAngle());
-    nReverseAngle = (270 - nReverseAngle) % 360;
-    if (nReverseAngle != 0)
+    // LO does linear gradients top to bottom, while MSO does bottom to top.
+    // LO does axial gradients inner to outer, while MSO does outer to inner.
+    // Conclusion: swap start and end colors (and stop emulating this with 180deg rotations).
+    const Color aMSOStartColor(rColorStops.back().getStopColor());
+    Color aMSOEndColor(rColorStops.front().getStopColor());
+
+    const sal_Int32 nAngle = toDegrees(rGradient.GetAngle());
+    if (nAngle != 0)
     {
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillAngle"_ostr, OString::number(nReverseAngle * 60000)));
+        m_aFlyProperties.push_back(
+            std::make_pair<OString, OString>("fillAngle"_ostr, OString::number(nAngle * 60000)));
     }
 
     if (rColorStops.size() < 3)
     {
-        // two-color version, use back as 2nd color
-        const Color aEndColor(rColorStops.back().getStopColor());
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillBackColor"_ostr, OString::number(wwUtility::RGBToBGR(aEndColor))));
-
         if (rGradient.GetGradientStyle() == awt::GradientStyle_AXIAL)
         {
             m_aFlyProperties.push_back(
@@ -3779,12 +3772,16 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
         // assume what was formally GradientStyle_AXIAL, see above and also refer to
         // FillModel::pushToPropMap 'fFocus' value and usage.
         // The 2nd color is the in-between color, use it
-        const Color aEndColor(rColorStops[1].getStopColor());
-        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillBackColor"_ostr, OString::number(wwUtility::RGBToBGR(aEndColor))));
+        aMSOEndColor = Color(rColorStops[1].getStopColor());
+
         m_aFlyProperties.push_back(
             std::make_pair<OString, OString>("fillFocus"_ostr, OString::number(50)));
     }
+
+    m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+        "fillColor"_ostr, OString::number(wwUtility::RGBToBGR(aMSOStartColor))));
+    m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+        "fillBackColor"_ostr, OString::number(wwUtility::RGBToBGR(aMSOEndColor))));
 }
 
 void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
