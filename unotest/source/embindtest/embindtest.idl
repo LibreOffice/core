@@ -36,6 +36,8 @@ interface XTest {
     boolean isFloat([in] float value);
     double getDouble();
     boolean isDouble([in] double value);
+    char getChar();
+    boolean isChar([in] char value);
     string getString();
     boolean isString([in] string value);
     Struct getStruct();

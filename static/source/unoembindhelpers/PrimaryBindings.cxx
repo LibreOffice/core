@@ -23,6 +23,39 @@
 using namespace emscripten;
 using namespace css::uno;
 
+EM_JS(void, jsRegisterChar, (std::type_info const* raw),
+// clang-format off
+{
+    Module.registerType(raw, {
+        name: 'rtl::OUString',
+        fromWireType(ptr) {
+            let str = String.fromCharCode(Module.HEAPU16[ptr >> 1]);
+            return str;
+        },
+        toWireType(destructors, value) {
+            if (typeof value != 'string' || value.length !== 1) {
+                Module.throwBindingError(
+                    'Cannot pass anything but 1-element string to C++ char16_t');
+            }
+            let data = Module._malloc(2);
+            Module.HEAPU16[data >> 1] = value.charCodeAt(0);
+            if (destructors !== null) {
+                destructors.push(Module._free, data);
+            }
+            return data;
+        },
+        argPackAdvance: 8,
+        readValueFromPointer(pointer) {
+            return this.fromWireType(Module.HEAPU32[((pointer)>>2)]);
+        },
+        destructorFunction(ptr) {
+            Module._free(ptr);
+        },
+    });
+}
+// clang-format on
+);
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-pp-token"
 EM_JS(void, jsRegisterString, (std::type_info const* raw),
@@ -167,6 +200,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     function("rtl_uString_release",
              +[](std::uintptr_t ptr) { rtl_uString_release(reinterpret_cast<rtl_uString*>(ptr)); });
 
+    jsRegisterChar(&typeid(char16_t));
     jsRegisterString(&typeid(OUString));
 }
 #endif

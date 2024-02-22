@@ -74,6 +74,12 @@ Module.addOnPostRun(function() {
         console.assert(test.isDouble(v));
     }
     {
+        let v = test.getChar();
+        console.log(v);
+        console.assert(v === 'Ö');
+        console.assert(test.isChar(v));
+    }
+    {
         let v = test.getString();
         console.log(v);
         console.assert(v === 'hä');
