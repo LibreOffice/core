@@ -93,6 +93,161 @@ Module.addOnPostRun(function() {
         console.assert(v.m3 === 'hä');
         console.assert(test.isStruct(v));
     }
+    {
+        let v = test.getSequenceBoolean();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === 1); //TODO: true
+        console.assert(v.get(1) === 1); //TODO: true
+        console.assert(v.get(2) === 0); //TODO: false
+        console.assert(test.isSequenceBoolean(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceByte();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === -12);
+        console.assert(v.get(1) === 1);
+        console.assert(v.get(2) === 12);
+        console.assert(test.isSequenceByte(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceShort();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === -1234);
+        console.assert(v.get(1) === 1);
+        console.assert(v.get(2) === 1234);
+        console.assert(test.isSequenceShort(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceUnsignedShort();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === 1);
+        console.assert(v.get(1) === 10);
+        console.assert(v.get(2) === 54321);
+        console.assert(test.isSequenceUnsignedShort(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceLong();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === -123456);
+        console.assert(v.get(1) === 1);
+        console.assert(v.get(2) === 123456);
+        console.assert(test.isSequenceLong(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceUnsignedLong();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === 1);
+        console.assert(v.get(1) === 10);
+        console.assert(v.get(2) === 3456789012);
+        console.assert(test.isSequenceUnsignedLong(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceHyper();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === -123456789n);
+        console.assert(v.get(1) === 1n);
+        console.assert(v.get(2) === 123456789n);
+        console.assert(test.isSequenceHyper(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceUnsignedHyper();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === 1n);
+        console.assert(v.get(1) === 10n);
+        console.assert(v.get(2) === 9876543210n);
+        console.assert(test.isSequenceUnsignedHyper(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceFloat();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === -10.25);
+        console.assert(v.get(1) === 1.5);
+        console.assert(v.get(2) === 10.75);
+        console.assert(test.isSequenceFloat(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceDouble();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === -100.5);
+        console.assert(v.get(1) === 1.25);
+        console.assert(v.get(2) === 100.75);
+        console.assert(test.isSequenceDouble(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceChar();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === 'a');
+        console.assert(v.get(1) === 'B');
+        console.assert(v.get(2) === 'Ö');
+        console.assert(test.isSequenceChar(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceString();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) === 'foo');
+        console.assert(v.get(1) === 'barr');
+        console.assert(v.get(2) === 'bazzz');
+        console.assert(test.isSequenceString(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceSequenceString();
+        console.log(v);
+        console.assert(v.size() === 3);
+        let e0 = v.get(0);
+        console.assert(e0.size() === 0);
+        e0.delete();
+        let e1 = v.get(1);
+        console.assert(e1.size() === 2);
+        console.assert(e1.get(0) === 'foo');
+        console.assert(e1.get(1) === 'barr');
+        e1.delete();
+        let e2 = v.get(2);
+        console.assert(e2.size() === 1);
+        console.assert(e2.get(0) === 'baz');
+        e2.delete();
+        console.assert(test.isSequenceSequenceString(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceStruct();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0).m1 === -123456);
+        console.assert(v.get(0).m2 === -100.5);
+        console.assert(v.get(0).m3 === 'foo');
+        console.assert(v.get(1).m1 === 1);
+        console.assert(v.get(1).m2 === 1.25);
+        console.assert(v.get(1).m3 === 'barr');
+        console.assert(v.get(2).m1 === 123456);
+        console.assert(v.get(2).m2 === 100.75);
+        console.assert(v.get(2).m3 === 'bazzz');
+        console.assert(test.isSequenceStruct(v));
+        v.delete();
+    }
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
