@@ -54,6 +54,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <svx/svxids.hrc>
 #include <o3tl/string_view.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -119,19 +120,6 @@ static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValu
     return pNew;
 }
 
-// the selection of bullets from the OpenSymbol
-const sal_Unicode aBulletTypes[] =
-{
-    0x2022,
-    0x25cf,
-    0xe00c,
-    0xe00a,
-    0x2794,
-    0x27a2,
-    0x2717,
-    0x2714
-};
-
 // Is one of the masked formats set?
 static bool lcl_IsNumFmtSet(SvxNumRule const * pNum, sal_uInt16 nLevelMask)
 {
@@ -146,7 +134,7 @@ static bool lcl_IsNumFmtSet(SvxNumRule const * pNum, sal_uInt16 nLevelMask)
     return bRet;
 }
 
-static const vcl::Font& lcl_GetDefaultBulletFont()
+static vcl::Font& lcl_GetDefaultBulletFont()
 {
     static vcl::Font aDefBulletFont = []()
     {
@@ -440,8 +428,11 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 
     bPreset = false;
     bModified = true;
-    sal_Unicode cChar = aBulletTypes[m_xExamplesVS->GetSelectedItemId() - 1];
-    const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    sal_uInt16 nIndex = m_xExamplesVS->GetSelectedItemId() - 1;
+    sal_Unicode cChar = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get()[nIndex].toChar();
+    vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    rActBulletFont.SetFamilyName(
+        officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get()[nIndex]);
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
