@@ -96,9 +96,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes" context="cellprotectionpage|label1">Cell protection is only effective after the current sheet has been protected.
-
-Select 'Protect Sheet' from the 'Tools' menu.</property>
+                <property name="label" translatable="yes" context="cellprotectionpage|label1">Cell protection is only effective after the current sheet has been protected.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">52</property>
                 <property name="xalign">0</property>
