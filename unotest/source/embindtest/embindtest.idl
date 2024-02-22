@@ -9,7 +9,38 @@
 
 module org { module libreoffice { module embindtest {
 
-interface XTest {};
+struct Struct {
+    long m1;
+    double m2;
+    string m3;
+};
+
+interface XTest {
+    boolean getBoolean();
+    boolean isBoolean([in] boolean value);
+    byte getByte();
+    boolean isByte([in] byte value);
+    short getShort();
+    boolean isShort([in] short value);
+    unsigned short getUnsignedShort();
+    boolean isUnsignedShort([in] unsigned short value);
+    long getLong();
+    boolean isLong([in] long value);
+    unsigned long getUnsignedLong();
+    boolean isUnsignedLong([in] unsigned long value);
+    hyper getHyper();
+    boolean isHyper([in] hyper value);
+    unsigned hyper getUnsignedHyper();
+    boolean isUnsignedHyper([in] unsigned hyper value);
+    float getFloat();
+    boolean isFloat([in] float value);
+    double getDouble();
+    boolean isDouble([in] double value);
+    string getString();
+    boolean isString([in] string value);
+    Struct getStruct();
+    boolean isStruct([in] Struct value);
+};
 
 singleton Test: XTest;
 
