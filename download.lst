@@ -106,8 +106,8 @@ ETONYEK_TARBALL := libetonyek-0.1.$(ETONYEK_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-EXPAT_SHA256SUM := ef2420f0232c087801abf705e89ae65f6257df6b7931d37846a193ef2e8cdcbe
-EXPAT_TARBALL := expat-2.5.0.tar.xz
+EXPAT_SHA256SUM := cb5f5a8ea211e1cabd59be0a933a52e3c02cc326e86a4d387d8d218e7ee47a3e
+EXPAT_TARBALL := expat-2.6.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -397,8 +397,8 @@ MYTHES_TARBALL := mythes-1.2.5.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-NSS_SHA256SUM := f78ab1d911cae8bbc94758fb3bd0f731df4087423a4ff5db271ba65381f6b739
-NSS_TARBALL := nss-3.90-with-nspr-4.35.tar.gz
+NSS_SHA256SUM := 59bb55a59b02e4004fc26ad0aa1a13fe8d73c6c90c447dd2f2efb73fb81083ed
+NSS_TARBALL := nss-3.98-with-nspr-4.35.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -423,8 +423,8 @@ OPENLDAP_TARBALL := openldap-2.6.6.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OPENSSL_SHA256SUM := b3425d3bb4a2218d0697eb41f7fc0cdede016ed19ca49d168b78e8d947887f55
-OPENSSL_TARBALL := openssl-3.0.11.tar.gz
+OPENSSL_SHA256SUM := 88525753f79d3bec27d2fa7c66aa0b92b3aa9498dafd93d7cfa4b3780cdae313
+OPENSSL_TARBALL := openssl-3.0.13.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
