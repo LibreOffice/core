@@ -8011,7 +8011,7 @@ void ScInterpreter::ScXLookup()
                 }
                 else
                 {
-                    vsa.isStringSearch = false;
+                    vsa.isStringSearch = true;
                     vsa.sSearchStr = pToken->GetString();
                 }
             }
@@ -10894,10 +10894,8 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
     rParam.nTab  = vsa.nTab1;
 
     ScQueryEntry& rEntry = rParam.GetEntry(0);
-    rEntry = rParam.GetEntry(0);
     rEntry.nField = vsa.eSearchMode != searchrev ? vsa.nCol1 : vsa.nCol2;
     rEntry.bDoQuery = true;
-    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     switch ( vsa.eMatchMode )
     {
         case exactorNA :
@@ -10943,6 +10941,8 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
             PushIllegalParameter();
             return false;
     }
+
+    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     if ( vsa.isStringSearch )
     {
         rItem.meType   = ScQueryEntry::ByString;
