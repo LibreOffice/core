@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk4,\
     vcl/unx/gtk4/customcellrenderer \
     vcl/unx/gtk4/gtkaccessibleeventlistener \
     vcl/unx/gtk4/gtkaccessibleregistry \
+    vcl/unx/gtk4/gtkaccessibletext \
     vcl/unx/gtk4/gtkdata \
     vcl/unx/gtk4/gtkinst \
     vcl/unx/gtk4/gtksys \

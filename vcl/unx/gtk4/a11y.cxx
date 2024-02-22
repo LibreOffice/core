@@ -23,6 +23,7 @@
 #include "a11y.hxx"
 #include "gtkaccessibleeventlistener.hxx"
 #include "gtkaccessibleregistry.hxx"
+#include "gtkaccessibletext.hxx"
 
 #define OOO_TYPE_FIXED (ooo_fixed_get_type())
 #define OOO_FIXED(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), OOO_TYPE_FIXED, OOoFixed))
@@ -410,9 +411,13 @@ const struct
     GetGIfaceType const aGetGIfaceType;
     const css::uno::Type& (*aGetUnoType)();
 } TYPE_TABLE[] = {
+#if GTK_CHECK_VERSION(4, 13, 8)
+    { "Text", reinterpret_cast<GInterfaceInitFunc>(lo_accessible_text_init),
+      gtk_accessible_text_get_type, cppu::UnoType<css::accessibility::XAccessibleText>::get },
+#endif
 #if GTK_CHECK_VERSION(4, 10, 0)
     { "Value", reinterpret_cast<GInterfaceInitFunc>(lo_accessible_range_init),
-      gtk_accessible_range_get_type, cppu::UnoType<css::accessibility::XAccessibleValue>::get }
+      gtk_accessible_range_get_type, cppu::UnoType<css::accessibility::XAccessibleValue>::get },
 #endif
 };
 
