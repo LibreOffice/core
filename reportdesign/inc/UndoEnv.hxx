@@ -37,7 +37,7 @@ namespace rptui
     class OXUndoEnvironmentImpl;
 
 
-    class OXUndoEnvironment final
+    class SAL_DLLPUBLIC_RTTI OXUndoEnvironment final
         : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                         ,   css::container::XContainerListener
                                         ,   css::util::XModifyListener

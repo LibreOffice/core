@@ -55,7 +55,7 @@ namespace dbaui
 
     struct UndoManager_Impl;
     typedef ::cppu::ImplHelper1< css::document::XUndoManager > UndoManager_Base;
-    class UndoManager final : public UndoManager_Base
+    class SAL_DLLPUBLIC_RTTI UndoManager final : public UndoManager_Base
     {
     public:
         DBACCESS_DLLPUBLIC UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );

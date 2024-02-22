@@ -43,7 +43,7 @@ public:
 
 class SvxGraphCtrlAccessibleContext;
 
-class GraphCtrl : public weld::CustomWidgetController
+class SAL_DLLPUBLIC_RTTI GraphCtrl : public weld::CustomWidgetController
 {
     friend class GraphCtrlView;
     friend class GraphCtrlUserCall;
