@@ -5,6 +5,7 @@
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">100000</property>
+    <property name="value">1</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
@@ -264,10 +265,11 @@
                             <child>
                               <object class="GtkComboBox" id="NavElementWidget">
                                 <property name="visible">True</property>
-                                <property name="can-focus">True</property>
+                                <property name="can-focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="model">liststore4</property>
                                 <property name="entry-text-column">0</property>
+                                <property name="popup-fixed-width">False</property>
                                 <property name="id-column">1</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderertext7"/>
@@ -297,10 +299,8 @@
                     </child>
                     <child>
                       <object class="GtkToolbar" id="content3">
-                        <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="toolbar-style">icons</property>
-                        <property name="show-arrow">False</property>
                         <child>
                           <object class="GtkToolButton" id=".uno:ScrollToPrevious">
                             <property name="visible">True</property>
@@ -330,27 +330,27 @@
                     <child>
                       <object class="GtkToolbar" id="content4">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="toolbar-style">icons</property>
-                        <property name="show-arrow">False</property>
                         <child>
-                          <object class="GtkToolItem" id="contentedit">
+                          <object class="GtkToolItem">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
                             <child>
-                              <object class="GtkSpinButton" id="spinbutton">
+                              <object class="GtkSpinButton" id="gotopage">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="tooltip-text" translatable="yes" context="navigatorpanel|spinbutton|tooltip_text">Go to Page</property>
-                                <property name="hexpand">True</property>
-                                <property name="truncate-multiline">True</property>
+                                <property name="tooltip-text" translatable="yes" context="navigatorpanel|gotopage|tooltip_text">Go to page</property>
+                                <property name="width-chars">3</property>
+                                <property name="max-width-chars">3</property>
+                                <property name="input-purpose">number</property>
                                 <property name="adjustment">adjustment1</property>
-                                <property name="value">1</property>
+                                <property name="numeric">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="spinbutton-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|spinbutton">Enter page number and press Enter. Use arrows to move to next page forward or backward.</property>
+                                  <object class="AtkObject" id="gotopage-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|gotopage">Enter a page that you want to go to and press enter or use the buttons to move to the previous or next page.</property>
                                   </object>
                                 </child>
                               </object>
@@ -505,7 +505,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -612,7 +612,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>

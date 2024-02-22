@@ -49,6 +49,7 @@ class SwNavigationPI final : public PanelLayout
 
     ::sfx2::sidebar::ControllerItem m_aDocFullName;
     ::sfx2::sidebar::ControllerItem m_aPageStats;
+    ::sfx2::sidebar::ControllerItem m_aNavElement;
 
     std::unique_ptr<weld::Toolbar> m_xContent1ToolBox;
     std::unique_ptr<weld::Toolbar> m_xContent2ToolBox;
@@ -62,13 +63,12 @@ class SwNavigationPI final : public PanelLayout
     std::unique_ptr<weld::Menu> m_xUpdateMenu;
     std::unique_ptr<weld::Menu> m_xInsertMenu;
     std::unique_ptr<weld::Toolbar> m_xGlobalToolBox;
-    std::unique_ptr<weld::SpinButton> m_xEdit;
+    std::unique_ptr<weld::SpinButton> m_xGotoPageSpinButton;
     std::unique_ptr<weld::Widget> m_xContentBox;
     std::unique_ptr<SwContentTree> m_xContentTree;
     std::unique_ptr<weld::Widget> m_xGlobalBox;
     std::unique_ptr<SwGlobalTree> m_xGlobalTree;
     std::unique_ptr<weld::ComboBox> m_xDocListBox;
-    Idle                m_aPageChgIdle;
     OUString            m_sContentFileName;
 
     VclPtr<SfxNavigator> m_xNavigatorDlg;
@@ -102,15 +102,9 @@ class SwNavigationPI final : public PanelLayout
     DECL_LINK( DoneLink, SfxPoolItem const *, void );
     DECL_LINK( HeadingsMenuSelectHdl, const OUString&, void );
     DECL_LINK( GlobalMenuSelectHdl, const OUString&, void );
-    DECL_LINK( ChangePageHdl, Timer*, void );
-    DECL_LINK( PageEditModifyHdl, weld::SpinButton&, void );
-    DECL_LINK( EditActionHdl, weld::Entry&, bool );
     DECL_LINK( SetFocusChildHdl, weld::Container&, void );
     DECL_LINK( NavigateByComboBoxSelectHdl, weld::ComboBox&, void );
-    DECL_LINK( PageModifiedHdl, weld::Entry&, void );
-
-    bool EditAction();
-    void UsePage();
+    DECL_LINK(GotoPageSpinButtonValueChangedHdl, weld::SpinButton&, void);
 
     void UpdateInitShow();
 
@@ -121,6 +115,8 @@ class SwNavigationPI final : public PanelLayout
     void            SetGlobalMode(bool bSet) {m_bGlobalMode = bSet;}
 
     void UpdateNavigateBy();
+
+    void SetContent3And4ToolBoxVisibility();
 
 public:
 

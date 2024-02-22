@@ -598,7 +598,7 @@ NavElementBox_Base::NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox
     : m_xComboBox(std::move(xComboBox))
     ,m_xFrame(std::move(xFrame))
 {
-    m_xComboBox->set_size_request(150, -1);
+    m_xComboBox->set_size_request(100, -1);
 
     m_xComboBox->make_sorted();
     m_xComboBox->freeze();
