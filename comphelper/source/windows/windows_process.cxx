@@ -241,7 +241,7 @@ WinLaunchChild(const wchar_t *exePath,
     }
     else
     {
-        LPVOID lpMsgBuf = nullptr;
+        LPWSTR lpMsgBuf = nullptr;
         FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                        FORMAT_MESSAGE_FROM_SYSTEM |
                        FORMAT_MESSAGE_IGNORE_INSERTS,
