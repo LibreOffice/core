@@ -221,6 +221,8 @@ namespace sdr::contact
             aNewViewInformation2D.setViewTime(fCurrentTime);
             if (const SfxViewShell* pViewShell = SfxViewShell::Current())
                 aNewViewInformation2D.setAutoColor(pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
+            if (static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView()).IsTextEdit())
+                aNewViewInformation2D.setTextEditActive(true);
             updateViewInformation2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;

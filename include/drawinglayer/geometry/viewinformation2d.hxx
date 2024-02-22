@@ -163,6 +163,9 @@ public:
     Color getAutoColor() const;
     void setAutoColor(Color aNew);
 
+    bool getTextEditActive() const;
+    void setTextEditActive(bool bNew);
+
     static void setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporary);
     static bool getGlobalAntiAliasing();
     static void forwardPixelSnapHairline(bool bPixelSnapHairline);

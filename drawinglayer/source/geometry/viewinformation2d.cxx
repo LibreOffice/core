@@ -90,6 +90,12 @@ protected:
     // color to use for automatic color
     Color maAutoColor;
 
+    // a hint that the View that is being painted has an active TextEdit. This
+    // is important for handling of TextHierarchyEditPrimitive2D to suppress
+    // the text for objects in TextEdit - the text is visualized by the
+    // active EditEngine/Outliner overlay, so it would be double visualized
+    bool mbTextEditActive;
+
     // allow to reduce DisplayQuality (e.g. sw 3d fallback renderer for interactions)
     bool mbReducedDisplayQuality : 1;
 
@@ -110,6 +116,7 @@ public:
         , mxVisualizedPage()
         , mfViewTime(0.0)
         , maAutoColor(COL_AUTO)
+        , mbTextEditActive(false)
         , mbReducedDisplayQuality(false)
         , mbUseAntiAliasing(ViewInformation2D::getGlobalAntiAliasing())
         , mbPixelSnapHairline(mbUseAntiAliasing && bForwardPixelSnapHairline)
@@ -197,6 +204,9 @@ public:
     Color getAutoColor() const { return maAutoColor; }
     void setAutoColor(Color aNew) { maAutoColor = aNew; }
 
+    bool getTextEditActive() const { return mbTextEditActive; }
+    void setTextEditActive(bool bNew) { mbTextEditActive = bNew; }
+
     bool getReducedDisplayQuality() const { return mbReducedDisplayQuality; }
     void setReducedDisplayQuality(bool bNew) { mbReducedDisplayQuality = bNew; }
 
@@ -213,6 +223,7 @@ public:
                 && maViewport == rCandidate.maViewport
                 && mxVisualizedPage == rCandidate.mxVisualizedPage
                 && mfViewTime == rCandidate.mfViewTime && maAutoColor == rCandidate.maAutoColor
+                && mbTextEditActive == rCandidate.mbTextEditActive
                 && mbReducedDisplayQuality == rCandidate.mbReducedDisplayQuality
                 && mbUseAntiAliasing == rCandidate.mbUseAntiAliasing
                 && mbPixelSnapHairline == rCandidate.mbPixelSnapHairline);
@@ -352,6 +363,16 @@ void ViewInformation2D::setUseAntiAliasing(bool bNew)
 Color ViewInformation2D::getAutoColor() const { return mpViewInformation2D->getAutoColor(); }
 
 void ViewInformation2D::setAutoColor(Color aNew) { mpViewInformation2D->setAutoColor(aNew); }
+
+bool ViewInformation2D::getTextEditActive() const
+{
+    return mpViewInformation2D->getTextEditActive();
+}
+
+void ViewInformation2D::setTextEditActive(bool bNew)
+{
+    mpViewInformation2D->setTextEditActive(bNew);
+}
 
 bool ViewInformation2D::getPixelSnapHairline() const
 {
