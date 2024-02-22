@@ -504,7 +504,7 @@ void SwAnnotationWin::SetMenuButtonColors()
     const tools::Long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
     aSymbolRect.AdjustBottom( -nBorderDistanceBottom );
     DecorationView aDecoView(xVirDev.get());
-    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, GetTextColor(),
+    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, COL_BLACK,
                          DrawSymbolFlags::NONE);
     mxMenuButton->set_image(xVirDev);
     mxMenuButton->set_size_request(aSize.Width() + 4, aSize.Height() + 4);
