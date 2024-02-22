@@ -33,6 +33,7 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 
 #include <memory>
 #include <vector>
@@ -116,6 +117,10 @@ public:
 
     void testSingleLine();
 
+    void testMoveParagraph();
+
+    void testCreateLines();
+
     DECL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, void);
 
     CPPUNIT_TEST_SUITE(Test);
@@ -145,6 +150,8 @@ public:
     CPPUNIT_TEST(testTdf147196);
     CPPUNIT_TEST(testTdf148148);
     CPPUNIT_TEST(testSingleLine);
+    CPPUNIT_TEST(testMoveParagraph);
+    CPPUNIT_TEST(testCreateLines);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -811,8 +818,8 @@ void Test::testHTMLPaste()
     // Given an empty editeng document:
     EditEngine aEditEngine(mpItemPool.get());
     EditDoc& rDoc = aEditEngine.GetEditDoc();
-    //OString aHTML("<!DOCTYPE html>\n<html><body>test</body></html>"_ostr);
-    std::vector<OString> aContent({ "<!DOCTYPE html>\n<html><body>test</body></html>"_ostr });
+    //OString aHTML("<!DOCTYPE html>\n<html><body>test</body></html>");
+    std::vector<OString> aContent({ "<!DOCTYPE html>\n<html><body>test</body></html>" });
     std::vector<OUString> aMime({ "text/html" });
 
     uno::Reference<datatransfer::XTransferable> xData(new TestTransferable(aContent, aMime));
@@ -832,7 +839,7 @@ void Test::testHTMLFragmentPaste()
     // Given an empty editeng document:
     EditEngine aEditEngine(mpItemPool.get());
     EditDoc& rDoc = aEditEngine.GetEditDoc();
-    std::vector<OString> aContent({ "a<b>b</b>c"_ostr });
+    std::vector<OString> aContent({ "a<b>b</b>c" });
     std::vector<OUString> aMime({ "text/html" });
 
     uno::Reference<datatransfer::XTransferable> xData(new TestTransferable(aContent, aMime));
@@ -854,7 +861,7 @@ void Test::testRTFPaste()
     EditEngine aEditEngine(mpItemPool.get());
     EditDoc& rDoc = aEditEngine.GetEditDoc();
     std::vector<OString> aContent(
-        { "{\\rtf1\\adeflang1025\\ansi{\\ul www.libreoffice.org}}"_ostr });
+        { "{\\rtf1\\adeflang1025\\ansi{\\ul www.libreoffice.org}}" });
     std::vector<OUString> aMime({ "text/richtext" });
     uno::Reference<datatransfer::XTransferable> xData(new TestTransferable(aContent, aMime));
 
@@ -876,7 +883,7 @@ void Test::testRTFHTMLPaste()
     EditEngine aEditEngine(mpItemPool.get());
     EditDoc& rDoc = aEditEngine.GetEditDoc();
     std::vector<OString> aContent(
-        { "{\\rtf1\\adeflang1025\\ansi{\\ul www.libreoffice.org}}"_ostr,
+        { "{\\rtf1\\adeflang1025\\ansi{\\ul www.libreoffice.org}}",
           "Version:1.0\nStartHTML:0000000121\n"
           "EndHTML:0000000596\n"
           "StartFragment:0000000519\n"
@@ -887,7 +894,7 @@ void Test::testRTFHTMLPaste()
           "<style type=\"text/css\">@page { size: 21cm 29.7cm; margin: 2cm }"
           "p{ line-height: 115%; margin-bottom: 0.25cm; background: transparent }</style>"
           "</head><body lang=\"de-DE\" link=\"#000080\" vlink=\"#800000\" dir=\"ltr\">"
-          "<p style=\"line-height: 100%; margin-bottom: 0cm\">abc</p></body></html>"_ostr });
+          "<p style=\"line-height: 100%; margin-bottom: 0cm\">abc</p></body></html>" });
     std::vector<OUString> aMime(
         { "text/richtext",
           "application/x-openoffice-html-simple;windows_formatname=\"HTML Format\"" });
@@ -2379,7 +2386,7 @@ void Test::testCreateLines()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rParagraphPortionList.Count());
 
     {
-        EditLineList& rLines = rParagraphPortionList.getRef(0).GetLines();
+        EditLineList& rLines = rParagraphPortionList[0]->GetLines();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rLines.Count());
         EditLine const& rLine = rLines[0];
 
@@ -2395,7 +2402,7 @@ void Test::testCreateLines()
     }
 
     {
-        EditLineList& rLines = rParagraphPortionList.getRef(1).GetLines();
+        EditLineList& rLines = rParagraphPortionList[1]->GetLines();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rLines.Count());
 
         {
