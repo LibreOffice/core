@@ -3042,7 +3042,8 @@ void SfxMedium::GetMedium_Impl()
     pImpl->bDownloadDone = true;
     pImpl->aDoneLink.ClearPendingCall();
     ErrCodeMsg nError = GetErrorIgnoreWarning();
-    pImpl->aDoneLink.Call( reinterpret_cast<void*>(sal_uInt32(nError.GetCode())) );
+    sal_uIntPtr nErrorCode = sal_uInt32(nError.GetCode());
+    pImpl->aDoneLink.Call( reinterpret_cast<void*>(nErrorCode) );
 }
 
 bool SfxMedium::IsRemote() const

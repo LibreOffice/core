@@ -1552,7 +1552,7 @@ namespace
 
         // vcl::StringEntryIdentifier does not allow for 0 values, but our position is 0-based
         // => normalize
-        return reinterpret_cast< vcl::StringEntryIdentifier >( _nPos + 1 );
+        return reinterpret_cast< vcl::StringEntryIdentifier >( _nPos + sal_IntPtr(1) );
     }
 
     sal_Int32 lcl_getEntryPos( vcl::StringEntryIdentifier _entry )

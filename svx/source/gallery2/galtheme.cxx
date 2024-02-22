@@ -88,7 +88,7 @@ void GalleryTheme::ImplBroadcast(sal_uInt32 nUpdatePos)
         if( GetObjectCount() && ( nUpdatePos >= GetObjectCount() ) )
             nUpdatePos = GetObjectCount() - 1;
 
-        Broadcast( GalleryHint( GalleryHintType::THEME_UPDATEVIEW, GetName(), reinterpret_cast<void*>(nUpdatePos) ) );
+        Broadcast( GalleryHint( GalleryHintType::THEME_UPDATEVIEW, GetName(), reinterpret_cast<void*>(static_cast<sal_uIntPtr>(nUpdatePos)) ) );
     }
 }
 

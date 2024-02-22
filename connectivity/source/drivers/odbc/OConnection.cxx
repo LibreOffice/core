@@ -98,7 +98,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     memcpy(szConnStrIn, aConStr.getStr(), std::min<sal_Int32>(sal_Int32(2048),aConStr.getLength()));
 
 #ifndef MACOSX
-    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,reinterpret_cast<SQLPOINTER>(nTimeOut),SQL_IS_UINTEGER);
+    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,reinterpret_cast<SQLPOINTER>(static_cast<sal_IntPtr>(nTimeOut)),SQL_IS_UINTEGER);
 #else
     (void)nTimeOut; /* WaE */
 #endif
@@ -312,10 +312,10 @@ void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-
+    const sal_IntPtr nAutocommit = autoCommit ? SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF;
     OTools::ThrowException(this,N3SQLSetConnectAttr(m_aConnectionHandle,
                                    SQL_ATTR_AUTOCOMMIT,
-                                   reinterpret_cast<SQLPOINTER>((autoCommit) ? SQL_AUTOCOMMIT_ON : SQL_AUTOCOMMIT_OFF) ,SQL_IS_INTEGER),
+                                   reinterpret_cast<SQLPOINTER>(nAutocommit) ,SQL_IS_INTEGER),
                                    m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 
@@ -423,7 +423,7 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level )
 
     OTools::ThrowException(this,N3SQLSetConnectAttr(m_aConnectionHandle,
                                    SQL_ATTR_TXN_ISOLATION,
-                                   reinterpret_cast<SQLPOINTER>(level),SQL_IS_INTEGER),
+                                   reinterpret_cast<SQLPOINTER>(static_cast<sal_IntPtr>(level)),SQL_IS_INTEGER),
                                    m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 

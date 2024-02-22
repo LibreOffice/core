@@ -895,7 +895,7 @@ sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
 
     nRealPos = m_pImpl->m_pImplLB->InsertEntry( nRealPos, rStr );
     nRealPos -= m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
-    CallEventListeners( VclEventId::ComboboxItemAdded, reinterpret_cast<void*>(nRealPos) );
+    CallEventListeners( VclEventId::ComboboxItemAdded, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nRealPos)) );
     return nRealPos;
 }
 
@@ -916,7 +916,7 @@ sal_Int32 ComboBox::InsertEntryWithImage(
 
     nRealPos = m_pImpl->m_pImplLB->InsertEntry( nRealPos, rStr, rImage );
     nRealPos -= m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
-    CallEventListeners( VclEventId::ComboboxItemAdded, reinterpret_cast<void*>(nRealPos) );
+    CallEventListeners( VclEventId::ComboboxItemAdded, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nRealPos)) );
     return nRealPos;
 }
 
@@ -925,7 +925,7 @@ void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
     const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
     assert(nPos >= 0 && nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
     m_pImpl->m_pImplLB->RemoveEntry( nPos + nMRUCount );
-    CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(nPos) );
+    CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nPos)) );
 }
 
 void ComboBox::Clear()
@@ -933,7 +933,7 @@ void ComboBox::Clear()
     if (!m_pImpl->m_pImplLB)
         return;
     m_pImpl->m_pImplLB->Clear();
-    CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(-1) );
+    CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(sal_IntPtr(-1)) );
 }
 
 Image ComboBox::GetEntryImage( sal_Int32 nPos ) const

@@ -611,7 +611,7 @@ ErrCode getProcData(HMODULE handle, OUString const & name, ProcData * proc)
 {
     assert(proc != nullptr);
     if (name.getLength() != 0 && name[0] == '@') { //TODO: "@" vs. "#"???
-        sal_Int32 n = o3tl::toInt32(name.subView(1)); //TODO: handle bad input
+        sal_IntPtr n = o3tl::toInt32(name.subView(1)); //TODO: handle bad input
         if (n <= 0 || n > 0xFFFF) {
             return ERRCODE_BASIC_BAD_ARGUMENT; //TODO: more specific errcode?
         }

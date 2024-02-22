@@ -421,7 +421,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, EditHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl, weld::TreeView&, void)
 {
-    int nSelect = m_xListLB->get_selected_index();
+    sal_IntPtr nSelect = m_xListLB->get_selected_index();
     Application::PostUserEvent( LINK( this, SwAddressListDialog,
                                       StaticListBoxSelectHdl_Impl ), reinterpret_cast<void*>(nSelect) );
 }

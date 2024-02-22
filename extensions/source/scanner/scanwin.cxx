@@ -253,9 +253,10 @@ void Twain::ShimListenerThread::execute()
                 ThrowLastError("DuplicateHandle");
             // we will not need our copy as soon as shim has its own inherited one
             ScopedHANDLE hScopedDup(hDup);
-            DWORD nDup = static_cast<DWORD>(reinterpret_cast<sal_uIntPtr>(hDup));
-            if (reinterpret_cast<HANDLE>(nDup) != hDup)
-                throw std::exception("HANDLE does not fit to 32 bit - cannot pass to shim!");
+            sal_uIntPtr nDup = reinterpret_cast<sal_uIntPtr>(hDup);
+            if constexpr (sizeof(sal_uIntPtr) > 4)
+                if (nDup > 0xFFFFFFFF)
+                    throw std::exception("HANDLE does not fit to 32 bit - cannot pass to shim!");
 
             // Send this thread handle as the first parameter
             sCmdLine = "\"" + sCmdLine + "\" " + OUString::number(nDup);

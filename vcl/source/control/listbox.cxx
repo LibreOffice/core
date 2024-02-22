@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(ListBox, ImplSelectHdl, LinkParamNone*, void)
 
 IMPL_LINK( ListBox, ImplFocusHdl, sal_Int32, nPos, void )
 {
-    CallEventListeners( VclEventId::ListboxFocus, reinterpret_cast<void*>(nPos) );
+    CallEventListeners( VclEventId::ListboxFocus, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nPos)) );
 }
 
 IMPL_LINK_NOARG( ListBox, ImplListItemSelectHdl, LinkParamNone*, void )
@@ -945,7 +945,7 @@ sal_Int32 ListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
 {
     sal_Int32 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList().GetMRUCount(), rStr );
     nRealPos = sal::static_int_cast<sal_Int32>(nRealPos - mpImplLB->GetEntryList().GetMRUCount());
-    CallEventListeners( VclEventId::ListboxItemAdded, reinterpret_cast<void*>(nRealPos) );
+    CallEventListeners( VclEventId::ListboxItemAdded, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nRealPos)) );
     return nRealPos;
 }
 
@@ -953,14 +953,14 @@ sal_Int32 ListBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_I
 {
     sal_Int32 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList().GetMRUCount(), rStr, rImage );
     nRealPos = sal::static_int_cast<sal_Int32>(nRealPos - mpImplLB->GetEntryList().GetMRUCount());
-    CallEventListeners( VclEventId::ListboxItemAdded, reinterpret_cast<void*>(nRealPos) );
+    CallEventListeners( VclEventId::ListboxItemAdded, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nRealPos)) );
     return nRealPos;
 }
 
 void ListBox::RemoveEntry( sal_Int32 nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList().GetMRUCount() );
-    CallEventListeners( VclEventId::ListboxItemRemoved, reinterpret_cast<void*>(nPos) );
+    CallEventListeners( VclEventId::ListboxItemRemoved, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nPos)) );
 }
 
 Image ListBox::GetEntryImage( sal_Int32 nPos ) const
@@ -1043,9 +1043,9 @@ void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
         //Only when bSelect == true, send both Selection & Focus events
         if (nCurrentPos != nPos && bSelect)
         {
-            CallEventListeners( VclEventId::ListboxSelect, reinterpret_cast<void*>(nPos));
+            CallEventListeners( VclEventId::ListboxSelect, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nPos)));
             if (HasFocus())
-                CallEventListeners( VclEventId::ListboxFocus, reinterpret_cast<void*>(nPos));
+                CallEventListeners( VclEventId::ListboxFocus, reinterpret_cast<void*>(static_cast<sal_IntPtr>(nPos)));
         }
     }
 }

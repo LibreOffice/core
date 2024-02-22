@@ -55,7 +55,7 @@ SwNumberTreeNode::~SwNumberTreeNode()
 
     OSL_ENSURE( IsPhantom() || mpParent == nullptr, ": I'm not supposed to have a parent.");
 
-    mpParent = reinterpret_cast<SwNumberTreeNode *>(0xdeadbeef);
+    mpParent = reinterpret_cast<SwNumberTreeNode *>(sal_uIntPtr(0xdeadbeef));
 
     OSL_ENSURE(mChildren.empty(), "children left!");
 }
