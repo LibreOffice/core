@@ -582,9 +582,9 @@ SAL_IMPLEMENT_MAIN()
             {
                 css::uno::Reference< reflection::XTypeDescription > td(
                     xTD_enum->nextTypeDescription());
-                OUString name(td->getName());
+                OUString td_name(td->getName());
                 bool bEmit = std::any_of(unoidlMandatoryProvs.begin(), unoidlMandatoryProvs.end(),
-                    [&name](rtl::Reference<unoidl::Provider>& rProv) { return rProv->findEntity(name).is(); });
+                    [&td_name](rtl::Reference<unoidl::Provider>& rProv) { return rProv->findEntity(td_name).is(); });
                 if (bEmit) {
                     type_emitter->get_type(td);
                 }

@@ -857,7 +857,6 @@ Assembly ^ TypeEmitter::type_resolve(
             reflection::XInterfaceMemberTypeDescription > const & xMember =
             members[ members_pos ];
         Sequence< Reference< reflection::XTypeDescription > > seq_exceptions;
-        Emit::MethodBuilder ^ method_builder;
 
         MethodAttributes c_method_attr = (MethodAttributes)
             (MethodAttributes::Public |
@@ -905,7 +904,7 @@ Assembly ^ TypeEmitter::type_resolve(
 //                 c_method_attr, tb,
 //                 param_types );
 //             else
-                method_builder = type_builder->DefineMethod(
+            Emit::MethodBuilder ^ method_builder = type_builder->DefineMethod(
                     ustring_to_String( xMethod->getMemberName() ),
                     c_method_attr, get_type( xMethod->getReturnType() ),
                     param_types );
@@ -969,11 +968,11 @@ Assembly ^ TypeEmitter::type_resolve(
             {
                 array< ::System::Type^>^ arCtorOneway = gcnew array< ::System::Type^>(0);
                 array< ::System::Object^>^ arArgs = gcnew array< ::System::Object^>(0);
-                Emit::CustomAttributeBuilder ^ attrBuilder =
+                Emit::CustomAttributeBuilder ^ attrBuilder2 =
                     gcnew Emit::CustomAttributeBuilder(
                         ::uno::OnewayAttribute::typeid->GetConstructor( arCtorOneway),
                         arArgs);
-                method_builder->SetCustomAttribute(attrBuilder);
+                method_builder->SetCustomAttribute(attrBuilder2);
             }
         }
         else // attribute
@@ -1038,10 +1037,10 @@ Assembly ^ TypeEmitter::type_resolve(
                 method_builder->DefineParameter(
                     1 /* starts with 1 */, ParameterAttributes::In, "value" );
                 //define UNO exception attribute (exceptions)--------------------------------------
-                Emit::CustomAttributeBuilder^ attrBuilder =
+                Emit::CustomAttributeBuilder^ attrBuilder2 =
                     get_exception_attribute(xAttribute->getSetExceptions());
-                if (attrBuilder != nullptr)
-                    method_builder->SetCustomAttribute(attrBuilder);
+                if (attrBuilder2 != nullptr)
+                    method_builder->SetCustomAttribute(attrBuilder2);
 
                 property_builder->SetSetMethod( method_builder );
             }
@@ -1179,10 +1178,10 @@ Assembly ^ TypeEmitter::type_resolve(
             ::System::String ^ base_type_name = base_type->FullName;
 
             //ToDo m_generated_structs?
-            struct_entry ^ entry =
+            struct_entry ^ entry2 =
                 dynamic_cast< struct_entry ^ >(
                 m_generated_structs[base_type_name] );
-            if (nullptr == entry)
+            if (nullptr == entry2)
             {
                 // complete type
                 array<FieldInfo^>^ fields =
@@ -1191,9 +1190,9 @@ Assembly ^ TypeEmitter::type_resolve(
                     BindingFlags::Public |
                     BindingFlags::DeclaredOnly) );
                 sal_Int32 len = fields->Length;
-                for ( sal_Int32 pos = 0; pos < len; ++pos )
+                for ( sal_Int32 pos2 = 0; pos2 < len; ++pos2 )
                 {
-                    FieldInfo ^ field = fields[ pos ];
+                    FieldInfo ^ field = fields[ pos2 ];
                     all_member_names[ member_pos ] = field->Name;
                     all_param_types[ member_pos ] = field->FieldType;
                     ++member_pos;
@@ -1202,13 +1201,13 @@ Assembly ^ TypeEmitter::type_resolve(
             else // generated during this session:
                 // members may be incomplete ifaces
             {
-                sal_Int32 len = entry->m_member_names->Length;
-                for ( sal_Int32 pos = 0; pos < len; ++pos )
+                sal_Int32 len = entry2->m_member_names->Length;
+                for ( sal_Int32 pos2 = 0; pos2 < len; ++pos2 )
                 {
                     all_member_names[ member_pos ] =
-                        entry->m_member_names[ pos ];
+                        entry2->m_member_names[ pos2 ];
                     all_param_types[ member_pos ] =
-                        entry->m_param_types[ pos ];
+                        entry2->m_param_types[ pos2 ];
                     ++member_pos;
                 }
             }
@@ -1474,12 +1473,12 @@ Assembly ^ TypeEmitter::type_resolve(
                                 MethodAttributes::RTSpecialName),
             CallingConventions::Standard, nullptr);
 
-    Emit::ILGenerator^ ilGen = ctor_builder->GetILGenerator();
-    ilGen->Emit( Emit::OpCodes::Ldarg_0 ); // push this
-    ilGen->Emit(
+    Emit::ILGenerator^ ilGen1 = ctor_builder->GetILGenerator();
+    ilGen1->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+    ilGen1->Emit(
             Emit::OpCodes::Call,
             type_builder->BaseType->GetConstructor(gcnew array< ::System::Type^>(0)));
-    ilGen->Emit( Emit::OpCodes::Ret );
+    ilGen1->Emit( Emit::OpCodes::Ret );
 
 
     //Create the service constructors.
@@ -1505,12 +1504,12 @@ Assembly ^ TypeEmitter::type_resolve(
 
     ::System::Type ^ type_uno_exception = get_type("unoidl.com.sun.star.uno.Exception", true);
 
-    for (int i = seqCtors.getLength() - 1; i >= 0; i--)
+    for (int j = seqCtors.getLength() - 1; j >= 0; j--)
     {
         bool bParameterArray = false;
         ::System::Type ^ typeAny = ::uno::Any::typeid;
         const Reference<reflection::XServiceConstructorDescription> & ctorDes =
-            seqCtors[i];
+            seqCtors[j];
         //obtain the parameter types
         Sequence<Reference<reflection::XParameter> > seqParams =
             ctorDes->getParameters();
