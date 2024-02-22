@@ -495,12 +495,12 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
 
 // tdf#104927
 // http://www.unicode.org/reports/tr11/
-sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr, sal_Int32& nIdx, sal_Int32 nMaxWidth)
+sal_Int32 ScImportExport::CountVisualWidth(std::u16string_view rStr, sal_Int32& nIdx, sal_Int32 nMaxWidth)
 {
     sal_Int32 nWidth = 0;
-    while(nIdx < rStr.getLength() && nWidth < nMaxWidth)
+    while(nIdx < static_cast<sal_Int32>(rStr.size()) && nWidth < nMaxWidth)
     {
-        sal_uInt32 nCode = rStr.iterateCodePoints(&nIdx);
+        sal_uInt32 nCode = o3tl::iterateCodePoints(rStr, &nIdx);
 
         auto nEaWidth = u_getIntPropertyValue(nCode, UCHAR_EAST_ASIAN_WIDTH);
         if (nEaWidth == U_EA_FULLWIDTH || nEaWidth == U_EA_WIDE)
@@ -509,10 +509,10 @@ sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr, sal_Int32& nIdx
             nWidth += 1;
     }
 
-    if (nIdx < rStr.getLength())
+    if (nIdx < static_cast<sal_Int32>(rStr.size()))
     {
         sal_Int32 nTmpIdx = nIdx;
-        sal_uInt32 nCode = rStr.iterateCodePoints(&nTmpIdx);
+        sal_uInt32 nCode = o3tl::iterateCodePoints(rStr, &nTmpIdx);
 
         if (u_getIntPropertyValue(nCode, UCHAR_DEFAULT_IGNORABLE_CODE_POINT))
             nIdx = nTmpIdx;
@@ -520,7 +520,7 @@ sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr, sal_Int32& nIdx
     return nWidth;
 }
 
-sal_Int32 ScImportExport::CountVisualWidth(const OUString& rStr)
+sal_Int32 ScImportExport::CountVisualWidth(std::u16string_view rStr)
 {
     sal_Int32 nIdx = 0;
     return CountVisualWidth(rStr, nIdx, SAL_MAX_INT32);

@@ -65,13 +65,13 @@ namespace vcl
     TextLayoutCommon::~TextLayoutCommon() COVERITY_NOEXCEPT_FALSE
     {}
 
-    OUString TextLayoutCommon::GetCenterEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth)
+    OUString TextLayoutCommon::GetCenterEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth)
     {
         OUStringBuffer aTmpStr(rOrigStr);
 
         // speed it up by removing all but 1.33x as many as the break pos.
-        sal_Int32 nEraseChars = std::max<sal_Int32>(4, rOrigStr.getLength() - (nIndex*4)/3);
-        while(nEraseChars < rOrigStr.getLength() && GetTextWidth(aTmpStr.toString(), 0, aTmpStr.getLength()) > nMaxWidth)
+        sal_Int32 nEraseChars = std::max<sal_Int32>(4, rOrigStr.size() - (nIndex*4)/3);
+        while(nEraseChars < static_cast<sal_Int32>(rOrigStr.size()) && GetTextWidth(aTmpStr.toString(), 0, aTmpStr.getLength()) > nMaxWidth)
         {
             aTmpStr = rOrigStr;
             sal_Int32 i = (aTmpStr.getLength() - nEraseChars)/2;

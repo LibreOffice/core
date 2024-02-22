@@ -118,12 +118,12 @@ public:
         @param nMaxWidth the maximum width to count.
         @return the sum of the width of counted characters.
     **/
-    static sal_Int32 CountVisualWidth(const OUString& rStr, sal_Int32& nIdx, sal_Int32 nMaxWidth);
+    static sal_Int32 CountVisualWidth(std::u16string_view rStr, sal_Int32& nIdx, sal_Int32 nMaxWidth);
 
     /** ScImportExport::CountVisualWidth
         @return the sum of the visual width of the whole string.
     **/
-    static sal_Int32 CountVisualWidth(const OUString& rStr);
+    static sal_Int32 CountVisualWidth(std::u16string_view rStr);
 
     //! only if stream is only used in own (!) memory
     static  void    SetNoEndianSwap( SvStream& rStrm );

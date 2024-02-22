@@ -525,11 +525,11 @@ OUString reverseString(std::u16string_view rStr)
     return sBuf.makeStringAndClear();
 }
 
-OUString reverseCodePoints(OUString const & str) {
-    auto const len = str.getLength();
+OUString reverseCodePoints(std::u16string_view str) {
+    auto const len = str.size();
     OUStringBuffer buf(len);
-    for (auto i = len; i != 0;) {
-        buf.appendUtf32(str.iterateCodePoints(&i, -1));
+    for (sal_Int32 i = len; i != 0;) {
+        buf.appendUtf32(o3tl::iterateCodePoints(str, &i, -1));
     }
     return buf.makeStringAndClear();
 }

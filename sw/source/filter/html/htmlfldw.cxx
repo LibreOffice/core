@@ -414,7 +414,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                     }
                 }
 
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ) );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.subView( nPos, nChunkLen ) );
 
                 rWrt.m_bTagOn = false;
                 while( nItems )
@@ -423,7 +423,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
             }
             else
             {
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ) );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.subView( nPos, nChunkLen ) );
             }
             nPos = nEndPos;
         }

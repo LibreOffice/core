@@ -474,7 +474,7 @@ public:
     void OutFootEndNoteInfo();
     void OutFootEndNotes();
     OUString GetFootEndNoteSym( const SwFormatFootnote& rFormatFootnote );
-    void OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote, const OUString& rNum,
+    void OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote, std::u16string_view rNum,
                              sal_uInt16 nScript );
 
     void OutBasic(const SwHTMLWriter& rHTMLWrt);
@@ -509,7 +509,7 @@ public:
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE option of current
     // frame format output and maybe add a <BR CLEAR=...> at the
     // beginning of rEndTags
-    OString OutFrameFormatOptions( const SwFrameFormat& rFrameFormat, const OUString& rAltText,
+    OString OutFrameFormatOptions( const SwFrameFormat& rFrameFormat, std::u16string_view rAltText,
                                    HtmlFrmOpts nFrameOpts );
 
     void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, HtmlFrmOpts nFrameOpts);

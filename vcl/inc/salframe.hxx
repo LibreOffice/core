@@ -314,7 +314,7 @@ public:
     // Helper method for input method handling: Calculate cursor index in (UTF-16) OUString,
     // starting at nCursorIndex, moving number of characters (not UTF-16 codepoints) specified
     // in nOffset, nChars.
-    static Selection        CalcDeleteSurroundingSelection(const OUString& rSurroundingText,
+    static Selection        CalcDeleteSurroundingSelection(std::u16string_view rSurroundingText,
                                                            sal_Int32 nCursorIndex, int nOffset, int nChars);
 };
 

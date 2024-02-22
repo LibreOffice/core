@@ -32,6 +32,7 @@
 #include <osl/process.h>
 #endif
 #include <osl/thread.hxx>
+#include <o3tl/string_view.hxx>
 #include <jvmfwk/framework.hxx>
 #include <vendorbase.hxx>
 #include <vendorplugin.hxx>
@@ -133,31 +134,36 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
     }
 }
 
-std::vector<OUString> jfw_convertUserPathList(OUString const& sUserPath)
+std::vector<OUString> jfw_convertUserPathList(std::u16string_view sUserPath)
 {
     std::vector<OUString> result;
     sal_Int32 nIdx = 0;
     do
     {
-        sal_Int32 nextColon = sUserPath.indexOf(SAL_PATHSEPARATOR, nIdx);
-        OUString sToken(sUserPath.subView(nIdx, nextColon > 0 ? nextColon - nIdx
-                                                              : sUserPath.getLength() - nIdx));
+        size_t nextColon = sUserPath.find(SAL_PATHSEPARATOR, nIdx);
+        std::u16string_view sToken;
+        if (nextColon != 0 && nextColon != std::u16string_view::npos)
+            sToken = sUserPath.substr(nIdx, nextColon - nIdx);
+        else
+            sToken = sUserPath.substr(nIdx, sUserPath.size() - nIdx);
 
         // Check if we are in bootstrap variable mode (class path starts with '$').
         // Then the class path must be in URL format.
-        if (sToken.startsWith("$"))
+        if (o3tl::starts_with(sToken, u"$"))
         {
             // Detect open bootstrap variables - they might contain colons - we need to skip those.
-            sal_Int32 nBootstrapVarStart = sToken.indexOf("${");
-            if (nBootstrapVarStart >= 0)
+            size_t nBootstrapVarStart = sToken.find(u"${");
+            if (nBootstrapVarStart != std::u16string_view::npos)
             {
-                sal_Int32 nBootstrapVarEnd = sToken.indexOf("}", nBootstrapVarStart);
-                if (nBootstrapVarEnd == -1)
+                size_t nBootstrapVarEnd = sToken.find(u"}", nBootstrapVarStart);
+                if (nBootstrapVarEnd == std::u16string_view::npos)
                 {
                     // Current colon is part of bootstrap variable - skip it!
-                    nextColon = sUserPath.indexOf(SAL_PATHSEPARATOR, nextColon + 1);
-                    sToken = sUserPath.subView(nIdx, nextColon > 0 ? nextColon - nIdx
-                                                                   : sUserPath.getLength() - nIdx);
+                    nextColon = sUserPath.find(SAL_PATHSEPARATOR, nextColon + 1);
+                    if (nextColon != 0 && nextColon != std::u16string_view::npos)
+                        sToken = sUserPath.substr(nIdx, nextColon - nIdx);
+                    else
+                        sToken = sUserPath.substr(nIdx, sUserPath.size() - nIdx);
                 }
             }
         }

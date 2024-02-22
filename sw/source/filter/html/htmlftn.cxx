@@ -426,7 +426,7 @@ OUString SwHTMLWriter::GetFootEndNoteSym( const SwFormatFootnote& rFormatFootnot
 }
 
 void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
-                                         const OUString& rNum,
+                                         std::u16string_view rNum,
                                          sal_uInt16 nScript )
 {
     const SwEndNoteInfo *pInfo;

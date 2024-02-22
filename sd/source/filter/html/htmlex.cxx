@@ -374,7 +374,7 @@ OUString TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState* pState )
 }
 
 // escapes a string for html
-OUString StringToHTMLString( const OUString& rString )
+OUString StringToHTMLString( std::u16string_view rString )
 {
     SvMemoryStream aMemStm;
     HTMLOutFuncs::Out_String( aMemStm, rString );

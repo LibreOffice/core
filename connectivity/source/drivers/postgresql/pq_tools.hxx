@@ -131,7 +131,7 @@ void fillAttnum2attnameMap(
     const OUString &schema,
     const OUString &table );
 
-css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str );
+css::uno::Sequence< sal_Int32 > string2intarray( std::u16string_view str );
 
 css::uno::Sequence< OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const css::uno::Sequence< sal_Int32> &source );

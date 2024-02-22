@@ -259,7 +259,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsMarquee( SwHTMLWriter& rWrt,
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MARQUEE;
     if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         nFrameFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
-    OString aEndTags = rWrt.OutFrameFormatOptions(rFormat, OUString(), nFrameFlags);
+    OString aEndTags = rWrt.OutFrameFormatOptions(rFormat, u"", nFrameFlags);
     if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         rWrt.OutCSS1_FrameFormatOptions( rFormat, nFrameFlags, &rSdrObject );
 

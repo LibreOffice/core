@@ -50,8 +50,8 @@ char const sHTML_SC_no[] =       "NO";
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const char *pIndent,
-                                  const OUString& rName,
-                                  const OUString& rContent,
+                                  std::u16string_view rName,
+                                  std::u16string_view rContent,
                                   bool bHTTPEquiv,
                                   OUString *pNonConvertableChars  )
 {
@@ -79,7 +79,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         const char *pIndent,
         OUString *pNonConvertableChars    )
 {
-    OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_content_type, "text/html; charset=utf-8", true,
+    OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_content_type, u"text/html; charset=utf-8", true,
                  pNonConvertableChars );
 
     // Title (regardless if empty)

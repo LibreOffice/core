@@ -505,7 +505,7 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
 }
 
 OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
-                                     const OUString& rAlternateText,
+                                     std::u16string_view rAlternateText,
                                      HtmlFrmOpts nFrameOpts )
 {
     OString sRetEndTags;
@@ -535,7 +535,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     }
 
     // ALT
-    if( (nFrameOpts & HtmlFrmOpts::Alt) && !rAlternateText.isEmpty() )
+    if( (nFrameOpts & HtmlFrmOpts::Alt) && !rAlternateText.empty() )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_alt "=\"");
         Strm().WriteOString( sOut );
@@ -1631,7 +1631,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt,
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MULTICOL;
     if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         nFrameFlags |= HTML_FRMOPTS_MULTICOL_CSS1;
-    rWrt.OutFrameFormatOptions(rFrameFormat, OUString(), nFrameFlags);
+    rWrt.OutFrameFormatOptions(rFrameFormat, u"", nFrameFlags);
     if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         rWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameFlags );
 
@@ -1677,7 +1677,7 @@ static SwHTMLWriter& OutHTML_FrameFormatAsSpacer( SwHTMLWriter& rWrt, const SwFr
     rWrt.Strm().WriteOString( sOut );
 
     // ALIGN, WIDTH, HEIGHT
-    OString aEndTags = rWrt.OutFrameFormatOptions(rFrameFormat, OUString(), HTML_FRMOPTS_SPACER);
+    OString aEndTags = rWrt.OutFrameFormatOptions(rFrameFormat, u"", HTML_FRMOPTS_SPACER);
 
     rWrt.Strm().WriteChar( '>' );
     if( !aEndTags.isEmpty() )
@@ -1712,7 +1712,7 @@ static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_DIV;
     if( rWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
        nFrameFlags |= HtmlFrmOpts::SNoBorder;
-    OString aEndTags = rWrt.OutFrameFormatOptions(rFrameFormat, OUString(), nFrameFlags);
+    OString aEndTags = rWrt.OutFrameFormatOptions(rFrameFormat, u"", nFrameFlags);
     rWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameFlags );
     rWrt.Strm().WriteChar( '>' );
 

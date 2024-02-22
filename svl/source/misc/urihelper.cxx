@@ -745,17 +745,17 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     return OUString();
 }
 
-OUString URIHelper::FindFirstDOIInText(OUString const & rText,
+OUString URIHelper::FindFirstDOIInText(std::u16string_view rText,
                                        sal_Int32 & rBegin,
                                        sal_Int32 & rEnd,
                                        CharClass const & rCharClass)
 {
-    if (rBegin > rEnd || rEnd > rText.getLength())
+    if (rBegin > rEnd || rEnd > static_cast<sal_Int32>(rText.size()))
         return OUString();
 
     sal_Int32 start = 7;
     sal_Int32 count = rEnd-rBegin;
-    OUString candidate(rText.subView(rBegin, count));
+    OUString candidate(rText.substr(rBegin, count));
     // Match with regex "doi:10\.\d{4,9}\/[-._;()\/:a-zA-Z0-9]+"
     if (candidate.startsWithIgnoreAsciiCase("doi:10."))
     {

@@ -46,6 +46,7 @@
 
 #include <linguistic/misc.hxx>
 #include <linguistic/hyphdta.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace osl;
 using namespace com::sun::star;

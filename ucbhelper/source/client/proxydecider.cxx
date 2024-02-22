@@ -155,7 +155,7 @@ public:
     virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
 
 private:
-    void setNoProxyList( const OUString & rNoProxyList );
+    void setNoProxyList( std::u16string_view rNoProxyList );
 };
 
 
@@ -777,28 +777,28 @@ void SAL_CALL InternetProxyDecider_Impl::disposing(const lang::EventObject&)
 
 
 void InternetProxyDecider_Impl::setNoProxyList(
-                                        const OUString & rNoProxyList )
+                                        std::u16string_view rNoProxyList )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     m_aNoProxyList.clear();
 
-    if ( rNoProxyList.isEmpty() )
+    if ( rNoProxyList.empty() )
         return;
 
     // List of connection endpoints hostname[:port],
     // separated by semicolon. Wildcards allowed.
 
-    sal_Int32 nPos = 0;
-    sal_Int32 nEnd = rNoProxyList.indexOf( ';' );
-    sal_Int32 nLen = rNoProxyList.getLength();
+    size_t nPos = 0;
+    size_t nEnd = rNoProxyList.find( ';' );
+    size_t nLen = rNoProxyList.size();
 
     do
     {
-        if ( nEnd == -1 )
+        if ( nEnd == std::u16string_view::npos )
             nEnd = nLen;
 
-        OUString aToken = rNoProxyList.copy( nPos, nEnd - nPos );
+        OUString aToken( rNoProxyList.substr( nPos, nEnd - nPos ) );
 
         if ( !aToken.isEmpty() )
         {
@@ -870,7 +870,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
         if ( nEnd != nLen )
         {
             nPos = nEnd + 1;
-            nEnd = rNoProxyList.indexOf( ';', nPos );
+            nEnd = rNoProxyList.find( ';', nPos );
         }
     }
     while ( nEnd != nLen );

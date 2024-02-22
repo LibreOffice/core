@@ -833,7 +833,7 @@ void ScCsvGrid::ImplSetTextLineSep(
     InvalidateGfx();
 }
 
-void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
+void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, std::u16string_view rTextLine )
 {
     if( nLine < GetFirstVisLine() ) return;
 
@@ -848,7 +848,7 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
     std::vector<OUString>& rStrVec = maTexts[ nLineIx ];
     rStrVec.clear();
     sal_uInt32 nColCount = GetColumnCount();
-    sal_Int32 nStrLen = rTextLine.getLength();
+    sal_Int32 nStrLen = rTextLine.size();
     sal_Int32 nStrIx = 0;
     for( sal_uInt32 nColIx = 0; (nColIx < nColCount) && (nStrIx < nStrLen); ++nColIx )
     {
@@ -856,7 +856,7 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
         sal_Int32 nLastIx = nStrIx;
         ScImportExport::CountVisualWidth( rTextLine, nLastIx, nColWidth );
         sal_Int32 nLen = std::min( CSV_MAXSTRLEN, nLastIx - nStrIx );
-        rStrVec.push_back( rTextLine.copy( nStrIx, nLen ) );
+        rStrVec.push_back( OUString(rTextLine.substr( nStrIx, nLen )) );
         nStrIx = nStrIx + nLen;
     }
     InvalidateGfx();

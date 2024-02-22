@@ -38,7 +38,7 @@ private:
 
 private:
     /// helpers
-    void implSaveScreenshot(const BitmapEx& rScreenshot, const OUString& rScreenshotId);
+    void implSaveScreenshot(const BitmapEx& rScreenshot, std::u16string_view rScreenshotId);
     void saveScreenshot(VclAbstractDialog const& rDialog);
     void saveScreenshot(weld::Window& rDialog);
 

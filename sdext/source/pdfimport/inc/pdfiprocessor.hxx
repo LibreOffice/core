@@ -81,7 +81,7 @@ namespace pdfi
 
         static void sortElements( Element* pElement );
 
-        static OUString SubstituteBidiMirrored(const OUString& rString);
+        static OUString SubstituteBidiMirrored(std::u16string_view rString);
 
     private:
         void processGlyphLine();

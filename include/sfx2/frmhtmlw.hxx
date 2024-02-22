@@ -38,12 +38,12 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 class SFX2_DLLPUBLIC SfxFrameHTMLWriter
 {
     SAL_DLLPRIVATE static void OutMeta( SvStream& rStrm,
-                                const char *pIndent, const OUString& rName,
-                                const OUString& rContent, bool bHTTPEquiv,
+                                const char *pIndent, std::u16string_view rName,
+                                std::u16string_view rContent, bool bHTTPEquiv,
                                 OUString *pNonConvertableChars = nullptr );
     SAL_DLLPRIVATE inline static void OutMeta( SvStream& rStrm,
                                 const char *pIndent, const char *pName,
-                                const OUString& rContent, bool bHTTPEquiv,
+                                std::u16string_view rContent, bool bHTTPEquiv,
                                 OUString *pNonConvertableChars = nullptr );
 
 public:
@@ -58,7 +58,7 @@ public:
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                             const char *pIndent, const char *pName,
-                            const OUString& rContent, bool bHTTPEquiv,
+                            std::u16string_view rContent, bool bHTTPEquiv,
                             OUString *pNonConvertableChars )
 {
     OUString sTmp = OUString::createFromAscii(pName);

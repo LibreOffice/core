@@ -159,7 +159,7 @@ COMPHELPER_DLLPUBLIC OUString reverseString(std::u16string_view rStr);
 
 /** Reverse an OUString's Unicode code points.
 */
-COMPHELPER_DLLPUBLIC OUString reverseCodePoints(OUString const & str);
+COMPHELPER_DLLPUBLIC OUString reverseCodePoints(std::u16string_view str);
 
 
 namespace detail

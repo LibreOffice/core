@@ -50,6 +50,7 @@
 #include <stdio.h>
 #include <osl/diagnose.h>
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <htmlexp.hxx>
 #include <global.hxx>
@@ -378,7 +379,7 @@ void ScHTMLExport::WriteHeader()
         for(sal_Int32 nPos {0};;)
         {
             rStrm.WriteChar( '\"' );
-            OUT_STR( rList.getToken( 0, ';', nPos ) );
+            OUT_STR( o3tl::getToken( rList, 0, ';', nPos ) );
             rStrm.WriteChar( '\"' );
             if (nPos<0)
                 break;
@@ -896,7 +897,7 @@ void ScHTMLExport::WriteTables()
         }
 
         if ( bAll )
-            OUT_COMMENT( "**************************************************************************" );
+            OUT_COMMENT( u"**************************************************************************" );
     }
 }
 
@@ -1250,7 +1251,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
                 for (sal_Int32 nPos {0};;)
                 {
                     OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
-                        rList.getToken( 0, ';', nPos ),
+                        o3tl::getToken( rList, 0, ';', nPos ),
                         &aNonConvertibleChars);
                     aStr.append(aTmpStr);
                     if (nPos<0)

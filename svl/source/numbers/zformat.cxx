@@ -725,10 +725,10 @@ bool NatNumTakesParameters(sal_Int16 nNum)
 
 // is there a 3-letter bank code in NatNum12 param (but not
 // followed by an equal mark, like in the date code "NNN=")?
-static bool lcl_isNatNum12Currency( const OUString& sParam )
+static bool lcl_isNatNum12Currency( std::u16string_view sParam )
 {
     sal_Int32 nUpper = 0;
-    sal_Int32 nLen = sParam.getLength();
+    sal_Int32 nLen = sParam.size();
     for (sal_Int32 n = 0; n < nLen; ++n)
     {
         sal_Unicode c = sParam[n];

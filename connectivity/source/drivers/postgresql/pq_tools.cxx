@@ -840,17 +840,17 @@ OUString getColExprForDefaultSettingVal(ConnectionSettings const *settings)
                OUString("pg_get_expr(pg_attrdef.adbin, pg_attrdef.adrelid, true)");
 }
 
-css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
+css::uno::Sequence< sal_Int32 > string2intarray( std::u16string_view str )
 {
     css::uno::Sequence< sal_Int32 > ret;
-    const sal_Int32 strlen = str.getLength();
-    if( str.getLength() > 1 )
+    const sal_Int32 strlen = str.size();
+    if( strlen > 1 )
     {
         sal_Int32 start = 0;
         sal_uInt32 c;
         for (;;)
         {
-            c = str.iterateCodePoints(&start);
+            c = o3tl::iterateCodePoints(str, &start);
             if (!iswspace(c))
                 break;
             if ( start == strlen)
@@ -860,7 +860,7 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
             return ret;
         for (;;)
         {
-            c = str.iterateCodePoints(&start);
+            c = o3tl::iterateCodePoints(str, &start);
             if ( !iswspace(c) )
                 break;
             if ( start == strlen)
@@ -879,7 +879,7 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
                     break;
                 if ( start == strlen)
                     return ret;
-                c=str.iterateCodePoints(&start);
+                c = o3tl::iterateCodePoints(str, &start);
             } while ( c );
             do
             {
@@ -888,7 +888,7 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
                 if ( start == strlen)
                     return ret;
                 digits.append(OUString(&c, 1));
-                c = str.iterateCodePoints(&start);
+                c = o3tl::iterateCodePoints(str, &start);
             } while ( c );
             vec.push_back( o3tl::toInt32(digits) );
             do
@@ -897,11 +897,11 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
                     break;
                 if ( start == strlen)
                     return ret;
-                c = str.iterateCodePoints(&start);
+                c = o3tl::iterateCodePoints(str, &start);
             } while ( c );
             if ( c == L'}' )
                 break;
-            if ( str.iterateCodePoints(&start) != L',' )
+            if ( o3tl::iterateCodePoints(str, &start) != L',' )
                 return ret;
             if ( start == strlen)
                 return ret;

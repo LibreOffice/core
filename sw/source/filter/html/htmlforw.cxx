@@ -1015,7 +1015,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     }
     OString aEndTags;
     if( nFrameOpts != HtmlFrmOpts::NONE )
-        aEndTags = rWrt.OutFrameFormatOptions(rFormat, OUString(), nFrameOpts);
+        aEndTags = rWrt.OutFrameFormatOptions(rFormat, u"", nFrameOpts);
 
     if( rWrt.m_bCfgOutStyles )
     {

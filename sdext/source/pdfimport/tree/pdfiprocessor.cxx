@@ -36,6 +36,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <i18nutil/unicode.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 
@@ -763,13 +764,13 @@ void PDFIProcessor::sortElements(Element* pEle)
 /* Produce mirrored-image for each code point which has the Bidi_Mirrored property, within a string.
    This need to be done in forward order.
 */
-OUString PDFIProcessor::SubstituteBidiMirrored(const OUString& rString)
+OUString PDFIProcessor::SubstituteBidiMirrored(std::u16string_view rString)
 {
-    const sal_Int32 nLen = rString.getLength();
+    const sal_Int32 nLen = rString.size();
     OUStringBuffer aMirror(nLen);
 
     for (sal_Int32 i = 0; i < nLen;) {
-        const sal_uInt32 nCodePoint = rString.iterateCodePoints(&i);
+        const sal_uInt32 nCodePoint = o3tl::iterateCodePoints(rString, &i);
         aMirror.appendUtf32(unicode::GetMirroredChar(nCodePoint));
     }
     return aMirror.makeStringAndClear();

@@ -419,7 +419,7 @@ public:
     bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
-    bool FnSetDOIAttr( SvxAutoCorrDoc&, const OUString&,
+    bool FnSetDOIAttr( SvxAutoCorrDoc&, std::u16string_view,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,

@@ -63,7 +63,7 @@ namespace vcl
         ~TextLayoutCommon() COVERITY_NOEXCEPT_FALSE;
 
     private:
-        OUString GetCenterEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth);
+        OUString GetCenterEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth);
         OUString GetEndEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText);
         OUString GetNewsEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
     };

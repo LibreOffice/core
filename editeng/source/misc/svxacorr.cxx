@@ -770,7 +770,7 @@ bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 }
 
 // DOI citation recognition
-bool SvxAutoCorrect::FnSetDOIAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+bool SvxAutoCorrect::FnSetDOIAttr( SvxAutoCorrDoc& rDoc, std::u16string_view rTxt,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {

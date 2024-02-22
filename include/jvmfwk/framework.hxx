@@ -354,7 +354,7 @@ jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>>* parInfo);
  * @param sUserPath colon-separated string of user classpaths
  * @return list of user classpaths
  */
-JVMFWK_DLLPUBLIC std::vector<OUString> jfw_convertUserPathList(OUString const& sUserPath);
+JVMFWK_DLLPUBLIC std::vector<OUString> jfw_convertUserPathList(std::u16string_view sUserPath);
 
 /** determines if a path points to a Java installation.
 

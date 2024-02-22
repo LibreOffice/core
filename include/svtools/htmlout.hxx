@@ -42,14 +42,14 @@ struct HTMLOutEvent
 
 struct HTMLOutFuncs
 {
-    SVT_DLLPUBLIC static OString ConvertStringToHTML( const OUString& sSrc,
+    SVT_DLLPUBLIC static OString ConvertStringToHTML( std::u16string_view sSrc,
                         OUString *pNonConvertableChars = nullptr );
 
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, std::string_view rStr,
                                    bool bOn = true);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_uInt32 cChar,
                         OUString *pNonConvertableChars = nullptr );
-    SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const OUString&,
+    SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, std::u16string_view,
                         OUString *pNonConvertableChars = nullptr );
     SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uInt32 nHex, sal_uInt8 nLen );
     SVT_DLLPUBLIC static SvStream& Out_Color( SvStream&, const Color&, bool bXHTML = false );
@@ -64,7 +64,7 @@ struct HTMLOutFuncs
     SVT_DLLPUBLIC static SvStream& OutScript( SvStream& rStrm,
                                 const OUString& rBaseURL,
                                 std::u16string_view rSource,
-                                const OUString& rLanguage,
+                                std::u16string_view rLanguage,
                                 ScriptType eScriptType,
                                 const OUString& rSrc,
                                 const OUString *pSBLibrary,

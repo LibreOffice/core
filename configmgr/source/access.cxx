@@ -84,6 +84,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <o3tl/string_view.hxx>
 
 #include "access.hxx"
 #include "broadcaster.hxx"
@@ -109,9 +110,9 @@ namespace {
 // Conservatively forbid what is either not an XML Char (including lone
 // surrogates, even though they should not appear in well-formed UNO OUString
 // instances anyway), or is a slash (as it causes problems in path syntax):
-bool isValidName(OUString const & name, bool setMember) {
-    for (sal_Int32 i = 0; i != name.getLength();) {
-        sal_uInt32 c = name.iterateCodePoints(&i);
+bool isValidName(std::u16string_view name, bool setMember) {
+    for (sal_Int32 i = 0; i != static_cast<sal_Int32>(name.size());) {
+        sal_uInt32 c = o3tl::iterateCodePoints(name, &i);
         if ((c < 0x20 && !(c == 0x09 || c == 0x0A || c == 0x0D))
             || rtl::isSurrogate(c) || c == 0xFFFE || c == 0xFFFF
             || (!setMember && c == '/'))
@@ -119,7 +120,7 @@ bool isValidName(OUString const & name, bool setMember) {
             return false;
         }
     }
-    return !name.isEmpty();
+    return !name.empty();
 }
 
 }

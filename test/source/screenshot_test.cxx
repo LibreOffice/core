@@ -24,15 +24,23 @@
 
 
 namespace {
-    void splitHelpId( const OUString& rHelpId, OUString& rDirname, OUString &rBasename )
+    void splitHelpId( std::u16string_view rHelpId, std::u16string_view& rDirname, std::u16string_view& rBasename )
     {
-        sal_Int32 nIndex = rHelpId.lastIndexOf( '/' );
+        size_t nIndex = rHelpId.rfind( '/' );
 
-        if( nIndex > 0 )
-            rDirname = rHelpId.subView( 0, nIndex );
+        if( nIndex != 0 && nIndex != std::u16string_view::npos)
+            rDirname = rHelpId.substr( 0, nIndex );
 
-        if( rHelpId.getLength() > nIndex+1 )
-            rBasename = rHelpId.subView( nIndex+1 );
+        if (nIndex == std::u16string_view::npos)
+        {
+            if( rHelpId.size() > 0 )
+                rBasename = rHelpId;
+        }
+        else
+        {
+            if( rHelpId.size() > nIndex+1 )
+                rBasename = rHelpId.substr( nIndex+1 );
+        }
     }
 }
 
@@ -71,11 +79,11 @@ void ScreenshotTest::setUp()
     }
 }
 
-void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, const OUString& rScreenshotId)
+void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, std::u16string_view rScreenshotId)
 {
-    OUString aDirname, aBasename;
-    splitHelpId(rScreenshotId, aDirname, aBasename);
-    aDirname = g_aScreenshotDirectory + "/" + aDirname +
+    std::u16string_view aSplitDirname, aBasename;
+    splitHelpId(rScreenshotId, aSplitDirname, aBasename);
+    OUString aDirname = g_aScreenshotDirectory + "/" + aSplitDirname +
                ( (maCurrentLanguage == "en-US") ? OUString() : "/" + maCurrentLanguage );
 
     auto const dirUrl = m_directories.getURLFromWorkdir(aDirname);

@@ -7571,7 +7571,7 @@ weld::Window* SalFrame::GetFrameWeld() const
     return m_xFrameWeld.get();
 }
 
-Selection SalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingText,
+Selection SalFrame::CalcDeleteSurroundingSelection(std::u16string_view rSurroundingText,
                                                    sal_Int32 nCursorIndex, int nOffset, int nChars)
 {
     Selection aInvalid(SAL_MAX_UINT32, SAL_MAX_UINT32);
@@ -7581,9 +7581,9 @@ Selection SalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingT
 
     if (nOffset > 0)
     {
-        while (nOffset && nCursorIndex < rSurroundingText.getLength())
+        while (nOffset && nCursorIndex < static_cast<sal_Int32>(rSurroundingText.size()))
         {
-            rSurroundingText.iterateCodePoints(&nCursorIndex, 1);
+            o3tl::iterateCodePoints(rSurroundingText, &nCursorIndex, 1);
             --nOffset;
         }
     }
@@ -7591,7 +7591,7 @@ Selection SalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingT
     {
         while (nOffset && nCursorIndex > 0)
         {
-            rSurroundingText.iterateCodePoints(&nCursorIndex, -1);
+            o3tl::iterateCodePoints(rSurroundingText, &nCursorIndex, -1);
             ++nOffset;
         }
     }
@@ -7605,9 +7605,9 @@ Selection SalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingT
 
     sal_Int32 nCursorEndIndex(nCursorIndex);
     sal_Int32 nCount(0);
-    while (nCount < nChars && nCursorEndIndex < rSurroundingText.getLength())
+    while (nCount < nChars && nCursorEndIndex < static_cast<sal_Int32>(rSurroundingText.size()))
     {
-        rSurroundingText.iterateCodePoints(&nCursorEndIndex, 1);
+        o3tl::iterateCodePoints(rSurroundingText, &nCursorEndIndex, 1);
         ++nCount;
     }
 

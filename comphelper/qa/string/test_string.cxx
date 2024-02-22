@@ -197,15 +197,15 @@ void TestString::testReverseString()
 }
 
 void TestString::testReverseCodePoints() {
-    CPPUNIT_ASSERT_EQUAL(OUString(), comphelper::string::reverseCodePoints(""));
-    CPPUNIT_ASSERT_EQUAL(OUString("cba"), comphelper::string::reverseCodePoints("abc"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), comphelper::string::reverseCodePoints(u""));
+    CPPUNIT_ASSERT_EQUAL(OUString("cba"), comphelper::string::reverseCodePoints(u"abc"));
     CPPUNIT_ASSERT_EQUAL(
         u"w\U0010FFFFv\U00010000u"_ustr,
-        comphelper::string::reverseCodePoints(u"u\U00010000v\U0010FFFFw"_ustr));
+        comphelper::string::reverseCodePoints(u"u\U00010000v\U0010FFFFw"));
     static sal_Unicode const malformed[] = {0xDC00, 0xD800};
     CPPUNIT_ASSERT_EQUAL(
         u"\U00010000"_ustr,
-        comphelper::string::reverseCodePoints(OUString(malformed, std::size(malformed))));
+        comphelper::string::reverseCodePoints(std::u16string_view(malformed, std::size(malformed))));
 }
 
 void TestString::testSplit()

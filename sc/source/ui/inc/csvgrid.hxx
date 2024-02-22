@@ -237,7 +237,7 @@ public:
                                     sal_Int32 nLine, const OUString& rTextLine,
                                     const OUString& rSepChars, sal_Unicode cTextSep, bool bMergeSep, bool bRemoveSpace = false );
     /** Fills all cells of a line with the passed text (fixed width mode). */
-    void                        ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine );
+    void                        ImplSetTextLineFix( sal_Int32 nLine, std::u16string_view rTextLine );
 
     /** Returns the text of the specified cell. */
     OUString             GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const;

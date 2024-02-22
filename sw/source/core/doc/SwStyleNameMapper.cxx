@@ -23,6 +23,7 @@
 #include <swtypes.hxx>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/string_view.hxx>
 #include <map>
 
 #ifdef _NEED_TO_DEBUG_MAPPING
@@ -60,11 +61,11 @@ lcl_GetSpecialExtraName(const OUString& rExtraName, const bool bIsUIName )
     return rExtraName;
 }
 
-bool lcl_SuffixIsUser(const OUString & rString)
+bool lcl_SuffixIsUser(std::u16string_view rString)
 {
     // Interesting, why the rest must be longer than 1 character? It is so
     // since commit 4fbc9dd48b7cebb304010e7337b1bbc3936c7923 (2001-08-16)
-    return rString.getLength() > 8 && rString.endsWith(" (user)");
+    return rString.size() > 8 && o3tl::ends_with(rString, u" (user)");
 }
 
 void lcl_CheckSuffixAndDelete(OUString & rString)
