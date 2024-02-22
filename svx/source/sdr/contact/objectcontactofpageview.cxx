@@ -216,6 +216,8 @@ namespace sdr::contact
             aNewViewInformation2D.setViewport(aViewRange);
             aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(GetSdrPage()));
             aNewViewInformation2D.setViewTime(fCurrentTime);
+            if (static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView()).IsTextEdit())
+                aNewViewInformation2D.setTextEditActive(true);
             updateViewInformation2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;

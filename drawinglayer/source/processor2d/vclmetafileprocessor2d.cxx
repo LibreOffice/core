@@ -890,20 +890,6 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
                 static_cast<const primitive2d::StructureTagPrimitive2D&>(rCandidate));
             break;
         }
-        case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D:
-        {
-            // This primitive is created if a text edit is active and contains it's
-            // current content, not from model data itself.
-            // Pixel renderers need to suppress that content, it gets displayed by the active
-            // TextEdit in the EditView. Suppression is done by decomposing to nothing.
-            // MetaFile renderers have to show it, so that the edited text is part of the
-            // MetaFile, e.g. needed for presentation previews and exports.
-            // So take action here and process it's content:
-            // Note: Former error was #i97628#
-            process(static_cast<const primitive2d::TextHierarchyEditPrimitive2D&>(rCandidate)
-                        .getContent());
-            break;
-        }
         case PRIMITIVE2D_ID_EPSPRIMITIVE2D:
         {
             RenderEpsPrimitive2D(static_cast<const primitive2d::EpsPrimitive2D&>(rCandidate));
