@@ -800,22 +800,29 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                     }
                     else    // focus of -100%, 0%, and 100% is linear gradient
                     {
+                        // LO linear gradients: top == start, but for MSO bottom == start == moColor
+                        bool bSwapColors = true;
+
                         /*  According to spec, a focus of -100% or 100% swaps the
                             start and stop colors, effectively reversing the gradient.
                             If the angle was provided as a negative,
                             then the colors are also (again) reversed. */
                         if( fFocus < -0.5 || fFocus > 0.5 )
-                            nVmlAngle = (nVmlAngle + 180) % 360;
+                            bSwapColors = !bSwapColors;
                         if (moAngle.value_or(0) < 0)
-                            nVmlAngle = (nVmlAngle + 180) % 360;
+                            bSwapColors = !bSwapColors;
 
+                        const Color& rStartColor = bSwapColors ? aColor2 : aColor1;
+                        const Color& rEndColor = bSwapColors ? aColor1 : aColor2;
                         // set the start and stop colors
-                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.0, aColor1 );
-                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 1.0, aColor2 );
+                        lcl_setGradientStop(aFillProps.maGradientProps.maGradientStops, 0.0,
+                                            rStartColor);
+                        lcl_setGradientStop(aFillProps.maGradientProps.maGradientStops, 1.0,
+                                            rEndColor);
                     }
 
                     // VML counts counterclockwise from bottom, DrawingML clockwise from left
-                    sal_Int32 nDmlAngle = (630 - nVmlAngle) % 360;
+                    sal_Int32 nDmlAngle = NormAngle360(90 - nVmlAngle);
                     aFillProps.maGradientProps.moShadeAngle = nDmlAngle * ::oox::drawingml::PER_DEGREE;
                 }
                 else    // XML_gradientRadial is rectangular gradient

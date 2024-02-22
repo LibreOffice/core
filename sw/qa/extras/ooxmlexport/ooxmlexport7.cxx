@@ -640,9 +640,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3150), aGradient.Angle);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf126533_negativeAxialAngle, "tdf126533_negativeAxialAngle.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle, "tdf126533_axialAngle.docx")
 {
-    // axiel gradient is purple foreground/lime background in the middle (top-left to bottom-right)
+    // axial gradient is purple foreground/lime background in the middle (top-left to bottom-right)
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
@@ -658,7 +658,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_negativeAxialAngle, "tdf126533_negativeAx
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, Color(aColorStops[2].getStopColor()));
     // without the fix, this was 1350 (visually the colors were reversed)
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(450), aGradient.Angle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2250), aGradient.Angle);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle2, "tdf126533_axialAngle2.docx")
+{
+    // axial gradient is purple foreground/lime background in the middle (top-right to bottom-left)
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xPageStyle, "FillStyle"));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xPageStyle, "FillGradient");
+
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, Color(aColorStops[0].getStopColor()));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, Color(aColorStops[1].getStopColor()));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA, Color(aColorStops[2].getStopColor()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1350), aGradient.Angle);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
 }
 

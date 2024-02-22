@@ -9636,19 +9636,16 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         OString sStartColor = msfilter::util::ConvertColor(Color(rGradient.GetColorStops().front().getStopColor()));
         OString sEndColor = msfilter::util::ConvertColor(Color(rGradient.GetColorStops().back().getStopColor()));
 
-        // Calculate the angle that was originally in the imported DOCX file
-        // (reverse calculate the angle that was converted in the file
-        //     /oox/source/vml/vmlformatting.cxx :: FillModel::pushToPropMap
-        // and also in
-        //     /oox/source/drawingml/fillproperties.cxx :: FillProperties::pushToPropMap
-        sal_Int32 nReverseAngle = toDegrees(4500_deg10 - rGradient.GetAngle());
-        nReverseAngle = (270 - nReverseAngle) % 360;
-        if (nReverseAngle != 0)
+        const sal_Int32 nAngle = toDegrees(rGradient.GetAngle());
+        if (nAngle != 0)
             AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(),
-                    XML_angle, OString::number( nReverseAngle ) );
+                    XML_angle, OString::number(nAngle));
 
-        OString sColor1 = sStartColor;
-        OString sColor2 = sEndColor;
+        // LO does linear gradients top to bottom, while MSO does bottom to top.
+        // LO does axial gradients inner to outer, while MSO does outer to inner.
+        // Conclusion: swap start and end colors.
+        const OString sColor1 = sEndColor; // LO end color is MSO start color
+        OString sColor2 = sStartColor; // LO start color is MSO end color
 
         switch (rGradient.GetGradientStyle())
         {
@@ -9668,8 +9665,8 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
                             if (basegfx::fTools::more(rStop.getStopOffset(), 0.5))
                                 break;
 
-                            // the color in the middle is considered the start color for focus 50
-                            sColor1 = msfilter::util::ConvertColor(Color(rStop.getStopColor()));
+                            // from MSO export perspective, the inner color is the end color
+                            sColor2 = msfilter::util::ConvertColor(Color(rStop.getStopColor()));
                             bIsSymmetrical = true;
                         }
                     }

@@ -228,14 +228,16 @@ DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle1, "tdf159824_gradientAngle1.r
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.EndColor);
-    // RTF 1° angle (in 1/60,000 degree units = 60,000) == LO 181° (in 1/10 degree unites)
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(181), sal_Int32(aGradient.Angle / 10));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.EndColor);
+    // RTF 1° angle (in 1/60,000 degree units = 60,000) == LO 1° (in 1/10 degree units)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(10), aGradient.Angle);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle2, "tdf159824_gradientAngle2.rtf")
 {
+    // This file is identical to gradientAngle1 except that the fillAngle is -2° instead of 1°.
+
     // given a frame with a lime (top) to white (bottom) linear gradient at an RTF -2° angle.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
@@ -248,11 +250,59 @@ DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle2, "tdf159824_gradientAngle2.r
     // MCGR: Use the completely imported transparency gradient to check for correctness
     basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    // because of the negative angle, the colors were swapped compared to gradientAngle1.rtf
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.EndColor);
-    // RTF -2° angle (in 1/60,000 degree units = -120,000) == LO 358° (in 1/10 degree unites)
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(358), sal_Int32(aGradient.Angle / 10));
+    // RTF -2° angle (in 1/60,000 degree units = -120,000) == LO 358° (in 1/10 degree units)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3580), aGradient.Angle);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle3, "tdf159824_gradientAngle3.rtf")
+{
+    // This file is identical to gradientAngle1 except that the fillAngle is 181° instead of 1°.
+
+    // given a frame with a lime (top) to white (bottom) linear gradient at an RTF 181° angle.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+
+    // MCGR: Use the completely imported transparency gradient to check for correctness
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.EndColor);
+    // RTF 181° angle (in 1/60,000 degree units) == LO 181° (in 1/10 degree units)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1810), aGradient.Angle);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf159824_gradientAngle4, "tdf159824_gradientAngle4.rtf")
+{
+    // This file is identical to gradientAngle1 except that the fillAngle is -90° instead of 1°.
+
+    // given a frame with a white (left) to lime (right) linear gradient at an RTF -90° angle
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+                         getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
+    awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
+
+    // MCGR: Use the completely imported transparency gradient to check for correctness
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
+    // because of the negative angle, the colors were swapped compared to gradientAngle1.rtf
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8508442), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE), aGradient.EndColor);
+    // RTF -90° angle (in 1/60,000 degree units) == LO 270° (in 1/10 degree units)
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2700), aGradient.Angle);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf158830, "tdf158830.rtf")
