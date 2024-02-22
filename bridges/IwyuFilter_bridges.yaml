@@ -4,6 +4,9 @@ excludelist:
     bridges/source/cpp_uno/gcc3_linux_x86-64/abi.hxx:
     # No .hxx -> .h replacement in URE headers
     - typelib/typedescription.hxx
+    bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:
+    # Actually needed to not crash in fuzzing
+    - cxxabi.h
     bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx:
     # No .hxx -> .h replacement in URE headers
     - typelib/typedescription.hxx
