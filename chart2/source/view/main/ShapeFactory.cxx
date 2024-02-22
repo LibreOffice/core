@@ -898,6 +898,12 @@ rtl::Reference<SvxShapePolyPolygon>
     xShape->setShapeKind(SdrObjKind::PathFill); // aka ClosedBezierShape
     xTarget->addShape(*xShape); //need to add the shape before setting of properties
 
+    if (std::isnan(fUnitCircleWidthAngleDegree))
+    {
+        SAL_WARN("chart2", "fUnitCircleWidthAngleDegree isNaN");
+        return xShape;
+    }
+
     //set properties
     try
     {
