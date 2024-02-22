@@ -24,7 +24,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/numitem.hxx>
