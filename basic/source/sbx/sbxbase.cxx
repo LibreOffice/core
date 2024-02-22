@@ -57,11 +57,7 @@ SbxBase::SbxBase()
     nFlags  = SbxFlagBits::ReadWrite;
 }
 
-SbxBase::SbxBase( const SbxBase& r )
-    : SvRefBase( r )
-{
-    nFlags  = r.nFlags;
-}
+SbxBase::SbxBase(const SbxBase& r) = default;
 
 SbxBase::~SbxBase()
 {

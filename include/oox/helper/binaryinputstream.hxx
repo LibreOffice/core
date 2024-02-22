@@ -188,9 +188,7 @@ public:
     void         copyToStream( BinaryOutputStream& rOutStrm );
 
 protected:
-    /** This dummy default c'tor will never call the c'tor of the virtual base
-        class BinaryStreamBase as this class cannot be instantiated directly. */
-    BinaryInputStream() : BinaryStreamBase( false ) {}
+    BinaryInputStream() = default;
 
 private:
     BinaryInputStream( BinaryInputStream const& ) = delete;

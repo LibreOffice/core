@@ -88,9 +88,7 @@ public:
     void writeUnicodeArray( const OUString& rString );
 
 protected:
-    /** This dummy default c'tor will never call the c'tor of the virtual base
-        class BinaryStreamBase as this class cannot be instantiated directly. */
-    BinaryOutputStream() : BinaryStreamBase( false ) {}
+    BinaryOutputStream() = default;
 
 private:
     BinaryOutputStream( BinaryOutputStream const& ) = delete;
