@@ -75,6 +75,10 @@ VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rVie
                                          const basegfx::BColorModifierStack& rInitStack)
     : VclProcessor2D(rViewInformation, rOutDev, rInitStack)
     , m_nOrigAntiAliasing(rOutDev.GetAntialiasing())
+    , m_bRenderSimpleTextDirect(
+          officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
+    , m_bRenderDecoratedTextDirect(
+          officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
 {
     // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
     maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
@@ -403,7 +407,7 @@ void VclPixelProcessor2D::processTextSimplePortionPrimitive2D(
     const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
     adaptTextToFillDrawMode();
 
-    if (officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
+    if (SAL_LIKELY(m_bRenderSimpleTextDirect))
     {
         RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
     }
@@ -423,7 +427,7 @@ void VclPixelProcessor2D::processTextDecoratedPortionPrimitive2D(
     const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
     adaptTextToFillDrawMode();
 
-    if (officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
+    if (SAL_LIKELY(m_bRenderDecoratedTextDirect))
     {
         RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
     }
