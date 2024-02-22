@@ -106,6 +106,7 @@
 #include <openflag.hxx>
 #include "objstor.hxx"
 #include <appopen.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <memory>
 
@@ -346,7 +347,7 @@ bool SfxObjectShell::IsReadOnlyUI() const
 */
 
 {
-    return pImpl->bReadOnlyUI;
+    return pImpl->bReadOnlyUI || SfxViewShell::IsCurrentLokViewReadOnly();
 }
 
 

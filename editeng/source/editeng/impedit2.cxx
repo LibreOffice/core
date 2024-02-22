@@ -31,6 +31,7 @@
 #include <editeng/txtrange.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/mieclip.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/securityoptions.hxx>
@@ -346,65 +347,71 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
     GetSelEngine().SetCurView( pView );
     SetActiveView( pView );
-    if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
+    if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput)
     {
-        pView->DeleteSelected();
-        mpIMEInfos.reset();
-        EditPaM aPaM = pView->GetImpEditView()->GetEditSelection().Max();
-        OUString aOldTextAfterStartPos = aPaM.GetNode()->Copy( aPaM.GetIndex() );
-        sal_Int32 nMax = aOldTextAfterStartPos.indexOf( CH_FEATURE );
-        if ( nMax != -1 )  // don't overwrite features!
-            aOldTextAfterStartPos = aOldTextAfterStartPos.copy( 0, nMax );
-        mpIMEInfos.reset( new ImplIMEInfos( aPaM, aOldTextAfterStartPos ) );
-        mpIMEInfos->bWasCursorOverwrite = !pView->IsInsertMode();
-        UndoActionStart( EDITUNDO_INSERT );
+        if (!pView->IsReadOnly())
+        {
+            pView->DeleteSelected();
+            mpIMEInfos.reset();
+            EditPaM aPaM = pView->GetImpEditView()->GetEditSelection().Max();
+            OUString aOldTextAfterStartPos = aPaM.GetNode()->Copy( aPaM.GetIndex() );
+            sal_Int32 nMax = aOldTextAfterStartPos.indexOf( CH_FEATURE );
+            if ( nMax != -1 )  // don't overwrite features!
+                aOldTextAfterStartPos = aOldTextAfterStartPos.copy( 0, nMax );
+            mpIMEInfos.reset( new ImplIMEInfos( aPaM, aOldTextAfterStartPos ) );
+            mpIMEInfos->bWasCursorOverwrite = !pView->IsInsertMode();
+            UndoActionStart( EDITUNDO_INSERT );
+        }
     }
     else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
     {
-        OSL_ENSURE( mpIMEInfos, "CommandEventId::EndExtTextInput => No start ?" );
-        if( mpIMEInfos )
+        if (!pView->IsReadOnly())
         {
-            // #102812# convert quotes in IME text
-            // works on the last input character, this is especially in Korean text often done
-            // quotes that are inside of the string are not replaced!
-            // Borrowed from sw: edtwin.cxx
-            if ( mpIMEInfos->nLen )
+            OSL_ENSURE( mpIMEInfos, "CommandEventId::EndExtTextInput => No start ?" );
+            if( mpIMEInfos )
             {
-                EditSelection aSel( mpIMEInfos->aPos );
-                aSel.Min().SetIndex( aSel.Min().GetIndex() + mpIMEInfos->nLen-1 );
-                aSel.Max().SetIndex( aSel.Max().GetIndex() + mpIMEInfos->nLen );
                 // #102812# convert quotes in IME text
                 // works on the last input character, this is especially in Korean text often done
                 // quotes that are inside of the string are not replaced!
-                // See also tdf#155350
-                const sal_Unicode nCharCode = aSel.Min().GetNode()->GetChar( aSel.Min().GetIndex() );
-                if ( ( GetStatus().DoAutoCorrect() ) && SvxAutoCorrect::IsAutoCorrectChar(nCharCode) )
+                // Borrowed from sw: edtwin.cxx
+                if ( mpIMEInfos->nLen )
                 {
-                    aSel = DeleteSelected( aSel );
-                    aSel = AutoCorrect( aSel, nCharCode, mpIMEInfos->bWasCursorOverwrite );
-                    pView->pImpEditView->SetEditSelection( aSel );
+                    EditSelection aSel( mpIMEInfos->aPos );
+                    aSel.Min().SetIndex( aSel.Min().GetIndex() + mpIMEInfos->nLen-1 );
+                    aSel.Max().SetIndex( aSel.Max().GetIndex() + mpIMEInfos->nLen );
+                    // #102812# convert quotes in IME text
+                    // works on the last input character, this is especially in Korean text often done
+                    // quotes that are inside of the string are not replaced!
+                    // See also tdf#155350
+                    const sal_Unicode nCharCode = aSel.Min().GetNode()->GetChar( aSel.Min().GetIndex() );
+                    if ( ( GetStatus().DoAutoCorrect() ) && SvxAutoCorrect::IsAutoCorrectChar(nCharCode) )
+                    {
+                        aSel = DeleteSelected( aSel );
+                        aSel = AutoCorrect( aSel, nCharCode, mpIMEInfos->bWasCursorOverwrite );
+                        pView->pImpEditView->SetEditSelection( aSel );
+                    }
                 }
+
+                ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
+                if (pPortion)
+                    pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex() );
+
+                bool bWasCursorOverwrite = mpIMEInfos->bWasCursorOverwrite;
+
+                mpIMEInfos.reset();
+
+                FormatAndLayout( pView );
+
+                pView->SetInsertMode( !bWasCursorOverwrite );
             }
-
-            ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
-            if (pPortion)
-                pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex() );
-
-            bool bWasCursorOverwrite = mpIMEInfos->bWasCursorOverwrite;
-
-            mpIMEInfos.reset();
-
-            FormatAndLayout( pView );
-
-            pView->SetInsertMode( !bWasCursorOverwrite );
+            UndoActionEnd();
         }
-        UndoActionEnd();
     }
     else if ( rCEvt.GetCommand() == CommandEventId::ExtTextInput )
     {
-        OSL_ENSURE( mpIMEInfos, "CommandEventId::ExtTextInput => No Start ?" );
-        if( mpIMEInfos )
+        if( mpIMEInfos && !pView->IsReadOnly())
         {
+            OSL_ENSURE( mpIMEInfos, "CommandEventId::ExtTextInput => No Start ?" );
             const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
 
             if ( !pData->IsOnlyCursorChanged() )

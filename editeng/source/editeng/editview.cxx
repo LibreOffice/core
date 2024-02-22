@@ -155,6 +155,7 @@ EditViewCallbacks::~EditViewCallbacks()
 EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
 {
     pImpEditView.reset( new ImpEditView( this, pEng, pWindow ) );
+    pImpEditView->bReadOnly = pImpEditView->bReadOnly || SfxViewShell::IsCurrentLokViewReadOnly();
 }
 
 EditView::~EditView()
@@ -252,7 +253,7 @@ void EditView::Invalidate()
 
 void EditView::SetReadOnly( bool bReadOnly )
 {
-    pImpEditView->bReadOnly = bReadOnly;
+    pImpEditView->bReadOnly = bReadOnly || SfxViewShell::IsCurrentLokViewReadOnly();
 }
 
 bool EditView::IsReadOnly() const
