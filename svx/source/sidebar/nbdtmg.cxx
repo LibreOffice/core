@@ -40,6 +40,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <editeng/eeitem.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -61,7 +62,7 @@ namespace svx::sidebar {
 
 namespace {
 
-const vcl::Font& lcl_GetDefaultBulletFont()
+vcl::Font& lcl_GetDefaultBulletFont()
 {
     static vcl::Font aDefBulletFont = []()
     {
@@ -75,18 +76,6 @@ const vcl::Font& lcl_GetDefaultBulletFont()
     }();
     return aDefBulletFont;
 }
-
-const sal_Unicode aDefaultBulletTypes[] =
-{
-    0x2022,
-    0x25cf,
-    0xe00c,
-    0xe00a,
-    0x2794,
-    0x27a2,
-    0x2717,
-    0x2714
-};
 
 NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
@@ -261,17 +250,20 @@ BulletsTypeMgr& BulletsTypeMgr::GetInstance()
 
 void BulletsTypeMgr::Init()
 {
-    const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    css::uno::Sequence< OUString > aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
+    css::uno::Sequence< OUString > aBulletSymbolsFonts(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
+
+    vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
     for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
     {
         pActualBullets[i] = new BulletsSettings;
-        pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
+        pActualBullets[i]->cBulletChar = aBulletSymbols[i].toChar();
+        rActBulletFont.SetFamilyName(aBulletSymbolsFonts[i]);
         pActualBullets[i]->aFont = rActBulletFont;
-        OString id = OString::Concat(RID_SVXSTR_BULLET_DESCRIPTION_0.getId()) + OString::number(i);
-        pActualBullets[i]->sDescription = SvxResId( TranslateId(RID_SVXSTR_BULLET_DESCRIPTION_0.mpContext, id.getStr()) );
     }
 }
+
 sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex)
 {
     if ( mLevel == sal_uInt16(0xFFFF) || mLevel == 0)

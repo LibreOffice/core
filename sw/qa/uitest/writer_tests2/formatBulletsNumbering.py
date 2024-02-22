@@ -207,13 +207,10 @@ class formatBulletsNumbering(UITestCase):
                 xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "2")
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "3")
-                self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Solid diamond bullets")
                 # Select element num 7
                 xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "7"}))
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "6")
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "7")
-                self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Cross mark bullets")
-
 
             # Test other Pages
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:
