@@ -37,12 +37,6 @@
 
 using namespace SkiaHelper;
 
-static void releaseInstalledPixels(void* pAddr, void*)
-{
-    if (pAddr)
-        delete[] static_cast<sal_uInt8*>(pAddr);
-}
-
 AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
                                                  AquaSharedAttributes& rShared)
     : SkiaSalGraphicsImpl(rParent, rShared.mpFrame)
@@ -251,6 +245,7 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     if (!context)
     {
         SAL_WARN("vcl.skia", "drawNativeControl(): Failed to allocate bitmap context");
+        delete[] data;
         return false;
     }
     // Setup context state for drawing (performDrawNativeControl() e.g. fills background in some cases).
@@ -287,11 +282,8 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
         if (!bitmap.installPixels(SkImageInfo::Make(width, height,
                                                     mSurface->imageInfo().colorType(),
                                                     kPremul_SkAlphaType),
-                                  data, width * 4, releaseInstalledPixels, nullptr))
+                                  data, width * 4, nullptr, nullptr))
             abort();
-
-        // Make bitmap immutable to avoid making a copy in bitmap.asImage()
-        bitmap.setImmutable();
 
         preDraw();
         SAL_INFO("vcl.skia.trace", "drawnativecontrol(" << this << "): " << rControlRegion << ":"
@@ -312,6 +304,15 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
         ++pendingOperationsToFlush; // tdf#136369
         postDraw();
     }
+    // Related: tdf#159529 eliminate possible memory leak
+    // Despite confirming that the release function passed to
+    // SkBitmap.bitmap.installPixels() does get called for every
+    // data array that has been allocated, Apple's Instruments
+    //  indicates that the data is leaking. While it is likely a
+    // false positive, it makes leak analysis difficult so leave
+    // the bitmap mutable. That causes SkBitmap.asImage() to make
+    // a copy of the data and the data can be safely deleted here.
+    delete[] data;
     return bOK;
 }
 
