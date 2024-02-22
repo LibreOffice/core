@@ -1615,23 +1615,43 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 #if !ENABLE_WASM_STRIP_PINGUSER
                 bool bIsHeadlessOrUITest = SfxApplication::IsHeadlessOrUITest(); //uitest.uicheck fails when the dialog is open
+                bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew is shown
 
-                //what's new infobar
-                if (!bIsInfobarShown && utl::isProductVersionUpgraded(true) && !bIsHeadlessOrUITest)
+                //what's new dialog
+                if (utl::isProductVersionUpgraded())
                 {
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
-                    bIsInfobarShown = true;
-                    if (pInfoBar)
+                    const bool bShowWhatsNew = officecfg::Setup::Product::WhatsNew::get();
+                    const bool bIsUnitTestMode = getenv("LO_TESTNAME") != nullptr;
+
+                    if (!bIsHeadlessOrUITest && !bIsUnitTestMode && bShowWhatsNew)
                     {
-                        weld::Button& rWhatsNewButton = pInfoBar->addButton();
-                        rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
-                        rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
+                        const auto xCurrentFrame = GetFrame().GetFrameInterface();
+                        SfxUnoFrameItem aDocFrame(SID_FILLFRAME, xCurrentFrame);
+                        GetDispatcher()->ExecuteList(SID_WHATSNEWDLG, SfxCallMode::SLOT, {},
+                                                    { &aDocFrame });
+                        bIsWhatsNewShown = true;
+                    }
+
+                    //update lastversion
+                    OUString sSetupVersion = utl::ConfigManager::getProductVersion();
+                    try
+                    {
+                        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                            comphelper::ConfigurationChanges::create());
+                        officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
+                        batch->commit();
+                    }
+                    catch (css::lang::IllegalArgumentException&)
+                    { //If the value was readOnly.
+                        SAL_WARN("desktop.updater", "Updating property ooSetupLastVersion to version "
+                                                        << sSetupVersion
+                                                        << " failed (read-only property?)");
                     }
                 }
 
                 // show tip-of-the-day dialog if it due, but not if there is the impress modal template dialog
                 // open where SdModule::ExecuteNewDocument will launch it instead when that dialog is dismissed
-                if (SfxApplication::IsTipOfTheDayDue() && !bIsHeadlessOrUITest && !IsInModalMode())
+                if (SfxApplication::IsTipOfTheDayDue() && !bIsHeadlessOrUITest && !IsInModalMode() && !bIsWhatsNewShown)
                 {
                     bool bIsBaseFormOpen = false;
 
@@ -1804,11 +1824,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 }
 
 #if !ENABLE_WASM_STRIP_PINGUSER
-IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, weld::Button&, void)
-{
-    GetDispatcher()->Execute(SID_WHATSNEW);
-}
-
 IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_GETINVOLVED);

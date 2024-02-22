@@ -260,8 +260,6 @@
 #define STR_GET_INVOLVED_BUTTON                 NC_("STR_GET_INVOLVED_BUTTON", "Get involved")
 #define STR_DONATE_TEXT                         NC_("STR_DONATE_TEXT", "Your donations support our worldwide community.")
 #define STR_DONATE_BUTTON                       NC_("STR_DONATE_BUTTON", "Donate")
-#define STR_WHATSNEW_TEXT                       NC_("STR_WHATSNEW", "You are running version %PRODUCTVERSION of %PRODUCTNAME for the first time. Do you want to learn what's new?")
-#define STR_WHATSNEW_BUTTON                     NC_("STR_WHATSNEW_BUTTON", "Release Notes")
 #define STR_READONLY_DOCUMENT                   NC_("STR_READONLY_DOCUMENT", "This document is open in read-only mode.")
 #define STR_READONLY_PDF                        NC_("STR_READONLY_PDF", "This PDF is open in read-only mode to allow signing the existing file.")
 #define STR_CLASSIFIED_DOCUMENT                 NC_("STR_CLASSIFIED_DOCUMENT", "The classification label of this document is %1.")

@@ -1,0 +1,42 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#define NC_(Context, String) TranslateId(Context, u8##String)
+
+#include <rtl/ustring.hxx>
+#include <config_python.h>
+#include <tuple>
+#include <unotools/resmgr.hxx>
+
+/*
+ * std:tuple consists of <text, image>
+ * image:
+   * place new images at extra/source/whatsnew
+   * do not forget to add the files to vcl/Package_whatsnew.mk
+   * images are cut-off at 600x400px
+*/
+
+const std::tuple<TranslateId, OUString> WELCOME_STRINGARRAY[] =
+{
+     { NC_("RID_CUI_WHATSNEW", "%PRODUCTNAME is a powerful and free office suite, used by millions of people around the world."), "LibreOffice.gif"},
+     { NC_("RID_CUI_WHATSNEW", "%PRODUCTNAME uses the reliable and trustworthy standard open document format."), "ODF.png"},
+     { NC_("RID_CUI_WHATSNEW", "%PRODUCTNAME blends into every operation system and provides full customization."), "Configurability.png"},
+     { NC_("RID_CUI_WHATSNEW", "%PRODUCTNAME is open source: Your project, your data, your freedom."), "Community.png"},
+};
+
+const std::tuple<TranslateId, OUString> WHATSNEW_STRINGARRAY[] =
+{
+     { NC_("RID_CUI_WHATSNEW", "Version 24.8 brings a shiny WhatsNew dialog :-)"), "whatsnew1.png"},
+};
+
+#define STR_WELCOME       NC_("STR_WELCOME", "Welcome to %PRODUCTNAME!")
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

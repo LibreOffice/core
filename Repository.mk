@@ -925,6 +925,7 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	tipoftheday_images \
+	whatsnew_images \
 ))
 endif
 

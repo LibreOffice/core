@@ -18,6 +18,7 @@ endif
 ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)
 $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/tipofthedaydialog \
+	cui/uiconfig/ui/whatsnewdialog \
 ))
 endif
 

@@ -117,8 +117,9 @@ class SvxZoomItem;
 #define SID_DOCUMENTATION                   (SID_SFX_START + 423)
 #define SID_DONATION                        (SID_SFX_START + 424)
 #define SID_GETINVOLVED                     (SID_SFX_START + 425)
-#define SID_WHATSNEW                        (SID_SFX_START + 426)
-#define SID_HYPHENATIONMISSING              (SID_SFX_START + 427)
+#define SID_WHATSNEW                        (SID_SFX_START + 426) // open ReleaseNotesURL
+#define SID_WHATSNEWDLG                     (SID_SFX_START + 427) // show WhatsNewDlg
+#define SID_HYPHENATIONMISSING              (SID_SFX_START + 428)
 
 #define SID_SHOW_LICENSE                    (SID_SFX_START + 1683)
 #define SID_SHOW_CREDITS                    (SID_SFX_START + 1711)

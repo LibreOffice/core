@@ -301,7 +301,13 @@
           </info>
           <value>0</value>
       </prop>
-    </group>
+      <prop oor:name="WhatsNew" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+            <desc>Set to false to not show the WhatsNew dialog on major updates.</desc>
+        </info>
+        <value>true</value>
+    </prop>
+  </group>
     <group oor:name="Office">
       <!--The default must be written by the setup.-->
       <info>

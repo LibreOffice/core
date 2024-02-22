@@ -347,7 +347,7 @@ void runGraphicsRenderTests()
     if (comphelper::LibreOfficeKit::isActive())
         return;
 #if !ENABLE_WASM_STRIP_PINGUSER
-    if (!utl::isProductVersionUpgraded(false))
+    if (!utl::isProductVersionUpgraded())
     {
         return;
     }

@@ -24,6 +24,7 @@
 #include "dlgfact.hxx"
 
 #include <about.hxx>
+#include <whatsnew.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/pageids.hxx>
@@ -1529,6 +1530,18 @@ AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 {
     return VclPtr<CuiAbstractControllerAsync_Impl>::Create(
         std::make_shared<AboutDialog>(pParent));
+}
+
+VclPtr<VclAbstractDialog>
+AbstractDialogFactory_Impl::CreateWhatsNewDialog(weld::Window* pParent, const bool bWelcome)
+{
+#if !ENABLE_WASM_STRIP_PINGUSER
+    return VclPtr<CuiAbstractControllerAsync_Impl>::Create(
+        std::make_shared<WhatsNewDialog>(pParent, bWelcome));
+#else
+    (void) pParent;
+    return nullptr;
+#endif
 }
 
 VclPtr<VclAbstractDialog>

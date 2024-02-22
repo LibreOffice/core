@@ -114,6 +114,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/SvxNotebookbarConfigPage \
     cui/source/customize/CustomNotebookbarGenerator \
     cui/source/dialogs/about \
+    cui/source/dialogs/whatsnew \
     $(call gb_Helper_optional,EXTENSIONS, \
         cui/source/dialogs/AdditionsDialog) \
     cui/source/dialogs/colorpicker \

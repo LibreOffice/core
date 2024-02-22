@@ -105,6 +105,7 @@
 
 #include <comphelper/types.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
 #include <unotools/confignode.hxx>
 #include <memory>
 
@@ -707,6 +708,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTipOfTheDayDialog(rReq.GetFrameWeld()));
+            pDlg->StartExecuteAsync(nullptr);
+            bDone = true;
+            break;
+        }
+        case SID_WHATSNEWDLG:
+        {
+            const bool bWelcome = !officecfg::Setup::Product::ooSetupLastVersion::get().has_value();
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateWhatsNewDialog(rReq.GetFrameWeld(), bWelcome));
             pDlg->StartExecuteAsync(nullptr);
             bDone = true;
             break;
