@@ -68,6 +68,10 @@ public:
 
     sal_Bool SAL_CALL isDouble(double value) override { return value == 100.5; }
 
+    sal_Unicode SAL_CALL getChar() override { return u'Ö'; }
+
+    sal_Bool SAL_CALL isChar(sal_Unicode value) override { return value == u'Ö'; }
+
     OUString SAL_CALL getString() override { return u"hä"_ustr; }
 
     sal_Bool SAL_CALL isString(OUString const& value) override { return value == u"hä"; }
