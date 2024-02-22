@@ -50,4 +50,8 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sw_ooxmllinks,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmllinks))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_ooxmllinks,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
