@@ -390,10 +390,6 @@ applyObjectAttributes(GtkAccessible* pGtkAccessible,
     } while (nIndex >= 0);
 }
 
-#define LO_TYPE_ACCESSIBLE (lo_accessible_get_type())
-#define LO_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), LO_TYPE_ACCESSIBLE, LoAccessible))
-// #define LO_IS_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), LO_TYPE_ACCESSIBLE))
-
 struct LoAccessibleClass
 {
     GObjectClass parent_class;

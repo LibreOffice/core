@@ -32,4 +32,8 @@ LoAccessible*
 lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
                   const css::uno::Reference<css::accessibility::XAccessible>& rAccessible);
 
+#define LO_TYPE_ACCESSIBLE (lo_accessible_get_type())
+#define LO_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), LO_TYPE_ACCESSIBLE, LoAccessible))
+// #define LO_IS_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), LO_TYPE_ACCESSIBLE))
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
