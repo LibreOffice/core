@@ -2424,11 +2424,11 @@ void SbUnoObject::doIntrospection()
 
 
 // Start of a list of all SbUnoMethod-Instances
-static SbUnoMethod* pFirst = nullptr;
+static SbUnoMethod* s_pFirst = nullptr;
 
 void clearUnoMethodsForBasic( StarBASIC const * pBasic )
 {
-    SbUnoMethod* pMeth = pFirst;
+    SbUnoMethod* pMeth = s_pFirst;
     while( pMeth )
     {
         SbxObject* pObject = pMeth->GetParent();
@@ -2443,8 +2443,8 @@ void clearUnoMethodsForBasic( StarBASIC const * pBasic )
                 // set the new StarBASIC as the parent of the module
                 // pObject->SetParent( NULL );
 
-                if( pMeth == pFirst )
-                    pFirst = pMeth->pNext;
+                if( pMeth == s_pFirst )
+                    s_pFirst = pMeth->pNext;
                 else if( pMeth->pPrev )
                     pMeth->pPrev->pNext = pMeth->pNext;
                 if( pMeth->pNext )
@@ -2457,7 +2457,7 @@ void clearUnoMethodsForBasic( StarBASIC const * pBasic )
                 pObject->SbxValue::Clear();
 
                 // start from the beginning after object clearing, the cycle will end since the method is removed each time
-                pMeth = pFirst;
+                pMeth = s_pFirst;
             }
             else
                 pMeth = pMeth->pNext;
@@ -2469,7 +2469,7 @@ void clearUnoMethodsForBasic( StarBASIC const * pBasic )
 
 void clearUnoMethods()
 {
-    SbUnoMethod* pMeth = pFirst;
+    SbUnoMethod* pMeth = s_pFirst;
     while( pMeth )
     {
         pMeth->SbxValue::Clear();
@@ -2492,9 +2492,9 @@ SbUnoMethod::SbUnoMethod
     pParamInfoSeq = nullptr;
 
     // enregister the method in a list
-    pNext = pFirst;
+    pNext = s_pFirst;
     pPrev = nullptr;
-    pFirst = this;
+    s_pFirst = this;
     if( pNext )
         pNext->pPrev = this;
 }
@@ -2503,8 +2503,8 @@ SbUnoMethod::~SbUnoMethod()
 {
     pParamInfoSeq.reset();
 
-    if( this == pFirst )
-        pFirst = pNext;
+    if( this == s_pFirst )
+        s_pFirst = pNext;
     else if( pPrev )
         pPrev->pNext = pNext;
     if( pNext )

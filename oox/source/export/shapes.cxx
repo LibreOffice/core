@@ -2408,7 +2408,7 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     mpFS->endElementNS( XML_a, XML_tcPr );
 }
 
-void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& rBorderLine)
+void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const BorderLine2& rBorderLine)
 {
 // While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
 // To get original value of LineWidth need to multiple by 2.
@@ -2418,7 +2418,7 @@ void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& r
 
     if ( nBorderWidth > 0 )
     {
-        mpFS->startElementNS(XML_a, XML_line, XML_w, OString::number(nBorderWidth));
+        mpFS->startElementNS(XML_a, xml_line_element, XML_w, OString::number(nBorderWidth));
         if ( rBorderLine.Color == sal_Int32( COL_AUTO ) )
             mpFS->singleElementNS(XML_a, XML_noFill);
         else
@@ -2446,13 +2446,13 @@ void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& r
                 break;
         }
         mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, sBorderStyle);
-        mpFS->endElementNS(XML_a, XML_line);
+        mpFS->endElementNS(XML_a, xml_line_element);
     }
     else if( nBorderWidth == 0)
     {
-        mpFS->startElementNS(XML_a, XML_line);
+        mpFS->startElementNS(XML_a, xml_line_element);
         mpFS->singleElementNS(XML_a, XML_noFill);
-        mpFS->endElementNS( XML_a, XML_line );
+        mpFS->endElementNS(XML_a, xml_line_element);
     }
 }
 

@@ -1202,7 +1202,7 @@ sal_uInt16 WinSalInfoPrinter::GetPaperBinBySourceIndex( const ImplJobSetup* pSet
     if (nBins != GDI_ERROR)
     {
         auto pBuffer = std::make_unique<sal_uInt16[]>(nBins);
-        DWORD nBins = ImplDeviceCaps( this, DC_BINS, reinterpret_cast<BYTE*>(pBuffer.get()), pSetupData );
+        nBins = ImplDeviceCaps( this, DC_BINS, reinterpret_cast<BYTE*>(pBuffer.get()), pSetupData );
         if (nBins != GDI_ERROR)
         {
             for (DWORD nBin = 0; nBin < nBins; ++nBin)

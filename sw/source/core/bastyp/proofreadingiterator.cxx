@@ -20,7 +20,7 @@
 
 namespace
 {
-css::uno::Reference<css::linguistic2::XProofreadingIterator> instance;
+css::uno::Reference<css::linguistic2::XProofreadingIterator> _instance;
 bool disposed = false;
 
 void doDispose(css::uno::Reference<css::linguistic2::XProofreadingIterator> const& inst)
@@ -42,7 +42,7 @@ sw::proofreadingiterator::get(css::uno::Reference<css::uno::XComponentContext> c
     bool disp;
     {
         SolarMutexGuard g;
-        instance = inst;
+        _instance = inst;
         disp = disposed;
     }
     if (disp)
@@ -57,8 +57,8 @@ void sw::proofreadingiterator::dispose()
     css::uno::Reference<css::linguistic2::XProofreadingIterator> inst;
     {
         SolarMutexGuard g;
-        inst = instance;
-        instance.clear();
+        inst = _instance;
+        _instance.clear();
         disposed = true;
     }
     doDispose(inst);

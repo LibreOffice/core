@@ -61,23 +61,23 @@ public:
 
 namespace
 {
-constexpr OUString givenname(u"givenname"_ustr);
-constexpr OUString sn(u"sn"_ustr);
-constexpr char fathersname[]("fathersname");
-constexpr OUString initials(u"initials"_ustr);
-constexpr OUString street(u"street"_ustr);
-constexpr OUString l(u"l"_ustr);
-constexpr OUString st(u"st"_ustr);
-constexpr char apartment[]("apartment");
-constexpr OUString postalcode(u"postalcode"_ustr);
-constexpr OUString c(u"c"_ustr);
-constexpr OUString o(u"o"_ustr);
-constexpr char position[]("position");
-constexpr OUString title(u"title"_ustr);
-constexpr OUString homephone(u"homephone"_ustr);
-constexpr OUString telephonenumber(u"telephonenumber"_ustr);
-constexpr OUString facsimiletelephonenumber(u"facsimiletelephonenumber"_ustr);
-constexpr OUString mail(u"mail"_ustr);
+constexpr OUString _givenname(u"givenname"_ustr);
+constexpr OUString _sn(u"sn"_ustr);
+constexpr char _fathersname[]("fathersname");
+constexpr OUString _initials(u"initials"_ustr);
+constexpr OUString _street(u"street"_ustr);
+constexpr OUString _l(u"l"_ustr);
+constexpr OUString _st(u"st"_ustr);
+constexpr char _apartment[]("apartment");
+constexpr OUString _postalcode(u"postalcode"_ustr);
+constexpr OUString _c(u"c"_ustr);
+constexpr OUString _o(u"o"_ustr);
+constexpr char _position[]("position");
+constexpr OUString _title(u"title"_ustr);
+constexpr OUString _homephone(u"homephone"_ustr);
+constexpr OUString _telephonenumber(u"telephonenumber"_ustr);
+constexpr OUString _facsimiletelephonenumber(u"facsimiletelephonenumber"_ustr);
+constexpr OUString _mail(u"mail"_ustr);
 
 // Backend class implementing access to Active Directory user data. It caches its encoded data
 // in a configuration entry, to allow reusing it when user later doesn't have access to AD DC
@@ -107,20 +107,20 @@ public:
                                          "ADsGetObject failed");
             // Fetch all the required information right now, when we know to have access to AD
             // (later the connection may already be lost)
-            m_aMap[givenname] = Str(pUser, &IADsUser::get_FirstName);
-            m_aMap[sn] = Str(pUser, &IADsUser::get_LastName);
-            m_aMap[initials] = Str(pUser, L"initials");
-            m_aMap[street] = Str(pUser, L"streetAddress");
-            m_aMap[l] = Str(pUser, L"l");
-            m_aMap[st] = Str(pUser, L"st");
-            m_aMap[postalcode] = Str(pUser, L"postalCode");
-            m_aMap[c] = Str(pUser, L"co");
-            m_aMap[o] = Str(pUser, L"company");
-            m_aMap[title] = Str(pUser, &IADsUser::get_Title);
-            m_aMap[homephone] = Str(pUser, L"homePhone");
-            m_aMap[telephonenumber] = Str(pUser, L"TelephoneNumber");
-            m_aMap[facsimiletelephonenumber] = Str(pUser, L"facsimileTelephoneNumber");
-            m_aMap[mail] = Str(pUser, &IADsUser::get_EmailAddress);
+            m_aMap[_givenname] = Str(pUser, &IADsUser::get_FirstName);
+            m_aMap[_sn] = Str(pUser, &IADsUser::get_LastName);
+            m_aMap[_initials] = Str(pUser, L"initials");
+            m_aMap[_street] = Str(pUser, L"streetAddress");
+            m_aMap[_l] = Str(pUser, L"l");
+            m_aMap[_st] = Str(pUser, L"st");
+            m_aMap[_postalcode] = Str(pUser, L"postalCode");
+            m_aMap[_c] = Str(pUser, L"co");
+            m_aMap[_o] = Str(pUser, L"company");
+            m_aMap[_title] = Str(pUser, &IADsUser::get_Title);
+            m_aMap[_homephone] = Str(pUser, L"homePhone");
+            m_aMap[_telephonenumber] = Str(pUser, L"TelephoneNumber");
+            m_aMap[_facsimiletelephonenumber] = Str(pUser, L"facsimileTelephoneNumber");
+            m_aMap[_mail] = Str(pUser, &IADsUser::get_EmailAddress);
 
             CacheData();
         }
@@ -131,20 +131,20 @@ public:
         }
     }
 
-    virtual OUString GetGivenName() override { return m_aMap[givenname]; }
-    virtual OUString GetSn() override { return m_aMap[sn]; }
-    virtual OUString GetInitials() override { return m_aMap[initials]; }
-    virtual OUString GetStreet() override { return m_aMap[street]; }
-    virtual OUString GetCity() override { return m_aMap[l]; }
-    virtual OUString GetState() override { return m_aMap[st]; }
-    virtual OUString GetPostalCode() override { return m_aMap[postalcode]; }
-    virtual OUString GetCountry() override { return m_aMap[c]; }
-    virtual OUString GetOrganization() override { return m_aMap[o]; }
-    virtual OUString GetTitle() override { return m_aMap[title]; }
-    virtual OUString GetHomePhone() override { return m_aMap[homephone]; }
-    virtual OUString GetTelephoneNumber() override { return m_aMap[telephonenumber]; }
-    virtual OUString GetFaxNumber() override { return m_aMap[facsimiletelephonenumber]; }
-    virtual OUString GetMail() override { return m_aMap[mail]; }
+    virtual OUString GetGivenName() override { return m_aMap[_givenname]; }
+    virtual OUString GetSn() override { return m_aMap[_sn]; }
+    virtual OUString GetInitials() override { return m_aMap[_initials]; }
+    virtual OUString GetStreet() override { return m_aMap[_street]; }
+    virtual OUString GetCity() override { return m_aMap[_l]; }
+    virtual OUString GetState() override { return m_aMap[_st]; }
+    virtual OUString GetPostalCode() override { return m_aMap[_postalcode]; }
+    virtual OUString GetCountry() override { return m_aMap[_c]; }
+    virtual OUString GetOrganization() override { return m_aMap[_o]; }
+    virtual OUString GetTitle() override { return m_aMap[_title]; }
+    virtual OUString GetHomePhone() override { return m_aMap[_homephone]; }
+    virtual OUString GetTelephoneNumber() override { return m_aMap[_telephonenumber]; }
+    virtual OUString GetFaxNumber() override { return m_aMap[_facsimiletelephonenumber]; }
+    virtual OUString GetMail() override { return m_aMap[_mail]; }
 
 private:
     typedef HRESULT (__stdcall IADsUser::*getstrfunc)(BSTR*);
@@ -186,20 +186,20 @@ private:
         try
         {
             OUString sCachedData = "user=" + m_sUserDN // user DN
-                                   + "\0" + givenname + "=" + GetGivenName() // 1st name
-                                   + "\0" + sn + "=" + GetSn() // sn
-                                   + "\0" + initials + "=" + GetInitials() // initials
-                                   + "\0" + street + "=" + GetStreet() // street
-                                   + "\0" + l + "=" + GetCity() // l
-                                   + "\0" + st + "=" + GetState() // st
-                                   + "\0" + postalcode + "=" + GetPostalCode() // p.code
-                                   + "\0" + c + "=" + GetCountry() // c
-                                   + "\0" + o + "=" + GetOrganization() // o
-                                   + "\0" + title + "=" + GetTitle() // title
-                                   + "\0" + homephone + "=" + GetHomePhone() // h.phone
-                                   + "\0" + telephonenumber + "=" + GetTelephoneNumber() // tel
-                                   + "\0" + facsimiletelephonenumber + "=" + GetFaxNumber() // fax
-                                   + "\0" + mail + "=" + GetMail(); // mail
+                                   + "\0" + _givenname + "=" + GetGivenName() // 1st name
+                                   + "\0" + _sn + "=" + GetSn() // sn
+                                   + "\0" + _initials + "=" + GetInitials() // initials
+                                   + "\0" + _street + "=" + GetStreet() // street
+                                   + "\0" + _l + "=" + GetCity() // l
+                                   + "\0" + _st + "=" + GetState() // st
+                                   + "\0" + _postalcode + "=" + GetPostalCode() // p.code
+                                   + "\0" + _c + "=" + GetCountry() // c
+                                   + "\0" + _o + "=" + GetOrganization() // o
+                                   + "\0" + _title + "=" + GetTitle() // title
+                                   + "\0" + _homephone + "=" + GetHomePhone() // h.phone
+                                   + "\0" + _telephonenumber + "=" + GetTelephoneNumber() // tel
+                                   + "\0" + _facsimiletelephonenumber + "=" + GetFaxNumber() // fax
+                                   + "\0" + _mail + "=" + GetMail(); // mail
             const css::uno::Sequence<sal_Int8> seqCachedData(
                 reinterpret_cast<const sal_Int8*>(sCachedData.getStr()),
                 sCachedData.getLength() * sizeof(sal_Unicode));
@@ -330,71 +330,71 @@ css::uno::Any WinUserInfoBe::getPropertyValue(OUString const& PropertyName)
     OUString sValue;
     // Only process the first argument of possibly multiple space- or comma-separated arguments
     OUString sToken = PropertyName.getToken(0, ' ').getToken(0, ',');
-    if (sToken == givenname)
+    if (sToken == _givenname)
     {
         sValue = m_pImpl->GetGivenName();
     }
-    else if (sToken == sn)
+    else if (sToken == _sn)
     {
         sValue = m_pImpl->GetSn();
     }
-    else if (sToken == fathersname)
+    else if (sToken == _fathersname)
     {
         sValue = m_pImpl->GetFathersname();
     }
-    else if (sToken == initials)
+    else if (sToken == _initials)
     {
         sValue = m_pImpl->GetInitials();
     }
-    else if (sToken == street)
+    else if (sToken == _street)
     {
         sValue = m_pImpl->GetStreet();
     }
-    else if (sToken == l)
+    else if (sToken == _l)
     {
         sValue = m_pImpl->GetCity();
     }
-    else if (sToken == st)
+    else if (sToken == _st)
     {
         sValue = m_pImpl->GetState();
     }
-    else if (sToken == apartment)
+    else if (sToken == _apartment)
     {
         sValue = m_pImpl->GetApartment();
     }
-    else if (sToken == postalcode)
+    else if (sToken == _postalcode)
     {
         sValue = m_pImpl->GetPostalCode();
     }
-    else if (sToken == c)
+    else if (sToken == _c)
     {
         sValue = m_pImpl->GetCountry();
     }
-    else if (sToken == o)
+    else if (sToken == _o)
     {
         sValue = m_pImpl->GetOrganization();
     }
-    else if (sToken == position)
+    else if (sToken == _position)
     {
         sValue = m_pImpl->GetPosition();
     }
-    else if (sToken == title)
+    else if (sToken == _title)
     {
         sValue = m_pImpl->GetTitle();
     }
-    else if (sToken == homephone)
+    else if (sToken == _homephone)
     {
         sValue = m_pImpl->GetHomePhone();
     }
-    else if (sToken == telephonenumber)
+    else if (sToken == _telephonenumber)
     {
         sValue = m_pImpl->GetTelephoneNumber();
     }
-    else if (sToken == facsimiletelephonenumber)
+    else if (sToken == _facsimiletelephonenumber)
     {
         sValue = m_pImpl->GetFaxNumber();
     }
-    else if (sToken == mail)
+    else if (sToken == _mail)
     {
         sValue = m_pImpl->GetMail();
     }
