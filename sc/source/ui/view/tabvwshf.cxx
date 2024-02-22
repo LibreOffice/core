@@ -212,7 +212,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 // Get info about current document and selected tab
                 SCTAB nTab = rViewData.GetTabNo();
-                OUString aDocName = GetViewData().GetDocShell()->GetTitle();
+                OUString aDocName = GetViewData().GetDocShell()->GetTitle(SFX_TITLE_FULLNAME);
                 sal_uInt16 nDoc = 0;
                 bool bCpy = true;
 
@@ -229,7 +229,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         pScSh->GetTitle();
 
-                        if (aDocName == pScSh->GetTitle())
+                        if (aDocName == pScSh->GetTitle(SFX_TITLE_FULLNAME))
                         {
                             nDoc = i;
                             break;
