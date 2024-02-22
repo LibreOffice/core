@@ -122,14 +122,6 @@ gb_CFLAGS := \
 
 gb_CXXFLAGS_DISABLE_WARNINGS = -w
 
-ifneq ($(COM_IS_CLANG),TRUE)
-
-# clang-cl doesn't support -Wv:18 for now
-gb_CFLAGS += \
-	-Wv:18 \
-
-endif
-
 gb_CXXFLAGS := \
 	-utf-8 \
 	$(CXXFLAGS_CXX11) \
@@ -179,12 +171,10 @@ endif
 
 ifneq ($(COM_IS_CLANG),TRUE)
 
-# clang-cl doesn't support -Wv:18 for now
 # Work around MSVC 2017 C4702 compiler bug with release builds
 # http://document-foundation-mail-archive.969070.n3.nabble.com/Windows-32-bit-build-failure-unreachable-code-tp4243848.html
 # http://document-foundation-mail-archive.969070.n3.nabble.com/64-bit-Windows-build-failure-after-MSVC-Update-tp4246816.html
 gb_CXXFLAGS += \
-	-Wv:18 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4702) \
 
 endif
@@ -267,8 +257,10 @@ endif
 
 gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 
-# When compiling for CLR, disable "warning C4339: use of undefined type detected
-# in CLR meta-data - use of this type may lead to a runtime exception":
+# VS2019 produces a warning C4857, that it doesn't support -std:c++20; it can't
+# be suppressed by -wd4857, only by -Wv:18. The warning seems incorrect, because
+# using -std:c++17 produces errors about undeclated 'char8_t'. VS2022 doesn't
+# have the problem, so drop -Wv:18 when bumping baseline.
 gb_CXXCLRFLAGS := \
 	$(if $(COM_IS_CLANG), \
 	    $(patsubst -std=%,-std:c++20 -Zc:__cplusplus,$(gb_CXXFLAGS)), \
@@ -277,9 +269,7 @@ gb_CXXCLRFLAGS := \
 	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
 	-EHa \
 	-clr \
-	-wd4339 \
 	-Wv:18 \
-	-wd4267 \
 	-Zc:twoPhase- \
 
 ifeq ($(COM_IS_CLANG),TRUE)

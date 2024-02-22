@@ -897,12 +897,15 @@ struct GridEntry
 
 typedef boost::multi_array<GridEntry, 2> array_type;
 
-static array_type assembleGrid(const VclGrid &rGrid);
-static bool isNullGrid(const array_type& A);
-static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, std::vector<VclGrid::Value> &rHeights);
-
-array_type assembleGrid(const VclGrid &rGrid)
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4459)
+#endif
+static array_type assembleGrid(const VclGrid &rGrid)
 {
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
     array_type A;
 
     for (vcl::Window* pChild = rGrid.GetWindow(GetWindowType::FirstChild); pChild;
@@ -925,7 +928,14 @@ array_type assembleGrid(const VclGrid &rGrid)
             A.resize(boost::extents[nCurrentMaxXPos+1][nCurrentMaxYPos+1]);
         }
 
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4459)
+#endif
         GridEntry &rEntry = A[nLeftAttach][nTopAttach];
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
         rEntry.pChild = pChild;
         rEntry.nSpanWidth = nWidth;
         rEntry.nSpanHeight = nHeight;
@@ -1045,7 +1055,14 @@ array_type assembleGrid(const VclGrid &rGrid)
     sal_Int32 nNonEmptyRows = std::count(aNonEmptyRows.begin(), aNonEmptyRows.end(), true);
 
     //make new grid without empty rows and columns
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4459)
+#endif
     array_type B(boost::extents[nNonEmptyCols][nNonEmptyRows]);
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
     for (sal_Int32 x = 0, x2 = 0; x < nMaxX; ++x)
     {
         if (!aNonEmptyCols[x])
@@ -1087,10 +1104,15 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
 #if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdangling-reference"
+#elif defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4459)
 #endif
             const GridEntry &rEntry = A[x][y];
 #if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
 #pragma GCC diagnostic pop
+#elif defined _MSC_VER
+#pragma warning(pop)
 #endif
             const vcl::Window *pChild = rEntry.pChild;
             if (!pChild || !pChild->IsVisible())
