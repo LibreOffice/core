@@ -440,9 +440,9 @@ void SvxNumValueSet::SetNumberingSettings(
             SetStyle( GetStyle()|WB_VSCROLL);
     for ( sal_Int32 i = 0; i < aNum.getLength(); i++ )
     {
-            InsertItem( i + 1, i );
-            if( i < 8 )
-                SetItemText(i + 1, SvxResId(RID_SVXSTR_SINGLENUM_DESCRIPTIONS[i]));
+        InsertItem(i + 1, i);
+        if (i < 8)
+            SetItemText(i + 1, SvxResId(RID_SVXSTR_SINGLENUM_DESCRIPTIONS[i]));
     }
 }
 
