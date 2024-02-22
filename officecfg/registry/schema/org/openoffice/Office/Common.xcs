@@ -3335,6 +3335,41 @@
         </value>
       </prop>
     </group>
+    <group oor:name="BulletsNumbering">
+      <info>
+        <desc>Contains Favorite characters</desc>
+      </info>
+      <prop oor:name="DefaultBullets" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of default bullets</desc>
+        </info>
+        <value>
+          <it>•</it>
+          <it>●</it>
+          <it></it>
+          <it></it>
+          <it>➔</it>
+          <it>➢</it>
+          <it>✗</it>
+          <it>✔</it>
+        </value>
+      </prop>
+      <prop oor:name="DefaultBulletsFonts" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of default bullet fonts. Matching font for `DefaultBullets`.</desc>
+        </info>
+        <value>
+          <it>OpenSymbol</it>
+          <it>OpenSymbol</it>
+          <it>OpenSymbol</it>
+          <it>OpenSymbol</it>
+          <it>OpenSymbol</it>
+          <it>OpenSymbol</it>
+          <it>OpenSymbol</it>
+          <it>OpenSymbol</it>
+        </value>
+      </prop>
+    </group>
     <group oor:name="Help">
       <info>
         <desc>Contains settings that specify the common help settings.</desc>

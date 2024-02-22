@@ -1368,15 +1368,6 @@
 #define RID_SVXSTR_ERR_OLD_PASSWD                           NC_("RID_SVXSTR_ERR_OLD_PASSWD", "Invalid password")
 #define RID_SVXSTR_ERR_REPEAT_PASSWD                        NC_("RID_SVXSTR_ERR_REPEAT_PASSWD", "Passwords do not match")
 
-#define RID_SVXSTR_BULLET_DESCRIPTION_0                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_0", "Solid small circular bullets")
-#define RID_SVXSTR_BULLET_DESCRIPTION_1                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_1", "Solid large circular bullets")
-#define RID_SVXSTR_BULLET_DESCRIPTION_2                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_2", "Solid diamond bullets")
-#define RID_SVXSTR_BULLET_DESCRIPTION_3                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_3", "Solid large square bullets")
-#define RID_SVXSTR_BULLET_DESCRIPTION_4                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_4", "Right pointing arrow bullets filled out")
-#define RID_SVXSTR_BULLET_DESCRIPTION_5                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_5", "Right pointing arrow bullets")
-#define RID_SVXSTR_BULLET_DESCRIPTION_6                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_6", "Cross mark bullets")
-#define RID_SVXSTR_BULLET_DESCRIPTION_7                     NC_("RID_SVXSTR_BULLET_DESCRIPTION_7", "Check mark bullets")
-
 // do not translate this; instead describe the nth numbering style (LC_NumberingLevel) defined by your locale
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_0                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_0", "Number 1) 2) 3)")
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_1                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_1", "Number 1. 2. 3.")
