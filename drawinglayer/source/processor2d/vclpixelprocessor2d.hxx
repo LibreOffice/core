@@ -55,6 +55,9 @@ class VclPixelProcessor2D final : public VclProcessor2D
 {
     AntialiasingFlags m_nOrigAntiAliasing;
 
+    bool m_bRenderSimpleTextDirect;
+    bool m_bRenderDecoratedTextDirect;
+
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation
      */
