@@ -692,14 +692,6 @@ gb_Extension_LICENSEFILE_DEFAULT := $(INSTROOT)/license.txt
 
 gb_UnpackedTarget_TARFILE_LOCATION := $(shell cygpath -u $(TARFILE_LOCATION))
 
-# UnoApiHeadersTarget class
-
-ifeq ($(DISABLE_DYNLOADING),TRUE)
-gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
-else
-gb_UnoApiHeadersTarget_select_variant = $(2)
-endif
-
 # UIConfig class
 
 # use responsefile because cui has too many files for command line
