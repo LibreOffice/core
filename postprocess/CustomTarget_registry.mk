@@ -67,8 +67,8 @@ postprocess_FILES_ctl := \
 postprocess_DEPS_draw := main
 postprocess_FILES_draw := \
 	$(postprocess_XCS)/Office/UI/DrawWindowState.xcs \
-	$(postprocess_XCU)/Office/UI/DrawWindowState.xcu \
 	$(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
+	    $(postprocess_XCU)/Office/UI/DrawWindowState.xcu \
 	    $(call gb_XcuFilterFiltersTarget_get_target,fcfg_draw_filters.xcu) \
 	    $(call gb_XcuFilterTypesTarget_get_target,fcfg_draw_types.xcu)) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-draw.xcu \
@@ -92,11 +92,11 @@ postprocess_FILES_impress := \
 	$(postprocess_XCS)/Office/PresenterScreen.xcs \
 	$(postprocess_XCS)/Office/UI/Effects.xcs \
 	$(postprocess_XCS)/Office/UI/ImpressWindowState.xcs \
-	$(postprocess_XCU)/Office/PresentationMinimizer.xcu \
-	$(postprocess_XCU)/Office/PresenterScreen.xcu \
-	$(postprocess_XCU)/Office/UI/Effects.xcu \
-	$(postprocess_XCU)/Office/UI/ImpressWindowState.xcu \
 	$(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
+	    $(postprocess_XCU)/Office/PresentationMinimizer.xcu \
+	    $(postprocess_XCU)/Office/PresenterScreen.xcu \
+	    $(postprocess_XCU)/Office/UI/Effects.xcu \
+	    $(postprocess_XCU)/Office/UI/ImpressWindowState.xcu \
 	    $(call gb_XcuFilterFiltersTarget_get_target,fcfg_impress_filters.xcu) \
 	    $(call gb_XcuFilterTypesTarget_get_target,fcfg_impress_types.xcu)) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-impress.xcu \
@@ -332,9 +332,9 @@ postprocess_DEPS_math := main
 postprocess_FILES_math := \
 	$(postprocess_XCS)/Office/UI/MathCommands.xcs \
 	$(postprocess_XCS)/Office/UI/MathWindowState.xcs \
-	$(postprocess_XCU)/Office/UI/MathCommands.xcu \
-	$(postprocess_XCU)/Office/UI/MathWindowState.xcu \
 	$(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
+	    $(postprocess_XCU)/Office/UI/MathCommands.xcu \
+	    $(postprocess_XCU)/Office/UI/MathWindowState.xcu \
 	    $(call gb_XcuFilterFiltersTarget_get_target,fcfg_math_filters.xcu) \
 	    $(call gb_XcuFilterTypesTarget_get_target,fcfg_math_types.xcu)) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-math.xcu \
