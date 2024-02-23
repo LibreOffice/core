@@ -167,8 +167,8 @@ FONT_NOTO_KUFI_ARABIC_TARBALL := noto-fonts-20171024.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_SANS_SHA256SUM := efef2f66ed2c5e005472cba156bd2afb68063a51bb628c6ee14143edc019d293
-FONT_NOTO_SANS_TARBALL := NotoSans-v2.012.zip
+FONT_NOTO_SANS_SHA256SUM := 9fd595dd701d7ea103a9ba8a9cfdcf0c35c5574ef754fecabe718eadad8bccde
+FONT_NOTO_SANS_TARBALL := NotoSans-v2.013.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
