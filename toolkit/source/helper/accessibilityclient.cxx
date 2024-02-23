@@ -50,112 +50,6 @@ namespace toolkit
     }
 
 
-    //= AccessibleDummyFactory
-
-    namespace {
-
-    class AccessibleDummyFactory:
-        public IAccessibleFactory
-    {
-    public:
-        AccessibleDummyFactory();
-        AccessibleDummyFactory(const AccessibleDummyFactory&) = delete;
-        AccessibleDummyFactory& operator=(const AccessibleDummyFactory&) = delete;
-
-    protected:
-        virtual ~AccessibleDummyFactory() override;
-
-    public:
-        // IAccessibleFactory
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXButton* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXCheckBox* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXRadioButton* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXListBox* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXFixedHyperlink* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXFixedText* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXScrollBar* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXEdit* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXMultiLineEdit* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXComboBox* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXToolBox* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXHeaderBar* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-            createAccessibleContext( SVTXNumericField* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-                createAccessibleContext( VCLXWindow* /*_pXWindow*/ ) override
-        {
-            return nullptr;
-        }
-        css::uno::Reference< css::accessibility::XAccessible >
-                createAccessible( Menu* /*_pMenu*/, bool /*_bIsMenuBar*/ ) override
-        {
-            return nullptr;
-        }
-    };
-
-    }
-
-    AccessibleDummyFactory::AccessibleDummyFactory()
-    {
-    }
-
-
-    AccessibleDummyFactory::~AccessibleDummyFactory()
-    {
-    }
-
-
     //= AccessibilityClient
 
 
@@ -188,36 +82,21 @@ namespace toolkit
         {
 #ifndef DISABLE_DYNLOADING
             s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, u"" SVLIBRARY( "acc" ) ""_ustr.pData, 0 );
-            if ( s_hAccessibleImplementationModule != nullptr )
-            {
-                s_pAccessibleFactoryFunc = reinterpret_cast<GetStandardAccComponentFactory>(
-                    osl_getFunctionSymbol( s_hAccessibleImplementationModule, u"getStandardAccessibleFactory"_ustr.pData ));
-
-            }
-            OSL_ENSURE( s_pAccessibleFactoryFunc, "AccessibilityClient::ensureInitialized: could not load the library, or not retrieve the needed symbol!" );
+            assert(s_hAccessibleImplementationModule);
+            s_pAccessibleFactoryFunc = reinterpret_cast<GetStandardAccComponentFactory>(
+                osl_getFunctionSymbol( s_hAccessibleImplementationModule, u"getStandardAccessibleFactory"_ustr.pData ));
 #else
             s_pAccessibleFactoryFunc = getStandardAccessibleFactory;
 #endif // DISABLE_DYNLOADING
 
-            // get a factory instance
-            if ( s_pAccessibleFactoryFunc )
-            {
-                IAccessibleFactory* pFactory = static_cast< IAccessibleFactory* >( (*s_pAccessibleFactoryFunc)() );
-                OSL_ENSURE( pFactory, "AccessibilityClient::ensureInitialized: no factory provided by the A11Y lib!" );
-                if ( pFactory )
-                {
-                    s_pFactory = pFactory;
-                    pFactory->release();
-                }
-            }
+            assert(s_pAccessibleFactoryFunc);
+            IAccessibleFactory* pFactory = static_cast< IAccessibleFactory* >( (*s_pAccessibleFactoryFunc)() );
+            assert(pFactory);
+            s_pFactory = pFactory;
+            pFactory->release();
         }
 #endif // HAVE_FEATURE_DESKTOP
 #endif // ENABLE_WASM_STRIP_ACCESSIBILITY
-
-        if (!s_pFactory)
-            // the attempt to load the lib, or to create the factory, failed
-            // -> fall back to a dummy factory
-            s_pFactory = new AccessibleDummyFactory;
 
         m_bInitialized = true;
     }
