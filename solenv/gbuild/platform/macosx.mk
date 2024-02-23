@@ -345,14 +345,6 @@ gb_Extension_LICENSEFILE_DEFAULT := $(INSTROOT)/Resources/LICENSE
 
 gb_UnpackedTarget_TARFILE_LOCATION := $(TARFILE_LOCATION)
 
-# UnoApiHeadersTarget class
-
-ifeq ($(DISABLE_DYNLOADING),TRUE)
-gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
-else
-gb_UnoApiHeadersTarget_select_variant = $(2)
-endif
-
 # UIMenubarTarget class
 
 define gb_UIMenubarTarget__command

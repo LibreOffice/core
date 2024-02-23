@@ -90,9 +90,6 @@ endef
 
 # UnoApiHeadersTarget
 
-# defined by platform
-#  gb_UnoApiHeadersTarget_select_variant
-
 # Allow to redefine header variant.
 #
 # On iOS we use static linking because dynamic loading of own code
@@ -125,8 +122,10 @@ endef
 # technical reasons to get around silly limitations in the OS, sigh.
 #
 # gb_UnoApiHeadersTarget_select_variant api default-variant
-ifeq ($(origin gb_UnoApiHeadersTarget_select_variant),undefined)
-$(eval $(call gb_Output_error,gb_UnoApiHeadersTarget_select_variant must be defined by platform))
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
+else
+gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
 gb_UnoApiHeadersTarget_CPPUMAKERDEPS := $(call gb_Executable_get_runtime_dependencies,cppumaker)

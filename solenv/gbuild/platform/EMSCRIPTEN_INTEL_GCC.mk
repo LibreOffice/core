@@ -7,8 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
-
 include $(GBUILDDIR)/platform/unxgcc.mk
 
 # don't sort; later can override previous settings!
