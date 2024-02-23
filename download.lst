@@ -207,8 +207,8 @@ FONT_NOTO_SERIF_ARMENIAN_TARBALL := NotoSerifArmenian-v2.008.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_SANS_GEORGIAN_SHA256SUM := bd75d1f0b9ef619b5ded0018d6258eeab2f9e976d8f8074bb7890f4e301648bf
-FONT_NOTO_SANS_GEORGIAN_TARBALL := NotoSansGeorgian-v2.003.zip
+FONT_NOTO_SANS_GEORGIAN_SHA256SUM := 10e85011008108308e6feab0408242acb07804da61ede3d3ff236461ae07ab1b
+FONT_NOTO_SANS_GEORGIAN_TARBALL := NotoSansGeorgian-v2.005.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
