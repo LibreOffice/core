@@ -19,6 +19,7 @@ ifeq (EMSCRIPTEN,$(OS))
 $(eval $(call gb_Module_add_targets,static,\
     CustomTarget_emscripten_fs_image \
     CustomTarget_unoembind \
+    Package_favicon \
     Package_unoembind \
     StaticLibrary_unoembind \
     $(if $(ENABLE_QT5), \
