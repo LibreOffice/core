@@ -19,7 +19,7 @@ $(eval $(call gb_Library_use_api,embindtest, \
     udkapi \
 ))
 
-$(eval $(call gb_Library_use_internal_api,embindtest, \
+$(eval $(call gb_Library_use_internal_comprehensive_api,embindtest, \
     embindtest \
 ))
 
