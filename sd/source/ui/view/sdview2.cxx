@@ -578,7 +578,8 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     }
 
                     if( bBookmark && bFile && ( nDropAction & DND_ACTION_MOVE ) && mpViewSh
-                        && ( SlideShow::IsRunning(mpViewSh->GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow() )) // IASS
+                        && ( SlideShow::IsRunning(mpViewSh->GetViewShellBase())
+                        && !SlideShow::IsInteractiveSlideshow(&mpViewSh->GetViewShellBase()) )) // IASS
                         bBookmark = false;
 
                     if( bDrawing || bGraphic || bMtf || bBitmap || bBookmark || bFile || bFileList || bXFillExchange || bSBAFormat || bEditEngineODF || bString || bRTF )

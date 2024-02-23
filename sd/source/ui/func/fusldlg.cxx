@@ -102,6 +102,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_FULLSCREEN, rPresentationSettings.mbFullScreen ) );
     aDlgSet.Put( SfxUInt32Item( ATTR_PRESENT_PAUSE_TIMEOUT, rPresentationSettings.mnPauseTimeout ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_SHOW_PAUSELOGO, rPresentationSettings.mbShowPauseLogo ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_INTERACTIVE, rPresentationSettings.mbInteractive ) );
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
     aDlgSet.Put( SfxInt32Item( ATTR_PRESENT_DISPLAY, pOptions->GetDisplay() ) );
@@ -212,6 +213,13 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     {
         bValuesChanged = true;
         rPresentationSettings.mbShowPauseLogo = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_INTERACTIVE, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbInteractive )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbInteractive = bValue;
     }
 
     pOptions->SetDisplay( aDlgSet.Get(ATTR_PRESENT_DISPLAY).GetValue() );
