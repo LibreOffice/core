@@ -1037,7 +1037,10 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	) \
 	resource_fonts \
 	cui \
-	$(if $(filter EMSCRIPTEN,$(OS)),unoembind) \
+	$(if $(filter EMSCRIPTEN,$(OS)), \
+	    favicon \
+	    unoembind \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
