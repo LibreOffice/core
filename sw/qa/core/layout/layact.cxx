@@ -73,6 +73,28 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNextRowInvalidatePos)
     // i.e. row 2 has to be shifted down to 7390, but this didn't happen.
     CPPUNIT_ASSERT_GREATER(nOldRow2Top, nNewRow2Top);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInSection)
+{
+    // Given a document with multiple sections, the 2nd section on page 1 has a one-page floating
+    // table:
+    createSwDoc("floattable-in-section.docx");
+
+    // When laying out that document:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+
+    // Then make sure the table is on page 1, not on page 2:
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    // Without the fix in place, it would have failed, the table was on page 2, not on page 1.
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(!pPage2->GetSortedObjs());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
