@@ -231,10 +231,9 @@ $(eval $(call repositorymodule_serialize,\
 	$(call gb_Helper_optional,DESKTOP,swui) \
 	sw sd \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
-	writerfilter \
-	$(if $(MERGELIBS_MORE),,cui) \
+	$(if $(MERGELIBS_MORE),,writerfilter cui) \
 	$(if $(MERGELIBS), merged, \
-		 $(if $(MERGELIBS_MORE),cui,) chartcontroller chartcore oox svx svxcore xo sfx fwk svt vcl) \
+		 $(if $(MERGELIBS_MORE),writerfilter cui,) chartcontroller chartcore oox svx svxcore xo sfx fwk svt vcl) \
 ))
 endif
 endif # !$(DISABLE_DYNLOADING)
