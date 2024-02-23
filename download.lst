@@ -172,8 +172,8 @@ FONT_NOTO_SANS_TARBALL := NotoSans-v2.013.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_SERIF_SHA256SUM := 3d4566a0e51e7fc14528f5a1eecc6f12e5ffbbec6484470d3da48b0d8ead345a
-FONT_NOTO_SERIF_TARBALL := NotoSerif-v2.012.zip
+FONT_NOTO_SERIF_SHA256SUM := fb4c6c75f10365f63b5c8ad5a1864ebe46dd0c70c40d0461cb0dc1b1b7c13a35
+FONT_NOTO_SERIF_TARBALL := NotoSerif-v2.013.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
