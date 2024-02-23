@@ -3477,7 +3477,7 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
             // Refresh current slide. Need to do that asynchronous, else e.g.
             // text edit changes EditEngine/Outliner are not progressed far
             // enough (ObjectChanged broadcast which we are in here seems
-            // to early for some cases)
+            // too early for some cases)
             uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
             mnEventObjectChange = AsyncUpdateSlideshow_Impl::AsyncUpdateSlideshow(this, XCurrentSlide, eHintKind);
             break;
