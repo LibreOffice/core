@@ -2062,7 +2062,15 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     // and then dispatch a SalEvent::EndExtTextInput event.
     NSString *pNewMarkedText = nullptr;
     NSString *pChars = [mpLastEvent characters];
-    bool bNeedsExtTextInput = ( pChars && mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] );
+
+    // tdf#158124 KEY_DELETE events do not need an ExtTextInput event
+    // When using various Japanese input methods, the last event will be a
+    // repeating key down event with a single delete character while the
+    // Backspace key, Delete key, or Fn-Delete keys are pressed. These key
+    // events are now ignored since setting mbTextInputWantsNonRepeatKeyDown
+    // to YES for these events will trigger an assert or crash when saving a
+    // .docx document.
+    bool bNeedsExtTextInput = ( pChars && mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] && ImplMapKeyCode( [mpLastEvent keyCode] ) != KEY_DELETE );
     if ( bNeedsExtTextInput )
     {
         // tdf#154708 Preserve selection for repeating Shift-arrow on Japanese keyboard
