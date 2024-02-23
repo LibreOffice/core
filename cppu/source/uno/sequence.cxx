@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstdlib>
 #include <string.h>
 
 #include <osl/diagnose.h>
@@ -227,6 +228,9 @@ static bool idefaultConstructElements(
         {
             typelib_TypeDescription * pElementTypeDescr = nullptr;
             TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+            if (pElementTypeDescr == nullptr) {
+                std::abort();
+            }
             sal_Int32 eEnum =
                 reinterpret_cast<typelib_EnumTypeDescription *>(
                  pElementTypeDescr)->nDefaultEnumValue;
@@ -245,6 +249,9 @@ static bool idefaultConstructElements(
     {
         typelib_TypeDescription * pElementTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+        if (pElementTypeDescr == nullptr) {
+            std::abort();
+        }
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
 
         if (nAlloc >= 0)
@@ -471,6 +478,9 @@ static bool icopyConstructFromElements(
     {
         typelib_TypeDescription * pElementTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+        if (pElementTypeDescr == nullptr) {
+            std::abort();
+        }
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
 
         pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
@@ -522,6 +532,9 @@ static bool icopyConstructFromElements(
         {
             typelib_TypeDescription * pElementTypeDescr = nullptr;
             TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+            if (pElementTypeDescr == nullptr) {
+                std::abort();
+            }
             typelib_TypeDescriptionReference * pSeqElementType =
                 reinterpret_cast<typelib_IndirectTypeDescription *>(pElementTypeDescr)->pType;
             uno_Sequence ** pDestElements = reinterpret_cast<uno_Sequence **>(pSeq->elements);
@@ -664,6 +677,9 @@ sal_Bool SAL_CALL uno_type_sequence_construct(
     {
         typelib_TypeDescription * pTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pTypeDescr, pType );
+        if (pTypeDescr == nullptr) {
+            std::abort();
+        }
 
         typelib_TypeDescriptionReference * pElementType =
             reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType;
