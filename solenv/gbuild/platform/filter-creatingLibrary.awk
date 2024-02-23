@@ -15,6 +15,7 @@ BEGIN {
     creatinglibrary_prefix = ENVIRON["CREATINGLIBRARY_PREFIX"];
     generatingcode_message = ENVIRON["GENERATINGCODE_MESSAGE"];
     finishedgeneratingcode_message = ENVIRON["FINISHEDGENERATINGCODE_MESSAGE"];
+    fastlink_in_clr_message = ENVIRON["FASTLINK_IN_CLR_MESSAGE"];
     if (!creatinglibrary_prefix) {
         creatinglibrary_prefix = "\\.lib.*\\.exp"
     }
@@ -24,23 +25,32 @@ BEGIN {
     if (!finishedgeneratingcode_message) {
         finishedgeneratingcode_message = "Finished generating code"
     }
+    if (!fastlink_in_clr_message) {
+        fastlink_in_clr_message = "DEBUG:FASTLINK.*DEBUG:FULL"
+    }
     firstline = 1
 }
 
 {
+    keep_firstline = 0
     if (firstline && match($0, creatinglibrary_prefix)) {
         # ignore
     } else if (match($0, generatingcode_message)) {
         # ignore
     } else if (match($0, finishedgeneratingcode_message)) {
         # ignore
+    } else if (match($0, fastlink_in_clr_message)) {
+        # ignore; "Creating library" will come after this warning
+        keep_firstline = 1
     } else {
         # because MSVC stupidly prints errors on stdout, it's
         # necessary to forward everything that isn't matched by the pattern
         # so users get to see them.
         print $0 > "/dev/stderr"
     }
-    firstline = 0
+    if (!keep_firstline) {
+        firstline = 0
+    }
 }
 
 # vim: set noet sw=4 ts=4:
