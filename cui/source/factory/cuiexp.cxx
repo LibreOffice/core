@@ -19,18 +19,50 @@
 
 #include "dlgfact.hxx"
 #include <sal/types.h>
+#include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 
-namespace cui
+/// anonymous implementation namespace
+namespace
 {
-static AbstractDialogFactory_Impl* GetFactory()
+class GetCreateDialogFactoryService
+    : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::lang::XUnoTunnel>
 {
-    static AbstractDialogFactory_Impl* pFactory = new AbstractDialogFactory_Impl;
-    return pFactory;
-}
-}
+public:
+    // css::lang::XServiceInfo:
+    virtual OUString SAL_CALL getImplementationName() override
+    {
+        return "com.sun.star.cui.GetCreateDialogFactoryService";
+    }
+    virtual sal_Bool SAL_CALL supportsService(const OUString& serviceName) override
+    {
+        return cppu::supportsService(this, serviceName);
+    }
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    {
+        return { "com.sun.star.cui.GetCreateDialogFactoryService" };
+    }
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL
+    getSomething(const ::css::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
+    {
+        // Noting that we have to return a pointer to **VclAbstractDialogFactory** otherwise
+        // the dynamic_casting on the other end will fail on Windows (possibly because of the virtual base involved).
+        static VclAbstractDialogFactory* pFactory = new AbstractDialogFactory_Impl;
+        return reinterpret_cast<sal_Int64>(pFactory);
+    }
+};
+
+} // closing anonymous implementation namespace
 
 extern "C" {
-SAL_DLLPUBLIC_EXPORT VclAbstractDialogFactory* CreateDialogFactory() { return ::cui::GetFactory(); }
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_cui_GetCreateDialogFactoryService(css::uno::XComponentContext*,
+                                               css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new GetCreateDialogFactoryService);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

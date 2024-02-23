@@ -17,41 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/module.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/bitmapex.hxx>
+#include <com/sun/star/cui/GetCreateDialogFactoryService.hpp>
+#include <comphelper/processfactory.hxx>
 
 typedef VclAbstractDialogFactory*(SAL_CALL* FuncPtrCreateDialogFactory)();
 
-#ifndef DISABLE_DYNLOADING
-extern "C" {
-static void thisModule() {}
-}
-#else
-extern "C" VclAbstractDialogFactory* CreateDialogFactory();
-#endif
-
 VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 {
-    static auto fp = []() -> FuncPtrCreateDialogFactory {
-#ifndef DISABLE_DYNLOADING
-        ::osl::Module aDialogLibrary;
-        if (aDialogLibrary.loadRelative(&thisModule, CUI_DLL_NAME,
-                                        SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
-        {
-            auto const p = reinterpret_cast<FuncPtrCreateDialogFactory>(
-                aDialogLibrary.getFunctionSymbol("CreateDialogFactory"));
-            aDialogLibrary.release();
-            return p;
-        }
-        return nullptr;
-#else
-        return CreateDialogFactory;
-#endif
-    }();
-    if (fp)
-        return fp();
-    return nullptr;
+    auto xService
+        = css::cui::GetCreateDialogFactoryService::create(comphelper::getProcessComponentContext());
+    return reinterpret_cast<VclAbstractDialogFactory*>(xService->getSomething({}));
 }
 
 VclAbstractDialog::~VclAbstractDialog() {}

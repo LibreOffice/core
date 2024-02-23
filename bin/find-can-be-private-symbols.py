@@ -179,7 +179,6 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
         # dynamically loaded
         elif sym.endswith("get_implementation"): continue
         elif sym.endswith("component_getFactory"): continue
-        elif sym == "CreateDialogFactory": continue
         elif sym == "CreateUnoWrapper": continue
         elif sym == "ExportDOC": continue
         elif sym == "ExportRTF": continue

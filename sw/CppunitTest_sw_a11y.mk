@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_a11y, \
 	acc \
 	sal \
 	cppu \
+	cui \
 	subsequenttest \
 	test \
 	unotest \
