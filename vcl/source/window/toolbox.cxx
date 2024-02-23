@@ -4435,7 +4435,9 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 // do nothing to avoid key presses going into the document
                 // while the toolbox has the focus
                 // just forward function and special keys and combinations with Alt-key
-                if( aKeyGroup == KEYGROUP_FKEYS || aKeyGroup == KEYGROUP_MISC || aKeyCode.IsMod2() )
+                // and Ctrl-key
+                if( aKeyGroup == KEYGROUP_FKEYS || aKeyGroup == KEYGROUP_MISC || aKeyCode.IsMod2()
+                        || aKeyCode.IsMod1() )
                     bForwardKey = true;
             }
         }
