@@ -98,7 +98,7 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/safemode.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
+#include <DevelopmentToolDockingWindow.hxx>
 
 #include <comphelper/types.hxx>
 #include <officecfg/Office/Common.hxx>

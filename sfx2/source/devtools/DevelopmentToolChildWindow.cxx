@@ -9,7 +9,7 @@
  */
 
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
-#include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
+#include <DevelopmentToolDockingWindow.hxx>
 #include <sfx2/sfxsids.hrc>
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(DevelopmentToolChildWindow, SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW);

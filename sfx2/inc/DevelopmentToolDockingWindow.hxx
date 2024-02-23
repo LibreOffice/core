@@ -28,7 +28,7 @@
  * Contains two sides. Left side contains the simplified DOM tree and
  * the right side the object inspector tree.
  */
-class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) DevelopmentToolDockingWindow final : public SfxDockingWindow
+class DevelopmentToolDockingWindow final : public SfxDockingWindow
 {
 private:
     std::unique_ptr<ObjectInspectorWidgets> mpObjectInspectorWidgets;
@@ -47,8 +47,8 @@ private:
     // Handler for the object inspector tree
     ObjectInspectorTreeHandler maObjectInspectorTreeHandler;
 
-    DECL_DLLPRIVATE_LINK(DocumentModelTreeViewSelectionHandler, weld::TreeView&, void);
-    DECL_DLLPRIVATE_LINK(DomToolbarButtonClicked, const OUString&, void);
+    DECL_LINK(DocumentModelTreeViewSelectionHandler, weld::TreeView&, void);
+    DECL_LINK(DomToolbarButtonClicked, const OUString&, void);
 
     void updateSelection();
 

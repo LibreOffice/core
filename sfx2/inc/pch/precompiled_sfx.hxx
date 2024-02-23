@@ -411,7 +411,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/ctrlitem.hxx>
-#include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>

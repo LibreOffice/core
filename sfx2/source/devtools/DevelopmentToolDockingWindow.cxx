@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
+#include <DevelopmentToolDockingWindow.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 

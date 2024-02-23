@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
+#include <DevelopmentToolDockingWindow.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
