@@ -321,7 +321,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 - (BOOL)performKeyEquivalent:(NSEvent*)pEvent
 {
-    BOOL bRet = [super performKeyEquivalent: pEvent];
+    bool bRet = [super performKeyEquivalent: pEvent];
 
     // tdf#126638 dispatch key shortcut events to modal windows
     // Some modal windows, such as the native Open and Save dialogs,
