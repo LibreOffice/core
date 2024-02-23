@@ -151,9 +151,9 @@ class SW_DLLPUBLIC SwPageDesc final
 
     struct StashedPageDesc
     {
-        std::shared_ptr<SwFrameFormat> m_pStashedFirst;
-        std::shared_ptr<SwFrameFormat> m_pStashedLeft;
-        std::shared_ptr<SwFrameFormat> m_pStashedFirstLeft;
+        std::optional<SwFrameFormat> m_oStashedFirst;
+        std::optional<SwFrameFormat> m_oStashedLeft;
+        std::optional<SwFrameFormat> m_oStashedFirstLeft;
     };
 
     mutable StashedPageDesc m_aStashedHeader;
