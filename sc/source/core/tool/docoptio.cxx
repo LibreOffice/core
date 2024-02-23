@@ -62,7 +62,6 @@ void ScDocOptions::ResetDocOptions()
     nTabDistance        = lcl_GetDefaultTabDist();
     bCalcAsShown        = false;
     bMatchWholeCell     = true;
-    bDoAutoSpell        = false;
     bLookUpColRowNames  = true;
     bFormulaRegexEnabled= false;
     bFormulaWildcardsEnabled= true;

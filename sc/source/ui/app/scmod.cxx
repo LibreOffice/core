@@ -381,11 +381,11 @@ void ScModule::Execute( SfxRequest& rReq )
                     bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 else
                 {   // Toggle
-                    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
-                    if ( pDocSh )
-                        bSet = !pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
+                    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+                    if (pViewSh)
+                        bSet = !pViewSh->IsAutoSpell();
                     else
-                        bSet = !GetDocOptions().IsAutoSpell();
+                        bSet = !ScModule::GetAutoSpellProperty();
                 }
 
                 SfxItemSetFixed<SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK> aSet( GetPool() );
@@ -552,12 +552,12 @@ void ScModule::Execute( SfxRequest& rReq )
 void ScModule::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
-    bool bTabView = pDocSh && (pDocSh->GetBestViewShell() != nullptr);
+    ScTabViewShell* pTabViewShell = pDocSh ? pDocSh->GetBestViewShell() : nullptr;
 
     SfxWhichIter aIter(rSet);
     for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
     {
-        if (!bTabView)
+        if (!pTabViewShell)
         {
             // Not in the normal calc view shell (most likely in preview shell). Disable all actions.
             rSet.DisableItem(nWhich);
@@ -579,7 +579,7 @@ void ScModule::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxUInt16Item( nWhich, sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );
                 break;
             case SID_AUTOSPELL_CHECK:
-                rSet.Put( SfxBoolItem( nWhich, pDocSh->GetDocument().GetDocOptions().IsAutoSpell()) );
+                rSet.Put( SfxBoolItem( nWhich, pTabViewShell->IsAutoSpell()) );
                 break;
             case SID_ATTR_LANGUAGE:
             case ATTR_CJK_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CJK_LANGUAGE
@@ -931,9 +931,9 @@ LanguageType ScModule::GetOptDigitLanguage()
  */
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
+    bool bOldAutoSpell = GetAutoSpellProperty();
     LanguageType nOldSpellLang, nOldCjkLang, nOldCtlLang;
-    bool bOldAutoSpell;
-    GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell );
+    GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang );
 
     if (!m_pAppCfg)
         GetAppOptions();
@@ -1166,16 +1166,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     {
         bool bDoAutoSpell = pItem->GetValue();
 
-        if (pDoc)
+        if (pViewSh)
         {
-            ScDocOptions aNewOpt = pDoc->GetDocOptions();
-            if ( aNewOpt.IsAutoSpell() != bDoAutoSpell )
+            if (pViewSh->IsAutoSpell() != bDoAutoSpell)
             {
-                aNewOpt.SetAutoSpell( bDoAutoSpell );
-                pDoc->SetDocOptions( aNewOpt );
-
-                if (pViewSh)
-                    pViewSh->EnableAutoSpell(bDoAutoSpell);
+                pViewSh->EnableAutoSpell(bDoAutoSpell);
 
                 bRepaint = true;            // Because HideAutoSpell might be invalid
                                             //TODO: Paint all Views?
@@ -2272,8 +2267,7 @@ using namespace com::sun::star;
 
 constexpr OUStringLiteral LINGUPROP_AUTOSPELL = u"IsSpellAuto";
 
-void ScModule::GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang,
-        bool& rAutoSpell )
+void ScModule::GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang )
 {
     // use SvtLinguConfig instead of service LinguProperties to avoid
     // loading the linguistic component
@@ -2285,7 +2279,6 @@ void ScModule::GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang,
     rDefLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage, css::i18n::ScriptType::LATIN);
     rCjkLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN);
     rCtlLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
-    rAutoSpell = aOptions.bIsSpellAuto;
 }
 
 void ScModule::SetAutoSpellProperty( bool bSet )
@@ -2295,6 +2288,18 @@ void ScModule::SetAutoSpellProperty( bool bSet )
     SvtLinguConfig aConfig;
 
     aConfig.SetProperty( LINGUPROP_AUTOSPELL, uno::Any(bSet) );
+}
+
+bool ScModule::GetAutoSpellProperty()
+{
+    // use SvtLinguConfig instead of service LinguProperties to avoid
+    // loading the linguistic component
+    SvtLinguConfig aConfig;
+
+    SvtLinguOptions aOptions;
+    aConfig.GetOptions( aOptions );
+
+    return aOptions.bIsSpellAuto;
 }
 
 bool ScModule::HasThesaurusLanguage( LanguageType nLang )

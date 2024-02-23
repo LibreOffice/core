@@ -1426,7 +1426,8 @@ void ScViewFunc::FillSimple( FillDir eDir )
             UpdateScrollBars();
 
             auto& rDoc = pDocSh->GetDocument();
-            bool bDoAutoSpell = rDoc.GetDocOptions().IsAutoSpell();
+            const ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
+            const bool bDoAutoSpell = pTabViewShell && pTabViewShell->IsAutoSpell();
             if ( bDoAutoSpell )
             {
                 // Copy AutoSpellData from above(left/right/below) if no selection.
@@ -1501,7 +1502,8 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
     pDocSh->UpdateOle(GetViewData());
     UpdateScrollBars();
 
-    bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
+    const ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
+    const bool bDoAutoSpell = pTabViewShell && pTabViewShell->IsAutoSpell();
     if ( bDoAutoSpell )
         CopyAutoSpellData(eDir, nStartCol, nStartRow, nEndCol, nEndRow, nCount);
 

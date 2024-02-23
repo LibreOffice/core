@@ -31,16 +31,13 @@
 #define PROP_UNO_LOOKUPLABELS   7
 #define PROP_UNO_MATCHWHOLE     8
 #define PROP_UNO_NULLDATE       9
-#define PROP_UNO_SPELLONLINE    10
-#define PROP_UNO_STANDARDDEC    11
-#define PROP_UNO_REGEXENABLED   12
-#define PROP_UNO_WILDCARDSENABLED 13
+#define PROP_UNO_STANDARDDEC    10
+#define PROP_UNO_REGEXENABLED   11
+#define PROP_UNO_WILDCARDSENABLED 12
 
 class ScDocOptionsHelper
 {
 public:
-    static std::span<const SfxItemPropertyMapEntry> GetPropertyMap();
-
     static bool setPropertyValue( ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
                                     std::u16string_view aPropertyName,

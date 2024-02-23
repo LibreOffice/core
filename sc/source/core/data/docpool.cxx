@@ -193,8 +193,7 @@ ScDocumentPool::ScDocumentPool()
 {
 
     LanguageType nDefLang, nCjkLang, nCtlLang;
-    bool bAutoSpell;
-    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
+    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang );
 
     //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
     SvxFontItem* pStdFont = getDefaultFontItem(nDefLang, DefaultFontType::LATIN_SPREADSHEET, ATTR_FONT);

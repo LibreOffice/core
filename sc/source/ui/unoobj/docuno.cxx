@@ -176,7 +176,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
         { SC_UNO_NULLDATE,                PROP_UNO_NULLDATE, cppu::UnoType<util::Date>::get(),                      0, 0},
         { SC_UNO_ROWLABELRNG,             0, cppu::UnoType<sheet::XLabelRanges>::get(),             0, 0},
         { SC_UNO_SHEETLINKS,              0, cppu::UnoType<container::XNameAccess>::get(),          0, 0},
-        { SC_UNO_SPELLONLINE,             PROP_UNO_SPELLONLINE, cppu::UnoType<bool>::get(),                          0, 0},
+        { SC_UNO_SPELLONLINE,             0, cppu::UnoType<bool>::get(),                            0, 0},
         { SC_UNO_STANDARDDEC,             PROP_UNO_STANDARDDEC, cppu::UnoType<sal_Int16>::get(),                    0, 0},
         { SC_UNO_REGEXENABLED,            PROP_UNO_REGEXENABLED, cppu::UnoType<bool>::get(),                         0, 0},
         { SC_UNO_WILDCARDSENABLED,        PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),                         0, 0},
@@ -498,10 +498,27 @@ void ScModelObj::RepaintRange( const ScRangeList& rRange )
         pDocShell->PostPaint(rRange, PaintPartFlags::Grid, SC_PF_TESTMERGE);
 }
 
+static OString getTabViewRenderState(ScTabViewShell& rTabViewShell)
+{
+    OStringBuffer aState;
+
+    if (rTabViewShell.IsAutoSpell())
+        aState.append('S');
+
+    aState.append(';');
+
+    const ScViewRenderingOptions& rViewRenderingOptions = rTabViewShell.GetViewRenderingData();
+    OString aThemeName = OUStringToOString(rViewRenderingOptions.GetColorSchemeName(), RTL_TEXTENCODING_UTF8);
+    aState.append(aThemeName);
+
+    return aState.makeStringAndClear();
+}
+
 static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
                                               const Fraction& rZoomY,
                                               const SCTAB nTab,
-                                              const ViewShellDocId& rDocId)
+                                              const ViewShellDocId& rDocId,
+                                              std::string_view rViewRenderState)
 {
     constexpr size_t nMaxIter = 5;
     size_t nIter = 0;
@@ -517,8 +534,11 @@ static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
             continue;
 
         ScViewData& rData = pTabViewShell->GetViewData();
-        if (rData.GetTabNo() == nTab && rData.GetZoomX() == rZoomX && rData.GetZoomY() == rZoomY)
+        if (rData.GetTabNo() == nTab && rData.GetZoomX() == rZoomX && rData.GetZoomY() == rZoomY &&
+            getTabViewRenderState(*pTabViewShell) == rViewRenderState)
+        {
             return &rData;
+        }
     }
 
     return nullptr;
@@ -543,7 +563,8 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     // first few shells. This is to avoid switching of zooms in ScGridWindow::PaintTile
     // and hence avoid grid-offset recomputation on all shapes which is not cheap.
     ScViewData* pViewData = lcl_getViewMatchingDocZoomTab(aFracX, aFracY,
-            pActiveViewData->GetTabNo(), pViewShell->GetDocId());
+            pActiveViewData->GetTabNo(), pViewShell->GetDocId(),
+            getTabViewRenderState(*pViewShell));
     if (!pViewData)
         pViewData = pActiveViewData;
 
@@ -1272,8 +1293,6 @@ void ScModelObj::completeFunction(const OUString& rFunctionName)
 
 OString ScModelObj::getViewRenderState(SfxViewShell* pViewShell)
 {
-    OStringBuffer aState;
-
     ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
     if (!pTabViewShell)
     {
@@ -1282,15 +1301,9 @@ OString ScModelObj::getViewRenderState(SfxViewShell* pViewShell)
     }
 
     if (pTabViewShell)
-    {
-        aState.append(';');
+        return getTabViewRenderState(*pTabViewShell);
 
-        const ScViewRenderingOptions& rViewRenderingOptions = pTabViewShell->GetViewRenderingData();
-        OString aThemeName = OUStringToOString(rViewRenderingOptions.GetColorSchemeName(), RTL_TEXTENCODING_UTF8);
-        aState.append(aThemeName);
-    }
-
-    return aState.makeStringAndClear();
+    return OString();
 }
 
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
@@ -1308,9 +1321,9 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     {
         if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
         {
-            ScDocOptions options = GetDocument()->GetDocOptions();
-            options.SetAutoSpell(rValue.Value.get<bool>());
-            GetDocument()->SetDocOptions(options);
+            ScViewData* pViewData = ScDocShell::GetViewData();
+            if (ScTabViewShell* pTabViewShell = pViewData ? pViewData->GetViewShell() : nullptr)
+                pTabViewShell->EnableAutoSpell(rValue.Value.get<bool>());
         }
         else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
             sThemeName = rValue.Value.get<OUString>();
@@ -2769,6 +2782,11 @@ void SAL_CALL ScModelObj::setPropertyValue(
              aPropertyName == SC_UNO_LOOKUPLABELS )
             bHardRecalc = false;
     }
+    else if (aPropertyName == SC_UNO_SPELLONLINE)
+    {
+        if (ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false))
+            pViewShell->EnableAutoSpell(ScUnoHelpFunctions::GetBoolFromAny(aValue));
+    }
     else if ( aPropertyName == SC_UNONAME_CLOCAL )
     {
         lang::Locale aLocale;
@@ -2915,6 +2933,11 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         if ( aRet.hasValue() )
         {
             // done...
+        }
+        else if (aPropertyName == SC_UNO_SPELLONLINE)
+        {
+            if (ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false))
+                aRet <<= pViewShell->IsAutoSpell();
         }
         else if ( aPropertyName == SC_UNONAME_CLOCAL )
         {

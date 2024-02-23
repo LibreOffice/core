@@ -64,6 +64,7 @@ private:
     SfxItemPropertyMap aPropertyMap;
     bool            mbArray;
     bool            mbValid;
+    bool            mbSpellOnline;
 
 public:
                             ScFunctionAccess();

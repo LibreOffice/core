@@ -4097,7 +4097,8 @@ bool ScViewData::UpdateFixY( SCTAB nTab )               // true = value changed
 void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 {
     ScDocument& rLocalDoc = GetDocument();
-    bool bOnlineSpell = rLocalDoc.GetDocOptions().IsAutoSpell();
+    const ScTabViewShell* pTabViewShell = GetViewShell();
+    const bool bOnlineSpell = pTabViewShell && pTabViewShell->IsAutoSpell();
 
     EEControlBits nCntrl = rOutl.GetControlWord();
     nCntrl |= EEControlBits::MARKNONURLFIELDS;

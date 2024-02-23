@@ -667,8 +667,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewCursors)
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineRenderParameter)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    ScDocument* pDoc = pModelObj->GetDocument();
-    bool bSet = pDoc->GetDocOptions().IsAutoSpell();
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    bool bSet = pView->IsAutoSpell();
 
     uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
@@ -676,7 +679,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineRenderParameter)
     };
     pModelObj->initializeForTiledRendering(aPropertyValues);
 
-    CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
+    CPPUNIT_ASSERT_EQUAL(!bSet, pView->IsAutoSpell());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextViewSelection)
@@ -1755,16 +1758,19 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFunctionDlg)
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineParameter)
 {
-    ScModelObj* pModelObj = createDoc("empty.ods");
-    ScDocument* pDoc = pModelObj->GetDocument();
-    bool bSet = pDoc->GetDocOptions().IsAutoSpell();
+    createDoc("empty.ods");
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    bool bSet = pView->IsAutoSpell();
 
     uno::Sequence<beans::PropertyValue> params =
     {
         comphelper::makePropertyValue("Enable", uno::Any(!bSet)),
     };
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
-    CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
+    CPPUNIT_ASSERT_EQUAL(!bSet, pView->IsAutoSpell());
 
     // set the same state as now and we don't expect any change (no-toggle)
     params =
@@ -1772,7 +1778,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineParameter)
         comphelper::makePropertyValue("Enable", uno::Any(!bSet)),
     };
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
-    CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
+    CPPUNIT_ASSERT_EQUAL(!bSet, pView->IsAutoSpell());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVbaRangeCopyPaste)
@@ -3147,11 +3153,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     int nFirstViewId = SfxLokHelper::getView();
     ViewCallback aView1;
 
-    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
     // Create a second view
     SfxLokHelper::createView();
     ViewCallback aView2;
-    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
     // Set second view to dark scheme
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -3161,11 +3167,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
         );
         dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
     }
-    CPPUNIT_ASSERT_EQUAL(";Dark"_ostr, pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pModelObj->getViewRenderState());
 
     // Switch back to first view and make sure it's the same
     SfxLokHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL(";Default"_ostr, pModelObj->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
 }
 
 /*

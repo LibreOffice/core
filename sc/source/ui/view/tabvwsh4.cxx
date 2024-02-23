@@ -1502,7 +1502,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     bReadOnly = pDocSh->IsReadOnly();
     bIsActive = false;
 
-    EnableAutoSpell(rDoc.GetDocOptions().IsAutoSpell());
+    EnableAutoSpell(ScModule::GetAutoSpellProperty());
 
     SetName("View"); // for SBX
     Color aColBlack( COL_BLACK );

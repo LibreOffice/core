@@ -1261,9 +1261,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     }
                     else if ( aLangText == "RESET_LANGUAGES" )
                     {
-                        bool bAutoSpell;
-
-                        ScModule::GetSpellSettings(eLang, eCjk, eCtl, bAutoSpell);
+                        ScModule::GetSpellSettings(eLang, eCjk, eCtl);
                         rDoc.SetLanguage(eLang, eCjk, eCtl);
                     }
                     else
