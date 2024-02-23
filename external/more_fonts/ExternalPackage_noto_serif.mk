@@ -14,6 +14,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto_serif,$(LIBO_SHAR
 	NotoSerif/hinted/ttf/NotoSerif-BoldItalic.ttf \
 	NotoSerif/hinted/ttf/NotoSerif-Italic.ttf \
 	NotoSerif/hinted/ttf/NotoSerif-Regular.ttf \
+	NotoSerif/hinted/ttf/NotoSerif-Condensed.ttf \
+	NotoSerif/hinted/ttf/NotoSerif-CondensedBold.ttf \
+	NotoSerif/hinted/ttf/NotoSerif-CondensedBoldItalic.ttf \
+	NotoSerif/hinted/ttf/NotoSerif-CondensedItalic.ttf \
+	NotoSerif/hinted/ttf/NotoSerif-Light.ttf \
+	NotoSerif/hinted/ttf/NotoSerif-LightItalic.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:
