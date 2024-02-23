@@ -76,7 +76,7 @@ static GBytes* lo_accessible_text_get_contents_at(GtkAccessibleText* self, unsig
     if (!xText.is())
         return nullptr;
 
-    if (offset < 0 || offset > o3tl::make_unsigned(xText->getCharacterCount()))
+    if (offset > o3tl::make_unsigned(xText->getCharacterCount()))
     {
         SAL_WARN("vcl.gtk",
                  "lo_accessible_text_get_contents_at called with invalid offset: " << offset);
