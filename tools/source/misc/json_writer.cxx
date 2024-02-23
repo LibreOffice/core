@@ -8,6 +8,7 @@
  */
 
 #include <tools/json_writer.hxx>
+#include <o3tl/string_view.hxx>
 #include <stdio.h>
 #include <cstring>
 #include <rtl/math.hxx>
@@ -130,16 +131,16 @@ static bool writeEscapedSequence(sal_uInt32 ch, char*& pos)
     }
 }
 
-void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
+void JsonWriter::writeEscapedOUString(std::u16string_view rPropVal)
 {
     *mPos = '"';
     ++mPos;
 
     // Convert from UTF-16 to UTF-8 and perform escaping
     sal_Int32 i = 0;
-    while (i < rPropVal.getLength())
+    while (i < static_cast<sal_Int32>(rPropVal.size()))
     {
-        sal_uInt32 ch = rPropVal.iterateCodePoints(&i);
+        sal_uInt32 ch = o3tl::iterateCodePoints(rPropVal, &i);
         if (writeEscapedSequence(ch, mPos))
             continue;
         if (ch <= 0x7F)
@@ -182,17 +183,17 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
     validate();
 }
 
-void JsonWriter::put(std::u16string_view pPropName, const OUString& rPropVal)
+void JsonWriter::put(std::u16string_view pPropName, std::u16string_view rPropVal)
 {
     auto nPropNameLength = pPropName.length();
     // But values can be any UTF-8,
     // if the string only contains of 0x2028, it will be expanded 6 times (see writeEscapedSequence)
-    auto nWorstCasePropValLength = rPropVal.getLength() * 6;
+    auto nWorstCasePropValLength = rPropVal.size() * 6;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
 
-    writeEscapedOUString(OUString(pPropName));
+    writeEscapedOUString(pPropName);
 
     memcpy(mPos, ": ", 2);
     mPos += 2;
@@ -252,9 +253,9 @@ void JsonWriter::put(std::string_view pPropName, bool nPropVal)
     putLiteral(pPropName, nPropVal ? std::string_view("true") : std::string_view("false"));
 }
 
-void JsonWriter::putSimpleValue(const OUString& rPropVal)
+void JsonWriter::putSimpleValue(std::u16string_view rPropVal)
 {
-    auto nWorstCasePropValLength = rPropVal.getLength() * 6;
+    auto nWorstCasePropValLength = rPropVal.size() * 6;
     ensureSpace(nWorstCasePropValLength + 4);
 
     addCommaBeforeField();

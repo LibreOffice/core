@@ -82,8 +82,8 @@ void JsonWriterTest::testArray()
     tools::JsonWriter aJson;
     {
         auto aArray = aJson.startArray("items");
-        aJson.putSimpleValue("foo");
-        aJson.putSimpleValue("bar");
+        aJson.putSimpleValue(u"foo");
+        aJson.putSimpleValue(u"bar");
     }
 
     OString aResult(aJson.finishAndGetAsOString());

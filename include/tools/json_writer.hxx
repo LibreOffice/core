@@ -48,7 +48,7 @@ public:
     [[nodiscard]] ScopedJsonWriterNode<']'> startArray(std::string_view nodeName);
     [[nodiscard]] ScopedJsonWriterNode<'}'> startStruct();
 
-    void put(std::u16string_view pPropName, const OUString& rPropValue);
+    void put(std::u16string_view pPropName, std::u16string_view rPropValue);
 
     void put(std::string_view pPropName, const OUString& rPropValue);
     // Assumes utf-8 property value encoding
@@ -69,7 +69,7 @@ public:
     }
     void put(std::string_view pPropName, bool);
 
-    void putSimpleValue(const OUString& rPropValue);
+    void putSimpleValue(std::u16string_view rPropValue);
 
     /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
     void putRaw(std::string_view);
@@ -84,7 +84,7 @@ public:
 private:
     void endNode(char closing);
     void addCommaBeforeField();
-    void writeEscapedOUString(const OUString& rPropVal);
+    void writeEscapedOUString(std::u16string_view rPropVal);
     void closeDocument();
     void ensureSpace(int noMoreBytesRequired);
     void ensureSpaceAndWriteNameColon(std::string_view name, int valSize);
