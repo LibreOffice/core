@@ -187,7 +187,8 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 
     // Disable the shape filter drop down menu when there is a running slide
     // show.
-    if (pViewShell!=nullptr && sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) && !sd::SlideShow::IsInteractiveSlideshow() ) // IASS
+    if (pViewShell!=nullptr && sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() )
+        && !sd::SlideShow::IsInteractiveSlideshow( &pViewShell->GetViewShellBase() ) ) // IASS
         mxToolbox->set_item_sensitive("shapes", false);
     else
         mxToolbox->set_item_sensitive("shapes", true);

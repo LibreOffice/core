@@ -196,7 +196,8 @@ void SdModule::Execute(SfxRequest& rReq)
             ::sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
             if (pViewShell)
             {
-                if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) && !sd::SlideShow::IsInteractiveSlideshow() ) // IASS
+                if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() )
+                    && !sd::SlideShow::IsInteractiveSlideshow( &pViewShell->GetViewShellBase() ) ) // IASS
                 {
                     // Prevent documents from opening while the slide
                     // show is running, except when this request comes

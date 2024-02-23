@@ -184,7 +184,7 @@ sal_Bool SAL_CALL DrawController::suspend( sal_Bool Suspend )
             rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( *pViewShellBase ) );
             if (xSlideShow.is())
             {
-                if (SlideShow::IsInteractiveSlideshow())
+                if (xSlideShow->IsInteractiveSlideshow())
                 {
                     // IASS mode: If preview mode, end it
                     if (xSlideShow->isInteractiveSetup())

@@ -111,6 +111,7 @@ namespace sd
         sal_Int32 mnPauseTimeout;
         bool mbShowPauseLogo;
         bool mbStartCustomShow;
+        bool mbInteractive;
 
         PresentationSettings();
     };

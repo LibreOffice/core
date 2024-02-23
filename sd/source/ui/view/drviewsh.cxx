@@ -50,7 +50,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
     if ( IsMouseButtonDown() && !IsMouseSelecting() )
         return;
 
-    if ( SlideShow::IsRunning( GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow() ) // IASS
+    if ( SlideShow::IsRunning( GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow( &GetViewShellBase() ) ) // IASS
         return;
 
     // tdf#98646 check if Rectangle which contains the bounds of the region to

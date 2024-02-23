@@ -110,7 +110,8 @@ PresentationSettings::PresentationSettings()
     mbAnimationAllowed( true ),
     mnPauseTimeout( 0 ),
     mbShowPauseLogo( false ),
-    mbStartCustomShow( false )
+    mbStartCustomShow( false ),
+    mbInteractive( true )
 {
 }
 

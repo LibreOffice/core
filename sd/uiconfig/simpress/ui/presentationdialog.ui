@@ -713,7 +713,23 @@
                           </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkCheckButton" id="enableinteractivemode">
+                            <property name="label" translatable="yes" context="presentationdialog|enableinteractivemode">Live-mode slidehow editing</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="enableinteractivemode-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|enableinteractivemode">The Impress main document window remains active during the presentation. Users can continue editing slide content, which will be reflected in the running slideshow.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">8</property>
+                          </packing>
                         </child>
                       </object>
                     </child>

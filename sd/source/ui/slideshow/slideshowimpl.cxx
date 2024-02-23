@@ -1126,7 +1126,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
                 mpPaneHider.reset(new PaneHider(*mpViewShell,this));
 
             // these Slots are forbidden in other views for this document
-            if( mpDocSh && !SlideShow::IsInteractiveSlideshow()) // IASS
+            if( mpDocSh && !pPresSettings->mbInteractive) // IASS
             {
                 mpDocSh->SetSlotFilter( true, pAllowed );
                 mpDocSh->ApplySlotFilter();

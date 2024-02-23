@@ -24,6 +24,8 @@
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <sdattr.hrc>
 #include <present.hxx>
 #include <cusshow.hxx>
@@ -66,6 +68,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xCbxChangePage(m_xBuilder->weld_check_button("changeslidesbyclick"))
     , m_xCbxAlwaysOnTop(m_xBuilder->weld_check_button("alwaysontop"))
     , m_xCbxShowNavigationButton(m_xBuilder->weld_check_button("shownavigationbutton"))
+    , m_xCbxInteractiveMode(m_xBuilder->weld_check_button("enableinteractivemode"))
     , m_xLbConsole(m_xBuilder->weld_combo_box("console_cb"))
     , m_xFtMonitor(m_xBuilder->weld_label("presdisplay_label"))
     , m_xLBMonitor(m_xBuilder->weld_combo_box("presdisplay_cb"))
@@ -150,6 +153,10 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
         m_xLbConsole->set_active(PresenterConsoleMode::FullScreen);
     else
         m_xLbConsole->set_active(PresenterConsoleMode::Windowed);
+
+    m_xCbxInteractiveMode->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_INTERACTIVE ) ).GetValue() );
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
+        m_xCbxInteractiveMode->set_visible(false);
 
     InitMonitorSettings();
 
@@ -306,6 +313,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ENDLESS, m_xRbtAuto->get_active() ) );
     rAttr.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, m_xFormatter->GetTime().GetMSFromTime() / 1000 ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_SHOW_PAUSELOGO, m_xCbxAutoLogo->get_active() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_INTERACTIVE, m_xCbxInteractiveMode->get_active() ) );
 
     int nPos = m_xLBMonitor->get_active();
     if (nPos != -1)
