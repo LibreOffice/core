@@ -556,6 +556,8 @@ public:
     SwRedlineTable::size_type GetRedline() const;
     // get redline type
     RedlineType GetRedlineType() const;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SwCellFrame;

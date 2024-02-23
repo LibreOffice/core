@@ -3046,6 +3046,15 @@ RedlineType SwTableBox::GetRedlineType() const
     return RedlineType::None;
 }
 
+void SwTableBox::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableBox"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("rowspan"), BAD_CAST(OString::number(mnRowSpan).getStr()));
+    GetFrameFormat()->dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 struct SwTableCellInfo::Impl
 {
     const SwTable * m_pTable;

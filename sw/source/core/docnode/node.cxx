@@ -1040,11 +1040,7 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         if (SwTableBox* pBox = GetTableBox())
         {
-            (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableBox"));
-            (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pBox);
-            (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("rowspan"), BAD_CAST(OString::number(pBox->getRowSpan()).getStr()));
-            pBox->GetFrameFormat()->dumpAsXml(pWriter);
-            (void)xmlTextWriterEndElement(pWriter);
+            pBox->dumpAsXml(pWriter);
         }
     }
 
