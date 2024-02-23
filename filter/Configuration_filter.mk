@@ -294,6 +294,7 @@ $(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_base_others.xcu
 	contenthandlers/com_sun_star_comp_framework_oxt_handler \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_DBACCESS),TRUE)
 # fcfg_database
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_database_types.xcu,filter/source/config/fragments/types,\
 	StarBase \
@@ -306,6 +307,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_database_filte
 $(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_database_others.xcu,filter/source/config/fragments,\
 	frameloaders/org_openoffice_comp_dbflt_DBContentLoader2 \
 ))
+endif
 
 ifeq ($(ENABLE_REPORTBUILDER),TRUE)
 # fcfg_reportbuilder
@@ -562,6 +564,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	MS_Multiplan \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),TRUE)
 # fcfg_draw
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
 	draw_ODG_FlatXML \
@@ -660,6 +663,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filter
 	MWAW_Presentation \
 	PowerPoint3 \
 ))
+endif
 
 # fcfg_chart
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_chart_types.xcu,filter/source/config/fragments/types,\
@@ -676,6 +680,7 @@ $(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_chart_others.xc
 	frameloaders/com_sun_star_comp_chart2_ChartFrameLoader \
 ))
 
+ifneq ($(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),TRUE)
 # fcfg_math
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_math_types.xcu,filter/source/config/fragments/types,\
 	math_MathML_XML_Math \
@@ -692,6 +697,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_math_filters.x
 	math_pdf_Export \
 	math8 \
 ))
+endif
 
 # fcfg_drawgraphics
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_types.xcu,filter/source/config/fragments/types,\
