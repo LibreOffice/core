@@ -187,8 +187,8 @@ FONT_NOTO_SANS_ARABIC_TARBALL := NotoSansArabic-v2.010.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_NASKH_ARABIC_SHA256SUM := 2b6a3f30f21d27bc6b75b40a350221e12e64b753604d613bf3ddf71cdbe331ac
-FONT_NOTO_NASKH_ARABIC_TARBALL := NotoNaskhArabic-v2.016.zip
+FONT_NOTO_NASKH_ARABIC_SHA256SUM := 3c5dce5eebe2b8bd9e2d208872c5b6d51d1a2a99bd77528d4d72651a00b164f0
+FONT_NOTO_NASKH_ARABIC_TARBALL := NotoNaskhArabic-v2.018.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
