@@ -1302,8 +1302,6 @@ static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bo
 static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis);
 
 static int doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis);
-
-static char* doc_getViewRenderState(LibreOfficeKitDocument* pThis);
 } // extern "C"
 
 namespace {
@@ -1497,8 +1495,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
 
         m_pDocumentClass->getA11yFocusedParagraph = doc_getA11yFocusedParagraph;
         m_pDocumentClass->getA11yCaretPosition = doc_getA11yCaretPosition;
-
-        m_pDocumentClass->getViewRenderState = doc_getViewRenderState;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -4890,15 +4886,6 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
     return 0;
 }
 
-static char* doc_getViewRenderState(LibreOfficeKitDocument* pThis)
-{
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
-        return nullptr;
-
-    return convertOString(pDoc->getViewRenderState());
-}
-
 namespace {
 
 /** Class to react on finishing of a dispatched command.
@@ -6354,6 +6341,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:RulerState")
     {
         return getRulerState(pThis);
+    }
+    else if (aCommand == ".uno:ViewRenderState")
+    {
+        return convertOString(pDoc->getViewRenderState());
     }
     else if (aCommand.starts_with(aViewRowColumnHeaders))
     {

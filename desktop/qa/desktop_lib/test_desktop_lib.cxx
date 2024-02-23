@@ -3681,13 +3681,12 @@ void DesktopLOKTest::testABI()
                          offsetof(struct _LibreOfficeKitDocumentClass, getA11yFocusedParagraph));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(71),
                          offsetof(struct _LibreOfficeKitDocumentClass, getA11yCaretPosition));
+
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(72),
                          offsetof(struct _LibreOfficeKitDocumentClass, hyperlinkInfoAtPosition));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(73),
-                         offsetof(struct _LibreOfficeKitDocumentClass, getViewRenderState));
 
     // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(74), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(73), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
