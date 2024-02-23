@@ -517,8 +517,6 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::hyperlinkInfoAtPosition().
     char* (*hyperlinkInfoAtPosition) (LibreOfficeKitDocument* pThis, int x,int y);
 
-    char* (*getViewRenderState) (LibreOfficeKitDocument* pThis);
-
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
