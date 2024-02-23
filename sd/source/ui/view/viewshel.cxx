@@ -409,7 +409,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         const bool bSlideShowRunning(xSlideShow.is() && xSlideShow->isRunning());
         bool bUseForSlideShow(bSlideShowRunning);
 
-        if(bSlideShowRunning && SlideShow::IsInteractiveSlideshow())
+        if(bSlideShowRunning && xSlideShow->IsInteractiveSlideshow())
         {
             // IASS
             OutputDevice* pShOut(xSlideShow->getShowWindow());
@@ -825,7 +825,7 @@ void ViewShell::SetupRulers()
     if(!mbHasRulers || !mpContentWindow )
         return;
 
-    if( SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow()) // IASS
+    if( SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase())) // IASS
         return;
 
     ::tools::Long nHRulerOfs = 0;

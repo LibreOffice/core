@@ -139,7 +139,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             // switch page in running slide show
             if(SlideShow::IsRunning(GetViewShellBase())
-                && !SlideShow::IsInteractiveSlideshow() // IASS
+                && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase()) // IASS
                 && rReq.GetArgs())
             {
                 if (const SfxUInt32Item* pWhatPage = rReq.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE))
