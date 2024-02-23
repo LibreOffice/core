@@ -123,7 +123,8 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     aScrollTimer.Stop();
 
     if ( mpView->IsDragHelpLine() || mpView->IsSetPageOrg() ||
-         (SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow()) ) // IASS
+         (SlideShow::IsRunning( mpViewShell->GetViewShellBase() )
+            && !SlideShow::IsInteractiveSlideshow( &mpViewShell->GetViewShellBase() )) ) // IASS
         return;
 
     Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
@@ -176,7 +177,8 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16          nCode = rKEvt.GetKeyCode().GetCode();
     bool            bReturn = false;
-    bool            bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) && !SlideShow::IsInteractiveSlideshow(); // IASS
+    bool bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() )
+        && !SlideShow::IsInteractiveSlideshow( &mpViewShell->GetViewShellBase() ); // IASS
 
     switch (nCode)
     {

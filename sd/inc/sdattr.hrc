@@ -55,8 +55,9 @@ class XColorItem;
 #define ATTR_PRESENT_PAUSE_TIMEOUT           TypedWhichId<SfxUInt32Item>(ATTR_PRESENT_START + 13)
 #define ATTR_PRESENT_SHOW_PAUSELOGO          ATTR_PRESENT_START + 14
 #define ATTR_PRESENT_DISPLAY                 TypedWhichId<SfxInt32Item>(ATTR_PRESENT_START + 15)
+#define ATTR_PRESENT_INTERACTIVE             ATTR_PRESENT_START + 16
 
-#define ATTR_PRESENT_END                ATTR_PRESENT_DISPLAY
+#define ATTR_PRESENT_END                ATTR_PRESENT_INTERACTIVE
 
 // animation attributes
 #define ATTR_ANIMATION_START            ATTR_PRESENT_END + 1

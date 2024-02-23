@@ -142,7 +142,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
     // We do not execute a thing during a native slide show
 
-    if (SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow()) // IASS
+    if (SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase())) // IASS
         return;
 
     sal_uInt16 nSId = rReq.GetSlot();
@@ -739,7 +739,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
     // We do not execute a thing during a native slide show
     if((SlideShow::IsRunning(GetViewShellBase())
-        && !SlideShow::IsInteractiveSlideshow()) // IASS
+        && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase())) // IASS
         && (rReq.GetSlot() != SID_PRESENTATION_END && rReq.GetSlot() != SID_SIZE_PAGE))
         return;
 

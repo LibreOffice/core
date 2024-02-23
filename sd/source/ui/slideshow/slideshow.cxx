@@ -39,6 +39,8 @@
 #include <framework/FrameworkHelper.hxx>
 #include <comphelper/extract.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <FrameView.hxx>
 #include <createpresentation.hxx>
 #include <unomodel.hxx>
@@ -194,12 +196,12 @@ bool SlideShow::StartPreview( ViewShellBase const & rBase,
         return false;
 
     // end an already running IASS Preview (when someone is fast)
-    if (SlideShow::IsInteractiveSlideshow() && xSlideShow->isInteractiveSetup())
+    if (xSlideShow->IsInteractiveSlideshow() && xSlideShow->isInteractiveSetup())
         xSlideShow->endInteractivePreview();
 
     // check if IASS re-use of running Slideshow can/should be done
     // and do it
-    if (SlideShow::IsInteractiveSlideshow() && xSlideShow->isFullScreen()) // IASS
+    if (xSlideShow->IsInteractiveSlideshow() && xSlideShow->isFullScreen()) // IASS
         return xSlideShow->startInteractivePreview( xDrawPage, xAnimationNode );
 
     // fallback to usual mode
@@ -227,10 +229,24 @@ bool SlideShow::IsRunning( const ViewShell& rViewShell )
 }
 
 /// returns true if the interactive slideshow mode is activated
-bool SlideShow::IsInteractiveSlideshow()
+bool SlideShow::IsInteractiveSlideshow(const ViewShellBase* pViewShellBase)
 {
+    if (nullptr == pViewShellBase)
+        return false;
+    rtl::Reference< SlideShow > xSlideShow(GetSlideShow(*pViewShellBase));
+    if (!xSlideShow.is())
+        return false;
+    return xSlideShow->IsInteractiveSlideshow();
+}
+
+bool SlideShow::IsInteractiveSlideshow() const
+{
+    // allow override with ENV_VAR for practical dev reasons
     static bool g_bEnable_Interactive_Slideshow(getenv("ENABLE_INTERACTIVE_SLIDESHOW"));
-    return g_bEnable_Interactive_Slideshow;
+    if (g_bEnable_Interactive_Slideshow)
+        return true;
+
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && mpDoc->getPresentationSettings().mbInteractive;
 }
 
 void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, vcl::Window* pParentWindow )
@@ -656,7 +672,7 @@ void SAL_CALL SlideShow::end()
 {
     SolarMutexGuard aGuard;
 
-    if (SlideShow::IsInteractiveSlideshow() && isInteractiveSetup())
+    if (IsInteractiveSlideshow() && isInteractiveSetup())
     {
         // If IASS was active clean that up, but do not end SlideShow
         endInteractivePreview();

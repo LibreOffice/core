@@ -102,7 +102,8 @@ public:
     static bool IsRunning( const ViewShell& rViewShell );
 
     /// returns true if the interactive slideshow mode is activated
-    static bool IsInteractiveSlideshow();
+    static bool IsInteractiveSlideshow(const ViewShellBase* pViewShellBase);
+    bool IsInteractiveSlideshow() const;
 
     // helper api
 

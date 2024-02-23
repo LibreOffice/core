@@ -1883,7 +1883,7 @@ void CustomAnimationPane::onAdd()
 
     updateControls();
 
-    if (!SlideShow::IsInteractiveSlideshow()) // IASS
+    if (!SlideShow::IsInteractiveSlideshow(&mrBase)) // IASS
         SlideShow::Stop( mrBase );
 }
 
