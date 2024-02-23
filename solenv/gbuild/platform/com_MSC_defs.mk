@@ -172,8 +172,8 @@ endif
 ifneq ($(COM_IS_CLANG),TRUE)
 
 # Work around MSVC 2017 C4702 compiler bug with release builds
-# http://document-foundation-mail-archive.969070.n3.nabble.com/Windows-32-bit-build-failure-unreachable-code-tp4243848.html
-# http://document-foundation-mail-archive.969070.n3.nabble.com/64-bit-Windows-build-failure-after-MSVC-Update-tp4246816.html
+# https://lists.freedesktop.org/archives/libreoffice/2018-July/080532.html
+# https://lists.freedesktop.org/archives/libreoffice/2018-August/080776.html
 gb_CXXFLAGS += \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4702) \
 
