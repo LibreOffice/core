@@ -169,18 +169,11 @@ bool lcl_HasRowOutline( const ScViewData& rViewData )
     return false;
 }
 
-ScViewRenderingOptions getViewRenderingOptions(ScDocShell& rDocShell)
-{
-    ScTabViewShell* pViewShell = rDocShell.GetBestViewShell();
-    return pViewShell ? pViewShell->GetViewRenderingData() : ScViewRenderingOptions();
-}
-
 } // anonymous namespace
 
 ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     pFrameWin( pParent ),
     aViewData( rDocSh, pViewShell ),
-    aViewRenderingData(getViewRenderingOptions(rDocSh)),
     aFunctionSet( &aViewData ),
     aHdrFunc( &aViewData ),
     aVScrollTop( VclPtr<ScrollAdaptor>::Create( pFrameWin, false ) ),
@@ -225,6 +218,12 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     bBlockRows( false ),
     mbInlineWithScrollbar( false )
 {
+    // copy settings of existing shell for this document
+    if (ScTabViewShell* pExistingViewShell = rDocSh.GetBestViewShell())
+    {
+        aViewRenderingData = pExistingViewShell->GetViewRenderingData();
+        EnableAutoSpell(pExistingViewShell->IsAutoSpell());
+    }
     Init();
 }
 
@@ -2398,6 +2397,7 @@ void ScTabView::EnableRefInput(bool bFlag)
 
 void ScTabView::EnableAutoSpell( bool bEnable )
 {
+    const bool bWasEnabled = IsAutoSpell();
     if (bEnable)
         mpSpellCheckCxt =
             std::make_shared<sc::SpellCheckContext>(&aViewData.GetDocument(),
@@ -2412,6 +2412,20 @@ void ScTabView::EnableAutoSpell( bool bEnable )
 
         pWin->SetAutoSpellContext(mpSpellCheckCxt);
     }
+
+    if (bWasEnabled != bEnable && comphelper::LibreOfficeKit::isActive())
+    {
+        if (ScTabViewShell* pViewSh = aViewData.GetViewShell())
+        {
+            ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pViewSh->GetCurrentDocument());
+            SfxLokHelper::notifyViewRenderState(pViewSh, pModel);
+        }
+    }
+}
+
+bool ScTabView::IsAutoSpell() const
+{
+    return static_cast<bool>(mpSpellCheckCxt);
 }
 
 void ScTabView::ResetAutoSpell()

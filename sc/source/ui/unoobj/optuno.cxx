@@ -24,31 +24,9 @@
 
 #include <optuno.hxx>
 #include <miscuno.hxx>
-#include <unonames.hxx>
 #include <docoptio.hxx>
 
 using namespace com::sun::star;
-
-std::span<const SfxItemPropertyMapEntry> ScDocOptionsHelper::GetPropertyMap()
-{
-    static const SfxItemPropertyMapEntry aMap[] =
-    {
-        { SC_UNO_CALCASSHOWN,  PROP_UNO_CALCASSHOWN ,  cppu::UnoType<bool>::get(),          0, 0},
-        { SC_UNO_DEFTABSTOP,   PROP_UNO_DEFTABSTOP  ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
-        { SC_UNO_IGNORECASE,   PROP_UNO_IGNORECASE  ,  cppu::UnoType<bool>::get(),          0, 0},
-        { SC_UNO_ITERENABLED,  PROP_UNO_ITERENABLED ,  cppu::UnoType<bool>::get(),          0, 0},
-        { SC_UNO_ITERCOUNT,    PROP_UNO_ITERCOUNT   ,  cppu::UnoType<sal_Int32>::get(),    0, 0},
-        { SC_UNO_ITEREPSILON,  PROP_UNO_ITEREPSILON ,  cppu::UnoType<double>::get(),       0, 0},
-        { SC_UNO_LOOKUPLABELS, PROP_UNO_LOOKUPLABELS,  cppu::UnoType<bool>::get(),          0, 0},
-        { SC_UNO_MATCHWHOLE,   PROP_UNO_MATCHWHOLE  ,  cppu::UnoType<bool>::get(),          0, 0},
-        { SC_UNO_NULLDATE,     PROP_UNO_NULLDATE    ,  cppu::UnoType<util::Date>::get(),   0, 0},
-        { SC_UNO_SPELLONLINE,  PROP_UNO_SPELLONLINE ,  cppu::UnoType<bool>::get(),          0, 0},
-        { SC_UNO_STANDARDDEC,  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
-        { SC_UNO_REGEXENABLED, PROP_UNO_REGEXENABLED,  cppu::UnoType<bool>::get(),          0, 0},
-        { SC_UNO_WILDCARDSENABLED, PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),  0, 0},
-    };
-    return aMap;
-}
 
 bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
@@ -103,9 +81,6 @@ bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
             if ( aValue >>= aDate )
                 rOptions.SetDate( aDate.Day, aDate.Month, aDate.Year );
         }
-        break;
-        case PROP_UNO_SPELLONLINE:
-            rOptions.SetAutoSpell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
         case PROP_UNO_STANDARDDEC:
         {
@@ -168,9 +143,6 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
             util::Date aDate( nD, nM, nY );
             aRet <<= aDate;
         }
-        break;
-        case PROP_UNO_SPELLONLINE:
-            aRet <<= rOptions.IsAutoSpell();
         break;
         case PROP_UNO_STANDARDDEC :
             aRet <<= static_cast<sal_Int16>( rOptions.GetStdPrecision() );

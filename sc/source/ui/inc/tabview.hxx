@@ -617,6 +617,7 @@ public:
     void            SetDrawBrushSet( std::unique_ptr<SfxItemSet> pNew, bool bLock );
     void            ResetBrushDocument();
 
+    SC_DLLPUBLIC bool IsAutoSpell() const;
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
     void ResetAutoSpellForContentChange();

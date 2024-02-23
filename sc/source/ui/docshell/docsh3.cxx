@@ -427,14 +427,12 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     //  Settings from the SpellCheckCfg get into Doc- and ViewOptions
 
     LanguageType nDefLang, nCjkLang, nCtlLang;
-    bool bAutoSpell;
-    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
+    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang );
     ScModule* pScMod = SC_MOD();
 
     ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
     ScFormulaOptions aFormulaOpt = pScMod->GetFormulaOptions();
     ScViewOptions aViewOpt = pScMod->GetViewOptions();
-    aDocOpt.SetAutoSpell( bAutoSpell );
 
     if (!comphelper::IsFuzzing())
     {

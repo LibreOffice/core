@@ -963,7 +963,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
         return;
 
     ScViewData& rViewData = pActiveViewSh->GetViewData();
-    bool bOnlineSpell = rViewData.GetDocument().GetDocOptions().IsAutoSpell();
+    bool bOnlineSpell = pActiveViewSh->IsAutoSpell();
 
     //  SetDefaultLanguage is independent of the language attributes,
     //  ScGlobal::GetEditDefaultLanguage is always used.

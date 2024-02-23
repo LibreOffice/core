@@ -45,6 +45,7 @@
 #include <clipparam.hxx>
 #include <stringutil.hxx>
 #include <tokenarray.hxx>
+#include <unonames.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -166,8 +167,33 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     return true;
 }
 
+namespace
+{
+    std::span<const SfxItemPropertyMapEntry> GetPropertyMap()
+    {
+        static const SfxItemPropertyMapEntry aMap[] =
+        {
+            { SC_UNO_CALCASSHOWN,  PROP_UNO_CALCASSHOWN ,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_DEFTABSTOP,   PROP_UNO_DEFTABSTOP  ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
+            { SC_UNO_IGNORECASE,   PROP_UNO_IGNORECASE  ,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_ITERENABLED,  PROP_UNO_ITERENABLED ,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_ITERCOUNT,    PROP_UNO_ITERCOUNT   ,  cppu::UnoType<sal_Int32>::get(),    0, 0},
+            { SC_UNO_ITEREPSILON,  PROP_UNO_ITEREPSILON ,  cppu::UnoType<double>::get(),       0, 0},
+            { SC_UNO_LOOKUPLABELS, PROP_UNO_LOOKUPLABELS,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_MATCHWHOLE,   PROP_UNO_MATCHWHOLE  ,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_NULLDATE,     PROP_UNO_NULLDATE    ,  cppu::UnoType<util::Date>::get(),   0, 0},
+            // SpreadsheetDocumentSettings supports "SpellOnline" so we must claim to support this here too
+            { SC_UNO_SPELLONLINE,  0 ,                     cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_STANDARDDEC,  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
+            { SC_UNO_REGEXENABLED, PROP_UNO_REGEXENABLED,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_WILDCARDSENABLED, PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),  0, 0},
+        };
+        return aMap;
+    }
+}
+
 ScFunctionAccess::ScFunctionAccess() :
-    aPropertyMap( ScDocOptionsHelper::GetPropertyMap() ),
+    aPropertyMap( GetPropertyMap() ),
     mbArray( true ),    // default according to behaviour of older Office versions
     mbValid( true )
 {
@@ -238,6 +264,11 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
         if( !(aValue >>= mbArray) )
             throw lang::IllegalArgumentException();
     }
+    else if (aPropertyName == SC_UNO_SPELLONLINE)
+    {
+        // silently ignore this property
+        SAL_WARN("sc", "'SpellOnline' not implemented for ScFunctionAccess");
+    }
     else
     {
         if ( !pOptions )
@@ -257,6 +288,12 @@ uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const OUString& aPropertyN
 
     if ( aPropertyName == "IsArrayFunction" )
         return uno::Any( mbArray );
+
+    if (aPropertyName == SC_UNO_SPELLONLINE)
+    {
+        SAL_WARN("sc", "'SpellOnline' not implemented for ScFunctionAccess");
+        return uno::Any(false);
+    }
 
     if ( !pOptions )
         pOptions.reset( new ScDocOptions() );

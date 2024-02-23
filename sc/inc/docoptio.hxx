@@ -39,7 +39,6 @@ class SC_DLLPUBLIC ScDocOptions
     bool       bIsIter;                 ///< iterations for circular refs
     bool       bCalcAsShown;            ///< calculate as shown (wrt precision)
     bool       bMatchWholeCell;         ///< search criteria must match the whole cell
-    bool       bDoAutoSpell;            ///< auto-spelling
     bool       bLookUpColRowNames;      ///< determine column-/row titles automagically
     mutable bool bFormulaRegexEnabled;    ///< regular expressions in formulas enabled, only when reading settings
     mutable bool bFormulaWildcardsEnabled;///< wildcards in formulas enabled, only when reading settings
@@ -50,8 +49,6 @@ public:
 
     bool   IsLookUpColRowNames() const       { return bLookUpColRowNames; }
     void   SetLookUpColRowNames( bool bVal ) { bLookUpColRowNames = bVal; }
-    bool   IsAutoSpell() const              { return bDoAutoSpell; }
-    void   SetAutoSpell( bool bVal )        { bDoAutoSpell = bVal; }
     bool   IsMatchWholeCell() const         { return bMatchWholeCell; }
     void   SetMatchWholeCell( bool bVal )   { bMatchWholeCell = bVal; }
     bool   IsIgnoreCase() const             { return bIsIgnoreCase; }
@@ -116,7 +113,6 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.nTabDistance           == nTabDistance
             &&  rOpt.bCalcAsShown           == bCalcAsShown
             &&  rOpt.bMatchWholeCell        == bMatchWholeCell
-            &&  rOpt.bDoAutoSpell           == bDoAutoSpell
             &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
             &&  rOpt.bFormulaWildcardsEnabled == bFormulaWildcardsEnabled

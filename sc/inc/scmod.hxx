@@ -174,9 +174,9 @@ public:
     void                SetPrintOptions ( const ScPrintOptions& rOpt );
     void                InsertEntryToLRUList(sal_uInt16 nFIndex);
 
-    static void         GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang,
-                                          bool& rAutoSpell );
+    static void         GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang );
     static void         SetAutoSpellProperty( bool bSet );
+    static bool         GetAutoSpellProperty();
     static bool         HasThesaurusLanguage( LanguageType nLang );
 
     static LanguageType GetOptDigitLanguage();      // from CTL options

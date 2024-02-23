@@ -688,16 +688,18 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         aGridColor = rOpts.GetGridColor();
     }
 
+    ScTabViewShell* pCurTabViewShell = mrViewData.GetViewShell();
+
     aOutputData.SetSyntaxMode       ( mrViewData.IsSyntaxMode() );
     aOutputData.SetGridColor        ( aGridColor );
     aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
     aOutputData.SetShowFormulas     ( rOpts.GetOption( VOPT_FORMULAS ) );
-    aOutputData.SetShowSpellErrors  ( rDoc.GetDocOptions().IsAutoSpell() );
+    aOutputData.SetShowSpellErrors  ( pCurTabViewShell && pCurTabViewShell->IsAutoSpell() );
     aOutputData.SetMarkClipped      ( SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible );
 
     aOutputData.SetUseStyleColor( true );       // always set in table view
 
-    aOutputData.SetViewShell( mrViewData.GetViewShell() );
+    aOutputData.SetViewShell(pCurTabViewShell);
 
     bool bGrid = rOpts.GetOption( VOPT_GRID ) && mrViewData.GetShowGrid();
     bool bGridFirst = !rOpts.GetOption( VOPT_GRID_ONTOP );
@@ -796,13 +798,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     {
         // init redraw
-        ScTabViewShell* pTabViewShell = mrViewData.GetViewShell();
-
-        if(pTabViewShell)
+        if (pCurTabViewShell)
         {
             MapMode aCurrentMapMode(pContentDev->GetMapMode());
             pContentDev->SetMapMode(aDrawMode);
-            SdrView* pDrawView = pTabViewShell->GetScDrawView();
+            SdrView* pDrawView = pCurTabViewShell->GetScDrawView();
 
             if(pDrawView)
             {
@@ -1038,9 +1038,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     {
         // end redraw
-        ScTabViewShell* pTabViewShell = mrViewData.GetViewShell();
-
-        if(pTabViewShell)
+        if (pCurTabViewShell)
         {
             MapMode aCurrentMapMode(pContentDev->GetMapMode());
             pContentDev->SetMapMode(aDrawMode);
@@ -1066,7 +1064,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 rDevice.SetMapMode(aNew);
             }
 
-            SdrView* pDrawView = pTabViewShell->GetScDrawView();
+            SdrView* pDrawView = pCurTabViewShell->GetScDrawView();
 
             if(pDrawView)
             {
