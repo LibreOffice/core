@@ -259,7 +259,7 @@ gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 
 # VS2019 produces a warning C4857, that it doesn't support -std:c++20; it can't
 # be suppressed by -wd4857, only by -Wv:18. The warning seems incorrect, because
-# using -std:c++17 produces errors about undeclated 'char8_t'. VS2022 doesn't
+# using -std:c++17 produces errors about undeclared 'char8_t'. VS2022 doesn't
 # have the problem, so drop -Wv:18 when bumping baseline.
 gb_CXXCLRFLAGS := \
 	$(if $(COM_IS_CLANG), \
