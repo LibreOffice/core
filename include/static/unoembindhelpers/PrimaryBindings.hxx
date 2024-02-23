@@ -104,7 +104,7 @@ template <typename T> void registerSequence(char const* name)
                   })
         .function("size", &css::uno::Sequence<T>::getLength)
         .function("get",
-                  +[](css::uno::Sequence<T> const& self, sal_Int32 index) {
+                  +[](css::uno::Sequence<T> const& self, sal_Int32 index) -> T const& {
                       checkSequenceAccess(self, index);
                       return self[index];
                   })
