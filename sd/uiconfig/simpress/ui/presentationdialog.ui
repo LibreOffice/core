@@ -746,7 +746,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="enableinteractivemode">
-                            <property name="label" translatable="yes" context="presentationdialog|enableinteractivemode">Live-mode slidehow editing</property>
+                            <property name="label" translatable="yes" context="presentationdialog|enableinteractivemode">Live-mode slideshow editing</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
