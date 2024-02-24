@@ -37,4 +37,8 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_a11y))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,sc_a11y))
 $(eval $(call gb_CppunitTest_use_common_configuration,sc_a11y))
 
+$(eval $(call gb_CppunitTest_use_packages,sc_a11y, \
+    postprocess_images \
+))
+
 # vim: set noet sw=4 ts=4:
