@@ -170,8 +170,8 @@ FONT_LINLIBERTINEG_TARBALL := e7a384790b13c29113e22e596ade9687-LinLibertineG-201
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_KUFI_ARABIC_SHA256SUM := 29acc15a4c4d6b51201ba5d60f303dfbc2e5acbfdb70413c9ae1ed34fa259994
-FONT_NOTO_KUFI_ARABIC_TARBALL := noto-fonts-20171024.tar.gz
+FONT_NOTO_KUFI_ARABIC_SHA256SUM := 1b6880e4b8df09c3b9e246d6084bfd94bf32a0ffff60cf2dcffd3622d0e2d79f
+FONT_NOTO_KUFI_ARABIC_TARBALL := NotoKufiArabic-v2.109.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
