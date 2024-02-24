@@ -390,88 +390,88 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 Sequence<sal_Int8> SAL_CALL OComponent::methodByte(const Sequence< sal_Int8 >& aSeq) throw( RuntimeException )
 {
     sal_Int8 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence<float> SAL_CALL OComponent::methodFloat(const Sequence< float>& aSeq) throw( RuntimeException )
 {
     float _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence<double> SAL_CALL OComponent::methodDouble(const Sequence< double >& aSeq) throw( RuntimeException)
 {
     double _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence< sal_Bool > SAL_CALL OComponent::methodBool(const Sequence< sal_Bool >& aSeq) throw( RuntimeException)
 {
     sal_Bool _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence< sal_Int16 > SAL_CALL OComponent::methodShort(const Sequence< sal_Int16 >& aSeq) throw( RuntimeException )
 {
     sal_Int16 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence< sal_uInt16 > SAL_CALL OComponent::methodUShort(const Sequence< sal_uInt16 >& aSeq) throw( RuntimeException )
 {
     sal_uInt16 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence< sal_Int32 > SAL_CALL OComponent::methodLong(const Sequence< sal_Int32 >& aSeq) throw( RuntimeException)
 {
     sal_Int32 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++)  {
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence< sal_uInt32 > SAL_CALL OComponent::methodULong(const Sequence< sal_uInt32 >& aSeq) throw( RuntimeException)
 {
     sal_uInt32 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence< OUString > SAL_CALL OComponent::methodString(const Sequence< OUString >& aSeq) throw( RuntimeException)
 {
     OUString _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++) {
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence< sal_Unicode > SAL_CALL OComponent::methodChar(const Sequence< sal_Unicode >& aSeq) throw( RuntimeException)
 {
     sal_Unicode _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
 Sequence< Any > SAL_CALL OComponent::methodAny(const Sequence< Any >& aSeq) throw( RuntimeException)
 {
     Any _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
         TypeClass _t= _x.getValueTypeClass();
         if( _t== TypeClass_STRING)
             OUString s(* (rtl_uString**)_x.getValue());
@@ -483,8 +483,8 @@ Sequence< Any > SAL_CALL OComponent::methodAny(const Sequence< Any >& aSeq) thro
 Sequence< Type > SAL_CALL OComponent::methodType(const Sequence< Type >& aSeq) throw( RuntimeException )
 {
     Type _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
-        _x= aSeq.getConstArray()[i];
+    for( const auto& i : aSeq.getConstArray() ){
+        _x= i;
     }
     return aSeq;
 }
