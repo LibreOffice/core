@@ -67,7 +67,7 @@ template <> struct typed_flags<vcl::PushFlags> : is_typed_flags<vcl::PushFlags, 
 #define PUSH_ALLFONT                                                                               \
     (vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::TEXTFILLCOLOR | vcl::PushFlags::TEXTLINECOLOR     \
      | vcl::PushFlags::OVERLINECOLOR | vcl::PushFlags::TEXTALIGN | vcl::PushFlags::TEXTLAYOUTMODE  \
-     | vcl::PushFlags::TEXTLANGUAGE | vcl::PushFlags::RTLENABLED | vcl::PushFlags::FONT)
+     | vcl::PushFlags::TEXTLANGUAGE | vcl::PushFlags::FONT)
 
 namespace vcl::text
 {
