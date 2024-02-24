@@ -45,8 +45,10 @@ void ValueSetWithTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 void ValueSetWithTextControl::SetOptimalDrawingAreaHeight()
 {
     const vcl::Font aFont(Application::GetSettings().GetStyleSettings().GetLabelFont());
-    const sal_Int32 nRowHeight = aFont.GetFontSize().Height() * 9 / 4; // see UserDraw()
-    const Size aSize(GetOutputSizePixel().Width(), nRowHeight * maItems.size());
+    double fRowHeight = aFont.GetFontSize().Height() * 9 / 4.0; // see UserDraw()
+    // It still looks too small. Probably the height specified should be the leading point size?
+    fRowHeight *= 1.2; // add 20% leading
+    const Size aSize(GetOutputSizePixel().Width(), fRowHeight * maItems.size());
     GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
     SetOutputSizePixel(aSize);
 }
