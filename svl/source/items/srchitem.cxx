@@ -364,7 +364,7 @@ void SvxSearchItem::SetWildcard( bool bVal )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
     }
-    else if ( SearchAlgorithms2::REGEXP == m_aSearchOpt.AlgorithmType2 )
+    else if ( SearchAlgorithms2::WILDCARD == m_aSearchOpt.AlgorithmType2 )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
     }
