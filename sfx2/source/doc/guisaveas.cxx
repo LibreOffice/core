@@ -1331,14 +1331,15 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
 #ifdef _WIN32
         if( !bIsInTempPath )
         {
-            wchar_t sPath[MAX_PATH+1];
-            HRESULT hRes = SHGetFolderPathW( nullptr, CSIDL_INTERNET_CACHE, nullptr, SHGFP_TYPE_CURRENT, sPath );
+            PWSTR sPath;
+            HRESULT hRes = SHGetKnownFolderPath(FOLDERID_InternetCache, 0, nullptr, &sPath);
             if( SUCCEEDED(hRes) )
             {
                 OUString sTempINetFiles;
                 if( osl::FileBase::getFileURLFromSystemPath(OUString(o3tl::toU(sPath)), sTempINetFiles) == osl::FileBase::E_None )
                     bIsInTempPath = !sTempINetFiles.isEmpty() && sLocationURL.startsWith( sTempINetFiles );
             }
+            CoTaskMemFree(sPath);
         }
 #endif
         // Suggest somewhere other than the system's temp directory
