@@ -1041,7 +1041,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         for key, value in defs.items():
             define = key
             if value is not None:
-                define += '=' + VisualStudioIntegrationGenerator.escapepattern.sub(r'\1', value)
+                define += '=' + VisualStudioIntegrationGenerator.escapepattern.sub(r'\1', value).replace('""', '"')
             defines_list.append(define)
         return defines_list
 
