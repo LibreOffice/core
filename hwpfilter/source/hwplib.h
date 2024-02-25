@@ -92,10 +92,6 @@ typedef struct
     int   mulY, divY;
 } ZZScaleXY;
 
-#if !defined(_WIN32) && !defined(MAX_PATH)
-#  define MAX_PATH  260
-#endif                                            /* MAX_PATH */
-
 #ifndef TRUE
 # define TRUE       1
 # define FALSE      0
