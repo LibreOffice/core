@@ -494,21 +494,9 @@ namespace XSLT
             params = args;
         }
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4996)
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
         xmlSubstituteEntitiesDefault(0);
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
         m_parameters.clear();
         for (int i = 0; i < params.getLength(); i++)
