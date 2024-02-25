@@ -41,14 +41,14 @@
 
 // apparently PATH_MAX is not standard and not defined by MSVC
 #ifndef PATH_MAX
-#ifdef _MAX_PATH
+#ifdef _WIN32
+#define PATH_MAX 32767
+#elif defined _MAX_PATH
 #define PATH_MAX _MAX_PATH
-#else
-#ifdef MAX_PATH
+#elif defined MAX_PATH
 #define PATH_MAX MAX_PATH
 #else
 #error no PATH_MAX
-#endif
 #endif
 #endif
 
@@ -120,14 +120,14 @@ static void setPythonHome ( const OUString & pythonHome )
         wcsncpy(wide, o3tl::toW(systemPythonHome.getStr()), len + 1);
 #else
     OString o = OUStringToOString(systemPythonHome, osl_getThreadTextEncoding());
-    size_t len = mbstowcs(wide, o.pData->buffer, PATH_MAX + 1);
+    size_t len = mbstowcs(wide, o.pData->buffer, std::size(wide));
     if(len == size_t(-1))
     {
         PyErr_SetString(PyExc_SystemError, "invalid multibyte sequence in python home path");
         return;
     }
 #endif
-    if(len >= PATH_MAX + 1)
+    if (len >= std::size(wide))
     {
         PyErr_SetString(PyExc_SystemError, "python home path is too long");
         return;
