@@ -136,7 +136,7 @@ WCHAR* commandLineAppend(WCHAR* buffer, std::wstring_view text)
 // current executable.
 [[nodiscard]] std::pair<std::wstring, std::wstring> extendLoaderEnvironment()
 {
-    std::vector<wchar_t> executable_path(MAX_PATH);
+    std::vector<wchar_t> executable_path(32767);
     DWORD exe_len;
     for (;;)
     {
