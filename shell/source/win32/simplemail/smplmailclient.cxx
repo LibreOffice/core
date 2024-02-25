@@ -67,7 +67,7 @@ namespace /* private */
         LONG lret = RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\SendAsEMailClient", &hkey);
         if (lret == ERROR_SUCCESS)
         {
-            wchar_t buff[MAX_PATH];
+            wchar_t buff[32767];
             LONG sz = sizeof(buff);
             lret = RegQueryValueW(hkey, nullptr, buff, &sz);
             if (lret == ERROR_SUCCESS)
