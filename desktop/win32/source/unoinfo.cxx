@@ -27,17 +27,15 @@
 
 #include <tools/pathutils.hxx>
 
-#define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
-#define MY_STRING(s) (s), MY_LENGTH(s)
-
 namespace {
 
-wchar_t * getBrandPath(wchar_t * path) {
-    DWORD n = GetModuleFileNameW(nullptr, path, MAX_PATH);
-    if (n == 0 || n >= MAX_PATH) {
+template<size_t N> std::wstring_view getBrandPath(wchar_t (&path)[N])
+{
+    DWORD n = GetModuleFileNameW(nullptr, path, N);
+    if (n == 0 || n >= N) {
         exit(EXIT_FAILURE);
     }
-    return tools::filename(path);
+    return { path, tools::filename(path) };
 }
 
 void writeNull() {
@@ -46,11 +44,9 @@ void writeNull() {
     }
 }
 
-void writePath(
-    wchar_t const * frontBegin, wchar_t const * frontEnd,
-    wchar_t const * backBegin, std::size_t backLength)
+void writePath(std::wstring_view front, std::wstring_view back)
 {
-    std::wstring path = tools::buildPath({ frontBegin, frontEnd }, { backBegin, backLength });
+    std::wstring path = tools::buildPath(front, back);
     if (path.empty()) {
         exit(EXIT_FAILURE);
     }
@@ -62,19 +58,18 @@ void writePath(
 }
 
 int wmain(int argc, wchar_t ** argv, wchar_t **) {
+    wchar_t path_buf[32767];
     if (argc == 2 && wcscmp(argv[1], L"c++") == 0) {
-        wchar_t path[MAX_PATH];
-        wchar_t * pathEnd = getBrandPath(path);
-        writePath(path, pathEnd, MY_STRING(L""));
+        auto path = getBrandPath(path_buf);
+        writePath(path, L"");
     } else if (argc == 2 && wcscmp(argv[1], L"java") == 0) {
         if (fwrite("1", 1, 1, stdout) != 1) {
             exit(EXIT_FAILURE);
         }
-        wchar_t path[MAX_PATH];
-        wchar_t * pathEnd = getBrandPath(path);
-        writePath(path, pathEnd, MY_STRING(L"classes\\libreoffice.jar"));
+        auto path = getBrandPath(path_buf);
+        writePath(path, L"classes\\libreoffice.jar");
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L""));
+        writePath(path, L"");
     } else {
         exit(EXIT_FAILURE);
     }
