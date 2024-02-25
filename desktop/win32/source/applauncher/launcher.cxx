@@ -19,6 +19,7 @@
 
 #include "launcher.hxx"
 
+#include <filesystem>
 #include <stdlib.h>
 #include <malloc.h>
 
@@ -26,10 +27,7 @@ extern "C" int APIENTRY wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 {
     // Retrieve startup info
 
-    STARTUPINFOW aStartupInfo;
-
-    ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
-    aStartupInfo.cb = sizeof( aStartupInfo );
+    STARTUPINFOW aStartupInfo{ sizeof(aStartupInfo) };
     GetStartupInfoW( &aStartupInfo );
 
     // Retrieve command line
@@ -42,20 +40,15 @@ extern "C" int APIENTRY wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 
     // Calculate application name
 
-    WCHAR szApplicationName[MAX_PATH];
-    WCHAR szDrive[MAX_PATH];
-    WCHAR szDir[MAX_PATH];
-    WCHAR szFileName[MAX_PATH];
-    WCHAR szExt[MAX_PATH];
-
-    GetModuleFileNameW( nullptr, szApplicationName, MAX_PATH );
-    _wsplitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
-    _wmakepath( szApplicationName, szDrive, szDir, L"soffice", L".exe" );
+    WCHAR szThisAppName[32767];
+    GetModuleFileNameW(nullptr, szThisAppName, std::size(szThisAppName));
+    std::filesystem::path soffice_exe(szThisAppName);
+    soffice_exe.replace_filename(L"soffice.exe");
 
     PROCESS_INFORMATION aProcessInfo;
 
     bool fSuccess = CreateProcessW(
-        szApplicationName,
+        soffice_exe.c_str(),
         lpCommandLine,
         nullptr,
         nullptr,
