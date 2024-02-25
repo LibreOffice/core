@@ -300,12 +300,12 @@ namespace /* private */
 
 STDAPI DllRegisterServer()
 {
-    WCHAR ModuleFileName[MAX_PATH];
+    WCHAR ModuleFileName[32767];
 
     GetModuleFileNameW(
         GetCurrentModuleHandle(),
         ModuleFileName,
-        sizeof(ModuleFileName)/sizeof(ModuleFileName[0]));
+        std::size(ModuleFileName));
 
     HRESULT hr = S_OK;
 
