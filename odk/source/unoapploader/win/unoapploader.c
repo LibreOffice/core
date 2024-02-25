@@ -72,9 +72,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     if ( path != NULL )
     {
-        wchar_t cmd[
-            MY_LENGTH(L"\"") + MAX_PATH +
-            MY_LENGTH(L"\\unoinfo.exe\" c++")];
+        wchar_t cmd[32767];
             /* hopefully does not overflow */
         cmd[0] = L'"';
         wcscpy(cmd + 1, path);
