@@ -209,7 +209,6 @@
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="row-spacing">6</property>
-            <property name="column-spacing">12</property>
             <child>
               <object class="GtkBox" id="gridcontent16">
                 <property name="visible">True</property>
@@ -224,12 +223,11 @@
                     <property name="column-spacing">3</property>
                     <child>
                       <object class="GtkToolbar" id="content1">
-                        <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="toolbar-style">icons</property>
                         <property name="show-arrow">False</property>
                         <child>
-                          <object class="GtkToggleToolButton" id="contenttoggle">
+                          <object class="GtkToolButton" id="contenttoggle">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="tooltip-text" translatable="yes" context="navigatorpanel|contenttoggle|tooltip_text">Toggle Master View</property>

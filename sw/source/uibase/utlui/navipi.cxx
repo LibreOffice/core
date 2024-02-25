@@ -295,7 +295,6 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OUString&, rCommand, void)
         bool bGlobalMode = IsGlobalMode();
         m_pConfig->SetGlobalActive(bGlobalMode);
         m_xGlobalToolBox->set_item_active("globaltoggle", bGlobalMode);
-        m_xContent1ToolBox->set_item_active("contenttoggle", bGlobalMode);
     }
     else if (rCommand == "save")
     {
@@ -511,11 +510,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xDocListBox->set_help_id(HID_NAVIGATOR_LISTBOX);
     m_xDocListBox->set_size_request(42, -1); // set a nominal width so it takes width of surroundings
 
-    if (!IsGlobalDoc())
-    {
-        m_xContent1ToolBox->set_item_visible("contenttoggle", false);
-    }
-
     bool bFloatingNavigator = ParentIsFloatingWindow(m_xNavigatorDlg);
 
     m_xContentTree->ShowTree();
@@ -557,6 +551,8 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
                         pActView->GetWrtShellPtr()->IsGlblDocSaveLinks());
         if (m_pConfig->IsGlobalActive())
             ToggleTree();
+        else
+            m_xContent1ToolBox->set_visible(true);
         if (bFloatingNavigator)
             m_xGlobalTree->grab_focus();
     }
@@ -668,13 +664,7 @@ void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
             {
                 SwWrtShell* pWrtShell = pActView->GetWrtShellPtr();
                 m_xContentTree->SetActiveShell(pWrtShell);
-                bool bGlobal = IsGlobalDoc();
-                m_xContent1ToolBox->set_item_visible("contenttoggle", bGlobal);
-                if ((!bGlobal && IsGlobalMode()) || (!IsGlobalMode() && m_pConfig->IsGlobalActive()))
-                {
-                    ToggleTree();
-                }
-                if (bGlobal)
+                if (IsGlobalDoc())
                 {
                     m_xGlobalToolBox->set_item_active("save", pWrtShell->IsGlblDocSaveLinks());
                 }
