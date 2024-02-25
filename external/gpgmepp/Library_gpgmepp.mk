@@ -72,6 +72,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,gpgmepp,\
 	UnpackedTarball/gpgmepp/lang/cpp/src/keylistresult \
 	UnpackedTarball/gpgmepp/lang/cpp/src/scdgetinfoassuantransaction \
 	UnpackedTarball/gpgmepp/lang/cpp/src/signingresult \
+	UnpackedTarball/gpgmepp/lang/cpp/src/statusconsumerassuantransaction \
 	UnpackedTarball/gpgmepp/lang/cpp/src/swdbresult \
 	UnpackedTarball/gpgmepp/lang/cpp/src/tofuinfo \
 	UnpackedTarball/gpgmepp/lang/cpp/src/trustitem \

@@ -20,8 +20,8 @@
    (void)ctx;
 --- src/gpgme-w32spawn.c
 +++ src/gpgme-w32spawn.c
-@@ -243,7 +243,7 @@
-           handle = LoadLibrary ("user32.dll");
+@@ -24,7 +249,7 @@
+           handle = LoadLibraryA ("user32.dll");
            if (handle)
              {
 -              func = GetProcAddress (handle, "AllowSetForegroundWindow");
