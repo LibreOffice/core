@@ -62,4 +62,6 @@
     <string name="search_find_next">Najít další</string>
     <string name="search_find_previous">Najít předchozí</string>
     <string name="action_save_as">Uložit jako…</string>
+    <string name="file_icon_desc">Ikona souboru</string>
+    <string name="calc_optimal_width">Optimální šířka</string>
 </resources>
