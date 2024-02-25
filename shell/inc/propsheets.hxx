@@ -75,7 +75,7 @@ private:
 
 private:
     LONG m_RefCnt;
-    Filepath_char_t m_szFileName[MAX_PATH];
+    std::wstring m_FileName;
 };
 
 #endif

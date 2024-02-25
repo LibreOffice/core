@@ -138,9 +138,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
                                                0, buffer.get(), size + 1 );
             if ( result_size != 0 )
             {
-                std::wstring fname = getShortPathName( buffer.get() );
-                ZeroMemory( m_szFileName, sizeof( m_szFileName ) );
-                wcsncpy( m_szFileName, fname.c_str(), ( SAL_N_ELEMENTS( m_szFileName ) - 1 ) );
+                m_FileName = getShortPathName(buffer.get());
                 hr = S_OK;
             }
             else
@@ -259,7 +257,7 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
     try
     {
-        CMetaInfoReader metaInfo(m_szFileName);
+        CMetaInfoReader metaInfo(m_FileName);
 
         SetWindowTextW(GetDlgItem(hwnd,IDC_TITLE),    metaInfo.getTagData( META_INFO_TITLE ).c_str() );
         SetWindowTextW(GetDlgItem(hwnd,IDC_AUTHOR),   metaInfo.getTagData( META_INFO_AUTHOR ).c_str() );
@@ -287,9 +285,9 @@ void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/
 {
     try
     {
-        CMetaInfoReader metaInfo(m_szFileName);
+        CMetaInfoReader metaInfo(m_FileName);
 
-        document_statistic_reader_ptr doc_stat_reader = create_document_statistic_reader(m_szFileName, &metaInfo);
+        document_statistic_reader_ptr doc_stat_reader = create_document_statistic_reader(m_FileName, &metaInfo);
 
         statistic_group_list_t sgl;
         doc_stat_reader->read(&sgl);
