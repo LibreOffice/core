@@ -42,7 +42,6 @@ const std::wstring WSPACE(SPACE);
 CInfoTip::CInfoTip(LONG RefCnt) :
     m_RefCnt(RefCnt)
 {
-    ZeroMemory(m_szFileName, sizeof(m_szFileName));
     InterlockedIncrement(&g_DllRefCnt);
 }
 
@@ -197,7 +196,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFl
     const std::wstring CONST_SPACE(SPACE);
 
     //display File Type, no matter other info is loaded successfully or not.
-    std::wstring tmpTypeStr = getFileTypeInfo( get_file_name_extension(m_szFileName) );
+    std::wstring tmpTypeStr = getFileTypeInfo( get_file_name_extension(m_FileName) );
     if ( tmpTypeStr != EMPTY_STRING )
     {
         msg += GetResString(IDS_TYPE_COLON) + CONST_SPACE;
@@ -206,7 +205,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFl
 
     try
     {
-        CMetaInfoReader meta_info_accessor(m_szFileName);
+        CMetaInfoReader meta_info_accessor(m_FileName);
 
         //display document title;
         if ( meta_info_accessor.getTagData( META_INFO_TITLE ).length() > 0)
@@ -265,7 +264,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFl
     }
 
     //display file size, no matter other information is loaded successfully or not.
-    std::wstring tmpSizeStr = getFileSizeInfo( m_szFileName );
+    std::wstring tmpSizeStr = getFileSizeInfo(m_FileName.c_str());
     if ( tmpSizeStr != EMPTY_STRING )
     {
         msg += L"\n";
@@ -327,13 +326,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
 
     m_FileNameOnly = std::wstring(begin, end);
 
-    fname = getShortPathName( fname );
-
-    // ZeroMemory because strncpy doesn't '\0'-terminates the destination
-    // string; reserve the last place in the buffer for the final '\0'
-    // that's why '(sizeof(m_szFileName) - 1)'
-    ZeroMemory(m_szFileName, sizeof(m_szFileName));
-    wcsncpy(m_szFileName, fname.c_str(), (sizeof(m_szFileName)/sizeof(*m_szFileName) - 1));
+    m_FileName = getShortPathName(fname);
 
     return S_OK;
 }
