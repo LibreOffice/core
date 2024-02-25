@@ -51,6 +51,7 @@
 #ifdef _WIN32
 
 #include <oledlg.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <vcl/winscheduler.hxx>
 
 namespace {
@@ -140,34 +141,21 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
     InitializedOleGuard aGuard;
 
-    OLEUIINSERTOBJECT io = {};
-    char szFile[MAX_PATH];
-    UINT uTemp;
-
-    io.cbStruct = sizeof(io);
+    OLEUIINSERTOBJECTW io{ sizeof(io) };
     io.hWndOwner = GetActiveWindow();
 
+    wchar_t szFile[MAX_PATH];
     szFile[0] = 0;
     io.lpszFile = szFile;
-    io.cchFile = MAX_PATH;
+    io.cchFile = std::size(szFile);
 
     io.dwFlags = IOF_SELECTCREATENEW | IOF_DISABLELINK;
-
-
-    ::osl::Module aOleDlgLib;
-    if( !aOleDlgLib.load( "oledlg" ))
-        throw uno::RuntimeException();
-
-    OleUIInsertObjectA_Type * pInsertFct = reinterpret_cast<OleUIInsertObjectA_Type *>(
-                                aOleDlgLib.getSymbol( "OleUIInsertObjectA" ));
-    if( !pInsertFct )
-        throw uno::RuntimeException();
 
     // Disable any event loop shortcuts by enabling a real timer.
     // This way the native windows dialog won't block our own processing.
     WinScheduler::SetForceRealTimer();
 
-    uTemp=pInsertFct(&io);
+    UINT uTemp = OleUIInsertObjectW(&io);
 
     if ( OLEUI_OK != uTemp )
         throw ucb::CommandAbortedException();
@@ -196,8 +184,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     }
     else
     {
-        OUString aFileName
-            = OStringToOUString( std::string_view( szFile ), osl_getThreadTextEncoding() );
+        OUString aFileName(o3tl::toU(szFile));
         OUString aFileURL;
         if ( osl::FileBase::getFileURLFromSystemPath( aFileName, aFileURL ) != osl::FileBase::E_None )
             throw uno::RuntimeException();
