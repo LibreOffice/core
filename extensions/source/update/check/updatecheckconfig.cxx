@@ -183,13 +183,13 @@ OUString UpdateCheckConfig::getAllUsersDirectory()
     OUString aRet;
 
 #ifdef _WIN32
-    WCHAR szPath[MAX_PATH];
-
-    if (TRUE == SHGetSpecialFolderPathW(nullptr, szPath, CSIDL_COMMON_DOCUMENTS, true))
+    PWSTR szPath = nullptr;
+    if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_PublicDocuments, KF_FLAG_CREATE, nullptr, &szPath)))
     {
         aRet = o3tl::toU(szPath);
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
+    CoTaskMemFree(szPath);
 #else
     osl::FileBase::getTempDirURL(aRet);
 #endif
