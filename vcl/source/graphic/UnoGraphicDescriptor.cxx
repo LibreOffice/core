@@ -236,7 +236,7 @@ rtl::Reference<::comphelper::PropertySetInfo> GraphicDescriptor::createPropertyS
         { OUString( "MimeType" ), static_cast< sal_Int32 >( UnoGraphicProperty::MimeType ), cppu::UnoType< OUString >::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString( "SizePixel" ), static_cast< sal_Int32 >( UnoGraphicProperty::SizePixel ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString( "Size100thMM" ), static_cast< sal_Int32 >( UnoGraphicProperty::Size100thMM ), cppu::UnoType< awt::Size >::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString( "BitsPerPixel" ), static_cast< sal_Int32 >( UnoGraphicProperty::BitsPerPixel ), cppu::UnoType< sal_uInt8 >::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString( "BitsPerPixel" ), static_cast< sal_Int32 >( UnoGraphicProperty::BitsPerPixel ), cppu::UnoType< sal_Int8 >::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString( "Transparent" ), static_cast< sal_Int32 >( UnoGraphicProperty::Transparent ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString( "Alpha" ), static_cast< sal_Int32 >( UnoGraphicProperty::Alpha ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString( "Animated" ), static_cast< sal_Int32 >( UnoGraphicProperty::Animated ), cppu::UnoType< sal_Bool >::get(), beans::PropertyAttribute::READONLY, 0 },
