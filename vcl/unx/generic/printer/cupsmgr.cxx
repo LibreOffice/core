@@ -82,14 +82,9 @@ struct GetPPDAttribs
     {
         // This CUPS method is not at all thread-safe we need
         // to dup the pointer to a static buffer it returns ASAP
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
         OString aResult = cupsGetPPD(m_aParameter.getStr());
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_POP
         MutexGuard aGuard( *m_pSyncMutex );
         m_aResult = aResult;
         m_aCondition.set();
@@ -222,10 +217,7 @@ void CUPSManager::runDests()
 
     // n#722902 - do a fast-failing check for cups working *at all* first
     http_t* p_http;
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
     if( (p_http=httpConnectEncrypt(
              cupsServer(),
              ippPort(),
@@ -242,9 +234,7 @@ void CUPSManager::runDests()
 
         httpClose(p_http);
     }
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 void CUPSManager::initialize()
@@ -454,14 +444,9 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
                     OUString aFileName( OStringToOUString( aPPDFile, aEncoding ) );
                     // update the printer info with context information
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     ppd_file_t* pPPD = ppdOpenFile( aPPDFile.getStr() );
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_POP
                     if( pPPD )
                     {
                         // create the new parser
@@ -469,14 +454,9 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         pCUPSParser->m_aFile = rPrinter;
                         pNewParser = pCUPSParser;
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
                         /*int nConflicts =*/ cupsMarkOptions( pPPD, pDest->num_options, pDest->options );
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_POP
                         SAL_INFO("vcl.unx.print", "processing the following options for printer " << pDest->name << " (instance " << (pDest->instance == nullptr ? "null" : pDest->instance) << "):");
                         for( int k = 0; k < pDest->num_options; k++ )
                             SAL_INFO("vcl.unx.print",
@@ -497,14 +477,9 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         rInfo.m_aContext = rContext;
 
                         // clean up the mess
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
                         ppdClose( pPPD );
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
                     }
                     else
