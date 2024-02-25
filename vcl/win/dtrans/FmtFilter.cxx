@@ -322,9 +322,9 @@ static std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
         if (FAILED(hr))
             return target;
 
-        wchar_t pathW[MAX_PATH];
+        wchar_t pathW[32767];
         WIN32_FIND_DATAW wfd;
-        hr = pIShellLink->GetPath(pathW, MAX_PATH, &wfd, SLGP_RAWPATH);
+        hr = pIShellLink->GetPath(pathW, std::size(pathW), &wfd, SLGP_RAWPATH);
         if (FAILED(hr))
             return target;
 
@@ -381,8 +381,8 @@ css::uno::Sequence<sal_Int8> CF_HDROPToFileList(HGLOBAL hGlobal)
 
     for (UINT i = 0; i < nFiles; i++)
     {
-        wchar_t buff[MAX_PATH];
-        /*UINT size =*/ DragQueryFileW(static_cast<HDROP>(hGlobal), i, buff, MAX_PATH);
+        wchar_t buff[32767];
+        /*UINT size =*/ DragQueryFileW(static_cast<HDROP>(hGlobal), i, buff, std::size(buff));
         std::wstring filename = buff;
         if (isShellLink(filename))
             filename = getShellLinkTarget(filename);
