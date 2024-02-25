@@ -20,18 +20,7 @@
 
 #include <pdfparse.hxx>
 
-// boost using obsolete stuff
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4996)
-#pragma warning(disable:4503)
-#endif
-
-// workaround windows compiler: do not include multi_pass.hpp
-#include <boost/spirit/include/classic_core.hpp>
-#include <boost/spirit/include/classic_utility.hpp>
-#include <boost/spirit/include/classic_error_handling.hpp>
-#include <boost/spirit/include/classic_file_iterator.hpp>
+#include <boost/spirit/include/classic.hpp>
 #include <boost/bind/bind.hpp>
 
 #include <string.h>
@@ -43,14 +32,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <utility>
-
-// disable warnings again because someone along the line has enabled them
-// (we have  included boost headers, what did you expect?)
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4996)
-#pragma warning(disable:4503)
-#endif
 
 
 using namespace boost::spirit::classic;
@@ -630,9 +611,5 @@ std::unique_ptr<PDFEntry> PDFReader::read(std::u16string_view aFileName)
     }
     return pRet;
 }
-
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
