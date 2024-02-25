@@ -31,8 +31,8 @@ const OUString& GetSofficeExe()
 {
     static const OUString s_sPath = []() {
         OUString result;
-        wchar_t sPath[MAX_PATH];
-        if (GetModuleFileNameW(nullptr, sPath, MAX_PATH) == 0)
+        wchar_t sPath[32767];
+        if (GetModuleFileNameW(nullptr, sPath, std::size(sPath)) == 0)
             return result;
         wchar_t* pSlashPos = wcsrchr(sPath, L'\\');
         if (pSlashPos == nullptr)
