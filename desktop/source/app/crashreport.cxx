@@ -68,15 +68,10 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
     MDRawAssertionInfo* /*assertion*/,
     bool succeeded)
 {
-    // TODO: moggi: can we avoid this conversion
-#ifdef _MSC_VER
-#pragma warning (disable: 4996)
-#endif
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
-    std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id)) + ".dmp";
+    OUString aPath(OUString::Concat(o3tl::toU(path)) + o3tl::toU(id) + ".dmp");
     CrashReporter::addKeyValue("Active-SfxObject",CrashReporter::getActiveSfxObjectName(),CrashReporter::AddItem);
     CrashReporter::addKeyValue("Last-4-Uno-Commands",CrashReporter::getLoggedUnoCommands(),CrashReporter::AddItem);
-    CrashReporter::addKeyValue("DumpFile", OStringToOUString(aPath, RTL_TEXTENCODING_UTF8), CrashReporter::AddItem);
+    CrashReporter::addKeyValue("DumpFile", aPath, CrashReporter::AddItem);
     CrashReporter::addKeyValue("GDIHandles", OUString::number(::GetGuiResources(::GetCurrentProcess(), GR_GDIOBJECTS)), CrashReporter::Write);
     SAL_WARN("desktop", "minidump generated: " << aPath);
     return succeeded;
@@ -238,7 +233,7 @@ void CrashReporter::updateMinidumpLocation()
     mpExceptionHandler->set_minidump_descriptor(descriptor);
 #elif defined _WIN32
     OUString aURL = getCrashDirectory();
-    mpExceptionHandler->set_dump_path(o3tl::toW(aURL.getStr()));
+    mpExceptionHandler->set_dump_path(std::wstring(o3tl::toW(aURL)));
 #endif
 }
 
