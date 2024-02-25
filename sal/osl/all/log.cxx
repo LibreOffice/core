@@ -15,6 +15,7 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <filesystem>
 #include <fstream>
 
 #include <config_global.h>
@@ -90,26 +91,25 @@ char const * toString(sal_detail_LogLevel level) {
 char const* setEnvFromLoggingIniFile(const char* env, const char* key)
 {
     char const* sResult = nullptr;
-    wchar_t buffer[MAX_PATH];
-    GetModuleFileNameW(nullptr, buffer, MAX_PATH);
-    std::wstring sProgramDirectory(buffer);
-    std::wstring::size_type pos = sProgramDirectory.find_last_of(L"\\/");
-    sProgramDirectory = sProgramDirectory.substr(0, pos+1);
-    sProgramDirectory += L"logging.ini";
+    wchar_t buffer[32767];
+    DWORD nLen = GetModuleFileNameW(nullptr, buffer, std::size(buffer));
+    if (nLen == 0 || nLen >= std::size(buffer))
+        return sResult;
+    std::filesystem::path sProgramDirectory(std::wstring(buffer, nLen));
+    sProgramDirectory.replace_filename(L"logging.ini");
 
     std::ifstream logFileStream(sProgramDirectory);
     if (!logFileStream.good())
         return sResult;
 
     std::size_t n;
-    std::string aKey;
-    std::string sWantedKey(key);
+    std::string_view sWantedKey(key);
     std::string sLine;
     while (std::getline(logFileStream, sLine)) {
         if (sLine.find('#') == 0)
             continue;
         if ( ( n = sLine.find('=') ) != std::string::npos) {
-            aKey = sLine.substr(0, n);
+            std::string_view aKey(sLine.data(), n);
             if (aKey != sWantedKey)
                 continue;
             _putenv_s(env, sLine.substr(n+1, sLine.length()).c_str());
