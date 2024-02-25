@@ -10,3 +10,14 @@
  
      table->cursor += length;
      return FT_Err_Ok;
+--- src/truetype/ttgxvar.c
++++ src/truetype/ttgxvar.c
+@@ -1045,7 +1045,7 @@
+     if ( varData->longWords )
+       per_region_size *= 2;
+ 
+-    bytes = varData->deltaSet + per_region_size * innerIndex;
++    bytes = varData->deltaSet ? varData->deltaSet + per_region_size * innerIndex : NULL;
+ 
+     if ( varData->longWords )
+     {
