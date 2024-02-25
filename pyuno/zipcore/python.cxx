@@ -64,9 +64,9 @@ static wchar_t * encode(wchar_t * buffer, wchar_t const * text) {
 }
 
 int wmain(int argc, wchar_t ** argv, wchar_t **) {
-    wchar_t path[MAX_PATH];
-    DWORD n = GetModuleFileNameW(nullptr, path, MAX_PATH);
-    if (n == 0 || n >= MAX_PATH) {
+    wchar_t path[32767];
+    DWORD n = GetModuleFileNameW(nullptr, path, std::size(path));
+    if (n == 0 || n >= std::size(path)) {
         exit(EXIT_FAILURE);
     }
     wchar_t * pathEnd = tools::filename(path);
