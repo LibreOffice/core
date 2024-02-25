@@ -24,6 +24,19 @@ diff -ru gpgme.orig/src/dirinfo.c gpgme/src/dirinfo.c
  /* Constants used internally to select the data.  */
  enum
    {
+diff -ru gpgme.orig/src/gpgme-w32spawn.c gpgme/src/gpgme-w32spawn.c
+--- gpgme.orig/src/gpgme-w32spawn.c	2023-10-27 21:27:30.000000000 +0900
++++ gpgme/src/gpgme-w32spawn.c	2024-02-26 17:32:59.949338645 +0900
+@@ -52,6 +52,9 @@
+ #define mystderr stderr
+ #endif
+ 
++#ifdef _MSC_VER
++#define snwprintf _snwprintf
++#endif
+ 
+ 
+ static wchar_t *
 diff -ru gpgme.orig/src/mbox-util.c gpgme/src/mbox-util.c
 --- gpgme.orig/src/mbox-util.c	2016-11-16 13:22:41.000000000 +0100
 +++ gpgme/src/mbox-util.c	2017-09-30 08:18:29.270567500 +0200
@@ -53,16 +66,16 @@ diff -ru gpgme.orig/src/priv-io.h gpgme/src/priv-io.h
 diff -ru gpgme.orig/src/util.h gpgme/src/util.h
 --- gpgme.orig/src/util.h	2017-03-28 11:41:30.000000000 +0200
 +++ gpgme/src/util.h	2017-09-30 08:10:54.194049100 +0200
-@@ -35,6 +35,9 @@
- #ifdef HAVE_UNISTD_H
+@@ -36,6 +36,9 @@
  # include <unistd.h>
  #endif
+ #include <stdint.h>
 +#ifdef _MSC_VER
 +typedef int pid_t;
 +#endif
  
- #include "gpgme.h"
  
+ #include "gpgme.h"
 diff -ru gpgme.orig/src/w32-util.c gpgme/src/w32-util.c
 --- gpgme.orig/src/w32-util.c	2017-03-09 09:01:10.000000000 +0100
 +++ gpgme/src/w32-util.c	2017-09-30 08:32:02.114330500 +0200
