@@ -224,7 +224,7 @@ void VCLXAccessibleTabPage::implGetSelection( sal_Int32& nStartIndex, sal_Int32&
 
 void VCLXAccessibleTabPage::disposing()
 {
-    AccessibleTextHelper_BASE::disposing();
+    comphelper::OAccessibleTextHelper::disposing();
 
     m_pTabControl = nullptr;
     m_sPageText.clear();

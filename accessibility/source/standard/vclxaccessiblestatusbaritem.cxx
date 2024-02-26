@@ -181,7 +181,7 @@ void VCLXAccessibleStatusBarItem::implGetSelection( sal_Int32& nStartIndex, sal_
 
 void VCLXAccessibleStatusBarItem::disposing()
 {
-    AccessibleTextHelper_BASE::disposing();
+    comphelper::OAccessibleTextHelper::disposing();
 
     m_pStatusBar = nullptr;
     m_sItemName.clear();

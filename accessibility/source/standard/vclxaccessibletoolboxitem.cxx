@@ -249,7 +249,7 @@ Any SAL_CALL VCLXAccessibleToolBoxItem::queryInterface( const Type& _rType )
 
 void SAL_CALL VCLXAccessibleToolBoxItem::disposing()
 {
-    AccessibleTextHelper_BASE::disposing();
+    comphelper::OAccessibleTextHelper::disposing();
     m_pToolBox = nullptr;
 }
 

@@ -30,11 +30,8 @@
 class TabControl;
 
 
-
-typedef ::comphelper::OAccessibleTextHelper AccessibleTextHelper_BASE;
-
 class VCLXAccessibleTabPage final : public cppu::ImplInheritanceHelper<
-                                        AccessibleTextHelper_BASE,
+                                        comphelper::OAccessibleTextHelper,
                                         css::accessibility::XAccessible,
                                         css::lang::XServiceInfo>
 {
