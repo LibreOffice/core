@@ -685,6 +685,7 @@ private:
     void ScHLookup();
     void ScVLookup();
     void ScXLookup();
+    void ScFilter();
     void ScSubTotal();
 
     // If upon call rMissingField==true then the database field parameter may be

@@ -260,10 +260,12 @@ public:
 
     void PutDouble(double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);
+    void PutDoubleTrans( double fVal, SCSIZE nIndex);
     void PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
     void PutString(const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR);
     void PutString(const svl::SharedString& rStr, SCSIZE nIndex);
+    void PutStringTrans(const svl::SharedString& rStr, SCSIZE nIndex);
     void PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
@@ -355,6 +357,7 @@ public:
 
 private:
     void CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const;
+    void CalcTransPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const;
 };
 
 static std::once_flag bElementsMaxFetched;
@@ -537,6 +540,13 @@ void ScMatrixImpl::PutDouble( double fVal, SCSIZE nIndex)
     PutDouble(fVal, nC, nR);
 }
 
+void ScMatrixImpl::PutDoubleTrans(double fVal, SCSIZE nIndex)
+{
+    SCSIZE nC, nR;
+    CalcTransPosition(nIndex, nC, nR);
+    PutDouble(fVal, nC, nR);
+}
+
 void ScMatrixImpl::PutString(const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
@@ -561,6 +571,13 @@ void ScMatrixImpl::PutString(const svl::SharedString& rStr, SCSIZE nIndex)
 {
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
+    PutString(rStr, nC, nR);
+}
+
+void ScMatrixImpl::PutStringTrans(const svl::SharedString& rStr, SCSIZE nIndex)
+{
+    SCSIZE nC, nR;
+    CalcTransPosition(nIndex, nC, nR);
     PutString(rStr, nC, nR);
 }
 
@@ -2641,6 +2658,14 @@ void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
     rR = nIndex - rC*nRowSize;
 }
 
+void ScMatrixImpl::CalcTransPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
+{
+    SCSIZE nColSize = maMat.size().column;
+    SAL_WARN_IF(!nColSize, "sc.core", "ScMatrixImpl::CalcPosition: 0 cols!");
+    rR = nColSize > 1 ? nIndex / nColSize : nIndex;
+    rC = nIndex - rR * nColSize;
+}
+
 namespace {
 
 size_t get_index(SCSIZE nMaxRow, size_t nRow, size_t nCol, size_t nRowOffset, size_t nColOffset)
@@ -3182,6 +3207,11 @@ void ScMatrix::PutDouble( double fVal, SCSIZE nIndex)
     pImpl->PutDouble(fVal, nIndex);
 }
 
+void ScMatrix::PutDoubleTrans(double fVal, SCSIZE nIndex)
+{
+    pImpl->PutDoubleTrans(fVal, nIndex);
+}
+
 void ScMatrix::PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutDouble(pArray, nLen, nC, nR);
@@ -3195,6 +3225,11 @@ void ScMatrix::PutString(const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR)
 void ScMatrix::PutString(const svl::SharedString& rStr, SCSIZE nIndex)
 {
     pImpl->PutString(rStr, nIndex);
+}
+
+void ScMatrix::PutStringTrans(const svl::SharedString& rStr, SCSIZE nIndex)
+{
+    pImpl->PutStringTrans(rStr, nIndex);
 }
 
 void ScMatrix::PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)

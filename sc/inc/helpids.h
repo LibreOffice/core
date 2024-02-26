@@ -595,5 +595,6 @@ inline constexpr OUString HID_FUNC_RAND_NV = u"SC_HID_FUNC_RAND_NV"_ustr;
 inline constexpr OUString HID_FUNC_RANDBETWEEN_NV = u"SC_HID_FUNC_RANDBETWEEN_NV"_ustr;
 inline constexpr OUString HID_FUNC_XLOOKUP_MS = u"SC_HID_FUNC_XLOOKUP_MS"_ustr;
 inline constexpr OUString HID_FUNC_XMATCH_MS = u"SC_HID_FUNC_XMATCH_MS"_ustr;
+inline constexpr OUString HID_FUNC_FILTER_MS = u"SC_HID_FUNC_FILTER_MS"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

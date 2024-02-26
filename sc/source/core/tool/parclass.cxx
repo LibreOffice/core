@@ -137,6 +137,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocEqual,           {{ Array, Array                                         }, 0, Value }},
     { ocFTest,           {{ ForceArray, ForceArray                               }, 0, Value }},
     { ocFalse,           {{ Bounds                                               }, 0, Value }},
+    { ocFilter,          {{ ReferenceOrRefArray, ForceArray, Value               }, 0, ForceArrayReturn }},
     { ocForecast,        {{ Value, ForceArray, ForceArray                        }, 0, Value }},
     { ocForecast_ETS_ADD, {{ ForceArray, ForceArray, ForceArray, Value, Value, Value        }, 0, Value }},
     { ocForecast_ETS_MUL, {{ ForceArray, ForceArray, ForceArray, Value, Value, Value        }, 0, Value }},

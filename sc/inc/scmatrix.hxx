@@ -253,10 +253,12 @@ public:
 
     void PutDouble( double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);
+    void PutDoubleTrans( double fVal, SCSIZE nIndex);
     void PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
     void PutString( const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR) ;
     void PutString( const svl::SharedString& rStr, SCSIZE nIndex) ;
+    void PutStringTrans( const svl::SharedString& rStr, SCSIZE nIndex) ;
     void PutString( const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR) ;
 
     void PutEmpty( SCSIZE nC, SCSIZE nR);

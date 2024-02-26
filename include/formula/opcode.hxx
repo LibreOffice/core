@@ -506,6 +506,7 @@ enum OpCode : sal_uInt16
         ocEncodeURL         = SC_OPCODE_ENCODEURL,
         ocFourier           = SC_OPCODE_FOURIER,
         ocRandbetweenNV     = SC_OPCODE_RANDBETWEEN_NV,
+        ocFilter            = SC_OPCODE_FILTER,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,
@@ -984,6 +985,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocEncodeURL: return "EncodeURL";
     case ocFourier: return "Fourier";
     case ocRandbetweenNV: return "RandbetweenNV";
+    case ocFilter: return "Filter";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";

@@ -278,6 +278,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "VLOOKUP" , SC_OPCODE_V_LOOKUP },
     { "COM.MICROSOFT.XLOOKUP" , SC_OPCODE_X_LOOKUP },
     { "HLOOKUP" , SC_OPCODE_H_LOOKUP },
+    { "COM.MICROSOFT.FILTER" , SC_OPCODE_FILTER },
     { "ORG.OPENOFFICE.MULTIRANGE" , SC_OPCODE_MULTI_AREA }, // legacy for range list (union)
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },
@@ -727,6 +728,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "VLOOKUP" , SC_OPCODE_V_LOOKUP },
     { "_xlfn.XLOOKUP" , SC_OPCODE_X_LOOKUP },
     { "HLOOKUP" , SC_OPCODE_H_LOOKUP },
+    { "_xlfn._xlws.FILTER" , SC_OPCODE_FILTER },
     { "_xlfn.ORG.OPENOFFICE.MULTIRANGE" , SC_OPCODE_MULTI_AREA }, // legacy for range list (union)
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },
@@ -1179,6 +1181,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "VLOOKUP" , SC_OPCODE_V_LOOKUP },
     { "XLOOKUP" , SC_OPCODE_X_LOOKUP },
     { "HLOOKUP" , SC_OPCODE_H_LOOKUP },
+    { "FILTER" , SC_OPCODE_FILTER },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },    // legacy for range list (union)
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },
@@ -1632,6 +1635,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "VLOOKUP" , SC_OPCODE_V_LOOKUP },
     { "XLOOKUP" , SC_OPCODE_X_LOOKUP },
     { "HLOOKUP" , SC_OPCODE_H_LOOKUP },
+    { "FILTER" , SC_OPCODE_FILTER },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },    // legacy for range list (union)
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },  // ?? first character = I ??
@@ -2083,6 +2087,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "VLOOKUP" , SC_OPCODE_V_LOOKUP },
     { "XLOOKUP" , SC_OPCODE_X_LOOKUP },
     { "HLOOKUP" , SC_OPCODE_H_LOOKUP },
+    { "FILTER" , SC_OPCODE_FILTER },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },
     { "OFFSET" , SC_OPCODE_OFFSET },
     { "INDEX" , SC_OPCODE_INDEX },
@@ -2515,6 +2520,7 @@ const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "VLOOKUP") , SC_OPCODE_V_LOOKUP },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "XLOOKUP") , SC_OPCODE_X_LOOKUP },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "HLOOKUP") , SC_OPCODE_H_LOOKUP },
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "FILTER") , SC_OPCODE_FILTER },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "MULTIRANGE") , SC_OPCODE_MULTI_AREA }, // legacy for range list (union)
     { NC_("RID_STRLIST_FUNCTION_NAMES", "OFFSET") , SC_OPCODE_OFFSET },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "INDEX") , SC_OPCODE_INDEX }, // ?? first character = I ??
