@@ -3239,9 +3239,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDocFailed : SfxEventHintId::SaveAsDocFailed, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
                                                 m_pData->m_pObjectShell.get() ) );
 
-        if ( comphelper::LibreOfficeKit::isActive() &&
-             aFilterName.indexOf("pdf_Export") > 0 &&
-             SfxViewShell::Current() )
+        if ( comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() )
             SfxViewShell::Current()->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, "ERROR" );
 
         std::stringstream aErrCode;
