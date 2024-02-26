@@ -282,11 +282,6 @@ $(call gb_CppunitTest__use_vcl,$(1),$(false))
 
 endef
 
-define gb_CppunitTest_localized_run
-$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest_localized := $(true)
-
-endef
-
 define gb_CppunitTest__use_api
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_UnoApi_get_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES += $(call gb_UnoApi_get_target,$(2))
