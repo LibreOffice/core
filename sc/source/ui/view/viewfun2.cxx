@@ -91,6 +91,7 @@
 #include <tools/json_writer.hxx>
 
 #include <officecfg/Office/Calc.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace com::sun::star;
 using ::editeng::SvxBorderLine;
@@ -3173,6 +3174,12 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
             pTabNames.reset();
 
         SCTAB nTab = GetViewData().GetTabNo();
+
+        if (comphelper::LibreOfficeKit::isActive() && !pSrcTabs->empty())
+        {
+            ScModelObj* pModel = pDocShell->GetModel();
+            SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+        }
 
         if (bUndo)
         {

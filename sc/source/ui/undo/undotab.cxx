@@ -542,6 +542,20 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
         }
     }
 
+    if (comphelper::LibreOfficeKit::isActive() && !mpNewTabs->empty())
+    {
+        tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
+        const auto newTabsMinIt = std::min_element(mpNewTabs->begin(), mpNewTabs->end());
+        const auto oldTabsMinIt = std::min_element(mpOldTabs->begin(), mpOldTabs->end());
+        SCTAB nTab = std::min(*newTabsMinIt, *oldTabsMinIt);
+        for (SCTAB nTabIndex = nTab; nTabIndex < rDoc.GetTableCount(); ++nTabIndex)
+        {
+            if (!rDoc.IsVisible(nTabIndex))
+                continue;
+            pViewShell->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, nTabIndex, 0);
+        }
+    }
+
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
 
     pDocShell->PostPaintGridAll();
