@@ -32,6 +32,7 @@
 #elif defined _WIN32
 #include <process.h>
 #include <windows.h>
+#include <systools/win32/extended_max_path.hxx>
 #define OSL_DETAIL_GETPID _getpid()
 #else
 #include <unistd.h>
@@ -91,7 +92,7 @@ char const * toString(sal_detail_LogLevel level) {
 char const* setEnvFromLoggingIniFile(const char* env, const char* key)
 {
     char const* sResult = nullptr;
-    wchar_t buffer[32767];
+    wchar_t buffer[EXTENDED_MAX_PATH];
     DWORD nLen = GetModuleFileNameW(nullptr, buffer, std::size(buffer));
     if (nLen == 0 || nLen >= std::size(buffer))
         return sResult;

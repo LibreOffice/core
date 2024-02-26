@@ -28,6 +28,7 @@
 #include <com/sun/star/system/XSimpleMailMessage2.hpp>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/extended_max_path.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/syslocale.hxx>
@@ -67,7 +68,7 @@ namespace /* private */
         LONG lret = RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\SendAsEMailClient", &hkey);
         if (lret == ERROR_SUCCESS)
         {
-            wchar_t buff[32767];
+            wchar_t buff[EXTENDED_MAX_PATH];
             LONG sz = sizeof(buff);
             lret = RegQueryValueW(hkey, nullptr, buff, &sz);
             if (lret == ERROR_SUCCESS)

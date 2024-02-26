@@ -25,6 +25,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <systools/win32/extended_max_path.hxx>
 #include <tools/pathutils.hxx>
 
 namespace {
@@ -58,7 +59,7 @@ void writePath(std::wstring_view front, std::wstring_view back)
 }
 
 int wmain(int argc, wchar_t ** argv, wchar_t **) {
-    wchar_t path_buf[32767];
+    wchar_t path_buf[EXTENDED_MAX_PATH];
     if (argc == 2 && wcscmp(argv[1], L"c++") == 0) {
         auto path = getBrandPath(path_buf);
         writePath(path, L"");

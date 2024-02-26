@@ -30,6 +30,8 @@
 
 #include <olectl.h> // declarations of DllRegisterServer/DllUnregisterServer
 
+#include <systools/win32/extended_max_path.hxx>
+
 // Module global
 
 LONG g_DllRefCnt = 0;
@@ -300,7 +302,7 @@ namespace /* private */
 
 STDAPI DllRegisterServer()
 {
-    WCHAR ModuleFileName[32767];
+    WCHAR ModuleFileName[EXTENDED_MAX_PATH];
 
     GetModuleFileNameW(
         GetCurrentModuleHandle(),

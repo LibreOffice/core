@@ -16,6 +16,7 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <spsuppStrings.hrc>
+#include <systools/win32/extended_max_path.hxx>
 #include <unotools/resmgr.hxx>
 #include "res/spsuppDlg.h"
 
@@ -31,7 +32,7 @@ const OUString& GetSofficeExe()
 {
     static const OUString s_sPath = []() {
         OUString result;
-        wchar_t sPath[32767];
+        wchar_t sPath[EXTENDED_MAX_PATH];
         if (GetModuleFileNameW(nullptr, sPath, std::size(sPath)) == 0)
             return result;
         wchar_t* pSlashPos = wcsrchr(sPath, L'\\');

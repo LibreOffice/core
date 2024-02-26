@@ -24,6 +24,7 @@
 #include <osl/process.h>
 #include <sal/log.hxx>
 #include <systools/win32/comtools.hxx>
+#include <systools/win32/extended_max_path.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -477,13 +478,13 @@ Sequence<JumpListItem> SAL_CALL JumpListImpl::getRemovedItems(const OUString& sA
                     item.arguments = o3tl::toU(PropVariantToStringWithDefault(propvar, L""));
                     PropVariantClear(&propvar);
 
-                    wchar_t itemDesc[32767];
+                    wchar_t itemDesc[EXTENDED_MAX_PATH];
                     ThrowIfFailed(pShellLinkItem->GetDescription(
                                       itemDesc, std::extent<decltype(itemDesc)>::value),
                                   "GetDescription failed.");
                     item.description = o3tl::toU(itemDesc);
 
-                    wchar_t path[32767];
+                    wchar_t path[EXTENDED_MAX_PATH];
                     int icon_index;
                     ThrowIfFailed(pShellLinkItem->GetIconLocation(
                                       path, std::extent<decltype(path)>::value, &icon_index),

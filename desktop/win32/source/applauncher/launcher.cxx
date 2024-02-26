@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <malloc.h>
 
+#include <systools/win32/extended_max_path.hxx>
+
 extern "C" int APIENTRY wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 {
     // Retrieve startup info
@@ -40,7 +42,7 @@ extern "C" int APIENTRY wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 
     // Calculate application name
 
-    WCHAR szThisAppName[32767];
+    WCHAR szThisAppName[EXTENDED_MAX_PATH];
     GetModuleFileNameW(nullptr, szThisAppName, std::size(szThisAppName));
     std::filesystem::path soffice_exe(szThisAppName);
     soffice_exe.replace_filename(L"soffice.exe");

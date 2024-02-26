@@ -26,6 +26,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <systools/win32/extended_max_path.hxx>
 #include <tools/pathutils.hxx>
 
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
@@ -64,7 +65,7 @@ static wchar_t * encode(wchar_t * buffer, wchar_t const * text) {
 }
 
 int wmain(int argc, wchar_t ** argv, wchar_t **) {
-    wchar_t path[32767];
+    wchar_t path[EXTENDED_MAX_PATH];
     DWORD n = GetModuleFileNameW(nullptr, path, std::size(path));
     if (n == 0 || n >= std::size(path)) {
         exit(EXIT_FAILURE);

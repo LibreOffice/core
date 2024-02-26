@@ -30,6 +30,7 @@
 
 #include <cppuhelper/findsofficepath.h>
 #include <sal/types.h>
+#include <systools/win32/extended_max_path.hxx>
 
 #define MY_SIZE(s) (sizeof (s) / sizeof *(s))
 #define MY_LENGTH(s) (MY_SIZE(s) - 1)
@@ -72,7 +73,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     if ( path != NULL )
     {
-        wchar_t cmd[32767];
+        wchar_t cmd[EXTENDED_MAX_PATH];
             /* hopefully does not overflow */
         cmd[0] = L'"';
         wcscpy(cmd + 1, path);

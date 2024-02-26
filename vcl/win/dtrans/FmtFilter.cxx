@@ -36,6 +36,7 @@
 #include <iomanip>
 
 #include <systools/win32/comtools.hxx>
+#include <systools/win32/extended_max_path.hxx>
 
 using namespace com::sun::star::uno;
 
@@ -322,7 +323,7 @@ static std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
         if (FAILED(hr))
             return target;
 
-        wchar_t pathW[32767];
+        wchar_t pathW[EXTENDED_MAX_PATH];
         WIN32_FIND_DATAW wfd;
         hr = pIShellLink->GetPath(pathW, std::size(pathW), &wfd, SLGP_RAWPATH);
         if (FAILED(hr))
@@ -381,7 +382,7 @@ css::uno::Sequence<sal_Int8> CF_HDROPToFileList(HGLOBAL hGlobal)
 
     for (UINT i = 0; i < nFiles; i++)
     {
-        wchar_t buff[32767];
+        wchar_t buff[EXTENDED_MAX_PATH];
         /*UINT size =*/ DragQueryFileW(static_cast<HDROP>(hGlobal), i, buff, std::size(buff));
         std::wstring filename = buff;
         if (isShellLink(filename))

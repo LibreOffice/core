@@ -39,11 +39,17 @@
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <systools/win32/extended_max_path.hxx>
+
 // apparently PATH_MAX is not standard and not defined by MSVC
-#ifndef PATH_MAX
 #ifdef _WIN32
-#define PATH_MAX 32767
-#elif defined _MAX_PATH
+#ifdef PATH_MAX
+#undef PATH_MAX
+#endif
+#define PATH_MAX EXTENDED_MAX_PATH
+#endif
+#ifndef PATH_MAX
+#if defined _MAX_PATH
 #define PATH_MAX _MAX_PATH
 #elif defined MAX_PATH
 #define PATH_MAX MAX_PATH

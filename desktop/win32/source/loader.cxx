@@ -26,6 +26,7 @@
 #include <string_view>
 #include <vector>
 #include <desktop/exithelper.h>
+#include <systools/win32/extended_max_path.hxx>
 #include <systools/win32/uwinapi.h>
 #include <tools/pathutils.hxx>
 
@@ -136,7 +137,7 @@ WCHAR* commandLineAppend(WCHAR* buffer, std::wstring_view text)
 // current executable.
 [[nodiscard]] std::pair<std::wstring, std::wstring> extendLoaderEnvironment()
 {
-    std::vector<wchar_t> executable_path(32767);
+    std::vector<wchar_t> executable_path(EXTENDED_MAX_PATH);
     DWORD exe_len;
     for (;;)
     {
