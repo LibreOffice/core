@@ -1259,9 +1259,29 @@ struct ExecuteGlobals
 }
 
 static ExecuteGlobals* pExecGlobals = nullptr;
-
+static std::chrono::high_resolution_clock::time_point startFuncTp;
 int Desktop::Main()
 {
+    std::chrono::high_resolution_clock::time_point startT;
+
+#ifdef SAL_LOG_INFO
+    startFuncTp = std::chrono::high_resolution_clock::now();
+    startT = std::chrono::high_resolution_clock::now();
+
+    auto recordTime = [](std::chrono::high_resolution_clock::time_point& startTp, const char* message)
+    {
+        const auto endTp = std::chrono::high_resolution_clock::now();
+        auto tMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTp - startTp);
+        SAL_INFO("desktop.startuptime", message << tMs.count() << " ms");
+        startTp = std::chrono::high_resolution_clock::now();
+    };
+#else
+    auto recordTime = [](...)
+    {
+    };
+#endif
+
+
     pExecGlobals = new ExecuteGlobals();
 
     // Remember current context object
@@ -1300,6 +1320,7 @@ int Desktop::Main()
 #endif
 
     SetSplashScreenProgress(10);
+    recordTime(startT, "SetSplashScreenProgress(10): time = ");
 
     userinstall::Status inst_fin = userinstall::finalize();
     if (inst_fin != userinstall::EXISTED && inst_fin != userinstall::CREATED)
@@ -1318,6 +1339,8 @@ int Desktop::Main()
     utl::Bootstrap::reloadData();
     SetSplashScreenProgress(20);
 
+    recordTime(startT, "SetSplashScreenProgress(20): time = ");
+
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     Reference< XRestartManager > xRestartManager( OfficeRestartManager::get(xContext) );
@@ -1327,6 +1350,8 @@ int Desktop::Main()
     RegisterServices();
 
     SetSplashScreenProgress(25);
+
+    recordTime(startT, "SetSplashScreenProgress(25): time = ");
 
 #if HAVE_FEATURE_DESKTOP && !defined(EMSCRIPTEN)
     // check user installation directory for lockfile so we can be sure
@@ -1363,6 +1388,8 @@ int Desktop::Main()
 
     SetSplashScreenProgress(30);
 
+    recordTime(startT, "SetSplashScreenProgress(30): time = ");
+
     // create title string
     OUString aTitle(ReplaceStringHookProc(RID_APPTITLE));
 #ifdef DBG_UTIL
@@ -1372,8 +1399,12 @@ int Desktop::Main()
 
     SetDisplayName( aTitle );
     SetSplashScreenProgress(35);
+
+    recordTime(startT, "SetSplashScreenProgress(35): time = ");
+
     pExecGlobals->pPathOptions.reset( new SvtPathOptions);
     SetSplashScreenProgress(40);
+    recordTime(startT, "SetSplashScreenProgress(40): time = ");
 
     xDesktop = css::frame::Desktop::create( xContext );
 
@@ -1492,6 +1523,7 @@ int Desktop::Main()
     pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
 
     SetSplashScreenProgress(50);
+    recordTime(startT, "SetSplashScreenProgress(50): time = ");
 
     // Backing Component
     bool bCrashed            = false;
@@ -1546,6 +1578,7 @@ int Desktop::Main()
     }
 
     SetSplashScreenProgress(55);
+    recordTime(startT, "SetSplashScreenProgress(55): time = ");
 
     svtools::ApplyFontSubstitutionsToVcl();
 
@@ -1553,6 +1586,7 @@ int Desktop::Main()
     SvtTabAppearanceCfg::SetApplicationDefaults( this );
     SvtAccessibilityOptions::SetVCLSettings();
     SetSplashScreenProgress(60);
+    recordTime(startT, "SetSplashScreenProgress(60): time = ");
 
     if ( !pExecGlobals->bRestartRequested )
     {
@@ -1560,11 +1594,13 @@ int Desktop::Main()
 
         // Preload function depends on an initialized sfx application!
         SetSplashScreenProgress(75);
+        recordTime(startT, "SetSplashScreenProgress(75): time = ");
 
         // use system window dialogs
         Application::SetSystemWindowMode( SystemWindowFlags::DIALOG );
 
         SetSplashScreenProgress(80);
+        recordTime(startT, "SetSplashScreenProgress(80): time = ");
 
         if ( !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoQuickstart() )
@@ -1573,6 +1609,7 @@ int Desktop::Main()
         if ( xDesktop.is() )
             xDesktop->addTerminateListener( new RequestHandlerController );
         SetSplashScreenProgress(100);
+        recordTime(startT, "SetSplashScreenProgress(100): time = ");
 
         // FIXME: move this somewhere sensible.
 #if HAVE_FEATURE_OPENCL
@@ -1937,6 +1974,9 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
     const char *pExitPostStartup = getenv ("OOO_EXIT_POST_STARTUP");
     if (pExitPostStartup && *pExitPostStartup)
         new ExitTimer();
+    const auto endTp = std::chrono::high_resolution_clock::now();
+    auto tMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTp - startFuncTp);
+    SAL_INFO( "desktop.startuptime", "Total Start Up time(ms) = " << tMs.count());
 }
 
 void Desktop::OpenClients()
