@@ -244,6 +244,9 @@ private:
     /// Setup pStyles and write styles.xml
     void InitStyles();
 
+    /// write optional w:background before the w:body of word/document.xml
+    void WriteDocumentBackgroundFill();
+
     /// Write footnotes.xml and endnotes.xml.
     void WriteFootnotesEndnotes();
 

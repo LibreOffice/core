@@ -1901,6 +1901,58 @@ bool DocxExport::isMirroredMargin()
     return bMirroredMargins;
 }
 
+void DocxExport::WriteDocumentBackgroundFill()
+{
+    const std::unique_ptr<SvxBrushItem> pBrush = getBackground();
+    if (!pBrush)
+        return;
+
+    m_pDocumentFS->startElementNS(XML_w, XML_background, FSNS(XML_w, XML_color),
+                                  msfilter::util::ConvertColor(pBrush->GetColor()));
+
+    const SwAttrSet& rPageStyleAttrSet = m_rDoc.GetPageDesc(0).GetMaster().GetAttrSet();
+    const drawing::FillStyle eFillType = rPageStyleAttrSet.Get(XATTR_FILLSTYLE).GetValue();
+    const GraphicObject* pGraphicObj = pBrush->GetGraphicObject();
+    if (pGraphicObj) // image/pattern/texture
+    {
+        const OUString aRelId = m_pDrawingML->writeGraphicToStorage(pGraphicObj->GetGraphic());
+        if (!aRelId.isEmpty())
+        {
+            m_pDocumentFS->startElementNS(XML_v, XML_background);
+
+            // Although MSO treats everything as tile, it is better for LO to not always tile
+            OString sType = "frame"_ostr; // single image
+            if (rPageStyleAttrSet.Get(XATTR_FILLBMP_TILE).GetValue())
+                sType = "tile"_ostr; // primarily for patterns / textures
+            m_pDocumentFS->singleElementNS(XML_v, XML_fill, FSNS(XML_r, XML_id), aRelId, XML_type,
+                                           sType);
+
+            m_pDocumentFS->endElementNS(XML_v, XML_background);
+        }
+    }
+    else if (eFillType == drawing::FillStyle_GRADIENT)
+    {
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet(m_rDoc.GetAttrPool());
+        aSet.Set(rPageStyleAttrSet);
+
+        // Collect all of the gradient attributes into SdrExporter() AttrLists
+        m_pAttrOutput->OutputStyleItemSet(aSet, /*TestForDefault=*/true);
+        assert(SdrExporter().getFlyAttrList().is() && "type and fillcolor are always provided");
+        assert(SdrExporter().getFlyFillAttrList().is() && "color2 is always provided");
+
+        rtl::Reference<FastAttributeList> xFlyAttrList(SdrExporter().getFlyAttrList());
+        rtl::Reference<FastAttributeList> xFillAttrList(SdrExporter().getFlyFillAttrList());
+        m_pDocumentFS->startElementNS(XML_v, XML_background, xFlyAttrList);
+        m_pDocumentFS->singleElementNS(XML_v, XML_fill, xFillAttrList);
+        m_pDocumentFS->endElementNS(XML_v, XML_background);
+
+        SdrExporter().getFlyAttrList().clear();
+        SdrExporter().getFlyFillAttrList().clear();
+    }
+
+    m_pDocumentFS->endElementNS(XML_w, XML_background);
+}
+
 void DocxExport::WriteMainText()
 {
     // setup the namespaces
@@ -1911,53 +1963,7 @@ void DocxExport::WriteMainText()
     m_aLinkedTextboxesHelper.clear();
 
     // Write background page color
-    if (std::unique_ptr<SvxBrushItem> oBrush = getBackground(); oBrush)
-    {
-        m_pDocumentFS->startElementNS(XML_w, XML_background, FSNS(XML_w, XML_color),
-                                      msfilter::util::ConvertColor(oBrush->GetColor()));
-
-        const SwAttrSet& rPageStyleAttrSet = m_rDoc.GetPageDesc(0).GetMaster().GetAttrSet();
-        const drawing::FillStyle eFillType = rPageStyleAttrSet.Get(XATTR_FILLSTYLE).GetValue();
-        const GraphicObject* pGraphicObj = oBrush->GetGraphicObject();
-        if (pGraphicObj) // image/pattern/texture
-        {
-            const OUString aRelId = m_pDrawingML->writeGraphicToStorage(pGraphicObj->GetGraphic());
-            if (!aRelId.isEmpty())
-            {
-                m_pDocumentFS->startElementNS(XML_v, XML_background);
-
-                // Although MSO treats everything as tile, it is better for LO to not always tile
-                OString sType = "frame"_ostr; // single image
-                if (rPageStyleAttrSet.Get(XATTR_FILLBMP_TILE).GetValue())
-                    sType = "tile"_ostr; // primarily for patterns / textures
-                m_pDocumentFS->singleElementNS(XML_v, XML_fill, FSNS(XML_r, XML_id), aRelId,
-                                            XML_type, sType);
-
-                m_pDocumentFS->endElementNS(XML_v, XML_background);
-            }
-        }
-        else if (eFillType == drawing::FillStyle_GRADIENT)
-        {
-            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet(m_rDoc.GetAttrPool());
-            aSet.Set(rPageStyleAttrSet);
-
-            // Collect all of the gradient attributes into SdrExporter() AttrLists
-            m_pAttrOutput->OutputStyleItemSet(aSet, /*TestForDefault=*/true);
-            assert(SdrExporter().getFlyAttrList().is() && "type and fillcolor are always provided");
-            assert(SdrExporter().getFlyFillAttrList().is() && "color2 is always provided");
-
-            rtl::Reference<FastAttributeList> xFlyAttrList(SdrExporter().getFlyAttrList());
-            rtl::Reference<FastAttributeList> xFillAttrList(SdrExporter().getFlyFillAttrList());
-            m_pDocumentFS->startElementNS(XML_v, XML_background, xFlyAttrList);
-            m_pDocumentFS->singleElementNS(XML_v, XML_fill, xFillAttrList);
-            m_pDocumentFS->endElementNS(XML_v, XML_background);
-
-            SdrExporter().getFlyAttrList().clear();
-            SdrExporter().getFlyFillAttrList().clear();
-        }
-
-        m_pDocumentFS->endElementNS(XML_w, XML_background);
-    }
+    WriteDocumentBackgroundFill();
 
     // body
     m_pDocumentFS->startElementNS(XML_w, XML_body);
