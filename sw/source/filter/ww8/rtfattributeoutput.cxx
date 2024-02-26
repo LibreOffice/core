@@ -86,6 +86,7 @@
 #include <redline.hxx>
 #include <rtf.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/mathml/imexport.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svl/grabbagitem.hxx>
@@ -3752,11 +3753,11 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
     const Color aMSOStartColor(rColorStops.back().getStopColor());
     Color aMSOEndColor(rColorStops.front().getStopColor());
 
-    const sal_Int32 nAngle = toDegrees(rGradient.GetAngle());
+    const sal_Int32 nAngle = toDegrees(rGradient.GetAngle()) * oox::drawingml::PER_DEGREE;
     if (nAngle != 0)
     {
         m_aFlyProperties.push_back(
-            std::make_pair<OString, OString>("fillAngle"_ostr, OString::number(nAngle * 60000)));
+            std::make_pair<OString, OString>("fillAngle"_ostr, OString::number(nAngle)));
     }
 
     if (rColorStops.size() < 3)

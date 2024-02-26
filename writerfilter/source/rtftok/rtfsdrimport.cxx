@@ -42,6 +42,7 @@
 #include "rtfreferenceproperties.hxx"
 #include <oox/vml/vmlformatting.hxx>
 #include <oox/helper/modelobjecthelper.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -668,7 +669,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
         else if (rProperty.first == "fillAngle")
         {
-            aFillModel.moAngle = rProperty.second.toInt32() / 60000;
+            aFillModel.moAngle = rProperty.second.toInt32() / oox::drawingml::PER_DEGREE;
         }
         else if (rProperty.first == "fillFocus")
             aFillModel.moFocus = rProperty.second.toDouble() / 100; // percent
