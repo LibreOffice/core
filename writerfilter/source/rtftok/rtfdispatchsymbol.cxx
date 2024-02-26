@@ -144,6 +144,16 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 { // tdf#158586 don't dispatch \par here, it eats deferred page breaks
                     setNeedPar(true);
                 }
+
+                RTFValue::Pointer_t pTblpPr
+                    = m_aStates.top().getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblpPr);
+                if (pTblpPr)
+                {
+                    // We have a pending floating table, provide an anchor for it still in this
+                    // section.
+                    dispatchSymbol(RTFKeyword::PAR);
+                }
+
                 sectBreak();
                 if (m_nResetBreakOnSectBreak != RTFKeyword::invalid)
                 {
