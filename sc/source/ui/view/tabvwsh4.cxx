@@ -268,7 +268,9 @@ void ScTabViewShell::Deactivate(bool bMDI)
     {
         HideNoteMarker();           // note marker
 
-        if ( pHdl )
+        // in LOK case this could be trigerred on every action from other view (doc_setView)
+        // we don't want to hide tooltip only because other view did some action
+        if ( pHdl && !comphelper::LibreOfficeKit::isActive() )
             pHdl->HideTip();        // Hide formula auto input tip
     }
 }
