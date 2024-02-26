@@ -27,7 +27,7 @@ EM_JS(void, jsRegisterChar, (std::type_info const* raw),
 // clang-format off
 {
     Module.registerType(raw, {
-        name: 'rtl::OUString',
+        name: 'sal_Unicode',
         fromWireType(ptr) {
             let str = String.fromCharCode(Module.HEAPU16[ptr >> 1]);
             return str;
