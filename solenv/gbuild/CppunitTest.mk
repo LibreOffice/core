@@ -135,10 +135,10 @@ else
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
-		( \
-		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do \
-			printf 'LO_TEST_LOCALE=%s\n' "$$l" && ) \
+		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do) \
 		$(call gb_CppunitTest_coredumpctl_setup,$@,$(if $(gb_CppunitTest_localized),$$l)) \
+		( \
+		$(if $(gb_CppunitTest_localized),printf 'LO_TEST_LOCALE=%s\n' "$$l" && ) \
 		$(if $(gb_CppunitTest_localized),LO_TEST_LOCALE="$$l") \
 		$(if $(gb_CppunitTest__vcl_no_svp), \
 			$(filter-out SAL_USE_VCLPLUGIN=svp,$(gb_TEST_ENV_VARS)),$(gb_TEST_ENV_VARS)) \
@@ -157,14 +157,15 @@ else
 			$(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_CppunitTest_get_linktarget_target,$*) \
 		$(call gb_CppunitTest__make_args) "-env:CPPUNITTESTTARGET=$@" \
-		$(if $(gb_CppunitTest_localized),|| exit $$?; done) \
 		) \
-		$(if $(gb_CppunitTest__interactive),, \
-			> $@.log 2>&1 \
-			|| ($(if $(value gb_CppunitTest_postprocess), \
+		$(if $(gb_CppunitTest__interactive),$(if $(gb_CppunitTest_localized),|| exit $$?), \
+			> $@.$(if $(gb_CppunitTest_localized),$$l.)log 2>&1 \
+			|| { $(if $(value gb_CppunitTest_postprocess), \
 					RET=$$?; \
-					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
-				cat $@.log; $(gb_CppunitTest_UNITTESTFAILED) Cppunit $*)))
+					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.$(if $(gb_CppunitTest_localized),$$l.)log 2>&1;) \
+				cat $@.$(if $(gb_CppunitTest_localized),$$l.)log; $(gb_CppunitTest_UNITTESTFAILED) Cppunit $*; \
+				$(if $(gb_CppunitTest_localized),exit $$RET;) } ) \
+		$(if $(gb_CppunitTest_localized),; done))
 	$(call gb_Trace_EndRange,$*,CUT)
 endif
 
