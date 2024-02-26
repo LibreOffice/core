@@ -133,6 +133,8 @@
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <editeng/flstitem.hxx>
 #ifdef IOS
@@ -4820,6 +4822,37 @@ static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned n
     }
 }
 
+// To be an exportable selection, there must be something selected and that
+// selection can't be "ScCellObj" which doesn't can't provide a svg.
+//
+// Typically a problem arises when double clicking a shape in calc. The 1st
+// click selects the shape, triggering generation of a preview, but the second
+// shape engers into edit mode befoce doc_renderShapeSelection has a chance to
+// fire, at which point the shape is no longer selected. Rather than generate
+// an error just return a 0 length result if there is no shape selected, so we
+// continue to generate an error if a shape is selected, but could not provide
+// an svg.
+static bool doc_hasShapeSelection(const css::uno::Reference<css::lang::XComponent>& rComponent)
+{
+    uno::Reference<frame::XModel> xModel(rComponent, uno::UNO_QUERY);
+    if (!xModel.is())
+        return false;
+
+    uno::Reference<frame::XController> xController(xModel->getCurrentController());
+    if (!xController.is())
+        return false;
+
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(xController, uno::UNO_QUERY);
+    if (!xSelectionSupplier.is())
+        return false;
+
+    Any selection = xSelectionSupplier->getSelection();
+    uno::Reference<lang::XServiceInfo> xSelection;
+    selection >>= xSelection;
+
+    return xSelection && xSelection->getImplementationName() != "ScCellObj";
+}
+
 static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOutput)
 {
     comphelper::ProfileZone aZone("doc_renderShapeSelection");
@@ -4835,6 +4868,9 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
     try
     {
         LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+        if (!doc_hasShapeSelection(pDocument->mxComponent))
+            return 0;
 
         uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
 
