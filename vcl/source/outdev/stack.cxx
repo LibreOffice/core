@@ -84,9 +84,6 @@ void OutputDevice::Push(vcl::PushFlags nFlags)
     if (nFlags & vcl::PushFlags::REFPOINT && mbRefPoint)
         rState.mpRefPoint = maRefPoint;
 
-    if (nFlags & vcl::PushFlags::RTLENABLED)
-        rState.mbRTLEnabled = IsRTLEnabled();
-
     if (mpAlphaVDev)
         mpAlphaVDev->Push();
 }
@@ -186,9 +183,6 @@ void OutputDevice::Pop()
         else
             SetRefPoint();
     }
-
-    if ( rState.mnFlags & vcl::PushFlags::RTLENABLED )
-        EnableRTL( rState.mbRTLEnabled );
 
     maOutDevStateStack.pop_back();
 
