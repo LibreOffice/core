@@ -967,7 +967,7 @@ bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette&
 
     if( nXclLine == EXC_LINE_NONE )
         return false;
-    if( nXclLine >= SAL_N_ELEMENTS( ppnLineParam ) )
+    if( nXclLine >= std::size( ppnLineParam ) )
         nXclLine = EXC_LINE_THIN;
 
     rLine.SetColor( rPalette.GetColor( nXclColor ) );

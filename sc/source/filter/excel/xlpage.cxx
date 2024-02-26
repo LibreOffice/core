@@ -193,7 +193,7 @@ void XclPageData::SetDefaults()
 Size XclPageData::GetScPaperSize() const
 {
     const XclPaperSize* pEntry = pPaperSizeTable;
-    if( mnPaperSize < SAL_N_ELEMENTS( pPaperSizeTable ) )
+    if( mnPaperSize < std::size( pPaperSizeTable ) )
         pEntry += mnPaperSize;
 
     Size aSize;

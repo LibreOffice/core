@@ -352,7 +352,7 @@ Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColo
         0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
         0x50, 0x70, 0x78                                    // 16 - 18
     };
-    return (nXclPattern < SAL_N_ELEMENTS( pnRatioTable )) ?
+    return (nXclPattern < std::size( pnRatioTable )) ?
         ScfTools::GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 
@@ -478,10 +478,10 @@ const char* const ppcDefNames[] =
 
 OUString XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    OSL_ENSURE( SAL_N_ELEMENTS( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
+    OSL_ENSURE( std::size( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
 
-    if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )
+    if( cBuiltIn < std::size( ppcDefNames ) )
         return OUString::createFromAscii(ppcDefNames[cBuiltIn]);
     else
         return OUString::number(cBuiltIn);
@@ -553,7 +553,7 @@ OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, std::u16string_view 
     else
     {
         OUStringBuffer aBuf(maStyleNamePrefix1);
-        if( nStyleId < SAL_N_ELEMENTS( ppcStyleNames ) )
+        if( nStyleId < std::size( ppcStyleNames ) )
             aBuf.appendAscii(ppcStyleNames[nStyleId]);
         else if (!rName.empty())
             aBuf.append(rName);
@@ -590,7 +590,7 @@ bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyl
         nPrefixLen = strlen(maStyleNamePrefix2);
     if( nPrefixLen > 0 )
     {
-        for( sal_uInt8 nId = 0; nId < SAL_N_ELEMENTS( ppcStyleNames ); ++nId )
+        for( sal_uInt8 nId = 0; nId < std::size( ppcStyleNames ); ++nId )
         {
             if( nId != EXC_STYLE_NORMAL )
             {
