@@ -2670,19 +2670,19 @@ SfxPoolItem* XFillHatchItem::CreateDefault() { return new XFillHatchItem; }
 XFillHatchItem::XFillHatchItem(const OUString& rName,
                              const XHatch& rTheHatch) :
     NameOrIndex(XATTR_FILLHATCH, rName),
-    aHatch(rTheHatch)
+    m_aHatch(rTheHatch)
 {
 }
 
 XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem) :
     NameOrIndex(rItem),
-    aHatch(rItem.aHatch)
+    m_aHatch(rItem.m_aHatch)
 {
 }
 
 XFillHatchItem::XFillHatchItem(const XHatch& rTheHatch)
 :   NameOrIndex( XATTR_FILLHATCH, -1 ),
-    aHatch(rTheHatch)
+    m_aHatch(rTheHatch)
 {
 }
 
@@ -2694,7 +2694,7 @@ XFillHatchItem* XFillHatchItem::Clone(SfxItemPool* /*pPool*/) const
 bool XFillHatchItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-             aHatch == static_cast<const XFillHatchItem&>(rItem).aHatch );
+             m_aHatch == static_cast<const XFillHatchItem&>(rItem).m_aHatch );
 }
 
 bool XFillHatchItem::GetPresentation
@@ -2716,7 +2716,7 @@ bool XFillHatchItem::HasMetrics() const
 
 void XFillHatchItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
-    aHatch.SetDistance( BigInt::Scale( aHatch.GetDistance(), nMul, nDiv ) );
+    m_aHatch.SetDistance( BigInt::Scale( m_aHatch.GetDistance(), nMul, nDiv ) );
 }
 
 bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2729,10 +2729,10 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
         {
             css::drawing::Hatch aUnoHatch;
 
-            aUnoHatch.Style = aHatch.GetHatchStyle();
-            aUnoHatch.Color = sal_Int32(aHatch.GetColor());
-            aUnoHatch.Distance = aHatch.GetDistance();
-            aUnoHatch.Angle = aHatch.GetAngle().get();
+            aUnoHatch.Style = m_aHatch.GetHatchStyle();
+            aUnoHatch.Color = sal_Int32(m_aHatch.GetColor());
+            aUnoHatch.Distance = m_aHatch.GetDistance();
+            aUnoHatch.Angle = m_aHatch.GetAngle().get();
 
             uno::Sequence< beans::PropertyValue > aPropSeq{
                 comphelper::makePropertyValue("Name", SvxUnogetApiNameForItem(Which(), GetName())),
@@ -2746,10 +2746,10 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
         {
             css::drawing::Hatch aUnoHatch;
 
-            aUnoHatch.Style = aHatch.GetHatchStyle();
-            aUnoHatch.Color = sal_Int32(aHatch.GetColor());
-            aUnoHatch.Distance = aHatch.GetDistance();
-            aUnoHatch.Angle = aHatch.GetAngle().get();
+            aUnoHatch.Style = m_aHatch.GetHatchStyle();
+            aUnoHatch.Color = sal_Int32(m_aHatch.GetColor());
+            aUnoHatch.Distance = m_aHatch.GetDistance();
+            aUnoHatch.Angle = m_aHatch.GetAngle().get();
             rVal <<= aUnoHatch;
             break;
         }
@@ -2761,13 +2761,13 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
         }
 
         case MID_HATCH_STYLE:
-            rVal <<= aHatch.GetHatchStyle(); break;
+            rVal <<= m_aHatch.GetHatchStyle(); break;
         case MID_HATCH_COLOR:
-            rVal <<= aHatch.GetColor(); break;
+            rVal <<= m_aHatch.GetColor(); break;
         case MID_HATCH_DISTANCE:
-            rVal <<= aHatch.GetDistance(); break;
+            rVal <<= m_aHatch.GetDistance(); break;
         case MID_HATCH_ANGLE:
-            rVal <<= aHatch.GetAngle().get(); break;
+            rVal <<= m_aHatch.GetAngle().get(); break;
 
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
@@ -2803,10 +2803,10 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 SetName( aName );
                 if ( bHatch )
                 {
-                    aHatch.SetHatchStyle( aUnoHatch.Style );
-                    aHatch.SetColor( Color(ColorTransparency, aUnoHatch.Color) );
-                    aHatch.SetDistance( aUnoHatch.Distance );
-                    aHatch.SetAngle( Degree10(aUnoHatch.Angle) );
+                    m_aHatch.SetHatchStyle( aUnoHatch.Style );
+                    m_aHatch.SetColor( Color(ColorTransparency, aUnoHatch.Color) );
+                    m_aHatch.SetDistance( aUnoHatch.Distance );
+                    m_aHatch.SetAngle( Degree10(aUnoHatch.Angle) );
                 }
 
                 return true;
@@ -2821,10 +2821,10 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= aUnoHatch))
                 return false;
 
-            aHatch.SetHatchStyle( aUnoHatch.Style );
-            aHatch.SetColor( Color(ColorTransparency, aUnoHatch.Color) );
-            aHatch.SetDistance( aUnoHatch.Distance );
-            aHatch.SetAngle( Degree10(aUnoHatch.Angle) );
+            m_aHatch.SetHatchStyle( aUnoHatch.Style );
+            m_aHatch.SetColor( Color(ColorTransparency, aUnoHatch.Color) );
+            m_aHatch.SetDistance( aUnoHatch.Distance );
+            m_aHatch.SetAngle( Degree10(aUnoHatch.Angle) );
             break;
         }
 
@@ -2842,7 +2842,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nVal = sal_Int16();
             if (!(rVal >>= nVal ))
                 return false;
-            aHatch.SetHatchStyle( static_cast<css::drawing::HatchStyle>(nVal) );
+            m_aHatch.SetHatchStyle( static_cast<css::drawing::HatchStyle>(nVal) );
             break;
         }
 
@@ -2855,11 +2855,11 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
 
             if ( nMemberId == MID_HATCH_COLOR )
-                aHatch.SetColor( Color(ColorTransparency, nVal) );
+                m_aHatch.SetColor( Color(ColorTransparency, nVal) );
             else if ( nMemberId == MID_HATCH_DISTANCE )
-                aHatch.SetDistance( nVal );
+                m_aHatch.SetDistance( nVal );
             else
-                aHatch.SetAngle( Degree10(nVal) );
+                m_aHatch.SetAngle( Degree10(nVal) );
             break;
         }
 
@@ -2885,7 +2885,7 @@ std::unique_ptr<XFillHatchItem> XFillHatchItem::checkForUniqueItem( SdrModel* pM
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return std::make_unique<XFillHatchItem>( aUniqueName, aHatch );
+            return std::make_unique<XFillHatchItem>( aUniqueName, m_aHatch );
     }
 
     return nullptr;

@@ -31,7 +31,7 @@ class SdrModel;
 
 class SVXCORE_DLLPUBLIC XFillHatchItem final : public NameOrIndex
 {
-    XHatch  aHatch;
+    XHatch  m_aHatch;
 
 public:
                             static SfxPoolItem* CreateDefault();
@@ -52,7 +52,7 @@ public:
     virtual bool            HasMetrics() const override;
     virtual void            ScaleMetrics(tools::Long nMul, tools::Long nDiv) override;
 
-    const XHatch&           GetHatchValue() const { return aHatch;} // GetValue -> GetHatchValue
+    const XHatch&           GetHatchValue() const { return m_aHatch;} // GetValue -> GetHatchValue
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     std::unique_ptr<XFillHatchItem> checkForUniqueItem( SdrModel* pModel ) const;
