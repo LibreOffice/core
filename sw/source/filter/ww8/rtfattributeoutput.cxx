@@ -3760,13 +3760,11 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
             std::make_pair<OString, OString>("fillAngle"_ostr, OString::number(nAngle)));
     }
 
+    bool bIsSymmetrical = true;
     if (rColorStops.size() < 3)
     {
-        if (rGradient.GetGradientStyle() == awt::GradientStyle_AXIAL)
-        {
-            m_aFlyProperties.push_back(
-                std::make_pair<OString, OString>("fillFocus"_ostr, OString::number(50)));
-        }
+        if (rGradient.GetGradientStyle() != awt::GradientStyle_AXIAL)
+            bIsSymmetrical = false;
     }
     else
     {
@@ -3774,15 +3772,18 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
         // FillModel::pushToPropMap 'fFocus' value and usage.
         // The 2nd color is the in-between color, use it
         aMSOEndColor = Color(rColorStops[1].getStopColor());
-
-        m_aFlyProperties.push_back(
-            std::make_pair<OString, OString>("fillFocus"_ostr, OString::number(50)));
     }
 
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
         "fillColor"_ostr, OString::number(wwUtility::RGBToBGR(aMSOStartColor))));
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
         "fillBackColor"_ostr, OString::number(wwUtility::RGBToBGR(aMSOEndColor))));
+
+    if (bIsSymmetrical)
+    {
+        m_aFlyProperties.push_back(
+            std::make_pair<OString, OString>("fillFocus"_ostr, OString::number(50)));
+    }
 }
 
 void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
