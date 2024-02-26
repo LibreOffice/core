@@ -69,7 +69,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 {
     assert( m_pToolBox );
     m_nItemId = m_pToolBox->GetItemId( m_nIndexInParent );
-    m_sOldName = GetText();
+    m_sOldName = implGetText();
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );
     m_bIndeterminate = ( m_pToolBox->GetItemState( m_nItemId ) == TRISTATE_INDET );
     ToolBoxItemType eType = m_pToolBox->GetItemType( m_nIndexInParent );
@@ -112,29 +112,6 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 
 VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
 {
-}
-
-OUString VCLXAccessibleToolBoxItem::GetText() const
-{
-    // no text for separators and spaces
-    if (!m_pToolBox || m_nItemId <= ToolBoxItemId(0))
-        return OUString();
-
-    OUString sRet = m_pToolBox->GetItemText( m_nItemId );
-    if (!sRet.isEmpty())
-        return sRet;
-
-    sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
-    if (!sRet.isEmpty())
-        return sRet;
-
-    vcl::Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
-    if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
-         pItemWindow->GetAccessible()->getAccessibleContext().is() )
-    {
-        sRet = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
-    }
-    return sRet;
 }
 
 void VCLXAccessibleToolBoxItem::SetFocus( bool _bFocus )
@@ -238,7 +215,25 @@ awt::Rectangle VCLXAccessibleToolBoxItem::implGetBounds(  )
 
 OUString VCLXAccessibleToolBoxItem::implGetText()
 {
-    return GetText();
+    // no text for separators and spaces
+    if (!m_pToolBox || m_nItemId <= ToolBoxItemId(0))
+        return OUString();
+
+    OUString sRet = m_pToolBox->GetItemText( m_nItemId );
+    if (!sRet.isEmpty())
+        return sRet;
+
+    sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
+    if (!sRet.isEmpty())
+        return sRet;
+
+    vcl::Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
+    if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
+        pItemWindow->GetAccessible()->getAccessibleContext().is() )
+    {
+        sRet = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
+    }
+    return sRet;
 }
 
 Locale VCLXAccessibleToolBoxItem::implGetLocale()
@@ -362,7 +357,7 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleName(  )
     OExternalLockGuard aGuard( this );
 
     // entry text == accessible name
-    return GetText();
+    return implGetText();
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleRelationSet(  )
@@ -411,26 +406,26 @@ OUString VCLXAccessibleToolBoxItem::getText()
 {
     OExternalLockGuard aGuard( this );
 
-    return GetText();
+    return implGetText();
 }
 
 sal_Int32 VCLXAccessibleToolBoxItem::getCharacterCount()
 {
-    return GetText().getLength();
+    return implGetText().getLength();
 }
 
 sal_Unicode VCLXAccessibleToolBoxItem::getCharacter( sal_Int32 nIndex )
 {
      OExternalLockGuard aGuard( this );
 
-     return OCommonAccessibleText::implGetCharacter( GetText(), nIndex );
+     return OCommonAccessibleText::implGetCharacter(implGetText(), nIndex);
 }
 
 OUString VCLXAccessibleToolBoxItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
      OExternalLockGuard aGuard( this );
 
-     return OCommonAccessibleText::implGetTextRange( GetText(), nStartIndex, nEndIndex );
+     return OCommonAccessibleText::implGetTextRange(implGetText(), nStartIndex, nEndIndex);
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getCaretPosition()
@@ -442,7 +437,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::setCaretPosition( sal_Int32 nIndex 
 {
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidRange( nIndex, nIndex, GetText().getLength() ) )
+    if (!implIsValidRange(nIndex, nIndex, implGetText().getLength()))
         throw IndexOutOfBoundsException();
 
     return false;
