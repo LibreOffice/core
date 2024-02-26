@@ -90,6 +90,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -1354,6 +1355,46 @@ Reference< XShape > const & Shape::createAndInsert(
         // add properties from textbody to shape properties
         if( mpTextBody )
         {
+            // tdf#67347: In case of Stacked, PP calculates in the vertical direction with the
+            // horizontal alignment.
+            // In LO, we simulate it by setting TextVerticalAdjust based on the ParagraphAdjust
+            // of the 1. paragraph
+            // It is not perfect, because we have 1 TextVerticalAdjust / 1 shape, and it
+            // does not support justified, while we can have many ParagraphAdjust / 1 shape
+            // (if the shape have more paragraphs)
+            if (mpTextBody->getTextProperties().maPropertyMap.hasProperty(PROP_WritingMode)
+                && mpTextBody->getTextProperties().maPropertyMap.getProperty(PROP_WritingMode)
+                       == uno::Any(text::WritingMode2::STACKED)
+                && mpTextBody->getParagraphs().size() > 0
+                && aServiceName != "com.sun.star.drawing.GroupShape")
+            {
+                std::optional<css::style::ParagraphAdjust>& oParaAdjust
+                    = mpTextBody->getParagraphs()[0]->getProperties().getParaAdjust();
+
+                if (oParaAdjust)
+                {
+                    switch (*oParaAdjust)
+                    {
+                        case ParagraphAdjust::ParagraphAdjust_LEFT:
+                            mpTextBody->getTextProperties().meVA
+                                = TextVerticalAdjust::TextVerticalAdjust_TOP;
+                            break;
+                        case ParagraphAdjust::ParagraphAdjust_CENTER:
+                            mpTextBody->getTextProperties().meVA
+                                = TextVerticalAdjust::TextVerticalAdjust_CENTER;
+                            break;
+                        case ParagraphAdjust::ParagraphAdjust_RIGHT:
+                            mpTextBody->getTextProperties().meVA
+                                = TextVerticalAdjust::TextVerticalAdjust_BOTTOM;
+                            break;
+                        default:
+                            break;
+                    }
+                    mpTextBody->getTextProperties().maPropertyMap.setProperty(
+                        PROP_TextVerticalAdjust, mpTextBody->getTextProperties().meVA);
+                }
+            }
+
             mpTextBody->getTextProperties().pushTextDistances(Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
             aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
             // Push char properties as well - specifically useful when this is a placeholder
