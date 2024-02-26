@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,writerfilter_rtftok))
 
 $(eval $(call gb_CppunitTest_use_externals,writerfilter_rtftok,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
