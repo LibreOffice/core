@@ -38,36 +38,32 @@
 
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 {
-    HMODULE h;
 #if OSL_DEBUG_LEVEL < 2
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 #endif
-    rtl_uString* Module = nullptr;
-    oslModule ret = nullptr;
-    oslFileError    nError;
-
     SAL_INFO( "sal.osl", "osl_loadModule: " << OUString(strModuleName) );
     OSL_ASSERT(strModuleName);
 
-    nError = osl_getSystemPathFromFileURL(strModuleName, &Module);
+    OUString Module;
+    oslFileError nError = osl_getSystemPathFromFileURL(strModuleName, &Module.pData);
 
     if ( osl_File_E_None != nError )
-        rtl_uString_assign(&Module, strModuleName);
+        Module = OUString::unacquired(&strModuleName);
 
-    h = LoadLibraryW(o3tl::toW(Module->buffer));
+    HMODULE h = LoadLibraryW(o3tl::toW(Module.getStr()));
 
     if (h == nullptr)
-        h = LoadLibraryExW(o3tl::toW(Module->buffer), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+        h = LoadLibraryExW(o3tl::toW(Module.getStr()), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
 
     // In case of long path names (\\?\c:\...) try to shorten the filename.
     // LoadLibrary cannot handle file names which exceed 260 letters.
     // In case the path is too long, the function will fail. However, the error
     // code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
     // on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
-    if (h == nullptr && Module->length > 260)
+    if (h == nullptr && Module.getLength() > 260)
     {
-        std::vector<WCHAR> vec(Module->length + 1);
-        DWORD len = GetShortPathNameW(o3tl::toW(Module->buffer), vec.data(), Module->length + 1);
+        std::vector<WCHAR> vec(Module.getLength() + 1);
+        DWORD len = GetShortPathNameW(o3tl::toW(Module.getStr()), vec.data(), vec.size());
         if (len )
         {
             h = LoadLibraryW(vec.data());
@@ -77,33 +73,28 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
         }
     }
 
-    ret = static_cast<oslModule>(h);
-    rtl_uString_release(Module);
 #if OSL_DEBUG_LEVEL < 2
     SetErrorMode(errorMode);
 #endif
 
-    return ret;
+    return static_cast<oslModule>(h);
 }
 
 oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 )
 {
-    HMODULE h;
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
-    oslModule ret = nullptr;
 
     SAL_INFO( "sal.osl", "osl_loadModule: " << pModuleName );
     OSL_ASSERT(pModuleName);
 
-    h = LoadLibraryA(pModuleName);
+    HMODULE h = LoadLibraryA(pModuleName);
     if (h == nullptr)
         h = LoadLibraryExA(pModuleName, nullptr,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
 
-    ret = static_cast<oslModule>(h);
     SetErrorMode(errorMode);
 
-    return ret;
+    return static_cast<oslModule>(h);
 }
 
 oslModule osl_loadModuleRelativeAscii(
@@ -142,24 +133,12 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
 
 oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *strSymbolName )
 {
-    rtl_String *symbolName = nullptr;
-    oslGenericFunction address;
-
     OSL_ASSERT(Module);
-    OSL_ASSERT(strSymbolName);
+    assert(strSymbolName);
 
-    rtl_uString2String(
-        &symbolName,
-        strSymbolName->buffer,
-        strSymbolName->length,
-        RTL_TEXTENCODING_UTF8,
-        OUSTRING_TO_OSTRING_CVTFLAGS
-    );
+    auto symbolName(OUStringToOString(OUString::unacquired(&strSymbolName), RTL_TEXTENCODING_UTF8));
 
-    address=osl_getAsciiFunctionSymbol(Module, rtl_string_getStr(symbolName));
-    rtl_string_release(symbolName);
-
-    return address;
+    return osl_getAsciiFunctionSymbol(Module, symbolName.getStr());
 }
 
 oslGenericFunction SAL_CALL
