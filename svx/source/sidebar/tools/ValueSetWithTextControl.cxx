@@ -42,17 +42,6 @@ void ValueSetWithTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetColCount();
 }
 
-void ValueSetWithTextControl::SetOptimalDrawingAreaHeight()
-{
-    const vcl::Font aFont(Application::GetSettings().GetStyleSettings().GetLabelFont());
-    double fRowHeight = aFont.GetFontSize().Height() * 9 / 4.0; // see UserDraw()
-    // It still looks too small. Probably the height specified should be the leading point size?
-    fRowHeight *= 1.2; // add 20% leading
-    const Size aSize(GetOutputSizePixel().Width(), fRowHeight * maItems.size());
-    GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
-    SetOutputSizePixel(aSize);
-}
-
 void ValueSetWithTextControl::AddItem(
     const OUString& rItemText,
     const OUString& rItemText2 )
