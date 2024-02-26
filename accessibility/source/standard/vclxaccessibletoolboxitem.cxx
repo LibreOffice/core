@@ -116,27 +116,23 @@ VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
 
 OUString VCLXAccessibleToolBoxItem::GetText() const
 {
-    OUString sRet;
     // no text for separators and spaces
-    if ( m_pToolBox && m_nItemId > ToolBoxItemId(0) )
-    {
-        sRet = m_pToolBox->GetItemText( m_nItemId );
-        if (sRet.isEmpty())
-        {
-            sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
-            if (sRet.isEmpty())
-            {
-                vcl::Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
-                if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
-                     pItemWindow->GetAccessible()->getAccessibleContext().is() )
-                {
-                    OUString sWinText = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
-                    if (!sWinText.isEmpty())
-                        sRet = sWinText;
-                }
-            }
-        }
+    if (!m_pToolBox || m_nItemId <= ToolBoxItemId(0))
+        return OUString();
 
+    OUString sRet = m_pToolBox->GetItemText( m_nItemId );
+    if (!sRet.isEmpty())
+        return sRet;
+
+    sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
+    if (!sRet.isEmpty())
+        return sRet;
+
+    vcl::Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
+    if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
+         pItemWindow->GetAccessible()->getAccessibleContext().is() )
+    {
+        sRet = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
     }
     return sRet;
 }
