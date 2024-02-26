@@ -11,6 +11,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -621,6 +622,12 @@ DECLARE_WW8EXPORT_TEST(testTdf101826_xattrTextBoxFill, "tdf101826_xattrTextBoxFi
     CPPUNIT_ASSERT_MESSAGE("background color", Color(0xFF, 0xFF, 0x00) != getProperty<Color>(getShape(4), "BackColor"));
     //Basic Picture Fill: Tux image
     CPPUNIT_ASSERT_EQUAL_MESSAGE("background image", drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(getShape(5), "FillStyle"));
+    // Basic Pattern fill: many thin, green, vertical stripes on yellow background
+    auto eMode = getProperty<drawing::BitmapMode>(getShapeByName(u"Frame2"), "FillBitmapMode");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tiled pattern", drawing::BitmapMode_REPEAT, eMode);
+    // Basic Texture fill: tiled blue denim texture
+    eMode = getProperty<drawing::BitmapMode>(getShapeByName(u"Frame6"), "FillBitmapMode");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tiled texture", drawing::BitmapMode_REPEAT, eMode);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf123433_fillStyleStop, "tdf123433_fillStyleStop.doc")

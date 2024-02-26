@@ -1849,8 +1849,9 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
         nOpaque = 255 - pGraphicObject->GetAttr().GetAlpha();
         if (0 != nOpaque)
             bSetOpacity = true;
-
-        rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+        const ESCHER_FillStyle eFillType
+            = rBrush.GetGraphicPos() == GPOS_TILED ? ESCHER_FillTexture : ESCHER_FillPicture;
+        rPropOpt.AddOpt(ESCHER_Prop_fillType, eFillType);
         rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
         rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
     }
