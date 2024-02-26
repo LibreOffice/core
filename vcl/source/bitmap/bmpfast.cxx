@@ -269,7 +269,7 @@ static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuf
     PIXBYTE* pRawDst = rDstBuffer.mpBits;
 
     // source and destination don't match upside down
-    if( ScanlineFormat::TopDown & (rSrcBuffer.mnFormat ^ rDstBuffer.mnFormat)  )
+    if (rSrcBuffer.meDirection != rDstBuffer.meDirection)
     {
         pRawDst += (rSrcBuffer.mnHeight - 1) * nDstLinestep;
         nDstLinestep = -rDstBuffer.mnScanlineSize;
@@ -309,7 +309,7 @@ static bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     TrueColorPixelPtr<DSTFMT> aDstLine; aDstLine.SetRawPtr( rDstBuffer.mpBits );
 
     // source and destination don't match upside down
-    if( ScanlineFormat::TopDown & (rSrcBuffer.mnFormat ^ rDstBuffer.mnFormat) )
+    if (rSrcBuffer.meDirection != rDstBuffer.meDirection)
     {
         aDstLine.AddByteOffset( (rSrcBuffer.mnHeight - 1) * nDstLinestep );
         nDstLinestep = -nDstLinestep;
@@ -331,7 +331,7 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 
     // select the matching instantiation for the destination's bitmap format
-    switch (RemoveScanline(rDst.mnFormat))
+    switch (rDst.meFormat)
     {
         case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N8BitPal:
@@ -360,7 +360,7 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     static int nNotAccelerated = 0;
     SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
                  "vcl.gdi",
-                 "ImplConvertFromBitmap for not accelerated case (" << std::hex << static_cast<int>(rSrc.mnFormat) << "->" << static_cast<int>(rDst.mnFormat) << ")" );
+                 "ImplConvertFromBitmap for not accelerated case (" << std::hex << int(rSrc.meFormat) << "->" << int(rDst.meFormat) << ")" );
 
     return false;
 }
@@ -375,7 +375,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         return false;
     // vertical mirroring
     if( rTR.mnDestHeight < 0 )
-        // TODO: rDst.mnFormat ^= ScanlineFormat::TopDown;
+        // TODO: rDst.meDirection != ScanlineDirection::TopDown;
         return false;
 
     // offsetted conversion is not implemented yet
@@ -402,8 +402,8 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     if( rDst.mnHeight < rTR.mnDestY + rTR.mnDestHeight )
         return false;
 
-    const ScanlineFormat nSrcFormat = RemoveScanline(rSrc.mnFormat);
-    const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
+    const ScanlineFormat nSrcFormat = rSrc.meFormat;
+    const ScanlineFormat nDstFormat = rDst.meFormat;
 
     // special handling of trivial cases
     if( nSrcFormat == nDstFormat )
@@ -448,14 +448,14 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     static int nNotAccelerated = 0;
     SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
                  "vcl.gdi",
-                 "ImplFastBitmapConversion for not accelerated case (" << std::hex << static_cast<int>(rSrc.mnFormat) << "->" << static_cast<int>(rDst.mnFormat) << ")" );
+                 "ImplFastBitmapConversion for not accelerated case (" << std::hex << int(rSrc.meFormat) << "->" << int(rDst.meFormat) << ")" );
 
     return false;
 }
 
 static inline ConstScanline ImplGetScanline( const BitmapBuffer& rBuf, tools::Long nY )
 {
-    if( rBuf.mnFormat & ScanlineFormat::TopDown )
+    if (rBuf.meDirection == ScanlineDirection::TopDown)
         return rBuf.mpBits + nY * rBuf.mnScanlineSize;
     else
         return rBuf.mpBits + (rBuf.mnHeight - 1 - nY) * rBuf.mnScanlineSize;
@@ -481,7 +481,7 @@ static bool ImplCopyFromScanline( tools::Long nY, BitmapBuffer& rDst, ConstScanl
     TrueColorPixelPtr<SRCFMT> aSrcType;
     aSrcType.SetRawPtr( const_cast<Scanline>( aSrcScanline ));
     // select the matching instantiation for the destination's bitmap format
-    switch( RemoveScanline( rDst.mnFormat ))
+    switch (rDst.meFormat)
     {
         case ScanlineFormat::N24BitTcBgr:
             return ImplCopyToScanline<ScanlineFormat::N24BitTcBgr>( nY, rDst, aSrcType, nSrcWidth );
@@ -509,8 +509,8 @@ bool ImplFastCopyScanline( tools::Long nY, BitmapBuffer& rDst, ConstScanline aSr
     if( rDst.mnHeight <= nY )
         return false;
 
-    const ScanlineFormat nSrcFormat = RemoveScanline(nSrcScanlineFormat);
-    const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
+    const ScanlineFormat nSrcFormat = nSrcScanlineFormat;
+    const ScanlineFormat nDstFormat = rDst.meFormat;
 
     // special handling of trivial cases
     if( nSrcFormat == nDstFormat )
@@ -547,7 +547,7 @@ bool ImplFastCopyScanline( tools::Long nY, BitmapBuffer& rDst, const BitmapBuffe
         return false;
     if( rSrc.maPalette != rDst.maPalette )
         return false;
-    return ImplFastCopyScanline( nY, rDst, ImplGetScanline( rSrc, nY ), rSrc.mnFormat, rSrc.mnScanlineSize);
+    return ImplFastCopyScanline( nY, rDst, ImplGetScanline( rSrc, nY ), rSrc.meFormat, rSrc.mnScanlineSize);
 }
 
 template <ScanlineFormat DSTFMT, ScanlineFormat SRCFMT> //,sal_uLong MSKFMT>
@@ -555,8 +555,7 @@ static bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
 {
-    SAL_WARN_IF(( rMskBuffer.mnFormat & ~ScanlineFormat::TopDown ) != ScanlineFormat::N8BitPal,
-        "vcl.gdi", "FastBmp BlendImage: unusual MSKFMT" );
+    SAL_WARN_IF(rMskBuffer.meFormat != ScanlineFormat::N8BitPal, "vcl.gdi", "FastBmp BlendImage: unusual MSKFMT");
 
     const int nSrcLinestep = rSrcBuffer.mnScanlineSize;
     int nMskLinestep = rMskBuffer.mnScanlineSize;
@@ -570,14 +569,14 @@ static bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
         nMskLinestep = 0;
 
     // source and mask don't match: upside down
-    if( (rSrcBuffer.mnFormat ^ rMskBuffer.mnFormat) & ScanlineFormat::TopDown )
+    if (rSrcBuffer.meDirection != rMskBuffer.meDirection)
     {
         aMskLine.AddByteOffset( (rSrcBuffer.mnHeight - 1) * nMskLinestep );
         nMskLinestep = -nMskLinestep;
     }
 
     // source and destination don't match: upside down
-    if( (rSrcBuffer.mnFormat ^ rDstBuffer.mnFormat) & ScanlineFormat::TopDown )
+    if (rSrcBuffer.meDirection != rDstBuffer.meDirection)
     {
         aDstLine.AddByteOffset( (rDstBuffer.mnHeight - 1) * nDstLinestep );
         nDstLinestep = -nDstLinestep;
@@ -632,7 +631,7 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 
     // select the matching instantiation for the destination's bitmap format
-    switch (RemoveScanline(rDst.mnFormat))
+    switch (rDst.meFormat)
     {
         case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N8BitPal:
@@ -661,7 +660,7 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
     static int nNotAccelerated = 0;
     SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
                  "vcl.gdi",
-                 "ImplBlendFromBitmap for not accelerated case (" << std::hex << static_cast<int>(rSrc.mnFormat) << "*" << static_cast<int>(rMsk.mnFormat) << "->" << static_cast<int>(rDst.mnFormat) );
+                 "ImplBlendFromBitmap for not accelerated case (" << std::hex << int(rSrc.meFormat) << "*" << int(rMsk.meFormat) << "->" << int(rDst.meFormat) );
     return false;
 }
 
@@ -681,7 +680,7 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
         return false;
     // vertical mirroring
     if( rTR.mnDestHeight < 0 )
-        // TODO: rDst.mnFormat ^= ScanlineFormat::TopDown;
+        // TODO: rDst.meDirection != ScanlineDirection::TopDown;
         return false;
 
     // offsetted blending is not implemented yet
@@ -719,10 +718,8 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
     const BitmapBuffer& rSrc = *rSrcRA.ImplGetBitmapBuffer();
     const BitmapBuffer& rMsk = *rMskRA.ImplGetBitmapBuffer();
 
-    const ScanlineFormat nSrcFormat = RemoveScanline(rSrc.mnFormat);
-
     // select the matching instantiation for the source's bitmap format
-    switch( nSrcFormat )
+    switch (rSrc.meFormat)
     {
         case ScanlineFormat::N1BitMsbPal:
             break;
@@ -755,20 +752,18 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
     static int nNotAccelerated = 0;
     SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
                  "vcl.gdi",
-                 "ImplFastBlend for not accelerated case (" << std::hex << static_cast<int>(rSrc.mnFormat) << "*" << static_cast<int>(rMsk.mnFormat) << "->" << static_cast<int>(rDst.mnFormat) << ")" );
+                 "ImplFastBlend for not accelerated case (" << std::hex << int(rSrc.meFormat) << "*" << int(rMsk.meFormat) << "->" << int(rDst.meFormat) << ")" );
 
     return false;
 }
 
 bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 {
-    const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
-
     // erasing a bitmap is often just a byte-wise memory fill
     bool bByteFill = true;
     sal_uInt8 nFillByte;
 
-    switch( nDstFormat )
+    switch (rDst.meFormat)
     {
         case ScanlineFormat::N1BitMsbPal:
             nFillByte = rColor.GetIndex();
@@ -800,7 +795,7 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
     }
 
     // TODO: handle other bitmap formats
-    switch( nDstFormat )
+    switch (rDst.meFormat)
     {
         case ScanlineFormat::N32BitTcMask:
 

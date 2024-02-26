@@ -50,7 +50,7 @@ void SalBitmap::updateChecksum() const
         if( lineBitsCount % 8 != 0 )
         {
             const int extraBitsCount = lineBitsCount % 8;
-            switch( RemoveScanline( pBuf->mnFormat ))
+            switch (pBuf->meFormat)
             {
                 case ScanlineFormat::N1BitMsbPal:
                 {
@@ -62,7 +62,7 @@ void SalBitmap::updateChecksum() const
                     break;
             }
         }
-        if( pBuf->mnFormat & ScanlineFormat::TopDown )
+        if (pBuf->meDirection == ScanlineDirection::TopDown)
         {
             if( pBuf->mnScanlineSize == lineBitsCount / 8 )
                 nCrc = rtl_crc32(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);

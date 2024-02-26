@@ -106,7 +106,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     config.output.is_external_memory = 1;
     if (bSupportsBitmap32 && has_alpha)
     {
-        switch (RemoveScanline(access->GetScanlineFormat()))
+        switch (access->GetScanlineFormat())
         {
             // Our bitmap32 code expects premultiplied.
             case ScanlineFormat::N32BitTcRgba:
@@ -131,7 +131,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     {
         if (has_alpha)
         {
-            switch (RemoveScanline(access->GetScanlineFormat()))
+            switch (access->GetScanlineFormat())
             {
                 case ScanlineFormat::N24BitTcRgb:
                     config.output.colorspace = MODE_RGBA;
@@ -149,7 +149,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
         }
         else
         {
-            switch (RemoveScanline(access->GetScanlineFormat()))
+            switch (access->GetScanlineFormat())
             {
                 case ScanlineFormat::N24BitTcRgb:
                     config.output.colorspace = MODE_RGB;

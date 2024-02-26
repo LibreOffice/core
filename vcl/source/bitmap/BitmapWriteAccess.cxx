@@ -65,11 +65,11 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, const BitmapReadAccess& rRe
 void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
                                      ScanlineFormat nSrcScanlineFormat, sal_uInt32 nSrcScanlineSize)
 {
-    const ScanlineFormat nFormat = RemoveScanline(nSrcScanlineFormat);
+    const ScanlineFormat eFormat = nSrcScanlineFormat;
 
     assert(nY >= 0 && nY < mpBuffer->mnHeight && "y-coordinate in destination out of range!");
-    DBG_ASSERT((HasPalette() && nFormat <= ScanlineFormat::N8BitPal)
-                   || (!HasPalette() && nFormat > ScanlineFormat::N8BitPal),
+    DBG_ASSERT((HasPalette() && eFormat <= ScanlineFormat::N8BitPal)
+                   || (!HasPalette() && eFormat > ScanlineFormat::N8BitPal),
                "No copying possible between palette and non palette scanlines!");
 
     const sal_uInt32 nCount = std::min(GetScanlineSize(), nSrcScanlineSize);
@@ -77,7 +77,7 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
     if (!nCount)
         return;
 
-    if (GetScanlineFormat() == RemoveScanline(nSrcScanlineFormat))
+    if (GetScanlineFormat() == eFormat)
         memcpy(GetScanline(nY), aSrcScanline, nCount);
     else
     {
@@ -85,10 +85,10 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
                                  nSrcScanlineSize))
             return;
 
-        DBG_ASSERT(nFormat != ScanlineFormat::N32BitTcMask,
+        DBG_ASSERT(eFormat != ScanlineFormat::N32BitTcMask,
                    "No support for pixel formats with color masks yet!");
         FncGetPixel pFncGetPixel;
-        switch (nFormat)
+        switch (eFormat)
         {
             case ScanlineFormat::N1BitMsbPal:
                 pFncGetPixel = GetPixelForN1BitMsbPal;

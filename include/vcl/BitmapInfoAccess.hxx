@@ -52,7 +52,7 @@ public:
     {
         assert(mpBuffer && "Access is not valid!");
 
-        return mpBuffer && (mpBuffer->mnFormat & ScanlineFormat::TopDown);
+        return mpBuffer && mpBuffer->meDirection == ScanlineDirection::TopDown;
     }
 
     bool IsBottomUp() const { return !IsTopDown(); }
@@ -61,7 +61,7 @@ public:
     {
         assert(mpBuffer && "Access is not valid!");
 
-        return mpBuffer ? RemoveScanline(mpBuffer->mnFormat) : ScanlineFormat::NONE;
+        return mpBuffer ? mpBuffer->meFormat : ScanlineFormat::NONE;
     }
 
     sal_uInt32 GetScanlineSize() const

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SCANLINE_HXX
-#define INCLUDED_VCL_SCANLINE_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 #include <sal/types.h>
@@ -26,35 +25,28 @@
 typedef sal_uInt8*        Scanline;
 typedef const sal_uInt8*  ConstScanline;
 
-enum class ScanlineFormat {
-    NONE              = 0x00000000,
-
-    N1BitMsbPal       = 0x00000001,
-
-    N8BitPal          = 0x00000010,
-
-    N24BitTcBgr       = 0x00000100,
-    N24BitTcRgb       = 0x00000200,
-
-    N32BitTcAbgr      = 0x00000800,
-    N32BitTcArgb      = 0x00001000,
-    N32BitTcBgra      = 0x00002000,
-    N32BitTcRgba      = 0x00004000,
-    N32BitTcMask      = 0x00008000,
-
-    TopDown           = 0x00010000 // scanline adjustment
+enum class ScanlineFormat : sal_uInt8
+{
+    NONE,
+    // 1 Bit - still needed?
+    N1BitMsbPal,
+    // 8 Bit Palette
+    N8BitPal,
+    // 24 Bit
+    N24BitTcBgr,
+    N24BitTcRgb,
+    // 32 Bit
+    N32BitTcAbgr,
+    N32BitTcArgb,
+    N32BitTcBgra,
+    N32BitTcRgba,
+    N32BitTcMask,
 };
 
-namespace o3tl
+enum class ScanlineDirection : sal_uInt8
 {
-    template<> struct typed_flags<ScanlineFormat> : is_typed_flags<ScanlineFormat, 0x0001fb11> {};
-}
-
-inline ScanlineFormat RemoveScanline(ScanlineFormat nFormat)
-{
-    return nFormat & ~ScanlineFormat::TopDown;
-}
-
-#endif // INCLUDED_VCL_SCANLINE_HXX
+    BottomUp,
+    TopDown
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -119,7 +119,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     sal_uInt8* pSource(pRead->mpBits);
     sal_uInt8* pDestination(pWrite->mpBits);
     tools::Long readRowChange = pRead->mnScanlineSize;
-    if(pRead->mnFormat & ScanlineFormat::TopDown)
+    if (pRead->meDirection == ScanlineDirection::TopDown)
     {
         pSource += pRead->mnScanlineSize * (pRead->mnHeight - 1);
         readRowChange = -readRowChange;
@@ -127,12 +127,14 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 
     std::unique_ptr<ColorScanlineConverter> pConverter;
 
-    if (RemoveScanline(pRead->mnFormat) == ScanlineFormat::N24BitTcRgb)
-        pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N24BitTcRgb,
-                                                    3, pRead->mnScanlineSize));
-    else if (RemoveScanline(pRead->mnFormat) == ScanlineFormat::N32BitTcRgba)
-        pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N32BitTcRgba,
-                                                    4, pRead->mnScanlineSize));
+    if (pRead->meFormat == ScanlineFormat::N24BitTcRgb)
+    {
+        pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N24BitTcRgb, 3, pRead->mnScanlineSize));
+    }
+    else if (pRead->meFormat == ScanlineFormat::N32BitTcRgba)
+    {
+        pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N32BitTcRgba, 4, pRead->mnScanlineSize));
+    }
     if (pConverter)
     {
         for (tools::Long y = 0; y < pRead->mnHeight; y++)

@@ -118,27 +118,28 @@ BitmapBuffer* QtBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
     pBuffer->mnBitCount = getFormatBits(m_pImage->format());
     pBuffer->mpBits = m_pImage->bits();
     pBuffer->mnScanlineSize = m_pImage->bytesPerLine();
+    pBuffer->meDirection = ScanlineDirection::TopDown;
 
     switch (pBuffer->mnBitCount)
     {
         case 1:
-            pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal | ScanlineFormat::TopDown;
+            pBuffer->meFormat = ScanlineFormat::N1BitMsbPal;
             pBuffer->maPalette = m_aPalette;
             break;
         case 8:
-            pBuffer->mnFormat = ScanlineFormat::N8BitPal | ScanlineFormat::TopDown;
+            pBuffer->meFormat = ScanlineFormat::N8BitPal;
             pBuffer->maPalette = m_aPalette;
             break;
         case 24:
-            pBuffer->mnFormat = ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown;
+            pBuffer->meFormat = ScanlineFormat::N24BitTcRgb;
             pBuffer->maPalette = aEmptyPalette;
             break;
         case 32:
         {
 #ifdef OSL_BIGENDIAN
-            pBuffer->mnFormat = ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown;
+            pBuffer->meFormat = ScanlineFormat::N32BitTcArgb;
 #else
-            pBuffer->mnFormat = ScanlineFormat::N32BitTcBgra | ScanlineFormat::TopDown;
+            pBuffer->meFormat = ScanlineFormat::N32BitTcBgra;
 #endif
             pBuffer->maPalette = aEmptyPalette;
             break;

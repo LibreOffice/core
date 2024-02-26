@@ -43,8 +43,8 @@ BitmapReadAccess::BitmapReadAccess(const Bitmap& rBitmap, BitmapAccessMode nMode
 
     maColorMask = mpBuffer->maColorMask;
 
-    mFncGetPixel = GetPixelFunction(mpBuffer->mnFormat);
-    mFncSetPixel = SetPixelFunction(mpBuffer->mnFormat);
+    mFncGetPixel = GetPixelFunction(mpBuffer->meFormat);
+    mFncSetPixel = SetPixelFunction(mpBuffer->meFormat);
 
     if (!mFncGetPixel || !mFncSetPixel)
     {
@@ -59,7 +59,7 @@ bool Bitmap32IsPreMultipled() { return ImplGetSVData()->mpDefInst->supportsBitma
 
 FncGetPixel BitmapReadAccess::GetPixelFunction(ScanlineFormat nFormat)
 {
-    switch (RemoveScanline(nFormat))
+    switch (nFormat)
     {
         case ScanlineFormat::N1BitMsbPal:
             return GetPixelForN1BitMsbPal;
@@ -99,7 +99,7 @@ FncGetPixel BitmapReadAccess::GetPixelFunction(ScanlineFormat nFormat)
 
 FncSetPixel BitmapReadAccess::SetPixelFunction(ScanlineFormat nFormat)
 {
-    switch (RemoveScanline(nFormat))
+    switch (nFormat)
     {
         case ScanlineFormat::N1BitMsbPal:
             return SetPixelForN1BitMsbPal;

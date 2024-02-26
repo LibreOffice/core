@@ -49,7 +49,7 @@ public:
         assert(mpBuffer && "Access is not valid!");
         assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
 
-        if (mpBuffer->mnFormat & ScanlineFormat::TopDown)
+        if (mpBuffer->meDirection == ScanlineDirection::TopDown)
         {
             return mpBuffer->mpBits + (nY * mpBuffer->mnScanlineSize);
         }

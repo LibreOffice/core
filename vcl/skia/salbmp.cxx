@@ -288,25 +288,25 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
     switch (mBitCount)
     {
         case 1:
-            buffer->mnFormat = ScanlineFormat::N1BitMsbPal;
+            buffer->meFormat = ScanlineFormat::N1BitMsbPal;
             break;
         case 8:
-            buffer->mnFormat = ScanlineFormat::N8BitPal;
+            buffer->meFormat = ScanlineFormat::N8BitPal;
             break;
         case 24:
             // Make the RGB/BGR format match the default Skia 32bpp format, to allow
             // easy conversion later.
-            buffer->mnFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N24BitTcBgr
+            buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N24BitTcBgr
                                                       : ScanlineFormat::N24BitTcRgb;
             break;
         case 32:
-            buffer->mnFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgra
+            buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgra
                                                       : ScanlineFormat::N32BitTcRgba;
             break;
         default:
             abort();
     }
-    buffer->mnFormat |= ScanlineFormat::TopDown;
+    buffer->meDirection = ScanlineDirection::TopDown;
     // Refcount all read/write accesses, to catch problems with existing accesses while
     // a bitmap changes, and also to detect when we can free mBuffer if wanted.
     // Write mode implies also reading. It would be probably a good idea to count even
@@ -1139,8 +1139,8 @@ void SkiaSalBitmap::PerformErase()
         fastColor = Color(ColorAlpha, mPalette.GetBestIndex(fastColor));
     if (!ImplFastEraseBitmap(*bitmapBuffer, fastColor))
     {
-        FncSetPixel setPixel = BitmapReadAccess::SetPixelFunction(bitmapBuffer->mnFormat);
-        assert(bitmapBuffer->mnFormat & ScanlineFormat::TopDown);
+        FncSetPixel setPixel = BitmapReadAccess::SetPixelFunction(bitmapBuffer->meFormat);
+        assert(bitmapBuffer->meDirection == ScanlineDirection::TopDown);
         // Set first scanline, copy to others.
         Scanline scanline = bitmapBuffer->mpBits;
         for (tools::Long x = 0; x < bitmapBuffer->mnWidth; ++x)

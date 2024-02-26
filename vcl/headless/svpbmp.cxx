@@ -57,17 +57,17 @@ static std::optional<BitmapBuffer> ImplCreateDIB(
     switch (ePixelFormat)
     {
         case vcl::PixelFormat::N8_BPP:
-            pDIB->mnFormat = ScanlineFormat::N8BitPal;
+            pDIB->meFormat = ScanlineFormat::N8BitPal;
             break;
         case vcl::PixelFormat::N24_BPP:
-            pDIB->mnFormat = SVP_24BIT_FORMAT;
+            pDIB->meFormat = SVP_24BIT_FORMAT;
             break;
         case vcl::PixelFormat::N32_BPP:
-            pDIB->mnFormat = SVP_CAIRO_FORMAT;
+            pDIB->meFormat = SVP_CAIRO_FORMAT;
             break;
         case vcl::PixelFormat::INVALID:
             assert(false);
-            pDIB->mnFormat = SVP_CAIRO_FORMAT;
+            pDIB->meFormat = SVP_CAIRO_FORMAT;
             break;
     }
 
@@ -75,7 +75,7 @@ static std::optional<BitmapBuffer> ImplCreateDIB(
     if (ePixelFormat <= vcl::PixelFormat::N8_BPP)
         nColors = vcl::numberOfColors(ePixelFormat);
 
-    pDIB->mnFormat |= ScanlineFormat::TopDown;
+    pDIB->meDirection = ScanlineDirection::TopDown;
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
     tools::Long nScanlineBase;
