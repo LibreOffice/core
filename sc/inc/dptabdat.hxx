@@ -53,7 +53,7 @@ class ScDocument;
  * Base class that abstracts different data source types of a datapilot
  * table.
  */
-class SC_DLLPUBLIC ScDPTableData
+class SAL_DLLPUBLIC_RTTI ScDPTableData
 {
     //  cached data for GetDatePart
     tools::Long    nLastDateVal;
@@ -66,7 +66,7 @@ public:
     /** This structure stores dimension information used when calculating
         results.  These data are read only during result calculation, so it
         should be passed as a const instance. */
-    struct SAL_DLLPRIVATE CalcInfo
+    struct CalcInfo
     {
         ::std::vector<sal_Int32>        aColLevelDims;
         ::std::vector<ScDPDimension*>   aColDims;
@@ -128,7 +128,7 @@ public:
 
     virtual sal_Int32               GetMembersCount( sal_Int32 nDim );
     const ScDPItemData*   GetMemberByIndex( sal_Int32 nDim, sal_Int32 nIndex );
-    virtual const ScDPItemData*   GetMemberById( sal_Int32 nDim, sal_Int32 nId);
+    SC_DLLPUBLIC virtual const ScDPItemData*   GetMemberById( sal_Int32 nDim, sal_Int32 nId);
     virtual sal_Int32                GetSourceDim( sal_Int32 nDim );
     virtual sal_Int32                Compare( sal_Int32 nDim, sal_Int32 nDataId1, sal_Int32 nDataId2);
 

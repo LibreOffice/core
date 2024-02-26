@@ -45,7 +45,7 @@ struct ScRawToken;
 struct ScSingleRefData;
 struct ScComplexRefData;
 
-class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaTokenArray
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI ScTokenArray final : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
 
@@ -61,21 +61,21 @@ class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaT
     void CheckForThreading( const formula::FormulaToken& r );
 
 public:
-    ScTokenArray(const ScDocument& rDoc);
+    SC_DLLPUBLIC ScTokenArray(const ScDocument& rDoc);
     ScTokenArray(ScSheetLimits&);
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */
     ScTokenArray( const ScTokenArray& ) = default;
     ScTokenArray( ScTokenArray&& ) = default;
-    virtual ~ScTokenArray() override;
+    SC_DLLPUBLIC virtual ~ScTokenArray() override;
 
     bool EqualTokens( const ScTokenArray* pArr2 ) const;
 
-    virtual void Clear() override;
-    std::unique_ptr<ScTokenArray> Clone() const;    /// True copy!
-    ScTokenArray CloneValue() const;    /// True copy!
+    SC_DLLPUBLIC virtual void Clear() override;
+    SC_DLLPUBLIC std::unique_ptr<ScTokenArray> Clone() const;    /// True copy!
+    SC_DLLPUBLIC ScTokenArray CloneValue() const;    /// True copy!
 
-    void GenHash();
+    SC_DLLPUBLIC void GenHash();
     size_t GetHash() const { return mnHashValue;}
 
     ScFormulaVectorState GetVectorState() const { return meVectorState;}
@@ -89,9 +89,9 @@ public:
     bool IsInvariant() const;
 
     /// Exactly and only one range (valid or deleted)
-    bool IsReference( ScRange& rRange, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC bool IsReference( ScRange& rRange, const ScAddress& rPos ) const;
     /// Exactly and only one valid range (no #REF!s)
-    bool IsValidReference( ScRange& rRange, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC bool IsValidReference( ScRange& rRange, const ScAddress& rPos ) const;
 
                             /** Determines the extent of direct adjacent
                                 references. Only use with real functions, e.g.
@@ -101,26 +101,26 @@ public:
                                 const ScAddress& rPos, ScDirection );
 
     formula::FormulaToken* AddRawToken( const ScRawToken& );
-    virtual bool AddFormulaToken(
+    SC_DLLPUBLIC virtual bool AddFormulaToken(
         const css::sheet::FormulaToken& rToken,
         svl::SharedStringPool& rSPool,
         formula::ExternalReferenceHelper* _pRef) override;
-    virtual void CheckToken( const formula::FormulaToken& r ) override;
-    virtual formula::FormulaToken* AddOpCode( OpCode eCode ) override;
+    SC_DLLPUBLIC virtual void CheckToken( const formula::FormulaToken& r ) override;
+    SC_DLLPUBLIC virtual formula::FormulaToken* AddOpCode( OpCode eCode ) override;
     /** ScSingleRefToken with ocPush. */
-    formula::FormulaToken* AddSingleReference( const ScSingleRefData& rRef );
+    SC_DLLPUBLIC formula::FormulaToken* AddSingleReference( const ScSingleRefData& rRef );
     /** ScSingleRefOpToken with ocMatRef. */
     formula::FormulaToken* AddMatrixSingleReference( const ScSingleRefData& rRef );
-    formula::FormulaToken* AddDoubleReference( const ScComplexRefData& rRef );
-    void                   AddRangeName( sal_uInt16 n, sal_Int16 nSheet );
+    SC_DLLPUBLIC formula::FormulaToken* AddDoubleReference( const ScComplexRefData& rRef );
+    SC_DLLPUBLIC void      AddRangeName( sal_uInt16 n, sal_Int16 nSheet );
     formula::FormulaToken* AddDBRange( sal_uInt16 n );
-    formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const svl::SharedString& rName );
-    void AddExternalSingleReference( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& rRef );
-    formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& rRef );
-    formula::FormulaToken* AddMatrix( const ScMatrixRef& p );
+    SC_DLLPUBLIC formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const svl::SharedString& rName );
+    SC_DLLPUBLIC void AddExternalSingleReference( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& rRef );
+    SC_DLLPUBLIC formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& rRef );
+    SC_DLLPUBLIC formula::FormulaToken* AddMatrix( const ScMatrixRef& p );
     /** ScSingleRefOpToken with ocColRowName. */
-    formula::FormulaToken* AddColRowName( const ScSingleRefData& rRef );
-    virtual formula::FormulaToken* MergeArray( ) override;
+    SC_DLLPUBLIC formula::FormulaToken* AddColRowName( const ScSingleRefData& rRef );
+    SC_DLLPUBLIC virtual formula::FormulaToken* MergeArray( ) override;
 
     /** Merge very last SingleRef+ocRange+SingleRef combination into DoubleRef
         and adjust pCode array, or do nothing if conditions not met. */
@@ -259,9 +259,9 @@ public:
      * Create a string representation of formula token array without modifying
      * the internal state of the token array.
      */
-    OUString CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC OUString CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
 
-    void WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow );
+    SC_DLLPUBLIC void WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow );
 
     sal_Int32 GetWeight() const;
 

@@ -88,7 +88,7 @@ public:
     OString dumpAsString() const;
 };
 
-class SC_DLLPUBLIC ScOutlineArray
+class ScOutlineArray
 {
 friend class ScSubOutlineIterator;
 
@@ -109,17 +109,17 @@ public:
 
     size_t GetDepth() const { return nDepth;}
 
-    bool FindTouchedLevel(
+    SC_DLLPUBLIC bool FindTouchedLevel(
         SCCOLROW nBlockStart, SCCOLROW nBlockEnd, size_t& rFindLevel) const;
 
-    bool Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, bool& rSizeChanged,
+    SC_DLLPUBLIC bool Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, bool& rSizeChanged,
                  bool bHidden = false );
     bool Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, bool& rSizeChanged );
 
     ScOutlineEntry* GetEntry(size_t nLevel, size_t nIndex);
-    const ScOutlineEntry* GetEntry(size_t nLevel, size_t nIndex) const;
-    size_t GetCount(size_t nLevel) const;
-    const ScOutlineEntry* GetEntryByPos(size_t nLevel, SCCOLROW nPos) const;
+    SC_DLLPUBLIC const ScOutlineEntry* GetEntry(size_t nLevel, size_t nIndex) const;
+    SC_DLLPUBLIC size_t GetCount(size_t nLevel) const;
+    SC_DLLPUBLIC const ScOutlineEntry* GetEntryByPos(size_t nLevel, SCCOLROW nPos) const;
 
     bool GetEntryIndex(size_t nLevel, SCCOLROW nPos, size_t& rnIndex) const;
     bool GetEntryIndexInRange(
@@ -128,7 +128,7 @@ public:
     void SetVisibleBelow(
         size_t nLevel, size_t nEntry, bool bValue, bool bSkipHidden = false);
 
-    void GetRange(SCCOLROW& rStart, SCCOLROW& rEnd) const;
+    SC_DLLPUBLIC void GetRange(SCCOLROW& rStart, SCCOLROW& rEnd) const;
     void ExtendBlock(size_t nLevel, SCCOLROW& rBlkStart, SCCOLROW& rBlkEnd);
 
     bool TestInsertSpace(SCSIZE nSize, SCCOLROW nMaxVal) const;

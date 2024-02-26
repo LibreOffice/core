@@ -39,7 +39,7 @@ class ScMarkArray;
 //!     It should be possible to have MarkArrays for each table, in order to
 //!     enable "search all" across more than one table again!
 
-class SC_DLLPUBLIC ScMarkData
+class ScMarkData
 {
 public:
     typedef std::set<SCTAB> MarkedTabsType;
@@ -61,21 +61,21 @@ private:
     bool            bMarkIsNeg:1;           // cancel if multi selection
 
 public:
-    ScMarkData(const ScSheetLimits& rSheetLimits);
+    SC_DLLPUBLIC ScMarkData(const ScSheetLimits& rSheetLimits);
     ScMarkData(const ScSheetLimits& rSheetLimits, const ScRangeList& rList);
     ScMarkData(const ScMarkData& rData) = default;
     ScMarkData(ScMarkData&& rData) = default;
     ScMarkData& operator=(const ScMarkData& rData);
     ScMarkData& operator=(ScMarkData&& rData);
 
-    void        ResetMark();
-    void        SetMarkArea( const ScRange& rRange );
+    SC_DLLPUBLIC void ResetMark();
+    SC_DLLPUBLIC void SetMarkArea( const ScRange& rRange );
 
     // bSetupMulti must be set to true only for recursive calls to SetMultiMarkArea
-    void        SetMultiMarkArea( const ScRange& rRange, bool bMark = true, bool bSetupMulti = false );
+    SC_DLLPUBLIC void SetMultiMarkArea( const ScRange& rRange, bool bMark = true, bool bSetupMulti = false );
 
-    void        MarkToMulti();
-    void        MarkToSimple();
+    SC_DLLPUBLIC void MarkToMulti();
+    SC_DLLPUBLIC void MarkToSimple();
 
     bool        IsMarked() const                { return bMarked; }
     bool        IsMultiMarked() const           { return bMultiMarked; }
@@ -86,16 +86,16 @@ public:
 
     void        SetAreaTab( SCTAB nTab );
 
-    void        SelectTable( SCTAB nTab, bool bNew );
+    SC_DLLPUBLIC void SelectTable( SCTAB nTab, bool bNew );
     bool        GetTableSelect( SCTAB nTab ) const;
 
-    void        SelectOneTable( SCTAB nTab );
-    SCTAB       GetSelectCount() const;
-    SCTAB       GetFirstSelected() const;
+    SC_DLLPUBLIC void SelectOneTable( SCTAB nTab );
+    SC_DLLPUBLIC SCTAB GetSelectCount() const;
+    SC_DLLPUBLIC SCTAB GetFirstSelected() const;
     SCTAB       GetLastSelected() const;
 
     const MarkedTabsType& GetSelectedTabs() const { return maTabMarked;}
-    void SetSelectedTabs(const MarkedTabsType& rTabs);
+    SC_DLLPUBLIC void SetSelectedTabs(const MarkedTabsType& rTabs);
 
     void        SetMarkNegative( bool bFlag )   { bMarkIsNeg = bFlag; }
     bool        IsMarkNegative() const          { return bMarkIsNeg;  }
@@ -106,7 +106,7 @@ public:
     const ScMultiSel& GetMultiSelData() const   { return aMultiSel;   }
     ScMarkArray GetMarkArray( SCCOL nCol ) const { return aMultiSel.GetMarkArray( nCol ); }
 
-    bool        IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple = false ) const;
+    SC_DLLPUBLIC bool IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple = false ) const;
 
     /** Create a range list of marks.
         @param  nForTab
@@ -116,7 +116,7 @@ public:
     void        FillRangeListWithMarks( ScRangeList* pList, bool bClear, SCTAB nForTab = -1 ) const;
     void        ExtendRangeListTables( ScRangeList* pList ) const;
 
-    ScRangeList GetMarkedRanges() const;
+    SC_DLLPUBLIC ScRangeList GetMarkedRanges() const;
     /** Get marked ranges with sheet-tab set to nTab.
         Marks are stored for the currently active sheet respectively the
         multi-area start-sheet-tab, update ranges with the sheet for which this
@@ -128,29 +128,29 @@ public:
     std::vector<sc::ColRowSpan> GetMarkedRowSpans() const;
     std::vector<sc::ColRowSpan> GetMarkedColSpans() const;
 
-    bool        IsColumnMarked( SCCOL nCol ) const;
-    bool        IsRowMarked( SCROW nRow ) const;
-    bool        IsAllMarked( const ScRange& rRange ) const;     // Multi
+    SC_DLLPUBLIC bool IsColumnMarked( SCCOL nCol ) const;
+    SC_DLLPUBLIC bool IsRowMarked( SCROW nRow ) const;
+    SC_DLLPUBLIC bool IsAllMarked( const ScRange& rRange ) const;     // Multi
 
     // Returns the first column of the range [column,nLastCol] for which
     // all those columns have equal marks. Value returned is not less than nMinCol.
     SCCOL       GetStartOfEqualColumns( SCCOL nLastCol, SCCOL nMinCol = 0 ) const;
 
                 /// May return -1
-    SCROW       GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const;
-    bool        HasMultiMarks( SCCOL nCol ) const;
+    SC_DLLPUBLIC SCROW GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const;
+    SC_DLLPUBLIC bool HasMultiMarks( SCCOL nCol ) const;
     bool        HasAnyMultiMarks() const;
 
     //  adjust table marking:
-    void        InsertTab( SCTAB nTab );
-    void        DeleteTab( SCTAB nTab );
+    SC_DLLPUBLIC void InsertTab( SCTAB nTab );
+    SC_DLLPUBLIC void DeleteTab( SCTAB nTab );
 
     void        ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, sal_Int32 nColOffset);
     void        ShiftRows(const ScDocument& rDoc, SCROW nStartRow, sal_Int32 nRowOffset);
 
     // Generate envelopes if multimarked and fills the passed ScRange object with
     // the smallest range that includes the marked area plus its envelopes.
-    void        GetSelectionCover( ScRange& rRange );
+    SC_DLLPUBLIC void GetSelectionCover( ScRange& rRange );
     // Get top, bottom, left and right envelopes
     const ScRangeList& GetTopEnvelope() const    { return aTopEnvelope;    }
     const ScRangeList& GetBottomEnvelope() const { return aBottomEnvelope; }

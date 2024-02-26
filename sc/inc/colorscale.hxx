@@ -244,7 +244,7 @@ protected:
 
 typedef std::vector<std::unique_ptr<ScColorScaleEntry, o3tl::default_delete<ScColorScaleEntry>>> ScColorScaleEntries;
 
-class SC_DLLPUBLIC ScColorScaleFormat final : public ScColorFormat
+class SAL_DLLPUBLIC_RTTI ScColorScaleFormat final : public ScColorFormat
 {
 private:
     ScColorScaleEntries maColorScales;
@@ -255,7 +255,7 @@ private:
     void calcMinMax(double& nMin, double& nMax) const;
     double CalcValue(double nMin, double nMax, const ScColorScaleEntries::const_iterator& rItr) const;
 public:
-    ScColorScaleFormat(ScDocument* pDoc);
+    SC_DLLPUBLIC ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
     ScColorScaleFormat(const ScColorScaleFormat&) = delete;
     virtual ~ScColorScaleFormat() override;
@@ -265,8 +265,8 @@ public:
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
 
-    std::optional<Color> GetColor(const ScAddress& rAddr) const;
-    void AddEntry(ScColorScaleEntry* pEntry);
+    SC_DLLPUBLIC std::optional<Color> GetColor(const ScAddress& rAddr) const;
+    SC_DLLPUBLIC void AddEntry(ScColorScaleEntry* pEntry);
 
     bool IsEqual(const ScFormatEntry& r, bool bIgnoreSrcPos) const override;
 
@@ -277,14 +277,14 @@ public:
 
     virtual Type GetType() const override;
     ScColorScaleEntries::iterator begin();
-    ScColorScaleEntries::const_iterator begin() const;
+    SC_DLLPUBLIC ScColorScaleEntries::const_iterator begin() const;
     ScColorScaleEntries::iterator end();
-    ScColorScaleEntries::const_iterator end() const;
+    SC_DLLPUBLIC ScColorScaleEntries::const_iterator end() const;
 
     ScColorScaleEntry* GetEntry(size_t nPos);
-    const ScColorScaleEntry* GetEntry(size_t nPos) const;
+    SC_DLLPUBLIC const ScColorScaleEntry* GetEntry(size_t nPos) const;
 
-    size_t size() const;
+    SC_DLLPUBLIC size_t size() const;
 
     /**
      * Makes sure that the maColorScales contain at least 2 entries.
@@ -356,20 +356,20 @@ struct ScIconSetFormatData
     ScIconSetFormatData& operator=(ScIconSetFormatData const&) = delete; //TODO?
 };
 
-class SC_DLLPUBLIC ScIconSetFormat final : public ScColorFormat
+class SAL_DLLPUBLIC_RTTI ScIconSetFormat final : public ScColorFormat
 {
 public:
-    ScIconSetFormat(ScDocument* pDoc);
+    SC_DLLPUBLIC ScIconSetFormat(ScDocument* pDoc);
     ScIconSetFormat(ScDocument* pDoc, const ScIconSetFormat& rFormat);
 
     virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
 
-    std::unique_ptr<ScIconSetInfo> GetIconSetInfo(const ScAddress& rAddr) const;
+    SC_DLLPUBLIC std::unique_ptr<ScIconSetInfo> GetIconSetInfo(const ScAddress& rAddr) const;
 
-    void SetIconSetData( ScIconSetFormatData* pData );
-    const ScIconSetFormatData* GetIconSetData() const;
+    SC_DLLPUBLIC void SetIconSetData( ScIconSetFormatData* pData );
+    SC_DLLPUBLIC const ScIconSetFormatData* GetIconSetData() const;
     ScIconSetFormatData* GetIconSetData();
 
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) override;
@@ -379,8 +379,8 @@ public:
 
     virtual Type GetType() const override;
 
-    static const ScIconSetMap g_IconSetMap[];
-    static const char* getIconSetName( ScIconSetType eType );
+    SC_DLLPUBLIC static const ScIconSetMap g_IconSetMap[];
+    SC_DLLPUBLIC static const char* getIconSetName( ScIconSetType eType );
     static sal_Int32 getIconSetElements( ScIconSetType eType );
     static OUString getIconName(ScIconSetType eType, sal_Int32 nIndex);
     static BitmapEx& getBitmap(sc::IconSetBitmapMap& rBitmapMap, ScIconSetType eType, sal_Int32 nIndex);
@@ -389,9 +389,9 @@ public:
     typedef ScIconSetFormatData::Entries_t::const_iterator const_iterator;
 
     iterator begin();
-    const_iterator begin() const;
+    SC_DLLPUBLIC const_iterator begin() const;
     iterator end();
-    const_iterator end() const;
+    SC_DLLPUBLIC const_iterator end() const;
 
     size_t size() const;
 

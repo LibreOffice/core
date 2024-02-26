@@ -94,7 +94,7 @@ enum class ScObjectHandling
     MirrorRTLMode // used for switch between RTL and LTR by .uno:SheetRightToLeft
 };
 
-class SC_DLLPUBLIC ScDrawLayer final : public FmFormModel
+class SAL_DLLPUBLIC_RTTI ScDrawLayer final : public FmFormModel
 {
 private:
     OUString        aName;
@@ -146,11 +146,11 @@ public:
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCCOL nDx,SCROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos );
     void InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rData);
-    void            RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
+    SC_DLLPUBLIC void RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
 
-    bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
+    SC_DLLPUBLIC bool HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 
-    void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
+    SC_DLLPUBLIC void DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2, bool bAnchored = false );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
 
@@ -182,9 +182,9 @@ public:
     OUString        GetNewGraphicName( tools::Long* pnCounter = nullptr ) const;
     void            EnsureGraphicNames();
 
-    static bool IsCellAnchored( const SdrObject& rObj );
-    static bool IsResizeWithCell( const SdrObject& rObj );
-    static void             SetPageAnchored( SdrObject& );
+    SC_DLLPUBLIC static bool IsCellAnchored( const SdrObject& rObj );
+    SC_DLLPUBLIC static bool IsResizeWithCell( const SdrObject& rObj );
+    SC_DLLPUBLIC static void SetPageAnchored( SdrObject& );
     static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
     static void             SetNonRotatedAnchor( SdrObject&, const ScDrawObjData &rAnchor );
 
@@ -196,18 +196,18 @@ public:
         SCTAB nTab,
         bool bHiddenAsZero = true);
 
-    static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab, bool bResizeWithCell );
+    SC_DLLPUBLIC static void SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab, bool bResizeWithCell );
     static void             UpdateCellAnchorFromPositionEnd( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true );
-    static ScAnchorType     GetAnchorType( const SdrObject& );
+    SC_DLLPUBLIC static ScAnchorType GetAnchorType( const SdrObject& );
     std::vector<SdrObject*> GetObjectsAnchoredToRows(SCTAB nTab, SCROW nStartRow, SCROW nEndRow);
-    std::map<SCROW, std::vector<SdrObject*>> GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, SCROW nEndRow);
+    SC_DLLPUBLIC std::map<SCROW, std::vector<SdrObject*>> GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, SCROW nEndRow);
     bool HasObjectsAnchoredInRange(const ScRange& rRange);
     std::vector<SdrObject*> GetObjectsAnchoredToCols(SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol);
     void MoveObject(SdrObject* pObj, const ScAddress& rNewPosition);
 
     // positions for detective lines
-    static ScDrawObjData* GetObjData( SdrObject* pObj, bool bCreate=false );
-    static ScDrawObjData* GetNonRotatedObjData( SdrObject* pObj, bool bCreate=false );
+    SC_DLLPUBLIC static ScDrawObjData* GetObjData( SdrObject* pObj, bool bCreate=false );
+    SC_DLLPUBLIC static ScDrawObjData* GetNonRotatedObjData( SdrObject* pObj, bool bCreate=false );
 
     // The sheet information in ScDrawObjData isn't updated when sheets are inserted/deleted.
     // Use this method to get an object with positions on the specified sheet (should be the
@@ -215,13 +215,13 @@ public:
     static ScDrawObjData* GetObjDataTab( SdrObject* pObj, SCTAB nTab );
 
     /** Returns true, if the passed object is the caption of a cell note. */
-    static bool IsNoteCaption(const ScDrawObjData* pData);
+    SC_DLLPUBLIC static bool IsNoteCaption(const ScDrawObjData* pData);
     static bool IsNoteCaption(SdrObject* pObj) { return IsNoteCaption(GetObjData(pObj)); }
 
     /** Returns the object data, if the passed object is a cell note caption. */
     static ScDrawObjData* GetNoteCaptionData( SdrObject* pObj, SCTAB nTab );
 
-    static ScMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate = false );
+    SC_DLLPUBLIC static ScMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate = false );
 
 private:
     static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel

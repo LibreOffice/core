@@ -99,7 +99,7 @@ enum ObjectSelectionType
 
 class ScFormEditData;
 class ScViewOptiChangesListener;
-class SC_DLLPUBLIC ScTabViewShell : public SfxViewShell, public ScDBFunc
+class SAL_DLLPUBLIC_RTTI ScTabViewShell : public SfxViewShell, public ScDBFunc
 {
 private:
     rtl::Reference<ScViewOptiChangesListener> mChangesListener;
@@ -209,12 +209,12 @@ private:
     bool            IsSignatureLineSigned();
     bool            IsQRCodeSelected();
 
-    DECL_DLLPRIVATE_LINK( SimpleRefClose, const OUString*, void );
-    DECL_DLLPRIVATE_LINK( SimpleRefDone, const OUString&, void );
-    DECL_DLLPRIVATE_LINK( SimpleRefAborted, const OUString&, void );
-    DECL_DLLPRIVATE_LINK( SimpleRefChange, const OUString&, void );
-    DECL_DLLPRIVATE_LINK( FormControlActivated, LinkParamNone*, void );
-    DECL_DLLPRIVATE_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
+    DECL_LINK( SimpleRefClose, const OUString*, void );
+    DECL_LINK( SimpleRefDone, const OUString&, void );
+    DECL_LINK( SimpleRefAborted, const OUString&, void );
+    DECL_LINK( SimpleRefChange, const OUString&, void );
+    DECL_LINK( FormControlActivated, LinkParamNone*, void );
+    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
 protected:
     virtual void    Activate(bool bMDI) override;
@@ -261,12 +261,12 @@ public:
 
     weld::Window*   GetDialogParent();
 
-    bool            IsRefInputMode() const;
+    SC_DLLPUBLIC bool IsRefInputMode() const;
     void            ExecuteInputDirect();
 
     const ScInputHandler* GetInputHandler() const { return mpInputHandler.get(); }
     ScInputHandler* GetInputHandler() { return mpInputHandler.get(); }
-    const OUString* GetEditString() const;
+    SC_DLLPUBLIC const OUString* GetEditString() const;
     void            UpdateInputHandler( bool bForce = false, bool bStopEditing = true );
     void            UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust );
     bool            TabKeyInput(const KeyEvent& rKEvt);
@@ -277,14 +277,14 @@ public:
     ::editeng::SvxBorderLine*   GetDefaultFrameLine() const { return pCurFrameLine.get(); }
     void            SetDefaultFrameLine(const ::editeng::SvxBorderLine* pLine );
 
-    void           Execute( SfxRequest& rReq );
-    void           GetState( SfxItemSet& rSet );
+    SC_DLLPUBLIC void Execute( SfxRequest& rReq );
+    SC_DLLPUBLIC void GetState( SfxItemSet& rSet );
 
     void            ExecuteTable( SfxRequest& rReq );
     void            GetStateTable( SfxItemSet& rSet );
 
     void            WindowChanged();
-    void            ExecDraw(SfxRequest&);
+    SC_DLLPUBLIC void ExecDraw(SfxRequest&);
     void            ExecDrawIns(SfxRequest& rReq);
     void            GetDrawState(SfxItemSet &rSet);
     void            GetDrawInsState(SfxItemSet &rSet);
@@ -312,7 +312,7 @@ public:
     void            GetStyleState(SfxItemSet &rSet);
 
     void            UpdateDrawShell();
-    void            SetDrawShell( bool bActive );
+    SC_DLLPUBLIC void SetDrawShell( bool bActive );
     void            SetDrawTextShell( bool bActive );
 
     void            SetPivotShell( bool bActive );
@@ -364,7 +364,7 @@ public:
 
     void            DeactivateOle();
 
-    static ScTabViewShell* GetActiveViewShell();
+    SC_DLLPUBLIC static ScTabViewShell* GetActiveViewShell();
 
     std::shared_ptr<SfxModelessDialogController> CreateRefDialogController(SfxBindings* pB, SfxChildWindow* pCW,
                                                     SfxChildWinInfo* pInfo,
@@ -381,13 +381,13 @@ public:
                             const Point* pInsPos );
     void    InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget );
 
-    bool    SelectObject( std::u16string_view rName );
+    SC_DLLPUBLIC bool SelectObject( std::u16string_view rName );
 
     void    SetInFormatDialog(bool bFlag) {bInFormatDialog=bFlag;}
 
     void    ForceMove()     { Move(); }
 
-    static std::unique_ptr<SvxNumberInfoItem> MakeNumberInfoItem( ScDocument& rDoc, const ScViewData& rViewData );
+    SC_DLLPUBLIC static std::unique_ptr<SvxNumberInfoItem> MakeNumberInfoItem( ScDocument& rDoc, const ScViewData& rViewData );
 
     static void UpdateNumberFormatter( const SvxNumberInfoItem&  rInfoItem );
 
@@ -440,7 +440,7 @@ public:
                                                     bool bHidden, bool bFiltered, bool bGroups, SCTAB nCurrentTabIndex);
     void LOKSendFormulabarUpdate(EditView* pEditView, const OUString& rText, const ESelection& rSelection);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
-    static  css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
+    SC_DLLPUBLIC static css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 
     void InitFormEditData();
     void ClearFormEditData();

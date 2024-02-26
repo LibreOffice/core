@@ -59,7 +59,7 @@ enum ScValidErrorStyle
 
 // Entry for validation (only one condition exists)
 
-class SC_DLLPUBLIC ScValidationData final : public ScConditionEntry
+class SAL_DLLPUBLIC_RTTI ScValidationData final : public ScConditionEntry
 {
 private:
     sal_uInt32 nKey;               // index in attributes
@@ -85,33 +85,33 @@ private:
     DECL_STATIC_LINK(ScValidationData, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
 public:
-            ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
+    SC_DLLPUBLIC ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const OUString& rExpr1, const OUString& rExpr2,
                                 ScDocument& rDocument, const ScAddress& rPos,
                                 const OUString& rExprNmsp1 = OUString(), const OUString& rExprNmsp2 = OUString(),
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
-            ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
+    SC_DLLPUBLIC ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument& rDocument, const ScAddress& rPos );
-            ScValidationData( const ScValidationData& r );
+    SC_DLLPUBLIC ScValidationData( const ScValidationData& r );
             ScValidationData( ScDocument& rDocument, const ScValidationData& r );
-    virtual ~ScValidationData() override;
+    SC_DLLPUBLIC virtual ~ScValidationData() override;
 
     ScValidationData* Clone() const     // real copy
                     { return new ScValidationData( *GetDocument(), *this ); }
     ScValidationData* Clone(ScDocument* pNew) const override
                     { return new ScValidationData( *pNew, *this ); }
 
-    void            ResetInput();
-    void            ResetError();
-    void            SetInput( const OUString& rTitle, const OUString& rMsg );
-    void            SetError( const OUString& rTitle, const OUString& rMsg,
+    SC_DLLPUBLIC void ResetInput();
+    SC_DLLPUBLIC void ResetError();
+    SC_DLLPUBLIC void SetInput( const OUString& rTitle, const OUString& rMsg );
+    SC_DLLPUBLIC void SetError( const OUString& rTitle, const OUString& rMsg,
                                 ScValidErrorStyle eStyle );
 
     bool            GetInput( OUString& rTitle, OUString& rMsg ) const
                         { rTitle = aInputTitle; rMsg = aInputMessage; return bShowInput; }
-    bool            GetErrMsg( OUString& rTitle, OUString& rMsg, ScValidErrorStyle& rStyle ) const;
+    SC_DLLPUBLIC bool GetErrMsg( OUString& rTitle, OUString& rMsg, ScValidErrorStyle& rStyle ) const;
 
     bool            HasErrMsg() const       { return bShowError; }
 
@@ -128,7 +128,7 @@ public:
         @descr  Fills the list only, if this is a list validation and IsShowList() is enabled.
         @param rStrings  (out-param) The string list to fill with list validation entries.
         @return  true = rStrings has been filled with at least one entry. */
-    bool FillSelectionList(std::vector<ScTypedStrData>& rStrings, const ScAddress& rPos) const;
+    SC_DLLPUBLIC bool FillSelectionList(std::vector<ScTypedStrData>& rStrings, const ScAddress& rPos) const;
 
     //  with string: during input, with cell: for detective / RC_FORCED
     bool IsDataValid(
@@ -154,7 +154,7 @@ public:
         const OUString& rTest, const ScPatternAttr& rPattern,
         const ScAddress& rPos, const CustomValidationPrivateAccess& ) const;
 
-    bool IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC bool IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     /** Test, if formula is valid. */
     bool isFormulaResultsValidatable(const OUString& rTest, const ScAddress& rPos, SvNumberFormatter* pFormatter,
@@ -168,7 +168,7 @@ public:
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
 
-    bool            EqualEntries( const ScValidationData& r ) const;    // for undo
+    SC_DLLPUBLIC bool EqualEntries( const ScValidationData& r ) const;    // for undo
 
     //  sort (using std::set) by index
     bool operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }

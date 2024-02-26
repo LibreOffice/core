@@ -119,7 +119,7 @@ public:
     virtual void notify() = 0;
 };
 
-class SC_DLLPUBLIC ScChartListenerCollection final
+class ScChartListenerCollection final
 {
 public:
     typedef std::map<OUString, std::unique_ptr<ScChartListener>> ListenersType;
@@ -140,21 +140,21 @@ private:
     Idle            aIdle;
     ScDocument&     rDoc;
 
-                    DECL_DLLPRIVATE_LINK(TimerHdl, Timer *, void);
+    DECL_LINK(TimerHdl, Timer *, void);
 
     ScChartListenerCollection& operator=( const ScChartListenerCollection& ) = delete;
 
     void Init();
 
 public:
-    ScChartListenerCollection( ScDocument& rDoc );
+    SC_DLLPUBLIC ScChartListenerCollection( ScDocument& rDoc );
     ScChartListenerCollection( const ScChartListenerCollection& );
-    ~ScChartListenerCollection();
+    SC_DLLPUBLIC ~ScChartListenerCollection();
 
                     // only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
 
-    bool insert(ScChartListener* pListener);
+    SC_DLLPUBLIC bool insert(ScChartListener* pListener);
     ScChartListener* findByName(const OUString& rName);
     const ScChartListener* findByName(const OUString& rName) const;
     bool hasListeners() const;
@@ -183,7 +183,7 @@ public:
     void            SetDiffDirty( const ScChartListenerCollection&,
                         bool bSetChartRangeLists );
 
-    void            SetRangeDirty( const ScRange& rRange );     // for example rows/columns
+    SC_DLLPUBLIC void SetRangeDirty( const ScRange& rRange );     // for example rows/columns
 
     void            UpdateChartsContainingTab( SCTAB nTab );
 
@@ -197,7 +197,7 @@ public:
      * Note that the caller is responsible for managing the life-cycle of the
      * listener instance.
      */
-    void            StartListeningHiddenRange( const ScRange& rRange,
+    SC_DLLPUBLIC void StartListeningHiddenRange( const ScRange& rRange,
                                                ScChartHiddenRangeListener* pListener );
 
     /**
@@ -205,7 +205,7 @@ public:
      * list of hidden range listeners.  This does not delete the passed
      * listener instance.
      */
-    void            EndListeningHiddenRange( ScChartHiddenRangeListener* pListener );
+    SC_DLLPUBLIC void EndListeningHiddenRange( ScChartHiddenRangeListener* pListener );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

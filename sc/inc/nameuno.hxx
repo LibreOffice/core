@@ -41,7 +41,7 @@ namespace com::sun::star::container { class XNamed; }
 class ScDocShell;
 class ScNamedRangesObj;
 
-class SC_DLLPUBLIC ScNamedRangeObj final : public ::cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ScNamedRangeObj final : public ::cppu::WeakImplHelper<
                             css::sheet::XNamedRange,
                             css::sheet::XFormulaTokens,
                             css::sheet::XCellRangeReferrer,
@@ -57,7 +57,7 @@ private:
 
 private:
 friend class ScVbaName;
-    ScRangeData*            GetRangeData_Impl();
+    SC_DLLPUBLIC ScRangeData* GetRangeData_Impl();
     void                    Modify_Impl( const OUString* pNewName,
                                         const ScTokenArray* pNewTokens, const OUString* pNewContent,
                                         const ScAddress* pNewPos, const ScRangeData::Type* pNewType,

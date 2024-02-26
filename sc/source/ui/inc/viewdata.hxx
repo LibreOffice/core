@@ -268,7 +268,7 @@ private:
     [[nodiscard]] ScSplitPos SanitizeWhichActive() const;
 };
 
-class SC_DLLPUBLIC ScViewData
+class ScViewData
 {
 private:
     double              nPPTX, nPPTY;               // Scaling factors
@@ -336,16 +336,16 @@ private:
     tools::Long                m_nLOKPageUpDownOffset;
     tools::Rectangle    maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
 
-    DECL_DLLPRIVATE_LINK( EditEngineHdl, EditStatus&, void );
+    DECL_LINK( EditEngineHdl, EditStatus&, void );
 
 
-    SAL_DLLPRIVATE void          CalcPPT();
-    SAL_DLLPRIVATE void          CreateTabData( SCTAB nNewTab );
-    SAL_DLLPRIVATE void          CreateTabData( std::vector< SCTAB >& rvTabs );
-    SAL_DLLPRIVATE void          CreateSelectedTabData();
-    SAL_DLLPRIVATE void          EnsureTabDataSize(size_t nSize);
-    SAL_DLLPRIVATE void          UpdateCurrentTab();
-    SAL_DLLPRIVATE ScViewDataTable* FetchTableData(SCTAB) const;
+    void          CalcPPT();
+    void          CreateTabData( SCTAB nNewTab );
+    void          CreateTabData( std::vector< SCTAB >& rvTabs );
+    void          CreateSelectedTabData();
+    void          EnsureTabDataSize(size_t nSize);
+    void          UpdateCurrentTab();
+    ScViewDataTable* FetchTableData(SCTAB) const;
 
     ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh);
 
@@ -356,27 +356,27 @@ public:
 
     ScDocShell*     GetDocShell() const     { return pDocShell; }
     ScDocFunc&      GetDocFunc() const;
-    ScDBFunc*       GetView() const;
+    SC_DLLPUBLIC ScDBFunc* GetView() const;
     ScTabViewShell* GetViewShell() const    { return pView; }
     SfxObjectShell* GetSfxDocShell() const  { return pDocShell; }
     SfxBindings&    GetBindings();          // from ViewShell's ViewFrame
-    SfxDispatcher&  GetDispatcher();        // from ViewShell's ViewFrame
+    SC_DLLPUBLIC SfxDispatcher& GetDispatcher();        // from ViewShell's ViewFrame
 
-    ScMarkData&     GetMarkData();
+    SC_DLLPUBLIC ScMarkData& GetMarkData();
     ScMarkData&     GetHighlightData();
-    const ScMarkData& GetMarkData() const;
+    SC_DLLPUBLIC const ScMarkData& GetMarkData() const;
 
     weld::Window*   GetDialogParent();          // forwarded from tabvwsh
-    ScGridWindow*   GetActiveWin();             // from View
+    SC_DLLPUBLIC ScGridWindow* GetActiveWin();             // from View
     const ScGridWindow* GetActiveWin() const;
-    ScDrawView*     GetScDrawView();            // from View
+    SC_DLLPUBLIC ScDrawView* GetScDrawView();            // from View
     bool            IsMinimized() const;        // from View
 
     void            UpdateInputHandler( bool bForce = false );
 
     void            WriteUserData(OUString& rData);
     void            ReadUserData(std::u16string_view rData);
-    void            WriteExtOptions( ScExtDocOptions& rOpt ) const;
+    SC_DLLPUBLIC void WriteExtOptions( ScExtDocOptions& rOpt ) const;
     void            ReadExtOptions( const ScExtDocOptions& rOpt );
     void            WriteUserDataSequence(css::uno::Sequence <css::beans::PropertyValue>& rSettings) const;
     void            ReadUserDataSequence(const css::uno::Sequence <css::beans::PropertyValue>& rSettings);
@@ -400,8 +400,8 @@ public:
     SCCOL           MaxCol() const                          { return mrDoc.MaxCol(); }
     SCROW           MaxRow() const                          { return mrDoc.MaxRow(); }
     ScSplitPos      GetActivePart() const                   { return pThisTab->eWhichActive; }
-    SCCOL           GetPosX( ScHSplitPos eWhich, SCTAB nForTab = -1 ) const;
-    SCROW           GetPosY( ScVSplitPos eWhich, SCTAB nForTab = -1 ) const;
+    SC_DLLPUBLIC SCCOL GetPosX( ScHSplitPos eWhich, SCTAB nForTab = -1 ) const;
+    SC_DLLPUBLIC SCROW GetPosY( ScVSplitPos eWhich, SCTAB nForTab = -1 ) const;
     SCCOL           GetCurX() const                         { return pThisTab->nCurX; }
     SCROW           GetCurY() const                         { return pThisTab->nCurY; }
     SCCOL           GetCurXForTab( SCTAB nTabIndex ) const;
@@ -453,7 +453,7 @@ public:
 
     void            SetZoomType( SvxZoomType eNew, bool bAll );
     void            SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs );
+    SC_DLLPUBLIC void SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs );
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll );
     void            RefreshZoom();
 
@@ -481,9 +481,9 @@ public:
     }
     sal_Int16 GetFormulaBarLines() const { return nFormulaBarLines; };
 
-    ScMarkType      GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
+    SC_DLLPUBLIC ScMarkType GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
                                     SCCOL& rEndCol, SCROW& rEndRow, SCTAB& rEndTab ) const;
-    ScMarkType      GetSimpleArea( ScRange& rRange ) const;
+    SC_DLLPUBLIC ScMarkType GetSimpleArea( ScRange& rRange ) const;
                     /// May modify rNewMark using MarkToSimple().
     ScMarkType      GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) const;
     void            GetMultiArea( ScRangeListRef& rRange ) const;
@@ -556,7 +556,7 @@ public:
     inline void     GetMoveCursor( SCCOL& rCurX, SCROW& rCurY );
 
     const ScViewOptions&    GetOptions() const { return maOptions; }
-    void                    SetOptions( const ScViewOptions& rOpt );
+    SC_DLLPUBLIC void       SetOptions( const ScViewOptions& rOpt );
 
     bool    IsGridMode      () const            { return maOptions.GetOption(VOPT_GRID); }
     bool    IsSyntaxMode    () const            { return maOptions.GetOption(VOPT_SYNTAX); }
@@ -617,12 +617,12 @@ public:
     void            SetTabNo( SCTAB nNewTab );
     void            SetActivePart( ScSplitPos eNewActive );
 
-    Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
+    SC_DLLPUBLIC Point GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                                 bool bAllowNeg = false, SCTAB nForTab = -1 ) const;
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScHSplitPos eWhich ) const;
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) const;
     /// returns the position (top-left corner) of the requested cell in print twips coordinates.
-    Point           GetPrintTwipsPos( SCCOL nCol, SCROW nRow ) const;
+    SC_DLLPUBLIC Point GetPrintTwipsPos( SCCOL nCol, SCROW nRow ) const;
     Point           GetPrintTwipsPosFromTileTwips(const Point& rTileTwipsPos) const;
 
     /// return json for our cursor position.

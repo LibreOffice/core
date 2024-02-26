@@ -141,7 +141,7 @@ public:
     void    SetEnglishName( const OUString& rEnglishName );
 };
 
-class SC_DLLPUBLIC ScUnoAddInCollection
+class ScUnoAddInCollection
 {
 private:
     tools::Long                    nFuncCount;
@@ -187,9 +187,9 @@ public:
     static bool         FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc,
                                                   bool bEnglishFunctionNames );
                   /// leave rRetExcelName unchanged, if no matching name is found
-    bool                GetExcelName( const OUString& rCalcName, LanguageType eDestLang, OUString& rRetExcelName );
+    SC_DLLPUBLIC bool   GetExcelName( const OUString& rCalcName, LanguageType eDestLang, OUString& rRetExcelName );
                   /// leave rRetCalcName unchanged, if no matching name is found
-    bool                GetCalcName( const OUString& rExcelName, OUString& rRetCalcName );
+    SC_DLLPUBLIC bool   GetCalcName( const OUString& rExcelName, OUString& rRetCalcName );
 };
 
 class ScUnoAddInCall

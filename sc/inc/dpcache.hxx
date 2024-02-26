@@ -44,7 +44,7 @@ enum class SvNumFormatType : sal_Int16;
  * This class represents the cached data part of the datapilot cache table
  * implementation.
  */
-class SC_DLLPUBLIC ScDPCache
+class ScDPCache
 {
 public:
     typedef std::unordered_set<OUString> StringSetType;
@@ -53,7 +53,7 @@ public:
     typedef o3tl::sorted_vector<ScDPObject*> ScDPObjectSet;
     typedef std::vector<SCROW> IndexArrayType;
 
-    struct SAL_DLLPRIVATE GroupItems
+    struct GroupItems
     {
         ScDPItemDataVec maItems;
         ScDPNumGroupInfo maInfo;
@@ -65,7 +65,7 @@ public:
         GroupItems(const ScDPNumGroupInfo& rInfo, sal_Int32 nGroupType);
     };
 
-    struct SAL_DLLPRIVATE Field
+    struct Field
     {
         /**
          * Optional items for grouped field.
@@ -134,23 +134,23 @@ public:
     rtl_uString* InternString( size_t nDim, const OUString& rStr );
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
-    const ScDPObjectSet& GetAllReferences() const;
+    SC_DLLPUBLIC const ScDPObjectSet& GetAllReferences() const;
 
     SCROW GetIdByItemData(tools::Long nDim, const ScDPItemData& rItem) const;
 
     static sal_uInt32 GetLocaleIndependentFormat( SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
     static OUString GetLocaleIndependentFormattedNumberString( double fValue );
     static OUString GetLocaleIndependentFormattedString( double fValue, SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
-    OUString GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
+    SC_DLLPUBLIC OUString GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
     SvNumberFormatter* GetNumberFormatter() const;
 
     tools::Long AppendGroupField();
     void ResetGroupItems(tools::Long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType);
     SCROW SetGroupItem(tools::Long nDim, const ScDPItemData& rData);
-    void GetGroupDimMemberIds(tools::Long nDim, std::vector<SCROW>& rIds) const;
+    SC_DLLPUBLIC void GetGroupDimMemberIds(tools::Long nDim, std::vector<SCROW>& rIds) const;
     void ClearGroupFields();
     void ClearAllFields();
-    const ScDPNumGroupInfo* GetNumGroupInfo(tools::Long nDim) const;
+    SC_DLLPUBLIC const ScDPNumGroupInfo* GetNumGroupInfo(tools::Long nDim) const;
 
     /**
      * Return a group type identifier.  The values correspond with
@@ -160,15 +160,15 @@ public:
      *
      * @return group type identifier, or 0 on failure.
      */
-    sal_Int32 GetGroupType(tools::Long nDim) const;
+    SC_DLLPUBLIC sal_Int32 GetGroupType(tools::Long nDim) const;
 
-    SCCOL GetDimensionIndex(std::u16string_view sName) const;
+    SC_DLLPUBLIC SCCOL GetDimensionIndex(std::u16string_view sName) const;
     sal_uInt32 GetNumberFormat( tools::Long nDim ) const;
-    bool  IsDateDimension( tools::Long nDim ) const ;
+    SC_DLLPUBLIC bool IsDateDimension( tools::Long nDim ) const ;
     tools::Long GetDimMemberCount(tools::Long nDim) const;
 
-    const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
-    const ScDPItemDataVec& GetDimMemberValues( SCCOL nDim ) const;
+    SC_DLLPUBLIC const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
+    SC_DLLPUBLIC const ScDPItemDataVec& GetDimMemberValues( SCCOL nDim ) const;
     void InitFromDoc(ScDocument& rDoc, const ScRange& rRange);
     bool InitFromDataBase(DBConnector& rDB);
 
@@ -183,19 +183,19 @@ public:
      * sheet source data.  For any other source type, this should equal the
      * row count.
      */
-    SCROW GetDataSize() const;
+    SC_DLLPUBLIC SCROW GetDataSize() const;
     SCROW GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    OUString GetDimensionName(std::vector<OUString>::size_type nDim) const;
+    SC_DLLPUBLIC OUString GetDimensionName(std::vector<OUString>::size_type nDim) const;
     bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 
     ScDocument& GetDoc() const;
     tools::Long GetColumnCount() const;
 
-    const ScDPItemData* GetItemDataById( tools::Long nDim, SCROW nId ) const;
+    SC_DLLPUBLIC const ScDPItemData* GetItemDataById( tools::Long nDim, SCROW nId ) const;
 
-    size_t GetFieldCount() const;
-    size_t GetGroupFieldCount() const;
+    SC_DLLPUBLIC size_t GetFieldCount() const;
+    SC_DLLPUBLIC size_t GetGroupFieldCount() const;
 
     ScDPCache(const ScDPCache&) = delete;
     const ScDPCache& operator=(const ScDPCache&) = delete;

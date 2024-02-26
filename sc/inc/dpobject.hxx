@@ -80,7 +80,7 @@ struct ScDPServiceDesc
     bool operator== ( const ScDPServiceDesc& rOther ) const;
 };
 
-class SC_DLLPUBLIC ScDPObject
+class ScDPObject
 {
 private:
     ScDocument*             pDoc;
@@ -107,18 +107,18 @@ private:
     bool                    bSettingsChanged:1;
     bool                    mbEnableGetPivotData:1;
 
-    SAL_DLLPRIVATE ScDPTableData*    GetTableData();
-    SAL_DLLPRIVATE void              CreateObjects();
-    SAL_DLLPRIVATE void              CreateOutput();
-    SAL_DLLPRIVATE void ClearSource();
-    SAL_DLLPRIVATE void FillLabelDataForDimension(
+    ScDPTableData*    GetTableData();
+    void              CreateObjects();
+    void              CreateOutput();
+    void ClearSource();
+    void FillLabelDataForDimension(
         const css::uno::Reference< css::container::XIndexAccess>& xDims,
         sal_Int32 nDim, ScDPLabelData& rLabelData);
 
 public:
-    ScDPObject(ScDocument* pD);
+    SC_DLLPUBLIC ScDPObject(ScDocument* pD);
     ScDPObject(const ScDPObject& r);
-    ~ScDPObject();
+    SC_DLLPUBLIC ~ScDPObject();
 
     ScDPObject& operator= (const ScDPObject& r);
 
@@ -129,24 +129,24 @@ public:
     void                InvalidateData();
     void Clear();
     void ClearTableData();
-    void ReloadGroupTableData();
+    SC_DLLPUBLIC void ReloadGroupTableData();
 
-    void                Output( const ScAddress& rPos );
+    SC_DLLPUBLIC void   Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( bool& rOverflow );
 
-    ScRange GetOutputRangeByType( sal_Int32 nType );
-    ScRange GetOutputRangeByType( sal_Int32 nType ) const;
+    SC_DLLPUBLIC ScRange GetOutputRangeByType( sal_Int32 nType );
+    SC_DLLPUBLIC ScRange GetOutputRangeByType( sal_Int32 nType ) const;
 
-    void                SetSaveData(const ScDPSaveData& rData);
+    SC_DLLPUBLIC void SetSaveData(const ScDPSaveData& rData);
     ScDPSaveData*       GetSaveData() const     { return pSaveData.get(); }
 
-    void                SetOutRange(const ScRange& rRange);
-    const ScRange&      GetOutRange() const;
+    SC_DLLPUBLIC void SetOutRange(const ScRange& rRange);
+    SC_DLLPUBLIC const ScRange& GetOutRange() const;
 
-    void                SetHeaderLayout(bool bUseGrid);
+    SC_DLLPUBLIC void   SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const { return mbHeaderLayout;}
 
-    void                SetSheetDesc(const ScSheetSourceDesc& rDesc);
+    SC_DLLPUBLIC void   SetSheetDesc(const ScSheetSourceDesc& rDesc);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);
     void                SetServiceData(const ScDPServiceDesc& rDesc);
 
@@ -157,13 +157,13 @@ public:
     const ScImportSourceDesc* GetImportSourceDesc() const   { return pImpDesc.get(); }
     const ScDPServiceDesc* GetDPServiceDesc() const { return pServDesc.get(); }
 
-    css::uno::Reference<css::sheet::XDimensionsSupplier> const & GetSource();
+    SC_DLLPUBLIC css::uno::Reference<css::sheet::XDimensionsSupplier> const & GetSource();
 
     bool                IsSheetData() const;
     bool                IsImportData() const { return(pImpDesc != nullptr); }
     bool                IsServiceData() const { return(pServDesc != nullptr); }
 
-    void SetName(const OUString& rNew);
+    SC_DLLPUBLIC void SetName(const OUString& rNew);
     const OUString& GetName() const { return aTableName; }
     void SetTag(const OUString& rNew);
     const OUString& GetTag() const { return aTableTag; }
@@ -176,17 +176,17 @@ public:
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
     bool                IsDimNameInUse(std::u16string_view rName) const;
-    OUString GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr );
-    bool                IsDuplicated( tools::Long nDim );
-    tools::Long                GetDimCount();
+    SC_DLLPUBLIC OUString GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr );
+    SC_DLLPUBLIC bool   IsDuplicated( tools::Long nDim );
+    SC_DLLPUBLIC tools::Long GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, css::sheet::DataPilotTableHeaderData& rData);
-    tools::Long                GetHeaderDim( const ScAddress& rPos, css::sheet::DataPilotFieldOrientation& rOrient );
+    SC_DLLPUBLIC tools::Long GetHeaderDim( const ScAddress& rPos, css::sheet::DataPilotFieldOrientation& rOrient );
     bool                GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop,
                                        tools::Long nDragDim,
                                        tools::Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, tools::Long& rDimPos );
     bool                IsFilterButton( const ScAddress& rPos );
 
-    OUString            GetFormattedString( std::u16string_view rDimName, const double fValue );
+    SC_DLLPUBLIC OUString GetFormattedString( std::u16string_view rDimName, const double fValue );
 
     double GetPivotData(
         const OUString& rDataFieldName,
@@ -212,13 +212,13 @@ public:
     bool                GetHierarchiesNA( sal_Int32 nDim, css::uno::Reference< css::container::XNameAccess >& xHiers );
     void                GetHierarchies( sal_Int32 nDim, css::uno::Sequence< OUString >& rHiers );
 
-    sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
+    SC_DLLPUBLIC sal_Int32 GetUsedHierarchy( sal_Int32 nDim );
 
     bool                GetMembersNA( sal_Int32 nDim, css::uno::Reference< css::sheet::XMembersAccess >& xMembers );
     bool                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, css::uno::Reference< css::sheet::XMembersAccess >& xMembers );
 
     bool                GetMemberNames( sal_Int32 nDim, css::uno::Sequence< OUString >& rNames );
-    bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
+    SC_DLLPUBLIC bool   GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz );
@@ -238,13 +238,13 @@ public:
     // (button attribute must be present)
     void                RefreshAfterLoad();
 
-    void                BuildAllDimensionMembers();
+    SC_DLLPUBLIC void BuildAllDimensionMembers();
 
     /**
      * Remove in the save data entries for members that don't exist anymore.
      * This is called during pivot table refresh.
      */
-    bool SyncAllDimensionMembers();
+    SC_DLLPUBLIC bool SyncAllDimensionMembers();
 
     static bool         HasRegisteredSources();
     static std::vector<OUString> GetRegisteredSources();
@@ -260,7 +260,7 @@ public:
         const ScPivotFieldVector* pRefRowFields = nullptr,
         const ScPivotFieldVector* pRefPageFields = nullptr );
 
-    static bool         IsOrientationAllowed( css::sheet::DataPilotFieldOrientation nOrient, sal_Int32 nDimFlags );
+    SC_DLLPUBLIC static bool IsOrientationAllowed( css::sheet::DataPilotFieldOrientation nOrient, sal_Int32 nDimFlags );
 
     void PutInteropGrabBag(std::map<OUString, css::uno::Any>&& val)
     {

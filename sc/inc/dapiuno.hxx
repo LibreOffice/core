@@ -127,7 +127,7 @@ public:
 };
 
 //  ScDataPilotDescriptorBase is never instantiated directly
-class SC_DLLPUBLIC ScDataPilotDescriptorBase : public cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ScDataPilotDescriptorBase : public cppu::WeakImplHelper<
                                     css::sheet::XDataPilotDescriptor,
                                     css::beans::XPropertySet,
                                     css::sheet::XDataPilotDataLayoutFieldSupplier,

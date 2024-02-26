@@ -45,7 +45,7 @@ enum ScDetectiveObjType
     SC_DETOBJ_RECTANGLE
 };
 
-class SC_DLLPUBLIC ScDetectiveFunc
+class ScDetectiveFunc
 {
     static Color     nArrowColor;
     static Color     nErrorColor;
@@ -125,9 +125,9 @@ public:
     bool        DeleteSucc( SCCOL nCol, SCROW nRow );
     bool        DeletePred( SCCOL nCol, SCROW nRow );
     bool        DeleteAll( ScDetectiveDelete eWhat );
-    bool        DeleteCirclesAt( SCCOL nCol, SCROW nRow );
+    SC_DLLPUBLIC bool DeleteCirclesAt( SCCOL nCol, SCROW nRow );
 
-    bool        MarkInvalid(bool& rOverflow);
+    SC_DLLPUBLIC bool MarkInvalid(bool& rOverflow);
 
     void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
     void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
@@ -137,7 +137,7 @@ public:
 
     static bool IsNonAlienArrow( const SdrObject* pObject );
 
-    ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
+    SC_DLLPUBLIC ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
                                 ScAddress& rPosition, ScRange& rSource, bool& rRedLine );
     void        InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
                                 const ScRange& rSource, bool bRedLine );

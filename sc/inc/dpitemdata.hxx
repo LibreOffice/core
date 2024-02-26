@@ -25,15 +25,15 @@
  * <p>Do make sure that an item with an interned string won't persist after
  * the pivot cache has been destroyed or reloaded.</p>
  */
-class SC_DLLPUBLIC ScDPItemData
+class ScDPItemData
 {
     friend class ScDPCache;
 
 public:
     enum Type { GroupValue = 0, RangeStart = 1, Value = 2, String = 3, Error = 4, Empty = 5 };
 
-    static const sal_Int32 DateFirst;
-    static const sal_Int32 DateLast;
+    SC_DLLPUBLIC static const sal_Int32 DateFirst;
+    SC_DLLPUBLIC static const sal_Int32 DateLast;
 
     struct GroupValueAttr
     {
@@ -81,12 +81,12 @@ public:
 
     ScDPItemData& operator= (const ScDPItemData& r);
 
-    bool IsEmpty() const;
+    SC_DLLPUBLIC bool IsEmpty() const;
     bool IsValue() const;
-    OUString GetString() const;
-    double GetValue() const;
-    GroupValueAttr GetGroupValue() const;
-    bool HasStringData() const ;
+    SC_DLLPUBLIC OUString GetString() const;
+    SC_DLLPUBLIC double GetValue() const;
+    SC_DLLPUBLIC GroupValueAttr GetGroupValue() const;
+    SC_DLLPUBLIC bool HasStringData() const ;
 
     ScDPValue::Type GetCellType() const;
 

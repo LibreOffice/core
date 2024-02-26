@@ -290,7 +290,7 @@ private:
     void addCacheDocToReferenced( sal_uInt16 nFileId );
 public:
 
-    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const;
+    SC_DLLPUBLIC ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const;
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew,
             size_t* pnIndex, const OUString* pExtUrl);
 
@@ -369,7 +369,7 @@ private:
     const ScDocument& mrDoc;
 };
 
-class SC_DLLPUBLIC ScExternalRefManager final : public formula::ExternalReferenceHelper, public SfxListener
+class SAL_DLLPUBLIC_RTTI ScExternalRefManager final : public formula::ExternalReferenceHelper, public SfxListener
 {
 public:
 
@@ -383,7 +383,7 @@ public:
      * link to a certain external file is updated, the notify() method gets
      * called.
      */
-    class SAL_DLLPRIVATE LinkListener
+    class LinkListener
     {
     public:
         LinkListener();
@@ -426,7 +426,7 @@ private:
 
 public:
     /** Source document meta-data container. */
-    struct SAL_DLLPRIVATE SrcFileData
+    struct SrcFileData
     {
         OUString maFileName;      /// original file name as loaded from the file.
         OUString maRealFileName;  /// file name created from the relative name.
@@ -453,7 +453,7 @@ public:
      *
      * @return shared_ptr to the cache table instance
      */
-    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const;
+    SC_DLLPUBLIC ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const;
 
     /**
      * Get a cache table instance for specified file and table name.  If the
@@ -479,7 +479,7 @@ public:
      *
      * @return shared_ptr to the cache table instance
      */
-    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew,
+    SC_DLLPUBLIC ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew,
             size_t* pnIndex = nullptr, const OUString* pExtUrl = nullptr);
 
     /** Returns a vector containing all (real) table names and cache tables of
@@ -488,7 +488,7 @@ public:
         The index in the returned vector corresponds to the table index used to
         access the cache table, e.g. in getCacheTable().
      */
-    void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<OUString>& rTabNames) const;
+    SC_DLLPUBLIC void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<OUString>& rTabNames) const;
 
     /**
      * Get the span (distance+sign(distance)) of two sheets of a specified
@@ -539,7 +539,7 @@ public:
      */
     bool isInReferenceMarking() const   { return mbInReferenceMarking; }
 
-    void storeRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, const ScTokenArray& rArray);
+    SC_DLLPUBLIC void storeRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, const ScTokenArray& rArray);
 
     ScExternalRefCache::TokenRef getSingleRefToken(
         sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rCell,
@@ -558,7 +558,7 @@ public:
      * @return shared_ptr to a token array instance.  <i>The caller must not
      *         delete the instance returned by this method.</i>
      */
-    ScExternalRefCache::TokenArrayRef getDoubleRefTokens(
+    SC_DLLPUBLIC ScExternalRefCache::TokenArrayRef getDoubleRefTokens(
         sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange, const ScAddress* pCurPos);
 
     /**
@@ -572,7 +572,7 @@ public:
      *
      * @return shared_ptr to array of tokens composing the name
      */
-    ScExternalRefCache::TokenArrayRef getRangeNameTokens(
+    SC_DLLPUBLIC ScExternalRefCache::TokenArrayRef getRangeNameTokens(
         sal_uInt16 nFileId, const OUString& rName, const ScAddress* pCurPos = nullptr);
 
     bool isValidRangeName(sal_uInt16 nFileId, const OUString& rName);
@@ -586,8 +586,8 @@ public:
      *
      * @param rFile file name to convert
      */
-    void convertToAbsName(OUString& rFile) const;
-    sal_uInt16 getExternalFileId(const OUString& rFile);
+    SC_DLLPUBLIC void convertToAbsName(OUString& rFile) const;
+    SC_DLLPUBLIC sal_uInt16 getExternalFileId(const OUString& rFile);
 
     /**
      * It returns a pointer to the name of the URI associated with a given
@@ -602,14 +602,14 @@ public:
      *
      * @return const OUString* external document URI.
      */
-    const OUString* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
+    SC_DLLPUBLIC const OUString* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
 
     /**
      * Reindex external file references to skip unused files, if skipping is enabled.
      */
-    sal_uInt16 convertFileIdToUsedFileId(sal_uInt16 nFileId);
-    void setSkipUnusedFileIds(std::vector<sal_uInt16>& pExternFileIds);
-    void disableSkipUnusedFileIds();
+    SC_DLLPUBLIC sal_uInt16 convertFileIdToUsedFileId(sal_uInt16 nFileId);
+    SC_DLLPUBLIC void setSkipUnusedFileIds(std::vector<sal_uInt16>& pExternFileIds);
+    SC_DLLPUBLIC void disableSkipUnusedFileIds();
 
     /**
      * Get all cached external file names as an array. Array indices of the
@@ -718,12 +718,12 @@ public:
      */
     void insertRefCellFromTemplate( ScFormulaCell* pTemplateCell, ScFormulaCell* pCell );
 
-    bool hasCellExternalReference(const ScAddress& rCell);
+    SC_DLLPUBLIC bool hasCellExternalReference(const ScAddress& rCell);
 
     void enableDocTimer( bool bEnable );
 
     /** Add all known external files to the LinkManager. */
-    void addFilesToLinkManager();
+    SC_DLLPUBLIC void addFilesToLinkManager();
 
 private:
     ScExternalRefManager(const ScExternalRefManager&) = delete;
@@ -865,7 +865,7 @@ private:
     bool mbDocTimerEnabled:1;
 
     AutoTimer maSrcDocTimer;
-    DECL_DLLPRIVATE_LINK(TimeOutHdl, Timer*, void);
+    DECL_LINK(TimeOutHdl, Timer*, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

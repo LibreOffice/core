@@ -40,7 +40,7 @@ struct ScMarkEntry
   and for each entry the range is defined as :
       [previousEntry.nRow+1, currentEntry.nRow]
 */
-class SC_DLLPUBLIC ScMarkArray
+class ScMarkArray
 {
     const ScSheetLimits &       mrSheetLimits;
     std::vector<ScMarkEntry>    mvData;
@@ -49,12 +49,12 @@ friend class ScMarkArrayIter;
 friend class ScDocument;                // for FillInfo
 
 public:
-            ScMarkArray( const ScSheetLimits& rLimits );
+    SC_DLLPUBLIC ScMarkArray( const ScSheetLimits& rLimits );
             ScMarkArray( ScMarkArray&& rArray ) noexcept;
             ScMarkArray( const ScMarkArray& rArray );
     void    Reset( bool bMarked = false, SCSIZE nNeeded = 1 );
     bool    GetMark( SCROW nRow ) const;
-    void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked );
+    SC_DLLPUBLIC void SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked );
     void    Set( std::vector<ScMarkEntry> && );
     bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
     bool    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
@@ -65,7 +65,7 @@ public:
     ScMarkArray& operator=(ScMarkArray&& rSource) noexcept;
     bool operator==(ScMarkArray const & rOther ) const;
 
-    bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
+    SC_DLLPUBLIC bool Search( SCROW nRow, SCSIZE& nIndex ) const;
 
     /// Including current row, may return -1 if bUp and not found
     SCROW   GetNextMarked( SCROW nRow, bool bUp ) const;

@@ -72,7 +72,7 @@ class ScPrintUIOptions;
 class ScSheetSaveData;
 struct ScFormatSaveData;
 
-class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
+class SAL_DLLPUBLIC_RTTI ScModelObj : public SfxBaseModel,
                     public vcl::ITiledRenderable,
                     public css::sheet::XSpreadsheetDocument,
                     public css::document::XActionLockable,
@@ -138,10 +138,10 @@ public:
     /// create ScModelObj and set at pDocSh (SetBaseModel)
     static void             CreateAndSet(ScDocShell* pDocSh);
 
-    ScDocument*             GetDocument() const;
-    SfxObjectShell*         GetEmbeddedObject() const;
+    SC_DLLPUBLIC ScDocument*     GetDocument() const;
+    SC_DLLPUBLIC SfxObjectShell* GetEmbeddedObject() const;
 
-    void UpdateAllRowHeights();
+    SC_DLLPUBLIC void UpdateAllRowHeights();
 
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading();
@@ -260,7 +260,7 @@ public:
                             /// XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    SC_DLLPUBLIC static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
                             /// XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
@@ -308,7 +308,7 @@ public:
                             tools::Long nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::getDocumentSize().
-    virtual Size getDocumentSize() final override;
+    SC_DLLPUBLIC virtual Size getDocumentSize() final override;
 
     /// @see vcl::ITiledRenderable::getDataArea().
     virtual Size getDataArea(long nPart) override;

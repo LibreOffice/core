@@ -154,7 +154,7 @@ namespace ooo::vba::excel {
     class ScVbaCellRangeAccess;  // Vba Helper class
 }
 
-class SC_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ScCellRangesBase :
+class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") ScCellRangesBase :
                          public cppu::WeakImplHelper<
                             css::beans::XPropertySet,
                              css::beans::XMultiPropertySet,
@@ -191,7 +191,7 @@ private:
     bool                    bGotDataChangedHint;
     XModifyListenerArr_Impl aValueListeners;
 
-    DECL_DLLPRIVATE_LINK( ValueListenerHdl, const SfxHint&, void );
+    DECL_LINK( ValueListenerHdl, const SfxHint&, void );
 
 private:
     void            PaintGridRanges_Impl();
@@ -201,7 +201,7 @@ private:
 
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
-    SfxItemSet*             GetCurrentDataSet(bool bNoDflt = false);
+    SC_DLLPUBLIC SfxItemSet* GetCurrentDataSet(bool bNoDflt = false);
     void                    ForgetMarkData();
     void                    ForgetCurrentAttrs();
 
@@ -216,15 +216,15 @@ protected:
     const ScMarkData*       GetMarkData();
 
     // GetItemPropertyMap for derived classes must contain all entries, including base class
-    virtual const SfxItemPropertyMap& GetItemPropertyMap();
+    SC_DLLPUBLIC virtual const SfxItemPropertyMap& GetItemPropertyMap();
     css::beans::PropertyState GetOnePropertyState(
                                 sal_uInt16 nItemWhich, const SfxItemPropertyMapEntry* pEntry );
     /// @throws css::uno::RuntimeException
-    virtual void            GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
+    SC_DLLPUBLIC virtual void GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                 css::uno::Any& );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
+    SC_DLLPUBLIC virtual void SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue );
 
 public:
@@ -232,7 +232,7 @@ public:
                             ScCellRangesBase(ScDocShell* pDocSh, ScRangeList aR);
     virtual                 ~ScCellRangesBase() override;
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    SC_DLLPUBLIC virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     virtual void            RefChanged();
 
                             // from derived classes and by getImplementation
@@ -455,7 +455,7 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 };
 
-class SC_DLLPUBLIC ScCellRangeObj : public ScCellRangesBase,
+class SAL_DLLPUBLIC_RTTI ScCellRangeObj : public ScCellRangesBase,
                        public css::sheet::XCellRangeAddressable,
                        public css::sheet::XSheetCellRange,
                        public css::sheet::XArrayFormulaRange,
@@ -496,7 +496,7 @@ protected:
                                 const formula::FormulaGrammar::Grammar eGrammar );
 
 public:
-                            ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
+    SC_DLLPUBLIC            ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
     virtual                 ~ScCellRangeObj() override;
 
                             // uses ObjectShell from document, if set (returns NULL otherwise)
@@ -628,7 +628,7 @@ public:
 
 //! really derive cell from range?
 
-class SC_DLLPUBLIC ScCellObj final : public ScCellRangeObj,
+class SAL_DLLPUBLIC_RTTI ScCellObj final : public ScCellRangeObj,
                     public css::text::XText,
                     public css::container::XEnumerationAccess,
                     public css::table::XCell2,
@@ -678,7 +678,7 @@ public:
                             // not meant for any other purpose.
     const ScAddress&        GetPosition() const { return aCellPos; }
 
-    void                    InputEnglishString( const OUString& rText );
+    SC_DLLPUBLIC void       InputEnglishString( const OUString& rText );
 
                             // XText
     virtual void SAL_CALL   insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange,
@@ -762,7 +762,7 @@ public:
     virtual sal_Int16 SAL_CALL resetActionLocks() override;
 };
 
-class SC_DLLPUBLIC ScTableSheetObj final : public ScCellRangeObj,
+class SAL_DLLPUBLIC_RTTI ScTableSheetObj final : public ScCellRangeObj,
                         public css::sheet::XSpreadsheet,
                         public css::container::XNamed,
                         public css::sheet::XSheetPageBreak,
@@ -866,7 +866,7 @@ public:
                             getScenarios() override;
 
                             // XSheetAnnotationsSupplier
-    virtual css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL
+    SC_DLLPUBLIC virtual css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL
                             getAnnotations() override;
 
                             // XDrawPageSupplier

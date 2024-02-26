@@ -77,7 +77,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream);
 #define SC_PF_TESTMERGE     2
 #define SC_PF_WHOLEROWS     4
 
-class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
+class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxListener
 {
     std::shared_ptr<ScDocument> m_pDocument;
 
@@ -113,14 +113,14 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     css::uno::Reference<css::script::vba::XVBAScriptListener>   m_xVBAListener;
     css::uno::Reference<css::datatransfer::XTransferable2>      m_xClipData;
 
-    SAL_DLLPRIVATE void          InitItems();
-    SAL_DLLPRIVATE void          DoEnterHandler();
-    SAL_DLLPRIVATE void          InitOptions(bool bForLoading);
-    SAL_DLLPRIVATE void          ResetDrawObjectShell();
+    void          InitItems();
+    void          DoEnterHandler();
+    void          InitOptions(bool bForLoading);
+    void          ResetDrawObjectShell();
 
     /** Do things that need to be done before saving to our own format and
         necessary clean ups in dtor. */
-    class SAL_DLLPRIVATE PrepareSaveGuard
+    class PrepareSaveGuard
     {
         public:
             explicit    PrepareSaveGuard( ScDocShell & rDocShell );
@@ -129,38 +129,39 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
                         ScDocShell & mrDocShell;
     };
 
-    SAL_DLLPRIVATE bool          LoadXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
-    SAL_DLLPRIVATE bool          SaveXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
-    SAL_DLLPRIVATE SCTAB         GetSaveTab();
+    bool          LoadXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
+    bool          SaveXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
+    SCTAB         GetSaveTab();
 
     friend bool TestImportDBF(SvStream &rStream);
 
-    SAL_DLLPRIVATE ErrCode       DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
+    ErrCode       DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
                                              std::map<SCCOL, ScColWidthParam>& aColWidthParam, ScFlatBoolRowSegments& rRowHeightsRecalc );
-    SAL_DLLPRIVATE ErrCodeMsg    DBaseExport(
+    ErrCodeMsg    DBaseExport(
                                     const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo );
 
-    SAL_DLLPRIVATE static bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
-    SAL_DLLPRIVATE static bool       KillFile( const INetURLObject& rURL );
-    SAL_DLLPRIVATE static bool       IsDocument( const INetURLObject& rURL );
+    static bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
+    static bool       KillFile( const INetURLObject& rURL );
+    static bool       IsDocument( const INetURLObject& rURL );
 
-    SAL_DLLPRIVATE void          LockPaint_Impl(bool bDoc);
-    SAL_DLLPRIVATE void          UnlockPaint_Impl(bool bDoc);
-    SAL_DLLPRIVATE void          LockDocument_Impl(sal_uInt16 nNew);
-    SAL_DLLPRIVATE void          UnlockDocument_Impl(sal_uInt16 nNew);
+    void          LockPaint_Impl(bool bDoc);
+    void          UnlockPaint_Impl(bool bDoc);
+    void          LockDocument_Impl(sal_uInt16 nNew);
+    void          UnlockDocument_Impl(sal_uInt16 nNew);
 
-    SAL_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
-    SAL_DLLPRIVATE css::uno::Reference< css::frame::XModel > LoadSharedDocument();
+    void          EnableSharedSettings( bool bEnable );
+    css::uno::Reference< css::frame::XModel > LoadSharedDocument();
 
-    SAL_DLLPRIVATE void          UseSheetSaveEntries();
+    void          UseSheetSaveEntries();
 
-    SAL_DLLPRIVATE std::unique_ptr<ScDocFunc> CreateDocFunc();
+    std::unique_ptr<ScDocFunc> CreateDocFunc();
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 public:
                     SFX_DECL_INTERFACE(SCID_DOC_SHELL)
-                    SFX_DECL_OBJECTFACTORY();
+   SC_DLLPUBLIC static SfxObjectFactory&    Factory();                                  \
+   virtual SfxObjectFactory&   GetFactory() const override { return Factory(); }
 
 private:
     /// SfxInterface initializer.
@@ -168,11 +169,10 @@ private:
 
 public:
     explicit        ScDocShell( const ScDocShell& rDocShell ) = delete;
-    explicit        ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT, const std::shared_ptr<ScDocument>& pDoc = {} );
+    SC_DLLPUBLIC explicit ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT, const std::shared_ptr<ScDocument>& pDoc = {} );
                     virtual ~ScDocShell() override;
 
-    virtual SfxUndoManager*
-                    GetUndoManager() override;
+    SC_DLLPUBLIC virtual SfxUndoManager* GetUndoManager() override;
 
     virtual void    FillClass( SvGlobalName * pClassName,
                                SotClipboardFormatId * pFormat,
@@ -200,7 +200,7 @@ public:
 
     virtual void    Draw(OutputDevice *, const JobSetup & rSetup, sal_uInt16 nAspect, bool bOutputForScreen) override;
 
-    virtual void    SetVisArea( const tools::Rectangle & rVisArea ) override;
+    SC_DLLPUBLIC virtual void SetVisArea( const tools::Rectangle & rVisArea ) override;
 
     virtual void    TerminateEditing() override;
 
@@ -215,7 +215,7 @@ public:
 
     virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet) override;
 
-    void    GetDocStat( ScDocStat& rDocStat );
+    SC_DLLPUBLIC void GetDocStat( ScDocStat& rDocStat );
 
     const ScDocument& GetDocument() const { return *m_pDocument; }
     ScDocument&     GetDocument()   { return *m_pDocument; }
@@ -262,13 +262,13 @@ public:
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const OUString& rStyle );
 
-    static weld::Window*  GetActiveDialogParent();
+    SC_DLLPUBLIC static weld::Window*  GetActiveDialogParent();
     void            ErrorMessage(TranslateId pGlobStrId);
     bool            IsEditable() const;
 
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
-    void            UpdateAllRowHeights( const ScMarkData* pTabMark = nullptr );
-    void            UpdateAllRowHeights(const bool bOnlyUsedRows);
+    SC_DLLPUBLIC void UpdateAllRowHeights( const ScMarkData* pTabMark = nullptr );
+    SC_DLLPUBLIC void UpdateAllRowHeights(const bool bOnlyUsedRows);
     void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
     void            RefreshPivotTables( const ScRange& rSource );
@@ -279,14 +279,14 @@ public:
                                     ScMarkData& rMark, bool bRecord = true);
     void            ModifyScenario(SCTAB nTab, const OUString& rName, const OUString& rComment,
                                     const Color& rColor, ScScenarioFlags nFlags);
-    bool TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+    SC_DLLPUBLIC bool TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bNotifyAndPaint );
 
     bool            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRecord );
 
-    void            DoRecalc( bool bApi );
-    void            DoHardRecalc();
+    SC_DLLPUBLIC void DoRecalc( bool bApi );
+    SC_DLLPUBLIC void DoHardRecalc();
 
     void            UpdateOle(const ScViewData& rViewData, bool bSnapSize = false);
     bool            IsOle() const;
@@ -299,13 +299,13 @@ public:
 
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer) override;
     void            UpdateLinks() override;
-    void            SetInitialLinkUpdate( const SfxMedium* pMedium );
+    SC_DLLPUBLIC void SetInitialLinkUpdate( const SfxMedium* pMedium );
     void            AllowLinkUpdate();
-    void            ReloadAllLinks();
+    SC_DLLPUBLIC void ReloadAllLinks();
     void            ReloadTabLinks();
     ScLkUpdMode     GetLinkUpdateModeState() const;
 
-    void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
+    SC_DLLPUBLIC void SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
     /**
      * Called when the Options dialog is dismissed with the OK button, to
      * handle potentially conflicting option settings.
@@ -319,12 +319,12 @@ public:
     void            PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, PaintPartFlags nPart,
                             sal_uInt16 nExtFlags = 0, tools::Long nMaxWidthAffectedHint = -1 );
-    void            PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags = 0,
+    SC_DLLPUBLIC void PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags = 0,
                                tools::Long nMaxWidthAffectedHint = -1 );
 
     void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab, tools::Long nMaxWidthAffectedHint = -1);
     void            PostPaintCell( const ScAddress& rPos, tools::Long nMaxWidthAffectedHint = -1);
-    void            PostPaintGridAll();
+    SC_DLLPUBLIC void PostPaintGridAll();
     void            PostPaintExtras();
 
     bool            IsPaintLocked() const { return m_pPaintLockData != nullptr; }
@@ -335,25 +335,25 @@ public:
                                                        SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
     void            UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange );
 
-    void            SetDocumentModified();
+    SC_DLLPUBLIC void SetDocumentModified();
     void            SetDrawModified();
 
-    void            LockPaint();
-    void            UnlockPaint();
+    SC_DLLPUBLIC void LockPaint();
+    SC_DLLPUBLIC void UnlockPaint();
     sal_uInt16          GetLockCount() const { return m_nDocumentLock;}
     void            SetLockCount(sal_uInt16 nNew);
 
     void            LockDocument();
     void            UnlockDocument();
 
-    DECL_DLLPRIVATE_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
-    DECL_DLLPRIVATE_LINK( ReloadAllLinksHdl, weld::Button&, void );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_LINK( ReloadAllLinksHdl, weld::Button&, void );
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() override;
 
     void            SetInplace( bool bInplace );
     bool            IsEmpty() const { return m_bIsEmpty; }
-    void            SetEmpty(bool bSet);
+    SC_DLLPUBLIC void SetEmpty(bool bSet);
 
     bool            IsInUndo() const                { return m_bIsInUndo; }
     void            SetInUndo(bool bSet);
@@ -378,7 +378,7 @@ public:
 
     SfxBindings*    GetViewBindings();
 
-    ScTabViewShell* GetBestViewShell( bool bOnlyVisible = true );
+    SC_DLLPUBLIC ScTabViewShell* GetBestViewShell( bool bOnlyVisible = true );
 
     void            SetDocumentModifiedPending( bool bVal )
                         { m_bDocumentModifiedPending = bVal; }
@@ -395,8 +395,8 @@ public:
 
     OutputDevice*   GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
 
-    static ScViewData* GetViewData();
-    static SCTAB       GetCurTab();
+    SC_DLLPUBLIC static ScViewData* GetViewData();
+    SC_DLLPUBLIC static SCTAB       GetCurTab();
 
     static ScDocShell* GetShellByNum( sal_uInt16 nDocNo );
     static OUString   GetOwnFilterName();
@@ -409,7 +409,7 @@ public:
     static bool       HasAutomaticTableName( std::u16string_view rFilter );
     static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote);
 
-    DECL_DLLPRIVATE_LINK( RefreshDBDataHdl, Timer*, void );
+    DECL_LINK( RefreshDBDataHdl, Timer*, void );
 
     void            BeforeXMLLoading();
     void            AfterXMLLoading(bool bRet);
@@ -431,7 +431,7 @@ public:
 
     void SnapVisArea( tools::Rectangle& rRect ) const;
 
-    void RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
+    SC_DLLPUBLIC void RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
 
     ScModelObj* GetModel() const { return static_cast<ScModelObj*>(SfxObjectShell::GetModel().get()); }
 

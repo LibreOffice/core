@@ -90,7 +90,7 @@ public:
 #endif
 };
 
-class SC_DLLPUBLIC ScDPSaveDimension
+class ScDPSaveDimension
 {
 private:
     OUString aName;
@@ -144,16 +144,16 @@ public:
 
     void SetName( const OUString& rNew ); // used if the source dim was renamed (groups)
 
-    void SetOrientation(css::sheet::DataPilotFieldOrientation nNew);
-    void SetSubTotals(std::vector<ScGeneralFunction> && rFuncs);
+    SC_DLLPUBLIC void SetOrientation(css::sheet::DataPilotFieldOrientation nNew);
+    SC_DLLPUBLIC void SetSubTotals(std::vector<ScGeneralFunction> && rFuncs);
     tools::Long GetSubTotalsCount() const
         { return maSubTotalFuncs.size(); }
 
     ScGeneralFunction GetSubTotalFunc(tools::Long nIndex) const
         { return maSubTotalFuncs[nIndex]; }
 
-    bool HasShowEmpty() const;
-    void SetShowEmpty(bool bSet);
+    SC_DLLPUBLIC bool HasShowEmpty() const;
+    SC_DLLPUBLIC void SetShowEmpty(bool bSet);
     bool GetShowEmpty() const
         { return bool(nShowEmptyMode); }
 
@@ -161,7 +161,7 @@ public:
     bool GetRepeatItemLabels() const
         { return bRepeatItemLabels; }
 
-    void SetFunction(ScGeneralFunction nNew);
+    SC_DLLPUBLIC void SetFunction(ScGeneralFunction nNew);
     ScGeneralFunction GetFunction() const
         { return nFunction; }
 
@@ -169,11 +169,11 @@ public:
     tools::Long GetUsedHierarchy() const
         { return nUsedHierarchy; }
 
-    void SetLayoutName(const OUString& rName);
-    const std::optional<OUString> & GetLayoutName() const;
+    SC_DLLPUBLIC void SetLayoutName(const OUString& rName);
+    SC_DLLPUBLIC const std::optional<OUString> & GetLayoutName() const;
     void RemoveLayoutName();
-    void SetSubtotalName(const OUString& rName);
-    const std::optional<OUString> & GetSubtotalName() const;
+    SC_DLLPUBLIC void SetSubtotalName(const OUString& rName);
+    SC_DLLPUBLIC const std::optional<OUString> & GetSubtotalName() const;
     void RemoveSubtotalName();
 
     bool IsMemberNameInUse(const OUString& rName) const;
@@ -181,28 +181,28 @@ public:
     const css::sheet::DataPilotFieldReference* GetReferenceValue() const
         { return pReferenceValue.get(); }
 
-    void SetReferenceValue(const css::sheet::DataPilotFieldReference* pNew);
+    SC_DLLPUBLIC void SetReferenceValue(const css::sheet::DataPilotFieldReference* pNew);
 
     const css::sheet::DataPilotFieldSortInfo* GetSortInfo() const
         { return pSortInfo.get(); }
 
-    void SetSortInfo(const css::sheet::DataPilotFieldSortInfo* pNew);
+    SC_DLLPUBLIC void SetSortInfo(const css::sheet::DataPilotFieldSortInfo* pNew);
     const css::sheet::DataPilotFieldAutoShowInfo* GetAutoShowInfo() const
         { return pAutoShowInfo.get(); }
 
-    void SetAutoShowInfo(const css::sheet::DataPilotFieldAutoShowInfo* pNew);
+    SC_DLLPUBLIC void SetAutoShowInfo(const css::sheet::DataPilotFieldAutoShowInfo* pNew);
     const css::sheet::DataPilotFieldLayoutInfo* GetLayoutInfo() const
         { return pLayoutInfo.get(); }
 
-    void SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo* pNew);
+    SC_DLLPUBLIC void SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo* pNew);
 
-    void SetCurrentPage( const OUString* pPage ); // NULL = no selection (all)
+    SC_DLLPUBLIC void SetCurrentPage( const OUString* pPage ); // NULL = no selection (all)
     OUString GetCurrentPage() const; // only for ODF compatibility
 
     css::sheet::DataPilotFieldOrientation GetOrientation() const
         { return nOrientation; }
 
-    ScDPSaveMember* GetExistingMemberByName(const OUString& rName);
+    SC_DLLPUBLIC ScDPSaveMember* GetExistingMemberByName(const OUString& rName);
 
     /**
      * Get a member object by its name.  If one doesn't exist, create a new
@@ -213,7 +213,7 @@ public:
      *
      * @return pointer to the member object.
      */
-    ScDPSaveMember* GetMemberByName(const OUString& rName);
+    SC_DLLPUBLIC ScDPSaveMember* GetMemberByName(const OUString& rName);
 
     void SetMemberPosition( const OUString& rName, sal_Int32 nNewPos );
 
@@ -221,7 +221,7 @@ public:
 
     void UpdateMemberVisibility(const std::unordered_map< OUString, bool>& rData);
 
-    bool HasInvisibleMember() const;
+    SC_DLLPUBLIC bool HasInvisibleMember() const;
 
     void RemoveObsoleteMembers(const MemberSetType& rMembers);
 

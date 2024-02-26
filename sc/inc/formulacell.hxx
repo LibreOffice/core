@@ -117,7 +117,7 @@ enum class ScMatrixMode : sal_uInt8 {
     Reference = 2                    // Remaining cells, via ocMatRef reference token
 };
 
-class SC_DLLPUBLIC ScFormulaCell final : public SvtListener
+class SAL_DLLPUBLIC_RTTI ScFormulaCell final : public SvtListener
 {
 private:
     ScFormulaCellGroupRef mxGroup;       // Group of formulae we're part of
@@ -189,27 +189,27 @@ public:
 
     ScAddress       aPos;
 
-                    virtual ~ScFormulaCell() override;
+    SC_DLLPUBLIC virtual ~ScFormulaCell() override;
 
     ScFormulaCell* Clone() const;
     ScFormulaCell* Clone( const ScAddress& rPos ) const;
 
-    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos );
+    SC_DLLPUBLIC ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos );
 
     /**
      * Transfer the ownership of the passed token array instance to the
      * formula cell being constructed.  The caller <i>must not</i> pass a NULL
      * token array pointer.
      */
-    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
+    SC_DLLPUBLIC ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
-    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, const ScTokenArray& rArray,
+    SC_DLLPUBLIC ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, const ScTokenArray& rArray,
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
-    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
+    SC_DLLPUBLIC ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
                    const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    ScMatrixMode = ScMatrixMode::NONE );
 
@@ -228,11 +228,11 @@ public:
 
     size_t GetHash() const;
 
-    OUString GetFormula( const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
+    SC_DLLPUBLIC OUString GetFormula( const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                          const ScInterpreterContext* pContext = nullptr ) const;
-    OUString GetFormula( sc::CompileFormulaContext& rCxt, const ScInterpreterContext* pContext = nullptr ) const;
+    SC_DLLPUBLIC OUString GetFormula( sc::CompileFormulaContext& rCxt, const ScInterpreterContext* pContext = nullptr ) const;
 
-    void            SetDirty( bool bDirtyFlag=true );
+    SC_DLLPUBLIC void SetDirty( bool bDirtyFlag=true );
     void            SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
     void            SetDirtyAfterLoad();
@@ -245,11 +245,11 @@ public:
     }
 
     bool GetDirty() const { return bDirty; }
-    void ResetDirty();
+    SC_DLLPUBLIC void ResetDirty();
     bool NeedsListening() const { return bNeedListening; }
     void SetNeedsListening( bool bVar );
     void SetNeedsDirty( bool bVar );
-    void SetNeedNumberFormat( bool bVal );
+    SC_DLLPUBLIC void SetNeedNumberFormat( bool bVal );
     bool NeedsNumberFormat() const { return mbNeedsNumberFormat;}
     SvNumFormatType GetFormatType() const { return nFormatType; }
     void            Compile(const OUString& rFormula,
@@ -325,15 +325,15 @@ public:
     void            FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes) const;
     bool            IsSubTotal() const { return bSubTotal;}
     bool            IsChanged() const { return bChanged;}
-    void            SetChanged(bool b);
+    SC_DLLPUBLIC void SetChanged(bool b);
     bool            IsEmpty();      // formula::svEmptyCell result
                     // display as empty string if formula::svEmptyCell result
     bool            IsEmptyDisplayedAsString();
-    bool            IsValue();      // also true if formula::svEmptyCell
+    SC_DLLPUBLIC bool IsValue();      // also true if formula::svEmptyCell
     bool            IsValueNoError();
     bool            IsValueNoError() const;
-    double          GetValue();
-    const svl::SharedString & GetString();
+    SC_DLLPUBLIC double GetValue();
+    SC_DLLPUBLIC const svl::SharedString & GetString();
 
     /**
      * Get a numeric value without potentially triggering re-calculation.
@@ -345,14 +345,14 @@ public:
      */
     const svl::SharedString & GetRawString() const;
     const ScMatrix* GetMatrix();
-    bool            GetMatrixOrigin( const ScDocument& rDoc, ScAddress& rPos ) const;
+    SC_DLLPUBLIC bool GetMatrixOrigin( const ScDocument& rDoc, ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
     sc::MatrixEdge  GetMatrixEdge( const ScDocument& rDoc, ScAddress& rOrgPos ) const;
-    FormulaError    GetErrCode();   // interpret first if necessary
+    SC_DLLPUBLIC FormulaError GetErrCode();   // interpret first if necessary
     FormulaError    GetRawError() const;  // don't interpret, just return code or result error
     bool            GetErrorOrValue( FormulaError& rErr, double& rVal );
-    sc::FormulaResultValue GetResult();
-    sc::FormulaResultValue GetResult() const;
+    SC_DLLPUBLIC sc::FormulaResultValue GetResult();
+    SC_DLLPUBLIC sc::FormulaResultValue GetResult() const;
     ScMatrixMode    GetMatrixFlag() const { return cMatrixFlag;}
     ScTokenArray*   GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}
@@ -378,21 +378,21 @@ public:
     void SetCompile( bool bVal );
     ScDocument& GetDocument() const { return rDocument;}
     void            SetMatColsRows( SCCOL nCols, SCROW nRows );
-    void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
+    SC_DLLPUBLIC void GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
                     // cell belongs to ChangeTrack and not to the real document
     void SetInChangeTrack( bool bVal );
     bool IsInChangeTrack() const { return bInChangeTrack;}
 
     // For import filters!
-    void            AddRecalcMode( ScRecalcMode );
+    SC_DLLPUBLIC void AddRecalcMode( ScRecalcMode );
     /** For import only: set a double result. */
-    void SetHybridDouble( double n );
+    SC_DLLPUBLIC void SetHybridDouble( double n );
     /** For import only: set a string result.
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void SetHybridString( const svl::SharedString& r );
+    SC_DLLPUBLIC void SetHybridString( const svl::SharedString& r );
     /** For import only: set an empty cell result to be displayed as empty string.
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridEmptyDisplayedAsString() or SetHybridFormula(), use
@@ -416,26 +416,26 @@ public:
         formula string because the formula is present as a token array, as it
         is the case for binary Excel import.
      */
-    void SetResultDouble( double n );
+    SC_DLLPUBLIC void SetResultDouble( double n );
 
-    void SetResultToken( const formula::FormulaToken* pToken );
+    SC_DLLPUBLIC void SetResultToken( const formula::FormulaToken* pToken );
 
     const svl::SharedString & GetResultString() const;
 
     bool HasHybridStringResult() const;
 
     /* Sets the shared code array to error state in addition to the cell result */
-    void SetErrCode( FormulaError n );
+    SC_DLLPUBLIC void SetErrCode( FormulaError n );
 
     /* Sets just the result to error */
     void SetResultError( FormulaError n );
 
-    bool IsHyperLinkCell() const;
+    SC_DLLPUBLIC bool IsHyperLinkCell() const;
     std::unique_ptr<EditTextObject> CreateURLObject();
-    void GetURLResult( OUString& rURL, OUString& rCellText );
+    SC_DLLPUBLIC void GetURLResult( OUString& rURL, OUString& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */
-    bool            IsMultilineResult();
+    SC_DLLPUBLIC bool IsMultilineResult();
 
     bool NeedsInterpret() const
     {
@@ -475,7 +475,7 @@ public:
     /**
      * Turn a non-grouped cell into the top of a grouped cell.
      */
-    ScFormulaCellGroupRef CreateCellGroup( SCROW nLen, bool bInvariant );
+    SC_DLLPUBLIC ScFormulaCellGroupRef CreateCellGroup( SCROW nLen, bool bInvariant );
     const ScFormulaCellGroupRef& GetCellGroup() const { return mxGroup;}
     void SetCellGroup( const ScFormulaCellGroupRef &xRef );
 
@@ -491,15 +491,15 @@ public:
     void EndListeningTo( sc::EndListeningContext& rCxt );
 
     bool IsShared() const;
-    bool IsSharedTop() const;
-    SCROW GetSharedTopRow() const;
-    SCROW GetSharedLength() const;
+    SC_DLLPUBLIC bool IsSharedTop() const;
+    SC_DLLPUBLIC SCROW GetSharedTopRow() const;
+    SC_DLLPUBLIC SCROW GetSharedLength() const;
 
     // An estimate of the number of cells referenced by the formula
     sal_Int32 GetWeight() const;
 
     ScTokenArray* GetSharedCode();
-    const ScTokenArray* GetSharedCode() const;
+    SC_DLLPUBLIC const ScTokenArray* GetSharedCode() const;
 
     void SyncSharedCode();
 
