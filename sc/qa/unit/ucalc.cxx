@@ -2909,6 +2909,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "DDE",
         "ERROR.TYPE",
         "ERRORTYPE",
+        "FILTER",
         "GETPIVOTDATA",
         "HLOOKUP",
         "HYPERLINK",

@@ -510,7 +510,8 @@
 #define SC_OPCODE_REGEX             497
 #define SC_OPCODE_FOURIER           498
 #define SC_OPCODE_RANDBETWEEN_NV    499
-#define SC_OPCODE_STOP_2_PAR        500     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_FILTER            500
+#define SC_OPCODE_STOP_2_PAR        501     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */

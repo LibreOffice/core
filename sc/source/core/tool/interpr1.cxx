@@ -8130,6 +8130,179 @@ void ScInterpreter::ScXLookup()
     }
 }
 
+void ScInterpreter::ScFilter()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 2, 3))
+        return;
+
+    // Optional 3th argument to set the value to return if all values
+    // in the included array are empty (filter returns nothing)
+    formula::FormulaConstTokenRef xNotFound;
+    if (nParamCount == 3 && GetStackType() != svEmptyCell)
+        xNotFound = PopToken();
+
+    SCCOL nCondResultColEnd = 0;
+    SCROW nCondResultRowEnd = 0;
+    ScMatrixRef pCondResultMatrix = nullptr;
+    std::vector<double> aResValues;
+    size_t nMatch = 0;
+    // take 2nd argument criteria bool array
+    switch ( GetStackType() )
+    {
+        case svMatrix :
+        case svExternalDoubleRef:
+        case svExternalSingleRef:
+        case svDoubleRef:
+        case svSingleRef:
+            {
+                pCondResultMatrix = GetMatrix();
+                if (!pCondResultMatrix)
+                {
+                    PushError(FormulaError::IllegalParameter);
+                    return;
+                }
+                SCSIZE nC, nR;
+                pCondResultMatrix->GetDimensions(nC, nR);
+                nCondResultColEnd = static_cast<SCCOL>(nC - 1);
+                nCondResultRowEnd = static_cast<SCROW>(nR - 1);
+
+                // only 1 dimension of filtering allowed (also in excel)
+                if (nCondResultColEnd > 0 && nCondResultRowEnd > 0)
+                {
+                    PushError(FormulaError::NoValue);
+                    return;
+                }
+
+                // result matrix is filled with boolean values.
+                pCondResultMatrix->GetDoubleArray(aResValues);
+
+                FormulaError nError = FormulaError::NONE;
+                auto matchNum = [&nMatch, &nError](double i) {
+                    nError = GetDoubleErrorValue(i);
+                    if (nError != FormulaError::NONE)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if (i > 0)
+                            nMatch++;
+                        return false;
+                    }
+                };
+
+                if (auto it = std::find_if(aResValues.begin(), aResValues.end(), matchNum); it != aResValues.end())
+                {
+                    PushError(nError);
+                    return;
+                }
+            }
+            break;
+
+        default:
+            {
+                PushIllegalParameter();
+                return;
+            }
+    }
+
+    // bail out, no need to evaluate other arguments
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+
+    SCCOL nQueryCol1 = 0;
+    SCROW nQueryRow1 = 0;
+    SCCOL nQueryCol2 = 0;
+    SCROW nQueryRow2 = 0;
+    ScMatrixRef pQueryMatrix = nullptr;
+    // take 1st argument range
+    switch ( GetStackType() )
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+            {
+                pQueryMatrix = GetMatrix();
+                if (!pQueryMatrix)
+                {
+                    PushError( FormulaError::IllegalParameter);
+                    return;
+                }
+                SCSIZE nC, nR;
+                pQueryMatrix->GetDimensions( nC, nR);
+                nQueryCol2 = static_cast<SCCOL>(nC - 1);
+                nQueryRow2 = static_cast<SCROW>(nR - 1);
+            }
+        break;
+        default:
+            PushError( FormulaError::IllegalParameter);
+            return;
+    }
+
+    // bail out, no need to set a matrix if we have no result
+    if (!nMatch)
+    {
+        if (xNotFound && (xNotFound->GetType() != svMissing))
+            PushTokenRef(xNotFound);
+        else
+            PushError(FormulaError::NestedArray);
+        return;
+    }
+
+    SCSIZE nResPos = 0;
+    ScMatrixRef pResMat = nullptr;
+    if (nQueryCol2 == nCondResultColEnd && nCondResultColEnd > 0)
+    {
+        pResMat = GetNewMat(nMatch, nQueryRow2 + 1 , /*bEmpty*/true);
+        for (SCROW iR = nQueryRow1; iR <= nQueryRow2; iR++)
+        {
+            for (size_t iC = 0; iC < aResValues.size(); iC++)
+            {
+                if (aResValues[iC] > 0)
+                {
+                    if (pQueryMatrix->IsStringOrEmpty(iC, iR))
+                        pResMat->PutStringTrans(pQueryMatrix->GetString(iC, iR), nResPos++);
+                    else
+                        pResMat->PutDoubleTrans(pQueryMatrix->GetDouble(iC, iR), nResPos++);
+                }
+            }
+        }
+    }
+    else if (nQueryRow2 == nCondResultRowEnd && nCondResultRowEnd > 0)
+    {
+        pResMat = GetNewMat(nQueryCol2 + 1, nMatch, /*bEmpty*/true);
+        for (SCCOL iC = nQueryCol1; iC <= nQueryCol2; iC++)
+        {
+            for (size_t iR = 0; iR < aResValues.size(); iR++)
+            {
+                if (aResValues[iR] > 0)
+                {
+                    if (pQueryMatrix->IsStringOrEmpty(iC, iR))
+                        pResMat->PutString(pQueryMatrix->GetString(iC, iR), nResPos++);
+                    else
+                        pResMat->PutDouble(pQueryMatrix->GetDouble(iC, iR), nResPos++);
+                }
+            }
+        }
+    }
+    else
+    {
+        PushError(FormulaError::IllegalParameter);
+        return;
+    }
+
+    if (pResMat)
+        PushMatrix(pResMat);
+    else
+        PushError(FormulaError::NestedArray);
+}
+
 void ScInterpreter::ScSubTotal()
 {
     sal_uInt8 nParamCount = GetByte();
