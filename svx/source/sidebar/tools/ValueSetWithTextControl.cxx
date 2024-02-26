@@ -43,15 +43,6 @@ void ValueSetWithTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetColCount();
 }
 
-void ValueSetWithTextControl::SetOptimalDrawingAreaHeight()
-{
-    const vcl::Font aFont(Application::GetSettings().GetStyleSettings().GetLabelFont());
-    const sal_Int32 nRowHeight = aFont.GetFontSize().Height() * 9 / 4; // see UserDraw()
-    const Size aSize(GetOutputSizePixel().Width(), nRowHeight * maItems.size());
-    GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
-    SetOutputSizePixel(aSize);
-}
-
 void ValueSetWithTextControl::AddItem(
     const OUString& rItemText,
     const OUString& rItemText2 )

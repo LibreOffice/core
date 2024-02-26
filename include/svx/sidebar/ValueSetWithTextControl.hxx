@@ -40,7 +40,6 @@ public:
 
     SVX_DLLPRIVATE virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    void SetOptimalDrawingAreaHeight();
     void AddItem(const OUString& rItemText, const OUString& rItemText2);
 
     SVX_DLLPRIVATE virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
