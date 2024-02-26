@@ -798,26 +798,30 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
     }
 }
 
-// These two methods save and restore the Point of PaM.
-// If the point cannot be moved, a "backup" is created on the previous node.
-// Either way, returned, inserting at its original position will not move it.
-::std::optional<SwNodeIndex> SwUndoSaveContent::MovePtBackward(SwPaM & rPam)
+// These two methods move the Point of Pam backwards/forwards. With that, one
+// can span an area for a Undo/Redo. (The Point is then positioned in front of
+// the area to manipulate!)
+// The flag indicates if there is still content in front of Point.
+bool SwUndoSaveContent::MovePtBackward( SwPaM& rPam )
 {
     rPam.SetMark();
     if( rPam.Move( fnMoveBackward ))
-        return {};
+        return true;
 
-    return { SwNodeIndex(rPam.GetPoint()->nNode, -1) };
+    // If there is no content onwards, set Point simply to the previous position
+    // (Node and Content, so that Content will be detached!)
+    --rPam.GetPoint()->nNode;
+    rPam.GetPoint()->nContent.Assign( nullptr, 0 );
+    return false;
 }
 
-void SwUndoSaveContent::MovePtForward(SwPaM& rPam, ::std::optional<SwNodeIndex> && oMvBkwrd)
+void SwUndoSaveContent::MovePtForward( SwPaM& rPam, bool bMvBkwrd )
 {
     // Was there content before this position?
-    if (!oMvBkwrd)
+    if( bMvBkwrd )
         rPam.Move( fnMoveForward );
     else
     {
-        *rPam.GetPoint() = SwPosition(*oMvBkwrd);
         ++rPam.GetPoint()->nNode;
         SwContentNode* pCNd = rPam.GetContentNode();
         if( pCNd )

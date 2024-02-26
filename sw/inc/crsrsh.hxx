@@ -326,7 +326,7 @@ public:
     // only for usage in special cases allowed!
     void ExtendedSelectAll(bool bFootnotes = true);
     /// If ExtendedSelectAll() was called and selection didn't change since then.
-    ::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode*>>> ExtendedSelectedAll() const;
+    bool ExtendedSelectedAll();
     enum class StartsWith { None, Table, HiddenPara };
     /// If document body starts with a table or starts/ends with hidden paragraph.
     StartsWith StartsWith_();
@@ -586,11 +586,8 @@ public:
     // fields etc.
     OUString GetSelText() const;
 
-    /// Check if Point of current cursor is placed within a table.
-    const SwTableNode* IsCursorInTable() const;
-    bool MoveOutOfTable();
-    bool TrySelectOuterTable();
-    bool MoveStartText();
+    // Check of SPoint or Mark of current cursor are placed within a table.
+    inline const SwTableNode* IsCursorInTable() const;
 
     bool IsCursorInFootnote() const;
 
@@ -902,6 +899,11 @@ inline bool SwCursorShell::IsSelection() const
 inline bool SwCursorShell::IsMultiSelection() const
 {
     return m_pCurrentCursor->GetNext() != m_pCurrentCursor;
+}
+
+inline const SwTableNode* SwCursorShell::IsCursorInTable() const
+{
+    return m_pCurrentCursor->GetNode().FindTableNode();
 }
 
 inline bool SwCursorShell::IsCursorPtAtEnd() const

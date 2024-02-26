@@ -590,8 +590,6 @@ DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
 
         pWrtShell->SelAll(); // Selects the whole table.
         pWrtShell->SelAll(); // Selects the whole document.
-        pShellCursor = pWrtShell->getShellCursor(false);
-
         SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
         CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
@@ -657,11 +655,11 @@ DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
 
     pWrtShell->SelAll(); // Selects A1.
     pWrtShell->SelAll(); // Selects the whole table.
     pWrtShell->SelAll(); // Selects the whole document.
-    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
     // This was "Footnote.", as Ctrl-A also selected footnotes, but it should not.
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
