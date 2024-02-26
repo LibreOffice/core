@@ -75,6 +75,7 @@ protected:
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap);
+    static bool isToolbarItemClass(std::u16string_view sClass);
 };
 
 /// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.

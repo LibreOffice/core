@@ -2105,8 +2105,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
             NotebookBarAddonsMerger::MergeNotebookBarAddons(pParent, pFunction, m_xFrame, *m_pNotebookBarAddonsItem, rMap);
         return nullptr;
     }
-    else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||
-             name == "GtkToggleToolButton" || name == "GtkRadioToolButton" || name == "GtkToolItem")
+    else if (isToolbarItemClass(name))
     {
         if (pToolBox)
         {
@@ -4034,6 +4033,13 @@ void BuilderBase::collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMa
     {
         rMap[sProperty] = std::make_pair(sValue, sModifiers);
     }
+}
+
+bool BuilderBase::isToolbarItemClass(std::u16string_view sClass)
+{
+    return sClass == u"GtkToolButton" || sClass == u"GtkMenuToolButton"
+           || sClass == u"GtkToggleToolButton" || sClass == u"GtkRadioToolButton"
+           || sClass == u"GtkToolItem";
 }
 
 vcl::Window *VclBuilder::get_widget_root()
