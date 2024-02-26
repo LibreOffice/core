@@ -139,6 +139,15 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_bIgnoreNextContSectBreak = false;
             else
             {
+                RTFValue::Pointer_t pTblpPr
+                    = m_aStates.top().getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblpPr);
+                if (pTblpPr)
+                {
+                    // We have a pending floating table, provide an anchor for it still in this
+                    // section.
+                    dispatchSymbol(RTFKeyword::PAR);
+                }
+
                 sectBreak();
                 if (m_nResetBreakOnSectBreak != RTFKeyword::invalid)
                 {
