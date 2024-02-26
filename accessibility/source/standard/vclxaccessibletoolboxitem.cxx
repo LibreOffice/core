@@ -69,7 +69,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 {
     assert( m_pToolBox );
     m_nItemId = m_pToolBox->GetItemId( m_nIndexInParent );
-    m_sOldName = implGetText();
+    m_sOldName = implGetAccessibleName();
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );
     m_bIndeterminate = ( m_pToolBox->GetItemState( m_nItemId ) == TRISTATE_INDET );
     ToolBoxItemType eType = m_pToolBox->GetItemType( m_nIndexInParent );
@@ -162,7 +162,7 @@ void VCLXAccessibleToolBoxItem::SetIndeterminate( bool _bIndeterminate )
 
 void VCLXAccessibleToolBoxItem::NameChanged()
 {
-    OUString sNewName = implGetText();
+    OUString sNewName = implGetAccessibleName();
     if ( sNewName != m_sOldName )
     {
         Any aOldValue, aNewValue;
@@ -219,21 +219,7 @@ OUString VCLXAccessibleToolBoxItem::implGetText()
     if (!m_pToolBox || m_nItemId <= ToolBoxItemId(0))
         return OUString();
 
-    OUString sRet = m_pToolBox->GetItemText( m_nItemId );
-    if (!sRet.isEmpty())
-        return sRet;
-
-    sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
-    if (!sRet.isEmpty())
-        return sRet;
-
-    vcl::Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
-    if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
-        pItemWindow->GetAccessible()->getAccessibleContext().is() )
-    {
-        sRet = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
-    }
-    return sRet;
+    return m_pToolBox->GetItemText(m_nItemId);
 }
 
 Locale VCLXAccessibleToolBoxItem::implGetLocale()
@@ -352,12 +338,29 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleDescription(  )
     }
 }
 
+OUString VCLXAccessibleToolBoxItem::implGetAccessibleName()
+{
+    OUString sRet = implGetText();
+    if (!sRet.isEmpty())
+        return sRet;
+
+    sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
+    if (!sRet.isEmpty())
+        return sRet;
+
+    vcl::Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
+    if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
+        pItemWindow->GetAccessible()->getAccessibleContext().is() )
+    {
+        sRet = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
+    }
+    return sRet;
+}
+
 OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleName(  )
 {
     OExternalLockGuard aGuard( this );
-
-    // entry text == accessible name
-    return implGetText();
+    return implGetAccessibleName();
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleRelationSet(  )

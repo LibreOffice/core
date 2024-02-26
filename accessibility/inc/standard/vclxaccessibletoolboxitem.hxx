@@ -56,6 +56,8 @@ public:
     void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
 private:
+    OUString implGetAccessibleName();
+
     virtual ~VCLXAccessibleToolBoxItem() override;
 
     virtual void SAL_CALL                   disposing() override;
