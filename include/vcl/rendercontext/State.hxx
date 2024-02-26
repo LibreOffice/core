@@ -53,7 +53,6 @@ enum class PushFlags
     TEXTLAYOUTMODE = 0x0800,
     TEXTLANGUAGE = 0x1000,
     OVERLINECOLOR = 0x2000,
-    RTLENABLED = 0x4000,
     ALL = 0xFFFF
 };
 }
@@ -115,7 +114,6 @@ struct State
     LanguageType meTextLanguage = LANGUAGE_SYSTEM;
     PushFlags mnFlags = PushFlags::NONE;
     bool mbMapActive = false;
-    bool mbRTLEnabled = false;
 };
 }
 
