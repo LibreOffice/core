@@ -146,7 +146,7 @@ WCHAR* commandLineAppend(WCHAR* buffer, std::wstring_view text)
             fail();
         if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
-            executable_path.resize(exe_len + 4); // to accomodate a possible ".bin" in the end
+            executable_path.resize(exe_len + 4); // to accommodate a possible ".bin" in the end
             break;
         }
         executable_path.resize(executable_path.size() * 2);
