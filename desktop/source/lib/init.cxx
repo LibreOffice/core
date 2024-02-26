@@ -4826,7 +4826,7 @@ static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned n
 //
 // Typically a problem arises when double clicking a shape in calc. The 1st
 // click selects the shape, triggering generation of a preview, but the second
-// shape engers into edit mode before doc_renderShapeSelection has a chance to
+// shape enters into edit mode before doc_renderShapeSelection has a chance to
 // fire, at which point the shape is no longer selected. Rather than generate
 // an error just return a 0 length result if there is no shape selected, so we
 // continue to generate an error if a shape is selected, but could not provide
