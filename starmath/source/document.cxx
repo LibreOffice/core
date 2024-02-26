@@ -263,10 +263,10 @@ void SmDocShell::ArrangeFormula()
     const SmFormat &rFormat = GetFormat();
     mpTree->Prepare(rFormat, *this, 0);
 
-    pOutDev->Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE |
-                  vcl::PushFlags::RTLENABLED);
+    pOutDev->Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
 
     // We want the device to always be LTR, we handle RTL formulas ourselves.
+    bool bOldRTL = pOutDev->IsRTLEnabled();
     pOutDev->EnableRTL(false);
 
     // For RTL formulas, we want the brackets to be mirrored.
@@ -279,6 +279,7 @@ void SmDocShell::ArrangeFormula()
 
     mpTree->Arrange(*pOutDev, rFormat);
 
+    pOutDev->EnableRTL(bOldRTL);
     pOutDev->Pop();
 
     SetFormulaArranged(true);
@@ -353,10 +354,10 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
         bRestoreDrawMode = true;
     }
 
-    rDev.Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE |
-              vcl::PushFlags::RTLENABLED);
+    rDev.Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
 
     // We want the device to always be LTR, we handle RTL formulas ourselves.
+    bool bOldRTL = rDev.IsRTLEnabled();
     if (rDev.GetOutDevType() == OUTDEV_WINDOW)
         rDev.EnableRTL(bRTL);
     else
@@ -385,6 +386,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     //Drawing using visitor
     SmDrawingVisitor(rDev, aPosition, mpTree.get(), GetFormat());
 
+    rDev.EnableRTL(bOldRTL);
     rDev.Pop();
 
     if (bRestoreDrawMode)
