@@ -136,6 +136,8 @@ private:
     */
     virtual void SAL_CALL disposing() override;
 
+    void disposeChildren();
+
     /** This method adds the states
         AccessibleStateType::FOCUSABLE and possibly
         AccessibleStateType::MULTI_SELECTABLE to the state set
