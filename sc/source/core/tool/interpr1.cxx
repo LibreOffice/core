@@ -7843,8 +7843,13 @@ void ScInterpreter::ScXLookup()
 
     // Optional 4th argument to set return values if not found (default is #N/A)
     formula::FormulaConstTokenRef xNotFound;
+    FormulaError nFirstMatchError = FormulaError::NONE;
     if ( nParamCount >= 4 && GetStackType() != svEmptyCell )
+    {
         xNotFound = PopToken();
+        nFirstMatchError = xNotFound->GetError();
+        nGlobalError = FormulaError::NONE; // propagate only for match or active result path
+    }
 
     // 3rd argument is return value array
     ScMatrixRef prMat = nullptr;
@@ -8115,13 +8120,14 @@ void ScInterpreter::ScXLookup()
         if ( vsa.isResultNA )
         {
             if ( xNotFound && ( xNotFound->GetType() != svMissing ) )
+            {
+                nGlobalError = nFirstMatchError;
                 PushTokenRef(xNotFound);
+            }
             else
                 PushNA();
         }
     }
-
-    return;
 }
 
 void ScInterpreter::ScSubTotal()

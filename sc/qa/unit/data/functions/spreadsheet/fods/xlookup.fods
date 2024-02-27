@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2024-01-16T18:30:06.278000000</meta:creation-date><meta:editing-duration>PT1H14M20S</meta:editing-duration><meta:editing-cycles>23</meta:editing-cycles><meta:generator>LibreOfficeDev/24.8.0.0.alpha0$Windows_X86_64 LibreOffice_project/578d9be50413a4bdc809f8b5f58cc177458f8325</meta:generator><dc:date>2024-02-08T21:37:48.969000000</dc:date><meta:document-statistic meta:table-count="2" meta:cell-count="858" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2024-01-16T18:30:06.278000000</meta:creation-date><meta:editing-duration>PT1H22M11S</meta:editing-duration><meta:editing-cycles>26</meta:editing-cycles><meta:generator>LibreOfficeDev/24.8.0.0.alpha0$Windows_X86_64 LibreOffice_project/3f63df475b9c7039d93d0d66c74c4d0ad7989486</meta:generator><dc:date>2024-02-27T14:15:45.125000000</dc:date><meta:document-statistic meta:table-count="2" meta:cell-count="888" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
@@ -13,8 +13,8 @@
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
      <config:config-item-map-named config:name="Tables">
       <config:config-item-map-entry config:name="Sheet1">
-       <config:config-item config:name="CursorPositionX" config:type="int">4</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">17</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">4</config:config-item>
        <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
@@ -30,13 +30,13 @@
        <config:config-item config:name="IgnoreBreakAfterMultilineField" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">4</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">43</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">128</config:config-item>
        <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">24</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">46</config:config-item>
        <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
        <config:config-item config:name="ZoomValue" config:type="int">65</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -48,7 +48,7 @@
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet1</config:config-item>
-     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1851</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">2479</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">65</config:config-item>
      <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -1114,6 +1114,245 @@
    <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N309P0"/>
   </number:number-style>
+  <number:number-style style:name="N311P0" style:volatile="true">
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+  </number:number-style>
+  <number:number-style style:name="N311">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N311P0"/>
+  </number:number-style>
+  <number:number-style style:name="N312P0" style:volatile="true">
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+  </number:number-style>
+  <number:number-style style:name="N312">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N312P0"/>
+  </number:number-style>
+  <number:number-style style:name="N314P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+  </number:number-style>
+  <number:number-style style:name="N314">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N314P0"/>
+  </number:number-style>
+  <number:number-style style:name="N315P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+  </number:number-style>
+  <number:number-style style:name="N315">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N315P0"/>
+  </number:number-style>
+  <number:date-style style:name="N316">
+   <number:year number:style="long"/>
+   <number:text>.</number:text>
+   <number:month number:style="long"/>
+   <number:text>.</number:text>
+   <number:day number:style="long"/>
+  </number:date-style>
+  <number:date-style style:name="N317">
+   <number:day number:style="long"/>
+   <number:text>.</number:text>
+   <number:month number:textual="true"/>
+   <number:text>.</number:text>
+   <number:year/>
+  </number:date-style>
+  <number:date-style style:name="N318">
+   <number:day number:style="long"/>
+   <number:text>.</number:text>
+   <number:month number:textual="true"/>
+  </number:date-style>
+  <number:date-style style:name="N319">
+   <number:month number:textual="true"/>
+   <number:text>.</number:text>
+   <number:year/>
+  </number:date-style>
+  <number:time-style style:name="N320">
+   <number:hours/>
+   <number:text>:</number:text>
+   <number:minutes number:style="long"/>
+   <number:text> </number:text>
+   <number:am-pm/>
+  </number:time-style>
+  <number:time-style style:name="N321">
+   <number:hours/>
+   <number:text>:</number:text>
+   <number:minutes number:style="long"/>
+   <number:text>:</number:text>
+   <number:seconds number:style="long"/>
+   <number:text> </number:text>
+   <number:am-pm/>
+  </number:time-style>
+  <number:date-style style:name="N322">
+   <number:year number:style="long"/>
+   <number:text>.</number:text>
+   <number:month number:style="long"/>
+   <number:text>.</number:text>
+   <number:day number:style="long"/>
+   <number:text> </number:text>
+   <number:hours/>
+   <number:text>:</number:text>
+   <number:minutes number:style="long"/>
+  </number:date-style>
+  <number:number-style style:name="N324P0" style:volatile="true">
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+  </number:number-style>
+  <number:number-style style:name="N324">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N324P0"/>
+  </number:number-style>
+  <number:number-style style:name="N325P0" style:volatile="true">
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+  </number:number-style>
+  <number:number-style style:name="N325">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N325P0"/>
+  </number:number-style>
+  <number:number-style style:name="N327P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+  </number:number-style>
+  <number:number-style style:name="N327">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N327P0"/>
+  </number:number-style>
+  <number:number-style style:name="N328P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+  </number:number-style>
+  <number:number-style style:name="N328">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N328P0"/>
+  </number:number-style>
+  <number:number-style style:name="N332P0" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:number-style style:name="N332P1" style:volatile="true">
+   <number:text>-</number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:number-style style:name="N332P2" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:text loext:blank-width-char="F2_t4_-5">-     </number:text>
+  </number:number-style>
+  <number:text-style style:name="N332">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:text-content/>
+   <number:text loext:blank-width-char="-"> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N332P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N332P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N332P2"/>
+  </number:text-style>
+  <number:number-style style:name="N336P0" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:number-style style:name="N336P1" style:volatile="true">
+   <number:text>-</number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:number-style style:name="N336P2" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:text loext:blank-width-char="-4">- Ft </number:text>
+  </number:number-style>
+  <number:text-style style:name="N336">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:text-content/>
+   <number:text loext:blank-width-char="-"> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N336P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N336P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N336P2"/>
+  </number:text-style>
+  <number:number-style style:name="N340P0" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:number-style style:name="N340P1" style:volatile="true">
+   <number:text>-</number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:number-style style:name="N340P2" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="2" loext:max-blank-integer-digits="2"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:text-style style:name="N340">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:text-content/>
+   <number:text loext:blank-width-char="-"> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N340P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N340P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N340P2"/>
+  </number:text-style>
+  <number:number-style style:name="N344P0" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:number-style style:name="N344P1" style:volatile="true">
+   <number:text>-</number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:number-style style:name="N344P2" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="2" loext:max-blank-integer-digits="2"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:text-style style:name="N344">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:text-content/>
+   <number:text loext:blank-width-char="-"> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N344P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N344P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N344P2"/>
+  </number:text-style>
   <number:date-style style:name="N10129" number:language="en" number:country="US">
    <number:month/>
    <number:text>/</number:text>
@@ -1716,7 +1955,7 @@
      <text:p><text:sheet-name>???</text:sheet-name><text:s/>(<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2024-02-08">0000.00.00</text:date>, <text:time style:data-style-name="N2" text:time-value="21:35:29.191000000">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2024-02-27">0000.00.00</text:date>, <text:time style:data-style-name="N2" text:time-value="14:14:04.231000000">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -2550,7 +2789,21 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p/>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="15"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Mark</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="87" calcext:value-type="float">
+      <text:p>87</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Jenny</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="19" calcext:value-type="float">
+      <text:p>19</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell office:value-type="string" office:string-value="Accounting" calcext:value-type="string">
@@ -2568,7 +2821,21 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p/>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="15"/>
+     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Ned</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="67" calcext:value-type="float">
+      <text:p>67</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Donna</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="14" calcext:value-type="float">
+      <text:p>14</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="2" table:formula="of:=COM.MICROSOFT.XLOOKUP(4937;[.I14:.R14];[.I15:.R16];;-1)" office:value-type="string" office:string-value="Earlene McCartney" calcext:value-type="string">
@@ -2583,7 +2850,21 @@
      <table:table-cell table:formula="of:=FORMULA([.A24])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16;;-1)}" calcext:value-type="string">
       <text:p>{=XLOOKUP(4937;I14:R14;I15:R16;;-1)}</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Hans</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="16" calcext:value-type="float">
+      <text:p>16</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Stan</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="76" calcext:value-type="float">
+      <text:p>76</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell office:value-type="string" office:string-value="Accounting" calcext:value-type="string">
@@ -2598,7 +2879,25 @@
      <table:table-cell table:formula="of:=FORMULA([.A25])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16;;-1)}" calcext:value-type="string">
       <text:p>{=XLOOKUP(4937;I14:R14;I15:R16;;-1)}</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Martha</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="68" calcext:value-type="float">
+      <text:p>68</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Hans</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Amy</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="86" calcext:value-type="float">
+      <text:p>86</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="2" table:formula="of:=COM.MICROSOFT.XLOOKUP(4937;[.I14:.R14];[.I15:.R16])" office:value-type="string" office:string-value="Earlene McCartney" calcext:value-type="string">
@@ -2613,7 +2912,25 @@
      <table:table-cell table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="{=XLOOKUP(4937;I14:R14;I15:R16)}" calcext:value-type="string">
       <text:p>{=XLOOKUP(4937;I14:R14;I15:R16)}</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Greg</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Amy</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Pam</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="99" calcext:value-type="float">
+      <text:p>99</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell office:value-type="string" office:string-value="Accounting" calcext:value-type="string">
@@ -4839,7 +5156,42 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="77">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce18"/>
+     <table:table-cell table:number-columns-repeated="17"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.N25];[.K22:.K26];[.L22:.L26];COM.MICROSOFT.XLOOKUP([.N25];[.P22:.P26];[.Q22:.Q26]))" office:value-type="float" office:value="16" calcext:value-type="float">
+      <text:p>16</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="16" calcext:value-type="float">
+      <text:p>16</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A127]=[.B127]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A127])" office:value-type="string" office:string-value="=XLOOKUP(N25;K22:K26;L22:L26;XLOOKUP(N25;P22:P26;Q22:Q26))" calcext:value-type="string">
+      <text:p>=XLOOKUP(N25;K22:K26;L22:L26;XLOOKUP(N25;P22:P26;Q22:Q26))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.N26];[.K22:.K26];[.L22:.L26];COM.MICROSOFT.XLOOKUP([.N26];[.P22:.P26];[.Q22:.Q26]))" office:value-type="float" office:value="86" calcext:value-type="float">
+      <text:p>86</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="86" calcext:value-type="float">
+      <text:p>86</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A128]=[.B128]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A128])" office:value-type="string" office:string-value="=XLOOKUP(N26;K22:K26;L22:L26;XLOOKUP(N26;P22:P26;Q22:Q26))" calcext:value-type="string">
+      <text:p>=XLOOKUP(N26;K22:K26;L22:L26;XLOOKUP(N26;P22:P26;Q22:Q26))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="74">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce18"/>
      <table:table-cell table:number-columns-repeated="17"/>
