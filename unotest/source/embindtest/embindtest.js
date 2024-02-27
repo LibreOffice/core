@@ -9,9 +9,8 @@
 
 Module.addOnPostRun(function() {
     console.log('Running embindtest');
-    init_unoembind_uno(Module);
-    let test = new Module.unoembind_uno.org.libreoffice.embindtest.Test(
-        Module.getUnoComponentContext());
+    let uno = init_unoembind_uno(Module);
+    let test = new uno.org.libreoffice.embindtest.Test(Module.getUnoComponentContext());
     console.assert(typeof test === 'object');
     {
         let v = test.getBoolean();
