@@ -3981,6 +3981,7 @@ bool IsErrFunc(OpCode oc)
         case ocAggregate:       // may ignore errors depending on option
         case ocIfs_MS:
         case ocSwitch_MS:
+        case ocXLookup:
             return true;
         default:
             return false;
