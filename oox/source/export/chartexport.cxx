@@ -1720,7 +1720,6 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
                                     case chart2::PieChartSubType_BAR:
                                         sSubType = "bar";
                                         break;
-                                    case chart2::PieChartSubType_NONE:
                                     default:
                                         assert(false);
                                 }
