@@ -37,6 +37,12 @@ $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
 	officecfg/registry \
 ))
 
+ifeq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Library_use_custom_headers,sofficeapp, \
+    static/unoembind \
+))
+endif
+
 $(eval $(call gb_Library_use_api,sofficeapp,\
 	udkapi \
 	offapi \

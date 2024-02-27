@@ -46,13 +46,13 @@ void badUsage()
 {
     std::cerr
         << "Usage:\n\n"
-           "  embindmaker <name> <cpp-output> <js-output> <registries>\n\n"
+           "  embindmaker <name> <cpp-output> <hpp-output> <js-output> <registries>\n\n"
            "where each <registry> is '+' (primary) or ':' (secondary), followed by: either a\n"
            "new- or legacy-format .rdb file, a single .idl file, or a root directory of an\n"
            ".idl file tree.  For all primary registries, Embind code is written to\n"
-           "<cpp-output> and corresponding JavaScript scaffolding code is written to\n"
-           "<js-output>.  The <name> is used as part of some of the identifiers in those\n"
-           "generated files.\n";
+           "<cpp-output>/<hpp-output> and corresponding JavaScript scaffolding code is\n"
+           "written to <js-output>.  The <name> is used as part of some of the identifiers\n"
+           "in those generated files.\n";
     std::exit(EXIT_FAILURE);
 }
 
@@ -708,16 +708,17 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         auto const args = rtl_getAppCommandArgCount();
-        if (args < 3)
+        if (args < 4)
         {
             badUsage();
         }
         OUString name;
         rtl_getAppCommandArg(0, &name.pData);
         auto const cppPathname = getPathnameArgument(1);
-        auto const jsPathname = getPathnameArgument(2);
+        auto const hppPathname = getPathnameArgument(2);
+        auto const jsPathname = getPathnameArgument(3);
         rtl::Reference<TypeManager> mgr(new TypeManager);
-        for (sal_uInt32 i = 3; i != args; ++i)
+        for (sal_uInt32 i = 4; i != args; ++i)
         {
             auto const & [ uri, primary ] = parseRegistryArgument(i);
             try
@@ -906,7 +907,7 @@ SAL_IMPLEMENT_MAIN()
                    << "::get);\n";
             dumpRegisterFunctionEpilog(cppOut, n);
         }
-        cppOut << "EMSCRIPTEN_BINDINGS(unoembind_" << name << ") {\n";
+        cppOut << "void init_unoembind_" << name << "() {\n";
         for (unsigned long long i = 0; i != n; ++i)
         {
             cppOut << "    register" << i << "();\n";
@@ -931,6 +932,19 @@ SAL_IMPLEMENT_MAIN()
         if (!cppOut)
         {
             std::cerr << "Failed to write \"" << cppPathname << "\"\n";
+            std::exit(EXIT_FAILURE);
+        }
+        std::ofstream hppOut(hppPathname, std::ios_base::out | std::ios_base::trunc);
+        if (!hppOut)
+        {
+            std::cerr << "Cannot open \"" << hppPathname << "\" for writing\n";
+            std::exit(EXIT_FAILURE);
+        }
+        hppOut << "void init_unoembind_" << name << "();\n";
+        hppOut.close();
+        if (!hppOut)
+        {
+            std::cerr << "Failed to write \"" << hppPathname << "\"\n";
             std::exit(EXIT_FAILURE);
         }
         std::ofstream jsOut(jsPathname, std::ios_base::out | std::ios_base::trunc);
