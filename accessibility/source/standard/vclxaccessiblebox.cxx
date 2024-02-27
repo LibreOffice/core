@@ -293,11 +293,10 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
             // List.
             if ( ! m_xList.is())
             {
-                rtl::Reference<VCLXAccessibleList> pList = new VCLXAccessibleList ( GetVCLXWindow(),
+                m_xList = new VCLXAccessibleList(GetVCLXWindow(),
                     (m_aBoxType == LISTBOX ? VCLXAccessibleList::LISTBOX : VCLXAccessibleList::COMBOBOX),
                                                                     this);
-                pList->SetIndexInParent (i);
-                m_xList = pList;
+                m_xList->SetIndexInParent(i);
             }
             xChild = m_xList;
         }
