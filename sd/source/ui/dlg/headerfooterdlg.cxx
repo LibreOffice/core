@@ -151,7 +151,8 @@ private:
 
     void FillFormatList(sal_Int32 nSelectedPos);
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet );
-    void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage );
+    // returns true if the page has a date/time field item
+    bool GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool bSet, SdPage* pPage);
 
 public:
     HeaderFooterTabPage(weld::Container* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
@@ -535,25 +536,29 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     }
     else
     {
-        // get the language from the first master page
-        // or set it to all master pages
-        sal_uInt16 nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PageKind::Notes ) : 1;
+        const sal_uInt16 nPageCount = mpDoc->GetMasterSdPageCount(PageKind::Standard);
         sal_uInt16 nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
-            GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PageKind::Standard ) );
+            SdPage* pMasterSlide = mpDoc->GetMasterSdPage(nPage, PageKind::Standard);
+            bool bHasDateFieldItem = GetOrSetDateTimeLanguage(rLanguage, bSet, pMasterSlide);
+
+            // All pages must use the same language. If getting the language, only need to find one.
+            if (!bSet && bHasDateFieldItem)
+                break;
         }
     }
 }
 
-void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage )
+bool HeaderFooterTabPage::GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool bSet,
+                                                   SdPage* pPage)
 {
     if( !pPage )
-        return;
+        return false;
 
     SdrTextObj* pObj = static_cast<SdrTextObj*>(pPage->GetPresObj( PresObjKind::DateTime ));
     if( !pObj )
-        return;
+        return false;
 
     Outliner* pOutl = mpDoc->GetInternalOutliner();
     pOutl->Init( OutlinerMode::TextObject );
@@ -623,6 +628,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
 
     pOutl->Clear();
     pOutl->Init( nOutlMode );
+    return bHasDateFieldItem;
 }
 
 PresLayoutPreview::PresLayoutPreview()
