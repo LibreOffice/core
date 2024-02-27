@@ -55,7 +55,7 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
-#include <com/sun/star/drawing/TextureKind.hpp>
+#include <com/sun/star/drawing/TextureKind2.hpp>
 #include <com/sun/star/drawing/TextureMode.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
@@ -529,7 +529,7 @@
     { UNO_NAME_3D_NORMALS_KIND             ,SDRATTR_3DOBJ_NORMALS_KIND            , ::cppu::UnoType<css::drawing::NormalsKind>::get(), 0, 0}, \
     { UNO_NAME_3D_SHADOW_3D                ,SDRATTR_3DOBJ_SHADOW_3D               , cppu::UnoType<bool>::get(), 0, 0}, \
     { UNO_NAME_3D_TEXTURE_FILTER           ,SDRATTR_3DOBJ_TEXTURE_FILTER          , cppu::UnoType<bool>::get(), 0, 0}, \
-    { UNO_NAME_3D_TEXTURE_KIND             ,SDRATTR_3DOBJ_TEXTURE_KIND            , ::cppu::UnoType<css::drawing::TextureKind>::get(), 0, 0}, \
+    { UNO_NAME_3D_TEXTURE_KIND             ,SDRATTR_3DOBJ_TEXTURE_KIND            , ::cppu::UnoType<css::drawing::TextureKind2>::get(), 0, 0}, \
     { UNO_NAME_3D_TEXTURE_MODE             ,SDRATTR_3DOBJ_TEXTURE_MODE            , ::cppu::UnoType<css::drawing::TextureMode>::get(), 0, 0}, \
     { UNO_NAME_3D_TEXTURE_PROJ_X           ,SDRATTR_3DOBJ_TEXTURE_PROJ_X          , ::cppu::UnoType<css::drawing::TextureProjectionMode>::get(), 0, 0}, \
     { UNO_NAME_3D_TEXTURE_PROJ_Y           ,SDRATTR_3DOBJ_TEXTURE_PROJ_Y          , ::cppu::UnoType<css::drawing::TextureProjectionMode>::get(), 0, 0}, \

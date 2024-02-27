@@ -85,18 +85,9 @@ namespace drawinglayer::primitive2d
             const bool bTextureFilter(rSet.Get(SDRATTR_3DOBJ_TEXTURE_FILTER).GetValue());
 
             // get texture kind
-            // TextureKind: 1 == Base3DTextureLuminance, 2 == Base3DTextureIntensity, 3 == Base3DTextureColor
-            css::drawing::TextureKind2 aTextureKind(css::drawing::TextureKind2_LUMINANCE);
-            const sal_uInt16 nTextureKind(rSet.Get(SDRATTR_3DOBJ_TEXTURE_KIND).GetValue());
-
-            if(2 == nTextureKind)
-            {
-                aTextureKind = css::drawing::TextureKind2_INTENSITY;
-            }
-            else if(3 == nTextureKind)
-            {
-                aTextureKind = css::drawing::TextureKind2_COLOR;
-            }
+            // TextureKind: 0 == Base3DTextureLuminance, 1 == Base3DTextureIntensity, 2 == Base3DTextureColor
+            // see offapi/com/sun/star/drawing/TextureKind2.idl
+            css::drawing::TextureKind2 aTextureKind = static_cast<css::drawing::TextureKind2>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_KIND).GetValue());
 
             // get texture mode
             // TextureMode: 1 == Base3DTextureReplace, 2 == Base3DTextureModulate, 3 == Base3DTextureBlend

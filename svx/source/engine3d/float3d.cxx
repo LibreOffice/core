@@ -50,6 +50,7 @@
 #include <svtools/unitconv.hxx>
 
 #include <svx/float3d.hxx>
+#include <com/sun/star/drawing/TextureKind2.hpp>
 
 #include <bitmaps.hlst>
 
@@ -1349,12 +1350,13 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         if( eState != SfxItemState::DONTCARE )
         {
             sal_uInt16 nValue = rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_KIND).GetValue();
+            drawing::TextureKind2 objTextKind = static_cast<drawing::TextureKind2>(nValue);
 
-            if( ( !m_xBtnTexLuminance->get_active() && nValue == 1 ) ||
-                ( !m_xBtnTexColor->get_active() && nValue == 3 ) )
+            if( ( !m_xBtnTexLuminance->get_active() && objTextKind == css::drawing::TextureKind2_LUMINANCE ) ||
+                ( !m_xBtnTexColor->get_active() && objTextKind == css::drawing::TextureKind2_COLOR ) )
             {
-                m_xBtnTexLuminance->set_active( nValue == 1 );
-                m_xBtnTexColor->set_active( nValue == 3 );
+                m_xBtnTexLuminance->set_active( objTextKind == css::drawing::TextureKind2_LUMINANCE );
+                m_xBtnTexColor->set_active( objTextKind == css::drawing::TextureKind2_COLOR );
                 bUpdate = true;
             }
         }
@@ -2044,14 +2046,21 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 // Textures
     // Art
-    nValue = 99;
+    drawing::TextureKind2 objTextKind = css::drawing::TextureKind2_LUMINANCE;
+    bool bSet = false;
     if( m_xBtnTexLuminance->get_active() )
-        nValue = 1;
+    {
+        objTextKind = css::drawing::TextureKind2_LUMINANCE;
+        bSet = true;
+    }
     else if( m_xBtnTexColor->get_active() )
-        nValue = 3;
+    {
+        objTextKind = css::drawing::TextureKind2_COLOR;
+        bSet = true;
+    }
 
-    if( nValue == 1 || nValue == 3 )
-        rAttrs.Put(Svx3DTextureKindItem(nValue));
+    if(bSet)
+        rAttrs.Put(Svx3DTextureKindItem(static_cast<sal_uInt16>(objTextKind)));
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_TEXTURE_KIND);
 

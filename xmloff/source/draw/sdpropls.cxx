@@ -52,7 +52,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
-#include <com/sun/star/drawing/TextureKind.hpp>
+#include <com/sun/star/drawing/TextureKind2.hpp>
 #include <com/sun/star/drawing/TextureMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/txtprmap.hxx>
@@ -549,11 +549,12 @@ SvXMLEnumMapEntry<drawing::TextureProjectionMode> const  aXML_TexGenerationY_Enu
     { XML_TOKEN_INVALID, drawing::TextureProjectionMode(0) }
 };
 
-SvXMLEnumMapEntry<drawing::TextureKind> const  aXML_TexKind_EnumMap[] =
+SvXMLEnumMapEntry<drawing::TextureKind2> const  aXML_TexKind_EnumMap[] =
 {
-    { XML_LUMINANCE,    drawing::TextureKind_LUMINANCE },
-    { XML_COLOR,        drawing::TextureKind_COLOR },
-    { XML_TOKEN_INVALID, drawing::TextureKind(0) }
+    { XML_LUMINANCE,    drawing::TextureKind2_LUMINANCE },
+    { XML_INTENSITY,    drawing::TextureKind2_INTENSITY },
+    { XML_COLOR,        drawing::TextureKind2_COLOR },
+    { XML_TOKEN_INVALID, drawing::TextureKind2(0) }
 };
 
 SvXMLEnumMapEntry<drawing::TextureMode> const  aXML_TexMode_EnumMap[] =

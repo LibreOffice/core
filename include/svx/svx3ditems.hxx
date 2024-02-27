@@ -119,9 +119,9 @@ inline SfxUInt16Item makeSvx3DMaterialSpecularIntensityItem(sal_uInt16 nVal) {
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureKindItem final : public SfxUInt16Item {
 public:
-    Svx3DTextureKindItem(sal_uInt16 nVal = 3);
+    Svx3DTextureKindItem(sal_uInt16 nVal = 2);
 
-    // use drawing::TextureKind
+    // use drawing::TextureKind2
     SVX_DLLPRIVATE virtual  bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     SVX_DLLPRIVATE virtual  bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     SVX_DLLPRIVATE virtual Svx3DTextureKindItem* Clone(SfxItemPool* pPool = nullptr) const override;
