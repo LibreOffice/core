@@ -543,6 +543,10 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
 
                     // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
                     aGradient.SetAngle(Degree10(static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 )));
+
+                    // If this is symmetrical, set it as an axial gradient for better UI/export.
+                    // There were chart2 unit test failures when doing this to transparent gradients
+                    // so just avoid that case.
                     if (!bContainsTransparency)
                         aGradient.tryToConvertToAxial();
                 }
