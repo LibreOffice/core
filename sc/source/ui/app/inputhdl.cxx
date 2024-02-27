@@ -4445,7 +4445,9 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
             pDelayTimer->Start();
     }
 
-    HideTip();
+    // Don't hide function tooltip in LOK, a remote user might be using tip.
+    if (bStopEditing)
+        HideTip();
     HideTipBelow();
     bInOwnChange = false;
 }
