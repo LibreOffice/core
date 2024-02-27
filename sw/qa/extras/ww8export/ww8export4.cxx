@@ -228,6 +228,30 @@ DECLARE_WW8EXPORT_TEST(testInlinePageBreakFirstLine, "inlinePageBreakFirstLine.d
     CPPUNIT_ASSERT(IsFirstLine(aTextNodes[2]));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLegalNumbering)
+{
+    auto verify = [this]() {
+        // Second level's numbering should use Arabic numbers for first level reference
+        auto xPara = getParagraph(1);
+        CPPUNIT_ASSERT_EQUAL(OUString("CH I"), getProperty<OUString>(xPara, "ListLabelString"));
+        xPara = getParagraph(2);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: Sect 1.01
+        // - Actual  : Sect I.01
+        // i.e. fLegal was ignored on import/export.
+        CPPUNIT_ASSERT_EQUAL(OUString("Sect 1.01"), getProperty<OUString>(xPara, "ListLabelString"));
+        xPara = getParagraph(3);
+        CPPUNIT_ASSERT_EQUAL(OUString("CH II"), getProperty<OUString>(xPara, "ListLabelString"));
+        xPara = getParagraph(4);
+        CPPUNIT_ASSERT_EQUAL(OUString("Sect 2.01"), getProperty<OUString>(xPara, "ListLabelString"));
+    };
+
+    createSwDoc("listWithLgl.doc");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 DECLARE_WW8EXPORT_TEST(testNonInlinePageBreakFirstLine, "nonInlinePageBreakFirstLine.doc")
 {
     SwDoc* pDoc = getSwDoc();

@@ -279,7 +279,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         sal_Int16 nListTabPos,
         const OUString &rNumberingString,
         const SvxBrushItem* pBrush, //For i120928,to transfer graphic of bullet
-        bool /*isLegal*/
+        bool isLegal
     )
 {
     // Start value
@@ -303,6 +303,13 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         nAlign = 0;
         break;
     }
+
+    if (isLegal)
+    {
+        // 3rd bit.
+        nAlign |= 0x04;
+    }
+
     m_rWW8Export.m_pTableStrm->WriteUChar( nAlign );
 
     // Write the rgbxchNums[9], positions of placeholders for paragraph
