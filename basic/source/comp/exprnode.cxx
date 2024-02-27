@@ -118,7 +118,7 @@ SbiExprNode::~SbiExprNode()
 
 SbiSymDef* SbiExprNode::GetVar()
 {
-    if( eNodeType == SbxVARVAL )
+    if (IsVariable())
         return aVar.pDef;
     else
         return nullptr;
@@ -136,7 +136,7 @@ SbiSymDef* SbiExprNode::GetRealVar()
 // From 1995-12-18
 SbiExprNode* SbiExprNode::GetRealNode()
 {
-    if( eNodeType == SbxVARVAL )
+    if (IsVariable())
     {
         SbiExprNode* p = this;
         while( p->aVar.pNext )
