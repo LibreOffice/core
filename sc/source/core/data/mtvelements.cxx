@@ -31,6 +31,9 @@ void CellStoreEvent::element_block_acquired(const mdds::mtv::base_element_block*
         case sc::element_type_formula:
             ++mpCol->mnBlkCountFormula;
             break;
+        case sc::element_type_cellnote:
+            ++mpCol->mnBlkCountCellNotes;
+            break;
         default:
             ;
     }
@@ -45,6 +48,9 @@ void CellStoreEvent::element_block_released(const mdds::mtv::base_element_block*
     {
         case sc::element_type_formula:
             --mpCol->mnBlkCountFormula;
+            break;
+        case sc::element_type_cellnote:
+            --mpCol->mnBlkCountCellNotes;
             break;
         default:
             ;

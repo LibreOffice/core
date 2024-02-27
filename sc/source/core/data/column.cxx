@@ -82,15 +82,17 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 
 ScColumn::ScColumn(ScSheetLimits const & rSheetLimits) :
     maCellTextAttrs(rSheetLimits.GetMaxRowCount()),
-    maCellNotes(rSheetLimits.GetMaxRowCount()),
+    maCellNotes(sc::CellStoreEvent(this)),
     maBroadcasters(rSheetLimits.GetMaxRowCount()),
     maCells(sc::CellStoreEvent(this)),
     maSparklines(rSheetLimits.GetMaxRowCount()),
     mnBlkCountFormula(0),
+    mnBlkCountCellNotes(0),
     nCol( 0 ),
     nTab( 0 ),
     mbEmptyBroadcastersPending( false )
 {
+    maCellNotes.resize(rSheetLimits.GetMaxRowCount());
     maCells.resize(rSheetLimits.GetMaxRowCount());
 }
 
@@ -1834,7 +1836,9 @@ void ScColumn::SwapCol(ScColumn& rCol)
 
     // Swap all CellStoreEvent mdds event_func related.
     maCells.event_handler().swap(rCol.maCells.event_handler());
+    maCellNotes.event_handler().swap(rCol.maCellNotes.event_handler());
     std::swap( mnBlkCountFormula, rCol.mnBlkCountFormula);
+    std::swap(mnBlkCountCellNotes, rCol.mnBlkCountCellNotes);
 
     // notes update caption
     UpdateNoteCaptions(0, GetDoc().MaxRow());

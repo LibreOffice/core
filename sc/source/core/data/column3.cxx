@@ -238,6 +238,7 @@ void ScColumn::Delete( SCROW nRow )
 void ScColumn::FreeAll()
 {
     maCells.event_handler().stop();
+    maCellNotes.event_handler().stop();
 
     auto maxRowCount = GetDoc().GetMaxRowCount();
     // Keep a logical empty range of 0-rDoc.MaxRow() at all times.

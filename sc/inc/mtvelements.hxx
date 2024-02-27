@@ -114,8 +114,9 @@ struct SparklineTraits : public mdds::mtv::default_traits
     using block_funcs = mdds::mtv::element_block_funcs<sc::sparkline_block>;
 };
 
-struct CellNodeTraits : public mdds::mtv::default_traits
+struct CellNoteTraits : public mdds::mtv::default_traits
 {
+    using event_func = CellStoreEvent;
     using block_funcs = mdds::mtv::element_block_funcs<sc::cellnote_block>;
 };
 
@@ -140,7 +141,7 @@ struct CellStoreTraits : public mdds::mtv::default_traits
 typedef mdds::mtv::soa::multi_type_vector<SparklineTraits> SparklineStoreType;
 
 /// Cell note container
-typedef mdds::mtv::soa::multi_type_vector<CellNodeTraits> CellNoteStoreType;
+typedef mdds::mtv::soa::multi_type_vector<CellNoteTraits> CellNoteStoreType;
 
 /// Broadcaster storage container
 typedef mdds::mtv::soa::multi_type_vector<BroadcasterTraits> BroadcasterStoreType;

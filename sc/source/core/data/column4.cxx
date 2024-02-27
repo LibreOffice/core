@@ -2210,27 +2210,46 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
 
 void ScColumn::CheckIntegrity() const
 {
-    const ScColumn* pColTest = maCells.event_handler().getColumn();
-
-    if (pColTest != this)
+    auto checkEventHandlerColumnRef = [this](const auto& rStore, std::string_view pStoreName)
     {
-        std::ostringstream os;
-        os << "cell store's event handler references wrong column instance (this=" << this
-            << "; stored=" << pColTest << ")";
-        throw std::runtime_error(os.str());
-    }
+        if (const ScColumn* pColTest = rStore.event_handler().getColumn(); pColTest != this)
+        {
+            std::ostringstream os;
+            os << pStoreName << "'s event handler references wrong column instance (this=" << this
+                << "; stored=" << pColTest << ")";
+            throw std::runtime_error(os.str());
+        }
+    };
 
-    size_t nCount = std::count_if(maCells.cbegin(), maCells.cend(),
-        [](const auto& blk) { return blk.type == sc::element_type_formula; }
-    );
-
-    if (mnBlkCountFormula != nCount)
+    auto countBlocks = [](const auto& rStore, mdds::mtv::element_t nBlockType)
     {
-        std::ostringstream os;
-        os << "incorrect cached formula block count (expected=" << nCount << "; actual="
-            << mnBlkCountFormula << ")";
-        throw std::runtime_error(os.str());
-    }
+        std::size_t nCount = std::count_if(rStore.cbegin(), rStore.cend(),
+            [nBlockType](const auto& blk) { return blk.type == nBlockType; }
+        );
+
+        return nCount;
+    };
+
+    auto checkCachedBlockCount = [countBlocks](
+        const auto& rStore, mdds::mtv::element_t nBlockType, std::size_t nCachedBlkCount,
+        std::string_view pName)
+    {
+        std::size_t nCount = countBlocks(rStore, nBlockType);
+
+        if (nCachedBlkCount != nCount)
+        {
+            std::ostringstream os;
+            os << "incorrect cached " << pName << " block count (expected=" << nCount << "; actual="
+                << nCachedBlkCount << ")";
+            throw std::runtime_error(os.str());
+        }
+    };
+
+    checkEventHandlerColumnRef(maCells, "cell store");
+    checkEventHandlerColumnRef(maCellNotes, "cell-note store");
+
+    checkCachedBlockCount(maCells, sc::element_type_formula, mnBlkCountFormula, "formula");
+    checkCachedBlockCount(maCellNotes, sc::element_type_cellnote, mnBlkCountCellNotes, "cell note");
 }
 
 void ScColumn::CollectBroadcasterState(sc::BroadcasterState& rState) const

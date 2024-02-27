@@ -2273,9 +2273,7 @@ void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1,
 
 bool ScColumn::HasCellNotes() const
 {
-    if (maCellNotes.block_size() == 1 && maCellNotes.begin()->type == sc::element_type_empty)
-        return false; // all elements are empty
-    return true; // otherwise some must be notes
+    return mnBlkCountCellNotes != 0;
 }
 
 SCROW ScColumn::GetCellNotesMaxRow() const
