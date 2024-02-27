@@ -108,6 +108,12 @@ void SAL_CALL VCLXAccessibleList::disposing()
 {
     VCLXAccessibleComponent::disposing();
 
+    disposeChildren();
+    m_pListBoxHelper.reset();
+}
+
+void VCLXAccessibleList::disposeChildren()
+{
     // Dispose all items in the list.
     for (rtl::Reference<VCLXAccessibleListItem>& rxChild : m_aAccessibleChildren)
     {
@@ -116,8 +122,6 @@ void SAL_CALL VCLXAccessibleList::disposing()
     }
 
     m_aAccessibleChildren.clear();
-
-    m_pListBoxHelper.reset();
 }
 
 
@@ -515,7 +519,7 @@ rtl::Reference<VCLXAccessibleListItem> VCLXAccessibleList::CreateChild(sal_Int32
 
 void VCLXAccessibleList::HandleChangedItemList()
 {
-    m_aAccessibleChildren.clear();
+    disposeChildren();
     NotifyAccessibleEvent (
         AccessibleEventId::INVALIDATE_ALL_CHILDREN,
         Any(), Any());
