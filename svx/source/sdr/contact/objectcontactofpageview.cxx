@@ -70,8 +70,8 @@ namespace sdr::contact
 
         ObjectContactOfPageView::~ObjectContactOfPageView()
         {
-            // execute missing LazyInvalidates and stop timer
-            Invoke();
+            // stop timer
+            Stop();
         }
 
         // LazyInvalidate request. Take action.
