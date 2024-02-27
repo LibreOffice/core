@@ -253,6 +253,7 @@ AnimationSlideController::AnimationSlideController( Reference< XIndexAccess > co
 ,   mnCurrentSlideIndex(0)
 ,   mnHiddenSlideNumber( -1 )
 ,   mxSlides( xSlides )
+,   meMode2( eMode )
 {
     if( mxSlides.is() )
         mnSlideCount = xSlides->getCount();
