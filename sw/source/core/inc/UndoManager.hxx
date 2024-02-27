@@ -38,7 +38,7 @@ namespace sw {
  * It contains a stack of SwUndo actions, each of which represents one user-visible
  * undo / redo step.
  */
-class UndoManager final
+class SAL_DLLPUBLIC_RTTI UndoManager final
     : public IDocumentUndoRedo
     , public SdrUndoManager
 {
