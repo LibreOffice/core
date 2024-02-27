@@ -831,10 +831,15 @@ namespace sw
                 return (pOne->m_aStamp < pTwo->m_aStamp);
         }
 
-        RedlineStack::~RedlineStack()
+        void RedlineStack::ImplDestroy()
         {
             std::stable_sort(maStack.begin(), maStack.end(), CompareRedlines());
             std::for_each(maStack.begin(), maStack.end(), SetInDocAndDelete(mrDoc));
+        }
+
+        RedlineStack::~RedlineStack()
+        {
+            suppress_fun_call_w_exception(ImplDestroy());
         }
 
         sal_uInt16 WrtRedlineAuthor::AddName( const OUString& rNm )

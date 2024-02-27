@@ -303,6 +303,8 @@ namespace sw
             RedlineStack(RedlineStack const&) = delete;
             RedlineStack& operator=(RedlineStack const&) = delete;
 
+            void ImplDestroy();
+
         public:
             explicit RedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
             void MoveAttrsFieldmarkInserted(const SwPosition& rPos);
