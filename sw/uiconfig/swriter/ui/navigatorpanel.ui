@@ -329,14 +329,12 @@
                     <child>
                       <object class="GtkToolbar" id="content4">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="can-focus">True</property>
                         <property name="toolbar-style">icons</property>
                         <child>
                           <object class="GtkToolItem">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
                             <child>
                               <object class="GtkSpinButton" id="gotopage">
                                 <property name="visible">True</property>
