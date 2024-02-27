@@ -33,7 +33,6 @@ endif
 
 ifeq ($(OS)-$(ENABLE_DBGUTIL),EMSCRIPTEN-TRUE)
 $(eval $(call gb_Module_add_targets,unotest, \
-    InternalUnoApi_embindtest \
     Library_embindtest \
 ))
 endif
