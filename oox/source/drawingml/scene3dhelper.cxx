@@ -228,8 +228,10 @@ void Scene3DHelper::getAPIAnglesFrom3DProperties(
         // ignore it. The preset cameras have no rotation.
         nRevolution = 0;
     }
-    else if (47 <= mnPrstCameraIndex && mnPrstCameraIndex <= 61)
+    else if (47 <= mnPrstCameraIndex)
     {
+        assert(mnPrstCameraIndex <= 61
+               && "by definition we don't set anything >= nCameraPresetCount (62)");
         // perspective. MS Office has a strange rendering behavior: If the shape rotation is not zero
         // and the angle for rotation on x-axis (=latitude) is >90deg and <=270deg, then MSO renders
         // the shape with an addition 180deg rotation on the z-axis. This happens only with user
@@ -383,10 +385,11 @@ bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DProperti
         return false;
 
     const sal_Int32 nCameraPrstID((*p3DProperties).mnPreset.value());
-    mnPrstCameraIndex
+    sal_Int16 nPrstCameraIndex
         = getPrstCameraIndex(oox::drawingml::Generic3DProperties::getCameraPrstName(nCameraPrstID));
-    if (mnPrstCameraIndex < 0 or mnPrstCameraIndex >= nCameraPresetCount)
+    if (nPrstCameraIndex < 0 or nPrstCameraIndex >= nCameraPresetCount)
         return false; // error in document. OOXML specifies a fixed set of preset camera types.
+    mnPrstCameraIndex = nPrstCameraIndex;
 
     // We use extrusion, if there is a rotation around x-axis or y-axis,
     // or if there is no such rotation but we have a perspective projection with true depth,
