@@ -144,7 +144,6 @@ gb_MERGE_LIBRARY_LIST += \
 	) \
 	graphicfilter \
 	hwp \
-	$(if $(ENABLE_JAVA),hsqldb) \
 	log \
 	$(if $(ENABLE_LWP),lwpft) \
 	$(if $(filter $(OS),MACOSX), \
