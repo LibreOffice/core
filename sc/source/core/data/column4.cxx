@@ -2233,6 +2233,18 @@ void ScColumn::CheckIntegrity() const
             << mnBlkCountFormula << ")";
         throw std::runtime_error(os.str());
     }
+
+    nCount = std::count_if(maCellNotes.cbegin(), maCellNotes.cend(),
+        [](const auto& blk) { return blk.type == sc::element_type_cellnote; }
+    );
+
+    if (mnBlkCountCellNotes != nCount)
+    {
+        std::ostringstream os;
+        os << "incorrect cached cell note block count (expected=" << nCount << "; actual="
+            << mnBlkCountCellNotes << ")";
+        throw std::runtime_error(os.str());
+    }
 }
 
 void ScColumn::CollectBroadcasterState(sc::BroadcasterState& rState) const
