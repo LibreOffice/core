@@ -2796,7 +2796,7 @@ void VclBuilder::tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentC
     }
 }
 
-void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlreader::XmlReader &reader)
+void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem)
 {
     xmlreader::Span name;
     int nsId;
@@ -2833,7 +2833,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlread
         {
             if (name == "object" || name == "placeholder")
             {
-                pCurrentChild = handleObject(pParent, pAtkProps, reader);
+                pCurrentChild = handleObject(pParent, pAtkProps, reader, bToolbarItem);
 
                 bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
                 if (bObjectInserted)
@@ -3095,12 +3095,22 @@ VclBuilder::stringmap VclBuilder::handleAtkObject(xmlreader::XmlReader &reader) 
     return aProperties;
 }
 
-void VclBuilder::applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties)
+void VclBuilder::applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties, bool bToolbarItem)
 {
     assert(pWindow);
     for (auto const& [ rKey, rValue ] : rProperties)
     {
-        if (pWindow && rKey.match("AtkObject::"))
+        if (bToolbarItem)
+        {
+            // apply accessible name to the toolbar item
+            if (rKey == u"AtkObject::accessible-name")
+            {
+                ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
+                assert(pToolBox);
+                pToolBox->SetAccessibleName(m_pParserState->m_nLastToolbarId, rValue);
+            }
+        }
+        else if (pWindow && rKey.match("AtkObject::"))
             pWindow->set_property(rKey.copy(RTL_CONSTASCII_LENGTH("AtkObject::")), rValue);
         else
             SAL_WARN("vcl.builder", "unhandled atk prop: " << rKey);
@@ -3558,7 +3568,7 @@ template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::s
     return true;
 }
 
-VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader)
+VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem)
 {
     OUString sClass;
     OUString sID;
@@ -3616,7 +3626,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
         assert(!(pParent && pAtkProps) && "must not have both");
         auto aAtkProperties = handleAtkObject(reader);
         if (pParent)
-            applyAtkProperties(pParent, aAtkProperties);
+            applyAtkProperties(pParent, aAtkProperties, bToolbarItem);
         if (pAtkProps)
             *pAtkProps = aAtkProperties;
         return nullptr;
@@ -3649,7 +3659,8 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
                     pCurrentChild = insertObject(pParent, sClass, sID,
                         aProperties, aPangoAttributes, aAtkAttributes);
                 }
-                handleChild(pCurrentChild, nullptr, reader);
+                const bool bToolItem = pCurrentChild == pParent && pCurrentChild->GetType() == WindowType::TOOLBOX && isToolbarItemClass(sClass);
+                handleChild(pCurrentChild, nullptr, reader, bToolItem);
             }
             else if (name == "items")
                 aItems = handleItems(reader);

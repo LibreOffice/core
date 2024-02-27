@@ -353,9 +353,12 @@ private:
     void        extractMnemonicWidget(const OUString &id, stringmap &rMap);
 
     // either pParent or pAtkProps must be set, pParent for a child of a widget, pAtkProps for
-    // collecting the atk info for a GtkMenuItem
-    void        handleChild(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader);
-    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader);
+    // collecting the atk info for a GtkMenuItem,
+    // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
+    void        handleChild(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem = false);
+    // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
+    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem);
+
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
     static OUString getStyleClass(xmlreader::XmlReader &reader);
@@ -385,7 +388,8 @@ private:
 
     stringmap   handleAtkObject(xmlreader::XmlReader &reader) const;
 
-    static void applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties);
+    // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
+    void applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties, bool bToolbarItem);
 
     void        handleActionWidget(xmlreader::XmlReader &reader);
 
