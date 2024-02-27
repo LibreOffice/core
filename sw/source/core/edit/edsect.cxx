@@ -308,89 +308,114 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     // pInnermostNode contains the section/table before/after which we should
     // insert our empty paragraph, or it will be NULL if none is found.
     const SwNode* pInnermostNode = nullptr;
+    const SwSection* pSection = nullptr;
     {
         const SwNode* pTableNode = rCurrentNode.FindTableNode();
         const SwNode* pSectionNode = rCurrentNode.FindSectionNode();
 
         // find the table/section which is close
         if( pTableNode == nullptr )
+        {
             pInnermostNode = pSectionNode;
+            pSection = &static_cast<const SwSectionNode*>(pSectionNode)->GetSection();
+        }
         else if ( pSectionNode == nullptr )
             pInnermostNode = pTableNode;
         else
         {
             // compare and choose the larger one
-            pInnermostNode =
-                ( pSectionNode->GetIndex() > pTableNode->GetIndex() )
-                ? pSectionNode : pTableNode;
+            if (pSectionNode->GetIndex() > pTableNode->GetIndex())
+            {
+                pInnermostNode = pSectionNode;
+                pSection = &static_cast<const SwSectionNode*>(pSectionNode)->GetSection();
+            }
+            else
+                pInnermostNode = pTableNode;
         }
     }
-
-    // The previous version had a check to skip empty read-only sections. Those
-    // shouldn't occur, so we only need to check whether our pInnermostNode is
-    // inside a protected area.
-
-    // Now, pInnermostNode is NULL or the innermost section or table node.
-    if( (pInnermostNode != nullptr) && !pInnermostNode->IsProtect() )
+    bool bIsProtected = pInnermostNode->IsProtect();
+    if(pInnermostNode != nullptr)
     {
-        OSL_ENSURE( pInnermostNode->IsTableNode() ||
-                    pInnermostNode->IsSectionNode(), "wrong node found" );
-        OSL_ENSURE( ( pInnermostNode->GetIndex() <= rCurrentNode.GetIndex() )&&
-                    ( pInnermostNode->EndOfSectionNode()->GetIndex() >=
-                      rCurrentNode.GetIndex() ), "wrong node found" );
-
-        // we now need to find the possible start/end positions
-
-        // we found a start if
-        // - we're at or just before a start node
-        // - there are only start nodes between the current and pInnermostNode
-        SwNodeIndex aBegin( pCurrentPos->GetNode() );
-        if( rCurrentNode.IsContentNode() &&
-            (pCurrentPos->GetContentIndex() == 0))
-            --aBegin;
-        while( (aBegin != pInnermostNode->GetIndex()) &&
-               aBegin.GetNode().IsStartNode() )
-            --aBegin;
-        bool bStart = ( aBegin == pInnermostNode->GetIndex() );
-
-        // we found an end if
-        // - we're at or just before an end node
-        // - there are only end nodes between the current node and
-        //   pInnermostNode's end node or
-        // - there are only end nodes between the last table cell merged with
-        //   the current cell and pInnermostNode's end node
-        SwNodeIndex aEnd( pCurrentPos->GetNode() );
-        if( rCurrentNode.IsContentNode() &&
-            ( pCurrentPos->GetContentIndex() ==
-              rCurrentNode.GetContentNode()->Len() ) )
+        //special case - ToxSection
+        // - in this case the inner section could be tox header
+        //   section but the new node should be before the content section
+        //   protection of the tox should not prevent the insertion
+        //   only protection outside needs to be checked
+        if( pSection &&
+            (SectionType::ToxHeader == pSection->GetType() ||
+             SectionType::ToxContent == pSection->GetType()))
         {
-            ++aEnd;
+            if (SectionType::ToxHeader == pSection->GetType())
+                pInnermostNode = pSection->GetParent()->GetFormat()->GetSectionNode();
+            bIsProtected = static_cast<const SwSectionNode*>(pInnermostNode)->IsInProtectSect();
+        }
 
-            // tdf#156492 handle cells merged vertically in the bottom right corner
-            if ( pInnermostNode->IsTableNode() )
+        // The previous version had a check to skip empty read-only sections. Those
+        // shouldn't occur, so we only need to check whether our pInnermostNode is
+        // inside a protected area.
+
+        // Now, pInnermostNode is NULL or the innermost section or table node.
+        if(!bIsProtected)
+        {
+            OSL_ENSURE( pInnermostNode->IsTableNode() ||
+                        pInnermostNode->IsSectionNode(), "wrong node found" );
+            OSL_ENSURE( ( pInnermostNode->GetIndex() <= rCurrentNode.GetIndex() )&&
+                        ( pInnermostNode->EndOfSectionNode()->GetIndex() >=
+                          rCurrentNode.GetIndex() ), "wrong node found" );
+
+            // we now need to find the possible start/end positions
+
+            // we found a start if
+            // - we're at or just before a start node
+            // - there are only start nodes between the current and pInnermostNode
+            SwNodeIndex aBegin( pCurrentPos->GetNode() );
+            if( rCurrentNode.IsContentNode() &&
+                (pCurrentPos->GetContentIndex() == 0))
+                --aBegin;
+            while( (aBegin != pInnermostNode->GetIndex()) &&
+                   aBegin.GetNode().IsStartNode() )
+                --aBegin;
+            bool bStart = ( aBegin == pInnermostNode->GetIndex() );
+
+            // we found an end if
+            // - we're at or just before an end node
+            // - there are only end nodes between the current node and
+            //   pInnermostNode's end node or
+            // - there are only end nodes between the last table cell merged with
+            //   the current cell and pInnermostNode's end node
+            SwNodeIndex aEnd( pCurrentPos->GetNode() );
+            if( rCurrentNode.IsContentNode() &&
+                ( pCurrentPos->GetContentIndex() ==
+                  rCurrentNode.GetContentNode()->Len() ) )
             {
-                const SwNode* pTableBoxStartNode = pCurrentPos->GetNode().FindTableBoxStartNode();
-                const SwTableBox* pTableBox = pTableBoxStartNode->GetTableBox();
-                if ( pTableBox && pTableBox->getRowSpan() > 1 )
+                ++aEnd;
+
+                // tdf#156492 handle cells merged vertically in the bottom right corner
+                if ( pInnermostNode->IsTableNode() )
                 {
-                    const SwTableNode* pTableNd = pInnermostNode->FindTableNode();
-                    pTableBox = & pTableBox->FindEndOfRowSpan( pTableNd->GetTable(),
-                                                                        pTableBox->getRowSpan() );
-                    pTableBoxStartNode = pTableBox->GetSttNd();
-                    aEnd = pTableBoxStartNode->GetIndex() + 2;
+                    const SwNode* pTableBoxStartNode = pCurrentPos->GetNode().FindTableBoxStartNode();
+                    const SwTableBox* pTableBox = pTableBoxStartNode->GetTableBox();
+                    if ( pTableBox && pTableBox->getRowSpan() > 1 )
+                    {
+                        const SwTableNode* pTableNd = pInnermostNode->FindTableNode();
+                        pTableBox = & pTableBox->FindEndOfRowSpan( pTableNd->GetTable(),
+                                                                            pTableBox->getRowSpan() );
+                        pTableBoxStartNode = pTableBox->GetSttNd();
+                        aEnd = pTableBoxStartNode->GetIndex() + 2;
+                    }
                 }
             }
-        }
-        while( (aEnd != pInnermostNode->EndOfSectionNode()->GetIndex()) &&
-               aEnd.GetNode().IsEndNode() )
-            ++aEnd;
-        bool bEnd = ( aEnd == pInnermostNode->EndOfSectionNode()->GetIndex() );
+            while( (aEnd != pInnermostNode->EndOfSectionNode()->GetIndex()) &&
+                   aEnd.GetNode().IsEndNode() )
+                ++aEnd;
+            bool bEnd = ( aEnd == pInnermostNode->EndOfSectionNode()->GetIndex() );
 
-        // evaluate result: if both start + end, end is preferred
-        if( bEnd )
-            pReturn = pInnermostNode->EndOfSectionNode();
-        else if ( bStart )
-            pReturn = pInnermostNode;
+            // evaluate result: if both start + end, end is preferred
+            if( bEnd )
+                pReturn = pInnermostNode->EndOfSectionNode();
+            else if ( bStart )
+                pReturn = pInnermostNode;
+        }
     }
 
     OSL_ENSURE( ( pReturn == nullptr ) || pReturn->IsStartNode() ||

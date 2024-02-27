@@ -1059,7 +1059,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         SwSectionFormat* pSectFormat = rDoc.MakeSectionFormat();
         rDoc.GetNodes().InsertTextSection(
                 *pHeadNd, *pSectFormat, headerData, nullptr, &aIdx.GetNode(), true, false);
-
+        pSectFormat->GetSection()->SetProtect(SwTOXBase::IsProtected());
         if (pUndo)
         {
             pUndo->TitleSectionInserted(*pSectFormat);
