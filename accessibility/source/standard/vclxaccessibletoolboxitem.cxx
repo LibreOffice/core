@@ -340,7 +340,11 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleDescription(  )
 
 OUString VCLXAccessibleToolBoxItem::implGetAccessibleName()
 {
-    OUString sRet = implGetText();
+    OUString sRet = m_pToolBox->GetAccessibleName(m_nItemId);
+    if (!sRet.isEmpty())
+        return sRet;
+
+    sRet = implGetText();
     if (!sRet.isEmpty())
         return sRet;
 

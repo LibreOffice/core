@@ -412,6 +412,10 @@ public:
 
     void                SetHelpId( ToolBoxItemId nItemId, const OUString& rHelpId );
 
+    using DockingWindow::SetAccessibleName;
+    void SetAccessibleName(ToolBoxItemId nItemId, const OUString& rName );
+    OUString GetAccessibleName(ToolBoxItemId nItemId) const;
+
     //  window size according to current alignment, floating state and number of lines
     Size                CalcWindowSizePixel();
     //  window size according to current alignment, floating state and a given number of lines

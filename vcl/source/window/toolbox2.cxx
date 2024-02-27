@@ -1349,6 +1349,23 @@ const OUString& ToolBox::GetHelpText( ToolBoxItemId nItemId ) const
     return ImplGetHelpText( nItemId );
 }
 
+void ToolBox::SetAccessibleName(ToolBoxItemId nItemId, const OUString& rText)
+{
+    ImplToolItem* pItem = ImplGetItem(nItemId);
+
+    if (pItem)
+        pItem->maAccessibleName = rText;
+}
+
+OUString ToolBox::GetAccessibleName(ToolBoxItemId nItemId) const
+{
+    ImplToolItem* pItem = ImplGetItem(nItemId);
+    if (pItem)
+        return pItem->maAccessibleName;
+
+    return OUString();
+}
+
 void ToolBox::SetHelpId( ToolBoxItemId nItemId, const OUString& rHelpId )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
