@@ -955,8 +955,7 @@ SAL_IMPLEMENT_MAIN()
         }
         jsOut << "function init_unoembind_" << name
               << "(instance) {\n"
-                 "    instance.unoembind_"
-              << name << " = {\n";
+                 "    return {\n";
         writeJsMap(jsOut, *module, "        ");
         jsOut << "    };\n"
                  "};\n";

@@ -223,8 +223,8 @@ improvement! ;)
 Some usage examples through javascript of the current implementation:
 ```js
 // inserts a string at the start of the Writer document.
-init_unoembind_uno(Module);
-let css = Module.unoembind_uno.com.sun.star;
+let uno = init_unoembind_uno(Module);
+let css = uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
 xTextDocument = new css.text.XTextDocument(xModel.$query());
 xText = xTextDocument.getText();
@@ -238,8 +238,8 @@ xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); x
 
 ```js
 // changes each paragraph of the Writer document to a random color.
-init_unoembind_uno(Module);
-let css = Module.unoembind_uno.com.sun.star;
+let uno = init_unoembind_uno(Module);
+let css = uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
 xEnumAccess = new css.container.XEnumerationAccess(xText.$query());
 xParaEnumeration = xEnumAccess.createEnumeration();
