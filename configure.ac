@@ -6834,7 +6834,7 @@ if test "$_os" = "WINNT"; then
         IFS='.' read -r SDK_v1 SDK_v2 SDK_v3 SDK_v4 <<< "$WINDOWS_SDK_LIB_SUBDIR"
         # Assuming maximum of 5 digits for each part and ignoring last part
         SDK_NORMALIZED_VER=$((SDK_v1 * 10000000000 + SDK_v2 * 100000 + SDK_v3))
-        # 10.0.20348.0 is the minumum required version
+        # 10.0.20348.0 is the minimum required version
         if test "$SDK_NORMALIZED_VER" -lt 100000020348; then
             AC_MSG_ERROR([You need Windows SDK greater than or equal 10.0.20348.0])
         fi
