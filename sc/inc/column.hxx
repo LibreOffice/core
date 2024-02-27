@@ -206,8 +206,8 @@ class ScColumn : protected ScColumnData
     // Sparklines
     sc::SparklineStoreType maSparklines;
 
-    std::size_t mnBlkCountFormula;
-    std::size_t mnBlkCountCellNotes;
+    sal_uInt32 mnBlkCountFormula;
+    sal_uInt32 mnBlkCountCellNotes;
 
     SCCOL           nCol;
     SCTAB           nTab;
