@@ -210,6 +210,11 @@ void SbiParser::For()
     if( bForEach )
         Next();
     SbiExpression aLvalue( this, SbOPERAND );
+    if (!aLvalue.IsVariable())
+    {
+        bAbort = true;
+        return; // the error is alredy set in SbiExpression ctor
+    }
     aLvalue.Gen();      // variable on the Stack
 
     if( bForEach )
