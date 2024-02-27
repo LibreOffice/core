@@ -42,6 +42,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <linguistic/misc.hxx>
 #include <linguistic/hyphdta.hxx>
@@ -625,14 +626,14 @@ const sal_uInt32 the_aDigitZeroes [] =
     0x0001D7CE  //1D7FF   ; Decimal # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
 };
 
-bool HasDigits( const OUString &rText )
+bool HasDigits( std::u16string_view rText )
 {
-    const sal_Int32 nLen = rText.getLength();
+    const sal_Int32 nLen = rText.size();
 
     sal_Int32 i = 0;
     while (i < nLen) // for all characters ...
     {
-        const sal_uInt32 nCodePoint = rText.iterateCodePoints( &i );    // handle unicode surrogates correctly...
+        const sal_uInt32 nCodePoint = o3tl::iterateCodePoints( rText, &i );    // handle unicode surrogates correctly...
         for (unsigned int nDigitZero : the_aDigitZeroes)   // ... check in all 0..9 ranges
         {
             if (nDigitZero > nCodePoint)
