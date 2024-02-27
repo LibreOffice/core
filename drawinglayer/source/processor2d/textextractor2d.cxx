@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/processor2d/textextractor2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/processor2d/textextractor2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 namespace drawinglayer::processor2d
@@ -68,6 +69,23 @@ void TextExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D&
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
             break;
 
+        // This primitive is created if a text edit is active and contains its current content
+        // by default this is skipped
+        case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D:
+        {
+            if (m_bIncludeActiveTextEdit)
+            {
+                process(static_cast<const primitive2d::TextHierarchyEditPrimitive2D&>(rCandidate)
+                            .getContent());
+            }
+            else
+            {
+                // same as default
+                process(rCandidate);
+            }
+            break;
+        }
+
         default:
         {
             // process recursively
@@ -77,8 +95,10 @@ void TextExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D&
     }
 }
 
-TextExtractor2D::TextExtractor2D(const geometry::ViewInformation2D& rViewInformation)
+TextExtractor2D::TextExtractor2D(const geometry::ViewInformation2D& rViewInformation,
+                                 bool bIncludeActiveTextEdit)
     : BaseProcessor2D(rViewInformation)
+    , m_bIncludeActiveTextEdit(bIncludeActiveTextEdit)
 {
 }
 

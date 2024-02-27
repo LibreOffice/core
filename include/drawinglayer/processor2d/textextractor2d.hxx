@@ -22,8 +22,12 @@ namespace drawinglayer::processor2d
      */
 class DRAWINGLAYER_DLLPUBLIC TextExtractor2D : public BaseProcessor2D
 {
+private:
+    bool m_bIncludeActiveTextEdit;
+
 public:
-    explicit TextExtractor2D(const geometry::ViewInformation2D& rViewInformation);
+    explicit TextExtractor2D(const geometry::ViewInformation2D& rViewInformation,
+                             bool bIncludeActiveTextEdit);
     void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
     virtual void processTextPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) = 0;
     virtual ~TextExtractor2D() override;

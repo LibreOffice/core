@@ -188,7 +188,7 @@ namespace drawinglayer::processor2d
         }
 
         TextAsPolygonExtractor2D::TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation)
-        :   TextExtractor2D(rViewInformation),
+        :   TextExtractor2D(rViewInformation, false),
             maBColorModifierStack(),
             mnInText(0)
         {
