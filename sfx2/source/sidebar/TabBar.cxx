@@ -185,17 +185,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
     NotifyEventType nType = rEvent.GetType();
     if(NotifyEventType::KEYINPUT == nType)
     {
-        const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
-        if (!mpAccel)
-        {
-            mpAccel = svt::AcceleratorExecute::createAcceleratorHelper();
-            mpAccel->init(comphelper::getProcessComponentContext(), mxFrame);
-        }
-        const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
-        if (".uno:Sidebar" == aCommand ||
-                (rKeyCode.IsMod1() && rKeyCode.IsShift() && rKeyCode.GetCode() == KEY_F10))
-            return InterimItemWindow::EventNotify(rEvent);
-        return true;
+        return InterimItemWindow::EventNotify(rEvent);
     }
     else if(NotifyEventType::COMMAND == nType)
     {

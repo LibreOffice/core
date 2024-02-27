@@ -128,8 +128,6 @@ private:
     DECL_LINK(OnToolboxClicked, weld::Toggleable&, void);
 
     SidebarController* pParentSidebarController;
-    std::unique_ptr<svt::AcceleratorExecute> mpAccel;
-
 };
 
 
