@@ -302,7 +302,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo62336)
     // The problem was essentially a crash during table export as docx/rtf/html
     // If calc-layout is enabled, the crash does not occur, that's why loadFromFile/save is used
     loadFromFile(u"fdo62336.docx");
-    save("HTML (StarWriter)");
+    save(mpFilter);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo86857)
@@ -681,7 +681,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleData)
     createSwDoc("reqif-ole-data.xhtml");
     verify();
     setFilterOptions("xhtmlns=reqif-xhtml");
-    saveAndReload("HTML (StarWriter)");
+    saveAndReload(mpFilter);
     verify();
 }
 
@@ -737,7 +737,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleImg)
     createSwDoc("reqif-ole-img.xhtml");
     verify();
     setFilterOptions("xhtmlns=reqif-xhtml");
-    saveAndReload("HTML (StarWriter)");
+    saveAndReload(mpFilter);
     verify();
 }
 
@@ -1127,8 +1127,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteReqIf)
     xParagraph->setPropertyValue("ParaStyleName", uno::Any(OUString("Quotations")));
 
     // Export it.
-    setFilterOptions("xhtmlns=reqif-xhtml");
-    save("HTML (StarWriter)");
+    ExportToReqif();
     xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -1588,9 +1587,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedListHTML)
     // When exporting to HTML:
     ExportToHTML();
 
-    SvMemoryStream aStream;
-    WrapFromTempFile(aStream);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pXmlDoc); // if we have missing closing marks - parse error
 
     // Without the accompanying fix in place, this test would have failed:
@@ -2089,11 +2086,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testOleEmfPreviewToHtml)
     createSwDoc("ole2.odt");
 
     // When exporting to HTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    ExportToHTML();
 
     // Then make sure the <img> tag has matching file extension and data:
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
@@ -2275,7 +2268,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
     createSwWebDoc("clearing-break.html");
     // Then make sure that the clear property of the break is not ignored:
     verify();
-    saveAndReload("HTML (StarWriter)");
+    saveAndReload(mpFilter);
     // Make sure that the clear property of the break is not ignored during export:
     verify();
 }
@@ -2340,11 +2333,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testImageKeepRatio)
     xBodyText->insertTextContent(xCursor, xTextContent, false);
 
     // When exporting to HTML:
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    save(mpFilter);
 
     // Then make sure that the width is not a fixed size, that would break on resizing the browser
     // window:
@@ -2417,10 +2406,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
     xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString(".\\another.odt")));
 
     // Export
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties
-        = { comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")) };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    save(mpFilter);
 
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pHtmlDoc);
@@ -2440,7 +2426,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf153923)
 {
     createSwDoc("TableWithIndent.fodt");
-    save("HTML (StarWriter)");
+    save(mpFilter);
 
     // Parse it as XML (strict!)
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
