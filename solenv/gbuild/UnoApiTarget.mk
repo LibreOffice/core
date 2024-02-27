@@ -216,11 +216,6 @@ $(call gb_UnoApiHeadersTarget_get_real_comprehensive_dir,$(1))/%.hpp : \
 		| $(call gb_UnoApiHeadersTarget_get_real_comprehensive_target,$(1))
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_real_comprehensive_dir,$(1))/%_embind.cxx : \
-		$(call gb_Executable_get_target_for_build,cppumaker) \
-		| $(call gb_UnoApiHeadersTarget_get_real_comprehensive_target,$(1))
-	touch $$@
-
 endef
 
 # ensure that idl change triggers the dummy rule to rebuild the headers
