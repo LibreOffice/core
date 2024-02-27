@@ -3436,7 +3436,7 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     {
         case SdrHintKind::ObjectInserted:
         {
-            if (nullptr != mnEventObjectChange)
+            if (nullptr != mnEventObjectInserted)
                 // avoid multiple events
                 return;
 
