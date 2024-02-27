@@ -213,7 +213,7 @@ void SbiParser::For()
     if (!aLvalue.IsVariable())
     {
         bAbort = true;
-        return; // the error is alredy set in SbiExpression ctor
+        return; // the error is already set in SbiExpression ctor
     }
     aLvalue.Gen();      // variable on the Stack
 
