@@ -1393,15 +1393,15 @@ void ChartController::executeDispatch_SourceData()
             rModel.attachDataProvider(xDataProvider);
         }
     }
-    auto aUndoGuard = std::make_shared<UndoLiveUpdateGuard>(SchResId(STR_ACTION_EDIT_DATA_RANGES),
+    auto xUndoGuard = std::make_shared<UndoLiveUpdateGuard>(SchResId(STR_ACTION_EDIT_DATA_RANGES),
                                                             m_xUndoManager);
     SolarMutexGuard aSolarGuard;
     auto aDlg = std::make_shared<DataSourceDialog>(GetChartFrame(), xChartDoc);
-    weld::DialogController::runAsync(aDlg, [this, aUndoGuard](int nResult) {
+    weld::DialogController::runAsync(aDlg, [this, xUndoGuard=std::move(xUndoGuard)](int nResult) {
         if (nResult == RET_OK)
         {
             impl_adaptDataSeriesAutoResize();
-            aUndoGuard->commit();
+            xUndoGuard->commit();
         }
     });
 }
