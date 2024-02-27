@@ -26,6 +26,11 @@
 
 class IntlWrapper;
 
+/// Allows you to edit the contents of a TextFrame in a document that is read-only.
+///
+/// Appears in the item set of an sw::SpzFrameFormat.
+///
+/// Insert -> Frame -> Frame -> Options -> Editable in read-only document on the UI.
 class SW_DLLPUBLIC SwFormatEditInReadonly final : public SfxBoolItem
 {
 public:
