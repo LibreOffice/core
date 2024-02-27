@@ -94,7 +94,7 @@ public:
     virtual ~UnoTreeListBoxImpl() override;
     virtual void dispose() override;
 
-    void            insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uLong nPos );
+    void            insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos );
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
 
@@ -218,7 +218,7 @@ void TreeControlPeer::disposeControl()
 }
 
 
-UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = TREELIST_APPEND */ )
+UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uInt32 nPos /* = TREELIST_APPEND */ )
 {
     UnoTreeListEntry* pEntry = nullptr;
     if( mpTreeImpl )
@@ -503,7 +503,7 @@ Any SAL_CALL TreeControlPeer::getSelection()
 
     Any aRet;
 
-    sal_uLong nSelectionCount = rTree.GetSelectionCount();
+    sal_uInt32 nSelectionCount = rTree.GetSelectionCount();
     if( nSelectionCount == 1 )
     {
         UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.FirstSelected() );
@@ -1017,7 +1017,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl const & rTree, const Refere
     {
         Reference< XTreeNode > xParentNode( xNode->getParent() );
         UnoTreeListEntry* pParentEntry = nullptr;
-        sal_uLong nChild = TREELIST_APPEND;
+        sal_uInt32 nChild = TREELIST_APPEND;
 
         if( xParentNode.is() )
         {
@@ -1463,7 +1463,7 @@ IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl, SvTreeListBox*, void)
 }
 
 
-void UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos )
+void UnoTreeListBoxImpl::insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uInt32 nPos )
 {
     if( pParent )
         SvTreeListBox::Insert( pEntry, pParent, nPos );
