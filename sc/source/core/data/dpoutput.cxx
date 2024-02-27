@@ -598,9 +598,8 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                                         uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
                                         if (!lcl_MemberEmpty(aResult))
                                         {
-                                            ScDPOutLevelData tmp(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
-                                                                   aCaption, bHasHiddenMember, bIsDataLayout, false);
-                                            mpColFields.push_back(tmp);
+                                            mpColFields.emplace_back(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
+                                                                     aCaption, bHasHiddenMember, bIsDataLayout, false);
                                         }
                                     }
                                     break;
@@ -624,9 +623,8 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                                             catch (uno::Exception&)
                                             {
                                             }
-                                            ScDPOutLevelData tmp(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
-                                                                   aCaption, bHasHiddenMember, bIsDataLayout, false);
-                                            mpRowFields.push_back(tmp);
+                                            mpRowFields.emplace_back(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
+                                                                     aCaption, bHasHiddenMember, bIsDataLayout, false);
                                             maRowCompactFlags.push_back(bFieldCompact);
                                             mbHasCompactRowField |= bFieldCompact;
                                         }
@@ -637,9 +635,8 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                                     {
                                         uno::Sequence<sheet::MemberResult> aResult = getVisiblePageMembersAsResults(xLevel);
                                         // no check on results for page fields
-                                        ScDPOutLevelData tmp(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
-                                                               aCaption, bHasHiddenMember, false, true);
-                                        mpPageFields.push_back(tmp);
+                                        mpPageFields.emplace_back(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
+                                                                  aCaption, bHasHiddenMember, false, true);
                                     }
                                     break;
                                     default:
