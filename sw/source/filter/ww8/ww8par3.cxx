@@ -368,6 +368,8 @@ struct WW8LVL   // only THE entries, WE need!
     short   nDxaLeft1;          // first line indent
 
     sal_uInt8   nNFC;               // number format code
+    /// Legal numbering: whether this level overrides the nfc of all inherited level numbers.
+    bool fLegal;
     // Offset of fieldcodes in Num-X-String
     sal_uInt8   aOfsNumsXCH[WW8ListManager::nMaxLevel];
     sal_uInt8   nLenGrpprlChpx; // length, in bytes, of the LVL's grpprlChpx
@@ -662,7 +664,15 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     m_rSt.ReadUChar( aLVL.nNFC );
     m_rSt.ReadUChar( aBits1 );
     if( ERRCODE_NONE != m_rSt.GetError() ) return false;
+    // 1st..2nd bits.
     aLVL.nAlign = (aBits1 & 0x03);
+
+    if (aBits1 & 0x04)
+    {
+        // 3rd bit.
+        aLVL.fLegal = true;
+    }
+
     if( aBits1 & 0x10 ) aLVL.bV6Prev    = true;
     if( aBits1 & 0x20 ) aLVL.bV6PrSp    = true;
     if( aBits1 & 0x40 ) aLVL.bV6        = true;
@@ -898,6 +908,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     if( bSetStartNo && 0 <= aLVL.nStartAt)
         rNumFormat.SetStart(o3tl::narrowing<sal_uInt16>(aLVL.nStartAt));
     rNumFormat.SetNumberingType( nType );
+    rNumFormat.SetIsLegal(aLVL.fLegal);
     rNumFormat.SetNumAdjust( eAdj );
 
     if( style::NumberingType::CHAR_SPECIAL == nType )
