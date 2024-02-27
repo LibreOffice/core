@@ -3562,18 +3562,50 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
     Scheduler::ProcessEventsToIdle();
 
-    const ScViewData* pViewData = ScDocShell::GetViewData();
-    CPPUNIT_ASSERT(pViewData);
+    const ScViewData* pViewData1 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData1);
 
     // Get that active EditView
-    EditView* pEditView = pViewData->GetEditView(SC_SPLIT_BOTTOMLEFT);
-    CPPUNIT_ASSERT(pEditView);
-    EditEngine& rEditEngine = pEditView->getEditEngine();
+    EditView* pEditView1 = pViewData1->GetEditView(SC_SPLIT_BOTTOMLEFT);
+    CPPUNIT_ASSERT(pEditView1);
+    EditEngine& rEditEngine1 = pEditView1->getEditEngine();
     // These must match, if they don't then text will have a different width in edit and view modes
     CPPUNIT_ASSERT_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
-                                 pViewData->GetZoomX(), rEditEngine.GetRefMapMode().GetScaleX());
+                                 pViewData1->GetZoomX(), rEditEngine1.GetRefMapMode().GetScaleX());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
-                                 pViewData->GetZoomY(), rEditEngine.GetRefMapMode().GetScaleY());
+                                 pViewData1->GetZoomY(), rEditEngine1.GetRefMapMode().GetScaleY());
+
+    // Create a View #2
+    SfxLokHelper::createView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Set View #2 to the same zoom as View #1
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 17933, 4853));
+    pModelObj->setClientZoom(256, 256, 1333, 1333);
+
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView2);
+    pView2->SetCursor(0, 5); // A6
+
+    Scheduler::ProcessEventsToIdle();
+
+    // Activate edit mode in that A6 cell
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+
+    const ScViewData* pViewData2 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData2);
+
+    // Get the View #2 EditView
+    EditView* pEditView2 = pViewData2->GetEditView(SC_SPLIT_BOTTOMLEFT);
+    CPPUNIT_ASSERT(pEditView2);
+    EditEngine& rEditEngine2 = pEditView2->getEditEngine();
+    CPPUNIT_ASSERT(&rEditEngine1 != &rEditEngine2);
+    // Before the fix, these had different settings, resulting in the text
+    // dancing for the second user as they toggle in and out of edit mode, but
+    // each user should have the same settings.
+    CPPUNIT_ASSERT_EQUAL(rEditEngine1.GetControlWord(), rEditEngine2.GetControlWord());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
