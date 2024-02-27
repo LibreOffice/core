@@ -61,6 +61,24 @@ using namespace com::sun::star;
 using ::std::unique_ptr;
 using ::std::vector;
 
+namespace
+{
+void lcl_OnTabsChanged(const ScTabViewShell* pViewShell, const ScDocument& rDoc, SCTAB nTab, bool bInvalidateTiles = false)
+{
+    for (SCTAB nTabIndex = nTab; nTabIndex < rDoc.GetTableCount(); ++nTabIndex)
+    {
+        if (!rDoc.IsVisible(nTabIndex))
+            continue;
+        if (bInvalidateTiles)
+            pViewShell->libreOfficeKitViewInvalidateTilesCallback(nullptr, nTabIndex, 0);
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pViewShell,
+            true /* bColsAffected */, true /* bRowsAffected */,
+            true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, nTabIndex);
+    }
+}
+}
 
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   SCTAB nTabNum,
@@ -119,6 +137,12 @@ void ScUndoInsertTab::Undo()
     if ( pChangeTrack )
         pChangeTrack->Undo( nEndChangeAction, nEndChangeAction );
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScDocument& rDoc = pDocShell->GetDocument();
+        lcl_OnTabsChanged(pViewShell, rDoc, nTab);
+    }
+
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
     pDocShell->Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
 }
@@ -142,6 +166,12 @@ void ScUndoInsertTab::Redo()
     pDocShell->SetInUndo( false );              //! EndRedo
 
     SetChangeTrack();
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScDocument& rDoc = pDocShell->GetDocument();
+        lcl_OnTabsChanged(pViewShell, rDoc, nTab);
+    }
 }
 
 void ScUndoInsertTab::Repeat(SfxRepeatTarget& rTarget)
@@ -360,6 +390,12 @@ void ScUndoDeleteTab::Undo()
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (comphelper::LibreOfficeKit::isActive() && !theTabs.empty())
+    {
+        lcl_OnTabsChanged(pViewShell, rDoc, theTabs[0]);
+    }
+
     for(SCTAB nTab: theTabs)
     {
         pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab) );
@@ -373,7 +409,6 @@ void ScUndoDeleteTab::Undo()
     pDocShell->PostPaint(0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::All );  // incl. extras
 
     // not ShowTable due to SetTabNo(..., sal_True):
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->SetTabNo( lcl_GetVisibleTabBefore( rDoc, theTabs[0] ), true );
 }
@@ -392,6 +427,12 @@ void ScUndoDeleteTab::Redo()
     pDocShell->SetInUndo( true );               //! EndRedo
 
     SetChangeTrack();
+
+    if (comphelper::LibreOfficeKit::isActive() && !theTabs.empty())
+    {
+        ScDocument& rDoc = pDocShell->GetDocument();
+        lcl_OnTabsChanged(pViewShell, rDoc, theTabs[0]);
+    }
 
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
     pDocShell->Broadcast( SfxHint( SfxHintId::ScForceSetTab ) );
@@ -544,16 +585,10 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
 
     if (comphelper::LibreOfficeKit::isActive() && !mpNewTabs->empty())
     {
-        tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
         const auto newTabsMinIt = std::min_element(mpNewTabs->begin(), mpNewTabs->end());
         const auto oldTabsMinIt = std::min_element(mpOldTabs->begin(), mpOldTabs->end());
         SCTAB nTab = std::min(*newTabsMinIt, *oldTabsMinIt);
-        for (SCTAB nTabIndex = nTab; nTabIndex < rDoc.GetTableCount(); ++nTabIndex)
-        {
-            if (!rDoc.IsVisible(nTabIndex))
-                continue;
-            pViewShell->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, nTabIndex, 0);
-        }
+        lcl_OnTabsChanged(pViewShell, rDoc, nTab, true /* bInvalidateTiles */);
     }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
