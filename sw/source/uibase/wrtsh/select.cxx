@@ -141,7 +141,10 @@ void SwWrtShell::SelAll()
         bool bHasWholeTabSelection = HasWholeTabSelection();
         bool bIsCursorInTable = IsCursorInTable();
 
-        if (!bHasWholeTabSelection)
+        if (!bHasWholeTabSelection
+            && (   !bIsCursorInTable
+                || getShellCursor(false)->GetNode(false).FindTableNode() == nullptr
+                || !ExtendedSelectedAll())) // ESA inside table -> else branch
         {
             if ( IsSelection() && IsCursorPtAtEnd() )
                 SwapPam();
@@ -157,30 +160,35 @@ void SwWrtShell::SelAll()
             bIsFullSel &= !MoveSection( GoCurrSection, fnSectionEnd);
             Pop(SwCursorShell::PopMode::DeleteCurrent);
             GoStart(true, &bMoveTable, false, !bIsFullSel);
+            SttSelect();
+            GoEnd(true, &bMoveTable);
         }
         else
         {
-            EnterStdMode();
-            SttEndDoc(true);
+            if (MoveOutOfTable())
+            {   // select outer text
+                EnterStdMode(); // delete m_pTableCursor
+//                GoStart(true, &bMoveTable, false, true);
+                MoveSection(GoCurrSection, fnSectionStart); // don't move into prev table
+                SttSelect();
+                MoveSection(GoCurrSection, fnSectionEnd); // don't move to different cell
+            }
+            else
+            {
+                TrySelectOuterTable();
+            }
         }
-        SttSelect();
-        GoEnd(true, &bMoveTable);
 
         bool bNeedsExtendedSelectAll = StartsWith_() != StartsWith::None;
 
-        // If the cursor was in a table, then we only need the extended select
-        // all if the whole table is already selected, to still allow selecting
-        // only a single cell or a single table before selecting the whole
-        // document.
+        // the GoEnd() could have created a table selection, if so avoid ESA.
         if (bNeedsExtendedSelectAll && bIsCursorInTable)
-            bNeedsExtendedSelectAll = bHasWholeTabSelection;
+        {
+            bNeedsExtendedSelectAll = !HasWholeTabSelection();
+        }
 
         if (bNeedsExtendedSelectAll)
         {
-            // Disable table cursor to make sure getShellCursor() returns m_pCurrentCursor, not m_pTableCursor.
-            if (IsTableMode())
-                TableCursorToCursor();
-            // Do the extended select all on m_pCurrentCursor.
             ExtendedSelectAll(/*bFootnotes =*/ false);
         }
 

@@ -942,6 +942,23 @@ void SwUiWriterTest::testTdf67238()
     CPPUNIT_ASSERT(!((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf155685)
+{
+    SwDoc* pDoc = createDoc("table-at-end-of-cell.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GoNextCell();
+    pWrtShell->GoNextCell();
+    pWrtShell->GoNextCell();
+    pWrtShell->SelAll();
+    pWrtShell->Delete();
+    // this crashed
+    pWrtShell->Undo();
+    pWrtShell->Undo();
+    pWrtShell->Redo();
+    // this crashed
+    pWrtShell->Redo();
+}
+
 void SwUiWriterTest::testFdo75110()
 {
     SwDoc* pDoc = createDoc("fdo75110.odt");
@@ -8082,6 +8099,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf133982)
     lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
     lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
     lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     //Without the fix in place, it would have crashed here
     lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
@@ -8141,10 +8159,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf114973)
 {
     SwDoc* const pDoc = createDoc("tdf114973.fodt");
 
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(true);
+
     lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
     Scheduler::ProcessEventsToIdle();
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     // bug: cursor jumped into header
     CPPUNIT_ASSERT(!pWrtShell->IsInHeaderFooter());
 

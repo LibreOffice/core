@@ -218,10 +218,23 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
                 *pMoveTable = false;
             return true;
         }
+        SwTableNode const*const pTable(getShellCursor(false)->GetPoint()->nNode.GetNode().FindTableNode());
+        assert(pTable);
         if( MoveTable( GotoCurrTable, fnTableStart ) || bDontMoveRegion )
         {
             if ( pMoveTable )
                 *pMoveTable = true;
+            return true;
+        }
+        else if (SwCursor const*const pCursor = getShellCursor(false);
+                 pTable->GetNodes()[pTable->GetIndex()+1]->EndOfSectionIndex()
+                     < pCursor->GetPoint()->nNode.GetNode().GetIndex()
+                 && pMoveTable != nullptr // only set by SelAll()
+            // problem: cursor isn't inside 1st cell, and didn't move there
+            // workaround: try to move cursor outside of table for SelAll()
+                 && MoveOutOfTable())
+        {
+            assert(!*pMoveTable);
             return true;
         }
         else if( bBoxSelection && pMoveTable )
@@ -258,15 +271,40 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
         else if ( bKeepArea )
             return true;
     }
-    // Regions ???
+
+    // first try to move to the start of the current SwSection
     return SwCursorShell::MoveRegion( GotoCurrRegionAndSkip, fnRegionStart ) ||
-           SwCursorShell::SttEndDoc(true);
+           (pMoveTable != nullptr
+            // move to start of text - if in different table, move out
+            ? MoveStartText()
+            // TODO who needs SttEndDoc for other case?
+            : SwCursorShell::SttEndDoc(true));
 }
 
 bool SwWrtShell::GoEnd(bool bKeepArea, const bool *pMoveTable)
 {
-    if ( pMoveTable && *pMoveTable )
-        return MoveTable( GotoCurrTable, fnTableEnd );
+    if (pMoveTable && *pMoveTable) // only in SelAll()
+    {
+        SwTableNode const*const pTable(getShellCursor(false)->GetPoint()->nNode.GetNode().FindTableNode());
+        assert(pTable);
+        if (MoveTable(GotoCurrTable, fnTableEnd))
+        {
+            return true;
+        }
+        else if (SwCursor const*const pCursor = getShellCursor(false);
+                 pCursor->GetPoint()->nNode.GetNode().GetIndex()
+                     < pTable->GetNodes()[pTable->EndOfSectionIndex()-1]->StartOfSectionIndex()
+            // problem: cursor isn't inside 1st cell, and didn't move there
+            // workaround: try to move cursor outside of table for SelAll()
+                 && MoveOutOfTable())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     if ( IsCursorInTable() )
     {

@@ -328,7 +328,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( nLen )
         {
-            const bool bMvBkwrd = MovePtBackward( *pPam );
+            ::std::optional<SwNodeIndex> oMvBkwrd = MovePtBackward(*pPam);
 
             if (maText)
             {
@@ -355,7 +355,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
             nNode = pPam->GetMark()->nNode.GetIndex();
             nContent = pPam->GetMark()->nContent.GetIndex();
 
-            MovePtForward( *pPam, bMvBkwrd );
+            MovePtForward(*pPam, ::std::move(oMvBkwrd));
             pPam->Exchange();
             if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
             {

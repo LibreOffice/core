@@ -357,15 +357,15 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         auto const pFlysAtInsPos(sw::GetFlysAnchoredAt(*pDoc,
             rPam.GetPoint()->nNode.GetIndex()));
 
-        const bool bMvBkwrd = MovePtBackward(rPam);
+        ::std::optional<SwNodeIndex> oMvBkwrd = MovePtBackward(rPam);
 
         // re-insert content again (first detach m_pUndoNodeIndex!)
         sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
         m_pUndoNodeIndex.reset();
         MoveFromUndoNds(*pDoc, nMvNd, *rPam.GetMark());
-        if (m_nDeleteTextNodes != 0)
+        if (m_nDeleteTextNodes != 0 || oMvBkwrd)
         {
-            MovePtForward(rPam, bMvBkwrd);
+            MovePtForward(rPam, ::std::move(oMvBkwrd));
         }
         rPam.Exchange();
 

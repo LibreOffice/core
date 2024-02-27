@@ -1189,6 +1189,7 @@ public:
                     sal_uInt16 nCnt = 1, bool bBehind = true );
 
     // Delete Columns/Rows in table.
+    void DelTable(SwTableNode * pTable);
     bool DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn = false );
     void DeleteRow( const SwCursor& rCursor );
     void DeleteCol( const SwCursor& rCursor );

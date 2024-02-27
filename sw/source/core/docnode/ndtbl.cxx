@@ -1933,6 +1933,166 @@ void SwDoc::DeleteCol( const SwCursor& rCursor )
     GetIDocumentUndoRedo().EndUndo(SwUndoId::COL_DELETE, nullptr);
 }
 
+void SwDoc::DelTable(SwTableNode *const pTableNd)
+{
+    {
+        // tdf#156267 remove DdeBookmarks before deleting nodes
+        SwDataChanged aTmp(SwPaM(*pTableNd, *pTableNd->EndOfSectionNode()));
+    }
+
+    bool bNewTextNd = false;
+    // Is it alone in a FlyFrame?
+    SwNodeIndex aIdx( *pTableNd, -1 );
+    const SwStartNode* pSttNd = aIdx.GetNode().GetStartNode();
+    if( pSttNd )
+    {
+        const sal_uLong nTableEnd = pTableNd->EndOfSectionIndex() + 1;
+        const sal_uLong nSectEnd = pSttNd->EndOfSectionIndex();
+        if( nTableEnd == nSectEnd )
+        {
+            if( SwFlyStartNode == pSttNd->GetStartNodeType() )
+            {
+                SwFrameFormat* pFormat = pSttNd->GetFlyFormat();
+                if( pFormat )
+                {
+                    // That's the FlyFormat we're looking for
+                    getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
+                    return;
+                }
+            }
+            // No Fly? Thus Header or Footer: always leave a TextNode
+            // We can forget about Undo then!
+            bNewTextNd = true;
+        }
+    }
+
+    // No Fly? Then it is a Header or Footer, so keep always a TextNode
+    ++aIdx;
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().ClearRedo();
+        SwPaM aPaM( *pTableNd->EndOfSectionNode(), aIdx.GetNode() );
+
+        if( bNewTextNd )
+        {
+            const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
+            GetNodes().MakeTextNode( aTmpIdx,
+                        getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+        }
+
+        // Save the cursors (UNO and otherwise)
+        SwPaM const* pSavePaM(nullptr);
+        SwPaM forwardPaM{SwNodeIndex(*pTableNd->EndOfSectionNode())};
+        if (forwardPaM.Move(fnMoveForward, GoInNode))
+        {
+            pSavePaM = &forwardPaM;
+        }
+        SwPaM backwardPaM{SwNodeIndex(*pTableNd)};
+        if (backwardPaM.Move(fnMoveBackward, GoInNode))
+        {
+            if (pSavePaM == nullptr
+                    // try to stay in the same outer table cell
+                || (forwardPaM.GetPoint()->nNode.GetNode().FindTableNode() != pTableNd->StartOfSectionNode()->FindTableNode()
+                    && forwardPaM.GetPoint()->nNode.GetNode().StartOfSectionIndex()
+                        < backwardPaM.GetPoint()->nNode.GetNode().StartOfSectionIndex()))
+            {
+                pSavePaM = &backwardPaM;
+            }
+        }
+        assert(pSavePaM); // due to bNewTextNd this must succeed
+        {
+            SwPaM const tmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());
+            ::PaMCorrAbs(tmpPaM, *pSavePaM->GetPoint());
+        }
+
+        // Move hard PageBreaks to the succeeding Node
+        bool bSavePageBreak = false, bSavePageDesc = false;
+        sal_uLong nNextNd = pTableNd->EndOfSectionIndex()+1;
+        SwContentNode* pNextNd = GetNodes()[ nNextNd ]->GetContentNode();
+        if( pNextNd )
+        {
+            SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
+            const SfxPoolItem *pItem;
+            if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
+                false, &pItem ) )
+            {
+                pNextNd->SetAttr( *pItem );
+                bSavePageDesc = true;
+            }
+
+            if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
+                false, &pItem ) )
+            {
+                pNextNd->SetAttr( *pItem );
+                bSavePageBreak = true;
+            }
+        }
+        std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete(aPaM, SwDeleteFlags::Default));
+        if( bNewTextNd )
+            pUndo->SetTableDelLastNd();
+        pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
+        pUndo->SetTableName(pTableNd->GetTable().GetFrameFormat()->GetName());
+        GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
+    }
+    else
+    {
+        if( bNewTextNd )
+        {
+            const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
+            GetNodes().MakeTextNode( aTmpIdx,
+                        getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+        }
+
+        // Save the cursors (UNO and otherwise)
+        SwPaM const* pSavePaM(nullptr);
+        SwPaM forwardPaM{SwNodeIndex(*pTableNd->EndOfSectionNode())};
+        if (forwardPaM.Move(fnMoveForward, GoInNode))
+        {
+            pSavePaM = &forwardPaM;
+        }
+        SwPaM backwardPaM{SwNodeIndex(*pTableNd)};
+        if (backwardPaM.Move(fnMoveBackward, GoInNode))
+        {
+            if (pSavePaM == nullptr
+                    // try to stay in the same outer table cell
+                || (forwardPaM.GetPoint()->nNode.GetNode().FindTableNode() != pTableNd->StartOfSectionNode()->FindTableNode()
+                    && forwardPaM.GetPoint()->nNode.GetNode().StartOfSectionIndex()
+                        < backwardPaM.GetPoint()->nNode.GetNode().StartOfSectionIndex()))
+            {
+                pSavePaM = &backwardPaM;
+            }
+        }
+        assert(pSavePaM); // due to bNewTextNd this must succeed
+        {
+            SwPaM const tmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());
+            ::PaMCorrAbs(tmpPaM, *pSavePaM->GetPoint());
+        }
+
+        // Move hard PageBreaks to the succeeding Node
+        SwContentNode* pNextNd = GetNodes()[ pTableNd->EndOfSectionIndex()+1 ]->GetContentNode();
+        if( pNextNd )
+        {
+            SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
+            const SfxPoolItem *pItem;
+            if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
+                false, &pItem ) )
+                pNextNd->SetAttr( *pItem );
+
+            if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
+                false, &pItem ) )
+                pNextNd->SetAttr( *pItem );
+        }
+
+        pTableNd->DelFrames();
+        getIDocumentContentOperations().DeleteSection( pTableNd );
+    }
+
+    GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+
+    getIDocumentState().SetModified();
+    getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
+}
+
 bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 {
     if( ::HasProtectedCells( rBoxes ))
@@ -1966,132 +2126,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         aSelBoxes[0]->GetSttIdx()-1 == nTmpIdx1 &&
         nTmpIdx2 == pTableNd->EndOfSectionIndex() )
     {
-        bool bNewTextNd = false;
-        // Is it alone in a FlyFrame?
-        SwNodeIndex aIdx( *pTableNd, -1 );
-        const SwStartNode* pSttNd = aIdx.GetNode().GetStartNode();
-        if( pSttNd )
-        {
-            const sal_uLong nTableEnd = pTableNd->EndOfSectionIndex() + 1;
-            const sal_uLong nSectEnd = pSttNd->EndOfSectionIndex();
-            if( nTableEnd == nSectEnd )
-            {
-                if( SwFlyStartNode == pSttNd->GetStartNodeType() )
-                {
-                    SwFrameFormat* pFormat = pSttNd->GetFlyFormat();
-                    if( pFormat )
-                    {
-                        // That's the FlyFormat we're looking for
-                        getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
-                        return true;
-                    }
-                }
-                // No Fly? Thus Header or Footer: always leave a TextNode
-                // We can forget about Undo then!
-                bNewTextNd = true;
-            }
-        }
-
-        // No Fly? Then it is a Header or Footer, so keep always a TextNode
-        ++aIdx;
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().ClearRedo();
-            SwPaM aPaM( *pTableNd->EndOfSectionNode(), aIdx.GetNode() );
-
-            if( bNewTextNd )
-            {
-                const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
-                GetNodes().MakeTextNode( aTmpIdx,
-                            getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
-            }
-
-            // Save the cursors (UNO and otherwise)
-            SwPaM aSavePaM( SwNodeIndex( *pTableNd->EndOfSectionNode() ) );
-            if( ! aSavePaM.Move( fnMoveForward, GoInNode ) )
-            {
-                *aSavePaM.GetMark() = SwPosition( *pTableNd );
-                aSavePaM.Move( fnMoveBackward, GoInNode );
-            }
-            {
-                SwPaM const tmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());
-                ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
-            }
-
-            // Move hard PageBreaks to the succeeding Node
-            bool bSavePageBreak = false, bSavePageDesc = false;
-            sal_uLong nNextNd = pTableNd->EndOfSectionIndex()+1;
-            SwContentNode* pNextNd = GetNodes()[ nNextNd ]->GetContentNode();
-            if( pNextNd )
-            {
-                SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
-                const SfxPoolItem *pItem;
-                if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
-                    false, &pItem ) )
-                {
-                    pNextNd->SetAttr( *pItem );
-                    bSavePageDesc = true;
-                }
-
-                if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
-                    false, &pItem ) )
-                {
-                    pNextNd->SetAttr( *pItem );
-                    bSavePageBreak = true;
-                }
-            }
-            std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete(aPaM, SwDeleteFlags::Default));
-            if( bNewTextNd )
-                pUndo->SetTableDelLastNd();
-            pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
-            pUndo->SetTableName(pTableNd->GetTable().GetFrameFormat()->GetName());
-            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
-        }
-        else
-        {
-            if( bNewTextNd )
-            {
-                const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
-                GetNodes().MakeTextNode( aTmpIdx,
-                            getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
-            }
-
-            // Save the cursors (UNO and otherwise)
-            SwPaM aSavePaM( SwNodeIndex( *pTableNd->EndOfSectionNode() ) );
-            if( ! aSavePaM.Move( fnMoveForward, GoInNode ) )
-            {
-                *aSavePaM.GetMark() = SwPosition( *pTableNd );
-                aSavePaM.Move( fnMoveBackward, GoInNode );
-            }
-            {
-                SwPaM const tmpPaM(*pTableNd, *pTableNd->EndOfSectionNode());
-                ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
-            }
-
-            // Move hard PageBreaks to the succeeding Node
-            SwContentNode* pNextNd = GetNodes()[ pTableNd->EndOfSectionIndex()+1 ]->GetContentNode();
-            if( pNextNd )
-            {
-                SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
-                const SfxPoolItem *pItem;
-                if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
-                    false, &pItem ) )
-                    pNextNd->SetAttr( *pItem );
-
-                if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
-                    false, &pItem ) )
-                    pNextNd->SetAttr( *pItem );
-            }
-
-            pTableNd->DelFrames();
-            getIDocumentContentOperations().DeleteSection( pTableNd );
-        }
-
-        GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
-
-        getIDocumentState().SetModified();
-        getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
-
+        DelTable(pTableNd);
         return true;
     }
 

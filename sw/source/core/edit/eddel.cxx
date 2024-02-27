@@ -42,7 +42,9 @@
 
 void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool *const pUndo)
 {
-    bool bSelectAll = StartsWith_() != SwCursorShell::StartsWith::None && ExtendedSelectedAll();
+    auto const oSelectAll(StartsWith_() != SwCursorShell::StartsWith::None
+        ? ExtendedSelectedAll()
+        : ::std::optional<::std::pair<SwNode const*, ::std::vector<SwTableNode *>>>{});
     // only for selections
     if (!rPam.HasMark()
         || (*rPam.GetPoint() == *rPam.GetMark()
@@ -58,7 +60,7 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
     if( rPam.GetNode().FindTableNode() &&
         rPam.GetNode().StartOfSectionNode() !=
-        rPam.GetNode(false).StartOfSectionNode() && !bSelectAll )
+        rPam.GetNode(false).StartOfSectionNode() && !oSelectAll)
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
@@ -102,30 +104,34 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     {
         std::unique_ptr<SwPaM> pNewPam;
         SwPaM * pPam = &rPam;
-        if (bSelectAll)
+        if (oSelectAll)
         {
+            if (!oSelectAll->second.empty())
+            {
+                SwRewriter aRewriter;
+                aRewriter.AddRule(UndoArg1, SwResId(STR_MULTISEL));
+                GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, &aRewriter);
+            }
+            // tdf#155685 tables at the end must be deleted separately
+            for (SwTableNode *const pTable : oSelectAll->second)
+            {
+                GetDoc()->DelTable(pTable);
+            }
             assert(dynamic_cast<SwShellCursor*>(&rPam)); // must be corrected pam
             pNewPam.reset(new SwPaM(*rPam.GetMark(), *rPam.GetPoint()));
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
-            while (SwTableNode const* pTableNode =
-                pNewPam->Start()->nNode.GetNode().StartOfSectionNode()->FindTableNode())
-            {
-                pNewPam->Start()->nNode = *pTableNode;
-            }
-            // tdf#133990 ensure section is included in SwUndoDelete
-            while (SwSectionNode const* pSectionNode =
-                pNewPam->Start()->nNode.GetNode().StartOfSectionNode()->FindSectionNode())
-            {
-                pNewPam->Start()->nNode = *pSectionNode;
-            }
-            pNewPam->Start()->nContent.Assign(nullptr, 0);
+            *pNewPam->Start() = SwPosition(*oSelectAll->first);
             pPam = pNewPam.get();
         }
         // delete everything
         GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPam,
             isArtificialSelection ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
         SaveTableBoxContent( pPam->GetPoint() );
+        if (oSelectAll && !oSelectAll->second.empty())
+        {
+            GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
+        }
     }
 
     // Selection is not needed anymore
