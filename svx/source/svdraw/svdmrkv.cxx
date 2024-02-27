@@ -40,6 +40,7 @@
 #include <svx/scene3d.hxx>
 #include <svx/svdovirt.hxx>
 #include <sdr/overlay/overlayrollingrectangle.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
@@ -59,6 +60,8 @@
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+
+#include <drawinglayer/processor2d/textextractor2d.hxx>
 
 #include <array>
 
@@ -759,6 +762,30 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
     return result;
 }
 
+namespace
+{
+    class TextBoundsExtractor final : public drawinglayer::processor2d::TextExtractor2D
+    {
+    private:
+        basegfx::B2DRange maTextRange;
+        void processTextPrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate) override
+        {
+            maTextRange.expand(rCandidate.getB2DRange(getViewInformation2D()));
+        }
+    public:
+        explicit TextBoundsExtractor(const drawinglayer::geometry::ViewInformation2D& rViewInformation)
+            : drawinglayer::processor2d::TextExtractor2D(rViewInformation, true)
+        {
+        }
+
+        basegfx::B2DRange getTextBounds(const sdr::contact::ViewObjectContact &rVOC, sdr::contact::DisplayInfo &raDisplayInfo)
+        {
+            this->process(rVOC.getPrimitive2DSequence(raDisplayInfo));
+            return maTextRange;
+        }
+    };
+}
+
 void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
 {
     SfxViewShell* pViewShell = GetSfxViewShell();
@@ -837,6 +864,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             bConnectorSelection = dumpGluePointsToJSON(aGluePointsTree);
         }
 
+        SdrPageView* pPageView = GetSdrPageView();
+
         if (GetMarkedObjectCount())
         {
             SdrMark* pM = GetSdrMarkByIndex(0);
@@ -853,6 +882,27 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 + "\",\"type\":"
                 + OString::number(static_cast<sal_Int32>(pO->GetObjIdentifier())));
 
+            if (mpMarkedObj && !pOtherShell)
+            {
+                const sdr::contact::ViewObjectContact& rVOC = mpMarkedObj->GetViewContact().GetViewObjectContact(
+                    pPageView->GetPageWindow(0)->GetObjectContact());
+
+                sdr::contact::DisplayInfo aDisplayInfo;
+                TextBoundsExtractor aTextBoundsExtractor(rVOC.GetObjectContact().getViewInformation2D());
+                basegfx::B2DRange aRange = aTextBoundsExtractor.getTextBounds(rVOC, aDisplayInfo);
+                if (!aRange.isEmpty()) {
+                    tools::Rectangle rect(aRange.getMinX(), aRange.getMinY(), aRange.getMaxX(), aRange.getMaxY());
+                    tools::Rectangle aRangeTWIP = o3tl::convert(rect, o3tl::Length::mm100, o3tl::Length::twip);
+                    OString innerTextInfo = ",\"innerTextRect\":[" +
+                        OString::number(aRangeTWIP.getX()) + "," +
+                        OString::number(aRangeTWIP.getY()) + "," +
+                        OString::number(aRangeTWIP.GetWidth()) + "," +
+                        OString::number(aRangeTWIP.GetHeight()) + "]";
+
+                    aExtraInfo.append(innerTextInfo);
+                }
+            }
+
             // In core, the gridOffset is calculated based on the LogicRect's TopLeft coordinate
             // In online, we have the SnapRect and we calculate it based on its TopLeft coordinate
             // SnapRect's TopLeft and LogicRect's TopLeft match unless there is rotation
@@ -862,7 +912,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // whether the shape is rotated or not, we will always have the correct gridOffset
             // Note that the gridOffset is calculated from the first selected obj
             basegfx::B2DVector aGridOffset(0.0, 0.0);
-            if(getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), GetSdrPageView()))
+            if(getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), pPageView))
             {
                 Point p(aGridOffset.getX(), aGridOffset.getY());
                 if (convertMapMode)
