@@ -308,6 +308,12 @@ void XMLSectionExport::ExportIndexHeaderStart(
     // export name, dammit!
     Reference<XNamed> xName(rSection, UNO_QUERY);
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xName->getName());
+    Reference<XPropertySet> xPropSet(rSection, UNO_QUERY);
+    Any aAny = xPropSet->getPropertyValue("IsProtected");
+    if (*o3tl::doAccess<bool>(aAny))
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TRUE);
+    }
 
     // format already handled -> export only start element
     GetExport().StartElement( XML_NAMESPACE_TEXT, XML_INDEX_TITLE, true );
