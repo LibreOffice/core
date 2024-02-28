@@ -85,6 +85,12 @@ Module.addOnPostRun(function() {
         console.assert(test.isString(v));
     }
     {
+        let v = test.getEnum();
+        console.log(v);
+        console.assert(v === uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(test.isEnum(v));
+    }
+    {
         let v = test.getStruct();
         console.log(v.m1 + ', ' + v.m2 + ', ' + v.m3);
         console.assert(v.m1 === -123456);
@@ -229,6 +235,16 @@ Module.addOnPostRun(function() {
         console.assert(e2.get(0) === 'baz');
         e2.delete();
         console.assert(test.isSequenceSequenceString(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceEnum();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0) == uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v.get(1) == uno.org.libreoffice.embindtest.Enum.E3);
+        console.assert(v.get(2) == uno.org.libreoffice.embindtest.Enum.E_10);
+        console.assert(test.isSequenceEnum(v));
         v.delete();
     }
     {
