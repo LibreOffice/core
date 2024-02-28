@@ -188,7 +188,7 @@ void writeIso60599Binary32(osl::File & file, float value) {
 void writeIso60599Binary64(osl::File & file, double value) {
     union {
         unsigned char buf[8];
-        float d; // assuming double is ISO 60599 binary64
+        double d; // assuming double is ISO 60599 binary64
     } sa;
     sa.d = value;
 #if defined OSL_BIGENDIAN
