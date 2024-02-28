@@ -58,6 +58,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/json_writer.hxx>
 #include <formula/formulahelper.hxx>
 #include <formula/funcvarargs.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -1277,7 +1278,13 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 
                         const SfxViewShell* pViewShell = SfxViewShell::Current();
                         if (comphelper::LibreOfficeKit::isActive() && pViewShell->isLOKDesktop())
-                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, aNew.toUtf8());
+                        {
+                            tools::JsonWriter writer;
+                            writer.put("type", "formulausage");
+                            writer.put("text", aNew);
+                            OString sFunctionUsageTip = writer.finishAndGetAsOString();
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sFunctionUsageTip);
+                        }
                     }
                 }
             }
