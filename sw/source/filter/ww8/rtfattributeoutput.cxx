@@ -1625,7 +1625,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
                                         const wwFont* pFont, const SfxItemSet* pOutSet,
                                         sal_Int16 nIndentAt, sal_Int16 nFirstLineIndex,
                                         sal_Int16 /*nListTabPos*/, const OUString& rNumberingString,
-                                        const SvxBrushItem* pBrush, bool /*isLegal*/)
+                                        const SvxBrushItem* pBrush, bool isLegal)
 {
     m_rExport.Strm().WriteOString(SAL_NEWLINE_STRING);
     if (nLevel > 8) // RTF knows only 9 levels
@@ -1763,6 +1763,11 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
 
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELSTARTAT);
     m_rExport.Strm().WriteNumberAsString(nStart);
+
+    if (isLegal)
+    {
+        m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELLEGAL);
+    }
 
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELFOLLOW);
     m_rExport.Strm().WriteNumberAsString(nFollow);

@@ -715,7 +715,7 @@ RTFSymbol const aRTFControlWords[] = {
     { "levelindent", RTFControlType::VALUE, RTFKeyword::LEVELINDENT, 0 },
     { "leveljc", RTFControlType::VALUE, RTFKeyword::LEVELJC, 0 },
     { "leveljcn", RTFControlType::VALUE, RTFKeyword::LEVELJCN, 0 },
-    { "levellegal", RTFControlType::VALUE, RTFKeyword::LEVELLEGAL, 0 },
+    { "levellegal", RTFControlType::VALUE, RTFKeyword::LEVELLEGAL, 1 },
     { "levelnfc", RTFControlType::VALUE, RTFKeyword::LEVELNFC, 0 },
     { "levelnfcn", RTFControlType::VALUE, RTFKeyword::LEVELNFCN, 0 },
     { "levelnorestart", RTFControlType::VALUE, RTFKeyword::LEVELNORESTART, 0 },

@@ -716,6 +716,32 @@ DECLARE_RTFEXPORT_TEST(testTdf158409, "tdf158409.rtf")
     CPPUNIT_ASSERT_EQUAL(8.0, getProperty<double>(xRun, "CharHeight"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLegalNumbering)
+{
+    auto verify = [this]() {
+        // Second level's numbering should use Arabic numbers for first level reference
+        auto xPara = getParagraph(1);
+        CPPUNIT_ASSERT_EQUAL(OUString("CH I"), getProperty<OUString>(xPara, "ListLabelString"));
+        xPara = getParagraph(2);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: Sect 1.01
+        // - Actual  : Sect I.01
+        // i.e. \levellegal was ignored on import/export.
+        CPPUNIT_ASSERT_EQUAL(OUString("Sect 1.01"),
+                             getProperty<OUString>(xPara, "ListLabelString"));
+        xPara = getParagraph(3);
+        CPPUNIT_ASSERT_EQUAL(OUString("CH II"), getProperty<OUString>(xPara, "ListLabelString"));
+        xPara = getParagraph(4);
+        CPPUNIT_ASSERT_EQUAL(OUString("Sect 2.01"),
+                             getProperty<OUString>(xPara, "ListLabelString"));
+    };
+
+    createSwDoc("listWithLgl.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
