@@ -1763,10 +1763,8 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
         return;
 
     // when inserting into the source range, nothing need to be done
-    OSL_ENSURE( &aRg.aStart.GetNodes() == this,
-                "aRg should use this node array" );
-    OSL_ENSURE( &aRg.aStart.GetNodes() == &aRg.aEnd.GetNodes(),
-               "Range across different nodes arrays? You deserve punishment!");
+    assert(&aRg.aStart.GetNodes() == this);
+    assert(&aRg.aStart.GetNodes() == &aRg.aEnd.GetNodes());
     if( &rPos.GetNodes() == &aRg.aStart.GetNodes() &&
         rPos.GetIndex() >= aRg.aStart.GetIndex() &&
         rPos.GetIndex() < aRg.aEnd.GetIndex() )
