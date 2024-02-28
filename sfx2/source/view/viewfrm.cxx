@@ -1497,13 +1497,130 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
+                bool bIsInfobarShown(false);
+
+                if (officecfg::Office::Common::Passwords::HasMaster::get() &&
+                    officecfg::Office::Common::Passwords::StorageVersion::get() == 0)
+                {
+                    // master password stored in deprecated format
+                    VclPtr<SfxInfoBarWindow> pOldMasterPasswordInfoBar =
+                        AppendInfoBar("oldmasterpassword", "",
+                                      SfxResId(STR_REFRESH_MASTER_PASSWORD), InfobarType::DANGER, false);
+                    bIsInfobarShown = true;
+                    if (pOldMasterPasswordInfoBar)
+                    {
+                        weld::Button& rButton = pOldMasterPasswordInfoBar->addButton();
+                        rButton.set_label(SfxResId(STR_REFRESH_PASSWORD));
+                        rButton.connect_clicked(LINK(this,
+                                                   SfxViewFrame, RefreshMasterPasswordHdl));
+                        if (Application::GetHelp())
+                        {
+                            weld::Button& rHelp = pOldMasterPasswordInfoBar->addButton();
+                            rHelp.set_label(SfxResId(RID_STR_HELP));
+                            rHelp.connect_clicked(LINK(this, SfxViewFrame, HelpMasterPasswordHdl));
+                        }
+                    }
+                }
+
+                const bool bEmbedded = m_xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
+
+                // read-only infobar if necessary
+                const SfxViewShell *pVSh;
+                const SfxShell *pFSh;
+                if ( m_xObjSh->IsReadOnly() &&
+                    ! m_xObjSh->IsSecurityOptOpenReadOnly() &&
+                    ( !bEmbedded ||
+                        (( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode())))
+                {
+                    AppendReadOnlyInfobar();
+                    bIsInfobarShown = true;
+                }
+
+                if (!bEmbedded && m_xObjSh->Get_Impl()->getCurrentMacroExecMode() == css::document::MacroExecMode::NEVER_EXECUTE)
+                {
+                    AppendContainsMacrosInfobar();
+                    bIsInfobarShown = true;
+                }
+
+                if (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument")
+                    sfx2::SfxNotebookBar::ReloadNotebookBar(u"modules/swriter/ui/");
+
+                if (SfxClassificationHelper::IsClassified(m_xObjSh->getDocProperties()))
+                {
+                    // Document has BAILS properties, display an infobar accordingly.
+                    SfxClassificationHelper aHelper(m_xObjSh->getDocProperties());
+                    aHelper.UpdateInfobar(*this);
+                }
+
+                // Add pending infobars
+                std::vector<InfobarData>& aPendingInfobars = m_xObjSh->getPendingInfobars();
+                while (!aPendingInfobars.empty())
+                {
+                    InfobarData& aInfobarData = aPendingInfobars.back();
+
+                    // don't show Track Changes infobar, if Track Changes toolbar is visible
+                    if (aInfobarData.msId == "hiddentrackchanges")
+                    {
+                        if (auto xLayoutManager = getLayoutManager(GetFrame()))
+                        {
+                            if ( xLayoutManager->getElement(CHANGES_STR).is() )
+                            {
+                                aPendingInfobars.pop_back();
+                                continue;
+                            }
+                        }
+                    }
+
+                    // Track Changes infobar: add a button to show/hide Track Changes functions
+                    // Hyphenation infobar: add a button to get more information
+                    // tdf#148913 limit VclPtr usage for these
+                    bool bTrackChanges = aInfobarData.msId == "hiddentrackchanges";
+                    if ( bTrackChanges || aInfobarData.msId == "hyphenationmissing" )
+                    {
+                        VclPtr<SfxInfoBarWindow> pInfoBar =
+                            AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
+                                  aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
+                                  aInfobarData.mbShowCloseButton);
+                        bIsInfobarShown = true;
+
+                        // tdf#148913 don't extend this condition to keep it thread-safe
+                        if (pInfoBar)
+                        {
+                            weld::Button& rButton = pInfoBar->addButton();
+                            rButton.set_label(SfxResId(bTrackChanges
+                                    ? STR_TRACK_CHANGES_BUTTON
+                                    : STR_HYPHENATION_BUTTON));
+                            if (bTrackChanges)
+                            {
+                                rButton.connect_clicked(LINK(this,
+                                                    SfxViewFrame, HiddenTrackChangesHandler));
+                            }
+                            else
+                            {
+                                rButton.connect_clicked(LINK(this,
+                                                    SfxViewFrame, HyphenationMissingHandler));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
+                                  aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
+                                  aInfobarData.mbShowCloseButton);
+                        bIsInfobarShown = true;
+                    }
+
+                    aPendingInfobars.pop_back();
+                }
+
 #if !ENABLE_WASM_STRIP_PINGUSER
                 bool bIsHeadlessOrUITest = SfxApplication::IsHeadlessOrUITest(); //uitest.uicheck fails when the dialog is open
 
                 //what's new infobar
-                if (utl::isProductVersionUpgraded(true) && !bIsHeadlessOrUITest)
+                if (!bIsInfobarShown && utl::isProductVersionUpgraded(true) && !bIsHeadlessOrUITest)
                 {
                     VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
+                    bIsInfobarShown = true;
                     if (pInfoBar)
                     {
                         weld::Button& rWhatsNewButton = pInfoBar->addButton();
@@ -1549,12 +1666,12 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 if (nLastGetInvolvedShown == 0)
                     bUpdateLastTimeGetInvolvedShown = true;
-                else if (nPeriodSec < nNow && nLastGetInvolvedShown < (nNow + nPeriodSec/2) - nPeriodSec) // 90d alternating with donation
+                else if (!bIsInfobarShown && nPeriodSec < nNow && nLastGetInvolvedShown < (nNow + nPeriodSec/2) - nPeriodSec) // 90d alternating with donation
                 {
                     bUpdateLastTimeGetInvolvedShown = true;
 
                     VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", "", SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
-
+                    bIsInfobarShown = true;
                     if (pInfoBar)
                     {
                         weld::Button& rGetInvolvedButton = pInfoBar->addButton();
@@ -1577,7 +1694,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 if (nLastDonateShown == 0)
                     bUpdateLastTimeDonateShown = true;
-                else if (nPeriodSec < nNow && nLastDonateShown < nNow - nPeriodSec) // 90d alternating with getinvolved
+                else if (!bIsInfobarShown && nPeriodSec < nNow && nLastDonateShown < nNow - nPeriodSec) // 90d alternating with getinvolved
                 {
                     bUpdateLastTimeDonateShown = true;
 
@@ -1598,112 +1715,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     batch->commit();
                 }
 #endif
-                if (officecfg::Office::Common::Passwords::HasMaster::get() &&
-                    officecfg::Office::Common::Passwords::StorageVersion::get() == 0)
-                {
-                    // master password stored in deprecated format
-                    VclPtr<SfxInfoBarWindow> pOldMasterPasswordInfoBar =
-                        AppendInfoBar("oldmasterpassword", "",
-                                      SfxResId(STR_REFRESH_MASTER_PASSWORD), InfobarType::DANGER, false);
-                    if (pOldMasterPasswordInfoBar)
-                    {
-                        weld::Button& rButton = pOldMasterPasswordInfoBar->addButton();
-                        rButton.set_label(SfxResId(STR_REFRESH_PASSWORD));
-                        rButton.connect_clicked(LINK(this,
-                                                   SfxViewFrame, RefreshMasterPasswordHdl));
-                        if (Application::GetHelp())
-                        {
-                            weld::Button& rHelp = pOldMasterPasswordInfoBar->addButton();
-                            rHelp.set_label(SfxResId(RID_STR_HELP));
-                            rHelp.connect_clicked(LINK(this, SfxViewFrame, HelpMasterPasswordHdl));
-                        }
-                    }
-                }
-
-                const bool bEmbedded = m_xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
-
-                // read-only infobar if necessary
-                const SfxViewShell *pVSh;
-                const SfxShell *pFSh;
-                if ( m_xObjSh->IsReadOnly() &&
-                    ! m_xObjSh->IsSecurityOptOpenReadOnly() &&
-                    ( !bEmbedded ||
-                        (( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode())))
-                {
-                    AppendReadOnlyInfobar();
-                }
-
-                if (!bEmbedded && m_xObjSh->Get_Impl()->getCurrentMacroExecMode() == css::document::MacroExecMode::NEVER_EXECUTE)
-                    AppendContainsMacrosInfobar();
-
-                if (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument")
-                    sfx2::SfxNotebookBar::ReloadNotebookBar(u"modules/swriter/ui/");
-
-                if (SfxClassificationHelper::IsClassified(m_xObjSh->getDocProperties()))
-                {
-                    // Document has BAILS properties, display an infobar accordingly.
-                    SfxClassificationHelper aHelper(m_xObjSh->getDocProperties());
-                    aHelper.UpdateInfobar(*this);
-                }
-
-                // Add pending infobars
-                std::vector<InfobarData>& aPendingInfobars = m_xObjSh->getPendingInfobars();
-                while (!aPendingInfobars.empty())
-                {
-                    InfobarData& aInfobarData = aPendingInfobars.back();
-
-                    // don't show Track Changes infobar, if Track Changes toolbar is visible
-                    if (aInfobarData.msId == "hiddentrackchanges")
-                    {
-                        if (auto xLayoutManager = getLayoutManager(GetFrame()))
-                        {
-                            if ( xLayoutManager->getElement(CHANGES_STR).is() )
-                            {
-                                aPendingInfobars.pop_back();
-                                continue;
-                            }
-                        }
-                    }
-
-                    // Track Changes infobar: add a button to show/hide Track Changes functions
-                    // Hyphenation infobar: add a button to get more information
-                    // tdf#148913 limit VclPtr usage for these
-                    bool bTrackChanges = aInfobarData.msId == "hiddentrackchanges";
-                    if ( bTrackChanges || aInfobarData.msId == "hyphenationmissing" )
-                    {
-                        VclPtr<SfxInfoBarWindow> pInfoBar =
-                            AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
-                                  aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
-                                  aInfobarData.mbShowCloseButton);
-
-                        // tdf#148913 don't extend this condition to keep it thread-safe
-                        if (pInfoBar)
-                        {
-                            weld::Button& rButton = pInfoBar->addButton();
-                            rButton.set_label(SfxResId(bTrackChanges
-                                    ? STR_TRACK_CHANGES_BUTTON
-                                    : STR_HYPHENATION_BUTTON));
-                            if (bTrackChanges)
-                            {
-                                rButton.connect_clicked(LINK(this,
-                                                    SfxViewFrame, HiddenTrackChangesHandler));
-                            }
-                            else
-                            {
-                                rButton.connect_clicked(LINK(this,
-                                                    SfxViewFrame, HyphenationMissingHandler));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
-                                  aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
-                                  aInfobarData.mbShowCloseButton);
-                    }
-
-                    aPendingInfobars.pop_back();
-                }
 
                 break;
             }
