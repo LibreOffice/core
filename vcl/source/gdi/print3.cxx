@@ -514,7 +514,6 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             PrintDialog aDlg(xController->getWindow(), xController);
             if (!aDlg.run())
             {
-                xController->getPrinter()->SetUsePrintDialogSetting(false);
                 xController->abortJob();
                 return false;
             }
@@ -565,6 +564,7 @@ bool Printer::ExecutePrintJob(const std::shared_ptr<PrinterController>& xControl
 
 void Printer::FinishPrintJob(const std::shared_ptr<PrinterController>& xController)
 {
+    xController->resetPrintArea();
     xController->resetPaperToLastConfigured();
     xController->jobFinished( xController->getJobState() );
 }
@@ -1013,6 +1013,14 @@ void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
     if (aCurSize != maDefaultPageSize)
         mxPrinter->SetPaperSizeUser(maDefaultPageSize);
     mxPrinter->Pop();
+}
+
+// reset the print area created by the Print Dialog to the page style's print area.
+void PrinterController::resetPrintArea()
+{
+    mpImplData->mxPrinter->ResetPrintArea(true);
+    mpImplData->mxPrinter->SetUsePrintDialogSetting(false);
+    getPageCount();
 }
 
 int PrinterController::getPageCountProtected() const
