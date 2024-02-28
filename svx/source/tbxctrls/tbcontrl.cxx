@@ -4147,12 +4147,19 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols(std::vector<OUString>& rList,
 {
     rCurrencyList.clear();
 
+    static const OUStringLiteral aTwoSpace(u"  ");
     const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount = rCurrencyTable.size();
 
     sal_uInt16 nStart = 1;
 
-    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) + " " );
+    LanguageTag eLangTag = Application::GetSettings().GetLanguageTag();
+    OUString aString(ApplyLreOrRleEmbedding(rCurrencyTable[0].GetBankSymbol()));
+    aString += aTwoSpace;
+    aString += ApplyLreOrRleEmbedding(rCurrencyTable[0].GetSymbol());
+    aString += aTwoSpace;
+    aString += ApplyLreOrRleEmbedding(SvtLanguageTable::GetLanguageString(eLangTag.getLanguageType()));
+    aString += aTwoSpace;
     aString += ApplyLreOrRleEmbedding(SvtLanguageTable::GetLanguageString(rCurrencyTable[0].GetLanguage()));
 
     rList.push_back( aString );
@@ -4166,9 +4173,7 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols(std::vector<OUString>& rList,
     }
 
     CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
-    aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
-
-    static const OUStringLiteral aTwoSpace(u"  ");
+    aCollator.loadDefaultCollator(eLangTag.getLocale(), 0);
 
     for( sal_uInt16 i = 1; i < nCount; ++i )
     {
