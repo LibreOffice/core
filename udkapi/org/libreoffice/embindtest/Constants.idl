@@ -1,0 +1,27 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module org { module libreoffice { module embindtest {
+
+constants Constants {
+    const boolean Boolean = True;
+    const byte Byte = -12;
+    const short Short = -1234;
+    const unsigned short UnsignedShort = 54321;
+    const long Long = -123456;
+    const unsigned long UnsignedLong = 3456789012;
+    const hyper Hyper = -123456789;
+    const unsigned hyper UnsignedHyper = 9876543210;
+    const float Float = -10.25;
+    const double Double = 100.5;
+};
+
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

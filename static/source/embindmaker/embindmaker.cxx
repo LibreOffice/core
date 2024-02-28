@@ -25,6 +25,7 @@
 #include <utility>
 #include <vector>
 
+#include <codemaker/commoncpp.hxx>
 #include <codemaker/global.hxx>
 #include <codemaker/typemanager.hxx>
 #include <osl/file.hxx>
@@ -169,17 +170,66 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
                 break;
             }
             case unoidl::Entity::SORT_ENUM_TYPE:
-                module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
+                module->mappings.emplace_back(id, "instance.uno_Type_" + jsName(name));
                 enums.emplace_back(name);
                 break;
             case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
-                module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
+                module->mappings.emplace_back(id, "instance.uno_Type_" + jsName(name));
                 structs.emplace_back(name);
                 break;
             case unoidl::Entity::SORT_INTERFACE_TYPE:
-                module->mappings.emplace_back(id, "uno_Type_" + jsName(name));
+                module->mappings.emplace_back(id, "instance.uno_Type_" + jsName(name));
                 interfaces.emplace_back(name);
                 break;
+            case unoidl::Entity::SORT_CONSTANT_GROUP:
+            {
+                auto const& members
+                    = static_cast<unoidl::ConstantGroupEntity*>(ent.get())->getMembers();
+                if (!members.empty())
+                {
+                    auto sub = std::make_shared<Module>();
+                    for (auto const& member : members)
+                    {
+                        OUString value;
+                        switch (member.value.type)
+                        {
+                            case unoidl::ConstantValue::TYPE_BOOLEAN:
+                                value = member.value.booleanValue ? u"true"_ustr : u"false"_ustr;
+                                break;
+                            case unoidl::ConstantValue::TYPE_BYTE:
+                                value = OUString::number(member.value.byteValue);
+                                break;
+                            case unoidl::ConstantValue::TYPE_SHORT:
+                                value = OUString::number(member.value.shortValue);
+                                break;
+                            case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
+                                value = OUString::number(member.value.unsignedShortValue);
+                                break;
+                            case unoidl::ConstantValue::TYPE_LONG:
+                                value = OUString::number(member.value.longValue);
+                                break;
+                            case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
+                                value = OUString::number(member.value.unsignedLongValue);
+                                break;
+                            case unoidl::ConstantValue::TYPE_HYPER:
+                                value = OUString::number(member.value.hyperValue) + "n";
+                                break;
+                            case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
+                                value = OUString::number(member.value.unsignedHyperValue) + "n";
+                                break;
+                            case unoidl::ConstantValue::TYPE_FLOAT:
+                                value = OUString::number(member.value.floatValue);
+                                break;
+                            case unoidl::ConstantValue::TYPE_DOUBLE:
+                                value = OUString::number(member.value.doubleValue);
+                                break;
+                        }
+                        sub->mappings.emplace_back(member.name, value);
+                    }
+                    module->modules[id] = sub;
+                }
+                break;
+            }
             case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
             {
                 auto const& ctors
@@ -191,7 +241,7 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
                     for (auto const& ctor : ctors)
                     {
                         sub->mappings.emplace_back(getServiceConstructorName(ctor),
-                                                   jsServiceConstructor(name, ctor));
+                                                   "instance." + jsServiceConstructor(name, ctor));
                     }
                     module->modules[id] = sub;
                     services.emplace_back(name);
@@ -199,7 +249,7 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
             }
             break;
             case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
-                module->mappings.emplace_back(id, jsSingleton(name));
+                module->mappings.emplace_back(id, "instance." + jsSingleton(name));
                 singletons.emplace_back(name);
                 break;
             default:
@@ -682,7 +732,7 @@ void writeJsMap(std::ostream& out, Module const& module, std::string const& pref
         {
             out << ",\n";
         }
-        out << prefix << "'" << id << "': instance." << to;
+        out << prefix << "'" << id << "': " << to;
         comma = true;
     }
     for (auto const & [ id, sub ] : module.modules)
