@@ -1014,8 +1014,9 @@ void PrintDialog::updatePageRange(sal_Int32 nPages)
         {
             aBuf.append("-" + OUString::number(nPages));
         }
-        maPController->setValue("PageRange", css::uno::Any(aBuf.makeStringAndClear()));
-        setupOptionalUI();
+        OUString sRange = aBuf.makeStringAndClear();
+        mxPageRangeEdit->set_text(sRange);
+        maPController->setValue("PageRange", Any(sRange));
     }
 }
 
@@ -2185,7 +2186,7 @@ IMPL_LINK( PrintDialog, UIOption_SpinModifyHdl, weld::SpinButton&, i_rBox, void 
 IMPL_LINK( PrintDialog, UIOption_EntryModifyHdl, weld::Entry&, i_rBox, void )
 {
     PropertyValue* pVal = getValueForWindow( &i_rBox );
-    if( pVal )
+    if( pVal && mxPageRangesRadioButton->get_active() )
     {
         makeEnabled( &i_rBox );
 

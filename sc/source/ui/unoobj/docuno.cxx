@@ -1570,22 +1570,20 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     return bRangeValid;
 }
 
- static void lcl_SetPrintPage(const uno::Sequence<beans::PropertyValue>& rOptions, Size& aSize,
-                             bool& bLandscape, bool& bUsed)
+static Printer* lcl_GetPrinter(const uno::Sequence<beans::PropertyValue>& rOptions)
 {
+    Printer* pPrinter = nullptr;
     OutputDevice* pDev = lcl_GetRenderDevice(rOptions);
     if (pDev && pDev->GetOutDevType() == OUTDEV_PRINTER)
-    {
-        Printer* pPrinter = dynamic_cast<Printer*>(pDev);
-        if (pPrinter && pPrinter->IsUsePrintDialogSetting())
-        {
-            bUsed = true;
-            bLandscape = (pPrinter->GetOrientation() == Orientation::Landscape);
-            aSize = pPrinter->GetPrintPageSize();
-            aSize.setWidth(o3tl::convert(aSize.Width(), o3tl::Length::mm100, o3tl::Length::twip));
-            aSize.setHeight(o3tl::convert(aSize.Height(), o3tl::Length::mm100, o3tl::Length::twip));
-        }
-    }
+        pPrinter = dynamic_cast<Printer*>(pDev);
+    return pPrinter;
+}
+
+static Size lcl_GetPrintPageSize(Size aSize)
+{
+    aSize.setWidth(o3tl::convert(aSize.Width(), o3tl::Length::mm100, o3tl::Length::twip));
+    aSize.setHeight(o3tl::convert(aSize.Height(), o3tl::Length::mm100, o3tl::Length::twip));
+    return aSize;
 }
 
 bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
@@ -1775,15 +1773,28 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
         return 0;
 
     Size aPrintPageSize;
+    bool bPrintAreaReset = false;
     bool bPrintPageLandscape = false;
     bool bUsePrintDialogSetting = false;
-    lcl_SetPrintPage(rOptions, aPrintPageSize, bPrintPageLandscape, bUsePrintDialogSetting);
+    Printer* pPrinter = lcl_GetPrinter(rOptions);
+    if (pPrinter)
+    {
+        if (pPrinter->IsUsePrintDialogSetting())
+        {
+            bUsePrintDialogSetting = true;
+            bPrintPageLandscape = (pPrinter->GetOrientation() == Orientation::Landscape);
+            aPrintPageSize = lcl_GetPrintPageSize(pPrinter->GetPrintPageSize());
+        }
+        else // reset the print area created by the Print Dialog to the page style's print area.
+            bPrintAreaReset = pPrinter->IsPrintAreaReset();
+    }
 
     //  The same ScPrintFuncCache object in pPrintFuncCache is used as long as
     //  the same selection is used (aStatus) and the document isn't changed
     //  (pPrintFuncCache is cleared in Notify handler)
 
-    if (!pPrintFuncCache || !pPrintFuncCache->IsSameSelection(aStatus) || bUsePrintDialogSetting)
+    if (!pPrintFuncCache || !pPrintFuncCache->IsSameSelection(aStatus) || bUsePrintDialogSetting
+        || bPrintAreaReset)
     {
         pPrintFuncCache.reset(new ScPrintFuncCache(pDocShell, aMark, aStatus, aPrintPageSize,
                                                    bPrintPageLandscape, bUsePrintDialogSetting));
@@ -2015,7 +2026,16 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         Size aPrintPageSize;
         bool bPrintPageLandscape = false;
         bool bUsePrintDialogSetting = false;
-        lcl_SetPrintPage(rOptions, aPrintPageSize, bPrintPageLandscape, bUsePrintDialogSetting);
+        Printer* pPrinter = lcl_GetPrinter(rOptions);
+        if (pPrinter)
+        {
+            if (pPrinter->IsUsePrintDialogSetting())
+            {
+                bUsePrintDialogSetting = true;
+                bPrintPageLandscape = (pPrinter->GetOrientation() == Orientation::Landscape);
+                aPrintPageSize = lcl_GetPrintPageSize(pPrinter->GetPrintPageSize());
+            }
+        }
 
         std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (m_pPrintState && m_pPrintState->nPrintTab == nTab)
@@ -2251,7 +2271,16 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     Size aPrintPageSize;
     bool bPrintPageLandscape = false;
     bool bUsePrintDialogSetting = false;
-    lcl_SetPrintPage(rOptions, aPrintPageSize, bPrintPageLandscape, bUsePrintDialogSetting);
+    Printer* pPrinter = lcl_GetPrinter(rOptions);
+    if (pPrinter)
+    {
+        if (pPrinter->IsUsePrintDialogSetting())
+        {
+            bUsePrintDialogSetting = true;
+            bPrintPageLandscape = (pPrinter->GetOrientation() == Orientation::Landscape);
+            aPrintPageSize = lcl_GetPrintPageSize(pPrinter->GetPrintPageSize());
+        }
+    }
 
     //  to increase performance, ScPrintState might be used here for subsequent
     //  pages of the same sheet
