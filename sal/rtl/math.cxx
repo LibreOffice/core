@@ -459,23 +459,6 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces, enum rtl_math_Roun
     if (fValue == 0.0)
         return fValue;
 
-    if (nDecPlaces == 0)
-    {
-        switch (eMode)
-        {
-            case rtl_math_RoundingMode_HalfEven:
-                if (const int oldMode = std::fegetround(); std::fesetround(FE_TONEAREST) == 0)
-                {
-                    fValue = std::nearbyint(fValue);
-                    std::fesetround(oldMode);
-                    return fValue;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     const double fOrigValue = fValue;
 
     // sign adjustment
@@ -568,27 +551,12 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces, enum rtl_math_Roun
             }
             break;
             case rtl_math_RoundingMode_HalfEven:
-#if defined FLT_ROUNDS
-                /*
-                   Use fast version. FLT_ROUNDS may be defined to a function by some compilers!
-
-                   DBL_EPSILON is the smallest fractional number which can be represented,
-                   its reciprocal is therefore the smallest number that cannot have a
-                   fractional part. Once you add this reciprocal to `x', its fractional part
-                   is stripped off. Simply subtracting the reciprocal back out returns `x'
-                   without its fractional component.
-                   Simple, clever, and elegant - thanks to Ross Cottrell, the original author,
-                   who placed it into public domain.
-
-                   volatile: prevent compiler from being too smart
-                */
-                if (FLT_ROUNDS == 1)
+                if (const int oldMode = std::fegetround(); std::fesetround(FE_TONEAREST) == 0)
                 {
-                    volatile double x = fValue + 1.0 / DBL_EPSILON;
-                    fValue = x - 1.0 / DBL_EPSILON;
+                    fValue = std::nearbyint(fValue);
+                    std::fesetround(oldMode);
                 }
                 else
-#endif // FLT_ROUNDS
                 {
                     double f = floor(fValue);
                     if ((fValue - f) != 0.5)
