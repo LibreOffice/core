@@ -93,6 +93,7 @@ private:
     bool                        mbNewJobSetup;
     bool                        mbSinglePrintJobs;
     bool                        mbUsePrintSetting;
+    bool                        mbResetPrintArea;
 
     VCL_DLLPRIVATE void         ImplInitData();
     VCL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
@@ -222,6 +223,8 @@ public:
     VCL_DLLPRIVATE void         SetPrinterOptions( const vcl::printer::Options& rOptions );
     const vcl::printer::Options& GetPrinterOptions() const { return( *mpPrinterOptions ); }
 
+    void                        ResetPrintArea(bool bReset) { mbResetPrintArea = bReset; }
+    bool                        IsPrintAreaReset() { return mbResetPrintArea; }
     void                        SetUsePrintDialogSetting(bool bUsed) { mbUsePrintSetting = bUsed; }
     bool                        IsUsePrintDialogSetting() { return mbUsePrintSetting; }
     void                        SetPrintPageSize(Size aPrintPageSize) { maPrintPageSize = aPrintPageSize; }
@@ -483,6 +486,7 @@ public:
                       bool              getPrinterModified() const;
     VCL_DLLPRIVATE    void              pushPropertiesToPrinter();
     VCL_DLLPRIVATE    void              resetPaperToLastConfigured();
+    VCL_DLLPRIVATE    void              resetPrintArea();
                       void              setJobState( css::view::PrintableState );
     VCL_DLLPRIVATE    void              setupPrinter( weld::Window* i_pDlgParent );
 
