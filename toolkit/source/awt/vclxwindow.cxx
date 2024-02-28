@@ -920,7 +920,6 @@ void VCLXWindow::dispose(  )
     {
         pWindow->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
         pWindow->SetWindowPeer( nullptr, nullptr );
-        pWindow->SetAccessible( nullptr );
 
         SetOutputDevice( nullptr );
         pWindow.disposeAndClear();
