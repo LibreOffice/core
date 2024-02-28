@@ -331,7 +331,6 @@ bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
     if( pNd->IsContentNode() && !dynamic_cast<SwUnoCursor*>(this) )
     {
         const SwContentFrame* pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
-        // ^ null
         if ( (SwCursorSelOverFlags::ChangePos & eFlags)   //allowed to change position if it's a bad one
             && pFrame && pFrame->isFrameAreaDefinitionValid()
             && !pFrame->getFrameArea().Height()     //a bad zero height position
