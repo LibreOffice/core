@@ -3164,7 +3164,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     lcl_RemoveTabs(aString);
     lcl_RemoveTabs(aPreAutoCorrectString);
 
-    if (aString.indexOf('\n') != -1)
+    if (bModified && aString.indexOf('\n') != -1)
     {
         // Cell contains line breaks, enable wrapping
         ScLineBreakCell aBreakItem(true);
