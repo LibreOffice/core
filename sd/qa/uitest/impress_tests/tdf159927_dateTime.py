@@ -9,7 +9,6 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-import time
 
 class tdf159927(UITestCase):
 
@@ -21,8 +20,5 @@ class tdf159927(UITestCase):
                 # Expected: the existing language of the date/time field: Finnish
                 # Actual without the fix: the user's locale as specified in tools - options.
                 self.assertEqual(get_state_as_dict(language_list)["SelectEntryText"], "Finnish")
-
-                #time.sleep(2)
-
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
