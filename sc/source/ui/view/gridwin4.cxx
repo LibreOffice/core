@@ -1544,8 +1544,14 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     nBottomRightTileCol++;
     nBottomRightTileRow++;
 
+    if (nTopLeftTileCol > rDoc.MaxCol())
+        nTopLeftTileCol = rDoc.MaxCol();
+
     if (nBottomRightTileCol > rDoc.MaxCol())
         nBottomRightTileCol = rDoc.MaxCol();
+
+    if (nTopLeftTileRow > MAXTILEDROW)
+        nTopLeftTileRow = MAXTILEDROW;
 
     if (nBottomRightTileRow > MAXTILEDROW)
         nBottomRightTileRow = MAXTILEDROW;
