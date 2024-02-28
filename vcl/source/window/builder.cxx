@@ -476,8 +476,9 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     }
     catch (const css::uno::Exception &rExcept)
     {
-        DBG_UNHANDLED_EXCEPTION("vcl.builder", "Unable to read .ui file");
+        TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << sUIDir << sUIFile);
         CrashReporter::addKeyValue("VclBuilderException", "Unable to read .ui file: " + rExcept.Message, CrashReporter::Write);
+        assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");
         throw;
     }
 
