@@ -137,8 +137,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 {
     maStatus.GetControlWord() =  EEControlBits::USECHARATTRIBS | EEControlBits::DOIDLEFORMAT |
                                 EEControlBits::PASTESPECIAL | EEControlBits::UNDOATTRIBS |
-                                EEControlBits::ALLOWBIGOBJS | EEControlBits::RTFSTYLESHEETS |
-                                EEControlBits::FORMAT100;
+                                EEControlBits::ALLOWBIGOBJS | EEControlBits::RTFSTYLESHEETS;
 
     maSelEngine.SetFunctionSet(&maSelFuncSet);
 

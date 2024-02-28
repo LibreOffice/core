@@ -48,14 +48,13 @@ enum class EEControlBits
     AUTOPAGESIZEX      = 0x00200000,  // Adjust paper width to Text
     AUTOPAGESIZEY      = 0x00400000,  // Adjust paper height to Text
     AUTOPAGESIZE       = (AUTOPAGESIZEX | AUTOPAGESIZEY),
-    FORMAT100          = 0x01000000,  // Always format to 100%
-    ULSPACESUMMATION   = 0x02000000,  // MS Compat: sum SA and SB, not maximum value
-    SINGLELINE         = 0x04000000,  // One line for all text
-    STACKED            = 0x08000000,  // Same as ONECHARPERLINE (used in impress)
+    ULSPACESUMMATION   = 0x01000000,  // MS Compat: sum SA and SB, not maximum value
+    SINGLELINE         = 0x02000000,  // One line for all text
+    STACKED            = 0x04000000,  // Same as ONECHARPERLINE (used in impress)
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x0fffffff> {};
+    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x07ffffff> {};
 }
 
 enum class EVControlBits

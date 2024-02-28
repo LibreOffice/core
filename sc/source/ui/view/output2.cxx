@@ -2270,8 +2270,6 @@ void ScOutputData::InitOutputEditEngine()
             nCtrl &= ~EEControlBits::MARKFIELDS;
         else
             nCtrl &= ~EEControlBits::MARKURLFIELDS;   // URLs not shaded for output
-        if ( eType == OUTTYPE_WINDOW && mpRefDevice == pFmtDevice )
-            nCtrl &= ~EEControlBits::FORMAT100;       // use the actual MapMode
         mxOutputEditEngine->SetControlWord( nCtrl );
         mxOutputEditEngine->EnableAutoColor( mbUseStyleColor );
     }

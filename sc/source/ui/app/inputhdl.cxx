@@ -906,21 +906,6 @@ void ScInputHandler::UpdateRefDevice()
         return;
 
     bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
-    bool bInPlace = pActiveViewSh && pActiveViewSh->GetViewFrame().GetFrame().IsInPlace();
-    EEControlBits nCtrl = mpEditEngine->GetControlWord();
-    bool bFormat100Percent = bTextWysiwyg || bInPlace;
-    // FORMAT100 is an odd thing only used by calc since #i51508# and possibly
-    // redundant at this stage by resolution independent text layout and
-    // rendering, at least for the kit case we want the text layout to be done
-    // accurately at the provided scaling of the reference device
-    if (comphelper::LibreOfficeKit::isActive())
-        bFormat100Percent = false;
-
-    if (bFormat100Percent)
-        nCtrl |= EEControlBits::FORMAT100;    // EditEngine default: always format for 100%
-    else
-        nCtrl &= ~EEControlBits::FORMAT100;   // when formatting for screen, use the actual MapMode
-    mpEditEngine->SetControlWord( nCtrl );
     if ( bTextWysiwyg && pActiveViewSh )
         mpEditEngine->SetRefDevice( pActiveViewSh->GetViewData().GetDocument().GetPrinter() );
     else

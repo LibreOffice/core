@@ -413,7 +413,6 @@ void ImpEditEngine::FormatDoc()
     bool bGrow = false;
 
     // Here already, so that not always in CreateLines...
-    bool bMapChanged = ImpCheckRefMapMode();
     sal_Int32 nParaCount = GetParaPortions().Count();
     o3tl::sorted_vector<sal_Int32> aRepaintParas;
     aRepaintParas.reserve(nParaCount);
@@ -506,35 +505,7 @@ void ImpEditEngine::FormatDoc()
     mbIsFormatting = false;
     mbFormatted = true;
 
-    if ( bMapChanged )
-        GetRefDevice()->Pop();
-
     CallStatusHdl();    // If Modified...
-}
-
-bool ImpEditEngine::ImpCheckRefMapMode()
-{
-    bool bChange = false;
-
-    if ( maStatus.DoFormat100() )
-    {
-        MapMode aMapMode( GetRefDevice()->GetMapMode() );
-        if ( aMapMode.GetScaleX().GetNumerator() != aMapMode.GetScaleX().GetDenominator() )
-            bChange = true;
-        else if ( aMapMode.GetScaleY().GetNumerator() != aMapMode.GetScaleY().GetDenominator() )
-            bChange = true;
-
-        if ( bChange )
-        {
-            Fraction Scale1( 1, 1 );
-            aMapMode.SetScaleX( Scale1 );
-            aMapMode.SetScaleY( Scale1 );
-            GetRefDevice()->Push();
-            GetRefDevice()->SetMapMode( aMapMode );
-        }
-    }
-
-    return bChange;
 }
 
 void ImpEditEngine::CheckAutoPageSize()
@@ -704,9 +675,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         maStatus.TurnOffFlags(EEControlBits::STACKED);
 
     // Initialization...
-
-    // Always format for 100%:
-    bool bMapChanged = ImpCheckRefMapMode();
 
     if (rParaPortion.GetLines().Count() == 0)
     {
@@ -1815,9 +1783,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         CreateAndInsertEmptyLine(rParaPortion);
 
     bool bHeightChanged = FinishCreateLines(rParaPortion);
-
-    if ( bMapChanged )
-        GetRefDevice()->Pop();
 
     GetRefDevice()->Pop();
 

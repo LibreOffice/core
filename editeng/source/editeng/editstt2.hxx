@@ -88,9 +88,6 @@ public:
     bool    DoAutoComplete() const
                 { return bool( nControlBits & EEControlBits::AUTOCOMPLETE ); }
 
-    bool    DoFormat100() const
-                { return bool( nControlBits & EEControlBits::FORMAT100 ); }
-
     bool    ULSpaceSummation() const
                 { return bool( nControlBits & EEControlBits::ULSPACESUMMATION ); }
 

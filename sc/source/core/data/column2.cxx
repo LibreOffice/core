@@ -393,12 +393,6 @@ tools::Long ScColumn::GetNeededSize(
 
         const bool bPrevUpdateLayout = pEngine->SetUpdateLayout( false );
         bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
-        EEControlBits nCtrl = pEngine->GetControlWord();
-        if ( bTextWysiwyg )
-            nCtrl |= EEControlBits::FORMAT100;
-        else
-            nCtrl &= ~EEControlBits::FORMAT100;
-        pEngine->SetControlWord( nCtrl );
         MapMode aOld = pDev->GetMapMode();
         pDev->SetMapMode( aHMMMode );
         pEngine->SetRefDevice( pDev );
@@ -554,20 +548,6 @@ tools::Long ScColumn::GetNeededSize(
             nValue = bInPrintTwips ?
                     o3tl::toTwips(aTextSize, o3tl::Length::mm100) :
                     pDev->LogicToPixel(Size(0, aTextSize), aHMMMode).Height();
-
-            // With non-100% zoom and several lines or paragraphs, don't shrink below the result with FORMAT100 set
-            if ( !bTextWysiwyg && ( rZoomY.GetNumerator() != 1 || rZoomY.GetDenominator() != 1 ) &&
-                 ( pEngine->GetParagraphCount() > 1 || ( bBreak && pEngine->GetLineCount(0) > 1 ) ) )
-            {
-                pEngine->SetControlWord( nCtrl | EEControlBits::FORMAT100 );
-                pEngine->QuickFormatDoc( true );
-                aTextSize = pEngine->GetTextHeight();
-                tools::Long nSecondValue = bInPrintTwips ?
-                        o3tl::toTwips(aTextSize, o3tl::Length::mm100) :
-                        pDev->LogicToPixel(Size(0, aTextSize), aHMMMode).Height();
-                if ( nSecondValue > nValue )
-                    nValue = nSecondValue;
-            }
         }
 
         if ( nValue && bAddMargin )
