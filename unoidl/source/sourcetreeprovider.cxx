@@ -195,8 +195,7 @@ rtl::Reference<Entity> Cursor::getNext(OUString * name) {
                     }
                     auto ent = data.entities.end();
                     for (auto j = data.entities.begin(); j != data.entities.end(); ++j) {
-                        if (j->second.kind == SourceProviderEntity::KIND_EXTERNAL
-                            || j->second.kind == SourceProviderEntity::KIND_MODULE)
+                        if (j->second.kind != SourceProviderEntity::KIND_LOCAL)
                         {
                             continue;
                         }
@@ -207,8 +206,10 @@ rtl::Reference<Entity> Cursor::getNext(OUString * name) {
                         ent = j;
                     }
                     if (ent == data.entities.end()) {
-                        throw FileFormatException(
-                            stat.getFileURL(), "source file defines no entity");
+                        SAL_INFO(
+                            "unoidl",
+                            "source file <" << stat.getFileURL() << "> defines no entity");
+                        continue;
                     }
                     //TODO: Check that the entity's name matches the suffix of stat.getFileURL():
                     *name = ent->first.copy(ent->first.lastIndexOf('.') + 1);
