@@ -1694,6 +1694,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
                     batch->commit();
                 }
+#else
+                (void) bIsInfobarShown;
 #endif
 
                 break;
