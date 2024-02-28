@@ -41,6 +41,7 @@ cat <<\EOF >"${1?}"org.libreoffice.LibreOffice.appdata.xml
   you can easily share documents with users of other popular office suites
   without worrying about compatibility.</p>
  </description>
+ <launchable type="desktop-id">org.libreoffice.LibreOffice.desktop</launchable>
  <url type="homepage">http://www.libreoffice.org/discover/libreoffice/</url>
  <url type="bugtracker">https://bugs.documentfoundation.org/</url>
  <url type="donation">https://donate.libreoffice.org/</url>
