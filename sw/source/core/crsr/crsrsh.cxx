@@ -1994,22 +1994,27 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             {
                 pTableFrame = nullptr;
 
-                SwMoveFnCollection const & fnPosSect = *pPos <  *pITmpCursor->GetMark()
-                                            ? fnSectionStart
-                                            : fnSectionEnd;
-
                 // then only select inside the Box
                 if( m_pTableCursor )
                 {
+                    SwMoveFnCollection const & fnPosSect = *pPos <  *pITmpCursor->GetMark()
+                                                ? fnSectionStart
+                                                : fnSectionEnd;
+
                     m_pCurrentCursor->SetMark();
                     *m_pCurrentCursor->GetMark() = *m_pTableCursor->GetMark();
                     m_pCurrentCursor->GetMkPos() = m_pTableCursor->GetMkPos();
                     m_pTableCursor->DeleteMark();
                     m_pTableCursor->SwSelPaintRects::Hide();
-                }
 
-                *m_pCurrentCursor->GetPoint() = *m_pCurrentCursor->GetMark();
-                GoCurrSection( *m_pCurrentCursor, fnPosSect );
+                    *m_pCurrentCursor->GetPoint() = *m_pCurrentCursor->GetMark();
+                    GoCurrSection( *m_pCurrentCursor, fnPosSect );
+                }
+                else
+                {
+                    eFlags &= SwCursorShell::UPDOWN;
+                    *m_pCurrentCursor->GetPoint() = *m_pCurrentCursor->GetMark();
+                }
             }
         }
 
