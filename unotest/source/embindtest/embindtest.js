@@ -247,6 +247,26 @@ Module.addOnPostRun(function() {
         console.assert(test.isSequenceStruct(v));
         v.delete();
     }
+    console.assert(uno.org.libreoffice.embindtest.Constants.Boolean === true);
+    console.assert(test.isBoolean(uno.org.libreoffice.embindtest.Constants.Boolean));
+    console.assert(uno.org.libreoffice.embindtest.Constants.Byte === -12);
+    console.assert(test.isByte(uno.org.libreoffice.embindtest.Constants.Byte));
+    console.assert(uno.org.libreoffice.embindtest.Constants.Short === -1234);
+    console.assert(test.isShort(uno.org.libreoffice.embindtest.Constants.Short));
+    console.assert(uno.org.libreoffice.embindtest.Constants.UnsignedShort === 54321);
+    console.assert(test.isUnsignedShort(uno.org.libreoffice.embindtest.Constants.UnsignedShort));
+    console.assert(uno.org.libreoffice.embindtest.Constants.Long === -123456);
+    console.assert(test.isLong(uno.org.libreoffice.embindtest.Constants.Long));
+    console.assert(uno.org.libreoffice.embindtest.Constants.UnsignedLong === 3456789012);
+    console.assert(test.isUnsignedLong(uno.org.libreoffice.embindtest.Constants.UnsignedLong));
+    console.assert(uno.org.libreoffice.embindtest.Constants.Hyper === -123456789n);
+    console.assert(test.isHyper(uno.org.libreoffice.embindtest.Constants.Hyper));
+    console.assert(uno.org.libreoffice.embindtest.Constants.UnsignedHyper === 9876543210n);
+    console.assert(test.isUnsignedHyper(uno.org.libreoffice.embindtest.Constants.UnsignedHyper));
+    console.assert(uno.org.libreoffice.embindtest.Constants.Float === -10.25);
+    console.assert(test.isFloat(uno.org.libreoffice.embindtest.Constants.Float));
+    console.assert(uno.org.libreoffice.embindtest.Constants.Double === 100.5);
+    console.assert(test.isDouble(uno.org.libreoffice.embindtest.Constants.Double));
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
