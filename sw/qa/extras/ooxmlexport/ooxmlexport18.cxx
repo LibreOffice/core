@@ -1032,6 +1032,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocB, "tdf159158_zOrder_behi
         CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind, "tdf159158_zOrder_headerBehind.odt")
+{
+    // given a blue star (not marked as behind text) anchored in the header
+    // and an overlapping yellow rectangle anchored in the body text.
+    // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    // I don't know why the star is the lowest order in ODT import (maybe header weirdness),
+    // but it certainly needs to be the lowest on docx round-trip (also for header weirdness)
+    CPPUNIT_ASSERT_EQUAL(OUString("StarInHeader"), getProperty<OUString>(zOrder0, "Name"));
+    CPPUNIT_ASSERT_EQUAL(OUString("RectangleInBody"), getProperty<OUString>(zOrder1,"Name"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
 {
     // Without the accompanying fix in place, this test would have crashed,

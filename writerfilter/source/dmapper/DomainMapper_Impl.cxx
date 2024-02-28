@@ -4763,8 +4763,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     if (rProp.Name == "VML-Z-ORDER")
                     {
                         GraphicZOrderHelper& rZOrderHelper = m_rDMapper.graphicZOrderHelper();
-                        sal_Int32 zOrder(0);
+                        sal_Int64 zOrder(0);
                         rProp.Value >>= zOrder;
+                        GraphicZOrderHelper::adjustRelativeHeight(zOrder, /*IsZIndex=*/true,
+                                                                  zOrder < 0, IsInHeaderFooter());
                         xShapePropertySet->setPropertyValue("ZOrder",
                             uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
                         rZOrderHelper.addItem(xShapePropertySet, zOrder);
@@ -4808,8 +4810,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     if (rProp.Name == "VML-Z-ORDER")
                     {
                         GraphicZOrderHelper& rZOrderHelper = m_rDMapper.graphicZOrderHelper();
-                        sal_Int32 zOrder(0);
+                        sal_Int64 zOrder(0);
                         rProp.Value >>= zOrder;
+                        GraphicZOrderHelper::adjustRelativeHeight(zOrder, /*IsZIndex=*/true,
+                                                                  zOrder < 0, IsInHeaderFooter());
                         xShapePropertySet->setPropertyValue("ZOrder",
                             uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
                         rZOrderHelper.addItem(xShapePropertySet, zOrder);

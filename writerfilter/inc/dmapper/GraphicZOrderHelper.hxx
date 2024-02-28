@@ -17,11 +17,15 @@ class GraphicZOrderHelper
 {
 public:
     void addItem(css::uno::Reference<css::beans::XPropertySet> const& props,
-                 sal_Int32 relativeHeight);
-    sal_Int32 findZOrder(sal_Int32 relativeHeight, bool bOldStyle = false);
+                 sal_Int64 relativeHeight);
+
+    // must run adjustRelativeHeight before findZOrder - to set zOrder priorities
+    static void adjustRelativeHeight(sal_Int64& rRelativeHeight, bool bIsZIndex, bool bIsBehindText,
+                                     bool bIsInHeader);
+    sal_Int32 findZOrder(sal_Int64 relativeHeight, bool bOldStyle = false);
 
 private:
-    using Items = std::map<sal_Int32, css::uno::Reference<css::beans::XPropertySet>>;
+    using Items = std::map<sal_Int64, css::uno::Reference<css::beans::XPropertySet>>;
     Items m_items;
 };
 

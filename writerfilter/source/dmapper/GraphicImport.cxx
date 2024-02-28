@@ -210,7 +210,7 @@ public:
     sal_Int32 m_nTopPosition;
 
     bool      m_bUseSimplePos;
-    std::optional<sal_Int32> m_oZOrder;
+    std::optional<sal_Int64> m_oZOrder;
 
     sal_Int16 m_nHoriOrient;
     sal_Int16 m_nHoriRelation;
@@ -390,36 +390,19 @@ public:
 
     void applyZOrder(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
     {
-        std::optional<sal_Int32> oZOrder = m_oZOrder;
+        std::optional<sal_Int64> oZOrder = m_oZOrder;
         if (m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE
             && !m_rDomainMapper.IsInShape())
         {
-            oZOrder = SAL_MIN_INT32;
+            oZOrder = SAL_MIN_INT64;
         }
         else if (!oZOrder)
             return;
         else
         {
-            // tdf#120760 Send objects with behinddoc=true to the back.
-
-            // zOrder can be defined either by z-index or by relativeHeight.
-            // z-index indicates background with a negative value,
-            // while relativeHeight indicates background with BehindDoc = true.
-            //
-            // In general, all z-index-defined shapes appear on top of relativeHeight graphics
-            // regardless of the value.
-            // So we have to try to put all relativeHeights as far back as possible,
-            // and this has already partially happened because they were already made to be negative
-            // but now the behindDoc relativeHeights need to be forced to the very back.
-            //
-            // Subtract even more so behindDoc relativeHeights will be behind
-            // foreground relativeHeights and also behind all of the negative z-indexes
-            // (especially needed for IsInHeaderFooter, as EVERYTHING is forced to the background).
-            //
-            // relativeHeight already removed 0x1E00 0000, so can subtract another 0x6200 0000
             const bool bBehindText = m_bBehindDoc && !m_bOpaque;
-            if (bBehindText)
-                oZOrder = *oZOrder - 0x62000000;
+            GraphicZOrderHelper::adjustRelativeHeight(*oZOrder, /*IsZIndex=*/false, bBehindText,
+                                                      m_rDomainMapper.IsInHeaderFooter());
         }
 
         // TODO: it is possible that RTF has been wrong all along as well. Always true here?

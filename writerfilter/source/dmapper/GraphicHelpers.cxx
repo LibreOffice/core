@@ -270,9 +270,63 @@ text::WrapTextMode WrapHandler::getWrapMode( ) const
 }
 
 
-void GraphicZOrderHelper::addItem(uno::Reference<beans::XPropertySet> const& props, sal_Int32 const relativeHeight)
+void GraphicZOrderHelper::addItem(uno::Reference<beans::XPropertySet> const& props,
+                                  sal_Int64 const relativeHeight)
 {
     m_items[ relativeHeight ] = props;
+}
+
+void GraphicZOrderHelper::adjustRelativeHeight(sal_Int64& rRelativeHeight, bool bIsZIndex,
+                                               bool bIsBehindText, bool bIsInHeader)
+{
+    // zOrder can be defined either by z-index (VML) or by relativeHeight (DML).
+    // z-index indicates background with a negative value,
+    // while relativeHeight indicates background with behindDoc = true.
+    //
+    // In general, all z-index-defined shapes appear on top of relativeHeight graphics
+    // regardless of the value.
+
+    // priority order
+    // above text:  positive sal_Int32 z-index (opaque/in front of text)
+    //              relativeHeight (represented here as a negative sal_Int32, but still opaque)
+    // behind body: negative sal_Int32 z-index (!opaque/in the background)
+    //              behindText relativeHeight
+    //              (in header) positive z-index
+    //              (in header) relativeHeight
+    //              (in header) negative z-index
+    //              (in header) behindText
+
+    const sal_Int64 nMaxUnsignedInt32 = SAL_MAX_UINT32;
+    if (!bIsInHeader)
+    {
+        if (bIsZIndex)
+        {
+            // this number is already fine
+            // positive values are the only positive values coming into zOrder,
+            // and negative values will be !opaque (below text)
+        }
+        else if (!bIsBehindText)
+        {
+            assert (rRelativeHeight < 0);
+            // this number is already fine - will be above text, but relativeHeight is negative
+        }
+        else
+        {
+            // reduce to negative level 1 to force below a negative z-index
+            rRelativeHeight -= nMaxUnsignedInt32;
+        }
+    }
+    else // bIsInHeader
+    {
+        if (bIsZIndex && !bIsBehindText)
+            rRelativeHeight -= nMaxUnsignedInt32 * 2; // reduce to negative level 2
+        else if (!bIsBehindText)
+            rRelativeHeight -= nMaxUnsignedInt32 * 3; // reduce to negative level 3
+        else if (bIsZIndex)
+            rRelativeHeight -= nMaxUnsignedInt32 * 4; // reduce to negative level 4
+        else
+            rRelativeHeight -= nMaxUnsignedInt32 * 5; // reduce to negative level 5
+    }
 }
 
 // The relativeHeight value in .docx is an arbitrary number, where only the relative ordering matters.
@@ -282,7 +336,7 @@ void GraphicZOrderHelper::addItem(uno::Reference<beans::XPropertySet> const& pro
 // The key to this function is that later on, when setPropertyValue("ZOrder", <returned sal_Int32>),
 // SW also automatically increments ALL zOrders >= the one returned for this fly.
 // Thus, getProperty PROP_Z_ORDER for relativeHeight "x" can return different values for itemZOrder.
-sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldStyle )
+sal_Int32 GraphicZOrderHelper::findZOrder(sal_Int64 relativeHeight, bool bOldStyle)
 {
     // std::map is iterated sorted by key
     auto it = std::find_if(m_items.cbegin(), m_items.cend(),
