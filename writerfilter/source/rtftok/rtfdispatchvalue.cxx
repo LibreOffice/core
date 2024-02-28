@@ -135,6 +135,9 @@ bool RTFDocumentImpl::dispatchTableSprmValue(RTFKeyword nKeyword, int nParam)
             nSprm = NS_ooxml::LN_CT_Style_next;
             pIntValue = new RTFValue(getStyleName(nParam));
             break;
+        case RTFKeyword::LEVELLEGAL:
+            nSprm = NS_ooxml::LN_CT_Lvl_isLgl;
+            break;
         default:
             break;
     }
