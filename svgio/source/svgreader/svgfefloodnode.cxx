@@ -41,6 +41,9 @@ SvgFeFloodNode::~SvgFeFloodNode() {}
 
 void SvgFeFloodNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
+    // call parent
+    SvgFilterNode::parseAttribute(aSVGToken, aContent);
+
     // parse own
     switch (aSVGToken)
     {

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unordered_map>
 #include <svgfilternode.hxx>
 #include <svgfecolormatrixnode.hxx>
 #include <svgfedropshadownode.hxx>
@@ -24,6 +25,9 @@
 #include <svgfeimagenode.hxx>
 #include <svgfegaussianblurnode.hxx>
 #include <svgfeoffsetnode.hxx>
+
+typedef std::unordered_map<OUString, const drawinglayer::primitive2d::Primitive2DContainer*>
+    IdGraphicSourceMapper;
 
 namespace svgio::svgreader
 {
@@ -34,6 +38,30 @@ SvgFilterNode::SvgFilterNode(SVGToken aType, SvgDocument& rDocument, SvgNode* pP
 
 SvgFilterNode::~SvgFilterNode() {}
 
+void SvgFilterNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
+{
+    // call parent
+    SvgNode::parseAttribute(aSVGToken, aContent);
+
+    switch (aSVGToken)
+    {
+        case SVGToken::In:
+        {
+            maIn = aContent.trim();
+            break;
+        }
+        case SVGToken::Result:
+        {
+            maResult = aContent.trim();
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+}
+
 void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const
 {
     if (rTarget.empty())
@@ -42,12 +70,36 @@ void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarg
     const auto& rChildren = getChildren();
     const sal_uInt32 nCount(rChildren.size());
 
+    IdGraphicSourceMapper aIdGraphicSourceMapperList;
+    drawinglayer::primitive2d::Primitive2DContainer aNewTarget = rTarget;
+    aIdGraphicSourceMapperList.emplace("SourceGraphic", &aNewTarget);
+    //TODO: Add SourceAlpha, BackgroundImage, BackgroundAlpha, FillPaint, StrokePaint ??
+
     // apply children's filters
     for (sal_uInt32 a(0); a < nCount; a++)
     {
         SvgFilterNode* pFilterNode = dynamic_cast<SvgFilterNode*>(rChildren[a].get());
         if (pFilterNode)
+        {
+            if (!pFilterNode->getIn().isEmpty())
+            {
+                const IdGraphicSourceMapper::const_iterator aResult(
+                    aIdGraphicSourceMapperList.find(pFilterNode->getIn()));
+
+                if (aResult != aIdGraphicSourceMapperList.end())
+                {
+                    rTarget = *aResult->second;
+                }
+            }
+
             pFilterNode->apply(rTarget);
+
+            if (!pFilterNode->getResult().isEmpty())
+            {
+                aNewTarget = rTarget;
+                aIdGraphicSourceMapperList.emplace(pFilterNode->getResult(), &aNewTarget);
+            }
+        }
     }
 }
 

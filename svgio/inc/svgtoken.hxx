@@ -42,6 +42,7 @@ namespace svgio::svgreader
             Version,
             Id,
             In,
+            Result,
             Rx,
             Ry,
             Points,

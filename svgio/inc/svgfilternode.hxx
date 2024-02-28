@@ -27,11 +27,20 @@ namespace svgio::svgreader
 {
 class SvgFilterNode : public SvgNode
 {
+private:
+    OUString maIn;
+    OUString maResult;
+
 public:
     SvgFilterNode(SVGToken aType, SvgDocument& rDocument, SvgNode* pParent);
     virtual ~SvgFilterNode() override;
 
+    virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
+
     virtual void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const;
+
+    const OUString& getIn() const { return maIn; }
+    const OUString& getResult() const { return maResult; }
 };
 
 } // end of namespace svgio::svgreader

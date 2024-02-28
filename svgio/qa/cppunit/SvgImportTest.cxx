@@ -212,6 +212,53 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
     assertXPath(pDocument, "/primitive2D/transform/softedge"_ostr, "radius"_ostr, "5");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInFilterAttribute)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/inFilterAttribute.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, the feGaussianBlur and feColorMatrix filter would have been applied
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy11"_ostr, "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy12"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy13"_ostr, "40");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy21"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy22"_ostr, "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy23"_ostr, "40");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy31"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy32"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy33"_ostr, "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor"_ostr, "color"_ostr, "#ffffff");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testResultFilterAttribute)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/resultFilterAttribute.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, the feColorMatrix filter would have been applied
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy11"_ostr, "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy12"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy13"_ostr, "40");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy21"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy22"_ostr, "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy23"_ostr, "40");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy31"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy32"_ostr, "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform"_ostr, "xy33"_ostr, "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform/softedge"_ostr, "radius"_ostr, "2");
+    assertXPath(pDocument, "/primitive2D/transform/transform/softedge/polypolygoncolor"_ostr, "color"_ostr, "#ffffff");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeOffset)
 {
     Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterFeOffset.svg");

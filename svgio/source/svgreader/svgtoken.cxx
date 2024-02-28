@@ -41,6 +41,7 @@ constexpr auto aSVGTokenMap = frozen::make_unordered_map<std::u16string_view, SV
     { u"version", SVGToken::Version },
     { u"id", SVGToken::Id },
     { u"in", SVGToken::In },
+    { u"result", SVGToken::Result },
     { u"rx", SVGToken::Rx },
     { u"ry", SVGToken::Ry },
     { u"points", SVGToken::Points },
