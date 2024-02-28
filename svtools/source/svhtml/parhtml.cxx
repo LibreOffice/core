@@ -2073,14 +2073,16 @@ bool HTMLParser::ParseMetaOptionsImpl(
                 if (comphelper::string::getTokenCount(aContent, ';') == 2)
                 {
                     sal_Int32 nIdx{ 0 };
-                    Date aDate(o3tl::toInt32(o3tl::getToken(aContent, 0, ';', nIdx)));
-                    auto nTime = o3tl::toInt64(o3tl::getToken(aContent, 0, ';', nIdx));
-                    if (nTime < 0)
-                        nTime = o3tl::saturating_toggle_sign(nTime);
-                    tools::Time aTime(nTime);
-                    DateTime aDateTime(aDate, aTime);
-                    uDT = aDateTime.GetUNODateTime();
-                    valid = true;
+                    sal_Int32 nDate = o3tl::toInt32(o3tl::getToken(aContent, 0, ';', nIdx));
+                    sal_Int64 nTime = o3tl::toInt64(o3tl::getToken(aContent, 0, ';', nIdx));
+                    valid = nDate != std::numeric_limits<sal_Int32>::min() &&
+                            nTime != std::numeric_limits<sal_Int64>::min();
+                    if (valid)
+                    {
+                        Date aDate(nDate);
+                        tools::Time aTime(nTime);
+                        uDT = DateTime(aDate, aTime).GetUNODateTime();
+                    }
                 }
                 else if (utl::ISO8601parseDateTime(aContent, uDT))
                     valid = true;
