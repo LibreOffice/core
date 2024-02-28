@@ -1047,6 +1047,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind, "tdf159158_zOrder_he
     CPPUNIT_ASSERT_EQUAL(OUString("RectangleInBody"), getProperty<OUString>(zOrder1,"Name"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind2, "tdf159158_zOrder_headerBehind2.docx")
+{
+    // given a logo (marked as behind text) anchored in the header
+    // and an overlapping blue rectangle anchored in the body text.
+    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, "ZOrder")); // lower
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, "ZOrder")); // higher
+    CPPUNIT_ASSERT_EQUAL(OUString("HeaderImage"),
+                         getProperty<OUString>(zOrder0, "LinkDisplayName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("BodyBlueRectangle"),
+                         getProperty<OUString>(zOrder1,"LinkDisplayName"));
+    // The logo should not be opaque since it is in the header.
+    CPPUNIT_ASSERT(!getProperty<bool>(zOrder0, "Opaque")); // logo should be invisible
+    CPPUNIT_ASSERT(!getProperty<bool>(zOrder1, "Opaque"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
 {
     // Without the accompanying fix in place, this test would have crashed,
