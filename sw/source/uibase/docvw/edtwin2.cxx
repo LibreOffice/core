@@ -114,6 +114,7 @@ static OString getTooltipPayload(const OUString& tooltip, const SwRect& rect)
 {
     tools::JsonWriter writer;
     {
+        writer.put("type", "generaltooltip");
         writer.put("text", tooltip);
         writer.put("rectangle", rect.SVRect().toString());
     }
