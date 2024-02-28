@@ -76,6 +76,16 @@ public:
 
     sal_Bool SAL_CALL isString(OUString const& value) override { return value == u"hä"; }
 
+    org::libreoffice::embindtest::Enum SAL_CALL getEnum() override
+    {
+        return org::libreoffice::embindtest::Enum_E_2;
+    }
+
+    sal_Bool SAL_CALL isEnum(org::libreoffice::embindtest::Enum value) override
+    {
+        return value == org::libreoffice::embindtest::Enum_E_2;
+    }
+
     org::libreoffice::embindtest::Struct SAL_CALL getStruct() override
     {
         return { -123456, 100.5, u"hä"_ustr };
@@ -215,6 +225,22 @@ public:
                == css::uno::Sequence<css::uno::Sequence<OUString>>{ {},
                                                                     { u"foo"_ustr, u"barr"_ustr },
                                                                     { u"baz"_ustr } };
+    }
+
+    css::uno::Sequence<org::libreoffice::embindtest::Enum> SAL_CALL getSequenceEnum() override
+    {
+        return { org::libreoffice::embindtest::Enum_E_2, org::libreoffice::embindtest::Enum_E3,
+                 org::libreoffice::embindtest::Enum_E_10 };
+    }
+
+    sal_Bool SAL_CALL
+    isSequenceEnum(css::uno::Sequence<org::libreoffice::embindtest::Enum> const& value) override
+    {
+        return value
+               == css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                      org::libreoffice::embindtest::Enum_E_2, org::libreoffice::embindtest::Enum_E3,
+                      org::libreoffice::embindtest::Enum_E_10
+                  };
     }
 
     css::uno::Sequence<org::libreoffice::embindtest::Struct> SAL_CALL getSequenceStruct() override
