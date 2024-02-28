@@ -951,26 +951,20 @@ Reference< XShape > const & Shape::createAndInsert(
 
     // Look for 3D. Its z-rotation and extrusion color become shape properties. Do it early as
     // graphics might use 3D too and in that case should be imported as custom shape as well.
+    // FixMe. tdf#159515. We currently do not use extrusion, if an image has a 3D-scene.
+    bool bBlockExtrusion = aServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
+                           mp3DPropertiesPtr->mnPreset.has_value();
     double fShapeRotateInclCamera = 0.0; // unit rad; same orientation as shape property RotateAngle
     Color aExtrusionColor;
     Scene3DHelper aScene3DHelper;
     bool bHas3DEffect = aScene3DHelper.setExtrusionProperties(
         mp3DPropertiesPtr, mnRotation, getCustomShapeProperties()->getExtrusionPropertyMap(),
-        fShapeRotateInclCamera, aExtrusionColor);
-    // Currently the other places use unit 1/60000deg and MSO shape rotate orientation, thus convert.
+        fShapeRotateInclCamera, aExtrusionColor, bBlockExtrusion);
+    // Currently the other places use unit 1/60000deg and MSO shape rotate orientation.
     sal_Int32 nShapeRotateInclCamera = -basegfx::rad2deg<60000>(fShapeRotateInclCamera);
 
     bool bIs3DGraphic = aServiceName == "com.sun.star.drawing.GraphicObjectShape" && bHas3DEffect;
-    if (bIs3DGraphic)
-    {
-        // The parts which use bIs3DGraphic are commented out for now (3x) because the export does
-        // not re-create the image, and because the rendering of images with transparent parts is
-        // broken in extrusion mode (tdf#159515). In principle it works that way to get 3D-effects
-        // on images.
-        SAL_INFO("oox.drawingml",
-        "Shape::createAndInsert: image with 3D effect conversion disabled");
-    }
-    // bIsCustomShape |= bIs3DGraphic;
+    bIsCustomShape |= bIs3DGraphic;
 
     // The extrusion color does not belong to the extrusion properties but is secondary color in
     // the style of the shape, FillColor2 in API.
@@ -983,11 +977,11 @@ Reference< XShape > const & Shape::createAndInsert(
     // ToDo: MS Office 'automatic' color uses line color if it exists, LO uses fill color. We might
     // need to change color here in case of 'automatic'.
 
-    // if (bIsCroppedGraphic || bIs3DGraphic), disabled for now, see comment #965
-    if (bIsCroppedGraphic)
+    if (bIsCroppedGraphic || bIs3DGraphic)
     {
         aServiceName = "com.sun.star.drawing.CustomShape";
         mpGraphicPropertiesPtr->mbIsCustomShape = true;
+        mpGraphicPropertiesPtr->mbIsExtruded = bIs3DGraphic;
     }
     bool bUseRotationTransform = ( !mbWps ||
             aServiceName == "com.sun.star.drawing.LineShape" ||
@@ -1428,8 +1422,7 @@ Reference< XShape > const & Shape::createAndInsert(
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
         if (getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill)
             getFillProperties().assignUsed(aFillProperties);
-        // if(!bIsCroppedGraphic && !bIs3DGraphic), disabled for now, see comment #960
-        if (!bIsCroppedGraphic)
+        if(!bIsCroppedGraphic && !bIs3DGraphic)
             aFillProperties.pushToPropMap(aShapeProps, rGraphicHelper, mnRotation, nFillPhClr,
                                           css::awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height),
                                           nFillPhClrTheme, mbFlipH, mbFlipV, bIsCustomShape);

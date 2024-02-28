@@ -32,12 +32,15 @@ public:
             be created. The extrusion color is not handled as extrusion property but as secondary
             color in the style of the shape. If no 3D exist or the camera is invalid, the parameter
             value is unchanged.
+        @param [in] This optional parameter bBlockExtrusion can be removed when tdf#159912 is
+            fixed. For details see the bugreport.
         @return Returns true if extrusion properties are generated. Returns false if there is no 3D
             or if rendering without 3D is currently better. rPropertyMap is unchanged in such case.
     */
     bool setExtrusionProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
                                 const sal_Int32& rnMSOShapeRotation, oox::PropertyMap& rPropertyMap,
-                                double& rRotZ, oox::drawingml::Color& rExtrusionColor);
+                                double& rRotZ, oox::drawingml::Color& rExtrusionColor,
+                                const bool bBlockExtrusion = false);
 
 private:
     /** Calculates angles suitable for API from OOXML scene3d angles.

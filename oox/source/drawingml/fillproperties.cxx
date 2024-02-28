@@ -855,7 +855,8 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
 
             // It is a bitmap filled and rotated graphic.
             // When custom shape is rotated, bitmap have to be rotated too.
-            if(rPropMap.hasProperty(PROP_RotateAngle))
+            // Only in extruded mode the bitmap is transformed together with the shape
+            if(rPropMap.hasProperty(PROP_RotateAngle) && !mbIsExtruded)
             {
                 tools::Long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<tools::Long>();
                 xGraphic = lclRotateGraphic(xGraphic, Degree10(nAngle/10) );
@@ -863,7 +864,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
 
             // We have not core feature that flips graphic in the shape.
             // Here we are applying flip property to bitmap directly.
-            if(bFlipH || bFlipV)
+            if((bFlipH || bFlipV) && !mbIsExtruded)
                 xGraphic = lclMirrorGraphic(xGraphic, bFlipH, bFlipV );
 
             if(eColorMode == ColorMode_GREYS)

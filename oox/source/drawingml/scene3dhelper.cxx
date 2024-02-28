@@ -375,7 +375,8 @@ void Scene3DHelper::addProjectionGeometryToMap(
 bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
                                            const sal_Int32& rnMSOShapeRotation,
                                            oox::PropertyMap& rPropertyMap, double& rRotZ,
-                                           oox::drawingml::Color& rExtrusionColor)
+                                           oox::drawingml::Color& rExtrusionColor,
+                                           const bool bBlockExtrusion)
 {
     // We convert rnMSOShapeRotation, so that Shape::createAndInsert() can use rRotZ the same way in
     // all cases.
@@ -410,7 +411,7 @@ bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DProperti
     // in any case, so that Shape::createAndInsert() knows about it.
     rExtrusionColor = (*p3DProperties).maExtrusionColor;
 
-    if (!bCreateExtrusion)
+    if (!bCreateExtrusion || bBlockExtrusion)
         return false;
 
     // Create the extrusion properties in rPropertyMap so that they can be directly used.
