@@ -27,7 +27,7 @@ class SfxBindings;
 
 class Gallery;
 class GalleryBrowser1;
-class GalleryBrowser2;
+//class GalleryBrowser2;
 class FmFormModel;
 class Splitter;
 
@@ -42,7 +42,7 @@ public:
 private:
     Gallery* mpGallery;
     std::unique_ptr<GalleryBrowser1> mxBrowser1;
-    std::unique_ptr<GalleryBrowser2> mxBrowser2;
+    //std::unique_ptr<GalleryBrowser2> mxBrowser2;
 };
 
 } // end of namespace svx::sidebar

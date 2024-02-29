@@ -20,8 +20,7 @@
 #include <GalleryControl.hxx>
 
 #include <svx/gallery1.hxx>
-#include "galbrws1.hxx"
-#include <galbrws2.hxx>
+#include <galbrws1.hxx>
 
 namespace svx::sidebar {
 
@@ -30,10 +29,7 @@ GalleryControl::GalleryControl(weld::Widget* pParent)
     , mpGallery(Gallery::GetGalleryInstance())
     , mxBrowser1(new GalleryBrowser1(
               *m_xBuilder,
-              mpGallery,
-              [this] ()
-                  { return mxBrowser2->SelectTheme(mxBrowser1->GetSelectedTheme()); }))
-    , mxBrowser2(new GalleryBrowser2(*m_xBuilder, mpGallery))
+              mpGallery))
 {
     mxBrowser1->SelectTheme(0);
 }

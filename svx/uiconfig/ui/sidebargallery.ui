@@ -253,7 +253,7 @@
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=4 n-rows=1 -->
+                  <!-- n-columns=6 n-rows=1 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -298,6 +298,25 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkEntry" id="search">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes" context="sidebargallery|RID_SVXSTR_GALLERY_SEARCH">Search for icons</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="search-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sidebargallery|extended_tip|value">Enter search text.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkLabel" id="label">
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
@@ -308,7 +327,7 @@
                         </attributes>
                       </object>
                       <packing>
-                        <property name="left-attach">2</property>
+                        <property name="left-attach">3</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
@@ -324,7 +343,7 @@
                         <property name="use-underline">True</property>
                       </object>
                       <packing>
-                        <property name="left-attach">2</property>
+                        <property name="left-attach">4</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
@@ -338,7 +357,7 @@
                         <property name="always-show-image">True</property>
                       </object>
                       <packing>
-                        <property name="left-attach">3</property>
+                        <property name="left-attach">5</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>

@@ -24,7 +24,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <avmedia/mediaplayer.hxx>
 #include <helpids.h>
-#include <galbrws2.hxx>
+#include <galbrws1.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/galctrl.hxx>
@@ -36,7 +36,7 @@
 #include <bitmaps.hlst>
 #include <svl/itemset.hxx>
 
-GalleryPreview::GalleryPreview(GalleryBrowser2* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+GalleryPreview::GalleryPreview(GalleryBrowser1* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : mxScrolledWindow(std::move(xScrolledWindow))
     , mpParent(pParent)
     , mpTheme(nullptr)
@@ -150,7 +150,7 @@ bool GalleryPreview::KeyInput(const KeyEvent& rKEvt)
 {
     if(mpTheme)
     {
-        GalleryBrowser2* pBrowser = mpParent;
+        GalleryBrowser1* pBrowser = mpParent;
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
@@ -284,7 +284,7 @@ void GalleryIconView::drawTransparenceBackground(vcl::RenderContext& rOut, const
     rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
 }
 
-GalleryIconView::GalleryIconView(GalleryBrowser2* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+GalleryIconView::GalleryIconView(GalleryBrowser1* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : ValueSet(std::move(xScrolledWindow))
     , mpParent(pParent)
     , mpTheme(nullptr)
@@ -345,7 +345,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
         if(pObj)
         {
             aBitmapEx = pObj->createPreviewBitmapEx(aSize);
-            aItemTextTitle = GalleryBrowser2::GetItemText(*pObj, GalleryItemFlags::Title);
+            aItemTextTitle = GalleryBrowser1::GetItemText(*pObj, GalleryItemFlags::Title);
 
             mpTheme->SetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
         }
