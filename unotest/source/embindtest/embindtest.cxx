@@ -10,6 +10,8 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <org/libreoffice/embindtest/Struct.hpp>
@@ -75,6 +77,13 @@ public:
     OUString SAL_CALL getString() override { return u"hä"_ustr; }
 
     sal_Bool SAL_CALL isString(OUString const& value) override { return value == u"hä"; }
+
+    css::uno::Type SAL_CALL getType() override { return cppu::UnoType<sal_Int32>::get(); }
+
+    sal_Bool SAL_CALL isType(css::uno::Type const& value) override
+    {
+        return value == cppu::UnoType<sal_Int32>::get();
+    }
 
     org::libreoffice::embindtest::Enum SAL_CALL getEnum() override
     {
@@ -211,6 +220,21 @@ public:
     sal_Bool SAL_CALL isSequenceString(css::uno::Sequence<OUString> const& value) override
     {
         return value == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
+    }
+
+    css::uno::Sequence<css::uno::Type> SAL_CALL getSequenceType() override
+    {
+        return { cppu::UnoType<sal_Int32>::get(), cppu::UnoType<void>::get(),
+                 cppu::UnoType<css::uno::Sequence<org::libreoffice::embindtest::Enum>>::get() };
+    }
+
+    sal_Bool SAL_CALL isSequenceType(css::uno::Sequence<css::uno::Type> const& value) override
+    {
+        return value
+               == css::uno::Sequence<css::uno::Type>{
+                      cppu::UnoType<sal_Int32>::get(), cppu::UnoType<void>::get(),
+                      cppu::UnoType<css::uno::Sequence<org::libreoffice::embindtest::Enum>>::get()
+                  };
     }
 
     css::uno::Sequence<css::uno::Sequence<OUString>> SAL_CALL getSequenceSequenceString() override

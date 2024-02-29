@@ -85,6 +85,12 @@ Module.addOnPostRun(function() {
         console.assert(test.isString(v));
     }
     {
+        let v = test.getType();
+        console.log(v);
+        console.assert(v.toString() === 'long');
+        console.assert(test.isType(v));
+    }
+    {
         let v = test.getEnum();
         console.log(v);
         console.assert(v === uno.org.libreoffice.embindtest.Enum.E_2);
@@ -216,6 +222,16 @@ Module.addOnPostRun(function() {
         console.assert(v.get(1) === 'barr');
         console.assert(v.get(2) === 'bazzz');
         console.assert(test.isSequenceString(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceType();
+        console.log(v);
+        console.assert(v.size() === 3);
+        console.assert(v.get(0).toString() === 'long');
+        console.assert(v.get(1).toString() === 'void');
+        console.assert(v.get(2).toString() === '[]org.libreoffice.embindtest.Enum');
+        console.assert(test.isSequenceType(v));
         v.delete();
     }
     {
