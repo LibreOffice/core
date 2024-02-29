@@ -9,8 +9,12 @@
 
 #pragma once
 
+#include <array>
 #include <memory>
 #include <random>
+#include <vector>
+#include <i18nlangtag/lang.h>
+#include <svl/numformat.hxx>
 #include "types.hxx"
 
 namespace formula
@@ -32,20 +36,6 @@ struct DelayedSetNumberFormat
     SCCOL mCol;
     SCROW mRow;
     sal_uInt32 mnNumberFormat;
-};
-
-struct NFIndexAndFmtType
-{
-    sal_uInt32 nIndex;
-    SvNumFormatType eType : 16;
-    bool bIsValid : 1;
-
-    NFIndexAndFmtType()
-        : nIndex(0)
-        , eType(static_cast<SvNumFormatType>(0))
-        , bIsValid(false)
-    {
-    }
 };
 
 class ScInterpreterContextPool;
@@ -78,6 +68,8 @@ struct ScInterpreterContext
 
     SvNumFormatType GetNumberFormatType(sal_uInt32 nFIndex) const;
 
+    sal_uInt32 GetFormatForLanguageIfBuiltIn(sal_uInt32 nFormat, LanguageType eLnge) const;
+
 private:
     friend class ScInterpreterContextPool;
     void ResetTokens();
@@ -86,7 +78,33 @@ private:
     void ClearLookupCache(const ScDocument* pDoc);
     void initFormatTable();
     SvNumberFormatter* mpFormatter;
-    mutable NFIndexAndFmtType maNFTypeCache;
+
+    // Some temp caches of the 4 most recent results from NumberFormatting
+    // lookups.
+    struct NFBuiltIn
+    {
+        sal_uInt64 nKey;
+        sal_uInt32 nFormat;
+        NFBuiltIn()
+            : nKey(SAL_MAX_UINT64)
+            , nFormat(SAL_MAX_UINT32)
+        {
+        }
+    };
+    // from format+lang to builtin format
+    mutable std::array<NFBuiltIn, 4> maNFBuiltInCache;
+    struct NFType
+    {
+        sal_uInt32 nKey;
+        SvNumFormatType eType;
+        NFType()
+            : nKey(SAL_MAX_UINT32)
+            , eType(SvNumFormatType::ALL)
+        {
+        }
+    };
+    // from format index to type
+    mutable std::array<NFType, 4> maNFTypeCache;
 };
 
 class ScThreadedInterpreterContextGetterGuard;
