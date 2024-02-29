@@ -197,8 +197,7 @@ XclChSerTrendLine::XclChSerTrendLine() :
     /*  Set all bits in mfIntercept to 1 (that is -1.#NAN) to indicate that
         there is no interception point. Cannot use ::rtl::math::setNan() here
         cause it misses the sign bit. */
-    sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &mfIntercept );
-    pDouble->w32_parts.msw = pDouble->w32_parts.lsw = 0xFFFFFFFF;
+    reinterpret_cast<sal_math_Double*>(&mfIntercept)->intrep = 0xFFFFFFFFFFFFFFFF;
 }
 
 XclChSerErrorBar::XclChSerErrorBar() :
