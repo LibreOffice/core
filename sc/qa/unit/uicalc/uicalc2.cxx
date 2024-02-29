@@ -471,6 +471,35 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131073)
     CPPUNIT_ASSERT_EQUAL(nStdColWidth, pDoc->GetColWidth(2, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf159938)
+{
+    createScDoc("tdf159938.fods");
+    ScDocument* pDoc = getScDoc();
+
+    const sal_uInt16 nCol1Width = pDoc->GetColWidth(0, 0);
+    const sal_uInt16 nCol2Width = pDoc->GetColWidth(1, 0);
+    const sal_uInt16 nRow1Height = pDoc->GetRowHeight(0, 0);
+    const sal_uInt16 nRow2Height = pDoc->GetRowHeight(1, 0);
+    const sal_uInt16 nRow3Height = pDoc->GetRowHeight(2, 0);
+
+    goToCell("A1");
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+
+    ScDocShell* pDocSh = getScDocShell();
+    lcl_AssertCurrentCursorPosition(*pDocSh, u"A4");
+    CPPUNIT_ASSERT_EQUAL(nCol1Width, pDoc->GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(nCol2Width, pDoc->GetColWidth(1, 0));
+    CPPUNIT_ASSERT_EQUAL(nRow1Height, pDoc->GetRowHeight(0, 0));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 283
+    // - Actual  : 1552
+    CPPUNIT_ASSERT_EQUAL(nRow2Height, pDoc->GetRowHeight(1, 0));
+    CPPUNIT_ASSERT_EQUAL(nRow3Height, pDoc->GetRowHeight(2, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf83901)
 {
     createScDoc();
