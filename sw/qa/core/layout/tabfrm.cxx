@@ -17,6 +17,8 @@
 #include <anchoredobject.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 namespace
 {
@@ -234,6 +236,25 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrappedByTableNested)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pDoc->GetTableFrameFormats()->GetFormatCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetSpzFrameFormats()->GetFormatCount());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyHeader)
+{
+    // Given a document with 8 pages: a first page ending in a manual page break, then a multi-page
+    // floating table on pages 2..8:
+    createSwDoc("floattable-header.docx");
+    CPPUNIT_ASSERT_EQUAL(8, getPages());
+
+    // When creating a new paragraph at doc start:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SplitNode();
+    // Without the accompanying fix in place, this test would have crashed here.
+    pWrtShell->CalcLayout();
+
+    // Then make sure we get one more page, since the first page is now 2 pages:
+    CPPUNIT_ASSERT_EQUAL(9, getPages());
 }
 }
 
