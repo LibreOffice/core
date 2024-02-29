@@ -641,7 +641,13 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
     // distinguish the cases
     // a) connected to view, maybe edit mode is active, can work directly on the EditOutliner
     // b) background Outliner, reflect changes into ParaOutlinerObject (this is exactly the old UNO code)
-    if( HasView() )
+
+    // IASS: testing for HasView() is *not* sufficient - there may be more views of one document
+    // open and TextEdit is only active in one of them, or - as with IASS - it may even be the view
+    // of the running SlideShow itself which also will have no active TextEdit and thus no Outliner.
+    // Thus, to identify the view which indeed does have an outliner (and is in TextEdit mode),
+    // also check if it has an active Outliner by using GetTextEditOutliner()
+    if( HasView() && nullptr != mpView->GetTextEditOutliner() )
     {
         if( IsEditMode() != mbForwarderIsEditMode )
         {

@@ -27,6 +27,7 @@
 class SdrLayerIDSet;
 class SdrPage;
 class SdrObject;
+class SdrPageView;
 
 namespace sdr::contact
 {
@@ -121,6 +122,10 @@ public:
 
     // React on changes of the object of this ViewContact
     virtual void ActionChanged();
+
+    // IASS: helpers for IASS invalidates
+    void ActionChangedIfDifferentPageView(SdrPageView& rSdrPageView);
+    bool hasMultipleViewObjectContacts() const;
 
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
