@@ -198,6 +198,9 @@ private:
     std::unique_ptr<ScDragData> m_pDragData;
     std::shared_ptr<ScCondFormatDlgData> m_pScCondFormatDlgItem;
 
+    // Chart insert wizard's mark to make sure it undoes the correct thing in LOK case
+    UndoStackMark m_InsertWizardUndoMark = MARK_INVALID;
+
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -459,6 +462,8 @@ public:
 
     void setScCondFormatDlgItem(const std::shared_ptr<ScCondFormatDlgData>& rItem) { m_pScCondFormatDlgItem = rItem; }
     const std::shared_ptr<ScCondFormatDlgData>& getScCondFormatDlgItem() const { return m_pScCondFormatDlgItem; }
+
+    void SetInsertWizardUndoMark();
 
 private:
     void ExecuteMoveTable( SfxRequest& rReq );
