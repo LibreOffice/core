@@ -14871,17 +14871,11 @@ fi
 
 if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
     if test "$enable_mergelibs" = "more"; then
-        if test $_os != Linux; then
-            add_warning "--enable-mergelibs=more is not tested for this platform"
-        fi
         MERGELIBS="TRUE"
         MERGELIBS_MORE="TRUE"
         AC_MSG_RESULT([yes (more)])
         AC_DEFINE(ENABLE_MERGELIBS)
     elif test "$enable_mergelibs" = "yes" -o "$enable_mergelibs" = ""; then
-        if test $_os != Linux -a $_os != WINNT; then
-            add_warning "--enable-mergelibs is not tested for this platform"
-        fi
         MERGELIBS="TRUE"
         AC_MSG_RESULT([yes])
         AC_DEFINE(ENABLE_MERGELIBS)
