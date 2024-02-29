@@ -259,13 +259,14 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                     sal_Int32 nTmp = 0;
                     OUString sServer( sLNm.getToken( 0, cTokenSeparator, nTmp ) );
                     OUString sTopic( sLNm.getToken( 0, cTokenSeparator, nTmp ) );
+                    OUString sLinkStr( sLNm.getToken(0, cTokenSeparator, nTmp) );
 
                     if( pType )
                         *pType = sServer;
                     if( pFile )
                         *pFile = sTopic;
                     if( pLinkStr )
-                        *pLinkStr = nTmp != -1 ? sLNm.copy(nTmp) : OUString();
+                        *pLinkStr = sLinkStr;
                     bRet = true;
                 }
                 break;
