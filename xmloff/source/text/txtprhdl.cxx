@@ -36,6 +36,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
+#include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <sax/tools/converter.hxx>
@@ -228,6 +229,14 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_ParaVerticalAlign_Enum[] =
     { XML_BOTTOM,       ParagraphVertAlign::BOTTOM  },
     { XML_BASELINE,     ParagraphVertAlign::BASELINE    },
     { XML_AUTO,         ParagraphVertAlign::AUTOMATIC   },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry<sal_uInt16> const pXML_ParaHyphenationKeep_Enum[] =
+{
+    { XML_AUTO,         ParagraphHyphenationKeepType::AUTO    },
+    // keep page and column for interoperability
+    { XML_PAGE,         ParagraphHyphenationKeepType::COLUMN  },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -1415,6 +1424,10 @@ static const XMLPropertyHandler *GetPropertyHandler
     case XML_TYPE_COMPLEX_COLOR:
         pHdl = new XMLComplexColorHandler;
         break;
+    case XML_TYPE_HYPHENATION_KEEP:
+        pHdl = new XMLConstantsPropertyHandler( pXML_ParaHyphenationKeep_Enum, XML_TOKEN_INVALID );
+        break;
+
     default:
     {
         OSL_ENSURE(false, "XMLPropertyHandler missing (!)");

@@ -51,6 +51,7 @@
 #define MID_HYPHEN_NO_LAST_WORD 5
 #define MID_HYPHEN_MIN_WORD_LENGTH 6
 #define MID_HYPHEN_ZONE         7
+#define MID_HYPHEN_KEEP         8
 
 // SvxBoxInfoItem
 #define MID_HORIZONTAL          1

@@ -1627,13 +1627,14 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_xExtHyphenAfterBox->get_value_changed_from_saved() ||
          m_xMaxHyphenEdit->get_value_changed_from_saved() ||
          m_xMinWordLength->get_value_changed_from_saved() ||
-         m_aHyphenZone.get_value_changed_from_saved() )
+         m_aHyphenZone.get_value_changed_from_saved() ||
+         m_xKeepBox->get_state_changed_from_saved() )
     {
         SvxHyphenZoneItem aHyphen(
             static_cast<const SvxHyphenZoneItem&>(GetItemSet().Get( _nWhich )) );
         aHyphen.SetHyphen( eHyphenState == TRISTATE_TRUE );
-        aHyphen.SetNoCapsHyphenation(m_xHyphenNoCapsBox->get_state() == TRISTATE_TRUE);
-        aHyphen.SetNoLastWordHyphenation(m_xHyphenNoLastWordBox->get_state() == TRISTATE_TRUE);
+        aHyphen.SetNoCapsHyphenation(m_xHyphenNoCapsBox->get_state() != TRISTATE_TRUE);
+        aHyphen.SetNoLastWordHyphenation(m_xHyphenNoLastWordBox->get_state() != TRISTATE_TRUE);
 
         if ( eHyphenState == TRISTATE_TRUE )
         {
@@ -1647,6 +1648,18 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         DBG_ASSERT( pPool, "Where is the pool?" );
         MapUnit eUnit = pPool->GetMetric( _nWhich );
         aHyphen.GetTextHyphenZone() = static_cast<sal_uInt16>(m_aHyphenZone.GetCoreValue(eUnit));
+        aHyphen.SetHyphen( eHyphenState == TRISTATE_TRUE );
+
+        const TriState eKeepState = m_xKeepBox->get_state();
+        aHyphen.SetNoLastWordHyphenation(m_xHyphenNoLastWordBox->get_state() != TRISTATE_TRUE);
+        if ( eKeepState == TRISTATE_TRUE )
+        {
+             // hyphenate across column and page -> 0 (AUTO)
+            aHyphen.GetKeep() = static_cast<sal_uInt8>(0);
+        }
+        else
+            // don't hyphenate across column -> 3 (COLUMN)
+            aHyphen.GetKeep() = static_cast<sal_uInt8>(3);
 
         if ( !pOld ||
             *static_cast<const SvxHyphenZoneItem*>(pOld) != aHyphen ||
@@ -1857,8 +1870,8 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
         bIsHyphen = rHyphen.IsHyphen();
         m_xHyphenBox->set_state(bIsHyphen ? TRISTATE_TRUE : TRISTATE_FALSE);
-        m_xHyphenNoCapsBox->set_state(rHyphen.IsNoCapsHyphenation() ? TRISTATE_TRUE : TRISTATE_FALSE);
-        m_xHyphenNoLastWordBox->set_state(rHyphen.IsNoLastWordHyphenation() ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xHyphenNoCapsBox->set_state(rHyphen.IsNoCapsHyphenation() ? TRISTATE_FALSE : TRISTATE_TRUE);
+        m_xHyphenNoLastWordBox->set_state(rHyphen.IsNoLastWordHyphenation() ? TRISTATE_FALSE : TRISTATE_TRUE);
 
         m_xExtHyphenBeforeBox->set_value(rHyphen.GetMinLead());
         m_xExtHyphenAfterBox->set_value(rHyphen.GetMinTrail());
@@ -1866,6 +1879,9 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_xMinWordLength->set_value(rHyphen.GetMinWordLength());
         m_aHyphenZone.SetFieldUnit(eFUnit);
         m_aHyphenZone.SetMetricValue(rHyphen.GetTextHyphenZone(), MapUnit::MapTwip);
+        // don't hyphenate column or paragraph -> disable checkbox
+        m_xKeepBox->set_state(rHyphen.GetKeep() < 3 ? TRISTATE_TRUE : TRISTATE_FALSE);
+        aKeepState.bTriStateEnabled = false;
     }
     else
     {
@@ -1886,6 +1902,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_xMinWordLength->set_sensitive(bEnable);
     m_xHyphenZoneLabel->set_sensitive(bEnable);
     m_aHyphenZone.set_sensitive(bEnable);
+    m_xKeepBox->set_sensitive(bEnable);
 
     switch (rSet->GetItemState(SID_ATTR_PARA_PAGENUM))
     {
@@ -2147,6 +2164,7 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xMaxHyphenEdit->save_value();
     m_xMinWordLength->save_value();
     m_aHyphenZone.save_value();
+    m_xKeepBox->save_state();
     m_xPageBreakBox->save_state();
     m_xBreakPositionLB->save_value();
     m_xBreakTypeLB->save_value();
@@ -2220,6 +2238,8 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xWidowBox(m_xBuilder->weld_check_button("checkWidow"))
     , m_xWidowRowNo(m_xBuilder->weld_spin_button("spinWidow"))
     , m_xWidowRowLabel(m_xBuilder->weld_label("labelWidow"))
+    // Avoid hyphenation across
+    , m_xKeepBox(m_xBuilder->weld_check_button("checkKeep"))
 {
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -2234,6 +2254,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xBreakPositionLB->connect_changed(LINK(this, SvxExtParagraphTabPage, PageBreakPosHdl_Impl));
     m_xPageNumBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl));
     m_xKeepParaBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, KeepParaBoxClickHdl_Impl));
+    m_xKeepBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, KeepHdl_Impl));
 
     if (SfxObjectShell* pSh = SfxObjectShell::Current())
     {
@@ -2409,6 +2430,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xMinWordLength->set_sensitive(bEnable);
     m_xHyphenZoneLabel->set_sensitive(bEnable);
     m_aHyphenZone.set_sensitive(bEnable);
+    m_xKeepBox->set_sensitive(bEnable);
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
@@ -2508,6 +2530,11 @@ void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
     if (pDisablePageBreakItem)
         if ( pDisablePageBreakItem->GetValue())
                     DisablePageBreak();
+}
+
+IMPL_LINK(SvxExtParagraphTabPage, KeepHdl_Impl, weld::Toggleable&, rToggle, void)
+{
+    aKeepState.ButtonToggled(rToggle);
 }
 
 SvxAsianTabPage::SvxAsianTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)

@@ -463,15 +463,51 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
     const SwTwips nChg = aRectFnSet.YDiff( nTmpY, nDocPrtTop + nOldHeight );
 
-    // below the Widows-threshold...
-    if( rLine.GetLineNr() >= m_nWidLines )
+    // hyphenation-keep: truncate a hyphenated line at the end of the page (but not more)
+    int nExtraWidLines = 0;
+    if( rLine.GetLineNr() >= m_nWidLines && pMaster->HasPara() &&
+        ( rLine.GetLineNr() == m_nWidLines || !rLine.GetCurr()->IsEndHyph() ) )
+    {
+        SwParaPortion *pMasterPara = pMaster->GetPara();
+        const SwAttrSet& rSet = pFrame->GetTextNodeForParaProps()->GetSwAttrSet();
+        const SvxHyphenZoneItem &rAttr = rSet.GetHyphenZone();
+        if ( pMasterPara && pMasterPara->GetNext() && rAttr.IsHyphen() && rAttr.GetKeep() )
+        {
+            SwLineLayout * pNext = pMasterPara->GetNext();
+            SwLineLayout * pCurr = pNext;
+            SwLineLayout * pPrev = pNext;
+            while ( pNext->GetNext() )
+            {
+                pPrev = pCurr;
+                pCurr = pNext;
+                pNext = pNext->GetNext();
+            }
+            // hyphenated line, but not the last remaining one
+            if ( pNext->IsEndHyph() && !pNext->IsLastHyph() )
+            {
+                nExtraWidLines = rLine.GetLineNr() - m_nWidLines + 1;
+                // set remaining line to "last remaining hyphenated line"
+                // to avoid truncating multiple hyphenated lines instead
+                // of a single one
+                if ( pCurr->IsEndHyph() )
+                    pCurr->SetLastHyph( true );
+                // also unset the line before the remaining one
+                // TODO: check also the line after the truncated line?
+                if ( pPrev->IsLastHyph() )
+                    pPrev->SetLastHyph( false );
+            }
+        }
+    }
+
+    // below the Widows-threshold..., with an extra hyphenated line
+    if( rLine.GetLineNr() >= m_nWidLines + nExtraWidLines )
     {
         // Follow to Master I
         // If the Follow *grows*, there is the chance for the Master to
         // receive lines, that it was forced to hand over to the Follow lately:
         // Prepare(Need); check that below nChg!
         // (0W, 2O, 2M, 2F) + 1F = 3M, 2F
-        if( rLine.GetLineNr() > m_nWidLines && pFrame->IsJustWidow() )
+        if( rLine.GetLineNr() > m_nWidLines + nExtraWidLines && pFrame->IsJustWidow() )
         {
             // If the Master is locked, it has probably just donated a line
             // to us, we don't return that just because we turned it into

@@ -114,7 +114,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">6</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
@@ -134,7 +134,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
@@ -154,7 +154,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
@@ -174,7 +174,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -188,7 +188,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -202,7 +202,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
@@ -216,7 +216,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
@@ -230,37 +230,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkNoCaps">
-                <property name="label" translatable="yes" context="textflowpage|checkNoCaps">Don't hyphenate words in _CAPS</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkNoLastWord">
-                <property name="label" translatable="yes" context="textflowpage|checkNoLastWord">Don't hyphenate the last word</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-                <property name="width">2</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
@@ -303,6 +273,57 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">7</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="checkNoCaps">
+                <property name="label" translatable="yes" context="textflowpage|checkNoCaps">Hyphenate words in _CAPS</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">8</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="checkNoLastWord">
+                <property name="label" translatable="yes" context="textflowpage|checkNoLastWord">Hyphenate last word</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">9</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="checkKeep">
+                <property name="label" translatable="yes" context="textflowpage|checkKeep">Hyphenate _across column and page</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="inconsistent">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkKeep-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkKeep">Deselect this check box, if you don't want to hyphenate across column and page.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">10</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -719,9 +740,6 @@
         <property name="left-attach">0</property>
         <property name="top-attach">1</property>
       </packing>
-    </child>
-    <child>
-      <placeholder/>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="TextFlowPage-atkobject">

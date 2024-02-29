@@ -223,6 +223,7 @@ private:
     weld::TriStateEnabled aKeepParaState;
     weld::TriStateEnabled aOrphanState;
     weld::TriStateEnabled aWidowState;
+    weld::TriStateEnabled aKeepState;
 
     bool                bPageBreak;
     bool                bHtmlMode;
@@ -267,6 +268,9 @@ private:
     std::unique_ptr<weld::SpinButton> m_xWidowRowNo;
     std::unique_ptr<weld::Label> m_xWidowRowLabel;
 
+    // avoid hyphenation across
+    std::unique_ptr<weld::CheckButton> m_xKeepBox;
+
     void HyphenClickHdl();
     void PageNumBoxClickHdl();
     void ApplyCollClickHdl();
@@ -285,6 +289,7 @@ private:
     DECL_LINK(PageBreakTypeHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(PageNumBoxClickHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(KeepParaBoxClickHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(KeepHdl_Impl, weld::Toggleable&, void);
 
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };

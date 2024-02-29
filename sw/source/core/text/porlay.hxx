@@ -87,6 +87,7 @@ private:
     bool m_bDummy     : 1;
     bool m_bEndHyph   : 1;
     bool m_bMidHyph   : 1;
+    bool m_bLastHyph  : 1;
     bool m_bFly       : 1;
     bool m_bRest      : 1;
     bool m_bBlinking  : 1;
@@ -123,6 +124,8 @@ public:
     bool IsEndHyph() const { return m_bEndHyph; }
     void SetMidHyph( const bool bNew ) { m_bMidHyph = bNew; }
     bool IsMidHyph() const { return m_bMidHyph; }
+    void SetLastHyph( const bool bNew ) { m_bLastHyph = bNew; }
+    bool IsLastHyph() const { return m_bLastHyph; }
     void SetFly( const bool bNew ) { m_bFly = bNew; }
     bool IsFly() const { return m_bFly; }
     void SetRest( const bool bNew ) { m_bRest = bNew; }

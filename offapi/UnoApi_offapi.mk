@@ -3760,6 +3760,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/text,\
 	ModuleDispatcher \
 	NotePrintMode \
 	PageNumberType \
+	ParagraphHyphenationKeepType \
 	ParagraphVertAlign \
 	PlaceholderType \
 	PositionAndSpaceMode \

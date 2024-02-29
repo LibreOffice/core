@@ -428,6 +428,14 @@ published service ParagraphProperties
             @since LibreOffice 7.6
          */
         [optional, property, readonly] long SortedTextId;
+
+        /** Specifies how last word on a page or on other regions is hyphenated.
+
+            @see com::sun::star::text::ParagraphHyphenationKeepType
+
+            @since LibreOffice 24.8
+         */
+        [optional, property] long ParaHyphenationKeep;
 };
 
 

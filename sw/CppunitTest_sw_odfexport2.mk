@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odfexport2, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     sfx \
     subsequenttest \

@@ -1905,6 +1905,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 
     m_pCurr->SetEndHyph( false );
     m_pCurr->SetMidHyph( false );
+    m_pCurr->SetLastHyph( false );
 
     // fly positioning can make it necessary format a line several times
     // for this, we have to keep a copy of our rest portion

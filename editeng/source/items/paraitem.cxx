@@ -567,7 +567,8 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     nMinTrail(0),
     nMaxHyphens(255),
     nMinWordLength(0),
-    nTextHyphenZone(0)
+    nTextHyphenZone(0),
+    nKeep(0) // TODO change default value to COLUMN
 {
 }
 
@@ -600,6 +601,9 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
         break;
         case MID_HYPHEN_ZONE:
             rVal <<= static_cast<sal_Int16>(nTextHyphenZone);
+        break;
+        case MID_HYPHEN_KEEP:
+            rVal <<= static_cast<sal_Int16>(nKeep);
         break;
     }
     return true;
@@ -643,6 +647,9 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_HYPHEN_ZONE:
             nTextHyphenZone = nNewVal;
         break;
+        case MID_HYPHEN_KEEP:
+            nKeep = static_cast<sal_uInt8>(nNewVal);
+        break;
     }
     return true;
 }
@@ -661,7 +668,8 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
             && rItem.nMinTrail == nMinTrail
             && rItem.nMaxHyphens == nMaxHyphens
             && rItem.nMinWordLength == nMinWordLength
-            && rItem.nTextHyphenZone == nTextHyphenZone );
+            && rItem.nTextHyphenZone == nTextHyphenZone
+            && rItem.nKeep == nKeep );
 }
 
 SvxHyphenZoneItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
@@ -705,6 +713,7 @@ bool SvxHyphenZoneItem::GetPresentation
             if ( bNoLastWordHyphenation )
                 rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_LAST_WORD_TRUE);
 
+            rText += OUString::number( nKeep );
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -740,6 +749,25 @@ bool SvxHyphenZoneItem::GetPresentation
 
             if ( bNoLastWordHyphenation )
                 rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_LAST_WORD_TRUE);
+
+            switch ( nKeep )
+            {
+                case 0:
+                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_AUTO);
+                    break;
+                case 1:
+                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_SPREAD);
+                    break;
+                case 2:
+                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_PAGE);
+                    break;
+                case 3:
+                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_COLUMN);
+                    break;
+                case 4:
+                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_ALWAYS);
+                    break;
+            }
 
             return true;
         }

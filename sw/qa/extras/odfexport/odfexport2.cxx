@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/text/ColumnSeparatorStyle.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
@@ -31,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <editeng/unolingu.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unoprnms.hxx>
 #include <unotxdoc.hxx>
@@ -124,6 +126,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106733)
         pXmlDoc2,
         "//style:style[@style:name='Strong_20_Emphasis']/style:text-properties"_ostr,
         "hyphenate"_ostr, "false");
+}
+
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // fo:hyphenation-keep="page"
+    loadAndReload("tdf132599_page.fodt");
+    // This was 2 (not truncated hyphenated line)
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // fo:hyphenation-keep="auto"
+    loadAndReload("tdf132599_auto.fodt");
+    // not truncated hyphenated line
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")

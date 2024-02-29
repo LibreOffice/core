@@ -76,6 +76,7 @@ inline constexpr OUString UNO_NAME_PARA_HYPHENATION_ZONE = u"ParaHyphenationZone
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_NO_CAPS = u"ParaHyphenationNoCaps"_ustr;
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_NO_LAST_WORD
     = u"ParaHyphenationNoLastWord"_ustr;
+inline constexpr OUString UNO_NAME_PARA_HYPHENATION_KEEP = u"ParaHyphenationKeep"_ustr;
 inline constexpr OUString UNO_NAME_LEFT_MARGIN = u"LeftMargin"_ustr;
 inline constexpr OUString UNO_NAME_RIGHT_MARGIN = u"RightMargin"_ustr;
 inline constexpr OUString UNO_NAME_GUTTER_MARGIN = u"GutterMargin"_ustr;
