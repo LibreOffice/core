@@ -76,6 +76,10 @@ fix16_t fix16_mul(fix16_t inArg0, fix16_t inArg1)
     return result;
 }
 
+/* 32-bit implementation of fix16_div. Fastest version for e.g. ARM Cortex M3.
+ * Performs 32-bit divisions repeatedly to reduce the remainder. For this to
+ * be efficient, the processor has to have 32-bit hardware division.
+ */
 fix16_t fix16_div(fix16_t a, fix16_t b)
 {
     // This uses a hardware 32/32 bit division multiple times, until we have
