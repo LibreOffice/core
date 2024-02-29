@@ -58,7 +58,14 @@ void ScInterpreterContext::SetDocAndFormatter(const ScDocument& rDoc, SvNumberFo
         mxScLookupCache.reset();
         mpDoc = &rDoc;
     }
-    mpFormatter = pFormatter;
+    if (mpFormatter != pFormatter)
+    {
+        mpFormatter = pFormatter;
+
+        // drop cache
+        std::fill(maNFBuiltInCache.begin(), maNFBuiltInCache.end(), NFBuiltIn());
+        std::fill(maNFTypeCache.begin(), maNFTypeCache.end(), NFType());
+    }
 }
 
 void ScInterpreterContext::initFormatTable()
@@ -87,15 +94,47 @@ SvNumFormatType ScInterpreterContext::GetNumberFormatType(sal_uInt32 nFIndex) co
         return mpFormatter->GetType(nFIndex);
     }
 
-    if (maNFTypeCache.bIsValid && maNFTypeCache.nIndex == nFIndex)
-    {
-        return maNFTypeCache.eType;
-    }
+    auto aFind = std::find_if(maNFTypeCache.begin(), maNFTypeCache.end(),
+                              [nFIndex](const NFType& e) { return e.nKey == nFIndex; });
+    if (aFind != maNFTypeCache.end())
+        return aFind->eType;
 
-    maNFTypeCache.nIndex = nFIndex;
-    maNFTypeCache.eType = mpFormatter->GetType(nFIndex);
-    maNFTypeCache.bIsValid = true;
-    return maNFTypeCache.eType;
+    SvNumFormatType eType = mpFormatter->GetType(nFIndex);
+
+    std::move_backward(maNFTypeCache.begin(),
+                       std::next(maNFTypeCache.begin(), maNFTypeCache.size() - 1),
+                       maNFTypeCache.end());
+    maNFTypeCache[0].nKey = nFIndex;
+    maNFTypeCache[0].eType = eType;
+
+    return eType;
+}
+
+sal_uInt32 ScInterpreterContext::GetFormatForLanguageIfBuiltIn(sal_uInt32 nFormat,
+                                                               LanguageType eLnge) const
+{
+    if (!mpFormatter)
+        return nFormat;
+
+    if (!mpDoc->IsThreadedGroupCalcInProgress())
+        return mpFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLnge);
+
+    sal_uInt64 nKey = (static_cast<sal_uInt64>(nFormat) << 32) | eLnge.get();
+
+    auto aFind = std::find_if(maNFBuiltInCache.begin(), maNFBuiltInCache.end(),
+                              [nKey](const NFBuiltIn& e) { return e.nKey == nKey; });
+    if (aFind != maNFBuiltInCache.end())
+        return aFind->nFormat;
+
+    nFormat = mpFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLnge);
+
+    std::move_backward(maNFBuiltInCache.begin(),
+                       std::next(maNFBuiltInCache.begin(), maNFBuiltInCache.size() - 1),
+                       maNFBuiltInCache.end());
+    maNFBuiltInCache[0].nKey = nKey;
+    maNFBuiltInCache[0].nFormat = nFormat;
+
+    return nFormat;
 }
 
 /* ScInterpreterContextPool */
