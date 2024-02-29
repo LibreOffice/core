@@ -275,22 +275,17 @@ const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limit
 SvNumberFormatter::SvNumberFormatter( const Reference< XComponentContext >& rxContext,
                                       LanguageType eLang )
     : m_xContext( rxContext )
-    , maLanguageTag( eLang)
+    , IniLnge(eLang != LANGUAGE_DONTKNOW ? eLang : UNKNOWN_SUBSTITUTE)
+    , ActLnge(IniLnge)
+    , maLanguageTag(IniLnge)
 {
-    if ( eLang == LANGUAGE_DONTKNOW )
-    {
-        eLang = UNKNOWN_SUBSTITUTE;
-    }
-    IniLnge = eLang;
-    ActLnge = eLang;
     eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-    maLanguageTag.reset( eLang );
     xCharClass.changeLocale( m_xContext, maLanguageTag );
     xLocaleData.init( m_xContext, maLanguageTag );
     xCalendar.init( m_xContext, maLanguageTag.getLocale() );
-    xTransliteration.init( m_xContext, eLang );
+    xTransliteration.init( m_xContext, IniLnge );
     xNatNum.init( m_xContext );
 
     // cached locale data items
