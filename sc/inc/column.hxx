@@ -986,7 +986,7 @@ inline const SfxPoolItem& ScColumnData::GetAttr( SCROW nRow, sal_uInt16 nWhich, 
 
 inline sal_uInt32 ScColumnData::GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const
 {
-    return pAttrArray->GetPattern( nRow )->GetNumberFormat( rContext.GetFormatTable() );
+    return pAttrArray->GetPattern( nRow )->GetNumberFormat( rContext );
 }
 
 inline void ScColumn::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )

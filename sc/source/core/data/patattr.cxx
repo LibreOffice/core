@@ -1652,6 +1652,17 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
     return nFormat;
 }
 
+sal_uInt32 ScPatternAttr::GetNumberFormat( const ScInterpreterContext& rContext ) const
+{
+    sal_uInt32 nFormat = getNumberFormatKey(GetItemSet());
+    LanguageType eLang = getLanguageType(GetItemSet());
+    if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
+        ;       // it remains as it is
+    else
+        nFormat = rContext.GetFormatForLanguageIfBuiltIn( nFormat, eLang );
+    return nFormat;
+}
+
 // the same if conditional formatting is in play:
 
 sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,

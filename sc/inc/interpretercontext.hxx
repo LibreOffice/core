@@ -11,6 +11,8 @@
 
 #include <vector>
 #include <memory>
+#include <i18nlangtag/lang.h>
+#include <o3tl/sorted_vector.hxx>
 #include "types.hxx"
 
 namespace formula
@@ -32,20 +34,6 @@ struct DelayedSetNumberFormat
     SCCOL mCol;
     SCROW mRow;
     sal_uInt32 mnNumberFormat;
-};
-
-struct NFIndexAndFmtType
-{
-    sal_uInt32 nIndex;
-    SvNumFormatType eType : 16;
-    bool bIsValid : 1;
-
-    NFIndexAndFmtType()
-        : nIndex(0)
-        , eType(static_cast<SvNumFormatType>(0))
-        , bIsValid(false)
-    {
-    }
 };
 
 class ScInterpreterContextPool;
@@ -77,6 +65,8 @@ struct ScInterpreterContext
 
     SvNumFormatType GetNumberFormatType(sal_uInt32 nFIndex) const;
 
+    sal_uInt32 GetFormatForLanguageIfBuiltIn(sal_uInt32 nFormat, LanguageType eLnge) const;
+
 private:
     friend class ScInterpreterContextPool;
     void ResetTokens();
@@ -85,7 +75,27 @@ private:
     void ClearLookupCache(const ScDocument* pDoc);
     void initFormatTable();
     SvNumberFormatter* mpFormatter;
-    mutable NFIndexAndFmtType maNFTypeCache;
+
+    template <typename T> struct CompareKey
+    {
+        bool operator()(const T& lhs, const T& rhs) const { return lhs.nKey < rhs.nKey; }
+    };
+
+    struct NFType
+    {
+        sal_uInt32 nKey;
+        mutable SvNumFormatType eType;
+    };
+    // map from format index to type
+    mutable o3tl::sorted_vector<NFType, CompareKey<NFType>> maNFTypeCache;
+
+    struct NFBuiltIn
+    {
+        sal_uInt64 nKey;
+        mutable sal_uInt32 nFormat;
+    };
+    // map from format+lang to builtin format
+    mutable o3tl::sorted_vector<NFBuiltIn, CompareKey<NFBuiltIn>> maNFBuiltInCache;
 };
 
 class ScThreadedInterpreterContextGetterGuard;

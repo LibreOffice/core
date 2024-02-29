@@ -32,6 +32,7 @@
 
 namespace vcl { class Font; }
 namespace model { class ComplexColor; }
+struct ScInterpreterContext;
 class OutputDevice;
 class Fraction;
 class ScStyleSheet;
@@ -237,6 +238,7 @@ public:
     bool                    IsSymbolFont() const;
 
     sal_uInt32              GetNumberFormat( SvNumberFormatter* ) const;
+    sal_uInt32              GetNumberFormat( const ScInterpreterContext& rContext ) const;
     sal_uInt32              GetNumberFormat( SvNumberFormatter* pFormatter,
                                              const SfxItemSet* pCondSet ) const;
 

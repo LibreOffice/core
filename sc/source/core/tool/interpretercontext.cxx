@@ -83,19 +83,38 @@ void ScInterpreterContext::ClearLookupCache(const ScDocument* pDoc)
 SvNumFormatType ScInterpreterContext::GetNumberFormatType(sal_uInt32 nFIndex) const
 {
     if (!mpDoc->IsThreadedGroupCalcInProgress())
-    {
         return mpFormatter->GetType(nFIndex);
-    }
 
-    if (maNFTypeCache.bIsValid && maNFTypeCache.nIndex == nFIndex)
-    {
-        return maNFTypeCache.eType;
-    }
+    // Search/update cache by attempting to find nFIndex by inserting a new entry
+    auto result = maNFTypeCache.insert(NFType{ nFIndex, SvNumFormatType::ALL });
+    if (!result.second) // already exists, so return that SvNumFormatType
+        return result.first->eType;
 
-    maNFTypeCache.nIndex = nFIndex;
-    maNFTypeCache.eType = mpFormatter->GetType(nFIndex);
-    maNFTypeCache.bIsValid = true;
-    return maNFTypeCache.eType;
+    // Didn't exist, overwrite the placeholder SvNumFormatType::ALL with the real type
+    SvNumFormatType eType = mpFormatter->GetType(nFIndex);
+    result.first->eType = eType;
+    return eType;
+}
+
+sal_uInt32 ScInterpreterContext::GetFormatForLanguageIfBuiltIn(sal_uInt32 nFormat,
+                                                               LanguageType eLnge) const
+{
+    if (!mpFormatter)
+        return nFormat;
+
+    if (!mpDoc->IsThreadedGroupCalcInProgress())
+        return mpFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLnge);
+
+    sal_uInt64 nKey = (static_cast<sal_uInt64>(nFormat) << 32) | eLnge.get();
+    // Search/update cache by attempting to find nFormat+eLnge by inserting a new entry
+    auto result = maNFBuiltInCache.insert(NFBuiltIn{ nKey, 0 });
+    if (!result.second) // already exists, so return that dest Format
+        return result.first->nFormat;
+
+    // Didn't exist, overwrite the placeholder zero with the real format
+    nFormat = mpFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLnge);
+    result.first->nFormat = nFormat;
+    return nFormat;
 }
 
 /* ScInterpreterContextPool */
