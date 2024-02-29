@@ -573,7 +573,7 @@ public:
 private:
     mutable ::osl::Mutex m_aMutex;
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
-    LanguageType IniLnge; // Initialized setting language/country
+    const LanguageType IniLnge; // Initialized setting language/country
     LanguageType ActLnge; // Current setting language/country
     LanguageTag maLanguageTag;
     std::map<sal_uInt32, std::unique_ptr<SvNumberformat>>
