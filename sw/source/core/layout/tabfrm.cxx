@@ -1165,7 +1165,13 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         OSL_ENSURE( !GetIndPrev(), "Table is supposed to be at beginning" );
         if ( !IsInSct() )
         {
-            m_pTable->SetRowsToRepeat(0);
+            // This would mean the layout modifies the doc model, so RowsToRepeat drops to 0 while
+            // there are existing row frames with RepeatedHeadline == true. Avoid this at least
+            // inside split flys, it would lead to a crash in SwTabFrame::MakeAll().
+            if (!pFly || !pFly->IsFlySplitAllowed())
+            {
+                m_pTable->SetRowsToRepeat(0);
+            }
             return false;
         }
         else
@@ -6377,6 +6383,10 @@ void SwTabFrame::dumpAsXml(xmlTextWriterPtr writer) const
 {
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("tab"));
     SwFrame::dumpAsXmlAttributes( writer );
+
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("has-follow-flow-line"),
+                                      BAD_CAST(OString::boolean(m_bHasFollowFlowLine).getStr()));
+
     if ( HasFollow() )
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
