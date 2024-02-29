@@ -250,6 +250,17 @@ void ViewObjectContact::ActionChanged()
     GetObjectContact().setLazyInvalidate(*this);
 }
 
+// IASS: helper for IASS invalidates
+void ViewObjectContact::ActionChangedIfDifferentPageView(SdrPageView& rSdrPageView)
+{
+    SdrPageView* pSdrPageView(GetObjectContact().TryToGetSdrPageView());
+
+    // if there is no SdrPageView or different from given one, force
+    // invalidate/repaint
+    if (nullptr == pSdrPageView || pSdrPageView != &rSdrPageView)
+        ActionChanged();
+}
+
 void ViewObjectContact::triggerLazyInvalidate()
 {
     if(!mbLazyInvalidate)

@@ -24,6 +24,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <View.hxx>
+#include <slideshow.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/unolingu.hxx>
@@ -697,6 +698,11 @@ bool View::SdrBeginTextEdit(
 
         pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
     }
+
+    // check if we have IASS active and propagate that info to the view with the active TextEdit
+    rtl::Reference< SlideShow > xSlideshow(SlideShow::GetSlideShow(mpViewSh->GetViewShellBase()));
+    const bool bIASS(xSlideshow.is() && xSlideshow->isRunning() && xSlideshow->IsInteractiveSlideshow());
+    setInteractiveSlideShow(bIASS);
 
     bool bReturn = FmFormView::SdrBeginTextEdit(
         pObj, pPV, pWin, bIsNewObj, pOutl,
