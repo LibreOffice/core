@@ -24,6 +24,8 @@
 
 #include <tools/fix16.hxx>
 
+#include <bit>
+
 const fix16_t fix16_minimum = 0x80000000; /*!< the minimum value of fix16_t */
 const fix16_t fix16_overflow = 0x80000000; /*!< the value used to indicate overflows */
 
@@ -74,33 +76,6 @@ fix16_t fix16_mul(fix16_t inArg0, fix16_t inArg1)
     return result;
 }
 
-/* 32-bit implementation of fix16_div. Fastest version for e.g. ARM Cortex M3.
- * Performs 32-bit divisions repeatedly to reduce the remainder. For this to
- * be efficient, the processor has to have 32-bit hardware division.
- */
-#ifdef __GNUC__
-// Count leading zeros, using processor-specific instruction if available.
-#define clz(x) (__builtin_clzl(x) - (8 * sizeof(long) - 32))
-#else
-static uint8_t clz(uint32_t x)
-{
-    uint8_t result = 0;
-    if (x == 0)
-        return 32;
-    while (!(x & 0xF0000000))
-    {
-        result += 4;
-        x <<= 4;
-    }
-    while (!(x & 0x80000000))
-    {
-        result += 1;
-        x <<= 1;
-    }
-    return result;
-}
-#endif
-
 fix16_t fix16_div(fix16_t a, fix16_t b)
 {
     // This uses a hardware 32/32 bit division multiple times, until we have
@@ -135,7 +110,7 @@ fix16_t fix16_div(fix16_t a, fix16_t b)
     while (remainder && bit_pos >= 0)
     {
         // Shift remainder as much as we can without overflowing
-        int shift = clz(remainder);
+        int shift = std::countl_zero(remainder);
         if (shift > bit_pos)
             shift = bit_pos;
         remainder <<= shift;
