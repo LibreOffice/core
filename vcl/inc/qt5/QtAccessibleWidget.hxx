@@ -38,6 +38,9 @@ class QtWidget;
 
 class QtAccessibleWidget final : public QAccessibleInterface,
                                  public QAccessibleActionInterface,
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+                                 public QAccessibleAttributesInterface,
+#endif
                                  public QAccessibleTextInterface,
                                  public QAccessibleEditableTextInterface,
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
@@ -84,6 +87,15 @@ public:
     QStringList actionNames() const override;
     void doAction(const QString& actionName) override;
     QStringList keyBindingsForAction(const QString& actionName) const override;
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    // helper method for QAccessibleAttributesInterface
+    QHash<QAccessible::Attribute, QVariant> attributes() const;
+
+    // QAccessibleAttributesInterface
+    QList<QAccessible::Attribute> attributeKeys() const override;
+    QVariant attributeValue(QAccessible::Attribute key) const override;
+#endif
 
     // QAccessibleTextInterface
     void addSelection(int startOffset, int endOffset) override;

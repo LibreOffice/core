@@ -39,6 +39,7 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -742,6 +743,10 @@ void* QtAccessibleWidget::interface_cast(QAccessible::InterfaceType t)
     if (t == QAccessible::SelectionInterface && accessibleProvidesInterface<XAccessibleSelection>())
         return static_cast<QAccessibleSelectionInterface*>(this);
 #endif
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    if (t == QAccessible::AttributesInterface)
+        return static_cast<QAccessibleAttributesInterface*>(this);
+#endif
     return nullptr;
 }
 
@@ -854,6 +859,78 @@ QStringList QtAccessibleWidget::keyBindingsForAction(const QString& actionName) 
     }
     return keyBindings;
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+
+// QAccessibleAttributesInterface helpers
+namespace
+{
+void lcl_insertAttribute(QHash<QAccessible::Attribute, QVariant>& rQtAttrs, const OUString& rName,
+                         const OUString& rValue)
+{
+    if (rName == u"level"_ustr)
+    {
+        rQtAttrs.insert(QAccessible::Attribute::Level,
+                        QVariant::fromValue(static_cast<int>(rValue.toInt32())));
+    }
+    else
+    {
+        // for now, leave not explicitly handled attributes as they are and report
+        // via QAccessible::Attribute::Custom, but should consider suggesting to
+        // add more specific attributes on Qt side and use those instead
+        const QVariant aVariant = rQtAttrs.value(QAccessible::Attribute::Custom,
+                                                 QVariant::fromValue(QHash<QString, QString>()));
+        assert((aVariant.canConvert<QHash<QString, QString>>()));
+        QHash<QString, QString> aAttrs = aVariant.value<QHash<QString, QString>>();
+        aAttrs.insert(toQString(rName), toQString(rValue));
+        rQtAttrs.insert(QAccessible::Attribute::Custom, QVariant::fromValue(aAttrs));
+    }
+}
+}
+
+QHash<QAccessible::Attribute, QVariant> QtAccessibleWidget::attributes() const
+{
+    Reference<XAccessibleContext> xContext = getAccessibleContextImpl();
+    if (!xContext.is())
+        return {};
+
+    Reference<XAccessibleExtendedAttributes> xAttributes(xContext, UNO_QUERY);
+    if (!xAttributes.is())
+        return {};
+
+    OUString sAttrs;
+    xAttributes->getExtendedAttributes() >>= sAttrs;
+
+    QHash<QAccessible::Attribute, QVariant> aQtAttrs;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        const OUString sAttribute = sAttrs.getToken(0, ';', nIndex);
+        sal_Int32 nColonPos = 0;
+        const OUString sName = sAttribute.getToken(0, ':', nColonPos);
+        const OUString sValue = sAttribute.getToken(0, ':', nColonPos);
+        assert(nColonPos == -1
+               && "Too many colons in attribute that should have \"name:value\" syntax");
+        if (!sName.isEmpty())
+            lcl_insertAttribute(aQtAttrs, sName, sValue);
+    } while (nIndex >= 0);
+
+    return aQtAttrs;
+}
+
+// QAccessibleAttributesInterface
+QList<QAccessible::Attribute> QtAccessibleWidget::attributeKeys() const
+{
+    const QHash<QAccessible::Attribute, QVariant> aAttributes = attributes();
+    return aAttributes.keys();
+}
+
+QVariant QtAccessibleWidget::attributeValue(QAccessible::Attribute eAttribute) const
+{
+    const QHash<QAccessible::Attribute, QVariant> aAllAttributes = attributes();
+    return aAllAttributes.value(eAttribute);
+}
+#endif
 
 // QAccessibleTextInterface
 void QtAccessibleWidget::addSelection(int /* startOffset */, int /* endOffset */)
