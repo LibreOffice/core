@@ -55,10 +55,10 @@ const ::chart::tPropertyValueMap& StaticPageBackgroundDefaults()
             if (comphelper::LibreOfficeKit::isActive()) {
                 aDocColor = COL_AUTO;
             } else {
-                if (SfxViewShell::Current()) {
-                    aDocColor = SfxViewShell::Current()->GetColorConfigColor(svtools::DOCCOLOR);
+                if (SfxViewShell* pCurrentSh = SfxViewShell::Current()) {
+                    aDocColor = pCurrentSh->GetColorConfigColor(svtools::DOCCOLOR);
                 } else {
-                    SAL_WARN("chart2", "SfxViewShell::Current() returned nullptr");
+                    aDocColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
                 }
             }
             ::chart::PropertyHelper::setPropertyValue( aTmp, ::chart::FillProperties::PROP_FILL_COLOR, aDocColor );
