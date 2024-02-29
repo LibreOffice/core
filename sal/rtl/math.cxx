@@ -397,8 +397,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
 
     // overflow also if more than DBL_MAX_10_EXP digits without decimal
     // separator, or 0. and more than DBL_MIN_10_EXP digits, ...
-    bool bHuge = fVal == HUGE_VAL; // g++ 3.0.1 requires it this way...
-    if (bHuge)
+    if (std::isinf(fVal))
         eStatus = rtl_math_ConversionStatus_OutOfRange;
 
     if (bSign)
@@ -581,7 +580,7 @@ double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C()
 double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTERN_C()
 {
     const double fBigInt = 0x1p41; // 2^41 -> only 11 bits left for fractional part, fine as decimal
-    if (fValue == 0.0 || fValue == HUGE_VAL || !std::isfinite(fValue) || fValue > fBigInt)
+    if (fValue == 0.0 || !std::isfinite(fValue) || fValue > fBigInt)
     {
         // We don't handle these conditions.  Bail out.
         return fValue;
