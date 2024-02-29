@@ -53,7 +53,7 @@ public:
      */
     static const sal_uInt16 INPUTSTRING_PRECISION;
 
-    /// Preferred ctor with service manager and language/country enum
+    /// ctor with service manager and language/country enum
     SvNumberFormatter(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
                       LanguageType eLang);
 
