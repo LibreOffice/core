@@ -609,9 +609,6 @@ private:
     // get the registry, create one if none exists
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl& GetFormatterRegistry();
 
-    // called by ctors
-    SVL_DLLPRIVATE void ImpConstruct(LanguageType eLang);
-
     // Generate builtin formats provided by i18n behind CLOffset,
     // if bNoAdditionalFormats==false also generate additional i18n formats.
     SVL_DLLPRIVATE void ImpGenerateFormats(sal_uInt32 CLOffset, bool bNoAdditionalFormats);

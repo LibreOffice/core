@@ -277,28 +277,6 @@ SvNumberFormatter::SvNumberFormatter( const Reference< XComponentContext >& rxCo
     : m_xContext( rxContext )
     , maLanguageTag( eLang)
 {
-    ImpConstruct( eLang );
-}
-
-SvNumberFormatter::~SvNumberFormatter()
-{
-    {
-        ::osl::MutexGuard aGuard( GetGlobalMutex() );
-        pFormatterRegistry->Remove( this );
-        if ( !pFormatterRegistry->Count() )
-        {
-            delete pFormatterRegistry;
-            pFormatterRegistry = nullptr;
-        }
-    }
-
-    aFTable.clear();
-    ClearMergeTable();
-}
-
-
-void SvNumberFormatter::ImpConstruct( LanguageType eLang )
-{
     if ( eLang == LANGUAGE_DONTKNOW )
     {
         eLang = UNKNOWN_SUBSTITUTE;
@@ -332,6 +310,22 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 
     ::osl::MutexGuard aGuard( GetGlobalMutex() );
     GetFormatterRegistry().Insert( this );
+}
+
+SvNumberFormatter::~SvNumberFormatter()
+{
+    {
+        ::osl::MutexGuard aGuard( GetGlobalMutex() );
+        pFormatterRegistry->Remove( this );
+        if ( !pFormatterRegistry->Count() )
+        {
+            delete pFormatterRegistry;
+            pFormatterRegistry = nullptr;
+        }
+    }
+
+    aFTable.clear();
+    ClearMergeTable();
 }
 
 
