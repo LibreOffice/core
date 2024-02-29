@@ -275,9 +275,33 @@ const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limit
 SvNumberFormatter::SvNumberFormatter( const Reference< XComponentContext >& rxContext,
                                       LanguageType eLang )
     : m_xContext( rxContext )
-    , maLanguageTag( eLang)
+    , IniLnge(eLang != LANGUAGE_DONTKNOW ? eLang : UNKNOWN_SUBSTITUTE)
+    , ActLnge(IniLnge)
+    , maLanguageTag(IniLnge)
+    , MaxCLOffset(0)
+    , nDefaultSystemCurrencyFormat(NUMBERFORMAT_ENTRY_NOT_FOUND)
+    , eEvalDateFormat(NF_EVALDATEFORMAT_INTL)
+    , bNoZero(false)
 {
-    ImpConstruct( eLang );
+    xCharClass.changeLocale( m_xContext, maLanguageTag );
+    xLocaleData.init( m_xContext, maLanguageTag );
+    xCalendar.init( m_xContext, maLanguageTag.getLocale() );
+    xTransliteration.init( m_xContext, IniLnge );
+    xNatNum.init( m_xContext );
+
+    // cached locale data items
+    const LocaleDataWrapper* pLoc = GetLocaleData();
+    aDecimalSep = pLoc->getNumDecimalSep();
+    aDecimalSepAlt = pLoc->getNumDecimalSepAlt();
+    aThousandSep = pLoc->getNumThousandSep();
+    aDateSep = pLoc->getDateSep();
+
+    pStringScanner.reset( new ImpSvNumberInputScan( this ) );
+    pFormatScanner.reset( new ImpSvNumberformatScan( this ) );
+    ImpGenerateFormats( 0, false );     // 0 .. 999 for initialized language formats
+
+    ::osl::MutexGuard aGuard( GetGlobalMutex() );
+    GetFormatterRegistry().Insert( this );
 }
 
 SvNumberFormatter::~SvNumberFormatter()
@@ -294,44 +318,6 @@ SvNumberFormatter::~SvNumberFormatter()
 
     aFTable.clear();
     ClearMergeTable();
-}
-
-
-void SvNumberFormatter::ImpConstruct( LanguageType eLang )
-{
-    if ( eLang == LANGUAGE_DONTKNOW )
-    {
-        eLang = UNKNOWN_SUBSTITUTE;
-    }
-    IniLnge = eLang;
-    ActLnge = eLang;
-    eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
-    nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
-
-    maLanguageTag.reset( eLang );
-    xCharClass.changeLocale( m_xContext, maLanguageTag );
-    xLocaleData.init( m_xContext, maLanguageTag );
-    xCalendar.init( m_xContext, maLanguageTag.getLocale() );
-    xTransliteration.init( m_xContext, eLang );
-    xNatNum.init( m_xContext );
-
-    // cached locale data items
-    const LocaleDataWrapper* pLoc = GetLocaleData();
-    aDecimalSep = pLoc->getNumDecimalSep();
-    aDecimalSepAlt = pLoc->getNumDecimalSepAlt();
-    aThousandSep = pLoc->getNumThousandSep();
-    aDateSep = pLoc->getDateSep();
-
-    pStringScanner.reset( new ImpSvNumberInputScan( this ) );
-    pFormatScanner.reset( new ImpSvNumberformatScan( this ) );
-    pFormatTable = nullptr;
-    MaxCLOffset = 0;
-    ImpGenerateFormats( 0, false );     // 0 .. 999 for initialized language formats
-    pMergeTable = nullptr;
-    bNoZero = false;
-
-    ::osl::MutexGuard aGuard( GetGlobalMutex() );
-    GetFormatterRegistry().Insert( this );
 }
 
 
