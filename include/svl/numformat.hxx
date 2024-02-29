@@ -53,7 +53,7 @@ public:
      */
     static const sal_uInt16 INPUTSTRING_PRECISION;
 
-    /// Preferred ctor with service manager and language/country enum
+    /// ctor with service manager and language/country enum
     SvNumberFormatter(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
                       LanguageType eLang);
 
@@ -573,6 +573,8 @@ public:
 private:
     mutable ::osl::Mutex m_aMutex;
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    const LanguageType IniLnge; // Initialized setting language/country
+    LanguageType ActLnge; // Current setting language/country
     LanguageTag maLanguageTag;
     std::map<sal_uInt32, std::unique_ptr<SvNumberformat>>
         aFTable; // Table of format keys to format entries
@@ -591,8 +593,6 @@ private:
     Link<sal_uInt16, Color*> aColorLink; // User defined color table CallBack
     sal_uInt32 MaxCLOffset; // Max language/country offset used
     sal_uInt32 nDefaultSystemCurrencyFormat; // NewCurrency matching SYSTEM locale
-    LanguageType IniLnge; // Initialized setting language/country
-    LanguageType ActLnge; // Current setting language/country
     NfEvalDateFormat eEvalDateFormat; // DateFormat evaluation
     bool bNoZero; // Zero value suppression
 
@@ -608,9 +608,6 @@ private:
 
     // get the registry, create one if none exists
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl& GetFormatterRegistry();
-
-    // called by ctors
-    SVL_DLLPRIVATE void ImpConstruct(LanguageType eLang);
 
     // Generate builtin formats provided by i18n behind CLOffset,
     // if bNoAdditionalFormats==false also generate additional i18n formats.
