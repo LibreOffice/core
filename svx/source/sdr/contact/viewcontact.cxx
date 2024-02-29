@@ -201,6 +201,29 @@ void ViewContact::ActionChanged()
     }
 }
 
+// IASS: helper for IASS invalidates
+void ViewContact::ActionChangedIfDifferentPageView(SdrPageView& rSdrPageView)
+{
+    const sal_uInt32 nCount(maViewObjectContactVector.size());
+
+    for (sal_uInt32 a(0); a < nCount; a++)
+    {
+        ViewObjectContact* pCandidate = maViewObjectContactVector[a];
+        DBG_ASSERT(pCandidate,
+                   "ViewContact::GetViewObjectContact() invalid ViewObjectContactList (!)");
+
+        if (pCandidate)
+        {
+            pCandidate->ActionChangedIfDifferentPageView(rSdrPageView);
+        }
+    }
+}
+
+bool ViewContact::hasMultipleViewObjectContacts() const
+{
+    return maViewObjectContactVector.size() > 1;
+}
+
 // access to SdrObject and/or SdrPage. May return 0L like the default
 // implementations do. Override as needed.
 SdrObject* ViewContact::TryToGetSdrObject() const { return nullptr; }

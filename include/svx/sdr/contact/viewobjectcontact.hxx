@@ -24,6 +24,8 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
+class SdrPageView;
+
 namespace vcl { class Region; }
 
 namespace sdr::animation {
@@ -100,6 +102,9 @@ public:
 
     // React on changes of the object of this ViewContact
     virtual void ActionChanged();
+
+    // IASS: helper for IASS invalidates
+    void ActionChangedIfDifferentPageView(SdrPageView& rSdrPageView);
 
     // LazyInvalidate handling
     void triggerLazyInvalidate();

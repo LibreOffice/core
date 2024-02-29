@@ -68,11 +68,15 @@
 #include <textchaincursor.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 
 #include <memory>
 
 SdrObjEditView::SdrObjEditView(SdrModel& rSdrModel, OutputDevice* pOut)
     : SdrGlueEditView(rSdrModel, pOut)
+    , maTEOverlayGroup()
+    , maTextEditUpdateTimer("TextEditUpdateTimer")
+    , mxWeakTextEditObj()
     , mpTextEditPV(nullptr)
     , mpTextEditOutlinerView(nullptr)
     , mpTextEditWin(nullptr)
@@ -80,18 +84,89 @@ SdrObjEditView::SdrObjEditView(SdrModel& rSdrModel, OutputDevice* pOut)
     , pMacroObj(nullptr)
     , pMacroPV(nullptr)
     , pMacroWin(nullptr)
+    , aTextEditArea()
+    , aMinTextEditArea()
+    , aOldCalcFieldValueLink()
+    , aMacroDownPos()
     , nMacroTol(0)
     , mbTextEditDontDelete(false)
     , mbTextEditOnlyOneView(false)
     , mbTextEditNewObj(false)
     , mbQuickTextEditMode(true)
     , mbMacroDown(false)
+    , mbInteractiveSlideShow(false)
+    , mxSelectionController()
+    , mxLastSelectionController()
     , mpOldTextEditUndoManager(nullptr)
+    , mpLocalTextEditUndoManager()
 {
+    // init some timer settings (not starting it of course)
+    maTextEditUpdateTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
+    maTextEditUpdateTimer.SetInvokeHandler(LINK(this, SdrObjEditView, TextEditUpdate));
+}
+
+IMPL_LINK_NOARG(SdrObjEditView, ImpModifyHdl, LinkParamNone*, void)
+{
+    // IASS: active TextEdit had a model change. Check and react.
+    if (nullptr == mpTextEditOutliner)
+        // no Outliner, no TextEdit
+        return;
+
+    if (!mxWeakTextEditObj.get().is())
+        // no TextObject, no TextEdit
+        return;
+
+    // reset & restart the timer
+    maTextEditUpdateTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
+    maTextEditUpdateTimer.Start();
+}
+
+IMPL_LINK_NOARG(SdrObjEditView, TextEditUpdate, Timer*, void)
+{
+    // IASS: text was changed and EDIT_UPDATEDATA_TIMEOUT has passed
+    // since last user input
+    maTextEditUpdateTimer.Stop();
+
+    // be safe: still in TextEdit?
+    if (nullptr == mpTextEditOutliner)
+        // no Outliner, no TextEdit
+        return;
+
+    if (!mxWeakTextEditObj.get().is())
+        // no TextObject, no TextEdit
+        return;
+
+    // lauch an ObjectChange: This is the straightforward method
+    // to get this broadcasted. We do not risk to set the model
+    // unwantedly to changed, we had a text edit going on already.
+    // This is needed for SlideShow since it is not (yet) using the
+    // standard schema with VC/VOC/OC
+    if (isInteractiveSlideShow())
+        mxWeakTextEditObj.get()->BroadcastObjectChange();
+
+    // force repaint for objects with changed text in all views
+    // that are VC/VOC/OC based (SlideShow is not yet)
+    sdr::contact::ViewContact& rVC(mxWeakTextEditObj.get()->GetViewContact());
+
+    if (!rVC.hasMultipleViewObjectContacts())
+        // only one VOC -> this is us
+        return;
+
+    if (nullptr == mpTextEditPV)
+        // should not happen, just invalidate all visualizations
+        rVC.ActionChanged();
+    else
+        // invalidate only visualizations in different views:
+        // this is important to not cause evtl. high repaint costs
+        // in the EditView -> we avoid this by running the TextEdit
+        // on the overlay. NOTE: This is only for better performance,
+        // any repaint will just work fine and do the right thing
+        rVC.ActionChangedIfDifferentPageView(*mpTextEditPV);
 }
 
 SdrObjEditView::~SdrObjEditView()
 {
+    maTextEditUpdateTimer.Stop();
     mpTextEditWin = nullptr; // so there's no ShowCursor in SdrEndTextEdit
     assert(!IsTextEdit());
     if (IsTextEdit())
@@ -1486,6 +1561,12 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             mpTextEditOutlinerView->ShowCursor();
             mpTextEditOutliner->SetStatusEventHdl(
                 LINK(this, SdrObjEditView, ImpOutlinerStatusEventHdl));
+
+            // IASS: start listening to ModelChanges of TextEdit
+            if (isInteractiveSlideShow()
+                || pTextObj->GetViewContact().hasMultipleViewObjectContacts())
+                mpTextEditOutliner->SetModifyHdl(LINK(this, SdrObjEditView, ImpModifyHdl));
+
             if (pTextObj->IsChainable())
             {
                 mpTextEditOutlinerView->SetEndCutPasteLinkHdl(
@@ -1569,6 +1650,9 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
 SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 {
+    // IASS: stop evtl. running timer immediately
+    maTextEditUpdateTimer.Stop();
+
     SdrEndTextEditKind eRet = SdrEndTextEditKind::Unchanged;
     rtl::Reference<SdrTextObj> pTEObj = mxWeakTextEditObj.get();
     vcl::Window* pTEWin = mpTextEditWin;
@@ -1686,6 +1770,9 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
             pTEOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*, void>());
             pTEOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*, void>());
+
+            // IASS: stop listening to ModelChanges of TextEdit
+            pTEOutliner->SetModifyHdl(Link<LinkParamNone*, void>());
 
             const bool bUndo = IsUndoEnabled();
             if (bUndo)

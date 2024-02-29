@@ -76,8 +76,15 @@ class SVXCORE_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditView
     virtual void EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth) override;
 
     // The OverlayObjects used for visualizing active TextEdit (currently
-    // using TextEditOverlayObject, but not limited to it
+    // using TextEditOverlayObject, but not limited to it)
     sdr::overlay::OverlayObjectList maTEOverlayGroup;
+    Timer                           maTextEditUpdateTimer;
+
+    // IASS: allow reaction to active TextEdit changes
+    DECL_DLLPRIVATE_LINK(ImpModifyHdl, LinkParamNone*, void);
+
+    // IASS: timer-based reaction on TextEdit changes
+    DECL_DLLPRIVATE_LINK(TextEditUpdate, Timer*, void);
 
 protected:
     // TextEdit
@@ -104,9 +111,14 @@ protected:
     bool mbTextEditNewObj : 1;      // current edited object was just recreated
     bool mbQuickTextEditMode : 1;   // persistent(->CrtV). Default=TRUE
     bool mbMacroDown : 1;
+    bool mbInteractiveSlideShow : 1; // IASS
 
     rtl::Reference< sdr::SelectionController > mxSelectionController;
     rtl::Reference< sdr::SelectionController > mxLastSelectionController;
+
+    // check/set if we are in IASS and need to refresh evtl.
+    void setInteractiveSlideShow(bool bNew) { mbInteractiveSlideShow = bNew; }
+    bool isInteractiveSlideShow() const { return mbInteractiveSlideShow; }
 
 private:
     SfxUndoManager* mpOldTextEditUndoManager;
