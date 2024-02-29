@@ -67,6 +67,9 @@ void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector
     std::unique_ptr<weld::TreeIter> xEachEntry(mxControl->make_iterator());
     if (!mxControl->get_iter_first(*xEachEntry))
         return;
+
+    std::optional<ScPivotField> oDataField;
+
     do
     {
         ScItemValue* pItemValue = weld::fromId<ScItemValue*>(mxControl->get_id(*xEachEntry));
@@ -78,8 +81,15 @@ void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector
         aField.nFuncMask     = rFunctionData.mnFuncMask;
         aField.mnDupCount    = rFunctionData.mnDupCount;
         aField.maFieldRef    = rFunctionData.maFieldRef;
-        rVector.push_back(aField);
+
+        if (aField.nCol == PIVOT_DATA_FIELD)
+            oDataField = aField;
+        else
+            rVector.push_back(aField);
     } while (mxControl->iter_next(*xEachEntry));
+
+    if (oDataField)
+        rVector.push_back(*oDataField);
 }
 
 void ScPivotLayoutTreeListBase::InsertEntryForSourceTarget(weld::TreeView& /*pSource*/, int /*nTarget*/)
