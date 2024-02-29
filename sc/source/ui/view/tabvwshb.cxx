@@ -318,8 +318,17 @@ void ScTabViewShell::DeactivateOle()
         pClient->DeactivateObject();
 }
 
+void ScTabViewShell::SetInsertWizardUndoMark()
+{
+    assert(m_InsertWizardUndoMark == MARK_INVALID);
+    m_InsertWizardUndoMark = GetUndoManager()->MarkTopUndoAction();
+}
+
 IMPL_LINK( ScTabViewShell, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvent, void )
 {
+    assert(m_InsertWizardUndoMark != MARK_INVALID);
+    UndoStackMark nInsertWizardUndoMark = m_InsertWizardUndoMark;
+    m_InsertWizardUndoMark = MARK_INVALID;
     if( pEvent->DialogResult == ui::dialogs::ExecutableDialogResults::CANCEL )
     {
         ScTabView* pTabView = GetViewData().GetView();
@@ -332,8 +341,16 @@ IMPL_LINK( ScTabViewShell, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*
         DeactivateOle();
         pView->UnMarkAll();
 
-        rScDoc.GetUndoManager()->Undo();
-        rScDoc.GetUndoManager()->ClearRedo();
+        auto pUndoManager = rScDoc.GetUndoManager();
+        if (pUndoManager->GetRedoActionCount())
+        {
+            pUndoManager->RemoveMark(nInsertWizardUndoMark);
+        }
+        else
+        {
+            pUndoManager->UndoMark(nInsertWizardUndoMark);
+            pUndoManager->ClearRedo();
+        }
 
         // leave the draw shell
         SetDrawShell( false );

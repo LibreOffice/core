@@ -27,6 +27,7 @@ public:
     /// Make these public
     using SdrUndoManager::UndoWithContext;
     using SdrUndoManager::RedoWithContext;
+    using SdrUndoManager::UndoMark;
 
 private:
     static std::optional<ScRange> getAffectedRangeFromUndo(const SfxUndoAction*);

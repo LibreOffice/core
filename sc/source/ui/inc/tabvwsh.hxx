@@ -187,6 +187,10 @@ private:
     OUString   maScope;
 
     std::unique_ptr<ScDragData> m_pDragData;
+
+    // Chart insert wizard's mark to make sure it undoes the correct thing in LOK case
+    UndoStackMark m_InsertWizardUndoMark = MARK_INVALID;
+
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -445,6 +449,8 @@ public:
 
     void SetMoveKeepEdit(bool value) { bMoveKeepEdit = value; };
     bool GetMoveKeepEdit() { return bMoveKeepEdit; };
+
+    void SetInsertWizardUndoMark();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
