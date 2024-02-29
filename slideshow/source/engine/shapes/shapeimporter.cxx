@@ -346,7 +346,25 @@ bool ShapeImporter::isSkip(
                           "IsEmptyPresentationObject") &&
         bEmpty )
     {
-        return true;
+        // check object have fill or linestyle, if have, it should be visible
+        drawing::FillStyle aFillStyle{ drawing::FillStyle_NONE };
+        if (getPropertyValue(aFillStyle,
+            xPropSet, "FillStyle") &&
+            aFillStyle != drawing::FillStyle_NONE)
+        {
+            bEmpty = false;
+        }
+
+        drawing::LineStyle aLineStyle{ drawing::LineStyle_NONE };
+        if (bEmpty && getPropertyValue(aLineStyle,
+            xPropSet, "LineStyle") &&
+            aLineStyle != drawing::LineStyle_NONE)
+        {
+            bEmpty = false;
+        }
+
+        if (bEmpty)
+            return true;
     }
 
     //skip shapes which corresponds to annotations

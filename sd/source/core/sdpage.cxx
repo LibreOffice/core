@@ -2802,9 +2802,10 @@ bool SdPage::checkVisibility(
     const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
 
     // empty presentation objects only visible during edit mode
-    if( (bIsPrinting || !bEdit || bIsInsidePageObj ) && pObj->IsEmptyPresObj() )
+    if( (bIsPrinting || !bEdit || bIsInsidePageObj ) && pObj->IsEmptyPresObj() && !(pObj->HasFillStyle() || pObj->HasLineStyle()) )
     {
-        if( (pObj->GetObjInventor() != SdrInventor::Default) || ( (pObj->GetObjIdentifier() != SdrObjKind::Rectangle) && (pObj->GetObjIdentifier() != SdrObjKind::Page) ) )
+        if( (pObj->GetObjInventor() != SdrInventor::Default) || ( (pObj->GetObjIdentifier() != SdrObjKind::Rectangle) &&
+            (pObj->GetObjIdentifier() != SdrObjKind::Page) ) )
             return false;
     }
 
