@@ -3530,33 +3530,25 @@ SvNumberFormatterMergeMap SvNumberFormatter::ConvertMergeTableToMap()
     return aMap;
 }
 
-
 sal_uInt32 SvNumberFormatter::GetFormatForLanguageIfBuiltIn( sal_uInt32 nFormat,
                                                              LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if ( eLnge == LANGUAGE_DONTKNOW )
-    {
-        eLnge = IniLnge;
-    }
+        eLnge = IniLnge;    // IniLnge never changes
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLnge == IniLnge )
-    {
         return nFormat;     // it stays as it is
-    }
     sal_uInt32 nOffset = nFormat % SV_COUNTRY_LANGUAGE_OFFSET;  // relative index
     if ( nOffset > SV_MAX_COUNT_STANDARD_FORMATS )
-    {
-        return nFormat;    // not a built-in format
-    }
+        return nFormat;     // not a built-in format
+
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     sal_uInt32 nCLOffset = ImpGenerateCL(eLnge);    // create new standard formats if necessary
     return nCLOffset + nOffset;
 }
 
-
 sal_uInt32 SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
                                               LanguageType eLnge )
 {
-    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if (nTabOff >= NF_INDEX_TABLE_ENTRIES)
         return NUMBERFORMAT_ENTRY_NOT_FOUND;
 
@@ -3566,11 +3558,10 @@ sal_uInt32 SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
     if (indexTable[nTabOff] == NUMBERFORMAT_ENTRY_NOT_FOUND)
         return NUMBERFORMAT_ENTRY_NOT_FOUND;
 
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     sal_uInt32 nCLOffset = ImpGenerateCL(eLnge);    // create new standard formats if necessary
-
     return nCLOffset + indexTable[nTabOff];
 }
-
 
 NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) const
 {
