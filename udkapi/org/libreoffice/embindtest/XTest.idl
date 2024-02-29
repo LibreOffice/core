@@ -34,6 +34,8 @@ interface XTest {
     boolean isChar([in] char value);
     string getString();
     boolean isString([in] string value);
+    type getType();
+    boolean isType([in] type value);
     Enum getEnum();
     boolean isEnum([in] Enum value);
     Struct getStruct();
@@ -62,6 +64,8 @@ interface XTest {
     boolean isSequenceChar([in] sequence<char> value);
     sequence<string> getSequenceString();
     boolean isSequenceString([in] sequence<string> value);
+    sequence<type> getSequenceType();
+    boolean isSequenceType([in] sequence<type> value);
     sequence<sequence<string> > getSequenceSequenceString();
     boolean isSequenceSequenceString([in] sequence<sequence<string> > value);
     sequence<Enum> getSequenceEnum();

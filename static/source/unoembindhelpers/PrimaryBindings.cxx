@@ -12,16 +12,40 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Type.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textcvt.h>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
 #include <static/unoembindhelpers/PrimaryBindings.hxx>
+#include <typelib/typedescription.h>
 
 #include <cstdint>
+#include <string>
 #include <typeinfo>
 
 using namespace emscripten;
 using namespace css::uno;
+
+template <> struct emscripten::smart_ptr_trait<css::uno::Type>
+{
+    using PointerType = css::uno::Type;
+    using element_type = typelib_TypeDescriptionReference;
+    static typelib_TypeDescriptionReference* get(css::uno::Type const& ptr)
+    {
+        return ptr.getTypeLibType();
+    }
+    static sharing_policy get_sharing_policy() { return sharing_policy::INTRUSIVE; }
+    static css::uno::Type* share(typelib_TypeDescriptionReference* v)
+    {
+        return new css::uno::Type(v);
+    }
+    static css::uno::Type* construct_null() { return new css::uno::Type(); }
+};
 
 EM_JS(void, jsRegisterChar, (std::type_info const* raw),
 // clang-format off
@@ -110,6 +134,18 @@ EM_JS(void, jsRegisterString, (std::type_info const* raw),
 
 namespace
 {
+OString toUtf8(OUString const& string)
+{
+    OString s;
+    if (!string.convertToString(&s, RTL_TEXTENCODING_UTF8,
+                                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                                    | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+    {
+        throw css::uno::RuntimeException("cannot convert OUString to UTF-8");
+    }
+    return s;
+}
+
 template <typename T> void registerInOutParam(char const* name)
 {
     class_<unoembindhelpers::UnoInOutParam<T>>(name).constructor().constructor<T>().property(
@@ -134,6 +170,13 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .value("FromAny", unoembindhelpers::uno_Reference::FromAny);
     enum_<unoembindhelpers::uno_Sequence>("uno_Sequence")
         .value("FromSize", unoembindhelpers::uno_Sequence::FromSize);
+
+    emscripten::class_<typelib_TypeDescriptionReference>("uno_Type")
+        .smart_ptr<css::uno::Type>("uno_Type$")
+        .function("toString", +[](css::uno::Type const& self) {
+            auto const name = toUtf8(self.getTypeName());
+            return std::string(name.getStr(), name.getLength());
+        });
 
     // Any
     class_<Any>("Any").constructor(+[](const val& rObject, const TypeClass& rUnoType) -> Any {
