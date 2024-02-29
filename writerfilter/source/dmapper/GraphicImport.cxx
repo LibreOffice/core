@@ -972,8 +972,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             && !bIsDiagram && !bIsLockedCanvas && !bIsWordprocessingCanvas)
                             || xServiceInfo->supportsService("com.sun.star.drawing.LineShape");
                         SdrObject* pShape = SdrObject::getSdrObjectFromXShape(m_xShape);
-                        if ((bIsGroupOrLine && !lcl_bHasGroupSlantedChild(pShape) && nOOXAngle == 0)
-                            || !bIsGroupOrLine)
+                        if (!bIsGroupOrLine || (!nOOXAngle && !lcl_bHasGroupSlantedChild(pShape)))
                         {
                             if (m_pImpl->isXSizeValid())
                                 aSize.Width = m_pImpl->getXSize();
