@@ -4762,12 +4762,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 {
                     if (rProp.Name == "VML-Z-ORDER")
                     {
-                        GraphicZOrderHelper* pZOrderHelper = m_rDMapper.graphicZOrderHelper();
+                        GraphicZOrderHelper& rZOrderHelper = m_rDMapper.graphicZOrderHelper();
                         sal_Int32 zOrder(0);
                         rProp.Value >>= zOrder;
                         xShapePropertySet->setPropertyValue("ZOrder",
-                            uno::Any(pZOrderHelper->findZOrder(zOrder, /*LastDuplicateWins*/true)));
-                        pZOrderHelper->addItem(xShapePropertySet, zOrder);
+                            uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
+                        rZOrderHelper.addItem(xShapePropertySet, zOrder);
                         xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::Any( zOrder >= 0 ) );
                         checkZOrderStatus = true;
                     }
@@ -4807,12 +4807,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 {
                     if (rProp.Name == "VML-Z-ORDER")
                     {
-                        GraphicZOrderHelper* pZOrderHelper = m_rDMapper.graphicZOrderHelper();
+                        GraphicZOrderHelper& rZOrderHelper = m_rDMapper.graphicZOrderHelper();
                         sal_Int32 zOrder(0);
                         rProp.Value >>= zOrder;
                         xShapePropertySet->setPropertyValue("ZOrder",
-                            uno::Any(pZOrderHelper->findZOrder(zOrder, /*LastDuplicateWins*/true)));
-                        pZOrderHelper->addItem(xShapePropertySet, zOrder);
+                            uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
+                        rZOrderHelper.addItem(xShapePropertySet, zOrder);
                         xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::Any( zOrder >= 0 ) );
                         checkZOrderStatus = true;
                     }

@@ -107,7 +107,7 @@ public:
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
     StyleSheetTablePtr const & GetStyleSheetTable( );
     SettingsTablePtr const & GetSettingsTable();
-    GraphicZOrderHelper* graphicZOrderHelper();
+    GraphicZOrderHelper& graphicZOrderHelper();
 
     /// Return the first from the pending (not inserted to the document) shapes, if there are any.
     css::uno::Reference<css::drawing::XShape> PopPendingShape();

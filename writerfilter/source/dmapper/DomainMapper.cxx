@@ -4908,11 +4908,11 @@ SettingsTablePtr const & DomainMapper::GetSettingsTable()
     return m_pImpl->GetSettingsTable();
 }
 
-GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
+GraphicZOrderHelper& DomainMapper::graphicZOrderHelper()
 {
     if (m_zOrderHelper == nullptr)
         m_zOrderHelper.reset( new GraphicZOrderHelper );
-    return m_zOrderHelper.get();
+    return *m_zOrderHelper;
 }
 
 uno::Reference<drawing::XShape> DomainMapper::PopPendingShape()

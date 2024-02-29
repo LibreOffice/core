@@ -391,14 +391,14 @@ public:
     void applyZOrder(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
     {
         std::optional<sal_Int32> oZOrder = m_oZOrder;
-        bool bBehindText = m_bBehindDoc && !m_bOpaque;
         if (m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE
             && !m_rDomainMapper.IsInShape())
         {
             oZOrder = SAL_MIN_INT32;
-            bBehindText = false;
         }
-        if (oZOrder)
+        else if (!oZOrder)
+            return;
+        else
         {
             // tdf#120760 Send objects with behinddoc=true to the back.
 
@@ -417,18 +417,19 @@ public:
             // (especially needed for IsInHeaderFooter, as EVERYTHING is forced to the background).
             //
             // relativeHeight already removed 0x1E00 0000, so can subtract another 0x6200 0000
+            const bool bBehindText = m_bBehindDoc && !m_bOpaque;
             if (bBehindText)
                 oZOrder = *oZOrder - 0x62000000;
-
-            // TODO: it is possible that RTF has been wrong all along as well. Always true here?
-            const bool bLastDuplicateWins(!m_rDomainMapper.IsRTFImport()
-                || m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE);
-
-            GraphicZOrderHelper* pZOrderHelper = m_rDomainMapper.graphicZOrderHelper();
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER),
-                uno::Any(pZOrderHelper->findZOrder(*oZOrder, bLastDuplicateWins)));
-            pZOrderHelper->addItem(xGraphicObjectProperties, *oZOrder);
         }
+
+        // TODO: it is possible that RTF has been wrong all along as well. Always true here?
+        const bool bLastDuplicateWins(!m_rDomainMapper.IsRTFImport()
+            || m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE);
+
+        GraphicZOrderHelper& rZOrderHelper = m_rDomainMapper.graphicZOrderHelper();
+        xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER),
+            uno::Any(rZOrderHelper.findZOrder(*oZOrder, bLastDuplicateWins)));
+        rZOrderHelper.addItem(xGraphicObjectProperties, *oZOrder);
     }
 
     void applyName(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
