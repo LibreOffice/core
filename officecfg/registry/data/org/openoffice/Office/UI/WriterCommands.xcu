@@ -2280,11 +2280,6 @@
           <value xml:lang="en-US">To Next Sentence</value>
         </prop>
       </node>
-      <node oor:name=".uno:NumberOrNoNumber" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Numbering On/Off</value>
-        </prop>
-      </node>
       <node oor:name=".uno:GoToPrevSentence" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To Previous Sentence</value>

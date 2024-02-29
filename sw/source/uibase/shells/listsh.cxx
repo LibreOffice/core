@@ -126,7 +126,6 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
 
 void SwListShell::Execute(SfxRequest &rReq)
 {
-    const SfxItemSet* pArgs = rReq.GetArgs();
     const sal_uInt16 nSlot = rReq.GetSlot();
     SwWrtShell& rSh = GetShell();
 
@@ -194,18 +193,6 @@ void SwListShell::Execute(SfxRequest &rReq)
             rSh.GotoPrevNum();
             rReq.Done();
             break;
-
-        case FN_NUM_OR_NONUM:
-        {
-            bool bApi = rReq.IsAPI();
-            bool bDelete = !rSh.IsNoNum(!bApi);
-            if(pArgs )
-                bDelete = static_cast<const SfxBoolItem &>(pArgs->Get(rReq.GetSlot())).GetValue();
-            rSh.NumOrNoNum( bDelete, !bApi );
-            rReq.AppendItem( SfxBoolItem( nSlot, bDelete ) );
-            rReq.Done();
-        }
-        break;
         default:
             OSL_ENSURE(false, "wrong dispatcher");
             return;
@@ -222,9 +209,6 @@ void SwListShell::GetState(SfxItemSet &rSet)
     {
         switch( nWhich )
         {
-            case FN_NUM_OR_NONUM:
-                rSet.Put(SfxBoolItem(nWhich, GetShell().IsNoNum(false)));
-            break;
             case FN_NUM_BULLET_OUTLINE_UP:
             case FN_NUM_BULLET_UP:
                 if(!nCurrentNumLevel)

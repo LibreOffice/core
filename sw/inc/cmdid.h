@@ -103,8 +103,6 @@ class SwUINumRuleItem;
 #define FN_NUM_BULLET_OUTLINE_MOVEDOWN  (FN_EDIT + 42)  /* Push down with sub-items */
 #define FN_UPDATE_INPUTFIELDS           (FN_EDIT + 43)  /* Update input fields */
 
-#define FN_NUM_OR_NONUM         (FN_EDIT + 46)  /* Number on/off */
-
 #define FN_GOTO_NEXT_INPUTFLD   (FN_EDIT + 47)  /* go to next inputfield */
 #define FN_GOTO_PREV_INPUTFLD   (FN_EDIT + 48)  /* go to previous inputfield    */
 #define FN_GOTO_MARK            (FN_EDIT + 49)  /* go to bookmark by name */

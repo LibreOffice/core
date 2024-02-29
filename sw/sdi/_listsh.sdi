@@ -80,12 +80,5 @@ interface BaseTextList
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-
-    FN_NUM_OR_NONUM // status(play)
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
 }
 
