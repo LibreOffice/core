@@ -78,6 +78,46 @@ void lcl_OnTabsChanged(const ScTabViewShell* pViewShell, const ScDocument& rDoc,
             true /* bGroups */, nTabIndex);
     }
 }
+
+template<typename T>
+void lcl_MakeJsonArray(tools::JsonWriter& rJson, const std::vector<T>& v, const char *pArrayName)
+{
+    if (!v.empty())
+    {
+        auto jsonArray = rJson.startArray(pArrayName);
+        std::stringstream ss;
+        for (std::size_t i = 0; i < v.size(); ++i)
+        {
+            SCTAB tabIndex = v[i];
+            ss << tabIndex;
+            if (i < v.size() - 1)
+                ss << ",";
+            ss << " ";
+        }
+        if (!ss.str().empty())
+            rJson.putRaw(ss.str());
+    }
+}
+
+void lcl_UndoCommandResult(const ScTabViewShell* pViewShell,
+                           const char *pCmdName, const char *pCmdType,
+                           const std::vector<SCTAB>* pNewTabs,
+                           const std::vector<SCTAB>* pOldTabs = nullptr)
+{
+    tools::JsonWriter aJson;
+    aJson.put("commandName", pCmdName);
+    aJson.put("success", true);
+    {
+        auto result = aJson.startNode("result");
+        aJson.put("type", pCmdType);
+        if (pNewTabs)
+            lcl_MakeJsonArray(aJson, *pNewTabs, "newTabs");
+        if (pOldTabs)
+            lcl_MakeJsonArray(aJson, *pOldTabs, "oldTabs");
+    }
+
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+}
 }
 
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
@@ -141,6 +181,9 @@ void ScUndoInsertTab::Undo()
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         lcl_OnTabsChanged(pViewShell, rDoc, nTab);
+        std::vector<SCTAB> aTabs{nTab};
+        lcl_UndoCommandResult(pViewShell, ".uno:Undo", "ScUndoInsertTab", &aTabs);
+
     }
 
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
@@ -171,6 +214,8 @@ void ScUndoInsertTab::Redo()
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         lcl_OnTabsChanged(pViewShell, rDoc, nTab);
+        std::vector<SCTAB> aTabs{nTab};
+        lcl_UndoCommandResult(pViewShell, ".uno:Redo", "ScUndoInsertTab", &aTabs);
     }
 }
 
@@ -394,6 +439,7 @@ void ScUndoDeleteTab::Undo()
     if (comphelper::LibreOfficeKit::isActive() && !theTabs.empty())
     {
         lcl_OnTabsChanged(pViewShell, rDoc, theTabs[0]);
+        lcl_UndoCommandResult(pViewShell, ".uno:Undo", "ScUndoDeleteTab", &theTabs);
     }
 
     for(SCTAB nTab: theTabs)
@@ -432,6 +478,7 @@ void ScUndoDeleteTab::Redo()
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         lcl_OnTabsChanged(pViewShell, rDoc, theTabs[0]);
+        lcl_UndoCommandResult(pViewShell, ".uno:Redo", "ScUndoDeleteTab", &theTabs);
     }
 
     //  SetTabNo(...,sal_True) for all views to sync with drawing layer pages
@@ -589,6 +636,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
         const auto oldTabsMinIt = std::min_element(mpOldTabs->begin(), mpOldTabs->end());
         SCTAB nTab = std::min(*newTabsMinIt, *oldTabsMinIt);
         lcl_OnTabsChanged(pViewShell, rDoc, nTab, true /* bInvalidateTiles */);
+        lcl_UndoCommandResult(pViewShell, bUndo ? ".uno:Undo" : ".uno:Redo", "ScUndoMoveTab", mpOldTabs.get(), mpNewTabs.get());
     }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
