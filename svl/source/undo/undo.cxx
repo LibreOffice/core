@@ -34,6 +34,26 @@
 #include <limits.h>
 #include <algorithm>
 
+namespace
+{
+class SfxMarkedUndoContext final : public SfxUndoContext
+{
+public:
+    SfxMarkedUndoContext(SfxUndoManager& manager, UndoStackMark mark)
+    {
+        m_offset = manager.RemoveMark(mark);
+        size_t count = manager.GetUndoActionCount();
+        if (m_offset < count)
+            m_offset = count - m_offset - 1;
+        else
+            m_offset = std::numeric_limits<size_t>::max();
+    }
+    size_t GetUndoOffset() override { return m_offset; }
+
+private:
+    size_t m_offset;
+};
+}
 
 SfxRepeatTarget::~SfxRepeatTarget()
 {
@@ -1083,18 +1103,18 @@ UndoStackMark SfxUndoManager::MarkTopUndoAction()
     return m_xData->mnMarks;
 }
 
-void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
+size_t SfxUndoManager::RemoveMark(UndoStackMark i_mark)
 {
     UndoManagerGuard aGuard( *m_xData );
 
     if ((m_xData->mnEmptyMark < i_mark) || (MARK_INVALID == i_mark))
     {
-        return; // nothing to remove
+        return std::numeric_limits<size_t>::max(); // nothing to remove
     }
     else if (i_mark == m_xData->mnEmptyMark)
     {
         --m_xData->mnEmptyMark; // never returned from MarkTop => invalid
-        return;
+        return std::numeric_limits<size_t>::max();
     }
 
     for ( size_t i=0; i<m_xData->maUndoArray.maUndoActions.size(); ++i )
@@ -1104,13 +1124,15 @@ void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
         if (markPos != rAction.aMarks.end())
         {
             rAction.aMarks.erase( markPos );
-            return;
+            return i;
         }
     }
     SAL_WARN("svl", "SfxUndoManager::RemoveMark: mark not found!");
         // TODO: this might be too offensive. There are situations where we implicitly remove marks
         // without our clients, in particular the client which created the mark, having a chance to know
         // about this.
+
+    return std::numeric_limits<size_t>::max();
 }
 
 bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
@@ -1127,6 +1149,16 @@ bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
             m_xData->maUndoArray.maUndoActions[ nActionPos-1 ];
 
     return std::find(rAction.aMarks.begin(), rAction.aMarks.end(), i_mark) != rAction.aMarks.end();
+}
+
+
+void SfxUndoManager::UndoMark(UndoStackMark i_mark)
+{
+    SfxMarkedUndoContext context(*this, i_mark); // Removes the mark
+    if (context.GetUndoOffset() == std::numeric_limits<size_t>::max())
+        return; // nothing to undo
+
+    UndoWithContext(context);
 }
 
 
