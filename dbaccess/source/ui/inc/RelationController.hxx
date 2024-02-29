@@ -34,7 +34,7 @@ namespace dbaui
     {
         css::uno::Reference< css::container::XNameAccess >    m_xTables;
         std::unique_ptr<weld::WaitObject> m_xWaitObject;
-        sal_uLong       m_nThreadEvent;
+        sal_Int32      m_nThreadEvent;
         bool            m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class
