@@ -13,6 +13,8 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <tabfrm.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 namespace
 {
@@ -108,6 +110,25 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNestedRowSpan)
 
     // Then make sure the resulting page count matches Word:
     CPPUNIT_ASSERT_EQUAL(6, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyHeader)
+{
+    // Given a document with 8 pages: a first page ending in a manual page break, then a multi-page
+    // floating table on pages 2..8:
+    createSwDoc("floattable-header.docx");
+    CPPUNIT_ASSERT_EQUAL(8, getPages());
+
+    // When creating a new paragraph at doc start:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SplitNode();
+    // Without the accompanying fix in place, this test would have crashed here.
+    pWrtShell->CalcLayout();
+
+    // Then make sure we get one more page, since the first page is now 2 pages:
+    CPPUNIT_ASSERT_EQUAL(9, getPages());
 }
 }
 
