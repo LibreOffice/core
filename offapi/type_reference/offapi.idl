@@ -516,6 +516,7 @@ module com {
      const short NUM7 = 263;
      const short NUM8 = 264;
      const short NUM9 = 265;
+     const short NUMBERSIGN = 191;
      const short NUMLOCK = 1313;
      const short O = 526;
      const short OPEN = 1296;
@@ -561,6 +562,8 @@ module com {
      const short V = 533;
      const short W = 534;
      const short X = 535;
+     const short XF86BACK = 166;
+     const short XF86FORWARD = 167;
      const short Y = 536;
      const short Z = 537;
     };
@@ -5238,6 +5241,7 @@ module com {
      [property] long EdgeNode1VertDist;
      [property] long EdgeNode2HorzDist;
      [property] long EdgeNode2VertDist;
+     [property, optional] boolean EdgeOOXMLCurve;
     };
     published service ConnectorShape {
      service ::com::sun::star::drawing::Shape;
@@ -7324,6 +7328,7 @@ module com {
      [property] short LeftMargin;
      [property] short RightMargin;
      [property, optional] short BaseLine;
+     [property, optional] boolean IsRightToLeft;
     };
     /** @deprecated */ published struct SymbolDescriptor {
      string sName;
@@ -10675,24 +10680,34 @@ module com {
      const long BOOLEAN = 16;
      const long CHAR = 1;
      const long CLOB = 2005;
+     const long DATALINK = 70;
      const long DATE = 91;
      const long DECIMAL = 3;
      const long DISTINCT = 2001;
      const long DOUBLE = 8;
      const long FLOAT = 6;
      const long INTEGER = 4;
+     const long LONGNVARCHAR = -16;
      const long LONGVARBINARY = -4;
      const long LONGVARCHAR = -1;
+     const long NCHAR = -15;
+     const long NCLOB = 2011;
      const long NUMERIC = 2;
+     const long NVARCHAR = -9;
      const long OBJECT = 2000;
      const long OTHER = 1111;
      const long REAL = 7;
      const long REF = 2006;
+     const long REF_CURSOR = 2012;
+     const long ROWID = -8;
      const long SMALLINT = 5;
      const long SQLNULL = 0;
+     const long SQLXML = 2009;
      const long STRUCT = 2002;
      const long TIME = 92;
      const long TIMESTAMP = 93;
+     const long TIMESTAMP_WITH_TIMEZONE = 2014;
+     const long TIME_WITH_TIMEZONE = 2013;
      const long TINYINT = -6;
      const long VARBINARY = -3;
      const long VARCHAR = 12;
@@ -12004,6 +12019,7 @@ module com {
     published constants NamedRangeFlag {
      const long COLUMN_HEADER = 4;
      const long FILTER_CRITERIA = 1;
+     const long HIDDEN = 16;
      const long PRINT_AREA = 2;
      const long ROW_HEADER = 8;
     };
@@ -13361,6 +13377,7 @@ module com {
      [property] short StartWith;
      [property, optional] ::com::sun::star::awt::XBitmap GraphicBitmap;
      [property, optional] string ListFormat;
+     [property, optional] boolean IsLegal;
     };
     published service NumberingRule {
      service ::com::sun::star::style::NumberingAlignment;
@@ -13882,6 +13899,7 @@ module com {
      [property, optional] string Tooltip;
      [property, optional] boolean Decorative;
      [property, optional] boolean IsSplitAllowed;
+     [property, optional] boolean WrapTextAtFlyStart;
     };
     published service BaseFrame {
      service ::com::sun::star::text::BaseFrameProperties;
@@ -14723,6 +14741,7 @@ module com {
      const short FOOTNOTE = 3;
      const short REFERENCE_MARK = 0;
      const short SEQUENCE_FIELD = 1;
+     const short STYLE = 5;
     };
     published service ReferenceMark {
      interface ::com::sun::star::text::XTextContent;
@@ -15541,6 +15560,7 @@ module com {
       [property] short ReferenceFieldPart;
       [property] short SequenceNumber;
       [property, optional] string ReferenceFieldLanguage;
+      [property, optional] short ReferenceFieldFlags;
      };
      published service GraphicObjectCount {
       service ::com::sun::star::text::TextField;
@@ -17262,6 +17282,7 @@ module com {
      [property] short SearchSimilarityAdd;
      [property] short SearchSimilarityExchange;
      [property, optional] boolean SearchWildcard;
+     [property, optional] long WildcardEscapeCharacter;
     };
     published interface XReplaceDescriptor {
      interface ::com::sun::star::util::XSearchDescriptor;
