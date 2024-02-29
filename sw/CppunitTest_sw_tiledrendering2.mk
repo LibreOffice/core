@@ -64,4 +64,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_tiledrendering2,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_tiledrendering2))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_tiledrendering2,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
