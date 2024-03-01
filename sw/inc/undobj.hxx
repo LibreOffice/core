@@ -244,7 +244,7 @@ class SwUndoInsLayFormat;
 namespace sw {
 
 std::optional<std::vector<SwFrameFormat*>>
-GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset nSttNode);
+GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset nSttNode, bool isAtPageIncluded);
 
 }
 

@@ -462,7 +462,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
     }
 
     bool bSplitFly = false;
-    std::optional<std::vector<SwFrameFormat*>> oFlys = sw::GetFlysAnchoredAt(GetDoc(), GetIndex());
+    std::optional<std::vector<SwFrameFormat*>> oFlys = sw::GetFlysAnchoredAt(GetDoc(), GetIndex(), false);
     if (oFlys.has_value())
     {
         // See if one of the flys is a split fly. If so, we need to keep

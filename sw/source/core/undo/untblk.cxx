@@ -38,7 +38,7 @@
 namespace sw {
 
 std::optional<std::vector<SwFrameFormat*>>
-GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset const nSttNode)
+GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset const nSttNode, bool const isAtPageIncluded)
 {
     std::optional<std::vector<SwFrameFormat*>> pFrameFormats;
     const size_t nArrLen = rDoc.GetSpzFrameFormats()->size();
@@ -47,10 +47,11 @@ GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset const nSttNode)
         SwFrameFormat *const pFormat = (*rDoc.GetSpzFrameFormats())[n];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
         SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
-        if (pAnchorNode
-             && nSttNode == pAnchorNode->GetIndex()
-             && ((pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
-                 || (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)))
+        if ((pAnchorNode
+                && nSttNode == pAnchorNode->GetIndex()
+                && ((pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
+                    || (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)))
+            || (isAtPageIncluded && pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PAGE))
         {
             if (!pFrameFormats)
                 pFrameFormats.emplace();
@@ -89,7 +90,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
         // These flys will be saved in pFrameFormats array (only flys which exist BEFORE insertion!)
         // Then in SwUndoInserts::SetInsertRange the flys saved in pFrameFormats will NOT create Undos.
         // m_FlyUndos will only be filled with newly inserted flys.
-        m_pFrameFormats = sw::GetFlysAnchoredAt(rDoc, m_nSttNode);
+        m_pFrameFormats = sw::GetFlysAnchoredAt(rDoc, m_nSttNode, true);
     }
     // consider Redline
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
@@ -392,7 +393,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     if( ( m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent ) && m_oUndoNodeIndex)
     {
         auto const pFlysAtInsPos(sw::GetFlysAnchoredAt(rDoc,
-            rPam.GetPoint()->GetNodeIndex()));
+            rPam.GetPoint()->GetNodeIndex(), false));
 
         ::std::optional<SwNodeIndex> oMvBkwrd = MovePtBackward(rPam);
 

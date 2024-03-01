@@ -5066,7 +5066,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     }
     else
     {
-        pFlys = sw::GetFlysAnchoredAt(rDoc, rPos.GetNodeIndex());
+        pFlys = sw::GetFlysAnchoredAt(rDoc, rPos.GetNodeIndex(), false);
         pFlysAtInsPos = pFlys ? &*pFlys : nullptr;
     }
 
