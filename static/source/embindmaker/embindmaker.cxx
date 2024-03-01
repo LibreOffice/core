@@ -849,6 +849,7 @@ SAL_IMPLEMENT_MAIN()
                        << mem.name << ")";
             }
             cppOut << ";\n";
+            cppOut << "    ::unoembindhelpers::registerUnoType<" << cppName(enm) << ">();\n";
             dumpRegisterFunctionEpilog(cppOut, n);
         }
         std::set<OUString> sequences;

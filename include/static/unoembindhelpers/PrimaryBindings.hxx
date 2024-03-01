@@ -14,11 +14,14 @@
 #include <cstdint>
 #include <limits>
 #include <stdexcept>
+#include <typeinfo>
 
 #include <emscripten/bind.h>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <cppu/unotype.hxx>
 #include <sal/types.h>
 
 template <typename T> struct emscripten::smart_ptr_trait<css::uno::Reference<T>>
@@ -33,6 +36,11 @@ template <typename T> struct emscripten::smart_ptr_trait<css::uno::Reference<T>>
 
 namespace unoembindhelpers
 {
+namespace detail
+{
+void registerUnoType(css::uno::Type const& type, std::type_info const* id);
+}
+
 enum class uno_Reference
 {
     FromAny
@@ -74,6 +82,11 @@ void checkSequenceAccess(css::uno::Sequence<T> const& sequence, sal_Int32 index)
     {
         throw std::out_of_range("index out of bounds");
     }
+}
+
+template <typename T> void registerUnoType()
+{
+    detail::registerUnoType(cppu::UnoType<T>::get(), &typeid(T));
 }
 
 template <typename T> void registerSequence(char const* name)
