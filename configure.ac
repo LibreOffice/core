@@ -14875,6 +14875,7 @@ if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
         MERGELIBS_MORE="TRUE"
         AC_MSG_RESULT([yes (more)])
         AC_DEFINE(ENABLE_MERGELIBS)
+        AC_DEFINE(ENABLE_MERGELIBS_MORE)
     elif test "$enable_mergelibs" = "yes" -o "$enable_mergelibs" = ""; then
         MERGELIBS="TRUE"
         AC_MSG_RESULT([yes])
