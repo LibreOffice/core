@@ -172,6 +172,7 @@ gb_MERGE_LIBRARY_LIST += \
 	$(if $(filter WNT,$(OS)), \
 		smplmail \
 	) \
+	solver \
 	storagefd \
 	svgfilter \
 	t602filter \
