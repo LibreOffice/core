@@ -159,6 +159,7 @@ gb_MERGE_LIBRARY_LIST += \
 	msforms \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
 	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
+	OGLTrans \
 	odbc \
 	pdffilter \
 	$(if $(BUILD_POSTGRESQL_SDBC), \
