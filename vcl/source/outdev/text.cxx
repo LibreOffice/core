@@ -1758,16 +1758,11 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
 }
 
 void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
-                                 sal_Int32 nIndex, sal_Int32 nLen,
+                                 const sal_Int32 nIndex, const sal_Int32 nLen,
                                  DrawTextFlags nStyle, std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
                                  const SalLayoutGlyphs* pGlyphs )
 {
     assert(!is_double_buffered_window());
-
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
 
     if ( !IsDeviceOutputNecessary() || (nIndex >= rStr.getLength()) )
         return;
@@ -1782,12 +1777,12 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     if ( mbOutputClipped )
         return;
 
-    if( nIndex >= rStr.getLength() )
-        return;
-
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
+    // nIndex and nLen must go to mpAlphaVDev->DrawCtrlText unchanged
+    sal_Int32 nCorrectedIndex = nIndex;
+    sal_Int32 nCorrectedLen = nLen;
+    if ((nCorrectedLen < 0) || (nCorrectedIndex + nCorrectedLen >= rStr.getLength()))
     {
-        nLen = rStr.getLength() - nIndex;
+        nCorrectedLen = rStr.getLength() - nCorrectedIndex;
     }
     sal_Int32  nMnemonicPos = -1;
 
@@ -1797,33 +1792,33 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     const OUString aStr = removeMnemonicFromString(rStr, nMnemonicPos); // Strip mnemonics always
     if (nMnemonicPos != -1)
     {
-        if (nMnemonicPos < nIndex)
+        if (nMnemonicPos < nCorrectedIndex)
         {
-            --nIndex;
+            --nCorrectedIndex;
         }
         else
         {
-            if (nMnemonicPos < (nIndex + nLen))
-                --nLen;
+            if (nMnemonicPos < (nCorrectedIndex + nCorrectedLen))
+                --nCorrectedLen;
         }
         if (nStyle & DrawTextFlags::Mnemonic && !pVector
             && !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics))
         {
-            SAL_WARN_IF( nMnemonicPos >= (nIndex+nLen), "vcl", "Mnemonic underline marker after last character" );
+            SAL_WARN_IF( nMnemonicPos >= (nCorrectedIndex+nCorrectedLen), "vcl", "Mnemonic underline marker after last character" );
             bool bInvalidPos = false;
 
-            if( nMnemonicPos >= nLen )
+            if (nMnemonicPos >= nCorrectedLen)
             {
                 // may occur in BiDi-Strings: the '~' is sometimes found behind the last char
                 // due to some strange BiDi text editors
                 // -> place the underline behind the string to indicate a failure
                 bInvalidPos = true;
-                nMnemonicPos = nLen-1;
+                nMnemonicPos = nCorrectedLen - 1;
             }
 
             KernArray aDXArray;
-            GetTextArray(aStr, &aDXArray, nIndex, nLen, true, nullptr, pGlyphs);
-            sal_Int32 nPos = nMnemonicPos - nIndex;
+            GetTextArray(aStr, &aDXArray, nCorrectedIndex, nCorrectedLen, true, nullptr, pGlyphs);
+            sal_Int32 nPos = nMnemonicPos - nCorrectedIndex;
             sal_Int32 lc_x1 = nPos ? aDXArray[nPos - 1] : 0;
             sal_Int32 lc_x2 = aDXArray[nPos];
             nMnemonicWidth = std::abs(lc_x1 - lc_x2);
@@ -1871,7 +1866,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
     }
 
-    DrawText(rPos, aStr, nIndex, nLen, pVector, pDisplayText, pGlyphs);
+    DrawText(rPos, aStr, nCorrectedIndex, nCorrectedLen, pVector, pDisplayText, pGlyphs);
     if (nMnemonicPos != -1)
         ImplDrawMnemonicLine(nMnemonicX, nMnemonicY, nMnemonicWidth);
 
