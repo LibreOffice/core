@@ -23,6 +23,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
@@ -52,7 +53,7 @@ namespace o3tl
     template<> struct typed_flags<SvTLEntryFlags> : is_typed_flags<SvTLEntryFlags, 0x801f> {};
 }
 
-class VCL_DLLPUBLIC SvTreeListEntry
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListEntry
 {
     friend class SvTreeList;
     friend class SvListView;

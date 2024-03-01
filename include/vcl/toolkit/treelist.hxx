@@ -23,6 +23,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/treelistentries.hxx>
 
@@ -61,7 +62,7 @@ struct SvSortData
     const SvTreeListEntry* pRight;
 };
 
-class VCL_DLLPUBLIC SvTreeList final
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeList final
 {
     friend class        SvListView;
 
@@ -199,7 +200,7 @@ public:
     void                Resort();
 };
 
-class VCL_DLLPUBLIC SvListView
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvListView
 {
     friend class SvTreeList;
 

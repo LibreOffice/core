@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 #define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
+#include <config_options.h>
 #include <epoxy/gl.h>
 #include <sal/detail/log.h>
 #include <vcl/dllapi.h>
@@ -42,7 +43,7 @@
     } while (false)
 
 // All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
-struct VCL_DLLPUBLIC OpenGLHelper
+struct UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) OpenGLHelper
 {
     OpenGLHelper() = delete; // Should not be instantiated
 

@@ -62,7 +62,7 @@ namespace comphelper
     /** a class which aggregates a proxy for an XAccessible, and wrapping the context returned by this
         XAccessible.
     */
-    class COMPHELPER_DLLPUBLIC OAccessibleWrapper:public OAccessibleWrapper_Base
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleWrapper:public OAccessibleWrapper_Base
                             ,public OComponentProxyAggregation
 
     {
@@ -139,7 +139,7 @@ namespace comphelper
 
         @seealso OAccessibleContextWrapper
     */
-    class COMPHELPER_DLLPUBLIC OAccessibleContextWrapperHelper
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleContextWrapperHelper
                 :private OComponentProxyAggregationHelper
                 ,public OAccessibleContextWrapperHelper_Base
     {
@@ -240,7 +240,7 @@ namespace comphelper
                                             ,   css::accessibility::XAccessibleContext
                                             >   OAccessibleContextWrapper_CBase;
 
-    class COMPHELPER_DLLPUBLIC OAccessibleContextWrapper
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleContextWrapper
                     :public cppu::BaseMutex
                     ,public OAccessibleContextWrapper_CBase
                     ,public OAccessibleContextWrapperHelper

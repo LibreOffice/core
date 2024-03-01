@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_TXTATTR_HXX
 #define INCLUDED_VCL_TXTATTR_HXX
 
+#include <config_options.h>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>
@@ -74,7 +75,7 @@ public:
 
 };
 
-class VCL_DLLPUBLIC TextAttribFontWeight final : public TextAttrib
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) TextAttribFontWeight final : public TextAttrib
 {
 private:
     FontWeight  meWeight;

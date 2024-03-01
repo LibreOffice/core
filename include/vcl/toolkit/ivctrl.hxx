@@ -23,6 +23,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <memory>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
@@ -174,7 +175,7 @@ public:
 
 class MnemonicGenerator;
 
-class VCL_DLLPUBLIC SvtIconChoiceCtrl final : public Control
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvtIconChoiceCtrl final : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
 

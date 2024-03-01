@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
 #define INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
@@ -114,7 +115,7 @@ namespace comphelper
     /** a helper class for implementing an AccessibleExtendedComponent which at the same time
         supports an XAccessibleText interface
     */
-    class COMPHELPER_DLLPUBLIC OAccessibleTextHelper : public cppu::ImplInheritanceHelper<
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAccessibleTextHelper : public cppu::ImplInheritanceHelper<
                                                            OAccessibleExtendedComponentHelper,
                                                            css::accessibility::XAccessibleText>,
                                   public OCommonAccessibleText

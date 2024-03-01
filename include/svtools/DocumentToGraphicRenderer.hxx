@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <vector>
 
 #include <vcl/graph.hxx>
@@ -41,7 +42,7 @@ namespace com::sun::star {
     }
 }
 
-class SVT_DLLPUBLIC DocumentToGraphicRenderer
+class UNLESS_MERGELIBS_MORE(SVT_DLLPUBLIC) DocumentToGraphicRenderer
 {
     const css::uno::Reference<css::lang::XComponent>& mxDocument;
 

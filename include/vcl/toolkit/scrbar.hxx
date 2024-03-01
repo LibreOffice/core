@@ -23,6 +23,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/scrollable.hxx>
@@ -30,7 +31,7 @@
 
 struct ImplScrollBarData;
 
-class VCL_DLLPUBLIC ScrollBar final : public Control
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) ScrollBar final : public Control
                               , public Scrollable
 {
 private:

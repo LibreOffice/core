@@ -23,6 +23,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessibletableprovider.hxx>
@@ -39,7 +40,7 @@ enum class SvTabJustify
     AdjustCenter = static_cast<int>(SvLBoxTabFlags::ADJUST_CENTER)
 };
 
-class VCL_DLLPUBLIC SvTabListBox : public SvTreeListBox
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
@@ -90,7 +91,7 @@ namespace vcl {
     struct SvHeaderTabListBoxImpl;
 }
 
-class VCL_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public vcl::IAccessibleTableProvider
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvHeaderTabListBox : public SvTabListBox, public vcl::IAccessibleTableProvider
 {
 private:
     bool                            m_bFirstPaint;

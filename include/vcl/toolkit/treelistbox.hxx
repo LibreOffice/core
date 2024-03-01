@@ -23,6 +23,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 
 #include <deque>
@@ -173,7 +174,7 @@ typedef std::pair<vcl::RenderContext&, const SvTreeListEntry&> svtree_measure_ar
 typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, const SvTreeListEntry&> svtree_render_args;
 typedef std::pair<SvTreeListEntry*, OUString> IterString;
 
-class VCL_DLLPUBLIC SvTreeListBox
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox
                 :public Control
                 ,public SvListView
                 ,public DropTargetHelper

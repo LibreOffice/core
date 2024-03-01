@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <toolkit/dllapi.h>
 
 #include <com/sun/star/awt/XTextArea.hpp>
@@ -132,7 +133,7 @@ public:
 
 //  class VCLXCheckBox
 
-class TOOLKIT_DLLPUBLIC VCLXCheckBox final : public cppu::ImplInheritanceHelper<
+class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXCheckBox final : public cppu::ImplInheritanceHelper<
                         VCLXGraphicControl,
                         css::awt::XCheckBox,
                         css::awt::XButton>
@@ -181,7 +182,7 @@ public:
 
 //  class VCLXRadioButton
 
-class TOOLKIT_DLLPUBLIC VCLXRadioButton final : public cppu::ImplInheritanceHelper<
+class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXRadioButton final : public cppu::ImplInheritanceHelper<
                         VCLXGraphicControl,
                         css::awt::XRadioButton,
                         css::awt::XButton>
@@ -298,7 +299,7 @@ public:
 
 //  class VCLXScrollBar
 
-class TOOLKIT_DLLPUBLIC VCLXScrollBar final :
+class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXScrollBar final :
                         public cppu::ImplInheritanceHelper<VCLXWindow, css::awt::XScrollBar>
 {
 private:
@@ -535,25 +536,25 @@ protected:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class SAL_DLLPUBLIC_RTTI SVTXNumericField final : public cppu::ImplInheritanceHelper<SVTXFormattedField, css::awt::XNumericField>
+class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) SVTXNumericField final : public cppu::ImplInheritanceHelper<SVTXFormattedField, css::awt::XNumericField>
 {
 public:
                     SVTXNumericField();
                     virtual ~SVTXNumericField() override;
 
     // css::awt::XNumericField
-    TOOLKIT_DLLPUBLIC void SAL_CALL setValue( double Value ) override;
-    TOOLKIT_DLLPUBLIC double SAL_CALL getValue(  ) override;
+    void SAL_CALL setValue( double Value ) override;
+    double SAL_CALL getValue(  ) override;
     void SAL_CALL setMin( double Value ) override;
-    TOOLKIT_DLLPUBLIC double SAL_CALL getMin(  ) override;
+    double SAL_CALL getMin(  ) override;
     void SAL_CALL setMax( double Value ) override;
-    TOOLKIT_DLLPUBLIC double SAL_CALL getMax(  ) override;
+    double SAL_CALL getMax(  ) override;
     void SAL_CALL setFirst( double Value ) override;
     double SAL_CALL getFirst(  ) override;
     void SAL_CALL setLast( double Value ) override;
     double SAL_CALL getLast(  ) override;
     void SAL_CALL setSpinSize( double Value ) override;
-    TOOLKIT_DLLPUBLIC double SAL_CALL getSpinSize(  ) override;
+    double SAL_CALL getSpinSize(  ) override;
     void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
     sal_Int16 SAL_CALL getDecimalDigits(  ) override;
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;

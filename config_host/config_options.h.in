@@ -24,5 +24,17 @@
 #define IF_MERGELIBS(x)
 #endif
 
+// Used to turn off visibility for some classes/symbols when linking with --enable-mergelibs=more
+//
+#if ENABLE_MERGELIBS_MORE
+#define UNLESS_MERGELIBS_MORE(x)
+#else
+#define UNLESS_MERGELIBS_MORE(x) x
+#endif
+#if ENABLE_MERGELIBS_MORE
+#define IF_MERGELIBS_MORE(x) x
+#else
+#define IF_MERGELIBS_MORE(x)
+#endif
 
 #endif

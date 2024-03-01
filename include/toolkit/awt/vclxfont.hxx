@@ -20,6 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_AWT_VCLXFONT_HXX
 #define INCLUDED_TOOLKIT_AWT_VCLXFONT_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XFont2.hpp>
@@ -34,7 +35,7 @@ class FontMetric;
 
 
 
-class TOOLKIT_DLLPUBLIC VCLXFont final :
+class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXFont final :
                         public cppu::WeakImplHelper<
                             css::awt::XFont2>
 {

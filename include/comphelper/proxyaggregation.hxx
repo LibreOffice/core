@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_PROXYAGGREGATION_HXX
 #define INCLUDED_COMPHELPER_PROXYAGGREGATION_HXX
 
+#include <config_options.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/basemutex.hxx>
@@ -178,7 +179,7 @@ namespace comphelper
 
     //= OComponentProxyAggregation
 
-    class COMPHELPER_DLLPUBLIC OComponentProxyAggregation : public cppu::BaseMutex
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OComponentProxyAggregation : public cppu::BaseMutex
                                         ,public cppu::WeakComponentImplHelperBase
                                         ,public OComponentProxyAggregationHelper
     {
