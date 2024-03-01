@@ -82,7 +82,6 @@ public class SampleSpellChecker extends ComponentBase implements
                 "IsGermanPreReform",
                 "IsSpellUpperCase",
                 "IsSpellWithDigits",
-                "IsSpellCapitalization"
             };
         aPropChgHelper  = new PropChgHelper_Spell( this, aProps );
         aEvtListeners   = new ArrayList<Object>();
@@ -208,7 +207,6 @@ public class SampleSpellChecker extends ComponentBase implements
         boolean bIsGermanPreReform      = GetValueToUse( "IsGermanPreReform", false, aProperties );
         boolean bIsSpellWithDigits      = GetValueToUse( "IsSpellWithDigits", false, aProperties );
         boolean bIsSpellUpperCase       = GetValueToUse( "IsSpellUpperCase", false, aProperties );
-        boolean bIsSpellCapitalization  = GetValueToUse( "IsSpellCapitalization", true, aProperties );
 
         //!! This code needs to be replaced by code calling the actual
         //!! implementation of your spellchecker
@@ -303,7 +301,6 @@ public class SampleSpellChecker extends ComponentBase implements
         boolean bIsGermanPreReform      = GetValueToUse( "IsGermanPreReform", false, aProperties );
         boolean bIsSpellWithDigits      = GetValueToUse( "IsSpellWithDigits", false, aProperties );
         boolean bIsSpellUpperCase       = GetValueToUse( "IsSpellUpperCase", false, aProperties );
-        boolean bIsSpellCapitalization  = GetValueToUse( "IsSpellCapitalization", true, aProperties );
 
         short nFailure = GetSpellFailure( aWord, aLocale, aProperties );
         if (nFailure != -1)
@@ -311,8 +308,6 @@ public class SampleSpellChecker extends ComponentBase implements
             // postprocess result for errors that should be ignored
             if (   (!bIsSpellUpperCase  && IsUpper( aWord, aLocale ))
                 || (!bIsSpellWithDigits && HasDigits( aWord ))
-                || (!bIsSpellCapitalization
-                    &&  nFailure == SpellFailure.CAPTION_ERROR)
             )
                 nFailure = -1;
         }

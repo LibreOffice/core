@@ -120,9 +120,9 @@ public:
     virtual void SAL_CALL setIsSpellWithDigits(sal_Bool p1) override
         { setProperty(UPN_IS_SPELL_WITH_DIGITS, static_cast<bool>(p1)); }
     virtual sal_Bool SAL_CALL getIsSpellCapitalization() override
-        { return getPropertyBool(UPN_IS_SPELL_CAPITALIZATION); }
-    virtual void SAL_CALL setIsSpellCapitalization(sal_Bool p1) override
-        { setProperty(UPN_IS_SPELL_CAPITALIZATION, static_cast<bool>(p1)); }
+        { return false; }
+    virtual void SAL_CALL setIsSpellCapitalization(sal_Bool /*p1*/) override
+        { throw new css::beans::UnknownPropertyException( "this deprecated property has been removed"); }
     virtual sal_Int16 SAL_CALL getHyphMinLeading() override
         { return getPropertyInt16(UPN_HYPH_MIN_LEADING); }
     virtual void SAL_CALL setHyphMinLeading(sal_Int16 p1) override

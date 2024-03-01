@@ -3,7 +3,6 @@
 "LinguProps";"com::sun::star::linguistic2::LinguProperties";"IsIgnoreControlCharacters"
 "LinguProps";"com::sun::star::linguistic2::LinguProperties";"IsSpellUpperCase"
 "LinguProps";"com::sun::star::linguistic2::LinguProperties";"IsSpellWithDigits"
-"LinguProps";"com::sun::star::linguistic2::LinguProperties";"IsSpellCapitalization"
 "LinguProps";"com::sun::star::linguistic2::LinguProperties";"HyphMinLeading"
 "LinguProps";"com::sun::star::linguistic2::LinguProperties";"HyphMinTrailing"
 "LinguProps";"com::sun::star::linguistic2::LinguProperties";"HyphMinWordLength"

@@ -404,8 +404,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
         // postprocess result for errors that should be ignored
         const bool bIgnoreError =
                 (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang )) ||
-                (!rHelper.IsSpellWithDigits() && HasDigits( rWord )) ||
-                (!rHelper.IsSpellCapitalization()  &&  nFailure == SpellFailure::CAPTION_ERROR);
+                (!rHelper.IsSpellWithDigits() && HasDigits( rWord ));
         if (bIgnoreError)
             nFailure = -1;
     }

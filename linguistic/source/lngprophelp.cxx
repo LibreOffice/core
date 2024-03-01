@@ -291,7 +291,6 @@ PropertyHelper_Spell::PropertyHelper_Spell(
     auto& rPropNames = GetPropNames();
     rPropNames.push_back(UPN_IS_SPELL_UPPER_CASE);
     rPropNames.push_back(UPN_IS_SPELL_WITH_DIGITS);
-    rPropNames.push_back(UPN_IS_SPELL_CAPITALIZATION);
     rPropNames.push_back(UPN_IS_SPELL_CLOSED_COMPOUND);
     rPropNames.push_back(UPN_IS_SPELL_HYPHENATED_COMPOUND);
     SetDefaultValues();
@@ -310,7 +309,6 @@ void PropertyHelper_Spell::SetDefaultValues()
 
     bResIsSpellUpperCase        = bIsSpellUpperCase         = false;
     bResIsSpellWithDigits       = bIsSpellWithDigits        = false;
-    bResIsSpellCapitalization   = bIsSpellCapitalization    = true;
     bResIsSpellClosedCompound   = bIsSpellClosedCompound    = true;
     bResIsSpellHyphenatedCompound = bIsSpellHyphenatedCompound = true;
 }
@@ -338,11 +336,6 @@ void PropertyHelper_Spell::GetCurrentValues()
         {
             pbVal    = &bIsSpellWithDigits;
             pbResVal = &bResIsSpellWithDigits;
-        }
-        else if ( rPropName == UPN_IS_SPELL_CAPITALIZATION )
-        {
-            pbVal    = &bIsSpellCapitalization;
-            pbResVal = &bResIsSpellCapitalization;
         }
         else if ( rPropName == UPN_IS_SPELL_CLOSED_COMPOUND )
         {
@@ -386,13 +379,6 @@ bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt 
             case UPH_IS_SPELL_WITH_DIGITS         :
             {
                 pbVal = &bIsSpellWithDigits;
-                bSCWA = ! *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
-                break;
-            }
-            case UPH_IS_SPELL_CAPITALIZATION      :
-            {
-                pbVal = &bIsSpellCapitalization;
                 bSCWA = ! *pbVal;    // sal_False->sal_True change?
                 bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
@@ -452,7 +438,6 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     // return value is default value unless there is an explicitly supplied
     // temporary value
     bResIsSpellWithDigits       = bIsSpellWithDigits;
-    bResIsSpellCapitalization   = bIsSpellCapitalization;
     bResIsSpellClosedCompound   = bIsSpellClosedCompound;
     bResIsSpellHyphenatedCompound = bIsSpellHyphenatedCompound;
     bResIsSpellUpperCase        = bIsSpellUpperCase;
@@ -470,7 +455,6 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
             {
                 case UPH_IS_SPELL_UPPER_CASE     : pbResVal = &bResIsSpellUpperCase; break;
                 case UPH_IS_SPELL_WITH_DIGITS    : pbResVal = &bResIsSpellWithDigits; break;
-                case UPH_IS_SPELL_CAPITALIZATION : pbResVal = &bResIsSpellCapitalization; break;
                 case UPH_IS_SPELL_CLOSED_COMPOUND : pbResVal = &bResIsSpellClosedCompound; break;
                 case UPH_IS_SPELL_HYPHENATED_COMPOUND : pbResVal = &bResIsSpellHyphenatedCompound; break;
                 default:
@@ -771,11 +755,6 @@ bool PropertyHelper_Spelling::IsSpellUpperCase() const
 bool PropertyHelper_Spelling::IsSpellWithDigits() const
 {
     return mxPropHelper->IsSpellWithDigits();
-}
-
-bool PropertyHelper_Spelling::IsSpellCapitalization() const
-{
-    return mxPropHelper->IsSpellCapitalization();
 }
 
 bool PropertyHelper_Spelling::IsSpellClosedCompound() const

@@ -29,7 +29,6 @@ import lib.MultiPropertyTest;
 *   <li><code>'IsIgnoreControlCharacters'</code></li>
 *   <li><code>'IsSpellUpperCase'</code></li>
 *   <li><code>'IsSpellWithDigits'</code></li>
-*   <li><code>'IsSpellCapitalization'</code></li>
 *   <li><code>'HyphMinLeading'</code></li>
 *   <li><code>'HyphMinTrailing'</code></li>
 *   <li><code>'HyphMinWordLength'</code></li>

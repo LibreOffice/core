@@ -165,14 +165,12 @@ class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyHelper_Spell final :
     // default values
     bool        bIsSpellUpperCase;
     bool        bIsSpellWithDigits;
-    bool        bIsSpellCapitalization;
     bool        bIsSpellClosedCompound;
     bool        bIsSpellHyphenatedCompound;
 
     // return values, will be set to default value or current temporary value
     bool        bResIsSpellUpperCase;
     bool        bResIsSpellWithDigits;
-    bool        bResIsSpellCapitalization;
     bool        bResIsSpellClosedCompound;
     bool        bResIsSpellHyphenatedCompound;
 
@@ -199,7 +197,6 @@ public:
 
     bool        IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
     bool        IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
-    bool        IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
     bool        IsSpellClosedCompound() const       { return bResIsSpellClosedCompound; }
     bool        IsSpellHyphenatedCompound() const   { return bResIsSpellHyphenatedCompound; }
 };

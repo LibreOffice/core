@@ -83,11 +83,6 @@ public class PropChgHelper_Spell extends PropChgHelper
                 bSCWA = !bVal;          // FALSE->TRUE change?
                 bSWWA = !bSCWA;                 // TRUE->FALSE change?
             }
-            else if (aEvt.PropertyName.equals( "IsSpellCapitalization" ))
-            {
-                bSCWA = !bVal;      // FALSE->TRUE change?
-                bSWWA = !bSCWA;             // TRUE->FALSE change?
-            }
 
             if (bSCWA)
                 nLngSvcFlags |= LinguServiceEventFlags.SPELL_CORRECT_WORDS_AGAIN;
