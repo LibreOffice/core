@@ -286,14 +286,21 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
                     ? SwResId(STR_PAGE_COUNT_PRINTED)
                     : (extra.isEmpty() ? SwResId(STR_PAGE_COUNT) : SwResId(STR_PAGE_COUNT_CUSTOM)));
     aStr = aStr.replaceFirst("%1", OUString::number(nPhyNum));
-    aStr = aStr.replaceFirst("%2", OUString::number(nPageCount));
     if (nPageCount != nPrintedPageCount)
     {
+        aStr = aStr.replaceFirst("%2", OUString::number(nPageCount));
         aStr = aStr.replaceFirst("%3", OUString::number(nPrintedPhyNum));
         aStr = aStr.replaceFirst("%4", OUString::number(nPrintedPageCount));
     }
-    else
-        aStr = aStr.replaceFirst("%3", extra);
+    else {
+        if (extra.isEmpty())
+            aStr = aStr.replaceFirst("%2", OUString::number(nPageCount));
+        else
+        {
+            aStr = aStr.replaceFirst("%2", extra);
+            aStr = aStr.replaceFirst("%3", OUString::number(nPageCount));
+        }
+    }
 
     return aStr;
 }
