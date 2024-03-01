@@ -116,7 +116,7 @@ void lcl_UndoCommandResult(const ScTabViewShell* pViewShell,
             lcl_MakeJsonArray(aJson, *pOldTabs, "oldTabs");
     }
 
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractAsOString().getStr());
 }
 }
 
