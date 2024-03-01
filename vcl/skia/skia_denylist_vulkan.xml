@@ -30,7 +30,7 @@
         <entry os="windows" vendor="intel"> <!-- tdf#144923 off-topic comment 14 + tdf#150232 -->
             <device id="0x9a49"/>
         </entry>
-        <entry os="windows" vendor="intel"> <!-- tdf#158945 : Iris XE (0.405.479) -->
+        <entry os="windows" vendor="intel" compare="less_equal" version="0.404.4032"> <!-- tdf#158945 -->
             <device id="0xa7a0"/>
         </entry>
         <entry os="all" vendor="amd" compare="less" version="2.0.198"> <!-- tdf#146402 -->
