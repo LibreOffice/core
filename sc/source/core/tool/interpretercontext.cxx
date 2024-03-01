@@ -58,11 +58,17 @@ void ScInterpreterContext::SetDocAndFormatter(const ScDocument& rDoc, SvNumberFo
         mxScLookupCache.reset();
         mpDoc = &rDoc;
     }
-    mpFormatter = pFormatter;
+    if (mpFormatter != pFormatter)
+    {
+        maNFBuiltInCache.clear();
+        maNFTypeCache.clear();
+        mpFormatter = pFormatter;
+    }
 }
 
 void ScInterpreterContext::initFormatTable()
 {
+    assert(!mpFormatter && maNFBuiltInCache.empty() && maNFTypeCache.empty());
     mpFormatter = mpDoc->GetFormatTable(); // will assert if not main thread
 }
 
