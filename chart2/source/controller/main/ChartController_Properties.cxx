@@ -789,7 +789,7 @@ void ChartController::executeDlg_ObjectProperties_withUndoGuard(
         }
 
         //open the dialog
-        aDlgPtr->runAsync(aDlgPtr, [this, aDlgPtr, xChartDoc, pItemConverter, bSuccessOnUnchanged, aUndoGuard] (int nResult)
+        aDlgPtr->runAsync(aDlgPtr, [aDlgPtr, xChartDoc, pItemConverter, bSuccessOnUnchanged, aUndoGuard] (int nResult)
         {
             if (nResult == RET_OK || (bSuccessOnUnchanged && aDlgPtr->DialogWasClosedWithOK())) {
                 const SfxItemSet* pOutItemSet = aDlgPtr->GetOutputItemSet();
