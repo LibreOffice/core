@@ -26,7 +26,10 @@
 #include <sfx2/viewsh.hxx>
 #include <static/unoembindhelpers/PrimaryBindings.hxx>
 #include <typelib/typedescription.h>
+#include <typelib/typedescription.hxx>
+#include <uno/data.h>
 
+#include <cassert>
 #include <cstdint>
 #include <stdexcept>
 #include <string>
@@ -149,6 +152,21 @@ OString toUtf8(OUString const& string)
         throw css::uno::RuntimeException("cannot convert OUString to UTF-8");
     }
     return s;
+}
+
+void copyStruct(typelib_CompoundTypeDescription* desc, void const* source, void* dest)
+{
+    if (desc->pBaseTypeDescription != nullptr)
+    {
+        copyStruct(desc->pBaseTypeDescription, source, dest);
+    }
+    for (sal_Int32 i = 0; i != desc->nMembers; ++i)
+    {
+        uno_type_copyData(
+            static_cast<char*>(dest) + desc->pMemberOffsets[i],
+            const_cast<char*>(static_cast<char const*>(source) + desc->pMemberOffsets[i]),
+            desc->ppTypeRefs[i], cpp_acquire);
+    }
 }
 
 template <typename T> void registerInOutParam(char const* name)
@@ -287,7 +305,11 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 case css::uno::TypeClass_TYPE:
                     return emscripten::val(*o3tl::forceAccess<css::uno::Type>(self));
                 case css::uno::TypeClass_SEQUENCE:
-                    return emscripten::val::undefined(); //TODO
+                {
+                    emscripten::internal::WireTypePack argv(self.getValue());
+                    return emscripten::val::take_ownership(
+                        _emval_take_value(getTypeId(self.getValueType()), argv));
+                }
                 case css::uno::TypeClass_ENUM:
                 {
                     emscripten::internal::WireTypePack argv(
@@ -296,7 +318,16 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
                 case css::uno::TypeClass_STRUCT:
-                    return emscripten::val::undefined(); //TODO
+                {
+                    css::uno::TypeDescription desc(self.getValueType().getTypeLibType());
+                    assert(desc.is());
+                    auto const td = reinterpret_cast<typelib_StructTypeDescription*>(desc.get());
+                    auto const copy = std::malloc(td->aBase.aBase.nSize);
+                    copyStruct(&td->aBase, self.getValue(), copy);
+                    emscripten::internal::WireTypePack argv(std::move(copy));
+                    return emscripten::val::take_ownership(
+                        _emval_take_value(getTypeId(self.getValueType()), argv));
+                }
                 case css::uno::TypeClass_EXCEPTION:
                     return emscripten::val::undefined(); //TODO
                 case css::uno::TypeClass_INTERFACE:

@@ -125,6 +125,7 @@ template <typename T> void registerSequence(char const* name)
             checkSequenceAccess(self, index);
             self.getArray()[index] = value;
         });
+    registerUnoType<css::uno::Sequence<T>>();
 }
 }
 

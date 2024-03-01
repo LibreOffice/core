@@ -864,6 +864,7 @@ SAL_IMPLEMENT_MAIN()
                    << jsName(str) << "\")";
             dumpStructMembers(cppOut, mgr, str, strEnt);
             cppOut << ";\n";
+            cppOut << "    ::unoembindhelpers::registerUnoType<" << cppName(str) << ">();\n";
             dumpRegisterFunctionEpilog(cppOut, n);
             for (auto const& mem : strEnt->getDirectMembers())
             {
