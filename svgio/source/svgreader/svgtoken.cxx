@@ -111,6 +111,7 @@ constexpr auto aSVGTokenMap = frozen::make_unordered_map<std::u16string_view, SV
     { u"visibility", SVGToken::Visibility },
     { u"title", SVGToken::Title },
     { u"desc", SVGToken::Desc },
+    { u"overflow", SVGToken::Overflow },
     { u"preserveAspectRatio", SVGToken::PreserveAspectRatio },
     { u"defer", SVGToken::Defer },
     { u"none", SVGToken::None },

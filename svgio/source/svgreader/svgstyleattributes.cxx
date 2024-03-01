@@ -850,7 +850,8 @@ namespace svgio::svgreader
                         const basegfx::B2DRange aTargetRange(0.0, 0.0, fTargetWidth, fTargetHeight);
                         const SvgAspectRatio& rRatio = rMarker.getSvgAspectRatio();
 
-                        if(rRatio.isSet())
+
+                        if(rRatio.isSet() && Overflow::visible != rMarker.getSvgStyleAttributes()->getOverflow())
                         {
                             // let mapping be created from SvgAspectRatio
                             rMarkerTransform = rRatio.createMapping(aTargetRange, aPrimitiveRange);
@@ -1279,6 +1280,7 @@ namespace svgio::svgreader
             maTextAlign(TextAlign::notset),
             maTextDecoration(TextDecoration::notset),
             maTextAnchor(TextAnchor::notset),
+            maOverflow(Overflow::notset),
             maVisibility(Visibility::notset),
             maFillRule(FillRule::notset),
             maClipRule(FillRule::notset),
@@ -1822,6 +1824,21 @@ namespace svgio::svgreader
                     }
                     break;
                 }
+                case SVGToken::Overflow:
+                {
+                    if(!aContent.isEmpty())
+                    {
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"visible"))
+                        {
+                            setOverflow(Overflow::visible);
+                        }
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"hidden"))
+                        {
+                            setOverflow(Overflow::hidden);
+                        }
+                    }
+                    break;
+                }
                 case SVGToken::Visibility:
                 {
                     if(!aContent.isEmpty())
@@ -2314,6 +2331,25 @@ namespace svgio::svgreader
 
             // default is 1
             return SvgNumber(1.0);
+        }
+
+        Overflow SvgStyleAttributes::getOverflow() const
+        {
+            if(Overflow::notset != maOverflow)
+            {
+                return maOverflow;
+            }
+
+            if(mrOwner.hasLocalCssStyle())
+            {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+                if (pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getOverflow();
+                }
+            }
+
+            return Overflow::hidden;
         }
 
         Visibility SvgStyleAttributes::getVisibility() const

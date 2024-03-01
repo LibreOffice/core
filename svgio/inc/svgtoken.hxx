@@ -113,6 +113,7 @@ namespace svgio::svgreader
             Visibility,
             Title,
             Desc,
+            Overflow,
 
             // AspectRatio and params
             PreserveAspectRatio,
