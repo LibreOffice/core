@@ -182,6 +182,9 @@ gb_MERGE_LIBRARY_LIST += \
 	$(if $(ENABLE_LIBCMIS),ucpcmis1) \
 	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucppkg1 \
+	wpftdraw \
+	wpftimpress \
+	wpftwriter \
 	$(if $(filter WNT,$(OS)), \
 		wininetbe1 \
 	) \
