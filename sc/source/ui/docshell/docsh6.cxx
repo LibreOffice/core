@@ -499,10 +499,10 @@ void ScDocShell::CheckConfigOptions()
         ScTabViewShell* pViewShell = GetBestViewShell();
         if (pViewShell)
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pViewShell->GetFrameWeld(),
+            std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pViewShell->GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
-                                                          ScResId(STR_OPTIONS_WARN_SEPARATORS), GetpApp()));
-            xInfoBox->run();
+                                                          ScResId(STR_OPTIONS_WARN_SEPARATORS), pViewShell));
+            xInfoBox->runAsync(xInfoBox, [] (int) {});
         }
 
         // For now, this is the only option setting that could launch info
