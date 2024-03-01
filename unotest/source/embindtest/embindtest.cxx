@@ -9,11 +9,13 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
+#include <o3tl/any.hxx>
 #include <org/libreoffice/embindtest/Enum.hpp>
 #include <org/libreoffice/embindtest/Struct.hpp>
 #include <org/libreoffice/embindtest/XTest.hpp>
@@ -22,7 +24,6 @@
 
 namespace com::sun::star::uno
 {
-class Any;
 class XComponentContext;
 }
 
@@ -103,6 +104,165 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
     sal_Bool SAL_CALL isStruct(org::libreoffice::embindtest::Struct const& value) override
     {
         return value == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr };
+    }
+
+    css::uno::Any SAL_CALL getAnyVoid() override { return {}; }
+
+    sal_Bool SAL_CALL isAnyVoid(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<void>::get();
+    }
+
+    css::uno::Any SAL_CALL getAnyBoolean() override { return css::uno::Any(true); }
+
+    sal_Bool SAL_CALL isAnyBoolean(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<bool>::get()
+               && *o3tl::forceAccess<bool>(value);
+    }
+
+    css::uno::Any SAL_CALL getAnyByte() override { return css::uno::Any(sal_Int8(-12)); }
+
+    sal_Bool SAL_CALL isAnyByte(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<sal_Int8>::get()
+               && *o3tl::forceAccess<sal_Int8>(value) == -12;
+    }
+
+    css::uno::Any SAL_CALL getAnyShort() override { return css::uno::Any(sal_Int16(-1234)); }
+
+    sal_Bool SAL_CALL isAnyShort(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<sal_Int16>::get()
+               && *o3tl::forceAccess<sal_Int16>(value) == -1234;
+    }
+
+    css::uno::Any SAL_CALL getAnyUnsignedShort() override
+    {
+        return css::uno::Any(sal_uInt16(54321));
+    }
+
+    sal_Bool SAL_CALL isAnyUnsignedShort(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<sal_uInt16>::get()
+               && *o3tl::forceAccess<sal_uInt16>(value) == 54321;
+    }
+
+    css::uno::Any SAL_CALL getAnyLong() override { return css::uno::Any(sal_Int32(-123456)); }
+
+    sal_Bool SAL_CALL isAnyLong(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<sal_Int32>::get()
+               && *o3tl::forceAccess<sal_Int32>(value) == -123456;
+    }
+
+    css::uno::Any SAL_CALL getAnyUnsignedLong() override
+    {
+        return css::uno::Any(sal_uInt32(3456789012));
+    }
+
+    sal_Bool SAL_CALL isAnyUnsignedLong(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<sal_uInt32>::get()
+               && *o3tl::forceAccess<sal_uInt32>(value) == 3456789012;
+    }
+
+    css::uno::Any SAL_CALL getAnyHyper() override { return css::uno::Any(sal_Int64(-123456789)); }
+
+    sal_Bool SAL_CALL isAnyHyper(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<sal_Int64>::get()
+               && *o3tl::forceAccess<sal_Int64>(value) == -123456789;
+    }
+
+    css::uno::Any SAL_CALL getAnyUnsignedHyper() override
+    {
+        return css::uno::Any(sal_uInt64(9876543210));
+    }
+
+    sal_Bool SAL_CALL isAnyUnsignedHyper(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<sal_uInt64>::get()
+               && *o3tl::forceAccess<sal_uInt64>(value) == 9876543210;
+    }
+
+    css::uno::Any SAL_CALL getAnyFloat() override { return css::uno::Any(-10.25f); }
+
+    sal_Bool SAL_CALL isAnyFloat(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<float>::get()
+               && *o3tl::forceAccess<float>(value) == -10.25;
+    }
+
+    css::uno::Any SAL_CALL getAnyDouble() override { return css::uno::Any(100.5); }
+
+    sal_Bool SAL_CALL isAnyDouble(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<double>::get()
+               && *o3tl::forceAccess<double>(value) == 100.5;
+    }
+
+    css::uno::Any SAL_CALL getAnyChar() override { return css::uno::Any(u'Ö'); }
+
+    sal_Bool SAL_CALL isAnyChar(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<sal_Unicode>::get()
+               && *o3tl::forceAccess<sal_Unicode>(value) == u'Ö';
+    }
+
+    css::uno::Any SAL_CALL getAnyString() override { return css::uno::Any(u"hä"_ustr); }
+
+    sal_Bool SAL_CALL isAnyString(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<OUString>::get()
+               && *o3tl::forceAccess<OUString>(value) == u"hä";
+    }
+
+    css::uno::Any SAL_CALL getAnyType() override
+    {
+        return css::uno::Any(cppu::UnoType<sal_Int32>::get());
+    }
+
+    sal_Bool SAL_CALL isAnyType(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<css::uno::Type>::get()
+               && *o3tl::forceAccess<css::uno::Type>(value) == cppu::UnoType<sal_Int32>::get();
+    }
+
+    css::uno::Any SAL_CALL getAnySequence() override
+    {
+        return css::uno::Any(css::uno::Sequence{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr });
+    }
+
+    sal_Bool SAL_CALL isAnySequence(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<css::uno::Sequence<OUString>>::get()
+               && *o3tl::forceAccess<css::uno::Sequence<OUString>>(value)
+                      == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
+    }
+
+    css::uno::Any SAL_CALL getAnyEnum() override
+    {
+        return css::uno::Any(org::libreoffice::embindtest::Enum_E_2);
+    }
+
+    sal_Bool SAL_CALL isAnyEnum(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Enum>::get()
+               && *o3tl::forceAccess<org::libreoffice::embindtest::Enum>(value)
+                      == org::libreoffice::embindtest::Enum_E_2;
+    }
+
+    css::uno::Any SAL_CALL getAnyStruct() override
+    {
+        return css::uno::Any(org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr });
+    }
+
+    sal_Bool SAL_CALL isAnyStruct(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Struct>::get()
+               && *o3tl::forceAccess<org::libreoffice::embindtest::Struct>(value)
+                      == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr };
     }
 
     css::uno::Sequence<sal_Bool> SAL_CALL getSequenceBoolean() override
@@ -234,6 +394,26 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
                == css::uno::Sequence<css::uno::Type>{
                       cppu::UnoType<sal_Int32>::get(), cppu::UnoType<void>::get(),
                       cppu::UnoType<css::uno::Sequence<org::libreoffice::embindtest::Enum>>::get()
+                  };
+    }
+
+    css::uno::Sequence<css::uno::Any> SAL_CALL getSequenceAny() override
+    {
+        return { css::uno::Any(sal_Int32(-123456)), css::uno::Any(),
+                 css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                     org::libreoffice::embindtest::Enum_E_2, org::libreoffice::embindtest::Enum_E3,
+                     org::libreoffice::embindtest::Enum_E_10 }) };
+    }
+
+    sal_Bool SAL_CALL isSequenceAny(css::uno::Sequence<css::uno::Any> const& value) override
+    {
+        return value
+               == css::uno::Sequence<css::uno::Any>{
+                      css::uno::Any(sal_Int32(-123456)), css::uno::Any(),
+                      css::uno::Any(css::uno::Sequence<org::libreoffice::embindtest::Enum>{
+                          org::libreoffice::embindtest::Enum_E_2,
+                          org::libreoffice::embindtest::Enum_E3,
+                          org::libreoffice::embindtest::Enum_E_10 })
                   };
     }
 
