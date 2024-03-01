@@ -119,6 +119,9 @@ ifneq ($(MERGELIBS_MORE),)
 
 gb_MERGE_LIBRARY_LIST += \
 	acc \
+	$(if $(filter $(OS),WNT), \
+		ado \
+	) \
 	analysis \
 	animcore \
 	$(call gb_Helper_optional,AVMEDIA, \
