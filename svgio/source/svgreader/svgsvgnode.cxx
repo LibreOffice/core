@@ -421,10 +421,7 @@ namespace svgio::svgreader
                             else
                             {
                                 // create mapping
-                                // #i122610 SVG 1.1 defines in section 5.1.2 that if the attribute preserveAspectRatio is not specified,
-                                // then the effect is as if a value of 'xMidYMid meet' were specified.
-                                SvgAspectRatio aRatioDefault(SvgAlign::xMidYMid,true);
-                                const SvgAspectRatio& rRatio = getSvgAspectRatio().isSet()? getSvgAspectRatio() : aRatioDefault;
+                                const SvgAspectRatio& rRatio = getSvgAspectRatio();
 
                                 // let mapping be created from SvgAspectRatio
                                 const basegfx::B2DHomMatrix aEmbeddingTransform(
