@@ -25,7 +25,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
-#include "impvect.hxx"
+#include <vcl/bitmap/Vectorizer.hxx>
 #include <array>
 #include <memory>
 
@@ -49,11 +49,6 @@ static constexpr tools::Long BACK_MAP( tools::Long _def_nVal )
 {
     return ((_def_nVal + 2) >> 2) - 1;
 }
-static void VECT_PROGRESS( const Link<tools::Long, void>* pProgress, tools::Long _def_nVal )
-{
-    if(pProgress)
-      pProgress->Call(_def_nVal);
-}
 
 namespace {
 
@@ -62,7 +57,7 @@ class ImplChain;
 
 }
 
-namespace ImplVectorizer
+namespace vcl
 {
     static void ImplExpand( std::optional<ImplVectMap>& rMap, const BitmapReadAccess* pRAcc, const Color& rColor );
     static void ImplCalculate( ImplVectMap& rMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce );
@@ -639,16 +634,21 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
     aNewArr2.ImplCreatePoly( maPoly );
 }
 
-namespace ImplVectorizer {
+namespace vcl
+{
+void Vectorizer::updateProgress(tools::Long nProgress)
+{
+    if (mpProgress)
+       mpProgress->Call(nProgress);
+}
 
-bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                    sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress )
+bool Vectorizer::vectorize(BitmapEx const& rBitmap, GDIMetaFile& rMetafile)
 {
     bool bRet = false;
 
-    VECT_PROGRESS( pProgress, 0 );
+    updateProgress(0);
 
-    std::optional<Bitmap> xBmp(std::in_place, rColorBmp );
+    std::optional<Bitmap> xBmp(std::in_place, rBitmap.GetBitmap());
     BitmapScopedReadAccess pRAcc(*xBmp);
 
     if( pRAcc )
@@ -661,7 +661,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         sal_uInt16              n;
         std::array<ImplColorSet, 256> aColorSet;
 
-        rMtf.Clear();
+        rMetafile.Clear();
 
         // get used palette colors and sort them from light to dark colors
         for( n = 0; n < nColorCount; n++ )
@@ -687,7 +687,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             fPercentStep_2 = 45.0 / n;
 
         fPercent += 10.0;
-        VECT_PROGRESS( pProgress, FRound( fPercent ) );
+        updateProgress(FRound(fPercent));
 
         for( sal_uInt16 i = 0; i < n; i++ )
         {
@@ -697,12 +697,12 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             ImplExpand( oMap, pRAcc.get(), aFindColor );
 
             fPercent += fPercentStep_2;
-            VECT_PROGRESS( pProgress, FRound( fPercent ) );
+            updateProgress(FRound(fPercent));
 
             if( oMap )
             {
                 tools::PolyPolygon         aPolyPoly;
-                ImplCalculate( *oMap, aPolyPoly, cReduce );
+                ImplCalculate(*oMap, aPolyPoly, mnReduce);
                 oMap.reset();
 
                 if( aPolyPoly.Count() )
@@ -713,34 +713,34 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
                     if( aPolyPoly.Count() )
                     {
-                        rMtf.AddAction( new MetaLineColorAction( aFindColor, true ) );
-                        rMtf.AddAction( new MetaFillColorAction( aFindColor, true ) );
-                        rMtf.AddAction( new MetaPolyPolygonAction( std::move(aPolyPoly) ) );
+                        rMetafile.AddAction( new MetaLineColorAction( aFindColor, true ) );
+                        rMetafile.AddAction( new MetaFillColorAction( aFindColor, true ) );
+                        rMetafile.AddAction( new MetaPolyPolygonAction( std::move(aPolyPoly) ) );
                     }
                 }
             }
 
             fPercent += fPercentStep_2;
-            VECT_PROGRESS( pProgress, FRound( fPercent ) );
+            updateProgress(FRound(fPercent));
         }
 
-        if( rMtf.GetActionSize() )
+        if (rMetafile.GetActionSize())
         {
             MapMode         aMap( MapUnit::Map100thMM );
             ScopedVclPtrInstance< VirtualDevice > aVDev;
             const Size      aLogSize1( aVDev->PixelToLogic( Size( 1, 1 ), aMap ) );
 
-            rMtf.SetPrefMapMode( aMap );
-            rMtf.SetPrefSize( Size( nWidth + 2, nHeight + 2 ) );
-            rMtf.Move( 1, 1 );
-            rMtf.Scale( aLogSize1.Width(), aLogSize1.Height() );
+            rMetafile.SetPrefMapMode( aMap );
+            rMetafile.SetPrefSize( Size( nWidth + 2, nHeight + 2 ) );
+            rMetafile.Move( 1, 1 );
+            rMetafile.Scale( aLogSize1.Width(), aLogSize1.Height() );
             bRet = true;
         }
     }
 
     pRAcc.reset();
     xBmp.reset();
-    VECT_PROGRESS( pProgress, 100 );
+    updateProgress(100);
 
     return bRet;
 }

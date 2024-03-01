@@ -19,6 +19,7 @@
 
 #include <vcl/vclenum.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/bitmap/Vectorizer.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 #include <vcl/svapp.hxx>
@@ -132,18 +133,21 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
     m_pDocSh->SetWaitCursor( true );
     m_xPrgs->set_percentage(0);
 
-    Fraction    aScale;
-    Bitmap      aTmp( GetPreparedBitmap( rBmp, aScale ) );
+    Fraction aScale;
+    BitmapEx aBitmapEx(GetPreparedBitmap(rBmp, aScale));
 
-    if( !aTmp.IsEmpty() )
+    if (!aBitmapEx.IsEmpty())
     {
         const Link<::tools::Long,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
-        aTmp.Vectorize( rMtf, static_cast<sal_uInt8>(m_xMtReduce->get_value(FieldUnit::NONE)), &aPrgsHdl );
+        sal_uInt8 nReduce = sal_uInt8(m_xMtReduce->get_value(FieldUnit::NONE));
+        vcl::Vectorizer aVecotrizer(nReduce);
+        aVecotrizer.vectorize(aBitmapEx, rMtf);
+        aVecotrizer.setProgressCallback(&aPrgsHdl);
 
         if (m_xCbFillHoles->get_active())
         {
-            GDIMetaFile                 aNewMtf;
-            BitmapScopedReadAccess    pRAcc(aTmp);
+            GDIMetaFile aNewMtf;
+            BitmapScopedReadAccess pRAcc(aBitmapEx.GetBitmap());
 
             if( pRAcc )
             {

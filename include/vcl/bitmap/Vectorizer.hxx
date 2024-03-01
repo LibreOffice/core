@@ -19,14 +19,47 @@
 
 #pragma once
 
-#include <vcl/gdimtf.hxx>
+#include <vcl/dllapi.h>
 
-namespace tools { class PolyPolygon; }
+class GDIMetaFile;
+class BitmapEx;
 
-namespace ImplVectorizer
+namespace vcl
 {
-    bool     ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                            sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress );
+
+/** Convert the bitmap to a meta file
+ *
+ * This works by putting continuous areas of the same color into
+ * polygons painted in this color, by tracing the area's bounding
+ * line.
+ *
+ * @param rMetafile
+ * The resulting meta file
+ *
+ */
+class VCL_DLLPUBLIC Vectorizer
+{
+private:
+    /** If not 0, minimal size of bound rects for individual polygons. Smaller ones are ignored. */
+    sal_uInt8 mnReduce = 0;
+    /** A callback for showing the progress of the vectorization */
+    Link<tools::Long, void> const* mpProgress = nullptr;
+
+public:
+    Vectorizer(sal_uInt8 nReduce)
+        : mnReduce(nReduce)
+    {}
+
+    bool vectorize(BitmapEx const& rBitmap, GDIMetaFile& rMetafile);
+
+    void setProgressCallback(const Link<tools::Long,void>* pProgress)
+    {
+        mpProgress = pProgress;
+    }
+
+    void updateProgress(tools::Long nProgress);
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

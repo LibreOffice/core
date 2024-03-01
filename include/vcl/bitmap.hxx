@@ -503,26 +503,6 @@ public:
                                 size_t nColorCount,
                                 sal_uInt8 const * pTols );
 
-    /** Convert the bitmap to a meta file
-
-        This works by putting continuous areas of the same color into
-        polygons painted in this color, by tracing the area's bounding
-        line.
-
-        @param rMtf
-        The resulting meta file
-
-        @param cReduce
-        If non-null, minimal size of bound rects for individual polygons. Smaller ones are ignored.
-
-        @param pProgress
-        A callback for showing the progress of the vectorization
-     */
-    void                    Vectorize(
-                                GDIMetaFile& rMtf,
-                                sal_uInt8 cReduce,
-                                const Link<tools::Long,void>* pProgress );
-
     /** Change various global color characteristics
 
         @param nLuminancePercent

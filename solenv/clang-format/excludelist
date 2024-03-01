@@ -6347,6 +6347,7 @@ include/vcl/textview.hxx
 include/vcl/threadex.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
+include/vcl/bitmap/Vectorizer.hxx
 include/vcl/toolkit/button.hxx
 include/vcl/toolkit/calendar.hxx
 include/vcl/toolkit/combobox.hxx
@@ -14504,9 +14505,8 @@ vcl/source/bitmap/bmpfast.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/bitmap/dibtools.cxx
 vcl/source/bitmap/floyd.hxx
-vcl/source/bitmap/impvect.cxx
-vcl/source/bitmap/impvect.hxx
 vcl/source/bitmap/salbmp.cxx
+vcl/source/bitmap/Vectorizer.cxx
 vcl/source/cnttype/mcnttfactory.cxx
 vcl/source/cnttype/mcnttfactory.hxx
 vcl/source/cnttype/mcnttype.cxx
