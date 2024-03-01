@@ -31,6 +31,7 @@
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
+#include <utility>
 
 using namespace emscripten;
 using namespace css::uno;
@@ -166,6 +167,31 @@ Reference<css::frame::XModel> getCurrentModelFromViewSh()
     }
     return pSh->GetCurrentDocument();
 }
+
+struct LessType
+{
+    bool operator()(css::uno::Type const& type1, css::uno::Type const& type2) const
+    {
+        return type1.getTypeLibType() < type2.getTypeLibType();
+    }
+};
+
+std::map<css::uno::Type, std::type_info const*, LessType> unoTypes;
+
+std::type_info const* getTypeId(css::uno::Type const& type)
+{
+    auto const i = unoTypes.find(type);
+    if (i == unoTypes.end())
+    {
+        throw std::runtime_error("unregistered UNO type");
+    }
+    return i->second;
+}
+}
+
+namespace unoembindhelpers::detail
+{
+void registerUnoType(css::uno::Type const& type, std::type_info const* id) { unoTypes[type] = id; }
 }
 
 EMSCRIPTEN_BINDINGS(PrimaryBindings)
@@ -263,7 +289,12 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 case css::uno::TypeClass_SEQUENCE:
                     return emscripten::val::undefined(); //TODO
                 case css::uno::TypeClass_ENUM:
-                    return emscripten::val::undefined(); //TODO
+                {
+                    emscripten::internal::WireTypePack argv(
+                        std::move(*static_cast<sal_Int32 const*>(self.getValue())));
+                    return emscripten::val::take_ownership(
+                        _emval_take_value(getTypeId(self.getValueType()), argv));
+                }
                 case css::uno::TypeClass_STRUCT:
                     return emscripten::val::undefined(); //TODO
                 case css::uno::TypeClass_EXCEPTION:

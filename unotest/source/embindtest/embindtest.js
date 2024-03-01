@@ -265,7 +265,7 @@ Module.addOnPostRun(function() {
     {
         let v = test.getAnyEnum();
         console.log(v);
-        //TODO: console.assert(v.get() === uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v.get() === uno.org.libreoffice.embindtest.Enum.E_2);
         console.assert(test.isAnyEnum(v));
         v.delete();
         //TODO: let a = new Module.Any(
