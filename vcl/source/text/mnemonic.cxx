@@ -18,33 +18,22 @@ OUString removeMnemonicFromString(OUString const& rStr)
 OUString removeMnemonicFromString(OUString const& rStr, sal_Int32& rMnemonicPos)
 {
     OUString aStr = rStr;
-    sal_Int32 nLen = aStr.getLength();
-    sal_Int32 i = 0;
+    sal_Int32 nLen = aStr.getLength() - 1; // Don't remove trailing ~
 
     rMnemonicPos = -1;
-    while (i < nLen)
+    for (sal_Int32 i = 0; i < nLen; ++i)
     {
         if (aStr[i] == '~')
         {
-            if (nLen <= i + 1)
-                break;
-
-            if (aStr[i + 1] != '~')
+            aStr = aStr.replaceAt(i, 1, u"");
+            nLen--;
+            if (aStr[i] != '~')
             {
                 if (rMnemonicPos == -1)
                     rMnemonicPos = i;
-                aStr = aStr.replaceAt(i, 1, u"");
-                nLen--;
             }
-            else
-            {
-                aStr = aStr.replaceAt(i, 1, u"");
-                nLen--;
-                i++;
-            }
+            // else skip the escaped second ~
         }
-        else
-            i++;
     }
 
     return aStr;
