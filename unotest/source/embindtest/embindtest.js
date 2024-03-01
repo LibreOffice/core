@@ -248,12 +248,12 @@ Module.addOnPostRun(function() {
     {
         let v = test.getAnySequence();
         console.log(v);
-        //TODO: let x = v.get();
-        //TODO: console.assert(x.size() === 3);
-        //TODO: console.assert(x.get(0) === 'foo');
-        //TODO: console.assert(x.get(1) === 'barr');
-        //TODO: console.assert(x.get(2) === 'bazzz');
-        //TODO: x.delete();
+        let x = v.get();
+        console.assert(x.size() === 3);
+        console.assert(x.get(0) === 'foo');
+        console.assert(x.get(1) === 'barr');
+        console.assert(x.get(2) === 'bazzz');
+        x.delete();
         console.assert(test.isAnySequence(v));
         v.delete();
         let s = new Module.uno_Sequence_string(["foo", "barr", "bazzz"]);
@@ -276,9 +276,9 @@ Module.addOnPostRun(function() {
     {
         let v = test.getAnyStruct();
         console.log(v);
-        //TODO: console.assert(v.get().m1 === -123456);
-        //TODO: console.assert(v.get().m2 === 100.5);
-        //TODO: console.assert(v.get().m3 === 'hä');
+        console.assert(v.get().m1 === -123456);
+        console.assert(v.get().m2 === 100.5);
+        console.assert(v.get().m3 === 'hä');
         console.assert(test.isAnyStruct(v));
         v.delete();
         //TODO: let a = new Module.Any(
