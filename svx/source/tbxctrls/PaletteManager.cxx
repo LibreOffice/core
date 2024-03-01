@@ -22,6 +22,7 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/json_writer.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/objsh.hxx>
@@ -464,9 +465,9 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 }
 
 // TODO: make it generic, send any palette
-void PaletteManager::generateJSON(boost::property_tree::ptree& aTree, const std::set<Color>& rColors)
+void PaletteManager::generateJSON(tools::JsonWriter& aTree, const std::set<Color>& rColors)
 {
-    boost::property_tree::ptree aColorListTree;
+    auto aColorListTree = aTree.startArray("DocumentColors");
     sal_uInt32 nStartIndex = 1;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -476,26 +477,21 @@ void PaletteManager::generateJSON(boost::property_tree::ptree& aTree, const std:
     auto aColorIt = rColors.begin();
     while (aColorIt != rColors.end())
     {
-        boost::property_tree::ptree aColorRowTree;
+        auto aColorRowTree = aTree.startStruct();
+        auto aColorRowTree2 = aTree.startArray("");
 
         for (sal_uInt32 nColumn = 0; nColumn < nColumnCount; nColumn++)
         {
-            boost::property_tree::ptree aColorTree;
+            auto aColorTree = aTree.startStruct();
             OUString sName = aNamePrefix + OUString::number(nStartIndex++);
-            aColorTree.put("Value", aColorIt->AsRGBHexString().toUtf8());
-            aColorTree.put("Name", sName);
-
-            aColorRowTree.push_back(std::make_pair("", aColorTree));
+            aTree.put("Value", aColorIt->AsRGBHexString().toUtf8());
+            aTree.put("Name", sName);
 
             aColorIt++;
             if (aColorIt == rColors.end())
                 break;
         }
-
-        aColorListTree.push_back(std::make_pair("", aColorRowTree));
     }
-
-    aTree.add_child("DocumentColors", aColorListTree);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

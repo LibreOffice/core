@@ -38,6 +38,7 @@
 #include <svx/xdef.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
+#include <tools/json_writer.hxx>
 
 using namespace css;
 
@@ -185,17 +186,14 @@ void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet,
     if (comphelper::LibreOfficeKit::isActive())
     {
         svx::ThemeColorPaletteManager aManager(pColorSet);
-        std::stringstream aStream;
-        boost::property_tree::ptree aTree;
+        tools::JsonWriter aTree;
 
         if (pColorSet)
             aManager.generateJSON(aTree);
         if (rDocumentColors.size())
             PaletteManager::generateJSON(aTree, rDocumentColors);
 
-        boost::property_tree::write_json(aStream, aTree);
-
-        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, OString(aStream.str()));
+        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aTree.extractAsOString());
     }
 }
 

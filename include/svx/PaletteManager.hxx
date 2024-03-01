@@ -33,6 +33,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace weld { class Window; }
 namespace model { class ColorSet; }
+namespace tools { class JsonWriter; }
 
 class SVXCORE_DLLPUBLIC PaletteManager
 {
@@ -88,7 +89,7 @@ public:
     static void DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor);
 
     /// Appends node for Document Colors into the ptree
-    static void generateJSON(boost::property_tree::ptree& aTree, const std::set<Color>& rColors);
+    static void generateJSON(tools::JsonWriter& aTree, const std::set<Color>& rColors);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
