@@ -536,7 +536,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     }
     else
     {
-        const sal_uInt16 nPageCount = 1;// mpDoc->GetMasterSdPageCount(PageKind::Standard);
+        const sal_uInt16 nPageCount = mpDoc->GetMasterSdPageCount(PageKind::Standard);
         sal_uInt16 nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {

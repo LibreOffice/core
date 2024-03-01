@@ -19,7 +19,6 @@ class tdf159927(UITestCase):
                 language_list = xDialog.getChild("language_list")
                 # Expected: the existing language of the date/time field: Finnish
                 # Actual without the fix: the user's locale as specified in tools - options.
-# comment out uitest that fails regularly both on jenkins and my local box
-#                self.assertEqual(get_state_as_dict(language_list)["SelectEntryText"], "Finnish")
+                self.assertEqual(get_state_as_dict(language_list)["SelectEntryText"], "Finnish")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
