@@ -98,7 +98,7 @@ Module.addOnPostRun(function() {
     }
     {
         let v = test.getStruct();
-        console.log(v.m1 + ', ' + v.m2 + ', ' + v.m3);
+        console.log(v);
         console.assert(v.m1 === -123456);
         console.assert(v.m2 === 100.5);
         console.assert(v.m3 === 'hä');

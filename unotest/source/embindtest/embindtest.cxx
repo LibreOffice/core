@@ -14,6 +14,7 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
+#include <org/libreoffice/embindtest/Enum.hpp>
 #include <org/libreoffice/embindtest/Struct.hpp>
 #include <org/libreoffice/embindtest/XTest.hpp>
 #include <rtl/ustring.hxx>
@@ -29,7 +30,6 @@ namespace
 {
 class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 {
-public:
     sal_Bool SAL_CALL getBoolean() override { return true; }
 
     sal_Bool SAL_CALL isBoolean(sal_Bool value) override { return value; }
@@ -102,7 +102,7 @@ public:
 
     sal_Bool SAL_CALL isStruct(org::libreoffice::embindtest::Struct const& value) override
     {
-        return value.m1 == -123456 && value.m2 == 100.5 && value.m3 == u"hä";
+        return value == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr };
     }
 
     css::uno::Sequence<sal_Bool> SAL_CALL getSequenceBoolean() override
