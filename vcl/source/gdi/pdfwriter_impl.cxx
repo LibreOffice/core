@@ -7247,11 +7247,10 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
     Point       aPos            = rRect.TopLeft();
 
     tools::Long        nTextHeight     = GetTextHeight();
-    sal_Int32   nMnemonicPos    = -1;
 
     OUString aStr = rOrigStr;
     if ( nStyle & DrawTextFlags::Mnemonic )
-        aStr = removeMnemonicFromString( aStr, nMnemonicPos );
+        aStr = removeMnemonicFromString(aStr);
 
     // multiline text
     if ( nStyle & DrawTextFlags::MultiLine )
