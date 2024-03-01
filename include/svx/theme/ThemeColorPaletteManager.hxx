@@ -14,11 +14,14 @@
 #include <memory>
 #include <tools/color.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
-#include <boost/property_tree/json_parser.hpp>
 
 namespace model
 {
 class ColorSet;
+}
+namespace tools
+{
+class JsonWriter;
 }
 
 namespace svx
@@ -61,7 +64,7 @@ class SVXCORE_DLLPUBLIC ThemeColorPaletteManager final
 public:
     ThemeColorPaletteManager(std::shared_ptr<model::ColorSet> const& pColorSet);
     ThemePaletteCollection generate();
-    void generateJSON(boost::property_tree::ptree& aTree);
+    void generateJSON(tools::JsonWriter& aTree);
 };
 
 } // end svx namespace

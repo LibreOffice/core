@@ -12,12 +12,16 @@
 
 #include <docmodel/dllapi.h>
 #include <docmodel/color/ComplexColor.hxx>
-#include <boost/property_tree/ptree_fwd.hpp>
+
+namespace tools
+{
+class JsonWriter;
+}
 
 namespace model::color
 {
 DOCMODEL_DLLPUBLIC OString convertToJSON(model::ComplexColor const& rComplexColor);
-DOCMODEL_DLLPUBLIC void convertToJSONTree(boost::property_tree::ptree& rTree,
+DOCMODEL_DLLPUBLIC void convertToJSONTree(tools::JsonWriter& rTree,
                                           model::ComplexColor const& rComplexColor);
 DOCMODEL_DLLPUBLIC bool convertFromJSON(OString const& rJsonString,
                                         model::ComplexColor& rComplexColor);
