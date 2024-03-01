@@ -12,9 +12,12 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/any.hxx>
+#include <o3tl/unreachable.hxx>
 #include <rtl/string.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -25,6 +28,7 @@
 #include <typelib/typedescription.h>
 
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 #include <typeinfo>
 
@@ -179,52 +183,97 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         });
 
     // Any
-    class_<Any>("Any").constructor(+[](const val& rObject, const TypeClass& rUnoType) -> Any {
-        switch (rUnoType)
-        {
-            case TypeClass_VOID:
-                break;
-            case TypeClass_CHAR:
-                return Any{ rObject.as<sal_Int8>() };
-            case TypeClass_BOOLEAN:
-                return Any{ rObject.as<bool>() };
-            case TypeClass_BYTE:
-                return Any{ rObject.as<sal_Int8>() };
-            case TypeClass_SHORT:
-                return Any{ rObject.as<sal_Int16>() };
-            case TypeClass_UNSIGNED_SHORT:
-                return Any{ rObject.as<sal_uInt16>() };
-            case TypeClass_LONG:
-                return Any{ rObject.as<sal_Int32>() };
-            case TypeClass_UNSIGNED_LONG:
-                return Any{ rObject.as<sal_uInt32>() };
-            case TypeClass_HYPER:
-                return Any{ rObject.as<sal_Int64>() };
-            case TypeClass_UNSIGNED_HYPER:
-                return Any{ rObject.as<sal_uInt64>() };
-            case TypeClass_FLOAT:
-                return Any{ rObject.as<float>() };
-            case TypeClass_DOUBLE:
-                return Any{ rObject.as<double>() };
-            case TypeClass_STRING:
-                return Any{ OUString(rObject.as<std::u16string>()) };
-            case TypeClass_TYPE:
-            case TypeClass_ANY:
-            case TypeClass_ENUM:
-            case TypeClass_STRUCT:
-            case TypeClass_EXCEPTION:
-            case TypeClass_SEQUENCE:
-            case TypeClass_INTERFACE:
-            case TypeClass_TYPEDEF:
-            case TypeClass_SERVICE:
-            case TypeClass_MODULE:
-            case TypeClass_INTERFACE_METHOD:
-            case TypeClass_INTERFACE_ATTRIBUTE:
-            default:
-                break;
-        }
-        return {};
-    });
+    class_<Any>("Any")
+        .constructor(+[](const val& rObject, const TypeClass& rUnoType) -> Any {
+            switch (rUnoType)
+            {
+                case TypeClass_VOID:
+                    return {};
+                case TypeClass_BOOLEAN:
+                    return Any{ rObject.as<bool>() };
+                case TypeClass_BYTE:
+                    return Any{ rObject.as<sal_Int8>() };
+                case TypeClass_SHORT:
+                    return Any{ rObject.as<sal_Int16>() };
+                case TypeClass_UNSIGNED_SHORT:
+                    return Any{ rObject.as<sal_uInt16>() };
+                case TypeClass_LONG:
+                    return Any{ rObject.as<sal_Int32>() };
+                case TypeClass_UNSIGNED_LONG:
+                    return Any{ rObject.as<sal_uInt32>() };
+                case TypeClass_HYPER:
+                    return Any{ rObject.as<sal_Int64>() };
+                case TypeClass_UNSIGNED_HYPER:
+                    return Any{ rObject.as<sal_uInt64>() };
+                case TypeClass_FLOAT:
+                    return Any{ rObject.as<float>() };
+                case TypeClass_DOUBLE:
+                    return Any{ rObject.as<double>() };
+                case TypeClass_CHAR:
+                    return Any{ rObject.as<char16_t>() };
+                case TypeClass_STRING:
+                    return Any{ OUString(rObject.as<std::u16string>()) };
+                case TypeClass_TYPE:
+                    return {}; //TODO
+                case TypeClass_SEQUENCE:
+                    return {}; //TODO
+                case TypeClass_ENUM:
+                    return {}; //TODO
+                case TypeClass_STRUCT:
+                    return {}; //TODO
+                case TypeClass_EXCEPTION:
+                    return {}; //TODO
+                case TypeClass_INTERFACE:
+                    return {}; //TODO
+                default:
+                    throw std::invalid_argument("bad type class");
+            }
+        })
+        .function("get", +[](css::uno::Any const& self) {
+            switch (self.getValueType().getTypeClass())
+            {
+                case css::uno::TypeClass_VOID:
+                    return emscripten::val::undefined();
+                case css::uno::TypeClass_BOOLEAN:
+                    return emscripten::val(*o3tl::forceAccess<bool>(self));
+                case css::uno::TypeClass_BYTE:
+                    return emscripten::val(*o3tl::forceAccess<sal_Int8>(self));
+                case css::uno::TypeClass_SHORT:
+                    return emscripten::val(*o3tl::forceAccess<sal_Int16>(self));
+                case css::uno::TypeClass_UNSIGNED_SHORT:
+                    return emscripten::val(*o3tl::forceAccess<sal_uInt16>(self));
+                case css::uno::TypeClass_LONG:
+                    return emscripten::val(*o3tl::forceAccess<sal_Int32>(self));
+                case css::uno::TypeClass_UNSIGNED_LONG:
+                    return emscripten::val(*o3tl::forceAccess<sal_uInt32>(self));
+                case css::uno::TypeClass_HYPER:
+                    return emscripten::val(*o3tl::forceAccess<sal_Int64>(self));
+                case css::uno::TypeClass_UNSIGNED_HYPER:
+                    return emscripten::val(*o3tl::forceAccess<sal_uInt64>(self));
+                case css::uno::TypeClass_FLOAT:
+                    return emscripten::val(*o3tl::forceAccess<float>(self));
+                case css::uno::TypeClass_DOUBLE:
+                    return emscripten::val(*o3tl::forceAccess<double>(self));
+                case css::uno::TypeClass_CHAR:
+                    return emscripten::val(*o3tl::forceAccess<sal_Unicode>(self));
+                case css::uno::TypeClass_STRING:
+                    return emscripten::val(*o3tl::forceAccess<OUString>(self));
+                case css::uno::TypeClass_TYPE:
+                    return emscripten::val(*o3tl::forceAccess<css::uno::Type>(self));
+                case css::uno::TypeClass_SEQUENCE:
+                    return emscripten::val::undefined(); //TODO
+                case css::uno::TypeClass_ENUM:
+                    return emscripten::val::undefined(); //TODO
+                case css::uno::TypeClass_STRUCT:
+                    return emscripten::val::undefined(); //TODO
+                case css::uno::TypeClass_EXCEPTION:
+                    return emscripten::val::undefined(); //TODO
+                case css::uno::TypeClass_INTERFACE:
+                    return emscripten::val::undefined(); //TODO
+                default:
+                    O3TL_UNREACHABLE;
+            };
+        });
 
     registerInOutParam<bool>("uno_InOutParam_boolean");
     registerInOutParam<sal_Int8>("uno_InOutParam_byte");

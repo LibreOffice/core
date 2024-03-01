@@ -10,6 +10,7 @@
 Module.addOnPostRun(function() {
     console.log('Running embindtest');
     let uno = init_unoembind_uno(Module);
+    let css = uno.com.sun.star;
     let test = new uno.org.libreoffice.embindtest.Test(Module.getUnoComponentContext());
     console.assert(typeof test === 'object');
     {
@@ -103,6 +104,187 @@ Module.addOnPostRun(function() {
         console.assert(v.m2 === 100.5);
         console.assert(v.m3 === 'hä');
         console.assert(test.isStruct(v));
+    }
+    {
+        let v = test.getAnyVoid();
+        console.log(v);
+        console.assert(v.get() === undefined);
+        console.assert(test.isAnyVoid(v));
+        v.delete();
+        let a = new Module.Any(undefined, css.uno.TypeClass.VOID);
+        console.assert(test.isAnyVoid(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyBoolean();
+        console.log(v);
+        console.assert(v.get() === true);
+        console.assert(test.isAnyBoolean(v));
+        v.delete();
+        let a = new Module.Any(true, css.uno.TypeClass.BOOLEAN);
+        console.assert(test.isAnyBoolean(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyByte();
+        console.log(v);
+        console.assert(v.get() === -12);
+        console.assert(test.isAnyByte(v));
+        v.delete();
+        let a = new Module.Any(-12, css.uno.TypeClass.BYTE);
+        console.assert(test.isAnyByte(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyShort();
+        console.log(v);
+        console.assert(v.get() === -1234);
+        console.assert(test.isAnyShort(v));
+        v.delete();
+        let a = new Module.Any(-1234, css.uno.TypeClass.SHORT);
+        console.assert(test.isAnyShort(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyUnsignedShort();
+        console.log(v);
+        console.assert(v.get() === 54321);
+        console.assert(test.isAnyUnsignedShort(v));
+        v.delete();
+        let a = new Module.Any(54321, css.uno.TypeClass.UNSIGNED_SHORT);
+        console.assert(test.isAnyUnsignedShort(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyLong();
+        console.log(v);
+        console.assert(v.get() === -123456);
+        console.assert(test.isAnyLong(v));
+        v.delete();
+        let a = new Module.Any(-123456, css.uno.TypeClass.LONG);
+        console.assert(test.isAnyLong(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyUnsignedLong();
+        console.log(v);
+        console.assert(v.get() === 3456789012);
+        console.assert(test.isAnyUnsignedLong(v));
+        v.delete();
+        let a = new Module.Any(3456789012, css.uno.TypeClass.UNSIGNED_LONG);
+        console.assert(test.isAnyUnsignedLong(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyHyper();
+        console.log(v);
+        console.assert(v.get() === -123456789n);
+        console.assert(test.isAnyHyper(v));
+        v.delete();
+        let a = new Module.Any(-123456789n, css.uno.TypeClass.HYPER);
+        console.assert(test.isAnyHyper(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyUnsignedHyper();
+        console.log(v);
+        console.assert(v.get() === 9876543210n);
+        console.assert(test.isAnyUnsignedHyper(v));
+        v.delete();
+        let a = new Module.Any(9876543210n, css.uno.TypeClass.UNSIGNED_HYPER);
+        console.assert(test.isAnyUnsignedHyper(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyFloat();
+        console.log(v);
+        console.assert(v.get() === -10.25);
+        console.assert(test.isAnyFloat(v));
+        v.delete();
+        let a = new Module.Any(-10.25, css.uno.TypeClass.FLOAT);
+        console.assert(test.isAnyFloat(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyDouble();
+        console.log(v);
+        console.assert(v.get() === 100.5);
+        console.assert(test.isAnyDouble(v));
+        v.delete();
+        let a = new Module.Any(100.5, css.uno.TypeClass.DOUBLE);
+        console.assert(test.isAnyDouble(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyChar();
+        console.log(v);
+        console.assert(v.get() === 'Ö');
+        console.assert(test.isAnyChar(v));
+        v.delete();
+        let a = new Module.Any('Ö', css.uno.TypeClass.CHAR);
+        console.assert(test.isAnyChar(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyString();
+        console.log(v);
+        console.assert(v.get() === 'hä');
+        console.assert(test.isAnyString(v));
+        v.delete();
+        let a = new Module.Any('hä', css.uno.TypeClass.STRING);
+        console.assert(test.isAnyString(a));
+        a.delete();
+    }
+    {
+        let v = test.getAnyType();
+        console.log(v);
+        console.assert(v.get().toString() === 'long');
+        console.assert(test.isAnyType(v));
+        v.delete();
+        //TODO: let a = new Module.Any(TODO, css.uno.TypeClass.TYPE);
+        //TODO: console.assert(test.isAnyType(a));
+        //TODO: a.delete();
+    }
+    {
+        let v = test.getAnySequence();
+        console.log(v);
+        //TODO: let x = v.get();
+        //TODO: console.assert(x.size() === 3);
+        //TODO: console.assert(x.get(0) === 'foo');
+        //TODO: console.assert(x.get(1) === 'barr');
+        //TODO: console.assert(x.get(2) === 'bazzz');
+        //TODO: x.delete();
+        console.assert(test.isAnySequence(v));
+        v.delete();
+        let s = new Module.uno_Sequence_string(["foo", "barr", "bazzz"]);
+        //TODO: let a = new Module.Any(s, css.uno.TypeClass.SEQUENCE);
+        //TODO: console.assert(test.isAny(a));
+        //TODO: a.delete();
+        s.delete();
+    }
+    {
+        let v = test.getAnyEnum();
+        console.log(v);
+        //TODO: console.assert(v.get() === uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(test.isAnyEnum(v));
+        v.delete();
+        //TODO: let a = new Module.Any(
+        //TODO:     uno.org.libreoffice.embindtest.Enum.E_2, css.uno.TypeClass.ENUM);
+        //TODO: console.assert(test.isAny(a));
+        //TODO: a.delete();
+    }
+    {
+        let v = test.getAnyStruct();
+        console.log(v);
+        //TODO: console.assert(v.get().m1 === -123456);
+        //TODO: console.assert(v.get().m2 === 100.5);
+        //TODO: console.assert(v.get().m3 === 'hä');
+        console.assert(test.isAnyStruct(v));
+        v.delete();
+        //TODO: let a = new Module.Any(
+        //TODO:     {m1: -123456, m2: 100.5, m3: 'hä'}, css.uno.TypeClass.STRUCT);
+        //TODO: console.assert(test.isAny(a));
+        //TODO: a.delete();
     }
     {
         let v = test.getSequenceBoolean();
@@ -232,6 +414,25 @@ Module.addOnPostRun(function() {
         console.assert(v.get(1).toString() === 'void');
         console.assert(v.get(2).toString() === '[]org.libreoffice.embindtest.Enum');
         console.assert(test.isSequenceType(v));
+        v.delete();
+    }
+    {
+        let v = test.getSequenceAny();
+        console.log(v);
+        console.assert(v.size() === 3);
+        let e0 = v.get(0);
+        console.assert(e0.get() === -123456);
+        e0.delete();
+        let e1 = v.get(1);
+        console.assert(e1.get() === undefined);
+        e1.delete();
+        //TODO: let e2 = v.get(2);
+        //TODO: console.assert(e2.size() === 3);
+        //TODO: console.assert(e2.get(0) == uno.org.libreoffice.embindtest.Enum.E_2);
+        //TODO: console.assert(e2.get(1) == uno.org.libreoffice.embindtest.Enum.E3);
+        //TODO: console.assert(e2.get(2) == uno.org.libreoffice.embindtest.Enum.E_10);
+        //TODO: e2.delete();
+        console.assert(test.isSequenceAny(v));
         v.delete();
     }
     {
