@@ -239,6 +239,43 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyBoolean)
     assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 4, \"4\": 1}");
     assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 4, \"4\": 0}");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testCopyFormattedNumber)
+{
+    // Given a document with formatted numbers in A1-A2:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    OUString aNumberFormat("#,##0.00");
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    pFormatter->PutEntry(aNumberFormat, nCheckPos, nType, nFormat);
+    ScAddress aCellPos1(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    pDoc->SetNumberFormat(aCellPos1, nFormat);
+    pDoc->SetString(aCellPos1, "1000");
+    ScAddress aCellPos2(/*nColP=*/0, /*nRowP=*/1, /*nTabP=*/0);
+    pDoc->SetNumberFormat(aCellPos2, nFormat);
+    pDoc->SetString(aCellPos2, "2000");
+
+    // When copying those values:
+    ScImportExport aExporter(*pDoc, ScRange(aCellPos1, aCellPos2));
+    SvMemoryStream aStream;
+    CPPUNIT_ASSERT(aExporter.ExportStream(aStream, OUString(), SotClipboardFormatId::HTML));
+
+    // Then make sure the values are numbers:
+    aStream.Seek(0);
+    htmlDocUniquePtr pHtmlDoc = parseHtmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '(//td)[1]' no attribute 'data-sheets-value' exist
+    // i.e. only a formatted number string was written, without a float value.
+    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 3, \"3\": 1000}");
+    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-numberformat"_ostr,
+                "{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}");
+    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr, "{ \"1\": 3, \"3\": 2000}");
+    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-numberformat"_ostr,
+                "{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
