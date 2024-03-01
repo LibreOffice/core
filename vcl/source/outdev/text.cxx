@@ -1789,27 +1789,27 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     {
         nLen = rStr.getLength() - nIndex;
     }
-    OUString   aStr = rStr;
     sal_Int32  nMnemonicPos = -1;
 
     tools::Long        nMnemonicX = 0;
     tools::Long        nMnemonicY = 0;
     tools::Long        nMnemonicWidth = 0;
-    if ( (nStyle & DrawTextFlags::Mnemonic) && nLen > 1 )
+    const OUString aStr = removeMnemonicFromString(rStr, nMnemonicPos); // Strip mnemonics always
+    if (nMnemonicPos != -1)
     {
-        aStr = removeMnemonicFromString( aStr, nMnemonicPos );
-        if ( nMnemonicPos != -1 )
+        if (nMnemonicPos < nIndex)
         {
-            if( nMnemonicPos < nIndex )
-            {
-                --nIndex;
-            }
-            else
-            {
-                if( nMnemonicPos < (nIndex+nLen) )
-                    --nLen;
-                SAL_WARN_IF( nMnemonicPos >= (nIndex+nLen), "vcl", "Mnemonic underline marker after last character" );
-            }
+            --nIndex;
+        }
+        else
+        {
+            if (nMnemonicPos < (nIndex + nLen))
+                --nLen;
+        }
+        if (nStyle & DrawTextFlags::Mnemonic && !pVector
+            && !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics))
+        {
+            SAL_WARN_IF( nMnemonicPos >= (nIndex+nLen), "vcl", "Mnemonic underline marker after last character" );
             bool bInvalidPos = false;
 
             if( nMnemonicPos >= nLen )
@@ -1837,13 +1837,14 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             nMnemonicX = mnOutOffX + aTempPos.X();
             nMnemonicY = mnOutOffY + aTempPos.Y();
         }
+        else
+            nMnemonicPos = -1; // Reset - we don't show the mnemonic
     }
 
+    std::optional<Color> oOldTextColor;
+    std::optional<Color> oOldTextFillColor;
     if ( nStyle & DrawTextFlags::Disable && ! pVector )
     {
-        Color aOldTextColor;
-        Color aOldTextFillColor;
-        bool  bRestoreFillColor;
         bool  bHighContrastBlack = false;
         bool  bHighContrastWhite = false;
         const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
@@ -1858,14 +1859,9 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             }
         }
 
-        aOldTextColor = GetTextColor();
+        oOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
-        {
-            bRestoreFillColor = true;
-            aOldTextFillColor = GetTextFillColor();
-        }
-        else
-            bRestoreFillColor = false;
+            oOldTextFillColor = GetTextFillColor();
 
         if( bHighContrastBlack )
             SetTextColor( COL_GREEN );
@@ -1873,26 +1869,16 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             SetTextColor( COL_LIGHTGREEN );
         else
             SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
+    }
 
-        DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
-        if (!(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics))
-        {
-            if ( nMnemonicPos != -1 )
-                ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
-        }
-        SetTextColor( aOldTextColor );
-        if ( bRestoreFillColor )
-            SetTextFillColor( aOldTextFillColor );
-    }
-    else
-    {
-        DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText, pGlyphs );
-        if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector )
-        {
-            if ( nMnemonicPos != -1 )
-                ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
-        }
-    }
+    DrawText(rPos, aStr, nIndex, nLen, pVector, pDisplayText, pGlyphs);
+    if (nMnemonicPos != -1)
+        ImplDrawMnemonicLine(nMnemonicX, nMnemonicY, nMnemonicWidth);
+
+    if (oOldTextColor)
+        SetTextColor( *oOldTextColor );
+    if (oOldTextFillColor)
+        SetTextFillColor(*oOldTextFillColor);
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawCtrlText( rPos, rStr, nIndex, nLen, nStyle, pVector, pDisplayText );
