@@ -1146,6 +1146,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         nFormat, *pFormatter, &aNonConvertibleChars));
 
     std::optional<tools::JsonWriter> oJson;
+    const SvNumberformat* pNumberFormat = nullptr;
     if (bValueData)
     {
         if (nFormat)
@@ -1160,6 +1161,14 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
                     oJson.emplace();
                     oJson->put("1", static_cast<sal_Int32>(4));
                     oJson->put("4", static_cast<sal_Int32>(fVal));
+                }
+                else
+                {
+                    // 3 is number.
+                    oJson.emplace();
+                    oJson->put("1", static_cast<sal_Int32>(3));
+                    oJson->put("3", static_cast<sal_Int32>(fVal));
+                    pNumberFormat = pFormatEntry;
                 }
             }
         }
@@ -1176,6 +1185,19 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     {
         OUString aJsonString = OUString::fromUtf8(oJson->finishAndGetAsOString());
         aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_DSval "=\""
+                      + HTMLOutFuncs::ConvertStringToHTML(aJsonString) + "\"");
+    }
+
+    if (pNumberFormat)
+    {
+        // 2 is a number format.
+        oJson.emplace();
+        oJson->put("1", static_cast<sal_Int32>(2));
+        oJson->put("2", pNumberFormat->GetFormatstring());
+        // The number format is for a number.
+        oJson->put("3", static_cast<sal_Int32>(1));
+        OUString aJsonString = OUString::fromUtf8(oJson->finishAndGetAsOString());
+        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_DSnum "=\""
                       + HTMLOutFuncs::ConvertStringToHTML(aJsonString) + "\"");
     }
 
