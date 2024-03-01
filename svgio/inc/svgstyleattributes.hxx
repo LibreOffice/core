@@ -170,6 +170,13 @@ namespace svgio::svgreader
             Central
         };
 
+        enum class Overflow
+        {
+            notset,
+            hidden,
+            visible
+        };
+
         enum class Visibility
         {
             notset,
@@ -207,6 +214,7 @@ namespace svgio::svgreader
             TextAnchor                  maTextAnchor;
             SvgPaint                    maColor;
             SvgNumber                   maOpacity;
+            Overflow                    maOverflow;
             Visibility                  maVisibility;
             OUString               maTitle;
             OUString               maDesc;
@@ -409,6 +417,10 @@ namespace svgio::svgreader
             /// Opacity content
             SvgNumber getOpacity() const;
             void setOpacity(const SvgNumber& rOpacity) { maOpacity = rOpacity; }
+
+            /// Overflow
+            Overflow getOverflow() const;
+            void setOverflow(const Overflow aOverflow) { maOverflow = aOverflow; }
 
             /// Visibility
             Visibility getVisibility() const;

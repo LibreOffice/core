@@ -1966,6 +1966,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156271)
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "dx1"_ostr, "23");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159968)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf159968.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Check no mask is applied to the marker
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/transform/transform/polypolygoncolor"_ostr, "color"_ostr, "#000000");
+    assertXPath(pDocument,
+            "/primitive2D/transform/transform/transform/transform/polypolygoncolor/polypolygon/polygon/point"_ostr, 5);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149880)
 {
     Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf149880.svg");
