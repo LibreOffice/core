@@ -68,11 +68,11 @@ class   HWPStyle;
 class   HWPPara;
 class   HStream;
 
-struct ColumnInfo{
+struct HWPColumnInfo{
     int start_page;
     bool bIsSet;
     std::shared_ptr<ColumnDef> xColdef;
-    explicit ColumnInfo(int num){
+    explicit HWPColumnInfo(int num){
         start_page = num;
         bIsSet = false;
     }
@@ -279,7 +279,7 @@ class DLLEXPORT HWPFile
         HWPInfo   _hwpInfo;
         HWPFont   _hwpFont;
         HWPStyle  _hwpStyle;
-        std::vector<std::unique_ptr<ColumnInfo>> columnlist;
+        std::vector<std::unique_ptr<HWPColumnInfo>> columnlist;
         // paragraph list
         std::vector<std::unique_ptr<HWPPara>> plist;
         // keep paragraph's that failed to load until

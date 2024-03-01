@@ -566,13 +566,13 @@ void HWPFile::AddCharShape(std::shared_ptr<CharShape> const & cshape)
 
 void HWPFile::AddColumnInfo()
 {
-    columnlist.emplace_back(new ColumnInfo(m_nCurrentPage));
+    columnlist.emplace_back(new HWPColumnInfo(m_nCurrentPage));
     setMaxSettedPage();
 }
 
 void HWPFile::SetColumnDef(const std::shared_ptr<ColumnDef>& rColdef)
 {
-    ColumnInfo *cinfo = columnlist.back().get();
+    HWPColumnInfo *cinfo = columnlist.back().get();
     if( cinfo->bIsSet )
         return;
     cinfo->xColdef = rColdef;
