@@ -2570,7 +2570,7 @@ AC_ARG_WITH(linker-hash-style,
 
 AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home=<absolute path to JDK home>],
-        [If you have installed JDK 17 or later on your system please supply the
+        [If you have installed JDK 8 or later on your system please supply the
          path here. Note that this is not the location of the java command but the
          location of the entire distribution. In case of cross-compiling, this
          is the JDK of the host os. Use --with-build-platform-configure-options
@@ -8647,7 +8647,7 @@ if test "$ENABLE_JAVA" != ""; then
         fi
 
         if ! test -f "$with_jdk_home/lib/jvm.lib" -a -f "$with_jdk_home/bin/java.exe"; then
-            AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option (or fix the path) pointing to a $WIN_HOST_BITS-bit JDK >= 17])
+            AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option (or fix the path) pointing to a $WIN_HOST_BITS-bit JDK >= 8])
         fi
     fi
 
@@ -8712,6 +8712,7 @@ dnl ===================================================================
 # Whether all the complexity here actually is needed any more or not, no idea.
 
 JDK_SECURITYMANAGER_DISALLOWED=
+MODULAR_JAVA=
 if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     _gij_longver=0
     AC_MSG_CHECKING([the installed JDK])
@@ -8732,8 +8733,8 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
             _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED '/^$/d' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-            if test "$_jdk_ver" -lt 170000; then
-                AC_MSG_ERROR([JDK is too old, you need at least 17 ($_jdk_ver < 170000)])
+            if test "$_jdk_ver" -lt 10800; then
+                AC_MSG_ERROR([JDK is too old, you need at least 8 ($_jdk_ver < 10800)])
             fi
             dnl TODO: Presumably, the Security Manager will not merely be disallowed, but be
             dnl completely removed in some Java version > 18 (see
@@ -8748,13 +8749,21 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
             fi
             AC_MSG_RESULT([found $JAVA_HOME (JDK $_jdk)])
 
+            dnl Check whether the build Java supports modules
+            if test "$_jdk_ver" -ge 90000; then
+                MODULAR_JAVA=TRUE
+            else
+                AC_MSG_WARN([Modular jars will not be built. They need at least Java 9 ($_jdk_ver < 90000)])
+                add_warning "Modular jars will not be built. They need at least Java 9 ($_jdk_ver < 90000)"
+            fi
+
             # set to limit VM usage for JunitTests
             JAVAIFLAGS=-Xmx64M
             # set to limit VM usage for javac
             JAVACFLAGS=-J-Xmx128M
         fi
     else
-        AC_MSG_ERROR([Java not found. You need at least JDK 17])
+        AC_MSG_ERROR([Java not found. You need at least JDK 8])
     fi
 else
     if test -z "$ENABLE_JAVA"; then
@@ -9058,6 +9067,7 @@ AC_SUBST(JDK_FOR_BUILD)
 AC_SUBST(JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD)
 AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
+AC_SUBST(MODULAR_JAVA)
 
 
 dnl ===================================================================

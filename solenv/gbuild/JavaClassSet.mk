@@ -19,7 +19,7 @@
 
 gb_JavaClassSet_JAVACCOMMAND = $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVACFLAGS) \
     -encoding utf8 \
-    --release $(1) \
+    $(if $(MODULAR_JAVA),--release $(1),-source $(1) -target $(1)) \
     -Xlint:-options \
     -Xlint:unchecked
 
@@ -51,7 +51,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 			@$$RESPONSEFILE &&) \
 		rm -f $$RESPONSEFILE &&) \
-		$(if $(T_MODULENAME),\
+		$(if $(MODULAR_JAVA),$(if $(T_MODULENAME),\
 			RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 				$(T_JAVA9FILES)) && \
 			$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,9) \
@@ -61,7 +61,7 @@ $(call gb_Helper_abbreviate_dirs,\
 				$(if $(T_MODULENAME),--patch-module $(T_MODULENAME)="$(subst $(WHITESPACE),$(gb_CLASSPATHSEP),$(strip $(dir $(PACKAGEDIRS))))") \
 				-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 				@$$RESPONSEFILE &&) \
-			rm -f $$RESPONSEFILE &&) \
+			rm -f $$RESPONSEFILE &&)) \
 	touch $(1))
 
 endef
