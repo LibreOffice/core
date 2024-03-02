@@ -20,8 +20,8 @@ namespace tools
 constexpr int DEFAULT_BUFFER_SIZE = 2048;
 
 JsonWriter::JsonWriter()
-    : mpBuffer(static_cast<char*>(malloc(DEFAULT_BUFFER_SIZE)))
-    , mPos(mpBuffer)
+    : mpBuffer(rtl_string_alloc(DEFAULT_BUFFER_SIZE))
+    , mPos(mpBuffer->buffer)
     , mSpaceAllocated(DEFAULT_BUFFER_SIZE)
     , mStartNodeCount(0)
     , mbFirstFieldInNode(true)
@@ -38,7 +38,7 @@ JsonWriter::JsonWriter()
 JsonWriter::~JsonWriter()
 {
     assert(mbClosed && "forgot to extract data?");
-    free(mpBuffer);
+    rtl_string_release(mpBuffer);
 }
 
 JsonWriter::ScopedJsonWriterNode<'}'> JsonWriter::startNode(std::string_view pNodeName)
@@ -291,12 +291,15 @@ void JsonWriter::addCommaBeforeField()
 void JsonWriter::ensureSpace(int noMoreBytesRequired)
 {
     assert(!mbClosed && "already extracted data");
-    int currentUsed = mPos - mpBuffer;
+    int currentUsed = mPos - mpBuffer->buffer;
     if (currentUsed + noMoreBytesRequired >= mSpaceAllocated)
     {
         auto newSize = (currentUsed + noMoreBytesRequired) * 2;
-        mpBuffer = static_cast<char*>(realloc(mpBuffer, newSize));
-        mPos = mpBuffer + currentUsed;
+        rtl_String* pNewBuffer = rtl_string_alloc(newSize);
+        memcpy(pNewBuffer->buffer, mpBuffer->buffer, currentUsed);
+        rtl_string_release(mpBuffer);
+        mpBuffer = pNewBuffer;
+        mPos = mpBuffer->buffer + currentUsed;
         mSpaceAllocated = newSize;
 
         addValidationMark();
@@ -339,13 +342,13 @@ OString JsonWriter::finishAndGetAsOString()
     *mPos = 0;
     mbClosed = true;
 
-    OString ret(mpBuffer, mPos - mpBuffer);
-    return ret;
+    mpBuffer->length = mPos - mpBuffer->buffer;
+    return mpBuffer;
 }
 
 bool JsonWriter::isDataEquals(std::string_view s) const
 {
-    return std::string_view(mpBuffer, static_cast<size_t>(mPos - mpBuffer)) == s;
+    return std::string_view(mpBuffer->buffer, static_cast<size_t>(mPos - mpBuffer->buffer)) == s;
 }
 
 } // namespace tools
