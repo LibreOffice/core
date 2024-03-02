@@ -767,7 +767,8 @@ void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< docum
 
 namespace {
 
-OUString getStringPropertyValue( const uno::Sequence<beans::PropertyValue>& rProps, std::u16string_view rName )
+beans::PropertyValue getStringPropertyValue(const uno::Sequence<beans::PropertyValue>& rProps,
+                                            const OUString& rName)
 {
     OUString aStr;
 
@@ -780,7 +781,7 @@ OUString getStringPropertyValue( const uno::Sequence<beans::PropertyValue>& rPro
         }
     }
 
-    return aStr;
+    return comphelper::makePropertyValue(rName, aStr);
 }
 
 }
@@ -819,19 +820,12 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         if ( aFilterName.isEmpty() )
             throw io::IOException(); // TODO:
 
-        static constexpr OUString sFilterName = u"FilterName"_ustr;
-        static constexpr OUString sHierarchicalDocumentName = u"HierarchicalDocumentName"_ustr;
-        static constexpr OUString sDocumentBaseURL = u"DocumentBaseURL"_ustr;
-        static constexpr OUString sSourceShellID = u"SourceShellID"_ustr;
-        static constexpr OUString sDestinationShellID = u"DestinationShellID"_ustr;
         uno::Sequence<beans::PropertyValue> aArgs{
-            comphelper::makePropertyValue(sFilterName, aFilterName),
-            comphelper::makePropertyValue(sHierarchicalDocumentName, aHierarchName),
-            comphelper::makePropertyValue(sDocumentBaseURL, aBaseURL),
-            comphelper::makePropertyValue(sSourceShellID,
-                                          getStringPropertyValue(rObjArgs, sSourceShellID)),
-            comphelper::makePropertyValue(
-                sDestinationShellID, getStringPropertyValue(rObjArgs, sDestinationShellID))
+            comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName),
+            comphelper::makePropertyValue(u"HierarchicalDocumentName"_ustr, aHierarchName),
+            comphelper::makePropertyValue(u"DocumentBaseURL"_ustr, aBaseURL),
+            getStringPropertyValue(rObjArgs, u"SourceShellID"_ustr),
+            getStringPropertyValue(rObjArgs, u"DestinationShellID"_ustr),
         };
 
         xDoc->storeToStorage( xStorage, aArgs );
