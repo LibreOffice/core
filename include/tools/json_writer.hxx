@@ -34,7 +34,7 @@ class TOOLS_DLLPUBLIC JsonWriter
     friend class ScopedJsonWriterArray;
     friend class ScopedJsonWriterStruct;
 
-    char* mpBuffer;
+    rtl_String* mpBuffer;
     char* mPos;
     int mSpaceAllocated;
     int mStartNodeCount;
@@ -99,14 +99,14 @@ private:
     inline void addValidationMark()
     {
 #ifndef NDEBUG
-        *(mpBuffer + mSpaceAllocated - 1) = JSON_WRITER_DEBUG_MARKER;
+        *(mpBuffer->buffer + mSpaceAllocated - 1) = JSON_WRITER_DEBUG_MARKER;
 #endif
     }
 
     inline void validate()
     {
 #ifndef NDEBUG
-        unsigned char c = *(mpBuffer + mSpaceAllocated - 1);
+        unsigned char c = *(mpBuffer->buffer + mSpaceAllocated - 1);
         assert(c == JSON_WRITER_DEBUG_MARKER);
 #endif
     }
