@@ -58,6 +58,11 @@ void Svx3DPreviewControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Construct();
 }
 
+void Svx3DPreviewControl::ClearPageView()
+{
+    mp3DView->ClearPageView();
+}
+
 Svx3DPreviewControl::~Svx3DPreviewControl()
 {
     mp3DObj.clear();

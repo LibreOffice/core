@@ -61,6 +61,7 @@ public:
     SvxPreviewObjectType GetObjectType() const { return mnObjectType; }
     SfxItemSet const & Get3DAttributes() const;
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
+    void ClearPageView();
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl final : public Svx3DPreviewControl
