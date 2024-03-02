@@ -57,8 +57,7 @@ sal_uInt16 lcl_DoUpdateCharts( ScDocument& rDoc )
         OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
+        while (SdrObject* pObject = aIter.Next())
         {
             if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && ScDocument::IsChart( pObject ) )
             {
@@ -66,7 +65,6 @@ sal_uInt16 lcl_DoUpdateCharts( ScDocument& rDoc )
                 rDoc.UpdateChart( aName );
                 ++nFound;
             }
-            pObject = aIter.Next();
         }
     }
     return nFound;
@@ -122,8 +120,7 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument& rSr
         return;
 
     SdrObjListIter aIter( pDestPage, SdrIterMode::Flat );
-    SdrObject* pObject = aIter.Next();
-    while( pObject )
+    while (SdrObject* pObject = aIter.Next())
     {
         if( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
         {
@@ -143,7 +140,6 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument& rSr
                 rDestDoc.SetChartRanges( aChartName, aRangesVector );
             }
         }
-        pObject = aIter.Next();
     }
 }
 
@@ -158,8 +154,7 @@ void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument& rDestDoc, const S
         return;
 
     SdrObjListIter aIter( pDestPage, SdrIterMode::Flat );
-    SdrObject* pObject = aIter.Next();
-    while( pObject )
+    while (SdrObject* pObject = aIter.Next())
     {
         if( pObject->GetObjIdentifier() == SdrObjKind::OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
         {
@@ -168,7 +163,6 @@ void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument& rDestDoc, const S
             Reference< util::XModifiable > xModif(xChartDoc, uno::UNO_QUERY_THROW);
             xModif->setModified( true);
         }
-        pObject = aIter.Next();
     }
 }
 
@@ -326,12 +320,8 @@ void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVe
     if ( pPage )
     {
         SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
-        SdrObject* pObject = aIter.Next();
-        while ( pObject )
-        {
+        while (SdrObject* pObject = aIter.Next())
             AddRangesIfProtectedChart( rRangesVector, rDocument, pObject );
-            pObject = aIter.Next();
-        }
     }
 }
 
@@ -341,8 +331,7 @@ void ScChartHelper::GetChartNames( ::std::vector< OUString >& rChartNames, const
         return;
 
     SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
-    SdrObject* pObject = aIter.Next();
-    while ( pObject )
+    while (SdrObject* pObject = aIter.Next())
     {
         if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 )
         {
@@ -352,7 +341,6 @@ void ScChartHelper::GetChartNames( ::std::vector< OUString >& rChartNames, const
                 rChartNames.push_back( pSdrOle2Obj->GetPersistName() );
             }
         }
-        pObject = aIter.Next();
     }
 }
 
@@ -365,8 +353,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
     size_t nRangeListCount = rRangesVector.size();
     size_t nRangeList = 0;
     SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
-    SdrObject* pObject = aIter.Next();
-    while ( pObject )
+    while (SdrObject* pObject = aIter.Next())
     {
         if ( pObject->GetObjIdentifier() == SdrObjKind::OLE2 )
         {
@@ -424,7 +411,6 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                 }
             }
         }
-        pObject = aIter.Next();
     }
 }
 
