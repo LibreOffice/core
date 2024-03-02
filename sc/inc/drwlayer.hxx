@@ -215,7 +215,8 @@ public:
     static ScDrawObjData* GetObjDataTab( SdrObject* pObj, SCTAB nTab );
 
     /** Returns true, if the passed object is the caption of a cell note. */
-    static bool     IsNoteCaption( SdrObject* pObj );
+    static bool IsNoteCaption(const ScDrawObjData* pData);
+    static bool IsNoteCaption(SdrObject* pObj) { return IsNoteCaption(GetObjData(pObj)); }
 
     /** Returns the object data, if the passed object is a cell note caption. */
     static ScDrawObjData* GetNoteCaptionData( SdrObject* pObj, SCTAB nTab );
