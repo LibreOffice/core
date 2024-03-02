@@ -251,6 +251,8 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Contain
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
 {
+    // drop page view before the widget it paints to is destroyed
+    m_xPreview->ClearPageView();
 }
 
 IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void*, void)
