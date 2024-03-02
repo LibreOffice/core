@@ -511,8 +511,7 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
         SCTAB nNewTab = static_cast<SCTAB>(nNewPos);
 
         SdrObjListIter aIter( pOldPage, SdrIterMode::Flat );
-        SdrObject* pOldObject = aIter.Next();
-        while (pOldObject)
+        while (SdrObject* pOldObject = aIter.Next())
         {
             ScDrawObjData* pOldData = GetObjData(pOldObject);
             if (pOldData)
@@ -534,8 +533,6 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 
             if (bRecording)
                 AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pNewObject ) );
-
-            pOldObject = aIter.Next();
         }
     }
 
@@ -560,7 +557,7 @@ void ScDrawLayer::ResetTab( SCTAB nStart, SCTAB nEnd )
             continue;
 
         SdrObjListIter aIter(pPage, SdrIterMode::Flat);
-        for (SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next())
+        while (SdrObject* pObj = aIter.Next())
         {
             ScDrawObjData* pData = GetObjData(pObj);
             if (!pData)
@@ -1389,8 +1386,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     if (pPage)
     {
         SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
+        while (SdrObject* pObject = aIter.Next())
         {
                             //TODO: test Flags (hidden?)
 
@@ -1415,8 +1411,6 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
                 }
                 bAny = true;
             }
-
-            pObject = aIter.Next();
         }
     }
 
@@ -1604,21 +1598,16 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     if ( bNegativePage )
         MirrorRectRTL( aTestRect );
 
-    bool bFound = false;
-
     tools::Rectangle aObjRect;
     SdrObjListIter aIter( pPage );
-    SdrObject* pObject = aIter.Next();
-    while ( pObject && !bFound )
+    while (SdrObject* pObject = aIter.Next())
     {
         aObjRect = pObject->GetSnapRect();  //TODO: GetLogicRect ?
         if (aTestRect.Contains(aObjRect.TopLeft()) || aTestRect.Contains(aObjRect.BottomLeft()))
-            bFound = true;
-
-        pObject = aIter.Next();
+            return true;
     }
 
-    return bFound;
+    return false;
 }
 
 void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
@@ -1650,8 +1639,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
     ppObj.reserve(nObjCount);
 
     SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-    SdrObject* pObject = aIter.Next();
-    while (pObject)
+    while (SdrObject* pObject = aIter.Next())
     {
         // do not delete note caption, they are always handled by the cell note
         // TODO: detective objects are still deleted, is this desired?
@@ -1681,8 +1669,6 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                 }
             }
         }
-
-        pObject = aIter.Next();
     }
 
     if (bRecording)
@@ -1726,8 +1712,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                 ppObj.reserve(nObjCount);
 
                 SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-                SdrObject* pObject = aIter.Next();
-                while (pObject)
+                while (SdrObject* pObject = aIter.Next())
                 {
                     // do not delete note caption, they are always handled by the cell note
                     // TODO: detective objects are still deleted, is this desired?
@@ -1749,8 +1734,6 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                             ppObj.push_back(pObject);
                         }
                     }
-
-                    pObject = aIter.Next();
                 }
 
                 //  Delete objects (backwards)
@@ -1934,8 +1917,7 @@ void ScDrawLayer::CopyFromClip(ScDrawLayer* pClipModel, SCTAB nSourceTab,
         return; // Can this happen? And if yes, what to do?
 
     SdrObjListIter aIter( pSrcPage, SdrIterMode::Flat );
-    SdrObject* pOldObject = aIter.Next();
-    if (!pOldObject)
+    if (!aIter.Count())
         return; // no objects at all. Nothing to do.
 
     //  a clipboard document and its source share the same document item pool,
@@ -1965,15 +1947,12 @@ void ScDrawLayer::CopyFromClip(ScDrawLayer* pClipModel, SCTAB nSourceTab,
     bool bSourceRTL = pClipDoc->IsLayoutRTL(nSourceTab);
     bool bDestRTL = pDoc->IsLayoutRTL(nDestTab);
 
-    while (pOldObject)
+    while (SdrObject* pOldObject = aIter.Next())
     {
         // ToDO: Can this happen? Such objects should not be in the clipboard document.
         // do not copy internal objects (detective) and note captions
         if ((pOldObject->GetLayer() == SC_LAYER_INTERN) || IsNoteCaption(pOldObject))
-        {
-            pOldObject = aIter.Next();
             continue;
-        }
 
         // 'aIter' considers all objects on pSrcPage. But ScDocument::CopyBlockFromClip, which is used
         // for filtered data, acts not on the total range but only on parts of it. So we need to look,
@@ -1991,18 +1970,12 @@ void ScDrawLayer::CopyFromClip(ScDrawLayer* pClipModel, SCTAB nSourceTab,
             aSrcObjStart = pClipDoc->GetRange(nClipTab, pOldObject->GetCurrentBoundRect()).aStart;
         }
         if (!rSourceRange.Contains(aSrcObjStart))
-        {
-            pOldObject = aIter.Next();
             continue;
-        }
         // If object is anchored to a filtered cell, we will not copy it, because filtered rows are
         // eliminated in paste. Copying would produce hidden objects which can only be accessed per
         // macro.
         if (pObjData && pClipDoc->RowFiltered((*pObjData).maStart.Row(), nSourceTab))
-        {
-            pOldObject = aIter.Next();
             continue;
-        }
 
         // Copy style sheet
         auto pStyleSheet = pOldObject->GetStyleSheet();
@@ -2257,7 +2230,6 @@ void ScDrawLayer::CopyFromClip(ScDrawLayer* pClipModel, SCTAB nSourceTab,
                 }
             }
         }
-        pOldObject = aIter.Next();
     }
 
     if( bRestoreDestTabName )
@@ -2452,8 +2424,7 @@ SdrObject* ScDrawLayer::GetNamedObject( std::u16string_view rName, SdrObjKind nI
         if (pPage)
         {
             SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
-            SdrObject* pObject = aIter.Next();
-            while (pObject)
+            while (SdrObject* pObject = aIter.Next())
             {
                 if ( nId == SdrObjKind::NONE || pObject->GetObjIdentifier() == nId )
                     if ( IsNamedObject( pObject, rName ) )
@@ -2461,8 +2432,6 @@ SdrObject* ScDrawLayer::GetNamedObject( std::u16string_view rName, SdrObjKind nI
                         rFoundTab = static_cast<SCTAB>(nTab);
                         return pObject;
                     }
-
-                pObject = aIter.Next();
             }
         }
     }
@@ -2503,20 +2472,15 @@ void ScDrawLayer::EnsureGraphicNames()
         if (pPage)
         {
             SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
-            SdrObject* pObject = aIter.Next();
 
             /* The index passed to GetNewGraphicName() will be set to
                 the used index in each call. This prevents the repeated search
                 for all names from 1 to current index. */
             tools::Long nCounter = 0;
 
-            while (pObject)
-            {
+            while (SdrObject* pObject = aIter.Next())
                 if ( pObject->GetObjIdentifier() == SdrObjKind::Graphic && pObject->GetName().isEmpty())
                     pObject->SetName( GetNewGraphicName( &nCounter ) );
-
-                pObject = aIter.Next();
-            }
         }
     }
 }
@@ -2742,14 +2706,12 @@ ScDrawLayer::GetObjectsAnchoredToRows(SCTAB nTab, SCROW nStartRow, SCROW nEndRow
 
     std::vector<SdrObject*> aObjects;
     SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-    SdrObject* pObject = aIter.Next();
     ScRange aRange( 0, nStartRow, nTab, pDoc->MaxCol(), nEndRow, nTab);
-    while (pObject)
+    while (SdrObject* pObject = aIter.Next())
     {
         ScDrawObjData* pObjData = GetObjData(pObject);
         if (pObjData && aRange.Contains(pObjData->maStart))
             aObjects.push_back(pObject);
-        pObject = aIter.Next();
     }
     return aObjects;
 }
@@ -2763,9 +2725,8 @@ ScDrawLayer::GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, 
 
     std::map<SCROW, std::vector<SdrObject*>> aRowObjects;
     SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-    SdrObject* pObject = aIter.Next();
     ScRange aRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab);
-    while (pObject)
+    while (SdrObject* pObject = aIter.Next())
     {
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
@@ -2773,7 +2734,6 @@ ScDrawLayer::GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, 
             if (pObjData && aRange.Contains(pObjData->maStart))
                 aRowObjects[pObjData->maStart.Row()].push_back(pObject);
         }
-        pObject = aIter.Next();
     }
     return aRowObjects;
 }
@@ -2788,8 +2748,7 @@ bool ScDrawLayer::HasObjectsAnchoredInRange(const ScRange& rRange)
         return false;
 
     SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-    SdrObject* pObject = aIter.Next();
-    while (pObject)
+    while (SdrObject* pObject = aIter.Next())
     {
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
@@ -2797,7 +2756,6 @@ bool ScDrawLayer::HasObjectsAnchoredInRange(const ScRange& rRange)
             if (pObjData && rRange.Contains(pObjData->maStart)) // Object is in given range
                 return true;
         }
-        pObject = aIter.Next();
     }
     return false;
 }
@@ -2811,14 +2769,12 @@ std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCols(SCTAB nTab, SCCOL 
 
     std::vector<SdrObject*> aObjects;
     SdrObjListIter aIter(pPage, SdrIterMode::Flat);
-    SdrObject* pObject = aIter.Next();
     ScRange aRange(nStartCol, 0, nTab, nEndCol, pDoc->MaxRow(), nTab);
-    while (pObject)
+    while (SdrObject* pObject = aIter.Next())
     {
         ScDrawObjData* pObjData = GetObjData(pObject);
         if (pObjData && aRange.Contains(pObjData->maStart))
             aObjects.push_back(pObject);
-        pObject = aIter.Next();
     }
     return aObjects;
 }
