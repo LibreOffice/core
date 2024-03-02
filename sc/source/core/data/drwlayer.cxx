@@ -88,6 +88,7 @@
 #include <docpool.hxx>
 #include <detfunc.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <clipcontext.hxx>
 #include <clipparam.hxx>
 
 #include <memory>
@@ -1833,6 +1834,34 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
             }
 
             pDestPage->InsertObject(pNewObject.get());
+
+            // Store the chart's source data to the clipboad document, even when it's out of the
+            // copied range. It will be ignored when pasted to the same document; when pasted to
+            // another document, ScDocument::mpClipParam will provide the actually copied ranges,
+            // and the data copied here will be used to break connection and switch to own data
+            // in ScDrawLayer::CopyFromClip.
+            if (xOldChart && !xOldChart->hasInternalDataProvider())
+            {
+                sc::CopyToClipContext aCxt(*pClipDoc, false, true);
+                OUString aChartName = static_cast<SdrOle2Obj*>(pOldObject)->GetPersistName();
+                std::vector<ScRangeList> aRangesVector;
+                pDoc->GetChartRanges(aChartName, aRangesVector, *pDoc);
+                for (const ScRangeList& ranges : aRangesVector)
+                {
+                    for (const ScRange& r : ranges)
+                    {
+                        for (SCTAB i = r.aStart.Tab(); i <= r.aEnd.Tab(); ++i)
+                        {
+                            ScTable* pTab = pDoc->FetchTable(i);
+                            ScTable* pClipTab = pClipDoc->FetchTable(i);
+                            if (!pTab || !pClipTab)
+                                continue;
+                            pTab->CopyToClip(aCxt, r.aStart.Col(), r.aStart.Row(), r.aEnd.Col(),
+                                             r.aEnd.Row(), pClipTab);
+                        }
+                    }
+                }
+            }
 
             //  no undo needed in clipboard document
             //  charts are not updated
