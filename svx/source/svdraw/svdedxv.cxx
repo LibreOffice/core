@@ -136,7 +136,7 @@ IMPL_LINK_NOARG(SdrObjEditView, TextEditUpdate, Timer*, void)
         // no TextObject, no TextEdit
         return;
 
-    // lauch an ObjectChange: This is the straightforward method
+    // launch an ObjectChange: This is the straightforward method
     // to get this broadcasted. We do not risk to set the model
     // unwantedly to changed, we had a text edit going on already.
     // This is needed for SlideShow since it is not (yet) using the
