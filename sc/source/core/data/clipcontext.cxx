@@ -403,8 +403,8 @@ bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
 }
 
 CopyToClipContext::CopyToClipContext(
-    ScDocument& rDoc, bool bKeepScenarioFlags) :
-    ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags) {}
+    ScDocument& rDoc, bool bKeepScenarioFlags, bool bCopyChartRanges) :
+    ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags), mbCopyChartRanges(bCopyChartRanges) {}
 
 CopyToClipContext::~CopyToClipContext() {}
 

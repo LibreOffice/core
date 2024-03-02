@@ -880,14 +880,16 @@ public:
 void ScColumn::CopyToClip(
     sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const
 {
-    pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
-                          rCxt.isKeepScenarioFlags() ? (ScMF::All & ~ScMF::Scenario) : ScMF::All );
+    if (!rCxt.isCopyChartRanges()) // No need to copy attributes for chart ranges
+        pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
+                              rCxt.isKeepScenarioFlags() ? (ScMF::All & ~ScMF::Scenario) : ScMF::All );
 
     {
         CopyToClipHandler aFunc(GetDoc(), *this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol));
         sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
     }
 
+    if (!rCxt.isCopyChartRanges()) // No need to copy attributes for chart ranges
     {
         CopyTextAttrToClipHandler aFunc(rColumn.maCellTextAttrs);
         sc::ParseBlock(maCellTextAttrs.begin(), maCellTextAttrs, aFunc, nRow1, nRow2);

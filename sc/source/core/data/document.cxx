@@ -2218,6 +2218,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags);
     CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks);
 
+    // 1. Copy selected cells
     for (SCTAB i = 0; i < nEndTab; ++i)
     {
         if (!maTabs[i] || i >= pClipDoc->GetTableCount() || !pClipDoc->maTabs[i])
@@ -2227,12 +2228,17 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
             continue;
 
         maTabs[i]->CopyToClip(aCxt, rClipParam.maRanges, pClipDoc->maTabs[i].get());
+    }
 
-        if (mpDrawLayer && bIncludeObjects)
+    // 2. Copy drawing objects in the selection. Do in after the first "copy cells" pass, because
+    // the embedded objects (charts) coud reference cells from tabs not (yet) copied; doing it now
+    // allows to know what is already copied, to not owerwrite attributes of already copied data.
+    if (mpDrawLayer && bIncludeObjects)
+    {
+        for (SCTAB i = 0; i < nEndTab; ++i)
         {
-            //  also copy drawing objects
-            tools::Rectangle aObjRect = GetMMRect(
-                aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), i);
+            tools::Rectangle aObjRect = GetMMRect(aClipRange.aStart.Col(), aClipRange.aStart.Row(),
+                                                  aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), i);
             mpDrawLayer->CopyToClip(pClipDoc, i, aObjRect);
         }
     }
