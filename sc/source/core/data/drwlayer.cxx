@@ -1784,8 +1784,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
     ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nTab);
 
     SdrObjListIter aIter( pSrcPage, SdrIterMode::Flat );
-    SdrObject* pOldObject = aIter.Next();
-    while (pOldObject)
+    while (SdrObject* pOldObject = aIter.Next())
     {
         // Catch objects where the object itself is inside the rectangle to be copied.
         bool bObjectInArea = rRange.Contains(pOldObject->GetCurrentBoundRect());
@@ -1852,8 +1851,6 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
                 //  charts are not updated
             }
         }
-
-        pOldObject = aIter.Next();
     }
 }
 
