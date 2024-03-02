@@ -513,4 +513,10 @@
     <DisplayString Condition="m_value &amp; 0x80000000UL">Warning: {*this,view(detail)}</DisplayString>
     <DisplayString>Error: {*this,view(detail)}</DisplayString>
   </Type>
+  <Type Name="SvGUID">
+    <DisplayString>{{{Data1,Xb}-{Data2,Xb}-{Data3,Xb}-{Data4[0],nvoXb}{Data4[1],nvoXb}-{Data4[2],nvoXb}{Data4[3],nvoXb}{Data4[4],nvoXb}{Data4[5],nvoXb}{Data4[6],nvoXb}{Data4[7],nvoXb}}}</DisplayString>
+  </Type>
+  <Type Name="SvGlobalName">
+    <DisplayString>{m_aData}</DisplayString>
+  </Type>
 </AutoVisualizer>
