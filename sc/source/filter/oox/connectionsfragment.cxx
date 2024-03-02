@@ -18,10 +18,12 @@
  */
 
 #include <connectionsfragment.hxx>
+#include <documentimport.hxx>
 
 #include <oox/token/namespaces.hxx>
 #include <biffhelper.hxx>
 #include <connectionsbuffer.hxx>
+#include <sal/log.hxx>
 
 namespace oox::xls {
 
@@ -38,9 +40,34 @@ ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const 
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( connection ):
+            if (nElement == XLS_TOKEN(dbPr))
+            {
+                mrConnection.importDbPr(rAttribs);
+                return this;
+            }
+            if (nElement == XLS_TOKEN(olapPr))
+            {
+                mrConnection.importOlapPr(rAttribs);
+                return this;
+            }
             if( nElement == XLS_TOKEN( webPr ) )
             {
                 mrConnection.importWebPr( rAttribs );
+                return this;
+            }
+            if (nElement == XLS_TOKEN(textPr))
+            {
+                mrConnection.importTextPr(rAttribs);
+                return this;
+            }
+            if (nElement == XLS_TOKEN(parameters))
+            {
+                mrConnection.importParameters(rAttribs);
+                return this;
+            }
+            if (nElement == XLS_TOKEN(extLst))
+            {
+                mrConnection.importExtensionList();
                 return this;
             }
         break;
@@ -48,7 +75,7 @@ ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const 
         case XLS_TOKEN( webPr ):
             if( nElement == XLS_TOKEN( tables ) )
             {
-                mrConnection.importTables();
+                mrConnection.importTables(rAttribs);
                 return this;
             }
         break;
@@ -56,6 +83,38 @@ ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const 
         case XLS_TOKEN( tables ):
             mrConnection.importTable( rAttribs, nElement );
         break;
+
+        case XLS_TOKEN(textPr):
+            if (nElement == XLS_TOKEN(textFields))
+            {
+                mrConnection.importTextFields(rAttribs);
+                return this;
+            }
+            break;
+
+        case XLS_TOKEN(textFields):
+            if (nElement == XLS_TOKEN(textField))
+            {
+                mrConnection.importTextField(rAttribs);
+                return this;
+            }
+            break;
+
+        case XLS_TOKEN(parameters):
+            if (nElement == XLS_TOKEN(parameter))
+            {
+                mrConnection.importParameter(rAttribs);
+                return this;
+            }
+            break;
+
+        case XLS_TOKEN(extLst):
+            if (nElement == XLS_TOKEN(ext))
+            {
+                mrConnection.importExtension(rAttribs);
+                return this;
+            }
+            break;
     }
     return nullptr;
 }

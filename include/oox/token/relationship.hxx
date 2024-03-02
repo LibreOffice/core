@@ -24,6 +24,7 @@ enum class Relationship
     COMMENTS,
     COMMENTAUTHORS,
     COMMENTSEXTENDED,
+    CONNECTIONS,
     CONTROL,
     CTRLPROP,
     CUSTOMXML,

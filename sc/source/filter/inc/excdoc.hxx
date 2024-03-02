@@ -94,6 +94,10 @@ public:
     void                ReadDoc();
     void                Write( SvStream& rSvStrm );
     void                WriteXml( XclExpXmlStream& );
+
+    // add an element attributes and values to FastAttributeList
+    static void addElemensToAttrList(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
+                                     css::uno::Sequence<css::uno::Any>& aSeqs);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

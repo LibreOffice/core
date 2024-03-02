@@ -58,7 +58,19 @@
 #include "markdata.hxx"
 #include "drwlayer.hxx"
 
+#include <oox/helper/refvector.hxx>
+
 namespace com::sun::star::chart2 { class XChartDocument; }
+namespace oox
+{
+    namespace xls
+    {
+        class Connection;
+        struct ConnectionModel;
+    }
+}
+
+typedef oox::RefVector<oox::xls::Connection> ConnectionVector;
 
 class Timer;
 
@@ -373,6 +385,16 @@ private:
 public:
     SC_DLLPUBLIC CellAttributeHelper& getCellAttributeHelper() const;
 
+    void setConnectionVector(const ConnectionVector& rIn)
+    {
+        maConnectionVector = rIn;
+    }
+
+    const ConnectionVector& getConnectionVector() const
+    {
+        return maConnectionVector;
+    }
+
 private:
     rtl::Reference<ScPoolHelper> mxPoolHelper;
 
@@ -465,6 +487,8 @@ private:
 
     // Stores Goal Seek settings
     ScGoalSeekSettings maGoalSeekSettings;
+
+    ConnectionVector maConnectionVector;
 public:
     /// list of ScInterpreterTableOpParams currently in use
     std::vector<ScInterpreterTableOpParams*> m_TableOpList;
@@ -599,9 +623,24 @@ private:
 
     size_t              mnMutationGuardFlags;
 
+    bool mbConnectionXml = false;
+    bool mbCustomXml = false;
+    OUString aCustomXmlFragmentPath;
+
 public:
     bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder);
     void                     GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
+
+    void setHasConnectionXml(bool bUse) { mbConnectionXml = bUse; }
+    bool hasConnectionXml() { return mbConnectionXml; }
+
+    void setHasCustomXml(bool bUse, OUString& sCustomXmlPath)
+    {
+        mbCustomXml = bUse;
+        aCustomXmlFragmentPath = sCustomXmlPath;
+    }
+    OUString getCustomXmlItems() { return aCustomXmlFragmentPath; }
+    bool hasCustomXml() { return mbCustomXml; }
 
     bool IsEmbedFonts() const { return mbEmbedFonts; }
     bool IsEmbedUsedFontsOnly() const { return mbEmbedUsedFontsOnly; }

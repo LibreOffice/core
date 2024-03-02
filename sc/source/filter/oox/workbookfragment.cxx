@@ -76,6 +76,8 @@
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Calc.hxx>
 
+#include <xestream.hxx>
+
 namespace oox::xls {
 
 using namespace ::com::sun::star::io;
@@ -379,7 +381,16 @@ void WorkbookFragment::finalizeImport()
     // read the connections substream
     OUString aConnFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"connections" );
     if( !aConnFragmentPath.isEmpty() )
+    {
         importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
+        getScDocument().setHasConnectionXml(true);
+    }
+
+    // read the customXml substream
+    OUString aCustomXmlFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"customXml" );
+    if (!aCustomXmlFragmentPath.isEmpty())
+        getScDocument().setHasCustomXml(true, aCustomXmlFragmentPath);
+
     xGlobalSegment->setPosition( 1.0 );
 
     /*  Create fragments for all sheets, before importing them. Needed to do

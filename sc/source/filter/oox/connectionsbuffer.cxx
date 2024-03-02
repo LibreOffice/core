@@ -25,6 +25,10 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/helper/binaryinputstream.hxx>
+#include <sax/fastattribs.hxx>
+#include <documentimport.hxx>
+#include <document.hxx>
+#include <sax/fshelper.hxx>
 
 namespace oox::xls {
 
@@ -67,7 +71,8 @@ const sal_uInt8 BIFF12_WEBPR_HAS_URL                    = 0x04;
 } // namespace
 
 WebPrModel::WebPrModel() :
-    mnHtmlFormat( XML_none ),
+    mnCount( 0 ),
+    mnHtmlFormat( -1 ),
     mbXml( false ),
     mbSourceData( false ),
     mbParsePre( false ),
@@ -84,8 +89,10 @@ ConnectionModel::ConnectionModel() :
     mnId( -1 ),
     mnType( BIFF12_CONNECTION_UNKNOWN ),
     mnReconnectMethod( BIFF12_RECONNECT_AS_REQUIRED ),
-    mnCredentials( XML_integrated ),
+    mnCredentials( -1 ),
     mnInterval( 0 ),
+    mnRefreshedVersion(-1),
+    mnMinRefreshableVersion(0),
     mbKeepAlive( false ),
     mbNew( false ),
     mbDeleted( false ),
@@ -104,10 +111,32 @@ WebPrModel& ConnectionModel::createWebPr()
     return *mxWebPr;
 }
 
+TextPrModel& ConnectionModel::createTextPr()
+{
+    OSL_ENSURE(!mxTextPr, "ConnectionModel::createTextPr - multiple call");
+    mxTextPr.reset(new TextPrModel);
+    return *mxTextPr;
+}
+
+ParametersModel& ConnectionModel::createParameters()
+{
+    OSL_ENSURE(!mxParameters, "ConnectionModel::createParameters - multiple call");
+    mxParameters.reset(new ParametersModel);
+    return *mxParameters;
+}
+
+ExtensionListModel& ConnectionModel::createExtensionList()
+{
+    OSL_ENSURE(!mxExtensionList, "ConnectionModel::createExtensionList - multiple call");
+    mxExtensionList.reset(new ExtensionListModel);
+    return *mxExtensionList;
+}
+
 Connection::Connection( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
-    maModel.mnId = -1;
+    maModel.mnId = -1; // use="required"
+    maModel.mnRefreshedVersion = -1; // use="required"
 }
 
 void Connection::importConnection( const AttributeList& rAttribs )
@@ -118,10 +147,12 @@ void Connection::importConnection( const AttributeList& rAttribs )
     maModel.maSourceConnFile  = rAttribs.getXString( XML_odcFile, OUString() );
     maModel.maSsoId           = rAttribs.getXString( XML_singleSignOnId, OUString() );
     maModel.mnId              = rAttribs.getInteger( XML_id, -1 );
+    maModel.mnRefreshedVersion = rAttribs.getInteger(XML_refreshedVersion, -1);
+    maModel.mnMinRefreshableVersion = rAttribs.getInteger(XML_minRefreshableVersion, 0);
     // type and reconnectionMethod are using the BIFF12 constants instead of XML tokens
     maModel.mnType            = rAttribs.getInteger( XML_type, BIFF12_CONNECTION_UNKNOWN );
     maModel.mnReconnectMethod = rAttribs.getInteger( XML_reconnectionMethod, BIFF12_RECONNECT_AS_REQUIRED );
-    maModel.mnCredentials     = rAttribs.getToken( XML_credentials, XML_integrated );
+    maModel.mnCredentials     = rAttribs.getToken( XML_credentials, -1 );
     maModel.mnInterval        = rAttribs.getInteger( XML_interval, 0 );
     maModel.mbKeepAlive       = rAttribs.getBool( XML_keepAlive, false );
     maModel.mbNew             = rAttribs.getBool( XML_new, false );
@@ -131,6 +162,24 @@ void Connection::importConnection( const AttributeList& rAttribs )
     maModel.mbRefreshOnLoad   = rAttribs.getBool( XML_refreshOnLoad, false );
     maModel.mbSaveData        = rAttribs.getBool( XML_saveData, false );
     maModel.mbSavePassword    = rAttribs.getBool( XML_savePassword, false );
+    // FIXME: FSNS(XML_xr16, XML_uid) gets wrong(?) id of xr16:uid
+    // maModel.maXr16Uid = rAttribs.getXString( FSNS(XML_xr16, XML_uid), OUString() );
+
+    // workaround for finding correct XML id of xr16:uid
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+    {
+        css::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
+
+        for (auto& attr : aFast)
+        {
+            // xr16:uid="{...}" // tokenId = 3347856
+            if (attr.Value.startsWith("{"))
+            {
+                maModel.maXr16Uid = attr.Value;
+                break;
+            }
+        }
+    }
 }
 
 void Connection::importWebPr( const AttributeList& rAttribs )
@@ -140,7 +189,7 @@ void Connection::importWebPr( const AttributeList& rAttribs )
     rWebPr.maUrl             = rAttribs.getXString( XML_url, OUString() );
     rWebPr.maPostMethod      = rAttribs.getXString( XML_post, OUString() );
     rWebPr.maEditPage        = rAttribs.getXString( XML_editPage, OUString() );
-    rWebPr.mnHtmlFormat      = rAttribs.getToken( XML_htmlFormat, XML_none );
+    rWebPr.mnHtmlFormat      = rAttribs.getToken( XML_htmlFormat, -1 );
     rWebPr.mbXml             = rAttribs.getBool( XML_xml, false );
     rWebPr.mbSourceData      = rAttribs.getBool( XML_sourceData, false );
     rWebPr.mbParsePre        = rAttribs.getBool( XML_parsePre, false );
@@ -152,12 +201,32 @@ void Connection::importWebPr( const AttributeList& rAttribs )
     rWebPr.mbHtmlTables      = rAttribs.getBool( XML_htmlTables, false );
 }
 
-void Connection::importTables()
+void Connection::importDbPr(const AttributeList& rAttribs)
+{
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+    {
+        css::uno::Sequence<css::uno::Any> aDbPrAny = getSequenceOfAny(xFastAttributeList);
+        maModel.maDbPrSequenceAny = aDbPrAny;
+    }
+}
+
+void Connection::importOlapPr(const AttributeList& rAttribs)
+{
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+    {
+        css::uno::Sequence<css::uno::Any> aOlapPrAny = getSequenceOfAny(xFastAttributeList);
+        maModel.maOlapPrSequenceAny = aOlapPrAny;
+    }
+}
+
+void Connection::importTables(const AttributeList& rAttribs)
 {
     if( maModel.mxWebPr )
     {
         OSL_ENSURE( maModel.mxWebPr->maTables.empty(), "Connection::importTables - multiple calls" );
         maModel.mxWebPr->maTables.clear();
+
+        maModel.mxWebPr->mnCount = rAttribs.getInteger(XML_count, 0);
     }
 }
 
@@ -169,9 +238,14 @@ void Connection::importTable( const AttributeList& rAttribs, sal_Int32 nElement 
     Any aTableAny;
     switch( nElement )
     {
-        case XLS_TOKEN( m ):                                                            break;
-        case XLS_TOKEN( s ):    aTableAny <<= rAttribs.getXString( XML_v, OUString() ); break;
-        case XLS_TOKEN( x ):    aTableAny <<= rAttribs.getInteger( XML_v, -1 );         break;
+        case XLS_TOKEN(m): // no value
+            break;
+        case XLS_TOKEN(s): // character value
+            aTableAny <<= "s," + rAttribs.getXString(XML_v, OUString());
+            break;
+        case XLS_TOKEN(x): // shared items index
+            aTableAny <<= "x," + OUString::number(rAttribs.getInteger(XML_v, -1));
+            break;
         default:
             OSL_ENSURE( false, "Connection::importTable - unexpected element" );
             return;
@@ -179,8 +253,91 @@ void Connection::importTable( const AttributeList& rAttribs, sal_Int32 nElement 
     maModel.mxWebPr->maTables.push_back( aTableAny );
 }
 
+void Connection::importTextPr(const AttributeList& rAttribs)
+{
+    TextPrModel& rTextPr = maModel.createTextPr();
+
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+    {
+        css::uno::Sequence<css::uno::Any> aTextPrAny = getSequenceOfAny(xFastAttributeList);
+        rTextPr.maTextPrSequenceAny = aTextPrAny;
+    }
+}
+
+void Connection::importTextFields(const AttributeList& rAttribs)
+{
+    if (maModel.mxTextPr)
+    {
+        OSL_ENSURE(maModel.mxTextPr->vTextField.empty(),
+                   "Connection::importTextFields - multiple calls");
+        maModel.mxTextPr->vTextField.clear();
+
+        if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+        {
+            css::uno::Sequence<css::uno::Any> aTextFieldsAny = getSequenceOfAny(xFastAttributeList);
+            maModel.mxTextPr->maTextFieldsSequenceAny = aTextFieldsAny;
+        }
+    }
+}
+
+void Connection::importTextField(const AttributeList& rAttribs)
+{
+    if (!maModel.mxTextPr)
+        return;
+
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+    {
+        css::uno::Sequence<css::uno::Any> aTextFieldAny = getSequenceOfAny(xFastAttributeList);
+        maModel.mxTextPr->vTextField.push_back(aTextFieldAny);
+    }
+}
+
+void Connection::importParameters(const AttributeList& rAttribs)
+{
+    ParametersModel& rParameters = maModel.createParameters();
+    maModel.mxParameters->vParameter.clear();
+    rParameters.mnCount = rAttribs.getInteger(XML_count, -1);
+}
+
+void Connection::importParameter(const AttributeList& rAttribs)
+{
+    if (!maModel.mxParameters)
+        return;
+
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+    {
+        css::uno::Sequence<css::uno::Any> aParameterAny = getSequenceOfAny(xFastAttributeList);
+        maModel.mxParameters->vParameter.push_back(aParameterAny);
+    }
+}
+
+void Connection::importExtensionList()
+{
+    maModel.createExtensionList();
+    maModel.mxExtensionList->vExtension.clear();
+}
+
+void Connection::importExtension(const AttributeList& rAttribs)
+{
+    if (!maModel.mxExtensionList)
+        return;
+
+    // store uri attributes of <ext> element
+    OUString sUri = rAttribs.getXString(XML_uri, OUString());
+    maModel.mxExtensionList->vExtension.push_back(sUri);
+}
+
+css::uno::Sequence<css::uno::Any> Connection::getSequenceOfAny(
+    css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList)
+{
+    css::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
+    css::uno::Sequence<css::xml::Attribute> aUnk = xFastAttributeList->getUnknownAttributes();
+    return { css::uno::Any(aFast), css::uno::Any(aUnk) };
+}
+
 void Connection::importConnection( SequenceInputStream& rStrm )
 {
+    // TODO: update import&export of Microsoft Excel Binary (XLSB) File Format
     sal_uInt16 nFlags, nStrFlags;
     sal_uInt8 nSavePassword, nCredentials;
     rStrm.skip( 2 );
@@ -292,6 +449,9 @@ void ConnectionsBuffer::finalizeImport()
 {
     for( const auto& rxConnection : maConnections )
         insertConnectionToMap( rxConnection );
+
+    ScDocument& rDoc = getDocImport().getDoc();
+    rDoc.setConnectionVector(maConnections);
 }
 
 ConnectionRef ConnectionsBuffer::getConnection( sal_Int32 nConnId ) const
