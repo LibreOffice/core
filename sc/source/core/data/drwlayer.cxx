@@ -239,7 +239,7 @@ static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
     SCROW nClipEndY;
     pClipDoc->GetClipStart(nClipStartX, nClipStartY);
     pClipDoc->GetClipArea(nClipEndX, nClipEndY, true);
-    nClipEndX = nClipEndX + nClipStartX;
+    nClipEndX += nClipStartX;
     nClipEndY += nClipStartY; // GetClipArea returns the difference
 
     return ScRange(nClipStartX, nClipStartY, nClipTab, nClipEndX, nClipEndY, nClipTab);
