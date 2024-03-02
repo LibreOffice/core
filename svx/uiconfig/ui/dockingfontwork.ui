@@ -571,7 +571,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="framShadowOffset">
+              <object class="GtkLabel" id="frameShadowOffset">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="dockingforntwork|frameShadowOffset">Shadow Offset</property>
