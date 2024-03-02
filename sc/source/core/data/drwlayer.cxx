@@ -1786,70 +1786,73 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
     SdrObjListIter aIter( pSrcPage, SdrIterMode::Flat );
     while (SdrObject* pOldObject = aIter.Next())
     {
+        // do not copy internal objects (detective) and note captions
+        if (pOldObject->GetLayer() == SC_LAYER_INTERN)
+            continue;
+
+        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
+        if (IsNoteCaption(pObjData))
+            continue;
+
         // Catch objects where the object itself is inside the rectangle to be copied.
         bool bObjectInArea = rRange.Contains(pOldObject->GetCurrentBoundRect());
         // Catch objects whose anchor is inside the rectangle to be copied.
-        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
-        if (pObjData)
-            bObjectInArea = bObjectInArea || aClipRange.Contains(pObjData->maStart);
-
-        // do not copy internal objects (detective) and note captions
-        if (bObjectInArea && pOldObject->GetLayer() != SC_LAYER_INTERN
-            && !IsNoteCaption(pOldObject))
+        if (!bObjectInArea && pObjData)
+            bObjectInArea = aClipRange.Contains(pObjData->maStart);
+        if (!bObjectInArea)
+            continue;
+        
+        if (!pDestModel)
         {
-            if ( !pDestModel )
+            pDestModel = pClipDoc->GetDrawLayer();      // does the document already have a drawing layer?
+            if (!pDestModel)
             {
-                pDestModel = pClipDoc->GetDrawLayer();      // does the document already have a drawing layer?
-                if ( !pDestModel )
-                {
-                    //  allocate drawing layer in clipboard document only if there are objects to copy
+                //  allocate drawing layer in clipboard document only if there are objects to copy
 
-                    pClipDoc->InitDrawLayer();                  //TODO: create contiguous pages
-                    pDestModel = pClipDoc->GetDrawLayer();
+                pClipDoc->InitDrawLayer(); //TODO: create contiguous pages
+                pDestModel = pClipDoc->GetDrawLayer();
+            }
+            if (pDestModel)
+                pDestPage = pDestModel->GetPage(static_cast<sal_uInt16>(nTab));
+        }
+
+        OSL_ENSURE(pDestPage, "no page");
+        if (pDestPage)
+        {
+            // Clone to target SdrModel
+            rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*pDestModel));
+            uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
+            if(!xOldChart.is())//#i110034# do not move charts as they lose all their data references otherwise
+            {
+                if (pObjData)
+                {
+                    // The object is anchored to cell. The position is determined by the start
+                    // address. Copying into the clipboard does not change the anchor.
+                    // ToDo: Adapt Offset relative to anchor cell size for cell anchored.
+                    // ToDo: Adapt Offset and size for cell-anchored with resize objects.
+                    // ToDo: Exclude object from resize if disallowed at object.
                 }
-                if (pDestModel)
-                    pDestPage = pDestModel->GetPage( static_cast<sal_uInt16>(nTab) );
+                else
+                {
+                    // The object is anchored to page. We make its position so, that the
+                    // cell behind the object will have the same address in clipboard document as
+                    // in source document. So we will be able to reconstruct the original cell
+                    // address from position when pasting the object.
+                    tools::Rectangle aObjRect = pOldObject->GetSnapRect();
+                    ScRange aPseudoAnchor = pDoc->GetRange(nTab, aObjRect, true /*bHiddenAsZero*/);
+                    tools::Rectangle aSourceCellRect
+                        = GetCellRect(*pDoc, aPseudoAnchor.aStart, false /*bMergedCell*/);
+                    tools::Rectangle aDestCellRect
+                        = GetCellRect(*pClipDoc, aPseudoAnchor.aStart, false);
+                    Point aMove = aDestCellRect.TopLeft() - aSourceCellRect.TopLeft();
+                    pNewObject->NbcMove(Size(aMove.getX(), aMove.getY()));
+                }
             }
 
-            OSL_ENSURE( pDestPage, "no page" );
-            if (pDestPage)
-            {
-                // Clone to target SdrModel
-                rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*pDestModel));
-                uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
-                if(!xOldChart.is())//#i110034# do not move charts as they lose all their data references otherwise
-                {
-                    if (pObjData)
-                    {
-                        // The object is anchored to cell. The position is determined by the start
-                        // address. Copying into the clipboard does not change the anchor.
-                        // ToDo: Adapt Offset relative to anchor cell size for cell anchored.
-                        // ToDo: Adapt Offset and size for cell-anchored with resize objects.
-                        // ToDo: Exclude object from resize if disallowed at object.
-                    }
-                    else
-                    {
-                        // The object is anchored to page. We make its position so, that the
-                        // cell behind the object will have the same address in clipboard document as
-                        // in source document. So we will be able to reconstruct the original cell
-                        // address from position when pasting the object.
-                        tools::Rectangle aObjRect = pOldObject->GetSnapRect();
-                        ScRange aPseudoAnchor
-                            = pDoc->GetRange(nTab, aObjRect, true /*bHiddenAsZero*/);
-                        tools::Rectangle aSourceCellRect
-                            = GetCellRect(*pDoc, aPseudoAnchor.aStart, false /*bMergedCell*/);
-                        tools::Rectangle aDestCellRect
-                            = GetCellRect(*pClipDoc, aPseudoAnchor.aStart, false);
-                        Point aMove = aDestCellRect.TopLeft() - aSourceCellRect.TopLeft();
-                        pNewObject->NbcMove(Size(aMove.getX(), aMove.getY()));
-                    }
-                }
+            pDestPage->InsertObject(pNewObject.get());
 
-                pDestPage->InsertObject( pNewObject.get() );
-
-                //  no undo needed in clipboard document
-                //  charts are not updated
-            }
+            //  no undo needed in clipboard document
+            //  charts are not updated
         }
     }
 }
@@ -2890,16 +2893,15 @@ ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )
     return pData;
 }
 
-bool ScDrawLayer::IsNoteCaption( SdrObject* pObj )
+bool ScDrawLayer::IsNoteCaption(const ScDrawObjData* pData)
 {
-    ScDrawObjData* pData = pObj ? GetObjData( pObj ) : nullptr;
     return pData && pData->meType == ScDrawObjData::CellNote;
 }
 
 ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
 {
-    ScDrawObjData* pData = pObj ? GetObjDataTab( pObj, nTab ) : nullptr;
-    return (pData && pData->meType == ScDrawObjData::CellNote) ? pData : nullptr;
+    ScDrawObjData* pData = GetObjDataTab(pObj, nTab);
+    return IsNoteCaption(pData) ? pData : nullptr;
 }
 
 ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
