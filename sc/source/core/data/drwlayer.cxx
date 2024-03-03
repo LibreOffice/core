@@ -1990,7 +1990,7 @@ void ScDrawLayer::CopyFromClip(ScDrawLayer* pClipModel, SCTAB nSourceTab,
         }
         else // Object is anchored to page.
         {
-            aSrcObjStart = pClipDoc->GetRange(nClipTab, pOldObject->GetCurrentBoundRect()).aStart;
+            aSrcObjStart = pClipDoc->GetRange(nSourceTab, pOldObject->GetCurrentBoundRect()).aStart;
         }
         if (!rSourceRange.Contains(aSrcObjStart))
         {
