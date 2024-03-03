@@ -310,12 +310,10 @@ void CustomAnimationListEntryItem::PaintTrigger(vcl::RenderContext& rRenderConte
 
     ::tools::Rectangle aOutRect(rRect);
 
-    // fill the background
-    Color aColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
-
     rRenderContext.Push();
-    rRenderContext.SetFillColor(aColor);
+    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
     rRenderContext.SetLineColor();
+    // fill the background with the dialog bg color
     rRenderContext.DrawRect(aOutRect);
 
     // Erase the four corner pixels to make the rectangle appear rounded.
@@ -335,6 +333,8 @@ void CustomAnimationListEntryItem::PaintTrigger(vcl::RenderContext& rRenderConte
     aOutRect.AdjustTop( nVertBorder );
     aOutRect.AdjustBottom( -nVertBorder );
 
+    // Draw the text with the dialog text color
+    rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogTextColor());
     rRenderContext.DrawText(aOutRect, rRenderContext.GetEllipsisString(msDescription, aOutRect.GetWidth()));
     rRenderContext.Pop();
 }
