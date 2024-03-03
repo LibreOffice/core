@@ -280,7 +280,7 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
 // XServiceInfo
 OUString AccessibleDialogControlShape::getImplementationName()
 {
-    return "com.sun.star.comp.basctl.AccessibleShape";
+    return u"com.sun.star.comp.basctl.AccessibleShape"_ustr;
 }
 
 sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rServiceName )
@@ -290,7 +290,7 @@ sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rService
 
 Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames()
 {
-    return { "com.sun.star.drawing.AccessibleShape" };
+    return { u"com.sun.star.drawing.AccessibleShape"_ustr };
 }
 
 // XAccessible
