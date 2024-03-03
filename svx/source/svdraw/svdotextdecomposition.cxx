@@ -35,6 +35,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -328,13 +329,38 @@ namespace
                 const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
                     static_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(pNewPrimitive.get());
 
-                pTCPP->CreateDecorationGeometryContent(
-                    aContainer,
-                    pTCPP->getTextTransform(),
-                    caseMappedText,
-                    rInfo.mnTextStart,
-                    rInfo.mnTextLen,
-                    aDXArray);
+                if (pTCPP->getWordLineMode()) // single word mode: 'Individual words' in UI
+                {
+                    // Split to single word primitives using TextBreakupHelper
+                    drawinglayer::primitive2d::TextBreakupHelper aTextBreakupHelper(*pTCPP);
+                    drawinglayer::primitive2d::Primitive2DContainer aBroken(aTextBreakupHelper.extractResult(drawinglayer::primitive2d::BreakupUnit::Word));
+                    for (auto& rPortion : aBroken)
+                    {
+                        assert(rPortion->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D &&
+                               "TextBreakupHelper generates same output primitive type as input");
+
+                        const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pPortion =
+                            static_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(rPortion.get());
+
+                        pPortion->CreateDecorationGeometryContent(
+                            aContainer,
+                            pPortion->getTextTransform(),
+                            caseMappedText,
+                            pPortion->getTextPosition(),
+                            pPortion->getTextLength(),
+                            pPortion->getDXArray());
+                    }
+                }
+                else
+                {
+                    pTCPP->CreateDecorationGeometryContent(
+                        aContainer,
+                        pTCPP->getTextTransform(),
+                        caseMappedText,
+                        rInfo.mnTextStart,
+                        rInfo.mnTextLen,
+                        aDXArray);
+                }
             }
 
             pNewPrimitive = new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aContainer));
