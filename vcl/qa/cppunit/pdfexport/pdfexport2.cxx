@@ -46,6 +46,7 @@
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <cmath>
 
 using namespace ::com::sun::star;
 
@@ -4896,6 +4897,61 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf113866)
                 CPPUNIT_ASSERT_EQUAL(COL_GREEN, pPageObject->getFillColor());
         }
     }
+}
+
+// Form controls coordinates scrambled when exporting to pdf with unchecked form creation in Writer
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159817)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ExportFormFields", uno::Any(false) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"tdf159817.fodt");
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    // So I extracted these values by using SAL_WARN(... << ...getMinimum()), but it appears
+    // that the C++ stream operators do not output double values with sufficient resolution for me
+    // to recreate those values in code, sigh, so resort to rounding things.
+    auto roundPoint = [&pPdfPage](int i) {
+        auto p = pPdfPage->getObject(i)->getBounds().getMinimum();
+        return basegfx::B2DPoint(std::floor(p.getX() * 10) / 10.0,
+                                 std::floor(p.getY() * 10) / 10.0);
+    };
+    // before the fix these co-ordinates would have been way further down the page
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(8.6, 677.3), roundPoint(13));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(9.3, 677.9), roundPoint(14));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(9.8, 678.5), roundPoint(15));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(85.0, 677.3), roundPoint(16));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(85.6, 677.9), roundPoint(17));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(170.1, 677.3), roundPoint(18));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(170.6, 677.9), roundPoint(19));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(0.0, 654.0), roundPoint(20));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(0.6, 654.6), roundPoint(21));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.3, 655.5), roundPoint(22));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.3, 655.5), roundPoint(23));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.2, 655.5), roundPoint(24));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.2, 655.5), roundPoint(25));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.4, 655.5), roundPoint(26));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.4, 655.5), roundPoint(27));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.1, 655.5), roundPoint(28));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.1, 655.5), roundPoint(29));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.5, 655.5), roundPoint(30));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.5, 655.5), roundPoint(31));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.0, 655.5), roundPoint(32));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.0, 655.5), roundPoint(33));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 641.4), roundPoint(34));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 623.7), roundPoint(35));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 623.8), roundPoint(36));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(138.6, 623.7), roundPoint(37));
 }
 
 } // end anonymous namespace
