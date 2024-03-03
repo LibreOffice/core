@@ -31,7 +31,7 @@ store the file, use `Write()`.
 ### CONSTRUCTORS AND DESTRUCTORS
 
 - `GDIMetaFile`
-- `GDIMetaFile( cosnt GDIMetaFile& rMtf )` - copy constructor
+- `GDIMetaFile( const GDIMetaFile& rMtf )` - copy constructor
 - `~GDIMetaFile`
 
 ### OPERATORS
