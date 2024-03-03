@@ -1835,7 +1835,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
 
             pDestPage->InsertObject(pNewObject.get());
 
-            // Store the chart's source data to the clipboad document, even when it's out of the
+            // Store the chart's source data to the clipboard document, even when it's out of the
             // copied range. It will be ignored when pasted to the same document; when pasted to
             // another document, ScDocument::mpClipParam will provide the actually copied ranges,
             // and the data copied here will be used to break connection and switch to own data
