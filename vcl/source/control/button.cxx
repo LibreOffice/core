@@ -2530,6 +2530,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
     if ( !maImage )
     {
         MapMode     aResMapMode( MapUnit::Map100thMM );
+        Point       aPos  = pDev->LogicToPixel( rPos );
         Size        aSize = GetSizePixel();
         Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
         Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
@@ -2563,7 +2564,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
             pDev->SetTextColor( GetTextColor() );
         pDev->SetTextFillColor();
 
-        ImplDraw( pDev, nFlags, rPos, aSize,
+        ImplDraw( pDev, nFlags, aPos, aSize,
                   aImageSize, aStateRect, aMouseRect );
 
         Point   aCenterPos = aStateRect.Center();
@@ -3353,6 +3354,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
                      SystemTextColorFlags nFlags )
 {
     MapMode     aResMapMode( MapUnit::Map100thMM );
+    Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = GetSizePixel();
     Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
     Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
@@ -3389,7 +3391,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();
 
-    ImplDraw( pDev, nFlags, rPos, aSize,
+    ImplDraw( pDev, nFlags, aPos, aSize,
               aImageSize, aStateRect, aMouseRect );
 
     pDev->SetLineColor();
