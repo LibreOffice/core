@@ -203,7 +203,7 @@ public:
     bool            Unprotect( SCTAB nTab, const OUString& rPassword );
 
     void            DeleteCells( DelCellCmd eCmd );
-    bool            InsertCells( InsCellCmd eCmd, bool bRecord = true, bool bPartOfPaste = false );
+    bool            InsertCells( InsCellCmd eCmd, bool bRecord = true, bool bPartOfPaste = false, size_t nCount = 0);
     void            DeleteMulti( bool bRows );
 
     void            DeleteContents( InsertDeleteFlags nFlags );

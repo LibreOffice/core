@@ -213,11 +213,11 @@ void HandleConditionalFormat(sal_uInt32 nIndex, bool bCondFormatDlg, bool bConta
     }
 }
 
-void InsertCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, InsCellCmd eCmd)
+void InsertCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, InsCellCmd eCmd, size_t nCount = 0)
 {
     if (eCmd!=INS_NONE)
     {
-        pTabViewShell->InsertCells( eCmd );
+        pTabViewShell->InsertCells( eCmd, true, false, nCount );
 
         if( ! rReq.IsAPI() )
         {
@@ -352,6 +352,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_INS_CELL:
             {
                 InsCellCmd eCmd=INS_NONE;
+                size_t nCount = 0;
 
                 if ( pReqArgs )
                 {
@@ -385,18 +386,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                         VclPtr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg(pTabViewShell->GetFrameWeld(), bTheFlag));
-                        pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
+                        pDlg->StartExecuteAsync([pDlg, pTabViewShell, &nCount](sal_Int32 nResult){
                             if (nResult == RET_OK)
                             {
                                 SfxRequest aRequest(pTabViewShell->GetViewFrame(), FID_INS_CELL);
-                                InsertCells(pTabViewShell, aRequest, pDlg->GetInsCellCmd());
+                                InsCellCmd eTmpCmd = pDlg->GetInsCellCmd();
+                                nCount = pDlg->GetCount();
+                                InsertCells(pTabViewShell, aRequest, eTmpCmd, nCount);
                             }
                             pDlg->disposeOnce();
                         });
                     }
                 }
 
-                InsertCells(pTabViewShell, rReq, eCmd);
+                InsertCells(pTabViewShell, rReq, eCmd, nCount);
             }
             break;
 

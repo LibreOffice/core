@@ -1756,7 +1756,7 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
 }
 
 bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, InsCellCmd eCmd,
-                             bool bRecord, bool bApi, bool bPartOfPaste )
+                             bool bRecord, bool bApi, bool bPartOfPaste, size_t nInsertCount )
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -1795,8 +1795,8 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     SCCOL nStartCol = aTargetRange.aStart.Col();
     SCROW nStartRow = aTargetRange.aStart.Row();
     SCTAB nStartTab = aTargetRange.aStart.Tab();
-    SCCOL nEndCol = aTargetRange.aEnd.Col();
-    SCROW nEndRow = aTargetRange.aEnd.Row();
+    SCCOL nEndCol = aTargetRange.aEnd.Col() + nInsertCount;
+    SCROW nEndRow = aTargetRange.aEnd.Row() + nInsertCount;
     SCTAB nEndTab = aTargetRange.aEnd.Tab();
 
     if ( !rDoc.ValidRow(nStartRow) || !rDoc.ValidRow(nEndRow) )

@@ -138,7 +138,7 @@ public:
                                         bool bApi );
 
     bool            InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
-                              InsCellCmd eCmd, bool bRecord, bool bApi, bool bPartOfPaste = false );
+                              InsCellCmd eCmd, bool bRecord, bool bApi, bool bPartOfPaste = false, size_t nInsertCount = 0 );
 
     bool            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
                               DelCellCmd eCmd, bool bApi );

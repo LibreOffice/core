@@ -266,6 +266,7 @@ public:
     virtual short Execute() override;
     virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual InsCellCmd GetInsCellCmd() const override ;
+    virtual size_t GetCount() const override ;
 };
 
 class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg

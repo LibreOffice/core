@@ -570,6 +570,11 @@ InsCellCmd  AbstractScInsertCellDlg_Impl::GetInsCellCmd() const
     return m_xDlg->GetInsCellCmd();
 }
 
+size_t AbstractScInsertCellDlg_Impl::GetCount() const
+{
+    return m_xDlg->GetCount();
+}
+
 InsertDeleteFlags AbstractScInsertContentsDlg_Impl::GetInsContentsCmdBits() const
 {
     return m_xDlg->GetInsContentsCmdBits();

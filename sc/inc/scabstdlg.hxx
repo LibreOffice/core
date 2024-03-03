@@ -184,6 +184,7 @@ protected:
     virtual             ~AbstractScInsertCellDlg() override = default;
 public:
     virtual InsCellCmd GetInsCellCmd() const = 0;
+    virtual size_t GetCount() const = 0;
 };
 
 class AbstractScInsertContentsDlg : public VclAbstractDialog
