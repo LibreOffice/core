@@ -121,6 +121,11 @@ struct lcl_AllOperator : public lcl_Operator
 
     virtual bool setsCategories( bool /*bDataInColumns*/ ) override
     {
+        // Do not force creation of categories, when original has no categories
+        if (auto pDataWrapper = dynamic_cast<const ChartDataWrapper*>(m_xDataToApply.get()))
+            if (auto xChartModel = pDataWrapper->getChartModel())
+                if (auto xDiagram = xChartModel->getFirstChartDiagram())
+                    return xDiagram->getCategories().is();
         return true;
     }
 
@@ -696,6 +701,11 @@ css::uno::Sequence< OUString > SAL_CALL ChartDataWrapper::getSupportedServiceNam
         "com.sun.star.chart.ChartDataArray",
         "com.sun.star.chart.ChartData"
     };
+}
+
+rtl::Reference<ChartModel> ChartDataWrapper::getChartModel() const
+{
+    return m_spChart2ModelContact->getDocumentModel();
 }
 
 } //  namespace chart
