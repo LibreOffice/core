@@ -2236,7 +2236,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     }
 
     // 2. Copy drawing objects in the selection. Do in after the first "copy cells" pass, because
-    // the embedded objects (charts) coud reference cells from tabs not (yet) copied; doing it now
+    // the embedded objects (charts) could reference cells from tabs not (yet) copied; doing it now
     // allows to know what is already copied, to not owerwrite attributes of already copied data.
     if (mpDrawLayer && bIncludeObjects)
     {
