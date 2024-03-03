@@ -1113,13 +1113,13 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString&
 // Service
 OUString SAL_CALL SfxScriptLibraryContainer::getImplementationName( )
 {
-    return "com.sun.star.comp.sfx2.ScriptLibraryContainer";
+    return u"com.sun.star.comp.sfx2.ScriptLibraryContainer"_ustr;
 }
 
 Sequence< OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceNames( )
 {
-    return {"com.sun.star.script.DocumentScriptLibraryContainer",
-            "com.sun.star.script.ScriptLibraryContainer"}; // for compatibility
+    return {u"com.sun.star.script.DocumentScriptLibraryContainer"_ustr,
+            u"com.sun.star.script.ScriptLibraryContainer"_ustr}; // for compatibility
 }
 
 // Implementation class SfxScriptLibrary

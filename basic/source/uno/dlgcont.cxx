@@ -471,13 +471,13 @@ SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ )
 
 OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( )
 {
-    return "com.sun.star.comp.sfx2.DialogLibraryContainer";
+    return u"com.sun.star.comp.sfx2.DialogLibraryContainer"_ustr;
 }
 
 Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceNames( )
 {
-    return {"com.sun.star.script.DocumentDialogLibraryContainer",
-            "com.sun.star.script.DialogLibraryContainer"}; // for compatibility
+    return {u"com.sun.star.script.DocumentDialogLibraryContainer"_ustr,
+            u"com.sun.star.script.DialogLibraryContainer"_ustr}; // for compatibility
 }
 
 // Implementation class SfxDialogLibrary
