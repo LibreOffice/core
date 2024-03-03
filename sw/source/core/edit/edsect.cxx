@@ -333,9 +333,10 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
                 pInnermostNode = pTableNode;
         }
     }
-    bool bIsProtected = pInnermostNode->IsProtect();
     if(pInnermostNode != nullptr)
     {
+        bool bIsProtected = pInnermostNode->IsProtect();
+
         //special case - ToxSection
         // - in this case the inner section could be tox header
         //   section but the new node should be before the content section
