@@ -436,6 +436,60 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf158223)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf153706)
+{
+    // Load a spreadsheet with a to-page XY scatter chart with the sheet as data source
+    loadFromFile(u"ods/tdf153706_XY_scatter_chart.ods");
+
+    // Select the cell range around the chart, and copy the range to clipboard, including the chart
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    { comphelper::makePropertyValue(u"ToPoint"_ustr, u"D1:K23"_ustr) });
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    // create a new document
+    load(u"private:factory/scalc"_ustr);
+
+    // Paste; this must create a chart with own data source having a proper copy of the data
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    css::uno::Reference xChartDoc(getChartDocFromSheet(0, mxComponent), css::uno::UNO_SET_THROW);
+    auto xDataArray(xChartDoc->getDataProvider().queryThrow<chart::XChartDataArray>());
+
+    css::uno::Sequence<Sequence<double>> aData = xDataArray->getData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aData.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aData[0].getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aData[1].getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aData[2].getLength());
+    CPPUNIT_ASSERT_EQUAL(2.0, aData[0][0]);
+    CPPUNIT_ASSERT_EQUAL(3.0, aData[0][1]);
+    CPPUNIT_ASSERT_EQUAL(3.0, aData[1][0]);
+    CPPUNIT_ASSERT_EQUAL(2.0, aData[1][1]);
+    CPPUNIT_ASSERT_EQUAL(4.0, aData[2][0]);
+    CPPUNIT_ASSERT_EQUAL(1.0, aData[2][1]);
+
+    // Without the fix, this would fail with
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e., the X values were treated as another Y series
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfDataSeries(xChartDoc));
+
+    auto xSeries(getDataSeriesFromDoc(xChartDoc, 0).queryThrow<chart2::data::XDataSource>());
+    auto sequences = xSeries->getDataSequences();
+    // Without the fix, this would fail with
+    // - Expected: 2
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), sequences.getLength());
+
+    auto propX(sequences[0]->getValues().queryThrow<beans::XPropertySet>());
+    // Without the fix, this would fail with
+    // - Expected: values-x
+    // - Actual  : values-y
+    CPPUNIT_ASSERT_EQUAL(u"values-x"_ustr, propX->getPropertyValue("Role").get<OUString>());
+
+    auto propY(sequences[1]->getValues().queryThrow<beans::XPropertySet>());
+    CPPUNIT_ASSERT_EQUAL(u"values-y"_ustr, propY->getPropertyValue("Role").get<OUString>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

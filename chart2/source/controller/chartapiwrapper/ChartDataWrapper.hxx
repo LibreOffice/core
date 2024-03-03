@@ -20,6 +20,8 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
+#include <rtl/ref.hxx>
+
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart/XDateCategories.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -28,7 +30,11 @@
 
 #include <memory>
 
-namespace chart::wrapper
+namespace chart
+{
+class ChartModel;
+
+namespace wrapper
 {
 
 class Chart2ModelContact;
@@ -52,6 +58,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    rtl::Reference<ChartModel> getChartModel() const;
 
 private:
     // ____ XDateCategories ____
@@ -113,5 +121,6 @@ private:
 };
 
 } //  namespace chart::wrapper
+} //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
