@@ -1700,6 +1700,26 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf86166)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158802)
+{
+    createScDoc("tdf158802.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(0)) } }));
+
+    dispatchCommand(mxComponent, ".uno:Remove", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149502_HangOnDeletingSheet1)
 {
     createScDoc("tdf149502_HangOnDeletingSheet1.ods");
