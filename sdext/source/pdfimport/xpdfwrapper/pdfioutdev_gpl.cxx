@@ -453,8 +453,8 @@ static void flipSplashBitmap(SplashBitmap *pBitmap)
     auto nRowSize = static_cast<size_t>(pBitmap->getRowSize());
     auto nAlphaRowSize = static_cast<size_t>(pBitmap->getAlphaRowSize());
 
-    auto aTmpRow = new unsigned char[nRowSize];
-    auto aTmpAlphaRow = new unsigned char[nAlphaRowSize];
+    std::unique_ptr<unsigned char[]> aTmpRow(new unsigned char[nRowSize]);
+    std::unique_ptr<unsigned char[]> aTmpAlphaRow(new unsigned char[nAlphaRowSize]);
 
     auto pBitmapData = pBitmap->getDataPtr();
     auto pAlphaData = pBitmap->getAlphaPtr();
@@ -470,16 +470,14 @@ static void flipSplashBitmap(SplashBitmap *pBitmap)
          nCur++, pCurRowA+=nRowSize, pCurRowB-=nRowSize,
          pCurAlphaA+=nAlphaRowSize, pCurAlphaB-=nAlphaRowSize)
     {
-        memcpy(aTmpRow, pCurRowA, nRowSize);
+        memcpy(aTmpRow.get(), pCurRowA, nRowSize);
         memcpy(pCurRowA, pCurRowB, nRowSize);
-        memcpy(pCurRowB, aTmpRow, nRowSize);
+        memcpy(pCurRowB, aTmpRow.get(), nRowSize);
 
-        memcpy(aTmpAlphaRow, pCurAlphaA, nAlphaRowSize);
+        memcpy(aTmpAlphaRow.get(), pCurAlphaA, nAlphaRowSize);
         memcpy(pCurAlphaA, pCurAlphaB, nAlphaRowSize);
-        memcpy(pCurAlphaB, aTmpAlphaRow, nAlphaRowSize);
+        memcpy(pCurAlphaB, aTmpAlphaRow.get(), nAlphaRowSize);
     }
-    delete[] aTmpRow;
-    delete[] aTmpAlphaRow;
 }
 
 int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, const GfxState* state ) const
@@ -1268,13 +1266,15 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
 
     auto pSplashGfx = new Gfx(m_pDoc, pSplashOut, pResDict, &aBox, nullptr);
     pSplashGfx->display(aStr);
-    auto pSplashBitmap = pSplashOut->takeBitmap();
+    std::unique_ptr<SplashBitmap> pSplashBitmap(pSplashOut->takeBitmap());
+    // Poppler tells us to free the splash device immediately after taking the
+    // bitmap
     delete pSplashGfxState;
     delete pSplashGfx;
     delete pSplashOut;
 
     // Add a vertical flip, we can't do this in LO for an image filled poly
-    flipSplashBitmap(pSplashBitmap);
+    flipSplashBitmap(pSplashBitmap.get());
 
     auto nBitmapWidth = static_cast<size_t>(pSplashBitmap->getWidth());
     auto nBitmapHeight = static_cast<size_t>(pSplashBitmap->getHeight());
@@ -1300,22 +1300,20 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
         }
     }
 
-    auto pRgbStr = new MemStream(pBitmapData, 0,
-        nBitmapWidth * nBitmapHeight * 3, Object(objNull));
-    auto pAlphaStr = new MemStream(reinterpret_cast<char *>(pSplashBitmap->getAlphaPtr()), 0,
-        nBitmapWidth * nBitmapHeight, Object(objNull));
+    std::unique_ptr<MemStream> pRgbStr(new MemStream(pBitmapData, 0,
+        nBitmapWidth * nBitmapHeight * 3, Object(objNull)));
+    std::unique_ptr<MemStream> pAlphaStr(new MemStream(reinterpret_cast<char *>(pSplashBitmap->getAlphaPtr()),
+        0, nBitmapWidth * nBitmapHeight, Object(objNull)));
     auto aDecode = Object(objNull);
-    auto pRgbIdentityColorMap = new GfxImageColorMap(8, &aDecode, new GfxDeviceRGBColorSpace());
-    auto pGrayIdentityColorMap = new GfxImageColorMap(8, &aDecode, new GfxDeviceGrayColorSpace());
+    std::unique_ptr<GfxImageColorMap> pRgbIdentityColorMap(new GfxImageColorMap(8, &aDecode,
+        new GfxDeviceRGBColorSpace()));
+    std::unique_ptr<GfxImageColorMap> pGrayIdentityColorMap(new GfxImageColorMap(8, &aDecode,
+        new GfxDeviceGrayColorSpace()));
 
     OutputBuffer aBuf; initBuf(aBuf);
-    writePng_(aBuf, pRgbStr, nBitmapWidth, nBitmapHeight, pRgbIdentityColorMap,
-        pAlphaStr, nBitmapWidth, nBitmapHeight, pGrayIdentityColorMap);
+    writePng_(aBuf, pRgbStr.get(), nBitmapWidth, nBitmapHeight, pRgbIdentityColorMap.get(),
+        pAlphaStr.get(), nBitmapWidth, nBitmapHeight, pGrayIdentityColorMap.get());
     writeBinaryBuffer(aBuf);
-
-    delete pAlphaStr;
-    delete pRgbStr;
-    delete pSplashBitmap;
 
     // If we return false here we can fall back to the slow path
     return true;
