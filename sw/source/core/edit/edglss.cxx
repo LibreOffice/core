@@ -229,6 +229,14 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
                         // but we want to copy the table and the start node before
                         // the first cell as well.
                         aPaM.Start()->Assign(*oSelectAll->first);
+                        if (SwSectionNode const* pSection = oSelectAll->first->GetSectionNode())
+                        {
+                            if (aPaM.End()->GetNodeIndex() < pSection->EndOfSectionIndex())
+                            {
+                                // include section end so that section is copied
+                                aPaM.End()->Assign(*oSelectAll->first->GetNodes()[pSection->EndOfSectionIndex() + 1]);
+                            }
+                        }
                     }
                     bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, SwCopyFlags::CheckPosInFly)
                         || bRet;

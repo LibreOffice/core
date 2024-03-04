@@ -1844,7 +1844,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
             // If the end of the section is outside the copy range,
             // the section node will skipped, not copied!
             // If someone want to change this behaviour, he has to adjust the function
-            // lcl_NonCopyCount(..) in ndcopy.cxx which relies on it.
+            // lcl_NonCopyCount() which relies on it.
             if( pCurrentNode->EndOfSectionIndex() < aRg.aEnd.GetIndex() )
             {
                 // copy of the whole section, so create a new SectionNode

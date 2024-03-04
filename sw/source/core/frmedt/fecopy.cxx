@@ -1088,8 +1088,23 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
 
                     --aIndexBefore;
 
+                    // copying to the clipboard, the section is inserted
+                    // at the start of the nodes, followed by empty text node
+                    bool const isSourceSection(aCpyPam.Start()->GetNode().IsSectionNode()
+                        && aCpyPam.End()->GetNodeIndex() == aCpyPam.Start()->GetNode().EndOfSectionIndex() + 1
+                        && aCpyPam.End()->GetNode().IsTextNode()
+                        && aCpyPam.End()->GetNode().GetTextNode()->Len() == 0);
+
                     rClpDoc.getIDocumentContentOperations().CopyRange(aCpyPam, rInsPos, SwCopyFlags::CheckPosInFly);
                     // Note: aCpyPam is invalid now
+
+                    if (isSourceSection
+                        && aIndexBefore.GetNode().IsStartNode()
+                        && rInsPos.GetNode().GetTextNode()->Len() == 0)
+                    {   // if there is an empty text node at the start, it
+                        // should be *replaced* by the section, so delete it
+                        GetDoc()->getIDocumentContentOperations().DelFullPara(rPaM);
+                    }
 
                     ++aIndexBefore;
                     SwPaM aPaM(aIndexBefore.GetNode(), rInsPos.GetNode());
