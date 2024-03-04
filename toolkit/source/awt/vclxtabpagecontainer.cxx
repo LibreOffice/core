@@ -148,7 +148,7 @@ void VCLXTabPageContainer::ProcessWindowEvent( const VclWindowEvent& _rVclWindow
     {
         case VclEventId::TabpageActivate:
         {
-            sal_uLong page = reinterpret_cast<sal_uLong>(_rVclWindowEvent.GetData());
+            sal_uInt16 page = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>(_rVclWindowEvent.GetData()));
             awt::tab::TabPageActivatedEvent aEvent(nullptr,page);
             m_aTabPageListeners.tabPageActivated(aEvent);
             break;

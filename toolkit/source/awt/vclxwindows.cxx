@@ -2602,14 +2602,14 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         case VclEventId::TabpageDeactivate:
         {
-            sal_uLong nPageID = reinterpret_cast<sal_uLong>( rVclWindowEvent.GetData() );
+            sal_uInt16 nPageID = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>( rVclWindowEvent.GetData() ));
             maTabListeners.deactivated( nPageID );
             break;
 
         }
         case VclEventId::TabpageActivate:
         {
-            sal_uLong nPageID = reinterpret_cast<sal_uLong>( rVclWindowEvent.GetData() );
+            sal_uInt16 nPageID = static_cast<sal_uInt16>(reinterpret_cast<sal_uIntPtr>( rVclWindowEvent.GetData() ));
             maTabListeners.activated( nPageID );
             break;
         }
