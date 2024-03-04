@@ -125,16 +125,15 @@ public:
                      std::unique_ptr<jsdialog::ActionDataMap> pData = nullptr);
 
 private:
-    void send(tools::JsonWriter& aJsonWriter);
-    std::unique_ptr<tools::JsonWriter> generateFullUpdate() const;
-    std::unique_ptr<tools::JsonWriter> generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
-    std::unique_ptr<tools::JsonWriter> generateCloseMessage() const;
-    std::unique_ptr<tools::JsonWriter>
-    generateActionMessage(VclPtr<vcl::Window> pWindow,
-                          std::unique_ptr<jsdialog::ActionDataMap> pData) const;
-    std::unique_ptr<tools::JsonWriter>
-    generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId) const;
-    std::unique_ptr<tools::JsonWriter> generateClosePopupMessage(OUString sWindowId) const;
+    void send(const OString& sMsg);
+    OString generateFullUpdate() const;
+    OString generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
+    OString generateCloseMessage() const;
+    OString generateActionMessage(VclPtr<vcl::Window> pWindow,
+                                  std::unique_ptr<jsdialog::ActionDataMap> pData) const;
+    OString generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
+                                 OUString sCloseId) const;
+    OString generateClosePopupMessage(OUString sWindowId) const;
 };
 
 class JSDialogSender
