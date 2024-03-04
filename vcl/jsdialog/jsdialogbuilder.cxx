@@ -81,31 +81,22 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
 
 void JSDialogNotifyIdle::forceUpdate() { m_bForce = true; }
 
-void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
+void JSDialogNotifyIdle::send(const OString& sMsg)
 {
     if (!m_aNotifierWindow)
     {
-        aJsonWriter.finishAndGetAsOString();
         return;
     }
 
     const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
     if (pNotifier)
     {
-        if (m_bForce || !aJsonWriter.isDataEquals(m_LastNotificationMessage))
+        if (m_bForce || sMsg != m_LastNotificationMessage)
         {
             m_bForce = false;
-            m_LastNotificationMessage = aJsonWriter.finishAndGetAsOString();
+            m_LastNotificationMessage = sMsg;
             pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, m_LastNotificationMessage);
         }
-        else
-        {
-            aJsonWriter.finishAndGetAsOString();
-        }
-    }
-    else
-    {
-        aJsonWriter.finishAndGetAsOString();
     }
 }
 
@@ -139,91 +130,89 @@ void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType,
     m_aMessageQueue.push_back(aMessage);
 }
 
-std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateFullUpdate() const
+OString JSDialogNotifyIdle::generateFullUpdate() const
 {
-    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
-
     if (!m_aContentWindow || !m_aNotifierWindow)
-        return aJsonWriter;
+        return OString();
 
-    m_aContentWindow->DumpAsPropertyTree(*aJsonWriter);
+    tools::JsonWriter aJsonWriter;
+
+    m_aContentWindow->DumpAsPropertyTree(aJsonWriter);
     if (m_aNotifierWindow)
-        aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
-    aJsonWriter->put("jsontype", m_sTypeOfJSON);
+        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+    aJsonWriter.put("jsontype", m_sTypeOfJSON);
 
-    return aJsonWriter;
+    return aJsonWriter.finishAndGetAsOString();
 }
 
-std::unique_ptr<tools::JsonWriter>
-JSDialogNotifyIdle::generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const
+OString JSDialogNotifyIdle::generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const
 {
-    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
-
     if (!pWindow || !m_aNotifierWindow)
-        return aJsonWriter;
+        return OString();
 
-    aJsonWriter->put("jsontype", m_sTypeOfJSON);
-    aJsonWriter->put("action", "update");
+    tools::JsonWriter aJsonWriter;
+
+    aJsonWriter.put("jsontype", m_sTypeOfJSON);
+    aJsonWriter.put("action", "update");
     if (m_aNotifierWindow)
-        aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
+        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
     {
-        auto aEntries = aJsonWriter->startNode("control");
-        pWindow->DumpAsPropertyTree(*aJsonWriter);
+        auto aEntries = aJsonWriter.startNode("control");
+        pWindow->DumpAsPropertyTree(aJsonWriter);
     }
 
-    return aJsonWriter;
+    return aJsonWriter.finishAndGetAsOString();
 }
 
-std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateCloseMessage() const
+OString JSDialogNotifyIdle::generateCloseMessage() const
 {
-    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
+    tools::JsonWriter aJsonWriter;
     if (m_aNotifierWindow)
-        aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
-    aJsonWriter->put("jsontype", m_sTypeOfJSON);
-    aJsonWriter->put("action", "close");
+        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+    aJsonWriter.put("jsontype", m_sTypeOfJSON);
+    aJsonWriter.put("action", "close");
 
-    return aJsonWriter;
+    return aJsonWriter.finishAndGetAsOString();
 }
 
-std::unique_ptr<tools::JsonWriter>
+OString
 JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
                                           std::unique_ptr<jsdialog::ActionDataMap> pData) const
 {
-    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
+    tools::JsonWriter aJsonWriter;
 
-    aJsonWriter->put("jsontype", m_sTypeOfJSON);
-    aJsonWriter->put("action", "action");
+    aJsonWriter.put("jsontype", m_sTypeOfJSON);
+    aJsonWriter.put("action", "action");
     if (m_aNotifierWindow)
-        aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
+        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
 
     {
-        auto aDataNode = aJsonWriter->startNode("data");
-        aJsonWriter->put("control_id", pWindow->get_id());
+        auto aDataNode = aJsonWriter.startNode("data");
+        aJsonWriter.put("control_id", pWindow->get_id());
 
         for (auto it = pData->begin(); it != pData->end(); it++)
-            aJsonWriter->put(it->first, it->second);
+            aJsonWriter.put(it->first, it->second);
     }
 
-    return aJsonWriter;
+    return aJsonWriter.finishAndGetAsOString();
 }
 
-std::unique_ptr<tools::JsonWriter>
-JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
-                                         OUString sCloseId) const
+OString JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
+                                                 OUString sCloseId) const
 {
-    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
-
     if (!pWindow || !m_aNotifierWindow)
-        return aJsonWriter;
+        return OString();
 
     if (!pWindow->GetParentWithLOKNotifier())
-        return aJsonWriter;
+        return OString();
+
+    tools::JsonWriter aJsonWriter;
 
     {
-        auto aChildren = aJsonWriter->startArray("children");
+        auto aChildren = aJsonWriter.startArray("children");
         {
-            auto aStruct = aJsonWriter->startStruct();
-            pWindow->DumpAsPropertyTree(*aJsonWriter);
+            auto aStruct = aJsonWriter.startStruct();
+            pWindow->DumpAsPropertyTree(aJsonWriter);
         }
     }
 
@@ -240,37 +229,36 @@ JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString s
         if (pDockingWindow)
         {
             Point aPos = pDockingWindow->GetFloatingPos();
-            aJsonWriter->put("posx", aPos.getX());
-            aJsonWriter->put("posy", aPos.getY());
+            aJsonWriter.put("posx", aPos.getX());
+            aJsonWriter.put("posy", aPos.getY());
             if (!pDockingWindow->IsVisible())
-                aJsonWriter->put("visible", "false");
+                aJsonWriter.put("visible", "false");
         }
     }
 
-    aJsonWriter->put("jsontype", "dialog");
-    aJsonWriter->put("type", "modalpopup");
-    aJsonWriter->put("cancellable", true);
-    aJsonWriter->put("popupParent", sParentId);
-    aJsonWriter->put("clickToClose", sCloseId);
-    aJsonWriter->put("id", pWindow->GetParentWithLOKNotifier()->GetLOKWindowId());
+    aJsonWriter.put("jsontype", "dialog");
+    aJsonWriter.put("type", "modalpopup");
+    aJsonWriter.put("cancellable", true);
+    aJsonWriter.put("popupParent", sParentId);
+    aJsonWriter.put("clickToClose", sCloseId);
+    aJsonWriter.put("id", pWindow->GetParentWithLOKNotifier()->GetLOKWindowId());
 
-    return aJsonWriter;
+    return aJsonWriter.finishAndGetAsOString();
 }
 
-std::unique_ptr<tools::JsonWriter>
-JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
+OString JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
 {
-    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
-
     if (!m_aNotifierWindow)
-        return aJsonWriter;
+        return OString();
 
-    aJsonWriter->put("jsontype", "dialog");
-    aJsonWriter->put("type", "modalpopup");
-    aJsonWriter->put("action", "close");
-    aJsonWriter->put("id", sWindowId);
+    tools::JsonWriter aJsonWriter;
 
-    return aJsonWriter;
+    aJsonWriter.put("jsontype", "dialog");
+    aJsonWriter.put("type", "modalpopup");
+    aJsonWriter.put("action", "close");
+    aJsonWriter.put("id", sWindowId);
+
+    return aJsonWriter.finishAndGetAsOString();
 }
 
 void JSDialogNotifyIdle::Invoke()
@@ -292,29 +280,29 @@ void JSDialogNotifyIdle::Invoke()
         switch (eType)
         {
             case jsdialog::MessageType::FullUpdate:
-                send(*generateFullUpdate());
+                send(generateFullUpdate());
                 break;
 
             case jsdialog::MessageType::WidgetUpdate:
-                send(*generateWidgetUpdate(rMessage.m_pWindow));
+                send(generateWidgetUpdate(rMessage.m_pWindow));
                 break;
 
             case jsdialog::MessageType::Close:
-                send(*generateCloseMessage());
+                send(generateCloseMessage());
                 break;
 
             case jsdialog::MessageType::Action:
-                send(*generateActionMessage(rMessage.m_pWindow, std::move(rMessage.m_pData)));
+                send(generateActionMessage(rMessage.m_pWindow, std::move(rMessage.m_pData)));
                 break;
 
             case jsdialog::MessageType::Popup:
-                send(*generatePopupMessage(rMessage.m_pWindow,
-                                           (*rMessage.m_pData)[PARENT_ID ""_ostr],
-                                           (*rMessage.m_pData)[CLOSE_ID ""_ostr]));
+                send(generatePopupMessage(rMessage.m_pWindow,
+                                          (*rMessage.m_pData)[PARENT_ID ""_ostr],
+                                          (*rMessage.m_pData)[CLOSE_ID ""_ostr]));
                 break;
 
             case jsdialog::MessageType::PopupClose:
-                send(*generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID ""_ostr]));
+                send(generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID ""_ostr]));
                 break;
         }
     }
