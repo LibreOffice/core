@@ -5171,12 +5171,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                         rDoc.getIDocumentContentOperations().SplitNode( rPos, false );
                     }
 
-                    if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
-                    {
-                        // after the SplitNode, span the CpyPam correctly again
-                        pCopyPam->Move( fnMoveBackward, GoInContent );
-                        pCopyPam->Move( fnMoveBackward, GoInContent );
-                    }
+                    assert(rPos != *pCopyPam->GetPoint()); // code removed
 
                     pDestTextNd = rDoc.GetNodes()[ aInsPos.GetIndex()-SwNodeOffset(1) ]->GetTextNode();
                     aDestIdx.Assign(
@@ -5262,12 +5257,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                     rDoc.getIDocumentContentOperations().SplitNode( rPos, false );
                 }
 
-                if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
-                {
-                    // after the SplitNode, span the CpyPam correctly again
-                    pCopyPam->Move( fnMoveBackward, GoInContent );
-                    pCopyPam->Move( fnMoveBackward, GoInContent );
-                }
+                assert(rPos != *pCopyPam->GetPoint()); // code removed
 
                 // Correct the area again
                 if( bEndEqualIns )
