@@ -195,7 +195,8 @@ namespace
 ScFunctionAccess::ScFunctionAccess() :
     aPropertyMap( GetPropertyMap() ),
     mbArray( true ),    // default according to behaviour of older Office versions
-    mbValid( true )
+    mbValid( true ),
+    mbSpellOnline( false )
 {
     StartListening( *SfxGetpApp() );       // for SfxHintId::Deinitializing
 }
@@ -266,8 +267,9 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
     }
     else if (aPropertyName == SC_UNO_SPELLONLINE)
     {
-        // silently ignore this property
-        SAL_WARN("sc", "'SpellOnline' not implemented for ScFunctionAccess");
+        // Allow this property because SpreadsheetDocumentSettings lists it
+        if( !(aValue >>= mbSpellOnline) )
+            throw lang::IllegalArgumentException();
     }
     else
     {
@@ -275,7 +277,6 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
             pOptions.reset( new ScDocOptions() );
 
         // options aren't initialized from configuration - always get the same default behaviour
-
         bool bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
         if (!bDone)
             throw beans::UnknownPropertyException(aPropertyName);
@@ -289,11 +290,9 @@ uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const OUString& aPropertyN
     if ( aPropertyName == "IsArrayFunction" )
         return uno::Any( mbArray );
 
+    // Allow this property because SpreadsheetDocumentSettings lists it
     if (aPropertyName == SC_UNO_SPELLONLINE)
-    {
-        SAL_WARN("sc", "'SpellOnline' not implemented for ScFunctionAccess");
-        return uno::Any(false);
-    }
+        return uno::Any(mbSpellOnline);
 
     if ( !pOptions )
         pOptions.reset( new ScDocOptions() );
