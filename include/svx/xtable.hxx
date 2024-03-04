@@ -101,7 +101,7 @@ public:
 class SVXCORE_DLLPUBLIC XGradientEntry final : public XPropertyEntry
 {
 private:
-    basegfx::BGradient  aGradient;
+    basegfx::BGradient  m_aGradient;
 
 public:
     XGradientEntry(const basegfx::BGradient& rGradient, const OUString& rName);
@@ -109,7 +109,7 @@ public:
 
     const basegfx::BGradient& GetGradient() const
     {
-        return aGradient;
+        return m_aGradient;
     }
 };
 

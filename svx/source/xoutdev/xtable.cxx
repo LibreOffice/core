@@ -74,13 +74,13 @@ XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
 
 XGradientEntry::XGradientEntry(const basegfx::BGradient& rGradient, const OUString& rName)
 :   XPropertyEntry(rName),
-    aGradient(rGradient)
+    m_aGradient(rGradient)
 {
 }
 
 XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
 :   XPropertyEntry(rOther),
-    aGradient(rOther.aGradient)
+    m_aGradient(rOther.m_aGradient)
 {
 }
 
