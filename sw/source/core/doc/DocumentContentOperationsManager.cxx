@@ -29,6 +29,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <UndoManager.hxx>
 #include <docary.hxx>
+#include <pamtyp.hxx>
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
 #include <grfatr.hxx>
@@ -5065,16 +5066,14 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     // Move the PaM one node back from the insert position, so that
     // the position doesn't get moved
     pCopyPam->SetMark();
-    bool bCanMoveBack = pCopyPam->Move(fnMoveBackward, GoInContent);
-    // If the position was shifted from more than one node, an end node has been skipped
-    bool bAfterTable = false;
-    if ((rPos.GetNodeIndex() - pCopyPam->GetPoint()->GetNodeIndex()) > SwNodeOffset(1))
+    bool bCanMoveBack = false;
+    // First check if it will be able to move *to* first copied node.
+    // Note this doesn't just check IsStartNode() because SwDoc::AppendDoc()
+    // intentionally sets it to the body start node, perhaps it should just
+    // call SplitNode instead?
+    if (!pStt->GetNode().IsSectionNode() && !pStt->GetNode().IsTableNode())
     {
-        // First go back to the original place
-        *(pCopyPam->GetPoint()) = rPos;
-
-        bCanMoveBack = false;
-        bAfterTable = true;
+        bCanMoveBack = pCopyPam->Move(fnMoveBackward, GoInContent);
     }
     if( !bCanMoveBack )
     {
@@ -5084,6 +5083,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
 
     SwNodeRange aRg( pStt->GetNode(), pEnd->GetNode() );
     SwNodeIndex aInsPos( rPos.GetNode() );
+    ::std::optional<SwContentIndex> oInsContentIndex;
     const bool bOneNode = pStt->GetNode() == pEnd->GetNode();
     SwTextNode* pSttTextNd = pStt->GetNode().GetTextNode();
     SwTextNode* pEndTextNd = pEnd->GetNode().GetTextNode();
@@ -5236,8 +5236,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             // We have to set the correct PaM for Undo, if this PaM starts in a textnode,
             // the undo operation will try to merge this node after removing the table.
             // If we didn't split a textnode, the PaM should start at the inserted table node
-            if( rPos.GetContentIndex() == pDestTextNd->Len() )
-            {    // Insertion at the last position of a textnode (empty or not)
+            if (pDestTextNd->Len() && rPos.GetContentIndex() == pDestTextNd->Len())
+            {   // Insertion at the last position of a textnode
                 ++aInsPos; // The table will be inserted behind the text node
             }
             else if( rPos.GetContentIndex() )
@@ -5269,27 +5269,18 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                     --aRg.aEnd;
                 }
             }
-            else if( bCanMoveBack )
-            {   // Insertion at the first position of a text node. It will not be split, the table
-                // will be inserted before the text node.
-                // See below, before the SetInsertRange function of the undo object will be called,
-                // the CpyPam would be moved to the next content position. This has to be avoided
-                // We want to be moved to the table node itself thus we have to set bCanMoveBack
-                // and to manipulate pCopyPam.
-                bCanMoveBack = false;
-                pCopyPam->GetPoint()->Adjust(SwNodeOffset(-1));
-            }
+            assert(!bCanMoveBack);
         }
 
         pDestTextNd = aInsPos.GetNode().GetTextNode();
         if (pEndTextNd)
         {
-            SwContentIndex aDestIdx( aInsPos.GetNode().GetContentNode(), rPos.GetContentIndex() );
+            oInsContentIndex.emplace(aInsPos.GetNode().GetContentNode(), rPos.GetContentIndex());
             if( !pDestTextNd )
             {
                 pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode(),
                             rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
-                aDestIdx.Assign( pDestTextNd, 0  );
+                oInsContentIndex->Assign(pDestTextNd, 0);
                 --aInsPos;
 
                 // if we have to insert an extra text node
@@ -5307,8 +5298,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 PUSH_NUMRULE_STATE
             }
 
-            pEndTextNd->CopyText( pDestTextNd, aDestIdx, SwContentIndex( pEndTextNd ),
-                            pEnd->GetContentIndex() );
+            pEndTextNd->CopyText(pDestTextNd, *oInsContentIndex,
+                    SwContentIndex(pEndTextNd), pEnd->GetContentIndex());
 
             // Also copy all format templates
             if( bCopyCollFormat && ( bOneNode || bEmptyDestNd ))
@@ -5360,19 +5351,28 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             bCopyBookmarks = false;
         }
 
+
+        // init *again* - because CopyWithFlyInFly moved startPos
+        SwPosition startPos(pCopyPam->GetPoint()->GetNode(), SwNodeOffset(+1));
         // at-char anchors post SplitNode are on index 0 of 2nd node and will
         // remain there - move them back to the start (end would also work?)
         // ... also for at-para anchors; here start is preferable because
         // it's consistent with SplitNode from SwUndoInserts::RedoImpl()
-        if (pFlysAtInsPos)
+        if (pFlysAtInsPos
+            && (bCanMoveBack
+                || startPos.GetNode().IsTextNode()
+                || (pCopyPam->GetPoint()->GetNode().IsStartNode()
+                     && startPos.GetNode().IsSectionNode()))) // not into table
         {
-            // init *again* - because CopyWithFlyInFly moved startPos
-            SwPosition startPos(pCopyPam->GetPoint()->GetNode(), SwNodeOffset(+1));
             if (bCanMoveBack)
             {   // pCopyPam is actually 1 before the copy range so move it fwd
                 SwPaM temp(*pCopyPam->GetPoint());
                 temp.Move(fnMoveForward, GoInContent);
                 startPos = *temp.GetPoint();
+            }
+            else if (startPos.GetNode().IsSectionNode())
+            {   // probably on top-level start node, so no CheckNodesRange here;
+                GoNextPos(&startPos, false); // SwFEShell::Paste() deletes node
             }
             assert(startPos.GetNode().IsContentNode());
             SwPosition startPosAtPara(startPos);
@@ -5456,26 +5456,31 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         }
         else // incremented in (!pSttTextNd && pDestTextNd) above
         {
-            pCopyPam->GetMark()->Assign(aInsPos);
+            // assign also content index in this case, see testSectionAnchorCopyTableAtStart
+            assert(oInsContentIndex);
+            assert(oInsContentIndex->GetContentNode() == &aInsPos.GetNode());
+            pCopyPam->GetMark()->Assign(aInsPos, oInsContentIndex->GetIndex());
         }
         rPos = *pCopyPam->GetMark();
     }
     else
         *pCopyPam->GetMark() = rPos;
 
-    if ( !bAfterTable )
-        pCopyPam->Move( fnMoveForward, bCanMoveBack ? GoInContent : GoInNode );
+    if (bCanMoveBack)
+    {
+        pCopyPam->Move(fnMoveForward, GoInContent);
+    }
     else
     {
         // Reset the offset to 0 as it was before the insertion
         pCopyPam->GetPoint()->Adjust(SwNodeOffset(+1));
 
-        // If the next node is a start node, then step back: the start node
-        // has been copied and needs to be in the selection for the undo
+        // If the next node is a start node, then step back: SetInsertRange()
+        // will add 1 in this case, but that is too much...
         if (pCopyPam->GetPoint()->GetNode().IsStartNode())
             pCopyPam->GetPoint()->Adjust(SwNodeOffset(-1));
-
     }
+    oInsContentIndex.reset();
     pCopyPam->Exchange();
 
     // Also copy all bookmarks

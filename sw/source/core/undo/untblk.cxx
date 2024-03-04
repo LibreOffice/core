@@ -390,6 +390,10 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
             rPam.GetPoint()->GetNodeIndex()));
 
         ::std::optional<SwNodeIndex> oMvBkwrd = MovePtBackward(rPam);
+        bool const isMoveFlyAnchors(!oMvBkwrd // equivalent to bCanMoveBack
+            || m_oUndoNodeIndex->GetNode().IsTextNode()
+            || (oMvBkwrd->GetNode().IsStartNode()
+                && m_oUndoNodeIndex->GetNode().IsSectionNode()));
 
         // re-insert content again (first detach m_oUndoNodeIndex!)
         SwNodeOffset const nMvNd = m_oUndoNodeIndex->GetIndex();
@@ -403,7 +407,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
         // at-char anchors post SplitNode are on index 0 of 2nd node and will
         // remain there - move them back to the start (end would also work?)
-        if (pFlysAtInsPos)
+        if (pFlysAtInsPos && isMoveFlyAnchors)
         {
             for (SwFrameFormat * pFly : *pFlysAtInsPos)
             {

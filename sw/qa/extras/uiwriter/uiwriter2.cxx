@@ -459,7 +459,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
 
     // this would crash in 2 different ways
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -474,7 +474,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
     dispatchCommand(mxComponent, ".uno:Redo", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
 
@@ -486,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
     dispatchCommand(mxComponent, ".uno:Redo", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134436)

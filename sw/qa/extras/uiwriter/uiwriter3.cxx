@@ -1516,7 +1516,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    // the table is inserted before the first paragraph, which has a pagedesc
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
