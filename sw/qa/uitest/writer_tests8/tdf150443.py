@@ -27,7 +27,7 @@ class tdf150443(UITestCase):
                 xsearch.executeAction("CLICK", tuple())  #first search
                 xToolkit.processEventsToIdle()
                 page = get_state_as_dict(xWriterEdit)["CurrentPage"]
-                # page may depend on font subsitution, just check it moved
+                # page may depend on font substitution, just check it moved
                 self.assertTrue(page == "4" or page == "5")
 
             # reject the tracked table row in Manage Changes dialog window
