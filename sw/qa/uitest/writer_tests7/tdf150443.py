@@ -26,7 +26,9 @@ class tdf150443(UITestCase):
                 xsearch = xDialog.getChild("search")
                 xsearch.executeAction("CLICK", tuple())  #first search
                 xToolkit.processEventsToIdle()
-                self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "4")
+                page = get_state_as_dict(xWriterEdit)["CurrentPage"]
+                # page may depend on font subsitution, just check it moved
+                self.assertTrue(page == "4" or page == "5")
 
             # reject the tracked table row in Manage Changes dialog window
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
