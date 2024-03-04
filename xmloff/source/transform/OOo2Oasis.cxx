@@ -20,11 +20,10 @@
 #include <config_wasm_strip.h>
 
 #include <osl/diagnose.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <sal/log.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <utility>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -45,7 +44,6 @@
 #include "OOo2Oasis.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;

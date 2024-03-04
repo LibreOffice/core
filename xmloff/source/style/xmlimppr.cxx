@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <utility>
@@ -39,7 +38,6 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
-#include <xmloff/contextid.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
 

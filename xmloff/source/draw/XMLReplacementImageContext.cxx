@@ -23,7 +23,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <XMLReplacementImageContext.hxx>
 #include <sal/log.hxx>

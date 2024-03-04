@@ -46,7 +46,6 @@
 #include <xmloff/xmlerror.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -63,8 +62,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/namecontainer.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>

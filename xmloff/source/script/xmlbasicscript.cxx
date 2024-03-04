@@ -21,15 +21,12 @@
 
 #include "xmlbasicscript.hxx"
 #include <sal/log.hxx>
-#include <xmlscript/xmlns.h>
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmltoken.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;

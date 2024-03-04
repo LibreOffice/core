@@ -23,16 +23,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xexptran.hxx>
 #include <xmloff/xmlerror.hxx>

@@ -12,8 +12,6 @@
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
-#include <SchXMLImport.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>

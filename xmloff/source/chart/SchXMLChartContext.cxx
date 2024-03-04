@@ -42,10 +42,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagram.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 

@@ -19,12 +19,9 @@
 
 #include "XMLSymbolImageContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <sal/log.hxx>
 

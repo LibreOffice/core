@@ -21,7 +21,6 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <limits.h>
 

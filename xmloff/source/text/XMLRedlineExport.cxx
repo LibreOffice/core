@@ -43,8 +43,6 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <unotools/securityoptions.hxx>
-#include <tools/date.hxx>
-#include <tools/datetime.hxx>
 
 
 using namespace ::com::sun::star;

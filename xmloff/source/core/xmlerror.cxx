@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-
 #include <rtl/ustrbuf.hxx>
 
 using ::com::sun::star::uno::Any;

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <comphelper/attributelist.hxx>
-#include <comphelper/servicehelper.hxx>
 #include "MutableAttrList.hxx"
 
 

@@ -23,9 +23,6 @@
 
 #include <utility>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/namespacemap.hxx>
-#include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
 
 #include <sax/tools/converter.hxx>

@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>

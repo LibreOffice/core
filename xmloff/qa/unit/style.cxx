@@ -19,7 +19,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
-#include <docmodel/uno/UnoComplexColor.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/character.hxx>
 #include <unotools/saveopt.hxx>

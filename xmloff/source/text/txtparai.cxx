@@ -29,13 +29,11 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
@@ -46,7 +44,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/txtimp.hxx>
 #include "txtparai.hxx"

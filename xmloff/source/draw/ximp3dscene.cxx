@@ -18,7 +18,6 @@
  */
 
 #include <sax/tools/converter.hxx>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 
 #include "ximp3dscene.hxx"

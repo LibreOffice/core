@@ -25,7 +25,6 @@
 #include <sal/log.hxx>
 
 #include <utility>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/prstylei.hxx>
@@ -36,7 +35,6 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/chart2/RegressionEquation.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

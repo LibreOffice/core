@@ -19,15 +19,12 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
@@ -37,7 +34,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <anim.hxx>
 #include <animimp.hxx>
 

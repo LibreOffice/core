@@ -25,9 +25,7 @@
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>

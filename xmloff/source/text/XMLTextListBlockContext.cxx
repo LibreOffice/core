@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextListItemContext.hxx"
@@ -32,8 +29,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 

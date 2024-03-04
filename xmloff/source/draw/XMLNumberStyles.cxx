@@ -22,7 +22,6 @@
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 
 #include <o3tl/string_view.hxx>

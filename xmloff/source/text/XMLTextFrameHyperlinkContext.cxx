@@ -22,7 +22,6 @@
 
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextFrameContext.hxx"

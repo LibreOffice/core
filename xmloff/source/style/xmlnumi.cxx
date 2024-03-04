@@ -37,7 +37,6 @@
 
 #include <o3tl/any.hxx>
 #include <o3tl/temporary.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
@@ -50,8 +49,6 @@
 
 #include <vcl/vclenum.hxx>
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>

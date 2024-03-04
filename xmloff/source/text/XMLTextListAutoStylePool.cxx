@@ -20,7 +20,6 @@
 #include <utility>
 #include <vector>
 
-#include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -28,7 +27,6 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>

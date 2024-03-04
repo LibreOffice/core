@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <algorithm>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/solar.h>
 #include <PageMasterStyleMap.hxx>
 #include <utility>
 #include <xmloff/families.hxx>

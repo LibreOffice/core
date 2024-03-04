@@ -19,16 +19,13 @@
 
 #include "ximpcustomshape.hxx"
 #include <o3tl/any.hxx>
-#include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <EnhancedCustomShapeToken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xexptran.hxx>
@@ -46,7 +43,6 @@
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
-#include <memory>
 #include <string_view>
 #include <unordered_map>
 

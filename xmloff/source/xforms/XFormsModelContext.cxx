@@ -28,15 +28,12 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/xforms/XModel2.hpp>
 
 
 using com::sun::star::util::XUpdatable;

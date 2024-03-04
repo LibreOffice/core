@@ -19,8 +19,6 @@
 
 #include <com/sun/star/style/TabAlign.hpp>
 #include <sal/log.hxx>
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/style/TabStop.hpp>

@@ -20,12 +20,10 @@
 #include "XMLIndexIllustrationSourceContext.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "XMLIndexTemplateContext.hxx"
-#include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <rtl/ustring.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;

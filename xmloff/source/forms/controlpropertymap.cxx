@@ -28,8 +28,6 @@
 #include "controlpropertymap.hxx"
 #include <xmlprop.hxx>
 
-#include <string.h>
-
 using namespace ::xmloff::token;
 
 namespace xmloff

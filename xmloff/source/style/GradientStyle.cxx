@@ -26,12 +26,10 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <basegfx/utils/bgradient.hxx>

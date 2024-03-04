@@ -20,14 +20,12 @@
 #include <xmloff/ImageStyle.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <xmloff/xmltkmap.hxx>
 
 using namespace css;
 using namespace xmloff::token;

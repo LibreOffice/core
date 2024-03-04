@@ -25,7 +25,6 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/diagnose_ex.hxx>

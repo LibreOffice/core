@@ -26,14 +26,11 @@
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
-#include <osl/diagnose.h>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlerror.hxx>
-#include <xmloff/namespacemap.hxx>
 
 
 using com::sun::star::uno::Reference;

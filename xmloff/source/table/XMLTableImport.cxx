@@ -29,13 +29,11 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <utility>
 #include <xmloff/table/XMLTableImport.hxx>
-#include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/txtimp.hxx>

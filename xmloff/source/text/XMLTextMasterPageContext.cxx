@@ -28,7 +28,6 @@
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmltoken.hxx>

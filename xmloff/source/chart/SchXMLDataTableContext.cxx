@@ -21,8 +21,7 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <xmloff/xmltoken.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>

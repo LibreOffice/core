@@ -20,7 +20,6 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
-#include <comphelper/attributelist.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
@@ -31,7 +30,6 @@
 
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
@@ -45,7 +43,6 @@
 #include "ximplink.hxx"
 
 #include <unordered_map>
-#include <string_view>
 #include <vector>
 
 namespace {

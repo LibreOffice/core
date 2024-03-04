@@ -20,14 +20,11 @@
 
 #include "XMLIndexObjectSourceContext.hxx"
 
-#include <rtl/ustring.hxx>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sax/tools/converter.hxx>
 
 #include "XMLIndexTemplateContext.hxx"
-#include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>

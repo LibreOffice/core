@@ -19,7 +19,6 @@
 
 #include <osl/thread.h>
 #include <sal/log.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <xmloff/xmlscripti.hxx>

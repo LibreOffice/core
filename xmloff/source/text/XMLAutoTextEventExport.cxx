@@ -22,7 +22,6 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -33,7 +32,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/processfactory.hxx>
 
 
 using namespace ::com::sun::star;

@@ -25,7 +25,6 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
@@ -34,7 +33,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XEndnotesSupplier.hpp>

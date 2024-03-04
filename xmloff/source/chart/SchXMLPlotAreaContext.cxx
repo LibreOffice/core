@@ -29,11 +29,9 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include <oox/helper/containerhelper.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -49,7 +47,6 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

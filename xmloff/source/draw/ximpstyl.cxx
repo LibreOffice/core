@@ -18,7 +18,6 @@
  */
 
 #include "ximpstyl.hxx"
-#include <utility>
 #include <xmloff/maptype.hxx>
 #include <xmloff/XMLDrawingPageStyleContext.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
@@ -41,14 +40,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
-#include <com/sun/star/util/Color.hpp>
 #include <comphelper/namecontainer.hxx>
 #include <xmloff/autolayout.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/families.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <XMLNumberStylesImport.hxx>
@@ -56,9 +53,6 @@
 #include <comphelper/configuration.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
-#include <comphelper/sequenceashashmap.hxx>
-#include <sax/tools/converter.hxx>
-#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

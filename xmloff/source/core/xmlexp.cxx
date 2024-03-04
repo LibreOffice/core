@@ -34,7 +34,6 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>

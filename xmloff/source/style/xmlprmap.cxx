@@ -28,8 +28,6 @@
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmlimp.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <vector>
 
 using namespace ::com::sun::star::uno;

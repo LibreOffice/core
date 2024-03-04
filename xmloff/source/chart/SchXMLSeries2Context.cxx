@@ -52,7 +52,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
-#include <SchXMLImport.hxx>
 #include <xmloff/prstylei.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

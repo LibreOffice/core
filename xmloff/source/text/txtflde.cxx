@@ -46,7 +46,6 @@
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -56,7 +55,6 @@
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

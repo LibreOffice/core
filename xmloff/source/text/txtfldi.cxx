@@ -24,7 +24,6 @@
  *  (variable related text fields and database display fields)
  */
 
-#include <o3tl/safeint.hxx>
 #include <sal/config.h>
 
 #include <cassert>
@@ -43,7 +42,6 @@
 #include <XMLStringBufferImportContext.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/PlaceholderType.hpp>

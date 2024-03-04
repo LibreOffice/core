@@ -24,7 +24,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>

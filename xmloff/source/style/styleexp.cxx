@@ -22,7 +22,6 @@
 #include <o3tl/any.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -38,7 +37,6 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/maptype.hxx>
-#include <memory>
 #include <set>
 #include <prstylecond.hxx>
 #include <sal/log.hxx>

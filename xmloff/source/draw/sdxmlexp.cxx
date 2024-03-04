@@ -72,10 +72,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/util/Color.hpp>
 #include <docmodel/uno/UnoTheme.hxx>
-#include <docmodel/theme/Theme.hxx>
-#include <o3tl/enumrange.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -19,7 +19,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/Duration.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -27,7 +26,6 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpshow.hxx"
 

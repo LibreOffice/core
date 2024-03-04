@@ -32,7 +32,6 @@
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

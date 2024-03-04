@@ -20,7 +20,6 @@
 #include "DrawAspectHdl.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 

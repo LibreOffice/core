@@ -26,7 +26,6 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 

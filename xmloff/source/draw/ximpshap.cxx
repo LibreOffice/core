@@ -31,8 +31,6 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
-#include <com/sun/star/drawing/Alignment.hpp>
-#include <com/sun/star/drawing/EscapeDirection.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

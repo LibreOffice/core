@@ -22,7 +22,6 @@
 #include "SchXMLTableContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 #include "SchXMLTextListContext.hxx"
-#include <SchXMLImport.hxx>
 #include "SchXMLTools.hxx"
 #include "transporttypes.hxx"
 #include <XMLStringBufferImportContext.hxx>
@@ -31,9 +30,7 @@
 #include <sal/log.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/string.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>

@@ -31,16 +31,14 @@
 #include <comphelper/sequence.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmltoken.hxx>
 #include <xmloff/GradientStyle.hxx>
 #include <xmloff/HatchStyle.hxx>
 #include <xmloff/ImageStyle.hxx>
 #include <xmloff/MarkerStyle.hxx>
 #include <xmloff/DashStyle.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-
-#include <vector>
 
 using namespace ::com::sun::star;
 

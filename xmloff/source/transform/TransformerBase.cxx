@@ -19,7 +19,6 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/i18n/CharacterClassification.hpp>

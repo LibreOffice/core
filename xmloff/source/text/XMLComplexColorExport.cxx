@@ -13,7 +13,6 @@
 
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <array>
 

@@ -27,7 +27,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

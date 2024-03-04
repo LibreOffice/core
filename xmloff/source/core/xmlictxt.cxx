@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include <sax/fastattribs.hxx>
-#include <comphelper/attributelist.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

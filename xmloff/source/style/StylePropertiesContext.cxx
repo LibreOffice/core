@@ -9,9 +9,7 @@
 
 #include "StylePropertiesContext.hxx"
 
-#include <tools/debug.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlimp.hxx>
 
 #include <xmloff/XMLComplexColorContext.hxx>

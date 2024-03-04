@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
@@ -32,7 +31,6 @@
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <utility>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 

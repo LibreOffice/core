@@ -21,7 +21,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
-#include <rtl/ustring.hxx>
 
 using ::com::sun::star::uno::Reference;
 

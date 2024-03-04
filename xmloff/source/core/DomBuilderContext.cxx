@@ -29,7 +29,6 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 
 #include <rtl/ustring.hxx>

@@ -24,14 +24,11 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/namespacemap.hxx>
 
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/xforms/XModel2.hpp>
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 using com::sun::star::xforms::XModel2;

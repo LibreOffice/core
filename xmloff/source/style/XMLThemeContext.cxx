@@ -9,21 +9,13 @@
 
 #include <XMLThemeContext.hxx>
 
-#include <xmloff/maptype.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlprcon.hxx>
-#include <xmloff/xmlerror.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlement.hxx>
-#include <xmloff/xmlprhdl.hxx>
 
-#include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sax/tools/converter.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>

@@ -18,12 +18,9 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
 #include "TokenContext.hxx"
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlerror.hxx>
 
 #include <algorithm>

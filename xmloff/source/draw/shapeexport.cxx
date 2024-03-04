@@ -36,7 +36,6 @@
 #include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/drawing/Alignment.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>

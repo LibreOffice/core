@@ -20,11 +20,9 @@
 
 #include "XMLFootnoteSeparatorImport.hxx"
 
-#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 
 
@@ -36,13 +34,10 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlement.hxx>
 
 #include <PageMasterStyleMap.hxx>
-
-#include <vector>
 
 
 using namespace ::com::sun::star;

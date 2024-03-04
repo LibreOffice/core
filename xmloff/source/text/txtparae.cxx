@@ -25,6 +25,7 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -34,7 +35,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
@@ -56,7 +56,6 @@
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/text/XFormField.hpp>

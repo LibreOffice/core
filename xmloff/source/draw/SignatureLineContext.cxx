@@ -16,7 +16,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>

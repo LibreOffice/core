@@ -33,12 +33,10 @@
 #include <utility>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlnumfi.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/languagetagodf.hxx>

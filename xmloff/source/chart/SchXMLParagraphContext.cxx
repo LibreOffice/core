@@ -24,9 +24,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/namespacemap.hxx>
-
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

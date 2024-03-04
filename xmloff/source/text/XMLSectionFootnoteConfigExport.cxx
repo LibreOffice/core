@@ -31,8 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
-#include <vector>
-
 
 using namespace ::xmloff::token;
 

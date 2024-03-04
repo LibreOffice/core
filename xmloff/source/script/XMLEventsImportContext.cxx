@@ -22,9 +22,7 @@
 #include <XMLEventImportHelper.hxx>
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <comphelper/attributelist.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>

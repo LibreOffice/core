@@ -22,12 +22,10 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <sax/tools/converter.hxx>
 #include "XMLIndexTemplateContext.hxx"
-#include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <rtl/ustring.hxx>
 
 
 using namespace ::xmloff::token;

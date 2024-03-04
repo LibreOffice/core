@@ -20,7 +20,6 @@
 #include <xmloff/controlpropertyhdl.hxx>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 
 #include <sax/tools/converter.hxx>

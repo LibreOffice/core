@@ -18,13 +18,7 @@
  */
 
 #include "formenums.hxx"
-#include <com/sun/star/form/FormSubmitEncoding.hpp>
-#include <com/sun/star/form/FormSubmitMethod.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/form/NavigationBarMode.hpp>
-#include <com/sun/star/form/TabulatorCycle.hpp>
-#include <com/sun/star/form/FormButtonType.hpp>
-#include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>

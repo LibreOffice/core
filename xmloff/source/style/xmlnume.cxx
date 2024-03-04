@@ -46,7 +46,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "fonthdl.hxx"
-#include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <tools/fontenum.hxx>

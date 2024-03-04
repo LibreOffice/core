@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlprmap.hxx>
-#include <memory>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1

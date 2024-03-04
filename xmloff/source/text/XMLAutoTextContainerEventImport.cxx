@@ -19,7 +19,6 @@
 
 #include "XMLAutoTextContainerEventImport.hxx"
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>

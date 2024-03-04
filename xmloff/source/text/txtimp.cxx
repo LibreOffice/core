@@ -34,7 +34,7 @@
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XFormField.hpp>
-#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <xmloff/xmlnamespace.hxx>
@@ -65,12 +65,10 @@
 #include <XMLNumberStylesImport.hxx>
 #include <PageMasterStyleMap.hxx>
 #include <PageMasterPropHdlFactory.hxx>
-#include <PageMasterPropMapper.hxx>
 // XML import: reconstruction of assignment of paragraph style to outline levels (#i69629#)
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <txtlists.hxx>
 #include <xmloff/odffields.hxx>
-#include <comphelper/attributelist.hxx>
 
 using ::com::sun::star::ucb::XAnyCompare;
 

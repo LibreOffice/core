@@ -44,7 +44,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
 #include <XMLEmbeddedObjectImportContext.hxx>

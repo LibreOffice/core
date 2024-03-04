@@ -20,7 +20,6 @@
 #include <memory>
 #include <xmloff/MarkerStyle.hxx>
 #include <xexptran.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>

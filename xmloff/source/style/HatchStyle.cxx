@@ -23,7 +23,6 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -32,7 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlement.hxx>
 
 using namespace ::com::sun::star;

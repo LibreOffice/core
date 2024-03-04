@@ -28,12 +28,10 @@
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <tools/color.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 

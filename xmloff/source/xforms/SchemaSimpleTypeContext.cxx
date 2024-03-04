@@ -22,12 +22,9 @@
 
 #include "SchemaRestrictionContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 using com::sun::star::uno::Reference;

@@ -19,8 +19,6 @@
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/presentation/AnimationSpeed.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

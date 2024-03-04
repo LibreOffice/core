@@ -21,7 +21,6 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
@@ -31,11 +30,8 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/txtprmap.hxx>
-
-#include <vector>
 
 
 using namespace ::xmloff::token;

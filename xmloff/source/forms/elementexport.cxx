@@ -59,11 +59,9 @@
 #include <tools/time.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/extract.hxx>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 
 #include <algorithm>
-#include <string_view>
 
 namespace xmloff
 {

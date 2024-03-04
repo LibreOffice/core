@@ -23,9 +23,206 @@ excludelist:
     xmloff/source/core/fasttokenhandler.cxx:
     # Needed for special array initialization
     - tokennames.inc
+    xmloff/source/chart/SchXMLCalculationSettingsContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/chart/SchXMLDataTableContext.cxx:
+    # Complete type is needed
+    - com/sun/star/chart/XChartDocument.hpp
+    xmloff/source/chart/SchXMLChartContext.cxx:
+    # Complete type is needed
+    - SchXMLImport.hxx
+    xmloff/source/chart/SchXMLImport.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    xmloff/source/chart/SchXMLPlotAreaContext.cxx:
+    # Complete type is needed
+    - SchXMLImport.hxx
+    xmloff/source/chart/XMLChartStyleContext.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    xmloff/source/core/DocumentSettingsContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/draw/SignatureLineContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/draw/XMLImageMapContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/draw/XMLGraphicsDefaultStyle.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/draw/layerexp.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/draw/layerimp.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
     xmloff/source/draw/sdpropls.cxx:
     # Needed for extern type definitions at linking time
     - enummaps.hxx
+    xmloff/source/draw/ximppage.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/draw/ximpshow.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/draw/ximpshap.cxx:
+    # Complete type is needed
+    - com/sun/star/graphic/XGraphic.hpp
+    xmloff/source/draw/ximpstyl.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/forms/formlayerimport.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    xmloff/source/forms/gridcolumnproptranslator.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    xmloff/source/forms/layerexport.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/forms/officeforms.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/style/PageMasterImportContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    # Needed for extern variable
+    - xmloff/XMLTextMasterPageContext.hxx
+    xmloff/source/style/PageMasterImportPropMapper.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/style/XMLRtlGutterPropertyHandler.cxx:
+    # without this a static assertion fails in elsa.h
+    - frozen/bits/defines.h
+    xmloff/source/style/XMLFontAutoStylePool.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/style/XMLPageExport.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/style/prstylei.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/style/styleexp.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/style/xmlnume.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/style/xmlstyle.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLAutoTextContainerEventImport.cxx:
+    # Complete type is needed
+    - com/sun/star/container/XNameReplace.hpp
+    xmloff/source/text/XMLAutoMarkFileContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/table/XMLTableExport.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/table/XMLTableImport.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLAutoTextEventExport.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    xmloff/source/text/XMLChangedRegionImportContext.cxx:
+    # Actually used
+    - com/sun/star/text/XTextCursor.hpp
+    xmloff/source/text/XMLFootnoteConfigurationImportContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLFootnoteImportContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLIndexBibliographyConfigurationContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLIndexBibliographySourceContext.cxx:
+    # Complete type is needed
+    - com/sun/star/beans/XPropertySet.hpp
+    xmloff/source/text/XMLIndexIllustrationSourceContext.cxx:
+    # Complete type is needed
+    - com/sun/star/beans/XPropertySet.hpp
+    xmloff/source/text/XMLIndexTOCContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLLineNumberingExport.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLPropertyBackpatcher.cxx:
+    # Complete type is needed
+    - com/sun/star/beans/XPropertySet.hpp
+    xmloff/source/text/XMLLineNumberingImportContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLRedlineExport.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/text/XText.hpp
+    - com/sun/star/text/XTextContent.hpp
+    - com/sun/star/text/XTextSection.hpp
+    xmloff/source/text/XMLSectionExport.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/beans/PropertyValue.hpp
+    xmloff/source/text/XMLSectionImportContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLTextColumnsContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLTextFrameContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/text/TextContentAnchorType.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    xmloff/source/text/XMLTextListAutoStylePool.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLTextMarkImportContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLTextMasterPageContext.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/XMLTextNumRuleInfo.cxx:
+    # Actually needed
+    - com/sun/star/text/XTextContent.hpp
+    xmloff/source/text/XMLTextShapeImportHelper.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtexppr.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtflde.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtftne.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtfldi.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtparai.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtstyle.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtparae.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtstyli.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
+    xmloff/source/text/txtvfldi.cxx:
+    # Complete type is needed
+    - com/sun/star/frame/XModel.hpp
     xmloff/source/meta/MetaExportComponent.cxx:
     # Needed for direct member access
     - com/sun/star/frame/XModel.hpp
