@@ -163,4 +163,33 @@ CPPUNIT_TEST_FIXTURE(SolverTest, tdf156815)
     CPPUNIT_ASSERT_EQUAL(OUString("$NewName.$B$2"), aConstraints[0].aRightStr);
 }
 
+// Tests if settings for the DEPS and SCO solvers are kept in the file
+CPPUNIT_TEST_FIXTURE(SolverTest, tdf158735)
+{
+    createScDoc("ods/tdf158735.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Test the non-default values of the DEPS model
+    ScTable* pTable = pDoc->FetchTable(0);
+    std::shared_ptr<sc::SolverSettings> pSettings = pTable->GetSolverSettings();
+    CPPUNIT_ASSERT(pSettings);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.comp.Calc.NLPSolver.DEPSSolverImpl"),
+                         pSettings->GetParameter(SP_LO_ENGINE));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.45"), pSettings->GetParameter(SP_AGENT_SWITCH_RATE));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.85"), pSettings->GetParameter(SP_CROSSOVER_PROB));
+    CPPUNIT_ASSERT_EQUAL(OUString("1500"), pSettings->GetParameter(SP_LEARNING_CYCLES));
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), pSettings->GetParameter(SP_ENHANCED_STATUS));
+
+    // Test the non-default values of the SCO model
+    pTable = pDoc->FetchTable(1);
+    pSettings = pTable->GetSolverSettings();
+    CPPUNIT_ASSERT(pSettings);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.comp.Calc.NLPSolver.SCOSolverImpl"),
+                         pSettings->GetParameter(SP_LO_ENGINE));
+    CPPUNIT_ASSERT_EQUAL(OUString("180"), pSettings->GetParameter(SP_LIBRARY_SIZE));
+    CPPUNIT_ASSERT_EQUAL(OUString("0.00055"), pSettings->GetParameter(SP_STAGNATION_TOLERANCE));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pSettings->GetParameter(SP_RND_STARTING_POINT));
+    CPPUNIT_ASSERT_EQUAL(OUString("80"), pSettings->GetParameter(SP_STAGNATION_LIMIT));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
