@@ -58,7 +58,9 @@ OUString LabelItemWindow::get_label() const { return m_xLabel->get_label(); }
 
 void LabelItemWindow::dispose()
 {
+    m_xImage.reset();
     m_xLabel.reset();
+    m_xBox.reset();
     InterimItemWindow::dispose();
 }
 
