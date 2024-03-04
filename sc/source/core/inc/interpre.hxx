@@ -34,6 +34,7 @@
 
 #include <map>
 #include <memory>
+#include <random>
 #include <vector>
 #include <limits>
 #include <ostream>
@@ -180,6 +181,7 @@ private:
 
     ScCalcConfig maCalcConfig;
     formula::FormulaTokenIterator aCode;
+    std::optional<std::mt19937> oRNG;
     ScAddress   aPos;
     ScTokenArray* pArr;
     ScInterpreterContext& mrContext;
@@ -497,6 +499,8 @@ private:
     // Returns true if last jump was executed and result matrix pushed.
     bool JumpMatrix( short nStackLevel );
 
+    std::mt19937& GetRNG();
+
     double Compare( ScQueryOp eOp );
     /** @param pOptions
             NULL means case sensitivity document option is to be used!
@@ -521,7 +525,7 @@ private:
     void ScPi();
     void ScRandom();
     void ScRandbetween();
-    void ScRandomImpl( const std::function<double( double fFirst, double fLast )>& RandomFunc,
+    void ScRandomImpl( const std::function<double( std::mt19937& rRng, double fFirst, double fLast )>& RandomFunc,
             double fFirst, double fLast );
     void ScTrue();
     void ScFalse();
