@@ -117,20 +117,20 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     {
         case EXC_BIFF2:
             mpnColorTable = spnDefColorTable2;
-            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable2 );
+            mnTableSize = std::size( spnDefColorTable2 );
         break;
         case EXC_BIFF3:
         case EXC_BIFF4:
             mpnColorTable = spnDefColorTable3;
-            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable3 );
+            mnTableSize = std::size( spnDefColorTable3 );
         break;
         case EXC_BIFF5:
             mpnColorTable = spnDefColorTable5;
-            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable5 );
+            mnTableSize = std::size( spnDefColorTable5 );
         break;
         case EXC_BIFF8:
             mpnColorTable = spnDefColorTable8;
-            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable8 );
+            mnTableSize = std::size( spnDefColorTable8 );
         break;
         default:
             DBG_ERROR_BIFF();
