@@ -749,6 +749,119 @@ void SwUiWriterTest::testThreadedException()
     CPPUNIT_ASSERT(!bRes);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testPasteTableAtFlyAnchor)
+{
+    SwDoc * pDoc(createDoc());
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+    anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+    SfxItemSet flySet(pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{});
+    flySet.Put(anchor);
+    SwFlyFrameFormat const* pFly = dynamic_cast<SwFlyFrameFormat const*>(
+            pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true));
+    CPPUNIT_ASSERT(pFly != nullptr);
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+    pWrtShell->SelFlyGrabCursor();
+    pWrtShell->GetDrawView()->UnmarkAll();
+    CPPUNIT_ASSERT(pWrtShell->GetCurrFlyFrame() != nullptr);
+
+    // insert table in fly
+    SwInsertTableOptions tableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(tableOpt, 2, 2);
+
+    // select table
+    pWrtShell->SelAll();
+
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // move cursor back to body
+    pWrtShell->ClearMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    CPPUNIT_ASSERT(!pWrtShell->GetCurrFlyFrame());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInTable());
+    CPPUNIT_ASSERT(!pFly->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode());
+
+    pWrtShell->Undo();
+
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+    CPPUNIT_ASSERT(!pFly->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode());
+
+    // the problem was that Redo moved the fly anchor into the first table cell
+    pWrtShell->Redo();
+
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInTable());
+    CPPUNIT_ASSERT(!pFly->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode());
+
+    pWrtShell->Undo();
+
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
+    CPPUNIT_ASSERT(!pFly->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
+{
+    rtl::Reference<SwTransferable> pTransfer;
+    {
+        SwDoc * pDoc(createDoc("pagebreak-source.fodt"));
+        SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+        pWrtShell->SelAll();
+
+        pTransfer = new SwTransferable(*pWrtShell);
+        pTransfer->Copy();
+
+        //lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+
+        mxComponent->dispose();
+        mxComponent.clear();
+    }
+
+    SwDoc * pDoc(createDoc("pagebreak-target.fodt"));
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(getParagraph(1), "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
+
+    //paste not working in this branch? lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    TransferableDataHelper aHelper(pTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(getParagraph(1), "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetSections().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("SourceSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    // the problem was that there was a page break now
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(getParagraph(1), "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(getParagraph(1), "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetSections().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("SourceSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(getParagraph(1), "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 void SwUiWriterTest::testBookmarkCopy()
 {
     SwDoc * pDoc(createDoc());
@@ -4622,7 +4735,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
 
     // this would crash in 2 different ways
     lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -4638,7 +4751,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
 
     lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
@@ -4651,7 +4764,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
 }
 
 void SwUiWriterTest::testDde()

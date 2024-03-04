@@ -2286,12 +2286,6 @@ SwXText::copyText(
             // us, even if we have only a single paragraph.
             m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false);
         }
-        if (!pFirstNode)
-        {   // the node at rPos was split; get rid of the first empty one so
-            // that the pasted table is first
-            auto pDelCursor(m_pImpl->m_pDoc->CreateUnoCursor(SwPosition(SwNodeIndex(*GetStartNode(), 1))));
-            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pDelCursor);
-        }
     }
     else
     {

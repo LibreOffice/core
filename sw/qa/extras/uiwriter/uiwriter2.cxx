@@ -1217,7 +1217,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf141175)
     lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    // the paste now takes a different path, where it doesn't insert a neseted
+    // table but instead merges the source table cells into the target table cells
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
