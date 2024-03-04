@@ -8,6 +8,10 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/table/TableBorder2.hpp>
@@ -16,13 +20,20 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/configuration.hxx>
 #include <swdtflvr.hxx>
 #include <o3tl/string_view.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <swacorr.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -32,6 +43,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
 
@@ -394,6 +406,110 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\"', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, pTextDoc->getText()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(true, pBatch);
+    pBatch->commit();
+    comphelper::ScopeGuard g([] {
+        std::shared_ptr<comphelper::ConfigurationChanges> _pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(false, _pBatch);
+        _pBatch->commit();
+    });
+
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+
+    // force the AppName to enable DDE, it is not there for test runs
+    Application::SetAppName("soffice");
+
+    // temp copy for the file that will be used as a reference for DDE link
+    // this file includes a section named "Section1" with text inside
+    createTempCopy(u"tdf158375_dde_reference.fodt");
+
+    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer
+        = getSwDocShell()->getEmbeddedObjectContainer();
+    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+
+    // create a section with DDE link
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextSectionProps(
+        xFactory->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY);
+
+    uno::Sequence<OUString> aNames{ "DDECommandFile", "DDECommandType", "DDECommandElement",
+                                    "IsAutomaticUpdate", "IsProtected" };
+    uno::Sequence<uno::Any> aValues{ uno::Any(OUString{ "soffice" }), uno::Any(maTempFile.GetURL()),
+                                     uno::Any(OUString{ "Section1" }), uno::Any(true),
+                                     uno::Any(true) };
+    uno::Reference<beans::XMultiPropertySet> rMultiPropSet(xTextSectionProps, uno::UNO_QUERY);
+    rMultiPropSet->setPropertyValues(aNames, aValues);
+
+    // insert the TextSection with DDE link
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = xTextDocument->getText();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XParagraphCursor> xCursor(xText->createTextCursor(), uno::UNO_QUERY);
+    xText->insertTextContent(
+        xCursor, uno::Reference<text::XTextContent>(xTextSectionProps, uno::UNO_QUERY), false);
+
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(1), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
+
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false, nullptr);
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
+                                                      uno::UNO_QUERY);
+    uno::Reference<text::XTextSection> xSection(xSections->getByIndex(0), uno::UNO_QUERY);
+
+    // make sure there's no text in the section after UpdateAllLinks, since
+    // DisableActiveContent disables DDE links.
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xSection->getAnchor()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(true, pBatch);
+    pBatch->commit();
+    comphelper::ScopeGuard g([] {
+        std::shared_ptr<comphelper::ConfigurationChanges> _pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(false, _pBatch);
+        _pBatch->commit();
+    });
+
+    // Enable LOK mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
+    // finds out that the test runs headless.
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document with a Draw doc in it.
+    createSwDoc("ole-save-while-edit.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    selectShape(1);
+
+    // attempt to edit the OLE object.
+    pWrtShell->LaunchOLEObj();
+
+    // it shouldn't switch because the current configuration
+    // (DisableActiveContent) prohibits OLE objects changing to states other
+    // then LOADED
+    auto xShape = getShape(1);
+    uno::Reference<document::XEmbeddedObjectSupplier2> xEmbedSupplier(xShape, uno::UNO_QUERY);
+    auto xEmbeddedObj = xEmbedSupplier->getExtendedControlOverEmbeddedObject();
+    CPPUNIT_ASSERT_EQUAL(embed::EmbedStates::LOADED, xEmbeddedObj->getCurrentState());
+
+    // Dispose the document while LOK is still active to avoid leaks.
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 } // end of anonymous namespace
