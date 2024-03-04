@@ -3328,7 +3328,11 @@ void EnumType::addComprehensiveGetCppuTypeIncludes(
 void EnumType::dumpDeclaration(FileStream& o)
 {
     o << "\n#if defined LIBO_INTERNAL_ONLY\n";
+    o << "\n#if defined __GNUC__\n"; // gcc does not like visibility annotation on enum
+    o << "\nenum class " << id_ << "\n{\n";
+    o << "\n#else\n";
     o << "\nenum class SAL_DLLPUBLIC_RTTI " << id_ << "\n{\n";
+    o << "\n#endif\n";
     o << "\n#else\n";
     o << "\nenum SAL_DLLPUBLIC_RTTI " << id_ << "\n{\n";
     o << "\n#endif\n";

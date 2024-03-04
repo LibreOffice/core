@@ -220,7 +220,7 @@ typedef void *                   sal_Handle;
 #       define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("hidden")))
 #       define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
 #       define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("hidden")))
-#       define SAL_DLLPUBLIC_RTTI
+#       define SAL_DLLPUBLIC_RTTI     __attribute__ ((visibility("default")))
 #     else
 #       define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
 #       define SAL_JNI_EXPORT        __attribute__ ((visibility("default")))
@@ -234,7 +234,11 @@ typedef void *                   sal_Handle;
 #           define SAL_DLLPUBLIC_RTTI  __attribute__ ((visibility("default")))
 #         endif
 #       else
-#         define SAL_DLLPUBLIC_RTTI
+// GCC does not have currently have equivalent functionality to clang's type_visibility
+// but I have a feature request for that at https://gcc.gnu.org/bugzilla/show_bug.cgi?id=113958
+// Until that is implemented, just make the whole class visible, which is what I would need to
+// do anyhow if something wants to import the typeinfo symbol.
+#         define SAL_DLLPUBLIC_RTTI  __attribute__ ((visibility("default")))
 #       endif
 #     endif
 #   else

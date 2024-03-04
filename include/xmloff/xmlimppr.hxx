@@ -39,7 +39,11 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace com::sun::star::xml::sax { class XAttributeList; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
+#if defined __GNUC__ // gcc does not like visibility annotation on enum
+namespace com::sun::star::drawing { enum class FillStyle; }
+#else
 namespace com::sun::star::drawing { enum class SAL_DLLPUBLIC_RTTI FillStyle; }
+#endif
 
 struct XMLPropertyState;
 class XMLPropertySetMapper;

@@ -1197,7 +1197,8 @@ SAL_DLLPUBLIC double SAL_CALL rtl_ustr_toDouble(
 /** @cond INTERNAL */
 /** The implementation of a Unicode string.
 */
-typedef struct SAL_DLLPUBLIC_RTTI _rtl_uString
+struct SAL_DLLPUBLIC_RTTI _rtl_uString;
+typedef struct _rtl_uString
 {
     oslInterlockedCount refCount; /* opaque */
     sal_Int32           length;
