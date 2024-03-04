@@ -112,7 +112,7 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
             if( pGraphicObj->GetGraphicType() == GraphicType::Bitmap )
             {
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, pGraphicObj->GetGraphicObject(),
-                    [this, pView, pGraphicObj, pObj] (GraphicObject aFilterObj) -> void
+                    [pView, pGraphicObj, pObj] (GraphicObject aFilterObj) -> void
                     {
                         if( SdrPageView* pPageView = pView->GetSdrPageView() )
                         {
@@ -123,10 +123,11 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
                             pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj.get() );
                             pView->EndUndo();
                         }
-                        Invalidate();
                     });
+                return;
             }
     }
+    Invalidate();
 }
 
 void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )

@@ -124,10 +124,11 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
                             pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj.get() );
                             pView->EndUndo();
                         }
-                        Invalidate();
                     });
+                return;
             }
     }
+    Invalidate();
 }
 
 } // end of namespace sd
