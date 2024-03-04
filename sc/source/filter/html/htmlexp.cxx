@@ -1172,6 +1172,15 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
                 }
             }
         }
+
+        if (aCell.getType() == CELLTYPE_FORMULA)
+        {
+            // If it's a formula, then also emit that, grammar is R1C1 reference style.
+            OUString aFormula = aCell.getFormula()->GetFormula(
+                    formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+            aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_DSformula "=\""
+                    + HTMLOutFuncs::ConvertStringToHTML(aFormula) + "\"");
+        }
     }
     else
     {
