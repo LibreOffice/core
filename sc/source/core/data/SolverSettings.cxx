@@ -11,6 +11,7 @@
 #include <global.hxx>
 #include <table.hxx>
 #include <docsh.hxx>
+#include <rtl/math.hxx>
 #include <solverutil.hxx>
 #include <unotools/charclass.hxx>
 #include <SolverSettings.hxx>
@@ -73,6 +74,28 @@ void SolverSettings::Initialize()
     ReadParamValue(SP_LIMIT_BBDEPTH, m_sLimitBBDepth);
     ReadParamValue(SP_TIMEOUT, m_sTimeout);
     ReadParamValue(SP_ALGORITHM, m_sAlgorithm);
+    // Engine options common for DEPS and SCO
+    ReadParamValue(SP_SWARM_SIZE, m_sSwarmSize);
+    ReadParamValue(SP_LEARNING_CYCLES, m_sLearningCycles);
+    ReadParamValue(SP_GUESS_VARIABLE_RANGE, m_sGuessVariableRange);
+    ReadDoubleParamValue(SP_VARIABLE_RANGE_THRESHOLD, m_sVariableRangeThreshold);
+    ReadParamValue(SP_ACR_COMPARATOR, m_sUseACRComparator);
+    ReadParamValue(SP_RND_STARTING_POINT, m_sUseRandomStartingPoint);
+    ReadParamValue(SP_STRONGER_PRNG, m_sUseStrongerPRNG);
+    ReadParamValue(SP_STAGNATION_LIMIT, m_sStagnationLimit);
+    ReadDoubleParamValue(SP_STAGNATION_TOLERANCE, m_sTolerance);
+    ReadParamValue(SP_ENHANCED_STATUS, m_sEnhancedSolverStatus);
+    // DEPS Options
+    ReadDoubleParamValue(SP_AGENT_SWITCH_RATE, m_sAgentSwitchRate);
+    ReadDoubleParamValue(SP_SCALING_MIN, m_sScalingFactorMin);
+    ReadDoubleParamValue(SP_SCALING_MAX, m_sScalingFactorMax);
+    ReadDoubleParamValue(SP_CROSSOVER_PROB, m_sCrossoverProbability);
+    ReadDoubleParamValue(SP_COGNITIVE_CONST, m_sCognitiveConstant);
+    ReadDoubleParamValue(SP_SOCIAL_CONST, m_sSocialConstant);
+    ReadDoubleParamValue(SP_CONSTRICTION_COEFF, m_sConstrictionCoeff);
+    ReadDoubleParamValue(SP_MUTATION_PROB, m_sMutationProbability);
+    // SCO Options
+    ReadParamValue(SP_LIBRARY_SIZE, m_sLibrarySize);
 }
 
 // Returns the current value of the parameter in the object as a string
@@ -118,6 +141,63 @@ OUString SolverSettings::GetParameter(SolverParameter eParam)
             break;
         case SP_ALGORITHM:
             return m_sAlgorithm;
+            break;
+        case SP_SWARM_SIZE:
+            return m_sSwarmSize;
+            break;
+        case SP_LEARNING_CYCLES:
+            return m_sLearningCycles;
+            break;
+        case SP_GUESS_VARIABLE_RANGE:
+            return m_sGuessVariableRange;
+            break;
+        case SP_VARIABLE_RANGE_THRESHOLD:
+            return m_sVariableRangeThreshold;
+            break;
+        case SP_ACR_COMPARATOR:
+            return m_sUseACRComparator;
+            break;
+        case SP_RND_STARTING_POINT:
+            return m_sUseRandomStartingPoint;
+            break;
+        case SP_STRONGER_PRNG:
+            return m_sUseStrongerPRNG;
+            break;
+        case SP_STAGNATION_LIMIT:
+            return m_sStagnationLimit;
+            break;
+        case SP_STAGNATION_TOLERANCE:
+            return m_sTolerance;
+            break;
+        case SP_ENHANCED_STATUS:
+            return m_sEnhancedSolverStatus;
+            break;
+        case SP_AGENT_SWITCH_RATE:
+            return m_sAgentSwitchRate;
+            break;
+        case SP_SCALING_MIN:
+            return m_sScalingFactorMin;
+            break;
+        case SP_SCALING_MAX:
+            return m_sScalingFactorMax;
+            break;
+        case SP_CROSSOVER_PROB:
+            return m_sCrossoverProbability;
+            break;
+        case SP_COGNITIVE_CONST:
+            return m_sCognitiveConstant;
+            break;
+        case SP_SOCIAL_CONST:
+            return m_sSocialConstant;
+            break;
+        case SP_CONSTRICTION_COEFF:
+            return m_sConstrictionCoeff;
+            break;
+        case SP_MUTATION_PROB:
+            return m_sMutationProbability;
+            break;
+        case SP_LIBRARY_SIZE:
+            return m_sLibrarySize;
             break;
         default:
             return "";
@@ -188,6 +268,75 @@ void SolverSettings::SetParameter(SolverParameter eParam, OUString sValue)
                 m_sAlgorithm = sValue;
         }
         break;
+        case SP_SWARM_SIZE:
+            m_sSwarmSize = sValue;
+            break;
+        case SP_LEARNING_CYCLES:
+            m_sLearningCycles = sValue;
+            break;
+        case SP_GUESS_VARIABLE_RANGE:
+            m_sGuessVariableRange = sValue;
+            break;
+        case SP_VARIABLE_RANGE_THRESHOLD:
+            m_sVariableRangeThreshold = sValue;
+            break;
+        case SP_ACR_COMPARATOR:
+        {
+            if (sValue == "0" || sValue == "1")
+                m_sUseACRComparator = sValue;
+        }
+        break;
+        case SP_RND_STARTING_POINT:
+        {
+            if (sValue == "0" || sValue == "1")
+                m_sUseRandomStartingPoint = sValue;
+        }
+        break;
+        case SP_STRONGER_PRNG:
+        {
+            if (sValue == "0" || sValue == "1")
+                m_sUseStrongerPRNG = sValue;
+        }
+        break;
+        case SP_STAGNATION_LIMIT:
+            m_sStagnationLimit = sValue;
+            break;
+        case SP_STAGNATION_TOLERANCE:
+            m_sTolerance = sValue;
+            break;
+        case SP_ENHANCED_STATUS:
+        {
+            if (sValue == "0" || sValue == "1")
+                m_sEnhancedSolverStatus = sValue;
+        }
+        break;
+        case SP_AGENT_SWITCH_RATE:
+            m_sAgentSwitchRate = sValue;
+            break;
+        case SP_SCALING_MIN:
+            m_sScalingFactorMin = sValue;
+            break;
+        case SP_SCALING_MAX:
+            m_sScalingFactorMax = sValue;
+            break;
+        case SP_CROSSOVER_PROB:
+            m_sCrossoverProbability = sValue;
+            break;
+        case SP_COGNITIVE_CONST:
+            m_sCognitiveConstant = sValue;
+            break;
+        case SP_SOCIAL_CONST:
+            m_sSocialConstant = sValue;
+            break;
+        case SP_CONSTRICTION_COEFF:
+            m_sConstrictionCoeff = sValue;
+            break;
+        case SP_MUTATION_PROB:
+            m_sMutationProbability = sValue;
+            break;
+        case SP_LIBRARY_SIZE:
+            m_sLibrarySize = sValue;
+            break;
         default:
             break;
     }
@@ -321,12 +470,35 @@ void SolverSettings::SaveSolverSettings()
     sal_Int32 nConstrCount = m_aConstraints.size();
     WriteParamValue(SP_CONSTR_COUNT, OUString::number(nConstrCount));
 
+    // Solver engine options
     WriteParamValue(SP_INTEGER, m_sInteger);
     WriteParamValue(SP_NON_NEGATIVE, m_sNonNegative);
     WriteParamValue(SP_EPSILON_LEVEL, m_sEpsilonLevel);
     WriteParamValue(SP_LIMIT_BBDEPTH, m_sLimitBBDepth);
     WriteParamValue(SP_TIMEOUT, m_sTimeout);
     WriteParamValue(SP_ALGORITHM, m_sAlgorithm);
+    // Engine options common for DEPS and SCO
+    WriteParamValue(SP_SWARM_SIZE, m_sSwarmSize);
+    WriteParamValue(SP_LEARNING_CYCLES, m_sLearningCycles);
+    WriteParamValue(SP_GUESS_VARIABLE_RANGE, m_sGuessVariableRange);
+    WriteDoubleParamValue(SP_VARIABLE_RANGE_THRESHOLD, m_sVariableRangeThreshold);
+    WriteParamValue(SP_ACR_COMPARATOR, m_sUseACRComparator);
+    WriteParamValue(SP_RND_STARTING_POINT, m_sUseRandomStartingPoint);
+    WriteParamValue(SP_STRONGER_PRNG, m_sUseStrongerPRNG);
+    WriteParamValue(SP_STAGNATION_LIMIT, m_sStagnationLimit);
+    WriteDoubleParamValue(SP_STAGNATION_TOLERANCE, m_sTolerance);
+    WriteParamValue(SP_ENHANCED_STATUS, m_sEnhancedSolverStatus);
+    // DEPS Options
+    WriteDoubleParamValue(SP_AGENT_SWITCH_RATE, m_sAgentSwitchRate);
+    WriteDoubleParamValue(SP_SCALING_MIN, m_sScalingFactorMin);
+    WriteDoubleParamValue(SP_SCALING_MAX, m_sScalingFactorMax);
+    WriteDoubleParamValue(SP_CROSSOVER_PROB, m_sCrossoverProbability);
+    WriteDoubleParamValue(SP_COGNITIVE_CONST, m_sCognitiveConstant);
+    WriteDoubleParamValue(SP_SOCIAL_CONST, m_sSocialConstant);
+    WriteDoubleParamValue(SP_CONSTRICTION_COEFF, m_sConstrictionCoeff);
+    WriteDoubleParamValue(SP_MUTATION_PROB, m_sMutationProbability);
+    // SCO Options
+    WriteParamValue(SP_LIBRARY_SIZE, m_sLibrarySize);
 
     if (m_pDocShell)
         m_pDocShell->SetDocumentModified();
@@ -354,6 +526,26 @@ bool SolverSettings::ReadParamValue(SolverParameter eParam, OUString& rValue, bo
     return false;
 }
 
+// Reads a parameter value of type 'double' from the named range and into rValue
+bool SolverSettings::ReadDoubleParamValue(SolverParameter eParam, OUString& rValue)
+{
+    const auto iter = m_mNamedRanges.find(eParam);
+    assert(iter != m_mNamedRanges.end());
+    OUString sRange = iter->second;
+    ScRangeData* pRangeData
+        = m_pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(sRange));
+    if (pRangeData)
+    {
+        OUString sLocalizedValue = pRangeData->GetSymbol();
+        double fValue = rtl::math::stringToDouble(sLocalizedValue,
+                                                  ScGlobal::getLocaleData().getNumDecimalSep()[0],
+                                                  ScGlobal::getLocaleData().getNumThousandSep()[0]);
+        rValue = OUString::number(fValue);
+        return true;
+    }
+    return false;
+}
+
 /* Writes a parameter value to the file as a named range.
  * Argument bQuoted indicates whether the value should be enclosed with quotes or not (used
  * for string expressions that must be enclosed with quotes)
@@ -372,6 +564,22 @@ void SolverSettings::WriteParamValue(SolverParameter eParam, OUString sValue, bo
     assert(iter != m_mNamedRanges.end());
     OUString sRange = iter->second;
     ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sValue);
+    m_pRangeName->insert(pNewEntry);
+}
+
+// Writes a parameter value of type 'double' to the file as a named range
+// The argument 'sValue' uses dot as decimal separator and needs to be localized before
+// being written to the file
+void SolverSettings::WriteDoubleParamValue(SolverParameter eParam, std::u16string_view sValue)
+{
+    const auto iter = m_mNamedRanges.find(eParam);
+    assert(iter != m_mNamedRanges.end());
+    OUString sRange = iter->second;
+    double fValue = rtl::math::stringToDouble(sValue, '.', ',');
+    OUString sLocalizedValue = rtl::math::doubleToUString(
+        fValue, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+        ScGlobal::getLocaleData().getNumDecimalSep()[0], true);
+    ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sLocalizedValue);
     m_pRangeName->insert(pNewEntry);
 }
 
@@ -396,6 +604,12 @@ void SolverSettings::GetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
             {
                 css::uno::Any nValue(sParamValue.toInt32());
                 pParamValues[i] = css::beans::PropertyValue(sLOParamName, -1, nValue,
+                                                            css::beans::PropertyState_DIRECT_VALUE);
+            }
+            if (sParamType == "double")
+            {
+                css::uno::Any fValue(sParamValue.toDouble());
+                pParamValues[i] = css::beans::PropertyValue(sLOParamName, -1, fValue,
                                                             css::beans::PropertyState_DIRECT_VALUE);
             }
             if (sParamType == "bool")
@@ -437,6 +651,12 @@ void SolverSettings::SetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
                 sal_Int32 nValue = 0;
                 aProp.Value >>= nValue;
                 SetParameter(eParamId, OUString::number(nValue));
+            }
+            if (sParamType == "double")
+            {
+                double fValue = 0;
+                aProp.Value >>= fValue;
+                SetParameter(eParamId, OUString::number(fValue));
             }
             if (sParamType == "bool")
             {
