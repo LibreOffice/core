@@ -79,7 +79,6 @@ public class SampleHyphenator extends ComponentBase implements
             {
                 "IsIgnoreControlCharacters",
                 "IsUseDictionaryList",
-                "IsGermanPreReform",
                 "HyphMinLeading",
                 "HyphMinTrailing",
                 "HyphMinWordLength"
@@ -225,7 +224,6 @@ public class SampleHyphenator extends ComponentBase implements
         //! them here.
         boolean bIsIgnoreControlCharacters  = GetValueToUse( "IsIgnoreControlCharacters", true, aProperties );
         boolean bIsUseDictionaryList        = GetValueToUse( "IsUseDictionaryList", true, aProperties );
-        boolean bIsGermanPreReform          = GetValueToUse( "IsGermanPreReform", false, aProperties );
         short   nHyphMinLeading             = GetValueToUse( "HyphMinLeading", (short)2, aProperties );
         short   nHyphMinTrailing            = GetValueToUse( "HyphMinTrailing", (short)2, aProperties );
         short   nHyphMinWordLen             = GetValueToUse( "HyphMinWordLength", (short)5, aProperties );
@@ -242,16 +240,7 @@ public class SampleHyphenator extends ComponentBase implements
             //!! implementation of your hyphenator
             if (IsEqual( aLocale, new Locale( "de", "DE", "" ) ) )
             {
-                if (bIsGermanPreReform && aWord.equals( "Schiffahrt" ))
-                {
-                    // Note: there is only one position where the word
-                    // can be hyphenated...
-
-                    aHyphenatedWord = "Schifffahrt";
-                    nHyphenationPos = 4;
-                    nHyphenPos = 5;
-                }
-                else if (!bIsGermanPreReform && aWord.equals( "Schifffahrt" ))
+                if (aWord.equals( "Schifffahrt" ))
                 {
                     nHyphenationPos = nHyphenPos = 5;
                 }
@@ -306,7 +295,6 @@ public class SampleHyphenator extends ComponentBase implements
         //! them here.
         boolean bIsIgnoreControlCharacters  = GetValueToUse( "IsIgnoreControlCharacters", true, aProperties );
         boolean bIsUseDictionaryList        = GetValueToUse( "IsUseDictionaryList", true, aProperties );
-        boolean bIsGermanPreReform          = GetValueToUse( "IsGermanPreReform", false, aProperties );
         short   nHyphMinLeading             = GetValueToUse( "HyphMinLeading", (short)2, aProperties );
         short   nHyphMinTrailing            = GetValueToUse( "HyphMinTrailing", (short)2, aProperties );
         short   nHyphMinWordLen             = GetValueToUse( "HyphMinWordLength", (short)5, aProperties );
@@ -317,15 +305,6 @@ public class SampleHyphenator extends ComponentBase implements
         //!! implementation of your hyphenator
         if ( IsEqual( aLocale, new Locale( "de", "DE", "" ) ) )
         {
-            // there is an alternative spelling only when the
-            // word is hyphenated between the "ff" and old german spelling
-            // is set.
-            if (aWord.equals( "Schiffahrt" ) &&
-                bIsGermanPreReform && nIndex == 4)
-            {
-                xRes = new XHyphenatedWord_impl(aWord, aLocale,
-                              (short)4, "Schifffahrt", (short)5 );
-            }
         }
         else if ( IsEqual( aLocale, new Locale( "en", "US", "" ) ) )
         {
@@ -355,7 +334,6 @@ public class SampleHyphenator extends ComponentBase implements
         //! them here.
         boolean bIsIgnoreControlCharacters  = GetValueToUse( "IsIgnoreControlCharacters", true, aProperties );
         boolean bIsUseDictionaryList        = GetValueToUse( "IsUseDictionaryList", true, aProperties );
-        boolean bIsGermanPreReform          = GetValueToUse( "IsGermanPreReform", false, aProperties );
         short   nHyphMinLeading             = GetValueToUse( "HyphMinLeading", (short)2, aProperties );
         short   nHyphMinTrailing            = GetValueToUse( "HyphMinTrailing", (short)2, aProperties );
         short   nHyphMinWordLen             = GetValueToUse( "HyphMinWordLength", (short)5, aProperties );
@@ -366,13 +344,7 @@ public class SampleHyphenator extends ComponentBase implements
         //!! implementation of your hyphenator
         if ( IsEqual( aLocale, new Locale( "de", "DE", "" ) ) )
         {
-            if (bIsGermanPreReform && aWord.equals( "Schiffahrt" ))
-            {
-                short aPos[] = new short[] { (short) 4 };
-                xRes = new XPossibleHyphens_impl(aWord, aLocale,
-                            "Schiff=fahrt", aPos);
-            }
-            else if (!bIsGermanPreReform && aWord.equals( "Schifffahrt" ))
+            if (aWord.equals( "Schifffahrt" ))
             {
                 short aPos[] = new short[] { (short) 5 };
                 xRes = new XPossibleHyphens_impl(aWord, aLocale,

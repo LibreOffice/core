@@ -79,7 +79,6 @@ public class SampleSpellChecker extends ComponentBase implements
             {
                 "IsIgnoreControlCharacters",
                 "IsUseDictionaryList",
-                "IsGermanPreReform",
                 "IsSpellUpperCase",
                 "IsSpellWithDigits",
             };
@@ -161,12 +160,9 @@ public class SampleSpellChecker extends ComponentBase implements
 
         //!! This code needs to be replaced by code calling the actual
         //!! implementation of your spellchecker
-        boolean bIsGermanPreReform      = GetValueToUse( "IsGermanPreReform", false, aProperties );
         if (IsEqual( aLocale, new Locale( "de", "DE", "" ) ))
         {
-            if (bIsGermanPreReform && aWord.equals( "Schifffahrt" ))
-                nRes = SpellFailure.SPELLING_ERROR;
-            else if (!bIsGermanPreReform && aWord.equals( "Schiffahrt" ))
+            if (aWord.equals( "Schiffahrt" ))
                 nRes = SpellFailure.SPELLING_ERROR;
         }
         else if (IsEqual( aLocale, new Locale( "en", "US", "" ) ))
@@ -204,7 +200,6 @@ public class SampleSpellChecker extends ComponentBase implements
         //! The values for 'IsIgnoreControlCharacters' and 'IsUseDictionaryList'
         //! are handled by the dispatcher! Thus there is no need to access
         //! them here.
-        boolean bIsGermanPreReform      = GetValueToUse( "IsGermanPreReform", false, aProperties );
         boolean bIsSpellWithDigits      = GetValueToUse( "IsSpellWithDigits", false, aProperties );
         boolean bIsSpellUpperCase       = GetValueToUse( "IsSpellUpperCase", false, aProperties );
 
@@ -212,12 +207,7 @@ public class SampleSpellChecker extends ComponentBase implements
         //!! implementation of your spellchecker
         if (IsEqual( aLocale, new Locale( "de", "DE", "" ) ))
         {
-            if (bIsGermanPreReform && aWord.equals( "Schifffahrt" ))
-            {
-                nType = SpellFailure.SPELLING_ERROR;
-                aProposals = new String[]{ "Schiffahrt" };
-            }
-            else if (!bIsGermanPreReform && aWord.equals( "Schiffahrt" ))
+            if (aWord.equals( "Schiffahrt" ))
             {
                 nType = SpellFailure.SPELLING_ERROR;
                 aProposals = new String[]{ "Schifffahrt" };
@@ -298,7 +288,6 @@ public class SampleSpellChecker extends ComponentBase implements
         //! The values for 'IsIgnoreControlCharacters' and 'IsUseDictionaryList'
         //! are handled by the dispatcher! Thus there is no need to access
         //! them here.
-        boolean bIsGermanPreReform      = GetValueToUse( "IsGermanPreReform", false, aProperties );
         boolean bIsSpellWithDigits      = GetValueToUse( "IsSpellWithDigits", false, aProperties );
         boolean bIsSpellUpperCase       = GetValueToUse( "IsSpellUpperCase", false, aProperties );
 

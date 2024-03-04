@@ -32,11 +32,6 @@ class Meaning :
     css::uno::Sequence< OUString >  aSyn;   // list of synonyms, may be empty.
     OUString         aTerm;
 
-#if 0
-        // this is for future use by a German thesaurus
-        sal_Bool                bIsGermanPreReform;
-#endif
-
     Meaning(const Meaning &) = delete;
     Meaning & operator = (const Meaning &) = delete;
 

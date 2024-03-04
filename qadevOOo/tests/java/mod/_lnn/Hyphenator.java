@@ -24,9 +24,7 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 /**
@@ -77,10 +75,6 @@ public class Hyphenator extends TestCase {
         XMultiServiceFactory xMSF = Param.getMSF();
         XInterface oObj = (XInterface)xMSF.createInstance
             ("com.sun.star.linguistic2.Hyphenator");
-        Object LP = xMSF.createInstance
-            ("com.sun.star.linguistic2.LinguProperties");
-        XPropertySet LProps = UnoRuntime.queryInterface(XPropertySet.class,LP);
-        LProps.setPropertyValue("IsGermanPreReform",Boolean.TRUE);
 
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);

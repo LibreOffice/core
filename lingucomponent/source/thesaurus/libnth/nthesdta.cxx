@@ -37,10 +37,6 @@ Meaning::Meaning(OUString _aTerm) :
     aSyn        ( Sequence< OUString >(1) ),
     aTerm       (std::move(_aTerm))
 {
-#if 0
-    // this is for future use by a german thesaurus when one exists
-    bIsGermanPreReform = rHelper.IsGermanPreReform;
-#endif
 }
 
 Meaning::~Meaning()

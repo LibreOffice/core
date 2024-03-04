@@ -174,7 +174,7 @@ public class LinguisticExamples
         // in the LinguProperties property set need to be supllied.
         PropertyValue[] aProps = new PropertyValue[1];
         aProps[0] = new PropertyValue();
-        aProps[0].Name  = "IsGermanPreReform";
+        aProps[0].Name  = "IsIgnoreControlCharacters";
         aProps[0].Value = Boolean.TRUE;
 
 
@@ -293,7 +293,7 @@ public class LinguisticExamples
 
         // set a spellchecker and hyphenator property value to a defined state
         try {
-            aLinguProps.setPropertyValue("IsGermanPreReform", Boolean.TRUE);
+            aLinguProps.setPropertyValue("IsIgnoreControlCharacters", Boolean.TRUE);
         } catch (Exception e) {
         }
 
@@ -306,7 +306,7 @@ public class LinguisticExamples
         // event that eventually results in the listeners
         // 'processLinguServiceEvent' function being called
         try {
-            aLinguProps.setPropertyValue("IsGermanPreReform", Boolean.FALSE);
+            aLinguProps.setPropertyValue("IsIgnoreControlCharacters", Boolean.FALSE);
         } catch (Exception e) {
         }
 

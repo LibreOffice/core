@@ -155,8 +155,6 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetLinguProps()
                 ::cppu::UnoType<sal_Int16>::get(),    0, 0 },
         { UPN_HYPH_MIN_WORD_LENGTH,       UPH_HYPH_MIN_WORD_LENGTH,
                 ::cppu::UnoType<sal_Int16>::get(),    0, 0 },
-        { UPN_IS_GERMAN_PRE_REFORM,       UPH_IS_GERMAN_PRE_REFORM,       /*! deprecated !*/
-                cppu::UnoType<bool>::get(),            0, 0 },
         { UPN_IS_HYPH_AUTO,               UPH_IS_HYPH_AUTO,
                 cppu::UnoType<bool>::get(),            0, 0 },
         { UPN_IS_HYPH_SPECIAL,            UPH_IS_HYPH_SPECIAL,

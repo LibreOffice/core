@@ -162,7 +162,6 @@ sal_Bool SAL_CALL
 
 static const char *aSP[] =
 {
-    UPN_IS_GERMAN_PRE_REFORM,
     UPN_IS_IGNORE_CONTROL_CHARACTERS,
     UPN_IS_USE_DICTIONARY_LIST,
     UPN_IS_SPELL_UPPER_CASE,
@@ -188,12 +187,7 @@ PropertyHelper_Spell::PropertyHelper_Spell(
             sal_Bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
-            if (OUString( UPN_IS_GERMAN_PRE_REFORM ) == pPropName[i])
-            {
-                pbVal    = &bIsGermanPreReform;
-                pbResVal = &bResIsGermanPreReform;
-            }
-            else if (OUString( UPN_IS_IGNORE_CONTROL_CHARACTERS ) == pPropName[i])
+            if (OUString( UPN_IS_IGNORE_CONTROL_CHARACTERS ) == pPropName[i])
             {
                 pbVal    = &bIsIgnoreControlCharacters;
                 pbResVal = &bResIsIgnoreControlCharacters;
@@ -246,7 +240,6 @@ PropertyHelper_Spell::~PropertyHelper_Spell()
 
 void PropertyHelper_Spell::SetDefault()
 {
-    bResIsGermanPreReform           = bIsGermanPreReform            = sal_False;
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = sal_True;
     bResIsUseDictionaryList         = bIsUseDictionaryList          = sal_True;
     bResIsSpellUpperCase            = bIsSpellUpperCase             = sal_False;
@@ -275,12 +268,6 @@ void SAL_CALL
             case UPH_IS_IGNORE_CONTROL_CHARACTERS :
             {
                 pbVal = &bIsIgnoreControlCharacters;
-                break;
-            }
-            case UPH_IS_GERMAN_PRE_REFORM         :
-            {
-                pbVal = &bIsGermanPreReform;
-                bSCWA = bSWWA = sal_True;
                 break;
             }
             case UPH_IS_USE_DICTIONARY_LIST       :
@@ -348,7 +335,6 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
 {
     // set return value to default value unless there is an
     // explicitly supplied temporary value
-    bResIsGermanPreReform           = bIsGermanPreReform;
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
     bResIsUseDictionaryList         = bIsUseDictionaryList;
     bResIsSpellUpperCase            = bIsSpellUpperCase;
@@ -366,7 +352,6 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
             sal_Bool *pbResVal = NULL;
             switch (pVal[i].Handle)
             {
-                case UPH_IS_GERMAN_PRE_REFORM         : pbResVal = &bResIsGermanPreReform; break;
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS : pbResVal = &bResIsIgnoreControlCharacters; break;
                 case UPH_IS_USE_DICTIONARY_LIST       : pbResVal = &bResIsUseDictionaryList; break;
                 case UPH_IS_SPELL_UPPER_CASE          : pbResVal = &bResIsSpellUpperCase; break;

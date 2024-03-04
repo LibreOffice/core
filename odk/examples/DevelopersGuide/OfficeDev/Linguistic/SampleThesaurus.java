@@ -73,7 +73,6 @@ public class SampleThesaurus extends ComponentBase implements
             {
                 "IsIgnoreControlCharacters",
                 "IsUseDictionaryList",
-                "IsGermanPreReform",
             };
 
         // this service has no listeners thus we may use the base class,
@@ -179,7 +178,6 @@ public class SampleThesaurus extends ComponentBase implements
         //! The values for 'IsIgnoreControlCharacters' and 'IsUseDictionaryList'
         //! are handled by the dispatcher! Thus there is no need to access
         //! them here.
-        boolean bIsGermanPreReform      = GetValueToUse( "IsGermanPreReform", false, aProperties );
 
         XMeaning[] aRes = null;
 

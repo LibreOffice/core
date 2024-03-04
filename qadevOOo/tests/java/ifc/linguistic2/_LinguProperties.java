@@ -24,7 +24,6 @@ import lib.MultiPropertyTest;
 * Testing <code>com.sun.star.linguistic2.LinguProperties</code>
 * service properties:
 * <ul>
-*   <li><code>'IsGermanPreReform'</code></li>
 *   <li><code>'IsUseDictionaryList'</code></li>
 *   <li><code>'IsIgnoreControlCharacters'</code></li>
 *   <li><code>'IsSpellUpperCase'</code></li>

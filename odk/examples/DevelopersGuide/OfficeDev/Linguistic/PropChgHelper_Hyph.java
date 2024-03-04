@@ -61,7 +61,6 @@ public class PropChgHelper_Hyph extends PropChgHelper
                 // nothing to be done
             }
             else if (aEvt.PropertyName.equals( "IsUseDictionaryList" ) ||
-                     aEvt.PropertyName.equals( "IsGermanPreReform" ) ||
                      aEvt.PropertyName.equals( "HyphMinLeading" ) ||
                      aEvt.PropertyName.equals( "HyphMinTrailing" ) ||
                      aEvt.PropertyName.equals( "HyphMinWordLength" ))
