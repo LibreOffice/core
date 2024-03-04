@@ -276,6 +276,32 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyFormattedNumber)
     assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-numberformat"_ostr,
                 "{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testCopyFormula)
+{
+    // Given a document with a formula in A3:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos1(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    pDoc->SetString(aCellPos1, "1000");
+    ScAddress aCellPos2(/*nColP=*/0, /*nRowP=*/1, /*nTabP=*/0);
+    pDoc->SetString(aCellPos2, "2000");
+    ScAddress aCellPos3(/*nColP=*/0, /*nRowP=*/2, /*nTabP=*/0);
+    pDoc->SetFormula(aCellPos3, "=SUM(A1:A2)", pDoc->GetGrammar());
+
+    // When copying those cells:
+    ScImportExport aExporter(*pDoc, ScRange(aCellPos1, aCellPos3));
+    SvMemoryStream aStream;
+    CPPUNIT_ASSERT(aExporter.ExportStream(aStream, OUString(), SotClipboardFormatId::HTML));
+
+    // Then make sure the formula is exported in A3:
+    aStream.Seek(0);
+    htmlDocUniquePtr pHtmlDoc = parseHtmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '(//td)[3]' no attribute 'data-sheets-formula' exist
+    // i.e. only the formula result was exported, not the formula.
+    assertXPath(pHtmlDoc, "(//td)[3]"_ostr, "data-sheets-formula"_ostr, "=SUM(R[-2]C:R[-1]C)");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
