@@ -118,6 +118,9 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
         SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = std::min<SCTAB>(nMaxTab, rRange.aEnd.Tab());
 
+        if (nTab1 < 0 || nTab2 < 0)
+            continue;
+
         if (!m_pDocument->ValidCol(nCol1)) nCol1 = m_pDocument->MaxCol();
         if (!m_pDocument->ValidRow(nRow1)) nRow1 = m_pDocument->MaxRow();
         if (!m_pDocument->ValidCol(nCol2)) nCol2 = m_pDocument->MaxCol();
