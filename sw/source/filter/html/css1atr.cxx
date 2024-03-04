@@ -3301,14 +3301,16 @@ SwHTMLWriter& OutCSS1_SvxBox( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 
     if( rHt.Which() == RES_CHRATR_BOX )
     {
+        constexpr std::string_view inline_block("inline-block");
         if( rWrt.m_bTagOn )
         {
             // Inline-block to make the line height changing correspond to the character border
-            rWrt.OutCSS1_PropertyAscii(sCSS1_P_display, "inline-block");
+            rWrt.OutCSS1_PropertyAscii(sCSS1_P_display, inline_block);
         }
         else
         {
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false );
+            if (!IgnorePropertyForReqIF(rWrt.mbReqIF, sCSS1_P_display, inline_block))
+                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false );
             return rWrt;
         }
     }

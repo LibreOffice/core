@@ -3032,6 +3032,27 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoBrClearForImageWrap)
         0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_Tdf160017_spanClosingOrder)
+{
+    // Given a document with a paragraph having explicit font color and character border properties:
+    createSwDoc("char_border_and_font_color.fodt");
+    // When exporting to reqif:
+    ExportToReqif();
+    // Without the fix, this would fail, because there was an extra closing </reqif-xhtml:span>
+    WrapReqifFromTempFile();
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160017_spanClosingOrder)
+{
+    // Given a document with a paragraph having explicit font color and character border properties:
+    createSwDoc("char_border_and_font_color.fodt");
+    // When exporting to HTML:
+    ExportToHTML();
+    // Parse it as XML (strict!)
+    // Without the fix, this would fail, because span and font elements closed in wrong order
+    CPPUNIT_ASSERT(parseXml(maTempFile));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
