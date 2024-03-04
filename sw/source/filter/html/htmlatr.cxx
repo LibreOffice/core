@@ -1056,7 +1056,7 @@ public:
 
     HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt, sal_Int32 nE );
 
-    const SfxPoolItem* GetItem() const { return m_pItem.get(); }
+    const SfxPoolItem& GetItem() const { return *m_pItem; }
 
     void SetStart(sal_Int32 nStt) { m_nStart = nStt; }
     sal_Int32 GetStart() const { return m_nStart; }
@@ -1073,7 +1073,7 @@ HTMLStartEndPos::HTMLStartEndPos(const SfxPoolItem& rItem, sal_Int32 nStt, sal_I
     , m_pItem(rItem.Clone())
 {}
 
-typedef std::vector<HTMLStartEndPos *> HTMLStartEndPositions;
+typedef std::map<sal_Int32, std::vector<HTMLStartEndPos*>> HTMLStartEndPositions;
 
 namespace {
 
@@ -1089,8 +1089,8 @@ enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // unsupported Attribute
 
 class HTMLEndPosLst
 {
-    HTMLStartEndPositions m_aStartLst; // list, sorted for start positions
-    HTMLStartEndPositions m_aEndLst; // list, sorted for end positions
+    HTMLStartEndPositions m_aStartLst; // list, each position's elements sorted by appearance order
+    HTMLStartEndPositions m_aEndLst; // list, no sort of elements in position
     std::deque<sal_Int32> m_aScriptChgLst; // positions where script changes
         // 0 is not contained in this list,
         // but the text length
@@ -1108,8 +1108,7 @@ class HTMLEndPosLst
 
     // Insert/remove a SttEndPos in/from the Start and End lists.
     // The end position is known.
-    void InsertItem_( HTMLStartEndPos *pPos, HTMLStartEndPositions::size_type nEndPos );
-    void RemoveItem_( HTMLStartEndPositions::size_type nEndPos );
+    void InsertItem_(HTMLStartEndPos* pPos);
 
     // determine the 'type' of the attribute
     HTMLOnOffState GetHTMLItemState( const SfxPoolItem& rItem );
@@ -1123,8 +1122,7 @@ class HTMLEndPosLst
                                           sal_Int32 nEndPos );
 
     // adapt the end of a split item
-    void FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
-                            HTMLStartEndPositions::size_type nStartPos );
+    void FixSplittedItem(HTMLStartEndPos* pPos, sal_Int32 nNewEnd);
 
     // insert an attribute in the lists and, if necessary, split it
     void InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
@@ -1141,6 +1139,8 @@ class HTMLEndPosLst
 
     const SwHTMLFormatInfo *GetFormatInfo( const SwFormat& rFormat,
                                      SwHTMLFormatInfos& rFormatInfos );
+
+    void OutEndAttrs(SwHTMLWriter& rWrt, std::vector<HTMLStartEndPos*>& posItems);
 
 public:
 
@@ -1167,36 +1167,46 @@ public:
     bool IsHTMLMode(sal_uLong nMode) const { return (m_nHTMLMode & nMode) != 0; }
 };
 
+struct SortEnds
+{
+    HTMLStartEndPositions& m_startList;
+    SortEnds(HTMLStartEndPositions& startList) : m_startList(startList) {}
+    bool operator()(const HTMLStartEndPos* p1, const HTMLStartEndPos* p2)
+    {
+        // if p1 start after p2, then it ends before
+        if (p1->GetStart() > p2->GetStart())
+            return true;
+        if (p1->GetStart() < p2->GetStart())
+            return false;
+        for (const auto p : m_startList[p1->GetStart()])
+        {
+            if (p == p1)
+                return false;
+            if (p == p2)
+                return true;
+        }
+        assert(!"Neither p1 nor p2 found in their start list");
+        return false;
+    }
+};
+
+#ifndef NDEBUG
+bool IsEmpty(const HTMLStartEndPositions& l)
+{
+    return std::find_if(l.begin(), l.end(), [](auto& i) { return !i.second.empty(); }) == l.end();
+}
+#endif
+
 }
 
-void HTMLEndPosLst::InsertItem_( HTMLStartEndPos *pPos, HTMLStartEndPositions::size_type nEndPos )
+void HTMLEndPosLst::InsertItem_(HTMLStartEndPos* pPos)
 {
-    // Insert the attribute in the Start list behind all attributes that
-    // were started before, or at the same position.
-    sal_Int32 nStart = pPos->GetStart();
-    HTMLStartEndPositions::size_type i {0};
+    // Character border attribute must be the first which is written out because of border merge.
+    auto& posItems1 = m_aStartLst[pPos->GetStart()];
+    auto it = pPos->GetItem().Which() == RES_CHRATR_BOX ? posItems1.begin() : posItems1.end();
+    posItems1.insert(it, pPos);
 
-    while (i < m_aStartLst.size() && m_aStartLst[i]->GetStart() <= nStart)
-        ++i;
-    m_aStartLst.insert(m_aStartLst.begin() + i, pPos);
-
-    // the position in the End list was supplied
-    m_aEndLst.insert(m_aEndLst.begin() + nEndPos, pPos);
-}
-
-void HTMLEndPosLst::RemoveItem_( HTMLStartEndPositions::size_type nEndPos )
-{
-    HTMLStartEndPos* pPos = m_aEndLst[nEndPos];
-
-    // now, we are looking for it in the Start list
-    HTMLStartEndPositions::iterator it = std::find(m_aStartLst.begin(), m_aStartLst.end(), pPos);
-    OSL_ENSURE(it != m_aStartLst.end(), "Item not found in Start List!");
-    if (it != m_aStartLst.end())
-        m_aStartLst.erase(it);
-
-    m_aEndLst.erase(m_aEndLst.begin() + nEndPos);
-
-    delete pPos;
+    m_aEndLst[pPos->GetEnd()].push_back(pPos);
 }
 
 HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
@@ -1350,23 +1360,25 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
 
 bool HTMLEndPosLst::ExistsOnTagItem( sal_uInt16 nWhich, sal_Int32 nPos )
 {
-    for (auto pTest : m_aStartLst)
+    for (const auto& [startPos, items] : m_aStartLst)
     {
-        if( pTest->GetStart() > nPos )
+        if (startPos > nPos)
         {
             // this attribute, and all attributes that follow, start later
             break;
         }
-        else if( pTest->GetEnd() > nPos )
+
+        for (const auto* pTest : items)
         {
-            // the attribute starts before, or at, the current position and
-            // ends after it
-            const SfxPoolItem *pItem = pTest->GetItem();
-            if( pItem->Which() == nWhich &&
-                HTML_ON_VALUE == GetHTMLItemState(*pItem) )
+            if (pTest->GetEnd() > nPos)
             {
-                // an OnTag attribute was found
-                return true;
+                // the attribute starts before, or at, the current position and ends after it
+                const SfxPoolItem& rItem = pTest->GetItem();
+                if (rItem.Which() == nWhich && HTML_ON_VALUE == GetHTMLItemState(rItem))
+                {
+                    // an OnTag attribute was found
+                    return true;
+                }
             }
         }
     }
@@ -1384,24 +1396,17 @@ bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
         return false;
     }
 
-    for (auto pTest : m_aStartLst)
+    for (const auto* pTest : m_aStartLst[nStartPos])
     {
-        if( pTest->GetStart() > nStartPos )
+        if (pTest->GetEnd() == nEndPos)
         {
-            // this attribute, and all attributes that follow, start later
-            break;
-        }
-        else if( pTest->GetStart()==nStartPos &&
-                 pTest->GetEnd()==nEndPos )
-        {
-            // the attribute starts before or at the current position and
-            // ends after it
-            const SfxPoolItem *pItem = pTest->GetItem();
-            sal_uInt16 nTstWhich = pItem->Which();
+            // the attribute starts before or at the current position and ends after it
+            const SfxPoolItem& rItem = pTest->GetItem();
+            sal_uInt16 nTstWhich = rItem.Which();
             if( (nTstWhich == RES_CHRATR_CROSSEDOUT ||
                  nTstWhich == RES_CHRATR_UNDERLINE ||
                  nTstWhich == RES_CHRATR_BLINK) &&
-                HTML_OFF_VALUE == GetHTMLItemState(*pItem) )
+                HTML_OFF_VALUE == GetHTMLItemState(rItem) )
             {
                 // an OffTag attribute was found that is exported the same
                 // way as the current item
@@ -1413,55 +1418,55 @@ bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
     return false;
 }
 
-void HTMLEndPosLst::FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
-                                        HTMLStartEndPositions::size_type nStartPos )
+void HTMLEndPosLst::FixSplittedItem(HTMLStartEndPos* pPos, sal_Int32 nNewEnd)
 {
+    // remove the item from the End list
+    {
+        auto& posItems = m_aEndLst[pPos->GetEnd()];
+        posItems.erase(std::remove(posItems.begin(), posItems.end(), pPos), posItems.end());
+    }
     // fix the end position accordingly
     pPos->SetEnd( nNewEnd );
-
-    // remove the item from the End list
-    HTMLStartEndPositions::iterator it = std::find(m_aEndLst.begin(), m_aEndLst.end(), pPos);
-    OSL_ENSURE(it != m_aEndLst.end(), "Item not found in End List!");
-    if (it != m_aEndLst.end())
-        m_aEndLst.erase(it);
-
-    // from now on, it is closed as the last one at the corresponding position
-    HTMLStartEndPositions::size_type nEndPos {0};
-    while (nEndPos < m_aEndLst.size() && m_aEndLst[nEndPos]->GetEnd() <= nNewEnd)
-        ++nEndPos;
-    m_aEndLst.insert(m_aEndLst.begin() + nEndPos, pPos);
+    // from now on, it is closed at the corresponding position
+    m_aEndLst[nNewEnd].push_back(pPos);
 
     // now, adjust the attributes that got started afterwards
-    for (HTMLStartEndPositions::size_type i = nStartPos + 1; i < m_aStartLst.size(); ++i)
+    const sal_Int32 nPos = pPos->GetStart();
+    for (const auto& [startPos, items] : m_aStartLst)
     {
-        HTMLStartEndPos* pTest = m_aStartLst[i];
-        sal_Int32 nTestEnd = pTest->GetEnd();
-        if( pTest->GetStart() >= nNewEnd )
-        {
-            // the Test attribute and all the following ones start, after the
-            // split attribute ends
+        if (startPos < nPos)
+            continue;
+
+        if (startPos >= nNewEnd)
             break;
-        }
-        else if( nTestEnd > nNewEnd )
+
+        auto it = items.begin();
+        if (startPos == nPos)
         {
+            it = std::find(items.begin(), items.end(), pPos);
+            if (it != items.end())
+                ++it;
+        }
+        for (; it != items.end(); ++it)
+        {
+            HTMLStartEndPos* pTest = *it;
+            const sal_Int32 nTestEnd = pTest->GetEnd();
+            if (nTestEnd <= nNewEnd)
+                continue;
+
             // the Test attribute starts before the split attribute
             // ends, and ends afterwards, i.e., it must be split, as well
 
+            // remove the attribute from the End list
+            auto& posItems = m_aEndLst[pTest->GetEnd()];
+            posItems.erase(std::remove(posItems.begin(), posItems.end(), pTest), posItems.end());
             // set the new end
             pTest->SetEnd( nNewEnd );
-
-            // remove the attribute from the End list
-            it = std::find(m_aEndLst.begin(), m_aEndLst.end(), pTest);
-            OSL_ENSURE(it != m_aEndLst.end(), "Item not found in End List!");
-            if (it != m_aEndLst.end())
-                m_aEndLst.erase(it);
-
-            // it now ends as the first attribute in the respective position.
-            // We already know this position in the End list.
-            m_aEndLst.insert(m_aEndLst.begin() + nEndPos, pTest);
+            // it now ends in the respective position.
+            m_aEndLst[nNewEnd].push_back(pTest);
 
             // insert the 'rest' of the attribute
-            InsertItem( *pTest->GetItem(), nNewEnd, nTestEnd );
+            InsertItem( pTest->GetItem(), nNewEnd, nTestEnd );
         }
     }
 }
@@ -1469,36 +1474,38 @@ void HTMLEndPosLst::FixSplittedItem( HTMLStartEndPos *pPos, sal_Int32 nNewEnd,
 void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                                                           sal_Int32 nEnd )
 {
-    HTMLStartEndPositions::size_type i;
-    for (i = 0; i < m_aEndLst.size(); i++)
+    assert(nStart < nEnd);
+
+    for (auto& [endPos, items] : m_aEndLst)
     {
-        HTMLStartEndPos* pTest = m_aEndLst[i];
-        sal_Int32 nTestEnd = pTest->GetEnd();
-        if( nTestEnd <= nStart )
+        if (endPos <= nStart)
         {
             // the Test attribute ends, before the new one starts
             continue;
         }
-        else if( nTestEnd < nEnd )
-        {
-            if( pTest->GetStart() < nStart )
-            {
-                // the Test attribute ends, before the new one ends. Thus, the
-                // new attribute must be split.
-                InsertItem_( new HTMLStartEndPos( rItem, nStart, nTestEnd ), i );
-                nStart = nTestEnd;
-            }
-        }
-        else
+        if (endPos >= nEnd)
         {
             // the Test attribute (and all that follow) ends, before the new
             // one ends
             break;
         }
+
+        std::sort(items.begin(), items.end(), SortEnds(m_aStartLst));
+
+        for (HTMLStartEndPos* pTest : items)
+        {
+            if( pTest->GetStart() < nStart )
+            {
+                // the Test attribute ends, before the new one ends. Thus, the
+                // new attribute must be split.
+                InsertItem_(new HTMLStartEndPos(rItem, nStart, endPos));
+                nStart = endPos;
+            }
+        }
     }
 
     // one attribute must still be inserted
-    InsertItem_( new HTMLStartEndPos( rItem, nStart, nEnd ), i );
+    InsertItem_(new HTMLStartEndPos(rItem, nStart, nEnd));
 }
 
 void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
@@ -1509,59 +1516,49 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
     // first, we must search for the old items by using the start list and
     // determine the new item range
 
-    for (HTMLStartEndPositions::size_type i = 0; i < m_aStartLst.size(); ++i)
+    for (auto& [nTestStart, items] : m_aStartLst)
     {
-        HTMLStartEndPos* pTest = m_aStartLst[i];
-        sal_Int32 nTestStart = pTest->GetStart();
-        sal_Int32 nTestEnd = pTest->GetEnd();
-
         if( nTestStart >= nEnd )
         {
             // this attribute, and all that follow, start later
             break;
         }
-        else if( nTestEnd > nStart )
+
+        for (auto it = items.begin(); it != items.end();)
         {
+            HTMLStartEndPos* pTest = *it;
+            sal_Int32 nTestEnd = pTest->GetEnd();
+            if (nTestEnd <= nStart)
+                continue;
+
             // the Test attribute ends in the range that must be deleted
-            const SfxPoolItem *pItem = pTest->GetItem();
+            const SfxPoolItem& rTestItem = pTest->GetItem();
 
             // only the corresponding OnTag attributes have to be considered
-            if( pItem->Which() == nWhich &&
-                HTML_ON_VALUE == GetHTMLItemState( *pItem ) )
+            if (rTestItem.Which() == nWhich && HTML_ON_VALUE == GetHTMLItemState(rTestItem))
             {
-                bool bDelete = true;
+                // if necessary, insert the second part of the split
+                // attribute
+                if (nTestEnd > nEnd)
+                    InsertItem(pTest->GetItem(), nEnd, nTestEnd);
 
-                if( nTestStart < nStart )
-                {
-                    // the start of the new attribute corresponds to the new
-                    // end of the attribute
-                    FixSplittedItem( pTest, nStart, i );
-                    bDelete = false;
-                }
-                else
+                if (nTestStart >= nStart)
                 {
                     // the Test item only starts after the new end of the
                     // attribute. Therefore, it can be completely erased.
-                    m_aStartLst.erase(m_aStartLst.begin() + i);
-                    i--;
-
-                    HTMLStartEndPositions::iterator it
-                        = std::find(m_aEndLst.begin(), m_aEndLst.end(), pTest);
-                    OSL_ENSURE(it != m_aEndLst.end(), "Item not found in End List!");
-                    if (it != m_aEndLst.end())
-                        m_aEndLst.erase(it);
-                }
-
-                // if necessary, insert the second part of the split
-                // attribute
-                if( nTestEnd > nEnd )
-                {
-                    InsertItem( *pTest->GetItem(), nEnd, nTestEnd );
-                }
-
-                if( bDelete )
+                    it = items.erase(it);
+                    auto& posItems = m_aEndLst[pTest->GetEnd()];
+                    posItems.erase(std::remove(posItems.begin(), posItems.end(), pTest),
+                                   posItems.end());
                     delete pTest;
+                    continue;
+                }
+
+                // the start of the new attribute corresponds to the new
+                // end of the attribute
+                FixSplittedItem(pTest, nStart);
             }
+            ++it;
         }
     }
 }
@@ -1609,8 +1606,8 @@ HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, std::optional<Color> xDfl
 
 HTMLEndPosLst::~HTMLEndPosLst()
 {
-    OSL_ENSURE(m_aStartLst.empty(), "Start List not empty in destructor");
-    OSL_ENSURE(m_aEndLst.empty(), "End List not empty in destructor");
+    assert(IsEmpty(m_aStartLst) && "Start List not empty in destructor");
+    assert(IsEmpty(m_aEndLst) && "End List not empty in destructor");
 }
 
 void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
@@ -1896,53 +1893,25 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos )
 {
     rHWrt.m_bTagOn = true;
 
-    // Character border attribute must be the first which is written out
-    // because of border merge.
-    HTMLStartEndPositions::size_type nCharBoxIndex = 0;
-    while (nCharBoxIndex < m_aStartLst.size()
-           && m_aStartLst[nCharBoxIndex]->GetItem()->Which() != RES_CHRATR_BOX)
-    {
-        ++nCharBoxIndex;
-    }
-
+    auto it = m_aStartLst.find(nPos);
+    if (it == m_aStartLst.end())
+        return;
     // the attributes of the start list are sorted in ascending order
-    for (HTMLStartEndPositions::size_type i = 0; i < m_aStartLst.size(); ++i)
+    for (HTMLStartEndPos* pPos : it->second)
     {
-        HTMLStartEndPos *pPos = nullptr;
-        if (nCharBoxIndex < m_aStartLst.size())
+        // output the attribute
+        sal_uInt16 nCSS1Script = rHWrt.m_nCSS1Script;
+        sal_uInt16 nWhich = pPos->GetItem().Which();
+        if( RES_TXTATR_CHARFMT == nWhich ||
+            RES_TXTATR_INETFMT == nWhich ||
+             RES_PARATR_DROP == nWhich )
         {
-            if( i == 0 )
-                pPos = m_aStartLst[nCharBoxIndex];
-            else if( i == nCharBoxIndex )
-                pPos = m_aStartLst[0];
-            else
-                pPos = m_aStartLst[i];
+            rHWrt.m_nCSS1Script = GetScriptAtPos( nPos, nCSS1Script );
         }
-        else
-            pPos = m_aStartLst[i];
-
-        sal_Int32 nStart = pPos->GetStart();
-        if( nStart > nPos )
-        {
-            // this attribute, and all that follow, will be opened later on
-            break;
-        }
-        else if( nStart == nPos )
-        {
-            // output the attribute
-            sal_uInt16 nCSS1Script = rHWrt.m_nCSS1Script;
-            sal_uInt16 nWhich = pPos->GetItem()->Which();
-            if( RES_TXTATR_CHARFMT == nWhich ||
-                RES_TXTATR_INETFMT == nWhich ||
-                 RES_PARATR_DROP == nWhich )
-            {
-                rHWrt.m_nCSS1Script = GetScriptAtPos( nPos, nCSS1Script );
-            }
-            HTMLOutFuncs::FlushToAscii( rHWrt.Strm() ); // was one time only - do we still need it?
-            Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
-            rHWrt.maStartedAttributes[pPos->GetItem()->Which()]++;
-            rHWrt.m_nCSS1Script = nCSS1Script;
-        }
+        HTMLOutFuncs::FlushToAscii( rHWrt.Strm() ); // was one time only - do we still need it?
+        Out( aHTMLAttrFnTab, pPos->GetItem(), rHWrt );
+        rHWrt.maStartedAttributes[pPos->GetItem().Which()]++;
+        rHWrt.m_nCSS1Script = nCSS1Script;
     }
 }
 
@@ -1950,59 +1919,56 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos )
 {
     rHWrt.m_bTagOn = false;
 
-    // the attributes in the End list are sorted in ascending order
-    HTMLStartEndPositions::size_type i {0};
-    while (i < m_aEndLst.size())
+    if (nPos == SAL_MAX_INT32)
     {
-        HTMLStartEndPos* pPos = m_aEndLst[i];
-        sal_Int32 nEnd = pPos->GetEnd();
+        for (auto& element : m_aEndLst)
+            OutEndAttrs(rHWrt, element.second);
+    }
+    else
+    {
+        auto it = m_aEndLst.find(nPos);
+        if (it != m_aEndLst.end())
+            OutEndAttrs(rHWrt, it->second);
+    }
+}
 
-        if( SAL_MAX_INT32 == nPos || nEnd == nPos )
+void HTMLEndPosLst::OutEndAttrs(SwHTMLWriter& rWrt, std::vector<HTMLStartEndPos*>& posItems)
+{
+    std::sort(posItems.begin(), posItems.end(), SortEnds(m_aStartLst));
+    for (auto it = posItems.begin(); it != posItems.end(); it = posItems.erase(it))
+    {
+        HTMLStartEndPos* pPos = *it;
+        HTMLOutFuncs::FlushToAscii( rWrt.Strm() ); // was one time only - do we still need it?
+        // Skip closing span if next character span has the same border (border merge)
+        bool bSkipOut = false;
+        if( pPos->GetItem().Which() == RES_CHRATR_BOX )
         {
-            HTMLOutFuncs::FlushToAscii( rHWrt.Strm() ); // was one time only - do we still need it?
-            // Skip closing span if next character span has the same border (border merge)
-            bool bSkipOut = false;
-            if( pPos->GetItem()->Which() == RES_CHRATR_BOX )
+            auto& startPosItems = m_aStartLst[pPos->GetEnd()];
+            for (auto it2 = startPosItems.begin(); it2 != startPosItems.end(); ++it2)
             {
-                HTMLStartEndPositions::iterator it
-                    = std::find(m_aStartLst.begin(), m_aStartLst.end(), pPos);
-                OSL_ENSURE(it != m_aStartLst.end(), "Item not found in Start List!");
-                if (it != m_aStartLst.end())
-                    ++it;
-                while (it != m_aStartLst.end())
+                HTMLStartEndPos* pEndPos = *it2;
+                if( pEndPos->GetItem().Which() == RES_CHRATR_BOX &&
+                    static_cast<const SvxBoxItem&>(pEndPos->GetItem()) ==
+                    static_cast<const SvxBoxItem&>(pPos->GetItem()) )
                 {
-                    HTMLStartEndPos *pEndPos = *it;
-                    if( pEndPos->GetItem()->Which() == RES_CHRATR_BOX &&
-                        *static_cast<const SvxBoxItem*>(pEndPos->GetItem()) ==
-                        *static_cast<const SvxBoxItem*>(pPos->GetItem()) )
-                    {
-                        pEndPos->SetStart(pPos->GetStart());
-                        bSkipOut = true;
-                        break;
-                    }
-                    ++it;
+                    startPosItems.erase(it2);
+                    pEndPos->SetStart(pPos->GetStart());
+                    auto& oldStartPosItems = m_aStartLst[pEndPos->GetStart()];
+                    oldStartPosItems.insert(oldStartPosItems.begin(), pEndPos);
+                    bSkipOut = true;
+                    break;
                 }
             }
-            if( !bSkipOut )
-            {
-                Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
-                rHWrt.maStartedAttributes[pPos->GetItem()->Which()]--;
-            }
-            RemoveItem_( i );
         }
-        else if( nEnd > nPos )
+        if( !bSkipOut )
         {
-            // this attribute, and all that follow, are closed later on
-            break;
+            Out( aHTMLAttrFnTab, pPos->GetItem(), rWrt );
+            rWrt.maStartedAttributes[pPos->GetItem().Which()]--;
         }
-        else
-        {
-            // The attribute is closed before the current position. This
-            // is not allowed, but we can handle it anyway.
-            OSL_ENSURE( nEnd >= nPos,
-                    "The attribute should've been closed a long time ago" );
-            i++;
-        }
+
+        auto& posItems2 = m_aStartLst[pPos->GetStart()];
+        posItems2.erase(std::remove(posItems2.begin(), posItems2.end(), pPos), posItems2.end());
+        delete pPos;
     }
 }
 
