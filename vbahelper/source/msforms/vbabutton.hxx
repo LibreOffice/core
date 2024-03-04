@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBABUTTON_HXX
-#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBABUTTON_HXX
+
+#pragma once
+
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XCommandButton.hpp>
 
@@ -50,6 +51,5 @@ public:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
-#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBABUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
