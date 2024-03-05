@@ -524,6 +524,7 @@ ifeq ($(OS)-$(ENABLE_DBGUTIL),EMSCRIPTEN-TRUE)
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,org/libreoffice/embindtest, \
     Constants \
     Enum \
+    Exception \
     Struct \
     XTest \
 ))
