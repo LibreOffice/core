@@ -103,7 +103,7 @@ private:
                          DocumentSignatureMode eMode);
 
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
-    chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction,
+    chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const CertificateChooserUserAction eAction,
                            const CertificateKind certificateKind=CertificateKind_NONE);
 
     bool
@@ -696,7 +696,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 
 uno::Sequence<Reference<css::security::XCertificate>>
 DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& rProperties,
-                                                  const UserAction eAction,
+                                                  const CertificateChooserUserAction eAction,
                                                   const CertificateKind certificateKind)
 {
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
@@ -729,7 +729,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSigningCertificate(OUString& rDescription)
 {
     std::map<OUString, OUString> aProperties;
-    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, UserAction::Sign )[0];
+    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Sign )[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
@@ -737,7 +737,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSignin
 Reference< css::security::XCertificate > DocumentDigitalSignatures::selectSigningCertificate(OUString& rDescription)
 {
     std::map<OUString, OUString> aProperties;
-    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, UserAction::SelectSign )[0];
+    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::SelectSign )[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
@@ -748,7 +748,7 @@ DocumentDigitalSignatures::selectSigningCertificateWithType(const CertificateKin
 {
     std::map<OUString, OUString> aProperties;
     Reference<css::security::XCertificate> xCert
-        = chooseCertificatesImpl(aProperties, UserAction::SelectSign, certificateKind)[0];
+        = chooseCertificatesImpl(aProperties, CertificateChooserUserAction::SelectSign, certificateKind)[0];
     rDescription = aProperties["Description"];
     return xCert;
 }
@@ -757,7 +757,7 @@ css::uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSi
 {
     std::map<OUString, OUString> aProperties;
     uno::Sequence< Reference< css::security::XCertificate > > aCerts=
-        chooseCertificatesImpl( aProperties, UserAction::Encrypt );
+        chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Encrypt );
     if (aCerts.getLength() == 1 && !aCerts[0].is())
         // our error case contract is: empty sequence, so map that!
         return uno::Sequence< Reference< css::security::XCertificate > >();
@@ -768,7 +768,7 @@ css::uno::Sequence< Reference< css::security::XCertificate > > DocumentDigitalSi
 css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithProps(Sequence<::com::sun::star::beans::PropertyValue>& rProperties)
 {
     std::map<OUString, OUString> aProperties;
-    auto xCert = chooseCertificatesImpl( aProperties, UserAction::Sign )[0];
+    auto xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Sign )[0];
 
     std::vector<css::beans::PropertyValue> vec;
     vec.reserve(aProperties.size());

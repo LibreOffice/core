@@ -41,7 +41,7 @@ using namespace css;
 
 CertificateChooser::CertificateChooser(weld::Window* _pParent,
                                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
-                                       UserAction eAction)
+                                       CertificateChooserUserAction eAction)
     : GenericDialogController(_pParent, "xmlsec/ui/selectcertificatedialog.ui", "SelectCertificateDialog")
     , meAction(eAction)
     , m_xFTSign(m_xBuilder->weld_label("sign"))
@@ -146,19 +146,19 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
 
     switch (meAction)
     {
-        case UserAction::Sign:
+        case CertificateChooserUserAction::Sign:
             m_xFTSign->show();
             m_xOKBtn->set_label(XsResId(STR_SIGN));
             msPreferredKey = aUserOpts.GetSigningKey();
             break;
 
-        case UserAction::SelectSign:
+        case CertificateChooserUserAction::SelectSign:
             m_xFTSign->show();
             m_xOKBtn->set_label(XsResId(STR_SELECTSIGN));
             msPreferredKey = aUserOpts.GetSigningKey();
             break;
 
-        case UserAction::Encrypt:
+        case CertificateChooserUserAction::Encrypt:
             m_xFTEncrypt->show();
             m_xFTDescription->hide();
             m_xDescriptionED->hide();
@@ -187,7 +187,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             }
             else
             {
-                if (meAction == UserAction::Sign || meAction == UserAction::SelectSign)
+                if (meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign)
                     xCerts = secEnvironment->getPersonalCertificates();
                 else
                     xCerts = secEnvironment->getAllCertificates();
@@ -213,7 +213,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
         // fill list of certificates; the first entry will be selected
         for (const auto& xCert : xCerts)
         {
-            std::shared_ptr<UserData> userData = std::make_shared<UserData>();
+            std::shared_ptr<CertificateChooserUserData> userData = std::make_shared<CertificateChooserUserData>();
             userData->xCertificate = xCert;
             userData->xSecurityContext = secContext;
             userData->xSecurityEnvironment = secEnvironment;
@@ -242,11 +242,11 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             if ( !sIssuer.isEmpty() && !msPreferredKey.isEmpty() ) {
                 if ( sIssuer == msPreferredKey )
                 {
-                    if ( meAction == UserAction::Sign || meAction == UserAction::SelectSign )
+                    if ( meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign )
                     {
                         oSelectRow.emplace(nRow);
                     }
-                    else if ( meAction == UserAction::Encrypt &&
+                    else if ( meAction == CertificateChooserUserAction::Encrypt &&
                               aUserOpts.GetEncryptToSelf() )
                         mxEncryptToSelf = xCert;
                 }
@@ -271,11 +271,11 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
 uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser::GetSelectedCertificates()
 {
     std::vector< uno::Reference< css::security::XCertificate > > aRet;
-    if (meAction == UserAction::Encrypt)
+    if (meAction == CertificateChooserUserAction::Encrypt)
     {
         // for encryption, multiselection is enabled
         m_xCertLB->selected_foreach([this, &aRet](weld::TreeIter& rEntry){
-            UserData* userData = weld::fromId<UserData*>(m_xCertLB->get_id(rEntry));
+            CertificateChooserUserData* userData = weld::fromId<CertificateChooserUserData*>(m_xCertLB->get_id(rEntry));
             aRet.push_back( userData->xCertificate );
             return false;
         });
@@ -286,7 +286,7 @@ uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser
         int nSel = m_xCertLB->get_selected_index();
         if (nSel != -1)
         {
-            UserData* userData = weld::fromId<UserData*>(m_xCertLB->get_id(nSel));
+            CertificateChooserUserData* userData = weld::fromId<CertificateChooserUserData*>(m_xCertLB->get_id(nSel));
             xCert = userData->xCertificate;
         }
         aRet.push_back( xCert );
@@ -306,7 +306,7 @@ uno::Reference<xml::crypto::XXMLSecurityContext> CertificateChooser::GetSelected
     if (nSel == -1)
         return uno::Reference<xml::crypto::XXMLSecurityContext>();
 
-    UserData* userData = weld::fromId<UserData*>(m_xCertLB->get_id(nSel));
+    CertificateChooserUserData* userData = weld::fromId<CertificateChooserUserData*>(m_xCertLB->get_id(nSel));
     uno::Reference<xml::crypto::XXMLSecurityContext> xCert = userData->xSecurityContext;
     return xCert;
 }
@@ -366,7 +366,7 @@ void CertificateChooser::ImplShowCertificateDetails()
     if (nSel == -1)
         return;
 
-    UserData* userData = weld::fromId<UserData*>(m_xCertLB->get_id(nSel));
+    CertificateChooserUserData* userData = weld::fromId<CertificateChooserUserData*>(m_xCertLB->get_id(nSel));
 
     if (!userData->xSecurityEnvironment.is() || !userData->xCertificate.is())
         return;

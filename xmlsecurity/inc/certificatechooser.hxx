@@ -34,14 +34,14 @@ namespace com::sun::star {
 
 namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
-struct UserData
+struct CertificateChooserUserData
 {
     css::uno::Reference<css::security::XCertificate> xCertificate;
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> xSecurityContext;
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
 };
 
-enum class UserAction
+enum class CertificateChooserUserAction
 {
     Sign,
     SelectSign, // Select signing certificate
@@ -52,10 +52,10 @@ class CertificateChooser final : public weld::GenericDialogController
 {
 private:
     std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
-    std::vector<std::shared_ptr<UserData>> mvUserData;
+    std::vector<std::shared_ptr<CertificateChooserUserData>> mvUserData;
 
     bool                    mbInitialized;
-    UserAction const        meAction;
+    CertificateChooserUserAction const meAction;
     OUString                msPreferredKey;
     css::uno::Reference<css::security::XCertificate> mxEncryptToSelf;
 
@@ -86,12 +86,12 @@ private:
 public:
     CertificateChooser(weld::Window* pParent,
                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
-                       UserAction eAction);
+                       CertificateChooserUserAction eAction);
     virtual ~CertificateChooser() override;
 
     static std::unique_ptr<CertificateChooser> getInstance(weld::Window* _pParent,
                         std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
-                        UserAction eAction) {
+                        CertificateChooserUserAction eAction) {
         // Don't reuse CertificateChooser instances
         // Reusing the same instance will, in the following case, lead to a
         // crash. It appears that the CertificateChooser is getting disposed
