@@ -587,7 +587,7 @@ bool OleComponent::InitializeObject_Impl()
 
 namespace
 {
-    HRESULT OleLoadSeh(LPSTORAGE pIStorage, LPVOID* ppObj)
+    HRESULT OleLoadSeh(LPSTORAGE pIStorage, IUnknown** ppObj)
     {
         HRESULT hr = E_FAIL;
         // tdf#119039: there is a nasty bug in OleLoad, that may call an unpaired
@@ -601,7 +601,7 @@ namespace
             pIStorage->AddRef();
 
         __try {
-            hr = OleLoad(pIStorage, IID_IUnknown, nullptr, ppObj);
+            hr = OleLoad(pIStorage, IID_IUnknown, nullptr, IID_PPV_ARGS_Helper(ppObj));
         } __except( EXCEPTION_EXECUTE_HANDLER ) {
             hr = E_FAIL;
         }
@@ -626,7 +626,7 @@ void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
     if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO: transport error code?
 
-    hr = OleLoadSeh(m_pNativeImpl->m_pIStorage, reinterpret_cast<void**>(&m_pNativeImpl->m_pObj));
+    hr = OleLoadSeh(m_pNativeImpl->m_pIStorage, &m_pNativeImpl->m_pObj);
     if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
     {
         throw uno::RuntimeException();
@@ -857,7 +857,7 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
                 {
                     hr = pObjectStorage->CopyTo( 0, nullptr, nullptr, m_pNativeImpl->m_pIStorage );
                     if ( SUCCEEDED( hr ) )
-                        hr = OleLoadSeh(m_pNativeImpl->m_pIStorage, reinterpret_cast<void**>(&m_pNativeImpl->m_pObj));
+                        hr = OleLoadSeh(m_pNativeImpl->m_pIStorage, &m_pNativeImpl->m_pObj);
                 }
             }
         }
