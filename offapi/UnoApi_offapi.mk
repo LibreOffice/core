@@ -3398,6 +3398,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	ConditionFormatOperator \
 	ConditionOperator \
 	ConditionOperator2 \
+	CreateDialogFactoryService \
 	DataBarAxis \
 	DataBarEntryType \
 	DateType \

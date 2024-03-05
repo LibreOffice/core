@@ -1,5 +1,5 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,23 +15,12 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+ -->
 
-#include <scabstdlg.hxx>
-
-#include <osl/module.hxx>
-#include <tools/svlibrary.h>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/sheet/CreateDialogFactoryService.hpp>
-
-ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
-{
-    auto xService = css::sheet::CreateDialogFactoryService::create(comphelper::getProcessComponentContext());
-    assert(xService);
-    // get a factory instance
-    ScAbstractDialogFactory* pFactory = reinterpret_cast<ScAbstractDialogFactory*>(xService->getSomething({}));
-    assert(pFactory);
-    return pFactory;
-}
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.sheet.comp.CreateDialogFactoryService"
+      constructor="com_sun_star_sheet_CreateDialogFactoryService_get_implementation">
+    <service name="com.sun.star.sheet.CreateDialogFactoryService"/>
+  </implementation>
+</component>

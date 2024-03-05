@@ -17,21 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scabstdlg.hxx>
+module com { module sun { module star { module sheet {
 
-#include <osl/module.hxx>
-#include <tools/svlibrary.h>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/sheet/CreateDialogFactoryService.hpp>
+/**
+  The sc module uses this to get a pointer to the ScAbstractDialogFactory from the scui module.
+  Because we have a dependency in our modules that goes the "wrong" way.
 
-ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
-{
-    auto xService = css::sheet::CreateDialogFactoryService::create(comphelper::getProcessComponentContext());
-    assert(xService);
-    // get a factory instance
-    ScAbstractDialogFactory* pFactory = reinterpret_cast<ScAbstractDialogFactory*>(xService->getSomething({}));
-    assert(pFactory);
-    return pFactory;
-}
+  @since LibreOffice 24.8
+
+  @internal
+
+  ATTENTION: This is marked <em>internal</em> and does not
+  have the <em>published</em> flag, which means it is subject to
+  change without notice and should not be used outside the LibreOffice core.
+*/
+service CreateDialogFactoryService : com::sun::star::lang::XUnoTunnel;
+
+}; }; }; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
