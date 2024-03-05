@@ -134,6 +134,8 @@ gb_MERGE_LIBRARY_LIST += \
 	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
 	cui \
 	date \
+	dba \
+	dbahsql \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
 	dlgprov \
 	$(if $(ENABLE_EVOAB2),evoab) \
