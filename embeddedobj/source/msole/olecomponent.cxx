@@ -1122,7 +1122,7 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
 
 awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    if (!m_pNativeImpl->m_pViewObject2)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
