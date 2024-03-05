@@ -215,6 +215,8 @@ Color Window::GetBackgroundColor() const { return GetOutDev()->GetBackgroundColo
 
 void Window::EnableRTL(bool bEnable) { GetOutDev()->EnableRTL(bEnable); }
 
+void Window::FlashWindow() const {}
+
 } /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

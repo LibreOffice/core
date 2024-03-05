@@ -43,7 +43,7 @@
     } while (false)
 
 // All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
-struct UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) OpenGLHelper
+struct VCL_DLLPUBLIC OpenGLHelper
 {
     OpenGLHelper() = delete; // Should not be instantiated
 
@@ -100,7 +100,7 @@ public:
     __attribute__ ((format (printf, 2, 3)))
 #endif
     static void debugMsgPrint(const int nType, const char *pFormat, ...);
-    IF_MERGELIBS_MORE(VCL_DLLPUBLIC) static void debugMsgStream(std::ostringstream const &pStream);
+    static void debugMsgStream(std::ostringstream const &pStream);
     static void debugMsgStreamWarn(std::ostringstream const &pStream);
 
     /**

@@ -1120,7 +1120,7 @@ public:
     virtual void DumpAsPropertyTree(tools::JsonWriter&);
 
 
-    virtual void FlashWindow() const {};
+    virtual void FlashWindow() const;
 
     /** @name Accessibility
      */
