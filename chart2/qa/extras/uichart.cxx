@@ -104,6 +104,81 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocu
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf99969)
+{
+    loadFromFile(u"ods/tdf99969.ods");
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+                                                    uno::UNO_QUERY_THROW);
+    sal_Int32 nColumns = 2;
+    sal_Int32 nRows = 6;
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
+
+    uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in origin file", nColumns,
+                                 aExpectedColumnDescriptions.getLength());
+
+    uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in origin file", nRows,
+                                 aExpectedRowDescriptions.getLength());
+
+    Sequence<Sequence<double>> aExpectedData = xChartData->getData();
+
+    dispatchCommand(mxComponent, ".uno:GoToCell",
+                    { comphelper::makePropertyValue("ToPoint", uno::Any(OUString("C2:L25"))) });
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // create a new document
+    load("private:factory/scalc");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc2.is());
+
+    uno::Reference<chart::XChartDataArray> xDataArray(xChartDoc2->getDataProvider(),
+                                                      UNO_QUERY_THROW);
+
+    Sequence<OUString> aColumnDesc = xDataArray->getColumnDescriptions();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in destination file", nColumns,
+                                 aColumnDesc.getLength());
+    for (sal_Int32 i = 0; i < nColumns; ++i)
+    {
+        // Without the fix in place, this test would have failed with
+        // - Expected: ABC
+        // - Actual  :
+        // - Incorrect description in column: 0
+        OString sMessage("Incorrect description in column: " + OString::number(i));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aExpectedColumnDescriptions[i],
+                                     aColumnDesc[i]);
+    }
+
+    Sequence<OUString> aRowDesc = xDataArray->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in destination file", nRows,
+                                 aRowDesc.getLength());
+    for (sal_Int32 i = 0; i < nRows; ++i)
+    {
+        OString sMessage("Incorrect description in row: " + OString::number(i));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aExpectedRowDescriptions[i], aRowDesc[i]);
+    }
+
+    Sequence<Sequence<double>> aData = xDataArray->getData();
+
+    for (sal_Int32 nRowIdx = 0; nRowIdx < nRows; ++nRowIdx)
+    {
+        for (sal_Int32 nColIdx = 0; nColIdx < nColumns; ++nColIdx)
+        {
+            double nValue = aData[nRowIdx][nColIdx];
+            double nExpected = aExpectedData[nRowIdx][nColIdx];
+            OString sMessage("Incorrect value in Col: " + OString::number(nColIdx)
+                             + " Row: " + OString::number(nRowIdx));
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), nExpected, nValue);
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
 {
     loadFromFile(u"ods/tdf120348.ods");
