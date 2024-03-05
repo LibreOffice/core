@@ -30,7 +30,7 @@
     @since LibreOffice 24.8
  */
 
-published constants ParagraphHyphenationKeepType
+constants ParagraphHyphenationKeepType
 {
     /** No restriction applies. The word may be hyphenated at the end of any region.
      */
