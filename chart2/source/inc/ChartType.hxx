@@ -75,12 +75,6 @@ public:
     // ____ XChartType ____
     // still abstract ! implement !
     virtual OUString SAL_CALL getChartType() override = 0;
-#if 0
-    virtual ::com::sun::star::chart2::PieChartSubType SAL_CALL getPieChartSubType() override
-    {
-        return ::com::sun::star::chart2::PieChartSubType_NONE;
-    }
-#endif
     virtual css::uno::Reference< css::chart2::XCoordinateSystem > SAL_CALL
         createCoordinateSystem( ::sal_Int32 DimensionCount ) final override;
     virtual css::uno::Sequence< OUString > SAL_CALL

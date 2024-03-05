@@ -1284,6 +1284,13 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                             XML_NAMESPACE_CHART, GetXMLToken(eXMLChartType )) );
             }
 
+            // Handle subtype for of-pie charts
+            if (sChartType == u"com.sun.star.chart.BarOfPieDiagram") {
+                mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUB_BAR, OUString::boolean(true));
+            } else if (sChartType == u"com.sun.star.chart.PieOfPieDiagram") {
+                mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUB_PIE, OUString::boolean(true));
+            }
+
             //column-mapping or row-mapping
             if( maSequenceMapping.hasElements() )
             {

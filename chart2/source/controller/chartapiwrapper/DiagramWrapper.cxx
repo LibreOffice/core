@@ -465,6 +465,15 @@ OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
         if( aName.find( u"Area" ) != std::u16string_view::npos )
             return "com.sun.star.chart.AreaDiagram";
 
+        // Handle bar-of-pie and pie-of-pie before simple pie
+        // "BarOfPie"
+        if( aName.find( u"BarOfPie" ) != std::u16string_view::npos )
+            return "com.sun.star.chart.BarOfPieDiagram";
+
+        // "PieOfPie"
+        if( aName.find( u"PieOfPie" ) != std::u16string_view::npos )
+            return "com.sun.star.chart.PieOfPieDiagram";
+
         // "Pie" "PieAllExploded" "ThreeDPie" "ThreeDPieAllExploded"
         if( aName.find( u"Pie" ) != std::u16string_view::npos )
             return "com.sun.star.chart.PieDiagram";

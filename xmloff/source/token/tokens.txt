@@ -1822,7 +1822,10 @@ style-ref
 styles
 stylesheet
 sub-table
+sub-bar
+sub-none
 subject
+sub-pie
 subset
 subtitle
 subtotal-field

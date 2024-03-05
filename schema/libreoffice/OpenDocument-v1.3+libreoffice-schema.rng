@@ -2717,6 +2717,20 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+    <!-- TODO no proposal -->
+  <rng:define name="chart-chart-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:sub-bar">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:sub-pie">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- OFFICE-2112, TODO half of this missing in proposal -->
   <rng:define name="table-table-protection">
     <rng:element name="loext:table-protection">

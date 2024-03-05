@@ -231,7 +231,8 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
         mbColHasLabels( false ),
         mbRowHasLabels( false ),
         meDataRowSource( chart::ChartDataRowSource_COLUMNS ),
-        mbIsStockChart( false )
+        mbIsStockChart( false ),
+        mPieSubType(com::sun::star::chart2::PieChartSubType_NONE)
 {
 }
 
@@ -317,6 +318,7 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
     OUString sAutoStyleName;
     OUString aOldChartTypeName;
     bool bHasAddin = false;
+    mPieSubType = com::sun::star::chart2::PieChartSubType_NONE;
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
@@ -384,6 +386,16 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
                 break;
             case XML_ELEMENT(CHART,  XML_ROW_MAPPING):
                 msRowTrans = aIter.toString();
+                break;
+            case XML_ELEMENT(LO_EXT, XML_SUB_BAR):
+                if (aIter.toString().toBoolean()) {
+                    mPieSubType = com::sun::star::chart2::PieChartSubType_BAR;
+                }
+                break;
+            case XML_ELEMENT(LO_EXT, XML_SUB_PIE):
+                if (aIter.toString().toBoolean()) {
+                    mPieSubType = com::sun::star::chart2::PieChartSubType_PIE;
+                }
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -751,6 +763,15 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
 
     // cleanup: remove empty chart type groups
     lcl_removeEmptyChartTypeGroups( xNewDoc );
+
+    // Handle sub-pie type. Is this the right place to do this?
+    if (maChartTypeServiceName == "com.sun.star.chart2.PieChartType") {
+        Reference< chart2::XDiagram> xDia(xNewDoc->getFirstDiagram());
+        uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
+        if( xDiaProp.is()) {
+            xDiaProp->setPropertyValue("SubPieType", uno::Any(mPieSubType));
+        }
+    }
 
     // set stack mode before a potential chart type detection (in case we have a rectangular range)
     uno::Reference< chart::XDiagram > xDiagram( xDoc->getDiagram() );

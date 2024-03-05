@@ -167,6 +167,10 @@ static const tMakeStringStringMap& lcl_getChartTypeNameMap()
          "com.sun.star.chart2.ColumnChartType"},
         {"com.sun.star.chart.PieDiagram",
          "com.sun.star.chart2.PieChartType"},
+        {"com.sun.star.chart.BarOfPieDiagram",
+         "com.sun.star.chart2.BarOfPieChartType"},
+        {"com.sun.star.chart.PieOfPieDiagram",
+         "com.sun.star.chart2.PieOfPieChartType"},
         {"com.sun.star.chart.DonutDiagram",
          "com.sun.star.chart2.DonutChartType"},
         {"com.sun.star.chart.XYDiagram",
@@ -304,7 +308,8 @@ XMLTokenEnum getTokenByChartType(
             else if( aServiceName == u"Bar" ||
                      (!bUseOldNames && aServiceName == u"Column"))
                 eResult = XML_BAR;
-            else if ( aServiceName == u"Pie" )
+            else if ( aServiceName == u"Pie" || aServiceName == u"BarOfPie" ||
+                    aServiceName == u"PieOfPie" )
                 eResult = XML_CIRCLE;
             else if ( aServiceName == u"Donut" )
                 eResult = XML_RING;

@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 
 using uno::Reference;
 using beans::XPropertySet;
@@ -1130,6 +1131,58 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarDataRangeODS)
     OUString aNegRange;
     aAny >>= aNegRange;
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$C$1:$C$3"), aNegRange);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_barOfPie)
+{
+    loadFromFile(u"ods/tdf50934_barOfPie.ods");
+    saveAndReload("calc8");
+
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT(xChartType.is());
+
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.PieChartType"_ustr,
+            xChartType->getChartType());
+
+    // Verify that it saves and loads as bar-of-pie
+    Reference< chart2::XDiagram> xDia(xChartDoc->getFirstDiagram());
+    CPPUNIT_ASSERT(xDia.is());
+    uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xDiaProp.is());
+    uno::Any aAny = xDiaProp->getPropertyValue("SubPieType");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    chart2::PieChartSubType subPieType;
+    aAny >>= subPieType;
+    CPPUNIT_ASSERT_EQUAL(chart2::PieChartSubType_BAR, subPieType);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_pieOfPie)
+{
+    loadFromFile(u"ods/tdf50934_pieOfPie.ods");
+    saveAndReload("calc8");
+
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT(xChartType.is());
+
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.PieChartType"_ustr,
+            xChartType->getChartType());
+
+    // Verify that it saves and loads as pie-of-pie
+    Reference< chart2::XDiagram> xDia(xChartDoc->getFirstDiagram());
+    CPPUNIT_ASSERT(xDia.is());
+    uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xDiaProp.is());
+    uno::Any aAny = xDiaProp->getPropertyValue("SubPieType");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    chart2::PieChartSubType subPieType;
+    aAny >>= subPieType;
+    CPPUNIT_ASSERT_EQUAL(chart2::PieChartSubType_PIE, subPieType);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartCrash)
