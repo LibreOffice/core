@@ -19,7 +19,6 @@
 -o sw.SwXDrawPage
 -o sw.SwXEndnoteProperties
 -o sw.SwXFieldMaster
--o sw.SwXFootnoteText
 -o sw.SwXFrames
 -o sw.SwXHeadFootText
 -o sw.SwXLineNumberingProperties

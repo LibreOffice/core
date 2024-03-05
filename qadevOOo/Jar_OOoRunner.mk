@@ -1093,7 +1093,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXDrawPage \
     qadevOOo/tests/java/mod/_sw/SwXEndnoteProperties \
     qadevOOo/tests/java/mod/_sw/SwXFieldMaster \
-    qadevOOo/tests/java/mod/_sw/SwXFootnoteText \
     qadevOOo/tests/java/mod/_sw/SwXFrames \
     qadevOOo/tests/java/mod/_sw/SwXHeadFootText \
     qadevOOo/tests/java/mod/_sw/SwXLineNumberingProperties \
