@@ -20,7 +20,6 @@ $(eval $(call gb_Library_use_libraries,i18nlangtag,\
 ))
 
 $(eval $(call gb_Library_use_externals,i18nlangtag,\
-	boost_headers \
 	icu_headers \
 	icuuc \
 ))

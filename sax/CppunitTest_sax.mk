@@ -11,8 +11,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,sax))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sax))
 
-$(eval $(call gb_CppunitTest_use_external,sax,boost_headers))
-
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sax))
 
 $(eval $(call gb_CppunitTest_use_libraries,sax, \

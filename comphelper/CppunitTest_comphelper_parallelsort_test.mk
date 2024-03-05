@@ -13,10 +13,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_parallelsort_test,
     comphelper/qa/unit/parallelsorttest \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,comphelper_parallelsort_test,\
-	boost_headers \
-))
-
 $(eval $(call gb_CppunitTest_use_sdk_api,comphelper_parallelsort_test))
 
 $(eval $(call gb_CppunitTest_use_libraries,comphelper_parallelsort_test, \

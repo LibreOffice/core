@@ -9,8 +9,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,i18nlangtag_test_languagetag))
 
-$(eval $(call gb_CppunitTest_use_external,i18nlangtag_test_languagetag,boost_headers))
-
 $(eval $(call gb_CppunitTest_use_sdk_api,i18nlangtag_test_languagetag))
 
 $(eval $(call gb_CppunitTest_use_libraries,i18nlangtag_test_languagetag,\

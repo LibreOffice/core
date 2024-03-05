@@ -43,7 +43,6 @@ $(eval $(call gb_Library_use_libraries,solver,\
 ))
 
 $(eval $(call gb_Library_use_externals,solver,\
-	boost_headers \
 	coinmp \
 	lpsolve \
 ))

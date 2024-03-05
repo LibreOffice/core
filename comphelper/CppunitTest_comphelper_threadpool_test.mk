@@ -13,10 +13,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_threadpool_test, \
     comphelper/qa/unit/threadpooltest \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,comphelper_threadpool_test,\
-	boost_headers \
-))
-
 $(eval $(call gb_CppunitTest_use_sdk_api,comphelper_threadpool_test))
 
 $(eval $(call gb_CppunitTest_use_libraries,comphelper_threadpool_test, \

@@ -11,10 +11,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,i18npool_defaultnumberingprovider))
 
-$(eval $(call gb_CppunitTest_use_externals,i18npool_defaultnumberingprovider,\
-	boost_headers \
-))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,i18npool_defaultnumberingprovider, \
     i18npool/qa/cppunit/test_defaultnumberingprovider \
 ))

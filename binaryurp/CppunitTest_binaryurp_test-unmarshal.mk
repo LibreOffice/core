@@ -9,8 +9,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,binaryurp_test-unmarshal))
 
-$(eval $(call gb_CppunitTest_use_external,binaryurp_test-unmarshal,boost_headers))
-
 $(eval $(call gb_CppunitTest_use_libraries,binaryurp_test-unmarshal,\
 	cppu \
 	cppuhelper \

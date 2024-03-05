@@ -20,8 +20,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,salhelper_testapi,\
     salhelper/qa/timer \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,salhelper_testapi,boost_headers))
-
 $(eval $(call gb_CppunitTest_use_libraries,salhelper_testapi,\
     salhelper \
     sal \

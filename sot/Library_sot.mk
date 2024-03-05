@@ -21,8 +21,6 @@ $(eval $(call gb_Library_Library,sot))
 
 $(eval $(call gb_Library_set_componentfile,sot,sot/util/sot,services))
 
-$(eval $(call gb_Library_use_external,sot,boost_headers))
-
 $(eval $(call gb_Library_use_sdk_api,sot))
 
 $(eval $(call gb_Library_add_defs,sot,\

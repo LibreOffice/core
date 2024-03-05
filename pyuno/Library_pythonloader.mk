@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,pythonloader,\
 ))
 
 $(eval $(call gb_Library_use_externals,pythonloader,\
-    boost_headers \
     python \
 ))
 

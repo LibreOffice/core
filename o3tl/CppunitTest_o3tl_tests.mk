@@ -19,8 +19,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,o3tl_tests))
 
-$(eval $(call gb_CppunitTest_use_external,o3tl_tests,boost_headers))
-
 $(eval $(call gb_CppunitTest_use_libraries,o3tl_tests,\
 	sal \
 ))

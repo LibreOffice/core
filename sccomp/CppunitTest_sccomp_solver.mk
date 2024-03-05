@@ -13,10 +13,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sccomp_solver,\
 	sccomp/qa/unit/solver \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sccomp_solver,\
-	boost_headers \
-))
-
 $(eval $(call gb_CppunitTest_add_defs,sccomp_solver,\
 	$(if $(ENABLE_COINMP), -DENABLE_COINMP) \
 	$(if $(ENABLE_LPSOLVE), -DENABLE_LPSOLVE) \

@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_custom_headers,ucpchelp1, \
 $(eval $(call gb_Library_use_sdk_api,ucpchelp1))
 
 $(eval $(call gb_Library_use_externals,ucpchelp1,\
-	boost_headers \
 	clucene \
 	expat \
 	libxml2 \

@@ -21,7 +21,6 @@ $(eval $(call gb_Library_use_libraries,hwp,\
 ))
 
 $(eval $(call gb_Library_use_externals,hwp,\
-	boost_headers \
 	zlib \
 ))
 

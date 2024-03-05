@@ -26,8 +26,6 @@ $(eval $(call gb_Library_set_include,pricing,\
     -I$(SRCDIR)/scaddins/inc \
 ))
 
-$(eval $(call gb_Library_use_external,pricing,boost_headers))
-
 $(eval $(call gb_Library_use_common_precompiled_header,pricing))
 
 $(eval $(call gb_Library_use_internal_comprehensive_api,pricing,\

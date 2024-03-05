@@ -32,10 +32,6 @@ $(eval $(call gb_CppunitTest_use_api,sax_xmlimport,\
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sax_xmlimport, \
-	boost_headers \
-))
-
 $(eval $(call gb_CppunitTest_use_ure,sax_xmlimport))
 $(eval $(call gb_CppunitTest_use_vcl,sax_xmlimport))
 

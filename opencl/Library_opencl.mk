@@ -19,7 +19,6 @@ $(eval $(call gb_Library_add_defs,opencl,\
 ))
 
 $(eval $(call gb_Library_use_externals,opencl,\
-    boost_headers \
     clew \
     icu_headers \
     icui18n \

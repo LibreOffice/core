@@ -31,7 +31,6 @@ $(eval $(call gb_Library_use_internal_api,helplinker,\
 
 
 $(eval $(call gb_Library_use_externals,helplinker,\
-    boost_headers \
     expat \
     libxslt \
     libxml2 \

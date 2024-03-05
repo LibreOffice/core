@@ -48,7 +48,6 @@ $(eval $(call gb_Library_use_system_win32_libs,jvmfwk,\
 endif
 
 $(eval $(call gb_Library_use_externals,jvmfwk,\
-    boost_headers \
     libxml2 \
     valgrind \
 ))

@@ -10,8 +10,6 @@
 
 $(eval $(call gb_Library_Library,log_uno_uno))
 
-$(eval $(call gb_Library_use_external,log_uno_uno,boost_headers))
-
 $(eval $(call gb_Library_use_udk_api,log_uno_uno))
 
 $(eval $(call gb_Library_use_libraries,log_uno_uno,\

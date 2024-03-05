@@ -9,8 +9,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,unotools_fontcvt))
 
-$(eval $(call gb_CppunitTest_use_external,unotools_fontcvt,boost_headers))
-
 $(eval $(call gb_CppunitTest_use_sdk_api,unotools_fontcvt))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,unotools_fontcvt, \
