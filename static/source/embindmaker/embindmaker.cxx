@@ -141,8 +141,8 @@ OUString jsSingleton(OUString const& singleton) { return "uno_Function_" + jsNam
 
 void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view prefix,
           Module* module, std::vector<OUString>& enums, std::vector<OUString>& structs,
-          std::vector<OUString>& interfaces, std::vector<OUString>& services,
-          std::vector<OUString>& singletons)
+          std::vector<OUString>& exceptions, std::vector<OUString>& interfaces,
+          std::vector<OUString>& services, std::vector<OUString>& singletons)
 {
     assert(cursor.is());
     assert(module != nullptr);
@@ -165,8 +165,8 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
                     sub = std::make_shared<Module>();
                 }
                 scan(static_cast<unoidl::ModuleEntity*>(ent.get())->createCursor(),
-                     Concat2View(name + "."), sub.get(), enums, structs, interfaces, services,
-                     singletons);
+                     Concat2View(name + "."), sub.get(), enums, structs, exceptions, interfaces,
+                     services, singletons);
                 break;
             }
             case unoidl::Entity::SORT_ENUM_TYPE:
@@ -176,6 +176,10 @@ void scan(rtl::Reference<unoidl::MapCursor> const& cursor, std::u16string_view p
             case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
                 module->mappings.emplace_back(id, "instance.uno_Type_" + jsName(name));
                 structs.emplace_back(name);
+                break;
+            case unoidl::Entity::SORT_EXCEPTION_TYPE:
+                module->mappings.emplace_back(id, "instance.uno_Type_" + jsName(name));
+                exceptions.emplace_back(name);
                 break;
             case unoidl::Entity::SORT_INTERFACE_TYPE:
                 module->mappings.emplace_back(id, "instance.uno_Type_" + jsName(name));
@@ -443,6 +447,28 @@ void dumpStructMembers(std::ostream& out, rtl::Reference<TypeManager> const& man
                           static_cast<unoidl::PlainStructTypeEntity*>(ent.get()));
     }
     for (auto const& mem : struc->getDirectMembers())
+    {
+        out << "\n        .field(\"" << mem.name << "\", &" << cppName(name) << "::" << mem.name
+            << ")";
+    }
+}
+
+void dumpExceptionMembers(std::ostream& out, rtl::Reference<TypeManager> const& manager,
+                          OUString const& name,
+                          rtl::Reference<unoidl::ExceptionTypeEntity> exception)
+{
+    auto const& base = exception->getDirectBase();
+    if (!base.isEmpty())
+    {
+        auto const ent = manager->getManager()->findEntity(base);
+        if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_EXCEPTION_TYPE)
+        {
+            throw CannotDumpException("bad exception base \"" + base + "\"");
+        }
+        dumpExceptionMembers(out, manager, name,
+                             static_cast<unoidl::ExceptionTypeEntity*>(ent.get()));
+    }
+    for (auto const& mem : exception->getDirectMembers())
     {
         out << "\n        .field(\"" << mem.name << "\", &" << cppName(name) << "::" << mem.name
             << ")";
@@ -784,13 +810,14 @@ SAL_IMPLEMENT_MAIN()
         auto const module = std::make_shared<Module>();
         std::vector<OUString> enums;
         std::vector<OUString> structs;
+        std::vector<OUString> exceptions;
         std::vector<OUString> interfaces;
         std::vector<OUString> services;
         std::vector<OUString> singletons;
         for (auto const& prov : mgr->getPrimaryProviders())
         {
-            scan(prov->createRootCursor(), u"", module.get(), enums, structs, interfaces, services,
-                 singletons);
+            scan(prov->createRootCursor(), u"", module.get(), enums, structs, exceptions,
+                 interfaces, services, singletons);
         }
         std::ofstream cppOut(cppPathname, std::ios_base::out | std::ios_base::trunc);
         if (!cppOut)
@@ -809,6 +836,10 @@ SAL_IMPLEMENT_MAIN()
         for (auto const& str : structs)
         {
             cppOut << "#include <" << str.replace('.', '/') << ".hpp>\n";
+        }
+        for (auto const& exc : exceptions)
+        {
+            cppOut << "#include <" << exc.replace('.', '/') << ".hpp>\n";
         }
         for (auto const& ifc : interfaces)
         {
@@ -867,6 +898,24 @@ SAL_IMPLEMENT_MAIN()
             cppOut << "    ::unoembindhelpers::registerUnoType<" << cppName(str) << ">();\n";
             dumpRegisterFunctionEpilog(cppOut, n);
             for (auto const& mem : strEnt->getDirectMembers())
+            {
+                recordSequenceTypes(mgr, mem.type, sequences);
+            }
+        }
+        for (auto const& exc : exceptions)
+        {
+            auto const ent = mgr->getManager()->findEntity(exc);
+            assert(ent.is());
+            assert(ent->getSort() == unoidl::Entity::SORT_EXCEPTION_TYPE);
+            rtl::Reference const excEnt(static_cast<unoidl::ExceptionTypeEntity*>(ent.get()));
+            dumpRegisterFunctionProlog(cppOut, n);
+            cppOut << "    ::emscripten::value_object<" << cppName(exc) << ">(\"uno_Type_"
+                   << jsName(exc) << "\")";
+            dumpExceptionMembers(cppOut, mgr, exc, excEnt);
+            cppOut << ";\n";
+            cppOut << "    ::unoembindhelpers::registerUnoType<" << cppName(exc) << ">();\n";
+            dumpRegisterFunctionEpilog(cppOut, n);
+            for (auto const& mem : excEnt->getDirectMembers())
             {
                 recordSequenceTypes(mgr, mem.type, sequences);
             }

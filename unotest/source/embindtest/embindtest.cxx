@@ -17,6 +17,7 @@
 #include <cppuhelper/weak.hxx>
 #include <o3tl/any.hxx>
 #include <org/libreoffice/embindtest/Enum.hpp>
+#include <org/libreoffice/embindtest/Exception.hpp>
 #include <org/libreoffice/embindtest/Struct.hpp>
 #include <org/libreoffice/embindtest/XTest.hpp>
 #include <rtl/ustring.hxx>
@@ -263,6 +264,23 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::Struct>::get()
                && *o3tl::forceAccess<org::libreoffice::embindtest::Struct>(value)
                       == org::libreoffice::embindtest::Struct{ -123456, 100.5, u"hä"_ustr };
+    }
+
+    css::uno::Any SAL_CALL getAnyException() override
+    {
+        return css::uno::Any(org::libreoffice::embindtest::Exception{
+            u"error"_ustr, {}, -123456, 100.5, u"hä"_ustr });
+    }
+
+    sal_Bool SAL_CALL isAnyException(css::uno::Any const& value) override
+    {
+        if (value.getValueType() != cppu::UnoType<org::libreoffice::embindtest::Exception>::get())
+        {
+            return false;
+        }
+        auto const& e = *o3tl::forceAccess<org::libreoffice::embindtest::Exception>(value);
+        return e.Message == "error" && !e.Context.is() && e.m1 == -123456 && e.m2 == 100.5
+               && e.m3 == u"hä";
     }
 
     css::uno::Sequence<sal_Bool> SAL_CALL getSequenceBoolean() override

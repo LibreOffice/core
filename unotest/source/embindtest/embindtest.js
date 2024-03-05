@@ -287,6 +287,22 @@ Module.addOnPostRun(function() {
         //TODO: a.delete();
     }
     {
+        let v = test.getAnyException();
+        console.log(v);
+        console.assert(v.get().Message === 'error');
+        console.assert(v.get().Context === null);
+        console.assert(v.get().m1 === -123456);
+        console.assert(v.get().m2 === 100.5);
+        console.assert(v.get().m3 === 'hä');
+        console.assert(test.isAnyException(v));
+        v.delete();
+        //TODO: let a = new Module.Any(
+        //TODO:     {Message: 'error', Context: null, m1: -123456, m2: 100.5, m3: 'hä'},
+        //TODO:     css.uno.TypeClass.EXCEPTION);
+        //TODO: console.assert(test.isAnyException(a));
+        //TODO: a.delete();
+    }
+    {
         let v = test.getSequenceBoolean();
         console.log(v);
         console.assert(v.size() === 3);

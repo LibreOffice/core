@@ -318,18 +318,17 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
                 case css::uno::TypeClass_STRUCT:
+                case css::uno::TypeClass_EXCEPTION:
                 {
                     css::uno::TypeDescription desc(self.getValueType().getTypeLibType());
                     assert(desc.is());
-                    auto const td = reinterpret_cast<typelib_StructTypeDescription*>(desc.get());
-                    auto const copy = std::malloc(td->aBase.aBase.nSize);
-                    copyStruct(&td->aBase, self.getValue(), copy);
+                    auto const td = reinterpret_cast<typelib_CompoundTypeDescription*>(desc.get());
+                    auto const copy = std::malloc(td->aBase.nSize);
+                    copyStruct(td, self.getValue(), copy);
                     emscripten::internal::WireTypePack argv(std::move(copy));
                     return emscripten::val::take_ownership(
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
-                case css::uno::TypeClass_EXCEPTION:
-                    return emscripten::val::undefined(); //TODO
                 case css::uno::TypeClass_INTERFACE:
                     return emscripten::val::undefined(); //TODO
                 default:
