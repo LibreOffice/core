@@ -252,8 +252,8 @@ FONT_AMIRI_TARBALL := Amiri-1.000.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_REEM_SHA256SUM := c4fd68a23c0ea471cc084ae7efe888da372b925cb208eeb0322c26792d2ef413
-FONT_REEM_TARBALL := ReemKufi-1.2.zip
+FONT_REEM_SHA256SUM := 2359f036c7bddeb4d5529d7b3c9139c3288c920cc26053d417cdbb563eafe0a4
+FONT_REEM_TARBALL := ReemKufi-1.7.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
