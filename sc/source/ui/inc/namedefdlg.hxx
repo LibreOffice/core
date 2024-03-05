@@ -30,6 +30,7 @@ private:
     const OUString maGlobalNameStr;
     const OUString maErrInvalidNameStr;
     const OUString maErrInvalidNameCellRefStr;
+    const OUString maErrInvalidSheetReference;
     const OUString maErrNameInUse;
 
     //hack to call this dialog from Manage Names
@@ -66,6 +67,8 @@ private:
     DECL_LINK(AddBtnHdl, weld::Button&, void);
     DECL_LINK(NameModifyHdl, weld::Entry&, void);
     DECL_LINK(AssignGetFocusHdl, formula::RefEdit&, void);
+    DECL_LINK(EdModifyCheckBoxHdl, weld::Toggleable&, void);
+    DECL_LINK(RefEdModifyHdl, formula::RefEdit&, void);
 
 protected:
     virtual void RefInputDone(bool bForced = false) override;

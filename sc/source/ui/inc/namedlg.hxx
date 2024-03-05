@@ -35,6 +35,7 @@ private:
     const OUString maGlobalNameStr;
     const OUString maErrInvalidNameStr;
     const OUString maErrNameInUse;
+    const OUString maErrInvalidSheetReference;
     const OUString maStrMultiSelect;
     OUString maStrInfoDefault;
 

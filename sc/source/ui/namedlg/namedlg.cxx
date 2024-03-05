@@ -50,6 +50,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
     , maGlobalNameStr(ScResId(STR_GLOBAL_SCOPE))
     , maErrInvalidNameStr(ScResId(STR_ERR_NAME_INVALID))
     , maErrNameInUse(ScResId(STR_ERR_NAME_EXISTS))
+    , maErrInvalidSheetReference(ScResId(STR_INVALID_TABREF_PRINT_AREA))
     , maStrMultiSelect(ScResId(STR_MULTI_SELECT))
 
     , mrViewData(rViewData)
@@ -259,23 +260,51 @@ bool ScNameDlg::IsNameValid()
         m_xFtInfo->set_label(maErrNameInUse);
         return false;
     }
-    m_xFtInfo->set_label( maStrInfoDefault );
     return true;
 }
 
 bool ScNameDlg::IsFormulaValid()
 {
-    ScCompiler aComp(mrDoc, maCursorPos, mrDoc.GetGrammar());
-    std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_xEdAssign->GetText());
-    if (pCode->GetCodeError() != FormulaError::NONE)
+    const OUString aRangeOrFormulaExp = m_xEdAssign->GetText();
+    // tdf#140394 - check if formula is a valid print range
+    if (m_xBtnPrintArea->get_active())
     {
-        m_xFtInfo->set_label_type(weld::LabelType::Error);
-        return false;
+        const ScRefFlags nValidAddr  = ScRefFlags::VALID | ScRefFlags::ROW_VALID | ScRefFlags::COL_VALID;
+        const ScRefFlags nValidRange = nValidAddr | ScRefFlags::ROW2_VALID | ScRefFlags::COL2_VALID;
+        const formula::FormulaGrammar::AddressConvention eConv = mrDoc.GetAddressConvention();
+        const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
+
+        ScAddress aAddr;
+        ScRange aRange;
+        for (sal_Int32 nIdx = 0; nIdx >= 0;)
+        {
+            const OUString aOne = aRangeOrFormulaExp.getToken(0, sep, nIdx);
+            ScRefFlags nResult = aRange.Parse(aOne, mrDoc, eConv);
+            if ((nResult & nValidRange) != nValidRange)
+            {
+                ScRefFlags nAddrResult = aAddr.Parse(aOne, mrDoc, eConv);
+                if ((nAddrResult & nValidAddr) != nValidAddr)
+                {
+                    m_xFtInfo->set_label_type(weld::LabelType::Error);
+                    m_xFtInfo->set_label(maErrInvalidSheetReference);
+                    return false;
+                }
+            }
+        }
     }
     else
     {
-        return true;
+        ScCompiler aComp(mrDoc, maCursorPos, mrDoc.GetGrammar());
+        std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(aRangeOrFormulaExp);
+        if (pCode->GetCodeError() != FormulaError::NONE)
+        {
+            m_xFtInfo->set_label_type(weld::LabelType::Error);
+            //TODO: implement an info text
+            return false;
+        }
     }
+
+    return true;
 }
 
 ScRangeName* ScNameDlg::GetRangeName(const OUString& rScope)
@@ -348,22 +377,19 @@ void ScNameDlg::NameModified()
     OUString aOldName = aLine.aName;
     OUString aNewName = m_xEdName->get_text();
     aNewName = aNewName.trim();
-    m_xFtInfo->set_label_type(weld::LabelType::Normal);
+    m_xBtnOk->set_sensitive(false);
     if (aNewName != aOldName)
     {
         if (!IsNameValid())
             return;
     }
-    else
-    {
-        m_xFtInfo->set_label( maStrInfoDefault );
-    }
 
     if (!IsFormulaValid())
-    {
-        //TODO: implement an info text
         return;
-    }
+
+    m_xFtInfo->set_label_type(weld::LabelType::Normal);
+    m_xFtInfo->set_label(maStrInfoDefault);
+    m_xBtnOk->set_sensitive(true);
 
     OUString aOldScope = aLine.aScope;
     //empty table

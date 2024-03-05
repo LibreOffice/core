@@ -173,6 +173,7 @@
 #define STR_SAVE_DOC                            NC_("STR_SAVE_DOC", "Save document")
 #define STR_AREA_ALREADY_INSERTED               NC_("STR_AREA_ALREADY_INSERTED", "This range has already been inserted.")
 #define STR_INVALID_TABREF                      NC_("STR_INVALID_TABREF", "Invalid sheet reference.")
+#define STR_INVALID_TABREF_PRINT_AREA           NC_("STR_INVALID_TABREF_PRINT_AREA", "Invalid sheet reference. Ensure the inserted expression is a valid print range.")
 #define STR_INVALID_QUERYAREA                   NC_("STR_INVALID_QUERYAREA", "This range does not contain a valid query.")
 #define STR_REIMPORT_EMPTY                      NC_("STR_REIMPORT_EMPTY", "This range does not contain imported data.")
 #define STR_NOMULTISELECT                       NC_("STR_NOMULTISELECT", "This function cannot be used with multiple selections.")
