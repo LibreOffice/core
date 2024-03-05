@@ -136,6 +136,9 @@ gb_MERGE_LIBRARY_LIST += \
 	date \
 	dba \
 	dbahsql \
+	$(call gb_Helper_optional,DBCONNECTIVITY, \
+		dbase \
+		dbaxml) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	dlgprov \
