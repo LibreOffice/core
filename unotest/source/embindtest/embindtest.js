@@ -258,7 +258,7 @@ Module.addOnPostRun(function() {
         v.delete();
         let s = new Module.uno_Sequence_string(["foo", "barr", "bazzz"]);
         //TODO: let a = new Module.Any(s, css.uno.TypeClass.SEQUENCE);
-        //TODO: console.assert(test.isAny(a));
+        //TODO: console.assert(test.isAnySequence(a));
         //TODO: a.delete();
         s.delete();
     }
@@ -270,7 +270,7 @@ Module.addOnPostRun(function() {
         v.delete();
         //TODO: let a = new Module.Any(
         //TODO:     uno.org.libreoffice.embindtest.Enum.E_2, css.uno.TypeClass.ENUM);
-        //TODO: console.assert(test.isAny(a));
+        //TODO: console.assert(test.isAnyEnum(a));
         //TODO: a.delete();
     }
     {
@@ -283,7 +283,7 @@ Module.addOnPostRun(function() {
         v.delete();
         //TODO: let a = new Module.Any(
         //TODO:     {m1: -123456, m2: 100.5, m3: 'hä'}, css.uno.TypeClass.STRUCT);
-        //TODO: console.assert(test.isAny(a));
+        //TODO: console.assert(test.isAnyStruct(a));
         //TODO: a.delete();
     }
     {
