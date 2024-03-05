@@ -40,17 +40,13 @@
 namespace
 {
 // Paragraph properties are pasted if the selection contains a whole paragraph
-// or there was no selection at all (i.e. just a left click)
 bool ShouldPasteParaFormatPerSelection(const OutlinerView* pOLV)
 {
     if(!pOLV)
         return true;
 
-    if(!pOLV->GetEditView().HasSelection())
-        return true;
-
     if(!pOLV->GetEditView().IsSelectionWithinSinglePara())
-        return true;
+        return false;
 
     return pOLV->GetEditView().IsSelectionFullPara();
 }
