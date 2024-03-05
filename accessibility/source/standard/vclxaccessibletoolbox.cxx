@@ -660,9 +660,14 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         Reference< XAccessible> xParent = pChild;
         if ( pItemWindow )
         {
-            xChild = new OToolBoxWindowItem(0,::comphelper::getProcessComponentContext(),pItemWindow->GetAccessible(),xParent);
-            pItemWindow->SetAccessible(xChild);
-            pChild->SetChild( xChild );
+            auto const xInnerAcc(pItemWindow->GetAccessible());
+            if (xInnerAcc) // else child is being disposed - avoid crashing
+            {
+                xChild = new OToolBoxWindowItem(0,
+                    ::comphelper::getProcessComponentContext(), xInnerAcc, xParent);
+                pItemWindow->SetAccessible(xChild);
+                pChild->SetChild( xChild );
+            }
         }
         xChild = pChild;
         if ( nHighlightItemId > ToolBoxItemId(0) && nItemId == nHighlightItemId )
