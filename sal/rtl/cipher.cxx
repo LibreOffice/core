@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <stdlib.h>
 #include <string.h>
 
 #include <sal/types.h>
