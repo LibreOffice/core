@@ -18,8 +18,9 @@
  */
 
 #include "swdlgfact.hxx"
-
 #include <swuiexp.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 namespace swui
 {
@@ -30,10 +31,44 @@ SwAbstractDialogFactory& GetFactory()
 }
 }
 
-extern "C" {
-SAL_DLLPUBLIC_EXPORT SwAbstractDialogFactory* SwCreateDialogFactory()
+/// anonymous implementation namespace
+namespace
 {
-    return &::swui::GetFactory();
+class DialogFactoryService
+    : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::lang::XUnoTunnel>
+{
+public:
+    // css::lang::XServiceInfo:
+    virtual OUString SAL_CALL getImplementationName() override
+    {
+        return "com.sun.star.text.comp.DialogFactoryService";
+    }
+    virtual sal_Bool SAL_CALL supportsService(const OUString& serviceName) override
+    {
+        return cppu::supportsService(this, serviceName);
+    }
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    {
+        return { "com.sun.star.text.DialogFactoryService" };
+    }
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL
+    getSomething(const ::css::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
+    {
+        SwAbstractDialogFactory* pFactory = &::swui::GetFactory();
+        return reinterpret_cast<sal_Int64>(pFactory);
+    }
+};
+
+} // closing anonymous implementation namespace
+
+extern "C" {
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_text_DialogFactoryService_get_implementation(css::uno::XComponentContext*,
+                                                          css::uno::Sequence<css::uno::Any> const&)
+{
+    return cppu::acquire(new DialogFactoryService);
 }
 }
 

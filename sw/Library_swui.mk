@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,swui))
 
-$(eval $(call gb_Library_set_plugin_for,swui,sw))
+$(eval $(call gb_Library_set_componentfile,swui,sw/util/swui,services))
 
 $(eval $(call gb_Library_set_include,swui,\
     -I$(SRCDIR)/sw/inc \
@@ -72,6 +72,7 @@ $(eval $(call gb_Library_use_libraries,swui,\
     svx \
     svx \
     svxcore \
+	sw \
     tk \
     tl \
     ucbhelper \

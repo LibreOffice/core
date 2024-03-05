@@ -3746,6 +3746,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/text,\
 	ColumnSeparatorStyle \
 	ControlCharacter \
 	DateDisplayFormat \
+	DialogFactoryService \
 	DocumentStatistic \
 	FilenameDisplayFormat \
 	FontEmphasis \

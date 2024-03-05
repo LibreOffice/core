@@ -15,8 +15,6 @@
 #include <libxml/parser.h>
 #include "commonfuzzer.hxx"
 
-extern "C" void* SwCreateDialogFactory() { return nullptr; }
-
 extern "C" bool TestPDFExportFODT(SvStream& rStream);
 
 static void silent_error_func(void*, const char* /*format*/, ...) {}
