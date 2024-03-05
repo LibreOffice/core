@@ -152,8 +152,8 @@ FONT_GENTIUM_TARBALL := 1725634df4bb3dcb1b2c91a6175f8789-GentiumBasic_1102.zip
 # will not run into conflicts
 FONT_LIBERATION_NARROW_SHA256SUM := 8879d89b5ff7b506c9fc28efc31a5c0b954bbe9333e66e5283d27d20a8519ea3
 FONT_LIBERATION_NARROW_TARBALL := liberation-narrow-fonts-ttf-1.07.6.tar.gz
-FONT_LIBERATION_SHA256SUM := 26f85412dd0aa9d061504a1cc8aaf0aa12a70710e8d47d8b65a1251757c1a5ef
-FONT_LIBERATION_TARBALL := liberation-fonts-ttf-2.1.4.tar.gz
+FONT_LIBERATION_SHA256SUM := 7191c669bf38899f73a2094ed00f7b800553364f90e2637010a69c0e268f25d0
+FONT_LIBERATION_TARBALL := liberation-fonts-ttf-2.1.5.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
