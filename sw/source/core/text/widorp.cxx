@@ -131,11 +131,6 @@ bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
             aRectFnSet.YDiff( aRectFnSet.GetPrtBottom(*m_pFrame->GetUpper()), m_nOrigin );
         SwTwips nDiff = nHeight - nLineHeight;
 
-        // Hide whitespace may require not to insert a new page.
-        SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
-        if (!pPageFrame->CheckPageHeightValidForHideWhitespace(nDiff))
-            nDiff = 0;
-
         // If everything is inside the existing frame the result is true;
         bFit = nDiff >= 0;
 
