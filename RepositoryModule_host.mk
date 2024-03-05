@@ -229,8 +229,9 @@ $(eval $(call repositorymodule_serialize,\
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
 	sc msword \
 	$(call gb_Helper_optional,DESKTOP,swui) \
-	sw sd \
+	sw \
 	$(if $(MERGELIBS_MORE),, \
+		sd \
 		$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 		writerfilter cui) \
 	$(if $(MERGELIBS), merged, \
