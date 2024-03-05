@@ -137,6 +137,7 @@ gb_MERGE_LIBRARY_LIST += \
 	dba \
 	dbahsql \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	dlgprov \
 	$(if $(ENABLE_EVOAB2),evoab) \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \

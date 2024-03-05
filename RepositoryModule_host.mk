@@ -230,10 +230,11 @@ $(eval $(call repositorymodule_serialize,\
 	sc msword \
 	$(call gb_Helper_optional,DESKTOP,swui) \
 	sw sd \
-	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
-	$(if $(MERGELIBS_MORE),,writerfilter cui) \
+	$(if $(MERGELIBS_MORE),, \
+		$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
+		writerfilter cui) \
 	$(if $(MERGELIBS), merged, \
-		 $(if $(MERGELIBS_MORE),writerfilter cui,) chartcontroller chartcore oox svx svxcore xo sfx fwk svt vcl) \
+		chartcontroller chartcore oox svx svxcore xo sfx fwk svt vcl) \
 ))
 endif
 endif # !$(DISABLE_DYNLOADING)
