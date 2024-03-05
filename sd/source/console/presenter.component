@@ -15,4 +15,8 @@
         constructor="sd_PresenterProtocolHandler_get_implementation">
         <service name="com.sun.star.frame.ProtocolHandler"/>
     </implementation>
+    <implementation name="com.sun.star.presentation.comp.CreateDialogFactoryService"
+        constructor="com_sun_star_presentation_CreateDialogFactoryService_get_implementation">
+        <service name="com.sun.star.presentation.CreateDialogFactoryService"/>
+     </implementation>
 </component>

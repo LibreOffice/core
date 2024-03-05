@@ -17,20 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sdabstdlg.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/presentation/CreateDialogFactoryService.hpp>
+module com { module sun { module star { module presentation {
 
-SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
-{
-    auto xService = css::presentation::CreateDialogFactoryService::create(
-        comphelper::getProcessComponentContext());
-    assert(xService);
-    // get a factory instance
-    SdAbstractDialogFactory* pFactory
-        = reinterpret_cast<SdAbstractDialogFactory*>(xService->getSomething({}));
-    assert(pFactory);
-    return pFactory;
-}
+/**
+  The sd module uses this to get a pointer to the AccessibleFactory from the sdui module.
+  Because we have a dependency in our modules that goes the "wrong" way.
+
+  @since LibreOffice 24.8
+
+  @internal
+
+  ATTENTION: This is marked <em>internal</em> and does not
+  have the <em>published</em> flag, which means it is subject to
+  change without notice and should not be used outside the LibreOffice core.
+*/
+service CreateDialogFactoryService : com::sun::star::lang::XUnoTunnel;
+
+}; }; }; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
