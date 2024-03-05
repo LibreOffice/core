@@ -125,7 +125,7 @@ css::uno::Reference< css::accessibility::XAccessible > Window::GetAccessible( bo
     */
     if ( !mpWindowImpl )
         return css::uno::Reference< css::accessibility::XAccessible >();
-    if ( !mpWindowImpl->mxAccessible.is() && bCreate )
+    if (!mpWindowImpl->mxAccessible.is() && !mpWindowImpl->mbInDispose && bCreate)
         mpWindowImpl->mxAccessible = CreateAccessible();
 
     return mpWindowImpl->mxAccessible;
