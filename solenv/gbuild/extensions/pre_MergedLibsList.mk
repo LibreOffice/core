@@ -175,6 +175,7 @@ gb_MERGE_LIBRARY_LIST += \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
 	sdbc2 \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	slideshow \
 	$(if $(filter WNT,$(OS)), \
 		smplmail \
