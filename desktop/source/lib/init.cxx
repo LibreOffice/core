@@ -1298,6 +1298,8 @@ static void doc_setViewTimezone(LibreOfficeKitDocument* pThis, int nId, const ch
 
 static void doc_setViewReadOnly(LibreOfficeKitDocument* pThis, int nId, const bool readonly);
 
+static void doc_setAllowChangeComments(LibreOfficeKitDocument* pThis, int nId, const bool allow);
+
 static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
 
 static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis);
@@ -1497,6 +1499,8 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->getA11yCaretPosition = doc_getA11yCaretPosition;
 
         m_pDocumentClass->setViewReadOnly = doc_setViewReadOnly;
+
+        m_pDocumentClass->setAllowChangeComments = doc_setAllowChangeComments;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -7239,6 +7243,17 @@ static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pTh
 
     doc_setView(pThis, nId);
     SfxViewShell::Current()->SetLokReadOnlyView(readOnly);
+}
+
+static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, const bool allow)
+{
+    comphelper::ProfileZone aZone("doc_setAllowChangeComments");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    doc_setView(pThis, nId);
+    SfxViewShell::Current()->SetAllowChangeComments(allow);
 }
 
 static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)
