@@ -18,6 +18,7 @@
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
+#include <fmtanchr.hxx>
 
 /// Covers sw/source/uibase/dochdl/ fixes.
 class SwUibaseDochdlTest : public SwModelTestBase
@@ -74,6 +75,31 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelection)
     // Without the accompanying fix in place, this test would have crashed, because we read past the
     // end of the hints array.
     CPPUNIT_ASSERT(!xTransfer->isComplex());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelectionAtChar)
+{
+    // Given a document with an at-char anchored image:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AT_CHAR);
+    aFrameSet.Put(aAnchor);
+    Graphic aGrf;
+    pWrtShell->SwFEShell::Insert(OUString(), OUString(), &aGrf, &aFrameSet);
+    pWrtShell->UnSelectFrame();
+
+    // When checking if the selection is simple or complex:
+    pWrtShell->SelAll();
+    uno::Reference<datatransfer::XTransferable2> xTransfer = new SwTransferable(*pWrtShell);
+    bool bComplex = xTransfer->isComplex();
+
+    // Then make sure it's complex:
+    // Without the accompanying fix in place, this test would have failed, a selection containing an
+    // image was considered simple.
+    CPPUNIT_ASSERT(bComplex);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
