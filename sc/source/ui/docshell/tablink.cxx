@@ -177,8 +177,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
         pMed->UseInteractionHandler(true);    // enable the filter options dialog
 
     // aRef->DoClose() will be called explicitly, but it is still more safe to use SfxObjectShellLock here
-    ScDocShell* pSrcShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS);
-    SfxObjectShellLock aRef = pSrcShell;
+    rtl::Reference<ScDocShell> pSrcShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS);
     pSrcShell->DoLoad(pMed);
 
     // options might have been set
@@ -358,7 +357,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     //  clean up
 
-    aRef->DoClose();
+    pSrcShell->DoClose();
 
     //  Undo
 
@@ -491,8 +490,7 @@ ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
                                    OUString& rFilterName, OUString& rOptions,
                                    sal_uInt32 nRekCnt, weld::Window* pInteractionParent,
                                    css::uno::Reference<css::io::XInputStream> xInputStream)
-    : pDocShell(nullptr)
-    , pMedium(nullptr)
+    : pMedium(nullptr)
 {
     if ( rFilterName.isEmpty() )
         GetFilterName(rFileName, rFilterName, rOptions, true, pInteractionParent != nullptr);
@@ -506,7 +504,6 @@ ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
         return ;
 
     pDocShell = new ScDocShell( SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS );
-    aRef = pDocShell;
 
     ScDocument& rDoc = pDocShell->GetDocument();
     ScExtDocOptions*    pExtDocOpt = rDoc.GetExtDocOptions();
@@ -526,22 +523,21 @@ ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
 
 ScDocumentLoader::~ScDocumentLoader()
 {
-    if ( aRef.is() )
-        aRef->DoClose();
+    if (pDocShell)
+        pDocShell->DoClose();
     else
         delete pMedium;
 }
 
 void ScDocumentLoader::ReleaseDocRef()
 {
-    if ( aRef.is() )
+    if (pDocShell)
     {
         //  release reference without calling DoClose - caller must
         //  have another reference to the doc and call DoClose later
 
-        pDocShell = nullptr;
         pMedium = nullptr;
-        aRef.clear();
+        pDocShell.clear();
     }
 }
 

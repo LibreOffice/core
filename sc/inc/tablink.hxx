@@ -73,8 +73,7 @@ class SfxFilter;
 class SC_DLLPUBLIC ScDocumentLoader
 {
 private:
-    ScDocShell*         pDocShell;
-    SfxObjectShellRef   aRef;
+    rtl::Reference<ScDocShell> pDocShell;
     SfxMedium*          pMedium;
 
 public:
@@ -84,7 +83,7 @@ public:
                      = css::uno::Reference<css::io::XInputStream>());
     ~ScDocumentLoader();
     ScDocument*         GetDocument();
-    ScDocShell*         GetDocShell()       { return pDocShell; }
+    ScDocShell*         GetDocShell()       { return pDocShell.get(); }
     bool                IsError() const;
 
     void                ReleaseDocRef();    // without calling DoClose

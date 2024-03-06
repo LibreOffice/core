@@ -38,7 +38,6 @@
 
 ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Widget* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/externaldata.ui", "ExternalDataDialog")
-    , m_pSourceShell(nullptr)
     , m_xCbUrl(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
     , m_xBtnBrowse(m_xBuilder->weld_button("browse"))
     , m_xLbRanges(m_xBuilder->weld_tree_view("ranges"))
@@ -109,8 +108,7 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
     {
         //  unload old document
         m_pSourceShell->DoClose();
-        m_pSourceShell = nullptr;
-        aSourceRef.clear();
+        m_pSourceShell.clear();
     }
 
     if ( rFile.isEmpty() )
@@ -131,7 +129,6 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
         if (nErr)
             ErrorHandler::HandleError( nErr );      // including warnings
 
-        aSourceRef = m_pSourceShell;
         aLoader.ReleaseDocRef();    // don't call DoClose in DocLoader dtor
     }
 }
@@ -208,7 +205,6 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
         pMed->UseInteractionHandler( true );    // to enable the filter options dialog
 
         m_pSourceShell = new ScDocShell;
-        aSourceRef = m_pSourceShell;
         m_pSourceShell->DoLoad( pMed.get() );
 
         ErrCodeMsg nErr = m_pSourceShell->GetErrorCode();
@@ -222,8 +218,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
         else
         {
             m_pSourceShell->DoClose();
-            m_pSourceShell = nullptr;
-            aSourceRef.clear();
+            m_pSourceShell.clear();
 
             m_xCbUrl->set_entry_text(OUString());
         }

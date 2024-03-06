@@ -91,7 +91,7 @@ void GalleryFileStorage::ImplCreateSvDrawStorage()
     }
 }
 
-const tools::SvRef<SotStorage>& GalleryFileStorage::GetSvDrawStorage() const
+const rtl::Reference<SotStorage>& GalleryFileStorage::GetSvDrawStorage() const
 {
     return m_aSvDrawStorageRef;
 }
@@ -265,14 +265,14 @@ bool GalleryFileStorage::implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nP
 
 bool GalleryFileStorage::readModel(const GalleryObject* pObject, SdrModel& rModel)
 {
-    tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
+    rtl::Reference<SotStorage> xSotStorage(GetSvDrawStorage());
     bool bRet = false;
     const INetURLObject aURL(ImplGetURL(pObject));
 
     if (xSotStorage.is())
     {
         const OUString aStreamName(GetSvDrawStreamNameFromURL(aURL));
-        tools::SvRef<SotStorageStream> xInputStream(
+        rtl::Reference<SotStorageStream> xInputStream(
             xSotStorage->OpenSotStream(aStreamName, StreamMode::READ));
 
         if (xInputStream.is() && !xInputStream->GetError())
@@ -289,13 +289,13 @@ SgaObjectSvDraw GalleryFileStorage::insertModel(const FmFormModel& rModel,
                                                 const INetURLObject& rUserURL)
 {
     INetURLObject aURL(implCreateUniqueURL(SgaObjKind::SvDraw, rUserURL));
-    tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
+    rtl::Reference<SotStorage> xSotStorage(GetSvDrawStorage());
     bool bRet = false;
 
     if (xSotStorage.is())
     {
         const OUString aStreamName(GetSvDrawStreamNameFromURL(aURL));
-        tools::SvRef<SotStorageStream> xOutputStream(
+        rtl::Reference<SotStorageStream> xOutputStream(
             xSotStorage->OpenSotStream(aStreamName, StreamMode::WRITE | StreamMode::TRUNC));
 
         if (xOutputStream.is() && !xOutputStream->GetError())
@@ -336,13 +336,13 @@ bool GalleryFileStorage::readModelStream(const GalleryObject* pObject,
                                          tools::SvRef<SotTempStream> const& rxModelStream)
 {
     const INetURLObject aURL(ImplGetURL(pObject));
-    tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
+    rtl::Reference<SotStorage> xSotStorage(GetSvDrawStorage());
     bool bRet = false;
 
     if (xSotStorage.is())
     {
         const OUString aStreamName(GetSvDrawStreamNameFromURL(aURL));
-        tools::SvRef<SotStorageStream> xInputStream(
+        rtl::Reference<SotStorageStream> xInputStream(
             xSotStorage->OpenSotStream(aStreamName, StreamMode::READ));
 
         if (xInputStream.is() && !xInputStream->GetError())
@@ -384,12 +384,12 @@ GalleryFileStorage::insertModelStream(const tools::SvRef<SotTempStream>& rxModel
                                       const INetURLObject& rUserURL)
 {
     INetURLObject aURL(implCreateUniqueURL(SgaObjKind::SvDraw, rUserURL));
-    tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
+    rtl::Reference<SotStorage> xSotStorage(GetSvDrawStorage());
 
     if (xSotStorage.is())
     {
         const OUString aStreamName(GetSvDrawStreamNameFromURL(aURL));
-        tools::SvRef<SotStorageStream> xOutputStream(
+        rtl::Reference<SotStorageStream> xOutputStream(
             xSotStorage->OpenSotStream(aStreamName, StreamMode::WRITE | StreamMode::TRUNC));
 
         if (xOutputStream.is() && !xOutputStream->GetError())
@@ -533,7 +533,7 @@ SgaObjectSvDraw GalleryFileStorage::updateSvDrawObject(const GalleryObject* pEnt
     if (GetSvDrawStorage().is())
     {
         const OUString aStmName(GetSvDrawStreamNameFromURL(*pEntry->m_oStorageUrl));
-        tools::SvRef<SotStorageStream> pIStm
+        rtl::Reference<SotStorageStream> pIStm
             = GetSvDrawStorage()->OpenSotStream(aStmName, StreamMode::READ);
 
         if (pIStm.is() && !pIStm->GetError())
@@ -618,7 +618,7 @@ void GalleryFileStorage::updateTheme()
 
     try
     {
-        tools::SvRef<SotStorage> aTempStorageRef(
+        rtl::Reference<SotStorage> aTempStorageRef(
             new SotStorage(false, aTmpURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                            StreamMode::STD_READWRITE));
         GetSvDrawStorage()->CopyTo(aTempStorageRef.get());

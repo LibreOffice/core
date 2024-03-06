@@ -23,7 +23,7 @@
 #include "mock-visitor.hxx"
 #include <memory>
 
-typedef tools::SvRef<SmDocShell> SmDocShellRef;
+typedef rtl::Reference<SmDocShell> SmDocShellRef;
 
 using namespace ::com::sun::star;
 

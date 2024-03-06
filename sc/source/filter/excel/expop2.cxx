@@ -71,7 +71,7 @@ ErrCode ExportBiff5::Write()
     ScDocShell* pDocShell = GetDocShell();
     OSL_ENSURE( pDocShell, "ExportBiff5::Write - no document shell" );
 
-    tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
+    rtl::Reference<SotStorage> xRootStrg = GetRootStorage();
     OSL_ENSURE( xRootStrg.is(), "ExportBiff5::Write - no root storage" );
 
     VBAExportMode eVbaExportMode = VBAExportMode::NONE;
@@ -91,7 +91,7 @@ ErrCode ExportBiff5::Write()
         VbaExport aExport(pDocShell->GetModel());
         if (aExport.containsVBAProject())
         {
-            tools::SvRef<SotStorage> xVBARoot = xRootStrg->OpenSotStorage("_VBA_PROJECT_CUR");
+            rtl::Reference<SotStorage> xVBARoot = xRootStrg->OpenSotStorage("_VBA_PROJECT_CUR");
             aExport.exportVBA( xVBARoot.get() );
         }
     }

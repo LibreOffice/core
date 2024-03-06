@@ -23,6 +23,7 @@
 
 #include <span>
 
+#include <rtl/ref.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
@@ -228,7 +229,7 @@ private:
 
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED
 #define SV_DECL_DRAW_DOC_SHELL_DEFINED
-typedef ::tools::SvRef<DrawDocShell> DrawDocShellRef;
+typedef rtl::Reference<DrawDocShell> DrawDocShellRef;
 #endif
 
 } // end of namespace sd

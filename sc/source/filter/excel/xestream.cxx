@@ -1035,7 +1035,7 @@ bool XclExpXmlStream::exportDocument()
     // NOTE: Don't use SotStorage or SvStream any more, and never call
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
     // Instead, write via XOutputStream instance.
-    tools::SvRef<SotStorage> rStorage = static_cast<SotStorage*>(nullptr);
+    rtl::Reference<SotStorage> rStorage;
     drawingml::DrawingML::ResetMlCounters();
 
     auto& rGraphicExportCache = drawingml::GraphicExportCache::get();
@@ -1113,7 +1113,7 @@ bool XclExpXmlStream::exportDocument()
         if (aExport.containsVBAProject())
         {
             SvMemoryStream aVbaStream(4096, 4096);
-            tools::SvRef<SotStorage> pVBAStorage(new SotStorage(aVbaStream));
+            rtl::Reference<SotStorage> pVBAStorage(new SotStorage(aVbaStream));
             aExport.exportVBA( pVBAStorage.get() );
             aVbaStream.Seek(0);
             css::uno::Reference<css::io::XInputStream> xVBAStream(

@@ -402,7 +402,7 @@ SotStorage::~SotStorage()
 std::unique_ptr<SvMemoryStream> SotStorage::CreateMemoryStream()
 {
     std::unique_ptr<SvMemoryStream> pStm(new SvMemoryStream( 0x8000, 0x8000 ));
-    tools::SvRef<SotStorage> aStg = new SotStorage( *pStm );
+    rtl::Reference<SotStorage> aStg = new SotStorage(*pStm);
     if( CopyTo( aStg.get() ) )
     {
         aStg->Commit();
@@ -529,10 +529,10 @@ bool SotStorage::Commit()
     return ERRCODE_NONE == GetError();
 }
 
-tools::SvRef<SotStorageStream> SotStorage::OpenSotStream( const OUString & rEleName,
+rtl::Reference<SotStorageStream> SotStorage::OpenSotStream(const OUString& rEleName,
                                               StreamMode nMode )
 {
-    tools::SvRef<SotStorageStream> pStm;
+    rtl::Reference<SotStorageStream> pStm;
     if( m_pOwnStg )
     {
         // enable full Ole patches,
@@ -540,7 +540,7 @@ tools::SvRef<SotStorageStream> SotStorage::OpenSotStream( const OUString & rEleN
         nMode |= StreamMode::SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
         BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode );
-        pStm = new SotStorageStream( p );
+        pStm = new SotStorageStream(p);
 
         if( !nE )
             m_pOwnStg->ResetError(); // don't set error
@@ -553,7 +553,7 @@ tools::SvRef<SotStorageStream> SotStorage::OpenSotStream( const OUString & rEleN
     return pStm;
 }
 
-SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
+rtl::Reference<SotStorage> SotStorage::OpenSotStorage( const OUString & rEleName,
                                          StreamMode nMode,
                                          bool transacted )
 {
@@ -564,7 +564,7 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
         BaseStorage * p = m_pOwnStg->OpenStorage(rEleName, nMode, !transacted);
         if( p )
         {
-            SotStorage * pStor = new SotStorage( p );
+            rtl::Reference<SotStorage> pStor = new SotStorage( p );
             if( !nE )
                 m_pOwnStg->ResetError(); // don't set error
 
@@ -657,7 +657,7 @@ bool SotStorage::IsOLEStorage( SvStream* pStream )
     return Storage::IsStorageFile( pStream );
 }
 
-SotStorage* SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::XStorage >& xStorage,
+rtl::Reference<SotStorage> SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::XStorage >& xStorage,
                                         const OUString& rEleName, StreamMode nMode )
 {
     sal_Int32 nEleMode = embed::ElementModes::SEEKABLEREAD;
@@ -757,7 +757,7 @@ sal_Int32 SotStorage::GetVersion( const css::uno::Reference < css::embed::XStora
 
 namespace
 {
-    void traverse(const tools::SvRef<SotStorage>& rStorage, std::vector<unsigned char>& rBuf)
+    void traverse(const rtl::Reference<SotStorage>& rStorage, std::vector<unsigned char>& rBuf)
     {
         SvStorageInfoList infos;
 
@@ -768,14 +768,14 @@ namespace
             if (info.IsStream())
             {
                 // try to open and read all content
-                tools::SvRef<SotStorageStream> xStream(rStorage->OpenSotStream(info.GetName(), StreamMode::STD_READ));
+                rtl::Reference<SotStorageStream> xStream(rStorage->OpenSotStream(info.GetName(), StreamMode::STD_READ));
                 const size_t nSize = xStream->GetSize();
                 const size_t nRead = xStream->ReadBytes(rBuf.data(), nSize);
                 SAL_INFO("sot", "Read " << nRead << "bytes");
             }
             else if (info.IsStorage())
             {
-                tools::SvRef<SotStorage> xStorage(rStorage->OpenSotStorage(info.GetName(), StreamMode::STD_READ));
+                rtl::Reference<SotStorage> xStorage(rStorage->OpenSotStorage(info.GetName(), StreamMode::STD_READ));
 
                 // continue with children
                 traverse(xStorage, rBuf);
@@ -789,7 +789,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportOLE2(SvStream &rStream)
     try
     {
         size_t nSize = rStream.remainingSize();
-        tools::SvRef<SotStorage> xRootStorage(new SotStorage(&rStream, false));
+        rtl::Reference<SotStorage> xRootStorage(new SotStorage(&rStream, false));
         std::vector<unsigned char> aTmpBuf(nSize);
         traverse(xRootStorage, aTmpBuf);
     }

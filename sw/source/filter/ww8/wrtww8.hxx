@@ -1023,7 +1023,7 @@ protected:
     std::unique_ptr<WW8AttributeOutput> m_pAttrOutput;  ///< Converting attributes to stream data
 
 private:
-    tools::SvRef<SotStorage>       m_xEscherStg;      /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj
+    rtl::Reference<SotStorage> m_xEscherStg; /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj
 
 public:
     /// Access to the attribute output class.
@@ -1088,8 +1088,8 @@ public:
     void StartCommentOutput( std::u16string_view rName );
     void EndCommentOutput(   std::u16string_view rName );
     void OutGrf(const ww8::Frame &rFrame);
-    bool TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> const& xOleStg,
-                             const tools::SvRef<SotStorage>& xObjStg, OUString const& rStorageName,
+    bool TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotStorage> const& xOleStg,
+                             const rtl::Reference<SotStorage>& xObjStg, OUString const& rStorageName,
                              SwOLENode* pOLENd);
 
     virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* pRedlineData = nullptr ) override;

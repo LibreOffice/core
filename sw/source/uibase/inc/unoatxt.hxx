@@ -42,8 +42,7 @@ class SwXBodyText;
 
 #ifndef SW_DECL_SWDOCSHELL_DEFINED
 #define SW_DECL_SWDOCSHELL_DEFINED
-#include <tools/ref.hxx>
-typedef tools::SvRef<SwDocShell> SwDocShellRef;
+typedef rtl::Reference<SwDocShell> SwDocShellRef;
 #endif
 
 class SwXAutoTextContainer final : public cppu::WeakImplHelper

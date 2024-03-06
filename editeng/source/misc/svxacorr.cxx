@@ -2280,7 +2280,7 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
 void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                                         std::unique_ptr<SvStringsISortDtor>& rpLst,
                                         const OUString& sStrmName,
-                                        tools::SvRef<SotStorage>& rStg)
+                                        rtl::Reference<SotStorage>& rStg)
 {
     if( rpLst )
         rpLst->clear();
@@ -2290,7 +2290,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
     {
         if( rStg.is() && rStg->IsStream( sStrmName ) )
         {
-            tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
+            rtl::Reference<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
                 ( StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE ) );
             if( ERRCODE_NONE != xStrm->GetError())
             {
@@ -2351,7 +2351,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                             const SvStringsISortDtor& rLst,
                             const OUString& sStrmName,
-                            tools::SvRef<SotStorage> const &rStg,
+                            rtl::Reference<SotStorage> const &rStg,
                             bool bConvert )
 {
     if( !rStg.is() )
@@ -2364,7 +2364,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
     }
     else
     {
-        tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
+        rtl::Reference<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
                 ( StreamMode::READ | StreamMode::WRITE | StreamMode::SHARE_DENYWRITE ) );
         if( xStrm.is() )
         {
@@ -2483,7 +2483,7 @@ bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
     if( !rNew.isEmpty() && GetCplSttExceptList()->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
-        tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
+        rtl::Reference<SotStorage> xStg = new SotStorage(sUserAutoCorrFile, StreamMode::READWRITE);
 
         SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
 
@@ -2503,7 +2503,7 @@ bool SvxAutoCorrectLanguageLists::AddToWordStartExceptList(const OUString& rNew)
     if( !rNew.isEmpty() && GetWordStartExceptList()->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
-        tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
+        rtl::Reference<SotStorage> xStg = new SotStorage(sUserAutoCorrFile, StreamMode::READWRITE);
 
         SaveExceptList_Imp( *pWordStart_ExcptLst, pXMLImplWordStart_ExcptLstStr, xStg );
 
@@ -2521,7 +2521,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
 {
     try
     {
-        tools::SvRef<SotStorage> xStg = new SotStorage( sShareAutoCorrFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
+        rtl::Reference<SotStorage> xStg = new SotStorage( sShareAutoCorrFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
         if( xStg.is() && xStg->IsContained( pXMLImplCplStt_ExcptLstStr ) )
             LoadXMLExceptList_Imp( pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
     }
@@ -2534,7 +2534,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
 void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
 {
     MakeUserStorage_Impl();
-    tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
+    rtl::Reference<SotStorage> xStg = new SotStorage(sUserAutoCorrFile, StreamMode::READWRITE);
 
     SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
 
@@ -2550,7 +2550,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWordStartExceptList()
 {
     try
     {
-        tools::SvRef<SotStorage> xStg = new SotStorage( sShareAutoCorrFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
+        rtl::Reference<SotStorage> xStg = new SotStorage( sShareAutoCorrFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
         if( xStg.is() && xStg->IsContained( pXMLImplWordStart_ExcptLstStr ) )
             LoadXMLExceptList_Imp( pWordStart_ExcptLst, pXMLImplWordStart_ExcptLstStr, xStg );
     }
@@ -2564,7 +2564,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWordStartExceptList()
 void SvxAutoCorrectLanguageLists::SaveWordStartExceptList()
 {
     MakeUserStorage_Impl();
-    tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
+    rtl::Reference<SotStorage> xStg = new SotStorage(sUserAutoCorrFile, StreamMode::READWRITE);
 
     SaveExceptList_Imp( *pWordStart_ExcptLst, pXMLImplWordStart_ExcptLstStr, xStg );
 
@@ -2594,7 +2594,7 @@ void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const OUString& rName )
 {
     if( sShareAutoCorrFile != sUserAutoCorrFile )
     {
-        tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
+        rtl::Reference<SotStorage> xStg = new SotStorage(sUserAutoCorrFile, StreamMode::READWRITE);
         if( xStg.is() && ERRCODE_NONE == xStg->GetError() &&
             xStg->IsStream( rName ) )
         {
@@ -2656,8 +2656,8 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     }
     if (bConvert && !bError)
     {
-        tools::SvRef<SotStorage> xSrcStg = new SotStorage( aDest.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ), StreamMode::READ );
-        tools::SvRef<SotStorage> xDstStg = new SotStorage( sUserAutoCorrFile, StreamMode::WRITE );
+        rtl::Reference<SotStorage> xSrcStg = new SotStorage( aDest.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ), StreamMode::READ );
+        rtl::Reference<SotStorage> xDstStg = new SotStorage(sUserAutoCorrFile, StreamMode::WRITE);
 
         if( xSrcStg.is() && xDstStg.is() )
         {
@@ -2705,7 +2705,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
     bool bRet = true, bRemove = !pAutocorr_List || pAutocorr_List->empty();
     if( !bRemove )
     {
-        tools::SvRef<SotStorageStream> refList = rStg.OpenSotStream( pXMLImplAutocorr_ListStr,
+        rtl::Reference<SotStorageStream> refList = rStg.OpenSotStream( pXMLImplAutocorr_ListStr,
                     ( StreamMode::READ | StreamMode::WRITE | StreamMode::SHARE_DENYWRITE ) );
         if( refList.is() )
         {
@@ -2756,7 +2756,7 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
     GetAutocorrWordList();
 
     MakeUserStorage_Impl();
-    tools::SvRef<SotStorage> xStorage = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
+    rtl::Reference<SotStorage> xStorage = new SotStorage(sUserAutoCorrFile, StreamMode::READWRITE);
 
     bool bRet = xStorage.is() && ERRCODE_NONE == xStorage->GetError();
 
@@ -2825,7 +2825,7 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
     GetAutocorrWordList();
 
     MakeUserStorage_Impl();
-    tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
+    rtl::Reference<SotStorage> xStg = new SotStorage(sUserAutoCorrFile, StreamMode::READWRITE);
 
     bool bRet = xStg.is() && ERRCODE_NONE == xStg->GetError();
 
@@ -2883,7 +2883,7 @@ void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
         {
             if( pAutocorr_List->Insert( SvxAutocorrWord(rShort, sLong, false) ) )
             {
-                tools::SvRef<SotStorage> xStor = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
+                rtl::Reference<SotStorage> xStor = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
                 MakeBlocklist_Imp( *xStor );
             }
         }

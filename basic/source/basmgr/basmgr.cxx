@@ -632,7 +632,7 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
 
 void BasicManager::LoadBasicManager( SotStorage& rStorage, std::u16string_view rBaseURL )
 {
-    tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
+    rtl::Reference<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
     // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -724,7 +724,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, std::u16string_view r
 
 void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 {
-    tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szOldManagerStream, eStreamReadMode );
+    rtl::Reference<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szOldManagerStream, eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.getLength(), "No Storage Name!" );
@@ -777,7 +777,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
         aLibRelStorage = aLibRelStorage.smartRel2Abs( aLibRelStorageName, bWasAbsolute);
         DBG_ASSERT(!bWasAbsolute, "RelStorageName was absolute!" );
 
-        tools::SvRef<SotStorage> xStorageRef;
+        rtl::Reference<SotStorage> xStorageRef;
         if ( aLibAbsStorage == aCurStorage || aLibRelStorageName == szImbedded )
         {
             xStorageRef = &rStorage;
@@ -838,7 +838,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     {
         aStorageName = GetStorageName();
     }
-    tools::SvRef<SotStorage> xStorage;
+    rtl::Reference<SotStorage> xStorage;
     // The current must not be opened again...
     if ( pCurStorage )
     {
@@ -861,7 +861,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     {
         xStorage = new SotStorage( false, aStorageName, eStorageReadMode );
     }
-    tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage( szBasicStorage, eStorageReadMode, false );
+    rtl::Reference<SotStorage> xBasicStorage = xStorage->OpenSotStorage( szBasicStorage, eStorageReadMode, false );
 
     if ( !xBasicStorage.is() || xBasicStorage->GetError() )
     {
@@ -871,7 +871,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     else
     {
         // In the Basic-Storage every lib is in a Stream...
-        tools::SvRef<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( pLibInfo->GetLibName(), eStreamReadMode );
+        rtl::Reference<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( pLibInfo->GetLibName(), eStreamReadMode );
         if ( !xBasicStream.is() || xBasicStream->GetError() )
         {
             ErrCodeMsg aErrInf( ERRCODE_BASMGR_LIBLOAD , pLibInfo->GetLibName(), DialogMask::ButtonsOk );
@@ -1093,7 +1093,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
     if (bDelBasicFromStorage && !(*itLibInfo)->IsReference() &&
            (!(*itLibInfo)->IsExtern() || SotStorage::IsStorageFile((*itLibInfo)->GetStorageName())))
     {
-        tools::SvRef<SotStorage> xStorage;
+        rtl::Reference<SotStorage> xStorage;
         try
         {
             if (!(*itLibInfo)->IsExtern())
@@ -1112,7 +1112,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 
         if (xStorage.is() && xStorage->IsStorage(szBasicStorage))
         {
-            tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage
+            rtl::Reference<SotStorage> xBasicStorage = xStorage->OpenSotStorage
                             ( szBasicStorage, StreamMode::STD_READWRITE, false );
 
             if ( !xBasicStorage.is() || xBasicStorage->GetError() )
@@ -1286,7 +1286,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
         {
             try
             {
-                tools::SvRef<SotStorage> xStorage = new SotStorage(false, LinkTargetURL, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
+                rtl::Reference<SotStorage> xStorage = new SotStorage(false, LinkTargetURL, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
                 if (!xStorage->GetError())
                 {
                     pLib = AddLib(*xStorage, rLibName, true);

@@ -23,7 +23,7 @@
 #include "typedstrdata.hxx"
 #include <i18nlangtag/lang.h>
 #include <svx/svdtypes.hxx>
-#include <tools/ref.hxx>
+#include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
@@ -591,7 +591,7 @@ public:
     /// Vertical pixel per twips factor.
     SC_DLLPUBLIC static double              nScreenPPTY;
 
-    static tools::SvRef<ScDocShell>   xDrawClipDocShellRef;
+    static rtl::Reference<ScDocShell> xDrawClipDocShellRef;
 
     static sal_uInt16           nDefFontHeight;
     SC_DLLPUBLIC static sal_uInt16           nStdRowHeight;

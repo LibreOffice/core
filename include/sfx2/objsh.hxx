@@ -176,7 +176,7 @@ template<class T> bool checkSfxObjectShell(const SfxObjectShell* pShell)
 }
 
 class SFX2_DLLPUBLIC SfxObjectShell :
-    public SfxShell, virtual public SotObject,
+    public SfxShell, public SotObject,
     public ::comphelper::IEmbeddedHelper
 {
 friend struct ModifyBlocker_Impl;
@@ -837,7 +837,7 @@ public:
     };
 
 
-typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
+typedef rtl::Reference<SfxObjectShell> SfxObjectShellRef;
 
 class SfxObjectShellLock
 {

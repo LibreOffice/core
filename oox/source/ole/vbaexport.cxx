@@ -1040,12 +1040,12 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     getCorrectExportOrder(xNameContainer, aLibraryMap);
 
     // start here with the VBA export
-    tools::SvRef<SotStorage> xVBAStream = pRootStorage->OpenSotStorage("VBA", StreamMode::READWRITE);
-    tools::SvRef<SotStorageStream> pDirStream = xVBAStream->OpenSotStream("dir", StreamMode::READWRITE);
+    rtl::Reference<SotStorage> xVBAStream = pRootStorage->OpenSotStorage("VBA", StreamMode::READWRITE);
+    rtl::Reference<SotStorageStream> pDirStream = xVBAStream->OpenSotStream("dir", StreamMode::READWRITE);
 
-    tools::SvRef<SotStorageStream> pVBAProjectStream = xVBAStream->OpenSotStream("_VBA_PROJECT", StreamMode::READWRITE);
-    tools::SvRef<SotStorageStream> pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", StreamMode::READWRITE);
-    tools::SvRef<SotStorageStream> pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", StreamMode::READWRITE);
+    rtl::Reference<SotStorageStream> pVBAProjectStream = xVBAStream->OpenSotStream("_VBA_PROJECT", StreamMode::READWRITE);
+    rtl::Reference<SotStorageStream> pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", StreamMode::READWRITE);
+    rtl::Reference<SotStorageStream> pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", StreamMode::READWRITE);
 
     const rtl_TextEncoding eTextEncoding = getVBATextEncoding();
 
@@ -1106,7 +1106,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     for (sal_Int32 i = 0; i < n; ++i)
     {
         const OUString& rModuleName = aElementNames[aLibraryMap[i]];
-        tools::SvRef<SotStorageStream> pModuleStream = xVBAStream->OpenSotStream(rModuleName, StreamMode::READWRITE);
+        rtl::Reference<SotStorageStream> pModuleStream = xVBAStream->OpenSotStream(rModuleName, StreamMode::READWRITE);
         css::uno::Any aCode = xNameContainer->getByName(rModuleName);
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         OUString aSourceCode;

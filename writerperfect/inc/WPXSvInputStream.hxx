@@ -57,7 +57,7 @@ private:
     bool isZip();
     void ensureZipIsInitialized();
     static librevenge::RVNGInputStream*
-    createWPXStream(const tools::SvRef<SotStorageStream>& rxStorage);
+    createWPXStream(const rtl::Reference<SotStorageStream>& rxStorage);
     static librevenge::RVNGInputStream*
     createWPXStream(const css::uno::Reference<css::io::XInputStream>& rxStream);
 

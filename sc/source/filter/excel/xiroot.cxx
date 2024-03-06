@@ -42,7 +42,7 @@
 // Global data ================================================================
 
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
-        const tools::SvRef<SotStorage>& xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
+        const rtl::Reference<SotStorage>& xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
     mxDocImport(std::make_shared<ScDocumentImport>(rDoc)),
     mbHasCodePage( false ),

@@ -2995,7 +2995,7 @@ SwMSConvertControls::SwMSConvertControls( SfxObjectShell const *pDSh, SwPaM *pP 
 
 // in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
 // filter/source/msocximex.cxx, so... we need an implementation here
-bool  SwMSConvertControls::ReadOCXStream( tools::SvRef<SotStorage> const & rSrc1,
+bool  SwMSConvertControls::ReadOCXStream( rtl::Reference<SotStorage> const & rSrc1,
         css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl )
 {
@@ -3025,12 +3025,12 @@ void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     aSize.Height = convertTwipToMm100(aRect.Bottom());
 
     //Open the ObjectPool
-    tools::SvRef<SotStorage> xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
+    rtl::Reference<SotStorage> xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
 
     //Create a destination storage for the microsoft control
     sal_uInt32 nObjId = ++mnObjectId;
     OUString sStorageName = "_" + OUString::number( static_cast<sal_Int64>( nObjId ));
-    tools::SvRef<SotStorage> xOleStg = xObjPool->OpenSotStorage(sStorageName);
+    rtl::Reference<SotStorage> xOleStg = xObjPool->OpenSotStorage(sStorageName);
 
     if (!xOleStg.is())
         return;

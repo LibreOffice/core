@@ -713,8 +713,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
 
                 // pOtherDocSh->DoClose() will be called explicitly later, but it is still more safe to use SfxObjectShellLock here
-                ScDocShell* pOtherDocSh = new ScDocShell;
-                SfxObjectShellLock aDocShTablesRef = pOtherDocSh;
+                rtl::Reference<ScDocShell> pOtherDocSh = new ScDocShell;
                 pOtherDocSh->DoLoad( pMed );
                 ErrCodeMsg nErr = pOtherDocSh->GetErrorCode();
                 if (nErr)

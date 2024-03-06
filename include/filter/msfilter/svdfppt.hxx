@@ -655,7 +655,7 @@ public:
                                 const sal_uInt32* pTableArry,
                                 SvxMSDffSolverContainer* pSolverContainer
                             );
-    virtual bool ReadFormControl( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const = 0;
+    virtual bool ReadFormControl( rtl::Reference<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const = 0;
 };
 
 struct PPTTextParagraphStyleAtomInterpreter
@@ -1285,7 +1285,7 @@ public:
         ePageKind               ( ePKind ),
         mpPPTImporter           ( pPPTImporter )
     {};
-    bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
+    bool ReadOCXStream( rtl::Reference<SotStorage>& rSrc1,
         css::uno::Reference<css::drawing::XShape > *pShapeRef );
     virtual bool InsertControl(
         const css::uno::Reference< css::form::XFormComponent > &rFComp,

@@ -205,7 +205,7 @@ ErrCodeMsg Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
         ErrCodeMsg nResult = ERRCODE_ABORT;
         try
         {
-            tools::SvRef<SotStorage> aRef = new SotStorage( rStrm );
+            rtl::Reference<SotStorage> aRef = new SotStorage(rStrm);
             nResult = Write( rPaM, *aRef, pFName );
             if ( nResult == ERRCODE_NONE )
                 aRef->Commit();
