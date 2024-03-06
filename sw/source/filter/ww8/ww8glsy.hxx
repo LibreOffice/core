@@ -60,7 +60,7 @@ private:
 class WW8Glossary
 {
 public:
-    WW8Glossary( tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion, SotStorage *pStg);
+    WW8Glossary(rtl::Reference<SotStorageStream>& refStrm, sal_uInt8 nVersion, SotStorage* pStg);
     bool Load( SwTextBlocks &rBlocks, bool bSaveRelFile );
     std::shared_ptr<WW8GlossaryFib>& GetFib()
     {
@@ -73,9 +73,9 @@ public:
 
 private:
     std::shared_ptr<WW8GlossaryFib> m_xGlossary;
-    tools::SvRef<SotStorageStream> m_xTableStream;
-    tools::SvRef<SotStorageStream> &m_rStrm;
-    tools::SvRef<SotStorage> m_xStg;
+    rtl::Reference<SotStorageStream> m_xTableStream;
+    rtl::Reference<SotStorageStream> &m_rStrm;
+    rtl::Reference<SotStorage> m_xStg;
     sal_uInt16 m_nStrings;
 
     static bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,

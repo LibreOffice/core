@@ -669,13 +669,12 @@ void ScDrawTransferObj::InitDocShell()
     if ( m_aDocShellRef.is() )
         return;
 
-    ScDocShell* pDocSh = new ScDocShell;
-    m_aDocShellRef = pDocSh;      // ref must be there before InitNew
+    m_aDocShellRef = new ScDocShell;      // ref must be there before InitNew
 
-    pDocSh->DoInitNew();
+    m_aDocShellRef->DoInitNew();
 
-    ScDocument& rDestDoc = pDocSh->GetDocument();
-    rDestDoc.InitDrawLayer( pDocSh );
+    ScDocument& rDestDoc = m_aDocShellRef->GetDocument();
+    rDestDoc.InitDrawLayer(m_aDocShellRef.get());
 
     SdrModel* pDestModel = rDestDoc.GetDrawLayer();
     // #i71538# use complete SdrViews
@@ -705,18 +704,18 @@ void ScDrawTransferObj::InitDocShell()
     }
 
     tools::Rectangle aDestArea( Point(), m_aSrcSize );
-    pDocSh->SetVisArea( aDestArea );
+    m_aDocShellRef->SetVisArea(aDestArea);
 
     ScViewOptions aViewOpt( rDestDoc.GetViewOptions() );
     aViewOpt.SetOption( VOPT_GRID, false );
     rDestDoc.SetViewOptions( aViewOpt );
 
-    ScViewData aViewData( *pDocSh, nullptr );
+    ScViewData aViewData(*m_aDocShellRef, nullptr);
     aViewData.SetTabNo( 0 );
     aViewData.SetScreen( aDestArea );
     aViewData.SetCurX( 0 );
     aViewData.SetCurY( 0 );
-    pDocSh->UpdateOle(aViewData, true);
+    m_aDocShellRef->UpdateOle(aViewData, true);
 }
 
 const css::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()

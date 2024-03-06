@@ -127,10 +127,10 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
         bool                mbFontIndependentLineSpacing;
         sal_uInt32          mnTextSize;
 
-        tools::SvRef<SotStorage>        mrStg;
-        tools::SvRef<SotStorageStream>  mpCurUserStrm;
-        tools::SvRef<SotStorageStream>  mpStrm;
-        tools::SvRef<SotStorageStream>  mpPicStrm;
+        rtl::Reference<SotStorage>        mrStg;
+        rtl::Reference<SotStorageStream>  mpCurUserStrm;
+        rtl::Reference<SotStorageStream>  mpStrm;
+        rtl::Reference<SotStorageStream>  mpPicStrm;
         std::unique_ptr<PptEscherEx>    mpPptEscherEx;
 
         std::vector<std::unique_ptr<PPTExOleObjEntry>> maExOleObj;
@@ -217,7 +217,7 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
         virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
 
     public:
-                                PPTWriter( tools::SvRef<SotStorage> xSvStorage,
+                                PPTWriter( rtl::Reference<SotStorage> xSvStorage,
                                             css::uno::Reference< css::frame::XModel > const & rModel,
                                             css::uno::Reference< css::task::XStatusIndicator > const & rStatInd,
                                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );

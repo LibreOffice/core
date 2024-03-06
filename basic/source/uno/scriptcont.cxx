@@ -334,7 +334,7 @@ rtl::Reference<SfxLibraryContainer> SfxScriptLibraryContainer::createInstanceImp
 void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
 {
     // TODO: move loading from old storage to binary filters?
-    auto xStorage = tools::make_ref<SotStorage>( false, aFile );
+    rtl::Reference<SotStorage> xStorage(new SotStorage(false, aFile));
     if( xStorage->GetError() == ERRCODE_NONE )
     {
         auto pBasicManager = std::make_unique<BasicManager> ( *xStorage, aFile );

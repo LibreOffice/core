@@ -299,7 +299,7 @@ bool SwOLENode::RestorePersistentData()
     if ( maOLEObj.m_xOLERef.is() )
     {
         // If a SvPersist instance already exists, we use it
-        SfxObjectShell* p = GetDoc().GetPersist();
+        rtl::Reference<SfxObjectShell> p = GetDoc().GetPersist();
         if( !p )
         {
             // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
@@ -470,13 +470,13 @@ Size SwOLENode::GetTwipSize() const
 SwContentNode* SwOLENode::MakeCopy( SwDoc& rDoc, SwNode& rIdx, bool) const
 {
     // If there's already a SvPersist instance, we use it
-    SfxObjectShell* pPersistShell = rDoc.GetPersist();
+    rtl::Reference<SfxObjectShell> pPersistShell = rDoc.GetPersist();
     if( !pPersistShell )
     {
         // TODO/LATER: is EmbeddedObjectContainer not enough?
         // the created document will be closed by rDoc ( should use SfxObjectShellLock )
         pPersistShell = new SwDocShell( rDoc, SfxObjectCreateMode::INTERNAL );
-        rDoc.SetTmpDocShell( pPersistShell );
+        rDoc.SetTmpDocShell(pPersistShell.get());
         pPersistShell->DoInitNew();
     }
 
@@ -938,7 +938,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
     SwDoc& rDoc = pNode->GetDoc();
 
     // If there's already a SvPersist instance, we use it
-    SfxObjectShell* p = rDoc.GetPersist();
+    rtl::Reference<SfxObjectShell> p = rDoc.GetPersist();
     if( !p )
     {
         // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?

@@ -290,7 +290,7 @@ IMPL_LINK_NOARG(SdVectorizeDlg, MetricModifyHdl, weld::MetricSpinButton&, void)
 
 void SdVectorizeDlg::LoadSettings()
 {
-    tools::SvRef<SotStorageStream>  xIStm( SD_MOD()->GetOptionStream(
+    rtl::Reference<SotStorageStream>  xIStm( SD_MOD()->GetOptionStream(
                                SD_OPTION_VECTORIZE ,
                                SdOptionStreamMode::Load ) );
     sal_uInt16              nLayers;
@@ -321,7 +321,7 @@ void SdVectorizeDlg::LoadSettings()
 
 void SdVectorizeDlg::SaveSettings() const
 {
-    tools::SvRef<SotStorageStream> xOStm( SD_MOD()->GetOptionStream(
+    rtl::Reference<SotStorageStream> xOStm( SD_MOD()->GetOptionStream(
                               SD_OPTION_VECTORIZE  ,
                               SdOptionStreamMode::Store ) );
 

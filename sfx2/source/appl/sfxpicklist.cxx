@@ -166,7 +166,7 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         return;
 
     // only ObjectShell-related events with media interest
-    SfxObjectShell* pDocSh = pEventHint->GetObjShell();
+    rtl::Reference<SfxObjectShell> pDocSh = pEventHint->GetObjShell();
     if( !pDocSh )
         return;
 
@@ -198,7 +198,7 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case SfxEventHintId::SaveToDocDone:
         case SfxEventHintId::CloseDoc:
         {
-            AddDocumentToPickList(pDocSh);
+            AddDocumentToPickList(pDocSh.get());
         }
         break;
 
@@ -215,7 +215,7 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
             OUString path = pMedium->GetOrigURL();
             if (!path.isEmpty())
             {
-                AddDocumentToPickList(pDocSh);
+                AddDocumentToPickList(pDocSh.get());
             }
         }
         break;
