@@ -36,6 +36,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <com/sun/star/sheet/NamedRangeFlag.hdl>
+#include <xihelper.hxx>
 
 using namespace ::oox;
 using namespace ::com::sun::star;
@@ -713,10 +714,17 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                     aRange.aStart.SetTab( nScTab );
                     aRange.aEnd.SetTab( nScTab );
                     aRange.PutInOrder();
-                    aRangeList.push_back( aRange );
+
+                    // tdf#148170 - convert print range to an excel cell range
+                    XclRange aXclRange(ScAddress::UNINITIALIZED);
+                    // create no warning if ranges are shrunken
+                    if (GetAddressConverter().ConvertRange(aXclRange, aRange, false))
+                    {
+                        XclImpAddressConverter::FillRange(aXclRange, aRange);
+                        aRangeList.push_back(aRange);
+                    }
                 }
-                // create the NAME record (do not warn if ranges are shrunken)
-                GetAddressConverter().ValidateRangeList( aRangeList, false );
+                // create the NAME record
                 if( !aRangeList.empty() )
                     GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTAREA, aRangeList );
             }

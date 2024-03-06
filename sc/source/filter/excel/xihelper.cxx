@@ -98,6 +98,14 @@ ScAddress XclImpAddressConverter::CreateValidAddress(
 
 // cell range -----------------------------------------------------------------
 
+void XclImpAddressConverter::FillRange(const XclRange& rXclRange, ScRange& rScRange)
+{
+    const XclAddress aXclStartAdr = rXclRange.maFirst;
+    lclFillAddress(rScRange.aStart, aXclStartAdr.mnCol, aXclStartAdr.mnRow, rScRange.aStart.Tab());
+    const XclAddress aXclEndAdr = rXclRange.maLast;
+    lclFillAddress(rScRange.aEnd, aXclEndAdr.mnCol, aXclEndAdr.mnRow, rScRange.aEnd.Tab());
+}
+
 bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
 {

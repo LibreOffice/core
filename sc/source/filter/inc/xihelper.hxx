@@ -71,6 +71,11 @@ public:
 
     // cell range -------------------------------------------------------------
 
+    /** Fills the passed Calc cell range with the passed Excel cell range.
+        @param XclRange  The Excel cell range to be transfered.
+        @param ScRange  (Out) The filled Calc cell range. */
+    static void FillRange(const XclRange& rXclRange, ScRange& rScRange);
+
     /** Converts the passed Excel cell range to a Calc cell range.
         @param rScRange  (Out) The converted Calc cell range, if valid.
         @param rXclRange  The Excel cell range to convert.

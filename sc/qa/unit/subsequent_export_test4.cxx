@@ -761,6 +761,26 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf51022_lostPrintRange)
     CPPUNIT_ASSERT_EQUAL(aRange2, *pDoc->GetPrintRange(0, 1));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf148170_ExceedXlsPrintRange)
+{
+    createScDoc();
+
+    // Create print range that exceeds the xls limitations
+    const auto aScSheeLimits = ScSheetLimits::CreateDefault();
+    ScRange aCalcPrintRange(0, 0, 0, aScSheeLimits.MaxCol(), aScSheeLimits.MaxRow(), 0);
+    ScDocument* pDoc = getScDoc();
+    pDoc->AddPrintRange(0, aCalcPrintRange);
+
+    saveAndReload("MS Excel 97");
+
+    // Check if print range was shrunk to xls limitations
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pDoc->GetPrintRangeCount(0));
+    // Check sc/source/filter/inc/xlconst.hxx for xls limitations
+    ScRange aXlsPrintRange(0, 0, 0, 16383, 65535, 0);
+    CPPUNIT_ASSERT_EQUAL(aXlsPrintRange, *pDoc->GetPrintRange(0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf138741_externalLinkSkipUnusedsCrash)
 {
     createScDoc("xlsx/tdf138741_externalLinkSkipUnusedsCrash.xlsx");
