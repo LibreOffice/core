@@ -356,7 +356,6 @@ static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
 #if GTK_CHECK_VERSION(4, 0, 0)
 static GtkWidget* gVScrollbar;
-static GtkWidget* gHScrollbar;
 static GtkWidget* gTextView;
 #else
 static GtkWidget* gComboBox;
@@ -364,6 +363,7 @@ static GtkWidget* gListBox;
 static GtkWidget* gSpinBox;
 static GtkWidget* gTreeViewWidget;
 #endif
+static GtkWidget* gHScrollbar;
 static GtkWidget* gEntryBox;
 
 namespace
@@ -2626,10 +2626,11 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     // set scrollbar settings
     gint min_slider_length = 21;
 
+    GtkRequisition natural_horz_scroll_size;
+    gtk_widget_get_preferred_size(gHScrollbar, nullptr, &natural_horz_scroll_size);
+
 #if GTK_CHECK_VERSION(4, 0, 0)
-    GtkRequisition natural_size;
-    gtk_widget_get_preferred_size(gHScrollbar, nullptr, &natural_size);
-    aStyleSet.SetScrollBarSize(natural_size.height);
+    aStyleSet.SetScrollBarSize(natural_horz_scroll_size.height);
 #else
     // Grab some button style attributes
     Size aSize;
@@ -2646,6 +2647,10 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
                                 "has-secondary-backward-stepper", &has_backward2, nullptr);
     if (has_forward || has_backward || has_forward2 || has_backward2)
         QuerySize(mpHScrollbarButtonStyle, aSize);
+
+    // Recent breeze (Mar 2024) has 17 vs 10, while Adwaita still reports 14 vs 14.
+    if (natural_horz_scroll_size.height > aSize.Height())
+        aSize.setHeight(natural_horz_scroll_size.height);
 
     aStyleSet.SetScrollBarSize(aSize.Height());
 
@@ -2933,15 +2938,16 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpToolButtonStyle = gtk_widget_get_style_context(GTK_WIDGET(pButton));
 #endif
 
+    gHScrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, nullptr);
+    gtk_fixed_put(GTK_FIXED(gDumbContainer), gHScrollbar, 0, 0);
+    gtk_widget_show(gHScrollbar);
+
 #if GTK_CHECK_VERSION(4, 0, 0)
     gVScrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, nullptr);
     gtk_fixed_put(GTK_FIXED(gDumbContainer), gVScrollbar, 0, 0);
     gtk_widget_show(gVScrollbar);
     mpVScrollbarStyle = gtk_widget_get_style_context(gVScrollbar);
 
-    gHScrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, nullptr);
-    gtk_fixed_put(GTK_FIXED(gDumbContainer), gHScrollbar, 0, 0);
-    gtk_widget_show(gHScrollbar);
     mpHScrollbarStyle = gtk_widget_get_style_context(gHScrollbar);
 
     gTextView = gtk_text_view_new();
