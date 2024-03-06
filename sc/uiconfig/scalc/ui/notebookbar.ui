@@ -3859,15 +3859,15 @@
                                       </packing>
                                     </child>
                                     <child>
-                                    <object class="GtkToolButton" id="Home-ParaLeftToRight1">
+                                      <object class="GtkToolButton" id="Home-ParaLeftToRight1">
                                         <property name="visible">False</property>
                                         <property name="action_name">.uno:ParaLeftToRight</property>
                                         <property name="use_underline">True</property>
-                                    </object>
-                                    <packing>
+                                      </object>
+                                      <packing>
                                         <property name="expand">False</property>
                                         <property name="homogeneous">True</property>
-                                    </packing>
+                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
