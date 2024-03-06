@@ -205,18 +205,12 @@ namespace sdr::properties
             TextProperties::Notify( rBC, rHint );
 
             bool bRemoveRenderGeometry = false;
-            const SfxStyleSheetHint* pStyleHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
 
-            if ( pStyleHint && pStyleHint->GetStyleSheet() == GetStyleSheet() )
+            if (rHint.GetId() == SfxHintId::StyleSheetModified || rHint.GetId() == SfxHintId::StyleSheetChanged)
             {
-                switch( pStyleHint->GetId() )
-                {
-                    case SfxHintId::StyleSheetModified :
-                    case SfxHintId::StyleSheetChanged  :
-                        bRemoveRenderGeometry = true;
-                    break;
-                    default: break;
-                }
+                const SfxStyleSheetHint* pStyleHint = static_cast<const SfxStyleSheetHint*>(&rHint);
+                if ( pStyleHint->GetStyleSheet() == GetStyleSheet() )
+                    bRemoveRenderGeometry = true;
             }
             else if ( rHint.GetId() == SfxHintId::DataChanged )
             {
