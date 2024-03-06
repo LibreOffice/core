@@ -1526,9 +1526,9 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
         sal_Int32 nLen = rInString.getLength();
         //prepare a unicode string, encrypt it
         enableStringEncryption( nInObjectNumber );
-        sal_uInt8 *pCopy = m_vEncryptionBuffer.data();
         sal_Int32 nChars = 2 + (nLen * 2);
         m_vEncryptionBuffer.resize(nChars);
+        sal_uInt8 *pCopy = m_vEncryptionBuffer.data();
         *pCopy++ = 0xFE;
         *pCopy++ = 0xFF;
         // we need to prepare a byte stream from the unicode string buffer
