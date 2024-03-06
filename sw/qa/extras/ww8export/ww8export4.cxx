@@ -51,6 +51,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77964)
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShapeByName(u"Image2"), "AnchorType"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf160049_anchorMargin, "tdf160049_anchorMargin.doc")
+{
+    // given a document with a LEFT "column/text" anchored image
+
+    // The image takes into account the margin, so it looks like it is in the middle of the doc,
+    // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
+                         getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf150197_anlv2ListFormat, "tdf150197_anlv2ListFormat.doc")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(getParagraph(2), "ListLabelString"));
