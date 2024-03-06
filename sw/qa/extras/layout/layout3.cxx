@@ -2374,6 +2374,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160526)
     assertXPath(pExportDump, "//page[2]/body/txt/anchored/SwAnchoredDrawObject"_ostr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159443)
+{
+    // Given a document with chart, which have a datatable
+    createSwDoc("tdf159443.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    //// Without the fix, this would fail:
+    //// - Expected: DataSeries1
+    //// - Actual  : 1.25
+    //// - In <>, XPath contents of child does not match
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[47]/textarray/text"_ostr,
+        "DataSeries1");
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[49]/textarray/text"_ostr,
+        "Category1");
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[51]/textarray/text"_ostr,
+        "4.3");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
