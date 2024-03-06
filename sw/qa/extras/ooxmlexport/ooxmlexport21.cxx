@@ -13,6 +13,7 @@
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -288,6 +289,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
                              getProperty<awt::FontSlant>(xRun, "CharPosture"));
         CPPUNIT_ASSERT(!xProps->getPropertyValue("ListAutoFormat").hasValue());
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMarginVML, "tdf160049_anchorMarginVML.docx")
+{
+    // given a VML (Word 2003) document with a LEFT "column/text" anchored image
+    // (which will import as DML compat12 on the round-trip)
+    if (isExported())
+        return;
+    // The image takes into account the margin, so it looks like it is in the middle of the doc,
+    // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
+                         getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
