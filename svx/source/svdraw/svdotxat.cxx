@@ -424,17 +424,16 @@ bool SdrTextObj::HasText() const
 
     OutlinerParaObject* pOPO = GetOutlinerParaObject();
 
-    bool bHasText = false;
-    if( pOPO )
-    {
-        const EditTextObject& rETO = pOPO->GetTextObject();
-        sal_Int32 nParaCount = rETO.GetParagraphCount();
+    if( !pOPO )
+        return false;
 
-        if( nParaCount > 0 )
-            bHasText = (nParaCount > 1) || (!rETO.GetText( 0 ).isEmpty());
-    }
-
-    return bHasText;
+    const EditTextObject& rETO = pOPO->GetTextObject();
+    sal_Int32 nParaCount = rETO.GetParagraphCount();
+    if( nParaCount == 0 )
+        return false;
+    if( nParaCount > 1 )
+        return true;
+    return rETO.HasText( 0 );
 }
 
 void SdrTextObj::AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily family)

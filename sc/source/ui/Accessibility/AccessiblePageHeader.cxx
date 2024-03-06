@@ -348,7 +348,7 @@ bool ScAccessiblePageHeader::IsDefunc( sal_Int64 nParentStates )
 
 void ScAccessiblePageHeader::AddChild(const EditTextObject* pArea, sal_uInt32 nIndex, SvxAdjust eAdjust)
 {
-    if (pArea && (!pArea->GetText(0).isEmpty() || (pArea->GetParagraphCount() > 1)))
+    if (pArea && ((pArea->GetParagraphCount() > 1) || pArea->HasText(0)))
     {
         if (maAreas[nIndex].is())
         {

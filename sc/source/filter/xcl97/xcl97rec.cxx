@@ -921,8 +921,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
     // Excel has one alignment per NoteObject while Calc supports
     // one alignment per paragraph - use the first paragraph
     // alignment (if set) as our overall alignment.
-    OUString aParaText( rEditObj.GetText( 0 ) );
-    if( !aParaText.isEmpty() )
+    if( rEditObj.HasText( 0 ) )
     {
         const SfxItemSet& aSet( rEditObj.GetParaAttribs( 0));
         if( const SvxAdjustItem* pItem = aSet.GetItemIfSet( EE_PARA_JUST ) )
