@@ -103,9 +103,12 @@ void SfxInfoBarWindow::SetCloseButtonImage()
     aSize = Size(aSize.Width() * 1.5, aSize.Height() * 1.5);
 
     ScopedVclPtr<VirtualDevice> xDevice(m_xCloseBtn->create_virtual_device());
-    xDevice->SetOutputSizePixel(aSize);
+    xDevice->SetOutputSizePixel(Size(24, 24));
+    xDevice->SetBackground(Color(m_aBackgroundColor));
+    xDevice->Erase();
 
-    Point aBtnPos(0, 0);
+    const int nPos = (24 - aSize.getWidth()) / 2;
+    Point aBtnPos(nPos, nPos);
 
     const ViewInformation2D aNewViewInfos;
     const std::unique_ptr<BaseProcessor2D> pProcessor(
