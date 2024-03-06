@@ -26,7 +26,7 @@ INFO: latest browser won't work anymore with 0.0.0.0 and need 127.0.0.1.
 
 ## Setup for the LO WASM build (with Qt)
 
-We're using Qt 5.15.2 with Emscripten 2.0.31. There are a bunch of Qt patches
+We're using Qt 5.15.2 with Emscripten 3.1.46. There are a bunch of Qt patches
 to fix the most grave bugs. Also newer Emscripten versions have various bugs
 with the FS image support.
 
@@ -37,8 +37,8 @@ with the FS image support.
 <https://emscripten.org/docs/getting_started/index.html>
 
     git clone https://github.com/emscripten-core/emsdk.git
-    ./emsdk install 2.0.31
-    ./emsdk activate --embedded 2.0.31
+    ./emsdk install 3.1.46
+    ./emsdk activate 3.1.46
 
 Example `bashrc` scriptlet:
 
@@ -404,7 +404,7 @@ For instance, this autogen.input works for me:
 
 For building LO core for use in COWASM, it is known to work to use
 Emscripten 3.1.30 (and not just 2.0.31 which is what the LO+Qt5 work
-has been using).
+has been using in the past).
 
 ### That's all
 
