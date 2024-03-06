@@ -2400,6 +2400,12 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
         rFSPA.nXaLeft = 0;
         rFSPA.nXaRight = nWidth;
     }
+    else if ((eHoriOri == text::HoriOrientation::LEFT || eHoriOri == text::HoriOrientation::RIGHT)
+             && eHoriRel == text::RelOrientation::FRAME)
+    {
+        // relative left/right honors paragraph margins, but not with center or none/absolute offset
+        eHoriRel = text::RelOrientation::PRINT_AREA;
+    }
 
     // #i24255# - position of floating screen objects in
     // R2L layout are given in L2R layout, thus convert them of all
