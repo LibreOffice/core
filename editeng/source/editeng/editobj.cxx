@@ -138,6 +138,12 @@ OUString ContentInfo::GetText() const
     return OUString(p);
 }
 
+sal_Int32 ContentInfo::GetTextLen() const
+{
+    const rtl_uString* p = maText.getData();
+    return p->length;
+}
+
 void ContentInfo::SetText( const OUString& rStr )
 {
     maText = svl::SharedString(rStr.pData, nullptr);
@@ -408,6 +414,14 @@ OUString EditTextObjectImpl::GetText(sal_Int32 nPara) const
         return OUString();
 
     return maContents[nPara]->GetText();
+}
+
+sal_Int32 EditTextObjectImpl::GetTextLen(sal_Int32 nPara ) const
+{
+    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
+        return 0;
+
+    return maContents[nPara]->GetTextLen();
 }
 
 void EditTextObjectImpl::ClearPortionInfo()

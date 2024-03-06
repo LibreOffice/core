@@ -142,6 +142,7 @@ public:
     const svl::SharedString& GetSharedString() const { return maText;}
     OUString GetText() const;
     void SetText( const OUString& rStr );
+    sal_Int32 GetTextLen() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
@@ -228,6 +229,7 @@ public:
 
     virtual sal_Int32 GetParagraphCount() const override;
     virtual OUString GetText(sal_Int32 nParagraph) const override;
+    virtual sal_Int32 GetTextLen(sal_Int32 nParagraph) const override;
 
     virtual void ClearPortionInfo() override;
 

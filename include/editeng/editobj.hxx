@@ -87,6 +87,10 @@ public:
 
     virtual OUString GetText(sal_Int32 nPara) const = 0;
 
+    virtual sal_Int32 GetTextLen(sal_Int32 nPara) const = 0;
+
+    bool HasText(sal_Int32 nPara) const { return GetTextLen(nPara) > 0; }
+
     virtual void ClearPortionInfo() = 0;
 
     virtual bool HasOnlineSpellErrors() const = 0;

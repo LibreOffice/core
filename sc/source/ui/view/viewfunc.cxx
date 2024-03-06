@@ -832,7 +832,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             pDocSh->UpdateOle(GetViewData());
 
             bool bIsEmpty = rData.GetParagraphCount() == 0
-                || (rData.GetParagraphCount() == 1 && rData.GetText(0).isEmpty());
+                || (rData.GetParagraphCount() == 1 && !rData.HasText(0));
             const OUString aType(bIsEmpty ? u"delete-content" : u"cell-change");
             HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow, aType);
 
