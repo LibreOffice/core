@@ -554,50 +554,44 @@ namespace sdr::properties
             if(!rObj.HasText())
                 return;
 
+            SfxHintId nId(rHint.GetId());
             const svx::ITextProvider& rTextProvider(getTextProvider());
-            if(dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
+
+            if(SfxHintId::DataChanged == nId && dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
             {
-                SfxHintId nId(rHint.GetId());
-
-                if(SfxHintId::DataChanged == nId)
+                sal_Int32 nText = rTextProvider.getTextCount();
+                while (nText--)
                 {
-                    sal_Int32 nText = rTextProvider.getTextCount();
-                    while (nText--)
-                    {
-                        OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
-                        if( pParaObj )
-                            pParaObj->ClearPortionInfo();
-                    }
-                    rObj.SetTextSizeDirty();
+                    OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                    if( pParaObj )
+                        pParaObj->ClearPortionInfo();
+                }
+                rObj.SetTextSizeDirty();
 
-                    if(rObj.IsTextFrame() && rObj.NbcAdjustTextFrameWidthAndHeight())
-                    {
-                        // here only repaint wanted
-                        rObj.ActionChanged();
-                        //rObj.BroadcastObjectChange();
-                    }
-
-                    // #i101556# content of StyleSheet has changed -> new version
-                    maVersion++;
+                if(rObj.IsTextFrame() && rObj.NbcAdjustTextFrameWidthAndHeight())
+                {
+                    // here only repaint wanted
+                    rObj.ActionChanged();
+                    //rObj.BroadcastObjectChange();
                 }
 
-                if(SfxHintId::Dying == nId)
+                // #i101556# content of StyleSheet has changed -> new version
+                maVersion++;
+            }
+            else if(SfxHintId::Dying == nId && dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
+            {
+                sal_Int32 nText = rTextProvider.getTextCount();
+                while (nText--)
                 {
-                    sal_Int32 nText = rTextProvider.getTextCount();
-                    while (nText--)
-                    {
-                        OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
-                        if( pParaObj )
-                            pParaObj->ClearPortionInfo();
-                    }
+                    OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                    if( pParaObj )
+                        pParaObj->ClearPortionInfo();
                 }
             }
-            else if(dynamic_cast<const SfxStyleSheetBasePool *>(&rBC) != nullptr)
+            else if (nId == SfxHintId::StyleSheetModified && dynamic_cast<const SfxStyleSheetBasePool *>(&rBC) != nullptr)
             {
                 const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
-
-                if(pExtendedHint
-                    && SfxHintId::StyleSheetModified == pExtendedHint->GetId())
+                if (pExtendedHint)
                 {
                     const OUString& aOldName(pExtendedHint->GetOldName());
                     OUString aNewName(pExtendedHint->GetStyleSheet()->GetName());
