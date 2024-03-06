@@ -453,4 +453,18 @@ public:
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
+class ClearedMutexArea
+{
+public:
+    ClearedMutexArea(osl::ResettableMutexGuard& guard)
+        : m_guard(guard)
+    {
+        m_guard.clear();
+    }
+    ~ClearedMutexArea() { m_guard.reset(); }
+
+private:
+    osl::ResettableMutexGuard& m_guard;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
