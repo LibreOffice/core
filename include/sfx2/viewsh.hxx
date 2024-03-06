@@ -222,6 +222,7 @@ private:
     LOKDocumentFocusListener& GetLOKDocumentFocusListener();
     const LOKDocumentFocusListener& GetLOKDocumentFocusListener() const;
     bool                        lokReadOnlyView = false; // When true, this is a LOK readonly view.
+    bool                        allowChangeComments = false; // When true, user can edit comments in readonly view mode.
 
 public:
 
@@ -247,6 +248,8 @@ public:
 
     void                        SetLokReadOnlyView(bool readOnlyView) { lokReadOnlyView = readOnlyView; };
     bool                        IsLokReadOnlyView() const { return lokReadOnlyView; };
+    void                        SetAllowChangeComments(bool allow) { allowChangeComments = allow; }
+    bool                        IsAllowChangeComments() { return allowChangeComments; }
 
     // Misc
 

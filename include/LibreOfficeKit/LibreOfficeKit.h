@@ -517,6 +517,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setViewReadOnly().
     void (*setViewReadOnly) (LibreOfficeKitDocument* pThis, int nId, const bool readOnly);
 
+    /// @see lok::Document::setAllowChangeComments().
+    void (*setAllowChangeComments) (LibreOfficeKitDocument* pThis, int nId, const bool allow);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
