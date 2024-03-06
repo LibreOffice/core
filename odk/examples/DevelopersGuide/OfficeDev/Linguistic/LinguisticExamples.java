@@ -159,7 +159,7 @@ public class LinguisticExamples
 
         // list of property values to used in function calls below.
         // Only properties with values different from the (default) values
-        // in the LinguProperties property set need to be supllied.
+        // in the LinguProperties property set need to be supplied.
         // Thus we may stay with an empty list in order to use the ones
         // from the property set.
         PropertyValue[] aEmptyProps = new PropertyValue[0];
@@ -171,7 +171,7 @@ public class LinguisticExamples
 
         // another list of property values to used in function calls below.
         // Only properties with values different from the (default) values
-        // in the LinguProperties property set need to be supllied.
+        // in the LinguProperties property set need to be supplied.
         PropertyValue[] aProps = new PropertyValue[1];
         aProps[0] = new PropertyValue();
         aProps[0].Name  = "IsIgnoreControlCharacters";
