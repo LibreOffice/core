@@ -1717,24 +1717,6 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const css::uno::Sequence< sal_Int
         uno::Sequence < sal_Int8 > aCLSID = GetCLSID();
         if ( MimeConfigurationHelper::ClassIDsEqual( aIdentifier, aCLSID ) )
             return comphelper::getSomething_cast(m_pNativeImpl->m_pObj.get());
-
-        // compatibility hack for old versions: CLSID was used in wrong order (SvGlobalName order)
-        sal_Int32 nLength = aIdentifier.getLength();
-        if ( nLength == 16 )
-        {
-            for ( sal_Int32 n=8; n<16; n++ )
-                if ( aIdentifier[n] != aCLSID[n] )
-                    return 0;
-            if ( aIdentifier[7] == aCLSID[6] &&
-                 aIdentifier[6] == aCLSID[7] &&
-                 aIdentifier[5] == aCLSID[4] &&
-                 aIdentifier[4] == aCLSID[5] &&
-                 aIdentifier[3] == aCLSID[0] &&
-                 aIdentifier[2] == aCLSID[1] &&
-                 aIdentifier[1] == aCLSID[2] &&
-                 aIdentifier[0] == aCLSID[3] )
-                return comphelper::getSomething_cast(m_pNativeImpl->m_pObj.get());
-        }
     }
     catch ( const uno::Exception& )
     {
