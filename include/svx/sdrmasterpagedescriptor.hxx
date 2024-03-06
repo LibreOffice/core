@@ -22,6 +22,7 @@
 
 #include <svx/sdrpageuser.hxx>
 #include <svx/svdsob.hxx>
+#include <svx/svxdllapi.h>
 #include <memory>
 
 class SdrPageProperties;
@@ -30,7 +31,7 @@ namespace sdr::contact { class ViewContact; }
 
 namespace sdr
 {
-    class MasterPageDescriptor final : public sdr::PageUser
+    class SVXCORE_DLLPUBLIC MasterPageDescriptor final : public sdr::PageUser
     {
     private:
         SdrPage&                                        maOwnerPage;
