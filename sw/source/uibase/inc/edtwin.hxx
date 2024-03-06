@@ -56,7 +56,7 @@ class SwTextFrame;
     To translate the pixel positions from the buffer OutputDevice to the real
     pixel positions, use the PixelToLogic methods of this class.
   */
-class SwEditWin final : public vcl::DocWindow,
+class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
                 public DropTargetHelper, public DragSourceHelper
 {
     friend class SwEditWinUIObject;
