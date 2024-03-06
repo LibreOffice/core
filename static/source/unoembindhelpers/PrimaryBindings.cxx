@@ -306,7 +306,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                     return emscripten::val(*o3tl::forceAccess<css::uno::Type>(self));
                 case css::uno::TypeClass_SEQUENCE:
                 {
-                    emscripten::internal::WireTypePack argv(self.getValue());
+                    emscripten::internal::WireTypePack argv(const_cast<void*>(self.getValue()));
                     return emscripten::val::take_ownership(
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
