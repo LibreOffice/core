@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SDRPAGEUSER_HXX
 
 #include <vector>
+#include <svx/svxdllapi.h>
 
 class SdrPage;
 
@@ -30,7 +31,7 @@ class SdrPage;
 
 namespace sdr
 {
-    class PageUser
+    class SVXCORE_DLLPUBLIC PageUser
     {
     public:
         // this method is called from the destructor of the referenced page.
