@@ -1095,6 +1095,51 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf157740_slideMasters)
     assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf159931_slideLayouts)
+{
+    createSdImpressDoc("odp/repeatBitmapMode.odp");
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDocRels1 = parseExport("ppt/slides/_rels/slide1.xml.rels");
+    xmlDocUniquePtr pXmlDocRels2 = parseExport("ppt/slides/_rels/slide2.xml.rels");
+
+    assertXPath(
+        pXmlDocRels1,
+        "(/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout'])"_ostr);
+
+    // the relative target e.g. "../slideLayouts/slideLayout2.xml"
+    OUString sRelativeLayoutPath1 = getXPathContent(
+        pXmlDocRels1,
+        "(/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout'])/@Target"_ostr);
+
+    assertXPath(
+        pXmlDocRels2,
+        "(/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout'])"_ostr);
+
+    // the relative target e.g. "../slideLayouts/slideLayout1.xml"
+    OUString sRelativeLayoutPath2 = getXPathContent(
+        pXmlDocRels2,
+        "(/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout'])/@Target"_ostr);
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+
+    // Check that the referenced slideLayout files exist
+    // Without the accompanying fix in place, this test would have failed with:
+    // equality assertion failed
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the referenced slideLayout file was missing on export.
+    OUString sSlideLayoutName1 = sRelativeLayoutPath1.getToken(2, '/');
+    OUString sSlideLayoutName2 = sRelativeLayoutPath2.getToken(2, '/');
+
+    CPPUNIT_ASSERT_EQUAL(true,
+                         bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName1)));
+    CPPUNIT_ASSERT_EQUAL(true,
+                         bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName2)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
