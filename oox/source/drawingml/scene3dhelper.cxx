@@ -12,16 +12,19 @@
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/vector/b3dvector.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
+#include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
 
 namespace oox
 {
@@ -435,10 +438,507 @@ bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DProperti
     // Shape properties
     Scene3DHelper::addExtrusionDepthToMap(p3DProperties, rPropertyMap);
 
-    // Extrusion color enabled?
-    rPropertyMap.setProperty(oox::PROP_Color, rExtrusionColor.isUsed());
+    // The 'automatic' extrusion color is different in MS Office. Thus we enable it in any case.
+    // CreateAndInsert method will set a suitable 'automatic' color, if rExtrusionColor is not used.
+    rPropertyMap.setProperty(oox::PROP_Color, true);
+    // ToDo: Some materials might need ShadeMode_Smooth or ShadeMode_PHONG.
+    rPropertyMap.setProperty(oox::PROP_ShadeMode, css::drawing::ShadeMode_FLAT);
 
     return true;
+}
+
+namespace
+{
+/* This struct is used to hold light properties for a light in a preset light rig.*/
+struct MSOLight
+{
+    // Values are as specified in [MS-OI29500], see commit message.
+    // The color is specified as RGBA, but alpha value is always 1.0 and ignored anyway, so it is
+    // dropped here. The RGB values are in decimal, but might exceed the usual [0;1] range.
+    double fMSOColorR;
+    double fMSOColorG;
+    double fMSOColorB;
+    // MSO uses 4 decimals precision, some light directions are not normalized.
+    double fMSOLightDirectionX;
+    double fMSOLightDirectionY;
+    double fMSOLightDirectionZ;
+    double fScale;
+    double fOffset;
+    bool bSpecular;
+    bool bDiffuse;
+};
+
+/* This struct is used to hold properties of a light rig*/
+struct PrstLightRigValues
+{
+    // values are as specified in [MS-OI29500], see commit message.
+    std::u16string_view sLightRigName; // identifies the light rig, mandatory in OOXML
+    // The ambient color is specified as RGBA, but alpha value is always 1.0 and R = B = G. Thus we
+    // store here only one value.
+    std::optional<double> fAmbient;
+    // Each rig has at least one light and maximal four lights
+    MSOLight aLight1;
+    std::optional<MSOLight> aLight2;
+    std::optional<MSOLight> aLight3;
+    std::optional<MSOLight> aLight4;
+    // Light rig rotation is not contained in the presets.
+};
+} // end anonymous namespace
+
+// The values are taken from [MS-OI29500]. For details see the spreadsheet attached to
+// tdf#70039 and the commit message.
+constexpr sal_uInt16 nLightRigPresetCount(27); // Fix value, specified in OOXML standard.
+constexpr PrstLightRigValues aPrstLightRigValuesArray[nLightRigPresetCount] = {
+    { u"balanced",
+      { 0.13 },
+      { 1.05, 1.05, 1.05, 0.5263, -0.4092, -0.7453, 1, 0, true, true },
+      { { 1, 1, 1, -0.9386, 0.3426, -0.041, 1, 0, true, true } },
+      { { 0.5, 0.5, 0.5, 0.0934, 0.763, 0.6396, 1, 0, true, true } },
+      {} },
+    { u"brightRoom",
+      { 1.5 },
+      { 1, 1, 1, 0, -1, 0, 1, 0, false, true },
+      { { 1, 1, 1, 0.8227, -0.1882, -0.5364, 1, 0, true, false } },
+      { { -0.5, -0.5, -0.5, 0, 0, -1, 1, 0, false, true } },
+      { { 0.5, 0.5, 0.5, 0, 1, 0, 1, 0, false, true } } },
+    { u"chilly",
+      { 0.11 },
+      { 0.31, 0.32, 0.32, 0.6574, -0.7316, -0.1806, 1, 0, true, true },
+      { { 0.45, 0.45, 0.45, -0.3539, -0.1505, -0.9231, 1, 0, false, true } },
+      { { 1.03, 1.02, 1.15, 0.672, -0.6185, -0.4073, 1, 0, false, true } },
+      { { 0.41, 0.45, 0.48, -0.5781, 0.7976, 0.1722, 1, 0, true, true } } },
+    { u"contrasting",
+      { 1 },
+      { 1, 1, 1, 0, -1, 0, 1, 0, true, false },
+      { { 1, 1, 1, 0, 1, 0, 1, 0, true, false } },
+      {},
+      {} },
+    { u"flat",
+      { 1 },
+      { 0.821, 0.821, 0.821, -0.9546, -0.1619, -0.2502, 1, 0, true, false },
+      { { 2.072, 2.54, 2.91, 0.0009, 0.8605, 0.5095, 1, 0, true, false } },
+      { { 3.843, 3.843, 3.843, 0.6574, -0.7316, -0.1806, 1, 0, true, false } },
+      {} },
+    { u"flood",
+      { 0.13 },
+      { 1.1, 1.1, 1.1, 0.5685, -0.7651, -0.3022, 1, 0, true, true },
+      { { 1.1, 1.1, 1.1, -0.2366, -0.9595, -0.1531, 1, 0, true, true } },
+      { { 0.55, 0.55, 0.55, -0.8982, 0.1386, -0.4171, 1, 0, true, true } },
+      {} },
+    { u"freezing",
+      {},
+      { 0.53, 0.567, 0.661, 0.6574, -0.7316, -0.1806, 1, 0, true, true },
+      { { 0.37, 0.461, 0.461, -0.2781, -0.4509, -0.8482, 1, 0, false, true } },
+      { { 0.649, 0.638, 0.904, 0.672, -0.6185, -0.4073, 1, 0, false, true } },
+      { { 0.971, 1.19, 1.363, -0.1825, 0.968, 0.1722, 1, 0, true, true } } },
+    { u"glow",
+      { 1 },
+      { 1, 1, 1, 0, -1, 0, 1, 0, true, true },
+      { { 0.7, 0.7, 0.7, 0, 1, 0, 1, 0, true, true } },
+      {},
+      {} },
+    { u"harsh",
+      { 0.28 },
+      { 0.88, 0.88, 0.88, 0.6689, -0.6755, -0.3104, 1, 0, true, true },
+      { { 0.88, 0.88, 0.88, -0.592, -0.7371, -0.326, 1, 0, true, true } },
+      {},
+      {} },
+    { u"legacyFlat1",
+      { 0.305 },
+      { 0.58, 0.58, 0.58, 0, 0, -0.2, 1, 0, true, true },
+      { { 0.58, 0.58, 0.58, 0, 0, -0.2, 0.5, 0, false, true } },
+      {},
+      {} },
+    { u"legacyFlat2",
+      { 0.305 },
+      { 0.58, 0.58, 0.58, -1, -1, -0.2, 1, 0, true, true },
+      { { 0.58, 0.58, 0.58, 0, 1, -0.2, 0.5, 0, false, true } },
+      {},
+      {} },
+    { u"legacyFlat3",
+      { 0.305 },
+      { 0.58, 0.58, 0.58, 0, -1, -0.2, 1, 0, true, true },
+      { { 0.58, 0.58, 0.58, 0, 1, -0.2, 0.5, 0, false, true } },
+      {},
+      {} },
+    { u"legacyFlat4",
+      { 0.305 },
+      { 0.58, 0.58, 0.58, 1, -1, -0.2, 1, 0, true, true },
+      { { 0.58, 0.58, 0.58, 0, 1, -0.2, 0.5, 0, false, true } },
+      {},
+      {} },
+    { u"legacyHarsh1",
+      { 0.061 },
+      { 0.793, 0.793, 0.793, 0, 0, -0.2, 1, 0, true, true },
+      { { 0.214, 0.214, 0.214, 0, 0, -0.2, 1, 0, false, true } },
+      {},
+      {} },
+    { u"legacyHarsh2",
+      { 0.061 },
+      { 0.793, 0.793, 0.793, -1, -1, -0.2, 1, 0, true, true },
+      { { 0.214, 0.214, 0.214, 0, 1, -0.2, 1, 0, false, true } },
+      {},
+      {} },
+    { u"legacyHarsh3",
+      { 0.061 },
+      { 0.793, 0.793, 0.793, 0, -1, -0.2, 1, 0, true, true },
+      { { 0.214, 0.214, 0.214, 0, 1, -0.2, 1, 0, false, true } },
+      {},
+      {} },
+    { u"legacyHarsh4",
+      { 0.061 },
+      { 0.793, 0.793, 0.793, 1, -1, -0.2, 1, 0, true, true },
+      { { 0.214, 0.214, 0.214, 0, 1, -0.2, 1, 0, false, true } },
+      {},
+      {} },
+    { u"legacyNormal1",
+      { 0.153 },
+      { 0.671, 0.671, 0.671, 0, 0, -0.2, 1, 0, true, true },
+      { { 0.366, 0.366, 0.366, 0, 0, -0.2, 0.5, 0, false, true } },
+      {},
+      {} },
+    { u"legacyNormal2",
+      { 0.153 },
+      { 0.671, 0.671, 0.671, -1, -1, -0.2, 1, 0, true, true },
+      { { 0.366, 0.366, 0.366, 0, 1, -0.2, 0.5, 0, false, true } },
+      {},
+      {} },
+    { u"legacyNormal3",
+      { 0.153 },
+      { 0.671, 0.671, 0.671, 0, -1, -0.2, 1, 0, true, true },
+      { { 0.366, 0.366, 0.366, 0, 1, -0.2, 0.5, 0, false, true } },
+      {},
+      {} },
+    { u"legacyNormal4",
+      { 0.153 },
+      { 0.671, 0.671, 0.671, 1, -1, -0.2, 1, 0, true, true },
+      { { 0.366, 0.366, 0.366, 0, 1, -0.2, 0.5, 0, false, true } },
+      {},
+      {} },
+    { u"morning",
+      {},
+      { 0.669, 0.648, 0.596, 0.6574, -0.7316, -0.1806, 0.5, 0.5, true, true },
+      { { 0.459, 0.454, 0.385, -0.2781, -0.4509, -0.8482, 1, 0, false, true } },
+      { { 0.9, 0.86, 0.83, 0.672, -0.6185, -0.4073, 1, 0, false, true } },
+      { { 0.911, 0.846, 0.728, -0.1825, 0.968, 0.1722, 1, 0, true, true } } },
+    { u"soft", { 0.3 }, { 0.8, 0.8, 0.8, -0.6897, 0.2484, -0.6802, 1, 0, true, true }, {}, {}, {} },
+    { u"sunrise",
+      {},
+      { 0.667, 0.63, 0.527, 0.6574, -0.7316, -0.1806, 1, 0, true, true },
+      { { 0.459, 0.459, 0.371, -0.2781, -0.4509, -0.8482, 1, 0, false, true } },
+      { { 0.826, 0.712, 0.638, 0.672, -0.6185, -0.4073, 1, 0, false, true } },
+      { { 1.511, 1.319, 0.994, -0.1825, 0.968, 0.1722, 1, 0, false, true } } },
+    { u"sunset",
+      {},
+      { 0.672, 0.169, 0.169, 0.6574, -0.7316, -0.1806, 1, 0, true, true },
+      { { 0.459, 0.448, 0.327, 0.0922, -0.3551, -0.9303, 1, 0, false, true } },
+      { { 0.775, 0.612, 0.502, 0.672, -0.6185, -0.4073, 1, 0, false, true } },
+      { { 0.761, 0.69, 0.397, -0.424, 0.8891, 0.1722, 1, 0, false, true } } },
+    { u"threePt",
+      {},
+      { 1.141, 1.141, 1.141, -0.6515, -0.2693, -0.7093, 1, 0, true, true },
+      { { 0.5, 0.5, 0.5, 0.8482, 0.2469, -0.4686, 1, 0, true, true } },
+      { { 1, 1, 1, 0.5634, -0.2812, 0.7769, 1, 0, true, true } },
+      {} },
+    { u"twoPt",
+      { 0.25 },
+      { 0.84, 0.84, 0.84, 0.5266, -0.4089, -0.7454, 0, 0, true, true },
+      { { 0.3, 0.3, 0.3, -0.8983, 0.2365, -0.3704, 1, 0, true, true } },
+      {},
+      {} }
+};
+
+namespace
+{
+/** Searches for the item in aPrstLightRigValuesArray with given sPresetName.
+    @param [in] sPresetName name as specified in OOXML standard
+    @return returns the index if item exists, otherwise -1.*/
+sal_Int16 lcl_getPrstLightRigIndex(std::u16string_view sPresetName)
+{
+    sal_Int16 nIt(0);
+    while (nIt < nLightRigPresetCount && aPrstLightRigValuesArray[nIt].sLightRigName != sPresetName)
+        ++nIt;
+    if (nIt >= nLightRigPresetCount)
+    {
+        nIt = -1; // Error is handled by caller
+    }
+    return nIt;
+}
+
+/** Extracts the light directions from the preset lightRig.
+    @param [in] rLightRig from which the lights are extracted
+    @param [out] rLightDirVec contains the preset lights but each as B3DVector*/
+void lcl_getLightDirectionsFromRig(const PrstLightRigValues& rLightRig,
+                                   std::vector<basegfx::B3DVector>& rLightDirVec)
+{
+    auto addLightDir = [&](const MSOLight& aMSOLight) {
+        basegfx::B3DVector aLightDir(aMSOLight.fMSOLightDirectionX, aMSOLight.fMSOLightDirectionY,
+                                     aMSOLight.fMSOLightDirectionZ);
+        rLightDirVec.push_back(std::move(aLightDir));
+    };
+    // aLight1 always exists, the others are optional
+    addLightDir(rLightRig.aLight1);
+    if (rLightRig.aLight2.has_value())
+        addLightDir(rLightRig.aLight2.value());
+    if (rLightRig.aLight3.has_value())
+        addLightDir(rLightRig.aLight3.value());
+    if (rLightRig.aLight4.has_value())
+        addLightDir(rLightRig.aLight4.value());
+}
+
+/** Converts the directions from MSO specification to coordinates in the shape coordinate system.
+    @details The extruded shape uses a left-hand Cartesian coordinate system with x-axis right, y-axis
+    down and z-axis towards observer. When L(Lx,Ly,Lz) is the specified ligth direction, then
+    V(-Ly, -Lx, Lz) is the direction in the shape coordinate system.
+    @param [in,out] rLightDirVec contains for each indiviual light its direction.*/
+void lcl_AdaptAndNormalizeLightDirections(std::vector<basegfx::B3DVector>& rLightDirVec)
+{
+    basegfx::B3DHomMatrix aTransform; // unit matrix
+    aTransform.set(0, 0, 0.0);
+    aTransform.set(0, 1, -1.0);
+    aTransform.set(1, 0, -1.0);
+    aTransform.set(1, 1, 0.0);
+    for (auto& rDirection : rLightDirVec)
+    {
+        rDirection *= aTransform;
+        rDirection.normalize();
+    }
+}
+
+/** Gets the rotation angles fX and fY from the extrusion property RotateAngle in the map.
+    Does nothing if property does not exist.
+    @param [in] rPropertyMap should contain valid value in RotateAngle property
+    @param [out] fX, fY rotation angle in unit rad with orientation as in API.*/
+void lcl_getXYAnglesFromMap(oox::PropertyMap& rPropertyMap, double& rfX, double& rfY)
+{
+    if (!rPropertyMap.hasProperty(oox::PROP_RotateAngle))
+        return;
+    css::drawing::EnhancedCustomShapeParameterPair aAnglePair;
+    css::uno::Any aAny = rPropertyMap.getProperty(oox::PROP_RotateAngle);
+    if (aAny >>= aAnglePair)
+    {
+        rfX = basegfx::deg2rad(aAnglePair.First.Value.get<double>());
+        rfY = basegfx::deg2rad(aAnglePair.Second.Value.get<double>());
+    }
+}
+
+/** Applies the rotations given in fX, fY, fZ to the light directions.
+    @details The rotations are applied in the order fZ, fY, fX. All angles have unit rad. The
+        orientation of the angles fX and fY is the same as in the extrusion property RotateAngle in
+        API. The orientation of angle fZ is the same as in shape property RotateAngle in API.
+    @param [in, out] rLightDirVec contains the to be transformed light directions
+    @param [in] fX angle for rotation around x-axis
+    @param [in] fY angle for rotation around y-axis
+    @param {in] fZ angle for rotation around z-axis*/
+void lcl_ApplyShapeRotationToLights(std::vector<basegfx::B3DVector>& rLightDirVec, const double& fX,
+                                    const double& fY, const double& fZ)
+{
+    basegfx::B3DHomMatrix aTransform; // unit matrix
+    // rotate has the order first x, than y, last z. We need order z, y, x.
+    aTransform.rotate(0.0, 0.0, -fZ);
+    aTransform.rotate(0.0, -fY, 0.0);
+    aTransform.rotate(fX, 0.0, 0.0);
+    for (auto it = rLightDirVec.begin(); it != rLightDirVec.end(); ++it)
+        (*it) *= aTransform;
+}
+
+/** Applies the light rig rotation to the directions of the individual lights
+    @details A light rig has a mandatory attribute 'dir' for rotating the rig in 45deg steps. It might
+        have an element 'rot', that describes a rotation by spherical coordinates 'lat', 'lon' and
+        'rev'. The element has precedence over the attribute.
+    @param [in] p3DProperties contains info about light rig.
+    @param {in, out] rLightDirVec contains for each indiviual light its direction in shape coordinate
+        system with x-axis right, y-axis down, z-axis toward observer.*/
+void lcl_IncorporateRigRotationIntoLightDirections(
+    const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+    std::vector<basegfx::B3DVector>& rLightDirVec)
+{
+    basegfx::B3DHomMatrix aTransform; // unit matrix
+    // if a 'rot' element exists, then all of 'lat', 'lon' and 'rev' needs to exist.
+    if ((*p3DProperties).maLightRigRotation.mnLatitude.has_value())
+    {
+        double fLat
+            = basegfx::deg2rad<60000>((*p3DProperties).maLightRigRotation.mnLatitude.value_or(0));
+        double fLon
+            = basegfx::deg2rad<60000>((*p3DProperties).maLightRigRotation.mnLongitude.value_or(0));
+        double fRev
+            = basegfx::deg2rad<60000>((*p3DProperties).maLightRigRotation.mnRevolution.value_or(0));
+        aTransform.rotate(0.0, 0.0, fRev);
+        aTransform.rotate(fLat, fLon, 0.0);
+    }
+    else
+    {
+        sal_Int32 nDir = 0;
+        switch ((*p3DProperties).mnLightRigDirection.value_or(XML_t))
+        {
+            case XML_t:
+                nDir = 0;
+                break;
+            case XML_tr:
+                nDir = 45;
+                break;
+            case XML_r:
+                nDir = 90;
+                break;
+            case XML_br:
+                nDir = 135;
+                break;
+            case XML_b:
+                nDir = 180;
+                break; // or -180
+            case XML_bl:
+                nDir = -135;
+                break;
+            case XML_l:
+                nDir = -90;
+                break;
+            case XML_tl:
+                nDir = -45;
+                break;
+            default:
+                nDir = 0;
+        }
+        // Rotation is always only around z-axis
+        aTransform.rotate(0.0, 0.0, basegfx::deg2rad(nDir));
+    }
+    for (auto& rDirection : rLightDirVec)
+        rDirection *= aTransform;
+}
+
+/** The lights in OOXML are basically incompatible with our lights. We try to tweak some rigs to
+    reduce obvious problems.
+    @param [in, out] rLightDirVec light directions with already incorporated rotations
+    @param [in, out] rLightRig the to be tweaked rig
+*/
+void lcl_tweakLightRig(std::vector<basegfx::B3DVector>& rLightDirVec, PrstLightRigValues& rLightRig)
+{
+    if (rLightRig.sLightRigName == u"brightRoom")
+    {
+        // The fourth light has more significant direction.
+        if (rLightDirVec.size() >= 4 && rLightRig.aLight2.has_value()
+            && rLightRig.aLight4.has_value())
+        {
+            std::swap(rLightDirVec[1], rLightDirVec[3]);
+            // swap fourth and second in light rig too, swap their other properties too.
+            MSOLight aTemp = rLightRig.aLight4.value();
+            rLightRig.aLight4 = rLightRig.aLight2.value();
+            rLightRig.aLight2 = aTemp;
+            // and make it brighter, 1.0 instead of 0.5
+            rLightRig.aLight2.value().fMSOColorR = 1.0;
+            rLightRig.aLight2.value().fMSOColorG = 1.0;
+            rLightRig.aLight2.value().fMSOColorB = 1.0;
+        }
+        // The object is far too bright.
+        rLightRig.fAmbient = 0.6; // instead 1.5
+    }
+    else if (rLightRig.sLightRigName == u"chilly" || rLightRig.sLightRigName == u"flood")
+    {
+        // They are too dark.
+        rLightRig.fAmbient = 0.35; // instead 0.11 resp. 0.13
+    }
+    else if (rLightRig.sLightRigName == u"freezing" || rLightRig.sLightRigName == u"morning"
+             || rLightRig.sLightRigName == u"sunrise")
+    {
+        // These rigs have no ambient color but four lights. The objects are too dark with only
+        // two lights.
+        rLightRig.fAmbient = 0.4;
+    }
+    else if (rLightRig.sLightRigName == u"sunset")
+    {
+        // The fourth light is more significant.
+        if (rLightDirVec.size() >= 4 && rLightRig.aLight4.has_value())
+        {
+            MSOLight aTemp = rLightRig.aLight2.value();
+            rLightRig.aLight2 = rLightRig.aLight4.value();
+            rLightRig.aLight4 = aTemp;
+            std::swap(rLightDirVec[1], rLightDirVec[3]);
+        }
+    }
+    else if (rLightRig.sLightRigName == u"soft")
+    {
+        // This is the only modern light rig with Scale=0.5 and Offset=0.5. It would be harsh=false
+        // and specular=true at the same time. We switch specular off as that is used to set harsh on.
+        rLightRig.aLight1.bSpecular = false;
+    }
+}
+
+} // end anonymous namespace
+
+void Scene3DHelper::setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+                                          const double& rfRotZ, oox::PropertyMap& rPropertyMap)
+{
+    if (!p3DProperties || (p3DProperties && !(*p3DProperties).mnLightRigType.has_value()))
+        return;
+
+    // get index of light rig in aPrstLightRigValuesArray
+    const sal_Int32 nLightRigPrstID((*p3DProperties).mnLightRigType.value()); // token
+    sal_Int16 nPrstLightRigIndex = lcl_getPrstLightRigIndex(
+        oox::drawingml::Generic3DProperties::getLightRigName(nLightRigPrstID));
+    if (nPrstLightRigIndex < 0 or nPrstLightRigIndex >= nLightRigPresetCount)
+        return; // error in document. OOXML specifies a fixed set of preset light rig types.
+
+    // The light rig is copied because it might be tweaked later.
+    PrstLightRigValues aLightRig = aPrstLightRigValuesArray[nPrstLightRigIndex];
+
+    std::vector<basegfx::B3DVector> aLightDirVec;
+    aLightDirVec.reserve(4);
+    lcl_getLightDirectionsFromRig(aLightRig, aLightDirVec);
+    lcl_AdaptAndNormalizeLightDirections(aLightDirVec);
+
+    lcl_IncorporateRigRotationIntoLightDirections(p3DProperties, aLightDirVec);
+
+    // Parts (1) to (6) are workarounds for the problem that our current model as well as API and
+    // ODF are not able to describe or use the capabilities of extruded custom shapes of MS Office.
+    // If the implementation is improved one day, the parts will need to be adapted.
+
+    // (1) Moving the camera around does not change shape or light directions for modern cameras in
+    // MS Office. For legacy cameras MS Office behaves same as LibreOffice: Not the camera is moved
+    // but the shape is rotated. For modern cameras we need to rotate the light rig the same way as
+    // the shape to get a similar illumination as in MS Office.
+    if (mnPrstCameraIndex < 20 || 37 < mnPrstCameraIndex)
+    {
+        double fX = 0.0; // unit rad, orientation as in API
+        double fY = 0.0; // unit rad, orientation as in API
+        lcl_getXYAnglesFromMap(rPropertyMap, fX, fY);
+        lcl_ApplyShapeRotationToLights(aLightDirVec, fX, fY, rfRotZ);
+    }
+
+    // (2) We try to tweak some light rigs a little bit, e.g. make sure the first light is specular
+    // or add some ambient light instead of not possible third or forth light.
+    lcl_tweakLightRig(aLightDirVec, aLightRig);
+
+    rPropertyMap.setProperty(oox::PROP_Brightness, aLightRig.fAmbient.value_or(0) * 100);
+
+    // (3) A 3D-scene of an extruded custom shape has currently no colored light, but only a
+    // level. We get the level from Red.
+    rPropertyMap.setProperty(oox::PROP_FirstLightLevel, aLightRig.aLight1.fMSOColorR * 100);
+
+    // (4) 'Specular' and 'Diffuse' in the MSO specification belong to modern 3D geometry. That is not
+    // available in our legacy one. Here we treat 'Specular' as property 'Harsh' and ignore 'Diffuse'.
+    rPropertyMap.setProperty(oox::PROP_FirstLightHarsh, aLightRig.aLight1.bSpecular);
+
+    // (5) In fact we have stored position in FirstLightDirection and SecondLightDirection,
+    // not direction, thus the minus sign.
+    css::drawing::Direction3D aLightPos;
+    aLightPos.DirectionX = -aLightDirVec[0].getX();
+    aLightPos.DirectionY = -aLightDirVec[0].getY();
+    aLightPos.DirectionZ = -aLightDirVec[0].getZ();
+    rPropertyMap.setProperty(oox::PROP_FirstLightDirection, aLightPos);
+
+    // (6) For extruded custom shapes only two lights are possible although our rendering engine has
+    // eight lights. We will loose lights.
+    if (aLightDirVec.size() > 1)
+    {
+        rPropertyMap.setProperty(oox::PROP_SecondLightLevel,
+                                 aLightRig.aLight2.value().fMSOColorR * 100);
+        rPropertyMap.setProperty(oox::PROP_SecondLightHarsh, aLightRig.aLight2.value().bSpecular);
+        aLightPos.DirectionX = -aLightDirVec[1].getX();
+        aLightPos.DirectionY = -aLightDirVec[1].getY();
+        aLightPos.DirectionZ = -aLightDirVec[1].getZ();
+        rPropertyMap.setProperty(oox::PROP_SecondLightDirection, aLightPos);
+    }
+    else
+        rPropertyMap.setProperty(oox::PROP_SecondLightLevel, 0.0); // prevent defaults.
 }
 
 } // end namespace oox

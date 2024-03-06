@@ -42,6 +42,14 @@ public:
                                 double& rRotZ, oox::drawingml::Color& rExtrusionColor,
                                 const bool bBlockExtrusion = false);
 
+    /** Creates lighting properties in rPropertyMap from MSO preset and shape rotation
+        @param [in] p3DProperties a pointer to Shape3DProperties
+        @param [in] rRotZ the shape rotation inclusive camera z-rotation as calculated by
+            setExtrusionProperties()
+        @param [in, out] rPropertyMap the map, that was already filled by setExtrusionProperties()*/
+    void setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+                               const double& rRotZ, oox::PropertyMap& rPropertyMap);
+
 private:
     /** Calculates angles suitable for API from OOXML scene3d angles.
         @param [in] nLat, nLon, nRev in unit 1/60000 deg with same orientation as the attributes lat,

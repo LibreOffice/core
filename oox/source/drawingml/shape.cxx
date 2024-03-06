@@ -988,20 +988,22 @@ Reference< XShape > const & Shape::createAndInsert(
         fShapeRotateInclCamera, aExtrusionColor, bBlockExtrusion);
     // Currently the other places use unit 1/60000deg and MSO shape rotate orientation.
     sal_Int32 nShapeRotateInclCamera = -basegfx::rad2deg<60000>(fShapeRotateInclCamera);
-
     bool bIs3DGraphic = aServiceName == "com.sun.star.drawing.GraphicObjectShape" && bHas3DEffect;
     bIsCustomShape |= bIs3DGraphic;
 
     // The extrusion color does not belong to the extrusion properties but is secondary color in
-    // the style of the shape, FillColor2 in API.
+    // the style of the shape, FillColor2 in API. The case that no extrusion color was set is handled
+    // further down when FillProperties and LineProperties are handled.
     if (aExtrusionColor.isUsed())
     {
         // FillColor2 is not yet transformed to ComplexColor.
         ::Color aColor = aExtrusionColor.getColor(rFilterBase.getGraphicHelper());
         maShapeProperties.setProperty(PROP_FillColor2, aColor);
     }
-    // ToDo: MS Office 'automatic' color uses line color if it exists, LO uses fill color. We might
-    // need to change color here in case of 'automatic'.
+
+    if (bHas3DEffect)
+        aScene3DHelper.setLightingProperties(mp3DPropertiesPtr, fShapeRotateInclCamera,
+                                             getCustomShapeProperties()->getExtrusionPropertyMap());
 
     if (bIsCroppedGraphic || bIs3DGraphic)
     {
@@ -1468,6 +1470,28 @@ Reference< XShape > const & Shape::createAndInsert(
             if( aShapeProps.hasProperty( PROP_TextAutoGrowHeight ) )
                 xSet->setPropertyValue( rPropName, Any( false ) );
 
+        // For extruded shapes, MSO uses the line color if no extrusion color is specified. LO uses
+        // fill color in 'automatic' case. Thus we set extrusion color explicitely.
+        if (bHas3DEffect && !aExtrusionColor.isUsed())
+        {
+            const OUString& rFillColor2PropName = PropertyMap::getPropertyName(PROP_FillColor2);
+            if (xSetInfo.is() && xSetInfo->hasPropertyByName(rFillColor2PropName))
+            {
+                Color aComplexColor;
+                if (aLineProperties.maLineFill.moFillType.has_value()
+                    && aLineProperties.maLineFill.moFillType.value() != XML_noFill)
+                    aComplexColor = aLineProperties.maLineFill.getBestSolidColor();
+                else if (aFillProperties.moFillType.has_value()
+                    && aFillProperties.moFillType.value() != XML_noFill)
+                    aComplexColor = aFillProperties.getBestSolidColor();
+                if (aComplexColor.isUsed())
+                {
+                    const ::Color aSimpleColor = aComplexColor.getColor(rFilterBase.getGraphicHelper());
+                    xSet->setPropertyValue(rFillColor2PropName, Any(aSimpleColor));
+                }
+            }
+        }
+
         // do not set properties at a group shape (this causes
         // assertions from svx) ...
         if( aServiceName != "com.sun.star.drawing.GroupShape" )
@@ -1781,7 +1805,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 putPropertyToGrabBag("EffectProperties", uno::Any(comphelper::containerToSequence(aEffects)));
             }
 
-            // add 3D effects if any
+            // add 3D effects if any to GrabBag. They are still used in export.
             Sequence< PropertyValue > aCamera3DEffects = get3DProperties().getCameraAttributes();
             Sequence< PropertyValue > aLightRig3DEffects = get3DProperties().getLightRigAttributes();
             Sequence< PropertyValue > aShape3DEffects = get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );

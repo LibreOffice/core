@@ -26,11 +26,15 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_testscene3d, \
     cppuhelper \
     oox \
     sal \
+    sfx \
     subsequenttest \
+    svx \
+    svxcore \
     test \
+    tl \
     unotest \
     utl \
-    tl \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,oox_testscene3d))

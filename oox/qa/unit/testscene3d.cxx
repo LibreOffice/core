@@ -10,14 +10,22 @@
 #include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/unoprnms.hxx>
+#include <sfx2/viewsh.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdview.hxx>
+#include <tools/color.hxx>
+#include <vcl/bitmapex.hxx>
 
 using namespace css;
 
@@ -33,6 +41,9 @@ public:
 protected:
     // get shape with nShapeIndex from page nPageIndex
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex, sal_uInt8 nPageIndex);
+    // Converts the shape 0 on page 0 to a bitmap and returns this bitmap.
+    // It assumes, that shape 0 on page 0 is the only shape.
+    void getShapeAsBitmap(BitmapEx& rBMP);
 };
 
 uno::Reference<drawing::XShape> TestScene3d::getShape(sal_uInt8 nShapeIndex, sal_uInt8 nPageIndex)
@@ -47,6 +58,27 @@ uno::Reference<drawing::XShape> TestScene3d::getShape(sal_uInt8 nShapeIndex, sal
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShapeIndex), uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get xShape", xShape.is());
     return xShape;
+}
+
+void TestScene3d::getShapeAsBitmap(BitmapEx& rBMP)
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell->GetDrawView();
+
+    // Mark object and convert it to bitmap
+    uno::Reference<drawing::XShape> xShape3D(getShape(0, 0));
+    SdrObject* pSdrShape(SdrObject::getSdrObjectFromXShape(xShape3D));
+    pSdrView->MarkObj(pSdrShape, pSdrView->GetSdrPageView());
+    dispatchCommand(mxComponent, ".uno:ConvertIntoBitmap", {});
+    pSdrView->UnmarkAll();
+
+    // Get graphic
+    uno::Reference<drawing::XShape> xShapeBmp(getShape(0, 0));
+    SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(SdrObject::getSdrObjectFromXShape(xShapeBmp));
+    CPPUNIT_ASSERT_MESSAGE("No image object created", pGrafObj);
+    const Graphic& rGraphic = pGrafObj->GetGraphic();
+    rBMP = rGraphic.GetBitmapEx();
+    CPPUNIT_ASSERT_MESSAGE("No bitmap", !rBMP.IsEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_isometricRightUp)
@@ -99,10 +131,11 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_isometricRightUp)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1270.0, aParaPair.First.Value.get<double>(), 1E-14);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aParaPair.Second.Value.get<double>(), 1E-14);
 
-    // This shape does not use an extrusion color.
-    bool bIsExtrusionColorEnabled(true);
+    // This shape does not use an extrusion color, but we enable it in all cases and set
+    // its color, because MSO and LO have different defaults.
+    bool bIsExtrusionColorEnabled(false);
     aExtrusionPropMap.getValue(u"Color"_ustr) >>= bIsExtrusionColorEnabled;
-    CPPUNIT_ASSERT_MESSAGE("error: Extrusion color enabled", !bIsExtrusionColorEnabled);
+    CPPUNIT_ASSERT_MESSAGE("error: Extrusion color not enabled", bIsExtrusionColorEnabled);
 }
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_legacyObliqueBottomRight)
@@ -315,6 +348,155 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_legacyPerspectiveTopRight)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6292, aBoundRect.X, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3138, aBoundRect.Y, 10);
 }
+
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_modernCamera)
+{
+    // The modern camera 'orthographicFront' looks at the shape. The scene is lit by lightRig 'twoPt'.
+    // A modern camera moves around the shape. The lightRig has a fixed position in regard to the
+    // shape. This is the same shape as in test_lightRig_legacyCamera but with a modern camera.
+    // The test assumes rendering with ShadeMode_FLAT.
+    loadFromFile(u"Scene3d_lightRig_modernCamera.pptx");
+    BitmapEx aBMP;
+    getShapeAsBitmap(aBMP);
+
+    // Size in pixel depends on dpi. Thus calculate positions relative to size.
+    // Color in center
+    sal_Int32 nX = 0.5 * aBMP.GetSizePixel().Width();
+    sal_Int32 nY = 0.5 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedCenter(248, 226, 212);
+    CPPUNIT_ASSERT_MESSAGE("center color wrong",
+                           aExpectedCenter.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    // Color left
+    nX = 0.046122 * aBMP.GetSizePixel().Width();
+    nY = 0.5 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedLeft(0, 105, 48);
+    CPPUNIT_ASSERT_MESSAGE("left color wrong",
+                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+}
+
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_legacyCamera)
+{
+    // The legacy camera 'legacyObliqueFront' looks at the shape. The scene is lit by lightRig
+    // 'twoPt'. A legacy camera is fix, instead the shape is rotated. The lightRig has a fixed
+    // position in regard to the camera, but the shape receives various lighting when rotated.
+    // This is the same shape as in test_lightRig_modernCamera but with a legacy camera.
+    // The test assumes rendering with ShadeMode_FLAT.
+    loadFromFile(u"Scene3d_lightRig_legacyCamera.pptx");
+    BitmapEx aBMP;
+    getShapeAsBitmap(aBMP);
+
+    // Size in pixel depends on dpi. Thus calculate positions relative to size.
+    // Color in center
+    sal_Int32 nX = 0.5 * aBMP.GetSizePixel().Width();
+    sal_Int32 nY = 0.5 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedCenter(96, 88, 82);
+    CPPUNIT_ASSERT_MESSAGE("center color wrong",
+                           aExpectedCenter.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    // Color left
+    nX = 0.046122 * aBMP.GetSizePixel().Width();
+    nY = 0.5 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedLeft(0, 180, 82);
+    CPPUNIT_ASSERT_MESSAGE("left color wrong",
+                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+}
+
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_default)
+{
+    // The scene uses the modern camera 'isometricOffAxis1Top' and the lightRig 'harsh'. Here the
+    // unrotated lightRig is tested. Since rig 'harsh' has only two lights and the direction of the
+    // second light is against view direction, the colors are same in LibreOffice and MS Office.
+    // The test assumes rendering with ShadeMode_FLAT.
+    loadFromFile(u"Scene3d_lightRig_default.pptx");
+    BitmapEx aBMP;
+    getShapeAsBitmap(aBMP);
+
+    // Size in pixel depends on dpi. Thus calculate positions relative to size.
+    // Front color
+    sal_Int32 nX = 0.93811 * aBMP.GetSizePixel().Width();
+    sal_Int32 nY = 0.49904 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedFront(165, 187, 150);
+    CPPUNIT_ASSERT_MESSAGE("front color wrong",
+                           aExpectedFront.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    // Left color
+    nX = 0.078176 * aBMP.GetSizePixel().Width();
+    nY = 0.49904 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedLeft(255, 189, 74);
+    CPPUNIT_ASSERT_MESSAGE("left color wrong",
+                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    // Top color
+    nX = 0.48860 * aBMP.GetSizePixel().Width();
+    nY = 0.069098 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedTop(189, 100, 39);
+    CPPUNIT_ASSERT_MESSAGE("top color wrong",
+                           aExpectedTop.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+}
+
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_dir_rotation)
+{
+    // The scene uses the modern camera 'isometricOffAxis1Top' and the lightRig 'harsh'. The rig is
+    // rotated around the z-axis by attribute 'dir'. Since rig 'harsh' has only two lights and the
+    // direction of the second light is against the view direction, colors are same in LibreOffice
+    // and MSO. The test assumes rendering with ShadeMode_FLAT.
+    loadFromFile(u"Scene3d_lightRig_dir_rotation.pptx");
+    BitmapEx aBMP;
+    getShapeAsBitmap(aBMP);
+
+    // Size in pixel depends on dpi. Thus calculate positions relative to size.
+    // Front color
+    sal_Int32 nX = 0.93811 * aBMP.GetSizePixel().Width();
+    sal_Int32 nY = 0.49904 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedFront(165, 187, 150);
+    CPPUNIT_ASSERT_MESSAGE("front color wrong",
+                           aExpectedFront.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    // Left color
+    nX = 0.078176 * aBMP.GetSizePixel().Width();
+    nY = 0.49904 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedLeft(206, 108, 42);
+    CPPUNIT_ASSERT_MESSAGE("left color wrong",
+                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    // Top color
+    nX = 0.48860 * aBMP.GetSizePixel().Width();
+    nY = 0.069098 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedTop(255, 189, 74);
+    CPPUNIT_ASSERT_MESSAGE("top color wrong",
+                           aExpectedTop.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+}
+
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_rot_rotation)
+{
+    // The scene uses the modern camera 'isometricOffAxis1Top' and the lightRig 'harsh'. The rig is
+    // rotated around x- and y-axis by element 'rot'.
+    // The test assumes rendering with ShadeMode_FLAT.
+    loadFromFile(u"Scene3d_lightRig_rot_rotation.pptx");
+    BitmapEx aBMP;
+    getShapeAsBitmap(aBMP);
+
+    // Size in pixel depends on dpi. Thus calculate positions relative to size.
+    // Front color, same as in MS Office
+    sal_Int32 nX = 0.93811 * aBMP.GetSizePixel().Width();
+    sal_Int32 nY = 0.49904 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedFront(88, 100, 80);
+    CPPUNIT_ASSERT_MESSAGE("center color wrong",
+                           aExpectedFront.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    // Left color, different from MS Office
+    // The rotation brings the second light in a position, that it contributes to the left face.
+    // Because the light is specular in MS Office, but current LibreOffice cannot make a second
+    // light specular, the colors in MS Office and LibreOffice differ noticeably. MS Office has
+    // here rgb(255, 214, 99). The expectected color is the color in LibreOffice as of March 2024.
+    // The test needs to be updated, when LibreOffice rendering is improved.
+    nX = 0.078176 * aBMP.GetSizePixel().Width();
+    nY = 0.49904 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedLeft(255, 191, 75);
+    CPPUNIT_ASSERT_MESSAGE("left color wrong",
+                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    // Top color, same as in MS Office
+    nX = 0.48860 * aBMP.GetSizePixel().Width();
+    nY = 0.069098 * aBMP.GetSizePixel().Height();
+    ::Color aExpectedTop(106, 56, 22);
+    CPPUNIT_ASSERT_MESSAGE("top color wrong",
+                           aExpectedTop.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
