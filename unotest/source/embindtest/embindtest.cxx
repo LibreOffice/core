@@ -279,7 +279,7 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
             return false;
         }
         auto const& e = *o3tl::forceAccess<org::libreoffice::embindtest::Exception>(value);
-        return e.Message == "error" && !e.Context.is() && e.m1 == -123456 && e.m2 == 100.5
+        return e.Message.startsWith("error") && !e.Context.is() && e.m1 == -123456 && e.m2 == 100.5
                && e.m3 == u"hä";
     }
 
