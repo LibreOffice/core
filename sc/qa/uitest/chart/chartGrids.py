@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Chart Enable Grids dialog
 class chartGrids(UITestCase):
    def test_chart_enable_grids_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")):
+    with self.ui_test.load_file(get_url_for_data_file("chart.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
