@@ -1285,6 +1285,19 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         if (m_pImpl->m_nWrap == text::WrapTextMode_THROUGH && m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME)
                         {
+                            if (m_pImpl->m_bLayoutInCell && m_pImpl->m_rDomainMapper.IsInTable()
+                                && (m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_FRAME
+                                    || m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_PRINT_AREA))
+                            {
+                                // Impossible to be page-oriented when layout in cell.
+                                // Since we are turning LayoutInCell off (to simplify layout),
+                                // we need to set the orientation to the paragraph,
+                                // as MSO effectively does when it forces layoutInCell.
+                                // Probably also needs to happen with TEXT_LINE,
+                                // but MSO is really weird with vertical relation to "line"
+                                m_pImpl->m_nVertRelation = text::RelOrientation::FRAME;
+                            }
+
                             // text::RelOrientation::FRAME is OOXML's "column", which behaves as if
                             // layout-in-cell would be always off.
                             m_pImpl->m_bLayoutInCell = false;

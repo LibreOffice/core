@@ -354,6 +354,33 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin15, "tdf160049_anchorMargin15
                          getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.docx")
+{
+    // given an in-table, slightly rotated image vertically aligned -1cm (above) the top page margin
+    // (which is actually forced to layoutInCell, so that becomes 1cm above the paragraph instead)
+
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    const sal_Int32 nCellTop
+        = getXPath(pDump, "//row[1]/cell[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    const sal_Int32 nParaTop
+        = getXPath(pDump, "//row[1]/cell[1]/txt/infos/bounds"_ostr, "top"_ostr).toInt32();
+    const sal_Int32 nImageTop
+        = getXPath(pDump, "//row[1]/cell[1]/txt/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    // The image is approximately half-way between cell top and the start of the text
+    // correct ImageTop: 3588, while incorrect value was 1117. Cell top is 3051, ParaTop is 4195
+    const sal_Int32 nHalfway = nCellTop + (nParaTop - nCellTop) / 2;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nHalfway, nImageTop, 50); // +/- 4.4%
+
+    // The effect is implemented by forcing "Entire paragraph area"/FRAME/0
+    // instead of "Page text area"/PAGE_PRINT_AREA/8
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
+                         getProperty<sal_Int16>(getShape(1), "VertOrientRelation"));
+    // since layoutInCell had been turned off. If the implementation changes, check the layout.
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
 {
     // Although MSO's UI reports "layoutInCell" for the rectangle, it isn't specified or honored
