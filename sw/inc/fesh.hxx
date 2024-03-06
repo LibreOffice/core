@@ -428,7 +428,7 @@ public:
             FlyCntType eType, bool bIgnoreTextBoxes);
 
     /// If a fly is selected, it draws cursor into the first ContentFrame.
-    const SwFrameFormat* SelFlyGrabCursor();
+    SW_DLLPUBLIC const SwFrameFormat* SelFlyGrabCursor();
 
     /// Get FlyFrameFormat; for UI macro linkage at Flys
     const SwFrameFormat* GetFlyFrameFormat() const;
