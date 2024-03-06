@@ -43,6 +43,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <systools/win32/comtools.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/threadex.hxx>
 
 #include "graphconvert.hxx"
@@ -60,23 +61,81 @@ using namespace ::comphelper;
 #define     MAX_ENUM_ELE     20
 #define     FORMATS_NUM      3
 
-typedef std::vector< FORMATETC* > FormatEtcList;
-
 FORMATETC const pFormatTemplates[FORMATS_NUM] = {
                     { CF_ENHMETAFILE, nullptr, 0, -1, TYMED_ENHMF },
                     { CF_METAFILEPICT, nullptr, 0, -1, TYMED_MFPICT },
                     { CF_BITMAP, nullptr, 0, -1, TYMED_GDI } };
 
 
-struct OleComponentNative_Impl {
+// We have at least one single-threaded apartment (STA) in the process (the VCL Main thread, which
+// is the GUI thread), and a multithreaded apartment (MTA) for most of other threads. OLE objects
+// may be created in either: in interactive mode, this typically happens in the STA; when serving
+// external requests, this may be either in STA (when explicit "OnMainThread" argument is passed to
+// loadComponentFromURL, and the instantiation of the object happens during the load), or in MTA
+// (the thread actually serving the incoming calls).
+//
+// The objects typically can only be used in the appartment where they were instantiated. This means
+// that e.g. a call to IOleObject::Close will fail, if it is performed in a different thread, when
+// it was started in the main thread. And vice versa, opening a document in a handler thread, then
+// trying to interact with the OLE object in GUI would fail.
+//
+// To handle this, several workarounds were implemented in the past; the mentioned "OnMainThread"
+// argument is one of these, allowing open document requests be processed not in the handler threads
+// that receired the request, but in the main thread which will then be used for interaction. Also
+// OleComponent::GetExtent was changed to check if the first call to IDataObject::GetData failed
+// with RPC_E_WRONG_THREAD, and then retry in the main thread.
+//
+// But ultimately every call to the OLE object needs such checks. E.g., failing to close the object
+// keeps the server running, effectively leaking resources, until it crashes/freezes after multiple
+// iterations.
+//
+// Currently, OleComponentNative_Impl is implemented using IGlobalInterfaceTable, which allows to
+// register an object in process-global instance of the table from the thread that instantiated the
+// object, and obtain a "cookie" (a number); and then use that cookie from any thread to access that
+// object. The global table will do its magic to provide either the original object (when it is
+// requested from the same apartment as used for its registration), or a "proxy", which will marshal
+// all calls to the proper thread, transparently for the caller. This implementation should obsolete
+// the previous workarounds (in theory).
+//
+// m_pGlobalTable is the reference to the global table.
+// The storage object gets registered in the global table immediately when it's created.
+// But the OLE object itself can't be registered immediately, before it is run: an attempt to call
+// RegisterInterfaceInGlobal with such a newly created OLE object fails with CO_E_OBJNOTCONNECTED.
+// Thus, the initial reference to the OLE object (which at this stage seems to be apartment-neutral)
+// is stored to m_pObj. Only when it is run, it is registered in the global table.
+//
+// Indeed, the implicit change of the thread is a blocking operation, which opens a wonderful new
+// opportunities for shiny deadlocks. Thus, precautions are needed to avoid them.
+//
+// When the OLE object is accessed by m_pObj (should be only in initialization code!), no measures
+// are taken to change locking. But when it is accessed by getObj() - which may return the proxy -
+// the calls are guarded by a SolarMutexReleaser, to allow the other thread do its job.
+//
+// There are at least two other mutexes in play here. One is in OleEmbeddedObject, that holds the
+// OleComponent. The calls to OleComponent's methods are also wrapped there into unlock/lock pairs
+// (see OleEmbeddedObject::changeState). The other is in OleComponent itself. For now, I see no
+// deadlocks caused by that mutex, so no unlock/lock is introduced for that. It may turn out to be
+// required eventually.
+class OleComponentNative_Impl
+{
+public:
     sal::systools::COMReference< IUnknown > m_pObj;
-    sal::systools::COMReference< IOleObject > m_pOleObject;
-    sal::systools::COMReference< IViewObject2 > m_pViewObject2;
-    sal::systools::COMReference< IStorage > m_pIStorage;
-    FormatEtcList m_aFormatsList;
     uno::Sequence< datatransfer::DataFlavor > m_aSupportedGraphFormats;
 
+    // The getters may return a proxy, that redirects the calls to another thread.
+    // Thus, calls to methods of returned objects must be inside solar mutex releaser.
+    auto getStorage() const { return getInterface<IStorage>(m_nStorage); }
+    auto getObj() const { return m_nOleObject ? getInterface<IUnknown>(m_nOleObject) : m_pObj; }
+    template <typename T>
+    auto get() const { return getObj().QueryInterface<T>(sal::systools::COM_QUERY); }
+
+    void registerStorage(IStorage* pStorage) { registerInterface(pStorage, m_nStorage); }
+    void registerObj() { registerInterface(m_pObj.get(), m_nOleObject); }
+
+    bool IsStorageRegistered() const { return m_nStorage != 0; }
+
     OleComponentNative_Impl()
+        : m_pGlobalTable(CLSID_StdGlobalInterfaceTable, nullptr, CLSCTX_INPROC_SERVER)
     {
         // TODO: Extend format list
         m_aSupportedGraphFormats = {
@@ -108,6 +167,14 @@ struct OleComponentNative_Impl {
         };
     }
 
+    ~OleComponentNative_Impl()
+    {
+        if (m_nOleObject)
+            m_pGlobalTable->RevokeInterfaceFromGlobal(m_nOleObject);
+        if (m_nStorage)
+            m_pGlobalTable->RevokeInterfaceFromGlobal(m_nStorage);
+    }
+
     bool ConvertDataForFlavor( const STGMEDIUM& aMedium,
                                     const datatransfer::DataFlavor& aFlavor,
                                     uno::Any& aResult );
@@ -115,8 +182,39 @@ struct OleComponentNative_Impl {
     bool GraphicalFlavor( const datatransfer::DataFlavor& aFlavor );
 
     uno::Sequence< datatransfer::DataFlavor > GetFlavorsForAspects( sal_uInt32 nSupportedAspects );
+
+    sal::systools::COMReference<IStorage> CreateNewStorage(const OUString& url);
+
+private:
+    sal::systools::COMReference<IGlobalInterfaceTable> m_pGlobalTable;
+    DWORD m_nStorage = 0;
+    DWORD m_nOleObject = 0;
+
+    template <typename T> sal::systools::COMReference<T> getInterface(DWORD cookie) const
+    {
+        sal::systools::COMReference<T> result;
+        HRESULT hr = m_pGlobalTable->GetInterfaceFromGlobal(cookie, IID_PPV_ARGS(&result));
+        SAL_WARN_IF(FAILED(hr), "embeddedobj.ole",
+                    "GetInterfaceFromGlobal failed: is cookie " << cookie << " not registered?");
+        return result;
+    }
+
+    template <typename T> void registerInterface(T* pInterface, DWORD& cookie)
+    {
+        assert(cookie == 0); // do not set again
+        HRESULT hr = m_pGlobalTable->RegisterInterfaceInGlobal(pInterface, __uuidof(T), &cookie);
+        SAL_WARN_IF(FAILED(hr), "embeddedobj.ole", "RegisterInterfaceInGlobal failed");
+    }
 };
 
+namespace
+{
+struct SafeSolarMutexReleaser
+{
+    SolarMutexGuard guard; // To make sure we actually hold it prior to release
+    SolarMutexReleaser releaser;
+};
+}
 
 static DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 {
@@ -145,23 +243,6 @@ static OUString GetFlavorSuffixFromAspect( DWORD nAsp )
     // no suffix for DVASPECT_CONTENT
 
     return aResult;
-}
-
-
-static HRESULT OpenIStorageFromURL_Impl( const OUString& aURL, IStorage** ppIStorage )
-{
-    OSL_ENSURE( ppIStorage, "The pointer must not be empty!" );
-
-    OUString aFilePath;
-    if ( !ppIStorage || ::osl::FileBase::getSystemPathFromFileURL( aURL, aFilePath ) != ::osl::FileBase::E_None )
-        throw uno::RuntimeException(); // TODO: something dangerous happened
-
-    return StgOpenStorage( o3tl::toW(aFilePath.getStr()),
-                             nullptr,
-                             STGM_READWRITE | STGM_TRANSACTED, // | STGM_DELETEONRELEASE,
-                             nullptr,
-                             0,
-                             ppIStorage );
 }
 
 
@@ -321,12 +402,10 @@ OleComponent::OleComponent( const uno::Reference< uno::XComponentContext >& xCon
 : m_pInterfaceContainer( nullptr )
 , m_bDisposed( false )
 , m_bModified( false )
-, m_pNativeImpl( new OleComponentNative_Impl() )
+, m_pNativeImpl( std::make_unique<OleComponentNative_Impl>() )
 , m_pUnoOleObject( pUnoOleObject )
 , m_pOleWrapClientSite( nullptr )
 , m_pImplAdviseSink( nullptr )
-, m_nOLEMiscFlags( 0 )
-, m_nAdvConn( 0 )
 , m_xContext( xContext )
 , m_bOleInitialized( false )
 , m_bWorkaroundActive( false )
@@ -364,14 +443,6 @@ OleComponent::~OleComponent()
             Dispose();
         } catch( const uno::Exception& ) {}
     }
-
-    for (auto const& format : m_pNativeImpl->m_aFormatsList)
-    {
-        delete format;
-    }
-    m_pNativeImpl->m_aFormatsList.clear();
-
-    delete m_pNativeImpl;
 }
 
 void OleComponent::Dispose()
@@ -429,30 +500,37 @@ void OleComponent::disconnectEmbeddedObject()
 }
 
 
-void OleComponent::CreateNewIStorage_Impl()
+OUString OleComponent::getTempURL() const
 {
+    OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
+    if ( m_pUnoOleObject )
+        return m_pUnoOleObject->CreateTempURLEmpty_Impl();
+    else
+        return GetNewTempFileURL_Impl(m_xContext);
+}
+
+
+sal::systools::COMReference<IStorage> OleComponentNative_Impl::CreateNewStorage(const OUString& url)
+{
+    if (IsStorageRegistered())
+        throw io::IOException(); // TODO:the object is already initialized
     // TODO: in future a global memory could be used instead of file.
 
     // write the stream to the temporary file
-    OUString aTempURL;
-
-    OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
-    if ( m_pUnoOleObject )
-        aTempURL = m_pUnoOleObject->CreateTempURLEmpty_Impl();
-    else
-        aTempURL = GetNewTempFileURL_Impl( m_xContext );
-
-    if ( !aTempURL.getLength() )
+    if (url.isEmpty())
         throw uno::RuntimeException(); // TODO
 
     // open an IStorage based on the temporary file
     OUString aTempFilePath;
-    if ( ::osl::FileBase::getSystemPathFromFileURL( aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
+    if (osl::FileBase::getSystemPathFromFileURL(url, aTempFilePath) != osl::FileBase::E_None)
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
-    HRESULT hr = StgCreateDocfile( o3tl::toW(aTempFilePath.getStr()), STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &m_pNativeImpl->m_pIStorage );
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
+    sal::systools::COMReference<IStorage> pStorage;
+    HRESULT hr = StgCreateDocfile( o3tl::toW(aTempFilePath.getStr()), STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &pStorage );
+    if (FAILED(hr) || !pStorage)
         throw io::IOException(); // TODO: transport error code?
+    registerStorage(pStorage);
+    return pStorage;
 }
 
 
@@ -482,16 +560,19 @@ uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsFor
 
 void OleComponent::RetrieveObjectDataFlavors_Impl()
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    if (!m_pNativeImpl->m_pObj)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     if ( !m_aDataFlavors.getLength() )
     {
-        sal::systools::COMReference< IDataObject > pDataObject(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
-        if ( pDataObject )
+        if (auto pDataObject = m_pNativeImpl->get<IDataObject>())
         {
+            HRESULT hr;
             sal::systools::COMReference< IEnumFORMATETC > pFormatEnum;
-            HRESULT hr = pDataObject->EnumFormatEtc( DATADIR_GET, &pFormatEnum );
+            {
+                SafeSolarMutexReleaser releaser;
+                hr = pDataObject->EnumFormatEtc(DATADIR_GET, &pFormatEnum);
+            }
             if ( SUCCEEDED( hr ) && pFormatEnum )
             {
                 FORMATETC pElem[ MAX_ENUM_ELE ];
@@ -531,19 +612,20 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
 }
 
 
-bool OleComponent::InitializeObject_Impl()
+void OleComponent::InitializeObject_Impl()
 // There will be no static objects!
 {
     if ( !m_pNativeImpl->m_pObj )
-        return false;
+        throw embed::WrongStateException();
 
     // the linked object will be detected here
     OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
     if ( m_pUnoOleObject )
         m_pUnoOleObject->SetObjectIsLink_Impl( m_pNativeImpl->m_pObj.QueryInterface<IOleLink>(sal::systools::COM_QUERY).is() );
 
-    if ( !m_pNativeImpl->m_pViewObject2.set(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY) )
-        return false;
+    auto pViewObject2(m_pNativeImpl->m_pObj.QueryInterface<IViewObject2>(sal::systools::COM_QUERY));
+    if (!pViewObject2)
+        throw uno::RuntimeException(); // TODO
 
     // remove all the caches
     if ( sal::systools::COMReference< IOleCache > pIOleCache{ m_pNativeImpl->m_pObj, sal::systools::COM_QUERY } )
@@ -566,23 +648,24 @@ bool OleComponent::InitializeObject_Impl()
         hr2 = pIOleCache->Cache( &aFormat, ADVFCACHE_ONSAVE, &nConn );
     }
 
-    if ( !m_pNativeImpl->m_pOleObject.set(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY) )
-        return false; // Static objects are not supported, they should be inserted as graphics
+    auto pOleObject(m_pNativeImpl->m_pObj.QueryInterface<IOleObject>(sal::systools::COM_QUERY));
+    if (!pOleObject)
+        throw uno::RuntimeException(); // Static objects are not supported, they should be inserted as graphics
 
-    m_pNativeImpl->m_pOleObject->GetMiscStatus( DVASPECT_CONTENT, reinterpret_cast<DWORD*>(&m_nOLEMiscFlags) );
+    DWORD nOLEMiscFlags(0);
+    pOleObject->GetMiscStatus(DVASPECT_CONTENT, reinterpret_cast<DWORD*>(&nOLEMiscFlags));
     // TODO: use other misc flags also
     // the object should have drawable aspect even in case it supports only iconic representation
-    // if ( m_nOLEMiscFlags & OLEMISC_ONLYICONIC )
+    // if ( nOLEMiscFlags & OLEMISC_ONLYICONIC )
 
-    m_pNativeImpl->m_pOleObject->SetClientSite( m_pOleWrapClientSite );
+    pOleObject->SetClientSite(m_pOleWrapClientSite);
 
     // the only need in this registration is workaround for close notification
-    m_pNativeImpl->m_pOleObject->Advise( m_pImplAdviseSink, reinterpret_cast<DWORD*>(&m_nAdvConn) );
-    m_pNativeImpl->m_pViewObject2->SetAdvise( DVASPECT_CONTENT, 0, m_pImplAdviseSink );
+    DWORD nAdvConn(0);
+    pOleObject->Advise(m_pImplAdviseSink, reinterpret_cast<DWORD*>(&nAdvConn));
+    pViewObject2->SetAdvise(DVASPECT_CONTENT, 0, m_pImplAdviseSink);
 
-    OleSetContainedObject( m_pNativeImpl->m_pOleObject, TRUE );
-
-    return true;
+    OleSetContainedObject(pOleObject, TRUE);
 }
 
 namespace
@@ -617,62 +700,62 @@ void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
     if ( !aTempURL.getLength() )
         throw lang::IllegalArgumentException(); // TODO
 
-    if ( m_pNativeImpl->m_pIStorage )
+    if (m_pNativeImpl->IsStorageRegistered())
         throw io::IOException(); // TODO the object is already initialized or wrong initialization is done
 
     // open an IStorage based on the temporary file
-    HRESULT hr = OpenIStorageFromURL_Impl( aTempURL, &m_pNativeImpl->m_pIStorage );
+    OUString aFilePath;
+    if (osl::FileBase::getSystemPathFromFileURL(aTempURL, aFilePath) != ::osl::FileBase::E_None)
+        throw uno::RuntimeException(); // TODO: something dangerous happened
 
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
+    sal::systools::COMReference<IStorage> pStorage;
+    HRESULT hr = StgOpenStorage(o3tl::toW(aFilePath.getStr()), nullptr,
+                                STGM_READWRITE | STGM_TRANSACTED, // | STGM_DELETEONRELEASE,
+                                nullptr, 0, &pStorage);
+    if (FAILED(hr) || !pStorage)
         throw io::IOException(); // TODO: transport error code?
 
-    hr = OleLoadSeh(m_pNativeImpl->m_pIStorage, &m_pNativeImpl->m_pObj);
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
-    {
-        throw uno::RuntimeException();
-    }
+    m_pNativeImpl->registerStorage(pStorage);
 
-    if ( !InitializeObject_Impl() )
-        throw uno::RuntimeException(); // TODO
+    hr = OleLoadSeh(pStorage, &m_pNativeImpl->m_pObj);
+    if (FAILED(hr))
+        throw uno::RuntimeException();
+
+    InitializeObject_Impl();
 }
 
 
 void OleComponent::CreateObjectFromClipboard()
 {
-    if ( m_pNativeImpl->m_pIStorage )
-        throw io::IOException(); // TODO:the object is already initialized
-
-    CreateNewIStorage_Impl();
-    if ( !m_pNativeImpl->m_pIStorage )
+    auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
+    if (!pStorage)
         throw uno::RuntimeException(); // TODO
 
     IDataObject * pDO = nullptr;
     HRESULT hr = OleGetClipboard( &pDO );
-    if( SUCCEEDED( hr ) && pDO )
-    {
-        hr = OleQueryCreateFromData( pDO );
-        if( S_OK == GetScode( hr ) )
-        {
-            hr = OleCreateFromData( pDO,
-                                    IID_IUnknown,
-                                    OLERENDER_DRAW, // OLERENDER_FORMAT
-                                    nullptr,        // &aFormat,
-                                    nullptr,
-                                    m_pNativeImpl->m_pIStorage,
-                                    reinterpret_cast<void**>(&m_pNativeImpl->m_pObj) );
-        }
-        else
-        {
-            // Static objects are not supported
-            pDO->Release();
-        }
-    }
-
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
+    if (FAILED(hr))
         throw uno::RuntimeException();
 
-    if ( !InitializeObject_Impl() )
-        throw uno::RuntimeException(); // TODO
+    hr = OleQueryCreateFromData(pDO);
+    if (S_OK == hr)
+    {
+        hr = OleCreateFromData( pDO,
+                                IID_IUnknown,
+                                OLERENDER_DRAW, // OLERENDER_FORMAT
+                                nullptr,        // &aFormat,
+                                nullptr,
+                                pStorage,
+                                IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
+        if (FAILED(hr))
+            throw uno::RuntimeException();
+    }
+    else
+    {
+        // Static objects are not supported
+        pDO->Release();
+    }
+
+    InitializeObject_Impl();
 }
 
 
@@ -683,11 +766,8 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
     if ( !GetClassIDFromSequence_Impl( aSeqCLSID, aClsID ) )
         throw lang::IllegalArgumentException(); // TODO
 
-    if ( m_pNativeImpl->m_pIStorage )
-        throw io::IOException(); // TODO:the object is already initialized
-
-    CreateNewIStorage_Impl();
-    if ( !m_pNativeImpl->m_pIStorage )
+    auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
+    if (!pStorage)
         throw uno::RuntimeException(); // TODO
 
     // FORMATETC aFormat = { CF_METAFILEPICT, NULL, nAspect, -1, TYMED_MFPICT }; // for OLE..._DRAW should be NULL
@@ -697,14 +777,12 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
                             OLERENDER_DRAW, // OLERENDER_FORMAT
                             nullptr,        // &aFormat,
                             nullptr,
-                            m_pNativeImpl->m_pIStorage,
-                            reinterpret_cast<void**>(&m_pNativeImpl->m_pObj) );
-
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
+                            pStorage,
+                            IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
+    if (FAILED(hr))
         throw uno::RuntimeException(); // TODO
 
-    if ( !InitializeObject_Impl() )
-        throw uno::RuntimeException(); // TODO
+    InitializeObject_Impl();
 
     // TODO: getExtent???
 }
@@ -723,11 +801,8 @@ void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTr
 
 void OleComponent::CreateObjectFromFile( const OUString& aFileURL )
 {
-    if ( m_pNativeImpl->m_pIStorage )
-        throw io::IOException(); // TODO:the object is already initialized
-
-    CreateNewIStorage_Impl();
-    if ( !m_pNativeImpl->m_pIStorage )
+    auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
+    if (!pStorage)
         throw uno::RuntimeException(); // TODO:
 
     OUString aFilePath;
@@ -740,24 +815,19 @@ void OleComponent::CreateObjectFromFile( const OUString& aFileURL )
                                     OLERENDER_DRAW, // OLERENDER_FORMAT
                                     nullptr,
                                     nullptr,
-                                    m_pNativeImpl->m_pIStorage,
-                                    reinterpret_cast<void**>(&m_pNativeImpl->m_pObj) );
-
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
+                                    pStorage,
+                                    IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
+    if (FAILED(hr))
         throw uno::RuntimeException(); // TODO
 
-    if ( !InitializeObject_Impl() )
-        throw uno::RuntimeException(); // TODO
+    InitializeObject_Impl();
 }
 
 
 void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
 {
-    if ( m_pNativeImpl->m_pIStorage )
-        throw io::IOException(); // TODO:the object is already initialized
-
-    CreateNewIStorage_Impl();
-    if ( !m_pNativeImpl->m_pIStorage )
+    auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
+    if (!pStorage)
         throw uno::RuntimeException(); // TODO:
 
     OUString aFilePath;
@@ -769,31 +839,33 @@ void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
                                         OLERENDER_DRAW, // OLERENDER_FORMAT
                                         nullptr,
                                         nullptr,
-                                        m_pNativeImpl->m_pIStorage,
-                                        reinterpret_cast<void**>(&m_pNativeImpl->m_pObj) );
-
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
+                                        pStorage,
+                                        IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
+    if (FAILED(hr))
         throw uno::RuntimeException(); // TODO
 
-    if ( !InitializeObject_Impl() )
-        throw uno::RuntimeException(); // TODO
+    InitializeObject_Impl();
 }
 
 
 void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & pOleLinkComponent )
 {
-    if ( !pOleLinkComponent || !pOleLinkComponent->m_pNativeImpl->m_pObj )
+    if (!pOleLinkComponent)
         throw lang::IllegalArgumentException(); // TODO
 
-    if ( m_pNativeImpl->m_pIStorage )
-        throw io::IOException(); // TODO:the object is already initialized
+    auto pOleLinkComponentObj(pOleLinkComponent->m_pNativeImpl->getObj());
+    if (!pOleLinkComponentObj)
+        throw lang::IllegalArgumentException();
 
-    sal::systools::COMReference< IDataObject > pDataObject(pOleLinkComponent->m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+    // the object must be already disconnected from the temporary URL
+    auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
+
+    SafeSolarMutexReleaser releaser;
+
+    auto pDataObject(pOleLinkComponentObj.QueryInterface<IDataObject>(sal::systools::COM_QUERY));
     if ( pDataObject && SUCCEEDED( OleQueryCreateFromData( pDataObject ) ) )
     {
-        // the object must be already disconnected from the temporary URL
-        CreateNewIStorage_Impl();
-        if ( !m_pNativeImpl->m_pIStorage )
+        if (!pStorage)
             throw uno::RuntimeException(); // TODO:
 
         OleCreateFromData( pDataObject,
@@ -801,13 +873,13 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
                                 OLERENDER_DRAW,
                                 nullptr,
                                 nullptr,
-                                m_pNativeImpl->m_pIStorage,
-                                reinterpret_cast<void**>(&m_pNativeImpl->m_pObj) );
+                                pStorage,
+                                IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
     }
 
     if ( !m_pNativeImpl->m_pObj )
     {
-        sal::systools::COMReference< IOleLink > pOleLink(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+        auto pOleLink(pOleLinkComponentObj.QueryInterface<IOleLink>(sal::systools::COM_QUERY));
         if ( !pOleLink )
             throw io::IOException(); // TODO: the object doesn't support IOleLink
 
@@ -839,8 +911,8 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
                                         OLERENDER_DRAW, // OLERENDER_FORMAT
                                         nullptr,
                                         nullptr,
-                                        m_pNativeImpl->m_pIStorage,
-                                        reinterpret_cast<void**>(&m_pNativeImpl->m_pObj) );
+                                        pStorage,
+                                        IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
             }
         }
 
@@ -852,33 +924,29 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
             if ( SUCCEEDED( hr ) && pBindCtx )
             {
                 sal::systools::COMReference< IStorage > pObjectStorage;
-                hr = pMoniker->BindToStorage( pBindCtx, nullptr, IID_IStorage, reinterpret_cast<void**>(&pObjectStorage) );
+                hr = pMoniker->BindToStorage(pBindCtx, nullptr, IID_PPV_ARGS(&pObjectStorage));
                 if ( SUCCEEDED( hr ) && pObjectStorage )
                 {
-                    hr = pObjectStorage->CopyTo( 0, nullptr, nullptr, m_pNativeImpl->m_pIStorage );
+                    hr = pObjectStorage->CopyTo(0, nullptr, nullptr, pStorage);
                     if ( SUCCEEDED( hr ) )
-                        hr = OleLoadSeh(m_pNativeImpl->m_pIStorage, &m_pNativeImpl->m_pObj);
+                        hr = OleLoadSeh(pStorage, &m_pNativeImpl->m_pObj);
                 }
             }
         }
     }
 
-    // If object could not be created the only way is to use graphical representation
-    if ( !m_pNativeImpl->m_pObj )
-        throw uno::RuntimeException(); // TODO
-
-    if ( !InitializeObject_Impl() )
-        throw uno::RuntimeException(); // TODO
+    InitializeObject_Impl();
 }
 
 
 void OleComponent::RunObject()
 {
-    OSL_ENSURE( m_pNativeImpl->m_pOleObject, "The pointer can not be set to NULL here!" );
-    if ( !m_pNativeImpl->m_pOleObject )
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    OSL_ENSURE(pOleObject, "The pointer can not be set to NULL here!");
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    if ( !OleIsRunning( m_pNativeImpl->m_pOleObject ) )
+    if (!OleIsRunning(pOleObject))
     {
         HRESULT hr = OleRun( m_pNativeImpl->m_pObj );
 
@@ -908,6 +976,9 @@ void OleComponent::RunObject()
             else
                 throw io::IOException(error, getXWeak());
         }
+        // Only now, when the object is activated, it can be registered in the global table;
+        // before this point, RegisterInterfaceInGlobal would return CO_E_OBJNOTCONNECTED
+        m_pNativeImpl->registerObj();
     }
 }
 
@@ -933,20 +1004,31 @@ awt::Size OleComponent::CalculateWithFactor( const awt::Size& aSize,
 
 void OleComponent::CloseObject()
 {
-    if ( m_pNativeImpl->m_pOleObject && OleIsRunning( m_pNativeImpl->m_pOleObject ) )
-        m_pNativeImpl->m_pOleObject->Close( OLECLOSE_NOSAVE ); // must be saved before
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (pOleObject && OleIsRunning(pOleObject))
+    {
+        SafeSolarMutexReleaser releaser;
+        HRESULT hr = pOleObject->Close(OLECLOSE_NOSAVE); // must be saved before
+        SAL_WARN_IF(FAILED(hr), "embeddedobj.ole", "IOleObject::Close failed");
+    }
 }
 
 
 uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     if( !m_aVerbList.getLength() )
     {
         sal::systools::COMReference< IEnumOLEVERB > pEnum;
-        if( SUCCEEDED( m_pNativeImpl->m_pOleObject->EnumVerbs( &pEnum ) ) )
+        HRESULT hr;
+        {
+            SafeSolarMutexReleaser releaser;
+            hr = pOleObject->EnumVerbs(&pEnum);
+        }
+        if (SUCCEEDED(hr))
         {
             OLEVERB     szEle[ MAX_ENUM_ELE ];
             ULONG       nNum = 0;
@@ -954,7 +1036,7 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
 
             do
             {
-                HRESULT hr = pEnum->Next( MAX_ENUM_ELE, szEle, &nNum );
+                hr = pEnum->Next(MAX_ENUM_ELE, szEle, &nNum);
                 if( hr == S_OK || hr == S_FALSE )
                 {
                     m_aVerbList.realloc( nSeqSize += nNum );
@@ -980,16 +1062,17 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
 
 void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    RunObject();
+
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO
 
-    HRESULT hr = OleRun( m_pNativeImpl->m_pOleObject );
-    if ( FAILED( hr ) )
-        throw io::IOException(); // TODO: a specific exception that transport error code can be thrown here
+    SafeSolarMutexReleaser releaser;
 
     // TODO: probably extents should be set here and stored in aRect
     // TODO: probably the parent window also should be set
-    hr = m_pNativeImpl->m_pOleObject->DoVerb( nVerbID, nullptr, m_pOleWrapClientSite, 0, nullptr, nullptr );
+    HRESULT hr = pOleObject->DoVerb(nVerbID, nullptr, m_pOleWrapClientSite, 0, nullptr, nullptr);
 
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO
@@ -998,22 +1081,29 @@ void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
 
 void OleComponent::SetHostName( const OUString& aEmbDocName )
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    m_pNativeImpl->m_pOleObject->SetHostNames( L"app name", o3tl::toW( aEmbDocName.getStr() ) );
+    SafeSolarMutexReleaser releaser;
+    pOleObject->SetHostNames(L"app name", o3tl::toW(aEmbDocName.getStr()));
 }
 
 
 void OleComponent::SetExtent( const awt::Size& aVisAreaSize, sal_Int64 nAspect )
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
 
     SIZEL aSize = { aVisAreaSize.Width, aVisAreaSize.Height };
-    HRESULT hr = m_pNativeImpl->m_pOleObject->SetExtent( nMSAspect, &aSize );
+    HRESULT hr;
+    {
+        SafeSolarMutexReleaser releaser;
+        hr = pOleObject->SetExtent(nMSAspect, &aSize);
+    }
 
     if ( FAILED( hr ) )
     {
@@ -1029,7 +1119,7 @@ void OleComponent::SetExtent( const awt::Size& aVisAreaSize, sal_Int64 nAspect )
 
 awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    if (!m_pNativeImpl->m_pObj)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
@@ -1039,14 +1129,17 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
     if ( nMSAspect == DVASPECT_CONTENT )
     {
         // Try to get the size from the replacement image first
-        sal::systools::COMReference< IDataObject > pDataObject(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
-        if ( pDataObject )
+        if (auto pDataObject = m_pNativeImpl->get<IDataObject>())
         {
             STGMEDIUM aMedium;
             FORMATETC aFormat = pFormatTemplates[1]; // use windows metafile format
             aFormat.dwAspect = nMSAspect;
 
-            HRESULT hr = pDataObject->GetData( &aFormat, &aMedium );
+            HRESULT hr;
+            {
+                SafeSolarMutexReleaser releaser;
+                hr = pDataObject->GetData(&aFormat, &aMedium);
+            }
 
             if (hr == RPC_E_WRONG_THREAD)
             {
@@ -1122,13 +1215,18 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
 
 awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
 {
-    if (!m_pNativeImpl->m_pViewObject2)
+    auto pViewObject2(m_pNativeImpl->get<IViewObject2>());
+    if (!pViewObject2)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
     SIZEL aSize;
 
-    HRESULT hr = m_pNativeImpl->m_pViewObject2->GetExtent( nMSAspect, -1, nullptr, &aSize );
+    HRESULT hr;
+    {
+        SafeSolarMutexReleaser releaser;
+        hr = pViewObject2->GetExtent(nMSAspect, -1, nullptr, &aSize);
+    }
 
     if ( FAILED( hr ) )
     {
@@ -1149,12 +1247,17 @@ awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
 
 awt::Size OleComponent::GetRecommendedExtent( sal_Int64 nAspect )
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     DWORD nMSAspect = static_cast<DWORD>(nAspect); // first 32 bits are for MS aspects
     SIZEL aSize;
-    HRESULT hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
+    HRESULT hr;
+    {
+        SafeSolarMutexReleaser releaser;
+        hr = pOleObject->GetExtent(nMSAspect, &aSize);
+    }
     if ( FAILED( hr ) )
     {
         SAL_WARN("embeddedobj.ole", " OleComponent::GetRecommendedExtent: GetExtent() failed");
@@ -1167,22 +1270,31 @@ awt::Size OleComponent::GetRecommendedExtent( sal_Int64 nAspect )
 
 sal_Int64 OleComponent::GetMiscStatus( sal_Int64 nAspect )
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    DWORD nResult;
-    m_pNativeImpl->m_pOleObject->GetMiscStatus( static_cast<DWORD>(nAspect), &nResult );
+    DWORD nResult = 0;
+    {
+        SafeSolarMutexReleaser releaser;
+        pOleObject->GetMiscStatus(static_cast<DWORD>(nAspect), &nResult);
+    }
     return static_cast<sal_Int64>(nResult); // first 32 bits are for MS flags
 }
 
 
 uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     GUID aCLSID;
-    HRESULT hr = m_pNativeImpl->m_pOleObject->GetUserClassID( &aCLSID );
+    HRESULT hr;
+    {
+        SafeSolarMutexReleaser releaser;
+        hr = pOleObject->GetUserClassID(&aCLSID);
+    }
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO:
 
@@ -1196,16 +1308,14 @@ uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
 
 bool OleComponent::IsDirty()
 {
-    if ( !m_pNativeImpl->m_pOleObject )
-        throw embed::WrongStateException(); // TODO: the object is in wrong state
-
     if ( IsWorkaroundActive() )
         return true;
 
-    sal::systools::COMReference< IPersistStorage > pPersistStorage(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+    auto pPersistStorage(m_pNativeImpl->get<IPersistStorage>());
     if ( !pPersistStorage )
         throw io::IOException(); // TODO
 
+    SafeSolarMutexReleaser releaser;
     HRESULT hr = pPersistStorage->IsDirty();
     return ( hr != S_FALSE );
 }
@@ -1213,41 +1323,45 @@ bool OleComponent::IsDirty()
 
 void OleComponent::StoreOwnTmpIfNecessary()
 {
-    if ( !m_pNativeImpl->m_pOleObject )
+    auto pOleObject(m_pNativeImpl->get<IOleObject>());
+    if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    sal::systools::COMReference< IPersistStorage > pPersistStorage(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+    auto pPersistStorage(m_pNativeImpl->get<IPersistStorage>());
     if ( !pPersistStorage )
         throw io::IOException(); // TODO
 
+    SafeSolarMutexReleaser releaser;
+
     if ( m_bWorkaroundActive || pPersistStorage->IsDirty() != S_FALSE )
     {
-        HRESULT hr = OleSave( pPersistStorage, m_pNativeImpl->m_pIStorage, TRUE );
+        auto pStorage(m_pNativeImpl->getStorage());
+        HRESULT hr = OleSave(pPersistStorage, pStorage, TRUE);
         if ( FAILED( hr ) )
         {
             // Till now was required only for AcrobatReader7.0.8
             GUID aCLSID;
-            hr = m_pNativeImpl->m_pOleObject->GetUserClassID( &aCLSID );
+            hr = pOleObject->GetUserClassID(&aCLSID);
             if ( FAILED( hr ) )
             {
                 SAL_WARN("embeddedobj.ole", "OleComponent::StoreOwnTmpIfNecessary: GetUserClassID() failed");
                 throw io::IOException(); // TODO
             }
 
-            hr = WriteClassStg( m_pNativeImpl->m_pIStorage, aCLSID );
+            hr = WriteClassStg(pStorage, aCLSID);
             if ( FAILED( hr ) )
                 throw io::IOException(); // TODO
 
             // the result of the following call is not checked because some objects, for example AcrobatReader7.0.8
             // return error even in case the saving was done correctly
-            hr = pPersistStorage->Save( m_pNativeImpl->m_pIStorage, TRUE );
+            hr = pPersistStorage->Save(pStorage, TRUE);
 
             // another workaround for AcrobatReader7.0.8 object, this object might think that it is not changed
             // when it has been created from file, although it must be saved
             m_bWorkaroundActive = true;
         }
 
-        hr = m_pNativeImpl->m_pIStorage->Commit( STGC_DEFAULT );
+        hr = pStorage->Commit(STGC_DEFAULT);
         if ( FAILED( hr ) )
             throw io::IOException(); // TODO
 
@@ -1439,7 +1553,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( !m_pNativeImpl->m_pOleObject )
+    if (!m_pNativeImpl->m_pObj)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
     uno::Any aResult;
@@ -1450,7 +1564,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         DWORD nRequestedAspect = GetAspectFromFlavor( aFlavor );
         // if own icon is set and icon aspect is requested the own icon can be returned directly
 
-        sal::systools::COMReference< IDataObject > pDataObject(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+        auto pDataObject(m_pNativeImpl->get<IDataObject>());
         if ( !pDataObject )
             throw io::IOException(); // TODO: transport error code
 
@@ -1477,7 +1591,11 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
                 FORMATETC aFormat = pFormatTemplates[nInd];
                 aFormat.dwAspect = nRequestedAspect;
 
-                HRESULT hr = pDataObject->GetData( &aFormat, &aMedium );
+                HRESULT hr;
+                {
+                    SafeSolarMutexReleaser releaser;
+                    hr = pDataObject->GetData(&aFormat, &aMedium);
+                }
                 if ( SUCCEEDED( hr ) )
                 {
                     bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );
@@ -1536,9 +1654,6 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OleComponent::getTransferData
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( !m_pNativeImpl->m_pOleObject )
-        throw embed::WrongStateException(); // TODO: the object is in wrong state
-
     RetrieveObjectDataFlavors_Impl();
 
     return m_aDataFlavors;
@@ -1551,13 +1666,7 @@ sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataF
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( !m_pNativeImpl->m_pOleObject )
-        throw embed::WrongStateException(); // TODO: the object is in wrong state
-
-    if ( !m_aDataFlavors.getLength() )
-    {
-        RetrieveObjectDataFlavors_Impl();
-    }
+    RetrieveObjectDataFlavors_Impl();
 
     for (auto const& supportedFormat : m_aDataFlavors)
         if ( supportedFormat.MimeType.equals( aFlavor.MimeType ) && supportedFormat.DataType == aFlavor.DataType )
@@ -1607,7 +1716,7 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const css::uno::Sequence< sal_Int
     {
         uno::Sequence < sal_Int8 > aCLSID = GetCLSID();
         if ( MimeConfigurationHelper::ClassIDsEqual( aIdentifier, aCLSID ) )
-            return comphelper::getSomething_cast(static_cast<IUnknown*>(m_pNativeImpl->m_pObj));
+            return comphelper::getSomething_cast(m_pNativeImpl->m_pObj.get());
 
         // compatibility hack for old versions: CLSID was used in wrong order (SvGlobalName order)
         sal_Int32 nLength = aIdentifier.getLength();
@@ -1624,7 +1733,7 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const css::uno::Sequence< sal_Int
                  aIdentifier[2] == aCLSID[1] &&
                  aIdentifier[1] == aCLSID[2] &&
                  aIdentifier[0] == aCLSID[3] )
-                return reinterpret_cast<sal_Int64>(static_cast<IUnknown*>(m_pNativeImpl->m_pObj));
+                return comphelper::getSomething_cast(m_pNativeImpl->m_pObj.get());
         }
     }
     catch ( const uno::Exception& )
