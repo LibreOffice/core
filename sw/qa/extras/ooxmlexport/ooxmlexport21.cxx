@@ -302,6 +302,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMarginVML, "tdf160049_anchorMarginV
                          getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin2, "tdf160049_anchorMargin2.docx")
+{
+    // given a DML compat14 (Word 2010) document with a LEFT "column/text" anchored shape
+
+    // The shape takes into account the margin, so it looks like it is in the middle of the doc,
+    // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
+                         getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin15, "tdf160049_anchorMargin15.docx")
 {
     // given a DML compat15 (Word 2013) document with a LEFT "column/text" anchored image

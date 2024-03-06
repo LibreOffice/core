@@ -1268,6 +1268,16 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             m_pImpl->m_bLayoutInCell = false;
                         }
 
+                        if (m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME
+                            && m_pImpl->m_nHoriOrient > text::HoriOrientation::NONE
+                            && m_pImpl->m_nHoriOrient != text::HoriOrientation::CENTER
+                            && m_pImpl->m_nHoriOrient < text::HoriOrientation::FULL)
+                        {
+                            // before compat15, relative left/right/inside/outside honored margins.
+                            if (m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() < 15)
+                                m_pImpl->m_nHoriRelation = text::RelOrientation::PRINT_AREA;
+                        }
+
                         // Anchored: Word only supports at-char in that case.
                         text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
