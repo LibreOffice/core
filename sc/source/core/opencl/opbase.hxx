@@ -29,8 +29,8 @@ namespace sc::opencl {
 // "correctness test" is of course ludicrous. Either things are checked in normal unit tests, in
 // every 'make check', or not at all. The below comments are ridiculous.
 
-#define REDUCE_THRESHOLD 201  // set to 4 for correctness testing. priority 1
-#define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
+constexpr auto REDUCE_THRESHOLD = 201;  // set to 4 for correctness testing. priority 1
+constexpr auto UNROLLING_FACTOR = 16;  // set to 4 for correctness testing (if no reduce)
 
 
 class FormulaTreeNode;
