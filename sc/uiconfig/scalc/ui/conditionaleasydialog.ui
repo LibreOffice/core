@@ -93,6 +93,7 @@
                           <object class="GtkEntry" id="entryNumber">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="description"/>
                             </accessibility>
@@ -107,6 +108,7 @@
                           <object class="GtkEntry" id="entryNumber2">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="description"/>
                             </accessibility>
@@ -204,6 +206,7 @@
                       <object class="GtkEntry" id="entryRange">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="range"/>
                         </accessibility>

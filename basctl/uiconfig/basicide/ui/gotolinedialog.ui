@@ -83,6 +83,7 @@
             <child>
               <object class="GtkSpinButton" id="spin">
                 <property name="visible">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="can-focus">True</property>
               </object>
               <packing>

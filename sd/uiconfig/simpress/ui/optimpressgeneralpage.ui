@@ -724,6 +724,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can-focus">False</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="halign">start</property>
                       </object>
                     </child>
