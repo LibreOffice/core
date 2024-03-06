@@ -152,7 +152,7 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>( pStyleSheetHint->GetStyleSheet() );
             RemoveStyleFromParagraphs( pStyle );
         }
-        else if ( nId == SfxHintId::StyleSheetModified )
+        else if ( nId == SfxHintId::StyleSheetModified || nId == SfxHintId::StyleSheetModifiedExtended )
         {
             const SfxStyleSheetHint* pStyleSheetHint = static_cast<const SfxStyleSheetHint*>(&rHint);
             SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>( pStyleSheetHint->GetStyleSheet() );

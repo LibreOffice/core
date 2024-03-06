@@ -419,7 +419,7 @@ void UpdateStyleList(weld::ComboBox& rLbStyle, const ScDocument* pDoc)
 
 void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if(rHint.GetId() == SfxHintId::StyleSheetModified)
+    if(rHint.GetId() == SfxHintId::StyleSheetModified || rHint.GetId() == SfxHintId::StyleSheetModifiedExtended)
     {
         if(!mbIsInStyleCreate)
             UpdateStyleList(*mxLbStyle, mpDoc);
@@ -1282,7 +1282,7 @@ void ScDateFrmtEntry::SetInactive()
 
 void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if(rHint.GetId() == SfxHintId::StyleSheetModified)
+    if(rHint.GetId() == SfxHintId::StyleSheetModified || rHint.GetId() == SfxHintId::StyleSheetModifiedExtended)
     {
         if(!mbIsInStyleCreate)
             UpdateStyleList(*mxLbStyle, mpDoc);

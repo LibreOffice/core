@@ -434,6 +434,7 @@ namespace sdr::properties
                         break;
                     }
                     case SfxHintId::StyleSheetModified        :
+                    case SfxHintId::StyleSheetModifiedExtended:
                     case SfxHintId::StyleSheetChanged         :
                     {
                         // notify change

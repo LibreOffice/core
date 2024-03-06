@@ -588,24 +588,22 @@ namespace sdr::properties
                         pParaObj->ClearPortionInfo();
                 }
             }
-            else if (nId == SfxHintId::StyleSheetModified && dynamic_cast<const SfxStyleSheetBasePool *>(&rBC) != nullptr)
+            else if (nId == SfxHintId::StyleSheetModifiedExtended)
             {
-                const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
-                if (pExtendedHint)
-                {
-                    const OUString& aOldName(pExtendedHint->GetOldName());
-                    OUString aNewName(pExtendedHint->GetStyleSheet()->GetName());
-                    SfxStyleFamily eFamily = pExtendedHint->GetStyleSheet()->GetFamily();
+                assert(dynamic_cast<const SfxStyleSheetBasePool *>(&rBC) != nullptr);
+                const SfxStyleSheetModifiedHint& rExtendedHint = static_cast<const SfxStyleSheetModifiedHint&>(rHint);
+                const OUString& aOldName(rExtendedHint.GetOldName());
+                OUString aNewName(rExtendedHint.GetStyleSheet()->GetName());
+                SfxStyleFamily eFamily = rExtendedHint.GetStyleSheet()->GetFamily();
 
-                    if(aOldName != aNewName)
+                if(aOldName != aNewName)
+                {
+                    sal_Int32 nText = rTextProvider.getTextCount();
+                    while (nText--)
                     {
-                        sal_Int32 nText = rTextProvider.getTextCount();
-                        while (nText--)
-                        {
-                            OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
-                            if( pParaObj )
-                                pParaObj->ChangeStyleSheetName(eFamily, aOldName, aNewName);
-                        }
+                        OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                        if( pParaObj )
+                            pParaObj->ChangeStyleSheetName(eFamily, aOldName, aNewName);
                     }
                 }
             }

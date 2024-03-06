@@ -1677,16 +1677,17 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
     if ( pStyle->GetFamily() == SfxStyleFamily::Page )
     {
-        if ( nId == SfxHintId::StyleSheetModified )
+        if ( nId == SfxHintId::StyleSheetModified || nId == SfxHintId::StyleSheetModifiedExtended )
         {
             ScDocShellModificator aModificator( *this );
 
             const OUString& aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
-            const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint); // name changed?
-            if (pExtendedHint)
-                aOldName = pExtendedHint->GetOldName();
-
+            if ( nId == SfxHintId::StyleSheetModifiedExtended )
+            {
+                const SfxStyleSheetModifiedHint& rExtendedHint = static_cast<const SfxStyleSheetModifiedHint&>(rHint); // name changed?
+                aOldName = rExtendedHint.GetOldName();
+            }
             if ( aNewName != aOldName )
                 m_pDocument->RenamePageStyleInUse( aOldName, aNewName );
 
@@ -1701,7 +1702,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
             aModificator.SetDocumentModified();
 
-            if (pExtendedHint)
+            if (nId == SfxHintId::StyleSheetModifiedExtended)
             {
                 SfxBindings* pBindings = GetViewBindings();
                 if (pBindings)
@@ -1717,13 +1718,11 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
     }
     else if ( pStyle->GetFamily() == SfxStyleFamily::Para )
     {
-        if ( nId == SfxHintId::StyleSheetModified)
+        if (nId == SfxHintId::StyleSheetModifiedExtended)
         {
+            const SfxStyleSheetModifiedHint& rExtendedHint = static_cast<const SfxStyleSheetModifiedHint&>(rHint);
             const OUString& aNewName = pStyle->GetName();
-            OUString aOldName = aNewName;
-            const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
-            if (pExtendedHint)
-                aOldName = pExtendedHint->GetOldName();
+            const OUString& aOldName = rExtendedHint.GetOldName();
             if ( aNewName != aOldName )
             {
                 for(SCTAB i = 0; i < m_pDocument->GetTableCount(); ++i)

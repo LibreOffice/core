@@ -154,7 +154,8 @@ ConditionalFormatEasyDialog::~ConditionalFormatEasyDialog() {}
 
 void ConditionalFormatEasyDialog::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::StyleSheetModified)
+    if (rHint.GetId() == SfxHintId::StyleSheetModified
+        || rHint.GetId() == SfxHintId::StyleSheetModifiedExtended)
         UpdateStyleList(mpDocument, *mxStyles);
 }
 

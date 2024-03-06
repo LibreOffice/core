@@ -173,7 +173,8 @@ StylePoolChangeListener::~StylePoolChangeListener()
 
 void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::StyleSheetModified)
+    if (rHint.GetId() == SfxHintId::StyleSheetModified
+        || rHint.GetId() == SfxHintId::StyleSheetModifiedExtended)
         StylePreviewCache::ClearCache(true);
     m_pPreviewControl->RequestStylesListUpdate();
 }

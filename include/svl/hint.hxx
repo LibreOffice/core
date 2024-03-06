@@ -104,6 +104,7 @@ enum class SfxHintId {
 // SFX stylesheet
     StyleSheetCreated,  // new
     StyleSheetModified,  // changed
+    StyleSheetModifiedExtended,  // changed, but using the SfxStyleSheetModifiedHint, not the SfxStyleSheetHint
     StyleSheetChanged,  // erased and re-created (replaced)
     StyleSheetErased,  // erased
     StyleSheetInDestruction,  // in the process of being destructed
@@ -229,6 +230,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::ScAccWindowResized: return stream << "ScAccWindowResized";
     case SfxHintId::StyleSheetCreated: return stream << "StyleSheetCreated";
     case SfxHintId::StyleSheetModified: return stream << "StyleSheetModified";
+    case SfxHintId::StyleSheetModifiedExtended: return stream << "StyleSheetModifiedExtended";
     case SfxHintId::StyleSheetChanged: return stream << "StyleSheetChanged";
     case SfxHintId::StyleSheetErased: return stream << "StyleSheetErased";
     case SfxHintId::StyleSheetInDestruction: return stream << "StyleSheetInDestruction";

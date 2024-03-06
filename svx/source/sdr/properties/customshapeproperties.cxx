@@ -206,7 +206,9 @@ namespace sdr::properties
 
             bool bRemoveRenderGeometry = false;
 
-            if (rHint.GetId() == SfxHintId::StyleSheetModified || rHint.GetId() == SfxHintId::StyleSheetChanged)
+            if (rHint.GetId() == SfxHintId::StyleSheetModified ||
+                rHint.GetId() == SfxHintId::StyleSheetModifiedExtended ||
+                rHint.GetId() == SfxHintId::StyleSheetChanged)
             {
                 const SfxStyleSheetHint* pStyleHint = static_cast<const SfxStyleSheetHint*>(&rHint);
                 if ( pStyleHint->GetStyleSheet() == GetStyleSheet() )

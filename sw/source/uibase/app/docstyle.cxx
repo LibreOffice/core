@@ -142,13 +142,15 @@ public:
 
         auto nId = pHint->GetId();
         auto pDocStyleSheet = pHint->GetStyleSheet();
-        auto pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
+        const SfxStyleSheetModifiedHint* pExtendedHint = nullptr;
+        if (nId == SfxHintId::StyleSheetModifiedExtended)
+            pExtendedHint = static_cast<const SfxStyleSheetModifiedHint*>(&rHint);
         const OUString aName = pExtendedHint ? pExtendedHint->GetOldName() : pDocStyleSheet->GetName();
         auto pStyleSheet = SfxStyleSheetPool::Find(aName, pDocStyleSheet->GetFamily());
         if (!pStyleSheet)
             return;
 
-        if (nId == SfxHintId::StyleSheetModified)
+        if (nId == SfxHintId::StyleSheetModified || nId == SfxHintId::StyleSheetModifiedExtended)
         {
             pStyleSheet->SetName(pDocStyleSheet->GetName());
             UpdateStyleHierarchyFrom(pStyleSheet, pDocStyleSheet);
