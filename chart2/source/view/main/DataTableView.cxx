@@ -455,11 +455,9 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         nRow++;
     }
 
+    // force recalculation of column widths in the table shape
     xBroadcaster->unlockBroadcasts();
-
-    // force recalculation of all cells in the table shape
     pTableObject->DistributeColumns(0, nColumnCount, true, true);
-    pTableObject->DistributeRows(0, nRowCount, true, true);
 
     xBroadcaster->lockBroadcasts();
 
@@ -476,6 +474,10 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         xPropertySet.set(xTableColumns->getByIndex(i), uno::UNO_QUERY);
         xPropertySet->setPropertyValue("Width", uno::Any(nColumnWidth));
     }
+
+    // force recalculation of row heights in the table shape
+    xBroadcaster->unlockBroadcasts();
+    pTableObject->DistributeRows(0, nRowCount, true, true);
 
     if (bKeys)
     {
@@ -501,7 +503,6 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             }
         }
     }
-    xBroadcaster->unlockBroadcasts();
 }
 
 void DataTableView::changePosition(sal_Int32 x, sal_Int32 y)

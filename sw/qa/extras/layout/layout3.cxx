@@ -2404,6 +2404,42 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159443)
         "4.3");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159422)
+{
+    // Given a document with chart, which have a datatable
+    createSwDoc("charttable.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    //// Without the fix, this would fail:
+    //// - Expected: 5877
+    //// - Actual  : 5649
+    //// - Delta   : 20
+    sal_Int32 nYSymbol1 = getXPath(pXmlDoc,
+                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                   "push[1]/push[99]/polypolygon/polygon/point[1]",
+                                   "y")
+                              .toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5877, nYSymbol1, 20);
+    sal_Int32 nYSymbol2 = getXPath(pXmlDoc,
+                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                   "push[1]/push[100]/polypolygon/polygon/point[1]",
+                                   "y")
+                              .toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6225, nYSymbol2, 20);
+    sal_Int32 nYSymbol3 = getXPath(pXmlDoc,
+                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                   "push[1]/push[101]/polypolygon/polygon/point[1]",
+                                   "y")
+                              .toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6573, nYSymbol3, 20);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
