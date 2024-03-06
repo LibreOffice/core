@@ -63,6 +63,7 @@
 #include "../ppt/pptanimations.hxx"
 
 #include <i18nlangtag/languagetag.hxx>
+#include <svx/sdrmasterpagedescriptor.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdogrp.hxx>
@@ -1513,23 +1514,48 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     // use master's id type as they have same range, mso does that as well
     pFS->startElementNS(XML_p, XML_sldLayoutIdLst);
 
-    sal_Int32 nLayout = 0;
-    OUString aSlideName;
-    css::uno::Reference< css::beans::XPropertySet >xPagePropSet;
+    auto getLayoutsUsedForMaster = [](SdrPage* pMaster) -> std::unordered_set<sal_Int32>
+    {
+        if (!pMaster)
+            return {};
+
+        std::unordered_set<sal_Int32> aUsedLayouts{};
+        for (const auto* pPageUser : pMaster->GetPageUsers())
+        {
+            const auto* pMasterPageDescriptor
+                = dynamic_cast<const sdr::MasterPageDescriptor*>(pPageUser);
+
+            if (!pMasterPageDescriptor)
+                continue;
+
+            AutoLayout eLayout
+                = static_cast<SdPage&>(pMasterPageDescriptor->GetOwnerPage()).GetAutoLayout();
+            aUsedLayouts.insert(eLayout);
+        }
+        return aUsedLayouts;
+    };
+
+    std::unordered_set<sal_Int32> aLayouts = getLayoutsUsedForMaster(pMasterPage);
+
+    css::uno::Reference< css::beans::XPropertySet > xPagePropSet;
     xPagePropSet.set(mXDrawPage, UNO_QUERY);
     if (xPagePropSet.is())
     {
         uno::Any aAny;
         if (GetPropertyValue(aAny, xPagePropSet, "SlideLayout"))
-            aAny >>= nLayout;
+            aLayouts.insert(aAny.get<sal_Int32>());
     }
 
+    OUString aSlideName;
     Reference< XNamed > xNamed(mXDrawPage, UNO_QUERY);
     if (xNamed.is())
         aSlideName = xNamed->getName();
 
-    ImplWritePPTXLayout(nLayout, nPageNum, aSlideName);
-    AddLayoutIdAndRelation(pFS, GetLayoutFileId(nLayout, nPageNum));
+    for (auto nLayout : aLayouts)
+    {
+        ImplWritePPTXLayout(nLayout, nPageNum, aSlideName);
+        AddLayoutIdAndRelation(pFS, GetLayoutFileId(nLayout, nPageNum));
+    }
 
     pFS->endElementNS(XML_p, XML_sldLayoutIdLst);
 

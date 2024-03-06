@@ -397,6 +397,7 @@ private:
 public:
     void AddPageUser(sdr::PageUser& rNewUser);
     void RemovePageUser(sdr::PageUser& rOldUser);
+    const sdr::PageUserVector& GetPageUsers() const { return maPageUsers; };
 
     // SdrModel access on SdrPage level
     SdrModel& getSdrModelFromSdrPage() const { return mrSdrModelFromSdrPage; }
