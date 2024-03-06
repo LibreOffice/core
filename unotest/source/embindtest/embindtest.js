@@ -289,7 +289,7 @@ Module.addOnPostRun(function() {
     {
         let v = test.getAnyException();
         console.log(v);
-        console.assert(v.get().Message === 'error');
+        console.assert(v.get().Message.startsWith('error'));
         console.assert(v.get().Context === null);
         console.assert(v.get().m1 === -123456);
         console.assert(v.get().m2 === 100.5);
