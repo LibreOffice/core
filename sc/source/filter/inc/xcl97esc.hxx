@@ -102,7 +102,7 @@ public:
                             const tools::Rectangle* pChildAnchor );
 
 private:
-    tools::SvRef<SotStorageStream>  mxCtlsStrm;         /// The 'Ctls' stream.
+    rtl::Reference<SotStorageStream> mxCtlsStrm; /// The 'Ctls' stream.
     /** Creates a TBX form control OBJ record from the passed form control. */
     std::unique_ptr<XclExpTbxControlObj> CreateTBXCtrlObj(
                             css::uno::Reference< css::drawing::XShape > const & xShape,

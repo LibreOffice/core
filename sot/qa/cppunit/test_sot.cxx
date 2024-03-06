@@ -32,10 +32,10 @@ namespace
     public:
         SotTest() {}
 
-        bool checkStream( const tools::SvRef<SotStorage> &xObjStor,
+        bool checkStream( const rtl::Reference<SotStorage> &xObjStor,
                           const OUString &rStreamName,
                           sal_uInt64 nSize );
-        bool checkStorage( const tools::SvRef<SotStorage> &xObjStor );
+        bool checkStorage(const rtl::Reference<SotStorage>& xObjStor);
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
@@ -52,7 +52,7 @@ namespace
         CPPUNIT_TEST_SUITE_END();
     };
 
-    bool SotTest::checkStream( const tools::SvRef<SotStorage> &xObjStor,
+    bool SotTest::checkStream( const rtl::Reference<SotStorage> &xObjStor,
                                const OUString &rStreamName,
                                sal_uInt64 nSize )
     {
@@ -62,7 +62,7 @@ namespace
             return true;
 
         {   // Read the data in one block
-            tools::SvRef<SotStorageStream> xStream( xObjStor->OpenSotStream( rStreamName ) );
+            rtl::Reference<SotStorageStream> xStream(xObjStor->OpenSotStream(rStreamName));
             xStream->Seek(0);
             sal_uInt64 nRemaining = xStream->GetSize() - xStream->Tell();
 
@@ -73,7 +73,7 @@ namespace
             nReadableSize = xStream->ReadBytes(static_cast<void *>(pData), nSize);
         }
         {   // Read the data backwards as well
-            tools::SvRef<SotStorageStream> xStream( xObjStor->OpenSotStream( rStreamName ) );
+            rtl::Reference<SotStorageStream> xStream(xObjStor->OpenSotStream(rStreamName));
             for( sal_uInt64 i = nReadableSize; i > 0; i-- )
             {
                 CPPUNIT_ASSERT_MESSAGE( "sot reading error", !xStream->GetError() );
@@ -89,7 +89,7 @@ namespace
         return true;
     }
 
-    bool SotTest::checkStorage( const tools::SvRef<SotStorage> &xObjStor )
+    bool SotTest::checkStorage(const rtl::Reference<SotStorage>& xObjStor)
     {
         SvStorageInfoList aInfoList;
         xObjStor->FillInfoList( &aInfoList );
@@ -98,7 +98,7 @@ namespace
         {
             if( rInfo.IsStorage() )
             {
-                tools::SvRef<SotStorage> xChild( xObjStor->OpenSotStorage( rInfo.GetName() ) );
+                rtl::Reference<SotStorage> xChild(xObjStor->OpenSotStorage(rInfo.GetName()));
                 checkStorage( xChild );
             }
             else if( rInfo.IsStream() )
@@ -113,7 +113,7 @@ namespace
         SfxFilterFlags, SotClipboardFormatId, unsigned int)
     {
         SvFileStream aStream(rURL, StreamMode::READ);
-        tools::SvRef<SotStorage> xObjStor = new SotStorage(aStream);
+        rtl::Reference<SotStorage> xObjStor = new SotStorage(aStream);
         if (!xObjStor.is() || xObjStor->GetError())
             return false;
 
@@ -132,12 +132,12 @@ namespace
         OUString aURL(
             m_directories.getURLFromSrc(u"/sot/qa/cppunit/data/pass/fdo84229-1.compound"));
         SvFileStream aStream(aURL, StreamMode::READ);
-        tools::SvRef<SotStorage> xObjStor = new SotStorage(aStream);
+        rtl::Reference<SotStorage> xObjStor = new SotStorage(aStream);
         CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",
                                xObjStor.is());
         CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",
                                !xObjStor->GetError());
-        tools::SvRef<SotStorageStream> xStream = xObjStor->OpenSotStream("Book");
+        rtl::Reference<SotStorageStream> xStream = xObjStor->OpenSotStream("Book");
         CPPUNIT_ASSERT_MESSAGE("stream failed to open",
                                xStream.is());
         CPPUNIT_ASSERT_MESSAGE("stream failed to open",

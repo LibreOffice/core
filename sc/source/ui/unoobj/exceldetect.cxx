@@ -62,7 +62,7 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
 
     try
     {
-        tools::SvRef<SotStorage> xStorage = new SotStorage(pStream, false);
+        rtl::Reference<SotStorage> xStorage = new SotStorage(pStream, false);
         if (!xStorage.is() || xStorage->GetError())
             return false;
         return xStorage->IsStream(rName);

@@ -1648,7 +1648,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
 bool XclExpChangeTrack::WriteUserNamesStream()
 {
     bool bRet = false;
-    tools::SvRef<SotStorageStream> xSvStrm = OpenStream( EXC_STREAM_USERNAMES );
+    rtl::Reference<SotStorageStream> xSvStrm = OpenStream(EXC_STREAM_USERNAMES);
     OSL_ENSURE( xSvStrm.is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
     if( xSvStrm.is() )
     {
@@ -1671,7 +1671,7 @@ void XclExpChangeTrack::Write()
     if( !WriteUserNamesStream() )
         return;
 
-    tools::SvRef<SotStorageStream> xSvStrm = OpenStream( EXC_STREAM_REVLOG );
+    rtl::Reference<SotStorageStream> xSvStrm = OpenStream(EXC_STREAM_REVLOG);
     OSL_ENSURE( xSvStrm.is(), "XclExpChangeTrack::Write - no stream" );
     if( xSvStrm.is() )
     {

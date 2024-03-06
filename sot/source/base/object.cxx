@@ -38,13 +38,13 @@ void SotObject::OwnerLock(bool bLock)
     if (bLock)
     {
         nOwnerLockCount++;
-        AddFirstRef();
+        acquire();
     }
     else if (nOwnerLockCount)
     {
         if (0 == --nOwnerLockCount)
             DoClose();
-        ReleaseRef();
+        release();
     }
 }
 
@@ -53,7 +53,7 @@ bool SotObject::DoClose()
     bool bRet = false;
     if (!bInClose)
     {
-        tools::SvRef<SotObject> xHoldAlive(this);
+        rtl::Reference<SotObject> xHoldAlive(this);
         bInClose = true;
         bRet = Close();
         bInClose = false;

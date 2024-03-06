@@ -2597,8 +2597,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     // To load encrypted documents with password, user interaction needs to be enabled.
     pMedium->UseInteractionHandler(mbUserInteractionEnabled);
 
-    ScDocShell* pNewShell = new ScDocShell(SfxModelFlags::EXTERNAL_LINK);
-    SfxObjectShellRef aRef = pNewShell;
+    rtl::Reference<ScDocShell> pNewShell = new ScDocShell(SfxModelFlags::EXTERNAL_LINK);
 
     // increment the recursive link count of the source document.
     ScExtDocOptions* pExtOpt = mrDoc.GetExtDocOptions();
@@ -2619,9 +2618,9 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
 
     if (!pNewShell->DoLoad(pMedium.release()))
     {
-        aRef->DoClose();
-        aRef.clear();
-        return aRef;
+        pNewShell->DoClose();
+        pNewShell.clear();
+        return pNewShell;
     }
 
     // with UseInteractionHandler, options may be set by dialog during DoLoad
@@ -2630,7 +2629,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         aOptions = aNew;
     setFilterData(nFileId, rFilter, aOptions);    // update the filter data, including the new options
 
-    return aRef;
+    return pNewShell;
 }
 
 ScDocument& ScExternalRefManager::cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell )
@@ -3305,8 +3304,8 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case SfxEventHintId::SaveDocDone:
         case SfxEventHintId::SaveAsDocDone:
             {
-                SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
-                transformUnsavedRefToSavedRef(pObjShell);
+                rtl::Reference<SfxObjectShell> pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
+                transformUnsavedRefToSavedRef(pObjShell.get());
             }
             break;
         default:

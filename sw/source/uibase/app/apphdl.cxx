@@ -876,7 +876,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
     {
         const SfxEventHint& rEvHint = static_cast<const SfxEventHint&>(rHint);
-        SwDocShell* pDocSh = dynamic_cast<SwDocShell*>(rEvHint.GetObjShell());
+        rtl::Reference<SwDocShell> pDocSh = dynamic_cast<SwDocShell*>(rEvHint.GetObjShell().get());
         if( pDocSh )
         {
             SwWrtShell* pWrtSh = pDocSh->GetWrtShell();

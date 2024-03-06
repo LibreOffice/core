@@ -51,7 +51,7 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 
-typedef tools::SvRef<SwDocShell> SwDocShellRef;
+typedef rtl::Reference<SwDocShell> SwDocShellRef;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

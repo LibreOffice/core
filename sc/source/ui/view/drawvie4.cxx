@@ -95,7 +95,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
 
     rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, std::move(aObjDesc) );
 
-    pTransferObj->SetDrawPersist( aDragShellRef.get() );    // keep persist for ole objects alive
+    pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
     pTransferObj->SetDragSource( this );               // copies selection
 
     SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );     // for internal D&D
@@ -366,7 +366,7 @@ void ScDrawView::DoCopy()
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
-        pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef );    // keep persist for ole objects alive
     }
 
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
@@ -400,7 +400,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
-        pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef );    // keep persist for ole objects alive
     }
 
     return pTransferObj;

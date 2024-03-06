@@ -40,7 +40,7 @@ private:
     std::unique_ptr<SdrModel>       m_pModel;
     TransferableDataHelper          m_aOleData;
     TransferableObjectDescriptor    m_aObjDesc;
-    SfxObjectShellRef               m_aDocShellRef;
+    rtl::Reference<ScDocShell>      m_aDocShellRef;
     SfxObjectShellRef               m_aDrawPersistRef;
 
                                     // extracted from model in ctor:

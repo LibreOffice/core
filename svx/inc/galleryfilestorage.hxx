@@ -45,7 +45,7 @@ class GalleryThemeEntry;
 class SVXCORE_DLLPUBLIC GalleryFileStorage final
 {
 private:
-    tools::SvRef<SotStorage> m_aSvDrawStorageRef;
+    rtl::Reference<SotStorage> m_aSvDrawStorageRef;
     const GalleryStorageLocations& maGalleryStorageLocations;
     GalleryObjectCollection& mrGalleryObjectCollection;
     bool mbReadOnly;
@@ -66,7 +66,7 @@ public:
     void setDestDir(const OUString& rDestDir, bool bRelative);
 
     SAL_DLLPRIVATE void ImplCreateSvDrawStorage();
-    SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
+    SAL_DLLPRIVATE const rtl::Reference<SotStorage>& GetSvDrawStorage() const;
 
     const INetURLObject& getThemeURL() const { return maGalleryStorageLocations.getThemeURL(); }
 

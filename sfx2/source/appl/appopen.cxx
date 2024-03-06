@@ -1124,9 +1124,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             DBG_ASSERT( pSh, "Controller without ObjectShell ?!" );
 
             rReq.SetReturnValue( SfxViewFrameItem( pCntrFrame->GetCurrentViewFrame() ) );
-
-            if ( bHidden )
-                pSh->RestoreNoDelete();
         }
     }
 

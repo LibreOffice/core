@@ -549,7 +549,7 @@ void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
 
 bool MathType::Parse(SotStorage *pStor)
 {
-    tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
+    rtl::Reference<SotStorageStream> xSrc = pStor->OpenSotStream(
         "Equation Native",
         StreamMode::STD_READ);
     if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
@@ -1869,7 +1869,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
     SvStream *pStream = rMedium.GetOutStream();
     if ( pStream )
     {
-        tools::SvRef<SotStorage> pStor = new SotStorage( pStream, false );
+        rtl::Reference<SotStorage> pStor = new SotStorage(pStream, false);
 
         SvGlobalName aGName(MSO_EQUATION3_CLASSID);
         pStor->SetClass( aGName, SotClipboardFormatId::NONE, "Microsoft Equation 3.0");
@@ -1889,7 +1889,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
-        tools::SvRef<SotStorageStream> xStor( pStor->OpenSotStream("\1CompObj"));
+        rtl::Reference<SotStorageStream> xStor(pStor->OpenSotStream("\1CompObj"));
         xStor->WriteBytes(aCompObj, sizeof(aCompObj));
 
         static sal_uInt8 const aOle[] = {
@@ -1897,12 +1897,12 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00
             };
-        tools::SvRef<SotStorageStream> xStor2( pStor->OpenSotStream("\1Ole"));
+        rtl::Reference<SotStorageStream> xStor2(pStor->OpenSotStream("\1Ole"));
         xStor2->WriteBytes(aOle, sizeof(aOle));
         xStor.clear();
         xStor2.clear();
 
-        tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream("Equation Native");
+        rtl::Reference<SotStorageStream> xSrc = pStor->OpenSotStream("Equation Native");
         if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
             return false;
 

@@ -166,7 +166,7 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     const SfxEventHint& rEventHint = static_cast<const SfxEventHint&>(rHint);
     // only ObjectShell-related events with media interest
-    SfxObjectShell* pDocSh = rEventHint.GetObjShell();
+    rtl::Reference<SfxObjectShell> pDocSh = rEventHint.GetObjShell();
     if( !pDocSh )
         return;
 
@@ -199,7 +199,7 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case SfxEventHintId::CloseDoc:
         {
             const bool bNoThumbnail = rEventHint.GetEventId() == SfxEventHintId::CloseDoc;
-            AddDocumentToPickList(pDocSh, bNoThumbnail);
+            AddDocumentToPickList(pDocSh.get(), bNoThumbnail);
         }
         break;
 
@@ -216,7 +216,7 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
             OUString path = pMedium->GetOrigURL();
             if (!path.isEmpty())
             {
-                AddDocumentToPickList(pDocSh);
+                AddDocumentToPickList(pDocSh.get());
             }
         }
         break;

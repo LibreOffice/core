@@ -294,7 +294,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
         rtl::Reference<ScTransferObj> pTransferObj(new ScTransferObj( pSysClipDoc, std::move(aObjDesc) ));
         if ( ScGlobal::xDrawClipDocShellRef.is() )
         {
-            SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
+            SfxObjectShellRef aPersistRef(ScGlobal::xDrawClipDocShellRef);
             pTransferObj->SetDrawPersist( aPersistRef );// keep persist for ole objects alive
         }
         pTransferObj->CopyToClipboard( GetActiveWin() );
@@ -410,7 +410,7 @@ bool ScViewFunc::CopyToClipMultiRange( const ScDocument* pInputClipDoc, const Sc
         rtl::Reference<ScTransferObj> pTransferObj(new ScTransferObj( std::move(pDocClip), std::move(aObjDesc) ));
         if ( ScGlobal::xDrawClipDocShellRef.is() )
         {
-            SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
+            SfxObjectShellRef aPersistRef(ScGlobal::xDrawClipDocShellRef);
             pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
         }
         pTransferObj->CopyToClipboard( GetActiveWin() );    // system clipboard

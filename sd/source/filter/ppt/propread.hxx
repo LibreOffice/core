@@ -23,6 +23,7 @@
 #include <vector>
 #include <memory>
 
+#include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <sot/storage.hxx>
 #include <tools/stream.hxx>
@@ -133,7 +134,7 @@ class Section final
 class PropRead
 {
         bool                mbStatus;
-        tools::SvRef<SotStorageStream>      mpSvStream;
+        rtl::Reference<SotStorageStream> mpSvStream;
 
         sal_uInt16              mnByteOrder;
         sal_uInt8               mApplicationCLSID[ 16 ];

@@ -120,7 +120,7 @@ struct XclImpRootData : public XclRootData
     bool                mbHasBasic;         /// true = document contains VB project.
 
     explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            const tools::SvRef<SotStorage>& xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
+                            const rtl::Reference<SotStorage>& xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
     virtual             ~XclImpRootData() override;
 };
 

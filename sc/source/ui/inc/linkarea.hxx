@@ -31,9 +31,8 @@ class SvtURLBox;
 class ScLinkedAreaDlg : public weld::GenericDialogController
 {
 private:
-    ScDocShell*             m_pSourceShell;
+    rtl::Reference<ScDocShell> m_pSourceShell;
     std::unique_ptr<sfx2::DocumentInserter> m_xDocInserter;
-    SfxObjectShellRef   aSourceRef;
 
     std::unique_ptr<SvtURLBox> m_xCbUrl;
     std::unique_ptr<weld::Button> m_xBtnBrowse;

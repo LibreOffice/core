@@ -23,10 +23,12 @@
 
 #include <ostream>
 
+#include <unotools/weakref.hxx>
 #include <sfx2/dllapi.h>
 #include <svl/hint.hxx>
 #include <unotools/eventcfg.hxx>
 #include <rtl/ustring.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XController2.hpp>
@@ -111,8 +113,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
     }
 }
 
-class SfxObjectShell;
-
 enum class SfxEventHintId {
     NONE = 0,
     ActivateDoc,
@@ -191,7 +191,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
-    SfxObjectShell*     pObjShell;
+    unotools::WeakReference<SfxObjectShell> pObjShell;
     OUString            aEventName;
     SfxEventHintId      nEventId;
 
@@ -210,8 +210,7 @@ public:
     const OUString&     GetEventName() const
                         { return aEventName; }
 
-    SfxObjectShell*     GetObjShell() const
-                        { return pObjShell; }
+    rtl::Reference<SfxObjectShell> GetObjShell() const { return pObjShell.get(); }
 };
 
 
