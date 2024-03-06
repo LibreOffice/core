@@ -314,6 +314,37 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin2, "tdf160049_anchorMargin2.d
                          getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin14, "tdf160049_anchorMargin14.docx")
+{
+    // given a DML compat14 (Word 2010) document with a LEFT "column/text" anchored image
+    // followed by a RIGHT column/text anchored image (with a 2cm paragraph right margin)
+    // followed by a CENTER column/text anchored image (with a large left margin)
+    // followed by a LEFT FROM column/text anchored image (which ignores the left margin)
+    // followed by a LEFT "margin" anchored image (which always ignores the left margin)
+
+    // The shape takes into account the left margin, looking like it is in the middle of the doc,
+    // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
+    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"));
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
+                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+    // The shape takes into account the right margin, looking like it is in the middle of the doc,
+    xShape.set(getShapeByName(u"Picture 3"));
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
+                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+    // The third shape takes "center" very seriously, and ignores the margins
+    xShape.set(getShapeByName(u"Picture 4"));
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
+                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+    // The fourth shape takes "left by 123", and ignores the margins, acting just like "margin"
+    xShape.set(getShapeByName(u"Picture 5"));
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
+                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+    // The fifth shape shows how "left" works with "margin", which apparently means page margin
+    xShape.set(getShapeByName(u"Picture 6"));
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
+                         getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin15, "tdf160049_anchorMargin15.docx")
 {
     // given a DML compat15 (Word 2013) document with a LEFT "column/text" anchored image
