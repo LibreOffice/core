@@ -122,6 +122,7 @@
 #include <unotextrange.hxx>
 #include <unoframe.hxx>
 #include <txatbase.hxx>
+#include <unoparaframeenum.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
@@ -457,6 +458,14 @@ sal_Bool SAL_CALL SwTransferable::isComplex()
                             return true; // Complex
                         }
                     }
+                }
+
+                FrameClientSortList_t vFrames;
+                ::CollectFrameAtNode(rNd, vFrames, true);
+                if (!vFrames.empty())
+                {
+                    // There is an at-char anchored object to this node, that's complex.
+                    return true;
                 }
 
                 nTextLength += pTextNode->GetText().getLength();
