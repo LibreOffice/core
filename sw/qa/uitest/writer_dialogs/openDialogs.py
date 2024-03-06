@@ -9,7 +9,7 @@
 
 from uitest.framework import UITestCase
 import unittest
-from uitest.uihelper.testDialog import testDialog
+from uitest.uihelper.testDialog import testAppDialog
 
 dialogs = [
     {"command": ".uno:OpenRemote", "closeButton": "cancel"},
@@ -131,7 +131,7 @@ def load_tests(loader, tests, pattern):
 # the test only checks if writer crashes by opening the dialog
 class openDialogs(UITestCase):
     def check(self, dialog):
-        testDialog(self, "writer", dialog)
+        testAppDialog(self, "writer", dialog)
 
 dialogCount = 0
 for dialog in dialogs:

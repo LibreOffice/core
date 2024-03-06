@@ -9,7 +9,7 @@
 
 from uitest.framework import UITestCase
 import unittest
-from uitest.uihelper.testDialog import testDialog
+from uitest.uihelper.testDialog import testAppDialog
 
 dialogs = [
     {"command": ".uno:OpenRemote", "closeButton": "cancel"},
@@ -177,7 +177,7 @@ def load_tests(loader, tests, pattern):
 # the test only checks if calc crashes by opening the dialog, see e.g. tdf#120227, tdf#125985, tdf#125982
 class openDialogs(UITestCase):
     def check(self, dialog):
-        testDialog(self, "calc", dialog)
+        testAppDialog(self, "calc", dialog)
 
 dialogCount = 0
 for dialog in dialogs:
