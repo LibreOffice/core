@@ -1981,7 +1981,10 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             if (std::find(aPreloaded.begin(), aPreloaded.end(), fpPreload) == aPreloaded.end())
             {
                 aPreloaded.push_back(fpPreload);
+                // unlock because we may be instantiating some services here
+                g.unlock();
                 fpPreload();
+                g.lock();
             }
         }
 
