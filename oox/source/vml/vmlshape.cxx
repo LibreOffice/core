@@ -647,8 +647,13 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
         rPropSet.setAnyProperty(PROP_VertOrient, Any(text::VertOrientation::TOP));
     }
 
+    // if the anchor is not inline, and is relative to left or right, then apply the margins
+    bool bHonorMargins = rTypeModel.maPosition == "relative" || rTypeModel.maPosition == "absolute";
     if ( rTypeModel.maPositionHorizontal == "center" )
+    {
         rPropSet.setAnyProperty(PROP_HoriOrient, Any(text::HoriOrientation::CENTER));
+        bHonorMargins = false;
+    }
     else if ( rTypeModel.maPositionHorizontal == "left" )
         rPropSet.setAnyProperty(PROP_HoriOrient, Any(text::HoriOrientation::LEFT));
     else if ( rTypeModel.maPositionHorizontal == "right" )
@@ -663,6 +668,8 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
         rPropSet.setAnyProperty(PROP_HoriOrient, Any(text::HoriOrientation::RIGHT));
         rPropSet.setAnyProperty(PROP_PageToggle, Any(true));
     }
+    else
+        bHonorMargins = false;
 
     if ( rTypeModel.maPositionHorizontalRelative == "page" )
         rPropSet.setAnyProperty(PROP_HoriOrientRelation, Any(text::RelOrientation::PAGE_FRAME));
@@ -674,9 +681,13 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
     else if (rTypeModel.maPositionHorizontalRelative == "left-margin-area" ||
              rTypeModel.maPositionHorizontalRelative == "outer-margin-area")
         rPropSet.setProperty(PROP_HoriOrientRelation, text::RelOrientation::PAGE_LEFT);
-    else if ( rTypeModel.maPositionHorizontalRelative == "text" )
-        rPropSet.setProperty(PROP_HoriOrientRelation, text::RelOrientation::FRAME);
-
+    else // "text"
+    {
+        if (bHonorMargins)
+            rPropSet.setProperty(PROP_HoriOrientRelation, text::RelOrientation::PRINT_AREA);
+        else
+            rPropSet.setProperty(PROP_HoriOrientRelation, text::RelOrientation::FRAME);
+    }
     if ( rTypeModel.maPositionVertical == "center" )
         rPropSet.setAnyProperty(PROP_VertOrient, Any(text::VertOrientation::CENTER));
     else if ( rTypeModel.maPositionVertical == "top" )
