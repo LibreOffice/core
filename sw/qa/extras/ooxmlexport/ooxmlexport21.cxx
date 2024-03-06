@@ -295,11 +295,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMarginVML, "tdf160049_anchorMarginV
 {
     // given a VML (Word 2003) document with a LEFT "column/text" anchored image
     // (which will import as DML compat12 on the round-trip)
-    if (isExported())
-        return;
+
     // The image takes into account the margin, so it looks like it is in the middle of the doc,
     // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
+                         getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin15, "tdf160049_anchorMargin15.docx")
+{
+    // given a DML compat15 (Word 2013) document with a LEFT "column/text" anchored image
+
+    // The image ignores the margin, so it is at the left for compat15 (but middle-ish for compat14)
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::FRAME,
                          getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
 }
 
