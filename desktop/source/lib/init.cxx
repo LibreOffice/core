@@ -1894,6 +1894,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
             case LOK_CALLBACK_COLOR_PALETTES:
             case LOK_CALLBACK_TOOLTIP:
+            case LOK_CALLBACK_SHAPE_INNER_TEXT:
             {
                 if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");

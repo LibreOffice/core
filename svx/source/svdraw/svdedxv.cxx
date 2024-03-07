@@ -1972,7 +1972,10 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             if (mpModel)
             {
                 if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
+                {
                     mpModel->SetChanged();
+                    SetInnerTextAreaForLOKit();
+                }
             }
 
             /* Start chaining processing */
@@ -2164,7 +2167,10 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 // It could execute CommandEventId::ExtTextInput, while SdrObjEditView::KeyInput
                 // isn't called
                 if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
+                {
                     mpModel->SetChanged();
+                    SetInnerTextAreaForLOKit();
+                }
             }
             return true;
         }
