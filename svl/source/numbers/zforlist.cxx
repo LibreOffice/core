@@ -1473,7 +1473,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( SvNumFormatType eType, Language
     }
 }
 
-bool SvNumberFormatter::IsSpecialStandardFormat( sal_uInt32 nFIndex,
+bool SvNumberFormatter::ImpIsSpecialStandardFormat( sal_uInt32 nFIndex,
                                                  LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -1488,7 +1488,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, SvNumFormat
                                                  LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
+    if ( ImpIsSpecialStandardFormat( nFIndex, eLnge ) )
         return nFIndex;
     else
         return GetStandardFormat( eType, eLnge );
@@ -1526,7 +1526,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
                                                  SvNumFormatType eType, LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
+    if ( ImpIsSpecialStandardFormat( nFIndex, eLnge ) )
         return nFIndex;
 
     switch( eType )

@@ -297,9 +297,6 @@ public:
     sal_uInt32 GetStandardFormat(double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
                                  LanguageType eLnge);
 
-    /// Whether nFIndex is a special builtin format
-    bool IsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageType eLnge);
-
     /** Return a time format that best matches fNumber. */
     sal_uInt32 GetTimeFormat(double fNumber, LanguageType eLnge, bool bForceDuration);
 
@@ -682,6 +679,9 @@ private:
 
     // Substitute a format during GetFormatEntry(), i.e. system formats.
     SvNumberformat* ImpSubstituteEntry(SvNumberformat* pFormat, sal_uInt32* o_pRealKey = nullptr);
+
+    // Whether nFIndex is a special builtin format
+    SVL_DLLPRIVATE bool ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageType eLnge);
 
     // own mutex, may also be used by internal class SvNumberFormatterRegistry_Impl
     static ::osl::Mutex& GetGlobalMutex();
