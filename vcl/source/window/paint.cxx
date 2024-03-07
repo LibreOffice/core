@@ -1523,7 +1523,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     VclPtrInstance<VirtualDevice> pMaskedDevice(*i_pTargetOutDev,
                                                 DeviceFormat::WITH_ALPHA);
 
-    pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel() );
+    pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel(), true, true );
     pMaskedDevice->EnableRTL( IsRTLEnabled() );
     aMtf.WindStart();
     aMtf.Play(*pMaskedDevice);
