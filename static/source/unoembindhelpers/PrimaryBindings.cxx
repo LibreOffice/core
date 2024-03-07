@@ -334,7 +334,15 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
                 case css::uno::TypeClass_INTERFACE:
-                    return emscripten::val::undefined(); //TODO
+                {
+                    auto const ifc = *static_cast<css::uno::XInterface* const*>(self.getValue());
+                    auto const copy = std::malloc(sizeof(css::uno::XInterface*));
+                    *static_cast<css::uno::XInterface**>(copy) = ifc;
+                    ifc->acquire();
+                    emscripten::internal::WireTypePack argv(std::move(copy));
+                    return emscripten::val::take_ownership(
+                        _emval_take_value(getTypeId(self.getValueType()), argv));
+                }
                 default:
                     O3TL_UNREACHABLE;
             };

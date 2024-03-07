@@ -975,7 +975,9 @@ SAL_IMPLEMENT_MAIN()
             }
             dumpAttributes(cppOut, mgr, ifc, ifcEnt, {});
             dumpMethods(cppOut, mgr, ifc, ifcEnt, {});
-            cppOut << "        ;\n";
+            cppOut << "        ;\n"
+                      "    ::unoembindhelpers::registerUnoType<::com::sun::star::uno::Reference<"
+                   << cppName(ifc) << ">>();\n";
             dumpRegisterFunctionEpilog(cppOut, n);
             for (auto const& attr : ifcEnt->getDirectAttributes())
             {

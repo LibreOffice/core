@@ -303,6 +303,16 @@ Module.addOnPostRun(function() {
         //TODO: a.delete();
     }
     {
+        let v = test.getAnyInterface();
+        console.log(v);
+        console.assert(v.get().$equals(test.$query()));
+        console.assert(test.isAnyInterface(v));
+        v.delete();
+        //TODO: let a = new Module.Any(test, css.uno.TypeClass.INTERFACE);
+        //TODO: console.assert(test.isAnyInterface(a));
+        //TODO: a.delete();
+    }
+    {
         let v = test.getSequenceBoolean();
         console.log(v);
         console.assert(v.size() === 3);
