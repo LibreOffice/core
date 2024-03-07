@@ -57,6 +57,9 @@ public:
         return true to break the loop.  */
     void  ForAllListeners(std::function<bool(SfxListener*)> f) const;
 
+    /** used to avoid dynamic_cast cost */
+    virtual bool IsSfxStyleSheet() const;
+
     friend class SfxListener;
     friend class ::SfxBroadcasterTest;
 };

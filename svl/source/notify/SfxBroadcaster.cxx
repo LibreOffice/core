@@ -149,4 +149,5 @@ size_t SfxBroadcaster::GetListenerCount() const
     return m_Listeners.size() - m_RemovedPositions.size();
 }
 
+bool SfxBroadcaster::IsSfxStyleSheet() const { return false; }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

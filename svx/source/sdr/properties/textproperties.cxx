@@ -557,7 +557,7 @@ namespace sdr::properties
             SfxHintId nId(rHint.GetId());
             const svx::ITextProvider& rTextProvider(getTextProvider());
 
-            if(SfxHintId::DataChanged == nId && dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
+            if(SfxHintId::DataChanged == nId && rBC.IsSfxStyleSheet())
             {
                 sal_Int32 nText = rTextProvider.getTextCount();
                 while (nText--)
@@ -578,7 +578,7 @@ namespace sdr::properties
                 // #i101556# content of StyleSheet has changed -> new version
                 maVersion++;
             }
-            else if(SfxHintId::Dying == nId && dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
+            else if(SfxHintId::Dying == nId && rBC.IsSfxStyleSheet())
             {
                 sal_Int32 nText = rTextProvider.getTextCount();
                 while (nText--)

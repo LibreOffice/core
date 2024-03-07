@@ -158,15 +158,15 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>( pStyleSheetHint->GetStyleSheet() );
             UpdateParagraphsWithStyleSheet( pStyle );
         }
-        else if ( nId == SfxHintId::Dying )
+        else if ( nId == SfxHintId::Dying && rBC.IsSfxStyleSheet() )
         {
-            if ( auto pStyle = dynamic_cast< SfxStyleSheet* >(&rBC) )
-                RemoveStyleFromParagraphs( pStyle );
+            auto pStyle = static_cast< SfxStyleSheet* >(&rBC);
+            RemoveStyleFromParagraphs( pStyle );
         }
-        else if ( nId == SfxHintId::DataChanged )
+        else if ( nId == SfxHintId::DataChanged && rBC.IsSfxStyleSheet())
         {
-            if ( auto pStyle = dynamic_cast< SfxStyleSheet* >(&rBC) )
-                UpdateParagraphsWithStyleSheet( pStyle );
+            auto pStyle = static_cast< SfxStyleSheet* >(&rBC);
+            UpdateParagraphsWithStyleSheet( pStyle );
         }
     }
     if (rHint.GetId() == SfxHintId::Dying && dynamic_cast<const SfxApplication*>(&rBC))

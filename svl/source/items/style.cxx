@@ -856,6 +856,10 @@ bool SfxStyleSheet::isUsedByModel() const
     return IsUsed();
 }
 
+bool SfxStyleSheet::IsSfxStyleSheet() const
+{
+    return true;
+}
 
 SfxStyleSheetPool::SfxStyleSheetPool( SfxItemPool const& rSet)
 : SfxStyleSheetBasePool( const_cast< SfxItemPool& >( rSet ) )

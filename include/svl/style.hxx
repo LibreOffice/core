@@ -295,6 +295,8 @@ public:
 
     virtual bool        SetParent( const OUString& ) override;
 
+    virtual bool        IsSfxStyleSheet() const override;
+
 protected:
     virtual             ~SfxStyleSheet() override;
 };

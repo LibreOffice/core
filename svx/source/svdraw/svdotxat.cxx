@@ -360,10 +360,13 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
     while (nNum>0) {
         nNum--;
         SfxBroadcaster* pBroadcast=GetBroadcasterJOE(nNum);
-        SfxStyleSheet* pStyle=dynamic_cast<SfxStyleSheet*>( pBroadcast );
-        if (pStyle!=nullptr && pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
-            if (aStyleSheets.find(pStyle)==aStyleSheets.end()) {
-                EndListening(*pStyle);
+        if (pBroadcast->IsSfxStyleSheet())
+        {
+            SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>( pBroadcast );
+            if (pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
+                if (aStyleSheets.find(pStyle)==aStyleSheets.end()) {
+                    EndListening(*pStyle);
+                }
             }
         }
     }
