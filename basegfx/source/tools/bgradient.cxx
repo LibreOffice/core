@@ -914,7 +914,7 @@ void BGradient::tryToApplyBorder()
     }
     else
     {
-        // apply border to GradientSteps
+        // apply border to GradientStops
         aColorStops.createSpaceAtStart(fOffset);
     }
 
