@@ -44,7 +44,7 @@ public:
                 pMtf.reset( new GDIMetaFile( rMtf ) );
             }
     void                 SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
-    void                 SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
+    void                 SetAdviseFlags( sal_uInt32 nAdv ) { nAdvFlags = nAdv; }
     void                 SetSize( const Size & rSize ) { aSize = rSize; }
     void                 Write( SvStream & rStm );
 };
