@@ -958,7 +958,12 @@ SAL_IMPLEMENT_MAIN()
                    << cppName(ifc)
                    << "> const & the_self) { return "
                       "::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface>(the_"
-                      "self); })\n";
+                      "self); })\n"
+                      "        .function(\"$equals\", +[](::com::sun::star::uno::Reference<"
+                   << cppName(ifc)
+                   << "> const & the_self, "
+                      "::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface> const & "
+                      "the_other) { return the_self == the_other; })\n";
             if (bases.size() > 1)
             {
                 std::set<OUString> visitedBases;
