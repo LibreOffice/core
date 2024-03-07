@@ -2,28 +2,28 @@
 
 declare -A replacements
 replacements["Agency FB"]="Noto Sans"
-replacements["Noto Sans Light"]="Noto Sans"
 replacements["Segoe UI"]="Noto Sans"
 replacements["Univers 45 Light"]="Noto Sans"
 replacements["Trebuchet MS"]="Noto Sans"
-replacements["Georgia"]="Noto Serif"
 replacements["Perpetua"]="Noto Sans"
-replacements["Garamond"]="Noto Serif"
 replacements["Calibri Light"]="Noto Sans"
-replacements["Consolas"]="DejaVu Sans Mono"
-replacements["Verdana"]="Noto Sans"
 replacements["Rockwell"]="Noto Sans"
-replacements["Tms Rmn"]="DejaVu Sans"
-replacements["Tahoma"]="Noto Sans"
 replacements["DFKai-SB"]="Noto Sans"
 replacements["Gill Sans MT"]="Noto Sans"
-replacements["Helvetica"]="Liberation Sans"
-replacements["Liberation Serif"]="DejaVu Sans"
 replacements["BentonSans Medium"]="Noto Sans"
 replacements["BentonSans"]="Noto Sans"
 replacements["AdvPS88D1"]="Noto Sans"
 replacements["NexusSansOT"]="Noto Sans"
 replacements["Segoe Script"]="Noto Sans"
+replacements["Impact"]="Noto Sans"
+replacements["Century Gothic"]="Noto Sans"
+replacements["Kings Caslon Text"]="Noto Sans"
+replacements["Times"]="Liberation Serif"
+replacements["Jokerman"]="Noto Sans"
+replacements["FreeSans"]="Noto Sans"
+replacements["DINPro-Medium"]="Noto Sans"
+replacements["Open Sans Light"]="Noto Sans"
+replacements["Lora - regular"]="Noto Sans"
 
 extracted_folder=".temp_extracted"
 
@@ -31,7 +31,7 @@ for file in $(find "$1" -type f); do
     file_name=$(basename "$file")
     current_extension="${file_name##*.}"
 
-    if [[ $current_extension == "docx" || $current_extension == "xlsx" || $current_extension == "pptx" ]]; then
+    if [[ $current_extension == "docx" || $current_extension == "xlsx" || $current_extension == "pptx" || $current_extension == "odt" ]]; then
         base_name="${file_name%.*}"
 
         # move the file to a new .zip file
