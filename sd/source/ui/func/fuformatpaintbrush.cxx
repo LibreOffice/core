@@ -146,13 +146,6 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         }
 
         unmarkimpl( mpView );
-
-        if (aVEvt.mpObj)
-        {
-            sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, false/*bToggle*/);
-            return true;
-        }
     }
     return false;
 }
