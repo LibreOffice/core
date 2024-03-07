@@ -1992,15 +1992,16 @@ void Test::testTransliterate()
     int selStart = 12;
     int selEnd = 12;
     ESelection esel(0, selStart, 0, selEnd);
+    ESelection eSentenceSel(0, 0, 0, 25);
 
     /* DocumentContentOperationsManager checks if the cursor is inside of a word before transliterating,
      * but Edit Engine has no such check. Therefore, behavior is different between these two when the
      * cursor is on a word boundary. */
 
-    /* No selection tests. Cursor between the ' ' and 'm' before 'met'. */
+    /* No selection tests. Cursor between the ' ' and 'm' before 'met' - except in SENTENCE_CASE where the complete sentence is selected.*/
     CPPUNIT_ASSERT_EQUAL(OUString(""), editEng.GetText(esel));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe smith. Time Passed."),
-                         lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
+                         lcl_translitTest(editEng, sText2, eSentenceSel, TF::SENTENCE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."),
@@ -2013,11 +2014,9 @@ void Test::testTransliterate()
     selEnd = 14;
     esel = ESelection(0, selStart, 0, selEnd);
     CPPUNIT_ASSERT_EQUAL(OUString(""), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe smith. Time Passed."),
-                         lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
@@ -2027,8 +2026,6 @@ void Test::testTransliterate()
     selEnd = 24;
     esel = ESelection(0, selStart, 0, selEnd);
     CPPUNIT_ASSERT_EQUAL(OUString(""), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe smith. Time Passed."),
-                         lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
@@ -2041,8 +2038,6 @@ void Test::testTransliterate()
     selEnd = 12;
     esel = ESelection(0, selStart, 0, selEnd);
     CPPUNIT_ASSERT_EQUAL(OUString(""), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe smith. Time Passed."),
-                         lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."),
@@ -2056,8 +2051,6 @@ void Test::testTransliterate()
     esel = ESelection(0, selStart, 0, selEnd);
     CPPUNIT_ASSERT_EQUAL(OUString("met"), editEng.GetText(esel));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
-                         lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
@@ -2070,8 +2063,6 @@ void Test::testTransliterate()
     esel = ESelection(0, selStart, 0, selEnd);
     CPPUNIT_ASSERT_EQUAL(OUString("et"), editEng.GetText(esel));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."),
-                         lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mET joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
@@ -2083,8 +2074,6 @@ void Test::testTransliterate()
     selEnd = 13;
     esel = ESelection(0, selStart, 0, selEnd);
     CPPUNIT_ASSERT_EQUAL(OUString("me"), editEng.GetText(esel));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
-                         lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
                          lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MEt joe Smith. Time Passed."),
