@@ -112,7 +112,7 @@ namespace sdr::contact
             const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);
             const double fOffsetY((aScale.getY() - aPrefSize.getHeight()) / 2.0);
 
-            if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
+            if (fOffsetX >= 0.0 && fOffsetY >= 0.0)
             {
                 // create the EmptyPresObj fallback visualisation. The fallback graphic
                 // is already provided in rGraphicObject in this case, use it
