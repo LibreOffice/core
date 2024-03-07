@@ -242,7 +242,6 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
     }
 }
 
-
 SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = nullptr;
 volatile bool SvNumberFormatter::bCurrencyTableInitialized = false;
 namespace
@@ -1472,7 +1471,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( SvNumFormatType eType, Language
     }
 }
 
-bool SvNumberFormatter::IsSpecialStandardFormat( sal_uInt32 nFIndex,
+bool SvNumberFormatter::ImpIsSpecialStandardFormat( sal_uInt32 nFIndex,
                                                  LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -1487,7 +1486,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, SvNumFormat
                                                  LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
+    if ( ImpIsSpecialStandardFormat( nFIndex, eLnge ) )
         return nFIndex;
     else
         return GetStandardFormat( eType, eLnge );
@@ -1525,7 +1524,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
                                                  SvNumFormatType eType, LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
+    if ( ImpIsSpecialStandardFormat( nFIndex, eLnge ) )
         return nFIndex;
 
     switch( eType )
@@ -3768,18 +3767,15 @@ void SvNumberFormatter::SetDefaultSystemCurrency( std::u16string_view rAbbrev, L
     nSystemCurrencyPosition = 0;    // not found => simple SYSTEM
 }
 
-
 void SvNumberFormatter::ResetDefaultSystemCurrency()
 {
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
 
-
 void SvNumberFormatter::InvalidateDateAcceptancePatterns()
 {
     pStringScanner->InvalidateDateAcceptancePatterns();
 }
-
 
 sal_uInt32 SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
 {

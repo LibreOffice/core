@@ -297,9 +297,6 @@ public:
     sal_uInt32 GetStandardFormat(double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
                                  LanguageType eLnge);
 
-    /// Whether nFIndex is a special builtin format
-    bool IsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageType eLnge);
-
     /** Return a time format that best matches fNumber. */
     sal_uInt32 GetTimeFormat(double fNumber, LanguageType eLnge, bool bForceDuration);
 
@@ -677,25 +674,29 @@ private:
     DECL_DLLPRIVATE_STATIC_LINK(SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void);
 
     // Substitute a format during GetFormatEntry(), i.e. system formats.
-    SvNumberformat* ImpSubstituteEntry(SvNumberformat* pFormat, sal_uInt32* o_pRealKey = nullptr);
+    SVL_DLLPRIVATE SvNumberformat* ImpSubstituteEntry(SvNumberformat* pFormat,
+                                                      sal_uInt32* o_pRealKey = nullptr);
+
+    // Whether nFIndex is a special builtin format
+    SVL_DLLPRIVATE bool ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageType eLnge);
+
+    // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
+    SVL_DLLPRIVATE void ResetDefaultSystemCurrency();
+
+    // Replace the SYSTEM language/country format codes. Called upon change of
+    // the user configurable locale.
+    // Old compatibility codes are replaced, user defined are converted, and
+    // new format codes are appended.
+    SVL_DLLPRIVATE void ReplaceSystemCL(LanguageType eOldLanguage);
 
     // own mutex, may also be used by internal class SvNumberFormatterRegistry_Impl
     static ::osl::Mutex& GetGlobalMutex();
     ::osl::Mutex& GetInstanceMutex() const { return m_aMutex; }
 
 public:
-    // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
-    void ResetDefaultSystemCurrency();
-
     // Called by SvNumberFormatterRegistry_Impl::Notify if the system locale's
     // date acceptance patterns change.
     void InvalidateDateAcceptancePatterns();
-
-    // Replace the SYSTEM language/country format codes. Called upon change of
-    // the user configurable locale.
-    // Old compatibility codes are replaced, user defined are converted, and
-    // new format codes are appended.
-    void ReplaceSystemCL(LanguageType eOldLanguage);
 
     const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
 
