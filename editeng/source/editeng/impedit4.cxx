@@ -2708,11 +2708,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
     if ( !aSel.HasRange() )
     {
-        /* Cursor is inside of a word */
-        if (nTransliterationMode == TransliterationFlags::SENTENCE_CASE)
-            aSel = SelectSentence( aSel );
-        else
-            aSel = SelectWord( aSel );
+        aSel = SelectWord( aSel, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true, true );
     }
 
     // tdf#107176: if there's still no range, just return aSel

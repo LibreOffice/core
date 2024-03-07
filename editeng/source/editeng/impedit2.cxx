@@ -1567,7 +1567,7 @@ EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM )
     return aNewPaM;
 }
 
-EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16 nWordType, bool bAcceptStartOfWord )
+EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16 nWordType, bool bAcceptStartOfWord, bool bAcceptEndOfWord )
 {
     EditSelection aNewSel( rCurSel );
     EditPaM aPaM( rCurSel.Max() );
@@ -1589,7 +1589,7 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
             aPaM.GetNode()->GetString(), aPaM.GetIndex(), aLocale, nWordType, true);
 
         // don't select when cursor at end of word
-        if ( ( aBoundary.endPos > aPaM.GetIndex() ) &&
+        if ( ( aBoundary.endPos > aPaM.GetIndex() || ( bAcceptEndOfWord && aBoundary.endPos == aPaM.GetIndex() ) ) &&
              ( ( aBoundary.startPos < aPaM.GetIndex() ) || ( bAcceptStartOfWord && ( aBoundary.startPos == aPaM.GetIndex() ) ) ) )
         {
             aNewSel.Min().SetIndex( aBoundary.startPos );
