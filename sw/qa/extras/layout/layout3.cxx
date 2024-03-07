@@ -2458,6 +2458,31 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159422)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6573, nYSymbol3, 20);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159456)
+{
+    // Given a document with chart, which have a datatable
+    createSwDoc("charttable.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    //// Without the fix, this would fail:
+    //// - Expected: 1
+    //// - Actual  : 1.5
+    //// - In <>, XPath contents of child does not match
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[103]/textarray/text"_ostr,
+        "1");
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[104]/textarray/text"_ostr,
+        "2");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
