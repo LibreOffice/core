@@ -419,84 +419,92 @@ namespace sdr::properties
         {
             bool bHintUsed(false);
 
-            const SfxStyleSheetHint* pStyleHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
-
-            if(pStyleHint && pStyleHint->GetStyleSheet() == GetStyleSheet())
+            SfxHintId id = rHint.GetId();
+            if (id == SfxHintId::StyleSheetCreated
+                || id == SfxHintId::StyleSheetChanged
+                || id == SfxHintId::StyleSheetErased
+                || id == SfxHintId::StyleSheetModified
+                || id == SfxHintId::StyleSheetInDestruction
+                || id == SfxHintId::StyleSheetModifiedExtended)
             {
-                SdrObject& rObj = GetSdrObject();
-                //SdrPage* pPage = rObj.GetPage();
+                const SfxStyleSheetHint* pStyleHint = static_cast<const SfxStyleSheetHint*>(&rHint);
 
-                switch(pStyleHint->GetId())
+                if(pStyleHint->GetStyleSheet() == GetStyleSheet())
                 {
-                    case SfxHintId::StyleSheetCreated         :
-                    {
-                        // cannot happen, nothing to do
-                        break;
-                    }
-                    case SfxHintId::StyleSheetModified        :
-                    case SfxHintId::StyleSheetModifiedExtended:
-                    case SfxHintId::StyleSheetChanged         :
-                    {
-                        // notify change
-                        break;
-                    }
-                    case SfxHintId::StyleSheetErased          :
-                    case SfxHintId::StyleSheetInDestruction   :
-                    {
-                        // Style needs to be exchanged
-                        SfxStyleSheet* pNewStSh = nullptr;
-                        SdrModel& rModel(rObj.getSdrModelFromSdrObject());
+                    SdrObject& rObj = GetSdrObject();
+                    //SdrPage* pPage = rObj.GetPage();
 
-                        // Do nothing if object is in destruction, else a StyleSheet may be found from
-                        // a StyleSheetPool which is just being deleted itself. and thus it would be fatal
-                        // to register as listener to that new StyleSheet.
-                        if(!rObj.IsInDestruction())
+                    switch(id)
+                    {
+                        case SfxHintId::StyleSheetCreated         :
                         {
-                            if(SfxStyleSheet* pStyleSheet = GetStyleSheet())
+                            // cannot happen, nothing to do
+                            break;
+                        }
+                        case SfxHintId::StyleSheetModified        :
+                        case SfxHintId::StyleSheetModifiedExtended:
+                        case SfxHintId::StyleSheetChanged         :
+                        {
+                            // notify change
+                            break;
+                        }
+                        case SfxHintId::StyleSheetErased          :
+                        case SfxHintId::StyleSheetInDestruction   :
+                        {
+                            // Style needs to be exchanged
+                            SfxStyleSheet* pNewStSh = nullptr;
+                            SdrModel& rModel(rObj.getSdrModelFromSdrObject());
+
+                            // Do nothing if object is in destruction, else a StyleSheet may be found from
+                            // a StyleSheetPool which is just being deleted itself. and thus it would be fatal
+                            // to register as listener to that new StyleSheet.
+                            if(!rObj.IsInDestruction())
                             {
-                                pNewStSh = static_cast<SfxStyleSheet*>(rModel.GetStyleSheetPool()->Find(
-                                    pStyleSheet->GetParent(), pStyleSheet->GetFamily()));
+                                if(SfxStyleSheet* pStyleSheet = GetStyleSheet())
+                                {
+                                    pNewStSh = static_cast<SfxStyleSheet*>(rModel.GetStyleSheetPool()->Find(
+                                        pStyleSheet->GetParent(), pStyleSheet->GetFamily()));
+                                }
+
+                                if(!pNewStSh)
+                                {
+                                    pNewStSh = rModel.GetDefaultStyleSheet();
+                                }
                             }
 
-                            if(!pNewStSh)
+                            // remove used style, it's erased or in destruction
+                            ImpRemoveStyleSheet();
+
+                            if(pNewStSh)
                             {
-                                pNewStSh = rModel.GetDefaultStyleSheet();
+                                ImpAddStyleSheet(pNewStSh, true);
                             }
+
+                            break;
                         }
-
-                        // remove used style, it's erased or in destruction
-                        ImpRemoveStyleSheet();
-
-                        if(pNewStSh)
-                        {
-                            ImpAddStyleSheet(pNewStSh, true);
-                        }
-
-                        break;
+                        default: break;
                     }
-                    default: break;
+
+                    // Get old BoundRect. Do this after the style change is handled
+                    // in the ItemSet parts because GetBoundRect() may calculate a new
+                    tools::Rectangle aBoundRect = rObj.GetLastBoundRect();
+
+                    rObj.SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
+
+                    // tell the object about the change
+                    rObj.SetChanged();
+                    rObj.BroadcastObjectChange();
+
+                    //if(pPage && pPage->IsInserted())
+                    //{
+                    //  rObj.BroadcastObjectChange();
+                    //}
+
+                    rObj.SendUserCall(SdrUserCallType::ChangeAttr, aBoundRect);
+
+                    bHintUsed = true;
                 }
-
-                // Get old BoundRect. Do this after the style change is handled
-                // in the ItemSet parts because GetBoundRect() may calculate a new
-                tools::Rectangle aBoundRect = rObj.GetLastBoundRect();
-
-                rObj.SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
-
-                // tell the object about the change
-                rObj.SetChanged();
-                rObj.BroadcastObjectChange();
-
-                //if(pPage && pPage->IsInserted())
-                //{
-                //  rObj.BroadcastObjectChange();
-                //}
-
-                rObj.SendUserCall(SdrUserCallType::ChangeAttr, aBoundRect);
-
-                bHintUsed = true;
             }
-
             if(!bHintUsed)
             {
                 // forward to SdrObject ATM. Not sure if this will be necessary
