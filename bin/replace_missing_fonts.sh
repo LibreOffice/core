@@ -45,9 +45,13 @@ for file in $(find "$1" -type f); do
             file_changed=false
             value=${replacements[$key]}
             for subfile in $(find "$extracted_folder" -type f); do
-                if grep -q "$key" "$subfile"; then
-                    # use sed to replace the string in the file if it exists
-                    sed -i "s/$key/$value/g" "$subfile"
+                # Replace only if it's between quotes
+                if grep -q "\"$key\"" "$subfile"; then
+                    sed -i "s/\"$key\"/\"$value\"/g" "$subfile"
+                    file_changed=true
+                # or between '&quot;'
+                elif grep -q "&quot;$key&quot;" "$subfile"; then
+                    sed -i "s/&quot;$key&quot;/\&quot;$value\&quot;/g" "$subfile"
                     file_changed=true
                 fi
             done
