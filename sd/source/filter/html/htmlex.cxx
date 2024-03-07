@@ -378,9 +378,7 @@ OUString StringToHTMLString( std::u16string_view rString )
 {
     SvMemoryStream aMemStm;
     HTMLOutFuncs::Out_String( aMemStm, rString );
-    aMemStm.WriteChar( char(0) );
-    sal_Int32 nLength = strlen(static_cast<char const *>(aMemStm.GetData()));
-    return OUString( static_cast<char const *>(aMemStm.GetData()), nLength, RTL_TEXTENCODING_UTF8 );
+    return OUString( static_cast<char const *>(aMemStm.GetData()), aMemStm.GetSize(), RTL_TEXTENCODING_UTF8 );
 }
 
 // converts a paragraph of the outliner to html
