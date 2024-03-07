@@ -234,7 +234,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream
     // connect XML writer to output stream
     xSaxWriter->setOutputStream(xOutputStream);
     if (m_bUseHTMLMLEntities)
-        xSaxWriter->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesExport);
+        xSaxWriter->setCustomEntityNames(starmathdatabase::getCustomMathmlHtmlEntitiesExport());
 
     // prepare arguments (prepend doc handler to given arguments)
     Sequence<Any> aArgs{ Any(xSaxWriter), Any(rPropSet) };

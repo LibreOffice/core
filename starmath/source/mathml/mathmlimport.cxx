@@ -264,7 +264,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
         if (xFastParser)
         {
             if (bUseHTMLMLEntities)
-                xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
+                xFastParser->setCustomEntityNames(starmathdatabase::getCustomMathmlHtmlEntities());
             xFastParser->parseStream(aParserInput);
         }
         else if (xFastDocHandler)
@@ -272,7 +272,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
             Reference<css::xml::sax::XFastParser> xParser
                 = css::xml::sax::FastParser::create(rxContext);
             if (bUseHTMLMLEntities)
-                xParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
+                xParser->setCustomEntityNames(starmathdatabase::getCustomMathmlHtmlEntities());
             xParser->setFastDocumentHandler(xFastDocHandler);
             xParser->parseStream(aParserInput);
         }

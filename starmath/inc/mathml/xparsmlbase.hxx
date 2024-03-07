@@ -39,15 +39,15 @@ constexpr sal_Int32 STARMATH_MATHMLHTML_ENTITY_NUMBER = 2125;
   * Entity names for mathml. Example: &infin -> \u221E;
   * These ones are to be used on import.
   */
-const extern ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
-    icustomMathmlHtmlEntities;
+const css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
+getCustomMathmlHtmlEntities();
 
 /**
   * Entity names for mathml. Example: "\u221E"; -> &infin;
   * These ones are to be used on file export.
   */
-const extern ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
-    icustomMathmlHtmlEntitiesExport;
+const css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
+getCustomMathmlHtmlEntitiesExport();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
