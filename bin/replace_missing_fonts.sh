@@ -24,6 +24,13 @@ replacements["FreeSans"]="Noto Sans"
 replacements["DINPro-Medium"]="Noto Sans"
 replacements["Open Sans Light"]="Noto Sans"
 replacements["Lora - regular"]="Noto Sans"
+replacements["Tahoma"]="Noto Sans"
+replacements["Thorndale"]="Liberation Serif"
+replacements["Albany"]="Liberation Sans"
+replacements["Lucida Sans Unicode"]="Noto Sans"
+replacements["Candara"]="Noto Sans"
+replacements["Verdana"]="Noto Sans"
+replacements["Gill Sans MT"]="Noto Sans"
 
 extracted_folder=".temp_extracted"
 
