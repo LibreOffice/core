@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX
+#pragma once
 
 #include <deque>
 
@@ -73,7 +72,5 @@ struct SwXParaFrameEnumeration
 };
 
 css::uno::Reference<css::text::XTextContent> FrameClientToXTextContent(sw::FrameClient* pClient);
-
-#endif // INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

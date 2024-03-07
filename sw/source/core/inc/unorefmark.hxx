@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOREFMARK_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNOREFMARK_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -102,7 +101,5 @@ public:
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor() override;
 
 };
-
-#endif // INCLUDED_SW_SOURCE_CORE_INC_UNOREFMARK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

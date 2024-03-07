@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOTEXTMARKUP_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_UNOTEXTMARKUP_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 
@@ -97,7 +96,5 @@ private:
 
     std::map< OUString, css::uno::Any > maMap;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
