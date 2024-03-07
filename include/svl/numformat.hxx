@@ -683,14 +683,14 @@ private:
     // Whether nFIndex is a special builtin format
     SVL_DLLPRIVATE bool ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageType eLnge);
 
+    // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
+    SVL_DLLPRIVATE void ResetDefaultSystemCurrency();
+
     // own mutex, may also be used by internal class SvNumberFormatterRegistry_Impl
     static ::osl::Mutex& GetGlobalMutex();
     ::osl::Mutex& GetInstanceMutex() const { return m_aMutex; }
 
 public:
-    // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
-    void ResetDefaultSystemCurrency();
-
     // Called by SvNumberFormatterRegistry_Impl::Notify if the system locale's
     // date acceptance patterns change.
     void InvalidateDateAcceptancePatterns();

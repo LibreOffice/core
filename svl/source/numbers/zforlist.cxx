@@ -242,7 +242,6 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
     }
 }
 
-
 SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = nullptr;
 volatile bool SvNumberFormatter::bCurrencyTableInitialized = false;
 namespace
@@ -3756,18 +3755,15 @@ void SvNumberFormatter::SetDefaultSystemCurrency( std::u16string_view rAbbrev, L
     nSystemCurrencyPosition = 0;    // not found => simple SYSTEM
 }
 
-
 void SvNumberFormatter::ResetDefaultSystemCurrency()
 {
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
 
-
 void SvNumberFormatter::InvalidateDateAcceptancePatterns()
 {
     pStringScanner->InvalidateDateAcceptancePatterns();
 }
-
 
 sal_uInt32 SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
 {
