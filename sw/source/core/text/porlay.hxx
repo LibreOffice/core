@@ -75,7 +75,7 @@ public:
 
 /// Collection of SwLinePortion instances, representing one line of text.
 /// Typically owned by an SwParaPortion.
-class SwLineLayout : public SwTextPortion
+class SAL_DLLPUBLIC_RTTI SwLineLayout : public SwTextPortion
 {
 private:
     SwLineLayout *m_pNext;                // The next Line
