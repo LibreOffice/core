@@ -306,7 +306,11 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                     return emscripten::val(*o3tl::forceAccess<css::uno::Type>(self));
                 case css::uno::TypeClass_SEQUENCE:
                 {
-                    emscripten::internal::WireTypePack argv(const_cast<void*>(self.getValue()));
+                    auto const seq = *static_cast<uno_Sequence* const*>(self.getValue());
+                    auto const copy = std::malloc(sizeof(uno_Sequence*));
+                    *static_cast<uno_Sequence**>(copy) = seq;
+                    osl_atomic_increment(&seq->nRefCount);
+                    emscripten::internal::WireTypePack argv(std::move(copy));
                     return emscripten::val::take_ownership(
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
