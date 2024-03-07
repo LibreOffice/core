@@ -2586,6 +2586,7 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 case vcl::PDFWriter::TableRow:
                 case vcl::PDFWriter::Formula:
                 case vcl::PDFWriter::Figure:
+                case vcl::PDFWriter::Annot:
                     mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement,
                                                               vcl::PDFWriter::Block);
                     break;
