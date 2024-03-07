@@ -1390,6 +1390,31 @@ auto CurlProcessor::ProcessRequest(
                         }
                         break;
                     }
+                    case SC_FORBIDDEN:
+                    {
+                        ::std::map<OUString, OUString> const headerMap(
+                            ProcessHeaders(headers.HeaderFields.back().first));
+                        // X-MSDAVEXT_Error see [MS-WEBDAVE] 2.2.3.1.9
+                        auto const it(headerMap.find("x-msdavext_error"));
+                        if (it == headerMap.end() || !it->second.startsWith("917656;"))
+                        {
+                            break;
+                        }
+                        // fallback needs cookie engine enabled
+                        CURLcode rc
+                            = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_COOKIEFILE, "");
+                        assert(rc == CURLE_OK);
+                        (void)rc;
+                        SAL_INFO("ucb.ucp.webdav.curl", "403 fallback authentication");
+                        // disable 302 redirect
+                        pRequestHeaderList.reset(curl_slist_append(
+                            pRequestHeaderList.release(), "X-FORMS_BASED_AUTH_ACCEPTED: f"));
+                        if (!pRequestHeaderList)
+                        {
+                            throw uno::RuntimeException("curl_slist_append failed");
+                        }
+                    }
+                        [[fallthrough]]; // SP, no cookie, or cookie failed: try NTLM/Negotiate
                     case SC_UNAUTHORIZED:
                     case SC_PROXY_AUTHENTICATION_REQUIRED:
                     {
@@ -1397,8 +1422,9 @@ auto CurlProcessor::ProcessRequest(
                              ? rSession.m_isAuthenticated
                              : rSession.m_isAuthenticatedProxy)
                             = false; // any auth data in m_pCurl is invalid
-                        auto& rnAuthRequests(statusCode == SC_UNAUTHORIZED ? nAuthRequests
-                                                                           : nAuthRequestsProxy);
+                        auto& rnAuthRequests(statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
+                                                 ? nAuthRequests
+                                                 : nAuthRequestsProxy);
                         if (rnAuthRequests == 10)
                         {
                             SAL_INFO("ucb.ucp.webdav.curl", "aborting authentication after "
@@ -1406,22 +1432,32 @@ auto CurlProcessor::ProcessRequest(
                         }
                         else if (pEnv && pEnv->m_xAuthListener)
                         {
-                            ::std::optional<OUString> const oRealm(ExtractRealm(
-                                headers, statusCode == SC_UNAUTHORIZED ? "WWW-Authenticate"
-                                                                       : "Proxy-Authenticate"));
+                            ::std::optional<OUString> const oRealm(
+                                ExtractRealm(headers, statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
+                                                          ? "WWW-Authenticate"
+                                                          : "Proxy-Authenticate"));
 
                             ::std::optional<Auth>& roAuth(
-                                statusCode == SC_UNAUTHORIZED ? oAuth : oAuthProxy);
+                                statusCode != SC_PROXY_AUTHENTICATION_REQUIRED ? oAuth
+                                                                               : oAuthProxy);
                             OUString userName(roAuth ? roAuth->UserName : OUString());
                             OUString passWord(roAuth ? roAuth->PassWord : OUString());
                             long authAvail(0);
-                            auto const rc = curl_easy_getinfo(rSession.m_pCurl.get(),
-                                                              statusCode == SC_UNAUTHORIZED
-                                                                  ? CURLINFO_HTTPAUTH_AVAIL
-                                                                  : CURLINFO_PROXYAUTH_AVAIL,
-                                                              &authAvail);
+                            auto const rc
+                                = curl_easy_getinfo(rSession.m_pCurl.get(),
+                                                    statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
+                                                        ? CURLINFO_HTTPAUTH_AVAIL
+                                                        : CURLINFO_PROXYAUTH_AVAIL,
+                                                    &authAvail);
                             assert(rc == CURLE_OK);
                             (void)rc;
+                            if (statusCode == SC_FORBIDDEN)
+                            { // SharePoint fallback: try Negotiate auth
+                                assert(authAvail == 0);
+                                // note: this must be a single value!
+                                // would need 2 iterations to try CURLAUTH_NTLM too
+                                authAvail = CURLAUTH_NEGOTIATE;
+                            }
                             // only allow SystemCredentials once - the
                             // PasswordContainer may have stored it in the
                             // Config (TrySystemCredentialsFirst or
@@ -1440,8 +1476,9 @@ auto CurlProcessor::ProcessRequest(
 
                             auto const ret = pEnv->m_xAuthListener->authenticate(
                                 oRealm ? *oRealm : "",
-                                statusCode == SC_UNAUTHORIZED ? rSession.m_URI.GetHost()
-                                                              : rSession.m_Proxy.aName,
+                                statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
+                                    ? rSession.m_URI.GetHost()
+                                    : rSession.m_Proxy.aName,
                                 userName, passWord, isSystemCredSupported);
 
                             if (ret == 0)
