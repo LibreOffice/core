@@ -64,9 +64,9 @@ void
 IndexedStyleSheets::Reindex()
 {
     mPositionsByName.clear();
-    mStyleSheetPositionsByFamily.clear();
+    mStyleSheetPositionsByFamily.resize(NUMBER_OF_FAMILIES);
     for (size_t i = 0; i < NUMBER_OF_FAMILIES; i++) {
-        mStyleSheetPositionsByFamily.emplace_back();
+        mStyleSheetPositionsByFamily[i].clear();
     }
 
     sal_Int32 i = 0;
