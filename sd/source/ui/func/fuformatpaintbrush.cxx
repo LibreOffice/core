@@ -290,7 +290,9 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if( pObj && SdrObjEditView::SupportsFormatPaintbrush(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
+        const OutlinerView* pOLV = rDrawViewShell.GetDrawView()->GetTextEditOutlinerView();
+        if( pObj && pOLV &&
+            SdrObjEditView::SupportsFormatPaintbrush(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
             return;
     }
     rSet.DisableItem( SID_FORMATPAINTBRUSH );

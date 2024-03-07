@@ -2814,7 +2814,9 @@ sal_Int32 SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFor
 
     OutlinerView* pOLV = GetTextEditOutlinerView();
 
-    bool isParaSelection = pOLV ? pOLV->GetEditView().IsSelectionFullPara() : false;
+    bool isParaSelection
+        = pOLV ? !pOLV->GetEditView().HasSelection() || pOLV->GetEditView().IsSelectionFullPara()
+               : false;
     rFormatSet = std::make_shared<SfxItemSet>(GetModel().GetItemPool(),
                                               GetFormatRangeImpl(pOLV != nullptr, isParaSelection));
     if (pOLV)
