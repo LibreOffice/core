@@ -171,7 +171,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     }
 
     if (xDiagram->getDataTable().is())
-        m_bForceShiftPosition = true;
+        m_bTableShiftPosition = true;
 
     //prepare for autoscaling and shape creation
     // - create plotter for charttypes (for each first scale group at each plotter, as they are independent)
@@ -340,12 +340,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
 bool SeriesPlotterContainer::isCategoryPositionShifted(const chart2::ScaleData& rSourceScale,
                                                        bool bHasComplexCategories)
 {
-    if (m_bForceShiftPosition)
-        return true;
-
     if (rSourceScale.AxisType == AxisType::CATEGORY)
         return bHasComplexCategories || rSourceScale.ShiftedCategoryPosition
-               || m_bChartTypeUsesShiftedCategoryPositionPerDefault;
+               || m_bTableShiftPosition || m_bChartTypeUsesShiftedCategoryPositionPerDefault;
 
     if (rSourceScale.AxisType == AxisType::DATE)
         return rSourceScale.ShiftedCategoryPosition;
