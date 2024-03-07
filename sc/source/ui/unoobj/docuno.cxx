@@ -27,6 +27,9 @@
 #include <editeng/editview.hxx>
 #include <editeng/memberids.h>
 #include <editeng/outliner.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <svx/fmview.hxx>
@@ -131,6 +134,7 @@
 #include <table.hxx>
 #include <appoptio.hxx>
 #include <formulaopt.hxx>
+#include <stlpool.hxx>
 
 #include <strings.hrc>
 
@@ -2059,7 +2063,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         bWasCellRange = pPrintFunc->GetLastSourceRange( aCellRange );
         Size aTwips = pPrintFunc->GetPageSize();
 
-        if (!m_pPrintState)
+        if (!m_pPrintState || nRenderer == nTabStart)
         {
             m_pPrintState.reset(new ScPrintState());
             pPrintFunc->GetPrintState(*m_pPrintState, true);
@@ -2103,6 +2107,172 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pPrinterOptions->SetDefaults();
     pPrinterOptions->appendPrintUIOptions( aSequence );
     return aSequence;
+}
+
+static void lcl_SetMediaScreen(const uno::Reference<drawing::XShape>& xMediaShape,
+                               const OutputDevice* pDev, tools::Rectangle& aRect,
+                               sal_Int32 nPageNumb)
+{
+    OUString sMediaURL;
+    uno::Reference<beans::XPropertySet> xPropSet(xMediaShape, uno::UNO_QUERY);
+    xPropSet->getPropertyValue("MediaURL") >>= sMediaURL;
+    if (!sMediaURL.isEmpty())
+    {
+        OUString sTitle;
+        xPropSet->getPropertyValue("Title") >>= sTitle;
+        OUString sDescription;
+        xPropSet->getPropertyValue("Description") >>= sDescription;
+        OUString const altText(sTitle.isEmpty() ? sDescription
+                               : sDescription.isEmpty()
+                                   ? sTitle
+                                   : OUString::Concat(sTitle) + OUString::Concat("\n")
+                                         + OUString::Concat(sDescription));
+
+        OUString const mimeType(xPropSet->getPropertyValue("MediaMimeType").get<OUString>());
+        SdrObject* pSdrObj(SdrObject::getSdrObjectFromXShape(xMediaShape));
+        vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+        sal_Int32 nScreenId = pPDF->CreateScreen(aRect, altText, mimeType, nPageNumb, pSdrObj);
+        if (sMediaURL.startsWith("vnd.sun.star.Package:"))
+        {
+            // Embedded media
+            OUString aTempFileURL;
+            xPropSet->getPropertyValue("PrivateTempFileURL") >>= aTempFileURL;
+            pPDF->SetScreenStream(nScreenId, aTempFileURL);
+        }
+        else // Linked media
+            pPDF->SetScreenURL(nScreenId, sMediaURL);
+    }
+}
+
+static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const ScPrintState& rState,
+                                          ScDocument& rDoc, SCTAB nTab, tools::Long nStartPage,
+                                          bool bSinglePageSheets)
+{
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
+    if (pPDF && pPDF->GetIsExportTaggedPDF() && pDrawLayer)
+    {
+
+        if (!bSinglePageSheets)
+        {
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+            OSL_ENSURE(pPage, "Page ?");
+            if (pPage)
+            {
+                ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+                SfxStyleSheetBase* pStyleSheet = pStylePool->Find(rDoc.GetPageStyle(nTab), SfxStyleFamily::Page);
+                SfxItemSet* pItemSet = &pStyleSheet->GetItemSet();
+
+                tools::Long nLeftMargin(pItemSet->Get(ATTR_LRSPACE).GetLeft());
+                nLeftMargin = o3tl::convert(nLeftMargin, o3tl::Length::twip, o3tl::Length::mm100);
+
+                tools::Long nTopMargin(pItemSet->Get(ATTR_ULSPACE).GetUpper());
+                nTopMargin = o3tl::convert(nTopMargin, o3tl::Length::twip, o3tl::Length::mm100);
+
+                tools::Long nHeader = 0;
+                const SvxSetItem* pHeaderSetItem = &pItemSet->Get(ATTR_PAGE_HEADERSET);
+                bool bHasHdr = pHeaderSetItem->GetItemSet().Get(ATTR_PAGE_ON).GetValue();
+                if (bHasHdr)
+                {
+                    const SfxItemSet* pHeaderSet = &pHeaderSetItem->GetItemSet();
+                    tools::Long nHdrHeight = pHeaderSet->Get(ATTR_PAGE_SIZE).GetSize().Height();
+                    nHeader = o3tl::convert(nHdrHeight, o3tl::Length::twip, o3tl::Length::mm100);
+                }
+
+                bool bTopDown = pItemSet->Get(ATTR_PAGE_TOPDOWN).GetValue();
+
+                SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
+                SdrObject* pObj = aIter.Next();
+                while (pObj && pObj->IsVisible())
+                {
+                    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+                    if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
+                    {
+                        SCCOL nX1, nX2;
+                        SCROW nY1, nY2;
+                        sal_Int32 nPageNumb = nStartPage;
+                        if (bTopDown) // top-bottom page order
+                        {
+                            nX1 = 0;
+                            for (size_t i = 0; i < rState.nPagesX; ++i)
+                            {
+                                nX2 = (*rState.xPageEndX)[i];
+                                for (size_t j = 0; j < rState.nPagesY; ++j)
+                                {
+                                    auto& rPageRow = (*rState.xPageRows)[j];
+                                    nY1 = rPageRow.GetStartRow();
+                                    nY2 = rPageRow.GetEndRow();
+
+                                    tools::Rectangle aPageRect(rDoc.GetMMRect(nX1, nY1, nX2, nY2, nTab));
+                                    tools::Rectangle aTmpRect(aPageRect.GetIntersection(pObj->GetCurrentBoundRect()));
+                                    if (!aTmpRect.IsEmpty())
+                                    {
+                                        tools::Long nPosX(aTmpRect.getX() - aPageRect.getX() + nLeftMargin);
+                                        tools::Long nPosY(aTmpRect.getY() - aPageRect.getY() + nHeader + nTopMargin);
+                                        tools::Rectangle aRect(Point(nPosX, nPosY), aTmpRect.GetSize());
+                                        lcl_SetMediaScreen(xShape, pDev, aRect, nPageNumb);
+                                    }
+                                    ++nPageNumb;
+                                }
+                                nX1 = nX2 + 1;
+                            }
+                        }
+                        else // left to right page order
+                        {
+                            for (size_t i = 0; i < rState.nPagesY; ++i)
+                            {
+                                auto& rPageRow = (*rState.xPageRows)[i];
+                                nY1 = rPageRow.GetStartRow();
+                                nY2 = rPageRow.GetEndRow();
+                                nX1 = 0;
+                                for (size_t j = 0; j < rState.nPagesX; ++j)
+                                {
+                                    nX2 = (*rState.xPageEndX)[j];
+
+                                    tools::Rectangle aPageRect(rDoc.GetMMRect(nX1, nY1, nX2, nY2, nTab));
+                                    tools::Rectangle aTmpRect(aPageRect.GetIntersection(pObj->GetCurrentBoundRect()));
+                                    if (!aTmpRect.IsEmpty())
+                                    {
+                                        tools::Long nPosX(aTmpRect.getX() - aPageRect.getX() + nLeftMargin);
+                                        tools::Long nPosY(aTmpRect.getY() - aPageRect.getY() + nHeader + nTopMargin);
+                                        tools::Rectangle aRect(Point(nPosX, nPosY), aTmpRect.GetSize());
+                                        lcl_SetMediaScreen(xShape, pDev, aRect, nPageNumb);
+                                    }
+                                    ++nPageNumb;
+                                    nX1 = nX2 + 1;
+                                }
+                            }
+                        }
+                    }
+                    pObj = aIter.Next();
+                }
+            }
+        }
+        else    // export whole sheet
+        {
+            SCTAB nTabCount = rDoc.GetTableCount();
+            for (SCTAB i = 0; i < nTabCount; ++i)
+            {
+                SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
+                OSL_ENSURE(pPage, "Page ?");
+                if (pPage)
+                {
+                    SdrObjListIter aIter(pPage, SdrIterMode::DeepWithGroups);
+                    SdrObject* pObj = aIter.Next();
+                    while (pObj && pObj->IsVisible())
+                    {
+                        uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+                        if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
+                        {
+                            tools::Rectangle aRect(pObj->GetCurrentBoundRect());
+                            lcl_SetMediaScreen(xShape, pDev, aRect, i);
+                        }
+                        pObj = aIter.Next();
+                    }
+                }
+            }
+        }
+    }
 }
 
 void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelection,
@@ -2150,6 +2320,17 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         throw lang::IllegalArgumentException();
 
     ScDocument& rDoc = pDocShell->GetDocument();
+
+    SCTAB nTab;
+    if (!maValidPages.empty())
+        nTab = pPrintFuncCache->GetTabForPage(maValidPages.at(nRenderer) - 1);
+    else
+        nTab = pPrintFuncCache->GetTabForPage(nRenderer);
+
+    tools::Long nTabStart = pPrintFuncCache->GetTabStart(nTab);
+
+    if (nRenderer == nTabStart)
+        lcl_PDFExportMediaShapeScreen(pDev, *m_pPrintState, rDoc, nTab, nTabStart, bSinglePageSheets);
 
     ScRange aRange;
     const ScRange* pSelRange = nullptr;
@@ -2225,12 +2406,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         }
     } aDrawViewKeeper;
 
-    SCTAB nTab;
-    if ( !maValidPages.empty() )
-        nTab = pPrintFuncCache->GetTabForPage( maValidPages.at( nRenderer )-1 );
-    else
-        nTab = pPrintFuncCache->GetTabForPage( nRenderer );
-
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
     if( pModel )
@@ -2285,7 +2460,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         aPage.Select( nRenderer+1 );
 
     tools::Long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
-    tools::Long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >(pDev->GetExtOutDevData() );
     if ( nRenderer == nTabStart )
