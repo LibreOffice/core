@@ -15,4 +15,8 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sw_ooxmlexport21,\
     officecfg/registry \
 ))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_ooxmlexport21,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
