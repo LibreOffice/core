@@ -23,6 +23,7 @@ replacements["BentonSans Medium"]="Noto Sans"
 replacements["BentonSans"]="Noto Sans"
 replacements["AdvPS88D1"]="Noto Sans"
 replacements["NexusSansOT"]="Noto Sans"
+replacements["Segoe Script"]="Noto Sans"
 
 extracted_folder=".temp_extracted"
 
