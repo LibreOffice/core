@@ -179,12 +179,12 @@ namespace basegfx::utils
             const sal_uInt32 nPointCount(rCandidate.count());
             const sal_uInt32 nDotDashCount(rDotDashArray.size());
 
-            if(fTools::lessOrEqual(fDotDashLength, 0.0))
+            if(fDotDashLength <= 0.0)
             {
                 fDotDashLength = std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
-            if(fTools::lessOrEqual(fDotDashLength, 0.0) || !rLineTargetCallback || !nPointCount)
+            if(fDotDashLength <= 0.0 || !rLineTargetCallback || !nPointCount)
             {
                 // parameters make no sense, just add source to targets
                 if (rLineTargetCallback)

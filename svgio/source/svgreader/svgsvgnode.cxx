@@ -484,8 +484,8 @@ namespace svgio::svgreader
                 {
                     // Svg defines that a negative value is an error and that 0.0 disables rendering
                     // isPositive() not usable because it allows 0.0 in contrast to mathematical definition of 'positive'
-                    const bool bWidthInvalid(getWidth().isSet() && basegfx::fTools::lessOrEqual(getWidth().getNumber(), 0.0));
-                    const bool bHeightInvalid(getHeight().isSet() && basegfx::fTools::lessOrEqual(getHeight().getNumber(), 0.0));
+                    const bool bWidthInvalid(getWidth().isSet() && getWidth().getNumber() <= 0.0);
+                    const bool bHeightInvalid(getHeight().isSet() && getHeight().getNumber() <= 0.0);
                     if(!bWidthInvalid && !bHeightInvalid)
                     {
                         basegfx::B2DRange aSvgCanvasRange; // viewport

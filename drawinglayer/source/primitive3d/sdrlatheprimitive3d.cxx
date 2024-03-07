@@ -266,13 +266,13 @@ namespace drawinglayer::primitive3d
             mbCloseBack(bCloseBack)
         {
             // make sure Rotation is positive
-            if(basegfx::fTools::lessOrEqual(getRotation(), 0.0))
+            if(getRotation() <= 0.0)
             {
                 mfRotation = 0.0;
             }
 
             // make sure the percentage value getDiagonal() is between 0.0 and 1.0
-            if(basegfx::fTools::lessOrEqual(getDiagonal(), 0.0))
+            if(getDiagonal() <= 0.0)
             {
                 mfDiagonal = 0.0;
             }

@@ -1239,12 +1239,12 @@ namespace basegfx::utils
             const sal_uInt32 nPointCount(rCandidate.count());
             const sal_uInt32 nDotDashCount(rDotDashArray.size());
 
-            if(fTools::lessOrEqual(fDotDashLength, 0.0))
+            if(fDotDashLength <= 0.0)
             {
                 fDotDashLength = std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
-            if(fTools::lessOrEqual(fDotDashLength, 0.0) || (!rLineTargetCallback && !rGapTargetCallback) || !nPointCount)
+            if(fDotDashLength <= 0.0 || (!rLineTargetCallback && !rGapTargetCallback) || !nPointCount)
             {
                 // parameters make no sense, just add source to targets
                 if (rLineTargetCallback)
@@ -2846,7 +2846,7 @@ namespace basegfx::utils
         {
             OSL_ENSURE(rOld1.count() == rOld2.count(), "B2DPolygon interpolate: Different geometry (!)");
 
-            if(fTools::lessOrEqual(t, 0.0) || rOld1 == rOld2)
+            if(t <= 0.0 || rOld1 == rOld2)
             {
                 return rOld1;
             }

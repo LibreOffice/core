@@ -147,7 +147,7 @@ namespace basegfx
             const B2DVector aTangentA(rCandidate.getTangent(0.0));
             const double fScalarAE(aEdge.scalar(aTangentA));
 
-            if(fTools::lessOrEqual(fScalarAE, 0.0))
+            if(fScalarAE <= 0.0)
             {
                 // angle between TangentA and Edge is bigger or equal 90 degrees
                 return false;
@@ -174,7 +174,7 @@ namespace basegfx
             const B2DVector aTangentB(rCandidate.getTangent(1.0));
             const double fScalarBE(aEdge.scalar(aTangentB));
 
-            if(fTools::lessOrEqual(fScalarBE, 0.0))
+            if(fScalarBE <= 0.0)
             {
                 // angle between TangentB and Edge is bigger or equal 90 degrees
                 return false;

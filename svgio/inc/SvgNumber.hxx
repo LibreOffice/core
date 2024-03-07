@@ -99,7 +99,7 @@ public:
 
     bool isPositive() const
     {
-        return basegfx::fTools::moreOrEqual(mfNumber, 0.0);
+        return mfNumber >= 0.0;
     }
 
     // Only usable in cases, when the unit is not SvgUnit::percent, otherwise use method solve

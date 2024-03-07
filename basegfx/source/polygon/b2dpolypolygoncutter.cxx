@@ -146,16 +146,16 @@ namespace basegfx
                 if(rVecA.cross(rVecB) > 0.0)
                 {
                     // b is left turn seen from a, test if Test is left of both and so inside (left is seen as inside)
-                    const bool bBoolA(fTools::moreOrEqual(rVecA.cross(rTest), 0.0));
-                    const bool bBoolB(fTools::lessOrEqual(rVecB.cross(rTest), 0.0));
+                    const bool bBoolA(rVecA.cross(rTest) >= 0.0);
+                    const bool bBoolB(rVecB.cross(rTest) <= 0.0);
 
                     return (bBoolA && bBoolB);
                 }
                 else
                 {
                     // b is right turn seen from a, test if Test is right of both and so outside (left is seen as inside)
-                    const bool bBoolA(fTools::lessOrEqual(rVecA.cross(rTest), 0.0));
-                    const bool bBoolB(fTools::moreOrEqual(rVecB.cross(rTest), 0.0));
+                    const bool bBoolA(rVecA.cross(rTest) <= 0.0);
+                    const bool bBoolB(rVecB.cross(rTest) >= 0.0);
 
                     return (!(bBoolA && bBoolB));
                 }

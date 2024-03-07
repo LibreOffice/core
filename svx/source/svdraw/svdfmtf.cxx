@@ -1540,7 +1540,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
         const basegfx::BColor aMedium(basegfx::average(aStart, aEnd));
         fTransparence = aMedium.luminance();
 
-        if(basegfx::fTools::lessOrEqual(fTransparence, 0.0))
+        if(fTransparence <= 0.0)
         {
             // no transparence needed, all done
         }

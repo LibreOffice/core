@@ -131,7 +131,7 @@ namespace sdr::contact
                     fHeight = aObjectRange.getHeight();
                 }
 
-                if(basegfx::fTools::lessOrEqual(fWidth, 0.0) ||basegfx::fTools::lessOrEqual(fHeight, 0.0))
+                if(fWidth <= 0.0 || fHeight <= 0.0)
                 {
                     // no texture; fallback to very small size
                     aTextureSize.setX(0.01);

@@ -541,7 +541,7 @@ namespace basegfx
 
     B2DVector B2DCubicBezier::getTangent(double t) const
     {
-        if(fTools::lessOrEqual(t, 0.0))
+        if(t <= 0.0)
         {
             // tangent in start point
             B2DVector aTangent(getControlPointA() - getStartPoint());

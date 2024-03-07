@@ -410,13 +410,13 @@ namespace drawinglayer::primitive3d
             mbCloseBack(bCloseBack)
         {
             // make sure depth is positive
-            if(basegfx::fTools::lessOrEqual(getDepth(), 0.0))
+            if(getDepth() <= 0.0)
             {
                 mfDepth = 0.0;
             }
 
             // make sure the percentage value getDiagonal() is between 0.0 and 1.0
-            if(basegfx::fTools::lessOrEqual(getDiagonal(), 0.0))
+            if(getDiagonal() <= 0.0)
             {
                 mfDiagonal = 0.0;
             }

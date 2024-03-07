@@ -293,7 +293,7 @@ namespace basegfx::trapezoidhelper
 
                 const double fOldDeltaYStart(rCutPoint.getY() - aEdge.getStart().getY());
 
-                if(fTools::lessOrEqual(fOldDeltaYStart, 0.0))
+                if(fOldDeltaYStart <= 0.0)
                 {
                     // do not split: the resulting edge would be horizontal
                     // correct it to new start point
@@ -303,7 +303,7 @@ namespace basegfx::trapezoidhelper
 
                 const double fNewDeltaYStart(aEdge.getEnd().getY() - rCutPoint.getY());
 
-                if(fTools::lessOrEqual(fNewDeltaYStart, 0.0))
+                if(fNewDeltaYStart <= 0.0)
                 {
                     // do not split: the resulting edge would be horizontal
                     // correct it to new end point
@@ -949,7 +949,7 @@ namespace basegfx::utils
             const B2DPoint& rPointB,
             double fLineWidth)
         {
-            if(fTools::lessOrEqual(fLineWidth, 0.0))
+            if(fLineWidth <= 0.0)
             {
                 // no line width
                 return;
@@ -1121,7 +1121,7 @@ namespace basegfx::utils
             const B2DPolygon& rPolygon,
             double fLineWidth)
         {
-            if(fTools::lessOrEqual(fLineWidth, 0.0))
+            if(fLineWidth <= 0.0)
             {
                 return;
             }

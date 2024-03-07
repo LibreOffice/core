@@ -85,7 +85,7 @@ namespace drawinglayer::primitive2d
                 const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);
                 const double fOffsetY((aScale.getY() - aPrefSize.getHeight()) / 2.0);
 
-                if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
+                if(fOffsetX >= 0.0 && fOffsetY >= 0.0)
                 {
                     // if content fits into frame, create it
                     basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(

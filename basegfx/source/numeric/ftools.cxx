@@ -99,7 +99,7 @@ namespace basegfx
 
     double normalizeToRange(double v, const double fRange)
     {
-        if(fTools::lessOrEqual(fRange, 0.0))
+        if(fRange <= 0.0)
         {
             // with a zero (or less) range, all normalizes to 0.0
             return 0.0;

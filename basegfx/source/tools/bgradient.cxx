@@ -200,8 +200,7 @@ void BColorStops::replaceStartColor(const BColor& rStart)
 
     // search for highest existing non-StartColor - CAUTION,
     // there might be none, one or multiple with StopOffset 0.0
-    while (a1stNonStartColor != end()
-           && basegfx::fTools::lessOrEqual(a1stNonStartColor->getStopOffset(), 0.0))
+    while (a1stNonStartColor != end() && a1stNonStartColor->getStopOffset() <= 0.0)
         a1stNonStartColor++;
 
     // create new ColorStops by 1st adding new one and then all
