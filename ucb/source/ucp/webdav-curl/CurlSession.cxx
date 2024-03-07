@@ -1530,9 +1530,8 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
     DAVResource result;
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(headerNames, result);
 
-    ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, "OPTIONS", "CURLOPT_CUSTOMREQUEST" }
-    };
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "OPTIONS",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(*this, uri, "OPTIONS", options, &rEnv, nullptr, nullptr, nullptr,
                                   &headers);
