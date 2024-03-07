@@ -76,6 +76,8 @@ interface XTest {
     boolean isAnyStruct([in] any value);
     any getAnyException();
     boolean isAnyException([in] any value);
+    any getAnyInterface();
+    boolean isAnyInterface([in] any value);
     sequence<boolean> getSequenceBoolean();
     boolean isSequenceBoolean([in] sequence<boolean> value);
     sequence<byte> getSequenceByte();

@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppu/unotype.hxx>
@@ -281,6 +282,19 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         auto const& e = *o3tl::forceAccess<org::libreoffice::embindtest::Exception>(value);
         return e.Message.startsWith("error") && !e.Context.is() && e.m1 == -123456 && e.m2 == 100.5
                && e.m3 == u"hä";
+    }
+
+    css::uno::Any SAL_CALL getAnyInterface() override
+    {
+        return css::uno::Any(css::uno::Reference<org::libreoffice::embindtest::XTest>(this));
+    }
+
+    sal_Bool SAL_CALL isAnyInterface(css::uno::Any const& value) override
+    {
+        return value.getValueType() == cppu::UnoType<org::libreoffice::embindtest::XTest>::get()
+               && *o3tl::forceAccess<css::uno::Reference<org::libreoffice::embindtest::XTest>>(
+                      value)
+                      == static_cast<OWeakObject*>(this);
     }
 
     css::uno::Sequence<sal_Bool> SAL_CALL getSequenceBoolean() override
