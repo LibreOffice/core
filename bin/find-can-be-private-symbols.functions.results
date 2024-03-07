@@ -9405,14 +9405,10 @@ SvNumberFormatter::GetTimeFormat(double, o3tl::strong_int<unsigned short, Langua
 SvNumberFormatter::GetTransliteration() const
 SvNumberFormatter::GetUserDefColor(unsigned short)
 SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(NfCurrencyEntry const*&, bool&, NfCurrencyEntry const*, unsigned short, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-SvNumberFormatter::ImpSubstituteEntry(SvNumberformat*, unsigned int*)
 SvNumberFormatter::InvalidateDateAcceptancePatterns()
 SvNumberFormatter::IsDecimalSep(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
 SvNumberFormatter::IsLocaleInstalled(o3tl::strong_int<unsigned short, LanguageTypeTag>)
-SvNumberFormatter::IsSpecialStandardFormat(unsigned int, o3tl::strong_int<unsigned short, LanguageTypeTag>)
 SvNumberFormatter::PutandConvertEntrySystem(rtl::OUString&, int&, SvNumFormatType&, unsigned int&, o3tl::strong_int<unsigned short, LanguageTypeTag>, o3tl::strong_int<unsigned short, LanguageTypeTag>)
-SvNumberFormatter::ReplaceSystemCL(o3tl::strong_int<unsigned short, LanguageTypeTag>)
-SvNumberFormatter::ResetDefaultSystemCurrency()
 SvNumberFormatter::SetDefaultSystemCurrency(std::basic_string_view<char16_t, std::char_traits<char16_t> >, o3tl::strong_int<unsigned short, LanguageTypeTag>)
 SvNumberFormatter::SetNoZero(bool)
 SvNumberformat::GetCal() const
@@ -19343,7 +19339,6 @@ formula::FormulaTokenArray::operator=(formula::FormulaTokenArray const&)
 formula::FormulaTokenArray::operator=(formula::FormulaTokenArray&&)
 formula::FormulaTokenArrayPlainIterator::AfterRemoveToken(unsigned short, unsigned short)
 formula::FormulaTokenArrayPlainIterator::PeekNext()
-formula::FormulaTokenIterator::GetNonEndOfPathToken(short) const
 formula::FormulaTokenIterator::Item::Item(formula::FormulaTokenArray const*, short, short)
 formula::FormulaTokenIterator::Push(formula::FormulaTokenArray const*)
 formula::FormulaTypedDoubleToken::GetDoubleType() const

@@ -577,7 +577,7 @@ public:
     void ReInit( const FormulaTokenArray& );
 
 private:
-    const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
+    SAL_DLLPRIVATE const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
 };
 
 // For use in SAL_INFO, SAL_WARN etc
