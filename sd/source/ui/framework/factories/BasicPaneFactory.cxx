@@ -345,7 +345,8 @@ Reference<XResource> BasicPaneFactory::CreateFullScreenPane (
         new FullScreenPane(
             rxComponentContext,
             rxPaneId,
-            mpViewShellBase->GetViewWindow()));
+            mpViewShellBase->GetViewWindow(),
+            mpViewShellBase->GetDocShell()));
 
     return xPane;
 }

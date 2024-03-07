@@ -155,6 +155,7 @@
 #define STR_EFFECTDLG_PROGRAM                           NC_("STR_EFFECTDLG_PROGRAM", "Program")
 #define STR_EFFECTDLG_MACRO                             NC_("STR_EFFECTDLG_MACRO", "Macro")
 #define STR_FULLSCREEN_SLIDESHOW                        NC_("STR_FULLSCREEN_SLIDESHOW", "Presenting: %s")
+#define STR_FULLSCREEN_CONSOLE                          NC_("STR_FULLSCREEN_CONSOLE", "Console: %s")
 
 // To translators: this is the spinbutton in the slidesorter toolbar to set the number of slides to show per row
 #define STR_SLIDES                                      NNC_("STR_SLIDES", "%1 slide", "%1 slides")

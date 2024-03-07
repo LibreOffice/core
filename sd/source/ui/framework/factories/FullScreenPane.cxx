@@ -26,6 +26,9 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -36,7 +39,8 @@ namespace sd::framework {
 FullScreenPane::FullScreenPane (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<XResourceId>& rxPaneId,
-    const vcl::Window* pViewShellWindow)
+    const vcl::Window* pViewShellWindow,
+    const DrawDocShell* pDrawDocShell)
     : FrameWindowPane(rxPaneId,nullptr),
       mxComponentContext(rxComponentContext)
 {
@@ -76,10 +80,12 @@ FullScreenPane::FullScreenPane (
 
     // Set title and icon of the new window to those of the current window
     // of the view shell.
-    if (pViewShellWindow != nullptr)
+    if (pViewShellWindow != nullptr && pDrawDocShell != nullptr)
     {
-        const SystemWindow* pSystemWindow = pViewShellWindow->GetSystemWindow();
-        mpWorkWindow->SetText(pSystemWindow->GetText());
+        SystemWindow* pSystemWindow = pViewShellWindow->GetSystemWindow();
+        OUString Title(SdResId(STR_FULLSCREEN_CONSOLE));
+        Title = Title.replaceFirst("%s", pDrawDocShell->GetTitle(SFX_TITLE_DETECT));
+        mpWorkWindow->SetText(Title);
         mpWorkWindow->SetIcon(pSystemWindow->GetIcon());
     }
 

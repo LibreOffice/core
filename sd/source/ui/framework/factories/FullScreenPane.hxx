@@ -27,6 +27,7 @@ class VclWindowEvent;
 
 namespace vcl { class Window; }
 namespace com::sun::star::uno { class XComponentContext; }
+namespace sd { class DrawDocShell; }
 
 namespace sd::framework {
 
@@ -43,13 +44,17 @@ public:
         @param rxPaneId
             The resource id of the new pane.
         @param pViewShellWindow
-            The top-level parent of this window is used to obtain title and
+            The top-level parent of this window is used to obtain
             icon for the new top-level window.
+        @param pDrawDocShell
+            The DrawDocShell parent of this window is used to obtain
+            title for the new top-level window.
     */
     FullScreenPane (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const vcl::Window* pViewShellWindow);
+        const vcl::Window* pViewShellWindow,
+        const DrawDocShell* pDrawDocShell);
     virtual ~FullScreenPane() noexcept override;
 
     virtual void SAL_CALL disposing() override;
