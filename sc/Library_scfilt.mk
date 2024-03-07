@@ -196,6 +196,8 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/pivotcachefragment \
 	sc/source/filter/oox/pivottablebuffer \
 	sc/source/filter/oox/pivottablefragment \
+	sc/source/filter/oox/PivotTableFormat \
+	sc/source/filter/oox/PivotTableFormatContext \
 	sc/source/filter/oox/querytablebuffer \
 	sc/source/filter/oox/querytablefragment \
 	sc/source/filter/oox/revisionfragment \

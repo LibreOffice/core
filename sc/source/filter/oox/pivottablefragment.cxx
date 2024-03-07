@@ -19,6 +19,7 @@
 
 #include <pivottablefragment.hxx>
 #include <pivottablebuffer.hxx>
+#include <PivotTableFormatContext.hxx>
 #include <biffhelper.hxx>
 #include <oox/token/namespaces.hxx>
 
@@ -174,12 +175,14 @@ ContextHandlerRef PivotTableFragment::onCreateContext( sal_Int32 nElement, const
             switch( nElement )
             {
                 case XLS_TOKEN( location ):     mrPivotTable.importLocation( rAttribs, getSheetIndex() );   break;
-                case XLS_TOKEN( pivotFields ):  return this;
-                case XLS_TOKEN( rowFields ):    return this;
-                case XLS_TOKEN( colFields ):    return this;
-                case XLS_TOKEN( pageFields ):   return this;
-                case XLS_TOKEN( dataFields ):   return this;
-                case XLS_TOKEN( filters ):      return this;
+                case XLS_TOKEN(pivotFields):
+                case XLS_TOKEN(rowFields):
+                case XLS_TOKEN(colFields):
+                case XLS_TOKEN(pageFields):
+                case XLS_TOKEN(dataFields):
+                case XLS_TOKEN(filters):
+                case XLS_TOKEN(formats):
+                    return this;
                 case XLS_TOKEN(pivotTableStyleInfo):
                     mrPivotTable.putToInteropGrabBag("pivotTableStyleInfo", rAttribs);
                     break;
@@ -203,6 +206,10 @@ ContextHandlerRef PivotTableFragment::onCreateContext( sal_Int32 nElement, const
         break;
         case XLS_TOKEN( filters ):
             if( nElement == XLS_TOKEN( filter ) ) return new PivotTableFilterContext( *this, mrPivotTable.createTableFilter() );
+        break;
+        case XLS_TOKEN(formats):
+            if (nElement == XLS_TOKEN(format))
+                return new PivotTableFormatContext(*this, mrPivotTable.createFormat());
         break;
     }
     return nullptr;

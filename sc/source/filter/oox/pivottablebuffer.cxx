@@ -60,6 +60,7 @@
 #include <document.hxx>
 #include <documentimport.hxx>
 #include <workbooksettings.hxx>
+#include <PivotTableFormat.hxx>
 
 namespace oox::xls {
 
@@ -1234,6 +1235,13 @@ PivotTableFilter& PivotTable::createTableFilter()
     return *xTableFilter;
 }
 
+PivotTableFormat& PivotTable::createFormat()
+{
+    PivotTableFormatVector::value_type xFormat = std::make_shared<PivotTableFormat>(*this);
+    maFormats.push_back(xFormat);
+    return *xFormat;
+}
+
 void PivotTable::finalizeImport()
 {
     if( !getAddressConverter().validateCellRange( maLocationModel.maRange, true, true ) )
@@ -1327,6 +1335,10 @@ void PivotTable::finalizeImport()
 
         // filters
         maFilters.forEachMem( &PivotTableFilter::finalizeImport );
+
+        // formats
+        //for (auto& pFormat : maFormats)
+        //    pFormat->finalizeImport();
 
         // calculate base position of table
         CellAddress aPos( maLocationModel.maRange.aStart.Tab(), maLocationModel.maRange.aStart.Col(), maLocationModel.maRange.aStart.Row() );

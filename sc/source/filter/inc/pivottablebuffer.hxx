@@ -20,6 +20,7 @@
 #pragma once
 
 #include "pivotcachebuffer.hxx"
+#include "PivotTableFormat.hxx"
 #include "stylesbuffer.hxx"
 #include <rtl/ref.hxx>
 
@@ -318,6 +319,8 @@ public:
     PivotTableField&    createTableField();
     /** Creates and returns a new pivot table filter. */
     PivotTableFilter&   createTableFilter();
+    /** Creates and returns a new pivot table format. */
+    PivotTableFormat& createFormat();
     /** Inserts the pivot table into the sheet. */
     void                finalizeImport();
     /** Finalizes all fields, finds field names and creates grouping fields. */
@@ -377,6 +380,7 @@ private:
     PageFieldVector       maPageFields;       /// Settings for all fields in page dimension.
     DataFieldVector       maDataFields;       /// Settings for all fields in data area.
     PivotTableFilterVector maFilters;       /// All field filters.
+    PivotTableFormatVector maFormats;
     PTDefinitionModel     maDefModel;         /// Global pivot table settings.
     PTLocationModel       maLocationModel;    /// Location settings of the pivot table.
     PivotCache*           mpPivotCache;       /// The pivot cache this table is based on.
