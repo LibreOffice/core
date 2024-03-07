@@ -459,7 +459,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     if(rBitmapEx.IsEmpty())
         return;
 
-    if(rtl::math::approxEqual( fAlpha, 0.0 ))
+    if( fAlpha == 0.0 )
         return;
 
     // MM02 compared to other public methods of OutputDevice

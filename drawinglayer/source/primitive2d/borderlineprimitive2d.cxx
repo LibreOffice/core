@@ -331,7 +331,7 @@ namespace drawinglayer::primitive2d
             // direction has to be equal -> cross product == 0.0
             const basegfx::B2DVector aVT(pCandidateA->getEnd() - pCandidateA->getStart());
             const basegfx::B2DVector aVC(pCandidateB->getEnd() - pCandidateB->getStart());
-            if(!rtl::math::approxEqual(0.0, aVC.cross(aVT)))
+            if(aVC.cross(aVT) != 0)
             {
                 return Primitive2DReference();
             }
