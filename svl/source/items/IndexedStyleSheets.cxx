@@ -47,13 +47,13 @@ IndexedStyleSheets::IndexedStyleSheets()
 {
 }
 
-void IndexedStyleSheets::Register(const SfxStyleSheetBase& style, sal_Int32 pos)
+void IndexedStyleSheets::Register(SfxStyleSheetBase& style, sal_Int32 pos)
 {
     mPositionsByName.insert(std::make_pair(style.GetName(), pos));
     size_t position = family_to_index(style.GetFamily());
-    mStyleSheetPositionsByFamily.at(position).push_back(pos);
+    mStyleSheetsByFamily.at(position).push_back(&style);
     size_t positionForFamilyAll = family_to_index(SfxStyleFamily::All);
-    mStyleSheetPositionsByFamily.at(positionForFamilyAll).push_back(pos);
+    mStyleSheetsByFamily.at(positionForFamilyAll).push_back(&style);
 }
 
 void
@@ -61,7 +61,7 @@ IndexedStyleSheets::Reindex()
 {
     mPositionsByName.clear();
     for (size_t i = 0; i < NUMBER_OF_FAMILIES; i++) {
-        mStyleSheetPositionsByFamily[i].clear();
+        mStyleSheetsByFamily[i].clear();
     }
 
     sal_Int32 i = 0;
@@ -222,11 +222,11 @@ IndexedStyleSheets::FindPositionsByPredicate(StyleSheetPredicate& predicate) con
     return r;
 }
 
-const std::vector<sal_Int32>&
-IndexedStyleSheets::GetStyleSheetPositionsByFamily(SfxStyleFamily e) const
+const std::vector<SfxStyleSheetBase*>&
+IndexedStyleSheets::GetStyleSheetsByFamily(SfxStyleFamily e) const
 {
     size_t position = family_to_index(e);
-    return mStyleSheetPositionsByFamily.at(position);
+    return mStyleSheetsByFamily.at(position);
 }
 
 } /* namespace svl */

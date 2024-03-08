@@ -153,11 +153,11 @@ public:
 
     /** Get the positions of the style sheets which belong to a certain family.
      */
-    const std::vector<sal_Int32>& GetStyleSheetPositionsByFamily(SfxStyleFamily) const;
+    const std::vector<SfxStyleSheetBase*>& GetStyleSheetsByFamily(SfxStyleFamily) const;
 
 private:
     /** Register the position of a styleName in the index */
-    void Register(const SfxStyleSheetBase& style, sal_Int32 pos);
+    void Register(SfxStyleSheetBase& style, sal_Int32 pos);
 
     typedef std::vector<rtl::Reference<SfxStyleSheetBase>> VectorType;
     /** Vector with the stylesheets to allow for index-based access.
@@ -175,7 +175,7 @@ private:
 
     static constexpr size_t NUMBER_OF_FAMILIES = 7;
 
-    std::array<std::vector<sal_Int32>, NUMBER_OF_FAMILIES> mStyleSheetPositionsByFamily;
+    std::array<std::vector<SfxStyleSheetBase*>, NUMBER_OF_FAMILIES> mStyleSheetsByFamily;
 };
 
 } /* namespace svl */

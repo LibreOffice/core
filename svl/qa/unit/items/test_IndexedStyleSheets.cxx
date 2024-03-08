@@ -176,10 +176,10 @@ void IndexedStyleSheetsTest::PositionCanBeQueriedByFamily()
     iss.AddStyleSheet(sheet2);
     iss.AddStyleSheet(sheet3);
 
-    const std::vector<sal_Int32>& v = iss.GetStyleSheetPositionsByFamily(SfxStyleFamily::Char);
+    const std::vector<SfxStyleSheetBase*>& v = iss.GetStyleSheetsByFamily(SfxStyleFamily::Char);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Separation by family works.", static_cast<size_t>(2), v.size());
 
-    const std::vector<sal_Int32>& w = iss.GetStyleSheetPositionsByFamily(SfxStyleFamily::All);
+    const std::vector<SfxStyleSheetBase*>& w = iss.GetStyleSheetsByFamily(SfxStyleFamily::All);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wildcard works for family queries.", static_cast<size_t>(3), w.size());
 }
 

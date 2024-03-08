@@ -415,7 +415,7 @@ sal_Int32 SfxStyleSheetIterator::Count()
     }
     else if(nMask == SfxStyleSearchBits::All)
     {
-        n = static_cast<sal_uInt16>(pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily).size());
+        n = static_cast<sal_uInt16>(pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetsByFamily(nSearchFamily).size());
     }
     else
     {
@@ -435,11 +435,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_Int32 nIdx)
     }
     else if(nMask == SfxStyleSearchBits::All)
     {
-        rtl::Reference< SfxStyleSheetBase > ref =
-        pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(
-                pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily).at(nIdx))
-                ;
-        retval = ref.get();
+        retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetsByFamily(nSearchFamily).at(nIdx);
         mnCurrentPosition = nIdx;
     }
     else
@@ -489,14 +485,13 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
     else if(nMask == SfxStyleSearchBits::All)
     {
         sal_Int32 newPosition = mnCurrentPosition + 1;
-        const std::vector<sal_Int32>& familyVector
+        const std::vector<SfxStyleSheetBase*>& familyVector
             =
-            pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily);
+            pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetsByFamily(nSearchFamily);
         if (static_cast<sal_Int32>(familyVector.size()) > newPosition)
         {
             mnCurrentPosition = newPosition;
-            sal_Int32 stylePosition = familyVector[newPosition];
-            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(stylePosition);
+            retval = familyVector[newPosition];
         }
     }
     else
