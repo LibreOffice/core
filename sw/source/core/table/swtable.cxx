@@ -1745,13 +1745,19 @@ void SwTable::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTable"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("table-format"), "%p", GetFrameFormat());
-    for (const auto& pLine : GetTabLines())
+    for (const auto& pLine : m_aLines)
     {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableLine"));
         (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pLine);
         pLine->GetFrameFormat()->dumpAsXml(pWriter);
         (void)xmlTextWriterEndElement(pWriter);
     }
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("tab-sort-content-boxes"));
+    for (const auto& pBox : m_TabSortContentBoxes)
+    {
+        pBox->dumpAsXml(pWriter);
+    }
+    (void)xmlTextWriterEndElement(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -3050,6 +3056,7 @@ void SwTableBox::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableBox"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("start-node"), BAD_CAST(OString::number(static_cast<sal_Int32>(m_pStartNode->GetIndex())).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("rowspan"), BAD_CAST(OString::number(mnRowSpan).getStr()));
     GetFrameFormat()->dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
