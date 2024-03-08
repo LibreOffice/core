@@ -1689,7 +1689,7 @@ void VCartesianAxis::createDataTableShape(std::unique_ptr<TickFactory2D> const& 
 
     if (nDistance <= 0)
     {
-        // we only have one data series so we have no TickMarks, therefor calculate and use the table size
+        // we only have one data series so we have no TickMarks, therefore calculate and use the table size
         auto rDelta = aEnd - aStart;
         nDistance = basegfx::fround(rDelta.getX());
     }
