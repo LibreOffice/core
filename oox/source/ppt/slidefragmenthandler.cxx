@@ -112,7 +112,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
         if( !bNotesFragmentPathFound && !mpSlidePersistPtr->getMasterPersist() )
         {
             SlidePersistPtr pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, true, mpSlidePersistPtr->getPage(),
-                                std::make_shared<PPTShape>( Master, "com.sun.star.drawing.GroupShape" ), mpSlidePersistPtr->getNotesTextStyle() );
+                                std::make_shared<PPTShape>( Master, u"com.sun.star.drawing.GroupShape"_ustr ), mpSlidePersistPtr->getNotesTextStyle() );
             pMasterPersistPtr->setPath( aNotesFragmentPath );
             rFilter.getMasterPages().push_back( pMasterPersistPtr );
             FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aNotesFragmentPath, pMasterPersistPtr, Master ) );
@@ -131,7 +131,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
         {
             return new PPTShapeGroupContext(
                 *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
-                std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.GroupShape" ) );
+                std::make_shared<PPTShape>( meShapeLocation, u"com.sun.star.drawing.GroupShape"_ustr ) );
         }
         break;
 

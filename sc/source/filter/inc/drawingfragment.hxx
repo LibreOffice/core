@@ -58,7 +58,7 @@ public:
     explicit            Shape(
                             const WorksheetHelper& rHelper,
                             const AttributeList& rAttribs,
-                            const char* pcServiceName );
+                            const OUString& rServiceName );
 
 private:
     virtual void        finalizeXShape(

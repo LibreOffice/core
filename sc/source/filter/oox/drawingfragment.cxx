@@ -91,8 +91,8 @@ void ShapeMacroAttacher::attachMacro( const OUString& rMacroUrl )
     }
 }
 
-Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, const char* pcServiceName ) :
-    ::oox::drawingml::Shape( pcServiceName ),
+Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, const OUString& rServiceName ) :
+    ::oox::drawingml::Shape( rServiceName ),
     WorksheetHelper( rHelper )
 {
     OUString aMacro = rAttribs.getXString( XML_macro, OUString() );
@@ -134,32 +134,32 @@ GroupShapeContext::GroupShapeContext( const FragmentHandler2& rParent,
     {
         case XDR_TOKEN( sp ):
         {
-            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.CustomShape" );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, u"com.sun.star.drawing.CustomShape"_ustr );
             if( pxShape ) *pxShape = xShape;
             return new ShapeContext( rParent, rxParentShape, xShape );
         }
         case XDR_TOKEN( cxnSp ):
         {
-            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.ConnectorShape" );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, u"com.sun.star.drawing.ConnectorShape"_ustr );
             if( pxShape ) *pxShape = xShape;
             return new ConnectorShapeContext(rParent, rxParentShape, xShape,
                                              xShape->getConnectorShapeProperties());
         }
         case XDR_TOKEN( pic ):
         {
-            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, u"com.sun.star.drawing.GraphicObjectShape"_ustr );
             if( pxShape ) *pxShape = xShape;
             return new GraphicShapeContext( rParent, rxParentShape, xShape );
         }
         case XDR_TOKEN( graphicFrame ):
         {
-            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, u"com.sun.star.drawing.GraphicObjectShape"_ustr );
             if( pxShape ) *pxShape = xShape;
             return new GraphicalObjectFrameContext( rParent, rxParentShape, xShape, rHelper.getSheetType() != WorksheetType::Chart );
         }
         case XDR_TOKEN( grpSp ):
         {
-            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.GroupShape" );
+            ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, u"com.sun.star.drawing.GroupShape"_ustr );
             if( pxShape ) *pxShape = xShape;
             return new GroupShapeContext( rParent, rHelper, rxParentShape, xShape );
         }

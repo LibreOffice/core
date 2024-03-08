@@ -126,7 +126,7 @@ using namespace ::com::sun::star::style;
 
 namespace oox::drawingml {
 
-Shape::Shape( const char* pServiceName, bool bDefaultHeight )
+Shape::Shape()
 : mpLinePropertiesPtr( std::make_shared<LineProperties>() )
 , mpShapeRefLinePropPtr( std::make_shared<LineProperties>() )
 , mpFillPropertiesPtr( std::make_shared<FillProperties>() )
@@ -155,8 +155,40 @@ Shape::Shape( const char* pServiceName, bool bDefaultHeight )
 , maDiagramDoms( 0 )
 , mpDiagramHelper( nullptr )
 {
-    if ( pServiceName )
-        msServiceName = OUString::createFromAscii( pServiceName );
+    setDefaults(/*bDefaultHeight*/true);
+}
+
+
+Shape::Shape( const OUString& rServiceName, bool bDefaultHeight )
+: mpLinePropertiesPtr( std::make_shared<LineProperties>() )
+, mpShapeRefLinePropPtr( std::make_shared<LineProperties>() )
+, mpFillPropertiesPtr( std::make_shared<FillProperties>() )
+, mpShapeRefFillPropPtr( std::make_shared<FillProperties>() )
+, mpGraphicPropertiesPtr( std::make_shared<GraphicProperties>() )
+, mpCustomShapePropertiesPtr( std::make_shared<CustomShapeProperties>() )
+, mp3DPropertiesPtr( std::make_shared<Shape3DProperties>() )
+, mpEffectPropertiesPtr( std::make_shared<EffectProperties>() )
+, mpShapeRefEffectPropPtr( std::make_shared<EffectProperties>() )
+, mpMasterTextListStyle( std::make_shared<TextListStyle>() )
+, mnSubType( 0 )
+, meFrameType( FRAMETYPE_GENERIC )
+, mnRotation( 0 )
+, mnDiagramRotation( 0 )
+, mbFlipH( false )
+, mbFlipV( false )
+, mbHidden( false )
+, mbHiddenMasterShape( false )
+, mbLocked( false )
+, mbWPGChild(false)
+, mbLockedCanvas( false )
+, mbWordprocessingCanvas(false)
+, mbWps( false )
+, mbTextBox( false )
+, mbHasLinkedTxbx( false )
+, maDiagramDoms( 0 )
+, mpDiagramHelper( nullptr )
+{
+    msServiceName = rServiceName;
     setDefaults(bDefaultHeight);
 }
 
@@ -313,9 +345,9 @@ ChartShapeInfo& Shape::setChartType( bool bEmbedShapes )
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setChartType - multiple frame types" );
     meFrameType = FRAMETYPE_CHART;
     if (mbWps)
-        msServiceName = "com.sun.star.drawing.temporaryForXMLImportOLE2Shape";
+        msServiceName = u"com.sun.star.drawing.temporaryForXMLImportOLE2Shape"_ustr;
     else
-        msServiceName = "com.sun.star.drawing.OLE2Shape";
+        msServiceName = u"com.sun.star.drawing.OLE2Shape"_ustr;
     mxChartShapeInfo = std::make_shared<ChartShapeInfo>( bEmbedShapes );
     return *mxChartShapeInfo;
 }
@@ -324,7 +356,7 @@ void Shape::setDiagramType()
 {
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setDiagramType - multiple frame types" );
     meFrameType = FRAMETYPE_DIAGRAM;
-    msServiceName = "com.sun.star.drawing.GroupShape";
+    msServiceName = u"com.sun.star.drawing.GroupShape"_ustr;
     mnSubType = 0;
 }
 
@@ -332,14 +364,8 @@ void Shape::setTableType()
 {
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setTableType - multiple frame types" );
     meFrameType = FRAMETYPE_TABLE;
-    msServiceName = "com.sun.star.drawing.TableShape";
+    msServiceName = u"com.sun.star.drawing.TableShape"_ustr;
     mnSubType = 0;
-}
-
-void Shape::setServiceName( const char* pServiceName )
-{
-    if ( pServiceName )
-        msServiceName = OUString::createFromAscii( pServiceName );
 }
 
 const ShapeStyleRef* Shape::getShapeStyleRef( sal_Int32 nRefType ) const
@@ -926,7 +952,7 @@ Reference< XShape > const & Shape::createAndInsert(
     if (pMathXml)
     {
         // convert this shape to OLE
-        aServiceName = "com.sun.star.drawing.OLE2Shape";
+        aServiceName = u"com.sun.star.drawing.OLE2Shape"_ustr;
         msServiceName = aServiceName;
         meFrameType = FRAMETYPE_GENERIC; // not OLEOBJECT, no stream in package
         mnSubType = 0;

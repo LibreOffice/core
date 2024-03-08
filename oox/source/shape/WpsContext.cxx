@@ -584,7 +584,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 break;
             // Generate new shape
             oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
-                "com.sun.star.drawing.ConnectorShape", false);
+                u"com.sun.star.drawing.ConnectorShape"_ustr, false);
             pShape->setConnectorShape(true);
             pShape->setWps(true);
             pShape->setWordprocessingCanvas(true);

@@ -246,7 +246,7 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         }
 
         pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, false, xMasterPage,
-                                                            std::make_shared<PPTShape>( Master, "com.sun.star.drawing.GroupShape" ), mpTextListStyle );
+                                                            std::make_shared<PPTShape>( Master, u"com.sun.star.drawing.GroupShape"_ustr ), mpTextListStyle );
         pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
         rFilter.getMasterPages().push_back( pMasterPersistPtr );
         rFilter.setActualSlidePersist( pMasterPersistPtr );
@@ -404,7 +404,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
         {
             SlidePersistPtr pMasterPersistPtr;
             SlidePersistPtr pSlidePersistPtr = std::make_shared<SlidePersist>( rFilter, false, false, xSlide,
-                                std::make_shared<PPTShape>( Slide, "com.sun.star.drawing.GroupShape" ), mpTextListStyle );
+                                std::make_shared<PPTShape>( Slide, u"com.sun.star.drawing.GroupShape"_ustr ), mpTextListStyle );
 
             FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( rFilter, aSlideFragmentPath, pSlidePersistPtr, Slide ) );
 
@@ -458,7 +458,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                         if ( xNotesPage.is() )
                         {
                             SlidePersistPtr pNotesPersistPtr = std::make_shared<SlidePersist>( rFilter, false, true, xNotesPage,
-                                std::make_shared<PPTShape>( Slide, "com.sun.star.drawing.GroupShape" ), mpTextListStyle );
+                                std::make_shared<PPTShape>( Slide, u"com.sun.star.drawing.GroupShape"_ustr ), mpTextListStyle );
                             FragmentHandlerRef xNotesFragmentHandler( new SlideFragmentHandler( getFilter(), aNotesFragmentPath, pNotesPersistPtr, Slide ) );
                             rFilter.getNotesPages().push_back( pNotesPersistPtr );
                             rFilter.setActualSlidePersist( pNotesPersistPtr );
@@ -479,7 +479,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                 SlidePersistPtr pCommentAuthorsPersistPtr =
                     std::make_shared<SlidePersist>( rFilter, false, true, xCommentAuthorsPage,
                                       std::make_shared<PPTShape>(
-                                              Slide, "com.sun.star.drawing.GroupShape" ),
+                                              Slide, u"com.sun.star.drawing.GroupShape"_ustr ),
                                       mpTextListStyle );
                 FragmentHandlerRef xCommentAuthorsFragmentHandler(
                     new SlideFragmentHandler( getFilter(),
@@ -498,7 +498,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                     std::make_shared<SlidePersist>(
                         rFilter, false, true, xCommentsPage,
                         std::make_shared<PPTShape>(
-                                Slide, "com.sun.star.drawing.GroupShape" ),
+                                Slide, u"com.sun.star.drawing.GroupShape"_ustr ),
                         mpTextListStyle );
 
                 FragmentHandlerRef xCommentsFragmentHandler(

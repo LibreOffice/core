@@ -100,15 +100,15 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
 */
     case PPT_TOKEN( cxnSp ):        // connector shape
     {
-        auto pShape = std::make_shared<PPTShape>(meShapeLocation, "com.sun.star.drawing.ConnectorShape");
+        auto pShape = std::make_shared<PPTShape>(meShapeLocation, u"com.sun.star.drawing.ConnectorShape"_ustr);
         return new oox::drawingml::ConnectorShapeContext(*this, mpGroupShapePtr, pShape,
                                                          pShape->getConnectorShapeProperties());
     }
     case PPT_TOKEN( grpSp ):        // group shape
-        return new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.GroupShape" ) );
+        return new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, std::make_shared<PPTShape>( meShapeLocation, u"com.sun.star.drawing.GroupShape"_ustr ) );
     case PPT_TOKEN( sp ):           // Shape
         {
-            auto pShape = std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.CustomShape" );
+            auto pShape = std::make_shared<PPTShape>( meShapeLocation, u"com.sun.star.drawing.CustomShape"_ustr );
             bool bUseBgFill = rAttribs.getBool(XML_useBgFill, false);
             if (bUseBgFill)
             {
@@ -119,10 +119,10 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );
         }
     case PPT_TOKEN( pic ):          // CT_Picture
-        return new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) );
+        return new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  std::make_shared<PPTShape>( meShapeLocation, u"com.sun.star.drawing.GraphicObjectShape"_ustr ) );
     case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
         {
-            pGraphicShape = std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.OLE2Shape" );
+            pGraphicShape = std::make_shared<PPTShape>( meShapeLocation, u"com.sun.star.drawing.OLE2Shape"_ustr );
             return new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, pGraphicShape, true );
         }
     }

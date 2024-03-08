@@ -58,8 +58,8 @@ using namespace ::com::sun::star::presentation;
 
 namespace oox::ppt {
 
-PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const char* pServiceName )
-: Shape( pServiceName )
+PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const OUString& rServiceName )
+: Shape( rServiceName )
 , meShapeLocation( eShapeLocation )
 , mbReferenced( false )
 , mbHasNoninheritedShapeProperties( false )

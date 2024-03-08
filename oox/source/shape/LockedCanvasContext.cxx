@@ -26,7 +26,7 @@ namespace oox::shape
 LockedCanvasContext::LockedCanvasContext(FragmentHandler2 const& rParent)
     : FragmentHandler2(rParent)
 {
-    mpShapePtr = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape");
+    mpShapePtr = std::make_shared<oox::drawingml::Shape>(u"com.sun.star.drawing.GroupShape"_ustr);
     mpShapePtr->setLockedCanvas(true); // will be "LockedCanvas" in InteropGrabBag
 }
 
@@ -47,12 +47,13 @@ LockedCanvasContext::onCreateContext(sal_Int32 nElementToken, const ::oox::Attri
         {
             return new oox::drawingml::ShapeContext(
                 *this, mpShapePtr,
-                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.CustomShape", true));
+                std::make_shared<oox::drawingml::Shape>(u"com.sun.star.drawing.CustomShape"_ustr,
+                                                        true));
         }
         case XML_cxnSp: // CT_GvmlConnector
         {
-            oox::drawingml::ShapePtr pShape
-                = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.ConnectorShape");
+            oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
+                u"com.sun.star.drawing.ConnectorShape"_ustr);
             return new oox::drawingml::ConnectorShapeContext(*this, mpShapePtr, pShape,
                                                              pShape->getConnectorShapeProperties());
         }
@@ -60,20 +61,22 @@ LockedCanvasContext::onCreateContext(sal_Int32 nElementToken, const ::oox::Attri
         {
             return new oox::drawingml::GraphicShapeContext(
                 *this, mpShapePtr,
-                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape"));
+                std::make_shared<oox::drawingml::Shape>(
+                    u"com.sun.star.drawing.GraphicObjectShape"_ustr));
         }
         case XML_graphicFrame: // CT_GvmlGraphicObjectFrame
         {
             return new oox::drawingml::GraphicalObjectFrameContext(
                 *this, mpShapePtr,
-                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape"),
+                std::make_shared<oox::drawingml::Shape>(
+                    u"com.sun.star.drawing.GraphicObjectShape"_ustr),
                 true);
         }
         case XML_grpSp: // CT_GvmlGroupShape
         {
             return new oox::drawingml::ShapeGroupContext(
                 *this, mpShapePtr,
-                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape"));
+                std::make_shared<oox::drawingml::Shape>(u"com.sun.star.drawing.GroupShape"_ustr));
         }
         // mandatory child elements of CT_GvmlGroupShapeNonVisual
         case XML_cNvPr: // CT_NonVisualDrawingProps

@@ -58,7 +58,7 @@ class PPTShape final : public oox::drawingml::Shape
 public:
 
     PPTShape( const oox::ppt::ShapeLocation eShapeLocation,
-                const char* pServiceType );
+                const OUString& rServiceType );
     virtual ~PPTShape() override;
 
     using oox::drawingml::Shape::addShape;

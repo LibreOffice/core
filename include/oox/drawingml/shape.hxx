@@ -110,14 +110,15 @@ class OOX_DLLPUBLIC Shape
 {
 public:
 
-    explicit Shape( const char* pServiceType = nullptr, bool bDefaultHeight = true );
+    Shape();
+    explicit Shape( const OUString& rServiceType, bool bDefaultHeight = true );
     explicit Shape( const ShapePtr& pSourceShape );
     Shape(Shape const &) = default;
     virtual ~Shape();
     Shape & operator =(Shape const &) = default;
 
-    OUString&                  getServiceName(){ return msServiceName; }
-    void                            setServiceName( const char* pServiceName );
+    const OUString&            getServiceName() const { return msServiceName; }
+    void                       setServiceName( const OUString& rServiceName ) { msServiceName = rServiceName; }
 
     const OUString& getDiagramDataModelID() const { return msDiagramDataModelID; }
     void setDiagramDataModelID( const OUString& rDiagramDataModelID ) { msDiagramDataModelID = rDiagramDataModelID; }
