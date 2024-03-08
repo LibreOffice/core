@@ -266,7 +266,7 @@ sal_Int32 getTokenCount(std::u16string_view rIn, sal_Unicode cTok)
 sal_uInt32 decimalStringToNumber(std::u16string_view str)
 {
     sal_uInt32 result = 0;
-    for( sal_Int32 i = 0; i < static_cast<sal_Int32>(str.size()); )
+    for( std::size_t i = 0; i < str.size(); )
     {
         sal_uInt32 c = o3tl::iterateCodePoints(str, &i);
         sal_uInt32 value = 0;

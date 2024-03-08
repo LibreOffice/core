@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <string>
 #include <string_view>
+#include <type_traits>
 
 #include <o3tl/intcmp.hxx>
 #include <rtl/character.hxx>
@@ -509,8 +510,9 @@ inline double toDouble(std::string_view str)
 }
 
 // Like OUString::iterateCodePoints, but for std::string_view:
-inline sal_uInt32 iterateCodePoints(std::u16string_view string, sal_Int32* indexUtf16,
-                                    sal_Int32 incrementCodePoints = 1)
+template <typename T>
+requires(std::is_same_v<T, sal_Int32> || std::is_same_v<T, std::size_t>) sal_uInt32
+    iterateCodePoints(std::u16string_view string, T* indexUtf16, sal_Int32 incrementCodePoints = 1)
 {
     std::size_t n;
     char16_t cu;

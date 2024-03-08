@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstddef>
 #include <cstdlib>
 #include <utility>
 #include <vector>
@@ -111,7 +112,7 @@ namespace {
 // surrogates, even though they should not appear in well-formed UNO OUString
 // instances anyway), or is a slash (as it causes problems in path syntax):
 bool isValidName(std::u16string_view name, bool setMember) {
-    for (sal_Int32 i = 0; i != static_cast<sal_Int32>(name.size());) {
+    for (std::size_t i = 0; i != name.size();) {
         sal_uInt32 c = o3tl::iterateCodePoints(name, &i);
         if ((c < 0x20 && !(c == 0x09 || c == 0x0A || c == 0x0D))
             || rtl::isSurrogate(c) || c == 0xFFFE || c == 0xFFFF

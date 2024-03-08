@@ -10,6 +10,7 @@
 #include <tools/json_writer.hxx>
 #include <o3tl/string_view.hxx>
 #include <stdio.h>
+#include <cstddef>
 #include <cstring>
 #include <rtl/math.hxx>
 
@@ -137,8 +138,8 @@ void JsonWriter::writeEscapedOUString(std::u16string_view rPropVal)
     ++mPos;
 
     // Convert from UTF-16 to UTF-8 and perform escaping
-    sal_Int32 i = 0;
-    while (i < static_cast<sal_Int32>(rPropVal.size()))
+    std::size_t i = 0;
+    while (i < rPropVal.size())
     {
         sal_uInt32 ch = o3tl::iterateCodePoints(rPropVal, &i);
         if (writeEscapedSequence(ch, mPos))
