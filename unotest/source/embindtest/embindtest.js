@@ -112,7 +112,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === undefined);
         console.assert(test.isAnyVoid(v));
         v.delete();
-        let a = new Module.Any(undefined, css.uno.TypeClass.VOID);
+        let a = new Module.uno_Any(Module.uno_Type.Void(), undefined);
         console.assert(test.isAnyVoid(a));
         a.delete();
     }
@@ -122,7 +122,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === true);
         console.assert(test.isAnyBoolean(v));
         v.delete();
-        let a = new Module.Any(true, css.uno.TypeClass.BOOLEAN);
+        let a = new Module.uno_Any(Module.uno_Type.Boolean(), true);
         console.assert(test.isAnyBoolean(a));
         a.delete();
     }
@@ -132,7 +132,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === -12);
         console.assert(test.isAnyByte(v));
         v.delete();
-        let a = new Module.Any(-12, css.uno.TypeClass.BYTE);
+        let a = new Module.uno_Any(Module.uno_Type.Byte(), -12);
         console.assert(test.isAnyByte(a));
         a.delete();
     }
@@ -142,7 +142,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === -1234);
         console.assert(test.isAnyShort(v));
         v.delete();
-        let a = new Module.Any(-1234, css.uno.TypeClass.SHORT);
+        let a = new Module.uno_Any(Module.uno_Type.Short(), -1234);
         console.assert(test.isAnyShort(a));
         a.delete();
     }
@@ -152,7 +152,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === 54321);
         console.assert(test.isAnyUnsignedShort(v));
         v.delete();
-        let a = new Module.Any(54321, css.uno.TypeClass.UNSIGNED_SHORT);
+        let a = new Module.uno_Any(Module.uno_Type.UnsignedShort(), 54321);
         console.assert(test.isAnyUnsignedShort(a));
         a.delete();
     }
@@ -162,7 +162,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === -123456);
         console.assert(test.isAnyLong(v));
         v.delete();
-        let a = new Module.Any(-123456, css.uno.TypeClass.LONG);
+        let a = new Module.uno_Any(Module.uno_Type.Long(), -123456);
         console.assert(test.isAnyLong(a));
         a.delete();
     }
@@ -172,7 +172,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === 3456789012);
         console.assert(test.isAnyUnsignedLong(v));
         v.delete();
-        let a = new Module.Any(3456789012, css.uno.TypeClass.UNSIGNED_LONG);
+        let a = new Module.uno_Any(Module.uno_Type.UnsignedLong(), 3456789012);
         console.assert(test.isAnyUnsignedLong(a));
         a.delete();
     }
@@ -182,7 +182,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === -123456789n);
         console.assert(test.isAnyHyper(v));
         v.delete();
-        let a = new Module.Any(-123456789n, css.uno.TypeClass.HYPER);
+        let a = new Module.uno_Any(Module.uno_Type.Hyper(), -123456789n);
         console.assert(test.isAnyHyper(a));
         a.delete();
     }
@@ -192,7 +192,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === 9876543210n);
         console.assert(test.isAnyUnsignedHyper(v));
         v.delete();
-        let a = new Module.Any(9876543210n, css.uno.TypeClass.UNSIGNED_HYPER);
+        let a = new Module.uno_Any(Module.uno_Type.UnsignedHyper(), 9876543210n);
         console.assert(test.isAnyUnsignedHyper(a));
         a.delete();
     }
@@ -202,7 +202,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === -10.25);
         console.assert(test.isAnyFloat(v));
         v.delete();
-        let a = new Module.Any(-10.25, css.uno.TypeClass.FLOAT);
+        let a = new Module.uno_Any(Module.uno_Type.Float(), -10.25);
         console.assert(test.isAnyFloat(a));
         a.delete();
     }
@@ -212,7 +212,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === 100.5);
         console.assert(test.isAnyDouble(v));
         v.delete();
-        let a = new Module.Any(100.5, css.uno.TypeClass.DOUBLE);
+        let a = new Module.uno_Any(Module.uno_Type.Double(), 100.5);
         console.assert(test.isAnyDouble(a));
         a.delete();
     }
@@ -222,7 +222,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === 'Ö');
         console.assert(test.isAnyChar(v));
         v.delete();
-        let a = new Module.Any('Ö', css.uno.TypeClass.CHAR);
+        let a = new Module.uno_Any(Module.uno_Type.Char(), 'Ö');
         console.assert(test.isAnyChar(a));
         a.delete();
     }
@@ -232,7 +232,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === 'hä');
         console.assert(test.isAnyString(v));
         v.delete();
-        let a = new Module.Any('hä', css.uno.TypeClass.STRING);
+        let a = new Module.uno_Any(Module.uno_Type.String(), 'hä');
         console.assert(test.isAnyString(a));
         a.delete();
     }
@@ -242,7 +242,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get().toString() === 'long');
         console.assert(test.isAnyType(v));
         v.delete();
-        //TODO: let a = new Module.Any(Module.uno_Type.Long(), css.uno.TypeClass.TYPE);
+        //TODO: let a = new Module.uno_Any(Module.uno_Type.Type(), Module.uno_Type.Long());
         //TODO: console.assert(test.isAnyType(a));
         //TODO: a.delete();
     }
@@ -258,7 +258,7 @@ Module.addOnPostRun(function() {
         console.assert(test.isAnySequence(v));
         v.delete();
         let s = new Module.uno_Sequence_string(["foo", "barr", "bazzz"]);
-        //TODO: let a = new Module.Any(s, css.uno.TypeClass.SEQUENCE);
+        //TODO: let a = new Module.uno_Any(Module.uno_Type.Sequence(Module.uno_Type.String()), s);
         //TODO: console.assert(test.isAnySequence(a));
         //TODO: a.delete();
         s.delete();
@@ -269,8 +269,9 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === uno.org.libreoffice.embindtest.Enum.E_2);
         console.assert(test.isAnyEnum(v));
         v.delete();
-        //TODO: let a = new Module.Any(
-        //TODO:     uno.org.libreoffice.embindtest.Enum.E_2, css.uno.TypeClass.ENUM);
+        //TODO: let a = new Module.uno_Any(
+        //TODO:     Module.uno_Type.Enum('org.libreoffice.embindtest.Enum'),
+        //TODO:     uno.org.libreoffice.embindtest.Enum.E_2);
         //TODO: console.assert(test.isAnyEnum(a));
         //TODO: a.delete();
     }
@@ -282,8 +283,9 @@ Module.addOnPostRun(function() {
         console.assert(v.get().m3 === 'hä');
         console.assert(test.isAnyStruct(v));
         v.delete();
-        //TODO: let a = new Module.Any(
-        //TODO:     {m1: -123456, m2: 100.5, m3: 'hä'}, css.uno.TypeClass.STRUCT);
+        //TODO: let a = new Module.uno_Any(
+        //TODO:     Module.uno_Type.Struct('org.libreoffice.embindtest.Struct'),
+        //TODO:     {m1: -123456, m2: 100.5, m3: 'hä'});
         //TODO: console.assert(test.isAnyStruct(a));
         //TODO: a.delete();
     }
@@ -297,9 +299,9 @@ Module.addOnPostRun(function() {
         console.assert(v.get().m3 === 'hä');
         console.assert(test.isAnyException(v));
         v.delete();
-        //TODO: let a = new Module.Any(
-        //TODO:     {Message: 'error', Context: null, m1: -123456, m2: 100.5, m3: 'hä'},
-        //TODO:     css.uno.TypeClass.EXCEPTION);
+        //TODO: let a = new Module.uno_Any(
+        //TODO:     Module.uno_Type.Exception('org.libreoffice.embindtest.Exception'),
+        //TODO:     {Message: 'error', Context: null, m1: -123456, m2: 100.5, m3: 'hä'});
         //TODO: console.assert(test.isAnyException(a));
         //TODO: a.delete();
     }
@@ -309,7 +311,8 @@ Module.addOnPostRun(function() {
         console.assert(v.get().$equals(test.$query()));
         console.assert(test.isAnyInterface(v));
         v.delete();
-        //TODO: let a = new Module.Any(test, css.uno.TypeClass.INTERFACE);
+        //TODO: let a = new Module.uno_Any(
+        //TODO:     Module.uno_Type.Inteface('org.libreoffice.embindtest.Test'), test);
         //TODO: console.assert(test.isAnyInterface(a));
         //TODO: a.delete();
     }

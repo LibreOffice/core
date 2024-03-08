@@ -248,9 +248,9 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         });
 
     // Any
-    class_<Any>("Any")
-        .constructor(+[](const val& rObject, const TypeClass& rUnoType) -> Any {
-            switch (rUnoType)
+    class_<Any>("uno_Any")
+        .constructor(+[](const css::uno::Type& rUnoType, const val& rObject) -> Any {
+            switch (rUnoType.getTypeClass())
             {
                 case TypeClass_VOID:
                     return {};
