@@ -90,6 +90,7 @@ Module.addOnPostRun(function() {
         console.log(v);
         console.assert(v.toString() === 'long');
         console.assert(test.isType(v));
+        console.assert(test.isType(Module.uno_Type.Long()));
     }
     {
         let v = test.getEnum();
@@ -241,7 +242,7 @@ Module.addOnPostRun(function() {
         console.assert(v.get().toString() === 'long');
         console.assert(test.isAnyType(v));
         v.delete();
-        //TODO: let a = new Module.Any(TODO, css.uno.TypeClass.TYPE);
+        //TODO: let a = new Module.Any(Module.uno_Type.Long(), css.uno.TypeClass.TYPE);
         //TODO: console.assert(test.isAnyType(a));
         //TODO: a.delete();
     }
@@ -441,6 +442,11 @@ Module.addOnPostRun(function() {
         console.assert(v.get(2).toString() === '[]org.libreoffice.embindtest.Enum');
         console.assert(test.isSequenceType(v));
         v.delete();
+        let s = new Module.uno_Sequence_type([
+            Module.uno_Type.Long(), Module.uno_Type.Void(),
+            Module.uno_Type.Sequence(Module.uno_Type.Enum('org.libreoffice.embindtest.Enum'))]);
+        console.assert(test.isSequenceType(s));
+        s.delete();
     }
     {
         let v = test.getSequenceAny();
