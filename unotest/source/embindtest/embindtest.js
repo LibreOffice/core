@@ -461,12 +461,14 @@ Module.addOnPostRun(function() {
         let e1 = v.get(1);
         console.assert(e1.get() === undefined);
         e1.delete();
-        //TODO: let e2 = v.get(2);
-        //TODO: console.assert(e2.size() === 3);
-        //TODO: console.assert(e2.get(0) == uno.org.libreoffice.embindtest.Enum.E_2);
-        //TODO: console.assert(e2.get(1) == uno.org.libreoffice.embindtest.Enum.E3);
-        //TODO: console.assert(e2.get(2) == uno.org.libreoffice.embindtest.Enum.E_10);
-        //TODO: e2.delete();
+        let e2 = v.get(2);
+        let s = e2.get();
+        console.assert(s.size() === 3);
+        console.assert(s.get(0) === uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(s.get(1) === uno.org.libreoffice.embindtest.Enum.E3);
+        console.assert(s.get(2) === uno.org.libreoffice.embindtest.Enum.E_10);
+        s.delete();
+        e2.delete();
         console.assert(test.isSequenceAny(v));
         v.delete();
     }
@@ -493,9 +495,9 @@ Module.addOnPostRun(function() {
         let v = test.getSequenceEnum();
         console.log(v);
         console.assert(v.size() === 3);
-        console.assert(v.get(0) == uno.org.libreoffice.embindtest.Enum.E_2);
-        console.assert(v.get(1) == uno.org.libreoffice.embindtest.Enum.E3);
-        console.assert(v.get(2) == uno.org.libreoffice.embindtest.Enum.E_10);
+        console.assert(v.get(0) === uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v.get(1) === uno.org.libreoffice.embindtest.Enum.E3);
+        console.assert(v.get(2) === uno.org.libreoffice.embindtest.Enum.E_10);
         console.assert(test.isSequenceEnum(v));
         v.delete();
     }
