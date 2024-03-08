@@ -1,0 +1,16 @@
+--- src/sksl/transform/SkSLFindAndDeclareBuiltinVariables.cpp
++++ src/sksl/transform/SkSLFindAndDeclareBuiltinVariables.cpp
+@@ -105,11 +105,11 @@
+                       }
+                       switch (a->kind()) {
+                           case ProgramElement::Kind::kGlobalVar:
+-                              SkASSERT(GlobalVarBuiltinName(*a) != GlobalVarBuiltinName(*b));
++                              SkASSERT(GlobalVarBuiltinName(*a) != GlobalVarBuiltinName(*b) || a == b);
+                               return GlobalVarBuiltinName(*a) < GlobalVarBuiltinName(*b);
+ 
+                           case ProgramElement::Kind::kInterfaceBlock:
+-                              SkASSERT(InterfaceBlockName(*a) != InterfaceBlockName(*b));
++                              SkASSERT(InterfaceBlockName(*a) != InterfaceBlockName(*b) || a == b);
+                               return InterfaceBlockName(*a) < InterfaceBlockName(*b);
+ 
+                           default:
