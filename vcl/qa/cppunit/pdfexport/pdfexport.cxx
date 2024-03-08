@@ -2706,6 +2706,41 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816Link)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pAnnots->GetElements().size());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142133)
+{
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf142133.docx", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+
+    // There should be one annotation
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+    auto pAnnotReference
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    CPPUNIT_ASSERT(pAnnotReference);
+    vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+    CPPUNIT_ASSERT(pAnnot);
+    // We're expecting something like /Type /Annot /A << /Type /Action /S /URI /URI (path)
+    CPPUNIT_ASSERT_EQUAL(
+        OString("Annot"),
+        static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+    CPPUNIT_ASSERT_EQUAL(
+        OString("Link"),
+        static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"))->GetValue());
+    auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"));
+    CPPUNIT_ASSERT(pAction);
+    auto pURIElem
+        = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pAction->LookupElement("URI"));
+    CPPUNIT_ASSERT(pURIElem);
+    // Check it matches
+    CPPUNIT_ASSERT_EQUAL(OString("https://google.com/"), pURIElem->GetValue());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");

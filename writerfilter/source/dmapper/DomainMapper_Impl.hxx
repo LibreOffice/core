@@ -232,6 +232,7 @@ class FieldContext : public virtual SvRefBase
     OUString m_sHyperlinkURL;
     /// A frame for the hyperlink when one exists.
     OUString m_sHyperlinkTarget;
+    OUString m_sHyperlinkStyle;
 
     FFDataHandler::Pointer_t m_pFFDataHandler;
     FormControlHelper::Pointer_t m_pFormControlHelper;
@@ -283,6 +284,8 @@ public:
     const OUString& GetHyperlinkURL() const { return m_sHyperlinkURL; }
     void SetHyperlinkTarget(const OUString& rTarget) { m_sHyperlinkTarget = rTarget; }
     const OUString& GetHyperlinkTarget() const { return m_sHyperlinkTarget; }
+    void  SetHyperlinkStyle(const OUString& rStyle) { m_sHyperlinkStyle = rStyle; }
+    const OUString& GetHyperlinkStyle() const { return m_sHyperlinkStyle; }
 
     void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
     const FFDataHandler::Pointer_t& getFFDataHandler() const { return m_pFFDataHandler; }
