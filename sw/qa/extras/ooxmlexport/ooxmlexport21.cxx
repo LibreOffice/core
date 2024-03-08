@@ -381,6 +381,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.docx")
+{
+    // given an in-table, group-shape vertically aligned -1.35 cm (above) the top page margin
+    // (which is actually forced to layoutInCell, so that turns into 1.35cm above the paragraph)
+
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    const sal_Int32 nShapeTop
+        = getXPath(pDump,
+                   "//body/tab[1]/row[1]/cell[1]/txt[1]/anchored/SwAnchoredDrawObject/bounds"_ostr,
+                   "top"_ostr)
+              .toInt32();
+    // The shape is approximately 1 cm below the top of the page, and ~0.5cm above the cell
+    // correct ShapeTop: 888 TWIPS, while incorrect value was -480. Cell top is 1148, PageTop is 284
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(888, nShapeTop, 50);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
 {
     // Although MSO's UI reports "layoutInCell" for the rectangle, it isn't specified or honored
