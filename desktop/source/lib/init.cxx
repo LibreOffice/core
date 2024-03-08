@@ -5079,6 +5079,9 @@ static bool isCommandAllowed(OUString& command) {
         return true;
     else
     {
+        if (command == u".uno:Save"_ustr && SfxViewShell::Current() && SfxViewShell::Current()->IsAllowChangeComments())
+            return true;
+
         for (size_t i = 0; i < std::size(nonAllowedList); i++)
         {
             if (nonAllowedList[i] == command)
