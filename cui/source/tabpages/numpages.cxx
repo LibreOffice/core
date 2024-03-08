@@ -739,6 +739,10 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
     m_xBtBrowseFile->connect_clicked(LINK(this, SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl));
 
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        m_xBtBrowseFile->hide();
+    }
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
     // determine graphic name
