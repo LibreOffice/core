@@ -497,10 +497,10 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic pop))
 #elif defined LIBO_INTERNAL_ONLY && defined _MSC_VER
 #define SAL_WNODEPRECATED_DECLARATIONS_PUSH \
-    _Pragma(SAL_STRINGIFY_ARG(warning(push))) \
-    _Pragma(SAL_STRINGIFY_ARG(warning(disable : 4996)))
+    __pragma(warning(push)) \
+    __pragma(warning(disable : 4996))
 #define SAL_WNODEPRECATED_DECLARATIONS_POP \
-    _Pragma(SAL_STRINGIFY_ARG(warning(pop)))
+    __pragma(warning(pop))
 #else
 #   define SAL_WNODEPRECATED_DECLARATIONS_PUSH
 #   define SAL_WNODEPRECATED_DECLARATIONS_POP
