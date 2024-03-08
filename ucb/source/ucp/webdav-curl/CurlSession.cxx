@@ -1914,7 +1914,9 @@ auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> co
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{ g_NoBody };
+    ::std::vector<CurlOption> const options{
+        g_NoBody, { CURLOPT_CUSTOMREQUEST, "HEAD", "CURLOPT_CUSTOMREQUEST" }
+    };
 
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
@@ -2147,9 +2149,8 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, "MKCOL", "CURLOPT_CUSTOMREQUEST" }
-    };
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "MKCOL",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(*this, uri, "MKCOL", options, &rEnv, nullptr, nullptr, nullptr,
                                   nullptr);
@@ -2177,9 +2178,8 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURI
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, pMethod, "CURLOPT_CUSTOMREQUEST" }
-    };
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, pMethod,
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(rSession, uriSource, OUString::createFromAscii(pMethod), options,
                                   &rEnv, ::std::move(pList), nullptr, nullptr, nullptr);
@@ -2209,9 +2209,8 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, "DELETE", "CURLOPT_CUSTOMREQUEST" }
-    };
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "DELETE",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(*this, uri, "DESTROY", options, &rEnv, nullptr, nullptr, nullptr,
                                   nullptr);
