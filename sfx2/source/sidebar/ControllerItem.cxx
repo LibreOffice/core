@@ -20,6 +20,11 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 
 #include <sfx2/bindings.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <comphelper/lok.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <tools/fldunit.hxx>
+#include <svl/intitem.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -59,6 +64,13 @@ void ControllerItem::RequestUpdate()
 {
     std::unique_ptr<SfxPoolItem> pState;
     const SfxItemState eState (GetBindings().QueryState(GetId(), pState));
+    if (GetId() == SID_ATTR_METRIC && comphelper::LibreOfficeKit::isActive())
+    {
+        MeasurementSystem eSystem
+            = LocaleDataWrapper(comphelper::LibreOfficeKit::getLocale()).getMeasurementSystemEnum();
+        FieldUnit eUnit = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
+        static_cast<SfxUInt16Item*>(pState.get())->SetValue(static_cast<sal_uInt16>(eUnit));
+    }
     mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState.get());
 }
 
