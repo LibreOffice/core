@@ -39,6 +39,7 @@
 #include <fcntl.h>
 #include <limits>
 #include <limits.h>
+#include <utility>
 
 #include <string.h>
 #include <pthread.h>
@@ -67,9 +68,9 @@
 #ifdef LINUX
 #include <sys/vfs.h>
 // As documented by the kernel
-#define SMB_SUPER_MAGIC  static_cast<__fsword_t>(0x517B)
-#define CIFS_SUPER_MAGIC static_cast<__fsword_t>(0xFF534D42)
-#define SMB2_SUPER_MAGIC static_cast<__fsword_t>(0xFE534D42)
+constexpr decltype(std::declval<struct statfs>().f_type) SMB_SUPER_MAGIC = 0x517B;
+constexpr decltype(std::declval<struct statfs>().f_type) CIFS_SUPER_MAGIC = 0xFF534D42;
+constexpr decltype(std::declval<struct statfs>().f_type) SMB2_SUPER_MAGIC = 0xFE534D42;
 #endif
 
 namespace {
