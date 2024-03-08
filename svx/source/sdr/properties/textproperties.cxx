@@ -550,15 +550,15 @@ namespace sdr::properties
             // call parent
             AttributeProperties::Notify(rBC, rHint);
 
-            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
-            if(!rObj.HasText())
-                return;
-
             SfxHintId nId(rHint.GetId());
-            const svx::ITextProvider& rTextProvider(getTextProvider());
 
             if(SfxHintId::DataChanged == nId && rBC.IsSfxStyleSheet())
             {
+                SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
+                if(!rObj.HasText())
+                    return;
+
+                const svx::ITextProvider& rTextProvider(getTextProvider());
                 sal_Int32 nText = rTextProvider.getTextCount();
                 while (nText--)
                 {
@@ -580,6 +580,11 @@ namespace sdr::properties
             }
             else if(SfxHintId::Dying == nId && rBC.IsSfxStyleSheet())
             {
+                SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
+                if(!rObj.HasText())
+                    return;
+
+                const svx::ITextProvider& rTextProvider(getTextProvider());
                 sal_Int32 nText = rTextProvider.getTextCount();
                 while (nText--)
                 {
@@ -598,6 +603,7 @@ namespace sdr::properties
 
                 if(aOldName != aNewName)
                 {
+                    const svx::ITextProvider& rTextProvider(getTextProvider());
                     sal_Int32 nText = rTextProvider.getTextCount();
                     while (nText--)
                     {
