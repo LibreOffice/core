@@ -2007,12 +2007,10 @@ void ImplBorderWindow::FlashWindow() const
     // Use OS features to bring user attention to this window: find topmost one and FlashWindow
     vcl::Window* pMyParent = mpWindowImpl->mpParent;
     while (pMyParent && pMyParent->mpWindowImpl && pMyParent->mpWindowImpl->mpParent)
-    {
         pMyParent = pMyParent->mpWindowImpl->mpParent;
-    }
-    if (pMyParent) {
+
+    if (pMyParent && pMyParent->mpWindowImpl)
         pMyParent->mpWindowImpl->mpFrame->FlashWindow();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
