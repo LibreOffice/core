@@ -307,37 +307,37 @@ bool ScDPServiceDesc::operator== ( const ScDPServiceDesc& rOther ) const
         aParPass == rOther.aParPass;
 }
 
-ScDPObject::ScDPObject( ScDocument* pD ) :
-    pDoc( pD ),
-    nHeaderRows( 0 ),
-    mbHeaderLayout(false),
-    bAllowMove(false),
-    bSettingsChanged(false),
-    mbEnableGetPivotData(true)
+ScDPObject::ScDPObject(ScDocument* pDocument)
+    : mpDocument(pDocument)
+    , mnHeaderRows(0)
+    , mbHeaderLayout(false)
+    , mbAllowMove(false)
+    , mbSettingsChanged(false)
+    , mbEnableGetPivotData(true)
 {
 }
 
-ScDPObject::ScDPObject(const ScDPObject& r) :
-    pDoc( r.pDoc ),
-    aTableName( r.aTableName ),
-    aTableTag( r.aTableTag ),
-    aOutRange( r.aOutRange ),
-    maInteropGrabBag(r.maInteropGrabBag),
-    nHeaderRows( r.nHeaderRows ),
-    mbHeaderLayout( r.mbHeaderLayout ),
-    bAllowMove(false),
-    bSettingsChanged(false),
-    mbEnableGetPivotData(r.mbEnableGetPivotData)
+ScDPObject::ScDPObject(const ScDPObject& rOther)
+    : mpDocument(rOther.mpDocument)
+    , maTableName(rOther.maTableName)
+    , maTableTag(rOther.maTableTag)
+    , maOutputRange(rOther.maOutputRange)
+    , maInteropGrabBag(rOther.maInteropGrabBag)
+    , mnHeaderRows(rOther.mnHeaderRows)
+    , mbHeaderLayout(rOther.mbHeaderLayout)
+    , mbAllowMove(false)
+    , mbSettingsChanged(false)
+    , mbEnableGetPivotData(rOther.mbEnableGetPivotData)
 {
-    if (r.pSaveData)
-        pSaveData.reset( new ScDPSaveData(*r.pSaveData) );
-    if (r.pSheetDesc)
-        pSheetDesc.reset( new ScSheetSourceDesc(*r.pSheetDesc) );
-    if (r.pImpDesc)
-        pImpDesc.reset( new ScImportSourceDesc(*r.pImpDesc) );
-    if (r.pServDesc)
-        pServDesc.reset( new ScDPServiceDesc(*r.pServDesc) );
-    // xSource (and pOutput) is not copied
+    if (rOther.mpSaveData)
+        mpSaveData.reset(new ScDPSaveData(*rOther.mpSaveData));
+    if (rOther.mpSheetDescription)
+        mpSheetDescription.reset(new ScSheetSourceDesc(*rOther.mpSheetDescription));
+    if (rOther.mpImportDescription)
+        mpImportDescription.reset(new ScImportSourceDesc(*rOther.mpImportDescription));
+    if (rOther.mpServiceDescription)
+        mpServiceDescription.reset(new ScDPServiceDesc(*rOther.mpServiceDescription));
+    // mxSource (and mpOutput) is not copied
 }
 
 ScDPObject::~ScDPObject()
@@ -345,31 +345,31 @@ ScDPObject::~ScDPObject()
     Clear();
 }
 
-ScDPObject& ScDPObject::operator= (const ScDPObject& r)
+ScDPObject& ScDPObject::operator= (const ScDPObject& rOther)
 {
-    if (this != &r)
+    if (this != &rOther)
     {
         Clear();
 
-        pDoc = r.pDoc;
-        aTableName = r.aTableName;
-        aTableTag = r.aTableTag;
-        aOutRange = r.aOutRange;
-        maInteropGrabBag = r.maInteropGrabBag;
-        nHeaderRows = r.nHeaderRows;
-        mbHeaderLayout = r.mbHeaderLayout;
-        bAllowMove = false;
-        bSettingsChanged = false;
-        mbEnableGetPivotData = r.mbEnableGetPivotData;
+        mpDocument = rOther.mpDocument;
+        maTableName = rOther.maTableName;
+        maTableTag = rOther.maTableTag;
+        maOutputRange = rOther.maOutputRange;
+        maInteropGrabBag = rOther.maInteropGrabBag;
+        mnHeaderRows = rOther.mnHeaderRows;
+        mbHeaderLayout =rOther.mbHeaderLayout;
+        mbAllowMove = false;
+        mbSettingsChanged = false;
+        mbEnableGetPivotData = rOther.mbEnableGetPivotData;
 
-        if (r.pSaveData)
-            pSaveData.reset( new ScDPSaveData(*r.pSaveData) );
-        if (r.pSheetDesc)
-            pSheetDesc.reset( new ScSheetSourceDesc(*r.pSheetDesc) );
-        if (r.pImpDesc)
-            pImpDesc.reset( new ScImportSourceDesc(*r.pImpDesc) );
-        if (r.pServDesc)
-            pServDesc.reset( new ScDPServiceDesc(*r.pServDesc) );
+        if (rOther.mpSaveData)
+            mpSaveData.reset(new ScDPSaveData(*rOther.mpSaveData));
+        if (rOther.mpSheetDescription)
+            mpSheetDescription.reset(new ScSheetSourceDesc(*rOther.mpSheetDescription));
+        if (rOther.mpImportDescription)
+            mpImportDescription.reset(new ScImportSourceDesc(*rOther.mpImportDescription));
+        if (rOther.mpServiceDescription)
+            mpServiceDescription.reset(new ScDPServiceDesc(*rOther.mpServiceDescription));
     }
     return *this;
 }
@@ -381,14 +381,14 @@ void ScDPObject::EnableGetPivotData(bool b)
 
 void ScDPObject::SetAllowMove(bool bSet)
 {
-    bAllowMove = bSet;
+    mbAllowMove = bSet;
 }
 
 void ScDPObject::SetSaveData(const ScDPSaveData& rData)
 {
-    if ( pSaveData.get() != &rData )      // API implementation modifies the original SaveData object
+    if (mpSaveData.get() != &rData)      // API implementation modifies the original SaveData object
     {
-        pSaveData.reset( new ScDPSaveData( rData ) );
+        mpSaveData.reset(new ScDPSaveData(rData));
     }
 
     InvalidateData();       // re-init source from SaveData
@@ -401,157 +401,157 @@ void ScDPObject::SetHeaderLayout (bool bUseGrid)
 
 void ScDPObject::SetOutRange(const ScRange& rRange)
 {
-    aOutRange = rRange;
+    maOutputRange = rRange;
 
-    if ( pOutput )
-        pOutput->SetPosition( rRange.aStart );
+    if (mpOutput)
+        mpOutput->SetPosition( rRange.aStart );
 }
 
 const ScRange& ScDPObject::GetOutRange() const
 {
-    return aOutRange;
+    return maOutputRange;
 }
 
 void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
 {
-    if ( pSheetDesc && rDesc == *pSheetDesc )
-        return;             // nothing to do
+    if (mpSheetDescription && rDesc == *mpSheetDescription)
+        return; // nothing to do
 
-    pImpDesc.reset();
-    pServDesc.reset();
+    mpImportDescription.reset();
+    mpServiceDescription.reset();
 
-    pSheetDesc.reset( new ScSheetSourceDesc(rDesc) );
+    mpSheetDescription.reset( new ScSheetSourceDesc(rDesc) );
 
     //  make valid QueryParam
 
-    const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
-    ScQueryParam aParam = pSheetDesc->GetQueryParam();
+    const ScRange& rSrcRange = mpSheetDescription->GetSourceRange();
+    ScQueryParam aParam = mpSheetDescription->GetQueryParam();
     aParam.nCol1 = rSrcRange.aStart.Col();
     aParam.nRow1 = rSrcRange.aStart.Row();
     aParam.nCol2 = rSrcRange.aEnd.Col();
     aParam.nRow2 = rSrcRange.aEnd.Row();
     aParam.bHasHeader = true;
-    pSheetDesc->SetQueryParam(aParam);
+    mpSheetDescription->SetQueryParam(aParam);
 
-    ClearTableData();      // new source must be created
+    ClearTableData(); // new source must be created
 }
 
 void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
 {
-    if ( pImpDesc && rDesc == *pImpDesc )
-        return;             // nothing to do
+    if (mpImportDescription && rDesc == *mpImportDescription)
+        return; // nothing to do
 
-    pSheetDesc.reset();
-    pServDesc.reset();
+    mpSheetDescription.reset();
+    mpServiceDescription.reset();
 
-    pImpDesc.reset( new ScImportSourceDesc(rDesc) );
+    mpImportDescription.reset(new ScImportSourceDesc(rDesc));
 
-    ClearTableData();      // new source must be created
+    ClearTableData(); // new source must be created
 }
 
 void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
 {
-    if ( pServDesc && rDesc == *pServDesc )
-        return;             // nothing to do
+    if (mpServiceDescription && rDesc == *mpServiceDescription)
+        return; // nothing to do
 
-    pSheetDesc.reset();
-    pImpDesc.reset();
+    mpSheetDescription.reset();
+    mpImportDescription.reset();
 
-    pServDesc.reset( new ScDPServiceDesc(rDesc) );
+    mpServiceDescription.reset(new ScDPServiceDesc(rDesc));
 
     ClearTableData();      // new source must be created
 }
 
 void ScDPObject::WriteSourceDataTo( ScDPObject& rDest ) const
 {
-    if ( pSheetDesc )
-        rDest.SetSheetDesc( *pSheetDesc );
-    else if ( pImpDesc )
-        rDest.SetImportDesc( *pImpDesc );
-    else if ( pServDesc )
-        rDest.SetServiceData( *pServDesc );
+    if (mpSheetDescription)
+        rDest.SetSheetDesc(*mpSheetDescription);
+    else if (mpImportDescription)
+        rDest.SetImportDesc(*mpImportDescription);
+    else if (mpServiceDescription)
+        rDest.SetServiceData(*mpServiceDescription);
 
     //  name/tag are not source data, but needed along with source data
 
-    rDest.aTableName = aTableName;
-    rDest.aTableTag  = aTableTag;
+    rDest.maTableName = maTableName;
+    rDest.maTableTag  = maTableTag;
 }
 
 void ScDPObject::WriteTempDataTo( ScDPObject& rDest ) const
 {
-    rDest.nHeaderRows = nHeaderRows;
+    rDest.mnHeaderRows = mnHeaderRows;
 }
 
 bool ScDPObject::IsSheetData() const
 {
-    return ( pSheetDesc != nullptr );
+    return mpSheetDescription != nullptr;
 }
 
 void ScDPObject::SetName(const OUString& rNew)
 {
-    aTableName = rNew;
+    maTableName = rNew;
 }
 
 void ScDPObject::SetTag(const OUString& rNew)
 {
-    aTableTag = rNew;
+    maTableTag = rNew;
 }
 
 bool ScDPObject::IsDataDescriptionCell(const ScAddress& rPos)
 {
-    if (!pSaveData)
+    if (!mpSaveData)
         return false;
 
-    tools::Long nDataDimCount = pSaveData->GetDataDimensionCount();
+    tools::Long nDataDimCount = mpSaveData->GetDataDimensionCount();
     if (nDataDimCount != 1)
         // There has to be exactly one data dimension for the description to
         // appear at top-left corner.
         return false;
 
     CreateOutput();
-    ScRange aTabRange = pOutput->GetOutputRange(sheet::DataPilotOutputRangeType::TABLE);
+    ScRange aTabRange = mpOutput->GetOutputRange(sheet::DataPilotOutputRangeType::TABLE);
     return (rPos == aTabRange.aStart);
 }
 
 uno::Reference<sheet::XDimensionsSupplier> const & ScDPObject::GetSource()
 {
     CreateObjects();
-    return xSource;
+    return mxSource;
 }
 
 void ScDPObject::CreateOutput()
 {
     CreateObjects();
-    if (pOutput)
+    if (mpOutput)
         return;
 
-    bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
-    pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton, pSaveData ? pSaveData->GetExpandCollapse() : false ) );
-    pOutput->SetHeaderLayout ( mbHeaderLayout );
+    bool bFilterButton = IsSheetData() && mpSaveData && mpSaveData->GetFilterButton();
+    mpOutput.reset( new ScDPOutput(mpDocument, mxSource, maOutputRange.aStart, bFilterButton, mpSaveData ? mpSaveData->GetExpandCollapse() : false ) );
+    mpOutput->SetHeaderLayout ( mbHeaderLayout );
 
-    sal_Int32 nOldRows = nHeaderRows;
-    nHeaderRows = pOutput->GetHeaderRows();
+    sal_Int32 nOldRows = mnHeaderRows;
+    mnHeaderRows = mpOutput->GetHeaderRows();
 
-    if ( !(bAllowMove && nHeaderRows != nOldRows) )
+    if (!(mbAllowMove && mnHeaderRows != nOldRows))
         return;
 
-    sal_Int32 nDiff = nOldRows - nHeaderRows;
+    sal_Int32 nDiff = nOldRows - mnHeaderRows;
     if ( nOldRows == 0 )
         --nDiff;
-    if ( nHeaderRows == 0 )
+    if (mnHeaderRows == 0)
         ++nDiff;
 
-    sal_Int32 nNewRow = aOutRange.aStart.Row() + nDiff;
+    sal_Int32 nNewRow = maOutputRange.aStart.Row() + nDiff;
     if ( nNewRow < 0 )
         nNewRow = 0;
 
-    ScAddress aStart( aOutRange.aStart );
+    ScAddress aStart(maOutputRange.aStart);
     aStart.SetRow(nNewRow);
-    pOutput->SetPosition( aStart );
+    mpOutput->SetPosition( aStart );
 
-    //TODO: modify aOutRange?
+    //TODO: modify maOutputRange?
 
-    bAllowMove = false;     // use only once
+    mbAllowMove = false; // use only once
 }
 
 namespace {
@@ -680,25 +680,25 @@ ScDPTableData* ScDPObject::GetTableData()
     if (!mpTableData)
     {
         shared_ptr<ScDPTableData> pData;
-        const ScDPDimensionSaveData* pDimData = pSaveData ? pSaveData->GetExistingDimensionData() : nullptr;
+        const ScDPDimensionSaveData* pDimData = mpSaveData ? mpSaveData->GetExistingDimensionData() : nullptr;
 
-        if ( pImpDesc )
+        if (mpImportDescription)
         {
             // database data
-            const ScDPCache* pCache = pImpDesc->CreateCache(pDimData);
+            const ScDPCache* pCache = mpImportDescription->CreateCache(pDimData);
             if (pCache)
             {
                 pCache->AddReference(this);
-                pData = std::make_shared<ScDatabaseDPData>(pDoc, *pCache);
+                pData = std::make_shared<ScDatabaseDPData>(mpDocument, *pCache);
             }
         }
         else
         {
             // cell data
-            if (!pSheetDesc)
+            if (!mpSheetDescription)
             {
                 OSL_FAIL("no source descriptor");
-                pSheetDesc.reset( new ScSheetSourceDesc(pDoc) );     // dummy defaults
+                mpSheetDescription.reset(new ScSheetSourceDesc(mpDocument)); // dummy defaults
             }
 
             {
@@ -706,11 +706,11 @@ ScDPTableData* ScDPObject::GetTableData()
                 // GETPIVOTDATA called onto itself from within the source
                 // range.
                 DisableGetPivotData aSwitch(*this, mbEnableGetPivotData);
-                const ScDPCache* pCache = pSheetDesc->CreateCache(pDimData);
+                const ScDPCache* pCache = mpSheetDescription->CreateCache(pDimData);
                 if (pCache)
                 {
                     pCache->AddReference(this);
-                    pData = std::make_shared<ScSheetDPData>(pDoc, *pSheetDesc, *pCache);
+                    pData = std::make_shared<ScSheetDPData>(mpDocument, *mpSheetDescription, *pCache);
                 }
             }
         }
@@ -718,7 +718,7 @@ ScDPTableData* ScDPObject::GetTableData()
         // grouping (for cell or database data)
         if (pData && pDimData)
         {
-            auto pGroupData = std::make_shared<ScDPGroupTableData>(pData, pDoc);
+            auto pGroupData = std::make_shared<ScDPGroupTableData>(pData, mpDocument);
             pDimData->WriteToData(*pGroupData);
             pData = pGroupData;
         }
@@ -731,39 +731,39 @@ ScDPTableData* ScDPObject::GetTableData()
 
 void ScDPObject::CreateObjects()
 {
-    if (!xSource.is())
+    if (!mxSource.is())
     {
-        pOutput.reset();     // not valid when xSource is changed
+        mpOutput.reset(); // not valid when mxSource is changed
 
-        if ( pServDesc )
+        if (mpServiceDescription)
         {
-            xSource = CreateSource( *pServDesc );
+            mxSource = CreateSource(*mpServiceDescription);
         }
 
-        if ( !xSource.is() )    // database or sheet data, or error in CreateSource
+        if (!mxSource.is())    // database or sheet data, or error in CreateSource
         {
-            OSL_ENSURE( !pServDesc, "DPSource could not be created" );
+            OSL_ENSURE(!mpServiceDescription, "DPSource could not be created");
             ScDPTableData* pData = GetTableData();
             if (pData)
             {
-                if (pSaveData)
+                if (mpSaveData)
                     // Make sure to transfer these flags to the table data
                     // since they may have changed.
-                    pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
+                    pData->SetEmptyFlags(mpSaveData->GetIgnoreEmptyRows(), mpSaveData->GetRepeatIfEmpty());
 
                 pData->ReloadCacheTable();
-                xSource = new ScDPSource( pData );
+                mxSource = new ScDPSource( pData );
             }
         }
 
-        if (pSaveData)
-            pSaveData->WriteToSource( xSource );
+        if (mpSaveData)
+            mpSaveData->WriteToSource(mxSource);
     }
-    else if (bSettingsChanged)
+    else if (mbSettingsChanged)
     {
-        pOutput.reset();     // not valid when xSource is changed
+        mpOutput.reset(); // not valid when mxSource is changed
 
-        uno::Reference<util::XRefreshable> xRef( xSource, uno::UNO_QUERY );
+        uno::Reference<util::XRefreshable> xRef(mxSource, uno::UNO_QUERY);
         if (xRef.is())
         {
             try
@@ -776,24 +776,24 @@ void ScDPObject::CreateObjects()
             }
         }
 
-        if (pSaveData)
-            pSaveData->WriteToSource( xSource );
+        if (mpSaveData)
+            mpSaveData->WriteToSource(mxSource);
     }
-    bSettingsChanged = false;
+    mbSettingsChanged = false;
 }
 
 void ScDPObject::InvalidateData()
 {
-    bSettingsChanged = true;
+    mbSettingsChanged = true;
 }
 
 void ScDPObject::Clear()
 {
-    pOutput.reset();
-    pSaveData.reset();
-    pSheetDesc.reset();
-    pImpDesc.reset();
-    pServDesc.reset();
+    mpOutput.reset();
+    mpSaveData.reset();
+    mpSheetDescription.reset();
+    mpImportDescription.reset();
+    mpServiceDescription.reset();
     ClearTableData();
     maInteropGrabBag.clear();
 }
@@ -815,11 +815,11 @@ void ScDPObject::ReloadGroupTableData()
         // Table data not built yet.  No need to reload the group data.
         return;
 
-    if (!pSaveData)
+    if (!mpSaveData)
         // How could it not have the save data... but whatever.
         return;
 
-    const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
+    const ScDPDimensionSaveData* pDimData = mpSaveData->GetExistingDimensionData();
     if (!pDimData || !pDimData->HasGroupDimensions())
     {
         // No group dimensions exist.  Check if it currently has group
@@ -839,24 +839,24 @@ void ScDPObject::ReloadGroupTableData()
         // This is already a group table data. Salvage the source data and
         // re-create a new group data.
         const shared_ptr<ScDPTableData>& pSource = pData->GetSourceTableData();
-        auto pGroupData = std::make_shared<ScDPGroupTableData>(pSource, pDoc);
+        auto pGroupData = std::make_shared<ScDPGroupTableData>(pSource, mpDocument);
         pDimData->WriteToData(*pGroupData);
         mpTableData = pGroupData;
     }
     else
     {
         // This is a source data.  Create a group data based on it.
-        auto pGroupData = std::make_shared<ScDPGroupTableData>(mpTableData, pDoc);
+        auto pGroupData = std::make_shared<ScDPGroupTableData>(mpTableData, mpDocument);
         pDimData->WriteToData(*pGroupData);
         mpTableData = pGroupData;
     }
 
-    bSettingsChanged = true;
+    mbSettingsChanged = true;
 }
 
 void ScDPObject::ClearSource()
 {
-    Reference< XComponent > xObjectComp( xSource, UNO_QUERY );
+    uno::Reference<XComponent> xObjectComp(mxSource, UNO_QUERY);
     if (xObjectComp.is())
     {
         try
@@ -868,62 +868,62 @@ void ScDPObject::ClearSource()
             DBG_UNHANDLED_EXCEPTION("sc.core");
         }
     }
-    xSource = nullptr;
+    mxSource = nullptr;
 }
 
 ScRange ScDPObject::GetNewOutputRange( bool& rOverflow )
 {
-    CreateOutput();             // create xSource and pOutput if not already done
+    CreateOutput(); // create mxSource and mpOutput if not already done
 
-    rOverflow = pOutput->HasError();        // range overflow or exception from source
+    rOverflow = mpOutput->HasError();        // range overflow or exception from source
     if ( rOverflow )
-        return ScRange( aOutRange.aStart );
+        return ScRange(maOutputRange.aStart);
     else
     {
-        //  don't store the result in aOutRange, because nothing has been output yet
-        return pOutput->GetOutputRange();
+        //  don't store the result in maOutputRange, because nothing has been output yet
+        return mpOutput->GetOutputRange();
     }
 }
 
 void ScDPObject::Output( const ScAddress& rPos )
 {
     //  clear old output area
-    pDoc->DeleteAreaTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
-                         aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
-                         aOutRange.aStart.Tab(), InsertDeleteFlags::ALL );
-    pDoc->RemoveFlagsTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
-                          aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
-                          aOutRange.aStart.Tab(), ScMF::Auto );
+    mpDocument->DeleteAreaTab(maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
+                         maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
+                         maOutputRange.aStart.Tab(), InsertDeleteFlags::ALL );
+    mpDocument->RemoveFlagsTab( maOutputRange.aStart.Col(), maOutputRange.aStart.Row(),
+                          maOutputRange.aEnd.Col(), maOutputRange.aEnd.Row(),
+                          maOutputRange.aStart.Tab(), ScMF::Auto );
 
-    CreateOutput();             // create xSource and pOutput if not already done
+    CreateOutput(); // create mxSource and mpOutput if not already done
 
-    pOutput->SetPosition( rPos );
+    mpOutput->SetPosition( rPos );
 
-    pOutput->Output();
+    mpOutput->Output();
 
-    //  aOutRange is always the range that was last output to the document
-    aOutRange = pOutput->GetOutputRange();
-    const ScAddress& s = aOutRange.aStart;
-    const ScAddress& e = aOutRange.aEnd;
-    pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
+    // maOutputRange is always the range that was last output to the document
+    maOutputRange = mpOutput->GetOutputRange();
+    const ScAddress& s = maOutputRange.aStart;
+    const ScAddress& e = maOutputRange.aEnd;
+    mpDocument->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
 }
 
 ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
 {
     CreateOutput();
 
-    if (pOutput->HasError())
-        return ScRange(aOutRange.aStart);
+    if (mpOutput->HasError())
+        return ScRange(maOutputRange.aStart);
 
-    return pOutput->GetOutputRange(nType);
+    return mpOutput->GetOutputRange(nType);
 }
 
 ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType ) const
 {
-    if (!pOutput || pOutput->HasError())
+    if (!mpOutput || mpOutput->HasError())
         return ScRange(ScAddress::INITIALIZE_INVALID);
 
-    return pOutput->GetOutputRange(nType);
+    return mpOutput->GetOutputRange(nType);
 }
 
 static bool lcl_HasButton( const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -933,52 +933,52 @@ static bool lcl_HasButton( const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 
 void ScDPObject::RefreshAfterLoad()
 {
-    // apply drop-down attribute, initialize nHeaderRows, without accessing the source
+    // apply drop-down attribute, initialize mnHeaderRows, without accessing the source
     // (button attribute must be present)
 
     // simple test: block of button cells at the top, followed by an empty cell
 
-    SCCOL nFirstCol = aOutRange.aStart.Col();
-    SCROW nFirstRow = aOutRange.aStart.Row();
-    SCTAB nTab = aOutRange.aStart.Tab();
+    SCCOL nFirstCol = maOutputRange.aStart.Col();
+    SCROW nFirstRow = maOutputRange.aStart.Row();
+    SCTAB nTab = maOutputRange.aStart.Tab();
 
     SCROW nInitial = 0;
-    SCROW nOutRows = aOutRange.aEnd.Row() + 1 - aOutRange.aStart.Row();
-    while ( nInitial + 1 < nOutRows && lcl_HasButton( pDoc, nFirstCol, nFirstRow + nInitial, nTab ) )
+    SCROW nOutRows = maOutputRange.aEnd.Row() + 1 - maOutputRange.aStart.Row();
+    while (nInitial + 1 < nOutRows && lcl_HasButton(mpDocument, nFirstCol, nFirstRow + nInitial, nTab))
         ++nInitial;
 
     if ( nInitial + 1 < nOutRows &&
-        pDoc->IsBlockEmpty( nFirstCol, nFirstRow + nInitial, nFirstCol, nFirstRow + nInitial, nTab ) &&
-        aOutRange.aEnd.Col() > nFirstCol )
+        mpDocument->IsBlockEmpty( nFirstCol, nFirstRow + nInitial, nFirstCol, nFirstRow + nInitial, nTab ) &&
+        maOutputRange.aEnd.Col() > nFirstCol )
     {
-        nHeaderRows = nInitial;
+        mnHeaderRows = nInitial;
     }
     else
-        nHeaderRows = 0;        // nothing found, no drop-down lists
+        mnHeaderRows = 0;        // nothing found, no drop-down lists
 }
 
 void ScDPObject::BuildAllDimensionMembers()
 {
-    if (!pSaveData)
+    if (!mpSaveData)
         return;
 
     // #i111857# don't always create empty mpTableData for external service.
-    if (pServDesc)
+    if (mpServiceDescription)
         return;
 
     ScDPTableData* pTableData = GetTableData();
     if(pTableData)
-        pSaveData->BuildAllDimensionMembers(pTableData);
+        mpSaveData->BuildAllDimensionMembers(pTableData);
 }
 
 bool ScDPObject::SyncAllDimensionMembers()
 {
-    if (!pSaveData)
+    if (!mpSaveData)
         return false;
 
     // #i111857# don't always create empty mpTableData for external service.
-    // Ideally, xSource should be used instead of mpTableData.
-    if (pServDesc)
+    // Ideally, mxSource should be used instead of mpTableData.
+    if (mpServiceDescription)
         return false;
 
     ScDPTableData* pData = GetTableData();
@@ -988,9 +988,9 @@ bool ScDPObject::SyncAllDimensionMembers()
         return false;
 
     // Refresh the cache wrapper since the cache may have changed.
-    pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
+    pData->SetEmptyFlags(mpSaveData->GetIgnoreEmptyRows(), mpSaveData->GetRepeatIfEmpty());
     pData->ReloadCacheTable();
-    pSaveData->SyncAllDimensionMembers(pData);
+    mpSaveData->SyncAllDimensionMembers(pData);
     return true;
 }
 
@@ -1058,15 +1058,15 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
 {
     // Output area
 
-    SCCOL nCol1 = aOutRange.aStart.Col();
-    SCROW nRow1 = aOutRange.aStart.Row();
-    SCTAB nTab1 = aOutRange.aStart.Tab();
-    SCCOL nCol2 = aOutRange.aEnd.Col();
-    SCROW nRow2 = aOutRange.aEnd.Row();
-    SCTAB nTab2 = aOutRange.aEnd.Tab();
+    SCCOL nCol1 = maOutputRange.aStart.Col();
+    SCROW nRow1 = maOutputRange.aStart.Row();
+    SCTAB nTab1 = maOutputRange.aStart.Tab();
+    SCCOL nCol2 = maOutputRange.aEnd.Col();
+    SCROW nRow2 = maOutputRange.aEnd.Row();
+    SCTAB nTab2 = maOutputRange.aEnd.Tab();
 
     ScRefUpdateRes eRes =
-        ScRefUpdate::Update( pDoc, eUpdateRefMode,
+        ScRefUpdate::Update(mpDocument, eUpdateRefMode,
             rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
             rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
             nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
@@ -1075,15 +1075,15 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
 
     // sheet source data
 
-    if ( !pSheetDesc )
+    if (!mpSheetDescription)
         return;
 
-    const OUString& rRangeName = pSheetDesc->GetRangeName();
+    const OUString& rRangeName = mpSheetDescription->GetRangeName();
     if (!rRangeName.isEmpty())
         // Source range is a named range.  No need to update.
         return;
 
-    const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
+    const ScRange& rSrcRange = mpSheetDescription->GetSourceRange();
     nCol1 = rSrcRange.aStart.Col();
     nRow1 = rSrcRange.aStart.Row();
     nTab1 = rSrcRange.aStart.Tab();
@@ -1091,17 +1091,17 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
     nRow2 = rSrcRange.aEnd.Row();
     nTab2 = rSrcRange.aEnd.Tab();
 
-    eRes = ScRefUpdate::Update( pDoc, eUpdateRefMode,
+    eRes = ScRefUpdate::Update(mpDocument, eUpdateRefMode,
             rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
             rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
             nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
     if ( eRes == UR_NOTHING )
         return;
 
-    SCCOL nDiffX = nCol1 - pSheetDesc->GetSourceRange().aStart.Col();
-    SCROW nDiffY = nRow1 - pSheetDesc->GetSourceRange().aStart.Row();
+    SCCOL nDiffX = nCol1 - mpSheetDescription->GetSourceRange().aStart.Col();
+    SCROW nDiffY = nRow1 - mpSheetDescription->GetSourceRange().aStart.Row();
 
-    ScQueryParam aParam = pSheetDesc->GetQueryParam();
+    ScQueryParam aParam = mpSheetDescription->GetQueryParam();
     aParam.nCol1 = sal::static_int_cast<SCCOL>( aParam.nCol1 + nDiffX );
     aParam.nCol2 = sal::static_int_cast<SCCOL>( aParam.nCol2 + nDiffX );
     aParam.nRow1 += nDiffY; //TODO: used?
@@ -1111,21 +1111,21 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
         if (aParam.GetEntry(i).bDoQuery)
             aParam.GetEntry(i).nField += nDiffX;
 
-    pSheetDesc->SetQueryParam(aParam);
-    pSheetDesc->SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+    mpSheetDescription->SetQueryParam(aParam);
+    mpSheetDescription->SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
 }
 
-bool ScDPObject::RefsEqual( const ScDPObject& r ) const
+bool ScDPObject::RefsEqual( const ScDPObject& rOther) const
 {
-    if ( aOutRange != r.aOutRange )
+    if (maOutputRange != rOther.maOutputRange)
         return false;
 
-    if ( pSheetDesc && r.pSheetDesc )
+    if (mpSheetDescription && rOther.mpSheetDescription)
     {
-        if ( pSheetDesc->GetSourceRange() != r.pSheetDesc->GetSourceRange() )
+        if (mpSheetDescription->GetSourceRange() != rOther.mpSheetDescription->GetSourceRange())
             return false;
     }
-    else if ( pSheetDesc || r.pSheetDesc )
+    else if (mpSheetDescription || rOther.mpSheetDescription)
     {
         OSL_FAIL("RefsEqual: SheetDesc set at only one object");
         return false;
@@ -1134,17 +1134,17 @@ bool ScDPObject::RefsEqual( const ScDPObject& r ) const
     return true;
 }
 
-void ScDPObject::WriteRefsTo( ScDPObject& r ) const
+void ScDPObject::WriteRefsTo(ScDPObject& rObject) const
 {
-    r.SetOutRange( aOutRange );
-    if ( pSheetDesc )
-        r.SetSheetDesc( *pSheetDesc );
+    rObject.SetOutRange(maOutputRange);
+    if (mpSheetDescription)
+        rObject.SetSheetDesc(*mpSheetDescription);
 }
 
 void ScDPObject::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
 {
     CreateOutput();
-    pOutput->GetPositionData(rPos, rPosData);
+    mpOutput->GetPositionData(rPos, rPosData);
 }
 
 bool ScDPObject::GetDataFieldPositionData(
@@ -1153,7 +1153,7 @@ bool ScDPObject::GetDataFieldPositionData(
     CreateOutput();
 
     vector<sheet::DataPilotFieldFilter> aFilters;
-    if (!pOutput->GetDataResultPositionData(aFilters, rPos))
+    if (!mpOutput->GetDataResultPositionData(aFilters, rPos))
         return false;
 
     sal_Int32 n = static_cast<sal_Int32>(aFilters.size());
@@ -1169,7 +1169,7 @@ void ScDPObject::GetDrillDownData(const ScAddress& rPos, Sequence< Sequence<Any>
 {
     CreateOutput();
 
-    Reference<sheet::XDrillDownDataSupplier> xDrillDownData(xSource, UNO_QUERY);
+    uno::Reference<sheet::XDrillDownDataSupplier> xDrillDownData(mxSource, UNO_QUERY);
     if (!xDrillDownData.is())
         return;
 
@@ -1182,10 +1182,10 @@ void ScDPObject::GetDrillDownData(const ScAddress& rPos, Sequence< Sequence<Any>
 
 bool ScDPObject::IsDimNameInUse(std::u16string_view rName) const
 {
-    if (!xSource.is())
+    if (!mxSource.is())
         return false;
 
-    Reference<container::XNameAccess> xDims = xSource->getDimensions();
+    Reference<container::XNameAccess> xDims = mxSource->getDimensions();
     const Sequence<OUString> aDimNames = xDims->getElementNames();
     for (const OUString& rDimName : aDimNames)
     {
@@ -1209,9 +1209,9 @@ OUString ScDPObject::GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int3
     rIsDataLayout = false;
     OUString aRet;
 
-    if ( xSource.is() )
+    if (mxSource.is())
     {
-        uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+        uno::Reference<container::XNameAccess> xDimsName = mxSource->getDimensions();
         uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
         tools::Long nDimCount = xDims->getCount();
         if ( nDim < nDimCount )
@@ -1256,9 +1256,9 @@ OUString ScDPObject::GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int3
 bool ScDPObject::IsDuplicated( tools::Long nDim )
 {
     bool bDuplicated = false;
-    if ( xSource.is() )
+    if (mxSource.is())
     {
-        uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+        uno::Reference<container::XNameAccess> xDimsName = mxSource->getDimensions();
         uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
         tools::Long nDimCount = xDims->getCount();
         if ( nDim < nDimCount )
@@ -1285,11 +1285,11 @@ bool ScDPObject::IsDuplicated( tools::Long nDim )
 tools::Long ScDPObject::GetDimCount()
 {
     tools::Long nRet = 0;
-    if ( xSource.is() )
+    if (mxSource.is())
     {
         try
         {
-            uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+            uno::Reference<container::XNameAccess> xDimsName = mxSource->getDimensions();
             if ( xDimsName.is() )
                 nRet = xDimsName->getElementNames().getLength();
         }
@@ -1302,14 +1302,14 @@ tools::Long ScDPObject::GetDimCount()
 
 void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHeaderData& rData)
 {
-    CreateOutput();             // create xSource and pOutput if not already done
+    CreateOutput(); // create mxSource and mpOutput if not already done
 
     // Reset member values to invalid state.
     rData.Dimension = rData.Hierarchy = rData.Level = -1;
     rData.Flags = 0;
 
     DataPilotTablePositionData aPosData;
-    pOutput->GetPositionData(rPos, aPosData);
+    mpOutput->GetPositionData(rPos, aPosData);
     const sal_Int32 nPosType = aPosData.PositionType;
     if (nPosType == css::sheet::DataPilotTablePositionType::COLUMN_HEADER || nPosType == css::sheet::DataPilotTablePositionType::ROW_HEADER)
         aPosData.PositionData >>= rData;
@@ -1375,7 +1375,7 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
     CreateObjects();
 
     std::vector<const ScDPSaveDimension*> aDataDims;
-    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDataDims);
+    mpSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDataDims);
     if (aDataDims.empty())
         return std::numeric_limits<double>::quiet_NaN();
 
@@ -1388,13 +1388,13 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
 
     size_t nDataIndex = std::distance(aDataDims.begin(), it);
 
-    uno::Reference<sheet::XDataPilotResults> xDPResults(xSource, uno::UNO_QUERY);
+    uno::Reference<sheet::XDataPilotResults> xDPResults(mxSource, uno::UNO_QUERY);
     if (!xDPResults.is())
         return std::numeric_limits<double>::quiet_NaN();
 
     // Dimensions must be sorted in order of appearance, and row dimensions
     // must come before column dimensions.
-    std::sort(rFilters.begin(), rFilters.end(), LessByDimOrder(pSaveData->GetDimensionSortOrder()));
+    std::sort(rFilters.begin(), rFilters.end(), LessByDimOrder(mpSaveData->GetDimensionSortOrder()));
 
     size_t n = rFilters.size();
     uno::Sequence<sheet::DataPilotFieldFilter> aFilters(n);
@@ -1411,31 +1411,31 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
 
 bool ScDPObject::IsFilterButton( const ScAddress& rPos )
 {
-    CreateOutput();             // create xSource and pOutput if not already done
+    CreateOutput(); // create mxSource and mpOutput if not already done
 
-    return pOutput->IsFilterButton( rPos );
+    return mpOutput->IsFilterButton( rPos );
 }
 
 tools::Long ScDPObject::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFieldOrientation& rOrient )
 {
-    CreateOutput();             // create xSource and pOutput if not already done
+    CreateOutput(); // create mxSource and mpOutput if not already done
 
-    return pOutput->GetHeaderDim( rPos, rOrient );
+    return mpOutput->GetHeaderDim( rPos, rOrient );
 }
 
 bool ScDPObject::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, tools::Long nDragDim,
                                 tools::Rectangle& rPosRect, sheet::DataPilotFieldOrientation& rOrient, tools::Long& rDimPos )
 {
-    CreateOutput();             // create xSource and pOutput if not already done
+    CreateOutput();// create mxSource and mpOutput if not already done
 
-    return pOutput->GetHeaderDrag( rPos, bMouseLeft, bMouseTop, nDragDim, rPosRect, rOrient, rDimPos );
+    return mpOutput->GetHeaderDrag( rPos, bMouseLeft, bMouseTop, nDragDim, rPosRect, rOrient, rDimPos );
 }
 
 void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, tools::Long nDimension)
 {
-    CreateOutput();             // create xSource and pOutput if not already done
+    CreateOutput();// create mxSource and mpOutput if not already done
 
-    pOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
+    mpOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
 }
 
 OUString ScDPObject::GetFormattedString(std::u16string_view rDimName, const double fValue)
@@ -1730,7 +1730,7 @@ bool ScDPObject::ParseFilters(
 {
     // parse the string rFilterList into parameters for GetPivotData
 
-    CreateObjects();            // create xSource if not already done
+    CreateObjects(); // create mxSource if not already done
 
     std::vector<OUString> aDataNames;     // data fields (source name)
     std::vector<OUString> aGivenNames;    // data fields (compound name)
@@ -1740,7 +1740,7 @@ bool ScDPObject::ParseFilters(
 
     // get all the field and item names
 
-    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XNameAccess> xDimsName = mxSource->getDimensions();
     uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
     sal_Int32 nDimCount = xIntDims->getCount();
     for ( sal_Int32 nDim = 0; nDim<nDimCount; nDim++ )
@@ -1998,12 +1998,12 @@ bool ScDPObject::ParseFilters(
 
 void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj)
 {
-    CreateObjects();            // create xSource if not already done
+    CreateObjects(); // create mxSource if not already done
 
     //  find dimension name
 
     uno::Reference<container::XNamed> xDim;
-    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XNameAccess> xDimsName = mxSource->getDimensions();
     uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
     tools::Long nIntCount = xIntDims->getCount();
     if ( rElemDesc.Dimension < nIntCount )
@@ -2085,7 +2085,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     //TODO: use Hierarchy and Level in SaveData !!!!
 
     //  modify pDestObj if set, this object otherwise
-    ScDPSaveData* pModifyData = pDestObj ? ( pDestObj->pSaveData.get() ) : pSaveData.get();
+    ScDPSaveData* pModifyData = pDestObj ? ( pDestObj->mpSaveData.get() ) : mpSaveData.get();
     OSL_ENSURE( pModifyData, "no data?" );
     if ( pModifyData )
     {
@@ -2297,27 +2297,27 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
 
 void ScDPObject::FillOldParam(ScPivotParam& rParam) const
 {
-    const_cast<ScDPObject*>(this)->CreateObjects();       // xSource is needed for field numbers
+    const_cast<ScDPObject*>(this)->CreateObjects(); // mxSource is needed for field numbers
 
-    if (!xSource.is())
+    if (!mxSource.is())
         return;
 
-    rParam.nCol = aOutRange.aStart.Col();
-    rParam.nRow = aOutRange.aStart.Row();
-    rParam.nTab = aOutRange.aStart.Tab();
+    rParam.nCol = maOutputRange.aStart.Col();
+    rParam.nRow = maOutputRange.aStart.Row();
+    rParam.nTab = maOutputRange.aStart.Tab();
     // ppLabelArr / nLabels is not changed
 
-    bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
+    bool bAddData = lcl_GetDataGetOrientation(mxSource) == sheet::DataPilotFieldOrientation_HIDDEN;
     lcl_FillOldFields(
-        rParam.maPageFields, xSource, sheet::DataPilotFieldOrientation_PAGE, false);
+        rParam.maPageFields, mxSource, sheet::DataPilotFieldOrientation_PAGE, false);
     lcl_FillOldFields(
-        rParam.maColFields, xSource, sheet::DataPilotFieldOrientation_COLUMN, bAddData);
+        rParam.maColFields, mxSource, sheet::DataPilotFieldOrientation_COLUMN, bAddData);
     lcl_FillOldFields(
-        rParam.maRowFields, xSource, sheet::DataPilotFieldOrientation_ROW, false);
+        rParam.maRowFields, mxSource, sheet::DataPilotFieldOrientation_ROW, false);
     lcl_FillOldFields(
-        rParam.maDataFields, xSource, sheet::DataPilotFieldOrientation_DATA, false);
+        rParam.maDataFields, mxSource, sheet::DataPilotFieldOrientation_DATA, false);
 
-    uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xProp(mxSource, uno::UNO_QUERY);
     if (!xProp.is())
         return;
 
@@ -2448,10 +2448,10 @@ void ScDPObject::FillLabelDataForDimension(
 void ScDPObject::FillLabelData(sal_Int32 nDim, ScDPLabelData& rLabels)
 {
     CreateObjects();
-    if (!xSource.is())
+    if (!mxSource.is())
         return;
 
-    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XNameAccess> xDimsName = mxSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     sal_Int32 nDimCount = xDims->getCount();
     if (nDimCount <= 0 || nDim >= nDimCount)
@@ -2465,10 +2465,10 @@ void ScDPObject::FillLabelData(ScPivotParam& rParam)
     rParam.maLabelArray.clear();
 
     CreateObjects();
-    if (!xSource.is())
+    if (!mxSource.is())
         return;
 
-    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XNameAccess> xDimsName = mxSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     sal_Int32 nDimCount = xDims->getCount();
     if (nDimCount <= 0)
@@ -2486,10 +2486,10 @@ void ScDPObject::GetFieldIdsNames(sheet::DataPilotFieldOrientation nOrient, std:
                                      std::vector<OUString>& rNames)
 {
     CreateObjects();
-    if (!xSource.is())
+    if (!mxSource.is())
         return;
 
-    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XNameAccess> xDimsName = mxSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     tools::Long nDimCount = xDims->getCount();
     for (tools::Long nDim = 0; nDim < nDimCount; ++nDim)
@@ -2894,8 +2894,8 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
 
 void ScDPObject::Dump() const
 {
-    if (pSaveData)
-        pSaveData->Dump();
+    if (mpSaveData)
+        mpSaveData->Dump();
 
     if (mpTableData)
         mpTableData->Dump();
@@ -3646,17 +3646,17 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
     for (const auto& rxTable : maTables)
     {
         const ScDPObject& rObj = *rxTable;
-        ScRange aOutRange = rObj.GetOutRange();
-        if (aOutRange.aStart.Tab() != nOld)
+        ScRange maOutputRange = rObj.GetOutRange();
+        if (maOutputRange.aStart.Tab() != nOld)
             continue;
 
-        ScAddress& s = aOutRange.aStart;
-        ScAddress& e = aOutRange.aEnd;
-        s.SetTab(nNew);
-        e.SetTab(nNew);
+        ScAddress& start = maOutputRange.aStart;
+        ScAddress& end = maOutputRange.aEnd;
+        start.SetTab(nNew);
+        end.SetTab(nNew);
         ScDPObject* pNew = new ScDPObject(rObj);
-        pNew->SetOutRange(aOutRange);
-        mrDoc.ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
+        pNew->SetOutRange(maOutputRange);
+        mrDoc.ApplyFlagsTab(start.Col(), start.Row(), end.Col(), end.Row(), start.Tab(), ScMF::DpTable);
         aAdded.push_back(std::unique_ptr<ScDPObject>(pNew));
     }
 

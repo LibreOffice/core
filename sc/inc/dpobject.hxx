@@ -83,29 +83,30 @@ struct ScDPServiceDesc
 class ScDPObject
 {
 private:
-    ScDocument*             pDoc;
-                                            // settings
-    std::unique_ptr<ScDPSaveData> pSaveData;
-    OUString aTableName;
-    OUString aTableTag;
-    ScRange                 aOutRange;
-    std::unique_ptr<ScSheetSourceDesc>  pSheetDesc;     //  for sheet data
-    std::unique_ptr<ScImportSourceDesc> pImpDesc;       //  for database data
-    std::unique_ptr<ScDPServiceDesc> pServDesc;      //  for external service
-    std::shared_ptr<ScDPTableData>  mpTableData;
-                                            // cached data
-    css::uno::Reference<css::sheet::XDimensionsSupplier> xSource;
-    std::unique_ptr<ScDPOutput> pOutput;
+    ScDocument* mpDocument;
+
+    // Settings
+    std::unique_ptr<ScDPSaveData> mpSaveData;
+    OUString maTableName;
+    OUString maTableTag;
+    ScRange maOutputRange;
+    std::unique_ptr<ScSheetSourceDesc> mpSheetDescription; //  for sheet data
+    std::unique_ptr<ScImportSourceDesc> mpImportDescription; //  for database data
+    std::unique_ptr<ScDPServiceDesc> mpServiceDescription; //  for external service
+    std::shared_ptr<ScDPTableData> mpTableData; // cached data
+
+    css::uno::Reference<css::sheet::XDimensionsSupplier> mxSource;
+    std::unique_ptr<ScDPOutput> mpOutput;
 
     // name -> sequence of sequences of css::xml::FastAttribute or css::xml::Attribute
     // see PivotTable::putToInteropGrabBag in sc/source/filter/oox/pivottablebuffer.cxx for details
     std::map<OUString, css::uno::Any> maInteropGrabBag;
 
-    sal_Int32               nHeaderRows;    // page fields plus filter button
-    bool                    mbHeaderLayout:1;  // true : grid, false : standard
-    bool                    bAllowMove:1;
-    bool                    bSettingsChanged:1;
-    bool                    mbEnableGetPivotData:1;
+    sal_Int32 mnHeaderRows;    // page fields plus filter button
+    bool mbHeaderLayout : 1;  // true : grid, false : standard
+    bool mbAllowMove : 1;
+    bool mbSettingsChanged : 1;
+    bool mbEnableGetPivotData : 1;
 
     ScDPTableData*    GetTableData();
     void              CreateObjects();
@@ -138,7 +139,7 @@ public:
     SC_DLLPUBLIC ScRange GetOutputRangeByType( sal_Int32 nType ) const;
 
     SC_DLLPUBLIC void SetSaveData(const ScDPSaveData& rData);
-    ScDPSaveData*       GetSaveData() const     { return pSaveData.get(); }
+    ScDPSaveData* GetSaveData() const { return mpSaveData.get(); }
 
     SC_DLLPUBLIC void SetOutRange(const ScRange& rRange);
     SC_DLLPUBLIC const ScRange& GetOutRange() const;
@@ -153,20 +154,21 @@ public:
     void                WriteSourceDataTo( ScDPObject& rDest ) const;
     void                WriteTempDataTo( ScDPObject& rDest ) const;
 
-    const ScSheetSourceDesc* GetSheetDesc() const   { return pSheetDesc.get(); }
-    const ScImportSourceDesc* GetImportSourceDesc() const   { return pImpDesc.get(); }
-    const ScDPServiceDesc* GetDPServiceDesc() const { return pServDesc.get(); }
+    const ScSheetSourceDesc* GetSheetDesc() const { return mpSheetDescription.get(); }
+    const ScImportSourceDesc* GetImportSourceDesc() const { return mpImportDescription.get(); }
+    const ScDPServiceDesc* GetDPServiceDesc() const { return mpServiceDescription.get(); }
 
     SC_DLLPUBLIC css::uno::Reference<css::sheet::XDimensionsSupplier> const & GetSource();
 
     bool                IsSheetData() const;
-    bool                IsImportData() const { return(pImpDesc != nullptr); }
-    bool                IsServiceData() const { return(pServDesc != nullptr); }
+    bool IsImportData() const { return mpImportDescription != nullptr; }
+    bool IsServiceData() const { return mpServiceDescription != nullptr; }
+
 
     SC_DLLPUBLIC void SetName(const OUString& rNew);
-    const OUString& GetName() const { return aTableName; }
+    const OUString& GetName() const { return maTableName; }
     void SetTag(const OUString& rNew);
-    const OUString& GetTag() const { return aTableTag; }
+    const OUString& GetTag() const { return maTableTag; }
 
     /**
      *  Data description cell displays the description of a data dimension if
@@ -234,7 +236,7 @@ public:
     void                GetDrillDownData(const ScAddress& rPos,
                                          css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rTableData);
 
-    // apply drop-down attribute, initialize nHeaderRows, without accessing the source
+    // apply drop-down attribute, initialize mnHeaderRows, without accessing the source
     // (button attribute must be present)
     void                RefreshAfterLoad();
 
