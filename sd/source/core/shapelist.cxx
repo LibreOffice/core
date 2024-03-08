@@ -38,8 +38,7 @@ ShapeList::~ShapeList()
 /** adds the given shape to this list */
 void ShapeList::addShape( SdrObject& rObject )
 {
-    ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
-    if( aIter == maShapeList.end() )
+    if( maShapeSet.insert(&rObject).second )
     {
         maShapeList.push_back(&rObject);
         rObject.AddObjectUser( *this );
@@ -53,9 +52,9 @@ void ShapeList::addShape( SdrObject& rObject )
 /** removes the given shape from this list */
 void ShapeList::removeShape( SdrObject& rObject )
 {
-    ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
-    if( aIter != maShapeList.end() )
+    if( maShapeSet.erase(&rObject) )
     {
+        ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
         bool bIterErased = aIter == maIter;
 
         (*aIter)->RemoveObjectUser(*this);
@@ -76,6 +75,7 @@ void ShapeList::clear()
 {
     ListImpl aShapeList;
     aShapeList.swap( maShapeList );
+    maShapeSet.clear();
 
     for( auto& rpShape : aShapeList )
         rpShape->RemoveObjectUser(*this);
@@ -92,14 +92,14 @@ bool ShapeList::isEmpty() const
 /** returns true if given shape is part of this list */
 bool ShapeList::hasShape( SdrObject& rObject ) const
 {
-    return std::find( maShapeList.begin(), maShapeList.end(), &rObject )  != maShapeList.end();
+    return maShapeSet.contains( &rObject );
 }
 
 void ShapeList::ObjectInDestruction(const SdrObject& rObject)
 {
-    ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
-    if( aIter != maShapeList.end() )
+    if( maShapeSet.erase(&rObject) )
     {
+        ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
         bool bIterErased = aIter == maIter;
 
         aIter = maShapeList.erase( aIter );
