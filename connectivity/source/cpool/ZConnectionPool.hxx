@@ -107,7 +107,7 @@ namespace connectivity
         TActiveConnectionMap    m_aActiveConnections;   // the currently active connections
 
         std::mutex              m_aMutex;
-        ::rtl::Reference<OPoolTimer>    m_xInvalidator;         // invalidates the conntection pool when shot
+        ::rtl::Reference<OPoolTimer>    m_xInvalidator;         // invalidates the connection pool when shot
 
         css::uno::Reference< css::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
         css::uno::Reference< css::uno::XInterface >           m_xDriverNode;  // config node entry
