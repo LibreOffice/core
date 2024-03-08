@@ -18,9 +18,6 @@
 #include <comphelper/processfactory.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/unreachable.hxx>
-#include <rtl/string.hxx>
-#include <rtl/textcvt.h>
-#include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
@@ -142,18 +139,6 @@ EM_JS(void, jsRegisterString, (std::type_info const* raw),
 
 namespace
 {
-OString toUtf8(OUString const& string)
-{
-    OString s;
-    if (!string.convertToString(&s, RTL_TEXTENCODING_UTF8,
-                                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                                    | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
-    {
-        throw css::uno::RuntimeException("cannot convert OUString to UTF-8");
-    }
-    return s;
-}
-
 void copyStruct(typelib_CompoundTypeDescription* desc, void const* source, void* dest)
 {
     if (desc->pBaseTypeDescription != nullptr)
@@ -258,8 +243,8 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                             return css::uno::Type(css::uno::TypeClass_INTERFACE, OUString(name));
                         })
         .function("toString", +[](css::uno::Type const& self) {
-            auto const name = toUtf8(self.getTypeName());
-            return std::string(name.getStr(), name.getLength());
+            auto const name = self.getTypeName();
+            return std::u16string(name.getStr(), name.getLength());
         });
 
     // Any
