@@ -835,7 +835,7 @@ void SwLineLayout::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
 
 void SwLineLayout::ResetFlags()
 {
-    m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bFly
+    m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bLastHyph = m_bFly
     = m_bRest = m_bBlinking = m_bClipping = m_bContent = m_bRedline
     = m_bRedlineEnd = m_bForcedLeftMargin = m_bHanging = false;
     m_eRedlineEnd = RedlineType::None;
