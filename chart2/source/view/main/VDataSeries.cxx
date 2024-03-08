@@ -1148,7 +1148,7 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
 
 bool VDataSeries::hasPropertyMapping(const OUString& rPropName ) const
 {
-    return m_PropertyMap.find(rPropName) != m_PropertyMap.end();
+    return m_PropertyMap.contains(rPropName);
 }
 
 } //namespace chart
