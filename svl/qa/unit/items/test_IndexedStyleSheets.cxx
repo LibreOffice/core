@@ -179,8 +179,8 @@ void IndexedStyleSheetsTest::PositionCanBeQueriedByFamily()
     const std::vector<SfxStyleSheetBase*>& v = iss.GetStyleSheetsByFamily(SfxStyleFamily::Char);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Separation by family works.", static_cast<size_t>(2), v.size());
 
-    const std::vector<SfxStyleSheetBase*>& w = iss.GetStyleSheetsByFamily(SfxStyleFamily::All);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wildcard works for family queries.", static_cast<size_t>(3), w.size());
+    const std::vector<SfxStyleSheetBase*>& w = iss.GetStyleSheetsByFamily(SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wildcard works for family queries.", static_cast<size_t>(1), w.size());
 }
 
 void IndexedStyleSheetsTest::OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed()

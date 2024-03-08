@@ -173,7 +173,7 @@ private:
     /** A map which stores the positions of style sheets by their name */
     MapType mPositionsByName;
 
-    static constexpr size_t NUMBER_OF_FAMILIES = 7;
+    static constexpr size_t NUMBER_OF_FAMILIES = 6;
 
     std::array<std::vector<SfxStyleSheetBase*>, NUMBER_OF_FAMILIES> mStyleSheetsByFamily;
 };

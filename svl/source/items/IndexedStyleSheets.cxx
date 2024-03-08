@@ -32,8 +32,6 @@ size_t family_to_index(SfxStyleFamily family)
         return 4;
     case SfxStyleFamily::Table:
         return 5;
-    case SfxStyleFamily::All:
-        return 6;
     default: break;
     }
     assert(false); // only for compiler warning. all cases are handled in the switch
@@ -52,8 +50,6 @@ void IndexedStyleSheets::Register(SfxStyleSheetBase& style, sal_Int32 pos)
     mPositionsByName.insert(std::make_pair(style.GetName(), pos));
     size_t position = family_to_index(style.GetFamily());
     mStyleSheetsByFamily.at(position).push_back(&style);
-    size_t positionForFamilyAll = family_to_index(SfxStyleFamily::All);
-    mStyleSheetsByFamily.at(positionForFamilyAll).push_back(&style);
 }
 
 void
