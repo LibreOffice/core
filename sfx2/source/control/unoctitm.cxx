@@ -547,7 +547,20 @@ static bool isCommandAllowedForViewType(const OUString& command)
             u"CopyHyperlinkLocation"_ustr
         };
 
-        return std::find(std::begin(allowedCommandList), std::end(allowedCommandList), command) != std::end(allowedCommandList);
+        bool allowed = std::find(std::begin(allowedCommandList), std::end(allowedCommandList), command) != std::end(allowedCommandList);
+
+        if (!allowed && SfxViewShell::Current() && SfxViewShell::Current()->IsAllowChangeComments())
+        {
+            constexpr OUString allowedCommentCommandList[] = {
+                u"InsertAnnotation"_ustr,
+                u"DeleteComment"_ustr,
+                u"DeleteAnnotation"_ustr,
+                u"EditAnnotation"_ustr
+            };
+            allowed = std::find(std::begin(allowedCommentCommandList), std::end(allowedCommentCommandList), command) != std::end(allowedCommentCommandList);
+        }
+
+        return allowed;
     }
 
     return true;
