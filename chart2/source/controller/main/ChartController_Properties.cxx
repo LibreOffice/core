@@ -703,17 +703,17 @@ void ChartController::executeDlg_ObjectProperties( const OUString& rSelectedObje
 {
     OUString aObjectCID = lcl_getFormatCIDforSelectedCID( rSelectedObjectCID );
 
-    auto aUndoGuard = std::make_shared<UndoGuard>(
+    auto xUndoGuard = std::make_shared<UndoGuard>(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::ActionType::Format,
             ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
         m_xUndoManager );
 
-    ChartController::executeDlg_ObjectProperties_withUndoGuard( aUndoGuard, aObjectCID, false );
+    ChartController::executeDlg_ObjectProperties_withUndoGuard(std::move(xUndoGuard), aObjectCID, false );
 }
 
 void ChartController::executeDlg_ObjectProperties_withUndoGuard(
-    std::shared_ptr<UndoGuard> aUndoGuard,const OUString& rObjectCID, bool bSuccessOnUnchanged )
+    std::shared_ptr<UndoGuard> xUndoGuard, const OUString& rObjectCID, bool bSuccessOnUnchanged )
 {
     //return true if the properties were changed successfully
     if( rObjectCID.isEmpty() )
@@ -793,14 +793,15 @@ void ChartController::executeDlg_ObjectProperties_withUndoGuard(
         }
 
         //open the dialog
-        SfxTabDialogController::runAsync(aDlgPtr, [aDlgPtr, xChartDoc, pItemConverter, bSuccessOnUnchanged, aUndoGuard] (int nResult)
+        SfxTabDialogController::runAsync(aDlgPtr, [aDlgPtr, xChartDoc, pItemConverter,bSuccessOnUnchanged,
+                                                   xUndoGuard=std::move(xUndoGuard)] (int nResult)
         {
             if (nResult == RET_OK || (bSuccessOnUnchanged && aDlgPtr->DialogWasClosedWithOK())) {
                 const SfxItemSet* pOutItemSet = aDlgPtr->GetOutputItemSet();
                 if(pOutItemSet) {
                     ControllerLockGuardUNO aCLGuard(xChartDoc);
                     (void)pItemConverter->ApplyItemSet(*pOutItemSet); //model should be changed now
-                    aUndoGuard->commit();
+                    xUndoGuard->commit();
                 }
             }
         });
