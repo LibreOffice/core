@@ -242,9 +242,9 @@ Module.addOnPostRun(function() {
         console.assert(v.get().toString() === 'long');
         console.assert(test.isAnyType(v));
         v.delete();
-        //TODO: let a = new Module.uno_Any(Module.uno_Type.Type(), Module.uno_Type.Long());
-        //TODO: console.assert(test.isAnyType(a));
-        //TODO: a.delete();
+        let a = new Module.uno_Any(Module.uno_Type.Type(), Module.uno_Type.Long());
+        console.assert(test.isAnyType(a));
+        a.delete();
     }
     {
         let v = test.getAnySequence();

@@ -279,7 +279,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 case TypeClass_STRING:
                     return Any{ OUString(rObject.as<std::u16string>()) };
                 case TypeClass_TYPE:
-                    return {}; //TODO
+                    return css::uno::Any(rObject.as<css::uno::Type>());
                 case TypeClass_SEQUENCE:
                     return {}; //TODO
                 case TypeClass_ENUM:
