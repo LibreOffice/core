@@ -72,11 +72,6 @@ IndexedStyleSheets::Reindex()
     }
 }
 
-sal_Int32 IndexedStyleSheets::GetNumberOfStyleSheets() const
-{
-    return mStyleSheets.size();
-}
-
 void
 IndexedStyleSheets::AddStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style)
 {

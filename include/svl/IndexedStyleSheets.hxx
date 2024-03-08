@@ -94,7 +94,7 @@ public:
     bool HasStyleSheet(const rtl::Reference<SfxStyleSheetBase>& style) const;
 
     /** Obtain the number of style sheets which are held */
-    sal_Int32 GetNumberOfStyleSheets() const;
+    sal_Int32 GetNumberOfStyleSheets() const { return mStyleSheets.size(); }
 
     /** Obtain the number of style sheets for which a certain condition holds */
     sal_Int32 GetNumberOfStyleSheetsWithPredicate(StyleSheetPredicate& predicate) const;
