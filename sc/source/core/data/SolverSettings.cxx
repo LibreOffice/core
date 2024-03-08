@@ -9,9 +9,11 @@
  */
 
 #include <global.hxx>
+#include <compiler.hxx>
 #include <table.hxx>
 #include <docsh.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/string_view.hxx>
 #include <solverutil.hxx>
 #include <unotools/charclass.hxx>
 #include <SolverSettings.hxx>
@@ -412,6 +414,12 @@ bool SolverSettings::ReadConstraintPart(ConstraintPart ePart, tools::Long nIndex
     if (pRangeData)
     {
         rValue = pRangeData->GetSymbol();
+        // tdf#156814 Remove sheet name if it is a range that refers to the same sheet
+        ScRange aRange;
+        ScRefFlags nFlags = aRange.ParseAny(rValue, m_rDoc);
+        bool bIsValidRange = (nFlags & ScRefFlags::VALID) == ScRefFlags::VALID;
+        if (bIsValidRange && m_rTable.GetTab() == aRange.aStart.Tab())
+            rValue = aRange.Format(m_rDoc, ScRefFlags::RANGE_ABS);
         return true;
     }
     return false;
@@ -521,6 +529,49 @@ bool SolverSettings::ReadParamValue(SolverParameter eParam, OUString& rValue, bo
         rValue = pRangeData->GetSymbol();
         if (bRemoveQuotes)
             ScGlobal::EraseQuotes(rValue, '"');
+
+        // tdf#156814 Remove sheet name from the objective cell and value if they refer to the same sheet
+        if (eParam == SP_OBJ_CELL || eParam == SP_OBJ_VAL)
+        {
+            ScRange aRange;
+            ScRefFlags nFlags = aRange.ParseAny(rValue, m_rDoc);
+            bool bIsValidRange = ((nFlags & ScRefFlags::VALID) == ScRefFlags::VALID);
+
+            if (bIsValidRange && m_rTable.GetTab() == aRange.aStart.Tab())
+                rValue = aRange.Format(m_rDoc, ScRefFlags::RANGE_ABS);
+        }
+        else if (eParam == SP_VAR_CELLS)
+        {
+            // Variable cells may contain multiple ranges separated by ';'
+            sal_Int32 nIdx = 0;
+            OUString sNewValue;
+            bool bFirst = true;
+            // Delimiter character to separate ranges
+            sal_Unicode cDelimiter = ScCompiler::GetNativeSymbolChar(OpCode::ocSep);
+
+            do
+            {
+                OUString aRangeStr(o3tl::getToken(rValue, 0, cDelimiter, nIdx));
+                ScRange aRange;
+                ScRefFlags nFlags = aRange.ParseAny(aRangeStr, m_rDoc);
+                bool bIsValidRange = (nFlags & ScRefFlags::VALID) == ScRefFlags::VALID;
+
+                if (bIsValidRange && m_rTable.GetTab() == aRange.aStart.Tab())
+                    aRangeStr = aRange.Format(m_rDoc, ScRefFlags::RANGE_ABS);
+
+                if (bFirst)
+                {
+                    sNewValue = aRangeStr;
+                    bFirst = false;
+                }
+                else
+                {
+                    sNewValue += OUStringChar(cDelimiter) + aRangeStr;
+                }
+            } while (nIdx > 0);
+
+            rValue = sNewValue;
+        }
         return true;
     }
     return false;
