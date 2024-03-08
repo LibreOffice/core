@@ -17,7 +17,6 @@
 
 
 namespace {
-const size_t NUMBER_OF_FAMILIES = 7;
 size_t family_to_index(SfxStyleFamily family)
 {
     switch (family) {
@@ -46,10 +45,7 @@ namespace svl {
 
 IndexedStyleSheets::IndexedStyleSheets()
 {
-    for (size_t i = 0; i < NUMBER_OF_FAMILIES; i++) {
-        mStyleSheetPositionsByFamily.emplace_back();
-    }
-;}
+}
 
 void IndexedStyleSheets::Register(const SfxStyleSheetBase& style, sal_Int32 pos)
 {
@@ -64,7 +60,6 @@ void
 IndexedStyleSheets::Reindex()
 {
     mPositionsByName.clear();
-    mStyleSheetPositionsByFamily.resize(NUMBER_OF_FAMILIES);
     for (size_t i = 0; i < NUMBER_OF_FAMILIES; i++) {
         mStyleSheetPositionsByFamily[i].clear();
     }

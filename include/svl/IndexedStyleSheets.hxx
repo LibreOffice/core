@@ -17,6 +17,7 @@
 #include <svl/svldllapi.h>
 
 #include <unordered_map>
+#include <array>
 #include <vector>
 
 namespace svl
@@ -172,7 +173,9 @@ private:
     /** A map which stores the positions of style sheets by their name */
     MapType mPositionsByName;
 
-    std::vector<std::vector<sal_Int32>> mStyleSheetPositionsByFamily;
+    static constexpr size_t NUMBER_OF_FAMILIES = 7;
+
+    std::array<std::vector<sal_Int32>, NUMBER_OF_FAMILIES> mStyleSheetPositionsByFamily;
 };
 
 } /* namespace svl */
