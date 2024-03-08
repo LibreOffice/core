@@ -221,6 +221,42 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
 
     emscripten::class_<typelib_TypeDescriptionReference>("uno_Type")
         .smart_ptr<css::uno::Type>("uno_Type$")
+        .class_function("Void", +[]() { return cppu::UnoType<void>::get(); })
+        .class_function("Boolean", +[]() { return cppu::UnoType<bool>::get(); })
+        .class_function("Byte", +[]() { return cppu::UnoType<sal_Int8>::get(); })
+        .class_function("Short", +[]() { return cppu::UnoType<sal_Int16>::get(); })
+        .class_function("UnsignedShort", +[]() { return cppu::UnoType<sal_uInt16>::get(); })
+        .class_function("Long", +[]() { return cppu::UnoType<sal_Int32>::get(); })
+        .class_function("UnsignedLong", +[]() { return cppu::UnoType<sal_uInt32>::get(); })
+        .class_function("Hyper", +[]() { return cppu::UnoType<sal_Int64>::get(); })
+        .class_function("UnsignedHyper", +[]() { return cppu::UnoType<sal_uInt64>::get(); })
+        .class_function("Float", +[]() { return cppu::UnoType<float>::get(); })
+        .class_function("Double", +[]() { return cppu::UnoType<double>::get(); })
+        .class_function("Char", +[]() { return cppu::UnoType<sal_Unicode>::get(); })
+        .class_function("String", +[]() { return cppu::UnoType<OUString>::get(); })
+        .class_function("Type", +[]() { return cppu::UnoType<css::uno::Type>::get(); })
+        .class_function("Any", +[]() { return cppu::UnoType<css::uno::Any>::get(); })
+        .class_function("Sequence",
+                        +[](css::uno::Type const& type) {
+                            return css::uno::Type(css::uno::TypeClass_SEQUENCE,
+                                                  "[]" + type.getTypeName());
+                        })
+        .class_function("Enum",
+                        +[](std::u16string const& name) {
+                            return css::uno::Type(css::uno::TypeClass_ENUM, OUString(name));
+                        })
+        .class_function("Struct",
+                        +[](std::u16string const& name) {
+                            return css::uno::Type(css::uno::TypeClass_STRUCT, OUString(name));
+                        })
+        .class_function("Exception",
+                        +[](std::u16string const& name) {
+                            return css::uno::Type(css::uno::TypeClass_EXCEPTION, OUString(name));
+                        })
+        .class_function("Interface",
+                        +[](std::u16string const& name) {
+                            return css::uno::Type(css::uno::TypeClass_INTERFACE, OUString(name));
+                        })
         .function("toString", +[](css::uno::Type const& self) {
             auto const name = toUtf8(self.getTypeName());
             return std::string(name.getStr(), name.getLength());
