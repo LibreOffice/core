@@ -316,6 +316,9 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         // find the table/section which is close
         if( pTableNode == nullptr )
         {
+            if( pSectionNode == nullptr )
+                return nullptr;
+
             pInnermostNode = pSectionNode;
             pSection = &static_cast<const SwSectionNode*>(pSectionNode)->GetSection();
         }
