@@ -1272,6 +1272,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, TestTextBoxCrashAfterLineDel)
     xCursor->setString(OUString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146356)
+{
+    createSwDoc("tdf146356.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD2 | awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    emulateTyping(*pTextDoc, u"Some Text");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Some Text
+    // - Actual  : Table of Contents
+    CPPUNIT_ASSERT_EQUAL(OUString("Some Text"), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121546)
 {
     createSwDoc("tdf121546.odt");
