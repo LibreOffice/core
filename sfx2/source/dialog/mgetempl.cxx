@@ -301,9 +301,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( pModule )
     {
-        const SfxPoolItem* pPoolItem = pModule->GetItem( SID_ATTR_METRIC );
-        if ( pPoolItem )
-            eFieldUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>( pPoolItem )->GetValue());
+        eFieldUnit = pModule->GetFieldUnit();
     }
 
     switch ( eFieldUnit )

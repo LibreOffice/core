@@ -32,6 +32,8 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
+#include <comphelper/lok.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #define ShellClass_SfxModule
 #include <sfxslots.hxx>
@@ -245,11 +247,7 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
     FieldUnit eUnit = FieldUnit::INCH;
     SfxModule* pModule = GetActiveModule();
     if ( pModule )
-    {
-        const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
-        if ( pItem )
-            eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
-    }
+        return pModule->GetFieldUnit();
     else
         SAL_WARN( "sfx.appl", "GetModuleFieldUnit(): no module found" );
     return eUnit;
@@ -257,6 +255,12 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
 
 FieldUnit SfxModule::GetFieldUnit() const
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        MeasurementSystem eSystem
+            = LocaleDataWrapper(comphelper::LibreOfficeKit::getLocale()).getMeasurementSystemEnum();
+        return MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
+    }
     FieldUnit eUnit = FieldUnit::INCH;
     const SfxPoolItem* pItem = GetItem( SID_ATTR_METRIC );
     if ( pItem )
