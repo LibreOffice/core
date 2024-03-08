@@ -248,7 +248,8 @@ while (xParaEnumeration.hasMoreElements()) {
     xParagraph = new css.text.XTextRange(xParaEnumeration.nextElement(), Module.uno_Reference.FromAny);
     if (xParagraph.$is()) {
         xParaProps = new css.beans.XPropertySet(xParagraph.$query());
-        let color = new Module.Any(Math.floor(Math.random() * 0xFFFFFF), css.uno.TypeClass.LONG);
+        let color = new Module.uno_Any(
+            Module.uno_Type.Long(), Math.floor(Math.random() * 0xFFFFFF));
         xParaProps.setPropertyValue("CharColor", color);
         color.delete();
     }
