@@ -240,14 +240,14 @@ public:
 private:
     DimsType m_DimList;
     DupNameCountType maDupNameCounts; /// keep track of number of duplicates in each name.
-    std::unique_ptr<ScDPDimensionSaveData> pDimensionData; // settings that create new dimensions
-    sal_uInt16 nColumnGrandMode;
-    sal_uInt16 nRowGrandMode;
-    sal_uInt16 nIgnoreEmptyMode;
-    sal_uInt16 nRepeatEmptyMode;
-    bool bFilterButton; // not passed to DataPilotSource
-    bool bDrillDown; // not passed to DataPilotSource
-    bool bExpandCollapse; // not passed to DataPilotSource
+    std::unique_ptr<ScDPDimensionSaveData> mpDimensionData; // settings that create new dimensions
+    sal_uInt16 mnColumnGrandMode;
+    sal_uInt16 mnRowGrandMode;
+    sal_uInt16 mnIgnoreEmptyMode;
+    sal_uInt16 mnRepeatEmptyMode;
+    bool mbFilterButton; // not passed to DataPilotSource
+    bool mbDrillDown; // not passed to DataPilotSource
+    bool mbExpandCollapse; // not passed to DataPilotSource
 
     /** if true, all dimensions already have all of their member instances
      *  created. */
@@ -320,38 +320,30 @@ public:
 
     void SetPosition( ScDPSaveDimension* pDim, tools::Long nNew );
     SC_DLLPUBLIC void SetColumnGrand( bool bSet );
-    bool GetColumnGrand() const
-        { return bool(nColumnGrandMode); }
+    bool GetColumnGrand() const { return bool(mnColumnGrandMode); }
 
     SC_DLLPUBLIC void SetRowGrand( bool bSet );
-    bool GetRowGrand() const
-        { return bool(nRowGrandMode); }
+    bool GetRowGrand() const { return bool(mnRowGrandMode); }
 
     SC_DLLPUBLIC void SetIgnoreEmptyRows( bool bSet );
-    bool GetIgnoreEmptyRows() const
-        { return bool(nIgnoreEmptyMode); }
+    bool GetIgnoreEmptyRows() const { return bool(mnIgnoreEmptyMode); }
 
     SC_DLLPUBLIC void SetRepeatIfEmpty( bool bSet );
-    bool GetRepeatIfEmpty() const
-        { return bool(nRepeatEmptyMode); }
+    bool GetRepeatIfEmpty() const { return bool(mnRepeatEmptyMode); }
 
     SC_DLLPUBLIC void SetFilterButton( bool bSet );
-    bool GetFilterButton() const
-        { return bFilterButton; }
+    bool GetFilterButton() const { return mbFilterButton; }
 
     SC_DLLPUBLIC void SetDrillDown( bool bSet );
-    bool GetDrillDown() const
-        { return bDrillDown; }
+    bool GetDrillDown() const { return mbDrillDown; }
 
     SC_DLLPUBLIC void SetExpandCollapse( bool bSet );
-    bool GetExpandCollapse() const
-        { return bExpandCollapse; }
+    bool GetExpandCollapse() const { return mbExpandCollapse; }
 
     void WriteToSource( const css::uno::Reference<css::sheet::XDimensionsSupplier>& xSource );
     bool IsEmpty() const;
 
-    const ScDPDimensionSaveData* GetExistingDimensionData() const
-        { return pDimensionData.get(); }
+    const ScDPDimensionSaveData* GetExistingDimensionData() const { return mpDimensionData.get(); }
 
     void RemoveAllGroupDimensions( const OUString& rSrcDimName, std::vector<OUString>* pDeletedNames = nullptr );
 
