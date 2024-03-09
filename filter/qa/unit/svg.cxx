@@ -46,7 +46,8 @@ void SvgFilterTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
 {
-#if !defined(MACOSX)
+// On Windows, SVGFilter::filterWriterOrCalc can't get current frame to obtain selection
+#if !defined(MACOSX) && !defined(_WIN32)
     // Load a document with a jpeg image in it.
     loadFromFile(u"preserve-jpg.odt");
 
