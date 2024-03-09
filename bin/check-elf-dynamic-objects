@@ -198,7 +198,7 @@ local file="$1"
             fi
         ;;
         */libmergedlo.so)
-            allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} ${dconfallowlist} libcups.so.2 libcairo.so.2"
+            allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} ${kerberosallowlist} ${dconfallowlist} libcups.so.2 libcairo.so.2"
         ;;
     esac
     if test "${skip}" = 0 && readelf -d "${file}" &> /dev/null ; then
