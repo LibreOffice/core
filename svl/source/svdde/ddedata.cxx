@@ -141,7 +141,7 @@ sal_uInt32 DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
     return static_cast<sal_uInt32>(nFmt);
 }
 
-SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)
+SotClipboardFormatId DdeData::GetInternalFormat(sal_uInt32 nFmt)
 {
     switch( nFmt )
     {

@@ -72,7 +72,7 @@ public:
     DdeData&        operator=(DdeData&&) noexcept;
 
     static sal_uInt32 GetExternalFormat(SotClipboardFormatId nFmt);
-    static SotClipboardFormatId GetInternalFormat(sal_uLong nFmt);
+    static SotClipboardFormatId GetInternalFormat(sal_uInt32 nFmt);
 };
 
 
