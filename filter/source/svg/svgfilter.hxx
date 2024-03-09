@@ -53,6 +53,7 @@ using namespace ::com::sun::star::xml::sax;
 
 #define SVG_EXPORT_ALLPAGES ((sal_Int32)-1)
 
+namespace com::sun::star::frame { class XController; }
 
 // Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
 inline constexpr OUString sPlaceholderTag = u"<[:isPlaceholder:]>"_ustr;
@@ -294,6 +295,8 @@ private:
 
     bool filterImpressOrDraw( const Sequence< PropertyValue >& rDescriptor );
     bool filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor );
+
+    css::uno::Reference<css::frame::XController> fillDrawImpressSelectedPages();
 
 protected:
 

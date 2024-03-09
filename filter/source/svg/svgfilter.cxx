@@ -149,6 +149,74 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     return filterImpressOrDraw(rDescriptor);
 }
 
+css::uno::Reference<css::frame::XController> SVGFilter::fillDrawImpressSelectedPages()
+{
+    uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
+    uno::Reference<frame::XFrame> xFrame = xDesktop->getCurrentFrame(); // Manage headless case
+    if (!xFrame)
+        return {};
+    uno::Reference<frame::XController> xController(xFrame->getController(), uno::UNO_SET_THROW);
+    uno::Reference<drawing::framework::XControllerManager> xManager(xController,
+                                                                    uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::framework::XConfigurationController> xConfigController(
+        xManager->getConfigurationController());
+
+    // which view configuration are we in?
+    //
+    // * traverse Impress resources to find slide preview pane, grab selection from there
+    // * otherwise, fallback to current slide
+    //
+    const uno::Sequence<uno::Reference<drawing::framework::XResourceId>> aResIds(
+        xConfigController->getCurrentConfiguration()->getResources(
+            {}, "", drawing::framework::AnchorBindingMode_INDIRECT));
+
+    for (const uno::Reference<drawing::framework::XResourceId>& rResId : aResIds)
+    {
+        // can we somehow obtain the slidesorter from the Impress framework?
+        if (rResId->getResourceURL() == "private:resource/view/SlideSorter")
+        {
+            // got it, grab current selection from there
+            uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
+                xConfigController->getResource(rResId), uno::UNO_QUERY);
+            if (!xSelectionSupplier)
+                continue;
+
+            Sequence<Reference<XInterface>> aSelectedPageSequence;
+            if (xSelectionSupplier->getSelection() >>= aSelectedPageSequence)
+            {
+                for (auto& xInterface : aSelectedPageSequence)
+                {
+                    uno::Reference<drawing::XDrawPage> xDrawPage(xInterface, uno::UNO_QUERY);
+
+                    if (Reference<XPropertySet> xPropSet{ xDrawPage, UNO_QUERY })
+                    {
+                        Reference<XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
+                        if (xPropSetInfo && xPropSetInfo->hasPropertyByName("Visible"))
+                        {
+                            bool bIsSlideVisible = true; // default: true
+                            xPropSet->getPropertyValue("Visible") >>= bIsSlideVisible;
+                            if (!bIsSlideVisible)
+                                continue;
+                        }
+                    }
+                    mSelectedPages.push_back(xDrawPage);
+                }
+
+                // and stop looping. It is likely not getting better
+                break;
+            }
+        }
+    }
+
+    if (mSelectedPages.empty())
+    {
+        // apparently failed to clean selection - fallback to current page
+        uno::Reference<drawing::XDrawView> xDrawView(xController, uno::UNO_QUERY_THROW);
+        mSelectedPages.push_back(xDrawView->getCurrentPage());
+    }
+    return xController;
+}
+
 bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescriptor )
 {
     SolarMutexGuard aGuard;
@@ -390,85 +458,9 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             }
         }
 
-        uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
         uno::Reference<frame::XController > xController;
-        if (xDesktop->getCurrentFrame().is() && !bPageProvided) // Manage headless case
-        {
-            uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_SET_THROW);
-            xController.set(xFrame->getController(), uno::UNO_SET_THROW);
-            uno::Reference<drawing::XDrawView> xDrawView(xController, uno::UNO_QUERY_THROW);
-            uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY_THROW);
-            uno::Reference<drawing::framework::XConfigurationController> xConfigController(xManager->getConfigurationController());
-
-            // which view configuration are we in?
-            //
-            // * traverse Impress resources to find slide preview pane, grab selection from there
-            // * otherwise, fallback to current slide
-            //
-            const uno::Sequence<uno::Reference<drawing::framework::XResourceId> > aResIds(
-                xConfigController->getCurrentConfiguration()->getResources(
-                    uno::Reference<drawing::framework::XResourceId>(),
-                    "",
-                    drawing::framework::AnchorBindingMode_INDIRECT));
-
-            for( const uno::Reference<drawing::framework::XResourceId>& rResId : aResIds )
-            {
-                // can we somehow obtain the slidesorter from the Impress framework?
-                if( rResId->getResourceURL() == "private:resource/view/SlideSorter" )
-                {
-                    // got it, grab current selection from there
-                    uno::Reference<drawing::framework::XResource> xRes(
-                        xConfigController->getResource(rResId));
-
-                    uno::Reference< view::XSelectionSupplier > xSelectionSupplier(
-                        xRes,
-                        uno::UNO_QUERY );
-                    if( xSelectionSupplier.is() )
-                    {
-                        uno::Any aSelection = xSelectionSupplier->getSelection();
-                        if( aSelection.hasValue() )
-                        {
-                            Sequence< Reference< XInterface > > aSelectedPageSequence;
-                            aSelection >>= aSelectedPageSequence;
-                            sal_Int32 nCount = aSelectedPageSequence.getLength();
-                            if (nCount > 0)
-                            {
-                                size_t nSelectedPageCount = nCount;
-                                for( size_t j=0; j<nSelectedPageCount; ++j )
-                                {
-                                    uno::Reference< drawing::XDrawPage > xDrawPage( aSelectedPageSequence[j],
-                                                                                    uno::UNO_QUERY );
-
-                                    Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
-                                    bool bIsSlideVisible = true;     // default: true
-                                    if (xPropSet.is())
-                                    {
-                                        Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-                                        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("Visible"))
-                                        {
-                                            xPropSet->getPropertyValue( "Visible" )  >>= bIsSlideVisible;
-                                            if (!bIsSlideVisible)
-                                                continue;
-                                        }
-                                    }
-                                    mSelectedPages.push_back(xDrawPage);
-                                }
-                            }
-
-                            // and stop looping. It is likely not getting better
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if( mSelectedPages.empty() )
-            {
-                // apparently failed to clean selection - fallback to current page
-                mSelectedPages.resize( 1 );
-                mSelectedPages[0] = xDrawView->getCurrentPage();
-            }
-        }
+        if (!bPageProvided)
+            xController = fillDrawImpressSelectedPages();
 
         /*
          * Export all slides, or requested "PagePos"
@@ -590,11 +582,8 @@ bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor
 
     uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
     uno::Reference<frame::XController > xController;
-    if (xDesktop->getCurrentFrame().is())
-    {
-        uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_SET_THROW);
+    if (uno::Reference<frame::XFrame> xFrame = xDesktop->getCurrentFrame())
         xController.set(xFrame->getController(), uno::UNO_SET_THROW);
-    }
 
     Reference< view::XSelectionSupplier > xSelection (xController, UNO_QUERY);
     if (!xSelection.is())
