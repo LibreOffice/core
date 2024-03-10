@@ -104,6 +104,7 @@ SfxObjectShell::GetPreviewMetaFile( bool bFullContent ) const
 
 BitmapEx SfxObjectShell::GetPreviewBitmap() const
 {
+    SfxCloseVetoLock lock(*this);
     ScopedVclPtrInstance< VirtualDevice > pDevice;
     pDevice->SetAntialiasing(AntialiasingFlags::Enable | pDevice->GetAntialiasing());
     if(!CreatePreview_Impl(/*bFullContent*/false, pDevice, nullptr))
