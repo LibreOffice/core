@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
-#include <memory>
-#include <numeric>
-
 #include <headless/svpgdi.hxx>
 #include <comphelper/lok.hxx>
 

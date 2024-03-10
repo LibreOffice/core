@@ -19,8 +19,6 @@
 
 #ifndef IOS
 
-#include <headless/svpbmp.hxx>
-#include <headless/svpinst.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpgdi.hxx>
 

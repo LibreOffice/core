@@ -21,13 +21,8 @@
 #include <sal/log.hxx>
 
 #include <cstring>
-
+#include <vcl/cairo.hxx>
 #include <headless/svpbmp.hxx>
-#include <headless/svpgdi.hxx>
-#include <headless/svpinst.hxx>
-
-#include <basegfx/vector/b2ivector.hxx>
-#include <basegfx/range/b2ibox.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/bitmap.hxx>

@@ -7,12 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <math.h>
 #include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -28,7 +26,6 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-#include <chrono>
 #include <iostream>
 
 #include <test/outputdevice.hxx>

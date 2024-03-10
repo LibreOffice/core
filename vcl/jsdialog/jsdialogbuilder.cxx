@@ -10,9 +10,7 @@
 #include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
-#include <comphelper/lok.hxx>
 #include <utility>
-#include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
@@ -23,16 +21,11 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <messagedialog.hxx>
 #include <tools/json_writer.hxx>
-#include <o3tl/deleter.hxx>
 #include <memory>
-#include <boost/property_tree/json_parser.hpp>
 #include <vcl/jsdialog/executor.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
 #include <tools/stream.hxx>
-
 #include <vcl/cvtgrf.hxx>
-
 #include <wizdlg.hxx>
 
 static std::map<OUString, vcl::Window*>& GetLOKPopupsMap()

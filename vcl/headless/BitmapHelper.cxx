@@ -18,7 +18,8 @@
  */
 
 #include <headless/BitmapHelper.hxx>
-#include <svdata.hxx>
+#include <vcl/cairo.hxx>
+#include <vcl/svapp.hxx>
 #include <utility>
 
 BitmapHelper::BitmapHelper(const SalBitmap& rSourceBitmap, const bool bForceARGB32)

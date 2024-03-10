@@ -10,9 +10,6 @@
 
 #include <test/outputdevice.hxx>
 
-#include <cmath>
-#include <vector>
-
 namespace vcl::test {
 
 namespace

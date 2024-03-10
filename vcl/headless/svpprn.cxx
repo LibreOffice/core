@@ -22,14 +22,10 @@
 #include <string_view>
 
 #include <vcl/svapp.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/QueueInfo.hxx>
 #include <printerinfomanager.hxx>
 
 #include <jobset.h>
 #include <print.h>
-#include <salptype.hxx>
-#include <svdata.hxx>
 
 #include <unx/genpspgraphics.h>
 

@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 #include <sal/config.h>
 
 #include <mutex>
 
 #include <pthread.h>
 #include <sys/time.h>
-#include <poll.h>
 
 #include <sal/types.h>
-#include <sal/log.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/inputtypes.hxx>
@@ -51,7 +48,6 @@
 #include <svdata.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
-#include <comphelper/lok.hxx>
 #include <tools/debug.hxx>
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;

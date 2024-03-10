@@ -18,8 +18,6 @@
  */
 
 #include <comphelper/lok.hxx>
-#include <o3tl/safeint.hxx>
-#include <vcl/syswin.hxx>
 #include <sal/log.hxx>
 
 #include <headless/svpframe.hxx>

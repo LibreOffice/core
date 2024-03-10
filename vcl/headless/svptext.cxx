@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-
-#include <sal/types.h>
 #include <vcl/fontcharmap.hxx>
-#include <basegfx/range/b2ibox.hxx>
+#include <sal/config.h>
 #include <headless/svpgdi.hxx>
 #include <font/FontMetricData.hxx>
 #include <sallayout.hxx>

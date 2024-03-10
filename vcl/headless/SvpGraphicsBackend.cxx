@@ -19,12 +19,6 @@
 
 #include <headless/SvpGraphicsBackend.hxx>
 
-#include <sal/log.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <vcl/BitmapTools.hxx>
-#include <headless/BitmapHelper.hxx>
-
 SvpGraphicsBackend::SvpGraphicsBackend(CairoCommon& rCairoCommon)
     : m_rCairoCommon(rCairoCommon)
 {

@@ -17,16 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/gradient.hxx>
+#include <vcl/svapp.hxx>
 #include <headless/BitmapHelper.hxx>
 #include <headless/CairoCommon.hxx>
-#include <dlfcn.h>
+#ifdef ANDROID
+#include <vcl/cairo.hxx> // for correct compilation in only android
+#endif
 #include <vcl/BitmapTools.hxx>
 #include <SalGradient.hxx>
-#include <svdata.hxx>
 #include <tools/helpers.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <comphelper/configuration.hxx>
