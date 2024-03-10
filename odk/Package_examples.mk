@@ -189,6 +189,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/FirstSteps/FirstLoadComponent/basic/FirstLoadComponent.bas \
     DevelopersGuide/FirstSteps/FirstLoadComponent/python/FirstLoadComponent.py \
     DevelopersGuide/FirstSteps/FirstLoadComponent/python/DualComponentLoader.py \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/cxx/HelloTextTableShape.cxx \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/cxx/Makefile \
     DevelopersGuide/FirstSteps/HelloTextTableShape/java/HelloTextTableShape.java \
     DevelopersGuide/FirstSteps/HelloTextTableShape/java/Makefile \
     DevelopersGuide/FirstSteps/HelloTextTableShape/basic/HelloTextTableShape.bas \

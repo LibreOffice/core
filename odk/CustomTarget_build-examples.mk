@@ -12,6 +12,7 @@ my_example_dirs = \
     CLI/VB.NET/WriterDemo \
     DevelopersGuide/FirstSteps/FirstUnoContact/cxx \
     DevelopersGuide/FirstSteps/FirstLoadComponent/cxx \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/cxx \
     DevelopersGuide/BasicAndDialogs/ToolkitControls \
     DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp \
     DevelopersGuide/Components/CppComponent \
