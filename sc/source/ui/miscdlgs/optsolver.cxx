@@ -508,34 +508,93 @@ void ScOptSolverDlg::LoadSolverSettings()
     m_pSolverSettings->GetEngineOptions(maProperties);
 }
 
-// Set solver settings and save them
+// Set solver settings and save them to the file
+// But first, checks if the settings have changed
 void ScOptSolverDlg::SaveSolverSettings()
 {
-    m_pSolverSettings->SetParameter(sc::SP_OBJ_CELL, m_xEdObjectiveCell->GetText());
-    m_pSolverSettings->SetParameter(sc::SP_OBJ_VAL, m_xEdTargetValue->GetText());
-    m_pSolverSettings->SetParameter(sc::SP_VAR_CELLS, m_xEdVariableCells->GetText());
+    // tdf#160104 If file does not have a solver model and the Solver dialog is set to its
+    // default initial values (maximize is selected; no variable cells; no target value
+    // and no constraints defined) then nothing needs to be saved
+    if (!m_pSolverSettings->TabHasSolverModel() && m_xRbMax->get_active()
+        && m_xEdTargetValue->GetText().isEmpty() && m_xEdVariableCells->GetText().isEmpty()
+        && m_aConditions.size() == 0)
+        return;
 
-    // Objective type
-    if (m_xRbMax->get_active())
-        m_pSolverSettings->SetObjectiveType(sc::OT_MAXIMIZE);
-    else if (m_xRbMin->get_active())
-        m_pSolverSettings->SetObjectiveType(sc::OT_MINIMIZE);
+    // The current tab has a model; now we need to determined if it has been modified
+    bool bModified = false;
+
+    // Check objective cell, objective value and variable cells
+    if (m_pSolverSettings->GetParameter(sc::SP_OBJ_CELL) != m_xEdObjectiveCell->GetText()
+        || m_pSolverSettings->GetParameter(sc::SP_OBJ_VAL) != m_xEdTargetValue->GetText()
+        || m_pSolverSettings->GetParameter(sc::SP_VAR_CELLS) != m_xEdVariableCells->GetText())
+        bModified = true;
+
+    // Check selected objective type and save it if changed
+    sc::ObjectiveType aType = sc::OT_MAXIMIZE;
+    if (m_xRbMin->get_active())
+        aType = sc::OT_MINIMIZE;
     else if (m_xRbValue->get_active())
-        m_pSolverSettings->SetObjectiveType(sc::OT_VALUE);
+        aType = sc::OT_VALUE;
 
-    // Model constraints
-    m_pSolverSettings->SetConstraints(m_aConditions);
+    if (m_pSolverSettings->GetObjectiveType() != aType)
+        bModified = true;
 
-    // Solver engine name
-    m_pSolverSettings->SetParameter(sc::SP_LO_ENGINE, maEngine);
+    // Check if model constraints changed
+    std::vector<sc::ModelConstraint> vCurConditions = m_pSolverSettings->GetConstraints();
+    if (!bModified && vCurConditions.size() != m_aConditions.size())
+        bModified = true;
+    else
+    {
+        // Here the size of both vectors is the same
+        // Now it needs to check the contents of the constraints
+        for (size_t i = 0; i < vCurConditions.size(); i++)
+        {
+            if (vCurConditions[i].aLeftStr != m_aConditions[i].aLeftStr
+                || vCurConditions[i].nOperator != m_aConditions[i].nOperator
+                || vCurConditions[i].aRightStr != m_aConditions[i].aRightStr)
+                bModified = true;
 
-    // Solver engine options
-    m_pSolverSettings->SetEngineOptions(maProperties);
+            if (bModified)
+                break;
+        }
+    }
 
-    // Effectively save settings to file
-    m_pSolverSettings->SaveSolverSettings();
+    // Check if the solver engine name and its options have changed
+    if (m_pSolverSettings->GetParameter(sc::SP_LO_ENGINE) != maEngine)
+    {
+        bModified = true;
+    }
+    else
+    {
+        // The solver engine hasn't changed, so we need to check if engine options changed
+        // Query current engine options; here we start by creating a copy of maProperties
+        // to ensure the order is the same
+        css::uno::Sequence<css::beans::PropertyValue> vCurOptions(maProperties);
+        m_pSolverSettings->GetEngineOptions(vCurOptions);
+
+        for (sal_Int32 i = 0; i < vCurOptions.getLength(); i++)
+        {
+            if (vCurOptions[i].Value != maProperties[i].Value)
+            {
+                bModified = true;
+                break;
+            }
+        }
+    }
+
+    // Effectively save settings to file if modifications were made
+    if (bModified)
+    {
+        m_pSolverSettings->SetParameter(sc::SP_OBJ_CELL, m_xEdObjectiveCell->GetText());
+        m_pSolverSettings->SetParameter(sc::SP_OBJ_VAL, m_xEdTargetValue->GetText());
+        m_pSolverSettings->SetParameter(sc::SP_VAR_CELLS, m_xEdVariableCells->GetText());
+        m_pSolverSettings->SetObjectiveType(aType);
+        m_pSolverSettings->SetConstraints(m_aConditions);
+        m_pSolverSettings->SetParameter(sc::SP_LO_ENGINE, maEngine);
+        m_pSolverSettings->SetEngineOptions(maProperties);
+        m_pSolverSettings->SaveSolverSettings();
+    }
 }
-
 // Test if a LO engine implementation exists
 bool ScOptSolverDlg::IsEngineAvailable(std::u16string_view sEngineName)
 {

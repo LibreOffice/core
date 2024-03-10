@@ -299,6 +299,7 @@ public:
 
     SC_DLLPUBLIC void SaveSolverSettings();
     SC_DLLPUBLIC void ResetToDefaults();
+    SC_DLLPUBLIC bool TabHasSolverModel();
 };
 
 } // namespace sc

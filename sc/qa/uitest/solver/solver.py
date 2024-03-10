@@ -58,4 +58,78 @@ class solver(UITestCase):
             #verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getValue(), 400)
 
+
+    # Tests the isModified property on a blank Calc file
+    def test_tdf160104_blank_file(self):
+        with self.ui_test.create_doc_in_start_center("calc") as calc_doc:
+            self.assertFalse(calc_doc.isModified())
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog", close_button="") as xDialog:
+                xCloseBtn = xDialog.getChild("close")
+                xCloseBtn.executeAction("CLICK", ())
+
+            # Here isModified needs to be False because the dialog was opened and closed with no changes
+            self.assertFalse(calc_doc.isModified())
+
+            # Now open the dialog again and make some changes
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog", close_button="") as xDialog:
+                xCloseBtn = xDialog.getChild("close")
+                xMin = xDialog.getChild("min")
+                xChangeEdit = xDialog.getChild("changeedit")
+
+                # Click the Minimize option and change variable cells
+                xMin.executeAction("CLICK", ())
+                xChangeEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "$A$1:$A$10"}))
+                xCloseBtn.executeAction("CLICK", ())
+
+            # Here isModified needs to be True because changes were made to the dialog
+            self.assertTrue(calc_doc.isModified())
+
+
+    # Tests the isModified property on an existing file that contains a solver model
+    def test_tdf160104_with_file(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf160104.ods")) as calc_doc:
+            self.assertFalse(calc_doc.isModified())
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog", close_button="") as xDialog:
+                xTargetEdit = xDialog.getChild("targetedit")
+                xMax = xDialog.getChild("max")
+                xChangeEdit = xDialog.getChild("changeedit")
+                xRef1Edit = xDialog.getChild("ref1edit")
+                xVal1Edit = xDialog.getChild("val1edit")
+                xOp1List = xDialog.getChild("op1list")
+                xRef2Edit = xDialog.getChild("ref2edit")
+                xVal2Edit = xDialog.getChild("val2edit")
+                xOp2List = xDialog.getChild("op2list")
+
+                # Checks whether the solver model was loaded correctly
+                self.assertEqual("$F$2", get_state_as_dict(xTargetEdit)["Text"])
+                self.assertEqual("true", get_state_as_dict(xMax)["Checked"])
+                self.assertEqual("$D$2:$D$11", get_state_as_dict(xChangeEdit)["Text"])
+                self.assertEqual("$F$5", get_state_as_dict(xRef1Edit)["Text"])
+                self.assertEqual("$F$8", get_state_as_dict(xVal1Edit)["Text"])
+                self.assertEqual("≤", get_state_as_dict(xOp1List)["SelectEntryText"])
+                self.assertEqual("$D$2:$D$11", get_state_as_dict(xRef2Edit)["Text"])
+                self.assertEqual("", get_state_as_dict(xVal2Edit)["Text"])
+                self.assertEqual("Binary", get_state_as_dict(xOp2List)["SelectEntryText"])
+
+                # Closes the dialog without making changes
+                xCloseBtn = xDialog.getChild("close")
+                xCloseBtn.executeAction("CLICK", ())
+
+            # Here isModified needs to be False no changes were made to the solver dialog
+            self.assertFalse(calc_doc.isModified())
+
+            # Now open the dialog again and make some changes
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog", close_button="") as xDialog:
+                xCloseBtn = xDialog.getChild("close")
+                xMin = xDialog.getChild("min")
+                xChangeEdit = xDialog.getChild("changeedit")
+
+                # Click the Minimize option and change variable cells
+                xMin.executeAction("CLICK", ())
+                xChangeEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "$E$2:$E$11"}))
+                xCloseBtn.executeAction("CLICK", ())
+
+            # Here isModified needs to be True because changes were made to the Solver dialog
+            self.assertTrue(calc_doc.isModified())
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

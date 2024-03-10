@@ -776,4 +776,22 @@ void SolverSettings::ResetToDefaults()
     m_aConstraints.clear();
 }
 
+/* Returns true if the current sheet already has a solver model.
+   This is determined by checking if the current tab has the SP_OBJ_CELL named range
+   which is associated with solver models.
+   Note that the named ranges are only created after SaveSolverSettings is called,
+   so before it is called, no solver-related named ranges exist.
+*/
+bool SolverSettings::TabHasSolverModel()
+{
+    // Check if the named range for the objective value exists in the sheet
+    const auto iter = m_mNamedRanges.find(SP_OBJ_CELL);
+    OUString sRange = iter->second;
+    ScRangeData* pRangeData
+        = m_pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(sRange));
+    if (pRangeData)
+        return true;
+    return false;
+}
+
 } // namespace sc
