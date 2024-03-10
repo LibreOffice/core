@@ -120,8 +120,6 @@ public:
                         ( m_pExtraData && rCmp.m_pExtraData &&
                             *m_pExtraData == *rCmp.m_pExtraData ));
         }
-    bool operator!=( const SwRedlineData& rCmp ) const
-        {   return !operator==( rCmp ); }
 
     RedlineType GetType() const { return m_eType; }
 

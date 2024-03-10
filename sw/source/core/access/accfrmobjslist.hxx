@@ -52,12 +52,6 @@ public:
         return m_aCurr == r.m_aCurr;
     }
 
-    bool operator!=(
-            const SwAccessibleChildSList_const_iterator& r ) const
-    {
-        return !(*this == r);
-    }
-
     SwAccessibleChildSList_const_iterator& operator++();
 
     const sw::access::SwAccessibleChild& operator*() const

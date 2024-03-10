@@ -99,8 +99,6 @@ struct SwCallMouseEvent final
                     PTR.pFormat == rEvent.PTR.pFormat &&
                     PTR.IMAP.pIMapObj == rEvent.PTR.IMAP.pIMapObj;
         }
-    bool operator!=( const SwCallMouseEvent& rEvent ) const
-        {   return !( *this == rEvent );    }
 
     void Clear()
         {
