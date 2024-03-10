@@ -19,15 +19,11 @@
 
 #pragma once
 
-#include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
-#include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
-#include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-#include <xmlsecuritydllapi.h>
 #include <framework/securityengine.hxx>
 
 #include <vector>

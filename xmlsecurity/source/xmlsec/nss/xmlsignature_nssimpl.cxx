@@ -28,7 +28,7 @@
 
 #include "securityenvironment_nssimpl.hxx"
 
-#include <comphelper/servicehelper.hxx>
+#include <xmlsec/xmldsig.h>
 #include <sal/log.hxx>
 
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>

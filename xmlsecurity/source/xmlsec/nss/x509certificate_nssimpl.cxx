@@ -25,7 +25,6 @@
 #include <hasht.h>
 
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -36,7 +35,6 @@
 #include <certificateextension_xmlsecimpl.hxx>
 
 #include "sanextension_nssimpl.hxx"
-#include <o3tl/string_view.hxx>
 #include <tools/time.hxx>
 #include <svl/sigstruct.hxx>
 

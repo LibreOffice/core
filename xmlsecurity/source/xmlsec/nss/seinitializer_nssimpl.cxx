@@ -20,7 +20,6 @@
 #include <sal/types.h>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "seinitializer_nssimpl.hxx"

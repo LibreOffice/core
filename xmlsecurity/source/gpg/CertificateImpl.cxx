@@ -7,11 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_gpgme.h>
-
 #include "CertificateImpl.hxx"
 
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

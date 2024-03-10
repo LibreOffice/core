@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <xmlsecuritydllapi.h>
 #include <framework/signatureengine.hxx>
 
 namespace com::sun::star::xml::crypto::sax { class XSignatureVerifyResultListener; }

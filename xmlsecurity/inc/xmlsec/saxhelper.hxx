@@ -22,11 +22,9 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <com/sun/star/xml/csax/XMLAttribute.hpp>
 
 #include <libxml/parser.h>
-#include <libxml/tree.h>
-
-#include <rtl/ustring.hxx>
 
 namespace com::sun::star::xml::csax { struct XMLAttribute; }
 namespace com::sun::star::uno { template <typename > class Sequence; }

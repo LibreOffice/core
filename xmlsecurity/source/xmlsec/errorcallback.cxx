@@ -24,6 +24,8 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <xmlsec/xmlsec.h>
+#include <xmlsec/errors.h>
 
 #ifdef _WIN32
 #include <prewin.h>

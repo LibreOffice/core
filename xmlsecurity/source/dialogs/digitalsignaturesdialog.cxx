@@ -26,34 +26,20 @@
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
 #include <biginteger.hxx>
-#include <sax/tools/converter.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/security/NoPasswordException.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
-#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/SystemShellExecuteException.hpp>
 
 #include <osl/file.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/uri.hxx>
 #include <sal/log.hxx>
-
-#include <tools/date.hxx>
-#include <tools/time.hxx>
 #include <unotools/datetime.hxx>
 
 #include <bitmaps.hlst>

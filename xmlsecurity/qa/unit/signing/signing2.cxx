@@ -19,10 +19,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <officecfg/Office/Common.hxx>
@@ -30,13 +27,9 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/documentconstants.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <osl/thread.hxx>
 
 using namespace css;
 

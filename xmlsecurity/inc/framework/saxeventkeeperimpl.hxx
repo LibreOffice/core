@@ -25,7 +25,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <xmlsecuritydllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <memory>

@@ -19,7 +19,6 @@
 
 #include <UriBindingHelper.hxx>
 
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 

@@ -21,8 +21,9 @@
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
-#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/types.h>
@@ -40,8 +41,6 @@
 
 #include "digestcontext.hxx"
 #include "ciphercontext.hxx"
-
-#include <cstddef>
 #include <memory>
 #include <utility>
 #include <vector>

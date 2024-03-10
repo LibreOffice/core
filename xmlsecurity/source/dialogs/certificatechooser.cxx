@@ -28,10 +28,9 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
 
-#include <o3tl/safeint.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/charclass.hxx>
-
+#include <unotools/useroptions.hxx>
 
 #include <resourcemanager.hxx>
 #include <strings.hrc>

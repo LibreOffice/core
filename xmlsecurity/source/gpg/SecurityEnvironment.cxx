@@ -13,7 +13,6 @@
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 
-#include <comphelper/servicehelper.hxx>
 #include <vector>
 #include <rtl/ref.hxx>
 
@@ -28,6 +27,9 @@
 #include <key.h>
 #include <keylistresult.h>
 #include <xmlsec-wrapper.h>
+#include <libxml/xmlstring.h>
+#include <xmlsec/base64.h>
+#include <xmlsec/xmlsec.h>
 
 #if defined _MSC_VER && defined __clang__
 #pragma clang diagnostic push

@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/resmgr.hxx>
-#include <unotools/useroptions.hxx>
 #include <unordered_map>
 
 namespace com::sun::star {

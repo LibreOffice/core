@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <xsecxmlsecdllapi.h>
-
 // Only used for logging
 void setErrorRecorder();
 //ToDo

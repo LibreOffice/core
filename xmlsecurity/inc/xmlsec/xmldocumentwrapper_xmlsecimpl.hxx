@@ -31,8 +31,6 @@
 #define NODEPOSITION_STARTELEMENT  2
 #define NODEPOSITION_ENDELEMENT    3
 
-#include <libxml/tree.h>
-
 class XMLDocumentWrapper_XmlSecImpl final : public cppu::WeakImplHelper
 <
     css::xml::wrapper::XXMLDocumentWrapper,

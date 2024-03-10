@@ -28,8 +28,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <xmlsecuritydllapi.h>
-
 class SAL_DLLPUBLIC_RTTI SecurityEngine : public cppu::WeakImplHelper
 <
     css::xml::crypto::sax::XReferenceResolvedListener,

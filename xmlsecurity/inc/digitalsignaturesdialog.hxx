@@ -20,13 +20,9 @@
 #pragma once
 
 #include <vcl/weld.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "documentsignaturehelper.hxx"
-#include "xmlsignaturehelper.hxx"
 #include "documentsignaturemanager.hxx"
-
-#include <vector>
 
 namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }

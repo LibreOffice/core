@@ -28,12 +28,11 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/diagnose_ex.hxx>

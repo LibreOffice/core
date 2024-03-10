@@ -39,6 +39,7 @@
 #include <vector>
 
 #include <xmlsec-wrapper.h>
+#include <xmlsec/xmlsec.h>
 
 namespace com::sun::star::security { class XCertificate; }
 class X509Certificate_NssImpl;

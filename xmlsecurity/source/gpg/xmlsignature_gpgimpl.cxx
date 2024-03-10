@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <xmlsec-wrapper.h>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/xmlsignature_gpgimpl.hxx>
 
@@ -33,7 +32,6 @@
 #pragma clang diagnostic pop
 #endif
 #include <context.h>
-#include <key.h>
 #include <data.h>
 #include <signingresult.h>
 #include <importresult.h>
@@ -41,6 +39,10 @@
 #include <xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmlstreamio.hxx>
 #include <xmlsec/errorcallback.hxx>
+#include <xmlsec/xmltree.h>
+#include <xmlsec/base64.h>
+#include <xmlsec/xmldsig.h>
+#include <xmlsec/xmlsec.h>
 
 #include "SecurityEnvironment.hxx"
 

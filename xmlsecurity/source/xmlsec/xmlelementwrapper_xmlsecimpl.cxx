@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <xsecxmlsecdllapi.h>
+#include <sal/types.h>
 
 namespace com::sun::star::xml::crypto
 {

@@ -27,7 +27,6 @@
 #include <biginteger.hxx>
 #include <strings.hrc>
 #include <pdfsignaturehelper.hxx>
-#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
@@ -35,15 +34,8 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
-#include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
-#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>

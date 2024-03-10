@@ -18,16 +18,16 @@
  */
 
 #include "nssrenam.h"
+#include <nss.h>
 #include <cert.h>
+#include <pk11pub.h>
 #include <secerr.h>
 #include <ocsp.h>
 
 #include <sal/config.h>
-#include <sal/macros.h>
 #include <osl/diagnose.h>
 #include "securityenvironment_nssimpl.hxx"
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <xmlsec-wrapper.h>
 
@@ -45,6 +45,10 @@
 #include "secerror.hxx"
 #include <prerror.h>
 #include <keyhi.h>
+#include <xmlsec/base64.h>
+#include <xmlsec/keysmngr.h>
+#include <xmlsec/nss/app.h>
+#include <xmlsec/nss/pkikeys.h>
 
 // added for password exception
 #include <com/sun/star/security/NoPasswordException.hpp>
