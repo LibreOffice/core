@@ -139,6 +139,9 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     // Recent colors used by toolbar buttons
     std::unordered_map<sal_uInt16, NamedColor> m_aRecentColors;
 
+    mutable oslInterlockedCount m_nClosingLockLevel = 0;
+    mutable bool m_bCloseModelScheduled = false;
+
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();
 
