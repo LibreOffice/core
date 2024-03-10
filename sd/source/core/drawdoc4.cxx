@@ -1016,13 +1016,12 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
 // (including ~LT~). This is unlike rNewName.
 void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const OUString& rNewName)
 {
-    OUString aSep(SD_LT_SEPARATOR);
     OUString aOldName(rOldLayoutName);
-    sal_Int32 nPos = aOldName.indexOf( aSep );
+    sal_Int32 nPos = aOldName.indexOf( SD_LT_SEPARATOR );
 
     // erase everything after '~LT~'
     if (nPos != -1)
-        aOldName = aOldName.copy(0, nPos + aSep.getLength());
+        aOldName = aOldName.copy(0, nPos + SD_LT_SEPARATOR.getLength());
 
     std::vector<StyleReplaceData> aReplList;
     SfxStyleSheetIterator aIter(mxStyleSheetPool.get(), SfxStyleFamily::Page);
@@ -1035,7 +1034,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
         // if the sheetname starts with aOldName + "~LT~"
         if (aSheetName.startsWith(aOldName))
         {
-            aSheetName = aSheetName.replaceAt(0, aOldName.getLength() - aSep.getLength(), rNewName);
+            aSheetName = aSheetName.replaceAt(0, aOldName.getLength() - SD_LT_SEPARATOR.getLength(), rNewName);
 
             StyleReplaceData aReplData;
             aReplData.nFamily     = pSheet->GetFamily();
@@ -1052,7 +1051,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
 
     // Now set the layout name of the drawing and the notes page, as well as
     // their master pages.
-    OUString aPageLayoutName = rNewName + aSep + STR_LAYOUT_OUTLINE;
+    OUString aPageLayoutName = rNewName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE;
 
     // Inform all text objects on pages that use the renamed layout and set the
     // new name.
