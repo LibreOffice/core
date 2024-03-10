@@ -135,6 +135,9 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     /// Holds Infobars until View is fully loaded
     std::vector<InfobarData> m_aPendingInfobars;
 
+    mutable oslInterlockedCount m_nClosingLockLevel = 0;
+    mutable bool m_bCloseModelScheduled = false;
+
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();
 
