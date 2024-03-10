@@ -46,6 +46,7 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextRange;
 import com.sun.star.table.XCellRange;
 import com.sun.star.table.XCell;
 import com.sun.star.table.TableBorder;
@@ -58,6 +59,10 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XDrawPage;
+import com.sun.star.container.XNamed;
+import com.sun.star.text.XBookmarksSupplier;
+import com.sun.star.text.XTextTablesSupplier;
+import com.sun.star.container.XNameAccess;
 
 public class HelloTextTableShape {
 
@@ -139,7 +144,7 @@ public class HelloTextTableShape {
             manipulateText(xShapeText);
             manipulateShape(xWriterShape);
 
-/* more code snippets used in the manual:
+            // more code snippets used in the manual:
 
             Object bookmark = xWriterFactory.createInstance ( "com.sun.star.text.Bookmark" );
             // name the bookmark
@@ -150,21 +155,17 @@ public class HelloTextTableShape {
             // get XTextContent interface and insert it at the end of the document
             XTextContent xTextContent = (XTextContent) UnoRuntime.queryInterface (
                     XTextContent.class, bookmark );
-            //mxDocText.insertTextContent ( mxDocText.getEnd(), xTextContent, false );
             xText.insertTextContent ( xText.getEnd(), xTextContent, false );
 
-                        //query BookmarksSupplier
-                        XBookmarksSupplier xBookmarksSupplier = (XBookmarksSupplier)UnoRuntime.queryInterface(
-                            XBookmarksSupplier.class, xWriterComponent);
-                        XNameAccess xNamedBookmarks = xBookmarksSupplier.getBookmarks();
-                        Object foundBookmark = xNamedBookmarks.getByName("MyUniqueBookmarkName");
-                        XTextContent xFoundBookmark = (XTextContent)UnoRuntime.queryInterface(XTextContent.class, foundBookmark);
-                        XTextRange xFound = xFoundBookmark.getAnchor();
-                        xFound.setString(" The throat mike, glued to her neck, "
+            //query BookmarksSupplier
+            XBookmarksSupplier xBookmarksSupplier = (XBookmarksSupplier)UnoRuntime.queryInterface(
+            XBookmarksSupplier.class, xWriterComponent);
+            XNameAccess xNamedBookmarks = xBookmarksSupplier.getBookmarks();
+            Object foundBookmark = xNamedBookmarks.getByName("MyUniqueBookmarkName");
+            XTextContent xFoundBookmark = (XTextContent)UnoRuntime.queryInterface(XTextContent.class, foundBookmark);
+            XTextRange xFound = xFoundBookmark.getAnchor();
+            xFound.setString(" The throat mike, glued to her neck, "
                             + "looked as much as possible like an analgesic dermadisk.");
-
-
-
 
             // first query the XTextTablesSupplier interface from our document
             XTextTablesSupplier xTablesSupplier = (XTextTablesSupplier) UnoRuntime.queryInterface(
@@ -187,7 +188,6 @@ public class HelloTextTableShape {
                             XPropertySet.class, table);
                     xTableProps.setPropertyValue("BackColor", Integer.valueOf(0xC8FFB9));
             }
- */
         }
         catch( com.sun.star.lang.DisposedException e ) { //works from Patch 1
             xRemoteContext = null;
