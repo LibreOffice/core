@@ -1278,10 +1278,9 @@ void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUS
     sal_uInt16 nPage = 0;
     const sal_uInt16 nMaxPages = m_pDoc->GetPageCount();
 
-    sd::DrawViewShell* pDrawViewShell = lcl_getDrawViewShell(m_pDoc);
-    if (!pDrawViewShell)
-        return;
-    PageKind eDrawViewShellPageKind = pDrawViewShell->GetPageKind();
+    PageKind eDrawViewShellPageKind = PageKind::Standard;
+    if (sd::DrawViewShell* pDrawViewShell = lcl_getDrawViewShell(m_pDoc))
+        eDrawViewShellPageKind = pDrawViewShell->GetPageKind();
 
     while( nPage < nMaxPages )
     {
