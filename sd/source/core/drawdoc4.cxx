@@ -1043,11 +1043,12 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
             aReplData.aNewName   = aSheetName;
             aReplList.push_back(aReplData);
 
-            pSheet->SetName(aSheetName);
+            pSheet->SetName(aSheetName, /*bReindexNow*/false);
         }
 
         pSheet = aIter.Next();
     }
+    mxStyleSheetPool->Reindex();
 
     // Now set the layout name of the drawing and the notes page, as well as
     // their master pages.
