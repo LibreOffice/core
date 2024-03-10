@@ -12,8 +12,6 @@
 #include <xmlsec/xmlsec_init.hxx>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-
-#include <xmlsec/xmlsec.h>
 #include <xmlsec/xmlstreamio.hxx>
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
 #include <xmlsec/mscng/crypto.h>

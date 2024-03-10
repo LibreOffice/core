@@ -24,7 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <libxml/tree.h>
-#include <xsecxmlsecdllapi.h>
 
 class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <

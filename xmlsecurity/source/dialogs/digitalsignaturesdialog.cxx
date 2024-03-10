@@ -52,7 +52,6 @@
 #include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/configitem.hxx>
 
 #ifdef _WIN32
 #include <o3tl/char16_t2wchar_t.hxx>

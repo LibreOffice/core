@@ -20,7 +20,9 @@
 #pragma once
 
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XLocator.hpp>
 
 #include <cppuhelper/implbase.hxx>
 

@@ -24,7 +24,6 @@
 #include <rtl/ref.hxx>
 #include <svl/sigstruct.hxx>
 #include "xmlsecuritydllapi.h"
-#include "xmlsignaturehelper.hxx"
 #include "xsecctl.hxx"
 
 #include <com/sun/star/security/XCertificate.hpp>
