@@ -386,14 +386,13 @@ bool FilterBase::importBinaryData( StreamDataSequence & orDataSeq, const OUStrin
         return false;
 
     // try to open the stream (this may fail - do not assert)
-    BinaryXInputStream aInStrm( openInputStream( rStreamName ), true );
-    if( aInStrm.isEof() )
+    Reference<XInputStream> xInStream = openInputStream( rStreamName );
+    if (!xInStream)
         return false;
 
     // copy the entire stream to the passed sequence
-    SequenceOutputStream aOutStrm( orDataSeq );
-    aInStrm.copyToStream( aOutStrm );
-    return true;
+    sal_Int32 nBytesRead = xInStream->readBytes( orDataSeq, SAL_MAX_INT32);
+    return nBytesRead != -1 && nBytesRead != 0;
 }
 
 // com.sun.star.lang.XServiceInfo interface
