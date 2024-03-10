@@ -35,10 +35,12 @@
 #include <sfx2/templatedlg.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/eeitem.hxx>
+#include <unotools/viewoptions.hxx>
 
 #include <svx/svxids.hrc>
 #include <strings.hrc>
 
+#include <app.hrc>
 #include <sdmod.hxx>
 #include <pres.hxx>
 #include <optsitem.hxx>
@@ -506,6 +508,13 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
                     // tdf#127946 pass in argument for dialog parent
                     SfxUnoFrameItem aDocFrame(SID_FILLFRAME, pFrame->GetFrameInterface());
                     pDispatcher->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
+
+                    // hack: toggle notes area default-on if no config found
+                    SvtViewOptions aNotesAreaWinOpt(
+                        EViewType::Window, "simpress/" + OUString::number(SID_NOTES_WINDOW));
+                    css::uno::Sequence < css::beans::NamedValue > aSeq = aNotesAreaWinOpt.GetUserData();
+                    if ( !aSeq.hasElements() )
+                        pDispatcher->Execute(SID_NOTES_WINDOW, SfxCallMode::ASYNCHRON);
                 }
             }
         }
