@@ -15110,7 +15110,7 @@ function AnimatedTextElement( aElement, aEventMultiplexer )
             if( aBulletPlaceholderElem )
             {
                 var sId = aBulletPlaceholderElem.getAttribute( 'id' );
-                sId = 'bullet-char(' + sId + ')';
+                sId = 'bullet-char-' + sId;
                 aBulletCharElem = theDocument.getElementById( sId );
                 if( aBulletCharElem )
                 {
