@@ -85,34 +85,6 @@ using namespace css;
 
 namespace
 {
-    class SaveODFItem: public utl::ConfigItem
-    {
-    private:
-        virtual void ImplCommit() override;
-
-    public:
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-        SaveODFItem();
-    };
-
-    void SaveODFItem::ImplCommit() {}
-    void SaveODFItem::Notify( const css::uno::Sequence< OUString >& ) {}
-
-    SaveODFItem::SaveODFItem(): utl::ConfigItem("Office.Common/Save")
-    {
-        OUString sDef("ODF/DefaultVersion");
-        Sequence< css::uno::Any > aValues = GetProperties( Sequence<OUString>(&sDef,1) );
-        if ( aValues.getLength() != 1)
-            throw uno::RuntimeException(
-                "[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion",
-                nullptr);
-
-        sal_Int16 nTmp = 0;
-        if ( !(aValues[0] >>= nTmp) )
-            throw uno::RuntimeException(
-                "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!",
-                nullptr );
-    }
 
 #ifdef _WIN32
     constexpr std::u16string_view aGUIServers[]
@@ -377,7 +349,6 @@ bool DigitalSignaturesDialog::canAddRemove()
 
     OSL_ASSERT(maSignatureManager.getStore().is());
     bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
-    SaveODFItem item;
 
     // see specification
     //cvs: specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
