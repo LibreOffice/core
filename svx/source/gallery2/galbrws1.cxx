@@ -48,7 +48,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
