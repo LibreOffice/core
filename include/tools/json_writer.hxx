@@ -46,6 +46,7 @@ public:
 
     [[nodiscard]] ScopedJsonWriterNode<'}'> startNode(std::string_view nodeName);
     [[nodiscard]] ScopedJsonWriterNode<']'> startArray(std::string_view nodeName);
+    [[nodiscard]] ScopedJsonWriterNode<']'> startAnonArray();
     [[nodiscard]] ScopedJsonWriterNode<'}'> startStruct();
 
     void put(std::u16string_view pPropName, std::u16string_view rPropValue);

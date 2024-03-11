@@ -134,9 +134,11 @@ void ThemeColorPaletteManager::generateJSON(tools::JsonWriter& aTree)
 
     for (size_t nEffect = 0; nEffect < 6; ++nEffect)
     {
-        auto aColorRowTree = aTree.startStruct();
+        auto aColorRowTree = aTree.startAnonArray();
         for (size_t nIndex = 0; nIndex < 12; ++nIndex)
         {
+            auto aColorTree = aTree.startStruct();
+
             auto const& rColorData = aThemePaletteCollection.maColors[nIndex];
             auto const& rEffectData = rColorData.maEffects[nEffect];
 

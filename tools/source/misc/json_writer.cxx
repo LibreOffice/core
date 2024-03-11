@@ -74,6 +74,16 @@ JsonWriter::ScopedJsonWriterNode<']'> JsonWriter::startArray(std::string_view pN
     return { *this };
 }
 
+JsonWriter::ScopedJsonWriterNode<']'> JsonWriter::startAnonArray()
+{
+    putRaw("[ ");
+
+    mStartNodeCount++;
+    mbFirstFieldInNode = true;
+
+    return { *this };
+}
+
 JsonWriter::ScopedJsonWriterNode<'}'> JsonWriter::startStruct()
 {
     putRaw("{ ");
