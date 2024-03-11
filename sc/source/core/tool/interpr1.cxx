@@ -67,13 +67,12 @@
 #include <compare.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <stdlib.h>
-#include <vector>
 #include <memory>
+#include <vector>
 #include <limits>
 #include <string_view>
 #include <cmath>
@@ -1737,7 +1736,7 @@ void ScInterpreter::ScPi()
     PushDouble(M_PI);
 }
 
-void ScInterpreter::ScRandomImpl( const std::function<double( std::mt19937& rRng, double fFirst, double fLast )>& RandomFunc,
+void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, double fLast )>& RandomFunc,
         double fFirst, double fLast )
 {
     if (bMatrixFormula)
@@ -1764,7 +1763,7 @@ void ScInterpreter::ScRandomImpl( const std::function<double( std::mt19937& rRng
             // default are executed in array context unless
             // FA.setPropertyValue("IsArrayFunction",False) was set, return a
             // scalar double instead of a 1x1 matrix object. tdf#128218
-            PushDouble( RandomFunc( GetRNG(), fFirst, fLast));
+            PushDouble( RandomFunc( fFirst, fLast));
             return;
         }
 
@@ -1785,7 +1784,7 @@ void ScInterpreter::ScRandomImpl( const std::function<double( std::mt19937& rRng
             {
                 for (SCROW j=0; j < nRows; ++j)
                 {
-                    pResMat->PutDouble( RandomFunc( GetRNG(), fFirst, fLast),
+                    pResMat->PutDouble( RandomFunc( fFirst, fLast),
                             static_cast<SCSIZE>(i), static_cast<SCSIZE>(j));
                 }
             }
@@ -1794,28 +1793,16 @@ void ScInterpreter::ScRandomImpl( const std::function<double( std::mt19937& rRng
     }
     else
     {
-        PushDouble( RandomFunc( GetRNG(), fFirst, fLast));
+        PushDouble( RandomFunc( fFirst, fLast));
     }
-}
-
-std::mt19937& ScInterpreter::GetRNG()
-{
-    if (!oRNG)
-    {
-        // create a per-interpreter Random Number Generator, seeded from the global rng, so we don't have
-        // to lock a mutex to generate a random number
-        unsigned int nSeed(comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<sal_uInt32>::max()));
-        oRNG = std::mt19937(nSeed);
-    }
-    return *oRNG;
 }
 
 void ScInterpreter::ScRandom()
 {
-    auto RandomFunc = [](std::mt19937& rRNG, double, double)
+    auto RandomFunc = [this]( double, double )
     {
         std::uniform_real_distribution<double> dist(0.0, 1.0);
-        return dist(rRNG);
+        return dist(mrContext.aRNG);
     };
     ScRandomImpl( RandomFunc, 0.0, 0.0);
 }
@@ -1835,10 +1822,10 @@ void ScInterpreter::ScRandbetween()
         return;
     }
     fMax = std::nextafter( fMax+1, -DBL_MAX);
-    auto RandomFunc = [](std::mt19937& rRNG, double fFirst, double fLast)
+    auto RandomFunc = [this]( double fFirst, double fLast )
     {
         std::uniform_real_distribution<double> dist(fFirst, fLast);
-        return floor(dist(rRNG));
+        return floor(dist(mrContext.aRNG));
     };
     ScRandomImpl( RandomFunc, fMin, fMax);
 }
