@@ -81,7 +81,7 @@ FORMATETC const pFormatTemplates[FORMATS_NUM] = {
 //
 // To handle this, several workarounds were implemented in the past; the mentioned "OnMainThread"
 // argument is one of these, allowing open document requests be processed not in the handler threads
-// that receired the request, but in the main thread which will then be used for interaction. Also
+// that received the request, but in the main thread which will then be used for interaction. Also
 // OleComponent::GetExtent was changed to check if the first call to IDataObject::GetData failed
 // with RPC_E_WRONG_THREAD, and then retry in the main thread.
 //
