@@ -2649,19 +2649,19 @@ boost::property_tree::ptree XFillFloatTransparenceItem::dumpAsJSON() const
 
 XHatch::XHatch(const Color& rCol, css::drawing::HatchStyle eTheStyle, tools::Long nTheDistance,
                Degree10 nTheAngle) :
-    eStyle(eTheStyle),
-    aColor(rCol),
-    nDistance(nTheDistance),
-    nAngle(nTheAngle)
+    m_eStyle(eTheStyle),
+    m_aColor(rCol),
+    m_nDistance(nTheDistance),
+    m_nAngle(nTheAngle)
 {
 }
 
 bool XHatch::operator==(const XHatch& rHatch) const
 {
-    return ( eStyle     == rHatch.eStyle    &&
-             aColor     == rHatch.aColor    &&
-             nDistance  == rHatch.nDistance &&
-             nAngle     == rHatch.nAngle );
+    return ( m_eStyle     == rHatch.m_eStyle    &&
+             m_aColor     == rHatch.m_aColor    &&
+             m_nDistance  == rHatch.m_nDistance &&
+             m_nAngle     == rHatch.m_nAngle );
 }
 
 

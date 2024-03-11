@@ -31,27 +31,27 @@
 
 class SVXCORE_DLLPUBLIC XHatch final
 {
-    css::drawing::HatchStyle     eStyle;
-    Color           aColor;
-    tools::Long     nDistance;
-    Degree10        nAngle;
+    css::drawing::HatchStyle     m_eStyle;
+    Color           m_aColor;
+    tools::Long     m_nDistance;
+    Degree10        m_nAngle;
 
 public:
-                    XHatch() : eStyle(css::drawing::HatchStyle_SINGLE), nDistance(0), nAngle(0) {}
+                    XHatch() : m_eStyle(css::drawing::HatchStyle_SINGLE), m_nDistance(0), m_nAngle(0) {}
                     XHatch(const Color& rCol, css::drawing::HatchStyle eStyle = css::drawing::HatchStyle_SINGLE,
                            tools::Long nDistance = 20, Degree10 nAngle = 0_deg10);
 
     bool operator==(const XHatch& rHatch) const;
 
-    void            SetHatchStyle(css::drawing::HatchStyle eNewStyle) { eStyle = eNewStyle; }
-    void            SetColor(const Color& rColor) { aColor = rColor; }
-    void            SetDistance(tools::Long nNewDistance) { nDistance = nNewDistance; }
-    void            SetAngle(Degree10 nNewAngle) { nAngle = nNewAngle; }
+    void            SetHatchStyle(css::drawing::HatchStyle eNewStyle) { m_eStyle = eNewStyle; }
+    void            SetColor(const Color& rColor) { m_aColor = rColor; }
+    void            SetDistance(tools::Long nNewDistance) { m_nDistance = nNewDistance; }
+    void            SetAngle(Degree10 nNewAngle) { m_nAngle = nNewAngle; }
 
-    css::drawing::HatchStyle     GetHatchStyle() const { return eStyle; }
-    const Color&    GetColor() const { return aColor; }
-    tools::Long     GetDistance() const { return nDistance; }
-    Degree10        GetAngle() const { return nAngle; }
+    css::drawing::HatchStyle     GetHatchStyle() const { return m_eStyle; }
+    const Color&    GetColor() const { return m_aColor; }
+    tools::Long     GetDistance() const { return m_nDistance; }
+    Degree10        GetAngle() const { return m_nAngle; }
 };
 
 #endif
