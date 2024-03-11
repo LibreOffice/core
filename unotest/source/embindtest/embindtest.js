@@ -258,9 +258,9 @@ Module.addOnPostRun(function() {
         console.assert(test.isAnySequence(v));
         v.delete();
         let s = new Module.uno_Sequence_string(["foo", "barr", "bazzz"]);
-        //TODO: let a = new Module.uno_Any(Module.uno_Type.Sequence(Module.uno_Type.String()), s);
-        //TODO: console.assert(test.isAnySequence(a));
-        //TODO: a.delete();
+        let a = new Module.uno_Any(Module.uno_Type.Sequence(Module.uno_Type.String()), s);
+        console.assert(test.isAnySequence(a));
+        a.delete();
         s.delete();
     }
     {
@@ -283,11 +283,11 @@ Module.addOnPostRun(function() {
         console.assert(v.get().m3 === 'hä');
         console.assert(test.isAnyStruct(v));
         v.delete();
-        //TODO: let a = new Module.uno_Any(
-        //TODO:     Module.uno_Type.Struct('org.libreoffice.embindtest.Struct'),
-        //TODO:     {m1: -123456, m2: 100.5, m3: 'hä'});
-        //TODO: console.assert(test.isAnyStruct(a));
-        //TODO: a.delete();
+        let a = new Module.uno_Any(
+            Module.uno_Type.Struct('org.libreoffice.embindtest.Struct'),
+            {m1: -123456, m2: 100.5, m3: 'hä'});
+        console.assert(test.isAnyStruct(a));
+        a.delete();
     }
     {
         let v = test.getAnyException();
@@ -299,11 +299,11 @@ Module.addOnPostRun(function() {
         console.assert(v.get().m3 === 'hä');
         console.assert(test.isAnyException(v));
         v.delete();
-        //TODO: let a = new Module.uno_Any(
-        //TODO:     Module.uno_Type.Exception('org.libreoffice.embindtest.Exception'),
-        //TODO:     {Message: 'error', Context: null, m1: -123456, m2: 100.5, m3: 'hä'});
-        //TODO: console.assert(test.isAnyException(a));
-        //TODO: a.delete();
+        let a = new Module.uno_Any(
+            Module.uno_Type.Exception('org.libreoffice.embindtest.Exception'),
+            {Message: 'error', Context: null, m1: -123456, m2: 100.5, m3: 'hä'});
+        console.assert(test.isAnyException(a));
+        a.delete();
     }
     {
         let v = test.getAnyInterface();
@@ -311,10 +311,10 @@ Module.addOnPostRun(function() {
         console.assert(v.get().$equals(test.$query()));
         console.assert(test.isAnyInterface(v));
         v.delete();
-        //TODO: let a = new Module.uno_Any(
-        //TODO:     Module.uno_Type.Inteface('org.libreoffice.embindtest.Test'), test);
-        //TODO: console.assert(test.isAnyInterface(a));
-        //TODO: a.delete();
+        let a = new Module.uno_Any(
+            Module.uno_Type.Interface('org.libreoffice.embindtest.XTest'), test);
+        console.assert(test.isAnyInterface(a));
+        a.delete();
     }
     {
         let v = test.getSequenceBoolean();
