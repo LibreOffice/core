@@ -822,8 +822,9 @@ void SdrMarkView::SetInnerTextAreaForLOKit() const
     if (!comphelper::LibreOfficeKit::isActive())
         return;
     SfxViewShell* pViewShell = GetSfxViewShell();
-    if (pViewShell)
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SHAPE_INNER_TEXT, CreateInnerTextRectString().getStr());
+    OString sRectString = CreateInnerTextRectString();
+    if (pViewShell && !sRectString.isEmpty())
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SHAPE_INNER_TEXT, sRectString.getStr());
 }
 
 void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
