@@ -282,7 +282,17 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 case TypeClass_TYPE:
                     return css::uno::Any(rObject.as<css::uno::Type>());
                 case TypeClass_SEQUENCE:
-                    return {}; //TODO
+                case TypeClass_STRUCT:
+                case TypeClass_EXCEPTION:
+                case TypeClass_INTERFACE:
+                {
+                    emscripten::internal::EM_DESTRUCTORS destructors = nullptr;
+                    emscripten::internal::EM_GENERIC_WIRE_TYPE result
+                        = _emval_as(rObject.as_handle(), getTypeId(rUnoType), &destructors);
+                    emscripten::internal::DestructorsRunner dr(destructors);
+                    return css::uno::Any(
+                        emscripten::internal::fromGenericWireType<void const*>(result), rUnoType);
+                }
                 case TypeClass_ENUM:
                 {
                     emscripten::internal::EM_DESTRUCTORS destructors = nullptr;
@@ -294,12 +304,6 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                             emscripten::internal::fromGenericWireType<sal_Int32>(result)),
                         rUnoType);
                 }
-                case TypeClass_STRUCT:
-                    return {}; //TODO
-                case TypeClass_EXCEPTION:
-                    return {}; //TODO
-                case TypeClass_INTERFACE:
-                    return {}; //TODO
                 default:
                     throw std::invalid_argument("bad type class");
             }
