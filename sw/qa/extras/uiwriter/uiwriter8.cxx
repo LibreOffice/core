@@ -1287,6 +1287,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146356)
     // - Expected: Some Text
     // - Actual  : Table of Contents
     CPPUNIT_ASSERT_EQUAL(OUString("Some Text"), getParagraph(1)->getString());
+
+    // tdf#160095: Without the fix in place, this test would have crashed here
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD2 | awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Some Text"), getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121546)
