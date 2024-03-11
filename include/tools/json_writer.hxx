@@ -49,6 +49,7 @@ public:
 
     [[nodiscard]] ScopedJsonWriterNode startNode(const char*);
     [[nodiscard]] ScopedJsonWriterArray startArray(const char*);
+    [[nodiscard]] ScopedJsonWriterArray startAnonArray();
     [[nodiscard]] ScopedJsonWriterStruct startStruct();
 
     void put(const OUString& pPropName, const OUString& rPropValue);
@@ -84,6 +85,7 @@ public:
     bool isDataEquals(const std::string&) const;
 
 private:
+    void startAnonBlock(const char cType);
     void endNode();
     void endArray();
     void endStruct();

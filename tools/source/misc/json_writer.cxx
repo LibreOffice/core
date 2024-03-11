@@ -93,6 +93,12 @@ ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
     return ScopedJsonWriterArray(*this);
 }
 
+ScopedJsonWriterArray JsonWriter::startAnonArray()
+{
+    startAnonBlock('[');
+    return ScopedJsonWriterArray(*this);
+}
+
 void JsonWriter::endArray()
 {
     assert(mStartNodeCount && "mismatched StartNode/EndNode somewhere");
@@ -105,13 +111,13 @@ void JsonWriter::endArray()
     validate();
 }
 
-ScopedJsonWriterStruct JsonWriter::startStruct()
+void JsonWriter::startAnonBlock(const char cType)
 {
     ensureSpace(6);
 
     addCommaBeforeField();
 
-    *mPos = '{';
+    *mPos = cType;
     ++mPos;
     *mPos = ' ';
     ++mPos;
@@ -119,7 +125,11 @@ ScopedJsonWriterStruct JsonWriter::startStruct()
     mbFirstFieldInNode = true;
 
     validate();
+}
 
+ScopedJsonWriterStruct JsonWriter::startStruct()
+{
+    startAnonBlock('{');
     return ScopedJsonWriterStruct(*this);
 }
 
