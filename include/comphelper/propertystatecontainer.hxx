@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_PROPERTYSTATECONTAINER_HXX
 #define INCLUDED_COMPHELPER_PROPERTYSTATECONTAINER_HXX
 
+#include <config_options.h>
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -42,7 +43,7 @@ namespace comphelper
 
         @see com.sun.star.beans.XPropertyState
     */
-    class COMPHELPER_DLLPUBLIC OPropertyStateContainer
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OPropertyStateContainer
                 :public  OPropertyContainer
                 ,public  OPropertyStateContainer_TBase
     {

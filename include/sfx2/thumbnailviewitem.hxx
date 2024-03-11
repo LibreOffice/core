@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <vcl/bitmapex.hxx>
@@ -61,7 +62,7 @@ struct ThumbnailItemAttributes
     drawinglayer::attribute::FontAttribute aFontAttr;
 };
 
-class SFX2_DLLPUBLIC ThumbnailViewItem
+class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) ThumbnailViewItem
 {
 public:
 

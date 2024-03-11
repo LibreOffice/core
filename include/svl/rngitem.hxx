@@ -20,13 +20,14 @@
 #ifndef INCLUDED_SVL_RNGITEM_HXX
 #define INCLUDED_SVL_RNGITEM_HXX
 
+#include <config_options.h>
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 
 class SvStream;
 
 
-class SVL_DLLPUBLIC SfxRangeItem final : public SfxPoolItem
+class UNLESS_MERGELIBS_MORE(SVL_DLLPUBLIC) SfxRangeItem final : public SfxPoolItem
 {
 private:
     sal_uInt16                  nFrom;

@@ -18,13 +18,14 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/sdbc/XBlob.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
-    class OOO_DLLPUBLIC_DBTOOLS BlobHelper final : public ::cppu::WeakImplHelper< css::sdbc::XBlob >
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) BlobHelper final : public ::cppu::WeakImplHelper< css::sdbc::XBlob >
     {
         css::uno::Sequence< sal_Int8 > m_aValue;
     public:

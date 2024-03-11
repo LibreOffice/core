@@ -19,12 +19,13 @@
 #ifndef INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
 
+#include <config_options.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 
-class XMLOFF_DLLPUBLIC XMLCharContext : public SvXMLImportContext
+class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLCharContext : public SvXMLImportContext
 {
     XMLCharContext(const XMLCharContext&) = delete;
     void operator =(const XMLCharContext&) = delete;

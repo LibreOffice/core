@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_DOCMACROMODE_HXX
 #define INCLUDED_SFX2_DOCMACROMODE_HXX
 
+#include <config_options.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/signaturestate.hxx>
 
@@ -178,7 +179,7 @@ namespace sfx2
 
         @see css::document::MacroExecMode
     */
-    class SFX2_DLLPUBLIC DocumentMacroMode
+    class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) DocumentMacroMode
     {
     public:
         /** creates an instance

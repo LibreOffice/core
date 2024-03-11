@@ -42,7 +42,7 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
     };
 
     class OUnoObject;
-    class REPORTDESIGN_DLLPUBLIC DlgEdHint final : public SfxHint
+    class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) DlgEdHint final : public SfxHint
     {
     private:
         DlgEdHintKind   eHintKind;
@@ -60,7 +60,7 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
 class OReportPage;
 class OPropertyMediator;
 
-class REPORTDESIGN_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") OObjectBase
+class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("crosscast") OObjectBase
 {
 protected:
     mutable rtl::Reference<OPropertyMediator>                         m_xMediator;
@@ -115,7 +115,7 @@ public:
 
 // OCustomShape
 
-class REPORTDESIGN_DLLPUBLIC OCustomShape final : public SdrObjCustomShape , public OObjectBase
+class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) OCustomShape final : public SdrObjCustomShape , public OObjectBase
 {
     friend class OReportPage;
     friend class DlgEdFactory;
@@ -158,7 +158,7 @@ private:
 
 // OOle2Obj
 
-class REPORTDESIGN_DLLPUBLIC OOle2Obj final : public SdrOle2Obj , public OObjectBase
+class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) OOle2Obj final : public SdrOle2Obj , public OObjectBase
 {
     friend class OReportPage;
     friend class DlgEdFactory;
@@ -215,7 +215,7 @@ private:
 
 // OUnoObject
 
-class REPORTDESIGN_DLLPUBLIC OUnoObject final : public SdrUnoObj , public OObjectBase
+class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) OUnoObject final : public SdrUnoObj , public OObjectBase
 {
     friend class OReportPage;
     friend class OObjectBase;

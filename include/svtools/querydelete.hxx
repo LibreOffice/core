@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <memory>
 #include <vcl/weld.hxx>
 #include <svtools/svtdllapi.h>
@@ -32,7 +33,8 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_ALL = 101
 };
 
-class SVT_DLLPUBLIC QueryDeleteDlg_Impl final : public weld::MessageDialogController
+class UNLESS_MERGELIBS_MORE(SVT_DLLPUBLIC) QueryDeleteDlg_Impl final
+    : public weld::MessageDialogController
 {
 private:
     std::unique_ptr<weld::Button> m_xAllButton;

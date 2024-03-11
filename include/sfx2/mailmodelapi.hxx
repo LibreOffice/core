@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
@@ -37,7 +38,7 @@ typedef ::std::vector< OUString > AddressList_Impl;
 
 // class SfxMailModel_Impl -----------------------------------------------
 
-class SFX2_DLLPUBLIC SfxMailModel
+class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) SfxMailModel
 {
 protected:
     enum SaveResult

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 #define INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 
+#include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
@@ -74,7 +75,7 @@ namespace utl
         You'll usually never use this class directly, but only as parameter for a
         ->SharedUNOComponent class.
     */
-    class UNOTOOLS_DLLPUBLIC CloseableComponent
+    class UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) CloseableComponent
     {
     private:
         /** Our IMPL class.

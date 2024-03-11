@@ -26,7 +26,7 @@
 
 namespace connectivity::file
     {
-        class OOO_DLLPUBLIC_FILE OColumns : public sdbcx::OCollection
+        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_FILE) OColumns : public sdbcx::OCollection
         {
         protected:
             OFileTable* m_pTable;

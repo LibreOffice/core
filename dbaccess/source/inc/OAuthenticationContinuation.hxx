@@ -31,7 +31,7 @@
 namespace dbaccess
 {
 
-class OOO_DLLPUBLIC_DBA OAuthenticationContinuation :
+class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBA) OAuthenticationContinuation :
     public comphelper::OInteraction< css::ucb::XInteractionSupplyAuthentication >
 {
     bool    m_bRememberPassword : 1;      // remember the password for this session ?

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_PARSECONTEXT_HXX
 #define INCLUDED_SVX_PARSECONTEXT_HXX
 
+#include <config_options.h>
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <connectivity/IParseContext.hxx>
@@ -70,7 +71,7 @@ namespace svxform
     /** helper class which needs access to a (shared and ref-counted) OSystemParseContext
         instance.
     */
-    class SVXCORE_DLLPUBLIC OParseContextClient
+    class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) OParseContextClient
     {
     protected:
         OParseContextClient();

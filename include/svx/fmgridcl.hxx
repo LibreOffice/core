@@ -32,7 +32,7 @@ namespace weld { class Menu; }
 // FmGridHeader
 
 struct FmGridHeaderData;
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FmGridHeader
+class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) FmGridHeader
             :public ::svt::EditBrowserHeader
             ,public DropTargetHelper
 {
@@ -87,7 +87,7 @@ private:
 // FmGridControl
 
 class FmXGridPeer;
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FmGridControl : public DbGridControl
+class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) FmGridControl : public DbGridControl
 
 {
     friend class FmGridHeader;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
 #define INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
 
+#include <config_options.h>
 #include <framework/fwkdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -110,7 +111,7 @@ namespace framework
         the dreaded SolarMutex being locked when they're called, the above behavior is a compromise between "how it should
         be" and "how it can realistically be".
     */
-    class FWK_DLLPUBLIC UndoManagerHelper
+    class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) UndoManagerHelper
     {
     public:
         UndoManagerHelper( IUndoManagerImplementation& i_undoManagerImpl );

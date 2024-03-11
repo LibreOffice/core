@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FORMULA_FORMULA_HXX
 #define INCLUDED_FORMULA_FORMULA_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <utility>
 
@@ -52,7 +53,7 @@ class RefEdit;
 class RefButton;
 class FormEditData;
 
-class FORMULA_DLLPUBLIC FormulaModalDialog
+class UNLESS_MERGELIBS_MORE(FORMULA_DLLPUBLIC) FormulaModalDialog
     : public weld::GenericDialogController, public formula::IFormulaEditorHelper
 {
     friend class FormulaDlg_Impl;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_ENUMHELPER_HXX
 #define INCLUDED_COMPHELPER_ENUMHELPER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <comphelper/comphelperdllapi.h>
@@ -37,7 +38,7 @@ namespace comphelper
 /** provides a com.sun.star.container::XEnumeration access based
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
-class COMPHELPER_DLLPUBLIC OEnumerationByName final :
+class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OEnumerationByName final :
                          public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                           css::lang::XEventListener    >
 {
@@ -99,7 +100,7 @@ class SAL_DLLPUBLIC_TEMPLATE OAnyEnumeration_BASE
     for an outside set vector of Any's.
 
 */
-class COMPHELPER_DLLPUBLIC OAnyEnumeration final :
+class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OAnyEnumeration final :
                                            public OAnyEnumeration_BASE
 {
     sal_Int32                         m_nPos;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_DBAEXCHANGE_HXX
 #define INCLUDED_SVX_DBAEXCHANGE_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <o3tl/typed_flags_set.hxx>
@@ -240,7 +241,7 @@ namespace svx
 
     /** class for transferring multiple columns
     */
-    class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC OMultiColumnTransferable final : public TransferDataContainer
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) OMultiColumnTransferable final : public TransferDataContainer
     {
     public:
         OMultiColumnTransferable();

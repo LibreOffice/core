@@ -56,7 +56,7 @@ namespace dbtools
     //= ParameterManager
 
     class FilterManager;
-    class OOO_DLLPUBLIC_DBTOOLS ParameterManager
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) ParameterManager
     {
     public:
         /// classifies the origin of the data to fill a parameter

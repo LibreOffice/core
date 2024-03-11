@@ -19,11 +19,12 @@
 #ifndef INCLUDED_XMLOFF_TXTIMPPR_HXX
 #define INCLUDED_XMLOFF_TXTIMPPR_HXX
 
+#include <config_options.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlimppr.hxx>
 #include <optional>
 
-class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper final : public SvXMLImportPropertyMapper
+class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLTextImportPropertyMapper final : public SvXMLImportPropertyMapper
 {
     sal_Int32 m_nSizeTypeIndex;
     sal_Int32 m_nWidthTypeIndex;

@@ -35,7 +35,7 @@ class Control;
 namespace vcl
 {
 
-struct VCL_DLLPUBLIC ControlLayoutData
+struct UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) ControlLayoutData
 {
     // contains the string really displayed
     // there must be exactly one bounding rectangle in m_aUnicodeBoundRects

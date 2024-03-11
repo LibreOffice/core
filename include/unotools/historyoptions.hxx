@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -44,7 +45,7 @@ namespace SvtHistoryOptions
 
         @param      eHistory select right history.
     */
-    UNOTOOLS_DLLPUBLIC void Clear(EHistoryType eHistory, const bool bClearPinnedItems = true);
+    UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) void Clear(EHistoryType eHistory, const bool bClearPinnedItems = true);
 
     /** Return the complete specified history list.
 
@@ -60,7 +61,7 @@ namespace SvtHistoryOptions
         bool isReadOnly = false;
         bool isPinned = false;
     };
-    UNOTOOLS_DLLPUBLIC std::vector< HistoryItem > GetList(EHistoryType eHistory);
+    UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) std::vector< HistoryItem > GetList(EHistoryType eHistory);
 
     /** Append a new item to the specified list.
 
@@ -73,18 +74,18 @@ namespace SvtHistoryOptions
         @param sThumbnail  base64 encoded thumbnail of the item
         @param oIsReadOnly item was opened editable or read-only
     */
-    UNOTOOLS_DLLPUBLIC void AppendItem(EHistoryType eHistory, const OUString& sURL,
+    UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) void AppendItem(EHistoryType eHistory, const OUString& sURL,
                                        const OUString& sFilter, const OUString& sTitle,
                                        const std::optional<OUString>& sThumbnail,
                                        std::optional<bool> oIsReadOnly);
 
     /** Delete item from the specified list.
     */
-    UNOTOOLS_DLLPUBLIC void DeleteItem(EHistoryType eHistory, const OUString& sURL,
+    UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) void DeleteItem(EHistoryType eHistory, const OUString& sURL,
                                        const bool bClearPinned = true);
 
     // tdf#38742 - toggle pinned state of an item
-    UNOTOOLS_DLLPUBLIC void TogglePinItem(EHistoryType eHistory, const OUString& sURL);
+    UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) void TogglePinItem(EHistoryType eHistory, const OUString& sURL);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_DOCSTORAGEMODIFYLISTENER_HXX
 #define INCLUDED_SFX2_DOCSTORAGEMODIFYLISTENER_HXX
 
+#include <config_options.h>
 #include <sfx2/dllapi.h>
 
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -50,7 +51,7 @@ namespace sfx2
 
     //= DocumentStorageModifyListener
 
-    class SFX2_DLLPUBLIC DocumentStorageModifyListener final : public cppu::WeakImplHelper<css::util::XModifyListener>
+    class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) DocumentStorageModifyListener final : public cppu::WeakImplHelper<css::util::XModifyListener>
     {
         IModifiableDocument*    m_pDocument;
         comphelper::SolarMutex& m_rMutex;

@@ -199,7 +199,7 @@ namespace dbaui
 
     struct OGenericUnoController_Data;
 
-    class DBACCESS_DLLPUBLIC OGenericUnoController
+    class UNLESS_MERGELIBS_MORE(DBACCESS_DLLPUBLIC) OGenericUnoController
                                 :public OGenericUnoController_MBASE
                                 ,public OGenericUnoController_Base
                                 ,public IController

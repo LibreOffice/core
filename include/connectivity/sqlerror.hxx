@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SQLERROR_HXX
 #define INCLUDED_CONNECTIVITY_SQLERROR_HXX
 
+#include <config_options.h>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <optional>
@@ -55,7 +56,7 @@ namespace connectivity
 
         @see css::sdb::ErrorCondition
     */
-    class OOO_DLLPUBLIC_DBTOOLS SQLError
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) SQLError
     {
     public:
                         SQLError();

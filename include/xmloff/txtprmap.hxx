@@ -19,6 +19,7 @@
 #ifndef INCLUDED_XMLOFF_TXTPRMAP_HXX
 #define INCLUDED_XMLOFF_TXTPRMAP_HXX
 
+#include <config_options.h>
 #include <xmloff/contextid.hxx>
 #include <xmloff/xmlprmap.hxx>
 
@@ -219,7 +220,7 @@ enum class TextPropMap {
     CELL = 11
 };
 
-class XMLOFF_DLLPUBLIC XMLTextPropertySetMapper final : public XMLPropertySetMapper
+class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLTextPropertySetMapper final : public XMLPropertySetMapper
 {
 public:
     XMLTextPropertySetMapper( TextPropMap nType, bool bForExport );

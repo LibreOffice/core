@@ -11,13 +11,15 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <vcl/weld.hxx>
 
 #include "writerperfectdllapi.h"
 
 namespace writerperfect
 {
-class WRITERPERFECT_DLLPUBLIC WPFTEncodingDialog final : public weld::GenericDialogController
+class UNLESS_MERGELIBS_MORE(WRITERPERFECT_DLLPUBLIC) WPFTEncodingDialog final
+    : public weld::GenericDialogController
 {
 public:
     WPFTEncodingDialog(weld::Window* pParent, const OUString& title, const OUString& defEncoding);

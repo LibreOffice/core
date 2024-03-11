@@ -20,6 +20,7 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_REPORTFORMULA_HXX
 #define INCLUDED_REPORTDESIGN_INC_REPORTFORMULA_HXX
 
+#include <config_options.h>
 #include "dllapi.h"
 
 #include <osl/diagnose.h>
@@ -32,7 +33,7 @@ namespace rptui
 
     //= ReportFormula
 
-    class REPORTDESIGN_DLLPUBLIC ReportFormula
+    class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) ReportFormula
     {
     public:
         enum BindType

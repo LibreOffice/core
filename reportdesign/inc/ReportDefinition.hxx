@@ -20,6 +20,7 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_REPORTDEFINITION_HXX
 #define INCLUDED_REPORTDESIGN_INC_REPORTDEFINITION_HXX
 
+#include <config_options.h>
 #include "dllapi.h"
 
 #include "ReportHelperDefines.hxx"
@@ -189,7 +190,7 @@ namespace reportdesign
     public:
         //TTTT Needed? Or same as above?
         static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-        REPORTDESIGN_DLLPUBLIC static std::shared_ptr<rptui::OReportModel> getSdrModel(const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
+        UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) static std::shared_ptr<rptui::OReportModel> getSdrModel(const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
 
     private:
         DECLARE_XINTERFACE( )

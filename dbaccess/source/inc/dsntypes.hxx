@@ -101,7 +101,7 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_POSTGRES                  19
 
 // ODsnTypeCollection
-class OOO_DLLPUBLIC_DBA ODsnTypeCollection final
+class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBA) ODsnTypeCollection final
 {
 
     std::vector<OUString> m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
@@ -187,7 +187,7 @@ public:
 };
 
 //- ODsnTypeCollection::TypeIterator
-class OOO_DLLPUBLIC_DBA ODsnTypeCollection::TypeIterator
+class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBA) ODsnTypeCollection::TypeIterator
 {
     friend class ODsnTypeCollection;
 

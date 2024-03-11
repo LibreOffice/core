@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_XMLTKMAP_HXX
 #define INCLUDED_XMLOFF_XMLTKMAP_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
@@ -47,7 +48,7 @@ struct SvXMLTokenMapEntry
     }
 };
 
-class XMLOFF_DLLPUBLIC SvXMLTokenMap
+class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) SvXMLTokenMap
 {
 private:
     std::unique_ptr<SvXMLTokenMap_Impl>  m_pImpl;

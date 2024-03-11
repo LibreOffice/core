@@ -32,7 +32,7 @@ namespace rptui
 
 class OReportModel;
 
-class REPORTDESIGN_DLLPUBLIC OReportPage final : public SdrPage
+class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) OReportPage final : public SdrPage
 {
     OReportPage& operator=(const OReportPage&) = delete;
     OReportPage(const OReportPage&) = delete;

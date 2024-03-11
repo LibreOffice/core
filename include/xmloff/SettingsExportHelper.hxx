@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
 #define INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <string_view>
@@ -45,7 +46,7 @@ namespace xmloff
     class XMLSettingsExportContext;
 }
 
-class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
+class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
 {
     ::xmloff::XMLSettingsExportContext& m_rContext;
 

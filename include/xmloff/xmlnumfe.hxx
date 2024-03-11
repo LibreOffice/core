@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_XMLNUMFE_HXX
 #define INCLUDED_XMLOFF_XMLNUMFE_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
@@ -44,7 +45,7 @@ class SvXMLNumUsedList_Impl;
 
 class SvXMLEmbeddedTextEntryArr;
 
-class XMLOFF_DLLPUBLIC SvXMLNumFmtExport final
+class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) SvXMLNumFmtExport final
 {
 private:
     SvXMLExport&                m_rExport;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_NUMBEREDCOLLECTION_HXX
 #define INCLUDED_COMPHELPER_NUMBEREDCOLLECTION_HXX
 
+#include <config_options.h>
 #include <comphelper/comphelperdllapi.h>
 
 #include <com/sun/star/uno/Reference.h>
@@ -44,7 +45,7 @@ namespace comphelper{
 
     @threadsafe
  */
-class COMPHELPER_DLLPUBLIC NumberedCollection final :
+class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) NumberedCollection final :
                                               public  ::cppu::WeakImplHelper< css::frame::XUntitledNumbers >
 {
 

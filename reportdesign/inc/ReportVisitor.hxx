@@ -19,6 +19,7 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_REPORTVISITOR_HXX
 #define INCLUDED_REPORTDESIGN_INC_REPORTVISITOR_HXX
 
+#include <config_options.h>
 #include "dllapi.h"
 #include <com/sun/star/report/XReportDefinition.hpp>
 
@@ -47,7 +48,7 @@ namespace reportdesign
         ~ITraverseReport() {}
     };
 
-    class REPORTDESIGN_DLLPUBLIC OReportVisitor
+    class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) OReportVisitor
     {
         ITraverseReport*                                                                m_pTraverseReport;
     public:

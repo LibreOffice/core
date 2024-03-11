@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_SELECTIONMULTIPLEX_HXX
 #define INCLUDED_COMPHELPER_SELECTIONMULTIPLEX_HXX
 
+#include <config_options.h>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -37,7 +38,7 @@ namespace comphelper
     //= OSelectionChangeListener
 
     /// simple listener adapter for selections
-    class COMPHELPER_DLLPUBLIC OSelectionChangeListener
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OSelectionChangeListener
     {
         friend class OSelectionChangeMultiplexer;
 
@@ -54,7 +55,7 @@ namespace comphelper
     //= OSelectionChangeMultiplexer
 
     /// multiplexer for selection changes
-    class COMPHELPER_DLLPUBLIC OSelectionChangeMultiplexer final : public cppu::WeakImplHelper< css::view::XSelectionChangeListener>
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OSelectionChangeMultiplexer final : public cppu::WeakImplHelper< css::view::XSelectionChangeListener>
     {
         friend class OSelectionChangeListener;
         css::uno::Reference< css::view::XSelectionSupplier>  m_xSet;

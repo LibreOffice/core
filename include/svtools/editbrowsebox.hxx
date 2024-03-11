@@ -916,7 +916,7 @@ namespace svt
         EditBrowseBox(EditBrowseBox const &) = delete;
         EditBrowseBox& operator=(EditBrowseBox const &) = delete;
 
-        class BrowserMouseEventPtr
+        class SAL_DLLPRIVATE BrowserMouseEventPtr
         {
             std::unique_ptr<BrowserMouseEvent> pEvent;
             bool               bDown;

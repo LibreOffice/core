@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_TITLEHELPER_HXX
 #define INCLUDED_FRAMEWORK_TITLEHELPER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
@@ -50,7 +51,7 @@ namespace framework{
 
     @threadsafe
  */
-class FWK_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
+class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final : private ::cppu::BaseMutex
                   , public  ::cppu::WeakImplHelper< css::frame::XTitle                 ,
                                                      css::frame::XTitleChangeBroadcaster,
                                                      css::frame::XTitleChangeListener   ,

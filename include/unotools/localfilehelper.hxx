@@ -19,6 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_LOCALFILEHELPER_HXX
 #define INCLUDED_UNOTOOLS_LOCALFILEHELPER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/unotoolsdllapi.h>
 
@@ -26,7 +27,7 @@
 
 namespace utl
 {
-    class UNOTOOLS_DLLPUBLIC LocalFileHelper
+    class UNLESS_MERGELIBS_MORE(UNOTOOLS_DLLPUBLIC) LocalFileHelper
     {
     public:
         static          css::uno::Sequence< OUString >

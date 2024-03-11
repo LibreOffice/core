@@ -23,7 +23,7 @@ class Window;
 
 namespace dbahsql
 {
-class SAL_DLLPUBLIC_EXPORT HsqlImporter
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_EXPORT) HsqlImporter
 {
 private:
     css::uno::Reference<css::sdbc::XConnection>& m_rConnection;

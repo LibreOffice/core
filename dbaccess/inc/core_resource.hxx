@@ -30,7 +30,7 @@ namespace dbaccess
 {
     // ResourceManager
     // handling resources within the DBA-Core library
-    class OOO_DLLPUBLIC_DBA ResourceManager
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBA) ResourceManager
     {
     private:
         // no instantiation allowed

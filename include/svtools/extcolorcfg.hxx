@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -57,7 +58,7 @@ public:
     void            setColor(Color _nColor) { m_nColor = _nColor; }
 };
 
-class SVT_DLLPUBLIC ExtendedColorConfig final : public SfxBroadcaster, public SfxListener
+class UNLESS_MERGELIBS_MORE(SVT_DLLPUBLIC) ExtendedColorConfig final : public SfxBroadcaster, public SfxListener
 {
     friend class ExtendedColorConfig_Impl;
 private:

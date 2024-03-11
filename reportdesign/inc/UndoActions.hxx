@@ -135,7 +135,7 @@ namespace rptui
 
     //= OCommentUndoAction
 
-    class REPORTDESIGN_DLLPUBLIC OCommentUndoAction : public SdrUndoAction
+    class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) OCommentUndoAction : public SdrUndoAction
     {
     protected:
         OUString                m_strComment; // undo, redo comment

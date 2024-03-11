@@ -32,7 +32,7 @@ namespace com::sun::star::frame { class XFrame; }
 class PaletteManager;
 class ToolBox;
 
-class SVXCORE_DLLPUBLIC ColorStatus
+class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) ColorStatus
 {
     Color maColor;
     Color maTLBRColor;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_SIGNATURESTATE_HXX
 #define INCLUDED_SFX2_SIGNATURESTATE_HXX
 
+#include <config_options.h>
 #include <sfx2/dllapi.h>
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
@@ -45,7 +46,8 @@ enum class SignatureState
 namespace DocumentSignatures
 {
 /** Get document signature state */
-SFX2_DLLPUBLIC SignatureState
+UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC)
+SignatureState
 getSignatureState(const css::uno::Sequence<css::security::DocumentSignatureInformation>& aInfos);
 }
 

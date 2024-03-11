@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -36,7 +37,7 @@ namespace connectivity::sdbcx
         typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OIndex_BASE;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndex> OIndex_PROP;
 
-        class OOO_DLLPUBLIC_DBTOOLS OIndex :
+        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OIndex :
                                     public cppu::BaseMutex,
                                     public ODescriptor_BASE,
                                     public IRefreshableColumns,

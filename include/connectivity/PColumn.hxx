@@ -40,7 +40,7 @@ namespace connectivity::parse
         typedef sdbcx::OColumn OParseColumn_BASE;
         typedef ::comphelper::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
 
-        class OOO_DLLPUBLIC_DBTOOLS OParseColumn final :
+        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OParseColumn final :
             public OParseColumn_BASE, public OParseColumn_PROP
         {
             OUString    m_aRealName;

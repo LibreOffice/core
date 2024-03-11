@@ -20,6 +20,7 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_CONDITIONALEXPRESSION_HXX
 #define INCLUDED_REPORTDESIGN_INC_CONDITIONALEXPRESSION_HXX
 
+#include <config_options.h>
 #include "dllapi.h"
 
 #include <rtl/ustring.hxx>
@@ -32,7 +33,7 @@ namespace rptui
 
     // = ConditionalExpression
 
-    class REPORTDESIGN_DLLPUBLIC ConditionalExpression
+    class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) ConditionalExpression
     {
     private:
         const OUString       m_sPattern;
@@ -90,7 +91,7 @@ namespace rptui
 
     // = ConditionalExpressionFactory
 
-    class REPORTDESIGN_DLLPUBLIC ConditionalExpressionFactory
+    class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) ConditionalExpressionFactory
     {
     public:
         /// fills the given map with all ConditionalExpressions which we know

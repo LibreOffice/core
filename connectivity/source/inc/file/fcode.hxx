@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <connectivity/sqliterator.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <connectivity/FValue.hxx>
@@ -36,7 +37,7 @@ namespace connectivity
         class OOperand;
         typedef std::stack<OOperand*> OCodeStack;
 
-        class OOO_DLLPUBLIC_FILE OCode
+        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_FILE) OCode
         {
         public:
             //virtual dtor to allow this to be the root of the class hierarchy
@@ -244,7 +245,7 @@ namespace connectivity
             virtual bool operate(const OOperand*, const OOperand*) const override;
         };
 
-        class OOO_DLLPUBLIC_FILE OOp_COMPARE : public OBoolOperator
+        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_FILE) OOp_COMPARE : public OBoolOperator
         {
             sal_Int32 aPredicateType;
 

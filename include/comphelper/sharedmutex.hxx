@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_SHAREDMUTEX_HXX
 #define INCLUDED_COMPHELPER_SHAREDMUTEX_HXX
 
+#include <config_options.h>
 #include <comphelper/comphelperdllapi.h>
 #include <memory>
 
@@ -31,7 +32,7 @@ namespace comphelper
 
     //= SharedMutex
 
-    class COMPHELPER_DLLPUBLIC SharedMutex
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) SharedMutex
     {
     public:
         SharedMutex();

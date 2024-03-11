@@ -37,7 +37,7 @@ namespace rptui
 class OReportPage;
 class OXUndoEnvironment;
 
-class REPORTDESIGN_DLLPUBLIC OReportModel final : public SdrModel
+class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) OReportModel final : public SdrModel
 {
     friend class OReportPage;
 

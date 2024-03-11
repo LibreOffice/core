@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_USERINPUTINTERCEPTION_HXX
 #define INCLUDED_SFX2_USERINPUTINTERCEPTION_HXX
 
+#include <config_options.h>
 #include <sfx2/dllapi.h>
 
 #include <memory>
@@ -44,7 +45,7 @@ namespace sfx2
     /** helper class for implementing the XUserInputInterception interface
         for a controller implementation
     */
-    class SFX2_DLLPUBLIC UserInputInterception
+    class UNLESS_MERGELIBS_MORE(SFX2_DLLPUBLIC) UserInputInterception
     {
     public:
         UserInputInterception( ::cppu::OWeakObject& _rControllerImpl, ::osl::Mutex& _rMutex );

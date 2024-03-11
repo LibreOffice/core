@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_ENUMPROPERTYHDL_HXX
 #define INCLUDED_XMLOFF_ENUMPROPERTYHDL_HXX
 
+#include <config_options.h>
 #include <xmloff/xmlprhdl.hxx>
 #include <cppu/unotype.hxx>
 
@@ -28,7 +29,7 @@ template <typename EnumT> struct SvXMLEnumMapEntry;
 /**
     PropertyHandler for a generic xml enumeration type:
 */
-class XMLOFF_DLLPUBLIC XMLEnumPropertyHdl : public XMLPropertyHandler
+class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLEnumPropertyHdl : public XMLPropertyHandler
 {
 private:
     const SvXMLEnumMapEntry<sal_uInt16>* mpEnumMap;

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <framework/fwkdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -27,7 +28,7 @@ namespace com::sun::star::container { class XIndexContainer; }
 
 namespace framework
 {
-    class FWK_DLLPUBLIC ActionTriggerHelper
+    class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) ActionTriggerHelper
     {
         public:
             // Fills the submitted menu with the structure contained in the second

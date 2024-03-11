@@ -43,7 +43,7 @@ namespace tools { class Rectangle; }
 namespace dbaui
 {
     class IController;
-    class DBACCESS_DLLPUBLIC ODataView :    public vcl::Window
+    class UNLESS_MERGELIBS_MORE(DBACCESS_DLLPUBLIC) ODataView :    public vcl::Window
     {
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;  // the service factory to work with
 

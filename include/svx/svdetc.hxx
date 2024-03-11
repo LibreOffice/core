@@ -166,14 +166,14 @@ class OLEObjCache
 
 public:
     OLEObjCache();
-    SVXCORE_DLLPUBLIC ~OLEObjCache();
+    UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) ~OLEObjCache();
 
     void InsertObj(SdrOle2Obj* pObj);
     void RemoveObj(SdrOle2Obj* pObj);
 
-    SVXCORE_DLLPUBLIC size_t size() const;
-    SVXCORE_DLLPUBLIC SdrOle2Obj* operator[](size_t nPos);
-    SVXCORE_DLLPUBLIC const SdrOle2Obj* operator[](size_t nPos) const;
+    UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) size_t size() const;
+    UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) SdrOle2Obj* operator[](size_t nPos);
+    UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) const SdrOle2Obj* operator[](size_t nPos) const;
 };
 
 

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_DBAOBJECTEX_HXX
 #define INCLUDED_SVX_DBAOBJECTEX_HXX
 
+#include <config_options.h>
 #include <vcl/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/svxdllapi.h>
@@ -29,7 +30,7 @@ namespace com::sun::star::ucb { class XContent; }
 namespace svx
 {
     //= OComponentTransferable
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OComponentTransferable final : public TransferDataContainer
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) OComponentTransferable final : public TransferDataContainer
     {
     public:
         OComponentTransferable();

@@ -19,11 +19,12 @@
 
 #pragma once
 
+#include <config_options.h>
 #include "smdllapi.hxx"
 
 namespace SmGlobals
 {
-SM_DLLPUBLIC void ensure();
+UNLESS_MERGELIBS_MORE(SM_DLLPUBLIC) void ensure();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_NAMEDBOOLPROPERTYHDL_HXX
 #define INCLUDED_XMLOFF_NAMEDBOOLPROPERTYHDL_HXX
 
+#include <config_options.h>
 #include <utility>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -27,7 +28,7 @@
 /**
     PropertyHandler for a named xml bool type:
 */
-class XMLOFF_DLLPUBLIC XMLNamedBoolPropertyHdl final : public XMLPropertyHandler
+class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLNamedBoolPropertyHdl final : public XMLPropertyHandler
 {
 private:
     const OUString maTrueStr;

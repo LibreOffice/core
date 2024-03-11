@@ -56,7 +56,7 @@ namespace connectivity::file
                                                   css::lang::XServiceInfo,
                                                   css::lang::XEventListener> OResultSet_BASE;
 
-        class OOO_DLLPUBLIC_FILE OResultSet :
+        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_FILE) OResultSet :
                             public  cppu::BaseMutex,
                             public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,

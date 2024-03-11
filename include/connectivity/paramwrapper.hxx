@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 #define INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 
+#include <config_options.h>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>
 
@@ -127,7 +128,7 @@ namespace dbtools::param
                                                >   ParameterWrapperContainer_Base;
 
     /// class for the parameter event @see approveParameter
-    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapperContainer final :
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) ParameterWrapperContainer final :
         public ParameterWrapperContainer_Base
     {
     private:

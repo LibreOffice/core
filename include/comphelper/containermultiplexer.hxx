@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_CONTAINERMULTIPLEXER_HXX
 #define INCLUDED_COMPHELPER_CONTAINERMULTIPLEXER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -42,7 +43,7 @@ namespace comphelper
         In this case, derive this class from OContainerListener, and create an adapter
         OContainerListenerAdapter which multiplexes the changes.</p>
     */
-    class COMPHELPER_DLLPUBLIC OContainerListener
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OContainerListener
     {
         friend class OContainerListenerAdapter;
         rtl::Reference<OContainerListenerAdapter>  m_xAdapter;
@@ -68,7 +69,7 @@ namespace comphelper
     // workaround for incremental linking bugs in MSVC2015
     class SAL_DLLPUBLIC_TEMPLATE OContainerListenerAdapter_Base : public cppu::WeakImplHelper< css::container::XContainerListener > {};
 
-    class COMPHELPER_DLLPUBLIC OContainerListenerAdapter final : public OContainerListenerAdapter_Base
+    class UNLESS_MERGELIBS_MORE(COMPHELPER_DLLPUBLIC) OContainerListenerAdapter final : public OContainerListenerAdapter_Base
     {
         friend class OContainerListener;
 

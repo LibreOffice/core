@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX
 #define INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX
 
+#include <config_options.h>
 #include <basic/basicdllapi.h>
 
 namespace com::sun::star::frame { class XModel; }
@@ -62,7 +63,7 @@ namespace basic
 
     //= BasicManagerRepository
 
-    class BASIC_DLLPUBLIC BasicManagerRepository
+    class UNLESS_MERGELIBS_MORE(BASIC_DLLPUBLIC) BasicManagerRepository
     {
     public:
         /** returns the BasicManager belonging to the given document

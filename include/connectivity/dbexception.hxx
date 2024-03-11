@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 #define INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 
+#include <config_options.h>
 #include <connectivity/standardsqlstate.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -145,7 +146,7 @@ private:
 //= SQLExceptionIteratorHelper - iterating through an SQLException chain
 
 
-class OOO_DLLPUBLIC_DBTOOLS SQLExceptionIteratorHelper final
+class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) SQLExceptionIteratorHelper final
 {
     const css::sdbc::SQLException* m_pCurrent;
     SQLExceptionInfo::TYPE                      m_eCurrentType;

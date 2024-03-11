@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_STATEMENTCOMPOSER_HXX
 #define INCLUDED_CONNECTIVITY_STATEMENTCOMPOSER_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 
 #include <memory>
@@ -39,7 +40,7 @@ namespace dbtools
     struct StatementComposer_Data;
     /** a class which is able to compose queries (SELECT statements) from a command and a command type
     */
-    class OOO_DLLPUBLIC_DBTOOLS StatementComposer
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) StatementComposer
     {
         ::std::unique_ptr< StatementComposer_Data >   m_pData;
 

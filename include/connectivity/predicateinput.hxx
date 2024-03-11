@@ -41,7 +41,7 @@ namespace dbtools
     /** A class which allows input of an SQL predicate for a row set column
         into an edit field.
     */
-    class OOO_DLLPUBLIC_DBTOOLS OPredicateInputController
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OPredicateInputController
     {
     private:
         css::uno::Reference< css::sdbc::XConnection >
