@@ -2434,8 +2434,10 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             mpTextEditOutlinerView->SetAttribs(rSet);
 
             Outliner* pTEOutliner = mpTextEditOutlinerView->GetOutliner();
-            if (mpModel && pTEOutliner && pTEOutliner->IsModified())
+            if (mpModel && pTEOutliner && pTEOutliner->IsModified()) {
                 mpModel->SetChanged();
+                SetInnerTextAreaForLOKit();
+            }
 
             ImpMakeTextCursorAreaVisible();
         }
