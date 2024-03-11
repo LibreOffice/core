@@ -47,6 +47,7 @@ public:
 
     [[nodiscard]] ScopedJsonWriterNode startNode(std::string_view);
     [[nodiscard]] ScopedJsonWriterArray startArray(std::string_view);
+    [[nodiscard]] ScopedJsonWriterArray startAnonArray();
     [[nodiscard]] ScopedJsonWriterStruct startStruct();
 
     void put(std::u16string_view pPropName, const OUString& rPropValue);
@@ -83,6 +84,7 @@ public:
     bool isDataEquals(std::string_view) const;
 
 private:
+    void startAnonBlock(const char cType);
     void endNode();
     void endArray();
     void endStruct();

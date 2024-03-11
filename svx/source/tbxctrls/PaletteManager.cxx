@@ -482,8 +482,7 @@ void PaletteManager::generateJSON(tools::JsonWriter& aTree, const std::set<Color
     auto aColorIt = rColors.begin();
     while (aColorIt != rColors.end())
     {
-        auto aColorRowTree = aTree.startStruct();
-        auto aColorRowTree2 = aTree.startArray("");
+        auto aColorRowTree = aTree.startAnonArray();
 
         for (sal_uInt32 nColumn = 0; nColumn < nColumnCount; nColumn++)
         {
