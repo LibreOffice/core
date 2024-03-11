@@ -544,7 +544,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     }
 
     if ( !xResult.is() )
-        throw uno::RuntimeException("Unable to retrive the UI configuration menu.", getXWeak());
+        throw uno::RuntimeException("Unable to retrieve the UI configuration menu.", getXWeak());
 
     return xResult;
 }
