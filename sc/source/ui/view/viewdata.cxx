@@ -1752,7 +1752,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         Size aPaperSize = pView->GetActiveWin()->PixelToLogic( Size( nSizeXPix, nSizeYPix ), GetLogicMode() );
         Size aPaperSizePTwips(nSizeXPTwips, nSizeYPTwips);
-        if ( bBreak && !bAsianVertical && SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+        // In the LOK case the following code can make the cell background and visible area larger
+        // than needed which makes selecting the adjacent right cell impossible in some cases.
+        if ( bBreak && !bAsianVertical && SC_MOD()->GetInputOptions().GetTextWysiwyg() && !bLOKActive )
         {
             //  if text is formatted for printer, use the exact same paper width
             //  (and same line breaks) as for output.
