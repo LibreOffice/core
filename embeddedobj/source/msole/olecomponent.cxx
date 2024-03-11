@@ -74,7 +74,7 @@ FORMATETC const pFormatTemplates[FORMATS_NUM] = {
 // loadComponentFromURL, and the instantiation of the object happens during the load), or in MTA
 // (the thread actually serving the incoming calls).
 //
-// The objects typically can only be used in the appartment where they were instantiated. This means
+// The objects typically can only be used in the apartment where they were instantiated. This means
 // that e.g. a call to IOleObject::Close will fail, if it is performed in a different thread, when
 // it was started in the main thread. And vice versa, opening a document in a handler thread, then
 // trying to interact with the OLE object in GUI would fail.
