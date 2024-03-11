@@ -269,11 +269,11 @@ Module.addOnPostRun(function() {
         console.assert(v.get() === uno.org.libreoffice.embindtest.Enum.E_2);
         console.assert(test.isAnyEnum(v));
         v.delete();
-        //TODO: let a = new Module.uno_Any(
-        //TODO:     Module.uno_Type.Enum('org.libreoffice.embindtest.Enum'),
-        //TODO:     uno.org.libreoffice.embindtest.Enum.E_2);
-        //TODO: console.assert(test.isAnyEnum(a));
-        //TODO: a.delete();
+        let a = new Module.uno_Any(
+            Module.uno_Type.Enum('org.libreoffice.embindtest.Enum'),
+            uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(test.isAnyEnum(a));
+        a.delete();
     }
     {
         let v = test.getAnyStruct();

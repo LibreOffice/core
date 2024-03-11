@@ -17,6 +17,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/temporary.hxx>
 #include <o3tl/unreachable.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -283,7 +284,16 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 case TypeClass_SEQUENCE:
                     return {}; //TODO
                 case TypeClass_ENUM:
-                    return {}; //TODO
+                {
+                    emscripten::internal::EM_DESTRUCTORS destructors = nullptr;
+                    emscripten::internal::EM_GENERIC_WIRE_TYPE result
+                        = _emval_as(rObject.as_handle(), getTypeId(rUnoType), &destructors);
+                    emscripten::internal::DestructorsRunner dr(destructors);
+                    return css::uno::Any(
+                        &o3tl::temporary(
+                            emscripten::internal::fromGenericWireType<sal_Int32>(result)),
+                        rUnoType);
+                }
                 case TypeClass_STRUCT:
                     return {}; //TODO
                 case TypeClass_EXCEPTION:
