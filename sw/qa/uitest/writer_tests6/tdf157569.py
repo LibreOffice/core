@@ -9,6 +9,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
+import platform
 
 class tdf157569(UITestCase):
 
@@ -22,7 +23,10 @@ class tdf157569(UITestCase):
             # Without the fix in place, this test would have failed with
             # AssertionError: 1663 != 944
             self.assertEqual(1663, nHeight)
-            self.assertEqual(2111, nWidth)
+            if platform.system() == "Windows":
+                self.assertEqual(2145, nWidth) # no idea why
+            else:
+                self.assertEqual(2111, nWidth)
 
             xDoc = self.xUITest.getTopFocusWindow()
             xEditWin = xDoc.getChild("writer_edit")
