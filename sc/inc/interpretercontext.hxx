@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <random>
+#include <vector>
 #include <i18nlangtag/lang.h>
 #include <o3tl/sorted_vector.hxx>
 #include "types.hxx"
@@ -48,6 +49,7 @@ struct ScInterpreterContext
     // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
     // This is populated/used only when formula-group threading is enabled.
     std::vector<sal_uInt8> maConditions;
+    std::mt19937 aRNG;
     ScInterpreter* pInterpreter;
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter);

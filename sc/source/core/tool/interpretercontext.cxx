@@ -22,6 +22,7 @@
 #include <svl/zforlist.hxx>
 
 #include <document.hxx>
+#include <comphelper/random.hxx>
 #include <formula/token.hxx>
 #include <lookupcache.hxx>
 #include <rangecache.hxx>
@@ -34,6 +35,9 @@ ScInterpreterContext::ScInterpreterContext(const ScDocument& rDoc, SvNumberForma
     : mpDoc(&rDoc)
     , mnTokenCachePos(0)
     , maTokens(TOKEN_CACHE_SIZE, nullptr)
+    // create a per-interpreter Random Number Generator, seeded from the global rng, so we don't have
+    // to lock a mutex to generate a random number
+    , aRNG(comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<sal_uInt32>::max()))
     , pInterpreter(nullptr)
     , mpFormatter(pFormatter)
 {
