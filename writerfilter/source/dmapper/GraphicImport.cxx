@@ -1863,9 +1863,10 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             if (m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 if (m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME
-                    && m_pImpl->m_nHoriOrient > text::HoriOrientation::NONE
-                    && m_pImpl->m_nHoriOrient != text::HoriOrientation::CENTER
-                    && m_pImpl->m_nHoriOrient < text::HoriOrientation::FULL)
+                    && (m_pImpl->m_nHoriOrient == text::HoriOrientation::LEFT
+                        || m_pImpl->m_nHoriOrient == text::HoriOrientation::RIGHT
+                        || m_pImpl->m_nHoriOrient == text::HoriOrientation::INSIDE
+                        || m_pImpl->m_nHoriOrient == text::HoriOrientation::OUTSIDE))
                 {
                     // before compat15, relative left/right/inside/outside honored margins.
                     if (m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() < 15)
