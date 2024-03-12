@@ -27,6 +27,8 @@ namespace svgio::svgreader
 class SvgFeImageNode final : public SvgFilterNode
 {
 private:
+    OUString maIn;
+    OUString maResult;
     OUString maUrl; // external link
     OUString maData; // base64 data
 
@@ -36,7 +38,8 @@ public:
 
     virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
-    void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const override;
+    void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+               const SvgFilterNode* pParent) const override;
 };
 
 } // end of namespace svgio::svgreader

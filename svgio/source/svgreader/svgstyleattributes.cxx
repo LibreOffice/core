@@ -1210,7 +1210,7 @@ namespace svgio::svgreader
                 const SvgFilterNode* pFilter = accessFilterXLink();
                 if(pFilter)
                 {
-                    pFilter->apply(aSource);
+                    pFilter->apply(aSource, nullptr);
                 }
             }
 

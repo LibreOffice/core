@@ -33,12 +33,19 @@ SvgFeColorMatrixNode::~SvgFeColorMatrixNode() {}
 
 void SvgFeColorMatrixNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
-    // call parent
-    SvgFilterNode::parseAttribute(aSVGToken, aContent);
-
     // parse own
     switch (aSVGToken)
     {
+        case SVGToken::In:
+        {
+            maIn = aContent.trim();
+            break;
+        }
+        case SVGToken::Result:
+        {
+            maResult = aContent.trim();
+            break;
+        }
         case SVGToken::Type:
         {
             if (!aContent.isEmpty())
@@ -74,8 +81,15 @@ void SvgFeColorMatrixNode::parseAttribute(SVGToken aSVGToken, const OUString& aC
     }
 }
 
-void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const
+void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                                 const SvgFilterNode* pParent) const
 {
+    if (const drawinglayer::primitive2d::Primitive2DContainer* rSource
+        = pParent->findGraphicSource(maIn))
+    {
+        rTarget = *rSource;
+    }
+
     if (maType == ColorType::LuminanceToAlpha)
     {
         const drawinglayer::primitive2d::Primitive2DReference xRef(
@@ -114,6 +128,8 @@ void SvgFeColorMatrixNode::apply(drawinglayer::primitive2d::Primitive2DContainer
                 std::move(rTarget), std::make_shared<basegfx::BColorModifier_matrix>(aVector)));
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
+
+    pParent->addGraphicSourceToMapper(maResult, rTarget);
 }
 
 } // end of namespace svgio::svgreader

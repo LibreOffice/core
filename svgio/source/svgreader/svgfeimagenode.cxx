@@ -38,15 +38,22 @@ SvgFeImageNode::~SvgFeImageNode() {}
 
 void SvgFeImageNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
-    // call parent
-    SvgFilterNode::parseAttribute(aSVGToken, aContent);
-
     // parse own
     switch (aSVGToken)
     {
         case SVGToken::Style:
         {
             readLocalCssStyle(aContent);
+            break;
+        }
+        case SVGToken::In:
+        {
+            maIn = aContent.trim();
+            break;
+        }
+        case SVGToken::Result:
+        {
+            maResult = aContent.trim();
             break;
         }
         case SVGToken::Href:
@@ -69,8 +76,15 @@ void SvgFeImageNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent
     }
 }
 
-void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const
+void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                           const SvgFilterNode* pParent) const
 {
+    if (const drawinglayer::primitive2d::Primitive2DContainer* rSource
+        = pParent->findGraphicSource(maIn))
+    {
+        rTarget = *rSource;
+    }
+
     BitmapEx aBitmapEx;
 
     if (!maData.isEmpty())
@@ -129,6 +143,8 @@ void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
 
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
+
+    pParent->addGraphicSourceToMapper(maResult, rTarget);
 }
 
 } // end of namespace svgio::svgreader

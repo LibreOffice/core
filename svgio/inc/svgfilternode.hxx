@@ -19,28 +19,33 @@
 
 #pragma once
 
+#include <unordered_map>
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+typedef std::unordered_map<OUString, drawinglayer::primitive2d::Primitive2DContainer>
+    IdGraphicSourceMapper;
 
 namespace svgio::svgreader
 {
 class SvgFilterNode : public SvgNode
 {
 private:
-    OUString maIn;
-    OUString maResult;
+    IdGraphicSourceMapper maIdGraphicSourceMapperList;
 
 public:
     SvgFilterNode(SVGToken aType, SvgDocument& rDocument, SvgNode* pParent);
     virtual ~SvgFilterNode() override;
 
-    virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
+    virtual void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                       const SvgFilterNode* pParent) const;
 
-    virtual void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const;
-
-    const OUString& getIn() const { return maIn; }
-    const OUString& getResult() const { return maResult; }
+    void
+    addGraphicSourceToMapper(const OUString& rStr,
+                             drawinglayer::primitive2d::Primitive2DContainer pGrapicSource) const;
+    const drawinglayer::primitive2d::Primitive2DContainer*
+    findGraphicSource(const OUString& rStr) const;
 };
 
 } // end of namespace svgio::svgreader

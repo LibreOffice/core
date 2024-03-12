@@ -33,9 +33,6 @@ SvgFeGaussianBlurNode::~SvgFeGaussianBlurNode() {}
 
 void SvgFeGaussianBlurNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
-    // call parent
-    SvgFilterNode::parseAttribute(aSVGToken, aContent);
-
     // parse own
     switch (aSVGToken)
     {
@@ -52,6 +49,16 @@ void SvgFeGaussianBlurNode::parseAttribute(SVGToken aSVGToken, const OUString& a
             }
             break;
         }
+        case SVGToken::In:
+        {
+            maIn = aContent.trim();
+            break;
+        }
+        case SVGToken::Result:
+        {
+            maResult = aContent.trim();
+            break;
+        }
         default:
         {
             break;
@@ -59,13 +66,22 @@ void SvgFeGaussianBlurNode::parseAttribute(SVGToken aSVGToken, const OUString& a
     }
 }
 
-void SvgFeGaussianBlurNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const
+void SvgFeGaussianBlurNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                                  const SvgFilterNode* pParent) const
 {
+    if (const drawinglayer::primitive2d::Primitive2DContainer* rSource
+        = pParent->findGraphicSource(maIn))
+    {
+        rTarget = *rSource;
+    }
+
     const drawinglayer::primitive2d::Primitive2DReference xRef(
         new drawinglayer::primitive2d::SoftEdgePrimitive2D(maStdDeviation.getNumber(),
                                                            std::move(rTarget)));
 
     rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
+
+    pParent->addGraphicSourceToMapper(maResult, rTarget);
 }
 
 } // end of namespace svgio::svgreader

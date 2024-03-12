@@ -40,15 +40,22 @@ SvgFeDropShadowNode::~SvgFeDropShadowNode() {}
 
 void SvgFeDropShadowNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
-    // call parent
-    SvgFilterNode::parseAttribute(aSVGToken, aContent);
-
     // parse own
     switch (aSVGToken)
     {
         case SVGToken::Style:
         {
             readLocalCssStyle(aContent);
+            break;
+        }
+        case SVGToken::In:
+        {
+            maIn = aContent.trim();
+            break;
+        }
+        case SVGToken::Result:
+        {
+            maResult = aContent.trim();
             break;
         }
         case SVGToken::Dx:
@@ -112,8 +119,15 @@ void SvgFeDropShadowNode::parseAttribute(SVGToken aSVGToken, const OUString& aCo
     }
 }
 
-void SvgFeDropShadowNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const
+void SvgFeDropShadowNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                                const SvgFilterNode* pParent) const
 {
+    if (const drawinglayer::primitive2d::Primitive2DContainer* rSource
+        = pParent->findGraphicSource(maIn))
+    {
+        rTarget = *rSource;
+    }
+
     basegfx::B2DHomMatrix aTransform;
     if (maDx.isSet() || maDy.isSet())
     {
@@ -140,6 +154,8 @@ void SvgFeDropShadowNode::apply(drawinglayer::primitive2d::Primitive2DContainer&
     aTempTarget.append(rTarget);
 
     rTarget = aTempTarget;
+
+    pParent->addGraphicSourceToMapper(maResult, rTarget);
 }
 
 } // end of namespace svgio::svgreader
