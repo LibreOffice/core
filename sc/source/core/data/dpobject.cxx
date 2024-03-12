@@ -526,8 +526,12 @@ void ScDPObject::CreateOutput()
         return;
 
     bool bFilterButton = IsSheetData() && mpSaveData && mpSaveData->GetFilterButton();
-    mpOutput.reset( new ScDPOutput(mpDocument, mxSource, maOutputRange.aStart, bFilterButton, mpSaveData ? mpSaveData->GetExpandCollapse() : false ) );
-    mpOutput->SetHeaderLayout ( mbHeaderLayout );
+    bool bExpandCollapse = mpSaveData ? mpSaveData->GetExpandCollapse() : false;
+
+    mpOutput.reset(new ScDPOutput(mpDocument, mxSource, maOutputRange.aStart, bFilterButton, bExpandCollapse));
+    mpOutput->SetHeaderLayout(mbHeaderLayout);
+    if (mpSaveData->hasFormats())
+        mpOutput->setFormats(mpSaveData->getFormats());
 
     sal_Int32 nOldRows = mnHeaderRows;
     mnHeaderRows = mpOutput->GetHeaderRows();

@@ -11,11 +11,15 @@
 #include <pivottablebuffer.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <pivot/PivotTableFormats.hxx>
+#include <dpsave.hxx>
+#include <dpobject.hxx>
 
 namespace oox::xls
 {
-PivotTableFormat::PivotTableFormat(const PivotTable& rPivotTable)
+PivotTableFormat::PivotTableFormat(PivotTable& rPivotTable)
     : WorkbookHelper(rPivotTable)
+    , mrPivotTable(rPivotTable)
 {
 }
 
@@ -69,6 +73,34 @@ void PivotTableFormat::importPivotArea(const oox::AttributeList& rAttribs)
     mnFieldPosition = rAttribs.getUnsigned(XML_field);
 }
 
+void PivotTableFormat::finalizeImport()
+{
+    OUString const& rDxfStyle = getStyles().createDxfStyle(mnDxfId);
+
+    ScDPObject* pDPObj = mrPivotTable.getDPObject();
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+
+    sc::PivotTableFormats aFormats;
+
+    if (pSaveData->hasFormats())
+        aFormats = pSaveData->getFormats();
+
+    // Resolve references - TODO
+    for (auto const& pReference : maReferences)
+    {
+        if (pReference->mnField && pReference->mbSelected)
+        {
+            auto nField = *pReference->mnField;
+            for (auto index : pReference->maFieldItemsIndices)
+            {
+                aFormats.add(nField, index, rDxfStyle);
+            }
+        }
+    }
+
+    pSaveData->setFormats(aFormats);
+}
+
 PivotTableReference& PivotTableFormat::createReference()
 {
     auto xReference = std::make_shared<PivotTableReference>(*this);
@@ -78,6 +110,7 @@ PivotTableReference& PivotTableFormat::createReference()
 
 PivotTableReference::PivotTableReference(const PivotTableFormat& rFormat)
     : WorkbookHelper(rFormat)
+    , mrFormat(rFormat)
 {
 }
 void PivotTableReference::importReference(const oox::AttributeList& rAttribs)

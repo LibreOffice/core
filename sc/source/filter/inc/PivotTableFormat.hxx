@@ -56,16 +56,21 @@ private:
 
     std::vector<std::shared_ptr<PivotTableReference>> maReferences;
 
+    // Other
+    PivotTable& mrPivotTable;
+
 public:
-    explicit PivotTableFormat(const PivotTable& rPivotTable);
+    explicit PivotTableFormat(PivotTable& rPivotTable);
     void importPivotArea(const oox::AttributeList& rAttribs);
     void importFormat(const oox::AttributeList& rAttribs);
     PivotTableReference& createReference();
+    void finalizeImport();
 };
 
 class PivotTableReference : public WorkbookHelper
 {
-    //PivotTableFormat const& mrFormat;
+public:
+    PivotTableFormat const& mrFormat;
 
     std::optional<sal_uInt32> mnField;
     std::optional<sal_uInt32> mnCount;

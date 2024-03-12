@@ -28,6 +28,7 @@
 #include "address.hxx"
 
 #include "dptypes.hxx"
+#include "pivot/PivotTableFormats.hxx"
 
 #include <memory>
 #include <vector>
@@ -63,6 +64,8 @@ private:
     sal_Int32 mnRowFormatCount;
     sal_uInt32 mnSingleNumberFormat;
     size_t mnRowDims; // Including empty ones.
+
+    std::unique_ptr<sc::PivotTableFormats> mpFormats;
 
     // Output geometry related parameters
     sal_Int32 mnColCount;
@@ -135,6 +138,11 @@ public:
 
     void            SetHeaderLayout(bool bUseGrid);
     bool            GetHeaderLayout() const { return mbHeaderLayout;}
+
+    void setFormats(sc::PivotTableFormats const& rPivotTableFormats)
+    {
+        mpFormats.reset(new sc::PivotTableFormats(rPivotTableFormats));
+    }
 
     static void GetDataDimensionNames(
         OUString& rSourceName, OUString& rGivenName,

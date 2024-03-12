@@ -763,6 +763,21 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
     //  SubTotal formatting is controlled by headers
 }
 
+namespace
+{
+void lclApplyStyle(ScDocument* pDoc, SCTAB nTab,
+                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                      OUString const& rStyleName)
+{
+    ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
+    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pStlPool->Find(rStyleName, SfxStyleFamily::Para));
+    if (pStyle)
+    {
+        pDoc->ApplyStyleAreaTab(nCol1, nRow1, nCol2, nRow2, nTab, *pStyle);
+    }
+}
+}
+
 void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                              const sheet::MemberResult& rData, bool bColHeader, tools::Long nLevel )
 {
@@ -1060,12 +1075,16 @@ void ScDPOutput::Output()
             MultiFieldCell(nHdrCol, mnTabStartRow, nTab, false /* bRowField */);
 
         SCROW nRowPos = mnMemberStartRow + static_cast<SCROW>(nField);                //TODO: check for overflow
+        tools::Long nDimension = mpColFields[nField].mnDim;
         const uno::Sequence<sheet::MemberResult> rSequence = mpColFields[nField].maResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         tools::Long nThisColCount = rSequence.getLength();
         OSL_ENSURE(nThisColCount == mnColCount, "count mismatch");     //TODO: ???
+        tools::Long nColumnIndex = -1;
         for (tools::Long nCol=0; nCol<nThisColCount; nCol++)
         {
+            if (!(pArray[nCol].Flags & sheet::MemberResultFlags::CONTINUE))
+                nColumnIndex++;
             SCCOL nColPos = mnDataStartCol + static_cast<SCCOL>(nCol);                //TODO: check for overflow
             HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
             if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
@@ -1094,6 +1113,18 @@ void ScDPOutput::Output()
             else if (  pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL )
                 outputimp.AddCol( nColPos );
 
+            // Apply format
+            if (mpFormats)
+            {
+                for (auto& aFormat : mpFormats->getVector())
+                {
+                    if (aFormat.nField == nDimension && aFormat.nDataIndex == nColumnIndex)
+                    {
+                        lclApplyStyle(mpDocument, nTab, nColPos, nRowPos, nColPos, mnDataStartRow - 1, aFormat.aStyleName);
+                    }
+                }
+            }
+
             // Apply the same number format as in data source.
             mpDocument->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, mpColFields[nField].mnSrcNumFmt));
         }
@@ -1118,12 +1149,16 @@ void ScDPOutput::Output()
             MultiFieldCell(nHdrCol, nHdrRow, nTab, true /* bRowField */);
 
         SCCOL nColPos = mnMemberStartCol + static_cast<SCCOL>(nFieldColOffset);          //TODO: check for overflow
+        tools::Long nDimension = mpRowFields[nField].mnDim;
         const uno::Sequence<sheet::MemberResult> rSequence = mpRowFields[nField].maResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         sal_Int32 nThisRowCount = rSequence.getLength();
         OSL_ENSURE(nThisRowCount == mnRowCount, "count mismatch");     //TODO: ???
+        tools::Long nRowIndex = -1;
         for (sal_Int32 nRow=0; nRow<nThisRowCount; nRow++)
         {
+            if (!(pArray[nRow].Flags & sheet::MemberResultFlags::CONTINUE))
+                nRowIndex++;
             const sheet::MemberResult& rData = pArray[nRow];
             const bool bHasMember = (rData.Flags & sheet::MemberResultFlags::HASMEMBER);
             const bool bSubtotal = (rData.Flags & sheet::MemberResultFlags::SUBTOTAL);
@@ -1173,6 +1208,18 @@ void ScDPOutput::Output()
             }
             else if ( bSubtotal )
                 outputimp.AddRow( nRowPos );
+
+            // Apply format
+            if (mpFormats)
+            {
+                for (auto& aFormat : mpFormats->getVector())
+                {
+                    if (aFormat.nField == nDimension && aFormat.nDataIndex == nRowIndex)
+                    {
+                        lclApplyStyle(mpDocument, nTab, nColPos, nRowPos, mnDataStartCol - 1, nRowPos, aFormat.aStyleName);
+                    }
+                }
+            }
 
             // Apply the same number format as in data source.
             mpDocument->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, mpRowFields[nField].mnSrcNumFmt));

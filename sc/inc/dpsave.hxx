@@ -45,6 +45,7 @@ namespace com::sun::star::sheet {
 class ScDPDimensionSaveData;
 class ScDPTableData;
 enum class ScGeneralFunction;
+namespace sc { class PivotTableFormats; }
 
 // classes to save Data Pilot settings
 
@@ -253,6 +254,7 @@ private:
      *  created. */
     bool mbDimensionMembersBuilt;
 
+    std::unique_ptr<sc::PivotTableFormats> mpFormats;
     std::optional<OUString> mpGrandTotalName;
     mutable std::unique_ptr<DimOrderType> mpDimOrder; // dimension order for row and column dimensions, to traverse result tree.
 
@@ -264,6 +266,10 @@ public:
     ScDPSaveData& operator= ( const ScDPSaveData& r );
 
     bool operator== ( const ScDPSaveData& r ) const;
+
+    SC_DLLPUBLIC bool hasFormats();
+    SC_DLLPUBLIC sc::PivotTableFormats const& getFormats();
+    SC_DLLPUBLIC void setFormats(sc::PivotTableFormats const& rPivotTableFormats);
 
     SC_DLLPUBLIC void SetGrandTotalName(const OUString& rName);
     SC_DLLPUBLIC const std::optional<OUString> & GetGrandTotalName() const;

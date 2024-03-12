@@ -1337,8 +1337,8 @@ void PivotTable::finalizeImport()
         maFilters.forEachMem( &PivotTableFilter::finalizeImport );
 
         // formats
-        //for (auto& pFormat : maFormats)
-        //    pFormat->finalizeImport();
+        for (auto& pFormat : maFormats)
+            pFormat->finalizeImport();
 
         // calculate base position of table
         CellAddress aPos( maLocationModel.maRange.aStart.Tab(), maLocationModel.maRange.aStart.Col(), maLocationModel.maRange.aStart.Row() );

@@ -25,6 +25,7 @@
 #include <dputil.hxx>
 #include <generalfunction.hxx>
 #include <dptabdat.hxx>
+#include <pivot/PivotTableFormats.hxx>
 
 #include <sal/types.h>
 #include <sal/log.hxx>
@@ -712,6 +713,8 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& rOther)
 {
     if (rOther.mpDimensionData)
         mpDimensionData.reset(new ScDPDimensionSaveData(*rOther.mpDimensionData));
+    if (rOther.mpFormats)
+        mpFormats.reset(new sc::PivotTableFormats(*rOther.mpFormats));
 
     for (auto const& rOtherSaveDimension : rOther.m_DimList)
     {
@@ -762,6 +765,21 @@ bool ScDPSaveData::operator== (const ScDPSaveData& rOther) const
 
 ScDPSaveData::~ScDPSaveData()
 {
+}
+
+void ScDPSaveData::setFormats(sc::PivotTableFormats const& rPivotTableFormats)
+{
+    mpFormats.reset(new sc::PivotTableFormats(rPivotTableFormats));
+}
+
+bool ScDPSaveData::hasFormats()
+{
+    return bool(mpFormats);
+}
+
+sc::PivotTableFormats const& ScDPSaveData::getFormats()
+{
+    return *mpFormats;
 }
 
 void ScDPSaveData::SetGrandTotalName(const OUString& rName)
