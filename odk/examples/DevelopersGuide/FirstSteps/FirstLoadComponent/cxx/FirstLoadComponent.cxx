@@ -30,7 +30,6 @@
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -63,20 +62,21 @@ SAL_IMPLEMENT_MAIN()
         Reference<XInterface> desktop = xRemoteServiceManager->createInstanceWithContext(
             "com.sun.star.frame.Desktop", xRemoteContext);
         Reference<XComponentLoader> xComponentLoader
-            = Reference<XComponentLoader>(desktop, UNO_QUERY);
+            = Reference<XComponentLoader>(desktop, UNO_QUERY_THROW);
 
         Sequence<PropertyValue> loadProps(0);
         Reference<XComponent> xSpreadsheetComponent = xComponentLoader->loadComponentFromURL(
             "private:factory/scalc", "_blank", 0, loadProps);
 
-        Reference<XSpreadsheetDocument> xSpreadsheetDocument(xSpreadsheetComponent, UNO_QUERY);
+        Reference<XSpreadsheetDocument> xSpreadsheetDocument(xSpreadsheetComponent,
+                                                             UNO_QUERY_THROW);
         Reference<XSpreadsheets> xSpreadsheets = xSpreadsheetDocument->getSheets();
         xSpreadsheets->insertNewByName("MySheet", (sal_Int16)0);
         Type elemType = xSpreadsheets->getElementType();
 
         std::cout << elemType.getTypeName() << std::endl;
         Any sheet = xSpreadsheets->getByName("MySheet");
-        Reference<XSpreadsheet> xSpreadsheet(sheet, UNO_QUERY);
+        Reference<XSpreadsheet> xSpreadsheet(sheet, UNO_QUERY_THROW);
 
         Reference<XCell> xCell = xSpreadsheet->getCellByPosition(0, 0);
         xCell->setValue(21);
@@ -85,12 +85,12 @@ SAL_IMPLEMENT_MAIN()
         xCell = xSpreadsheet->getCellByPosition(0, 2);
         xCell->setFormula("=sum(A1:A2)");
 
-        Reference<XPropertySet> xCellProps(xCell, UNO_QUERY);
+        Reference<XPropertySet> xCellProps(xCell, UNO_QUERY_THROW);
         xCellProps->setPropertyValue("CellStyle", Any(OUString("Result")));
 
-        Reference<XModel> xSpreadsheetModel(xSpreadsheetComponent, UNO_QUERY);
+        Reference<XModel> xSpreadsheetModel(xSpreadsheetComponent, UNO_QUERY_THROW);
         Reference<XController> xSpreadsheetController = xSpreadsheetModel->getCurrentController();
-        Reference<XSpreadsheetView> xSpreadsheetView(xSpreadsheetController, UNO_QUERY);
+        Reference<XSpreadsheetView> xSpreadsheetView(xSpreadsheetController, UNO_QUERY_THROW);
         xSpreadsheetView->setActiveSheet(xSpreadsheet);
 
         // *********************************************************
@@ -118,7 +118,7 @@ SAL_IMPLEMENT_MAIN()
 
         // *********************************************************
         // example for use of XEnumerationAccess
-        Reference<XCellRangesQuery> xCellQuery(sheet, UNO_QUERY);
+        Reference<XCellRangesQuery> xCellQuery(sheet, UNO_QUERY_THROW);
         Reference<XSheetCellRanges> xFormulaCells
             = xCellQuery->queryContentCells((sal_Int16)CellFlags::FORMULA);
         Reference<XEnumerationAccess> xFormulas = xFormulaCells->getCells();
@@ -126,8 +126,8 @@ SAL_IMPLEMENT_MAIN()
 
         while (xFormulaEnum->hasMoreElements())
         {
-            Reference<XCell> formulaCell(xFormulaEnum->nextElement(), UNO_QUERY);
-            Reference<XCellAddressable> xCellAddress(formulaCell, UNO_QUERY);
+            Reference<XCell> formulaCell(xFormulaEnum->nextElement(), UNO_QUERY_THROW);
+            Reference<XCellAddressable> xCellAddress(formulaCell, UNO_QUERY_THROW);
             if (xCellAddress.is())
             {
                 std::cout << "Formula cell in column " << xCellAddress->getCellAddress().Column
@@ -136,7 +136,7 @@ SAL_IMPLEMENT_MAIN()
             }
         }
     }
-    catch (RuntimeException& e)
+    catch (Exception& e)
     {
         std::cerr << e.Message << "\n";
         return 1;
