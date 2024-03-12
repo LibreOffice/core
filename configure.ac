@@ -7197,7 +7197,9 @@ if test "$_os" != "WINNT"; then
 
     dnl Check for large file support
     AC_SYS_LARGEFILE
-    if test -n "$ac_cv_sys_file_offset_bits" -a "$ac_cv_sys_file_offset_bits" != "no"; then
+    if test -n "$ac_cv_sys_largefile_opts"  -a "$ac_cv_sys_largefile_opts" != "none needed" -a "$ac_cv_sys_largefile_opts" != "support not detected"; then
+        LFS_CFLAGS="$ac_cv_sys_largefile_opts"
+    elif test -n "$ac_cv_sys_file_offset_bits" -a "$ac_cv_sys_file_offset_bits" != "no"; then
         LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
     fi
     if test -n "$ac_cv_sys_large_files" -a "$ac_cv_sys_large_files" != "no"; then
