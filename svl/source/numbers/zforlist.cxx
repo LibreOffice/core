@@ -375,7 +375,7 @@ void SvNumberFormatter::SetColorLink( const Link<sal_uInt16,Color*>& rColorTable
     aColorLink = rColorTableCallBack;
 }
 
-Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex)
+Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex) const
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if( aColorLink.IsSet() )
@@ -996,7 +996,7 @@ sal_uInt32 SvNumberFormatter::ImpGetCLOffset(LanguageType eLnge) const
 
 sal_uInt32 SvNumberFormatter::ImpIsEntry(std::u16string_view rString,
                                          sal_uInt32 nCLOffset,
-                                         LanguageType eLnge)
+                                         LanguageType eLnge) const
 {
     sal_uInt32 res = NUMBERFORMAT_ENTRY_NOT_FOUND;
     auto it = aFTable.find( nCLOffset);
@@ -1014,7 +1014,6 @@ sal_uInt32 SvNumberFormatter::ImpIsEntry(std::u16string_view rString,
     }
     return res;
 }
-
 
 SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
                                                       SvNumFormatType& eType,

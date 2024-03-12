@@ -62,7 +62,7 @@ public:
     /// Set CallBack to ColorTable
     void SetColorLink(const Link<sal_uInt16, Color*>& rColorTableCallBack);
     /// Do the CallBack to ColorTable
-    Color* GetUserDefColor(sal_uInt16 nIndex);
+    Color* GetUserDefColor(sal_uInt16 nIndex) const;
 
     /// Change language/country, also input and format scanner
     void ChangeIntl(LanguageType eLnge);
@@ -627,7 +627,7 @@ private:
     // Test whether format code already exists, then return index key,
     // otherwise NUMBERFORMAT_ENTRY_NOT_FOUND
     SVL_DLLPRIVATE sal_uInt32 ImpIsEntry(std::u16string_view rString, sal_uInt32 CLOffset,
-                                         LanguageType eLnge);
+                                         LanguageType eLnge) const;
 
     // Create builtin formats for language/country if necessary, return CLOffset
     SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL(LanguageType eLnge);
