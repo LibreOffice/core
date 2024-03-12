@@ -667,7 +667,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
             {
                 SwContentFrame const*const pAnchor = pFootnote->GetRef();
                 SwTabFrame const* pTab = pAnchor->FindTabFrame();
-                if (pTab == &rTab)
+                if (pTab)
                 {
                     while (pTab->GetUpper()->IsInTab())
                     {
