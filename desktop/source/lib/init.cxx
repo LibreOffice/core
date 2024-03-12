@@ -3790,6 +3790,8 @@ static void doc_iniUnoCommands ()
         u".uno:ParaspaceDecrease"_ustr,
         u".uno:AcceptTrackedChange"_ustr,
         u".uno:RejectTrackedChange"_ustr,
+        u".uno:AcceptTrackedChangeToNext"_ustr,
+        u".uno:RejectTrackedChangeToNext"_ustr,
         u".uno:ShowResolvedAnnotations"_ustr,
         u".uno:InsertBreak"_ustr,
         u".uno:InsertEndnote"_ustr,
