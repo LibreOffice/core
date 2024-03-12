@@ -182,6 +182,12 @@ struct FormulaTokenRef_less
 {
     bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
         { return r1.get() < r2.get(); }
+    // So we don't have to create a FormulaConstTokenRef to search by formula::FormulaToken*
+    using is_transparent = void;
+    bool operator () ( const formula::FormulaToken* p1, const formula::FormulaConstTokenRef& r2 ) const
+        { return p1 < r2.get(); }
+    bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaToken* p2 ) const
+        { return r1.get() < p2; }
 };
 typedef ::std::map< const formula::FormulaConstTokenRef, formula::FormulaConstTokenRef, FormulaTokenRef_less> ScTokenMatrixMap;
 
