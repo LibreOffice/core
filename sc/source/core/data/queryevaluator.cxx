@@ -244,7 +244,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByValue(const ScRefCellValue& rCe
             nNumFmt = getNumFmt(nCol, nRow);
         if (nNumFmt)
         {
-            SvNumberFormatter* pFormatter
+            const SvNumberFormatter* pFormatter
                 = mpContext ? mpContext->GetFormatTable() : mrDoc.GetFormatTable();
             const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
             if (pEntry)
