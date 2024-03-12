@@ -296,7 +296,7 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCon
 
         ScCondFormatData aData = pCondForm->GetData(
                 pInfo->maCell, rAddr);
-        if (!aData.aStyleName.isEmpty())
+        if (!bAnyCondition && !aData.aStyleName.isEmpty())
         {
             SfxStyleSheetBase* pStyleSheet =
                 pStlPool->Find( aData.aStyleName, SfxStyleFamily::Para );
@@ -337,7 +337,7 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCon
             pTableInfo->addIconSetInfo(std::move(aData.pIconSet));
         }
 
-        if (pInfo->mxColorScale && pInfo->pIconSet && pInfo->pDataBar)
+        if (bAnyCondition && pInfo->mxColorScale && pInfo->pIconSet && pInfo->pDataBar)
             break;
     }
 
