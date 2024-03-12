@@ -73,19 +73,20 @@ private:
     std::shared_ptr<GraphicReader> mpContext;
     std::shared_ptr<ImpSwapFile> mpSwapFile;
     std::shared_ptr<GfxLink>     mpGfxLink;
-    GraphicType                  meType;
-    mutable sal_uLong            mnSizeBytes;
-    bool                         mbSwapOut;
-    bool                         mbDummyContext;
     std::shared_ptr<VectorGraphicData> maVectorGraphicData;
+
+    GraphicType                  meType = GraphicType::NONE;
+    mutable sal_uLong            mnSizeBytes = 0;
+    bool                         mbSwapOut = false;
+    bool                         mbDummyContext = false;
     // cache checksum computation
     mutable BitmapChecksum       mnChecksum = 0;
 
     std::optional<GraphicID>     mxGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
 
-    std::chrono::high_resolution_clock::time_point maLastUsed;
-    bool mbPrepared;
+    mutable std::chrono::high_resolution_clock::time_point maLastUsed = std::chrono::high_resolution_clock::now();
+    bool mbPrepared = false;
 
 public:
     ImpGraphic();

@@ -81,13 +81,7 @@ SvStream* ImpGraphic::getSwapFileStream() const
     return nullptr;
 }
 
-ImpGraphic::ImpGraphic() :
-        meType          ( GraphicType::NONE ),
-        mnSizeBytes     ( 0 ),
-        mbSwapOut       ( false ),
-        mbDummyContext  ( false ),
-        maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared      ( false )
+ImpGraphic::ImpGraphic()
 {
 }
 
@@ -98,18 +92,18 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , mpContext(rImpGraphic.mpContext)
     , mpSwapFile(rImpGraphic.mpSwapFile)
     , mpGfxLink(rImpGraphic.mpGfxLink)
+    , maVectorGraphicData(rImpGraphic.maVectorGraphicData)
     , meType(rImpGraphic.meType)
     , mnSizeBytes(rImpGraphic.mnSizeBytes)
     , mbSwapOut(rImpGraphic.mbSwapOut)
     , mbDummyContext(rImpGraphic.mbDummyContext)
-    , maVectorGraphicData(rImpGraphic.maVectorGraphicData)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
-    , maLastUsed (std::chrono::high_resolution_clock::now())
-    , mbPrepared (rImpGraphic.mbPrepared)
+    , mbPrepared(rImpGraphic.mbPrepared)
 {
-    if( rImpGraphic.mpAnimation )
+    // Special case for animations
+    if (rImpGraphic.mpAnimation)
     {
-        mpAnimation = std::make_unique<Animation>( *rImpGraphic.mpAnimation );
+        mpAnimation = std::make_unique<Animation>(*rImpGraphic.mpAnimation);
         maBitmapEx = mpAnimation->GetBitmapEx();
     }
 }
@@ -122,13 +116,12 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
     , mpContext(std::move(rImpGraphic.mpContext))
     , mpSwapFile(std::move(rImpGraphic.mpSwapFile))
     , mpGfxLink(std::move(rImpGraphic.mpGfxLink))
+    , maVectorGraphicData(std::move(rImpGraphic.maVectorGraphicData))
     , meType(rImpGraphic.meType)
     , mnSizeBytes(rImpGraphic.mnSizeBytes)
     , mbSwapOut(rImpGraphic.mbSwapOut)
     , mbDummyContext(rImpGraphic.mbDummyContext)
-    , maVectorGraphicData(std::move(rImpGraphic.maVectorGraphicData))
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
-    , maLastUsed (std::chrono::high_resolution_clock::now())
     , mbPrepared (rImpGraphic.mbPrepared)
 {
     rImpGraphic.clear();
@@ -138,11 +131,7 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
 ImpGraphic::ImpGraphic(std::shared_ptr<GfxLink> xGfxLink, sal_Int32 nPageIndex)
     : mpGfxLink(std::move(xGfxLink))
     , meType(GraphicType::Bitmap)
-    , mnSizeBytes(0)
     , mbSwapOut(true)
-    , mbDummyContext(false)
-    , maLastUsed (std::chrono::high_resolution_clock::now())
-    , mbPrepared (false)
 {
     maSwapInfo.mbIsTransparent = true;
     maSwapInfo.mbIsAlpha = true;
@@ -152,59 +141,34 @@ ImpGraphic::ImpGraphic(std::shared_ptr<GfxLink> xGfxLink, sal_Int32 nPageIndex)
     maSwapInfo.mnPageIndex = nPageIndex;
 }
 
-ImpGraphic::ImpGraphic(GraphicExternalLink aGraphicExternalLink) :
-        meType          ( GraphicType::Default ),
-        mnSizeBytes     ( 0 ),
-        mbSwapOut       ( false ),
-        mbDummyContext  ( false ),
-        maGraphicExternalLink(std::move(aGraphicExternalLink)),
-        maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+ImpGraphic::ImpGraphic(GraphicExternalLink aGraphicExternalLink)
+    : meType(GraphicType::Default)
+    , maGraphicExternalLink(std::move(aGraphicExternalLink))
 {
 }
 
-ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
-        maBitmapEx            ( rBitmapEx ),
-        meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
-        mnSizeBytes     ( 0 ),
-        mbSwapOut       ( false ),
-        mbDummyContext  ( false ),
-        maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+ImpGraphic::ImpGraphic(const BitmapEx& rBitmapEx)
+    : maBitmapEx(rBitmapEx)
+    , meType(!rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE)
 {
 }
 
 ImpGraphic::ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr)
-:   meType( rVectorGraphicDataPtr ? GraphicType::Bitmap : GraphicType::NONE ),
-    mnSizeBytes( 0 ),
-    mbSwapOut( false ),
-    mbDummyContext  ( false ),
-    maVectorGraphicData(rVectorGraphicDataPtr),
-    maLastUsed (std::chrono::high_resolution_clock::now()),
-    mbPrepared (false)
+    : maVectorGraphicData(rVectorGraphicDataPtr)
+    , meType(rVectorGraphicDataPtr ? GraphicType::Bitmap : GraphicType::NONE)
 {
 }
 
-ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
-        maBitmapEx      ( rAnimation.GetBitmapEx() ),
-        mpAnimation     ( std::make_unique<Animation>( rAnimation ) ),
-        meType          ( GraphicType::Bitmap ),
-        mnSizeBytes     ( 0 ),
-        mbSwapOut       ( false ),
-        mbDummyContext  ( false ),
-        maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+ImpGraphic::ImpGraphic(const Animation& rAnimation)
+    : maBitmapEx(rAnimation.GetBitmapEx())
+    , mpAnimation(std::make_unique<Animation>(rAnimation))
+    , meType(GraphicType::Bitmap)
 {
 }
 
-ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
-        maMetaFile      ( rMtf ),
-        meType          ( GraphicType::GdiMetafile ),
-        mnSizeBytes     ( 0 ),
-        mbSwapOut       ( false ),
-        mbDummyContext  ( false ),
-        maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+ImpGraphic::ImpGraphic(const GDIMetaFile& rMetafile)
+    : maMetaFile(rMetafile)
+    , meType(GraphicType::GdiMetafile)
 {
 }
 
