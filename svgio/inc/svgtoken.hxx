@@ -86,6 +86,8 @@ namespace svgio::svgreader
             FeFlood,
             FeImage,
             FeGaussianBlur,
+            FeMerge,
+            FeMergeNode,
             FeOffset,
             Filter,
             FloodColor,

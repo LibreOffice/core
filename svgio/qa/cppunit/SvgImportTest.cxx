@@ -259,6 +259,22 @@ CPPUNIT_TEST_FIXTURE(Test, testResultFilterAttribute)
     assertXPath(pDocument, "/primitive2D/transform/transform/softedge/polypolygoncolor"_ostr, "color"_ostr, "#ffffff");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFilterFeMerge)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/filterFeMerge.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/softedge"_ostr, 2);
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygon"_ostr, 1);
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor"_ostr, 1);
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke"_ostr, 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeOffset)
 {
     Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterFeOffset.svg");

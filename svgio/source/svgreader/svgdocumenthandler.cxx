@@ -46,6 +46,8 @@
 #include <svgfefloodnode.hxx>
 #include <svgfeimagenode.hxx>
 #include <svgfegaussianblurnode.hxx>
+#include <svgfemergenode.hxx>
+#include <svgfemergenodenode.hxx>
 #include <svgfeoffsetnode.hxx>
 #include <svgfilternode.hxx>
 #include <svgmasknode.hxx>
@@ -407,6 +409,20 @@ namespace
                 {
                     /// new node for feGaussianBlur
                     mpTarget = new SvgFeGaussianBlurNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
+                case SVGToken::FeMerge:
+                {
+                    /// new node for feMerge
+                    mpTarget = new SvgFeMergeNode(aSVGToken, maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
+                case SVGToken::FeMergeNode:
+                {
+                    /// new node for feMergeNode
+                    mpTarget = new SvgFeMergeNodeNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }

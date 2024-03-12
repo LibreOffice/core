@@ -84,6 +84,8 @@ constexpr auto aSVGTokenMap = frozen::make_unordered_map<std::u16string_view, SV
     { u"feFlood", SVGToken::FeFlood },
     { u"feImage", SVGToken::FeImage },
     { u"feGaussianBlur", SVGToken::FeGaussianBlur },
+    { u"feMerge", SVGToken::FeMerge },
+    { u"feMergeNode", SVGToken::FeMergeNode },
     { u"feOffset", SVGToken::FeOffset },
     { u"filter", SVGToken::Filter },
     { u"flood-color", SVGToken::FloodColor },
