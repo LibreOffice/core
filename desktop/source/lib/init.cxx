@@ -3755,6 +3755,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:ParaspaceDecrease"),
         OUString(".uno:AcceptTrackedChange"),
         OUString(".uno:RejectTrackedChange"),
+        OUString(".uno:AcceptTrackedChangeToNext"),
+        OUString(".uno:RejectTrackedChangeToNext"),
         OUString(".uno:ShowResolvedAnnotations"),
         OUString(".uno:InsertBreak"),
         OUString(".uno:InsertEndnote"),

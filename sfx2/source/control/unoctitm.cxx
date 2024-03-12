@@ -1037,6 +1037,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "RejectAllTrackedChanges" ||
              aEvent.FeatureURL.Path == "AcceptTrackedChange" ||
              aEvent.FeatureURL.Path == "RejectTrackedChange" ||
+             aEvent.FeatureURL.Path == "AcceptTrackedChangeToNext" ||
+             aEvent.FeatureURL.Path == "RejectTrackedChangeToNext" ||
              aEvent.FeatureURL.Path == "NextTrackedChange" ||
              aEvent.FeatureURL.Path == "PreviousTrackedChange" ||
              aEvent.FeatureURL.Path == "FormatGroup" ||
