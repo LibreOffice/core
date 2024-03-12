@@ -116,7 +116,43 @@ char const* setEnvFromLoggingIniFile(const char* env, const char* key)
             aKey = sLine.substr(0, n);
             if (aKey != sWantedKey)
                 continue;
-            _putenv_s(env, sLine.substr(n+1, sLine.length()).c_str());
+            std::string value(sLine, n+1, sLine.length());
+            for (std::size_t i = 0;;) {
+                i = value.find_first_of("\\$", i);
+                if (i == std::string::npos) {
+                    break;
+                }
+                if (value[i] == '\\') {
+                    if (i == value.size() - 1 || (value[i + 1] != '\\' && value[i + 1] != '$')) {
+                        ++i;
+                        continue;
+                    }
+                    value.erase(i, 1);
+                    ++i;
+                } else {
+                    if (i == value.size() - 1 || value[i + 1] != '{') {
+                        ++i;
+                        continue;
+                    }
+                    std::size_t i2 = value.find('}', i + 2);
+                    if (i2 == std::string::npos) {
+                        break;
+                    }
+                    std::string name(value, i + 2, i2 - (i + 2));
+                    if (name.find('\0') != std::string::npos) {
+                        i = i2 + 1;
+                        continue;
+                    }
+                    char const * p = std::getenv(name.c_str());
+                    if (p == nullptr) {
+                        value.erase(i, i2 + 1 - i);
+                    } else {
+                        value.replace(i, i2 + 1 - i, p);
+                        i += std::strlen(p);
+                    }
+                }
+            }
+            _putenv_s(env, value.c_str());
             sResult = std::getenv(env);
             break;
         }
