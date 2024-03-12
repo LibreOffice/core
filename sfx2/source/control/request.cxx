@@ -418,7 +418,6 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
 
 void SfxRequest::SetReturnValue(const SfxPoolItem &rItem)
 {
-    DBG_ASSERT(!pImpl, "Set Return value multiple times?");
     DBG_ASSERT(nullptr != pImpl->pPool, "Missing SfxItemPool (!)");
     if (nullptr != pImpl->pPool)
         pImpl->aRetVal = SfxPoolItemHolder(*pImpl->pPool, &rItem);
