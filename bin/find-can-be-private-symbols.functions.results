@@ -18572,7 +18572,6 @@ formula::FormulaTokenArray::operator=(formula::FormulaTokenArray const&)
 formula::FormulaTokenArray::operator=(formula::FormulaTokenArray&&)
 formula::FormulaTokenArrayPlainIterator::AfterRemoveToken(unsigned short, unsigned short)
 formula::FormulaTokenArrayPlainIterator::PeekNext()
-formula::FormulaTokenIterator::GetNonEndOfPathToken(short) const
 formula::FormulaTokenIterator::Item::Item(formula::FormulaTokenArray const*, short, short)
 formula::FormulaTokenIterator::Push(formula::FormulaTokenArray const*)
 formula::FormulaTypedDoubleToken::GetDoubleType() const
