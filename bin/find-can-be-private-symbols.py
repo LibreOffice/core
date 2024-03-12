@@ -128,6 +128,36 @@ print("unused_exports = " + str(len(unused_exports)))
 #    if i == -1: return sym
 #    return sym[:i]
 
+# for each class, count how many symbols will become hidden if we mark the class as hidden
+can_be_hidden_count = dict()
+for sym in exported_symbols2:
+    i = sym.rfind("::")
+    if i == -1: continue
+    clz = sym[:i]
+    if clz in can_be_hidden_count:
+        can_be_hidden_count[clz] = can_be_hidden_count[clz] + 1
+    else:
+        can_be_hidden_count[clz] = 1
+for sym in imported_symbols2:
+    i = sym.rfind("::")
+    if i == -1: continue
+    clz = sym[:i]
+    if clz in can_be_hidden_count:
+        can_be_hidden_count[clz] = can_be_hidden_count[clz] - 1
+    else:
+        can_be_hidden_count[clz] = -1
+# convert to list, and sort the results in descending order
+can_be_hidden_list = list()
+for clz in can_be_hidden_count:
+    cnt = can_be_hidden_count[clz]
+    if cnt > 0:
+        can_be_hidden_list.append((cnt, clz))
+can_be_hidden_list.sort(reverse=True)
+with open("bin/find-can-be-private-symbols.classes.results", "wt") as f:
+    for i in can_be_hidden_list:
+        f.write(str(i[0]) + " " + i[1] + "\n")
+
+
 with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
     for sym in sorted(unused_exports):
         # Filter out most of the noise.
