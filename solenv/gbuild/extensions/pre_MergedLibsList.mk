@@ -180,8 +180,6 @@ gb_MERGE_LIBRARY_LIST += \
 	sdbc2 \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	slideshow \
-	sm \
-	smd \
 	$(if $(filter WNT,$(OS)), \
 		smplmail \
 	) \

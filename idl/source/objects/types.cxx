@@ -249,9 +249,7 @@ void SvMetaType::WriteSfxItem(
 
     // write the implementation part
     rOutStm.WriteOString( "#ifdef SFX_TYPEMAP" ) << endl;
-    rOutStm.WriteOString( "#if defined(_WIN32)" ) << endl;
-    rOutStm.WriteOString( "__declspec(selectany)" ) << endl;
-    rOutStm.WriteOString( "#else" ) << endl;
+    rOutStm.WriteOString( "#if !defined(_WIN32) && (defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS) || defined(EMSCRIPTEN) || defined(LINUX)))" ) << endl;
     rOutStm.WriteOString( "__attribute__((__weak__))" ) << endl;
     rOutStm.WriteOString( "#endif" ) << endl;
     rOutStm.WriteOString( aTypeName ).WriteOString( aVarName )
