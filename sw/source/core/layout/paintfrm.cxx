@@ -7160,7 +7160,7 @@ static std::vector<basegfx::B2DPolygon> lcl_CreatePageAreaDelimiterPolygons(cons
     std::vector<basegfx::B2DPolygon> aPolygons;
 
     // Hide text boundaries by default - cool#3491
-    if (!bHeaderFooter && !comphelper::LibreOfficeKit::isActive())
+    if (!bHeaderFooter && comphelper::LibreOfficeKit::isActive())
         return aPolygons;
 
     double nLineLength = 200.0; // in Twips
