@@ -136,7 +136,7 @@ public:
 /// Represents the current text cursor of one opened edit window.
 ///
 /// See SwShellTableCursor for a table cursor that extends this class.
-class SW_DLLPUBLIC SwShellCursor : public virtual SwCursor, public SwSelPaintRects
+class SAL_DLLPUBLIC_RTTI SwShellCursor : public virtual SwCursor, public SwSelPaintRects
 {
 private:
     // Document positions of start/end characters of a SSelection.

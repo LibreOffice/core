@@ -30,7 +30,7 @@ class SwFlyFrameAttrMgr;
 class SvxHyperlinkItem;
 class SwInsertChart;
 
-class SW_DLLPUBLIC SwTextShell: public SwBaseShell
+class SAL_DLLPUBLIC_RTTI SwTextShell: public SwBaseShell
 {
     RotateTransliteration m_aRotateCase;
 
@@ -80,10 +80,10 @@ public:
 
     void    GetAttrState(SfxItemSet &);
 
-             SwTextShell(SwView &rView);
-    virtual ~SwTextShell() override;
+    SW_DLLPUBLIC SwTextShell(SwView &rView);
+    SW_DLLPUBLIC virtual ~SwTextShell() override;
     /// Create item set for the insert frame dialog.
-    SfxItemSet CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr);
+    SW_DLLPUBLIC SfxItemSet CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr);
 };
 
 #endif

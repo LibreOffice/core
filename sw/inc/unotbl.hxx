@@ -244,7 +244,7 @@ struct SwRangeDescriptor
     void Normalize();
 };
 
-class SW_DLLPUBLIC SwXTextTable final : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SwXTextTable final : public cppu::WeakImplHelper
 <
     css::text::XTextTable,
     css::lang::XServiceInfo,
@@ -269,9 +269,9 @@ public:
     static rtl::Reference<SwXTextTable>
             CreateXTextTable(SwFrameFormat * pFrameFormat);
 
-    static void GetCellPosition(std::u16string_view aCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
+    SW_DLLPUBLIC static void GetCellPosition(std::u16string_view aCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
 
-    SwFrameFormat* GetFrameFormat();
+    SW_DLLPUBLIC SwFrameFormat* GetFrameFormat();
 
     //XTextTable
     virtual void SAL_CALL initialize( sal_Int32 nRows, sal_Int32 nColumns ) override;

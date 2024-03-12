@@ -212,7 +212,7 @@ class SwWriteTableCols : public o3tl::sorted_vector<std::unique_ptr<SwWriteTable
 
 class SwTable;
 
-class SW_DLLPUBLIC SwWriteTable
+class SAL_DLLPUBLIC_RTTI SwWriteTable
 {
 private:
     const SwTable* m_pTable;
@@ -295,10 +295,10 @@ protected:
     sal_uInt16 GetRightSpace(size_t nCol, sal_uInt16 nColSpan) const;
 
 public:
-    SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, tools::Long nWidth, sal_uInt32 nBWidth,
+    SW_DLLPUBLIC SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, tools::Long nWidth, sal_uInt32 nBWidth,
                  bool bRel, sal_uInt16 nMaxDepth = USHRT_MAX,
                  sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0, sal_uInt32 nNumOfRowsToRepeat=0);
-    SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo);
+    SW_DLLPUBLIC SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo);
     virtual ~SwWriteTable();
 
     const SwWriteTableRows& GetRows() const { return m_aRows; }

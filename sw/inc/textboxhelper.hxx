@@ -53,7 +53,7 @@ class SpzFrameFormat;
  * This class provides helper methods to create, query and maintain such
  * TextBoxes.
  */
-class SW_DLLPUBLIC SwTextBoxHelper
+class SwTextBoxHelper
 {
 public:
     /// Maps a draw format to a fly format.
@@ -63,7 +63,8 @@ public:
     /// Create a TextBox for a shape. If the third parameter is true,
     /// the original text in the shape will be copied to the frame
     /// The textbox is created for the shape given by the pObject parameter.
-    static void create(SwFrameFormat* pShape, SdrObject* pObject, bool bCopyText = false);
+    SW_DLLPUBLIC static void create(SwFrameFormat* pShape, SdrObject* pObject,
+                                    bool bCopyText = false);
     /// Sets the given textframe as textbox for the given (group member) shape.
     static void set(SwFrameFormat* pShape, SdrObject* pObject,
                     css::uno::Reference<css::text::XTextFrame> xNew);
@@ -122,13 +123,14 @@ public:
      *
      * @see isTextBox
      */
-    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType,
-                                                const SdrObject* pObject = nullptr);
+    SW_DLLPUBLIC static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat,
+                                                             sal_uInt16 nType,
+                                                             const SdrObject* pObject = nullptr);
     /// If we have an associated TextFrame, then return that.
-    static SwFrameFormat*
+    SW_DLLPUBLIC static SwFrameFormat*
     getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// If we have an associated TextFrame, then return its XTextFrame.
-    static css::uno::Reference<css::text::XTextFrame>
+    SW_DLLPUBLIC static css::uno::Reference<css::text::XTextFrame>
     getUnoTextFrame(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// Return the textbox rectangle of a draw shape (in relative twips).
     static tools::Rectangle getRelativeTextRectangle(SdrObject* pShape);
@@ -149,16 +151,16 @@ public:
      *                 pObject will be inspected. If this parameter nullptr,
      *                 the textbox what belongs to the pObject will only be inspected.
      */
-    static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType,
-                          const SdrObject* pObject = nullptr);
+    SW_DLLPUBLIC static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType,
+                                       const SdrObject* pObject = nullptr);
 
     /// Returns true if the SdrObject has a SwTextFrame otherwise false
     static bool hasTextFrame(const SdrObject* pObj);
 
     /// Count number of shapes in the document, excluding TextBoxes.
-    static sal_Int32 getCount(const SwDoc& rDoc);
+    SW_DLLPUBLIC static sal_Int32 getCount(const SwDoc& rDoc);
     /// Count number of shapes on the page, excluding TextBoxes.
-    static sal_Int32 getCount(SdrPage const* pPage);
+    SW_DLLPUBLIC static sal_Int32 getCount(SdrPage const* pPage);
     /// Get a shape by index, excluding TextBoxes.
     ///
     /// @throws css::lang::IndexOutOfBoundsException

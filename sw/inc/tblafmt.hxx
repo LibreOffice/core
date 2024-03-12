@@ -151,7 +151,7 @@ The properties saved are divided into three categories:
 Character and box properties are stored per cell (and are lossy for tables larger than 4x4). Table
 properties are stored per-table, and are lossless.
 */
-class SW_DLLPUBLIC SwTableAutoFormat
+class SAL_DLLPUBLIC_RTTI SwTableAutoFormat
 {
     friend class SwDocTest;
     friend void FinitCore();       // To destroy default pointer.
@@ -185,11 +185,11 @@ class SW_DLLPUBLIC SwTableAutoFormat
     bool m_bHidden;
     bool m_bUserDefined;
 public:
-    SwTableAutoFormat( OUString aName );
-    SwTableAutoFormat( const SwTableAutoFormat& rNew );
-    ~SwTableAutoFormat();
+    SW_DLLPUBLIC SwTableAutoFormat( OUString aName );
+    SW_DLLPUBLIC SwTableAutoFormat( const SwTableAutoFormat& rNew );
+    SW_DLLPUBLIC ~SwTableAutoFormat();
 
-    SwTableAutoFormat& operator=( const SwTableAutoFormat& rNew );
+    SW_DLLPUBLIC SwTableAutoFormat& operator=( const SwTableAutoFormat& rNew );
 
     const SvxFormatKeepItem& GetKeepWithNextPara() const { return *m_aKeepWithNextPara; }
     const SvxShadowItem& GetShadow() const { return *m_aShadow; }
@@ -199,7 +199,7 @@ public:
 
     void SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos );
     const SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos ) const;
-    SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos );
+    SW_DLLPUBLIC SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos );
     static const SwBoxAutoFormat& GetDefaultBoxFormat();
 
     void SetName( const OUString& rNew ) { m_aName = rNew; m_nStrResId = USHRT_MAX; }

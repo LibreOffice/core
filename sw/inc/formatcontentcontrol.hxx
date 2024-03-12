@@ -51,7 +51,7 @@ enum class SwContentControlType
 };
 
 /// SfxPoolItem subclass that wraps an SwContentControl.
-class SW_DLLPUBLIC SwFormatContentControl final : public SfxPoolItem
+class SAL_DLLPUBLIC_RTTI SwFormatContentControl final : public SfxPoolItem
 {
     std::shared_ptr<SwContentControl> m_pContentControl;
     SwTextContentControl* m_pTextAttr;

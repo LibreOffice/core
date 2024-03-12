@@ -584,6 +584,11 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
     }
 }
 
+void SwView::TriggerAttrChangedNotify()
+{
+    AttrChangedNotify(nullptr);
+}
+
 IMPL_LINK_NOARG(SwView, TimeoutHdl, Timer *, void)
 {
     if (m_pWrtShell->ActionPend() || g_bNoInterrupt)

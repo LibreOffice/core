@@ -55,7 +55,7 @@ private:
 };
 
 /// Represents the style of a paragraph.
-class SW_DLLPUBLIC SwTextFormatColl
+class SAL_DLLPUBLIC_RTTI SwTextFormatColl
     : public SwFormatColl
     , public sw::FormatDropDefiner
 {
@@ -107,7 +107,7 @@ public:
 
     void SetLinkedCharFormat(SwCharFormat* pLink);
 
-    const SwCharFormat* GetLinkedCharFormat() const;
+    SW_DLLPUBLIC const SwCharFormat* GetLinkedCharFormat() const;
 
     bool IsAtDocNodeSet() const;
 
@@ -117,7 +117,7 @@ public:
     // Return the list level of the Outline Style - the List Style for the
     // outline numbering -
     // to which the Paragraph Style is assigned.
-    int  GetAssignedOutlineStyleLevel() const;
+    SW_DLLPUBLIC int GetAssignedOutlineStyleLevel() const;
 
     bool IsAssignedToListLevelOfOutlineStyle() const
     {
@@ -126,8 +126,8 @@ public:
 
     // If a Paragraph Style is assigned to list level N of the Outline Style,
     // then its outline level - AttrOutlineLevel - is set to N+1
-    void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
-    void DeleteAssignmentToListLevelOfOutlineStyle();
+    SW_DLLPUBLIC void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
+    SW_DLLPUBLIC void DeleteAssignmentToListLevelOfOutlineStyle();
 
     /** Override to recognize changes on the <SwNumRuleItem> and register/unregister
      the paragragh style at the corresponding <SwNumRule> instance. */

@@ -58,7 +58,7 @@ namespace o3tl {
 
 /// A page of the document layout. Upper frame is expected to be an SwRootFrame
 /// instance. At least an SwBodyFrame lower is expected.
-class SW_DLLPUBLIC SwPageFrame final: public SwFootnoteBossFrame
+class SAL_DLLPUBLIC_RTTI SwPageFrame final: public SwFootnoteBossFrame
 {
     friend class SwFrame;
 
@@ -150,7 +150,7 @@ public:
     const SwPageDesc *GetPageDesc() const { return m_pDesc; }
           SwPageDesc *FindPageDesc();
 
-                 SwContentFrame  *FindLastBodyContent();
+    SW_DLLPUBLIC SwContentFrame  *FindLastBodyContent();
     inline       SwContentFrame  *FindFirstBodyContent();
     inline const SwContentFrame  *FindFirstBodyContent() const;
     inline const SwContentFrame  *FindLastBodyContent() const;

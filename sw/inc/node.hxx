@@ -93,7 +93,7 @@ struct AccessibilityCheckStatus
 }
 
 /// Base class of the Writer document model elements.
-class SW_DLLPUBLIC SwNode
+class SAL_DLLPUBLIC_RTTI SwNode
     : public sw::BorderCacheOwner, private BigPtrEntry
 {
     friend class SwNodes;
@@ -204,15 +204,15 @@ public:
 
     /** Search table node, in which it is. If it is in no table
        @return 0. */
-                    SwTableNode *FindTableNode();
+    SW_DLLPUBLIC SwTableNode *FindTableNode();
     inline const  SwTableNode *FindTableNode() const;
 
     /** Search section node, in which it is. If it is in no section
        @return 0. */
-                    SwSectionNode *FindSectionNode();
+    SW_DLLPUBLIC SwSectionNode *FindSectionNode();
     inline    const   SwSectionNode *FindSectionNode() const;
 
-    SwStartNode* FindSttNodeByType( SwStartNodeType eTyp );
+    SW_DLLPUBLIC SwStartNode* FindSttNodeByType( SwStartNodeType eTyp );
     inline const SwStartNode* FindSttNodeByType( SwStartNodeType eTyp ) const;
 
     const SwStartNode* FindTableBoxStartNode() const
@@ -301,19 +301,19 @@ public:
     /** Search PageDesc with which this node is formatted. If layout is existent
        search over layout, else only the hard way is left: search over the nodes
        to the front!! */
-    const SwPageDesc* FindPageDesc( SwNodeOffset* pPgDescNdIdx = nullptr ) const;
+    SW_DLLPUBLIC const SwPageDesc* FindPageDesc( SwNodeOffset* pPgDescNdIdx = nullptr ) const;
 
     /// If node is in a fly return the respective format.
-    SwFrameFormat* GetFlyFormat() const;
+    SW_DLLPUBLIC SwFrameFormat* GetFlyFormat() const;
 
     /// If node is in a table return the respective table box.
-    SwTableBox* GetTableBox() const;
+    SW_DLLPUBLIC SwTableBox* GetTableBox() const;
 
     SwNodeOffset GetIndex() const { return SwNodeOffset(GetPos()); }
 
-    const SwTextNode* FindOutlineNodeOfLevel(sal_uInt8 nLvl, SwRootFrame const* pLayout = nullptr) const;
+    SW_DLLPUBLIC const SwTextNode* FindOutlineNodeOfLevel(sal_uInt8 nLvl, SwRootFrame const* pLayout = nullptr) const;
 
-    sal_uInt8 HasPrevNextLayNode() const;
+    SW_DLLPUBLIC sal_uInt8 HasPrevNextLayNode() const;
 
     std::vector<SwFrameFormat *> const & GetAnchoredFlys() const { return m_aAnchoredFlys; }
     void AddAnchoredFly(SwFrameFormat *);

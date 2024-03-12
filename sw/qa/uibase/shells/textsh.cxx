@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFootnoteUI)
     pWrtShell->EndAllAction();
     pWrtShell->UnSelectFrame();
     pWrtShell->LeaveSelFrameMode();
-    pWrtShell->GetView().AttrChangedNotify(nullptr);
+    pWrtShell->GetView().TriggerAttrChangedNotify();
     pWrtShell->MoveSection(GoCurrSection, fnSectionEnd);
 
     // When checking if we can insert a footnote inside the split fly:

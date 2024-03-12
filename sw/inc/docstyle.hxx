@@ -43,7 +43,7 @@ class SwBoxAutoFormat;
 enum class SwGetPoolIdFromName : sal_uInt16;
 
 // Temporary StyleSheet.
-class SW_DLLPUBLIC SwDocStyleSheet final : public SfxStyleSheetBase
+class SAL_DLLPUBLIC_RTTI SwDocStyleSheet final : public SfxStyleSheetBase
 {
     friend class SwDocStyleSheetPool;
     friend class SwStyleSheetIterator;
@@ -81,7 +81,7 @@ public:
     SwDocStyleSheet( SwDoc&                 rDoc,
                      SwDocStyleSheetPool&   rPool);
 
-    SwDocStyleSheet( const SwDocStyleSheet& );
+    SW_DLLPUBLIC SwDocStyleSheet( const SwDocStyleSheet& );
 
     void                    Reset();
 
@@ -99,14 +99,14 @@ public:
      which indicates that the indent attributes at a paragraph style should
      be reset in case that a list style is applied to the paragraph style and
      no indent attributes are applied. */
-    void                    SetItemSet( const SfxItemSet& rSet, const bool bBroadcast = true,
+    SW_DLLPUBLIC void       SetItemSet( const SfxItemSet& rSet, const bool bBroadcast = true,
                                         const bool bResetIndentAttrsAtParagraphStyle = false );
 
-    virtual SfxItemSet&     GetItemSet() override;
+    SW_DLLPUBLIC virtual SfxItemSet& GetItemSet() override;
     virtual std::optional<SfxItemSet> GetItemSetForPreview() override;
     /** new method for paragraph styles to merge indent attributes of applied list
      style into the given item set, if the list style indent attributes are applicable. */
-    void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
+    SW_DLLPUBLIC void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
     virtual const OUString& GetParent() const override;
     virtual const OUString& GetFollow() const override;
     const OUString& GetLink() const;
@@ -133,8 +133,8 @@ public:
 
     virtual OUString GetUsedBy() override;
 
-    SwCharFormat*              GetCharFormat();
-    SwTextFormatColl*           GetCollection();
+    SW_DLLPUBLIC SwCharFormat* GetCharFormat();
+    SW_DLLPUBLIC SwTextFormatColl* GetCollection();
     SwFrameFormat*               GetFrameFormat();
     const SwPageDesc*       GetPageDesc();
     const SwNumRule*        GetNumRule();

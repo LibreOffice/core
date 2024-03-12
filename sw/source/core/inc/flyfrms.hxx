@@ -32,7 +32,7 @@ double getLocalFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFram
 
 // Base class for those Flys that can "move freely" or better that are not
 // bound in Content.
-class SW_DLLPUBLIC SwFlyFreeFrame : public SwFlyFrame
+class SAL_DLLPUBLIC_RTTI SwFlyFreeFrame : public SwFlyFrame
 {
 private:
     // #i34753# - flag for at-page anchored Writer fly frames
@@ -159,7 +159,7 @@ public:
 };
 
 /// Flys that are anchored to content (at-para, at-char) but not in content (as-char).
-class SW_DLLPUBLIC SwFlyAtContentFrame final: public SwFlyFreeFrame, public SwFlowFrame
+class SAL_DLLPUBLIC_RTTI SwFlyAtContentFrame final: public SwFlyFreeFrame, public SwFlowFrame
 {
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
@@ -197,9 +197,9 @@ public:
     */
     virtual bool IsFormatPossible() const override;
     const SwFlyAtContentFrame* GetFollow() const;
-    SwFlyAtContentFrame* GetFollow();
+    SW_DLLPUBLIC SwFlyAtContentFrame* GetFollow();
     const SwFlyAtContentFrame* GetPrecede() const;
-    SwFlyAtContentFrame* GetPrecede();
+    SW_DLLPUBLIC SwFlyAtContentFrame* GetPrecede();
     /// Like Cut(), except that follow chaining is maintained.
     void DelEmpty();
     bool IsWrapOnAllPages() const;

@@ -153,7 +153,7 @@ typedef cppu::ImplInheritanceHelper
 >
 SwXTextDocumentBaseClass;
 
-class SW_DLLPUBLIC SwXTextDocument final : public SwXTextDocumentBaseClass,
+class SAL_DLLPUBLIC_RTTI SwXTextDocument final : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public vcl::ITiledRenderable,
     public css::tiledrendering::XTiledRenderable
@@ -240,19 +240,19 @@ public:
 
     void NotifyRefreshListeners();
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
+    SW_DLLPUBLIC virtual void SAL_CALL acquire(  ) noexcept override;
+    SW_DLLPUBLIC virtual void SAL_CALL release(  ) noexcept override;
 
     //XWeak
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    SW_DLLPUBLIC static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XTextDocument
-    virtual css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
     rtl::Reference< SwXBodyText > getBodyText();
     virtual void SAL_CALL reformat() override;
 
@@ -265,12 +265,12 @@ public:
     virtual void SAL_CALL lockControllers(  ) override;
     virtual void SAL_CALL unlockControllers(  ) override;
     virtual sal_Bool SAL_CALL hasControllersLocked(  ) override;
-    virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController(  ) override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController(  ) override;
     virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection(  ) override;
 
     //XComponent
-    virtual void SAL_CALL dispose() override;
+    SW_DLLPUBLIC virtual void SAL_CALL dispose() override;
     virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override;
     virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override;
 
@@ -287,7 +287,7 @@ public:
     virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getNumberingRules() override;
 
     //XFootnotesSupplier
-    virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getFootnotes() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL getFootnotes() override;
     virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getFootnoteSettings() override;
 
     //XEndnotesSupplier
@@ -295,7 +295,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getEndnoteSettings() override;
 
     // XContentControlsSupplier
-    css::uno::Reference<css::container::XIndexAccess> SAL_CALL getContentControls() override;
+    SW_DLLPUBLIC css::uno::Reference<css::container::XIndexAccess> SAL_CALL getContentControls() override;
 
     //XReplaceable
     virtual css::uno::Reference< css::util::XReplaceDescriptor >  SAL_CALL createReplaceDescriptor() override;
@@ -326,13 +326,13 @@ public:
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getBookmarks() override;
 
     // css::text::XTextSectionsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextSections() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextSections() override;
 
     // css::text::XTextTablesSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextTables() override;
 
     // css::text::XTextGraphicObjectsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getGraphicObjects() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getGraphicObjects() override;
 
     // css::text::XTextFramesSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getTextFrames() override;
@@ -344,7 +344,7 @@ public:
     virtual css::uno::Reference< css::style::XAutoStyles > SAL_CALL getAutoStyles(  ) override;
 
     //XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
     virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier,
                 const css::uno::Sequence< css::uno::Any >& Arguments) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
@@ -355,7 +355,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::drawing::XDrawPageSupplier
-    virtual css::uno::Reference< css::drawing::XDrawPage >  SAL_CALL getDrawPage() override;
+    SW_DLLPUBLIC virtual css::uno::Reference< css::drawing::XDrawPage >  SAL_CALL getDrawPage() override;
 
     // css::drawing::XDrawPagesSupplier
     virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getDrawPages() override;
@@ -366,7 +366,7 @@ public:
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    SW_DLLPUBLIC virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
@@ -416,7 +416,7 @@ public:
         const ::css::uno::Reference<::css::text::XPasteListener>& xListener) override;
 
     /// @see vcl::ITiledRenderable::paintTile().
-    virtual void paintTile( VirtualDevice &rDevice,
+    SW_DLLPUBLIC virtual void paintTile( VirtualDevice &rDevice,
                             int nOutputWidth,
                             int nOutputHeight,
                             int nTilePosX,
@@ -424,33 +424,33 @@ public:
                             tools::Long nTileWidth,
                             tools::Long nTileHeight ) override;
     /// @see vcl::ITiledRenderable::getDocumentSize().
-    virtual Size getDocumentSize() override;
+    SW_DLLPUBLIC virtual Size getDocumentSize() override;
     /// @see vcl::ITiledRenderable::setPart().
     virtual void setPart(int nPart, bool bAllowChangeFocus = true) override;
     /// @see vcl::ITiledRenderable::getParts().
-    virtual int getParts() override;
+    SW_DLLPUBLIC virtual int getParts() override;
     /// @see vcl::ITiledRenderable::getPart().
     virtual int getPart() override;
     /// @see vcl::ITiledRenderable::getPartName().
     virtual OUString getPartName(int nPart) override;
     /// @see vcl::ITiledRenderable::getPartHash().
-    virtual OUString getPartHash(int nPart) override;
+    SW_DLLPUBLIC virtual OUString getPartHash(int nPart) override;
     /// @see vcl::ITiledRenderable::getDocWindow().
-    virtual VclPtr<vcl::Window> getDocWindow() override;
+    SW_DLLPUBLIC virtual VclPtr<vcl::Window> getDocWindow() override;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
-    virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
+    SW_DLLPUBLIC virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
     /// @see vcl::ITiledRenderable::postKeyEvent().
-    virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) override;
+    SW_DLLPUBLIC virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) override;
     /// @see vcl::ITiledRenderable::postMouseEvent().
-    virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) override;
+    SW_DLLPUBLIC virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) override;
     /// @see vcl::ITiledRenderable::setTextSelection().
-    virtual void setTextSelection(int nType, int nX, int nY) override;
+    SW_DLLPUBLIC virtual void setTextSelection(int nType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::getSelection().
-    virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
+    SW_DLLPUBLIC virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
     /// @see vcl::ITiledRenderable::setGraphicSelection().
-    virtual void setGraphicSelection(int nType, int nX, int nY) override;
+    SW_DLLPUBLIC virtual void setGraphicSelection(int nType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::resetSelection().
-    virtual void resetSelection() override;
+    SW_DLLPUBLIC virtual void resetSelection() override;
     /// @see vcl::ITiledRenderable::getPartPageRectangles().
     virtual OUString getPartPageRectangles() override;
     /// @see vcl::ITiledRenderable::setClipboard().
@@ -458,7 +458,7 @@ public:
     /// @see vcl::ITiledRenderable::isMimeTypeSupported().
     virtual bool isMimeTypeSupported() override;
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
-    virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
+    SW_DLLPUBLIC virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
     /// @see vcl::ITiledRenderable::setClientZoom.
     virtual void setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_) override;
     /// @see vcl::ITiledRenderable::getPointer().
@@ -466,14 +466,14 @@ public:
     /// @see vcl::ITiledRenderable::getTrackedChanges().
     void getTrackedChanges(tools::JsonWriter&) override;
     /// @see vcl::ITiledRenderable::getTrackedChangeAuthors().
-    void getTrackedChangeAuthors(tools::JsonWriter& rJsonWriter) override;
+    SW_DLLPUBLIC void getTrackedChangeAuthors(tools::JsonWriter& rJsonWriter) override;
 
     void getRulerState(tools::JsonWriter& rJsonWriter) override;
     /// @see vcl::ITiledRenderable::getPostIts().
-    void getPostIts(tools::JsonWriter& rJsonWriter) override;
+    SW_DLLPUBLIC void getPostIts(tools::JsonWriter& rJsonWriter) override;
 
     /// @see vcl::ITiledRenderable::executeFromFieldEvent().
-    virtual void executeFromFieldEvent(const StringMap& aArguments) override;
+    SW_DLLPUBLIC virtual void executeFromFieldEvent(const StringMap& aArguments) override;
 
     /// @see vcl::ITiledRenderable::getSearchResultRectangles().
     std::vector<basegfx::B2DRange> getSearchResultRectangles(const char* pPayload) override;
@@ -482,13 +482,13 @@ public:
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::executeContentControlEvent().
-    void executeContentControlEvent(const StringMap& aArguments) override;
+    SW_DLLPUBLIC void executeContentControlEvent(const StringMap& aArguments) override;
 
     /// @see vcl::ITiledRenderable::getCommandValues().
-    void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
+    SW_DLLPUBLIC void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
-    OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
+    SW_DLLPUBLIC OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
     bool supportsCommand(std::u16string_view rCommand) override;

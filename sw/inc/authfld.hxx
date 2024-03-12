@@ -62,7 +62,7 @@ struct SwTOXSortKey
 typedef std::vector<SwTOXSortKey> SortKeyArr;
 typedef std::vector<rtl::Reference<SwAuthEntry>> SwAuthDataArr;
 
-class SW_DLLPUBLIC SwAuthorityFieldType final : public SwFieldType
+class SAL_DLLPUBLIC_RTTI SwAuthorityFieldType final : public SwFieldType
 {
     SwDoc*                  m_pDoc;
     SwAuthDataArr           m_DataArr;
@@ -97,8 +97,8 @@ public:
                             m_SequArrRLHidden.clear();
                         }
 
-    void                GetAllEntryIdentifiers( std::vector<OUString>& rToFill ) const;
-    SwAuthEntry*        GetEntryByIdentifier(std::u16string_view rIdentifier) const;
+    SW_DLLPUBLIC void   GetAllEntryIdentifiers( std::vector<OUString>& rToFill ) const;
+    SW_DLLPUBLIC SwAuthEntry* GetEntryByIdentifier(std::u16string_view rIdentifier) const;
 
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface
@@ -129,13 +129,13 @@ public:
                                 m_bSortByDocument = bSet;
                             }
 
-    sal_uInt16          GetSortKeyCount() const ;
-    const SwTOXSortKey* GetSortKey(sal_uInt16 nIdx) const ;
+    SW_DLLPUBLIC sal_uInt16 GetSortKeyCount() const ;
+    SW_DLLPUBLIC const SwTOXSortKey* GetSortKey(sal_uInt16 nIdx) const ;
     void                SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey const nKeys[]);
 
     //initui.cxx
-    static OUString const & GetAuthFieldName(ToxAuthorityField eType);
-    static OUString const & GetAuthTypeName(ToxAuthorityType eType);
+    SW_DLLPUBLIC static OUString const & GetAuthFieldName(ToxAuthorityField eType);
+    SW_DLLPUBLIC static OUString const & GetAuthTypeName(ToxAuthorityType eType);
 
     LanguageType    GetLanguage() const {return m_eLanguage;}
     void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}
@@ -157,7 +157,7 @@ public:
     one of the instances with the same m_nHandle is actually in the document,
     they're all cloned via CopyField()...
  */
-class SW_DLLPUBLIC SwAuthorityField final : public SwField
+class SAL_DLLPUBLIC_RTTI SwAuthorityField final : public SwField
 {
     rtl::Reference<SwAuthEntry>  m_xAuthEntry;
     mutable sal_IntPtr  m_nTempSequencePos;
@@ -181,7 +181,7 @@ public:
     OUString ConditionalExpandAuthIdentifier(SwRootFrame const* pLayout) const;
 
     //To handle Citation
-    OUString ExpandCitation(ToxAuthorityField eField, SwRootFrame const* pLayout) const;
+    SW_DLLPUBLIC OUString ExpandCitation(ToxAuthorityField eField, SwRootFrame const* pLayout) const;
 
     SwAuthorityField(SwAuthorityFieldType* pType, std::u16string_view rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, SwAuthEntry* pAuthEntry);
@@ -206,7 +206,7 @@ public:
      * \param   pTOX        bibliography table to take the format of the string from
      * \return              entry formatted as the appropriate authority type in the table
      */
-    OUString GetAuthority(const SwRootFrame *pLayout,
+    SW_DLLPUBLIC OUString GetAuthority(const SwRootFrame *pLayout,
                           const SwForm *pTOX = nullptr) const;
 
     /**
@@ -218,7 +218,7 @@ public:
      * Returns absolute target URL in case there is one (GetTargetType() should be checked).
      *   If there isn't one, the result is undefined.
      */
-    OUString GetAbsoluteURL() const;
+    SW_DLLPUBLIC OUString GetAbsoluteURL() const;
 
     /**
      * Returns relative URI for the URL

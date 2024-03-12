@@ -218,7 +218,7 @@ class SW_DLLPUBLIC SwMailTransferable final :
 
 };
 
-class SW_DLLPUBLIC SwMailMessage final :
+class SAL_DLLPUBLIC_RTTI SwMailMessage final :
         public comphelper::WeakComponentImplHelper<css::mail::XMailMessage>
 {
     OUString m_sSenderName;
@@ -235,28 +235,28 @@ class SW_DLLPUBLIC SwMailMessage final :
 //  css::uno::Sequence<css::mail::MailAttachmentDescriptor> m_aAttachments;
     css::uno::Sequence<css::mail::MailAttachment> m_aAttachments;
 public:
-    SwMailMessage();
+    SW_DLLPUBLIC SwMailMessage();
     virtual ~SwMailMessage() override;
 
     // attributes
     virtual OUString SAL_CALL getSenderName() override;
     virtual OUString SAL_CALL getSenderAddress() override;
     virtual OUString SAL_CALL getReplyToAddress() override;
-    virtual void SAL_CALL setReplyToAddress( const OUString& _replytoaddress ) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setReplyToAddress( const OUString& _replytoaddress ) override;
     virtual OUString SAL_CALL getSubject() override;
-    virtual void SAL_CALL setSubject(const OUString& _subject) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setSubject(const OUString& _subject) override;
 
     virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getBody() override;
-    virtual void SAL_CALL setBody(const css::uno::Reference<css::datatransfer::XTransferable>& _body) override;
+    SW_DLLPUBLIC virtual void SAL_CALL setBody(const css::uno::Reference<css::datatransfer::XTransferable>& _body) override;
 
     // methods
-    virtual void SAL_CALL addRecipient( const OUString& sRecipientAddress ) override;
-    virtual void SAL_CALL addCcRecipient( const OUString& sRecipientAddress ) override;
-    virtual void SAL_CALL addBccRecipient( const OUString& sRecipientAddress ) override;
+    SW_DLLPUBLIC virtual void SAL_CALL addRecipient( const OUString& sRecipientAddress ) override;
+    SW_DLLPUBLIC virtual void SAL_CALL addCcRecipient( const OUString& sRecipientAddress ) override;
+    SW_DLLPUBLIC virtual void SAL_CALL addBccRecipient( const OUString& sRecipientAddress ) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getRecipients() override;
     virtual css::uno::Sequence<OUString> SAL_CALL getCcRecipients() override;
     virtual css::uno::Sequence<OUString> SAL_CALL getBccRecipients() override;
-    virtual void SAL_CALL addAttachment(const css::mail::MailAttachment& aMailAttachment) override;
+    SW_DLLPUBLIC virtual void SAL_CALL addAttachment(const css::mail::MailAttachment& aMailAttachment) override;
     virtual css::uno::Sequence<css::mail::MailAttachment> SAL_CALL getAttachments() override;
     void SetSenderName(const OUString& rSenderName)
     {

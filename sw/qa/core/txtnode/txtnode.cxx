@@ -483,7 +483,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlySplitFootnote)
     pWrtShell->EndAllAction();
     pWrtShell->UnSelectFrame();
     pWrtShell->LeaveSelFrameMode();
-    pWrtShell->GetView().AttrChangedNotify(nullptr);
+    pWrtShell->GetView().TriggerAttrChangedNotify();
     pWrtShell->MoveSection(GoCurrSection, fnSectionEnd);
 
     // When inserting a footnote:
