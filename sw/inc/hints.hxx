@@ -65,9 +65,12 @@ public:
     {}
 };
 
-/*
+/**
  * SwFormatChg is sent when a format has changed to another format. 2 Hints are always sent
  * the old and the new format
+ *
+ * This is typically owned by an sw::LegacyModifyHint, which knows if this pool item is the old or
+ * the new format.
  */
 class SwFormatChg final : public SwMsgPoolItem
 {
