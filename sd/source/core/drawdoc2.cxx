@@ -324,7 +324,11 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
 
                 if (!aURL.isEmpty() && (aURL[0] == 35))
                 {
-                    OUString aHashSlide = "#" + SdResId(STR_PAGE);
+                    OUString aHashSlide;
+                    if (meDocType == DocumentType::Draw)
+                        aHashSlide = "#" + SdResId(STR_PAGE_NAME);
+                    else
+                        aHashSlide = "#" + SdResId(STR_PAGE);
 
                     if (aURL.startsWith(aHashSlide))
                     {
