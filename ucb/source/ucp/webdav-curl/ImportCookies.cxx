@@ -97,7 +97,11 @@ OString TryImportCookies(uno::Reference<uno::XComponentContext> const& xContext[
         // apparently this may crash, and sqlite3_errstr() isn't exported?
         // SAL_INFO("ucb.ucp.webdav.curl", "sqlite3_open failed: " << sqlite3_errmsg(db));
         SAL_INFO("ucb.ucp.webdav.curl", "sqlite3_open failed: " << rc);
-        sqlite3_close(db);
+        if (db)
+        {
+            sqlite3_close(db);
+        }
+        return OString();
     }
     char* err(nullptr);
     Value value;
