@@ -235,16 +235,15 @@ public:
                                     LanguageType nOriginalLang = LANGUAGE_DONTKNOW,
                                     bool bSystemLanguage = false ) const;
 
-    void SetStarFormatSupport( bool b )         { bStarFlag = b; }
-
     /**
      * Get output string from a numeric value that fits the number of
      * characters specified.
      */
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString ) const;
 
-    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor );
-    void GetOutputString( std::u16string_view sString, OUString& OutString, const Color** ppColor );
+    // bStarFlag: Take *n format as ESC n
+    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor, bool bStarFlag = false );
+    void GetOutputString( std::u16string_view sString, OUString& OutString, const Color** ppColor, bool bStarFlag = false );
 
     // True if type text
     bool IsTextFormat() const { return bool(eType & SvNumFormatType::TEXT); }
@@ -513,7 +512,6 @@ private:
     SvNumberformatLimitOps eOp2;    // Operator for second condition
     SvNumFormatType eType;          // Type of format
     bool bAdditionalBuiltin;        // If this is an additional built-in format defined by i18n
-    bool bStarFlag;                 // Take *n format as ESC n
     bool bStandard;                 // If this is a default standard format
     bool bIsUsed;                   // Flag as used for storing
 
@@ -623,21 +621,23 @@ private:
 
     // Helper function for number strings
     // append string symbols, insert leading 0 or ' ', or ...
-    SVL_DLLPRIVATE bool ImpNumberFill( OUStringBuffer& sStr,
+    SVL_DLLPRIVATE bool ImpNumberFill(OUStringBuffer& sStr,
                     double& rNumber,
                     sal_Int32& k,
                     sal_uInt16& j,
                     sal_uInt16 nIx,
                     short eSymbolType,
+                    bool bStarFlag,
                     bool bInsertRightBlank = false );
 
     // Helper function to fill in the integer part and the group (AKA thousand) separators
-    SVL_DLLPRIVATE bool ImpNumberFillWithThousands( OUStringBuffer& sStr,
+    SVL_DLLPRIVATE bool ImpNumberFillWithThousands(OUStringBuffer& sStr,
                                  double& rNumber,
                                  sal_Int32 k,
                                  sal_uInt16 j,
                                  sal_uInt16 nIx,
                                  sal_Int32 nDigCnt,
+                                 bool bStarFlag,
                                  bool bAddDecSep = true ) const;
 
     // Helper function to fill in the group (AKA thousand) separators
@@ -654,7 +654,8 @@ private:
                                  sal_Int32 nDecPos,
                                  sal_uInt16 j,
                                  sal_uInt16 nIx,
-                                 bool bInteger ) const;
+                                 bool bInteger,
+                                 bool bStarFlag) const;
 
     /** Calculate each element of fraction:
      * integer part, numerator part, denominator part
@@ -671,19 +672,24 @@ private:
                                                 sal_Int64& nDiv ) const;
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
+                                             bool bStarFlag,
                                              OUStringBuffer& OutString);
     SVL_DLLPRIVATE bool ImpGetScientificOutput(double fNumber,
                                                sal_uInt16 nIx,
+                                               bool bStarFlag,
                                                OUStringBuffer& OutString);
 
     SVL_DLLPRIVATE bool ImpGetDateOutput( double fNumber,
                                           sal_uInt16 nIx,
+                                          bool bStarFlag,
                                           OUStringBuffer& OutString );
     SVL_DLLPRIVATE bool ImpGetTimeOutput( double fNumber,
                                           sal_uInt16 nIx,
+                                          bool bStarFlag,
                                           OUStringBuffer& OutString );
     SVL_DLLPRIVATE bool ImpGetDateTimeOutput( double fNumber,
                                               sal_uInt16 nIx,
+                                              bool bStarFlag,
                                               OUStringBuffer& OutString );
 
     // Switches to the "gregorian" calendar if the current calendar is
@@ -705,6 +711,7 @@ private:
 
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
                                             sal_uInt16 nIx,
+                                            bool bStarFlag,
                                             OUStringBuffer& OutString ) const;
 
     SVL_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );

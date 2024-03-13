@@ -1763,15 +1763,7 @@ void SvNumberFormatter::GetOutputString(const OUString& sString,
     else
     {
         ChangeIntl(pFormat->GetLanguage());
-        if ( bUseStarFormat )
-        {
-           pFormat->SetStarFormatSupport( true );
-        }
-        pFormat->GetOutputString(sString, sOutString, ppColor);
-        if ( bUseStarFormat )
-        {
-           pFormat->SetStarFormatSupport( false );
-        }
+        pFormat->GetOutputString(sString, sOutString, ppColor, bUseStarFormat);
     }
 }
 
@@ -1791,11 +1783,7 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
     if (!pFormat)
         pFormat = GetFormatEntry(ZF_STANDARD);
     ChangeIntl(pFormat->GetLanguage());
-    if ( bUseStarFormat )
-        pFormat->SetStarFormatSupport( true );
-    pFormat->GetOutputString(fOutNumber, sOutString, ppColor);
-    if ( bUseStarFormat )
-        pFormat->SetStarFormatSupport( false );
+    pFormat->GetOutputString(fOutNumber, sOutString, ppColor, bUseStarFormat);
 }
 
 bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
@@ -1833,15 +1821,7 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
         }
         else
         {
-            if ( bUseStarFormat )
-            {
-                aEntry.SetStarFormatSupport( true );
-            }
-            aEntry.GetOutputString(fPreviewNumber, sOutString, ppColor);
-            if ( bUseStarFormat )
-            {
-                aEntry.SetStarFormatSupport( false );
-            }
+            aEntry.GetOutputString(fPreviewNumber, sOutString, ppColor, bUseStarFormat);
         }
         return true;
     }

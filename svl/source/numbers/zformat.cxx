@@ -364,14 +364,13 @@ void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
 }
 
 SvNumberformat::SvNumberformat( SvNumberformat const & rFormat )
-    : rScan(rFormat.rScan), bStarFlag( rFormat.bStarFlag )
+    : rScan(rFormat.rScan)
 {
     ImpCopyNumberformat( rFormat );
 }
 
 SvNumberformat::SvNumberformat( SvNumberformat const & rFormat, ImpSvNumberformatScan& rSc )
     : rScan(rSc)
-    , bStarFlag( rFormat.bStarFlag )
 {
     ImpCopyNumberformat( rFormat );
 }
@@ -757,7 +756,6 @@ SvNumberformat::SvNumberformat(OUString& rString,
                                bool bReplaceBooleanEquivalent)
         : rScan(*pSc)
         , bAdditionalBuiltin( false )
-        , bStarFlag( false )
 {
     if (bReplaceBooleanEquivalent)
         rScan.ReplaceBooleanEquivalent( rString);
@@ -2199,7 +2197,8 @@ static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, std::u
 
 void SvNumberformat::GetOutputString(std::u16string_view sString,
                                      OUString& OutString,
-                                     const Color** ppColor)
+                                     const Color** ppColor,
+                                     bool bStarFlag)
 {
     OUStringBuffer sOutBuff;
     sal_uInt16 nIx;
@@ -2476,7 +2475,8 @@ sal_uInt16 SvNumberformat::GetSubformatIndex (double fNumber ) const
 
 bool SvNumberformat::GetOutputString(double fNumber,
                                      OUString& OutString,
-                                     const Color** ppColor)
+                                     const Color** ppColor,
+                                     bool bStarFlag)
 {
     bool bRes = false;
     OutString.clear();
@@ -2564,15 +2564,15 @@ bool SvNumberformat::GetOutputString(double fNumber,
             bHadStandard = true;
             break;
         case SvNumFormatType::DATE:
-            bRes |= ImpGetDateOutput(fNumber, 0, sBuff);
+            bRes |= ImpGetDateOutput(fNumber, 0, bStarFlag, sBuff);
             bHadStandard = true;
             break;
         case SvNumFormatType::TIME:
-            bRes |= ImpGetTimeOutput(fNumber, 0, sBuff);
+            bRes |= ImpGetTimeOutput(fNumber, 0, bStarFlag, sBuff);
             bHadStandard = true;
             break;
         case SvNumFormatType::DATETIME:
-            bRes |= ImpGetDateTimeOutput(fNumber, 0, sBuff);
+            bRes |= ImpGetDateTimeOutput(fNumber, 0, bStarFlag, sBuff);
             bHadStandard = true;
             break;
         default: break;
@@ -2634,27 +2634,27 @@ bool SvNumberformat::GetOutputString(double fNumber,
             }
             break;
         case SvNumFormatType::DATE:
-            bRes |= ImpGetDateOutput(fNumber, nIx, sBuff);
+            bRes |= ImpGetDateOutput(fNumber, nIx, bStarFlag, sBuff);
             break;
         case SvNumFormatType::TIME:
-            bRes |= ImpGetTimeOutput(fNumber, nIx, sBuff);
+            bRes |= ImpGetTimeOutput(fNumber, nIx, bStarFlag, sBuff);
                 break;
         case SvNumFormatType::DATETIME:
-            bRes |= ImpGetDateTimeOutput(fNumber, nIx, sBuff);
+            bRes |= ImpGetDateTimeOutput(fNumber, nIx, bStarFlag, sBuff);
             break;
         case SvNumFormatType::NUMBER:
         case SvNumFormatType::PERCENT:
         case SvNumFormatType::CURRENCY:
-            bRes |= ImpGetNumberOutput(fNumber, nIx, sBuff);
+            bRes |= ImpGetNumberOutput(fNumber, nIx, bStarFlag, sBuff);
             break;
         case SvNumFormatType::LOGICAL:
             bRes |= ImpGetLogicalOutput(fNumber, nIx, sBuff);
             break;
         case SvNumFormatType::FRACTION:
-            bRes |= ImpGetFractionOutput(fNumber, nIx, sBuff);
+            bRes |= ImpGetFractionOutput(fNumber, nIx, bStarFlag, sBuff);
             break;
         case SvNumFormatType::SCIENTIFIC:
-            bRes |= ImpGetScientificOutput(fNumber, nIx, sBuff);
+            bRes |= ImpGetScientificOutput(fNumber, nIx, bStarFlag, sBuff);
             break;
         default: break;
         }
@@ -2665,6 +2665,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
 
 bool SvNumberformat::ImpGetScientificOutput(double fNumber,
                                             sal_uInt16 nIx,
+                                            bool bStarFlag,
                                             OUStringBuffer& sStr)
 {
     bool bRes = false;
@@ -2768,7 +2769,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     }
 
     // restore leading zeros or blanks according to format '0' or '?' tdf#156449
-    bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
+    bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP, bStarFlag);
 
     bool bCont = true;
 
@@ -2800,7 +2801,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     }
     else
     {
-        bRes |= ImpDecimalFill(sStr, fNumber, nDecPos, j, nIx, false);
+        bRes |= ImpDecimalFill(sStr, fNumber, nDecPos, j, nIx, false, bStarFlag);
     }
 
     if (bSign)
@@ -2898,6 +2899,7 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
 
 bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                                           sal_uInt16 nIx,
+                                          bool bStarFlag,
                                           OUStringBuffer& sBuff)
 {
     bool bRes = false;
@@ -2964,7 +2966,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     sal_uInt16 j = nCnt-1; // Last symbol -> backwards
     sal_Int32 k;           // Denominator
 
-    bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC, true);
+    bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC, bStarFlag, true);
 
     bool bCont = true;
     if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRAC)
@@ -2995,7 +2997,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     }
     else
     {
-        bRes |= ImpNumberFill(sFrac, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRACBLANK);
+        bRes |= ImpNumberFill(sFrac, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRACBLANK, bStarFlag);
         bCont = false;  // there is no integer part?
         if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRACBLANK)
         {
@@ -3041,7 +3043,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     {
         k = sStr.getLength(); // After last figure
         bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx,
-                                           rInfo.nCntPre);
+                                           rInfo.nCntPre, bStarFlag);
     }
     if (bSign && (nFrac != 0 || fNum != 0.0))
     {
@@ -3086,6 +3088,7 @@ sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString( OUStringBuffer& rBuf, d
 
 bool SvNumberformat::ImpGetTimeOutput(double fNumber,
                                       sal_uInt16 nIx,
+                                      bool bStarFlag,
                                       OUStringBuffer& sBuff)
 {
     using namespace ::com::sun::star::i18n;
@@ -3705,6 +3708,7 @@ static bool lcl_getValidDate( const DateTime& rNullDate, const DateTime& rEpochS
 
 bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                       sal_uInt16 nIx,
+                                      bool bStarFlag,
                                       OUStringBuffer& sBuff)
 {
     using namespace ::com::sun::star::i18n;
@@ -3975,6 +3979,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
 
 bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                                           sal_uInt16 nIx,
+                                          bool bStarFlag,
                                           OUStringBuffer& sBuff)
 {
     using namespace ::com::sun::star::i18n;
@@ -4352,6 +4357,7 @@ bool SvNumberformat::ImpGetLogicalOutput(double fNumber,
 
 bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                                         sal_uInt16 nIx,
+                                        bool bStarFlag,
                                         OUStringBuffer& sStr) const
 {
     bool bRes = false;
@@ -4456,7 +4462,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                                         // Edit backwards:
     j = NumFor[nIx].GetCount()-1;       // Last symbol
                                         // Decimal places:
-    bRes |= ImpDecimalFill( sStr, fNumber, nDecPos, j, nIx, bInteger );
+    bRes |= ImpDecimalFill( sStr, fNumber, nDecPos, j, nIx, bInteger, bStarFlag );
     if (bSign)
     {
         sStr.insert(0, '-');
@@ -4470,7 +4476,8 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                                    sal_Int32 nDecPos,     // decimals start
                                    sal_uInt16 j,          // symbol index within format code
                                    sal_uInt16 nIx,        // subformat index
-                                   bool bInteger) const   // is integer
+                                   bool bInteger,         // is integer
+                                   bool bStarFlag) const
 {
     bool bRes = false;
     bool bFilled = false;               // Was filled?
@@ -4581,7 +4588,7 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
     } // of decimal places
 
     bRes |= ImpNumberFillWithThousands(sStr, rNumber, k, j, nIx, // Fill with . if needed
-                                       rInfo.nCntPre, bFilled );
+                                       rInfo.nCntPre, bStarFlag, bFilled );
 
     return bRes;
 }
@@ -4592,6 +4599,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
                                                  sal_uInt16 j,          // symbol index within format code
                                                  sal_uInt16 nIx,        // subformat index
                                                  sal_Int32 nDigCnt,     // count of integer digits in format
+                                                 bool bStarFlag,        // Take *n format as ESC n
                                                  bool bAddDecSep) const // add decimal separator if necessary
 {
     bool bRes = false;
@@ -4780,6 +4788,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
                                     sal_uInt16& j,         // symbol index within format code
                                     sal_uInt16 nIx,        // subformat index
                                     short eSymbolType,     // type of stop condition
+                                    bool bStarFlag,        // Take *n format as ESC n
                                     bool bInsertRightBlank)// insert blank on right for denominator (default = false)
 {
     bool bRes = false;
