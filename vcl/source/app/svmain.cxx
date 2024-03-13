@@ -466,6 +466,9 @@ void DeInitVCL()
         pSVData->mpBlendFrameCache->m_aLastResult.Clear();
     pSVData->mbDeInit = true;
 
+    // Some events may need to access objects destroyed in ImplDeleteOnDeInit, so process them first
+    Scheduler::ProcessEventsToIdle();
+
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 
 #if OSL_DEBUG_LEVEL > 0
