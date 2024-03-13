@@ -42,7 +42,6 @@
 #include <svl/languageoptions.hxx>
 #include <editeng/editstat.hxx>
 #include <formula/errorcodes.hxx>
-#include <formulaopt.hxx>
 #include <vcl/svapp.hxx>
 
 #include <appluno.hxx>
@@ -51,16 +50,12 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <docuno.hxx>
-#include <globstr.hrc>
-#include <scresid.hxx>
-#include <scmod.hxx>
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
 #include <ViewSettingsSequenceDefines.hxx>
 #include <userdat.hxx>
 
 #include <compiler.hxx>
-#include <officecfg/Office/Calc.hxx>
 
 #include "XMLConverter.hxx"
 #include "XMLDetectiveContext.hxx"
