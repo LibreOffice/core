@@ -1096,8 +1096,6 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "DeleteNote" ||
              aEvent.FeatureURL.Path == "AcceptChanges" ||
              aEvent.FeatureURL.Path == "SetDefault" ||
-             aEvent.FeatureURL.Path == "ParaLeftToRight" ||
-             aEvent.FeatureURL.Path == "ParaRightToLeft" ||
              aEvent.FeatureURL.Path == "ParaspaceIncrease" ||
              aEvent.FeatureURL.Path == "ParaspaceDecrease" ||
              aEvent.FeatureURL.Path == "TableDialog" ||
@@ -1168,6 +1166,18 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "InsertPictureContentControl")
     {
         aBuffer.append(aEvent.IsEnabled ? std::u16string_view(u"enabled") : std::u16string_view(u"disabled"));
+    }
+    else if (aEvent.FeatureURL.Path == "ParaLeftToRight" ||
+             aEvent.FeatureURL.Path == "ParaRightToLeft")
+    {
+        tools::JsonWriter aTree;
+        bool bTemp = false;
+        aEvent.State >>= bTemp;
+        aTree.put("commandName", aEvent.FeatureURL.Complete);
+        aTree.put("disabled", !aEvent.IsEnabled);
+        aTree.put("state", bTemp ? "true" : "false");
+        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aTree.finishAndGetAsOString());
+        return;
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||
