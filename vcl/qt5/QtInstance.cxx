@@ -708,6 +708,11 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** 
     // for scaled icons in the native menus
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
+    // force Qt::HighDpiScaleFactorRoundingPolicy::Round, which is the Qt 5 default
+    // policy and prevents incorrect rendering with the Qt 6 default policy
+    // Qt::HighDpiScaleFactorRoundingPolicy::PassThrough (tdf#159915)
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::Round);
 
     FreeableCStr session_manager;
     if (getenv("SESSION_MANAGER") != nullptr)
