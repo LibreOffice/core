@@ -110,60 +110,6 @@ public:
     }
 };
 
-class ScanlineTransformer_4BitPalette final : public ScanlineTransformer
-{
-private:
-    sal_uInt8* pData;
-    const BitmapPalette& mrPalette;
-    sal_uInt32 mnX;
-    sal_uInt32 mnShift;
-
-public:
-    explicit ScanlineTransformer_4BitPalette(const BitmapPalette& rPalette)
-        : pData(nullptr)
-        , mrPalette(rPalette)
-        , mnX(0)
-        , mnShift(0)
-    {
-    }
-
-    virtual void skipPixel(sal_uInt32 nPixel) override
-    {
-        mnX += nPixel;
-        if (nPixel & 1) // is nPixel an odd number
-            mnShift ^= 4;
-    }
-
-    virtual void startLine(sal_uInt8* pLine) override
-    {
-        pData = pLine;
-        mnX = 0;
-        mnShift = 4;
-    }
-
-    virtual Color readPixel() override
-    {
-        const sal_uInt32 nDataIndex = mnX / 2;
-        const sal_uInt8 nIndex((pData[nDataIndex] >> mnShift) & 0x0f);
-        mnX++;
-        mnShift ^= 4;
-
-        if (nIndex < mrPalette.GetEntryCount())
-            return mrPalette[nIndex];
-        else
-            return COL_BLACK;
-    }
-
-    virtual void writePixel(Color nColor) override
-    {
-        const sal_uInt32 nDataIndex = mnX / 2;
-        const sal_uInt8 nColorIndex = mrPalette.GetBestIndex(nColor);
-        pData[nDataIndex] |= (nColorIndex & 0x0f) << mnShift;
-        mnX++;
-        mnShift ^= 4;
-    }
-};
-
 class ScanlineTransformer_1BitPalette final : public ScanlineTransformer
 {
 private:
@@ -215,8 +161,6 @@ std::unique_ptr<ScanlineTransformer> getScanlineTransformer(sal_uInt16 nBits,
     {
         case 1:
             return std::make_unique<ScanlineTransformer_1BitPalette>(rPalette);
-        case 4:
-            return std::make_unique<ScanlineTransformer_4BitPalette>(rPalette);
         case 8:
             return std::make_unique<ScanlineTransformer_8BitPalette>(rPalette);
         case 24:
