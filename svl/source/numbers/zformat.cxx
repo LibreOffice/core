@@ -3054,7 +3054,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 }
 
 sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString( OUStringBuffer& rBuf, double fFractionOfSecond,
-        int nFractionDecimals, bool bAddOneRoundingDecimal, sal_uInt16 nIx, sal_uInt16 nMinimumInputLineDecimals )
+        int nFractionDecimals, bool bAddOneRoundingDecimal, sal_uInt16 nIx, sal_uInt16 nMinimumInputLineDecimals ) const
 {
     if (!nFractionDecimals)
         return 0;
