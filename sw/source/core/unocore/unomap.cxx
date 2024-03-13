@@ -73,7 +73,7 @@ using namespace ::com::sun::star::beans;
 
 std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
-    OSL_ENSURE(nPropertyId < PROPERTY_MAP_END, "Id ?" );
+    assert(nPropertyId < PROPERTY_MAP_END);
     if( m_aMapEntriesArr[ nPropertyId ].empty() )
     {
         switch(nPropertyId)
