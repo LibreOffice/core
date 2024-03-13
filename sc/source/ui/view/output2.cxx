@@ -1877,8 +1877,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                     //  Cells to the left are marked directly, cells to the
                     //  right are handled by the flag for nX2
                     SCCOL nMarkX = ( nCellX <= nX2 ) ? nCellX : nX2;
-                    RowInfo* pMarkRowInfo = ( nCellY == nY ) ? pThisRowInfo : &pRowInfo[0];
-                    pMarkRowInfo->basicCellInfo(nMarkX).bEditEngine = true;
+                    pThisRowInfo->basicCellInfo(nMarkX).bEditEngine = true;
                     bDoCell = false;    // don't draw here
                 }
                 if ( bDoCell )
@@ -4429,14 +4428,17 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                     SCROW nCellY = nY;
                     bool bDoCell = false;
 
+                    // if merged cell contains hidden row or column or both
+                    const ScMergeFlagAttr* pMergeFlag = mpDoc->GetAttr(nX, nY, nTab, ATTR_MERGE_FLAG);
+                    bool bOverlapped = (pMergeFlag->IsHorOverlapped() || pMergeFlag->IsVerOverlapped());
+
                     tools::Long nPosY = nRowPosY;
-                    if ( nArrY == 0 )
+                    if (bOverlapped)
                     {
-                        nPosY = nScrY;
-                        nY = pRowInfo[1].nRowNo;
+                        nY = pRowInfo[nArrY].nRowNo;
                         SCCOL nOverX;                   // start of the merged cells
                         SCROW nOverY;
-                        if (GetMergeOrigin( nX,nY, 1, nOverX,nOverY, true ))
+                        if (GetMergeOrigin( nX,nY, nArrY, nOverX,nOverY, true ))
                         {
                             nCellX = nOverX;
                             nCellY = nOverY;
