@@ -355,7 +355,7 @@
 
 #define RID_CUISTR_CANNOTCONVERTURL_ERR             NC_("RID_SVXSTR_CANNOTCONVERTURL_ERR", "The URL <%1> cannot be converted to a filesystem path.")
 
-#define RID_CUISTR_ABOUT_COPYRIGHT                  NC_("aboutdialog|copyright", "Copyright © 2000–2023 LibreOffice contributors.")
+#define RID_CUISTR_ABOUT_COPYRIGHT                  NC_("aboutdialog|copyright", "Copyright © 2000–2024 LibreOffice contributors.")
 #define RID_CUISTR_ABOUT_VENDOR                     NC_("aboutdialog|vendor", "This release was supplied by %OOOVENDOR.")
 #define RID_CUISTR_ABOUT_BASED_ON                   NC_("aboutdialog|libreoffice", "LibreOffice was based on OpenOffice.org.")
 #define RID_CUISTR_ABOUT_DERIVED                    NC_("aboutdialog|derived", "%PRODUCTNAME is derived from LibreOffice which was based on OpenOffice.org")
