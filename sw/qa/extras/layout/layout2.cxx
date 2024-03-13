@@ -1288,11 +1288,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
 
     // Keep line spacing before bottom cell border (it was 1892)
     sal_Int32 y1
-        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[5]/polyline/point[1]"_ostr,
+        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[7]/polyline/point[1]"_ostr,
                    "y"_ostr)
               .toInt32();
     sal_Int32 y2
-        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[5]/polyline/point[2]"_ostr,
+        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[7]/polyline/point[2]"_ostr,
                    "y"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2092, y1, 7);
@@ -1545,13 +1545,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf115630)
     sal_Int32 nXRight
         = getXPath(
               pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/polyline[1]/point[1]"_ostr,
+              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/polyline[1]/point[1]"_ostr,
               "x"_ostr)
               .toInt32();
     sal_Int32 nXLeft
         = getXPath(
               pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/polyline[1]/point[2]"_ostr,
+              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/polyline[1]/point[2]"_ostr,
               "x"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2895, nXRight - nXLeft, 50);
@@ -1931,13 +1931,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
     sal_Int32 nYTop
         = getXPath(
               pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[4]/polyline[1]/point[1]"_ostr,
+              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[4]/polyline[1]/point[1]"_ostr,
               "y"_ostr)
               .toInt32();
     sal_Int32 nYBottom
         = getXPath(
               pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[4]/polyline[1]/point[31]"_ostr,
+              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[4]/polyline[1]/point[31]"_ostr,
               "y"_ostr)
               .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4615, nYTop - nYBottom, 5);
@@ -2134,7 +2134,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nY = getXPath(pXmlDoc,
-                            "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/polypolygon/"
+                            "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[1]/polypolygon/"
                             "polygon/point[1]"_ostr,
                             "y"_ostr)
                        .toInt32();
@@ -2322,12 +2322,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(
-        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/textarray/text"_ostr,
+        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/textarray/text"_ostr,
         "hello");
     // This failed, text color was #000000.
     assertXPath(
         pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/textcolor[@color='#ffffff']"_ostr,
+        "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/textcolor[@color='#ffffff']"_ostr,
         1);
 }
 

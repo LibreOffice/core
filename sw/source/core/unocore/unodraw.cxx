@@ -1500,9 +1500,12 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
                         // consider invisible layers
+                        SdrLayerID nLayerId = pObj->GetLayer();
+                        const IDocumentDrawModelAccess& rIDMA = pFormat->GetDoc()->getIDocumentDrawModelAccess();
                         aRet <<=
-                            ( pObj->GetLayer() != pFormat->GetDoc()->getIDocumentDrawModelAccess().GetHellId() &&
-                              pObj->GetLayer() != pFormat->GetDoc()->getIDocumentDrawModelAccess().GetInvisibleHellId() );
+                            ( nLayerId != rIDMA.GetHellId() &&
+                              nLayerId != rIDMA.GetHeaderFooterHellId() &&
+                              nLayerId != rIDMA.GetInvisibleHellId() );
                     }
                 }
                 else if(FN_ANCHOR_POSITION == pEntry->nWID)

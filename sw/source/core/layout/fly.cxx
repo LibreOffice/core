@@ -427,17 +427,24 @@ void SwFlyFrame::DeleteCnt()
     InvalidatePage();
 }
 
-void SwFlyFrame::InitDrawObj(SwFrame const& rAnchorFrame)
+void SwFlyFrame::InitDrawObj(SwFrame& rAnchorFrame)
 {
     SetDrawObj(*SwFlyDrawContact::CreateNewRef(this, GetFormat(), rAnchorFrame));
 
     // Set the right Layer
+    const IDocumentSettingAccess& rIDSA = GetFormat()->getIDocumentSettingAccess();
+    bool isPaintHellOverHF = rIDSA.get(DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
     IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
     SdrLayerID nHeavenId = rIDDMA.GetHeavenId();
     SdrLayerID nHellId = rIDDMA.GetHellId();
-    GetVirtDrawObj()->SetLayer( GetFormat()->GetOpaque().GetValue()
-                                ? nHeavenId
-                                : nHellId );
+    bool isOpaque = GetFormat()->GetOpaque().GetValue();
+    if (!isOpaque && isPaintHellOverHF)
+    {
+        if (!rAnchorFrame.FindFooterOrHeader())
+            nHellId = rIDDMA.GetHeaderFooterHellId();
+    }
+
+    GetVirtDrawObj()->SetLayer( isOpaque ? nHeavenId :nHellId );
 }
 
 static SwPosition ResolveFlyAnchor(SwFrameFormat const& rFlyFrame)
@@ -1035,9 +1042,18 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if ( pSh )
                 pSh->InvalidateWindows( getFrameArea() );
             const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
+            const IDocumentSettingAccess& rIDSA = GetFormat()->getIDocumentSettingAccess();
+            bool isPaintHellOverHF = rIDSA.get(DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
+            SdrLayerID nHellId = rIDDMA.GetHellId();
+
+            if (isPaintHellOverHF && !GetAnchorFrame()->FindFooterOrHeader())
+            {
+                nHellId = rIDDMA.GetHeaderFooterHellId();
+            }
+
             const SdrLayerID nId = GetFormat()->GetOpaque().GetValue() ?
                              rIDDMA.GetHeavenId() :
-                             rIDDMA.GetHellId();
+                             nHellId;
             GetVirtDrawObj()->SetLayer( nId );
 
             if ( Lower() )

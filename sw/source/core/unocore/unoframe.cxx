@@ -46,6 +46,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <UndoAttribute.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
@@ -1376,9 +1377,16 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
         pObject = pContactObject->GetMaster();
 
         const ::SwFormatSurround& rSurround = rFormat.GetSurround();
+        const IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        bool isPaintHellOverHF = rIDSA.get(DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
+
+        //TODO: HeaderFooterHellId only appropriate if object is anchored in body
         pObject->SetLayer(
             ( css::text::WrapTextMode_THROUGH == rSurround.GetSurround() &&
-              !rFormat.GetOpaque().GetValue() ) ? pDoc->getIDocumentDrawModelAccess().GetHellId()
+              !rFormat.GetOpaque().GetValue() )
+                              ? isPaintHellOverHF
+                                    ? pDoc->getIDocumentDrawModelAccess().GetHeaderFooterHellId()
+                                    : pDoc->getIDocumentDrawModelAccess().GetHellId()
                                              : pDoc->getIDocumentDrawModelAccess().GetHeavenId() );
         SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         pDrawModel->GetPage(0)->InsertObject( pObject );

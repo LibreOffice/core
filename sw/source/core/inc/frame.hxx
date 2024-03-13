@@ -577,13 +577,17 @@ public:
         const SwRect&,
         const SwPageFrame* pPage,
         const SwBorderAttrs&) const;
+    enum PaintFrameMode { PAINT_ALL, PAINT_HEADER_FOOTER, PAINT_NON_HEADER_FOOTER };
+    static const SwFrame* SkipFrame(const SwFrame* pFrame, PaintFrameMode ePaintFrameMode );
     void PaintBaBo( const SwRect&, const SwPageFrame *pPage,
-                    const bool bOnlyTextBackground = false) const;
+                    const bool bOnlyTextBackground = false,
+                   PaintFrameMode eMode = PAINT_ALL ) const;
     void PaintSwFrameBackground( const SwRect&, const SwPageFrame *pPage,
                           const SwBorderAttrs &,
                           const bool bLowerMode = false,
                           const bool bLowerBorder = false,
-                          const bool bOnlyTextBackground = false ) const;
+                          const bool bOnlyTextBackground = false,
+                          PaintFrameMode eMode = PAINT_ALL ) const;
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrame*,
                           const Color *pColor,
                           const SvxBorderLineStyle = SvxBorderLineStyle::SOLID ) const;
@@ -849,7 +853,7 @@ public:
                                  SwCursorMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
                                  SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const;
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const;
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode eMode = PAINT_ALL ) const;
 
     // HACK: shortcut between frame and formatting
     // It's your own fault if you cast void* incorrectly! In any case check

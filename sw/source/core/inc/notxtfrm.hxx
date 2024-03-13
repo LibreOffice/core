@@ -82,7 +82,7 @@ public:
     virtual bool LeftMargin(SwPaM *) const override;
     virtual bool RightMargin(SwPaM *, bool bAPI = false) const override;
 
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const override;
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL ) const override;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
                               SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const override;
     virtual bool GetModelPositionForViewPoint(SwPosition* pPos, Point& aPoint,

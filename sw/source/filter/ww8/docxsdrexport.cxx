@@ -846,12 +846,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         if (pObj)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
-            bOpaque = pObj->GetLayer()
-                          != pFrameFormat->GetDoc()->getIDocumentDrawModelAccess().GetHellId()
-                      && pObj->GetLayer()
-                             != pFrameFormat->GetDoc()
-                                    ->getIDocumentDrawModelAccess()
-                                    .GetInvisibleHellId();
+            const IDocumentDrawModelAccess& iDocumentDrawModelAccess
+                = pFrameFormat->GetDoc()->getIDocumentDrawModelAccess();
+            bOpaque = pObj->GetLayer() != iDocumentDrawModelAccess.GetHellId()
+                      && pObj->GetLayer() != iDocumentDrawModelAccess.GetHeaderFooterHellId()
+                      && pObj->GetLayer() != iDocumentDrawModelAccess.GetInvisibleHellId();
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
 

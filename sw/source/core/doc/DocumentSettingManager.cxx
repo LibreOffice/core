@@ -107,7 +107,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbAutoFirstLineIndentDisregardLineSpace(true),
     mbNoNumberingShowFollowBy(false),
     mbDropCapPunctuation(true),
-    mbUseVariableWidthNBSP(false)
+    mbUseVariableWidthNBSP(false),
+    mbPaintHellOverHeaderFooter(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -265,6 +266,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
         case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
         case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP: return mbUseVariableWidthNBSP;
+        case DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER: return mbPaintHellOverHeaderFooter;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -480,6 +482,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP:
             mbUseVariableWidthNBSP = value;
+            break;
+
+        case DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER:
+            mbPaintHellOverHeaderFooter = value;
             break;
 
         // COMPATIBILITY FLAGS END
@@ -1055,6 +1061,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbUseVariableWidthNBSP"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbUseVariableWidthNBSP).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbPaintHellOverHeaderFooter"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbPaintHellOverHeaderFooter).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbContinuousEndnotes"));

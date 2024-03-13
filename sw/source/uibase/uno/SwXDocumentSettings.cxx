@@ -161,6 +161,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_USE_VARIABLE_WIDTH_NBSP,
     HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
     HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS,
+    HANDLE_PAINT_HELL_OVER_HEADER_FOOTER
 };
 
 }
@@ -268,6 +269,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("UseVariableWidthNBSP"), HANDLE_USE_VARIABLE_WIDTH_NBSP, cppu::UnoType<bool>::get(), 0 },
         { OUString("ApplyTextAttrToEmptyLineAtEndOfParagraph"), HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, cppu::UnoType<bool>::get(), 0 },
         { OUString("DoNotMirrorRtlDrawObjs"), HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS, cppu::UnoType<bool>::get(), 0 },
+        { OUString("PaintHellOverHeaderFooter"), HANDLE_PAINT_HELL_OVER_HEADER_FOOTER, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1152,6 +1154,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::USE_VARIABLE_WIDTH_NBSP, bTmp);
         }
         break;
+        case HANDLE_PAINT_HELL_OVER_HEADER_FOOTER:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1726,6 +1736,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::USE_VARIABLE_WIDTH_NBSP);
+        }
+        break;
+        case HANDLE_PAINT_HELL_OVER_HEADER_FOOTER:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
         }
         break;
         default:

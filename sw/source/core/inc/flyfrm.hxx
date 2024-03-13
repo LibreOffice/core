@@ -83,7 +83,7 @@ class SAL_DLLPUBLIC_RTTI SwFlyFrame : public SwLayoutFrame, public SwAnchoredObj
     friend void Notify( SwFlyFrame *, SwPageFrame *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
-    void InitDrawObj(SwFrame const&); // these to methods are called in the
+    void InitDrawObj(SwFrame&); // these to methods are called in the
     void FinitDrawObj();    // constructors
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwFlyFrameInvFlags &,
@@ -170,7 +170,7 @@ protected:
 
 public:
     // #i26791#
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const& ) const override;
+    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL ) const override;
     virtual Size ChgSize( const Size& aNewSize ) override;
     virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;

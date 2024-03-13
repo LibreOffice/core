@@ -133,6 +133,8 @@ enum class DocumentSettingId
     DROP_CAP_PUNCTUATION,
     // render NBSP as standard-space-width (prettier when justified)
     USE_VARIABLE_WIDTH_NBSP,
+    // overlap background shapes if anchored in body
+    PAINT_HELL_OVER_HEADER_FOOTER,
 };
 
 /** Provides access to settings of a document

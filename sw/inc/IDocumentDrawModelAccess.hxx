@@ -37,6 +37,7 @@ public:
     virtual SwDrawModel* GetOrCreateDrawModel() = 0;
     virtual SdrLayerID GetHeavenId() const = 0;
     virtual SdrLayerID GetHellId() const = 0;
+    virtual SdrLayerID GetHeaderFooterHellId() const = 0;
     virtual SdrLayerID GetControlsId() const = 0;
     virtual SdrLayerID GetInvisibleHeavenId() const = 0;
     virtual SdrLayerID GetInvisibleHellId() const = 0;
