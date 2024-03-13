@@ -160,7 +160,7 @@ public:
     typedef std::vector<VclPtr<vcl::Window>> OutWindowSet;
 
     ImpEditView& getImpl() const { return *mpImpEditView; }
-    ImpEditEngine& getImpEditEngine() const;
+    SAL_DLLPRIVATE ImpEditEngine& getImpEditEngine() const;
 
     void setEditEngine(EditEngine* pEditEngine);
     EditEngine& getEditEngine() const;
@@ -174,7 +174,7 @@ private:
 
     // counts how many characters take unfolded fields
     // bCanOverflow - count field length without trim to the selected pos
-    sal_Int32       countFieldsOffsetSum(sal_Int32 nPara, sal_Int32 nPo, bool bCanOverflow) const;
+    SAL_DLLPRIVATE sal_Int32       countFieldsOffsetSum(sal_Int32 nPara, sal_Int32 nPo, bool bCanOverflow) const;
 
 public:
                     EditView( EditEngine* pEng, vcl::Window* pWindow );
@@ -190,13 +190,13 @@ public:
 
     LanguageType    GetInputLanguage() const;
 
-    bool            HasOtherViewWindow( vcl::Window* pWin );
+    SAL_DLLPRIVATE bool            HasOtherViewWindow( vcl::Window* pWin );
     bool            AddOtherViewWindow( vcl::Window* pWin );
     bool            RemoveOtherViewWindow( vcl::Window* pWin );
 
     void            Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     tools::Rectangle       GetInvalidateRect() const;
-    void            InvalidateWindow(const tools::Rectangle& rClipRect);
+    SAL_DLLPRIVATE void            InvalidateWindow(const tools::Rectangle& rClipRect);
     void            InvalidateOtherViewWindows( const tools::Rectangle& rInvRect );
     void            Invalidate();
     ::Pair            Scroll( tools::Long nHorzScroll, tools::Long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
@@ -250,7 +250,7 @@ public:
 
     bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
-    void            ReleaseMouse();
+    SAL_DLLPRIVATE void            ReleaseMouse();
     bool            MouseMove( const MouseEvent& rMouseEvent );
     bool            Command(const CommandEvent& rCEvt);
 
@@ -264,18 +264,18 @@ public:
 
     // especially for Oliver Specht
     Point           GetWindowPosTopLeft( sal_Int32 nParagraph );
-    void            MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
-    void            MoveParagraphs( tools::Long nDiff );
+    SAL_DLLPRIVATE void            MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
+    SAL_DLLPRIVATE void            MoveParagraphs( tools::Long nDiff );
 
     const SfxItemSet& GetEmptyItemSet() const;
     SfxItemSet          GetAttribs();
     void                SetAttribs( const SfxItemSet& rSet );
     void                RemoveAttribs( bool bRemoveParaAttribs = false, sal_uInt16 nWhich = 0 );
-    void                RemoveAttribs( EERemoveParaAttribsMode eMode, sal_uInt16 nWhich );
+    SAL_DLLPRIVATE void                RemoveAttribs( EERemoveParaAttribsMode eMode, sal_uInt16 nWhich );
     void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich );
     void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
 
-    ErrCode             Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
+    SAL_DLLPRIVATE ErrCode             Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
 
     void            SetBackgroundColor( const Color& rColor );
     Color const &   GetBackgroundColor() const;
@@ -300,36 +300,36 @@ public:
     bool            SetEditEngineUpdateLayout( bool bUpdate );
     void            ForceLayoutCalculation();
 
-    const SfxStyleSheet* GetStyleSheet() const;
-    SfxStyleSheet* GetStyleSheet();
+    SAL_DLLPRIVATE const SfxStyleSheet* GetStyleSheet() const;
+    SAL_DLLPRIVATE SfxStyleSheet* GetStyleSheet();
 
-    void            SetAnchorMode( EEAnchorMode eMode );
-    EEAnchorMode    GetAnchorMode() const;
+    SAL_DLLPRIVATE void            SetAnchorMode( EEAnchorMode eMode );
+    SAL_DLLPRIVATE EEAnchorMode    GetAnchorMode() const;
 
     void            CompleteAutoCorrect( vcl::Window const * pFrameWin = nullptr );
 
     EESpellState    StartSpeller(weld::Widget* pDialogParent, bool bMultipleDoc = false);
     EESpellState    StartThesaurus(weld::Widget* pDialogParent);
-    sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
+    SAL_DLLPRIVATE sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
     void            StartTextConversion(weld::Widget* pDialogParent, LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc);
 
     void            TransliterateText( TransliterationFlags nTransliterationMode );
 
-    bool            IsCursorAtWrongSpelledWord();
+    SAL_DLLPRIVATE bool            IsCursorAtWrongSpelledWord();
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
     bool            ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void>& rCallBack);
     OUString        SpellIgnoreWord();
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
-    const SvxFieldItem* GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const;
+    SAL_DLLPRIVATE const SvxFieldItem* GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const;
     const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = nullptr, sal_Int32* pnPos = nullptr ) const;
 
     /// return the selected field or the field immediately after (or before) the current cursor
     const SvxFieldItem* GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
-    const SvxFieldItem* GetFieldAtSelection(bool* pIsBeforeCursor) const;
+    SAL_DLLPRIVATE const SvxFieldItem* GetFieldAtSelection(bool* pIsBeforeCursor) const;
 
     /// return field under mouse, at selection, or immediately after (or before) the current cursor
     const SvxFieldData* GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor = false) const;
@@ -340,8 +340,8 @@ public:
     /// Converts logical position in paragraph to position with unfolded fields
     sal_Int32       GetPosWithField(sal_Int32 nPara, sal_Int32 nPos) const;
 
-    void            SetInvalidateMore( sal_uInt16 nPixel );
-    sal_uInt16      GetInvalidateMore() const;
+    SAL_DLLPRIVATE void            SetInvalidateMore( sal_uInt16 nPixel );
+    SAL_DLLPRIVATE sal_uInt16      GetInvalidateMore() const;
 
     // grows or shrinks the font height for the current selection
     void            ChangeFontSize( bool bGrow, const FontList* pList );
