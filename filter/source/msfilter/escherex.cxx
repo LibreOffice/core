@@ -4867,6 +4867,7 @@ EscherEx::EscherEx(std::shared_ptr<EscherExGlobal> xGlobal, SvStream* pOutStrm, 
     , mnCountOfs(0)
     , mnGroupLevel(0)
     , mnHellLayerId(SDRLAYER_NOTFOUND)
+    , mnHeaderFooterHellLayerId(SDRLAYER_NOTFOUND)
     , mbEscherSpgr(false)
     , mbEscherDg(false)
     , mbOOXML(bOOXML)

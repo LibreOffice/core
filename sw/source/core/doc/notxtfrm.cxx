@@ -211,7 +211,7 @@ static void lcl_ClearArea( const SwFrame &rFrame,
     }
 }
 
-void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const, PaintFrameMode) const
 {
     if ( getFrameArea().IsEmpty() )
         return;

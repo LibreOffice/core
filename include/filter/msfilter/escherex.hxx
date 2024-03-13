@@ -1062,6 +1062,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 
         sal_uInt32                  mnGroupLevel;
         SdrLayerID                  mnHellLayerId;
+        SdrLayerID                  mnHeaderFooterHellLayerId;
 
         bool                        mbEscherSpgr;
         bool                        mbEscherDg;
@@ -1211,6 +1212,8 @@ public:
 
     void SetHellLayerId( SdrLayerID nId )       { mnHellLayerId = nId; }
     SdrLayerID GetHellLayerId() const           { return mnHellLayerId; }
+    void SetHeaderFooterHellLayerId( SdrLayerID nId )       { mnHeaderFooterHellLayerId = nId; }
+    SdrLayerID GetHeaderFooterHellLayerId() const           { return mnHeaderFooterHellLayerId; }
 
 private:
                         EscherEx( const EscherEx& ) = delete;

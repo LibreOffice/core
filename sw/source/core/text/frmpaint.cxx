@@ -642,7 +642,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
     return false;
 }
 
-void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const, PaintFrameMode) const
 {
     ResetRepaint();
 

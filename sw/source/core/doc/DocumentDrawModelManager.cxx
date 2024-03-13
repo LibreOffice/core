@@ -56,6 +56,7 @@ DocumentDrawModelManager::DocumentDrawModelManager(SwDoc& i_rSwdoc)
     : m_rDoc(i_rSwdoc)
     , mnHeaven(0)
     , mnHell(0)
+    , mnHeaderFooterHell(0)
     , mnControls(0)
     , mnInvisibleHeaven(0)
     , mnInvisibleHell(0)
@@ -85,6 +86,9 @@ void DocumentDrawModelManager::InitDrawModel()
     OUString sLayerNm;
     sLayerNm = "Hell";
     mnHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+
+    sLayerNm = "HeaderFooterHell";
+    mnHeaderFooterHell = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     sLayerNm = "Heaven";
     mnHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
@@ -204,6 +208,11 @@ SdrLayerID DocumentDrawModelManager::GetHellId() const
     return mnHell;
 }
 
+SdrLayerID DocumentDrawModelManager::GetHeaderFooterHellId() const
+{
+    return mnHeaderFooterHell;
+}
+
 SdrLayerID DocumentDrawModelManager::GetControlsId() const
 {
     return mnControls;
@@ -242,6 +251,7 @@ bool DocumentDrawModelManager::IsVisibleLayerId( SdrLayerID _nLayerId ) const
     bool bRetVal;
 
     if ( _nLayerId == GetHeavenId() ||
+         _nLayerId == GetHeaderFooterHellId() ||
          _nLayerId == GetHellId() ||
          _nLayerId == GetControlsId() )
     {
@@ -270,7 +280,8 @@ SdrLayerID DocumentDrawModelManager::GetInvisibleLayerIdByVisibleOne( SdrLayerID
     {
         nInvisibleLayerId = GetInvisibleHeavenId();
     }
-    else if ( _nVisibleLayerId == GetHellId() )
+    //TODO: do we need an InvisbleHeaderFooterHell?
+    else if ( _nVisibleLayerId == GetHellId() || _nVisibleLayerId == GetHeaderFooterHellId())
     {
         nInvisibleLayerId = GetInvisibleHellId();
     }

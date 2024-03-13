@@ -3270,7 +3270,7 @@ namespace
  * 3. Paint the document content (text)
  * 4. Paint the draw layer that is above the document
 |*/
-void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const pPrintData) const
+void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const pPrintData, PaintFrameMode) const
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrame(), "Lower of root is no page." );
 
@@ -3294,6 +3294,8 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     else
         SwRootFrame::s_isInPaint = bResetRootPaint = true;
 
+    const IDocumentSettingAccess& rIDSA = pSh->GetDoc()->getIDocumentSettingAccess();
+    bool isPaintHellOverHF = rIDSA.get(DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER) && pSh->Imp()->HasDrawView();
     std::unique_ptr<SwSavePaintStatics> pStatics;
     if ( gProp.pSGlobalShell )
         pStatics.reset(new SwSavePaintStatics());
@@ -3488,9 +3490,25 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                     gProp.pSLines->LockLines( false );
                 }
 
-                if ( pSh->GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS ) )
-                    pPage->PaintBaBo( aPaintRect, pPage, /*bOnlyTextBackground=*/true );
+                if (isPaintHellOverHF)
+                {
+                    if ( pSh->GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS ) )
+                        pPage->PaintBaBo( aPaintRect, pPage, /*bOnlyTextBackground=*/true, PAINT_HEADER_FOOTER );
+                    pPage->PaintSwFrame(rRenderContext, aPaintRect, pPrintData, PAINT_HEADER_FOOTER);
+                    gProp.pSLines->LockLines( true );
+                    const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
+                    pSh->Imp()->PaintLayer( rIDDMA.GetHeaderFooterHellId(),
+                                            pPrintData,
+                                            *pPage, pPage->getFrameArea(),
+                                            &aPageBackgrdColor,
+                                            pPage->IsRightToLeft(),
+                                            &aSwRedirector );
+                    gProp.pSLines->PaintLines( pSh->GetOut(), gProp );
+                    gProp.pSLines->LockLines( false );
+                }
 
+                if ( pSh->GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS ) )
+                    pPage->PaintBaBo( aPaintRect, pPage, /*bOnlyTextBackground=*/true, isPaintHellOverHF ? PAINT_NON_HEADER_FOOTER : PAINT_ALL );
                 if( pSh->GetWin() )
                 {
                     // collect sub-lines
@@ -3498,8 +3516,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                     // paint special sub-lines
                     gProp.pSSpecSubsLines->PaintSubsidiary( pSh->GetOut(), nullptr, gProp );
                 }
-
-                pPage->PaintSwFrame( rRenderContext, aPaintRect );
+                pPage->PaintSwFrame( rRenderContext, aPaintRect, pPrintData, isPaintHellOverHF ? PAINT_NON_HEADER_FOOTER : PAINT_ALL);
 
                 // no paint of page border and shadow, if writer is in place mode.
                 if( pSh->GetWin() && pSh->GetDoc()->GetDocShell() &&
@@ -3701,11 +3718,14 @@ SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
     }
 }
 
-void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const,
+    PaintFrameMode ePaintFrameMode) const
 {
     // #i16816# tagged pdf support
     Frame_Info aFrameInfo(*this, false);
-    SwTaggedPDFHelper aTaggedPDFHelper( nullptr, &aFrameInfo, nullptr, rRenderContext );
+    SwTaggedPDFHelper aTaggedPDFHelper( nullptr,
+        PAINT_HEADER_FOOTER == ePaintFrameMode ? nullptr : &aFrameInfo,
+        nullptr, rRenderContext );
     ::std::optional<SwTaggedPDFHelper> oTaggedLink;
     if (IsFlyFrame())
     {
@@ -3720,6 +3740,10 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
 
     const SwFrame *pFrame = Lower();
     if ( !pFrame )
+        return;
+
+    pFrame = SkipFrame(pFrame, ePaintFrameMode);
+    if (!pFrame)
         return;
 
     SwFrameDeleteGuard g(const_cast<SwLayoutFrame*>(this)); // lock because Calc() and recursion
@@ -3827,6 +3851,7 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
             ::lcl_EmergencyFormatFootnoteCont( const_cast<SwFootnoteContFrame*>(static_cast<const SwFootnoteContFrame*>(pFrame->GetNext())) );
 
         pFrame = pFrame->GetNext();
+        pFrame = SkipFrame(pFrame, ePaintFrameMode);
 
         if ( pFrame )
         {
@@ -4224,7 +4249,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     return bPaint;
 }
 
-void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const, PaintFrameMode) const
 {
     if ( GetLayoutRowSpan() >= 1 )
         SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
@@ -4263,7 +4288,7 @@ void SwFrame::SetDrawObjsAsDeleted( bool bDeleted )
     }
 }
 
-void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const, PaintFrameMode) const
 {
     //optimize thumbnail generation and store procedure to improve odt saving performance, #i120030#
     SwViewShell *pShell = getRootFrame()->GetCurrShell();
@@ -4640,7 +4665,7 @@ void SwTextFrame::PaintOutlineContentVisibilityButton() const
         UpdateOutlineContentVisibilityButton(pWrtSh);
 }
 
-void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const, PaintFrameMode) const
 {
     const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();
     if (pViewOption->IsTable())
@@ -6652,8 +6677,26 @@ SwRect SwPageFrame::GetBoundRect(OutputDevice const * pOutputDevice) const
     return nRet;
 }
 
+const SwFrame* SwFrame::SkipFrame(const SwFrame* pFrame, PaintFrameMode ePaintFrameMode )
+{
+    if (ePaintFrameMode != PAINT_ALL)
+    {
+        if (ePaintFrameMode == PAINT_NON_HEADER_FOOTER)
+        {
+            while (pFrame && (pFrame->IsHeaderFrame() || pFrame->IsFooterFrame()))
+                pFrame = pFrame->GetNext();
+        }
+        else
+        {
+            while ( pFrame && !pFrame->IsHeaderFrame() && !pFrame->IsFooterFrame())
+                pFrame = pFrame->GetNext();
+        }
+    }
+    return pFrame;
+}
+
 void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
-                         const bool bOnlyTextBackground ) const
+                         const bool bOnlyTextBackground, PaintFrameMode ePaintFrameMode ) const
 {
     if ( !pPage )
         pPage = FindPageFrame();
@@ -6679,7 +6722,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
 
     // paint background
     {
-        PaintSwFrameBackground( rRect, pPage, rAttrs, false, true/*bLowerBorder*/, bOnlyTextBackground );
+        PaintSwFrameBackground( rRect, pPage, rAttrs, false, true/*bLowerBorder*/, bOnlyTextBackground, ePaintFrameMode );
     }
 
     // paint border before painting background
@@ -6714,7 +6757,8 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                              const SwBorderAttrs & rAttrs,
                              const bool bLowerMode,
                              const bool bLowerBorder,
-                             const bool bOnlyTextBackground ) const
+                             const bool bOnlyTextBackground,
+                             PaintFrameMode ePaintFrameMode) const
 {
     // #i1837# - no paint of table background, if corresponding option is *not* set.
     SwViewShell *pSh = gProp.pSGlobalShell;
@@ -6949,6 +6993,11 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     SwRect aRect( GetPaintArea() );
     aRect.Intersection_( rRect );
     SwRect aBorderRect( aRect );
+
+    pFrame = SkipFrame(pFrame, ePaintFrameMode);
+    if (!pFrame)
+        return;
+
     SwShortCut aShortCut( *pFrame, aBorderRect );
     do
     {   if ( gProp.pSProgress )
@@ -6971,6 +7020,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             }
         }
         pFrame = pFrame->GetNext();
+        pFrame = SkipFrame(pFrame, ePaintFrameMode);
     } while ( pFrame && pFrame->GetUpper() == this &&
               !aShortCut.Stop( aFrameRect ) );
 }

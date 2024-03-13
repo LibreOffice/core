@@ -184,6 +184,7 @@ class DocumentSettingManager final :
     bool mbNoNumberingShowFollowBy;
     bool mbDropCapPunctuation; // tdf#150200, tdf#150438
     bool mbUseVariableWidthNBSP : 1; // tdf#41652
+    bool mbPaintHellOverHeaderFooter : 1; // tdf#160198
 
 public:
 

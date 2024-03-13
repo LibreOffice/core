@@ -241,7 +241,7 @@ public:
                                SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = nullptr ) const override;
+                        SwPrintData const*const pPrintData = nullptr, PaintFrameMode mode = PAINT_ALL ) const override;
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 #ifdef DBG_UTIL

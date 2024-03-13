@@ -2044,6 +2044,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     const SdrObject* pObj = rFormat.FindRealSdrObject();
 
     if( pObj && (pObj->GetLayer() == GetHellLayerId() ||
+        pObj->GetLayer() == GetHeaderFooterHellLayerId() ||
         pObj->GetLayer() == GetInvisibleHellId() ) && !(bIsInHeader && bIsThrough))
     {
         rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
@@ -2135,6 +2136,7 @@ void SwBasicEscherEx::Init()
     mnEmuDiv = aFact.GetDenominator();
 
     SetHellLayerId(mrWrt.m_rDoc.getIDocumentDrawModelAccess().GetHellId());
+    SetHeaderFooterHellLayerId(mrWrt.m_rDoc.getIDocumentDrawModelAccess().GetHeaderFooterHellId());
 }
 
 sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax)

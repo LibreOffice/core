@@ -754,7 +754,7 @@ CPPUNIT_TEST_FIXTURE(Test, TestPuzzleExport)
     CPPUNIT_ASSERT(pMetaXml);
     // After parsing check that node...
     auto pXNode = getXPathNode(
-        pMetaXml, "/metafile/push/push/push/push[4]/push/push/polypolygon/polygon"_ostr);
+        pMetaXml, "/metafile/push/push/push/push[6]/push/push/polypolygon/polygon"_ostr);
     CPPUNIT_ASSERT(pXNode);
     auto pNode = pXNode->nodesetval->nodeTab[0];
     CPPUNIT_ASSERT(pNode);

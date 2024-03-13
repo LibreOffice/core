@@ -83,7 +83,7 @@ class SW_DLLPUBLIC SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
     friend void Notify( SwFlyFrame *, SwPageFrame *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
-    void InitDrawObj(SwFrame const&); // these to methods are called in the
+    void InitDrawObj(SwFrame&); // these to methods are called in the
     void FinitDrawObj();    // constructors
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwFlyFrameInvFlags &,
@@ -171,7 +171,7 @@ protected:
 public:
     // #i26791#
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
-                        SwPrintData const*const pPrintData = nullptr ) const override;
+                        SwPrintData const*const pPrintData = nullptr, PaintFrameMode mode = PAINT_ALL ) const override;
     virtual Size ChgSize( const Size& aNewSize ) override;
     virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
