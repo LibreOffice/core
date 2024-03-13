@@ -638,7 +638,7 @@ private:
                                  sal_uInt16 j,
                                  sal_uInt16 nIx,
                                  sal_Int32 nDigCnt,
-                                 bool bAddDecSep = true );
+                                 bool bAddDecSep = true ) const;
 
     // Helper function to fill in the group (AKA thousand) separators
     // or to skip additional digits
@@ -647,14 +647,14 @@ private:
                                       sal_Int32& k,
                                       sal_uInt16 nIx,
                                       sal_Int32 & nDigitCount,
-                                      utl::DigitGroupingIterator & );
+                                      utl::DigitGroupingIterator & ) const;
 
     SVL_DLLPRIVATE bool ImpDecimalFill( OUStringBuffer& sStr,
                                  double& rNumber,
                                  sal_Int32 nDecPos,
                                  sal_uInt16 j,
                                  sal_uInt16 nIx,
-                                 bool bInteger );
+                                 bool bInteger ) const;
 
     /** Calculate each element of fraction:
      * integer part, numerator part, denominator part
@@ -705,7 +705,7 @@ private:
 
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
                                             sal_uInt16 nIx,
-                                            OUStringBuffer& OutString );
+                                            OUStringBuffer& OutString ) const;
 
     SVL_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );
 

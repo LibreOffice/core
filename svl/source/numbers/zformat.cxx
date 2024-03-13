@@ -4352,7 +4352,7 @@ bool SvNumberformat::ImpGetLogicalOutput(double fNumber,
 
 bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                                         sal_uInt16 nIx,
-                                        OUStringBuffer& sStr)
+                                        OUStringBuffer& sStr) const
 {
     bool bRes = false;
     bool bSign;
@@ -4470,7 +4470,7 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                                    sal_Int32 nDecPos,     // decimals start
                                    sal_uInt16 j,          // symbol index within format code
                                    sal_uInt16 nIx,        // subformat index
-                                   bool bInteger)         // is integer
+                                   bool bInteger) const   // is integer
 {
     bool bRes = false;
     bool bFilled = false;               // Was filled?
@@ -4592,7 +4592,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
                                                  sal_uInt16 j,          // symbol index within format code
                                                  sal_uInt16 nIx,        // subformat index
                                                  sal_Int32 nDigCnt,     // count of integer digits in format
-                                                 bool bAddDecSep)       // add decimal separator if necessary
+                                                 bool bAddDecSep) const // add decimal separator if necessary
 {
     bool bRes = false;
     sal_Int32 nLeadingStringChars = 0; // inserted StringChars before number
@@ -4752,7 +4752,7 @@ void SvNumberformat::ImpDigitFill(OUStringBuffer& sStr,     // number string
                                   sal_Int32 & k,            // position within string
                                   sal_uInt16 nIx,           // subformat index
                                   sal_Int32 & nDigitCount,  // count of integer digits from the right so far
-                                  utl::DigitGroupingIterator & rGrouping )  // current grouping
+                                  utl::DigitGroupingIterator & rGrouping ) const // current grouping
 {
     if (NumFor[nIx].Info().bThousand) // Only if grouping fill in separators
     {
