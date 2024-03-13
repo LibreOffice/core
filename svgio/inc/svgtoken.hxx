@@ -84,6 +84,7 @@ namespace svgio::svgreader
             ClipPathProperty,
             FeBlend,
             FeColorMatrix,
+            FeComposite,
             FeDropShadow,
             FeFlood,
             FeImage,

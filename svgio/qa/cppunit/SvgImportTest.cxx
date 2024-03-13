@@ -225,6 +225,32 @@ CPPUNIT_TEST_FIXTURE(Test, testFeColorMatrix)
     assertXPath(pDocument, "/primitive2D/transform/mask/modifiedColor[4]"_ostr, "modifier"_ostr, "luminance_to_alpha");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFilterFeComposite)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/filterFeComposite.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]"_ostr, "color"_ostr, "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "height"_ostr, "100");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "width"_ostr, "100");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "minx"_ostr, "70");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "miny"_ostr, "70");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "maxx"_ostr, "170");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "maxy"_ostr, "170");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]"_ostr, "color"_ostr, "#6ab150");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "height"_ostr, "100");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "width"_ostr, "100");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "minx"_ostr, "30");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "miny"_ostr, "30");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "maxx"_ostr, "130");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "maxy"_ostr, "130");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
 {
     Primitive2DSequence aSequenceTdf132246 = parseSvg(u"/svgio/qa/cppunit/data/filterFeGaussianBlur.svg");

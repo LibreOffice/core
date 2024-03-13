@@ -43,6 +43,7 @@
 #include <svgclippathnode.hxx>
 #include <svgfeblendnode.hxx>
 #include <svgfecolormatrixnode.hxx>
+#include <svgfecompositenode.hxx>
 #include <svgfedropshadownode.hxx>
 #include <svgfefloodnode.hxx>
 #include <svgfeimagenode.hxx>
@@ -389,6 +390,13 @@ namespace
                 {
                     /// new node for feColorMatrix
                     mpTarget = new SvgFeColorMatrixNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
+                case SVGToken::FeComposite:
+                {
+                    /// new node for feComposite
+                    mpTarget = new SvgFeCompositeNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }

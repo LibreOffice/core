@@ -82,6 +82,7 @@ constexpr auto aSVGTokenMap = frozen::make_unordered_map<std::u16string_view, SV
     { u"clip-path", SVGToken::ClipPathProperty },
     { u"feBlend", SVGToken::FeBlend },
     { u"feColorMatrix", SVGToken::FeColorMatrix },
+    { u"feComposite", SVGToken::FeComposite },
     { u"feDropShadow", SVGToken::FeDropShadow },
     { u"feFlood", SVGToken::FeFlood },
     { u"feImage", SVGToken::FeImage },
