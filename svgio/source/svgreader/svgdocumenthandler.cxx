@@ -41,6 +41,7 @@
 #include <svgstylenode.hxx>
 #include <svgimagenode.hxx>
 #include <svgclippathnode.hxx>
+#include <svgfeblendnode.hxx>
 #include <svgfecolormatrixnode.hxx>
 #include <svgfedropshadownode.hxx>
 #include <svgfefloodnode.hxx>
@@ -374,6 +375,13 @@ namespace
                 {
                     /// new node for Mask
                     mpTarget = new SvgMaskNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
+                case SVGToken::FeBlend:
+                {
+                    /// new node for feBlend
+                    mpTarget = new SvgFeBlendNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
