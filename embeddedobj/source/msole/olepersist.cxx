@@ -58,6 +58,17 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
+namespace
+{
+#if defined(_WIN32)
+template <class Proc> auto ExecUnlocked(Proc proc, osl::ResettableMutexGuard& guard)
+{
+    ClearedMutexArea area(guard);
+    return proc();
+}
+#endif
+}
+
 
 bool KillFile_Impl( const OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
 {
@@ -1059,8 +1070,11 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                             const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs,
-                            bool bSaveAs )
+                            bool bSaveAs, osl::ResettableMutexGuard& rGuard)
 {
+#ifndef _WIN32
+    (void)rGuard;
+#endif
     // TODO: use lObjArgs
     // TODO: exchange StoreVisualReplacement by SO file format version?
 
@@ -1110,7 +1124,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 #ifdef _WIN32
         // if the object was NOT modified after storing it can be just copied
         // as if it was in loaded state
-      || ( m_pOleComponent && !m_pOleComponent->IsDirty() )
+        || (m_pOleComponent && !ExecUnlocked([this] { return m_pOleComponent->IsDirty(); }, rGuard))
 #endif
     )
     {
@@ -1482,13 +1496,13 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
     }
     // end wrapping related part ====================
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
 
-    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, false );
+    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, false, aGuard );
 
     // TODO: should the listener notification be done?
 }
@@ -1509,13 +1523,13 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
     }
     // end wrapping related part ====================
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
 
-    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, true );
+    StoreToLocation_Impl( xStorage, sEntName, lObjArgs, true, aGuard );
 
     // TODO: should the listener notification be done here or in saveCompleted?
 }
@@ -1691,7 +1705,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     // ask container to store the object, the container has to make decision
     // to do so or not
 
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1717,7 +1731,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     bool bStoreLoaded = true;
 
 #ifdef _WIN32
-    if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent && m_pOleComponent->IsDirty() )
+    if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent && ExecUnlocked([this] { return m_pOleComponent->IsDirty(); }, aGuard) )
     {
         bStoreLoaded = false;
 
