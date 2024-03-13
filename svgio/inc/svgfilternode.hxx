@@ -43,7 +43,7 @@ public:
 
     void
     addGraphicSourceToMapper(const OUString& rStr,
-                             drawinglayer::primitive2d::Primitive2DContainer pGrapicSource) const;
+                             drawinglayer::primitive2d::Primitive2DContainer pGraphicSource) const;
     const drawinglayer::primitive2d::Primitive2DContainer*
     findGraphicSource(const OUString& rStr) const;
 };
