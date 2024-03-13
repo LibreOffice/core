@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="xsc">
   <requires lib="gtk+" version="3.20"/>
-  <!-- n-columns=2 n-rows=4 -->
+  <!-- n-columns=2 n-rows=5 -->
   <object class="GtkGrid" id="SecurityLevelPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -111,6 +111,11 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="icon-name">res/lock.png</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="vhighimg-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="SecurityLevelPage|vhighimg">Very high security level</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -124,6 +129,11 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="icon-name">res/lock.png</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="highimg-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="SecurityLevelPage|highimg">High security level</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -137,6 +147,11 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="icon-name">res/lock.png</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="medimg-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="SecurityLevelPage|medimg">Medium security level</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -150,10 +165,79 @@ All other macros, regardless whether signed or not, are disabled.</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="icon-name">res/lock.png</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="lowimg-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="SecurityLevelPage|lowimg">Low security level</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="empty">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="warningbox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="valign">end</property>
+        <property name="hexpand">True</property>
+        <child>
+          <object class="GtkImage" id="warningimg">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="valign">center</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">3</property>
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="icon-name">vcl/res/warningbox.png</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="warningimg-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="SecurityLevelPage|warningimg">File reload needed</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="warningmsg">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="hexpand">True</property>
+            <property name="wrap">True</property>
+            <property name="ellipsize">end</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
   </object>

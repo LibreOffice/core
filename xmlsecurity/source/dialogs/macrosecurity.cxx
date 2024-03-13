@@ -105,6 +105,9 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecuri
     , m_xHighImg(m_xBuilder->weld_widget("highimg"))
     , m_xMedImg(m_xBuilder->weld_widget("medimg"))
     , m_xLowImg(m_xBuilder->weld_widget("lowimg"))
+    , m_xWarningLb(m_xBuilder->weld_label("warningmsg"))
+    , m_xWarningImg(m_xBuilder->weld_image("warningimg"))
+    , m_xWarningBox(m_xBuilder->weld_box("warningbox"))
 {
     m_xLowRB->connect_toggled( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
     m_xMediumRB->connect_toggled( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
@@ -129,6 +132,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecuri
     }
 
     mnCurLevel = static_cast<sal_uInt16>(SvtSecurityOptions::GetMacroSecurityLevel());
+    mnInitialLevel = mnCurLevel;
     bool bReadonly = SvtSecurityOptions::IsReadOnly( SvtSecurityOptions::EOption::MacroSecLevel );
 
     weld::RadioButton* pCheck = nullptr;
@@ -166,6 +170,28 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecuri
         m_xMediumRB->set_sensitive(false);
         m_xLowRB->set_sensitive(false);
     }
+
+    SetWarningLabel("");
+    // Use same font color as in InfobarType::WARNING
+    m_xWarningLb->set_font_color(Color(0x70, 0x43, 0x00));
+    m_xWarningImg->set_size_request(24, 24);
+}
+
+void MacroSecurityLevelTP::SetWarningLabel(const OUString& sMsg)
+{
+    m_xWarningLb->set_label(sMsg);
+    if (!sMsg.isEmpty())
+    {
+        m_xWarningLb->show();
+        m_xWarningImg->show();
+        m_xWarningBox->set_background(Color(0xFE, 0xEF, 0xB3));
+    }
+    else
+    {
+        m_xWarningLb->hide();
+        m_xWarningImg->hide();
+        m_xWarningBox->set_background(COL_TRANSPARENT);
+    }
 }
 
 IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl, weld::Toggleable&, void)
@@ -182,6 +208,14 @@ IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl, weld::Toggleable&, void)
     {
         mnCurLevel = nNewLevel;
         m_pDlg->EnableReset();
+    }
+
+    // Show warning message if a different security level is chosen
+    if (nNewLevel != mnInitialLevel)
+        SetWarningLabel(XsResId(STR_RELOAD_FILE_WARNING));
+    else
+    {
+        SetWarningLabel("");
     }
 }
 

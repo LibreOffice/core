@@ -72,6 +72,8 @@ class MacroSecurityLevelTP : public MacroSecurityTP
 {
 private:
     sal_uInt16   mnCurLevel;
+    // Stores the security level when the dialog opens. Used to check if the value changed
+    sal_uInt16   mnInitialLevel;
 
     std::unique_ptr<weld::RadioButton> m_xVeryHighRB;
     std::unique_ptr<weld::RadioButton> m_xHighRB;
@@ -81,6 +83,11 @@ private:
     std::unique_ptr<weld::Widget> m_xHighImg;
     std::unique_ptr<weld::Widget> m_xMedImg;
     std::unique_ptr<weld::Widget> m_xLowImg;
+    std::unique_ptr<weld::Label> m_xWarningLb;
+    std::unique_ptr<weld::Image> m_xWarningImg;
+    std::unique_ptr<weld::Box> m_xWarningBox;
+
+    void SetWarningLabel(const OUString& sMsg);
 
     DECL_LINK(RadioButtonHdl, weld::Toggleable&, void);
 public:
