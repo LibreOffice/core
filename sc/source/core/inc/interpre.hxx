@@ -31,6 +31,7 @@
 #include <math.hxx>
 #include <kahan.hxx>
 #include <queryentry.hxx>
+#include <sortparam.hxx>
 #include "parclass.hxx"
 
 #include <map>
@@ -267,6 +268,9 @@ private:
     bool        bMatrixFormula;         // formula cell is a matrix formula
 
     VolatileType meVolatileType;
+
+    // sort parameters
+    ScSortParam aSortParam;
 
     void MakeMatNew(ScMatrixRef& rMat, SCSIZE nC, SCSIZE nR);
 
@@ -557,6 +561,22 @@ private:
     // Returns true if last jump was executed and result matrix pushed.
     bool JumpMatrix( short nStackLevel );
 
+    // Advance sort
+    static void DecoladeRow(ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2);
+
+    std::unique_ptr<ScSortInfoArray> CreateFastSortInfoArray(
+        const ScSortParam& rSortParam, bool bMatrix, SCCOLROW nInd1, SCCOLROW nInd2);
+    std::vector<SCCOLROW> GetSortOrder(const ScSortParam& rSortParam, const ScMatrixRef& pMatSrc);
+
+    void QuickSort(ScSortInfoArray* pArray, const ScMatrixRef& pMatSrc, SCCOLROW nLo, SCCOLROW nHi);
+
+    short Compare(ScSortInfoArray* pArray, const ScMatrixRef& pMatSrc, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
+    short CompareCell( sal_uInt16 nSort,
+        ScRefCellValue& rCell1, ScRefCellValue& rCell2 ) const;
+    short CompareMatrixCell( const ScMatrixRef& pMatSrc, sal_uInt16 nSort, SCCOL nCell1Col, SCROW nCell1Row,
+        SCCOL nCell2Col, SCROW nCell2Row ) const;
+    // Advance sort end
+
     double Compare( ScQueryOp eOp );
     /** @param pOptions
             NULL means case sensitivity document option is to be used!
@@ -691,6 +711,7 @@ private:
     void ScVLookup();
     void ScXLookup();
     void ScFilter();
+    void ScSort();
     void ScSubTotal();
 
     // If upon call rMissingField==true then the database field parameter may be

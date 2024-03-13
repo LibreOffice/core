@@ -27,9 +27,14 @@
 #include <editeng/colritem.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include "scdllapi.h"
+#include "celltextattr.hxx"
+#include "cellvalue.hxx"
+#include "patattr.hxx"
 
 struct ScSubTotalParam;
 struct ScQueryParam;
+class SdrObject;
+class ScPostIt;
 
 enum class ScColorSortMode {
     None,
@@ -115,6 +120,7 @@ struct SC_DLLPUBLIC ScSortParam
     SCROW       nRow1;
     SCCOL       nCol2;
     SCROW       nRow2;
+    SCTAB       nSourceTab;
     ScDataAreaExtras aDataAreaExtras;
     sal_uInt16  nUserIndex;
     bool        bHasHeader;
@@ -146,6 +152,176 @@ struct SC_DLLPUBLIC ScSortParam
     void            MoveToDest();
 
     sal_uInt16 GetSortKeyCount() const { return maKeyState.size(); }
+};
+
+struct ScSortInfo final
+{
+    ScRefCellValue maCell;
+    SCCOLROW       nOrg;
+};
+
+class ScSortInfoArray
+{
+public:
+
+    struct Cell
+    {
+        ScRefCellValue maCell;
+        const sc::CellTextAttr* mpAttr;
+        const ScPostIt* mpNote;
+        std::vector<SdrObject*> maDrawObjects;
+        CellAttributeHolder maPattern;
+
+        Cell() : mpAttr(nullptr), mpNote(nullptr),  maPattern() {}
+    };
+
+    struct Row
+    {
+        std::vector<Cell> maCells;
+
+        bool mbHidden:1;
+        bool mbFiltered:1;
+
+        explicit Row( size_t nColSize ) : maCells(nColSize, Cell()), mbHidden(false), mbFiltered(false) {}
+    };
+
+    typedef std::vector<Row> RowsType;
+
+private:
+    std::unique_ptr<RowsType> mpRows; /// row-wise data table for sort by row operation.
+
+    std::vector<std::unique_ptr<ScSortInfo[]>> mvppInfo;
+    SCCOLROW        nStart;
+    SCCOLROW        mnLastIndex; /// index of last non-empty cell position.
+
+    std::vector<SCCOLROW> maOrderIndices;
+    bool mbKeepQuery;
+    bool mbUpdateRefs;
+
+public:
+    ScSortInfoArray(const ScSortInfoArray&) = delete;
+    const ScSortInfoArray& operator=(const ScSortInfoArray&) = delete;
+
+    ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
+        mvppInfo(nSorts),
+        nStart( nInd1 ),
+        mnLastIndex(nInd2),
+        mbKeepQuery(false),
+        mbUpdateRefs(false)
+    {
+        SCSIZE nCount( nInd2 - nInd1 + 1 );
+        if (nSorts)
+        {
+            for ( sal_uInt16 nSort = 0; nSort < nSorts; nSort++ )
+            {
+                mvppInfo[nSort].reset(new ScSortInfo[nCount]);
+            }
+        }
+
+        for (size_t i = 0; i < nCount; ++i)
+            maOrderIndices.push_back(i+nStart);
+    }
+
+    void SetKeepQuery( bool b ) { mbKeepQuery = b; }
+
+    bool IsKeepQuery() const { return mbKeepQuery; }
+
+    void SetUpdateRefs( bool b ) { mbUpdateRefs = b; }
+
+    bool IsUpdateRefs() const { return mbUpdateRefs; }
+
+    /**
+     * Call this only during normal sorting, not from reordering.
+     */
+    std::unique_ptr<ScSortInfo[]> const & GetFirstArray() const
+    {
+        return mvppInfo[0];
+    }
+
+    /**
+     * Call this only during normal sorting, not from reordering.
+     */
+    ScSortInfo & Get( sal_uInt16 nSort, SCCOLROW nInd )
+    {
+        return mvppInfo[nSort][ nInd - nStart ];
+    }
+
+    /**
+     * Call this only during normal sorting, not from reordering.
+     */
+    void Swap( SCCOLROW nInd1, SCCOLROW nInd2 )
+    {
+        if (nInd1 == nInd2) // avoid self-move-assign
+            return;
+        SCSIZE n1 = static_cast<SCSIZE>(nInd1 - nStart);
+        SCSIZE n2 = static_cast<SCSIZE>(nInd2 - nStart);
+        for ( sal_uInt16 nSort = 0; nSort < static_cast<sal_uInt16>(mvppInfo.size()); nSort++ )
+        {
+            auto & ppInfo = mvppInfo[nSort];
+            std::swap(ppInfo[n1], ppInfo[n2]);
+        }
+
+        std::swap(maOrderIndices[n1], maOrderIndices[n2]);
+
+        if (mpRows)
+        {
+            // Swap rows in data table.
+            RowsType& rRows = *mpRows;
+            std::swap(rRows[n1], rRows[n2]);
+        }
+    }
+
+    void SetOrderIndices( std::vector<SCCOLROW>&& rIndices )
+    {
+        maOrderIndices = std::move(rIndices);
+    }
+
+    /**
+     * @param rIndices indices are actual row positions on the sheet, not an
+     *                 offset from the top row.
+     */
+    void ReorderByRow( const std::vector<SCCOLROW>& rIndices )
+    {
+        if (!mpRows)
+            return;
+
+        RowsType& rRows = *mpRows;
+
+        std::vector<SCCOLROW> aOrderIndices2;
+        aOrderIndices2.reserve(rIndices.size());
+
+        RowsType aRows2;
+        aRows2.reserve(rRows.size());
+
+        for (const auto& rIndex : rIndices)
+        {
+            size_t nPos = rIndex - nStart; // switch to an offset to top row.
+            aRows2.push_back(rRows[nPos]);
+            aOrderIndices2.push_back(maOrderIndices[nPos]);
+        }
+
+        rRows.swap(aRows2);
+        maOrderIndices.swap(aOrderIndices2);
+    }
+
+    sal_uInt16      GetUsedSorts() const { return mvppInfo.size(); }
+
+    SCCOLROW    GetStart() const { return nStart; }
+    SCCOLROW GetLast() const { return mnLastIndex; }
+
+    const std::vector<SCCOLROW>& GetOrderIndices() const { return maOrderIndices; }
+
+    RowsType& InitDataRows( size_t nRowSize, size_t nColSize )
+    {
+        mpRows.reset(new RowsType);
+        mpRows->resize(nRowSize, Row(nColSize));
+        return *mpRows;
+    }
+
+    RowsType* GetDataRows()
+    {
+        return mpRows.get();
+    }
 };
 
 namespace sc {

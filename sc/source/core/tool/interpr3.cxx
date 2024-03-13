@@ -26,6 +26,8 @@
 #include <dociter.hxx>
 #include <matrixoperators.hxx>
 #include <scmatrix.hxx>
+#include <columniterator.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include <cassert>
 #include <cmath>
@@ -4138,6 +4140,367 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
     // error if there was one.
     while (nParam-- > 0)
         PopError();
+}
+
+void ScInterpreter::DecoladeRow( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2 )
+{
+    SCROW nRow;
+    int nMax = nRow2 - nRow1;
+    for (SCROW i = nRow1; (i + 4) <= nRow2; i += 4)
+    {
+        nRow = comphelper::rng::uniform_int_distribution(0, nMax - 1);
+        pArray->Swap(i, nRow1 + nRow);
+    }
+}
+
+std::unique_ptr<ScSortInfoArray> ScInterpreter::CreateFastSortInfoArray(
+    const ScSortParam& rSortParam, bool bMatrix, SCCOLROW nInd1, SCCOLROW nInd2 )
+{
+    sal_uInt16 nUsedSorts = 1;
+    while (nUsedSorts < rSortParam.GetSortKeyCount() && rSortParam.maKeyState[nUsedSorts].bDoSort)
+        nUsedSorts++;
+    std::unique_ptr<ScSortInfoArray> pArray(new ScSortInfoArray(nUsedSorts, nInd1, nInd2));
+
+    if (rSortParam.bByRow)
+    {
+        for (sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++)
+        {
+            if (!bMatrix)
+            {
+                SCCOL nCol = static_cast<SCCOL>(rSortParam.maKeyState[nSort].nField);
+                std::optional<sc::ColumnIterator> pIter = mrDoc.GetColumnIterator(rSortParam.nSourceTab, nCol, nInd1, nInd2);
+                assert(pIter->hasCell());
+
+                for (SCROW nRow = nInd1; nRow <= nInd2; nRow++, pIter->next())
+                {
+                    ScSortInfo& rInfo = pArray->Get(nSort, nRow);
+                    rInfo.maCell = pIter->getCell();
+                    rInfo.nOrg = nRow;
+                }
+            }
+            else
+            {
+                for (SCROW nRow = nInd1; nRow <= nInd2; nRow++)
+                {
+                    ScSortInfo& rInfo = pArray->Get(nSort, nRow);
+                    rInfo.nOrg = nRow;
+                }
+            }
+        }
+    }
+    else
+    {
+        for (sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++)
+        {
+            if (!bMatrix)
+            {
+                SCROW nRow = rSortParam.maKeyState[nSort].nField;
+                for (SCCOL nCol = static_cast<SCCOL>(nInd1);
+                    nCol <= static_cast<SCCOL>(nInd2); nCol++)
+                {
+                    ScSortInfo& rInfo = pArray->Get(nSort, nCol);
+                    rInfo.maCell = mrDoc.GetRefCellValue(ScAddress(nCol, nRow, rSortParam.nSourceTab));
+                    rInfo.nOrg = nCol;
+                }
+            }
+            else
+            {
+                for (SCCOL nCol = static_cast<SCCOL>(nInd1);
+                    nCol <= static_cast<SCCOL>(nInd2); nCol++)
+                {
+                    ScSortInfo& rInfo = pArray->Get(nSort, nCol);
+                    rInfo.nOrg = nCol;
+                }
+            }
+        }
+    }
+    return pArray;
+}
+
+std::vector<SCCOLROW> ScInterpreter::GetSortOrder( const ScSortParam& rSortParam, const ScMatrixRef& pMatSrc )
+{
+    std::vector<SCCOLROW> aOrderIndices;
+    aSortParam = rSortParam;
+    if (rSortParam.bByRow)
+    {
+        const SCROW nLastRow = rSortParam.nRow2;
+        const SCROW nRow1 = (rSortParam.bHasHeader ? rSortParam.nRow1 + 1 : rSortParam.nRow1);
+        if (nRow1 < nLastRow)
+        {
+            std::unique_ptr<ScSortInfoArray> pArray(CreateFastSortInfoArray(
+                aSortParam, (pMatSrc != nullptr), nRow1, nLastRow));
+
+            if (nLastRow - nRow1 > 255)
+                DecoladeRow(pArray.get(), nRow1, nLastRow);
+
+            QuickSort(pArray.get(), pMatSrc, nRow1, nLastRow);
+            aOrderIndices = pArray->GetOrderIndices();
+        }
+    }
+    else
+    {
+        const SCCOL nLastCol = rSortParam.nCol2;
+        const SCCOL nCol1 = (rSortParam.bHasHeader ? rSortParam.nCol1 + 1 : rSortParam.nCol1);
+        if (nCol1 < nLastCol)
+        {
+            std::unique_ptr<ScSortInfoArray> pArray(CreateFastSortInfoArray(
+                aSortParam, (pMatSrc != nullptr), nCol1, nLastCol));
+
+            QuickSort(pArray.get(), pMatSrc, nCol1, nLastCol);
+            aOrderIndices = pArray->GetOrderIndices();
+        }
+    }
+    return aOrderIndices;
+}
+
+void ScInterpreter::QuickSort( ScSortInfoArray* pArray, const ScMatrixRef& pMatSrc, SCCOLROW nLo, SCCOLROW nHi )
+{
+    if ((nHi - nLo) == 1)
+    {
+        if (Compare(pArray, pMatSrc, nLo, nHi) > 0)
+            pArray->Swap( nLo, nHi );
+    }
+    else
+    {
+        SCCOLROW ni = nLo;
+        SCCOLROW nj = nHi;
+        do
+        {
+            while ((ni <= nHi) && (Compare(pArray, pMatSrc, ni, nLo)) < 0)
+                ni++;
+            while ((nj >= nLo) && (Compare(pArray, pMatSrc, nLo, nj)) < 0)
+                nj--;
+            if (ni <= nj)
+            {
+                if (ni != nj)
+                    pArray->Swap( ni, nj );
+                ni++;
+                nj--;
+            }
+        } while (ni < nj);
+        if ((nj - nLo) < (nHi - ni))
+        {
+            if (nLo < nj)
+                QuickSort(pArray, pMatSrc, nLo, nj);
+            if (ni < nHi)
+                QuickSort(pArray, pMatSrc, ni, nHi);
+        }
+        else
+        {
+            if (ni < nHi)
+                QuickSort(pArray, pMatSrc, ni, nHi);
+            if (nLo < nj)
+                QuickSort(pArray, pMatSrc, nLo, nj);
+        }
+    }
+}
+
+short ScInterpreter::Compare( ScSortInfoArray* pArray, const ScMatrixRef& pMatSrc, SCCOLROW nIndex1, SCCOLROW nIndex2 ) const
+{
+    short nRes;
+    sal_uInt16 nSort = 0;
+    do
+    {
+        ScSortInfo& rInfo1 = pArray->Get( nSort, nIndex1 );
+        ScSortInfo& rInfo2 = pArray->Get( nSort, nIndex2 );
+        if (!pMatSrc)
+        {
+            if (aSortParam.bByRow)
+                nRes = CompareCell( nSort, rInfo1.maCell, rInfo2.maCell );
+            else
+                nRes = CompareCell( nSort, rInfo1.maCell, rInfo2.maCell );
+        }
+        else
+        {
+            if (aSortParam.bByRow)
+                nRes = CompareMatrixCell( pMatSrc, nSort,
+                    static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField), rInfo1.nOrg,
+                    static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField), rInfo2.nOrg );
+            else
+                nRes = CompareMatrixCell( pMatSrc, nSort,
+                    static_cast<SCCOL>(rInfo1.nOrg), aSortParam.maKeyState[nSort].nField,
+                    static_cast<SCCOL>(rInfo2.nOrg), aSortParam.maKeyState[nSort].nField );
+        }
+    } while ( nRes == 0 && ++nSort < pArray->GetUsedSorts() );
+    if( nRes == 0 )
+    {
+        ScSortInfo& rInfo1 = pArray->Get( 0, nIndex1 );
+        ScSortInfo& rInfo2 = pArray->Get( 0, nIndex2 );
+        if( rInfo1.nOrg < rInfo2.nOrg )
+            nRes = -1;
+        else if( rInfo1.nOrg > rInfo2.nOrg )
+            nRes = 1;
+    }
+    return nRes;
+}
+
+short ScInterpreter::CompareCell( sal_uInt16 nSort, ScRefCellValue& rCell1, ScRefCellValue& rCell2 ) const
+{
+    short nRes = 0;
+
+    CellType eType1 = rCell1.getType(), eType2 = rCell2.getType();
+
+    if (!rCell1.isEmpty())
+    {
+        if (!rCell2.isEmpty())
+        {
+            bool bErr1 = false;
+            bool bStr1 = ( eType1 != CELLTYPE_VALUE );
+            if (eType1 == CELLTYPE_FORMULA)
+            {
+                if (rCell1.getFormula()->GetErrCode() != FormulaError::NONE)
+                {
+                    bErr1 = true;
+                    bStr1 = false;
+                }
+                else if (rCell1.getFormula()->IsValue())
+                {
+                    bStr1 = false;
+                }
+            }
+
+            bool bErr2 = false;
+            bool bStr2 = ( eType2 != CELLTYPE_VALUE );
+            if (eType2 == CELLTYPE_FORMULA)
+            {
+                if (rCell2.getFormula()->GetErrCode() != FormulaError::NONE)
+                {
+                    bErr2 = true;
+                    bStr2 = false;
+                }
+                else if (rCell2.getFormula()->IsValue())
+                {
+                    bStr2 = false;
+                }
+            }
+
+            if ( bStr1 && bStr2 )           // only compare strings as strings!
+            {
+                OUString aStr1 = rCell1.getSharedString()->getString();
+                OUString aStr2 = rCell2.getSharedString()->getString();
+
+                CollatorWrapper& rSortCollator = ScGlobal::GetCollator(aSortParam.bCaseSens);
+                nRes = static_cast<short>( rSortCollator.compareString( aStr1, aStr2 ) );
+            }
+            else if ( bStr1 )               // String <-> Number or Error
+            {
+                if (bErr2)
+                    nRes = -1;              // String in front of Error
+                else
+                    nRes = 1;               // Number in front of String
+            }
+            else if ( bStr2 )               // Number or Error <-> String
+            {
+                if (bErr1)
+                    nRes = 1;               // String in front of Error
+                else
+                    nRes = -1;              // Number in front of String
+            }
+            else if (bErr1 && bErr2)
+            {
+                // nothing, two Errors are equal
+            }
+            else if (bErr1)                 // Error <-> Number
+            {
+                nRes = 1;                   // Number in front of Error
+            }
+            else if (bErr2)                 // Number <-> Error
+            {
+                nRes = -1;                  // Number in front of Error
+            }
+            else                            // Mixed numbers
+            {
+                double nVal1 = rCell1.getValue();
+                double nVal2 = rCell2.getValue();
+                if (nVal1 < nVal2)
+                    nRes = -1;
+                else if (nVal1 > nVal2)
+                    nRes = 1;
+            }
+            if ( !aSortParam.maKeyState[nSort].bAscending )
+                nRes = -nRes;
+        }
+        else
+            nRes = -1;
+    }
+    else
+    {
+        if (!rCell2.isEmpty())
+            nRes = 1;
+        else
+            nRes = 0;                   // both empty
+    }
+    return nRes;
+}
+
+short ScInterpreter::CompareMatrixCell( const ScMatrixRef& pMatSrc, sal_uInt16 nSort, SCCOL nCell1Col, SCROW nCell1Row,
+    SCCOL nCell2Col, SCROW nCell2Row ) const
+{
+    short nRes = 0;
+
+    // 1st value
+    bool bCell1Empty = false;
+    bool bCell1Value = false;
+    if (pMatSrc->IsEmpty(nCell1Col, nCell1Row))
+        bCell1Empty = true;
+    else if (pMatSrc->IsStringOrEmpty(nCell1Col, nCell1Row))
+        bCell1Value = false;
+    else
+        bCell1Value = true;
+
+    // 2nd value
+    bool bCell2Empty = false;
+    bool bCell2Value = false;
+    if (pMatSrc->IsEmpty(nCell2Col, nCell2Row))
+        bCell2Empty = true;
+    else if (pMatSrc->IsStringOrEmpty(nCell2Col, nCell2Row))
+        bCell2Value = false;
+    else
+        bCell2Value = true;
+
+    if (!bCell1Empty)
+    {
+        if (!bCell2Empty)
+        {
+            if ( !bCell1Value && !bCell2Value )           // only compare strings as strings!
+            {
+                OUString aStr1 = pMatSrc->GetString(nCell1Col, nCell1Row).getString();
+                OUString aStr2 = pMatSrc->GetString(nCell2Col, nCell2Row).getString();
+
+                CollatorWrapper& rSortCollator = ScGlobal::GetCollator(aSortParam.bCaseSens);
+                nRes = static_cast<short>( rSortCollator.compareString( aStr1, aStr2 ) );
+            }
+            else if ( !bCell1Value )        // String <-> Number or Error
+            {
+                nRes = 1;                   // Number in front of String
+            }
+            else if ( !bCell2Value )        // Number or Error <-> String
+            {
+                nRes = -1;                  // Number in front of String
+            }
+            else                            // Mixed numbers
+            {
+                double nVal1 = pMatSrc->GetDouble(nCell1Col, nCell1Row);
+                double nVal2 = pMatSrc->GetDouble(nCell2Col, nCell2Row);
+                if (nVal1 < nVal2)
+                    nRes = -1;
+                else if (nVal1 > nVal2)
+                    nRes = 1;
+            }
+            if ( !aSortParam.maKeyState[nSort].bAscending )
+                nRes = -nRes;
+        }
+        else
+            nRes = -1;
+    }
+    else
+    {
+        if (!bCell2Empty)
+            nRes = 1;
+        else
+            nRes = 0;                   // both empty
+    }
+    return nRes;
 }
 
 void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<tools::Long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray )

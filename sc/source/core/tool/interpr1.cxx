@@ -61,7 +61,6 @@
 #include <externalrefmgr.hxx>
 #include <doubleref.hxx>
 #include <queryparam.hxx>
-#include <queryentry.hxx>
 #include <queryiter.hxx>
 #include <tokenarray.hxx>
 #include <compare.hxx>
@@ -8295,6 +8294,208 @@ void ScInterpreter::ScFilter()
     {
         PushError(FormulaError::IllegalParameter);
         return;
+    }
+
+    if (pResMat)
+        PushMatrix(pResMat);
+    else
+        PushError(FormulaError::NestedArray);
+}
+
+void ScInterpreter::ScSort()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 1, 4))
+        return;
+
+    // Create sort data
+    ScSortParam aSortData;
+
+    // 4th argument optional
+    aSortData.bByRow = true; // default: By_Col = false --> bByRow = true
+    if (nParamCount == 4)
+        aSortData.bByRow = !GetBool();
+
+    // 3rd argument optional
+    std::vector<double> aSortOrderValues{ 1.0 }; // default: 1 = asc, -1 = desc
+    if (nParamCount >= 3)
+    {
+        bool bMissing = IsMissing();
+        ScMatrixRef pSortOrder = GetMatrix();
+        if (!bMissing)
+        {
+            aSortOrderValues.clear();
+            pSortOrder->GetDoubleArray(aSortOrderValues);
+            for (const double& sortOrder : aSortOrderValues)
+            {
+                if (sortOrder != 1.0 && sortOrder != -1.0)
+                {
+                    PushIllegalParameter();
+                    return;
+                }
+            }
+        }
+    }
+
+    // 2nd argument optional
+    std::vector<double> aSortIndexValues{ 0.0 }; // default: first column or row
+    if (nParamCount >= 2)
+    {
+        bool bMissing = IsMissing();
+        ScMatrixRef pSortIndex = GetMatrix();
+        if (!bMissing)
+        {
+            aSortIndexValues.clear();
+            pSortIndex->GetDoubleArray(aSortIndexValues);
+            for (double& sortIndex : aSortIndexValues)
+            {
+                if (sortIndex < 1)
+                {
+                    PushIllegalParameter();
+                    return;
+                }
+                else
+                    sortIndex--;
+            }
+        }
+    }
+
+    if (aSortIndexValues.size() != aSortOrderValues.size() && aSortOrderValues.size() > 1)
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    // 1st argument is vector to be sorted
+    SCSIZE nsC = 0, nsR = 0;
+    ScMatrixRef pMatSrc = nullptr;
+    switch ( GetStackType() )
+    {
+        case svSingleRef:
+            PopSingleRef(aSortData.nCol1, aSortData.nRow1, aSortData.nSourceTab);
+            aSortData.nCol2   = aSortData.nCol1;
+            aSortData.nRow2   = aSortData.nRow1;
+            nsC = aSortData.nCol2 - aSortData.nCol1 + 1;
+            nsR = aSortData.nRow2 - aSortData.nRow1 + 1;
+        break;
+        case svDoubleRef:
+        {
+            SCTAB nTab2 = 0;
+            PopDoubleRef(aSortData.nCol1, aSortData.nRow1, aSortData.nSourceTab, aSortData.nCol2, aSortData.nRow2, nTab2);
+            if (aSortData.nSourceTab != nTab2)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            nsC = aSortData.nCol2 - aSortData.nCol1 + 1;
+            nsR = aSortData.nRow2 - aSortData.nRow1 + 1;
+        }
+        break;
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            pMatSrc = GetMatrix();
+            if (!pMatSrc)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            pMatSrc->GetDimensions(nsC, nsR);
+            aSortData.nCol2 = nsC - 1; // aSortData.nCol1 = 0
+            aSortData.nRow2 = nsR - 1; // aSortData.nRow1 = 0
+        }
+        break;
+
+        default:
+            PushIllegalParameter();
+            return;
+    }
+
+    aSortData.maKeyState.resize(aSortIndexValues.size());
+    for (size_t i = 0; i < aSortIndexValues.size(); i++)
+    {
+        SCSIZE fIndex = static_cast<SCSIZE>(double_to_int32(aSortIndexValues[i]));
+        if ((aSortData.bByRow && fIndex + 1 > nsC) || (!aSortData.bByRow && fIndex + 1 > nsR))
+        {
+            PushIllegalParameter();
+            return;
+        }
+
+        aSortData.maKeyState[i].bDoSort = true;
+        aSortData.maKeyState[i].nField = (aSortData.bByRow ? aSortData.nCol1 : aSortData.nRow1) + fIndex;
+
+        if (aSortIndexValues.size() == aSortOrderValues.size())
+            aSortData.maKeyState[i].bAscending = (aSortOrderValues[i] == 1.0);
+        else
+            aSortData.maKeyState[i].bAscending = (aSortOrderValues[0] == 1.0);
+    }
+
+    // sorting...
+    std::vector<SCCOLROW> aOrderIndices = GetSortOrder(aSortData, pMatSrc);
+
+    SCCOLROW nStartPos = (!aSortData.bByRow ? aSortData.nCol1 : aSortData.nRow1);
+    size_t nCount = aOrderIndices.size();
+    std::vector<SCCOLROW> aPosTable(nCount);
+
+    for (size_t i = 0; i < nCount; ++i)
+        aPosTable[aOrderIndices[i] - nStartPos] = i;
+
+    ScMatrixRef pResMat = nullptr;
+    if (!aOrderIndices.empty())
+    {
+        pResMat = GetNewMat(nsC, nsR, /*bEmpty*/true);
+        if (!pMatSrc)
+        {
+            ScCellIterator aCellIter(mrDoc, ScRange(aSortData.nCol1, aSortData.nRow1, aSortData.nSourceTab,
+                aSortData.nCol2, aSortData.nRow2, aSortData.nSourceTab));
+            for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
+            {
+                SCSIZE nThisCol = static_cast<SCSIZE>(aCellIter.GetPos().Col() - aSortData.nCol1);
+                SCSIZE nThisRow = static_cast<SCSIZE>(aCellIter.GetPos().Row() - aSortData.nRow1);
+
+                ScRefCellValue aCell = aCellIter.getRefCellValue();
+                if (aCell.hasNumeric())
+                {
+                    if (aSortData.bByRow)
+                        pResMat->PutDouble(GetCellValue(aCellIter.GetPos(), aCell), nThisCol, aPosTable[nThisRow]);
+                    else
+                        pResMat->PutDouble(GetCellValue(aCellIter.GetPos(), aCell), aPosTable[nThisCol], nThisRow);
+                }
+                else
+                {
+                    svl::SharedString aStr;
+                    GetCellString(aStr, aCell);
+                    if (aSortData.bByRow)
+                        pResMat->PutString(aStr, nThisCol, aPosTable[nThisRow]);
+                    else
+                        pResMat->PutString(aStr, aPosTable[nThisCol], nThisRow);
+                }
+            }
+        }
+        else
+        {
+            for (SCCOL ci = aSortData.nCol1; ci <= aSortData.nCol2; ci++)
+            {
+                for (SCROW rj = aSortData.nRow1; rj <= aSortData.nRow2; rj++)
+                {
+                    if (pMatSrc->IsStringOrEmpty(ci, rj))
+                    {
+                        if (aSortData.bByRow)
+                            pResMat->PutString(pMatSrc->GetString(ci, rj), ci, aPosTable[rj]);
+                        else
+                            pResMat->PutString(pMatSrc->GetString(ci, rj), aPosTable[ci], rj);
+                    }
+                    else
+                    {
+                        if (aSortData.bByRow)
+                            pResMat->PutDouble(pMatSrc->GetDouble(ci, rj), ci, aPosTable[rj]);
+                        else
+                            pResMat->PutDouble(pMatSrc->GetDouble(ci, rj), aPosTable[ci], rj);
+                    }
+                }
+            }
+        }
     }
 
     if (pResMat)

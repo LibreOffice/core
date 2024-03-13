@@ -4128,6 +4128,7 @@ StackVar ScInterpreter::Interpret()
                 case ocRandomNV         : ScRandom();                   break;
                 case ocRandbetweenNV    : ScRandbetween();              break;
                 case ocFilter           : ScFilter();                   break;
+                case ocSort             : ScSort();                     break;
                 case ocTrue             : ScTrue();                     break;
                 case ocFalse            : ScFalse();                    break;
                 case ocGetActDate       : ScGetActDate();               break;
