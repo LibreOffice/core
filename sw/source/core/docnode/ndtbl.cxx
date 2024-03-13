@@ -887,6 +887,34 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     return &rNdTable;
 }
 
+static void lcl_RemoveBreaksTable(SwTableNode & rNode, SwTableFormat *const pTableFormat)
+{
+    // delete old layout frames, new ones need to be created...
+    rNode.DelFrames(nullptr);
+
+    // remove PageBreaks/PageDesc/ColBreak
+    SwFrameFormat & rFormat(*rNode.GetTable().GetFrameFormat());
+
+    if (const SvxFormatBreakItem* pItem = rFormat.GetItemIfSet(RES_BREAK, false))
+    {
+        if (pTableFormat)
+        {
+            pTableFormat->SetFormatAttr(*pItem);
+        }
+        rFormat.ResetFormatAttr(RES_BREAK);
+    }
+
+    SwFormatPageDesc const*const pPageDescItem(rFormat.GetItemIfSet(RES_PAGEDESC, false));
+    if (pPageDescItem && pPageDescItem->GetPageDesc())
+    {
+        if (pTableFormat)
+        {
+            pTableFormat->SetFormatAttr(*pPageDescItem);
+        }
+        rFormat.ResetFormatAttr(RES_PAGEDESC);
+    }
+}
+
 static void lcl_RemoveBreaks(SwContentNode & rNode, SwTableFormat *const pTableFormat)
 {
     // delete old layout frames, new ones need to be created...
@@ -1391,7 +1419,13 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     for( nLines = 0; aNodeIndex <= rTableNodes.rbegin()->rbegin()->aEnd; ++aNodeIndex,++nLines )
     {
         SwNode& rNode = aNodeIndex.GetNode();
-        if( rNode.IsContentNode() )
+        assert(!rNode.IsSectionNode()); // not possible in writerfilter import
+        if (rNode.IsTableNode())
+        {
+            lcl_RemoveBreaksTable(static_cast<SwTableNode&>(rNode),
+                    (0 == nLines) ? pTableFormat : nullptr);
+        }
+        else if (rNode.IsContentNode())
         {
             lcl_RemoveBreaks(static_cast<SwContentNode&>(rNode),
                     (0 == nLines) ? pTableFormat : nullptr);
