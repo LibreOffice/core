@@ -13,7 +13,6 @@
 #include <test/util/xrefreshable.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

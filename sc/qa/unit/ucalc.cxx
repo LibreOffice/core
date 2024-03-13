@@ -38,7 +38,6 @@
 #include <editutil.hxx>
 #include <asciiopt.hxx>
 #include <impex.hxx>
-#include <docpool.hxx>
 #include <globalnames.hxx>
 #include <columnspanset.hxx>
 

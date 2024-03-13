@@ -9,15 +9,8 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-
 #include <test/htmltesttools.hxx>
 #include <test/unoapixml_test.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace css::uno;
 using namespace css::lang;

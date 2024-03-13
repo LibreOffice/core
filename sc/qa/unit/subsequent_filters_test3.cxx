@@ -19,7 +19,6 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
-#include <vcl/scheduler.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/lineitem.hxx>
 #include <dbdata.hxx>

@@ -12,7 +12,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XFunctionDescriptions.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

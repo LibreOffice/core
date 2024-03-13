@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
 #include <test/htmltesttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -14,7 +14,6 @@
 #include <test/sheet/xsheetannotations.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>

@@ -14,7 +14,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

@@ -12,7 +12,6 @@
 #include "helper/qahelper.hxx"
 
 #include <docsh.hxx>
-#include <docpool.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <stlpool.hxx>

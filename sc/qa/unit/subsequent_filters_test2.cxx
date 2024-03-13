@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 
-#include <memory>
-
 #include <osl/thread.h>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
@@ -28,7 +26,6 @@
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
 #include <cellvalue.hxx>
-#include <docpool.hxx>
 #include <dbdata.hxx>
 #include <validat.hxx>
 #include <formulacell.hxx>
@@ -47,10 +44,8 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/UnitConversion.hxx>
-#include <vcl/scheduler.hxx>
 #include "helper/qahelper.hxx"
 
 using namespace ::com::sun::star;

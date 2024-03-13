@@ -18,7 +18,6 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

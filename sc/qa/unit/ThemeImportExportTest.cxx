@@ -9,7 +9,6 @@
 
 #include "helper/qahelper.hxx"
 
-#include <docsh.hxx>
 #include <scitems.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>

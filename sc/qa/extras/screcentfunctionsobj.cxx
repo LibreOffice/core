@@ -10,7 +10,6 @@
 #include <test/unoapi_test.hxx>
 #include <test/sheet/xrecentfunctions.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

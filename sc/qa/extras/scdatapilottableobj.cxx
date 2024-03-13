@@ -13,7 +13,6 @@
 #include <test/sheet/xdatapilottable.hxx>
 #include <test/sheet/xdatapilottable2.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>

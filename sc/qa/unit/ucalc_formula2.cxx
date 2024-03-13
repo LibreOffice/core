@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 #include <clipparam.hxx>
 #include <scopetools.hxx>

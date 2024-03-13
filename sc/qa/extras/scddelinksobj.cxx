@@ -20,7 +20,6 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XDDELink.hpp>
 #include <com/sun/star/sheet/XDDELinks.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>

@@ -11,7 +11,6 @@
 #include <test/beans/xpropertyset.hxx>
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 

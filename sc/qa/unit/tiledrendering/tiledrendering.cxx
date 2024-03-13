@@ -7,17 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/cppunitasserthelper.hxx>
 #include <test/unoapixml_test.hxx>
 #include <test/helper/transferable.hxx>
-#include <cppunit/tools/StringHelper.h>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/datatransfer/clipboard/LokClipboard.hpp>
-#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -40,13 +35,9 @@
 #include <sc.hrc>
 #include <comphelper/string.hxx>
 #include <tools/json_writer.hxx>
-#include <docoptio.hxx>
 #include <postit.hxx>
 #include <test/lokcallback.hxx>
-#include <osl/file.hxx>
-#include <unotools/tempfile.hxx>
 
-#include <chrono>
 #include <cstddef>
 
 #include <attrib.hxx>

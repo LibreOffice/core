@@ -12,9 +12,7 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <vcl/filter/pdfdocument.hxx>
-#include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/scheduler.hxx>
-#include <vcl/svapp.hxx>
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
 

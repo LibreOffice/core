@@ -10,14 +10,10 @@
 #include "helper/qahelper.hxx"
 
 #include <docmodel/theme/Theme.hxx>
-#include <svx/svdpage.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 
-#include <docsh.hxx>
 #include <patattr.hxx>
-#include <attrib.hxx>
-#include <docpool.hxx>
 #include <scitems.hxx>
 #include <undomanager.hxx>
 #include <ThemeColorChanger.hxx>

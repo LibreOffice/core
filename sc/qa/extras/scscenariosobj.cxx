@@ -16,7 +16,6 @@
 #include <test/sheet/xscenarios.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XScenario.hpp>
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>

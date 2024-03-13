@@ -1,17 +1,12 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-
-#include <sfx2/sfxmodelfactory.hxx>
 
 #include "helper/qahelper.hxx"
 
 #include <docsh.hxx>
 #include <document.hxx>
-#include <clipparam.hxx>
 #include <markdata.hxx>
-#include <undoblk.hxx>
 #include <formulacell.hxx>
 #include <formulagroup.hxx>
 #include <scopetools.hxx>

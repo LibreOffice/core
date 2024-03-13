@@ -9,11 +9,7 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <test/unoapi_test.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <docsh.hxx>

@@ -11,7 +11,6 @@
 #include <test/sheet/xlabelrange.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

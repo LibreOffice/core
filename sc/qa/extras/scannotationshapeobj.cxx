@@ -18,7 +18,6 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>

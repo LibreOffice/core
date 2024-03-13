@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include "helper/qahelper.hxx"
-#include "helper/debughelper.hxx"
 
 #include <patattr.hxx>
 #include <scitems.hxx>
@@ -28,7 +27,6 @@
 #include <queryparam.hxx>
 #include <rtl/string.hxx>
 
-#include <test/xmltesttools.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 

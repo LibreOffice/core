@@ -10,14 +10,10 @@
 #include <sal/config.h>
 #include <helper/qahelper.hxx>
 #include <sal/log.hxx>
-#include <unotools/tempfile.hxx>
 #include <svx/svdpage.hxx>
-#include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 
 #include <conditio.hxx>
-#include <docsh.hxx>
 #include <document.hxx>
 #include <scitems.hxx>
 

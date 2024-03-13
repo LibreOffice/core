@@ -18,7 +18,6 @@
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/SubTotalColumn.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

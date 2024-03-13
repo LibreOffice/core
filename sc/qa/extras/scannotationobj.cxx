@@ -15,7 +15,6 @@
 #include <test/text/xsimpletext.hxx>
 #include <test/text/xtextrange.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

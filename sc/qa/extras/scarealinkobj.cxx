@@ -14,7 +14,6 @@
 #include <test/util/xrefreshable.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

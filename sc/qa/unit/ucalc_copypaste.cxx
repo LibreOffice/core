@@ -15,7 +15,6 @@
 #include <clipparam.hxx>
 #include <dbdata.hxx>
 #include <docfunc.hxx>
-#include <docpool.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/brushitem.hxx>
 #include <editutil.hxx>

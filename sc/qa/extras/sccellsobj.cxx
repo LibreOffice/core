@@ -12,7 +12,6 @@
 #include <test/container/xenumerationaccess.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

@@ -10,7 +10,6 @@
 #include <test/unoapi_test.hxx>
 #include <test/sheet/xconsolidationdescriptor.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XConsolidatable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

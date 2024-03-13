@@ -9,8 +9,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include "helper/qahelper.hxx"
 
 #include <comphelper/propertyvalue.hxx>
@@ -22,10 +20,8 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
-#include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
 
-#include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <fuconcustomshape.hxx>
 #include <fuconuno.hxx>

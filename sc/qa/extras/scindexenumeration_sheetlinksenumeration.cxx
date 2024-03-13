@@ -14,7 +14,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/SheetLinkMode.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>

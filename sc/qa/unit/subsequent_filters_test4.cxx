@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <osl/file.hxx>
 #include <config_fonts.h>
 
 #include <svx/svdpage.hxx>

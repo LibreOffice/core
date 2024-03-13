@@ -12,7 +12,6 @@
 
 #include <test/unoapi_test.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -24,12 +23,9 @@
 #include <editutil.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <osl/file.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
-#include <vcl/scheduler.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>

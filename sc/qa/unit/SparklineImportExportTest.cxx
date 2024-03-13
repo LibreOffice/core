@@ -8,12 +8,11 @@
  */
 
 #include <test/unoapixml_test.hxx>
-
-#include <com/sun/star/lang/XComponent.hpp>
+#include <document.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <docsh.hxx>
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
+#include <docuno.hxx>
 
 using namespace css;
 

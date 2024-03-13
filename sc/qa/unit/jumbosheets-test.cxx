@@ -12,10 +12,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/keycodes.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 
 #include <docsh.hxx>
@@ -23,7 +20,6 @@
 #include <scmod.hxx>
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <scdll.hxx>
 
 using namespace ::com::sun::star;

@@ -2,15 +2,10 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include "helper/qahelper.hxx"
 
 #include <docsh.hxx>
 #include <document.hxx>
-
-#include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

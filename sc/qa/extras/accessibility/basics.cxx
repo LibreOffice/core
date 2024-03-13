@@ -15,13 +15,11 @@
 
 #include <com/sun/star/awt/Key.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <vcl/scheduler.hxx>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
 #include <test/a11y/accessibletestbase.hxx>
-#include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
 
