@@ -56,6 +56,7 @@
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
+#include <sectfrm.hxx>
 #include <layact.hxx>
 #include <flyfrms.hxx>
 #include <htmltbl.hxx>
@@ -790,8 +791,11 @@ SwPageDesc *SwPageFrame::FindPageDesc()
     }
 
     SwContentFrame* pFirstContent = FindFirstBodyContent();
-    while (pFirstContent && pFirstContent->IsHiddenNow())
+    while (pFirstContent && pFirstContent->IsInSct()
+            && pFirstContent->FindSctFrame()->IsHiddenNow())
+    {
         pFirstContent = pFirstContent->GetNextContentFrame();
+    }
     SwFrame* pFlow = pFirstContent;
     if ( pFlow && pFlow->IsInTab() )
         pFlow = pFlow->FindTabFrame();
