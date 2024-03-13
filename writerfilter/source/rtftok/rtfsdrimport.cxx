@@ -402,6 +402,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
     bool bCustom(false);
     int const nType = initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
+    if (nType == ESCHER_ShpInst_PictureFrame && xPropertySet.is())
+    {
+        xPropertySet->setPropertyValue("IsEmptyPresentationObject", uno::Any(true));
+    }
 
     for (auto& rProperty : rShape.getProperties())
     {

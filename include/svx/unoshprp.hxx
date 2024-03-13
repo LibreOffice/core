@@ -197,7 +197,8 @@
 #define OWN_ATTR_TEXTCOLUMNS                    (OWN_ATTR_VALUE_START+106)
 #define OWN_ATTR_HYPERLINK                      (OWN_ATTR_VALUE_START+107)
 #define OWN_ATTR_MISC_OBJ_DECORATIVE            (OWN_ATTR_VALUE_START+108)
-// ATTENTION: current maximum is OWN_ATTR_VALUE_START+108 svx; when adding values, update
+#define OWN_ATTR_OBJ_ISEMPTYPRESOBJ             (OWN_ATTR_VALUE_START+109)
+// ATTENTION: current maximum is OWN_ATTR_VALUE_START+109 svx; when adding values, update
 // OWN_ATTR_VALUE_END in include/svl/solar.hrc accordingly
 
 // #FontWork#
@@ -477,6 +478,7 @@
     { UNO_NAME_GRAPHOBJ_SIGNATURELINE_CAN_ADD_COMMENT, OWN_ATTR_SIGNATURELINE_CAN_ADD_COMMENT, cppu::UnoType<bool>::get(), 0, 0}, \
     { UNO_NAME_GRAPHOBJ_SIGNATURELINE_UNSIGNED_IMAGE, OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0}, \
     { UNO_NAME_GRAPHOBJ_SIGNATURELINE_IS_SIGNED,     OWN_ATTR_SIGNATURELINE_IS_SIGNED   , cppu::UnoType<bool>::get(), 0, 0}, \
+    { UNO_NAME_OBJ_ISEMPTYPRESOBJ,            OWN_ATTR_OBJ_ISEMPTYPRESOBJ , cppu::UnoType<bool>::get(), 0, 0}, \
     { UNO_NAME_GRAPHOBJ_QRCODE,               OWN_ATTR_QRCODE            , cppu::UnoType<css::drawing::BarCode>::get(), 0, 0},
 
 #define SPECIAL_3DSCENEOBJECT_PROPERTIES_DEFAULTS \

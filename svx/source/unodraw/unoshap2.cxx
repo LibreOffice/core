@@ -1217,6 +1217,8 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 bOk = true;
             }
         }
+        if (bOk)
+            GetSdrObject()->SetEmptyPresObj(false);
         break;
     }
 
@@ -1232,6 +1234,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             if( HasSdrObject() )
             {
                 static_cast<SdrGrafObj*>(GetSdrObject())->SetGrafStreamURL( aStreamURL );
+                GetSdrObject()->SetEmptyPresObj(false);
             }
             bOk = true;
         }
@@ -1264,6 +1267,8 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 }
             }
         }
+        if (bOk)
+            GetSdrObject()->SetEmptyPresObj(false);
         break;
     }
 
@@ -1273,6 +1278,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         if( xGraphic.is() )
         {
             static_cast< SdrGrafObj*>( GetSdrObject() )->SetGraphic( xGraphic );
+            GetSdrObject()->SetEmptyPresObj(false);
             bOk = true;
         }
         break;
@@ -1372,6 +1378,17 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         if (xGraphic.is())
         {
             static_cast<SdrGrafObj*>(GetSdrObject())->setSignatureLineUnsignedGraphic(xGraphic);
+            bOk = true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_OBJ_ISEMPTYPRESOBJ:
+    {
+        bool bIsEmptyPresObj;
+        if (rValue >>= bIsEmptyPresObj)
+        {
+            GetSdrObject()->SetEmptyPresObj(bIsEmptyPresObj);
             bOk = true;
         }
         break;
@@ -1539,6 +1556,12 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     case OWN_ATTR_SIGNATURELINE_IS_SIGNED:
     {
         rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->isSignatureLineSigned();
+        break;
+    }
+
+    case OWN_ATTR_OBJ_ISEMPTYPRESOBJ:
+    {
+        rValue <<= GetSdrObject()->IsEmptyPresObj();
         break;
     }
 

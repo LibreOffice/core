@@ -44,7 +44,7 @@
 #define UNO_NAME_OBJ_DIMHIDE            "DimHide"
 #define UNO_NAME_OBJ_DIMPREV            "DimPrevious"
 #define UNO_NAME_OBJ_EFFECT             "Effect"
-#define UNO_NAME_OBJ_ISEMPTYPRESOBJ     "IsEmptyPresentationObject"
+#define UNO_NAME_OBJ_ISEMPTYPRESOBJ_SD     "IsEmptyPresentationObject"
 #define UNO_NAME_OBJ_ISPRESOBJ          "IsPresentationObject"
 #define UNO_NAME_OBJ_CLICKACTION        "OnClick"
 #define UNO_NAME_OBJ_PLAYFULL           "PlayFull"

@@ -112,7 +112,7 @@ using ::com::sun::star::drawing::XShape;
         { u"" UNO_NAME_OBJ_DIMHIDE ""_ustr, WID_DIMHIDE,       cppu::UnoType<bool>::get(),                            0, 0},\
         { u"" UNO_NAME_OBJ_DIMPREV ""_ustr, WID_DIMPREV,       cppu::UnoType<bool>::get(),                            0, 0},\
         { u"" UNO_NAME_OBJ_EFFECT ""_ustr, WID_EFFECT,         cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
-        { u"" UNO_NAME_OBJ_ISEMPTYPRESOBJ ""_ustr,WID_ISEMPTYPRESOBJ, cppu::UnoType<bool>::get(),                            0, 0},\
+        { u"" UNO_NAME_OBJ_ISEMPTYPRESOBJ_SD ""_ustr,WID_ISEMPTYPRESOBJ, cppu::UnoType<bool>::get(),                            0, 0},\
         { u"" UNO_NAME_OBJ_ISPRESOBJ ""_ustr, WID_ISPRESOBJ,   cppu::UnoType<bool>::get(),                            css::beans::PropertyAttribute::READONLY, 0},\
         { u"" UNO_NAME_OBJ_MASTERDEPENDENT ""_ustr,WID_MASTERDEPEND, cppu::UnoType<bool>::get(),                            0, 0},\
         { u"" UNO_NAME_OBJ_CLICKACTION ""_ustr, WID_CLICKACTION, cppu::UnoType<presentation::ClickAction>::get(),       0, 0},\
