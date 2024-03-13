@@ -420,6 +420,11 @@ bool Application::IsOnSystemEventLoop()
 
 void Scheduler::ProcessEventsToIdle()
 {
+#if OSL_DEBUG_LEVEL > 0
+    const ImplSVData* pSVData = ImplGetSVData();
+    if (pSVData->mpDefInst->IsMainThread())
+        assert(pSVData->maSchedCtx.mnIdlesLockCount == 0);
+#endif
     int nSanity = 1;
     while (ImplYield(false, true))
     {
@@ -432,7 +437,6 @@ void Scheduler::ProcessEventsToIdle()
     // If we yield from a non-main thread we just can guarantee that all idle
     // events were processed at some point, but our check can't prevent further
     // processing in the main thread, which may add new events, so skip it.
-    const ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpDefInst->IsMainThread() )
         return;
     for (int nTaskPriority = 0; nTaskPriority < PRIO_COUNT; ++nTaskPriority)
