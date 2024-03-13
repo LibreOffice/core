@@ -701,7 +701,7 @@ private:
 
     SVL_DLLPRIVATE bool ImpGetLogicalOutput( double fNumber,
                                              sal_uInt16 nIx,
-                                             OUStringBuffer& OutString );
+                                             OUStringBuffer& OutString ) const;
 
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
                                             sal_uInt16 nIx,

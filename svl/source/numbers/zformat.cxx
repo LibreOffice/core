@@ -4329,7 +4329,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
 
 bool SvNumberformat::ImpGetLogicalOutput(double fNumber,
                                          sal_uInt16 nIx,
-                                         OUStringBuffer& sStr)
+                                         OUStringBuffer& sStr) const
 {
     bool bRes = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
