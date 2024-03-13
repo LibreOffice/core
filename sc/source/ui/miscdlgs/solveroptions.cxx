@@ -69,7 +69,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
     , m_xBtnEdit(m_xBuilder->weld_button("edit"))
 {
     m_xLbSettings->set_size_request(m_xLbSettings->get_approximate_digit_width() * 32,
-                                    m_xLbSettings->get_height_rows(6));
+                                    m_xLbSettings->get_height_rows(12));
 
     m_xLbSettings->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
