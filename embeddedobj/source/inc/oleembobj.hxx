@@ -249,7 +249,8 @@ protected:
                             const css::uno::Reference< css::embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs,
-                            bool bSaveAs );
+                            bool bSaveAs,
+                            osl::ResettableMutexGuard& rGuard);
 #ifdef _WIN32
     /// @throws css::uno::Exception
     void StoreObjectToStream( css::uno::Reference< css::io::XOutputStream > const & xOutStream );

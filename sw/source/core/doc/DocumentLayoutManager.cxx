@@ -43,6 +43,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <osl/diagnose.h>
+#include <vcl/scheduler.hxx>
 
 using namespace ::com::sun::star;
 
@@ -191,6 +192,9 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
 /// Deletes the denoted format and its content.
 void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
 {
+    // Do not paint, until the destruction is complete. Paint may access the layout and nodes
+    // while it's in inconsistent state, and crash.
+    Scheduler::IdlesLockGuard g;
     // A chain of frames needs to be merged, if necessary,
     // so that the Frame's contents are adjusted accordingly before we destroy the Frames.
     const SwFormatChain &rChain = pFormat->GetChain();
