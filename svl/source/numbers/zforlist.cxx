@@ -375,7 +375,7 @@ void SvNumberFormatter::SetColorLink( const Link<sal_uInt16,Color*>& rColorTable
     aColorLink = rColorTableCallBack;
 }
 
-Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex)
+Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex) const
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     if( aColorLink.IsSet() )

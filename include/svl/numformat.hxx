@@ -62,7 +62,7 @@ public:
     /// Set CallBack to ColorTable
     void SetColorLink(const Link<sal_uInt16, Color*>& rColorTableCallBack);
     /// Do the CallBack to ColorTable
-    Color* GetUserDefColor(sal_uInt16 nIndex);
+    Color* GetUserDefColor(sal_uInt16 nIndex) const;
 
     /// Change language/country, also input and format scanner
     void ChangeIntl(LanguageType eLnge);
