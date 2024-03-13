@@ -32,7 +32,7 @@ private:
     OutlinerView&       mrOutlinerView;
     Point               maTextShapeTopLeft;
 
-    EDITENG_DLLPRIVATE Point                GetTextOffset() const;
+    SAL_DLLPRIVATE Point                GetTextOffset() const;
 
 public:
     explicit            SvxDrawOutlinerViewForwarder( OutlinerView& rOutl );

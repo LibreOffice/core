@@ -192,15 +192,15 @@ class EDITENG_DLLPUBLIC OutlinerView final
         Outside = 3     // Outside OutputArea
     };
 
-    EDITENG_DLLPRIVATE void         ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, bool bExpand );
+    SAL_DLLPRIVATE void         ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, bool bExpand );
 
-    EDITENG_DLLPRIVATE sal_Int32    ImpCheckMousePos( const Point& rPosPixel, MouseTarget& reTarget);
-    EDITENG_DLLPRIVATE void         ImpToggleExpand( Paragraph const * pParentPara );
-    EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( bool bIncludeHiddenChildren );
+    SAL_DLLPRIVATE sal_Int32    ImpCheckMousePos( const Point& rPosPixel, MouseTarget& reTarget);
+    SAL_DLLPRIVATE void         ImpToggleExpand( Paragraph const * pParentPara );
+    SAL_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( bool bIncludeHiddenChildren );
 
-    EDITENG_DLLPRIVATE sal_Int32    ImpInitPaste( sal_Int32& rStart );
-    EDITENG_DLLPRIVATE void         ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_Int32 nSize);
-    EDITENG_DLLPRIVATE sal_Int32    ImpCalcSelectedPages( bool bIncludeFirstSelected );
+    SAL_DLLPRIVATE sal_Int32    ImpInitPaste( sal_Int32& rStart );
+    SAL_DLLPRIVATE void         ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_Int32 nSize);
+    SAL_DLLPRIVATE sal_Int32    ImpCalcSelectedPages( bool bIncludeFirstSelected );
 
     Link<LinkParamNone*,void> aEndCutPasteLink;
 

@@ -159,44 +159,44 @@ public:
         const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial,
         SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
-    EDITENG_DLLPRIVATE ImpEditEngine& getImpl() const;
+    SAL_DLLPRIVATE ImpEditEngine& getImpl() const;
 
 private:
     std::unique_ptr<ImpEditEngine> mpImpEditEngine;
 
                                        EditEngine( const EditEngine& ) = delete;
                        EditEngine&     operator=( const EditEngine& ) = delete;
-    EDITENG_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, vcl::Window const * pFrameWin );
+    SAL_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, vcl::Window const * pFrameWin );
 
-    EDITENG_DLLPRIVATE void CheckIdleFormatter();
-    EDITENG_DLLPRIVATE bool IsIdleFormatterActive() const;
-    EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode const * pNode);
-    EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode const * pNode) const;
-    EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
+    SAL_DLLPRIVATE void CheckIdleFormatter();
+    SAL_DLLPRIVATE bool IsIdleFormatterActive() const;
+    SAL_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode const * pNode);
+    SAL_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode const * pNode) const;
+    SAL_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
 
-    EDITENG_DLLPRIVATE css::uno::Reference<css::datatransfer::XTransferable>
+    SAL_DLLPRIVATE css::uno::Reference<css::datatransfer::XTransferable>
             CreateTransferable(const EditSelection& rSelection);
 
-    EDITENG_DLLPRIVATE EditPaM EndOfWord(const EditPaM& rPaM);
+    SAL_DLLPRIVATE EditPaM EndOfWord(const EditPaM& rPaM);
 
-    EDITENG_DLLPRIVATE EditPaM GetPaM(const Point& aDocPos, bool bSmart = true);
+    SAL_DLLPRIVATE EditPaM GetPaM(const Point& aDocPos, bool bSmart = true);
 
-    EDITENG_DLLPRIVATE EditSelection SelectWord(
+    SAL_DLLPRIVATE EditSelection SelectWord(
         const EditSelection& rCurSelection,
         sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
 
-    EDITENG_DLLPRIVATE tools::Long GetXPos(ParaPortion const& rParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
+    SAL_DLLPRIVATE tools::Long GetXPos(ParaPortion const& rParaPortion, EditLine const& rLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
 
-    EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(ParaPortion const& rParaPortion, EditLine const& rLine) const;
+    SAL_DLLPRIVATE Range GetLineXPosStartEnd(ParaPortion const& rParaPortion, EditLine const& rLine) const;
 
-    EDITENG_DLLPRIVATE InternalEditStatus& GetInternalEditStatus();
+    SAL_DLLPRIVATE InternalEditStatus& GetInternalEditStatus();
 
-    EDITENG_DLLPRIVATE void HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos);
-    EDITENG_DLLPRIVATE void HandleEndPasteOrDrop(PasteOrDropInfos& rInfos);
-    EDITENG_DLLPRIVATE bool HasText() const;
-    EDITENG_DLLPRIVATE const EditSelectionEngine& GetSelectionEngine() const;
-    EDITENG_DLLPRIVATE void SetInSelectionMode(bool b);
-    EDITENG_DLLPRIVATE void ensureDocumentFormatted() const;
+    SAL_DLLPRIVATE void HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos);
+    SAL_DLLPRIVATE void HandleEndPasteOrDrop(PasteOrDropInfos& rInfos);
+    SAL_DLLPRIVATE bool HasText() const;
+    SAL_DLLPRIVATE const EditSelectionEngine& GetSelectionEngine() const;
+    SAL_DLLPRIVATE void SetInSelectionMode(bool b);
+    SAL_DLLPRIVATE void ensureDocumentFormatted() const;
 
 public:
     EditEngine(SfxItemPool* pItemPool);

@@ -63,7 +63,7 @@ private:
     bool        bAllRight   : 1; // Record wrong words in the dedicated
                                  // dictionary and do not start the dialog.
 
-    EDITENG_DLLPRIVATE bool     SpellNext();        // select next area
+    SAL_DLLPRIVATE bool     SpellNext();        // select next area
     bool    FindSpellError();   // Check for errors (over areas)
 
     SvxSpellWrapper(SvxSpellWrapper const &) = delete;
