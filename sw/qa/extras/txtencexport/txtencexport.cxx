@@ -14,10 +14,9 @@ namespace
 class TxtEncExportTest : public SwModelTestBase
 {
 public:
-    TxtEncExportTest(const OUString & rFilterOptions)
+    TxtEncExportTest()
         : SwModelTestBase("/sw/qa/extras/txtencexport/data/", "Text (encoded)")
     {
-        setFilterOptions(rFilterOptions);
     }
 
 protected:
@@ -37,15 +36,11 @@ protected:
     }
 };
 
-#define DECLARE_TXTENCEXPORT_TEST(TestName, filename, filterOptions, ClassName) \
-    class ClassName : public TxtEncExportTest {                                 \
-    public:                                                                     \
-        ClassName() : TxtEncExportTest(filterOptions) {}                        \
-    };                                                                          \
-    DECLARE_SW_EXPORT_TEST(TestName, filename, nullptr, ClassName)
-
-DECLARE_TXTENCEXPORT_TEST(testBulletsNotHidden, "bullets.odt", "UTF8,,,,", TxtEncExportNotHiddenTest)
+CPPUNIT_TEST_FIXTURE(TxtEncExportTest, testBulletsNotHidden)
 {
+    createSwDoc("bullets.odt");
+    setFilterOptions("UTF8,,,,");
+    save(mpFilter);
     OString aData = readExportedFile();
 
     OUString aString = OStringToOUString(
@@ -70,8 +65,11 @@ DECLARE_TXTENCEXPORT_TEST(testBulletsNotHidden, "bullets.odt", "UTF8,,,,", TxtEn
     CPPUNIT_ASSERT_EQUAL(aExpected, aData);
 }
 
-DECLARE_TXTENCEXPORT_TEST(testBulletsHidden, "bullets.odt", "UTF8,,,,,false", TxtEncExportHiddenTest)
+CPPUNIT_TEST_FIXTURE(TxtEncExportTest, testBulletsHidden)
 {
+    createSwDoc("bullets.odt");
+    setFilterOptions("UTF8,,,,,false");
+    save(mpFilter);
     OString aData = readExportedFile();
 
     OUString aString = OStringToOUString(
