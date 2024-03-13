@@ -85,7 +85,7 @@
   <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
    <style:text-properties/>
   </style:style>
-  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="Standard">
+  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="WithMargin">
    <style:paragraph-properties style:page-number="auto"/>
   </style:style>
   <style:style style:name="Sect1" style:family="section">
@@ -101,9 +101,17 @@
    <style:header-style/>
    <style:footer-style/>
   </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="10cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
  </office:automatic-styles>
  <office:master-styles>
   <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+  <style:master-page style:name="WithMargin" style:page-layout-name="pm2"/>
  </office:master-styles>
  <office:body>
   <office:text>
