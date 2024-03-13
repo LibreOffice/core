@@ -4195,4 +4195,18 @@ const TranslateId SC_OPCODE_FILTER_ARY[] =
     NC_("SC_OPCODE_FILTER", "The value to return if all values in the included array are empty (filter returns nothing).")
 };
 
+// -=*# Resource for function SORT #*=-
+const TranslateId SC_OPCODE_SORT_ARY[] =
+{
+    NC_("SC_OPCODE_SORT", "Sorts the contents of a range or array."),
+    NC_("SC_OPCODE_SORT", "Range"),
+    NC_("SC_OPCODE_SORT", "The range, or array to sort."),
+    NC_("SC_OPCODE_SORT", "Sort index"),
+    NC_("SC_OPCODE_SORT", "A number indicating the row or column to sort by."),
+    NC_("SC_OPCODE_SORT", "Sort order"),
+    NC_("SC_OPCODE_SORT", "A number indicating the desired sort order; 1 for ascending order (default), -1 for descending order."),
+    NC_("SC_OPCODE_SORT", "By col"),
+    NC_("SC_OPCODE_SORT", "A logical value indicating the desired sort direction; FALSE to sort by row (default), TRUE to sort by column.")
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

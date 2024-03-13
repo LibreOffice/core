@@ -26,7 +26,6 @@
 #include "colcontainer.hxx"
 #include "sortparam.hxx"
 #include "types.hxx"
-#include "cellvalue.hxx"
 #include <formula/types.hxx>
 #include "calcmacros.hxx"
 #include <formula/errorcodes.hxx>
