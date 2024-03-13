@@ -472,8 +472,7 @@ void SwAttrHandler::Pop( const SwTextAttr& rAttr )
 
 void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
 {
-    OSL_ENSURE( nAttr < RES_TXTATR_WITHEND_END,
-            "I cannot activate this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
+    assert(nAttr < RES_TXTATR_WITHEND_END);
 
     const sal_uInt16 nStackPos = StackPos[ nAttr ];
     const SwTextAttr* pTopAt = GetTop(nStackPos);
