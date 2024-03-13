@@ -567,6 +567,10 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     if( !pTextApi )
         return;
 
+    if (mpDoc->IsUndoEnabled())
+        mpDoc->BegUndo(SdResId(STR_ANNOTATION_REPLY));
+
+    CreateChangeUndo(xAnnotation);
     ::Outliner aOutliner( GetAnnotationPool(),OutlinerMode::TextObject );
 
     SdDrawDocument::SetCalcFieldValueHdl( &aOutliner );
@@ -623,6 +627,9 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
 
     // Tell our LOK clients about this (comment modification)
     LOKCommentNotifyAll(CommentNotificationType::Modify, xAnnotation);
+
+    if( mpDoc->IsUndoEnabled() )
+        mpDoc->EndUndo();
 
     UpdateTags(true);
     SelectAnnotation( xAnnotation, true );
