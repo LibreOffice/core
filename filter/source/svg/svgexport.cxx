@@ -1526,7 +1526,7 @@ void SVGFilter::implExportTextShapeIndex()
     for( sal_Int32 i = 0; i < nCount; ++i )
     {
         const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
-        if( mTextShapeIdListMap.find( xDrawPage ) != mTextShapeIdListMap.end() )
+        if( mTextShapeIdListMap.contains(xDrawPage) )
         {
             OUString sTextShapeIdList = mTextShapeIdListMap[xDrawPage].trim();
 
