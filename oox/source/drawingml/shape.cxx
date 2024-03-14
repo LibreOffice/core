@@ -1471,7 +1471,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 xSet->setPropertyValue( rPropName, Any( false ) );
 
         // For extruded shapes, MSO uses the line color if no extrusion color is specified. LO uses
-        // fill color in 'automatic' case. Thus we set extrusion color explicitely.
+        // fill color in 'automatic' case. Thus we set extrusion color explicitly.
         if (bHas3DEffect && !aExtrusionColor.isUsed())
         {
             const OUString& rFillColor2PropName = PropertyMap::getPropertyName(PROP_FillColor2);
