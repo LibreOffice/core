@@ -18,11 +18,16 @@
 
 #include <svgfecompositenode.hxx>
 #include <o3tl/string_view.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 
 namespace svgio::svgreader
 {
 SvgFeCompositeNode::SvgFeCompositeNode(SvgDocument& rDocument, SvgNode* pParent)
     : SvgFilterNode(SVGToken::FeComposite, rDocument, pParent)
+    , maOperator(Operator::Over)
 {
 }
 
@@ -53,6 +58,29 @@ void SvgFeCompositeNode::parseAttribute(SVGToken aSVGToken, const OUString& aCon
             maResult = aContent.trim();
             break;
         }
+        case SVGToken::Operator:
+        {
+            if (!aContent.isEmpty())
+            {
+                if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"over"))
+                {
+                    maOperator = Operator::Over;
+                }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"in"))
+                {
+                    maOperator = Operator::In;
+                }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"out"))
+                {
+                    maOperator = Operator::Out;
+                }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"xor"))
+                {
+                    maOperator = Operator::Xor;
+                }
+            }
+            break;
+        }
         default:
         {
             break;
@@ -63,17 +91,50 @@ void SvgFeCompositeNode::parseAttribute(SVGToken aSVGToken, const OUString& aCon
 void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                                const SvgFilterNode* pParent) const
 {
-    if (const drawinglayer::primitive2d::Primitive2DContainer* rSource2
+    basegfx::B2DPolyPolygon aPolyPolygon, aPolyPolygon2;
+
+    // Process maIn2 first
+    if (const drawinglayer::primitive2d::Primitive2DContainer* pSource2
         = pParent->findGraphicSource(maIn2))
     {
-        rTarget = *rSource2;
+        rTarget.append(*pSource2);
+        const basegfx::B2DRange aRange2(
+            pSource2->getB2DRange(drawinglayer::geometry::ViewInformation2D()));
+
+        aPolyPolygon2 = basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange2));
     }
 
-    if (const drawinglayer::primitive2d::Primitive2DContainer* rSource
+    if (const drawinglayer::primitive2d::Primitive2DContainer* pSource
         = pParent->findGraphicSource(maIn))
     {
-        rTarget.append(*rSource);
+        rTarget.append(*pSource);
+        const basegfx::B2DRange aRange(
+            pSource->getB2DRange(drawinglayer::geometry::ViewInformation2D()));
+
+        aPolyPolygon = basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange));
     }
+
+    basegfx::B2DPolyPolygon aResult;
+    if (maOperator == Operator::Over)
+    {
+        aResult = basegfx::utils::solvePolygonOperationOr(aPolyPolygon, aPolyPolygon2);
+    }
+    else if (maOperator == Operator::Out)
+    {
+        aResult = basegfx::utils::solvePolygonOperationDiff(aPolyPolygon, aPolyPolygon2);
+    }
+    else if (maOperator == Operator::In)
+    {
+        aResult = basegfx::utils::solvePolygonOperationAnd(aPolyPolygon, aPolyPolygon2);
+    }
+    else if (maOperator == Operator::Xor)
+    {
+        aResult = basegfx::utils::solvePolygonOperationXor(aPolyPolygon, aPolyPolygon2);
+    }
+
+    rTarget = drawinglayer::primitive2d::Primitive2DContainer{
+        new drawinglayer::primitive2d::MaskPrimitive2D(std::move(aResult), std::move(rTarget))
+    };
 
     pParent->addGraphicSourceToMapper(maResult, rTarget);
 }

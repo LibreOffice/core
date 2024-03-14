@@ -24,12 +24,21 @@
 
 namespace svgio::svgreader
 {
+enum class Operator
+{
+    Over,
+    In,
+    Out,
+    Xor,
+};
+
 class SvgFeCompositeNode : public SvgFilterNode
 {
 private:
     OUString maIn;
     OUString maIn2;
     OUString maResult;
+    Operator maOperator;
 
 public:
     SvgFeCompositeNode(SvgDocument& rDocument, SvgNode* pParent);

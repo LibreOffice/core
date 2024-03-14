@@ -95,6 +95,7 @@ namespace svgio::svgreader
             Filter,
             FloodColor,
             FloodOpacity,
+            Operator,
             Mask,
             ClipPathUnits,
             MaskUnits,

@@ -235,20 +235,20 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeComposite)
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]"_ostr, "color"_ostr, "#ff0000");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "height"_ostr, "100");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "width"_ostr, "100");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "minx"_ostr, "70");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "miny"_ostr, "70");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "maxx"_ostr, "170");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[1]/polypolygon"_ostr, "maxy"_ostr, "170");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]"_ostr, "color"_ostr, "#6ab150");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "height"_ostr, "100");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "width"_ostr, "100");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "minx"_ostr, "30");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "miny"_ostr, "30");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "maxx"_ostr, "130");
-    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor[2]/polypolygon"_ostr, "maxy"_ostr, "130");
+    assertXPath(pDocument, "/primitive2D/transform/mask"_ostr, 5);
+    // over operator
+    assertXPath(pDocument, "/primitive2D/transform/mask[1]/polypolygoncolor"_ostr, 3);
+    assertXPath(pDocument, "/primitive2D/transform/mask[1]/polypolygon/polygon/point"_ostr, 8);
+    // xor operator
+    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygoncolor"_ostr, 3);
+    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygon/polygon[1]/point"_ostr, 8);
+    assertXPath(pDocument, "/primitive2D/transform/mask[2]/polypolygon/polygon[2]/point"_ostr, 4);
+    // in operator
+    assertXPath(pDocument, "/primitive2D/transform/mask[3]/polypolygoncolor"_ostr, 3);
+    assertXPath(pDocument, "/primitive2D/transform/mask[3]/polypolygon/polygon/point"_ostr, 4);
+    // out operator
+    assertXPath(pDocument, "/primitive2D/transform/mask[4]/polypolygoncolor"_ostr, 3);
+    assertXPath(pDocument, "/primitive2D/transform/mask[4]/polypolygon/polygon/point"_ostr, 6);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
