@@ -2592,11 +2592,17 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
     if( bDelContent )
     {
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
-        pDoc->GetNodes().MakeTextNode( aInsIdx.GetNode(), pDoc->GetDfltTextFormatColl() );
+        SwTextNode *const pNewNode(pDoc->GetNodes().MakeTextNode(aInsIdx.GetNode(), pDoc->GetDfltTextFormatColl()));
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
 
         if( !pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+        {
+            {   // move cursors to new node which precedes aPam
+                SwPosition const pos(*pNewNode, 0);
+                ::PaMCorrAbs(aPam, pos);
+            }
             pEntry->pUndo = std::make_unique<SwUndoDelete>(aPam, SwDeleteFlags::Default, true);
+        }
     }
 
     pEntry->pBoxNumAttr = std::make_unique<SfxItemSetFixed<
@@ -2620,6 +2626,13 @@ void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex
         SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
         DEBUG_REDLINE( pDoc )
 
+        {   // move cursors to first node which was inserted
+            SwPaM pam(SwNodeIndex(*rBox.GetSttNd(), 1));
+            assert(pam.GetPoint()->GetNode().IsTextNode());
+            pam.SetMark();
+            pam.Move(fnMoveForward, GoInContent);
+            ::PaMCorrAbs(pam, *pam.GetPoint());
+        }
         if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
         {
             SwPosition aTmpPos( rIdx );

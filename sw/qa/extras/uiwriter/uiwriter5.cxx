@@ -2807,7 +2807,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156487)
     assertXPath(pXmlDoc, "/metafile/push/push/push/textarray/text", 1);
 }
 
-#ifndef DBG_UTIL
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf149498)
 {
     // load a table, and delete the first column with enabled change tracking:
@@ -2823,7 +2822,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf149498)
     // this would crash due to bookmark over cell boundary
     dispatchCommand(mxComponent, ".uno:Undo", {});
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf150673_RedlineTableColumnDeletionWithExport)
 {
