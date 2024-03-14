@@ -135,15 +135,20 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(SRCDIR)/external/skia/inc/ \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),skia)
+$(call gb_LinkTarget_use_static_libraries,$(1),skia)
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DSK_USER_CONFIG_HEADER="<$(BUILDDIR)/config_host/config_skia.h>" \
-	-DSKIA_DLL \
 )
+
 endef
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
-        skia \
-))
+
+define gb_ExternalProject__use_skia
+$(call gb_ExternalProject_use_static_libraries,$(1),\
+  skia \
+)
+
+endef
+
 endif
 
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))

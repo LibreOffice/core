@@ -61,7 +61,10 @@ $(eval $(call gb_Library_use_externals,vclplug_win,\
     boost_headers \
     epoxy \
     harfbuzz \
-    $(if $(filter SKIA,$(BUILD_TYPE)),skia) \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        skia \
+        libpng \
+    ) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
@@ -115,6 +118,9 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,vclplug_win,\
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        usp10 \
+    ) \
     advapi32 \
     d2d1 \
     dwmapi \
