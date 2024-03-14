@@ -1324,9 +1324,14 @@ auto CurlProcessor::ProcessRequest(
                 throw DAVException(DAVException::DAV_INVALID_ARG);
             }
             rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HTTPAUTH, oAuth->AuthMask);
-            assert(
-                rc
-                == CURLE_OK); // it shouldn't be possible to reduce auth to 0 via the authSystem masks
+            if (rc != CURLE_OK)
+            { // NEGOTIATE typically disabled on Linux, NTLM is optional too
+                assert(rc == CURLE_NOT_BUILT_IN);
+                SAL_INFO("ucb.ucp.webdav.curl", "no auth method available");
+                throw DAVException(
+                    DAVException::DAV_HTTP_NOAUTH,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            }
         }
 
         if (oAuthProxy && !rSession.m_isAuthenticatedProxy)
@@ -1352,9 +1357,14 @@ auto CurlProcessor::ProcessRequest(
                 throw DAVException(DAVException::DAV_INVALID_ARG);
             }
             rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_PROXYAUTH, oAuthProxy->AuthMask);
-            assert(
-                rc
-                == CURLE_OK); // it shouldn't be possible to reduce auth to 0 via the authSystem masks
+            if (rc != CURLE_OK)
+            { // NEGOTIATE typically disabled on Linux, NTLM is optional too
+                assert(rc == CURLE_NOT_BUILT_IN);
+                SAL_INFO("ucb.ucp.webdav.curl", "no auth method available");
+                throw DAVException(
+                    DAVException::DAV_HTTP_NOAUTH,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            }
         }
 
         ResponseHeaders headers(rSession.m_pCurl.get());
@@ -1504,20 +1514,42 @@ auto CurlProcessor::ProcessRequest(
                             OUString userName(roAuth ? roAuth->UserName : OUString());
                             OUString passWord(roAuth ? roAuth->PassWord : OUString());
                             long authAvail(0);
-                            auto const rc
+                            auto rc
                                 = curl_easy_getinfo(rSession.m_pCurl.get(),
                                                     statusCode != SC_PROXY_AUTHENTICATION_REQUIRED
                                                         ? CURLINFO_HTTPAUTH_AVAIL
                                                         : CURLINFO_PROXYAUTH_AVAIL,
                                                     &authAvail);
                             assert(rc == CURLE_OK);
-                            (void)rc;
                             if (statusCode == SC_FORBIDDEN)
                             { // SharePoint hack: try NTLM auth
                                 assert(authAvail == 0);
                                 // note: this must be a single value!
                                 // would need 2 iterations to try CURLAUTH_NTLM too
-                                authAvail = CURLAUTH_NEGOTIATE;
+                                rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HTTPAUTH,
+                                                      CURLAUTH_NEGOTIATE);
+                                if (rc == CURLE_OK)
+                                {
+                                    authAvail = CURLAUTH_NEGOTIATE;
+                                }
+                                else
+                                {
+                                    rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HTTPAUTH,
+                                                          CURLAUTH_NTLM);
+                                    if (rc == CURLE_OK)
+                                    {
+                                        authAvail = CURLAUTH_NTLM;
+                                    }
+                                    else
+                                    { // can't work
+                                        SAL_INFO("ucb.ucp.webdav.curl",
+                                                 "no SP fallback auth method available");
+                                        throw DAVException(
+                                            DAVException::DAV_HTTP_NOAUTH,
+                                            ConnectionEndPointString(rSession.m_URI.GetHost(),
+                                                                     rSession.m_URI.GetPort()));
+                                    }
+                                }
                             }
                             // only allow SystemCredentials once - the
                             // PasswordContainer may have stored it in the
