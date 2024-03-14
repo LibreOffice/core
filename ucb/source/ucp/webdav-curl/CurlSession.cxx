@@ -229,15 +229,6 @@ struct CurlOption
     }
 };
 
-// NOBODY will prevent logging the response body in ProcessRequest() exception
-// handler, so only use it if logging is disabled
-const CurlOption g_NoBody{ CURLOPT_NOBODY,
-                           sal_detail_log_report(SAL_DETAIL_LOG_LEVEL_INFO, "ucb.ucp.webdav.curl")
-                                   == SAL_DETAIL_LOG_ACTION_IGNORE
-                               ? 1L
-                               : 0L,
-                           nullptr };
-
 /// combined guard class to ensure things are released in correct order,
 /// particularly in ProcessRequest() error handling
 class Guard
@@ -1969,7 +1960,11 @@ auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> co
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
     ::std::vector<CurlOption> const options{
-        g_NoBody, { CURLOPT_CUSTOMREQUEST, "HEAD", "CURLOPT_CUSTOMREQUEST" }
+        // NOBODY will prevent logging the response body in ProcessRequest()
+        // exception, but omitting it here results in a long timeout until the
+        // server closes the connection, which is worse
+        { CURLOPT_NOBODY, 1L, nullptr },
+        { CURLOPT_CUSTOMREQUEST, "HEAD", "CURLOPT_CUSTOMREQUEST" }
     };
 
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
