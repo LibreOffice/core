@@ -734,7 +734,7 @@ void lcl_ApplyShapeRotationToLights(std::vector<basegfx::B3DVector>& rLightDirVe
                                     const double& fY, const double& fZ)
 {
     basegfx::B3DHomMatrix aTransform; // unit matrix
-    // rotate has the order first x, than y, last z. We need order z, y, x.
+    // rotate has the order first x, then y, last z. We need order z, y, x.
     aTransform.rotate(0.0, 0.0, -fZ);
     aTransform.rotate(0.0, -fY, 0.0);
     aTransform.rotate(fX, 0.0, 0.0);
