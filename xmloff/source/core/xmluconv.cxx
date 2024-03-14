@@ -54,7 +54,6 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::text;
 using namespace com::sun::star::style;
 using namespace ::com::sun::star::i18n;

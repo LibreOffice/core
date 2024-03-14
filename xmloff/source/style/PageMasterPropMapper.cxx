@@ -26,8 +26,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 
 XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
     XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory(), false/*bForExport*/)

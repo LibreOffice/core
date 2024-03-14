@@ -38,7 +38,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
 const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushHoriPos[] =

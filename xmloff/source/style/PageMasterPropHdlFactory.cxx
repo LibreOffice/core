@@ -39,7 +39,6 @@
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::drawing;
 
 SvXMLEnumMapEntry<sal_uInt16> const aXML_TextGridMode_ConstantMap[] =
 {

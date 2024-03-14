@@ -30,8 +30,6 @@
 
 #include <vector>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 using ::xmloff::token::GetXMLToken;
 
 namespace {

@@ -43,7 +43,6 @@
 #include "TransformerBase.hxx"
 #include <xmloff/xmlimp.hxx>
 
-using namespace ::osl;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

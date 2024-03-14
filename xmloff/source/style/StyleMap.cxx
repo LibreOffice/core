@@ -19,9 +19,6 @@
 
 #include <StyleMap.hxx>
 
-using namespace css::uno;
-using namespace css::lang;
-
 StyleMap::StyleMap() {}
 
 StyleMap::~StyleMap() {}

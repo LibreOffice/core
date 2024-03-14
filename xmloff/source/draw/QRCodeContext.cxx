@@ -25,7 +25,6 @@ using namespace css;
 using namespace css::xml::sax;
 using namespace css::uno;
 using namespace css::drawing;
-using namespace css::graphic;
 using namespace xmloff::token;
 
 QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,

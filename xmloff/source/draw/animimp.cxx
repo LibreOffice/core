@@ -37,7 +37,6 @@
 #include <anim.hxx>
 #include <animimp.hxx>
 
-using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;

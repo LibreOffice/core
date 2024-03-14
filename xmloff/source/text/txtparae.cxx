@@ -120,7 +120,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::graphic;

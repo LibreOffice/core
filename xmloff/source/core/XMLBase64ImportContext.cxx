@@ -26,7 +26,6 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
 

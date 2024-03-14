@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/sequence.hxx>
 
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 

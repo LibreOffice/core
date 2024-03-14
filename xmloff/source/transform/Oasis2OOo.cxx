@@ -46,10 +46,8 @@
 #include "Oasis2OOo.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace ::osl;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 

@@ -84,7 +84,6 @@ namespace xmloff
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::io;
-    using namespace ::com::sun::star::table;
     using namespace ::com::sun::star::text;
     using namespace ::com::sun::star::form::binding;
 

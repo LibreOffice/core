@@ -26,7 +26,6 @@
 
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
 
 void XMLPersAttrListTContext::AddAttribute(

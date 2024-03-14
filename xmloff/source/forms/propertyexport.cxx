@@ -47,7 +47,6 @@ namespace xmloff
 
     using namespace css;
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
     // NO using namespace ...util !!!

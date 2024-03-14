@@ -22,9 +22,7 @@
 #include <osl/diagnose.h>
 
 
-using namespace ::osl;
 using namespace ::xmloff::token;
-using namespace ::com::sun::star::uno;
 
 XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit const *pInit )
 {

@@ -29,7 +29,6 @@
 #include <xmlprop.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 #define M_E_( a, p, l, t, c ) \

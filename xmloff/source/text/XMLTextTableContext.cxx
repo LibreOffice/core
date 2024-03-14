@@ -20,9 +20,6 @@
 #include <xmloff/XMLTextTableContext.hxx>
 
 
-using namespace ::com::sun::star::uno;
-
-
 XMLTextTableContext::XMLTextTableContext( SvXMLImport& rImport ) :
     SvXMLImportContext( rImport )
 {

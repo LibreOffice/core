@@ -32,7 +32,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
-using namespace ::xmloff::token;
 
 static bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
