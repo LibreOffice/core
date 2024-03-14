@@ -18,6 +18,7 @@ import os
 import math
 from datetime import datetime
 import urllib.parse
+import re
 
 def convert_str_to_date(value):
     value = value.replace('.', '')
@@ -73,7 +74,7 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
 
     reports = soup.find("div", {"id": "reports"}).tbody
     ID, currentID = "", ""
-    version, currentVersion = "", ""
+    version, currentVersion = 0, 0
     OS, currentOS = "", ""
 
     tr_list = reports.find_all("tr")
@@ -81,7 +82,7 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
         td_list = tr.find_all("td")
 
         currentID = td_list[0].a.text.strip()
-        currentVersion = td_list[2].text.strip().split(': ')[1]
+        currentVersion = int(''.join(re.findall("\d+", td_list[2].text)))
         currentOS = td_list[3].text.strip()
 
         # get most recent version
@@ -91,16 +92,13 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
             ID = currentID
             OS = currentOS
 
-    if not version:
-        version = currentVersion
-
     if not ID:
         ID = currentID
 
     if not OS:
         OS = currentOS
 
-    return count, ID, version, OS
+    return count, ID, OS
 
 def parse_details_and_get_info(url, gitRepo):
     try:
@@ -187,7 +185,7 @@ if __name__ == '__main__':
     with open(fileName, "a") as f:
         if bInsertHeader:
             line = '\t'.join(["Name", "Ratio", "Count", "First report", "Last Report",
-                "ID", "Version", "Reason", "OS", "Stack", "Code Lines", "Last 4 UNO Commands", '\n'])
+                "ID", "Reason", "OS", "Stack", "Code Lines", "Last 4 UNO Commands", '\n'])
             f.write(line)
             f.flush()
 
@@ -195,13 +193,13 @@ if __name__ == '__main__':
             if k not in crashesInFile:
                 print("Parsing " + k)
                 try:
-                    crashCount, crashID, crashVersion, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
+                    crashCount, crashID, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
                             "https://crashreport.libreoffice.org/stats/signature/" + urllib.parse.quote(k))
                     crashReason, crashStack, codeLine, unoCommands = parse_details_and_get_info(
                             "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, args.repository)
                     ratio = round(crashCount / ((lDate[2] - lDate[1]).days + 1), 2)
                     line = '\t'.join([k, str(ratio), str(crashCount) , lDate[1].strftime('%y/%m/%d'), lDate[2].strftime('%y/%m/%d'),
-                            crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, unoCommands, '\n'])
+                            crashID, crashReason, crashOS, crashStack, codeLine, unoCommands, '\n'])
                     f.write(line)
                     f.flush()
                 except (requests.exceptions.Timeout, AttributeError):
