@@ -482,13 +482,14 @@ public:
 
 class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
 {
-    std::unique_ptr<SwRenameXNamedDlg> m_xDlg;
+    std::shared_ptr<SwRenameXNamedDlg> m_xDlg;
 public:
     explicit AbstractSwRenameXNamedDlg_Impl(std::unique_ptr<SwRenameXNamedDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual void SetForbiddenChars( const OUString& rSet ) override;
     virtual void SetAlternativeAccess(
              css::uno::Reference< css::container::XNameAccess > & xSecond,
