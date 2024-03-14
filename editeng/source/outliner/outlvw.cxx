@@ -189,6 +189,13 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
 
                     if( !aKeyCode.IsShift() )
                     {
+                        // Don't let insert empty paragraph with numbering. Instead end numbering.
+                        if (pPara->GetDepth() > -1 &&
+                            pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) == 0)
+                        {
+                            ToggleBullets();
+                            return true;
+                        }
                         // ImpGetCursor again???
                         if( !bSelection &&
                                 aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
