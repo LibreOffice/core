@@ -688,9 +688,9 @@ void lcl_getLightDirectionsFromRig(const PrstLightRigValues& rLightRig,
 
 /** Converts the directions from MSO specification to coordinates in the shape coordinate system.
     @details The extruded shape uses a left-hand Cartesian coordinate system with x-axis right, y-axis
-    down and z-axis towards observer. When L(Lx,Ly,Lz) is the specified ligth direction, then
+    down and z-axis towards observer. When L(Lx,Ly,Lz) is the specified light direction, then
     V(-Ly, -Lx, Lz) is the direction in the shape coordinate system.
-    @param [in,out] rLightDirVec contains for each indiviual light its direction.*/
+    @param [in,out] rLightDirVec contains for each individual light its direction.*/
 void lcl_AdaptAndNormalizeLightDirections(std::vector<basegfx::B3DVector>& rLightDirVec)
 {
     basegfx::B3DHomMatrix aTransform; // unit matrix
@@ -747,7 +747,7 @@ void lcl_ApplyShapeRotationToLights(std::vector<basegfx::B3DVector>& rLightDirVe
         have an element 'rot', that describes a rotation by spherical coordinates 'lat', 'lon' and
         'rev'. The element has precedence over the attribute.
     @param [in] p3DProperties contains info about light rig.
-    @param {in, out] rLightDirVec contains for each indiviual light its direction in shape coordinate
+    @param {in, out] rLightDirVec contains for each individual light its direction in shape coordinate
         system with x-axis right, y-axis down, z-axis toward observer.*/
 void lcl_IncorporateRigRotationIntoLightDirections(
     const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
