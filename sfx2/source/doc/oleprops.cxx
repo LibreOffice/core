@@ -1110,7 +1110,7 @@ ErrCode const & SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const OUS
     if( pStrg )
     {
         rtl::Reference<SotStorageStream> xStrm = pStrg->OpenSotStream( rStrmName, StreamMode::TRUNC | StreamMode::STD_WRITE );
-        if( xStrm.is() )
+        if (xStrm.is() && xStrm->IsWritable())
             Save( *xStrm );
         else
             SetError( ERRCODE_IO_ACCESSDENIED );
