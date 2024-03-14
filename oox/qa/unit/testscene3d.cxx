@@ -482,7 +482,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_rot_rotation)
     // The rotation brings the second light in a position, that it contributes to the left face.
     // Because the light is specular in MS Office, but current LibreOffice cannot make a second
     // light specular, the colors in MS Office and LibreOffice differ noticeably. MS Office has
-    // here rgb(255, 214, 99). The expectected color is the color in LibreOffice as of March 2024.
+    // here rgb(255, 214, 99). The expected color is the color in LibreOffice as of March 2024.
     // The test needs to be updated, when LibreOffice rendering is improved.
     nX = 0.078176 * aBMP.GetSizePixel().Width();
     nY = 0.49904 * aBMP.GetSizePixel().Height();
