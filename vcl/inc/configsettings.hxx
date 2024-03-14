@@ -40,20 +40,20 @@ namespace vcl
     private:
         std::unordered_map< OUString, SmallOUStrMap > m_aSettings;
 
-        virtual void Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
+        SAL_DLLPRIVATE virtual void Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
 
         void getValues();
-        SettingsConfigItem();
+        SAL_DLLPRIVATE SettingsConfigItem();
 
-        virtual void ImplCommit() override;
+        SAL_DLLPRIVATE virtual void ImplCommit() override;
 
     public:
-        virtual ~SettingsConfigItem() override;
+        SAL_DLLPRIVATE virtual ~SettingsConfigItem() override;
 
         static SettingsConfigItem* get();
 
         OUString getValue( const OUString& rGroup, const OUString& rKey ) const;
-        void setValue( const OUString& rGroup, const OUString& rKey, const OUString& rValue );
+        SAL_DLLPRIVATE void setValue( const OUString& rGroup, const OUString& rKey, const OUString& rValue );
 
     };
 

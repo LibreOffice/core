@@ -69,13 +69,13 @@ public:
                                   const Point& rPt, const Size& rSz, sal_uLong nRendererId,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
                     AnimationRenderer(AnimationRenderer&&) = delete;
-                    ~AnimationRenderer();
+     SAL_DLLPRIVATE ~AnimationRenderer();
 
     bool            matches(const OutputDevice* pOut, tools::Long nRendererId) const;
     void            drawToIndex( sal_uLong nIndex );
-    void            draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
-    void            repaint();
-    AnimationData*  createAnimationData() const;
+    SAL_DLLPRIVATE void draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
+    SAL_DLLPRIVATE void repaint();
+    SAL_DLLPRIVATE AnimationData*  createAnimationData() const;
 
     void            getPosSize( const AnimationFrame& rAnm, Point& rPosPix, Size& rSizePix );
 

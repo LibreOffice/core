@@ -98,41 +98,41 @@ class VCL_DLLPUBLIC PDFObjectElement final : public PDFElement
 
     bool m_bParsed;
 
-    void parseIfNecessary();
+    SAL_DLLPRIVATE void parseIfNecessary();
 
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
     PDFElement* Lookup(const OString& rDictionaryKey);
     PDFObjectElement* LookupObject(const OString& rDictionaryKey);
-    double GetObjectValue() const;
-    void SetDictionaryOffset(sal_uInt64 nDictionaryOffset);
+    SAL_DLLPRIVATE double GetObjectValue() const;
+    SAL_DLLPRIVATE void SetDictionaryOffset(sal_uInt64 nDictionaryOffset);
     sal_uInt64 GetDictionaryOffset();
-    void SetDictionaryLength(sal_uInt64 nDictionaryLength);
+    SAL_DLLPRIVATE void SetDictionaryLength(sal_uInt64 nDictionaryLength);
     sal_uInt64 GetDictionaryLength();
     PDFDictionaryElement* GetDictionary();
-    void SetDictionary(PDFDictionaryElement* pDictionaryElement);
-    void SetNumberElement(PDFNumberElement* pNumberElement);
-    PDFNumberElement* GetNumberElement() const;
+    SAL_DLLPRIVATE void SetDictionary(PDFDictionaryElement* pDictionaryElement);
+    SAL_DLLPRIVATE void SetNumberElement(PDFNumberElement* pNumberElement);
+    SAL_DLLPRIVATE PDFNumberElement* GetNumberElement() const;
     /// Get access to the parsed key-value items from the object dictionary.
     const std::map<OString, PDFElement*>& GetDictionaryItems();
-    const std::vector<PDFReferenceElement*>& GetDictionaryReferences() const;
-    void AddDictionaryReference(PDFReferenceElement* pReference);
-    void SetArray(PDFArrayElement* pArrayElement);
-    void SetStream(PDFStreamElement* pStreamElement);
+    SAL_DLLPRIVATE const std::vector<PDFReferenceElement*>& GetDictionaryReferences() const;
+    SAL_DLLPRIVATE void AddDictionaryReference(PDFReferenceElement* pReference);
+    SAL_DLLPRIVATE void SetArray(PDFArrayElement* pArrayElement);
+    SAL_DLLPRIVATE void SetStream(PDFStreamElement* pStreamElement);
     /// Access to the stream of the object, if it has any.
     PDFStreamElement* GetStream() const;
-    void SetArrayOffset(sal_uInt64 nArrayOffset);
-    sal_uInt64 GetArrayOffset() const;
-    void SetArrayLength(sal_uInt64 nArrayLength);
-    sal_uInt64 GetArrayLength() const;
+    SAL_DLLPRIVATE void SetArrayOffset(sal_uInt64 nArrayOffset);
+    SAL_DLLPRIVATE sal_uInt64 GetArrayOffset() const;
+    SAL_DLLPRIVATE void SetArrayLength(sal_uInt64 nArrayLength);
+    SAL_DLLPRIVATE sal_uInt64 GetArrayLength() const;
     PDFArrayElement* GetArray();
     /// Parse objects stored in this object stream.
-    void ParseStoredObjects();
-    std::vector<std::unique_ptr<PDFElement>>& GetStoredElements();
-    SvMemoryStream* GetStreamBuffer() const;
-    void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
-    PDFDocument& GetDocument();
+    SAL_DLLPRIVATE void ParseStoredObjects();
+    SAL_DLLPRIVATE std::vector<std::unique_ptr<PDFElement>>& GetStoredElements();
+    SAL_DLLPRIVATE SvMemoryStream* GetStreamBuffer() const;
+    SAL_DLLPRIVATE void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
+    SAL_DLLPRIVATE PDFDocument& GetDocument();
 
     void writeString(OStringBuffer& /*rBuffer*/) override { assert(false && "not implemented"); }
 };
@@ -146,8 +146,8 @@ class VCL_DLLPUBLIC PDFArrayElement final : public PDFElement
 
 public:
     PDFArrayElement(PDFObjectElement* pObject);
-    bool Read(SvStream& rStream) override;
-    void PushBack(PDFElement* pElement);
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE void PushBack(PDFElement* pElement);
     const std::vector<PDFElement*>& GetElements() const;
     PDFElement* GetElement(size_t nIndex) const { return m_aElements[nIndex]; }
 
@@ -177,15 +177,15 @@ class VCL_DLLPUBLIC PDFReferenceElement final : public PDFElement
 public:
     PDFReferenceElement(PDFDocument& rDoc, PDFNumberElement& rObject,
                         PDFNumberElement const& rGeneration);
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
     /// Assuming the reference points to a number object, return its value.
-    double LookupNumber(SvStream& rStream) const;
+    SAL_DLLPRIVATE double LookupNumber(SvStream& rStream) const;
     /// Lookup referenced object, without assuming anything about its contents.
     PDFObjectElement* LookupObject();
     int GetObjectValue() const;
     int GetGenerationValue() const;
-    sal_uInt64 GetOffset() const;
-    PDFNumberElement& GetObjectElement() const;
+    SAL_DLLPRIVATE sal_uInt64 GetOffset() const;
+    SAL_DLLPRIVATE PDFNumberElement& GetObjectElement() const;
 
     void writeString(OStringBuffer& rBuffer) override
     {
@@ -205,9 +205,9 @@ class VCL_DLLPUBLIC PDFStreamElement final : public PDFElement
     SvMemoryStream m_aMemory;
 
 public:
-    explicit PDFStreamElement(size_t nLength);
-    bool Read(SvStream& rStream) override;
-    sal_uInt64 GetOffset() const;
+    SAL_DLLPRIVATE explicit PDFStreamElement(size_t nLength);
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE sal_uInt64 GetOffset() const;
     SvMemoryStream& GetMemory();
 
     void writeString(OStringBuffer& rBuffer) override
@@ -227,10 +227,10 @@ class VCL_DLLPUBLIC PDFNameElement final : public PDFElement
 
 public:
     PDFNameElement();
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
     void SetValue(const OString& rValue) { m_aValue = rValue; }
     const OString& GetValue() const;
-    sal_uInt64 GetLocation() const;
+    SAL_DLLPRIVATE sal_uInt64 GetLocation() const;
     sal_uInt64 GetLength() const { return m_aValue.getLength(); }
 
     void writeString(OStringBuffer& rBuffer) override
@@ -254,13 +254,13 @@ class VCL_DLLPUBLIC PDFDictionaryElement final : public PDFElement
 
 public:
     PDFDictionaryElement();
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
 
-    static PDFElement* Lookup(const std::map<OString, PDFElement*>& rDictionary,
-                              const OString& rKey);
-    void SetKeyOffset(const OString& rKey, sal_uInt64 nOffset);
+    SAL_DLLPRIVATE static PDFElement* Lookup(const std::map<OString, PDFElement*>& rDictionary,
+                                             const OString& rKey);
+    SAL_DLLPRIVATE void SetKeyOffset(const OString& rKey, sal_uInt64 nOffset);
     sal_uInt64 GetKeyOffset(const OString& rKey) const;
-    void SetKeyValueLength(const OString& rKey, sal_uInt64 nLength);
+    SAL_DLLPRIVATE void SetKeyValueLength(const OString& rKey, sal_uInt64 nLength);
     sal_uInt64 GetKeyValueLength(const OString& rKey) const;
     const std::map<OString, PDFElement*>& GetItems() const;
     /// Looks up an object which is only referenced in this dictionary.
@@ -347,8 +347,8 @@ class VCL_DLLPUBLIC PDFHexStringElement final : public PDFElement
     OString m_aValue;
 
 public:
-    bool Read(SvStream& rStream) override;
-    const OString& GetValue() const;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE const OString& GetValue() const;
 
     void writeString(OStringBuffer& rBuffer) override
     {
@@ -364,7 +364,7 @@ class VCL_DLLPUBLIC PDFLiteralStringElement final : public PDFElement
     OString m_aValue;
 
 public:
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
     const OString& GetValue() const;
 
     void writeString(OStringBuffer& rBuffer) override
@@ -386,12 +386,12 @@ class VCL_DLLPUBLIC PDFNumberElement final : public PDFElement
 
 public:
     PDFNumberElement();
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
     double GetValue() const;
     void SetValue(double fValue) { m_fValue = fValue; }
 
-    sal_uInt64 GetLocation() const;
-    sal_uInt64 GetLength() const;
+    SAL_DLLPRIVATE sal_uInt64 GetLocation() const;
+    SAL_DLLPRIVATE sal_uInt64 GetLength() const;
 
     void writeString(OStringBuffer& rBuffer) override { rBuffer.append(m_fValue); }
 };
@@ -403,8 +403,8 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PDFCommentElement final : public PDFElemen
     OString m_aComment;
 
 public:
-    explicit PDFCommentElement(PDFDocument& rDoc);
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE explicit PDFCommentElement(PDFDocument& rDoc);
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
     void writeString(OStringBuffer& /*rBuffer*/) override {}
 };
 
@@ -416,8 +416,8 @@ class VCL_DLLPUBLIC PDFEndDictionaryElement final : public PDFElement
 
 public:
     PDFEndDictionaryElement();
-    bool Read(SvStream& rStream) override;
-    sal_uInt64 GetLocation() const;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE sal_uInt64 GetLocation() const;
 
     void writeString(OStringBuffer& /*rBuffer*/) override {}
 };
@@ -426,7 +426,7 @@ public:
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PDFEndStreamElement final : public PDFElement
 {
 public:
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
 
     void writeString(OStringBuffer& /*rBuffer*/) override {}
 };
@@ -435,7 +435,7 @@ public:
 class VCL_DLLPUBLIC PDFEndObjectElement final : public PDFElement
 {
 public:
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
 
     void writeString(OStringBuffer& /*rBuffer*/) override {}
 };
@@ -448,8 +448,8 @@ class VCL_DLLPUBLIC PDFEndArrayElement final : public PDFElement
 
 public:
     PDFEndArrayElement();
-    bool Read(SvStream& rStream) override;
-    sal_uInt64 GetOffset() const;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE sal_uInt64 GetOffset() const;
 
     void writeString(OStringBuffer& /*rBuffer*/) override {}
 };
@@ -465,7 +465,7 @@ public:
     {
     }
 
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
 
     void writeString(OStringBuffer& rBuffer) override
     {
@@ -477,7 +477,7 @@ public:
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PDFNullElement final : public PDFElement
 {
 public:
-    bool Read(SvStream& rStream) override;
+    SAL_DLLPRIVATE bool Read(SvStream& rStream) override;
 
     void writeString(OStringBuffer& rBuffer) override { rBuffer.append("null"); }
 };
@@ -520,22 +520,23 @@ class VCL_DLLPUBLIC PDFDocument final : public PDFObjectContainer
     size_t m_nSignaturePage = 0;
 
     /// Suggest a minimal, yet free signature ID to use for the next signature.
-    sal_uInt32 GetNextSignature();
+    SAL_DLLPRIVATE sal_uInt32 GetNextSignature();
     /// Write the signature object as part of signing.
-    sal_Int32 WriteSignatureObject(const OUString& rDescription, bool bAdES,
-                                   sal_uInt64& rLastByteRangeOffset, sal_Int64& rContentOffset);
+    SAL_DLLPRIVATE sal_Int32 WriteSignatureObject(const OUString& rDescription, bool bAdES,
+                                                  sal_uInt64& rLastByteRangeOffset,
+                                                  sal_Int64& rContentOffset);
     /// Write the appearance object as part of signing.
-    sal_Int32 WriteAppearanceObject(tools::Rectangle& rSignatureRectangle);
+    SAL_DLLPRIVATE sal_Int32 WriteAppearanceObject(tools::Rectangle& rSignatureRectangle);
     /// Write the annot object as part of signing.
-    sal_Int32 WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_Int32 nSignatureId,
-                               sal_Int32 nAppearanceId,
-                               const tools::Rectangle& rSignatureRectangle);
+    SAL_DLLPRIVATE sal_Int32 WriteAnnotObject(PDFObjectElement const& rFirstPage,
+                                              sal_Int32 nSignatureId, sal_Int32 nAppearanceId,
+                                              const tools::Rectangle& rSignatureRectangle);
     /// Write the updated Page object as part of signing.
-    bool WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnotId);
+    SAL_DLLPRIVATE bool WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnotId);
     /// Write the updated Catalog object as part of signing.
-    bool WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& pRoot);
+    SAL_DLLPRIVATE bool WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& pRoot);
     /// Write the updated cross-references as part of signing.
-    void WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* pRoot);
+    SAL_DLLPRIVATE void WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* pRoot);
 
 public:
     PDFDocument();
@@ -545,31 +546,32 @@ public:
     /// @name Low-level functions, to be used by PDFElement subclasses.
     //@{
     /// Decode a hex dump.
-    static std::vector<unsigned char> DecodeHexString(PDFHexStringElement const* pElement);
+    SAL_DLLPRIVATE static std::vector<unsigned char>
+    DecodeHexString(PDFHexStringElement const* pElement);
     static OUString DecodeHexStringUTF16BE(PDFHexStringElement const& rElement);
-    static OString ReadKeyword(SvStream& rStream);
-    static size_t FindStartXRef(SvStream& rStream);
-    void ReadXRef(SvStream& rStream);
-    void ReadXRefStream(SvStream& rStream);
-    static void SkipWhitespace(SvStream& rStream);
+    SAL_DLLPRIVATE static OString ReadKeyword(SvStream& rStream);
+    SAL_DLLPRIVATE static size_t FindStartXRef(SvStream& rStream);
+    SAL_DLLPRIVATE void ReadXRef(SvStream& rStream);
+    SAL_DLLPRIVATE void ReadXRefStream(SvStream& rStream);
+    SAL_DLLPRIVATE static void SkipWhitespace(SvStream& rStream);
     /// Instead of all whitespace, just skip CR and NL characters.
-    static void SkipLineBreaks(SvStream& rStream);
-    size_t GetObjectOffset(size_t nIndex) const;
+    SAL_DLLPRIVATE static void SkipLineBreaks(SvStream& rStream);
+    SAL_DLLPRIVATE size_t GetObjectOffset(size_t nIndex) const;
     const std::vector<std::unique_ptr<PDFElement>>& GetElements() const;
     std::vector<PDFObjectElement*> GetPages();
     PDFObjectElement* GetCatalog();
     /// Remember the end location of an EOF token.
-    void PushBackEOF(size_t nOffset);
+    SAL_DLLPRIVATE void PushBackEOF(size_t nOffset);
     /// Look up object based on object number, possibly by parsing object streams.
     PDFObjectElement* LookupObject(size_t nObjectNumber);
     /// Access to the input document, even after the input stream is gone.
-    SvMemoryStream& GetEditBuffer();
+    SAL_DLLPRIVATE SvMemoryStream& GetEditBuffer();
     /// Tokenize elements from current offset.
-    bool Tokenize(SvStream& rStream, TokenizeMode eMode,
-                  std::vector<std::unique_ptr<PDFElement>>& rElements,
-                  PDFObjectElement* pObjectElement);
+    SAL_DLLPRIVATE bool Tokenize(SvStream& rStream, TokenizeMode eMode,
+                                 std::vector<std::unique_ptr<PDFElement>>& rElements,
+                                 PDFObjectElement* pObjectElement);
     /// Register an object (owned directly or indirectly by m_aElements) as a provider for a given ID.
-    void SetIDObject(size_t nID, PDFObjectElement* pObject);
+    SAL_DLLPRIVATE void SetIDObject(size_t nID, PDFObjectElement* pObject);
     //@}
 
     /// @name High-level functions, to be used by others.
@@ -577,7 +579,7 @@ public:
     /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);
     /// Calls Read() first and if it fails it tries to fixup and then retry.
-    bool ReadWithPossibleFixup(SvStream& rStream);
+    SAL_DLLPRIVATE bool ReadWithPossibleFixup(SvStream& rStream);
     void SetSignatureLine(std::vector<sal_Int8>&& rSignatureLine);
     void SetSignaturePage(size_t nPage);
     /// Sign the read document with xCertificate in the edit buffer.
@@ -592,11 +594,11 @@ public:
     //@}
 
     /// See vcl::PDFObjectContainer::createObject().
-    sal_Int32 createObject() override;
+    SAL_DLLPRIVATE sal_Int32 createObject() override;
     /// See vcl::PDFObjectContainer::updateObject().
-    bool updateObject(sal_Int32 n) override;
+    SAL_DLLPRIVATE bool updateObject(sal_Int32 n) override;
     /// See vcl::PDFObjectContainer::writeBuffer().
-    bool writeBufferBytes(const void* pBuffer, sal_uInt64 nBytes) override;
+    SAL_DLLPRIVATE bool writeBufferBytes(const void* pBuffer, sal_uInt64 nBytes) override;
     void checkAndEnableStreamEncryption(sal_Int32 /*nObject*/) override {}
     void disableStreamEncryption() override {}
 };

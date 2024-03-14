@@ -49,7 +49,7 @@ protected:
     SAL_DLLPRIVATE tools::Long     getMaxWidthScrollBarAndDownButton() const;
 
 protected:
-    bool            IsDropDownBox() const;
+    SAL_DLLPRIVATE bool IsDropDownBox() const;
 
     virtual void    FillLayoutData() const override;
 
@@ -65,7 +65,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void            Select();
-    void            DoubleClick();
+    SAL_DLLPRIVATE void DoubleClick();
 
     virtual void    Modify() override;
 
@@ -75,12 +75,12 @@ public:
 
     tools::Rectangle       GetDropDownPosSizePixel() const;
 
-    void            AdaptDropDownLineCountToMaximum();
+    SAL_DLLPRIVATE void AdaptDropDownLineCountToMaximum();
     void            SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16      GetDropDownLineCount() const;
 
     void            EnableAutoSize( bool bAuto );
-    bool            IsAutoSizeEnabled() const;
+    SAL_DLLPRIVATE bool IsAutoSizeEnabled() const;
 
     virtual void    SetText( const OUString& rStr ) override;
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) override;
@@ -100,11 +100,11 @@ public:
     bool            IsInDropDown() const;
     void            ToggleDropDown();
 
-    void            SetUserItemSize( const Size& rSz );
-    void            EnableUserDraw( bool bUserDraw );
-    bool            IsUserDrawEnabled() const;
+    SAL_DLLPRIVATE void SetUserItemSize( const Size& rSz );
+    SAL_DLLPRIVATE void EnableUserDraw( bool bUserDraw );
+    SAL_DLLPRIVATE bool IsUserDrawEnabled() const;
 
-    void            DrawEntry( const UserDrawEvent& rEvt );
+    SAL_DLLPRIVATE void DrawEntry( const UserDrawEvent& rEvt );
     void            SetBorderStyle( WindowBorderStyle nBorderStyle );
     void            SetHighlightColor(const Color& rColor);
     void            SetHighlightTextColor(const Color& rColor);
@@ -112,16 +112,16 @@ public:
     /**
      * Adds a new separator at the given position n.
      */
-    void            AddSeparator( sal_Int32 n );
+    SAL_DLLPRIVATE void AddSeparator( sal_Int32 n );
 
     void            EnableAutocomplete( bool bEnable, bool bMatchCase = false );
     bool            IsAutocompleteEnabled() const;
 
     bool            IsMultiSelectionEnabled() const;
 
-    void            SetSelectHdl(const Link<ComboBox&,void>& rLink);
-    void            SetEntryActivateHdl(const Link<Edit&,bool>& rLink);
-    void            SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink);
+    SAL_DLLPRIVATE void SetSelectHdl(const Link<ComboBox&,void>& rLink);
+    SAL_DLLPRIVATE void SetEntryActivateHdl(const Link<Edit&,bool>& rLink);
+    SAL_DLLPRIVATE void SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink);
 
     Size            CalcMinimumSize() const override;
     virtual Size    GetOptimalSize() const override;
@@ -129,12 +129,12 @@ public:
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            SetMRUEntries( std::u16string_view rEntries );
-    OUString        GetMRUEntries() const;
-    void            SetMaxMRUCount( sal_Int32  n );
-    sal_Int32       GetMaxMRUCount() const;
-    void            SetEntryData( sal_Int32  nPos, void* pNewData );
-    void*           GetEntryData( sal_Int32  nPos ) const;
+    SAL_DLLPRIVATE void     SetMRUEntries( std::u16string_view rEntries );
+    SAL_DLLPRIVATE OUString GetMRUEntries() const;
+    SAL_DLLPRIVATE void     SetMaxMRUCount( sal_Int32  n );
+    SAL_DLLPRIVATE sal_Int32 GetMaxMRUCount() const;
+    SAL_DLLPRIVATE void  SetEntryData( sal_Int32  nPos, void* pNewData );
+    SAL_DLLPRIVATE void* GetEntryData( sal_Int32  nPos ) const;
 
     sal_Int32       GetTopEntry() const;
 
@@ -152,11 +152,11 @@ public:
     // other route.  e.g. the toolbar fontsize combobox wants to immediately
     // change size only if something is picked from the combobox menu, other
     // changes don't auto-apply until the user presses return
-    bool            IsModifyByKeyboard() const;
+    SAL_DLLPRIVATE bool IsModifyByKeyboard() const;
 
     // determine if Edit::Modify was called due to the ComboBox changing the edit area
     // itself
-    bool            IsSyntheticModify() const;
+    SAL_DLLPRIVATE bool IsSyntheticModify() const;
 
 
     /** checks whether a certain point lies within the bounds of
@@ -180,14 +180,14 @@ public:
     using Control::GetIndexForPoint;
     tools::Long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
-    void setMaxWidthChars(sal_Int32 nWidth);
+    SAL_DLLPRIVATE void setMaxWidthChars(sal_Int32 nWidth);
 
-    void SetWidthInChars(sal_Int32 nWidthInChars);
+    SAL_DLLPRIVATE void SetWidthInChars(sal_Int32 nWidthInChars);
 
-    tools::Long GetDropDownEntryHeight() const;
+    SAL_DLLPRIVATE tools::Long GetDropDownEntryHeight() const;
 
     // the drop down window container
-    ImplListBoxWindow* GetMainWindow() const;
+    SAL_DLLPRIVATE ImplListBoxWindow* GetMainWindow() const;
 
     virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 

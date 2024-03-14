@@ -55,10 +55,10 @@ public:
 
     bool                IsEmpty() const;
     void                SetEmpty();
-    void                Clear();
-    void                ClearAlpha();
+    SAL_DLLPRIVATE void Clear();
+    SAL_DLLPRIVATE void ClearAlpha();
 
-    void                Draw( OutputDevice* pOutDev,
+    SAL_DLLPRIVATE void Draw( OutputDevice* pOutDev,
                               const Point& rDestPt ) const;
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt, const Size& rDestSize ) const;
@@ -71,7 +71,7 @@ public:
     const AlphaMask &   GetAlphaMask() const { return maAlphaMask; }
 
     const Size&         GetSizePixel() const { return maBitmapSize; }
-    void                SetSizePixel(const Size& rNewSize);
+    SAL_DLLPRIVATE void SetSizePixel(const Size& rNewSize);
 
     const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
     void                SetPrefSize( const Size& rPrefSize ) { maBitmap.SetPrefSize( rPrefSize ); }
@@ -251,7 +251,7 @@ public:
         rSearchColor and the individual pixel values, such that the
         corresponding pixel is still regarded a match.
      */
-    void                Replace(
+    SAL_DLLPRIVATE void Replace(
                             const Color& rSearchColor,
                             const Color& rReplaceColor,
                             sal_uInt8 nTolerance );
@@ -412,7 +412,7 @@ public:
         @return The transformed bitmap
     */
     [[nodiscard]]
-    BitmapEx            getTransformed(
+    SAL_DLLPRIVATE BitmapEx getTransformed(
                             const basegfx::B2DHomMatrix& rTransformation,
                             const basegfx::B2DRange& rVisibleRange,
                             double fMaximumArea) const;
@@ -433,9 +433,9 @@ public:
                             const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
                             const Size &rSize );
 
-    void                ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
+    SAL_DLLPRIVATE void ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 
-    void                AdjustTransparency( sal_uInt8 cTrans );
+    SAL_DLLPRIVATE void AdjustTransparency( sal_uInt8 cTrans );
 
     void                CombineMaskOr(Color maskColor, sal_uInt8 nTol);
 
@@ -460,7 +460,7 @@ private:
                                     const int nHeight,
                                     const int nStride);
 
-    void  loadFromIconTheme( const OUString& rIconName );
+    SAL_DLLPRIVATE void  loadFromIconTheme( const OUString& rIconName );
 
     Bitmap              maBitmap;
     AlphaMask           maAlphaMask;

@@ -30,7 +30,7 @@ class VCL_DLLPUBLIC BinaryDataContainer final
 
     std::shared_ptr<Impl> mpImpl;
 
-    void ensureSwappedIn() const;
+    SAL_DLLPRIVATE void ensureSwappedIn() const;
 
 public:
     BinaryDataContainer() = default;
@@ -47,24 +47,24 @@ public:
     size_t getSize() const;
     bool isEmpty() const;
     const sal_uInt8* getData() const;
-    css::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
+    SAL_DLLPRIVATE css::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
 
     // Returns the data as a readonly stream open for reading
-    std::shared_ptr<SvStream> getAsStream();
+    SAL_DLLPRIVATE std::shared_ptr<SvStream> getAsStream();
 
     // Returns the data as a readonly stream open for reading
-    css::uno::Reference<css::io::XInputStream> getAsXInputStream();
+    SAL_DLLPRIVATE css::uno::Reference<css::io::XInputStream> getAsXInputStream();
 
     /// writes the contents to the given stream
     std::size_t writeToStream(SvStream& rStream) const;
 
     /// return the in-memory size in bytes as of now.
-    std::size_t getSizeBytes() const;
+    SAL_DLLPRIVATE std::size_t getSizeBytes() const;
 
     /// swap out to disk for now
-    void swapOut() const;
+    SAL_DLLPRIVATE void swapOut() const;
 
-    size_t calculateHash() const;
+    SAL_DLLPRIVATE size_t calculateHash() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

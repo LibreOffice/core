@@ -34,17 +34,20 @@ private:
 
 public:
     HtmlTransferable(OString sData);
-    virtual ~HtmlTransferable() override;
+    SAL_DLLPRIVATE virtual ~HtmlTransferable() override;
 
     // css::uno::XInterface
-    css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    SAL_DLLPRIVATE css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
     void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
     void SAL_CALL release() noexcept override { OWeakObject::release(); }
 
     // css::datatransfer::XTransferable
-    css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
-    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-    sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
+    SAL_DLLPRIVATE css::uno::Any SAL_CALL
+    getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
+    SAL_DLLPRIVATE css::uno::Sequence<css::datatransfer::DataFlavor>
+        SAL_CALL getTransferDataFlavors() override;
+    SAL_DLLPRIVATE sal_Bool SAL_CALL
+    isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
 };
 
 } // namespace vcl::unohelper

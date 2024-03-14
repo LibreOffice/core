@@ -1,38 +1,5 @@
-AllSettings::CopyData()
-AllSettings::Update(AllSettingsFlags, AllSettings const&)
-AllSettings::operator!=(AllSettings const&) const
-AllSettings::operator==(AllSettings const&) const
 AlphaMask::AlphaMask(AlphaMask&&)
 AlphaMask::operator=(Bitmap const&)
-Animation::Adjust(short, short, short, short, short, double, bool)
-Animation::Convert(BmpConversion)
-Animation::Draw(OutputDevice&, Point const&) const
-Animation::Draw(OutputDevice&, Point const&, Size const&) const
-Animation::GetChecksum() const
-Animation::GetSizeBytes() const
-Animation::IsTransparent() const
-Animation::Mirror(BmpMirrorFlags)
-Animation::ResetLoopCount()
-Animation::Start(OutputDevice&, Point const&, Size const&, long, OutputDevice*)
-Animation::Stop(OutputDevice const*, long)
-Animation::operator=(Animation const&)
-Animation::operator==(Animation const&) const
-AnimationRenderer::createAnimationData() const
-AnimationRenderer::draw(unsigned long, VirtualDevice*)
-AnimationRenderer::repaint()
-AnimationRenderer::~AnimationRenderer()
-Application::DeInit()
-Application::EnableBitmapRendering()
-Application::GetAppLocaleDataWrapper()
-Application::GetSystemDependentDataManager()
-Application::HandleKey(VclEventId, vcl::Window*, KeyEvent*)
-Application::ImplCallEventListeners(VclSimpleEvent&)
-Application::ImplCallEventListenersApplicationDataChanged(void*)
-Application::InsertAccel(Accelerator*)
-Application::IsBitmapRendering()
-Application::Main()
-Application::RemoveAccel(Accelerator const*)
-Application::setDeInitHook(Link<LinkParamNone*, void> const&)
 AsWinding(SkPath const&, SkPath*)
 AsyncQuitHandler::AsyncQuitHandler()
 AsyncQuitHandler::OnAsyncQuit(AsyncQuitHandler*, void*)
@@ -62,44 +29,11 @@ BasicManager::SetLibraryContainerInfo(LibraryContainerInfo const&)
 BasicManager::~BasicManager()
 BigInt::BigInt(unsigned int)
 BigInt::operator%=(BigInt const&)
-BinaryDataContainer::calculateHash() const
-BinaryDataContainer::ensureSwappedIn() const
-BinaryDataContainer::getAsStream()
-BinaryDataContainer::getAsXInputStream()
-BinaryDataContainer::getCopyAsByteSequence() const
-BinaryDataContainer::getSizeBytes() const
-BinaryDataContainer::swapOut() const
-Bitmap::AdaptBitCount(Bitmap&) const
-Bitmap::Adjust(short, short, short, short, short, double, bool, bool)
-Bitmap::Bitmap(std::shared_ptr<SalBitmap>)
-Bitmap::Blend(AlphaMask const&, Color const&)
-Bitmap::CopyPixel(tools::Rectangle const&, tools::Rectangle const&)
-Bitmap::CopyPixel(tools::Rectangle const&, tools::Rectangle const&, Bitmap const&)
-Bitmap::CopyPixel_AlphaOptimized(tools::Rectangle const&, tools::Rectangle const&)
-Bitmap::CopyPixel_AlphaOptimized(tools::Rectangle const&, tools::Rectangle const&, AlphaMask const&)
-Bitmap::CreateDisplayBitmap(OutputDevice*) const
-Bitmap::CreateRegion(Color const&, tools::Rectangle const&) const
-Bitmap::Expand(int, int, Color const*)
-Bitmap::Replace(AlphaMask const&, Color const&)
-Bitmap::Replace(Color const&, Color const&, unsigned char)
-Bitmap::Replace(Color const*, Color const*, unsigned long, unsigned char const*)
-Bitmap::ReplaceMask(AlphaMask const&, Color const&)
-Bitmap::Rotate(o3tl::strong_int<short, FractionTag<10> >, Color const&)
-Bitmap::accessSystemDependentDataHolder() const
 BitmapAlphaClampFilter::execute(BitmapEx const&) const
 BitmapBasicMorphologyFilter::filter(Bitmap const&) const
 BitmapColorQuantizationFilter::execute(BitmapEx const&) const
 BitmapConvolutionMatrixFilter::execute(BitmapEx const&) const
 BitmapEmbossGreyFilter::execute(BitmapEx const&) const
-BitmapEx::AdjustTransparency(unsigned char)
-BitmapEx::ChangeColorAlpha(unsigned char, signed char)
-BitmapEx::Clear()
-BitmapEx::ClearAlpha()
-BitmapEx::Draw(OutputDevice*, Point const&) const
-BitmapEx::Replace(Color const&, Color const&, unsigned char)
-BitmapEx::SetSizePixel(Size const&)
-BitmapEx::getTransformed(basegfx::B2DHomMatrix const&, basegfx::B2DRange const&, double) const
-BitmapEx::loadFromIconTheme(rtl::OUString const&)
 BitmapFilterStackBlur::execute(BitmapEx const&) const
 BitmapHelper::BitmapHelper(SalBitmap const&, bool)
 BitmapHelper::getBits(int&)
@@ -109,14 +43,6 @@ BitmapInfoAccess::GetMatchingPaletteIndex(BitmapColor const&) const
 BitmapMedianFilter::execute(BitmapEx const&) const
 BitmapMonochromeFilter::execute(BitmapEx const&) const
 BitmapMosaicFilter::execute(BitmapEx const&) const
-BitmapPalette::BitmapPalette(BitmapColor const*, BitmapColor const*)
-BitmapPalette::BitmapPalette(BitmapPalette&&)
-BitmapPalette::GetChecksum() const
-BitmapPalette::GetMatchingIndex(BitmapColor const&) const
-BitmapPalette::IsGreyPalette8Bit() const
-BitmapPalette::IsGreyPaletteAny() const
-BitmapPalette::operator=(BitmapPalette&&)
-BitmapPalette::operator==(BitmapPalette const&) const
 BitmapPopArtFilter::execute(BitmapEx const&) const
 BitmapSepiaFilter::execute(BitmapEx const&) const
 BitmapShadowFilter::execute(BitmapEx const&) const
@@ -125,9 +51,6 @@ BitmapSmoothenFilter::execute(BitmapEx const&) const
 BitmapSobelGreyFilter::execute(BitmapEx const&) const
 BitmapSolarizeFilter::execute(BitmapEx const&) const
 BitmapSymmetryCheck::checkImpl(BitmapReadAccess const*)
-BitmapWriteAccess::CopyScanline(long, BitmapReadAccess const&)
-BitmapWriteAccess::CopyScanline(long, unsigned char const*, ScanlineFormat, unsigned int)
-BitmapWriteAccess::DrawLine(Point const&, Point const&)
 BitmapWriteAccess::SetFillColor()
 BmpWriter(SvStream&, Graphic const&, FilterConfigItem*)
 BrowseBox::BrowseBox(vcl::Window*, long, BrowserMode)
@@ -158,16 +81,6 @@ BuilderBase::collectAtkRelationAttribute(xmlreader::XmlReader&, std::map<rtl::OU
 BuilderBase::collectAtkRoleAttribute(xmlreader::XmlReader&, std::map<rtl::OUString, rtl::OUString, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > >&)
 BuilderBase::collectPangoAttribute(xmlreader::XmlReader&, std::map<rtl::OUString, rtl::OUString, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > >&)
 BuilderBase::isToolbarItemClass(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-Button::Button(WindowType)
-Button::GetButtonState()
-Button::GetButtonState() const
-Button::GetCustomButtonImage() const
-Button::GetModeImage() const
-Button::HasImage() const
-Button::IsSmallSymbol() const
-Button::SetCommandHandler(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
-Button::SetCustomButtonImage(Image const&)
-Button::SetSmallSymbol()
 CLuceneError::CLuceneError()
 CLuceneError::CLuceneError(CLuceneError const&)
 CLuceneError::CLuceneError(int, char const*, bool)
@@ -239,30 +152,6 @@ ColorWindow::SelectEntry(NamedColor const&)
 ColorWindow::SelectValueSetEntry(SvxColorValueSet*, Color const&)
 ColorWindow::ShowNoneButton()
 ColorWindow::statusChanged(com::sun::star::frame::FeatureStateEvent const&)
-ComboBox::AdaptDropDownLineCountToMaximum()
-ComboBox::AddSeparator(int)
-ComboBox::DoubleClick()
-ComboBox::DrawEntry(UserDrawEvent const&)
-ComboBox::EnableUserDraw(bool)
-ComboBox::GetDropDownEntryHeight() const
-ComboBox::GetEntryData(int) const
-ComboBox::GetMRUEntries() const
-ComboBox::GetMainWindow() const
-ComboBox::GetMaxMRUCount() const
-ComboBox::IsAutoSizeEnabled() const
-ComboBox::IsDropDownBox() const
-ComboBox::IsModifyByKeyboard() const
-ComboBox::IsSyntheticModify() const
-ComboBox::IsUserDrawEnabled() const
-ComboBox::SetEntryActivateHdl(Link<Edit&, bool> const&)
-ComboBox::SetEntryData(int, void*)
-ComboBox::SetMRUEntries(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-ComboBox::SetMaxMRUCount(int)
-ComboBox::SetSelectHdl(Link<ComboBox&, void> const&)
-ComboBox::SetUserDrawHdl(Link<UserDrawEvent*, void> const&)
-ComboBox::SetUserItemSize(Size const&)
-ComboBox::SetWidthInChars(int)
-ComboBox::setMaxWidthChars(int)
 CommandEvent::CommandEvent()
 CommandEvent::GetAutoScrollData() const
 CommandEvent::GetGesturePanData() const
@@ -480,20 +369,6 @@ DockingAreaWindow::Resize()
 DockingAreaWindow::StateChanged(StateChangedType)
 DockingAreaWindow::dispose()
 DockingAreaWindow::~DockingAreaWindow()
-DockingManager::AddWindow(vcl::Window const*)
-DockingManager::DockingManager()
-DockingManager::GetDockingWindowWrapper(vcl::Window const*)
-DockingManager::IsInPopupMode(vcl::Window const*)
-DockingManager::RemoveWindow(vcl::Window const*)
-DockingManager::SetPopupModeEndHdl(vcl::Window const*, Link<FloatingWindow*, void> const&)
-DockingManager::StartPopupMode(vcl::Window const*, tools::Rectangle const&, FloatWinPopupFlags)
-DockingManager::~DockingManager()
-DockingWindow::DockingWindow(WindowType, char const*)
-DockingWindow::DockingWindow(vcl::Window*, rtl::OUString const&, rtl::OUString const&, char const*, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
-DockingWindow::SetMaxOutputSizePixel(Size const&)
-DockingWindow::isLayoutEnabled() const
-DockingWindow::loadUI(vcl::Window*, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
-DockingWindow::setOptimalLayoutSize()
 DocumentSignatureManager::ImplOpenSignatureStream(int, bool)
 DocumentSignatureManager::getGpgSecurityContext() const
 DocumentSignatureManager::getGpgSecurityEnvironment()
@@ -517,11 +392,6 @@ DriverBlocklist::Parser::handleContent(xmlreader::XmlReader&)
 DriverBlocklist::Parser::handleDevices(DriverBlocklist::DriverInfo&, xmlreader::XmlReader&)
 DriverBlocklist::Parser::handleEntry(DriverBlocklist::DriverInfo&, xmlreader::XmlReader&)
 DriverBlocklist::Parser::handleList(xmlreader::XmlReader&)
-DropTargetHelper::AcceptDrop(AcceptDropEvent const&)
-DropTargetHelper::ExecuteDrop(ExecuteDropEvent const&)
-DropTargetHelper::ImplBeginDrag(com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor> const&)
-DropTargetHelper::ImplConstruct()
-DropTargetHelper::ImplEndDrag()
 E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget&) const
 E3dAttributesUndoAction::Redo()
 E3dAttributesUndoAction::Undo()
@@ -622,18 +492,6 @@ E3dView::InitView()
 EFieldInfo::EFieldInfo(EFieldInfo const&)
 EFieldInfo::EFieldInfo(SvxFieldItem const&, int, int)
 EFieldInfo::operator=(EFieldInfo const&)
-Edit::CreatePopupMenu()
-Edit::Edit(WindowType)
-Edit::IsCharInput(KeyEvent const&)
-Edit::IsInsertMode() const
-Edit::SetCursorAtLast()
-Edit::SetInsertMode(bool)
-Edit::SetPlaceholderText(rtl::OUString const&)
-Edit::SetSubEdit(Edit*)
-Edit::SetWidthInChars(int)
-Edit::ShowTruncationWarning(weld::Widget*)
-Edit::Undo()
-Edit::setMaxWidthChars(int)
 EditAbstractDialogFactory::Create()
 EditEngine::AppendDeletedNodeInfo(DeletedNodeInfo*)
 EditEngine::CallHtmlImportHandler(HtmlImportInfo&)
@@ -835,13 +693,6 @@ FilterConfigItem::GetStatusIndicator() const
 FilterConfigItem::ImpInitTree(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 FilterConfigItem::ImplGetPropertyValue(com::sun::star::uno::Any&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, rtl::OUString const&)
 FilterConfigItem::WritePropertyValue(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&, com::sun::star::beans::PropertyValue const&)
-FixedBitmap::ApplySettings(OutputDevice&)
-FixedBitmap::DataChanged(DataChangedEvent const&)
-FixedBitmap::Draw(OutputDevice*, Point const&, SystemTextColorFlags)
-FixedBitmap::Paint(OutputDevice&, tools::Rectangle const&)
-FixedBitmap::Resize()
-FixedBitmap::SetBitmap(BitmapEx const&)
-FixedBitmap::StateChanged(StateChangedType)
 FixedHyperlink::GetFocus()
 FixedHyperlink::Initialize()
 FixedHyperlink::KeyInput(KeyEvent const&)
@@ -850,16 +701,6 @@ FixedHyperlink::MouseButtonUp(MouseEvent const&)
 FixedHyperlink::MouseMove(MouseEvent const&)
 FixedHyperlink::RequestHelp(HelpEvent const&)
 FixedHyperlink::set_property(rtl::OUString const&, rtl::OUString const&)
-FixedImage::ApplySettings(OutputDevice&)
-FixedImage::DataChanged(DataChangedEvent const&)
-FixedImage::Draw(OutputDevice*, Point const&, SystemTextColorFlags)
-FixedImage::DumpAsPropertyTree(tools::JsonWriter&)
-FixedImage::GetOptimalSize() const
-FixedImage::Paint(OutputDevice&, tools::Rectangle const&)
-FixedImage::Resize()
-FixedImage::StateChanged(StateChangedType)
-FixedImage::loadThemeImage(rtl::OUString const&)
-FixedImage::set_property(rtl::OUString const&, rtl::OUString const&)
 FixedLine::ApplySettings(OutputDevice&)
 FixedLine::DataChanged(DataChangedEvent const&)
 FixedLine::Draw(OutputDevice*, Point const&, SystemTextColorFlags)
@@ -890,21 +731,6 @@ FixedText::setMinWidthChars(int)
 FixedText::set_mnemonic_widget(vcl::Window*)
 FixedText::set_property(rtl::OUString const&, rtl::OUString const&)
 FixedText::~FixedText()
-FloatingWindow::AddPopupModeWindow(vcl::Window*)
-FloatingWindow::ApplySettings(OutputDevice&)
-FloatingWindow::DataChanged(DataChangedEvent const&)
-FloatingWindow::EventNotify(NotifyEvent&)
-FloatingWindow::FloatingWindow(vcl::Window*, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
-FloatingWindow::ImplConvertToRelPos(vcl::Window*, AbsoluteScreenPixelRectangle const&)
-FloatingWindow::PixelInvalidate(tools::Rectangle const*)
-FloatingWindow::PopupModeEnd()
-FloatingWindow::SetTitleType(FloatWinTitleType)
-FloatingWindow::StartPopupMode(ToolBox*, FloatWinPopupFlags)
-FloatingWindow::StartPopupMode(tools::Rectangle const&, FloatWinPopupFlags)
-FloatingWindow::StateChanged(StateChangedType)
-FloatingWindow::dispose()
-FloatingWindow::doDeferredInit(long)
-FloatingWindow::~FloatingWindow()
 FmDesignModeChangedHint::FmDesignModeChangedHint(bool)
 FmDesignModeChangedHint::~FmDesignModeChangedHint()
 FmFormModel::AllocPage(bool)
@@ -976,28 +802,11 @@ FocusListenerMultiplexer::focusLost(com::sun::star::awt::FocusEvent const&)
 FocusListenerMultiplexer::queryInterface(com::sun::star::uno::Type const&)
 FocusListenerMultiplexer::release()
 FontAttributes::CompareDeviceIndependentFontAttributes(FontAttributes const&) const
-FontCharMap::FontCharMap(bool, std::vector<unsigned int, std::allocator<unsigned int> >)
-FontCharMap::FontCharMap(tools::SvRef<ImplFontCharMap>)
-FontCharMap::findRangeIndex(unsigned int) const
-FontCharMap::isMicrosoftSymbolMap() const
-FontCharMap::~FontCharMap()
 FontConfigFontOptions::SyncPattern(rtl::OString const&, unsigned int, unsigned int, bool)
 FontConfigFontOptions::cairo_font_options_substitute(_FcPattern*)
 FontConfigFontOptions::~FontConfigFontOptions()
 FontList::GetNextFontMetric(void*)
 FontList::GetStyleName(FontWeight, FontItalic) const
-FontMetric::EqualIgnoreColor(FontMetric const&) const
-FontMetric::EqualNoBase(FontMetric const&) const
-FontMetric::FontMetric(vcl::font::PhysicalFontFace const&)
-FontMetric::GetHashValueIgnoreColor() const
-FontMetric::GetHashValueNoBase() const
-FontMetricData::FontMetricData(vcl::font::FontSelectPattern const&)
-FontMetricData::ImplInitAboveTextLineSize(OutputDevice const*)
-FontMetricData::ImplInitFlags(OutputDevice const*)
-FontMetricData::ImplInitTextLineSize(OutputDevice const*)
-FontMetricData::ImplInitTextLineSizeHarfBuzz(LogicalFontInstance*)
-FontMetricData::ShouldNotUseUnderlineMetrics() const
-FontMetricData::ShouldUseWinMetrics(int, int, int, int, int, int) const
 FontNameBox::CachePreview(unsigned long, Point*, int, int)
 FontNameBox::InitFontMRUEntriesFile()
 FontNameBox::LoadMRUEntries(rtl::OUString const&)
@@ -1007,11 +816,6 @@ FontSizeBox::SetValue(int, FieldUnit)
 FontSizeBox::format_number(int) const
 FontSizeNames::Name2Size(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
 FontSizeNames::Size2Name(int) const
-FontSubsetInfo::CreateFontSubset(FontType, SvStream*, char const*, unsigned int const*, unsigned char const*, int)
-FontSubsetInfo::CreateFontSubsetFromCff()
-FontSubsetInfo::FontSubsetInfo()
-FontSubsetInfo::LoadFont(FontType, unsigned char const*, int)
-FontSubsetInfo::~FontSubsetInfo()
 FormattedField::Down()
 FormattedField::DumpAsPropertyTree(tools::JsonWriter&)
 FormattedField::EventNotify(NotifyEvent&)
@@ -1054,29 +858,7 @@ Fraction::Fraction(double, double)
 Fraction::operator-=(Fraction const&)
 FrameDeleteWatch::Notify(SfxHint const&)
 FreeTypeTextRenderImpl::ClearDevFontCache()
-FreetypeFont::ApplyGlyphTransform(bool, FT_GlyphRec_*) const
-FreetypeFont::FreetypeFont(FreetypeFontInstance&, std::shared_ptr<FreetypeFontInfo>)
-FreetypeFont::GetFontFaceIndex() const
-FreetypeFont::GetFontFaceVariation() const
-FreetypeFont::GetFontFileName() const
-FreetypeFont::GetFontMetric(tools::SvRef<FontMetricData> const&) const
-FreetypeFont::GetFtFace() const
-FreetypeFont::GetGlyphOutline(unsigned int, basegfx::B2DPolyPolygon&, bool) const
-FreetypeFont::~FreetypeFont()
-FreetypeManager::AnnounceFonts(vcl::font::PhysicalFontCollection*) const
-FreetypeManager::CreateFont(FreetypeFontInstance*)
-FreetypeManager::FindFontFile(rtl::OString const&)
-FreetypeManager::FreetypeManager()
-FreetypeManager::InitFreetype()
-FreetypeManager::~FreetypeManager()
 FuConstUnoControl::Activate()
-GDIMetaFile::GetSizeBytes() const
-GDIMetaFile::Linker(OutputDevice*, bool)
-GDIMetaFile::Mirror(BmpMirrorFlags)
-GDIMetaFile::ReplaceAction(rtl::Reference<MetaAction>, unsigned long)
-GDIMetaFile::Rotate(o3tl::strong_int<short, FractionTag<10> >)
-GDIMetaFile::dumpAsXml(char const*) const
-GDIMetaFile::push_back(rtl::Reference<MetaAction> const&)
 GLWindow::Synchronize(bool) const
 GUB_count
 GalleryExplorer::BeginLocking(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
@@ -1105,35 +887,6 @@ GalleryThemeEntry::getCachedTheme(Gallery*)
 GalleryThemeEntry::removeTheme()
 GalleryThemeEntry::setStorageLocations(INetURLObject&)
 GalleryThemeEntry::~GalleryThemeEntry()
-GenPspGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*, rtl::OUString const&, rtl::OUString const&)
-GenPspGraphics::ClearDevFontCache()
-GenPspGraphics::CreateBitmapSurface(OutputDevice const&, BitmapSystemData const&, Size const&) const
-GenPspGraphics::CreateSurface(OutputDevice const&, int, int, int, int) const
-GenPspGraphics::CreateSurface(std::shared_ptr<_cairo_surface> const&) const
-GenPspGraphics::DrawTextLayout(GenericSalLayout const&)
-GenPspGraphics::GetDevFontList(vcl::font::PhysicalFontCollection*)
-GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities&) const
-GenPspGraphics::GetFontCharMap() const
-GenPspGraphics::GetFontMetric(tools::SvRef<FontMetricData>&, int)
-GenPspGraphics::GetGraphicsData() const
-GenPspGraphics::GetNativeSurfaceHandle(std::shared_ptr<cairo::Surface>&, basegfx::B2ISize const&) const
-GenPspGraphics::GetResolution(int&, int&)
-GenPspGraphics::GetTextLayout(int)
-GenPspGraphics::Init(psp::JobData*)
-GenPspGraphics::SetFont(LogicalFontInstance*, int)
-GenPspGraphics::SetTextColor(Color)
-GenPspGraphics::SupportsCairo() const
-GenPspGraphics::~GenPspGraphics()
-GenericSalLayout::ApplyAsianKerning(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-GenericSalLayout::ApplyDXArray(double const*, unsigned char const*)
-GenericSalLayout::DropGlyph(int)
-GenericSalLayout::GetCharWidths(std::vector<double, std::allocator<double> >&, rtl::OUString const&) const
-GenericSalLayout::HasVerticalAlternate(unsigned int, unsigned int)
-GenericSalLayout::Justify(double)
-GenericSalLayout::MoveGlyph(int, double)
-GenericSalLayout::ParseFeatures(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs&, int, bool)
-GenericSalLayout::Simplify(bool)
 GenericUnixSalData::InitFreetypeManager()
 GenericUnixSalData::InitPrintFontManager()
 GetODFSaneDefaultVersion(SvtSaveOptions::ODFDefaultVersion)
@@ -1319,22 +1072,9 @@ GrYUVABackendTextureInfo::operator==(GrYUVABackendTextureInfo const&) const
 GrYUVABackendTextureInfo::toYUVALocations() const
 GrYUVABackendTextures::GrYUVABackendTextures(SkYUVAInfo const&, GrBackendTexture const*, GrSurfaceOrigin)
 GrYUVABackendTextures::toYUVALocations() const
-Gradient::DrawComplexGradientToMetafile(tools::Rectangle const&, GDIMetaFile&) const
-Gradient::DrawLinearGradientToMetafile(tools::Rectangle const&, GDIMetaFile&) const
-Gradient::GetMetafileSteps(tools::Rectangle const&) const
-Gradient::MakeGrayscale()
 Gradient::operator=(Gradient const&)
 Gradient::operator=(Gradient&&)
 Gradient::operator==(Gradient const&) const
-Graphic::GetAnimationLoopCount() const
-Graphic::GetAnimationNotifyHdl() const
-Graphic::Graphic(std::shared_ptr<GfxLink> const&, int)
-Graphic::IsDummyContext() const
-Graphic::IsEPS() const
-Graphic::SetAnimationNotifyHdl(Link<Animation*, void> const&)
-Graphic::SetDummyContext(bool)
-Graphic::SetReaderContext(std::shared_ptr<GraphicReader> const&)
-Graphic::getUniqueID() const
 GraphicConverter::GraphicConverter()
 GraphicDescriptor::ImpConstruct()
 GraphicDescriptor::ImpDetectBMP(SvStream&, bool)
@@ -1628,21 +1368,6 @@ ImageControl::ImplDraw(OutputDevice&, Point const&, Size const&) const
 ImageControl::LoseFocus()
 ImageControl::Paint(OutputDevice&, tools::Rectangle const&)
 ImageControl::Resize()
-ImageMap::ImpDetectFormat(SvStream&)
-ImageMap::ImpReadCERN(SvStream&)
-ImageMap::ImpReadCERNCoords(char const**)
-ImageMap::ImpReadCERNLine(std::basic_string_view<char, std::char_traits<char> >)
-ImageMap::ImpReadCERNRadius(char const**)
-ImageMap::ImpReadCERNURL(char const**)
-ImageMap::ImpReadImageMap(SvStream&, unsigned long)
-ImageMap::ImpReadNCSA(SvStream&)
-ImageMap::ImpReadNCSACoords(char const**)
-ImageMap::ImpReadNCSALine(std::basic_string_view<char, std::char_traits<char> >)
-ImageMap::ImpReadNCSAURL(char const**)
-ImageMap::ImpWriteCERN(SvStream&) const
-ImageMap::ImpWriteImageMap(SvStream&) const
-ImageMap::ImpWriteNCSA(SvStream&) const
-ImageMap::Write(SvStream&) const
 ImageTree::getNameAccess()
 ImageTree::loadImage(rtl::OUString const&, rtl::OUString const&, BitmapEx&, bool, int, ImageLoadFlags)
 ImageTree::shutdown()
@@ -1777,16 +1502,6 @@ LogLuv24fromXYZ
 LogLuv24toXYZ
 LogLuv32fromXYZ
 LogLuv32toXYZ
-LogicalFontInstance::AddFallbackForUnicode(unsigned int, FontWeight, rtl::OUString const&, bool, ItalicMatrix const&)
-LogicalFontInstance::GetFallbackForUnicode(unsigned int, FontWeight, rtl::OUString*, bool*, ItalicMatrix*) const
-LogicalFontInstance::GetGlyphOutlineUntransformed(unsigned int) const
-LogicalFontInstance::GetGlyphWidth(unsigned int, bool, bool) const
-LogicalFontInstance::GetHbFontUntransformed() const
-LogicalFontInstance::GetScale(double*, double*) const
-LogicalFontInstance::IgnoreFallbackForUnicode(unsigned int, FontWeight, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-LogicalFontInstance::InitHbFont()
-LogicalFontInstance::IsGraphiteFont()
-LogicalFontInstance::NeedOffsetCorrection(int)
 LokChartHelper::Hit(Point const&)
 LokChartHelper::HitAny(Point const&, bool)
 LokChartHelper::Invalidate()
@@ -1826,34 +1541,6 @@ Menu::SetAccessibleName(unsigned short, rtl::OUString const&)
 Menu::dispose()
 Menu::operator=(Menu const&)
 Menu::~Menu()
-MenuBar::AddMenuBarButton(Image const&, Link<MenuBarButtonCallbackArg&, bool> const&, rtl::OUString const&)
-MenuBar::ClosePopup(Menu*)
-MenuBar::GetMenuBarButtonRectPixel(unsigned short)
-MenuBar::GetMenuBarHeight() const
-MenuBar::HandleMenuHighlightEvent(Menu*, unsigned short) const
-MenuBar::MenuBar(MenuBar const&)
-MenuBar::MenuBarKeyInput(KeyEvent const&)
-MenuBar::RemoveMenuBarButton(unsigned short)
-MenuBar::SelectItem(unsigned short)
-MenuBar::SetMenuBarButtonHighlightHdl(unsigned short, Link<MenuBarButtonCallbackArg&, bool> const&)
-MenuBar::ShowButtons(bool, bool, bool)
-MenuBar::dispose()
-MenuBar::getMenuBarWindow()
-MenuBar::~MenuBar()
-MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow&, bool)
-MenuBarUpdateIconManager::GetBubbleWindow()
-MenuBarUpdateIconManager::GetIconID(MenuBar*) const
-MenuBarUpdateIconManager::MenuBarUpdateIconManager()
-MenuBarUpdateIconManager::RemoveBubbleWindow()
-MenuBarUpdateIconManager::RemoveMenuBarIcon(MenuBar*)
-MenuBarUpdateIconManager::RemoveMenuBarIcons()
-MenuBarUpdateIconManager::SetBubbleChanged()
-MenuBarUpdateIconManager::SetBubbleImage(Image const&)
-MenuBarUpdateIconManager::SetBubbleText(rtl::OUString const&)
-MenuBarUpdateIconManager::SetBubbleTitle(rtl::OUString const&)
-MenuBarUpdateIconManager::SetShowBubble(bool)
-MenuBarUpdateIconManager::SetShowMenuIcon(bool)
-MenuBarUpdateIconManager::~MenuBarUpdateIconManager()
 MenuButton::Activate()
 MenuButton::CancelMenu()
 MenuButton::DumpAsPropertyTree(tools::JsonWriter&)
@@ -18599,46 +18286,7 @@ vcl::ControlLayoutData::ToRelativeLineIndex(long) const
 vcl::ConvertDoubleValue(double, long, unsigned short, FieldUnit, FieldUnit)
 vcl::CreateTTFfontSubset(vcl::AbstractTrueTypeFont&, std::vector<unsigned char, std::allocator<unsigned char> >&, unsigned int const*, unsigned char const*, int, FontSubsetInfo&)
 vcl::CreateTTFromTTGlyphs(vcl::AbstractTrueTypeFont*, std::vector<unsigned char, std::allocator<unsigned char> >&, unsigned short const*, unsigned char const*, int)
-vcl::Cursor::Cursor(vcl::Cursor const&)
-vcl::Cursor::ImplDoHide(bool)
-vcl::Cursor::ImplDoShow(bool, bool)
-vcl::Cursor::ImplPrepForDraw(OutputDevice const*, ImplCursorData&)
-vcl::Cursor::ImplRestore()
-vcl::Cursor::LOKNotify(vcl::Window*, rtl::OUString const&)
-vcl::Cursor::operator=(vcl::Cursor const&)
-vcl::Cursor::operator==(vcl::Cursor const&) const
-vcl::DefaultTextLayout::DecomposeTextRectAction() const
-vcl::DefaultTextLayout::DrawText(Point const&, rtl::OUString const&, int, int, std::vector<tools::Rectangle, std::allocator<tools::Rectangle> >*, rtl::OUString*)
-vcl::DefaultTextLayout::GetTextArray(rtl::OUString const&, KernArray*, int, int, bool) const
-vcl::DefaultTextLayout::GetTextBreak(rtl::OUString const&, long, int, int) const
-vcl::DefaultTextLayout::GetTextWidth(rtl::OUString const&, int, int) const
-vcl::EnumContext::AddEntry(rtl::OUString const&, vcl::EnumContext::Application)
-vcl::EnumContext::AddEntry(rtl::OUString const&, vcl::EnumContext::Context)
-vcl::EnumContext::GetApplication_DI() const
-vcl::EnumContext::ProvideApplicationContainers()
-vcl::EnumContext::ProvideContextContainers()
 vcl::ExtOutDevData::~ExtOutDevData()
-vcl::Font::EqualIgnoreColor(vcl::Font const&) const
-vcl::Font::GetAverageFontSize() const
-vcl::Font::GetCJKContextLanguageTag() const
-vcl::Font::GetFontAttributes(FontAttributes&) const
-vcl::Font::GetFontFamily() const
-vcl::Font::GetHashValueIgnoreColor() const
-vcl::Font::GetLanguageTag() const
-vcl::Font::SetCJKContextLanguageTag(LanguageTag const&)
-vcl::Font::SetLanguageTag(LanguageTag const&)
-vcl::GetTTGlobalFontHeadInfo(vcl::AbstractTrueTypeFont const*, int&, int&, int&, int&, unsigned short&)
-vcl::GetTTGlobalFontInfo(vcl::AbstractTrueTypeFont*, vcl::TTGlobalFontInfo_*)
-vcl::GraphicFormatDetector::checkAndUncompressBuffer(unsigned char*, unsigned int, unsigned long&)
-vcl::GraphicFormatDetector::checkDXF()
-vcl::GraphicFormatDetector::checkMOV()
-vcl::GraphicFormatDetector::checkPBM()
-vcl::GraphicFormatDetector::checkPCD()
-vcl::GraphicFormatDetector::checkPCT()
-vcl::GraphicFormatDetector::checkPGM()
-vcl::GraphicFormatDetector::checkPPM()
-vcl::GraphicFormatDetector::checkRAS()
-vcl::GraphicFormatDetector::checkSVM()
 vcl::I18nHelper::I18nHelper(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, LanguageTag)
 vcl::I18nHelper::filterFormattingChars(rtl::OUString const&)
 vcl::I18nHelper::~I18nHelper()
@@ -18691,233 +18339,12 @@ vcl::PDFExtOutDevData::RegisterDest()
 vcl::PaintBufferGuard::SetPaintRect(tools::Rectangle const&)
 vcl::PngImageReader::getMicrosoftGifChunk(SvStream&)
 vcl::PngImageReader::isAPng(SvStream&)
-vcl::PrinterController::abortJob()
-vcl::PrinterController::createProgressDialog()
-vcl::PrinterController::getBoolProperty(rtl::OUString const&, bool) const
-vcl::PrinterController::getFilteredPageCount() const
-vcl::PrinterController::getFilteredPageFile(int, GDIMetaFile&, bool)
-vcl::PrinterController::getIntProperty(rtl::OUString const&, int) const
-vcl::PrinterController::getJobState() const
-vcl::PrinterController::getPrinterModified() const
-vcl::PrinterController::getUIOptions() const
-vcl::PrinterController::getWindow() const
-vcl::PrinterController::isDirectPrint() const
-vcl::PrinterController::isProgressCanceled() const
-vcl::PrinterController::isShowDialogs() const
-vcl::PrinterController::isUIChoiceEnabled(rtl::OUString const&, int) const
-vcl::PrinterController::isUIOptionEnabled(rtl::OUString const&) const
-vcl::PrinterController::jobFinished(com::sun::star::view::PrintableState)
-vcl::PrinterController::jobStarted()
-vcl::PrinterController::makeEnabled(rtl::OUString const&)
-vcl::PrinterController::printFilteredPage(int)
-vcl::PrinterController::setLastPage(bool)
-vcl::PrinterController::setValue(com::sun::star::beans::PropertyValue const&)
 vcl::PrinterOptionsHelper::setUIControlOpt(com::sun::star::uno::Sequence<rtl::OUString> const&, rtl::OUString const&, com::sun::star::uno::Sequence<rtl::OUString> const&, rtl::OUString const&, com::sun::star::beans::PropertyValue const*, vcl::PrinterOptionsHelper::UIControlOptions const&)
 vcl::ReadRegion(SvStream&, vcl::Region&)
 vcl::Region::GetAsRegionBand() const
 vcl::Region::Overlaps(tools::Rectangle const&) const
 vcl::Region::Scale(double, double)
 vcl::ScriptRun::next()
-vcl::SettingsConfigItem::ImplCommit()
-vcl::SettingsConfigItem::Notify(com::sun::star::uno::Sequence<rtl::OUString> const&)
-vcl::SettingsConfigItem::SettingsConfigItem()
-vcl::SettingsConfigItem::getValues()
-vcl::SettingsConfigItem::setValue(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
-vcl::SettingsConfigItem::~SettingsConfigItem()
-vcl::TextLayoutCommon::BreakLineSimple(long, rtl::OUString const&, int, int, long)
-vcl::TextLayoutCommon::GetCenterEllipsisString(std::basic_string_view<char16_t, std::char_traits<char16_t> >, int, long)
-vcl::TextLayoutCommon::GetEllipsisString(rtl::OUString const&, long, DrawTextFlags)
-vcl::TextLayoutCommon::GetEndEllipsisString(rtl::OUString const&, int, long, bool)
-vcl::TextLayoutCommon::GetNewsEllipsisString(rtl::OUString const&, long, DrawTextFlags)
-vcl::TextLayoutCommon::GetTextLines(tools::Rectangle const&, long, ImplMultiTextLineInfo&, long, rtl::OUString const&, DrawTextFlags)
-vcl::TextLayoutCommon::~TextLayoutCommon()
-vcl::WidgetDefinitionReader::readDefinition(tools::XmlWalker&, vcl::WidgetDefinition&, ControlType)
-vcl::WidgetDefinitionReader::readDrawingDefinition(tools::XmlWalker&, std::shared_ptr<vcl::WidgetDefinitionState> const&)
-vcl::WidgetDefinitionReader::readPart(tools::XmlWalker&, std::shared_ptr<vcl::WidgetDefinitionPart>)
-vcl::Window::CalcOutputSize(Size const&) const
-vcl::Window::EnableAlwaysOnTop(bool)
-vcl::Window::EnableInput(bool, vcl::Window const*)
-vcl::Window::EndAutoScroll()
-vcl::Window::EndExtTextInput()
-vcl::Window::EndSaveFocus(VclPtr<vcl::Window> const&)
-vcl::Window::Erase(OutputDevice&)
-vcl::Window::GetActivateMode() const
-vcl::Window::GetCursorExtTextInputWidth() const
-vcl::Window::GetCursorRect() const
-vcl::Window::GetDialogControlFlags() const
-vcl::Window::GetDrawPixel(OutputDevice const*, long) const
-vcl::Window::GetLastPointerPosPixel()
-vcl::Window::GetNativeControlRegion(ControlType, ControlPart, tools::Rectangle const&, ControlState, ImplControlValue const&, tools::Rectangle&, tools::Rectangle&) const
-vcl::Window::GetOutputRectPixel() const
-vcl::Window::GetOverlineColor() const
-vcl::Window::GetParentClipMode() const
-vcl::Window::GetParentDialog() const
-vcl::Window::GetPrevStyle() const
-vcl::Window::GetTextAlign() const
-vcl::Window::HasPaintEvent() const
-vcl::Window::ImplGetWindow() const
-vcl::Window::InvalidateSizeCache()
-vcl::Window::IsAlwaysEnableInput() const
-vcl::Window::IsAlwaysOnTopEnabled() const
-vcl::Window::IsCreatedWithToolkit() const
-vcl::Window::IsDefaultSize() const
-vcl::Window::IsDialogControlStart() const
-vcl::Window::IsDockingWindow() const
-vcl::Window::IsInInitShow() const
-vcl::Window::IsLOKWindowsEmpty()
-vcl::Window::IsNativeControlSupported(ControlType, ControlPart) const
-vcl::Window::IsOverlineColor() const
-vcl::Window::IsScrollable() const
-vcl::Window::IsTextFillColor() const
-vcl::Window::NormalizedScreenToOutputPixel(Point const&) const
-vcl::Window::NotifyAllChildren(DataChangedEvent&)
-vcl::Window::PixelToLogic(vcl::Region const&) const
-vcl::Window::SaveFocus()
-vcl::Window::SetAccessibleDescription(rtl::OUString const&)
-vcl::Window::SetAccessibleRelationLabelFor(vcl::Window*)
-vcl::Window::SetAccessibleRelationLabeledBy(vcl::Window*)
-vcl::Window::SetActivateMode(ActivateModeFlags)
-vcl::Window::SetDumpAsPropertyTreeHdl(Link<tools::JsonWriter&, void> const&)
-vcl::Window::SetFakeFocus(bool)
-vcl::Window::SetHelpHdl(Link<vcl::Window&, bool> const&)
-vcl::Window::SetMapMode()
-vcl::Window::SetMnemonicActivateHdl(Link<vcl::Window&, bool> const&)
-vcl::Window::SetOverlineColor()
-vcl::Window::SetOverlineColor(Color const&)
-vcl::Window::SetTextAlign(TextAlign)
-vcl::Window::SetWindowRegionPixel()
-vcl::Window::SetWindowRegionPixel(vcl::Region const&)
-vcl::Window::StartAutoScroll(StartAutoScrollFlags)
-vcl::Window::UpdateSettings(AllSettings const&, bool)
-vcl::Window::Window(WindowType)
-vcl::Window::add_mnemonic_label(FixedText*)
-vcl::Window::add_to_size_group(std::shared_ptr<VclSizeGroup> const&)
-vcl::Window::get_border_width() const
-vcl::Window::get_fill() const
-vcl::Window::get_grid_height() const
-vcl::Window::get_grid_left_attach() const
-vcl::Window::get_grid_top_attach() const
-vcl::Window::get_grid_width() const
-vcl::Window::get_halign() const
-vcl::Window::get_hexpand() const
-vcl::Window::get_margin_bottom() const
-vcl::Window::get_margin_end() const
-vcl::Window::get_margin_start() const
-vcl::Window::get_margin_top() const
-vcl::Window::get_non_homogeneous() const
-vcl::Window::get_pack_type() const
-vcl::Window::get_padding() const
-vcl::Window::get_secondary() const
-vcl::Window::get_ungrouped_preferred_size() const
-vcl::Window::get_valign() const
-vcl::Window::list_mnemonic_labels() const
-vcl::Window::remove_from_all_size_groups()
-vcl::Window::remove_mnemonic_label(FixedText*)
-vcl::Window::reorderWithinParent(unsigned short)
-vcl::Window::set_fill(bool)
-vcl::Window::set_font_attribute(rtl::OUString const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-vcl::Window::set_grid_height(int)
-vcl::Window::set_grid_left_attach(int)
-vcl::Window::set_grid_top_attach(int)
-vcl::Window::set_grid_width(int)
-vcl::Window::set_halign(VclAlign)
-vcl::Window::set_margin_bottom(int)
-vcl::Window::set_margin_end(int)
-vcl::Window::set_margin_start(int)
-vcl::Window::set_non_homogeneous(bool)
-vcl::Window::set_pack_type(VclPackType)
-vcl::Window::set_padding(int)
-vcl::Window::set_secondary(bool)
-vcl::Window::set_valign(VclAlign)
-vcl::WizardMachine::RemovePage(BuilderPage const*)
-vcl::WizardMachine::SetPage(short, std::unique_ptr<BuilderPage, std::default_delete<BuilderPage> >)
-vcl::WizardMachine::getStateHistory(std::vector<short, std::allocator<short> >&)
-vcl::WizardMachine::isAutomaticNextButtonStateEnabled() const
-vcl::WizardMachine::isTravelingSuspended() const
-vcl::WizardMachine::removePageFromHistory(short)
-vcl::WizardMachine::resumeTraveling(vcl::WizardMachine::AccessGuard)
-vcl::WizardMachine::suspendTraveling(vcl::WizardMachine::AccessGuard)
-vcl::WriteRegion(SvStream&, vcl::Region const&)
-vcl::bitmap::get_premultiply_table()
-vcl::bitmap::get_unpremultiply_table()
-vcl::bitmap::unpremultiply(unsigned char, unsigned char)
-vcl::filter::PDFArrayElement::PushBack(vcl::filter::PDFElement*)
-vcl::filter::PDFArrayElement::Read(SvStream&)
-vcl::filter::PDFBooleanElement::Read(SvStream&)
-vcl::filter::PDFCommentElement::PDFCommentElement(vcl::filter::PDFDocument&)
-vcl::filter::PDFCommentElement::Read(SvStream&)
-vcl::filter::PDFDictionaryElement::Lookup(std::map<rtl::OString, vcl::filter::PDFElement*, std::less<rtl::OString>, std::allocator<std::pair<rtl::OString const, vcl::filter::PDFElement*> > > const&, rtl::OString const&)
-vcl::filter::PDFDictionaryElement::Read(SvStream&)
-vcl::filter::PDFDictionaryElement::SetKeyOffset(rtl::OString const&, unsigned long)
-vcl::filter::PDFDictionaryElement::SetKeyValueLength(rtl::OString const&, unsigned long)
-vcl::filter::PDFDocument::DecodeHexString(vcl::filter::PDFHexStringElement const*)
-vcl::filter::PDFDocument::FindStartXRef(SvStream&)
-vcl::filter::PDFDocument::GetEditBuffer()
-vcl::filter::PDFDocument::GetNextSignature()
-vcl::filter::PDFDocument::GetObjectOffset(unsigned long) const
-vcl::filter::PDFDocument::PushBackEOF(unsigned long)
-vcl::filter::PDFDocument::ReadKeyword(SvStream&)
-vcl::filter::PDFDocument::ReadWithPossibleFixup(SvStream&)
-vcl::filter::PDFDocument::ReadXRef(SvStream&)
-vcl::filter::PDFDocument::ReadXRefStream(SvStream&)
-vcl::filter::PDFDocument::SetIDObject(unsigned long, vcl::filter::PDFObjectElement*)
-vcl::filter::PDFDocument::SkipLineBreaks(SvStream&)
-vcl::filter::PDFDocument::SkipWhitespace(SvStream&)
-vcl::filter::PDFDocument::Tokenize(SvStream&, vcl::filter::TokenizeMode, std::vector<std::unique_ptr<vcl::filter::PDFElement, std::default_delete<vcl::filter::PDFElement> >, std::allocator<std::unique_ptr<vcl::filter::PDFElement, std::default_delete<vcl::filter::PDFElement> > > >&, vcl::filter::PDFObjectElement*)
-vcl::filter::PDFDocument::WriteAnnotObject(vcl::filter::PDFObjectElement const&, int, int, tools::Rectangle const&)
-vcl::filter::PDFDocument::WriteAppearanceObject(tools::Rectangle&)
-vcl::filter::PDFDocument::WriteCatalogObject(int, vcl::filter::PDFReferenceElement*&)
-vcl::filter::PDFDocument::WritePageObject(vcl::filter::PDFObjectElement&, int)
-vcl::filter::PDFDocument::WriteSignatureObject(rtl::OUString const&, bool, unsigned long&, long&)
-vcl::filter::PDFDocument::WriteXRef(unsigned long, vcl::filter::PDFReferenceElement const*)
-vcl::filter::PDFDocument::createObject()
-vcl::filter::PDFDocument::updateObject(int)
-vcl::filter::PDFDocument::writeBufferBytes(void const*, unsigned long)
-vcl::filter::PDFEndArrayElement::GetOffset() const
-vcl::filter::PDFEndArrayElement::Read(SvStream&)
-vcl::filter::PDFEndDictionaryElement::GetLocation() const
-vcl::filter::PDFEndDictionaryElement::Read(SvStream&)
-vcl::filter::PDFEndObjectElement::Read(SvStream&)
-vcl::filter::PDFEndStreamElement::Read(SvStream&)
-vcl::filter::PDFHexStringElement::GetValue() const
-vcl::filter::PDFHexStringElement::Read(SvStream&)
-vcl::filter::PDFLiteralStringElement::Read(SvStream&)
-vcl::filter::PDFNameElement::GetLocation() const
-vcl::filter::PDFNameElement::Read(SvStream&)
-vcl::filter::PDFNullElement::Read(SvStream&)
-vcl::filter::PDFNumberElement::GetLength() const
-vcl::filter::PDFNumberElement::GetLocation() const
-vcl::filter::PDFNumberElement::Read(SvStream&)
-vcl::filter::PDFObjectElement::AddDictionaryReference(vcl::filter::PDFReferenceElement*)
-vcl::filter::PDFObjectElement::GetArrayLength() const
-vcl::filter::PDFObjectElement::GetArrayOffset() const
-vcl::filter::PDFObjectElement::GetDictionaryReferences() const
-vcl::filter::PDFObjectElement::GetDocument()
-vcl::filter::PDFObjectElement::GetNumberElement() const
-vcl::filter::PDFObjectElement::GetObjectValue() const
-vcl::filter::PDFObjectElement::GetStoredElements()
-vcl::filter::PDFObjectElement::GetStreamBuffer() const
-vcl::filter::PDFObjectElement::ParseStoredObjects()
-vcl::filter::PDFObjectElement::Read(SvStream&)
-vcl::filter::PDFObjectElement::SetArray(vcl::filter::PDFArrayElement*)
-vcl::filter::PDFObjectElement::SetArrayLength(unsigned long)
-vcl::filter::PDFObjectElement::SetArrayOffset(unsigned long)
-vcl::filter::PDFObjectElement::SetDictionary(vcl::filter::PDFDictionaryElement*)
-vcl::filter::PDFObjectElement::SetDictionaryLength(unsigned long)
-vcl::filter::PDFObjectElement::SetDictionaryOffset(unsigned long)
-vcl::filter::PDFObjectElement::SetNumberElement(vcl::filter::PDFNumberElement*)
-vcl::filter::PDFObjectElement::SetStream(vcl::filter::PDFStreamElement*)
-vcl::filter::PDFObjectElement::SetStreamBuffer(std::unique_ptr<SvMemoryStream, std::default_delete<SvMemoryStream> >&)
-vcl::filter::PDFObjectElement::parseIfNecessary()
-vcl::filter::PDFReferenceElement::GetObjectElement() const
-vcl::filter::PDFReferenceElement::GetOffset() const
-vcl::filter::PDFReferenceElement::LookupNumber(SvStream&) const
-vcl::filter::PDFReferenceElement::Read(SvStream&)
-vcl::filter::PDFStreamElement::GetOffset() const
-vcl::filter::PDFStreamElement::PDFStreamElement(unsigned long)
-vcl::filter::PDFStreamElement::Read(SvStream&)
-vcl::filter::PDFTrailerElement::GetLocation() const
-vcl::filter::PDFTrailerElement::Read(SvStream&)
 vcl::font::FeatureDefinition::FeatureDefinition(unsigned int, TranslateId, rtl::OUString)
 vcl::font::FeatureDefinition::FeatureDefinition(unsigned int, TranslateId, std::vector<vcl::font::FeatureParameter, std::allocator<vcl::font::FeatureParameter> >)
 vcl::font::FeatureParameter::FeatureParameter(unsigned int, TranslateId)
@@ -18925,33 +18352,6 @@ vcl::font::FeatureParameter::FeatureParameter(unsigned int, rtl::OUString)
 vcl::font::FontSelectPattern::hashCode() const
 vcl::font::FontSelectPattern::operator==(vcl::font::FontSelectPattern const&) const
 vcl::font::OpenTypeFeatureDefinitionList()
-vcl::font::PhysicalFontCollection::Clear()
-vcl::font::PhysicalFontCollection::Clone() const
-vcl::font::PhysicalFontCollection::FindFontFamily(vcl::font::FontSelectPattern&) const
-vcl::font::PhysicalFontCollection::GetFontFaceCollection() const
-vcl::font::PhysicalFontCollection::GetGlyphFallbackFont(vcl::font::FontSelectPattern&, LogicalFontInstance*, rtl::OUString&, int) const
-vcl::font::PhysicalFontCollection::ImplFindFontFamilyBySearchName(rtl::OUString const&) const
-vcl::font::PhysicalFontCollection::ImplFindFontFamilyBySubstFontAttr(utl::FontNameAttr const&) const
-vcl::font::PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() const
-vcl::font::PhysicalFontCollection::ImplInitGenericGlyphFallback() const
-vcl::font::PhysicalFontCollection::ImplInitMatchData() const
-vcl::font::PhysicalFontCollection::SetFallbackHook(vcl::font::GlyphFallbackFontSubstitution*)
-vcl::font::PhysicalFontCollection::SetPreMatchHook(vcl::font::PreMatchFontSubstitution*)
-vcl::font::PhysicalFontFace::CreateFontSubset(std::vector<unsigned char, std::allocator<unsigned char> >&, unsigned int const*, unsigned char const*, int, FontSubsetInfo&) const
-vcl::font::PhysicalFontFace::GetColorPalettes() const
-vcl::font::PhysicalFontFace::GetGlyphColorBitmap(unsigned int, tools::Rectangle&) const
-vcl::font::PhysicalFontFace::GetGlyphColorLayers(unsigned int) const
-vcl::font::PhysicalFontFace::GetGlyphName(unsigned int, bool) const
-vcl::font::PhysicalFontFace::GetHbUnscaledFont() const
-vcl::font::PhysicalFontFace::GetName(vcl::font::NameID, LanguageTag const&) const
-vcl::font::PhysicalFontFace::GetRawFontData(unsigned int) const
-vcl::font::PhysicalFontFace::HasColorBitmaps() const
-vcl::font::PhysicalFontFace::HasColorLayers() const
-vcl::font::PhysicalFontFamily::CalcType(ImplFontAttrs&, FontWeight&, FontWidth&, FontFamily, utl::FontNameAttr const*)
-vcl::font::PhysicalFontFamily::FindBestFontFace(vcl::font::FontSelectPattern const&) const
-vcl::font::PhysicalFontFamily::InitMatchData(utl::FontSubstConfiguration const&, rtl::OUString const&)
-vcl::font::PhysicalFontFamily::UpdateCloneFontList(vcl::font::PhysicalFontCollection&) const
-vcl::font::PhysicalFontFamily::UpdateDevFontList(vcl::font::PhysicalFontFaceCollection&) const
 vcl::getTTCoverage(std::optional<std::bitset<128ul> >&, std::optional<std::bitset<64ul> >&, unsigned char const*, unsigned long)
 vcl::importPdfVectorGraphicData(SvStream&, std::shared_ptr<VectorGraphicData>&)
 vcl::lok::unregisterPollCallbacks()
@@ -19006,22 +18406,6 @@ vcl::text::ImplLayoutArgs::SetKashidaArray(unsigned char const*)
 vcl::text::ImplLayoutArgs::SetLayoutWidth(double)
 vcl::text::ImplLayoutArgs::SetOrientation(o3tl::strong_int<short, FractionTag<10> >)
 vcl::text::TextLayoutCache::Create(rtl::OUString const&)
-vcl::unohelper::DragAndDropClient::dragDropEnd(com::sun::star::datatransfer::dnd::DragSourceDropEvent const&)
-vcl::unohelper::DragAndDropClient::dragEnter(com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent const&)
-vcl::unohelper::DragAndDropClient::dragExit(com::sun::star::datatransfer::dnd::DropTargetEvent const&)
-vcl::unohelper::DragAndDropClient::dragGestureRecognized(com::sun::star::datatransfer::dnd::DragGestureEvent const&)
-vcl::unohelper::DragAndDropClient::dragOver(com::sun::star::datatransfer::dnd::DropTargetDragEvent const&)
-vcl::unohelper::DragAndDropClient::drop(com::sun::star::datatransfer::dnd::DropTargetDropEvent const&)
-vcl::unohelper::HtmlTransferable::getTransferData(com::sun::star::datatransfer::DataFlavor const&)
-vcl::unohelper::HtmlTransferable::getTransferDataFlavors()
-vcl::unohelper::HtmlTransferable::isDataFlavorSupported(com::sun::star::datatransfer::DataFlavor const&)
-vcl::unohelper::HtmlTransferable::queryInterface(com::sun::star::uno::Type const&)
-vcl::unohelper::HtmlTransferable::~HtmlTransferable()
-vcl::unohelper::TextDataObject::getTransferData(com::sun::star::datatransfer::DataFlavor const&)
-vcl::unohelper::TextDataObject::getTransferDataFlavors()
-vcl::unohelper::TextDataObject::isDataFlavorSupported(com::sun::star::datatransfer::DataFlavor const&)
-vcl::unohelper::TextDataObject::queryInterface(com::sun::star::uno::Type const&)
-vcl::unohelper::TextDataObject::~TextDataObject()
 vec_compress
 vec_expand
 verifyLink
@@ -19030,8 +18414,6 @@ verifyPricer
 verify_basis
 verify_solution
 verify_stability
-weld::AssistantController::AssistantController(weld::Widget*, rtl::OUString const&, rtl::OUString const&)
-weld::AssistantController::~AssistantController()
 weld::CustomWidgetController::DragBeginHdl(weld::DrawingArea&)
 weld::MetricSpinButton::format_number(long) const
 weld::MetricSpinButton::spin_button_input(int*)

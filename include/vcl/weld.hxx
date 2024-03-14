@@ -2727,9 +2727,10 @@ protected:
     std::unique_ptr<weld::Assistant> m_xAssistant;
 
 public:
-    AssistantController(weld::Widget* pParent, const OUString& rUIFile, const OUString& rDialogId);
+    SAL_DLLPRIVATE AssistantController(weld::Widget* pParent, const OUString& rUIFile,
+                                       const OUString& rDialogId);
     virtual Dialog* getDialog() override;
-    virtual ~AssistantController() override;
+    SAL_DLLPRIVATE virtual ~AssistantController() override;
 };
 }
 #endif

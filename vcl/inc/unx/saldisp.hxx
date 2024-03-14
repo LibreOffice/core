@@ -269,47 +269,47 @@ protected:
     mutable Time    m_nLastUserEventTime; // mutable because changed on first access
 
     virtual void    Dispatch( XEvent *pEvent ) = 0;
-    void            InitXinerama();
-    void            InitRandR( ::Window aRoot ) const;
-    static void     DeInitRandR();
-    void            processRandREvent( XEvent* );
+    SAL_DLLPRIVATE void InitXinerama();
+    SAL_DLLPRIVATE void InitRandR( ::Window aRoot ) const;
+    SAL_DLLPRIVATE static void DeInitRandR();
+    SAL_DLLPRIVATE void processRandREvent( XEvent* );
 
-    void            doDestruct();
-    void            addXineramaScreenUnique( int i, tools::Long i_nX, tools::Long i_nY, tools::Long i_nWidth, tools::Long i_nHeight );
-    Time            GetEventTimeImpl( bool bAlwaysReget = false ) const;
+    SAL_DLLPRIVATE void doDestruct();
+    SAL_DLLPRIVATE void addXineramaScreenUnique( int i, tools::Long i_nX, tools::Long i_nY, tools::Long i_nWidth, tools::Long i_nHeight );
+    SAL_DLLPRIVATE Time GetEventTimeImpl( bool bAlwaysReget = false ) const;
 public:
-    static bool BestVisual(Display *pDisp, int nScreen, XVisualInfo &rVI);
+    SAL_DLLPRIVATE static bool BestVisual(Display *pDisp, int nScreen, XVisualInfo &rVI);
 
-                    SalDisplay( Display* pDisp );
+    SAL_DLLPRIVATE SalDisplay( Display* pDisp );
 
     virtual        ~SalDisplay() override;
 
-    void            Init();
+    SAL_DLLPRIVATE void Init();
 
 #ifdef DBG_UTIL
     void            PrintInfo() const;
     void            DbgPrintDisplayEvent(const char *pComment, const XEvent *pEvent) const;
 #endif
 
-    void            Beep() const;
+    SAL_DLLPRIVATE void Beep() const;
 
-    void            ModifierMapping();
-    void            SimulateKeyPress( sal_uInt16 nKeyCode );
-    KeyIndicatorState  GetIndicatorState() const;
-    OUString        GetKeyNameFromKeySym( KeySym keysym ) const;
-    OUString        GetKeyName( sal_uInt16 nKeyCode ) const;
-    sal_uInt16      GetKeyCode( KeySym keysym, char*pcPrintable ) const;
-    KeySym          GetKeySym( XKeyEvent      *pEvent,
+    SAL_DLLPRIVATE void ModifierMapping();
+    SAL_DLLPRIVATE void SimulateKeyPress( sal_uInt16 nKeyCode );
+    SAL_DLLPRIVATE KeyIndicatorState  GetIndicatorState() const;
+    SAL_DLLPRIVATE OUString GetKeyNameFromKeySym( KeySym keysym ) const;
+    SAL_DLLPRIVATE OUString GetKeyName( sal_uInt16 nKeyCode ) const;
+    SAL_DLLPRIVATE sal_uInt16 GetKeyCode( KeySym keysym, char*pcPrintable ) const;
+    SAL_DLLPRIVATE KeySym GetKeySym( XKeyEvent      *pEvent,
                                char           *pPrintable,
                                int            *pLen,
                                KeySym         *pUnmodifiedKeySym,
                                Status         *pStatus,
                                XIC = nullptr ) const;
 
-    Cursor                GetPointer( PointerStyle ePointerStyle );
-    int             CaptureMouse( SalFrame *pCapture );
+    SAL_DLLPRIVATE Cursor GetPointer( PointerStyle ePointerStyle );
+    SAL_DLLPRIVATE int CaptureMouse( SalFrame *pCapture );
 
-    ScreenData*     initScreen( SalX11Screen nXScreen ) const;
+    SAL_DLLPRIVATE ScreenData* initScreen( SalX11Screen nXScreen ) const;
     const ScreenData&     getDataForScreen( SalX11Screen nXScreen ) const
     {
         if( nXScreen.getXScreen() >= m_aScreens.size() )

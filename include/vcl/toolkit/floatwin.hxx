@@ -98,33 +98,33 @@ public:
                                                 sal_uInt16& rArrangeIndex, Point* pLOKTwipsPos = nullptr);
                    static AbsoluteScreenPixelPoint ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos);
                    static AbsoluteScreenPixelRectangle ImplConvertToAbsPos(vcl::Window* pReference, const tools::Rectangle& rRect);
-                   static tools::Rectangle ImplConvertToRelPos(vcl::Window* pReference, const AbsoluteScreenPixelRectangle& rRect);
+    SAL_DLLPRIVATE static tools::Rectangle ImplConvertToRelPos(vcl::Window* pReference, const AbsoluteScreenPixelRectangle& rRect);
     SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId );
     SAL_DLLPRIVATE AbsoluteScreenPixelRectangle ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
-    virtual        void             doDeferredInit(WinBits nBits) override;
+                   virtual void     doDeferredInit(WinBits nBits) override;
                    void             PixelInvalidate(const tools::Rectangle* pRectangle) override;
 
 public:
     explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle);
-    explicit        FloatingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
+    SAL_DLLPRIVATE explicit FloatingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
                                    const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
-    virtual         ~FloatingWindow() override;
-    virtual void    dispose() override;
+    virtual ~FloatingWindow() override;
+    virtual void dispose() override;
 
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void    StateChanged( StateChangedType nType ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+    virtual void StateChanged( StateChangedType nType ) override;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void    PopupModeEnd();
+    virtual void PopupModeEnd();
 
-    void            SetTitleType( FloatWinTitleType nTitle );
+    SAL_DLLPRIVATE void SetTitleType( FloatWinTitleType nTitle );
     FloatWinTitleType GetTitleType() const { return mnTitle; }
 
-    void            StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nFlags );
-    void            StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags  );
+    SAL_DLLPRIVATE void StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nFlags );
+    SAL_DLLPRIVATE void StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags  );
     void            EndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE );
-    void            AddPopupModeWindow( vcl::Window* pWindow );
+    SAL_DLLPRIVATE void AddPopupModeWindow( vcl::Window* pWindow );
     FloatWinPopupFlags GetPopupModeFlags() const { return mnPopupModeFlags; }
     void            SetPopupModeFlags( FloatWinPopupFlags nFlags ) { mnPopupModeFlags = nFlags; }
     bool            IsInPopupMode() const { return mbPopupMode; }

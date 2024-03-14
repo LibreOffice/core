@@ -61,7 +61,7 @@ public:
     SAL_DLLPRIVATE void             ImplSetSeparatorX( tools::Long nX );
 
 protected:
-    explicit            Button( WindowType nType );
+    SAL_DLLPRIVATE explicit Button( WindowType nType );
 
     // for drawing RadioButton or CheckButton that has Text and/or Image
     SAL_DLLPRIVATE void ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags,
@@ -80,24 +80,24 @@ public:
     const Link<Button*,void>& GetClickHdl() const { return maClickHdl; }
 
     /// Setup handler for UNO commands so that commands like .uno:Something are handled automagically by this button.
-    void                SetCommandHandler(const OUString& aCommand, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    SAL_DLLPRIVATE void SetCommandHandler(const OUString& aCommand, const css::uno::Reference<css::frame::XFrame>& rFrame);
     OUString const &    GetCommand() const { return maCommand; }
 
     void                SetModeImage( const Image& rImage );
-    Image const &       GetModeImage( ) const;
-    bool                HasImage() const;
+    SAL_DLLPRIVATE Image const & GetModeImage( ) const;
+    SAL_DLLPRIVATE bool HasImage() const;
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;
-    DrawButtonFlags     GetButtonState() const;
-    DrawButtonFlags&    GetButtonState();
+    SAL_DLLPRIVATE DrawButtonFlags  GetButtonState() const;
+    SAL_DLLPRIVATE DrawButtonFlags& GetButtonState();
 
     /// Set an image to use as the complete render view of a custom button,
     /// instead of the usual contents of a button
-    void                SetCustomButtonImage( const Image& rImage );
-    Image const &       GetCustomButtonImage() const;
+    SAL_DLLPRIVATE void SetCustomButtonImage( const Image& rImage );
+    SAL_DLLPRIVATE Image const & GetCustomButtonImage() const;
 
-    bool                IsSmallSymbol() const;
-    void                SetSmallSymbol();
+    SAL_DLLPRIVATE bool IsSmallSymbol() const;
+    SAL_DLLPRIVATE void SetSmallSymbol();
     virtual bool        set_property(const OUString &rKey, const OUString &rValue) override;
 
     /// Sets the button state according to the FeatureStateEvent emitted by a Uno state change.

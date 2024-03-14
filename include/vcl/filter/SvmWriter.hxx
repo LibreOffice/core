@@ -24,7 +24,7 @@
 
 class SvStream;
 
-class VCL_DLLPUBLIC SvmWriter
+class SvmWriter
 {
 private:
     SvStream& mrStream;
@@ -32,10 +32,10 @@ private:
     void WriteColor(::Color aColor);
 
 public:
-    SvmWriter(SvStream& rIStm);
+    VCL_DLLPUBLIC SvmWriter(SvStream& rIStm);
 
-    SvStream& Write(const GDIMetaFile& rMetaFile);
-    static BitmapChecksum GetChecksum(const GDIMetaFile& rMetaFile);
+    VCL_DLLPUBLIC SvStream& Write(const GDIMetaFile& rMetaFile);
+    VCL_DLLPUBLIC static BitmapChecksum GetChecksum(const GDIMetaFile& rMetaFile);
     void MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData);
     void ActionHandler(const MetaAction* pAction);
     void PixelHandler(const MetaPixelAction* pAction);

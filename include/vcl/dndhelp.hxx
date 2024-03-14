@@ -47,21 +47,21 @@ public:
 
     // css::datatransfer::dnd::XDragGestureListener
     /// @throws css::uno::RuntimeException
-    virtual void dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge );
+    SAL_DLLPRIVATE virtual void dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge );
 
     // css::datatransfer::dnd::XDragSourceListener
     /// @throws css::uno::RuntimeException
-    virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde );
+    SAL_DLLPRIVATE virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde );
 
     // css::datatransfer::dnd::XDropTargetListener
     /// @throws css::uno::RuntimeException
-    virtual void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde );
+    SAL_DLLPRIVATE virtual void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde );
     /// @throws css::uno::RuntimeException
-    virtual void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee );
+    SAL_DLLPRIVATE virtual void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee );
     /// @throws css::uno::RuntimeException
-    virtual void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte );
+    SAL_DLLPRIVATE virtual void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte );
     /// @throws css::uno::RuntimeException
-    virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde );
+    SAL_DLLPRIVATE virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde );
 };
 
 class DragAndDropWrapper final :

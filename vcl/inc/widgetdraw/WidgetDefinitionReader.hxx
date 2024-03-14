@@ -24,13 +24,15 @@ private:
     OUString m_rDefinitionFile;
     OUString m_rResourcePath;
 
-    void readDefinition(tools::XmlWalker& rWalker, WidgetDefinition& rWidgetDefinition,
-                        ControlType eType);
+    SAL_DLLPRIVATE void readDefinition(tools::XmlWalker& rWalker,
+                                       WidgetDefinition& rWidgetDefinition, ControlType eType);
 
-    void readPart(tools::XmlWalker& rWalker, std::shared_ptr<WidgetDefinitionPart> rpPart);
+    SAL_DLLPRIVATE void readPart(tools::XmlWalker& rWalker,
+                                 std::shared_ptr<WidgetDefinitionPart> rpPart);
 
-    void readDrawingDefinition(tools::XmlWalker& rWalker,
-                               const std::shared_ptr<WidgetDefinitionState>& rStates);
+    SAL_DLLPRIVATE void
+    readDrawingDefinition(tools::XmlWalker& rWalker,
+                          const std::shared_ptr<WidgetDefinitionState>& rStates);
 
 public:
     WidgetDefinitionReader(OUString aDefinitionFile, OUString aResourcePath);

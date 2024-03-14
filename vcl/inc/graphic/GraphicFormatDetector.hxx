@@ -165,21 +165,21 @@ public:
     bool checkPNG();
     bool checkAPNG();
     bool checkJPG();
-    bool checkSVM();
-    bool checkPCD();
+    SAL_DLLPRIVATE bool checkSVM();
+    SAL_DLLPRIVATE bool checkPCD();
     bool checkPSD();
     bool checkEPS();
-    bool checkDXF();
-    bool checkPCT();
-    bool checkPBM();
-    bool checkPGM();
-    bool checkPPM();
-    bool checkRAS();
+    SAL_DLLPRIVATE bool checkDXF();
+    SAL_DLLPRIVATE bool checkPCT();
+    SAL_DLLPRIVATE bool checkPBM();
+    SAL_DLLPRIVATE bool checkPGM();
+    SAL_DLLPRIVATE bool checkPPM();
+    SAL_DLLPRIVATE bool checkRAS();
     bool checkXPM();
     bool checkXBM();
     bool checkSVG();
     bool checkTGA();
-    bool checkMOV();
+    SAL_DLLPRIVATE bool checkMOV();
     bool checkPDF();
     bool checkWEBP();
     const GraphicMetadata& getMetadata();
@@ -194,8 +194,9 @@ private:
      * @param nRetSize the amount of bytes actually uncompressed
      * @return sal_uInt8* a pointer to maFirstBytes or aUncompressed buffer
      */
-    sal_uInt8* checkAndUncompressBuffer(sal_uInt8* aUncompressedBuffer, sal_uInt32 nSize,
-                                        sal_uInt64& nDecompressedSize);
+    SAL_DLLPRIVATE sal_uInt8* checkAndUncompressBuffer(sal_uInt8* aUncompressedBuffer,
+                                                       sal_uInt32 nSize,
+                                                       sal_uInt64& nDecompressedSize);
     bool mbExtendedInfo;
     bool mbWasCompressed;
     GraphicMetadata maMetadata;

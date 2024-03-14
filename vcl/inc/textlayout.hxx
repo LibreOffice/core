@@ -43,7 +43,7 @@ namespace vcl
         virtual sal_Int32   GetTextBreak( const OUString& _rText, tools::Long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
 
-        OUString GetEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
+        SAL_DLLPRIVATE OUString GetEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
 
         std::tuple<sal_Int32, sal_Int32> BreakLine(const tools::Long nWidth, OUString const& rStr,
                         css::uno::Reference< css::linguistic2::XHyphenator > const& xHyph,
@@ -51,21 +51,21 @@ namespace vcl
                         const bool bHyphenate, const tools::Long nOrigLineWidth,
                         const sal_Int32 nPos, const sal_Int32 nLen);
 
-        std::tuple<sal_Int32, sal_Int32> BreakLineSimple(const tools::Long nWidth, OUString const& rStr,
+        SAL_DLLPRIVATE std::tuple<sal_Int32, sal_Int32> BreakLineSimple(const tools::Long nWidth, OUString const& rStr,
                                   const sal_Int32 nPos, sal_Int32 nBreakPos, const tools::Long nOrigLineWidth);
 
-        tools::Long GetTextLines(tools::Rectangle const& rRect, const tools::Long nTextHeight,
+        SAL_DLLPRIVATE tools::Long GetTextLines(tools::Rectangle const& rRect, const tools::Long nTextHeight,
                                  ImplMultiTextLineInfo& rLineInfo,
                                  tools::Long nWidth, OUString const& rStr,
                                  DrawTextFlags nStyle);
 
     protected:
-        ~TextLayoutCommon() COVERITY_NOEXCEPT_FALSE;
+        SAL_DLLPRIVATE ~TextLayoutCommon() COVERITY_NOEXCEPT_FALSE;
 
     private:
-        OUString GetCenterEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth);
-        OUString GetEndEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText);
-        OUString GetNewsEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
+        SAL_DLLPRIVATE OUString GetCenterEllipsisString(std::u16string_view rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth);
+        SAL_DLLPRIVATE OUString GetEndEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText);
+        SAL_DLLPRIVATE OUString GetNewsEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
     };
 
     /** is an implementation of TextLayoutCommon which simply delegates its calls to the respective
@@ -81,7 +81,7 @@ namespace vcl
         virtual ~DefaultTextLayout();
 
         // TextLayoutCommon overridables
-        virtual tools::Long        GetTextWidth( const OUString& _rText,
+        SAL_DLLPRIVATE virtual tools::Long GetTextWidth( const OUString& _rText,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength ) const override;
 
@@ -92,18 +92,18 @@ namespace vcl
                                       std::vector< tools::Rectangle >* _pVector,
                                       OUString* _pDisplayText ) override;
 
-        virtual tools::Long GetTextArray( const OUString& _rText,
+        SAL_DLLPRIVATE virtual tools::Long GetTextArray( const OUString& _rText,
                                           KernArray* _pDXArray,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength,
                                           bool bCaret = false ) const override;
 
-        virtual sal_Int32   GetTextBreak( const OUString& _rText,
+        SAL_DLLPRIVATE virtual sal_Int32 GetTextBreak( const OUString& _rText,
                                           tools::Long _nMaxTextWidth,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength ) const override;
 
-        virtual bool        DecomposeTextRectAction() const override;
+        SAL_DLLPRIVATE virtual bool DecomposeTextRectAction() const override;
 
     private:
         OutputDevice&   m_rTargetDevice;
@@ -119,7 +119,7 @@ namespace vcl
         ControlTextRenderer( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice );
         ~ControlTextRenderer();
 
-        tools::Rectangle   DrawText( const tools::Rectangle& _rRect,
+        tools::Rectangle DrawText( const tools::Rectangle& _rRect,
                               const OUString& _rText, DrawTextFlags _nStyle,
                               std::vector< tools::Rectangle >* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize );
 

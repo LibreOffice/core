@@ -57,7 +57,7 @@ public:
     const Color&    GetStartColor() const;
     void            SetEndColor( const Color& rColor );
     const Color&    GetEndColor() const;
-    void            MakeGrayscale();
+    SAL_DLLPRIVATE void MakeGrayscale();
 
     void            SetAngle( Degree10 nAngle );
     Degree10        GetAngle() const;
@@ -88,10 +88,10 @@ public:
                         { return !(Gradient::operator==( rGradient )); }
 
 private:
-    tools::Long GetMetafileSteps(tools::Rectangle const& rRect) const;
+    SAL_DLLPRIVATE tools::Long GetMetafileSteps(tools::Rectangle const& rRect) const;
 
-    void DrawComplexGradientToMetafile(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile) const;
-    void DrawLinearGradientToMetafile(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile) const;
+    SAL_DLLPRIVATE void DrawComplexGradientToMetafile(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile) const;
+    SAL_DLLPRIVATE void DrawLinearGradientToMetafile(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile) const;
 };
 
 #endif // INCLUDED_VCL_GRADIENT_HXX

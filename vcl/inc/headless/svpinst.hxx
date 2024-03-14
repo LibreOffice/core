@@ -100,7 +100,7 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEv
 
     virtual void            TriggerUserEventProcessing() override;
     virtual void            ProcessEvent( SalUserEvent aEvent ) override;
-    bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
+    SAL_DLLPRIVATE bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;
@@ -108,31 +108,31 @@ public:
     SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~SvpSalInstance() override;
 
-    void                    CloseWakeupPipe();
-    void                    Wakeup(SvpRequest request = SvpRequest::NONE);
+    SAL_DLLPRIVATE void     CloseWakeupPipe();
+    SAL_DLLPRIVATE void     Wakeup(SvpRequest request = SvpRequest::NONE);
 
-    void                    StartTimer( sal_uInt64 nMS );
-    void                    StopTimer();
+    SAL_DLLPRIVATE void     StartTimer( sal_uInt64 nMS );
+    SAL_DLLPRIVATE void     StopTimer();
 
     inline void             registerFrame( SalFrame* pFrame );
     inline void             deregisterFrame( SalFrame* pFrame );
 
-    bool                    CheckTimeout( bool bExecuteTimers = true );
+    SAL_DLLPRIVATE bool     CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    SAL_DLLPRIVATE virtual SalFrame* CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
+    SAL_DLLPRIVATE virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
     virtual void            DestroyFrame( SalFrame* pFrame ) override;
 
     // Object (System Child Window)
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) override;
+    SAL_DLLPRIVATE virtual SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) override;
     virtual void            DestroyObject( SalObject* pObject ) override;
 
     // VirtualDevice
     // nDX and nDY in Pixel
     // nBitCount: 0 == Default(=as window) / 1 == Mono
     // pData allows for using a system dependent graphics or device context
-    virtual std::unique_ptr<SalVirtualDevice>
+    SAL_DLLPRIVATE virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
                                                      tools::Long &nDX, tools::Long &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
@@ -141,10 +141,10 @@ public:
     // pSetupData->mpDriverData can be 0
     // pSetupData must be updated with the current
     // JobSetup
-    virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+    SAL_DLLPRIVATE virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) override;
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) override;
-    virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
 
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) override;
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) override;
@@ -152,27 +152,27 @@ public:
     virtual void            PostPrintersChanged() override;
 
     // SalTimer
-    virtual SalTimer*       CreateSalTimer() override;
+    SAL_DLLPRIVATE virtual SalTimer* CreateSalTimer() override;
     // SalSystem
-    virtual SalSystem*      CreateSalSystem() override;
+    SAL_DLLPRIVATE virtual SalSystem* CreateSalSystem() override;
     // SalBitmap
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
-    virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
-    virtual bool            AnyInput( VclInputFlags nType ) override;
-    virtual bool            IsMainThread() const override;
+    SAL_DLLPRIVATE virtual bool DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
+    SAL_DLLPRIVATE virtual bool AnyInput( VclInputFlags nType ) override;
+    SAL_DLLPRIVATE virtual bool IsMainThread() const override;
     virtual void            updateMainThread() override;
 
     virtual OUString        GetConnectionIdentifier() override;
 
-    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
+    SAL_DLLPRIVATE virtual void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
-    virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
 
-    virtual const cairo_font_options_t* GetCairoFontOptions() override;
+    SAL_DLLPRIVATE virtual const cairo_font_options_t* GetCairoFontOptions() override;
 };
 
 inline void SvpSalInstance::registerFrame( SalFrame* pFrame )

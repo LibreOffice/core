@@ -75,7 +75,7 @@ namespace vcl { struct FontCapabilities; }
 class VCL_DLLPUBLIC FreetypeManager final
 {
 public:
-    ~FreetypeManager();
+    SAL_DLLPRIVATE ~FreetypeManager();
 
     static FreetypeManager& get();
 
@@ -84,19 +84,19 @@ public:
                                 sal_IntPtr nFontId,
                                 const FontAttributes&);
 
-    void                    AnnounceFonts( vcl::font::PhysicalFontCollection* ) const;
+    SAL_DLLPRIVATE void     AnnounceFonts( vcl::font::PhysicalFontCollection* ) const;
 
     void                    ClearFontCache();
 
-    FreetypeFont*           CreateFont(FreetypeFontInstance* pLogicalFont);
+    SAL_DLLPRIVATE FreetypeFont* CreateFont(FreetypeFontInstance* pLogicalFont);
 
 private:
     // to access the constructor (can't use InitFreetypeManager function, because it's private?!)
     friend class GenericUnixSalData;
-    explicit FreetypeManager();
+    SAL_DLLPRIVATE explicit FreetypeManager();
 
-    static void             InitFreetype();
-    FreetypeFontFile* FindFontFile(const OString& rNativeFileName);
+    SAL_DLLPRIVATE static void InitFreetype();
+    SAL_DLLPRIVATE FreetypeFontFile* FindFontFile(const OString& rNativeFileName);
 
     typedef std::unordered_map<sal_IntPtr, std::shared_ptr<FreetypeFontInfo>> FontInfoList;
     typedef std::unordered_map<const char*, std::unique_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
@@ -109,27 +109,27 @@ private:
 class VCL_DLLPUBLIC FreetypeFont final
 {
 public:
-                            ~FreetypeFont();
+    SAL_DLLPRIVATE ~FreetypeFont();
 
-    const OString&          GetFontFileName() const;
-    int                     GetFontFaceIndex() const;
-    int                     GetFontFaceVariation() const;
+    SAL_DLLPRIVATE const OString&          GetFontFileName() const;
+    SAL_DLLPRIVATE int                     GetFontFaceIndex() const;
+    SAL_DLLPRIVATE int                     GetFontFaceVariation() const;
     bool                    TestFont() const { return mbFaceOk;}
-    FT_Face                 GetFtFace() const;
+    SAL_DLLPRIVATE FT_Face                 GetFtFace() const;
     const FontConfigFontOptions* GetFontOptions() const;
 
-    void                    GetFontMetric(FontMetricDataRef const &) const;
+    SAL_DLLPRIVATE void                    GetFontMetric(FontMetricDataRef const &) const;
 
-    bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
+    SAL_DLLPRIVATE bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
     bool                    GetAntialiasAdvice() const;
 
 private:
     friend class FreetypeFontInstance;
     friend class FreetypeManager;
 
-    explicit FreetypeFont(FreetypeFontInstance&, std::shared_ptr<FreetypeFontInfo>  rFontInfo);
+    SAL_DLLPRIVATE explicit FreetypeFont(FreetypeFontInstance&, std::shared_ptr<FreetypeFontInfo>  rFontInfo);
 
-    void                    ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
+    SAL_DLLPRIVATE void ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
 
     FreetypeFontInstance& mrFontInstance;
 

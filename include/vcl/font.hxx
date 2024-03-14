@@ -108,17 +108,17 @@ public:
     tools::Long                GetFontHeight() const;
     void                SetAverageFontWidth( tools::Long nWidth );
     tools::Long                GetAverageFontWidth() const;
-    const Size&         GetAverageFontSize() const;
-    const FontFamily&   GetFontFamily() const;
+    SAL_DLLPRIVATE const Size& GetAverageFontSize() const;
+    SAL_DLLPRIVATE const FontFamily& GetFontFamily() const;
 
     // tdf#127471 for corrections on EMF/WMF we need the AvgFontWidth in Windows-specific notation
     tools::Long         GetOrCalculateAverageFontWidth() const;
 
     // Prefer LanguageTag over LanguageType
-    void                SetLanguageTag( const LanguageTag & );
-    const LanguageTag&  GetLanguageTag() const;
-    void                SetCJKContextLanguageTag( const LanguageTag& );
-    const LanguageTag&  GetCJKContextLanguageTag() const;
+    SAL_DLLPRIVATE void SetLanguageTag( const LanguageTag & );
+    SAL_DLLPRIVATE const LanguageTag& GetLanguageTag() const;
+    SAL_DLLPRIVATE void SetCJKContextLanguageTag( const LanguageTag& );
+    SAL_DLLPRIVATE const LanguageTag& GetCJKContextLanguageTag() const;
     void                SetLanguage( LanguageType );
     LanguageType        GetLanguage() const;
     void                SetCJKContextLanguage( LanguageType );
@@ -153,7 +153,7 @@ public:
     bool                IsWordLineMode() const;
 
     void                Merge( const Font& rFont );
-    void                GetFontAttributes( FontAttributes& rAttrs ) const;
+    SAL_DLLPRIVATE void GetFontAttributes( FontAttributes& rAttrs ) const;
 
     Font&               operator=( const Font& );
     Font&               operator=( Font&& ) noexcept;
@@ -161,10 +161,10 @@ public:
     bool                operator!=( const Font& rFont ) const
                             { return !(Font::operator==( rFont )); }
     bool                IsSameInstance( const Font& ) const;
-    bool                EqualIgnoreColor( const Font& ) const;
+    SAL_DLLPRIVATE bool EqualIgnoreColor( const Font& ) const;
 
     // Compute value usable as hash.
-    size_t              GetHashValueIgnoreColor() const;
+    SAL_DLLPRIVATE size_t GetHashValueIgnoreColor() const;
 
     friend VCL_DLLPUBLIC SvStream&  ::ReadFont( SvStream& rIStm, vcl::Font& );
     friend VCL_DLLPUBLIC SvStream&  ::WriteFont( SvStream& rOStm, const vcl::Font& );

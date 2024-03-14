@@ -99,7 +99,7 @@ private:
 
     SAL_DLLPRIVATE bool                 ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Size rLogicDestSize);
 
-    void                                Linker( OutputDevice* pOut, bool bLink );
+    SAL_DLLPRIVATE void                 Linker( OutputDevice* pOut, bool bLink );
 
 public:
                     GDIMetaFile();
@@ -111,14 +111,14 @@ public:
     bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
-    void            Mirror( BmpMirrorFlags nMirrorFlags );
+    SAL_DLLPRIVATE void Mirror( BmpMirrorFlags nMirrorFlags );
     void            Move( tools::Long nX, tools::Long nY );
     // additional Move method getting specifics how to handle MapMode( MapUnit::MapPixel )
     void            Move( tools::Long nX, tools::Long nY, tools::Long nDPIX, tools::Long nDPIY );
     void            ScaleActions(double fScaleX, double fScaleY);
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
-    void            Rotate( Degree10 nAngle10 );
+    SAL_DLLPRIVATE void Rotate( Degree10 nAngle10 );
     void            Clip( const tools::Rectangle& );
     bool            HasTransparentActions() const;
 
@@ -161,12 +161,12 @@ public:
 
     void            AddAction(const rtl::Reference<MetaAction>& pAction);
     void            AddAction(const rtl::Reference<MetaAction>& pAction, size_t nPos);
-    void            push_back(const rtl::Reference<MetaAction>& pAction);
+    SAL_DLLPRIVATE void push_back(const rtl::Reference<MetaAction>& pAction);
     /**
      * @param pAction takes ownership
      * @param nAction the action to replace
      */
-    void ReplaceAction( rtl::Reference<MetaAction> pAction, size_t nAction );
+    SAL_DLLPRIVATE void ReplaceAction( rtl::Reference<MetaAction> pAction, size_t nAction );
 
     MetaAction*     FirstAction();
     MetaAction*     NextAction();
@@ -180,7 +180,7 @@ public:
     void            SetPrefMapMode( const MapMode& rMapMode ) { m_aPrefMapMode = rMapMode; }
 
 
-    sal_uLong       GetSizeBytes() const;
+    SAL_DLLPRIVATE sal_uLong GetSizeBytes() const;
 
     /// Creates an antialiased thumbnail
     bool            CreateThumbnail(BitmapEx& rBitmapEx,

@@ -66,7 +66,7 @@ public:
 
 public:
                     Cursor();
-                    Cursor( const Cursor& rCursor );
+    SAL_DLLPRIVATE  Cursor( const Cursor& rCursor );
                     ~Cursor();
 
     void            SetStyle( sal_uInt16 nStyle );
@@ -91,19 +91,19 @@ public:
 
     void            SetDirection( CursorDirection nDirection = CursorDirection::NONE );
 
-    Cursor&         operator=( const Cursor& rCursor );
-    bool            operator==( const Cursor& rCursor ) const;
+    SAL_DLLPRIVATE Cursor& operator=( const Cursor& rCursor );
+    SAL_DLLPRIVATE bool    operator==( const Cursor& rCursor ) const;
     bool            operator!=( const Cursor& rCursor ) const
                         { return !(Cursor::operator==( rCursor )); }
 
     void            DrawToDevice(OutputDevice& rRenderContext);
 
 private:
-    void LOKNotify( vcl::Window* pWindow, const OUString& rAction );
-    bool ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData);
-    void ImplRestore();
-    void ImplDoShow( bool bDrawDirect, bool bRestore );
-    bool ImplDoHide( bool bStop );
+    SAL_DLLPRIVATE void LOKNotify( vcl::Window* pWindow, const OUString& rAction );
+    SAL_DLLPRIVATE bool ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData);
+    SAL_DLLPRIVATE void ImplRestore();
+    SAL_DLLPRIVATE void ImplDoShow( bool bDrawDirect, bool bRestore );
+    SAL_DLLPRIVATE bool ImplDoHide( bool bStop );
 };
 
 } // namespace vcl

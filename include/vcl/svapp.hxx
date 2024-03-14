@@ -345,7 +345,7 @@ public:
 
     vcl/fpicker/test/svdem.cxx
     */
-    virtual int                 Main();
+    SAL_DLLPRIVATE virtual int  Main();
 
     /** Exit from the application
 
@@ -659,7 +659,7 @@ public:
 
      @returns reference to a LocaleDataWrapper object
     */
-    static const LocaleDataWrapper& GetAppLocaleDataWrapper();
+    SAL_DLLPRIVATE static const LocaleDataWrapper& GetAppLocaleDataWrapper();
 
     ///@}
 
@@ -714,7 +714,7 @@ public:
 
      @see ImplCallEventListeners(VclSimpleEvent* pEvent)
     */
-    static void                 ImplCallEventListenersApplicationDataChanged( void* pData );
+    SAL_DLLPRIVATE static void  ImplCallEventListenersApplicationDataChanged( void* pData );
 
     /** Send event to all VCL application event listeners
 
@@ -722,7 +722,7 @@ public:
 
      @see ImplCallEventListeners(sal_uLong nEvent, Windows* pWin, void* pData);
     */
-    static void                 ImplCallEventListeners( VclSimpleEvent& rEvent );
+    SAL_DLLPRIVATE static void  ImplCallEventListeners( VclSimpleEvent& rEvent );
 
     /** Handle keypress event
 
@@ -732,7 +732,7 @@ public:
 
      @see PostKeyEvent
     */
-    static bool                 HandleKey( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
+    SAL_DLLPRIVATE static bool HandleKey( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
 
     /** Send keypress event
 
@@ -837,7 +837,7 @@ public:
 
      @returns the global instance of the SystemDependentDataManager
     */
-    static basegfx::SystemDependentDataManager& GetSystemDependentDataManager();
+    SAL_DLLPRIVATE static basegfx::SystemDependentDataManager& GetSystemDependentDataManager();
 
     /** Get the first top-level window of the application.
 
@@ -1028,7 +1028,7 @@ public:
 
      @see RemoveAccel
     */
-    static bool                 InsertAccel( Accelerator* pAccel );
+    SAL_DLLPRIVATE static bool  InsertAccel( Accelerator* pAccel );
 
     /** Remove accelerator
 
@@ -1036,7 +1036,7 @@ public:
 
      @see InsertAccel
     */
-    static void                 RemoveAccel( Accelerator const * pAccel );
+    SAL_DLLPRIVATE static void  RemoveAccel( Accelerator const * pAccel );
 
     /** Get the number of reserved key codes used by the application.
 
@@ -1215,7 +1215,7 @@ public:
 
     /** Enable software-only bitmap rendering
      */
-    static void                 EnableBitmapRendering();
+    SAL_DLLPRIVATE static void EnableBitmapRendering();
 
     /** Determines if bitmap rendering is enabled
 

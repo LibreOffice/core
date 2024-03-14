@@ -431,12 +431,12 @@ class VCL_DLLPUBLIC MenuBar final : public Menu
     SAL_DLLPRIVATE bool ImplHandleCmdEvent(const CommandEvent& rCEvent);
 
     /// Return the MenuBarWindow.
-    MenuBarWindow* getMenuBarWindow();
+    SAL_DLLPRIVATE MenuBarWindow* getMenuBarWindow();
 
 public:
     MenuBar();
-    MenuBar( const MenuBar& rMenu );
-    virtual ~MenuBar() override;
+    SAL_DLLPRIVATE MenuBar( const MenuBar& rMenu );
+    SAL_DLLPRIVATE virtual ~MenuBar() override;
     virtual void dispose() override;
 
     MenuBar& operator =( const MenuBar& rMenu );
@@ -447,16 +447,16 @@ public:
     virtual void ClosePopup(Menu* pMenu) override;
 
     /// Forward the KeyInput call to the MenuBar.
-    virtual void MenuBarKeyInput(const KeyEvent& rEvent) override;
+    SAL_DLLPRIVATE virtual void MenuBarKeyInput(const KeyEvent& rEvent) override;
 
     void ShowCloseButton( bool bShow );
     bool HasCloseButton() const { return mbCloseBtnVisible; }
     bool HasFloatButton() const { return mbFloatBtnVisible; }
     bool HasHideButton() const { return mbHideBtnVisible; }
-    void ShowButtons( bool bClose, bool bFloat, bool bHide );
+    SAL_DLLPRIVATE void ShowButtons( bool bClose, bool bFloat, bool bHide );
 
-    virtual void SelectItem(sal_uInt16 nId) override;
-    bool HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
+    SAL_DLLPRIVATE virtual void SelectItem(sal_uInt16 nId) override;
+    SAL_DLLPRIVATE bool HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
     bool HandleMenuButtonEvent(sal_uInt16 nEventId);
 
     void SetCloseButtonClickHdl( const Link<void*,void>& rLink ) { maCloseHdl = rLink; }
@@ -472,20 +472,20 @@ public:
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     // passed string will be set as tooltip
-    sal_uInt16 AddMenuBarButton( const Image&, const Link<MenuBarButtonCallbackArg&,bool>&, const OUString& );
+    SAL_DLLPRIVATE sal_uInt16 AddMenuBarButton( const Image&, const Link<MenuBarButtonCallbackArg&,bool>&, const OUString& );
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state
-    void SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBarButtonCallbackArg&,bool>& );
+    SAL_DLLPRIVATE void SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBarButtonCallbackArg&,bool>& );
     // returns the rectangle occupied by the additional button named nId
     // coordinates are relative to the systemwindow the menubar is attached to
     // if the menubar is unattached an empty rectangle is returned
-    tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 nId );
-    void RemoveMenuBarButton( sal_uInt16 nId );
+    SAL_DLLPRIVATE tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 nId );
+    SAL_DLLPRIVATE void RemoveMenuBarButton( sal_uInt16 nId );
     void LayoutChanged();
     // get the height of the menubar, return the native menubar height if that is active or the vcl
     // one if not
-    int GetMenuBarHeight() const;
+    SAL_DLLPRIVATE int GetMenuBarHeight() const;
 };
 
 inline MenuBar& MenuBar::operator=( const MenuBar& rMenu )
@@ -519,7 +519,7 @@ public:
     virtual bool IsMenuBar() const override { return false; }
 
     /// Close the 'pStartedFrom' menu window.
-    virtual void ClosePopup(Menu* pMenu) override;
+    SAL_DLLPRIVATE virtual void ClosePopup(Menu* pMenu) override;
 
     void SetText( const OUString& rTitle )
     {

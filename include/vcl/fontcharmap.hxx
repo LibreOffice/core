@@ -42,9 +42,9 @@ public:
 
     /** A new FontCharMap is created based on passed arguments.
      */
-    FontCharMap(bool bMicrosoftSymbolMap, std::vector<sal_UCS4> aRangeCodes);
+    SAL_DLLPRIVATE FontCharMap(bool bMicrosoftSymbolMap, std::vector<sal_UCS4> aRangeCodes);
 
-    virtual ~FontCharMap() override;
+    SAL_DLLPRIVATE virtual ~FontCharMap() override;
 
     /** Get the default font character map
 
@@ -136,16 +136,16 @@ public:
      */
     sal_UCS4            GetCharFromIndex( int nCharIndex ) const;
 
-    bool isMicrosoftSymbolMap() const;
+    SAL_DLLPRIVATE bool isMicrosoftSymbolMap() const;
 
 private:
     ImplFontCharMapRef mpImplFontCharMap;
 
     friend class ::OutputDevice;
 
-    int                 findRangeIndex( sal_UCS4 ) const;
+    SAL_DLLPRIVATE int  findRangeIndex( sal_UCS4 ) const;
 
-                        FontCharMap( ImplFontCharMapRef pIFCMap );
+    SAL_DLLPRIVATE      FontCharMap( ImplFontCharMapRef pIFCMap );
 
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& ) = delete;

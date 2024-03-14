@@ -89,7 +89,7 @@ public:
     SAL_DLLPRIVATE ImpGraphic* ImplGetImpGraphic() const { return mxImpGraphic.get(); }
 
                     Graphic();
-                    Graphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex = 0);
+    SAL_DLLPRIVATE  Graphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex = 0);
                     Graphic( const GraphicExternalLink& rGraphicLink );
                     Graphic( const Graphic& rGraphic );
                     Graphic( Graphic&& rGraphic ) noexcept;
@@ -116,7 +116,7 @@ public:
     bool            IsTransparent() const;
     bool            IsAlpha() const;
     bool            IsAnimated() const;
-    bool            IsEPS() const;
+    SAL_DLLPRIVATE bool IsEPS() const;
 
     bool isAvailable() const;
     bool makeAvailable();
@@ -162,22 +162,22 @@ public:
     void            StopAnimation( const OutputDevice* pOutputDevice,
                           tools::Long nExtraData );
 
-    void            SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
-    Link<Animation*,void> GetAnimationNotifyHdl() const;
+    SAL_DLLPRIVATE void SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
+    SAL_DLLPRIVATE Link<Animation*,void> GetAnimationNotifyHdl() const;
 
-    sal_uInt32      GetAnimationLoopCount() const;
+    SAL_DLLPRIVATE sal_uInt32 GetAnimationLoopCount() const;
 
     BitmapChecksum  GetChecksum() const;
 
     OUString getOriginURL() const;
     void setOriginURL(OUString const & rOriginURL);
 
-    OString getUniqueID() const;
+    SAL_DLLPRIVATE OString getUniqueID() const;
 
     std::shared_ptr<GraphicReader>& GetReaderContext();
-    void                            SetReaderContext( const std::shared_ptr<GraphicReader> &pReader );
-    void                            SetDummyContext(bool value);
-    bool                            IsDummyContext() const;
+    SAL_DLLPRIVATE void             SetReaderContext( const std::shared_ptr<GraphicReader> &pReader );
+    SAL_DLLPRIVATE void             SetDummyContext(bool value);
+    SAL_DLLPRIVATE bool             IsDummyContext() const;
 
     void            SetGfxLink(const std::shared_ptr<GfxLink>& rGfxLink);
     const std::shared_ptr<GfxLink> & GetSharedGfxLink() const;

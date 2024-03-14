@@ -371,7 +371,7 @@ public:
     virtual ~PrinterController();
 
     const VclPtr<Printer>&              getPrinter() const;
-    weld::Window*                       getWindow() const;
+    SAL_DLLPRIVATE weld::Window*        getWindow() const;
 
     /** For implementations: get current job properties as changed by e.g. print dialog
 
@@ -391,17 +391,17 @@ public:
 
         in case the property is unknown or not convertible to bool, i_bFallback is returned
     */
-    bool                                getBoolProperty( const OUString& i_rPropertyName, bool i_bFallback ) const;
+    SAL_DLLPRIVATE bool                 getBoolProperty( const OUString& i_rPropertyName, bool i_bFallback ) const;
 
     /** Get an int property
 
         in case the property is unknown or not convertible to bool, i_nFallback is returned
     */
-    sal_Int32                           getIntProperty( const OUString& i_rPropertyName, sal_Int32 i_nFallback ) const;
+    SAL_DLLPRIVATE sal_Int32            getIntProperty( const OUString& i_rPropertyName, sal_Int32 i_nFallback ) const;
 
     /// Set a property value - can also be used to add another UI property
     void                                setValue( const OUString& i_rPropertyName, const css::uno::Any& i_rValue );
-    void                                setValue( const css::beans::PropertyValue& i_rValue );
+    SAL_DLLPRIVATE void                 setValue( const css::beans::PropertyValue& i_rValue );
 
     /** @return The currently active UI options. These are the same that were passed to setUIOptions. */
     const css::uno::Sequence< css::beans::PropertyValue >&
@@ -415,7 +415,7 @@ public:
 
     /// Enable/disable an option; this can be used to implement dialog logic.
     bool                                isUIOptionEnabled( const OUString& rPropName ) const;
-    bool                                isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
+    SAL_DLLPRIVATE bool                 isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
 
     /** MakeEnabled will change the property rPropName depends on to the value
 
@@ -424,7 +424,7 @@ public:
 
         @return The property name rPropName depends on or an empty string if no change was made.
     */
-    OUString                            makeEnabled( const OUString& rPropName );
+    SAL_DLLPRIVATE OUString             makeEnabled( const OUString& rPropName );
 
     /// App must override this
     virtual int                         getPageCount() const = 0;
@@ -448,12 +448,12 @@ public:
     virtual void                        printPage(int i_nPage) const = 0;
 
     /// Will be called after a possible dialog has been shown and the real printjob starts
-    virtual void                        jobStarted();
-    virtual void                        jobFinished( css::view::PrintableState );
+    SAL_DLLPRIVATE virtual void         jobStarted();
+    SAL_DLLPRIVATE virtual void         jobFinished( css::view::PrintableState );
 
-    css::view::PrintableState           getJobState() const;
+    SAL_DLLPRIVATE css::view::PrintableState getJobState() const;
 
-    void                                abortJob();
+    SAL_DLLPRIVATE void                 abortJob();
 
     bool                                isShowDialogs() const;
     bool                                isDirectPrint() const;
@@ -467,12 +467,12 @@ public:
                       int               getFilteredPageCount() const;
     SAL_DLLPRIVATE    PageSize          getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf,
                                             bool i_bMayUseCache = false );
-                      PageSize          getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf,
+    PageSize                            getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf,
                                             bool i_bMayUseCache = false );
                       void              printFilteredPage( int i_nPage );
     SAL_DLLPRIVATE    void              setPrinter( const VclPtr<Printer>& );
-                      void              createProgressDialog();
-                      bool              isProgressCanceled() const;
+    SAL_DLLPRIVATE    void              createProgressDialog();
+    SAL_DLLPRIVATE    bool              isProgressCanceled() const;
     SAL_DLLPRIVATE    void              setMultipage( const MultiPageSetup& );
     SAL_DLLPRIVATE    const MultiPageSetup&
                                         getMultipage() const;
@@ -483,7 +483,7 @@ public:
     SAL_DLLPRIVATE    void              setPaperSizeFromUser( Size i_aUserSize );
     SAL_DLLPRIVATE    void              setOrientationFromUser( Orientation eOrientation, bool set );
                       void              setPrinterModified( bool i_bPapersizeFromSetup );
-                      bool              getPrinterModified() const;
+    SAL_DLLPRIVATE    bool              getPrinterModified() const;
     SAL_DLLPRIVATE    void              pushPropertiesToPrinter();
     SAL_DLLPRIVATE    void              resetPaperToLastConfigured();
     SAL_DLLPRIVATE    void              resetPrintArea();

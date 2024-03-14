@@ -131,25 +131,25 @@ public:
 
 private:
     // for glyph+font+script fallback
-    void            MoveGlyph(int nStart, double nNewXPos);
-    void            DropGlyph(int nStart);
-    void            Simplify(bool bIsBase);
+    SAL_DLLPRIVATE void MoveGlyph(int nStart, double nNewXPos);
+    SAL_DLLPRIVATE void DropGlyph(int nStart);
+    SAL_DLLPRIVATE void Simplify(bool bIsBase);
 
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
-    void            ApplyDXArray(const double*, const sal_Bool*);
-    void            Justify(double nNewWidth);
-    void            ApplyAsianKerning(std::u16string_view rStr);
+    SAL_DLLPRIVATE void ApplyDXArray(const double*, const sal_Bool*);
+    SAL_DLLPRIVATE void Justify(double nNewWidth);
+    SAL_DLLPRIVATE void ApplyAsianKerning(std::u16string_view rStr);
 
-    void            GetCharWidths(std::vector<double>& rCharWidths,
+    SAL_DLLPRIVATE void GetCharWidths(std::vector<double>& rCharWidths,
                                   const OUString& rStr) const;
 
-    void            SetNeedFallback(vcl::text::ImplLayoutArgs&, sal_Int32, bool);
+    SAL_DLLPRIVATE void SetNeedFallback(vcl::text::ImplLayoutArgs&, sal_Int32, bool);
 
-    bool            HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
+    SAL_DLLPRIVATE bool HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
 
-    void            ParseFeatures(std::u16string_view name);
+    SAL_DLLPRIVATE void ParseFeatures(std::u16string_view name);
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 

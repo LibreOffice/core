@@ -79,17 +79,20 @@ public:
     ImplFontAttrs GetMatchType() const { return mnMatchType; }
     FontWeight GetMatchWeight() const { return meMatchWeight; }
     FontWidth GetMatchWidth() const { return meMatchWidth; }
-    void InitMatchData(const utl::FontSubstConfiguration&, const OUString& rSearchName);
+    SAL_DLLPRIVATE void InitMatchData(const utl::FontSubstConfiguration&,
+                                      const OUString& rSearchName);
 
     void AddFontFace(PhysicalFontFace*);
 
-    PhysicalFontFace* FindBestFontFace(const vcl::font::FontSelectPattern& rFSD) const;
+    SAL_DLLPRIVATE PhysicalFontFace*
+    FindBestFontFace(const vcl::font::FontSelectPattern& rFSD) const;
 
-    void UpdateDevFontList(PhysicalFontFaceCollection&) const;
-    void UpdateCloneFontList(PhysicalFontCollection&) const;
+    SAL_DLLPRIVATE void UpdateDevFontList(PhysicalFontFaceCollection&) const;
+    SAL_DLLPRIVATE void UpdateCloneFontList(PhysicalFontCollection&) const;
 
-    static void CalcType(ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
-                         FontFamily eFamily, const utl::FontNameAttr* pFontAttr);
+    SAL_DLLPRIVATE static void CalcType(ImplFontAttrs& rType, FontWeight& rWeight,
+                                        FontWidth& rWidth, FontFamily eFamily,
+                                        const utl::FontNameAttr* pFontAttr);
 
 private:
     std::vector<rtl::Reference<PhysicalFontFace>> maFontFaces;

@@ -130,15 +130,15 @@ private:
 public:
     explicit        FixedBitmap( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    ApplySettings(vcl::RenderContext&) override;
+    SAL_DLLPRIVATE virtual void ApplySettings(vcl::RenderContext&) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
-    virtual void    Resize() override;
-    virtual void    StateChanged( StateChangedType nType ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    SAL_DLLPRIVATE virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    SAL_DLLPRIVATE virtual void Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
+    SAL_DLLPRIVATE virtual void Resize() override;
+    SAL_DLLPRIVATE virtual void StateChanged( StateChangedType nType ) override;
+    SAL_DLLPRIVATE virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void            SetBitmap( const BitmapEx& rBitmap );
+    void SetBitmap( const BitmapEx& rBitmap );
 };
 
 class VCL_DLLPUBLIC FixedImage : public Control
@@ -158,24 +158,24 @@ protected:
 public:
     explicit        FixedImage( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    ApplySettings(vcl::RenderContext&) override;
+    SAL_DLLPRIVATE virtual void    ApplySettings(vcl::RenderContext&) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
-    virtual void    Resize() override;
-    virtual void    StateChanged( StateChangedType nType ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual Size    GetOptimalSize() const override;
+    SAL_DLLPRIVATE virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    SAL_DLLPRIVATE virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
+    SAL_DLLPRIVATE virtual void    Resize() override;
+    SAL_DLLPRIVATE virtual void    StateChanged( StateChangedType nType ) override;
+    SAL_DLLPRIVATE virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    SAL_DLLPRIVATE virtual Size    GetOptimalSize() const override;
 
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }
 
     const Image&    GetModeImage( ) const { return maImage;}
-    virtual bool    set_property(const OUString &rKey, const OUString &rValue) override;
+    SAL_DLLPRIVATE virtual bool    set_property(const OUString &rKey, const OUString &rValue) override;
 
-    static Image loadThemeImage(const OUString &rFileName);
+    SAL_DLLPRIVATE static Image loadThemeImage(const OUString &rFileName);
 
-    void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
+    SAL_DLLPRIVATE void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

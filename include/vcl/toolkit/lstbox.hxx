@@ -114,35 +114,35 @@ protected:
     bool               IsDropDownBox() const { return mpFloatWin != nullptr; }
 
 protected:
-    explicit            ListBox( WindowType nType );
+    SAL_DLLPRIVATE explicit ListBox( WindowType nType );
 
-    virtual void        FillLayoutData() const override;
+    SAL_DLLPRIVATE virtual void FillLayoutData() const override;
 
 public:
     explicit            ListBox( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
-    virtual             ~ListBox() override;
-    virtual void        dispose() override;
+    SAL_DLLPRIVATE virtual ~ListBox() override;
+    SAL_DLLPRIVATE virtual void dispose() override;
 
-    virtual void        ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
-    virtual void        Resize() override;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
-    virtual void        StateChanged( StateChangedType nType ) override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+    SAL_DLLPRIVATE virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    SAL_DLLPRIVATE virtual void Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
+    SAL_DLLPRIVATE virtual void Resize() override;
+    SAL_DLLPRIVATE virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+    SAL_DLLPRIVATE virtual void StateChanged( StateChangedType nType ) override;
+    SAL_DLLPRIVATE virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void                Select();
-    void                DoubleClick();
-    virtual void        GetFocus() override;
-    virtual void        LoseFocus() override;
+    SAL_DLLPRIVATE void DoubleClick();
+    SAL_DLLPRIVATE virtual void GetFocus() override;
+    SAL_DLLPRIVATE virtual void LoseFocus() override;
 
-    virtual const Wallpaper& GetDisplayBackground() const override;
+    SAL_DLLPRIVATE virtual const Wallpaper& GetDisplayBackground() const override;
 
-    virtual void        setPosSizePixel( tools::Long nX, tools::Long nY,
+    SAL_DLLPRIVATE virtual void setPosSizePixel( tools::Long nX, tools::Long nY,
                                          tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
     tools::Rectangle           GetDropDownPosSizePixel() const;
 
-    void                AdaptDropDownLineCountToMaximum();
+    SAL_DLLPRIVATE void AdaptDropDownLineCountToMaximum();
     void                SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16          GetDropDownLineCount() const;
 
@@ -160,7 +160,7 @@ public:
     OUString            GetEntry( sal_Int32  nPos ) const;
     sal_Int32           GetEntryCount() const;
 
-    void                SelectEntry( std::u16string_view rStr, bool bSelect = true );
+    SAL_DLLPRIVATE void SelectEntry( std::u16string_view rStr, bool bSelect = true );
     void                SelectEntryPos( sal_Int32  nPos, bool bSelect = true );
     void                SelectEntriesPos( const std::vector<sal_Int32>& rPositions, bool bSelect = true );
 
@@ -171,8 +171,8 @@ public:
     bool                IsEntryPosSelected( sal_Int32  nPos ) const;
     void                SetNoSelection();
 
-    void                SetEntryData( sal_Int32  nPos, void* pNewData );
-    void*               GetEntryData( sal_Int32  nPos ) const;
+    SAL_DLLPRIVATE void  SetEntryData( sal_Int32  nPos, void* pNewData );
+    SAL_DLLPRIVATE void* GetEntryData( sal_Int32  nPos ) const;
 
     /** this methods stores a combination of flags from the
         ListBoxEntryFlags::* defines at the given entry.
@@ -182,7 +182,7 @@ public:
         to change the internal behaviour of the ListBox implementation
         for specific entries.
     */
-    void                SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
+    SAL_DLLPRIVATE void SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
 
     void                SetTopEntry( sal_Int32  nPos );
     sal_Int32           GetTopEntry() const;
@@ -201,9 +201,9 @@ public:
     /**
      * Adds a new separator at the given position n.
      */
-    void                AddSeparator( sal_Int32 n );
+    SAL_DLLPRIVATE void AddSeparator( sal_Int32 n );
 
-    bool                IsTravelSelect() const;
+    SAL_DLLPRIVATE bool IsTravelSelect() const;
     bool                IsInDropDown() const;
     void                ToggleDropDown();
 
@@ -219,9 +219,9 @@ public:
 
     void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
 
-    Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
+    SAL_DLLPRIVATE Size CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
-    virtual Size        GetOptimalSize() const override;
+    SAL_DLLPRIVATE virtual Size GetOptimalSize() const override;
     Size                CalcAdjustedSize( const Size& rPrefSize ) const;
     Size                CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void                GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
@@ -249,13 +249,13 @@ public:
     using Control::GetIndexForPoint;
     tools::Long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
-    void setMaxWidthChars(sal_Int32 nWidth);
+    SAL_DLLPRIVATE void setMaxWidthChars(sal_Int32 nWidth);
 
-    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
+    SAL_DLLPRIVATE virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
-    virtual FactoryFunction GetUITestFactory() const override;
+    SAL_DLLPRIVATE virtual FactoryFunction GetUITestFactory() const override;
 
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
+    SAL_DLLPRIVATE virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MultiListBox final : public ListBox

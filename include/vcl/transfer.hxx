@@ -455,14 +455,14 @@ private:
     void                ImplConstruct();
 
                         // called by our own implementation of XDropTargetListener (DropTargetListener instance)
-    void                ImplBeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
-    void                ImplEndDrag();
+    SAL_DLLPRIVATE void ImplBeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
+    SAL_DLLPRIVATE void ImplEndDrag();
 
 public:
 
                         // to be overridden by the application
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    SAL_DLLPRIVATE virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    SAL_DLLPRIVATE virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
                         DropTargetHelper( vcl::Window* pWindow );
                         DropTargetHelper( const css::uno::Reference< css::datatransfer::dnd::XDropTarget >& rxDropTarget );

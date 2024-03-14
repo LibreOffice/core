@@ -37,7 +37,7 @@ class VCL_DLLPUBLIC FontMetric : public vcl::Font
 public:
     explicit            FontMetric();
                         FontMetric( const FontMetric& );  // TODO make this explicit
-                        FontMetric(vcl::font::PhysicalFontFace const& rFace);
+    SAL_DLLPRIVATE      FontMetric(vcl::font::PhysicalFontFace const& rFace);
                         ~FontMetric() override;
 
     sal_Int32           GetAscent() const                           { return mnAscent; }
@@ -69,14 +69,14 @@ public:
     bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
 
-    bool                EqualIgnoreColor( const FontMetric& ) const;
+    SAL_DLLPRIVATE bool EqualIgnoreColor( const FontMetric& ) const;
 
     // Compute value usable as hash.
     size_t              GetHashValueIgnoreColor() const;
 
 private:
-    bool                EqualNoBase( const FontMetric& ) const;
-    size_t              GetHashValueNoBase() const;
+    SAL_DLLPRIVATE bool EqualNoBase( const FontMetric& ) const;
+    SAL_DLLPRIVATE size_t GetHashValueNoBase() const;
     sal_Int32           mnAscent;                      // Ascent
     sal_Int32           mnDescent;                     // Descent
     sal_Int32           mnIntLeading;                  // Internal Leading

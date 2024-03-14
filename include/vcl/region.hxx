@@ -118,7 +118,7 @@ public:
     bool operator!=( const vcl::Region& rRegion ) const { return !(Region::operator==( rRegion )); }
 
     friend VCL_DLLPUBLIC SvStream& ReadRegion( SvStream& rIStm, vcl::Region& rRegion );
-    friend VCL_DLLPUBLIC SvStream& WriteRegion( SvStream& rOStm, const vcl::Region& rRegion );
+    friend SvStream& WriteRegion( SvStream& rOStm, const vcl::Region& rRegion );
 
     /* workaround: faster conversion for PolyPolygons
      * if half of the Polygons contained in rPolyPoly are actually

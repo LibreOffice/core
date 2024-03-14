@@ -505,7 +505,7 @@ public:
     SalFrame*                           ImplGetFrame() const;
     SAL_DLLPRIVATE ImplFrameData*       ImplGetFrameData();
 
-                   vcl::Window*         ImplGetWindow() const; ///< if this is a proxy return the client, otherwise itself
+    vcl::Window*                        ImplGetWindow() const; ///< if this is a proxy return the client, otherwise itself
     SAL_DLLPRIVATE ImplWinData*         ImplGetWinData() const;
     SAL_DLLPRIVATE vcl::Window*         ImplGetClientWindow() const;
     SAL_DLLPRIVATE vcl::Window*         ImplGetDlgWindow( sal_uInt16 n, GetDlgWindowType nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = nullptr );
@@ -703,7 +703,7 @@ private:
 
 protected:
     // Single argument ctors shall be explicit.
-    explicit                            Window( WindowType nType );
+    SAL_DLLPRIVATE explicit             Window( WindowType nType );
 
             void                        SetCompoundControl( bool bCompound );
 
@@ -739,7 +739,7 @@ public:
     virtual void                        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
 
-    void                                Erase(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void                 Erase(vcl::RenderContext& rRenderContext);
 
     virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags );
     virtual void                        Move();
@@ -770,13 +770,13 @@ public:
 
     void                                SetStyle( WinBits nStyle );
     WinBits                             GetStyle() const;
-    WinBits                             GetPrevStyle() const;
+    SAL_DLLPRIVATE WinBits              GetPrevStyle() const;
     void                                SetExtendedStyle( WindowExtendedStyle nExtendedStyle );
     WindowExtendedStyle                 GetExtendedStyle() const;
     void                                SetType( WindowType nType );
     WindowType                          GetType() const;
     bool                                IsSystemWindow() const;
-    bool                                IsDockingWindow() const;
+    SAL_DLLPRIVATE bool                 IsDockingWindow() const;
     bool                                IsDialog() const;
     bool                                IsMenuFloatingWindow() const;
     bool                                IsToolbarFloatingWindow() const;
@@ -796,7 +796,7 @@ public:
     void                                GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                                    sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
     Size                                CalcWindowSize( const Size& rOutSz ) const;
-    Size                                CalcOutputSize( const Size& rWinSz ) const;
+    SAL_DLLPRIVATE Size                 CalcOutputSize( const Size& rWinSz ) const;
     tools::Long                                CalcTitleWidth() const;
 
     void                                EnableClipSiblings( bool bClipSiblings = true );
@@ -809,9 +809,9 @@ public:
     void                                SetPaintTransparent( bool bTransparent );
     bool                                IsPaintTransparent() const;
     void                                SetDialogControlStart( bool bStart );
-    bool                                IsDialogControlStart() const;
+    SAL_DLLPRIVATE bool                 IsDialogControlStart() const;
     void                                SetDialogControlFlags( DialogControlFlags nFlags );
-    DialogControlFlags                  GetDialogControlFlags() const;
+    SAL_DLLPRIVATE DialogControlFlags   GetDialogControlFlags() const;
 
     struct PointerState
     {
@@ -824,20 +824,20 @@ public:
     void                                SetInputContext( const InputContext& rInputContext );
     const InputContext&                 GetInputContext() const;
     void                                PostExtTextInputEvent(VclEventId nType, const OUString& rText);
-    void                                EndExtTextInput();
+    SAL_DLLPRIVATE void                 EndExtTextInput();
     void                                SetCursorRect( const tools::Rectangle* pRect = nullptr, tools::Long nExtTextInputWidth = 0 );
-    const tools::Rectangle*                    GetCursorRect() const;
-    tools::Long                                GetCursorExtTextInputWidth() const;
+    SAL_DLLPRIVATE const tools::Rectangle* GetCursorRect() const;
+    SAL_DLLPRIVATE tools::Long          GetCursorExtTextInputWidth() const;
 
     void                                SetCompositionCharRect( const tools::Rectangle* pRect, tools::Long nCompositionLength, bool bVertical = false );
 
-    void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
-    void                                NotifyAllChildren( DataChangedEvent& rDCEvt );
+    SAL_DLLPRIVATE void                 UpdateSettings( const AllSettings& rSettings, bool bChild = false );
+    SAL_DLLPRIVATE void                 NotifyAllChildren( DataChangedEvent& rDCEvt );
 
     void                                SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont, bool bUseRenderContextDPI = false);
     vcl::Font                           GetPointFont(vcl::RenderContext const & rRenderContext) const;
     void                                SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
-    tools::Long                                GetDrawPixel( ::OutputDevice const * pDev, tools::Long nPixels ) const;
+    SAL_DLLPRIVATE tools::Long          GetDrawPixel( ::OutputDevice const * pDev, tools::Long nPixels ) const;
     vcl::Font                           GetDrawPixelFont( ::OutputDevice const * pDev ) const;
 
     void SetControlFont();
@@ -859,10 +859,10 @@ public:
     void ApplyControlBackground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor);
 
     void                                SetParentClipMode( ParentClipMode nMode = ParentClipMode::NONE );
-    ParentClipMode                      GetParentClipMode() const;
+    SAL_DLLPRIVATE ParentClipMode       GetParentClipMode() const;
 
-    void                                SetWindowRegionPixel();
-    void                                SetWindowRegionPixel( const vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 SetWindowRegionPixel();
+    SAL_DLLPRIVATE void                 SetWindowRegionPixel( const vcl::Region& rRegion );
     vcl::Region                         GetWindowClipRegionPixel() const;
     vcl::Region                         GetPaintRegion() const;
     bool                                IsInPaint() const;
@@ -874,7 +874,7 @@ public:
     void                                SetParent( vcl::Window* pNewParent );
     vcl::Window*                        GetParent() const;
     // return the dialog we are contained in or NULL if un-contained
-    Dialog*                             GetParentDialog() const;
+    SAL_DLLPRIVATE Dialog*              GetParentDialog() const;
     bool                                IsAncestorOf( const vcl::Window& rWindow ) const;
 
     void                                Show( bool bVisible = true, ShowFlags nFlags = ShowFlags::NONE );
@@ -882,14 +882,14 @@ public:
     bool                                IsVisible() const;
     bool                                IsReallyVisible() const;
     bool                                IsReallyShown() const;
-    bool                                IsInInitShow() const;
+    SAL_DLLPRIVATE bool                 IsInInitShow() const;
 
     void                                Enable( bool bEnable = true, bool bChild = true );
     void                                Disable( bool bChild = true ) { Enable( false, bChild ); }
     bool                                IsEnabled() const;
 
     void                                EnableInput( bool bEnable = true, bool bChild = true );
-    void                                EnableInput( bool bEnable, const vcl::Window* pExcludeWindow );
+    SAL_DLLPRIVATE void                 EnableInput( bool bEnable, const vcl::Window* pExcludeWindow );
     bool                                IsInputEnabled() const;
 
     /** Override <code>EnableInput</code>. This can be necessary due to other people
@@ -907,7 +907,7 @@ public:
     @return
     true if window is in AlwaysEnableInput state
     */
-    bool                                IsAlwaysEnableInput() const;
+    SAL_DLLPRIVATE bool                 IsAlwaysEnableInput() const;
 
     /** A window is in modal mode if one of its children or subchildren
         is a running modal window (a modal dialog)
@@ -916,13 +916,13 @@ public:
     */
     bool                                IsInModalMode() const;
 
-    void                                SetActivateMode( ActivateModeFlags nMode );
-    ActivateModeFlags                   GetActivateMode() const;
+    SAL_DLLPRIVATE void                 SetActivateMode( ActivateModeFlags nMode );
+    SAL_DLLPRIVATE ActivateModeFlags    GetActivateMode() const;
 
     void                                ToTop( ToTopFlags nFlags = ToTopFlags::NONE );
     void                                SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags );
-    void                                EnableAlwaysOnTop( bool bEnable = true );
-    bool                                IsAlwaysOnTopEnabled() const;
+    SAL_DLLPRIVATE void                 EnableAlwaysOnTop( bool bEnable = true );
+    SAL_DLLPRIVATE bool                 IsAlwaysOnTopEnabled() const;
 
     virtual void                        setPosSizePixel( tools::Long nX, tools::Long nY,
                                                          tools::Long nWidth, tools::Long nHeight,
@@ -935,7 +935,7 @@ public:
                                                          const Size& rNewSize );
     virtual void                        SetOutputSizePixel( const Size& rNewSize );
     bool                                IsDefaultPos() const;
-    bool                                IsDefaultSize() const;
+    SAL_DLLPRIVATE bool                 IsDefaultSize() const;
     Point                               GetOffsetPixelFrom(const vcl::Window& rWindow) const;
 
     // those conversion routines might deliver different results during UI mirroring
@@ -943,7 +943,7 @@ public:
     Point                               ScreenToOutputPixel( const Point& rPos ) const;
     //  the normalized screen methods work independent from UI mirroring
     Point                               OutputToNormalizedScreenPixel( const Point& rPos ) const;
-    Point                               NormalizedScreenToOutputPixel( const Point& rPos ) const;
+    SAL_DLLPRIVATE Point                NormalizedScreenToOutputPixel( const Point& rPos ) const;
     AbsoluteScreenPixelPoint            OutputToAbsoluteScreenPixel( const Point& rPos ) const;
     Point                               AbsoluteScreenToOutputPixel( const AbsoluteScreenPixelPoint& rPos ) const;
     AbsoluteScreenPixelRectangle        GetDesktopRectPixel() const;
@@ -952,7 +952,7 @@ public:
     //  window extents including border and decoration, in absolute screen coordinates
     AbsoluteScreenPixelRectangle        GetWindowExtentsAbsolute() const;
 
-    bool                                IsScrollable() const;
+    SAL_DLLPRIVATE bool                 IsScrollable() const;
     virtual void                        Scroll( tools::Long nHorzScroll, tools::Long nVertScroll,
                                                 ScrollFlags nFlags = ScrollFlags::NONE );
     void                                Scroll( tools::Long nHorzScroll, tools::Long nVertScroll,
@@ -977,7 +977,7 @@ public:
      */
     virtual void                        PixelInvalidate(const tools::Rectangle* pRectangle);
     void                                Validate();
-    bool                                HasPaintEvent() const;
+    SAL_DLLPRIVATE bool                 HasPaintEvent() const;
     void                                PaintImmediately();
 
     // toggles new docking support, enabled via toolkit
@@ -1005,12 +1005,12 @@ public:
      * doesn't.  This is necessary for implementing tab stops inside floating
      * windows, but floating windows don't get focus from the system.
      */
-    void                                SetFakeFocus( bool bFocus );
+    SAL_DLLPRIVATE void                 SetFakeFocus( bool bFocus );
 
     bool                                IsCompoundControl() const;
 
-    static VclPtr<vcl::Window>          SaveFocus();
-    static void                         EndSaveFocus(const VclPtr<vcl::Window>& xFocusWin);
+    SAL_DLLPRIVATE static VclPtr<vcl::Window> SaveFocus();
+    SAL_DLLPRIVATE static void          EndSaveFocus(const VclPtr<vcl::Window>& xFocusWin);
 
     void                                LocalStartDrag();
     void                                CaptureMouse();
@@ -1022,7 +1022,7 @@ public:
     void                                EnableChildPointerOverwrite( bool bOverwrite );
     void                                SetPointerPosPixel( const Point& rPos );
     Point                               GetPointerPosPixel();
-    Point                               GetLastPointerPosPixel();
+    SAL_DLLPRIVATE Point                GetLastPointerPosPixel();
     /// Similar to SetPointerPosPixel(), but sets the frame data's last mouse position instead.
     void                                SetLastMousePos(const Point& rPos);
     void                                ShowPointer( bool bVisible );
@@ -1082,8 +1082,8 @@ public:
     void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );
     bool                                IsTracking() const;
 
-    void                                StartAutoScroll( StartAutoScrollFlags nFlags );
-    void                                EndAutoScroll();
+    SAL_DLLPRIVATE void                 StartAutoScroll( StartAutoScrollFlags nFlags );
+    SAL_DLLPRIVATE void                 EndAutoScroll();
 
     bool                                HandleScrollCommand( const CommandEvent& rCmd,
                                                              Scrollable* pHScrl,
@@ -1114,7 +1114,7 @@ public:
     static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);
 
     /// check if LOK Window container is empty
-    static bool                         IsLOKWindowsEmpty();
+    SAL_DLLPRIVATE static bool          IsLOKWindowsEmpty();
 
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
     virtual void DumpAsPropertyTree(tools::JsonWriter&);
@@ -1145,13 +1145,13 @@ public:
     void                                SetAccessibleName( const OUString& rName );
     OUString                            GetAccessibleName() const;
 
-    void                                SetAccessibleDescription( const OUString& rDescr );
+    SAL_DLLPRIVATE void                 SetAccessibleDescription( const OUString& rDescr );
     OUString                            GetAccessibleDescription() const;
 
-    void                                SetAccessibleRelationLabeledBy( vcl::Window* pLabeledBy );
+    SAL_DLLPRIVATE void                 SetAccessibleRelationLabeledBy( vcl::Window* pLabeledBy );
     vcl::Window*                        GetAccessibleRelationLabeledBy() const;
 
-    void                                SetAccessibleRelationLabelFor( vcl::Window* pLabelFor );
+    SAL_DLLPRIVATE void                 SetAccessibleRelationLabelFor( vcl::Window* pLabelFor );
     vcl::Window*                        GetAccessibleRelationLabelFor() const;
 
     vcl::Window*                        GetAccessibleRelationMemberOf() const;
@@ -1189,7 +1189,7 @@ protected:
      */
     virtual Size GetOptimalSize() const;
     /// clear OptimalSize cache
-    void InvalidateSizeCache();
+    SAL_DLLPRIVATE void InvalidateSizeCache();
 private:
 
     SAL_DLLPRIVATE bool                 ImplIsAccessibleCandidate() const;
@@ -1208,7 +1208,7 @@ private:
      *
      * @see get_preferred_size
      */
-    Size get_ungrouped_preferred_size() const;
+    SAL_DLLPRIVATE Size get_ungrouped_preferred_size() const;
 public:
     /*  records all DrawText operations within the passed rectangle;
      *  a synchronous paint is sent to achieve this
@@ -1220,7 +1220,7 @@ public:
     void                                SetWindowPeer( css::uno::Reference< css::awt::XVclWindowPeer > const & xPeer, VCLXWindow* pVCLXWindow );
 
     // remember if it was generated by Toolkit
-    bool                                IsCreatedWithToolkit() const;
+    SAL_DLLPRIVATE bool                 IsCreatedWithToolkit() const;
     void                                SetCreatedWithToolkit( bool b );
 
     // Drag and Drop interfaces
@@ -1280,14 +1280,14 @@ public:
     /*
      * How to horizontally align this widget
      */
-    VclAlign get_halign() const;
-    void set_halign(VclAlign eAlign);
+    SAL_DLLPRIVATE VclAlign get_halign() const;
+    SAL_DLLPRIVATE void set_halign(VclAlign eAlign);
 
     /*
      * How to vertically align this widget
      */
-    VclAlign get_valign() const;
-    void set_valign(VclAlign eAlign);
+    SAL_DLLPRIVATE VclAlign get_valign() const;
+    SAL_DLLPRIVATE void set_valign(VclAlign eAlign);
 
     /*
      * Whether the widget would like to use any available extra horizontal
@@ -1312,73 +1312,73 @@ public:
     /*
      * Whether the widget should receive extra space when the parent grows
      */
-    bool get_fill() const;
-    void set_fill(bool bFill);
+    SAL_DLLPRIVATE bool get_fill() const;
+    SAL_DLLPRIVATE void set_fill(bool bFill);
 
     void set_border_width(sal_Int32 nBorderWidth);
-    sal_Int32 get_border_width() const;
+    SAL_DLLPRIVATE sal_Int32 get_border_width() const;
 
-    void set_margin_start(sal_Int32 nWidth);
-    sal_Int32 get_margin_start() const;
+    SAL_DLLPRIVATE void set_margin_start(sal_Int32 nWidth);
+    SAL_DLLPRIVATE sal_Int32 get_margin_start() const;
 
-    void set_margin_end(sal_Int32 nWidth);
-    sal_Int32 get_margin_end() const;
+    SAL_DLLPRIVATE void set_margin_end(sal_Int32 nWidth);
+    SAL_DLLPRIVATE sal_Int32 get_margin_end() const;
 
     void set_margin_top(sal_Int32 nWidth);
-    sal_Int32 get_margin_top() const;
+    SAL_DLLPRIVATE sal_Int32 get_margin_top() const;
 
-    void set_margin_bottom(sal_Int32 nWidth);
-    sal_Int32 get_margin_bottom() const;
+    SAL_DLLPRIVATE void set_margin_bottom(sal_Int32 nWidth);
+    SAL_DLLPRIVATE sal_Int32 get_margin_bottom() const;
 
     /*
      * How the widget is packed with reference to the start or end of the parent
      */
-    VclPackType get_pack_type() const;
-    void set_pack_type(VclPackType ePackType);
+    SAL_DLLPRIVATE VclPackType get_pack_type() const;
+    SAL_DLLPRIVATE void set_pack_type(VclPackType ePackType);
 
     /*
      * The extra space to put between the widget and its neighbors
      */
-    sal_Int32 get_padding() const;
-    void set_padding(sal_Int32 nPadding);
+    SAL_DLLPRIVATE sal_Int32 get_padding() const;
+    SAL_DLLPRIVATE void set_padding(sal_Int32 nPadding);
 
     /*
      * The number of columns that the widget spans
      */
-    sal_Int32 get_grid_width() const;
-    void set_grid_width(sal_Int32 nCols);
+    SAL_DLLPRIVATE sal_Int32 get_grid_width() const;
+    SAL_DLLPRIVATE void set_grid_width(sal_Int32 nCols);
 
     /*
      * The column number to attach the left side of the widget to
      */
-    sal_Int32 get_grid_left_attach() const;
-    void set_grid_left_attach(sal_Int32 nAttach);
+    SAL_DLLPRIVATE sal_Int32 get_grid_left_attach() const;
+    SAL_DLLPRIVATE void set_grid_left_attach(sal_Int32 nAttach);
 
     /*
      * The number of row that the widget spans
      */
-    sal_Int32 get_grid_height() const;
-    void set_grid_height(sal_Int32 nRows);
+    SAL_DLLPRIVATE sal_Int32 get_grid_height() const;
+    SAL_DLLPRIVATE void set_grid_height(sal_Int32 nRows);
 
     /*
      * The row number to attach the top side of the widget to
      */
-    sal_Int32 get_grid_top_attach() const;
-    void set_grid_top_attach(sal_Int32 nAttach);
+    SAL_DLLPRIVATE sal_Int32 get_grid_top_attach() const;
+    SAL_DLLPRIVATE void set_grid_top_attach(sal_Int32 nAttach);
 
     /*
      * If true this child appears in a secondary layout group of children
      * e.g. help buttons in a buttonbox
      */
-    bool get_secondary() const;
-    void set_secondary(bool bSecondary);
+    SAL_DLLPRIVATE bool get_secondary() const;
+    SAL_DLLPRIVATE void set_secondary(bool bSecondary);
 
     /*
      * If true this child is exempted from homogeneous sizing
      * e.g. special button in a buttonbox
      */
-    bool get_non_homogeneous() const;
-    void set_non_homogeneous(bool bNonHomogeneous);
+    SAL_DLLPRIVATE bool get_non_homogeneous() const;
+    SAL_DLLPRIVATE void set_non_homogeneous(bool bNonHomogeneous);
 
     /*
      * Sets a widget property
@@ -1392,26 +1392,26 @@ public:
      *
      * @return false if attribute is unknown
      */
-    bool set_font_attribute(const OUString &rKey, std::u16string_view rValue);
+    SAL_DLLPRIVATE bool set_font_attribute(const OUString &rKey, std::u16string_view rValue);
 
     /*
      * Adds this widget to the xGroup VclSizeGroup
      *
      */
-    void add_to_size_group(const std::shared_ptr<VclSizeGroup>& xGroup);
-    void remove_from_all_size_groups();
+    SAL_DLLPRIVATE void add_to_size_group(const std::shared_ptr<VclSizeGroup>& xGroup);
+    SAL_DLLPRIVATE void remove_from_all_size_groups();
 
     /*
      * add/remove mnemonic label
      */
-    void add_mnemonic_label(FixedText *pLabel);
-    void remove_mnemonic_label(FixedText *pLabel);
-    const std::vector<VclPtr<FixedText> >& list_mnemonic_labels() const;
+    SAL_DLLPRIVATE void add_mnemonic_label(FixedText *pLabel);
+    SAL_DLLPRIVATE void remove_mnemonic_label(FixedText *pLabel);
+    SAL_DLLPRIVATE const std::vector<VclPtr<FixedText> >& list_mnemonic_labels() const;
 
     /*
      * Move this widget to be the nNewPosition'd child of its parent
      */
-    void reorderWithinParent(sal_uInt16 nNewPosition);
+    SAL_DLLPRIVATE void reorderWithinParent(sal_uInt16 nNewPosition);
 
     /**
      * Sets an ID.
@@ -1457,13 +1457,13 @@ public:
     virtual bool IsChart() const { return false; }
     virtual bool IsStarMath() const { return false; }
 
-    void SetHelpHdl(const Link<vcl::Window&, bool>& rLink);
-    void SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink);
+    SAL_DLLPRIVATE void SetHelpHdl(const Link<vcl::Window&, bool>& rLink);
+    SAL_DLLPRIVATE void SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink);
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
-    void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
+    SAL_DLLPRIVATE void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
 
     Size                        GetOutputSizePixel() const;
-    tools::Rectangle            GetOutputRectPixel() const;
+    SAL_DLLPRIVATE tools::Rectangle GetOutputRectPixel() const;
 
     Point                       LogicToPixel( const Point& rLogicPt ) const;
     Size                        LogicToPixel( const Size& rLogicSize ) const;
@@ -1480,7 +1480,7 @@ public:
     Size                        PixelToLogic( const Size& rDeviceSize ) const;
     tools::Rectangle                   PixelToLogic( const tools::Rectangle& rDeviceRect ) const;
     tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
-    vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion ) const;
+    SAL_DLLPRIVATE vcl::Region  PixelToLogic( const vcl::Region& rDeviceRegion ) const;
     Point                       PixelToLogic( const Point& rDevicePt,
                                               const MapMode& rMapMode ) const;
     Size                        PixelToLogic( const Size& rDeviceSize,
@@ -1506,7 +1506,7 @@ public:
 
     void                        EnableMapMode( bool bEnable = true );
     bool                        IsMapModeEnabled() const;
-    void                        SetMapMode();
+    SAL_DLLPRIVATE void         SetMapMode();
     void                        SetMapMode( const MapMode& rNewMapMode );
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphicsLayout
@@ -1537,28 +1537,28 @@ public:
     void                        SetTextFillColor();
     void                        SetTextFillColor( const Color& rColor );
     Color                       GetTextFillColor() const;
-    bool                        IsTextFillColor() const;
+    SAL_DLLPRIVATE bool         IsTextFillColor() const;
 
     void                        SetTextLineColor();
     void                        SetTextLineColor( const Color& rColor );
     const Color&                GetTextLineColor() const;
     bool                        IsTextLineColor() const;
 
-    void                        SetOverlineColor();
-    void                        SetOverlineColor( const Color& rColor );
-    const Color&                GetOverlineColor() const;
-    bool                        IsOverlineColor() const;
+    SAL_DLLPRIVATE void         SetOverlineColor();
+    SAL_DLLPRIVATE void         SetOverlineColor( const Color& rColor );
+    SAL_DLLPRIVATE const Color& GetOverlineColor() const;
+    SAL_DLLPRIVATE bool         IsOverlineColor() const;
 
     void                        SetTextAlign( TextAlign eAlign );
-    TextAlign                   GetTextAlign() const;
+    SAL_DLLPRIVATE TextAlign    GetTextAlign() const;
 
     /** Query the platform layer for control support
      */
-    bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
+    SAL_DLLPRIVATE bool         IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
 
     /** Query the native control's actual drawing region (including adornment)
      */
-    bool                        GetNativeControlRegion(
+    SAL_DLLPRIVATE bool         GetNativeControlRegion(
                                     ControlType nType,
                                     ControlPart nPart,
                                     const tools::Rectangle& rControlRegion,

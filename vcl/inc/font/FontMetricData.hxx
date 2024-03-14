@@ -40,7 +40,7 @@ class LogicalFontInstance;
 class VCL_DLLPUBLIC FontMetricData final : public FontAttributes, public SvRefBase
 {
 public:
-    explicit        FontMetricData( const vcl::font::FontSelectPattern& );
+    SAL_DLLPRIVATE explicit FontMetricData( const vcl::font::FontSelectPattern& );
 
     // font instance attributes from the font request
     tools::Long            GetWidth() const                                                { return mnWidth; }
@@ -94,16 +94,16 @@ public:
     tools::Long            GetDoubleStrikeoutOffset1() const                               { return mnDStrikeoutOffset1; }
     tools::Long            GetDoubleStrikeoutOffset2() const                               { return mnDStrikeoutOffset2; }
 
-    void            ImplInitTextLineSize( const OutputDevice* pDev );
-    void            ImplInitAboveTextLineSize( const OutputDevice* pDev );
-    void            ImplInitFlags( const OutputDevice* pDev );
+    SAL_DLLPRIVATE void ImplInitTextLineSize( const OutputDevice* pDev );
+    SAL_DLLPRIVATE void ImplInitAboveTextLineSize( const OutputDevice* pDev );
+    SAL_DLLPRIVATE void ImplInitFlags( const OutputDevice* pDev );
     void            ImplCalcLineSpacing(LogicalFontInstance *pFontInstance);
     void            ImplInitBaselines(LogicalFontInstance *pFontInstance);
 
 private:
-    bool            ShouldNotUseUnderlineMetrics() const;
-    bool            ImplInitTextLineSizeHarfBuzz(LogicalFontInstance *pFontInstance);
-    bool            ShouldUseWinMetrics(int, int, int, int, int, int) const;
+    SAL_DLLPRIVATE bool ShouldNotUseUnderlineMetrics() const;
+    SAL_DLLPRIVATE bool ImplInitTextLineSizeHarfBuzz(LogicalFontInstance *pFontInstance);
+    SAL_DLLPRIVATE bool ShouldUseWinMetrics(int, int, int, int, int, int) const;
 
     // font instance attributes from the font request
     tools::Long            mnHeight;                   // Font size

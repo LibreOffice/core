@@ -152,7 +152,7 @@ public:
     virtual FontCharMapRef GetFontCharMap() const;
     virtual bool GetFontCapabilities(vcl::FontCapabilities&) const;
 
-    RawFontData GetRawFontData(uint32_t) const;
+    SAL_DLLPRIVATE RawFontData GetRawFontData(uint32_t) const;
 
     bool IsBetterMatch(const vcl::font::FontSelectPattern&, FontMatchStatus&) const;
     sal_Int32 CompareIgnoreSize(const PhysicalFontFace&) const;
@@ -167,18 +167,18 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    bool CreateFontSubset(std::vector<sal_uInt8>&, const sal_GlyphId*, const sal_uInt8*, const int,
-                          FontSubsetInfo&) const;
+    SAL_DLLPRIVATE bool CreateFontSubset(std::vector<sal_uInt8>&, const sal_GlyphId*,
+                                         const sal_uInt8*, const int, FontSubsetInfo&) const;
 
     bool IsColorFont() const { return HasColorLayers() || HasColorBitmaps(); }
 
     bool HasColorLayers() const;
-    std::vector<ColorLayer> GetGlyphColorLayers(sal_GlyphId) const;
+    SAL_DLLPRIVATE std::vector<ColorLayer> GetGlyphColorLayers(sal_GlyphId) const;
 
-    const std::vector<ColorPalette>& GetColorPalettes() const;
+    SAL_DLLPRIVATE const std::vector<ColorPalette>& GetColorPalettes() const;
 
     bool HasColorBitmaps() const;
-    RawFontData GetGlyphColorBitmap(sal_GlyphId, tools::Rectangle&) const;
+    SAL_DLLPRIVATE RawFontData GetGlyphColorBitmap(sal_GlyphId, tools::Rectangle&) const;
 
     OString GetGlyphName(sal_GlyphId, bool = false) const;
 
@@ -206,7 +206,7 @@ protected:
 
     explicit PhysicalFontFace(const FontAttributes&);
 
-    hb_font_t* GetHbUnscaledFont() const;
+    SAL_DLLPRIVATE hb_font_t* GetHbUnscaledFont() const;
 };
 }
 

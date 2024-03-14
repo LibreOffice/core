@@ -113,7 +113,7 @@ public:
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
-    explicit                Bitmap( std::shared_ptr<SalBitmap> xSalBitmap );
+    SAL_DLLPRIVATE explicit Bitmap( std::shared_ptr<SalBitmap> xSalBitmap );
                             ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
@@ -147,7 +147,7 @@ public:
 
     BitmapChecksum          GetChecksum() const;
 
-    Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay ) const;
+    SAL_DLLPRIVATE Bitmap   CreateDisplayBitmap( OutputDevice* pDisplay ) const;
 
     static const BitmapPalette&
                             GetGreyPalette( int nEntries );
@@ -203,7 +203,7 @@ public:
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    bool                    Expand(
+    SAL_DLLPRIVATE bool Expand(
                                 sal_Int32 nDX, sal_Int32 nDY,
                                 const Color* pInitColor = nullptr );
 
@@ -229,7 +229,7 @@ public:
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    bool                    CopyPixel(
+    SAL_DLLPRIVATE bool CopyPixel(
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc,
                                 const Bitmap& rBmpSrc );
@@ -251,16 +251,16 @@ public:
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    bool                    CopyPixel(
+    SAL_DLLPRIVATE bool CopyPixel(
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc );
 
-    bool                    CopyPixel_AlphaOptimized(
+    SAL_DLLPRIVATE bool CopyPixel_AlphaOptimized(
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc,
                                 const AlphaMask& rBmpSrc );
 
-    bool                    CopyPixel_AlphaOptimized(
+    SAL_DLLPRIVATE bool CopyPixel_AlphaOptimized(
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc );
 
@@ -280,7 +280,7 @@ public:
 
         @return true, if blending was successful, false otherwise
      */
-    bool                    Blend(
+    SAL_DLLPRIVATE bool Blend(
                                 const AlphaMask& rAlpha,
                                 const Color& rBackgroundColor );
 
@@ -346,7 +346,7 @@ public:
 
     // Adapt the BitCount of rNew to BitCount of total, including grey or color palette
     // Can be used to create alpha/mask bitmaps after their processing in 24bit
-    void AdaptBitCount(Bitmap& rNew) const;
+    SAL_DLLPRIVATE void AdaptBitCount(Bitmap& rNew) const;
 
     /** Rotate bitmap by the specified angle
 
@@ -361,7 +361,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Rotate( Degree10 nAngle10, const Color& rFillColor );
+    SAL_DLLPRIVATE bool Rotate( Degree10 nAngle10, const Color& rFillColor );
 
     /** Create on-off mask from bitmap
 
@@ -436,7 +436,7 @@ public:
 
         @return the generated region.
      */
-    vcl::Region                  CreateRegion( const Color& rColor, const tools::Rectangle& rRect ) const;
+    SAL_DLLPRIVATE vcl::Region CreateRegion( const Color& rColor, const tools::Rectangle& rRect ) const;
 
     /** Merge bitmap with given background color according to specified alpha mask
 
@@ -448,7 +448,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Replace( const AlphaMask& rAlpha, const Color& rMergeColor );
+    SAL_DLLPRIVATE bool Replace( const AlphaMask& rAlpha, const Color& rMergeColor );
 
     /** Replace all pixel where the given mask/alpha layer is on with the specified color
 
@@ -460,7 +460,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    ReplaceMask( const AlphaMask& rMask, const Color& rReplaceColor );
+    SAL_DLLPRIVATE bool ReplaceMask( const AlphaMask& rMask, const Color& rReplaceColor );
 
     /** Replace all pixel having the search color with the specified color
 
@@ -477,7 +477,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol = 0 );
+    SAL_DLLPRIVATE bool Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -497,7 +497,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Replace(
+    SAL_DLLPRIVATE bool Replace(
                                 const Color* pSearchColors,
                                 const Color* rReplaceColors,
                                 size_t nColorCount,
@@ -553,7 +553,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Adjust(
+    SAL_DLLPRIVATE bool Adjust(
                                 short nLuminancePercent,
                                 short nContrastPercent = 0,
                                 short nChannelRPercent = 0,
@@ -587,7 +587,7 @@ public:
                                 const AlphaMask& rAlphaMask);
 
     // access to SystemDependentDataHolder, to support overload in derived class(es)
-    const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
+    SAL_DLLPRIVATE const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
 
 public:
     /** ReassignWithSize and recalculate bitmap.

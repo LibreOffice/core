@@ -605,7 +605,7 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-    VCL_DLLPUBLIC void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info);
+void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info);
 
 /**
  * Returns part of the head table info, normally collected by GetTTGlobalFontInfo.
@@ -621,7 +621,7 @@ class TrueTypeFont;
  * @return            true, if table data could be decoded
  * @ingroup sft
  */
-    VCL_DLLPUBLIC bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
+bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
 
 /*- private definitions */
 

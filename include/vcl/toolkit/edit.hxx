@@ -137,7 +137,7 @@ protected:
     virtual void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde) override;
 
 protected:
-    Edit(WindowType nType);
+    SAL_DLLPRIVATE Edit(WindowType nType);
     virtual void FillLayoutData() const override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 public:
@@ -164,7 +164,7 @@ public:
 
     virtual void        Modify();
 
-    static bool         IsCharInput( const KeyEvent& rKEvt );
+    SAL_DLLPRIVATE static bool IsCharInput( const KeyEvent& rKEvt );
 
     virtual void        SetModifyFlag();
 
@@ -174,16 +174,16 @@ public:
     virtual void        SetReadOnly( bool bReadOnly = true );
     virtual bool        IsReadOnly() const { return mbReadOnly; }
 
-    void                SetInsertMode( bool bInsert );
-    bool                IsInsertMode() const;
+    SAL_DLLPRIVATE void SetInsertMode( bool bInsert );
+    SAL_DLLPRIVATE bool IsInsertMode() const;
 
     virtual void        SetMaxTextLen( sal_Int32 nMaxLen );
     virtual sal_Int32   GetMaxTextLen() const { return mnMaxTextLen; }
 
-    void                SetWidthInChars(sal_Int32 nWidthInChars);
+    SAL_DLLPRIVATE void SetWidthInChars(sal_Int32 nWidthInChars);
     sal_Int32           GetWidthInChars() const { return mnWidthInChars; }
 
-    void                setMaxWidthChars(sal_Int32 nWidth);
+    SAL_DLLPRIVATE void setMaxWidthChars(sal_Int32 nWidth);
 
     virtual void        SetSelection( const Selection& rSelection );
     virtual const Selection&    GetSelection() const;
@@ -195,15 +195,15 @@ public:
     virtual void        Cut();
     virtual void        Copy();
     virtual void        Paste();
-    void                Undo();
+    SAL_DLLPRIVATE void Undo();
 
     virtual void        SetText( const OUString& rStr ) override;
     virtual void        SetText( const OUString& rStr, const Selection& rNewSelection );
     virtual OUString    GetText() const override;
 
-    void                SetCursorAtLast();
+    SAL_DLLPRIVATE void SetCursorAtLast();
 
-    void                SetPlaceholderText( const OUString& rStr );
+    SAL_DLLPRIVATE void SetPlaceholderText( const OUString& rStr );
 
     void                SaveValue() { maSaveValue = GetText(); }
     const OUString&     GetSavedValue() const { return maSaveValue; }
@@ -213,7 +213,7 @@ public:
 
     void                SetActivateHdl(const Link<Edit&,bool>& rLink) { maActivateHdl = rLink; }
 
-    void                SetSubEdit( Edit* pEdit );
+    SAL_DLLPRIVATE void SetSubEdit( Edit* pEdit );
     Edit*               GetSubEdit() const { return mpSubEdit; }
 
     void                SetAutocompleteHdl( const Link<Edit&,void>& rLink ) { maAutocompleteHdl = rLink; }
@@ -226,9 +226,9 @@ public:
     sal_Int32           GetMaxVisChars() const;
 
     // shows a warning box saying "text too long, truncated"
-    static void         ShowTruncationWarning(weld::Widget* pParent);
+    SAL_DLLPRIVATE static void ShowTruncationWarning(weld::Widget* pParent);
 
-    VclPtr<PopupMenu>           CreatePopupMenu();
+    SAL_DLLPRIVATE VclPtr<PopupMenu>           CreatePopupMenu();
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;

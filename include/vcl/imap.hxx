@@ -40,25 +40,25 @@ private:
     OUString                     aName;
 
     // binary saving/loading
-    void                ImpWriteImageMap( SvStream& rOStm ) const ;
-    void                ImpReadImageMap( SvStream& rIStm, size_t nCount );
+    SAL_DLLPRIVATE void ImpWriteImageMap( SvStream& rOStm ) const ;
+    SAL_DLLPRIVATE void ImpReadImageMap( SvStream& rIStm, size_t nCount );
 
     // Import/Export
-    void                ImpWriteCERN( SvStream& rOStm ) const;
-    void                ImpWriteNCSA( SvStream& rOStm ) const;
-    void                ImpReadCERN( SvStream& rOStm );
-    void                ImpReadNCSA( SvStream& rOStm );
+    SAL_DLLPRIVATE void ImpWriteCERN( SvStream& rOStm ) const;
+    SAL_DLLPRIVATE void ImpWriteNCSA( SvStream& rOStm ) const;
+    SAL_DLLPRIVATE void ImpReadCERN( SvStream& rOStm );
+    SAL_DLLPRIVATE void ImpReadNCSA( SvStream& rOStm );
 
-    void                ImpReadCERNLine( std::string_view rLine );
-    static Point        ImpReadCERNCoords( const char** ppStr );
-    static tools::Long         ImpReadCERNRadius( const char** ppStr );
-    static OUString     ImpReadCERNURL( const char** ppStr );
+    SAL_DLLPRIVATE void                ImpReadCERNLine( std::string_view rLine );
+    SAL_DLLPRIVATE static Point        ImpReadCERNCoords( const char** ppStr );
+    SAL_DLLPRIVATE static tools::Long  ImpReadCERNRadius( const char** ppStr );
+    SAL_DLLPRIVATE static OUString     ImpReadCERNURL( const char** ppStr );
 
-    void                ImpReadNCSALine( std::string_view rLine );
-    static OUString     ImpReadNCSAURL( const char** ppStr );
-    static Point        ImpReadNCSACoords( const char** ppStr );
+    SAL_DLLPRIVATE void                ImpReadNCSALine( std::string_view rLine );
+    SAL_DLLPRIVATE static OUString     ImpReadNCSAURL( const char** ppStr );
+    SAL_DLLPRIVATE static Point        ImpReadNCSACoords( const char** ppStr );
 
-    static IMapFormat   ImpDetectFormat( SvStream& rIStm );
+    SAL_DLLPRIVATE static IMapFormat ImpDetectFormat( SvStream& rIStm );
 
 public:
 
@@ -110,7 +110,7 @@ public:
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     // Import/Export
-    void                Write ( SvStream& rOStm ) const;
+    SAL_DLLPRIVATE void Write ( SvStream& rOStm ) const;
     void                Read( SvStream& rIStm );
 
     void                Write( SvStream& rOStm, IMapFormat nFormat ) const;

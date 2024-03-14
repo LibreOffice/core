@@ -37,22 +37,23 @@ public:
     Animation(const Animation& rAnimation);
     ~Animation();
 
-    Animation& operator=(const Animation& rAnimation);
-    bool operator==(const Animation& rAnimation) const;
+    SAL_DLLPRIVATE Animation& operator=(const Animation& rAnimation);
+    SAL_DLLPRIVATE bool operator==(const Animation& rAnimation) const;
     bool operator!=(const Animation& rAnimation) const { return !(*this == rAnimation); }
 
     void Clear();
 
-    bool Start(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz,
-               tools::Long nRendererId, OutputDevice* pFirstFrameOutDev);
+    SAL_DLLPRIVATE bool Start(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz,
+                              tools::Long nRendererId, OutputDevice* pFirstFrameOutDev);
 
-    void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nRendererId = 0);
+    SAL_DLLPRIVATE void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nRendererId = 0);
 
-    void Draw(OutputDevice& rOutDev, const Point& rDestPt) const;
-    void Draw(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz) const;
+    SAL_DLLPRIVATE void Draw(OutputDevice& rOutDev, const Point& rDestPt) const;
+    SAL_DLLPRIVATE void Draw(OutputDevice& rOutDev, const Point& rDestPt,
+                             const Size& rDestSz) const;
 
     bool IsInAnimation() const { return mbIsInAnimation; }
-    bool IsTransparent() const;
+    SAL_DLLPRIVATE bool IsTransparent() const;
 
     const Size& GetDisplaySizePixel() const { return maGlobalSize; }
     void SetDisplaySizePixel(const Size& rSize) { maGlobalSize = rSize; }
@@ -62,7 +63,7 @@ public:
 
     sal_uInt32 GetLoopCount() const { return mnLoopCount; }
     void SetLoopCount(const sal_uInt32 nLoopCount);
-    void ResetLoopCount();
+    SAL_DLLPRIVATE void ResetLoopCount();
 
     void SetNotifyHdl(const Link<Animation*, void>& rLink) { maNotifyLink = rLink; }
     const Link<Animation*, void>& GetNotifyHdl() const { return maNotifyLink; }
@@ -73,18 +74,18 @@ public:
     const AnimationFrame& Get(sal_uInt16 nAnimation) const;
     void Replace(const AnimationFrame& rNewAnimationBmp, sal_uInt16 nAnimation);
 
-    sal_uLong GetSizeBytes() const;
-    BitmapChecksum GetChecksum() const;
+    SAL_DLLPRIVATE sal_uLong GetSizeBytes() const;
+    SAL_DLLPRIVATE BitmapChecksum GetChecksum() const;
 
 public:
-    void Convert(BmpConversion eConversion);
+    SAL_DLLPRIVATE void Convert(BmpConversion eConversion);
     bool ReduceColors(sal_uInt16 nNewColorCount);
 
     bool Invert();
-    void Mirror(BmpMirrorFlags nMirrorFlags);
-    void Adjust(short nLuminancePercent, short nContrastPercent, short nChannelRPercent,
-                short nChannelGPercent, short nChannelBPercent, double fGamma = 1.0,
-                bool bInvert = false);
+    SAL_DLLPRIVATE void Mirror(BmpMirrorFlags nMirrorFlags);
+    SAL_DLLPRIVATE void Adjust(short nLuminancePercent, short nContrastPercent,
+                               short nChannelRPercent, short nChannelGPercent,
+                               short nChannelBPercent, double fGamma = 1.0, bool bInvert = false);
 
     friend SvStream& ReadAnimation(SvStream& rIStream, Animation& rAnimation);
     friend SvStream& WriteAnimation(SvStream& rOStream, const Animation& rAnimation);

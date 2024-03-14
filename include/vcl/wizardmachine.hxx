@@ -146,8 +146,8 @@ namespace vcl
         bool ShowPrevPage();
 
         void                AddPage( std::unique_ptr<BuilderPage> xPage );
-        void                RemovePage( const BuilderPage* pPage );
-        void                SetPage( WizardTypes::WizardState nLevel, std::unique_ptr<BuilderPage> xPage );
+        SAL_DLLPRIVATE void RemovePage( const BuilderPage* pPage );
+        SAL_DLLPRIVATE void SetPage( WizardTypes::WizardState nLevel, std::unique_ptr<BuilderPage> xPage );
         BuilderPage*        GetPage( WizardTypes::WizardState eState ) const;
 
         /// enable (or disable) buttons
@@ -234,11 +234,11 @@ namespace vcl
             enabled if and only if determineNextState does not return WZS_INVALID_STATE.
         */
         void                enableAutomaticNextButtonState();
-        bool                isAutomaticNextButtonStateEnabled() const;
+        SAL_DLLPRIVATE bool isAutomaticNextButtonStateEnabled() const;
 
         /** removes a page from the history. Should be called when the page is being disabled
         */
-        void                removePageFromHistory(WizardTypes::WizardState nToRemove);
+        SAL_DLLPRIVATE void removePageFromHistory(WizardTypes::WizardState nToRemove);
 
         /** skip a state
 
@@ -300,7 +300,7 @@ namespace vcl
 
         /** retrieves a copy of the state history, i.e. all states we already visited
         */
-        void                    getStateHistory(std::vector<WizardTypes::WizardState>& out_rHistory);
+        SAL_DLLPRIVATE void getStateHistory(std::vector<WizardTypes::WizardState>& out_rHistory);
 
         virtual OUString         getPageIdentForState(WizardTypes::WizardState nState) const;
         virtual WizardTypes::WizardState getStateFromPageIdent(const OUString& rIdent) const;
@@ -313,9 +313,9 @@ namespace vcl
             AccessGuard() { }
         };
 
-        void                   suspendTraveling( AccessGuard );
-        void                   resumeTraveling( AccessGuard );
-        bool                   isTravelingSuspended() const;
+        SAL_DLLPRIVATE void    suspendTraveling( AccessGuard );
+        SAL_DLLPRIVATE void    resumeTraveling( AccessGuard );
+        SAL_DLLPRIVATE bool    isTravelingSuspended() const;
 
     protected:
         BuilderPage* GetOrCreatePage(const WizardTypes::WizardState i_nState);

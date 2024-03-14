@@ -32,34 +32,34 @@ class VCL_DLLPUBLIC SpinField : public Edit
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle, WindowType nType = WindowType::SPINFIELD );
     virtual         ~SpinField() override;
-    virtual void    dispose() override;
+    SAL_DLLPRIVATE virtual void dispose() override;
 
-    virtual bool    ShowDropDown( bool bShow );
+    SAL_DLLPRIVATE virtual bool ShowDropDown( bool bShow );
 
-    virtual void    Up();
-    virtual void    Down();
-    virtual void    First();
-    virtual void    Last();
+    SAL_DLLPRIVATE virtual void Up();
+    SAL_DLLPRIVATE virtual void Down();
+    SAL_DLLPRIVATE virtual void First();
+    SAL_DLLPRIVATE virtual void Last();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos,SystemTextColorFlags nFlags ) override;
-    virtual void    Resize() override;
-    virtual void    StateChanged( StateChangedType nType ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    SAL_DLLPRIVATE virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    SAL_DLLPRIVATE virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    SAL_DLLPRIVATE virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    SAL_DLLPRIVATE virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    SAL_DLLPRIVATE virtual void Draw( OutputDevice* pDev, const Point& rPos,SystemTextColorFlags nFlags ) override;
+    SAL_DLLPRIVATE virtual void Resize() override;
+    SAL_DLLPRIVATE virtual void StateChanged( StateChangedType nType ) override;
+    SAL_DLLPRIVATE virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    SAL_DLLPRIVATE virtual bool PreNotify( NotifyEvent& rNEvt ) override;
 
     void            SetUpHdl( const Link<SpinField&,void>& rLink ) { maUpHdlLink = rLink; }
     void            SetDownHdl( const Link<SpinField&,void>& rLink ) { maDownHdlLink = rLink; }
 
-    virtual Size    CalcMinimumSize() const override;
-    virtual Size    CalcMinimumSizeForText(const OUString &rString) const override;
-    virtual Size    GetOptimalSize() const override;
-    virtual Size    CalcSize(sal_Int32 nChars) const override;
+    SAL_DLLPRIVATE virtual Size CalcMinimumSize() const override;
+    SAL_DLLPRIVATE virtual Size CalcMinimumSizeForText(const OUString &rString) const override;
+    SAL_DLLPRIVATE virtual Size GetOptimalSize() const override;
+    SAL_DLLPRIVATE virtual Size CalcSize(sal_Int32 nChars) const override;
 
-    virtual FactoryFunction GetUITestFactory() const override;
+    SAL_DLLPRIVATE virtual FactoryFunction GetUITestFactory() const override;
 
     SAL_DLLPRIVATE void SetUpperEnabled(bool bEnabled);
     SAL_DLLPRIVATE void SetLowerEnabled(bool bEnabled);
@@ -70,12 +70,12 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    SAL_DLLPRIVATE virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
-    void            EndDropDown();
+    SAL_DLLPRIVATE void EndDropDown();
 
-    virtual void    FillLayoutData() const override;
-    tools::Rectangle *     ImplFindPartRect( const Point& rPt );
+    SAL_DLLPRIVATE virtual void FillLayoutData() const override;
+    SAL_DLLPRIVATE tools::Rectangle * ImplFindPartRect( const Point& rPt );
 
 private:
     DECL_DLLPRIVATE_LINK( ImplTimeout, Timer*, void );

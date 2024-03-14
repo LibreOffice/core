@@ -39,18 +39,18 @@ public:
 
     SAL_DLLPRIVATE BitmapColor* ImplGetColorBuffer();
 
-    BitmapChecksum GetChecksum() const;
+    SAL_DLLPRIVATE BitmapChecksum GetChecksum() const;
 
     BitmapPalette();
     BitmapPalette( const BitmapPalette& );
-    BitmapPalette( BitmapPalette&& ) noexcept;
+    SAL_DLLPRIVATE BitmapPalette( BitmapPalette&& ) noexcept;
     BitmapPalette(std::initializer_list<BitmapColor> aBitmapColor);
     template <size_t N> BitmapPalette(const std::array<BitmapColor, N>& colors);
     explicit BitmapPalette(sal_uInt16 nCount);
     ~BitmapPalette();
 
     BitmapPalette& operator=( const BitmapPalette& );
-    BitmapPalette& operator=( BitmapPalette&& ) noexcept;
+    SAL_DLLPRIVATE BitmapPalette& operator=( BitmapPalette&& ) noexcept;
 
     bool operator==( const BitmapPalette& rBitmapPalette ) const;
     bool operator!=(const BitmapPalette& rBitmapPalette) const
@@ -71,12 +71,12 @@ public:
     sal_uInt16 GetBestIndex(const BitmapColor& rCol) const;
     /// Returns the BitmapColor (i.e. palette index) that is an exact match
     /// of the required color. Returns SAL_MAX_UINT16 if nothing found.
-    sal_uInt16 GetMatchingIndex(const BitmapColor& rCol) const;
+    SAL_DLLPRIVATE sal_uInt16 GetMatchingIndex(const BitmapColor& rCol) const;
 
     /// Returns true if the palette is 8-bit grey palette.
     bool IsGreyPalette8Bit() const;
     /// Returns true if the palette is a grey palette (may not be 8-bit).
-    bool IsGreyPaletteAny() const;
+    SAL_DLLPRIVATE bool IsGreyPaletteAny() const;
 
     typedef o3tl::cow_wrapper< ImplBitmapPalette > ImplType;
 
