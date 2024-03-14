@@ -20,11 +20,14 @@
 
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+
+#include <cmath>
 
 namespace oox
 {
@@ -939,6 +942,96 @@ void Scene3DHelper::setLightingProperties(const oox::drawingml::Shape3DPropertie
     }
     else
         rPropertyMap.setProperty(oox::PROP_SecondLightLevel, 0.0); // prevent defaults.
+}
+
+namespace
+/** This struct is used to hold material values for extruded custom shapes. Because we cannot yet
+    render all material propertes MS Office uses, the values are adapted to our current abilities.*/
+{
+struct MaterialValues
+{
+    std::u16string_view msMaterialPrstName; // identifies the material type
+    // Corresponds to MS Office 'Diffuse Color' and 'Ambient Color'.
+    double fDiffusion;
+    double fSpecularity; // Corresponds to MS Office 'Specular Color'.
+    // Corresponds to our 'Shininess' as 2^(Shininess/10) = nSpecularPower.
+    sal_uInt8 nSpecularPower;
+    bool bMetal; // Corresponds to MS Office 'Metal'
+    // constants com::sun::star::drawing::EnhancedCustomShapeMetalType
+    // MetalMSCompatible belongs to 'legacyMetal' material type.
+    std::optional<sal_Int16> oMetalType; // MetalODF = 0, MetalMSCompatible = 1
+    // MS Office properties 'Emissive Color', 'Diffuse Fresnel', 'Alpha Fresnel' and 'Blinn Highlight'
+    // are not contained.
+};
+} // end anonymous namespace
+
+// OOXML standard has a fixed amount of 15 material types. The type 'legacyWireframe' is special and
+// thus is handled separately. A spreadsheet with further remarks is attached to tdf#70039.
+constexpr sal_uInt16 nPrstMaterialCount(14);
+constexpr MaterialValues aPrstMaterialArray[nPrstMaterialCount]
+    = { { u"clear", 100, 60, 20, false, {} },
+        { u"dkEdge", 70, 100, 35, false, {} },
+        { u"flat", 100, 80, 50, false, {} },
+        { u"legacyMatte", 100, 0, 0, false, {} },
+        { u"legacyMetal", 66.69921875, 122.0703125, 32, true, { 1 } },
+        { u"legacyPlastic", 100, 122.0703125, 32, false, {} },
+        { u"matte", 100, 0, 0, false, {} },
+        { u"metal", 100, 100, 12, true, { 0 } },
+        { u"plastic", 100, 60, 12, true, { 0 } },
+        { u"powder", 100, 30, 10, false, {} },
+        { u"softEdge", 100, 100, 35, false, {} },
+        { u"softmetal", 100, 100, 8, true, { 0 } },
+        { u"translucentPowder", 100, 30, 10, true, { 0 } },
+        { u"warmMatte", 100, 30, 8, false, {} } };
+
+void Scene3DHelper::setMaterialProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+                                          oox::PropertyMap& rPropertyMap)
+{
+    if (!p3DProperties)
+        return;
+
+    // PowerPoint does not write aus prstMaterial="warmMatte", but handles it as default.
+    const sal_Int32 nMaterialID = (*p3DProperties).mnMaterial.value_or(XML_warmMatte); // token
+
+    // special handling for 'legacyWireframe'
+    if (nMaterialID == XML_legacyWireframe)
+    {
+        // This is handled via shade mode of the scene.
+        rPropertyMap.setProperty(oox::PROP_ShadeMode, css::drawing::ShadeMode_DRAFT);
+        // Notice, the color of the strokes will be different from MS Office, because LO uses the
+        // shape line color even if the line style is 'none', whereas MS Office uses contour color or
+        // Black.
+        return;
+    }
+
+    sal_Int16 nIdx(0); // Index into aPrstMaterialArray
+    while (nIdx < nPrstMaterialCount
+           && aPrstMaterialArray[nIdx].msMaterialPrstName
+                  != oox::drawingml::Generic3DProperties::getPresetMaterialTypeString(nMaterialID))
+        ++nIdx;
+    if (nIdx >= nPrstMaterialCount)
+        return; // error in document
+
+    // extrusion-diffuse, extrusion-specularity-loext
+    rPropertyMap.setProperty(oox::PROP_Diffusion, aPrstMaterialArray[nIdx].fDiffusion);
+    rPropertyMap.setProperty(oox::PROP_Specularity, aPrstMaterialArray[nIdx].fSpecularity);
+
+    // extrusion-shininess
+    double fShininess = 0.0;
+    // Conversion 2^(fShininess/10) = nSpecularPower
+    if (aPrstMaterialArray[nIdx].nSpecularPower > 0)
+        fShininess = 10.0 * std::log2(aPrstMaterialArray[nIdx].nSpecularPower);
+    rPropertyMap.setProperty(oox::PROP_Shininess, fShininess);
+
+    // extrusion-metal, extrusion-metal-type
+    rPropertyMap.setProperty(oox::PROP_Metal, aPrstMaterialArray[nIdx].bMetal);
+    if (aPrstMaterialArray[nIdx].bMetal)
+    {
+        sal_Int16 eMetalType = aPrstMaterialArray[nIdx].oMetalType.value_or(0) == 1
+                                   ? css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible
+                                   : css::drawing::EnhancedCustomShapeMetalType::MetalODF;
+        rPropertyMap.setProperty(oox::PROP_MetalType, eMetalType);
+    }
 }
 
 } // end namespace oox

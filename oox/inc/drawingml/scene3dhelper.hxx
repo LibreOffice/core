@@ -50,6 +50,19 @@ public:
     void setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
                                const double& rRotZ, oox::PropertyMap& rPropertyMap);
 
+    /** Puts the material properties of the 3D-shape into the property map
+        @details OOXML and MSO describe the material properties using Specular Color (RGBA), Diffuse
+            Color (RGBA), Ambient Color (RGBA), Emissive Color (RGBA), Specular Power (positive int),
+            Diffuse Fresnel (int), Alpha Fresnel (int), Metal (bool) and Blinn Highlight (bool). ODF
+            and API have Diffusion (double), Specularity (double), Shininess (double), Metal (bool),
+            MetalType (enum). Thus a directly use of the MSO values is not possible and some material
+            types cannot be rendered. The method uses workarounds and approximations.
+        @param [in] p3DProperties contains besides other properties the material preset name
+        @param [in, out] rPropertyMap has properties directly usable in
+            CustomShapeProperties.pushToPropSet() for property Extrusion.*/
+    static void setMaterialProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+                                      oox::PropertyMap& rPropertyMap);
+
 private:
     /** Calculates angles suitable for API from OOXML scene3d angles.
         @param [in] nLat, nLon, nRev in unit 1/60000 deg with same orientation as the attributes lat,

@@ -43,7 +43,7 @@ protected:
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex, sal_uInt8 nPageIndex);
     // Converts the shape 0 on page 0 to a bitmap and returns this bitmap.
     // It assumes, that shape 0 on page 0 is the only shape.
-    void getShapeAsBitmap(BitmapEx& rBMP);
+    void getShapeAsBitmap(BitmapEx& rBMP, sal_uInt8 nShapeIndex);
 };
 
 uno::Reference<drawing::XShape> TestScene3d::getShape(sal_uInt8 nShapeIndex, sal_uInt8 nPageIndex)
@@ -60,26 +60,48 @@ uno::Reference<drawing::XShape> TestScene3d::getShape(sal_uInt8 nShapeIndex, sal
     return xShape;
 }
 
-void TestScene3d::getShapeAsBitmap(BitmapEx& rBMP)
+void TestScene3d::getShapeAsBitmap(BitmapEx& rBMP, sal_uInt8 nShapeIndex)
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pSdrView = pViewShell->GetDrawView();
 
     // Mark object and convert it to bitmap
-    uno::Reference<drawing::XShape> xShape3D(getShape(0, 0));
+    uno::Reference<drawing::XShape> xShape3D(getShape(nShapeIndex, 0));
     SdrObject* pSdrShape(SdrObject::getSdrObjectFromXShape(xShape3D));
     pSdrView->MarkObj(pSdrShape, pSdrView->GetSdrPageView());
     dispatchCommand(mxComponent, ".uno:ConvertIntoBitmap", {});
     pSdrView->UnmarkAll();
 
     // Get graphic
-    uno::Reference<drawing::XShape> xShapeBmp(getShape(0, 0));
+    uno::Reference<drawing::XShape> xShapeBmp(getShape(nShapeIndex, 0));
     SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(SdrObject::getSdrObjectFromXShape(xShapeBmp));
     CPPUNIT_ASSERT_MESSAGE("No image object created", pGrafObj);
     const Graphic& rGraphic = pGrafObj->GetGraphic();
     rBMP = rGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_MESSAGE("No bitmap", !rBMP.IsEmpty());
 }
+
+namespace
+{
+void lcl_AssertColorsApproximateEqual(const ::Color& aExpected, const ::Color& aActual)
+{
+    // Currently (March 2024), the import of lighting and material is only approximately possible.
+    // Thus colors are not identical. When the import will be improved, the tolerances should be
+    // reduced. The test uses HSB instead of RGB, because differences in hue are more irritating and
+    // should be detected as a priority. That is not possible with GetColorError() method.
+    sal_uInt16 nExpH;
+    sal_uInt16 nExpS;
+    sal_uInt16 nExpB;
+    sal_uInt16 nActH;
+    sal_uInt16 nActS;
+    sal_uInt16 nActB;
+    aExpected.RGBtoHSB(nExpH, nExpS, nExpB);
+    aActual.RGBtoHSB(nActH, nActS, nActB);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Hue", nExpH, nActH, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Saturation", nExpS, nActS, 13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Brightness", nExpB, nActB, 11);
+}
+} // end anonymous namespace
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_isometricRightUp)
 {
@@ -357,21 +379,17 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_modernCamera)
     // The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_modernCamera.pptx");
     BitmapEx aBMP;
-    getShapeAsBitmap(aBMP);
+    getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
     // Color in center
     sal_Int32 nX = 0.5 * aBMP.GetSizePixel().Width();
     sal_Int32 nY = 0.5 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedCenter(248, 226, 212);
-    CPPUNIT_ASSERT_MESSAGE("center color wrong",
-                           aExpectedCenter.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(247, 225, 211), aBMP.GetPixelColor(nX, nY));
     // Color left
     nX = 0.046122 * aBMP.GetSizePixel().Width();
     nY = 0.5 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedLeft(0, 105, 48);
-    CPPUNIT_ASSERT_MESSAGE("left color wrong",
-                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(0, 103, 47), aBMP.GetPixelColor(nX, nY));
 }
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_legacyCamera)
@@ -383,21 +401,17 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_legacyCamera)
     // The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_legacyCamera.pptx");
     BitmapEx aBMP;
-    getShapeAsBitmap(aBMP);
+    getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
     // Color in center
     sal_Int32 nX = 0.5 * aBMP.GetSizePixel().Width();
     sal_Int32 nY = 0.5 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedCenter(96, 88, 82);
-    CPPUNIT_ASSERT_MESSAGE("center color wrong",
-                           aExpectedCenter.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(94, 86, 80), aBMP.GetPixelColor(nX, nY));
     // Color left
     nX = 0.046122 * aBMP.GetSizePixel().Width();
     nY = 0.5 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedLeft(0, 180, 82);
-    CPPUNIT_ASSERT_MESSAGE("left color wrong",
-                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(5, 185, 87), aBMP.GetPixelColor(nX, nY));
 }
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_default)
@@ -408,27 +422,21 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_default)
     // The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_default.pptx");
     BitmapEx aBMP;
-    getShapeAsBitmap(aBMP);
+    getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
     // Front color
     sal_Int32 nX = 0.93811 * aBMP.GetSizePixel().Width();
     sal_Int32 nY = 0.49904 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedFront(165, 187, 150);
-    CPPUNIT_ASSERT_MESSAGE("front color wrong",
-                           aExpectedFront.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(165, 187, 150), aBMP.GetPixelColor(nX, nY));
     // Left color
     nX = 0.078176 * aBMP.GetSizePixel().Width();
     nY = 0.49904 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedLeft(255, 189, 74);
-    CPPUNIT_ASSERT_MESSAGE("left color wrong",
-                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(255, 189, 74), aBMP.GetPixelColor(nX, nY));
     // Top color
     nX = 0.48860 * aBMP.GetSizePixel().Width();
     nY = 0.069098 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedTop(189, 100, 39);
-    CPPUNIT_ASSERT_MESSAGE("top color wrong",
-                           aExpectedTop.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(189, 100, 39), aBMP.GetPixelColor(nX, nY));
 }
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_dir_rotation)
@@ -439,27 +447,21 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_dir_rotation)
     // and MSO. The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_dir_rotation.pptx");
     BitmapEx aBMP;
-    getShapeAsBitmap(aBMP);
+    getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
     // Front color
     sal_Int32 nX = 0.93811 * aBMP.GetSizePixel().Width();
     sal_Int32 nY = 0.49904 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedFront(165, 187, 150);
-    CPPUNIT_ASSERT_MESSAGE("front color wrong",
-                           aExpectedFront.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(165, 187, 150), aBMP.GetPixelColor(nX, nY));
     // Left color
     nX = 0.078176 * aBMP.GetSizePixel().Width();
     nY = 0.49904 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedLeft(206, 108, 42);
-    CPPUNIT_ASSERT_MESSAGE("left color wrong",
-                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(206, 108, 42), aBMP.GetPixelColor(nX, nY));
     // Top color
     nX = 0.48860 * aBMP.GetSizePixel().Width();
     nY = 0.069098 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedTop(255, 189, 74);
-    CPPUNIT_ASSERT_MESSAGE("top color wrong",
-                           aExpectedTop.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(255, 189, 74), aBMP.GetPixelColor(nX, nY));
 }
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_rot_rotation)
@@ -469,32 +471,88 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_rot_rotation)
     // The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_rot_rotation.pptx");
     BitmapEx aBMP;
-    getShapeAsBitmap(aBMP);
+    getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
     // Front color, same as in MS Office
     sal_Int32 nX = 0.93811 * aBMP.GetSizePixel().Width();
     sal_Int32 nY = 0.49904 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedFront(88, 100, 80);
-    CPPUNIT_ASSERT_MESSAGE("center color wrong",
-                           aExpectedFront.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
-    // Left color, different from MS Office
-    // The rotation brings the second light in a position, that it contributes to the left face.
-    // Because the light is specular in MS Office, but current LibreOffice cannot make a second
-    // light specular, the colors in MS Office and LibreOffice differ noticeably. MS Office has
-    // here rgb(255, 214, 99). The expected color is the color in LibreOffice as of March 2024.
-    // The test needs to be updated, when LibreOffice rendering is improved.
+    lcl_AssertColorsApproximateEqual(::Color(88, 100, 80), aBMP.GetPixelColor(nX, nY));
+    // Left color
     nX = 0.078176 * aBMP.GetSizePixel().Width();
     nY = 0.49904 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedLeft(255, 191, 75);
-    CPPUNIT_ASSERT_MESSAGE("left color wrong",
-                           aExpectedLeft.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
-    // Top color, same as in MS Office
+    lcl_AssertColorsApproximateEqual(::Color(255, 214, 99), aBMP.GetPixelColor(nX, nY));
+    // Top color
     nX = 0.48860 * aBMP.GetSizePixel().Width();
     nY = 0.069098 * aBMP.GetSizePixel().Height();
-    ::Color aExpectedTop(106, 56, 22);
-    CPPUNIT_ASSERT_MESSAGE("top color wrong",
-                           aExpectedTop.GetColorError(aBMP.GetPixelColor(nX, nY)) < 7);
+    lcl_AssertColorsApproximateEqual(::Color(106, 56, 22), aBMP.GetPixelColor(nX, nY));
+}
+
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_material_highlight)
+{
+    // The file contains six shapes with same geometry and fill and line color. The scenes use the
+    // camera 'orthographicFront' and the lightRig 'twoPt'. The test looks at an area of highlight
+    // and at an area outside the hightlight.
+
+    loadFromFile(u"Scene3d_material_highlight.pptx");
+
+    BitmapEx aBMP;
+    getShapeAsBitmap(aBMP, 0); // material legacyPlastic
+    sal_Int32 nX = 0.75 * aBMP.GetSizePixel().Width();
+    sal_Int32 nYhigh = 0.25 * aBMP.GetSizePixel().Height();
+    sal_Int32 nYsoft = 0.75 * aBMP.GetSizePixel().Height();
+    lcl_AssertColorsApproximateEqual(::Color(255, 255, 255), aBMP.GetPixelColor(nX, nYhigh));
+    lcl_AssertColorsApproximateEqual(::Color(130, 95, 70), aBMP.GetPixelColor(nX, nYsoft));
+
+    // same geometry, thus nX, nYhigh and nYsoft unchanged
+    getShapeAsBitmap(aBMP, 1); // material warmMatte
+    lcl_AssertColorsApproximateEqual(::Color(253, 200, 164), aBMP.GetPixelColor(nX, nYhigh));
+    lcl_AssertColorsApproximateEqual(::Color(132, 96, 71), aBMP.GetPixelColor(nX, nYsoft));
+
+    getShapeAsBitmap(aBMP, 2); // material metal
+    lcl_AssertColorsApproximateEqual(::Color(255, 255, 255), aBMP.GetPixelColor(nX, nYhigh));
+    lcl_AssertColorsApproximateEqual(::Color(132, 96, 71), aBMP.GetPixelColor(nX, nYsoft));
+
+    getShapeAsBitmap(aBMP, 3); // material matte
+    lcl_AssertColorsApproximateEqual(::Color(190, 138, 102), aBMP.GetPixelColor(nX, nYhigh));
+    lcl_AssertColorsApproximateEqual(::Color(130, 95, 70), aBMP.GetPixelColor(nX, nYsoft));
+
+    getShapeAsBitmap(aBMP, 4); // material dkEdge
+    lcl_AssertColorsApproximateEqual(::Color(255, 255, 255), aBMP.GetPixelColor(nX, nYhigh));
+    lcl_AssertColorsApproximateEqual(::Color(115, 84, 62), aBMP.GetPixelColor(nX, nYsoft));
+
+    getShapeAsBitmap(aBMP, 5); // material legacyMetal
+    lcl_AssertColorsApproximateEqual(::Color(255, 255, 220), aBMP.GetPixelColor(nX, nYhigh));
+    lcl_AssertColorsApproximateEqual(::Color(86, 63, 46), aBMP.GetPixelColor(nX, nYsoft));
+}
+
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_material_wireframe)
+{
+    // Given a document with a shape in 3D mode with material legacyWireframe.
+    // It uses a projection "Oblique: Top Left".
+    loadFromFile(u"Scene3d_material_wireframe.pptx");
+    uno::Reference<drawing::XShape> xShape(getShape(0, 0));
+
+    // Make sure the export to ODF has the corresponding attributes.
+    save("impress8");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:presentation/draw:page/"
+                "draw:custom-shape/draw:enhanced-geometry"_ostr,
+                "extrusion-origin"_ostr, "-0.5 -0.5");
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:presentation/draw:page/"
+                "draw:custom-shape/draw:enhanced-geometry"_ostr,
+                "extrusion-skew"_ostr, "30 -45");
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:presentation/draw:page/"
+                "draw:custom-shape/draw:enhanced-geometry"_ostr,
+                "projection"_ostr, "parallel");
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:presentation/draw:page/"
+                "draw:custom-shape/draw:enhanced-geometry"_ostr,
+                "shade-mode"_ostr, "draft");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

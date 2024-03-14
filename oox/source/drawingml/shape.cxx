@@ -1002,8 +1002,12 @@ Reference< XShape > const & Shape::createAndInsert(
     }
 
     if (bHas3DEffect)
+    {
         aScene3DHelper.setLightingProperties(mp3DPropertiesPtr, fShapeRotateInclCamera,
                                              getCustomShapeProperties()->getExtrusionPropertyMap());
+        oox::Scene3DHelper::setMaterialProperties(
+            mp3DPropertiesPtr, getCustomShapeProperties()->getExtrusionPropertyMap());
+    }
 
     if (bIsCroppedGraphic || bIs3DGraphic)
     {
