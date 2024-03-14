@@ -74,4 +74,8 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sw_odfimport,\
 	officecfg/registry \
 ))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_odfimport,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
