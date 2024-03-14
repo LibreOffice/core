@@ -59,7 +59,7 @@ private:
     OUString                maUserData;
     std::unique_ptr<GrfSimpleCacheObj> mxSimpleCache;
 
-    bool                    VCL_DLLPRIVATE ImplGetCropParams(
+    bool                    SAL_DLLPRIVATE ImplGetCropParams(
                                 const OutputDevice& rOut,
                                 Point& rPt,
                                 Size& rSz,
@@ -106,7 +106,7 @@ private:
 
         @return true, if everything was successfully rendered.
     */
-    bool VCL_DLLPRIVATE     ImplRenderTempTile(
+    bool SAL_DLLPRIVATE     ImplRenderTempTile(
                                 VirtualDevice& rVDev,
                                 int nNumTilesX,
                                 int nNumTilesY,
@@ -115,7 +115,7 @@ private:
                             );
 
     /// internally called by ImplRenderTempTile()
-    bool VCL_DLLPRIVATE     ImplRenderTileRecursive(
+    bool SAL_DLLPRIVATE     ImplRenderTileRecursive(
                                 VirtualDevice& rVDev,
                                 int nExponent,
                                 int nMSBFactor,
@@ -128,7 +128,7 @@ private:
                                 ImplTileInfo& rTileInfo
                             );
 
-    bool VCL_DLLPRIVATE     ImplDrawTiled(
+    bool SAL_DLLPRIVATE     ImplDrawTiled(
                                 OutputDevice& rOut,
                                 const tools::Rectangle& rArea,
                                 const Size& rSizePixel,
@@ -137,7 +137,7 @@ private:
                                 int nTileCacheSize1D
                             );
 
-    bool VCL_DLLPRIVATE     ImplDrawTiled(
+    bool SAL_DLLPRIVATE     ImplDrawTiled(
                                 OutputDevice& rOut,
                                 const Point& rPos,
                                 int nNumTilesX,
@@ -146,7 +146,7 @@ private:
                                 const GraphicAttr* pAttr
                             ) const;
 
-    void VCL_DLLPRIVATE     ImplTransformBitmap(
+    void SAL_DLLPRIVATE     ImplTransformBitmap(
                                 BitmapEx&           rBmpEx,
                                 const GraphicAttr&  rAttr,
                                 const Size&         rCropLeftTop,

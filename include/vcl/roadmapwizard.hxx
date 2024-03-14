@@ -179,7 +179,7 @@ namespace vcl
         /** updates the roadmap control to show the given path, as far as possible
             (modulo conflicts with other paths)
         */
-        VCL_DLLPRIVATE void implUpdateRoadmap( );
+        SAL_DLLPRIVATE void implUpdateRoadmap( );
     };
 } // namespace vcl
 

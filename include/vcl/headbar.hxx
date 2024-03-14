@@ -231,21 +231,21 @@ private:
                           mxAccessible;
 
     using Window::ImplInit;
-    VCL_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
-    VCL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    VCL_DLLPRIVATE tools::Long             ImplGetItemPos( sal_uInt16 nPos ) const;
-    VCL_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
-    VCL_DLLPRIVATE sal_uInt16       ImplDoHitTest( const Point& rPos, tools::Long& nMouseOff, sal_uInt16& nPos ) const;
-    VCL_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
-    VCL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
+    SAL_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
+    SAL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    SAL_DLLPRIVATE tools::Long             ImplGetItemPos( sal_uInt16 nPos ) const;
+    SAL_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
+    SAL_DLLPRIVATE sal_uInt16       ImplDoHitTest( const Point& rPos, tools::Long& nMouseOff, sal_uInt16& nPos ) const;
+    SAL_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
+    SAL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle& rItemRect, const tools::Rectangle* pRect);
-    VCL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
+    SAL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle* pRect);
-    VCL_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
+    SAL_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
                                        bool bEnd = false );
-    VCL_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );
-    VCL_DLLPRIVATE void             ImplDrag( const Point& rPos );
-    VCL_DLLPRIVATE void             ImplEndDrag( bool bCancel );
+    SAL_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );
+    SAL_DLLPRIVATE void             ImplDrag( const Point& rPos );
+    SAL_DLLPRIVATE void             ImplEndDrag( bool bCancel );
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 

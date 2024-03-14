@@ -263,16 +263,16 @@ private:
     // call. The AddBox method is called from the GetDragFinishedHdl() and the
     // remove is called in the link callback and in the dtor. So it can't be
     // called for a deleted object.
-    VCL_DLLPRIVATE static void AddBoxToDDList_Impl( const SvTreeListBox& rB );
-    VCL_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
+    SAL_DLLPRIVATE static void AddBoxToDDList_Impl( const SvTreeListBox& rB );
+    SAL_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
     DECL_DLLPRIVATE_LINK( DragFinishHdl_Impl, sal_Int8, void );
 
     // after a checkbox entry is inserted, use this to get its width to support
     // autowidth for the 1st checkbox column
-    VCL_DLLPRIVATE void CheckBoxInserted(SvTreeListEntry* pEntry);
+    SAL_DLLPRIVATE void CheckBoxInserted(SvTreeListEntry* pEntry);
 
-    VCL_DLLPRIVATE void DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
-    VCL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry) const;
+    SAL_DLLPRIVATE void DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
+    SAL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry) const;
 
     /** Handles the given key event.
 
@@ -281,7 +281,7 @@ private:
         @return
             <TRUE/> if the event has been consumed, <FALSE/> otherwise.
     */
-    VCL_DLLPRIVATE bool HandleKeyInput(const KeyEvent& rKEvt);
+    SAL_DLLPRIVATE bool HandleKeyInput(const KeyEvent& rKEvt);
 
     void UnsetDropTarget();
 
@@ -472,22 +472,22 @@ public:
 
     virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
-    VCL_DLLPRIVATE void SetCollapsedNodeBmp( const Image& );
-    VCL_DLLPRIVATE void SetExpandedNodeBmp( const Image& );
-    VCL_DLLPRIVATE Image const & GetExpandedNodeBmp( ) const;
+    SAL_DLLPRIVATE void SetCollapsedNodeBmp( const Image& );
+    SAL_DLLPRIVATE void SetExpandedNodeBmp( const Image& );
+    SAL_DLLPRIVATE Image const & GetExpandedNodeBmp( ) const;
 
 protected:
 
     virtual void                CalcEntryHeight(SvTreeListEntry const* pEntry);
                    void         AdjustEntryHeight( const Image& rBmp );
-    VCL_DLLPRIVATE void         AdjustEntryHeight();
+    SAL_DLLPRIVATE void         AdjustEntryHeight();
 
-    VCL_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
-    VCL_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, tools::Long nLine, vcl::RenderContext& rRenderContext );
+    SAL_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
+    SAL_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, tools::Long nLine, vcl::RenderContext& rRenderContext );
 
-    VCL_DLLPRIVATE void         InitTreeView();
-    VCL_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, tools::Long nX, SvLBoxTab** ppTab );
-    VCL_DLLPRIVATE void         ImplInitStyle();
+    SAL_DLLPRIVATE void         InitTreeView();
+    SAL_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, tools::Long nX, SvLBoxTab** ppTab );
+    SAL_DLLPRIVATE void         ImplInitStyle();
 
     void            SetupDragOrigin();
     void            EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,
@@ -529,7 +529,7 @@ protected:
 
     // true if rPos is over the SvTreeListBox body, i.e. not over a
     // scrollbar
-    VCL_DLLPRIVATE bool PosOverBody(const Point& rPos) const;
+    SAL_DLLPRIVATE bool PosOverBody(const Point& rPos) const;
 public:
 
     void            SetNoAutoCurEntry( bool b );

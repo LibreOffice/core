@@ -62,7 +62,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     struct PrintFont;
     friend struct PrintFont;
 
-    struct VCL_DLLPRIVATE PrintFont
+    struct SAL_DLLPRIVATE PrintFont
     {
         FontAttributes    m_aFontAttributes;
 

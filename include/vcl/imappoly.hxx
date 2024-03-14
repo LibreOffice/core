@@ -31,7 +31,7 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IMapPolygonObject final : public IMapObjec
     tools::Rectangle           aEllipse;
     bool                bEllipse;
 
-    VCL_DLLPRIVATE void ImpConstruct( const tools::Polygon& rPoly, bool bPixel );
+    SAL_DLLPRIVATE void ImpConstruct( const tools::Polygon& rPoly, bool bPixel );
 
     // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const override;

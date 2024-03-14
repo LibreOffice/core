@@ -95,18 +95,18 @@ private:
     bool                        mbUsePrintSetting;
     bool                        mbResetPrintArea;
 
-    VCL_DLLPRIVATE void         ImplInitData();
-    VCL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
-    VCL_DLLPRIVATE void         ImplInitDisplay();
-    VCL_DLLPRIVATE static SalPrinterQueueInfo*
+    SAL_DLLPRIVATE void         ImplInitData();
+    SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
+    SAL_DLLPRIVATE void         ImplInitDisplay();
+    SAL_DLLPRIVATE static SalPrinterQueueInfo*
                                 ImplGetQueueInfo( const OUString& rPrinterName, const OUString* pDriver );
-    VCL_DLLPRIVATE void         ImplUpdatePageData();
-    VCL_DLLPRIVATE void         ImplUpdateFontList();
-    VCL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
+    SAL_DLLPRIVATE void         ImplUpdatePageData();
+    SAL_DLLPRIVATE void         ImplUpdateFontList();
+    SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
 
-    VCL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController> const & );
+    SAL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController> const & );
 
-    static VCL_DLLPRIVATE ErrCode
+    static SAL_DLLPRIVATE ErrCode
                                 ImplSalPrinterErrorCodeToVCL( SalPrinterError nError );
 
     SAL_DLLPRIVATE void         ImplPrintTransparent (
@@ -115,13 +115,13 @@ private:
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
 private:
-    VCL_DLLPRIVATE void         EndJob();
+    SAL_DLLPRIVATE void         EndJob();
                                 Printer( const Printer& rPrinter )    = delete;
     Printer&                    operator =( const Printer& rPrinter ) = delete;
 
 public:
-    VCL_DLLPRIVATE void         ImplStartPage();
-    VCL_DLLPRIVATE void         ImplEndPage();
+    SAL_DLLPRIVATE void         ImplStartPage();
+    SAL_DLLPRIVATE void         ImplEndPage();
 
 protected:
     virtual bool                AcquireGraphics() const override;
@@ -220,7 +220,7 @@ public:
         should the need arise to set the printer options outside vcl, also a method would have to be devised
         to not override these again internally
     */
-    VCL_DLLPRIVATE void         SetPrinterOptions( const vcl::printer::Options& rOptions );
+    SAL_DLLPRIVATE void         SetPrinterOptions( const vcl::printer::Options& rOptions );
     const vcl::printer::Options& GetPrinterOptions() const { return( *mpPrinterOptions ); }
 
     void                        ResetPrintArea(bool bReset) { mbResetPrintArea = bReset; }
@@ -311,7 +311,7 @@ public:
 
         not exported, not usable outside vcl
     */
-    static void VCL_DLLPRIVATE  ImplPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
+    static void SAL_DLLPRIVATE  ImplPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
                                     const JobSetup& i_rInitSetup );
 };
 
@@ -465,37 +465,37 @@ public:
     // the benefit of vcl's plugins.
     // Still: DO NOT USE OUTSIDE VCL
                       int               getFilteredPageCount() const;
-    VCL_DLLPRIVATE    PageSize          getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf,
+    SAL_DLLPRIVATE    PageSize          getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf,
                                             bool i_bMayUseCache = false );
                       PageSize          getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf,
                                             bool i_bMayUseCache = false );
                       void              printFilteredPage( int i_nPage );
-    VCL_DLLPRIVATE    void              setPrinter( const VclPtr<Printer>& );
+    SAL_DLLPRIVATE    void              setPrinter( const VclPtr<Printer>& );
                       void              createProgressDialog();
                       bool              isProgressCanceled() const;
-    VCL_DLLPRIVATE    void              setMultipage( const MultiPageSetup& );
-    VCL_DLLPRIVATE    const MultiPageSetup&
+    SAL_DLLPRIVATE    void              setMultipage( const MultiPageSetup& );
+    SAL_DLLPRIVATE    const MultiPageSetup&
                                         getMultipage() const;
                       void              setLastPage( bool i_bLastPage );
-    VCL_DLLPRIVATE    void              setReversePrint( bool i_bReverse );
-    VCL_DLLPRIVATE    void              setPapersizeFromSetup( bool i_bPapersizeFromSetup );
-    VCL_DLLPRIVATE    bool              getPapersizeFromSetup() const;
-    VCL_DLLPRIVATE    void              setPaperSizeFromUser( Size i_aUserSize );
-    VCL_DLLPRIVATE    void              setOrientationFromUser( Orientation eOrientation, bool set );
+    SAL_DLLPRIVATE    void              setReversePrint( bool i_bReverse );
+    SAL_DLLPRIVATE    void              setPapersizeFromSetup( bool i_bPapersizeFromSetup );
+    SAL_DLLPRIVATE    bool              getPapersizeFromSetup() const;
+    SAL_DLLPRIVATE    void              setPaperSizeFromUser( Size i_aUserSize );
+    SAL_DLLPRIVATE    void              setOrientationFromUser( Orientation eOrientation, bool set );
                       void              setPrinterModified( bool i_bPapersizeFromSetup );
                       bool              getPrinterModified() const;
-    VCL_DLLPRIVATE    void              pushPropertiesToPrinter();
-    VCL_DLLPRIVATE    void              resetPaperToLastConfigured();
-    VCL_DLLPRIVATE    void              resetPrintArea();
+    SAL_DLLPRIVATE    void              pushPropertiesToPrinter();
+    SAL_DLLPRIVATE    void              resetPaperToLastConfigured();
+    SAL_DLLPRIVATE    void              resetPrintArea();
                       void              setJobState( css::view::PrintableState );
-    VCL_DLLPRIVATE    void              setupPrinter( weld::Window* i_pDlgParent );
+    SAL_DLLPRIVATE    void              setupPrinter( weld::Window* i_pDlgParent );
 
-    VCL_DLLPRIVATE    int               getPageCountProtected() const;
-    VCL_DLLPRIVATE    css::uno::Sequence< css::beans::PropertyValue >
+    SAL_DLLPRIVATE    int               getPageCountProtected() const;
+    SAL_DLLPRIVATE    css::uno::Sequence< css::beans::PropertyValue >
                                         getPageParametersProtected( int i_nPage ) const;
 
-    VCL_DLLPRIVATE    DrawModeFlags     removeTransparencies( GDIMetaFile const & i_rIn, GDIMetaFile& o_rOut );
-    VCL_DLLPRIVATE    void              resetPrinterOptions( bool i_bFileOutput );
+    SAL_DLLPRIVATE    DrawModeFlags     removeTransparencies( GDIMetaFile const & i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE    void              resetPrinterOptions( bool i_bFileOutput );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper

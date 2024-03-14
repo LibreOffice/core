@@ -326,8 +326,8 @@ namespace vcl
         DECL_DLLPRIVATE_LINK(OnFinish, weld::Button&, void);
         DECL_DLLPRIVATE_LINK(OnCancel, weld::Button&, void);
 
-        VCL_DLLPRIVATE void     implUpdateTitle();
-        VCL_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
+        SAL_DLLPRIVATE void     implUpdateTitle();
+        SAL_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
     };
 
 

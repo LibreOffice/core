@@ -134,7 +134,7 @@ class VCL_DLLPUBLIC TransferableHelper : public cppu::WeakImplHelper< css::datat
 private:
 
     // nested class to implement the XTerminateListener interface
-    class VCL_DLLPRIVATE TerminateListener final : public cppu::WeakImplHelper< css::frame::XTerminateListener, css::lang::XServiceInfo >
+    class SAL_DLLPRIVATE TerminateListener final : public cppu::WeakImplHelper< css::frame::XTerminateListener, css::lang::XServiceInfo >
     {
     private:
 
@@ -219,7 +219,7 @@ protected:
 
 private:
 
-    VCL_DLLPRIVATE void             ImplFlush();
+    SAL_DLLPRIVATE void             ImplFlush();
 
 protected:
 

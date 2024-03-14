@@ -29,7 +29,7 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IMapRectangleObject final : public IMapObj
 {
     tools::Rectangle           aRect;
 
-    VCL_DLLPRIVATE void             ImpConstruct( const tools::Rectangle& rRect, bool bPixel );
+    SAL_DLLPRIVATE void             ImpConstruct( const tools::Rectangle& rRect, bool bPixel );
 
     // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const override;
