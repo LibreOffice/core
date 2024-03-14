@@ -3553,6 +3553,9 @@ ErrCode WW8Export::ExportDocument_Impl()
     m_pFib.reset(new WW8Fib(8, m_bDot));
 
     rtl::Reference<SotStorageStream> xWwStrm(GetWriter().GetStorage().OpenSotStream(m_aMainStg));
+    if (!xWwStrm->IsWritable())
+        return ERRCODE_IO_ACCESSDENIED;
+
     rtl::Reference<SotStorageStream> xTableStrm(xWwStrm), xDataStrm(xWwStrm);
     xWwStrm->SetBufferSize( 32768 );
 
