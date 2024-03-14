@@ -530,7 +530,7 @@
                     <property name="halign">start</property>
                     <property name="active">0</property>
                     <items>
-                      <item id="filter_none" translatable="yes" context="startcenter|filter_none">All Applications</item>
+                      <item id="filter_none" translatable="yes" context="startcenter|filter_none">All Documents</item>
                       <item id="filter_writer" translatable="yes" context="startcenter|filter_writer">Text Documents</item>
                       <item id="filter_calc" translatable="yes" context="startcenter|filter_calc">Spreadsheets</item>
                       <item id="filter_impress" translatable="yes" context="startcenter|filter_impress">Presentations</item>
