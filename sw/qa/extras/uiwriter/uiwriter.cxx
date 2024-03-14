@@ -813,7 +813,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
         SwDoc * pDoc(createDoc("pagebreak-source.fodt"));
 
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-        CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
+        CPPUNIT_ASSERT_EQUAL(long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
         pWrtShell->SelAll();
 
@@ -833,7 +833,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     CPPUNIT_ASSERT_EQUAL(OUString("WithMargin"), getProperty<OUString>(getParagraph(1), "PageDescName"));
     CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
     // page style WithMargin is used
-    CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
+    CPPUNIT_ASSERT_EQUAL(long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
     //paste not working in this branch? lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
     TransferableDataHelper aHelper(pTransfer.get());
@@ -846,7 +846,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     // the problem was that there was a page break now
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
-    CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
+    CPPUNIT_ASSERT_EQUAL(long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
     pWrtShell->Undo();
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
@@ -854,7 +854,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
-    CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
+    CPPUNIT_ASSERT_EQUAL(long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
     pWrtShell->Redo();
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
@@ -863,7 +863,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     CPPUNIT_ASSERT_EQUAL(OUString("SourceSection"), pWrtShell->GetCurrSection()->GetSectionName());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
-    CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
+    CPPUNIT_ASSERT_EQUAL(long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
     pWrtShell->Undo();
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
@@ -871,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     CPPUNIT_ASSERT_EQUAL(OUString("TargetSection"), pWrtShell->GetCurrSection()->GetSectionName());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
-    CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
+    CPPUNIT_ASSERT_EQUAL(long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 }
 
 void SwUiWriterTest::testBookmarkCopy()
