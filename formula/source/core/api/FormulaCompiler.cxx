@@ -1230,6 +1230,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocMatrixUnit :
         case ocModalValue_Multi :
         case ocFourier :
+        case ocFilter :
             return true;
         default:
         {
