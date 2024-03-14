@@ -186,7 +186,14 @@ ErrCode SwASCWriter::WriteStream()
                         }
                         bWriteSttTag = false;
                     }
-                    Out( aASCNodeFnTab, *pNd, *this );
+
+                    SwTableNode* pTableNd = pNd->FindTableNode();
+
+                    // Handle a table
+                    if (pTableNd && m_bWriteAll)
+                        WriteTable(pTableNd, pNd);
+                    else
+                        Out( aASCNodeFnTab, *pNd, *this );
                 }
                 bTstFly = false;        // Testing once is enough
             }
@@ -219,6 +226,56 @@ void SwASCWriter::SetupFilterOptions(SfxMedium& rMedium)
         aOpt.ReadUserData(sItemOpt);
         SetAsciiOptions(aOpt);
     }
+}
+
+void SwASCWriter::WriteTable(SwTableNode* pTableNd, SwTextNode* pNd)
+{
+    OUString sPreLineEnd = this->m_sLineEnd;
+    m_sLineEnd = u""_ustr;
+
+    const SwTableLine* pEndTabLine = pTableNd->GetTable().GetTabLines().back();
+    const SwTableBox* pEndTabBox = pEndTabLine->GetTabBoxes().back();
+
+    for( const SwTableLine* pLine : pTableNd->GetTable().GetTabLines() )
+    {
+        for( const SwTableBox* pBox : pLine->GetTabBoxes() )
+        {
+            Out( aASCNodeFnTab, *pNd, *this );
+
+            Point aPrevBoxPoint = pNd->GetTableBox()->GetCoordinates();
+            m_pCurrentPam->Move(fnMoveForward, GoInNode);
+            pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
+
+            // Line break in a box
+            // Each line is a new SwTextNode so we
+            // need to parse inside the current box
+            while (pNd->GetTableBox() && (pNd->GetTableBox()->GetCoordinates() == aPrevBoxPoint))
+            {
+                Strm().WriteUnicodeOrByteText(sPreLineEnd);
+                Out(aASCNodeFnTab, *pNd, *this);
+
+                m_pCurrentPam->Move(fnMoveForward, GoInNode);
+                pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
+            }
+            if (pBox != pLine->GetTabBoxes().back())
+                Strm().WriteUChar( 0x9 );
+
+            if (pBox == pEndTabBox)
+                this->m_sLineEnd = sPreLineEnd;
+
+        }// end for each Box
+
+        if (pLine == pEndTabLine)
+        {
+            m_pCurrentPam->Move(fnMoveBackward, GoInNode);
+            pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
+            Strm().WriteUnicodeOrByteText( sPreLineEnd );
+        }
+        if (pLine != pEndTabLine)
+            Strm().WriteUnicodeOrByteText( sPreLineEnd );
+
+    }// end For each row
+    this->m_sLineEnd = sPreLineEnd;
 }
 
 void GetASCWriter(
