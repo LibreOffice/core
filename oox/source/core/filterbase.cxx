@@ -492,7 +492,7 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
                 if( mxImpl->mxOutStream.is() )
                 {
                     mxImpl->mxStorage = implCreateStorage( mxImpl->mxOutStream );
-                    bRet = mxImpl->mxStorage && exportDocument() && implFinalizeExport( getMediaDescriptor() );
+                    bRet = mxImpl->mxStorage && mxImpl->mxStorage->isStorage() && exportDocument() && implFinalizeExport( getMediaDescriptor() );
                 }
             break;
         }
