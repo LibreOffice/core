@@ -215,20 +215,23 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
     aObj >>= xTmp;
     uno::Reference<container::XNamed> xNamed(xTmp, uno::UNO_QUERY);
     SwAbstractDialogFactory& rFact = swui::GetFactory();
-    ScopedVclPtr<AbstractSwRenameXNamedDlg> pDlg(
+    VclPtr<AbstractSwRenameXNamedDlg> pDlg(
         rFact.CreateSwRenameXNamedDlg(m_xDialog.get(), xNamed, xNameAccess));
     pDlg->SetForbiddenChars(BookmarkTable::aForbiddenChars
                             + OUStringChar(BookmarkTable::s_cSeparator));
 
-    if (pDlg->Execute())
-    {
-        ValidateBookmarks();
-        m_xDeleteBtn->set_sensitive(false);
-        m_xGotoBtn->set_sensitive(false);
-        m_xEditTextBtn->set_sensitive(false);
-        m_xRenameBtn->set_sensitive(false);
-        m_xInsertBtn->set_sensitive(false);
-    }
+    pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            ValidateBookmarks();
+            m_xDeleteBtn->set_sensitive(false);
+            m_xGotoBtn->set_sensitive(false);
+            m_xEditTextBtn->set_sensitive(false);
+            m_xRenameBtn->set_sensitive(false);
+            m_xInsertBtn->set_sensitive(false);
+        }
+        pDlg->disposeOnce();
+    });
 }
 
 // callback to an insert button. Inserts a new text mark to the current position.

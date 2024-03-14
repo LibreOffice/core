@@ -242,6 +242,11 @@ short AbstractSwRenameXNamedDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractSwRenameXNamedDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 bool AbstractSwContentControlListItemDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx)
 {
     return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
