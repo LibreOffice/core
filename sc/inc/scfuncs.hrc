@@ -4187,12 +4187,12 @@ const TranslateId SC_OPCODE_RANDBETWEEN_NV_ARY[] =
 const TranslateId SC_OPCODE_FILTER_ARY[] =
 {
     NC_("SC_OPCODE_FILTER", "Filters an array based on a Boolean (True/False) array."),
-    NC_("SC_OPCODE_FILTER", "Range "),
+    NC_("SC_OPCODE_FILTER", "Range"),
     NC_("SC_OPCODE_FILTER", "The array, or range to filter."),
     NC_("SC_OPCODE_FILTER", "Include"),
     NC_("SC_OPCODE_FILTER", "A Boolean array whose height or width is the same as the array."),
     NC_("SC_OPCODE_FILTER", "Result if empty"),
-    NC_("SC_OPCODE_FILTER", "The value to return if all values in the included array are empty (filter returns nothing)")
+    NC_("SC_OPCODE_FILTER", "The value to return if all values in the included array are empty (filter returns nothing).")
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
