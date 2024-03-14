@@ -153,11 +153,12 @@ def unwrapInclude(include):
     return include[1:-1]
 
 
-def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude):
+def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespaces):
     inAdd = False
     toAdd = []
     inRemove = False
     toRemove = []
+    inFull = False
     currentFileName = None
 
     for line in iwyuOutput:
@@ -174,6 +175,9 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude):
             if inAdd:
                 inAdd = False
                 continue
+            if inFull:
+                inFull = False
+                continue
 
         shouldAdd = fileName + " should add these lines:"
         match = re.match(shouldAdd, line)
@@ -189,6 +193,12 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude):
             inRemove = True
             continue
 
+        if checknamespaces:
+            match = re.match("The full include-list for " + fileName, line)
+            if match:
+                inFull = True
+                continue
+
         if inAdd:
             match = re.match('#include ([^ ]+)', line)
             if match:
@@ -198,7 +208,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude):
                 # Forward declaration.
                 toAdd.append(line)
 
-        if inRemove:
+        if inRemove and not checknamespaces:
             match = re.match("- #include (.*)  // lines (.*)-.*", line)
             if match:
                 # Only suggest removals for now. Removing fwd decls is more complex: they may be
@@ -209,25 +219,203 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude):
                 if not ignoreRemoval(include, toAdd, currentFileName, moduleRules, noexclude):
                     toRemove.append("%s:%s: %s" % (currentFileName, lineno, include))
 
+        if inFull:
+            if checknamespaces:
+                # match for all possible URE/UNO namespaces, created with:
+                # find udkapi/com/sun/star/ -type d | sort| xargs basename -a | tr '\012' '|'
+                # find offapi/com/sun/star/ -type d | sort | xargs basename -a | tr '\012' '|'
+                # and ooo::vba namespaces
+                # plus a few popular ones about other modules
+                ns = re.compile(
+                                '.*for\ ('
+                                    # URE namespaces
+                                    'beans|'
+                                    'bridge|oleautomation|'
+                                    'connection|'
+                                    'container|'
+                                    'io|'
+                                    'java|'
+                                    'lang|'
+                                    'loader|'
+                                    'reflection|'
+                                    'registry|'
+                                    'script|'
+                                    'security|'
+                                    'task|'
+                                    'uno|'
+                                    'uri|'
+                                    'util|'
+                                    # UNO namespaces
+                                    'accessibility|'
+                                    'animations|'
+                                    'auth|'
+                                    'awt|tab|tree|grid|'
+                                    'chart|'
+                                    'chart2|data|'
+                                    'configuration|bootstrap|backend|xml|'
+                                    'cui|'
+                                    'datatransfer|clipboard|dnd|'
+                                    'deployment|test|ui|'
+                                    'document|'
+                                    'drawing|framework|'
+                                    'embed|'
+                                    'form|binding|runtime|control|inspection|submission|component|validation|'
+                                    'formula|'
+                                    'frame|status|'
+                                    'gallery|'
+                                    'geometry|'
+                                    'graphic|'
+                                    'i18n|'
+                                    'image|'
+                                    'inspection|'
+                                    'ldap|'
+                                    'linguistic2|'
+                                    'logging|'
+                                    'mail|'
+                                    'media|'
+                                    'mozilla|'
+                                    'office|'
+                                    'packages|zip|manifest|'
+                                    'presentation|textfield|'
+                                    'qa|'
+                                    'rdf|'
+                                    'rendering|'
+                                    'report|inspection|meta|'
+                                    'resource|'
+                                    'scanner|'
+                                    'script|vba|browse|provider|'
+                                    'sdb|application|tools|'
+                                    'sdbc|'
+                                    'sdbcx|'
+                                    'security|'
+                                    'setup|'
+                                    'sheet|opencl|'
+                                    'smarttags|'
+                                    'style|'
+                                    'svg|'
+                                    'system|windows|'
+                                    'table|'
+                                    'task|'
+                                    'text|textfield|docinfo|fieldmaster|'
+                                    'tiledrendering|'
+                                    'ucb|'
+                                    'ui|dialogs|test|'
+                                    'util|'
+                                    'view|'
+                                    'xforms|'
+                                    'xml|xslt|wrapper|csax|sax|input|xpath|dom|views|events|crypto|sax|'
+                                    'xsd|'
+                                     # ooo::vba and its namespaces
+                                    'ooo|vba|excel|powerpoint|adodb|access|office|word|stdole|msforms|dao|'
+                                     # use of module namespaces, as spotted in the code
+                                    'analysis|pricing' # sca internals
+                                    'apphelper|CloneHelper|DataSeriesProperties|SceneProperties|wrapper|' # for chart internals
+                                    'basegfx|utils|'
+                                    'boost|posix_time|gregorian'
+                                    'cairo|'
+                                    'canvas|'
+                                    'chelp|'
+                                    'comphelper|'
+                                    'connectivity|'
+                                    'cpp|java|' # for codemaker::
+                                    'cppu|'
+                                    'dbaccess|dbahsql|dbaui|dbtools|'
+                                    'desktop|dp_misc|'
+                                    'drawinglayer|attribute|geometry|primitive2d|processor2d|'
+                                    'editeng|'
+                                    'emscripten|'
+                                    'formula|'
+                                    'framework|'
+                                    'frm|'
+                                    'http_dav_ucp|tdoc_ucp|package_ucp|hierarchy_ucp|gio|fileaccess|ucb_impl|hcp_impl|ucb_cmdenv|' # for ucb internal
+                                    'i18npool|'
+                                    'internal|ColorComponentTag|' # for slideshow internals
+                                    'jfw_plugin|'
+                                    'jni_uno|'
+                                    'librevenge|'
+                                    'linguistic|'
+                                    'lok|'
+                                    'mtv|' # for mdds::mtv
+                                    'nsSwDocInfoSubType|SWUnoHelper|nsHdFtFlags|' # sw internal
+                                    'o3tl|'
+                                    'odfflatxml|' # filter internal
+                                    'oox|core|drawingml|ole|vml|'
+                                    'OpenStormBento|'
+                                    'osl|'
+                                    'PackageKit|'
+                                    'pdfi|pdfparse|'
+                                    'ppt|'
+                                    'pyuno|'
+                                    'reportdesign|'
+                                    'rptui|'
+                                    'rtl|math|textenc|'
+                                    'salhelper|'
+                                    'sax_fastparser|'
+                                    'sax|' # for xml::sax
+                                    'sc|'
+                                    'SchXMLTools|' # for xmloff
+                                    'sd|slidesorter|cache|controller|model|view|'
+                                    'sf_misc|'
+                                    'sfx2|DocTempl|'
+                                    'sidebar|' # for sfx2::sidebar
+                                    'skeletonmaker|'
+                                    'std|chrono_literals|literals|'
+                                    'stoc_sec|'
+                                    'store|'
+                                    'svl|impl|'
+                                    'svt|'
+                                    'svtools|'
+                                    'svx|sdr|contact|table|'
+                                    'sw|access|annotation|mark|types|util|'
+                                    'toolkit|'
+                                    'treeview|'
+                                    'ucbhelper|'
+                                    'unodevtools'
+                                    'unopkg|'
+                                    'util|db|qe|' # for xmlsearch::
+                                    'utl|'
+                                    'vcl|'
+                                    'writerfilter|'
+                                    'xforms|'
+                                    'xmloff|token|EnhancedCustomShapeToken' # for xmloff::
+                                    'ZipUtils'
+                                    ')$', re.VERBOSE
+                                )
+
+                reason = re.match(ns, line)
+                if reason:
+                    # Warn about namespaces: if a header is suggested only '// for $namespace', then the namespace is not used
+                    # otherwise the used classes name would show up after the '// for'
+                    # Cleaning out the respective header (if ther is any
+                    # - which is not always the case) is for the next run!
+                    nameSpace = reason.group(1).split(' ')[0]
+                    print("WARNING:", fileName, "This 'using namespace' is likely unnecessary:", nameSpace)
+
+                    # Get the row number, normal IWYU output does not contain this info
+                    subprocess.run(["git", "grep", "-n", "using namespace.*"+nameSpace+";", fileName])
+
     for remove in sorted(toRemove):
         print("ERROR: %s: remove not needed include" % remove)
     return len(toRemove)
 
 
-def run_tool(task_queue, failed_files, dontstop, noexclude):
+def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces):
     while True:
         invocation, moduleRules = task_queue.get()
         if not len(failed_files):
             print("[IWYU] " + invocation.split(' ')[-1])
             p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude)
-            if retcode == -1:
+            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude, checknamespaces)
+            if retcode == -1 and not checknamespaces:
                 print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
             elif retcode > 0:
                 print("ERROR: The following command found unused includes:\n" + invocation)
                 if not dontstop:
                     failed_files.append(invocation)
         task_queue.task_done()
+    if checknamespaces:
+        # Workaround: sometimes running git grep makes the letters typed into the terminal disappear after the script is finished
+        os.system('stty sane')
 
 
 def isInUnoIncludeFile(path):
@@ -243,7 +431,7 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/uno/")
 
 
-def tidy(compileCommands, paths, dontstop, noexclude):
+def tidy(compileCommands, paths, dontstop, noexclude,checknamespaces):
     return_code = 0
 
     try:
@@ -251,7 +439,7 @@ def tidy(compileCommands, paths, dontstop, noexclude):
         task_queue = queue.Queue(max_task)
         failed_files = []
         for _ in range(max_task):
-            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude))
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude,checknamespaces))
             t.daemon = True
             t.start()
 
@@ -319,6 +507,10 @@ def main(argv):
                     help='Check header files. If omitted, check source files. Use with --recursive.')
     parser.add_argument('--noexclude', action='store_true',
                     help='Ignore excludelist. Useful to check whether its exclusions are still all valid.')
+    parser.add_argument('--ns', action='store_true',
+                    help='Warn about unused "using namespace" statements. '
+                         'Removing these may uncover more removable headers '
+                         'in a subsequent normal run')
 
     args = parser.parse_args()
 
@@ -367,7 +559,7 @@ def main(argv):
             if not file.exists():
                 print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude)
+    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
