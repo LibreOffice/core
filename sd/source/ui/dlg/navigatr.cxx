@@ -164,20 +164,21 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
     sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
+    // tdf#160190
+    if (!pViewShell)
+        return;
+
     // tdf#139944 disable navigator in master mode
-    if (pViewShell)
+    if (const sd::DrawViewShell* pDrawViewShell = static_cast<::sd::DrawViewShell*>(pViewShell))
     {
-        if (const sd::DrawViewShell* pDrawViewShell = static_cast<::sd::DrawViewShell*>(pViewShell))
+        if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
         {
-            if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
-            {
-                m_xContainer->set_sensitive(false);
-                mxTlbObjects->clear();
-                return;
-            }
-            else
-                m_xContainer->set_sensitive(true);
+            m_xContainer->set_sensitive(false);
+            mxTlbObjects->clear();
+            return;
         }
+        else
+            m_xContainer->set_sensitive(true);
     }
 
     const OUString& aDocShName( pDocShell->GetName() );
@@ -189,8 +190,7 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
         mxLbDocs->set_active_text(aDocShName);
     }
 
-    if (pViewShell)
-        lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
+    lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
 }
 
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
@@ -200,35 +200,33 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     OUString aDocShName( pDocShell->GetName() );
     ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
+    // tdf#160190
+    if (!pViewShell)
+        return;
+
     // tdf#139944 disable navigator in master mode
-    if (pViewShell)
+    if (const sd::DrawViewShell* pDrawViewShell = static_cast<::sd::DrawViewShell*>(pViewShell))
     {
-        if (const sd::DrawViewShell* pDrawViewShell = static_cast<::sd::DrawViewShell*>(pViewShell))
+        if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
         {
-            if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
-            {
-                m_xContainer->set_sensitive(false);
-                mxTlbObjects->clear();
-                RefreshDocumentLB();
-                return;
-            }
-            else
-                m_xContainer->set_sensitive(true);
+            m_xContainer->set_sensitive(false);
+            mxTlbObjects->clear();
+            RefreshDocumentLB();
+            return;
         }
+        else
+            m_xContainer->set_sensitive(true);
     }
 
     // Restore the 'ShowAllShapes' flag from the last time (in this session)
     // that the navigator was shown.
-    if (pViewShell != nullptr)
-    {
-        ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
-        if (pFrameView != nullptr)
-            mxTlbObjects->SetShowAllShapes(pFrameView->IsNavigatorShowingAllShapes(), false);
-    }
+    ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
+    if (pFrameView != nullptr)
+        mxTlbObjects->SetShowAllShapes(pFrameView->IsNavigatorShowingAllShapes(), false);
 
     // Disable the shape filter drop down menu when there is a running slide
     // show.
-    if (pViewShell!=nullptr && sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() )
+    if (sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() )
         && !sd::SlideShow::IsInteractiveSlideshow( &pViewShell->GetViewShellBase() ) ) // IASS
         mxToolbox->set_item_sensitive("shapes", false);
     else
@@ -256,8 +254,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         }
     }
 
-    if (pViewShell)
-        lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
+    lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
 }
 
 /**
