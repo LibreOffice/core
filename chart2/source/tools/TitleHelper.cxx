@@ -20,10 +20,8 @@
 #include <TitleHelper.hxx>
 #include <Title.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ReferenceSizeProvider.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>

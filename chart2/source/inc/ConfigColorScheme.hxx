@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <memory>
-#include <string_view>
 
 namespace com::sun::star::uno { class XComponentContext; }
 

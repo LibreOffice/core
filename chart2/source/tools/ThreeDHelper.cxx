@@ -17,19 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/numeric/ftools.hxx>
 #include <ThreeDHelper.hxx>
 #include <Diagram.hxx>
-#include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
-#include <ChartType.hxx>
-#include <BaseGFXHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <defines.hxx>
 
-#include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <rtl/math.hxx>

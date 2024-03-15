@@ -48,7 +48,6 @@
 #include <ColorPerPointHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesProperties.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ControllerLockGuard.hxx>
 #include "UndoGuard.hxx"
@@ -58,9 +57,8 @@
 #include <ReferenceSizeProvider.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <RegressionCurveModel.hxx>
-#include <com/sun/star/util/CloseVetoException.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <o3tl/string_view.hxx>
+#include <com/sun/star/util/CloseVetoException.hpp>
 
 #include <memory>
 

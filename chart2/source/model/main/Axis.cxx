@@ -23,7 +23,6 @@
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
-#include <CloneHelper.hxx>
 #include <AxisHelper.hxx>
 #include <EventListenerHelper.hxx>
 #include <ModifyListenerHelper.hxx>

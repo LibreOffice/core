@@ -24,7 +24,6 @@
 #include "WrappedGapwidthProperty.hxx"
 #include "Chart2ModelContact.hxx"
 #include <ChartType.hxx>
-#include <DiagramHelper.hxx>
 #include <tools/long.hxx>
 #include <utility>
 

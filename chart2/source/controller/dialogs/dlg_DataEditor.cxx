@@ -20,7 +20,6 @@
 #include <dlg_DataEditor.hxx>
 #include "DataBrowser.hxx"
 #include <ChartModel.hxx>
-#include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <utility>

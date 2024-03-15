@@ -21,13 +21,11 @@
 #include <TimerTriggeredControllerLock.hxx>
 
 #include <ChartController.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartResourceGroups.hxx>
 #include <ChartTypeDialogController.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
 

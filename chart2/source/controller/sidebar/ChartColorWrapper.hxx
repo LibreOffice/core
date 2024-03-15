@@ -11,7 +11,7 @@
 
 #include <ChartModel.hxx>
 
-#include <svx/Palette.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::frame { class XModel; }

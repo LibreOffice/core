@@ -16,7 +16,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/PieChartSubType.hpp>
 

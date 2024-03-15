@@ -22,6 +22,7 @@
 #include <config_options.h>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include "charttoolsdllapi.hxx"
+#include "ChartType.hxx"
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::chart2 { class XChartType; }

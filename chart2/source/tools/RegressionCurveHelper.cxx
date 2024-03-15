@@ -36,14 +36,11 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DataSeries.hxx>
-#include <Diagram.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
-#include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <o3tl/safeint.hxx>
 #include <comphelper/diagnose_ex.hxx>

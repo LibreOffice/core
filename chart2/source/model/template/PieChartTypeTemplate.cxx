@@ -23,13 +23,11 @@
 #include <CommonConverters.hxx>
 #include <ChartType.hxx>
 #include <Diagram.hxx>
-#include <DiagramHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSeriesProperties.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
-#include <ThreeDHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

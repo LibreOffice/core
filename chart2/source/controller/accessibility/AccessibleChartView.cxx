@@ -18,7 +18,6 @@
  */
 
 #include <AccessibleChartView.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ResId.hxx>
@@ -31,8 +30,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-
-#include <comphelper/servicehelper.hxx>
 
 #include <rtl/ustring.hxx>
 #include <vcl/window.hxx>

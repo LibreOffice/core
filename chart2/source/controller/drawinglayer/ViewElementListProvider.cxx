@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <o3tl/safeint.hxx>
 #include <svx/xtable.hxx>
-#include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdobj.hxx>

@@ -20,7 +20,6 @@
 #include "tp_3D_SceneGeometry.hxx"
 
 #include <Diagram.hxx>
-#include <DiagramHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>

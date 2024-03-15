@@ -29,7 +29,6 @@
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <BaseCoordinateSystem.hxx>

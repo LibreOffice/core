@@ -34,7 +34,6 @@
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <com/sun/star/chart2/XTitle.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

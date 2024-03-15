@@ -22,7 +22,6 @@
 #include "Chart2ModelContact.hxx"
 #include <AxisIndexDefines.hxx>
 #include <BaseCoordinateSystem.hxx>
-#include <GridProperties.hxx>
 
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>

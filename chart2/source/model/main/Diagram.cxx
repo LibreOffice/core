@@ -60,7 +60,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <editeng/unoprnms.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <tools/helpers.hxx>

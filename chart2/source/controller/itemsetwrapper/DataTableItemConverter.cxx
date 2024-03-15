@@ -12,26 +12,9 @@
 #include <CharacterPropertyItemConverter.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
-#include <chartview/ExplicitScaleValues.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include "SchWhichPairs.hxx"
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
-#include <CommonConverters.hxx>
-#include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
-#include <Diagram.hxx>
-#include <unonames.hxx>
-#include <BaseCoordinateSystem.hxx>
 #include <memory>
-
-#include <osl/diagnose.h>
-#include <o3tl/any.hxx>
-#include <svl/eitem.hxx>
-#include <svx/chrtitem.hxx>
-#include <svx/sdangitm.hxx>
-#include <svl/intitem.hxx>
-#include <rtl/math.hxx>
 
 using namespace css;
 

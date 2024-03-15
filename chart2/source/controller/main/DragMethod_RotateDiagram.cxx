@@ -21,9 +21,7 @@
 #include <DrawViewWrapper.hxx>
 
 #include <SelectionHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>

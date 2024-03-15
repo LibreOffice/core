@@ -36,7 +36,6 @@
 #include <chartview/ExplicitValueProvider.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <comphelper/sequence.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

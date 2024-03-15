@@ -13,7 +13,6 @@
 #include <ChartModel.hxx>
 
 #include <svx/xlnwtit.hxx>
-#include <svx/xlinjoit.hxx>
 #include <svx/xlntrit.hxx>
 
 #include <svx/linectrl.hxx>

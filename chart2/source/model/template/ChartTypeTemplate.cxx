@@ -22,10 +22,8 @@
 #include <CommonConverters.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
-#include <DataSeries.hxx>
 #include <DataSeriesProperties.hxx>
 #include <DataSource.hxx>
-#include <GridProperties.hxx>
 
 #include <Axis.hxx>
 #include <AxisHelper.hxx>

@@ -31,8 +31,6 @@
 #include <ChartModel.hxx>
 #include <BaseCoordinateSystem.hxx>
 
-#include <com/sun/star/chart2/XDataSeries.hpp>
-
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>

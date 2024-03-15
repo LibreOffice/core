@@ -25,7 +25,6 @@
 #include <chartview/ExplicitScaleValues.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include "SchWhichPairs.hxx"
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>

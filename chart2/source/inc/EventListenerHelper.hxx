@@ -20,7 +20,6 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <algorithm>
 #include <utility>
 
 namespace com::sun::star::lang { class XEventListener; }

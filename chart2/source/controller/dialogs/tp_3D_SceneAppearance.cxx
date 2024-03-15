@@ -18,7 +18,6 @@
  */
 
 #include "tp_3D_SceneAppearance.hxx"
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <ThreeDHelper.hxx>
 #include <ControllerLockGuard.hxx>

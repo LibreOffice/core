@@ -10,7 +10,6 @@
 #include "charttest.hxx"
 
 #include <comphelper/propertyvalue.hxx>
-#include <vcl/scheduler.hxx>
 
 using namespace ::com::sun::star;
 

@@ -20,7 +20,6 @@
 #include "tp_Wizard_TitlesAndObjects.hxx"
 #include <res_Titles.hxx>
 #include <res_LegendPosition.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>

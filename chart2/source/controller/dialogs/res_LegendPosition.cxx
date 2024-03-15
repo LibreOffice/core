@@ -18,7 +18,6 @@
  */
 
 #include <res_LegendPosition.hxx>
-#include <ChartModelHelper.hxx>
 #include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <ChartModel.hxx>

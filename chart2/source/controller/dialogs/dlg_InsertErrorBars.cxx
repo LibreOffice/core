@@ -21,18 +21,14 @@
 #include <res_ErrorBar.hxx>
 #include <chartview/ExplicitScaleValues.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartView.hxx>
 #include <ObjectIdentifier.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ObjectNameProvider.hxx>
 #include <DataSeries.hxx>
-
-#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

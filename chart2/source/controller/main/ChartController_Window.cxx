@@ -65,13 +65,11 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <sfx2/viewsh.hxx>
 #include <svx/ActionDescriptionProvider.hxx>

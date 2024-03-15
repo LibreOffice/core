@@ -35,7 +35,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <basegfx/utils/gradienttools.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 
 namespace

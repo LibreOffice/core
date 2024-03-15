@@ -20,7 +20,6 @@
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <rtl/ref.hxx>
-#include <algorithm>
 #include <iterator>
 #include <vector>
 

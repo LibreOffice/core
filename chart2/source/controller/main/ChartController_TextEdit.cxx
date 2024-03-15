@@ -43,7 +43,6 @@
 #include <editeng/editids.hrc>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart2/XTitle.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <memory>

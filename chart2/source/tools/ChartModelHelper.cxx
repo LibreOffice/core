@@ -18,12 +18,10 @@
  */
 
 #include <ChartModelHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <DataSource.hxx>
 #include <DataSourceHelper.hxx>
 #include <ControllerLockGuard.hxx>
-#include <RangeHighlighter.hxx>
 #include <InternalDataProvider.hxx>
 #include <ChartModel.hxx>
 #include <BaseCoordinateSystem.hxx>

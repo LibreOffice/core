@@ -24,7 +24,6 @@
 #include <ChartModelHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 

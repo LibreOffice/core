@@ -21,7 +21,6 @@
 
 #include <TitleDialogData.hxx>
 #include <TitleHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
 #include <ChartModel.hxx>

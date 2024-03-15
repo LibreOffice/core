@@ -33,7 +33,6 @@
 #include "DialogModel.hxx"
 #include <o3tl/safeint.hxx>
 #include <TabPageNotifiable.hxx>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 
 #include <comphelper/diagnose_ex.hxx>

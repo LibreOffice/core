@@ -19,11 +19,9 @@
 
 #include <ReferenceSizeProvider.hxx>
 #include <RelativeSizeHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesProperties.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>

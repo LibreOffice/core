@@ -22,7 +22,6 @@
 
 #include <res_LegendPosition.hxx>
 #include <TextDirectionListBox.hxx>
-#include <optional>
 
 namespace chart
 {

@@ -23,7 +23,6 @@
 
 #include <vector>
 #include <algorithm>
-#include <memory>
 #include <optional>
 #include <cmath>
 #include <limits>

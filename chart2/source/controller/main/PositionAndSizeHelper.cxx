@@ -23,7 +23,6 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <tools/gen.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>

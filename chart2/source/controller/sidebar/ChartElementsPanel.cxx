@@ -28,9 +28,7 @@
 
 #include <Legend.hxx>
 #include <LegendHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>

@@ -19,7 +19,6 @@
 #pragma once
 
 #include <ReferenceSizeProvider.hxx>
-#include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 

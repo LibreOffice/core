@@ -26,7 +26,6 @@
 #include <o3tl/unsafe_downcast.hxx>
 #include <o3tl/string_view.hxx>
 #include <vcl/svapp.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>

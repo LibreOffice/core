@@ -20,7 +20,6 @@
 #include "AreaChartTypeTemplate.hxx"
 #include "AreaChartType.hxx"
 #include <Diagram.hxx>
-#include <DiagramHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>

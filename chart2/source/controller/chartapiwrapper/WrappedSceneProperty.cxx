@@ -19,7 +19,6 @@
 
 #include "WrappedSceneProperty.hxx"
 #include "Chart2ModelContact.hxx"
-#include <DiagramHelper.hxx>
 #include <BaseGFXHelper.hxx>
 #include <utility>
 

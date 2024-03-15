@@ -9,8 +9,6 @@
 
 #include "charttest.hxx"
 
-#include <test/xmltesttools.hxx>
-
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

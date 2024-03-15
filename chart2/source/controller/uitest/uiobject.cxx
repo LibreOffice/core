@@ -17,8 +17,6 @@
 #include <ObjectHierarchy.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 
-#include <comphelper/servicehelper.hxx>
-
 #include <utility>
 #include <vcl/svapp.hxx>
 

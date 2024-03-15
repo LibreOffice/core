@@ -28,10 +28,8 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSeriesProperties.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <unonames.hxx>
@@ -41,7 +39,6 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/sequence.hxx>

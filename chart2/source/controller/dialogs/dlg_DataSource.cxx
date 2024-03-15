@@ -23,7 +23,6 @@
 #include <ChartTypeTemplateProvider.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <Diagram.hxx>
-#include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
 #include <ChartModel.hxx>
 

@@ -24,7 +24,6 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include "StockDataInterpreter.hxx"
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <servicenames_charttypes.hxx>

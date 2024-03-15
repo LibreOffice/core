@@ -36,7 +36,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
 #include <sfx2/objsh.hxx>

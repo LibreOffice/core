@@ -33,14 +33,12 @@
 #include <DataSeries.hxx>
 #include <Diagram.hxx>
 #include <strings.hrc>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <ChartViewHelper.hxx>
 
 #include <ChartWindow.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <DrawViewWrapper.hxx>
 #include <ObjectIdentifier.hxx>
-#include <DiagramHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include "UndoGuard.hxx"
 #include "ChartDropTargetHelper.hxx"
@@ -54,15 +52,11 @@
 #include "UndoActions.hxx"
 #include <ViewElementListProvider.hxx>
 
-#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <BaseCoordinateSystem.hxx>
 
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
@@ -80,7 +74,7 @@
 #include <comphelper/lok.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
-
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 // this is needed to properly destroy the unique_ptr to the AcceleratorExecute

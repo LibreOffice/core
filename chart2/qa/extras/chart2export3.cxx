@@ -9,15 +9,7 @@
 
 #include "charttest.hxx"
 
-#include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#include <com/sun/star/chart2/MovingAverageType.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 using uno::Reference;
 using beans::XPropertySet;

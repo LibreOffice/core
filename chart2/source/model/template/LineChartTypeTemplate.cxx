@@ -20,7 +20,6 @@
 #include "LineChartTypeTemplate.hxx"
 #include "LineChartType.hxx"
 #include <Diagram.hxx>
-#include <DiagramHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>

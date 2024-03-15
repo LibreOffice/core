@@ -20,7 +20,6 @@
 
 #include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"
-#include <DiagramHelper.hxx>
 #include <DataSeries.hxx>
 
 #include <memory>

@@ -23,7 +23,6 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSourceHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>

@@ -19,7 +19,6 @@
 
 #include <FormattedStringHelper.hxx>
 #include <FormattedString.hxx>
-#include <com/sun/star/chart2/FormattedString.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/property.hxx>
 

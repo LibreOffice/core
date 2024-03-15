@@ -20,7 +20,6 @@
 #include "MinMaxLineWrapper.hxx"
 #include "Chart2ModelContact.hxx"
 #include <ChartType.hxx>
-#include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>

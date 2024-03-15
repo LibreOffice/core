@@ -24,8 +24,6 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <rtl/ref.hxx>
 
-#include <vector>
-
 namespace chart { class ChartModel; }
 namespace com::sun::star::chart2 { class XAxis; }
 namespace com::sun::star::chart2 { class XChartDocument; }

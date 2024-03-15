@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <ChartController.hxx>
-#include <ChartView.hxx>
 
 #include <dlg_InsertAxis_Grid.hxx>
 #include <dlg_InsertDataLabel.hxx>
@@ -33,7 +32,6 @@
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include <DataSeries.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <GridProperties.hxx>
 #include <chartview/DrawModelWrapper.hxx>

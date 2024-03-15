@@ -21,7 +21,6 @@
 #include "Chart2ModelContact.hxx"
 #include <FastPropertyIdRanges.hxx>
 #include <ChartType.hxx>
-#include <DiagramHelper.hxx>
 #include <WrappedProperty.hxx>
 #include <unonames.hxx>
 

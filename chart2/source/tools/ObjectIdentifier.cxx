@@ -25,13 +25,10 @@
 #include <ObjectIdentifier.hxx>
 #include <TitleHelper.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
-#include <GridProperties.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <servicenames_charttypes.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>

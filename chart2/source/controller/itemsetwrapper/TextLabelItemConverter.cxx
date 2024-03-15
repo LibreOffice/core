@@ -20,13 +20,11 @@
 #include <TextLabelItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSeriesProperties.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ItemPropertyMap.hxx>
 #include "SchWhichPairs.hxx"
@@ -49,7 +47,6 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <memory>
 
 using namespace com::sun::star;

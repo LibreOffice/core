@@ -20,7 +20,6 @@
 #include "WrappedNumberFormatProperty.hxx"
 #include "Chart2ModelContact.hxx"
 #include <Axis.hxx>
-#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <unonames.hxx>
 #include <utility>

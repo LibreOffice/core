@@ -29,7 +29,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <rtl/ref.hxx>
 #include <tools/color.hxx>
 #include <unotools/weakref.hxx>
 

@@ -194,12 +194,6 @@ excludelist:
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
     - com/sun/star/util/XModifyListener.hpp
-    chart2/source/model/main/GridProperties.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    - com/sun/star/util/XModifyListener.hpp
     chart2/source/model/main/Legend.cxx:
     # Needed for template
     - com/sun/star/awt/Size.hpp
@@ -207,13 +201,6 @@ excludelist:
     - com/sun/star/chart2/RelativeSize.hpp
     chart2/source/model/main/PageBackground.hxx:
     # base class has to be a complete type
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/util/XModifyBroadcaster.hpp
-    - com/sun/star/util/XModifyListener.hpp
-    chart2/source/model/main/Title.hxx:
-    # base class has to be a complete type
-    - com/sun/star/chart2/XTitle.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp

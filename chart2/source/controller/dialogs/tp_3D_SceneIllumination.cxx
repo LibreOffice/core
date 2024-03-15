@@ -30,7 +30,6 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
 #include <utility>
-#include <svx/obj3d.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

@@ -23,7 +23,6 @@
 #include <ObjectIdentifier.hxx>
 #include <ChartView.hxx>
 #include <ChartController.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
@@ -32,11 +31,9 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <sal/log.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -22,6 +22,7 @@
 #include "charttoolsdllapi.hxx"
 #include <com/sun/star/chart2/ScaleData.hpp>
 #include <rtl/ref.hxx>
+#include "GridProperties.hxx"
 
 #include <vector>
 
@@ -43,7 +44,6 @@ class Axis;
 class BaseCoordinateSystem;
 class ChartType;
 class Diagram;
-class GridProperties;
 
 class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) AxisHelper
 {

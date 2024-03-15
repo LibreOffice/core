@@ -23,7 +23,6 @@
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <TitleHelper.hxx>
-#include <ThreeDHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include "UndoGuard.hxx"
@@ -49,7 +48,6 @@
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>

@@ -18,9 +18,7 @@
  */
 
 #include "ControllerCommandDispatch.hxx"
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>

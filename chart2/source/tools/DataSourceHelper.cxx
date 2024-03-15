@@ -21,7 +21,6 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartTypeManager.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>

@@ -20,11 +20,7 @@
 #include <ConfigColorScheme.hxx>
 
 #include <unotools/configitem.hxx>
-#include <sal/macros.h>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/sequence.hxx>
-
-#include <set>
 
 using namespace ::com::sun::star;
 

@@ -27,9 +27,7 @@
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
@@ -46,7 +44,6 @@
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-#include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>

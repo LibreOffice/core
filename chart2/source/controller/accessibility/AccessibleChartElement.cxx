@@ -24,17 +24,11 @@
 #include <ChartController.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>
-#include <servicenames.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-
-#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

@@ -20,7 +20,6 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XFormattedString2; }

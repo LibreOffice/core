@@ -24,35 +24,25 @@
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
-#include <ChartTypeManager.hxx>
-#include <ChartTypeTemplate.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
-#include <servicenames_charttypes.hxx>
 #include <RelativePositionHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
 
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 
-#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <o3tl/safeint.hxx>
 #include <unotools/saveopt.hxx>
-#include <rtl/math.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
@@ -61,7 +51,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
-#include <cstddef>
 #include <limits>
 
 using namespace ::com::sun::star;

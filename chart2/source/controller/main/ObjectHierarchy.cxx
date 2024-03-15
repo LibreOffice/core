@@ -19,8 +19,6 @@
 
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
-#include <ChartModelHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <RegressionCurveModel.hxx>

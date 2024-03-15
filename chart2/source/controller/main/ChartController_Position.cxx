@@ -27,11 +27,9 @@
 #include "UndoGuard.hxx"
 #include <ObjectNameProvider.hxx>
 #include <DiagramHelper.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <CommonConverters.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 
-#include <comphelper/servicehelper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
 #include <svl/intitem.hxx>

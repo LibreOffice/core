@@ -37,9 +37,7 @@
 
 #include <ChartModel.hxx>
 
-#include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
 
@@ -53,7 +51,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <utility>
 #include <vcl/settings.hxx>
 

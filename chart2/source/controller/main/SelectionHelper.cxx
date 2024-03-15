@@ -19,9 +19,7 @@
 
 #include <SelectionHelper.hxx>
 #include <ObjectIdentifier.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 
 #include <svx/svdpage.hxx>

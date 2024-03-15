@@ -29,9 +29,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -39,7 +37,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <comphelper/sequence.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>

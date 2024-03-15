@@ -22,10 +22,8 @@
 #include <ChartTypeManager.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartTypeTemplate.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
 

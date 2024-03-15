@@ -24,12 +24,10 @@
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;

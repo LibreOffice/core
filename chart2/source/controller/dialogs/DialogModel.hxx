@@ -21,6 +21,7 @@
 #include <TimerTriggeredControllerLock.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
+#include <ChartTypeTemplate.hxx>
 
 #include <map>
 #include <memory>
@@ -46,7 +47,6 @@ namespace com::sun::star::chart2 {
 namespace chart
 {
 class ChartType;
-class ChartTypeTemplate;
 class DataSeries;
 struct InterpretedData;
 class LabeledDataSequence;

@@ -28,7 +28,6 @@
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <Diagram.hxx>
-#include <DiagramHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <Legend.hxx>
 #include <XMLFilter.hxx>
@@ -47,8 +46,6 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/io/TempFile.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 

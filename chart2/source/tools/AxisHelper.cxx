@@ -49,7 +49,6 @@
 
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <cstddef>

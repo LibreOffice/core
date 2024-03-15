@@ -23,7 +23,6 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <algorithm>
 

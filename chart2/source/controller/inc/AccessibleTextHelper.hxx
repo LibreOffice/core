@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <memory>
 #include <comphelper/compbase.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
