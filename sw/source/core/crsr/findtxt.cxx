@@ -361,7 +361,7 @@ static bool DoSearch(SwPaM & rSearchPam,
     bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
     AmbiguousIndex & nStart, AmbiguousIndex & nEnd, AmbiguousIndex nTextLen,
     SwTextNode const* pNode, SwTextFrame const* pTextFrame,
-    SwRootFrame const* pLayout, SwPaM* pPam);
+    SwRootFrame const* pLayout, SwPaM& rPam);
 
 namespace sw {
 
@@ -677,7 +677,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                                        bRegSearch, bChkEmptyPara, bChkParaEnd,
                                        nStartInside, nEndInside, nTextLen,
                                        pNode->GetTextNode(), pFrame, pLayout,
-                                       oPam ? &*oPam : nullptr );
+                                       *oPam);
                     if ( bFound )
                         break;
                     else
@@ -710,7 +710,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                                    bRegSearch, bChkEmptyPara, bChkParaEnd,
                                    nStart, nEnd, nTextLen,
                                    pNode->GetTextNode(), pFrame, pLayout,
-                                   oPam ? &*oPam : nullptr );
+                                   *oPam);
             }
             if (bFound)
                 break;
@@ -727,10 +727,10 @@ bool DoSearch(SwPaM & rSearchPam,
                       bool bChkEmptyPara, bool bChkParaEnd,
         AmbiguousIndex & nStart, AmbiguousIndex & nEnd, AmbiguousIndex const nTextLen,
         SwTextNode const*const pNode, SwTextFrame const*const pFrame,
-        SwRootFrame const*const pLayout, SwPaM* pPam)
+        SwRootFrame const*const pLayout, SwPaM& rPam)
 {
     bool bFound = false;
-    SwPosition& rPtPos = *pPam->GetPoint();
+    SwPosition& rPtPos = *rPam.GetPoint();
     OUString sCleanStr;
     std::vector<AmbiguousIndex> aFltArr;
     LanguageType eLastLang = LANGUAGE_SYSTEM;
@@ -818,7 +818,7 @@ bool DoSearch(SwPaM & rSearchPam,
             nStart = nProxyStart;
             nEnd = nProxyEnd;
             // set section correctly
-            *rSearchPam.GetPoint() = *pPam->GetPoint();
+            *rSearchPam.GetPoint() = *rPam.GetPoint();
             rSearchPam.SetMark();
 
             // adjust start and end
@@ -875,7 +875,7 @@ bool DoSearch(SwPaM & rSearchPam,
     else if ((bChkEmptyPara && !nStart.GetAnyIndex() && !nTextLen.GetAnyIndex())
              || bChkParaEnd)
     {
-        *rSearchPam.GetPoint() = *pPam->GetPoint();
+        *rSearchPam.GetPoint() = *rPam.GetPoint();
         if (pLayout)
         {
             *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(
