@@ -71,14 +71,14 @@ private:
     SAL_DLLPRIVATE void RemoveMenuBarIcons();
 
 public:
-    SAL_DLLPRIVATE MenuBarUpdateIconManager();
-    SAL_DLLPRIVATE ~MenuBarUpdateIconManager();
+    MenuBarUpdateIconManager();
+    ~MenuBarUpdateIconManager();
 
-    SAL_DLLPRIVATE void SetShowMenuIcon(bool bShowMenuIcon);
-    SAL_DLLPRIVATE void SetShowBubble(bool bShowBubble);
-    SAL_DLLPRIVATE void SetBubbleImage(const Image& rImage);
-    SAL_DLLPRIVATE void SetBubbleTitle(const OUString& rTitle);
-    SAL_DLLPRIVATE void SetBubbleText(const OUString& rText);
+    void SetShowMenuIcon(bool bShowMenuIcon);
+    void SetShowBubble(bool bShowBubble);
+    void SetBubbleImage(const Image& rImage);
+    void SetBubbleTitle(const OUString& rTitle);
+    void SetBubbleText(const OUString& rText);
 
     void SetClickHdl(const Link<LinkParamNone*, void>& rHdl) { maClickHdl = rHdl; }
 
@@ -87,7 +87,7 @@ public:
     const OUString& GetBubbleTitle() const { return maBubbleTitle; }
     const OUString& GetBubbleText() const { return maBubbleText; }
 
-    SAL_DLLPRIVATE void RemoveBubbleWindow();
+    void RemoveBubbleWindow();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
