@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/processor2d/contourextractor2d.hxx>
 
 namespace svgio::svgreader
 {
@@ -102,20 +103,22 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
         = pParent->findGraphicSource(maIn2))
     {
         rTarget.append(*pSource2);
-        const basegfx::B2DRange aRange2(
-            pSource2->getB2DRange(drawinglayer::geometry::ViewInformation2D()));
-
-        aPolyPolygon2 = basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange2));
+        drawinglayer::processor2d::ContourExtractor2D aExtractor(
+            drawinglayer::geometry::ViewInformation2D(), true);
+        aExtractor.process(*pSource2);
+        const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
+        aPolyPolygon2 = basegfx::utils::mergeToSinglePolyPolygon(rResult);
     }
 
     if (const drawinglayer::primitive2d::Primitive2DContainer* pSource
         = pParent->findGraphicSource(maIn))
     {
         rTarget.append(*pSource);
-        const basegfx::B2DRange aRange(
-            pSource->getB2DRange(drawinglayer::geometry::ViewInformation2D()));
-
-        aPolyPolygon = basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange));
+        drawinglayer::processor2d::ContourExtractor2D aExtractor(
+            drawinglayer::geometry::ViewInformation2D(), true);
+        aExtractor.process(*pSource);
+        const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
+        aPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(rResult);
     }
 
     basegfx::B2DPolyPolygon aResult;
