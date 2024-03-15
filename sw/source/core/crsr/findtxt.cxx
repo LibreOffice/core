@@ -403,318 +403,315 @@ bool FindTextImpl(SwPaM & rSearchPam,
     // LanguageType eLastLang = 0;
     while (nullptr != (pNode = ::GetNode(*oPam, bFirst, fnMove, bInReadOnly, pLayout)))
     {
-        if( pNode->IsTextNode() )
+        if (!pNode->IsTextNode())
+            continue;
+
+        const SwTextNode& rTextNode = *pNode->GetTextNode();
+        SwTextFrame const* const pFrame(
+            pLayout ? static_cast<SwTextFrame const*>(rTextNode.getLayoutFrame(pLayout)) : nullptr);
+        assert(!pLayout || pFrame);
+        AmbiguousIndex nTextLen;
+        if (pLayout)
         {
-            SwTextNode& rTextNode = *pNode->GetTextNode();
-            SwTextFrame const*const pFrame(pLayout
-                ? static_cast<SwTextFrame const*>(rTextNode.getLayoutFrame(pLayout))
-                : nullptr);
-            assert(!pLayout || pFrame);
-            AmbiguousIndex nTextLen;
+            nTextLen.SetFrameIndex(TextFrameIndex(pFrame->GetText().getLength()));
+        }
+        else
+        {
+            nTextLen.SetModelIndex(rTextNode.GetText().getLength());
+        }
+        AmbiguousIndex nEnd;
+        if (pLayout ? FrameContainsNode(*pFrame, oPam->GetMark()->GetNodeIndex())
+                    : rPtPos.GetNode() == oPam->GetMark()->GetNode())
+        {
             if (pLayout)
             {
-                nTextLen.SetFrameIndex(TextFrameIndex(pFrame->GetText().getLength()));
+                nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*oPam->GetMark()));
             }
             else
             {
-                nTextLen.SetModelIndex(rTextNode.GetText().getLength());
+                nEnd.SetModelIndex(oPam->GetMark()->GetContentIndex());
             }
-            AmbiguousIndex nEnd;
-            if (pLayout
-                    ? FrameContainsNode(*pFrame, oPam->GetMark()->GetNodeIndex())
-                    : rPtPos.GetNode() == oPam->GetMark()->GetNode())
+        }
+        else
+        {
+            if (bSrchForward)
+            {
+                nEnd = nTextLen;
+            }
+            else
             {
                 if (pLayout)
                 {
-                    nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*oPam->GetMark()));
+                    nEnd.SetFrameIndex(TextFrameIndex(0));
                 }
                 else
                 {
-                    nEnd.SetModelIndex(oPam->GetMark()->GetContentIndex());
+                    nEnd.SetModelIndex(0);
                 }
             }
-            else
+        }
+        AmbiguousIndex nStart;
+        if (pLayout)
+        {
+            nStart.SetFrameIndex(pFrame->MapModelToViewPos(*oPam->GetPoint()));
+        }
+        else
+        {
+            nStart.SetModelIndex(rPtPos.GetContentIndex());
+        }
+
+        /* #i80135# */
+        // if there are SwPostItFields inside our current node text, we
+        // split the text into separate pieces and search for text inside
+        // the pieces as well as inside the fields
+        MaybeMergedIter iter(pLayout ? pFrame : nullptr, pLayout ? nullptr : &rTextNode);
+
+        // count PostItFields by looping over all fields
+        std::vector<std::pair<SwTextAttr const*, AmbiguousIndex>> postits;
+        if (bSearchInNotes)
+        {
+            if (!bSrchForward)
             {
-                if (bSrchForward)
+                std::swap(nStart, nEnd);
+            }
+
+            SwTextNode const* pTemp(nullptr);
+            while (SwTextAttr const* const pTextAttr = iter.NextAttr(pTemp))
+            {
+                if (pTextAttr->Which() == RES_TXTATR_ANNOTATION)
                 {
-                    nEnd = nTextLen;
+                    AmbiguousIndex aPos;
+                    aPos.SetModelIndex(pTextAttr->GetStart());
+                    if (pLayout)
+                    {
+                        aPos.SetFrameIndex(pFrame->MapModelToView(pTemp, aPos.GetModelIndex()));
+                    }
+                    if ((nStart <= aPos) && (aPos <= nEnd))
+                    {
+                        postits.emplace_back(pTextAttr, aPos);
+                    }
+                }
+            }
+
+            if (!bSrchForward)
+            {
+                std::swap(nStart, nEnd);
+            }
+        }
+
+        SwDocShell* const pDocShell = pNode->GetDoc().GetDocShell();
+        SwWrtShell* const pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
+        SwPostItMgr* const pPostItMgr = pWrtShell ? pWrtShell->GetPostItMgr() : nullptr;
+
+        // If there is an active text edit, then search there.
+        bool bEndedTextEdit = false;
+        SdrView* pSdrView = pWrtShell ? pWrtShell->GetDrawView() : nullptr;
+        if (pSdrView)
+        {
+            // If the edited object is not anchored to this node, then ignore it.
+            SdrObject* pObject = pSdrView->GetTextEditObject();
+            if (pObject)
+            {
+                if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
+                {
+                    const SwNode* pAnchorNode = pFrameFormat->GetAnchor().GetAnchorNode();
+                    if (!pAnchorNode
+                        || (pLayout ? !FrameContainsNode(*pFrame, pAnchorNode->GetIndex())
+                                    : pAnchorNode->GetIndex() != pNode->GetIndex()))
+                        pObject = nullptr;
+                }
+            }
+
+            if (pObject)
+            {
+                sal_uInt16 nResult
+                    = pSdrView->GetTextEditOutlinerView()->StartSearchAndReplace(*xSearchItem);
+                if (!nResult)
+                {
+                    // If not found, end the text edit.
+                    pSdrView->SdrEndTextEdit();
+                    const Point aPoint(pSdrView->GetAllMarkedRect().TopLeft());
+                    pSdrView->UnmarkAll();
+                    pWrtShell->CallSetCursor(&aPoint, true);
+                    pWrtShell->Edit();
+                    bEndedTextEdit = true;
                 }
                 else
                 {
-                    if (pLayout)
-                    {
-                        nEnd.SetFrameIndex(TextFrameIndex(0));
-                    }
-                    else
-                    {
-                        nEnd.SetModelIndex(0);
-                    }
+                    bFound = true;
+                    break;
                 }
             }
-            AmbiguousIndex nStart;
-            if (pLayout)
-            {
-                nStart.SetFrameIndex(pFrame->MapModelToViewPos(*oPam->GetPoint()));
-            }
-            else
-            {
-                nStart.SetModelIndex(rPtPos.GetContentIndex());
-            }
+        }
 
-            /* #i80135# */
-            // if there are SwPostItFields inside our current node text, we
-            // split the text into separate pieces and search for text inside
-            // the pieces as well as inside the fields
-            MaybeMergedIter iter(pLayout ? pFrame : nullptr, pLayout ? nullptr : &rTextNode);
-
-            // count PostItFields by looping over all fields
-            std::vector<std::pair<SwTextAttr const*, AmbiguousIndex>> postits;
-            if (bSearchInNotes)
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Writer and editeng selections are not supported in parallel.
+            SvxSearchItem* pSearchItem = SwView::GetSearchItem();
+            // If we just finished search in shape text, don't attempt to do that again.
+            if (!bEndedTextEdit
+                && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
             {
-                if (!bSrchForward)
+                // If there are any shapes anchored to this node, search there.
+                SwPaM aPaM(pNode->GetDoc().GetNodes().GetEndOfContent());
+                if (pLayout)
                 {
-                    std::swap(nStart, nEnd);
+                    *aPaM.GetPoint() = pFrame->MapViewToModelPos(nStart.GetFrameIndex());
                 }
-
-                SwTextNode const* pTemp(nullptr);
-                while (SwTextAttr const*const pTextAttr = iter.NextAttr(pTemp))
+                else
                 {
-                    if ( pTextAttr->Which()==RES_TXTATR_ANNOTATION )
+                    aPaM.GetPoint()->Assign(rTextNode, nStart.GetModelIndex());
+                }
+                aPaM.SetMark();
+                if (pLayout)
+                {
+                    aPaM.GetMark()->Assign(
+                        (pFrame->GetMergedPara() ? *pFrame->GetMergedPara()->pLastNode : rTextNode)
+                            .GetIndex()
+                        + 1);
+                }
+                else
+                {
+                    aPaM.GetMark()->Assign(rTextNode.GetIndex() + 1);
+                }
+                if (pNode->GetDoc().getIDocumentDrawModelAccess().Search(aPaM, *xSearchItem)
+                    && pSdrView)
+                {
+                    if (SdrObject* pObject = pSdrView->GetTextEditObject())
                     {
-                        AmbiguousIndex aPos;
-                        aPos.SetModelIndex(pTextAttr->GetStart());
-                        if (pLayout)
+                        if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
                         {
-                            aPos.SetFrameIndex(pFrame->MapModelToView(pTemp, aPos.GetModelIndex()));
-                        }
-                        if ((nStart <= aPos) && (aPos <= nEnd))
-                        {
-                            postits.emplace_back(pTextAttr, aPos);
-                        }
-                    }
-                }
-
-                if (!bSrchForward)
-                {
-                    std::swap(nStart, nEnd);
-                }
-
-            }
-
-            SwDocShell *const pDocShell = pNode->GetDoc().GetDocShell();
-            SwWrtShell *const pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
-            SwPostItMgr *const pPostItMgr = pWrtShell ? pWrtShell->GetPostItMgr() : nullptr;
-
-            // If there is an active text edit, then search there.
-            bool bEndedTextEdit = false;
-            SdrView* pSdrView = pWrtShell ? pWrtShell->GetDrawView() : nullptr;
-            if (pSdrView)
-            {
-                // If the edited object is not anchored to this node, then ignore it.
-                SdrObject* pObject = pSdrView->GetTextEditObject();
-                if (pObject)
-                {
-                    if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
-                    {
-                        const SwNode* pAnchorNode = pFrameFormat->GetAnchor().GetAnchorNode();
-                        if (!pAnchorNode || (pLayout
-                                ? !FrameContainsNode(*pFrame, pAnchorNode->GetIndex())
-                                : pAnchorNode->GetIndex() != pNode->GetIndex()))
-                            pObject = nullptr;
-                    }
-                }
-
-                if (pObject)
-                {
-                    sal_uInt16 nResult = pSdrView->GetTextEditOutlinerView()->StartSearchAndReplace(*xSearchItem);
-                    if (!nResult)
-                    {
-                        // If not found, end the text edit.
-                        pSdrView->SdrEndTextEdit();
-                        const Point aPoint(pSdrView->GetAllMarkedRect().TopLeft());
-                        pSdrView->UnmarkAll();
-                        pWrtShell->CallSetCursor(&aPoint, true);
-                        pWrtShell->Edit();
-                        bEndedTextEdit = true;
-                    }
-                    else
-                    {
-                        bFound = true;
-                        break;
-                    }
-                }
-            }
-
-            if (comphelper::LibreOfficeKit::isActive())
-            {
-                // Writer and editeng selections are not supported in parallel.
-                SvxSearchItem* pSearchItem = SwView::GetSearchItem();
-                // If we just finished search in shape text, don't attempt to do that again.
-                if (!bEndedTextEdit && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
-                {
-                    // If there are any shapes anchored to this node, search there.
-                    SwPaM aPaM(pNode->GetDoc().GetNodes().GetEndOfContent());
-                    if (pLayout)
-                    {
-                        *aPaM.GetPoint() = pFrame->MapViewToModelPos(nStart.GetFrameIndex());
-                    }
-                    else
-                    {
-                        aPaM.GetPoint()->Assign(rTextNode, nStart.GetModelIndex());
-                    }
-                    aPaM.SetMark();
-                    if (pLayout)
-                    {
-                        aPaM.GetMark()->Assign( (pFrame->GetMergedPara()
-                                ? *pFrame->GetMergedPara()->pLastNode
-                                : rTextNode)
-                            .GetIndex() + 1 );
-                    }
-                    else
-                    {
-                        aPaM.GetMark()->Assign( rTextNode.GetIndex() + 1 );
-                    }
-                    if (pNode->GetDoc().getIDocumentDrawModelAccess().Search(aPaM, *xSearchItem) && pSdrView)
-                    {
-                        if (SdrObject* pObject = pSdrView->GetTextEditObject())
-                        {
-                            if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
+                            const SwNode* pAnchorNode = pFrameFormat->GetAnchor().GetAnchorNode();
+                            if (pAnchorNode)
                             {
-                                const SwNode* pAnchorNode = pFrameFormat->GetAnchor().GetAnchorNode();
-                                if (pAnchorNode)
-                                {
-                                    // Set search position to the shape's anchor point.
-                                    rSearchPam.GetPoint()->Assign(*pAnchorNode);
-                                    rSearchPam.SetMark();
-                                    bFound = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // do we need to finish a note?
-            if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
-            {
-                if (bSearchInNotes)
-                {
-                    if (!postits.empty())
-                    {
-                        if (bSrchForward)
-                        {
-                            postits.erase(postits.begin());
-                        }
-                        else
-                        {
-                            postits.pop_back(); // hope that's the right one?
-                        }
-                    }
-                    //search inside, finish and put focus back into the doc
-                    if (pPostItMgr->FinishSearchReplace(rSearchOpt,bSrchForward))
-                    {
-                        bFound = true ;
-                        break;
-                    }
-                }
-                else
-                {
-                    pPostItMgr->SetActiveSidebarWin(nullptr);
-                }
-            }
-
-            if (!postits.empty())
-            {
-                // now we have to split
-                AmbiguousIndex nStartInside;
-                AmbiguousIndex nEndInside;
-                sal_Int32 aLoop = bSrchForward ? 0 : postits.size();
-
-                while ((0 <= aLoop) && (o3tl::make_unsigned(aLoop) <= postits.size()))
-                {
-                    if (bSrchForward)
-                    {
-                        if (aLoop == 0)
-                        {
-                            nStartInside = nStart;
-                        }
-                        else if (pLayout)
-                        {
-                            nStartInside.SetFrameIndex(postits[aLoop - 1].second.GetFrameIndex() + TextFrameIndex(1));
-                        }
-                        else
-                        {
-                            nStartInside.SetModelIndex(postits[aLoop - 1].second.GetModelIndex() + 1);
-                        }
-                        nEndInside = static_cast<size_t>(aLoop) == postits.size()
-                            ? nEnd
-                            : postits[aLoop].second;
-                        nTextLen = nEndInside - nStartInside;
-                    }
-                    else
-                    {
-                        nStartInside = static_cast<size_t>(aLoop) == postits.size()
-                            ? nStart
-                            : postits[aLoop].second;
-                        if (aLoop == 0)
-                        {
-                            nEndInside = nEnd;
-                        }
-                        else if (pLayout)
-                        {
-                            nEndInside.SetFrameIndex(postits[aLoop - 1].second.GetFrameIndex() + TextFrameIndex(1));
-                        }
-                        else
-                        {
-                            nEndInside.SetModelIndex(postits[aLoop - 1].second.GetModelIndex() + 1);
-                        }
-                        nTextLen = nStartInside - nEndInside;
-                    }
-                    // search inside the text between a note
-                    bFound = DoSearch( rSearchPam,
-                                       rSearchOpt, rSText, fnMove, bSrchForward,
-                                       bRegSearch, bChkEmptyPara, bChkParaEnd,
-                                       nStartInside, nEndInside, nTextLen,
-                                       pNode->GetTextNode(), pFrame, pLayout,
-                                       *oPam);
-                    if ( bFound )
-                        break;
-                    else
-                    {
-                        // we should now be right in front of a note, search inside
-                        if (bSrchForward
-                            ? (static_cast<size_t>(aLoop) != postits.size())
-                            : (aLoop != 0))
-                        {
-                            const SwTextAttr *const pTextAttr = bSrchForward
-                                ? postits[aLoop].first
-                                : postits[aLoop - 1].first;
-                            if (pPostItMgr && pPostItMgr->SearchReplace(
-                                    static_txtattr_cast<SwTextField const*>(pTextAttr)->GetFormatField(),rSearchOpt,bSrchForward))
-                            {
-                                bFound = true ;
+                                // Set search position to the shape's anchor point.
+                                rSearchPam.GetPoint()->Assign(*pAnchorNode);
+                                rSearchPam.SetMark();
+                                bFound = true;
                                 break;
                             }
                         }
                     }
-                    aLoop = bSrchForward ? aLoop+1 : aLoop-1;
+                }
+            }
+        }
+
+        // do we need to finish a note?
+        if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
+        {
+            if (bSearchInNotes)
+            {
+                if (!postits.empty())
+                {
+                    if (bSrchForward)
+                    {
+                        postits.erase(postits.begin());
+                    }
+                    else
+                    {
+                        postits.pop_back(); // hope that's the right one?
+                    }
+                }
+                //search inside, finish and put focus back into the doc
+                if (pPostItMgr->FinishSearchReplace(rSearchOpt, bSrchForward))
+                {
+                    bFound = true;
+                    break;
                 }
             }
             else
             {
-                // if there is no SwPostItField inside or searching inside notes
-                // is disabled, we search the whole length just like before
-                bFound = DoSearch( rSearchPam,
-                                   rSearchOpt, rSText, fnMove, bSrchForward,
-                                   bRegSearch, bChkEmptyPara, bChkParaEnd,
-                                   nStart, nEnd, nTextLen,
-                                   pNode->GetTextNode(), pFrame, pLayout,
-                                   *oPam);
+                pPostItMgr->SetActiveSidebarWin(nullptr);
             }
-            if (bFound)
-                break;
         }
+
+        if (!postits.empty())
+        {
+            // now we have to split
+            AmbiguousIndex nStartInside;
+            AmbiguousIndex nEndInside;
+            sal_Int32 aLoop = bSrchForward ? 0 : postits.size();
+
+            while ((0 <= aLoop) && (o3tl::make_unsigned(aLoop) <= postits.size()))
+            {
+                if (bSrchForward)
+                {
+                    if (aLoop == 0)
+                    {
+                        nStartInside = nStart;
+                    }
+                    else if (pLayout)
+                    {
+                        nStartInside.SetFrameIndex(postits[aLoop - 1].second.GetFrameIndex()
+                                                   + TextFrameIndex(1));
+                    }
+                    else
+                    {
+                        nStartInside.SetModelIndex(postits[aLoop - 1].second.GetModelIndex() + 1);
+                    }
+                    nEndInside = static_cast<size_t>(aLoop) == postits.size()
+                                     ? nEnd
+                                     : postits[aLoop].second;
+                    nTextLen = nEndInside - nStartInside;
+                }
+                else
+                {
+                    nStartInside = static_cast<size_t>(aLoop) == postits.size()
+                                       ? nStart
+                                       : postits[aLoop].second;
+                    if (aLoop == 0)
+                    {
+                        nEndInside = nEnd;
+                    }
+                    else if (pLayout)
+                    {
+                        nEndInside.SetFrameIndex(postits[aLoop - 1].second.GetFrameIndex()
+                                                 + TextFrameIndex(1));
+                    }
+                    else
+                    {
+                        nEndInside.SetModelIndex(postits[aLoop - 1].second.GetModelIndex() + 1);
+                    }
+                    nTextLen = nStartInside - nEndInside;
+                }
+                // search inside the text between a note
+                bFound = DoSearch(rSearchPam, rSearchOpt, rSText, fnMove, bSrchForward, bRegSearch,
+                                  bChkEmptyPara, bChkParaEnd, nStartInside, nEndInside, nTextLen,
+                                  pNode->GetTextNode(), pFrame, pLayout, *oPam);
+                if (bFound)
+                    break;
+                else
+                {
+                    // we should now be right in front of a note, search inside
+                    if (bSrchForward ? (static_cast<size_t>(aLoop) != postits.size())
+                                     : (aLoop != 0))
+                    {
+                        const SwTextAttr* const pTextAttr
+                            = bSrchForward ? postits[aLoop].first : postits[aLoop - 1].first;
+                        if (pPostItMgr
+                            && pPostItMgr->SearchReplace(
+                                   static_txtattr_cast<SwTextField const*>(pTextAttr)
+                                       ->GetFormatField(),
+                                   rSearchOpt, bSrchForward))
+                        {
+                            bFound = true;
+                            break;
+                        }
+                    }
+                }
+                aLoop = bSrchForward ? aLoop + 1 : aLoop - 1;
+            }
+        }
+        else
+        {
+            // if there is no SwPostItField inside or searching inside notes
+            // is disabled, we search the whole length just like before
+            bFound = DoSearch(rSearchPam, rSearchOpt, rSText, fnMove, bSrchForward, bRegSearch,
+                              bChkEmptyPara, bChkParaEnd, nStart, nEnd, nTextLen,
+                              pNode->GetTextNode(), pFrame, pLayout, *oPam);
+        }
+        if (bFound)
+            break;
     }
     return bFound;
 }
