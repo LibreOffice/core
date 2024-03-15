@@ -145,6 +145,9 @@ void ScViewFunctionSet::SetSelectionEngine( ScViewSelectionEngine* pSelEngine )
 // Drag & Drop
 void ScViewFunctionSet::BeginDrag()
 {
+    if (m_pViewData->GetViewShell()->IsLokReadOnlyView())
+        return;
+
     SCTAB nTab = m_pViewData->GetTabNo();
 
     SCCOL nPosX;
