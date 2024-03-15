@@ -30,6 +30,7 @@ enum class Operator
     In,
     Out,
     Xor,
+    Atop,
 };
 
 class SvgFeCompositeNode : public SvgFilterNode

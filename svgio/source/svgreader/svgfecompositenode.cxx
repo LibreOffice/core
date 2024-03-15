@@ -78,6 +78,10 @@ void SvgFeCompositeNode::parseAttribute(SVGToken aSVGToken, const OUString& aCon
                 {
                     maOperator = Operator::Xor;
                 }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"atop"))
+                {
+                    maOperator = Operator::Atop;
+                }
             }
             break;
         }
@@ -130,6 +134,13 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
     else if (maOperator == Operator::Xor)
     {
         aResult = basegfx::utils::solvePolygonOperationXor(aPolyPolygon, aPolyPolygon2);
+    }
+    else if (maOperator == Operator::Atop)
+    {
+        // Atop is the union of In and Out.
+        // The parts of in2 graphic that do not overlap with the in graphic stay untouched.
+        aResult = basegfx::utils::solvePolygonOperationDiff(aPolyPolygon2, aPolyPolygon);
+        aResult.append(basegfx::utils::solvePolygonOperationAnd(aPolyPolygon, aPolyPolygon2));
     }
 
     rTarget = drawinglayer::primitive2d::Primitive2DContainer{

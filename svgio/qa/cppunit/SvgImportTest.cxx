@@ -249,6 +249,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFilterFeComposite)
     // out operator
     assertXPath(pDocument, "/primitive2D/transform/mask[4]/polypolygoncolor"_ostr, 3);
     assertXPath(pDocument, "/primitive2D/transform/mask[4]/polypolygon/polygon/point"_ostr, 6);
+    // atop operator
+    assertXPath(pDocument, "/primitive2D/transform/mask[5]/polypolygoncolor"_ostr, 3);
+    assertXPath(pDocument, "/primitive2D/transform/mask[5]/polypolygon/polygon[1]/point"_ostr, 6);
+    assertXPath(pDocument, "/primitive2D/transform/mask[5]/polypolygon/polygon[2]/point"_ostr, 4);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFilterFeGaussianBlur)
