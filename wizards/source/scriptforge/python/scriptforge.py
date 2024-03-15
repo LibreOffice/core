@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#     Copyright 2020-2024 Jean-Pierre LEDURE, Rafael LIMA, Alain ROMEDENNE
+#     Copyright 2020-2024 Jean-Pierre LEDURE, Rafael LIMA, @AmourSpirit, Alain ROMEDENNE
 
 # =====================================================================================================================
 # ===           The ScriptForge library and its associated libraries are part of the LibreOffice project.           ===
@@ -38,6 +38,11 @@
         - implements a protocol between those interfaces and, when appropriate, the corresponding ScriptForge
           Basic libraries implementing the requested services.
 
+    The scriptforge.pyi module
+        - provides the static type checking of all the visible interfaces of the ScriptForge API.
+        - when the user uses an IDE like PyCharm or VSCode, (s)he might benefit from the typing
+          hints provided by them thanks to the twin scriptforhe.pyi module.
+
     Usage:
 
         When Python and LibreOffice run in the same process (usual case):
@@ -45,10 +50,13 @@
 
         When Python and LibreOffice are started in separate processes,
         LibreOffice being started from console ... (example for Linux with port = 2023)
-            ./soffice --accept='socket,host=localhost,port=2023;urp;'
+            ./soffice --accept='socket,host=localhost,port=2024;urp;'
         then use next statements:
             from scriptforge import CreateScriptService, ScriptForge
-            ScriptForge(hostname = 'localhost', port = 2023)
+            ScriptForge(hostname = 'localhost', port = 2024)
+
+        When the user uses an IDE like PyCharm or VSCode, (s)he might benefit from the typing
+        hints provided by them thanks to the twin scriptforhe.pyi module.
 
     Specific documentation about the use of ScriptForge from Python scripts:
         https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_intro.html?DbPAR=BASIC
@@ -59,6 +67,7 @@ import uno
 import datetime
 import time
 import os
+from typing import TypeVar
 
 
 class _Singleton(type):
@@ -446,10 +455,10 @@ class ScriptForge(object, metaclass = _Singleton):
 
 class SFServices(object):
     """
-        Generic implementation of a parent Service class
-        Every service must subclass this class to be recognized as a valid service
+        Generic implementation of a parent Service class.
+        Every service must subclass this class to be recognized as a valid service.
         A service instance is created by the CreateScriptService method
-        It can have a mirror in the Basic world or be totally defined in Python
+        It can have a mirror in the Basic world or be totally defined in Python.
 
         Every subclass must initialize 3 class properties:
             servicename (e.g. 'ScriptForge.FileSystem', 'ScriptForge.Basic')
@@ -659,7 +668,6 @@ class SFServices(object):
 #                       SFScriptForge CLASS    (alias of ScriptForge Basic library)                                 ###
 # #####################################################################################################################
 class SFScriptForge:
-    pass
 
     # #########################################################################
     # SF_Array CLASS
@@ -1227,11 +1235,11 @@ class SFScriptForge:
         def MoveFile(self, source, destination):
             return self.ExecMethod(self.vbMethod, 'MoveFile', source, destination)
 
-        def Normalize(self, filename):
-            return self.ExecMethod(self.vbMethod, 'Normalize', filename)
-
         def MoveFolder(self, source, destination):
             return self.ExecMethod(self.vbMethod, 'MoveFolder', source, destination)
+
+        def Normalize(self, filename):
+            return self.ExecMethod(self.vbMethod, 'Normalize', filename)
 
         def OpenTextFile(self, filename, iomode = 1, create = False, encoding = 'UTF-8'):
             return self.ExecMethod(self.vbMethod, 'OpenTextFile', filename, iomode, create, encoding)
@@ -1529,11 +1537,11 @@ class SFScriptForge:
         def SetPDFExportOptions(self, pdfoptions):
             return self.ExecMethod(self.vbMethod + self.flgDictArg, 'SetPDFExportOptions', pdfoptions)
 
-        def UnoObjectType(self, unoobject):
-            return self.ExecMethod(self.vbMethod, 'UnoObjectType', unoobject)
-
         def UnoMethods(self, unoobject):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'UnoMethods', unoobject)
+
+        def UnoObjectType(self, unoobject):
+            return self.ExecMethod(self.vbMethod, 'UnoObjectType', unoobject)
 
         def UnoProperties(self, unoobject):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'UnoProperties', unoobject)
@@ -2391,11 +2399,11 @@ class SFDocuments:
         def OpenFormDocument(self, formdocument, designmode = False):
             return self.ExecMethod(self.vbMethod, 'OpenFormDocument', formdocument, designmode)
 
-        def OpenQuery(self, queryname):
-            return self.ExecMethod(self.vbMethod, 'OpenQuery', queryname)
+        def OpenQuery(self, queryname, designmode = False):
+            return self.ExecMethod(self.vbMethod, 'OpenQuery', queryname, designmode)
 
-        def OpenTable(self, tablename):
-            return self.ExecMethod(self.vbMethod, 'OpenTable', tablename)
+        def OpenTable(self, tablename, designmode = False):
+            return self.ExecMethod(self.vbMethod, 'OpenTable', tablename, designmode)
 
         def PrintOut(self, formdocument, pages = '', copies = 1):
             return self.ExecMethod(self.vbMethod, 'PrintOut', formdocument, pages, copies)
@@ -2666,11 +2674,11 @@ class SFDocuments:
                                  XChartObj = False, XDiagram = False, XShape = False, XTableChart = False,
                                  XTitle = True, YTitle = True)
 
-        def Resize(self, xpos = -1, ypos = -1, width = -1, height = -1):
-            return self.ExecMethod(self.vbMethod, 'Resize', xpos, ypos, width, height)
-
         def ExportToFile(self, filename, imagetype = 'png', overwrite = False):
             return self.ExecMethod(self.vbMethod, 'ExportToFile', filename, imagetype, overwrite)
+
+        def Resize(self, xpos = -1, ypos = -1, width = -1, height = -1):
+            return self.ExecMethod(self.vbMethod, 'Resize', xpos, ypos, width, height)
 
     # #########################################################################
     # SF_Form CLASS
@@ -3031,6 +3039,62 @@ def CreateScriptService(service, *args, **kwargs):
 
 
 createScriptService, createscriptservice = CreateScriptService, CreateScriptService
+
+
+# ###############################################################################
+# FOR TYPING HINTS, NEXT VARIABLE TYPES MAY BE IMPORTED IN USER SCRIPTS
+# EXAMPLE:
+#       from scriptforge import CALC, RANGE
+#       def userfct(c: CALC, r: RANGE) -> RANGE:
+#           r1: RANGE = "A1:K10"
+# ###############################################################################
+# List the available service types
+#   SFScriptForge
+ARRAY = SFScriptForge.SF_Array
+BASIC = SFScriptForge.SF_Basic
+DICTIONARY = SFScriptForge.SF_Dictionary
+EXCEPTION = SFScriptForge.SF_Exception
+FILESYSTEM = SFScriptForge.SF_FileSystem
+L10N = SFScriptForge.SF_L10N
+PLATFORM = SFScriptForge.SF_Platform
+REGION = SFScriptForge.SF_Region
+SESSION = SFScriptForge.SF_Session
+STRING = SFScriptForge.SF_String
+TEXTSTREAM = SFScriptForge.SF_TextStream
+TIMER = SFScriptForge.SF_Timer
+UI = SFScriptForge.SF_UI
+#   SFDatabases
+DATABASE = SFDatabases.SF_Database
+DATASET = SFDatabases.SF_Dataset
+DATASHEET = SFDatabases.SF_Datasheet
+#   SFDialogs
+DIALOG = SFDialogs.SF_Dialog
+DIALOGCONTROL = SFDialogs.SF_DialogControl
+#   SFDocuments
+DOCUMENT = SFDocuments.SF_Document
+BASE = SFDocuments.SF_Base
+CALC = SFDocuments.SF_Calc
+CALCREFERENCE = SFDocuments.SF_CalcReference
+CHART = SFDocuments.SF_Chart
+FORM = SFDocuments.SF_Form
+FORMCONTROL = SFDocuments.SF_FormControl
+FORMDOCUMENT = SFDocuments.SF_FormDocument
+WRITER = SFDocuments.SF_Writer
+#   SFWidgets
+MENU = SFWidgets.SF_Menu
+POPUPMENU = SFWidgets.SF_PopupMenu
+TOOLBAR = SFWidgets.SF_Toolbar
+TOOLBARBUTTON = SFWidgets.SF_ToolbarButton
+#   UNO
+UNO = TypeVar('UNO')
+#   Other
+FILE = TypeVar('FILE', str, str)
+SHEETNAME = TypeVar('SHEETNAME', str, str)
+RANGE = TypeVar('RANGE', str, str)
+SCRIPT_URI = TypeVar('SCRIPT_URI', str, str)
+SQL_SELECT = TypeVar('SQL_SELECT', str, str)
+SQL_ACTION = TypeVar('SQL_ACTION', str, str)
+
 
 # ######################################################################
 # Lists the scripts, that shall be visible inside the Basic/Python IDE

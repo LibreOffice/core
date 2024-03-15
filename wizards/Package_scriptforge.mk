@@ -57,5 +57,6 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_SHARE_FOLD
 
 $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_LIB_PYUNO_FOLDER),\
 	python/scriptforge.py \
+	python/scriptforge.pyi \
 ))
 # vim: set noet sw=4 ts=4:
