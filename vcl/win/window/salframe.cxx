@@ -3589,7 +3589,7 @@ static bool HandleAltNumPadCode(HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
                 if (!(keyFlags & KF_REPEAT))
                     state.clear();
                 state.started = true;
-                return true;
+                return false; // This must be processed further - e.g., to show accelerators
             }
 
             if (!state.started)
