@@ -447,8 +447,6 @@ public:
 
     SC_DLLPUBLIC void SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
 
-    SC_DLLPUBLIC void SetNumberFormatter( SvNumberFormatter* pFormatter );
-
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()
         or SetGrammar().

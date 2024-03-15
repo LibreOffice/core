@@ -309,11 +309,6 @@ std::vector<OUString> &ScCompiler::GetSetupTabNames() const
     return rTabNames;
 }
 
-void ScCompiler::SetNumberFormatter( SvNumberFormatter* pFormatter )
-{
-    mpFormatter = pFormatter;
-}
-
 void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
 {
     if (!xMap)

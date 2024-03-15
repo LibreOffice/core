@@ -102,7 +102,6 @@ private:
 
 void applySharedFormulas(
     ScDocumentImport& rDoc,
-    SvNumberFormatter& rFormatter,
     std::vector<FormulaBuffer::SharedFormulaEntry>& rSharedFormulas,
     std::vector<FormulaBuffer::SharedFormulaDesc>& rCells,
     WorkbookHelper& rWorkbookHelper)
@@ -117,7 +116,6 @@ void applySharedFormulas(
             const OUString& rTokenStr = rEntry.maTokenStr;
 
             ScCompiler aComp(rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML, true, false);
-            aComp.SetNumberFormatter(&rFormatter);
             std::unique_ptr<ScTokenArray> pArray = aComp.CompileString(rTokenStr);
             if (pArray)
             {
@@ -233,7 +231,7 @@ void applySharedFormulas(
 }
 
 void applyCellFormulas(
-    ScDocumentImport& rDoc, CachedTokenArray& rCache, SvNumberFormatter& rFormatter,
+    ScDocumentImport& rDoc, CachedTokenArray& rCache,
     const Sequence<ExternalLinkInfo>& rExternalLinks,
     const std::vector<FormulaBuffer::TokenAddressItem>& rCells )
 {
@@ -275,7 +273,6 @@ void applyCellFormulas(
         }
 
         ScCompiler aCompiler(rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML, true, false);
-        aCompiler.SetNumberFormatter(&rFormatter);
         aCompiler.SetExternalLinks(rExternalLinks);
         std::unique_ptr<ScTokenArray> pCode = aCompiler.CompileString(rItem.maTokenStr);
         if (!pCode)
@@ -292,7 +289,7 @@ void applyCellFormulas(
 }
 
 void applyArrayFormulas(
-    ScDocumentImport& rDoc, SvNumberFormatter& rFormatter,
+    ScDocumentImport& rDoc,
     const Sequence<ExternalLinkInfo>& rExternalLinks,
     const std::vector<FormulaBuffer::TokenRangeAddressItem>& rArrays )
 {
@@ -301,7 +298,6 @@ void applyArrayFormulas(
         const ScAddress& aPos = rAddressItem.maTokenAndAddress.maAddress;
 
         ScCompiler aComp(rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML);
-        aComp.SetNumberFormatter(&rFormatter);
         aComp.SetExternalLinks(rExternalLinks);
         std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(rAddressItem.maTokenAndAddress.maTokenStr));
         if (pArray)
@@ -365,21 +361,21 @@ void applyCellFormulaValues(
 }
 
 void processSheetFormulaCells(
-    ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter& rFormatter,
+    ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem,
     const Sequence<ExternalLinkInfo>& rExternalLinks, WorkbookHelper& rWorkbookHelper )
 {
     if (rItem.mpSharedFormulaEntries && rItem.mpSharedFormulaIDs)
-        applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries,
+        applySharedFormulas(rDoc, *rItem.mpSharedFormulaEntries,
                             *rItem.mpSharedFormulaIDs, rWorkbookHelper);
 
     if (rItem.mpCellFormulas)
     {
         CachedTokenArray aCache(rDoc.getDoc());
-        applyCellFormulas(rDoc, aCache, rFormatter, rExternalLinks, *rItem.mpCellFormulas);
+        applyCellFormulas(rDoc, aCache, rExternalLinks, *rItem.mpCellFormulas);
     }
 
     if (rItem.mpArrayFormulas)
-        applyArrayFormulas(rDoc, rFormatter, rExternalLinks, *rItem.mpArrayFormulas);
+        applyArrayFormulas(rDoc, rExternalLinks, *rItem.mpArrayFormulas);
 
     if (rItem.mpCellFormulaValues)
         applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues, rWorkbookHelper);
@@ -434,7 +430,7 @@ void FormulaBuffer::finalizeImport()
         aSheetItems.push_back(getSheetItem(nTab));
 
     for (SheetItem& rItem : aSheetItems)
-        processSheetFormulaCells(rDoc, rItem, *rDoc.getDoc().GetFormatTable(), getExternalLinks().getLinkInfos(),
+        processSheetFormulaCells(rDoc, rItem, getExternalLinks().getLinkInfos(),
                 *this);
 
     // With formula results being set and not recalculated we need to
