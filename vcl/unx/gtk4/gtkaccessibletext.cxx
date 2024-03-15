@@ -125,6 +125,38 @@ static gboolean lo_accessible_text_get_selection(GtkAccessibleText* self, gsize*
     return true;
 }
 
+static int
+convertUnoTextAttributesToGtk(const css::uno::Sequence<css::beans::PropertyValue>& rAttribs,
+                              char*** attribute_names, char*** attribute_values)
+{
+    std::vector<std::pair<OString, OUString>> aNameValuePairs;
+    for (const css::beans::PropertyValue& rAttribute : rAttribs)
+    {
+        if (rAttribute.Name == "CharFontName")
+        {
+            const OUString sValue = *o3tl::doAccess<OUString>(rAttribute.Value);
+            aNameValuePairs.emplace_back(GTK_ACCESSIBLE_ATTRIBUTE_FAMILY, sValue);
+        }
+    }
+
+    if (aNameValuePairs.empty())
+        return 0;
+
+    const int nCount = aNameValuePairs.size();
+    *attribute_names = g_new(char*, nCount + 1);
+    *attribute_values = g_new(char*, nCount + 1);
+    for (int i = 0; i < nCount; i++)
+    {
+        (*attribute_names)[i] = g_strdup(aNameValuePairs[i].first.getStr());
+        (*attribute_values)[i] = g_strdup(
+            OUStringToOString(aNameValuePairs[i].second, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    (*attribute_names)[nCount] = nullptr;
+    (*attribute_values)[nCount] = nullptr;
+
+    return nCount;
+}
+
 static gboolean lo_accessible_text_get_attributes(GtkAccessibleText* self, unsigned int offset,
                                                   gsize* n_ranges, GtkAccessibleTextRange** ranges,
                                                   char*** attribute_names, char*** attribute_values)
@@ -152,40 +184,20 @@ static gboolean lo_accessible_text_get_attributes(GtkAccessibleText* self, unsig
     else
         aAttribs = xText->getCharacterAttributes(offset, css::uno::Sequence<OUString>());
 
-    std::vector<std::pair<OString, OUString>> aNameValuePairs;
-    for (const css::beans::PropertyValue& rAttribute : aAttribs)
-    {
-        if (rAttribute.Name == "CharFontName")
-        {
-            const OUString sValue = *o3tl::doAccess<OUString>(rAttribute.Value);
-            aNameValuePairs.emplace_back(GTK_ACCESSIBLE_ATTRIBUTE_FAMILY, sValue);
-        }
-    }
-
-    if (aNameValuePairs.empty())
+    const int nCount = convertUnoTextAttributesToGtk(aAttribs, attribute_names, attribute_values);
+    if (nCount == 0)
         return false;
 
-    const css::accessibility::TextSegment aAttributeRun
-        = xText->getTextAtIndex(offset, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
-
-    const int nCount = aNameValuePairs.size();
     *n_ranges = nCount;
     *ranges = g_new(GtkAccessibleTextRange, nCount);
-    *attribute_names = g_new(char*, nCount + 1);
-    *attribute_values = g_new(char*, nCount + 1);
-
+    // just use start and end of attribute run for each single attribute
+    const css::accessibility::TextSegment aAttributeRun
+        = xText->getTextAtIndex(offset, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
     for (int i = 0; i < nCount; i++)
     {
-        // just use start and end of attribute run for each single attribute
         ((*ranges)[i]).start = aAttributeRun.SegmentStart;
         ((*ranges)[i]).length = aAttributeRun.SegmentEnd - aAttributeRun.SegmentStart;
-
-        (*attribute_names)[i] = g_strdup(aNameValuePairs[i].first.getStr());
-        (*attribute_values)[i] = g_strdup(
-            OUStringToOString(aNameValuePairs[i].second, RTL_TEXTENCODING_UTF8).getStr());
     }
-    (*attribute_names)[nCount] = nullptr;
-    (*attribute_values)[nCount] = nullptr;
 
     return true;
 }
