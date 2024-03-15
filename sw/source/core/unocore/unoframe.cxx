@@ -99,6 +99,7 @@
 #include <ndtxt.hxx>
 #include <ndgrf.hxx>
 #include <mutex>
+#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -2680,6 +2681,7 @@ void SwXFrame::Notify(const SfxHint& rHint)
 void SwXFrame::dispose()
 {
     SolarMutexGuard aGuard;
+    Scheduler::IdlesLockGuard g;
     SwFrameFormat* pFormat = GetFrameFormat();
     if (!pFormat)
         return;
