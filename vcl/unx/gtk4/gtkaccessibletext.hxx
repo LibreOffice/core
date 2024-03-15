@@ -11,7 +11,7 @@
 
 #include <gtk/gtk.h>
 
-#if GTK_CHECK_VERSION(4, 13, 8)
+#if GTK_CHECK_VERSION(4, 14, 0)
 
 void lo_accessible_text_init(GtkAccessibleTextInterface* iface);
 

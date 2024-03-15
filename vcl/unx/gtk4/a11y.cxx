@@ -411,7 +411,7 @@ const struct
     GetGIfaceType const aGetGIfaceType;
     const css::uno::Type& (*aGetUnoType)();
 } TYPE_TABLE[] = {
-#if GTK_CHECK_VERSION(4, 13, 8)
+#if GTK_CHECK_VERSION(4, 14, 0)
     { "Text", reinterpret_cast<GInterfaceInitFunc>(lo_accessible_text_init),
       gtk_accessible_text_get_type, cppu::UnoType<css::accessibility::XAccessibleText>::get },
 #endif

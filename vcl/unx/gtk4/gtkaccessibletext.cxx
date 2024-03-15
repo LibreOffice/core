@@ -19,7 +19,7 @@
 #include "a11y.hxx"
 #include "gtkaccessibletext.hxx"
 
-#if GTK_CHECK_VERSION(4, 13, 8)
+#if GTK_CHECK_VERSION(4, 14, 0)
 
 namespace
 {
@@ -202,6 +202,25 @@ static gboolean lo_accessible_text_get_attributes(GtkAccessibleText* self, unsig
     return true;
 }
 
+static void lo_accessible_text_get_default_attributes(GtkAccessibleText* self,
+                                                      char*** attribute_names,
+                                                      char*** attribute_values)
+{
+    css::uno::Reference<css::accessibility::XAccessibleText> xText = getXText(self);
+    if (!xText.is())
+        return;
+
+    css::uno::Reference<css::accessibility::XAccessibleTextAttributes> xAttributes(
+        xText, com::sun::star::uno::UNO_QUERY);
+    if (!xAttributes.is())
+        return;
+
+    css::uno::Sequence<css::beans::PropertyValue> aAttribs
+        = xAttributes->getDefaultAttributes(css::uno::Sequence<OUString>());
+
+    convertUnoTextAttributesToGtk(aAttribs, attribute_names, attribute_values);
+}
+
 void lo_accessible_text_init(GtkAccessibleTextInterface* iface)
 {
     iface->get_contents = lo_accessible_text_get_contents;
@@ -209,6 +228,7 @@ void lo_accessible_text_init(GtkAccessibleTextInterface* iface)
     iface->get_caret_position = lo_accessible_text_get_caret_position;
     iface->get_selection = lo_accessible_text_get_selection;
     iface->get_attributes = lo_accessible_text_get_attributes;
+    iface->get_default_attributes = lo_accessible_text_get_default_attributes;
 }
 
 #endif
