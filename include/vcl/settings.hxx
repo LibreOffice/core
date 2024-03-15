@@ -84,7 +84,7 @@ enum class MouseWheelBehaviour
 class VCL_DLLPUBLIC MouseSettings
 {
 private:
-    void                            CopyData();
+    SAL_DLLPRIVATE void                            CopyData();
     std::shared_ptr<ImplMouseData>  mxData;
 
 public:
@@ -97,31 +97,31 @@ public:
     sal_uInt64                      GetDoubleClickTime() const;
 
     void                            SetDoubleClickWidth( sal_Int32 nDoubleClkWidth );
-    sal_Int32                       GetDoubleClickWidth() const;
+    SAL_DLLPRIVATE sal_Int32                       GetDoubleClickWidth() const;
 
     void                            SetDoubleClickHeight( sal_Int32 nDoubleClkHeight );
-    sal_Int32                       GetDoubleClickHeight() const;
+    SAL_DLLPRIVATE sal_Int32                       GetDoubleClickHeight() const;
 
     void                            SetStartDragWidth( sal_Int32 nDragWidth );
-    sal_Int32                       GetStartDragWidth() const;
+    SAL_DLLPRIVATE sal_Int32                       GetStartDragWidth() const;
 
     void                            SetStartDragHeight( sal_Int32 nDragHeight );
-    sal_Int32                       GetStartDragHeight() const;
+    SAL_DLLPRIVATE sal_Int32                       GetStartDragHeight() const;
 
-    static sal_uInt16               GetStartDragCode();
+    SAL_DLLPRIVATE static sal_uInt16               GetStartDragCode();
 
-    static sal_uInt16               GetContextMenuCode();
+    SAL_DLLPRIVATE static sal_uInt16               GetContextMenuCode();
 
-    static sal_uInt16               GetContextMenuClicks();
+    SAL_DLLPRIVATE static sal_uInt16               GetContextMenuClicks();
 
-    static sal_Int32                GetScrollRepeat();
+    SAL_DLLPRIVATE static sal_Int32                GetScrollRepeat();
 
-    static sal_Int32                GetButtonStartRepeat();
+    SAL_DLLPRIVATE static sal_Int32                GetButtonStartRepeat();
 
     void                            SetButtonRepeat( sal_Int32 nRepeat );
     sal_Int32                       GetButtonRepeat() const;
 
-    static sal_Int32                GetActionDelay();
+    SAL_DLLPRIVATE static sal_Int32                GetActionDelay();
 
     void                            SetMenuDelay( sal_Int32 nDelay );
     sal_Int32                       GetMenuDelay() const;

@@ -135,10 +135,10 @@ private:
 
 protected:
     // Single argument ctors shall be explicit.
-    explicit SystemWindow(WindowType nType, const char* pIdleDebugName);
-    void loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+    SAL_DLLPRIVATE explicit SystemWindow(WindowType nType, const char* pIdleDebugName);
+    SAL_DLLPRIVATE void loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
 
-    void SetWindowState(const vcl::WindowData& rData);
+    SAL_DLLPRIVATE void SetWindowState(const vcl::WindowData& rData);
 
     virtual void settingOptimalLayoutSize(Window *pBox);
 
@@ -157,8 +157,8 @@ public:
     virtual void    Resize() override;
     virtual Size    GetOptimalSize() const override;
     virtual void    queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-    bool            isLayoutEnabled() const;
-    void            setOptimalLayoutSize(bool bAllowWindowShrink);
+    SAL_DLLPRIVATE bool            isLayoutEnabled() const;
+    SAL_DLLPRIVATE void            setOptimalLayoutSize(bool bAllowWindowShrink);
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
 
     void            SetIcon( sal_uInt16 nIcon );
@@ -167,13 +167,13 @@ public:
     // separately from the window title
     void            SetRepresentedURL( const OUString& );
 
-    void            ShowTitleButton( TitleButton nButton, bool bVisible );
-    bool            IsTitleButtonVisible( TitleButton nButton ) const;
+    SAL_DLLPRIVATE void            ShowTitleButton( TitleButton nButton, bool bVisible );
+    SAL_DLLPRIVATE bool            IsTitleButtonVisible( TitleButton nButton ) const;
 
     void            SetMinOutputSizePixel( const Size& rSize );
     const Size&     GetMinOutputSizePixel() const { return maMinOutSize; }
-    void            SetMaxOutputSizePixel( const Size& rSize );
-    const Size&     GetMaxOutputSizePixel() const;
+    SAL_DLLPRIVATE void            SetMaxOutputSizePixel( const Size& rSize );
+    SAL_DLLPRIVATE const Size&     GetMaxOutputSizePixel() const;
 
     void            SetWindowState(std::u16string_view rStr);
     OUString GetWindowState(vcl::WindowDataMask nMask = vcl::WindowDataMask::All) const;
@@ -193,7 +193,7 @@ public:
     VclPtr<NotebookBar> const & GetNotebookBar() const;
 
     TaskPaneList*   GetTaskPaneList();
-    void GetWindowState(vcl::WindowData& rData) const;
+    SAL_DLLPRIVATE void GetWindowState(vcl::WindowData& rData) const;
 
     virtual void     SetText( const OUString& rStr ) override;
     virtual OUString GetText() const override;

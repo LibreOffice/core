@@ -65,7 +65,7 @@ public:
     virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
     std::unique_ptr<SvpGraphicsBackend> const& getSvpBackend() { return m_pBackend; }
 
-    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
+    SAL_DLLPRIVATE virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
 
     virtual void            SetTextColor( Color nColor ) override;
     virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;
@@ -84,9 +84,9 @@ public:
     virtual SystemGraphicsData GetGraphicsData() const override;
 
 #if ENABLE_CAIRO_CANVAS
-    virtual bool            SupportsCairo() const override;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
+    SAL_DLLPRIVATE virtual bool            SupportsCairo() const override;
+    SAL_DLLPRIVATE virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    SAL_DLLPRIVATE virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
     virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const override;
     virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
 #endif // ENABLE_CAIRO_CANVAS

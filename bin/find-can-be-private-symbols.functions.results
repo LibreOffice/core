@@ -1,5 +1,8 @@
 AlphaMask::AlphaMask(AlphaMask&&)
 AlphaMask::operator=(Bitmap const&)
+Application::DeInit()
+Application::IsBitmapRendering()
+Application::setDeInitHook(Link<LinkParamNone*, void> const&)
 AsWinding(SkPath const&, SkPath*)
 AsyncQuitHandler::AsyncQuitHandler()
 AsyncQuitHandler::OnAsyncQuit(AsyncQuitHandler*, void*)
@@ -43,6 +46,9 @@ BitmapInfoAccess::GetMatchingPaletteIndex(BitmapColor const&) const
 BitmapMedianFilter::execute(BitmapEx const&) const
 BitmapMonochromeFilter::execute(BitmapEx const&) const
 BitmapMosaicFilter::execute(BitmapEx const&) const
+BitmapPalette::BitmapPalette(BitmapColor const*, BitmapColor const*)
+BitmapPalette::IsGreyPalette8Bit() const
+BitmapPalette::operator==(BitmapPalette const&) const
 BitmapPopArtFilter::execute(BitmapEx const&) const
 BitmapSepiaFilter::execute(BitmapEx const&) const
 BitmapShadowFilter::execute(BitmapEx const&) const
@@ -392,6 +398,7 @@ DriverBlocklist::Parser::handleContent(xmlreader::XmlReader&)
 DriverBlocklist::Parser::handleDevices(DriverBlocklist::DriverInfo&, xmlreader::XmlReader&)
 DriverBlocklist::Parser::handleEntry(DriverBlocklist::DriverInfo&, xmlreader::XmlReader&)
 DriverBlocklist::Parser::handleList(xmlreader::XmlReader&)
+DropTargetHelper::ImplConstruct()
 E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget&) const
 E3dAttributesUndoAction::Redo()
 E3dAttributesUndoAction::Undo()
@@ -493,127 +500,7 @@ EFieldInfo::EFieldInfo(EFieldInfo const&)
 EFieldInfo::EFieldInfo(SvxFieldItem const&, int, int)
 EFieldInfo::operator=(EFieldInfo const&)
 EditAbstractDialogFactory::Create()
-EditEngine::AppendDeletedNodeInfo(DeletedNodeInfo*)
-EditEngine::CallHtmlImportHandler(HtmlImportInfo&)
-EditEngine::CallRtfImportHandler(RtfImportInfo&)
-EditEngine::ClearOverflowingParaNum()
-EditEngine::ClearPolygon()
-EditEngine::ConnectContents(int, bool)
-EditEngine::ConnectParagraphs(ContentNode*, ContentNode*, bool)
-EditEngine::CreateESelection(EditSelection const&) const
-EditEngine::CreateEditPaM(EPaM const&)
-EditEngine::CreateFontFromItemSet(SfxItemSet const&, SvtScriptType)
-EditEngine::CreateSelection(ESelection const&)
-EditEngine::CreateSvxFontFromItemSet(SfxItemSet const&)
-EditEngine::CursorLeft(EditPaM const&, unsigned short)
-EditEngine::CursorRight(EditPaM const&, unsigned short)
-EditEngine::DeleteSelected(EditSelection const&)
-EditEngine::DeleteSelection(EditSelection const&)
-EditEngine::Draw(OutputDevice&, tools::Rectangle const&)
-EditEngine::Draw(OutputDevice&, tools::Rectangle const&, Point const&)
-EditEngine::FindParagraph(long)
-EditEngine::ForceAutoColor(bool)
-EditEngine::GetActiveView() const
-EditEngine::GetBaseParaAttribs(int) const
-EditEngine::GetBeginDropHdl() const
-EditEngine::GetDefaultHorizontalTextDirection() const
-EditEngine::GetDocPos(Point const&) const
-EditEngine::GetEditDoc()
-EditEngine::GetEditDoc() const
-EditEngine::GetEditViews()
-EditEngine::GetEditViews() const
-EditEngine::GetEmptyTextObject()
-EditEngine::GetEndDropHdl() const
-EditEngine::GetFirstLineStartX(int)
-EditEngine::GetLanguage(EditPaM const&) const
-EditEngine::GetLineHeight(int)
-EditEngine::GetMaxAutoPaperSize() const
-EditEngine::GetMinAutoPaperSize() const
-EditEngine::GetOverflowingLineNum() const
-EditEngine::GetOverflowingParaNum() const
-EditEngine::GetParaBounds(int)
-EditEngine::GetParaPortions()
-EditEngine::GetParaPortions() const
-EditEngine::GetParagraphInfos(int)
-EditEngine::GetRotation() const
-EditEngine::GetScriptType(EditSelection const&) const
-EditEngine::GetSelected(EditSelection const&) const
-EditEngine::GetSpeller()
-EditEngine::GetStandardSvxFont(int)
-EditEngine::GetStatusEventHdl() const
-EditEngine::GetStyleSheet(int) const
-EditEngine::GetTextHeightNTP() const
-EditEngine::GetVertical() const
-EditEngine::HasText(SvxSearchItem const&)
-EditEngine::InsertContent(std::unique_ptr<ContentNode, std::default_delete<ContentNode> >, int)
-EditEngine::InsertFeature(EditSelection const&, SfxPoolItem const&)
-EditEngine::InsertField(EditSelection const&, SvxFieldItem const&)
-EditEngine::InsertLineBreak(EditSelection const&)
-EditEngine::InsertParaBreak(EditSelection const&)
-EditEngine::InsertParagraph(int, EditTextObject const&, bool)
-EditEngine::InsertText(EditSelection const&, rtl::OUString const&)
-EditEngine::InsertText(EditTextObject const&, EditSelection const&)
-EditEngine::InsertText(com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> const&, rtl::OUString const&, EditPaM const&, bool, SotClipboardFormatId)
-EditEngine::IsCallParaInsertedOrDeleted() const
-EditEngine::IsForceAutoColor() const
-EditEngine::IsFormatted() const
-EditEngine::IsHtmlImportHandlerSet() const
-EditEngine::IsImportRTFStyleSheetsSet() const
-EditEngine::IsInUndo() const
-EditEngine::IsPageOverflow()
-EditEngine::IsRtfImportHandlerSet() const
-EditEngine::IsTextPos(Point const&, unsigned short)
-EditEngine::IsTopToBottom() const
-EditEngine::MoveParagraphs(Range const&, int)
-EditEngine::ParaAttribsToCharAttribs(ContentNode*)
-EditEngine::ParagraphHeightChanged(int)
-EditEngine::PutSpellingToSentenceStart(EditView const&)
-EditEngine::QuickMarkInvalid(ESelection const&)
-EditEngine::QuickMarkToBeRepainted(int)
-EditEngine::Redo(EditView*)
-EditEngine::RemoveCharAttribs(EditSelection const&, EERemoveParaAttribsMode, unsigned short)
-EditEngine::RemoveCharAttribs(EditSelection const&, bool, unsigned short)
-EditEngine::RemoveParaPortion(int)
-EditEngine::RemoveParagraph(int)
-EditEngine::RemoveView(unsigned long)
-EditEngine::SeekCursor(ContentNode*, int, SvxFont&)
-EditEngine::SetActiveView(EditView*)
-EditEngine::SetAttribs(EditSelection const&, SfxItemSet const&, SetAttribsMode)
-EditEngine::SetBeginDropHdl(Link<EditView*, void> const&)
-EditEngine::SetBeginMovingParagraphsHdl(Link<MoveParagraphsInfo&, void> const&)
-EditEngine::SetBeginPasteOrDropHdl(Link<PasteOrDropInfos&, void> const&)
-EditEngine::SetCallParaInsertedOrDeleted(bool)
-EditEngine::SetCharAttribs(int, SfxItemSet const&)
-EditEngine::SetEndDropHdl(Link<EditView*, void> const&)
-EditEngine::SetEndMovingParagraphsHdl(Link<MoveParagraphsInfo&, void> const&)
-EditEngine::SetEndPasteOrDropHdl(Link<PasteOrDropInfos&, void> const&)
-EditEngine::SetFixedCellHeight(bool)
-EditEngine::SetFlatMode(bool)
-EditEngine::SetFontInfoInItemSet(SfxItemSet&, SvxFont const&)
-EditEngine::SetMaxAutoPaperSize(Size const&)
-EditEngine::SetMinAutoPaperSize(Size const&)
-EditEngine::SetMinColumnWrapHeight(long)
-EditEngine::SetParaAttribsOnly(int, SfxItemSet const&)
-EditEngine::SetPolygon(basegfx::B2DPolyPolygon const&)
-EditEngine::SetPolygon(basegfx::B2DPolyPolygon const&, basegfx::B2DPolyPolygon const*)
-EditEngine::SetRotation(TextRotation)
-EditEngine::SetStyleSheet(EditSelection const&, SfxStyleSheet*)
-EditEngine::SetTextColumns(short, int)
 EditEngine::SetUndoManager(EditUndoManager*)
-EditEngine::SetUndoMode(bool)
-EditEngine::ShouldCreateBigTextObject() const
-EditEngine::ShowParagraph(int, bool)
-EditEngine::SplitContent(int, int)
-EditEngine::StripPortions()
-EditEngine::TransliterateText(EditSelection const&, TransliterationFlags)
-EditEngine::Undo(EditView*)
-EditEngine::UndoActionStart(unsigned short, ESelection const&)
-EditEngine::UpdateFieldsOnly()
-EditEngine::UpdateSelections()
-EditEngine::getGlobalFontScale(double&, double&) const
-EditEngine::getGlobalSpacingScale(double&, double&) const
-EditEngine::setGlobalScale(double, double, double, double)
-EditEngine::setRoundFontSizeToPt(bool)
 EditTextObject::~EditTextObject()
 EditUndo::CanRepeat(SfxRepeatTarget&) const
 EditUndo::EditUndo(unsigned short, EditEngine*)
@@ -622,25 +509,6 @@ EditUndo::GetId() const
 EditUndo::GetViewShellId() const
 EditUndo::~EditUndo()
 EditUndoManager::SetEditEngine(EditEngine*)
-EditView::GetAnchorMode() const
-EditView::GetFieldAtSelection(bool*) const
-EditView::GetFieldUnderMousePointer(int&, int&) const
-EditView::GetInvalidateMore() const
-EditView::GetStyleSheet()
-EditView::GetStyleSheet() const
-EditView::HasOtherViewWindow(vcl::Window*)
-EditView::InvalidateWindow(tools::Rectangle const&)
-EditView::IsCursorAtWrongSpelledWord()
-EditView::MoveParagraphs(Range, int)
-EditView::MoveParagraphs(long)
-EditView::Read(SvStream&, EETextFormat, SvKeyValueIterator*)
-EditView::ReleaseMouse()
-EditView::RemoveAttribs(EERemoveParaAttribsMode, unsigned short)
-EditView::SetAnchorMode(EEAnchorMode)
-EditView::SetInvalidateMore(unsigned short)
-EditView::StartSearchAndReplace(SvxSearchItem const&)
-EditView::countFieldsOffsetSum(int, int, bool) const
-EditView::getImpEditEngine() const
 EmbeddedFontsHelper::activateFont(rtl::OUString const&, rtl::OUString const&)
 EmbeddedFontsHelper::clearTemporaryFontFiles()
 EmbeddedFontsHelper::fileUrlForTemporaryFont(rtl::OUString const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
@@ -693,6 +561,7 @@ FilterConfigItem::GetStatusIndicator() const
 FilterConfigItem::ImpInitTree(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 FilterConfigItem::ImplGetPropertyValue(com::sun::star::uno::Any&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, rtl::OUString const&)
 FilterConfigItem::WritePropertyValue(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&, com::sun::star::beans::PropertyValue const&)
+FixedBitmap::SetBitmap(BitmapEx const&)
 FixedHyperlink::GetFocus()
 FixedHyperlink::Initialize()
 FixedHyperlink::KeyInput(KeyEvent const&)
@@ -731,6 +600,15 @@ FixedText::setMinWidthChars(int)
 FixedText::set_mnemonic_widget(vcl::Window*)
 FixedText::set_property(rtl::OUString const&, rtl::OUString const&)
 FixedText::~FixedText()
+FloatingWindow::ApplySettings(OutputDevice&)
+FloatingWindow::DataChanged(DataChangedEvent const&)
+FloatingWindow::EventNotify(NotifyEvent&)
+FloatingWindow::PixelInvalidate(tools::Rectangle const*)
+FloatingWindow::PopupModeEnd()
+FloatingWindow::StateChanged(StateChangedType)
+FloatingWindow::dispose()
+FloatingWindow::doDeferredInit(long)
+FloatingWindow::~FloatingWindow()
 FmDesignModeChangedHint::FmDesignModeChangedHint(bool)
 FmDesignModeChangedHint::~FmDesignModeChangedHint()
 FmFormModel::AllocPage(bool)
@@ -807,6 +685,7 @@ FontConfigFontOptions::cairo_font_options_substitute(_FcPattern*)
 FontConfigFontOptions::~FontConfigFontOptions()
 FontList::GetNextFontMetric(void*)
 FontList::GetStyleName(FontWeight, FontItalic) const
+FontMetric::GetHashValueIgnoreColor() const
 FontNameBox::CachePreview(unsigned long, Point*, int, int)
 FontNameBox::InitFontMRUEntriesFile()
 FontNameBox::LoadMRUEntries(rtl::OUString const&)
@@ -859,6 +738,7 @@ Fraction::operator-=(Fraction const&)
 FrameDeleteWatch::Notify(SfxHint const&)
 FreeTypeTextRenderImpl::ClearDevFontCache()
 FuConstUnoControl::Activate()
+GDIMetaFile::dumpAsXml(char const*) const
 GLWindow::Synchronize(bool) const
 GUB_count
 GalleryExplorer::BeginLocking(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
@@ -1076,60 +956,6 @@ Gradient::operator=(Gradient const&)
 Gradient::operator=(Gradient&&)
 Gradient::operator==(Gradient const&) const
 GraphicConverter::GraphicConverter()
-GraphicDescriptor::ImpConstruct()
-GraphicDescriptor::ImpDetectBMP(SvStream&, bool)
-GraphicDescriptor::ImpDetectDXF(SvStream&, bool)
-GraphicDescriptor::ImpDetectEMF(SvStream&, bool)
-GraphicDescriptor::ImpDetectEPS(SvStream&, bool)
-GraphicDescriptor::ImpDetectGIF(SvStream&, bool)
-GraphicDescriptor::ImpDetectJPG(SvStream&, bool)
-GraphicDescriptor::ImpDetectMET(SvStream&, bool)
-GraphicDescriptor::ImpDetectPBM(SvStream&, bool)
-GraphicDescriptor::ImpDetectPCD(SvStream&, bool)
-GraphicDescriptor::ImpDetectPCT(SvStream&, bool)
-GraphicDescriptor::ImpDetectPCX(SvStream&)
-GraphicDescriptor::ImpDetectPGM(SvStream&, bool)
-GraphicDescriptor::ImpDetectPNG(SvStream&, bool)
-GraphicDescriptor::ImpDetectPPM(SvStream&, bool)
-GraphicDescriptor::ImpDetectPSD(SvStream&, bool)
-GraphicDescriptor::ImpDetectRAS(SvStream&, bool)
-GraphicDescriptor::ImpDetectSVG(SvStream&, bool)
-GraphicDescriptor::ImpDetectSVM(SvStream&, bool)
-GraphicDescriptor::ImpDetectTGA(SvStream&, bool)
-GraphicDescriptor::ImpDetectTIF(SvStream&, bool)
-GraphicDescriptor::ImpDetectWEBP(SvStream&, bool)
-GraphicDescriptor::ImpDetectWMF(SvStream&, bool)
-GraphicDescriptor::ImpDetectXBM(SvStream&, bool)
-GraphicDescriptor::ImpDetectXPM(SvStream&, bool)
-GraphicFilter::ImpTestOrFindFormat(std::basic_string_view<char16_t, std::char_traits<char16_t> >, SvStream&, unsigned short&)
-GraphicFilter::ImplInit()
-GraphicFilter::ImplSetError(ErrCode, SvStream const*)
-GraphicFilter::ImportGraphics(std::vector<std::shared_ptr<Graphic>, std::allocator<std::shared_ptr<Graphic> > >&, std::vector<std::unique_ptr<SvStream, std::default_delete<SvStream> >, std::allocator<std::unique_ptr<SvStream, std::default_delete<SvStream> > > >)
-GraphicFilter::ResetLastError()
-GraphicFilter::readBMP(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readDXF(SvStream&, Graphic&)
-GraphicFilter::readEMF(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readEPS(SvStream&, Graphic&)
-GraphicFilter::readGIF(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readJPEG(SvStream&, Graphic&, GfxLinkType&, GraphicFilterImportFlags)
-GraphicFilter::readMET(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readPBM(SvStream&, Graphic&)
-GraphicFilter::readPCD(SvStream&, Graphic&)
-GraphicFilter::readPCX(SvStream&, Graphic&)
-GraphicFilter::readPDF(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readPICT(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readPNG(SvStream&, Graphic&, GfxLinkType&, BinaryDataContainer&)
-GraphicFilter::readPSD(SvStream&, Graphic&)
-GraphicFilter::readRAS(SvStream&, Graphic&)
-GraphicFilter::readSVG(SvStream&, Graphic&, GfxLinkType&, BinaryDataContainer&)
-GraphicFilter::readTGA(SvStream&, Graphic&)
-GraphicFilter::readTIFF(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readWEBP(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readWMF(SvStream&, Graphic&, GfxLinkType&)
-GraphicFilter::readWMF_EMF(SvStream&, Graphic&, GfxLinkType&, VectorGraphicDataType)
-GraphicFilter::readWithTypeSerializer(SvStream&, Graphic&, GfxLinkType&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-GraphicFilter::readXBM(SvStream&, Graphic&)
-GraphicFilter::readXPM(SvStream&, Graphic&)
 GraphicHelper::GetPreferredExtension(rtl::OUString&, Graphic const&)
 GraphicNativeTransform::rotateBitmapOnly(o3tl::strong_int<short, FractionTag<10> >)
 GraphicNativeTransform::rotateGeneric(o3tl::strong_int<short, FractionTag<10> >, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
@@ -1455,34 +1281,6 @@ LinguMgr::GetProp()
 LinguMgr::GetSpell()
 LinguMgr::GetStandard()
 LinguMgr::GetThes()
-ListBox::AdaptDropDownLineCountToMaximum()
-ListBox::AddSeparator(int)
-ListBox::ApplySettings(OutputDevice&)
-ListBox::CalcSubEditSize() const
-ListBox::DataChanged(DataChangedEvent const&)
-ListBox::DoubleClick()
-ListBox::Draw(OutputDevice*, Point const&, SystemTextColorFlags)
-ListBox::DumpAsPropertyTree(tools::JsonWriter&)
-ListBox::FillLayoutData() const
-ListBox::GetDisplayBackground() const
-ListBox::GetEntryData(int) const
-ListBox::GetFocus()
-ListBox::GetOptimalSize() const
-ListBox::GetUITestFactory() const
-ListBox::IsTravelSelect() const
-ListBox::ListBox(WindowType)
-ListBox::LoseFocus()
-ListBox::PreNotify(NotifyEvent&)
-ListBox::Resize()
-ListBox::SelectEntry(std::basic_string_view<char16_t, std::char_traits<char16_t> >, bool)
-ListBox::SetEntryData(int, void*)
-ListBox::SetEntryFlags(int, ListBoxEntryFlags)
-ListBox::StateChanged(StateChangedType)
-ListBox::dispose()
-ListBox::setMaxWidthChars(int)
-ListBox::setPosSizePixel(long, long, long, long, PosSizeFlags)
-ListBox::set_property(rtl::OUString const&, rtl::OUString const&)
-ListBox::~ListBox()
 LocaleDataWrapper::ImplAddFormatNum(rtl::OUStringBuffer&, long, unsigned short, bool, bool) const
 LocaleDataWrapper::getAllInstalledLocaleNames() const
 LocaleDataWrapper::getLanguageCountryInfo() const
@@ -1541,6 +1339,8 @@ Menu::SetAccessibleName(unsigned short, rtl::OUString const&)
 Menu::dispose()
 Menu::operator=(Menu const&)
 Menu::~Menu()
+MenuBar::ClosePopup(Menu*)
+MenuBar::dispose()
 MenuButton::Activate()
 MenuButton::CancelMenu()
 MenuButton::DumpAsPropertyTree(tools::JsonWriter&)
@@ -1559,240 +1359,12 @@ MenuOrToolMenuButton::MenuOrToolMenuButton(SvxColorToolBoxControl*, ToolBox*, o3
 MenuOrToolMenuButton::MenuOrToolMenuButton(weld::MenuButton*)
 MenuOrToolMenuButton::get_active() const
 MenuOrToolMenuButton::get_widget() const
-MetaAction::Clone() const
-MetaAction::Execute(OutputDevice*)
-MetaAction::MetaAction()
-MetaAction::MetaAction(MetaAction const&)
-MetaAction::MetaAction(MetaActionType)
-MetaAction::Move(long, long)
-MetaAction::Scale(double, double)
-MetaAction::~MetaAction()
-MetaArcAction::Clone() const
-MetaArcAction::Execute(OutputDevice*)
-MetaArcAction::MetaArcAction()
-MetaArcAction::Move(long, long)
-MetaArcAction::Scale(double, double)
-MetaArcAction::~MetaArcAction()
-MetaBmpAction::Clone() const
-MetaBmpAction::Execute(OutputDevice*)
-MetaBmpAction::MetaBmpAction()
-MetaBmpAction::Move(long, long)
-MetaBmpAction::Scale(double, double)
-MetaBmpAction::~MetaBmpAction()
-MetaBmpExAction::Clone() const
-MetaBmpExAction::Execute(OutputDevice*)
-MetaBmpExAction::MetaBmpExAction()
-MetaBmpExAction::Move(long, long)
-MetaBmpExAction::Scale(double, double)
-MetaBmpExAction::~MetaBmpExAction()
-MetaBmpExScaleAction::Clone() const
-MetaBmpExScaleAction::Execute(OutputDevice*)
-MetaBmpExScaleAction::MetaBmpExScaleAction()
-MetaBmpExScaleAction::Move(long, long)
-MetaBmpExScaleAction::Scale(double, double)
-MetaBmpExScaleAction::~MetaBmpExScaleAction()
-MetaBmpExScalePartAction::Clone() const
-MetaBmpExScalePartAction::Execute(OutputDevice*)
-MetaBmpExScalePartAction::MetaBmpExScalePartAction()
-MetaBmpExScalePartAction::Move(long, long)
-MetaBmpExScalePartAction::Scale(double, double)
-MetaBmpExScalePartAction::~MetaBmpExScalePartAction()
-MetaBmpScaleAction::Clone() const
-MetaBmpScaleAction::Execute(OutputDevice*)
-MetaBmpScaleAction::MetaBmpScaleAction()
-MetaBmpScaleAction::Move(long, long)
-MetaBmpScaleAction::Scale(double, double)
-MetaBmpScaleAction::~MetaBmpScaleAction()
-MetaBmpScalePartAction::Clone() const
-MetaBmpScalePartAction::Execute(OutputDevice*)
-MetaBmpScalePartAction::MetaBmpScalePartAction()
-MetaBmpScalePartAction::Move(long, long)
-MetaBmpScalePartAction::Scale(double, double)
-MetaBmpScalePartAction::~MetaBmpScalePartAction()
-MetaChordAction::Clone() const
-MetaChordAction::Execute(OutputDevice*)
-MetaChordAction::MetaChordAction()
-MetaChordAction::Move(long, long)
-MetaChordAction::Scale(double, double)
-MetaChordAction::~MetaChordAction()
-MetaClipRegionAction::Clone() const
-MetaClipRegionAction::MetaClipRegionAction()
-MetaClipRegionAction::MetaClipRegionAction(vcl::Region, bool)
-MetaClipRegionAction::Move(long, long)
-MetaClipRegionAction::Scale(double, double)
-MetaClipRegionAction::~MetaClipRegionAction()
-MetaCommentAction::Clone() const
-MetaCommentAction::Execute(OutputDevice*)
-MetaCommentAction::MetaCommentAction()
-MetaCommentAction::MetaCommentAction(MetaCommentAction const&)
-MetaCommentAction::Move(long, long)
-MetaCommentAction::Scale(double, double)
-MetaCommentAction::~MetaCommentAction()
-MetaEPSAction::Clone() const
-MetaEPSAction::Execute(OutputDevice*)
 MetaEPSAction::MetaEPSAction()
 MetaEPSAction::MetaEPSAction(Point const&, Size const&, GfxLink, GDIMetaFile const&)
-MetaEPSAction::Move(long, long)
-MetaEPSAction::Scale(double, double)
 MetaEPSAction::~MetaEPSAction()
-MetaEllipseAction::Clone() const
-MetaEllipseAction::Execute(OutputDevice*)
-MetaEllipseAction::MetaEllipseAction()
-MetaEllipseAction::Move(long, long)
-MetaEllipseAction::Scale(double, double)
-MetaEllipseAction::~MetaEllipseAction()
-MetaFillColorAction::Clone() const
-MetaFillColorAction::MetaFillColorAction()
 MetaFillColorAction::~MetaFillColorAction()
-MetaFloatTransparentAction::Clone() const
-MetaFloatTransparentAction::Execute(OutputDevice*)
 MetaFloatTransparentAction::MetaFloatTransparentAction()
-MetaFloatTransparentAction::Move(long, long)
-MetaFloatTransparentAction::Scale(double, double)
 MetaFloatTransparentAction::~MetaFloatTransparentAction()
-MetaFontAction::Clone() const
-MetaFontAction::MetaFontAction()
-MetaFontAction::Scale(double, double)
-MetaFontAction::~MetaFontAction()
-MetaGradientExAction::Clone() const
-MetaGradientExAction::Execute(OutputDevice*)
-MetaGradientExAction::MetaGradientExAction()
-MetaGradientExAction::MetaGradientExAction(tools::PolyPolygon, Gradient)
-MetaGradientExAction::Move(long, long)
-MetaGradientExAction::Scale(double, double)
-MetaGradientExAction::~MetaGradientExAction()
-MetaISectRectClipRegionAction::Clone() const
-MetaISectRectClipRegionAction::MetaISectRectClipRegionAction()
-MetaISectRectClipRegionAction::Move(long, long)
-MetaISectRectClipRegionAction::Scale(double, double)
-MetaISectRectClipRegionAction::~MetaISectRectClipRegionAction()
-MetaISectRegionClipRegionAction::Clone() const
-MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction()
-MetaISectRegionClipRegionAction::Move(long, long)
-MetaISectRegionClipRegionAction::Scale(double, double)
-MetaISectRegionClipRegionAction::~MetaISectRegionClipRegionAction()
-MetaLayoutModeAction::Clone() const
-MetaLayoutModeAction::MetaLayoutModeAction()
-MetaLayoutModeAction::~MetaLayoutModeAction()
-MetaLineAction::Clone() const
-MetaLineAction::Execute(OutputDevice*)
-MetaLineAction::MetaLineAction()
-MetaLineAction::MetaLineAction(Point const&, Point const&)
-MetaLineAction::Move(long, long)
-MetaLineAction::Scale(double, double)
-MetaLineAction::~MetaLineAction()
-MetaLineColorAction::Clone() const
-MetaLineColorAction::MetaLineColorAction()
-MetaLineColorAction::~MetaLineColorAction()
-MetaMapModeAction::Clone() const
-MetaMapModeAction::MetaMapModeAction()
-MetaMapModeAction::MetaMapModeAction(MapMode const&)
-MetaMapModeAction::Scale(double, double)
-MetaMapModeAction::~MetaMapModeAction()
-MetaMoveClipRegionAction::Clone() const
-MetaMoveClipRegionAction::MetaMoveClipRegionAction()
-MetaMoveClipRegionAction::MetaMoveClipRegionAction(long, long)
-MetaMoveClipRegionAction::Scale(double, double)
-MetaMoveClipRegionAction::~MetaMoveClipRegionAction()
-MetaOverlineColorAction::Clone() const
-MetaOverlineColorAction::MetaOverlineColorAction()
-MetaOverlineColorAction::MetaOverlineColorAction(Color const&, bool)
-MetaOverlineColorAction::~MetaOverlineColorAction()
-MetaPieAction::Clone() const
-MetaPieAction::Execute(OutputDevice*)
-MetaPieAction::MetaPieAction()
-MetaPieAction::Move(long, long)
-MetaPieAction::Scale(double, double)
-MetaPieAction::~MetaPieAction()
-MetaPixelAction::Clone() const
-MetaPixelAction::Execute(OutputDevice*)
-MetaPixelAction::MetaPixelAction()
-MetaPixelAction::Move(long, long)
-MetaPixelAction::Scale(double, double)
-MetaPixelAction::~MetaPixelAction()
-MetaPointAction::Clone() const
-MetaPointAction::Execute(OutputDevice*)
-MetaPointAction::MetaPointAction()
-MetaPointAction::MetaPointAction(Point const&)
-MetaPointAction::Move(long, long)
-MetaPointAction::Scale(double, double)
-MetaPointAction::~MetaPointAction()
-MetaPolyLineAction::Clone() const
-MetaPolyLineAction::Execute(OutputDevice*)
-MetaPolyLineAction::MetaPolyLineAction()
-MetaPolyLineAction::MetaPolyLineAction(tools::Polygon)
-MetaPolyLineAction::Move(long, long)
-MetaPolyLineAction::Scale(double, double)
-MetaPolyLineAction::~MetaPolyLineAction()
-MetaPolyPolygonAction::Clone() const
-MetaPolyPolygonAction::Execute(OutputDevice*)
-MetaPolyPolygonAction::MetaPolyPolygonAction()
-MetaPolyPolygonAction::Move(long, long)
-MetaPolyPolygonAction::Scale(double, double)
-MetaPolyPolygonAction::~MetaPolyPolygonAction()
-MetaPolygonAction::Clone() const
-MetaPolygonAction::Execute(OutputDevice*)
-MetaPolygonAction::MetaPolygonAction()
-MetaPolygonAction::Move(long, long)
-MetaPolygonAction::Scale(double, double)
-MetaPolygonAction::~MetaPolygonAction()
-MetaPopAction::Clone() const
-MetaPopAction::~MetaPopAction()
-MetaPushAction::Clone() const
-MetaPushAction::MetaPushAction()
-MetaPushAction::~MetaPushAction()
-MetaRasterOpAction::Clone() const
-MetaRasterOpAction::MetaRasterOpAction()
-MetaRasterOpAction::~MetaRasterOpAction()
-MetaRectAction::Clone() const
-MetaRectAction::Execute(OutputDevice*)
-MetaRectAction::MetaRectAction()
-MetaRectAction::Move(long, long)
-MetaRectAction::Scale(double, double)
-MetaRectAction::~MetaRectAction()
-MetaRefPointAction::Clone() const
-MetaRefPointAction::MetaRefPointAction()
-MetaRefPointAction::MetaRefPointAction(Point const&, bool)
-MetaRefPointAction::~MetaRefPointAction()
-MetaRoundRectAction::Clone() const
-MetaRoundRectAction::Execute(OutputDevice*)
-MetaRoundRectAction::MetaRoundRectAction()
-MetaRoundRectAction::Move(long, long)
-MetaRoundRectAction::Scale(double, double)
-MetaRoundRectAction::~MetaRoundRectAction()
-MetaTextAlignAction::Clone() const
-MetaTextAlignAction::MetaTextAlignAction()
-MetaTextAlignAction::~MetaTextAlignAction()
-MetaTextArrayAction::Clone() const
-MetaTextArrayAction::Execute(OutputDevice*)
-MetaTextArrayAction::MetaTextArrayAction()
-MetaTextArrayAction::MetaTextArrayAction(MetaTextArrayAction const&)
-MetaTextArrayAction::MetaTextArrayAction(Point const&, rtl::OUString, KernArray, std::vector<unsigned char, std::allocator<unsigned char> >, int, int)
-MetaTextArrayAction::Move(long, long)
-MetaTextArrayAction::Scale(double, double)
-MetaTextArrayAction::SetDXArray(KernArray)
-MetaTextArrayAction::SetKashidaArray(std::vector<unsigned char, std::allocator<unsigned char> >)
-MetaTextArrayAction::~MetaTextArrayAction()
-MetaTextColorAction::Clone() const
-MetaTextColorAction::MetaTextColorAction()
-MetaTextColorAction::~MetaTextColorAction()
-MetaTextFillColorAction::Clone() const
-MetaTextFillColorAction::MetaTextFillColorAction()
-MetaTextFillColorAction::~MetaTextFillColorAction()
-MetaTextLanguageAction::Clone() const
-MetaTextLanguageAction::MetaTextLanguageAction()
-MetaTextLanguageAction::MetaTextLanguageAction(o3tl::strong_int<unsigned short, LanguageTypeTag>)
-MetaTextLanguageAction::~MetaTextLanguageAction()
-MetaTextLineColorAction::Clone() const
-MetaTextLineColorAction::MetaTextLineColorAction()
-MetaTextLineColorAction::MetaTextLineColorAction(Color const&, bool)
-MetaTextLineColorAction::~MetaTextLineColorAction()
-MetaWallpaperAction::Clone() const
-MetaWallpaperAction::Execute(OutputDevice*)
-MetaWallpaperAction::MetaWallpaperAction()
-MetaWallpaperAction::Move(long, long)
-MetaWallpaperAction::Scale(double, double)
-MetaWallpaperAction::~MetaWallpaperAction()
 MetafileXmlDump::dump(GDIMetaFile const&, SvStream&)
 MetafileXmlDump::writeXml(GDIMetaFile const&, tools::XmlWriter&)
 MetricBox::CalcMinimumSize() const
@@ -1802,27 +1374,6 @@ MetricBox::Modify()
 MetricBox::PreNotify(NotifyEvent&)
 MetricBox::ReformatAll()
 MetricBox::dispose()
-MetricField::CalcMinimumSize() const
-MetricField::DataChanged(DataChangedEvent const&)
-MetricField::Down()
-MetricField::DumpAsPropertyTree(tools::JsonWriter&)
-MetricField::EventNotify(NotifyEvent&)
-MetricField::First()
-MetricField::GetUITestFactory() const
-MetricField::Last()
-MetricField::Modify()
-MetricField::PreNotify(NotifyEvent&)
-MetricField::Up()
-MetricField::dispose()
-MetricField::set_property(rtl::OUString const&, rtl::OUString const&)
-MetricFormatter::CreateFieldText(long) const
-MetricFormatter::GetValueFromString(rtl::OUString const&) const
-MetricFormatter::GetValueFromStringUnit(rtl::OUString const&, FieldUnit) const
-MetricFormatter::MetricFormatter(Edit*)
-MetricFormatter::Reformat()
-MetricFormatter::SetUnit(FieldUnit)
-MetricFormatter::SetValue(long)
-MetricFormatter::~MetricFormatter()
 MiscSettings::GetDarkMode()
 MiscSettings::SetEnableLocalizedDecimalSep(bool)
 MiscSettings::operator!=(MiscSettings const&) const
@@ -1849,39 +1400,10 @@ MouseMotionListenerMultiplexer::mouseDragged(com::sun::star::awt::MouseEvent con
 MouseMotionListenerMultiplexer::mouseMoved(com::sun::star::awt::MouseEvent const&)
 MouseMotionListenerMultiplexer::queryInterface(com::sun::star::uno::Type const&)
 MouseMotionListenerMultiplexer::release()
-MouseSettings::CopyData()
-MouseSettings::GetActionDelay()
-MouseSettings::GetButtonStartRepeat()
-MouseSettings::GetContextMenuClicks()
-MouseSettings::GetContextMenuCode()
-MouseSettings::GetDoubleClickHeight() const
-MouseSettings::GetDoubleClickWidth() const
-MouseSettings::GetScrollRepeat()
-MouseSettings::GetStartDragCode()
-MouseSettings::GetStartDragHeight() const
-MouseSettings::GetStartDragWidth() const
 MouseSettings::operator!=(MouseSettings const&) const
 MouseSettings::operator==(MouseSettings const&) const
 MsLangId::getPlatformSystemLanguage()
 MsLangId::getPlatformSystemUILanguage()
-MultiSalLayout::AddFallback(std::unique_ptr<SalLayout, std::default_delete<SalLayout> >, ImplLayoutRuns const&)
-MultiSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs&)
-MultiSalLayout::DrawText(SalGraphics&) const
-MultiSalLayout::FillDXArray(std::vector<double, std::allocator<double> >*, rtl::OUString const&) const
-MultiSalLayout::GetCaretPositions(std::vector<double, std::allocator<double> >&, rtl::OUString const&) const
-MultiSalLayout::GetGlyphs() const
-MultiSalLayout::GetNextGlyph(GlyphItem const**, basegfx::B2DPoint&, int&, LogicalFontInstance const**) const
-MultiSalLayout::GetOutline(std::vector<basegfx::B2DPolyPolygon, std::allocator<basegfx::B2DPolyPolygon> >&) const
-MultiSalLayout::GetTextBreak(double, double, int) const
-MultiSalLayout::GetTextWidth() const
-MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs&, vcl::text::ImplLayoutArgs&, double const*)
-MultiSalLayout::InitFont() const
-MultiSalLayout::IsKashidaPosValid(int, int) const
-MultiSalLayout::LayoutText(vcl::text::ImplLayoutArgs&, SalLayoutGlyphsImpl const*)
-MultiSalLayout::MultiSalLayout(std::unique_ptr<SalLayout, std::default_delete<SalLayout> >)
-MultiSalLayout::ReleaseBaseLayout()
-MultiSalLayout::SetIncomplete(bool)
-MultiSalLayout::~MultiSalLayout()
 MultiSelection::operator=(MultiSelection const&)
 MyThes::CleanUpAfterLookup(mentry**, int)
 MyThes::Lookup(char const*, int, mentry**)
@@ -1959,9 +1481,6 @@ NumericFormatter::~NumericFormatter()
 OKButton::Click()
 OLEObjCache::operator[](unsigned long) const
 OLEObjCache::~OLEObjCache()
-Octree::CreatePalette(OctreeNode*)
-Octree::GetBestPaletteIndex(BitmapColor const&)
-Octree::GetPalIndex(OctreeNode const*, BitmapColor const&)
 OfaPtrItem::Clone(SfxItemPool*) const
 OfaPtrItem::operator==(SfxPoolItem const&) const
 OfaXColorListItem::Clone(SfxItemPool*) const
@@ -1970,73 +1489,14 @@ Op(SkPath const&, SkPath const&, SkPathOp, SkPath*)
 OpenCLConfig::OpenCLConfig()
 OpenCLConfig::checkImplementation(OpenCLPlatformInfo const&, OpenCLDeviceInfo const&) const
 OpenCLConfig::operator==(OpenCLConfig const&) const
-OpenGLContext::ImplInit()
-OpenGLContext::destroyCurrentContext()
-OpenGLContext::getChildWindow() const
-OpenGLContext::hasCurrent()
-OpenGLContext::initWindow()
-OpenGLContext::isCurrent()
-OpenGLContext::makeCurrent()
-OpenGLContext::prepareForYield()
-OpenGLContext::resetCurrent()
-OpenGLContext::swapBuffers()
-OpenGLHelper::ConvertBufferToBitmapEx(unsigned char const*, long, long)
-OpenGLHelper::GLErrorString(unsigned int)
 OpenGLHelper::LoadShaders(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, std::basic_string_view<char, std::char_traits<char> >, std::basic_string_view<char, std::char_traits<char> >)
-OpenGLHelper::OptimalBufferFormat()
 OpenGLHelper::debugMsgPrint(int, char const*, ...)
 OpenGLHelper::debugMsgStreamWarn(std::__cxx11::basic_ostringstream<char, std::char_traits<char>, std::allocator<char> > const&)
-OpenGLHelper::isDeviceDenylisted()
-OpenGLHelper::renderToFile(long, long, rtl::OUString const&)
 OpenGLZone::checkDebug(int, CrashWatchdogTimingsValues const&)
 OpenGLZone::getCrashWatchdogTimingsValues()
 OpenGLZone::hardDisable()
 OpenGLZone::relaxWatchdogTimings()
-Outliner::Collapse(Paragraph const*)
-Outliner::DepthChangedHdl(Paragraph*, ParaFlag)
-Outliner::DrawingTab(Point const&, long, rtl::OUString const&, SvxFont const&, int, unsigned char, bool, bool, Color const&, Color const&)
-Outliner::DrawingText(Point const&, rtl::OUString const&, int, int, std::span<int const, 18446744073709551615ul>, std::span<unsigned char const, 18446744073709551615ul>, SvxFont const&, int, unsigned char, std::vector<EEngineData::WrongSpellClass, std::allocator<EEngineData::WrongSpellClass> > const*, SvxFieldData const*, bool, bool, bool, com::sun::star::lang::Locale const*, Color const&, Color const&)
-Outliner::Expand(Paragraph const*)
 Outliner::GetBulletsNumberingStatus(int, int) const
-Outliner::GetDocPos(Point const&) const
-Outliner::GetNonOverflowingText() const
-Outliner::GetNumberFormat(int) const
-Outliner::GetOverflowingText() const
-Outliner::GetParaBounds(int) const
-Outliner::ImpCalcBulletArea(int, bool, bool)
-Outliner::ImpCalcBulletFont(int) const
-Outliner::ImpCanDeleteSelectedPages(OutlinerView*)
-Outliner::ImpCanDeleteSelectedPages(OutlinerView*, int, int)
-Outliner::ImpCanIndentSelectedPages(OutlinerView*)
-Outliner::ImpConvertEdtToOut(int)
-Outliner::ImpFilterIndents(int, int)
-Outliner::ImpTextPasted(int, int)
-Outliner::ImplBlockInsertionCallbacks(bool)
-Outliner::ImplCalcBulletText(int, bool, bool)
-Outliner::ImplCheckDepth(short&) const
-Outliner::ImplCheckNumBulletItem(int)
-Outliner::ImplCheckParagraphs(int, int)
-Outliner::ImplGetBulletSize(int)
-Outliner::ImplGetBulletText(int)
-Outliner::ImplGetNumbering(int, SvxNumberFormat const*)
-Outliner::ImplHasNumberFormat(int) const
-Outliner::ImplInitDepth(int, short, bool)
-Outliner::ImplSetLevelDependentStyleSheet(int)
-Outliner::IndentingPagesHdl(OutlinerView*)
-Outliner::InsertUndo(std::unique_ptr<EditUndo, std::default_delete<EditUndo> >)
-Outliner::InvalidateBullet(int)
-Outliner::IsForceAutoColor() const
-Outliner::IsTextPos(Point const&, unsigned short, bool*)
-Outliner::PaintBullet(int, Point const&, Point const&, o3tl::strong_int<short, FractionTag<10> >, OutputDevice&)
-Outliner::ParaAttribsChanged(int)
-Outliner::ParagraphDeleted(int)
-Outliner::ParagraphInserted(int)
-Outliner::ParagraphInsertedHdl(Paragraph*)
-Outliner::QuickFormatDoc()
-Outliner::RemovingPagesHdl(OutlinerView*)
-Outliner::SetLevelDependentStyleSheet(int)
-Outliner::SetMaxDepth(short)
-Outliner::StyleSheetChanged(SfxStyleSheet const*)
 OutlinerParaObjData::OutlinerParaObjData(OutlinerParaObjData const&)
 OutlinerParaObjData::OutlinerParaObjData(std::unique_ptr<EditTextObject, std::default_delete<EditTextObject> >, std::vector<ParagraphData, std::allocator<ParagraphData> >&&, bool)
 OutlinerParaObjData::isWrongListEqual(OutlinerParaObjData const&) const
@@ -2045,44 +1505,8 @@ OutlinerParaObject::GetParagraphData(int) const
 OutlinerParaObject::OutlinerParaObject(std::unique_ptr<EditTextObject, std::default_delete<EditTextObject> >, std::vector<ParagraphData, std::allocator<ParagraphData> >&&, bool)
 OutlinerView::GetStyleSheet() const
 OutlinerView::Indent(short)
-OutputDevice::ClearStack()
-OutputDevice::DrawBitmapEx(Point const&, Size const&, Point const&, Size const&, BitmapEx const&, MetaActionType)
-OutputDevice::DrawGradientWallpaper(long, long, long, long, Wallpaper const&)
-OutputDevice::DrawHatch(tools::PolyPolygon const&, Hatch const&, bool)
-OutputDevice::DrawMask(Point const&, Size const&, Point const&, Size const&, Bitmap const&, Color const&)
-OutputDevice::DrawPolyLineDirectInternal(basegfx::B2DHomMatrix const&, basegfx::B2DPolygon const&, double, double, std::vector<double, std::allocator<double> > const*, basegfx::B2DLineJoin, com::sun::star::drawing::LineCap, double)
-OutputDevice::GetCaretPositions(rtl::OUString const&, KernArray&, int, int, SalLayoutGlyphs const*) const
-OutputDevice::GetCommonDeviceInfo(Size const&) const
 OutputDevice::GetGraphics() const
 OutputDevice::GetInverseViewTransformation(MapMode const&) const
-OutputDevice::GetSystemGfxDataAny() const
-OutputDevice::GetViewTransformation(MapMode const&) const
-OutputDevice::HitTestNativeScrollbar(ControlPart, tools::Rectangle const&, Point const&, bool&) const
-OutputDevice::ImplDrawRotateText(SalLayout&)
-OutputDevice::ImplDrawText(OutputDevice&, tools::Rectangle const&, rtl::OUString const&, DrawTextFlags, std::vector<tools::Rectangle, std::allocator<tools::Rectangle> >*, rtl::OUString*, vcl::TextLayoutCommon&)
-OutputDevice::ImplDrawText(SalLayout&)
-OutputDevice::ImplDrawTextBackground(SalLayout const&)
-OutputDevice::ImplDrawTextLine(long, long, long, double, FontStrikeout, FontLineStyle, FontLineStyle, bool)
-OutputDevice::ImplDrawTextLines(SalLayout&, FontStrikeout, FontLineStyle, FontLineStyle, bool, bool)
-OutputDevice::LogicToPixel(basegfx::B2DPolyPolygon const&) const
-OutputDevice::LogicToPixel(basegfx::B2DPolyPolygon const&, MapMode const&) const
-OutputDevice::LogicToPixel(tools::PolyPolygon const&) const
-OutputDevice::LogicToPixel(tools::Polygon const&) const
-OutputDevice::LogicToPixel(tools::Polygon const&, MapMode const&) const
-OutputDevice::PixelToLogic(basegfx::B2DPolyPolygon const&) const
-OutputDevice::PixelToLogic(basegfx::B2DPolyPolygon const&, MapMode const&) const
-OutputDevice::PixelToLogic(basegfx::B2DPolygon const&, MapMode const&) const
-OutputDevice::PixelToLogic(tools::PolyPolygon const&) const
-OutputDevice::PixelToLogic(tools::Polygon const&) const
-OutputDevice::PixelToLogic(tools::Polygon const&, MapMode const&) const
-OutputDevice::ReMirror(vcl::Region&) const
-OutputDevice::ReleaseFontCache()
-OutputDevice::ReleaseFontCollection()
-OutputDevice::ResetNewFontCache()
-OutputDevice::SelectClipRegion(vcl::Region const&, SalGraphics*)
-OutputDevice::SetFontCollectionFromSVData()
-OutputDevice::SetOutOffXPixel(long)
-OutputDevice::SetOutOffYPixel(long)
 PDFSignatureHelper::GetNewSecurityId() const
 PDFSignatureHelper::ReadAndVerifySignature(com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&)
 PDFSignatureHelper::SetDescription(rtl::OUString const&)
@@ -2140,7 +1564,6 @@ PatternFormatter::~PatternFormatter()
 PixelSnapper::snap(basegfx::B2DPolygon const&, basegfx::B2DHomMatrix const&, basegfx::B2DHomMatrix&, unsigned int)
 PlaceEditDialog::InitDetails()
 PlaceEditDialog::SelectType(bool)
-PopupMenu::ClosePopup(Menu*)
 PopupMenu::CreateMenuInterface()
 PopupMenu::GetActivePopupMenu()
 PopupMenu::PopupMenu(PopupMenu const&)
@@ -2149,18 +1572,6 @@ PopupMenu::SetSelectedEntry(unsigned short)
 PopupMenu::~PopupMenu()
 PptSlidePersistList::PptSlidePersistList()
 PptSlidePersistList::~PptSlidePersistList()
-Printer::DrawGradientEx(OutputDevice*, tools::Rectangle const&, Gradient const&)
-Printer::ExecutePrintJob(std::shared_ptr<vcl::PrinterController> const&)
-Printer::GetCapabilities(PrinterCapType) const
-Printer::GetDuplexMode() const
-Printer::GetPaperInfo(int) const
-Printer::GetPaperInfoCount() const
-Printer::GetPaperSize(int) const
-Printer::GetSizeOfPaper() const
-Printer::ImplReleaseGraphics(bool)
-Printer::PreparePrintJob(std::shared_ptr<vcl::PrinterController>, JobSetup const&)
-Printer::SetCopyCount(unsigned short, bool)
-Printer::SetDuplexMode(DuplexMode)
 ProcessData::NotifyFreeObj(SdrObject*)
 ProgressBar::DataChanged(DataChangedEvent const&)
 ProgressBar::GetOptimalSize() const
@@ -2169,25 +1580,6 @@ ProgressBar::Resize()
 ProgressBar::StateChanged(StateChangedType)
 ProgressBarHelper::ProgressBarHelper(com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator>, bool)
 ProgressBarHelper::~ProgressBarHelper()
-PspSalInfoPrinter::AcquireGraphics()
-PspSalInfoPrinter::GetCapabilities(ImplJobSetup const*, PrinterCapType)
-PspSalInfoPrinter::GetLandscapeAngle(ImplJobSetup const*)
-PspSalInfoPrinter::GetPageInfo(ImplJobSetup const*, long&, long&, Point&, Size&)
-PspSalInfoPrinter::GetPaperBinBySourceIndex(ImplJobSetup const*, unsigned short)
-PspSalInfoPrinter::GetPaperBinCount(ImplJobSetup const*)
-PspSalInfoPrinter::GetPaperBinName(ImplJobSetup const*, unsigned short)
-PspSalInfoPrinter::GetSourceIndexByPaperBin(ImplJobSetup const*, unsigned short)
-PspSalInfoPrinter::InitPaperFormats(ImplJobSetup const*)
-PspSalInfoPrinter::ReleaseGraphics(SalGraphics*)
-PspSalInfoPrinter::SetData(JobSetFlags, ImplJobSetup*)
-PspSalInfoPrinter::SetPrinterData(ImplJobSetup*)
-PspSalInfoPrinter::Setup(weld::Window*, ImplJobSetup*)
-PspSalInfoPrinter::~PspSalInfoPrinter()
-PushButton::EndSelection()
-PushButton::PushButton(WindowType)
-PushButton::SetDropDown(PushButtonDropdownStyle)
-PushButton::SetSymbol(SymbolType)
-PushButton::SetSymbolAlign(SymbolAlign)
 PushButtonValue::clone() const
 QtData::ErrorTrapPop(bool)
 QtData::ErrorTrapPush()
@@ -2308,10 +1700,6 @@ QtSvpGraphics::SupportsCairo() const
 QtSvpGraphics::handleDamage(tools::Rectangle const&)
 QtSvpGraphics::updateQWidget() const
 QtSvpGraphics::~QtSvpGraphics()
-RadioButton::GetRadioImage(AllSettings const&, DrawButtonFlags)
-RadioButton::SetModeRadioImage(Image const&)
-RadioButton::Toggle()
-RadioButton::group(RadioButton&)
 Reader::ClearTemplate()
 Reader::GetTemplateDoc(SwDoc&)
 Reader::MakeHTMLDummyTemplateDoc()
@@ -2346,75 +1734,11 @@ SalBitmap::DropScaledCache()
 SalBitmap::convertDataBitCount(unsigned char const*, int, int, int, int, BitmapPalette const&, SalBitmap::BitConvert)
 SalData::SalData()
 SalData::~SalData()
-SalDisplay::Beep() const
-SalDisplay::BestVisual(_XDisplay*, int, XVisualInfo&)
-SalDisplay::CaptureMouse(SalFrame*)
-SalDisplay::DeInitRandR()
-SalDisplay::GetEventTimeImpl(bool) const
-SalDisplay::GetIndicatorState() const
-SalDisplay::GetKeyCode(unsigned long, char*) const
-SalDisplay::GetKeyName(unsigned short) const
-SalDisplay::GetKeyNameFromKeySym(unsigned long) const
-SalDisplay::GetKeySym(XKeyEvent*, char*, int*, unsigned long*, int*, _XIC*) const
-SalDisplay::GetPointer(PointerStyle)
-SalDisplay::Init()
-SalDisplay::InitRandR(unsigned long) const
-SalDisplay::InitXinerama()
-SalDisplay::ModifierMapping()
-SalDisplay::SalDisplay(_XDisplay*)
-SalDisplay::SimulateKeyPress(unsigned short)
-SalDisplay::addXineramaScreenUnique(int, long, long, long, long)
-SalDisplay::doDestruct()
-SalDisplay::initScreen(SalX11Screen) const
-SalDisplay::processRandREvent(_XEvent*)
 SalDisplay::~SalDisplay()
 SalFrame::DumpSetPosSize(long, long, long, long, unsigned short)
 SalFrame::GetGeometry() const
 SalFrame::SetCallback(vcl::Window*, bool (*)(vcl::Window*, SalEvent, void const*))
-SalGraphics::BlendAlphaBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&, SalBitmap const&, OutputDevice const&)
-SalGraphics::BlendBitmap(SalTwoRect const&, SalBitmap const&, OutputDevice const&)
-SalGraphics::CopyBits(SalTwoRect const&, OutputDevice const&)
-SalGraphics::DrawAlphaBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&, OutputDevice const&)
-SalGraphics::DrawAlphaRect(long, long, long, long, unsigned char, OutputDevice const&)
-SalGraphics::DrawBitmap(SalTwoRect const&, SalBitmap const&, OutputDevice const&)
-SalGraphics::DrawBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&, OutputDevice const&)
-SalGraphics::DrawEPS(long, long, long, long, void*, unsigned int, OutputDevice const&)
-SalGraphics::DrawGradient(tools::PolyPolygon const&, Gradient const&, OutputDevice const&)
-SalGraphics::DrawLine(long, long, long, long, OutputDevice const&)
-SalGraphics::DrawMask(SalTwoRect const&, SalBitmap const&, Color, OutputDevice const&)
-SalGraphics::DrawNativeControl(ControlType, ControlPart, tools::Rectangle const&, ControlState, ImplControlValue const&, rtl::OUString const&, OutputDevice const&, Color const&)
-SalGraphics::DrawPixel(long, long, Color, OutputDevice const&)
-SalGraphics::DrawPixel(long, long, OutputDevice const&)
-SalGraphics::DrawPolyLine(basegfx::B2DHomMatrix const&, basegfx::B2DPolygon const&, double, double, std::vector<double, std::allocator<double> > const*, basegfx::B2DLineJoin, com::sun::star::drawing::LineCap, double, bool, OutputDevice const&)
-SalGraphics::DrawPolyLine(unsigned int, Point const*, OutputDevice const&)
-SalGraphics::DrawPolyLineBezier(unsigned int, Point const*, PolyFlags const*, OutputDevice const&)
-SalGraphics::DrawPolyPolygon(basegfx::B2DHomMatrix const&, basegfx::B2DPolyPolygon const&, double, OutputDevice const&)
-SalGraphics::DrawPolyPolygon(unsigned int, unsigned int const*, Point const**, OutputDevice const&)
-SalGraphics::DrawPolyPolygonBezier(unsigned int, unsigned int const*, Point const* const*, PolyFlags const* const*, OutputDevice const&)
-SalGraphics::DrawPolygon(unsigned int, Point const*, OutputDevice const&)
-SalGraphics::DrawPolygonBezier(unsigned int, Point const*, PolyFlags const*, OutputDevice const&)
-SalGraphics::DrawRect(long, long, long, long, OutputDevice const&)
-SalGraphics::DrawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*, double, OutputDevice const&)
-SalGraphics::GetBitmap(long, long, long, long, OutputDevice const&)
-SalGraphics::GetMirrorMode(OutputDevice const&) const
-SalGraphics::GetNativeControlRegion(ControlType, ControlPart, tools::Rectangle const&, ControlState, ImplControlValue const&, tools::Rectangle&, tools::Rectangle&, OutputDevice const&)
-SalGraphics::GetPixel(long, long, OutputDevice const&)
-SalGraphics::HasFastDrawTransformedBitmap() const
-SalGraphics::HitTestNativeScrollbar(ControlPart, tools::Rectangle const&, Point const&, bool&, OutputDevice const&)
-SalGraphics::Invert(long, long, long, long, SalInvert, OutputDevice const&)
-SalGraphics::Invert(unsigned int, Point const*, SalInvert, OutputDevice const&)
-SalGraphics::SetClipRegion(vcl::Region const&, OutputDevice const&)
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*, double)
-SalGraphics::getMirror(OutputDevice const&) const
-SalGraphics::getRenderBackendName() const
-SalGraphics::mirror(ImplControlValue&, OutputDevice const&) const
-SalGraphics::mirror(basegfx::B2DPolyPolygon const&, OutputDevice const&) const
-SalGraphics::mirror(long&, OutputDevice const&) const
-SalGraphics::mirror(long&, long, OutputDevice const&, bool) const
-SalGraphics::mirror(tools::Rectangle&, OutputDevice const&, bool) const
-SalGraphics::mirror(unsigned int, Point const*, Point*, OutputDevice const&) const
-SalGraphics::mirror(vcl::Region&, OutputDevice const&) const
-SalGraphics::mirror2(long, OutputDevice const&) const
 SalInfoPrinter::~SalInfoPrinter()
 SalInstance::AcquireYieldMutex(unsigned int)
 SalInstance::CreateDragSource(SystemEnvData const*)
@@ -4846,13 +4170,6 @@ SelectionListenerMultiplexer::disposing(com::sun::star::lang::EventObject const&
 SelectionListenerMultiplexer::queryInterface(com::sun::star::uno::Type const&)
 SelectionListenerMultiplexer::release()
 SelectionListenerMultiplexer::selectionChanged(com::sun::star::awt::grid::GridSelectionEvent const&)
-SessionManagerInhibitor::inhibitDPMS(bool, _XDisplay*)
-SessionManagerInhibitor::inhibitFDOPM(bool, char const*, char const*)
-SessionManagerInhibitor::inhibitFDOSS(bool, char const*, char const*)
-SessionManagerInhibitor::inhibitGSM(bool, char const*, char const*, ApplicationInhibitFlags, unsigned int)
-SessionManagerInhibitor::inhibitMSM(bool, char const*, char const*, ApplicationInhibitFlags, unsigned int)
-SessionManagerInhibitor::inhibitXAutoLock(bool, _XDisplay*)
-SessionManagerInhibitor::inhibitXScreenSaver(bool, _XDisplay*)
 SfxAllItemSet::Clone(bool, SfxItemPool*) const
 SfxAllItemSet::PutImpl(SfxPoolItem const&, bool)
 SfxApplication::Deinitialize()
@@ -7268,30 +6585,6 @@ SpinButton::Resize()
 SpinButton::SetRange(Range const&)
 SpinButton::StateChanged(StateChangedType)
 SpinButton::Up()
-SpinField::CalcMinimumSize() const
-SpinField::CalcMinimumSizeForText(rtl::OUString const&) const
-SpinField::CalcSize(int) const
-SpinField::DataChanged(DataChangedEvent const&)
-SpinField::Down()
-SpinField::Draw(OutputDevice*, Point const&, SystemTextColorFlags)
-SpinField::EndDropDown()
-SpinField::EventNotify(NotifyEvent&)
-SpinField::FillLayoutData() const
-SpinField::First()
-SpinField::GetOptimalSize() const
-SpinField::GetUITestFactory() const
-SpinField::ImplFindPartRect(Point const&)
-SpinField::Last()
-SpinField::MouseButtonDown(MouseEvent const&)
-SpinField::MouseButtonUp(MouseEvent const&)
-SpinField::MouseMove(MouseEvent const&)
-SpinField::Paint(OutputDevice&, tools::Rectangle const&)
-SpinField::PreNotify(NotifyEvent&)
-SpinField::Resize()
-SpinField::ShowDropDown(bool)
-SpinField::StateChanged(StateChangedType)
-SpinField::Up()
-SpinField::dispose()
 SpinField::~SpinField()
 SpinListenerMultiplexer::SpinListenerMultiplexer(cppu::OWeakObject&)
 SpinListenerMultiplexer::acquire()
@@ -7371,57 +6664,7 @@ StringRangeEnumerator::checkValue(int, o3tl::sorted_vector<int, std::less<int>, 
 StringRangeEnumerator::insertJoinedRanges(std::vector<int, std::allocator<int> > const&)
 StringRangeEnumerator::insertRange(int, int, bool)
 StringRangeEnumerator::setRange(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-StyleSettings::CopyData()
-StyleSettings::GetActionButtonPressedRolloverTextColor() const
-StyleSettings::GetActionButtonRolloverTextColor() const
-StyleSettings::GetActionButtonTextColor() const
-StyleSettings::GetAlternatingRowColor() const
-StyleSettings::GetAntialiasingMinPixelHeight() const
-StyleSettings::GetBorderSize()
-StyleSettings::GetButtonPressedRolloverTextColor() const
-StyleSettings::GetDefaultActionButtonPressedRolloverTextColor() const
-StyleSettings::GetDefaultActionButtonRolloverTextColor() const
-StyleSettings::GetDefaultActionButtonTextColor() const
-StyleSettings::GetDefaultButtonPressedRolloverTextColor() const
-StyleSettings::GetDefaultButtonRolloverTextColor() const
-StyleSettings::GetDefaultButtonTextColor() const
-StyleSettings::GetDisplayOptions() const
-StyleSettings::GetFlatButtonPressedRolloverTextColor() const
-StyleSettings::GetFlatButtonRolloverTextColor() const
-StyleSettings::GetFlatButtonTextColor() const
-StyleSettings::GetFloatTitleHeight() const
-StyleSettings::GetIconFont() const
-StyleSettings::GetListBoxWindowBackgroundColor() const
-StyleSettings::GetListBoxWindowHighlightColor() const
-StyleSettings::GetListBoxWindowHighlightTextColor() const
-StyleSettings::GetListBoxWindowTextColor() const
-StyleSettings::GetMenuBarHighlightTextColor() const
-StyleSettings::GetMenuBarRolloverColor() const
-StyleSettings::GetMenuBarRolloverTextColor() const
-StyleSettings::GetMinThumbSize() const
-StyleSettings::GetPersonaFooter() const
-StyleSettings::GetPreferredContextMenuShortcuts() const
-StyleSettings::GetPreferredUseImagesInMenus() const
-StyleSettings::GetPrimaryButtonWarpsSlider() const
-StyleSettings::GetSkipDisabledInMenus() const
-StyleSettings::GetSpinSize() const
-StyleSettings::GetTabHighlightTextColor() const
-StyleSettings::GetTabRolloverTextColor() const
-StyleSettings::GetTabTextColor() const
-StyleSettings::GetToolTextColor() const
-StyleSettings::GetToolbarIconSizePixel() const
-StyleSettings::GetUseFlatBorders() const
-StyleSettings::GetUseFlatMenus() const
-StyleSettings::Set3DColors(Color const&)
-StyleSettings::SetCheckedColorSpecialCase()
-StyleSettings::SetFloatTitleHeight(int)
 StyleSettings::SetHideDisabledMenuItems(bool)
-StyleSettings::SetIconFont(vcl::Font const&)
-StyleSettings::SetListBoxPreviewDefaultLogicSize(Size const&)
-StyleSettings::SetSpinSize(int)
-StyleSettings::SetTitleHeight(int)
-StyleSettings::SetUseFlatBorders(bool)
-StyleSettings::SetUseFlatMenus(bool)
 StyleSettings::operator!=(StyleSettings const&) const
 StyleSettings::operator==(StyleSettings const&) const
 SurfaceHelper::SurfaceHelper()
@@ -7557,7 +6800,7 @@ SvNumberFormatter::GetNoZero() const
 SvNumberFormatter::GetNumDecimalSepAlt() const
 SvNumberFormatter::GetNumThousandSep() const
 SvNumberFormatter::GetTransliteration() const
-SvNumberFormatter::GetUserDefColor(unsigned short)
+SvNumberFormatter::GetUserDefColor(unsigned short) const
 SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(NfCurrencyEntry const*&, bool&, NfCurrencyEntry const*, unsigned short, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 SvNumberFormatter::ImpPosToken(rtl::OUStringBuffer const&, char16_t, int) const
 SvNumberFormatter::ImpSubstituteEntry(SvNumberformat*, unsigned int*)
@@ -7574,7 +6817,7 @@ SvNumberformat::GetExactDateOrder() const
 SvNumberformat::GetFormatStringForTimePrecision(int) const
 SvNumberformat::GetFormatter() const
 SvNumberformat::GetNatNumModifierString(unsigned short) const
-SvNumberformat::GetOutputString(std::basic_string_view<char16_t, std::char_traits<char16_t> >, rtl::OUString&, Color const**)
+SvNumberformat::GetOutputString(std::basic_string_view<char16_t, std::char_traits<char16_t> >, rtl::OUString&, Color const**, bool)
 SvNumberformat::GetPercentString(unsigned short) const
 SvNumberformat::HasPositiveBracketPlaceholder() const
 SvNumberformat::HasStringNegativeSign(rtl::OUString const&)
@@ -7947,159 +7190,6 @@ SvdProgressInfo::ReportRescales(unsigned long)
 SvdProgressInfo::SetActionCount(unsigned long)
 SvdProgressInfo::SetInsertCount(unsigned long)
 SvdProgressInfo::SetNextObject()
-SvmReader::ArcHandler()
-SvmReader::BmpExHandler()
-SvmReader::BmpExScaleHandler()
-SvmReader::BmpExScalePartHandler()
-SvmReader::BmpHandler()
-SvmReader::BmpScaleHandler()
-SvmReader::BmpScalePartHandler()
-SvmReader::ChordHandler()
-SvmReader::ClipRegionHandler()
-SvmReader::CommentHandler()
-SvmReader::DefaultHandler()
-SvmReader::EPSHandler()
-SvmReader::EllipseHandler()
-SvmReader::FillColorHandler()
-SvmReader::FloatTransparentHandler(ImplMetaReadData*)
-SvmReader::FontHandler(ImplMetaReadData*)
-SvmReader::GradientExHandler()
-SvmReader::GradientHandler()
-SvmReader::HatchHandler()
-SvmReader::ISectRectClipRegionHandler()
-SvmReader::ISectRegionClipRegionHandler()
-SvmReader::LayoutModeHandler()
-SvmReader::LineColorHandler()
-SvmReader::LineHandler()
-SvmReader::MapModeHandler()
-SvmReader::MaskHandler()
-SvmReader::MaskScaleHandler()
-SvmReader::MaskScalePartHandler()
-SvmReader::MetaActionHandler(ImplMetaReadData*)
-SvmReader::MoveClipRegionHandler()
-SvmReader::OverlineColorHandler()
-SvmReader::PieHandler()
-SvmReader::PixelHandler()
-SvmReader::PointHandler()
-SvmReader::PolyLineHandler()
-SvmReader::PolyPolygonHandler()
-SvmReader::PolygonHandler()
-SvmReader::PopHandler()
-SvmReader::PushHandler()
-SvmReader::RasterOpHandler()
-SvmReader::ReadColor(Color&)
-SvmReader::RectHandler()
-SvmReader::RefPointHandler()
-SvmReader::RoundRectHandler()
-SvmReader::StretchTextHandler(ImplMetaReadData const*)
-SvmReader::TextAlignHandler()
-SvmReader::TextArrayHandler(ImplMetaReadData const*)
-SvmReader::TextColorHandler()
-SvmReader::TextFillColorHandler()
-SvmReader::TextHandler(ImplMetaReadData const*)
-SvmReader::TextLanguageHandler()
-SvmReader::TextLineColorHandler()
-SvmReader::TextLineHandler()
-SvmReader::TextRectHandler(ImplMetaReadData const*)
-SvmReader::TransparentHandler()
-SvmReader::WallpaperHandler()
-SvmWriter::ActionHandler(MetaAction const*)
-SvmWriter::ArcHandler(MetaArcAction const*)
-SvmWriter::BmpExHandler(MetaBmpExAction const*)
-SvmWriter::BmpExScaleHandler(MetaBmpExScaleAction const*)
-SvmWriter::BmpExScalePartHandler(MetaBmpExScalePartAction const*)
-SvmWriter::BmpHandler(MetaBmpAction const*)
-SvmWriter::BmpScaleHandler(MetaBmpScaleAction const*)
-SvmWriter::BmpScalePartHandler(MetaBmpScalePartAction const*)
-SvmWriter::ChordHandler(MetaChordAction const*)
-SvmWriter::ClipRegionHandler(MetaClipRegionAction const*)
-SvmWriter::CommentHandler(MetaCommentAction const*)
-SvmWriter::EPSHandler(MetaEPSAction const*)
-SvmWriter::EllipseHandler(MetaEllipseAction const*)
-SvmWriter::FillColorHandler(MetaFillColorAction const*)
-SvmWriter::FloatTransparentHandler(MetaFloatTransparentAction const*)
-SvmWriter::FontHandler(MetaFontAction const*, ImplMetaWriteData*)
-SvmWriter::GradientExHandler(MetaGradientExAction const*)
-SvmWriter::GradientHandler(MetaGradientAction const*)
-SvmWriter::HatchHandler(MetaHatchAction const*)
-SvmWriter::ISectRectClipRegionHandler(MetaISectRectClipRegionAction const*)
-SvmWriter::ISectRegionClipRegionHandler(MetaISectRegionClipRegionAction const*)
-SvmWriter::LayoutModeHandler(MetaLayoutModeAction const*)
-SvmWriter::LineColorHandler(MetaLineColorAction const*)
-SvmWriter::LineHandler(MetaLineAction const*)
-SvmWriter::MapModeHandler(MetaMapModeAction const*)
-SvmWriter::MaskHandler(MetaMaskAction const*)
-SvmWriter::MaskScaleHandler(MetaMaskScaleAction const*)
-SvmWriter::MaskScalePartHandler(MetaMaskScalePartAction const*)
-SvmWriter::MetaActionHandler(MetaAction*, ImplMetaWriteData*)
-SvmWriter::MoveClipRegionHandler(MetaMoveClipRegionAction const*)
-SvmWriter::OverlineColorHandler(MetaOverlineColorAction const*)
-SvmWriter::PieHandler(MetaPieAction const*)
-SvmWriter::PixelHandler(MetaPixelAction const*)
-SvmWriter::PointHandler(MetaPointAction const*)
-SvmWriter::PolyLineHandler(MetaPolyLineAction const*)
-SvmWriter::PolyPolygonHandler(MetaPolyPolygonAction const*)
-SvmWriter::PolygonHandler(MetaPolygonAction const*)
-SvmWriter::PopHandler(MetaPopAction const*)
-SvmWriter::PushHandler(MetaPushAction const*)
-SvmWriter::RasterOpHandler(MetaRasterOpAction const*)
-SvmWriter::RectHandler(MetaRectAction const*)
-SvmWriter::RefPointHandler(MetaRefPointAction const*)
-SvmWriter::RoundRectHandler(MetaRoundRectAction const*)
-SvmWriter::StretchTextHandler(MetaStretchTextAction const*, ImplMetaWriteData const*)
-SvmWriter::TextAlignHandler(MetaTextAlignAction const*)
-SvmWriter::TextArrayHandler(MetaTextArrayAction const*, ImplMetaWriteData const*)
-SvmWriter::TextColorHandler(MetaTextColorAction const*)
-SvmWriter::TextFillColorHandler(MetaTextFillColorAction const*)
-SvmWriter::TextHandler(MetaTextAction const*, ImplMetaWriteData const*)
-SvmWriter::TextLanguageHandler(MetaTextLanguageAction const*)
-SvmWriter::TextLineColorHandler(MetaTextLineColorAction const*)
-SvmWriter::TextLineHandler(MetaTextLineAction const*)
-SvmWriter::TextRectHandler(MetaTextRectAction const*, ImplMetaWriteData const*)
-SvmWriter::TransparentHandler(MetaTransparentAction const*)
-SvmWriter::WallpaperHandler(MetaWallpaperAction const*)
-SvmWriter::WriteColor(Color)
-SvpSalBitmap::AcquireBuffer(BitmapAccessMode)
-SvpSalBitmap::Create(SalBitmap const&)
-SvpSalBitmap::Create(SalBitmap const&, SalGraphics*)
-SvpSalBitmap::Create(SalBitmap const&, vcl::PixelFormat)
-SvpSalBitmap::Create(Size const&, vcl::PixelFormat, BitmapPalette const&)
-SvpSalBitmap::Create(com::sun::star::uno::Reference<com::sun::star::rendering::XBitmapCanvas> const&, Size&, bool)
-SvpSalBitmap::Create(std::optional<BitmapBuffer> const&)
-SvpSalBitmap::Destroy()
-SvpSalBitmap::GetBitCount() const
-SvpSalBitmap::GetSize() const
-SvpSalBitmap::GetSystemData(BitmapSystemData&)
-SvpSalBitmap::ImplCreate(Size const&, vcl::PixelFormat, BitmapPalette const&, bool)
-SvpSalBitmap::ReleaseBuffer(BitmapBuffer*, BitmapAccessMode)
-SvpSalBitmap::Replace(Color const&, Color const&, unsigned char)
-SvpSalBitmap::Scale(double const&, double const&, BmpScaleFlag)
-SvpSalBitmap::ScalingSupported() const
-SvpSalBitmap::accessSystemDependentDataHolder() const
-SvpSalGraphics::CreateSurface(OutputDevice const&, int, int, int, int) const
-SvpSalGraphics::CreateSurface(std::shared_ptr<_cairo_surface> const&) const
-SvpSalGraphics::GetResolution(int&, int&)
-SvpSalGraphics::SupportsCairo() const
-SvpSalInstance::AddToRecentDocumentList(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
-SvpSalInstance::AnyInput(VclInputFlags)
-SvpSalInstance::CheckTimeout(bool)
-SvpSalInstance::CloseWakeupPipe()
-SvpSalInstance::CreateChildFrame(SystemParentData*, SalFrameStyleFlags)
-SvpSalInstance::CreateFrame(SalFrame*, SalFrameStyleFlags)
-SvpSalInstance::CreateInfoPrinter(SalPrinterQueueInfo*, ImplJobSetup*)
-SvpSalInstance::CreateObject(SalFrame*, SystemWindowData*, bool)
-SvpSalInstance::CreatePrintGraphics()
-SvpSalInstance::CreatePrinter(SalInfoPrinter*)
-SvpSalInstance::CreateSalSystem()
-SvpSalInstance::CreateSalTimer()
-SvpSalInstance::CreateVirtualDevice(SalGraphics&, long&, long&, DeviceFormat, SystemGraphicsData const*)
-SvpSalInstance::DoYield(bool, bool)
-SvpSalInstance::GetCairoFontOptions()
-SvpSalInstance::ImplYield(bool, bool)
-SvpSalInstance::IsMainThread() const
-SvpSalInstance::StartTimer(unsigned long)
-SvpSalInstance::StopTimer()
-SvpSalInstance::Wakeup(SvpRequest)
 SvpSalVirtualDevice::AcquireGraphics()
 SvpSalVirtualDevice::CreateSurface(long, long, unsigned char*)
 SvtBroadcaster::Add(SvtListener*)
@@ -9551,71 +8641,9 @@ SwAttrSet::changeCallback(SfxPoolItem const*, SfxPoolItem const*) const
 SwAuthenticator::getPassword()
 SwAuthenticator::getUserName()
 SwAuthenticator::~SwAuthenticator()
-SwAuthorityField::ChgTyp(SwFieldType*)
-SwAuthorityField::ConditionalExpandAuthIdentifier(SwRootFrame const*) const
-SwAuthorityField::Copy() const
-SwAuthorityField::ExpandImpl(SwRootFrame const*) const
-SwAuthorityField::GetDescription() const
-SwAuthorityField::GetFieldText(ToxAuthorityField) const
-SwAuthorityField::GetRelativeURI() const
-SwAuthorityField::GetTargetType() const
-SwAuthorityField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwAuthorityField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
-SwAuthorityField::SetPar1(rtl::OUString const&)
-SwAuthorityField::SwAuthorityField(SwAuthorityFieldType*, SwAuthEntry*)
-SwAuthorityField::SwAuthorityField(SwAuthorityFieldType*, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-SwAuthorityField::dumpAsXml(_xmlTextWriter*) const
-SwAuthorityField::~SwAuthorityField()
-SwAuthorityFieldType::AddField(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-SwAuthorityFieldType::AppendField(SwAuthEntry const&)
-SwAuthorityFieldType::ChangeEntryContent(SwAuthEntry const*)
-SwAuthorityFieldType::Copy() const
-SwAuthorityFieldType::CreateTOXInternational() const
-SwAuthorityFieldType::GetSequencePos(SwAuthEntry const*, SwRootFrame const*)
-SwAuthorityFieldType::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwAuthorityFieldType::QueryValue(com::sun::star::uno::Any&, unsigned short) const
-SwAuthorityFieldType::RemoveField(SwAuthEntry const*)
-SwAuthorityFieldType::SetSortKeys(unsigned short, SwTOXSortKey const*)
-SwAuthorityFieldType::SwAuthorityFieldType(SwDoc*)
-SwAuthorityFieldType::SwClientNotify(SwModify const&, SfxHint const&)
-SwAuthorityFieldType::dumpAsXml(_xmlTextWriter*) const
-SwAuthorityFieldType::~SwAuthorityFieldType()
 SwAutoCorrect::GetLongText(rtl::OUString const&, rtl::OUString&)
 SwAutoCorrect::PutText(com::sun::star::uno::Reference<com::sun::star::embed::XStorage> const&, rtl::OUString const&, rtl::OUString const&, SfxObjectShell&, rtl::OUString&)
 SwAutoCorrect::refreshBlockList(com::sun::star::uno::Reference<com::sun::star::embed::XStorage> const&)
-SwBaseShell::CopyPaMRing(SwPaM&)
-SwBaseShell::EditRegionDialog(SfxRequest const&)
-SwBaseShell::ExecBckCol(SfxRequest&)
-SwBaseShell::ExecClpbrd(SfxRequest&)
-SwBaseShell::ExecDelete(SfxRequest&)
-SwBaseShell::ExecDlg(SfxRequest&)
-SwBaseShell::ExecField(SfxRequest const&)
-SwBaseShell::ExecTextCtrl(SfxRequest&)
-SwBaseShell::ExecUndo(SfxRequest&)
-SwBaseShell::Execute(SfxRequest&)
-SwBaseShell::ExecuteGallery(SfxRequest&)
-SwBaseShell::GetBckColState(SfxItemSet&)
-SwBaseShell::GetBorderState(SfxItemSet&)
-SwBaseShell::GetGalleryState(SfxItemSet&)
-SwBaseShell::GetInterface() const
-SwBaseShell::GetShell()
-SwBaseShell::GetShellPtr()
-SwBaseShell::GetStaticInterface()
-SwBaseShell::GetTextCtrlState(SfxItemSet&)
-SwBaseShell::GetTextFontCtrlState(SfxItemSet&)
-SwBaseShell::InitInterface_Impl()
-SwBaseShell::InsertRegionDialog(SfxRequest&)
-SwBaseShell::InsertTable(SfxRequest&)
-SwBaseShell::InsertURLButton(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
-SwBaseShell::RegisterInterface(SfxModule const*)
-SwBaseShell::SetFrameMode(FlyMode, SwWrtShell*)
-SwBaseShell::SetWrapMode(unsigned short)
-SwBaseShell::StateClpbrd(SfxItemSet&)
-SwBaseShell::StateDisableItems(SfxItemSet&)
-SwBaseShell::StateStyle(SfxItemSet&)
-SwBaseShell::StateUndo(SfxItemSet&)
-SwBaseShell::SwBaseShell(SwView&)
-SwBaseShell::~SwBaseShell()
 SwBoxAutoFormat::Load(SvStream&, SwAfVersions const&, unsigned short)
 SwBoxAutoFormat::Save(SvStream&, unsigned short) const
 SwBoxAutoFormat::SetXObject(rtl::Reference<SwXTextCellStyle> const&)
@@ -9632,23 +8660,6 @@ SwBreakIt::GetLocale_(LanguageTag const&)
 SwBreakIt::GetRealScriptOfText(rtl::OUString const&, int) const
 SwBreakIt::SwBreakIt(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>)
 SwBreakIt::getGraphemeCount(rtl::OUString const&, int, int) const
-SwCellFrame::CheckDirection(bool)
-SwCellFrame::Cut()
-SwCellFrame::DestroyImpl()
-SwCellFrame::FindStartEndOfRowSpanCell(bool) const
-SwCellFrame::Format(OutputDevice*, SwBorderAttrs const*)
-SwCellFrame::GetCoveredCellInRow(SwRowFrame const&) const
-SwCellFrame::GetCoveredCells() const
-SwCellFrame::GetLayoutRowSpan() const
-SwCellFrame::GetModelPositionForViewPoint(SwPosition*, Point&, SwCursorMoveState*, bool) const
-SwCellFrame::IsCoveredCell() const
-SwCellFrame::IsLeaveUpperAllowed() const
-SwCellFrame::PaintSwFrame(OutputDevice&, SwRect const&) const
-SwCellFrame::SwCellFrame(SwTableBox const&, SwFrame*, bool)
-SwCellFrame::SwClientNotify(SwModify const&, SfxHint const&)
-SwCellFrame::dumpAsXml(_xmlTextWriter*) const
-SwCellFrame::dumpAsXmlAttributes(_xmlTextWriter*) const
-SwCellFrame::~SwCellFrame()
 SwChapterField::ChangeExpansion(SwFrame const&, SwContentNode const*, bool)
 SwChapterField::Copy() const
 SwChapterField::ExpandImpl(SwRootFrame const*) const
@@ -9725,26 +8736,6 @@ SwContentControlManager::Insert(SwTextContentControl*)
 SwContentControlManager::SwContentControlManager()
 SwContentControlManager::UnsortedGet(unsigned long)
 SwContentControlManager::dumpAsXml(_xmlTextWriter*) const
-SwContentFrame::CalcLowers(SwLayoutFrame&, SwLayoutFrame const&, long, bool)
-SwContentFrame::Cut()
-SwContentFrame::DestroyImpl()
-SwContentFrame::FindMaster() const
-SwContentFrame::GrowFrame(long, bool, bool)
-SwContentFrame::ImplGetNextContentFrame(bool) const
-SwContentFrame::MakeAll(OutputDevice*)
-SwContentFrame::MakePrtArea(SwBorderAttrs const&)
-SwContentFrame::MoveFootnoteCntFwd(bool, SwFootnoteBossFrame*)
-SwContentFrame::Paste(SwFrame*, SwFrame*)
-SwContentFrame::ShouldBwdMoved(SwLayoutFrame*, bool&)
-SwContentFrame::ShrinkFrame(long, bool, bool)
-SwContentFrame::SwClientNotify(SwModify const&, SfxHint const&)
-SwContentFrame::SwContentFrame(SwContentNode*, SwFrame*)
-SwContentFrame::UnitDown(SwPaM*, long, bool) const
-SwContentFrame::UnitUp(SwPaM*, long, bool) const
-SwContentFrame::UpdateAttr_(SfxPoolItem const*, SfxPoolItem const*, SwContentFrameInvFlags&, SwAttrSetChg*, SwAttrSetChg*)
-SwContentFrame::WouldFit(long&, bool&, bool, bool)
-SwContentFrame::WouldFit_(long, SwLayoutFrame*, bool, bool)
-SwContentFrame::~SwContentFrame()
 SwContentIndex::ChgValue(SwContentIndex const&, int)
 SwContentIndex::Init(int)
 SwContentIndex::SetMark(sw::mark::IMark const*)
@@ -9829,36 +8820,6 @@ SwDocStatField::GetSubType() const
 SwDocStatField::PutValue(com::sun::star::uno::Any const&, unsigned short)
 SwDocStatField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
 SwDocStatField::SetSubType(unsigned short)
-SwDocStyleSheet::GetDescription(MapUnit)
-SwDocStyleSheet::GetFollow() const
-SwDocStyleSheet::GetFrameFormat()
-SwDocStyleSheet::GetGrabBagItem(com::sun::star::uno::Any&) const
-SwDocStyleSheet::GetHelpId(rtl::OUString&)
-SwDocStyleSheet::GetItemSetForPreview()
-SwDocStyleSheet::GetLink() const
-SwDocStyleSheet::GetNumRule()
-SwDocStyleSheet::GetPageDesc()
-SwDocStyleSheet::GetParent() const
-SwDocStyleSheet::GetTableFormat()
-SwDocStyleSheet::GetUsedBy()
-SwDocStyleSheet::HasClearParentSupport() const
-SwDocStyleSheet::HasFollowSupport() const
-SwDocStyleSheet::HasParentSupport() const
-SwDocStyleSheet::IsHidden() const
-SwDocStyleSheet::IsUsed() const
-SwDocStyleSheet::PresetNameAndFamily(SfxStyleFamily, rtl::OUString const&)
-SwDocStyleSheet::Reset()
-SwDocStyleSheet::SetFollow(rtl::OUString const&)
-SwDocStyleSheet::SetGrabBagItem(com::sun::star::uno::Any const&)
-SwDocStyleSheet::SetHelpId(rtl::OUString const&, unsigned int)
-SwDocStyleSheet::SetHidden(bool)
-SwDocStyleSheet::SetLink(rtl::OUString const&)
-SwDocStyleSheet::SetName(rtl::OUString const&, bool)
-SwDocStyleSheet::SetNumRule(SwNumRule const&)
-SwDocStyleSheet::SetParent(rtl::OUString const&)
-SwDocStyleSheet::SetPhysical(bool)
-SwDocStyleSheet::SwDocStyleSheet(SwDoc&, SwDocStyleSheetPool&)
-SwDocStyleSheet::~SwDocStyleSheet()
 SwDrawFrameFormat::DelFrames()
 SwDrawFrameFormat::GetDescription() const
 SwDrawFrameFormat::GetLayoutDir() const
@@ -9947,23 +8908,6 @@ SwFltRedline::Clone(SfxItemPool*) const
 SwFltRedline::operator==(SfxPoolItem const&) const
 SwFltTOX::Clone(SfxItemPool*) const
 SwFltTOX::operator==(SfxPoolItem const&) const
-SwFlyAtContentFrame::DelEmpty()
-SwFlyAtContentFrame::GetFollow() const
-SwFlyAtContentFrame::GetPrecede() const
-SwFlyAtContentFrame::InvalidationAllowed(SwFrame::InvalidationType) const
-SwFlyAtContentFrame::IsFormatPossible() const
-SwFlyAtContentFrame::IsWrapOnAllPages() const
-SwFlyAtContentFrame::MakeAll(OutputDevice*)
-SwFlyAtContentFrame::MakeObjPos()
-SwFlyAtContentFrame::RegisterAtCorrectPage()
-SwFlyAtContentFrame::RegisterAtPage(SwPageFrame&)
-SwFlyAtContentFrame::SetAbsPos(Point const&)
-SwFlyAtContentFrame::ShouldBwdMoved(SwLayoutFrame*, bool&)
-SwFlyAtContentFrame::SwClientNotify(SwModify const&, SfxHint const&)
-SwFlyAtContentFrame::SwFlyAtContentFrame(SwFlyAtContentFrame&)
-SwFlyAtContentFrame::SwFlyAtContentFrame(SwFlyFrameFormat*, SwFrame*, SwFrame*, bool)
-SwFlyAtContentFrame::dumpAsXmlAttributes(_xmlTextWriter*) const
-SwFlyAtContentFrame::~SwFlyAtContentFrame()
 SwFlyDrawContact::CreateNewRef(SwFlyFrame*, SwFlyFrameFormat*, SwFrame const&)
 SwFlyDrawContact::GetAnchoredObj(SdrObject const*) const
 SwFlyDrawContact::GetAnchoredObj(SdrObject*)
@@ -9986,51 +8930,12 @@ SwFlyFrameFormat::SetObjTitle(rtl::OUString const&, bool)
 SwFlyFrameFormat::SetObjTooltip(rtl::OUString const&)
 SwFlyFrameFormat::SwFlyFrameFormat(SwAttrPool&, rtl::OUString const&, SwFrameFormat*)
 SwFlyFrameFormat::~SwFlyFrameFormat()
-SwFlyFreeFrame::CheckClip(SwFormatFrameSize const&)
-SwFlyFreeFrame::DestroyImpl()
-SwFlyFreeFrame::HasEnvironmentAutoSize() const
-SwFlyFreeFrame::IsFormatPossible() const
-SwFlyFreeFrame::MakeAll(OutputDevice*)
-SwFlyFreeFrame::NotifyBackground(SwPageFrame*, SwRect const&, PrepareHint)
-SwFlyFreeFrame::SwFlyFreeFrame(SwFlyFrameFormat*, SwFrame*, SwFrame*, bool)
-SwFlyFreeFrame::getFrameAreaTransformation() const
-SwFlyFreeFrame::getFramePrintAreaTransformation() const
-SwFlyFreeFrame::getLocalFrameRotation() const
-SwFlyFreeFrame::supportsAutoContour() const
-SwFlyFreeFrame::transform_translate(Point const&)
-SwFlyFreeFrame::~SwFlyFreeFrame()
 SwFmtAidsAutoComplItem::Clone(SfxItemPool*) const
 SwFmtAidsAutoComplItem::FillViewOptions(SwViewOption&) const
 SwFmtAidsAutoComplItem::SwFmtAidsAutoComplItem(SwViewOption const&)
 SwFootnoteInfo::operator=(SwFootnoteInfo const&)
 SwForm::GetFormMaxLevel(TOXTypes)
 SwForm::GetFormText()
-SwFormat::CopyAttrs(SwFormat const&)
-SwFormat::DelDiffs(SfxItemSet const&)
-SwFormat::Destr()
-SwFormat::IsBackgroundTransparent() const
-SwFormat::IsUsed() const
-SwFormat::RemoveAllUnos()
-SwFormat::ResetAllFormatAttr()
-SwFormat::ResetFormatAttr(unsigned short, unsigned short)
-SwFormat::SetFormatName(rtl::OUString const&, bool)
-SwFormat::SetGrabBagItem(com::sun::star::uno::Any const&)
-SwFormat::SetPageFormatToDefault()
-SwFormat::SwClientNotify(SwModify const&, SfxHint const&)
-SwFormat::SwFormat(SwAttrPool&, char const*, WhichRangesContainer const&, SwFormat*, unsigned short)
-SwFormat::SwFormat(SwAttrPool&, rtl::OUString, WhichRangesContainer const&, SwFormat*, unsigned short)
-SwFormat::SwFormat(SwFormat const&)
-SwFormat::getIDocumentChartDataProviderAccess()
-SwFormat::getIDocumentDrawModelAccess()
-SwFormat::getIDocumentDrawModelAccess() const
-SwFormat::getIDocumentFieldsAccess()
-SwFormat::getIDocumentLayoutAccess()
-SwFormat::getIDocumentLayoutAccess() const
-SwFormat::getIDocumentTimerAccess()
-SwFormat::getSdrAllFillAttributesHelper() const
-SwFormat::operator=(SwFormat const&)
-SwFormat::supportsFullDrawingLayerFillAttributeSet() const
-SwFormat::~SwFormat()
 SwFormatAnchor::Clone(SfxItemPool*) const
 SwFormatAnchor::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwFormatAnchor::PutValue(com::sun::star::uno::Any const&, unsigned char)
@@ -10063,17 +8968,6 @@ SwFormatCol::PutValue(com::sun::star::uno::Any const&, unsigned char)
 SwFormatCol::QueryValue(com::sun::star::uno::Any&, unsigned char) const
 SwFormatCol::SetGutterWidth(unsigned short, unsigned short)
 SwFormatCol::dumpAsXml(_xmlTextWriter*) const
-SwFormatContentControl::Clone(SfxItemPool*) const
-SwFormatContentControl::CreatePoolDefault(unsigned short)
-SwFormatContentControl::DoCopy(SwTextNode&)
-SwFormatContentControl::GetTextNode() const
-SwFormatContentControl::NotifyChangeTextNode(SwTextNode*)
-SwFormatContentControl::SetTextAttr(SwTextContentControl*)
-SwFormatContentControl::SwFormatContentControl(std::shared_ptr<SwContentControl> const&, unsigned short)
-SwFormatContentControl::SwFormatContentControl(unsigned short)
-SwFormatContentControl::dumpAsXml(_xmlTextWriter*) const
-SwFormatContentControl::operator==(SfxPoolItem const&) const
-SwFormatContentControl::~SwFormatContentControl()
 SwFormatDrop::Clone(SfxItemPool*) const
 SwFormatDrop::CreateDefault()
 SwFormatDrop::GetInfo(SfxPoolItem&) const
@@ -10084,20 +8978,6 @@ SwFormatEditInReadonly::Clone(SfxItemPool*) const
 SwFormatEditInReadonly::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwFormatEditInReadonly::dumpAsXml(_xmlTextWriter*) const
 SwFormatEndAtTextEnd::Clone(SfxItemPool*) const
-SwFormatField::ClearTextField()
-SwFormatField::ForceUpdateTextNode()
-SwFormatField::InvalidateField()
-SwFormatField::IsFieldInDoc() const
-SwFormatField::IsProtect() const
-SwFormatField::SetField(std::unique_ptr<SwField, std::default_delete<SwField> >)
-SwFormatField::SetTextField(SwTextField&)
-SwFormatField::SwClientNotify(SwModify const&, SfxHint const&)
-SwFormatField::SwFormatField(SwFormatField const&)
-SwFormatField::SwFormatField(unsigned short)
-SwFormatField::UpdateDocPos(long)
-SwFormatField::UpdateTextNode(SfxHint const&)
-SwFormatField::dumpAsXml(_xmlTextWriter*) const
-SwFormatField::operator==(SfxPoolItem const&) const
 SwFormatFlySplit::Clone(SfxItemPool*) const
 SwFormatFlySplit::dumpAsXml(_xmlTextWriter*) const
 SwFormatFollowTextFlow::Clone(SfxItemPool*) const
@@ -10224,47 +9104,11 @@ SwFrameExample::InitColors_Impl()
 SwFrameExample::Paint(OutputDevice&, tools::Rectangle const&)
 SwFrameExample::SetDrawingArea(weld::DrawingArea*)
 SwFrameExample::StyleUpdated()
-SwFrameFormat::DelFrames()
-SwFrameFormat::GetDescription() const
-SwFrameFormat::GetIMapObject(Point const&, SwFlyFrame const*) const
-SwFrameFormat::GetLayoutDir() const
-SwFrameFormat::GetPositionLayoutDir() const
-SwFrameFormat::IsLowerOf(SwFrameFormat const&) const
-SwFrameFormat::IsVisible() const
-SwFrameFormat::MakeFrames()
-SwFrameFormat::MakeGraphic(ImageMap*, unsigned int, std::optional<Size> const&)
-SwFrameFormat::MoveTableBox(SwTableBox&, SwFrameFormat const*)
-SwFrameFormat::RegisterToFormat(SwFormat&)
-SwFrameFormat::SetFormatName(rtl::OUString const&, bool)
-SwFrameFormat::SetLayoutDir(SwFrameFormat::tLayoutDir)
-SwFrameFormat::SetPositionLayoutDir(short)
-SwFrameFormat::SwClientNotify(SwModify const&, SfxHint const&)
-SwFrameFormat::SwFrameFormat(SwAttrPool&, char const*, SwFrameFormat*, unsigned short, WhichRangesContainer const&)
-SwFrameFormat::SwFrameFormat(SwAttrPool&, rtl::OUString const&, SwFrameFormat*, unsigned short, WhichRangesContainer const&)
-SwFrameFormat::dumpAsXml(_xmlTextWriter*) const
-SwFrameFormat::getSdrAllFillAttributesHelper() const
-SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
-SwFrameFormat::~SwFrameFormat()
 SwGammaGrf::Clone(SfxItemPool*) const
 SwGammaGrf::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwGammaGrf::PutValue(com::sun::star::uno::Any const&, unsigned char)
 SwGammaGrf::QueryValue(com::sun::star::uno::Any&, unsigned char) const
 SwGammaGrf::operator==(SfxPoolItem const&) const
-SwGetExpField::ChangeExpansion(SwFrame const&, SwTextField const&)
-SwGetExpField::ChgExpStr(rtl::OUString const&, SwRootFrame const*)
-SwGetExpField::Copy() const
-SwGetExpField::ExpandImpl(SwRootFrame const*) const
-SwGetExpField::GetFieldName() const
-SwGetExpField::GetPar2() const
-SwGetExpField::GetSubType() const
-SwGetExpField::GetValue(SwRootFrame const*) const
-SwGetExpField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwGetExpField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
-SwGetExpField::SetLanguage(o3tl::strong_int<unsigned short, LanguageTypeTag>)
-SwGetExpField::SetPar2(rtl::OUString const&)
-SwGetExpField::SetSubType(unsigned short)
-SwGetExpField::SetValue(double const&)
-SwGetExpField::SetValue(double const&, SwRootFrame const*)
 SwGlossaries::DelGroupDoc(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 SwGlossaries::EditGroupDoc(rtl::OUString const&, rtl::OUString const&, bool)
 SwGlossaries::FindGroupName(rtl::OUString&)
@@ -10359,16 +9203,6 @@ SwMailMergeConfigItem::SetSourceView(SwView*)
 SwMailMergeConfigItem::SetTargetView(SwView*)
 SwMailMergeConfigItem::stopDBChangeListening()
 SwMailMergeConfigItem::updateCurrentDBDataFromDocument()
-SwMailMessage::getAttachments()
-SwMailMessage::getBccRecipients()
-SwMailMessage::getBody()
-SwMailMessage::getCcRecipients()
-SwMailMessage::getRecipients()
-SwMailMessage::getReplyToAddress()
-SwMailMessage::getSenderAddress()
-SwMailMessage::getSenderName()
-SwMailMessage::getSubject()
-SwMailMessage::~SwMailMessage()
 SwMailTransferable::addPropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
 SwMailTransferable::addVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
 SwMailTransferable::getPropertySetInfo()
@@ -10391,34 +9225,6 @@ SwModify::GetInfo(SfxPoolItem&) const
 SwModify::SwClientNotify(SwModify const&, SfxHint const&)
 SwModuleOptions::ConvertWordDelimiter(std::basic_string_view<char16_t, std::char_traits<char16_t> >, bool)
 SwModuleOptions::SwModuleOptions()
-SwNode::AddAnchoredFly(SwFrameFormat*)
-SwNode::GetSectionLevel() const
-SwNode::IsInProtectSect() const
-SwNode::IsInRedlines() const
-SwNode::IsInVisibleArea(SwViewShell const*) const
-SwNode::IsProtect() const
-SwNode::RemoveAnchoredFly(SwFrameFormat*)
-SwNode::SwNode()
-SwNode::SwNode(SwNode const&, SwNodeType)
-SwNode::SwNode(SwNodes&, o3tl::strong_int<int, Tag_SwNodeOffset>, SwNodeType)
-SwNode::dumpAsXml(_xmlTextWriter*) const
-SwNode::getIDocumentContentOperations()
-SwNode::getIDocumentDeviceAccess() const
-SwNode::getIDocumentDrawModelAccess() const
-SwNode::getIDocumentFieldsAccess()
-SwNode::getIDocumentFieldsAccess() const
-SwNode::getIDocumentLayoutAccess()
-SwNode::getIDocumentLayoutAccess() const
-SwNode::getIDocumentLinksAdministration()
-SwNode::getIDocumentLinksAdministration() const
-SwNode::getIDocumentListItems()
-SwNode::getIDocumentMarkAccess() const
-SwNode::getIDocumentRedlineAccess() const
-SwNode::getIDocumentSettingAccess() const
-SwNode::getIDocumentStyleAccess()
-SwNode::getIDocumentStylePoolAccess() const
-SwNode::resetAndQueueAccessibilityCheck(bool)
-SwNode::~SwNode()
 SwNumFormat::GetCharFormatName() const
 SwNumFormat::GetGraphicOrientation() const
 SwNumFormat::IsEnumeration() const
@@ -10441,38 +9247,6 @@ SwNumRulesWithName::GetNumFormat(unsigned long, SwNumFormat const*&, rtl::OUStri
 SwNumRulesWithName::SetNumFormat(unsigned long, SwNumFormat const&, rtl::OUString const&)
 SwNumRulesWithName::SwNumRulesWithName(SwNumRulesWithName const&)
 SwNumRulesWithName::operator=(SwNumRulesWithName const&)
-SwOLENode::BreakFileLink_Impl()
-SwOLENode::CheckFileLink_Impl()
-SwOLENode::DisconnectFileLink_Impl()
-SwOLENode::GetNewReplacement()
-SwOLENode::IsChart() const
-SwOLENode::IsInGlobalDocSection() const
-SwOLENode::IsOLEObjectDeleted() const
-SwOLENode::MakeCopy(SwDoc&, SwNode&, bool) const
-SwOLENode::RestorePersistentData()
-SwOLENode::SavePersistentData()
-SwOLENode::SetChanged()
-SwOLENode::SwOLENode(SwNode&, rtl::OUString const&, long, SwGrfFormatColl*, SwAttrSet const*)
-SwOLENode::SwOLENode(SwNode&, svt::EmbeddedObjectRef const&, SwGrfFormatColl*, SwAttrSet const*)
-SwOLENode::UpdateLinkURL_Impl()
-SwOLENode::dumpAsXml(_xmlTextWriter*) const
-SwOLENode::~SwOLENode()
-SwOLEObj::GetDescription()
-SwOLEObj::GetStyleString()
-SwOLEObj::IsOleRef() const
-SwOLEObj::IsProtected() const
-SwOLEObj::IsProtectedHdl(LinkParamNone*)
-SwOLEObj::LinkStubIsProtectedHdl(void*, LinkParamNone*)
-SwOLEObj::SetNode(SwOLENode*)
-SwOLEObj::SwOLEObj(rtl::OUString, long)
-SwOLEObj::SwOLEObj(svt::EmbeddedObjectRef const&)
-SwOLEObj::UnloadObject()
-SwOLEObj::UnloadObject(com::sun::star::uno::Reference<com::sun::star::embed::XEmbeddedObject> const&, SwDoc const*, long)
-SwOLEObj::dumpAsXml(_xmlTextWriter*) const
-SwOLEObj::resetBufferedData()
-SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(basegfx::B2DRange&, bool)
-SwOLEObj::tryToGetChartDrawPage() const
-SwOLEObj::~SwOLEObj()
 SwOneExampleFrame::Command(CommandEvent const&)
 SwOneExampleFrame::CreatePopup(Point const&)
 SwOneExampleFrame::Paint(OutputDevice&, tools::Rectangle const&)
@@ -10513,33 +9287,6 @@ SwPageNumberField::GetSubType() const
 SwPageNumberField::PutValue(com::sun::star::uno::Any const&, unsigned short)
 SwPageNumberField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
 SwPageNumberField::SetPar2(rtl::OUString const&)
-SwPagePreview::Activate(bool)
-SwPagePreview::CreateInstance(SfxViewFrame&, SfxViewShell*)
-SwPagePreview::DocSzChgd(Size const&)
-SwPagePreview::EnableHScrollbar(bool)
-SwPagePreview::EnableVScrollbar(bool)
-SwPagePreview::Execute(SfxRequest&)
-SwPagePreview::GetDocShell()
-SwPagePreview::GetInterface() const
-SwPagePreview::GetState(SfxItemSet&)
-SwPagePreview::GetStaticInterface()
-SwPagePreview::HandleWheelCommands(CommandEvent const&)
-SwPagePreview::InitFactory()
-SwPagePreview::InitInterface_Impl()
-SwPagePreview::InnerResizePixel(Point const&, Size const&, bool)
-SwPagePreview::OuterResizePixel(Point const&, Size const&)
-SwPagePreview::RegisterFactory(o3tl::strong_int<unsigned short, SfxInterfaceIdTag>)
-SwPagePreview::RegisterInterface(SfxModule const*)
-SwPagePreview::ScrollDocSzChg()
-SwPagePreview::ScrollViewSzChg()
-SwPagePreview::SetVScrollbarThumbPos(unsigned short)
-SwPagePreview::SetVisArea(tools::Rectangle const&)
-SwPagePreview::SetZoom(SvxZoomType, unsigned short)
-SwPagePreview::ShowHScrollbar(bool)
-SwPagePreview::ShowVScrollbar(bool)
-SwPagePreview::StateUndo(SfxItemSet&)
-SwPagePreview::SwPagePreview(SfxViewFrame&, SfxViewShell*)
-SwPagePreview::~SwPagePreview()
 SwPosition::Assign(SwNode const&, o3tl::strong_int<int, Tag_SwNodeOffset>, int)
 SwPosition::AssignEndIndex(SwContentNode const&)
 SwPosition::AssignStartIndex(SwContentNode const&)
@@ -10550,25 +9297,6 @@ SwPosition::SwPosition(SwNodeIndex const&, SwContentIndex const&)
 SwPosition::SwPosition(SwNodeIndex const&, o3tl::strong_int<int, Tag_SwNodeOffset>, SwContentNode const*, int)
 SwPosition::dumpAsXml(_xmlTextWriter*) const
 SwPosition::operator>=(SwPosition const&) const
-SwPostItField::ChangeStyleSheetName(std::basic_string_view<char16_t, std::char_traits<char16_t> >, SfxStyleSheetBase const*)
-SwPostItField::Copy() const
-SwPostItField::ExpandImpl(SwRootFrame const*) const
-SwPostItField::GetDescription() const
-SwPostItField::GetNumberOfParagraphs() const
-SwPostItField::GetPar2() const
-SwPostItField::PutValue(com::sun::star::uno::Any const&, unsigned short)
-SwPostItField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
-SwPostItField::SetName(rtl::OUString const&)
-SwPostItField::SetPar1(rtl::OUString const&)
-SwPostItField::SetPar2(rtl::OUString const&)
-SwPostItField::SetParaId(unsigned int)
-SwPostItField::SetParentId(unsigned int)
-SwPostItField::SetParentName(rtl::OUString const&)
-SwPostItField::SetParentPostItId(unsigned int)
-SwPostItField::SetPostItId(unsigned int)
-SwPostItField::SetResolved(bool)
-SwPostItField::ToggleResolved()
-SwPostItField::dumpAsXml(_xmlTextWriter*) const
 SwPtrItem::Clone(SfxItemPool*) const
 SwPtrItem::operator==(SfxPoolItem const&) const
 SwRDFHelper::addStatement(com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::rdf::XResource> const&, rtl::OUString const&, rtl::OUString const&)
@@ -10615,41 +9343,9 @@ SwScriptField::QueryValue(com::sun::star::uno::Any&, unsigned short) const
 SwScriptField::SetPar1(rtl::OUString const&)
 SwScriptField::SetPar2(rtl::OUString const&)
 SwScriptField::SwScriptField(SwScriptFieldType*, rtl::OUString, rtl::OUString, bool)
-SwSection::BreakLink()
-SwSection::CalcHiddenFlag() const
-SwSection::CreateLink(LinkCreateType)
-SwSection::DataEquals(SwSectionData const&) const
-SwSection::GetLinkFileName() const
-SwSection::IsEditInReadonly() const
-SwSection::MakeChildLinksVisible(SwSectionNode const&)
-SwSection::Notify(SfxHint const&)
-SwSection::SetCondHidden(bool)
-SwSection::SetEditInReadonly(bool)
-SwSection::SetHidden(bool)
-SwSection::SetLinkFileName(rtl::OUString const&)
-SwSection::SetProtect(bool)
-SwSection::SetRefObject(SwServerObject*)
-SwSection::SetSectionData(SwSectionData const&)
-SwSection::SwClientNotify(SwModify const&, SfxHint const&)
-SwSection::SwSection(SectionType, rtl::OUString const&, SwSectionFormat&)
-SwSection::dumpAsXml(_xmlTextWriter*) const
-SwSection::~SwSection()
 SwSectionData::dumpAsXml(_xmlTextWriter*) const
 SwSectionData::operator=(SwSectionData const&)
 SwSectionData::operator==(SwSectionData const&) const
-SwSectionFormat::DelFrames()
-SwSectionFormat::GetGlobalDocSection() const
-SwSectionFormat::GetInfo(SfxPoolItem&) const
-SwSectionFormat::GetRegistry()
-SwSectionFormat::IsInClipboard() const
-SwSectionFormat::IsInContent() const
-SwSectionFormat::IsVisible() const
-SwSectionFormat::MakeFrames()
-SwSectionFormat::MakeUnoObject()
-SwSectionFormat::SwClientNotify(SwModify const&, SfxHint const&)
-SwSectionFormat::SwSectionFormat(SwFrameFormat*, SwDoc*)
-SwSectionFormat::dumpAsXml(_xmlTextWriter*) const
-SwSectionFormat::supportsFullDrawingLayerFillAttributeSet() const
 SwSeqFieldList::InsertSort(SeqFieldLstElem)
 SwSetExpField::ChgExpStr(rtl::OUString const&, SwRootFrame const*)
 SwSetExpField::Copy() const
@@ -10670,22 +9366,6 @@ SwSetExpFieldType::SwClientNotify(SwModify const&, SfxHint const&)
 SwShadowCursorItem::Clone(SfxItemPool*) const
 SwShadowCursorItem::FillViewOptions(SwViewOption&) const
 SwShadowCursorItem::SwShadowCursorItem(SwViewOption const&)
-SwShellCursor::Create(SwPaM*) const
-SwShellCursor::FillRects()
-SwShellCursor::FillStartEnd(SwRect&, SwRect&) const
-SwShellCursor::Hide()
-SwShellCursor::Invalidate(SwRect const&)
-SwShellCursor::IsAtValidPos(bool) const
-SwShellCursor::IsReadOnlyAvailable() const
-SwShellCursor::MaxReplaceArived()
-SwShellCursor::SaveTableBoxContent(SwPosition const*)
-SwShellCursor::SetMark()
-SwShellCursor::Show(SfxViewShell const*)
-SwShellCursor::SwShellCursor(SwCursorShell const&, SwPosition const&)
-SwShellCursor::SwShellCursor(SwCursorShell const&, SwPosition const&, Point const&, SwPaM*)
-SwShellCursor::SwShellCursor(SwShellCursor&)
-SwShellCursor::UpDown(bool, unsigned short)
-SwShellCursor::~SwShellCursor()
 SwSortKey::SwSortKey()
 SwSortOptions::SwSortOptions(SwSortOptions const&)
 SwSortedObjs::Contains(SwAnchoredObject const&) const
@@ -10725,84 +9405,10 @@ SwTOXMark::operator==(SfxPoolItem const&) const
 SwTabCols::Insert(long, long, long, bool, unsigned long)
 SwTabCols::Remove(unsigned long, unsigned long)
 SwTabCols::operator=(SwTabCols const&)
-SwTabFrame::CalcFlyOffsets(long&, long&, long&, long*) const
-SwTabFrame::CalcHeightOfFirstContentLine() const
-SwTabFrame::CheckDirection(bool)
-SwTabFrame::Cut()
-SwTabFrame::DestroyImpl()
-SwTabFrame::FindLastContent()
-SwTabFrame::FindLastContentOrTable()
-SwTabFrame::FindMaster(bool) const
-SwTabFrame::Format(OutputDevice*, SwBorderAttrs const*)
-SwTabFrame::GetBottomLineSize() const
-SwTabFrame::GetFirstNonHeadlineRow() const
-SwTabFrame::GrowFrame(long, bool, bool)
-SwTabFrame::HandleTableHeadlineChange()
-SwTabFrame::Invalidate(SwTabFrameInvFlags)
-SwTabFrame::IsCollapsingBorders() const
-SwTabFrame::IsInHeadline(SwFrame const&) const
-SwTabFrame::IsLayoutSplitAllowed() const
-SwTabFrame::Join()
-SwTabFrame::JoinAndDelFollows()
-SwTabFrame::MakeAll(OutputDevice*)
-SwTabFrame::PaintSwFrame(OutputDevice&, SwRect const&) const
-SwTabFrame::Paste(SwFrame*, SwFrame*)
-SwTabFrame::Prepare(PrepareHint, void const*, bool)
-SwTabFrame::RegistFlys()
-SwTabFrame::RemoveFollowFlowLine()
-SwTabFrame::ShouldBwdMoved(SwLayoutFrame*, bool&)
-SwTabFrame::Split(long, bool, bool, bool&)
-SwTabFrame::SwClientNotify(SwModify const&, SfxHint const&)
-SwTabFrame::SwTabFrame(SwTabFrame&)
-SwTabFrame::SwTabFrame(SwTable&, SwFrame*)
-SwTabFrame::UpdateAttr_(SfxPoolItem const*, SfxPoolItem const*, SwTabFrameInvFlags&, SwAttrSetChg*, SwAttrSetChg*)
-SwTabFrame::dumpAsXml(_xmlTextWriter*) const
-SwTabFrame::~SwTabFrame()
-SwTableAutoFormat::CountPos(unsigned int, unsigned int, unsigned int, unsigned int)
-SwTableAutoFormat::FirstRowEndColumnIsRow()
-SwTableAutoFormat::FirstRowStartColumnIsRow()
-SwTableAutoFormat::GetBoxFormat(unsigned char) const
-SwTableAutoFormat::GetDefaultBoxFormat()
-SwTableAutoFormat::GetTableTemplateCellSubName(SwBoxAutoFormat const&) const
-SwTableAutoFormat::GetTableTemplateMap()
-SwTableAutoFormat::HasHeaderRow() const
-SwTableAutoFormat::LastRowEndColumnIsRow()
-SwTableAutoFormat::LastRowStartColumnIsRow()
-SwTableAutoFormat::Load(SvStream&, SwAfVersions const&)
-SwTableAutoFormat::RestoreTableProperties(SwTable&) const
-SwTableAutoFormat::Save(SvStream&, unsigned short) const
-SwTableAutoFormat::SetBoxFormat(SwBoxAutoFormat const&, unsigned char)
-SwTableAutoFormat::SetXObject(rtl::Reference<SwXTextTableStyle> const&)
-SwTableAutoFormat::StoreTableProperties(SwTable const&)
-SwTableAutoFormat::UpdateFromSet(unsigned char, SfxItemSet const&, SwTableAutoFormatUpdateFlags, SvNumberFormatter const*)
-SwTableAutoFormat::UpdateToSet(unsigned char, bool, bool, SfxItemSet&, SwTableAutoFormatUpdateFlags, SvNumberFormatter*) const
 SwTableAutoFormatTable::AddAutoFormat(SwTableAutoFormat const&)
 SwTableAutoFormatTable::EraseAutoFormat(rtl::OUString const&)
 SwTableAutoFormatTable::ReleaseAutoFormat(rtl::OUString const&)
 SwTableAutoFormatTable::operator[](unsigned long) const
-SwTableBox::ActualiseValueBox()
-SwTableBox::CheckBoxFormat(SwTableBoxFormat*)
-SwTableBox::FindEndOfRowSpan(SwTable const&, unsigned short)
-SwTableBox::FindNextBox(SwTable const&, SwTableBox const*, bool) const
-SwTableBox::FindPreviousBox(SwTable const&, SwTableBox const*) const
-SwTableBox::FindStartOfRowSpan(SwTable const&, unsigned short)
-SwTableBox::GetName() const
-SwTableBox::GetRedlineType() const
-SwTableBox::GetValue(SwTableCalcPara&) const
-SwTableBox::HasNumContent(double&, unsigned int&, bool&) const
-SwTableBox::IsEmpty(bool) const
-SwTableBox::IsInHeadline(SwTable const*) const
-SwTableBox::IsNumberChanged() const
-SwTableBox::IsValidNumTextNd(bool) const
-SwTableBox::RegisterToFormat(SwFormat&)
-SwTableBox::RemoveFromTable()
-SwTableBox::SwTableBox(SwTableBoxFormat*, SwNodeIndex const&, SwTableLine*)
-SwTableBox::SwTableBox(SwTableBoxFormat*, SwStartNode const&, SwTableLine*)
-SwTableBox::SwTableBox(SwTableBoxFormat*, unsigned short, SwTableLine*)
-SwTableBox::dumpAsXml(_xmlTextWriter*) const
-SwTableBox::getDummyFlag() const
-SwTableBox::setDummyFlag(bool)
-SwTableBox::~SwTableBox()
 SwTableBoxFormula::Calc(SwTableCalcPara&, double&)
 SwTableBoxFormula::GetNodeOfFormula() const
 SwTableBoxFormula::GetTableBox()
@@ -10848,17 +9454,6 @@ SwTableFormula::SplitMergeBoxNm_(SwTable const&, rtl::OUStringBuffer&, rtl::OUSt
 SwTableFormula::SwTableFormula(rtl::OUString)
 SwTableFormula::ToRelBoxNm(SwTable const*)
 SwTableFormula::ToSplitMergeBoxNm(SwTableFormulaUpdate&)
-SwTableLine::ChgFrameFormat(SwTableLineFormat*)
-SwTableLine::FindNextBox(SwTable const&, SwTableBox const*, bool) const
-SwTableLine::FindPreviousBox(SwTable const&, SwTableBox const*, bool) const
-SwTableLine::GetRedlineType() const
-SwTableLine::GetTableLineHeight(bool&) const
-SwTableLine::IsDeleted(unsigned long&) const
-SwTableLine::IsEmpty() const
-SwTableLine::IsTracked(unsigned long&, bool) const
-SwTableLine::SwTableLine(SwTableLineFormat*, unsigned short, SwTableBox*)
-SwTableLine::hasSoftPageBreak() const
-SwTableLine::~SwTableLine()
 SwTableNode::MakeCopy(SwDoc&, SwNodeIndex const&) const
 SwTableNode::MakeFrame(SwFrame*)
 SwTableNode::MakeFramesForAdjacentContentNode(SwNodeIndex const&)
@@ -10898,30 +9493,6 @@ SwTextBlocks::PutText(rtl::OUString const&, rtl::OUString const&, rtl::OUString 
 SwTextBlocks::Rename(unsigned short, rtl::OUString const*, rtl::OUString const*)
 SwTextBlocks::SetMacroTable(unsigned short, SvxMacroTableDtor const&)
 SwTextBlocks::SetName(rtl::OUString const&)
-SwTextBoxHelper::CollectTextBoxes(SdrObject const*, SwFrameFormat*)
-SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat*, SdrObject const*)
-SwTextBoxHelper::changeAnchor(SwFrameFormat*, SdrObject*)
-SwTextBoxHelper::destroy(SwFrameFormat const*, SdrObject const*)
-SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat*, SdrObject*)
-SwTextBoxHelper::getByIndex(SdrPage const*, int)
-SwTextBoxHelper::getOrdNum(SdrObject const*)
-SwTextBoxHelper::getProperty(SwFrameFormat const*, rtl::OUString const&)
-SwTextBoxHelper::getProperty(SwFrameFormat const*, unsigned short, unsigned char, com::sun::star::uno::Any&)
-SwTextBoxHelper::getRelativeTextRectangle(SdrObject*)
-SwTextBoxHelper::getShapeWrapThrough(SwFrameFormat const*, bool&)
-SwTextBoxHelper::hasTextFrame(SdrObject const*)
-SwTextBoxHelper::isAnchorSyncNeeded(SwFrameFormat const*, SwFrameFormat const*)
-SwTextBoxHelper::mapAnchorType(RndStdIds const&)
-SwTextBoxHelper::queryInterface(SwFrameFormat const*, com::sun::star::uno::Type const&, SdrObject*)
-SwTextBoxHelper::restoreLinks(std::set<ZSortFly, std::less<ZSortFly>, std::allocator<ZSortFly> >&, std::vector<SwFrameFormat*, std::allocator<SwFrameFormat*> >&, std::map<SwFrameFormat const*, SwFrameFormat const*, std::less<SwFrameFormat const*>, std::allocator<std::pair<SwFrameFormat const* const, SwFrameFormat const*> > >&)
-SwTextBoxHelper::saveLinks(sw::FrameFormats<sw::SpzFrameFormat*> const&, std::map<SwFrameFormat const*, SwFrameFormat const*, std::less<SwFrameFormat const*>, std::allocator<std::pair<SwFrameFormat const* const, SwFrameFormat const*> > >&)
-SwTextBoxHelper::set(SwFrameFormat*, SdrObject*, com::sun::star::uno::Reference<com::sun::star::text::XTextFrame>)
-SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat&, SfxItemSet const&, SdrObject*)
-SwTextBoxHelper::syncProperty(SwFrameFormat*, std::basic_string_view<char16_t, std::char_traits<char16_t> >, com::sun::star::uno::Any const&, SdrObject*)
-SwTextBoxHelper::syncProperty(SwFrameFormat*, unsigned short, unsigned char, com::sun::star::uno::Any const&, SdrObject*)
-SwTextBoxHelper::syncTextBoxSize(SwFrameFormat*, SdrObject*)
-SwTextBoxHelper::synchronizeGroupTextBoxProperty(bool (*)(SwFrameFormat*, SdrObject*), SwFrameFormat*, SdrObject*)
-SwTextBoxHelper::updateTextBoxMargin(SdrObject*)
 SwTextContentControl::ChgTextNode(SwTextNode*)
 SwTextContentControl::CreateTextContentControl(SwDoc&, SwTextNode*, SfxPoolItemHolder const&, int, int, bool)
 SwTextContentControl::GetTextNode() const
@@ -10929,30 +9500,6 @@ SwTextContentControl::SwTextContentControl(SwContentControlManager*, SfxPoolItem
 SwTextContentControl::ToString() const
 SwTextContentControl::dumpAsXml(_xmlTextWriter*) const
 SwTextContentControl::~SwTextContentControl()
-SwTextFootnote::CheckCondColl()
-SwTextFootnote::CopyFootnote(SwTextFootnote&, SwTextNode&) const
-SwTextFootnote::DelFrames(SwRootFrame const*)
-SwTextFootnote::InvalidateNumberInLayout()
-SwTextFootnote::MakeNewTextSection(SwNodes&)
-SwTextFootnote::SetSeqRefNo()
-SwTextFootnote::SetStartNode(SwNodeIndex const*, bool)
-SwTextFootnote::SetUniqueSeqRefNo(SwDoc&)
-SwTextFootnote::SwTextFootnote(SfxPoolItemHolder const&, int)
-SwTextFootnote::dumpAsXml(_xmlTextWriter*) const
-SwTextFootnote::~SwTextFootnote()
-SwTextFormatColl::AreListLevelIndentsApplicable() const
-SwTextFormatColl::AreListLevelIndentsApplicableImpl(unsigned short) const
-SwTextFormatColl::GetAttrOutlineLevel() const
-SwTextFormatColl::IsAtDocNodeSet() const
-SwTextFormatColl::ResetAllFormatAttr()
-SwTextFormatColl::ResetFormatAttr(unsigned short, unsigned short)
-SwTextFormatColl::SetAttrOutlineLevel(int)
-SwTextFormatColl::SetFormatAttr(SfxItemSet const&)
-SwTextFormatColl::SetFormatAttr(SfxPoolItem const&)
-SwTextFormatColl::SetLinkedCharFormat(SwCharFormat*)
-SwTextFormatColl::SwClientNotify(SwModify const&, SfxHint const&)
-SwTextFormatColl::dumpAsXml(_xmlTextWriter*) const
-SwTextFormatColl::~SwTextFormatColl()
 SwTextGridItem::Clone(SfxItemPool*) const
 SwTextGridItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SwTextGridItem::Init()
@@ -10972,39 +9519,6 @@ SwTextLineBreak::~SwTextLineBreak()
 SwTextRuby::SwClientNotify(SwModify const&, SfxHint const&)
 SwTextRuby::SwTextRuby(SfxPoolItemHolder const&, int, int)
 SwTextRuby::~SwTextRuby()
-SwTextShell::ExecBasicMove(SfxRequest&)
-SwTextShell::ExecCharAttr(SfxRequest&)
-SwTextShell::ExecCharAttrArgs(SfxRequest&)
-SwTextShell::ExecDB(SfxRequest const&)
-SwTextShell::ExecDelete(SfxRequest&)
-SwTextShell::ExecEnterNum(SfxRequest&)
-SwTextShell::ExecField(SfxRequest&)
-SwTextShell::ExecGlossary(SfxRequest&)
-SwTextShell::ExecIdx(SfxRequest const&)
-SwTextShell::ExecInsert(SfxRequest&)
-SwTextShell::ExecMove(SfxRequest&)
-SwTextShell::ExecMoveCol(SfxRequest&)
-SwTextShell::ExecMoveLingu(SfxRequest&)
-SwTextShell::ExecMoveMisc(SfxRequest&)
-SwTextShell::ExecMovePage(SfxRequest&)
-SwTextShell::ExecParaAttr(SfxRequest&)
-SwTextShell::ExecParaAttrArgs(SfxRequest&)
-SwTextShell::ExecRotateTransliteration(SfxRequest const&)
-SwTextShell::ExecSetNumber(SfxRequest const&)
-SwTextShell::ExecTransliteration(SfxRequest const&)
-SwTextShell::Execute(SfxRequest&)
-SwTextShell::GetAttrState(SfxItemSet&)
-SwTextShell::GetIdxState(SfxItemSet&)
-SwTextShell::GetInterface() const
-SwTextShell::GetState(SfxItemSet&)
-SwTextShell::GetStaticInterface()
-SwTextShell::InitInterface_Impl()
-SwTextShell::InsertHyperlink(SvxHyperlinkItem const&)
-SwTextShell::InsertMediaDlg(SfxRequest const&)
-SwTextShell::InsertSymbol(SfxRequest&)
-SwTextShell::RegisterInterface(SfxModule const*)
-SwTextShell::StateField(SfxItemSet&)
-SwTextShell::StateInsert(SfxItemSet&)
 SwTranslateHelper::ExportPaMToHTML(SwPaM*)
 SwTranslateHelper::PasteHTMLToPaM(SwWrtShell&, SwPaM*, rtl::OString const&)
 SwTranslateHelper::TranslateDocument(SwWrtShell&, SwTranslateHelper::TranslateAPIConfig const&)
@@ -11031,45 +9545,6 @@ SwValueField::SwValueField(SwValueField const&)
 SwValueField::SwValueField(SwValueFieldType*, unsigned int, o3tl::strong_int<unsigned short, LanguageTypeTag>, double)
 SwValueField::dumpAsXml(_xmlTextWriter*) const
 SwView::StopShellTimer()
-SwVirtFlyDrawObj::CheckMacroHit(SdrObjMacroHitRec const&) const
-SwVirtFlyDrawObj::ContainsSwGrfNode() const
-SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
-SwVirtFlyDrawObj::Crop(basegfx::B2DPoint const&, double, double)
-SwVirtFlyDrawObj::GetCurrentBoundRect() const
-SwVirtFlyDrawObj::GetFormat()
-SwVirtFlyDrawObj::GetFormat() const
-SwVirtFlyDrawObj::GetLastBoundRect() const
-SwVirtFlyDrawObj::GetLogicRect() const
-SwVirtFlyDrawObj::GetMacroPointer(SdrObjMacroHitRec const&) const
-SwVirtFlyDrawObj::GetRotateAngle() const
-SwVirtFlyDrawObj::GetSnapRect() const
-SwVirtFlyDrawObj::HasLimitedRotation() const
-SwVirtFlyDrawObj::HasMacro() const
-SwVirtFlyDrawObj::IsTextBox() const
-SwVirtFlyDrawObj::Move(Size const&)
-SwVirtFlyDrawObj::NbcCrop(basegfx::B2DPoint const&, double, double)
-SwVirtFlyDrawObj::NbcMove(Size const&)
-SwVirtFlyDrawObj::NbcResize(Point const&, Fraction const&, Fraction const&)
-SwVirtFlyDrawObj::NbcSetLogicRect(tools::Rectangle const&)
-SwVirtFlyDrawObj::NbcSetSnapRect(tools::Rectangle const&)
-SwVirtFlyDrawObj::RecalcBoundRect()
-SwVirtFlyDrawObj::RecalcSnapRect()
-SwVirtFlyDrawObj::Resize(Point const&, Fraction const&, Fraction const&, bool)
-SwVirtFlyDrawObj::Rotate(Point const&, o3tl::strong_int<int, FractionTag<100> >, double, double)
-SwVirtFlyDrawObj::SetLogicRect(tools::Rectangle const&)
-SwVirtFlyDrawObj::SetRect() const
-SwVirtFlyDrawObj::SetSnapRect(tools::Rectangle const&)
-SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrModel&, SdrObject&, SwFlyFrame*)
-SwVirtFlyDrawObj::TakeObjInfo(SdrObjTransformInfoRec&) const
-SwVirtFlyDrawObj::TakeXorPoly() const
-SwVirtFlyDrawObj::addCropHandles(SdrHdlList&) const
-SwVirtFlyDrawObj::dumpAsXml(_xmlTextWriter*) const
-SwVirtFlyDrawObj::getFullDragClone() const
-SwVirtFlyDrawObj::getInnerBound() const
-SwVirtFlyDrawObj::getOuterBound() const
-SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(Size&) const
-SwVirtFlyDrawObj::wrap_DoPaintObject(drawinglayer::geometry::ViewInformation2D const&) const
-SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 SwVisibleCursor::Hide()
 SwVisibleCursor::SetPosAndShow(SfxViewShell const*)
 SwVisibleCursor::Show()
@@ -11096,23 +9571,6 @@ SwWebView::RegisterInterface(SfxModule const*)
 SwWebView::SelectShell()
 SwWebView::SwWebView(SfxViewFrame&, SfxViewShell*)
 SwWebView::~SwWebView()
-SwWriteTable::CollectTableRowsCols(long, unsigned int, long, unsigned int, SwTableLines const&, unsigned short)
-SwWriteTable::FillTableRowsCols(long, unsigned short, unsigned int, unsigned short, long, unsigned int, SwTableLines const&, SvxBrushItem const*, unsigned short, unsigned short)
-SwWriteTable::GetAbsHeight(long, unsigned long, unsigned short) const
-SwWriteTable::GetAbsWidth(unsigned short, unsigned short) const
-SwWriteTable::GetBoxWidth(SwTableBox const*)
-SwWriteTable::GetLeftSpace(unsigned short) const
-SwWriteTable::GetLineBrush(SwTableBox const*, SwWriteTableRow*)
-SwWriteTable::GetLineHeight(SwTableBox const*)
-SwWriteTable::GetLineHeight(SwTableLine const*)
-SwWriteTable::GetPercentWidth(unsigned short, unsigned short) const
-SwWriteTable::GetRawWidth(unsigned short, unsigned short) const
-SwWriteTable::GetRelWidth(unsigned short, unsigned short) const
-SwWriteTable::GetRightSpace(unsigned long, unsigned short) const
-SwWriteTable::MergeBorders(editeng::SvxBorderLine const*, bool)
-SwWriteTable::MergeBoxBorders(SwTableBox const*, unsigned long, unsigned long, unsigned short, unsigned short, unsigned short&, unsigned short&)
-SwWriteTable::ShouldExpandSub(SwTableBox const*, bool, unsigned short) const
-SwWriteTable::~SwWriteTable()
 SwWriter::SwWriter(SfxMedium&, SwCursorShell&, bool)
 SwWriter::SwWriter(SfxMedium&, SwDoc&)
 SwWriter::SwWriter(SvStream&, SwCursorShell&, bool)
@@ -11120,85 +9578,6 @@ SwWriter::SwWriter(com::sun::star::uno::Reference<com::sun::star::embed::XStorag
 SwWrtShellItem::Clone(SfxItemPool*) const
 SwWrtShellItem::SwWrtShellItem(SwWrtShell*)
 SwWrtShellItem::operator==(SfxPoolItem const&) const
-SwXTextRange::DeleteAndInsert(std::basic_string_view<char16_t, std::char_traits<char16_t> >, sw::DeleteAndInsertMode)
-SwXTextRange::GetDoc()
-SwXTextRange::GetDoc() const
-SwXTextRange::Impl::Notify(SfxHint const&)
-SwXTextRange::Invalidate()
-SwXTextRange::SetPositions(SwPaM const&)
-SwXTextRange::SwXTextRange(SwSectionFormat&)
-SwXTextRange::SwXTextRange(SwTableFormat&)
-SwXTextRange::addPropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
-SwXTextRange::addVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-SwXTextRange::createContentEnumeration(rtl::OUString const&)
-SwXTextRange::createEnumeration()
-SwXTextRange::getAvailableServiceNames()
-SwXTextRange::getElementType()
-SwXTextRange::getImplementationName()
-SwXTextRange::getPropertyDefault(rtl::OUString const&)
-SwXTextRange::getPropertySetInfo()
-SwXTextRange::getPropertyState(rtl::OUString const&)
-SwXTextRange::getPropertyStates(com::sun::star::uno::Sequence<rtl::OUString> const&)
-SwXTextRange::getPropertyValue(rtl::OUString const&)
-SwXTextRange::getString()
-SwXTextRange::getSupportedServiceNames()
-SwXTextRange::hasElements()
-SwXTextRange::makeRedline(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-SwXTextRange::removePropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
-SwXTextRange::removeVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-SwXTextRange::setPropertyToDefault(rtl::OUString const&)
-SwXTextRange::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
-SwXTextRange::setString(rtl::OUString const&)
-SwXTextRange::supportsService(rtl::OUString const&)
-SwXTextRange::~SwXTextRange()
-SwXTextTable::CreateXTextTable(SwFrameFormat*)
-SwXTextTable::Impl::GetColumnCount()
-SwXTextTable::Impl::GetRowCount()
-SwXTextTable::Impl::Notify(SfxHint const&)
-SwXTextTable::SwXTextTable()
-SwXTextTable::SwXTextTable(SwFrameFormat&)
-SwXTextTable::addChartDataChangeEventListener(com::sun::star::uno::Reference<com::sun::star::chart::XChartDataChangeEventListener> const&)
-SwXTextTable::addEventListener(com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> const&)
-SwXTextTable::addPropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
-SwXTextTable::addVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-SwXTextTable::attach(com::sun::star::uno::Reference<com::sun::star::text::XTextRange> const&)
-SwXTextTable::autoFormat(rtl::OUString const&)
-SwXTextTable::createCursorByCellName(rtl::OUString const&)
-SwXTextTable::createSortDescriptor()
-SwXTextTable::dispose()
-SwXTextTable::getAnchor()
-SwXTextTable::getCellByName(rtl::OUString const&)
-SwXTextTable::getCellByPosition(int, int)
-SwXTextTable::getCellNames()
-SwXTextTable::getCellRangeByName(rtl::OUString const&)
-SwXTextTable::getCellRangeByPosition(int, int, int, int)
-SwXTextTable::getColumnDescriptions()
-SwXTextTable::getColumns()
-SwXTextTable::getData()
-SwXTextTable::getDataArray()
-SwXTextTable::getImplementationName()
-SwXTextTable::getName()
-SwXTextTable::getNotANumber()
-SwXTextTable::getPropertySetInfo()
-SwXTextTable::getPropertyValue(rtl::OUString const&)
-SwXTextTable::getRowDescriptions()
-SwXTextTable::getRows()
-SwXTextTable::getSupportedServiceNames()
-SwXTextTable::initialize(int, int)
-SwXTextTable::isNotANumber(double)
-SwXTextTable::removeChartDataChangeEventListener(com::sun::star::uno::Reference<com::sun::star::chart::XChartDataChangeEventListener> const&)
-SwXTextTable::removeEventListener(com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> const&)
-SwXTextTable::removePropertyChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> const&)
-SwXTextTable::removeVetoableChangeListener(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> const&)
-SwXTextTable::setColumnDescriptions(com::sun::star::uno::Sequence<rtl::OUString> const&)
-SwXTextTable::setData(com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<double> > const&)
-SwXTextTable::setDataArray(com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<com::sun::star::uno::Any> > const&)
-SwXTextTable::setName(rtl::OUString const&)
-SwXTextTable::setPropertyValue(rtl::OUString const&, com::sun::star::uno::Any const&)
-SwXTextTable::setRowDescriptions(com::sun::star::uno::Sequence<rtl::OUString> const&)
-SwXTextTable::sort(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-SwXTextTable::supportsService(rtl::OUString const&)
-SwXTextTable::~SwXTextTable()
 SwXTextTableCursor::GetCursor()
 SwXTextTableCursor::GetCursor() const
 SwXTextTableCursor::GetDoc()
@@ -11235,18 +9614,8 @@ SyntaxHighlighter::Tokenizer::Tokenizer(HighlighterLanguage)
 SyntaxHighlighter::Tokenizer::getHighlightPortions(std::basic_string_view<char16_t, std::char_traits<char16_t> >, std::vector<HighlightPortion, std::allocator<HighlightPortion> >&) const
 SyntaxHighlighter::Tokenizer::getNextToken(char16_t const*&, char16_t const*, TokenType&, char16_t const*&, char16_t const*&) const
 SyntaxHighlighter::Tokenizer::setKeyWords(char const**, unsigned short)
-SystemWindow::GetMaxOutputSizePixel() const
-SystemWindow::GetWindowState(vcl::WindowData&) const
 SystemWindow::ImplData::ImplData()
-SystemWindow::IsTitleButtonVisible(TitleButton) const
-SystemWindow::SetMaxOutputSizePixel(Size const&)
-SystemWindow::SetWindowState(vcl::WindowData const&)
-SystemWindow::ShowTitleButton(TitleButton, bool)
-SystemWindow::SystemWindow(WindowType, char const*)
 SystemWindow::createScreenshot()
-SystemWindow::isLayoutEnabled() const
-SystemWindow::loadUI(vcl::Window*, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
-SystemWindow::setOptimalLayoutSize(bool)
 TBCExtraInfo::Read(SvStream&)
 TBCExtraInfo::TBCExtraInfo()
 TBCExtraInfo::getOnAction() const
@@ -11506,13 +9875,6 @@ Task::Task(Task const&)
 Task::Task(char const*)
 Task::operator=(Task const&)
 Task::~Task()
-TaskPaneList::FindNextFloat(vcl::Window*, bool)
-TaskPaneList::FindNextSplitter(vcl::Window*)
-TaskPaneList::HandleKeyEvent(KeyEvent const&)
-TaskPaneList::IsCycleKey(vcl::KeyCode const&)
-TaskPaneList::IsInList(vcl::Window*)
-TaskPaneList::TaskPaneList()
-TaskPaneList::~TaskPaneList()
 TestFontSubset(void const*, unsigned int)
 TestPDFExportFODT
 TextAttrib::operator==(TextAttrib const&) const
@@ -11600,57 +9962,6 @@ TextRanger::GetBoundRect_() const
 TextRanger::SetVertical(bool)
 TextSelection::Justify()
 TextSelection::TextSelection(TextPaM const&)
-TextView::CenterPaM(TextPaM const&)
-TextView::Copy(com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> const&)
-TextView::CursorDown(TextPaM const&)
-TextView::CursorEndOfDoc()
-TextView::CursorEndOfParagraph(TextPaM const&)
-TextView::CursorFirstWord(TextPaM const&)
-TextView::CursorLeft(TextPaM const&, unsigned short)
-TextView::CursorRight(TextPaM const&, unsigned short)
-TextView::CursorStartOfDoc()
-TextView::CursorStartOfLine(TextPaM const&)
-TextView::CursorStartOfParagraph(TextPaM const&)
-TextView::CursorUp(TextPaM const&)
-TextView::CursorWordLeft(TextPaM const&)
-TextView::CursorWordRight(TextPaM const&)
-TextView::EnableCursor(bool)
-TextView::GetSelected(LineEnd) const
-TextView::GetSelection() const
-TextView::HideSelection()
-TextView::ImpDelete(unsigned char, unsigned char)
-TextView::ImpGetOutputStartPos(Point const&) const
-TextView::ImpHideDDCursor()
-TextView::ImpIndentBlock(bool)
-TextView::ImpMoveCursor(KeyEvent const&)
-TextView::ImpPaint(OutputDevice&, Point const&, tools::Rectangle const*, TextSelection const*)
-TextView::ImpPaint(OutputDevice&, tools::Rectangle const&)
-TextView::ImpSetSelection(TextSelection const&)
-TextView::ImpShowCursor(bool, bool, bool)
-TextView::ImpShowDDCursor()
-TextView::ImpShowHideSelection(TextSelection const*)
-TextView::ImplCheckTextLen(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
-TextView::ImplTruncateNewText(rtl::OUString&) const
-TextView::Invalidate()
-TextView::IsAutoScroll() const
-TextView::IsCursorEnabled() const
-TextView::IsInSelection(TextPaM const&) const
-TextView::IsSelectionAtPoint(Point const&)
-TextView::PageDown(TextPaM const&)
-TextView::PageUp(TextPaM const&)
-TextView::Paste(com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> const&)
-TextView::SetCursorAtPoint(Point const&)
-TextView::SetInsertMode(bool)
-TextView::SetPaintSelection(bool)
-TextView::SetSelection(TextSelection const&, bool)
-TextView::ShowSelection()
-TextView::ShowSelection(TextSelection const&)
-TextView::dragDropEnd(com::sun::star::datatransfer::dnd::DragSourceDropEvent const&)
-TextView::dragEnter(com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent const&)
-TextView::dragExit(com::sun::star::datatransfer::dnd::DropTargetEvent const&)
-TextView::dragGestureRecognized(com::sun::star::datatransfer::dnd::DragGestureEvent const&)
-TextView::dragOver(com::sun::star::datatransfer::dnd::DropTargetDragEvent const&)
-TextView::drop(com::sun::star::datatransfer::dnd::DropTargetDropEvent const&)
 Throbber::Resize()
 Throbber::dispose()
 Throbber::~Throbber()
@@ -13563,6 +11874,7 @@ chart::getPointFromPoly(com::sun::star::drawing::PolyPolygonShape3D const&, int,
 chart::getPointFromPoly(std::vector<std::vector<com::sun::star::drawing::Position3D, std::allocator<com::sun::star::drawing::Position3D> >, std::allocator<std::vector<com::sun::star::drawing::Position3D, std::allocator<com::sun::star::drawing::Position3D> > > > const&, int, int)
 chart::operator+(com::sun::star::drawing::Position3D const&, com::sun::star::drawing::Direction3D const&)
 chart::operator-(com::sun::star::drawing::Position3D const&, com::sun::star::drawing::Position3D const&)
+checkForUpdates(UpdateInfo&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::task::XInteractionHandler> const&, com::sun::star::uno::Reference<com::sun::star::deployment::XUpdateInformationProvider> const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >, std::basic_string_view<char16_t, std::char_traits<char16_t> >, com::sun::star::uno::Sequence<rtl::OUString> const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >, rtl::OUString const&)
 check_degeneracy
 check_if_less
 check_int_sec_sos_free_decl
@@ -17774,7 +16086,6 @@ svt::DialogClosedListener::disposing(com::sun::star::lang::EventObject const&)
 svt::DocumentLockFile::GetLockDataImpl(std::unique_lock<std::mutex>&)
 svt::DocumentLockFile::WriteEntryToStream(std::unique_lock<std::mutex>&, o3tl::enumarray<LockFileComponent, rtl::OUString> const&, com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&)
 svt::EditBrowseBox::AsynchGetFocus()
-svt::EditBrowseBox::BrowserMouseEventPtr::Set(BrowserMouseEvent const*, bool)
 svt::EditBrowseBox::GetImage(svt::EditBrowseBox::RowStatus) const
 svt::EditBrowseBox::ResizeController(tools::SvRef<svt::CellController> const&, tools::Rectangle const&)
 svt::EditBrowseBox::implCreateActiveAccessible()
@@ -18286,6 +16597,7 @@ vcl::ControlLayoutData::ToRelativeLineIndex(long) const
 vcl::ConvertDoubleValue(double, long, unsigned short, FieldUnit, FieldUnit)
 vcl::CreateTTFfontSubset(vcl::AbstractTrueTypeFont&, std::vector<unsigned char, std::allocator<unsigned char> >&, unsigned int const*, unsigned char const*, int, FontSubsetInfo&)
 vcl::CreateTTFromTTGlyphs(vcl::AbstractTrueTypeFont*, std::vector<unsigned char, std::allocator<unsigned char> >&, unsigned short const*, unsigned char const*, int)
+vcl::DefaultTextLayout::DrawText(Point const&, rtl::OUString const&, int, int, std::vector<tools::Rectangle, std::allocator<tools::Rectangle> >*, rtl::OUString*)
 vcl::ExtOutDevData::~ExtOutDevData()
 vcl::I18nHelper::I18nHelper(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, LanguageTag)
 vcl::I18nHelper::filterFormattingChars(rtl::OUString const&)
@@ -18339,12 +16651,26 @@ vcl::PDFExtOutDevData::RegisterDest()
 vcl::PaintBufferGuard::SetPaintRect(tools::Rectangle const&)
 vcl::PngImageReader::getMicrosoftGifChunk(SvStream&)
 vcl::PngImageReader::isAPng(SvStream&)
+vcl::PrinterController::getFilteredPageCount() const
+vcl::PrinterController::getFilteredPageFile(int, GDIMetaFile&, bool)
+vcl::PrinterController::getUIOptions() const
+vcl::PrinterController::isDirectPrint() const
+vcl::PrinterController::isShowDialogs() const
+vcl::PrinterController::isUIOptionEnabled(rtl::OUString const&) const
+vcl::PrinterController::printFilteredPage(int)
+vcl::PrinterController::setLastPage(bool)
 vcl::PrinterOptionsHelper::setUIControlOpt(com::sun::star::uno::Sequence<rtl::OUString> const&, rtl::OUString const&, com::sun::star::uno::Sequence<rtl::OUString> const&, rtl::OUString const&, com::sun::star::beans::PropertyValue const*, vcl::PrinterOptionsHelper::UIControlOptions const&)
 vcl::ReadRegion(SvStream&, vcl::Region&)
 vcl::Region::GetAsRegionBand() const
 vcl::Region::Overlaps(tools::Rectangle const&) const
 vcl::Region::Scale(double, double)
 vcl::ScriptRun::next()
+vcl::SettingsConfigItem::getValues()
+vcl::Window::ImplGetWindow() const
+vcl::Window::SetTextAlign(TextAlign)
+vcl::Window::get_hexpand() const
+vcl::filter::PDFTrailerElement::GetLocation() const
+vcl::filter::PDFTrailerElement::Read(SvStream&)
 vcl::font::FeatureDefinition::FeatureDefinition(unsigned int, TranslateId, rtl::OUString)
 vcl::font::FeatureDefinition::FeatureDefinition(unsigned int, TranslateId, std::vector<vcl::font::FeatureParameter, std::allocator<vcl::font::FeatureParameter> >)
 vcl::font::FeatureParameter::FeatureParameter(unsigned int, TranslateId)
@@ -18352,6 +16678,11 @@ vcl::font::FeatureParameter::FeatureParameter(unsigned int, rtl::OUString)
 vcl::font::FontSelectPattern::hashCode() const
 vcl::font::FontSelectPattern::operator==(vcl::font::FontSelectPattern const&) const
 vcl::font::OpenTypeFeatureDefinitionList()
+vcl::font::PhysicalFontCollection::SetFallbackHook(vcl::font::GlyphFallbackFontSubstitution*)
+vcl::font::PhysicalFontFace::GetGlyphName(unsigned int, bool) const
+vcl::font::PhysicalFontFace::GetName(vcl::font::NameID, LanguageTag const&) const
+vcl::font::PhysicalFontFace::HasColorBitmaps() const
+vcl::font::PhysicalFontFace::HasColorLayers() const
 vcl::getTTCoverage(std::optional<std::bitset<128ul> >&, std::optional<std::bitset<64ul> >&, unsigned char const*, unsigned long)
 vcl::importPdfVectorGraphicData(SvStream&, std::shared_ptr<VectorGraphicData>&)
 vcl::lok::unregisterPollCallbacks()

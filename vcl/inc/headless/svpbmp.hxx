@@ -33,41 +33,41 @@ public:
              SvpSalBitmap();
     virtual ~SvpSalBitmap() override;
 
-    bool        ImplCreate(const Size& rSize,
+    SAL_DLLPRIVATE bool        ImplCreate(const Size& rSize,
                            vcl::PixelFormat ePixelFormat,
                            const BitmapPalette& rPalette,
                            bool bClear);
 
     // SalBitmap
-    virtual bool            Create(const Size& rSize,
+    SAL_DLLPRIVATE virtual bool            Create(const Size& rSize,
                                    vcl::PixelFormat ePixelFormat,
                                    const BitmapPalette& rPalette) override;
-    virtual bool            Create( const SalBitmap& rSalBmp ) override;
-    virtual bool            Create( const SalBitmap& rSalBmp,
+    SAL_DLLPRIVATE virtual bool            Create( const SalBitmap& rSalBmp ) override;
+    SAL_DLLPRIVATE virtual bool            Create( const SalBitmap& rSalBmp,
                                     SalGraphics* pGraphics ) override;
-    virtual bool            Create(const SalBitmap& rSalBmp,
+    SAL_DLLPRIVATE virtual bool            Create(const SalBitmap& rSalBmp,
                                    vcl::PixelFormat eNewPixelFormat) override;
-    virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
+    SAL_DLLPRIVATE virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) override;
-    void                    Create(const std::optional<BitmapBuffer> & pBuf);
+    SAL_DLLPRIVATE void                    Create(const std::optional<BitmapBuffer> & pBuf);
     const BitmapBuffer*     GetBuffer() const
     {
         return moDIB ? &*moDIB : nullptr;
     }
-    virtual void            Destroy() final override;
-    virtual Size            GetSize() const override;
-    virtual sal_uInt16      GetBitCount() const override;
+    SAL_DLLPRIVATE virtual void            Destroy() final override;
+    SAL_DLLPRIVATE virtual Size            GetSize() const override;
+    SAL_DLLPRIVATE virtual sal_uInt16      GetBitCount() const override;
 
-    virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) override;
-    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
-    virtual bool            GetSystemData( BitmapSystemData& rData ) override;
+    SAL_DLLPRIVATE virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) override;
+    SAL_DLLPRIVATE virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
+    SAL_DLLPRIVATE virtual bool            GetSystemData( BitmapSystemData& rData ) override;
 
-    virtual bool            ScalingSupported() const override;
-    virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
-    virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
+    SAL_DLLPRIVATE virtual bool            ScalingSupported() const override;
+    SAL_DLLPRIVATE virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
+    SAL_DLLPRIVATE virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
 
-    virtual const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const override;
+    SAL_DLLPRIVATE virtual const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const override;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX

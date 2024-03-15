@@ -126,7 +126,7 @@ public:
 protected:
     virtual bool                AcquireGraphics() const override;
     virtual void                ReleaseGraphics( bool bRelease = true ) override;
-    void ImplReleaseGraphics(bool bRelease = true);
+    SAL_DLLPRIVATE void ImplReleaseGraphics(bool bRelease = true);
     virtual void                ImplReleaseFonts() override;
 
     virtual tools::Long                GetGradientStepCount( tools::Long nMinRect ) override;
@@ -139,7 +139,7 @@ protected:
 
 public:
     void                        SetSystemTextColor(SystemTextColorFlags, bool) override;
-    void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
+    SAL_DLLPRIVATE void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
                                     const Gradient& rGradient );
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
     virtual Size                GetButtonBorderSize() override;
@@ -200,7 +200,7 @@ public:
     bool                        IsDisplayPrinter() const    { return mpDisplayDev != nullptr; }
     bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
-    sal_uInt32                  GetCapabilities( PrinterCapType nType ) const;
+    SAL_DLLPRIVATE sal_uInt32                  GetCapabilities( PrinterCapType nType ) const;
     bool                        HasSupport( PrinterSupport eFeature ) const;
 
     bool                        SetJobSetup( const JobSetup& rSetup );
@@ -231,8 +231,8 @@ public:
     Size                        GetPrintPageSize() { return maPrintPageSize; }
     bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
-    void                        SetDuplexMode( DuplexMode );
-    DuplexMode                  GetDuplexMode() const;
+    SAL_DLLPRIVATE void                        SetDuplexMode( DuplexMode );
+    SAL_DLLPRIVATE DuplexMode                  GetDuplexMode() const;
 
     bool                        SetPaperBin( sal_uInt16 nPaperBin );
     sal_uInt16                  GetPaperBin() const;
@@ -243,14 +243,14 @@ public:
     /** @return The paper format of the printer's current "jobsetup". Note that if PAPER_USER the actual size can be anything. */
     Paper                       GetPaper() const;
     /** @return Size of the paper of the printer's current "jobsetup". */
-    Size                        GetSizeOfPaper() const;
+    SAL_DLLPRIVATE Size                        GetSizeOfPaper() const;
     static OUString             GetPaperName( Paper ePaper );
 
     /** @return Number of available paper formats */
-    int                         GetPaperInfoCount() const;
+    SAL_DLLPRIVATE int                         GetPaperInfoCount() const;
 
     /** @return Info about paper format nPaper */
-    const PaperInfo&            GetPaperInfo( int nPaper ) const;
+    SAL_DLLPRIVATE const PaperInfo&            GetPaperInfo( int nPaper ) const;
     sal_uInt16                  GetPaperBinCount() const;
     OUString                    GetPaperBinName( sal_uInt16 nPaperBin ) const;
 
@@ -259,11 +259,11 @@ public:
 
     const Size&                 GetPaperSizePixel() const { return maPaperSize; }
     Size                        GetPaperSize() const { return PixelToLogic( maPaperSize ); }
-    Size                        GetPaperSize( int nPaper ) const;
+    SAL_DLLPRIVATE Size                        GetPaperSize( int nPaper ) const;
     const Point&                GetPageOffsetPixel() const { return maPageOffset; }
     Point                       GetPageOffset() const { return PixelToLogic( maPageOffset ); }
 
-    void                        SetCopyCount( sal_uInt16 nCopy, bool bCollate );
+    SAL_DLLPRIVATE void                        SetCopyCount( sal_uInt16 nCopy, bool bCollate );
     sal_uInt16                  GetCopyCount() const { return mnCopyCount; }
     bool                        IsCollateCopy() const { return mbCollateCopy; }
     void                        SetSinglePrintJobs(bool bSinglePrintJobs) { mbSinglePrintJobs = bSinglePrintJobs; }
@@ -302,9 +302,9 @@ public:
 
     // These 3 together are more modular PrintJob(), allowing printing more documents as one print job
     // by repeated calls to ExecutePrintJob(). Used by mailmerge.
-    static bool                 PreparePrintJob( std::shared_ptr<vcl::PrinterController> i_pController,
+    SAL_DLLPRIVATE static bool                 PreparePrintJob( std::shared_ptr<vcl::PrinterController> i_pController,
                                     const JobSetup& i_rInitSetup );
-    static bool ExecutePrintJob(const std::shared_ptr<vcl::PrinterController>& i_pController);
+    SAL_DLLPRIVATE static bool ExecutePrintJob(const std::shared_ptr<vcl::PrinterController>& i_pController);
     static void                 FinishPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController );
 
     /** Implementation detail of PrintJob being asynchronous

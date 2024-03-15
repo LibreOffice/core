@@ -75,21 +75,21 @@ private:
     MetaActionType       mnType;
 
 protected:
-    virtual             ~MetaAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaAction() override;
 
 public:
-                        MetaAction();
-    explicit            MetaAction( MetaActionType nType );
-                        MetaAction( MetaAction const & );
+    SAL_DLLPRIVATE                     MetaAction();
+    SAL_DLLPRIVATE explicit            MetaAction( MetaActionType nType );
+    SAL_DLLPRIVATE                     MetaAction( MetaAction const & );
 
-    virtual void        Execute( OutputDevice* pOut );
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut );
 
     oslInterlockedCount GetRefCount() const { return m_nCount; }
 
-    virtual rtl::Reference<MetaAction> Clone() const;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const;
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove );
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY );
 
     MetaActionType      GetType() const { return mnType; }
     /** \#i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
@@ -105,21 +105,21 @@ private:
     Color               maColor;
 
 public:
-                        MetaPixelAction();
+    SAL_DLLPRIVATE MetaPixelAction();
     MetaPixelAction(MetaPixelAction const &) = default;
     MetaPixelAction(MetaPixelAction &&) = default;
     MetaPixelAction & operator =(MetaPixelAction const &) = delete; // due to MetaAction
     MetaPixelAction & operator =(MetaPixelAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaPixelAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaPixelAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaPixelAction( const Point& rPt, const Color& rColor );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetPoint() const { return maPt; }
     const Color&        GetColor() const { return maColor; }
@@ -133,21 +133,21 @@ private:
     Point               maPt;
 
 public:
-                        MetaPointAction();
+    SAL_DLLPRIVATE   MetaPointAction();
     MetaPointAction(MetaPointAction const &) = default;
     MetaPointAction(MetaPointAction &&) = default;
     MetaPointAction & operator =(MetaPointAction const &) = delete; // due to MetaAction
     MetaPointAction & operator =(MetaPointAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaPointAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaPointAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-    explicit            MetaPointAction( const Point& );
+    SAL_DLLPRIVATE explicit MetaPointAction( const Point& );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetPoint() const { return maPt; }
     void                SetPoint(const Point& rPt) { maPt = rPt; }
@@ -162,23 +162,23 @@ private:
     Point               maEndPt;
 
 public:
-                        MetaLineAction();
+    SAL_DLLPRIVATE      MetaLineAction();
     MetaLineAction(MetaLineAction const &) = default;
     MetaLineAction(MetaLineAction &&) = default;
     MetaLineAction & operator =(MetaLineAction const &) = delete; // due to MetaAction
     MetaLineAction & operator =(MetaLineAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaLineAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaLineAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaLineAction( const Point& rStart, const Point& rEnd );
+    SAL_DLLPRIVATE      MetaLineAction( const Point& rStart, const Point& rEnd );
                         MetaLineAction( const Point& rStart, const Point& rEnd,
                                         LineInfo aLineInfo );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
@@ -195,21 +195,21 @@ private:
     tools::Rectangle           maRect;
 
 public:
-                        MetaRectAction();
+    SAL_DLLPRIVATE                     MetaRectAction();
     MetaRectAction(MetaRectAction const &) = default;
     MetaRectAction(MetaRectAction &&) = default;
     MetaRectAction & operator =(MetaRectAction const &) = delete; // due to MetaAction
     MetaRectAction & operator =(MetaRectAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaRectAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaRectAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaRectAction( const tools::Rectangle& );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
@@ -224,22 +224,22 @@ private:
     sal_uInt32          mnVertRound;
 
 public:
-                        MetaRoundRectAction();
+    SAL_DLLPRIVATE                     MetaRoundRectAction();
     MetaRoundRectAction(MetaRoundRectAction const &) = default;
     MetaRoundRectAction(MetaRoundRectAction &&) = default;
     MetaRoundRectAction & operator =(MetaRoundRectAction const &) = delete; // due to MetaAction
     MetaRoundRectAction & operator =(MetaRoundRectAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaRoundRectAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaRoundRectAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaRoundRectAction( const tools::Rectangle& rRect,
                                              sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     sal_uInt32          GetHorzRound() const { return mnHorzRound; }
@@ -256,21 +256,21 @@ private:
     tools::Rectangle           maRect;
 
 public:
-                        MetaEllipseAction();
+    SAL_DLLPRIVATE                     MetaEllipseAction();
     MetaEllipseAction(MetaEllipseAction const &) = default;
     MetaEllipseAction(MetaEllipseAction &&) = default;
     MetaEllipseAction & operator =(MetaEllipseAction const &) = delete; // due to MetaAction
     MetaEllipseAction & operator =(MetaEllipseAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaEllipseAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaEllipseAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaEllipseAction( const tools::Rectangle& );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
@@ -285,22 +285,22 @@ private:
     Point               maEndPt;
 
 public:
-                        MetaArcAction();
+    SAL_DLLPRIVATE MetaArcAction();
     MetaArcAction(MetaArcAction const &) = default;
     MetaArcAction(MetaArcAction &&) = default;
     MetaArcAction & operator =(MetaArcAction const &) = delete; // due to MetaAction
     MetaArcAction & operator =(MetaArcAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaArcAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaArcAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaArcAction( const tools::Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -319,22 +319,22 @@ private:
     Point               maEndPt;
 
 public:
-                        MetaPieAction();
+    SAL_DLLPRIVATE                     MetaPieAction();
     MetaPieAction(MetaPieAction const &) = default;
     MetaPieAction(MetaPieAction &&) = default;
     MetaPieAction & operator =(MetaPieAction const &) = delete; // due to MetaAction
     MetaPieAction & operator =(MetaPieAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaPieAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaPieAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaPieAction( const tools::Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -353,22 +353,22 @@ private:
     Point               maEndPt;
 
 public:
-                        MetaChordAction();
+    SAL_DLLPRIVATE                    MetaChordAction();
     MetaChordAction(MetaChordAction const &) = default;
     MetaChordAction(MetaChordAction &&) = default;
     MetaChordAction & operator =(MetaChordAction const &) = delete; // due to MetaAction
     MetaChordAction & operator =(MetaChordAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaChordAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaChordAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaChordAction( const tools::Rectangle& rRect,
                                          const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -386,22 +386,22 @@ private:
     tools::Polygon      maPoly;
 
 public:
-                        MetaPolyLineAction();
+    SAL_DLLPRIVATE                     MetaPolyLineAction();
     MetaPolyLineAction(MetaPolyLineAction const &) = default;
     MetaPolyLineAction(MetaPolyLineAction &&) = default;
     MetaPolyLineAction & operator =(MetaPolyLineAction const &) = delete; // due to MetaAction
     MetaPolyLineAction & operator =(MetaPolyLineAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaPolyLineAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaPolyLineAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-    explicit            MetaPolyLineAction( tools::Polygon  );
+    SAL_DLLPRIVATE explicit            MetaPolyLineAction( tools::Polygon  );
     explicit            MetaPolyLineAction( tools::Polygon , LineInfo  );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
@@ -416,21 +416,21 @@ private:
     tools::Polygon      maPoly;
 
 public:
-                        MetaPolygonAction();
+    SAL_DLLPRIVATE                     MetaPolygonAction();
     MetaPolygonAction(MetaPolygonAction const &) = default;
     MetaPolygonAction(MetaPolygonAction &&) = default;
     MetaPolygonAction & operator =(MetaPolygonAction const &) = delete; // due to MetaAction
     MetaPolygonAction & operator =(MetaPolygonAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaPolygonAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaPolygonAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaPolygonAction( tools::Polygon  );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
     void                SetPolygon(const tools::Polygon& rPoly) { maPoly = rPoly; }
@@ -443,21 +443,21 @@ private:
     tools::PolyPolygon  maPolyPoly;
 
 public:
-                        MetaPolyPolygonAction();
+    SAL_DLLPRIVATE                     MetaPolyPolygonAction();
     MetaPolyPolygonAction(MetaPolyPolygonAction const &) = default;
     MetaPolyPolygonAction(MetaPolyPolygonAction &&) = default;
     MetaPolyPolygonAction & operator =(MetaPolyPolygonAction const &) = delete; // due to MetaAction
     MetaPolyPolygonAction & operator =(MetaPolyPolygonAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaPolyPolygonAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaPolyPolygonAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaPolyPolygonAction( tools::PolyPolygon  );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     void                SetPolyPolygon(const tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
@@ -481,8 +481,8 @@ public:
 private:
     virtual             ~MetaTextAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     MetaTextAction( const Point& rPt, OUString aStr,
                     sal_Int32 nIndex, sal_Int32 nLen );
@@ -511,12 +511,12 @@ private:
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
-    virtual             ~MetaTextArrayAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaTextArrayAction() override;
 
 public:
-                        MetaTextArrayAction();
-                        MetaTextArrayAction( const MetaTextArrayAction& rAction );
-    MetaTextArrayAction( const Point& rStartPt, OUString aStr,
+    SAL_DLLPRIVATE                     MetaTextArrayAction();
+    SAL_DLLPRIVATE                     MetaTextArrayAction( const MetaTextArrayAction& rAction );
+    SAL_DLLPRIVATE MetaTextArrayAction( const Point& rStartPt, OUString aStr,
                          KernArray rDXAry,
                          std::vector<sal_Bool> pKashidaAry,
                          sal_Int32 nIndex,
@@ -527,12 +527,12 @@ public:
                          sal_Int32 nIndex,
                          sal_Int32 nLen );
 
-    virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
 
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-    virtual void    Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void    Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void    Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void    Scale( double fScaleX, double fScaleY ) override;
 
     const Point&    GetPoint() const { return maStartPt; }
     const OUString& GetText() const { return maStr; }
@@ -544,8 +544,8 @@ public:
     void            SetText(const OUString& rStr) { maStr = rStr; }
     void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
     void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
-    void            SetDXArray(KernArray aArray);
-    void            SetKashidaArray(std::vector<sal_Bool> aArray);
+    SAL_DLLPRIVATE void            SetDXArray(KernArray aArray);
+    SAL_DLLPRIVATE void            SetKashidaArray(std::vector<sal_Bool> aArray);
 };
 
 class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction
@@ -567,8 +567,8 @@ public:
 private:
     virtual             ~MetaStretchTextAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                            OUString aStr,
@@ -606,14 +606,14 @@ public:
 private:
     virtual             ~MetaTextRectAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     MetaTextRectAction( const tools::Rectangle& rRect,
                         OUString aStr, DrawTextFlags nStyle );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const OUString&     GetText() const { return maStr; }
@@ -642,15 +642,15 @@ public:
 private:
     virtual             ~MetaTextLineAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaTextLineAction( const Point& rPos, tools::Long nWidth,
                                             FontStrikeout eStrikeout,
                                             FontLineStyle eUnderline,
                                             FontLineStyle eOverline );
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetStartPoint() const { return maPos; }
     tools::Long                GetWidth() const { return mnWidth; }
@@ -672,21 +672,21 @@ private:
     Point               maPt;
 
 public:
-                        MetaBmpAction();
+    SAL_DLLPRIVATE                     MetaBmpAction();
     MetaBmpAction(MetaBmpAction const &) = default;
     MetaBmpAction(MetaBmpAction &&) = default;
     MetaBmpAction & operator =(MetaBmpAction const &) = delete; // due to MetaAction
     MetaBmpAction & operator =(MetaBmpAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaBmpAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaBmpAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaBmpAction( const Point& rPt, const Bitmap& rBmp );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
@@ -703,22 +703,22 @@ private:
     Size                maSz;
 
 public:
-                        MetaBmpScaleAction();
+    SAL_DLLPRIVATE                     MetaBmpScaleAction();
     MetaBmpScaleAction(MetaBmpScaleAction const &) = default;
     MetaBmpScaleAction(MetaBmpScaleAction &&) = default;
     MetaBmpScaleAction & operator =(MetaBmpScaleAction const &) = delete; // due to MetaAction
     MetaBmpScaleAction & operator =(MetaBmpScaleAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaBmpScaleAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaBmpScaleAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaBmpScaleAction( const Point& rPt, const Size& rSz,
                                             const Bitmap& rBmp );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
@@ -739,23 +739,23 @@ private:
     Size                maSrcSz;
 
 public:
-                        MetaBmpScalePartAction();
+    SAL_DLLPRIVATE                     MetaBmpScalePartAction();
     MetaBmpScalePartAction(MetaBmpScalePartAction const &) = default;
     MetaBmpScalePartAction(MetaBmpScalePartAction &&) = default;
     MetaBmpScalePartAction & operator =(MetaBmpScalePartAction const &) = delete; // due to MetaAction
     MetaBmpScalePartAction & operator =(MetaBmpScalePartAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaBmpScalePartAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaBmpScalePartAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaBmpScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                 const Point& rSrcPt, const Size& rSrcSz,
                                                 const Bitmap& rBmp );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetDestPoint() const { return maDstPt; }
@@ -777,21 +777,21 @@ private:
     Point               maPt;
 
 public:
-                        MetaBmpExAction();
+    SAL_DLLPRIVATE                     MetaBmpExAction();
     MetaBmpExAction(MetaBmpExAction const &) = default;
     MetaBmpExAction(MetaBmpExAction &&) = default;
     MetaBmpExAction & operator =(MetaBmpExAction const &) = delete; // due to MetaAction
     MetaBmpExAction & operator =(MetaBmpExAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaBmpExAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaBmpExAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
@@ -809,22 +809,22 @@ private:
     Size                maSz;
 
 public:
-                        MetaBmpExScaleAction();
+    SAL_DLLPRIVATE                     MetaBmpExScaleAction();
     MetaBmpExScaleAction(MetaBmpExScaleAction const &) = default;
     MetaBmpExScaleAction(MetaBmpExScaleAction &&) = default;
     MetaBmpExScaleAction & operator =(MetaBmpExScaleAction const &) = delete; // due to MetaAction
     MetaBmpExScaleAction & operator =(MetaBmpExScaleAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaBmpExScaleAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaBmpExScaleAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
                                               const BitmapEx& rBmpEx ) ;
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
@@ -846,23 +846,23 @@ private:
     Size                maSrcSz;
 
 public:
-                        MetaBmpExScalePartAction();
+    SAL_DLLPRIVATE                     MetaBmpExScalePartAction();
     MetaBmpExScalePartAction(MetaBmpExScalePartAction const &) = default;
     MetaBmpExScalePartAction(MetaBmpExScalePartAction &&) = default;
     MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction const &) = delete; // due to MetaAction
     MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaBmpExScalePartAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaBmpExScalePartAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaBmpExScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                   const Point& rSrcPt, const Size& rSrcSz,
                                                   const BitmapEx& rBmpEx );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetDestPoint() const { return maDstPt; }
@@ -894,15 +894,15 @@ public:
 private:
     virtual             ~MetaMaskAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaMaskAction( const Point& rPt,
                                         const Bitmap& rBmp,
                                         const Color& rColor );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -929,15 +929,15 @@ public:
 private:
     virtual             ~MetaMaskScaleAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaMaskScaleAction( const Point& rPt, const Size& rSz,
                                              const Bitmap& rBmp,
                                              const Color& rColor );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -968,16 +968,16 @@ public:
 private:
     virtual             ~MetaMaskScalePartAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaMaskScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                  const Point& rSrcPt, const Size& rSrcSz,
                                                  const Bitmap& rBmp,
                                                  const Color& rColor );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -1009,13 +1009,13 @@ public:
 private:
     virtual             ~MetaGradientAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaGradientAction( const tools::Rectangle& rRect, Gradient aGradient );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Gradient&     GetGradient() const { return maGradient; }
@@ -1031,21 +1031,21 @@ private:
     Gradient            maGradient;
 
 public:
-                        MetaGradientExAction();
+    SAL_DLLPRIVATE                     MetaGradientExAction();
     MetaGradientExAction(MetaGradientExAction const &) = default;
     MetaGradientExAction(MetaGradientExAction &&) = default;
     MetaGradientExAction & operator =(MetaGradientExAction const &) = delete; // due to MetaAction
     MetaGradientExAction & operator =(MetaGradientExAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaGradientExAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaGradientExAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaGradientExAction( tools::PolyPolygon  rPolyPoly, Gradient aGradient );
+    SAL_DLLPRIVATE                     MetaGradientExAction( tools::PolyPolygon  rPolyPoly, Gradient aGradient );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Gradient&     GetGradient() const { return maGradient; }
@@ -1069,13 +1069,13 @@ public:
 private:
     virtual             ~MetaHatchAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaHatchAction( tools::PolyPolygon aPolyPoly, const Hatch& rHatch );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Hatch&        GetHatch() const { return maHatch; }
@@ -1091,22 +1091,22 @@ private:
     Wallpaper           maWallpaper;
 
 public:
-                        MetaWallpaperAction();
+    SAL_DLLPRIVATE                     MetaWallpaperAction();
     MetaWallpaperAction(MetaWallpaperAction const &) = default;
     MetaWallpaperAction(MetaWallpaperAction &&) = default;
     MetaWallpaperAction & operator =(MetaWallpaperAction const &) = delete; // due to MetaAction
     MetaWallpaperAction & operator =(MetaWallpaperAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaWallpaperAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaWallpaperAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaWallpaperAction( const tools::Rectangle& rRect,
                                              const Wallpaper& rPaper );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
@@ -1121,21 +1121,21 @@ private:
     bool                mbClip;
 
 public:
-                        MetaClipRegionAction();
+    SAL_DLLPRIVATE                     MetaClipRegionAction();
     MetaClipRegionAction(MetaClipRegionAction const &) = default;
     MetaClipRegionAction(MetaClipRegionAction &&) = default;
     MetaClipRegionAction & operator =(MetaClipRegionAction const &) = delete; // due to MetaAction
     MetaClipRegionAction & operator =(MetaClipRegionAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaClipRegionAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaClipRegionAction( vcl::Region aRegion, bool bClip );
+    SAL_DLLPRIVATE                     MetaClipRegionAction( vcl::Region aRegion, bool bClip );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Region&  GetRegion() const { return maRegion; }
     bool                IsClipping() const { return mbClip; }
@@ -1150,21 +1150,21 @@ private:
     tools::Rectangle           maRect;
 
 public:
-                        MetaISectRectClipRegionAction();
+    SAL_DLLPRIVATE                     MetaISectRectClipRegionAction();
     MetaISectRectClipRegionAction(MetaISectRectClipRegionAction const &) = default;
     MetaISectRectClipRegionAction(MetaISectRectClipRegionAction &&) = default;
     MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction const &) = delete; // due to MetaAction
     MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaISectRectClipRegionAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaISectRectClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaISectRectClipRegionAction( const tools::Rectangle& );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
@@ -1177,21 +1177,21 @@ private:
     vcl::Region          maRegion;
 
 public:
-                        MetaISectRegionClipRegionAction();
+    SAL_DLLPRIVATE                     MetaISectRegionClipRegionAction();
     MetaISectRegionClipRegionAction(MetaISectRegionClipRegionAction const &) = default;
     MetaISectRegionClipRegionAction(MetaISectRegionClipRegionAction &&) = default;
     MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction const &) = delete; // due to MetaAction
     MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaISectRegionClipRegionAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaISectRegionClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaISectRegionClipRegionAction( vcl::Region  );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Region&  GetRegion() const { return maRegion; }
     void                SetRegion(const vcl::Region& rRegion) { maRegion = rRegion; }
@@ -1205,20 +1205,20 @@ private:
     tools::Long                mnVertMove;
 
 public:
-                        MetaMoveClipRegionAction();
+    SAL_DLLPRIVATE                     MetaMoveClipRegionAction();
     MetaMoveClipRegionAction(MetaMoveClipRegionAction const &) = default;
     MetaMoveClipRegionAction(MetaMoveClipRegionAction &&) = default;
     MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction const &) = delete; // due to MetaAction
     MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaMoveClipRegionAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaMoveClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaMoveClipRegionAction( tools::Long nHorzMove, tools::Long nVertMove );
+    SAL_DLLPRIVATE                     MetaMoveClipRegionAction( tools::Long nHorzMove, tools::Long nVertMove );
 
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     tools::Long                GetHorzMove() const { return mnHorzMove; }
     tools::Long                GetVertMove() const { return mnVertMove; }
@@ -1234,16 +1234,16 @@ private:
     bool                mbSet;
 
 public:
-                        MetaLineColorAction();
+    SAL_DLLPRIVATE                     MetaLineColorAction();
     MetaLineColorAction(MetaLineColorAction const &) = default;
     MetaLineColorAction(MetaLineColorAction &&) = default;
     MetaLineColorAction & operator =(MetaLineColorAction const &) = delete; // due to MetaAction
     MetaLineColorAction & operator =(MetaLineColorAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaLineColorAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaLineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaLineColorAction( const Color& rColor, bool bSet );
 
@@ -1261,7 +1261,7 @@ private:
     bool                mbSet;
 
 public:
-                        MetaFillColorAction();
+    SAL_DLLPRIVATE                     MetaFillColorAction();
     MetaFillColorAction(MetaFillColorAction const &) = default;
     MetaFillColorAction(MetaFillColorAction &&) = default;
     MetaFillColorAction & operator =(MetaFillColorAction const &) = delete; // due to MetaAction
@@ -1270,7 +1270,7 @@ private:
     virtual             ~MetaFillColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaFillColorAction( const Color& rColor, bool bSet );
 
@@ -1288,16 +1288,16 @@ private:
     Color               maColor;
 
 public:
-                        MetaTextColorAction();
+    SAL_DLLPRIVATE                     MetaTextColorAction();
     MetaTextColorAction(MetaTextColorAction const &) = default;
     MetaTextColorAction(MetaTextColorAction &&) = default;
     MetaTextColorAction & operator =(MetaTextColorAction const &) = delete; // due to MetaAction
     MetaTextColorAction & operator =(MetaTextColorAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaTextColorAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaTextColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaTextColorAction( const Color& );
 
@@ -1313,16 +1313,16 @@ private:
     bool                mbSet;
 
 public:
-                        MetaTextFillColorAction();
+    SAL_DLLPRIVATE                     MetaTextFillColorAction();
     MetaTextFillColorAction(MetaTextFillColorAction const &) = default;
     MetaTextFillColorAction(MetaTextFillColorAction &&) = default;
     MetaTextFillColorAction & operator =(MetaTextFillColorAction const &) = delete; // due to MetaAction
     MetaTextFillColorAction & operator =(MetaTextFillColorAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaTextFillColorAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaTextFillColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaTextFillColorAction( const Color& rColor, bool bSet );
 
@@ -1341,18 +1341,18 @@ private:
     bool                mbSet;
 
 public:
-                        MetaTextLineColorAction();
+    SAL_DLLPRIVATE                     MetaTextLineColorAction();
     MetaTextLineColorAction(MetaTextLineColorAction const &) = default;
     MetaTextLineColorAction(MetaTextLineColorAction &&) = default;
     MetaTextLineColorAction & operator =(MetaTextLineColorAction const &) = delete; // due to MetaAction
     MetaTextLineColorAction & operator =(MetaTextLineColorAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaTextLineColorAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaTextLineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaTextLineColorAction( const Color& rColor, bool bSet );
+    SAL_DLLPRIVATE                     MetaTextLineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
     void                SetColor(const Color& rColor) { maColor = rColor; }
@@ -1368,18 +1368,18 @@ private:
     bool                mbSet;
 
 public:
-                        MetaOverlineColorAction();
+    SAL_DLLPRIVATE                     MetaOverlineColorAction();
     MetaOverlineColorAction(MetaOverlineColorAction const &) = default;
     MetaOverlineColorAction(MetaOverlineColorAction &&) = default;
     MetaOverlineColorAction & operator =(MetaOverlineColorAction const &) = delete; // due to MetaAction
     MetaOverlineColorAction & operator =(MetaOverlineColorAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaOverlineColorAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaOverlineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaOverlineColorAction( const Color& rColor, bool bSet );
+    SAL_DLLPRIVATE                     MetaOverlineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
     void                SetColor(const Color& rColor) { maColor = rColor; }
@@ -1394,16 +1394,16 @@ private:
     TextAlign           maAlign;
 
 public:
-                        MetaTextAlignAction();
+    SAL_DLLPRIVATE                     MetaTextAlignAction();
     MetaTextAlignAction(MetaTextAlignAction const &) = default;
     MetaTextAlignAction(MetaTextAlignAction &&) = default;
     MetaTextAlignAction & operator =(MetaTextAlignAction const &) = delete; // due to MetaAction
     MetaTextAlignAction & operator =(MetaTextAlignAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaTextAlignAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaTextAlignAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaTextAlignAction( TextAlign eAlign );
 
@@ -1418,20 +1418,20 @@ private:
     MapMode             maMapMode;
 
 public:
-                        MetaMapModeAction();
+    SAL_DLLPRIVATE                     MetaMapModeAction();
     MetaMapModeAction(MetaMapModeAction const &) = default;
     MetaMapModeAction(MetaMapModeAction &&) = default;
     MetaMapModeAction & operator =(MetaMapModeAction const &) = delete; // due to MetaAction
     MetaMapModeAction & operator =(MetaMapModeAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaMapModeAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaMapModeAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-    explicit            MetaMapModeAction( const MapMode& );
+    SAL_DLLPRIVATE explicit            MetaMapModeAction( const MapMode& );
 
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const MapMode&      GetMapMode() const { return maMapMode; }
     void                SetMapMode(const MapMode& rMapMode) { maMapMode = rMapMode; }
@@ -1452,20 +1452,20 @@ private:
     void correctFontScale(tools::Long nNewFontScale) { maFont.SetAverageFontWidth(nNewFontScale); }
 
 public:
-                        MetaFontAction();
+    SAL_DLLPRIVATE                     MetaFontAction();
     MetaFontAction(MetaFontAction const &) = default;
     MetaFontAction(MetaFontAction &&) = default;
     MetaFontAction & operator =(MetaFontAction const &) = delete; // due to MetaAction
     MetaFontAction & operator =(MetaFontAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaFontAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaFontAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaFontAction( vcl::Font  );
 
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Font&    GetFont() const { return maFont; }
     void                SetFont(const vcl::Font& rFont) { maFont = rFont; }
@@ -1479,16 +1479,16 @@ private:
     vcl::PushFlags           mnFlags;
 
 public:
-                        MetaPushAction();
+    SAL_DLLPRIVATE                     MetaPushAction();
     MetaPushAction(MetaPushAction const &) = default;
     MetaPushAction(MetaPushAction &&) = default;
     MetaPushAction & operator =(MetaPushAction const &) = delete; // due to MetaAction
     MetaPushAction & operator =(MetaPushAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaPushAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaPushAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaPushAction( vcl::PushFlags nFlags );
 
@@ -1506,10 +1506,10 @@ public:
     MetaPopAction & operator =(MetaPopAction const &) = delete; // due to MetaAction
     MetaPopAction & operator =(MetaPopAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaPopAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaPopAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 };
 
 class VCL_DLLPUBLIC MetaRasterOpAction final : public MetaAction
@@ -1519,16 +1519,16 @@ private:
     RasterOp            meRasterOp;
 
 public:
-                        MetaRasterOpAction();
+    SAL_DLLPRIVATE                     MetaRasterOpAction();
     MetaRasterOpAction(MetaRasterOpAction const &) = default;
     MetaRasterOpAction(MetaRasterOpAction &&) = default;
     MetaRasterOpAction & operator =(MetaRasterOpAction const &) = delete; // due to MetaAction
     MetaRasterOpAction & operator =(MetaRasterOpAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaRasterOpAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaRasterOpAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaRasterOpAction( RasterOp eRasterOp );
 
@@ -1552,13 +1552,13 @@ public:
 private:
     virtual             ~MetaTransparentAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaTransparentAction( tools::PolyPolygon aPolyPoly, sal_uInt16 nTransPercent );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
@@ -1589,14 +1589,14 @@ public:
 private:
     virtual             ~MetaFloatTransparentAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
                                                     const Size& rSize, Gradient aGradient );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const GDIMetaFile&  GetGDIMetaFile() const { return maMtf; }
     const Point&        GetPoint() const { return maPoint; }
@@ -1632,14 +1632,14 @@ public:
 private:
     virtual             ~MetaEPSAction() override;
 public:
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaEPSAction( const Point& rPoint, const Size& rSize,
                                        GfxLink aGfxLink, const GDIMetaFile& rSubst );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const GfxLink&      GetLink() const { return maGfxLink; }
     const GDIMetaFile&  GetSubstitute() const { return maSubst; }
@@ -1659,18 +1659,18 @@ private:
     bool                mbSet;
 
 public:
-                        MetaRefPointAction();
+    SAL_DLLPRIVATE                     MetaRefPointAction();
     MetaRefPointAction(MetaRefPointAction const &) = default;
     MetaRefPointAction(MetaRefPointAction &&) = default;
     MetaRefPointAction & operator =(MetaRefPointAction const &) = delete; // due to MetaAction
     MetaRefPointAction & operator =(MetaRefPointAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaRefPointAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaRefPointAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaRefPointAction( const Point& rRefPoint, bool bSet );
+    SAL_DLLPRIVATE                     MetaRefPointAction( const Point& rRefPoint, bool bSet );
 
     const Point&        GetRefPoint() const { return maRefPoint; }
     void                SetRefPoint(const Point& rRefPoint) { maRefPoint = rRefPoint; }
@@ -1691,18 +1691,18 @@ private:
     SAL_DLLPRIVATE void ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize );
 
 private:
-    virtual             ~MetaCommentAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaCommentAction() override;
 
 public:
-    explicit            MetaCommentAction();
-    explicit            MetaCommentAction( const MetaCommentAction& rAct );
+    SAL_DLLPRIVATE explicit            MetaCommentAction();
+    SAL_DLLPRIVATE explicit            MetaCommentAction( const MetaCommentAction& rAct );
     explicit            MetaCommentAction( OString aComment, sal_Int32 nValue = 0, const sal_uInt8* pData = nullptr, sal_uInt32 nDataSize = 0 );
 
-    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
-    virtual void        Scale( double fScaleX, double fScaleY ) override;
+    SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
+    SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual void        Execute( OutputDevice* pOut ) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     const OString&      GetComment() const { return maComment; }
     sal_Int32           GetValue() const { return mnValue; }
@@ -1721,16 +1721,16 @@ private:
     vcl::text::ComplexTextLayoutFlags  mnLayoutMode;
 
 public:
-                        MetaLayoutModeAction();
+    SAL_DLLPRIVATE                     MetaLayoutModeAction();
     MetaLayoutModeAction(MetaLayoutModeAction const &) = default;
     MetaLayoutModeAction(MetaLayoutModeAction &&) = default;
     MetaLayoutModeAction & operator =(MetaLayoutModeAction const &) = delete; // due to MetaAction
     MetaLayoutModeAction & operator =(MetaLayoutModeAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaLayoutModeAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaLayoutModeAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
     explicit            MetaLayoutModeAction( vcl::text::ComplexTextLayoutFlags nLayoutMode );
 
@@ -1745,18 +1745,18 @@ private:
     LanguageType        meTextLanguage;
 
 public:
-                        MetaTextLanguageAction();
+    SAL_DLLPRIVATE                     MetaTextLanguageAction();
     MetaTextLanguageAction(MetaTextLanguageAction const &) = default;
     MetaTextLanguageAction(MetaTextLanguageAction &&) = default;
     MetaTextLanguageAction & operator =(MetaTextLanguageAction const &) = delete; // due to MetaAction
     MetaTextLanguageAction & operator =(MetaTextLanguageAction &&) = delete; // due to MetaAction
 private:
-    virtual             ~MetaTextLanguageAction() override;
+    SAL_DLLPRIVATE virtual             ~MetaTextLanguageAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
-    virtual rtl::Reference<MetaAction> Clone() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
-    explicit            MetaTextLanguageAction( LanguageType );
+    SAL_DLLPRIVATE explicit            MetaTextLanguageAction( LanguageType );
 
     LanguageType        GetTextLanguage() const { return meTextLanguage; }
     void                SetTextLanguage(const LanguageType eTextLanguage) { meTextLanguage = eTextLanguage; }

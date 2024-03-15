@@ -62,16 +62,16 @@ private:
     //       (This is replaced by the GSM interface from Mate 1.12 onwards)
     //
     // Note: the Uninhibit call has different spelling in FDOSS (UnInhibit) vs GSM (Uninhibit)
-    void inhibitFDOSS(bool bInhibit, const char* appname, const char* reason);
-    void inhibitFDOPM(bool bInhibit, const char* appname, const char* reason);
-    void inhibitGSM(bool bInhibit, const char* appname, const char* reason,
-                    ApplicationInhibitFlags eType, unsigned int window_system_id);
-    void inhibitMSM(bool bInhibit, const char* appname, const char* reason,
-                    ApplicationInhibitFlags eType, unsigned int window_system_id);
+    SAL_DLLPRIVATE void inhibitFDOSS(bool bInhibit, const char* appname, const char* reason);
+    SAL_DLLPRIVATE void inhibitFDOPM(bool bInhibit, const char* appname, const char* reason);
+    SAL_DLLPRIVATE void inhibitGSM(bool bInhibit, const char* appname, const char* reason,
+                                   ApplicationInhibitFlags eType, unsigned int window_system_id);
+    SAL_DLLPRIVATE void inhibitMSM(bool bInhibit, const char* appname, const char* reason,
+                                   ApplicationInhibitFlags eType, unsigned int window_system_id);
 
-    void inhibitXScreenSaver(bool bInhibit, Display* pDisplay);
-    static void inhibitXAutoLock(bool bInhibit, Display* pDisplay);
-    void inhibitDPMS(bool bInhibit, Display* pDisplay);
+    SAL_DLLPRIVATE void inhibitXScreenSaver(bool bInhibit, Display* pDisplay);
+    SAL_DLLPRIVATE static void inhibitXAutoLock(bool bInhibit, Display* pDisplay);
+    SAL_DLLPRIVATE void inhibitDPMS(bool bInhibit, Display* pDisplay);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

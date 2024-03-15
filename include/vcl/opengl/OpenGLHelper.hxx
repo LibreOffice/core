@@ -63,14 +63,14 @@ public:
      * this method. The buffer size is assumed to be 4*width*height and the format
      * to be OptimalBufferFormat().
     **/
-    static BitmapEx ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight);
+    SAL_DLLPRIVATE static BitmapEx ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight);
     /**
      * Returns the optimal buffer format for OpenGL (GL_BGRA or GL_RGBA).
     **/
-    static GLenum OptimalBufferFormat();
-    static void renderToFile(tools::Long nWidth, tools::Long nHeight, const OUString& rFileName);
+    SAL_DLLPRIVATE static GLenum OptimalBufferFormat();
+    SAL_DLLPRIVATE static void renderToFile(tools::Long nWidth, tools::Long nHeight, const OUString& rFileName);
 
-    static const char* GLErrorString(GLenum errorCode);
+    SAL_DLLPRIVATE static const char* GLErrorString(GLenum errorCode);
 
     /**
      * The caller is responsible for deleting the buffer objects identified by
@@ -106,7 +106,7 @@ public:
     /**
      * checks if the device/driver pair is on our OpenGL denylist
      */
-    static bool isDeviceDenylisted();
+    SAL_DLLPRIVATE static bool isDeviceDenylisted();
 
     /**
      * checks if the system supports all features that are necessary for the OpenGL support

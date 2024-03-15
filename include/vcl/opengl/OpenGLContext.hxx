@@ -71,19 +71,19 @@ public:
     /// release bound resources from the current context
     static void clearCurrent();
     /// release contexts etc. before (potentially) allowing another thread run.
-    static void prepareForYield();
+    SAL_DLLPRIVATE static void prepareForYield();
     /// Is there a current GL context ?
-    static bool hasCurrent();
+    SAL_DLLPRIVATE static bool hasCurrent();
 
     /// make this GL context current - so it is implicit in subsequent GL calls
-    virtual void makeCurrent();
+    SAL_DLLPRIVATE virtual void makeCurrent();
     /// Put this GL context to the end of the context list.
     void registerAsCurrent();
     /// reset the GL context so this context is not implicit in subsequent GL calls.
-    virtual void resetCurrent();
+    SAL_DLLPRIVATE virtual void resetCurrent();
     /// unbind the GL_FRAMEBUFFER to its default state, needed for gtk3
     virtual void restoreDefaultFramebuffer();
-    virtual void swapBuffers();
+    SAL_DLLPRIVATE virtual void swapBuffers();
     virtual void sync();
     void show();
 
@@ -91,7 +91,7 @@ public:
     virtual const GLWindow& getOpenGLWindow() const = 0;
 
     SystemChildWindow* getChildWindow();
-    const SystemChildWindow* getChildWindow() const;
+    SAL_DLLPRIVATE const SystemChildWindow* getChildWindow() const;
 
     bool isInitialized() const
     {
@@ -101,8 +101,8 @@ public:
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 
 private:
-    virtual void initWindow();
-    virtual void destroyCurrentContext();
+    SAL_DLLPRIVATE virtual void initWindow();
+    SAL_DLLPRIVATE virtual void destroyCurrentContext();
     virtual void adjustToNewSize();
 
 protected:
@@ -111,7 +111,7 @@ protected:
     static void InitChildWindow(SystemChildWindow *pChildWindow);
     static void BuffersSwapped();
     virtual GLWindow& getModifiableOpenGLWindow() = 0;
-    virtual bool ImplInit();
+    SAL_DLLPRIVATE virtual bool ImplInit();
 
     VclPtr<vcl::Window> m_xWindow;
     VclPtr<vcl::Window> mpWindow; //points to m_pWindow or the parent window, don't delete it

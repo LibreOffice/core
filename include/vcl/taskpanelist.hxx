@@ -33,20 +33,20 @@ namespace vcl { class Window; }
 class VCL_DLLPUBLIC TaskPaneList
 {
     ::std::vector< VclPtr<vcl::Window> > mTaskPanes;
-    vcl::Window *FindNextFloat( vcl::Window *pWindow, bool bForward );
-    vcl::Window *FindNextSplitter( vcl::Window *pWindow );
+    SAL_DLLPRIVATE vcl::Window *FindNextFloat( vcl::Window *pWindow, bool bForward );
+    SAL_DLLPRIVATE vcl::Window *FindNextSplitter( vcl::Window *pWindow );
 
 public:
-    bool IsInList( vcl::Window *pWindow );
+    SAL_DLLPRIVATE bool IsInList( vcl::Window *pWindow );
 
 public:
-    TaskPaneList();
-    ~TaskPaneList();
+    SAL_DLLPRIVATE TaskPaneList();
+    SAL_DLLPRIVATE ~TaskPaneList();
 
     void AddWindow( vcl::Window *pWindow );
     void RemoveWindow( vcl::Window *pWindow );
-    bool HandleKeyEvent(const KeyEvent& rKeyEvent);
-    static bool IsCycleKey(const vcl::KeyCode& rKeyCode);
+    SAL_DLLPRIVATE bool HandleKeyEvent(const KeyEvent& rKeyEvent);
+    SAL_DLLPRIVATE static bool IsCycleKey(const vcl::KeyCode& rKeyCode);
 };
 
 #endif

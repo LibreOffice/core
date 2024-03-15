@@ -163,11 +163,11 @@ private:
 class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
 {
 public:
-    virtual                 ~MetricFormatter() override;
+    SAL_DLLPRIVATE virtual                 ~MetricFormatter() override;
 
-    virtual void            Reformat() override;
+    SAL_DLLPRIVATE virtual void            Reformat() override;
 
-    virtual void            SetUnit( FieldUnit meUnit );
+    SAL_DLLPRIVATE virtual void            SetUnit( FieldUnit meUnit );
     FieldUnit               GetUnit() const { return meUnit; }
     void                    SetCustomUnitText( const OUString& rStr );
     const OUString&         GetCustomUnitText() const { return maCustomUnitText; }
@@ -182,23 +182,23 @@ public:
     sal_Int64               GetMin( FieldUnit eOutUnit ) const;
 
     void                    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
-    virtual void            SetValue( sal_Int64 nValue ) override;
+    SAL_DLLPRIVATE virtual void            SetValue( sal_Int64 nValue ) override;
     using NumericFormatter::SetUserValue;
     void                    SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     using NumericFormatter::GetValue;
     sal_Int64               GetValue( FieldUnit eOutUnit ) const;
-    virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
+    SAL_DLLPRIVATE virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
 protected:
     FieldUnit               meUnit;
 
-                            MetricFormatter(Edit* pEdit);
+    SAL_DLLPRIVATE                         MetricFormatter(Edit* pEdit);
 
     SAL_DLLPRIVATE void     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
-    virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
-    sal_Int64               GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const;
+    SAL_DLLPRIVATE virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
+    SAL_DLLPRIVATE sal_Int64               GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const;
 
 private:
     OUString                maCustomUnitText;
@@ -209,18 +209,18 @@ class VCL_DLLPUBLIC MetricField final : public SpinField, public MetricFormatter
 public:
     explicit                MetricField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
+    SAL_DLLPRIVATE virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    SAL_DLLPRIVATE virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
+    SAL_DLLPRIVATE virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size            CalcMinimumSize() const override;
+    SAL_DLLPRIVATE virtual Size            CalcMinimumSize() const override;
 
-    virtual void            Modify() override;
+    SAL_DLLPRIVATE virtual void            Modify() override;
 
-    virtual void            Up() override;
-    virtual void            Down() override;
-    virtual void            First() override;
-    virtual void            Last() override;
+    SAL_DLLPRIVATE virtual void            Up() override;
+    SAL_DLLPRIVATE virtual void            Down() override;
+    SAL_DLLPRIVATE virtual void            First() override;
+    SAL_DLLPRIVATE virtual void            Last() override;
 
     virtual void            SetUnit( FieldUnit meUnit ) override;
 
@@ -229,11 +229,11 @@ public:
     void                    SetLast( sal_Int64 nNewLast, FieldUnit eInUnit );
     sal_Int64               GetLast( FieldUnit eOutUnit ) const;
 
-    virtual bool            set_property(const OUString &rKey, const OUString &rValue) override;
-    virtual void            dispose() override;
+    SAL_DLLPRIVATE virtual bool            set_property(const OUString &rKey, const OUString &rValue) override;
+    SAL_DLLPRIVATE virtual void            dispose() override;
 
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-    virtual FactoryFunction GetUITestFactory() const override;
+    SAL_DLLPRIVATE virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
+    SAL_DLLPRIVATE virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetricBox final : public ComboBox, public MetricFormatter

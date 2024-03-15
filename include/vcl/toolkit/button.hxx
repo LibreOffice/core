@@ -145,11 +145,11 @@ public:
 
     void            Toggle();
 
-    void            SetSymbol( SymbolType eSymbol );
+    SAL_DLLPRIVATE void            SetSymbol( SymbolType eSymbol );
     SymbolType      GetSymbol() const { return meSymbol; }
-    void            SetSymbolAlign( SymbolAlign eAlign );
+    SAL_DLLPRIVATE void            SetSymbolAlign( SymbolAlign eAlign );
 
-    void            SetDropDown( PushButtonDropdownStyle nStyle );
+    SAL_DLLPRIVATE void            SetDropDown( PushButtonDropdownStyle nStyle );
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }
@@ -161,7 +161,7 @@ public:
     void            SetPressed( bool bPressed );
     bool            IsPressed() const { return mbPressed; }
 
-    void            EndSelection();
+    SAL_DLLPRIVATE void            EndSelection();
 
     Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize() const override;
@@ -208,7 +208,7 @@ protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
 
-    explicit        PushButton( WindowType nType );
+    SAL_DLLPRIVATE explicit        PushButton( WindowType nType );
 
     virtual void    FillLayoutData() const override;
     virtual const vcl::Font&
@@ -445,20 +445,20 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
-    void            Toggle();
+    SAL_DLLPRIVATE void            Toggle();
 
     bool            IsStateChanged() const { return mbStateChanged; }
 
     void            EnableRadioCheck( bool bRadioCheck ) { mbRadioCheck = bRadioCheck; }
     bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
 
-    void            SetModeRadioImage( const Image& rImage );
+    SAL_DLLPRIVATE void            SetModeRadioImage( const Image& rImage );
 
     void            SetState( bool bCheck );
     void            Check( bool bCheck = true );
     bool            IsChecked() const { return mbChecked; }
 
-    static Image    GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
+    SAL_DLLPRIVATE static Image    GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
     Size            CalcMinimumSize( tools::Long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const override;
@@ -485,7 +485,7 @@ public:
     /*
      * Group this RadioButton with another
      */
-    void group(RadioButton &rOther);
+    SAL_DLLPRIVATE void group(RadioButton &rOther);
     virtual void ShowFocus(const tools::Rectangle& rRect) override;
 
     /// Button has additional stuff that we need to dump too.
