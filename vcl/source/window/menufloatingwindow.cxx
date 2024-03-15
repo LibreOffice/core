@@ -1182,7 +1182,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
     if (pMenu && pMenu->pStartedFrom && pMenu->pStartedFrom->IsMenuBar())
     {
         MenuBar *pMenuBar = static_cast<MenuBar*>(pMenu->pStartedFrom.get());
-        const bool bShowAccels = nCode != KEY_ESCAPE;
+        const bool bShowAccels = !autoacc || nCode != KEY_ESCAPE;
         if (pMenuBar->getMenuBarWindow()->GetMBWMenuKey() != bShowAccels)
         {
             pMenuBar->getMenuBarWindow()->SetMBWMenuKey(bShowAccels);

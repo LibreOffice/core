@@ -124,7 +124,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     m_nRolloveredItem = ITEMPOS_INVALID;
     mbAutoPopup = true;
     m_bIgnoreFirstMove = true;
-    SetMBWHideAccel(true);
+    SetMBWHideAccel(ImplGetSVData()->maNWFData.mbAutoAccel);
     SetMBWMenuKey(false);
 
     m_aCloseBtn->maImage = Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC);
@@ -422,7 +422,7 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
             if (m_nHighlightedItem != ITEMPOS_INVALID)
             {
                 bool hide = GetMBWHideAccel();
-                SetMBWHideAccel(true);
+                SetMBWHideAccel(ImplGetSVData()->maNWFData.mbAutoAccel);
                 Invalidate(); //HighlightItem( nRolloveredItem, false );
                 SetMBWHideAccel(hide);
             }
@@ -466,7 +466,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         return;
 
     if (n == ITEMPOS_INVALID)
-        SetMBWHideAccel(true);
+        SetMBWHideAccel(ImplGetSVData()->maNWFData.mbAutoAccel);
 
     // #57934# close active popup if applicable, as TH's background storage works.
     MenuItemData* pNextData = m_pMenu->pItemList->GetDataFromPos( n );
