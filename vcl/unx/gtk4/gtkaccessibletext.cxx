@@ -7,9 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vector>
+
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <o3tl/any.hxx>
 #include <sal/log.hxx>
 
 #include "a11y.hxx"
@@ -121,14 +125,69 @@ static gboolean lo_accessible_text_get_selection(GtkAccessibleText* self, gsize*
     return true;
 }
 
-static gboolean lo_accessible_text_get_attributes(GtkAccessibleText* /* self */,
-                                                  unsigned int /* offset */, gsize* /* n_ranges */,
-                                                  GtkAccessibleTextRange** /* ranges */,
-                                                  char*** /* attribute_names */,
-                                                  char*** /* attribute_values */)
+static gboolean lo_accessible_text_get_attributes(GtkAccessibleText* self, unsigned int offset,
+                                                  gsize* n_ranges, GtkAccessibleTextRange** ranges,
+                                                  char*** attribute_names, char*** attribute_values)
 {
-    // TODO: implement
-    return false;
+    css::uno::Reference<css::accessibility::XAccessibleText> xText = getXText(self);
+    if (!xText.is())
+        return false;
+
+    const unsigned int nTextLength = o3tl::make_unsigned(xText->getCharacterCount());
+    if (offset == nTextLength)
+        offset = nTextLength - 1;
+
+    if (offset >= nTextLength)
+    {
+        SAL_WARN("vcl.gtk",
+                 "lo_accessible_text_get_attributes called with invalid offset: " << offset);
+        return false;
+    }
+
+    css::uno::Sequence<css::beans::PropertyValue> aAttribs;
+    css::uno::Reference<css::accessibility::XAccessibleTextAttributes> xAttributes(
+        xText, com::sun::star::uno::UNO_QUERY);
+    if (xAttributes.is())
+        aAttribs = xAttributes->getRunAttributes(offset, css::uno::Sequence<OUString>());
+    else
+        aAttribs = xText->getCharacterAttributes(offset, css::uno::Sequence<OUString>());
+
+    std::vector<std::pair<OString, OUString>> aNameValuePairs;
+    for (const css::beans::PropertyValue& rAttribute : aAttribs)
+    {
+        if (rAttribute.Name == "CharFontName")
+        {
+            const OUString sValue = *o3tl::doAccess<OUString>(rAttribute.Value);
+            aNameValuePairs.emplace_back(GTK_ACCESSIBLE_ATTRIBUTE_FAMILY, sValue);
+        }
+    }
+
+    if (aNameValuePairs.empty())
+        return false;
+
+    const css::accessibility::TextSegment aAttributeRun
+        = xText->getTextAtIndex(offset, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+
+    const int nCount = aNameValuePairs.size();
+    *n_ranges = nCount;
+    *ranges = g_new(GtkAccessibleTextRange, nCount);
+    *attribute_names = g_new(char*, nCount + 1);
+    *attribute_values = g_new(char*, nCount + 1);
+
+    for (int i = 0; i < nCount; i++)
+    {
+        // just use start and end of attribute run for each single attribute
+        ((*ranges)[i]).start = aAttributeRun.SegmentStart;
+        ((*ranges)[i]).length = aAttributeRun.SegmentEnd - aAttributeRun.SegmentStart;
+
+        (*attribute_names)[i] = g_strdup(aNameValuePairs[i].first.getStr());
+        (*attribute_values)[i] = g_strdup(
+            OUStringToOString(aNameValuePairs[i].second, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    (*attribute_names)[nCount] = nullptr;
+    (*attribute_values)[nCount] = nullptr;
+
+    return true;
 }
 
 void lo_accessible_text_init(GtkAccessibleTextInterface* iface)
