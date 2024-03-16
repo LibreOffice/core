@@ -769,7 +769,7 @@ class SFScriptForge:
             Use the console when the Python shell is not available, for example in ``Calc`` user defined functions (UDF)
             or during events processing.
 
-            Use the ``DebugPrint()`` and ``DebuDisplay()`` methods to log any relevant information, events  and data
+            Use the ``DebugPrint()`` and ``DebugDisplay()`` methods to log any relevant information, events  and data
             of any type to the console.
 
             Console entries can be dumped to a text file or visualized in a dialogue.
