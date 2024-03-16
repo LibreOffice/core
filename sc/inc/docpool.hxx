@@ -28,8 +28,6 @@ class ScDocument;
 
 class SC_DLLPUBLIC ScDocumentPool final : public SfxItemPool
 {
-    std::vector<SfxPoolItem*> mvPoolDefaults;
-
 public:
             ScDocumentPool();
 private:

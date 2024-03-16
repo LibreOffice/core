@@ -28,16 +28,13 @@
 #include <utility>
 
 ScPrintFuncCache::ScPrintFuncCache(ScDocShell* pD, const ScMarkData& rMark,
-                                   ScPrintSelectionStatus aStatus, Size aPageSize, bool bLandscape,
-                                   bool bUsed)
+                                   ScPrintSelectionStatus aStatus, Size aPrintPageSize, bool bPrintPageLandscape,
+                                   bool bUsePrintDialogSetting)
     :
     aSelection(std::move( aStatus )),
     pDocSh( pD ),
     nTotalPages( 0 ),
-    bLocInitialized( false ),
-    aPrintPageSize( aPageSize ),
-    bPrintPageLandscape( bLandscape ),
-    bUsePrintDialogSetting( bUsed )
+    bLocInitialized( false )
 {
     //  page count uses the stored cell widths for the printer anyway,
     //  so ScPrintFunc with the document's printer can be used to count

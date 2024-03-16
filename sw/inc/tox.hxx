@@ -54,11 +54,9 @@ namespace sw {
     };
     struct FindContentFrameHint final : SfxHint {
         SwContentFrame*& m_rpContentFrame;
-        const SwDoc& m_rDoc;
         const SwRootFrame& m_rLayout;
-        FindContentFrameHint(SwContentFrame*& rpContentFrame, const SwDoc& rDoc, const SwRootFrame& rLayout)
+        FindContentFrameHint(SwContentFrame*& rpContentFrame,const SwRootFrame& rLayout)
             : m_rpContentFrame(rpContentFrame)
-            , m_rDoc(rDoc)
             , m_rLayout(rLayout)
         {}
     };
@@ -185,10 +183,10 @@ public:
     SwDoc& GetDoc() const { return m_rDoc; }
     void CollectTextMarks(SwTOXMarks& rMarks) const
             { const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::CollectTextMarksHint(rMarks)); }
-    SwContentFrame* FindContentFrame(const SwDoc& rDoc, const SwRootFrame& rLayout) const
+    SwContentFrame* FindContentFrame(const SwRootFrame& rLayout) const
     {
         SwContentFrame* pContentFrame = nullptr;
-        const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::FindContentFrameHint(pContentFrame, rDoc, rLayout));
+        const_cast<SwTOXType*>(this)->GetNotifier().Broadcast(sw::FindContentFrameHint(pContentFrame, rLayout));
         return pContentFrame;
     }
     void CollectTextTOXMarksForLayout(std::vector<std::reference_wrapper<SwTextTOXMark>>& rMarks, const SwRootFrame* pLayout) const

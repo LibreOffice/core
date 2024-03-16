@@ -10,7 +10,6 @@
 #include <sal/config.h>
 #include <test/screenshot_test.hxx>
 #include <rtl/bootstrap.hxx>
-#include <osl/module.hxx>
 #include <tools/svlibrary.h>
 #include <vcl/abstdlg.hxx>
 #include <comphelper/processfactory.hxx>
@@ -28,7 +27,6 @@ class SwDialogsTest : public ScreenshotTest
 {
 private:
     css::uno::Reference<css::lang::XComponent> component_;
-    osl::Module libSwui_;
 
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
     /// written and has to add entries to KnownDialogs
