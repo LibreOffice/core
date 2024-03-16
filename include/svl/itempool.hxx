@@ -209,7 +209,6 @@ public:
     const WhichRangesContainer& GetMergedIdRanges() const;
 
 protected:
-    static inline void              ClearRefCount(SfxPoolItem& rItem);
     static inline void              AddRef(const SfxPoolItem& rItem);
     static inline sal_uInt32        ReleaseRef(const SfxPoolItem& rItem, sal_uInt32 n = 1);
 
@@ -360,12 +359,6 @@ private:
      //IDs below or equal are Which IDs, IDs above slot IDs
     static const sal_uInt16 SFX_WHICH_MAX = 4999;
 };
-
-// only the pool may manipulate the reference counts
-inline void SfxItemPool::ClearRefCount(SfxPoolItem& rItem)
-{
-    rItem.SetRefCount(0);
-}
 
 // only the pool may manipulate the reference counts
 inline void SfxItemPool::AddRef(const SfxPoolItem& rItem)

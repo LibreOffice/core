@@ -62,7 +62,6 @@ public:
     virtual ~NotesEditWindow() override;
 
     void provideNoteText();
-    bool HasNotesPlaceholder() { return mpTextObj; }
 
     virtual void EditViewScrollStateChange() override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;

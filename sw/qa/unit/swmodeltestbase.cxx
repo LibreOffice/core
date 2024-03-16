@@ -549,13 +549,6 @@ xmlDocUniquePtr SwModelTestBase::WrapReqifFromTempFile()
     return pXmlDoc;
 }
 
-void SwModelTestBase::WrapFromTempFile(SvMemoryStream& rStream)
-{
-    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
-    rStream.WriteStream(aFileStream);
-    rStream.Seek(0);
-}
-
 void SwModelTestBase::emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr)
 {
     for (const char16_t c : rStr)

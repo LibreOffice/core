@@ -357,10 +357,5 @@ OString JsonWriter::finishAndGetAsOString()
     return mpBuffer;
 }
 
-bool JsonWriter::isDataEquals(std::string_view s) const
-{
-    return std::string_view(mpBuffer->buffer, static_cast<size_t>(mPos - mpBuffer->buffer)) == s;
-}
-
 } // namespace tools
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

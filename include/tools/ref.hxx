@@ -134,9 +134,6 @@ public:
 
     SvRefBase &     operator=(const SvRefBase &) { return *this; }
 
-    void            RestoreNoDelete()
-                    { bNoDelete = 1; }
-
     void            AddNextRef()
                     {
                         assert( nRefCount < (1 << 30) && "Do not add refs to dead objects" );

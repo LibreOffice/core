@@ -113,8 +113,6 @@ public:
                         { rTitle = aInputTitle; rMsg = aInputMessage; return bShowInput; }
     SC_DLLPUBLIC bool GetErrMsg( OUString& rTitle, OUString& rMsg, ScValidErrorStyle& rStyle ) const;
 
-    bool            HasErrMsg() const       { return bShowError; }
-
     ScValidationMode GetDataMode() const    { return eDataMode; }
 
     sal_Int16 GetListType() const                { return mnListType; }

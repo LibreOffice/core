@@ -257,11 +257,6 @@ bool SwFmtAidsAutoComplItem::operator==(const SfxPoolItem& rCmp) const
     return m_bEncloseWithCharactersOn == rItem.m_bEncloseWithCharactersOn;
 }
 
-void SwFmtAidsAutoComplItem::FillViewOptions(SwViewOption& rVOpt) const
-{
-    rVOpt.SetEncloseWithCharactersOn(m_bEncloseWithCharactersOn);
-}
-
 #ifdef DBG_UTIL
 SwTestItem* SwTestItem::Clone( SfxItemPool* ) const
 {

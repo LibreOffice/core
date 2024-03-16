@@ -287,8 +287,6 @@ protected:
      */
     xmlDocUniquePtr WrapReqifFromTempFile();
 
-    void WrapFromTempFile(SvMemoryStream& rStream);
-
     bool isExported(){ return mbExported; }
 
     void emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr);

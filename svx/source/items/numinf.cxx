@@ -21,16 +21,6 @@
 #include <utility>
 
 
-SvxNumberInfoItem::SvxNumberInfoItem( const TypedWhichId<SvxNumberInfoItem> nId ) :
-    SfxPoolItem     ( nId ),
-    pFormatter      ( nullptr ),
-    eValueType      ( SvxNumberValueType::Undefined ),
-    aStringVal      ( "" ),
-    nDoubleVal      ( 0 )
-{
-}
-
-
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),

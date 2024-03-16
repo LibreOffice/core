@@ -221,7 +221,6 @@ public:
     void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals );
     bool    IsSpellUpperCase() const;
     bool    IsSpellWithDigits() const;
-    bool    IsSpellCapitalization() const;
     bool    IsSpellClosedCompound() const;
     bool    IsSpellHyphenatedCompound() const;
     /// @throws css::uno::RuntimeException

@@ -79,9 +79,6 @@ public:
      * After this no more document modifications may be written. */
     OString finishAndGetAsOString();
 
-    /** returns true if the current JSON data matches the string */
-    bool isDataEquals(std::string_view) const;
-
 private:
     void endNode(char closing);
     void addCommaBeforeField();

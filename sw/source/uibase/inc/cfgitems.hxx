@@ -147,8 +147,6 @@ public:
     virtual SwFmtAidsAutoComplItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual bool operator==(const SfxPoolItem&) const override;
 
-    void FillViewOptions(SwViewOption& rVOpt) const;
-
     bool IsEncloseWithCharactersOn() const { return m_bEncloseWithCharactersOn; }
 
     void SetEncloseWithCharactersOn(bool bFlag) { m_bEncloseWithCharactersOn = bFlag; }
