@@ -5605,7 +5605,7 @@ class SFDocuments:
                         ``sheetname``: the name of the new sheet.
 
                         ``beforesheet``: the name (string) or index (numeric, starting from 1) of the sheet
-                        efore which to insert the new sheet. This argument is optional and the default behavior
+                        before which to insert the new sheet. This argument is optional and the default behavior
                         is to insert the sheet at the last position.
                     Returns
                         ``True`` if the sheet could be inserted successfully.
