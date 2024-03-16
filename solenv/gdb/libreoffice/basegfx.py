@@ -98,7 +98,7 @@ class B2DPolygonPrinter(object):
             #          self.value.address, self.index))
             self.index += 1
             return ('point %d' % (self.index-1),
-                    '(%15f, %15f)' % (currPoint['mfX'], currPoint['mfY']))
+                    '(%15f, %15f)' % (currPoint['mnX'], currPoint['mnY']))
 
     class _bezierIterator(six.Iterator):
         def __init__(self, count, value):
@@ -129,9 +129,9 @@ class B2DPolygonPrinter(object):
             self.index += 1
             return ('point %d' % (self.index-1),
                     'p: (%15f, %15f) c-1: (%15f, %15f) c1: (%15f, %15f)' %
-                    (currPoint['mfX'],   currPoint['mfY'],
-                     prevControl['mfX'], prevControl['mfY'],
-                     nextControl['mfX'], nextControl['mfY']))
+                    (currPoint['mnX'],   currPoint['mnY'],
+                     prevControl['mnX'], prevControl['mnY'],
+                     nextControl['mnX'], nextControl['mnY']))
 
 class B2DPolyPolygonPrinter(object):
     '''Prints a B2DPolyPolygon object.'''
