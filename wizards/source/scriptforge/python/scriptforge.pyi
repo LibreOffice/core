@@ -977,7 +977,7 @@ class SFScriptForge:
 
         def CreateFolder(self, foldername: FILE) -> bool:
             """
-                Creates the specified ``olderame``.
+                Creates the specified ``foldername``.
                 If the specified folder has a parent folder that does not exist, it is created.
                     Args
                         foldername: a string representing the folder to create. It must not exist.
