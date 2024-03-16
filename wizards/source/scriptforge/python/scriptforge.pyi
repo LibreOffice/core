@@ -130,7 +130,7 @@ SCRIPT_URI = TypeVar('SCRIPT_URI', str, str)
 """
 SQL_SELECT = TypeVar('SQL_SELECT', str, str)
 """ A SQL command containing a SELECT statement, a tablename or a queryname.
-In a SELECT statement, table-, qyery- and field names may be surrounded by square brackets. """
+In a SELECT statement, table-, query- and field names may be surrounded by square brackets. """
 SQL_ACTION = TypeVar('SQL_ACTION', str, str)
 """ A SQL command containing an action statement (CREATE TABLE, INSERT, DELETE, ...).
 Table- and field names may be surrounded by square brackets. """
