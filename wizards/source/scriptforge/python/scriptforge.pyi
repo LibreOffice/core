@@ -6389,7 +6389,7 @@ class SFDocuments:
         Format: Literal["Standard (short)", "Standard (short YY)", "Standard (short YYYY)", "Standard (long)",
         "DD/MM/YY", "MM/DD/YY", "YY/MM/DD", "DD/MM/YYYY", "MM/DD/YYYY", "YYYY/MM/DD", "YY-MM-DD", "YYYY-MM-DD",
         "24h short", "24h long", "12h short", "12h long"]
-        """ Get/set the format used to display dates and times. Applicable to ``DateField, TimeFiels, FormattedField``
+        """ Get/set the format used to display dates and times. Applicable to ``DateField, TimeField, FormattedField``
         controls.   """
         ListCount: int
         """ Get the number of rows in the control. Applicable to ``ComboBox, ListBox`` controls.  """
