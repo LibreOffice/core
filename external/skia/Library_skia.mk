@@ -7,18 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,skia))
+$(eval $(call gb_Library_Library,skia))
 
-$(eval $(call gb_StaticLibrary_set_warnings_disabled,skia))
+$(eval $(call gb_Library_set_warnings_disabled,skia))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,skia,skia))
+$(eval $(call gb_Library_use_unpacked,skia,skia))
 
-$(eval $(call gb_StaticLibrary_use_clang,skia))
+$(eval $(call gb_Library_use_clang,skia))
 #This currently results in all sorts of compile complaints
-#$(eval $(call gb_StaticLibrary_set_clang_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
+#$(eval $(call gb_Library_set_clang_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
 
-$(eval $(call gb_StaticLibrary_add_defs,skia,\
+$(eval $(call gb_Library_add_defs,skia,\
     -DSKIA_IMPLEMENTATION=1 \
+    -DSKIA_DLL \
     -DSK_USER_CONFIG_HEADER="<$(BUILDDIR)/config_host/config_skia.h>" \
     $(if $(filter INTEL,$(CPUNAME)),$(if $(filter WNT,$(OS)),-DSK_CPU_SSE_LEVEL=SK_CPU_SSE_LEVEL_SSE1,-DSK_CPU_SSE_LEVEL=0)) \
     $(if $(filter X86_64,$(CPUNAME)),-DSK_CPU_SSE_LEVEL=SK_CPU_SSE_LEVEL_SSE2) \
@@ -31,7 +32,7 @@ $(eval $(call gb_StaticLibrary_add_defs,skia,\
 # Some code may be always built with optimizations, even with Skia debug enabled (see
 # $(gb_COMPILEROPTFLAGS) usage).
 ifeq ($(ENABLE_SKIA_DEBUG),)
-$(eval $(call gb_StaticLibrary_add_cxxflags,skia, \
+$(eval $(call gb_Library_add_cxxflags,skia, \
     $(gb_COMPILEROPTFLAGS) \
     $(PCH_NO_CODEGEN) \
 ))
@@ -40,11 +41,11 @@ endif
 ifeq ($(OS),WNT)
 # Skia can be built with or without UNICODE set, in LO sources we explicitly use the *W unicode
 # variants, so build Skia with UNICODE to make it also use the *W variants.
-$(eval $(call gb_StaticLibrary_add_defs,skia,\
+$(eval $(call gb_Library_add_defs,skia,\
     -DUNICODE -D_UNICODE \
 ))
 ifneq ($(gb_ENABLE_PCH),)
-$(eval $(call gb_StaticLibrary_add_cxxflags,skia, \
+$(eval $(call gb_Library_add_cxxflags,skia, \
     -FIsrc/utils/win/SkDWriteNTDDI_VERSION.h \
 ))
 endif
@@ -52,13 +53,13 @@ endif
 # The clang-cl provided with at least VS 2019 16.11.28 is known-broken with -std:c++20:
 ifneq ($(filter -std:c++20,$(CXXFLAGS_CXX11)),)
 ifeq ($(LO_CLANG_VERSION),120000)
-$(eval $(call gb_StaticLibrary_add_cxxflags,skia, \
+$(eval $(call gb_Library_add_cxxflags,skia, \
     -std:c++17 \
 ))
 endif
 endif
 
-$(eval $(call gb_StaticLibrary_use_system_win32_libs,skia,\
+$(eval $(call gb_Library_use_system_win32_libs,skia,\
     fontsub \
     ole32 \
     oleaut32 \
@@ -79,7 +80,7 @@ endif
 
 else ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_StaticLibrary_use_system_darwin_frameworks,skia,\
+$(eval $(call gb_Library_use_system_darwin_frameworks,skia,\
     Cocoa \
     Metal \
     QuartzCore \
@@ -87,13 +88,13 @@ $(eval $(call gb_StaticLibrary_use_system_darwin_frameworks,skia,\
 
 ifneq ($(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX),)
 # Disable std::shared_mutex usage on MacOSX < 10.12.
-$(eval $(call gb_StaticLibrary_add_defs,skia,\
+$(eval $(call gb_Library_add_defs,skia,\
     -DVMA_USE_STL_SHARED_MUTEX=0 \
 ))
 endif
 
 else
-$(eval $(call gb_StaticLibrary_use_externals,skia,\
+$(eval $(call gb_Library_use_externals,skia,\
     expat \
     freetype \
     fontconfig \
@@ -101,14 +102,14 @@ $(eval $(call gb_StaticLibrary_use_externals,skia,\
 endif
 
 # we don't enable jpeg for skia, but it has incorrect #ifdef's in places
-$(eval $(call gb_StaticLibrary_use_externals,skia,\
+$(eval $(call gb_Library_use_externals,skia,\
     zlib \
     libjpeg \
     libpng \
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_StaticLibrary_add_libs,skia,\
+$(eval $(call gb_Library_add_libs,skia,\
     -lm \
     -ldl \
     -lX11-xcb \
@@ -116,11 +117,11 @@ $(eval $(call gb_StaticLibrary_add_libs,skia,\
 ))
 endif
 
-$(eval $(call gb_StaticLibrary_use_libraries,skia,\
+$(eval $(call gb_Library_use_libraries,skia,\
     sal \
 ))
 
-$(eval $(call gb_StaticLibrary_set_include,skia,\
+$(eval $(call gb_Library_set_include,skia,\
     $$(INCLUDE) \
     -I$(call gb_UnpackedTarball_get_dir,skia) \
     -I$(call gb_UnpackedTarball_get_dir,skia)/modules/skcms/ \
@@ -129,15 +130,15 @@ $(eval $(call gb_StaticLibrary_set_include,skia,\
     -I$(SRCDIR)/external/skia/inc/ \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,skia,\
+$(eval $(call gb_Library_add_exception_objects,skia,\
     external/skia/source/SkMemory_malloc \
     external/skia/source/skia_compiler \
     external/skia/source/skia_opts \
 ))
 
-$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,skia,cpp))
+$(eval $(call gb_Library_set_generated_cxx_suffix,skia,cpp))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/base/SkArenaAlloc \
     UnpackedTarball/skia/src/base/SkBezierCurves \
     UnpackedTarball/skia/src/base/SkBlockAllocator \
@@ -616,7 +617,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
 ))
 
 ifneq ($(SKIA_GPU),)
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkGpuBlurUtils \
     UnpackedTarball/skia/src/gpu/AtlasTypes \
     UnpackedTarball/skia/src/gpu/Blend \
@@ -811,7 +812,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/text/gpu/VertexFiller \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/GrAuditTrail \
     UnpackedTarball/skia/src/gpu/ganesh/GrBlurUtils \
     UnpackedTarball/skia/src/gpu/ganesh/GrDrawOpTest \
@@ -857,7 +858,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
 ))
 
 ifeq ($(SKIA_GPU),VULKAN)
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkCaps \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkCommandBuffer \
@@ -895,7 +896,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/vk/VulkanMemory \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
     UnpackedTarball/skia/tools/sk_app/VulkanWindowContext \
     UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
@@ -904,42 +905,42 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
 endif
 endif
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkGlobalInitialization_default \
     UnpackedTarball/skia/src/ports/SkImageGenerator_none \
     UnpackedTarball/skia/src/ports/SkOSFile_stdio \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,skia,\
+$(eval $(call gb_Library_add_exception_objects,skia,\
     external/skia/source/skia_opts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_avx, $(CXXFLAGS_INTRINSICS_AVX) $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX) \
         $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_hsw, \
         $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
         $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2) $(LO_CLANG_CXXFLAGS_INTRINSICS_F16C) $(LO_CLANG_CXXFLAGS_INTRINSICS_FMA) \
         $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
         $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_skx, $(CXXFLAGS_INTRINSICS_AVX512)  $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512)\
         $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/WindowContext \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkDebug_win \
     UnpackedTarball/skia/src/ports/SkFontHost_win \
     UnpackedTarball/skia/src/fonts/SkFontMgr_indirect \
@@ -957,18 +958,18 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/win/SkIStream \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/win/RasterWindowContext_win \
 ))
 
 ifeq ($(SKIA_GPU),VULKAN)
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/win/VulkanWindowContext_win \
 ))
 endif
 
 else ifeq ($(OS),MACOSX)
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkDebug_stdio \
     UnpackedTarball/skia/src/ports/SkImageGeneratorCG \
     UnpackedTarball/skia/src/ports/SkFontMgr_mac_ct \
@@ -982,7 +983,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
 ))
 
 ifeq ($(SKIA_GPU),METAL)
-$(eval $(call gb_StaticLibrary_add_generated_objcxxobjects,skia,\
+$(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/tools/sk_app/MetalWindowContext \
     UnpackedTarball/skia/tools/sk_app/mac/MetalWindowContext_mac \
     UnpackedTarball/skia/tools/sk_app/mac/WindowContextFactory_mac \
@@ -990,7 +991,7 @@ $(eval $(call gb_StaticLibrary_add_generated_objcxxobjects,skia,\
 
 # Not used, uses OpenGL - UnpackedTarball/skia/tools/sk_app/mac/RasterWindowContext_mac
 
-$(eval $(call gb_StaticLibrary_add_generated_objcxxobjects,skia,\
+$(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlAttachment \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlCaps \
@@ -1020,7 +1021,7 @@ $(eval $(call gb_StaticLibrary_add_generated_objcxxobjects,skia,\
 endif
 
 else
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkDebug_stdio \
     UnpackedTarball/skia/src/ports/SkFontConfigInterface \
     UnpackedTarball/skia/src/ports/SkFontConfigInterface_direct \
@@ -1034,11 +1035,11 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkOSLibrary_posix \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/unix/RasterWindowContext_unix \
 ))
 ifeq ($(SKIA_GPU),VULKAN)
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/unix/VulkanWindowContext_unix \
 ))
 endif
@@ -1048,7 +1049,7 @@ endif
 # Skcms code is used by png writer, which is used by SkiaHelper::dump(). Building
 # this without optimizations would mean having each pixel of saved images be
 # processed by unoptimized code.
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,skia,\
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/modules/skcms/skcms, $(gb_COMPILEROPTFLAGS) \
 ))
 
