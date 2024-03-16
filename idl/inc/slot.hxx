@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IDL_INC_SLOT_HXX
-#define INCLUDED_IDL_INC_SLOT_HXX
+#pragma once
 
 #include "types.hxx"
-
 #include <tools/solar.h>
 
 class SvMetaSlot : public SvMetaAttribute
@@ -128,7 +126,5 @@ public:
     sal_uInt16          WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvStream & rOutStm ) const;
 };
-
-#endif // INCLUDED_IDL_INC_SLOT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
