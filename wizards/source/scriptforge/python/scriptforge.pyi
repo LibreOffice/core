@@ -1578,7 +1578,7 @@ class SFScriptForge:
 
         def Language(self, region: str = ...) -> str:
             """
-                Gets tthe name of the language, in English, of the specified region.
+                Gets the name of the language, in English, of the specified region.
                     Args
                         ``region``: formatted as "la-CO" or "la".
                 """
