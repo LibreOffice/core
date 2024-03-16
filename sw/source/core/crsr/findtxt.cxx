@@ -735,7 +735,6 @@ bool DoSearch(SwPaM & rSearchPam,
         SwRootFrame const*const pLayout, SwPaM* pPam)
 {
     bool bFound = false;
-    SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     OUString sCleanStr;
     std::vector<AmbiguousIndex> aFltArr;
     LanguageType eLastLang = LANGUAGE_SYSTEM;
@@ -876,39 +875,43 @@ bool DoSearch(SwPaM & rSearchPam,
 
     if ( bFound )
         return true;
-    else if ((bChkEmptyPara && !nStart.GetAnyIndex() && !nTextLen.GetAnyIndex())
-             || bChkParaEnd)
+
+    if (!bChkEmptyPara && !bChkParaEnd)
+        return false;
+
+    if (bChkEmptyPara && bSrchForward && nTextLen.GetAnyIndex())
+        return false; // the length is not zero - there is content here
+
+    // move to the end (or start) of the paragraph
+    *rSearchPam.GetPoint() = *pPam->GetPoint();
+    if (pLayout)
     {
-        *rSearchPam.GetPoint() = *pPam->GetPoint();
-        if (pLayout)
-        {
-            *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(
-                bChkParaEnd ? nTextLen.GetFrameIndex() : TextFrameIndex(0));
-        }
-        else
-        {
-            rSearchPam.GetPoint()->nContent = bChkParaEnd ? nTextLen.GetModelIndex() : 0;
-        }
-        rSearchPam.SetMark();
-        const SwNode *const pSttNd = bSrchForward
-            ? &rSearchPam.GetPoint()->nNode.GetNode() // end of the frame
-            : &rNdIdx.GetNode(); // keep the bug as-is for now...
-        /* FIXME: this condition does not work for !bSrchForward backward
-         * search, it probably never did. (pSttNd != &rNdIdx.GetNode())
-         * is never true in this case. */
-        if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
-            rSearchPam.Move(fnMoveForward, GoInContent) &&
-            (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->nNode.GetNode()) &&
-            SwNodeOffset(1) == abs(rSearchPam.GetPoint()->nNode.GetIndex() -
-                                   rSearchPam.GetMark()->nNode.GetIndex()))
-        {
-            // if backward search, switch point and mark
-            if( !bSrchForward )
-                rSearchPam.Exchange();
-            return true;
-        }
+        *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(
+            bSrchForward ? nTextLen.GetFrameIndex() : TextFrameIndex(0));
     }
-    return bFound;
+    else
+    {
+        rSearchPam.GetPoint()->nContent = bSrchForward ? nTextLen.GetModelIndex() : 0;
+    }
+    rSearchPam.SetMark();
+
+    if (!rSearchPam.Move(fnMove, GoInContent))
+        return false; // at start or end of the document
+
+    // selection must not be outside of the search area
+    if (!pPam->ContainsPosition(*rSearchPam.GetPoint()))
+        return false;
+
+    if (SwNodeOffset(1) == abs(rSearchPam.GetPoint()->nNode.GetIndex() -
+                               rSearchPam.GetMark()->nNode.GetIndex()))
+    {
+        if (bChkEmptyPara && !bSrchForward && rSearchPam.GetPoint()->nContent.GetIndex())
+            return false; // the length is not zero - there is content here
+
+        return true;
+    }
+
+    return false;
 }
 
 namespace {

@@ -293,6 +293,7 @@ public:
     void testTdf143760WrapContourToOff();
     void testHatchFill();
     void testTdf62032ApplyStyle();
+    void testTdf147583_backwardSearch();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
     CPPUNIT_TEST(testTdf96515);
@@ -419,6 +420,7 @@ public:
     CPPUNIT_TEST(testTdf143760WrapContourToOff);
     CPPUNIT_TEST(testHatchFill);
     CPPUNIT_TEST(testTdf62032ApplyStyle);
+    CPPUNIT_TEST(testTdf147583_backwardSearch);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -4160,6 +4162,37 @@ void SwUiWriterTest4::testTdf62032ApplyStyle()
     // - Actual  : 2
     CPPUNIT_ASSERT_EQUAL(OUString("1.1"),
                          getProperty<OUString>(getParagraph(2), "ListLabelString").trim());
+}
+
+void SwUiWriterTest4::testTdf147583_backwardSearch()
+{
+    createSwDoc(DATA_DIRECTORY, "tdf147583_backwardSearch.odt");
+    uno::Reference<util::XSearchable> xSearch(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XSearchDescriptor> xSearchDes = xSearch->createSearchDescriptor();
+    uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
+
+    uno::Reference<container::XIndexAccess> xIndex;
+    const sal_Int32 nParas = getParagraphs();
+
+    //specifying the search attributes
+    uno::Reference<beans::XPropertySet> xPropSet(xSearchDes, uno::UNO_QUERY_THROW);
+    xSearchDes->setPropertyValue("SearchRegularExpression", uno::Any(true)); // regex
+    xSearchDes->setSearchString("$"); // the end of the paragraph pilcrow marker
+
+    // xSearchDes->setPropertyValue("SearchBackwards", uno::Any(false));
+    // xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
+    // // all paragraphs (including the unselected last one) should be found
+    // CPPUNIT_ASSERT_EQUAL(nParas, xIndex->getCount());
+
+    xSearchDes->setPropertyValue("SearchBackwards", uno::Any(true));
+    xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
+    // all paragraphs (except the troublesome last one) are found
+    CPPUNIT_ASSERT_EQUAL(nParas - 1, xIndex->getCount());
+
+    xSearchDes->setSearchString("^$"); // empty paragraphs
+    xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
+    // should actually be 10 (including the empty para with the comment marker, and the last para)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xIndex->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest4);
