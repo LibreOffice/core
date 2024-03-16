@@ -5697,7 +5697,7 @@ class SFDocuments:
                         When ``False`` range selection is allowed.
 
                         ``closeafterselect``: when ``True`` (default) the dialog is closed immediately after
-                        the selection is made. wWhen ``False`` the user can change the selection as many times
+                        the selection is made. When ``False`` the user can change the selection as many times
                         as needed. Dialog closure is manual.
                     Returns
                         The selected range as a string, or the empty string when the user cancelled the request.
