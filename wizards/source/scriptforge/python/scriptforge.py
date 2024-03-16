@@ -56,7 +56,7 @@
             ScriptForge(hostname = 'localhost', port = 2024)
 
         When the user uses an IDE like PyCharm or VSCode, (s)he might benefit from the typing
-        hints provided by them thanks to the twin scriptforhe.pyi module.
+        hints provided by them thanks to the twin scriptforge.pyi module.
 
     Specific documentation about the use of ScriptForge from Python scripts:
         https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_intro.html?DbPAR=BASIC
