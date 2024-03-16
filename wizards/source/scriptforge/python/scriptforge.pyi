@@ -6569,7 +6569,7 @@ class SFDocuments:
                 Returns a Database service instance (service = ``SFDatabases.Database``) giving access
                 to the execution of SQL commands on the database linked with the actual form document.
                     Args
-                        ``user``, ``oassword``: the login parameters.
+                        ``user``, ``password``: the login parameters.
                 """
             ...
 
