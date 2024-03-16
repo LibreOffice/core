@@ -4178,11 +4178,11 @@ class SFDialogs:
         TripleState: bool
         """ Get/set whether the ``checkbox`` control may appear dimmed (grayed).    """
         URL: str
-        """ Get/set the URL to open when clcking the ``hyperlink`` control. """
+        """ Get/set the URL to open when clicking the ``hyperlink`` control. """
         Value: Any
         """
         Get/set the content of the control:
-        
+
         - ``Button``: bool - For toggle buttons only.
         - ``CheckBox``: bool, int - 0, ``False``: not checked, 1, ``True``: checked, 2: grayed, don't know.
         - ``ComboBox``: str - The selected value. The ``ListIndex`` property is an alternate option.
