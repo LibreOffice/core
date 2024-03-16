@@ -727,7 +727,6 @@ bool DoSearch(SwPaM & rSearchPam,
         SwRootFrame const*const pLayout, SwPaM& rPam)
 {
     bool bFound = false;
-    SwPosition& rPtPos = *rPam.GetPoint();
     OUString sCleanStr;
     std::vector<AmbiguousIndex> aFltArr;
     LanguageType eLastLang = LANGUAGE_SYSTEM;
@@ -869,39 +868,43 @@ bool DoSearch(SwPaM & rSearchPam,
 
     if ( bFound )
         return true;
-    else if ((bChkEmptyPara && !nStart.GetAnyIndex() && !nTextLen.GetAnyIndex())
-             || bChkParaEnd)
+
+    if (!bChkEmptyPara && !bChkParaEnd)
+        return false;
+
+    if (bChkEmptyPara && bSrchForward && nTextLen.GetAnyIndex())
+        return false; // the length is not zero - there is content here
+
+    // move to the end (or start) of the paragraph
+    *rSearchPam.GetPoint() = *rPam.GetPoint();
+    if (pLayout)
     {
-        *rSearchPam.GetPoint() = *rPam.GetPoint();
-        if (pLayout)
-        {
-            *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(
-                bChkParaEnd ? nTextLen.GetFrameIndex() : TextFrameIndex(0));
-        }
-        else
-        {
-            rSearchPam.GetPoint()->SetContent( bChkParaEnd ? nTextLen.GetModelIndex() : 0 );
-        }
-        rSearchPam.SetMark();
-        const SwNode *const pSttNd = bSrchForward
-            ? &rSearchPam.GetPoint()->GetNode() // end of the frame
-            : &rPtPos.GetNode(); // keep the bug as-is for now...
-        /* FIXME: this condition does not work for !bSrchForward backward
-         * search, it probably never did. (pSttNd != &rNdIdx.GetNode())
-         * is never true in this case. */
-        if( (bSrchForward || pSttNd != &rPtPos.GetNode()) &&
-            rSearchPam.Move(fnMoveForward, GoInContent) &&
-            (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->GetNode()) &&
-            SwNodeOffset(1) == abs(rSearchPam.GetPoint()->GetNodeIndex() -
-                                   rSearchPam.GetMark()->GetNodeIndex()))
-        {
-            // if backward search, switch point and mark
-            if( !bSrchForward )
-                rSearchPam.Exchange();
-            return true;
-        }
+        *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(
+            bSrchForward ? nTextLen.GetFrameIndex() : TextFrameIndex(0));
     }
-    return bFound;
+    else
+    {
+        rSearchPam.GetPoint()->SetContent(bSrchForward ? nTextLen.GetModelIndex() : 0);
+    }
+    rSearchPam.SetMark();
+
+    if (!rSearchPam.Move(fnMove, GoInContent))
+        return false; // at start or end of the document
+
+    // selection must not be outside of the search area
+    if (!rPam.ContainsPosition(*rSearchPam.GetPoint()))
+        return false;
+
+    if (SwNodeOffset(1) == abs(rSearchPam.GetPoint()->GetNodeIndex() -
+                               rSearchPam.GetMark()->GetNodeIndex()))
+    {
+        if (bChkEmptyPara && !bSrchForward && rSearchPam.GetPoint()->GetContentIndex())
+            return false; // the length is not zero - there is content here
+
+        return true;
+    }
+
+    return false;
 }
 
 namespace {
