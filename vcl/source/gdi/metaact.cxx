@@ -735,8 +735,25 @@ MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidt
 
 void MetaStretchTextAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowDim(pOut->LogicToPixel(maPt).Y()))
+    if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maPt, Size(mnWidth, pOut->GetTextHeight())))))
         return;
+
+    static bool bFuzzing = comphelper::IsFuzzing();
+    if (bFuzzing && mnWidth > 10000)
+    {
+        FontLineStyle eUnderline = pOut->GetFont().GetUnderline();
+        FontLineStyle eOverline = pOut->GetFont().GetOverline();
+
+        if (eUnderline == LINESTYLE_SMALLWAVE || eUnderline == LINESTYLE_WAVE ||
+            eUnderline == LINESTYLE_DOUBLEWAVE || eUnderline == LINESTYLE_BOLDWAVE ||
+            eOverline == LINESTYLE_SMALLWAVE || eOverline == LINESTYLE_WAVE ||
+            eOverline == LINESTYLE_DOUBLEWAVE || eOverline == LINESTYLE_BOLDWAVE)
+        {
+            SAL_WARN("vcl.gdi", "MetaStretchTextAction::Execute, skipping suspicious WaveTextLine of length: "
+                                    << mnWidth << " for fuzzing performance");
+            return;
+        }
+    }
 
     pOut->DrawStretchText( maPt, mnWidth, maStr, mnIndex, mnLen );
 }
