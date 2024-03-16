@@ -49,6 +49,9 @@
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 
 #include <map>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 #include <unotools/streamwrap.hxx>
 
@@ -67,112 +70,84 @@ using namespace sfx2;
 
 namespace drawing = com::sun::star::drawing;
 
+namespace
+{
+
+const auto constGfxTypeToExtension = frozen::make_unordered_map<GfxLinkType, OUString>(
+{
+    { GfxLinkType::NativePng, u"png"_ustr },
+    { GfxLinkType::NativeGif, u"gif"_ustr },
+    { GfxLinkType::NativeTif, u"tif"_ustr },
+    { GfxLinkType::NativeWmf, u"wmf"_ustr },
+    { GfxLinkType::NativeMet, u"met"_ustr },
+    { GfxLinkType::NativePct, u"pct"_ustr },
+    { GfxLinkType::NativeJpg, u"jpg"_ustr },
+    { GfxLinkType::NativeBmp, u"bmp"_ustr },
+    { GfxLinkType::NativeSvg, u"svg"_ustr },
+    { GfxLinkType::NativePdf, u"pdf"_ustr },
+    { GfxLinkType::NativeWebp, u"webp"_ustr },
+});
+
+const auto constVectorGraphicTypeToExtension = frozen::make_unordered_map<VectorGraphicDataType, OUString>(
+{
+    { VectorGraphicDataType::Wmf, u"wmf"_ustr },
+    { VectorGraphicDataType::Emf, u"emf"_ustr },
+    { VectorGraphicDataType::Svg, u"svg"_ustr },
+});
+
+const auto constGfxTypeToString = frozen::make_unordered_map<GfxLinkType, TranslateId>(
+{
+    { GfxLinkType::NativePng, STR_IMAGE_PNG },
+    { GfxLinkType::NativeGif, STR_IMAGE_GIF },
+    { GfxLinkType::NativeTif, STR_IMAGE_TIFF },
+    { GfxLinkType::NativeWmf, STR_IMAGE_WMF },
+    { GfxLinkType::NativeMet, STR_IMAGE_MET },
+    { GfxLinkType::NativePct, STR_IMAGE_PCT },
+    { GfxLinkType::NativeJpg, STR_IMAGE_JPEG },
+    { GfxLinkType::NativeBmp, STR_IMAGE_BMP },
+    { GfxLinkType::NativeSvg, STR_IMAGE_SVG },
+    { GfxLinkType::NativePdf, STR_IMAGE_PNG },
+    { GfxLinkType::NativeWebp, STR_IMAGE_WEBP },
+});
+
+} // end anonymous ns
+
 void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic )
 {
-    OUString aExtension = "png";
     auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
     if (rVectorGraphicDataPtr && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
     {
-        switch (rVectorGraphicDataPtr->getType())
-        {
-        case VectorGraphicDataType::Wmf:
-            aExtension = "wmf";
-            break;
-        case VectorGraphicDataType::Emf:
-            aExtension = "emf";
-            break;
-        default: // case VectorGraphicDataType::Svg:
-            aExtension = "svg";
-            break;
-        }
-
-        rExtension = aExtension;
-        return;
+        auto eType = rVectorGraphicDataPtr->getType();
+        const auto iter = constVectorGraphicTypeToExtension.find(eType);
+        if (iter != constVectorGraphicTypeToExtension.end())
+            rExtension = iter->second;
+        else
+            rExtension = u"svg"_ustr; // not sure this makes sense but it is like this for a long time
     }
-
-    switch( rGraphic.GetGfxLink().GetType() )
+    else
     {
-        case GfxLinkType::NativeGif:
-            aExtension = "gif";
-            break;
-        case GfxLinkType::NativeTif:
-            aExtension = "tif";
-            break;
-        case GfxLinkType::NativeWmf:
-            aExtension = "wmf";
-            break;
-        case GfxLinkType::NativeMet:
-            aExtension = "met";
-            break;
-        case GfxLinkType::NativePct:
-            aExtension = "pct";
-            break;
-        case GfxLinkType::NativeJpg:
-            aExtension = "jpg";
-            break;
-        case GfxLinkType::NativeBmp:
-            aExtension = "bmp";
-            break;
-        case GfxLinkType::NativeSvg:
-            aExtension = "svg";
-            break;
-        case GfxLinkType::NativePdf:
-            aExtension = "pdf";
-            break;
-        case GfxLinkType::NativeWebp:
-            aExtension = "webp";
-            break;
-        default:
-            break;
+        auto eType = rGraphic.GetGfxLink().GetType();
+        const auto iter = constGfxTypeToExtension.find(eType);
+        if (iter != constGfxTypeToExtension.end())
+            rExtension = iter->second;
+        else
+            rExtension = u"png"_ustr; // not sure this makes sense but it is like this for a long time
     }
-    rExtension = aExtension;
 }
 
 OUString GraphicHelper::GetImageType(const Graphic& rGraphic)
 {
-    OUString aGraphicTypeString = SvxResId(STR_IMAGE_UNKNOWN);
     auto pGfxLink = rGraphic.GetSharedGfxLink();
     if (pGfxLink)
     {
-        switch (pGfxLink->GetType())
-        {
-            case GfxLinkType::NativeGif:
-                aGraphicTypeString = SvxResId(STR_IMAGE_GIF);
-                break;
-            case GfxLinkType::NativeJpg:
-                aGraphicTypeString = SvxResId(STR_IMAGE_JPEG);
-                break;
-            case GfxLinkType::NativePng:
-                aGraphicTypeString = SvxResId(STR_IMAGE_PNG);
-                break;
-            case GfxLinkType::NativeTif:
-                aGraphicTypeString = SvxResId(STR_IMAGE_TIFF);
-                break;
-            case GfxLinkType::NativeWmf:
-                aGraphicTypeString = SvxResId(STR_IMAGE_WMF);
-                break;
-            case GfxLinkType::NativeMet:
-                aGraphicTypeString = SvxResId(STR_IMAGE_MET);
-                break;
-            case GfxLinkType::NativePct:
-                aGraphicTypeString = SvxResId(STR_IMAGE_PCT);
-                break;
-            case GfxLinkType::NativeSvg:
-                aGraphicTypeString = SvxResId(STR_IMAGE_SVG);
-                break;
-            case GfxLinkType::NativeBmp:
-                aGraphicTypeString = SvxResId(STR_IMAGE_BMP);
-                break;
-            case GfxLinkType::NativeWebp:
-                aGraphicTypeString = SvxResId(STR_IMAGE_WEBP);
-                break;
-            default:
-                break;
-        }
+        auto iter = constGfxTypeToString.find(pGfxLink->GetType());
+        if (iter != constGfxTypeToString.end())
+            return SvxResId(iter->second);
     }
-    return aGraphicTypeString;
+    return SvxResId(STR_IMAGE_UNKNOWN);
 }
+
 namespace {
 
 
