@@ -55,20 +55,7 @@
 
 #include <unotools/streamwrap.hxx>
 
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::graphic;
-using namespace css::ucb;
-using namespace css::beans;
-using namespace css::io;
-using namespace css::document;
-using namespace css::ui::dialogs;
-using namespace css::container;
-using namespace com::sun::star::task;
-
-using namespace sfx2;
-
-namespace drawing = com::sun::star::drawing;
+using namespace css;
 
 namespace
 {
@@ -151,15 +138,15 @@ OUString GraphicHelper::GetImageType(const Graphic& rGraphic)
 namespace {
 
 
-bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
-                              Sequence< PropertyValue >& rFilterData )
+bool lcl_ExecuteFilterDialog(const uno::Sequence<beans::PropertyValue>& rPropsForDialog,
+                             uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     bool bStatus = false;
     try
     {
-        Reference< XExecutableDialog > xFilterDialog(
-                comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.svtools.SvFilterOptionsDialog" ), UNO_QUERY );
-        Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
+        uno::Reference<ui::dialogs::XExecutableDialog> xFilterDialog(
+                comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.svtools.SvFilterOptionsDialog" ), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertyAccess> xFilterProperties( xFilterDialog, uno::UNO_QUERY);
 
         if( xFilterDialog.is() && xFilterProperties.is() )
         {
@@ -167,7 +154,7 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
             if( xFilterDialog->execute() )
             {
                 bStatus = true;
-                const Sequence< PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
+                const uno::Sequence<beans::PropertyValue> aPropsFromDialog = xFilterProperties->getPropertyValues();
                 for ( const auto& rProp : aPropsFromDialog )
                 {
                     if (rProp.Name == "FilterData")
@@ -178,19 +165,19 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
             }
         }
     }
-    catch( const NoSuchElementException& e )
+    catch (container::NoSuchElementException const& exception)
     {
         // the filter name is unknown
-        throw ErrorCodeIOException(
+        throw task::ErrorCodeIOException(
             ("lcl_ExecuteFilterDialog: NoSuchElementException"
-             " \"" + e.Message + "\": ERRCODE_IO_ABORT"),
-            Reference< XInterface >(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
+             " \"" + exception.Message + "\": ERRCODE_IO_ABORT"),
+            uno::Reference<uno::XInterface>(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
     }
-    catch( const ErrorCodeIOException& )
+    catch (const task::ErrorCodeIOException&)
     {
         throw;
     }
-    catch( const Exception& )
+    catch (const uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("sfx.doc", "ignoring");
     }
@@ -201,11 +188,11 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
 
 OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGraphic, const OUString& rGraphicName)
 {
-    FileDialogHelper aDialogHelper(TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
-    Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();
+    sfx2::FileDialogHelper aDialogHelper(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
+    uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDialogHelper.GetFilePicker();
 
     // fish out the graphic's name
-    aDialogHelper.SetContext(FileDialogHelper::ExportImage);
+    aDialogHelper.SetContext(sfx2::FileDialogHelper::ExportImage);
     aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
     INetURLObject aURL;
     aURL.SetSmartURL( rGraphicName );
@@ -287,16 +274,17 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
             if ( rGraphic.GetType() == GraphicType::Bitmap )
             {
                 Graphic aGraphic = rGraphic;
-                Reference<XGraphic> xGraphic = aGraphic.GetXGraphic();
+                uno::Reference<graphic::XGraphic> xGraphic = aGraphic.GetXGraphic();
 
                 OUString aExportFilter = rGraphicFilter.GetExportInternalFilterName(nFilter);
 
-                Sequence< PropertyValue > aPropsForDialog{
+                uno::Sequence<beans::PropertyValue> aPropsForDialog
+                {
                     comphelper::makePropertyValue("Graphic", xGraphic),
                     comphelper::makePropertyValue("FilterName", aExportFilter)
                 };
 
-                Sequence< PropertyValue > aFilterData;
+                uno::Sequence<beans::PropertyValue> aFilterData;
                 bool bStatus = lcl_ExecuteFilterDialog(aPropsForDialog, aFilterData);
                 if (bStatus)
                 {
@@ -349,67 +337,66 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
 }
 
 void GraphicHelper::SaveShapeAsGraphicToPath(
-    const css::uno::Reference<css::lang::XComponent>& xComponent,
-    const css::uno::Reference<css::drawing::XShape>& xShape, const OUString& aExportMimeType,
+    const uno::Reference<lang::XComponent>& xComponent,
+    const uno::Reference<drawing::XShape>& xShape, const OUString& aExportMimeType,
     const OUString& sPath)
 {
-    Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
-    Reference<XInputStream> xGraphStream;
+    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    uno::Reference<io::XInputStream> xGraphStream;
 
     if (xGraphStream.is())
     {
-        Reference<XSimpleFileAccess3> xFileAccess = SimpleFileAccess::create(xContext);
+        uno::Reference<ucb::XSimpleFileAccess3> xFileAccess = ucb::SimpleFileAccess::create(xContext);
         xFileAccess->writeFile(sPath, xGraphStream);
     }
     else if (xComponent.is() && aExportMimeType == "application/pdf")
     {
-        css::uno::Reference<css::lang::XMultiServiceFactory> xMSF(xContext->getServiceManager(),
-                                                                  css::uno::UNO_QUERY);
-        css::uno::Reference<css::document::XExporter> xExporter(
-            xMSF->createInstance("com.sun.star.comp.PDF.PDFFilter"), css::uno::UNO_QUERY);
+        uno::Reference<lang::XMultiServiceFactory> xMSF(xContext->getServiceManager(), uno::UNO_QUERY);
+        uno::Reference<document::XExporter> xExporter(
+            xMSF->createInstance("com.sun.star.comp.PDF.PDFFilter"), uno::UNO_QUERY);
         xExporter->setSourceDocument(xComponent);
 
-        css::uno::Reference<css::drawing::XShapes> xShapes
-            = css::drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
+        uno::Reference<drawing::XShapes> xShapes
+            = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
         xShapes->add(xShape);
-        css::uno::Sequence<PropertyValue> aFilterData{
+        uno::Sequence<beans::PropertyValue> aFilterData{
             comphelper::makePropertyValue("Selection", xShapes),
         };
         SvFileStream aStream(sPath, StreamMode::READWRITE | StreamMode::TRUNC);
-        css::uno::Reference<css::io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
-        css::uno::Sequence<PropertyValue> aDescriptor{
+        uno::Reference<io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
+        uno::Sequence<beans::PropertyValue> aDescriptor
+        {
             comphelper::makePropertyValue("FilterData", aFilterData),
             comphelper::makePropertyValue("OutputStream", xStream)
         };
-        css::uno::Reference<css::document::XFilter> xFilter(xExporter, css::uno::UNO_QUERY);
+        uno::Reference<document::XFilter> xFilter(xExporter, uno::UNO_QUERY);
         xFilter->filter(aDescriptor);
     }
     else
     {
-        Reference<css::drawing::XGraphicExportFilter> xGraphicExporter
-            = css::drawing::GraphicExportFilter::create(xContext);
+        uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
 
-        Sequence<PropertyValue> aDescriptor{ comphelper::makePropertyValue("MediaType",
+        uno::Sequence<beans::PropertyValue> aDescriptor{ comphelper::makePropertyValue("MediaType",
                                                                            aExportMimeType),
                                              comphelper::makePropertyValue("URL", sPath) };
 
-        Reference<XComponent> xSourceDocument(xShape, UNO_QUERY_THROW);
+        uno::Reference<lang::XComponent> xSourceDocument(xShape, uno::UNO_QUERY_THROW);
         xGraphicExporter->setSourceDocument(xSourceDocument);
         xGraphicExporter->filter(aDescriptor);
     }
 }
 
 void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
-                                       const css::uno::Reference<css::lang::XComponent>& xComponent,
-                                       const Reference<drawing::XShape>& xShape)
+                                       const uno::Reference<lang::XComponent>& xComponent,
+                                       const uno::Reference<drawing::XShape>& xShape)
 {
     try
     {
-        Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
+        uno::Reference<beans::XPropertySet> xShapeSet(xShape, uno::UNO_QUERY_THROW);
 
-        FileDialogHelper aDialogHelper(TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
-        Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();
-        aDialogHelper.SetContext(FileDialogHelper::ExportImage);
+        sfx2::FileDialogHelper aDialogHelper(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
+        uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDialogHelper.GetFilePicker();
+        aDialogHelper.SetContext(sfx2::FileDialogHelper::ExportImage);
         aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_SAVEAS_IMAGE) );
 
         // populate filter dialog filter list and select default filter to match graphic mime type
@@ -444,7 +431,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
             GraphicHelper::SaveShapeAsGraphicToPath(xComponent, xShape, aExportMimeType, sPath);
         }
     }
-    catch( Exception& )
+    catch (uno::Exception&)
     {
     }
 }
