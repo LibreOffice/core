@@ -7000,7 +7000,7 @@ class SFWidgets:
             """
                 Displays the popup menu and waits for a user action.
                     Args
-                        ``returnid``: if ``True`` (default), the numeric identfier of the selected item is returned.
+                        ``returnid``: if ``True`` (default), the numeric identifier of the selected item is returned.
                         If ``False``, the method returns the item's name.
                     Returns
                         The item clicked by the user.
