@@ -1684,7 +1684,7 @@ class SFScriptForge:
             """
                 Gets the offset between GMT and the given timezone and locale, in minutes.
                     Args
-                        ``imezone``: the timezone for which the offset to the GMT will be calculated.
+                        ``timezone``: the timezone for which the offset to the GMT will be calculated.
 
                         ``locale``: the locale specifying the country for which the offset will be calculated,
                         given either in "la-CO" or "CO" formats.
