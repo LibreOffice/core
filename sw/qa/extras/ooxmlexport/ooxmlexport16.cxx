@@ -30,7 +30,6 @@
 #include <unoprnms.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <vcl/skia/SkiaHelper.hxx>
 #include <officecfg/Office/Common.hxx>
 
 class Test : public SwModelTestBase
@@ -764,10 +763,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
     BitmapEx bitmap(vclGraphic.GetBitmapEx());
     CPPUNIT_ASSERT_EQUAL( tools::Long(76), bitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL( tools::Long(76), bitmap.GetSizePixel().Height());
-
-    // FIXME this still has some issues with skia
-    if (SkiaHelper::isVCLSkiaEnabled())
-        return;
 
     // Without the fix in place, this test would have failed with
     // - Expected: Color: R:228 G:71 B:69 A:0

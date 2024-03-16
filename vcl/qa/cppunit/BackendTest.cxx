@@ -15,7 +15,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
-#include <vcl/skia/SkiaHelper.hxx>
 
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -625,9 +624,6 @@ public:
     void testDrawXor()
     {
         if (getDefaultDeviceBitCount() < 24)
-            return;
-        // FIXME this still has some issues with skia
-        if (SkiaHelper::isVCLSkiaEnabled())
             return;
         vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupXOR();
