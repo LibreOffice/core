@@ -1398,7 +1398,7 @@ class SFScriptForge:
                 or by a successful invocation of the L10N service with the ``FolderName`` argument.
                 The generated file should pass successfully the ``"msgfmt --check 'the pofile'"`` GNU command.
                     Args
-                        ``filename``: the complete file name (in ``filesstem.FileNaming`` notation)
+                        ``filename``: the complete file name (in ``filesystem.FileNaming`` notation)
                         to export to. If it exists, it is overwritten without warning.
 
                         ``header``: comments that will appear on top of the generated file. Do not include
