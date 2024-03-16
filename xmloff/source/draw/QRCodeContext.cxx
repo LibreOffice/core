@@ -10,7 +10,6 @@
 #include "QRCodeContext.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/BarCode.hpp>
 #include <com/sun/star/drawing/BarCodeErrorCorrection.hpp>
 

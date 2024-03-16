@@ -18,7 +18,6 @@
  */
 
 
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 

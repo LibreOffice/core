@@ -20,7 +20,6 @@
 #include "formattributes.hxx"
 
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <osl/diagnose.h>
 

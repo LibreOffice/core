@@ -33,7 +33,6 @@
 #include <osl/diagnose.h>
 #include <XMLFillBitmapSizePropertyHandler.hxx>
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>
-#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
 #include <XMLRtlGutterPropertyHandler.hxx>
 

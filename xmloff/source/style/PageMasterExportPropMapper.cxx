@@ -19,7 +19,6 @@
 
 #include "PageMasterExportPropMapper.hxx"
 #include <xmloff/xmlprmap.hxx>
-#include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

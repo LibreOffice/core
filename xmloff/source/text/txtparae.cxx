@@ -65,7 +65,6 @@
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 
 #include <sax/tools/converter.hxx>
 

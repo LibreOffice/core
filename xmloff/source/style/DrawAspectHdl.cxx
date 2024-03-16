@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <sax/tools/converter.hxx>
-#include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star;
 

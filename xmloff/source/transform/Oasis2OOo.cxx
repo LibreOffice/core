@@ -19,7 +19,6 @@
 
 #include <comphelper/base64.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>

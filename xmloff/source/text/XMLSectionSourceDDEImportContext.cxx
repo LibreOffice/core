@@ -18,7 +18,6 @@
  */
 
 #include "XMLSectionSourceDDEImportContext.hxx"
-#include "XMLSectionImportContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>

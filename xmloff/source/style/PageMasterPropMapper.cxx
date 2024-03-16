@@ -23,8 +23,6 @@
 #include <PageMasterStyleMap.hxx>
 #include <PageMasterPropHdlFactory.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 using namespace ::com::sun::star;
 
 XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
