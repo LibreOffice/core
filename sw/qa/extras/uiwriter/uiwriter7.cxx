@@ -357,6 +357,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
                          pCursor->GetPointNode().GetTextNode()->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)
+{
+    createSwDoc("tdf147583_backwardSearch.odt");
+    uno::Reference<util::XSearchable> xSearch(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XSearchDescriptor> xSearchDes = xSearch->createSearchDescriptor();
+    uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
+
+    uno::Reference<container::XIndexAccess> xIndex;
+    const sal_Int32 nParas = getParagraphs();
+
+    //specifying the search attributes
+    uno::Reference<beans::XPropertySet> xPropSet(xSearchDes, uno::UNO_QUERY_THROW);
+    xSearchDes->setPropertyValue("SearchRegularExpression", uno::Any(true)); // regex
+    xSearchDes->setSearchString("$"); // the end of the paragraph pilcrow marker
+
+    // xSearchDes->setPropertyValue("SearchBackwards", uno::Any(false));
+    // xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
+    // // all paragraphs (including the unselected last one) should be found
+    // CPPUNIT_ASSERT_EQUAL(nParas, xIndex->getCount());
+
+    xSearchDes->setPropertyValue("SearchBackwards", uno::Any(true));
+    xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
+    // all paragraphs (except the troublesome last one) are found
+    CPPUNIT_ASSERT_EQUAL(nParas - 1, xIndex->getCount());
+
+    xSearchDes->setSearchString("^$"); // empty paragraphs
+    xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
+    // should actually be 10 (including the empty para with the comment marker, and the last para)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xIndex->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282)
 {
     createSwDoc();
