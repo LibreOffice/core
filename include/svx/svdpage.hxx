@@ -68,31 +68,31 @@ private:
     SdrObjList &operator=(const SdrObjList& rSrcList) = delete;
 
 protected:
-    void RecalcRects();
+    SAL_DLLPRIVATE void RecalcRects();
 
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
-    static void impChildInserted(SdrObject const & rChild);
+    SAL_DLLPRIVATE static void impChildInserted(SdrObject const & rChild);
 
     // tdf#116879 Clear SdrObjList, no Undo done. Used from destructor, but also
     // from other places. When used from destructor, suppress broadcasts
     // to not get callbacks to evtl. derived objects already in destruction
     // (e.g. SdrPage)
-    void impClearSdrObjList(bool bBroadcast);
+    SAL_DLLPRIVATE void impClearSdrObjList(bool bBroadcast);
 
 protected:
     // protected constructor to make clear that this class should only
     // be used as base for derivations, not naked. See getSdrModelFromSdrObjList
     // which is pure virtual to force this, too
-    SdrObjList();
-    virtual ~SdrObjList();
+    SAL_DLLPRIVATE SdrObjList();
+    SAL_DLLPRIVATE virtual ~SdrObjList();
 
 public:
     // SdrModel/SdrPage access on SdrObjList level
     virtual SdrPage* getSdrPageFromSdrObjList() const;
     virtual SdrObject* getSdrObjectFromSdrObjList() const;
 
-    void CopyObjects(const SdrObjList& rSrcList);
+    SAL_DLLPRIVATE void CopyObjects(const SdrObjList& rSrcList);
 
     // tdf#116879 clean up everything (without Undo), plus broadcasting
     // changes. Split to this call and a private one (impClearSdrObjList)
@@ -104,7 +104,7 @@ public:
     bool           IsObjOrdNumsDirty() const        { return mbObjOrdNumsDirty; }
     virtual void   NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
     virtual void   InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
-    void           sort( std::vector<sal_Int32>& sortOrder );
+    SAL_DLLPRIVATE void           sort( std::vector<sal_Int32>& sortOrder );
 
     void InsertObjectThenMakeNameUnique(SdrObject* pObj);
     void InsertObjectThenMakeNameUnique(SdrObject* pObj, std::unordered_set<rtl::OUString>& rNameSet, size_t nPos=SAL_MAX_SIZE);
@@ -122,22 +122,22 @@ public:
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
 
     /// Modify ZOrder of an SdrObject, object must already be in the list
-    void SetExistingObjectOrdNum(SdrObject* pExistingObj, size_t nNewObjNum);
+    SAL_DLLPRIVATE void SetExistingObjectOrdNum(SdrObject* pExistingObj, size_t nNewObjNum);
 
     void SetSdrObjListRectsDirty();
 
-    const tools::Rectangle& GetAllObjSnapRect() const;
+    SAL_DLLPRIVATE const tools::Rectangle& GetAllObjSnapRect() const;
     const tools::Rectangle& GetAllObjBoundRect() const;
 
     /// reformat all text objects, e.g. when changing printer
-    void NbcReformatAllTextObjects();
-    void ReformatAllTextObjects();
+    SAL_DLLPRIVATE void NbcReformatAllTextObjects();
+    SAL_DLLPRIVATE void ReformatAllTextObjects();
 
     /** #103122# reformats all edge objects that are connected to other objects */
-    void ReformatAllEdgeObjects();
+    SAL_DLLPRIVATE void ReformatAllEdgeObjects();
 
     /// convert attributes of the style to hard formatting
-    void BurnInStyleSheetAttributes();
+    SAL_DLLPRIVATE void BurnInStyleSheetAttributes();
 
     size_t GetObjCount() const;
     SdrObject* GetObj(size_t nNum) const;
@@ -153,7 +153,7 @@ public:
         list, extracts the content, inserts it flat to the list and
         removes the group object afterwards.
      */
-    void FlattenGroups();
+    SAL_DLLPRIVATE void FlattenGroups();
 
     /** Ungroup the object at the given index
 
@@ -164,7 +164,7 @@ public:
         operation is performed recursively, such that the content of
         the given object contains no groups afterwards.
      */
-    void UnGroupObj( size_t nObjNum );
+    SAL_DLLPRIVATE void UnGroupObj( size_t nObjNum );
 
     /** Return whether there is an explicit, user defined, object navigation
         order.  When there is one this method returns <TRUE/> and the
@@ -193,7 +193,7 @@ public:
         @return
             The returned pointer is NULL for invalid positions.
     */
-    SdrObject* GetObjectForNavigationPosition (const sal_uInt32 nNavigationPosition) const;
+    SAL_DLLPRIVATE SdrObject* GetObjectForNavigationPosition (const sal_uInt32 nNavigationPosition) const;
 
     /** Restore the navigation order to that defined by the z-order.
     */
@@ -209,7 +209,7 @@ public:
             for example because no explicit navigation order has been
             defined, i.e. HasObjectNavigationOrder() would return <FALSE/>.
     */
-    bool RecalcNavigationPositions();
+    SAL_DLLPRIVATE bool RecalcNavigationPositions();
 
     /** Set the navigation order to the one defined by the given list of
         XShape objects.
@@ -223,7 +223,7 @@ public:
     void SetNavigationOrder (const css::uno::Reference<
                              css::container::XIndexAccess>& rxOrder);
 
-    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    SAL_DLLPRIVATE virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     typedef std::deque<rtl::Reference<SdrObject>> SdrObjectDeque;
 
@@ -256,7 +256,7 @@ private:
             returned by GetObjCount() (the object is inserted at the end of
             the list.)
     */
-    void InsertObjectIntoContainer (
+    SAL_DLLPRIVATE void InsertObjectIntoContainer (
         SdrObject& rObject,
         const sal_uInt32 nInsertPosition);
 
@@ -269,7 +269,7 @@ private:
             the given object.  Valid values include 0 and are smaller than
             the number of objects in the list.
     */
-    void ReplaceObjectInContainer (
+    SAL_DLLPRIVATE void ReplaceObjectInContainer (
         SdrObject& rObject,
         const sal_uInt32 nObjectPosition);
 
@@ -280,10 +280,10 @@ private:
             Valid values include 0 and are smaller than the number of
             objects in the list.
     */
-    void RemoveObjectFromContainer (
+    SAL_DLLPRIVATE void RemoveObjectFromContainer (
         const sal_uInt32 nObjectPosition);
 
-    void ImplReformatAllEdgeObjects(const SdrObjList& );
+    SAL_DLLPRIVATE void ImplReformatAllEdgeObjects(const SdrObjList& );
 };
 
 // Used for all methods which return a page number

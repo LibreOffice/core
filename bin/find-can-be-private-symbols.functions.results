@@ -2983,100 +2983,10 @@ SdXImpressDocument::supportsService(rtl::OUString const&)
 SdXImpressDocument::unlockControllers()
 SdXImpressDocument::~SdXImpressDocument()
 SdrAngleItem::Clone(SfxItemPool*) const
-SdrAttrObj::HasFill() const
-SdrAttrObj::HasLine() const
-SdrAttrObj::ImpGetLineWdt() const
-SdrAttrObj::SdrAttrObj(SdrModel&)
-SdrAttrObj::SdrAttrObj(SdrModel&, SdrAttrObj const&)
-SdrAttrObj::~SdrAttrObj()
-SdrCaptionEscDirItem::Clone(SfxItemPool*) const
-SdrCaptionEscDirItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SdrCaptionEscDirItem::GetValueCount() const
-SdrCaptionEscDirItem::GetValueTextByPos(unsigned short)
 SdrCaptionEscIsRelItem::Clone(SfxItemPool*) const
 SdrCaptionEscRelItem::Clone(SfxItemPool*) const
 SdrCaptionFitLineLenItem::Clone(SfxItemPool*) const
 SdrCaptionLineLenItem::Clone(SfxItemPool*) const
-SdrCaptionObj::AddToHdlList(SdrHdlList&) const
-SdrCaptionObj::BckCreate(SdrDragStat&)
-SdrCaptionObj::BegCreate(SdrDragStat&)
-SdrCaptionObj::BrkCreate(SdrDragStat&)
-SdrCaptionObj::CloneSdrObject(SdrModel&) const
-SdrCaptionObj::CreateObjectSpecificProperties()
-SdrCaptionObj::CreateObjectSpecificViewContact()
-SdrCaptionObj::DoConvertToPolyObj(bool, bool) const
-SdrCaptionObj::EndCreate(SdrDragStat&, SdrCreateCmd)
-SdrCaptionObj::GetCreatePointer() const
-SdrCaptionObj::GetHdlCount() const
-SdrCaptionObj::GetObjIdentifier() const
-SdrCaptionObj::GetRelativePos() const
-SdrCaptionObj::GetSnapPoint(unsigned int) const
-SdrCaptionObj::GetSnapPointCount() const
-SdrCaptionObj::MovCreate(SdrDragStat&)
-SdrCaptionObj::NbcMove(Size const&)
-SdrCaptionObj::NbcResize(Point const&, Fraction const&, Fraction const&)
-SdrCaptionObj::NbcSetLogicRect(tools::Rectangle const&)
-SdrCaptionObj::NbcSetRelativePos(Point const&)
-SdrCaptionObj::NbcSetTailPos(Point const&)
-SdrCaptionObj::NewGeoData() const
-SdrCaptionObj::Notify(SfxBroadcaster&, SfxHint const&)
-SdrCaptionObj::RestoreGeoData(SdrObjGeoData const&)
-SdrCaptionObj::SaveGeoData(SdrObjGeoData&) const
-SdrCaptionObj::SdrCaptionObj(SdrModel&)
-SdrCaptionObj::SdrCaptionObj(SdrModel&, SdrCaptionObj const&)
-SdrCaptionObj::TRSetBaseGeometry(basegfx::B2DHomMatrix const&, basegfx::B2DPolyPolygon const&)
-SdrCaptionObj::TakeCreatePoly(SdrDragStat const&) const
-SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec&) const
-SdrCaptionObj::TakeObjNamePlural() const
-SdrCaptionObj::TakeObjNameSingul() const
-SdrCaptionObj::TakeXorPoly() const
-SdrCaptionObj::applySpecialDrag(SdrDragStat&)
-SdrCaptionObj::beginSpecialDrag(SdrDragStat&) const
-SdrCaptionObj::getSpecialDragComment(SdrDragStat const&) const
-SdrCaptionObj::hasSpecialDrag() const
-SdrCaptionObj::~SdrCaptionObj()
-SdrCaptionTypeItem::Clone(SfxItemPool*) const
-SdrCaptionTypeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SdrCaptionTypeItem::GetValueCount() const
-SdrCaptionTypeItem::GetValueTextByPos(unsigned short)
-SdrCircObj::AddToHdlList(SdrHdlList&) const
-SdrCircObj::BckCreate(SdrDragStat&)
-SdrCircObj::BegCreate(SdrDragStat&)
-SdrCircObj::BrkCreate(SdrDragStat&)
-SdrCircObj::CloneSdrObject(SdrModel&) const
-SdrCircObj::CreateObjectSpecificProperties()
-SdrCircObj::CreateObjectSpecificViewContact()
-SdrCircObj::DoConvertToPolyObj(bool, bool) const
-SdrCircObj::EndCreate(SdrDragStat&, SdrCreateCmd)
-SdrCircObj::GetCreatePointer() const
-SdrCircObj::GetHdlCount() const
-SdrCircObj::GetObjIdentifier() const
-SdrCircObj::GetSnapPoint(unsigned int) const
-SdrCircObj::GetSnapPointCount() const
-SdrCircObj::MovCreate(SdrDragStat&)
-SdrCircObj::NbcMirror(Point const&, Point const&)
-SdrCircObj::NbcMove(Size const&)
-SdrCircObj::NbcResize(Point const&, Fraction const&, Fraction const&)
-SdrCircObj::NbcSetSnapRect(tools::Rectangle const&)
-SdrCircObj::NbcShear(Point const&, o3tl::strong_int<int, FractionTag<100> >, double, bool)
-SdrCircObj::NewGeoData() const
-SdrCircObj::Notify(SfxBroadcaster&, SfxHint const&)
-SdrCircObj::RecalcSnapRect()
-SdrCircObj::RestoreGeoData(SdrObjGeoData const&)
-SdrCircObj::SaveGeoData(SdrObjGeoData&) const
-SdrCircObj::SdrCircObj(SdrModel&, SdrCircKind)
-SdrCircObj::SdrCircObj(SdrModel&, SdrCircObj const&)
-SdrCircObj::TakeCreatePoly(SdrDragStat const&) const
-SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec&) const
-SdrCircObj::TakeObjNamePlural() const
-SdrCircObj::TakeObjNameSingul() const
-SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle&) const
-SdrCircObj::TakeXorPoly() const
-SdrCircObj::applySpecialDrag(SdrDragStat&)
-SdrCircObj::beginSpecialDrag(SdrDragStat&) const
-SdrCircObj::getSpecialDragComment(SdrDragStat const&) const
-SdrCircObj::hasSpecialDrag() const
-SdrCircObj::~SdrCircObj()
 SdrCreateView::BckCreateObj()
 SdrCreateView::GetAttributes(SfxItemSet&, bool) const
 SdrCreateView::HideConnectMarker()
@@ -3661,32 +3571,6 @@ SdrObjGroup::getSdrObjectFromSdrObjList() const
 SdrObjGroup::getSdrPageFromSdrObjList() const
 SdrObjGroup::handlePageChange(SdrPage*, SdrPage*)
 SdrObjGroup::~SdrObjGroup()
-SdrObjList::BurnInStyleSheetAttributes()
-SdrObjList::CopyObjects(SdrObjList const&)
-SdrObjList::FlattenGroups()
-SdrObjList::GetAllObjSnapRect() const
-SdrObjList::GetObjectForNavigationPosition(unsigned int) const
-SdrObjList::ImplReformatAllEdgeObjects(SdrObjList const&)
-SdrObjList::InsertObjectIntoContainer(SdrObject&, unsigned int)
-SdrObjList::NbcReformatAllTextObjects()
-SdrObjList::RecalcNavigationPositions()
-SdrObjList::RecalcRects()
-SdrObjList::ReformatAllEdgeObjects()
-SdrObjList::ReformatAllTextObjects()
-SdrObjList::RemoveObjectFromContainer(unsigned int)
-SdrObjList::ReplaceObjectInContainer(SdrObject&, unsigned int)
-SdrObjList::SdrObjList()
-SdrObjList::SetExistingObjectOrdNum(SdrObject*, unsigned long)
-SdrObjList::UnGroupObj(unsigned long)
-SdrObjList::dumpAsXml(_xmlTextWriter*) const
-SdrObjList::getSdrPageFromSdrObjList() const
-SdrObjList::impChildInserted(SdrObject const&)
-SdrObjList::impClearSdrObjList(bool)
-SdrObjList::sort(std::vector<int, std::allocator<int> >&)
-SdrObjList::~SdrObjList()
-SdrObjListIter::ImpProcessMarkList(SdrMarkList const&, SdrIterMode)
-SdrObjListIter::ImpProcessObj(SdrObject const&, SdrIterMode)
-SdrObjListIter::ImpProcessObjectList(SdrObjList const&, SdrIterMode)
 SdrObject::AddReference(SdrVirtObj&)
 SdrObject::ApplyNotPersistAttr(SfxItemSet const&)
 SdrObject::BurnInStyleSheetAttributes()
@@ -10869,32 +10753,6 @@ XPatternList::Create()
 XPatternList::CreateBitmap(long, Size const&) const
 XPatternList::CreateBitmapForUI(long)
 XPatternList::createInstance()
-XPolygon::CalcDistance(unsigned short, unsigned short)
-XPolygon::CalcSmoothJoin(unsigned short, unsigned short, unsigned short)
-XPolygon::CalcTangent(unsigned short, unsigned short, unsigned short)
-XPolygon::CheckAngles(o3tl::strong_int<int, FractionTag<100> >&, o3tl::strong_int<int, FractionTag<100> >, o3tl::strong_int<int, FractionTag<100> >&, o3tl::strong_int<int, FractionTag<100> >&)
-XPolygon::Distort(tools::Rectangle const&, XPolygon const&)
-XPolygon::GenBezArc(Point const&, long, long, long, long, o3tl::strong_int<int, FractionTag<100> >, o3tl::strong_int<int, FractionTag<100> >, unsigned short, unsigned short)
-XPolygon::GetBoundRect() const
-XPolygon::GetFlags(unsigned short) const
-XPolygon::GetPointCount() const
-XPolygon::Insert(unsigned short, XPolygon const&)
-XPolygon::IsControl(unsigned short) const
-XPolygon::IsSmooth(unsigned short) const
-XPolygon::Move(long, long)
-XPolygon::PointsToBezier(unsigned short)
-XPolygon::Remove(unsigned short, unsigned short)
-XPolygon::SetFlags(unsigned short, PolyFlags)
-XPolygon::SetPointCount(unsigned short)
-XPolygon::SubdivideBezier(unsigned short, bool, double)
-XPolygon::XPolygon(XPolygon const&)
-XPolygon::XPolygon(XPolygon&&)
-XPolygon::XPolygon(basegfx::B2DPolygon const&)
-XPolygon::XPolygon(tools::Rectangle const&, long, long)
-XPolygon::XPolygon(unsigned short)
-XPolygon::operator=(XPolygon const&)
-XPolygon::operator=(XPolygon&&)
-XPolygon::operator==(XPolygon const&) const
 XPolygon::operator[](unsigned short)
 XPropertyEntry::XPropertyEntry(rtl::OUString)
 XPropertyList::isValidIdx(long) const

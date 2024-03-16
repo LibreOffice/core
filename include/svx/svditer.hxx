@@ -42,9 +42,9 @@ class SVXCORE_DLLPUBLIC SdrObjListIter
     bool                            mbReverse;
     bool                            mbUseZOrder;
 
-    void ImpProcessObjectList(const SdrObjList& rSdrObjList, SdrIterMode eMode);
-    void ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMode eMode);
-    void ImpProcessObj(const SdrObject& rSdrObject, SdrIterMode eMode);
+    SAL_DLLPRIVATE void ImpProcessObjectList(const SdrObjList& rSdrObjList, SdrIterMode eMode);
+    SAL_DLLPRIVATE void ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMode eMode);
+    SAL_DLLPRIVATE void ImpProcessObj(const SdrObject& rSdrObject, SdrIterMode eMode);
 
 public:
     explicit SdrObjListIter(const SdrObjList* pObjList, SdrIterMode eMode = SdrIterMode::DeepNoGroups, bool bReverse = false);

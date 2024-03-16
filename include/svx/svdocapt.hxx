@@ -52,8 +52,8 @@ private:
         mbSuppressGetBitmap = bNew;
     }
 
-    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
-    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     tools::Polygon  aTailPoly;              // the whole tail polygon
     bool            mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
@@ -69,12 +69,12 @@ private:
     SVX_DLLPRIVATE void ImpRecalcTail();
 
     // protected destructor
-    virtual ~SdrCaptionObj() override;
+    SAL_DLLPRIVATE virtual ~SdrCaptionObj() override;
 
 public:
-    SdrCaptionObj(SdrModel& rSdrModel);
+    SAL_DLLPRIVATE SdrCaptionObj(SdrModel& rSdrModel);
     // Copy constructor
-    SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource);
+    SAL_DLLPRIVATE SdrCaptionObj(SdrModel& rSdrModel, SdrCaptionObj const & rSource);
     SdrCaptionObj(
         SdrModel& rSdrModel,
         const tools::Rectangle& rRect,
@@ -83,9 +83,9 @@ public:
     // tdf#118662 getter for SuppressGetBitmap
     bool isSuppressGetBitmap() const { return mbSuppressGetBitmap; }
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual SdrObjKind GetObjIdentifier() const override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
+    SAL_DLLPRIVATE virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    SAL_DLLPRIVATE virtual SdrObjKind GetObjIdentifier() const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }
@@ -94,56 +94,56 @@ public:
     // for calc: fixed note tail position.
     void SetFixedTail() { mbFixedTail = true; }
 
-    virtual OUString TakeObjNameSingul() const override;
-    virtual OUString TakeObjNamePlural() const override;
+    SAL_DLLPRIVATE virtual OUString TakeObjNameSingul() const override;
+    SAL_DLLPRIVATE virtual OUString TakeObjNamePlural() const override;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+    SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
+    SAL_DLLPRIVATE virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    virtual sal_uInt32 GetHdlCount() const override;
-    virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetHdlCount() const override;
+    SAL_DLLPRIVATE virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const override;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
-    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual bool hasSpecialDrag() const override;
+    SAL_DLLPRIVATE virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
+    SAL_DLLPRIVATE virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
 
-    virtual bool BegCreate(SdrDragStat& rStat) override;
-    virtual bool MovCreate(SdrDragStat& rStat) override;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
-    virtual bool BckCreate(SdrDragStat& rStat) override;
-    virtual void BrkCreate(SdrDragStat& rStat) override;
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
-    virtual PointerStyle GetCreatePointer() const override;
+    SAL_DLLPRIVATE virtual bool BegCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual bool MovCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
+    SAL_DLLPRIVATE virtual bool BckCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual void BrkCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual PointerStyle GetCreatePointer() const override;
 
-    virtual void NbcMove(const Size& rSiz) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    SAL_DLLPRIVATE virtual void NbcMove(const Size& rSiz) override;
+    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
 
-    virtual void NbcSetRelativePos(const Point& rPnt) override;
-    virtual Point GetRelativePos() const override;
+    SAL_DLLPRIVATE virtual void NbcSetRelativePos(const Point& rPnt) override;
+    SAL_DLLPRIVATE virtual Point GetRelativePos() const override;
 
     virtual const tools::Rectangle& GetLogicRect() const override;
-    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    SAL_DLLPRIVATE virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
 
-    virtual sal_uInt32 GetSnapPointCount() const override;
-    virtual Point GetSnapPoint(sal_uInt32 i) const override;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetSnapPointCount() const override;
+    SAL_DLLPRIVATE virtual Point GetSnapPoint(sal_uInt32 i) const override;
 
 private:
-    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
-    virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
-    virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
+    SAL_DLLPRIVATE virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
+    SAL_DLLPRIVATE virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     const Point& GetTailPos() const;
     void SetTailPos(const Point& rPos);
-    void NbcSetTailPos(const Point& rPos);
+    SAL_DLLPRIVATE void NbcSetTailPos(const Point& rPos);
 
     // #i32599#
     // Add own implementation for TRSetBaseGeometry to handle TailPos over changes
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
+    SAL_DLLPRIVATE virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
 
     const Point& GetFixedTailPos() const  {return maFixedTailPos;}
 

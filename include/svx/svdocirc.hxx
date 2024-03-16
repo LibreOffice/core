@@ -46,8 +46,8 @@ private:
     // to allow sdr::properties::CircleProperties access to ImpSetAttrToCircInfo()
     friend class sdr::properties::CircleProperties;
 
-    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
-    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     SdrCircKind                 meCircleKind;
     Degree100                   nStartAngle;
@@ -62,14 +62,14 @@ private:
     SVX_DLLPRIVATE bool PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
     SVX_DLLPRIVATE virtual void RecalcXPoly() override;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+    SAL_DLLPRIVATE virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
 private:
     // protected destructor - due to final, make private
-    virtual ~SdrCircObj() override;
+    SAL_DLLPRIVATE virtual ~SdrCircObj() override;
 
 public:
-    SdrCircObj(
+    SAL_DLLPRIVATE SdrCircObj(
         SdrModel& rSdrModel,
         SdrCircKind eNewKind);
     SdrCircObj(
@@ -77,7 +77,7 @@ public:
         SdrCircKind eNewKind,
         const tools::Rectangle& rRect);
     // Copy constructor
-    SdrCircObj(SdrModel& rSdrModel, SdrCircObj const & rSource);
+    SAL_DLLPRIVATE SdrCircObj(SdrModel& rSdrModel, SdrCircObj const & rSource);
 
     // 0=0.00Deg=3h 9000=90.00Deg=12h 18000=180.00Deg=9h 27000=270.00Deg=6h
     // The circle is build up from StartAngle to EndWink anti-clockwise.
@@ -92,48 +92,48 @@ public:
 
     SdrCircKind GetCircleKind() const { return meCircleKind; }
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual SdrObjKind GetObjIdentifier() const override;
-    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
+    SAL_DLLPRIVATE virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    SAL_DLLPRIVATE virtual SdrObjKind GetObjIdentifier() const override;
+    SAL_DLLPRIVATE virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
 
-    virtual OUString TakeObjNameSingul() const override;
-    virtual OUString TakeObjNamePlural() const override;
+    SAL_DLLPRIVATE virtual OUString TakeObjNameSingul() const override;
+    SAL_DLLPRIVATE virtual OUString TakeObjNamePlural() const override;
 
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
-    virtual void RecalcSnapRect() override;
-    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
+    SAL_DLLPRIVATE virtual void RecalcSnapRect() override;
+    SAL_DLLPRIVATE virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
+    SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
-    virtual sal_uInt32 GetSnapPointCount() const override;
-    virtual Point GetSnapPoint(sal_uInt32 i) const override;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetSnapPointCount() const override;
+    SAL_DLLPRIVATE virtual Point GetSnapPoint(sal_uInt32 i) const override;
 
-    virtual sal_uInt32 GetHdlCount() const override;
-    virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetHdlCount() const override;
+    SAL_DLLPRIVATE virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const override;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
-    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual bool hasSpecialDrag() const override;
+    SAL_DLLPRIVATE virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
+    SAL_DLLPRIVATE virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
 
-    virtual bool BegCreate(SdrDragStat& rStat) override;
-    virtual bool MovCreate(SdrDragStat& rStat) override;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
-    virtual bool BckCreate(SdrDragStat& rStat) override;
-    virtual void BrkCreate(SdrDragStat& rStat) override;
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
-    virtual PointerStyle GetCreatePointer() const override;
-    virtual void NbcMove(const Size& aSiz) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void NbcShear (const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
-    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    SAL_DLLPRIVATE virtual bool BegCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual bool MovCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
+    SAL_DLLPRIVATE virtual bool BckCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual void BrkCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual PointerStyle GetCreatePointer() const override;
+    SAL_DLLPRIVATE virtual void NbcMove(const Size& aSiz) override;
+    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    SAL_DLLPRIVATE virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
+    SAL_DLLPRIVATE virtual void NbcShear (const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
 private:
-    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
-    virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
-    virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
+    SAL_DLLPRIVATE virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
+    SAL_DLLPRIVATE virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 public:
     Degree100 GetStartAngle() const { return nStartAngle; }
     Degree100 GetEndAngle() const { return nEndAngle; }
