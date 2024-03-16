@@ -3483,7 +3483,7 @@ class SFDialogs:
 
                         ``border``: "3D" (default), "FLAT" or "NONE".
 
-                        ``dropdown``: when ``True`` a dropdwn button is shown. Default = ``False``.
+                        ``dropdown``: when ``True`` a dropdown button is shown. Default = ``False``.
 
                         ``mindate``:  the smallest date that can be entered in the control. Default = 1900-01-01.
 
@@ -3492,7 +3492,7 @@ class SFDialogs:
                         A ``SFDialogs.SF_DialogControl`` instance or ``None``.
                 """
             ...
-        
+
         def CreateFileControl(self,
                               controlname: str,
                               place: Union[UNO, Tuple[int, int, int, int]],
