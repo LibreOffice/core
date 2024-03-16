@@ -41,7 +41,7 @@
     The scriptforge.pyi module
         - provides the static type checking of all the visible interfaces of the ScriptForge API.
         - when the user uses an IDE like PyCharm or VSCode, (s)he might benefit from the typing
-          hints provided by them thanks to the twin scriptforhe.pyi module.
+          hints provided by them thanks to the twin scriptforge.pyi module.
 
     Usage:
 
