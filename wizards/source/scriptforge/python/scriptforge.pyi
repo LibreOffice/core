@@ -3912,7 +3912,7 @@ class SFDialogs:
 
                         ``border``: "3D" (default), "FLAT" or "NONE".
 
-                        ``mintome``:  the smallest time that can be entered in the control. Default = 0h.
+                        ``mintime``:  the smallest time that can be entered in the control. Default = 0h.
 
                         ``maxtime``:  the largest time that can be entered in the control. Default = 24h.
                     Returns
