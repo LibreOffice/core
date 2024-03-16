@@ -1190,7 +1190,7 @@ class SFScriptForge:
             """
                 Moves one or more files from one location to another.
                 Returns ``True`` if at least one file has been moved or ``False`` if an error occurred.
-                An error will also occur if the source parameter uses wildcard characters anddoes not match any files.
+                An error will also occur if the source parameter uses wildcard characters and does not match any files.
 
                 The method stops immediately after it encounters an error. The method does not
                 roll back nor does it undo changes made before the error occurred.
