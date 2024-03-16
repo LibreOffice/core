@@ -23,6 +23,7 @@ $(eval $(call gb_Library_add_defs,skia,\
     -DSK_USER_CONFIG_HEADER="<$(BUILDDIR)/config_host/config_skia.h>" \
     $(if $(filter INTEL,$(CPUNAME)),$(if $(filter WNT,$(OS)),-DSK_CPU_SSE_LEVEL=SK_CPU_SSE_LEVEL_SSE1,-DSK_CPU_SSE_LEVEL=0)) \
     $(if $(filter X86_64,$(CPUNAME)),-DSK_CPU_SSE_LEVEL=SK_CPU_SSE_LEVEL_SSE2) \
+    -DSK_ENABLE_SKSL_IN_RASTER_PIPELINE \
 ))
 
 # SK_DEBUG controls runtime checks and is controlled by config_skia.h and depends on DBG_UTIL.
@@ -565,6 +566,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/analysis/SkSLReturnsInputAlpha \
     UnpackedTarball/skia/src/sksl/analysis/SkSLSymbolTableStackBuilder \
     UnpackedTarball/skia/src/sksl/analysis/SkSLSwitchCaseContainsExit \
+    UnpackedTarball/skia/src/sksl/analysis/SkSLGetLoopControlFlowInfo \
+    UnpackedTarball/skia/src/sksl/analysis/SkSLIsDynamicallyUniformExpression \
     UnpackedTarball/skia/src/sksl/codegen/SkSLGLSLCodeGenerator \
     UnpackedTarball/skia/src/sksl/codegen/SkSLMetalCodeGenerator \
     UnpackedTarball/skia/src/sksl/codegen/SkSLPipelineStageCodeGenerator \
@@ -572,6 +575,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/codegen/SkSLSPIRVtoHLSL \
     UnpackedTarball/skia/src/sksl/codegen/SkSLVMCodeGenerator \
     UnpackedTarball/skia/src/sksl/codegen/SkSLWGSLCodeGenerator \
+    UnpackedTarball/skia/src/sksl/codegen/SkSLRasterPipelineBuilder \
+    UnpackedTarball/skia/src/sksl/codegen/SkSLRasterPipelineCodeGenerator \
     UnpackedTarball/skia/src/sksl/transform/SkSLAddConstToVarModifiers \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateDeadFunctions \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateDeadGlobalVariables \
