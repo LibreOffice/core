@@ -6835,7 +6835,7 @@ class SFWidgets:
                            script: SCRIPT_URI = ...,
                            ) -> int:
             """
-                Inserts a radio btton in the menu.
+                Inserts a radio button in the menu.
                     Args
                         ``menuitem``: defines the text to be displayed in the menu.
                         This argument also defines the hierarchy of the item inside the menu by using the submenu
