@@ -6601,7 +6601,7 @@ class SFDocuments:
 
                         ``printoddpages``: print the right pages when ``True`` (default).
 
-                        ``printimages``: print the graphic objects when ``True`` (defauly).
+                        ``printimages``: print the graphic objects when ``True`` (default).
                     Returns
                          ``True`` when successful.
                 """
