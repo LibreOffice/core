@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_CORE_RECORDPARSER_HXX
 #define INCLUDED_OOX_CORE_RECORDPARSER_HXX
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 
 #include <oox/helper/binaryinputstream.hxx>
@@ -69,7 +69,7 @@ private:
     const RecordInfo*   getEndRecordInfo( sal_Int32 nRecId ) const;
 
 private:
-    typedef ::std::map< sal_Int32, RecordInfo > RecordInfoMap;
+    typedef ::std::unordered_map< sal_Int32, RecordInfo > RecordInfoMap;
 
     RecordInputSource   maSource;
     ::rtl::Reference< FragmentHandler > mxHandler;
