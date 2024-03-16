@@ -608,7 +608,7 @@ class SFScriptForge:
 
                         ``title``: String expression displayed in the title bar of the dialog box.
 
-                        ``default``: String expression displayed in the text box as default ifno other input is given.
+                        ``default``: String expression displayed in the text box as default if no other input is given.
 
                         ``xpostwips``: Integer expression that specifies the horizontal position of the dialog.
                         The position is an absolute coordinate and does not refer to the window of LibreOffice.
