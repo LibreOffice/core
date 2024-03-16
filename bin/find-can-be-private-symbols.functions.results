@@ -1489,6 +1489,7 @@ Op(SkPath const&, SkPath const&, SkPathOp, SkPath*)
 OpenCLConfig::OpenCLConfig()
 OpenCLConfig::checkImplementation(OpenCLPlatformInfo const&, OpenCLDeviceInfo const&) const
 OpenCLConfig::operator==(OpenCLConfig const&) const
+OpenGLContext::isCurrent()
 OpenGLHelper::LoadShaders(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, std::basic_string_view<char, std::char_traits<char> >, std::basic_string_view<char, std::char_traits<char> >)
 OpenGLHelper::debugMsgPrint(int, char const*, ...)
 OpenGLHelper::debugMsgStreamWarn(std::__cxx11::basic_ostringstream<char, std::char_traits<char>, std::allocator<char> > const&)
@@ -3571,6 +3572,7 @@ SdrObjGroup::getSdrObjectFromSdrObjList() const
 SdrObjGroup::getSdrPageFromSdrObjList() const
 SdrObjGroup::handlePageChange(SdrPage*, SdrPage*)
 SdrObjGroup::~SdrObjGroup()
+SdrObjList::getSdrPageFromSdrObjList() const
 SdrObject::AddReference(SdrVirtObj&)
 SdrObject::ApplyNotPersistAttr(SfxItemSet const&)
 SdrObject::BurnInStyleSheetAttributes()
@@ -7817,7 +7819,6 @@ SvxNumberFormatShell::SvxNumberFormatShell(SvNumberFormatter*, unsigned int, Svx
 SvxNumberFormatShell::SvxNumberFormatShell(SvNumberFormatter*, unsigned int, SvxNumberValueType, rtl::OUString const&)
 SvxNumberInfoItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
 SvxNumberInfoItem::SvxNumberInfoItem(SvxNumberInfoItem const&)
-SvxNumberInfoItem::SvxNumberInfoItem(TypedWhichId<SvxNumberInfoItem>)
 SvxNumberInfoItem::operator==(SfxPoolItem const&) const
 SvxNumberingPreview::Paint(OutputDevice&, tools::Rectangle const&)
 SvxObjectItem::Clone(SfxItemPool*) const
@@ -8815,7 +8816,6 @@ SwFlyFrameFormat::SetObjTooltip(rtl::OUString const&)
 SwFlyFrameFormat::SwFlyFrameFormat(SwAttrPool&, rtl::OUString const&, SwFrameFormat*)
 SwFlyFrameFormat::~SwFlyFrameFormat()
 SwFmtAidsAutoComplItem::Clone(SfxItemPool*) const
-SwFmtAidsAutoComplItem::FillViewOptions(SwViewOption&) const
 SwFmtAidsAutoComplItem::SwFmtAidsAutoComplItem(SwViewOption const&)
 SwFootnoteInfo::operator=(SwFootnoteInfo const&)
 SwForm::GetFormMaxLevel(TOXTypes)
@@ -9768,7 +9768,6 @@ TextAttribFontColor::operator==(TextAttrib const&) const
 TextAttribFontWeight::Clone() const
 TextAttribFontWeight::SetFont(vcl::Font&) const
 TextAttribFontWeight::operator==(TextAttrib const&) const
-TextEngine::ValidateSelection(TextSelection&) const
 TextListenerMultiplexer::acquire()
 TextListenerMultiplexer::disposing(com::sun::star::lang::EventObject const&)
 TextListenerMultiplexer::queryInterface(com::sun::star::uno::Type const&)
@@ -10753,6 +10752,7 @@ XPatternList::Create()
 XPatternList::CreateBitmap(long, Size const&) const
 XPatternList::CreateBitmapForUI(long)
 XPatternList::createInstance()
+XPolygon::XPolygon(tools::Rectangle const&, long, long)
 XPolygon::operator[](unsigned short)
 XPropertyEntry::XPropertyEntry(rtl::OUString)
 XPropertyList::isValidIdx(long) const
@@ -16172,7 +16172,6 @@ tools::Duration::SetTimeDiff(tools::Time const&, tools::Time const&)
 tools::JsonWriter::addCommaBeforeField()
 tools::JsonWriter::ensureSpace(int)
 tools::JsonWriter::ensureSpaceAndWriteNameColon(std::basic_string_view<char, std::char_traits<char> >, int)
-tools::JsonWriter::isDataEquals(std::basic_string_view<char, std::char_traits<char> >) const
 tools::JsonWriter::writeEscapedOUString(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 tools::Line::Intersection(tools::Line const&, Point&) const
 tools::PolyPolygon::Remove(unsigned short)
@@ -16459,6 +16458,7 @@ vcl::SettingsConfigItem::getValues()
 vcl::Window::ImplGetWindow() const
 vcl::Window::SetTextAlign(TextAlign)
 vcl::Window::get_hexpand() const
+vcl::bitmap::get_unpremultiply_table()
 vcl::filter::PDFTrailerElement::GetLocation() const
 vcl::filter::PDFTrailerElement::Read(SvStream&)
 vcl::font::FeatureDefinition::FeatureDefinition(unsigned int, TranslateId, rtl::OUString)

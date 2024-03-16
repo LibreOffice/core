@@ -155,6 +155,7 @@ for clz in can_be_hidden_count:
 can_be_hidden_list.sort(reverse=True)
 with open("bin/find-can-be-private-symbols.classes.results", "wt") as f:
     for i in can_be_hidden_list:
+        if i[0] < 10: break
         f.write(str(i[0]) + " " + i[1] + "\n")
 
 
