@@ -3440,7 +3440,7 @@ class SFDialogs:
                                 accuracy: int = ...
                                 ) -> Optional[DIALOGCONTROL]:
             """
-                Create a new control of type ``CurrenyField`` in the actual dialog.
+                Create a new control of type ``CurrencyField`` in the actual dialog.
                     Args
                         ``controlname``:  the name of the new control. It must not exist yet.
 
