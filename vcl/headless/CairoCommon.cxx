@@ -1095,14 +1095,17 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
 
-    constexpr int MaxNormalLineWidth = 64;
-    if (fLineWidth > MaxNormalLineWidth)
+    constexpr int MaxNormalLineWidthPx = 64;
+    if (fLineWidth > MaxNormalLineWidthPx)
     {
         const double fLineWidthPixel
             = bObjectToDeviceIsIdentity
                   ? fLineWidth
                   : (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
-        if (fLineWidthPixel > MaxNormalLineWidth)
+        constexpr double MaxLineWidth = 0x20000000;
+        // if the width is pixels is excessive, or if the actual number is huge, then
+        // when fuzzing drop it to something small
+        if (fLineWidthPixel > MaxNormalLineWidthPx || fLineWidth > MaxLineWidth)
         {
             SAL_WARN("vcl.gdi", "drawPolyLine, suspicious input line width of: "
                                     << fLineWidth << ", will be " << fLineWidthPixel
@@ -1111,8 +1114,8 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
             {
                 basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
                 aObjectToDeviceInv.invert();
-                fLineWidth
-                    = (aObjectToDeviceInv * basegfx::B2DVector(MaxNormalLineWidth, 0)).getLength();
+                fLineWidth = (aObjectToDeviceInv * basegfx::B2DVector(MaxNormalLineWidthPx, 0))
+                                 .getLength();
                 fLineWidth = std::min(fLineWidth, 2048.0);
             }
         }
