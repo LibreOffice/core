@@ -2843,7 +2843,7 @@ class SFDatabases:
                 call the ``Commit()`` method to apply the changes to the database.
 
                     Args
-                        ``tranactionmode``: specifies the transaction mode.
+                        ``transactionmode``: specifies the transaction mode.
                         This argument must be one of the constants defined in ``com.sun.star.sdbc.TransactionIsolation``
                         (Default = ``NONE``)
                     Returns
