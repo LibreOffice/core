@@ -21,9 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <headless/BitmapHelper.hxx>
 #include <headless/CairoCommon.hxx>
-#ifdef ANDROID
-#include <vcl/cairo.hxx> // for correct compilation in only android
-#endif
+#include <vcl/cairo.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <SalGradient.hxx>
 #include <tools/helpers.hxx>
