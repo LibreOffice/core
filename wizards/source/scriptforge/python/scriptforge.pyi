@@ -4835,7 +4835,7 @@ class SFDocuments:
 
         def IsLoaded(self, formdocument: str) -> bool:
             """
-                Return ``True`` if the given form Ddcument is currently open.
+                Return ``True`` if the given form Document is currently open.
                     Args
                         ``formdocument``: A valid hierarchical form document name as a case-sensitive string.
                 """
