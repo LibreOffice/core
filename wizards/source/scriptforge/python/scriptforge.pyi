@@ -2749,7 +2749,7 @@ class SFDatabases:
                         ``sqlcommand``: a table name, a query name or a ``SELECT SQL`` statement.
 
                         ``directsql``: when ``True``, no syntax conversion is done by LibreOffice.
-                        Ignored when ``sqlommand`` is a table or a query name. Defaults to ``False``.
+                        Ignored when ``sqlcommand`` is a table or a query name. Defaults to ``False``.
 
                         ``header``: when ``True``, a header row is inserted on the top of the list with the
                         column names. Defaults to ``False``.
@@ -4441,7 +4441,7 @@ class SFDocuments:
         IsWriter: bool
         """ ``True`` when type of document = ``Writer``.        """
         Keywords: str
-        """ Get/set the ``Keywords`` property of the document as a comma-seprated list of keywords.
+        """ Get/set the ``Keywords`` property of the document as a comma-separated list of keywords.
         This property is not applicable to ``Base`` documents. """
         Readonly: bool
         """ ``True`` if the document is actually in read-only mode.
