@@ -352,16 +352,45 @@ void ScTabView::SetScrollBar( ScrollAdaptor& rScroll, tools::Long nRangeMax, too
     if ( nVisible == 0 )
         nVisible = 1;       // #i59893# don't use visible size 0
 
-    rScroll.SetRange( Range( 0, nRangeMax ) );
-    rScroll.SetVisibleSize( nVisible );
-    rScroll.SetThumbPos( nPos );
+    //  RTL layout uses a negative range to simulate a mirrored scroll bar.
+    //  SetScrollBar/GetScrollBarPos hide this so outside of these functions normal cell
+    //  addresses can be used.
+    if ( bLayoutRTL )
+    {
+        rScroll.SetRange( Range( -nRangeMax, 0 ) );
+        rScroll.SetVisibleSize( nVisible );
+        rScroll.SetThumbPos( -nPos - nVisible );
+    }
+    else
+    {
+        rScroll.SetRange( Range( 0, nRangeMax ) );
+        rScroll.SetVisibleSize( nVisible );
+        rScroll.SetThumbPos( nPos );
+    }
 
-    rScroll.EnableRTL( bLayoutRTL );
+    // Related: tdf#93352 always disable RTL for scrollbars
+    // Enabling RTL causes the following bugs when clicking or
+    // dragging the mouse in scrollbars in Calc's RTL UI:
+    // - Click or drag events get mirrored so you must click or
+    //   drag in unexpected locations to move the scrollbar thumb
+    //   in the desired direction
+    // - Repeatedly dragging the scrollbar thumb leftward can only
+    //   move no highter than the R, S, or T columns
+    rScroll.EnableRTL( false );
+
+    // Related: tdf#93352 swap arrows if layout is RTL
+    // We cannot use EnableRTL(true) to signal that the arrows
+    // should be swapped (see comment above) so explicitly enable
+    // or disable arrow swapping.
+    rScroll.SetSwapArrows( bLayoutRTL );
 }
 
-tools::Long ScTabView::GetScrollBarPos( const ScrollAdaptor& rScroll )
+tools::Long ScTabView::GetScrollBarPos( const ScrollAdaptor& rScroll, bool bLayoutRTL )
 {
-    return rScroll.GetThumbPos();
+    if ( bLayoutRTL )
+        return -rScroll.GetThumbPos() - rScroll.GetVisibleSize();
+    else
+        return rScroll.GetThumbPos();
 }
 
 //  UpdateScrollBars - set visible area and scroll width of scroll bars
@@ -425,7 +454,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
     tools::Long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, rDoc.MaxRow(), nStartY );
-    SetScrollBar( *aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, bLayoutRTL );
+    SetScrollBar( *aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, false );
 
     if (bRight)
     {
@@ -438,7 +467,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
     {
         nVisYT = aViewData.VisibleCellsY( SC_SPLIT_TOP );
         tools::Long nMaxYT = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT, rDoc.MaxRow(), 0 );
-        SetScrollBar( *aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), bLayoutRTL );
+        SetScrollBar( *aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), false );
     }
 
     //      test the range

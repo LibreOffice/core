@@ -2576,6 +2576,7 @@ public:
 
     virtual int get_scroll_thickness() const = 0;
     virtual void set_scroll_thickness(int nThickness) = 0;
+    virtual void set_scroll_swap_arrows(bool bSwap) = 0;
 
     virtual ScrollType get_scroll_type() const = 0;
 

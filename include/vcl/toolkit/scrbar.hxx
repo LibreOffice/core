@@ -58,6 +58,7 @@ private:
     ScrollType      meScrollType;
     bool            mbCalcSize;
     bool            mbFullDrag;
+    bool            mbSwapArrows;
     Link<ScrollBar*,void>       maScrollHdl;
     Link<ScrollBar*,void>       maEndScrollHdl;
 
@@ -133,6 +134,8 @@ public:
     void            SetEndScrollHdl( const Link<ScrollBar*,void>& rLink ) { maEndScrollHdl = rLink; }
 
     virtual Size    GetOptimalSize() const override;
+
+    void            SetSwapArrows( bool bSwap ) { mbSwapArrows = bSwap; }
 };
 
 
