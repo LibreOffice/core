@@ -30,16 +30,16 @@ class SVXCORE_DLLPUBLIC SdrExchangeView : public SdrObjEditView
 
 protected:
 
-    void ImpGetPasteObjList(Point& rPos, SdrObjList*& rpLst);
-    void ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, SdrInsertFlags nOptions);
-    bool ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
+    SAL_DLLPRIVATE void ImpGetPasteObjList(Point& rPos, SdrObjList*& rpLst);
+    SAL_DLLPRIVATE void ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, SdrInsertFlags nOptions);
+    SAL_DLLPRIVATE bool ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
 
     // Returns true if rPt has changed
-    bool ImpLimitToWorkArea(Point& rPt) const;
+    SAL_DLLPRIVATE bool ImpLimitToWorkArea(Point& rPt) const;
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrExchangeView(
+    SAL_DLLPRIVATE SdrExchangeView(
         SdrModel& rSdrModel,
         OutputDevice* pOut);
 

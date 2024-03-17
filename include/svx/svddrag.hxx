@@ -75,7 +75,7 @@ class SVXCORE_DLLPUBLIC SdrDragStat final
     SdrDragMethod* m_pDragMethod;
     std::unique_ptr<SdrDragStatUserData>  mpUserData;     // Userdata
 
-    void Clear();
+    SAL_DLLPRIVATE void Clear();
 
     sal_Int32 GetPrevPos() const { return mvPnts.size()-(mvPnts.size()>1 ? 2 : 1); }
 
@@ -91,7 +91,7 @@ class SVXCORE_DLLPUBLIC SdrDragStat final
 
 public:
     SdrDragStat()                                    { Reset(); }
-    ~SdrDragStat();
+    SAL_DLLPRIVATE ~SdrDragStat();
     void         Reset();
     SdrView*     GetView() const                     { return m_pView; }
     void         SetView(SdrView* pV)                { m_pView=pV; }
@@ -150,10 +150,10 @@ public:
     bool         IsMouseDown() const                  { return !m_bMouseIsUp; }
     void         SetMouseDown(bool bDown)         { m_bMouseIsUp=!bDown; }
 
-    void         Reset(const Point& rPnt);
+    SAL_DLLPRIVATE void         Reset(const Point& rPnt);
     void         NextMove(const Point& rPnt);
-    void         NextPoint();
-    void         PrevPoint();
+    SAL_DLLPRIVATE void         NextPoint();
+    SAL_DLLPRIVATE void         PrevPoint();
     bool         CheckMinMoved(const Point& rPnt);
     tools::Long         GetDX() const                     { return GetNow().X()-GetPrev().X(); }
     tools::Long         GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
@@ -167,7 +167,7 @@ public:
     void         SetActionRect(const tools::Rectangle& rR) { m_aActionRect=rR; }
 
     // Also considering 1stPointAsCenter
-    void         TakeCreateRect(tools::Rectangle& rRect) const;
+    SAL_DLLPRIVATE void         TakeCreateRect(tools::Rectangle& rRect) const;
 
     auto&        GetGlueOptions() { return mGlueOptions; }
 };

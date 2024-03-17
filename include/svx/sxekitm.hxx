@@ -31,12 +31,12 @@ enum class SdrEdgeKind
 class SVXCORE_DLLPUBLIC SdrEdgeKindItem final : public SfxEnumItem<SdrEdgeKind> {
 public:
     SdrEdgeKindItem(SdrEdgeKind eStyle=SdrEdgeKind::OrthoLines): SfxEnumItem(SDRATTR_EDGEKIND, eStyle) {}
-    virtual SdrEdgeKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    SAL_DLLPRIVATE virtual SdrEdgeKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16   GetValueCount() const override; // { return 5; }
-    virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SAL_DLLPRIVATE virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SAL_DLLPRIVATE virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
     static OUString      GetValueTextByPos(sal_uInt16 nPos);
-    virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
+    SAL_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
 };
 
 #endif

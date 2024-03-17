@@ -62,25 +62,25 @@ protected:
 
 protected:
     virtual void SetMarkHandles(SfxViewShell* pOtherShell) override;
-    void ShowDragObj();
-    void HideDragObj();
+    SAL_DLLPRIVATE void ShowDragObj();
+    SAL_DLLPRIVATE void HideDragObj();
     bool ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNewObj, OutputDevice* pOut);
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrDragView(
+    SAL_DLLPRIVATE SdrDragView(
         SdrModel& rSdrModel,
         OutputDevice* pOut);
 
-    virtual ~SdrDragView() override;
+    SAL_DLLPRIVATE virtual ~SdrDragView() override;
 
 public:
-    virtual bool IsAction() const override;
-    virtual void MovAction(const Point& rPnt) override;
-    virtual void EndAction() override;
-    virtual void BckAction() override;
-    virtual void BrkAction() override;
-    virtual void TakeActionRect(tools::Rectangle& rRect) const override;
+    SAL_DLLPRIVATE virtual bool IsAction() const override;
+    SAL_DLLPRIVATE virtual void MovAction(const Point& rPnt) override;
+    SAL_DLLPRIVATE virtual void EndAction() override;
+    SAL_DLLPRIVATE virtual void BckAction() override;
+    SAL_DLLPRIVATE virtual void BrkAction() override;
+    SAL_DLLPRIVATE virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
     // special implementation for Writer:
     // TakeDragObjAnchorPos() returns the position at which an object
@@ -120,7 +120,7 @@ public:
     bool IsInsertGluePoint() const { return mbInsGluePoint; }
 
     // Interactive insertion of a new point. nIdx=0 => in front of the first point
-    bool IsInsObjPointPossible() const;
+    SAL_DLLPRIVATE bool IsInsObjPointPossible() const;
     bool BegInsObjPoint(const Point& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, rPnt, bNewObj, nullptr); }
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
     bool EndInsObjPoint(SdrCreateCmd eCmd);
@@ -131,7 +131,7 @@ public:
     void SetInsObjPointMode(bool bOn) { mbInsObjPointMode = bOn; }
     bool IsInsObjPointMode() const { return mbInsObjPointMode; }
 
-    bool IsInsGluePointPossible() const;
+    SAL_DLLPRIVATE bool IsInsGluePointPossible() const;
     bool BegInsGluePoint(const Point& rPnt);
     bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && mbInsGluePoint; }
 
@@ -186,7 +186,7 @@ public:
     void SetMarkedHitMovesAlways(bool bOn) { mbMarkedHitMovesAlways = bOn; }
     bool IsMarkedHitMovesAlways() const { return mbMarkedHitMovesAlways; }
 
-    bool IsOrthoDesired() const;
+    SAL_DLLPRIVATE bool IsOrthoDesired() const;
 
     // center as reference on Resize
     // Default=FALSE.

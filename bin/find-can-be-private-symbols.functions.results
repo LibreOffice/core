@@ -2988,200 +2988,18 @@ SdrCaptionEscIsRelItem::Clone(SfxItemPool*) const
 SdrCaptionEscRelItem::Clone(SfxItemPool*) const
 SdrCaptionFitLineLenItem::Clone(SfxItemPool*) const
 SdrCaptionLineLenItem::Clone(SfxItemPool*) const
-SdrCreateView::BckCreateObj()
-SdrCreateView::GetAttributes(SfxItemSet&, bool) const
-SdrCreateView::HideConnectMarker()
-SdrCreateView::HideCreateObj()
-SdrCreateView::ImpBegCreateObj(SdrInventor, SdrObjKind, Point const&, OutputDevice*, short, tools::Rectangle const&, SdrObject*)
-SdrCreateView::ImpClearConnectMarker()
-SdrCreateView::IsEdgeTool() const
-SdrCreateView::IsMeasureTool() const
-SdrCreateView::IsTextTool() const
-SdrCreateView::MouseMove(MouseEvent const&, OutputDevice*)
-SdrCreateView::SdrCreateView(SdrModel&, OutputDevice*)
-SdrCreateView::SetConnectMarker(SdrObjConnection const&)
-SdrCreateView::ShowCreateObj()
-SdrCreateView::~SdrCreateView()
 SdrCropHdl::CreateB2dIAObject()
 SdrCropHdl::GetBitmapForHandle(BitmapEx const&, int)
-SdrCustomShapeGeometryItem::Clone(SfxItemPool*) const
-SdrCustomShapeGeometryItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SdrCustomShapeGeometryItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrCustomShapeGeometryItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
-SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()
-SdrCustomShapeGeometryItem::SetPropSeq(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-SdrCustomShapeGeometryItem::operator==(SfxPoolItem const&) const
 SdrDragEntryPolyPolygon::createPrimitive2DSequenceInCurrentState(SdrDragMethod&)
 SdrDragEntryPolyPolygon::~SdrDragEntryPolyPolygon()
-SdrDragMethod::AddConnectorOverlays()
-SdrDragMethod::DoAddConnectorOverlays()
-SdrDragMethod::GetDragPV() const
-SdrDragMethod::ImpGetDescriptionStr(TranslateId) const
-SdrDragMethod::clearSdrDragEntries()
-SdrDragMethod::createSdrDragEntries_GlueDrag()
-SdrDragMethod::createSdrDragEntries_PointDrag()
-SdrDragMethod::createSdrDragEntries_PolygonDrag()
-SdrDragMethod::createSdrDragEntries_SolidDrag()
-SdrDragMethod::destroyOverlayGeometry()
-SdrDragMethod::getCurrentRange() const
-SdrDragMethod::resetSdrDragEntries()
 SdrDragMove::BeginSdrDrag()
 SdrDragMove::EndSdrDrag(bool)
 SdrDragMove::ImpCheckSnap(Point const&)
 SdrDragObjOwn::EndSdrDrag(bool)
 SdrDragResize::EndSdrDrag(bool)
-SdrDragStat::Clear()
-SdrDragStat::NextPoint()
-SdrDragStat::PrevPoint()
 SdrDragStat::Reset()
-SdrDragStat::Reset(Point const&)
-SdrDragStat::TakeCreateRect(tools::Rectangle&) const
-SdrDragStat::~SdrDragStat()
-SdrDragView::BckAction()
-SdrDragView::BrkAction()
-SdrDragView::EndAction()
-SdrDragView::HideDragObj()
-SdrDragView::IsAction() const
-SdrDragView::IsInsGluePointPossible() const
-SdrDragView::IsInsObjPointPossible() const
-SdrDragView::IsOrthoDesired() const
-SdrDragView::MovAction(Point const&)
-SdrDragView::SdrDragView(SdrModel&, OutputDevice*)
-SdrDragView::ShowDragObj()
-SdrDragView::TakeActionRect(tools::Rectangle&) const
-SdrDragView::~SdrDragView()
 SdrDropMarkerOverlay::ImplCreateOverlays(SdrView const&, basegfx::B2DPolyPolygon const&)
-SdrEdgeKindItem::Clone(SfxItemPool*) const
-SdrEdgeKindItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SdrEdgeKindItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrEdgeKindItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
-SdrEdgeNode1HorzDistItem::Clone(SfxItemPool*) const
-SdrEdgeNode1HorzDistItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrEdgeNode1HorzDistItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
-SdrEdgeNode1VertDistItem::Clone(SfxItemPool*) const
-SdrEdgeNode1VertDistItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrEdgeNode1VertDistItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
-SdrEdgeNode2HorzDistItem::Clone(SfxItemPool*) const
-SdrEdgeNode2HorzDistItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrEdgeNode2HorzDistItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
-SdrEdgeNode2VertDistItem::Clone(SfxItemPool*) const
-SdrEdgeNode2VertDistItem::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrEdgeNode2VertDistItem::QueryValue(com::sun::star::uno::Any&, unsigned char) const
-SdrEdgeObj::AddToHdlList(SdrHdlList&) const
-SdrEdgeObj::BckCreate(SdrDragStat&)
-SdrEdgeObj::BegCreate(SdrDragStat&)
-SdrEdgeObj::BrkCreate(SdrDragStat&)
-SdrEdgeObj::CheckNodeConnection(bool) const
-SdrEdgeObj::CreateObjectSpecificProperties()
-SdrEdgeObj::CreateObjectSpecificViewContact()
-SdrEdgeObj::DisconnectFromNode(bool)
-SdrEdgeObj::DoConvertToPolyObj(bool, bool) const
-SdrEdgeObj::EndCreate(SdrDragStat&, SdrCreateCmd)
-SdrEdgeObj::ForceGluePointList()
-SdrEdgeObj::GetCornerGluePoint(unsigned short) const
-SdrEdgeObj::GetCreatePointer() const
-SdrEdgeObj::GetCurrentBoundRect() const
-SdrEdgeObj::GetGluePointList() const
-SdrEdgeObj::GetHdlCount() const
-SdrEdgeObj::GetObjIdentifier() const
-SdrEdgeObj::GetPoint(unsigned int) const
-SdrEdgeObj::GetPointCount() const
-SdrEdgeObj::GetSnapPoint(unsigned int) const
-SdrEdgeObj::GetSnapPointCount() const
-SdrEdgeObj::GetSnapRect() const
-SdrEdgeObj::GetTailPoint(bool) const
-SdrEdgeObj::GetVertexGluePoint(unsigned short) const
-SdrEdgeObj::ImpCalcEdgeTrack(Point const&, long, tools::Rectangle const&, tools::Rectangle const&, Point const&, long, tools::Rectangle const&, tools::Rectangle const&, unsigned long*, SdrEdgeInfoRec*) const
-SdrEdgeObj::ImpCalcEdgeTrack(XPolygon const&, SdrObjConnection&, SdrObjConnection&, SdrEdgeInfoRec*) const
-SdrEdgeObj::ImpCalcEscAngle(SdrObject const*, Point const&)
-SdrEdgeObj::ImpCalcObjToCenter(Point const&, long, tools::Rectangle const&, Point const&)
-SdrEdgeObj::ImpDirtyEdgeTrack()
-SdrEdgeObj::ImpFindConnector(Point const&, SdrPageView const&, SdrObjConnection&, SdrEdgeObj const*, OutputDevice*, SdrDragStat*)
-SdrEdgeObj::ImpRecalcEdgeTrack()
-SdrEdgeObj::ImpSetAttrToEdgeInfo()
-SdrEdgeObj::ImpSetEdgeInfoToAttr()
-SdrEdgeObj::ImpSetTailPoint(bool, Point const&)
-SdrEdgeObj::ImpUndirtyEdgeTrack()
-SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod const&, bool, bool, bool) const
-SdrEdgeObj::IsPolyObj() const
-SdrEdgeObj::MovCreate(SdrDragStat&)
-SdrEdgeObj::NbcMirror(Point const&, Point const&)
-SdrEdgeObj::NbcMove(Size const&)
-SdrEdgeObj::NbcResize(Point const&, Fraction const&, Fraction const&)
-SdrEdgeObj::NbcRotate(Point const&, o3tl::strong_int<int, FractionTag<100> >, double, double)
-SdrEdgeObj::NbcSetAnchorPos(Point const&)
-SdrEdgeObj::NbcSetPoint(Point const&, unsigned int)
-SdrEdgeObj::NbcSetSnapRect(tools::Rectangle const&)
-SdrEdgeObj::NbcShear(Point const&, o3tl::strong_int<int, FractionTag<100> >, double, bool)
-SdrEdgeObj::NewGeoData() const
-SdrEdgeObj::Notify(SfxBroadcaster&, SfxHint const&)
-SdrEdgeObj::RecalcSnapRect()
-SdrEdgeObj::Reformat()
-SdrEdgeObj::RestoreGeoData(SdrObjGeoData const&)
-SdrEdgeObj::SaveGeoData(SdrObjGeoData&) const
-SdrEdgeObj::SdrEdgeObj(SdrModel&, SdrEdgeObj const&)
-SdrEdgeObj::TRGetBaseGeometry(basegfx::B2DHomMatrix&, basegfx::B2DPolyPolygon&) const
-SdrEdgeObj::TRSetBaseGeometry(basegfx::B2DHomMatrix const&, basegfx::B2DPolyPolygon const&)
-SdrEdgeObj::TakeCreatePoly(SdrDragStat const&) const
-SdrEdgeObj::TakeObjInfo(SdrObjTransformInfoRec&) const
-SdrEdgeObj::TakeObjNamePlural() const
-SdrEdgeObj::TakeObjNameSingul() const
-SdrEdgeObj::TakeUnrotatedSnapRect(tools::Rectangle&) const
-SdrEdgeObj::TakeXorPoly() const
-SdrEdgeObj::applySpecialDrag(SdrDragStat&)
-SdrEdgeObj::beginSpecialDrag(SdrDragStat&) const
-SdrEdgeObj::getEdgeTrack() const
-SdrEdgeObj::getFullDragClone() const
-SdrEdgeObj::getGluePointIndex(bool)
-SdrEdgeObj::getSpecialDragComment(SdrDragStat const&) const
-SdrEdgeObj::handlePageChange(SdrPage*, SdrPage*)
-SdrEdgeObj::hasSpecialDrag() const
-SdrEdgeObj::setGluePointIndex(bool, int)
 SdrEdgeObj::~SdrEdgeObj()
-SdrEditView::AddUndoActions(std::vector<std::unique_ptr<SdrUndoAction, std::default_delete<SdrUndoAction> >, std::allocator<std::unique_ptr<SdrUndoAction, std::default_delete<SdrUndoAction> > > >)
-SdrEditView::ConvertMarkedToPolyObj()
-SdrEditView::CreateConnectorUndo(SdrObject const&)
-SdrEditView::CrookMarkedObj(Point const&, Point const&, SdrCrookMode, bool, bool, bool)
-SdrEditView::DeleteMarkedList(SdrMarkList const&)
-SdrEditView::DistortMarkedObj(tools::Rectangle const&, XPolygon const&, bool, bool)
-SdrEditView::GetAttributes(SfxItemSet&, bool) const
-SdrEditView::GetMarkedObjRotate() const
-SdrEditView::GetMarkedObjShear() const
-SdrEditView::GetStyleSheet() const
-SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
-SdrEditView::ImpCanConvertForCombine(SdrObject const*)
-SdrEditView::ImpCanConvertForCombine1(SdrObject const*)
-SdrEditView::ImpCanDismantle(SdrObject const*, bool)
-SdrEditView::ImpCanDismantle(basegfx::B2DPolyPolygon const&, bool)
-SdrEditView::ImpCheckToTopBtmPossible()
-SdrEditView::ImpCombineToSinglePolygon(basegfx::B2DPolyPolygon const&)
-SdrEditView::ImpConvertOneObj(SdrObject*, bool, bool)
-SdrEditView::ImpConvertTo(bool, bool)
-SdrEditView::ImpCopyAttributes(SdrObject const*, SdrObject*) const
-SdrEditView::ImpCrookObj(SdrObject*, Point const&, Point const&, SdrCrookMode, bool, bool, bool, tools::Rectangle const&)
-SdrEditView::ImpDelLayerCheck(SdrObjList const*, o3tl::strong_int<short, SdrLayerIDTag>) const
-SdrEditView::ImpDelLayerDelObjs(SdrObjList*, o3tl::strong_int<short, SdrLayerIDTag>)
-SdrEditView::ImpDismantleOneObject(SdrObject const*, SdrObjList&, unsigned long&, SdrPageView*, bool)
-SdrEditView::ImpDistortObj(SdrObject*, tools::Rectangle const&, XPolygon const&, bool)
-SdrEditView::ImpGetPolyPolygon(SdrObject const*)
-SdrEditView::ImpGetPolyPolygon1(SdrObject const*)
-SdrEditView::IsCropAllowed() const
-SdrEditView::MarkListHasChanged()
-SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet&) const
-SdrEditView::MirrorMarkedObj(Point const&, Point const&, bool)
-SdrEditView::ModelHasChanged()
-SdrEditView::ResizeMultMarkedObj(Point const&, Fraction const&, Fraction const&, bool, bool)
-SdrEditView::SdrEditView(SdrModel&, OutputDevice*)
-SdrEditView::SetAttributes(SfxItemSet const&, bool)
-SdrEditView::SetNotPersistAttrToMarked(SfxItemSet const&)
-SdrEditView::SetStyleSheet(SfxStyleSheet*, bool)
-SdrEditView::SetStyleSheetToMarked(SfxStyleSheet*, bool)
-SdrEditView::ShearMarkedObj(Point const&, o3tl::strong_int<int, FractionTag<100> >, bool, bool)
-SdrEditView::~SdrEditView()
-SdrEmbedObjectLink::Closed()
-SdrEmbedObjectLink::DataChanged(rtl::OUString const&, com::sun::star::uno::Any const&)
-SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj*)
-SdrEmbedObjectLink::~SdrEmbedObjectLink()
 SdrEscherImport::GetColorFromPalette(unsigned short, Color&) const
 SdrEscherImport::GetFontEnityAtom(unsigned int) const
 SdrEscherImport::GetSlideLayoutAtom() const
@@ -3191,23 +3009,8 @@ SdrEscherImport::RecolorGraphic(SvStream&, unsigned int, Graphic&)
 SdrEscherImport::SdrEscherImport(PowerPointImportParam&, rtl::OUString const&)
 SdrEscherImport::SeekToShape(SvStream&, SvxMSDffClientData*, unsigned int) const
 SdrEscherImport::~SdrEscherImport()
-SdrExchangeView::ImpGetPasteLayer(SdrObjList const*, o3tl::strong_int<short, SdrLayerIDTag>&) const
-SdrExchangeView::ImpGetPasteObjList(Point&, SdrObjList*&)
-SdrExchangeView::ImpLimitToWorkArea(Point&) const
-SdrExchangeView::ImpPasteObject(SdrObject*, SdrObjList&, Point const&, Size const&, MapMode const&, SdrInsertFlags)
-SdrExchangeView::SdrExchangeView(SdrModel&, OutputDevice*)
 SdrFormatter::GetStr(long) const
 SdrFormatter::GetUnitStr(MapUnit)
-SdrGlobalData::SdrGlobalData()
-SdrGlueEditView::DeleteMarkedGluePoints()
-SdrGlueEditView::ImpCopyMarkedGluePoints()
-SdrGlueEditView::ImpDoMarkedGluePoints(void (*)(SdrGluePoint&, SdrObject const*, void const*, void const*, void const*, void const*), bool, void const*, void const*, void const*, void const*)
-SdrGlueEditView::ImpTransformMarkedGluePoints(void (*)(Point&, void const*, void const*, void const*, void const*), void const*, void const*, void const*, void const*)
-SdrGlueEditView::MoveMarkedGluePoints(Size const&, bool)
-SdrGlueEditView::ResizeMarkedGluePoints(Point const&, Fraction const&, Fraction const&, bool)
-SdrGlueEditView::RotateMarkedGluePoints(Point const&, o3tl::strong_int<int, FractionTag<100> >, bool)
-SdrGlueEditView::SdrGlueEditView(SdrModel&, OutputDevice*)
-SdrGlueEditView::~SdrGlueEditView()
 SdrGluePoint::EscAngleToDir(o3tl::strong_int<int, FractionTag<100> >)
 SdrGluePoint::EscDirToAngle(SdrEscapeDirection)
 SdrGluePoint::GetAlignAngle() const

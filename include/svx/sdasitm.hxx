@@ -54,13 +54,13 @@ private:
     mutable HashState m_aHashState = HashState::Unknown;
     mutable size_t m_aHash = 0xdeadbeef;
 
-    void SetPropSeq( const css::uno::Sequence< css::beans::PropertyValue >& rPropSeq );
+    SAL_DLLPRIVATE void SetPropSeq( const css::uno::Sequence< css::beans::PropertyValue >& rPropSeq );
     inline void UpdateHash() const;
     inline void InvalidateHash();
 
     public:
 
-            SdrCustomShapeGeometryItem();
+            SAL_DLLPRIVATE SdrCustomShapeGeometryItem();
             SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );
             virtual ~SdrCustomShapeGeometryItem() override;
 
@@ -69,16 +69,16 @@ private:
             SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem const &) = delete; // due to SfxPoolItem
             SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem &&) = delete; // due to SfxPoolItem
 
-            virtual bool                operator==( const SfxPoolItem& ) const override;
+            SAL_DLLPRIVATE virtual bool                operator==( const SfxPoolItem& ) const override;
 
-            virtual bool GetPresentation(SfxItemPresentation ePresentation,
+            SAL_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                          MapUnit eCoreMetric, MapUnit ePresentationMetric,
                                          OUString &rText, const IntlWrapper&) const override;
 
-            virtual SdrCustomShapeGeometryItem* Clone( SfxItemPool* pPool = nullptr ) const override;
+            SAL_DLLPRIVATE virtual SdrCustomShapeGeometryItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
-            virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-            virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+            SAL_DLLPRIVATE virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+            SAL_DLLPRIVATE virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
             css::uno::Any* GetPropertyValueByName( const OUString& rPropName );
             const css::uno::Any* GetPropertyValueByName( const OUString& rPropName ) const;

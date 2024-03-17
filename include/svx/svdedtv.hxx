@@ -117,44 +117,44 @@ private:
     SVX_DLLPRIVATE void ImpResetPossibilityFlags();
 
 protected:
-    void ImpBroadcastEdgesOfMarkedNodes();
+    SAL_DLLPRIVATE void ImpBroadcastEdgesOfMarkedNodes();
 
     // convert the objects marked in poly resp. bezier
-    void ImpConvertTo(bool bPath, bool bLineToArea);
+    SAL_DLLPRIVATE void ImpConvertTo(bool bPath, bool bLineToArea);
 
     // converts an object, when positive it removes the old one from its List
     // and inserts the new one instead. including Undo.
     // Nor MarkEntry nor ModelChgBroadcast is created.
-    rtl::Reference<SdrObject> ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea);
+    SAL_DLLPRIVATE rtl::Reference<SdrObject> ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea);
 
     // set both flags: bToTopPossible and bToBtmPossible.
     // bToTopPossibleDirty and bToBtmPossibleDirty are reset at the same time
-    void ImpCheckToTopBtmPossible();
+    SAL_DLLPRIVATE void ImpCheckToTopBtmPossible();
 
     // for CombineMarkedObjects and DismantleMarkedObjects
-    void ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) const;
+    SAL_DLLPRIVATE void ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) const;
 
     // for CombineMarkedObjects
-    static bool ImpCanConvertForCombine1(const SdrObject* pObj);
-    static bool ImpCanConvertForCombine(const SdrObject* pObj);
-    static basegfx::B2DPolyPolygon ImpGetPolyPolygon1(const SdrObject* pObj);
-    static basegfx::B2DPolyPolygon ImpGetPolyPolygon(const SdrObject* pObj);
-    static basegfx::B2DPolygon ImpCombineToSinglePolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
+    SAL_DLLPRIVATE static bool ImpCanConvertForCombine1(const SdrObject* pObj);
+    SAL_DLLPRIVATE static bool ImpCanConvertForCombine(const SdrObject* pObj);
+    SAL_DLLPRIVATE static basegfx::B2DPolyPolygon ImpGetPolyPolygon1(const SdrObject* pObj);
+    SAL_DLLPRIVATE static basegfx::B2DPolyPolygon ImpGetPolyPolygon(const SdrObject* pObj);
+    SAL_DLLPRIVATE static basegfx::B2DPolygon ImpCombineToSinglePolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     // for DismantleMarkedObjects
-    static bool ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPpolygon, bool bMakeLines);
-    static bool ImpCanDismantle(const SdrObject* pObj, bool bMakeLines);
-    void ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, size_t& rPos, SdrPageView* pPV, bool bMakeLines);
-    static void ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad, SdrCrookMode eMode,
+    SAL_DLLPRIVATE static bool ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPpolygon, bool bMakeLines);
+    SAL_DLLPRIVATE static bool ImpCanDismantle(const SdrObject* pObj, bool bMakeLines);
+    SAL_DLLPRIVATE void ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, size_t& rPos, SdrPageView* pPV, bool bMakeLines);
+    SAL_DLLPRIVATE static void ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad, SdrCrookMode eMode,
         bool bVertical, bool bNoContortion, bool bRotate, const tools::Rectangle& rMarkRect);
-    static void ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
-    bool ImpDelLayerCheck(SdrObjList const * pOL, SdrLayerID nDelID) const;
-    void ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID);
+    SAL_DLLPRIVATE static void ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
+    SAL_DLLPRIVATE bool ImpDelLayerCheck(SdrObjList const * pOL, SdrLayerID nDelID) const;
+    SAL_DLLPRIVATE void ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID);
 
     // Removes all objects of the MarkList from their ObjLists including Undo.
     // The entries in rMark remain.
     // @return a list of objects that must be deleted after the outermost EndUndo
-    std::vector<rtl::Reference<SdrObject>> DeleteMarkedList(SdrMarkList const& rMark); // DeleteMarked -> DeleteMarkedList
+    SAL_DLLPRIVATE std::vector<rtl::Reference<SdrObject>> DeleteMarkedList(SdrMarkList const& rMark); // DeleteMarked -> DeleteMarkedList
 
     // Check possibilities of all marked objects
     virtual void CheckPossibilities();
@@ -162,11 +162,11 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrEditView(
+    SAL_DLLPRIVATE SdrEditView(
         SdrModel& rSdrModel,
         OutputDevice* pOut);
 
-    virtual ~SdrEditView() override;
+    SAL_DLLPRIVATE virtual ~SdrEditView() override;
 
 public:
     // each call of an undo-capable method from its view, generates an undo action.
@@ -213,8 +213,8 @@ public:
     void EndTextEditAllViews() const;
     void EndTextEditCurrentView(bool bDontDeleteReally = false);
 
-    std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( const SdrObject& rO );
-    void AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > );
+    SAL_DLLPRIVATE std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( const SdrObject& rO );
+    SAL_DLLPRIVATE void AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > );
 
     // Layermanagement with Undo.
     void InsertNewLayer(const OUString& rName, sal_uInt16 nPos);
@@ -235,16 +235,16 @@ public:
     void SetMarkedObjRect(const tools::Rectangle& rRect);
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
-    void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bWdh, const bool bHgt);
-    Degree100 GetMarkedObjRotate() const;
+    SAL_DLLPRIVATE void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bWdh, const bool bHgt);
+    SAL_DLLPRIVATE Degree100 GetMarkedObjRotate() const;
     void RotateMarkedObj(const Point& rRef, Degree100 nAngle, bool bCopy=false);
-    void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);
+    SAL_DLLPRIVATE void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);
     void MirrorMarkedObjHorizontal();
     void MirrorMarkedObjVertical();
-    Degree100 GetMarkedObjShear() const;
-    void ShearMarkedObj(const Point& rRef, Degree100 nAngle, bool bVShear=false, bool bCopy=false);
-    void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bCopy=false);
-    void DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy=false);
+    SAL_DLLPRIVATE Degree100 GetMarkedObjShear() const;
+    SAL_DLLPRIVATE void ShearMarkedObj(const Point& rRef, Degree100 nAngle, bool bVShear=false, bool bCopy=false);
+    SAL_DLLPRIVATE void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bCopy=false);
+    SAL_DLLPRIVATE void DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy=false);
 
     // copy marked objects and mark them instead of the old ones
     void CopyMarkedObj();
@@ -264,7 +264,7 @@ public:
     bool IsShearAllowed() const;
     bool IsEdgeRadiusAllowed() const;
     bool IsCrookAllowed(bool bNoContortion=false) const;
-    bool IsCropAllowed() const;
+    SAL_DLLPRIVATE bool IsCropAllowed() const;
     bool IsDistortAllowed(bool bNoContortion=false) const;
 
     // Consolidate the text from multiple, selected TextObjects,
@@ -319,8 +319,8 @@ public:
     // EndUndo();
     void ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, bool bMark=true);
 
-    void SetNotPersistAttrToMarked(const SfxItemSet& rAttr);
-    void MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const;
+    SAL_DLLPRIVATE void SetNotPersistAttrToMarked(const SfxItemSet& rAttr);
+    SAL_DLLPRIVATE void MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const;
     void MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
     SfxItemSet GetAttrFromMarked(bool bOnlyHardAttr) const;
     void SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll);
@@ -341,14 +341,14 @@ public:
     SfxStyleSheet* GetStyleSheetFromMarked() const;
 
     // at the moment without undo :(
-    void SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
+    SAL_DLLPRIVATE void SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
     /* new interface src537 */
-    void GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
+    SAL_DLLPRIVATE void GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
 
-    void SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
-    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;
-    void SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
+    SAL_DLLPRIVATE void SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
+    SAL_DLLPRIVATE SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;
+    SAL_DLLPRIVATE void SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
     // Group all marked objects to a single group.
     // Subsequently mark the new group . If the group spawns multiple
@@ -374,7 +374,7 @@ public:
     bool IsConvertToPolyObjPossible() const { ForcePossibilities(); return m_bCanConvToPoly; }
     bool IsConvertToContourPossible() const { ForcePossibilities(); return m_bCanConvToContour; }
     void ConvertMarkedToPathObj(bool bLineToArea);
-    void ConvertMarkedToPolyObj();
+    SAL_DLLPRIVATE void ConvertMarkedToPolyObj();
 
     // Align all marked objects vertically. Normally the SnapRect of an object is used.
     void AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert);
@@ -432,8 +432,8 @@ public:
     bool IsImportMtfPossible() const { ForcePossibilities(); return m_bImportMtfPossible; }
 
     // override SdrMarkView, for internal use
-    virtual void MarkListHasChanged() override;
-    virtual void ModelHasChanged() override;
+    SAL_DLLPRIVATE virtual void MarkListHasChanged() override;
+    SAL_DLLPRIVATE virtual void ModelHasChanged() override;
 };
 
 #endif // INCLUDED_SVX_SVDEDTV_HXX

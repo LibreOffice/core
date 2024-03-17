@@ -26,33 +26,33 @@
 class SVXCORE_DLLPUBLIC SdrEdgeNode1HorzDistItem final : public SdrMetricItem {
 public:
     SdrEdgeNode1HorzDistItem(tools::Long nVal): SdrMetricItem(SDRATTR_EDGENODE1HORZDIST,nVal)  {}
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    virtual SdrEdgeNode1HorzDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    SAL_DLLPRIVATE virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SAL_DLLPRIVATE virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SAL_DLLPRIVATE virtual SdrEdgeNode1HorzDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 class SVXCORE_DLLPUBLIC SdrEdgeNode1VertDistItem final : public SdrMetricItem {
 public:
     SdrEdgeNode1VertDistItem(tools::Long nVal): SdrMetricItem(SDRATTR_EDGENODE1VERTDIST,nVal)  {}
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    virtual SdrEdgeNode1VertDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    SAL_DLLPRIVATE virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SAL_DLLPRIVATE virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SAL_DLLPRIVATE virtual SdrEdgeNode1VertDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 class SVXCORE_DLLPUBLIC SdrEdgeNode2HorzDistItem final : public SdrMetricItem {
 public:
     SdrEdgeNode2HorzDistItem(tools::Long nVal): SdrMetricItem(SDRATTR_EDGENODE2HORZDIST,nVal)  {}
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    virtual SdrEdgeNode2HorzDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    SAL_DLLPRIVATE virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SAL_DLLPRIVATE virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SAL_DLLPRIVATE virtual SdrEdgeNode2HorzDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 class SVXCORE_DLLPUBLIC SdrEdgeNode2VertDistItem final : public SdrMetricItem {
 public:
     SdrEdgeNode2VertDistItem(tools::Long nVal): SdrMetricItem(SDRATTR_EDGENODE2VERTDIST,nVal)  {}
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
-    virtual SdrEdgeNode2VertDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    SAL_DLLPRIVATE virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SAL_DLLPRIVATE virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SAL_DLLPRIVATE virtual SdrEdgeNode2VertDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 class SdrEdgeNode1GlueDistItem final : public SdrMetricItem {

@@ -190,11 +190,11 @@ class SVXCORE_DLLPUBLIC SdrEmbedObjectLink final : public sfx2::SvBaseLink
     SdrOle2Obj*         pObj;
 
 public:
-    explicit            SdrEmbedObjectLink(SdrOle2Obj* pObj);
-    virtual             ~SdrEmbedObjectLink() override;
+    SAL_DLLPRIVATE explicit            SdrEmbedObjectLink(SdrOle2Obj* pObj);
+    SAL_DLLPRIVATE virtual             ~SdrEmbedObjectLink() override;
 
-    virtual void        Closed() override;
-    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+    SAL_DLLPRIVATE virtual void        Closed() override;
+    SAL_DLLPRIVATE virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
     void                Connect() { GetRealObject(); }

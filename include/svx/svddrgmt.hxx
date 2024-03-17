@@ -124,7 +124,7 @@ private:
 
 protected:
     // access for derivated classes to maSdrDragEntries
-    void clearSdrDragEntries();
+    SAL_DLLPRIVATE void clearSdrDragEntries();
     void addSdrDragEntry(std::unique_ptr<SdrDragEntry> pNew);
     virtual void createSdrDragEntries();
     virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal);
@@ -150,13 +150,13 @@ protected:
     void setSolidDraggingActive(bool bNew) { mbSolidDraggingActive = bNew; }
 
     // internal helpers for creation of standard drag entries
-    void createSdrDragEntries_SolidDrag();
-    void createSdrDragEntries_PolygonDrag();
-    void createSdrDragEntries_PointDrag();
-    void createSdrDragEntries_GlueDrag();
+    SAL_DLLPRIVATE void createSdrDragEntries_SolidDrag();
+    SAL_DLLPRIVATE void createSdrDragEntries_PolygonDrag();
+    SAL_DLLPRIVATE void createSdrDragEntries_PointDrag();
+    SAL_DLLPRIVATE void createSdrDragEntries_GlueDrag();
 
     // old call forwarders to the SdrDragView
-    OUString           ImpGetDescriptionStr(TranslateId pStrCacheID) const;
+    SAL_DLLPRIVATE OUString           ImpGetDescriptionStr(TranslateId pStrCacheID) const;
     SdrHdl*            GetDragHdl() const              { return getSdrDragView().mpDragHdl; }
     SdrHdlKind         GetDragHdlKind() const          { return getSdrDragView().meDragHdl; }
     SdrDragStat&       DragStat()                      { return getSdrDragView().maDragStat; }
@@ -171,18 +171,18 @@ protected:
     Point              GetSnapPos(const Point& rPt) const { return getSdrDragView().GetSnapPos(rPt,getSdrDragView().mpMarkedPV); }
     SdrSnap            SnapPos(Point& rPt) const       { return getSdrDragView().SnapPos(rPt,getSdrDragView().mpMarkedPV); }
     inline const tools::Rectangle& GetMarkedRect() const;
-    SdrPageView*       GetDragPV() const;
+    SAL_DLLPRIVATE SdrPageView*       GetDragPV() const;
     SdrObject*         GetDragObj() const;
     bool               IsDraggingPoints() const        { return getSdrDragView().IsDraggingPoints(); }
     bool               IsDraggingGluePoints() const    { return getSdrDragView().IsDraggingGluePoints(); }
 
-    bool DoAddConnectorOverlays();
-    drawinglayer::primitive2d::Primitive2DContainer AddConnectorOverlays();
+    SAL_DLLPRIVATE bool DoAddConnectorOverlays();
+    SAL_DLLPRIVATE drawinglayer::primitive2d::Primitive2DContainer AddConnectorOverlays();
 
 public:
 
-    void resetSdrDragEntries();
-    basegfx::B2DRange getCurrentRange() const;
+    SAL_DLLPRIVATE void resetSdrDragEntries();
+    SAL_DLLPRIVATE basegfx::B2DRange getCurrentRange() const;
 
     // #i58950# also moved constructor implementation to cxx
     SdrDragMethod(SdrDragView& rNewView);
@@ -204,7 +204,7 @@ public:
     virtual void CreateOverlayGeometry(
         sdr::overlay::OverlayManager& rOverlayManager,
         const sdr::contact::ObjectContact& rObjectContact);
-    void destroyOverlayGeometry();
+    SAL_DLLPRIVATE void destroyOverlayGeometry();
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation() const;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);

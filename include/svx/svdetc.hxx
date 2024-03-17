@@ -185,7 +185,7 @@ public:
                         aUserMakeObjHdl;
     OLEObjCache         aOLEObjCache;
 
-    SdrGlobalData();
+    SAL_DLLPRIVATE SdrGlobalData();
 
     const SvtSysLocale& GetSysLocale() { return maSysLocale;  } // follows always locale settings
     const LocaleDataWrapper& GetLocaleData();    // follows always SysLocale
