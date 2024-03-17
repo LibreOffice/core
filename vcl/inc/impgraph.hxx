@@ -89,7 +89,7 @@ private:
     bool mbPrepared = false;
 
 public:
-    ImpGraphic();
+    ImpGraphic(bool bDefault = false);
     ImpGraphic( const ImpGraphic& rImpGraphic );
     ImpGraphic( ImpGraphic&& rImpGraphic ) noexcept;
     ImpGraphic( GraphicExternalLink aExternalLink);
@@ -133,7 +133,6 @@ private:
     void                clear();
 
     GraphicType         getType() const { return meType;}
-    void                setDefaultType();
     bool                isSupportedGraphic() const;
 
     bool                isTransparent() const;

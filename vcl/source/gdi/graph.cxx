@@ -287,8 +287,7 @@ bool Graphic::IsNone() const
 
 void Graphic::Clear()
 {
-    ImplTestRefCount();
-    mxImpGraphic->clear();
+    mxImpGraphic = std::make_shared<ImpGraphic>();
 }
 
 GraphicType Graphic::GetType() const
@@ -298,8 +297,7 @@ GraphicType Graphic::GetType() const
 
 void Graphic::SetDefaultType()
 {
-    ImplTestRefCount();
-    mxImpGraphic->setDefaultType();
+    mxImpGraphic = std::make_shared<ImpGraphic>(true);
 }
 
 bool Graphic::IsSupportedGraphic() const

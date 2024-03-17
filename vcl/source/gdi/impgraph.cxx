@@ -81,7 +81,8 @@ SvStream* ImpGraphic::getSwapFileStream() const
     return nullptr;
 }
 
-ImpGraphic::ImpGraphic()
+ImpGraphic::ImpGraphic(bool bDefault)
+    : meType(bDefault ? GraphicType::Default : GraphicType::NONE)
 {
 }
 
@@ -149,7 +150,7 @@ ImpGraphic::ImpGraphic(GraphicExternalLink aGraphicExternalLink)
 
 ImpGraphic::ImpGraphic(const BitmapEx& rBitmapEx)
     : maBitmapEx(rBitmapEx)
-    , meType(!rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE)
+    , meType(rBitmapEx.IsEmpty() ? GraphicType::NONE : GraphicType::Bitmap)
 {
 }
 
@@ -408,15 +409,9 @@ void ImpGraphic::clear()
     maGraphicExternalLink.msURL.clear();
 }
 
-void ImpGraphic::setDefaultType()
-{
-    clear();
-    meType = GraphicType::Default;
-}
-
 bool ImpGraphic::isSupportedGraphic() const
 {
-    return( meType != GraphicType::NONE );
+    return meType != GraphicType::NONE;
 }
 
 bool ImpGraphic::isTransparent() const
