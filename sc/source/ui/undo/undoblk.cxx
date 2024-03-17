@@ -1605,17 +1605,25 @@ bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoConditionalFormat::ScUndoConditionalFormat(ScDocShell* pNewDocShell,
-        ScDocumentUniquePtr pUndoDoc, ScDocumentUniquePtr pRedoDoc, SCTAB nTab):
+ScUndoConditionalFormat::ScUndoConditionalFormat(ScDocShell* pNewDocShell, SCTAB nTab):
     ScSimpleUndo( pNewDocShell ),
-    mpUndoDoc(std::move(pUndoDoc)),
-    mpRedoDoc(std::move(pRedoDoc)),
-    mnTab(nTab)
+    mnTab(nTab),
+    mpUndoDoc(createUndoRedoData())
 {
 }
 
 ScUndoConditionalFormat::~ScUndoConditionalFormat()
 {
+}
+
+ScDocumentUniquePtr ScUndoConditionalFormat::createUndoRedoData()
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocumentUniquePtr pUndoRedoDoc(new ScDocument(SCDOCMODE_UNDO));
+    pUndoRedoDoc->InitUndo(rDoc, mnTab, mnTab);
+    if (const auto* pList = rDoc.GetCondFormList(mnTab))
+        pUndoRedoDoc->SetCondFormList(new ScConditionalFormatList(*pUndoRedoDoc, *pList), mnTab);
+    return pUndoRedoDoc;
 }
 
 OUString ScUndoConditionalFormat::GetComment() const

@@ -5629,16 +5629,10 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, std::unique_ptr<
     if(rDoc.IsTabProtected(nTab))
         return;
 
-    bool bUndo = rDoc.IsUndoEnabled();
-    ScDocumentUniquePtr pUndoDoc;
     ScRange aCombinedRange = rRanges.Combine();
-    if(bUndo)
-    {
-        pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pUndoDoc->InitUndo( rDoc, nTab, nTab );
-        if (const auto* pList = rDoc.GetCondFormList(nTab))
-            pUndoDoc->SetCondFormList(new ScConditionalFormatList(*pUndoDoc, *pList), nTab);
-    }
+    std::unique_ptr<ScUndoConditionalFormat> pUndo;
+    if (rDoc.IsUndoEnabled())
+        pUndo.reset(new ScUndoConditionalFormat(&rDocShell, nTab));
 
     std::unique_ptr<ScRange> pRepaintRange;
     if(nOldFormat)
@@ -5666,14 +5660,10 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, std::unique_ptr<
         rDoc.SetStreamValid(nTab, false);
     }
 
-    if(bUndo)
+    if (pUndo)
     {
-        ScDocumentUniquePtr pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
-        pRedoDoc->InitUndo( rDoc, nTab, nTab );
-        if (const auto* pList = rDoc.GetCondFormList(nTab))
-            pRedoDoc->SetCondFormList(new ScConditionalFormatList(*pRedoDoc, *pList), nTab);
-        rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoConditionalFormat>(&rDocShell, std::move(pUndoDoc), std::move(pRedoDoc), nTab));
+        pUndo->setRedoData();
+        rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
     }
 
     if(pRepaintRange)

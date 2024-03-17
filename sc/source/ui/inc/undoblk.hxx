@@ -619,9 +619,10 @@ private:
 class ScUndoConditionalFormat : public ScSimpleUndo
 {
 public:
-    ScUndoConditionalFormat( ScDocShell* pNewDocShell,
-            ScDocumentUniquePtr pUndoDoc, ScDocumentUniquePtr pRedoDoc, SCTAB nTab);
+    ScUndoConditionalFormat( ScDocShell* pNewDocShell, SCTAB nTab);
     virtual         ~ScUndoConditionalFormat() override;
+
+    void setRedoData() { mpRedoDoc = createUndoRedoData(); }
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -631,10 +632,11 @@ public:
     virtual OUString GetComment() const override;
 
 private:
+    ScDocumentUniquePtr createUndoRedoData();
     void DoChange(ScDocument* pDoc);
+    SCTAB mnTab;
     ScDocumentUniquePtr mpUndoDoc;
     ScDocumentUniquePtr mpRedoDoc;
-    SCTAB mnTab;
 };
 
 class ScUndoConditionalFormatList : public ScSimpleUndo
