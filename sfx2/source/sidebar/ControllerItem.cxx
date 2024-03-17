@@ -64,7 +64,7 @@ void ControllerItem::RequestUpdate()
 {
     std::unique_ptr<SfxPoolItem> pState;
     const SfxItemState eState (GetBindings().QueryState(GetId(), pState));
-    if (GetId() == SID_ATTR_METRIC && comphelper::LibreOfficeKit::isActive())
+    if (GetId() == SID_ATTR_METRIC && pState && comphelper::LibreOfficeKit::isActive())
     {
         MeasurementSystem eSystem
             = LocaleDataWrapper(comphelper::LibreOfficeKit::getLocale()).getMeasurementSystemEnum();
