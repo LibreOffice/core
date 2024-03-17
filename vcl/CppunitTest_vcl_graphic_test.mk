@@ -11,6 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_graphic_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_graphic_test, \
     vcl/qa/cppunit/GraphicTest \
+    vcl/qa/cppunit/GraphicMemoryTest \
     vcl/qa/cppunit/GraphicDescriptorTest \
     vcl/qa/cppunit/GraphicFormatDetectorTest \
     vcl/qa/cppunit/GraphicNativeMetadataTest \

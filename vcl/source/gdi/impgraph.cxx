@@ -82,12 +82,14 @@ SvStream* ImpGraphic::getSwapFileStream() const
 }
 
 ImpGraphic::ImpGraphic(bool bDefault)
-    : meType(bDefault ? GraphicType::Default : GraphicType::NONE)
+    : MemoryManaged(false)
+    , meType(bDefault ? GraphicType::Default : GraphicType::NONE)
 {
 }
 
 ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
-    : maMetaFile(rImpGraphic.maMetaFile)
+    : MemoryManaged(rImpGraphic)
+    , maMetaFile(rImpGraphic.maMetaFile)
     , maBitmapEx(rImpGraphic.maBitmapEx)
     , maSwapInfo(rImpGraphic.maSwapInfo)
     , mpContext(rImpGraphic.mpContext)
@@ -101,6 +103,8 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
     , mbPrepared(rImpGraphic.mbPrepared)
 {
+    updateCurrentSizeInBytes(mnSizeBytes);
+
     // Special case for animations
     if (rImpGraphic.mpAnimation)
     {
@@ -110,7 +114,8 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
 }
 
 ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
-    : maMetaFile(std::move(rImpGraphic.maMetaFile))
+    : MemoryManaged(rImpGraphic)
+    , maMetaFile(std::move(rImpGraphic.maMetaFile))
     , maBitmapEx(std::move(rImpGraphic.maBitmapEx))
     , maSwapInfo(std::move(rImpGraphic.maSwapInfo))
     , mpAnimation(std::move(rImpGraphic.mpAnimation))
@@ -125,12 +130,15 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
     , mbPrepared (rImpGraphic.mbPrepared)
 {
+    updateCurrentSizeInBytes(mnSizeBytes);
+
     rImpGraphic.clear();
     rImpGraphic.mbDummyContext = false;
 }
 
 ImpGraphic::ImpGraphic(std::shared_ptr<GfxLink> xGfxLink, sal_Int32 nPageIndex)
-    : mpGfxLink(std::move(xGfxLink))
+    : MemoryManaged(true)
+    , mpGfxLink(std::move(xGfxLink))
     , meType(GraphicType::Bitmap)
     , mbSwapOut(true)
 {
@@ -140,53 +148,63 @@ ImpGraphic::ImpGraphic(std::shared_ptr<GfxLink> xGfxLink, sal_Int32 nPageIndex)
     maSwapInfo.mbIsAnimated = false;
     maSwapInfo.mnAnimationLoopCount = 0;
     maSwapInfo.mnPageIndex = nPageIndex;
+
+    ensureCurrentSizeInBytes();
 }
 
 ImpGraphic::ImpGraphic(GraphicExternalLink aGraphicExternalLink)
-    : meType(GraphicType::Default)
+    : MemoryManaged(true)
+    , meType(GraphicType::Default)
     , maGraphicExternalLink(std::move(aGraphicExternalLink))
 {
+    ensureCurrentSizeInBytes();
 }
 
 ImpGraphic::ImpGraphic(const BitmapEx& rBitmapEx)
-    : maBitmapEx(rBitmapEx)
+    : MemoryManaged(!rBitmapEx.IsEmpty())
+    , maBitmapEx(rBitmapEx)
     , meType(rBitmapEx.IsEmpty() ? GraphicType::NONE : GraphicType::Bitmap)
 {
+    ensureCurrentSizeInBytes();
 }
 
 ImpGraphic::ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr)
-    : maVectorGraphicData(rVectorGraphicDataPtr)
+    : MemoryManaged(bool(rVectorGraphicDataPtr))
+    , maVectorGraphicData(rVectorGraphicDataPtr)
     , meType(rVectorGraphicDataPtr ? GraphicType::Bitmap : GraphicType::NONE)
 {
+    ensureCurrentSizeInBytes();
 }
 
 ImpGraphic::ImpGraphic(const Animation& rAnimation)
-    : maBitmapEx(rAnimation.GetBitmapEx())
+    : MemoryManaged(true)
+    , maBitmapEx(rAnimation.GetBitmapEx())
     , mpAnimation(std::make_unique<Animation>(rAnimation))
     , meType(GraphicType::Bitmap)
 {
+    ensureCurrentSizeInBytes();
 }
 
 ImpGraphic::ImpGraphic(const GDIMetaFile& rMetafile)
-    : maMetaFile(rMetafile)
+    : MemoryManaged(true)
+    , maMetaFile(rMetafile)
     , meType(GraphicType::GdiMetafile)
 {
+    ensureCurrentSizeInBytes();
 }
 
 ImpGraphic::~ImpGraphic()
 {
-    vcl::graphic::Manager::get().unregisterGraphic(this);
 }
 
 ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 {
     if( &rImpGraphic != this )
     {
-        sal_Int64 aOldSizeBytes = mnSizeBytes;
-
         maMetaFile = rImpGraphic.maMetaFile;
         meType = rImpGraphic.meType;
         mnSizeBytes = rImpGraphic.mnSizeBytes;
+        updateCurrentSizeInBytes(mnSizeBytes);
 
         maSwapInfo = rImpGraphic.maSwapInfo;
         mpContext = rImpGraphic.mpContext;
@@ -214,7 +232,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         maVectorGraphicData = rImpGraphic.maVectorGraphicData;
         maLastUsed = std::chrono::high_resolution_clock::now();
 
-        vcl::graphic::Manager::get().changeExisting(this, aOldSizeBytes);
+        changeExisting(mnSizeBytes);
     }
 
     return *this;
@@ -222,8 +240,6 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
 ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
 {
-    sal_Int64 aOldSizeBytes = mnSizeBytes;
-
     maMetaFile = std::move(rImpGraphic.maMetaFile);
     meType = rImpGraphic.meType;
     mnSizeBytes = rImpGraphic.mnSizeBytes;
@@ -243,7 +259,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     rImpGraphic.mbDummyContext = false;
     maLastUsed = std::chrono::high_resolution_clock::now();
 
-    vcl::graphic::Manager::get().changeExisting(this, aOldSizeBytes);
+    changeExisting(mnSizeBytes);
 
     return *this;
 }
@@ -403,9 +419,9 @@ void ImpGraphic::clear()
     // cleanup
     clearGraphics();
     meType = GraphicType::NONE;
-    sal_Int64 nOldSize = mnSizeBytes;
     mnSizeBytes = 0;
-    vcl::graphic::Manager::get().changeExisting(this, nOldSize);
+
+    changeExisting(mnSizeBytes);
     maGraphicExternalLink.msURL.clear();
 }
 
@@ -925,6 +941,14 @@ void ImpGraphic::setPrefMapMode(const MapMode& rPrefMapMode)
     setValuesForPrefMapMod(rPrefMapMode);
 }
 
+void ImpGraphic::ensureCurrentSizeInBytes()
+{
+    if (isAvailable())
+        changeExisting(getSizeBytes());
+    else
+        changeExisting(0);
+}
+
 sal_uLong ImpGraphic::getSizeBytes() const
 {
     if (mnSizeBytes > 0)
@@ -1266,8 +1290,6 @@ bool ImpGraphic::swapOut()
 
     bool bResult = false;
 
-    sal_Int64 nByteSize = getSizeBytes();
-
     // We have GfxLink so we have the source available
     if (mpGfxLink && mpGfxLink->IsNative())
     {
@@ -1324,7 +1346,7 @@ bool ImpGraphic::swapOut()
     if (bResult)
     {
         // Signal to manager that we have swapped out
-        vcl::graphic::Manager::get().swappedOut(this, nByteSize);
+        swappedOut(0);
     }
 
     return bResult;
@@ -1332,14 +1354,17 @@ bool ImpGraphic::swapOut()
 
 bool ImpGraphic::ensureAvailable() const
 {
-    auto pThis = const_cast<ImpGraphic*>(this);
-
     bool bResult = true;
 
     if (isSwappedOut())
-        bResult = pThis->swapIn();
+    {
+        auto pThis = const_cast<ImpGraphic*>(this);
+        pThis->registerIntoManager();
 
-    pThis->maLastUsed = std::chrono::high_resolution_clock::now();
+        bResult = pThis->swapIn();
+    }
+
+    maLastUsed = std::chrono::high_resolution_clock::now();
     return bResult;
 }
 
@@ -1526,7 +1551,7 @@ bool ImpGraphic::swapIn()
 
     if (bReturn)
     {
-        vcl::graphic::Manager::get().swappedIn(this, getSizeBytes());
+        swappedIn(getSizeBytes());
     }
 
     return bReturn;
@@ -1731,4 +1756,22 @@ sal_Int32 ImpGraphic::getPageNumber() const
         return maVectorGraphicData->getPageIndex();
     return -1;
 }
+
+bool ImpGraphic::canReduceMemory() const
+{
+    if (mpContext)
+        return false;
+    return !isSwappedOut();
+}
+
+bool ImpGraphic::reduceMemory()
+{
+    return swapOut();
+}
+
+std::chrono::high_resolution_clock::time_point ImpGraphic::getLastUsed() const
+{
+    return maLastUsed;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

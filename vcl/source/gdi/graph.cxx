@@ -159,14 +159,14 @@ void ImplDrawDefault(OutputDevice& rOutDev, const OUString* pText,
 } // end anonymous namespace
 
 Graphic::Graphic()
-    : mxImpGraphic(vcl::graphic::Manager::get().newInstance())
+    : mxImpGraphic(new ImpGraphic())
 {
 }
 
 Graphic::Graphic(const Graphic& rGraphic)
 {
     if( rGraphic.IsAnimated() )
-        mxImpGraphic = vcl::graphic::Manager::get().copy(rGraphic.mxImpGraphic);
+        mxImpGraphic = std::make_shared<ImpGraphic>(*rGraphic.mxImpGraphic);
     else
         mxImpGraphic = rGraphic.mxImpGraphic;
 }
@@ -177,17 +177,17 @@ Graphic::Graphic(Graphic&& rGraphic) noexcept
 }
 
 Graphic::Graphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex)
-    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rGfxLink, nPageIndex))
+    : mxImpGraphic(new ImpGraphic(rGfxLink, nPageIndex))
 {
 }
 
 Graphic::Graphic(GraphicExternalLink const & rGraphicExternalLink)
-    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rGraphicExternalLink))
+    : mxImpGraphic(new ImpGraphic(rGraphicExternalLink))
 {
 }
 
-Graphic::Graphic(const BitmapEx& rBmpEx)
-    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rBmpEx))
+Graphic::Graphic(const BitmapEx& rBitmapEx)
+    : mxImpGraphic(new ImpGraphic(rBitmapEx))
 {
 }
 
@@ -195,7 +195,7 @@ Graphic::Graphic(const BitmapEx& rBmpEx)
 // and we need to be able to see and preserve 'stock' images too.
 Graphic::Graphic(const Image& rImage)
     // FIXME: should really defer the BitmapEx load.
-    : mxImpGraphic(std::make_shared<ImpGraphic>(rImage.GetBitmapEx()))
+    : mxImpGraphic(new ImpGraphic(rImage.GetBitmapEx()))
 {
     OUString aStock = rImage.GetStock();
     if (aStock.getLength())
@@ -203,17 +203,17 @@ Graphic::Graphic(const Image& rImage)
 }
 
 Graphic::Graphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr)
-    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rVectorGraphicDataPtr))
+    : mxImpGraphic(new ImpGraphic(rVectorGraphicDataPtr))
 {
 }
 
 Graphic::Graphic(const Animation& rAnimation)
-    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rAnimation))
+    : mxImpGraphic(new ImpGraphic(rAnimation))
 {
 }
 
-Graphic::Graphic(const GDIMetaFile& rMtf)
-    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rMtf))
+Graphic::Graphic(const GDIMetaFile& rMetaFile)
+    : mxImpGraphic(new ImpGraphic(rMetaFile))
 {
 }
 
@@ -225,19 +225,19 @@ Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic
     if( pGraphic )
     {
         if (pGraphic->IsAnimated())
-            mxImpGraphic = vcl::graphic::Manager::get().copy(pGraphic->mxImpGraphic);
+            mxImpGraphic = std::make_shared<ImpGraphic>(*pGraphic->mxImpGraphic);
         else
             mxImpGraphic = pGraphic->mxImpGraphic;
     }
     else
-        mxImpGraphic = vcl::graphic::Manager::get().newInstance();
+        mxImpGraphic = std::make_shared<ImpGraphic>();
 }
 
 void Graphic::ImplTestRefCount()
 {
     if (mxImpGraphic.use_count() > 1)
     {
-        mxImpGraphic = vcl::graphic::Manager::get().copy(mxImpGraphic);
+        mxImpGraphic = std::make_shared<ImpGraphic>(*mxImpGraphic);
     }
 }
 
@@ -256,7 +256,7 @@ Graphic& Graphic::operator=( const Graphic& rGraphic )
     if( &rGraphic != this )
     {
         if( rGraphic.IsAnimated() )
-            mxImpGraphic = vcl::graphic::Manager::get().copy(rGraphic.mxImpGraphic);
+            mxImpGraphic = std::make_shared<ImpGraphic>(*rGraphic.mxImpGraphic);
         else
             mxImpGraphic = rGraphic.mxImpGraphic;
     }

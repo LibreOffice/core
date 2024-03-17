@@ -1775,7 +1775,7 @@ void dumpState(rtl::OStringBuffer &rState)
         pWin = Application::GetNextTopLevelWindow( pWin );
     }
 
-    vcl::graphic::Manager::get().dumpState(rState);
+    vcl::graphic::MemoryManager::get().dumpState(rState);
 
     pSVData->dumpState(rState);
 
@@ -1792,7 +1792,7 @@ void trimMemory(int nTarget)
         if (!pSVData) // shutting down
             return;
         pSVData->dropCaches();
-        vcl::graphic::Manager::get().dropCache();
+        vcl::graphic::MemoryManager::get().reduceAllAndNow();
         // TODO: ideally - free up any deeper dirtied thread stacks.
         // comphelper::ThreadPool::getSharedOptimalPool().shutdown();
     }

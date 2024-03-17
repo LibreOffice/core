@@ -24,6 +24,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include "graphic/Manager.hxx"
+#include "graphic/MemoryManaged.hxx"
 #include "graphic/GraphicID.hxx"
 #include <optional>
 
@@ -56,11 +57,10 @@ enum class GraphicContentType : sal_Int32
     Vector
 };
 
-class ImpGraphic final
+class ImpGraphic final  : public vcl::graphic::MemoryManaged
 {
     friend class Graphic;
     friend class GraphicID;
-    friend class vcl::graphic::Manager;
 
 private:
 
@@ -160,6 +160,8 @@ private:
 
     sal_uLong           getSizeBytes() const;
 
+    void ensureCurrentSizeInBytes();
+
     void                draw(OutputDevice& rOutDev, const Point& rDestPt) const;
     void                draw(OutputDevice& rOutDev, const Point& rDestPt,
                              const Size& rDestSize) const;
@@ -212,6 +214,10 @@ private:
     // Set the pref map mode, but don't force swap-in
     void setValuesForPrefMapMod(const MapMode& rPrefMapMode);
 
+    bool canReduceMemory() const override;
+    bool reduceMemory() override;
+    std::chrono::high_resolution_clock::time_point getLastUsed() const override;
+
 public:
     void resetChecksum() { mnChecksum = 0; }
     bool swapIn();
@@ -220,7 +226,7 @@ public:
     VCL_DLLPUBLIC SvStream* getSwapFileStream() const;
     // public only because of use in GraphicFilter
     void updateFromLoadedGraphic(const ImpGraphic* graphic);
-    void dumpState(rtl::OStringBuffer &rState);
+    void dumpState(rtl::OStringBuffer &rState) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

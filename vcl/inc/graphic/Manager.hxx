@@ -11,66 +11,51 @@
 
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/animate/Animation.hxx>
-#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/GraphicExternalLink.hxx>
-#include <vcl/gfxlink.hxx>
 
 #include <memory>
 #include <mutex>
 #include <chrono>
 #include <o3tl/sorted_vector.hxx>
 
-class ImpGraphic;
-
 namespace vcl::graphic
 {
-class Manager final
+class MemoryManaged;
+
+class VCL_DLLPUBLIC MemoryManager final
 {
 private:
+    o3tl::sorted_vector<MemoryManaged*> maObjectList;
+    sal_Int64 mnTotalSize = 0;
     std::mutex maMutex; // instead of SolarMutex because graphics can live past vcl main
-    o3tl::sorted_vector<ImpGraphic*> m_pImpGraphicList;
-    std::chrono::seconds mnAllowedIdleTime;
-    bool mbSwapEnabled;
-    bool mbReducingGraphicMemory;
-    sal_Int64 mnMemoryLimit;
-    sal_Int64 mnUsedSize;
+
+    std::chrono::seconds mnAllowedIdleTime = std::chrono::seconds(1);
+    bool mbSwapEnabled = true;
+    bool mbReducingGraphicMemory = false;
+    sal_Int64 mnMemoryLimit = 10'000'000;
     Timer maSwapOutTimer;
+    sal_Int32 mnTimeout = 1'000;
+    sal_Int64 mnSmallFrySize = 100'000;
 
-    Manager();
-
-    void registerGraphic(const std::shared_ptr<ImpGraphic>& rImpGraphic);
-    void loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard, bool bDropAll);
-
-    DECL_LINK(SwapOutTimerHandler, Timer*, void);
-
-    static sal_Int64 getGraphicSizeBytes(const ImpGraphic* pImpGraphic);
-    void reduceGraphicMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
+    DECL_LINK(ReduceMemoryTimerHandler, Timer*, void);
 
 public:
-    static Manager& get();
+    MemoryManager();
+    void registerObject(MemoryManaged* pObject);
+    void unregisterObject(MemoryManaged* pObject);
+    void changeExisting(MemoryManaged* pObject, sal_Int64 nNewSize);
 
-    void dropCache();
+    void swappedIn(MemoryManaged* pObject, sal_Int64 nNewSize);
+    void swappedOut(MemoryManaged* pObject, sal_Int64 nNewSize);
+
+    static MemoryManager& get();
+    o3tl::sorted_vector<MemoryManaged*> const& getManagedObjects() { return maObjectList; }
+    sal_Int64 getTotalSize() { return mnTotalSize; }
+
+    void reduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
+    void loopAndReduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
+    void reduceAllAndNow();
     void dumpState(rtl::OStringBuffer& rState);
-
-    void swappedIn(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes);
-    void swappedOut(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes);
-
-    void changeExisting(const ImpGraphic* pImpGraphic, sal_Int64 nOldSize);
-    void unregisterGraphic(ImpGraphic* pImpGraphic);
-
-    std::shared_ptr<ImpGraphic> copy(std::shared_ptr<ImpGraphic> const& pImpGraphic);
-    std::shared_ptr<ImpGraphic> newInstance();
-    std::shared_ptr<ImpGraphic> newInstance(const BitmapEx& rBitmapEx);
-    std::shared_ptr<ImpGraphic> newInstance(std::shared_ptr<GfxLink> const& rLink,
-                                            sal_Int32 nPageIndex = 0);
-    std::shared_ptr<ImpGraphic>
-    newInstance(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr);
-    std::shared_ptr<ImpGraphic> newInstance(const Animation& rAnimation);
-    std::shared_ptr<ImpGraphic> newInstance(const GDIMetaFile& rMtf);
-    std::shared_ptr<ImpGraphic> newInstance(const GraphicExternalLink& rGraphicLink);
 };
 
 } // end namespace vcl::graphic
