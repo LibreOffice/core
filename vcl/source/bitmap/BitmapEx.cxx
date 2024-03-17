@@ -63,7 +63,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
         return;
 
     maBitmap = Bitmap(aSize, rBitmapEx.maBitmap.getPixelFormat());
-    SetSizePixel(aSize);
+    maBitmapSize = aSize;
     if( rBitmapEx.IsAlpha() )
         maAlphaMask = AlphaMask( aSize );
 
@@ -75,7 +75,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
 BitmapEx::BitmapEx(Size aSize, vcl::PixelFormat ePixelFormat)
 {
     maBitmap = Bitmap(aSize, ePixelFormat);
-    SetSizePixel(aSize);
+    maBitmapSize = aSize;
 }
 
 BitmapEx::BitmapEx( const OUString& rIconName )
@@ -251,11 +251,6 @@ BitmapChecksum BitmapEx::GetChecksum() const
     return nCrc;
 }
 
-void BitmapEx::SetSizePixel(const Size& rNewSize)
-{
-    maBitmapSize = rNewSize;
-}
-
 bool BitmapEx::Invert()
 {
     bool bRet = false;
@@ -294,7 +289,7 @@ bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag
             maAlphaMask.Scale( rScaleX, rScaleY, nScaleFlag );
         }
 
-        SetSizePixel(maBitmap.GetSizePixel());
+        maBitmapSize = maBitmap.GetSizePixel();
 
         SAL_WARN_IF( !maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                     "BitmapEx::Scale(): size mismatch for bitmap and alpha mask." );
@@ -352,7 +347,7 @@ bool BitmapEx::Rotate( Degree10 nAngle10, const Color& rFillColor )
                 maAlphaMask.Rotate( nAngle10, COL_ALPHA_TRANSPARENT );
         }
 
-        SetSizePixel(maBitmap.GetSizePixel());
+        maBitmapSize = maBitmap.GetSizePixel();
 
         SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                     "BitmapEx::Rotate(): size mismatch for bitmap and alpha mask.");
@@ -372,7 +367,7 @@ bool BitmapEx::Crop( const tools::Rectangle& rRectPixel )
         if( bRet && !maAlphaMask.IsEmpty() )
             maAlphaMask.Crop( rRectPixel );
 
-        SetSizePixel(maBitmap.GetSizePixel());
+        maBitmapSize = maBitmap.GetSizePixel();
 
         SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                     "BitmapEx::Crop(): size mismatch for bitmap and alpha mask.");
@@ -401,7 +396,7 @@ void BitmapEx::Expand( sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent )
         maAlphaMask.Expand( nDX, nDY, &aColor );
     }
 
-    SetSizePixel(maBitmap.GetSizePixel());
+    maBitmapSize = maBitmap.GetSizePixel();
 
     SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                 "BitmapEx::Expand(): size mismatch for bitmap and alpha mask.");

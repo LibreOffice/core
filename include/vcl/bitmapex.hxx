@@ -71,7 +71,6 @@ public:
     const AlphaMask &   GetAlphaMask() const { return maAlphaMask; }
 
     const Size&         GetSizePixel() const { return maBitmapSize; }
-    SAL_DLLPRIVATE void SetSizePixel(const Size& rNewSize);
 
     const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
     void                SetPrefSize( const Size& rPrefSize ) { maBitmap.SetPrefSize( rPrefSize ); }
