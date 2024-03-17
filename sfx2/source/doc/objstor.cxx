@@ -118,6 +118,9 @@
 #include <appbaslib.hxx>
 #include "objstor.hxx"
 #include "exoticfileloadexception.hxx"
+#include <unicode/ucsdet.h>
+#include <unicode/ucnv.h>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -873,6 +876,322 @@ bool SfxObjectShell::DoLoadExternal( SfxMedium *pMed )
     return LoadExternal(*pMedium);
 }
 
+const ::std::unordered_map<std::string, rtl_TextEncoding>  mapCharSets =
+                            {{"UTF-8", RTL_TEXTENCODING_UTF8},
+                            {"UTF-16BE", RTL_TEXTENCODING_UCS2},
+                            {"UTF-16LE", RTL_TEXTENCODING_UCS2},
+                            {"UTF-32BE", RTL_TEXTENCODING_UCS4},
+                            {"UTF-32LE", RTL_TEXTENCODING_UCS4},
+                            {"Shift_JIS", RTL_TEXTENCODING_SHIFT_JIS},
+                            {"ISO-2022-JP", RTL_TEXTENCODING_ISO_2022_JP},
+                            {"ISO-2022-CN", RTL_TEXTENCODING_ISO_2022_CN},
+                            {"ISO-2022-KR", RTL_TEXTENCODING_ISO_2022_KR},
+                            {"GB18030", RTL_TEXTENCODING_GB_18030},
+                            {"Big5", RTL_TEXTENCODING_BIG5},
+                            {"EUC-JP", RTL_TEXTENCODING_EUC_JP},
+                            {"EUC-KR", RTL_TEXTENCODING_EUC_KR},
+                            {"ISO-8859-1", RTL_TEXTENCODING_ISO_8859_1},
+                            {"ISO-8859-2", RTL_TEXTENCODING_ISO_8859_2},
+                            {"ISO-8859-5", RTL_TEXTENCODING_ISO_8859_5},
+                            {"ISO-8859-6", RTL_TEXTENCODING_ISO_8859_6},
+                            {"ISO-8859-7", RTL_TEXTENCODING_ISO_8859_7},
+                            {"ISO-8859-8", RTL_TEXTENCODING_ISO_8859_8},
+                            {"ISO-8859-9", RTL_TEXTENCODING_ISO_8859_9},
+                            {"windows-1250", RTL_TEXTENCODING_MS_1250},
+                            {"windows-1251", RTL_TEXTENCODING_MS_1251},
+                            {"windows-1252", RTL_TEXTENCODING_MS_1252},
+                            {"windows-1253", RTL_TEXTENCODING_MS_1253},
+                            {"windows-1254", RTL_TEXTENCODING_MS_1254},
+                            {"windows-1255", RTL_TEXTENCODING_MS_1255},
+                            {"windows-1256", RTL_TEXTENCODING_MS_1256},
+                            {"KOI8-R", RTL_TEXTENCODING_KOI8_R}};
+
+void SfxObjectShell::DetectCharSet(SvStream& stream, rtl_TextEncoding& eCharSet, SvStreamEndian &endian)
+{
+    constexpr size_t buffsize = 4096;
+    sal_Int8 bytes[buffsize] = { 0 };
+    sal_uInt64 nInitPos = stream.Tell();
+    sal_Int32 nRead = stream.ReadBytes(bytes, buffsize);
+
+    stream.Seek(nInitPos);
+    eCharSet = RTL_TEXTENCODING_DONTKNOW;
+
+    if (!nRead)
+        return;
+
+    UErrorCode uerr = U_ZERO_ERROR;
+    UCharsetDetector* ucd = ucsdet_open(&uerr);
+    if (!U_SUCCESS(uerr))
+        return;
+
+    const UCharsetMatch* match = nullptr;
+    const char* pEncodingName = nullptr;
+    ucsdet_setText(ucd, reinterpret_cast<const char*>(bytes), nRead, &uerr);
+    if (U_SUCCESS(uerr))
+        match = ucsdet_detect(ucd, &uerr);
+
+    if (U_SUCCESS(uerr))
+        pEncodingName = ucsdet_getName(match, &uerr);
+
+    if (U_SUCCESS(uerr))
+    {
+        const auto it = mapCharSets.find(pEncodingName);
+        if (it != mapCharSets.end())
+            eCharSet = it->second;
+
+        if (eCharSet == RTL_TEXTENCODING_UNICODE && !strcmp("UTF-16LE", pEncodingName))
+            endian = SvStreamEndian::LITTLE;
+        else if (eCharSet == RTL_TEXTENCODING_UNICODE && !strcmp("UTF-16BE", pEncodingName))
+            endian = SvStreamEndian::BIG;
+    }
+
+    ucsdet_close(ucd);
+}
+
+void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCharSet, OUString& separators, sal_Unicode cStringDelimiter, bool bForceCommonSeps, bool bAllowMultipleSeps)
+{
+    OUString sLine;
+    std::vector<std::unordered_map<sal_Unicode, sal_uInt32>> aLinesCharsCount;
+    std::unordered_map<sal_Unicode, sal_uInt32> aCharsCount;
+    std::unordered_map<sal_Unicode, std::pair<sal_uInt32, sal_uInt32>> aStats;
+    constexpr sal_uInt32 nMaxLinesToProcess = 20;
+    sal_uInt32 nLinesCount = 0;
+    OUString sInitSeps;
+    OUString sCommonSeps = ",\t;:| \\/";//Sorted by importance
+    std::unordered_set<sal_Unicode> usetCommonSeps;
+    bool bIsDelimiter = false;
+    // The below two are needed to handle a "not perfect" structure.
+    sal_uInt32 nMaxLinesSameChar = 0;
+    sal_uInt32 nMinDiffs = 0xFFFFFFFF;
+    sal_uInt64 nInitPos = stream.Tell();
+
+    if (!cStringDelimiter)
+        cStringDelimiter = '\"';
+
+    if (bForceCommonSeps)
+        for (sal_Int32 nComSepIdx = sCommonSeps.getLength() - 1; nComSepIdx >= 0; nComSepIdx --)
+            usetCommonSeps.insert(sCommonSeps[nComSepIdx]);
+    aLinesCharsCount.reserve(nMaxLinesToProcess);
+    separators = "";
+
+    stream.StartReadingUnicodeText(eCharSet);
+    while (stream.ReadUniOrByteStringLine(sLine, eCharSet) && aLinesCharsCount.size() < nMaxLinesToProcess)
+    {
+        if (sLine.isEmpty())
+            continue;
+
+        if (!nLinesCount)
+        {
+            if (sLine.getLength() == 5 && sLine.startsWithIgnoreAsciiCase("sep="))
+            {
+                separators += OUStringChar(sLine[4]);
+                break;
+            }
+            else if (sLine.getLength() == 7 && sLine[6] == '"' && sLine.startsWithIgnoreAsciiCase("\"sep="))
+            {
+                separators += OUStringChar(sLine[5]);
+                break;
+            }
+        }
+
+        // Count the occurrences of each character within the line.
+        // Skip strings.
+        const sal_Unicode *pEnd = sLine.getStr() + sLine.getLength();
+        for (const sal_Unicode *p = sLine.getStr(); p < pEnd; p++)
+        {
+            if (*p == cStringDelimiter)
+            {
+                bIsDelimiter = !bIsDelimiter;
+                continue;
+            }
+            if (bIsDelimiter)
+                continue;
+
+            // If restricted only to common separators then skip the rest
+            if (bForceCommonSeps && usetCommonSeps.find(*p) == usetCommonSeps.end())
+                continue;
+
+            auto it_elem = aCharsCount.find(*p);
+            if (it_elem == aCharsCount.cend())
+                aCharsCount.insert(std::pair<sal_uInt32, sal_uInt32>(*p, 1));
+            else
+                it_elem->second ++;
+        }
+
+        if (bIsDelimiter)
+            continue;
+
+        nLinesCount ++;
+
+        // For each character count the lines that contain it and different number of occurences.
+        // And the global maximum for the first statistic.
+        for (auto aCurLineChar=aCharsCount.cbegin(); aCurLineChar != aCharsCount.cend(); aCurLineChar++)
+        {
+            auto aCurStats = aStats.find(aCurLineChar->first);
+            if (aCurStats == aStats.cend())
+                aStats.insert(std::pair<sal_Unicode, std::pair<sal_uInt32, sal_uInt32>>(aCurLineChar->first, std::pair<sal_uInt32, sal_uInt32>(1, 1)));
+            else
+            {
+                aCurStats->second.first ++;// Increment number of lines that contain the current character
+
+                std::vector<std::unordered_map<sal_Unicode, sal_uInt32>>::const_iterator aPrevLineChar;
+                for (aPrevLineChar=aLinesCharsCount.cbegin(); aPrevLineChar != aLinesCharsCount.cend(); aPrevLineChar++)
+                {
+                    auto aPrevStats = aPrevLineChar->find(aCurLineChar->first);
+                    if (aPrevStats != aPrevLineChar->cend() && aPrevStats->second == aCurLineChar->second)
+                        break;
+                }
+                if (aPrevLineChar == aLinesCharsCount.cend())
+                    aCurStats->second.second ++;// Increment number of different number of occurences.
+
+                // Update the maximum of number of lines that contain the same character. This is a global value.
+                if (nMaxLinesSameChar < aCurStats->second.first)
+                    nMaxLinesSameChar = aCurStats->second.first;
+            }
+        }
+
+        aLinesCharsCount.emplace_back();
+        aLinesCharsCount[aLinesCharsCount.size() - 1].swap(aCharsCount);
+    }
+
+    // Compute the global minimum of different number of occurences.
+    // But only for characters which occur in a maximum number of lines (previously computed).
+    for (auto it=aStats.cbegin(); it != aStats.cend(); it++)
+        if (it->second.first == nMaxLinesSameChar && nMinDiffs > it->second.second)
+            nMinDiffs = it->second.second;
+
+    // Compute the initial list of separators: those with the maximum lines of occurence and
+    // the minimum of different number of occurences.
+    for (auto it=aStats.cbegin(); it != aStats.cend(); it++)
+        if (it->second.first == nMaxLinesSameChar && it->second.second == nMinDiffs)
+            sInitSeps += OUStringChar(it->first);
+
+    // If forced to most common or there are multiple separators then pick up only the most common by importance.
+    if (bForceCommonSeps || sInitSeps.getLength() > 1)
+    {
+        sal_Int32 nInitSepIdx;
+        sal_Int32 nComSepIdx;
+        for (nComSepIdx = 0; nComSepIdx < sCommonSeps.getLength(); nComSepIdx++)
+        {
+            sal_Unicode c = sCommonSeps[nComSepIdx];
+            for (nInitSepIdx = sInitSeps.getLength() - 1; nInitSepIdx >= 0; nInitSepIdx --)
+            {
+                if (c == sInitSeps[nInitSepIdx])
+                {
+                    separators += OUStringChar(c);
+                    break;
+                }
+            }
+
+            if (!bAllowMultipleSeps && nInitSepIdx >= 0)
+                break;
+        }
+    }
+
+    // If there are no most common separators then keep the initial list.
+    if (!bForceCommonSeps && !separators.getLength())
+    {
+        if (bAllowMultipleSeps)
+            separators = sInitSeps;
+        else
+            separators = OUStringChar(sInitSeps[0]);
+    }
+
+    stream.Seek(nInitPos);
+}
+
+void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterOptions, bool bForceDetect)
+{
+    rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
+    std::u16string_view aSeps;
+    std::u16string_view aDelimiter;
+    std::u16string_view aCharSet;
+    std::u16string_view aRest;
+    OUString aOrigFilterOpts = aFilterOptions;
+    bool bDelimiter = false, bCharSet = false, bRest = false; // This indicates the presence of the token even if empty ;)
+
+    if (aFilterOptions.isEmpty() && !bForceDetect)
+        return;
+    const std::u16string_view aDetect = u"DETECT";
+    sal_Int32 nPos = 0;
+
+    // Get first three tokens as they are the only tokens that affect detection.
+    aSeps = o3tl::getToken(aOrigFilterOpts, 0, ',', nPos);
+    bDelimiter = (nPos >= 0);
+    if (bDelimiter)
+        aDelimiter = o3tl::getToken(aOrigFilterOpts, 0, ',', nPos);
+    bCharSet = (nPos >= 0);
+    if (bCharSet)
+        aCharSet = o3tl::getToken(aOrigFilterOpts, 0, ',', nPos);
+    bRest = (nPos >= 0);
+    if (bRest)
+        aRest = std::basic_string_view<sal_Unicode>(aOrigFilterOpts.getStr() + nPos, aOrigFilterOpts.getLength() - nPos);
+
+    // Detect charset
+    if (bForceDetect || aCharSet == aDetect)
+    {
+        SvStreamEndian endian;
+        DetectCharSet(stream, eCharSet, endian);
+        if (eCharSet == RTL_TEXTENCODING_UNICODE)
+            stream.SetEndian(endian);
+    }
+    else if (!aCharSet.empty())
+        eCharSet = o3tl::toInt32(aCharSet);
+
+
+    //Detect separators
+    aFilterOptions = "";
+    if (bForceDetect || aSeps == aDetect)
+    {
+        OUString separators;
+        DetectCsvSeparators(stream, eCharSet, separators, static_cast<sal_Unicode>(o3tl::toInt32(aDelimiter)));
+
+        sal_Int32 nLen = separators.getLength();
+        for (sal_Int32 nSep = 0; nSep < nLen; nSep ++)
+        {
+            if (nSep)
+                aFilterOptions += "/";
+            aFilterOptions += OUString::number(separators[nSep]);
+        }
+    }
+    else
+        // For now keep the provided values.
+        aFilterOptions = aSeps;
+
+    OUStringChar cComma = u',';
+    if (bDelimiter || bForceDetect)
+        aFilterOptions += cComma + aDelimiter;
+    if (bCharSet || bForceDetect)
+        aFilterOptions += cComma + (aCharSet == aDetect || bForceDetect ? OUString::number(eCharSet) : aCharSet);
+    if (bRest)
+        aFilterOptions += cComma + aRest;
+}
+
+void SfxObjectShell::DetectFilterOptions(SfxMedium* pMedium, bool bForceDetect)
+{
+    std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
+    SfxItemSet& rSet = pMedium->GetItemSet();
+    const SfxStringItem* pOptions = rSet.GetItem(SID_FILE_FILTEROPTIONS, false);
+
+    // Skip if filter options are missing and the detection is not enforced
+    if (!bForceDetect && (!pFilter || !pOptions))
+        return;
+
+    if (pFilter->GetName() == "Text - txt - csv (StarCalc)")
+    {
+        css::uno::Reference< css::io::XInputStream > xInputStream = pMedium->GetInputStream();
+        if (!xInputStream.is())
+            return;
+        std::unique_ptr<SvStream> pInStream = utl::UcbStreamHelper::CreateStream(xInputStream);
+        if (!pInStream)
+            return;
+
+        OUString aFilterOptions = pOptions->GetValue();
+        DetectCsvFilterOptions(*pInStream, aFilterOptions, bForceDetect);
+        rSet.Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aFilterOptions));
+    }
+}
+
 ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const * pDoc )
 {
     ErrCode nError = ERRCODE_NONE;
@@ -880,6 +1199,14 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
     const SfxStringItem* pOptions = rSet.GetItem(SID_FILE_FILTEROPTIONS, false);
     const SfxUnoAnyItem* pData = rSet.GetItem(SID_FILTER_DATA, false);
     const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+
+    // Process earlier as the input could contain express detection instructions.
+    // This is relevant for "automatic" use case. For interactive use case the
+    // FilterOptions should not be detected here (the detection is done before entering
+    // interactive state). For now this is focused on CSV files.
+    DetectFilterOptions(pMedium);
+    //::sleep(30);
+
     if ( !pData && (bTiledRendering || !pOptions) )
     {
         css::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();

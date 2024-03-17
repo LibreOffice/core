@@ -45,6 +45,8 @@
 #include <functional>
 #include <sfx2/AccessibilityIssue.hxx>
 
+#include <unotools/ucbstreamhelper.hxx>
+
 namespace weld {class Button; }
 namespace model {class ColorSet; }
 struct NamedColor;
@@ -443,6 +445,10 @@ public:
     const css::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
     bool                        SetModifyPasswordInfo( const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
+    static void                 DetectCharSet(SvStream& stream, rtl_TextEncoding& eCharSet, SvStreamEndian& endian);
+    static void                 DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCharSet, OUString& separators, sal_Unicode cStringDelimiter, bool bForceCommonSeps = true,  bool bAllowMultipleSeps = false);
+    static void                 DetectCsvFilterOptions(SvStream& stream, OUString& aFilterOptions, bool bForceDetect = false);
+    static void                 DetectFilterOptions(SfxMedium* pMedium, bool bForceDetect = false);
     static ErrCode              HandleFilter( SfxMedium* pMedium, SfxObjectShell const * pDoc );
 
     virtual bool                PrepareClose(bool bUI = true);

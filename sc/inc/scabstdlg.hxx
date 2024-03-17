@@ -417,7 +417,8 @@ public:
     virtual     VclPtr<AbstractScImportAsciiDlg> CreateScImportAsciiDlg(weld::Window* pParent,
                                                                     const OUString& aDatName,
                                                                     SvStream* pInStream,
-                                                                    ScImportAsciiCall eCall) = 0;
+                                                                    ScImportAsciiCall eCall,
+                                                                    ScAsciiOptions* aOptions = nullptr) = 0;
 
     virtual     VclPtr<AbstractScTextImportOptionsDlg> CreateScTextImportOptionsDlg(weld::Window* pParent) = 0;
 

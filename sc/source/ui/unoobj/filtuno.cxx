@@ -179,15 +179,25 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
     {
         //  ascii import is special...
 
+        ScAsciiOptions aInOptions, *pInOptions = nullptr;
         INetURLObject aURL( aFileName );
         // tdf#132421 - don't URL encode filename for the import ASCII dialog title
         OUString aPrivDatName(aURL.GetLastName(INetURLObject::DecodeMechanism::Unambiguous));
         std::unique_ptr<SvStream> pInStream;
         if ( xInputStream.is() )
+        {
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
+            if (aFilterOptions.isEmpty())
+                aFilterOptions = "DETECT,34,DETECT,,,,,,,,,,,,";
+            SfxObjectShell::DetectCsvFilterOptions(*pInStream, aFilterOptions);
+
+            aInOptions.ReadFromString(aFilterOptions);
+            pInOptions = &aInOptions;
+        }
+
         ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(Application::GetFrameWeld(xDialogParent), aPrivDatName,
-                                                                                  pInStream.get(), SC_IMPORTFILE));
+                                                                                  pInStream.get(), SC_IMPORTFILE, pInOptions));
         if ( pDlg->Execute() == RET_OK )
         {
             ScAsciiOptions aOptions;

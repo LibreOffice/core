@@ -1,4 +1,4 @@
-WITHOUT QUOTES
+WITHOUT QUOTES,
 1 apostrophe,'
 2 apostrophes,''
 3 apostrophes,'''
@@ -6,7 +6,7 @@ A number,'3
 A word,'word
 A misspelled word,'mword
 
-WITH QUOTES
+WITH QUOTES,
 1 apostrophe,"'"
 2 apostrophes,"''"
 3 apostrophes,"'''"

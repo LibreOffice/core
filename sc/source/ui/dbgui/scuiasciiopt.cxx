@@ -316,7 +316,8 @@ static void lcl_SaveSeparators(
 }
 
 ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aDatName,
-                                   SvStream* pInStream, ScImportAsciiCall eCall)
+                                   SvStream* pInStream, ScImportAsciiCall eCall,
+                                   const ScAsciiOptions* aOptions)
     : GenericDialogController(pParent, "modules/scalc/ui/textimportcsv.ui", "TextImportCsvDialog")
     , mpDatStream(pInStream)
     , mnStreamPos(pInStream ? pInStream->Tell() : 0)
@@ -385,7 +386,27 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     sal_Int32 nFromRow = 1;
     sal_Int32 nCharSet = -1;
     sal_Int32 nLanguage = 0;
-    lcl_LoadSeparators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
+
+    if (aOptions)
+    {
+        if (!aOptions->GetFieldSeps().isEmpty())
+            sFieldSeparators = aOptions->GetFieldSeps();
+        if (aOptions->GetTextSep())
+            sTextSeparators = OUStringChar(aOptions->GetTextSep());
+        bMergeDelimiters = aOptions->IsMergeSeps();
+        bFixedWidth = aOptions->IsFixedLen();
+        bQuotedFieldAsText = aOptions->IsQuotedAsText();
+        bDetectSpecialNum = aOptions->IsDetectSpecialNumber();
+        bDetectScientificNum = aOptions->IsDetectScientificNumber();
+        bEvaluateFormulas = aOptions->IsEvaluateFormulas();
+        bSkipEmptyCells = aOptions->IsSkipEmptyCells();
+        bRemoveSpace = aOptions->IsRemoveSpace();
+        nFromRow = aOptions->GetStartRow();
+        nCharSet = aOptions->GetCharSet();
+        nLanguage = static_cast<sal_uInt16>(aOptions->GetLanguage());
+    }
+    else
+        lcl_LoadSeparators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bDetectScientificNum, bFixedWidth, nFromRow,
                          nCharSet, nLanguage, bSkipEmptyCells, bRemoveSpace, bEvaluateFormulas, meCall);
     // load from saved settings
@@ -415,8 +436,8 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
         mxNfRow->set_value(nFromRow);
 
     // Clipboard is always Unicode, else detect.
-    rtl_TextEncoding ePreselectUnicode = (meCall == SC_IMPORTFILE ?
-            RTL_TEXTENCODING_DONTKNOW : RTL_TEXTENCODING_UNICODE);
+    rtl_TextEncoding ePreselectUnicode = (aOptions ? aOptions->GetCharSet() : (meCall == SC_IMPORTFILE ?
+            RTL_TEXTENCODING_DONTKNOW : RTL_TEXTENCODING_UNICODE));
     // Sniff for Unicode / not
     if( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW && mpDatStream )
     {
@@ -463,7 +484,9 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
         mnStreamPos = mpDatStream->Tell();
     }
 
-    if (bIsTSV)
+    if (aOptions && !maFieldSeparators.isEmpty())
+        SetSeparators(0);
+    else if (bIsTSV)
         SetSeparators('\t');
     else
     {
