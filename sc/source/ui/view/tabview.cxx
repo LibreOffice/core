@@ -1097,7 +1097,7 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
         nViewPos = aViewData.GetPosY( (pScroll == aVScrollTop.get()) ?
                                         SC_SPLIT_TOP : SC_SPLIT_BOTTOM );
 
-    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = bHoriz && aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
 
     ScrollType eType = pScroll->GetScrollType();
     if ( eType == ScrollType::Drag )
@@ -1135,7 +1135,7 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                 nScrollMin = aViewData.GetFixPosX();
             if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == aVScrollBottom.get() )
                 nScrollMin = aViewData.GetFixPosY();
-            tools::Long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
+            tools::Long nScrollPos = GetScrollBarPos( *pScroll, bLayoutRTL ) + nScrollMin;
 
             OUString aHelpStr;
             tools::Rectangle aRect;
@@ -1167,6 +1167,22 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
     }
     else
         bDragging = false;
+
+    if ( bHoriz && bLayoutRTL )
+    {
+        // change scroll type so visible/previous cells calculation below remains the same
+        switch ( eType )
+        {
+            case ScrollType::LineUp:   eType = ScrollType::LineDown; break;
+            case ScrollType::LineDown: eType = ScrollType::LineUp;   break;
+            case ScrollType::PageUp:   eType = ScrollType::PageDown; break;
+            case ScrollType::PageDown: eType = ScrollType::PageUp;   break;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
+    }
 
     tools::Long nDelta(0);
     switch ( eType )
@@ -1200,7 +1216,7 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                 if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == aVScrollBottom.get() )
                     nScrollMin = aViewData.GetFixPosY();
 
-                tools::Long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
+                tools::Long nScrollPos = GetScrollBarPos( *pScroll, bLayoutRTL ) + nScrollMin;
                 nDelta = nScrollPos - nViewPos;
 
                 // tdf#152406 Disable anti-jitter code for scroll wheel events

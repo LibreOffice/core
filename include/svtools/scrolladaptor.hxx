@@ -71,6 +71,8 @@ public:
 
     void SetThickness(int nThickness);
 
+    void SetSwapArrows(bool bSwap = true);
+
     ScrollAdaptor(vcl::Window* pParent, bool bHori);
     virtual void dispose() override;
 };
