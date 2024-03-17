@@ -572,7 +572,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
             Hints.window_group = GetShellWindow();
     }
 
-    maGeometry.setPosSize({ x, y }, { w, h });
+    maGeometry.setPosSize({ x, y }, { static_cast<tools::Long>(w), static_cast<tools::Long>(h) });
     updateScreenNumber();
 
     XSync( GetXDisplay(), False );
@@ -1470,7 +1470,7 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
                               pState->width(), pState->height());
             // guess maximized geometry from last time
             maGeometry.setPos({ pState->GetMaximizedX(), pState->GetMaximizedY() });
-            maGeometry.setSize({ pState->GetMaximizedWidth(), pState->GetMaximizedHeight() });
+            maGeometry.setSize({ static_cast<tools::Long>(pState->GetMaximizedWidth()), static_cast<tools::Long>(pState->GetMaximizedHeight()) });
             cairo_xlib_surface_set_size(mpSurface,  pState->GetMaximizedWidth(), pState->GetMaximizedHeight());
             updateScreenNumber();
         }
@@ -3478,7 +3478,7 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
          *  note: this works because hWM_Parent is direct child of root,
          *  not necessarily parent of GetShellWindow()
          */
-        maGeometry.setPosSize({ xp + nLeft, yp + nTop }, { w, h });
+        maGeometry.setPosSize({ xp + nLeft, yp + nTop }, { static_cast<tools::Long>(w), static_cast<tools::Long>(h) });
     }
 
     // limit width and height if we are too large: #47757
