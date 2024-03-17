@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
 #include <scitems.hxx>
 #include <editeng/justifyitem.hxx>
 #include <o3tl/safeint.hxx>
@@ -416,7 +417,7 @@ void ScTable::SetScenario( bool bFlag )
 
 void ScTable::SetLink( ScLinkMode nMode,
                         const OUString& rDoc, const OUString& rFlt, const OUString& rOpt,
-                        const OUString& rTab, sal_uLong nRefreshDelay )
+                        const OUString& rTab, sal_Int32 nRefreshDelay )
 {
     nLinkMode = nMode;
     aLinkDoc = rDoc;        // File

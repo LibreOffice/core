@@ -24,6 +24,7 @@
 #include "attarray.hxx"
 #include "column.hxx"
 #include "colcontainer.hxx"
+#include <sal/types.h>
 #include "sortparam.hxx"
 #include "types.hxx"
 #include <formula/types.hxx>
@@ -169,7 +170,7 @@ private:
     OUString        aLinkFlt;
     OUString        aLinkOpt;
     OUString        aLinkTab;
-    sal_uLong       nLinkRefreshDelay;
+    sal_Int32       nLinkRefreshDelay;
     ScLinkMode      nLinkMode;
 
     // page style template
@@ -377,10 +378,10 @@ public:
     const OUString& GetLinkFlt() const                       { return aLinkFlt; }
     const OUString& GetLinkOpt() const                       { return aLinkOpt; }
     const OUString& GetLinkTab() const                       { return aLinkTab; }
-    sal_uLong   GetLinkRefreshDelay() const                  { return nLinkRefreshDelay; }
+    sal_Int32  GetLinkRefreshDelay() const                  { return nLinkRefreshDelay; }
 
     void        SetLink( ScLinkMode nMode, const OUString& rDoc, const OUString& rFlt,
-                        const OUString& rOpt, const OUString& rTab, sal_uLong nRefreshDelay );
+                        const OUString& rOpt, const OUString& rTab, sal_Int32 nRefreshDelay );
 
     sal_Int64   GetHashCode () const;
 

@@ -352,7 +352,7 @@ void ScDocShell::UpdateLinks()
         OUString aDocName = m_pDocument->GetLinkDoc(i);
         OUString aFltName = m_pDocument->GetLinkFlt(i);
         OUString aOptions = m_pDocument->GetLinkOpt(i);
-        sal_uInt32 nRefresh  = m_pDocument->GetLinkRefreshDelay(i);
+        sal_Int32 nRefresh  = m_pDocument->GetLinkRefreshDelay(i);
         bool bThere = false;
         for (SCTAB j = 0; j < i && !bThere; ++j)                // several times in the document?
         {

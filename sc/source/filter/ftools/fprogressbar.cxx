@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/solar.h>
+#include <sal/types.h>
 #include <fprogressbar.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -128,7 +128,7 @@ void ScfProgressBar::IncreaseProgressBar( std::size_t nDelta )
         if( nNewPos >= mnNextUnitPos )
         {
             mnNextUnitPos = nNewPos + mnUnitSize;
-            mxSysProgress->SetState( static_cast< sal_uLong >( nNewPos / mnSysProgressScale ) );
+            mxSysProgress->SetState( static_cast< sal_uInt64 >( nNewPos / mnSysProgressScale ) );
         }
     }
     else

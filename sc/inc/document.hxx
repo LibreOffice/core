@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vclptr.hxx>
 #include "patattr.hxx"
+#include <sal/types.h>
 #include "scdllapi.h"
 #include "interpretercontext.hxx"
 #include "rangelst.hxx"
@@ -1027,10 +1028,10 @@ public:
     OUString                                                GetLinkFlt( SCTAB nTab ) const;
     OUString                                                GetLinkOpt( SCTAB nTab ) const;
     SC_DLLPUBLIC OUString                                   GetLinkTab( SCTAB nTab ) const;
-    sal_uLong                                               GetLinkRefreshDelay( SCTAB nTab ) const;
+    sal_Int32                                               GetLinkRefreshDelay( SCTAB nTab ) const;
     void                                                    SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
                                                                      const OUString& rFilter, const OUString& rOptions,
-                                                                     const OUString& rTabName, sal_uLong nRefreshDelay );
+                                                                     const OUString& rTabName, sal_Int32 nRefreshDelay );
     bool                                                    HasLink( std::u16string_view rDoc,
                                                                      std::u16string_view rFilter, std::u16string_view rOptions ) const;
     SC_DLLPUBLIC bool                                       LinkExternalTab( SCTAB& nTab, const OUString& aDocTab,

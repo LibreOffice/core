@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <scitems.hxx>
@@ -536,7 +537,7 @@ OUString ScDocument::GetLinkTab( SCTAB nTab ) const
     return OUString();
 }
 
-sal_uLong ScDocument::GetLinkRefreshDelay( SCTAB nTab ) const
+sal_Int32 ScDocument::GetLinkRefreshDelay( SCTAB nTab ) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
         return pTable->GetLinkRefreshDelay();
@@ -545,7 +546,7 @@ sal_uLong ScDocument::GetLinkRefreshDelay( SCTAB nTab ) const
 
 void ScDocument::SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
                             const OUString& rFilter, const OUString& rOptions,
-                            const OUString& rTabName, sal_uLong nRefreshDelay )
+                            const OUString& rTabName, sal_Int32 nRefreshDelay )
 {
     if (ScTable* pTable = FetchTable(nTab))
         pTable->SetLink(nMode, rDoc, rFilter, rOptions, rTabName, nRefreshDelay);
@@ -604,7 +605,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
     else
         return false;
 
-    sal_uLong nRefreshDelay = 0;
+    sal_Int32 nRefreshDelay = 0;
 
     bool bWasThere = HasLink( aFileName, aFilterName, aOptions );
     SetLink( rTab, ScLinkMode::VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );

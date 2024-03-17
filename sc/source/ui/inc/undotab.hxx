@@ -291,7 +291,7 @@ private:
     OUString    aDocName;
     OUString    aFltName;
     OUString    aOptions;
-    sal_uLong   nRefreshDelay;
+    sal_Int32   nRefreshDelay;
     sal_uInt16  nCount;
     std::unique_ptr<SCTAB[]>
                 pTabs;
