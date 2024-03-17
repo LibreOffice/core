@@ -810,6 +810,18 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)
     CPPUNIT_ASSERT_EQUAL(Color(0x0A0A0A), pColorSet->getColor(model::ThemeColorType::Hyperlink));
     CPPUNIT_ASSERT_EQUAL(Color(0x440000), pColorSet->getColor(model::ThemeColorType::Accent1));
 }
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, test_scene3d_ooxml_light)
+{
+    // The document has a shape in 3D mode. The import of ooxml light rigs can produce light
+    // levels outside the 0..100 range allowed in ODF. Such high levels are needed for rendering
+    // similar to MS Office.
+    loadFromFile(u"Scene3d_LightRig_threePt.pptx");
+
+    // Without fix this would have failed with validation error.
+    save("impress8");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

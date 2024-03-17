@@ -125,6 +125,7 @@
 #include <XMLBase64Export.hxx>
 #include <XMLImageMapExport.hxx>
 #include <memory>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
@@ -4523,6 +4524,8 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         double fExtrusionFirstLightLevel = 0;
                                         if ( rProp.Value >>= fExtrusionFirstLightLevel )
                                         {
+                                            fExtrusionFirstLightLevel =
+                                                std::clamp(fExtrusionFirstLightLevel, 0.0, 100.0);
                                             ::sax::Converter::convertDouble(
                                                 aStrBuffer,
                                                 fExtrusionFirstLightLevel,
@@ -4540,6 +4543,8 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         double fExtrusionSecondLightLevel = 0;
                                         if ( rProp.Value >>= fExtrusionSecondLightLevel )
                                         {
+                                            fExtrusionSecondLightLevel =
+                                                std::clamp(fExtrusionSecondLightLevel, 0.0, 100.0);
                                             ::sax::Converter::convertDouble(
                                                 aStrBuffer,
                                                 fExtrusionSecondLightLevel,
