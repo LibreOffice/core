@@ -5611,26 +5611,12 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, std::unique_ptr<
     bool bUndo = rDoc.IsUndoEnabled();
     ScDocumentUniquePtr pUndoDoc;
     ScRange aCombinedRange = rRanges.Combine();
-    ScRange aCompleteRange;
     if(bUndo)
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
         pUndoDoc->InitUndo( rDoc, nTab, nTab );
-
-        if(pFormat)
-        {
-            aCompleteRange = aCombinedRange;
-        }
-        if(nOldFormat)
-        {
-            ScConditionalFormat* pOldFormat = rDoc.GetCondFormList(nTab)->GetFormat(nOldFormat);
-            if(pOldFormat)
-                aCompleteRange.ExtendTo(pOldFormat->GetRange().Combine());
-        }
-
-        rDoc.CopyToDocument(aCompleteRange.aStart.Col(),aCompleteRange.aStart.Row(),nTab,
-                            aCompleteRange.aEnd.Col(),aCompleteRange.aEnd.Row(),nTab,
-                            InsertDeleteFlags::ALL, false, *pUndoDoc);
+        if (const auto* pList = rDoc.GetCondFormList(nTab))
+            pUndoDoc->SetCondFormList(new ScConditionalFormatList(*pUndoDoc, *pList), nTab);
     }
 
     std::unique_ptr<ScRange> pRepaintRange;
@@ -5663,11 +5649,10 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, std::unique_ptr<
     {
         ScDocumentUniquePtr pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
         pRedoDoc->InitUndo( rDoc, nTab, nTab );
-        rDoc.CopyToDocument(aCompleteRange.aStart.Col(),aCompleteRange.aStart.Row(),nTab,
-                            aCompleteRange.aEnd.Col(),aCompleteRange.aEnd.Row(),nTab,
-                            InsertDeleteFlags::ALL, false, *pRedoDoc);
+        if (const auto* pList = rDoc.GetCondFormList(nTab))
+            pRedoDoc->SetCondFormList(new ScConditionalFormatList(*pRedoDoc, *pList), nTab);
         rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoConditionalFormat>(&rDocShell, std::move(pUndoDoc), std::move(pRedoDoc), aCompleteRange));
+                std::make_unique<ScUndoConditionalFormat>(&rDocShell, std::move(pUndoDoc), std::move(pRedoDoc), nTab));
     }
 
     if(pRepaintRange)

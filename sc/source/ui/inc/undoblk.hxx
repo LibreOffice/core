@@ -613,11 +613,13 @@ private:
     void            DoChange( ScDocument* pSrcDoc ) const;
 };
 
+// This class only uses conditional format lists in the undo/redo documents;
+// no other tab data is needed in the documents
 class ScUndoConditionalFormat : public ScSimpleUndo
 {
 public:
     ScUndoConditionalFormat( ScDocShell* pNewDocShell,
-            ScDocumentUniquePtr pUndoDoc, ScDocumentUniquePtr pRedoDoc, const ScRange& rRange);
+            ScDocumentUniquePtr pUndoDoc, ScDocumentUniquePtr pRedoDoc, SCTAB nTab);
     virtual         ~ScUndoConditionalFormat() override;
 
     virtual void    Undo() override;
@@ -631,7 +633,7 @@ private:
     void DoChange(ScDocument* pDoc);
     ScDocumentUniquePtr mpUndoDoc;
     ScDocumentUniquePtr mpRedoDoc;
-    ScRange maRange;
+    SCTAB mnTab;
 };
 
 class ScUndoConditionalFormatList : public ScSimpleUndo
