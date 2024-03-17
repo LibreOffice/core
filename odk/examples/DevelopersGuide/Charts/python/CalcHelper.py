@@ -1,3 +1,12 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
 import math
 import random
 import sys
@@ -140,10 +149,10 @@ class CalcHelper:
         try:
             # get the sheet to insert the chart
             sheet = self.get_data_sheet()
-            cell_range = sheet[0 : row_count - 1, 0 : column_count - 1]
+            cell_range = sheet[0 : row_count, 0 : column_count]
             factor = 2.0 * math.pi / (row_count - 1)
 
-            factor_col = column_count = 2
+            factor_col = column_count + 2
             sheet[0, factor_col - 1].Value = 0.2
             sheet[1, factor_col - 1].String = "Change the factor above and\nwatch the changes in the chart"
 
@@ -187,3 +196,5 @@ class CalcHelper:
                 except Exception as e:
                     print(f"Couldn't initialize Spreadsheet Document: {e}", file=sys.stderr)
                     traceback.print_exc()
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

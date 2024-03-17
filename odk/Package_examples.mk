@@ -49,7 +49,10 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/Charts/java/SelectionChangeListener.java \
     DevelopersGuide/Charts/java/bullet.gif \
     DevelopersGuide/Charts/python/CalcHelper.py \
+    DevelopersGuide/Charts/python/ChartHelper.py \
     DevelopersGuide/Charts/python/ChartInCalc.py \
+    DevelopersGuide/Charts/python/ChartInDraw.py \
+    DevelopersGuide/Charts/python/ChartInWriter.py \
     DevelopersGuide/Charts/python/Helper.py \
     DevelopersGuide/Charts/python/bullet.gif \
     DevelopersGuide/Components/Addons/JobsAddon/Addons.xcu \
