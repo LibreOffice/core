@@ -502,6 +502,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
         }
+        else if (strcmp(argv[2], "sc-html") == 0)
+        {
+            static FFilterCall pfnImport(nullptr);
+            if (!pfnImport)
+            {
+                pfnImport = load(u"libscfiltlo.so", "TestImportCalcHTML");
+            }
+            SvFileStream aFileStream(out, StreamMode::READ);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
+        }
         else if (strcmp(argv[2], "slk") == 0)
         {
             static FFilterCall pfnImport(nullptr);

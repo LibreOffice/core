@@ -3488,6 +3488,22 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSLK(SvStream &rStream)
     return aImpEx.ImportStream(rStream, OUString(), SotClipboardFormatId::SYLK);
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCalcHTML(SvStream &rStream)
+{
+    ScDLL::Init();
+    ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
+    aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
+    aDocument.SetInsertingFromOtherDoc(true);
+    aDocument.SetImportingXML(true);
+
+    ScImportExport aImpEx(aDocument);
+    return aImpEx.ImportStream(rStream, OUString(), SotClipboardFormatId::HTML);
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream)
 {
     ScDLL::Init();
