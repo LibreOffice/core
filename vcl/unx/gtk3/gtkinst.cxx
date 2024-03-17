@@ -8745,6 +8745,11 @@ public:
             gtk_widget_set_size_request(GTK_WIDGET(m_pScrollbar), nThickness, -1);
     }
 
+    virtual void set_scroll_swap_arrows(bool /* bSwap */) override
+    {
+        // Related: tdf#93352 do nothing since GtkScrollbar has no arrows
+    }
+
     virtual ~GtkInstanceScrollbar() override
     {
         g_signal_handler_disconnect(m_pAdjustment, m_nAdjustChangedSignalId);

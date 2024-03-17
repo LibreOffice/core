@@ -85,6 +85,7 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     meScrollType        = ScrollType::DontKnow;
     mbCalcSize          = true;
     mbFullDrag          = false;
+    mbSwapArrows        = false;
 
     ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, nullptr );
@@ -240,6 +241,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
 
         const tools::Rectangle aControlRegion( Point(0,0), aSize );
         tools::Rectangle aBtn1Region, aBtn2Region, aTrackRegion, aBoundingRegion;
+        const bool bSwapArrows = mbSwapArrows || IsRTLEnabled();
 
         // reset rectangles to empty *and* (0,0) position
         maThumbRect = tools::Rectangle();
@@ -248,9 +250,9 @@ void ScrollBar::ImplCalc( bool bUpdate )
 
         if ( GetStyle() & WB_HORZ )
         {
-            if ( GetNativeControlRegion( ControlType::Scrollbar, IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft,
+            if ( GetNativeControlRegion( ControlType::Scrollbar, bSwapArrows? ControlPart::ButtonRight: ControlPart::ButtonLeft,
                         aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aBtn1Region ) &&
-                 GetNativeControlRegion( ControlType::Scrollbar, IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight,
+                 GetNativeControlRegion( ControlType::Scrollbar, bSwapArrows? ControlPart::ButtonLeft: ControlPart::ButtonRight,
                         aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aBtn2Region ) )
             {
                 maBtn1Rect = aBtn1Region;

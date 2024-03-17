@@ -122,4 +122,6 @@ tools::Long ScrollAdaptor::DoScroll(tools::Long nNewPos)
 
 void ScrollAdaptor::SetThickness(int nThickness) { m_xScrollBar->set_scroll_thickness(nThickness); }
 
+void ScrollAdaptor::SetSwapArrows(bool bSwap) { m_xScrollBar->set_scroll_swap_arrows(bSwap); }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

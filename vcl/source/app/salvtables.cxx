@@ -2592,6 +2592,8 @@ public:
         else
             m_xScrollBar->set_width_request(nThickness);
     }
+
+    virtual void set_scroll_swap_arrows(bool bSwap) override { m_xScrollBar->SetSwapArrows(bSwap); }
 };
 }
 

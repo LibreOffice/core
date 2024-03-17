@@ -241,7 +241,7 @@ private:
     void            UpdateVarZoom();
 
     static void     SetScrollBar( ScrollAdaptor& rScroll, tools::Long nRangeMax, tools::Long nVisible, tools::Long nPos, bool bLayoutRTL );
-    static tools::Long     GetScrollBarPos( const ScrollAdaptor& rScroll );
+    static tools::Long     GetScrollBarPos( const ScrollAdaptor& rScroll, bool bLayoutRTL );
 
     void            GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                            SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode,
