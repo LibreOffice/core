@@ -28,16 +28,21 @@
 #include <functional>
 #include <utility>
 
-
-#define GCM_PROPERTY_ID_POS_X               1
-#define GCM_PROPERTY_ID_POS_Y               2
-#define GCM_PROPERTY_ID_WIDTH               3
-#define GCM_PROPERTY_ID_HEIGHT              4
-#define GCM_PROPERTY_ID_NAME                5
-#define GCM_PROPERTY_ID_TABINDEX            6
-#define GCM_PROPERTY_ID_STEP                7
-#define GCM_PROPERTY_ID_TAG                 8
-#define GCM_PROPERTY_ID_RESOURCERESOLVER    9
+namespace
+{
+    enum GcmPropertyId : sal_Int32
+    {
+        GCM_PROPERTY_ID_POS_X            = 1,
+        GCM_PROPERTY_ID_POS_Y            = 2,
+        GCM_PROPERTY_ID_WIDTH            = 3,
+        GCM_PROPERTY_ID_HEIGHT           = 4,
+        GCM_PROPERTY_ID_NAME             = 5,
+        GCM_PROPERTY_ID_TABINDEX         = 6,
+        GCM_PROPERTY_ID_STEP             = 7,
+        GCM_PROPERTY_ID_TAG              = 8,
+        GCM_PROPERTY_ID_RESOURCERESOLVER = 9
+    };
+}
 
 constexpr OUStringLiteral GCM_PROPERTY_POS_X = u"PositionX";
 constexpr OUStringLiteral GCM_PROPERTY_POS_Y = u"PositionY";
