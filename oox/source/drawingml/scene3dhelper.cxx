@@ -837,10 +837,10 @@ void lcl_tweakLightRig(std::vector<basegfx::B3DVector>& rLightDirVec, PrstLightR
         rLightRig.fAmbient = 0.35; // instead 0.11 resp. 0.13
     }
     else if (rLightRig.sLightRigName == u"freezing" || rLightRig.sLightRigName == u"morning"
-             || rLightRig.sLightRigName == u"sunrise")
+             || rLightRig.sLightRigName == u"sunrise" || rLightRig.sLightRigName == u"threePt")
     {
-        // These rigs have no ambient color but four lights. The objects are too dark with only
-        // two lights.
+        // These rigs have no ambient color but three or four lights. The objects are too dark with
+        // only two lights.
         rLightRig.fAmbient = 0.4;
     }
     else if (rLightRig.sLightRigName == u"sunset")
