@@ -33,6 +33,7 @@
 #include <osl/signal.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
+#include <sal/backtrace.hxx>
 
 #define ACT_IGNORE  1
 #define ACT_EXIT    2
@@ -280,8 +281,7 @@ namespace
 {
 void printStack(int sig)
 {
-    void *buffer[MAX_STACK_FRAMES];
-    int size = backtrace( buffer, SAL_N_ELEMENTS(buffer) );
+    std::unique_ptr<sal::BacktraceState> bs = sal::backtrace_get(MAX_STACK_FRAMES);
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
 
@@ -289,11 +289,8 @@ void printStack(int sig)
     fprintf( stderr, "Please turn on Enable Crash Reporting and\nAutomatic Display of Crashlogs in the Console application\n" );
 #endif
 
-    if ( size > 0 )
-    {
-        fputs( "Stack:\n", stderr );
-        backtrace_symbols_fd( buffer, size, fileno(stderr) );
-    }
+    fputs( "Stack:\n", stderr );
+    fprintf( stderr, "%s\n", OUStringToOString( sal::backtrace_to_string(bs.get()), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 void callSystemHandler(int signal, siginfo_t * info, void * context)
