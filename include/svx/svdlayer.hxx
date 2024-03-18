@@ -62,11 +62,11 @@ class SVXCORE_DLLPUBLIC SdrLayer
     OUString maName;
     OUString maTitle;
     OUString maDescription;
-    SdrModel*  pModel; // For broadcasting
+    SdrModel*  m_pModel; // For broadcasting
     bool mbVisibleODF; // corresponds to ODF draw:display
     bool mbPrintableODF; // corresponds to ODF draw:display
     bool mbLockedODF; // corresponds to ODF draw:protected
-    SdrLayerID nID;
+    SdrLayerID m_nID;
 
     SdrLayer(SdrLayerID nNewID, OUString aNewName);
 
@@ -91,8 +91,8 @@ public:
     void SetLockedODF(bool bLockedODF) { mbLockedODF = bLockedODF; }
     bool IsLockedODF() const { return mbLockedODF; }
 
-    SdrLayerID    GetID() const                               { return nID; }
-    void          SetModel(SdrModel* pNewModel)               { pModel=pNewModel; }
+    SdrLayerID    GetID() const                               { return m_nID; }
+    void          SetModel(SdrModel* pNewModel)               { m_pModel=pNewModel; }
 };
 
 #define SDRLAYER_MAXCOUNT 255
