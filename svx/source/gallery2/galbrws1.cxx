@@ -32,7 +32,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <helpids.h>
 #include <galobj.hxx>
 #include <svx/svxids.hrc>
 #include <svx/gallery1.hxx>
@@ -148,11 +147,9 @@ GalleryBrowser1::GalleryBrowser1(
     , meLastMode          ( GALLERYBROWSERMODE_NONE )
     , m_aCharacterClassficator( ::comphelper::getProcessComponentContext(), SvtSysLocale().GetLanguageTag() )
 {
-    mxNewTheme->set_help_id(HID_GALLERY_NEWTHEME);
     mxNewTheme->connect_clicked( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     mxThemes->make_sorted();
-    mxThemes->set_help_id( HID_GALLERY_THEMELIST );
     mxThemes->connect_changed( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
     mxThemes->connect_popup_menu(LINK(this, GalleryBrowser1, PopupMenuHdl1));
     mxThemes->connect_key_press(LINK(this, GalleryBrowser1, KeyInputHdl1));
@@ -180,9 +177,6 @@ GalleryBrowser1::GalleryBrowser1(
             "com.sun.star.util.URLTransformer", m_xContext ),
         css::uno::UNO_QUERY );
 
-    mxIconButton->set_help_id(HID_GALLERY_ICONVIEW);
-    mxListButton->set_help_id(HID_GALLERY_LISTVIEW);
-
     mxIconButton->connect_toggled( LINK( this, GalleryBrowser1, SelectTbxHdl ) );
     mxListButton->connect_toggled( LINK( this, GalleryBrowser1, SelectTbxHdl ) );
 
@@ -196,8 +190,6 @@ GalleryBrowser1::GalleryBrowser1(
     mxDragDropTargetHelper.reset(new GalleryDragDrop(this, mxListView->get_drop_target()));
     mxListView->connect_drag_begin(LINK(this, GalleryBrowser1, DragBeginHdl));
     mxSearchField->connect_changed( LINK( this, GalleryBrowser1, SearchHdl));
-
-    mxListView->set_help_id(HID_GALLERY_WINDOW);
 
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GalleryBrowser1::meInitMode ) ? GalleryBrowser1::meInitMode : GALLERYBROWSERMODE_ICON );
 

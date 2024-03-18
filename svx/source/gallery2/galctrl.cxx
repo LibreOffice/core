@@ -23,7 +23,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <avmedia/mediaplayer.hxx>
-#include <helpids.h>
 #include <galbrws1.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
@@ -65,8 +64,6 @@ void GalleryPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     SetOutputSizePixel(aSize);
-
-    pDrawingArea->set_help_id(HID_GALLERY_WINDOW);
 
     mxDragDropTargetHelper.reset(new GalleryDragDrop(mpParent, pDrawingArea->get_drop_target()));
 }
@@ -227,7 +224,6 @@ void DialogGalleryPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont)));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-    pDrawingArea->set_help_id(HID_GALLERY_WINDOW);
 }
 
 bool DialogGalleryPreview::SetGraphic( const INetURLObject& _aURL )
@@ -302,7 +298,6 @@ void GalleryIconView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetStyle(GetStyle() | WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_VSCROLL | WB_FLATVALUESET);
     EnableFullItemMode( false );
 
-    SetHelpId( HID_GALLERY_WINDOW );
     SetExtraSpacing( 2 );
     SetItemWidth( S_THUMB + 6 );
     SetItemHeight( S_THUMB + 6 );

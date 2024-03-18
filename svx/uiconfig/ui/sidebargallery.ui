@@ -111,6 +111,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="themelist-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="sidebargallery|RID_SVXSTR_GALLERYPROPS_GALTHEME">Gallery Theme</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sidebargallery|THEMELIST">Click a theme to view the objects associated with the theme.</property>
                           </object>
                         </child>
                       </object>
@@ -161,6 +162,11 @@
                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="gallery-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebargallery|extended_tip|gallery">To insert a Gallery object, select the object, and then drag it into the document.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -208,6 +214,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="gallerylist-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sidebargallery|extended_tip|gallery">To insert a Gallery object, select the object, and then drag it into the document.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -236,6 +247,11 @@
                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="preview-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebargallery|extended_tip|preview">Displays a large preview of the selected gallery item. Double click to close.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -269,7 +285,7 @@
                         <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="icon-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="sidebargallery|RID_SVXSTR_GALLERY_THEMEITEMS">Theme Items</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sidebargallery|extended_tip|icons">Displays the contents of the Gallery as icons.</property>
                           </object>
                         </child>
                       </object>
@@ -288,7 +304,7 @@
                         <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="list-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="sidebargallery|RID_SVXSTR_GALLERY_THEMEITEMS">Theme Items</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sidebargallery|extended_tip|list">Displays the contents of the Gallery as small icons, with title and path information.</property>
                           </object>
                         </child>
                       </object>
@@ -341,6 +357,11 @@
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="use-underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="insert-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sidebargallery|extended_tip|insert">Adds a new theme to the Gallery and lets you choose the files to include in the theme.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">4</property>
