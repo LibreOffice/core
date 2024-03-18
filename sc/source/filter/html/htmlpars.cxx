@@ -1608,13 +1608,14 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
     switch ( pInfo->nToken )
     {
         case HtmlTokenId::META:
+        if (ScDocShell* pDocSh = mpDoc->GetDocumentShell())
         {
             HTMLParser* pParser = static_cast<HTMLParser*>(pInfo->pParser);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                static_cast<cppu::OWeakObject*>(mpDoc->GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
+                static_cast<cppu::OWeakObject*>(pDocSh->GetModel()), uno::UNO_QUERY_THROW);
             pParser->ParseMetaOptions(
                 xDPS->getDocumentProperties(),
-                mpDoc->GetDocumentShell()->GetHeaderAttributes() );
+                pDocSh->GetHeaderAttributes() );
         }
         break;
         case HtmlTokenId::TITLE_ON:
@@ -1625,12 +1626,13 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         break;
         case HtmlTokenId::TITLE_OFF:
         {
-            if ( bInTitle && !aString.isEmpty() )
+            ScDocShell* pDocSh = mpDoc->GetDocumentShell();
+            if ( bInTitle && !aString.isEmpty() && pDocSh )
             {
                 // Remove blanks from line breaks
                 aString = aString.trim();
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                    static_cast<cppu::OWeakObject*>(mpDoc->GetDocumentShell()->GetModel()),
+                    static_cast<cppu::OWeakObject*>(pDocSh->GetModel()),
                     uno::UNO_QUERY_THROW);
                 xDPS->getDocumentProperties()->setTitle(aString);
             }
