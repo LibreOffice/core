@@ -935,8 +935,8 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 void ChartController::execute_DoubleClick( const Point* pMousePixel )
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    bool isMobilePhone = pViewShell && pViewShell->isLOKMobilePhone();
-    if (isMobilePhone)
+    bool notAllowed = pViewShell && (pViewShell->isLOKMobilePhone() || pViewShell->IsLokReadOnlyView());
+    if (notAllowed)
         return;
 
     bool bEditText = false;
