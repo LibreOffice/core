@@ -87,13 +87,12 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     const SfxItemSet* m_pParent;       ///< derivation
     sal_uInt16        m_nCount;        ///< number of items
     sal_uInt16        m_nRegister;     ///< number of items with NeedsSurrogateSupport
-    sal_uInt16        m_nTotalCount;   ///< number of WhichIDs, also size of m_ppItems array
 
     // bitfield (better packaging if a bool needs to be added)
     bool              m_bItemsFixed : 1; ///< true if this is a SfxItemSetFixed object, so does not *own* m_ppItems
 
     SfxPoolItem const** m_ppItems;     ///< pointer to array of items, we allocate and free this unless m_bItemsFixed==true
-    WhichRangesContainer m_pWhichRanges;  ///< array of Which Ranges
+    WhichRangesContainer m_aWhichRanges;  ///< array of Which Ranges
 
     // Notification-Callback mechanism for SwAttrSet in SW, functionPtr for callback
     std::function<void(const SfxPoolItem*, const SfxPoolItem*)> m_aCallback;
@@ -112,13 +111,13 @@ protected:
     using const_iterator = SfxPoolItem const**;
 
     const_iterator begin() const noexcept { return m_ppItems; }
-    const_iterator end() const noexcept { return begin() + m_nTotalCount; }
+    const_iterator end() const noexcept { return begin() + TotalCount(); }
 
-    bool empty() const noexcept { return 0 == m_nTotalCount; }
-    sal_Int32 size() const noexcept { return m_nTotalCount; }
+    bool empty() const noexcept { return 0 == TotalCount(); }
+    sal_Int32 size() const noexcept { return TotalCount(); }
     SfxPoolItem const* operator[](sal_Int32 idx) const noexcept
     {
-        assert(idx >= 0 && idx < m_nTotalCount && "index out of range");
+        assert(idx >= 0 && idx < TotalCount() && "index out of range");
         return m_ppItems[idx];
     }
 
@@ -141,7 +140,7 @@ protected:
     enum class SfxAllItemSetFlag { Flag };
     SfxItemSet( SfxItemPool&, SfxAllItemSetFlag );
     /** special constructor for SfxItemSetFixed */
-    SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems, sal_uInt16 nTotalCount );
+    SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems);
     /** special constructor for SfxItemSetFixed copy constructor */
     SfxItemSet( const SfxItemSet& rOther, SfxPoolItem const ** ppMyItems );
 
@@ -167,7 +166,7 @@ public:
 
     // Get number of items
     sal_uInt16                  Count() const { return m_nCount; }
-    sal_uInt16                  TotalCount() const { return m_nTotalCount; }
+    sal_uInt16                  TotalCount() const { return m_aWhichRanges.TotalCount(); }
 
     bool IsItemsFixed() const { return m_bItemsFixed; }
 
@@ -280,7 +279,7 @@ public:
     void                        MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
 
     SfxItemPool*                GetPool() const { return m_pPool; }
-    const WhichRangesContainer & GetRanges() const { return m_pWhichRanges; }
+    const WhichRangesContainer & GetRanges() const { return m_aWhichRanges; }
     void                        SetRanges( const WhichRangesContainer& );
     void                        SetRanges( WhichRangesContainer&& );
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
@@ -377,8 +376,7 @@ class SfxItemSetFixed : public SfxItemSetFixedStorage<WIDs...>, public SfxItemSe
 public:
     SfxItemSetFixed( SfxItemPool& rPool)
         : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<WIDs...>{}),
-                     SfxItemSetFixedStorage<WIDs...>::m_aItems,
-                     SfxItemSetFixedStorage<WIDs...>::NITEMS) {}
+                     SfxItemSetFixedStorage<WIDs...>::m_aItems) {}
     SfxItemSetFixed( const SfxItemSetFixed<WIDs...>& rOther )
         : SfxItemSet(rOther, SfxItemSetFixedStorage<WIDs...>::m_aItems) {}
 };

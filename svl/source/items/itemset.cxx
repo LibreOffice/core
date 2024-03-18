@@ -34,7 +34,6 @@
 #include <svl/setitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/voiditem.hxx>
-#include <items_helper.hxx>
 
 static bool g_bDisableItemInstanceManager(getenv("SVL_DISABLE_ITEM_INSTANCE_MANAGER"));
 static bool g_bShareImmediately(getenv("SVL_SHARE_ITEMS_GLOBALLY_INSTANTLY"));
@@ -215,17 +214,16 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
     , m_pParent(nullptr)
     , m_nCount(0)
     , m_nRegister(0)
-    , m_nTotalCount(svl::detail::CountRanges(rPool.GetMergedIdRanges()))
     , m_bItemsFixed(false)
-    , m_ppItems(new SfxPoolItem const *[m_nTotalCount]{})
-    , m_pWhichRanges(rPool.GetMergedIdRanges())
+    , m_ppItems(new const SfxPoolItem*[rPool.GetMergedIdRanges().TotalCount()]{})
+    , m_aWhichRanges(rPool.GetMergedIdRanges())
     , m_aCallback()
 {
 #ifdef DBG_UTIL
     nAllocatedSfxItemSetCount++;
     nUsedSfxItemSetCount++;
 #endif
-    assert(svl::detail::validRanges2(m_pWhichRanges));
+    assert(m_aWhichRanges.validRanges2());
 }
 
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, SfxAllItemSetFlag )
@@ -233,10 +231,9 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, SfxAllItemSetFlag )
     , m_pParent(nullptr)
     , m_nCount(0)
     , m_nRegister(0)
-    , m_nTotalCount(0)
     , m_bItemsFixed(false)
     , m_ppItems(nullptr)
-    , m_pWhichRanges()
+    , m_aWhichRanges()
     , m_aCallback()
 {
 #ifdef DBG_UTIL
@@ -246,15 +243,14 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, SfxAllItemSetFlag )
 }
 
 /** special constructor for SfxItemSetFixed */
-SfxItemSet::SfxItemSet( SfxItemPool& rPool, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems, sal_uInt16 nTotalCount )
+SfxItemSet::SfxItemSet( SfxItemPool& rPool, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems)//, sal_uInt16 nTotalCount )
     : m_pPool(&rPool)
     , m_pParent(nullptr)
     , m_nCount(0)
     , m_nRegister(0)
-    , m_nTotalCount(nTotalCount)
     , m_bItemsFixed(true)
     , m_ppItems(ppItems)
-    , m_pWhichRanges(std::move(ranges))
+    , m_aWhichRanges(std::move(ranges))
     , m_aCallback()
 {
 #ifdef DBG_UTIL
@@ -262,8 +258,8 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, WhichRangesContainer&& ranges, SfxPo
     nUsedSfxItemSetCount++;
 #endif
     assert(ppItems);
-    assert(m_pWhichRanges.size() > 0);
-    assert(svl::detail::validRanges2(m_pWhichRanges));
+    assert(m_aWhichRanges.size() > 0);
+    assert(m_aWhichRanges.validRanges2());
 }
 
 /** special constructor for SfxItemSetFixed copy constructor */
@@ -273,10 +269,9 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rOther,
     , m_pParent(rOther.m_pParent)
     , m_nCount(rOther.m_nCount)
     , m_nRegister(rOther.m_nRegister)
-    , m_nTotalCount(rOther.m_nTotalCount)
     , m_bItemsFixed(true)
     , m_ppItems(ppMyItems)
-    , m_pWhichRanges(rOther.m_pWhichRanges)
+    , m_aWhichRanges(rOther.m_aWhichRanges)
     , m_aCallback(rOther.m_aCallback)
 {
 #ifdef DBG_UTIL
@@ -284,8 +279,8 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rOther,
     nUsedSfxItemSetCount++;
 #endif
     assert(ppMyItems);
-    assert(m_pWhichRanges.size() > 0);
-    assert(svl::detail::validRanges2(m_pWhichRanges));
+    assert(m_aWhichRanges.size() > 0);
+    assert(m_aWhichRanges.validRanges2());
 
     if (0 == rOther.Count())
         return;
@@ -308,18 +303,17 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     , m_pParent(nullptr)
     , m_nCount(0)
     , m_nRegister(0)
-    , m_nTotalCount(svl::detail::CountRanges(wids))
     , m_bItemsFixed(false)
-    , m_ppItems(new SfxPoolItem const *[m_nTotalCount]{})
-    , m_pWhichRanges(std::move(wids))
+    , m_ppItems(new const SfxPoolItem*[wids.TotalCount()]{})
+    , m_aWhichRanges(std::move(wids))
     , m_aCallback()
 {
 #ifdef DBG_UTIL
     nAllocatedSfxItemSetCount++;
     nUsedSfxItemSetCount++;
 #endif
-    assert(svl::detail::CountRanges(m_pWhichRanges) != 0);
-    assert(svl::detail::validRanges2(m_pWhichRanges));
+    assert(m_aWhichRanges.TotalCount() != 0);
+    assert(m_aWhichRanges.validRanges2());
 }
 
 // Class that implements global Item sharing. It uses rtti to
@@ -746,10 +740,9 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     , m_pParent( rASet.m_pParent )
     , m_nCount( rASet.m_nCount )
     , m_nRegister( rASet.m_nRegister )
-    , m_nTotalCount( rASet.m_nTotalCount )
     , m_bItemsFixed(false)
     , m_ppItems(nullptr)
-    , m_pWhichRanges( rASet.m_pWhichRanges )
+    , m_aWhichRanges( rASet.m_aWhichRanges )
     , m_aCallback(rASet.m_aCallback)
 {
 #ifdef DBG_UTIL
@@ -779,7 +772,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
         ppDst++;
     }
 
-    assert(svl::detail::validRanges2(m_pWhichRanges));
+    assert(m_aWhichRanges.validRanges2());
     if (0 != m_nRegister)
         GetPool()->registerItemSet(*this);
 }
@@ -789,10 +782,9 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     , m_pParent( rASet.m_pParent )
     , m_nCount( rASet.m_nCount )
     , m_nRegister( rASet.m_nRegister )
-    , m_nTotalCount( rASet.m_nTotalCount )
     , m_bItemsFixed(false)
     , m_ppItems( rASet.m_ppItems )
-    , m_pWhichRanges( std::move(rASet.m_pWhichRanges) )
+    , m_aWhichRanges( std::move(rASet.m_aWhichRanges) )
     , m_aCallback(rASet.m_aCallback)
 {
 #ifdef DBG_UTIL
@@ -823,12 +815,11 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     rASet.m_pParent = nullptr;
     rASet.m_nCount = 0;
     rASet.m_nRegister = 0;
-    rASet.m_nTotalCount = 0;
     rASet.m_ppItems = nullptr;
-    rASet.m_pWhichRanges.reset();
+    rASet.m_aWhichRanges.reset();
     rASet.m_aCallback = nullptr;
 
-    assert(svl::detail::validRanges2(m_pWhichRanges));
+    assert(m_aWhichRanges.validRanges2());
 }
 
 SfxItemSet::~SfxItemSet()
@@ -847,7 +838,7 @@ SfxItemSet::~SfxItemSet()
     }
 
     // for invariant-testing
-    m_pWhichRanges.reset();
+    m_aWhichRanges.reset();
 }
 
 // Delete single Items or all Items (nWhich == 0)
@@ -1023,7 +1014,7 @@ void SfxItemSet::InvalidateAllItems()
     std::fill(begin(), begin() + TotalCount(), INVALID_POOL_ITEM);
 
     // ...and correct the count - invalid items get counted
-    m_nCount = m_nTotalCount;
+    m_nCount = TotalCount();
 }
 
 SfxItemState SfxItemSet::GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const
@@ -1330,41 +1321,41 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
         return;
 
     // need to create new WhichRanges
-    auto pNewRanges = m_pWhichRanges.MergeRange(nFrom, nTo);
-    RecreateRanges_Impl(pNewRanges);
-    m_pWhichRanges = std::move(pNewRanges);
+    auto aNewRanges = m_aWhichRanges.MergeRange(nFrom, nTo);
+    RecreateRanges_Impl(aNewRanges);
+    m_aWhichRanges = std::move(aNewRanges);
 }
 
 /**
  * Modifies the ranges of settable items. Keeps state of items which
  * are new ranges too.
  */
-void SfxItemSet::SetRanges( const WhichRangesContainer& pNewRanges )
+void SfxItemSet::SetRanges( const WhichRangesContainer& aNewRanges )
 {
     // Identical Ranges?
-    if (GetRanges() == pNewRanges)
+    if (GetRanges() == aNewRanges)
         return;
 
-    assert(svl::detail::validRanges2(pNewRanges));
-    RecreateRanges_Impl(pNewRanges);
-    m_pWhichRanges = pNewRanges;
+    assert(aNewRanges.validRanges2());
+    RecreateRanges_Impl(aNewRanges);
+    m_aWhichRanges = aNewRanges;
 }
 
-void SfxItemSet::SetRanges( WhichRangesContainer&& pNewRanges )
+void SfxItemSet::SetRanges( WhichRangesContainer&& aNewRanges )
 {
     // Identical Ranges?
-    if (GetRanges() == pNewRanges)
+    if (GetRanges() == aNewRanges)
         return;
 
-    assert(svl::detail::validRanges2(pNewRanges));
-    RecreateRanges_Impl(pNewRanges);
-    m_pWhichRanges = std::move(pNewRanges);
+    assert(aNewRanges.validRanges2());
+    RecreateRanges_Impl(aNewRanges);
+    m_aWhichRanges = std::move(aNewRanges);
 }
 
 void SfxItemSet::RecreateRanges_Impl(const WhichRangesContainer& rNewRanges)
 {
     // create new item-array (by iterating through all new ranges)
-    const sal_uInt16 nNewTotalCount(svl::detail::CountRanges(rNewRanges));
+    const sal_uInt16 nNewTotalCount(rNewRanges.TotalCount());
     SfxPoolItem const** aNewItemArray(new const SfxPoolItem* [nNewTotalCount]);
     sal_uInt16 nNewCount(0);
 
@@ -1427,7 +1418,6 @@ void SfxItemSet::RecreateRanges_Impl(const WhichRangesContainer& rNewRanges)
         delete[] m_ppItems;
     }
 
-    m_nTotalCount = nNewTotalCount;
     m_ppItems = aNewItemArray;
     m_nCount = nNewCount;
 }
@@ -2152,59 +2142,78 @@ std::unique_ptr<SfxItemSet> SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPo
 }
 
 
+void WhichRangesContainer::CountRanges() const
+{
+    m_TotalCount = 0;
+    for (const auto& rPair : *this)
+        m_TotalCount += svl::detail::rangeSize(rPair.first, rPair.second);
+}
+
 WhichRangesContainer::WhichRangesContainer( const WhichPair* wids, sal_Int32 nSize )
+: m_pairs(nullptr)
+, m_size(nSize)
+, m_TotalCount(0)
+, m_aLastWhichPairOffset(INVALID_WHICHPAIR_OFFSET)
+, m_aLastWhichPairFirst(0)
+, m_aLastWhichPairSecond(0)
+, m_bOwnRanges(true)
 {
     auto p = new WhichPair[nSize];
     for (int i=0; i<nSize; ++i)
         p[i] = wids[i];
     m_pairs = p;
-    m_size = nSize;
-    m_bOwnRanges = true;
-    m_aLastWhichPairOffset = INVALID_WHICHPAIR_OFFSET;
-    m_aLastWhichPairFirst = 0;
-    m_aLastWhichPairSecond = 0;
+    CountRanges();
 }
 
 WhichRangesContainer::WhichRangesContainer(sal_uInt16 nWhichStart, sal_uInt16 nWhichEnd)
-    : m_size(1), m_bOwnRanges(true)
+: m_pairs(nullptr)
+, m_size(1)
+, m_TotalCount(0)
+, m_aLastWhichPairOffset(INVALID_WHICHPAIR_OFFSET)
+, m_aLastWhichPairFirst(0)
+, m_aLastWhichPairSecond(0)
+, m_bOwnRanges(true)
 {
     auto p = new WhichPair[1];
     p[0] = { nWhichStart, nWhichEnd };
     m_pairs = p;
-    m_aLastWhichPairOffset = INVALID_WHICHPAIR_OFFSET;
-    m_aLastWhichPairFirst = 0;
-    m_aLastWhichPairSecond = 0;
+    CountRanges();
 }
 
 WhichRangesContainer::WhichRangesContainer(WhichRangesContainer && other)
 {
     std::swap(m_pairs, other.m_pairs);
     std::swap(m_size, other.m_size);
+    std::swap(m_TotalCount, other.m_TotalCount);
+    std::swap(m_aLastWhichPairOffset, other.m_aLastWhichPairOffset);
+    std::swap(m_aLastWhichPairFirst, other.m_aLastWhichPairFirst);
+    std::swap(m_aLastWhichPairSecond, other.m_aLastWhichPairSecond);
     std::swap(m_bOwnRanges, other.m_bOwnRanges);
-    m_aLastWhichPairOffset = INVALID_WHICHPAIR_OFFSET;
-    m_aLastWhichPairFirst = 0;
-    m_aLastWhichPairSecond = 0;
 }
 
 WhichRangesContainer& WhichRangesContainer::operator=(WhichRangesContainer && other)
 {
     std::swap(m_pairs, other.m_pairs);
     std::swap(m_size, other.m_size);
+    std::swap(m_TotalCount, other.m_TotalCount);
+    std::swap(m_aLastWhichPairOffset, other.m_aLastWhichPairOffset);
+    std::swap(m_aLastWhichPairFirst, other.m_aLastWhichPairFirst);
+    std::swap(m_aLastWhichPairSecond, other.m_aLastWhichPairSecond);
     std::swap(m_bOwnRanges, other.m_bOwnRanges);
-    m_aLastWhichPairOffset = INVALID_WHICHPAIR_OFFSET;
-    m_aLastWhichPairFirst = 0;
-    m_aLastWhichPairSecond = 0;
     return *this;
 }
 
 WhichRangesContainer& WhichRangesContainer::operator=(WhichRangesContainer const & other)
 {
     reset();
+
     m_size = other.m_size;
+    m_TotalCount = other.m_TotalCount;
+    m_aLastWhichPairOffset = other.m_aLastWhichPairOffset;
+    m_aLastWhichPairFirst = other.m_aLastWhichPairFirst;
+    m_aLastWhichPairSecond = other.m_aLastWhichPairSecond;
     m_bOwnRanges = other.m_bOwnRanges;
-    m_aLastWhichPairOffset = INVALID_WHICHPAIR_OFFSET;
-    m_aLastWhichPairFirst = 0;
-    m_aLastWhichPairSecond = 0;
+
     if (m_bOwnRanges)
     {
         auto p = new WhichPair[m_size];
@@ -2214,6 +2223,7 @@ WhichRangesContainer& WhichRangesContainer::operator=(WhichRangesContainer const
     }
     else
         m_pairs = other.m_pairs;
+
     return *this;
 }
 
@@ -2225,6 +2235,8 @@ WhichRangesContainer::~WhichRangesContainer()
 bool WhichRangesContainer::operator==(WhichRangesContainer const & other) const
 {
     if (m_size != other.m_size)
+        return false;
+    if (m_TotalCount != other.m_TotalCount)
         return false;
     if (m_pairs == other.m_pairs)
         return true;
@@ -2241,6 +2253,7 @@ void WhichRangesContainer::reset()
     }
     m_pairs = nullptr;
     m_size = 0;
+    m_TotalCount = 0;
     m_aLastWhichPairOffset = INVALID_WHICHPAIR_OFFSET;
     m_aLastWhichPairFirst = 0;
     m_aLastWhichPairSecond = 0;

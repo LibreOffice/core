@@ -25,8 +25,8 @@ class ItemSetPrinter(object):
                 % (self.value['m_pPool'], self.value['m_pParent'], whichranges)
 
     def which_ranges(self):
-        whichranges = self.value['m_pWhichRanges']['m_pairs']
-        whichranges_cnt = self.value['m_pWhichRanges']['m_size']
+        whichranges = self.value['m_aWhichRanges']['m_pairs']
+        whichranges_cnt = self.value['m_aWhichRanges']['m_size']
         whiches = []
         for index in range(whichranges_cnt):
             whiches.append((int(whichranges[index]['first']), int(whichranges[index]['second'])))

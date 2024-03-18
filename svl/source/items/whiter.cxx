@@ -22,7 +22,7 @@
 
 SfxWhichIter::SfxWhichIter(const SfxItemSet& rSet)
     : m_rItemSet(rSet)
-    , m_pCurrentWhichPair(rSet.m_pWhichRanges.begin())
+    , m_pCurrentWhichPair(rSet.m_aWhichRanges.begin())
     , m_nOffsetFromStartOfCurrentWhichPair(0)
     , m_nItemsOffset(0)
 {
@@ -30,7 +30,7 @@ SfxWhichIter::SfxWhichIter(const SfxItemSet& rSet)
 
 sal_uInt16 SfxWhichIter::GetCurWhich() const
 {
-    const WhichRangesContainer& rWhichRanges = m_rItemSet.m_pWhichRanges;
+    const WhichRangesContainer& rWhichRanges = m_rItemSet.m_aWhichRanges;
     if (m_pCurrentWhichPair >= (rWhichRanges.begin() + rWhichRanges.size()))
         return 0;
     return m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair;
@@ -38,7 +38,7 @@ sal_uInt16 SfxWhichIter::GetCurWhich() const
 
 sal_uInt16 SfxWhichIter::NextWhich()
 {
-    const WhichRangesContainer& rWhichRanges = m_rItemSet.m_pWhichRanges;
+    const WhichRangesContainer& rWhichRanges = m_rItemSet.m_aWhichRanges;
     if (m_pCurrentWhichPair >= (rWhichRanges.begin() + rWhichRanges.size()))
         return 0;
 
@@ -57,7 +57,7 @@ sal_uInt16 SfxWhichIter::NextWhich()
 
 sal_uInt16 SfxWhichIter::FirstWhich()
 {
-    m_pCurrentWhichPair = m_rItemSet.m_pWhichRanges.begin();
+    m_pCurrentWhichPair = m_rItemSet.m_aWhichRanges.begin();
     m_nOffsetFromStartOfCurrentWhichPair = 0;
     m_nItemsOffset = 0;
     return m_pCurrentWhichPair->first;

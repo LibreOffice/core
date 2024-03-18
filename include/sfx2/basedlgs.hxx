@@ -29,7 +29,7 @@ class SfxBindings;
 class SfxChildWindow;
 struct SfxChildWinInfo;
 class SfxItemSet;
-struct WhichRangesContainer;
+class WhichRangesContainer;
 
 class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {
