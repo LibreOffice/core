@@ -907,6 +907,11 @@ public:
                 }
                 case '\t':
                 {
+                    // Don't warn about tabs in ToC
+                    auto pSection = SwDoc::GetCurrSection(SwPosition(*pTextNode, 0));
+                    if (pSection && pSection->GetTOXBase())
+                        continue;
+
                     if (bPreviousWasChar)
                     {
                         ++nTabCount;
