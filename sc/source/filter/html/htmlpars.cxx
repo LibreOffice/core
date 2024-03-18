@@ -647,12 +647,17 @@ void ScHTMLLayoutParser::SetWidths()
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
         nTableWidth = static_cast<sal_uInt16>(pLocalColOffset->back() - pLocalColOffset->front());
+        const auto nColsAvailable = pLocalColOffset->size();
         for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
         {
             auto& pE = maList[ i ];
             if ( pE->nTab == nTable )
             {
-                pE->nOffset = static_cast<sal_uInt16>((*pLocalColOffset)[pE->nCol - nColCntStart]);
+                const size_t nColRequested = pE->nCol - nColCntStart;
+                if (nColRequested < nColsAvailable)
+                    pE->nOffset = static_cast<sal_uInt16>((*pLocalColOffset)[nColRequested]);
+                else
+                    SAL_WARN("sc", "missing information for column: " << nColRequested);
                 pE->nWidth = 0; // to be recalculated later
             }
         }
