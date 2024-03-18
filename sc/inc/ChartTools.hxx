@@ -11,7 +11,6 @@
 #pragma once
 
 #include <string_view>
-#include <memory>
 #include <vector>
 
 #include <svx/svditer.hxx>

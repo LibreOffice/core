@@ -24,12 +24,12 @@
 #include <vector>
 
 #include "address.hxx"
-#include <editeng/colritem.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include "scdllapi.h"
 #include "celltextattr.hxx"
 #include "cellvalue.hxx"
 #include "patattr.hxx"
+#include <tools/color.hxx>
 
 struct ScSubTotalParam;
 struct ScQueryParam;

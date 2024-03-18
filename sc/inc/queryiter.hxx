@@ -19,9 +19,6 @@
 
 #pragma once
 
-#include "address.hxx"
-#include "global.hxx"
-#include "scdllapi.h"
 #include "queryparam.hxx"
 #include "mtvelements.hxx"
 #include "types.hxx"

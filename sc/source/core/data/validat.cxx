@@ -23,7 +23,6 @@
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
 #include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
@@ -51,7 +50,6 @@
 #include <tokenarray.hxx>
 #include <scmatrix.hxx>
 #include <cellvalue.hxx>
-#include <comphelper/lok.hxx>
 #include <simpleformulacalc.hxx>
 
 #include <math.h>

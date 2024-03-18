@@ -22,12 +22,11 @@
 #include <scitems.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/app.hxx>
-#include <svx/svdocapt.hxx>
+#include <svx/svdocapt.hxx> //
 #include <comphelper/lok.hxx>
 #include <osl/diagnose.h>
 
 #include <document.hxx>
-#include <docpool.hxx>
 #include <patattr.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>

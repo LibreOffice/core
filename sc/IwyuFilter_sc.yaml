@@ -1113,3 +1113,6 @@ excludelist:
     sc/source/ui/view/tabvwshc.cxx:
     # Needed for ScFormulaDlg instantiation for some weird reason
     - funcdesc.hxx
+    sc/source/core/data/stlpool.cxx:
+    # access into incomplete type 'SfxItemPool'
+    - docpool.hxx

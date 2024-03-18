@@ -26,7 +26,6 @@
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/lok.hxx>
-#include <unotools/configmgr.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <strings.hrc>

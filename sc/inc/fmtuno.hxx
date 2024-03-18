@@ -34,7 +34,6 @@
 
 #include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include "address.hxx"

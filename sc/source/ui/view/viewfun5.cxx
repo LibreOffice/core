@@ -24,7 +24,6 @@
 #include <svx/unomodel.hxx>
 #include <unotools/streamwrap.hxx>
 
-#include <svx/fmmodel.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>

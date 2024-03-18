@@ -47,7 +47,6 @@
 #include <editeng/colritem.hxx>
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
-#include <svl/zformat.hxx>
 
 #include <algorithm>
 #include <limits>

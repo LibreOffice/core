@@ -41,7 +41,6 @@
 #include <futext.hxx>
 #include <docfunc.hxx>
 #include <sc.hrc>
-#include <fusel.hxx>
 #include <reftokenhelper.hxx>
 #include <externalrefmgr.hxx>
 #include <markdata.hxx>

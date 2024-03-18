@@ -18,8 +18,6 @@
  */
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <scitems.hxx>
 #include <editeng/borderline.hxx>
@@ -28,7 +26,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sfxdlg.hxx>
 #include <svl/whiter.hxx>
 
 #include <svl/stritem.hxx>
@@ -39,7 +36,6 @@
 #include <svl/ctloptions.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/langitem.hxx>
-#include <svx/numinf.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -59,14 +55,11 @@
 
 #include <formatsh.hxx>
 #include <sc.hrc>
-#include <globstr.hrc>
-#include <scresid.hxx>
 #include <docsh.hxx>
 #include <patattr.hxx>
 #include <scmod.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
-#include <printfun.hxx>
 #include <docpool.hxx>
 #include <tabvwsh.hxx>
 #include <attrib.hxx>

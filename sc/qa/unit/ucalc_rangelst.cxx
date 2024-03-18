@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 #include "helper/qahelper.hxx"
-#include <docsh.hxx>
 
 #include <rangelst.hxx>
 

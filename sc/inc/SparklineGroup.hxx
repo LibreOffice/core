@@ -12,9 +12,7 @@
 
 #include "scdllapi.h"
 #include "SparklineAttributes.hxx"
-#include <tools/color.hxx>
 #include <tools/Guid.hxx>
-#include <optional>
 
 namespace sc
 {

@@ -24,7 +24,6 @@
 #include <svl/srchitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/thread.hxx>

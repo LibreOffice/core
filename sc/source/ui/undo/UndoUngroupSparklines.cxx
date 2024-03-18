@@ -15,7 +15,6 @@
 
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
-#include <SparklineAttributes.hxx>
 
 namespace sc
 {

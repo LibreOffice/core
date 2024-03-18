@@ -24,7 +24,6 @@
 
 #include <undostyl.hxx>
 #include <docsh.hxx>
-#include <docpool.hxx>
 #include <stlpool.hxx>
 #include <printfun.hxx>
 #include <scmod.hxx>

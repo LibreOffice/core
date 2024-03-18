@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include <editeng/editdata.hxx>
 #include <map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
+#include <editeng/ESelection.hxx>
 
 #include "address.hxx"
 

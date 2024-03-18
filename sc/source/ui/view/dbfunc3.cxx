@@ -52,7 +52,6 @@
 #include <dbdocfun.hxx>
 #include <dpoutput.hxx>
 #include <editable.hxx>
-#include <docpool.hxx>
 #include <patattr.hxx>
 #include <unonames.hxx>
 #include <userlist.hxx>

@@ -66,7 +66,6 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
-#include <com/sun/star/util/XComplexColor.hpp>
 
 #include <autoform.hxx>
 #include <cellvalue.hxx>

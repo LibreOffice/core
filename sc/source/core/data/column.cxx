@@ -23,7 +23,6 @@
 #include <docsh.hxx>
 #include <document.hxx>
 #include <table.hxx>
-#include <docpool.hxx>
 #include <attarray.hxx>
 #include <patattr.hxx>
 #include <compiler.hxx>

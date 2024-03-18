@@ -75,7 +75,6 @@
 #include <defaultsoptions.hxx>
 #include <markdata.hxx>
 #include <preview.hxx>
-#include <docoptio.hxx>
 #include <documentlinkmgr.hxx>
 #include <gridwin.hxx>
 

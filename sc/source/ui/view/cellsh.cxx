@@ -53,8 +53,6 @@
 #include <clipparam.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
-#include <Sparkline.hxx>
-#include <SparklineGroup.hxx>
 
 #define ShellClass_ScCellShell
 #define ShellClass_CellMovement

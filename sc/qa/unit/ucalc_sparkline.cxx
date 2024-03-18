@@ -9,8 +9,6 @@
 
 #include "helper/qahelper.hxx"
 #include <docsh.hxx>
-#include <tabvwsh.hxx>
-#include <cliputil.hxx>
 #include <docfunc.hxx>
 #include <undomanager.hxx>
 
@@ -20,7 +18,6 @@
 #include <SparklineAttributes.hxx>
 #include <ThemeColorChanger.hxx>
 #include <docmodel/theme/Theme.hxx>
-#include <svx/svdpage.hxx>
 
 using namespace css;
 

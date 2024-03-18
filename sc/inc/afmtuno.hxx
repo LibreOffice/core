@@ -27,7 +27,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <climits>

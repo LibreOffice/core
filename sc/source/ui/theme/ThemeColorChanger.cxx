@@ -12,14 +12,12 @@
 
 #include <sal/config.h>
 
-#include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include <svx/svditer.hxx>
-#include <svx/theme/IThemeColorChanger.hxx>
 
 #include <undodraw.hxx>
 #include <stlpool.hxx>

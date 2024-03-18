@@ -27,7 +27,6 @@
 
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
-#include <sfx2/objsh.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>

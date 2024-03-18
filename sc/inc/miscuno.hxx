@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <vector>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

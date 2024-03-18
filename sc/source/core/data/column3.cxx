@@ -33,7 +33,6 @@
 #include <subtotal.hxx>
 #include <markdata.hxx>
 #include <stringutil.hxx>
-#include <docpool.hxx>
 #include <cellvalue.hxx>
 #include <tokenarray.hxx>
 #include <clipcontext.hxx>
@@ -48,7 +47,6 @@
 #include <colorscale.hxx>
 #include <table.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/colritem.hxx>
 
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -63,7 +61,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <osl/diagnose.h>
 
 #include <cstdio>
 #include <refdata.hxx>

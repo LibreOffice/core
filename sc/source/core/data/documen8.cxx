@@ -20,14 +20,12 @@
 #include <scitems.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

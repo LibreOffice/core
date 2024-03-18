@@ -32,7 +32,6 @@
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/unitconv.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)

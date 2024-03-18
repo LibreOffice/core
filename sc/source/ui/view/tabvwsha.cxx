@@ -74,7 +74,6 @@
 #include <tabvwsh.hxx>
 #include <tokenarray.hxx>
 #include <viewdata.hxx>
-#include <docpool.hxx>
 #include <printfun.hxx>
 #include <undostyl.hxx>
 #include <futext.hxx>

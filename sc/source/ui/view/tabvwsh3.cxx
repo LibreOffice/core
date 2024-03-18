@@ -60,8 +60,6 @@
 
 #include <basegfx/utils/zoomtools.hxx>
 
-#include <svx/svdpagv.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/dialog/ThemeDialog.hxx>
 #include <ThemeColorChanger.hxx>
 

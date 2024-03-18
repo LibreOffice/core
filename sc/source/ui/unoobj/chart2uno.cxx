@@ -50,7 +50,6 @@
 #include <svl/numformat.hxx>
 #include <svl/sharedstring.hxx>
 
-#include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/UnknownPropertyException.hpp>

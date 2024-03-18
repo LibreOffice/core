@@ -23,7 +23,6 @@
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svl/itemprop.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 class SvxSearchItem;

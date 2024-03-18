@@ -28,7 +28,6 @@
 #include <vcl/settings.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
-#include <svl/voiditem.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -66,7 +65,6 @@
 #include <docpool.hxx>
 #include <global.hxx>
 #include <attrib.hxx>
-#include <patattr.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scmod.hxx>

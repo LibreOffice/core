@@ -60,7 +60,6 @@
 #include <AccessibilityHints.hxx>
 #include <vcl/svapp.hxx>
 #include <viewutil.hxx>
-#include <docpool.hxx>
 #include <patattr.hxx>
 #include <columnspanset.hxx>
 

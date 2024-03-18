@@ -25,7 +25,6 @@
 #include <cellsuno.hxx>
 #include <docsh.hxx>
 #include <markdata.hxx>
-#include <miscuno.hxx>
 
 using namespace com::sun::star;
 

@@ -17,19 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/math.hxx>
 #include <queryevaluator.hxx>
 
 #include <cellform.hxx>
 #include <cellvalue.hxx>
-#include <colorscale.hxx>
 #include <document.hxx>
 #include <docoptio.hxx>
 #include <queryparam.hxx>
-#include <scitems.hxx>
 #include <table.hxx>
 
-#include <editeng/brushitem.hxx>
-#include <editeng/colritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/zformat.hxx>

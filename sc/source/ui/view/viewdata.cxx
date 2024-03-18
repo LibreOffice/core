@@ -38,7 +38,6 @@
 #include <sal/log.hxx>
 
 #include <viewdata.hxx>
-#include <docoptio.hxx>
 #include <scmod.hxx>
 #include <global.hxx>
 #include <document.hxx>

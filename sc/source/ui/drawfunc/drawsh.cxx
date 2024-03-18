@@ -21,7 +21,6 @@
 #include <svx/dialogs.hrc>
 #include <sc.hrc>
 
-#include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/app.hxx>
@@ -55,8 +54,6 @@
 #include <memory>
 #include <svx/xlnwtit.hxx>
 #include <svx/chrtitem.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <comphelper/lok.hxx>

@@ -29,7 +29,6 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <svl/itemprop.hxx>
-#include <vcl/svapp.hxx>
 
 #include <dpcache.hxx>
 #include <dptabres.hxx>

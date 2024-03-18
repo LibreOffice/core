@@ -30,8 +30,6 @@
 #include <funcdesc.hxx>
 
 #include <dwfunctr.hxx>
-#include <scresid.hxx>
-#include <strings.hrc>
 
 /*************************************************************************
 #*  Member:     ScFunctionWin

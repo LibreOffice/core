@@ -47,7 +47,7 @@
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <subtotalparam.hxx>
-#include <docpool.hxx>
+#include <cellvalue.hxx>
 #include <tokenarray.hxx>
 #include <mtvcellfunc.hxx>
 #include <columnspanset.hxx>

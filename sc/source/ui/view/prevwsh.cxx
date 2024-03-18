@@ -68,7 +68,6 @@
 
 #include <scabstdlg.hxx>
 #include <vcl/EnumContext.hxx>
-#include <vcl/notebookbar/notebookbar.hxx>
 
 //  for mouse wheel
 #define MINZOOM_SLIDER 10

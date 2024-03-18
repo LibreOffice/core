@@ -13,7 +13,6 @@
 #include <scresid.hxx>
 
 #include <Sparkline.hxx>
-#include <SparklineGroup.hxx>
 
 namespace sc
 {

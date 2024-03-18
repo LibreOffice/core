@@ -9,7 +9,6 @@
 
 #include <undo/UndoThemeChange.hxx>
 #include <docmodel/theme/Theme.hxx>
-#include <svx/svdpage.hxx>
 #include <scresid.hxx>
 #include <globstr.hrc>
 

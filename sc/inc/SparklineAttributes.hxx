@@ -11,8 +11,6 @@
 #pragma once
 
 #include "scdllapi.h"
-#include <sal/types.h>
-#include <tools/color.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <optional>
 #include <o3tl/cow_wrapper.hxx>

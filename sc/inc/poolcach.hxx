@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include "scdllapi.h"
 #include "patattr.hxx"
 #include <vector>
 

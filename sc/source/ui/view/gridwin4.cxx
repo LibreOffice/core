@@ -36,7 +36,6 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <comphelper/scopeguard.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcomponenthelpers.hxx>
 
@@ -57,7 +56,6 @@
 #include <attrib.hxx>
 #include <patattr.hxx>
 #include <dbdata.hxx>
-#include <docoptio.hxx>
 #include <notemark.hxx>
 #include <dbfunc.hxx>
 #include <scmod.hxx>
@@ -65,7 +63,6 @@
 #include <rfindlst.hxx>
 #include <hiranges.hxx>
 #include <pagedata.hxx>
-#include <docpool.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <docsh.hxx>

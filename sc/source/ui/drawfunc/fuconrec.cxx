@@ -27,16 +27,8 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svxids.hrc>
-#include <svx/strings.hrc>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/svdomeas.hxx>
 #include <osl/diagnose.h>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>

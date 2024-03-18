@@ -25,7 +25,6 @@
 #include <editeng/langitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/eeitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <utility>
 #include <vcl/settings.hxx>
@@ -42,7 +41,6 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <markdata.hxx>
-#include <docpool.hxx>
 
 #include <memory>
 

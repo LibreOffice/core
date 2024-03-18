@@ -24,7 +24,6 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-#include <sfx2/objsh.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svtools/embedhlp.hxx>

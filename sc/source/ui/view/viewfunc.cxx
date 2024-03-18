@@ -39,14 +39,12 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <osl/diagnose.h>
-#include <formula/paramclass.hxx>
 
 #include <viewfunc.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
-#include <docpool.hxx>
 #include <sc.hrc>
 #include <undocell.hxx>
 #include <undoblk.hxx>

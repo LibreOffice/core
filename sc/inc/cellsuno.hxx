@@ -85,7 +85,6 @@
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>

@@ -17,7 +17,6 @@
 #include <fstalgorithm.hxx>
 
 #include <algorithm>
-#include <memory>
 
 #include <o3tl/safeint.hxx>
 

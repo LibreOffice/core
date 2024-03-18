@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/objsh.hxx>
 #include <svl/listener.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

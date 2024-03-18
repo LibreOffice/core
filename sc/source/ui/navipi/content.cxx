@@ -24,7 +24,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdocapt.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -43,7 +42,6 @@
 #include <scmod.hxx>
 #include <rangenam.hxx>
 #include <dbdata.hxx>
-#include <tablink.hxx>
 #include <drwlayer.hxx>
 #include <transobj.hxx>
 #include <drwtrans.hxx>

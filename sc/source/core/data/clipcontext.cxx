@@ -14,7 +14,6 @@
 #include <column.hxx>
 #include <scitems.hxx>
 #include <tokenarray.hxx>
-#include <editutil.hxx>
 #include <clipparam.hxx>
 
 #include <svl/intitem.hxx>

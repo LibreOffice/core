@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/string.hxx>
-#include <comphelper/lok.hxx>
 #include <editeng/eeitem.hxx>
 #include <osl/diagnose.h>
 

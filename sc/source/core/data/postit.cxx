@@ -25,35 +25,21 @@
 #include <unotools/useroptions.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/unoshape.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
 
-#include <scitems.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnstcit.hxx>
-#include <svx/sxcecitm.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
-#include <svx/sdtditm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtmfitm.hxx>
 #include <tools/gen.hxx>
 
 #include <document.hxx>
-#include <docpool.hxx>
 #include <stlpool.hxx>
 #include <stylehelper.hxx>
-#include <patattr.hxx>
 #include <drwlayer.hxx>
 #include <userdat.hxx>
-#include <detfunc.hxx>
 #include <editutil.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -62,7 +48,6 @@
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <comphelper/propertyvalue.hxx>
 

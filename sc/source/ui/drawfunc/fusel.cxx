@@ -21,7 +21,6 @@
 #include <editeng/flditem.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/imapobj.hxx>
 #include <svx/svdouno.hxx>

@@ -28,7 +28,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/ptitem.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>

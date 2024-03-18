@@ -19,7 +19,6 @@
 #include <clipcontext.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
-#include <docpool.hxx>
 #include <conditio.hxx>
 #include <formulagroup.hxx>
 #include <tokenarray.hxx>
@@ -30,7 +29,6 @@
 #include <compiler.hxx>
 #include <recursionhelper.hxx>
 #include <docsh.hxx>
-#include <editutil.hxx>
 #include <broadcast.hxx>
 
 #include <SparklineGroup.hxx>

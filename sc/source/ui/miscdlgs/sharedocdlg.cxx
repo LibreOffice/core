@@ -28,7 +28,6 @@
 
 #include <docsh.hxx>
 
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <scresid.hxx>

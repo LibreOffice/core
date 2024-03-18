@@ -32,10 +32,8 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
-#include <osl/mutex.hxx>
 
 #include <memory>
 

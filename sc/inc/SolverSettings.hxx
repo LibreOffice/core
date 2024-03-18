@@ -10,14 +10,13 @@
 
 #pragma once
 
-#include <memory>
 #include <utility>
 #include <variant>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-class ScTable;
-class ScDocShell;
+#include "document.hxx"
+#include <docsh.hxx>
 
 namespace sc
 {

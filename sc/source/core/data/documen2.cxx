@@ -20,7 +20,6 @@
 #include <scextopt.hxx>
 #include <autonamecache.hxx>
 
-#include <o3tl/safeint.hxx>
 #include <osl/thread.h>
 #include <svx/xtable.hxx>
 #include <sfx2/bindings.hxx>
@@ -89,7 +88,6 @@
 #include <datamapper.hxx>
 #include <drwlayer.hxx>
 #include <sharedstringpoolpurge.hxx>
-#include <dociter.hxx>
 #include <docpool.hxx>
 #include <config_features.h>
 

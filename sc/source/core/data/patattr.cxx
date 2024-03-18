@@ -56,7 +56,6 @@
 
 #include <attrib.hxx>
 #include <patattr.hxx>
-#include <docpool.hxx>
 #include <stlsheet.hxx>
 #include <stlpool.hxx>
 #include <document.hxx>

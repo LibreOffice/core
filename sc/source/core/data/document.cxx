@@ -21,10 +21,7 @@
 
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
-#include <o3tl/safeint.hxx>
-#include <svx/sdrundomanager.hxx>
 #include <svx/svditer.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/numformat.hxx>
 #include <poolcach.hxx>
@@ -98,7 +95,6 @@
 #include <unordered_map>
 
 #include <comphelper/lok.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>

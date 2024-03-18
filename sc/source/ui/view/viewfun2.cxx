@@ -58,7 +58,6 @@
 #include <docfunc.hxx>
 #include <docpool.hxx>
 #include <docsh.hxx>
-#include <docoptio.hxx>
 #include <global.hxx>
 #include <patattr.hxx>
 #include <printfun.hxx>

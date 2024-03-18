@@ -11,7 +11,6 @@
 #include "helper/qahelper.hxx"
 #include <comphelper/configuration.hxx>
 #include <document.hxx>
-#include <docsh.hxx>
 #include <global.hxx>
 #include <scdll.hxx>
 

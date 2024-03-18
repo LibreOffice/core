@@ -22,7 +22,6 @@
 #include <svx/svdundo.hxx>
 
 #include <undobase.hxx>
-#include <undocell.hxx>
 #include <refundo.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>

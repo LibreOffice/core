@@ -85,7 +85,6 @@
 #include <charthelper.hxx>
 #include <table.hxx>
 #include <stlpool.hxx>
-#include <docpool.hxx>
 #include <detfunc.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <clipcontext.hxx>
@@ -1785,7 +1784,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
             bObjectInArea = aClipRange.Contains(pObjData->maStart);
         if (!bObjectInArea)
             continue;
-        
+
         if (!pDestModel)
         {
             pDestModel = pClipDoc->GetDrawLayer();      // does the document already have a drawing layer?

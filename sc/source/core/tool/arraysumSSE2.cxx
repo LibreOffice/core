@@ -9,7 +9,6 @@
  */
 
 #include <arraysumfunctor.hxx>
-
 #include <tools/simdsupport.hxx>
 
 #include <stdlib.h>

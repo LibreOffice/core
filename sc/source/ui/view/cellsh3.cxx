@@ -45,7 +45,6 @@
 #include <funcdesc.hxx>
 #include <markdata.hxx>
 #include <scabstdlg.hxx>
-#include <condformateasydlg.hxx>
 #include <columnspanset.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

@@ -9,7 +9,6 @@
 
 #include "op_financial.hxx"
 
-#include <formula/vectortoken.hxx>
 #include <sstream>
 
 using namespace formula;

@@ -20,7 +20,6 @@
 #pragma once
 
 #include "rangelst.hxx"
-#include <tools/solar.h>
 #include <memory>
 #include <map>
 

@@ -33,7 +33,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xtable.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 
 #include <document.hxx>

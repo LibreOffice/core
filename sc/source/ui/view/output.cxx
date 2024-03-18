@@ -39,10 +39,7 @@
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <o3tl/unit_conversion.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drectangle.hxx>
 
 #include <output.hxx>
 #include <document.hxx>

@@ -53,7 +53,6 @@
 #include <pagepar.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
-#include <docpool.hxx>
 #include <dociter.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>

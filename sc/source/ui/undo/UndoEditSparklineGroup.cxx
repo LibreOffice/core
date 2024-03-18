@@ -13,7 +13,6 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 
-#include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineAttributes.hxx>
 #include <utility>

@@ -30,7 +30,6 @@
 #include <attarray.hxx>
 #include <patattr.hxx>
 #include <docoptio.hxx>
-#include <cellform.hxx>
 #include <segmenttree.hxx>
 #include <progress.hxx>
 #include <queryparam.hxx>
@@ -47,7 +46,6 @@
 #include <editeng/editobj.hxx>
 #include <svl/sharedstring.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <algorithm>

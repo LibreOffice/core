@@ -8,17 +8,12 @@
  *
  */
 
-#include <scitems.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
-#include <svl/whiter.hxx>
 #include <vcl/EnumContext.hxx>
 
-#include <sc.hrc>
 #include <SparklineShell.hxx>
 #include <tabvwsh.hxx>
-#include <docsh.hxx>
 #include <document.hxx>
 
 #define ShellClass_SparklineShell

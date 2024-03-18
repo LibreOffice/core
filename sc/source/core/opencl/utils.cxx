@@ -10,7 +10,6 @@
 #include "utils.hxx"
 
 #include <cassert>
-#include <cmath>
 #include <cfloat>
 #include <limits>
 #include <sstream>

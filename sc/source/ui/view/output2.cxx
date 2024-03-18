@@ -54,12 +54,10 @@
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/glyphitem.hxx>
-#include <vcl/vcllayout.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
-#include <tools/stream.hxx>
 
 #include <output.hxx>
 #include <document.hxx>
@@ -81,8 +79,6 @@
 
 #include <memory>
 #include <vector>
-#include <o3tl/lru_map.hxx>
-#include <o3tl/hash_combine.hxx>
 
 #include <math.h>
 

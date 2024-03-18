@@ -19,9 +19,6 @@
 #undef RGB
 #endif
 
-#include <iostream>
-#include <vector>
-
 #define CALC_DEBUG_OUTPUT 0
 #define CALC_TEST_PERF 0
 

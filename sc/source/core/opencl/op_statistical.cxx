@@ -9,7 +9,6 @@
 
 #include "op_statistical.hxx"
 
-#include <formula/vectortoken.hxx>
 #include <sstream>
 #include "op_statistical_helpers.hxx"
 

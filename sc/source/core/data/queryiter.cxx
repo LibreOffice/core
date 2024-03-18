@@ -18,43 +18,28 @@
  */
 
 #include <queryiter.hxx>
+#include <rtl/math.hxx>
 
 #include <comphelper/flagguard.hxx>
 #include <o3tl/safeint.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 
 #include <global.hxx>
-#include <dociter.hxx>
 #include <document.hxx>
 #include <table.hxx>
 #include <column.hxx>
 #include <formulacell.hxx>
-#include <attarray.hxx>
-#include <patattr.hxx>
-#include <docoptio.hxx>
 #include <cellform.hxx>
-#include <segmenttree.hxx>
-#include <progress.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
-#include <globstr.hrc>
-#include <scresid.hxx>
 #include <cellvalue.hxx>
-#include <scmatrix.hxx>
-#include <rowheightcontext.hxx>
 #include <queryevaluator.hxx>
 #include <rangecache.hxx>
 #include <refdata.hxx>
 
-#include <tools/fract.hxx>
-#include <editeng/editobj.hxx>
 #include <svl/sharedstring.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <osl/diagnose.h>
-#include <sal/log.hxx>
 
-#include <algorithm>
 #include <limits>
 #include <vector>
 

@@ -19,7 +19,6 @@
 
 #include "vbarange.hxx"
 
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
@@ -35,7 +34,6 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
-#include <com/sun/star/sheet/XGoalSeek.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>

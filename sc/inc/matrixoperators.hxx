@@ -11,7 +11,6 @@
 
 
 #include <functional>
-#include <utility>
 #include <vector>
 #include "kahan.hxx"
 

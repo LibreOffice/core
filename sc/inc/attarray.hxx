@@ -25,7 +25,6 @@
 #include "patattr.hxx"
 
 #include <algorithm>
-#include <memory>
 #include <optional>
 
 #include <svl/itemset.hxx>
