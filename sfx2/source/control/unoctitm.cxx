@@ -1136,8 +1136,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         bool bTemp = false;
         aEvent.State >>= bTemp;
         aTree.put("commandName", aEvent.FeatureURL.Complete);
-        aTree.put("disabled", std::to_string(aEvent.IsEnabled) == "0" ? "true" : "false");
-        aTree.put("state", std::to_string(bTemp) == "1" ? "true" : "false");
+        aTree.put("disabled", !aEvent.IsEnabled);
+        aTree.put("state", bTemp ? "true" : "false");
         SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aTree.extractData());
         return;
     }
