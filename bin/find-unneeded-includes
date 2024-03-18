@@ -386,7 +386,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                 if reason:
                     # Warn about namespaces: if a header is suggested only '// for $namespace', then the namespace is not used
                     # otherwise the used classes name would show up after the '// for'
-                    # Cleaning out the respective header (if ther is any
+                    # Cleaning out the respective header (if there is any
                     # - which is not always the case) is for the next run!
                     nameSpace = reason.group(1).split(' ')[0]
                     print("WARNING:", fileName, "This 'using namespace' is likely unnecessary:", nameSpace)
