@@ -408,6 +408,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
     CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, pTextDoc->getText()->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159054_disableOutlineNumbering)
+{
+    createSwDoc("tdf159054_disableOutlineNumbering.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    const uno::Reference<text::XTextRange> xPara1 = getParagraph(1, "Heading A");
+    const uno::Reference<text::XTextRange> xPara2 = getParagraph(2, "Heading B");
+    const uno::Reference<text::XTextRange> xPara3 = getParagraph(3, "Heading C");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara1, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("B."), getProperty<OUString>(xPara2, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("C."), getProperty<OUString>(xPara3, "ListLabelString"));
+
+    // select (at least parts) of the first two paragraphs
+    pWrtShell->Down(/*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/true);
+
+    // on the selection, simulate pressing the toolbar button to toggle OFF numbering
+    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+
+    // the selected paragraphs should definitely have the list label removed
+    CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(xPara1, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(xPara2, "ListLabelString"));
+    // current implementation: the numbering style itself is changed too - affects all Heading 1's.
+    // A valid alternative implementation would be to simply SetCountInList(false) for 1st para,
+    // and leave the Outline style format alone.
+    CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(xPara3, "ListLabelString"));
+
+    // on the selection, simulate pressing the toolbar button to toggle ON numbering again
+    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+
+    // current implementation: the entire format was removed, so turn (default) numbering on
+    CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(xPara1, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(xPara2, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(xPara3, "ListLabelString"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
