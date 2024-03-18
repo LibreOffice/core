@@ -544,7 +544,10 @@ static bool isCommandAllowedForViewType(const OUString& command)
             u"LayoutStatus"_ustr,
             u"ToolbarMode"_ustr,
             u"ChangeTheme"_ustr,
-            u"CopyHyperlinkLocation"_ustr
+            u"CopyHyperlinkLocation"_ustr,
+            u"ExportDirectToPDF"_ustr,
+            u"ExportToPDF"_ustr,
+            u"ExportToEPUB"_ustr
         };
 
         bool allowed = std::find(std::begin(allowedCommandList), std::end(allowedCommandList), command) != std::end(allowedCommandList);
