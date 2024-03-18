@@ -251,6 +251,17 @@ scanAccessibilityIssuesOnNodes(SwDoc* pDocument)
     return aIssues;
 }
 
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTabsinTOC)
+{
+    createSwDoc("Tabs-in-TOC.odt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    sw::AccessibilityCheck aCheck(pDoc);
+    aCheck.check();
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aIssues.size());
+}
+
 void checkIssuePosition(std::shared_ptr<sfx::AccessibilityIssue> const& pIssue, int nLine,
                         sal_Int32 nStart, sal_Int32 nEnd, SwNodeOffset nIndex)
 {
