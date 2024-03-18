@@ -200,6 +200,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159054_disableOutlineNumbering)
+{
+    createSwDoc("tdf159054_disableOutlineNumbering.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    const uno::Reference<text::XTextRange> xPara1 = getParagraph(1, "Heading A");
+    const uno::Reference<text::XTextRange> xPara2 = getParagraph(2, "Heading B");
+    const uno::Reference<text::XTextRange> xPara3 = getParagraph(3, "Heading C");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara1, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("B."), getProperty<OUString>(xPara2, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("C."), getProperty<OUString>(xPara3, "ListLabelString"));
+
+    // select (at least parts) of the first two paragraphs
+    pWrtShell->Down(/*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/true);
+
+    // on the selection, simulate pressing the toolbar button to toggle OFF numbering
+    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+
+    // the selected paragraphs should definitely have the list label removed
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara1, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara2, "ListLabelString"));
+    // the third paragraph must retain the existing numbering format
+    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara3, "ListLabelString"));
+
+    // on the selection, simulate pressing the toolbar button to toggle ON numbering again
+    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+
+    // the outline numbering format must be re-applied to the first two paragraphs
+    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara1, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("B."), getProperty<OUString>(xPara2, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("C."), getProperty<OUString>(xPara3, "ListLabelString"));
+
+    // on the selection, simulate a right click - list - No list
+    dispatchCommand(mxComponent, ".uno:RemoveBullets", {});
+
+    // the selected paragraphs should definitely have the list label removed
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara1, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara2, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("A."), getProperty<OUString>(xPara3, "ListLabelString"));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -1693,36 +1693,7 @@ void SwWrtShell::NumOrBulletOff()
     if (!pCurNumRule)
         return;
 
-    if (pCurNumRule->IsOutlineRule())
-    {
-        SwNumRule aNumRule(*pCurNumRule);
-
-        SwTextNode * pTextNode =
-            sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->GetNode());
-
-        if (pTextNode)
-        {
-            int nLevel = pTextNode->GetActualListLevel();
-
-            if (nLevel < 0)
-                nLevel = 0;
-
-            if (nLevel >= MAXLEVEL)
-                nLevel = MAXLEVEL - 1;
-
-            SwNumFormat aFormat(aNumRule.Get(o3tl::narrowing<sal_uInt16>(nLevel)));
-
-            aFormat.SetNumberingType(SVX_NUM_NUMBER_NONE);
-            aNumRule.Set(nLevel, aFormat);
-
-            // no start or continuation of a list - the outline style is only changed.
-            SetCurNumRule( aNumRule, false );
-        }
-    }
-    else
-    {
-        DelNumRules();
-    }
+    DelNumRules();
 
     // #126346# - Cursor can not be anymore in front of
     // a label, because numbering/bullet is switched off.
