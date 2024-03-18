@@ -17,4 +17,9 @@
 /// "members inherited from optional service or interface",
 /// i.e., not every implementation supports these members
 /// or attributes.
+///
+/// \remark
+/// Only interfaces marked "published" are part of the published
+/// UNO API. Interfaces that haven't "published" mark, may be
+/// changed at any time. Do not use them in macros / scripts.
 
