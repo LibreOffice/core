@@ -1746,6 +1746,12 @@ void JSSpinButton::set_value(sal_Int64 value)
     sendAction(std::move(pMap));
 }
 
+void JSSpinButton::set_range(sal_Int64 min, sal_Int64 max)
+{
+    SalInstanceSpinButton::set_range(min, max);
+    sendUpdate();
+}
+
 JSFormattedSpinButton::JSFormattedSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
                                              SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceFormattedSpinButton, ::FormattedField>(pSender, pSpin, pBuilder,

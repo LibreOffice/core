@@ -659,6 +659,7 @@ public:
                  bool bTakeOwnership);
 
     virtual void set_value(sal_Int64 value) override;
+    virtual void set_range(sal_Int64 min, sal_Int64 max) override;
 };
 
 class JSFormattedSpinButton final
