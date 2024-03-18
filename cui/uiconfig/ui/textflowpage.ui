@@ -53,6 +53,13 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment9">
+    <property name="lower">2</property>
+    <property name="upper">9</property>
+    <property name="value">2</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <!-- n-columns=2 n-rows=2 -->
   <object class="GtkGrid" id="TextFlowPage">
     <property name="visible">True</property>
@@ -114,7 +121,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
@@ -129,6 +136,26 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="spinMaxNum-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinMaxNum">Enter the maximum number of consecutive lines that can be hyphenated.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="spinCompoundLineEnd">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">start</property>
+                <property name="margin-start">25</property>
+                <property name="activates_default">True</property>
+                <property name="adjustment">adjustment9</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="spinCompoundLineEnd-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinCompoundLineEnd">Enter the minimum number of characters of a compound word to leave at the end of the line before a hyphen is inserted.</property>
                   </object>
                 </child>
               </object>
@@ -206,6 +233,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="labelCompoundLineEnd">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes" context="textflowpage|labelCompoundLineEnd">C_ompound characters at line end</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">spinCompoundLineEnd</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="labelMaxNum">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -216,7 +257,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
@@ -230,7 +271,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
@@ -343,6 +384,7 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
+        <property name="height">2</property>
       </packing>
     </child>
     <child>
@@ -737,7 +779,7 @@
         </child>
       </object>
       <packing>
-        <property name="left-attach">0</property>
+        <property name="left-attach">1</property>
         <property name="top-attach">1</property>
       </packing>
     </child>

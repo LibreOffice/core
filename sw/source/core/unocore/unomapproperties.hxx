@@ -117,6 +117,7 @@
         { UNO_NAME_PARA_HYPHENATION_NO_LAST_WORD,       RES_PARATR_HYPHENZONE,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_HYPHEN_NO_LAST_WORD                }, \
         { UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS,  RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD                    }, \
         { UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS, RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL                   }, \
+        { UNO_NAME_PARA_HYPHENATION_COMPOUND_MIN_LEADING_CHARS, RES_PARATR_HYPHENZONE, cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_COMPOUND_MIN_LEAD           }, \
         { UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS,        RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS                 }, \
         { UNO_NAME_PARA_HYPHENATION_MIN_WORD_LENGTH,    RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_WORD_LENGTH             }, \
         { UNO_NAME_PARA_HYPHENATION_ZONE,               RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE}, \
@@ -479,6 +480,7 @@
                     { UNO_NAME_PARA_HYPHENATION_NO_LAST_WORD, RES_PARATR_HYPHENZONE,      cppu::UnoType<bool>::get(),  PropertyAttribute::MAYBEVOID, MID_HYPHEN_NO_LAST_WORD },\
                     { UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS, RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD   },\
                     { UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS, RES_PARATR_HYPHENZONE,        cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },\
+                    { UNO_NAME_PARA_HYPHENATION_COMPOUND_MIN_LEADING_CHARS, RES_PARATR_HYPHENZONE, cppu::UnoType<sal_Int16>::get(),  PropertyAttribute::MAYBEVOID, MID_HYPHEN_COMPOUND_MIN_LEAD },\
                     { UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS, RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},\
                     { UNO_NAME_PARA_HYPHENATION_MIN_WORD_LENGTH, RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_WORD_LENGTH},\
                     { UNO_NAME_PARA_HYPHENATION_ZONE, RES_PARATR_HYPHENZONE,                      cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE},\

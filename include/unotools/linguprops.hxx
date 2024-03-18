@@ -37,6 +37,7 @@ inline constexpr OUString UPN_IS_SPELL_WITH_DIGITS            = u"IsSpellWithDig
 // UNO property names for Hyphenator
 inline constexpr OUString UPN_HYPH_MIN_LEADING                = u"HyphMinLeading"_ustr;
 inline constexpr OUString UPN_HYPH_MIN_TRAILING               = u"HyphMinTrailing"_ustr;
+inline constexpr OUString UPN_HYPH_COMPOUND_MIN_LEADING       = u"HyphCompoundMinLeading"_ustr;
 inline constexpr OUString UPN_HYPH_MIN_WORD_LENGTH            = u"HyphMinWordLength"_ustr;
 inline constexpr OUString UPN_HYPH_NO_CAPS                    = u"HyphNoCaps"_ustr;
 inline constexpr OUString UPN_HYPH_NO_LAST_WORD               = u"HyphNoLastWord"_ustr;
@@ -109,6 +110,7 @@ inline constexpr OUString UPN_IS_GRAMMAR_INTERACTIVE          = u"IsInteractiveG
 #define UPH_HYPH_NO_LAST_WORD               32
 #define UPH_HYPH_ZONE                       33
 #define UPH_HYPH_KEEP                       34
+#define UPH_HYPH_COMPOUND_MIN_LEADING       35
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

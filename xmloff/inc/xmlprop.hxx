@@ -491,6 +491,8 @@ inline constexpr OUString PROP_ParaHyphenationMaxLeadingChars
     = u"ParaHyphenationMaxLeadingChars"_ustr;
 inline constexpr OUString PROP_ParaHyphenationMaxTrailingChars
     = u"ParaHyphenationMaxTrailingChars"_ustr;
+inline constexpr OUString PROP_ParaHyphenationCompoundMinLeadingChars
+    = u"ParaHyphenationCompoundMinLeadingChars"_ustr;
 inline constexpr OUString PROP_ParaHyphenationMinWordLength = u"ParaHyphenationMinWordLength"_ustr;
 inline constexpr OUString PROP_ParaHyphenationNoCaps = u"ParaHyphenationNoCaps"_ustr;
 inline constexpr OUString PROP_ParaHyphenationNoLastWord = u"ParaHyphenationNoLastWord"_ustr;

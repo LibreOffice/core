@@ -436,6 +436,13 @@ published service ParagraphProperties
             @since LibreOffice 24.8
          */
         [optional, property] long ParaHyphenationKeep;
+
+        /** specifies the minimum number of characters of the compound word part
+            to remain before the hyphen character (when hyphenation is applied).
+
+            @since LibreOffice 24.8
+         */
+        [optional, property] short ParaHyphenationCompoundMinLeadingChars;
 };
 
 

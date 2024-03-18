@@ -238,6 +238,7 @@ class PropertyHelper_Hyphen final :
     // default values
     sal_Int16   nHyphMinLeading,
             nHyphMinTrailing,
+            nHyphCompoundMinLeading,
             nHyphMinWordLength,
             nHyphTextHyphenZone;
     bool bNoHyphenateCaps;
@@ -245,6 +246,7 @@ class PropertyHelper_Hyphen final :
     // return values, will be set to default value or current temporary value
     sal_Int16   nResHyphMinLeading,
             nResHyphMinTrailing,
+            nResHyphCompoundMinLeading,
             nResHyphMinWordLength,
             nResHyphTextHyphenZone;
     bool bResNoHyphenateCaps;
@@ -272,6 +274,7 @@ public:
 
     sal_Int16   GetMinLeading() const               { return nResHyphMinLeading; }
     sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }
+    sal_Int16   GetCompoundMinLeading() const       { return nResHyphCompoundMinLeading; }
     sal_Int16   GetMinWordLength() const            { return nResHyphMinWordLength; }
     sal_Int16   GetTextHyphenZone() const           { return nResHyphTextHyphenZone; }
     bool IsNoHyphenateCaps() const { return bResNoHyphenateCaps; }
@@ -296,6 +299,7 @@ public:
     void SetTmpPropVals( const css::beans::PropertyValues &rPropVals );
     sal_Int16   GetMinLeading() const;
     sal_Int16   GetMinTrailing() const;
+    sal_Int16   GetCompoundMinLeading() const;
     sal_Int16   GetMinWordLength() const;
     sal_Int16   GetTextHyphenZone() const;
     bool IsNoHyphenateCaps() const;

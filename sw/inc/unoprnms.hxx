@@ -69,6 +69,8 @@ inline constexpr OUString UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS
     = u"ParaHyphenationMaxLeadingChars"_ustr;
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS
     = u"ParaHyphenationMaxTrailingChars"_ustr;
+inline constexpr OUString UNO_NAME_PARA_HYPHENATION_COMPOUND_MIN_LEADING_CHARS
+    = u"ParaHyphenationCompoundMinLeadingChars"_ustr;
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS = u"ParaHyphenationMaxHyphens"_ustr;
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_MIN_WORD_LENGTH
     = u"ParaHyphenationMinWordLength"_ustr;

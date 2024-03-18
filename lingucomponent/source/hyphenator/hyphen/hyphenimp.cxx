@@ -264,8 +264,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     rHelper.SetTmpPropVals(aProperties);
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
+    sal_Int16 minCompoundLead = rHelper.GetCompoundMinLeading();
     sal_Int16 minLen = rHelper.GetMinWordLength();
-    sal_Int16 nHyphZone = rHelper.GetTextHyphenZone();
     bool bNoHyphenateCaps = rHelper.IsNoHyphenateCaps();
 
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
@@ -419,8 +419,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             if (hit)
             {
                 // skip hyphenation right after stem boundaries in compound words
-                // if hyphenation zone is enabled (default value: less than 4-character distance)
-                if ( bCompoundHyphenation && nHyphZone && nHyphenationPos > -1 && i - nHyphenationPos < 4 )
+                // if minCompoundLead > 2 (default value: less than n=minCompoundLead character distance)
+                if ( bCompoundHyphenation && minCompoundLead > 2 && nHyphenationPos > -1 && i - nHyphenationPos < minCompoundLead )
                 {
                     uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
                     uno::Reference< XSpellChecker1 > xSpell;

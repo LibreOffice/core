@@ -976,6 +976,7 @@ hyphenation-no-caps
 hyphenation-no-last-word
 hyphenation-word-char-count
 hyphenation-zone
+hyphenation-compound-remain-char-count
 i
 icon
 icon-set

@@ -1625,6 +1625,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_xHyphenNoLastWordBox->get_state_changed_from_saved() ||
          m_xExtHyphenBeforeBox->get_value_changed_from_saved() ||
          m_xExtHyphenAfterBox->get_value_changed_from_saved() ||
+         m_xExtCompoundHyphenBeforeBox->get_value_changed_from_saved() ||
          m_xMaxHyphenEdit->get_value_changed_from_saved() ||
          m_xMinWordLength->get_value_changed_from_saved() ||
          m_aHyphenZone.get_value_changed_from_saved() ||
@@ -1640,6 +1641,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         {
             aHyphen.GetMinLead() = static_cast<sal_uInt8>(m_xExtHyphenBeforeBox->get_value());
             aHyphen.GetMinTrail() = static_cast<sal_uInt8>(m_xExtHyphenAfterBox->get_value());
+            aHyphen.GetCompoundMinLead() = static_cast<sal_uInt8>(m_xExtCompoundHyphenBeforeBox->get_value());
             aHyphen.GetMinWordLength() = static_cast<sal_uInt8>(m_xMinWordLength->get_value());
         }
         aHyphen.GetMaxHyphens() = static_cast<sal_uInt8>(m_xMaxHyphenEdit->get_value());
@@ -1875,6 +1877,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
         m_xExtHyphenBeforeBox->set_value(rHyphen.GetMinLead());
         m_xExtHyphenAfterBox->set_value(rHyphen.GetMinTrail());
+        m_xExtCompoundHyphenBeforeBox->set_value(rHyphen.GetCompoundMinLead());
         m_xMaxHyphenEdit->set_value(rHyphen.GetMaxHyphens());
         m_xMinWordLength->set_value(rHyphen.GetMinWordLength());
         m_aHyphenZone.SetFieldUnit(eFUnit);
@@ -1894,8 +1897,10 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_xHyphenNoLastWordBox->set_sensitive(bEnable);
     m_xExtHyphenBeforeBox->set_sensitive(bEnable);
     m_xExtHyphenAfterBox->set_sensitive(bEnable);
+    m_xExtCompoundHyphenBeforeBox->set_sensitive(bEnable);
     m_xBeforeText->set_sensitive(bEnable);
     m_xAfterText->set_sensitive(bEnable);
+    m_xCompoundBeforeText->set_sensitive(bEnable);
     m_xMaxHyphenLabel->set_sensitive(bEnable);
     m_xMaxHyphenEdit->set_sensitive(bEnable);
     m_xMinWordLabel->set_sensitive(bEnable);
@@ -2161,6 +2166,7 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xHyphenNoLastWordBox->save_state();
     m_xExtHyphenBeforeBox->save_value();
     m_xExtHyphenAfterBox->save_value();
+    m_xExtCompoundHyphenBeforeBox->save_value();
     m_xMaxHyphenEdit->save_value();
     m_xMinWordLength->save_value();
     m_aHyphenZone.save_value();
@@ -2213,6 +2219,8 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xExtHyphenBeforeBox(m_xBuilder->weld_spin_button("spinLineEnd"))
     , m_xAfterText(m_xBuilder->weld_label("labelLineEnd"))
     , m_xExtHyphenAfterBox(m_xBuilder->weld_spin_button("spinLineBegin"))
+    , m_xCompoundBeforeText(m_xBuilder->weld_label("labelCompoundLineEnd"))
+    , m_xExtCompoundHyphenBeforeBox(m_xBuilder->weld_spin_button("spinCompoundLineEnd"))
     , m_xMaxHyphenLabel(m_xBuilder->weld_label("labelMaxNum"))
     , m_xMaxHyphenEdit(m_xBuilder->weld_spin_button("spinMaxNum"))
     , m_xMinWordLabel(m_xBuilder->weld_label("labelMinLen"))
@@ -2287,6 +2295,8 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xExtHyphenBeforeBox->set_sensitive(false);
     m_xAfterText->set_sensitive(false);
     m_xExtHyphenAfterBox->set_sensitive(false);
+    m_xCompoundBeforeText->set_sensitive(false);
+    m_xExtCompoundHyphenBeforeBox->set_sensitive(false);
     m_xMaxHyphenLabel->set_sensitive(false);
     m_xMaxHyphenEdit->set_sensitive(false);
     m_xMinWordLabel->set_sensitive(false);
@@ -2424,6 +2434,8 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xExtHyphenBeforeBox->set_sensitive(bEnable);
     m_xAfterText->set_sensitive(bEnable);
     m_xExtHyphenAfterBox->set_sensitive(bEnable);
+    m_xCompoundBeforeText->set_sensitive(bEnable);
+    m_xExtCompoundHyphenBeforeBox->set_sensitive(bEnable);
     m_xMaxHyphenLabel->set_sensitive(bEnable);
     m_xMaxHyphenEdit->set_sensitive(bEnable);
     m_xMinWordLabel->set_sensitive(bEnable);

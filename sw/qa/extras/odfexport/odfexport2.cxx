@@ -153,6 +153,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf158885_compound_remain)
+{
+    loadAndReload("tdf158885_compound-remain.fodt");
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:text-properties[@loext:hyphenation-compound-remain-char-count='3']"_ostr, 1);
+}
+
 DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());

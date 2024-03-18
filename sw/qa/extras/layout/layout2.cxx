@@ -13,6 +13,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
@@ -937,6 +938,53 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952_compat)
                 " NNNNNNNNNN NNNNNNNNNNNNNNN https://example.com/xxxxxxx/testtesttesttest/hyphen");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
                 "portion"_ostr, "ate/testtesttest ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_compound_remain)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("hu", "HU", OUString())))
+        return;
+
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang = LanguageTag::convertToLanguageType(lang::Locale("hu", "HU", OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    createSwDoc("tdf158885_compound-remain.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // hyphenate compound word with 3- or more character distance from the stem boundary
+    // This was "emberel=lenes" (now "ember=ellenes", i.e. hyphenating at the stem boundary)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
+                "portion"_ostr,
+                "emberellenes emberellenes emberellenes emberellenes emberellenes ember");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
+                "portion"_ostr,
+                "ellenes emberellenes emberellenes emberellenes emberellenes emberellenes ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_not_compound_remain)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("hu", "HU", OUString())))
+        return;
+
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang = LanguageTag::convertToLanguageType(lang::Locale("hu", "HU", OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    createSwDoc("tdf158885_not_compound-remain.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // hyphenate compound word with 2-character distance from the stem boundary,
+    // resulting less readable hyphenation "emberel=lenes" ("emberel" and "lenes" have
+    // different meanings, than the original word parts)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
+                "portion"_ostr,
+                "emberellenes emberellenes emberellenes emberellenes emberellenes emberel");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
+                "portion"_ostr,
+                "lenes emberellenes emberellenes emberellenes emberellenes emberellenes ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)

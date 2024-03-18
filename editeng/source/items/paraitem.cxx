@@ -568,7 +568,8 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     nMaxHyphens(255),
     nMinWordLength(0),
     nTextHyphenZone(0),
-    nKeep(0) // TODO change default value to COLUMN
+    nKeep(0),           // TODO change default value to COLUMN
+    nCompoundMinLead(0)
 {
 }
 
@@ -604,6 +605,9 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
         break;
         case MID_HYPHEN_KEEP:
             rVal <<= static_cast<sal_Int16>(nKeep);
+        break;
+        case MID_HYPHEN_COMPOUND_MIN_LEAD:
+            rVal <<= static_cast<sal_Int16>(nCompoundMinLead);
         break;
     }
     return true;
@@ -650,6 +654,9 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_HYPHEN_KEEP:
             nKeep = static_cast<sal_uInt8>(nNewVal);
         break;
+        case MID_HYPHEN_COMPOUND_MIN_LEAD:
+            nCompoundMinLead = static_cast<sal_uInt8>(nNewVal);
+        break;
     }
     return true;
 }
@@ -666,6 +673,7 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
             && rItem.bPageEnd == bPageEnd
             && rItem.nMinLead == nMinLead
             && rItem.nMinTrail == nMinTrail
+            && rItem.nCompoundMinLead == nCompoundMinLead
             && rItem.nMaxHyphens == nMaxHyphens
             && rItem.nMinWordLength == nMinWordLength
             && rItem.nTextHyphenZone == nTextHyphenZone
@@ -702,6 +710,7 @@ bool SvxHyphenZoneItem::GetPresentation
             rText += EditResId(pId) + cpDelimTmp +
                     OUString::number( nMinLead ) + cpDelimTmp +
                     OUString::number( nMinTrail ) + cpDelimTmp +
+                    OUString::number( nCompoundMinLead ) + cpDelimTmp +
                     OUString::number( nMaxHyphens ) + cpDelimTmp +
                     OUString::number( nMinWordLength ) + cpDelimTmp +
                     GetMetricText( nTextHyphenZone, eCoreUnit, ePresUnit, &rIntl ) +
@@ -732,6 +741,8 @@ bool SvxHyphenZoneItem::GetPresentation
                     EditResId(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
+                    cpDelimTmp +
+                    EditResId(RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD).replaceAll("%1", OUString::number(nCompoundMinLead)) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens)) +
                     cpDelimTmp +

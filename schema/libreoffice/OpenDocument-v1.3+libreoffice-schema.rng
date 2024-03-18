@@ -3038,6 +3038,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-compound-remain-char-count">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
   <rng:define name="chart-data-point-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="loext:custom-label-field">

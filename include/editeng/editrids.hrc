@@ -230,6 +230,7 @@
 #define RID_SVXITEMS_ORPHANS_COMPLETE           NC_("RID_SVXITEMS_ORPHANS_COMPLETE", "Orphan control")
 #define RID_SVXITEMS_HYPHEN_MINLEAD             NC_("RID_SVXITEMS_HYPHEN_MINLEAD", "%1 characters at end of line")
 #define RID_SVXITEMS_HYPHEN_MINTRAIL            NC_("RID_SVXITEMS_HYPHEN_MINTRAIL", "%1 characters at beginning of line")
+#define RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD    NC_("RID_SVXITEMS_HYPHEN_COMPOUND_MINLEAD", "%1 compound word characters at end of line")
 #define RID_SVXITEMS_HYPHEN_MAX                 NC_("RID_SVXITEMS_HYPHEN_MAX", "%1 hyphens")
 #define RID_SVXITEMS_HYPHEN_NO_CAPS_TRUE        NC_("RID_SVXITEMS_HYPHEN_NO_CAPS_TRUE", "Not hyphenated CAPS")
 #define RID_SVXITEMS_HYPHEN_LAST_WORD_TRUE      NC_("RID_SVXITEMS_HYPHEN_NO_CAPS_FALSE", "Not hyphenated last word")

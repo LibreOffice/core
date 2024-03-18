@@ -491,6 +491,7 @@ void PropertyHelper_Hyphen::SetDefaultValues()
 
     nResHyphMinLeading      = nHyphMinLeading       = 2;
     nResHyphMinTrailing     = nHyphMinTrailing      = 2;
+    nResHyphCompoundMinLeading = nHyphCompoundMinLeading = 2;
     nResHyphMinWordLength   = nHyphMinWordLength    = 0;
     nResHyphTextHyphenZone  = nHyphTextHyphenZone   = 0;
     bResNoHyphenateCaps = bNoHyphenateCaps = false;
@@ -521,6 +522,11 @@ void PropertyHelper_Hyphen::GetCurrentValues()
         {
             pnVal    = &nHyphMinTrailing;
             pnResVal = &nResHyphMinTrailing;
+        }
+        if ( rPropName == UPN_HYPH_COMPOUND_MIN_LEADING )
+        {
+            pnVal    = &nHyphCompoundMinLeading;
+            pnResVal = &nResHyphCompoundMinLeading;
         }
         else if ( rPropName == UPN_HYPH_MIN_WORD_LENGTH )
         {
@@ -564,6 +570,7 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
         {
             case UPH_HYPH_MIN_LEADING     : pnVal = &nHyphMinLeading; break;
             case UPH_HYPH_MIN_TRAILING    : pnVal = &nHyphMinTrailing; break;
+            case UPH_HYPH_COMPOUND_MIN_LEADING : pnVal = &nHyphCompoundMinLeading; break;
             case UPH_HYPH_MIN_WORD_LENGTH : pnVal = &nHyphMinWordLength; break;
             case UPH_HYPH_ZONE            : pnVal = &nHyphTextHyphenZone; break;
             case UPH_HYPH_NO_CAPS : pbVal = &bNoHyphenateCaps; break;
@@ -603,6 +610,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     // temporary value
     nResHyphMinLeading      = nHyphMinLeading;
     nResHyphMinTrailing     = nHyphMinTrailing;
+    nResHyphCompoundMinLeading = nHyphCompoundMinLeading;
     nResHyphMinWordLength   = nHyphMinWordLength;
     nResHyphTextHyphenZone  = nHyphTextHyphenZone;
     bResNoHyphenateCaps = bNoHyphenateCaps;
@@ -616,6 +624,8 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
             pnResVal = &nResHyphMinLeading;
         else if ( rVal.Name == UPN_HYPH_MIN_TRAILING )
             pnResVal = &nResHyphMinTrailing;
+        if ( rVal.Name == UPN_HYPH_COMPOUND_MIN_LEADING )
+            pnResVal = &nResHyphCompoundMinLeading;
         else if ( rVal.Name == UPN_HYPH_MIN_WORD_LENGTH )
             pnResVal = &nResHyphMinWordLength;
         else if ( rVal.Name == UPN_HYPH_ZONE )
@@ -692,6 +702,11 @@ sal_Int16 PropertyHelper_Hyphenation::GetMinLeading() const
 sal_Int16 PropertyHelper_Hyphenation::GetMinTrailing() const
 {
     return mxPropHelper->GetMinTrailing();
+}
+
+sal_Int16 PropertyHelper_Hyphenation::GetCompoundMinLeading() const
+{
+    return mxPropHelper->GetCompoundMinLeading();
 }
 
 sal_Int16 PropertyHelper_Hyphenation::GetMinWordLength() const

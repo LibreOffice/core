@@ -42,6 +42,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
     sal_uInt8 nMinWordLength;   // hyphenate only words with at least nMinWordLength characters
     sal_uInt16 nTextHyphenZone; // don't force hyphenation at line end, allow this extra white space
     sal_uInt8 nKeep;            // avoid hyphenation across page etc., see ParagraphHyphenationKeep
+    sal_uInt8 nCompoundMinLead; // min. characters between compound word boundary and hyphenation
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -77,6 +78,9 @@ public:
 
     sal_uInt8 &GetMinTrail() { return nMinTrail; }
     sal_uInt8 GetMinTrail() const { return nMinTrail; }
+
+    sal_uInt8 &GetCompoundMinLead() { return nCompoundMinLead; }
+    sal_uInt8 GetCompoundMinLead() const { return nCompoundMinLead; }
 
     sal_uInt8 &GetMaxHyphens() { return nMaxHyphens; }
     sal_uInt8 GetMaxHyphens() const { return nMaxHyphens; }
