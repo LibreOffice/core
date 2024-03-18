@@ -378,6 +378,7 @@ namespace
         { PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF, u"CursorNotIgnoreTables"},
         { PROP_PARA_CONNECT_BORDERS, u"ParaIsConnectBorder"},
         { PROP_DECORATIVE, u"Decorative"},
+        { PROP_TABS_AND_BLANKS_FOR_LINE_CALCULATION, u"IgnoreTabsAndBlanksForLineCalculation"},
     });
 } // end anonymous ns
 

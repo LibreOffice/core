@@ -2021,6 +2021,10 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 i18n::LineBreakResults aLBR = _xBI->getLineBreak(
                     pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
                 nBreakPos = aLBR.breakIndex;
+
+                // show soft hyphen
+                if ( nBreakPos && CH_SOFTHYPHEN == pNode->GetString()[ sal_Int32(nBreakPos) - 1 ] )
+                    bHyphenated = true;
             }
             else
             {

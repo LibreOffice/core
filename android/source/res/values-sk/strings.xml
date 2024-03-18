@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_description">LibreOffice Viewer je prehliadač dokumentov založený na LibreOffice.</string>
+    <string name="default_document_name">bez názvu</string>
+    <string name="action_about">Info</string>
+    <string name="app_credits">https://www.libreoffice.org</string>
+    <string name="new_spreadsheet">Nový tabuľkový dokument</string>
+    <string name="select_file_to_open">Vyberte súbor, ktorý chcete otvoriť</string>
+    <string name="new_drawing">Nová kresba</string>
+    <string name="title_recents">Posledné súbory</string>
+    <string name="menu_search">Hľadať</string>
+    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="new_textdocument">Nový textový dokument</string>
+    <string name="new_presentation">Nová prezentácia</string>
+    <string name="search_not_found">Kľúčové slovo nebolo nájdené</string>
+    <string name="app_vendor">Dodávateľom tohto produktu je $VENDOR.</string>
+    <string name="menu_preferences">Možnosti</string>
+    <string name="pref_category_general">Všeobecné</string>
+    <string name="app_name_settings">Nastavenia LibreOffice Viewer</string>
+    <string name="app_version">Verzia: %1$s&lt;br&gt;ID zostavenia: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
+    <string name="about_license">Zobraziť licenciu</string>
+    <string name="title_browser">Všetky súbory</string>
+    <string name="app_name">LibreOffice Viewer</string>
+    <string name="about_moreinfo">Viac informácií</string>
+    <string name="readonly_file">Táto súbor je len na čítanie.</string>
+    <string name="about_notice">Zobraziť oznam</string>
+</resources>

@@ -29,6 +29,12 @@ namespace svgio::svgreader
             /// use styles
             SvgStyleAttributes      maSvgStyleAttributes;
 
+            SvgNumber               maX;
+            SvgNumber               maY;
+            SvgNumber               maWidth;
+            SvgNumber               maHeight;
+
+            std::unique_ptr<basegfx::B2DRange> mpViewBox;
             SvgAspectRatio          maSvgAspectRatio;
 
         public:
@@ -39,6 +45,15 @@ namespace svgio::svgreader
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
+
+            /// viewBox content
+            const basegfx::B2DRange* getViewBox() const { return mpViewBox.get(); }
+            void setViewBox(const basegfx::B2DRange* pViewBox) { mpViewBox.reset(); if(pViewBox) mpViewBox.reset( new basegfx::B2DRange(*pViewBox) ); }
+
+            /// SvgAspectRatio content
+            const SvgAspectRatio& getSvgAspectRatio() const { return maSvgAspectRatio; }
+
         };
 
 } // end of namespace svgio::svgreader

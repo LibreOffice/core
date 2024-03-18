@@ -231,6 +231,12 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     std::unique_ptr<TableStyle> pTableStyle;
     pTableStyle.reset(new TableStyle());
 
+    // Text Style definitions for table parts
+
+    bool bFirstRowTextBoldStyle = false;
+    bool bFirstColTextBoldStyle = false;
+    bool bLastColTextBoldStyle = false;
+
     // Text Color definitions for table parts
 
     ::oox::drawingml::Color wholeTblTextColor;
@@ -410,6 +416,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     pWholeTblBottomBorder->moLineWidth = 12700;
     pWholeTblInsideHBorder->moLineWidth = 12700;
     pWholeTblInsideVBorder->moLineWidth = 12700;
+    pFirstRowBottomBorder->moLineWidth = 12700;
 
     pWholeTblLeftBorder->moPresetDash = XML_solid;
     pWholeTblRightBorder->moPresetDash = XML_solid;
@@ -417,6 +424,7 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     pWholeTblBottomBorder->moPresetDash = XML_solid;
     pWholeTblInsideHBorder->moPresetDash = XML_solid;
     pWholeTblInsideVBorder->moPresetDash = XML_solid;
+    pFirstRowBottomBorder->moPresetDash = XML_solid;
 
     // Start to handle all style groups.
 
@@ -557,7 +565,13 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         setBorderLineType(pFirstRowBottomBorder, XML_solidFill);
         setBorderLineType(pLastRowTopBorder, XML_solidFill);
 
+        bFirstRowTextBoldStyle = true;
+        bFirstColTextBoldStyle = true;
+        bLastColTextBoldStyle = true;
+
         wholeTblTextColor.setSchemeClr(XML_tx1);
+        firstRowTextColor.setSchemeClr(XML_tx1);
+        lastColTextColor.setSchemeClr(XML_tx1);
 
         sal_Int32 accent_val;
 
@@ -570,8 +584,6 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         pWholeTblBottomBorder->maLineFill.maFillColor.setSchemeClr(accent_val);
         pFirstRowBottomBorder->maLineFill.maFillColor.setSchemeClr(accent_val);
         pLastRowTopBorder->maLineFill.maFillColor.setSchemeClr(accent_val);
-
-        firstRowTextColor.setSchemeClr(accent_val);
 
         pBand1HFillProperties->maFillColor.setSchemeClr(accent_val);
         pBand1VFillProperties->maFillColor.setSchemeClr(accent_val);
@@ -894,6 +906,10 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     // Create a TableStyle from handled properties.
     pTableStyle->getStyleId() = styleId;
     pTableStyle->getStyleName() = style_name;
+
+    pTableStyle->getFirstRow().getTextBoldStyle() = bFirstRowTextBoldStyle;
+    pTableStyle->getFirstCol().getTextBoldStyle() = bFirstColTextBoldStyle;
+    pTableStyle->getLastCol().getTextBoldStyle() = bLastColTextBoldStyle;
 
     pTableStyle->getWholeTbl().getTextColor() = wholeTblTextColor;
     pTableStyle->getFirstRow().getTextColor() = firstRowTextColor;

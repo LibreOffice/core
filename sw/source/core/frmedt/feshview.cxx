@@ -423,8 +423,8 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
         SwFrame* pNew = pOld;
         // #i28701#
         SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
-        SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-        SwFormatAnchor aAnch( rFormat.GetAnchor() );
+        SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+        SwFormatAnchor aAnch( pFormat->GetAnchor() );
         RndStdIds nAnchorId = aAnch.GetAnchorId();
         if ( RndStdIds::FLY_AS_CHAR == nAnchorId )
             return false;
@@ -613,13 +613,13 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
             // anchor attribute is change and re-create them afterwards.
             {
                 std::unique_ptr<SwHandleAnchorNodeChg> pHandleAnchorNodeChg;
-                SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(&rFormat) );
+                SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(pFormat) );
                 if ( pFlyFrameFormat )
                 {
                     pHandleAnchorNodeChg.reset(
                         new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                 }
-                rFormat.GetDoc()->SetAttr( aAnch, rFormat );
+                pFormat->GetDoc()->SetAttr( aAnch, *pFormat );
             }
             // #i28701# - no call of method
             // <CheckCharRectAndTopOfLine()> for to-character anchored
@@ -1476,8 +1476,8 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                 if ( pObj->GetLayer() == rIDDMA.GetHellId() )
                 {
                     const SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
-                    const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-                    const SwFormatSurround& rSurround = rFormat.GetSurround();
+                    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+                    const SwFormatSurround& rSurround = pFormat->GetSurround();
                     if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
                     {
                         bObjInBackground = true;
@@ -2379,14 +2379,16 @@ RndStdIds SwFEShell::GetAnchorId() const
                 nRet = RndStdIds::UNKNOWN;
                 break;
             }
-            SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-            RndStdIds nId = pContact->GetFormat()->GetAnchor().GetAnchorId();
-            if ( nRet == RndStdIds(SHRT_MAX) )
-                nRet = nId;
-            else if ( nRet != nId )
+            if (SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
             {
-                nRet = RndStdIds::UNKNOWN;
-                break;
+                RndStdIds nId = pContact->GetFormat()->GetAnchor().GetAnchorId();
+                if (nRet == RndStdIds(SHRT_MAX))
+                    nRet = nId;
+                else if (nRet != nId)
+                {
+                    nRet = RndStdIds::UNKNOWN;
+                    break;
+                }
             }
         }
     }
@@ -3310,17 +3312,19 @@ Color SwFEShell::GetShapeBackground() const
             OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackground - selected object is not a drawing object!");
             if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr )
             {
-                // determine page frame of the frame the shape is anchored.
-                const SwFrame* pAnchorFrame =
-                        static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrame( pSdrObj );
-                OSL_ENSURE( pAnchorFrame, "inconsistent model - no anchor at shape!");
-                if ( pAnchorFrame )
+                if (SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pSdrObj)))
                 {
-                    const SwPageFrame* pPageFrame = pAnchorFrame->FindPageFrame();
-                    OSL_ENSURE( pPageFrame, "inconsistent model - no page!");
-                    if ( pPageFrame )
+                    // determine page frame of the frame the shape is anchored.
+                    const SwFrame * pAnchorFrame = pDrawContact->GetAnchorFrame(pSdrObj);
+                    OSL_ENSURE(pAnchorFrame, "inconsistent model - no anchor at shape!");
+                    if (pAnchorFrame)
                     {
-                        aRetColor = pPageFrame->GetDrawBackgroundColor();
+                        const SwPageFrame* pPageFrame = pAnchorFrame->FindPageFrame();
+                        OSL_ENSURE(pPageFrame, "inconsistent model - no page!");
+                        if (pPageFrame)
+                        {
+                            aRetColor = pPageFrame->GetDrawBackgroundColor();
+                        }
                     }
                 }
             }

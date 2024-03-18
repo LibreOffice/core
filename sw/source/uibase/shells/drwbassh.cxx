@@ -836,8 +836,12 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 
                         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                         SwFrameFormat* pFrameFormat = FindFrameFormat(pObj);
-                        SwFormatHoriOrient aHOrient(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
-                        rSet.Put(SfxBoolItem(nWhich, aHOrient.GetHoriOrient() == nHoriOrient));
+                        if (pFrameFormat)
+                        {
+                            SwFormatHoriOrient aHOrient(
+                                pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
+                            rSet.Put(SfxBoolItem(nWhich, aHOrient.GetHoriOrient() == nHoriOrient));
+                        }
                     }
 
                     if (bVert && !bDisableThis && rMarkList.GetMarkCount() == 1)
@@ -860,8 +864,12 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 
                         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                         SwFrameFormat* pFrameFormat = FindFrameFormat(pObj);
-                        SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
-                        rSet.Put(SfxBoolItem(nWhich, aVOrient.GetVertOrient() == nVertOrient));
+                        if (pFrameFormat)
+                        {
+                            SwFormatVertOrient aVOrient(
+                                pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
+                            rSet.Put(SfxBoolItem(nWhich, aVOrient.GetVertOrient() == nVertOrient));
+                        }
                     }
                 }
                 break;

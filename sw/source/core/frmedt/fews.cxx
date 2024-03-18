@@ -464,12 +464,12 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 // This table is in a split fly, but we will insert a label, which means this is not
                 // a floating table anymore, disable the "can split" bit, it'll be hidden on the UI
                 // anyway.
-                SwFrameFormat& rFlyFormat = pFly->GetFrameFormat();
+                SwFrameFormat* pFormat = pFly->GetFrameFormat();
                 SfxItemSetFixed<RES_FLY_SPLIT, RES_FLY_SPLIT> aSet(GetDoc()->GetAttrPool());
                 SwFormatFlySplit aSplit(false);
                 aSet.Put(aSplit);
                 // SwUndoFormatAttr is created for us.
-                GetDoc()->SetFlyFrameAttr(rFlyFormat, aSet);
+                GetDoc()->SetFlyFrameAttr(*pFormat, aSet);
             }
         }
         break;

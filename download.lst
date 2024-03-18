@@ -75,8 +75,8 @@ CPPUNIT_TARBALL := cppunit-1.15.1.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CURL_SHA256SUM := 42ab8db9e20d8290a3b633e7fbb3cec15db34df65fd1015ef8ac1e4723750eeb
-CURL_TARBALL := curl-8.5.0.tar.xz
+CURL_SHA256SUM := 3ccd55d91af9516539df80625f818c734dc6f2ecf9bada33c76765e99121db15
+CURL_TARBALL := curl-8.6.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -106,8 +106,8 @@ ETONYEK_TARBALL := libetonyek-0.1.$(ETONYEK_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-EXPAT_SHA256SUM := ef2420f0232c087801abf705e89ae65f6257df6b7931d37846a193ef2e8cdcbe
-EXPAT_TARBALL := expat-2.5.0.tar.xz
+EXPAT_SHA256SUM := cb5f5a8ea211e1cabd59be0a933a52e3c02cc326e86a4d387d8d218e7ee47a3e
+EXPAT_TARBALL := expat-2.6.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -319,8 +319,8 @@ LIBGPGERROR_TARBALL := libgpg-error-1.43.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBLANGTAG_SHA256SUM := 1f12a20a02ec3a8d22e54dedb8b683a43c9c160bda1ba337bf1060607ae733bd
-LIBLANGTAG_TARBALL := liblangtag-0.6.3.tar.bz2
+LIBLANGTAG_SHA256SUM := 5ed6bcd4ae3f3c05c912e62f216cd1a44123846147f729a49fb5668da51e030e
+LIBLANGTAG_TARBALL := liblangtag-0.6.7.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -344,14 +344,14 @@ XMLSEC_TARBALL := xmlsec1-1.2.37.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBXML_SHA256SUM := 737e1d7f8ab3f139729ca13a2494fd17bf30ddb4b7a427cf336252cab57f57f7
-LIBXML_VERSION_MICRO := 4
-LIBXML_TARBALL := libxml2-2.11.$(LIBXML_VERSION_MICRO).tar.xz
+LIBXML_SHA256SUM := a972796696afd38073e0f59c283c3a2f5a560b5268b4babc391b286166526b21
+LIBXML_VERSION_MICRO := 5
+LIBXML_TARBALL := libxml2-2.12.$(LIBXML_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBXSLT_SHA256SUM := 1f32450425819a09acaff2ab7a5a7f8a2ec7956e505d7beeb45e843d0e1ecab1
-LIBXSLT_VERSION_MICRO := 38
+LIBXSLT_SHA256SUM := 2a20ad621148339b0759c4d4e96719362dee64c9a096dbba625ba053846349f0
+LIBXSLT_VERSION_MICRO := 39
 LIBXSLT_TARBALL := libxslt-1.1.$(LIBXSLT_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
@@ -397,8 +397,8 @@ MYTHES_TARBALL := mythes-1.2.5.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-NSS_SHA256SUM := f78ab1d911cae8bbc94758fb3bd0f731df4087423a4ff5db271ba65381f6b739
-NSS_TARBALL := nss-3.90-with-nspr-4.35.tar.gz
+NSS_SHA256SUM := 59bb55a59b02e4004fc26ad0aa1a13fe8d73c6c90c447dd2f2efb73fb81083ed
+NSS_TARBALL := nss-3.98-with-nspr-4.35.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -423,8 +423,8 @@ OPENLDAP_TARBALL := openldap-2.6.6.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OPENSSL_SHA256SUM := b3425d3bb4a2218d0697eb41f7fc0cdede016ed19ca49d168b78e8d947887f55
-OPENSSL_TARBALL := openssl-3.0.11.tar.gz
+OPENSSL_SHA256SUM := 88525753f79d3bec27d2fa7c66aa0b92b3aa9498dafd93d7cfa4b3780cdae313
+OPENSSL_TARBALL := openssl-3.0.13.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -555,8 +555,8 @@ XSLTML_TARBALL := a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ZLIB_SHA256SUM := 8a9ba2898e1d0d774eca6ba5b4627a11e5588ba85c8851336eb38de4683050a7
-ZLIB_TARBALL := zlib-1.3.tar.xz
+ZLIB_SHA256SUM := 38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32
+ZLIB_TARBALL := zlib-1.3.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

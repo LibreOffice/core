@@ -384,9 +384,8 @@ public:
     RTFSprms getSprms();
     /// Store a property
     void setSprm(Id nId, Id nValue);
-    bool hasProperties() const;
     /// If we got tokens indicating we're in a frame.
-    bool inFrame() const;
+    bool hasProperties() const;
 };
 
 /// State of the parser, which gets saved / restored when changing groups.
@@ -853,6 +852,8 @@ private:
     bool m_bNeedPar;
     /// If set, an empty paragraph will be added at the end of the document.
     bool m_bNeedFinalPar;
+    /// a synthetic \par was dispatched at the end of the current section
+    bool m_bParAtEndOfSection = false;
     /// The list table and list override table combined.
     RTFSprms m_aListTableSprms;
     /// Maps between listoverridetable and listtable indexes.
@@ -967,7 +968,7 @@ private:
     RTFKeyword m_nResetBreakOnSectBreak;
     /// If a section break is needed before the end of the doc (false right after a section break).
     bool m_bNeedSect;
-    /// If aFrame.inFrame() was true in the previous state.
+    /// If aFrame.hasProperties() was true in the previous state.
     bool m_bWasInFrame;
     /// A picture was seen in the current paragraph.
     bool m_bHadPicture;

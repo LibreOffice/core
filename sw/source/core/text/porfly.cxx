@@ -158,7 +158,7 @@ void SwTextFrame::MoveFlyInCnt(SwTextFrame *pNew,
     {
         // Consider changed type of <SwSortedList> entries
         SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-        const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat().GetAnchor();
+        const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat()->GetAnchor();
         if (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
             const SwPosition* pPos = rAnch.GetContentAnchor();

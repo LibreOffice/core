@@ -307,6 +307,10 @@ public:
         if (!pNextTextNode)
             return;
 
+        SwSectionNode* pNd = pCurrentTextNode->FindSectionNode();
+        if (pNd && pNd->GetSection().GetType() == SectionType::ToxContent)
+            return;
+
         for (auto& rPair : m_aNumberingCombinations)
         {
             if (pCurrentTextNode->GetText().startsWith(rPair.first)

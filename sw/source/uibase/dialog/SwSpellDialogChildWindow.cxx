@@ -821,6 +821,11 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPor
 
 void SwSpellDialogChildWindow::LockFocusNotification(bool bLock)
 {
+    if (!m_pSpellState)
+    {
+        return;
+    }
+
     OSL_ENSURE(m_pSpellState->m_bLockFocus != bLock, "invalid locking - no change of state");
     m_pSpellState->m_bLockFocus = bLock;
 }

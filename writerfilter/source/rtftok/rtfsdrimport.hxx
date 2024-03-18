@@ -77,6 +77,7 @@ public:
     void popParent();
     css::uno::Reference<css::drawing::XShape> const& getCurrentShape() const { return m_xShape; }
     bool isFakePict() const { return m_bFakePict; }
+    bool isTextGraphicObject() const { return m_bTextGraphicObject; }
 
 private:
     void createShape(const OUString& rService, css::uno::Reference<css::drawing::XShape>& xShape,

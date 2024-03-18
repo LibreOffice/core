@@ -217,7 +217,7 @@ bool IsNextContentFullPage(const SwFrame& rThis)
             continue;
         }
 
-        const SwFormatSurround& rSurround = pDrawObj->GetFrameFormat().GetSurround();
+        const SwFormatSurround& rSurround = pDrawObj->GetFrameFormat()->GetSurround();
         if (rSurround.GetSurround() != text::WrapTextMode_NONE)
         {
             continue;
@@ -379,10 +379,10 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
         {
 
             SwAnchoredObject* pObj = rObjs[i];
-            const SwFrameFormat& rFormat = pObj->GetFrameFormat();
+            const SwFrameFormat* pFormat = pObj->GetFrameFormat();
             const SwRect aRect( pObj->GetObjRect() );
             if ( aRect.Overlaps( rRect ) &&
-                 rFormat.GetSurround().GetSurround() != css::text::WrapTextMode_THROUGH )
+                 pFormat->GetSurround().GetSurround() != css::text::WrapTextMode_THROUGH )
             {
                 if( m_rThis.IsLayoutFrame() && //Fly Lower of This?
                     Is_Lower_Of( &m_rThis, pObj->GetDrawObj() ) )
@@ -404,10 +404,10 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
                 // flow, because then I wouldn't evade it.
                 if ( ::IsFrameInSameContext( pAnchor, &m_rThis ) )
                 {
-                    if ( rFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA )
+                    if ( pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA )
                     {
                         // The index of the other one can be retrieved using the anchor attribute.
-                        SwNodeOffset nTmpIndex = rFormat.GetAnchor().GetAnchorNode()->GetIndex();
+                        SwNodeOffset nTmpIndex = pFormat->GetAnchor().GetAnchorNode()->GetIndex();
                         // Now we're going to check whether the current paragraph before
                         // the anchor of the displacing object sits in the text. If this
                         // is the case, we don't try to evade it.
@@ -1224,13 +1224,13 @@ bool SwFlowFrame::IsPrevObjMove() const
         // text flow to the next layout frame
         for (SwAnchoredObject* pObj : *pPre->GetDrawObjs())
         {
-
+            const SwFrameFormat* pObjFormat = pObj->GetFrameFormat();
             // Do not consider hidden objects
             // i#26945 - do not consider object, which
             // doesn't follow the text flow.
-            if ( pObj->GetFrameFormat().GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
+            if ( pObjFormat->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
                                             pObj->GetDrawObj()->GetLayer() ) &&
-                 pObj->GetFrameFormat().GetFollowTextFlow().GetValue() )
+                 pObjFormat->GetFollowTextFlow().GetValue() )
             {
                 const SwLayoutFrame* pVertPosOrientFrame = pObj->GetVertPosOrientFrame();
                 if ( pVertPosOrientFrame &&

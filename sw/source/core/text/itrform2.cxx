@@ -420,7 +420,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 if (pAnchoredObj->RestartLayoutProcess()
                     && !pAnchoredObj->IsTmpConsiderWrapInfluence())
                 {
-                    SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat().GetAnchor());
+                    SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat()->GetAnchor());
                     assert(rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA);
                     TextFrameIndex const nAnchor(GetTextFrame()->MapModelToViewPos(*rAnchor.GetContentAnchor()));
                     if (pFollow->GetOffset() <= nAnchor
@@ -1009,6 +1009,8 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         case SwContentControlType::PLAIN_TEXT:
         {
             pDescriptor = std::make_unique<vcl::PDFWriter::EditWidget>();
+            auto pEditWidget = static_cast<vcl::PDFWriter::EditWidget*>(pDescriptor.get());
+            pEditWidget->MultiLine = true;
             break;
         }
         case SwContentControlType::CHECKBOX:
@@ -1016,8 +1018,13 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
             pDescriptor = std::make_unique<vcl::PDFWriter::CheckBoxWidget>();
             auto pCheckBoxWidget = static_cast<vcl::PDFWriter::CheckBoxWidget*>(pDescriptor.get());
             pCheckBoxWidget->Checked = pContentControl->GetChecked();
-            pCheckBoxWidget->OnValue = pContentControl->GetCheckedState();
-            pCheckBoxWidget->OffValue = pContentControl->GetUncheckedState();
+            // If it's checked already, then leave the default "Yes" OnValue unchanged, so the
+            // appropriate appearance is found by PDF readers.
+            if (!pCheckBoxWidget->Checked)
+            {
+                pCheckBoxWidget->OnValue = pContentControl->GetCheckedState();
+                pCheckBoxWidget->OffValue = pContentControl->GetUncheckedState();
+            }
             break;
         }
         case SwContentControlType::DROP_DOWN_LIST:

@@ -54,7 +54,17 @@ public:
         bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
+    struct LessSortCaseSensitive
+    {
+        bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
+    };
+
     struct LessCaseInsensitive
+    {
+        bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
+    };
+
+    struct LessSortCaseInsensitive
     {
         bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };

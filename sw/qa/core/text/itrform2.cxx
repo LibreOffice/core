@@ -16,6 +16,10 @@
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <formatcontentcontrol.hxx>
+#include <textcontentcontrol.hxx>
 
 namespace
 {
@@ -161,6 +165,42 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyAnchorLeftMargin)
     // - Actual  : 0
     // i.e. the left margin was lost.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(6480), pLastPara->getFramePrintArea().Left());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    // Given a file with a checked checkbox content control:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
+    // Toggle it, so we get a checked one:
+    SwTextContentControl* pTextContentControl = pWrtShell->CursorInsideContentControl();
+    const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
+    pWrtShell->GotoContentControl(rFormatContentControl);
+
+    // When exporting to PDF:
+    save("writer_pdf_Export");
+
+    // Then make sure that a checked checkbox form widget is emitted:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::CheckBox,
+                         pAnnotation->getFormFieldType(pPdfDocument.get()));
+    OUString aActual = pAnnotation->getFormFieldValue(pPdfDocument.get());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Yes
+    // - Actual  : Off
+    // i.e. the /AP -> /N key of the checkbox widget annotation object didn't have a sub-key that
+    // would match /V, leading to not showing the checked state.
+    CPPUNIT_ASSERT_EQUAL(OUString("Yes"), aActual);
 }
 }
 

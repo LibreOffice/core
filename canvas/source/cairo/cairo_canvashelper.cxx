@@ -488,7 +488,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                             geometry::IntegerSize2D aSize = aTexture.Bitmap->getSize();
 
                             cairo_matrix_init_scale( &aScaleMatrix, 1.0/aSize.Width, 1.0/aSize.Height );
-                            cairo_matrix_multiply( &aScaledTextureMatrix, &aTextureMatrix, &aScaleMatrix );
+                            cairo_matrix_multiply( &aScaledTextureMatrix, &aScaleMatrix, &aTextureMatrix );
                             cairo_matrix_invert( &aScaledTextureMatrix );
 
                             // we don't care about repeat mode yet, so the workaround is disabled for now

@@ -3003,7 +3003,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
                             // i#28701 - consider all
                             // to-character anchored objects
-                            if ( pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
+                            if ( pAnchoredObj->GetFrameFormat()->GetAnchor().GetAnchorId()
                                     == RndStdIds::FLY_AT_CHAR )
                             {
                                 bFormat = true;

@@ -518,7 +518,8 @@ DECLARE_RTFEXPORT_TEST(testFdo48446, "fdo48446.rtf") { getParagraph(1, u"\u0418\
 DECLARE_RTFEXPORT_TEST(testFdo47495, "fdo47495.rtf")
 {
     // Used to have 4 paragraphs, as a result the original bugdoc had 2 pages instead of 1.
-    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    // Word 2013 shows 1 paragraph
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 }
 
 DECLARE_RTFEXPORT_TEST(testAllGapsWord, "all_gaps_word.rtf")

@@ -5662,8 +5662,24 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             }
             else if (nType == ContentTypeId::URLFIELD)
             {
-                BringURLFieldsToAttention(SwGetINetAttrs {SwGetINetAttr(pCnt->GetName(),
-                                        *static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr())});
+                // tdf#159147 - Assure the SwURLFieldContent::SwTextINetFormat pointer is valid
+                // before bringing to attention.
+                const SwTextINetFormat* pTextINetFormat
+                        = static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr();
+                const SwCharFormats* pFormats = m_pActiveShell->GetDoc()->GetCharFormats();
+                for (auto n = pFormats->size(); 1 < n;)
+                {
+                    SwIterator<SwTextINetFormat, SwCharFormat> aIter(*(*pFormats)[--n]);
+                    for (SwTextINetFormat* pFnd = aIter.First(); pFnd; pFnd = aIter.Next())
+                    {
+                        if (pTextINetFormat == pFnd)
+                        {
+                            BringURLFieldsToAttention(SwGetINetAttrs {SwGetINetAttr(pCnt->GetName(),
+                                                                      *pTextINetFormat)});
+                            return;
+                        }
+                    }
+                }
             }
             else if (nType == ContentTypeId::REFERENCE)
             {

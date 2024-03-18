@@ -81,6 +81,7 @@ namespace sw::mark {
             virtual const_iterator_t getAllMarksEnd() const override;
             virtual sal_Int32 getAllMarksCount() const override;
             virtual const_iterator_t findMark(const OUString& rName) const override;
+            virtual const_iterator_t findFirstMarkNotStartsBefore(const SwPosition& rPos) const override;
 
             // bookmarks
             virtual bool isBookmarkDeleted(SwPaM const& rPaM, bool isReplace) const override;

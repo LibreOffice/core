@@ -97,8 +97,8 @@ SwAnchoredObject* GetAnchoredObjectOfAnnotationMark(const sw::mark::IMark& rAnno
 
     for (SwAnchoredObject* pObject : *pAnchored)
     {
-        SwFrameFormat& rFrameFormat = pObject->GetFrameFormat();
-        const SwPosition* pFrameAnchor = rFrameFormat.GetAnchor().GetContentAnchor();
+        SwFrameFormat* pFrameFormat = pObject->GetFrameFormat();
+        const SwPosition* pFrameAnchor = pFrameFormat->GetAnchor().GetContentAnchor();
         if (!pFrameAnchor)
         {
             continue;

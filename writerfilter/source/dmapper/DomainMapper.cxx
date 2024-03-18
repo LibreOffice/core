@@ -129,6 +129,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         m_pImpl->SetDocumentSettingsProperty(
             getPropertyName(PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING),
             uno::Any(true));
+        m_pImpl->SetDocumentSettingsProperty(
+            getPropertyName(PROP_TABS_AND_BLANKS_FOR_LINE_CALCULATION),
+            uno::Any(true));
 
         // Don't load the default style definitions to avoid weird mix
         m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::Any(true));
@@ -3257,7 +3260,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
          * section is a table. So in case first element is a table add a dummy para
          * and remove it again when lcl_endSectionGroup is called
          */
-        if(m_pImpl->m_nTableDepth == 0 && m_pImpl->GetIsFirstParagraphInSection()
+        if (m_pImpl->m_StreamStateStack.top().nTableDepth == 0
+            && m_pImpl->GetIsFirstParagraphInSection()
                 && !m_pImpl->GetIsDummyParaAddedForTableInSection() && !m_pImpl->GetIsTextFrameInserted()
                 && !m_pImpl->GetIsPreviousParagraphFramed() && !IsInHeaderFooter())
         {
@@ -3265,7 +3269,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
 
         // if first paragraph style in table has break-before-page, transfer that setting to the table itself.
-        if( m_pImpl->m_nTableDepth == 0 )
+        if (m_pImpl->m_StreamStateStack.top().nTableDepth == 0)
         {
             const uno::Any aBreakType(style::BreakType_PAGE_BEFORE);
             const PropertyMapPtr pParagraphProps = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
@@ -3286,11 +3290,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             }
         }
 
-        m_pImpl->m_nTableDepth++;
+        m_pImpl->m_StreamStateStack.top().nTableDepth++;
     }
     break;
     case NS_ooxml::LN_tblEnd:
-        m_pImpl->m_nTableDepth--;
+        m_pImpl->m_StreamStateStack.top().nTableDepth--;
     break;
     case NS_ooxml::LN_tcStart:
         m_pImpl->m_nTableCellDepth++;

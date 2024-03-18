@@ -438,8 +438,8 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 
     // #i28701#
     SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
-    SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-    const RndStdIds nAnchorId = rFormat.GetAnchor().GetAnchorId();
+    SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+    const RndStdIds nAnchorId = pFormat->GetAnchor().GetAnchorId();
 
     if ( RndStdIds::FLY_AS_CHAR == nAnchorId )
         return aRet;
@@ -447,9 +447,9 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     bool bFlyFrame = dynamic_cast<SwVirtFlyDrawObj *>(pObj) != nullptr;
 
     bool bTextBox = false;
-    if (rFormat.Which() == RES_DRAWFRMFMT)
+    if (pFormat->Which() == RES_DRAWFRMFMT)
     {
-        bTextBox = SwTextBoxHelper::isTextBox(&rFormat, RES_DRAWFRMFMT, pObj);
+        bTextBox = SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT, pObj);
     }
 
     SwFlyFrame* pFly = nullptr;
@@ -476,7 +476,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     {
         auto pFlyFormat
             = dynamic_cast<const SwFlyFrameFormat*>(SwTextBoxHelper::getOtherTextBoxFormat(
-                &rFormat, RES_DRAWFRMFMT, pObj));
+                pFormat, RES_DRAWFRMFMT, pObj));
         if (pFlyFormat)
         {
             pFly = pFlyFormat->GetFrame();
@@ -550,7 +550,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 
             if ( bMoveIt || (nAnchorId == RndStdIds::FLY_AT_CHAR) )
             {
-                SwFormatAnchor aAnch( rFormat.GetAnchor() );
+                SwFormatAnchor aAnch( pFormat->GetAnchor() );
                 switch ( nAnchorId )
                 {
                     case RndStdIds::FLY_AT_PARA:
@@ -607,14 +607,14 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                     // anchor attribute is change and re-create them afterwards.
                     {
                         std::unique_ptr<SwHandleAnchorNodeChg> pHandleAnchorNodeChg;
-                        SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(&rFormat) );
+                        SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(pFormat) );
                         if ( pFlyFrameFormat )
                         {
                             pHandleAnchorNodeChg.reset(
                                 new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                         }
-                        rFormat.GetDoc()->SetAttr( aAnch, rFormat );
-                        if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT,
+                        pFormat->GetDoc()->SetAttr( aAnch, *pFormat );
+                        if (SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT,
                             pObj))
                         {
                             if (pObj->getChildrenOfSdrObject())
@@ -622,11 +622,11 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                                 for (size_t i = 0;
                                      i < pObj->getChildrenOfSdrObject()->GetObjCount(); ++i)
                                     SwTextBoxHelper::changeAnchor(
-                                        &rFormat, pObj->getChildrenOfSdrObject()->GetObj(i));
+                                        pFormat, pObj->getChildrenOfSdrObject()->GetObj(i));
                             }
                             else
                                 SwTextBoxHelper::syncFlyFrameAttr(
-                                    rFormat, rFormat.GetAttrSet(), pObj);
+                                    *pFormat, pFormat->GetAttrSet(), pObj);
                         }
                     }
                     // #i28701# - no call of method

@@ -115,8 +115,8 @@ class SwAnchoredDrawObject final : public SwAnchoredObject
         }
 
         // accessors to the format
-        virtual SwFrameFormat& GetFrameFormat() override;
-        virtual const SwFrameFormat& GetFrameFormat() const override;
+        virtual SwFrameFormat* GetFrameFormat() override;
+        virtual const SwFrameFormat* GetFrameFormat() const override;
 
         // accessors to the object area and its position
         virtual SwRect GetObjRect() const override;

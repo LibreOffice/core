@@ -27,7 +27,7 @@ class TipOfTheDayDialog : public weld::GenericDialogController
 {
 private:
     CuiGraphicPreviewWindow m_aPreview;
-    weld::Window* m_pParent;
+    css::uno::Reference<css::awt::XWindow> m_xParent;
 
     std::unique_ptr<weld::Label> m_pText;
     std::unique_ptr<weld::CheckButton> m_pShowTip;

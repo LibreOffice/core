@@ -1583,12 +1583,12 @@ static SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
     SwSortedObjs* pDrawObjs = pPage->GetDrawObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDrawObjs->size());
     SwAnchoredObject* pDrawObj = (*pDrawObjs)[0];
-    CPPUNIT_ASSERT_EQUAL(OUString("Rahmen8"), pDrawObj->GetFrameFormat().GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Rahmen8"), pDrawObj->GetFrameFormat()->GetName());
     pPage = static_cast<SwPageFrame*>(pPage->GetNext());
     pDrawObjs = pPage->GetDrawObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDrawObjs->size());
     pDrawObj = (*pDrawObjs)[0];
-    CPPUNIT_ASSERT_EQUAL(OUString("Rahmen123"), pDrawObj->GetFrameFormat().GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Rahmen123"), pDrawObj->GetFrameFormat()->GetName());
     SwRect aFlyRect = pDrawObj->GetObjRect();
     CPPUNIT_ASSERT(pPage->getFrameArea().Contains(aFlyRect));
     return aFlyRect;

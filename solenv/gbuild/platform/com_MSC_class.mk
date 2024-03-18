@@ -179,7 +179,7 @@ define gb_AsmObject__command
 $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) $(dir $(4)) && \
-    "$(CC)" -nologo -EP -D_M_ARM64 $(SOLARINC) $(3) > $(subst .o,.asm,$(1)) && \
+    $(CC) -nologo -EP -D_M_ARM64 $(SOLARINC) $(3) > $(subst .o,.asm,$(1)) && \
     "$(ML_EXE)" $(gb_AFLAGS) -g -errorReport:prompt -o $(1) $(subst .o,.asm,$(1)), \
     ) && \
     echo "$(1) : $(3)" > $(4)
@@ -664,8 +664,12 @@ gb_AUTOCONF_WRAPPERS = \
 gb_ExternalProject_INCLUDE := \
 	$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC)))
 
+# Workaround for openssl build - it puts the CC var into additional pair of quotes. This breaks if
+# CC consists of more than a single element such as when using "ccache compiler". In case the
+# variables are exported for openssl, it closes and reopens the quotes after each element.
 gb_NMAKE_VARS = \
-	CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))" \
+	CC="$(subst $(WHITESPACE),$(if $(filter openssl,$(1)),\" \", ),$(strip \
+		$(shell cygpath -ws $(filter-out -%,$(CC))) $(filter -%,$(CC))))" \
 	INCLUDE="$(gb_ExternalProject_INCLUDE)" \
 	LIB="$(ILIB)" \
 	MAKEFLAGS= \

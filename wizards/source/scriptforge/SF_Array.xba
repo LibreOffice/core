@@ -1767,7 +1767,7 @@ Try:
 	Next i
 	&apos;	Now ... shuffle !
 	Do While lCurrentIndex &gt; lMin
-		lRandomIndex = Int(Rnd * (lCurrentIndex - lMin)) + lMin
+		lRandomIndex = Int(Rnd * (lCurrentIndex - lMin + 1)) + lMin
 		vSwapValue = vShuffle(lCurrentIndex)
 		vShuffle(lCurrentIndex) = vShuffle(lRandomIndex)
 		vShuffle(lRandomIndex) = vSwapValue

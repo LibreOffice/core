@@ -272,7 +272,14 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
     SwNodeIndex aIdx( rDoc.GetNodes(), m_nStartNode );
 
     SwTableNode* pTableNd = aIdx.GetNode().GetTableNode();
-    OSL_ENSURE( pTableNd, "no TableNode" );
+    // tdf#159025 skip undo if SwTableNode is a nullptr
+    // I don't know what causes the SwTableNode to be a nullptr in the
+    // case of tdf#159025, but at least stop the crashing by skipping
+    // this undo request.
+    SAL_WARN_IF( !pTableNd, "sw.core", "no TableNode" );
+    if( !pTableNd )
+        return;
+
     pTableNd->DelFrames();
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))

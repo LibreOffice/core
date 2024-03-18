@@ -1290,8 +1290,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageCommentAtChar)
     // Get the image anchor doc model position.
     SwFlyFrame* pFly = pWrtShell->GetCurrFlyFrame(false);
     CPPUNIT_ASSERT(pFly);
-    SwFrameFormat& rFlyFormat = pFly->GetFrameFormat();
-    const SwPosition* pImageAnchor = rFlyFormat.GetAnchor().GetContentAnchor();
+    SwFrameFormat* pFlyFormat = pFly->GetFrameFormat();
+    const SwPosition* pImageAnchor = pFlyFormat->GetAnchor().GetContentAnchor();
     CPPUNIT_ASSERT(pImageAnchor);
 
     // Get the annotation mark doc model start.

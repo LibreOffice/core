@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:scripts>
+  <office:script script:language="ooo:Basic">
+   <ooo:libraries>
+    <ooo:library-embedded ooo:name="Standard">
+     <ooo:module ooo:name="Module1">
+      <ooo:source-code>REM  *****  BASIC  *****
+
+Function TestInvoke
+  script = ThisComponent.scriptProvider.getScript(&quot;vnd.sun.star.script:Standard.Module1.S_Ref_Long?language=Basic&amp;location=document&quot;)
+  ret = script.invoke(Array(1), Array(), Array())
+
+  script = ThisComponent.scriptProvider.getScript(&quot;vnd.sun.star.script:Standard.Module1.S_Ref_Dbl?language=Basic&amp;location=document&quot;)
+  ret = ret &amp; &quot;/&quot; &amp; script.invoke(Array(2), Array(), Array())
+
+  TestInvoke = ret
+End Function
+
+Function S_Ref_Long(n As Long)
+  S_Ref_Long = CStr(n) &amp; &quot; &quot; &amp; TypeName(n)
+End Function
+
+Function S_Ref_Dbl(n As Double)
+  S_Ref_Dbl = CStr(n) &amp; &quot; &quot; &amp; TypeName(n)
+End Function
+
+
+      </ooo:source-code>
+     </ooo:module>
+    </ooo:library-embedded>
+   </ooo:libraries>
+  </office:script>
+ </office:scripts>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1"/>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

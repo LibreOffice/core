@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name_settings">Impostazioni del Visualizzatore di LibreOffice</string>
     <string name="app_name">Visualizzatore di LibreOffice</string>
-    <string name="app_about_name"><b>Visualizzatore di LibreOffice Beta</b></string>
+    <string name="app_about_name"><b>Visualizzatore LibreOffice \'Beta\'</b></string>
     <string name="app_description">Il Visualizzatore di LibreOffice è un\'app per visualizzare i documenti basata su LibreOffice.</string>
     <string name="app_credits">https://it.libreoffice.org/</string>
     <string name="app_vendor">Versione fornita da $VENDOR.</string>
@@ -87,8 +87,8 @@
     <string name="action_back">Indietro</string>
     <string name="action_text_copied">Testo copiato negli appunti</string>
     <string name="insert_table">Inserisci tabella</string>
-    <string name="select_insert_options">Scegli le opzioni di inserimento:</string>
-    <string name="select_delete_options">Scegli le opzioni di eliminazione:</string>
+    <string name="select_insert_options">Scegli opzioni di inserimento:</string>
+    <string name="select_delete_options">Scegli opzioni di eliminazione:</string>
     <string name="action_rename_worksheet">Rinomina foglio di lavoro</string>
     <string name="action_delete_worksheet">Elimina foglio di lavoro</string>
     <string name="action_delete_slide">Elimina diapositiva</string>
@@ -109,7 +109,7 @@
     <string name="alert_cancel">Annulla</string>
     <string name="tabhost_character">Carattere</string>
     <string name="current_uno_command">Comando UNO attuale</string>
-    <string name="display_language_summary">Imposta la lingua di visualizzazione predefinita</string>
+    <string name="display_language_summary">Imposta lingua di visualizzazione predefinita</string>
     <string name="display_language">Mostra lingua</string>
     <string name="pdf_export_finished">Esportazione in PDF terminata</string>
     <string name="unable_to_export_pdf">Impossibile esportare in PDF</string>
@@ -125,9 +125,9 @@
     <string name="highlight_color">Colore evidenziazione</string>
     <string name="directory_not_saved">Cartella non salvata.</string>
     <string name="sheet">Foglio</string>
-    <string name="file_icon_desc">fileicon</string>
+    <string name="file_icon_desc">iconafile</string>
     <string name="calc_optimal_length_default_text">Inserisci lunghezza aggiuntiva in centesimi di millimetro</string>
-    <string name="action_pwd_dialog_title">Inserisci la password</string>
+    <string name="action_pwd_dialog_title">Inserisci password</string>
     <string name="automatic">Automatico</string>
     <string name="action_rename_slide">Rinomina diapositiva</string>
 </resources>

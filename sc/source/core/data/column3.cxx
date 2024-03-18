@@ -2582,10 +2582,21 @@ class FilterEntriesHandler
 
         if (bIsEmptyCell)
         {
-            if (!mrFilterEntries.mbHasEmpties)
+            if (mbFilteredRow)
             {
-                mrFilterEntries.push_back(ScTypedStrData(OUString()));
-                mrFilterEntries.mbHasEmpties = true;
+                if (!mrFilterEntries.mbHasHiddenEmpties)
+                {
+                    mrFilterEntries.push_back(ScTypedStrData(OUString(), 0.0, 0.0, ScTypedStrData::Standard, false, true));
+                    mrFilterEntries.mbHasHiddenEmpties = true;
+                }
+            }
+            else
+            {
+                if (!mrFilterEntries.mbHasUnHiddenEmpties)
+                {
+                    mrFilterEntries.push_back(ScTypedStrData(OUString(), 0.0, 0.0, ScTypedStrData::Standard, false, false));
+                    mrFilterEntries.mbHasUnHiddenEmpties = true;
+                }
             }
             return;
         }
@@ -2614,7 +2625,7 @@ class FilterEntriesHandler
                     OUString aErr = ScGlobal::GetErrorString(nErr);
                     if (!aErr.isEmpty())
                     {
-                        mrFilterEntries.push_back(ScTypedStrData(std::move(aErr)));
+                        mrFilterEntries.push_back(ScTypedStrData(std::move(aErr), 0.0, 0.0, ScTypedStrData::Standard, false, mbFilteredRow));
                         return;
                     }
                 }

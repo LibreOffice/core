@@ -185,7 +185,7 @@ void SwFlyInContentFrame::MakeObjPos()
 void SwFlyInContentFrame::ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
-        AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, &GetFrameFormat() );
+        AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, GetFrameFormat() );
 }
 
 void SwFlyInContentFrame::NotifyBackground( SwPageFrame *, const SwRect& rRect,

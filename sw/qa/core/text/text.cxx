@@ -20,6 +20,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -113,6 +114,40 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLastBibliographyPdfExport)
 
     // Without the accompanying fix, the export to PDF would get stuck in an infinite loop
     CPPUNIT_ASSERT(true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159336)
+{
+    createSwDoc("tdf159336.odt");
+    save("writer_pdf_Export");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+    auto pAnnotReference
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    CPPUNIT_ASSERT(pAnnotReference);
+    vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+    CPPUNIT_ASSERT(pAnnot);
+    CPPUNIT_ASSERT_EQUAL(
+        OString("Annot"),
+        static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+    CPPUNIT_ASSERT_EQUAL(
+        OString("Widget"),
+        static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"))->GetValue());
+    // Ff = multiline
+    auto pFf = dynamic_cast<vcl::filter::PDFNumberElement*>(pAnnot->Lookup("Ff"));
+    CPPUNIT_ASSERT(pFf);
+    CPPUNIT_ASSERT_EQUAL(4096.0, pFf->GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
@@ -763,7 +798,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
     const SwSortedObjs& rSortedObjs = *pTextFrame->GetDrawObjs();
     const SwAnchoredObject* pAnchoredObject = rSortedObjs[0];
     // The content points to the start node, the next node is the graphic node.
-    SwNodeIndex aGraphicNode = *pAnchoredObject->GetFrameFormat().GetContent().GetContentIdx();
+    SwNodeIndex aGraphicNode = *pAnchoredObject->GetFrameFormat()->GetContent().GetContentIdx();
     ++aGraphicNode;
     tools::Rectangle aFlyFrame = pAnchoredObject->GetDrawObj()->GetLastBoundRect();
     Point aDocPos = aFlyFrame.Center();

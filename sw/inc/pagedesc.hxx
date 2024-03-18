@@ -151,9 +151,9 @@ class SW_DLLPUBLIC SwPageDesc final
 
     struct StashedPageDesc
     {
-        std::shared_ptr<SwFrameFormat> m_pStashedFirst;
-        std::shared_ptr<SwFrameFormat> m_pStashedLeft;
-        std::shared_ptr<SwFrameFormat> m_pStashedFirstLeft;
+        std::optional<SwFrameFormat> m_oStashedFirst;
+        std::optional<SwFrameFormat> m_oStashedLeft;
+        std::optional<SwFrameFormat> m_oStashedFirstLeft;
     };
 
     mutable StashedPageDesc m_aStashedHeader;
@@ -223,7 +223,7 @@ public:
     const SwFrameFormat* GetStashedFrameFormat(bool bHeader, bool bLeft, bool bFirst) const;
 
     /// Checks if the pagedescriptor has a stashed format according to the parameters or not.
-    bool HasStashedFormat(bool bHeader, bool bLeft, bool bFirst);
+    bool HasStashedFormat(bool bHeader, bool bLeft, bool bFirst) const;
 
     /// Gives the feature of removing the stashed format by hand if it is necessary.
     void RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst);

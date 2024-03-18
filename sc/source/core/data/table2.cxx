@@ -503,6 +503,7 @@ void ScTable::CopyToClip(
 
     nCol2 = ClampToAllocatedColumns(nCol2);
 
+    pTable->CreateColumnIfNotExists(nCol2);  // prevent repeated resizing
     for ( SCCOL i = nCol1; i <= nCol2; i++)
         aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->CreateColumnIfNotExists(i));  // notes are handled at column level
 
@@ -1348,6 +1349,7 @@ void ScTable::CopyToTable(
         // can lead to repetitive splitting and rejoining of the same formula group, which can get
         // quadratically expensive with large groups. So do the grouping just once at the end.
         sc::DelayFormulaGroupingSwitch delayGrouping( pDestTab->rDocument, true );
+        pDestTab->CreateColumnIfNotExists(ClampToAllocatedColumns(nCol2)); // avoid repeated resizing
         for (SCCOL i = nCol1; i <= ClampToAllocatedColumns(nCol2); i++)
             aCol[i].CopyToColumn(rCxt, nRow1, nRow2, bToUndoDoc ? nFlags : nTempFlags, bMarked,
                                  pDestTab->CreateColumnIfNotExists(i), pMarkData, bAsLink, bGlobalNamesToLocal);

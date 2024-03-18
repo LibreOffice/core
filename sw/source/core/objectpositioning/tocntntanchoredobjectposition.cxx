@@ -1241,7 +1241,7 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
             break;
         }
 
-        if (SwTextBoxHelper::isTextBox(&pAnchoredObj->GetFrameFormat(), RES_FLYFRMFMT))
+        if (SwTextBoxHelper::isTextBox(pAnchoredObj->GetFrameFormat(), RES_FLYFRMFMT))
         {
             // Overlapping with the frame of a textbox is fine.
             continue;
@@ -1276,7 +1276,7 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
             }
         }
 
-        css::text::WrapTextMode eWrap = pAnchoredObj->GetFrameFormat().GetSurround().GetSurround();
+        css::text::WrapTextMode eWrap = pAnchoredObj->GetFrameFormat()->GetSurround().GetSurround();
         if (eWrap == css::text::WrapTextMode_THROUGH)
         {
             // The other object is wrap through: allowed to overlap.

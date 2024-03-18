@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="Panel">
@@ -64,6 +64,7 @@
           <object class="GtkToolbar" id="toolbar">
             <property name="can-focus">True</property>
             <property name="no-show-all">True</property>
+            <property name="margin-end">9</property>
             <property name="toolbar-style">icons</property>
             <property name="show-arrow">False</property>
             <property name="icon_size">2</property>

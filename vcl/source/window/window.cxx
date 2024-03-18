@@ -223,6 +223,7 @@ void Window::dispose()
         Reference< XComponent> xC( mpWindowImpl->mxAccessible, UNO_QUERY );
         if ( xC.is() )
             xC->dispose();
+        mpWindowImpl->mxAccessible.clear();
     }
 
     ImplSVData* pSVData = ImplGetSVData();

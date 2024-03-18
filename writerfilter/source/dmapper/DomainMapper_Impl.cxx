@@ -37,6 +37,7 @@
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -78,6 +79,10 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/awt/FontRelief.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -339,9 +344,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSetCitation( false ),
         m_bSetDateValue( false ),
         m_bIsFirstSection( true ),
-        m_bIsColumnBreakDeferred( false ),
-        m_bIsPageBreakDeferred( false ),
-        m_nLineBreaksDeferred( 0 ),
         m_bSdtEndDeferred(false),
         m_bParaSdtEndDeferred(false),
         m_bStartTOC(false),
@@ -350,7 +352,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartIndex(false),
         m_bStartBibliography(false),
         m_nStartGenericField(0),
-        m_bTextInserted(false),
         m_bTextDeleted(false),
         m_sCurrentPermId(0),
         m_bFrameDirectionSet(false),
@@ -358,10 +359,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bInStyleSheetImport( false ),
         m_bInNumberingImport(false),
         m_bInAnyTableImport( false ),
-        m_eInHeaderFooterImport( HeaderFooterImportState::none ),
         m_bDiscardHeaderFooter( false ),
-        m_bInFootOrEndnote(false),
-        m_bInFootnote(false),
         m_bHasFootnoteStyle(false),
         m_bCheckFootnoteStyle(false),
         m_eSkipFootnoteState(SkipFootnoteSeparator::OFF),
@@ -374,17 +372,10 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaMarkerChange( false ),
         m_bIsParaMarkerMove( false ),
         m_bRedlineImageInPreviousRun( false ),
-        m_bParaChanged( false ),
-        m_bIsFirstParaInSection( true ),
-        m_bIsFirstParaInSectionAfterRedline( true ),
         m_bDummyParaAddedForTableInSection( false ),
         m_bDummyParaAddedForTableInSectionPage( false ),
         m_bTextFrameInserted(false),
-        m_bIsPreviousParagraphFramed( false ),
-        m_bIsLastParaInSection( false ),
         m_bIsLastSectionGroup( false ),
-        m_bIsInComments( false ),
-        m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false ),
         m_bSdt(false),
         m_bIsFirstRun(false),
@@ -397,7 +388,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
-        m_nTableDepth(0),
         m_nTableCellDepth(0),
         m_nLastTableCellParagraphDepth(0),
         m_bHasFtn(false),
@@ -406,14 +396,10 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIgnoreNextTab(false),
         m_bIsSplitPara(false),
         m_bIsActualParagraphFramed( false ),
-        m_bParaHadField(false),
-        m_bSaveParaHadField(false),
         m_bParaAutoBefore(false),
-        m_bFirstParagraphInCell(true),
-        m_bSaveFirstParagraphInCell(false),
-        m_bParaWithInlineObject(false),
         m_bSaxError(false)
 {
+    m_StreamStateStack.emplace(); // add state for document body
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_DOCUMENTBASEURL, OUString());
     if (m_aBaseUrl.isEmpty()) {
@@ -453,6 +439,7 @@ DomainMapper_Impl::DomainMapper_Impl(
 
 DomainMapper_Impl::~DomainMapper_Impl()
 {
+    assert(!m_StreamStateStack.empty());
     ChainTextFrames();
     // Don't remove last paragraph when pasting, sw expects that empty paragraph.
     if (m_bIsNewDoc)
@@ -519,6 +506,17 @@ uno::Reference< container::XNameContainer > const &  DomainMapper_Impl::GetChara
             xSupplier->getStyleFamilies()->getByName("CharacterStyles") >>= m_xCharacterStyles;
     }
     return m_xCharacterStyles;
+}
+
+uno::Reference<container::XNameContainer> const& DomainMapper_Impl::GetParagraphStyles()
+{
+    if (!m_xParagraphStyles.is())
+    {
+        uno::Reference<style::XStyleFamiliesSupplier> xSupplier(m_xTextDocument, uno::UNO_QUERY);
+        if (xSupplier.is())
+            xSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>= m_xParagraphStyles;
+    }
+    return m_xParagraphStyles;
 }
 
 OUString DomainMapper_Impl::GetUnusedCharacterStyleName()
@@ -905,27 +903,29 @@ void DomainMapper_Impl::SetIsLastSectionGroup( bool bIsLast )
 
 void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
 {
-    m_bIsLastParaInSection = bIsLast;
+    m_StreamStateStack.top().bIsLastParaInSection = bIsLast;
 }
 
 
 void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 {
-    m_bIsFirstParaInSection = bIsFirst;
+    m_StreamStateStack.top().bIsFirstParaInSection = bIsFirst;
 }
 
 void DomainMapper_Impl::SetIsFirstParagraphInSectionAfterRedline( bool bIsFirstAfterRedline )
 {
-    m_bIsFirstParaInSectionAfterRedline = bIsFirstAfterRedline;
+    m_StreamStateStack.top().bIsFirstParaInSectionAfterRedline = bIsFirstAfterRedline;
 }
 
 bool DomainMapper_Impl::GetIsFirstParagraphInSection( bool bAfterRedline ) const
 {
     // Anchored objects may include multiple paragraphs,
     // and none of them should be considered the first para in section.
-    return ( bAfterRedline ? m_bIsFirstParaInSectionAfterRedline : m_bIsFirstParaInSection )
+    return (bAfterRedline
+                    ? m_StreamStateStack.top().bIsFirstParaInSectionAfterRedline
+                    : m_StreamStateStack.top().bIsFirstParaInSection)
                 && !IsInShape()
-                && !m_bIsInComments
+                && !IsInComments()
                 && !IsInFootOrEndnote();
 }
 
@@ -951,12 +951,10 @@ void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
     m_bTextFrameInserted  = bIsInserted;
 }
 
-
 void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 {
-    m_bParaSectpr = bParaSectpr;
+    m_StreamStateStack.top().bParaSectpr = bParaSectpr;
 }
-
 
 void DomainMapper_Impl::SetSdt(bool bSdt)
 {
@@ -1562,21 +1560,22 @@ ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
 
 void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
 {
+    assert(!m_StreamStateStack.empty());
     switch (deferredBreakType)
     {
     case LINE_BREAK:
-        m_nLineBreaksDeferred++;
+        m_StreamStateStack.top().nLineBreaksDeferred++;
         break;
     case COLUMN_BREAK:
-        m_bIsColumnBreakDeferred = true;
+        m_StreamStateStack.top().bIsColumnBreakDeferred = true;
     break;
     case PAGE_BREAK:
             // See SwWW8ImplReader::HandlePageBreakChar(), page break should be
             // ignored inside tables.
-            if (m_nTableDepth > 0)
+            if (0 < m_StreamStateStack.top().nTableDepth)
                 return;
 
-            m_bIsPageBreakDeferred = true;
+            m_StreamStateStack.top().bIsPageBreakDeferred = true;
         break;
     default:
         return;
@@ -1585,14 +1584,15 @@ void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
 
 bool DomainMapper_Impl::isBreakDeferred( BreakType deferredBreakType )
 {
+    assert(!m_StreamStateStack.empty());
     switch (deferredBreakType)
     {
     case LINE_BREAK:
-        return m_nLineBreaksDeferred > 0;
+        return 0 < m_StreamStateStack.top().nLineBreaksDeferred;
     case COLUMN_BREAK:
-        return m_bIsColumnBreakDeferred;
+        return m_StreamStateStack.top().bIsColumnBreakDeferred;
     case PAGE_BREAK:
-        return m_bIsPageBreakDeferred;
+        return m_StreamStateStack.top().bIsPageBreakDeferred;
     default:
         return false;
     }
@@ -1600,17 +1600,18 @@ bool DomainMapper_Impl::isBreakDeferred( BreakType deferredBreakType )
 
 void DomainMapper_Impl::clearDeferredBreak(BreakType deferredBreakType)
 {
+    assert(!m_StreamStateStack.empty());
     switch (deferredBreakType)
     {
     case LINE_BREAK:
-        assert(m_nLineBreaksDeferred > 0);
-        m_nLineBreaksDeferred--;
+        assert(0 < m_StreamStateStack.top().nLineBreaksDeferred);
+        m_StreamStateStack.top().nLineBreaksDeferred--;
         break;
     case COLUMN_BREAK:
-        m_bIsColumnBreakDeferred = false;
+        m_StreamStateStack.top().bIsColumnBreakDeferred = false;
         break;
     case PAGE_BREAK:
-        m_bIsPageBreakDeferred = false;
+        m_StreamStateStack.top().bIsPageBreakDeferred = false;
         break;
     default:
         break;
@@ -1619,9 +1620,10 @@ void DomainMapper_Impl::clearDeferredBreak(BreakType deferredBreakType)
 
 void DomainMapper_Impl::clearDeferredBreaks()
 {
-    m_nLineBreaksDeferred = 0;
-    m_bIsColumnBreakDeferred = false;
-    m_bIsPageBreakDeferred = false;
+    assert(!m_StreamStateStack.empty());
+    m_StreamStateStack.top().nLineBreaksDeferred = 0;
+    m_StreamStateStack.top().bIsColumnBreakDeferred = false;
+    m_StreamStateStack.top().bIsPageBreakDeferred = false;
 }
 
 void DomainMapper_Impl::setSdtEndDeferred(bool bSdtEndDeferred)
@@ -1694,7 +1696,11 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
             aValue.Name = sPropertyName;
             aValue.Value = xTextRangeProperties->getPropertyValue(sPropertyName);
             if( nProperty < 4 )
+            {
                 xTextRangeProperties->setPropertyValue( sPropertyName, uno::Any(table::BorderLine2()));
+                if (!aValue.Value.hasValue())
+                    aValue.Value <<= table::BorderLine2();
+            }
             else // border spacing
             {
                 sal_Int32 nDistance = 0;
@@ -2313,7 +2319,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         {
             if ( GetIsFirstParagraphInShape() ||
                  (GetIsFirstParagraphInSection() && GetSectionContext() && GetSectionContext()->IsFirstSection()) ||
-                 (m_bFirstParagraphInCell && m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth) )
+                (m_StreamStateStack.top().bFirstParagraphInCell
+                 && 0 < m_StreamStateStack.top().nTableDepth
+                 && m_StreamStateStack.top().nTableDepth == m_nTableCellDepth))
             {
                 // export requires grabbag to match top_margin, so keep them in sync
                 if (nBeforeAutospacing && bIsAutoSet)
@@ -2518,6 +2526,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     lcl_AddRange(pToBeSavedProperties, xTextAppend, rAppendContext);
                 }
             }
+            applyToggleAttributes(pPropertyMap); // for paragraph marker formatting
             std::vector<beans::PropertyValue> aProperties;
             if (pPropertyMap)
             {
@@ -2566,7 +2575,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 else
                 {
                     uno::Reference<text::XTextCursor> xCursor;
-                    if (m_bParaHadField && !m_bIsInComments && !m_xTOCMarkerCursor.is())
+                    if (m_StreamStateStack.top().bParaHadField
+                        && !IsInComments() && !m_xTOCMarkerCursor.is())
                     {
                         // Workaround to make sure char props of the field are not lost.
                         // Not relevant for editeng-based comments.
@@ -2608,9 +2618,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 TOOLS_WARN_EXCEPTION("writerfilter", "DomainMapper_Impl::finishParagraph NumberingRules");
                             }
                         }
-                        else if ( m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName") &&
+                        else if (m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName")
                                 // don't update before tables
-                                (m_nTableDepth == 0 || !m_bFirstParagraphInCell))
+                            && (m_StreamStateStack.top().nTableDepth == 0
+                                || !m_StreamStateStack.top().bFirstParagraphInCell))
                         {
                             aCurrentNumberingName = GetListStyleName(nListId);
                             m_xPreviousParagraph->getPropertyValue("NumberingStyleName") >>= aPreviousNumberingName;
@@ -2765,7 +2776,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                     // tdf#77417 trim right white spaces in table cells in 2010 compatibility mode
                     sal_Int32 nMode = GetSettingsTable()->GetWordCompatibilityMode();
-                    if ( m_nTableDepth > 0 && nMode > 0 && nMode <= 14 )
+                    if (0 < m_StreamStateStack.top().nTableDepth && 0 < nMode && nMode <= 14)
                     {
                         // skip new line
                         xCur->goLeft(1, false);
@@ -2786,7 +2797,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                     xCur->goLeft( 1 , true );
                     // Extend the redline ranges for empty paragraphs
-                    if ( !m_bParaChanged && m_previousRedline )
+                    if (!m_StreamStateStack.top().bParaChanged && m_previousRedline)
                         CreateRedline( xCur, m_previousRedline );
                     CheckParaMarkerRedline( xCur );
                 }
@@ -2794,8 +2805,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
 
                 // table style precedence and not hidden shapes anchored to hidden empty table paragraphs
-                if (xParaProps && !m_bIsInComments
-                    && (m_nTableDepth > 0 || !m_aAnchoredObjectAnchors.empty()))
+                if (xParaProps && !IsInComments()
+                    && (0 < m_StreamStateStack.top().nTableDepth
+                        || !m_aAnchoredObjectAnchors.empty()))
                 {
                     // table style has got bigger precedence than docDefault style
                     // collect these pending paragraph properties to process in endTable()
@@ -2805,7 +2817,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     uno::Reference<text::XTextCursor> xCur2 =  xTextRange->getText()->createTextCursorByRange(xCur);
                     uno::Reference<text::XParagraphCursor> xParaCursor(xCur2, uno::UNO_QUERY_THROW);
                     xParaCursor->gotoStartOfParagraph(false);
-                    if (m_nTableDepth > 0)
+                    if (0 < m_StreamStateStack.top().nTableDepth)
                     {
                         TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps};
                         getTableManager().getCurrentParagraphs()->push_back(aPending);
@@ -2929,23 +2941,23 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     else
         SetIsPreviousParagraphFramed(false);
 
-    m_bRemoveThisParagraph = false;
+    m_StreamStateStack.top().bRemoveThisParagraph = false;
     if( !IsInHeaderFooter() && !IsInShape()
         && (!pParaContext || !pParaContext->props().IsFrameMode()) )
     { // If the paragraph is in a frame, shape or header/footer, it's not a paragraph of the section itself.
         SetIsFirstParagraphInSection(false);
         // don't count an empty deleted paragraph as first paragraph in section to avoid of
         // the deletion of the next empty paragraph later, resulting loss of the associated page break
-        if (!m_previousRedline || m_bParaChanged)
+        if (!m_previousRedline || m_StreamStateStack.top().bParaChanged)
         {
             SetIsFirstParagraphInSectionAfterRedline(false);
             SetIsLastParagraphInSection(false);
         }
     }
     m_previousRedline.clear();
-    m_bParaChanged = false;
+    m_StreamStateStack.top().bParaChanged = false;
 
-    if (m_bIsInComments && pParaContext)
+    if (IsInComments() && pParaContext)
     {
         if (const OUString sParaId = pParaContext->props().GetParaId(); !sParaId.isEmpty())
         {
@@ -2968,15 +2980,19 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     }
 
     SetIsOutsideAParagraph(true);
-    m_bParaHadField = false;
+    m_StreamStateStack.top().bParaHadField = false;
 
     // don't overwrite m_bFirstParagraphInCell in table separator nodes
     // and in text boxes anchored to the first paragraph of table cells
-    if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && !IsInShape() && !m_bIsInComments)
-        m_bFirstParagraphInCell = false;
+    if (0 < m_StreamStateStack.top().nTableDepth
+        && m_StreamStateStack.top().nTableDepth == m_nTableCellDepth
+        && !IsInShape() && !IsInComments())
+    {
+        m_StreamStateStack.top().bFirstParagraphInCell = false;
+    }
 
     m_bParaAutoBefore = false;
-    m_bParaWithInlineObject = false;
+    m_StreamStateStack.top().bParaWithInlineObject = false;
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
@@ -2984,7 +3000,149 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
 }
 
-void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
+// TODO this does not yet take table styles into account
+void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap)
+{
+    std::optional<PropertyMap::Property> charStyleProperty = pPropertyMap->getProperty(PROP_CHAR_STYLE_NAME);
+    if (charStyleProperty.has_value())
+    {
+        OUString sCharStyleName;
+        charStyleProperty->second >>= sCharStyleName;
+        float fCharStyleBold = css::awt::FontWeight::NORMAL;
+        float fCharStyleBoldComplex = css::awt::FontWeight::NORMAL;
+        css::awt::FontSlant eCharStylePosture = css::awt::FontSlant_NONE;
+        css::awt::FontSlant eCharStylePostureComplex = css::awt::FontSlant_NONE;
+        sal_Int16 nCharStyleCaseMap = css::style::CaseMap::NONE;
+        sal_Int16 nCharStyleRelief = css::awt::FontRelief::NONE;
+        bool bCharStyleContoured = false;//Outline;
+        bool bCharStyleShadowed = false;
+        sal_Int16 nCharStyleStrikeThrough = awt::FontStrikeout::NONE;
+        bool bCharStyleHidden = false;
+
+        uno::Reference<beans::XPropertySet> xCharStylePropertySet = GetCharacterStyles()->getByName(sCharStyleName).get<uno::Reference<beans::XPropertySet>>();
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT)) >>= fCharStyleBold;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT_COMPLEX)) >>= fCharStyleBoldComplex;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE)) >>= eCharStylePosture;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE_COMPLEX)) >>= eCharStylePostureComplex;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CASE_MAP)) >>= nCharStyleCaseMap;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_RELIEF)) >>= nCharStyleRelief;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CONTOURED)) >>= bCharStyleContoured;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_SHADOWED)) >>= bCharStyleShadowed;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_STRIKEOUT)) >>= nCharStyleStrikeThrough;
+        xCharStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_HIDDEN)) >>= bCharStyleHidden;
+        if (fCharStyleBold > css::awt::FontWeight::NORMAL || eCharStylePosture != css::awt::FontSlant_NONE|| nCharStyleCaseMap != css::style::CaseMap::NONE ||
+            nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
+            nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden)
+        {
+            uno::Reference<beans::XPropertySet> xParaStylePropertySet = GetParagraphStyles()->getByName(m_sCurrentParaStyleName).get<uno::Reference<beans::XPropertySet>>();
+            float fParaStyleBold = css::awt::FontWeight::NORMAL;
+            float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
+            css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
+            css::awt::FontSlant eParaStylePostureComplex = css::awt::FontSlant_NONE;
+            sal_Int16 nParaStyleCaseMap = css::style::CaseMap::NONE;
+            sal_Int16 nParaStyleRelief = css::awt::FontRelief::NONE;
+            bool bParaStyleContoured = false;
+            bool bParaStyleShadowed = false;
+            sal_Int16 nParaStyleStrikeThrough = awt::FontStrikeout::NONE;
+            bool bParaStyleHidden = false;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT)) >>= fParaStyleBold;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_WEIGHT_COMPLEX)) >>= fParaStyleBoldComplex;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE)) >>= eParaStylePosture;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_POSTURE_COMPLEX)) >>= eParaStylePostureComplex;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CASE_MAP)) >>= nParaStyleCaseMap;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_RELIEF)) >>= nParaStyleRelief;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_SHADOWED)) >>= bParaStyleShadowed;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_CONTOURED)) >>= bParaStyleContoured;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_STRIKEOUT)) >>= nParaStyleStrikeThrough;
+            xParaStylePropertySet->getPropertyValue(getPropertyName(PROP_CHAR_HIDDEN)) >>= bParaStyleHidden;
+            if (fCharStyleBold > css::awt::FontWeight::NORMAL && fParaStyleBold > css::awt::FontWeight::NORMAL)
+            {
+                std::optional<PropertyMap::Property> charBoldProperty = pPropertyMap->getProperty(PROP_CHAR_WEIGHT);
+                if (!charBoldProperty.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_WEIGHT, uno::Any(css::awt::FontWeight::NORMAL));
+                }
+            }
+            if (fCharStyleBoldComplex > css::awt::FontWeight::NORMAL && fParaStyleBoldComplex > css::awt::FontWeight::NORMAL)
+            {
+                std::optional<PropertyMap::Property> charBoldPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_WEIGHT_COMPLEX);
+                if (!charBoldPropertyComplex.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_WEIGHT_COMPLEX, uno::Any(css::awt::FontWeight::NORMAL));
+                    pPropertyMap->Insert(PROP_CHAR_WEIGHT_ASIAN, uno::Any(css::awt::FontWeight::NORMAL));
+                }
+            }
+            if (eCharStylePosture != css::awt::FontSlant_NONE && eParaStylePosture != css::awt::FontSlant_NONE)
+            {
+                std::optional<PropertyMap::Property> charItalicProperty = pPropertyMap->getProperty(PROP_CHAR_POSTURE);
+                if (!charItalicProperty.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_POSTURE, uno::Any(css::awt::FontSlant_NONE));
+                }
+            }
+            if (eCharStylePostureComplex != css::awt::FontSlant_NONE && eParaStylePostureComplex != css::awt::FontSlant_NONE)
+            {
+                std::optional<PropertyMap::Property> charItalicPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_POSTURE_COMPLEX);
+                if (!charItalicPropertyComplex.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_POSTURE_COMPLEX, uno::Any(css::awt::FontSlant_NONE));
+                    pPropertyMap->Insert(PROP_CHAR_POSTURE_ASIAN, uno::Any(css::awt::FontSlant_NONE));
+                }
+            }
+            if (nCharStyleCaseMap == nParaStyleCaseMap && nCharStyleCaseMap != css::style::CaseMap::NONE)
+            {
+                std::optional<PropertyMap::Property> charCaseMap = pPropertyMap->getProperty(PROP_CHAR_CASE_MAP);
+                if (!charCaseMap.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_CASE_MAP, uno::Any(css::style::CaseMap::NONE));
+                }
+            }
+            if (nParaStyleRelief != css::awt::FontRelief::NONE && nCharStyleRelief == nParaStyleRelief)
+            {
+                std::optional<PropertyMap::Property> charRelief = pPropertyMap->getProperty(PROP_CHAR_RELIEF);
+                if (!charRelief.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_RELIEF, uno::Any(css::awt::FontRelief::NONE));
+                }
+            }
+            if (bParaStyleContoured && bCharStyleContoured)
+            {
+                std::optional<PropertyMap::Property> charContoured = pPropertyMap->getProperty(PROP_CHAR_CONTOURED);
+                if (!charContoured.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_CONTOURED, uno::Any(false));
+                }
+            }
+            if (bParaStyleShadowed && bCharStyleShadowed)
+            {
+                std::optional<PropertyMap::Property> charShadow = pPropertyMap->getProperty(PROP_CHAR_SHADOWED);
+                if (!charShadow.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_SHADOWED, uno::Any(false));
+                }
+            }
+            if (nParaStyleStrikeThrough == css::awt::FontStrikeout::SINGLE && nParaStyleStrikeThrough == nCharStyleStrikeThrough)
+            {
+                std::optional<PropertyMap::Property> charStrikeThrough = pPropertyMap->getProperty(PROP_CHAR_STRIKEOUT);
+                if (!charStrikeThrough.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_STRIKEOUT, uno::Any(css::awt::FontStrikeout::NONE));
+                }
+            }
+            if (bParaStyleHidden && bCharStyleHidden)
+            {
+                std::optional<PropertyMap::Property> charHidden = pPropertyMap->getProperty(PROP_CHAR_HIDDEN);
+                if (!charHidden.has_value())
+                {
+                    pPropertyMap->Insert(PROP_CHAR_HIDDEN, uno::Any(false));
+                }
+            }
+        }
+    }
+}
+
+
+    void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -3001,8 +3159,9 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
 
     try
     {
+        applyToggleAttributes(pPropertyMap);
         // If we are in comments, then disable CharGrabBag, comment text doesn't support that.
-        uno::Sequence< beans::PropertyValue > aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
+        uno::Sequence<beans::PropertyValue> aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!IsInComments());
 
         if (IsInTOC() || m_bStartIndex || m_bStartBibliography)
             for( auto& rValue : asNonConstRange(aValues) )
@@ -3069,11 +3228,14 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                     {
                         xTOCTextCursor->goLeft(1, false);
                     }
-                    xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
+                    if (IsInComments())
+                        xTextRange = xTextAppend->finishParagraphInsert(aValues, xTOCTextCursor);
+                    else
+                        xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                     SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
                     if (!xTextRange.is())
                         throw uno::Exception("insertTextPortion failed", nullptr);
-                    m_bTextInserted = true;
+                    m_StreamStateStack.top().bTextInserted = true;
                     xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
                     if (m_nStartGenericField == 0)
                     {
@@ -3114,7 +3276,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
             m_pParaMarkerRedlineMove.clear();
         }
         CheckRedline( xTextRange );
-        m_bParaChanged = true;
+        m_StreamStateStack.top().bParaChanged = true;
 
         //getTableManager( ).handle(xTextRange);
     }
@@ -3472,19 +3634,13 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
 
 void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType)
 {
-    m_bSaveParaHadField = m_bParaHadField;
-    m_aHeaderFooterStack.push(HeaderFooterContext(m_bTextInserted, m_nTableDepth));
-    m_bTextInserted = false;
-    m_nTableDepth = 0;
-
     const PropertyIds ePropIsOn = bHeader? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
     const PropertyIds ePropShared = bHeader? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
     const PropertyIds ePropTextLeft = bHeader? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
     const PropertyIds ePropText = bHeader? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
 
     m_bDiscardHeaderFooter = true;
-    m_eInHeaderFooterImport
-        = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
+    m_StreamStateStack.top().eSubstreamType = bHeader ? SubstreamType::Header : SubstreamType::Footer;
 
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
@@ -3592,25 +3748,13 @@ void DomainMapper_Impl::PopPageHeaderFooter()
         }
         m_bDiscardHeaderFooter = false;
     }
-    m_eInHeaderFooterImport = HeaderFooterImportState::none;
-
-    if (!m_aHeaderFooterStack.empty())
-    {
-        m_bTextInserted = m_aHeaderFooterStack.top().getTextInserted();
-        m_nTableDepth = m_aHeaderFooterStack.top().getTableDepth();
-        m_aHeaderFooterStack.pop();
-    }
-
-    m_bParaHadField = m_bSaveParaHadField;
 }
 
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
-    SAL_WARN_IF(m_bInFootOrEndnote, "writerfilter.dmapper", "PushFootOrEndnote() is called from another foot or endnote");
-    m_bInFootOrEndnote = true;
-    m_bInFootnote = bIsFootnote;
+    SAL_WARN_IF(m_StreamStateStack.top().eSubstreamType != SubstreamType::Body, "writerfilter.dmapper", "PushFootOrEndnote() is called from another foot or endnote");
+    m_StreamStateStack.top().eSubstreamType = bIsFootnote ? SubstreamType::Footnote : SubstreamType::Endnote;
     m_bCheckFirstFootnoteTab = true;
-    m_bSaveFirstParagraphInCell = m_bFirstParagraphInCell;
     try
     {
         // Redlines outside the footnote should not affect footnote content
@@ -3724,7 +3868,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         }
         // store frame and (possible floating) table redline data for restoring them after frame conversion
         enum StoredRedlines eType;
-        if (m_bIsActualParagraphFramed || m_nTableDepth > 0)
+        if (m_bIsActualParagraphFramed || 0 < m_StreamStateStack.top().nTableDepth)
             eType = StoredRedlines::FRAME;
         else if (IsInFootOrEndnote())
             eType = IsInFootnote() ? StoredRedlines::FOOTNOTE : StoredRedlines::ENDNOTE;
@@ -3782,7 +3926,8 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
 
     // only export ParagraphFormat, when there is no other redline in the same text portion to avoid missing redline compression,
     // but always export the first ParagraphFormat redline in a paragraph to keep the paragraph style change data for rejection
-    if( (!bUsedRange || !m_bParaChanged) && GetTopContextOfType(CONTEXT_PARAGRAPH) )
+    if ((!bUsedRange || !m_StreamStateStack.top().bParaChanged)
+        && GetTopContextOfType(CONTEXT_PARAGRAPH))
     {
         std::vector<RedlineParamsPtr>& avRedLines = GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines();
         for( const auto& rRedline : avRedLines )
@@ -3841,7 +3986,7 @@ void DomainMapper_Impl::PushAnnotation()
 {
     try
     {
-        m_bIsInComments = true;
+        m_StreamStateStack.top().eSubstreamType = SubstreamType::Annotation;
         if (!GetTextFactory().is())
             return;
         m_xAnnotationField.set( GetTextFactory()->createInstance( "com.sun.star.text.TextField.Annotation" ),
@@ -4103,16 +4248,13 @@ void DomainMapper_Impl::PopFootOrEndnote()
     }
     m_aRedlines.pop();
     m_eSkipFootnoteState = SkipFootnoteSeparator::OFF;
-    m_bInFootOrEndnote = m_bInFootnote = false;
     m_pFootnoteContext = nullptr;
-    m_bFirstParagraphInCell = m_bSaveFirstParagraphInCell;
 }
 
 void DomainMapper_Impl::PopAnnotation()
 {
     RemoveLastParagraph();
 
-    m_bIsInComments = false;
     m_aTextAppendStack.pop();
 
     try
@@ -4430,7 +4572,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         getPropertyName( PROP_OPAQUE ),
                         uno::Any( true ) );
         }
-        m_bParaChanged = true;
+        m_StreamStateStack.top().bParaChanged = true;
         getTableManager().setIsInShape(true);
     }
     catch ( const uno::Exception& )
@@ -4580,7 +4722,7 @@ bool DomainMapper_Impl::IsDiscardHeaderFooter() const
 void DomainMapper_Impl::ClearPreviousParagraph()
 {
     // in table cells, set bottom auto margin of last paragraph to 0, except in paragraphs with numbering
-    if ((m_nTableDepth == (m_nTableCellDepth + 1))
+    if ((m_StreamStateStack.top().nTableDepth == (m_nTableCellDepth + 1))
         && m_xPreviousParagraph.is()
         && hasTableManager() && getTableManager().isCellLastParaAfterAutospacing())
     {
@@ -4592,7 +4734,7 @@ void DomainMapper_Impl::ClearPreviousParagraph()
     m_xPreviousParagraph.clear();
 
     // next table paragraph will be first paragraph in a cell
-    m_bFirstParagraphInCell = true;
+    m_StreamStateStack.top().bFirstParagraphInCell = true;
 }
 
 void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
@@ -5542,7 +5684,7 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
 
 void DomainMapper_Impl::PushFieldContext()
 {
-    m_bParaHadField = true;
+    m_StreamStateStack.top().bParaHadField = true;
     if(m_bDiscardHeaderFooter)
         return;
 #ifdef DBG_UTIL
@@ -5587,18 +5729,6 @@ void DomainMapper_Impl::SetFieldLocked()
         m_aFieldStack.back()->SetFieldLocked();
 }
 
-HeaderFooterContext::HeaderFooterContext(bool bTextInserted, sal_Int32 nTableDepth)
-    : m_bTextInserted(bTextInserted)
-    , m_nTableDepth(nTableDepth)
-{
-}
-
-bool HeaderFooterContext::getTextInserted() const
-{
-    return m_bTextInserted;
-}
-
-sal_Int32 HeaderFooterContext::getTableDepth() const { return m_nTableDepth; }
 
 FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart)
     : m_bFieldCommandCompleted(false)
@@ -6425,15 +6555,15 @@ OUString DomainMapper_Impl::extractTocTitle()
 css::uno::Reference<css::beans::XPropertySet>
 DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
 {
-    if (m_bParaChanged)
+    if (m_StreamStateStack.top().bParaChanged)
     {
-        finishParagraph(GetTopContextOfType(CONTEXT_PARAGRAPH), false); // resets m_bParaChanged
+        finishParagraph(GetTopContextOfType(CONTEXT_PARAGRAPH), false); // resets bParaChanged
         PopProperties(CONTEXT_PARAGRAPH);
         PushProperties(CONTEXT_PARAGRAPH);
         SetIsFirstRun(true);
         // The first paragraph of the index that is continuation of just finished one needs to be
-        // removed when finished (unless more content will arrive, which will set m_bParaChanged)
-        m_bRemoveThisParagraph = true;
+        // removed when finished (unless more content will arrive, which will set bParaChanged)
+        m_StreamStateStack.top().bRemoveThisParagraph = true;
     }
     const auto& xTextAppend = GetTopTextAppend();
     const auto xTextRange = xTextAppend->getEnd();
@@ -6668,7 +6798,7 @@ void DomainMapper_Impl::handleToc
 
     m_bStartTOC = true;
     pContext->SetTOC(xTOC);
-    m_bParaHadField = false;
+    m_StreamStateStack.top().bParaHadField = false;
 
     if (!xTOC)
         return;
@@ -6901,7 +7031,7 @@ void DomainMapper_Impl::handleBibliography
         xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::Any(OUString()));
 
     pContext->SetTOC( xTOC );
-    m_bParaHadField = false;
+    m_StreamStateStack.top().bParaHadField = false;
 
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
     appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
@@ -6944,7 +7074,7 @@ void DomainMapper_Impl::handleIndex
         }
     }
     pContext->SetTOC( xTOC );
-    m_bParaHadField = false;
+    m_StreamStateStack.top().bParaHadField = false;
 
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
     appendTextContent(xToInsert, uno::Sequence< beans::PropertyValue >() );
@@ -7914,7 +8044,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 }
             }
             else
-                m_bParaHadField = false;
+                m_StreamStateStack.top().bParaHadField = false;
         }
     }
     catch( const uno::Exception& )
@@ -8211,7 +8341,7 @@ void DomainMapper_Impl::PopFieldContext()
                     if (m_bStartedTOC || m_bStartIndex || m_bStartBibliography)
                     {
                         // inside SDT, last empty paragraph is also part of index
-                        if (!m_bParaChanged && !m_xSdtEntryStart)
+                        if (!m_StreamStateStack.top().bParaChanged && !m_xSdtEntryStart)
                         {
                             // End of index is the first item on a new paragraph - this paragraph
                             // should not be part of index
@@ -8236,8 +8366,8 @@ void DomainMapper_Impl::PopFieldContext()
                         }
                         m_bStartedTOC = false;
                         m_aTextAppendStack.pop();
-                        m_bTextInserted = false;
-                        m_bParaChanged = true; // the paragraph must stay anyway
+                        m_StreamStateStack.top().bTextInserted = false;
+                        m_StreamStateStack.top().bParaChanged = true; // the paragraph must stay anyway
                     }
                     m_bStartTOC = false;
                     m_bStartIndex = false;
@@ -8358,9 +8488,9 @@ void DomainMapper_Impl::PopFieldContext()
                         {
                             --m_nStartGenericField;
                             PopFieldmark(m_aTextAppendStack, xCrsr, pContext->GetFieldId());
-                            if(m_bTextInserted)
+                            if (m_StreamStateStack.top().bTextInserted)
                             {
-                                m_bTextInserted = false;
+                                m_StreamStateStack.top().bTextInserted = false;
                             }
                         }
                     }
@@ -8432,8 +8562,10 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
      * iff the first element in the section is a table. If the dummy para is not added yet, then add it;
      * So bookmark is not attached to the wrong paragraph.
      */
-    if(hasTableManager() && getTableManager().isInCell() && m_nTableDepth == 0 && GetIsFirstParagraphInSection()
-                    && !GetIsDummyParaAddedForTableInSection() &&!GetIsTextFrameInserted())
+    if (hasTableManager() && getTableManager().isInCell()
+        && m_StreamStateStack.top().nTableDepth == 0
+        && GetIsFirstParagraphInSection()
+        && !GetIsDummyParaAddedForTableInSection() && !GetIsTextFrameInserted())
     {
         AddDummyParaForTableInSection();
     }
@@ -8474,8 +8606,11 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                     // keep bookmark range, if it doesn't exceed cell boundary
                     uno::Reference< text::XTextRange > xStart = xCursor->getStart();
                     xCursor->goLeft( 1, false );
-                    if (m_nTableDepth == 0 || !m_bFirstParagraphInCell)
+                    if (m_StreamStateStack.top().nTableDepth == 0
+                        || !m_StreamStateStack.top().bFirstParagraphInCell)
+                    {
                         xCursor->gotoRange(xStart, true );
+                    }
                 }
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
                 SAL_WARN_IF(aBookmarkIter->second.m_sBookmarkName.isEmpty(), "writerfilter.dmapper", "anonymous bookmark");
@@ -8553,7 +8688,8 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
     * if the first element in the section is a table. If the dummy para is not added yet, then add it;
     * So permission is not attached to the wrong paragraph.
     */
-    if (getTableManager().isInCell() && m_nTableDepth == 0 && GetIsFirstParagraphInSection()
+    if (getTableManager().isInCell()
+        && m_StreamStateStack.top().nTableDepth == 0 && GetIsFirstParagraphInSection()
         && !GetIsDummyParaAddedForTableInSection() && !GetIsTextFrameInserted())
     {
         AddDummyParaForTableInSection();
@@ -8820,7 +8956,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         }
         else if (m_eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
         {
-            m_bParaWithInlineObject = true;
+            m_StreamStateStack.top().bParaWithInlineObject = true;
 
             // store inline images with track changes, because the anchor point
             // to set redlining is not available yet
@@ -9307,6 +9443,8 @@ void DomainMapper_Impl::substream(Id rName,
     appendTableHandler();
     getTableManager().startLevel();
 
+    m_StreamStateStack.emplace();
+
     //import of page header/footer
     //Ensure that only one header/footer per section is pushed
 
@@ -9337,7 +9475,11 @@ void DomainMapper_Impl::substream(Id rName,
     case NS_ooxml::LN_annotation :
         PushAnnotation();
     break;
+    default:
+        assert(false); // unexpected?
     }
+
+    assert(m_StreamStateStack.top().eSubstreamType != SubstreamType::Body);
 
     try
     {
@@ -9367,6 +9509,9 @@ void DomainMapper_Impl::substream(Id rName,
         PopAnnotation();
     break;
     }
+
+    assert(!m_StreamStateStack.empty());
+    m_StreamStateStack.pop();
 
     getTableManager().endLevel();
     popTableManager();

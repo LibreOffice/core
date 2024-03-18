@@ -3116,7 +3116,7 @@ void SwFlyFrameFormat::MakeFrames()
                 // #i28701# - consider changed type of
                 // <SwSortedObjs> entries.
                 if( pObj->DynCastFlyFrame() !=  nullptr &&
-                    (&pObj->GetFrameFormat()) == this )
+                    (pObj->GetFrameFormat()) == this )
                 {
                     bAdd = false;
                     break;

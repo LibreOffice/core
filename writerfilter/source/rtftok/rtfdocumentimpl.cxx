@@ -654,6 +654,7 @@ void RTFDocumentImpl::runBreak()
 
 void RTFDocumentImpl::tableBreak()
 {
+    checkFirstRun(); // ooo113308-1.rtf has a header at offset 151084 that doesn't startParagraphGroup() without this
     runBreak();
     Mapper().endParagraphGroup();
     Mapper().startParagraphGroup();
@@ -672,7 +673,10 @@ void RTFDocumentImpl::parBreak()
     m_bHadPicture = false;
 
     // start new one
-    Mapper().startParagraphGroup();
+    if (!m_bParAtEndOfSection)
+    {
+        Mapper().startParagraphGroup();
+    }
 }
 
 void RTFDocumentImpl::sectBreak(bool bFinal)
@@ -686,14 +690,26 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
     // Also, when pasting, it's fine to not have any paragraph inside the document at all.
     if (m_bNeedPar && (!bFinal || m_bNeedSect || bContinuous) && !isSubstream() && m_bIsNewDoc)
+    {
+        m_bParAtEndOfSection = true;
         dispatchSymbol(RTFKeyword::PAR);
+    }
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
     {
         dispatchFlag(RTFKeyword::PARD);
+        m_bParAtEndOfSection = true;
         dispatchSymbol(RTFKeyword::PAR);
         m_bNeedSect = bNeedSect;
     }
+    // testTdf148515, if RTF ends with \row, endParagraphGroup() must be called!
+    if (!m_bParAtEndOfSection || m_aStates.top().getCurrentBuffer())
+    {
+        Mapper().endParagraphGroup(); // < top para context dies with page break
+    }
+    m_bParAtEndOfSection = false;
+    // paragraph properties are *done* now - only section properties following
+
     while (!m_nHeaderFooterPositions.empty())
     {
         std::pair<Id, std::size_t> aPair = m_nHeaderFooterPositions.front();
@@ -726,7 +742,6 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
 
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
-    Mapper().endParagraphGroup();
 
     // End Section
     if (!m_pSuperstream)
@@ -1053,6 +1068,16 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     RTFSprms aAttributes;
     // shape attribute
     RTFSprms aPicAttributes;
+    if (m_aStates.top().getPicture().nCropT != 0 || m_aStates.top().getPicture().nCropB != 0
+        || m_aStates.top().getPicture().nCropL != 0 || m_aStates.top().getPicture().nCropR != 0)
+    {
+        text::GraphicCrop const crop{ m_aStates.top().getPicture().nCropT,
+                                      m_aStates.top().getPicture().nCropB,
+                                      m_aStates.top().getPicture().nCropL,
+                                      m_aStates.top().getPicture().nCropR };
+        auto const pCrop = new RTFValue(crop);
+        aPicAttributes.set(NS_ooxml::LN_CT_BlipFillProperties_srcRect, pCrop);
+    }
     auto pShapeValue = new RTFValue(xShape);
     aPicAttributes.set(NS_ooxml::LN_shape, pShapeValue);
     // pic sprm
@@ -1335,8 +1360,6 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     checkUnicode(/*bUnicode =*/false, /*bHex =*/true);
     return RTFError::OK;
 }
-
-bool RTFFrame::inFrame() const { return m_nW > 0 || m_nH > 0 || m_nX > 0 || m_nY > 0; }
 
 void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 {
@@ -2951,7 +2974,11 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
         case Destination::SHAPE:
             m_bNeedFinalPar = true;
             m_bNeedCr = m_bNeedCrOrig;
-            if (rState.getFrame().inFrame())
+            // tdf#47036 insert paragraph break for graphic object inside text
+            // frame at start of document - TODO: the object may actually be
+            // anchored inside the text frame and this ends up putting the
+            // anchor in the body, but better than losing the shape...
+            if (rState.getFrame().hasProperties() && m_pSdrImport->isTextGraphicObject())
             {
                 // parBreak() modifies m_aStates.top() so we can't apply resetFrame() directly on aState
                 resetFrame();
@@ -3614,7 +3641,7 @@ RTFError RTFDocumentImpl::popState()
 
     checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
     RTFParserState aState(m_aStates.top());
-    m_bWasInFrame = aState.getFrame().inFrame();
+    m_bWasInFrame = aState.getFrame().hasProperties();
 
     // dmapper expects some content in header/footer, so if there would be nothing, add an empty paragraph.
     if (m_pTokenizer->getGroup() == 1 && m_bFirstRun)

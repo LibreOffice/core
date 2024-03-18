@@ -538,11 +538,6 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                             rMap.getByName(prop.Name);
                         if (!pEntry)
                         {
-                            if (prop.Name == "CharStyleName")
-                            {
-                                lcl_setCharStyle(rPam.GetDoc(), prop.Value, items);
-                                continue;
-                            }
                             throw beans::UnknownPropertyException(
                                 "Unknown property: " + prop.Name);
                         }
@@ -551,7 +546,14 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                             throw beans::PropertyVetoException(
                                 "Property is read-only: " + prop.Name);
                         }
-                        rPropSet.setPropertyValue(*pEntry, prop.Value, items);
+                        if (prop.Name == "CharStyleName")
+                        {
+                            lcl_setCharStyle(rPam.GetDoc(), prop.Value, items);
+                        }
+                        else
+                        {
+                            rPropSet.setPropertyValue(*pEntry, prop.Value, items);
+                        }
                     }
 
                     IStyleAccess& rStyleAccess = rPam.GetDoc().GetIStyleAccess();

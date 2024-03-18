@@ -73,7 +73,7 @@ public:
     Iterator_t begin() { return m_pSprms->begin(); }
     Iterator_t end() { return m_pSprms->end(); }
     void clear();
-    bool equals(const RTFValue& rOther) const;
+    bool equals(const RTFSprms& rOther) const;
 
 private:
     void ensureCopyBeforeWrite();

@@ -124,18 +124,15 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             // but don't emit properties yet, since they may change till the first text token arrives
             m_bNeedPap = true;
-            if (!m_aStates.top().getFrame().inFrame())
+            if (!m_aStates.top().getFrame().hasProperties())
                 m_bNeedPar = false;
             m_bNeedFinalPar = false;
         }
         break;
         case RTFKeyword::SECT:
         {
-            if (m_bNeedCr)
-                dispatchSymbol(RTFKeyword::PAR);
-
             m_bHadSect = true;
-            if (m_bIgnoreNextContSectBreak)
+            if (m_bIgnoreNextContSectBreak || m_aStates.top().getFrame().hasProperties())
             {
                 // testContSectionPageBreak: need \par now
                 dispatchSymbol(RTFKeyword::PAR);
@@ -143,6 +140,10 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             else
             {
+                if (m_bNeedCr)
+                { // tdf#158586 don't dispatch \par here, it eats deferred page breaks
+                    setNeedPar(true);
+                }
                 sectBreak();
                 if (m_nResetBreakOnSectBreak != RTFKeyword::invalid)
                 {
@@ -374,7 +375,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_titlePg);
             if (((pBreak
                   && pBreak->getInt()
-                         == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous))
+                         == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous)
+                  && m_bHadSect) // tdf#158983 before first \sect, ignore \sbknone!
                  || m_nResetBreakOnSectBreak == RTFKeyword::SBKNONE)
                 && !(pTitlePg && pTitlePg->getInt()))
             {

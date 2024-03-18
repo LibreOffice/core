@@ -50,7 +50,7 @@ const Size ThumbSize(150, 150);
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
-    , m_pParent(pParent)
+    , m_xParent(pParent ? pParent->GetXWindow() : nullptr)
     , m_pText(m_xBuilder->weld_label("lbText"))
     , m_pShowTip(m_xBuilder->weld_check_button("cbShowTip"))
     , m_pNext(m_xBuilder->weld_button("btnNext"))
@@ -62,15 +62,11 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     m_nCurrentTip = officecfg::Office::Common::Misc::LastTipOfTheDayID::get();
     m_pPreview->set_size_request(ThumbSize.Width(), ThumbSize.Height());
 
-    if (pParent != nullptr)
+    if (m_xParent.is())
     {
-        css::uno::Reference<css::awt::XWindow> xWindow = pParent->GetXWindow();
-        if (xWindow.is())
-        {
-            VclPtr<vcl::Window> xVclWin(VCLUnoHelper::GetWindow(xWindow));
-            if (xVclWin != nullptr)
-                xVclWin->AddEventListener(LINK(this, TipOfTheDayDialog, Terminated));
-        }
+        VclPtr<vcl::Window> xVclWin(VCLUnoHelper::GetWindow(m_xParent));
+        if (xVclWin != nullptr)
+            xVclWin->AddEventListener(LINK(this, TipOfTheDayDialog, Terminated));
     }
 
     const auto t0 = std::chrono::system_clock::now().time_since_epoch();
@@ -94,7 +90,7 @@ IMPL_LINK(TipOfTheDayDialog, Terminated, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VclEventId::ObjectDying)
     {
-        m_pParent = nullptr;
+        m_xParent.clear();
         TipOfTheDayDialog::response(RET_OK);
     }
 }
@@ -107,15 +103,11 @@ TipOfTheDayDialog::~TipOfTheDayDialog()
     officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_pShowTip->get_active(), xChanges);
     xChanges->commit();
 
-    if (m_pParent != nullptr)
+    if (m_xParent.is())
     {
-        css::uno::Reference<css::awt::XWindow> xWindow = m_pParent->GetXWindow();
-        if (xWindow.is())
-        {
-            VclPtr<vcl::Window> xVclWin(VCLUnoHelper::GetWindow(xWindow));
-            if (xVclWin != nullptr)
-                xVclWin->RemoveEventListener(LINK(this, TipOfTheDayDialog, Terminated));
-        }
+        VclPtr<vcl::Window> xVclWin(VCLUnoHelper::GetWindow(m_xParent));
+        if (xVclWin != nullptr)
+            xVclWin->RemoveEventListener(LINK(this, TipOfTheDayDialog, Terminated));
     }
 }
 

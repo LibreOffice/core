@@ -1976,6 +1976,10 @@ namespace svgio::svgreader
                         {
                             setDominantBaseline(DominantBaseline::Hanging);
                         }
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"central"))
+                        {
+                            setDominantBaseline(DominantBaseline::Central);
+                        }
                         else
                         {
                             // no DominantBaseline

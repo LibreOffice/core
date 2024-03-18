@@ -463,14 +463,17 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
             {
-                SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pObj));
-                SwDrawFrameFormat *pFrameFormat = static_cast<SwDrawFrameFormat*>(pC->GetFormat());
-                if( pFrameFormat &&
-                    RndStdIds::FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId() )
+                if (SwDrawContact* pC = static_cast<SwDrawContact*>(GetUserCall(pObj)))
                 {
-                    rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), true );
-                    --i;
-                    getIDocumentLayoutAccess().DelLayoutFormat( pFrameFormat );
+                    SwDrawFrameFormat* pFrameFormat
+                        = static_cast<SwDrawFrameFormat*>(pC->GetFormat());
+                    if (pFrameFormat
+                        && RndStdIds::FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId())
+                    {
+                        rDrawView.MarkObj(pObj, rDrawView.Imp().GetPageView(), true);
+                        --i;
+                        getIDocumentLayoutAccess().DelLayoutFormat(pFrameFormat);
+                    }
                 }
             }
         }

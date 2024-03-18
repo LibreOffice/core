@@ -146,22 +146,57 @@ enum StoredRedlines
     NONE
 };
 
+enum class SubstreamType
+{
+    Body,
+    Header,
+    Footer,
+    Footnote,
+    Endnote,
+    Annotation,
+};
+
 /**
  * Storage for state that is relevant outside a header/footer, but not inside it.
  *
  * In case some state of DomainMapper_Impl should be reset before handling the
  * header/footer and should be restored once handling of header/footer is done,
  * then you can use this class to do so.
+ *
+ * note: presumably more state should be moved here.
  */
-class HeaderFooterContext
+struct SubstreamContext
 {
-    bool      m_bTextInserted;
-    sal_Int32 m_nTableDepth;
-
-public:
-    explicit HeaderFooterContext(bool bTextInserted, sal_Int32 nTableDepth);
-    bool getTextInserted() const;
-    sal_Int32 getTableDepth() const;
+    SubstreamType eSubstreamType = SubstreamType::Body;
+    bool      bTextInserted = false;
+    /**
+     * This contains the raw table depth. nTableDepth > 0 is the same as
+     * getTableManager().isInTable(), unless we're in the first paragraph of a
+     * table, or first paragraph after a table, as the table manager is only
+     * updated once we ended the paragraph (and know if the para has the
+     * inTbl SPRM or not).
+     */
+    sal_Int32 nTableDepth = 0;
+    // deferred breaks need to be saved for RTF, also for DOCX annotations
+    bool bIsColumnBreakDeferred = false;
+    bool bIsPageBreakDeferred = false;
+    sal_Int32 nLineBreaksDeferred = 0;
+    /// Current paragraph had at least one field in it.
+    bool bParaHadField = false;
+    /// Current paragraph in a table is first paragraph of a cell
+    bool bFirstParagraphInCell = true;
+    /// If the current paragraph has any runs.
+    bool bParaChanged = false;
+    bool bIsFirstParaInSectionAfterRedline = true;
+    bool bIsFirstParaInSection = true;
+    bool bIsLastParaInSection = false;
+    /// If the current paragraph contains section property definitions.
+    bool bParaSectpr = false;
+    bool bIsPreviousParagraphFramed = false;
+    /// Current paragraph had at least one inline object in it.
+    bool bParaWithInlineObject = false;
+    /// This is a continuation of already finished paragraph - e.g., first in an index section
+    bool bRemoveThisParagraph = false;
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -458,6 +493,8 @@ private:
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedPageStyleNo;
     css::uno::Reference<css::container::XNameContainer> m_xCharacterStyles;
+    css::uno::Reference<css::container::XNameContainer> m_xParagraphStyles;
+
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedCharacterStyleNo;
     css::uno::Reference<css::text::XText> m_xBodyText;
@@ -465,8 +502,11 @@ private:
 
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
-    std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
+public: // DomainMapper needs it
+    std::stack<SubstreamContext> m_StreamStateStack;
+private:
     std::stack<std::pair<TextAppendContext, bool>>                                  m_aHeaderFooterTextAppendStack;
+
     std::deque<FieldContextPtr> m_aFieldStack;
     bool m_bForceGenericFields;
     /// Type of decimal symbol associated to the document language in Writer locale definition
@@ -475,9 +515,6 @@ private:
     bool                                                                            m_bSetCitation;
     bool                                                                            m_bSetDateValue;
     bool                                                                            m_bIsFirstSection;
-    bool                                                                            m_bIsColumnBreakDeferred;
-    bool                                                                            m_bIsPageBreakDeferred;
-    sal_Int32                                                                       m_nLineBreaksDeferred;
     /// If we want to set "sdt end" on the next character context.
     bool                                                                            m_bSdtEndDeferred;
     /// If we want to set "paragraph sdt end" on the next paragraph context.
@@ -489,7 +526,6 @@ private:
     bool                                                                            m_bStartIndex;
     bool                                                                            m_bStartBibliography;
     unsigned int                                                                    m_nStartGenericField;
-    bool                                                                            m_bTextInserted;
     bool                                                                            m_bTextDeleted;
     LineNumberSettings                                                              m_aLineNumberSettings;
 
@@ -537,15 +573,7 @@ private:
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInNumberingImport; //in import of numbering (i.e. numbering.xml)
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
-    enum class HeaderFooterImportState
-    {
-        none,
-        header,
-        footer,
-    }                               m_eInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
-    bool                            m_bInFootOrEndnote;
-    bool                            m_bInFootnote;
     PropertyMapPtr m_pFootnoteContext;
     bool m_bHasFootnoteStyle;
     bool m_bCheckFootnoteStyle;
@@ -583,27 +611,16 @@ private:
     // text ZWSPs to keep the change tracking of the image in Writer.)
     bool                            m_bRedlineImageInPreviousRun;
 
-    /// If the current paragraph has any runs.
-    bool                            m_bParaChanged;
-    bool                            m_bIsFirstParaInSection;
-    bool                            m_bIsFirstParaInSectionAfterRedline;
     bool                            m_bIsFirstParaInShape = false;
     bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bDummyParaAddedForTableInSectionPage;
     bool                            m_bTextFrameInserted;
-    bool                            m_bIsPreviousParagraphFramed;
-    bool                            m_bIsLastParaInSection;
     bool                            m_bIsLastSectionGroup;
-    bool                            m_bIsInComments;
-    /// If the current paragraph contains section property definitions.
-    bool                            m_bParaSectpr;
     bool                            m_bUsingEnhancedFields;
     /// If the current paragraph is inside a structured document element.
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
     bool                            m_bIsOutsideAParagraph;
-    /// This is a continuation of already finished paragraph - e.g., first in an index section
-    bool                            m_bRemoveThisParagraph = false;
 
     css::uno::Reference< css::text::XTextCursor > m_xTOCMarkerCursor;
 
@@ -662,6 +679,7 @@ public:
     css::uno::Reference<css::container::XNameContainer> const & GetPageStyles();
     OUString GetUnusedPageStyleName();
     css::uno::Reference<css::container::XNameContainer> const & GetCharacterStyles();
+    css::uno::Reference<css::container::XNameContainer> const& GetParagraphStyles();
     OUString GetUnusedCharacterStyleName();
     css::uno::Reference<css::text::XText> const & GetBodyText();
     const css::uno::Reference<css::lang::XMultiServiceFactory>& GetTextFactory() const
@@ -695,7 +713,7 @@ public:
     void RemoveLastParagraph( );
     void SetIsDecimalComma() { m_bIsDecimalComma = true; };
     void SetIsLastParagraphInSection( bool bIsLast );
-    bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
+    bool GetIsLastParagraphInSection() const { return m_StreamStateStack.top().bIsLastParaInSection; }
     void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
     void SetRubyText( OUString const &sText, OUString const &sStyle) {
         m_aRubyInfo.sRubyText = sText;
@@ -721,10 +739,11 @@ public:
     bool GetIsTextFrameInserted() const { return m_bTextFrameInserted;}
     void SetIsTextDeleted(bool bIsTextDeleted) { m_bTextDeleted = bIsTextDeleted; }
 
-    void SetIsPreviousParagraphFramed( bool bIsFramed ) { m_bIsPreviousParagraphFramed = bIsFramed; }
-    bool GetIsPreviousParagraphFramed() const { return m_bIsPreviousParagraphFramed; }
+    void SetIsPreviousParagraphFramed(bool const bIsFramed)
+    { m_StreamStateStack.top().bIsPreviousParagraphFramed = bIsFramed; }
+    bool GetIsPreviousParagraphFramed() const { return m_StreamStateStack.top().bIsPreviousParagraphFramed; }
     void SetParaSectpr(bool bParaSectpr);
-    bool GetParaSectpr() const { return m_bParaSectpr;}
+    bool GetParaSectpr() const { return m_StreamStateStack.top().bParaSectpr; }
 
     void SetSymbolChar( sal_Int32 nSymbol) { m_aSymbolData.cSymbol = sal_Unicode(nSymbol); }
     void SetSymbolFont( OUString const &rName ) { m_aSymbolData.sFont = rName; }
@@ -740,9 +759,9 @@ public:
 
     /// Getter method for m_bSdt.
     bool GetSdt() const { return m_bSdt;}
-    bool GetParaChanged() const { return m_bParaChanged;}
-    bool GetParaHadField() const { return m_bParaHadField; }
-    bool GetRemoveThisPara() const { return m_bRemoveThisParagraph; }
+    bool GetParaChanged() const { return m_StreamStateStack.top().bParaChanged; }
+    bool GetParaHadField() const { return m_StreamStateStack.top().bParaHadField; }
+    bool GetRemoveThisPara() const { return m_StreamStateStack.top().bRemoveThisParagraph; }
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
@@ -755,6 +774,7 @@ public:
     bool isParaSdtEndDeferred() const;
 
     void finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove = false, const bool bNoNumbering = false);
+    void applyToggleAttributes( const PropertyMapPtr& pPropertyMap );
     void appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap );
     void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
     void appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOleHandler );
@@ -863,7 +883,7 @@ public:
     void PushPageFooter(SectionPropertyMap::PageType eType);
 
     void PopPageHeaderFooter();
-    bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
+    bool IsInHeaderFooter() const { auto const type(m_StreamStateStack.top().eSubstreamType); return type == SubstreamType::Header || type == SubstreamType::Footer; }
     void ConvertHeaderFooterToTextFrame(bool, bool);
     static void fillEmptyFrameProperties(std::vector<css::beans::PropertyValue>& rFrameProperties, bool bSetAnchorToChar);
 
@@ -871,8 +891,8 @@ public:
 
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
-    bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
-    bool IsInFootnote() const { return IsInFootOrEndnote() && m_bInFootnote; }
+    bool IsInFootOrEndnote() const { auto const type(m_StreamStateStack.top().eSubstreamType); return type == SubstreamType::Footnote || type == SubstreamType::Endnote; }
+    bool IsInFootnote() const { return m_StreamStateStack.top().eSubstreamType == SubstreamType::Footnote; }
 
     void StartCustomFootnote(const PropertyMapPtr pContext);
     void EndCustomFootnote();
@@ -1018,7 +1038,7 @@ public:
     void SetInFootnoteProperties(bool bSet) { m_bIsInFootnoteProperties = bSet;}
     bool IsInFootnoteProperties() const { return m_bIsInFootnoteProperties;}
 
-    bool IsInComments() const { return m_bIsInComments; };
+    bool IsInComments() const { return m_StreamStateStack.top().eSubstreamType == SubstreamType::Annotation; };
 
     std::vector<css::beans::PropertyValue> MakeFrameProperties(const ParagraphProperties& rProps);
     void CheckUnregisteredFrameConversion(bool bPreventOverlap = false);
@@ -1102,14 +1122,6 @@ public:
     /// Document background color, applied to every page style.
     std::optional<sal_Int32> m_oBackgroundColor;
 
-    /**
-     * This contains the raw table depth. m_nTableDepth > 0 is the same as
-     * getTableManager().isInTable(), unless we're in the first paragraph of a
-     * table, or first paragraph after a table, as the table manager is only
-     * updated once we ended the paragraph (and know if the para has the
-     * inTbl SPRM or not).
-     */
-    sal_Int32 m_nTableDepth;
     /// Raw table cell depth.
     sal_Int32 m_nTableCellDepth;
     /// Table cell depth of the last finished paragraph.
@@ -1182,7 +1194,7 @@ public:
     bool m_bIsActualParagraphFramed;
     std::deque<css::uno::Any> m_aStoredRedlines[StoredRedlines::NONE];
 
-    bool IsParaWithInlineObject() const { return m_bParaWithInlineObject; }
+    bool IsParaWithInlineObject() const { return m_StreamStateStack.top().bParaWithInlineObject; }
 
     css::uno::Reference< css::embed::XStorage > m_xDocumentStorage;
 
@@ -1209,17 +1221,9 @@ private:
     // Start a new index section; if needed, finish current paragraph
     css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
-    /// Current paragraph had at least one field in it.
-    bool m_bParaHadField;
-    bool m_bSaveParaHadField;
     css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool m_bParaAutoBefore;
-    /// Current paragraph in a table is first paragraph of a cell
-    bool m_bFirstParagraphInCell;
-    bool m_bSaveFirstParagraphInCell;
-    /// Current paragraph had at least one inline object in it.
-    bool m_bParaWithInlineObject;
     /// SAXException was seen so document will be abandoned
     bool m_bSaxError;
 

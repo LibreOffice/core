@@ -85,6 +85,11 @@ RTFValue::RTFValue(const RTFPicture& rPicture)
 {
 }
 
+RTFValue::RTFValue(text::GraphicCrop const& rCrop)
+    : m_oCrop(rCrop)
+{
+}
+
 RTFValue::~RTFValue() = default;
 
 int RTFValue::getInt() const { return m_nValue; }
@@ -110,6 +115,10 @@ uno::Any RTFValue::getAny() const
         ret <<= m_xStream;
     else if (m_xObject.is())
         ret <<= m_xObject;
+    else if (m_oCrop)
+    {
+        ret <<= *m_oCrop;
+    }
     else
         ret <<= static_cast<sal_Int32>(m_nValue);
     return ret;
@@ -172,7 +181,7 @@ bool RTFValue::equals(const RTFValue& rOther) const
     {
         if (m_pAttributes->size() != rOther.m_pAttributes->size())
             return false;
-        if (!m_pAttributes->equals(rOther))
+        if (!m_pAttributes->equals(*rOther.m_pAttributes))
             return false;
     }
     else if (m_pAttributes && m_pAttributes->size())
@@ -188,7 +197,7 @@ bool RTFValue::equals(const RTFValue& rOther) const
     {
         if (m_pSprms->size() != rOther.m_pSprms->size())
             return false;
-        if (!m_pSprms->equals(rOther))
+        if (!m_pSprms->equals(*rOther.m_pSprms))
             return false;
     }
     else if (m_pSprms && m_pSprms->size())

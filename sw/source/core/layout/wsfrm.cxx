@@ -2317,8 +2317,8 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
                     if( aBound.Overlaps( aRect ) )
                     {
-                        const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-                        if( css::text::WrapTextMode_THROUGH != rFormat.GetSurround().GetSurround() )
+                        const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+                        if( css::text::WrapTextMode_THROUGH != pFormat->GetSurround().GetSurround() )
                         {
                             const SwFrame* pAnchor = pAnchoredObj->GetAnchorFrame();
                             if ( pAnchor && pAnchor->FindFooterOrHeader() == GetUpper() )
@@ -4270,7 +4270,7 @@ void SwRootFrame::InvalidateAllObjPos()
             const SwSortedObjs& rObjs = *(pPageFrame->GetSortedObjs());
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat().GetAnchor();
+                const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat()->GetAnchor();
                 if ((rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA) &&
                     (rAnch.GetAnchorId() != RndStdIds::FLY_AT_CHAR))
                 {

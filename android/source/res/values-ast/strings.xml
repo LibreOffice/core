@@ -119,7 +119,7 @@
     <string name="error">Fallu</string>
     <string name="enter_part_name">Pon un nome pa la parte</string>
     <string name="bmp_null">El BMP nun val.</string>
-    <string name="unable_to_go_further">Nun se pue dir más allá</string>
+    <string name="unable_to_go_further">Nun se pue dir más allá.</string>
     <string name="printing_not_supported">El preséu nun almite la imprentación</string>
     <string name="directory_not_saved">Nun se guardó\'l directoriu.</string>
     <string name="part">Parte</string>

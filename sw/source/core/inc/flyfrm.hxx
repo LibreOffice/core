@@ -269,8 +269,8 @@ public:
     virtual void MakeObjPos() override;
     virtual void InvalidateObjPos() override;
 
-    virtual SwFrameFormat& GetFrameFormat() override;
-    virtual const SwFrameFormat& GetFrameFormat() const override;
+    virtual SwFrameFormat* GetFrameFormat() override;
+    virtual const SwFrameFormat* GetFrameFormat() const override;
 
     virtual SwRect GetObjRect() const override;
 

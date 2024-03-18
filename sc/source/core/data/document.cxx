@@ -3262,12 +3262,16 @@ bool ScDocument::HasClipFilteredRows()
     if ( rClipRanges.empty() )
         return false;
 
-    for ( size_t i = 0, n = rClipRanges.size(); i < n; ++i )
+    if (maTabs.size() > 0)
     {
-        ScRange & rRange = rClipRanges[ i ];
-        bool bAnswer = maTabs[nCountTab]->HasFilteredRows(rRange.aStart.Row(), rRange.aEnd.Row());
-        if (bAnswer)
-            return true;
+        for (size_t i = 0, n = rClipRanges.size(); i < n; ++i)
+        {
+            ScRange& rRange = rClipRanges[i];
+            bool bAnswer
+                = maTabs[nCountTab]->HasFilteredRows(rRange.aStart.Row(), rRange.aEnd.Row());
+            if (bAnswer)
+                return true;
+        }
     }
     return false;
 }
@@ -7042,6 +7046,8 @@ void ScDocument::GetNotesInRange( const ScRangeList& rRangeList, std::vector<sc:
         const ScRange & rRange = rRangeList[i];
         for( SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab )
         {
+            if (!maTabs[nTab])
+                continue;
             maTabs[nTab]->GetNotesInRange( rRange, rNotes );
         }
     }
@@ -7059,6 +7065,8 @@ bool ScDocument::ContainsNotesInRange( const ScRangeList& rRangeList ) const
         const ScRange & rRange = rRangeList[i];
         for( SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab )
         {
+            if (!maTabs[nTab])
+                continue;
             bool bContainsNote = maTabs[nTab]->ContainsNotesInRange( rRange );
             if(bContainsNote)
                 return true;

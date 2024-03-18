@@ -3725,11 +3725,16 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     SwDoc& rDest = rInsPos.GetDoc();
     SwNodeIndex aSavePos( rInsPos );
 
+    SwPaM aCopiedPaM(rRg.aStart, rRg.aEnd);
+    if (pCopiedPaM)
+        aCopiedPaM = pCopiedPaM->first;
+
     if (rRg.aStart != rRg.aEnd)
     {
         bool bEndIsEqualEndPos = rInsPos == rRg.aEnd.GetNode();
         --aSavePos;
         SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
+        auto savedEndContentIndex = aCopiedPaM.End()->GetContentIndex();
 
         // insert behind the already copied start node
         m_rDoc.GetNodes().CopyNodes( rRg, rInsPos, false, true );
@@ -3738,6 +3743,10 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         if (bEndIsEqualEndPos)
         {
             const_cast<SwNodeIndex&>(rRg.aEnd).Assign(aSavePos.GetNode(), +1);
+            // pCopiedPaM->first now spans a range from the start of the original selection
+            // to the end of newly added text, and the insertion point is in the middle of
+            // that range. Adjust the local copy to cover the original copied PaM.
+            aCopiedPaM.End()->Assign(rRg.aEnd, savedEndContentIndex);
         }
     }
 
@@ -3747,7 +3756,6 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     // sw_fieldmarkhide: also needs to be done before making frames
     if (m_rDoc.getIDocumentMarkAccess()->getAllMarksCount())
     {
-        SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
         SwPosition targetPos(aSavePos, SwNodeOffset(rRg.aStart != rRg.aEnd ? +1 : 0));
         if (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->GetNode())
         {
@@ -3760,7 +3768,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             targetPos = pCopiedPaM->second;
         }
 
-        sw::CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, targetPos, flags);
+        sw::CopyBookmarks(aCopiedPaM, targetPos, flags);
     }
 
     if (rRg.aStart != rRg.aEnd)
@@ -3851,7 +3859,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 
     {
         ::sw::UndoGuard const undoGuard(rDest.GetIDocumentUndoRedo());
-        CopyFlyInFlyImpl(rRg, pCopiedPaM ? &pCopiedPaM->first : nullptr,
+        CopyFlyInFlyImpl(rRg, pCopiedPaM ? &aCopiedPaM : nullptr,
             // see comment below regarding use of pCopiedPaM->second
             (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->GetNode())
                 ? pCopiedPaM->second.GetNode()

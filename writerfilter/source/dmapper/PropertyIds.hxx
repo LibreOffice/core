@@ -377,6 +377,7 @@ enum PropertyIds
         ,PROP_RTL_GUTTER
         ,PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF
         ,PROP_PARA_CONNECT_BORDERS
+        ,PROP_TABS_AND_BLANKS_FOR_LINE_CALCULATION
     };
 
 //Returns the UNO string equivalent to eId.

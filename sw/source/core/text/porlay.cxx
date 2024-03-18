@@ -744,7 +744,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     {
                         bool bDeleted = false;
                         size_t nAuthor = std::string::npos;
-                        const SwFormatAnchor& rAnchor = pAnchoredObj->GetFrameFormat().GetAnchor();
+                        const SwFormatAnchor& rAnchor = pAnchoredObj->GetFrameFormat()->GetAnchor();
                         if ( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR )
                         {
                             SwPosition aAnchor = *rAnchor.GetContentAnchor();

@@ -520,7 +520,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         }
         break;
         case RTFKeyword::PAGEBB:
-            nParam = NS_ooxml::LN_CT_PPrBase_pageBreakBefore;
+            // ignore a page break that is defined before the document content has even started
+            if (!m_bFirstRun)
+                nParam = NS_ooxml::LN_CT_PPrBase_pageBreakBefore;
             break;
         default:
             break;

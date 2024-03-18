@@ -1826,8 +1826,20 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
     uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
     if (mnTableDepth > 0 && xShapePropSet.is() && mbIsVMLfound) //if we had a table
     {
+        bool bForceShapeIntoCell = mbAllowInCell;
+        // According to tdf#153909 and GraphicImport's LN_shape handling,
+        // through-anchored shapes should not force the shape into the cell
+        if (bForceShapeIntoCell)
+        {
+            text::WrapTextMode nSurround = text::WrapTextMode_NONE;
+            xShapePropSet->getPropertyValue("Surround") >>= nSurround;
+            sal_Int32 nHoriRelation = -1;
+            xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nHoriRelation;
+            bForceShapeIntoCell = (nSurround != text::WrapTextMode_THROUGH)
+                                   || (nHoriRelation != text::RelOrientation::FRAME);
+        }
         xShapePropSet->setPropertyValue(dmapper::getPropertyName(dmapper::PROP_FOLLOW_TEXT_FLOW),
-                                        uno::Any(mbAllowInCell));
+                                        uno::Any(bForceShapeIntoCell));
     }
     // Notify the dmapper that the shape is ready to use
     if ( !bIsPicture )
