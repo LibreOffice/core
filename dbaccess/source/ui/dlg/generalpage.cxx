@@ -226,31 +226,29 @@ namespace dbaui
 
     OUString OGeneralPageWizard::getEmbeddedDBName( const SfxItemSet& _rSet )
     {
+        if (!m_pCollection)
+            return {};
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         bool bValid, bReadonly;
         getFlags( _rSet, bValid, bReadonly );
-
-        // if the selection is invalid, disable everything
-
-        implSetCurrentType(  OUString() );
+        if (!bValid)
+            return {};
 
         // compare the DSN prefix with the registered ones
-        OUString sDisplayName;
+        OUString sDBURL;
+        if (const SfxStringItem* pUrlItem = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL))
+            if (dbaccess::ODsnTypeCollection::isEmbeddedDatabase(pUrlItem->GetValue()))
+                sDBURL = pUrlItem->GetValue();
+        if (sDBURL.isEmpty())
+            sDBURL = dbaccess::ODsnTypeCollection::getEmbeddedDatabase();
+        OUString sDisplayName = m_pCollection->getTypeDisplayName(sDBURL);
 
-        if (m_pCollection && bValid)
-        {
-            implSetCurrentType( dbaccess::ODsnTypeCollection::getEmbeddedDatabase() );
-            sDisplayName = m_pCollection->getTypeDisplayName( m_eCurrentSelection );
-            onTypeSelected(m_eCurrentSelection);
-        }
-
-        // select the correct datasource type
-        if  (  dbaccess::ODsnTypeCollection::isEmbeddedDatabase( m_eCurrentSelection )
-            && m_xEmbeddedDBType->find_text(sDisplayName) == -1 )
+        // ensure presence of the correct datasource type
+        if (!sDisplayName.isEmpty() && m_xEmbeddedDBType->find_text(sDisplayName) == -1)
         {   // this indicates it's really a type which is known in general, but not supported on the current platform
             // show a message saying so
             //  eSpecialMessage = smUnsupportedType;
-            insertEmbeddedDBTypeEntryData( m_eCurrentSelection, sDisplayName );
+            insertEmbeddedDBTypeEntryData(sDBURL, sDisplayName);
         }
 
         return sDisplayName;
