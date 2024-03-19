@@ -386,6 +386,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)
     xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
     // should actually be 10 (including the empty para with the comment marker, and the last para)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xIndex->getCount());
+
+    xSearchDes->setSearchString(".$"); // any last character (not just full-stops) in a paragraph
+    xIndex.set(xSearch->findAll(xSearchDes), uno::UNO_SET_THROW);
+    // should be one for every non-empty paragraph
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), xIndex->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282)
