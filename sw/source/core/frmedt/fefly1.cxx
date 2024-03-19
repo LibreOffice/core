@@ -1920,7 +1920,7 @@ static sal_uInt16 SwFormatGetPageNum(const SwFlyFrameFormat * pFormat)
 }
 
 void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
-                                      const OUString & rReference,
+                                      std::u16string_view rReference,
                                       bool bSuccessors,
                                       std::vector< OUString > & aPrevPageVec,
                                       std::vector< OUString > & aThisPageVec,
@@ -1943,8 +1943,6 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
 
     /* potential successors resp. predecessors */
     std::vector< const SwFrameFormat * > aTmpSpzArray;
-
-    mxDoc->FindFlyByName(rReference);
 
     for (size_t n = 0; n < nCnt; ++n)
     {

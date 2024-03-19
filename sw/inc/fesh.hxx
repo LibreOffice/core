@@ -779,7 +779,7 @@ public:
     SW_DLLPUBLIC tools::Long GetSectionWidth( SwFormat const & rFormat ) const;
 
     SW_DLLPUBLIC void GetConnectableFrameFormats
-    (SwFrameFormat & rFormat, const OUString & rReference, bool bSuccessors,
+    (SwFrameFormat & rFormat, std::u16string_view rReference, bool bSuccessors,
      std::vector< OUString > & aPrevPageVec,
      std::vector< OUString > & aThisPageVec,
      std::vector< OUString > & aNextPageVec,
