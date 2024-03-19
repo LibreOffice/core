@@ -1368,10 +1368,15 @@ void SwDoc::DelNumRules(const SwPaM& rPam, SwRootFrame const*const pLayout)
             {
                 pTNd->ChkCondColl();
             }
-            else if( !pOutlNd &&
-                     static_cast<SwTextFormatColl*>(pTNd->GetFormatColl())->IsAssignedToListLevelOfOutlineStyle() )
+            else
             {
-                pOutlNd = pTNd;
+                auto pParaStyle = static_cast<SwTextFormatColl*>(pTNd->GetFormatColl());
+                if (pParaStyle && pParaStyle->IsAssignedToListLevelOfOutlineStyle())
+                {
+                    if (!pOutlNd)
+                        pOutlNd = pTNd;
+                    pTNd->SetCountedInList(false);
+                }
             }
         }
     }
