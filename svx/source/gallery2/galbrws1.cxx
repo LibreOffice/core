@@ -257,7 +257,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
 void GalleryBrowser1::ImplGetExecuteVector(std::vector<OUString>& o_aExec)
 {
-    GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+    GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListner );
 
     if( !pTheme )
         return;
@@ -289,14 +289,14 @@ void GalleryBrowser1::ImplGetExecuteVector(std::vector<OUString>& o_aExec)
 
     o_aExec.emplace_back("properties");
 
-    mpGallery->ReleaseTheme( pTheme, *this );
+    mpGallery->ReleaseTheme( pTheme, maLocalListner );
 }
 
 void GalleryBrowser1::ImplGalleryThemeProperties( std::u16string_view rThemeName, bool bCreateNew )
 {
     DBG_ASSERT(!mpThemePropsDlgItemSet, "mpThemePropsDlgItemSet already set!");
     mpThemePropsDlgItemSet.reset(new SfxItemSet( SfxGetpApp()->GetPool() ));
-    GalleryTheme*   pTheme = mpGallery->AcquireTheme( rThemeName, *this );
+    GalleryTheme*   pTheme = mpGallery->AcquireTheme( rThemeName, maLocalListner );
 
     ImplFillExchangeData( pTheme, *mpExchangeData );
 
@@ -346,7 +346,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(bool bCreateNew, sal_Int32 n
     }
 
     OUString aThemeName( mpExchangeData->pTheme->GetName() );
-    mpGallery->ReleaseTheme( mpExchangeData->pTheme, *this );
+    mpGallery->ReleaseTheme( mpExchangeData->pTheme, maLocalListner );
 
     if ( bCreateNew && ( nRet != RET_OK ) )
     {
@@ -368,13 +368,13 @@ void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
 {
     if (rIdent == u"update")
     {
-        GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+        GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListner );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<VclAbstractDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog(mxThemes.get(), pTheme));
 
         aActualizeProgress->Execute();
-        mpGallery->ReleaseTheme( pTheme, *this );
+        mpGallery->ReleaseTheme( pTheme, maLocalListner );
     }
     else if (rIdent == u"delete")
     {
@@ -385,7 +385,7 @@ void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
     }
     else if (rIdent == u"rename")
     {
-        GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+        GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListner );
         const OUString  aOldName( pTheme->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -408,11 +408,11 @@ void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
                 mpGallery->RenameTheme( aOldName, aName );
             }
         }
-        mpGallery->ReleaseTheme( pTheme, *this );
+        mpGallery->ReleaseTheme( pTheme, maLocalListner );
     }
     else if (rIdent == u"assign")
     {
-        GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+        GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListner );
 
         if (pTheme && !pTheme->IsReadOnly())
         {
@@ -423,7 +423,7 @@ void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
                 pTheme->SetId( aDlg->GetId(), true );
         }
 
-        mpGallery->ReleaseTheme( pTheme, *this );
+        mpGallery->ReleaseTheme( pTheme, maLocalListner );
     }
     else if (rIdent == u"properties")
     {
@@ -1501,13 +1501,12 @@ IMPL_LINK(GalleryBrowser1, SelectTbxHdl, weld::Toggleable&, rBox, void)
 
 void GalleryBrowser1::FillThemeEntries()
 {
-        SfxListener aListener;
         for (size_t i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; ++i)
         {
             const GalleryThemeEntry* pThemeInfo = mpGallery->GetThemeInfo( i );
             OUString aThemeName = pThemeInfo->GetThemeName();
             //sal_uInt32 nId = pThemeInfo->GetId();
-            GalleryTheme* pTheme = mpGallery->AcquireTheme(aThemeName, aListener);
+            GalleryTheme* pTheme = mpGallery->AcquireTheme(aThemeName, maLocalListner);
             sal_uInt32 nObjectCount = pTheme->GetObjectCount();
             for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
             {
@@ -1515,7 +1514,7 @@ void GalleryBrowser1::FillThemeEntries()
                 OUString aTitle = GetItemText(*xSgaObject, GalleryItemFlags::Title);
                 maAllThemeEntries.push_back(ThemeEntry(aThemeName, aTitle, nObject));
             }
-            mpGallery->ReleaseTheme(pTheme, aListener);
+            mpGallery->ReleaseTheme(pTheme, maLocalListner);
         }
         maFoundThemeEntries.assign(maAllThemeEntries.begin(), maAllThemeEntries.end());
 }
