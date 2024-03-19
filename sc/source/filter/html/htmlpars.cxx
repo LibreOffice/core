@@ -908,7 +908,8 @@ void ScHTMLLayoutParser::CloseEntry( const HtmlImportInfo* pInfo )
     if ( bTabInTabCell )
     {   // From the stack in TableOff
         bTabInTabCell = false;
-        NewActEntry(maList.back().get()); // New free flying mxActEntry
+        SAL_WARN_IF(maList.empty(), "sc", "unexpected close entry without open");
+        NewActEntry(maList.empty() ? nullptr : maList.back().get()); // New free flying mxActEntry
         return ;
     }
     if (mxActEntry->nTab == 0)
