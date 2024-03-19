@@ -331,8 +331,8 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
     xLocalColOffset.reset();
     if ( pTables )
     {
-        for( const auto& rEntry : *pTables)
-            delete rEntry.second;
+        for( auto& rEntry : *pTables)
+            rEntry.second.reset();
         pTables.reset();
     }
 }
@@ -592,7 +592,7 @@ void ScHTMLLayoutParser::Adjust()
             {
                 OuterMap::const_iterator it = pTables->find( nTab );
                 if ( it != pTables->end() )
-                    pTab = it->second;
+                    pTab = it->second.get();
             }
 
         }
@@ -627,7 +627,7 @@ void ScHTMLLayoutParser::Adjust()
             {
                 OuterMap::const_iterator it = pTables->find( nTab );
                 if ( it != pTables->end() )
-                    pTab = it->second;
+                    pTab = it->second.get();
             }
             // New line spacing
             SCROW nR = 0;
@@ -1272,10 +1272,10 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
                 if ( it == pTables->end() )
                 {
                     pTab1 = new InnerMap;
-                    (*pTables)[ nTab ] = pTab1;
+                    (*pTables)[ nTab ].reset(pTab1);
                 }
                 else
-                    pTab1 = it->second;
+                    pTab1 = it->second.get();
                 SCROW nRowSpan = pE->nRowOverlap;
                 SCROW nRowKGV;
                 SCROW nRowsPerRow1; // Outer table
@@ -1295,7 +1295,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
                 if ( nRowsPerRow2 > 1 )
                 {   // Height of the inner table
                     pTab2 = new InnerMap;
-                    (*pTables)[ nTable ] = pTab2;
+                    (*pTables)[ nTable ].reset(pTab2);
                 }
                 // Abuse void* Data entry of the Table class for height mapping
                 if ( nRowKGV > 1 )
@@ -1334,7 +1334,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
                         if ( !pTab2 )
                         {   // nRowsPerRow2 could be've been incremented
                             pTab2 = new InnerMap;
-                            (*pTables)[ nTable ] = pTab2;
+                            (*pTables)[ nTable ].reset(pTab2);
                         }
                         for ( SCROW j=0; j < nRows; j++ )
                         {

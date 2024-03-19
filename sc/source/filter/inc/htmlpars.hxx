@@ -148,7 +148,7 @@ class HTMLOption;
 
 // TODO these need better names
 typedef ::std::map<SCROW, SCROW> InnerMap;
-typedef ::std::map<sal_uInt16, InnerMap*> OuterMap;
+typedef ::std::map<sal_uInt16, std::unique_ptr<InnerMap>> OuterMap;
 
 /// HTML parser used during paste into Calc.
 class ScHTMLLayoutParser : public ScHTMLParser
