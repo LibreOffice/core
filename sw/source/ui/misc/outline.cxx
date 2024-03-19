@@ -623,6 +623,8 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, NumberSelect, weld::ComboBox&, void)
         {
             SwNumFormat aNumFormat(m_pNumRule->Get(i));
             aNumFormat.SetNumberingType(nNumberType);
+            // ensure that HasListFormat
+            aNumFormat.SetListFormat(aNumFormat.GetPrefix(), aNumFormat.GetSuffix(), i);
             m_pNumRule->Set(i, aNumFormat);
             CheckForStartValue_Impl(nNumberType);
         }
