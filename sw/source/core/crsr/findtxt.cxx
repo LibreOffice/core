@@ -726,6 +726,25 @@ bool DoSearch(SwPaM & rSearchPam,
         SwTextNode const*const pNode, SwTextFrame const*const pFrame,
         SwRootFrame const*const pLayout, SwPaM& rPam)
 {
+    if (bRegSearch && rSearchOpt.searchString.endsWith("$"))
+    {
+        bool bAlwaysSearchingForEndOfPara = true;
+        sal_Int32 nIndex = 0;
+        while ((nIndex = rSearchOpt.searchString.indexOf("|", nIndex)) != -1)
+        {
+            if (!nIndex || rSearchOpt.searchString[nIndex - 1] != '$')
+            {
+                bAlwaysSearchingForEndOfPara = false;
+                break;
+            }
+            ++nIndex;
+        }
+        // when searching for something at the end of the paragraph, the para end must be in range
+        const AmbiguousIndex& rParaEnd = bSrchForward ? nEnd : nStart;
+        if (bAlwaysSearchingForEndOfPara && nTextLen.GetAnyIndex() != rParaEnd.GetAnyIndex())
+            return false;
+    }
+
     bool bFound = false;
     OUString sCleanStr;
     std::vector<AmbiguousIndex> aFltArr;
