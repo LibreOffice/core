@@ -312,6 +312,9 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     {
         OUString sOld = m_sURL;
         m_sURL = m_pGeneralPage->GetSelectedType();
+        if (m_sURL.startsWith("sdbc:mysql:") && sOld.startsWith("sdbc:mysql:"))
+            m_sURL = sOld; // The type of MySQL connection was already set elsewhere; just use it,
+                           // instead of the hardcoded one from the selector
         DataSourceInfoConverter::convert(getORB(), m_pCollection,sOld,m_sURL,m_pImpl->getCurrentDataSource());
         ::dbaccess::DATASOURCE_TYPE eType = VerifyDataSourceType(m_pCollection->determineType(m_sURL));
         if (eType ==  ::dbaccess::DST_UNKNOWN)

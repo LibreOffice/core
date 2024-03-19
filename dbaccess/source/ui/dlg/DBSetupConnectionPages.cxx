@@ -239,9 +239,13 @@ using namespace ::com::sun::star;
         if ( bHasMySQLNative )
             m_xNATIVEDatabase->show();
 
-        // if any of the options is checked, then there's nothing to do
+        // tdf#103068: if any of the options is checked, then just update the selected kind:
+        // it could happen that the selection and the wizard path are not in sync
         if ( m_xODBCDatabase->get_active() || m_xJDBCDatabase->get_active() || m_xNATIVEDatabase->get_active() )
+        {
+            maClickHdl.Call(this);
             return;
+        }
 
         // prefer "native" or "JDBC"
         if ( bHasMySQLNative )
