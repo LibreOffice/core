@@ -135,6 +135,7 @@ private:
     css::uno::Reference<css::util::XURLTransformer> m_xTransformer;
 
     CharClass m_aCharacterClassficator;
+    SfxListener maLocalListner;
 
     void ImplInsertThemeEntry(const GalleryThemeEntry* pEntry);
     static void ImplFillExchangeData(const GalleryTheme* pThm, ExchangeData& rData);
