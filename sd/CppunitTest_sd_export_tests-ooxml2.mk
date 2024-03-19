@@ -11,4 +11,10 @@
 
 $(eval $(call sd_export_test,-ooxml2))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sd_export_tests-ooxml2, \
+    modules/simpress \
+    sfx \
+    svt \
+))
+
 # vim: set noet sw=4 ts=4:
