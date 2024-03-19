@@ -737,6 +737,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                     OFieldDescription* pField = new OFieldDescription();
                     pField->SetName(m_aKeyName);
                     pField->FillFromTypeInfo(pTypeInfo,true,true);
+                    pField->SetAutoIncrement(pTypeInfo->bAutoIncrement);
                     pField->SetPrimaryKey(true);
                     m_bAddPKFirstTime = false;
                     insertColumn(0,pField);
