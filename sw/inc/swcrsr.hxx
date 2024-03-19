@@ -67,6 +67,9 @@ namespace o3tl {
     template<> struct typed_flags<SwCursorSkipMode> : is_typed_flags<SwCursorSkipMode, 0x3> {};
 }
 
+/// SwCursor is a base class for UI/shell, table and UNO/API cursors.
+///
+/// It's more than just a pair of doc model positions (SwPaM), e.g. can go left/right or up/down.
 class SAL_DLLPUBLIC_RTTI SwCursor : public SwPaM
 {
     friend class SwCursorSaveState;
