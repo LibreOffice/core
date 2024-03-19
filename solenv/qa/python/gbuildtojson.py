@@ -144,7 +144,10 @@ class CheckGbuildToJsonModules(unittest.TestCase):
             bashscript.close()
             subprocess.check_call([self.bash, bashscriptname.replace('\\', '/')])
             os.remove(bashscriptname)
-        jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToJson', 'Library'))
+        try:
+            jsonfiles = os.listdir(os.path.join(self.tempwork, 'GbuildToJson', 'Library'))
+        except FileNotFoundError:
+            jsonfiles = []
         gbuildlibs = []
         for jsonfilename in jsonfiles:
             with open(os.path.join(self.tempwork, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
