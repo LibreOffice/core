@@ -903,15 +903,15 @@ bool OTableController::checkColumns(bool _bNew)
         {
         case RET_YES:
         {
-            auto pNewRow = std::make_shared<OTableRow>();
             TOTypeInfoSP pTypeInfo = ::dbaui::queryPrimaryKeyType(m_aTypeInfo);
             if ( !pTypeInfo )
                 break;
 
+            auto pNewRow = std::make_shared<OTableRow>();
             pNewRow->SetFieldType( pTypeInfo );
             OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
 
-            pActFieldDescr->SetAutoIncrement(false);
+            pActFieldDescr->SetAutoIncrement(pTypeInfo->bAutoIncrement);
             pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
             pActFieldDescr->SetName( createUniqueName("ID" ));
