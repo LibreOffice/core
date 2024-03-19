@@ -134,7 +134,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 
     // show description
     SfxItemState aState = rInAttrs->GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );
-    if( aState == SfxItemState::DONTCARE )
+    if( aState == SfxItemState::INVALID )
     {
         m_xCbShowDescription->set_state( TRISTATE_INDET );
     }
@@ -157,7 +157,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     if( aState == SfxItemState::SET )
         m_nInitialDegrees = static_cast< const SdrAngleItem * >( pPoolItem )->GetValue();
 
-    m_bHasInitialDegrees = aState != SfxItemState::DONTCARE;
+    m_bHasInitialDegrees = aState != SfxItemState::INVALID;
     if( m_bHasInitialDegrees )
         m_xCtrlDial->SetRotation( m_nInitialDegrees );
     else
@@ -169,7 +169,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     if( aState == SfxItemState::SET )
         m_bInitialStacking = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
 
-    m_bHasInitialStacking = aState != SfxItemState::DONTCARE;
+    m_bHasInitialStacking = aState != SfxItemState::INVALID;
     if( m_bHasInitialDegrees )
         m_xCbStacked->set_state(m_bInitialStacking ? TRISTATE_TRUE : TRISTATE_FALSE);
     else
@@ -181,7 +181,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 
     // Text overlap ----------
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
-    if( aState == SfxItemState::DONTCARE )
+    if( aState == SfxItemState::INVALID )
     {
         m_xCbTextOverlap->set_state( TRISTATE_INDET );
     }
@@ -198,7 +198,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 
     // text break ----------
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_BREAK, false, &pPoolItem );
-    if( aState == SfxItemState::DONTCARE )
+    if( aState == SfxItemState::INVALID )
     {
         m_xCbTextBreak->set_state( TRISTATE_INDET );
     }

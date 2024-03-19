@@ -134,7 +134,7 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
     rSet.Put(aKern);
 
     SfxItemState eState = aCharAttrSet.GetItemState( EE_CHAR_KERNING );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
     {
         rSet.InvalidateItem(EE_CHAR_KERNING);
     }
@@ -591,7 +591,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
         //Added by xuxu
         SfxItemState eState = aAttrSet.GetItemState( EE_PARA_LRSPACE );
-        if ( eState == SfxItemState::DONTCARE )
+        if ( eState == SfxItemState::INVALID )
         {
             rSet.InvalidateItem(EE_PARA_LRSPACE);
             rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);

@@ -143,7 +143,7 @@ void ScStyleSheetPool::CopyStyleFrom( SfxStyleSheetBasePool* pSrcPool,
     if (!pDestSheet)
         pDestSheet = &Make( rName, eFamily, pStyleSheet->GetMask() );
     SfxItemSet& rDestSet = pDestSheet->GetItemSet();
-    rDestSet.PutExtended( rSourceSet, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+    rDestSet.PutExtended( rSourceSet, SfxItemState::INVALID, SfxItemState::DEFAULT );
 
     if ( eFamily == SfxStyleFamily::Page )
     {
@@ -153,13 +153,13 @@ void ScStyleSheetPool::CopyStyleFrom( SfxStyleSheetBasePool* pSrcPool,
         {
             const SfxItemSet& rSrcSub = pSetItem->GetItemSet();
             SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
-            aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+            aDestSub.PutExtended( rSrcSub, SfxItemState::INVALID, SfxItemState::DEFAULT );
         }
         if ( const SvxSetItem* pSetItem = rSourceSet.GetItemIfSet( ATTR_PAGE_FOOTERSET, false ) )
         {
             const SfxItemSet& rSrcSub = pSetItem->GetItemSet();
             SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
-            aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
+            aDestSub.PutExtended( rSrcSub, SfxItemState::INVALID, SfxItemState::DEFAULT );
             rDestSet.Put( SvxSetItem( ATTR_PAGE_FOOTERSET, aDestSub ) );
         }
     }

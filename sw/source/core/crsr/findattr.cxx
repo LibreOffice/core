@@ -357,7 +357,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
     while( pTmpItem )
     {
         SfxItemState eState = m_aComapeSet.GetItemState( nWhch, false, &pItem );
-        if( SfxItemState::DONTCARE == eState || SfxItemState::SET == eState )
+        if( SfxItemState::INVALID == eState || SfxItemState::SET == eState )
         {
             sal_uInt16 n;
             SwSrchChrAttr* pCmp;
@@ -409,7 +409,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
 
             bool bContinue = false;
 
-            if( SfxItemState::DONTCARE == eState  )
+            if( SfxItemState::INVALID == eState  )
             {
                 // Will the attribute become valid?
                 if( !CmpAttr( m_aComapeSet.GetPool()->GetUserOrPoolDefaultItem( nWhch ),
@@ -517,7 +517,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
     while( pTmpItem )
     {
         SfxItemState eState = m_aComapeSet.GetItemState( nWhch, false, &pItem );
-        if( SfxItemState::DONTCARE == eState || SfxItemState::SET == eState )
+        if( SfxItemState::INVALID == eState || SfxItemState::SET == eState )
         {
             sal_uInt16 n;
             SwSrchChrAttr* pCmp;
@@ -567,7 +567,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                 }
 
             bool bContinue = false;
-            if( SfxItemState::DONTCARE == eState  )
+            if( SfxItemState::INVALID == eState  )
             {
                 // Will the attribute become valid?
                 if( !CmpAttr( m_aComapeSet.GetPool()->GetUserOrPoolDefaultItem( nWhch ),

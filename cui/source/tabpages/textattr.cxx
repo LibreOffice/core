@@ -136,7 +136,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     m_xMtrFldBottom->save_value();
 
     // adjust to height and autogrowsize
-    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SfxItemState::DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SfxItemState::INVALID )
     {
         m_xTsbAutoGrowHeight->set_state( rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -153,7 +153,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     m_xTsbAutoGrowSize->save_state();
 
     // adjust to width
-    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SfxItemState::DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SfxItemState::INVALID )
     {
         m_xTsbAutoGrowWidth->set_state( rAttrs->Get( SDRATTR_TEXT_AUTOGROWWIDTH ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -163,7 +163,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     m_xTsbAutoGrowWidth->save_state();
 
     // wordwrap text
-    if ( rAttrs->GetItemState( SDRATTR_TEXT_WORDWRAP ) != SfxItemState::DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_WORDWRAP ) != SfxItemState::INVALID )
     {
         m_xTsbWordWrapText->set_state( rAttrs->Get( SDRATTR_TEXT_WORDWRAP ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -178,7 +178,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     SfxItemState eVState = rAttrs->GetItemState( SDRATTR_TEXT_VERTADJUST );
     SfxItemState eHState = rAttrs->GetItemState( SDRATTR_TEXT_HORZADJUST );
 
-    if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
+    if(SfxItemState::INVALID != eVState && SfxItemState::INVALID != eHState)
     {
         // VertAdjust and HorAdjust are unequivocal, thus
         SdrTextVertAdjust eTVA = rAttrs->Get(SDRATTR_TEXT_VERTADJUST).GetValue();
@@ -254,7 +254,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // adjust to border
-    if (rAttrs->GetItemState(SDRATTR_TEXT_FITTOSIZE) != SfxItemState::DONTCARE)
+    if (rAttrs->GetItemState(SDRATTR_TEXT_FITTOSIZE) != SfxItemState::INVALID)
     {
         drawing::TextFitToSizeType const eFTS =
                     rAttrs->Get( SDRATTR_TEXT_FITTOSIZE ).GetValue();
@@ -267,7 +267,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         m_xTsbFitToSize->set_state( TRISTATE_INDET );
     m_xTsbFitToSize->save_state();
 
-    if( rAttrs->GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SfxItemState::INVALID )
     {
         bool bContour = rAttrs->Get( SDRATTR_TEXT_CONTOURFRAME ).GetValue();
         m_xTsbContour->set_state( bContour ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -405,7 +405,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
             eTVA = SDRTEXTVERTADJUST_BLOCK;
     }
 
-    if ( rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE )
+    if ( rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::INVALID )
     {
         SdrTextVertAdjust eOldTVA = rOutAttrs.Get( SDRATTR_TEXT_VERTADJUST ).GetValue();
         if( eOldTVA != eTVA )
@@ -414,7 +414,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     else
         rAttrs->Put( SdrTextVertAdjustItem( eTVA ) );
 
-    if ( rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST ) != SfxItemState::DONTCARE )
+    if ( rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST ) != SfxItemState::INVALID )
     {
         SdrTextHorzAdjust eOldTHA = rOutAttrs.Get( SDRATTR_TEXT_HORZADJUST ).GetValue();
         if( eOldTHA != eTHA )
@@ -630,7 +630,7 @@ IMPL_LINK(SvxTextAttrPage, ClickHdl_Impl, weld::Toggleable&, rButton, void)
     // #103516# Do the setup based on states of hor/ver adjust
     SfxItemState eVState = rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
     SfxItemState eHState = rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
-    bool bHorAndVer(SfxItemState::DONTCARE == eVState || SfxItemState::DONTCARE == eHState);
+    bool bHorAndVer(SfxItemState::INVALID == eVState || SfxItemState::INVALID == eHState);
 
     // #83698# enable/disable text anchoring dependent of contour
     m_xFlPosition->set_sensitive(!bContour && !bHorAndVer);
@@ -643,7 +643,7 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight() const
     bool bLeftToRightDirection = true;
     SfxItemState eState = rOutAttrs.GetItemState(SDRATTR_TEXTDIRECTION);
 
-    if(SfxItemState::DONTCARE != eState)
+    if(SfxItemState::INVALID != eState)
     {
         const SvxWritingModeItem& rItem = rOutAttrs.Get(SDRATTR_TEXTDIRECTION);
         if (rItem.GetValue() == css::text::WritingMode_TB_RL)

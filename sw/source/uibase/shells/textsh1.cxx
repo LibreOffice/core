@@ -2652,7 +2652,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
                     // If a hyperlink is selected, either alone or along with other text...
                     if (SfxItemState::SET <= aSet.GetItemState(RES_TXTATR_INETFMT)
-                        || aSet.GetItemState(RES_TXTATR_INETFMT) == SfxItemState::DONTCARE)
+                        || aSet.GetItemState(RES_TXTATR_INETFMT) == SfxItemState::INVALID)
                     {
                         break;
                     }

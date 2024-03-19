@@ -295,7 +295,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
     for ( sal_uInt16 i = 0; i < nFound; ++i )
     {
         pStyles[i].pDest->GetItemSet().PutExtended(
-            pStyles[i].pSource->GetItemSet(), SfxItemState::DONTCARE, SfxItemState::DEFAULT);
+            pStyles[i].pSource->GetItemSet(), SfxItemState::INVALID, SfxItemState::DEFAULT);
         if(pStyles[i].pSource->HasParentSupport())
             pStyles[i].pDest->SetParent(pStyles[i].pSource->GetParent());
         // follow is never used

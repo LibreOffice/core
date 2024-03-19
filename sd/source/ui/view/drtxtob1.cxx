@@ -491,8 +491,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             if( !pArgs )
             {
-                //aNewAttr.InvalidateAllItems(); <- produces problems (#35465#)
-
                 switch ( nSlot )
                 {
                     case SID_ATTR_CHAR_WEIGHT:

@@ -1141,7 +1141,7 @@ static SfxItemState GetSvxEditEngineItemState(EditEngine const& rEditEngine, con
             {
                 // ... and its different to this one than the state is don't care
                 if (*pParaItem != *(rAttrib.pAttr))
-                    return SfxItemState::DONTCARE;
+                    return SfxItemState::INVALID;
             }
             else
             {
@@ -1162,7 +1162,7 @@ static SfxItemState GetSvxEditEngineItemState(EditEngine const& rEditEngine, con
         if (bEmpty)
             eParaState = SfxItemState::DEFAULT;
         else if (bGaps)
-            eParaState = SfxItemState::DONTCARE;
+            eParaState = SfxItemState::INVALID;
         else
             eParaState = SfxItemState::SET;
 
@@ -1170,7 +1170,7 @@ static SfxItemState GetSvxEditEngineItemState(EditEngine const& rEditEngine, con
         if (pLastItem)
         {
             if ((pParaItem == nullptr) || (*pLastItem != *pParaItem))
-                return SfxItemState::DONTCARE;
+                return SfxItemState::INVALID;
         }
         else
         {

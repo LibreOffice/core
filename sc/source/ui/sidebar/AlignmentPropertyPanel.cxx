@@ -288,7 +288,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
                 const ScLineBreakCell* pItem = static_cast<const ScLineBreakCell*>(pState);
                 mxCBXWrapText->set_active(pItem->GetValue());
             }
-            else if(eState == SfxItemState::DONTCARE)
+            else if(eState == SfxItemState::INVALID)
             {
                 mxCBXWrapText->set_state(TRISTATE_INDET);
             }

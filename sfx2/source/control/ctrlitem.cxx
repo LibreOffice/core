@@ -278,7 +278,7 @@ SfxItemState SfxControllerItem::GetItemState
                         All other values that may appear should be reset to
                         default.
 
-                        SfxItemState::DONTCARE
+                        SfxItemState::INVALID
                         Enabled but there were only ambiguous values available
                         (i.e. non that can be queried).
 
@@ -292,7 +292,7 @@ SfxItemState SfxControllerItem::GetItemState
     return !pState
                 ? SfxItemState::DISABLED
                 : IsInvalidItem(pState)
-                    ? SfxItemState::DONTCARE
+                    ? SfxItemState::INVALID
                     : IsDisabledItem(pState)
                         ? SfxItemState::UNKNOWN
                         : SfxItemState::DEFAULT;

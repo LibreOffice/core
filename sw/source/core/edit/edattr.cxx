@@ -62,7 +62,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
     // ??? pPaM can be different from the Cursor ???
     if( GetCursorCnt() > getMaxLookup() )
     {
-        rSet.InvalidateAllItems();
+        rSet.ClearItem();
         return false;
     }
 
@@ -113,7 +113,6 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
         if( sal_Int32(nEndNd - nSttNd) >= getMaxLookup() )
         {
             rSet.ClearItem();
-            rSet.InvalidateAllItems();
             return false;
         }
 

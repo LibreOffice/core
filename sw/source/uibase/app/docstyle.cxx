@@ -1821,7 +1821,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
                     m_rDoc.ChgNumRuleFormats( aSetRule );
                 }
                 break;
-                case SfxItemState::DONTCARE:
+                case SfxItemState::INVALID:
                 // set NumRule to default values
                 // what are the default values?
                 {

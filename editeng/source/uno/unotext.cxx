@@ -990,8 +990,8 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
                         switch( eTempItemState )
                         {
                         case SfxItemState::DISABLED:
-                        case SfxItemState::DONTCARE:
-                            eItemState = SfxItemState::DONTCARE;
+                        case SfxItemState::INVALID:
+                            eItemState = SfxItemState::INVALID;
                             bItemStateSet = true;
                             break;
 
@@ -1043,7 +1043,7 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
             {
                 switch( eItemState )
                 {
-                case SfxItemState::DONTCARE:
+                case SfxItemState::INVALID:
                 case SfxItemState::DISABLED:
                     return beans::PropertyState_AMBIGUOUS_VALUE;
                 case SfxItemState::SET:
@@ -1123,8 +1123,8 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet& rSet, const Sf
                     switch( eTempItemState )
                     {
                     case SfxItemState::DISABLED:
-                    case SfxItemState::DONTCARE:
-                        eItemState = SfxItemState::DONTCARE;
+                    case SfxItemState::INVALID:
+                        eItemState = SfxItemState::INVALID;
                         bItemStateSet = true;
                         break;
 
@@ -1237,7 +1237,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet& rSet, const Sf
             case SfxItemState::DEFAULT:
                 rState = beans::PropertyState_DEFAULT_VALUE;
                 break;
-//                  case SfxItemState::DONTCARE:
+//                  case SfxItemState::INVALID:
 //                  case SfxItemState::DISABLED:
             default:
                 rState = beans::PropertyState_AMBIGUOUS_VALUE;

@@ -83,12 +83,14 @@ enum class SfxItemState {
     /** Specifies that the property is currently disabled. */
     DISABLED = 0x0001,
 
-    /** Specifies that the property is currently in a don't care state.
+    /** Specifies that the property is currently in a don't care state
+     * and thus invalid
      * <br/>
      * This is normally used if a selection provides more than one state
-     * for a property at the same time.
+     * for a property at the same time, so the Item is over-defined and
+     * has no valid state -> invalid
      */
-    DONTCARE = 0x0010,
+    INVALID = 0x0010,
 
     /** Specifies that the property is currently in a default state. */
     DEFAULT  = 0x0020,

@@ -314,7 +314,7 @@ static void DbgOutItemSet(FILE* fp, const SfxItemSet& rSet, bool bSearchInParent
         fprintf( fp, "\nWhich: %i\t", nWhich );
         if ( rSet.GetItemState( nWhich, bSearchInParent ) == SfxItemState::DEFAULT )
             fprintf( fp, "ITEM_OFF   " );
-        else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SfxItemState::DONTCARE )
+        else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SfxItemState::INVALID )
             fprintf( fp, "ITEM_DC    " );
         else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SfxItemState::SET )
             fprintf( fp, "ITEM_ON   *" );

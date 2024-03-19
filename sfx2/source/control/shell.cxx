@@ -499,7 +499,7 @@ SfxPoolItemHolder SfxShell::GetSlotState
             if ( SfxItemPool::IsWhich(nSlotId) )
                 pItem = &rPool.GetUserOrPoolDefaultItem(nSlotId);
             else
-                eState = SfxItemState::DONTCARE;
+                eState = SfxItemState::INVALID;
         }
     }
 
@@ -511,7 +511,7 @@ SfxPoolItemHolder SfxShell::GetSlotState
         return SfxPoolItemHolder();
     }
 
-    if ( bItemStateSet && eState == SfxItemState::DONTCARE )
+    if ( bItemStateSet && eState == SfxItemState::INVALID )
     {
         if ( pStateSet )
             pStateSet->ClearItem(nSlotId);

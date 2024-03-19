@@ -458,7 +458,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
 
                         SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_BLOCK;
 
-                        if (oSet->GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE)
+                        if (oSet->GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::INVALID)
                             eAdj = oSet->Get(SDRATTR_TEXT_VERTADJUST).GetValue();
 
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_BOTTOM, eAdj == SDRTEXTVERTADJUST_BOTTOM));
@@ -2429,7 +2429,7 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
                     SfxItemState nState = aIter.GetItemState(false);
                     if(!bOnlyHardAttr)
                     {
-                        if(SfxItemState::DONTCARE == nState)
+                        if(SfxItemState::INVALID == nState)
                             rAttr.InvalidateItem(nWhich);
                         else
                             rAttr.MergeValue(rSet.Get(nWhich), true);

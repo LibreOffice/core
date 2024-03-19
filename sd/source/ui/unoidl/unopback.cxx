@@ -323,7 +323,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
         case SfxItemState::DEFAULT:
             return beans::PropertyState_DEFAULT_VALUE;
         default:
-//      case SfxItemState::DONTCARE:
+//      case SfxItemState::INVALID:
 //      case SfxItemState::DISABLED:
             return beans::PropertyState_AMBIGUOUS_VALUE;
         }

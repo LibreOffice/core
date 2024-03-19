@@ -211,7 +211,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
     {
     case SID_FRAME_LINESTYLE:
         mbBorderStyleAvailable = false;
-        if( eState == SfxItemState::DONTCARE )
+        if( eState == SfxItemState::INVALID )
         {
             mbBorderStyleAvailable = true;
             mnInWidth = 0;
@@ -315,7 +315,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         break;
     case SID_ATTR_BORDER_DIAG_TLBR:
         mbDiagTLBR = false;
-        if( eState == SfxItemState::DONTCARE )
+        if( eState == SfxItemState::INVALID )
         {
             mbDiagTLBR = true;
             mnDiagTLBRInWidth = mnDiagTLBROutWidth = mnDiagTLBRDistance = 0;
@@ -341,7 +341,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         break;
     case SID_ATTR_BORDER_DIAG_BLTR:
         mbDiagBLTR = false;
-        if( eState == SfxItemState::DONTCARE )
+        if( eState == SfxItemState::INVALID )
         {
             mbDiagBLTR = true;
             mnDiagBLTRInWidth = mnDiagBLTROutWidth = mnDiagBLTRDistance = 0;

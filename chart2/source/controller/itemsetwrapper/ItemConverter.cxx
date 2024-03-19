@@ -211,7 +211,7 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
                 }
             }
         }
-        else if( nSourceItemState == SfxItemState::DONTCARE )
+        else if( nSourceItemState == SfxItemState::INVALID )
             rDestSet.InvalidateItem(nWhich);
 
         nWhich = aIter.NextWhich ();

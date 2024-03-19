@@ -402,7 +402,7 @@ namespace
                 rBtn.set_sensitive(false);
                 rTriState.bTriStateEnabled = false;
                 break;
-            case SfxItemState::DONTCARE:
+            case SfxItemState::INVALID:
                 rBtn.set_state(TRISTATE_INDET);
                 rTriState.bTriStateEnabled = true;
                 break;
@@ -439,7 +439,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
         case SfxItemState::DISABLED:
             m_xLbHorAlign->set_sensitive(false);
             break;
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_xLbHorAlign->set_active(-1);
             break;
         case SfxItemState::DEFAULT:
@@ -482,7 +482,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
         case SfxItemState::DISABLED:
             m_xEdIndent->set_sensitive(false);
             break;
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_xEdIndent->set_text("");
             break;
         case SfxItemState::DEFAULT:
@@ -505,7 +505,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
         case SfxItemState::DISABLED:
             m_xLbVerAlign->set_sensitive(false);
             break;
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_xLbVerAlign->set_active(-1);
             break;
         case SfxItemState::DEFAULT:
@@ -546,7 +546,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             m_xNfRotate->set_sensitive(false);
             m_xCtrlDialWin->set_sensitive(false);
             break;
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_xCtrlDial->SetNoRotation();
             break;
         case SfxItemState::DEFAULT:
@@ -568,7 +568,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
         case SfxItemState::DISABLED:
             m_xVsRefEdge->set_sensitive(false);
             break;
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_aVsRefEdge.SetNoSelection();
             break;
         case SfxItemState::DEFAULT:
@@ -606,7 +606,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
         case SfxItemState::DISABLED:
             m_xLbFrameDir->set_sensitive(false);
             break;
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_xLbFrameDir->set_active(-1);
             break;
         case SfxItemState::DEFAULT:

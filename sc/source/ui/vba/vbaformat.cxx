@@ -574,7 +574,7 @@ ScVbaFormat< Ifc... >::getLocked(  )
             {
                 const ScProtectionAttr& rProtAttr = pDataSet->Get(ATTR_PROTECTION);
                 SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION);
-                if(eState != SfxItemState::DONTCARE)
+                if(eState != SfxItemState::INVALID)
                     aCellProtection <<= rProtAttr.GetProtection();
             }
             else // fallback to propertyset
@@ -607,7 +607,7 @@ ScVbaFormat< Ifc... >::getFormulaHidden(  )
             {
                 const ScProtectionAttr& rProtAttr = pDataSet->Get(ATTR_PROTECTION);
                 SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION);
-                if(eState != SfxItemState::DONTCARE)
+                if(eState != SfxItemState::INVALID)
                     aBoolRet <<= rProtAttr.GetHideFormula();
             }
             else

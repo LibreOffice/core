@@ -480,7 +480,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
         return nullptr;
 
     // if (IsInvalidItem(pSource))
-    //     // SfxItemState::DONTCARE aka INVALID_POOL_ITEM
+    //     // SfxItemState::INVALID aka INVALID_POOL_ITEM
     //     // just use pSource which equals INVALID_POOL_ITEM
     //     return pSource;
 
@@ -675,12 +675,12 @@ void implCleanupItemEntry(SfxPoolItem const* pSource)
         return;
 
     // if (IsInvalidItem(pSource))
-    //     // SfxItemState::DONTCARE aka INVALID_POOL_ITEM
+    //     // SfxItemState::INVALID aka INVALID_POOL_ITEM
     //     // nothing to do for invalid item entries
     //     return;
 
     // if (IsDisabledItem(pSource))
-    //     // SfxItemState::DONTCARE aka DISABLED_POOL_ITEM
+    //     // SfxItemState::INVALID aka DISABLED_POOL_ITEM
     //     // nothing to do for disabled item entries
     //     return;
 
@@ -1005,18 +1005,6 @@ void SfxItemSet::ClearInvalidItems()
     }
 }
 
-void SfxItemSet::InvalidateAllItems()
-{
-    // instead of just asserting, do the change. Clear all items
-    ClearAllItemsImpl();
-
-    // set all to invalid
-    std::fill(begin(), begin() + TotalCount(), INVALID_POOL_ITEM);
-
-    // ...and correct the count - invalid items get counted
-    m_nCount = TotalCount();
-}
-
 SfxItemState SfxItemSet::GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const
 {
     const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(nWhich));
@@ -1051,7 +1039,7 @@ SfxItemState SfxItemSet::GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPo
 
     if (IsInvalidItem(pCandidate))
         // Different ones are present
-        return SfxItemState::DONTCARE;
+        return SfxItemState::INVALID;
 
     if (IsDisabledItem(pCandidate))
         // Item is Disabled
@@ -1227,7 +1215,7 @@ bool SfxItemSet::Put(const SfxItemSet& rSource, bool bInvalidAsDefault)
  *
  * SfxItemState::SET:       Hard set to the default of the Pool
  * SfxItemState::DEFAULT:   Deleted (0 pointer)
- * SfxItemState::DONTCARE:  Invalid (-1 pointer)
+ * SfxItemState::INVALID:  Invalid (-1 pointer)
  *
  * NB: All other values for 'eDontCareAs' and 'eDefaultAs' are invalid
  */
@@ -1260,7 +1248,7 @@ void SfxItemSet::PutExtended
                             ClearSingleItem_ForWhichID(nWhich);
                             break;
 
-                        case SfxItemState::DONTCARE:
+                        case SfxItemState::INVALID:
                             DisableOrInvalidateItem_ForWhichID(false, nWhich);
                             break;
 
@@ -1287,7 +1275,7 @@ void SfxItemSet::PutExtended
                         ClearSingleItem_ForWhichID(nWhich);
                         break;
 
-                    case SfxItemState::DONTCARE:
+                    case SfxItemState::INVALID:
                         DisableOrInvalidateItem_ForWhichID(false, nWhich);
                         break;
 

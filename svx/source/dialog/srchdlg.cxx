@@ -22,6 +22,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
+#include <svl/whiter.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/searchopt.hxx>
@@ -1978,7 +1979,13 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
 
     OUString aTxt;
 
-    aSet.InvalidateAllItems();
+    // ITEM: here we have a problem due to the hand-made ItemSet-like
+    // SearchAttrItemList. The state 'invalid' seems to be used as unused
+    // marker. It should be changed to use SfxPoolItemHolder and not need
+    // that. For now, set by using an own loop to set to that state
+    SfxWhichIter aIter(aSet);
+    for ( sal_uInt16 nWh = aIter.FirstWhich(); nWh != 0; nWh = aIter.NextWhich() )
+        aSet.InvalidateItem(nWh);
     aSet.Put(SvxBrushItem(nBrushWhich));
 
     if ( bSearch )

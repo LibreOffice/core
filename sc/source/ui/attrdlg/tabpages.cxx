@@ -70,7 +70,7 @@ void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
     // Is this a Default-Item?
     if ( eItemState == SfxItemState::DEFAULT )
         pProtAttr = static_cast<const ScProtectionAttr*>(&(rCoreAttrs->Get(nWhich)));
-    // At SfxItemState::DONTCARE let to 0
+    // At SfxItemState::INVALID let to 0
 
     bTriEnabled = ( pProtAttr == nullptr );                // TriState, when DontCare
     bDontCare = bTriEnabled;

@@ -679,7 +679,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         eItalic = rItem.GetValue();
         bStyle = true;
     }
-    bStyleAvailable = bStyleAvailable && (eState >= SfxItemState::DONTCARE);
+    bStyleAvailable = bStyleAvailable && (eState >= SfxItemState::INVALID);
 
     switch ( eLangGrp )
     {
@@ -696,7 +696,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     else
         bStyle = false;
-    bStyleAvailable = bStyleAvailable && (eState >= SfxItemState::DONTCARE);
+    bStyleAvailable = bStyleAvailable && (eState >= SfxItemState::INVALID);
 
     // currently chosen font
     if ( bStyle && pFontItem )
@@ -792,7 +792,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
                 pLangBox->set_active_id(eLangType);
             break;
         }
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             break;
     }
 
@@ -1522,7 +1522,7 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             m_xFontColorLB->set_sensitive(false);
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             //Related: tdf#106080 if there is no font color, then allow "none"
             //as a color so the listbox can display that state.
             EnableNoneFontColor();
@@ -1689,9 +1689,9 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     m_xUnderlineLB->set_active( 0 );
     SfxItemState eState = rSet->GetItemState( nWhich );
 
-    if ( eState >= SfxItemState::DONTCARE )
+    if ( eState >= SfxItemState::INVALID )
     {
-        if ( eState == SfxItemState::DONTCARE )
+        if ( eState == SfxItemState::INVALID )
             m_xUnderlineLB->set_active(-1);
         else
         {
@@ -1729,9 +1729,9 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     m_xOverlineLB->set_active( 0 );
     eState = rSet->GetItemState( nWhich );
 
-    if ( eState >= SfxItemState::DONTCARE )
+    if ( eState >= SfxItemState::INVALID )
     {
-        if ( eState == SfxItemState::DONTCARE )
+        if ( eState == SfxItemState::INVALID )
             m_xOverlineLB->set_active(-1);
         else
         {
@@ -1769,9 +1769,9 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     m_xStrikeoutLB->set_active( 0 );
     eState = rSet->GetItemState( nWhich );
 
-    if ( eState >= SfxItemState::DONTCARE )
+    if ( eState >= SfxItemState::INVALID )
     {
-        if ( eState == SfxItemState::DONTCARE )
+        if ( eState == SfxItemState::INVALID )
             m_xStrikeoutLB->set_active(-1);
         else
         {
@@ -1809,7 +1809,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             m_xIndividualWordsBtn->set_sensitive(false);
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_aIndividualWordsState.bTriStateEnabled = true;
             m_xIndividualWordsBtn->set_state( TRISTATE_INDET );
             break;
@@ -1851,7 +1851,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         if (nPos != -1)
             m_xPositionLB->set_active(nPos);
     }
-    else if ( eState == SfxItemState::DONTCARE )
+    else if ( eState == SfxItemState::INVALID )
         m_xEmphasisLB->set_active(-1);
     else if ( eState == SfxItemState::UNKNOWN )
     {
@@ -1886,7 +1886,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             m_xEffectsLB->set_sensitive(false);
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_xEffectsLB->set_active(-1);
             break;
 
@@ -1915,7 +1915,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             m_xReliefLB->set_sensitive(false);
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_xReliefLB->set_active(-1);
             break;
 
@@ -1944,7 +1944,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             m_xOutlineBtn->set_sensitive(false);
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_aOutlineState.bTriStateEnabled = true;
             m_xOutlineBtn->set_state(TRISTATE_INDET);
             break;
@@ -1975,7 +1975,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             m_xShadowBtn->set_sensitive(false);
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_aShadowState.bTriStateEnabled = true;
             m_xShadowBtn->set_state( TRISTATE_INDET );
             break;
@@ -2006,7 +2006,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             m_xHiddenBtn->set_sensitive(false);
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             m_aHiddenState.bTriStateEnabled = true;
             m_xHiddenBtn->set_state(TRISTATE_INDET);
             break;
@@ -2223,7 +2223,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
 
     if ( pOld )
     {
-        if( rOldSet.GetItemState( nWhich ) != SfxItemState::DONTCARE )
+        if( rOldSet.GetItemState( nWhich ) != SfxItemState::INVALID )
         {
             const SvxEmphasisMarkItem& rItem = *static_cast<const SvxEmphasisMarkItem*>(pOld);
             if ( rItem.GetEmphasisMark() == eMark )
@@ -2231,7 +2231,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
-    if (rOldSet.GetItemState( nWhich ) == SfxItemState::DONTCARE &&
+    if (rOldSet.GetItemState( nWhich ) == SfxItemState::INVALID &&
          m_xEmphasisLB->get_saved_value() == sMarkPos && m_xPositionLB->get_saved_value() == sPosPos)
     {
         bChanged = false;
@@ -2852,7 +2852,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         }
         else
         {
-            if( eState == SfxItemState::DONTCARE )
+            if( eState == SfxItemState::INVALID )
             {
                 m_x0degRB->set_active(false);
                 m_x90degRB->set_active(false);
@@ -3190,7 +3190,7 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
     SfxItemState eState = rSet->GetItemState( nWhich );
 
-    if ( eState >= SfxItemState::DONTCARE )
+    if ( eState >= SfxItemState::INVALID )
     {
         const SvxTwoLinesItem& rItem = static_cast<const SvxTwoLinesItem&>(rSet->Get( nWhich ));
         m_xTwoLinesBtn->set_active(rItem.GetValue());

@@ -251,8 +251,6 @@ public:
         { DisableOrInvalidateItem_ForWhichID(false, nWhich); }
     sal_uInt16                  ClearItem( sal_uInt16 nWhich = 0);
     void                        ClearInvalidItems();
-    void                        InvalidateAllItems(); // HACK(via nWhich = 0) ???
-
     inline void                 SetParent( const SfxItemSet* pNew );
 
     // add, delete items, work on items

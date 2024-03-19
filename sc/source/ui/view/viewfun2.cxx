@@ -3404,7 +3404,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         return;
 
     // none of the lines don't care?
-    if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
+    if( (eItemState != SfxItemState::INVALID) && (eTLBRState != SfxItemState::INVALID) && (eBLTRState != SfxItemState::INVALID) )
     {
         SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aOldSet( *rDoc.GetPool() );
         SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aNewSet( *rDoc.GetPool() );
@@ -3452,7 +3452,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
         ApplyAttributes( aNewSet, aOldSet );
     }
-    else // if ( eItemState == SfxItemState::DONTCARE )
+    else // if ( eItemState == SfxItemState::INVALID )
     {
         aFuncMark.MarkToMulti();
         rDoc.ApplySelectionLineStyle( aFuncMark, pLine, bColorOnly );

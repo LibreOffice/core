@@ -186,7 +186,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     m_xMtrFldHelpline2Len->save_value();
 
     // SdrMeasureBelowRefEdgeItem
-    if( rAttrs->GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SfxItemState::INVALID )
     {
         m_xTsbBelowRefEdge->set_state( rAttrs->Get( SDRATTR_MEASUREBELOWREFEDGE ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -207,7 +207,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 
     // SdrMeasureTextRota90Item
     // Attention: negate !
-    if( rAttrs->GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SfxItemState::INVALID )
     {
         m_xTsbParallel->set_state( rAttrs->Get( SDRATTR_MEASURETEXTROTA90 ).
                         GetValue() ? TRISTATE_FALSE : TRISTATE_TRUE );
@@ -219,7 +219,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     m_xTsbParallel->save_state();
 
     // SdrMeasureShowUnitItem
-    if( rAttrs->GetItemState( SDRATTR_MEASURESHOWUNIT ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_MEASURESHOWUNIT ) != SfxItemState::INVALID )
     {
         m_xTsbShowUnit->set_state( rAttrs->Get( SDRATTR_MEASURESHOWUNIT ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -231,7 +231,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     m_xTsbShowUnit->save_state();
 
     // SdrMeasureUnitItem
-    if( rAttrs->GetItemState( SDRATTR_MEASUREUNIT ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_MEASUREUNIT ) != SfxItemState::INVALID )
     {
         tools::Long nFieldUnit = static_cast<tools::Long>(rAttrs->Get( SDRATTR_MEASUREUNIT ).GetValue());
 
@@ -251,12 +251,12 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     m_xLbUnit->save_value();
 
     // Position
-    if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::INVALID )
     {
         css::drawing::MeasureTextVertPos eVPos =
                     rAttrs->Get( SDRATTR_MEASURETEXTVPOS ).GetValue();
         {
-            if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
+            if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::INVALID )
             {
                 css::drawing::MeasureTextHorzPos eHPos =
                             rAttrs->Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
@@ -465,7 +465,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
         if (m_xTsbAutoPosV->get_state() == TRISTATE_TRUE)
             eVPos = css::drawing::MeasureTextVertPos_AUTO;
 
-        if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
+        if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::INVALID )
         {
             css::drawing::MeasureTextVertPos eOldVPos = rOutAttrs.Get(SDRATTR_MEASURETEXTVPOS).GetValue();
             if( eOldVPos != eVPos )
@@ -480,7 +480,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
             bModified = true;
         }
 
-        if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
+        if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::INVALID )
         {
             css::drawing::MeasureTextHorzPos eOldHPos = rOutAttrs.Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
             if( eOldHPos != eHPos )

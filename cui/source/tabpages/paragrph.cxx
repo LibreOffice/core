@@ -270,7 +270,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
         if ( m_bLineDistToggled ||
              !pOld || !( *static_cast<const SvxLineSpacingItem*>(pOld) == aSpacing ) ||
-             SfxItemState::DONTCARE == GetItemSet().GetItemState( nWhich ) )
+             SfxItemState::INVALID == GetItemSet().GetItemState( nWhich ) )
         {
             rOutSet->Put( aSpacing );
             bModified = true;
@@ -313,7 +313,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         aMargin.SetContextValue(m_xContextualCB->get_active());
 
         if ( !pOld || *static_cast<const SvxULSpaceItem*>(pOld) != aMargin ||
-             SfxItemState::DONTCARE == GetItemSet().GetItemState( nWhich ) )
+             SfxItemState::INVALID == GetItemSet().GetItemState( nWhich ) )
         {
             rOutSet->Put( aMargin );
             bModified = true;
@@ -350,7 +350,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             item.SetTextLeft(m_aLeftIndent.GetCoreValue(eUnit));
         }
         if (!pOld || *static_cast<const SvxTextLeftMarginItem*>(pOld) != item
-            || SfxItemState::DONTCARE == GetItemSet().GetItemState(nWhich))
+            || SfxItemState::INVALID == GetItemSet().GetItemState(nWhich))
         {
             rOutSet->Put(item);
             bModified = true;
@@ -386,7 +386,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             item.SetRight(m_aRightIndent.GetCoreValue(eUnit));
         }
         if (!pOld || *static_cast<const SvxRightMarginItem*>(pOld) != item
-            || SfxItemState::DONTCARE == GetItemSet().GetItemState(nWhich))
+            || SfxItemState::INVALID == GetItemSet().GetItemState(nWhich))
         {
             rOutSet->Put(item);
             bModified = true;
@@ -429,7 +429,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         }
 
         if (!pOld || *static_cast<const SvxFirstLineIndentItem*>(pOld) != item
-            || SfxItemState::DONTCARE == GetItemSet().GetItemState(nWhich))
+            || SfxItemState::INVALID == GetItemSet().GetItemState(nWhich))
         {
             rOutSet->Put(item);
             bModified = true;
@@ -483,7 +483,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             bNullTab = true;
 
         if ( !pOld || *static_cast<const SvxLRSpaceItem*>(pOld) != aMargin ||
-             SfxItemState::DONTCARE == GetItemSet().GetItemState( nWhich ) )
+             SfxItemState::INVALID == GetItemSet().GetItemState( nWhich ) )
         {
             rOutSet->Put( aMargin );
             bModified = true;
@@ -1920,7 +1920,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             m_xPagenumEdit->set_value(nPageNum);
             break;
         }
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
         {
             aPageNumState.bTriStateEnabled = true;
             m_xPageNumBox->set_state(TRISTATE_INDET);
@@ -1978,7 +1978,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_xApplyCollBtn->set_state(TRISTATE_FALSE);
             }
         }
-        else if ( SfxItemState::DONTCARE == eItemState )
+        else if ( SfxItemState::INVALID == eItemState )
         {
             aApplyCollState.bTriStateEnabled = true;
             m_xApplyCollBtn->set_state(TRISTATE_INDET);
@@ -2050,7 +2050,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_xBreakTypeLB->set_active(nType);
                 m_xBreakPositionLB->set_active(nPosition);
             }
-            else if ( SfxItemState::DONTCARE == eItemState )
+            else if ( SfxItemState::INVALID == eItemState )
                 m_xPageBreakBox->set_state(TRISTATE_INDET);
             else
             {
@@ -2080,7 +2080,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         else
             m_xKeepParaBox->set_state(TRISTATE_FALSE);
     }
-    else if ( SfxItemState::DONTCARE == eItemState )
+    else if ( SfxItemState::INVALID == eItemState )
         m_xKeepParaBox->set_state(TRISTATE_INDET);
     else
         m_xKeepParaBox->set_sensitive(false);
@@ -2120,7 +2120,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             m_xWidowBox->set_state(_bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
             m_xWidowRowNo->set_sensitive(_bEnable);
         }
-        else if ( SfxItemState::DONTCARE == eTmpState )
+        else if ( SfxItemState::INVALID == eTmpState )
             m_xWidowBox->set_state( TRISTATE_INDET );
         else
             m_xWidowBox->set_sensitive(false);
@@ -2142,13 +2142,13 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             m_xOrphanRowLabel->set_sensitive(_bEnable);
 
         }
-        else if ( SfxItemState::DONTCARE == eTmpState )
+        else if ( SfxItemState::INVALID == eTmpState )
             m_xOrphanBox->set_state(TRISTATE_INDET);
         else
             m_xOrphanBox->set_sensitive(false);
         aOrphanState.eState = m_xOrphanBox->get_state();
     }
-    else if ( SfxItemState::DONTCARE == eItemState )
+    else if ( SfxItemState::INVALID == eItemState )
         m_xAllowSplitBox->set_state(TRISTATE_INDET);
     else
         m_xAllowSplitBox->set_sensitive(false);

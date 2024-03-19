@@ -167,7 +167,7 @@ SvxAreaTabPage::~SvxAreaTabPage()
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     drawing::FillStyle eXFS = drawing::FillStyle_NONE;
-    if( rSet.GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE )
+    if( rSet.GetItemState( XATTR_FILLSTYLE ) != SfxItemState::INVALID )
     {
         XFillStyleItem aFillStyleItem( rSet.Get( GetWhich( XATTR_FILLSTYLE ) ) );
         eXFS = aFillStyleItem.GetValue();

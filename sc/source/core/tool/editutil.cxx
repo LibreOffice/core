@@ -472,7 +472,7 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEngine ) :
         for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && !bNeedsObject; nId++)
         {
             SfxItemState eState = pEditAttrs->GetItemState( nId, false, &pItem );
-            if (eState == SfxItemState::DONTCARE)
+            if (eState == SfxItemState::INVALID)
                 bNeedsObject = true;
             else if (eState == SfxItemState::SET)
             {
@@ -498,13 +498,13 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEngine ) :
         //  contains field commands?
 
         SfxItemState eFieldState = pEditAttrs->GetItemState( EE_FEATURE_FIELD, false );
-        if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
+        if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
             bNeedsObject = true;
 
         //  not converted characters?
 
         SfxItemState eConvState = pEditAttrs->GetItemState( EE_FEATURE_NOTCONV, false );
-        if ( eConvState == SfxItemState::DONTCARE || eConvState == SfxItemState::SET )
+        if ( eConvState == SfxItemState::INVALID || eConvState == SfxItemState::SET )
             bNeedsObject = true;
     }
 }

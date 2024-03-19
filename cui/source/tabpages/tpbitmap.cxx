@@ -298,9 +298,9 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     CalculateBitmapPresetSize();
 
     bool bTiled = false; bool bStretched = false;
-    if(rAttrs->GetItemState( XATTR_FILLBMP_TILE ) != SfxItemState::DONTCARE)
+    if(rAttrs->GetItemState( XATTR_FILLBMP_TILE ) != SfxItemState::INVALID)
         bTiled = rAttrs->Get( XATTR_FILLBMP_TILE ).GetValue();
-    if(rAttrs->GetItemState( XATTR_FILLBMP_STRETCH ) != SfxItemState::DONTCARE)
+    if(rAttrs->GetItemState( XATTR_FILLBMP_STRETCH ) != SfxItemState::INVALID)
         bStretched = rAttrs->Get( XATTR_FILLBMP_STRETCH ).GetValue();
 
     if (bTiled)
@@ -313,7 +313,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     tools::Long nWidth = 0;
     tools::Long nHeight = 0;
 
-    if(rAttrs->GetItemState(XATTR_FILLBMP_SIZELOG) != SfxItemState::DONTCARE)
+    if(rAttrs->GetItemState(XATTR_FILLBMP_SIZELOG) != SfxItemState::INVALID)
     {
         if (rAttrs->Get( XATTR_FILLBMP_SIZELOG ).GetValue())
             m_xTsbScale->set_state(TRISTATE_FALSE);
@@ -324,7 +324,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         m_xTsbScale->set_state(TRISTATE_INDET);
 
     TriState eRelative = TRISTATE_FALSE;
-    if(rAttrs->GetItemState(XATTR_FILLBMP_SIZEX) != SfxItemState::DONTCARE)
+    if(rAttrs->GetItemState(XATTR_FILLBMP_SIZEX) != SfxItemState::INVALID)
     {
         nWidth = static_cast<const XFillBmpSizeXItem&>( rAttrs->Get( XATTR_FILLBMP_SIZEX ) ).GetValue();
         if(nWidth == 0)
@@ -337,7 +337,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         }
     }
 
-    if(rAttrs->GetItemState( XATTR_FILLBMP_SIZEY ) != SfxItemState::DONTCARE)
+    if(rAttrs->GetItemState( XATTR_FILLBMP_SIZEY ) != SfxItemState::INVALID)
     {
         nHeight = rAttrs->Get( XATTR_FILLBMP_SIZEY ).GetValue();
         if(nHeight == 0)
@@ -367,13 +367,13 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         }
     }
 
-    if( rAttrs->GetItemState( XATTR_FILLBMP_POS ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( XATTR_FILLBMP_POS ) != SfxItemState::INVALID )
     {
         RectPoint eValue = rAttrs->Get( XATTR_FILLBMP_POS ).GetValue();
         m_xPositionLB->set_active( static_cast< sal_Int32 >(eValue) );
     }
 
-    if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETX ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETX ) != SfxItemState::INVALID )
     {
         sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_POSOFFSETX ).GetValue();
         m_xPositionOffX->set_value(nValue, FieldUnit::PERCENT);
@@ -381,7 +381,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     else
         m_xPositionOffX->set_text("");
 
-    if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETY ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETY ) != SfxItemState::INVALID )
     {
         sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_POSOFFSETY ).GetValue();
         m_xPositionOffY->set_value(nValue, FieldUnit::PERCENT);
@@ -389,7 +389,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     else
         m_xPositionOffY->set_text("");
 
-    if( rAttrs->GetItemState( XATTR_FILLBMP_TILEOFFSETX ) != SfxItemState::DONTCARE)
+    if( rAttrs->GetItemState( XATTR_FILLBMP_TILEOFFSETX ) != SfxItemState::INVALID)
     {
         sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_TILEOFFSETX ).GetValue();
         if(nValue > 0)
@@ -399,7 +399,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         }
     }
 
-    if( rAttrs->GetItemState( XATTR_FILLBMP_TILEOFFSETY ) != SfxItemState::DONTCARE )
+    if( rAttrs->GetItemState( XATTR_FILLBMP_TILEOFFSETY ) != SfxItemState::INVALID )
     {
         sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_TILEOFFSETY ).GetValue();
         if(nValue > 0)

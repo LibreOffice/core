@@ -331,7 +331,7 @@ ScPatternAttr::ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pIt
     {
         // CAUTION: Use bInvalidAsDefault == false for the ::Put,
         // we *need* to take over also Items/Slots in state
-        // SfxItemState::DONTCARE aka IsInvalidItem, this is a precious
+        // SfxItemState::INVALID aka IsInvalidItem, this is a precious
         // value/information e.g. in ScDocument::CreateSelectionPattern
         maLocalSfxItemSet.Put(*pItemSet, false);
     }
@@ -1288,7 +1288,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
                     mxVisible.reset();
                 }
             }
-            else if ( eOldState != SfxItemState::DONTCARE )
+            else if ( eOldState != SfxItemState::INVALID )
             {
                 //  not set in OldAttrs -> compare item value to default item
                 if ( *pThisItem == rThisSet.GetPool()->GetUserOrPoolDefaultItem( nSubWhich ) )

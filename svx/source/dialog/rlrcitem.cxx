@@ -41,7 +41,7 @@ SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindin
 void SvxRulerItem::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState)
 {
-    // SfxItemState::DONTCARE => pState == -1 => PTR_CAST buff
+    // SfxItemState::INVALID => pState == -1 => PTR_CAST buff
     if ( eState != SfxItemState::DEFAULT )
         pState = nullptr;
 

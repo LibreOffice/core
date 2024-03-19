@@ -408,7 +408,7 @@ void SfxObjectShell::LoadStyles
 
     for ( sal_uInt16 i = 0; i < nFound; ++i )
     {
-        pFound[i].pDest->GetItemSet().PutExtended(pFound[i].pSource->GetItemSet(), SfxItemState::DONTCARE, SfxItemState::DEFAULT);
+        pFound[i].pDest->GetItemSet().PutExtended(pFound[i].pSource->GetItemSet(), SfxItemState::INVALID, SfxItemState::DEFAULT);
         if(pFound[i].pSource->HasParentSupport())
             pFound[i].pDest->SetParent(pFound[i].pSource->GetParent());
         if(pFound[i].pSource->HasFollowSupport())

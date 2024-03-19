@@ -521,7 +521,7 @@ public:
             SfxItemState eState = pDataSet->GetItemState( ATTR_VALUE_FORMAT);
             // one of the cells in the range is not like the other ;-)
             // so return a zero length format to indicate that
-            if ( eState == SfxItemState::DONTCARE )
+            if ( eState == SfxItemState::INVALID )
                 return OUString();
         }
 
@@ -2724,7 +2724,7 @@ ScVbaRange::getWrapText()
     SfxItemSet* pDataSet = getCurrentDataSet();
 
     SfxItemState eState = pDataSet->GetItemState( ATTR_LINEBREAK);
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
         return aNULL();
 
     uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY_THROW );
@@ -4019,7 +4019,7 @@ ScVbaRange::getRowHeight()
     sal_Int32 nEndRow = thisAddress.EndRow;
     sal_uInt16 nRowTwips = 0;
     // #TODO probably possible to use the SfxItemSet (and see if
-    //  SfxItemState::DONTCARE is set) to improve performance
+    //  SfxItemState::INVALID is set) to improve performance
 // #CHECKME looks like this is general behaviour not just row Range specific
 //  if ( mbIsRows )
     ScDocShell* pShell = getScDocShell();

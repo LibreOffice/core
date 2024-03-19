@@ -924,7 +924,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
         {
             if(!bOnlyHardAttr)
             {
-                if(SfxItemState::DONTCARE == aIter.GetItemState(false))
+                if(SfxItemState::INVALID == aIter.GetItemState(false))
                     rAttr.InvalidateItem(nWhich);
                 else
                     rAttr.MergeValue(rSet.Get(nWhich), true);
@@ -1128,7 +1128,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
     const size_t nMarkCount(GetMarkedObjectCount());
     std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
-    // create ItemSet without SfxItemState::DONTCARE. Put()
+    // create ItemSet without SfxItemState::INVALID. Put()
     // uses its second parameter (bInvalidAsDefault) to
     // remove all such items to set them to default.
     SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
@@ -1207,7 +1207,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 
             if(nOldLineWidth != nNewLineWidth)
             {
-                if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINESTARTWIDTH))
+                if(SfxItemState::INVALID != rSet.GetItemState(XATTR_LINESTARTWIDTH))
                 {
                     const sal_Int32 nValAct(rSet.Get(XATTR_LINESTARTWIDTH).GetValue());
                     const sal_Int32 nValNewStart(std::max(sal_Int32(0), nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
@@ -1215,7 +1215,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
                     pObj->SetMergedItem(XLineStartWidthItem(nValNewStart));
                 }
 
-                if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINEENDWIDTH))
+                if(SfxItemState::INVALID != rSet.GetItemState(XATTR_LINEENDWIDTH))
                 {
                     const sal_Int32 nValAct(rSet.Get(XATTR_LINEENDWIDTH).GetValue());
                     const sal_Int32 nValNewEnd(std::max(sal_Int32(0), nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
@@ -1459,7 +1459,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 
         SfxItemState eState=aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWWIDTH);
         bool bAutoGrow=aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue();
-        if (eState==SfxItemState::DONTCARE) {
+        if (eState==SfxItemState::INVALID) {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_AUTOWIDTH);
         } else if (eState==SfxItemState::SET) {
             aRetSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_AUTOWIDTH,bAutoGrow));
@@ -1467,7 +1467,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 
         eState=aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWHEIGHT);
         bAutoGrow=aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
-        if (eState==SfxItemState::DONTCARE) {
+        if (eState==SfxItemState::INVALID) {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_AUTOHEIGHT);
         } else if (eState==SfxItemState::SET) {
             aRetSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_AUTOHEIGHT,bAutoGrow));
@@ -1475,7 +1475,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 
         eState=aMarkAttr.GetItemState(SDRATTR_CORNER_RADIUS);
         tools::Long nRadius=aMarkAttr.Get(SDRATTR_CORNER_RADIUS).GetValue();
-        if (eState==SfxItemState::DONTCARE) {
+        if (eState==SfxItemState::INVALID) {
             aRetSet.InvalidateItem(SDRATTR_CORNER_RADIUS);
         } else if (eState==SfxItemState::SET) {
             aRetSet.Put(makeSdrEckenradiusItem(nRadius));

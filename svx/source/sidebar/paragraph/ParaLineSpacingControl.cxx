@@ -218,7 +218,7 @@ void ParaLineSpacingControl::Initialize()
         mpActLineDistFld->set_text("");
 
     }
-    else // !bItemStateSet || eState == SfxItemState::DONTCARE || eState == SfxItemState::UNKNOWN
+    else // !bItemStateSet || eState == SfxItemState::INVALID || eState == SfxItemState::UNKNOWN
     {
         mxLineDistLabel->set_sensitive(false);
         mpActLineDistFld->set_sensitive(false);

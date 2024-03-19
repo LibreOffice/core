@@ -538,7 +538,7 @@ void SdrEditView::CheckPossibilities()
             const SfxItemSet& rSet = pObj->GetMergedItemSet();
             SfxItemState eState = rSet.GetItemState(XATTR_FILLSTYLE, false);
 
-            if(SfxItemState::DONTCARE != eState)
+            if(SfxItemState::INVALID != eState)
             {
                 // If state is not DONTCARE, test the item
                 drawing::FillStyle eFillStyle = rSet.Get(XATTR_FILLSTYLE).GetValue();

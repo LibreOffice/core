@@ -219,7 +219,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
                         All other displayed values should be reset to the default
                         if possible.
 
-                        SfxItemState::DONTCARE
+                        SfxItemState::INVALID
                         Enabled but there were only ambiguous values available
                         (i.e. none that could be queried).
 
@@ -233,7 +233,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
     return !pState
                 ? SfxItemState::DISABLED
                 : IsInvalidItem(pState)
-                    ? SfxItemState::DONTCARE
+                    ? SfxItemState::INVALID
                     : IsDisabledItem(pState)
                         ? SfxItemState::UNKNOWN
                         : SfxItemState::DEFAULT;
@@ -357,7 +357,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
                 SfxItemState tmpState = static_cast<SfxItemState>(aItemStatus.State);
                 // make sure no-one tries to send us a combination of states
                 if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
-                    tmpState != SfxItemState::DONTCARE &&
+                    tmpState != SfxItemState::INVALID &&
                     tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
                     throw css::uno::RuntimeException("unknown status");
                 eState = tmpState;
@@ -464,7 +464,7 @@ void SfxToolBoxControl::StateChangedAtToolBoxControl
         }
         break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
         {
             eTri = TRISTATE_INDET;
             nItemBits |= ToolBoxItemBits::CHECKABLE;

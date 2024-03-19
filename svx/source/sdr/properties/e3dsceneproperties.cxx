@@ -83,7 +83,7 @@ namespace sdr::properties
                             // and always equal.
                             if(nWhich <= SDRATTR_3DSCENE_FIRST || nWhich >= SDRATTR_3DSCENE_LAST)
                             {
-                                if(SfxItemState::DONTCARE == aIter.GetItemState(false))
+                                if(SfxItemState::INVALID == aIter.GetItemState(false))
                                 {
                                     moItemSet->InvalidateItem(nWhich);
                                 }

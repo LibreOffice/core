@@ -272,7 +272,7 @@ const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
     if (mpImpl->mbStandard && rOldSet.GetParent())
         pItem = GetItem( *rOldSet.GetParent(), nSlot );
     else if ( rSet.GetParent() &&
-              SfxItemState::DONTCARE == rSet.GetItemState( nWh ) )
+              SfxItemState::INVALID == rSet.GetItemState( nWh ) )
         pItem = GetItem( *rSet.GetParent(), nSlot );
     else
         pItem = GetItem( rOldSet, nSlot );

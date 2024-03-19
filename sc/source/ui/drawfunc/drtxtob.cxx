@@ -1071,7 +1071,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put(aLR);
     Invalidate( SID_ATTR_PARA_LRSPACE );
     SfxItemState eState = aAttrSet.GetItemState( EE_PARA_LRSPACE );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
         rDestSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
     //xuxu for Line Space
     SvxLineSpacingItem aLineSP = aAttrSet.Get( EE_PARA_SBL );
@@ -1079,7 +1079,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put(aLineSP);
     Invalidate(SID_ATTR_PARA_LINESPACE);
     eState = aAttrSet.GetItemState( EE_PARA_SBL );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
         rDestSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
     //xuxu for UL Space
     SvxULSpaceItem aULSP = aAttrSet.Get( EE_PARA_ULSPACE );
@@ -1124,7 +1124,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  Underline
     eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
     {
         rDestSet.InvalidateItem( SID_ULINE_VAL_NONE );
         rDestSet.InvalidateItem( SID_ULINE_VAL_SINGLE );
@@ -1172,7 +1172,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         rDestSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
         rDestSet.DisableItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
     }
-    else if ( aAttrSet.GetItemState( EE_PARA_WRITINGDIR ) == SfxItemState::DONTCARE )
+    else if ( aAttrSet.GetItemState( EE_PARA_WRITINGDIR ) == SfxItemState::INVALID )
     {
         rDestSet.InvalidateItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
         rDestSet.InvalidateItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
@@ -1235,7 +1235,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
             case SID_TABLE_VERT_BOTTOM:
                 bool bContour = false;
                 SfxItemState eConState = aEditAttr.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
-                if( eConState != SfxItemState::DONTCARE )
+                if( eConState != SfxItemState::INVALID )
                 {
                     bContour = aEditAttr.Get( SDRATTR_TEXT_CONTOURFRAME ).GetValue();
                 }
@@ -1244,8 +1244,8 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 SfxItemState eVState = aEditAttr.GetItemState( SDRATTR_TEXT_VERTADJUST );
                 //SfxItemState eHState = aAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
 
-                //if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
-                if(SfxItemState::DONTCARE != eVState)
+                //if(SfxItemState::INVALID != eVState && SfxItemState::INVALID != eHState)
+                if(SfxItemState::INVALID != eVState)
                 {
                     SdrTextVertAdjust eTVA = aEditAttr.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
                     bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||

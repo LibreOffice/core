@@ -3312,7 +3312,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && !bAttrib; nId++)
             {
                 SfxItemState eState = aOldAttribs.GetItemState( nId, false, &pItem );
-                if (eState == SfxItemState::DONTCARE)
+                if (eState == SfxItemState::INVALID)
                     bAttrib = true;
                 else if (eState == SfxItemState::SET)
                 {
@@ -3328,12 +3328,12 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
 
             // Contains fields?
             SfxItemState eFieldState = aOldAttribs.GetItemState( EE_FEATURE_FIELD, false );
-            if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
+            if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
                 bAttrib = true;
 
             // Not converted characters?
             SfxItemState eConvState = aOldAttribs.GetItemState( EE_FEATURE_NOTCONV, false );
-            if ( eConvState == SfxItemState::DONTCARE || eConvState == SfxItemState::SET )
+            if ( eConvState == SfxItemState::INVALID || eConvState == SfxItemState::SET )
                 bAttrib = true;
 
             // Always recognize formulas as formulas
@@ -4575,7 +4575,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
         sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
         SfxItemSet aSet = mpEditEngine->GetAttribs( ESelection(0,0,nParCnt,0) );
         SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
-        if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
+        if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
         {
             // Copy content
             std::unique_ptr<EditTextObject> pObj = mpEditEngine->CreateTextObject();

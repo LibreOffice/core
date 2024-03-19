@@ -732,7 +732,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
     ::tools::Long nWidth = 300; // (1/100th mm)
 
     // determine line width and calculate with it the line end width
-    if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
+    if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::INVALID )
     {
         ::tools::Long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
         if( nValue > 0 )

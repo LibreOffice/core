@@ -875,7 +875,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             if(nEEWhich == EE_CHAR_KERNING)
             {
                 SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING );
-                if ( eState == SfxItemState::DONTCARE )
+                if ( eState == SfxItemState::INVALID )
                 {
                     rSet.InvalidateItem(EE_CHAR_KERNING);
                 }

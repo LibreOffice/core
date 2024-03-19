@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                     {
                         SfxItemSet aAttrSet(pView->GetModel().GetItemPool());
                         pView->GetAttributes( aAttrSet );
-                        if ( aAttrSet.GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
+                        if ( aAttrSet.GetItemState( XATTR_LINESTYLE ) != SfxItemState::INVALID )
                         {
                             drawing::LineStyle eXLS =
                                 aAttrSet.Get( XATTR_LINESTYLE ).GetValue();

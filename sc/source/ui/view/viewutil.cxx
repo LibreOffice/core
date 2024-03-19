@@ -57,7 +57,7 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
     SvxScriptSetItem aSetItem( rPool.GetSlotId(nWhichId), rPool );
     //  use PutExtended with eDefaultAs = SfxItemState::SET, so defaults from rCoreSet
     //  (document pool) are read and put into rShellSet (MessagePool)
-    aSetItem.GetItemSet().PutExtended( rCoreSet, SfxItemState::DONTCARE, SfxItemState::SET );
+    aSetItem.GetItemSet().PutExtended( rCoreSet, SfxItemState::INVALID, SfxItemState::SET );
     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
     if (pI)
     {

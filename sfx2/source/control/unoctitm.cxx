@@ -800,9 +800,9 @@ void SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< cs
     css::uno::Any aState;
     if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
-    SfxItemState eState = pDispatcher ? pDispatcher->QueryState( GetId(), aState ) : SfxItemState::DONTCARE;
+    SfxItemState eState = pDispatcher ? pDispatcher->QueryState( GetId(), aState ) : SfxItemState::INVALID;
 
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
     {
         // Use special uno struct to transport don't care state
         css::frame::status::ItemStatus aItemStatus;
@@ -894,7 +894,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
         pState->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );
     }
-    else if ( eState == SfxItemState::DONTCARE )
+    else if ( eState == SfxItemState::INVALID )
     {
         // Use special uno struct to transport don't care state
         css::frame::status::ItemStatus aItemStatus;

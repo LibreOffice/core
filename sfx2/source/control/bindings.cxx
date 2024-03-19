@@ -1024,7 +1024,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     OSL_FAIL( "Toggle only for Enums and Bools allowed" );
                 }
             }
-            else if ( SfxItemState::DONTCARE == eState )
+            else if ( SfxItemState::INVALID == eState )
             {
                 // Create one Status-Item for each Factory
                 std::unique_ptr<SfxPoolItem> pNewItem = pSlot->GetType()->CreateItem();
@@ -1195,10 +1195,10 @@ void SfxBindings::UpdateControllers_Impl
     if (!rCache.IsControllerDirty())
         return;
 
-    if ( SfxItemState::DONTCARE == eState )
+    if ( SfxItemState::INVALID == eState )
     {
         // ambiguous
-        rCache.SetState( SfxItemState::DONTCARE, INVALID_POOL_ITEM );
+        rCache.SetState( SfxItemState::INVALID, INVALID_POOL_ITEM );
     }
     else if ( SfxItemState::DEFAULT == eState &&
               SfxItemPool::IsSlot(rFound.nWhichId) )

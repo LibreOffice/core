@@ -1751,7 +1751,7 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( sal_uInt16 nItemWhic
                 eRet = beans::PropertyState_DIRECT_VALUE;
             else if ( eState == SfxItemState::DEFAULT )
                 eRet = beans::PropertyState_DEFAULT_VALUE;
-            else if ( eState == SfxItemState::DONTCARE )
+            else if ( eState == SfxItemState::INVALID )
                 eRet = beans::PropertyState_AMBIGUOUS_VALUE;
             else
             {

@@ -319,7 +319,6 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
         if (nEndNd - nSttNd >= SwNodeOffset(nMaxLookup))
         {
             rSet.ClearItem();
-            rSet.InvalidateAllItems();
             return;// uno::Any();
         }
 

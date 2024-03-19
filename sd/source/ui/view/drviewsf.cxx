@@ -749,19 +749,19 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     }
 
     SfxItemState eState = pSet->GetItemState( EE_PARA_LRSPACE );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
     {
         rSet.InvalidateItem(EE_PARA_LRSPACE);
         rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
     }
     eState = pSet->GetItemState( EE_PARA_SBL );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
     {
         rSet.InvalidateItem(EE_PARA_SBL);
         rSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
     }
     eState = pSet->GetItemState( EE_PARA_ULSPACE );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
     {
         rSet.InvalidateItem(EE_PARA_ULSPACE);
         rSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
@@ -775,7 +775,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     rSet.Put(SfxBoolItem(SID_SET_SMALL_CAPS, eCaseMap == SvxCaseMap::SmallCaps));
 
     eState = pSet->GetItemState( EE_CHAR_KERNING );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
     {
         rSet.InvalidateItem(EE_CHAR_KERNING);
         rSet.InvalidateItem(SID_ATTR_CHAR_KERNING);

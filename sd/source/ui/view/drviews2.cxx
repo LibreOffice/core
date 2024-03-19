@@ -4059,7 +4059,7 @@ void DrawViewShell::GetStatePropPanelAttr(SfxItemSet& rSet)
             case SID_TABLE_VERT_BOTTOM:
                 bool bContour = false;
                 SfxItemState eConState = aAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
-                if( eConState != SfxItemState::DONTCARE )
+                if( eConState != SfxItemState::INVALID )
                 {
                     bContour = aAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ).GetValue();
                 }
@@ -4068,8 +4068,8 @@ void DrawViewShell::GetStatePropPanelAttr(SfxItemSet& rSet)
                 SfxItemState eVState = aAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
                 //SfxItemState eHState = aAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
 
-                //if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
-                if(SfxItemState::DONTCARE != eVState)
+                //if(SfxItemState::INVALID != eVState && SfxItemState::INVALID != eHState)
+                if(SfxItemState::INVALID != eVState)
                 {
                     SdrTextVertAdjust eTVA = aAttrs.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
                     bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||

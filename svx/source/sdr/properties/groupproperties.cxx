@@ -77,7 +77,7 @@ namespace sdr::properties
 
                 while(nWhich)
                 {
-                    if(SfxItemState::DONTCARE == aIter.GetItemState(false))
+                    if(SfxItemState::INVALID == aIter.GetItemState(false))
                     {
                         moMergedItemSet->InvalidateItem(nWhich);
                     }

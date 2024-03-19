@@ -1291,7 +1291,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             case SID_BACKGROUND_COLOR:
             {
                 rSet.Put( SvxColorItem( rBrushItem.GetColor(), SID_BACKGROUND_COLOR ) );
-                if(SfxItemState::DONTCARE == rAttrSet.GetItemState(ATTR_BACKGROUND))
+                if(SfxItemState::INVALID == rAttrSet.GetItemState(ATTR_BACKGROUND))
                 {
                     rSet.InvalidateItem(SID_BACKGROUND_COLOR);
                 }
@@ -1507,7 +1507,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     // underline
 
     eState = rAttrSet.GetItemState( ATTR_FONT_UNDERLINE );
-    if ( eState == SfxItemState::DONTCARE )
+    if ( eState == SfxItemState::INVALID )
     {
         rSet.InvalidateItem( SID_ULINE_VAL_NONE );
         rSet.InvalidateItem( SID_ULINE_VAL_SINGLE );
@@ -1568,7 +1568,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
             }
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             rSet.InvalidateItem( SID_ALIGNLEFT );
             rSet.InvalidateItem( SID_ALIGNRIGHT );
             rSet.InvalidateItem( SID_ALIGNCENTERHOR );
@@ -1631,7 +1631,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
             }
             break;
 
-        case SfxItemState::DONTCARE:
+        case SfxItemState::INVALID:
             rSet.InvalidateItem( SID_ALIGNTOP );
             rSet.InvalidateItem( SID_ALIGNBOTTOM );
             rSet.InvalidateItem( SID_ALIGNCENTERVER );
@@ -1678,12 +1678,12 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
     sal_uInt16          nWhich = aIter.FirstWhich();
 
     SvxCellHorJustify eHAlign = SvxCellHorJustify::Standard;
-    bool bHasHAlign = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY ) != SfxItemState::DONTCARE;
+    bool bHasHAlign = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY ) != SfxItemState::INVALID;
     if( bHasHAlign )
         eHAlign = rAttrSet.Get( ATTR_HOR_JUSTIFY ).GetValue();
 
     SvxCellVerJustify eVAlign = SvxCellVerJustify::Standard;
-    bool bHasVAlign = rAttrSet.GetItemState( ATTR_VER_JUSTIFY ) != SfxItemState::DONTCARE;
+    bool bHasVAlign = rAttrSet.GetItemState( ATTR_VER_JUSTIFY ) != SfxItemState::INVALID;
     if( bHasVAlign )
         eVAlign = rAttrSet.Get( ATTR_VER_JUSTIFY ).GetValue();
 
@@ -1747,7 +1747,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
         {
             case SID_NUMBER_THOUSANDS:
                 {
-                    bool bEnable = (SfxItemState::DONTCARE != eItemState);
+                    bool bEnable = (SfxItemState::INVALID != eItemState);
                     if (bEnable)
                     {
                         bEnable = ((nType != SvNumFormatType::ALL) && (nType &
@@ -1774,7 +1774,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
             case SID_NUMBER_FORMAT:
                 // symphony version with format interpretation
                 {
-                    if(SfxItemState::DONTCARE != eItemState)
+                    if(SfxItemState::INVALID != eItemState)
                     {
                         bool bThousand(false);
                         bool bNegRed(false);
@@ -1952,14 +1952,14 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
 
     bool bVertDontCare =
-        (rAttrSet.GetItemState( ATTR_VERTICAL_ASIAN ) == SfxItemState::DONTCARE) ||
-        (rAttrSet.GetItemState( ATTR_STACKED ) == SfxItemState::DONTCARE);
+        (rAttrSet.GetItemState( ATTR_VERTICAL_ASIAN ) == SfxItemState::INVALID) ||
+        (rAttrSet.GetItemState( ATTR_STACKED ) == SfxItemState::INVALID);
     bool bLeftRight = !bVertDontCare &&
         !rAttrSet.Get( ATTR_STACKED ).GetValue();
     bool bTopBottom = !bVertDontCare && !bLeftRight &&
         rAttrSet.Get( ATTR_VERTICAL_ASIAN ).GetValue();
 
-    bool bBidiDontCare = (rAttrSet.GetItemState( ATTR_WRITINGDIR ) == SfxItemState::DONTCARE);
+    bool bBidiDontCare = (rAttrSet.GetItemState( ATTR_WRITINGDIR ) == SfxItemState::INVALID);
     EEHorizontalTextDirection eBidiDir = EEHorizontalTextDirection::Default;
     if ( !bBidiDontCare )
     {

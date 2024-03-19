@@ -250,8 +250,8 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
     bool bGradActive = (eStateGradient == SfxItemState::SET && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled());
     bool bLinearActive = (eStateLinear == SfxItemState::SET && static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue() != 0);
 
-    bool bGradUsed = (eStateGradient == SfxItemState::DONTCARE);
-    bool bLinearUsed = (eStateLinear == SfxItemState::DONTCARE);
+    bool bGradUsed = (eStateGradient == SfxItemState::INVALID);
+    bool bLinearUsed = (eStateLinear == SfxItemState::INVALID);
 
     bool bModified(false);
     bool bSwitchOffLinear(false);

@@ -272,7 +272,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                     SfxItemState eState = rChanges.GetItemState( nWhich, false, &pItem );
                     if ( eState == SfxItemState::SET )
                         rSet.Put( *pItem );
-                    else if ( eState == SfxItemState::DONTCARE )
+                    else if ( eState == SfxItemState::INVALID )
                         rSet.ClearItem( nWhich );
                     // when Default nothing
                 }

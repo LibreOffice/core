@@ -1371,7 +1371,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
         ESelection aSel( 0, 0, nParas-1, rEngine.GetTextLen( nParas-1 ) );
         SfxItemSet aSet( rEngine.GetAttribs( aSel ) );
         SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
-        if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
+        if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
             bFields = true;
     }
     if ( bFields )

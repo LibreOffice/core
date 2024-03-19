@@ -38,7 +38,7 @@ void DataTablePropertiesResources::initFromItemSet(const SfxItemSet& rInAttrs)
     SfxItemState aState;
 
     aState = rInAttrs.GetItemState(SCHATTR_DATA_TABLE_HORIZONTAL_BORDER, false, &pPoolItem);
-    if (aState == SfxItemState::DONTCARE)
+    if (aState == SfxItemState::INVALID)
     {
         m_xCbHorizontalBorder->set_state(TRISTATE_INDET);
     }
@@ -50,7 +50,7 @@ void DataTablePropertiesResources::initFromItemSet(const SfxItemSet& rInAttrs)
     }
 
     aState = rInAttrs.GetItemState(SCHATTR_DATA_TABLE_VERTICAL_BORDER, false, &pPoolItem);
-    if (aState == SfxItemState::DONTCARE)
+    if (aState == SfxItemState::INVALID)
     {
         m_xCbVerticalBorder->set_state(TRISTATE_INDET);
     }
@@ -61,7 +61,7 @@ void DataTablePropertiesResources::initFromItemSet(const SfxItemSet& rInAttrs)
     }
 
     aState = rInAttrs.GetItemState(SCHATTR_DATA_TABLE_OUTLINE, false, &pPoolItem);
-    if (aState == SfxItemState::DONTCARE)
+    if (aState == SfxItemState::INVALID)
     {
         m_xCbOutilne->set_state(TRISTATE_INDET);
     }
@@ -72,7 +72,7 @@ void DataTablePropertiesResources::initFromItemSet(const SfxItemSet& rInAttrs)
     }
 
     aState = rInAttrs.GetItemState(SCHATTR_DATA_TABLE_KEYS, false, &pPoolItem);
-    if (aState == SfxItemState::DONTCARE)
+    if (aState == SfxItemState::INVALID)
     {
         m_xCbKeys->set_state(TRISTATE_INDET);
     }

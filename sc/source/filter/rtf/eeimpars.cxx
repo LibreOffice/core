@@ -183,7 +183,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             {
                 const SfxPoolItem* pItem = nullptr;
                 SfxItemState eState = aSet.GetItemState( nId, true, &pItem );
-                if (eState == SfxItemState::DONTCARE)
+                if (eState == SfxItemState::INVALID)
                     bSimple = false;
                 else if (eState == SfxItemState::SET)
                 {
@@ -198,7 +198,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             if ( bSimple )
             {   //  Contains field commands?
                 SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
-                if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
+                if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
                     bSimple = false;
             }
 

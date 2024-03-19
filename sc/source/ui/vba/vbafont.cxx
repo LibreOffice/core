@@ -56,7 +56,7 @@ uno::Any SAL_CALL
 ScVbaFont::getSize()
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_HEIGHT) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_HEIGHT) == SfxItemState::INVALID )
             return aNULL();
     return ScVbaFont_BASE::getSize();
 }
@@ -87,7 +87,7 @@ ScVbaFont::getColorIndex()
     if(mbFormControl)
         return uno::Any( sal_Int32(0) );
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR) == SfxItemState::INVALID )
             return aNULL();
     return ScVbaFont_BASE::getColorIndex();
 }
@@ -177,7 +177,7 @@ uno::Any SAL_CALL
 ScVbaFont::getBold()
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_WEIGHT) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_WEIGHT) == SfxItemState::INVALID )
             return aNULL();
     return ScVbaFont_BASE::getBold();
 }
@@ -223,7 +223,7 @@ uno::Any SAL_CALL
 ScVbaFont::getUnderline()
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_UNDERLINE) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_UNDERLINE) == SfxItemState::INVALID )
             return aNULL();
 
     sal_Int32 nValue = awt::FontUnderline::NONE;
@@ -254,7 +254,7 @@ uno::Any SAL_CALL
 ScVbaFont::getStrikethrough()
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_CROSSEDOUT) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_CROSSEDOUT) == SfxItemState::INVALID )
             return aNULL();
     return ScVbaFont_BASE::getStrikethrough();
 }
@@ -263,7 +263,7 @@ uno::Any SAL_CALL
 ScVbaFont::getShadow()
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_SHADOWED) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_SHADOWED) == SfxItemState::INVALID )
             return aNULL();
     return ScVbaFont_BASE::getShadow();
 }
@@ -272,7 +272,7 @@ uno::Any SAL_CALL
 ScVbaFont::getItalic()
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_POSTURE) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_POSTURE) == SfxItemState::INVALID )
             return aNULL();
 
     return ScVbaFont_BASE::getItalic();
@@ -282,7 +282,7 @@ uno::Any SAL_CALL
 ScVbaFont::getName()
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT) == SfxItemState::INVALID )
             return aNULL();
     return ScVbaFont_BASE::getName();
 }
@@ -305,7 +305,7 @@ uno::Any SAL_CALL
 ScVbaFont::getOutlineFont()
 {
     if ( GetDataSet() )
-        if (  GetDataSet()->GetItemState( ATTR_FONT_CONTOUR) == SfxItemState::DONTCARE )
+        if (  GetDataSet()->GetItemState( ATTR_FONT_CONTOUR) == SfxItemState::INVALID )
             return aNULL();
     return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue("CharContoured");
 }
