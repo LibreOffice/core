@@ -885,9 +885,11 @@ bool PngImageReader::isAPng(SvStream& rStream)
     rStream.ReadUInt32(nChunkType);
     if (!rStream.good() || nChunkType != PNG_IHDR_SIGNATURE)
         return false;
-    rStream.SeekRel(nChunkSize);
+    if (!checkSeek(rStream, rStream.Tell() + nChunkSize))
+        return false;
     // Skip IHDR CRC
-    rStream.SeekRel(PNG_CRC_SIZE);
+    if (!checkSeek(rStream, rStream.Tell() + PNG_CRC_SIZE))
+        return false;
     // Look for acTL chunk that exists before the first IDAT chunk
     while (true)
     {
