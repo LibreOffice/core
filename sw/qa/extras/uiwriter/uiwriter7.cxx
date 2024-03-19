@@ -363,7 +363,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)
     createSwDoc("tdf147583_backwardSearch.odt");
     uno::Reference<util::XSearchable> xSearch(mxComponent, uno::UNO_QUERY);
     uno::Reference<util::XSearchDescriptor> xSearchDes = xSearch->createSearchDescriptor();
-    uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
 
     uno::Reference<container::XIndexAccess> xIndex;
     const sal_Int32 nParas = getParagraphs();
