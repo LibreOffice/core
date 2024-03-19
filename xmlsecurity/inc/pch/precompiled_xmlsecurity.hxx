@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:55 using:
+ Generated on 2024-03-19 14:24:39 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <assert.h>
 #include <cassert>
 #include <chrono>
@@ -39,6 +40,8 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <stddef.h>
@@ -60,12 +63,13 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/alloc.h>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -85,13 +89,13 @@
 #include <sal/typesizes.h>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/Scanline.hxx>
+#include <vcl/WindowPosSize.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
-#include <comphelper/errcode.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
@@ -100,18 +104,24 @@
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/windowstate.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Size2D.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -119,12 +129,11 @@
 #include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/StorageFormats.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -146,11 +155,9 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
-#include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/errcode.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -158,16 +165,17 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/intcmp.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <sax/saxdllapi.h>
 #include <svl/sigstruct.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
@@ -175,10 +183,14 @@
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
+#include <tools/helpers.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/solar.h>
+#include <tools/poly.hxx>
+#include <tools/ref.hxx>
+#include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -187,13 +199,10 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/datetime.hxx>
-#include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <biginteger.hxx>
-#include <xmlsecuritydllapi.h>
 #include <xsecctl.hxx>
 #endif // PCH_LEVEL >= 4
 
