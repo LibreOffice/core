@@ -2702,6 +2702,11 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     if ( !aSel.HasRange() )
     {
         aSel = SelectWord( aSel, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true, true );
+        if (!aSel.HasRange() && aSel.Min().GetIndex() > 0 &&
+            OUString(".!?").indexOf(aSel.Min().GetNode()->GetChar(aSel.Min().GetIndex() - 1)) > -1 )
+        {
+            aSel = SelectSentence(aSel);
+        }
     }
 
     // tdf#107176: if there's still no range, just return aSel
