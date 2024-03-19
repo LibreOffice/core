@@ -168,9 +168,7 @@ gb_MERGE_LIBRARY_LIST += \
 	OGLTrans \
 	odbc \
 	pdffilter \
-	$(if $(BUILD_POSTGRESQL_SDBC), \
-		postgresql-sdbc \
-		postgresql-sdbc-impl) \
+	$(if $(BUILD_POSTGRESQL_SDBC),postgresql-sdbc) \
 	pricing \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	rpt \
