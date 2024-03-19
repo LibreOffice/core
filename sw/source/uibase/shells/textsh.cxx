@@ -885,10 +885,13 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
         }
         else
         {
-            rSh.Push(); // save cur cursor
-            if ((rSh.IsEndWrd() || rSh.IsStartWord() || rSh.IsInWord()) && rSh.SelWrd())
+            if (rSh.IsEndSentence())
+            {
+                rSh.BwdSentence(true);
                 rSh.TransliterateText(m_aRotateCase.getNextMode());
-            rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+            }
+            else if ((rSh.IsEndWrd() || rSh.IsStartWord() || rSh.IsInWord()) && rSh.SelWrd())
+                rSh.TransliterateText(m_aRotateCase.getNextMode());
         }
     }
 }
