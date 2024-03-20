@@ -229,8 +229,16 @@ void SidebarController::disposeDecks()
         {
             const std::string hide = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
             if (!hide.empty())
+            {
+                // Be consistent with SwitchToDeck(), so both places emit JSON.
+                boost::property_tree::ptree aTree;
+                aTree.put("commandName", hide);
+                aTree.put("state", "false");
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aTree);
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                       (hide + "=false").c_str());
+                                                       aStream.str().c_str());
+            }
         }
 
         if (mpParentWindow)
