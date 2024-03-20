@@ -151,6 +151,7 @@
 #include <sfx2/DocumentSigner.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/numformat.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -989,49 +990,6 @@ void ExecuteOrientationChange()
 
     if ( mxUndoManager.is() )
         mxUndoManager->leaveUndoContext();
-}
-
-void setupSidebar(std::u16string_view sidebarDeckId = u"")
-{
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell ? &pViewShell->GetViewFrame() : nullptr;
-    if (pViewFrame)
-    {
-        if (!pViewFrame->GetChildWindow(SID_SIDEBAR))
-            pViewFrame->SetChildWindow(SID_SIDEBAR, false /* create it */, true /* focus */);
-
-        pViewFrame->ShowChildWindow(SID_SIDEBAR, true);
-
-        // Force synchronous population of panels
-        SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
-        if (!pChild)
-            return;
-
-        auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pChild->GetWindow());
-        if (!pDockingWin)
-            return;
-
-        pViewFrame->ShowChildWindow( SID_SIDEBAR );
-
-        const rtl::Reference<sfx2::sidebar::SidebarController>& xController
-            = pDockingWin->GetOrCreateSidebarController();
-
-        xController->FadeIn();
-        xController->RequestOpenDeck();
-
-        if (!sidebarDeckId.empty())
-        {
-            xController->SwitchToDeck(sidebarDeckId);
-        }
-        else
-        {
-            xController->SwitchToDefaultDeck();
-        }
-
-        pDockingWin->SyncUpdate();
-    }
-    else
-        SetLastExceptionMsg(u"No view shell or sidebar"_ustr);
 }
 
 void hideSidebar()
@@ -5302,12 +5260,18 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
     else if (gImpl && aCommand == ".uno:LOKSidebarWriterPage")
     {
-        setupSidebar(u"WriterPageDeck");
+        if (!sfx2::sidebar::Sidebar::Setup(u"WriterPageDeck"))
+        {
+            SetLastExceptionMsg(u"failed to set up sidebar"_ustr);
+        }
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarShow")
     {
-        setupSidebar();
+        if (!sfx2::sidebar::Sidebar::Setup(u""))
+        {
+            SetLastExceptionMsg(u"failed to set up sidebar"_ustr);
+        }
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarHide")
