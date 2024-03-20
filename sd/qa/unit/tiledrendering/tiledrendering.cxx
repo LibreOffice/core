@@ -54,6 +54,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/virdev.hxx>
 #include <o3tl/string_view.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 
 #include <chrono>
 #include <cstdlib>
@@ -783,6 +784,7 @@ public:
     bool m_bViewSelectionSet;
     boost::property_tree::ptree m_aCommentCallbackResult;
     OString m_ShapeSelection;
+    std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     TestLokCallbackWrapper m_callbackWrapper;
 
     ViewCallback()
@@ -893,6 +895,26 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
+        }
+        break;
+        case LOK_CALLBACK_STATE_CHANGED:
+        {
+            std::stringstream aStream(pPayload);
+            if (!aStream.str().starts_with("{"))
+            {
+                break;
+            }
+
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            auto it = aTree.find("commandName");
+            if (it == aTree.not_found())
+            {
+                break;
+            }
+
+            std::string aCommandName = it->second.get_value<std::string>();
+            m_aStateChanges[aCommandName] = aTree;
         }
         break;
         }
@@ -2940,6 +2962,25 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         CPPUNIT_ASSERT_EQUAL(false, pView1->IsTextEdit());
         CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarHide)
+{
+    // Given an impress document, with a visible sidebar:
+    createDoc("dummy.odp");
+    ViewCallback aView;
+    sfx2::sidebar::Sidebar::Setup(u"");
+    Scheduler::ProcessEventsToIdle();
+    aView.m_aStateChanges.clear();
+
+    // When hiding the slide layout deck:
+    dispatchCommand(mxComponent, ".uno:ModifyPage", {});
+
+    // Then make sure we get a state change for this, in JSON format:
+    auto it = aView.m_aStateChanges.find(".uno:ModifyPage");
+    // Without the accompanying fix in place, this test would have failed, we got the state change
+    // in plain text, which was inconsistent (show was JSON, hide was plain text).
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
