@@ -2923,6 +2923,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "SHEET",
         "SHEETS",
         "SORT",
+        "SORTBY",
         "STYLE",
         "VLOOKUP",
         "XLOOKUP",

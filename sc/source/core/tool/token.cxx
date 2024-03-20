@@ -1391,6 +1391,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocXMatch:
             case ocFilter:
             case ocSort:
+            case ocSortBy:
             case ocSLN:
             case ocIRR:
             case ocMIRR:

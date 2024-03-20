@@ -79,6 +79,7 @@ https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocume
   * XLOOKUP
   * FILTER
   * SORT
+  * SORTBY
 * Mathematical Functions
   * SUMIF
   * SUMIFS

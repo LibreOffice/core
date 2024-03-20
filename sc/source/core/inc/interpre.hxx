@@ -568,6 +568,8 @@ private:
     std::unique_ptr<ScSortInfoArray> CreateFastSortInfoArray(
         const ScSortParam& rSortParam, bool bMatrix, SCCOLROW nInd1, SCCOLROW nInd2);
     std::vector<SCCOLROW> GetSortOrder(const ScSortParam& rSortParam, const ScMatrixRef& pMatSrc);
+    ScMatrixRef CreateSortedMatrix(const ScSortParam& rSortParam, const ScMatrixRef& pMatSrc,
+        const ScRange& rSourceRange, const std::vector<SCCOLROW>& rSortArray, SCSIZE nsC, SCSIZE nsR);
 
     void QuickSort(ScSortInfoArray* pArray, const ScMatrixRef& pMatSrc, SCCOLROW nLo, SCCOLROW nHi);
 
@@ -713,6 +715,7 @@ private:
     void ScXLookup();
     void ScFilter();
     void ScSort();
+    void ScSortBy();
     void ScSubTotal();
 
     // If upon call rMissingField==true then the database field parameter may be

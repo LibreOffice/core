@@ -508,6 +508,7 @@ enum OpCode : sal_uInt16
         ocRandbetweenNV     = SC_OPCODE_RANDBETWEEN_NV,
         ocFilter            = SC_OPCODE_FILTER,
         ocSort              = SC_OPCODE_SORT,
+        ocSortBy            = SC_OPCODE_SORTBY,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,
@@ -988,6 +989,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocRandbetweenNV: return "RandbetweenNV";
     case ocFilter: return "Filter";
     case ocSort: return "Sort";
+    case ocSortBy: return "SortBy";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";

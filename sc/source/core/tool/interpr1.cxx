@@ -8434,75 +8434,230 @@ void ScInterpreter::ScSort()
 
     // sorting...
     std::vector<SCCOLROW> aOrderIndices = GetSortOrder(aSortData, pMatSrc);
-
-    SCCOLROW nStartPos = (!aSortData.bByRow ? aSortData.nCol1 : aSortData.nRow1);
-    size_t nCount = aOrderIndices.size();
-    std::vector<SCCOLROW> aPosTable(nCount);
-
-    for (size_t i = 0; i < nCount; ++i)
-        aPosTable[aOrderIndices[i] - nStartPos] = i;
-
-    ScMatrixRef pResMat = nullptr;
-    if (!aOrderIndices.empty())
-    {
-        pResMat = GetNewMat(nsC, nsR, /*bEmpty*/true);
-        if (!pMatSrc)
-        {
-            ScCellIterator aCellIter(mrDoc, ScRange(aSortData.nCol1, aSortData.nRow1, aSortData.nSourceTab,
-                aSortData.nCol2, aSortData.nRow2, aSortData.nSourceTab));
-            for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
-            {
-                SCSIZE nThisCol = static_cast<SCSIZE>(aCellIter.GetPos().Col() - aSortData.nCol1);
-                SCSIZE nThisRow = static_cast<SCSIZE>(aCellIter.GetPos().Row() - aSortData.nRow1);
-
-                ScRefCellValue aCell = aCellIter.getRefCellValue();
-                if (aCell.hasNumeric())
-                {
-                    if (aSortData.bByRow)
-                        pResMat->PutDouble(GetCellValue(aCellIter.GetPos(), aCell), nThisCol, aPosTable[nThisRow]);
-                    else
-                        pResMat->PutDouble(GetCellValue(aCellIter.GetPos(), aCell), aPosTable[nThisCol], nThisRow);
-                }
-                else
-                {
-                    svl::SharedString aStr;
-                    GetCellString(aStr, aCell);
-                    if (aSortData.bByRow)
-                        pResMat->PutString(aStr, nThisCol, aPosTable[nThisRow]);
-                    else
-                        pResMat->PutString(aStr, aPosTable[nThisCol], nThisRow);
-                }
-            }
-        }
-        else
-        {
-            for (SCCOL ci = aSortData.nCol1; ci <= aSortData.nCol2; ci++)
-            {
-                for (SCROW rj = aSortData.nRow1; rj <= aSortData.nRow2; rj++)
-                {
-                    if (pMatSrc->IsStringOrEmpty(ci, rj))
-                    {
-                        if (aSortData.bByRow)
-                            pResMat->PutString(pMatSrc->GetString(ci, rj), ci, aPosTable[rj]);
-                        else
-                            pResMat->PutString(pMatSrc->GetString(ci, rj), aPosTable[ci], rj);
-                    }
-                    else
-                    {
-                        if (aSortData.bByRow)
-                            pResMat->PutDouble(pMatSrc->GetDouble(ci, rj), ci, aPosTable[rj]);
-                        else
-                            pResMat->PutDouble(pMatSrc->GetDouble(ci, rj), aPosTable[ci], rj);
-                    }
-                }
-            }
-        }
-    }
+    // create sorted matrix
+    ScMatrixRef pResMat = CreateSortedMatrix(aSortData, pMatSrc,
+        ScRange(aSortData.nCol1, aSortData.nRow1, aSortData.nSourceTab,
+                aSortData.nCol2, aSortData.nRow2, aSortData.nSourceTab),
+                aOrderIndices, nsC, nsR);
 
     if (pResMat)
         PushMatrix(pResMat);
     else
-        PushError(FormulaError::NestedArray);
+        PushIllegalParameter();
+}
+
+void ScInterpreter::ScSortBy()
+{
+    sal_uInt8 nParamCount = GetByte();
+
+    if (nParamCount < 2/*|| (nParamCount % 2 != 1)*/)
+    {
+        PushError(FormulaError::ParameterExpected);
+        return;
+    }
+
+    sal_uInt8 nSortCount = nParamCount / 2;
+
+    ScSortParam aSortData;
+    aSortData.maKeyState.resize(nSortCount);
+
+    // 127th, ..., 3rd and 2nd argument: sort by range/array and sort orders pair
+    sal_uInt8 nSortBy = nSortCount;
+    ScMatrixRef pFullMatSortBy = nullptr;
+    while (nSortBy-- > 0 && nGlobalError == FormulaError::NONE)
+    {
+        // 3rd argument sort_order optional: default ascending
+        if (nParamCount >= 3 && (nParamCount % 2 == 1))
+        {
+            sal_Int8 nSortOrder = static_cast<sal_Int8>(GetInt32WithDefault(1));
+            if (nSortOrder != 1 && nSortOrder != -1)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            aSortData.maKeyState[nSortBy].bAscending = (nSortOrder == 1);
+            nParamCount--;
+        }
+
+        // 2nd argument: take sort by ranges
+        ScMatrixRef pMatSortBy = nullptr;
+        SCSIZE nbyC = 0, nbyR = 0;
+        switch (GetStackType())
+        {
+            case svSingleRef:
+            case svDoubleRef:
+            case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            {
+                if (nSortCount == 1)
+                {
+                    pFullMatSortBy = GetMatrix();
+                    if (!pFullMatSortBy)
+                    {
+                        PushIllegalParameter();
+                        return;
+                    }
+                    pFullMatSortBy->GetDimensions(nbyC, nbyR);
+                }
+                else
+                {
+                    pMatSortBy = GetMatrix();
+                    if (!pMatSortBy)
+                    {
+                        PushIllegalParameter();
+                        return;
+                    }
+                    pMatSortBy->GetDimensions(nbyC, nbyR);
+                }
+
+                // last->first (backward) sortby array
+                if (nSortBy == nSortCount - 1)
+                {
+                    if (nbyC == 1 && nbyR > 1)
+                        aSortData.bByRow = true;
+                    else if (nbyR == 1 && nbyC > 1)
+                        aSortData.bByRow = false;
+                    else
+                    {
+                        PushIllegalParameter();
+                        return;
+                    }
+
+                    if (nSortCount > 1)
+                    {
+                        pFullMatSortBy = GetNewMat(aSortData.bByRow ? (nbyC * nSortCount) : nbyC,
+                            aSortData.bByRow ? nbyR : (nbyR * nSortCount), /*bEmpty*/true);
+                    }
+                }
+            }
+            break;
+
+            default:
+                PushIllegalParameter();
+                return;
+        }
+
+        // ..., penultimate sortby arrays
+        if (nSortCount > 1 && nSortBy <= nSortCount - 1)
+        {
+            SCSIZE nCheckCol = 0, nCheckRow = 0;
+            pFullMatSortBy->GetDimensions(nCheckCol, nCheckRow);
+            if ((aSortData.bByRow && nbyR == nCheckRow && nbyC == 1) ||
+                (!aSortData.bByRow && nbyC == nCheckCol && nbyR == 1))
+            {
+                for (SCSIZE ci = 0; ci < nbyC; ci++)//col
+                {
+                    for (SCSIZE rj = 0; rj < nbyR; rj++)//row
+                    {
+                        if (pMatSortBy->IsStringOrEmpty(ci, rj))
+                        {
+                            if (aSortData.bByRow)
+                                pFullMatSortBy->PutString(pMatSortBy->GetString(ci, rj), ci + nSortBy, rj);
+                            else
+                                pFullMatSortBy->PutString(pMatSortBy->GetString(ci, rj), ci, rj + nSortBy);
+                        }
+                        else
+                        {
+                            if (aSortData.bByRow)
+                                pFullMatSortBy->PutDouble(pMatSortBy->GetDouble(ci, rj), ci + nSortBy, rj);
+                            else
+                                pFullMatSortBy->PutDouble(pMatSortBy->GetDouble(ci, rj), ci, rj + nSortBy);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                PushIllegalParameter();
+                return;
+            }
+        }
+
+        aSortData.maKeyState[nSortBy].bDoSort = true;
+        aSortData.maKeyState[nSortBy].nField = nSortBy;
+
+        nParamCount--;
+    }
+
+    // 1st argument is the range/array to be sorted
+    SCSIZE nsC = 0, nsR = 0;
+    SCCOL nSortCol1 = 0, nSortCol2 = 0;
+    SCROW nSortRow1 = 0, nSortRow2 = 0;
+    SCTAB nSortTab1 = 0, nSortTab2 = 0;
+    ScMatrixRef pMatSrc = nullptr;
+    switch ( GetStackType() )
+    {
+        case svSingleRef:
+            PopSingleRef(nSortCol1, nSortRow1, nSortTab1);
+            nSortCol2 = nSortCol1;
+            nSortRow2 = nSortRow1;
+            nsC = nSortCol2 - nSortCol1 + 1;
+            nsR = nSortRow2 - nSortRow1 + 1;
+        break;
+        case svDoubleRef:
+        {
+            PopDoubleRef(nSortCol1, nSortRow1, nSortTab1, nSortCol2, nSortRow2, nSortTab2);
+            if (nSortTab1 != nSortTab2)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            nsC = nSortCol2 - nSortCol1 + 1;
+            nsR = nSortRow2 - nSortRow1 + 1;
+        }
+        break;
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            pMatSrc = GetMatrix();
+            if (!pMatSrc)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            pMatSrc->GetDimensions(nsC, nsR);
+            nSortCol2 = nsC - 1; // nSortCol1 = 0
+            nSortRow2 = nsR - 1; // nSortRow1 = 0
+        }
+        break;
+
+        default:
+            PushIllegalParameter();
+            return;
+    }
+
+    SCSIZE nCheckMatrixCol = 0, nCheckMatrixRow = 0;
+    pFullMatSortBy->GetDimensions(nCheckMatrixCol, nCheckMatrixRow);
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+    else if ((aSortData.bByRow && nsR != nCheckMatrixRow) ||
+        (!aSortData.bByRow && nsC != nCheckMatrixCol))
+    {
+        PushIllegalParameter();
+        return;
+    }
+    else
+    {
+        aSortData.nCol2 = nCheckMatrixCol - 1;
+        aSortData.nRow2 = nCheckMatrixRow - 1;
+    }
+
+    // sorting...
+    std::vector<SCCOLROW> aOrderIndices = GetSortOrder(aSortData, pFullMatSortBy);
+    // create sorted matrix
+    ScMatrixRef pResMat = CreateSortedMatrix(aSortData, pMatSrc,
+        ScRange(nSortCol1, nSortRow1, nSortTab1, nSortCol2, nSortRow2, nSortTab2),
+        aOrderIndices, nsC, nsR);
+
+    if (pResMat)
+        PushMatrix(pResMat);
+    else
+        PushIllegalParameter();
 }
 
 void ScInterpreter::ScSubTotal()
