@@ -1939,15 +1939,11 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
     if (pOldChainPrev)
         mxDoc->Unchain(*pOldChainPrev);
 
-    const size_t nCnt = mxDoc->GetFlyCount(FLYCNTTYPE_FRM);
-
     /* potential successors resp. predecessors */
-    std::vector< const SwFrameFormat * > aTmpSpzArray;
+    std::vector<const SwFrameFormat *> aTmpSpzArray = mxDoc->GetFlyFrameFormats(FLYCNTTYPE_FRM, false);
 
-    for (size_t n = 0; n < nCnt; ++n)
+    for (auto it = aTmpSpzArray.begin(); it != aTmpSpzArray.end(); ++it)
     {
-        const SwFrameFormat & rFormat1 = *(mxDoc->GetFlyNum(n, FLYCNTTYPE_FRM));
-
         /*
            pFormat is a potential successor of rFormat if it is chainable after
            rFormat.
@@ -1959,17 +1955,14 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
         SwChainRet nChainState;
 
         if (bSuccessors)
-            nChainState = mxDoc->Chainable(rFormat, rFormat1);
+            nChainState = mxDoc->Chainable(rFormat, **it);
         else
-            nChainState = mxDoc->Chainable(rFormat1, rFormat);
+            nChainState = mxDoc->Chainable(**it, rFormat);
 
-        if (nChainState == SwChainRet::OK)
-        {
-            aTmpSpzArray.push_back(&rFormat1);
-
-        }
-
+        if (nChainState != SwChainRet::OK)
+            *it = nullptr;
     }
+    std::erase(aTmpSpzArray, nullptr);
 
     if  (!aTmpSpzArray.empty())
     {
