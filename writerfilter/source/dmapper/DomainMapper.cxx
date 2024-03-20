@@ -131,9 +131,6 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         m_pImpl->SetDocumentSettingsProperty(
             getPropertyName(PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING),
             uno::Any(true));
-        m_pImpl->SetDocumentSettingsProperty(
-            getPropertyName(PROP_TABS_AND_BLANKS_FOR_LINE_CALCULATION),
-            uno::Any(true));
 
         // Don't load the default style definitions to avoid weird mix
         m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::Any(true));
