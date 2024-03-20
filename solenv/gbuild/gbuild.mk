@@ -84,31 +84,30 @@ ifneq ($(strip $(TIMELOG)$(timelog)),)
 gb_TIMELOG := 1
 endif
 
+ifeq ($(strip $(dbglevel)),)
+ifeq ($(debug),)
+dbglevel := 0
+else
+dbglevel := 1
+endif
+endif
+
 gb_ENABLE_SYMBOLS_FOR := $(ENABLE_SYMBOLS_FOR)
 
 # enable_symbols (presumably from the command line)
 ifneq ($(strip $(enable_symbols)),)
 gb_ENABLE_SYMBOLS_FOR := $(enable_symbols)
 endif
+ifeq ($(origin debug),command line)
+gb_ENABLE_SYMBOLS_FOR := all
+endif
+ifeq ($(origin dbglevel),command line)
+gb_ENABLE_SYMBOLS_FOR := all
+endif
 
 # note: ENABLE_BREAKPAD turns on symbols
 ifneq ($(strip $(ENABLE_BREAKPAD)),)
 gb_ENABLE_SYMBOLS_FOR := all
-endif
-
-gb_DEBUGLEVEL := 0
-ifneq ($(strip $(debug)),)
-gb_DEBUGLEVEL := 1
-ifeq ($(origin debug),command line)
-gb_ENABLE_SYMBOLS_FOR := all
-endif
-endif
-
-ifneq ($(strip $(dbglevel)),)
-gb_DEBUGLEVEL := $(strip $(dbglevel))
-ifeq ($(origin dbglevel),command line)
-gb_ENABLE_SYMBOLS_FOR := all
-endif
 endif
 
 # handle special cases
@@ -206,7 +205,7 @@ gb_CPUDEFS += -D$(CPUNAME)
 
 gb_GLOBALDEFS := \
 	-D_REENTRANT \
-	-DOSL_DEBUG_LEVEL=$(gb_DEBUGLEVEL) \
+	-DOSL_DEBUG_LEVEL=$(dbglevel) \
 	$(gb_OSDEFS) \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
