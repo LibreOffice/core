@@ -1714,18 +1714,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             }
             else
             {
-                const size_t nCount = pDoc->GetFlyCount(FLYCNTTYPE_FRM);
-
-                SwFrameFormat* pChain = nullptr;
-                for( size_t i = 0; i < nCount; ++i )
-                {
-                    SwFrameFormat* pFormat2 = pDoc->GetFlyNum(i, FLYCNTTYPE_FRM);
-                    if(sChainName == pFormat2->GetName() )
-                    {
-                        pChain = pFormat2;
-                        break;
-                    }
-                }
+                SwFrameFormat* pChain = pDoc->GetFlyFrameFormatByName(sChainName);
                 if(pChain)
                 {
                     SwFrameFormat* pSource = bNextFrame ? pFormat : pChain;
