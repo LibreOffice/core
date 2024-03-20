@@ -715,7 +715,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 ))
 endif
 
-ifneq (,$(gb_ENABLE_DBGUTIL))
+ifneq (,$(ENABLE_DBGUTIL))
 $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/gridwin_dbgutil \
 ))
