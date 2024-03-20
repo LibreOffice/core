@@ -4209,4 +4209,16 @@ const TranslateId SC_OPCODE_SORT_ARY[] =
     NC_("SC_OPCODE_SORT", "A logical value indicating the desired sort direction; FALSE to sort by row (default), TRUE to sort by column.")
 };
 
+// -=*# Resource for function SORTBY #*=-
+const TranslateId SC_OPCODE_SORTBY_ARY[] =
+{
+    NC_("SC_OPCODE_SORTBY", "Sorts the contents of a range or array based on the values in a corresponding range or array."),
+    NC_("SC_OPCODE_SORTBY", "Sort range"),
+    NC_("SC_OPCODE_SORTBY", "The array or range to sort."),
+    NC_("SC_OPCODE_SORTBY", "Sort by range "),
+    NC_("SC_OPCODE_SORTBY", "Range 1, range 2,... are the arrays or ranges to sort on."),
+    NC_("SC_OPCODE_SORTBY", "Sort order "),
+    NC_("SC_OPCODE_SORTBY", "Order 1, order 2,... are the orders to use for sorting. 1 for ascending, -1 for descending. Default is ascending.")
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

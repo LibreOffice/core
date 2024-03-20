@@ -4253,6 +4253,75 @@ std::vector<SCCOLROW> ScInterpreter::GetSortOrder( const ScSortParam& rSortParam
     return aOrderIndices;
 }
 
+ScMatrixRef ScInterpreter::CreateSortedMatrix( const ScSortParam& rSortParam, const ScMatrixRef& pMatSrc,
+    const ScRange& rSourceRange, const std::vector<SCCOLROW>& rSortArray, SCSIZE nsC, SCSIZE nsR )
+{
+    SCCOLROW nStartPos = (!rSortParam.bByRow ? rSortParam.nCol1 : rSortParam.nRow1);
+    size_t nCount = rSortArray.size();
+    std::vector<SCCOLROW> aPosTable(nCount);
+
+    for (size_t i = 0; i < nCount; ++i)
+        aPosTable[rSortArray[i] - nStartPos] = i;
+
+    ScMatrixRef pResMat = nullptr;
+    if (!rSortArray.empty())
+    {
+        pResMat = GetNewMat(nsC, nsR, /*bEmpty*/true);
+        if (!pMatSrc)
+        {
+            ScCellIterator aCellIter(mrDoc, rSourceRange);
+            for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
+            {
+                SCSIZE nThisCol = static_cast<SCSIZE>(aCellIter.GetPos().Col() - rSourceRange.aStart.Col());
+                SCSIZE nThisRow = static_cast<SCSIZE>(aCellIter.GetPos().Row() - rSourceRange.aStart.Row());
+
+                ScRefCellValue aCell = aCellIter.getRefCellValue();
+                if (aCell.hasNumeric())
+                {
+                    if (rSortParam.bByRow)
+                        pResMat->PutDouble(GetCellValue(aCellIter.GetPos(), aCell), nThisCol, aPosTable[nThisRow]);
+                    else
+                        pResMat->PutDouble(GetCellValue(aCellIter.GetPos(), aCell), aPosTable[nThisCol], nThisRow);
+                }
+                else
+                {
+                    svl::SharedString aStr;
+                    GetCellString(aStr, aCell);
+                    if (rSortParam.bByRow)
+                        pResMat->PutString(aStr, nThisCol, aPosTable[nThisRow]);
+                    else
+                        pResMat->PutString(aStr, aPosTable[nThisCol], nThisRow);
+                }
+            }
+        }
+        else
+        {
+            for (SCCOL ci = rSourceRange.aStart.Col(); ci <= rSourceRange.aEnd.Col(); ci++)
+            {
+                for (SCROW rj = rSourceRange.aStart.Row(); rj <= rSourceRange.aEnd.Row(); rj++)
+                {
+                    if (pMatSrc->IsStringOrEmpty(ci, rj))
+                    {
+                        if (rSortParam.bByRow)
+                            pResMat->PutString(pMatSrc->GetString(ci, rj), ci, aPosTable[rj]);
+                        else
+                            pResMat->PutString(pMatSrc->GetString(ci, rj), aPosTable[ci], rj);
+                    }
+                    else
+                    {
+                        if (rSortParam.bByRow)
+                            pResMat->PutDouble(pMatSrc->GetDouble(ci, rj), ci, aPosTable[rj]);
+                        else
+                            pResMat->PutDouble(pMatSrc->GetDouble(ci, rj), aPosTable[ci], rj);
+                    }
+                }
+            }
+        }
+    }
+
+    return pResMat;
+}
+
 void ScInterpreter::QuickSort( ScSortInfoArray* pArray, const ScMatrixRef& pMatSrc, SCCOLROW nLo, SCCOLROW nHi )
 {
     if ((nHi - nLo) == 1)
