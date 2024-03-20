@@ -5027,7 +5027,7 @@ else
 fi
 AC_SUBST(ENABLE_SYMBOLS_FOR)
 
-if test -n "$with_android_ndk" -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \) -a "$ENABLE_DEBUGINFO_FOR" = "all"; then
+if test -n "$with_android_ndk" -a \( -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \) -a "$ENABLE_SYMBOLS_FOR" = "all"; then
     # Building on Android with full symbols: without enough memory the linker never finishes currently.
     AC_MSG_CHECKING([whether enough memory is available for linking])
     mem_size=$(grep -o 'MemTotal: *.\+ kB' /proc/meminfo | sed 's/MemTotal: *\(.\+\) kB/\1/')
