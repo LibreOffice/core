@@ -676,10 +676,6 @@ private:
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
     DECL_DLLPRIVATE_STATIC_LINK(SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void);
 
-    // return position of a special character
-    sal_Int32 ImpPosToken(const OUStringBuffer& sFormat, sal_Unicode token,
-                          sal_Int32 nStartPos = 0) const;
-
     // Substitute a format during GetFormatEntry(), i.e. system formats.
     SvNumberformat* ImpSubstituteEntry(SvNumberformat* pFormat, sal_uInt32* o_pRealKey = nullptr);
 
