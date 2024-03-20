@@ -14,12 +14,6 @@ $(eval $(call gb_Library_set_include,slideshow,\
     -I$(SRCDIR)/slideshow/source/inc \
 ))
 
-ifneq ($(strip $(debug)$(DEBUG)),)
-$(eval $(call gb_Library_add_defs,slideshow,\
-    -DBOOST_SP_ENABLE_DEBUG_HOOKS \
-))
-endif
-
 $(eval $(call gb_Library_set_precompiled_header,slideshow,slideshow/inc/pch/precompiled_slideshow))
 
 $(eval $(call gb_Library_use_externals,slideshow,\

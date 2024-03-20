@@ -9,12 +9,6 @@
 
 $(eval $(call gb_Library_Library,OGLTrans))
 
-ifneq ($(strip $(debug)$(DEBUG)),)
-$(eval $(call gb_Library_add_defs,OGLTrans,\
-    -DBOOST_SP_ENABLE_DEBUG_HOOKS \
-))
-endif
-
 $(eval $(call gb_Library_add_defs,OGLTrans,\
     -DGLM_FORCE_RADIANS \
 ))

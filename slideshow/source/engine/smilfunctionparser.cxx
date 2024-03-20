@@ -607,23 +607,4 @@ namespace slideshow::internal
         }
 }
 
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
-
-// debug hooks
-
-namespace boost
-{
-
-void sp_scalar_constructor_hook(void *)
-{
-}
-
-void sp_scalar_destructor_hook(void *)
-{
-}
-
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
