@@ -100,13 +100,6 @@ gb_ENABLE_SYMBOLS_FOR := all
 endif
 
 gb_DEBUGLEVEL := 0
-ifneq ($(strip $(DEBUG)),)
-gb_DEBUGLEVEL := 1
-# make DEBUG=true should force -g
-ifeq ($(origin DEBUG),command line)
-gb_ENABLE_SYMBOLS_FOR := all
-endif
-endif
 ifneq ($(strip $(debug)),)
 gb_DEBUGLEVEL := 1
 ifeq ($(origin debug),command line)

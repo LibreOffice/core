@@ -110,7 +110,7 @@ INTERACTIVE VARIABLES:
        BUILDTOOLTRACE  Run all commands that invoke built tools in strace,
                        valgrind or a debugger:
                        BUILDTOOLTRACE='$(DEVENV) /debugexe' PARALLELISM=1 make
-       DEBUG / debug   If not empty, build as with --enable-debug.
+       debug           If not empty, build as with --enable-debug.
        ENABLE_SYMBOLS / enable_symbols
                        If not empty, build as with --enable-symbols.
        dbglevel        If not empty, force the debug level to the specified value. The
