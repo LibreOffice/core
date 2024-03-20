@@ -48,13 +48,12 @@
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
-static LanguageType lcl_GetLanguageOfFormat( LanguageType nLng, sal_uLong nFormat,
-                                const SvNumberFormatter& rFormatter )
+static LanguageType lcl_GetLanguageOfFormat(LanguageType nLng, sal_uLong nFormat)
 {
     if( nLng == LANGUAGE_NONE ) // Bug #60010
         nLng = LANGUAGE_SYSTEM;
     else if( nLng == ::GetAppLanguage() )
-        switch( rFormatter.GetIndexTableOffset( nFormat ))
+        switch( SvNumberFormatter::GetIndexTableOffset( nFormat ))
         {
         case NF_NUMBER_SYSTEM:
         case NF_DATE_SYSTEM_SHORT:
@@ -583,7 +582,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
     const Color* pCol = nullptr;
 
     // Bug #60010
-    LanguageType nFormatLng = ::lcl_GetLanguageOfFormat( nLng, nFormat, *pFormatter );
+    LanguageType nFormatLng = ::lcl_GetLanguageOfFormat( nLng, nFormat );
 
     if( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFormatLng )
     {
@@ -752,8 +751,7 @@ void SwValueField::SetLanguage( LanguageType nLng )
     {
         // Bug #60010
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-        LanguageType nFormatLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
-                                                    *pFormatter );
+        LanguageType nFormatLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat() );
 
         if( (GetFormat() >= SV_COUNTRY_LANGUAGE_OFFSET ||
              LANGUAGE_SYSTEM != nFormatLng ) &&
