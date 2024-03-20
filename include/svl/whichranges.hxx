@@ -102,7 +102,7 @@ class SVL_DLLPUBLIC WhichRangesContainer
     void CountRanges() const;
 
 public:
-#ifdef DBG_UTIL
+#if !defined NDEBUG
     inline bool validRanges2() const
     {
         for (sal_Int32 i = 0; i < size(); ++i)
