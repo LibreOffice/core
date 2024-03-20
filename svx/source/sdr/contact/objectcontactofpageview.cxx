@@ -223,6 +223,10 @@ namespace sdr::contact
                 aNewViewInformation2D.setAutoColor(pViewShell->GetColorConfigColor(svtools::DOCCOLOR));
             if (static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView()).IsTextEdit())
                 aNewViewInformation2D.setTextEditActive(true);
+
+            // this is the EditView repaint, provide that information
+            aNewViewInformation2D.setEditViewActive(true);
+
             updateViewInformation2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;

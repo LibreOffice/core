@@ -94,7 +94,10 @@ protected:
     // is important for handling of TextHierarchyEditPrimitive2D to suppress
     // the text for objects in TextEdit - the text is visualized by the
     // active EditEngine/Outliner overlay, so it would be double visualized
-    bool mbTextEditActive;
+    bool mbTextEditActive : 1;
+
+    // processed view is an EditView
+    bool mbEditViewActive : 1;
 
     // allow to reduce DisplayQuality (e.g. sw 3d fallback renderer for interactions)
     bool mbReducedDisplayQuality : 1;
@@ -117,6 +120,7 @@ public:
         , mfViewTime(0.0)
         , maAutoColor(COL_AUTO)
         , mbTextEditActive(false)
+        , mbEditViewActive(false)
         , mbReducedDisplayQuality(false)
         , mbUseAntiAliasing(ViewInformation2D::getGlobalAntiAliasing())
         , mbPixelSnapHairline(mbUseAntiAliasing && bForwardPixelSnapHairline)
@@ -207,6 +211,9 @@ public:
     bool getTextEditActive() const { return mbTextEditActive; }
     void setTextEditActive(bool bNew) { mbTextEditActive = bNew; }
 
+    bool getEditViewActive() const { return mbEditViewActive; }
+    void setEditViewActive(bool bNew) { mbEditViewActive = bNew; }
+
     bool getReducedDisplayQuality() const { return mbReducedDisplayQuality; }
     void setReducedDisplayQuality(bool bNew) { mbReducedDisplayQuality = bNew; }
 
@@ -224,6 +231,7 @@ public:
                 && mxVisualizedPage == rCandidate.mxVisualizedPage
                 && mfViewTime == rCandidate.mfViewTime && maAutoColor == rCandidate.maAutoColor
                 && mbTextEditActive == rCandidate.mbTextEditActive
+                && mbEditViewActive == rCandidate.mbEditViewActive
                 && mbReducedDisplayQuality == rCandidate.mbReducedDisplayQuality
                 && mbUseAntiAliasing == rCandidate.mbUseAntiAliasing
                 && mbPixelSnapHairline == rCandidate.mbPixelSnapHairline);
@@ -372,6 +380,16 @@ bool ViewInformation2D::getTextEditActive() const
 void ViewInformation2D::setTextEditActive(bool bNew)
 {
     mpViewInformation2D->setTextEditActive(bNew);
+}
+
+bool ViewInformation2D::getEditViewActive() const
+{
+    return mpViewInformation2D->getEditViewActive();
+}
+
+void ViewInformation2D::setEditViewActive(bool bNew)
+{
+    mpViewInformation2D->setEditViewActive(bNew);
 }
 
 bool ViewInformation2D::getPixelSnapHairline() const

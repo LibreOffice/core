@@ -112,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/discretebitmapprimitive2d \
     drawinglayer/source/primitive2d/discreteshadowprimitive2d \
     drawinglayer/source/primitive2d/embedded3dprimitive2d \
+    drawinglayer/source/primitive2d/exclusiveeditviewprimitive2d \
     drawinglayer/source/primitive2d/epsprimitive2d \
     drawinglayer/source/primitive2d/fillgraphicprimitive2d \
     drawinglayer/source/primitive2d/fillgradientprimitive2d \

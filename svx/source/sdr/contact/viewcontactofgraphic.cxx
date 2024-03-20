@@ -46,6 +46,7 @@
 #include <editeng/colritem.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
 
 #include <bitmaps.hlst>
 
@@ -128,7 +129,13 @@ namespace sdr::contact
                     rGraphicObject,
                     aLocalGrafInfo));
 
-                xRetval.push_back(xReferenceB);
+                // embed it to a ExclusiveEditViewPrimitive2D to allow to decide in
+                // the primitive if to visualize or not
+                const drawinglayer::primitive2d::Primitive2DReference aEmbedded(
+                    new drawinglayer::primitive2d::ExclusiveEditViewPrimitive2D(
+                        drawinglayer::primitive2d::Primitive2DContainer { xReferenceB } ));
+
+                xRetval.push_back(aEmbedded);
             }
 
             return xRetval;

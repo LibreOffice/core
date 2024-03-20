@@ -163,8 +163,13 @@ public:
     Color getAutoColor() const;
     void setAutoColor(Color aNew);
 
+    /// claim that in the view processed a TextEdit is active
     bool getTextEditActive() const;
     void setTextEditActive(bool bNew);
+
+    /// claim that the view processed is an EditView visualization
+    bool getEditViewActive() const;
+    void setEditViewActive(bool bNew);
 
     static void setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporary);
     static bool getGlobalAntiAliasing();
