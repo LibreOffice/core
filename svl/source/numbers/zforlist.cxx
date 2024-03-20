@@ -3107,8 +3107,10 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
     pStdFormat->SetLastInsertKey( static_cast<sal_uInt16>(nPos - CLOffset), SvNumberformat::FormatterPrivateAccess() );
 }
 
+namespace {
 
-sal_Int32 SvNumberFormatter::ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos /* = 0*/ ) const
+// return position of a special character
+sal_Int32 ImpPosToken(const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos = 0)
 {
     sal_Int32 nLength = sFormat.getLength();
     for ( sal_Int32 i=nStartPos; i<nLength && i>=0 ; i++ )
@@ -3139,6 +3141,8 @@ sal_Int32 SvNumberFormatter::ImpPosToken ( const OUStringBuffer & sFormat, sal_U
             i--;
     }
     return -2;
+}
+
 }
 
 OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,

@@ -9405,7 +9405,6 @@ SvNumberFormatter::GetTimeFormat(double, o3tl::strong_int<unsigned short, Langua
 SvNumberFormatter::GetTransliteration() const
 SvNumberFormatter::GetUserDefColor(unsigned short)
 SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(NfCurrencyEntry const*&, bool&, NfCurrencyEntry const*, unsigned short, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
-SvNumberFormatter::ImpPosToken(rtl::OUStringBuffer const&, char16_t, int) const
 SvNumberFormatter::ImpSubstituteEntry(SvNumberformat*, unsigned int*)
 SvNumberFormatter::InvalidateDateAcceptancePatterns()
 SvNumberFormatter::IsDecimalSep(std::basic_string_view<char16_t, std::char_traits<char16_t> >) const
