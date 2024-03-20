@@ -81,17 +81,6 @@ using namespace ::com::sun::star::uno;
 
 // Prototypes
 static void lcl_FrameGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
-static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell const & rSh, std::u16string_view rName)
-{
-    const size_t nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
-    for( size_t i = 0; i < nCount; ++i )
-    {
-        const SwFrameFormat* pFormat = rSh.GetFlyNum(i, FLYCNTTYPE_FRM);
-        if(pFormat->GetName() == rName)
-            return pFormat;
-    }
-    return nullptr;
-}
 
 SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell)
 
@@ -604,8 +593,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if (!sPrevName.isEmpty())
                             {
                                 //needs cast - no non-const method available
-                                SwFrameFormat* pPrevFormat = const_cast<SwFrameFormat*>(
-                                    lcl_GetFrameFormatByName(rSh, sPrevName));
+                                SwFrameFormat* pPrevFormat = rSh.GetDoc()->GetFlyFrameFormatByName(sPrevName);
                                 SAL_WARN_IF(!pPrevFormat, "sw.ui", "No frame found!");
                                 if(pPrevFormat)
                                 {
@@ -636,8 +624,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if (!sNextName.isEmpty())
                             {
                                 //needs cast - no non-const method available
-                                SwFrameFormat* pNextFormat = const_cast<SwFrameFormat*>(
-                                    lcl_GetFrameFormatByName(rSh, sNextName));
+                                SwFrameFormat* pNextFormat = rSh.GetDoc()->GetFlyFrameFormatByName(sNextName);
                                 SAL_WARN_IF(!pNextFormat, "sw.ui", "No frame found!");
                                 if(pNextFormat)
                                 {
