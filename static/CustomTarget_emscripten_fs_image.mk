@@ -1524,6 +1524,7 @@ $(emscripten_fs_image_WORKDIR)/soffice.data.filelist: \
 # relative to $(BUILDDIR), so we won't run out of cmdline space that fast...
 $(emscripten_fs_image_WORKDIR)/soffice.data.js.metadata: $(emscripten_fs_image_WORKDIR)/soffice.data.filelist
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(emscripten_fs_image_WORKDIR)/soffice.data),$(true),GEN,2)
+	cd $(BUILDDIR) && \
 	$(EMSDK_FILE_PACKAGER) $(emscripten_fs_image_WORKDIR)/soffice.data --preload $(shell cat $^) --js-output=$(emscripten_fs_image_WORKDIR)/soffice.data.js --separate-metadata \
 	    || rm -f $(emscripten_fs_image_WORKDIR)/soffice.data.js $(emscripten_fs_image_WORKDIR)/soffice.data $(emscripten_fs_image_WORKDIR)/soffice.data.js.metadata
 
