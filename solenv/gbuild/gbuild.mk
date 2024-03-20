@@ -86,10 +86,7 @@ endif
 
 gb_ENABLE_SYMBOLS_FOR := $(ENABLE_SYMBOLS_FOR)
 
-# ENABLE_SYMBOLS (presumably from the command line)
-ifneq ($(strip $(ENABLE_SYMBOLS)),)
-gb_ENABLE_SYMBOLS_FOR := $(ENABLE_SYMBOLS)
-endif
+# enable_symbols (presumably from the command line)
 ifneq ($(strip $(enable_symbols)),)
 gb_ENABLE_SYMBOLS_FOR := $(enable_symbols)
 endif
