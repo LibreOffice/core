@@ -175,7 +175,7 @@ ifneq ($(COM_IS_CLANG),TRUE)
 # https://lists.freedesktop.org/archives/libreoffice/2018-July/080532.html
 # https://lists.freedesktop.org/archives/libreoffice/2018-August/080776.html
 gb_CXXFLAGS += \
-	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4702) \
+	$(if $(ENABLE_OPTIMIZED),-wd4702) \
 
 endif
 
