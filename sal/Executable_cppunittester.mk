@@ -28,7 +28,7 @@ $(eval $(call gb_Executable_add_exception_objects,cppunittester,\
 	sal/cppunittester/cppunittester \
 ))
 
-ifneq ($(strip $(debug)$(DEBUG)),)
+ifneq ($(MSVC_USE_DEBUG_RUNTIME),)
 $(eval $(call gb_Executable_use_system_win32_libs,cppunittester,\
 	dbghelp \
 ))
