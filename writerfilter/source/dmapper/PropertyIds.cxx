@@ -384,7 +384,6 @@ namespace
         { PROP_PARA_CONNECT_BORDERS, u"ParaIsConnectBorder"},
         { PROP_DECORATIVE, u"Decorative"},
         { PROP_PAPER_TRAY, u"PrinterPaperTray"},
-        { PROP_TABS_AND_BLANKS_FOR_LINE_CALCULATION, u"IgnoreTabsAndBlanksForLineCalculation"},
     });
 } // end anonymous ns
 
