@@ -397,6 +397,47 @@ void BigPtrArray::Replace( sal_Int32 idx, BigPtrEntry* pElem)
     p->mvData[ idx - p->nStart ] = pElem;
 }
 
+/** Speed up the complicated removal logic in SwNodes::RemoveNode.
+    Replaces the node AFTER pNotTheOne.
+    Returns the entry BEFORE pNotTheOne.
+*/
+BigPtrEntry* BigPtrArray::ReplaceTheOneAfter( BigPtrEntry* pNotTheOne, BigPtrEntry* pNewEntry)
+{
+    assert(pNotTheOne->m_pBlock->pBigArr == this);
+    BlockInfo* p = pNotTheOne->m_pBlock;
+    sal_uInt16 nOffset = pNotTheOne->m_nOffset;
+
+    // if the next node is inside the current block
+    if (nOffset < p->nElem - 1)
+    {
+        ++nOffset;
+        p->mvData[nOffset] = pNewEntry;
+        pNewEntry->m_nOffset = nOffset;
+        pNewEntry->m_pBlock = p;
+        --nOffset;
+    }
+    else
+    {
+        // slow path
+        BigPtrArray::Replace( pNotTheOne->GetPos()+1, pNewEntry );
+    }
+
+    // if the previous node is inside the current block
+    if (nOffset != 0)
+    {
+        --nOffset;
+        return p->mvData[nOffset];
+    }
+    else
+    {
+        // slow path
+        sal_Int32 nPrevPos = pNotTheOne->GetPos();
+        if (nPrevPos == 0)
+            return nullptr;
+        return BigPtrArray::operator[]( nPrevPos - 1 );
+    }
+}
+
 /** Compress the array */
 sal_uInt16 BigPtrArray::Compress()
 {

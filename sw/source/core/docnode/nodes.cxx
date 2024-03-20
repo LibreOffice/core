@@ -2413,14 +2413,8 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
             delete pDel;
             // coverity[use_after_free : FALSE] - pPrev will be reassigned if there will be another iteration to the loop
             pDel = pPrev;
-            sal_uLong nPrevNdIdx = pPrev->GetPos();
             BigPtrEntry* pTempEntry = &aTempEntries[sal_Int32(nCnt)];
-            BigPtrArray::Replace( nPrevNdIdx+1, pTempEntry );
-            if( nCnt )
-                pPrev = BigPtrArray::operator []( nPrevNdIdx  - 1 );
-                    // the accessed element can be a naked BigPtrEntry from
-                    // aTempEntries, so the downcast to SwNode* in
-                    // SwNodes::operator[] would be illegal (and unnecessary)
+            pPrev = ReplaceTheOneAfter(pPrev, pTempEntry);
         }
         nDelPos = SwNodeOffset(pDel->GetPos() + 1);
     }

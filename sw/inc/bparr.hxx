@@ -91,6 +91,11 @@ public:
     void Move( sal_Int32 from, sal_Int32 to );
     void Replace( sal_Int32 pos, BigPtrEntry* p);
 
+    /** Speed up the complicated removal logic in SwNodes::RemoveNode.
+        Returns the entry before pNotTheOne.
+    */
+    BigPtrEntry* ReplaceTheOneAfter( BigPtrEntry* pNotTheOne, BigPtrEntry* pNewEntry);
+
     SW_DLLPUBLIC BigPtrEntry* operator[]( sal_Int32 ) const;
 };
 
