@@ -123,12 +123,6 @@ ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_DEBUGLEVEL := 1
 endif
 
-ifneq ($(strip $(DBGLEVEL)),)
-gb_DEBUGLEVEL := $(strip $(DBGLEVEL))
-ifeq ($(origin DBGLEVEL),command line)
-gb_ENABLE_SYMBOLS_FOR := all
-endif
-endif
 ifneq ($(strip $(dbglevel)),)
 gb_DEBUGLEVEL := $(strip $(dbglevel))
 ifeq ($(origin dbglevel),command line)
