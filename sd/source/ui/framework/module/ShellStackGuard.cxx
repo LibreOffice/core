@@ -107,7 +107,7 @@ void SAL_CALL ShellStackGuard::disposing (
 
 IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pIdle, void)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     OSL_ASSERT(pIdle==&maPrinterPollingIdle);
 #else
     (void)pIdle;

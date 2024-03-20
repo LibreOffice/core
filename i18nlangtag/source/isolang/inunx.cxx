@@ -104,7 +104,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
             nLang = LanguageTag( *procLocale ).makeFallback().getLanguageType();
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             rSystemLanguage = nLang;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             if ( rSystemLanguage == LANGUAGE_DONTKNOW )
                 fprintf( stderr, "intnunx.cxx:  failed to convert osl_getProcessLocale() language to system language.\n" );
 #endif

@@ -255,7 +255,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                         e.Context, anyEx );
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     sal_Int32 const nMax = 3;
 #else
     sal_Int32 const nMax = 2;
@@ -362,7 +362,7 @@ static bool impl_needsCompatCheck()
             pset->setPropertyValue("LastCompatibilityCheckID", result );
             Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         bNeedsCheck = true;
 #endif
     }

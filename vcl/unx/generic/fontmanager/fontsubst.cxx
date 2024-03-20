@@ -133,7 +133,7 @@ bool FcPreMatchSubstitution::FindFontSubstitute(vcl::font::FontSelectPattern &rF
 
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     std::ostringstream oss;
     oss << "FcPreMatchSubstitution \""
         << rFontSelData.maTargetName
@@ -191,7 +191,7 @@ bool FcGlyphFallbackSubstitution::FindFontSubstitute(vcl::font::FontSelectPatter
 
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     std::ostringstream oss;
     oss << "FcGFSubstitution \""
         << rFontSelData.maTargetName

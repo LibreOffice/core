@@ -1078,7 +1078,7 @@ bool AquaSalInstance::SVMainHook(int* pnInit)
     osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
     OString aByteExe( OUStringToOString( aExe, osl_getThreadTextEncoding() ) );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     aByteExe += OString ( " NSAccessibilityDebugLogLevel 1" );
     const char* pArgv[] = { aByteExe.getStr(), NULL };
     NSApplicationMain( 3, pArgv );

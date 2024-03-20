@@ -51,7 +51,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 - (id) initWithDelegate: (id) _remoteControlDelegate {
     if ( (self = [super init]) ) {
         delegate = [_remoteControlDelegate retain];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         NSLog( @"Apple RemoteControl initWithDelegate ok");
 #endif
     }
@@ -64,7 +64,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 }
 
 - (void) setListeningToRemote: (BOOL) value {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         NSLog( @"Apple RemoteControl setListeningToRemote ok");
 #endif
     (void)value;
@@ -74,13 +74,13 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 }
 
 - (void) startListening: (id) sender {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             NSLog( @"Apple RemoteControl startListening ok");
 #endif
     (void)sender;
 }
 - (void) stopListening: (id) sender {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             NSLog( @"Apple RemoteControl stopListening ok");
 #endif
     (void)sender;
@@ -94,7 +94,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 }
 
 - (BOOL) sendsEventForButtonIdentifier: (RemoteControlEventIdentifier) identifier {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     NSLog( @"Apple RemoteControl: sending event for button identifier\n");
 #endif
     (void)identifier;
@@ -110,7 +110,7 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
                             targetIdentifier /*value = AppleIRController -> OK */,
                             kTargetApplicationIdentifier /*targetBundleIdentifier -> does not appear, since the peer is nil*/,
                             nil];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     NSLog( @"Apple Remote: sendDistributedNotification ...");
     // Debug purpose: returns all the existing dictionary keys.
     NSEnumerator* itKey = [userInfo keyEnumerator];
@@ -134,13 +134,13 @@ NSString* kTargetApplicationIdentifier = @"TargetBundleIdentifier";
 
 + (void) sendFinishedNotificationForAppIdentifier: (NSString*) identifier {
     [self sendDistributedNotification:FINISHED_USING_REMOTE_CONTROL_NOTIFICATION targetBundleIdentifier:identifier];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     NSLog( @"Apple RemoteControl: sendFinishedNotificationForAppIdentifier ...");
 #endif
 }
 + (void) sendRequestForRemoteControlNotification {
     [self sendDistributedNotification:REQUEST_FOR_REMOTE_CONTROL_NOTIFICATION targetBundleIdentifier:nil];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     NSLog( @"Apple RemoteControl: sendRequestForRemoteControlNotification ...");
 #endif
 }

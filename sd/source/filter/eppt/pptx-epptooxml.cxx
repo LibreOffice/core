@@ -1585,7 +1585,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
     Reference< drawing::XDrawPages > xDrawPages = xDPS->getDrawPages();
     Reference< drawing::XDrawPage > xSlide = xDrawPages->insertNewByIndex(xDrawPages->getCount());
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     if (xSlide.is())
         printf("new page created\n");
 #endif

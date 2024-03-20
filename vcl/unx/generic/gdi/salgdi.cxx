@@ -186,7 +186,7 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
 
     // different x- and y- resolutions are usually artifacts of
     // a wrongly calculated screen size.
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     SAL_INFO("vcl.gdi", "Forcing Resolution from "
         << std::hex << rDPIX
         << std::dec << rDPIX

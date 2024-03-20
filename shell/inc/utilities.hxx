@@ -74,7 +74,7 @@ std::wstring getShortPathName(const std::wstring& aLongName);
 
 LCID LocaleSetToLCID(const LocaleSet_t& Locale);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 inline void OutputDebugStringFormatW(LPCWSTR pFormat, ...)
 {
     WCHAR buffer[1024];

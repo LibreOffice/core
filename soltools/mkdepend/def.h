@@ -77,7 +77,7 @@ in this Software without prior written authorization from the X Consortium.
 #define ELIFFALSE       16     /* pseudo value --- never matched */
 #define ELIFGUESSFALSE  19     /* pseudo value --- never matched */
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 extern int  _debugmask;
 /*
  * debug levels are:

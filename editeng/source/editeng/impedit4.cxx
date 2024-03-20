@@ -1537,7 +1537,7 @@ bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
             if (nEnd > nStart)  // empty para?
                 ++nStart;
             LanguageType nLangFound = mpEditEngine->GetLanguage( k, nStart ).nLang;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
 #endif
             bHasConvTxt =   (nSrcLang == nLangFound) ||
@@ -1721,7 +1721,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             // of the text right to the cursor position
             const sal_Int32 nLangIdx = nEnd > nStart ? nStart + 1 : nStart;
             LanguageType nLangFound = mpEditEngine->GetLanguage( aCurStart.nPara, nLangIdx ).nLang;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
 #endif
             bool bLangOk =  (nLangFound == nSrcLang) ||

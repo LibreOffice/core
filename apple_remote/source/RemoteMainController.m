@@ -56,7 +56,7 @@
         RemoteControlContainer* container = [[RemoteControlContainer alloc] initWithDelegate: remoteControlBehavior];
 
         if ( [container instantiateAndAddRemoteControlDeviceWithClass: [AppleRemote class]] != 0 ) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [AppleRemote class]] successful");
         }
         else {
@@ -65,7 +65,7 @@
         }
 
         if ( [container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] != 0 ) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             NSLog(@"[container instantiateAndAddRemoteControlDeviceWithClass: [GlobalKeyboardDevice class]] successful");
         }
         else {
@@ -74,7 +74,7 @@
         }
         // to give the binding mechanism a chance to see the change of the attribute
         [self setValue: container forKey: @"remoteControl"];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             NSLog(@"AppleRemoteMainController init done");
 #endif
     }
@@ -105,13 +105,13 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 - (void) remoteButton: (RemoteControlEventIdentifier)buttonIdentifier pressedDown: (BOOL) pressedDown clickCount: (unsigned int)clickCount
 {
     (void)clickCount;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     NSString* pressed = @"";
     NSString* buttonName = nil;
 #endif
     if (pressedDown)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         pressed = @"(AppleRemoteMainController: button pressed)";
 
         switch(buttonIdentifier)
@@ -137,12 +137,12 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     else // not pressed
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         pressed = @"(AppleRemoteMainController: button released)";
 #endif
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 	//NSLog(@"Button %@ pressed %@", buttonName, pressed);
 	NSString* clickCountString = @"";
 	if (clickCount > 1) clickCountString = [NSString stringWithFormat: @"%d clicks", clickCount];

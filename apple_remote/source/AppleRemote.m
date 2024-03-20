@@ -48,7 +48,7 @@ static const char* AppleRemoteDeviceName = "AppleIRController";
 - (void) setCookieMappingInDictionary: (NSMutableDictionary*) _cookieToButtonMapping	{
 
     // TODO : avoid such magics
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     NSLog( @"Apple Remote: setting 10.6 cookies" );
 #endif
     // 10.6.x Snow Leopard

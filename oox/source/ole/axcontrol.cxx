@@ -2644,7 +2644,7 @@ HtmlTextBoxModel::HtmlTextBoxModel()
 bool
 HtmlTextBoxModel::importBinaryModel( BinaryInputStream& rInStrm )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
     // in msocximex ( where this is ported from, it appears *nothing* is read
     // from the control stream ), surely there is some useful info there ?

@@ -21,7 +21,7 @@
 #include <strsafe.h>
 #include <systools/win32/uwinapi.h>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
 {
     WCHAR   buffer[1024];

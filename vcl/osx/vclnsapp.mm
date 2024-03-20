@@ -391,7 +391,7 @@
         // workaround : declare remoteControl instance variable as public in RemoteMainController.m
 
         [pAppleRemoteCtrl->remoteControl startListening: self];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         NSLog(@"Apple Remote will become active - Using remote controls");
 #endif
     }
@@ -419,7 +419,7 @@
         // workaround : declare remoteControl instance variable as public in RemoteMainController.m
 
         [pAppleRemoteCtrl->remoteControl stopListening: self];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         NSLog(@"Apple Remote will resign active - Releasing remote controls");
 #endif
     }

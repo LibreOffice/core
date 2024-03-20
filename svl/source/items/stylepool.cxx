@@ -343,14 +343,14 @@ private:
     std::map< const SfxItemSet*, OUString> maParentNames;
     // #i86923#
     std::unique_ptr<SfxItemSet> mpIgnorableItems;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     sal_Int32 mnCount;
 #endif
 public:
     // #i86923#
     explicit StylePoolImpl( SfxItemSet const * pIgnorableItems )
         :
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
           mnCount(0),
 #endif
           mpIgnorableItems( pIgnorableItems != nullptr
@@ -416,14 +416,14 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     {
         pCurNode->setItemSet( rSet );
         bNonShareable = false; // to avoid a double insertion
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         ++mnCount;
 #endif
     }
     // If rSet contains at least one non poolable item, a new itemset has to be inserted
     if( bNonShareable )
         pCurNode->setItemSet( rSet );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     {
         sal_Int32 nCheck = -1;
         std::unique_ptr<IStylePoolIteratorAccess> pIter = createIterator(false,false);

@@ -337,7 +337,7 @@ void CustomAnimationPresets::importResources()
 
 void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     OUString aMissedPresetIds;
 #endif
 
@@ -370,7 +370,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
                         {
                             aEffectsList.push_back( pEffect );
                         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
                         else
                         {
                             aMissedPresetIds += OUString(rEffectName);
@@ -388,7 +388,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::importPresets()" );
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     SAL_WARN_IF(!aMissedPresetIds.isEmpty(), "sd", "sd::CustomAnimationPresets::importPresets(), invalid preset id: "
                     << aMissedPresetIds);
 #endif

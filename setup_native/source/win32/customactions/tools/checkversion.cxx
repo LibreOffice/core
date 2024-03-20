@@ -50,7 +50,7 @@ static bool GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppV
 }
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
 {
     WCHAR    buffer[1024];

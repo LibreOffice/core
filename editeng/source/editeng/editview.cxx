@@ -124,7 +124,7 @@ LanguageType EditView::CheckLanguage(
         aLangList[2] = rSettings.GetLanguageTag().getLanguageType();
         // en-US
         aLangList[3] = LANGUAGE_ENGLISH_US;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         lang::Locale a0( LanguageTag::convertToLocale( aLangList[0] ) );
         lang::Locale a1( LanguageTag::convertToLocale( aLangList[1] ) );
         lang::Locale a2( LanguageTag::convertToLocale( aLangList[2] ) );

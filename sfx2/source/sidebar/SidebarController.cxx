@@ -908,7 +908,7 @@ void SidebarController::SwitchToDeck (
     if ( ! mpCurrentDeck)
         return;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     // Show the context name in the deck title bar.
     DeckTitleBar* pDebugTitleBar = mpCurrentDeck->GetTitleBar();
     if (pDebugTitleBar)

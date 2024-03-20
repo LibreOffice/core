@@ -6,7 +6,7 @@
 
 set -o errexit
 
-# oox needs to be build with dbglevel=2 so that DEBUG is defined.
+# oox needs to be build with dbglevel=2 so that OSL_DEBUG_LEVEL=2 is defined.
 
 make oox.clean && make oox dbglevel=2
 

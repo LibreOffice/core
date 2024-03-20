@@ -70,7 +70,7 @@ namespace xml = com::sun::star::xml ;
 namespace
 {
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 
 class InputStreamWrapper : public ::cppu::WeakImplHelper< io::XInputStream >
 {

@@ -118,7 +118,7 @@ void CustomShapeProperties::pushToPropSet(
                 "found property map for preset: " << mnShapePresetType);
 
             aPropertyMap = maPresetDataMap[mnShapePresetType];
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             aPropertyMap.dumpCode( aPropertyMap.makePropertySet() );
 #endif
         }
@@ -372,7 +372,7 @@ void CustomShapeProperties::pushToPropSet(
             aPropertyMap.setProperty( PROP_Extrusion, aExtrusionSequence);
         }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
         // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
         // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs.
         SAL_INFO("oox.cscode", "==cscode== begin");

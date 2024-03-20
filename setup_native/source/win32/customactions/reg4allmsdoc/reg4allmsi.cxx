@@ -72,7 +72,7 @@ const int VISIO_END = 32;
 //    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in
 //    ".ppsm",    // Office PowerPoint 2007 macro-enabled XML show
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 inline void OutputDebugStringFormatW( LPCWSTR pFormat, ... )
 {
     WCHAR    buffer[1024];

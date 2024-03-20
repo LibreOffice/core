@@ -254,13 +254,6 @@ gb_GLOBALDEFS += -DSAL_LOG_INFO \
 
 endif
 
-ifneq ($(gb_DEBUGLEVEL),0)
-ifneq ($(gb_DEBUGLEVEL),1) # 2 or more
-gb_GLOBALDEFS += -DDEBUG \
-
-endif
-endif
-
 gb_GLOBALDEFS += \
 	$(call gb_Helper_define_if_set,\
 		DISABLE_DYNLOADING \

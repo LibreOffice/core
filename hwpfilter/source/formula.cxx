@@ -25,7 +25,7 @@
 #include "hwpeq.h"
 #include <iostream>
 
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
 
 #include "hcode.h"
 
@@ -46,7 +46,7 @@ void Formula::makeMathML(Node *res)
 {
      Node *tmp = res;
      if( !tmp ) return;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      fprintf(stderr,"<math:math xmlns:math=\"http://www.w3.org/1998/Math/MathML\">\n");
 #else
@@ -58,7 +58,7 @@ void Formula::makeMathML(Node *res)
      if( tmp->child )
           makeLines( tmp->child );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      fprintf(stderr,"<math:semantics/>\n");
      indo;
@@ -88,14 +88,14 @@ void Formula::makeLines(Node *res)
 void Formula::makeLine(Node *res)
 {
     if( !res ) return;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     inds; fprintf(stderr,"<math:mrow>\n");
 #else
     rstartEl("math:mrow", mxList);
 #endif
     if( res->child )
          makeExprList( res->child );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     inde; fprintf(stderr,"</math:mrow>\n");
 #else
     rendEl("math:mrow");
@@ -126,7 +126,7 @@ void Formula::makeExpr(Node *res)
     switch( tmp->id ) {
         case ID_PRIMARYEXPR:
              if( tmp->next ){
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
                  inds;
                  fprintf(stderr,"<math:mrow>\n");
 #else
@@ -137,7 +137,7 @@ void Formula::makeExpr(Node *res)
              makePrimary(tmp);
 
              if( tmp->next ){
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
                  inde; fprintf(stderr,"</math:mrow>\n");
 #else
                  rendEl("math:mrow");
@@ -188,7 +188,7 @@ void Formula::makeIdentifier(Node *res)
     if( !tmp->value ) return;
     switch( tmp->id ){
      case ID_CHARACTER :
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
           inds;
           fprintf(stderr,"<math:mi>%s</math:mi>\n",tmp->value.get());
           indo;
@@ -200,7 +200,7 @@ void Formula::makeIdentifier(Node *res)
           break;
      case ID_STRING :
           {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 #else
                 rstartEl("math:mi", mxList);
                 reucstr(tmp->value.get(), strlen(tmp->value.get()));
@@ -209,7 +209,7 @@ void Formula::makeIdentifier(Node *res)
           }
           break;
      case ID_IDENTIFIER :
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
           inds;
           fprintf(stderr,"<math:mi>%s</math:mi>\n",
                   getMathMLEntity(tmp->value.get()).c_str());
@@ -221,7 +221,7 @@ void Formula::makeIdentifier(Node *res)
 #endif
           break;
      case ID_NUMBER :
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
           inds;
           fprintf(stderr,"<math:mn>%s</math:mn>\n",tmp->value.get());
           indo;
@@ -234,7 +234,7 @@ void Formula::makeIdentifier(Node *res)
      case ID_OPERATOR :
      case ID_DELIMITER :
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
           inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value.get()); indo;
 #else
           rstartEl("math:mo", mxList);
@@ -267,7 +267,7 @@ void Formula::makeSubSup(Node *res)
      Node *tmp = res;
      if( !tmp ) return;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      if( res->id == ID_SUBEXPR )
           fprintf(stderr,"<math:msub>\n");
@@ -295,7 +295,7 @@ void Formula::makeSubSup(Node *res)
           makeExpr(tmp->next);
      }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inde;
      if( res->id == ID_SUBEXPR )
           fprintf(stderr,"</math:msub>\n");
@@ -318,7 +318,7 @@ void Formula::makeFraction(Node *res)
      Node *tmp = res;
      if( !tmp ) return;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      fprintf(stderr,"<math:mfrac>\n");
 #else
@@ -326,7 +326,7 @@ void Formula::makeFraction(Node *res)
 #endif
 
      tmp = tmp->child;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      fprintf(stderr,"<math:mrow>\n");
 #else
@@ -338,7 +338,7 @@ void Formula::makeFraction(Node *res)
      else
           makeExprList(tmp);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inde;
      fprintf(stderr,"</math:mrow>\n");
      inds;
@@ -353,7 +353,7 @@ void Formula::makeFraction(Node *res)
      else
           makeExprList(tmp->next);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inde;
      fprintf(stderr,"</math:mrow>\n");
      inde;
@@ -371,7 +371,7 @@ void Formula::makeDecoration(Node *res)
      if( !tmp ) return;
      if( !strncmp(tmp->value.get(),"under", 5) )
           isover = 0;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      if( isover )
           fprintf(stderr,"<math:mover>\n");
@@ -392,7 +392,7 @@ void Formula::makeDecoration(Node *res)
 
      makeBlock(tmp->next);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      fprintf(stderr,"<math:mo>%s</math:mo>\n",
              getMathMLEntity(tmp->value.get()).c_str());
@@ -403,7 +403,7 @@ void Formula::makeDecoration(Node *res)
      rendEl("math:mo");
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inde;
      if( isover )
           fprintf(stderr,"</math:mover>\n");
@@ -421,7 +421,7 @@ void Formula::makeRoot(Node *res)
 {
      Node *tmp = res;
      if( !tmp ) return;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      if( tmp->id == ID_SQRTEXPR )
           fprintf(stderr,"<math:msqrt>\n");
@@ -442,7 +442,7 @@ void Formula::makeRoot(Node *res)
           makeBlock(tmp->child->next);
      }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inde;
      if( tmp->id == ID_SQRTEXPR )
           fprintf(stderr,"</math:msqrt>\n");
@@ -463,7 +463,7 @@ void Formula::makeParenth(Node *res)
 {
      Node *tmp = res;
      if( !tmp ) return;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      fprintf(stderr,"<math:mrow>\n");
      inds;
@@ -488,7 +488,7 @@ void Formula::makeParenth(Node *res)
      if( tmp->child )
           makeExprList(tmp->child);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inde;
      fprintf(stderr,"</math:mrow>\n");
      inds;
@@ -514,7 +514,7 @@ void Formula::makeParenth(Node *res)
 void Formula::makeFence(Node *res)
 {
      Node *tmp = res->child;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      fprintf(stderr,"<math:mfenced open=\"%s\" close=\"%s\">\n",
                 getMathMLEntity(tmp->value.get()).c_str(),
@@ -530,7 +530,7 @@ void Formula::makeFence(Node *res)
 
      makeExprList(tmp->next);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inde;
      fprintf(stderr,"</math:mfenced>\n");
 #else
@@ -545,7 +545,7 @@ void Formula::makeBracket(Node *res)
 
 void Formula::makeBlock(Node *res)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inds;
      fprintf(stderr,"<math:mrow>\n");
 #else
@@ -555,7 +555,7 @@ void Formula::makeBlock(Node *res)
      if( res->child )
           makeExprList(res->child);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
      inde;
      fprintf(stderr,"</math:mrow>\n");
 #else

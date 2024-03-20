@@ -83,7 +83,7 @@ typedef _W64 int   ssize_t;
 #define USE_CHMOD   1
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 int _debugmask;
 #endif
 
@@ -309,7 +309,7 @@ int main(int argc, char    **argv)
         case 'v':
             if (endmarker) break;
             verbose = TRUE;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             if (argv[0][2])
                 _debugmask = atoi(argv[0]+2);
 #endif

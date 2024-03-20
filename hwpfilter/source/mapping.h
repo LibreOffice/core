@@ -360,7 +360,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 
 };
 
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
 hchar_string getMathMLEntity(const char *tex)
 {
      static const size_t tabSize = SAL_N_ELEMENTS(FormulaMapTab);

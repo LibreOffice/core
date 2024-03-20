@@ -111,7 +111,7 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef, EventRef, void*);
             defaultsKey = @"playhold";
             break;
         default:
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
             NSLog( @"Apple Remote: Unknown global keyboard defaults key for button identifier %d", remoteButtonIdentifier);
 #endif
             break;

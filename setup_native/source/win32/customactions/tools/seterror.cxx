@@ -28,7 +28,7 @@
 #include "seterror.hxx"
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
 {
     WCHAR    buffer[1024];

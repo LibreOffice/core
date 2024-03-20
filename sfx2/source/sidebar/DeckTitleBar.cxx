@@ -26,7 +26,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
 #include <sfx2/sidebar/Tools.hxx>
 #endif
 

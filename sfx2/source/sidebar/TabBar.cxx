@@ -82,7 +82,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
 
     mxMenuButton->connect_toggled(LINK(this, TabBar, OnToolboxClicked));
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     SetText(OUString("TabBar"));
 #endif
 }

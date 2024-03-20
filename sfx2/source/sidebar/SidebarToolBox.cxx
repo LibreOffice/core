@@ -75,7 +75,7 @@ SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
         mxImageController = sfx2::sidebar::ControllerFactory::CreateImageController(xFrame, xWidget);
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >= 2
     SetText(OUString("SidebarToolBox"));
 #endif
 }
