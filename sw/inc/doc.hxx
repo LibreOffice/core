@@ -838,6 +838,7 @@ public:
     std::vector<SwFrameFormat const*> GetFlyFrameFormats(
             FlyCntType eType,
             bool bIgnoreTextBoxes);
+    SwFrameFormat* GetFlyFrameFormatByName( const OUString& sFrameFormatName );
 
     // Copy formats in own arrays and return them.
     SwFrameFormat  *CopyFrameFormat ( const SwFrameFormat& );
