@@ -1201,6 +1201,27 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
     CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf160278)
+{
+    createSwDoc();
+    auto xTextDocument(mxComponent.queryThrow<css::text::XTextDocument>());
+    auto xText(xTextDocument->getText());
+    xText->setString("123");
+    CPPUNIT_ASSERT_EQUAL(OUString("123"), xText->getString());
+    auto xCursor = xText->createTextCursorByRange(xText->getEnd());
+    xCursor->goLeft(1, true);
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xCursor->getString());
+    // Insert an SMP character U+1f702 (so it's two UTF-16 code units, 0xd83d 0xdf02):
+    xCursor->setString(u"🜂");
+    // Without the fix, the replacement would expand the cursor one too many characters to the left,
+    // and the cursor text would become "2🜂", failing the next test:
+    CPPUNIT_ASSERT_EQUAL(OUString(u"🜂"), xCursor->getString());
+    xCursor->setString("test");
+    CPPUNIT_ASSERT_EQUAL(OUString(u"test"), xCursor->getString());
+    // This test would fail, too; the text would be "1test":
+    CPPUNIT_ASSERT_EQUAL(OUString(u"12test"), xText->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
