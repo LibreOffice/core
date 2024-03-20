@@ -103,9 +103,6 @@ ifeq ($(origin debug),command line)
 gb_ENABLE_SYMBOLS_FOR := all
 endif
 endif
-ifeq ($(ENABLE_DBGUTIL),TRUE)
-gb_DEBUGLEVEL := 1
-endif
 
 ifneq ($(strip $(dbglevel)),)
 gb_DEBUGLEVEL := $(strip $(dbglevel))
