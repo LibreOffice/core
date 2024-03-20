@@ -110,18 +110,18 @@ namespace comphelper
         OAccessibleSelectionHelper();
 
         // return ourself here by default
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext > implGetAccessibleContext() override;
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext > implGetAccessibleContext() override final;
 
     public:
 
         // XAccessibleSelection - default implementations
-        virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
-        virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
-        virtual void SAL_CALL clearAccessibleSelection(  ) override;
-        virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
-        virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-        virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+        virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override final;
+        virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override final;
+        virtual void SAL_CALL clearAccessibleSelection(  ) override final;
+        virtual void SAL_CALL selectAllAccessibleChildren(  ) override final;
+        virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override final;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
+        virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
     };
 
 

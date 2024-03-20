@@ -57,7 +57,7 @@ namespace comphelper
         virtual css::beans::PropertyState SAL_CALL
             getPropertyState(const OUString& PropertyName) override;
         virtual css::uno::Sequence< css::beans::PropertyState> SAL_CALL
-            getPropertyStates(const css::uno::Sequence< OUString >& aPropertyName) override;
+            getPropertyStates(const css::uno::Sequence< OUString >& aPropertyName) override final;
         virtual void SAL_CALL
             setPropertyToDefault(const OUString& PropertyName) override;
         virtual css::uno::Any SAL_CALL

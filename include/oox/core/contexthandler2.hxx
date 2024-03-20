@@ -268,9 +268,9 @@ public:
 
     // oox.core.ContextHandler interface --------------------------------------
 
-    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
-    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
-    virtual void        endRecord( sal_Int32 nRecId ) override;
+    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override final;
+    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) override final;
+    virtual void        endRecord( sal_Int32 nRecId ) override final;
 
     // oox.core.ContextHandler2Helper interface -------------------------------
 

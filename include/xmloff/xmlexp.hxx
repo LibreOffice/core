@@ -304,8 +304,8 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XNamed
-    virtual OUString SAL_CALL getName(  ) override;
-    virtual void SAL_CALL setName( const OUString& aName ) override;
+    virtual OUString SAL_CALL getName(  ) override final;
+    virtual void SAL_CALL setName( const OUString& aName ) override final;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) final override;

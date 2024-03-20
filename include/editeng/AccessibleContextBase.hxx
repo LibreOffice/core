@@ -233,7 +233,7 @@ public:
     /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
-        supportsService (const OUString& sServiceName) override;
+        supportsService (const OUString& sServiceName) override final;
 
     /** Returns a list of all supported services.  In this case that is just
         the AccessibleContext service.

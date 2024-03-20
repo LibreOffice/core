@@ -309,45 +309,45 @@ public:
 
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL characters(const OUString& aChars) override;
+    virtual void SAL_CALL characters(const OUString& aChars) override final;
     virtual void SAL_CALL processingInstruction(const OUString& aTarget,
-                                                const OUString& aData) override;
-    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
+                                                const OUString& aData) override final;
+    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override final;
 
     // ::css::xml::sax::XFastContextHandler
     virtual void SAL_CALL startFastElement(sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
     virtual void SAL_CALL startUnknownElement(const OUString & Namespace,
         const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 Element) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
+    virtual void SAL_CALL endFastElement(sal_Int32 Element) override final;
     virtual void SAL_CALL endUnknownElement(const OUString & Namespace,
-        const OUString & Name) override;
+        const OUString & Name) override final;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createFastChildContext(sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext(const OUString & Namespace, const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
 
     // XFastParser
-    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override;
-    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
-    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override;
-    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override;
-    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) override;
-    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override;
-    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
-    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override;
-    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
-    virtual void SAL_CALL setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override;
+    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override final;
+    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override final;
+    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override final;
+    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override final;
+    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) override final;
+    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override final;
+    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override final;
+    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override final;
+    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override final;
+    virtual void SAL_CALL setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override final;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
-    virtual void SAL_CALL cancel(  ) override;
+    virtual void SAL_CALL cancel(  ) override final;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;

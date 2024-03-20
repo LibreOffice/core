@@ -117,7 +117,7 @@ namespace comphelper
         }
 
         // XEventListener overridables
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override final;
 
     protected:
         // OComponentHelper overridables

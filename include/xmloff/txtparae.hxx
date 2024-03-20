@@ -210,7 +210,7 @@ protected:
         OUString *pMinWidthValue = nullptr );
 
     virtual void exportStyleAttributes(
-        const css::uno::Reference< css::style::XStyle > & rStyle ) override;
+        const css::uno::Reference< css::style::XStyle > & rStyle ) override final;
 
     void exportPageFrames( bool bProgress );
     void exportFrameFrames( bool bAutoStyles, bool bProgress,

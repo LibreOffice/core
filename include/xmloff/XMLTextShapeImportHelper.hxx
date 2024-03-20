@@ -36,7 +36,7 @@ public:
     virtual void addShape(
         css::uno::Reference< css::drawing::XShape >& rShape,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes ) override;
+        css::uno::Reference< css::drawing::XShapes >& rShapes ) override final;
 };
 
 #endif

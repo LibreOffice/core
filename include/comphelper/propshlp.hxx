@@ -172,7 +172,7 @@ protected:
                                           const css::uno::Any& rValue);
     /** Override this if you need to do something special during getPropertyValue */
     virtual css::uno::Any getPropertyValueImpl(std::unique_lock<std::mutex>& rGuard,
-                                               const ::rtl::OUString& aPropertyName);
+                                               const ::rtl::OUString& aPropertyName) final;
 
     /**
        This method fire events to all registered property listeners.

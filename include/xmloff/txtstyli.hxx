@@ -54,7 +54,7 @@ class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext
 protected:
 
     virtual void SetAttribute( sal_Int32 nElement,
-                               const OUString& rValue ) override;
+                               const OUString& rValue ) override final;
 
 public:
 
@@ -81,9 +81,9 @@ public:
     const OUString& GetDropCapStyleName() const { return m_sDropCapTextStyleName; }
     const OUString& GetDataStyleName() const { return m_sDataStyleName; }
 
-    virtual void CreateAndInsert( bool bOverwrite ) override;
+    virtual void CreateAndInsert( bool bOverwrite ) override final;
     virtual void Finish( bool bOverwrite ) override;
-    virtual void SetDefaults() override;
+    virtual void SetDefaults() override final;
 
     // override FillPropertySet, so we can get at the combined characters
     virtual void FillPropertySet(

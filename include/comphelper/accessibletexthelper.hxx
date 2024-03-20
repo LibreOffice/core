@@ -131,12 +131,12 @@ namespace comphelper
 
     public:
         // XAccessibleText
-        virtual OUString SAL_CALL getSelectedText() override;
-        virtual sal_Int32 SAL_CALL getSelectionStart() override;
-        virtual sal_Int32 SAL_CALL getSelectionEnd() override;
-        virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-        virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-        virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+        virtual OUString SAL_CALL getSelectedText() override final;
+        virtual sal_Int32 SAL_CALL getSelectionStart() override final;
+        virtual sal_Int32 SAL_CALL getSelectionEnd() override final;
+        virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
+        virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
+        virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
     };
 
 

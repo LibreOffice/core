@@ -95,7 +95,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL
-        disposing( const css::lang::EventObject& rSource ) override;
+        disposing( const css::lang::EventObject& rSource ) override final;
 
     // XPropertyChangeListener
     virtual void SAL_CALL
@@ -104,10 +104,10 @@ public:
     // XLinguServiceEventBroadcaster
     virtual sal_Bool SAL_CALL
         addLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override;
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
     virtual sal_Bool SAL_CALL
         removeLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override;
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
 
     // non-UNO functions
     void    AddAsPropListener();

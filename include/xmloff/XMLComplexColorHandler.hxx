@@ -19,18 +19,18 @@ class XMLOFF_DLLPUBLIC XMLComplexColorHandler : public XMLPropertyHandler
 {
 public:
     bool importXML(const OUString& /*rStrImpValue*/, css::uno::Any& /*rValue*/,
-                   const SvXMLUnitConverter&) const override
+                   const SvXMLUnitConverter&) const override final
     {
         return false;
     }
 
     bool exportXML(OUString& /*rStrExpValue*/, const css::uno::Any& /*rValue*/,
-                   const SvXMLUnitConverter&) const override
+                   const SvXMLUnitConverter&) const override final
     {
         return false;
     }
 
-    bool equals(const css::uno::Any& rAny1, const css::uno::Any& rAny2) const override
+    bool equals(const css::uno::Any& rAny1, const css::uno::Any& rAny2) const override final
     {
         uno::Reference<util::XComplexColor> xComplexColor1;
         uno::Reference<util::XComplexColor> xComplexColor2;

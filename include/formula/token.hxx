@@ -270,10 +270,10 @@ public:
                                     eInForceArray( r.eInForceArray ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaByteToken(*this); }
-    virtual sal_uInt8           GetByte() const override;
-    virtual void                SetByte( sal_uInt8 n ) override;
-    virtual ParamClass          GetInForceArray() const override;
-    virtual void                SetInForceArray( ParamClass c ) override;
+    virtual sal_uInt8           GetByte() const override final;
+    virtual void                SetByte( sal_uInt8 n ) override final;
+    virtual ParamClass          GetInForceArray() const override final;
+    virtual void                SetInForceArray( ParamClass c ) override final;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
@@ -307,8 +307,8 @@ public:
                                     FormulaToken( r ), fDouble( r.fDouble ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaDoubleToken(*this); }
-    virtual double              GetDouble() const override;
-    virtual double&             GetDoubleAsReference() override;
+    virtual double              GetDouble() const override final;
+    virtual double&             GetDoubleAsReference() override final;
     virtual sal_Int16           GetDoubleType() const override;     ///< always returns 0 for "not typed"
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };

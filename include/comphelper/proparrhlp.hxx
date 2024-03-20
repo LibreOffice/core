@@ -80,7 +80,7 @@ protected:
         fillProperties is called. getInfoService and getFirstAggregateId may be overwritten to determine
         the additional parameters of the OPropertyArrayAggregationHelper.
     */
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const final;
 };
 
 template<class TYPE>

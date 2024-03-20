@@ -91,13 +91,13 @@ namespace drawinglayer::primitive2d
             const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override final;
 
             /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override final;
 
             /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
+            virtual sal_uInt32 getPrimitive2DID() const override final;
         };
 } // end of namespace drawinglayer::primitive2d
 

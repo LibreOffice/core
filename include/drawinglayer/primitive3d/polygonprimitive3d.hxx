@@ -62,7 +62,7 @@ namespace drawinglayer::primitive3d
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const override;
 
             /// get range
-            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const override;
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const override final;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

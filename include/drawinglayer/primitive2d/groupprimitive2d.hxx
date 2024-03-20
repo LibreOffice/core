@@ -85,7 +85,7 @@ namespace drawinglayer::primitive2d
             virtual sal_uInt32 getPrimitive2DID() const override;
 
             // XAccounting
-            virtual sal_Int64 estimateUsage() override;
+            virtual sal_Int64 estimateUsage() override final;
         };
 } // end of namespace drawinglayer::primitive2d
 

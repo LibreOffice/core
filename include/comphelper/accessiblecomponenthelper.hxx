@@ -80,8 +80,8 @@ namespace comphelper
 
     public:
         // XAccessibleEventBroadcaster
-        virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-        virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
+        virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override final;
+        virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override final;
 
         // XAccessibleContext - still waiting to be overwritten
         virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override = 0;
@@ -197,11 +197,11 @@ namespace comphelper
 
     public:
         // XAccessibleComponent - default implementations
-        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
-        virtual css::awt::Point SAL_CALL getLocation(  ) override;
+        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
+        virtual css::awt::Point SAL_CALL getLocation(  ) override final;
         virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-        virtual css::awt::Size SAL_CALL getSize(  ) override;
-        virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
+        virtual css::awt::Size SAL_CALL getSize(  ) override final;
+        virtual css::awt::Rectangle SAL_CALL getBounds(  ) override final;
     };
 
 
@@ -226,7 +226,7 @@ namespace comphelper
 
     public:
         // XAccessibleComponent - default implementations
-        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
+        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
         virtual css::awt::Point SAL_CALL getLocation(  ) override;
         virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
         virtual css::awt::Size SAL_CALL getSize(  ) override;

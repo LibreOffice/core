@@ -54,7 +54,7 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override final;
 
     // This method is called from this instance implementation of
     // CreateChildContext if the element matches an entry in the

@@ -29,7 +29,7 @@ class XMLOFF_DLLPUBLIC XMLTextMasterStylesContext : public SvXMLStylesContext
 protected:
     virtual SvXMLStyleContext* CreateStyleChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override final;
 
     virtual bool InsertStyleFamily(XmlStyleFamily nFamily) const override;
 

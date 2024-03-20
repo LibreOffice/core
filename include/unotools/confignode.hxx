@@ -156,7 +156,7 @@ namespace utl
 
     protected:
         // OEventListenerAdapter
-        virtual void _disposing( const css::lang::EventObject& _rSource ) override;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) override final;
 
     protected:
         enum NAMEORIGIN

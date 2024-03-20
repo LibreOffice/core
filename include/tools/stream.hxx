@@ -642,7 +642,7 @@ public:
                     SvMemoryStream( std::size_t nInitSize=512, std::size_t nResize=64 );
                     virtual ~SvMemoryStream() override;
 
-    virtual void    ResetError() override;
+    virtual void    ResetError() override final;
 
     sal_uInt64      GetSize() { return TellEnd(); }
     std::size_t     GetEndOfData() const { return nEndOfData; }
@@ -659,7 +659,7 @@ public:
     /// @since LibreOffice 7.5
     void            MakeReadOnly();
     void            SetResizeOffset( std::size_t nNewResize ) { nResize = nNewResize; }
-    virtual sal_uInt64 TellEnd() override { FlushBuffer(); return nEndOfData; }
+    virtual sal_uInt64 TellEnd() override final { FlushBuffer(); return nEndOfData; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
