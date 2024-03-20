@@ -25,6 +25,7 @@
 
 using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
 constexpr OUString LANGUAGETOOL_DEFAULT_URL = u"https://api.languagetool.org/v2"_ustr;
+constexpr OUString LANGUAGETOOLPLUS_DEFAULT_URL = u"https://api.languagetoolplus.com/v2"_ustr;
 
 OptLanguageToolTabPage::OptLanguageToolTabPage(weld::Container* pPage,
                                                weld::DialogController* pController,
@@ -81,20 +82,21 @@ IMPL_LINK_NOARG(OptLanguageToolTabPage, CheckHdl, weld::Toggleable&, void)
 void OptLanguageToolTabPage::Reset(const SfxItemSet*)
 {
     // tdf#150494 If no URL has been set, use the default URL
-    OUString aBaseURL = LanguageToolCfg::BaseURL::get().value_or("");
-    if (aBaseURL.isEmpty())
-        m_xBaseURLED->set_text(LANGUAGETOOL_DEFAULT_URL);
-    else
-        m_xBaseURLED->set_text(aBaseURL);
+    OUString aUsername = LanguageToolCfg::Username::get().value_or("");
+    OUString aApiKey = LanguageToolCfg::ApiKey::get().value_or("");
+    OUString aBaseURL = LanguageToolCfg::BaseURL::get().value_or(
+        (aUsername.isEmpty() && aApiKey.isEmpty()) ? LANGUAGETOOL_DEFAULT_URL
+                                                   : LANGUAGETOOLPLUS_DEFAULT_URL);
 
+    m_xBaseURLED->set_text(aBaseURL);
     m_xBaseURLED->set_sensitive(!LanguageToolCfg::BaseURL::isReadOnly());
     m_xBaseURLImg->set_visible(LanguageToolCfg::BaseURL::isReadOnly());
 
-    m_xUsernameED->set_text(LanguageToolCfg::Username::get().value_or(""));
+    m_xUsernameED->set_text(aUsername);
     m_xUsernameED->set_sensitive(!LanguageToolCfg::Username::isReadOnly());
     m_xUsernameImg->set_visible(LanguageToolCfg::Username::isReadOnly());
 
-    m_xApiKeyED->set_text(LanguageToolCfg::ApiKey::get().value_or(""));
+    m_xApiKeyED->set_text(aApiKey);
     m_xApiKeyED->set_sensitive(!LanguageToolCfg::ApiKey::isReadOnly());
     m_xApiKeyImg->set_visible(LanguageToolCfg::ApiKey::isReadOnly());
 
@@ -139,14 +141,21 @@ bool OptLanguageToolTabPage::FillItemSet(SfxItemSet*)
     auto batch(comphelper::ConfigurationChanges::create());
 
     // tdf#150494 If no URL has been set, then save the default URL
+    // tdf#159395 If Username and ApiKey are set, then save the default URL for paid service
     OUString aBaseURL = m_xBaseURLED->get_text();
-    if (aBaseURL.isEmpty())
-        LanguageToolCfg::BaseURL::set(LANGUAGETOOL_DEFAULT_URL, batch);
-    else
-        LanguageToolCfg::BaseURL::set(aBaseURL, batch);
+    OUString aUsername = m_xUsernameED->get_text();
+    OUString aApiKey = m_xApiKeyED->get_text();
 
-    LanguageToolCfg::Username::set(m_xUsernameED->get_text(), batch);
-    LanguageToolCfg::ApiKey::set(m_xApiKeyED->get_text(), batch);
+    if (aBaseURL.isEmpty()
+        || (aUsername.isEmpty() && aApiKey.isEmpty() && aBaseURL == LANGUAGETOOLPLUS_DEFAULT_URL))
+        aBaseURL = LANGUAGETOOL_DEFAULT_URL;
+
+    if (!aUsername.isEmpty() && !aApiKey.isEmpty() && aBaseURL == LANGUAGETOOL_DEFAULT_URL)
+        aBaseURL = LANGUAGETOOLPLUS_DEFAULT_URL;
+
+    LanguageToolCfg::BaseURL::set(aBaseURL, batch);
+    LanguageToolCfg::Username::set(aUsername, batch);
+    LanguageToolCfg::ApiKey::set(aApiKey, batch);
     LanguageToolCfg::RestProtocol::set(m_xRestProtocol->get_text(), batch);
     LanguageToolCfg::SSLCertVerify::set(!m_xSSLDisableVerificationBox->get_active(), batch);
     batch->commit();
