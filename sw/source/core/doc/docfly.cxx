@@ -149,6 +149,25 @@ SwFrameFormat* SwDoc::GetFlyNum( size_t nIdx, FlyCntType eType, bool bIgnoreText
     return pRetFormat;
 }
 
+SwFrameFormat* SwDoc::GetFlyFrameFormatByName( const OUString& rFrameFormatName )
+{
+    auto pFrameFormats = GetSpzFrameFormats();
+    auto it = pFrameFormats->findByTypeAndName( RES_FLYFRMFMT, rFrameFormatName );
+    auto endIt = pFrameFormats->typeAndNameEnd();
+    for ( ; it != endIt; ++it)
+    {
+        sw::SpzFrameFormat* pFlyFormat = *it;
+        const SwNodeIndex* pIdx = pFlyFormat->GetContent().GetContentIdx();
+        if( !pIdx || !pIdx->GetNodes().IsDocNodes() )
+            continue;
+
+        const SwNode* pNd = GetNodes()[ pIdx->GetIndex() + 1 ];
+        if( !pNd->IsNoTextNode())
+            return pFlyFormat;
+    }
+    return nullptr;
+}
+
 std::vector<SwFrameFormat const*> SwDoc::GetFlyFrameFormats(
     FlyCntType const eType, bool const bIgnoreTextBoxes)
 {
