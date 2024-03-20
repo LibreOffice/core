@@ -1327,9 +1327,10 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 const SwTextFootnote* pTextFootnote = rDoc.GetFootnoteIdxs()[ n ];
                 const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
                 assert(pTextFootnote == rFormatFootnote.GetTextFootnote());
+                assert(&pTextFootnote->GetStartNode()->GetNode() == pTextFootnote->GetStartNode()->GetNode().
+                                    FindSttNodeByType(SwFootnoteStartNode));
 
-                if (pSttNode == pTextFootnote->GetStartNode()->GetNode().
-                                    FindSttNodeByType(SwFootnoteStartNode))
+                if (pSttNode == &pTextFootnote->GetStartNode()->GetNode())
                 {
                     xParentText = SwXFootnote::CreateXFootnote(rDoc,
                             &const_cast<SwFormatFootnote&>(rFormatFootnote));
