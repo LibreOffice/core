@@ -6569,6 +6569,8 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
         // such that one of the operands of ocEqual is a double-ref.
         // Examples of formula that matches this are:
         //   SUMPRODUCT(IF($A:$A=$L12;$D:$D*G:G))
+        // Also in case of DoubleRef arguments around other Binary operators can be trimmable:
+        //   SUMPRODUCT(($D:$D>M47:M47)*($D:$D<M48:M48)*($I:$I=N$41))
         bool bTillClose = true;
         bool bCloseTillIf = false;
         sal_Int16 nToksTillIf = 0;
@@ -6598,6 +6600,39 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                         if (lhsType == svDoubleRef && rhsType == svDoubleRef)
                         {
                             pLHS->GetDoubleRef()->SetTrimToData(true);
+                            pRHS->GetDoubleRef()->SetTrimToData(true);
+                        }
+                    }
+                    break;
+                case ocEqual:
+                case ocAdd:
+                case ocSub:
+                case ocAmpersand:
+                case ocPow:
+                case ocNotEqual:
+                case ocLess:
+                case ocGreater:
+                case ocLessEqual:
+                case ocGreaterEqual:
+                case ocAnd:
+                case ocOr:
+                case ocXor:
+                case ocIntersect:
+                case ocUnion:
+                case ocRange:
+                    {
+                        if (!pTok->IsInForceArray())
+                            break;
+                        FormulaToken* pLHS = *(ppTok - 1);
+                        FormulaToken* pRHS = *(ppTok - 2);
+                        StackVar lhsType = pLHS->GetType();
+                        StackVar rhsType = pRHS->GetType();
+                        if (lhsType == svDoubleRef && (rhsType == svSingleRef || rhsType == svDoubleRef))
+                        {
+                            pLHS->GetDoubleRef()->SetTrimToData(true);
+                        }
+                        if (rhsType == svDoubleRef && (lhsType == svSingleRef || lhsType == svDoubleRef))
+                        {
                             pRHS->GetDoubleRef()->SetTrimToData(true);
                         }
                     }
