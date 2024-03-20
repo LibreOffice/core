@@ -3540,7 +3540,8 @@ sal_uInt32 SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
     return nCLOffset + indexTable[nTabOff];
 }
 
-NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) const
+//static
+NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset(sal_uInt32 nFormat)
 {
     sal_uInt32 nOffset = nFormat % SV_COUNTRY_LANGUAGE_OFFSET;      // relative index
     if ( nOffset > SV_MAX_COUNT_STANDARD_FORMATS )

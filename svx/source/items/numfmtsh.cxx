@@ -714,7 +714,7 @@ bool SvxNumberFormatShell::IsEssentialFormat_Impl(SvNumFormatType eType, sal_uIn
     if (nKey == nCurFormatKey)
         return true;
 
-    const NfIndexTableOffset nIndex = pFormatter->GetIndexTableOffset(nKey);
+    const NfIndexTableOffset nIndex = SvNumberFormatter::GetIndexTableOffset(nKey);
     switch (nIndex)
     {
         // These are preferred or edit formats.

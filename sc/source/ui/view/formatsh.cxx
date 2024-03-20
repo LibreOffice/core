@@ -1736,7 +1736,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                                       // SvNumFormatType::DEFINED bit.
     const SvNumFormatType nType     = (eItemState >= SfxItemState::DEFAULT ? pFormatter->GetType( nNumberFormat) :
                                        GetCurrentNumberFormatType());
-    NfIndexTableOffset nOffset      = pFormatter->GetIndexTableOffset(nNumberFormat);
+    NfIndexTableOffset nOffset      = SvNumberFormatter::GetIndexTableOffset(nNumberFormat);
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();

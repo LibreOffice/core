@@ -1688,7 +1688,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //  use fixed-order formats instead of SYS... if bAutoOrder is false
         //  (only if the format strings are equal for the locale)
 
-        NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
+        NfIndexTableOffset eOffset = SvNumberFormatter::GetIndexTableOffset( nIndex );
         if ( eOffset == NF_DATE_SYS_DMMMYYYY )
         {
             sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMYYYY, m_nFormatLang );

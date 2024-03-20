@@ -1100,7 +1100,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
     //  element name
 
-    NfIndexTableOffset eBuiltIn = m_pFormatter->GetIndexTableOffset( nRealKey );
+    NfIndexTableOffset eBuiltIn = SvNumberFormatter::GetIndexTableOffset( nRealKey );
 
     SvNumFormatType nFmtType = SvNumFormatType::ALL;
     bool bThousand = false;
