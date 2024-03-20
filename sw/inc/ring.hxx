@@ -144,7 +144,7 @@ namespace sw
     }
 
     /**
-     * helper class that provides Svalue_typeL-style container iteration to the ring
+     * helper class that provides STL-style container iteration to the ring
      */
     template <typename value_type>
     class SAL_WARN_UNUSED RingContainer final
@@ -226,7 +226,7 @@ namespace sw
             value_type& dereference() const
                 { return m_pCurrent ? *m_pCurrent : * m_pStart; }
             /**
-             * value_type is:
+             * This is:
              * - pointing to the current item in the iteration in general
              * - nullptr if on the first item (begin())
              * - m_pStart when beyond the last item (end())
