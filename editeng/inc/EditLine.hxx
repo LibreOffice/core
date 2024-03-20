@@ -31,105 +31,107 @@ public:
     typedef std::vector<sal_Int32> CharPosArrayType;
 
 private:
-    CharPosArrayType aPositions;
-    std::vector<sal_Bool> aKashidaPositions;
-    sal_Int32 nTxtWidth = 0;
-    sal_Int32 nStartPosX = 0;
-    sal_Int32 nNextLinePosXDiff = 0;
-    sal_Int32 nStart = 0; // could be replaced by nStartPortion
-    sal_Int32 nEnd = 0; // could be replaced by nEndPortion
-    sal_Int32 nStartPortion = 0;
-    sal_Int32 nEndPortion = 0;
-    sal_uInt16 nHeight = 0; //  Total height of the line
-    sal_uInt16 nTxtHeight = 0; // Pure Text height
-    sal_uInt16 nMaxAscent = 0;
-    bool bHangingPunctuation : 1 = false;
-    bool bInvalid : 1 = true; // for skillful formatting
+    CharPosArrayType maPositions;
+    std::vector<sal_Bool> maKashidaPositions;
+    sal_Int32 mnTextWidth = 0;
+    sal_Int32 mnStartPosX = 0;
+    sal_Int32 mnNextLinePosXDiff = 0;
+    sal_Int32 mnStart = 0; // could be replaced by nStartPortion
+    sal_Int32 mnEnd = 0; // could be replaced by nEndPortion
+    sal_Int32 mnStartPortion = 0;
+    sal_Int32 mnEndPortion = 0;
+    sal_uInt16 mnHeight = 0; //  Total height of the line
+    sal_uInt16 mnTextHeight = 0; // Pure Text height
+    sal_uInt16 mnMaxAscent = 0;
+    bool mbHangingPunctuation : 1 = false;
+    bool mbInvalid : 1 = true; // for skillful formatting
 
 public:
     EditLine() = default;
     EditLine(const EditLine& rEditLine)
-        : nStart(rEditLine.nStart)
-        , nEnd(rEditLine.nEnd)
-        , nStartPortion(rEditLine.nStartPortion)
-        , nEndPortion(rEditLine.nEndPortion)
-        , bHangingPunctuation(rEditLine.bHangingPunctuation)
-        , bInvalid(true)
+        : mnStart(rEditLine.mnStart)
+        , mnEnd(rEditLine.mnEnd)
+        , mnStartPortion(rEditLine.mnStartPortion)
+        , mnEndPortion(rEditLine.mnEndPortion)
+        , mbHangingPunctuation(rEditLine.mbHangingPunctuation)
     {
     }
 
-    bool IsIn(sal_Int32 nIndex) const { return ((nIndex >= nStart) && (nIndex < nEnd)); }
+    bool IsIn(sal_Int32 nIndex) const { return nIndex >= mnStart && nIndex < mnEnd; }
 
-    bool IsIn(sal_Int32 nIndex, bool bInclEnd) const
+    bool IsIn(sal_Int32 nIndex, bool bIncludeEnd) const
     {
-        return ((nIndex >= nStart) && (bInclEnd ? (nIndex <= nEnd) : (nIndex < nEnd)));
+        return nIndex >= mnStart && (bIncludeEnd ? nIndex <= mnEnd : nIndex < mnEnd);
     }
 
-    void SetStart(sal_Int32 n) { nStart = n; }
-    sal_Int32 GetStart() const { return nStart; }
-    sal_Int32& GetStart() { return nStart; }
+    void SetStart(sal_Int32 nStart) { mnStart = nStart; }
+    sal_Int32 GetStart() const { return mnStart; }
+    sal_Int32& GetStart() { return mnStart; }
 
-    void SetEnd(sal_Int32 n) { nEnd = n; }
-    sal_Int32 GetEnd() const { return nEnd; }
-    sal_Int32& GetEnd() { return nEnd; }
+    void SetEnd(sal_Int32 nEnd) { mnEnd = nEnd; }
+    sal_Int32 GetEnd() const { return mnEnd; }
+    sal_Int32& GetEnd() { return mnEnd; }
 
-    void SetStartPortion(sal_Int32 n) { nStartPortion = n; }
-    sal_Int32 GetStartPortion() const { return nStartPortion; }
-    sal_Int32& GetStartPortion() { return nStartPortion; }
+    void SetStartPortion(sal_Int32 nStartPortion) { mnStartPortion = nStartPortion; }
+    sal_Int32 GetStartPortion() const { return mnStartPortion; }
+    sal_Int32& GetStartPortion() { return mnStartPortion; }
 
-    void SetEndPortion(sal_Int32 n) { nEndPortion = n; }
-    sal_Int32 GetEndPortion() const { return nEndPortion; }
-    sal_Int32& GetEndPortion() { return nEndPortion; }
+    void SetEndPortion(sal_Int32 nEndPortion) { mnEndPortion = nEndPortion; }
+    sal_Int32 GetEndPortion() const { return mnEndPortion; }
+    sal_Int32& GetEndPortion() { return mnEndPortion; }
 
-    void SetHeight(sal_uInt16 nH, sal_uInt16 nTxtH = 0);
-    sal_uInt16 GetHeight() const { return nHeight; }
-    sal_uInt16 GetTxtHeight() const { return nTxtHeight; }
+    void SetHeight(sal_uInt16 nHeight, sal_uInt16 nTextHeight = 0);
+    sal_uInt16 GetHeight() const { return mnHeight; }
+    sal_uInt16 GetTxtHeight() const { return mnTextHeight; }
 
-    void SetTextWidth(sal_Int32 n) { nTxtWidth = n; }
-    sal_Int32 GetTextWidth() const { return nTxtWidth; }
+    void SetTextWidth(sal_Int32 nTextWidth) { mnTextWidth = nTextWidth; }
+    sal_Int32 GetTextWidth() const { return mnTextWidth; }
 
-    void SetMaxAscent(sal_uInt16 n) { nMaxAscent = n; }
-    sal_uInt16 GetMaxAscent() const { return nMaxAscent; }
+    void SetMaxAscent(sal_uInt16 nMaxAscent) { mnMaxAscent = nMaxAscent; }
+    sal_uInt16 GetMaxAscent() const { return mnMaxAscent; }
 
-    void SetHangingPunctuation(bool b) { bHangingPunctuation = b; }
-    bool IsHangingPunctuation() const { return bHangingPunctuation; }
+    void SetHangingPunctuation(bool bHangingPunctuation)
+    {
+        mbHangingPunctuation = bHangingPunctuation;
+    }
+    bool IsHangingPunctuation() const { return mbHangingPunctuation; }
 
-    sal_Int32 GetLen() const { return nEnd - nStart; }
+    sal_Int32 GetLen() const { return mnEnd - mnStart; }
 
-    sal_Int32 GetStartPosX() const { return nStartPosX; }
-    void SetStartPosX(sal_Int32 start);
-    sal_Int32 GetNextLinePosXDiff() const { return nNextLinePosXDiff; }
-    void SetNextLinePosXDiff(sal_Int32 diff) { nNextLinePosXDiff = diff; }
+    sal_Int32 GetStartPosX() const { return mnStartPosX; }
+    void SetStartPosX(sal_Int32 nStart);
+    sal_Int32 GetNextLinePosXDiff() const { return mnNextLinePosXDiff; }
+    void SetNextLinePosXDiff(sal_Int32 nDiff) { mnNextLinePosXDiff = nDiff; }
     Size CalcTextSize(ParaPortion& rParaPortion);
 
-    bool IsInvalid() const { return bInvalid; }
-    bool IsValid() const { return !bInvalid; }
-    void SetInvalid() { bInvalid = true; }
-    void SetValid() { bInvalid = false; }
+    bool IsInvalid() const { return mbInvalid; }
+    bool IsValid() const { return !mbInvalid; }
+    void SetInvalid() { mbInvalid = true; }
+    void SetValid() { mbInvalid = false; }
 
-    bool IsEmpty() const { return nEnd <= nStart; }
+    bool IsEmpty() const { return mnEnd <= mnStart; }
 
-    CharPosArrayType& GetCharPosArray() { return aPositions; }
-    const CharPosArrayType& GetCharPosArray() const { return aPositions; }
+    CharPosArrayType& GetCharPosArray() { return maPositions; }
+    const CharPosArrayType& GetCharPosArray() const { return maPositions; }
 
-    std::vector<sal_Bool>& GetKashidaArray() { return aKashidaPositions; }
-    const std::vector<sal_Bool>& GetKashidaArray() const { return aKashidaPositions; }
+    std::vector<sal_Bool>& GetKashidaArray() { return maKashidaPositions; }
+    const std::vector<sal_Bool>& GetKashidaArray() const { return maKashidaPositions; }
 
     EditLine* Clone() const;
 
     EditLine& operator=(const EditLine& rLine)
     {
-        nEnd = rLine.nEnd;
-        nStart = rLine.nStart;
-        nEndPortion = rLine.nEndPortion;
-        nStartPortion = rLine.nStartPortion;
+        mnEnd = rLine.mnEnd;
+        mnStart = rLine.mnStart;
+        mnEndPortion = rLine.mnEndPortion;
+        mnStartPortion = rLine.mnStartPortion;
         return *this;
     }
 
     bool operator==(const EditLine& rLine) const
     {
-        return nStart == rLine.nStart && nEnd == rLine.nEnd && nStartPortion == rLine.nStartPortion
-               && nEndPortion == rLine.nEndPortion;
+        return mnStart == rLine.mnStart && mnEnd == rLine.mnEnd
+               && mnStartPortion == rLine.mnStartPortion && mnEndPortion == rLine.mnEndPortion;
     }
 };
 

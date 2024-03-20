@@ -20,72 +20,77 @@
 
 #include <EditLine.hxx>
 #include <editdoc.hxx>
+#include <algorithm>
 
 EditLine* EditLine::Clone() const
 {
-    EditLine* pL = new EditLine;
-    pL->aPositions = aPositions;
-    pL->nStartPosX      = nStartPosX;
-    pL->nNextLinePosXDiff = nNextLinePosXDiff;
-    pL->nStart          = nStart;
-    pL->nEnd            = nEnd;
-    pL->nStartPortion   = nStartPortion;
-    pL->nEndPortion     = nEndPortion;
-    pL->nHeight         = nHeight;
-    pL->nTxtWidth       = nTxtWidth;
-    pL->nTxtHeight      = nTxtHeight;
-    pL->nMaxAscent      = nMaxAscent;
+    EditLine* pLine = new EditLine;
+    pLine->maPositions = maPositions;
+    pLine->mnStartPosX = mnStartPosX;
+    pLine->mnNextLinePosXDiff = mnNextLinePosXDiff;
+    pLine->mnStart = mnStart;
+    pLine->mnEnd = mnEnd;
+    pLine->mnStartPortion = mnStartPortion;
+    pLine->mnEndPortion = mnEndPortion;
+    pLine->mnHeight = mnHeight;
+    pLine->mnTextWidth = mnTextWidth;
+    pLine->mnTextHeight = mnTextHeight;
+    pLine->mnMaxAscent = mnMaxAscent;
 
-    return pL;
+    return pLine;
 }
 
-Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
+Size EditLine::CalcTextSize(ParaPortion& rParaPortion)
 {
-    Size aSz;
-    Size aTmpSz;
+    Size aSize;
 
-    DBG_ASSERT( rParaPortion.GetTextPortions().Count(), "GetTextSize before CreatePortions !" );
+    DBG_ASSERT(rParaPortion.GetTextPortions().Count(), "GetTextSize before CreatePortions !");
 
-    for ( sal_Int32 n = nStartPortion; n <= nEndPortion; n++ )
+    for (sal_Int32 nPosition = mnStartPortion; nPosition <= mnEndPortion; nPosition++)
     {
-        TextPortion& rPortion = rParaPortion.GetTextPortions()[n];
-        switch ( rPortion.GetKind() )
+        TextPortion& rPortion = rParaPortion.GetTextPortions()[nPosition];
+        switch (rPortion.GetKind())
         {
             case PortionKind::TEXT:
             case PortionKind::FIELD:
             case PortionKind::HYPHENATOR:
             {
-                aTmpSz = rPortion.GetSize();
-                aSz.AdjustWidth(aTmpSz.Width() );
-                if ( aSz.Height() < aTmpSz.Height() )
-                    aSz.setHeight( aTmpSz.Height() );
+                Size aTmpSize = rPortion.GetSize();
+                aSize.AdjustWidth(aTmpSize.Width());
+                if (aSize.Height() < aTmpSize.Height() )
+                    aSize.setHeight( aTmpSize.Height() );
             }
             break;
             case PortionKind::TAB:
             {
-                aSz.AdjustWidth(rPortion.GetSize().Width() );
+                aSize.AdjustWidth(rPortion.GetSize().Width());
             }
             break;
-            case PortionKind::LINEBREAK: break;
+            case PortionKind::LINEBREAK:
+            break;
         }
     }
 
-    SetHeight( static_cast<sal_uInt16>(aSz.Height()) );
-    return aSz;
+    SetHeight(sal_uInt16(aSize.Height()));
+    return aSize;
 }
 
-void EditLine::SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH )
+void EditLine::SetHeight(sal_uInt16 nHeight, sal_uInt16 nTextHeight)
 {
-    nHeight = nH;
-    nTxtHeight = ( nTxtH ? nTxtH : nH );
-}
+    mnHeight = nHeight;
 
-void EditLine::SetStartPosX( sal_Int32 start )
-{
-    if (start > 0)
-        nStartPosX = start;
+    if (nTextHeight != 0)
+        mnTextHeight = nTextHeight;
     else
-        nStartPosX = 0;
+        mnTextHeight = nHeight;
+}
+
+void EditLine::SetStartPosX(sal_Int32 nStart)
+{
+    if (nStart > 0)
+        mnStartPosX = nStart;
+    else
+        mnStartPosX = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
