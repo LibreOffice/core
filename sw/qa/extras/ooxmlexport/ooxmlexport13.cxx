@@ -36,8 +36,10 @@ public:
 };
 
 // TODO: the re-import doesn't work just yet, but that isn't a regression...
-DECLARE_SW_EXPORT_TEST(testFlyInFly, "ooo39250-1-min.rtf", nullptr, Test)
+CPPUNIT_TEST_FIXTURE(Test, testFlyInFly)
 {
+    createSwDoc("ooo39250-1-min.rtf");
+    save(mpFilter);
     // check that anchor of text frame is in other text frame
     uno::Reference<text::XTextContent> const xAnchored(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAnchored.is());
