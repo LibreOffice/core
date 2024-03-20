@@ -614,10 +614,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     if(!(HasCurrentFunction() && ((rReq.GetModifier() & KEY_MOD1) || bCreateDirectly)))
         return;
 
-    // disable interactive drawing for LOK
-    if (bCreateDirectly)
-            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
-
     // get SdOptions
     SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
     sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
@@ -656,6 +652,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     {
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
+        case SID_ATTR_CHAR:
+        case SID_ATTR_CHAR_VERTICAL:
+        case SID_TEXT_FITTOSIZE:
+        case SID_TEXT_FITTOSIZE_VERTICAL:
         {
             // Make FuText the current function.
             SfxUInt16Item aItem (SID_TEXTEDIT, 1);
