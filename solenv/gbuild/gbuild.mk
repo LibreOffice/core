@@ -84,12 +84,6 @@ ifneq ($(strip $(TIMELOG)$(timelog)),)
 gb_TIMELOG := 1
 endif
 
-ifneq ($(ENABLE_DBGUTIL),)
-gb_ENABLE_DBGUTIL := $(true)
-else
-gb_ENABLE_DBGUTIL := $(false)
-endif
-
 gb_ENABLE_SYMBOLS_FOR := $(ENABLE_SYMBOLS_FOR)
 
 # ENABLE_SYMBOLS (presumably from the command line)
@@ -119,7 +113,7 @@ ifeq ($(origin debug),command line)
 gb_ENABLE_SYMBOLS_FOR := all
 endif
 endif
-ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+ifeq ($(ENABLE_DBGUTIL),TRUE)
 gb_DEBUGLEVEL := 1
 endif
 
@@ -230,7 +224,7 @@ gb_GLOBALDEFS := \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
 
-ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+ifeq ($(ENABLE_DBGUTIL),TRUE)
 gb_GLOBALDEFS += -DDBG_UTIL
 
 ifneq ($(COM)-$(MSVC_USE_DEBUG_RUNTIME),MSC-)

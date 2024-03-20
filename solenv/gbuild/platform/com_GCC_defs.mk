@@ -49,7 +49,7 @@ gb_COMPILERDEFS := \
 	$(if $(filter EMSCRIPTEN,$(OS)),-U_FORTIFY_SOURCE) \
 
 # enable debug STL
-ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+ifeq ($(ENABLE_DBGUTIL),TRUE)
 ifneq ($(HAVE_LIBSTDCPP),)
 gb_COMPILERDEFS_STDLIB_DEBUG = -D_GLIBCXX_DEBUG
 else
@@ -202,7 +202,7 @@ endif
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-fexceptions
 
-ifeq ($(gb_ENABLE_DBGUTIL),$(false))
+ifeq ($(ENABLE_DBGUTIL),)
 # Clang doesn't have this option
 ifeq ($(HAVE_GCC_FNO_ENFORCE_EH_SPECS),TRUE)
 gb_LinkTarget_EXCEPTIONFLAGS += \

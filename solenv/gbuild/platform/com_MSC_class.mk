@@ -330,7 +330,7 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 	-manifest
 
 # link.exe in -LIB mode doesn't understand -debug, use it only for EXEs and DLLs
-ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+ifeq ($(ENABLE_DBGUTIL),TRUE)
 # fastlink is faster but pdb files reference .obj files
 # but don't do that for setup_native DLLs: this produces make error 139 in some configurations
 gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = $(if $(filter -U_DLL,$(1)),-debug,-debug:fastlink)
