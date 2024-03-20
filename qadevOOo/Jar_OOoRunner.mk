@@ -8,9 +8,6 @@
 #
 #
 
-#force debug information for OOoRunner
-gb_JavaClassSet_JAVACDEBUG:= -g
-
 $(eval $(call gb_Jar_Jar,OOoRunner))
 
 $(eval $(call gb_Jar_add_manifest_classpath,OOoRunner,\

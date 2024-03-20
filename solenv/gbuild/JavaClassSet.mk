@@ -23,15 +23,11 @@ gb_JavaClassSet_JAVACCOMMAND = $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVACFLAGS) \
     -Xlint:-options \
     -Xlint:unchecked
 
-gb_JavaClassSet_JAVACDEBUG :=
-
 # Enforces correct dependency order for possibly generated stuff:
 # generated sources, jars/classdirs etc.
 gb_JavaClassSet_get_preparation_target = $(WORKDIR)/JavaClassSet/$(1).prepared
 
-ifneq ($(gb_DEBUGLEVEL),0)
 gb_JavaClassSet_JAVACDEBUG := -g
-endif
 
 # $(PACKAGEDIRS) inherited from Jar -- assumption is the last part of the path
 # is top-level java package directory
@@ -46,7 +42,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 			$(filter-out $(JARDEPS) $(T_JAVA9FILES),$(4))) && \
 		$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,$(JAVA_TARGET_VER)) \
-			$(gb_JavaClassSet_JAVACDEBUG) \
+			$(if $(call gb_target_symbols_enabled,$(2)),$(gb_JavaClassSet_JAVACDEBUG)) \
 			-classpath "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
 			-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 			@$$RESPONSEFILE &&) \
@@ -55,7 +51,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 				$(T_JAVA9FILES)) && \
 			$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,9) \
-				$(gb_JavaClassSet_JAVACDEBUG) \
+				$(if $(call gb_target_symbols_enabled,$(2)),$(gb_JavaClassSet_JAVACDEBUG)) \
 				-classpath "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
 				--module-path "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
 				$(if $(T_MODULENAME),--patch-module $(T_MODULENAME)="$(subst $(WHITESPACE),$(gb_CLASSPATHSEP),$(strip $(dir $(PACKAGEDIRS))))") \
