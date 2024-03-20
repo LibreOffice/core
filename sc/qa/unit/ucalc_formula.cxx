@@ -1464,7 +1464,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaAnnotateTrimOnDoubleRefs)
 
         {
             "=SUMPRODUCT(A:A=$C$1; 1-(A:A=$C$1))",
-            ScRange(-1, -1, -1, -1, -1, -1),     // Has no trimmable double-ref.
+            ScRange(0, 0, 0, 0, 1048575, 0),
             0.0,
             false                                // Not in matrix mode.
         },
