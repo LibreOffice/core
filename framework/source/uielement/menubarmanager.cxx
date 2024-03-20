@@ -664,7 +664,16 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                 if ( aTargetURL.Complete.startsWith( ".uno:StyleApply?" ) )
                     xMenuItemDispatch = new StyleDispatcher( m_xFrame, m_xURLTransformer, aTargetURL );
                 else
-                    xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, menuItemHandler->aTargetFrame, 0 );
+                {
+                    try
+                    {
+                        xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, menuItemHandler->aTargetFrame, 0 );
+                    }
+                    catch (uno::Exception const&)
+                    {
+                        TOOLS_WARN_EXCEPTION("fwk.uielement", "MenuBarManager::Activate(): exception from queryDispatch()");
+                    }
+                }
 
                 bool bPopupMenu( false );
                 if ( !menuItemHandler->xPopupMenuController.is() &&
