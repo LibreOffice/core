@@ -946,7 +946,7 @@ void Scene3DHelper::setLightingProperties(const oox::drawingml::Shape3DPropertie
 
 namespace
 /** This struct is used to hold material values for extruded custom shapes. Because we cannot yet
-    render all material propertes MS Office uses, the values are adapted to our current abilities.*/
+    render all material properties MS Office uses, the values are adapted to our current abilities.*/
 {
 struct MaterialValues
 {
