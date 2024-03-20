@@ -359,7 +359,7 @@ public:
         NF_INDEX_TABLE_ENTRIES if it's not a builtin format.
         @see NfIndexTableOffset
      */
-    NfIndexTableOffset GetIndexTableOffset(sal_uInt32 nFormat) const;
+    static NfIndexTableOffset GetIndexTableOffset(sal_uInt32 nFormat);
 
     /** Set evaluation type and order of input date strings
         @see NfEvalDateFormat
