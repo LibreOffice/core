@@ -492,7 +492,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_material_highlight)
 {
     // The file contains six shapes with same geometry and fill and line color. The scenes use the
     // camera 'orthographicFront' and the lightRig 'twoPt'. The test looks at an area of highlight
-    // and at an area outside the hightlight.
+    // and at an area outside the highlight.
 
     loadFromFile(u"Scene3d_material_highlight.pptx");
 
