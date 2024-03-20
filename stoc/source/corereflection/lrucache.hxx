@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_STOC_SOURCE_COREREFLECTION_LRUCACHE_HXX
-#define INCLUDED_STOC_SOURCE_COREREFLECTION_LRUCACHE_HXX
+
+#pragma once
 
 // __CACHE_DIAGNOSE forces cache size to 4 and works only for OUString keys
 //  #define __CACHE_DIAGNOSE 1
@@ -202,8 +202,5 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::clear()
 */
 typedef LRU_Cache< OUString, css::uno::Any, OUStringHash >
     LRU_CacheAnyByOUString;
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
