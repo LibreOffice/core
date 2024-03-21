@@ -375,7 +375,7 @@ void ScTabView::SetScrollBar( ScrollAdaptor& rScroll, tools::Long nRangeMax, too
     //   drag in unexpected locations to move the scrollbar thumb
     //   in the desired direction
     // - Repeatedly dragging the scrollbar thumb leftward can only
-    //   move no highter than the R, S, or T columns
+    //   move no higher than the R, S, or T columns
     rScroll.EnableRTL( false );
 
     // Related: tdf#93352 swap arrows if layout is RTL
