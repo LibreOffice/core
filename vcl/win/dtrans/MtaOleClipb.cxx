@@ -707,25 +707,32 @@ unsigned __stdcall CMtaOleClipboard::clipboardChangedNotifierThreadProc(void* pP
         MsgWaitForMultipleObjects(2, pInst->m_hClipboardChangedNotifierEvents, false, INFINITE,
                                   QS_ALLINPUT | QS_ALLPOSTMESSAGE);
 
-        std::unique_lock aGuard2( pInst->m_ClipboardChangedEventCountMutex );
-
-        if ( pInst->m_ClipboardChangedEventCount > 0 )
+        bool hadEvents;
         {
-            pInst->m_ClipboardChangedEventCount--;
-            if ( 0 == pInst->m_ClipboardChangedEventCount )
-                ResetEvent( pInst->m_hClipboardChangedEvent );
+            std::unique_lock aGuard2(pInst->m_ClipboardChangedEventCountMutex);
+            hadEvents = pInst->m_ClipboardChangedEventCount > 0;
+            if (hadEvents)
+            {
+                pInst->m_ClipboardChangedEventCount--;
+                if (0 == pInst->m_ClipboardChangedEventCount)
+                    ResetEvent(pInst->m_hClipboardChangedEvent);
+            }
+        }
 
-            aGuard2.unlock( );
-
-            // nobody should touch m_pfncClipViewerCallback while we do
-            std::unique_lock aClipViewerGuard( pInst->m_pfncClipViewerCallbackMutex );
+        if (hadEvents)
+        {
+            LPFNC_CLIPVIEWER_CALLBACK_t pClipViewerCallback;
+            {
+                // nobody should touch m_pfncClipViewerCallback while we do
+                // but don't hold the mutex while calling the callback itself: it could deadlock
+                std::unique_lock aClipViewerGuard(pInst->m_pfncClipViewerCallbackMutex);
+                pClipViewerCallback = pInst->m_pfncClipViewerCallback;
+            }
 
             // notify all clipboard listener
-            if ( pInst->m_pfncClipViewerCallback )
-                pInst->m_pfncClipViewerCallback( );
+            if (pClipViewerCallback)
+                pClipViewerCallback();
         }
-        else
-            aGuard2.unlock( );
     }
 
     return 0;
