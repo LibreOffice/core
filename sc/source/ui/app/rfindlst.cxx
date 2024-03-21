@@ -20,18 +20,25 @@
 #include <rfindlst.hxx>
 #include <tools/debug.hxx>
 #include <utility>
+#include <svtools/colorcfg.hxx>
+#include <scmod.hxx>
 
 #define SC_RANGECOLORS  8
 
 const Color aColNames[SC_RANGECOLORS] =
     { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_GREEN,
         COL_BLUE, COL_RED, COL_MAGENTA, COL_BROWN };
+const Color aDarkColNames[SC_RANGECOLORS] =
+    { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_GREEN,
+        Color(0xb4c7dc), Color(0xffa6a6), Color(0xffb66c), Color(0xafd095) }; //light blue/red/orange/green 3
+static bool bIsDark;
 
 ScRangeFindList::ScRangeFindList(OUString aName) :
     aDocName(std::move( aName )),
     bHidden( false ),
     nIndexColor( 0 )
 {
+    bIsDark = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
 }
 
 Color ScRangeFindList::Insert( const ScRangeFindData &rNew )
@@ -48,7 +55,8 @@ Color ScRangeFindList::Insert( const ScRangeFindData &rNew )
 
 Color ScRangeFindList::GetColorName( const size_t nIndex )
 {
-    return aColNames[nIndex % SC_RANGECOLORS];
+    return bIsDark ? aDarkColNames[nIndex % SC_RANGECOLORS]
+                   : aColNames[nIndex % SC_RANGECOLORS];
 }
 
 Color ScRangeFindList::FindColor( const ScRange& rRef, const size_t nIndex )
