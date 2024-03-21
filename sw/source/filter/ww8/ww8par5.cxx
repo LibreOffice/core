@@ -58,6 +58,7 @@
 #include <IDocumentState.hxx>
 #include <flddat.hxx>
 #include <docufld.hxx>
+#include <usrfld.hxx>
 #include <reffld.hxx>
 #include <IMark.hxx>
 #include <expfld.hxx>
@@ -1831,12 +1832,29 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
         aData = aData.replaceAll("\"", "");
     }
 
-    const auto pType(static_cast<SwDocInfoFieldType*>(
-        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)));
-    SwDocInfoField aField(pType, nSub|nReg, aData, GetFieldResult(pF), nFormat);
-    if (bDateTime)
-        ForceFieldLanguage(aField, nLang);
-    m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
+    bool bDone = false;
+    if (DI_CUSTOM == nSub)
+    {
+        const auto pType(static_cast<SwUserFieldType*>(
+            m_rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, aData, false)));
+        if (pType)
+        {
+            SwUserField aField(pType, 0, nFormat);
+            if (bDateTime)
+                ForceFieldLanguage(aField, nLang);
+            m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
+            bDone = true;
+        }
+    }
+    if (!bDone)
+    {
+        const auto pType(static_cast<SwDocInfoFieldType*>(
+            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)));
+        SwDocInfoField aField(pType, nSub|nReg, aData, GetFieldResult(pF), nFormat);
+        if (bDateTime)
+            ForceFieldLanguage(aField, nLang);
+        m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
+    }
 
     return eF_ResT::OK;
 }

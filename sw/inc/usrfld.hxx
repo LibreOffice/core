@@ -102,7 +102,7 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
  * Tracks the number format and the language, conversion between the float and
  * string representation is independent from the system locale.
  */
-class SwUserField final : public SwValueField
+class SW_DLLPUBLIC SwUserField final : public SwValueField
 {
     sal_uInt16  m_nSubType;
 
