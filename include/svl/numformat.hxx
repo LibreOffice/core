@@ -682,6 +682,12 @@ private:
     // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
     SVL_DLLPRIVATE void ResetDefaultSystemCurrency();
 
+    // Replace the SYSTEM language/country format codes. Called upon change of
+    // the user configurable locale.
+    // Old compatibility codes are replaced, user defined are converted, and
+    // new format codes are appended.
+    SVL_DLLPRIVATE void ReplaceSystemCL(LanguageType eOldLanguage);
+
     // own mutex, may also be used by internal class SvNumberFormatterRegistry_Impl
     static ::osl::Mutex& GetGlobalMutex();
     ::osl::Mutex& GetInstanceMutex() const { return m_aMutex; }
@@ -690,12 +696,6 @@ public:
     // Called by SvNumberFormatterRegistry_Impl::Notify if the system locale's
     // date acceptance patterns change.
     void InvalidateDateAcceptancePatterns();
-
-    // Replace the SYSTEM language/country format codes. Called upon change of
-    // the user configurable locale.
-    // Old compatibility codes are replaced, user defined are converted, and
-    // new format codes are appended.
-    void ReplaceSystemCL(LanguageType eOldLanguage);
 
     const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
 
