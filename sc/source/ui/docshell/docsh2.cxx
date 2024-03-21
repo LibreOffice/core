@@ -127,7 +127,7 @@ void ScDocShell::InitItems()
     if (!m_pDocument->GetForbiddenCharacters())
     {
         // set forbidden characters if necessary
-        const uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
+        const uno::Sequence<lang::Locale> aLocales = SvxAsianConfig::GetStartEndCharLocales();
         if (aLocales.hasElements())
         {
             std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenTable(
@@ -136,7 +136,7 @@ void ScDocShell::InitItems()
             for (const lang::Locale& rLocale : aLocales)
             {
                 i18n::ForbiddenCharacters aForbidden;
-                aAsian.GetStartEndChars( rLocale, aForbidden.beginLine, aForbidden.endLine );
+                SvxAsianConfig::GetStartEndChars( rLocale, aForbidden.beginLine, aForbidden.endLine );
                 LanguageType eLang = LanguageTag::convertToLanguageType(rLocale);
 
                 xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
@@ -149,13 +149,13 @@ void ScDocShell::InitItems()
     if ( !m_pDocument->IsValidAsianCompression() )
     {
         // set compression mode from configuration if not already set (e.g. XML import)
-        m_pDocument->SetAsianCompression( aAsian.GetCharDistanceCompression() );
+        m_pDocument->SetAsianCompression( SvxAsianConfig::GetCharDistanceCompression() );
     }
 
     if ( !m_pDocument->IsValidAsianKerning() )
     {
         // set asian punctuation kerning from configuration if not already set (e.g. XML import)
-        m_pDocument->SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
+        m_pDocument->SetAsianKerning( !SvxAsianConfig::IsKerningWesternTextOnly() );    // reversed
     }
 }
 

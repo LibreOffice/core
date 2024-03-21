@@ -1578,13 +1578,13 @@ static sal_uInt8 lcl_TranslateMetric(const SfxItemPropertyMapEntry& rEntry, SwDo
     return rEntry.nMemberId;
 }
 template<>
-void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& /*rPropSet*/, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     // default ItemSet handling
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
     SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
     aSet.SetParent(&rStyleSet);
-    rPropSet.setPropertyValue(rEntry, rValue, aSet);
+    SfxItemPropertySet::setPropertyValue(rEntry, rValue, aSet);
     rStyleSet.Put(aSet);
 }
 template<>
@@ -1667,7 +1667,7 @@ void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertyMapE
     rStyleSet.Put(XFillBmpTileItem(drawing::BitmapMode_REPEAT == eMode));
 }
 template<>
-void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& /*rPropSet*/, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     if (!rValue.has<OUString>() && !rValue.has<sal_Int32>())
         throw lang::IllegalArgumentException();
@@ -1703,7 +1703,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
     SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
     aSet.SetParent(&rStyleSet);
-    rPropSet.setPropertyValue(rEntry, uno::Any(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
+    SfxItemPropertySet::setPropertyValue(rEntry, uno::Any(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
     rStyleSet.Put(aSet);
 }
 template<>
@@ -2142,12 +2142,12 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItem
     return aRet;
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& /*rPropSet*/, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     SfxItemSet& rSet = rBase.GetItemSet();
     uno::Any aValue;
-    rPropSet.getPropertyValue(rEntry, rSet, aValue);
+    SfxItemPropertySet::getPropertyValue(rEntry, rSet, aValue);
     sal_Int8 nBin(aValue.get<sal_Int8>());
     if(nBin == -1)
         return uno::Any(OUString("[From printer settings]"));
@@ -2311,12 +2311,12 @@ uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemProperty
     return uno::Any(drawing::BitmapMode_NO_REPEAT);
 }
 template<>
-uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
+uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& /*rPropSet*/, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     SfxItemSet& rSet = rBase.GetItemSet();
     uno::Any aResult;
-    rPropSet.getPropertyValue(rEntry, rSet, aResult);
+    SfxItemPropertySet::getPropertyValue(rEntry, rSet, aResult);
     //
     // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
     if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && aResult.getValueType() == cppu::UnoType<sal_Int32>::get())
@@ -2555,7 +2555,7 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
                 }
                 else
                 {
-                    pStates[i] = pPropSet->getPropertyState(*pEntry, *pSourceSet);
+                    pStates[i] = SfxItemPropertySet::getPropertyState(*pEntry, *pSourceSet);
                 }
             }
             break;
@@ -2577,7 +2577,7 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
             break;
             default:
             {
-                pStates[i] = pPropSet->getPropertyState(*pEntry, *pSourceSet);
+                pStates[i] = SfxItemPropertySet::getPropertyState(*pEntry, *pSourceSet);
 
                 if(SfxStyleFamily::Page == m_rEntry.family() && SID_ATTR_PAGE_SIZE == pEntry->nWID && beans::PropertyState_DIRECT_VALUE == pStates[i])
                 {
@@ -4054,7 +4054,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 
         if(!bDone)
         {
-            pPropSet->getPropertyValue( *pEntry, *mpSet, aTarget );
+            SfxItemPropertySet::getPropertyValue( *pEntry, *mpSet, aTarget );
         }
 
         if(bTakeCareOfDrawingLayerFillStyle)
@@ -4244,7 +4244,7 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
 
         if(!bDone)
         {
-            pStates[i] = pPropSet->getPropertyState(*pEntry, *mpSet );
+            pStates[i] = SfxItemPropertySet::getPropertyState(*pEntry, *mpSet );
         }
     }
 

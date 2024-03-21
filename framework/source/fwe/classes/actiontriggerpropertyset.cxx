@@ -264,6 +264,7 @@ Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescriptor(
     };
 }
 
+// static
 bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const   OUString&    sCurrentValue   ,
     const   Any&        aNewValue       ,
@@ -298,6 +299,7 @@ bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     return bReturn;
 }
 
+// static
 bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const Reference< XBitmap >&  aCurrentValue   ,
     const Any&                  aNewValue       ,
@@ -332,6 +334,7 @@ bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     return bReturn;
 }
 
+// static
 bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const Reference< XInterface >&   aCurrentValue   ,
     const Any&                      aNewValue       ,

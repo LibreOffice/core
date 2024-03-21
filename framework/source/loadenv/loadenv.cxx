@@ -1433,7 +1433,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     return xResult;
 }
 
-bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const
+// static
+bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     css::uno::Reference< css::document::XActionLockable > xLock(xFrame, css::uno::UNO_QUERY);
 
@@ -1703,6 +1704,7 @@ bool LoadEnv::shouldFocusAndToFront() const
            && officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get();
 }
 
+// static
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                 bool bForceToFront)
 {

@@ -115,7 +115,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
 
             @return sal_True if command was executed successfully; sal_False otherwise.
          */
-        bool impl_execute(const OUString&                       sCommand      ,
+        static bool impl_execute(const OUString&                       sCommand      ,
                                 const css::uno::Sequence< OUString >& lArguments    ,
                                       bool                             bCheckExitCode);
 };

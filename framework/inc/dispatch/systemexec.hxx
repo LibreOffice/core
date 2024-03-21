@@ -89,7 +89,7 @@ class SystemExec final :  public  ::cppu::WeakImplHelper<
     /* internal */
     private:
 
-        void impl_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
+        static void impl_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                        const sal_Int16                                                   nState   );
 
 };      //  class SystemExec

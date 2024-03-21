@@ -160,12 +160,12 @@ private:
     void fillSubstVector( const css::uno::Reference< css::container::XNameAccess >& rFont,
                           const OUString& rType,
                           std::vector< OUString >& rSubstVector ) const;
-    FontWeight getSubstWeight( const css::uno::Reference< css::container::XNameAccess >& rFont,
-                          const OUString& rType ) const;
-    FontWidth getSubstWidth( const css::uno::Reference< css::container::XNameAccess >& rFont,
-                             const OUString& rType ) const;
-    ImplFontAttrs getSubstType( const css::uno::Reference< css::container::XNameAccess >& rFont,
-                                const OUString& rType ) const;
+    static FontWeight getSubstWeight( const css::uno::Reference< css::container::XNameAccess >& rFont,
+                          const OUString& rType );
+    static FontWidth getSubstWidth( const css::uno::Reference< css::container::XNameAccess >& rFont,
+                             const OUString& rType );
+    static ImplFontAttrs getSubstType( const css::uno::Reference< css::container::XNameAccess >& rFont,
+                                const OUString& rType );
     void readLocaleSubst( const OUString& rBcp47 ) const;
 public:
     FontSubstConfiguration();

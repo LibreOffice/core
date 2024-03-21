@@ -941,7 +941,7 @@ private:
         Note: This method can't fail. Flushing of config entries is an
               optional feature. Errors can be ignored.
      */
-    void impl_flushALLConfigChanges();
+    static void impl_flushALLConfigChanges();
 
     // TODO document me
     AutoRecovery::EFailureSafeResult implts_copyFile(const OUString& sSource    ,
@@ -1006,11 +1006,11 @@ private:
         @param  rArgs
                 is used to set the new created progress as parameter on these set.
      */
-    void impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
+    static void impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                       utl::MediaDescriptor&             rArgs    ,
                                 const css::uno::Reference< css::frame::XFrame >& xNewFrame);
 
-    void impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
+    static void impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                    utl::MediaDescriptor&             rArgs    ,
                              const css::uno::Reference< css::frame::XFrame >& xNewFrame);
 
@@ -4183,6 +4183,7 @@ void AutoRecovery::impl_showFullDiscError()
     xBox->run();
 }
 
+// static
 void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                                 utl::MediaDescriptor&             rArgs    ,
                                           const css::uno::Reference< css::frame::XFrame >& xNewFrame)
@@ -4248,6 +4249,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     rArgs.createItemIfMissing(utl::MediaDescriptor::PROP_STATUSINDICATOR, xInternalProgress);
 }
 
+// static
 void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                              utl::MediaDescriptor&             rArgs    ,
                                        const css::uno::Reference< css::frame::XFrame >& xNewFrame)
@@ -4282,6 +4284,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
     }
 }
 
+// static
 void AutoRecovery::impl_flushALLConfigChanges()
 {
     try

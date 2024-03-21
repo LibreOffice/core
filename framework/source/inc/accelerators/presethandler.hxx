@@ -299,7 +299,7 @@ class PresetHandler
 
             @return An opened storage in case method was successful - null otherwise.
          */
-        css::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const OUString& sPath ,
+        static css::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                       sal_Int32        eMode ,
                                                                                       bool         bShare);
 
@@ -325,7 +325,7 @@ class PresetHandler
             @return An iterator, which points directly into lLocalizedValue list.
                     As a negative result the special iterator lLocalizedValues.end() will be returned.
          */
-        ::std::vector< OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< OUString >& lLocalizedValues,
+        static ::std::vector< OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< OUString >& lLocalizedValues,
                                                                                                OUString&             rLanguageTag         ,
                                                                                                bool                          bAllowFallbacks );
 
@@ -356,7 +356,7 @@ class PresetHandler
 
             @return An opened storage in case method was successful - null otherwise.
          */
-        css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(OUString&      sPath         ,
+        static css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(OUString&      sPath         ,
                                                                                          sal_Int32             eMode         ,
                                                                                          bool              bShare        ,
                                                                                          OUString&             rLanguageTag  ,
@@ -370,7 +370,7 @@ class PresetHandler
             @return [vector< string >]
                     a list of folder names.
          */
-        ::std::vector< OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
+        static ::std::vector< OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
 };
 
 } // namespace framework

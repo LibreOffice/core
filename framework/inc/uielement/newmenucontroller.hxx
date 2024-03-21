@@ -57,7 +57,7 @@ namespace framework
             virtual void impl_setPopupMenu() override;
 
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
-            void retrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
+            static void retrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                      const css::uno::Sequence< OUString >& rCommands,
                                                      std::vector< vcl::KeyCode >& aMenuShortCuts );
             void setAccelerators();

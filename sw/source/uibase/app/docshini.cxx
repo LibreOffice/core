@@ -109,18 +109,17 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         const bool bFuzzing = comphelper::IsFuzzing();
         if (!bFuzzing)
         {
-            SvxAsianConfig aAsian;
-            const Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
+            const Sequence<lang::Locale> aLocales = SvxAsianConfig::GetStartEndCharLocales();
             for(const lang::Locale& rLocale : aLocales)
             {
                 ForbiddenCharacters aForbidden;
-                aAsian.GetStartEndChars( rLocale, aForbidden.beginLine, aForbidden.endLine);
+                SvxAsianConfig::GetStartEndChars( rLocale, aForbidden.beginLine, aForbidden.endLine);
                 LanguageType  eLang = LanguageTag::convertToLanguageType(rLocale);
                 m_xDoc->getIDocumentSettingAccess().setForbiddenCharacters( eLang, aForbidden);
             }
             m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION,
-                  !aAsian.IsKerningWesternTextOnly());
-            m_xDoc->getIDocumentSettingAccess().setCharacterCompressionType(aAsian.GetCharDistanceCompression());
+                  !SvxAsianConfig::IsKerningWesternTextOnly());
+            m_xDoc->getIDocumentSettingAccess().setCharacterCompressionType(SvxAsianConfig::GetCharDistanceCompression());
             m_xDoc->getIDocumentDeviceAccess().setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
         }
 

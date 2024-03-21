@@ -619,6 +619,7 @@ void PresetHandler::removeStorageListener(XMLBasedAcceleratorConfiguration* pLis
     }
 }
 
+// static
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                              sal_Int32        eMode ,
                                                                                              bool         bShare)
@@ -638,6 +639,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     return xPath;
 }
 
+// static
 ::std::vector< OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
         const ::std::vector< OUString >& lLocalizedValues,
         OUString& rLanguageTag,
@@ -662,6 +664,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     return pFound;
 }
 
+// static
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(
         OUString&      sPath         ,
         sal_Int32             eMode         ,
@@ -699,6 +702,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     return xLocalePath;
 }
 
+// static
 ::std::vector< OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
 {
     if (!xFolder.is())

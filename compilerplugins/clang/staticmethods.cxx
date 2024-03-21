@@ -111,16 +111,6 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (cdc.Class("BitmapInfoAccess").GlobalNamespace()) {
         return true;
     }
-    // the unotools and svl config code stuff is doing weird stuff with a reference-counted statically allocated pImpl class
-    if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/unotools/")) {
-        return true;
-    }
-    if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/svl/")) {
-        return true;
-    }
-    if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/framework/") || loplugin::hasPathnamePrefix(aFilename, SRCDIR "/framework/")) {
-        return true;
-    }
     // there is some odd stuff happening here I don't fully understand, leave it for now
     if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/canvas/") || loplugin::hasPathnamePrefix(aFilename, SRCDIR "/canvas/")) {
         return true;
@@ -145,7 +135,23 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     {
         return true;
     }
+
     auto fdc = loplugin::DeclCheck(pCXXMethodDecl);
+
+    // somebody has work-in-progress here
+    if ((fdc.Function("getCurrZeroChar")
+         .Class("LocaleDataWrapper").GlobalNamespace()))
+        return true;
+
+    // the unotools and svl config code stuff is doing weird stuff with a reference-counted statically allocated pImpl class
+    if ((fdc.Function("getByName2")
+         .Class("GlobalEventConfig").GlobalNamespace()))
+        return true;
+    if ((cdc.Class("SvtLinguConfig").GlobalNamespace()))
+        return true;
+    if ((cdc.Class("SvtModuleOptions").GlobalNamespace()))
+        return true;
+
     // only empty on Linux, not on windows
     if ((fdc.Function("GetVisualRepresentationInNativeFormat_Impl")
          .Class("OleEmbeddedObject").GlobalNamespace())

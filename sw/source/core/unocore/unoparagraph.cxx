@@ -173,10 +173,10 @@ public:
             const uno::Sequence< OUString >& rPropertyNames);
 
     /// @throws uno::RuntimeException
-    void GetSinglePropertyValue_Impl(
+    static void GetSinglePropertyValue_Impl(
         const SfxItemPropertyMapEntry& rEntry,
         const SfxItemSet& rSet,
-        uno::Any& rAny ) const;
+        uno::Any& rAny );
 
     /// @throws uno::RuntimeException
     uno::Sequence< beans::GetDirectPropertyTolerantResult >
@@ -428,10 +428,11 @@ void SAL_CALL SwXParagraph::setPropertyValues(
 }
 
 // Support for DrawingLayer FillStyles for GetPropertyValue() usages
+// static
 void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
     const SfxItemPropertyMapEntry& rEntry,
     const SfxItemSet& rSet,
-    uno::Any& rAny ) const
+    uno::Any& rAny )
 {
     bool bDone(false);
 
@@ -474,7 +475,7 @@ void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
         return;
 
     // fallback to standard get value implementation used before this helper was created
-    m_rPropSet.getPropertyValue(rEntry, rSet, rAny);
+    SfxItemPropertySet::getPropertyValue(rEntry, rSet, rAny);
 
     if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && rEntry.aType != rAny.getValueType())
     {

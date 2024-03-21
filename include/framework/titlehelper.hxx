@@ -132,16 +132,16 @@ class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final : private ::cppu::B
         void impl_startListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame);
         void impl_updateListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame);
 
-        void impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
+        static void impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
                                         const css::uno::Reference< css::uno::XInterface >& xComponent);
-        void impl_appendProductName (OUStringBuffer& sTitle);
+        static void impl_appendProductName (OUStringBuffer& sTitle);
         void impl_appendModuleName (OUStringBuffer& sTitle);
-        void impl_appendDebugVersion (OUStringBuffer& sTitle);
-        void impl_appendSafeMode (OUStringBuffer& sTitle);
+        static void impl_appendDebugVersion (OUStringBuffer& sTitle);
+        static void impl_appendSafeMode (OUStringBuffer& sTitle);
 
         void impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle);
 
-        OUString impl_convertURL2Title(std::u16string_view sURL);
+        static OUString impl_convertURL2Title(std::u16string_view sURL);
 
 
     // member

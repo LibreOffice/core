@@ -87,6 +87,7 @@ void AcceleratorConfigurationWriter::flush()
     xExtendedCFG->endDocument();
 }
 
+// static
 void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
                                                                  const OUString&                                        sCommand,
                                                                  const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig )

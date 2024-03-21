@@ -117,7 +117,7 @@ class KeyMapping
             @return [boolean]
                     sal_True if conversion was successful.
           */
-        bool impl_st_interpretIdentifierAsPureKeyCode(std::u16string_view sIdentifier,
+        static bool impl_st_interpretIdentifierAsPureKeyCode(std::u16string_view sIdentifier,
                                                                 sal_uInt16&      rCode      );
 };
 

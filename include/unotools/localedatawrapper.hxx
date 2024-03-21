@@ -177,7 +177,7 @@ public:
     static const std::vector< LanguageType > & getInstalledLanguageTypes();
 
     /// maps the LocaleData string to the International enum
-    MeasurementSystem   mapMeasurementStringToEnum( std::u16string_view rMS ) const;
+    static MeasurementSystem mapMeasurementStringToEnum( std::u16string_view rMS );
 
     /// Convenience method to obtain the default calendar.
     const std::shared_ptr< css::i18n::Calendar2 >& getDefaultCalendar() const;

@@ -71,7 +71,8 @@ void SvxAsianConfig::Commit() {
     impl_->batch->commit();
 }
 
-bool SvxAsianConfig::IsKerningWesternTextOnly() const {
+// static
+bool SvxAsianConfig::IsKerningWesternTextOnly() {
     return
         officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::get();
 }
@@ -81,7 +82,8 @@ void SvxAsianConfig::SetKerningWesternTextOnly(bool value) {
         value, impl_->batch);
 }
 
-CharCompressType SvxAsianConfig::GetCharDistanceCompression() const {
+// static
+CharCompressType SvxAsianConfig::GetCharDistanceCompression() {
     return static_cast<CharCompressType>(officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get());
 }
 
@@ -90,8 +92,8 @@ void SvxAsianConfig::SetCharDistanceCompression(CharCompressType value) {
         static_cast<sal_uInt16>(value), impl_->batch);
 }
 
+// static
 css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
-    const
 {
     const css::uno::Sequence< OUString > ns(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get()->
@@ -103,9 +105,10 @@ css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
     return ls;
 }
 
+// static
 bool SvxAsianConfig::GetStartEndChars(
     css::lang::Locale const & locale, OUString & startChars,
-    OUString & endChars) const
+    OUString & endChars)
 {
     css::uno::Reference< css::container::XNameAccess > set(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get());

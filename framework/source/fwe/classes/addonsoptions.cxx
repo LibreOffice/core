@@ -295,16 +295,16 @@ class AddonsOptions_Impl : public ConfigItem
         void                 ReadMergeStatusbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeStatusbar );
         bool                 ReadMenuItem( std::u16string_view aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu = false );
         bool                 ReadPopupMenu( std::u16string_view aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
-        void                 AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
+        static void          AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
         bool                 ReadToolBarItem( std::u16string_view aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
         bool                 ReadNotebookBarItem( std::u16string_view aNotebookBarItemNodeName, Sequence< PropertyValue >& aNotebookBarItem );
 
         bool                 ReadStatusBarItem( std::u16string_view aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
         std::unique_ptr<ImageEntry> ReadImageData( std::u16string_view aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
-        BitmapEx             ReadImageFromURL( const OUString& aURL );
+        static BitmapEx      ReadImageFromURL( const OUString& aURL );
         bool                 HasAssociatedImages( const OUString& aURL );
-        void                 SubstituteVariables( OUString& aURL );
+        static void          SubstituteVariables( OUString& aURL );
 
         void                 ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
         OUString             GeneratePrefixURL();
@@ -319,7 +319,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         Sequence< OUString > GetPropertyNamesStatusbarItem( std::u16string_view aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesImages( std::u16string_view aPropertyRootNode ) const;
-        bool                 CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
+        static bool CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq );
 
         DECL_LINK(NotifyEvent, void*, void);
 
@@ -1381,6 +1381,7 @@ bool AddonsOptions_Impl::ReadPopupMenu( std::u16string_view aPopupMenuNodeName, 
     return bResult;
 }
 
+// static
 void AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
 {
     Sequence< Sequence< PropertyValue > > aTargetSubMenuSeq;
@@ -1547,12 +1548,14 @@ bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
     return ( pIter != m_aImageManager.end() );
 }
 
+// static
 void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 {
     aURL = comphelper::getExpandedUri(
         comphelper::getProcessComponentContext(), aURL);
 }
 
+// static
 BitmapEx AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
 {
     BitmapEx aImage;
@@ -1651,7 +1654,8 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
     return pEntry;
 }
 
-bool AddonsOptions_Impl::CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
+// static
+bool AddonsOptions_Impl::CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq )
 {
     bool bResult = false;
 

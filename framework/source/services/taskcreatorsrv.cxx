@@ -90,7 +90,7 @@ private:
                                                                            const css::awt::Rectangle&                      aPosSize      ,
                                                                                  bool                                  bTopWindow    );
 
-    void implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const;
+    static void implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow);
 
     css::uno::Reference< css::frame::XFrame2 > implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame     ,
                                                                   const css::uno::Reference< css::awt::XWindow >&  xContainerWindow ,
@@ -99,9 +99,9 @@ private:
     void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
     void implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
 
-    void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
+    static void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
 
-    OUString impl_filterNames( const OUString& sName );
+    static OUString impl_filterNames( const OUString& sName );
 };
 
 TaskCreatorService::TaskCreatorService(css::uno::Reference< css::uno::XComponentContext >  xContext)
@@ -203,7 +203,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     return css::uno::Reference< css::uno::XInterface >(xFrame, css::uno::UNO_QUERY_THROW);
 }
 
-void TaskCreatorService::implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const
+// static
+void TaskCreatorService::implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
@@ -317,6 +318,7 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
     pPersistentStateHandler->initialize(lInitData);
 }
 
+// static
 void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
     // Special feature: It's allowed for frames using a top level window only!
@@ -336,6 +338,7 @@ void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Referen
     pHelper->initialize(lInitData);
 }
 
+// static
 OUString TaskCreatorService::impl_filterNames( const OUString& sName )
 {
     OUString sFiltered;

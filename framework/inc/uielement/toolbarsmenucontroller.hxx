@@ -71,7 +71,7 @@ namespace framework
             virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
-            css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
+            static css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
             css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
             void addCommand( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
 

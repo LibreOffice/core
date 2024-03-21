@@ -208,7 +208,7 @@ public:
                     const css::lang::Locale& rLocale );
 
     /* replace back references in the replace string by the sub expressions from the search result */
-    void ReplaceBackReferences( OUString& rReplaceStr, std::u16string_view rStr, const css::util::SearchResult& rResult ) const;
+    static void ReplaceBackReferences( OUString& rReplaceStr, std::u16string_view rStr, const css::util::SearchResult& rResult );
 };
 
 }   // namespace utl

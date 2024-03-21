@@ -2071,7 +2071,7 @@ static void lcl_SetCellProperty( const SfxItemPropertyMapEntry& rEntry, const un
             break;
         default:
             {
-                lcl_GetCellsPropertySet()->setPropertyValue(rEntry, rValue, rSet);
+                SfxItemPropertySet::setPropertyValue(rEntry, rValue, rSet);
             }
     }
 }
@@ -2343,7 +2343,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                     }
                     break;
                 default:
-                    pPropSet->getPropertyValue(*pEntry, *pDataSet, rAny);
+                    SfxItemPropertySet::getPropertyValue(*pEntry, *pDataSet, rAny);
             }
         }
     }

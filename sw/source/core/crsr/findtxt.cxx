@@ -1155,7 +1155,7 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
                 aResult.subRegExpressions = 1;
                 aResult.startOffset = { 0 };
                 aResult.endOffset = { aStr.getLength() };
-                aSText.ReplaceBackReferences( aReplaceStr, aStr, aResult );
+                utl::TextSearch::ReplaceBackReferences( aReplaceStr, aStr, aResult );
                 xRet = aReplaceStr;
             }
             else
@@ -1177,7 +1177,7 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
                                                    nStart, nEnd, aFltArr, false, false);
                 if (aSText.SearchForward(aStr, &nStart.GetAnyIndex(), &nEnd.GetAnyIndex(), &aResult))
                 {
-                    aSText.ReplaceBackReferences( aReplaceStr, aStr, aResult );
+                    utl::TextSearch::ReplaceBackReferences( aReplaceStr, aStr, aResult );
                     xRet = aReplaceStr;
                 }
             }

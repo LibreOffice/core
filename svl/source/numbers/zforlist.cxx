@@ -4917,17 +4917,20 @@ const NfKeywordTable & SvNumberFormatter::GetKeywords( sal_uInt32 nKey )
     return pFormatScanner->GetKeywords();
 }
 
-const NfKeywordTable & SvNumberFormatter::GetEnglishKeywords() const
+// static
+const NfKeywordTable & SvNumberFormatter::GetEnglishKeywords()
 {
     return ImpSvNumberformatScan::GetEnglishKeywords();
 }
 
-const std::vector<Color> & SvNumberFormatter::GetStandardColors() const
+// static
+const std::vector<Color> & SvNumberFormatter::GetStandardColors()
 {
     return ImpSvNumberformatScan::GetStandardColors();
 }
 
-size_t SvNumberFormatter::GetMaxDefaultColors() const
+// static
+size_t SvNumberFormatter::GetMaxDefaultColors()
 {
     return ImpSvNumberformatScan::GetMaxDefaultColors();
 }

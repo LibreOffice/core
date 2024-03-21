@@ -385,7 +385,7 @@ void SwXTextPortion::GetPropertyValue(
                     = pTextNode->GetAttr(RES_PARATR_LIST_AUTOFMT).GetStyleHandle();
                 if (pListSet)
                 {
-                    m_pPropSet->getPropertyValue(rEntry, *pListSet, rVal);
+                    SfxItemPropertySet::getPropertyValue(rEntry, *pListSet, rVal);
                     bDone = true;
                 }
             }
@@ -404,7 +404,7 @@ void SwXTextPortion::GetPropertyValue(
                                 RES_UNKNOWNATR_CONTAINER>>(pUnoCursor->GetDoc().GetAttrPool());
                     SwUnoCursorHelper::GetCursorAttr(*pUnoCursor, *pSet);
                 }
-                m_pPropSet->getPropertyValue(rEntry, *pSet, rVal);
+                SfxItemPropertySet::getPropertyValue(rEntry, *pSet, rVal);
             }
     }
 }

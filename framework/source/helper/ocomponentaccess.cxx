@@ -103,7 +103,7 @@ sal_Bool SAL_CALL OComponentAccess::hasElements()
     return bReturn;
 }
 
-
+// static
 void OComponentAccess::impl_collectAllChildComponents(  const css::uno::Reference< XFramesSupplier >&         xNode           ,
                                                                std::vector< css::uno::Reference< XComponent > >& seqComponents   )
 {
@@ -131,7 +131,8 @@ void OComponentAccess::impl_collectAllChildComponents(  const css::uno::Referenc
     // ... otherwise break a recursive path and go back at current stack!
 }
 
-css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame ) const
+// static
+css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame )
 {
     // Set default return value, if method failed.
     css::uno::Reference< XComponent > xComponent;

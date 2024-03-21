@@ -175,7 +175,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @param      "seqSource"     , reference to sequence for append.
             @return     "seqDestination" is parameter AND return value at the same time.
         */
-        void impl_appendSequence(           css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqDestination  ,
+        static void impl_appendSequence(           css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqDestination  ,
                                      const  css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqSource       );
 
         static bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );

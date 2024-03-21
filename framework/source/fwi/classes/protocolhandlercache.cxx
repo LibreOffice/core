@@ -123,7 +123,8 @@ HandlerCache::~HandlerCache()
     @descr      It frees all used memory. In further implementations (may if we support write access too)
                 it's a good place to flush changes back to the configuration - but not needed yet.
  */
-bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) const
+// static
+bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn )
 {
     bool bFound = false;
 
@@ -145,11 +146,13 @@ bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) cons
                 and call our other search method ...
                 It's a helper for outside code.
  */
-bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn ) const
+// static
+bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn )
 {
     return search( aURL.Complete, pReturn );
 }
 
+// static
 void HandlerCache::takeOver(HandlerHash aHandler, PatternHash aPattern)
 {
     SolarMutexGuard aGuard;
@@ -245,7 +248,7 @@ void HandlerCFGAccess::Notify(const css::uno::Sequence< OUString >& /*lPropertyN
 
     read(aHandler, aPattern);
     if (m_pCache)
-        m_pCache->takeOver(std::move(aHandler), std::move(aPattern));
+        framework::HandlerCache::takeOver(std::move(aHandler), std::move(aPattern));
 }
 
 void HandlerCFGAccess::ImplCommit()

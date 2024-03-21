@@ -120,7 +120,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 
         Any                       getSequenceFromCache( const OUString& aCommandURL );
         Any                       getInfoFromCommand( const OUString& rCommandURL );
-        void                      fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel );
+        static void               fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel );
         Sequence< OUString > getAllCommands();
         void                  fillCache();
         void                  addGenericInfoToCache();
@@ -249,6 +249,7 @@ sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
     return true;
 }
 
+// static
 void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel )
 {
     OUString aStr(aLabel.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName()));

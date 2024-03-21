@@ -105,9 +105,9 @@ public:
                             ~SfxItemPropertySet();
 
     /// @throws css::uno::RuntimeException
-    void getPropertyValue( const SfxItemPropertyMapEntry& rEntry,
+    static void getPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                           const SfxItemSet& rSet,
-                                          css::uno::Any& rAny) const;
+                                          css::uno::Any& rAny);
     /// @throws css::uno::RuntimeException
     /// @throws css::beans::UnknownPropertyException
     void getPropertyValue( const OUString &rName,
@@ -120,9 +120,9 @@ public:
                                             const SfxItemSet& rSet ) const;
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                setPropertyValue( const SfxItemPropertyMapEntry& rEntry,
+    static void setPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                           const css::uno::Any& aVal,
-                                          SfxItemSet& rSet ) const;
+                                          SfxItemSet& rSet );
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::UnknownPropertyException
@@ -133,8 +133,8 @@ public:
     /// @throws css::beans::UnknownPropertyException
     css::beans::PropertyState
         getPropertyState(const OUString& rName, const SfxItemSet& rSet)const;
-    css::beans::PropertyState
-        getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet) const
+    static css::beans::PropertyState
+        getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet)
                                     noexcept;
 
     css::uno::Reference<css::beans::XPropertySetInfo> const &

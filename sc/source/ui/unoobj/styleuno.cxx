@@ -1335,7 +1335,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName 
                     }
                     break;
                 default:
-                    pPropSet->getPropertyValue( *pResultEntry, *pItemSet, aAny );
+                    SfxItemPropertySet::getPropertyValue( *pResultEntry, *pItemSet, aAny );
             }
         }
         else if ( IsScUnoWid( nWhich ) )
@@ -1552,7 +1552,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
             {
                 SvxSetItem aNewHeader( rSet.Get(ATTR_PAGE_HEADERSET) );
                 if (pValue)
-                    pPropSet->setPropertyValue( *pHeaderEntry, *pValue, aNewHeader.GetItemSet() );
+                    SfxItemPropertySet::setPropertyValue( *pHeaderEntry, *pValue, aNewHeader.GetItemSet() );
                 else
                     aNewHeader.GetItemSet().ClearItem( pHeaderEntry->nWID );
                 rSet.Put( aNewHeader );
@@ -1566,7 +1566,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
             {
                 SvxSetItem aNewFooter( rSet.Get(ATTR_PAGE_FOOTERSET) );
                 if (pValue)
-                    pPropSet->setPropertyValue( *pFooterEntry, *pValue, aNewFooter.GetItemSet() );
+                    SfxItemPropertySet::setPropertyValue( *pFooterEntry, *pValue, aNewFooter.GetItemSet() );
                 else
                     aNewFooter.GetItemSet().ClearItem( pFooterEntry->nWID );
                 rSet.Put( aNewFooter );
@@ -1747,7 +1747,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
                         {
                             rSet.Put(rSet.Get(pEntry->nWID));
                         }
-                        pPropSet->setPropertyValue(*pEntry, *pValue, rSet);
+                        SfxItemPropertySet::setPropertyValue(*pEntry, *pValue, rSet);
                 }
             }
             else
@@ -1970,10 +1970,10 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
                         {
                             SfxItemSet aNoEmptySet( *pItemSet );
                             aNoEmptySet.Put( aNoEmptySet.Get( nWhich ) );
-                            pPropSet->getPropertyValue( *pResultEntry, aNoEmptySet, aAny );
+                            SfxItemPropertySet::getPropertyValue( *pResultEntry, aNoEmptySet, aAny );
                         }
                         else
-                            pPropSet->getPropertyValue( *pResultEntry, *pItemSet, aAny );
+                            SfxItemPropertySet::getPropertyValue( *pResultEntry, *pItemSet, aAny );
                 }
             }
             else if ( IsScUnoWid( nWhich ) )

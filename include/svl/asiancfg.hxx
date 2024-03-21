@@ -49,19 +49,19 @@ public:
 
     void Commit();
 
-    bool IsKerningWesternTextOnly() const;
+    static bool IsKerningWesternTextOnly();
 
     void SetKerningWesternTextOnly(bool value);
 
-    CharCompressType GetCharDistanceCompression() const;
+    static CharCompressType GetCharDistanceCompression();
 
     void SetCharDistanceCompression(CharCompressType value);
 
-    css::uno::Sequence< css::lang::Locale > GetStartEndCharLocales() const;
+    static css::uno::Sequence< css::lang::Locale > GetStartEndCharLocales();
 
-    bool GetStartEndChars(
+    static bool GetStartEndChars(
         css::lang::Locale const & locale, OUString & startChars,
-        OUString & endChars) const;
+        OUString & endChars);
 
     void SetStartEndChars(
         css::lang::Locale const & locale,

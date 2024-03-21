@@ -1051,7 +1051,8 @@ void ToolbarLayoutManager::setDockingAreaOffsets( const ::tools::Rectangle& rOff
     m_bLayoutDirty        = true;
 }
 
-OUString ToolbarLayoutManager::implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const
+// static
+OUString ToolbarLayoutManager::implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber )
 {
     OUString aAddonGenericTitle(FwkResId(STR_TOOLBAR_TITLE_ADDON));
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
@@ -2556,6 +2557,7 @@ void ToolbarLayoutManager::implts_setLayoutInProgress( bool bInProgress )
     m_bLayoutInProgress = bInProgress;
 }
 
+// static
 ::tools::Rectangle ToolbarLayoutManager::implts_calcHotZoneRect( const ::tools::Rectangle& rRect, sal_Int32 nHotZoneOffset )
 {
     ::tools::Rectangle aRect( rRect );
@@ -2947,6 +2949,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
     }
 }
 
+// static
 framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_determineDockingOperation(
     ui::DockingArea    DockingArea,
     const ::tools::Rectangle& rRowColRect,
@@ -3065,6 +3068,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
     return aTrackingRect;
 }
 
+// static
 void ToolbarLayoutManager::implts_setTrackingRect( ui::DockingArea eDockingArea, const ::Point& rMousePos, ::tools::Rectangle& rTrackingRect )
 {
     ::Point aPoint( rTrackingRect.TopLeft());

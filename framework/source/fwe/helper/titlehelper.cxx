@@ -517,6 +517,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
         impl_sendTitleChangedEvent ();
 }
 
+// static
 void TitleHelper::impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
                                              const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
@@ -527,6 +528,7 @@ void TitleHelper::impl_appendComponentTitle (      OUStringBuffer&              
         sTitle.append (xTitle->getTitle ());
 }
 
+// static
 void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
 {
     OUString name(utl::ConfigManager::getProductName());
@@ -576,6 +578,7 @@ void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
 }
 
 #ifdef DBG_UTIL
+// static
 void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
 {
     OUString version(utl::ConfigManager::getProductVersion());
@@ -592,6 +595,7 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer&)
 }
 #endif
 
+// static
 void TitleHelper::impl_appendSafeMode (OUStringBuffer& sTitle)
 {
     if (Application::IsSafeModeEnabled())
@@ -653,6 +657,7 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
         xNewBroadcaster->addTitleChangeListener (xThis);
 }
 
+// static
 OUString TitleHelper::impl_convertURL2Title(std::u16string_view sURL)
 {
     INetURLObject   aURL (sURL);

@@ -135,7 +135,7 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
                                          and must collect all information.
         *//*-*****************************************************************************************************/
 
-        void impl_collectAllChildComponents(    const   css::uno::Reference< css::frame::XFramesSupplier >&            xNode           ,
+        static void impl_collectAllChildComponents(    const   css::uno::Reference< css::frame::XFramesSupplier >&            xNode           ,
                                                         std::vector< css::uno::Reference< css::lang::XComponent > >&   seqComponents   );
 
         /*-****************************************************************************************************
@@ -150,7 +150,7 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
+        static css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
         css::uno::WeakReference< css::frame::XDesktop >     m_xOwner;   /// weak reference to the desktop object!
 

@@ -875,8 +875,9 @@ void FontSubstConfiguration::fillSubstVector( const css::uno::Reference< XNameAc
     }
 }
 
+// static
 FontWeight FontSubstConfiguration::getSubstWeight( const css::uno::Reference< XNameAccess >& rFont,
-                                                   const OUString& rType ) const
+                                                   const OUString& rType )
 {
     int weight = -1;
     try
@@ -902,8 +903,9 @@ FontWeight FontSubstConfiguration::getSubstWeight( const css::uno::Reference< XN
     return static_cast<FontWeight>( weight >= 0 ? pWeightNames[weight].nEnum : WEIGHT_DONTKNOW );
 }
 
+// static
 FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNameAccess >& rFont,
-                                                 const OUString& rType ) const
+                                                 const OUString& rType )
 {
     int width = -1;
     try
@@ -929,8 +931,9 @@ FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNam
     return static_cast<FontWidth>( width >= 0 ? pWidthNames[width].nEnum : WIDTH_DONTKNOW );
 }
 
+// static
 ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< XNameAccess >& rFont,
-                                                    const OUString& rType ) const
+                                                    const OUString& rType )
 {
     sal_uInt32 type = 0;
     try

@@ -1537,7 +1537,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 else
                 {
                     SfxItemSet aSet(pNoText->GetSwAttrSet());
-                    m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                    SfxItemPropertySet::setPropertyValue(*pEntry, aValue, aSet);
                     pNoText->SetAttr(aSet);
                 }
             }
@@ -1874,7 +1874,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 
             if(!bDone)
             {
-                m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                SfxItemPropertySet::setPropertyValue(*pEntry, aValue, aSet);
             }
 
             if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == nMemberId)
@@ -2076,7 +2076,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 else
                 {
                     const SfxItemSet& aSet(pNoText->GetSwAttrSet());
-                    m_pPropSet->getPropertyValue(*pEntry, aSet, aAny);
+                    SfxItemPropertySet::getPropertyValue(*pEntry, aSet, aAny);
                 }
             }
         }
@@ -2336,7 +2336,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
             if(!bDone)
             {
-                m_pPropSet->getPropertyValue(*pEntry, rSet, aAny);
+                SfxItemPropertySet::getPropertyValue(*pEntry, rSet, aAny);
             }
         }
     }

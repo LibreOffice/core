@@ -113,8 +113,9 @@ SfxItemPropertySet::~SfxItemPropertySet()
 {
 }
 
+// static
 void SfxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry& rEntry,
-            const SfxItemSet& rSet, Any& rAny ) const
+            const SfxItemSet& rSet, Any& rAny )
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = nullptr;
@@ -159,9 +160,10 @@ Any SfxItemPropertySet::getPropertyValue( const OUString &rName,
     return aVal;
 }
 
+// static
 void SfxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                            const Any& aVal,
-                                           SfxItemSet& rSet ) const
+                                           SfxItemSet& rSet )
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = nullptr;
@@ -196,7 +198,8 @@ void SfxItemPropertySet::setPropertyValue( const OUString &rName,
     setPropertyValue(*pEntry, aVal, rSet);
 }
 
-PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet) const
+// static
+PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet)
     noexcept
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;

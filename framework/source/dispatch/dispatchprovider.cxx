@@ -436,7 +436,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     ProtocolHandler                              aHandler;
 
     // This member is threadsafe by himself and lives if we live - we don't need any mutex here.
-    if (m_aProtocolHandlerCache.search(aURL,&aHandler))
+    if (framework::HandlerCache::search(aURL,&aHandler))
     {
         css::uno::Reference< css::frame::XDispatchProvider > xHandler;
         {
@@ -574,6 +574,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
     @threadsafe yes
 */
+// static
 bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
 {
     LoadEnv::EContentType eType = LoadEnv::classifyContent(aURL.Complete, css::uno::Sequence< css::beans::PropertyValue >());

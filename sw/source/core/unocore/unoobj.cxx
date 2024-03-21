@@ -553,7 +553,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                         }
                         else
                         {
-                            rPropSet.setPropertyValue(*pEntry, prop.Value, items);
+                            SfxItemPropertySet::setPropertyValue(*pEntry, prop.Value, items);
                         }
                     }
 
@@ -1886,7 +1886,7 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
 
         SwUnoCursorHelper::GetCursorAttr(rPaM, aSet);
 
-        rPropSet.getPropertyValue(*pEntry, aSet, aAny);
+        SfxItemPropertySet::getPropertyValue(*pEntry, aSet, aAny);
     }
 
     return aAny;
@@ -1977,7 +1977,7 @@ void SwUnoCursorHelper::SetPropertyValues(
         SwUnoCursorHelper::GetCursorAttr(rPaM, aItemSet);
         // this can set some attributes in nodes' mpAttrSet
         if (!SwUnoCursorHelper::SetCursorPropertyValue(*pEntry, rValue, rPaM, aItemSet))
-            rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+            SfxItemPropertySet::setPropertyValue(*pEntry, rValue, aItemSet);
         SwUnoCursorHelper::SetCursorAttr(rPaM, aItemSet, nAttrMode, false /*bTableMode*/);
     }
 
@@ -1992,7 +1992,7 @@ void SwUnoCursorHelper::SetPropertyValues(
         {
             // this can set some attributes in nodes' mpAttrSet
             if (!SwUnoCursorHelper::SetCursorPropertyValue(*pEntry, rValue, rPaM, aItemSet))
-                rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+                SfxItemPropertySet::setPropertyValue(*pEntry, rValue, aItemSet);
         }
 
         SwUnoCursorHelper::SetCursorAttr(rPaM, aItemSet, nAttrMode, false /*bTableMode*/);
@@ -2094,7 +2094,7 @@ SwUnoCursorHelper::GetPropertyStates(
                 }
 
                 pStates[i] = ( oSet->Count() )
-                    ? rPropSet.getPropertyState( *pEntry, *oSet )
+                    ? SfxItemPropertySet::getPropertyState( *pEntry, *oSet )
                     : beans::PropertyState_DEFAULT_VALUE;
 
                 //try again to find out if a value has been inherited
@@ -2109,7 +2109,7 @@ SwUnoCursorHelper::GetPropertyStates(
                     }
 
                     pStates[i] = ( oSetParent->Count() )
-                        ? rPropSet.getPropertyState( *pEntry, *oSetParent )
+                        ? SfxItemPropertySet::getPropertyState( *pEntry, *oSetParent )
                         : beans::PropertyState_DEFAULT_VALUE;
                 }
             }

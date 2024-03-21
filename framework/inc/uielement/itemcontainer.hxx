@@ -66,7 +66,7 @@ class ItemContainer final : public ::cppu::WeakImplHelper< css::container::XInde
 
     private:
         void copyItemContainer( const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );
-        css::uno::Reference< css::container::XIndexAccess > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
+        static css::uno::Reference< css::container::XIndexAccess > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
 
         mutable ShareableMutex                                                               m_aShareMutex;
         std::vector< css::uno::Sequence< css::beans::PropertyValue > > m_aItemVector;

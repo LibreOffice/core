@@ -286,6 +286,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     // <- VCL SYNCHRONIZED
 }
 
+// static
 void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     // no window ... no chance to set any title -> return

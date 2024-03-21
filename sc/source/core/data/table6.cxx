@@ -185,7 +185,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         OUString sReplStr = rSearchItem.GetReplaceString();
         if (rSearchItem.GetRegExp())
         {
-            pSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
+            utl::TextSearch::ReplaceBackReferences( sReplStr, aString, aSearchResult );
             OUStringBuffer aStrBuffer(aString);
             aStrBuffer.remove(nStart, nEnd-nStart+1);
             aStrBuffer.insert(nStart, sReplStr);

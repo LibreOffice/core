@@ -149,7 +149,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
         @return OUString
         The current office locale as BCP47 string.
         */
-        OUString impl_ts_getLocale() const;
+        static OUString impl_ts_getLocale();
 
         // helper
 
@@ -290,7 +290,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
         @return OUString
         The current office locale as BCP47 string.
         */
-        OUString impl_ts_getLocale() const;
+        static OUString impl_ts_getLocale();
 
         // helper
 

@@ -206,6 +206,7 @@ Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticPropertyDe
     };
 }
 
+// static
 bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(
     sal_Int16           aCurrentValue   ,
     const   Any&        aNewValue       ,

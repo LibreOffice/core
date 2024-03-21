@@ -386,6 +386,7 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
     }
 }
 
+// static
 bool SpinfieldToolbarController::impl_getValue(
     const Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat )
 {

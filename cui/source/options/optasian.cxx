@@ -231,8 +231,8 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
     }
     if( pImpl->xPrSet.is() )
         pImpl->xPrSetInfo = pImpl->xPrSet->getPropertySetInfo();
-    bool bKernWesternText = pImpl->aConfig.IsKerningWesternTextOnly();
-    CharCompressType nCompress = pImpl->aConfig.GetCharDistanceCompression();
+    bool bKernWesternText = SvxAsianConfig::IsKerningWesternTextOnly();
+    CharCompressType nCompress = SvxAsianConfig::GetCharDistanceCompression();
     if(pImpl->xPrSetInfo.is())
     {
         OUString sForbidden("ForbiddenCharacters");
@@ -342,7 +342,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl, weld::ComboBox&, void)
     }
     else
     {
-        bAvail = pImpl->aConfig.GetStartEndChars( aLocale, sStart, sEnd );
+        bAvail = SvxAsianConfig::GetStartEndChars( aLocale, sStart, sEnd );
     }
     if(!bAvail)
     {

@@ -1221,7 +1221,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
                 else
                 {
-                    m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                    SfxItemPropertySet::setPropertyValue(*pEntry, aValue, aSet);
                     pFormat->SetFormatAttr(aSet);
                 }
             }
@@ -1266,12 +1266,12 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     SAL_WARN("sw.core", "SwXShape: fixing invalid horizontal RelOrientation for at-page anchor");
                     value <<= nRelOrient;
                 }
-                m_pPropSet->setPropertyValue( *pEntry, value, aSet );
+                SfxItemPropertySet::setPropertyValue( *pEntry, value, aSet );
                 pFormat->SetFormatAttr(aSet);
             }
             else
             {
-                m_pPropSet->setPropertyValue( *pEntry, aValue, aSet );
+                SfxItemPropertySet::setPropertyValue( *pEntry, aValue, aSet );
 
                 if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
                 {
@@ -1637,7 +1637,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 else
                 {
                     const SwAttrSet& rSet = pFormat->GetAttrSet();
-                    m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
+                    SfxItemPropertySet::getPropertyValue(*pEntry, rSet, aRet);
                 }
             }
             else

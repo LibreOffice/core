@@ -68,7 +68,7 @@ class AcceleratorConfigurationWriter final
     private:
 
         /** @short  TODO */
-        void impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
+        static void impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
                                          const OUString&                                        sCommand,
                                          const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig );
 };

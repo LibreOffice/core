@@ -56,7 +56,7 @@ public:
 
     /** QueryProtocol.
     */
-    bool QueryProtocol (INetProtocol eProto) const
+    static bool QueryProtocol (INetProtocol eProto)
     {
         return ((eProto == INetProtocol::File ) ||
                 (eProto == INetProtocol::Ftp  ) ||

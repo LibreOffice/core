@@ -354,7 +354,7 @@ private:
 
     // non threadsafe
     void impl_checkMenuCloser            (                                                                        );
-    void impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame2 >& xFrame , bool bState );
+    static void impl_setCloser           ( const css::uno::Reference< css::frame::XFrame2 >& xFrame , bool bState );
 
     void disableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager);
 
@@ -3213,7 +3213,7 @@ void XFrameImpl::implts_checkSuicide()
     @param  bState
                 <TRUE/> enable; <FALSE/> disable this state
  */
-
+// static
 void XFrameImpl::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame2 >& xFrame ,
                             /*IN*/       bool                                   bState  )
 {

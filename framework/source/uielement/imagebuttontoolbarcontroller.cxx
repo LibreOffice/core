@@ -114,6 +114,7 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
     }
 }
 
+// static
 bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage )
 {
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aImageURL, StreamMode::STD_READ ));

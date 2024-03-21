@@ -504,7 +504,7 @@ private:
                 If it's set to sal_True... both actions has to be done: setVisible(), toFront()!
                 This mode is needed by a)
      */
-    void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
+    static void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                            bool                                  bForceToFront);
 
     /** @short  checks whether a frame is already used for another load request or not.
@@ -518,7 +518,7 @@ private:
                 sal_True if this frame is already used for loading,
                 sal_False otherwise.
      */
-    bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const;
+    static bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
     /** @short  try to determine the used application module
                 of this load request and apply right position and size

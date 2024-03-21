@@ -1228,6 +1228,7 @@ void ToolBarManager::AddFrameActionListener()
     }
 }
 
+// static
 ToolBoxItemBits ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
 {
     ToolBoxItemBits nItemBits( ToolBoxItemBits::NONE );

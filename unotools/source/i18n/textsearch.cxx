@@ -261,7 +261,8 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
     return bRet;
 }
 
-void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, std::u16string_view rStr, const SearchResult& rResult ) const
+// static
+void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, std::u16string_view rStr, const SearchResult& rResult )
 {
     if( rResult.subRegExpressions <= 0 )
         return;

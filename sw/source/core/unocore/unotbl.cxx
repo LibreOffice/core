@@ -1309,7 +1309,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
             {
                 SwFrameFormat* pLnFormat = pLn->ClaimFrameFormat();
                 SwAttrSet aSet(pLnFormat->GetAttrSet());
-                m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                SfxItemPropertySet::setPropertyValue(*pEntry, aValue, aSet);
                 pDoc->SetAttr(aSet, *pLnFormat);
             }
         }
@@ -1354,7 +1354,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName)
             default:
             {
                 const SwAttrSet& rSet = pLn->GetFrameFormat()->GetAttrSet();
-                m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
+                SfxItemPropertySet::getPropertyValue(*pEntry, rSet, aRet);
             }
         }
     }
@@ -1641,7 +1641,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
             if (!SwUnoCursorHelper::SetCursorPropertyValue(
                     *pEntry, aValue, rTableCursor.GetSelRing(), aItemSet))
             {
-                m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
+                SfxItemPropertySet::setPropertyValue(*pEntry, aValue, aItemSet);
             }
             SwUnoCursorHelper::SetCursorAttr(rTableCursor.GetSelRing(),
                     aItemSet, SetAttrMode::DEFAULT, true);
@@ -1691,7 +1691,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>
                     aSet(rTableCursor.GetDoc().GetAttrPool());
             SwUnoCursorHelper::GetCursorAttr(rTableCursor.GetSelRing(), aSet);
-            m_pPropSet->getPropertyValue(*pEntry, aSet, aResult);
+            SfxItemPropertySet::getPropertyValue(*pEntry, aSet, aResult);
         }
     }
     return aResult;
@@ -2664,7 +2664,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 default:
                 {
                     SwAttrSet aSet(pFormat->GetAttrSet());
-                    m_pImpl->m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                    SfxItemPropertySet::setPropertyValue(*pEntry, aValue, aSet);
                     pFormat->GetDoc()->SetAttr(aSet, *pFormat);
                 }
             }
@@ -2906,7 +2906,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 default:
                 {
                     const SwAttrSet& rSet = pFormat->GetAttrSet();
-                    m_pImpl->m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
+                    SfxItemPropertySet::getPropertyValue(*pEntry, rSet, aRet);
                 }
             }
         }
@@ -3396,7 +3396,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             if (!SwUnoCursorHelper::SetCursorPropertyValue(
                     *pEntry, aValue, rCursor.GetSelRing(), aItemSet))
             {
-                m_pImpl->m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
+                SfxItemPropertySet::setPropertyValue(*pEntry, aValue, aItemSet);
             }
             SwUnoCursorHelper::SetCursorAttr(rCursor.GetSelRing(),
                     aItemSet, SetAttrMode::DEFAULT, true);
@@ -3478,7 +3478,7 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 SwUnoTableCursor& rCursor =
                     dynamic_cast<SwUnoTableCursor&>(*m_pImpl->m_pTableCursor);
                 SwUnoCursorHelper::GetCursorAttr(rCursor.GetSelRing(), aSet);
-                m_pImpl->m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
+                SfxItemPropertySet::getPropertyValue(*pEntry, aSet, aRet);
             }
         }
 

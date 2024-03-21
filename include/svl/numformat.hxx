@@ -546,13 +546,13 @@ public:
     const NfKeywordTable& GetKeywords(sal_uInt32 nKey);
 
     /** Access for unit tests. */
-    const NfKeywordTable& GetEnglishKeywords() const;
+    static const NfKeywordTable& GetEnglishKeywords();
 
     /** Access for unit tests. */
-    const std::vector<Color>& GetStandardColors() const;
+    static const std::vector<Color>& GetStandardColors();
 
     /** Access for unit tests. */
-    size_t GetMaxDefaultColors() const;
+    static size_t GetMaxDefaultColors();
 
     struct InputScannerPrivateAccess
     {

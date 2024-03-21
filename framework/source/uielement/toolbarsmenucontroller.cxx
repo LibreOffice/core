@@ -235,6 +235,7 @@ static void fillHashMap( const Sequence< Sequence< css::beans::PropertyValue > >
 }
 
 // private function
+// static
 Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLayoutManagerToolbars( const Reference< css::frame::XLayoutManager >& rLayoutManager )
 {
     std::vector< ToolBarInfo > aToolBarArray;

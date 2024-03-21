@@ -306,10 +306,10 @@ static uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
     // have to iterate the map, not the item set?
     for (auto const pEntry : rMap.getPropertyEntries())
     {
-        if (rPropSet.getPropertyState(*pEntry, *pSet) == PropertyState_DIRECT_VALUE)
+        if (SfxItemPropertySet::getPropertyState(*pEntry, *pSet) == PropertyState_DIRECT_VALUE)
         {
             Any value;
-            rPropSet.getPropertyValue(*pEntry, *pSet, value);
+            SfxItemPropertySet::getPropertyValue(*pEntry, *pSet, value);
             props.emplace_back(pEntry->aName, value);
         }
     }
@@ -1374,7 +1374,7 @@ void makeRedline( SwPaM const & rPaM,
                     else
                     {
                         SfxItemPropertyMapEntry const*const pEntry = aEntries[i];
-                        rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+                        SfxItemPropertySet::setPropertyValue(*pEntry, rValue, aItemSet);
                         if (i == nStyleId)
                             rValue >>= sParaStyleName;
                     }

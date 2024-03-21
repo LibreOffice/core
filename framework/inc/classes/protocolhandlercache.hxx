@@ -105,10 +105,10 @@ class HandlerCache final
                  HandlerCache();
                  ~HandlerCache();
 
-        bool search( const OUString& sURL, ProtocolHandler* pReturn ) const;
-        bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
+        static bool search( const OUString& sURL, ProtocolHandler* pReturn );
+        static bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn );
 
-        void takeOver(HandlerHash aHandler, PatternHash aPattern);
+        static void takeOver(HandlerHash aHandler, PatternHash aPattern);
 };
 
 /**

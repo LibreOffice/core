@@ -162,11 +162,11 @@ protected:
 
     // Special case (transient) values can change during runtime!
     // Don't store them in the pre defined struct
-    OUString   GetWorkPath() const;
-    OUString   GetWorkVariableValue() const;
-    OUString   GetPathVariableValue() const;
+    static OUString GetWorkPath();
+    static OUString GetWorkVariableValue();
+    static OUString GetPathVariableValue();
 
-    OUString   GetHomeVariableValue() const;
+    static OUString GetHomeVariableValue();
 
     // XStringSubstitution implementation methods
     /// @throws css::container::NoSuchElementException
@@ -238,7 +238,8 @@ OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const OUS
     return impl_getSubstituteVariableValue( aVariable );
 }
 
-OUString SubstitutePathVariables::GetWorkPath() const
+// static
+OUString SubstitutePathVariables::GetWorkPath()
 {
     OUString aWorkPath;
     css::uno::Reference< css::container::XHierarchicalNameAccess > xPaths(officecfg::Office::Paths::Paths::get(), css::uno::UNO_QUERY_THROW);
@@ -249,7 +250,8 @@ OUString SubstitutePathVariables::GetWorkPath() const
     return aWorkPath;
 }
 
-OUString SubstitutePathVariables::GetWorkVariableValue() const
+// static
+OUString SubstitutePathVariables::GetWorkVariableValue()
 {
     OUString aWorkPath;
     std::optional<OUString> x(officecfg::Office::Paths::Variables::Work::get());
@@ -265,7 +267,8 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
     return aWorkPath;
 }
 
-OUString SubstitutePathVariables::GetHomeVariableValue() const
+// static
+OUString SubstitutePathVariables::GetHomeVariableValue()
 {
     osl::Security   aSecurity;
     OUString   aHomePath;
@@ -274,7 +277,8 @@ OUString SubstitutePathVariables::GetHomeVariableValue() const
     return aHomePath;
 }
 
-OUString SubstitutePathVariables::GetPathVariableValue() const
+// static
+OUString SubstitutePathVariables::GetPathVariableValue()
 {
     OUString aRetStr;
     const char* pEnv = getenv( "PATH" );

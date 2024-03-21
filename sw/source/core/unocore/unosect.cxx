@@ -818,7 +818,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
                     oItemSet.emplace(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID);
                     oItemSet->Put(rOldAttrSet);
-                    m_rPropSet.setPropertyValue(*pEntry,
+                    SfxItemPropertySet::setPropertyValue(*pEntry,
                             pValues[nProperty], *oItemSet);
                 }
                 else
@@ -1156,7 +1156,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
             {
                 if (pFormat)
                 {
-                    m_rPropSet.getPropertyValue(*pEntry,
+                    SfxItemPropertySet::getPropertyValue(*pEntry,
                             pFormat->GetAttrSet(), pRet[nProperty]);
                 }
                 else

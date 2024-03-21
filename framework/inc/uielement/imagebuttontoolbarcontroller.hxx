@@ -46,7 +46,7 @@ class ImageButtonToolbarController final : public ComplexToolbarController
     private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
 
-        bool ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage );
+        static bool ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage );
 };
 
 }

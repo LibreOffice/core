@@ -1544,7 +1544,8 @@ void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sI
     m_aMenuItemHandlerVector.push_back( std::move(pMenuItemHandler) );
 }
 
-sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const
+// static
+sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex)
 {
     sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
 

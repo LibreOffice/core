@@ -348,8 +348,7 @@ private:
     /** filter "real user defined paths" from the old configuration schema
         and set it as UserPaths on the new schema.
         Can be removed with new major release ... */
-
-    void impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
+    static void impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
                                  const std::vector<OUString>& lOld );
 
     /** reload one path directly from the new configuration schema (because
@@ -361,7 +360,7 @@ private:
         or check if the given path value uses paths, which can be replaced with predefined
         placeholder variables ...
      */
-    void impl_subst(std::vector<OUString>& lVals   ,
+    static void impl_subst(std::vector<OUString>& lVals   ,
                     const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
                           bool                                               bReSubst);
 
@@ -369,14 +368,14 @@ private:
                     bool                bReSubst);
 
     /** converts our new string list schema to the old ";" separated schema ... */
-    OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
-    std::vector<OUString> impl_convertOldStyle2Path(std::u16string_view sOldStylePath) const;
+    static OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath );
+    static std::vector<OUString> impl_convertOldStyle2Path(std::u16string_view sOldStylePath);
 
     /** remove still known paths from the given lList argument.
         So real user defined paths can be extracted from the list of
         fix internal paths !
      */
-    void impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
+    static void impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
                               std::vector<OUString>& lList);
 
     /** rebuild the member m_lPropDesc using the path list m_lPaths. */
@@ -395,8 +394,8 @@ private:
     const PathSettings::PathInfo* impl_getPathAccessConst(sal_Int32 nHandle) const;
 
     /** it checks, if the given path value seems to be a valid URL or system path. */
-    bool impl_isValidPath(std::u16string_view sPath) const;
-    bool impl_isValidPath(const std::vector<OUString>& lPath) const;
+    static bool impl_isValidPath(std::u16string_view sPath);
+    static bool impl_isValidPath(const std::vector<OUString>& lPath);
 
     void impl_storePath(const PathSettings::PathInfo& aPath);
 
@@ -662,6 +661,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     }
 }
 
+// static
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
                                           const std::vector<OUString>& lOld )
 {
@@ -911,6 +911,7 @@ void PathSettings::impl_notifyPropListener( std::u16string_view           sPath,
     }
 }
 
+// static
 void PathSettings::impl_subst(std::vector<OUString>& lVals   ,
                               const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
                                     bool                                               bReSubst)
@@ -940,7 +941,8 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
         aPath.sWritePath = xSubst->substituteVariables(aPath.sWritePath, false);
 }
 
-OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
+// static
+OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath)
 {
     OUStringBuffer sPathVal(256);
 
@@ -966,7 +968,8 @@ OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& r
     return sPathVal.makeStringAndClear();
 }
 
-std::vector<OUString> PathSettings::impl_convertOldStyle2Path(std::u16string_view sOldStylePath) const
+// static
+std::vector<OUString> PathSettings::impl_convertOldStyle2Path(std::u16string_view sOldStylePath)
 {
     std::vector<OUString> lList;
     sal_Int32    nToken = 0;
@@ -981,6 +984,7 @@ std::vector<OUString> PathSettings::impl_convertOldStyle2Path(std::u16string_vie
     return lList;
 }
 
+// static
 void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
                                         std::vector<OUString>& lList)
 {
@@ -1211,7 +1215,8 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
     *pOrgPath = std::move(aChangePath);
 }
 
-bool PathSettings::impl_isValidPath(const std::vector<OUString>& lPath) const
+// static
+bool PathSettings::impl_isValidPath(const std::vector<OUString>& lPath)
 {
     for (auto const& path : lPath)
     {
@@ -1222,7 +1227,8 @@ bool PathSettings::impl_isValidPath(const std::vector<OUString>& lPath) const
     return true;
 }
 
-bool PathSettings::impl_isValidPath(std::u16string_view sPath) const
+// static
+bool PathSettings::impl_isValidPath(std::u16string_view sPath)
 {
     // allow empty path to reset a path.
 // idea by LLA to support empty paths

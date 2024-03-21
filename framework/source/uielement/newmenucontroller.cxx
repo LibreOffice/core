@@ -242,6 +242,7 @@ void NewMenuController::setAccelerators()
     }
 }
 
+// static
 void NewMenuController::retrieveShortcutsFromConfiguration(
     const Reference< XAcceleratorConfiguration >& rAccelCfg,
     const Sequence< OUString >& rCommands,

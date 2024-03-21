@@ -464,7 +464,8 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(bool bWriteAcces
         return m_aReadCache;
 }
 
-OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
+// static
+OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale()
 {
     OUString sISOLocale = officecfg::Setup::L10N::ooLocale::get();
 
@@ -1311,7 +1312,8 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
     }
 }
 
-OUString XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
+// static
+OUString XCUBasedAcceleratorConfiguration::impl_ts_getLocale()
 {
     OUString sISOLocale = officecfg::Setup::L10N::ooLocale::get();
 

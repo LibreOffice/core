@@ -388,7 +388,8 @@ const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
     return aReservedWords[nWord];
 }
 
-MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( std::u16string_view rMS ) const
+// static
+MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( std::u16string_view rMS )
 {
 //! TODO: could be cached too
     if ( o3tl::equalsIgnoreAsciiCase( rMS, u"metric" ) )

@@ -1827,7 +1827,7 @@ void Test::testUserDefinedNumberFormats()
 void Test::testNfEnglishKeywordsIntegrity()
 {
     SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
-    const NfKeywordTable& rEnglishKeywords = aFormatter.GetEnglishKeywords();
+    const NfKeywordTable& rEnglishKeywords = SvNumberFormatter::GetEnglishKeywords();
     const NfKeywordTable& sKeywords = aFormatter.GetKeywords(0);
     CPPUNIT_ASSERT_EQUAL( size_t(NF_KEYWORD_ENTRIES_COUNT), rEnglishKeywords.size() );
     for (size_t i = 0; i < size_t(NF_KEYWORD_ENTRIES_COUNT); ++i)
@@ -1892,8 +1892,8 @@ void Test::testNfEnglishKeywordsIntegrity()
 void Test::testStandardColorIntegrity()
 {
     SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
-    const ::std::vector<Color> & rStandardColors = aFormatter.GetStandardColors();
-    const size_t nMaxDefaultColors = aFormatter.GetMaxDefaultColors();
+    const ::std::vector<Color> & rStandardColors = SvNumberFormatter::GetStandardColors();
+    const size_t nMaxDefaultColors = SvNumberFormatter::GetMaxDefaultColors();
     CPPUNIT_ASSERT_EQUAL( size_t(NF_KEY_LASTCOLOR) - size_t(NF_KEY_FIRSTCOLOR) + 1, nMaxDefaultColors );
     CPPUNIT_ASSERT_EQUAL( nMaxDefaultColors, rStandardColors.size() );
     // Colors must follow same order as in sEnglishKeyword
@@ -1912,7 +1912,7 @@ void Test::testStandardColorIntegrity()
 void Test::testColorNamesConversion()
 {
     SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN);
-    const NfKeywordTable& rEnglishKeywords = aFormatter.GetEnglishKeywords();
+    const NfKeywordTable& rEnglishKeywords = SvNumberFormatter::GetEnglishKeywords();
     const NfKeywordTable& rKeywords = aFormatter.GetKeywords(0);
 
     // Holding a reference to the NfKeywordTable doesn't help if we switch
