@@ -422,7 +422,7 @@ namespace drawinglayer::primitive2d
                 nOversampleValue ? nRasterHeight * nOversampleValue : nRasterHeight);
 
             // check for parallel execution possibilities
-            static bool bMultithreadAllowed = false; // loplugin:constvars:ignore
+            static bool bMultithreadAllowed = true; // loplugin:constvars:ignore
             sal_Int32 nThreadCount(0);
             comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
 
