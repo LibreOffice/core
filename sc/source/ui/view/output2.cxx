@@ -646,7 +646,7 @@ bool ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
     sal_uInt16 nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
     {
         OUString sTempOut(aString);
-        if (!pNumFormat->GetOutputString(fVal, nNumDigits, sTempOut))
+        if (!pNumFormat->GetOutputString(fVal, nNumDigits, sTempOut, pOutput->mpDoc->GetFormatTable()->GetNatNum()))
         {
             aString = sTempOut;
             // Failed to get output string.  Bail out.
@@ -685,7 +685,7 @@ bool ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
         // Re-calculate.
         nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
         OUString sTempOut(aString);
-        if (!pNumFormat->GetOutputString(fVal, nNumDigits, sTempOut))
+        if (!pNumFormat->GetOutputString(fVal, nNumDigits, sTempOut, pOutput->mpDoc->GetFormatTable()->GetNatNum()))
         {
             aString = sTempOut;
             // Failed to get output string.  Bail out.

@@ -1247,7 +1247,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
     // Native number transliteration
     css::i18n::NativeNumberXmlAttributes2 aAttr;
-    rFormat.GetNatNumXml( aAttr, nPart );
+    rFormat.GetNatNumXml( aAttr, nPart, m_pFormatter->GetNatNum() );
     if ( !aAttr.Format.isEmpty() )
     {
         assert(aAttr.Spellout.isEmpty());   // mutually exclusive

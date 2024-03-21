@@ -19,22 +19,8 @@
 #pragma once
 
 #include <svl/svldllapi.h>
-#include <com/sun/star/i18n/XNumberFormatCode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <i18nlangtag/lang.h>
-#include <tools/link.hxx>
-#include <svl/nfkeytab.hxx>
-#include <svl/ondemand.hxx>
-#include <svl/zforlist.hxx>
-#include <unotools/charclass.hxx>
 
-#include <map>
-
-class Color;
-class ImpSvNumberformatScan;
-class ImpSvNumberInputScan;
-class SvNumberFormatterRegistry_Impl;
-class NfCurrencyTable;
+#include <svl/nfengine.hxx>
 
 class SVL_DLLPUBLIC SvNumberFormatter
 {
@@ -246,7 +232,7 @@ public:
                               sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt);
 
     /// Count of decimals
-    sal_uInt16 GetFormatPrecision(sal_uInt32 nFormat) const;
+    sal_uInt16 GetFormatPrecision(sal_uInt32 nFormat);
 
     /// Count of integer digits
     sal_uInt16 GetFormatIntegerDigits(sal_uInt32 nFormat) const;
@@ -381,10 +367,7 @@ public:
     static sal_uInt16 ExpandTwoDigitYear(sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart);
 
     /// Return the decimal separator matching the locale of the given format
-    OUString GetFormatDecimalSep(sal_uInt32 nFormat) const;
-
-    /// Return the decimal separator matching the given locale / LanguageType.
-    OUString GetLangDecimalSep(LanguageType nLang) const;
+    OUString GetFormatDecimalSep(sal_uInt32 nFormat);
 
     static void resetTheCurrencyTable();
 
@@ -554,50 +537,18 @@ public:
     /** Access for unit tests. */
     static size_t GetMaxDefaultColors();
 
-    struct InputScannerPrivateAccess
-    {
-        friend class ImpSvNumberInputScan;
-
-    private:
-        InputScannerPrivateAccess() {}
-    };
-    /** Access for input scanner to temporarily (!) switch locales. */
-    OnDemandLocaleDataWrapper& GetOnDemandLocaleDataWrapper(const InputScannerPrivateAccess&)
-    {
-        return xLocaleData;
-    }
-
 private:
     mutable ::osl::Mutex m_aMutex;
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
     const LanguageType IniLnge; // Initialized setting language/country
-    LanguageType ActLnge; // Current setting language/country
-    LanguageTag maLanguageTag;
-    std::map<sal_uInt32, std::unique_ptr<SvNumberformat>>
-        aFTable; // Table of format keys to format entries
-    typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
-    DefaultFormatKeysMap aDefaultFormatKeys; // Table of default standard to format keys
+    SvNFFormatData m_aFormatData;
+    SvNFEngine::Accessor m_aRWPolicy;
     std::unique_ptr<SvNumberFormatTable> pFormatTable; // For the UI dialog
     std::unique_ptr<SvNumberFormatterIndexTable>
         pMergeTable; // List of indices for merging two formatters
-    OnDemandCharClass xCharClass; // CharacterClassification
-    OnDemandLocaleDataWrapper xLocaleData; // LocaleData switched between SYSTEM, ENGLISH and other
-    OnDemandTransliterationWrapper xTransliteration; // Transliteration loaded on demand
-    OnDemandCalendarWrapper xCalendar; // Calendar loaded on demand
+    SvNFLanguageData m_aCurrentLanguage;
     OnDemandNativeNumberWrapper xNatNum; // Native number service loaded on demand
-    std::unique_ptr<ImpSvNumberInputScan> pStringScanner; // Input string scanner
-    std::unique_ptr<ImpSvNumberformatScan> pFormatScanner; // Format code string scanner
     Link<sal_uInt16, Color*> aColorLink; // User defined color table CallBack
-    sal_uInt32 MaxCLOffset; // Max language/country offset used
-    sal_uInt32 nDefaultSystemCurrencyFormat; // NewCurrency matching SYSTEM locale
-    NfEvalDateFormat eEvalDateFormat; // DateFormat evaluation
-    bool bNoZero; // Zero value suppression
-
-    // cached locale data items needed almost any time
-    OUString aDecimalSep;
-    OUString aDecimalSepAlt;
-    OUString aThousandSep;
-    OUString aDateSep;
 
     SVL_DLLPRIVATE static volatile bool bCurrencyTableInitialized;
     SVL_DLLPRIVATE static sal_uInt16 nSystemCurrencyPosition;
@@ -606,82 +557,42 @@ private:
     // get the registry, create one if none exists
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl& GetFormatterRegistry();
 
-    // Generate builtin formats provided by i18n behind CLOffset,
-    // if bNoAdditionalFormats==false also generate additional i18n formats.
-    SVL_DLLPRIVATE void ImpGenerateFormats(sal_uInt32 CLOffset, bool bNoAdditionalFormats);
-
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
         sal_uInt32 CLOffset,
         css::uno::Reference<css::i18n::XNumberFormatCode> const& rNumberFormatCode,
         bool bAfterChangingSystemCL);
 
-    SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat(const css::i18n::NumberFormatCode& rCode,
-                                                   sal_uInt32 nPos,
-                                                   bool bAfterChangingSystemCL = false,
-                                                   sal_Int16 nOrgIndex = 0);
-
-    // Return CLOffset or (MaxCLOffset + SV_COUNTRY_LANGUAGE_OFFSET) if new language/country
-    SVL_DLLPRIVATE sal_uInt32 ImpGetCLOffset(LanguageType eLnge) const;
-
     // Test whether format code already exists, then return index key,
     // otherwise NUMBERFORMAT_ENTRY_NOT_FOUND
     SVL_DLLPRIVATE sal_uInt32 ImpIsEntry(std::u16string_view rString, sal_uInt32 CLOffset,
                                          LanguageType eLnge) const;
 
-    // Create builtin formats for language/country if necessary, return CLOffset
-    SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL(LanguageType eLnge);
-
     // Create theCurrencyTable with all <type>NfCurrencyEntry</type>
     SVL_DLLPRIVATE static void ImpInitCurrencyTable();
-
-    // Return the format index of the currency format of the system locale.
-    // Format is created if not already present.
-    SVL_DLLPRIVATE sal_uInt32 ImpGetDefaultSystemCurrencyFormat();
-
-    // Return the format index of the currency format of the current locale.
-    // Format is created if not already present.
-    SVL_DLLPRIVATE sal_uInt32 ImpGetDefaultCurrencyFormat();
-
-    // Return the default format for a given type and current locale.
-    // May ONLY be called from within GetStandardFormat().
-    SVL_DLLPRIVATE sal_uInt32 ImpGetDefaultFormat(SvNumFormatType nType);
-
-    // Return the index in a sequence of format codes matching an enum of
-    // NfIndexTableOffset. If not found 0 is returned. If the sequence doesn't
-    // contain any format code elements a default element is created and inserted.
-    SVL_DLLPRIVATE sal_Int32 ImpGetFormatCodeIndex(
-        css::uno::Sequence<css::i18n::NumberFormatCode>& rSeq, const NfIndexTableOffset nTabOff);
-
-    // Adjust a sequence of format codes to contain only one (THE) default
-    // instead of multiple defaults for short/medium/long types.
-    // If there is no medium but a short and a long default the long is taken.
-    // Non-PRODUCT version may check locale data for matching defaults in one
-    // FormatElement group.
-    SVL_DLLPRIVATE void ImpAdjustFormatCodeDefault(css::i18n::NumberFormatCode* pFormatArr,
-                                                   sal_Int32 nCount);
-
-    // Obtain the format entry for a given key index.
-    SVL_DLLPRIVATE SvNumberformat* GetFormatEntry(sal_uInt32 nKey);
-    SVL_DLLPRIVATE const SvNumberformat* GetFormatEntry(sal_uInt32 nKey) const;
 
     // used as a loop body inside of GetNewCurrencySymbolString() and GetCurrencyEntry()
     static bool ImpLookupCurrencyEntryLoopBody(const NfCurrencyEntry*& pFoundEntry,
                                                bool& bFoundBank, const NfCurrencyEntry* pData,
                                                sal_uInt16 nPos, std::u16string_view rSymbol);
 
+    // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
+    SVL_DLLPRIVATE void ResetDefaultSystemCurrency();
+
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
     DECL_DLLPRIVATE_STATIC_LINK(SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void);
 
     // Substitute a format during GetFormatEntry(), i.e. system formats.
-    SVL_DLLPRIVATE SvNumberformat* ImpSubstituteEntry(SvNumberformat* pFormat,
-                                                      sal_uInt32* o_pRealKey = nullptr);
+    SVL_DLLPRIVATE const SvNumberformat* ImpSubstituteEntry(const SvNumberformat* pFormat,
+                                                            sal_uInt32* o_pRealKey = nullptr);
 
     // Whether nFIndex is a special builtin format
     SVL_DLLPRIVATE bool ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageType eLnge);
+    SVL_DLLPRIVATE static bool ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, sal_uInt32 nCLOffset);
 
-    // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
-    SVL_DLLPRIVATE void ResetDefaultSystemCurrency();
+    SVL_DLLPRIVATE sal_uInt32 ImpGetOrGenerateCLOffset(LanguageType eLnge);
+
+    SVL_DLLPRIVATE LanguageType ImpResolveLanguage(LanguageType eLnge) const;
 
     // Replace the SYSTEM language/country format codes. Called upon change of
     // the user configurable locale.
@@ -700,28 +611,26 @@ public:
 
     const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
 
-    //! The following method is not to be used from outside but must be
-    //! public for the InputScanner.
-    // return the current FormatScanner
-    const ImpSvNumberformatScan* GetFormatScanner() const;
-
     //! The following methods are not to be used from outside but must be
     //! public for the InputScanner and FormatScanner.
 
     // return current (!) Locale
-    const LanguageTag& GetLanguageTag() const;
+    const LanguageTag& GetLanguageTag() const { return m_aCurrentLanguage.GetLanguageTag(); }
 
     // return corresponding Transliteration wrapper
-    const ::utl::TransliterationWrapper* GetTransliteration() const;
+    const ::utl::TransliterationWrapper* GetTransliteration() const
+    {
+        return m_aCurrentLanguage.GetTransliteration();
+    }
 
     // return the corresponding CharacterClassification wrapper
-    const CharClass* GetCharClass() const;
+    const CharClass* GetCharClass() const { return m_aCurrentLanguage.GetCharClass(); }
 
     // return the corresponding LocaleData wrapper
-    const LocaleDataWrapper* GetLocaleData() const;
+    const LocaleDataWrapper* GetLocaleData() const { return m_aCurrentLanguage.GetLocaleData(); }
 
     // return the corresponding Calendar wrapper
-    CalendarWrapper* GetCalendar() const;
+    CalendarWrapper* GetCalendar() const { return m_aCurrentLanguage.GetCalendar(); }
 
     // return the corresponding NativeNumberSupplier wrapper
     const NativeNumberWrapper* GetNatNum() const;
@@ -729,19 +638,19 @@ public:
     // cached locale data items
 
     // return the corresponding decimal separator
-    const OUString& GetNumDecimalSep() const;
+    const OUString& GetNumDecimalSep() const { return m_aCurrentLanguage.GetNumDecimalSep(); }
 
     // return the corresponding decimal separator alternative
-    const OUString& GetNumDecimalSepAlt() const;
+    const OUString& GetNumDecimalSepAlt() const { return m_aCurrentLanguage.GetNumDecimalSepAlt(); }
 
     // return the corresponding group (AKA thousand) separator
-    const OUString& GetNumThousandSep() const;
+    const OUString& GetNumThousandSep() const { return m_aCurrentLanguage.GetNumThousandSep(); }
 
     // return the corresponding date separator
-    const OUString& GetDateSep() const;
+    const OUString& GetDateSep() const { return m_aCurrentLanguage.GetDateSep(); }
 
-    // checks for decimal separator and optional alternative
-    bool IsDecimalSep(std::u16string_view rStr) const;
+    const SvNFFormatData& GetROFormatData() const { return m_aFormatData; }
+    const SvNFLanguageData& GetROLanguageData() const { return m_aCurrentLanguage; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

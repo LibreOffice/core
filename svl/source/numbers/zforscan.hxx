@@ -29,7 +29,7 @@
 #include <tools/date.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-class SvNumberFormatter;
+class SvNFLanguageData;
 struct ImpSvNumberformatInfo;
 
 
@@ -50,7 +50,8 @@ public:
         AllowEnglish    ///< allow English keywords as well as localized keywords
     };
 
-    explicit ImpSvNumberformatScan( SvNumberFormatter* pFormatter );
+    explicit ImpSvNumberformatScan(SvNFLanguageData& rCurrentLanguageData,
+                                   const SvNumberFormatter& rColorCallback);
     ~ImpSvNumberformatScan();
     void ChangeIntl( KeywordLocalization eKeywordLocalization = KeywordLocalization::AllowEnglish ); // Replaces Keywords
 
@@ -63,9 +64,9 @@ public:
                      sal_uInt16 nCnt); // Copies the FormatInfo
     sal_uInt16 GetResultStringsCnt() const      { return nResultStringsCnt; }
 
-    const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }
-    const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
-    CalendarWrapper& GetCal() const             { return *pFormatter->GetCalendar(); }
+    const CharClass& GetChrCls() const          { return *mrCurrentLanguageData.GetCharClass(); }
+    const LocaleDataWrapper& GetLoc() const     { return *mrCurrentLanguageData.GetLocaleData(); }
+    CalendarWrapper& GetCal() const             { return *mrCurrentLanguageData.GetCalendar(); }
 
     const NfKeywordTable & GetKeywords() const
         {
@@ -170,10 +171,12 @@ public:
                                                 /// set Thai T speciality
     void SetNatNumModifier( sal_uInt8 n )    { nNatNumModifier = n; }
 
-    SvNumberFormatter* GetNumberformatter() { return pFormatter; } // Access to formatter (for zformat.cxx)
+    SvNFLanguageData& GetCurrentLanguageData() { return mrCurrentLanguageData; } // Access to formatter (for zformat.cxx)
 
     /// Get type scanned (so far).
     SvNumFormatType GetScannedType() const { return eScannedType; }
+
+    const SvNumberFormatter& getColorCallback() const { return mrColorCallback; }
 
     static constexpr OUString sErrStr = u"#FMT"_ustr; // String for error output
 
@@ -184,7 +187,8 @@ private: // Private section
     Date maNullDate;                            // 30Dec1899
     OUString sNameStandardFormat;               // "Standard"
     sal_uInt16 nStandardPrec;                   // Default Precision for Standardformat
-    SvNumberFormatter* pFormatter;              // Pointer to the FormatList
+    SvNFLanguageData& mrCurrentLanguageData;    // Reference to the Language Data
+    const SvNumberFormatter& mrColorCallback;   // Reference to the Color Callback supplier
     css::uno::Reference< css::i18n::XNumberFormatCode > xNFC;
 
     OUString sStrArray[NF_MAX_FORMAT_SYMBOLS];  // Array of symbols
@@ -291,6 +295,8 @@ private: // Private section
 
     /** Swap nTypeArray and sStrArray elements at positions. */
     void SwapArrayElements( size_t nPos1, size_t nPos2 );
+
+    Color* GetUserDefColor(sal_uInt16 nIndex) const;
 
     static bool StringEqualsChar( std::u16string_view rStr, sal_Unicode ch )
         { return rStr.size() == 1 && rStr[0] == ch; }

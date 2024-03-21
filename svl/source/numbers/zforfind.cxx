@@ -72,21 +72,20 @@ const sal_Unicode cNoBreakSpace = 0xA0;
 const sal_Unicode cNarrowNoBreakSpace = 0x202F;
 const bool kDefaultEra = true;     // Gregorian CE, positive year
 
-ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
+ImpSvNumberInputScan::ImpSvNumberInputScan(SvNFLanguageData& rCurrentLanguage)
         :
+        mrCurrentLanguageData(rCurrentLanguage),
         bTextInitialized( false ),
         bScanGenitiveMonths( false ),
         bScanPartitiveMonths( false ),
         eScannedType( SvNumFormatType::UNDEFINED ),
         eSetType( SvNumFormatType::UNDEFINED )
 {
-    pFormatter = pFormatterP;
     moNullDate.emplace( 30,12,1899 );
     nYear2000 = SvNumberFormatter::GetYear2000Default();
     Reset();
     ChangeIntl();
 }
-
 
 ImpSvNumberInputScan::~ImpSvNumberInputScan()
 {
@@ -130,21 +129,20 @@ void ImpSvNumberInputScan::Reset()
 }
 
 // native number transliteration if necessary
-static void TransformInput( SvNumberFormatter const * pFormatter, OUString& rStr )
+static void TransformInput(const NativeNumberWrapper* pNatNum, const SvNFLanguageData& rCurrentLanguage, OUString& rStr)
 {
     sal_Int32 nPos, nLen;
     for ( nPos = 0, nLen = rStr.getLength(); nPos < nLen; ++nPos )
     {
         if ( 256 <= rStr[ nPos ] &&
-             pFormatter->GetCharClass()->isDigit( rStr, nPos ) )
+             rCurrentLanguage.GetCharClass()->isDigit( rStr, nPos ) )
         {
             break;
         }
     }
     if ( nPos < nLen )
     {
-        rStr = pFormatter->GetNatNum()->getNativeNumberString( rStr,
-                                                               pFormatter->GetLanguageTag().getLocale(), 0 );
+        rStr = pNatNum->getNativeNumberString(rStr, rCurrentLanguage.GetLanguageTag().getLocale(), 0);
     }
 }
 
@@ -291,7 +289,7 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
     bool res = false;
     OUStringBuffer sBuff(rSymbol);
     sal_Unicode cToken;
-    const OUString& rThSep = pFormatter->GetNumThousandSep();
+    const OUString& rThSep = mrCurrentLanguageData.GetNumThousandSep();
     const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
     sal_Int32 nCounter = 0; // counts 3 digits
@@ -466,7 +464,7 @@ bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
         if (nPos+1 < nIndex)
             return true;    // Surrogate, assume these to be new words.
 
-        const sal_Int32 nType = pFormatter->GetCharClass()->getCharacterType( rString, nPos);
+        const sal_Int32 nType = mrCurrentLanguageData.GetCharClass()->getCharacterType( rString, nPos);
         using namespace ::com::sun::star::i18n;
 
         if ((nType & (KCharacterType::UPPER | KCharacterType::LOWER | KCharacterType::DIGIT)) != 0)
@@ -539,7 +537,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( std::u16string_view rString,
                                                   sal_Int32& nPos,
                                                   sal_uInt16 nStringPos ) const
 {
-    const OUString& rSep = pFormatter->GetNumThousandSep();
+    const OUString& rSep = mrCurrentLanguageData.GetNumThousandSep();
     // Is it an ordinary space instead of a no-break space?
     bool bSpaceBreak = (rSep[0] == cNoBreakSpace || rSep[0] == cNarrowNoBreakSpace) &&
         rString[0] == u' ' &&
@@ -551,7 +549,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( std::u16string_view rString,
         return false; // no? => out
     }
 
-    utl::DigitGroupingIterator aGrouping( pFormatter->GetLocaleData()->getDigitGrouping());
+    utl::DigitGroupingIterator aGrouping( mrCurrentLanguageData.GetLocaleData()->getDigitGrouping());
     // Match ,### in {3} or ,## in {3,2}
     /* FIXME: this could be refined to match ,## in {3,2} only if ,##,## or
      * ,##,### and to match ,### in {3,2} only if it's the last. However,
@@ -580,7 +578,7 @@ short ImpSvNumberInputScan::GetLogical( std::u16string_view rString ) const
 {
     short res;
 
-    const ImpSvNumberformatScan* pFS = pFormatter->GetFormatScanner();
+    const ImpSvNumberformatScan* pFS = mrCurrentLanguageData.GetFormatScanner();
     if ( rString == pFS->GetTrueString() )
     {
         res = 1;
@@ -611,7 +609,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
         {
             InitText();
         }
-        sal_Int16 nMonths = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
+        sal_Int16 nMonths = mrCurrentLanguageData.GetCalendar()->getNumberOfMonthsInYear();
         for ( sal_Int16 i = 0; i < nMonths; i++ )
         {
             if ( bScanGenitiveMonths && StringContainsWord( pUpperGenitiveMonthText[i], rString, nPos ) )
@@ -650,7 +648,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
-            else if (i == 2 && pFormatter->GetLanguageTag().getLanguage() == "de")
+            else if (i == 2 && mrCurrentLanguageData.GetLanguageTag().getLanguage() == "de")
             {
                 if (pUpperAbbrevMonthText[i] == u"M\u00C4R" && StringContainsWord( "MRZ", rString, nPos))
                 {   // Accept MRZ for MÄR
@@ -689,7 +687,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
             // Brutal hack for German locales that know "Januar" or "Jänner".
             /* TODO: add alternative month names to locale data? if there are
              * more languages... */
-            const LanguageTag& rLanguageTag = pFormatter->GetLanguageTag();
+            const LanguageTag& rLanguageTag = mrCurrentLanguageData.GetLanguageTag();
             if (rLanguageTag.getLanguage() == "de")
             {
                 if (rLanguageTag.getCountry() == "AT")
@@ -744,7 +742,7 @@ int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos
         {
             InitText();
         }
-        sal_Int16 nDays = pFormatter->GetCalendar()->getNumberOfDaysInWeek();
+        sal_Int16 nDays = mrCurrentLanguageData.GetCalendar()->getNumberOfDaysInWeek();
         for ( sal_Int16 i = 0; i < nDays; i++ )
         {
             if ( StringContainsWord( pUpperDayText[i], rString, nPos ) )
@@ -778,8 +776,8 @@ bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos
         if ( !aUpperCurrSymbol.getLength() )
         {   // If no format specified the currency of the currently active locale.
             LanguageType eLang = (mpFormat ? mpFormat->GetLanguage() :
-                    pFormatter->GetLocaleData()->getLanguageTag().getLanguageType());
-            aUpperCurrSymbol = pFormatter->GetCharClass()->uppercase(
+                    mrCurrentLanguageData.GetLocaleData()->getLanguageTag().getLanguageType());
+            aUpperCurrSymbol = mrCurrentLanguageData.GetCharClass()->uppercase(
                 SvNumberFormatter::GetCurrencyEntry( eLang ).GetSymbol() );
         }
         if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
@@ -794,7 +792,7 @@ bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos
             {
                 if ( aSymbol.getLength() <= rString.getLength() - nPos )
                 {
-                    aSymbol = pFormatter->GetCharClass()->uppercase(aSymbol);
+                    aSymbol = mrCurrentLanguageData.GetCharClass()->uppercase(aSymbol);
                     if ( StringContains( aSymbol, rString, nPos ) )
                     {
                         nPos = nPos + aSymbol.getLength();
@@ -826,8 +824,8 @@ bool ImpSvNumberInputScan::GetTimeAmPm( const OUString& rString, sal_Int32& nPos
 
     if ( rString.getLength() > nPos )
     {
-        const CharClass* pChr = pFormatter->GetCharClass();
-        const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
+        const CharClass* pChr = mrCurrentLanguageData.GetCharClass();
+        const LocaleDataWrapper* pLoc = mrCurrentLanguageData.GetLocaleData();
         if ( StringContains( pChr->uppercase( pLoc->getTimeAM() ), rString, nPos ) )
         {
             nAmPm = 1;
@@ -855,13 +853,13 @@ inline bool ImpSvNumberInputScan::GetDecSep( std::u16string_view rString, sal_In
 {
     if ( static_cast<sal_Int32>(rString.size()) > nPos )
     {
-        const OUString& rSep = pFormatter->GetNumDecimalSep();
+        const OUString& rSep = mrCurrentLanguageData.GetNumDecimalSep();
         if ( o3tl::starts_with(rString.substr(nPos), rSep) )
         {
             nPos = nPos + rSep.getLength();
             return true;
         }
-        const OUString& rSepAlt = pFormatter->GetNumDecimalSepAlt();
+        const OUString& rSepAlt = mrCurrentLanguageData.GetNumDecimalSepAlt();
         if ( !rSepAlt.isEmpty() && o3tl::starts_with(rString.substr(nPos), rSepAlt) )
         {
             nPos = nPos + rSepAlt.getLength();
@@ -891,7 +889,7 @@ inline bool ImpSvNumberInputScan::GetTime100SecSep( std::u16string_view rString,
         }
         // Even in an otherwise ISO 8601 string be lenient and accept the
         // locale defined separator.
-        const OUString& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
+        const OUString& rSep = mrCurrentLanguageData.GetLocaleData()->getTime100SecSep();
         if ( o3tl::starts_with(rString.substr(nPos), rSep))
         {
             nPos = nPos + rSep.getLength();
@@ -1086,7 +1084,7 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex ) const
 sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex ) const
 {
     // Preset invalid month number
-    sal_uInt16 nRes = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
+    sal_uInt16 nRes = mrCurrentLanguageData.GetCalendar()->getNumberOfMonthsInYear();
 
     if (sStrArray[nNums[nIndex]].getLength() <= 2)
     {
@@ -1207,7 +1205,7 @@ bool ImpSvNumberInputScan::IsAcceptableIso8601()
 {
     if (mpFormat && (mpFormat->GetType() & SvNumFormatType::DATE))
     {
-        switch (pFormatter->GetEvalDateFormat())
+        switch (mrCurrentLanguageData.GetEvalDateFormat())
         {
             case NF_EVALDATEFORMAT_INTL:
                 return CanForceToIso8601( GetDateOrder());
@@ -1316,19 +1314,19 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     else if (!sDateAcceptancePatterns.hasElements())
     {
         // The current locale is the format's locale, if a format is present.
-        const NfEvalDateFormat eEDF = pFormatter->GetEvalDateFormat();
-        if (!mpFormat || eEDF == NF_EVALDATEFORMAT_FORMAT || mpFormat->GetLanguage() == pFormatter->GetLanguage())
+        const NfEvalDateFormat eEDF = mrCurrentLanguageData.GetEvalDateFormat();
+        if (!mpFormat || eEDF == NF_EVALDATEFORMAT_FORMAT || mpFormat->GetLanguage() == mrCurrentLanguageData.GetIniLanguage())
         {
-            sDateAcceptancePatterns = pFormatter->GetLocaleData()->getDateAcceptancePatterns();
+            sDateAcceptancePatterns = mrCurrentLanguageData.GetLocaleData()->getDateAcceptancePatterns();
         }
         else
         {
-            OnDemandLocaleDataWrapper& xLocaleData = pFormatter->GetOnDemandLocaleDataWrapper(
-                    SvNumberFormatter::InputScannerPrivateAccess());
+            OnDemandLocaleDataWrapper& xLocaleData = mrCurrentLanguageData.GetOnDemandLocaleDataWrapper(
+                    SvNFLanguageData::InputScannerPrivateAccess());
             const LanguageTag aSaveLocale( xLocaleData->getLanguageTag() );
             assert(mpFormat->GetLanguage() == aSaveLocale.getLanguageType());   // prerequisite
             // Obtain formatter's locale's (e.g. system) patterns.
-            xLocaleData.changeLocale( LanguageTag( pFormatter->GetLanguage()));
+            xLocaleData.changeLocale( LanguageTag( mrCurrentLanguageData.GetIniLanguage()));
             const css::uno::Sequence<OUString> aLocalePatterns( xLocaleData->getDateAcceptancePatterns());
             // Reset to format's locale.
             xLocaleData.changeLocale( aSaveLocale);
@@ -1365,7 +1363,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     }
     nDatePatternStart = nStartPatternAt; // remember start particle
 
-    const sal_Int32 nMonthsInYear = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
+    const sal_Int32 nMonthsInYear = mrCurrentLanguageData.GetCalendar()->getNumberOfMonthsInYear();
 
     for (sal_Int32 nPattern=0; nPattern < sDateAcceptancePatterns.getLength(); ++nPattern)
     {
@@ -1375,8 +1373,8 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
             // Ignore a pattern that would match numeric input with decimal
             // separator. It may had been read from configuration or resulted
             // from the locales' patterns concatenation above.
-            if (    rPat[1] == pFormatter->GetLocaleData()->getNumDecimalSep().toChar()
-                 || rPat[1] == pFormatter->GetLocaleData()->getNumDecimalSepAlt().toChar())
+            if (    rPat[1] == mrCurrentLanguageData.GetLocaleData()->getNumDecimalSep().toChar()
+                 || rPat[1] == mrCurrentLanguageData.GetLocaleData()->getNumDecimalSepAlt().toChar())
             {
                 SAL_WARN("svl.numbers", "ignoring date acceptance pattern with decimal separator ambiguity: " << rPat);
                 continue;   // for, next pattern
@@ -1660,7 +1658,7 @@ DateOrder ImpSvNumberInputScan::GetDateOrder( bool bFromFormatIfNoPattern )
         if (bFromFormatIfNoPattern && mpFormat)
             return mpFormat->GetDateOrder();
         else
-            return pFormatter->GetLocaleData()->getDateOrder();
+            return mrCurrentLanguageData.GetLocaleData()->getDateOrder();
     }
     switch ((nOrder & 0xff0000) >> 16)
     {
@@ -1726,7 +1724,7 @@ DateOrder ImpSvNumberInputScan::GetDateOrder( bool bFromFormatIfNoPattern )
         }
     }
     SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
-    return pFormatter->GetLocaleData()->getDateOrder();
+    return mrCurrentLanguageData.GetLocaleData()->getDateOrder();
 }
 
 LongDateOrder ImpSvNumberInputScan::GetMiddleMonthLongDateOrder( bool bFormatTurn,
@@ -1782,7 +1780,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
     int nFormatOrder;
     if ( mpFormat && (mpFormat->GetType() & SvNumFormatType::DATE) )
     {
-        eEDF = pFormatter->GetEvalDateFormat();
+        eEDF = mrCurrentLanguageData.GetEvalDateFormat();
         switch ( eEDF )
         {
         case NF_EVALDATEFORMAT_INTL :
@@ -1805,8 +1803,8 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
     }
     bool res = true;
 
-    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    CalendarWrapper* pCal = pFormatter->GetCalendar();
+    const LocaleDataWrapper* pLoc = mrCurrentLanguageData.GetLocaleData();
+    CalendarWrapper* pCal = mrCurrentLanguageData.GetCalendar();
     for ( int nTryOrder = 1; nTryOrder <= nFormatOrder; nTryOrder++ )
     {
         pCal->setGregorianDateTime( Date( Date::SYSTEM ) ); // today
@@ -2459,7 +2457,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
             if (nDayOfWeek < 0)
             {
                 SkipChar( '.', rString, nTempPos ); // abbreviated
-                SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nTempPos );
+                SkipString( mrCurrentLanguageData.GetLocaleData()->getLongDateDayOfWeekSep(), rString, nTempPos );
                 SkipBlanks( rString, nTempPos);
                 short nTempTempMonth = GetMonth( rString, nTempPos);
                 if (nTempTempMonth)
@@ -2513,7 +2511,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
                     {
                         // full long name
                         SkipBlanks(rString, nPos);
-                        SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
+                        SkipString( mrCurrentLanguageData.GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
                     }
                     SkipBlanks(rString, nPos);
                     nTempMonth = GetMonth(rString, nPos);
@@ -2698,12 +2696,12 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         nThousand++;
     }
 
-    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
+    const LocaleDataWrapper* pLoc = mrCurrentLanguageData.GetLocaleData();
     bool bSignedYear = false;
     bool bDate = SkipDatePatternSeparator( nStringPos, nPos, bSignedYear);   // 12/31  31.12.  12/31/1999  31.12.1999
     if (!bDate)
     {
-        const OUString& rDate = pFormatter->GetDateSep();
+        const OUString& rDate = mrCurrentLanguageData.GetDateSep();
         SkipBlanks(rString, nPos);
         bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
     }
@@ -3087,7 +3085,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
         eScannedType = SvNumFormatType::PERCENT;
     }
 
-    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
+    const LocaleDataWrapper* pLoc = mrCurrentLanguageData.GetLocaleData();
     const OUString& rTime = pLoc->getTimeSep();
     if ( SkipString(rTime, rString, nPos) )         // 10:
     {
@@ -3120,7 +3118,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
     bool bDate = SkipDatePatternSeparator( nStringsCnt-1, nPos, bSignedYear);   // 12/31  31.12.  12/31/1999  31.12.1999
     if (!bDate)
     {
-        const OUString& rDate = pFormatter->GetDateSep();
+        const OUString& rDate = mrCurrentLanguageData.GetDateSep();
         bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
     }
     if (bDate && bSignDetectedHere)
@@ -3234,7 +3232,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
     {
         // day of week is just parsed away
         sal_Int32 nOldPos = nPos;
-        const OUString& rSep = pFormatter->GetLocaleData()->getLongDateDayOfWeekSep();
+        const OUString& rSep = mrCurrentLanguageData.GetLocaleData()->getLongDateDayOfWeekSep();
         if ( StringContains( rSep, rString, nPos ) )
         {
             nPos = nPos + rSep.getLength();
@@ -3292,7 +3290,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
     {
         return false;
     }
-    const ::utl::TransliterationWrapper* pTransliteration = pFormatter->GetTransliteration();
+    const ::utl::TransliterationWrapper* pTransliteration = mrCurrentLanguageData.GetTransliteration();
     const OUString* pStr;
     OUString aString( rString );
     bool bFound = false;
@@ -3445,7 +3443,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             if (eSetType == SvNumFormatType::FRACTION)  // Fraction 1 = 1/1
             {
                 if (i >= nStringsCnt || // no end string nor decimal separator
-                    pFormatter->IsDecimalSep( sStrArray[i]))
+                    mrCurrentLanguageData.IsDecimalSep( sStrArray[i]))
                 {
                     eScannedType = SvNumFormatType::FRACTION;
                     nMatchedAllStrings &= ~nMatchedVirgin;
@@ -3468,7 +3466,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                 eScannedType == SvNumFormatType::UNDEFINED &&   // not date or currency
                 nDecPos == 0 &&             // no previous decimal separator
                 (i >= nStringsCnt ||        // no end string nor decimal separator
-                 pFormatter->IsDecimalSep( sStrArray[i]))
+                 mrCurrentLanguageData.IsDecimalSep( sStrArray[i]))
                 )
             {
                 eScannedType = SvNumFormatType::FRACTION;
@@ -3742,8 +3740,8 @@ bool ImpSvNumberInputScan::MatchedReturn()
 void ImpSvNumberInputScan::InitText()
 {
     sal_Int32 j, nElems;
-    const CharClass* pChrCls = pFormatter->GetCharClass();
-    const CalendarWrapper* pCal = pFormatter->GetCalendar();
+    const CharClass* pChrCls = mrCurrentLanguageData.GetCharClass();
+    const CalendarWrapper* pCal = mrCurrentLanguageData.GetCalendar();
 
     pUpperMonthText.reset();
     pUpperAbbrevMonthText.reset();
@@ -3816,13 +3814,13 @@ void ImpSvNumberInputScan::InitText()
  */
 void ImpSvNumberInputScan::ChangeIntl()
 {
-    sal_Unicode cDecSep = pFormatter->GetNumDecimalSep()[0];
+    sal_Unicode cDecSep = mrCurrentLanguageData.GetNumDecimalSep()[0];
     bDecSepInDateSeps = ( cDecSep == '-' ||
-                          cDecSep == pFormatter->GetDateSep()[0] );
+                          cDecSep == mrCurrentLanguageData.GetDateSep()[0] );
     if (!bDecSepInDateSeps)
     {
-        sal_Unicode cDecSepAlt = pFormatter->GetNumDecimalSepAlt().toChar();
-        bDecSepInDateSeps = cDecSepAlt && (cDecSepAlt == '-' || cDecSepAlt == pFormatter->GetDateSep()[0]);
+        sal_Unicode cDecSepAlt = mrCurrentLanguageData.GetNumDecimalSepAlt().toChar();
+        bDecSepInDateSeps = cDecSepAlt && (cDecSepAlt == '-' || cDecSepAlt == mrCurrentLanguageData.GetDateSep()[0]);
     }
     bTextInitialized = false;
     aUpperCurrSymbol.clear();
@@ -3854,6 +3852,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                                            SvNumFormatType& F_Type,         // IN: old type, OUT: new type
                                            double& fOutNumber,              // OUT: number if convertible
                                            const SvNumberformat* pFormat,   // maybe a number format to match against
+                                           const NativeNumberWrapper* pNatNum,
                                            SvNumInputOptions eInputOptions )
 {
     bool res; // return value
@@ -3871,9 +3870,9 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
     else
     {
         // NoMoreUpperNeeded, all comparisons on UpperCase
-        OUString aString = pFormatter->GetCharClass()->uppercase( rString );
+        OUString aString = mrCurrentLanguageData.GetCharClass()->uppercase( rString );
         // convert native number to ASCII if necessary
-        TransformInput(pFormatter, aString);
+        TransformInput(pNatNum, mrCurrentLanguageData, aString);
         res = IsNumberFormatMain( aString, pFormat );
     }
 

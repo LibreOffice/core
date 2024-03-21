@@ -28,7 +28,7 @@
 #include <optional>
 
 class SvNumberformat;
-class SvNumberFormatter;
+class SvNFLanguageData;
 enum class SvNumFormatType : sal_Int16;
 
 #define SV_MAX_COUNT_INPUT_STRINGS  20    // max count of substrings in input scanner
@@ -36,7 +36,7 @@ enum class SvNumFormatType : sal_Int16;
 class ImpSvNumberInputScan
 {
 public:
-    explicit ImpSvNumberInputScan( SvNumberFormatter* pFormatter );
+    explicit ImpSvNumberInputScan(SvNFLanguageData& rCurrentLanguage);
     ~ImpSvNumberInputScan();
 
 /*!*/   void ChangeIntl();                      // MUST be called if language changes
@@ -51,6 +51,7 @@ public:
                          SvNumFormatType& F_Type,            /// format type (in + out)
                          double& fOutNumber,                 /// value determined (out)
                          const SvNumberformat* pFormat,      /// number format to which compare against
+                         const NativeNumberWrapper* pNatNum,
                          SvNumInputOptions eInputOptions);
 
     /// after IsNumberFormat: get decimal position
@@ -76,7 +77,7 @@ public:
     bool HasIso8601Tsep() const { return bIso8601Tsep; }
 
 private:
-    SvNumberFormatter*  pFormatter;
+    SvNFLanguageData& mrCurrentLanguageData;
     const SvNumberformat* mpFormat;                            //* The format to compare against, if any
     std::unique_ptr<OUString[]> pUpperMonthText;               //* Array of month names, uppercase
     std::unique_ptr<OUString[]> pUpperAbbrevMonthText;         //* Array of month names, abbreviated, uppercase

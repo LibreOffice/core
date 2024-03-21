@@ -263,7 +263,7 @@ void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
 
         if( nFormat == pFormatter->GetFormatIndex( NF_NUMBER_STANDARD,
                                                     m_eCurLanguage )
-            || pFormat->GetOutputString( fVal, sValue, &pCol )
+            || pFormat->GetOutputString( fVal, sValue, &pCol, pFormatter->GetNatNum() )
             || nFormatType == SvNumFormatType::UNDEFINED )
         {
             sValue = pFormat->GetFormatstring();
