@@ -33,7 +33,7 @@ typedef struct _uno_Any uno_Any;
 typedef struct _uno_Mapping uno_Mapping;
 
 int msvc_filterCppException(EXCEPTION_POINTERS*, uno_Any*, uno_Mapping*);
-void msvc_raiseException(uno_Any*, uno_Mapping*);
+[[noreturn]] void msvc_raiseException(uno_Any*, uno_Mapping*);
 
 constexpr DWORD MSVC_EH_MAGIC_PARAM = 0x19930520;
 // The NT Exception code that msvcrt uses ('msc' | 0xE0000000)

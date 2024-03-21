@@ -163,9 +163,6 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
             TYPELIB_DANGER_RELEASE(pReturnTD);
 
         msvc_raiseException(&aUnoExc, pThis->getBridge()->getUno2Cpp()); // has to destruct the any
-
-        // is here for dummy
-        return typelib_TypeClass_VOID;
     }
     else // no exception occurred...
     {

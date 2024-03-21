@@ -21,6 +21,7 @@
 
 #include <memory>
 
+#include <cstdlib>
 #include <malloc.h>
 #include <new.h>
 #include <typeinfo>
@@ -196,6 +197,7 @@ void msvc_raiseException(uno_Any* pUnoExc, uno_Mapping* pUno2Cpp)
 
     // last point to release anything not affected by stack unwinding
     RaiseException(MSVC_EH_MAGIC_CODE, EXCEPTION_NONCONTINUABLE, MSVC_EH_PARAMETERS, arFilterArgs);
+    std::abort();
 }
 
 // This function does the same check as __CxxDetectRethrow from msvcrt (see its
