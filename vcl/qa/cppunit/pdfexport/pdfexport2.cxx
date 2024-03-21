@@ -1047,6 +1047,48 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReexportPDF)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160117)
+{
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf160117.ods", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    int nCount = 0;
+    bool bFound1 = false;
+    bool bFound2 = false;
+    bool bFound3 = false;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "FontDescriptor")
+        {
+            auto pFontName
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("FontName"_ostr));
+            CPPUNIT_ASSERT(pFontName);
+            if ("CAAAAA+LiberationSans-Bold"_ostr == pFontName->GetValue())
+                bFound1 = true;
+            else if ("DAAAAA+LiberationSans-Italic"_ostr == pFontName->GetValue())
+                bFound2 = true;
+            else if ("BAAAAA+LiberationSans"_ostr == pFontName->GetValue())
+                bFound3 = true;
+            ++nCount;
+        }
+    }
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(3, nCount);
+    CPPUNIT_ASSERT(bFound1);
+    CPPUNIT_ASSERT(bFound2);
+    CPPUNIT_ASSERT(bFound3);
+}
+
 // Check we correctly copy more complex resources (Fonts describing
 // glyphs in recursive arrays) to the target PDF
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReexportDocumentWithComplexResources)
