@@ -370,13 +370,17 @@ void CWinClipboard::unregisterClipboardViewer() { m_MtaOleClipboard.registerClip
 
 void WINAPI CWinClipboard::onClipboardContentChanged()
 {
-    osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
-
-    // reassociation to instance through static member
-    if (nullptr != s_pCWinClipbImpl)
+    rtl::Reference<CWinClipboard> pWinClipboard;
     {
-        s_pCWinClipbImpl->m_foreignContent.clear();
-        s_pCWinClipbImpl->notifyAllClipboardListener();
+        // Only hold the mutex to obtain a safe reference to the impl, to avoid deadlock
+        osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
+        pWinClipboard.set(s_pCWinClipbImpl);
+    }
+
+    if (pWinClipboard)
+    {
+        pWinClipboard->m_foreignContent.clear();
+        pWinClipboard->notifyAllClipboardListener();
     }
 }
 
