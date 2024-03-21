@@ -4407,6 +4407,8 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         {
             nPrecExp = 0;
         }
+        // Make sure that Calc's ROUND and formatted output agree
+        fNumber = rtl_math_round(fNumber, rInfo.nCntPost, rtl_math_RoundingMode_Corrected);
         if (rInfo.nCntPost) // Decimal places
         {
             if ((rInfo.nCntPost + nPrecExp) > 15 && nPrecExp < 15)
