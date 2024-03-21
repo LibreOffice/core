@@ -129,7 +129,9 @@ bool XcsParser::startElement(
     // illegal content):
     if (ignoring_ > 0
         || (nsId == xmlreader::XmlReader::NAMESPACE_NONE
-            && (name == "import" || name == "uses" || name == "constraints" || name == "desc")))
+            && (name == "import" || name == "uses" || name == "constraints" || name == "desc"
+                // the following are unused by LO but valid
+                || name == "deprecated" || name == "author" || name == "label")))
     {
         assert(ignoring_ < LONG_MAX);
         ++ignoring_;
