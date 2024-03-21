@@ -74,4 +74,8 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_uibase_uiview, \
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_uibase_uiview))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_uibase_uiview,abort))
+endif
+
 # vim: set noet sw=4 ts=4:
