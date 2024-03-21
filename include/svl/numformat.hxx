@@ -674,7 +674,8 @@ private:
     DECL_DLLPRIVATE_STATIC_LINK(SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void);
 
     // Substitute a format during GetFormatEntry(), i.e. system formats.
-    SvNumberformat* ImpSubstituteEntry(SvNumberformat* pFormat, sal_uInt32* o_pRealKey = nullptr);
+    SVL_DLLPRIVATE SvNumberformat* ImpSubstituteEntry(SvNumberformat* pFormat,
+                                                      sal_uInt32* o_pRealKey = nullptr);
 
     // Whether nFIndex is a special builtin format
     SVL_DLLPRIVATE bool ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageType eLnge);
