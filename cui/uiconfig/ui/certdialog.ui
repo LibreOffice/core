@@ -44,7 +44,7 @@
                 <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="add-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="certdialog|extended_tip|add">Opens a file picker dialog to add a new Network Security Services Certificate directory to the list.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="certdialog|extended_tip|add">Opens the Select Path dialog to add a new Network Security Services Certificate directory to the list.</property>
                   </object>
                 </child>
               </object>

@@ -153,7 +153,7 @@
                         <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="browse-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="exchangedatabases|extended_tip|browse">Opens a file open dialog to select a database file (*.odb). The selected file is added to the Available Databases list.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="exchangedatabases|extended_tip|browse">Opens the Open dialog to select a database file (*.odb). The selected file is added to the Available Databases list.</property>
                           </object>
                         </child>
                       </object>

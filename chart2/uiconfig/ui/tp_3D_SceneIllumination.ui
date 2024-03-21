@@ -276,11 +276,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHTSOURCE_COLOR|tooltip_text">Select a color using the color dialog</property>
+                        <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_LIGHTSOURCE_COLOR|tooltip_text">Select a color using the Pick a Color dialog</property>
                         <property name="image">IMG_LIGHTSOURCE_COLOR</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="BTN_LIGHTSOURCE_COLOR-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHTSOURCE_COLOR">Select a color using the color dialog.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_LIGHTSOURCE_COLOR">Select a color using the Pick a Color dialog.</property>
                           </object>
                         </child>
                       </object>
@@ -360,11 +360,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_AMBIENT_COLOR|tooltip_text">Select a color using the color dialog</property>
+                    <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|BTN_AMBIENT_COLOR|tooltip_text">Select a color using the Pick a Color dialog</property>
                     <property name="image">IMG_AMBIENT_COLOR</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_AMBIENT_COLOR-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_AMBIENT_COLOR">Select a color using the color dialog.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tp_3D_SceneIllumination|extended_tip|BTN_AMBIENT_COLOR">Select a color using the Pick a color dialog.</property>
                       </object>
                     </child>
                   </object>

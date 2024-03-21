@@ -329,7 +329,7 @@
                     <property name="receives_default">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="browse-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|browse">Opens a file open dialog where you can select a database file (*.odb). The selected file is added to the Databases Selection list.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|browse">Opens the Open dialog where you can select a database file (*.odb). The selected file is added to the Databases Selection list.</property>
                       </object>
                     </child>
                   </object>

@@ -165,7 +165,7 @@
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="importButton-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="iconselectordialog|extended_tip|importButton">Adds new icons to the list of icons. You see a file open dialog that imports the selected icon or icons into the internal icon directory of the office suite.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="iconselectordialog|extended_tip|importButton">Adds new icons to the list of icons. You see the Open dialog that imports the selected icon or icons into the internal icon directory of the office suite.</property>
                           </object>
                         </child>
                       </object>
