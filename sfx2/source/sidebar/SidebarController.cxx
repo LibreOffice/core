@@ -811,30 +811,28 @@ void SidebarController::SwitchToDeck (
     {
         if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
         {
-            boost::property_tree::ptree aTree;
-            aTree.put("locale", comphelper::LibreOfficeKit::getLocale().getBcp47());
-            bool bStateChanged = false;
+            std::vector<std::pair<std::string, std::string>> aStateChanges;
             if (msCurrentDeckId != rDeckDescriptor.msId)
             {
                 const std::string hide = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
                 if (!hide.empty())
                 {
-                    aTree.put("commandName", hide);
-                    aTree.put("state", "false");
-                    bStateChanged = true;
+                    aStateChanges.push_back({hide, std::string("false")});
                 }
             }
 
             const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId, GetCurrentContext());
             if (!show.empty())
             {
-                aTree.put("commandName", show);
-                aTree.put("state", "true");
-                bStateChanged = true;
+                aStateChanges.push_back({show, std::string("true")});
             }
 
-            if (bStateChanged)
+            for (const auto& rStateChange : aStateChanges)
             {
+                boost::property_tree::ptree aTree;
+                aTree.put("locale", comphelper::LibreOfficeKit::getLocale().getBcp47());
+                aTree.put("commandName", rStateChange.first);
+                aTree.put("state", rStateChange.second);
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aTree);
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
