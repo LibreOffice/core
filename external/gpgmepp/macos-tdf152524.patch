@@ -1,20 +1,25 @@
 --- src/posix-io.c	2023-02-01 11:50:48
-+++ src/posix-io.c	2024-02-05 19:16:00
-@@ -62,6 +62,10 @@
- # endif
- #endif
- #include <sys/socket.h>
++++ /Users/pluby/posix-io.c	2024-03-21 09:50:24
+@@ -67,6 +67,13 @@
+ #include "priv-io.h"
+ #include "sema.h"
+ #include "debug.h"
 +
 +#if HAVE_MACOS_SYSTEM
 +#include <dispatch/dispatch.h>
++#include <spawn.h>
++
++extern char **environ;
 +#endif
  
- #include "util.h"
- #include "priv-io.h"
-@@ -517,12 +521,50 @@
+ 
+ #ifdef USE_LINUX_GETDENTS
+@@ -515,6 +522,15 @@
+     }
+   return 0;
  }
- 
- 
++
++
 +#if HAVE_MACOS_SYSTEM
 +static int
 +_gpgme_io_spawn_macos (const char *path, char *const argv[], unsigned int flags,
@@ -22,11 +27,10 @@
 +		       void (*atfork) (void *opaque, int reserved),
 +		       void *atforkvalue, pid_t *r_pid);
 +#endif /*HAVE_MACOS_SYSTEM*/
-+
-+
+ 
+ 
  /* Returns 0 on success, -1 on error.  */
- int
- _gpgme_io_spawn (const char *path, char *const argv[], unsigned int flags,
+@@ -523,6 +539,35 @@
  		 struct spawn_fd_item_s *fd_list,
  		 void (*atfork) (void *opaque, int reserved),
  		 void *atforkvalue, pid_t *r_pid)
@@ -62,3 +66,37 @@
  {
    pid_t pid;
    int i;
+@@ -552,8 +597,15 @@
+   if (!pid)
+     {
+       /* Intermediate child to prevent zombie processes.  */
++#if HAVE_MACOS_SYSTEM
++      /* tdf#152524 fix crash by skipping second fork()
++       * Instead of calling a second fork() in the child process, replace
++       * execv() with posix_spawn(). posix_spawn() does not call any atfork
++       * handlers so the atfork handler that crashes will be skipped.  */
++#else /*HAVE_MACOS_SYSTEM*/
+       if ((pid = fork ()) == 0)
+ 	{
++#endif /*HAVE_MACOS_SYSTEM*/
+ 	  /* Child.  */
+           int max_fds = -1;
+           int fd;
+@@ -664,6 +716,9 @@
+ 		close (fd);
+ 	    }
+ 
++#if HAVE_MACOS_SYSTEM
++	  _exit(posix_spawn(NULL, path, NULL, NULL, argv, environ));
++#else /*HAVE_MACOS_SYSTEM*/
+ 	  execv (path, (char *const *) argv);
+ 	  /* Hmm: in that case we could write a special status code to the
+ 	     status-pipe.  */
+@@ -674,6 +729,7 @@
+ 	_exit (1);
+       else
+ 	_exit (0);
++#endif /*HAVE_MACOS_SYSTEM*/
+     }
+ 
+   TRACE_LOG  ("waiting for child process pid=%i", pid);
