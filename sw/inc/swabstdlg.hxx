@@ -280,6 +280,8 @@ public:
     virtual void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTableFlags,
                     SwTableAutoFormat const*& prTAFormat ) = 0;
+    virtual std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const = 0;
+    virtual void Apply() = 0;
 };
 
 class AbstractSwInsertDBColAutoPilot :  public VclAbstractDialog

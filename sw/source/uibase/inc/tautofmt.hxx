@@ -35,19 +35,19 @@ class SwWrtShell;
 
 class SwAutoFormatDlg final : public SfxDialogController
 {
-    OUString        m_aStrTitle;
-    OUString        m_aStrLabel;
-    OUString        m_aStrClose;
-    OUString        m_aStrDelTitle;
-    OUString        m_aStrDelMsg;
-    OUString        m_aStrRenameTitle;
-    OUString        m_aStrInvalidFormat;
+    OUString m_aStrTitle;
+    OUString m_aStrLabel;
+    OUString m_aStrClose;
+    OUString m_aStrDelTitle;
+    OUString m_aStrDelMsg;
+    OUString m_aStrRenameTitle;
+    OUString m_aStrInvalidFormat;
 
-    SwWrtShell*     m_pShell;
-    sal_uInt8       m_nIndex;
-    sal_uInt8       m_nDfltStylePos;
-    bool            m_bCoreDataChanged : 1;
-    bool            m_bSetAutoFormat : 1;
+    SwWrtShell* m_pShell;
+    sal_uInt8 m_nIndex;
+    sal_uInt8 m_nDfltStylePos;
+    bool m_bCoreDataChanged : 1;
+    bool m_bSetAutoFormat : 1;
 
     AutoFormatPreview m_aWndPreview;
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
@@ -64,8 +64,8 @@ class SwAutoFormatDlg final : public SfxDialogController
     std::unique_ptr<weld::Button> m_xBtnRename;
     std::unique_ptr<weld::CustomWeld> m_xWndPreview;
 
-    void Init( const SwTableAutoFormat* pSelFormat );
-    void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );
+    void Init(const SwTableAutoFormat* pSelFormat);
+    void UpdateChecks(const SwTableAutoFormat&, bool bEnableBtn);
 
     DECL_LINK(CheckHdl, weld::Toggleable&, void);
     DECL_LINK(AddHdl, weld::Button&, void);
@@ -74,8 +74,8 @@ class SwAutoFormatDlg final : public SfxDialogController
     DECL_LINK(SelFormatHdl, weld::TreeView&, void);
 
 public:
-    SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,
-                    bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat);
+    SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell, bool bSetAutoFormat,
+                    const SwTableAutoFormat* pSelFormat);
 
     std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const;
 

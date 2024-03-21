@@ -647,6 +647,11 @@ void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_Int32 nIdx)
     m_xDlg->SelectEntryPos( nIdx );
 }
 
+std::unique_ptr<SwTableAutoFormat> AbstractSwConvertTableDlg_Impl::FillAutoFormatOfIndex() const
+{
+    return m_xDlg->FillAutoFormatOfIndex();
+}
+
 std::unique_ptr<SwTableAutoFormat> AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex() const
 {
     return m_xDlg->FillAutoFormatOfIndex();
