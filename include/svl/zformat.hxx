@@ -242,8 +242,8 @@ public:
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString ) const;
 
     // bStarFlag: Take *n format as ESC n
-    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor, bool bStarFlag = false );
-    void GetOutputString( std::u16string_view sString, OUString& OutString, const Color** ppColor, bool bStarFlag = false );
+    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor, bool bStarFlag = false ) const;
+    void GetOutputString( std::u16string_view sString, OUString& OutString, const Color** ppColor, bool bStarFlag = false ) const;
 
     // True if type text
     bool IsTextFormat() const { return bool(eType & SvNumFormatType::TEXT); }
@@ -628,7 +628,7 @@ private:
                     sal_uInt16 nIx,
                     short eSymbolType,
                     bool bStarFlag,
-                    bool bInsertRightBlank = false );
+                    bool bInsertRightBlank = false ) const;
 
     // Helper function to fill in the integer part and the group (AKA thousand) separators
     SVL_DLLPRIVATE bool ImpNumberFillWithThousands(OUStringBuffer& sStr,
@@ -673,31 +673,31 @@ private:
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
                                              bool bStarFlag,
-                                             OUStringBuffer& OutString);
+                                             OUStringBuffer& OutString) const;
     SVL_DLLPRIVATE bool ImpGetScientificOutput(double fNumber,
                                                sal_uInt16 nIx,
                                                bool bStarFlag,
-                                               OUStringBuffer& OutString);
+                                               OUStringBuffer& OutString) const;
 
     SVL_DLLPRIVATE bool ImpGetDateOutput( double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
-                                          OUStringBuffer& OutString );
+                                          OUStringBuffer& OutString ) const;
     SVL_DLLPRIVATE bool ImpGetTimeOutput( double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
-                                          OUStringBuffer& OutString );
+                                          OUStringBuffer& OutString ) const;
     SVL_DLLPRIVATE bool ImpGetDateTimeOutput( double fNumber,
                                               sal_uInt16 nIx,
                                               bool bStarFlag,
-                                              OUStringBuffer& OutString );
+                                              OUStringBuffer& OutString ) const;
 
     // Switches to the "gregorian" calendar if the current calendar is
     // non-"gregorian" and the era is a "Dummy" era of a calendar which doesn't
     // know a "before" era (like zh_TW ROC or ja_JP Gengou). If switched and
     // rOrgCalendar was "gregorian" the string is emptied. If rOrgCalendar was
     // empty the previous calendar name and date/time are returned.
-    SVL_DLLPRIVATE bool ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, double& fOrgDateTime );
+    SVL_DLLPRIVATE bool ImpFallBackToGregorianCalendar(OUString& rOrgCalendar, double& fOrgDateTime) const;
 
     // Append a "G" short era string of the given calendar. In the case of a
     // Gengou calendar this is a one character abbreviation, for other

@@ -2198,7 +2198,7 @@ static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, std::u
 void SvNumberformat::GetOutputString(std::u16string_view sString,
                                      OUString& OutString,
                                      const Color** ppColor,
-                                     bool bStarFlag)
+                                     bool bStarFlag) const
 {
     OUStringBuffer sOutBuff;
     sal_uInt16 nIx;
@@ -2476,7 +2476,7 @@ sal_uInt16 SvNumberformat::GetSubformatIndex (double fNumber ) const
 bool SvNumberformat::GetOutputString(double fNumber,
                                      OUString& OutString,
                                      const Color** ppColor,
-                                     bool bStarFlag)
+                                     bool bStarFlag) const
 {
     bool bRes = false;
     OutString.clear();
@@ -2666,7 +2666,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
 bool SvNumberformat::ImpGetScientificOutput(double fNumber,
                                             sal_uInt16 nIx,
                                             bool bStarFlag,
-                                            OUStringBuffer& sStr)
+                                            OUStringBuffer& sStr) const
 {
     bool bRes = false;
     bool bSign = false;
@@ -2900,7 +2900,7 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
 bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
-                                          OUStringBuffer& sBuff)
+                                          OUStringBuffer& sBuff) const
 {
     bool bRes = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
@@ -3089,7 +3089,7 @@ sal_uInt16 SvNumberformat::ImpGetFractionOfSecondString( OUStringBuffer& rBuf, d
 bool SvNumberformat::ImpGetTimeOutput(double fNumber,
                                       sal_uInt16 nIx,
                                       bool bStarFlag,
-                                      OUStringBuffer& sBuff)
+                                      OUStringBuffer& sBuff) const
 {
     using namespace ::com::sun::star::i18n;
     bool bCalendarSet = false;
@@ -3479,7 +3479,7 @@ void SvNumberformat::SwitchToGregorianCalendar( std::u16string_view rOrgCalendar
     }
 }
 
-bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, double& fOrgDateTime )
+bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, double& fOrgDateTime ) const
 {
     using namespace ::com::sun::star::i18n;
     CalendarWrapper& rCal = GetCal();
@@ -3709,7 +3709,7 @@ static bool lcl_getValidDate( const DateTime& rNullDate, const DateTime& rEpochS
 bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                       sal_uInt16 nIx,
                                       bool bStarFlag,
-                                      OUStringBuffer& sBuff)
+                                      OUStringBuffer& sBuff) const
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
@@ -3980,7 +3980,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
 bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
-                                          OUStringBuffer& sBuff)
+                                          OUStringBuffer& sBuff) const
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
@@ -4791,7 +4791,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
                                     sal_uInt16 nIx,        // subformat index
                                     short eSymbolType,     // type of stop condition
                                     bool bStarFlag,        // Take *n format as ESC n
-                                    bool bInsertRightBlank)// insert blank on right for denominator (default = false)
+                                    bool bInsertRightBlank) const // insert blank on right for denominator (default = false)
 {
     bool bRes = false;
     bool bStop = false;
