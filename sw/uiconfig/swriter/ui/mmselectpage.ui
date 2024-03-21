@@ -173,7 +173,7 @@
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="browsetemplate-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|browsetemplate">Opens a template selector dialog.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|browsetemplate">Opens the New dialog to select a template.</property>
                   </object>
                 </child>
               </object>
