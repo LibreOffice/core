@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
 
@@ -4806,27 +4807,35 @@ void SwWW8ImplReader::ReadDocVars()
         aDocVarStrings, &aDocVarStringIds, &aDocValueStrings);
     if (m_bVer67)        return;
 
-    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-        m_pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-    uno::Reference<document::XDocumentProperties> xDocProps(
-        xDPS->getDocumentProperties());
-    OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
-    uno::Reference<beans::XPropertyContainer> xUserDefinedProps =
-        xDocProps->getUserDefinedProperties();
-    OSL_ENSURE(xUserDefinedProps.is(), "UserDefinedProperties is null");
-
-    for(size_t i=0; i<aDocVarStrings.size(); i++)
+    uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<css::lang::XMultiServiceFactory> xTextFactory(m_pDocShell->GetModel(), uno::UNO_QUERY);
+    uno::Reference< container::XNameAccess > xFieldMasterAccess = xFieldsSupplier->getTextFieldMasters();
+    for(size_t i = 0; i < aDocVarStrings.size(); i++)
     {
         const OUString &rName = aDocVarStrings[i];
         uno::Any aValue;
-        aValue <<= rName;
-        try {
-            xUserDefinedProps->addProperty( rName,
-                beans::PropertyAttribute::REMOVABLE,
-                aValue );
-        } catch (const uno::Exception &) {
-            // ignore
+        if (aDocValueStrings.size() > i)
+        {
+            OUString value = aDocValueStrings[i];
+            value = value.replaceAll("\r\n", "\n");
+            value = value.replaceAll("\r", "\n");
+            aValue <<= value;
         }
+
+        uno::Reference< beans::XPropertySet > xMaster;
+        OUString sFieldMasterService("com.sun.star.text.FieldMaster.User." + rName);
+
+        // Find or create Field Master
+        if (xFieldMasterAccess->hasByName(sFieldMasterService))
+        {
+            xMaster.set(xFieldMasterAccess->getByName(sFieldMasterService), uno::UNO_QUERY_THROW);
+        }
+        else
+        {
+            xMaster.set(xTextFactory->createInstance("com.sun.star.text.FieldMaster.User"), uno::UNO_QUERY_THROW);
+            xMaster->setPropertyValue("Name", uno::Any(rName));
+        }
+        xMaster->setPropertyValue("Content", aValue);
     }
 }
 
