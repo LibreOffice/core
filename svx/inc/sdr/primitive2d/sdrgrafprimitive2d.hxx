@@ -33,6 +33,7 @@ private:
     attribute::SdrLineFillEffectsTextAttribute maSdrLFSTAttribute;
     GraphicObject maGraphicObject;
     GraphicAttr maGraphicAttr;
+    bool mbPlaceholderImage = false;
 
     // local decomposition.
     virtual Primitive2DReference
@@ -41,7 +42,8 @@ private:
 public:
     SdrGrafPrimitive2D(::basegfx::B2DHomMatrix aTransform,
                        const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
-                       const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr);
+                       const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr,
+                       bool bPlaceholderImage = false);
 
     // data access
     const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }

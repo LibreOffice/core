@@ -20,6 +20,7 @@
 #include <sdr/primitive2d/sdrgrafprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/exclusiveeditviewprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
@@ -103,9 +104,22 @@ Primitive2DReference SdrGrafPrimitive2D::create2DDecomposition(
     // add text
     if (!getSdrLFSTAttribute().getText().isDefault())
     {
-        aRetval.push_back(createTextPrimitive(basegfx::B2DPolyPolygon(aUnitOutline), getTransform(),
-                                              getSdrLFSTAttribute().getText(),
-                                              getSdrLFSTAttribute().getLine(), false, false));
+        const drawinglayer::primitive2d::Primitive2DReference xReferenceA = createTextPrimitive(
+            basegfx::B2DPolyPolygon(aUnitOutline), getTransform(), getSdrLFSTAttribute().getText(),
+            getSdrLFSTAttribute().getLine(), false, false);
+
+        if (!mbPlaceholderImage)
+        {
+            aRetval.push_back(xReferenceA);
+        }
+        else
+        {
+            const drawinglayer::primitive2d::Primitive2DReference aEmbedded(
+                new drawinglayer::primitive2d::ExclusiveEditViewPrimitive2D(
+                    drawinglayer::primitive2d::Primitive2DContainer{ xReferenceA }));
+
+            aRetval.push_back(aEmbedded);
+        }
     }
 
     // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
@@ -128,11 +142,13 @@ Primitive2DReference SdrGrafPrimitive2D::create2DDecomposition(
 SdrGrafPrimitive2D::SdrGrafPrimitive2D(
     basegfx::B2DHomMatrix aTransform,
     const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
-    const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr)
+    const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr,
+    bool bPlaceholderImage /* = false */)
     : maTransform(std::move(aTransform))
     , maSdrLFSTAttribute(rSdrLFSTAttribute)
     , maGraphicObject(rGraphicObject)
     , maGraphicAttr(rGraphicAttr)
+    , mbPlaceholderImage(bPlaceholderImage)
 {
     // activate callback to flush buffered decomposition content
     setCallbackSeconds(20);

@@ -84,7 +84,8 @@ namespace sdr::contact
                 rObjectMatrix,
                 rAttribute,
                 aEmptyGraphicObject,
-                aEmptyGraphicAttr));
+                aEmptyGraphicAttr,
+                true));
             xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReferenceA };
 
             // SdrGrafPrimitive2D with content (which is the preview graphic) scaled to smaller size and
