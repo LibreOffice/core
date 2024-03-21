@@ -159,18 +159,20 @@ namespace drawinglayer::primitive2d
             separate from other text data since some renderers need to suppress
             this output due to painting the edited text in e.g. an
             OutlinerEditView in the active text edit control.
-            It is derived from GroupPrimitive2D so decomposes to the contained
-            Text, thus it will get displayed everywhere except a renderer
-            checks for this Primitive and suppresses it actively. Remember that
-            this is also important e.g. for PDF export - if the object is in
+            It now uses get2DDecomposition to decide if to process or not,
+            thus it does not need to be processed in any B2DProcessor at all.
+            This is also important e.g. for PDF export - if the object is in
             edit mode, we need to include the most current text from EditEngine/
-            Outliner to that export
+            Outliner to that export which is contained here.
          */
         class DRAWINGLAYER_DLLPUBLIC TextHierarchyEditPrimitive2D final : public GroupPrimitive2D
         {
         public:
             /// constructor
             explicit TextHierarchyEditPrimitive2D(Primitive2DContainer&& aContent);
+
+            /// local decomposition
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;

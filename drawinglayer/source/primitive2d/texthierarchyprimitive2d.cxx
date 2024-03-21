@@ -141,6 +141,15 @@ namespace drawinglayer::primitive2d
         {
         }
 
+        void TextHierarchyEditPrimitive2D::get2DDecomposition(
+            Primitive2DDecompositionVisitor& rVisitor,
+            const geometry::ViewInformation2D& rViewInformation) const
+        {
+            // check if TextEdit is active. If not, process. If yes, suppress the content
+            if (!rViewInformation.getTextEditActive())
+                GroupPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+        }
+
         // provide unique ID
         sal_uInt32 TextHierarchyEditPrimitive2D::getPrimitive2DID() const
         {

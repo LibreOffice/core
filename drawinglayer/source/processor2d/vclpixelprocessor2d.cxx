@@ -343,17 +343,6 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
             processInvertPrimitive2D(rCandidate);
             break;
         }
-        case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D:
-        {
-            // check if TextEdit is active
-            if (getViewInformation2D().getTextEditActive())
-                // suppress text display
-                break;
-
-            // visualize text
-            process(rCandidate);
-            break;
-        }
         case PRIMITIVE2D_ID_EPSPRIMITIVE2D:
         {
             RenderEpsPrimitive2D(static_cast<const primitive2d::EpsPrimitive2D&>(rCandidate));

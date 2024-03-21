@@ -224,8 +224,10 @@ namespace sdr::contact
             if (static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView()).IsTextEdit())
                 aNewViewInformation2D.setTextEditActive(true);
 
-            // this is the EditView repaint, provide that information
-            aNewViewInformation2D.setEditViewActive(true);
+            // this is the EditView repaint, provide that information,
+            // but only if we do not export to metafile
+            if (!isOutputToRecordingMetaFile())
+                aNewViewInformation2D.setEditViewActive(true);
 
             updateViewInformation2D(aNewViewInformation2D);
 

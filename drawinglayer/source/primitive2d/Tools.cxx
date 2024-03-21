@@ -231,6 +231,8 @@ OUString idToString(sal_uInt32 nId)
             return "FILLEDRECTANGLEPRIMITIVE";
         case PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D:
             return "SINGLELINEPRIMITIVE";
+        case PRIMITIVE2D_ID_EXCLUSIVEEDITVIEWPRIMITIVE2D:
+            return "EXCLUSIVEEDITVIEWPRIMITIVE2D";
         default:
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }
