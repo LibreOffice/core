@@ -60,6 +60,7 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_svg_export_tests \
     CppunitTest_sd_tiledrendering \
+    CppunitTest_sd_tiledrendering2 \
 ))
 endif
 endif
