@@ -367,6 +367,10 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
     createSwWebDoc("image-size.html");
     awt::Size aSize = getShape(1)->getSize();
     OutputDevice* pDevice = Application::GetDefaultDevice();
@@ -381,6 +385,10 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf142781)
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
     createSwWebDoc("tdf142781.html");
     OutputDevice* pDevice = Application::GetDefaultDevice();
     Size aPixelSize(672, 480);
