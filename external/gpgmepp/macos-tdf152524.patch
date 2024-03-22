@@ -1,5 +1,5 @@
 --- src/posix-io.c	2023-02-01 11:50:48
-+++ /Users/pluby/posix-io.c	2024-03-21 09:50:24
++++ src/posix-io.c	2024-03-21 09:50:24
 @@ -67,6 +67,13 @@
  #include "priv-io.h"
  #include "sema.h"
