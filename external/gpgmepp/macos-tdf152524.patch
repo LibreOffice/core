@@ -1,0 +1,102 @@
+--- src/posix-io.c	2023-02-01 11:50:48
++++ src/posix-io.c	2024-03-21 09:50:24
+@@ -67,6 +67,13 @@
+ #include "priv-io.h"
+ #include "sema.h"
+ #include "debug.h"
++
++#if HAVE_MACOS_SYSTEM
++#include <dispatch/dispatch.h>
++#include <spawn.h>
++
++extern char **environ;
++#endif
+ 
+ 
+ #ifdef USE_LINUX_GETDENTS
+@@ -515,6 +522,15 @@
+     }
+   return 0;
+ }
++
++
++#if HAVE_MACOS_SYSTEM
++static int
++_gpgme_io_spawn_macos (const char *path, char *const argv[], unsigned int flags,
++		       struct spawn_fd_item_s *fd_list,
++		       void (*atfork) (void *opaque, int reserved),
++		       void *atforkvalue, pid_t *r_pid);
++#endif /*HAVE_MACOS_SYSTEM*/
+ 
+ 
+ /* Returns 0 on success, -1 on error.  */
+@@ -523,6 +539,35 @@
+ 		 struct spawn_fd_item_s *fd_list,
+ 		 void (*atfork) (void *opaque, int reserved),
+ 		 void *atforkvalue, pid_t *r_pid)
++#if HAVE_MACOS_SYSTEM
++{
++	/* tdf#152524 fork() and exec() in a separate libdispatch queue
++	 * This is another attempt to stop the crashing in libdispatch by
++	 * running fork() and exec() within a libdispatch task that will
++	 * run in a sequential queue in a non-main thread.  */
++	static dispatch_queue_t queue = NULL;
++	if (!queue)
++		queue = dispatch_queue_create ("gpgmepp",
++					       DISPATCH_QUEUE_CONCURRENT);
++	if (!queue)
++		return -1;
++
++	__block int ret = -1;
++	dispatch_sync(queue, ^{
++		ret = _gpgme_io_spawn_macos (path, argv, flags,
++					     fd_list, atfork,
++					     atforkvalue, r_pid);
++	});
++
++	return ret;
++}
++
++static int
++_gpgme_io_spawn_macos (const char *path, char *const argv[], unsigned int flags,
++		       struct spawn_fd_item_s *fd_list,
++		       void (*atfork) (void *opaque, int reserved),
++		       void *atforkvalue, pid_t *r_pid)
++#endif /*HAVE_MACOS_SYSTEM*/
+ {
+   pid_t pid;
+   int i;
+@@ -552,8 +597,15 @@
+   if (!pid)
+     {
+       /* Intermediate child to prevent zombie processes.  */
++#if HAVE_MACOS_SYSTEM
++      /* tdf#152524 fix crash by skipping second fork()
++       * Instead of calling a second fork() in the child process, replace
++       * execv() with posix_spawn(). posix_spawn() does not call any atfork
++       * handlers so the atfork handler that crashes will be skipped.  */
++#else /*HAVE_MACOS_SYSTEM*/
+       if ((pid = fork ()) == 0)
+ 	{
++#endif /*HAVE_MACOS_SYSTEM*/
+ 	  /* Child.  */
+           int max_fds = -1;
+           int fd;
+@@ -664,6 +716,9 @@
+ 		close (fd);
+ 	    }
+ 
++#if HAVE_MACOS_SYSTEM
++	  _exit(posix_spawn(NULL, path, NULL, NULL, argv, environ));
++#else /*HAVE_MACOS_SYSTEM*/
+ 	  execv (path, (char *const *) argv);
+ 	  /* Hmm: in that case we could write a special status code to the
+ 	     status-pipe.  */
+@@ -674,6 +729,7 @@
+ 	_exit (1);
+       else
+ 	_exit (0);
++#endif /*HAVE_MACOS_SYSTEM*/
+     }
+ 
+   TRACE_LOG  ("waiting for child process pid=%i", pid);
