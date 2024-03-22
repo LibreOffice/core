@@ -135,7 +135,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
                     if ( nSlot == rList[i].nSlot )
                     {
                         bFound = true;
-                        if ( IsInvalidItem( rList[i].pItemPtr ) )
+                        if ( IsInvalidItem( rList[i].aItemPtr.getItem() ) )
                             bChecked = true;
                     }
                 }
@@ -167,13 +167,13 @@ SvxSearchAttributeDialog::~SvxSearchAttributeDialog()
 
 IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
 {
-    SearchAttrInfo aInvalidItem;
-    aInvalidItem.pItemPtr = INVALID_POOL_ITEM;
+    DBG_ASSERT( SfxObjectShell::Current(), "No DocShell" );
+    SfxItemPool& rPool(SfxObjectShell::Current()->GetPool());
 
     for (int i = 0, nCount = m_xAttrLB->n_children(); i < nCount; ++i)
     {
-        sal_uInt16 nSlot = m_xAttrLB->get_id(i).toUInt32();
-        bool bChecked = m_xAttrLB->get_toggle(i) == TRISTATE_TRUE;
+        const sal_uInt16 nSlot(m_xAttrLB->get_id(i).toUInt32());
+        const bool bChecked(TRISTATE_TRUE == m_xAttrLB->get_toggle(i));
 
         sal_uInt16 j;
         for ( j = rList.Count(); j; )
@@ -182,13 +182,9 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
             if( rItem.nSlot == nSlot )
             {
                 if( bChecked )
-                {
-                    if( !IsInvalidItem( rItem.pItemPtr ) )
-                        delete rItem.pItemPtr;
-                    rItem.pItemPtr = INVALID_POOL_ITEM;
-                }
-                else if( IsInvalidItem( rItem.pItemPtr ) )
-                    rItem.pItemPtr = nullptr;
+                    rItem.aItemPtr = SfxPoolItemHolder(rPool, INVALID_POOL_ITEM);
+                else if( IsInvalidItem( rItem.aItemPtr.getItem() ) )
+                    rItem.aItemPtr = SfxPoolItemHolder();
                 j = 1;
                 break;
             }
@@ -196,14 +192,13 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
 
         if ( !j && bChecked )
         {
-            aInvalidItem.nSlot = nSlot;
-            rList.Insert( aInvalidItem );
+            rList.Insert( { nSlot, SfxPoolItemHolder(rPool, INVALID_POOL_ITEM) });
         }
     }
 
     // remove invalid items (pItem == NULL)
     for ( sal_uInt16 n = rList.Count(); n; )
-        if ( !rList[ --n ].pItemPtr )
+        if ( !rList[ --n ].aItemPtr.getItem() )
             rList.Remove( n );
 
     m_xDialog->response(RET_OK);

@@ -24,6 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/srchdefs.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/timer.hxx>
 #include <memory>
@@ -40,8 +41,16 @@ enum class TransliterationFlags;
 
 struct SearchAttrInfo
 {
+    SearchAttrInfo()
+    : nSlot(0)
+    , aItemPtr() {}
+
+    SearchAttrInfo(sal_uInt16 Slot, const SfxPoolItemHolder& ItemPtr)
+    : nSlot(Slot)
+    , aItemPtr(ItemPtr) {}
+
     sal_uInt16          nSlot;
-    const SfxPoolItem*  pItemPtr;
+    SfxPoolItemHolder   aItemPtr;
 };
 
 typedef std::vector<SearchAttrInfo> SrchAttrInfoList;
@@ -51,7 +60,7 @@ class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrInfoList
 public:
     SearchAttrItemList() {}
     SearchAttrItemList( const SearchAttrItemList& rList );
-    SearchAttrItemList( SearchAttrItemList&& rList );
+    SearchAttrItemList( SearchAttrItemList&& rList ) noexcept;
     ~SearchAttrItemList();
 
     void            Put( const SfxItemSet& rSet );

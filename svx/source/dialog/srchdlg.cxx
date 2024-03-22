@@ -173,20 +173,14 @@ static void StrArrToList_Impl( TypedWhichId<SfxStringListItem> nId, const std::v
     SfxGetpApp()->PutItem( SfxStringListItem( nId, &rStrLst ) );
 }
 
-SearchAttrItemList::SearchAttrItemList( SearchAttrItemList&& rList ) :
+SearchAttrItemList::SearchAttrItemList( SearchAttrItemList&& rList ) noexcept :
     SrchAttrInfoList(std::move(rList))
 {
-    for ( size_t i = 0; i < size(); ++i )
-        if ( !IsInvalidItem( (*this)[i].pItemPtr ) )
-            (*this)[i].pItemPtr = (*this)[i].pItemPtr->Clone();
 }
 
 SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
     SrchAttrInfoList(rList)
 {
-    for ( size_t i = 0; i < size(); ++i )
-        if ( !IsInvalidItem( (*this)[i].pItemPtr ) )
-            (*this)[i].pItemPtr = (*this)[i].pItemPtr->Clone();
 }
 
 SearchAttrItemList::~SearchAttrItemList()
@@ -201,27 +195,14 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
 
     SfxItemPool* pPool = rSet.GetPool();
     SfxItemIter aIter( rSet );
-    SearchAttrInfo aItem;
     const SfxPoolItem* pItem = aIter.GetCurItem();
-    sal_uInt16 nWhich;
 
     do
     {
-        // only test that it is available?
-        if( IsInvalidItem( pItem ) )
-        {
-            nWhich = rSet.GetWhichByOffset( aIter.GetCurPos() );
-            aItem.pItemPtr = pItem;
-        }
-        else
-        {
-            nWhich = pItem->Which();
-            aItem.pItemPtr = pItem->Clone();
-        }
+        const sal_uInt16 nWhich(rSet.GetWhichByOffset(aIter.GetCurPos()));
+        const sal_uInt16 nSlot(pPool->GetSlotId(nWhich));
 
-        aItem.nSlot = pPool->GetSlotId( nWhich );
-        Insert( aItem );
-
+        emplace_back(nSlot, SfxPoolItemHolder(*pPool, pItem));
         pItem = aIter.NextItem();
     } while (pItem);
 }
@@ -232,19 +213,16 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
     SfxItemPool* pPool = rSet.GetPool();
 
     for ( size_t i = 0; i < size(); ++i )
-        if ( IsInvalidItem( (*this)[i].pItemPtr ) )
+        if ( IsInvalidItem( (*this)[i].aItemPtr.getItem() ) )
             rSet.InvalidateItem( pPool->GetWhichIDFromSlotID( (*this)[i].nSlot ) );
         else
-            rSet.Put( *(*this)[i].pItemPtr );
+            rSet.Put( *(*this)[i].aItemPtr.getItem() );
     return rSet;
 }
 
 
 void SearchAttrItemList::Clear()
 {
-    for ( size_t i = 0; i < size(); ++i )
-        if ( !IsInvalidItem( (*this)[i].pItemPtr ) )
-            delete (*this)[i].pItemPtr;
     SrchAttrInfoList::clear();
 }
 
@@ -255,10 +233,6 @@ void SearchAttrItemList::Remove(size_t nPos)
     size_t nLen = 1;
     if ( nPos + nLen > size() )
         nLen = size() - nPos;
-
-    for ( size_t i = nPos; i < nPos + nLen; ++i )
-        if ( !IsInvalidItem( (*this)[i].pItemPtr ) )
-            delete (*this)[i].pItemPtr;
 
     SrchAttrInfoList::erase( begin() + nPos, begin() + nPos + nLen );
 }
@@ -2019,13 +1993,12 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
     for( sal_uInt16 n = 0; n < pList->Count(); ++n )
     {
         SearchAttrInfo* pAItem = &pList->GetObject(n);
-        if( !IsInvalidItem( pAItem->pItemPtr ) &&
+        if( !IsInvalidItem( pAItem->aItemPtr.getItem() ) &&
             SfxItemState::SET == aOutSet.GetItemState(
-                pAItem->pItemPtr->Which(), false, &pItem ) )
+                pAItem->aItemPtr.Which(), false, &pItem ) )
         {
-            delete pAItem->pItemPtr;
-            pAItem->pItemPtr = pItem->Clone();
-            aOutSet.ClearItem( pAItem->pItemPtr->Which() );
+            pAItem->aItemPtr = SfxPoolItemHolder(*aOutSet.GetPool(), pItem);
+            aOutSet.ClearItem( pAItem->aItemPtr.Which() );
         }
     }
 
@@ -2162,10 +2135,10 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         if ( !rStr.isEmpty() )
             rStr += ", ";
 
-        if ( !IsInvalidItem( rItem.pItemPtr ) )
+        if ( !IsInvalidItem( rItem.aItemPtr.getItem() ) )
         {
             OUString aStr;
-            rPool.GetPresentation(*rItem.pItemPtr, eMapUnit, aStr, aIntlWrapper);
+            rPool.GetPresentation(*rItem.aItemPtr.getItem(), eMapUnit, aStr, aIntlWrapper);
             if (aStr.isEmpty())
             {
                 if (rStr.endsWith(", "))
