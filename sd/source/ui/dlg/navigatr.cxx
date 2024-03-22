@@ -796,6 +796,27 @@ void SdNavigatorWin::SetDragImage()
     mxToolbox->set_item_icon_name("dragmode", GetDragTypeSdBmpId(meDragType));
 }
 
+// for the sidebar to make the panel invisible when the shell type is outline or slide sorter
+void SdNavigatorWin::HandleContextChange(const vcl::EnumContext& eContext)
+{
+    if (eContext.GetApplication() != vcl::EnumContext::Application::Impress)
+        return;
+
+    ::sd::DrawDocShell* pCurrentDocShell
+            = dynamic_cast<::sd::DrawDocShell*>(SfxObjectShell::Current());
+    if (!pCurrentDocShell)
+        return;
+
+    const ::sd::DrawViewShell* pDrawViewShell
+            = static_cast<::sd::DrawViewShell*>(pCurrentDocShell->GetViewShell());
+    if (!pDrawViewShell)
+        return;
+
+    sd::ViewShell::ShellType eShellType = pDrawViewShell->GetShellType();
+    m_xContainer->set_visible(eShellType != sd::ViewShell::ST_OUTLINE
+            && eShellType != sd::ViewShell::ST_SLIDE_SORTER);
+}
+
 /**
  * ControllerItem for Navigator
  */

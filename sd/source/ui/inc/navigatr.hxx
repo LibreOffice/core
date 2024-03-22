@@ -25,6 +25,9 @@
 #include "sdtreelb.hxx"
 #include <pres.hxx>
 
+#include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <vcl/EnumContext.hxx>
+
 // forward
 namespace vcl { class Window; }
 
@@ -97,7 +100,7 @@ public:
 
 }
 
-class SD_DLLPUBLIC SdNavigatorWin : public PanelLayout
+class SD_DLLPUBLIC SdNavigatorWin : public PanelLayout, public sfx2::sidebar::IContextChangeReceiver
 {
 public:
     typedef ::std::function<void ()> UpdateRequestFunctor;
@@ -121,6 +124,8 @@ public:
 
     NavigatorDragType           GetNavigatorDragType();
     SdPageObjsTLV&              GetObjects();
+
+    virtual void HandleContextChange(const vcl::EnumContext& eContext) override;
 
 private:
     friend class SdNavigatorFloat;
