@@ -5,6 +5,8 @@
   <object class="GtkDialog" id="FindEntryDialog">
     <property name="can_focus">True</property>
     <property name="border_width">6</property>
+    <property name="title" translatable="yes" context="findentrydialog|FindEntryDialog">Find Entry</property>
+    <property name="modal">True</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
