@@ -17,8 +17,10 @@
 
 #include <filesystem>
 #include <fstream>
+#include <system_error>
 
 #include <config_global.h>
+#include <o3tl/temporary.hxx>
 #include <osl/thread.hxx>
 #include <rtl/string.h>
 #include <sal/detail/log.h>
@@ -200,6 +202,9 @@ std::ofstream * getLogFile() {
 
         if (logFile)
         {
+            std::filesystem::create_directories(
+                std::filesystem::path(logFile).remove_filename(),
+                o3tl::temporary(std::error_code()));
             // stays until process exits
             static std::ofstream file(logFile, std::ios::app | std::ios::out);
             pResult = &file;
