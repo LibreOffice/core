@@ -44,8 +44,6 @@ import com.sun.star.script.provider.XScript;
 
 import com.sun.star.uno.XComponentContext;
 
-import java.net.URL;
-
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.JavaScriptException;
@@ -78,12 +76,12 @@ public class ScriptProviderForJavaScript {
 
         @Override
         public boolean hasScriptEditor() {
-            return true;
+            return false;
         }
 
         @Override
         public ScriptEditor getScriptEditor() {
-            return ScriptEditorForJavaScript.getEditor();
+            return null;
         }
     }
 
@@ -198,31 +196,10 @@ class ScriptImpl implements XScript {
         try {
             Object result = null;
 
-            ScriptEditorForJavaScript editor =
-                ScriptEditorForJavaScript.getEditor(metaData.getSourceURL());
-
-            if (editor != null) {
-                result = editor.execute();
-
-                if (result != null  &&
-                    result.getClass().getName().equals("org.mozilla.javascript.Undefined")) {
-                    // Always return a string
-                    // TODO revisit
-                    return Context.toString(result);
-                }
-
-            }
-
             String source;
 
-            if (editor != null && editor.isModified()) {
-                LogUtils.DEBUG("GOT A MODIFIED SOURCE");
-                source = editor.getText();
-            } else {
-                metaData.loadSource();
-                source =  metaData.getSource();
-
-            }
+            metaData.loadSource();
+            source =  metaData.getSource();
 
             if (source == null || source.length() == 0) {
                 throw new ScriptFrameworkErrorException(
@@ -285,7 +262,6 @@ class ScriptImpl implements XScript {
             LogUtils.DEBUG("\t lineNum  " + se.lineNum);
             LogUtils.DEBUG("\t language  " + se.language);
             LogUtils.DEBUG("\t scriptName  " + se.scriptName);
-            raiseEditor(se.lineNum);
             throw new InvocationTargetException(
                 "JavaScript uncaught exception" + metaData.getLanguageName(), null, se);
         } catch (Exception ex) {
@@ -298,33 +274,6 @@ class ScriptImpl implements XScript {
             if (ctxt != null) {
                 Context.exit();
             }
-        }
-    }
-
-    private void raiseEditor(int lineNum) {
-        try {
-            URL sourceUrl = metaData.getSourceURL();
-
-            ScriptEditorForJavaScript editor =
-                ScriptEditorForJavaScript.getEditor(sourceUrl);
-
-            if (editor == null) {
-                editor = ScriptEditorForJavaScript.getEditor();
-
-                editor.edit(
-                    ScriptContext.createContext(m_xModel, m_xInvocContext,
-                                                m_xContext, m_xMultiComponentFactory),
-                    metaData);
-
-                editor = ScriptEditorForJavaScript.getEditor(sourceUrl);
-            }
-
-            if (editor != null) {
-                System.out.println("** Have raised IDE for JavaScript, calling indicateErrorLine for line "
-                                   + lineNum);
-                editor.indicateErrorLine(lineNum);
-            }
-        } catch (java.net.MalformedURLException ignore) {
         }
     }
 }

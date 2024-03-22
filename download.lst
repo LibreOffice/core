@@ -586,8 +586,8 @@ REVENGE_TARBALL := librevenge-0.0.$(REVENGE_VERSION_MICRO).tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-RHINO_SHA256SUM := 1fb458d6aab06932693cc8a9b6e4e70944ee1ff052fa63606e3131df34e21753
-RHINO_TARBALL := 798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip
+RHINO_SHA256SUM := bf4d2d0c5ff8889fd494486db09291cb7965f0bf2f93ef005d3b08070a5a4f5c
+RHINO_TARBALL := rhino-1.7.14.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
