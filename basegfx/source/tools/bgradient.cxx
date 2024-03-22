@@ -332,13 +332,13 @@ void BColorStops::sortAndCorrect()
         // get offset of entry at read position
         double fOff((*this)[read].getStopOffset());
 
-        if (basegfx::fTools::less(fOff, 0.0) && read + 1 < size())
+        if (fOff < 0.0 && read + 1 < size())
         {
             // value < 0.0 and we have a next entry. check for gradient snippet
             // containing 0.0 resp. StartColor
             const double fOff2((*this)[read + 1].getStopOffset());
 
-            if (basegfx::fTools::more(fOff2, 0.0))
+            if (fOff2 > 0.0)
             {
                 // read is the start of a gradient snippet containing 0.0. Correct
                 // entry to StartColor, interpolate to correct StartColor
@@ -353,7 +353,7 @@ void BColorStops::sortAndCorrect()
         }
 
         // step over < 0 values, these are outside and will be removed
-        if (basegfx::fTools::less(fOff, 0.0))
+        if (fOff < 0.0)
         {
             continue;
         }
@@ -410,7 +410,7 @@ void BColorStops::sortAndCorrect()
             // no valid entries at all, but not empty. This can only happen
             // when all entries are below 0.0 or above 1.0 (else a gradient
             // snippet spawning over both would have been detected)
-            if (basegfx::fTools::less(back().getStopOffset(), 0.0))
+            if (back().getStopOffset() < 0.0)
             {
                 // all outside too low, rescue last due to being closest to content
                 const BColor aBackColor(back().getStopColor());

@@ -331,7 +331,7 @@ namespace basegfx
     BColorModifier_gamma::BColorModifier_gamma(double fValue)
     :   mfValue(fValue),
         mfInvValue(fValue),
-        mbUseIt(!basegfx::fTools::equal(fValue, 1.0) && basegfx::fTools::more(fValue, 0.0) && basegfx::fTools::lessOrEqual(fValue, 10.0))
+        mbUseIt(!basegfx::fTools::equal(fValue, 1.0) && fValue > 0.0 && basegfx::fTools::lessOrEqual(fValue, 10.0))
     {
         if(mbUseIt)
         {
