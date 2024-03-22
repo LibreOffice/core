@@ -1418,16 +1418,19 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     // delete frames of all contained content nodes
     for( nLines = 0; aNodeIndex <= rTableNodes.rbegin()->rbegin()->aEnd; ++aNodeIndex,++nLines )
     {
-        SwNode& rNode = aNodeIndex.GetNode();
-        assert(!rNode.IsSectionNode()); // not possible in writerfilter import
-        if (rNode.IsTableNode())
+        SwNode* pNode(&aNodeIndex.GetNode());
+        while (pNode->IsSectionNode()) // could be ToX field in table
         {
-            lcl_RemoveBreaksTable(static_cast<SwTableNode&>(rNode),
+            pNode = pNode->GetNodes()[pNode->GetIndex()+1];
+        }
+        if (pNode->IsTableNode())
+        {
+            lcl_RemoveBreaksTable(static_cast<SwTableNode&>(*pNode),
                     (0 == nLines) ? pTableFormat : nullptr);
         }
-        else if (rNode.IsContentNode())
+        else if (pNode->IsContentNode())
         {
-            lcl_RemoveBreaks(static_cast<SwContentNode&>(rNode),
+            lcl_RemoveBreaks(static_cast<SwContentNode&>(*pNode),
                     (0 == nLines) ? pTableFormat : nullptr);
         }
     }
