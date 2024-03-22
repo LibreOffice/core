@@ -15,6 +15,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+
+#include <unotools/streamwrap.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star;
 
@@ -134,6 +140,40 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderNoMargin)
     // - Actual  : 0
     // i.e. the border negative distance was lost.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1147), nTopBorderDistance);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderDisable)
+{
+    // Given an empty document with a turned on header:
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
+    xStyle->setPropertyValue("HeaderIsOn", uno::Any(true));
+
+    // When pasting RTF content:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText = xTextDocument->getText();
+    uno::Reference<text::XTextRange> xBodyEnd = xText->getEnd();
+    uno::Reference<document::XFilter> xFilter(
+        m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY);
+    uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY);
+    xImporter->setTargetDocument(mxComponent);
+    std::unique_ptr<SvStream> pStream(new SvMemoryStream);
+    pStream->WriteOString("{\\rtf1 paste}");
+    pStream->Seek(0);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
+    uno::Sequence aDescriptor{ comphelper::makePropertyValue("InputStream", xStream),
+                               comphelper::makePropertyValue("InsertMode", true),
+                               comphelper::makePropertyValue("TextInsertModeRange", xBodyEnd) };
+    CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
+
+    // Then make sure the header stays on:
+    CPPUNIT_ASSERT(xStyle->getPropertyValue("HeaderIsOn").get<bool>());
 }
 }
 
