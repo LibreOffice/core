@@ -109,7 +109,7 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
                     return; // substring matching cannot be sorted
                 sal_uInt32 format = 0;
                 double value;
-                if (context->GetFormatTable()->IsNumberFormat(cell.getString(pDoc), format, value))
+                if (context->NFIsNumberFormat(cell.getString(pDoc), format, value))
                     return;
             }
         }

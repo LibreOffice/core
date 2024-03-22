@@ -139,7 +139,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
                 else
                 {
                     // Number in the standard format, the other on the cursor position
-                    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                    ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
                     sal_uInt32 nNumFmt = 0;
                     if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 && eFunc != SUBTOTAL_FUNC_SELECTION_COUNT)
                     {
@@ -152,15 +152,15 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
                         // for a single date+time value.
                         if (nVal < 0.0 || nVal >= 1.0)
                         {
-                            const SvNumberformat* pFormat = pFormatter->GetEntry(nNumFmt);
+                            const SvNumberformat* pFormat = rContext.NFGetFormatEntry(nNumFmt);
                             if (pFormat && (pFormat->GetType() == SvNumFormatType::TIME))
-                                nNumFmt = pFormatter->GetTimeFormat( nVal, pFormat->GetLanguage(), true);
+                                nNumFmt = rContext.NFGetTimeFormat( nVal, pFormat->GetLanguage(), true);
                         }
                     }
 
                     OUString aValStr;
                     const Color* pDummy;
-                    pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
+                    rContext.NFGetOutputString( nVal, nNumFmt, aValStr, &pDummy );
                     aStr += aValStr;
                 }
             }
@@ -755,10 +755,10 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
             }
             else
             {
-                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
                 sal_uInt32 nNumFmt = rDoc.GetNumberFormat( aPos );
 
-                aString = ScCellFormat::GetInputString( rCell, nNumFmt, *pFormatter, rDoc );
+                aString = ScCellFormat::GetInputString( rCell, nNumFmt, &rContext, rDoc );
                 if (rCell.getType() == CELLTYPE_STRING)
                 {
                     // Put a ' in front if necessary, so that the string is not
@@ -772,9 +772,9 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                     // removing one apostrophe.
                     // For number format Text IsNumberFormat() would never
                     // result in numeric anyway.
-                    if (!pFormatter->IsTextFormat(nNumFmt) && (aString.startsWith("'")
+                    if (!rContext.NFIsTextFormat(nNumFmt) && (aString.startsWith("'")
                                 || aString.startsWith("=") || aString.startsWith("+") || aString.startsWith("-")
-                                || pFormatter->IsNumberFormat(aString, nNumFmt, o3tl::temporary(double()))))
+                                || rContext.NFIsNumberFormat(aString, nNumFmt, o3tl::temporary(double()))))
                         aString = "'" + aString;
                 }
             }
@@ -1632,9 +1632,9 @@ void ScTabViewShell::ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
                 sal_uLong nNewFormat = rNewSet.Get( ATTR_VALUE_FORMAT ).GetValue();
                 if ( nNewFormat != nOldFormat )
                 {
-                    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                    const SvNumberformat* pOld = pFormatter->GetEntry( nOldFormat );
-                    const SvNumberformat* pNew = pFormatter->GetEntry( nNewFormat );
+                    ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
+                    const SvNumberformat* pOld = rContext.NFGetFormatEntry( nOldFormat );
+                    const SvNumberformat* pNew = rContext.NFGetFormatEntry( nNewFormat );
                     if ( pOld && pNew && pOld->GetLanguage() != pNew->GetLanguage() )
                         rNewSet.Put( SvxLanguageItem(
                                         pNew->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );

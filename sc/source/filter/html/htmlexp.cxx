@@ -1313,7 +1313,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
                 break;
             [[fallthrough]];
         default:
-            aStrOut = ScCellFormat::GetString(aCell, nFormat, &pColor, *pFormatter, *pDoc);
+            aStrOut = ScCellFormat::GetString(aCell, nFormat, &pColor, nullptr, *pDoc);
     }
 
     if ( !bFieldText )

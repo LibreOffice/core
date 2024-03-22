@@ -100,7 +100,7 @@ void ScQueryEvaluator::setupCollatorIfNeeded()
 }
 
 ScQueryEvaluator::ScQueryEvaluator(ScDocument& rDoc, const ScTable& rTab,
-                                   const ScQueryParam& rParam, const ScInterpreterContext* pContext,
+                                   const ScQueryParam& rParam, ScInterpreterContext* pContext,
                                    bool* pTestEqualCondition)
     : mrDoc(rDoc)
     , mrStrPool(rDoc.GetSharedStringPool())
@@ -327,9 +327,7 @@ OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow
         sal_uInt32 nFormat
             = mpContext ? mrTab.GetNumberFormat(*mpContext, ScAddress(nCol, nRow, mrTab.GetTab()))
                         : mrTab.GetNumberFormat(nCol, nRow);
-        SvNumberFormatter* pFormatter
-            = mpContext ? mpContext->GetFormatTable() : mrDoc.GetFormatTable();
-        return ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, sharedString, true);
+        return ScCellFormat::GetInputString(rCell, nFormat, mpContext, mrDoc, sharedString, true);
     }
 }
 

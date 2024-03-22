@@ -873,7 +873,7 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellSt
     pPattern = GetPattern(nRow);
     const Color* pColor;
     sal_uInt32 nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
-    OUString aStr = ScCellFormat::GetString(aCell, nFormat, &pColor, *pFormatter, rDocument);
+    OUString aStr = ScCellFormat::GetString(aCell, nFormat, &pColor, nullptr, rDocument);
 
     // Store the real script type to the array.
     rAttr.mnScriptType = rDocument.GetStringScriptType(aStr);
@@ -2569,9 +2569,9 @@ class FilterEntriesHandler
 
     void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell, bool bIsEmptyCell=false)
     {
-        SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
-        sal_uInt32 nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
-        OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrColumn.GetDoc(), mbFiltering);
+        ScInterpreterContext& rContext = mrColumn.GetDoc().GetNonThreadedContext();
+        sal_uInt32 nFormat = mrColumn.GetNumberFormat(rContext, nRow);
+        OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, &rContext, mrColumn.GetDoc(), mbFiltering);
 
         // Colors
         ScAddress aPos(rColumn.GetCol(), nRow, rColumn.GetTab());
@@ -2638,7 +2638,7 @@ class FilterEntriesHandler
                 ;
         }
 
-        SvNumFormatType nType = pFormatter->GetType(nFormat);
+        SvNumFormatType nType = rContext.NFGetType(nFormat);
         bool bDate = false;
         if ((nType & SvNumFormatType::DATE) && !(nType & SvNumFormatType::TIME))
         {
@@ -2649,16 +2649,16 @@ class FilterEntriesHandler
             bDate = true;
             // Convert string representation to ISO 8601 date to eliminate
             // locale dependent behaviour later when filtering for dates.
-            sal_uInt32 nIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_YYYYMMDD);
-            pFormatter->GetInputLineString( fVal, nIndex, aStr);
+            sal_uInt32 nIndex = rContext.NFGetFormatIndex( NF_DATE_DIN_YYYYMMDD);
+            rContext.NFGetInputLineString( fVal, nIndex, aStr);
         }
         else if (nType == SvNumFormatType::DATETIME)
         {
             // special case for datetime values.
             // Convert string representation to ISO 8601 (with blank instead of T) datetime
             // to eliminate locale dependent behaviour later when filtering for datetimes.
-            sal_uInt32 nIndex = pFormatter->GetFormatIndex(NF_DATETIME_ISO_YYYYMMDD_HHMMSS);
-            pFormatter->GetInputLineString(fVal, nIndex, aStr);
+            sal_uInt32 nIndex = rContext.NFGetFormatIndex(NF_DATETIME_ISO_YYYYMMDD_HHMMSS);
+            rContext.NFGetInputLineString(fVal, nIndex, aStr);
         }
         // store the formatted/rounded value for filtering
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0 && !bDate)
@@ -3132,7 +3132,7 @@ void ScColumn::SetValue(
         BroadcastNewCell(nRow);
 }
 
-OUString ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, const ScInterpreterContext* pContext ) const
+OUString ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, ScInterpreterContext* pContext ) const
 {
     // ugly hack for ordering problem with GetNumberFormat and missing inherited formats
     if (aCell.getType() == CELLTYPE_FORMULA)
@@ -3140,8 +3140,7 @@ OUString ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, const ScI
 
     sal_uInt32 nFormat = GetNumberFormat( pContext ? *pContext : GetDoc().GetNonThreadedContext(), nRow);
     const Color* pColor = nullptr;
-    return ScCellFormat::GetString(aCell, nFormat, &pColor,
-        pContext ? *(pContext->GetFormatTable()) : *(GetDoc().GetFormatTable()), GetDoc());
+    return ScCellFormat::GetString(aCell, nFormat, &pColor, pContext, GetDoc());
 }
 
 double* ScColumn::GetValueCell( SCROW nRow )
@@ -3160,7 +3159,7 @@ double* ScColumn::GetValueCell( SCROW nRow )
 OUString ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow, bool bForceSystemLocale ) const
 {
     sal_uInt32 nFormat = GetNumberFormat(GetDoc().GetNonThreadedContext(), nRow);
-    return ScCellFormat::GetInputString(aCell, nFormat, *(GetDoc().GetFormatTable()), GetDoc(), nullptr, false, bForceSystemLocale);
+    return ScCellFormat::GetInputString(aCell, nFormat, nullptr, GetDoc(), nullptr, false, bForceSystemLocale);
 }
 
 double ScColumn::GetValue( SCROW nRow ) const
@@ -3358,7 +3357,6 @@ class MaxStringLenHandler
 {
     sal_Int32 mnMaxLen;
     const ScColumn& mrColumn;
-    SvNumberFormatter* mpFormatter;
     rtl_TextEncoding meCharSet;
     bool mbOctetEncoding;
 
@@ -3366,7 +3364,7 @@ class MaxStringLenHandler
     {
         const Color* pColor;
         sal_uInt32 nFormat = mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT).GetValue();
-        OUString aString = ScCellFormat::GetString(rCell, nFormat, &pColor, *mpFormatter, mrColumn.GetDoc());
+        OUString aString = ScCellFormat::GetString(rCell, nFormat, &pColor, nullptr, mrColumn.GetDoc());
         sal_Int32 nLen = 0;
         if (mbOctetEncoding)
         {
@@ -3393,7 +3391,6 @@ public:
     MaxStringLenHandler(const ScColumn& rColumn, rtl_TextEncoding eCharSet) :
         mnMaxLen(0),
         mrColumn(rColumn),
-        mpFormatter(rColumn.GetDoc().GetFormatTable()),
         meCharSet(eCharSet),
         mbOctetEncoding(rtl_isOctetTextEncoding(eCharSet))
     {
@@ -3440,7 +3437,6 @@ namespace {
 class MaxNumStringLenHandler
 {
     const ScColumn& mrColumn;
-    SvNumberFormatter* mpFormatter;
     sal_Int32 mnMaxLen;
     sal_uInt16 mnPrecision;
     sal_uInt16 mnMaxGeneralPrecision;
@@ -3475,9 +3471,10 @@ class MaxNumStringLenHandler
                 mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT).GetValue();
         if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
         {
-            aSep = mpFormatter->GetFormatDecimalSep(nFormat);
-            aString = ScCellFormat::GetInputString(rCell, nFormat, *mpFormatter, mrColumn.GetDoc());
-            const SvNumberformat* pEntry = mpFormatter->GetEntry(nFormat);
+            ScInterpreterContext& rContext = mrColumn.GetDoc().GetNonThreadedContext();
+            aSep = rContext.NFGetFormatDecimalSep(nFormat);
+            aString = ScCellFormat::GetInputString(rCell, nFormat, &rContext, mrColumn.GetDoc());
+            const SvNumberformat* pEntry = rContext.NFGetFormatEntry(nFormat);
             if (pEntry)
             {
                 bool bThousand, bNegRed;
@@ -3485,7 +3482,7 @@ class MaxNumStringLenHandler
                 pEntry->GetFormatSpecialInfo(bThousand, bNegRed, nPrec, nLeading);
             }
             else
-                nPrec = mpFormatter->GetFormatPrecision(nFormat);
+                nPrec = rContext.NFGetFormatPrecision(nFormat);
         }
         else
         {
@@ -3560,7 +3557,7 @@ class MaxNumStringLenHandler
 
 public:
     MaxNumStringLenHandler(const ScColumn& rColumn, sal_uInt16 nMaxGeneralPrecision) :
-        mrColumn(rColumn), mpFormatter(rColumn.GetDoc().GetFormatTable()),
+        mrColumn(rColumn),
         mnMaxLen(0), mnPrecision(0), mnMaxGeneralPrecision(nMaxGeneralPrecision),
         mbHaveSigned(false)
     {

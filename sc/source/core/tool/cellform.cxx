@@ -29,23 +29,25 @@
 #include <editutil.hxx>
 
 OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nFormat,
-                              const Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument& rDoc,
+                              const Color** ppColor, ScInterpreterContext* pContext, const ScDocument& rDoc,
                               bool bNullVals, bool bFormula, bool bUseStarFormat )
 {
     *ppColor = nullptr;
+
+    ScInterpreterContext& rContext = pContext ? *pContext : rDoc.GetNonThreadedContext();
 
     switch (rCell.getType())
     {
         case CELLTYPE_STRING:
         {
             OUString str;
-            rFormatter.GetOutputString(rCell.getSharedString()->getString(), nFormat, str, ppColor, bUseStarFormat);
+            rContext.NFGetOutputString(rCell.getSharedString()->getString(), nFormat, str, ppColor, bUseStarFormat);
             return str;
         }
         case CELLTYPE_EDIT:
         {
             OUString str;
-            rFormatter.GetOutputString(rCell.getString(&rDoc), nFormat, str, ppColor );
+            rContext.NFGetOutputString(rCell.getString(&rDoc), nFormat, str, ppColor );
             return str;
         }
         case CELLTYPE_VALUE:
@@ -56,7 +58,7 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
             else
             {
                 OUString str;
-                rFormatter.GetOutputString( nValue, nFormat, str, ppColor, bUseStarFormat );
+                rContext.NFGetOutputString( nValue, nFormat, str, ppColor, bUseStarFormat );
                 return str;
             }
         }
@@ -97,14 +99,14 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
                         else
                         {
                             OUString str;
-                            rFormatter.GetOutputString( fValue, nFormat, str, ppColor, bUseStarFormat );
+                            rContext.NFGetOutputString( fValue, nFormat, str, ppColor, bUseStarFormat );
                             return str;
                         }
                     }
                     else
                     {
                         OUString str;
-                        rFormatter.GetOutputString( pFCell->GetString().getString(),
+                        rContext.NFGetOutputString( pFCell->GetString().getString(),
                                                     nFormat, str, ppColor, bUseStarFormat );
                         return str;
                     }
@@ -118,18 +120,20 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
 
 OUString ScCellFormat::GetString(
     ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nFormat, const Color** ppColor,
-    SvNumberFormatter& rFormatter, bool bNullVals, bool bFormula )
+    ScInterpreterContext* pContext, bool bNullVals, bool bFormula )
 {
     *ppColor = nullptr;
 
     ScRefCellValue aCell(rDoc, rPos);
-    return GetString(aCell, nFormat, ppColor, rFormatter, rDoc, bNullVals, bFormula);
+    return GetString(aCell, nFormat, ppColor, pContext, rDoc, bNullVals, bFormula);
 }
 
 OUString ScCellFormat::GetInputString(
-    const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter, const ScDocument& rDoc,
+    const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext, const ScDocument& rDoc,
     const svl::SharedString** pShared, bool bFiltering, bool bForceSystemLocale )
 {
+    ScInterpreterContext& rContext = pContext ? *pContext : rDoc.GetNonThreadedContext();
+
     if(pShared != nullptr)
         *pShared = nullptr;
     switch (rCell.getType())
@@ -140,7 +144,7 @@ OUString ScCellFormat::GetInputString(
         case CELLTYPE_VALUE:
         {
             OUString str;
-            rFormatter.GetInputLineString(rCell.getDouble(), nFormat, str, bFiltering, bForceSystemLocale);
+            rContext.NFGetInputLineString(rCell.getDouble(), nFormat, str, bFiltering, bForceSystemLocale);
             return str;
         }
         break;
@@ -153,7 +157,7 @@ OUString ScCellFormat::GetInputString(
             else if (pFC->IsValue())
             {
                 str.emplace();
-                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, *str, bFiltering, bForceSystemLocale);
+                rContext.NFGetInputLineString(pFC->GetValue(), nFormat, *str, bFiltering, bForceSystemLocale);
             }
             else
             {
@@ -210,7 +214,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
         //  like in GetString for document (column)
         const Color* pColor;
         sal_uInt32 nNumFmt = rDoc.GetNumberFormat(rPos);
-        return GetString(rCell, nNumFmt, &pColor, *rDoc.GetFormatTable(), rDoc);
+        return GetString(rCell, nNumFmt, &pColor, nullptr, rDoc);
     }
 }
 

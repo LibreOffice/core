@@ -1888,16 +1888,13 @@ bool ScDPObject::ParseFilters(
             OUString aQueryValue = aQueryValueName;
             if (mpTableData)
             {
-                SvNumberFormatter* pFormatter = mpTableData->GetCacheTable().getCache().GetNumberFormatter();
-                if (pFormatter)
-                {
-                    // Parse possible number from aQueryValueName and format
-                    // locale independent as aQueryValue.
-                    sal_uInt32 nNumFormat = 0;
-                    double fValue;
-                    if (pFormatter->IsNumberFormat( aQueryValueName, nNumFormat, fValue))
-                        aQueryValue = ScDPCache::GetLocaleIndependentFormattedString( fValue, *pFormatter, nNumFormat);
-                }
+                ScInterpreterContext& rContext = mpTableData->GetCacheTable().getCache().GetInterpreterContext();
+                // Parse possible number from aQueryValueName and format
+                // locale independent as aQueryValue.
+                sal_uInt32 nNumFormat = 0;
+                double fValue;
+                if (rContext.NFIsNumberFormat(aQueryValueName, nNumFormat, fValue))
+                    aQueryValue = ScDPCache::GetLocaleIndependentFormattedString(fValue, rContext, nNumFormat);
             }
 
             for ( SCSIZE nField=0; nField<nFieldCount; nField++ )

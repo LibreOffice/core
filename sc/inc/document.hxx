@@ -1203,9 +1203,9 @@ public:
                                     SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
     SC_DLLPUBLIC OUString GetString( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                     const ScInterpreterContext* pContext = nullptr ) const;
+                                     ScInterpreterContext* pContext = nullptr ) const;
     SC_DLLPUBLIC OUString GetString( const ScAddress& rPos,
-                                     const ScInterpreterContext* pContext = nullptr ) const;
+                                     ScInterpreterContext* pContext = nullptr ) const;
 
     /**
      * Return a pointer to the double value stored in value cell.

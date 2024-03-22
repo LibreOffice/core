@@ -1230,7 +1230,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 
                 ScInputStringType aRes =
                     ScStringUtil::parseInputString(
-                        *rDoc.GetFormatTable(), aText, LANGUAGE_ENGLISH_US);
+                        rDoc.GetNonThreadedContext(), aText, LANGUAGE_ENGLISH_US);
                 switch (aRes.meType)
                 {
                     case ScInputStringType::Formula:
@@ -1291,8 +1291,12 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
         return pForm->GetFormula( formula::FormulaGrammar::mapAPItoGrammar( bEnglish, false));
     }
 
-    SvNumberFormatter* pFormatter = bEnglish ? ScGlobal::GetEnglishFormatter() :
-                                                rDoc.GetFormatTable();
+    // use an InterpreterContext, possibly with a different formatter, to uniformly use
+    // ScCellFormat::GetInputString everywhere
+    ScInterpreterContextGetterGuard aContextGetterGuard(rDoc, bEnglish ? ScGlobal::GetEnglishFormatter()
+                                                                       : rDoc.GetFormatTable());
+    ScInterpreterContext* pInterpreterContext = aContextGetterGuard.GetInterpreterContext();
+
     // Since the English formatter was constructed with
     // LANGUAGE_ENGLISH_US the "General" format has index key 0,
     // we don't have to query.
@@ -1311,25 +1315,26 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
         }
     }
     else
-        aVal = ScCellFormat::GetInputString(aCell, nNumFmt, *pFormatter, rDoc);
+        aVal = ScCellFormat::GetInputString(aCell, nNumFmt, pInterpreterContext, rDoc);
 
     //  if applicable, prepend ' like in ScTabViewShell::UpdateInputHandler
     if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
     {
         double fDummy;
         OUString aTempString = aVal;
-        bool bIsNumberFormat(pFormatter->IsNumberFormat(aTempString, nNumFmt, fDummy));
+        bool bIsNumberFormat(pInterpreterContext->NFIsNumberFormat(aTempString, nNumFmt, fDummy));
         if ( bIsNumberFormat )
             aTempString = "'" + aTempString;
         else if ( aTempString.startsWith("'") )
         {
             //  if the string starts with a "'", add another one because setFormula
             //  strips one (like text input, except for "text" number formats)
-            if ( bEnglish || ( pFormatter->GetType(nNumFmt) != SvNumFormatType::TEXT ) )
+            if ( bEnglish || ( pInterpreterContext->NFGetType(nNumFmt) != SvNumFormatType::TEXT ) )
                 aTempString = "'" + aTempString;
         }
         aVal = aTempString;
     }
+
     return aVal;
 }
 
@@ -5863,9 +5868,9 @@ void ScCellObj::InputEnglishString( const OUString& rText )
         return;
 
     ScDocument& rDoc = pDocSh->GetDocument();
-    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+    ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
     sal_uInt32 nOldFormat = rDoc.GetNumberFormat( aCellPos );
-    if (pFormatter->GetType(nOldFormat) == SvNumFormatType::TEXT)
+    if (rContext.NFGetType(nOldFormat) == SvNumFormatType::TEXT)
     {
         SetString_Impl(rText, false, false);      // text cell
         return;
@@ -5874,14 +5879,14 @@ void ScCellObj::InputEnglishString( const OUString& rText )
     ScDocFunc &rFunc = pDocSh->GetDocFunc();
 
     ScInputStringType aRes =
-        ScStringUtil::parseInputString(*pFormatter, rText, LANGUAGE_ENGLISH_US);
+        ScStringUtil::parseInputString(rContext, rText, LANGUAGE_ENGLISH_US);
 
     if (aRes.meType != ScInputStringType::Unknown)
     {
         if ((nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && aRes.mnFormatType != SvNumFormatType::ALL)
         {
             // apply a format for the recognized type and the old format's language
-            sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat(*pFormatter, nOldFormat, aRes.mnFormatType);
+            sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat(rContext, nOldFormat, aRes.mnFormatType);
             if (nNewFormat != nOldFormat)
             {
                 ScPatternAttr aPattern(rDoc.getCellAttributeHelper());

@@ -241,6 +241,8 @@ public:
     sal_uInt32              GetNumberFormat( const ScInterpreterContext& rContext ) const;
     sal_uInt32              GetNumberFormat( SvNumberFormatter* pFormatter,
                                              const SfxItemSet* pCondSet ) const;
+    sal_uInt32              GetNumberFormat( const ScInterpreterContext& rContext,
+                                             const SfxItemSet* pCondSet ) const;
 
     Degree100               GetRotateVal( const SfxItemSet* pCondSet ) const;
     ScRotateDir             GetRotateDir( const SfxItemSet* pCondSet ) const;

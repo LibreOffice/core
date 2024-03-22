@@ -56,7 +56,7 @@ class ScQueryEvaluator
     CollatorWrapper* mpCollator;
     const bool mbMatchWholeCell;
     const bool mbCaseSensitive;
-    const ScInterpreterContext* mpContext;
+    ScInterpreterContext* mpContext;
 
     const SCSIZE mnEntryCount;
     bool* mpPasst;
@@ -108,8 +108,7 @@ class ScQueryEvaluator
 
 public:
     ScQueryEvaluator(ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
-                     const ScInterpreterContext* pContext = nullptr,
-                     bool* pTestEqualCondition = nullptr);
+                     ScInterpreterContext* pContext = nullptr, bool* pTestEqualCondition = nullptr);
 
     bool ValidQuery(SCROW nRow, const ScRefCellValue* pCell = nullptr,
                     sc::TableColumnBlockPositionSet* pBlockPos = nullptr);

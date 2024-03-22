@@ -1064,13 +1064,11 @@ Color ScTable::GetCellTextColor(ScAddress aPos) const
 
         if (pPattern->GetItem(ATTR_VALUE_FORMAT).GetValue())
         {
-            SvNumberFormatter* pNumberFormatter = GetDoc().GetFormatTable();
             const SfxUInt32Item pItem = pPattern->GetItem(ATTR_VALUE_FORMAT);
             auto& rDoc = const_cast<ScDocument&>(GetDoc());
             const Color* pColor;
             ScRefCellValue aCell(rDoc, aPos);
-            ScCellFormat::GetString(rDoc, aPos, pItem.GetValue(), &pColor, *pNumberFormatter, false,
-                                    false);
+            ScCellFormat::GetString(rDoc, aPos, pItem.GetValue(), &pColor, nullptr, false, false);
             if (pColor)
                 return *pColor;
         }

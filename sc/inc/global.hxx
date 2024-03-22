@@ -482,6 +482,7 @@ class SfxItemPool;
 class EditTextObject;
 class SfxObjectShell;
 class SvNumberFormatter;
+struct ScInterpreterContext;
 class ScUnitConverter;
 class CharClass;
 class LocaleDataWrapper;
@@ -583,7 +584,7 @@ public:
                                                 const SfxObjectShell* pShell );
     SC_DLLPUBLIC static OUString            GetDocTabName( std::u16string_view rFileName,
                                                 std::u16string_view rTabName );
-    SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( SvNumberFormatter&, sal_uInt32 nFormat, SvNumFormatType nType );
+    SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( ScInterpreterContext&, sal_uInt32 nFormat, SvNumFormatType nType );
 
     SC_DLLPUBLIC static sal_uInt16 GetStandardRowHeight();
     /// Horizontal pixel per twips factor.
@@ -823,7 +824,7 @@ public:
      */
     static double ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
             FormulaError & rError, FormulaError nStringNoValueError,
-            SvNumberFormatter* pFormatter, SvNumFormatType & rCurFmtType );
+            ScInterpreterContext& rContext, SvNumFormatType & rCurFmtType );
 
     /// Calc's threaded group calculation is in progress.
     SC_DLLPUBLIC static bool bThreadedGroupCalcInProgress;

@@ -27,7 +27,7 @@
 #include <vector>
 #include <ostream>
 
-class SvNumberFormatter;
+struct ScInterpreterContext;
 
 struct ScDBQueryParamInternal;
 struct ScQueryEntry;
@@ -62,7 +62,7 @@ struct SAL_DLLPUBLIC_RTTI ScQueryParamBase
     SC_DLLPUBLIC void RemoveAllEntriesByField(SCCOLROW nField);
     void Resize(size_t nNew);
     void FillInExcelSyntax( svl::SharedStringPool& rPool, const OUString& aCellStr, SCSIZE nIndex,
-                            SvNumberFormatter* pFormatter );
+                            ScInterpreterContext* pContext );
 
 protected:
     typedef std::vector<ScQueryEntry> EntriesType;

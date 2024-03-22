@@ -162,8 +162,8 @@ tools::Long ScColumn::GetNeededSize(
     else
         bBreak = pPattern->GetItem(ATTR_LINEBREAK).GetValue();
 
-    SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
-    sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+    ScInterpreterContext& rContext = rDocument.GetNonThreadedContext();
+    sal_uInt32 nFormat = pPattern->GetNumberFormat( rContext, pCondSet );
 
     // get "cell is value" flag
     // Must be synchronized with ScOutputData::LayoutStrings()
@@ -186,7 +186,7 @@ tools::Long ScColumn::GetNeededSize(
     }
 
     // #i111387#, tdf#121040: disable automatic line breaks for all number formats
-    if (bBreak && bCellIsValue && (pFormatter->GetType(nFormat) == SvNumFormatType::NUMBER))
+    if (bBreak && bCellIsValue && (rContext.NFGetType(nFormat) == SvNumFormatType::NUMBER))
     {
         // If a formula cell needs to be interpreted during aCell.hasNumeric()
         // to determine the type, the pattern may get invalidated because the
@@ -207,8 +207,8 @@ tools::Long ScColumn::GetNeededSize(
                 bBreak = false;
             else
             {
-                nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
-                if (pFormatter->GetType(nFormat) == SvNumFormatType::NUMBER)
+                nFormat = pPattern->GetNumberFormat( rContext, pCondSet );
+                if (rContext.NFGetType(nFormat) == SvNumFormatType::NUMBER)
                     bBreak = false;
             }
         }
@@ -301,7 +301,7 @@ tools::Long ScColumn::GetNeededSize(
     {
         const Color* pColor;
         OUString aValStr = ScCellFormat::GetString(
-            aCell, nFormat, &pColor, *pFormatter, rDocument, true, rOptions.bFormula);
+            aCell, nFormat, &pColor, &rContext, rDocument, true, rOptions.bFormula);
 
         if (!aValStr.isEmpty())
         {
@@ -471,7 +471,7 @@ tools::Long ScColumn::GetNeededSize(
         {
             const Color* pColor;
             OUString aString = ScCellFormat::GetString(
-                aCell, nFormat, &pColor, *pFormatter, rDocument, true,
+                aCell, nFormat, &pColor, &rContext, rDocument, true,
                 rOptions.bFormula);
 
             if (!aString.isEmpty())
@@ -652,7 +652,7 @@ class MaxStrLenFinder
     {
         const Color* pColor;
         OUString aValStr = ScCellFormat::GetString(
-            rCell, mnFormat, &pColor, *mrDoc.GetFormatTable(), mrDoc);
+            rCell, mnFormat, &pColor, nullptr, mrDoc);
 
         if (aValStr.getLength() <= mnMaxLen)
             return;
@@ -744,8 +744,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                         static_cast<tools::Long>( pMargin->GetRightMargin() * nPPTX );
 
         // Try to find the row that has the longest string, and measure the width of that string.
-        SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
-        sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
+        ScInterpreterContext& rContext = rDocument.GetNonThreadedContext();
+        sal_uInt32 nFormat = pPattern->GetNumberFormat(rContext);
         while ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && nRow <= 2)
         {
             // This is often used with CSV import or other data having a header
@@ -755,7 +755,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
             // rows..
             const ScPatternAttr* pNextPattern = GetPattern( ++nRow );
             if (!ScPatternAttr::areSame(pNextPattern, pPattern))
-                nFormat = pNextPattern->GetNumberFormat( pFormatter );
+                nFormat = pNextPattern->GetNumberFormat(rContext);
         }
         OUString aLongStr;
         const Color* pColor;
@@ -763,7 +763,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         {
             ScRefCellValue aCell = GetCellValue(pParam->mnMaxTextRow);
             aLongStr = ScCellFormat::GetString(
-                aCell, nFormat, &pColor, *pFormatter, rDocument);
+                aCell, nFormat, &pColor, &rContext, rDocument);
         }
         else
         {

@@ -323,11 +323,11 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 }
                 else
                 {
-                    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
-                    sal_uInt32 nNumFmt = pPattern->GetNumberFormat(pFormatter);
+                    ScInterpreterContext& rContext = m_pDoc->GetNonThreadedContext();
+                    sal_uInt32 nNumFmt = pPattern->GetNumberFormat(rContext);
                     const Color* pColor;
                     OUString aText
-                        = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, *m_pDoc);
+                        = ScCellFormat::GetString(aCell, nNumFmt, &pColor, &rContext, *m_pDoc);
                     if (!aText.isEmpty())
                         aEngine.SetTextCurrentDefaults(aText);
                 }

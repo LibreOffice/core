@@ -1128,7 +1128,7 @@ class ScriptTypeUpdater
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miPosAttr;
     ScConditionalFormatList* mpCFList;
-    SvNumberFormatter* mpFormatter;
+    ScInterpreterContext& mrContext;
     ScAddress maPos;
     bool mbUpdated;
 
@@ -1161,8 +1161,8 @@ private:
         }
 
         const Color* pColor;
-        sal_uInt32 nFormat = pPat->GetNumberFormat(mpFormatter, pCondSet);
-        OUString aStr = ScCellFormat::GetString(rCell, nFormat, &pColor, *mpFormatter, mrCol.GetDoc());
+        sal_uInt32 nFormat = pPat->GetNumberFormat(mrContext, pCondSet);
+        OUString aStr = ScCellFormat::GetString(rCell, nFormat, &pColor, &mrContext, mrCol.GetDoc());
 
         rAttr.mnScriptType = mrCol.GetDoc().GetStringScriptType(aStr);
         mbUpdated = true;
@@ -1174,7 +1174,7 @@ public:
         mrTextAttrs(rCol.GetCellAttrStore()),
         miPosAttr(mrTextAttrs.begin()),
         mpCFList(rCol.GetDoc().GetCondFormList(rCol.GetTab())),
-        mpFormatter(rCol.GetDoc().GetFormatTable()),
+        mrContext(rCol.GetDoc().GetNonThreadedContext()),
         maPos(rCol.GetCol(), 0, rCol.GetTab()),
         mbUpdated(false)
     {}

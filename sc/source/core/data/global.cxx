@@ -157,13 +157,12 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
     return bInvalidate;
 }
 
-sal_uInt32 ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
+sal_uInt32 ScGlobal::GetStandardFormat( ScInterpreterContext& rContext,
         sal_uInt32 nFormat, SvNumFormatType nType )
 {
-    const SvNumberformat* pFormat = rFormatter.GetEntry( nFormat );
-    if ( pFormat )
-        return rFormatter.GetStandardFormat( nFormat, nType, pFormat->GetLanguage() );
-    return rFormatter.GetStandardFormat( nType, eLnge );
+    if (const SvNumberformat* pFormat = rContext.NFGetFormatEntry(nFormat))
+        return rContext.NFGetStandardFormat( nFormat, nType, pFormat->GetLanguage() );
+    return rContext.NFGetStandardFormat( nType, eLnge );
 }
 
 sal_uInt16 ScGlobal::GetStandardRowHeight()

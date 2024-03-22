@@ -1846,12 +1846,11 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 }
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
-                        bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )
+                        bool bComputeII, bool bMatrixFlag, ScInterpreterContext* pContext )
     : FormulaCompiler(rArr, bComputeII, bMatrixFlag),
     rDoc(rCxt.getDoc()),
     aPos(rPos),
-    mpFormatter(pContext ? pContext->GetFormatTable() : rDoc.GetFormatTable()),
-    mpInterpreterContext(pContext),
+    mrInterpreterContext(pContext ? *pContext : rDoc.GetNonThreadedContext()),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(&ScGlobal::getCharClass()),
@@ -1870,12 +1869,11 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
 
 ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos, ScTokenArray& rArr,
                         formula::FormulaGrammar::Grammar eGrammar,
-                        bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )
+                        bool bComputeII, bool bMatrixFlag, ScInterpreterContext* pContext )
     : FormulaCompiler(rArr, bComputeII, bMatrixFlag),
         rDoc( rDocument ),
         aPos( rPos ),
-        mpFormatter(pContext ? pContext->GetFormatTable() : rDoc.GetFormatTable()),
-        mpInterpreterContext(pContext),
+        mrInterpreterContext(pContext ? *pContext : rDoc.GetNonThreadedContext()),
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
@@ -1895,12 +1893,11 @@ ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos, ScTokenArr
 }
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
-                        bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )
+                        bool bComputeII, bool bMatrixFlag, ScInterpreterContext* pContext )
     : FormulaCompiler(bComputeII, bMatrixFlag),
     rDoc(rCxt.getDoc()),
     aPos(rPos),
-    mpFormatter(pContext ? pContext->GetFormatTable() : rDoc.GetFormatTable()),
-    mpInterpreterContext(pContext),
+    mrInterpreterContext(pContext ? *pContext : rDoc.GetNonThreadedContext()),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(&ScGlobal::getCharClass()),
@@ -1919,12 +1916,11 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
 
 ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos,
                         formula::FormulaGrammar::Grammar eGrammar,
-                        bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )
+                        bool bComputeII, bool bMatrixFlag, ScInterpreterContext* pContext )
         : FormulaCompiler(bComputeII, bMatrixFlag),
         rDoc( rDocument ),
         aPos( rPos ),
-        mpFormatter(pContext ? pContext->GetFormatTable() : rDoc.GetFormatTable()),
-        mpInterpreterContext(pContext),
+        mrInterpreterContext(pContext ? *pContext : rDoc.GetNonThreadedContext()),
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
@@ -3168,12 +3164,12 @@ bool ScCompiler::ParseValue( const OUString& rSym )
     }
 
     double fVal;
-    sal_uInt32 nIndex = mxSymbols->isEnglishLocale() ? mpFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) : 0;
+    sal_uInt32 nIndex = mxSymbols->isEnglishLocale() ? mrInterpreterContext.NFGetStandardIndex(LANGUAGE_ENGLISH_US) : 0;
 
-    if (!mpFormatter->IsNumberFormat(rSym, nIndex, fVal))
+    if (!mrInterpreterContext.NFIsNumberFormat(rSym, nIndex, fVal))
         return false;
 
-    SvNumFormatType nType = mpFormatter->GetType(nIndex);
+    SvNumFormatType nType = mrInterpreterContext.NFGetType(nIndex);
 
     // Don't accept 3:3 as time, it is a reference to entire row 3 instead.
     // Dates should never be entered directly and automatically converted
@@ -5358,7 +5354,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         ScAddress aAbs = rRef.toAbs(rDoc, aPos);
         if (rDoc.HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
-            OUString aStr = rDoc.GetString(aAbs, mpInterpreterContext);
+            OUString aStr = rDoc.GetString(aAbs, &mrInterpreterContext);
             // Enquote to SingleQuoted.
             aStr = aStr.replaceAll(u"'", u"''");
             rBuffer.append('\'');
@@ -5387,7 +5383,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
             {
                 SAL_WARN("sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef falling back to cell: " <<
                         aAbs.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc));
-                aStr = rDoc.GetString(aAbs, mpInterpreterContext);
+                aStr = rDoc.GetString(aAbs, &mrInterpreterContext);
             }
             else
             {

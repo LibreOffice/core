@@ -84,7 +84,7 @@ ScQueryCellIteratorBase< accessType, queryType >::ScQueryCellIteratorBase(ScDocu
         ScQueryEntry& rEntry = maParam.GetEntry(i);
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         sal_uInt32 nIndex = 0;
-        bool bNumber = mrContext.GetFormatTable()->IsNumberFormat(
+        bool bNumber = mrContext.NFIsNumberFormat(
             rItem.maString.getString(), nIndex, rItem.mfVal);
         rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
     }
@@ -417,7 +417,6 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
         return false;
 
     CollatorWrapper& rCollator = ScGlobal::GetCollator(maParam.bCaseSens);
-    SvNumberFormatter& rFormatter = *(mrContext.GetFormatTable());
     const ScQueryEntry& rEntry = maParam.GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     bool bAscending = rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_EQUAL;
@@ -437,7 +436,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
         {
             ScRefCellValue aCell = sc::toRefCell(aPos.first, aPos.second);
             sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, nRow);
-            OUString aCellStr = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
+            OUString aCellStr = ScCellFormat::GetInputString(aCell, nFormat, &mrContext, rDoc);
             sal_Int32 nTmp = rCollator.compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
             if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                     (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
@@ -492,7 +491,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
     if (bForceStr || aCell.hasString())
     {
         sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
-        aLastInRangeString = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
+        aLastInRangeString = ScCellFormat::GetInputString(aCell, nFormat, &mrContext, rDoc);
     }
     else
     {
@@ -588,7 +587,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
         else if (bStr && bByString)
         {
             sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
-            OUString aCellStr = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
+            OUString aCellStr = ScCellFormat::GetInputString(aCell, nFormat, &mrContext, rDoc);
 
             nRes = rCollator.compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
             if (nRes < 0 && bAscending)

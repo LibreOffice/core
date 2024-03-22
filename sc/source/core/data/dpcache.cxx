@@ -658,8 +658,8 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
                 if (!aData.IsEmpty())
                 {
                     maEmptyRows.insert_back(nRow, nRow+1, false);
-                    SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
-                    rField.mnNumFormat = pFormatter ? pFormatter->GetStandardFormat(nFormatType) : 0;
+                    ScInterpreterContext& rContext = mrDoc.GetNonThreadedContext();
+                    rField.mnNumFormat = rContext.NFGetStandardFormat(nFormatType);
                 }
 
                 ++nRow;
@@ -1068,11 +1068,8 @@ bool ScDPCache::IsDateDimension( tools::Long nDim ) const
     if (nDim >= mnColumnCount)
         return false;
 
-    SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
-    if (!pFormatter)
-        return false;
-
-    SvNumFormatType eType = pFormatter->GetType(maFields[nDim]->mnNumFormat);
+    ScInterpreterContext& rContext = mrDoc.GetNonThreadedContext();
+    SvNumFormatType eType = rContext.NFGetType(maFields[nDim]->mnNumFormat);
     return (eType == SvNumFormatType::DATE) || (eType == SvNumFormatType::DATETIME);
 }
 
@@ -1163,22 +1160,22 @@ SCROW ScDPCache::GetIdByItemData(tools::Long nDim, const ScDPItemData& rItem) co
 }
 
 // static
-sal_uInt32 ScDPCache::GetLocaleIndependentFormat( SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat )
+sal_uInt32 ScDPCache::GetLocaleIndependentFormat(ScInterpreterContext& rContext, sal_uInt32 nNumFormat)
 {
     // For a date or date+time format use ISO format so it works across locales
     // and can be matched against string based item queries. For time use 24h
     // format. All others use General format, no currency, percent, ...
     // Use en-US locale for all.
-    switch (rFormatter.GetType( nNumFormat))
+    switch (rContext.NFGetType(nNumFormat))
     {
         case SvNumFormatType::DATE:
-            return rFormatter.GetFormatIndex( NF_DATE_ISO_YYYYMMDD, LANGUAGE_ENGLISH_US);
+            return rContext.NFGetFormatIndex( NF_DATE_ISO_YYYYMMDD, LANGUAGE_ENGLISH_US);
         case SvNumFormatType::TIME:
-            return rFormatter.GetFormatIndex( NF_TIME_HHMMSS, LANGUAGE_ENGLISH_US);
+            return rContext.NFGetFormatIndex( NF_TIME_HHMMSS, LANGUAGE_ENGLISH_US);
         case SvNumFormatType::DATETIME:
-            return rFormatter.GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, LANGUAGE_ENGLISH_US);
+            return rContext.NFGetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, LANGUAGE_ENGLISH_US);
         default:
-            return rFormatter.GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_ENGLISH_US);
+            return rContext.NFGetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_ENGLISH_US);
     }
 }
 
@@ -1190,15 +1187,15 @@ OUString ScDPCache::GetLocaleIndependentFormattedNumberString( double fValue )
 
 // static
 OUString ScDPCache::GetLocaleIndependentFormattedString( double fValue,
-        SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat )
+        ScInterpreterContext& rContext, sal_uInt32 nNumFormat )
 {
-    nNumFormat = GetLocaleIndependentFormat( rFormatter, nNumFormat);
+    nNumFormat = GetLocaleIndependentFormat( rContext, nNumFormat);
     if ((nNumFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         return GetLocaleIndependentFormattedNumberString( fValue);
 
     OUString aStr;
     const Color* pColor = nullptr;
-    rFormatter.GetOutputString( fValue, nNumFormat, aStr, &pColor);
+    rContext.NFGetOutputString( fValue, nNumFormat, aStr, &pColor);
     return aStr;
 }
 
@@ -1211,21 +1208,15 @@ OUString ScDPCache::GetFormattedString(tools::Long nDim, const ScDPItemData& rIt
     if (eType == ScDPItemData::Value)
     {
         // Format value using the stored number format.
-        SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
-        if (pFormatter)
-        {
-            sal_uInt32 nNumFormat = GetNumberFormat(nDim);
-            if (bLocaleIndependent)
-                return GetLocaleIndependentFormattedString( rItem.GetValue(), *pFormatter, nNumFormat);
+        ScInterpreterContext& rContext = mrDoc.GetNonThreadedContext();
+        sal_uInt32 nNumFormat = GetNumberFormat(nDim);
+        if (bLocaleIndependent)
+            return GetLocaleIndependentFormattedString( rItem.GetValue(), rContext, nNumFormat);
 
-            OUString aStr;
-            const Color* pColor = nullptr;
-            pFormatter->GetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
-            return aStr;
-        }
-
-        // Last resort...
-        return GetLocaleIndependentFormattedNumberString( rItem.GetValue());
+        OUString aStr;
+        const Color* pColor = nullptr;
+        rContext.NFGetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
+        return aStr;
     }
 
     if (eType == ScDPItemData::GroupValue)
@@ -1256,9 +1247,9 @@ OUString ScDPCache::GetFormattedString(tools::Long nDim, const ScDPItemData& rIt
     return rItem.GetString();
 }
 
-SvNumberFormatter* ScDPCache::GetNumberFormatter() const
+ScInterpreterContext& ScDPCache::GetInterpreterContext() const
 {
-    return mrDoc.GetFormatTable();
+    return mrDoc.GetNonThreadedContext();
 }
 
 tools::Long ScDPCache::AppendGroupField()

@@ -78,7 +78,10 @@ static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrAr
         nRowEnd = rDoc.MaxRow();
     }
 
-    nFormat = pPattern->GetNumberFormat( pContext ? pContext->GetFormatTable() : rDoc.GetFormatTable() );
+    if (pContext)
+        nFormat = pPattern->GetNumberFormat(*pContext);
+    else
+        nFormat = pPattern->GetNumberFormat(rDoc.GetFormatTable());
     rpArr = pNewArr;
     nAttrEndRow = nRowEnd;
 }
@@ -260,7 +263,7 @@ void ScValueIterator::GetCurNumFmtInfo( SvNumFormatType& nType, sal_uInt32& nInd
         SCROW nCurRow = GetRow();
         const ScColumn* pCol = &(mrDoc.maTabs[mnTab])->aCol[mnCol];
         nNumFmtIndex = pCol->GetNumberFormat(mrContext, nCurRow);
-        nNumFmtType = mrContext.GetNumberFormatType( nNumFmtIndex );
+        nNumFmtType = mrContext.NFGetType(nNumFmtIndex);
         bNumValid = true;
     }
 

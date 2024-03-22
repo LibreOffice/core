@@ -947,7 +947,7 @@ size_t ScFormulaCell::GetHash() const
     return pCode->GetHash();
 }
 
-OUString ScFormulaCell::GetFormula( const FormulaGrammar::Grammar eGrammar, const ScInterpreterContext* pContext ) const
+OUString ScFormulaCell::GetFormula( const FormulaGrammar::Grammar eGrammar, ScInterpreterContext* pContext ) const
 {
     if( pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen() )
     {
@@ -1001,7 +1001,7 @@ OUString ScFormulaCell::GetFormula( const FormulaGrammar::Grammar eGrammar, cons
     return buffer.makeStringAndClear();
 }
 
-OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInterpreterContext* pContext ) const
+OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, ScInterpreterContext* pContext ) const
 {
     OUStringBuffer aBuf;
     if (pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen())
@@ -2088,7 +2088,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     nFormatType = rContext.GetFormatTable()->GetType( nOldFormatIndex);
                 }
                 if (nOldFormatIndex !=
-                        ScGlobal::GetStandardFormat( *rContext.GetFormatTable(), nOldFormatIndex, nFormatType))
+                        ScGlobal::GetStandardFormat(rContext, nOldFormatIndex, nFormatType))
                     bForceNumberFormat = false;
             }
         }
@@ -2138,8 +2138,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             }
 
             if (bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)))
-                nFormatIndex = ScGlobal::GetStandardFormat(*rContext.GetFormatTable(),
-                        nFormatIndex, nFormatType);
+                nFormatIndex = ScGlobal::GetStandardFormat(rContext, nFormatIndex, nFormatType);
 
             // Do not replace a General format (which was the reason why
             // mbNeedsNumberFormat was set) with a General format.
@@ -2688,19 +2687,19 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
     // Cell Text uses the Cell format while the URL uses
     // the default format for the type.
     const sal_uInt32 nCellFormat = rDocument.GetNumberFormat( aPos );
-    SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
+    ScInterpreterContext& rContext = rDocument.GetNonThreadedContext();
 
-    const sal_uInt32 nURLFormat = ScGlobal::GetStandardFormat( *pFormatter, nCellFormat, SvNumFormatType::NUMBER);
+    const sal_uInt32 nURLFormat = ScGlobal::GetStandardFormat(rContext, nCellFormat, SvNumFormatType::NUMBER);
 
     if ( IsValue() )
     {
         double fValue = GetValue();
-        pFormatter->GetOutputString( fValue, nCellFormat, rCellText, &pColor );
+        rContext.NFGetOutputString( fValue, nCellFormat, rCellText, &pColor );
     }
     else
     {
         aCellString = GetString().getString();
-        pFormatter->GetOutputString( aCellString, nCellFormat, rCellText, &pColor );
+        rContext.NFGetOutputString( aCellString, nCellFormat, rCellText, &pColor );
     }
     ScConstMatrixRef xMat( aResult.GetMatrix());
     if (xMat)
@@ -2709,16 +2708,16 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
         if (!xMat->IsValue(0, 1))
             rURL = xMat->GetString(0, 1).getString();
         else
-            pFormatter->GetOutputString(
+            rContext.NFGetOutputString(
                 xMat->GetDouble(0, 1), nURLFormat, rURL, &pColor);
     }
 
     if(rURL.isEmpty())
     {
         if(IsValue())
-            pFormatter->GetOutputString( GetValue(), nURLFormat, rURL, &pColor );
+            rContext.NFGetOutputString( GetValue(), nURLFormat, rURL, &pColor );
         else
-            pFormatter->GetOutputString( aCellString, nURLFormat, rURL, &pColor );
+            rContext.NFGetOutputString( aCellString, nURLFormat, rURL, &pColor );
     }
 }
 

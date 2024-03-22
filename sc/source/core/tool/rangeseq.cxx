@@ -197,8 +197,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument& rDoc, const
     return !bHasErrors;
 }
 
-bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix,
-                                            SvNumberFormatter* pFormatter )
+bool ScRangeToSequence::FillStringArray(uno::Any& rAny, const ScMatrix* pMatrix, ScInterpreterContext& rContext)
 {
     if (!pMatrix)
         return false;
@@ -221,11 +220,11 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix
                 if ( !pMatrix->IsEmpty( nCol, nRow ) )
                     aStr = pMatrix->GetString(nCol, nRow).getString();
             }
-            else if ( pFormatter )
+            else
             {
                 double fVal = pMatrix->GetDouble( nCol, nRow );
                 const Color* pColor;
-                pFormatter->GetOutputString( fVal, 0, aStr, &pColor );
+                rContext.NFGetOutputString( fVal, 0, aStr, &pColor );
             }
             pColAry[nCol] = aStr;
         }

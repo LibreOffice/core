@@ -1947,7 +1947,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
             {
                 ScAddress aPos(nCol, nRow, nStartTab);
                 sal_uInt32 nNumFmt = rDoc.GetNumberFormat(aPos);
-                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
 
                 ScRefCellValue aCell(rDoc, aPos, blockPos[ nCol - nStartCol ]);
                 switch (aCell.getType())
@@ -1965,7 +1965,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         else
                         {
                             const Color* pColor;
-                            aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, rDoc);
+                            aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, &rContext, rDoc);
 
                             bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                             if( bMultiLineText )
@@ -1989,7 +1989,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     case CELLTYPE_VALUE:
                     {
                         const Color* pColor;
-                        aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, rDoc);
+                        aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, &rContext, rDoc);
                         rStrm.WriteUnicodeOrByteText(aCellStr);
                     }
                     break;
@@ -1998,7 +1998,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     default:
                     {
                         const Color* pColor;
-                        aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, *pFormatter, rDoc);
+                        aCellStr = ScCellFormat::GetString(aCell, nNumFmt, &pColor, &rContext, rDoc);
 
                         bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                         if( bMultiLineText )

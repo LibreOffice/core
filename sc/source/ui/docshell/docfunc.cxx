@@ -1274,7 +1274,7 @@ bool ScDocFunc::SetCellText(
                 pExtRefGuard.emplace(rDoc);
 
             ScInputStringType aRes =
-                ScStringUtil::parseInputString(*rDoc.GetFormatTable(), rText, LANGUAGE_ENGLISH_US);
+                ScStringUtil::parseInputString(rDoc.GetNonThreadedContext(), rText, LANGUAGE_ENGLISH_US);
 
             switch (aRes.meType)
             {

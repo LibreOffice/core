@@ -278,7 +278,7 @@ public:
     double GetDoubleWithStringConversion(SCSIZE nC, SCSIZE nR) const;
     svl::SharedString GetString(SCSIZE nC, SCSIZE nR) const;
     svl::SharedString GetString( SCSIZE nIndex) const;
-    svl::SharedString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
+    svl::SharedString GetString( ScInterpreterContext& rContext, SCSIZE nC, SCSIZE nR) const;
     ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
     bool IsStringOrEmpty( SCSIZE nIndex ) const;
     bool IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const;
@@ -339,7 +339,7 @@ public:
     ScMatrix::IterateResultMultiple<tRes> ApplyCollectOperation(const std::vector<T>& aOp);
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
-            SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool);
+            ScInterpreterContext& rContext, svl::SharedStringPool& rPool);
 
     void ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,
             ScInterpreter* pInterpreter, const ScMatrix::CalculateOpFunction& op);
@@ -718,7 +718,7 @@ svl::SharedString ScMatrixImpl::GetString( SCSIZE nIndex) const
     return GetString(nC, nR);
 }
 
-svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+svl::SharedString ScMatrixImpl::GetString( ScInterpreterContext& rContext, SCSIZE nC, SCSIZE nR) const
 {
     if (!ValidColRowOrReplicated( nC, nR ))
     {
@@ -739,11 +739,11 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
                 return svl::SharedString::getEmptyString();
 
             // result of empty FALSE jump path
-            sal_uInt32 nKey = rFormatter.GetStandardFormat( SvNumFormatType::LOGICAL,
+            sal_uInt32 nKey = rContext.NFGetStandardFormat( SvNumFormatType::LOGICAL,
                     ScGlobal::eLnge);
             OUString aStr;
             const Color* pColor = nullptr;
-            rFormatter.GetOutputString( 0.0, nKey, aStr, &pColor);
+            rContext.NFGetOutputString( 0.0, nKey, aStr, &pColor);
             return svl::SharedString( aStr);    // string not interned
         }
         case mdds::mtm::element_numeric:
@@ -761,10 +761,10 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
         return svl::SharedString( ScGlobal::GetErrorString( nError));   // string not interned
     }
 
-    sal_uInt32 nKey = rFormatter.GetStandardFormat( SvNumFormatType::NUMBER,
+    sal_uInt32 nKey = rContext.NFGetStandardFormat( SvNumFormatType::NUMBER,
             ScGlobal::eLnge);
     OUString aStr;
-    rFormatter.GetInputLineString( fVal, nKey, aStr);
+    rContext.NFGetInputLineString( fVal, nKey, aStr);
     return svl::SharedString( aStr);    // string not interned
 }
 
@@ -2676,14 +2676,14 @@ size_t get_index(SCSIZE nMaxRow, size_t nRow, size_t nCol, size_t nRowOffset, si
 }
 
 void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
-            SvNumberFormatter& rFormatter, svl::SharedStringPool& rStringPool)
+            ScInterpreterContext& rContext, svl::SharedStringPool& rStringPool)
 {
     SCSIZE nC1, nC2;
     SCSIZE nR1, nR2;
     xMat1->GetDimensions(nC1, nR1);
     xMat2->GetDimensions(nC2, nR2);
 
-    sal_uInt32 nKey = rFormatter.GetStandardFormat( SvNumFormatType::NUMBER,
+    sal_uInt32 nKey = rContext.NFGetStandardFormat( SvNumFormatType::NUMBER,
             ScGlobal::eLnge);
 
     std::vector<OUString> aString(nMaxCol * nMaxRow);
@@ -2703,7 +2703,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
                 return;
             }
             OUString aStr;
-            rFormatter.GetInputLineString( nVal, nKey, aStr);
+            rContext.NFGetInputLineString( nVal, nKey, aStr);
             aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
@@ -2711,7 +2711,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         [&](size_t nRow, size_t nCol, bool nVal)
         {
             OUString aStr;
-            rFormatter.GetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
+            rContext.NFGetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
             aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
@@ -2765,7 +2765,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
                 return;
             }
             OUString aStr;
-            rFormatter.GetInputLineString( nVal, nKey, aStr);
+            rContext.NFGetInputLineString( nVal, nKey, aStr);
             aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr);
         };
 
@@ -2773,7 +2773,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         [&](size_t nRow, size_t nCol, bool nVal)
         {
             OUString aStr;
-            rFormatter.GetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
+            rContext.NFGetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
             aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr);
         };
 
@@ -3287,9 +3287,9 @@ svl::SharedString ScMatrix::GetString( SCSIZE nIndex) const
     return pImpl->GetString(nIndex);
 }
 
-svl::SharedString ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+svl::SharedString ScMatrix::GetString( ScInterpreterContext& rContext, SCSIZE nC, SCSIZE nR) const
 {
-    return pImpl->GetString(rFormatter, nC, nR);
+    return pImpl->GetString(rContext, nC, nR);
 }
 
 ScMatrixValue ScMatrix::Get(SCSIZE nC, SCSIZE nR) const
@@ -3667,9 +3667,9 @@ void ScMatrix::Dump() const
 #endif
 
 void ScMatrix::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow,
-        const ScMatrixRef& xMat1, const ScMatrixRef& xMat2, SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool)
+        const ScMatrixRef& xMat1, const ScMatrixRef& xMat2, ScInterpreterContext& rContext, svl::SharedStringPool& rPool)
 {
-    pImpl->MatConcat(nMaxCol, nMaxRow, xMat1, xMat2, rFormatter, rPool);
+    pImpl->MatConcat(nMaxCol, nMaxRow, xMat1, xMat2, rContext, rPool);
 }
 
 void ScMatrix::ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,

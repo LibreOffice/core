@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <interpretercontext.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <scmatrix.hxx>
@@ -202,7 +203,7 @@ void ScQueryParamBase::Resize(size_t nNew)
 }
 
 void ScQueryParamBase::FillInExcelSyntax(
-    svl::SharedStringPool& rPool, const OUString& rCellStr, SCSIZE nIndex, SvNumberFormatter* pFormatter )
+    svl::SharedStringPool& rPool, const OUString& rCellStr, SCSIZE nIndex, ScInterpreterContext* pContext )
 {
     if (nIndex >= m_Entries.size())
         Resize(nIndex+1);
@@ -265,10 +266,10 @@ void ScQueryParamBase::FillInExcelSyntax(
         }
     }
 
-    if (!pFormatter)
+    if (!pContext)
         return;
 
-    /* TODO: pFormatter currently is also used as a flag whether matching
+    /* TODO: pContext currently is also used as a flag whether matching
      * empty cells with an empty string is triggered from the interpreter.
      * This could be handled independently if all queries should support
      * it, needs to be evaluated if that actually is desired. */
@@ -291,7 +292,7 @@ void ScQueryParamBase::FillInExcelSyntax(
     else
     {
         sal_uInt32 nFormat = 0;
-        bool bNumber = pFormatter->IsNumberFormat( rItem.maString.getString(), nFormat, rItem.mfVal);
+        bool bNumber = pContext->NFIsNumberFormat( rItem.maString.getString(), nFormat, rItem.mfVal);
         rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
     }
 }

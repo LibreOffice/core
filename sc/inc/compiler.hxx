@@ -274,8 +274,7 @@ private:
     ScDocument& rDoc;
     ScAddress   aPos;
 
-    SvNumberFormatter* mpFormatter;
-    const ScInterpreterContext* mpInterpreterContext;
+    ScInterpreterContext& mrInterpreterContext;
 
     SCTAB       mnCurrentSheetTab;      // indicates current sheet number parsed so far
     sal_Int32   mnCurrentSheetEndPos;   // position after current sheet name if parsed
@@ -384,22 +383,22 @@ public:
 
 public:
     ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
-            bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
+            bool bComputeII = false, bool bMatrixFlag = false, ScInterpreterContext* pContext = nullptr );
 
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of rDocument is used,
      */
     SC_DLLPUBLIC ScCompiler( ScDocument& rDocument, const ScAddress&,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
-            bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
+            bool bComputeII = false, bool bMatrixFlag = false, ScInterpreterContext* pContext = nullptr );
 
     SC_DLLPUBLIC ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
-            bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
+            bool bComputeII = false, bool bMatrixFlag = false, ScInterpreterContext* pContext = nullptr );
 
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of rDocument is used,
      */
     SC_DLLPUBLIC ScCompiler( ScDocument& rDocument, const ScAddress&, ScTokenArray& rArr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
-            bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
+            bool bComputeII = false, bool bMatrixFlag = false, ScInterpreterContext* pContext = nullptr );
 
     SC_DLLPUBLIC virtual ~ScCompiler() override;
 

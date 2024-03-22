@@ -24,7 +24,7 @@
 
 namespace com::sun::star::uno { class Any; }
 
-class SvNumberFormatter;
+struct ScInterpreterContext;
 class ScDocument;
 class ScMatrix;
 class ScRange;
@@ -43,7 +43,7 @@ public:
     static bool FillStringArray( css::uno::Any& rAny,
                                 ScDocument& rDoc, const ScRange& rRange );
     static bool FillStringArray( css::uno::Any& rAny,
-                                const ScMatrix* pMatrix, SvNumberFormatter* pFormatter );
+                                const ScMatrix* pMatrix, ScInterpreterContext& rContext );
     static bool FillMixedArray( css::uno::Any& rAny,
                                 ScDocument& rDoc, const ScRange& rRange,
                                 bool bAllowNV = false );

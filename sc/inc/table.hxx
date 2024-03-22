@@ -468,7 +468,7 @@ public:
     bool        ReservePatternCount( SCCOL nCol, SCSIZE nReserve );
 
     void        SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rStr );
-    OUString    GetString( SCCOL nCol, SCROW nRow, const ScInterpreterContext* pContext = nullptr ) const;
+    OUString    GetString( SCCOL nCol, SCROW nRow, ScInterpreterContext* pContext = nullptr ) const;
     double*     GetValueCell( SCCOL nCol, SCROW nRow );
     // Note that if pShared is set and a value is returned that way, the returned OUString is empty.
     OUString    GetInputString( SCCOL nCol, SCROW nRow, bool bForceSystemLocale = false ) const;

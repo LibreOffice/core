@@ -229,8 +229,8 @@ public:
     size_t GetHash() const;
 
     SC_DLLPUBLIC OUString GetFormula( const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                         const ScInterpreterContext* pContext = nullptr ) const;
-    SC_DLLPUBLIC OUString GetFormula( sc::CompileFormulaContext& rCxt, const ScInterpreterContext* pContext = nullptr ) const;
+                         ScInterpreterContext* pContext = nullptr ) const;
+    SC_DLLPUBLIC OUString GetFormula( sc::CompileFormulaContext& rCxt, ScInterpreterContext* pContext = nullptr ) const;
 
     SC_DLLPUBLIC void SetDirty( bool bDirtyFlag=true );
     void            SetDirtyVar();

@@ -1176,7 +1176,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR, /*bEmpty*/true);
     if (xResMat)
     {
-        xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, *pFormatter, mrDoc.GetSharedStringPool());
+        xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, mrContext, mrDoc.GetSharedStringPool());
     }
     return xResMat;
 }
@@ -1420,7 +1420,7 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            OUString aTmp = sStr + pMat->GetString(*pFormatter, i, j).getString();
+                            OUString aTmp = sStr + pMat->GetString(mrContext, i, j).getString();
                             pResMat->PutString(mrStrPool.intern(aTmp), i, j);
                         }
                     }
@@ -1435,7 +1435,7 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            OUString aTmp = pMat->GetString(*pFormatter, i, j).getString() + sStr;
+                            OUString aTmp = pMat->GetString(mrContext, i, j).getString() + sStr;
                             pResMat->PutString(mrStrPool.intern(aTmp), i, j);
                         }
                     }

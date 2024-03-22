@@ -34,7 +34,7 @@
 #define DEBUG_MATRIX 0
 
 class ScInterpreter;
-class SvNumberFormatter;
+struct ScInterpreterContext;
 class ScMatrixImpl;
 enum class FormulaError : sal_uInt16;
 
@@ -314,7 +314,7 @@ public:
         numerical value formatted as string, or in case of an error the error
         string is returned; an empty string for empty, a "FALSE" string for
         empty path. */
-    svl::SharedString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const ;
+    svl::SharedString GetString( ScInterpreterContext& rContext, SCSIZE nC, SCSIZE nR) const ;
 
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!
@@ -411,7 +411,7 @@ public:
             EmptyOpFunction aEmptyFunc) const ;
 
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
-            SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool) ;
+            ScInterpreterContext& rContext, svl::SharedStringPool& rPool) ;
 
     /** Apply binary operation to values from two input matrices, storing result into this matrix. */
     void ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,

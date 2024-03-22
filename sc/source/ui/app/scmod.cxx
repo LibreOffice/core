@@ -171,6 +171,8 @@ ScModule::~ScModule()
 
     ScGlobal::Clear(); // Also calls ScDocumentPool::DeleteVersionMaps();
 
+    ScInterpreterContextPool::ModuleExiting();
+
     DeleteCfg(); // Called from Exit()
 }
 

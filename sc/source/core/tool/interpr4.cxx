@@ -165,7 +165,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
 {
     FormulaError nError = FormulaError::NONE;
     double fValue = ScGlobal::ConvertStringToValue( rStr, maCalcConfig, nError, mnStringNoValueError,
-            pFormatter, nCurFmtType);
+            mrContext, nCurFmtType);
     if (nError != FormulaError::NONE)
         SetError(nError);
     return fValue;
@@ -173,7 +173,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
 
 double ScInterpreter::ConvertStringToValue( const OUString& rStr, FormulaError& rError, SvNumFormatType& rCurFmtType )
 {
-    return ScGlobal::ConvertStringToValue( rStr, maCalcConfig, rError, mnStringNoValueError, pFormatter, rCurFmtType);
+    return ScGlobal::ConvertStringToValue( rStr, maCalcConfig, rError, mnStringNoValueError, mrContext, rCurFmtType);
 }
 
 double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell )
@@ -223,7 +223,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
         {
             fValue = rCell.getDouble();
             nCurFmtIndex = mrDoc.GetNumberFormat( mrContext, rPos );
-            nCurFmtType = mrContext.GetNumberFormatType( nCurFmtIndex );
+            nCurFmtType = mrContext.NFGetType(nCurFmtIndex);
             if ( bCalcAsShown && fValue != 0.0 )
                 fValue = mrDoc.RoundValueAsShown( fValue, nCurFmtIndex, &mrContext );
         }
@@ -2436,7 +2436,7 @@ svl::SharedString ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
         ;   // nothing
     else if ( !pJumpMatrix )
     {
-        return pMat->GetString( *pFormatter, 0, 0);
+        return pMat->GetString( mrContext, 0, 0);
     }
     else
     {
@@ -2445,7 +2445,7 @@ svl::SharedString ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
         pJumpMatrix->GetPos( nC, nR);
         // Use vector replication for single row/column arrays.
         if ( (nC < nCols || nCols == 1) && (nR < nRows || nRows == 1) )
-            return pMat->GetString( *pFormatter, nC, nR);
+            return pMat->GetString( mrContext, nC, nR);
 
         SetError( FormulaError::NoValue);
     }
@@ -2515,11 +2515,11 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
 
 svl::SharedString ScInterpreter::GetStringFromDouble( double fVal )
 {
-    sal_uLong nIndex = pFormatter->GetStandardFormat(
+    sal_uLong nIndex = mrContext.NFGetStandardFormat(
                         SvNumFormatType::NUMBER,
                         ScGlobal::eLnge);
     OUString aStr;
-    pFormatter->GetInputLineString(fVal, nIndex, aStr);
+    mrContext.NFGetInputLineString(fVal, nIndex, aStr);
     return mrStrPool.intern(aStr);
 }
 
@@ -2907,7 +2907,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillStringArray( aParam, PopMatrix().get(), pFormatter ))
+                            if (!ScRangeToSequence::FillStringArray( aParam, PopMatrix().get(), mrContext ))
                                 SetError(FormulaError::IllegalParameter);
                             break;
                         default:
@@ -3831,7 +3831,6 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument& rDoc, ScInterpre
     , mrStrPool(rDoc.GetSharedStringPool())
     , pJumpMatrix(nullptr)
     , pMyFormulaCell(pCell)
-    , pFormatter(rContext.GetFormatTable())
     , pCur(nullptr)
     , nGlobalError(FormulaError::NONE)
     , sp(0)

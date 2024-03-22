@@ -2115,7 +2115,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
     SCROW nNextRow = nStartRow;
     SCCOL nEmptyCol;
     SCROW nEmptyRow;
-    SvNumberFormatter& rFormatter = *m_pDocument->GetFormatTable();
+    ScInterpreterContext& rContext = m_pDocument->GetNonThreadedContext();
 
     ScHorizontalCellIterator aIter( *m_pDocument, nTab, nStartCol, nStartRow,
         nEndCol, nEndRow );
@@ -2216,12 +2216,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                         if ( bFixedWidth || bSaveAsShown )
                         {
                             const Color* pDummy;
-                            aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, rFormatter, *m_pDocument);
-                            bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
+                            aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, &rContext, *m_pDocument);
+                            bString = bSaveAsShown && rContext.NFIsTextFormat( nFormat);
                         }
                         else
                         {
-                            aString = ScCellFormat::GetInputString(*pCell, nFormat, rFormatter, *m_pDocument);
+                            aString = ScCellFormat::GetInputString(*pCell, nFormat, &rContext, *m_pDocument);
                             bString = bForceQuotes = !bSaveNumberAsSuch;
                         }
                     }
@@ -2231,7 +2231,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                         {
                             sal_uInt32 nFormat = m_pDocument->GetNumberFormat(aPos);
                             const Color* pDummy;
-                            aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, rFormatter, *m_pDocument);
+                            aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, &rContext, *m_pDocument);
                         }
                         else
                             aString = pCell->getFormula()->GetString().getString();
@@ -2244,7 +2244,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                 {
                     sal_uInt32 nFormat = m_pDocument->GetNumberFormat(aPos);
                     const Color* pDummy;
-                    aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, rFormatter, *m_pDocument);
+                    aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, &rContext, *m_pDocument);
                 }
                 else
                     aString = pCell->getSharedString()->getString();
@@ -2265,12 +2265,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     if ( bFixedWidth || bSaveAsShown )
                     {
                         const Color* pDummy;
-                        aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, rFormatter, *m_pDocument);
-                        bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
+                        aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, &rContext, *m_pDocument);
+                        bString = bSaveAsShown && rContext.NFIsTextFormat( nFormat);
                     }
                     else
                     {
-                        aString = ScCellFormat::GetInputString(*pCell, nFormat, rFormatter, *m_pDocument);
+                        aString = ScCellFormat::GetInputString(*pCell, nFormat, &rContext, *m_pDocument);
                         bString = bForceQuotes = !bSaveNumberAsSuch;
                     }
                 }

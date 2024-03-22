@@ -2128,7 +2128,7 @@ void ScInterpreter::ScIsLogical()
                 if (aCell.hasNumeric())
                 {
                     sal_uInt32 nFormat = GetCellNumberFormat(aAdr, aCell);
-                    bRes = (pFormatter->GetType(nFormat) == SvNumFormatType::LOGICAL);
+                    bRes = (mrContext.NFGetType(nFormat) == SvNumFormatType::LOGICAL);
                 }
             }
         }
@@ -2176,7 +2176,7 @@ void ScInterpreter::ScType()
                     case CELLTYPE_VALUE :
                     {
                         sal_uInt32 nFormat = GetCellNumberFormat(aAdr, aCell);
-                        if (pFormatter->GetType(nFormat) == SvNumFormatType::LOGICAL)
+                        if (mrContext.NFGetType(nFormat) == SvNumFormatType::LOGICAL)
                             nType = 4;
                         else
                             nType = 1;
@@ -2244,9 +2244,9 @@ static bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
 
 namespace {
 
-void getFormatString(const SvNumberFormatter* pFormatter, sal_uLong nFormat, OUString& rFmtStr)
+void getFormatString(const ScInterpreterContext& rContext, sal_uLong nFormat, OUString& rFmtStr)
 {
-    rFmtStr = pFormatter->GetCalcCellReturn( nFormat);
+    rFmtStr = rContext.NFGetCalcCellReturn(nFormat);
 }
 
 }
@@ -2459,17 +2459,17 @@ void ScInterpreter::ScCell()
         {   // specific format code for standard formats
             OUString aFuncResult;
             sal_uInt32 nFormat = mrDoc.GetNumberFormat( aCellPos );
-            getFormatString(pFormatter, nFormat, aFuncResult);
+            getFormatString(mrContext, nFormat, aFuncResult);
             PushString( aFuncResult );
         }
         else if( aInfoType == "COLOR" )
         {   // 1 = negative values are colored, otherwise 0
-            const SvNumberformat* pFormat = pFormatter->GetEntry( mrDoc.GetNumberFormat( aCellPos ) );
+            const SvNumberformat* pFormat = mrContext.NFGetFormatEntry( mrDoc.GetNumberFormat( aCellPos ) );
             PushInt( lcl_FormatHasNegColor( pFormat ) ? 1 : 0 );
         }
         else if( aInfoType == "PARENTHESES" )
         {   // 1 = format string contains a '(' character, otherwise 0
-            const SvNumberformat* pFormat = pFormatter->GetEntry( mrDoc.GetNumberFormat( aCellPos ) );
+            const SvNumberformat* pFormat = mrContext.NFGetFormatEntry( mrDoc.GetNumberFormat( aCellPos ) );
             PushInt( lcl_FormatHasOpenPar( pFormat ) ? 1 : 0 );
         }
         else
@@ -2607,7 +2607,7 @@ void ScInterpreter::ScCellExternal()
     {
         OUString aFmtStr;
         sal_uLong nFmt = aFmt.mbIsSet ? aFmt.mnIndex : 0;
-        getFormatString(pFormatter, nFmt, aFmtStr);
+        getFormatString(mrContext, nFmt, aFmtStr);
         PushString(aFmtStr);
     }
     else if ( aInfoType == "COLOR" )
@@ -2616,7 +2616,7 @@ void ScInterpreter::ScCellExternal()
         int nVal = 0;
         if (aFmt.mbIsSet)
         {
-            const SvNumberformat* pFormat = pFormatter->GetEntry(aFmt.mnIndex);
+            const SvNumberformat* pFormat = mrContext.NFGetFormatEntry(aFmt.mnIndex);
             nVal = lcl_FormatHasNegColor(pFormat) ? 1 : 0;
         }
         PushInt(nVal);
@@ -2627,7 +2627,7 @@ void ScInterpreter::ScCellExternal()
         int nVal = 0;
         if (aFmt.mbIsSet)
         {
-            const SvNumberformat* pFormat = pFormatter->GetEntry(aFmt.mnIndex);
+            const SvNumberformat* pFormat = mrContext.NFGetFormatEntry(aFmt.mnIndex);
             nVal = lcl_FormatHasOpenPar(pFormat) ? 1 : 0;
         }
         PushInt(nVal);
@@ -3410,7 +3410,7 @@ void ScInterpreter::ScValue()
     }
 
     sal_uInt32 nFIndex = 0;     // 0 for default locale
-    if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
+    if (mrContext.NFIsNumberFormat(aInputString, nFIndex, fVal))
         PushDouble(fVal);
     else
         PushIllegalArgument();
@@ -5636,7 +5636,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, pFormatter);
+                rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, &mrContext);
                 if (rItem.meType == ScQueryEntry::ByString)
                     rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
             }
@@ -5930,7 +5930,7 @@ void ScInterpreter::ScCountIf()
             }
             else
             {
-                rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, pFormatter);
+                rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, &mrContext);
                 if (rItem.meType == ScQueryEntry::ByString)
                     rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
             }
@@ -6242,7 +6242,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, pFormatter);
+                rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, &mrContext);
                 if (rItem.meType == ScQueryEntry::ByString)
                     rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
             }
@@ -8571,7 +8571,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
                 ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
                 sal_uInt32 nIndex = 0;
                 OUString aQueryStr = rItem.maString.getString();
-                bool bNumber = pFormatter->IsNumberFormat(
+                bool bNumber = mrContext.NFIsNumberFormat(
                     aQueryStr, nIndex, rItem.mfVal);
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
 
@@ -9668,18 +9668,18 @@ void ScInterpreter::ScCurrency()
     const Color* pColor = nullptr;
     if ( fDec < 0.0 )
         fDec = 0.0;
-    sal_uLong nIndex = pFormatter->GetStandardFormat(
+    sal_uLong nIndex = mrContext.NFGetStandardFormat(
                                     SvNumFormatType::CURRENCY,
                                     ScGlobal::eLnge);
-    if ( static_cast<sal_uInt16>(fDec) != pFormatter->GetFormatPrecision( nIndex ) )
+    if ( static_cast<sal_uInt16>(fDec) != mrContext.NFGetFormatPrecision( nIndex ) )
     {
-        OUString sFormatString = pFormatter->GenerateFormat(
+        OUString sFormatString = mrContext.NFGenerateFormat(
                                                nIndex,
                                                ScGlobal::eLnge,
                                                true,        // with thousands separator
                                                false,       // not red
-                                              static_cast<sal_uInt16>(fDec));// decimal places
-        if (!pFormatter->GetPreviewString(sFormatString,
+                                               static_cast<sal_uInt16>(fDec));// decimal places
+        if (!mrContext.NFGetPreviewString(sFormatString,
                                           fVal,
                                           aStr,
                                           &pColor,
@@ -9688,7 +9688,7 @@ void ScInterpreter::ScCurrency()
     }
     else
     {
-        pFormatter->GetOutputString(fVal, nIndex, aStr, &pColor);
+        mrContext.NFGetOutputString(fVal, nIndex, aStr, &pColor);
     }
     PushString(aStr);
 }
@@ -9767,16 +9767,16 @@ void ScInterpreter::ScFixed()
     const Color* pColor = nullptr;
     if (fDec < 0.0)
         fDec = 0.0;
-    sal_uLong nIndex = pFormatter->GetStandardFormat(
+    sal_uLong nIndex = mrContext.NFGetStandardFormat(
                                         SvNumFormatType::NUMBER,
                                         ScGlobal::eLnge);
-    OUString sFormatString = pFormatter->GenerateFormat(
+    OUString sFormatString = mrContext.NFGenerateFormat(
                                            nIndex,
                                            ScGlobal::eLnge,
                                            bThousand,   // with thousands separator
                                            false,       // not red
                                            static_cast<sal_uInt16>(fDec));// decimal places
-    if (!pFormatter->GetPreviewString(sFormatString,
+    if (!mrContext.NFGetPreviewString(sFormatString,
                                               fVal,
                                               aStr,
                                               &pColor,
@@ -10503,7 +10503,7 @@ void ScInterpreter::ScText()
             eCellLang = ScGlobal::eLnge;
         if (bString)
         {
-            if (!pFormatter->GetPreviewString( sFormatString, aStr.getString(),
+            if (!mrContext.NFGetPreviewString( sFormatString, aStr.getString(),
                         aResult, &pColor, eCellLang))
                 PushIllegalArgument();
             else
@@ -10511,7 +10511,7 @@ void ScInterpreter::ScText()
         }
         else
         {
-            if (!pFormatter->GetPreviewStringGuess( sFormatString, fVal,
+            if (!mrContext.NFGetPreviewStringGuess( sFormatString, fVal,
                         aResult, &pColor, eCellLang))
                 PushIllegalArgument();
             else

@@ -247,7 +247,6 @@ private:
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
     ScTokenMatrixMap maTokenMatrixMap;  // map FormulaToken* to formula::FormulaTokenRef if in array condition
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
-    SvNumberFormatter* pFormatter;
 
     const formula::FormulaToken* pCur;  // current token
     ScTokenStack* pStackObj;            // contains the stacks

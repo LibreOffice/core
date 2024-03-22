@@ -23,10 +23,10 @@
 #include <rtl/ustring.hxx>
 #include <svl/sharedstring.hxx>
 
-class SvNumberFormatter;
 class Color;
-class ScDocument;
 class ScAddress;
+class ScDocument;
+struct ScInterpreterContext;
 struct ScRefCellValue;
 
 class SC_DLLPUBLIC ScCellFormat
@@ -35,25 +35,25 @@ public:
 
     static OUString GetString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat,
-        const Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument& rDoc, bool bNullVals = true,
+        const Color** ppColor, ScInterpreterContext* pContext, const ScDocument& rDoc, bool bNullVals = true,
         bool bFormula  = false, bool bUseStarFormat = false );
 
     static OUString GetString(
         ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nFormat,
-        const Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
+        const Color** ppColor, ScInterpreterContext* pContext, bool bNullVals = true,
         bool bFormula  = false );
 
     // Note that if pShared is set and a value is returned that way, the returned OUString is empty.
     static OUString GetInputString(
-        const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter,
+        const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext,
         const ScDocument& rDoc, const svl::SharedString** pShared = nullptr, bool bFiltering = false,
         bool bForceSystemLocale = false );
 
     static OUString GetInputString(
-        const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter,
+        const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext,
         const ScDocument& rDoc, bool bFiltering, bool bForceSystemLocale = false )
     {
-        return GetInputString( rCell, nFormat, rFormatter, rDoc, nullptr, bFiltering, bForceSystemLocale );
+        return GetInputString( rCell, nFormat, pContext, rDoc, nullptr, bFiltering, bForceSystemLocale );
     }
 
     static OUString GetOutputString(

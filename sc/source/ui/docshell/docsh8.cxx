@@ -445,7 +445,7 @@ void lcl_GetColumnTypes(
     sal_Int32* pColScales, bool& bHasMemo, rtl_TextEncoding eCharSet )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    SvNumberFormatter* pNumFmt = rDoc.GetFormatTable();
+    ScInterpreterContext& rContext = rDoc.GetNonThreadedContext();
 
     SCTAB nTab = rDataRange.aStart.Tab();
     SCCOL nFirstCol = rDataRange.aStart.Col();
@@ -573,7 +573,7 @@ void lcl_GetColumnTypes(
             else
             {
                 sal_uInt32 nFormat = rDoc.GetNumberFormat( nCol, nFirstDataRow, nTab );
-                switch ( pNumFmt->GetType( nFormat ) )
+                switch (rContext.NFGetType(nFormat))
                 {
                     case SvNumFormatType::LOGICAL :
                         nDbType = sdbc::DataType::BIT;
@@ -713,12 +713,12 @@ void lcl_getLongVarCharEditString( OUString& rString,
 }
 
 void lcl_getLongVarCharString(
-    OUString& rString, ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, SvNumberFormatter& rNumFmt )
+    OUString& rString, ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScInterpreterContext& rContext )
 {
     const Color* pColor;
     ScAddress aPos(nCol, nRow, nTab);
     sal_uInt32 nFormat = rDoc.GetNumberFormat(aPos);
-    rString = ScCellFormat::GetString(rDoc, aPos, nFormat, &pColor, rNumFmt);
+    rString = ScCellFormat::GetString(rDoc, aPos, nFormat, &pColor, &rContext);
 }
 
 }
@@ -751,7 +751,7 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
         nFirstRow = nLastRow;
     ScProgress aProgress( this, ScResId( STR_SAVE_DOC ),
                                                     nLastRow - nFirstRow, true );
-    SvNumberFormatter* pNumFmt = m_pDocument->GetFormatTable();
+    ScInterpreterContext& rContext = m_pDocument->GetNonThreadedContext();
 
     bool bHasFieldNames = true;
     for ( SCCOL nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
@@ -909,7 +909,7 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
                             else
                             {
                                 lcl_getLongVarCharString(
-                                    aString, *m_pDocument, nDocCol, nDocRow, nTab, *pNumFmt);
+                                    aString, *m_pDocument, nDocCol, nDocRow, nTab, rContext);
                             }
                             xRowUpdate->updateString( nCol+1, aString );
                         }
@@ -941,7 +941,7 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
                             }
                             else
                             {
-                                Date aDate = pNumFmt->GetNullDate();        // tools date
+                                Date aDate = rContext.NFGetNullDate();      // tools date
                                 aDate.AddDays(fVal);                        //! approxfloor?
                                 xRowUpdate->updateDate( nCol+1, aDate.GetUNODate() );
                             }
@@ -1012,7 +1012,7 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
                                 lcl_getLongVarCharEditString(aString, *pCell, aEditEngine);
                             else
                                 lcl_getLongVarCharString(
-                                    aString, *m_pDocument, nDocCol, nDocRow, nTab, *pNumFmt);
+                                    aString, *m_pDocument, nDocCol, nDocRow, nTab, rContext);
                         }
                         break;
 

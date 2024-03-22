@@ -35,6 +35,7 @@
 #include <compiler.hxx>
 #include <paramisc.hxx>
 #include <calcconfig.hxx>
+#include <interpretercontext.hxx>
 
 // struct ScImportParam:
 
@@ -351,7 +352,7 @@ bool isEmptyString( const OUString& rStr )
 
 double ScGlobal::ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
         FormulaError & rError, FormulaError nStringNoValueError,
-        SvNumberFormatter* pFormatter, SvNumFormatType & rCurFmtType )
+        ScInterpreterContext& rContext, SvNumFormatType & rCurFmtType )
 {
     // We keep ScCalcConfig::StringConversion::LOCALE default until
     // we provide a friendly way to convert string numbers into numbers in the UI.
@@ -385,11 +386,8 @@ double ScGlobal::ConvertStringToValue( const OUString& rStr, const ScCalcConfig&
                         return fValue;
                 }
 
-                if (!pFormatter)
-                    goto Label_fallback_to_unambiguous;
-
                 sal_uInt32 nFIndex = 0;
-                if (!pFormatter->IsNumberFormat(rStr, nFIndex, fValue))
+                if (!rContext.NFIsNumberFormat(rStr, nFIndex, fValue))
                 {
                     rError = nStringNoValueError;
                     fValue = 0.0;
@@ -398,7 +396,6 @@ double ScGlobal::ConvertStringToValue( const OUString& rStr, const ScCalcConfig&
             }
             break;
         case ScCalcConfig::StringConversion::UNAMBIGUOUS:
-Label_fallback_to_unambiguous:
             {
                 if (!rConfig.mbEmptyStringAsZero)
                 {
@@ -565,14 +562,7 @@ Label_fallback_to_unambiguous:
                                     rError = nStringNoValueError;
                                 else
                                 {
-                                    if (pFormatter)
-                                        fValue = aDate - pFormatter->GetNullDate();
-                                    else
-                                    {
-                                        SAL_WARN("sc.core","ScGlobal::ConvertStringToValue - fixed null date");
-                                        static Date aDefaultNullDate( 30, 12, 1899);
-                                        fValue = aDate - aDefaultNullDate;
-                                    }
+                                    fValue = aDate - rContext.NFGetNullDate();
                                 }
                             }
                             fValue += ((nUnit[hour] * 3600) + (nUnit[minute] * 60) + nUnit[second] + fFraction) / 86400.0;

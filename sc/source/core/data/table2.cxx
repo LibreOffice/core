@@ -575,7 +575,7 @@ void ScTable::CopyStaticToDocument(
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
             sal_uInt32 nNumFmt = aDefaultColData.GetPattern(nRow)->GetNumberFormat(
-                rDocument.GetNonThreadedContext().GetFormatTable());
+                rDocument.GetNonThreadedContext());
             SvNumberFormatterMergeMap::const_iterator itNum = rMap.find(nNumFmt);
             if (itNum != rMap.end())
                 nNumFmt = itNum->second;
@@ -1796,7 +1796,7 @@ void ScTable::SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rSt
         CreateColumnIfNotExists(nCol).SetRawString(nRow, rStr);
 }
 
-OUString ScTable::GetString( SCCOL nCol, SCROW nRow, const ScInterpreterContext* pContext ) const
+OUString ScTable::GetString( SCCOL nCol, SCROW nRow, ScInterpreterContext* pContext ) const
 {
     if (ValidColRow(nCol,nRow) && nCol < GetAllocatedColumnsCount())
         return aCol[nCol].GetString( nRow, pContext );

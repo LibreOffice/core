@@ -1659,7 +1659,7 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( const ScInterpreterContext& rContext 
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
         ;       // it remains as it is
     else
-        nFormat = rContext.GetFormatForLanguageIfBuiltIn( nFormat, eLang );
+        nFormat = rContext.NFGetFormatForLanguageIfBuiltIn( nFormat, eLang );
     return nFormat;
 }
 
@@ -1691,6 +1691,33 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
     }
 
     return pFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLang);
+}
+
+sal_uInt32 ScPatternAttr::GetNumberFormat( const ScInterpreterContext& rContext,
+                                           const SfxItemSet* pCondSet ) const
+{
+    if (!pCondSet)
+        return GetNumberFormat(rContext);
+
+    // Conditional format takes precedence over style and even hard format.
+
+    sal_uInt32 nFormat;
+    LanguageType eLang;
+    if (pCondSet->GetItemState(ATTR_VALUE_FORMAT) == SfxItemState::SET )
+    {
+        nFormat = getNumberFormatKey(*pCondSet);
+        if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT) == SfxItemState::SET)
+            eLang = getLanguageType(*pCondSet);
+        else
+            eLang = getLanguageType(GetItemSet());
+    }
+    else
+    {
+        nFormat = getNumberFormatKey(GetItemSet());
+        eLang = getLanguageType(GetItemSet());
+    }
+
+    return rContext.NFGetFormatForLanguageIfBuiltIn(nFormat, eLang);
 }
 
 const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )

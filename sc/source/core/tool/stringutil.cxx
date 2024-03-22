@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <interpretercontext.hxx>
 #include <stringutil.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -428,7 +429,7 @@ bool ScStringUtil::isMultiline( std::u16string_view rStr )
 }
 
 ScInputStringType ScStringUtil::parseInputString(
-    SvNumberFormatter& rFormatter, const OUString& rStr, LanguageType eLang )
+    ScInterpreterContext& rContext, const OUString& rStr, LanguageType eLang )
 {
     ScInputStringType aRet;
     aRet.mnFormatType = SvNumFormatType::ALL;
@@ -449,12 +450,12 @@ ScInputStringType ScStringUtil::parseInputString(
     }
     else        // test for English number format (only)
     {
-        sal_uInt32 nNumFormat = rFormatter.GetStandardIndex(eLang);
+        sal_uInt32 nNumFormat = rContext.NFGetStandardIndex(eLang);
 
-        if (rFormatter.IsNumberFormat(rStr, nNumFormat, aRet.mfValue))
+        if (rContext.NFIsNumberFormat(rStr, nNumFormat, aRet.mfValue))
         {
             aRet.meType = ScInputStringType::Number;
-            aRet.mnFormatType = rFormatter.GetType(nNumFormat);
+            aRet.mnFormatType = rContext.NFGetType(nNumFormat);
         }
         else if (!rStr.isEmpty())
             aRet.meType = ScInputStringType::Text;

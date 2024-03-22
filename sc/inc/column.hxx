@@ -446,10 +446,10 @@ public:
     void SetValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast = true );
     void        SetError( SCROW nRow, const FormulaError nError);
 
-    OUString    GetString( SCROW nRow, const ScInterpreterContext* pContext = nullptr ) const
+    OUString    GetString( SCROW nRow, ScInterpreterContext* pContext = nullptr ) const
         { return GetString( GetCellValue( nRow ), nRow, pContext ); }
     OUString    GetString( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
-                           const ScInterpreterContext* pContext = nullptr ) const
+                           ScInterpreterContext* pContext = nullptr ) const
         { return GetString( GetCellValue( rBlockPos, nRow ), nRow, pContext ); }
     double* GetValueCell( SCROW nRow );
     // Note that if pShared is set and a value is returned that way, the returned OUString is empty.
@@ -831,7 +831,7 @@ private:
         sc::CellStoreType::const_iterator& itPos, SCROW nRow, bool bForward) const;
     SCROW FindNextVisibleRow(SCROW nRow, bool bForward) const;
 
-    OUString GetString( const ScRefCellValue& cell, SCROW nRow, const ScInterpreterContext* pContext = nullptr ) const;
+    OUString GetString( const ScRefCellValue& cell, SCROW nRow, ScInterpreterContext* pContext = nullptr ) const;
     OUString GetInputString( const ScRefCellValue& cell, SCROW nRow, bool bForceSystemLocale = false ) const;
 
     /**

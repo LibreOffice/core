@@ -37,6 +37,7 @@ struct ScQueryParam;
 class ScDPObject;
 class ScDocument;
 class SvNumberFormatter;
+struct ScInterpreterContext;
 
 enum class SvNumFormatType : sal_Int16;
 
@@ -138,11 +139,11 @@ public:
 
     SCROW GetIdByItemData(tools::Long nDim, const ScDPItemData& rItem) const;
 
-    static sal_uInt32 GetLocaleIndependentFormat( SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
+    static sal_uInt32 GetLocaleIndependentFormat( ScInterpreterContext& rContext, sal_uInt32 nNumFormat );
     static OUString GetLocaleIndependentFormattedNumberString( double fValue );
-    static OUString GetLocaleIndependentFormattedString( double fValue, SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
+    static OUString GetLocaleIndependentFormattedString( double fValue, ScInterpreterContext& rContext, sal_uInt32 nNumFormat );
     SC_DLLPUBLIC OUString GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
-    SvNumberFormatter* GetNumberFormatter() const;
+    ScInterpreterContext& GetInterpreterContext() const;
 
     tools::Long AppendGroupField();
     void ResetGroupItems(tools::Long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType);

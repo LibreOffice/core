@@ -3911,7 +3911,7 @@ namespace
 sal_uInt32 SvNFEngine::GetCLOffsetRO(const SvNFFormatData& rFormatData, SvNFLanguageData&, const NativeNumberWrapper*, LanguageType eLnge)
 {
     sal_uInt32 nCLOffset = rFormatData.ImpGetCLOffset(eLnge);
-    assert(nCLOffset >= rFormatData.MaxCLOffset && "Language must have already been encountered");
+    assert(nCLOffset <= rFormatData.MaxCLOffset && "Language must have already been encountered");
     return nCLOffset;
 }
 

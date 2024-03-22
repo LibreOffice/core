@@ -128,6 +128,8 @@ struct ScInputStringType
     SvNumFormatType mnFormatType;
 };
 
+struct ScInterpreterContext;
+
 class ScStringUtil
 {
 public:
@@ -159,7 +161,7 @@ public:
     static bool SC_DLLPUBLIC isMultiline( std::u16string_view rStr );
 
     static ScInputStringType parseInputString(
-        SvNumberFormatter& rFormatter, const OUString& rStr, LanguageType eLang );
+        ScInterpreterContext& rContext, const OUString& rStr, LanguageType eLang );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

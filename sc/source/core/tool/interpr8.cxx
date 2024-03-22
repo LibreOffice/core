@@ -79,7 +79,7 @@ namespace {
 class ScETSForecastCalculation
 {
 private:
-    SvNumberFormatter* mpFormatter;
+    const ScInterpreterContext& mrContext;
     std::vector< DataPoint > maRange;   // data (X, Y)
     std::unique_ptr<double[]> mpBase;                     // calculated base value array
     std::unique_ptr<double[]> mpTrend;                    // calculated trend factor array
@@ -121,7 +121,7 @@ private:
     double convertXtoMonths( double x );
 
 public:
-    ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter );
+    ScETSForecastCalculation( SCSIZE nSize, const ScInterpreterContext& rContext );
 
     bool PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int nSmplInPrd,
                               bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
@@ -136,8 +136,8 @@ public:
 
 }
 
-ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter )
-    : mpFormatter(pFormatter)
+ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, const ScInterpreterContext& rContext )
+    : mrContext(rContext)
     , mnSmplInPrd(0)
     , mfStepSize(0.0)
     , mfAlpha(0.0)
@@ -197,7 +197,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
     // Method: assume there is an month interval and verify.
     // If month interval is used, replace maRange.X with month values
     // for ease of calculations.
-    Date aNullDate = mpFormatter->GetNullDate();
+    Date aNullDate = mrContext.NFGetNullDate();
     Date aDate = aNullDate + static_cast< sal_Int32 >( maRange[ 0 ].X );
     mnMonthDay = aDate.GetDay();
     for ( SCSIZE i = 1; i < mnCount && mnMonthDay; i++ )
@@ -820,7 +820,7 @@ void ScETSForecastCalculation::refill()
 
 double ScETSForecastCalculation::convertXtoMonths( double x )
 {
-    Date aDate = mpFormatter->GetNullDate() + static_cast< sal_Int32 >( x );
+    Date aDate = mrContext.NFGetNullDate() + static_cast< sal_Int32 >( x );
     int nYear = aDate.GetYear();
     int nMonth = aDate.GetMonth();
     double fMonthLength;
@@ -1310,7 +1310,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
         }
     }
 
-    ScETSForecastCalculation aETSCalc( pMatX->GetElementCount(), pFormatter );
+    ScETSForecastCalculation aETSCalc( pMatX->GetElementCount(), mrContext);
     if ( !aETSCalc.PreprocessDataRange( pMatX, pMatY, nSmplInPrd, bDataCompletion,
                                        nAggregation,
                                        ( eETSType != etsStatAdd && eETSType != etsStatMult ? pTMat : nullptr ),
@@ -1484,7 +1484,7 @@ void ScInterpreter::ScConcat_MS()
                                 {
                                     if ( pMat->IsValue( j, k ) )
                                     {
-                                        OUString aStr = pMat->GetString( *pFormatter, j, k ).getString();
+                                        OUString aStr = pMat->GetString( mrContext, j, k ).getString();
                                         if (CheckStringResultLen(aResBuf, aStr.getLength()))
                                             aResBuf.append(aStr);
                                     }
@@ -1602,7 +1602,7 @@ void ScInterpreter::ScTextJoin_MS()
                             else if (pMat->IsStringOrEmpty( j, k ))
                                 aDelimiters.push_back( pMat->GetString( j, k ).getString() );
                             else if (pMat->IsValue( j, k ))
-                                aDelimiters.push_back( pMat->GetString( *pFormatter, j, k ).getString() );
+                                aDelimiters.push_back( pMat->GetString( mrContext, j, k ).getString() );
                             else
                             {
                                 assert(!"should this really happen?");
@@ -1771,7 +1771,7 @@ void ScInterpreter::ScTextJoin_MS()
                                 else if (pMat->IsStringOrEmpty( j, k ))
                                     aStr = pMat->GetString( j, k ).getString();
                                 else if (pMat->IsValue( j, k ))
-                                    aStr = pMat->GetString( *pFormatter, j, k ).getString();
+                                    aStr = pMat->GetString( mrContext, j, k ).getString();
                                 else
                                 {
                                     assert(!"should this really happen?");

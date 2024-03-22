@@ -3547,14 +3547,14 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
     pTab->SetValue(rPos.Col(), rPos.Row(), fVal);
 }
 
-OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScInterpreterContext* pContext ) const
+OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, ScInterpreterContext* pContext ) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
         return pTable->GetString(nCol, nRow, pContext);
     return OUString();
 }
 
-OUString ScDocument::GetString( const ScAddress& rPos, const ScInterpreterContext* pContext ) const
+OUString ScDocument::GetString( const ScAddress& rPos, ScInterpreterContext* pContext ) const
 {
     if (const ScTable* pTable = FetchTable(rPos.Tab()))
         return pTable->GetString(rPos.Col(), rPos.Row(), pContext);
@@ -3739,7 +3739,7 @@ void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, SvNu
     if (nTab < GetTableCount() && maTabs[nTab])
     {
         nIndex = maTabs[nTab]->GetNumberFormat( rContext, rPos );
-        nType = rContext.GetNumberFormatType( nIndex );
+        nType = rContext.NFGetType(nIndex);
     }
     else
     {
