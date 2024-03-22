@@ -16,16 +16,32 @@ $(eval $(call gb_ExternalProject_register_targets,rhino,\
 $(call gb_ExternalProject_get_state_target,rhino,build) :
 	$(call gb_Trace_StartRange,rhino,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
-		$(ICECREAM_RUN) "$(ANT)" \
-			$(if $(verbose),-v,-q) \
-			-f build.xml \
-			-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
-			-DTARFILE_LOCATION="$(if $(findstring -cygwin,$(BUILD_PLATFORM)),$(shell cygpath -m $(TARFILE_LOCATION)),$(TARFILE_LOCATION))" \
-			-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
-			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
-			$(if $(debug),-Dbuild.debug="on") \
-			jar \
+		mkdir $(call gb_UnpackedTarball_get_dir,rhino)/build \
+		&& cd $(call gb_UnpackedTarball_get_dir,rhino) \
+		&& $(call gb_JavaClassSet_JAVACCOMMAND,$(JAVA_TARGET_VER)) $(gb_JavaClassSet_JAVACDEBUG) \
+			-d $(call gb_UnpackedTarball_get_dir,rhino)/build/content \
+			@$(SRCDIR)/external/rhino/filelist.txt \
+		&& mkdir $(call gb_UnpackedTarball_get_dir,rhino)/build/content/META-INF \
+		&& cp $(call gb_UnpackedTarball_get_dir,rhino)/LICENSE.txt \
+			$(call gb_UnpackedTarball_get_dir,rhino)/NOTICE-tools.txt \
+			$(call gb_UnpackedTarball_get_dir,rhino)/NOTICE.txt \
+			$(call gb_UnpackedTarball_get_dir,rhino)/build/content/META-INF/ \
+		&& $(gb_Jar_JARCOMMAND) -cf $(call gb_UnpackedTarball_get_dir,rhino)/build/js.jar \
+			-C $(call gb_UnpackedTarball_get_dir,rhino)/build/content . \
+			-C $(call gb_UnpackedTarball_get_dir,rhino)/src \
+			org/mozilla/javascript/commonjs/module/package.html \
+			-C $(call gb_UnpackedTarball_get_dir,rhino)/src \
+			org/mozilla/javascript/commonjs/module/provider/package.html \
+			-C $(call gb_UnpackedTarball_get_dir,rhino)/src \
+			org/mozilla/javascript/resources/Messages.properties \
+			-C $(call gb_UnpackedTarball_get_dir,rhino)/src \
+			org/mozilla/javascript/resources/Messages_en.properties \
+			-C $(call gb_UnpackedTarball_get_dir,rhino)/src \
+			org/mozilla/javascript/resources/Messages_fr.properties \
+			-C $(call gb_UnpackedTarball_get_dir,rhino)/src \
+			org/mozilla/javascript/tools/debugger/test.js \
+			-C $(call gb_UnpackedTarball_get_dir,rhino)/src \
+			org/mozilla/javascript/tools/resources/Messages.properties \
 	)
 	$(call gb_Trace_EndRange,rhino,EXTERNAL)
 
