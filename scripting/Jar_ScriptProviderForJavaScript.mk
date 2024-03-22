@@ -25,13 +25,7 @@ $(eval $(call gb_Jar_set_componentfile,ScriptProviderForJavaScript,scripting/jav
 $(eval $(call gb_Jar_set_packageroot,ScriptProviderForJavaScript,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,ScriptProviderForJavaScript,\
-	scripting/java/com/sun/star/script/framework/provider/javascript/ScriptEditorForJavaScript \
 	scripting/java/com/sun/star/script/framework/provider/javascript/ScriptProviderForJavaScript \
-))
-
-$(eval $(call gb_Jar_add_packagefile,ScriptProviderForJavaScript,\
-	com/sun/star/script/framework/provider/javascript/template.js,\
-		$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/javascript/template.js \
 ))
 
 # vim: set noet sw=4 ts=4:
