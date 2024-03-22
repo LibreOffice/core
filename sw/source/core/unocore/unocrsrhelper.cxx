@@ -232,7 +232,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    uno::Reference<text::XTextRange> const xTextRange(xTunnel, UNO_QUERY);
+    uno::Reference<text::XTextRange> const xTextRange(xIfc, UNO_QUERY);
     if (xTextRange.is())
     {
         SwUnoInternalPaM aPam(rTargetDoc);
