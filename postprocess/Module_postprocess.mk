@@ -28,11 +28,12 @@ $(eval $(call gb_Module_add_l10n_targets,postprocess,\
 	Package_registry \
 ))
 
-ifeq ($(WINDOWS_BUILD_SIGNING),TRUE)
-$(eval $(call gb_Module_add_targets,postprocess,\
-	CustomTarget_signing \
-))
-endif
+# Do not sign individual EXE/DLL files
+# ifeq ($(WINDOWS_BUILD_SIGNING),TRUE)
+# $(eval $(call gb_Module_add_targets,postprocess,\
+# 	CustomTarget_signing \
+# ))
+# endif
 
 # For configurations that use fontconfig (cf. inclusion of
 # vcl/unx/generic/fontmanager/fontconfig.cxx in Library_vcl), add
