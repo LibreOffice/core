@@ -398,6 +398,18 @@ bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DProperti
         return false; // error in document. OOXML specifies a fixed set of preset camera types.
     mnPrstCameraIndex = nPrstCameraIndex;
 
+    // Extrusion color is not handled as extrusion property but as shape property. Thus deliver it
+    // in any case, so that Shape::createAndInsert() knows about it.
+    rExtrusionColor = (*p3DProperties).maExtrusionColor;
+
+    // Even if we do not extrude an image, we still want to get the z-Rotation.
+    if (bBlockExtrusion)
+    {
+        rRotZ = basegfx::deg2rad<60000>((*p3DProperties).maCameraRotation.mnRevolution.value_or(0)
+                                        - rnMSOShapeRotation);
+        return false;
+    }
+
     // We use extrusion, if there is a rotation around x-axis or y-axis,
     // or if there is no such rotation but we have a perspective projection with true depth,
     // or we have a parallel projection other than a 'front' type.
@@ -413,18 +425,14 @@ bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DProperti
                             || (!bIsParallel && nDepthAmount > 0)
                             || (bIsParallel && !bIsParallelFrontType);
 
-    // Extrusion color is not handled as extrusion property but as shape property. Thus deliver it
-    // in any case, so that Shape::createAndInsert() knows about it.
-    rExtrusionColor = (*p3DProperties).maExtrusionColor;
-
-    if (!bCreateExtrusion || bBlockExtrusion)
+    if (!bCreateExtrusion)
         return false;
 
     // Create the extrusion properties in rPropertyMap so that they can be directly used.
     // Turn extrusion on
     rPropertyMap.setProperty(oox::PROP_Extrusion, true);
 
-    // Dummy value. Will be changed from evaluating the material properties, when implemented.
+    // Dummy value. Will be changed from evaluating the material properties.
     rPropertyMap.setProperty(oox::PROP_Diffusion, 100.0);
 
     // Camera properties

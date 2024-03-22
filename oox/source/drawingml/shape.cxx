@@ -975,11 +975,9 @@ Reference< XShape > const & Shape::createAndInsert(
     bool bIsCustomShape = (aServiceName == "com.sun.star.drawing.CustomShape" || bIsCroppedGraphic);
     bool bIsConnectorShape = (aServiceName == "com.sun.star.drawing.ConnectorShape");
 
-    // Look for 3D. Its z-rotation and extrusion color become shape properties. Do it early as
-    // graphics might use 3D too and in that case should be imported as custom shape as well.
-    // FixMe. tdf#159515. We currently do not use extrusion, if an image has a 3D-scene.
-    bool bBlockExtrusion = aServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
-                           mp3DPropertiesPtr->mnPreset.has_value();
+    // Look for 3D. Its z-rotation and extrusion color become shape properties. We consider a
+    // z-rotation of an image even we currently do not extrude an image to 3D-scene.
+    bool bBlockExtrusion = !bIsCustomShape && mp3DPropertiesPtr->mnPreset.has_value();
     double fShapeRotateInclCamera = 0.0; // unit rad; same orientation as shape property RotateAngle
     Color aExtrusionColor;
     Scene3DHelper aScene3DHelper;

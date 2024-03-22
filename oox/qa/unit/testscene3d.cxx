@@ -555,6 +555,74 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_material_wireframe)
                 "shade-mode"_ostr, "draft");
 }
 
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_cropped_image)
+{
+    // The file contains an image that has been cropped to shape in PowerPoint. The image is in 3D
+    // mode with perspective camera perspectiveContrastingRightFacing and perspective angle 120°. The
+    // extrusion is 76200 EMU deep with extrusion color #00B050. As a cropped image, it was imported
+    // in earlier LO versions as custom shape with bitmap fill, but without any 3D.
+    loadFromFile(u"Scene3d_cropped_image.pptx");
+    uno::Reference<drawing::XShape> xShape(getShape(0, 0)); // shape 0 on page 0
+
+    // Prepare property maps
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
+    comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
+
+    // Check that extrusion is on and has the correct geometry.
+    bool bIsExtruded(false);
+    aExtrusionPropMap.getValue(u"Extrusion"_ustr) >>= bIsExtruded;
+    CPPUNIT_ASSERT_MESSAGE("error: Extrusion is disabled", bIsExtruded);
+
+    drawing::ProjectionMode eProjectionMode = drawing::ProjectionMode_PARALLEL;
+    aExtrusionPropMap.getValue(u"ProjectionMode"_ustr) >>= eProjectionMode;
+    CPPUNIT_ASSERT_EQUAL(drawing::ProjectionMode_PERSPECTIVE, eProjectionMode);
+
+    drawing::Position3D aViewPoint;
+    aExtrusionPropMap.getValue(u"ViewPoint"_ustr) >>= aViewPoint;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aViewPoint.PositionX, 1E-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aViewPoint.PositionY, 1E-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9223.7479, aViewPoint.PositionZ, 1E-5);
+
+    // Check shape rotation angles
+    drawing::EnhancedCustomShapeParameterPair aParaPair;
+    aExtrusionPropMap.getValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= aParaPair;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-6.94093344831102, aParaPair.First.Value.get<double>(), 1E-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-44.4431265782766, aParaPair.Second.Value.get<double>(), 1E-12);
+    sal_Int32 nZRotate; // unit 1/100 degree
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(496), nZRotate);
+
+    // Check extrusion depth and color
+    aExtrusionPropMap.getValue(u"Depth"_ustr) >>= aParaPair;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(212.0, aParaPair.First.Value.get<double>(), 1E-12);
+    Color nColor;
+    xShapeProps->getPropertyValue(UNO_NAME_FILLCOLOR_2) >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x00b050), nColor);
+}
+
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_pureImage)
+{
+    // Given a document with a scene3d element on an image. Because it would lose image properties
+    // it is currently (March 2024) not imported as custom shape. But the z-rotation is evaluated
+    // as users might have used this instead of shape rotation, for example.
+    loadFromFile(u"Scene3d_pureImage.pptx");
+    uno::Reference<drawing::XShape> xShape(getShape(0, 0)); // shape 0 on page 0
+
+    // Make sure it is an image.
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GraphicObjectShape"_ustr, xShape->getShapeType());
+
+    // Make sure the image is rotated.
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    sal_Int32 nZRotate; // unit 1/100 degree
+    xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nZRotate;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(27000), nZRotate);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
