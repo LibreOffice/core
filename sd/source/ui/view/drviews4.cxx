@@ -306,16 +306,9 @@ void DrawViewShell::FreshNavigatrTree()
     SfxViewFrame *pViewFrame = GetViewFrame();
     if (!pViewFrame)
         return;
-    SfxChildWindow* pWindow = pViewFrame->GetChildWindow( SID_NAVIGATOR );
-    if( pWindow )
-    {
-        SdNavigatorFloat* pNavWin = static_cast<SdNavigatorFloat*>( pWindow->GetWindow() );
-        if( pNavWin )
-            pNavWin->FreshTree( GetDoc() );
-    }
-    // sidebar version
     SfxBindings& rBindings = pViewFrame->GetBindings();
     rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
+    rBindings.Update();
 }
 
 void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,

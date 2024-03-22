@@ -460,6 +460,11 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
                     pDrawView->MarkObj(pCursorEntryObject, pDrawView->GetSdrPageView(), true);
                 }
 
+                // SID_NAVIGATOR_STATE invalidate is done in DrawViewShell::ExecNavigatorWin
+                // and DrawDocShell::GotoBookmark. Update the bindings here to speed up Navigator
+                // state update.
+                mpBindings->Update();
+
                 // moved here from SetGetFocusHdl. Reset the
                 // focus only if something has been selected in the
                 // document.
