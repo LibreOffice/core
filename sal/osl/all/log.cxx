@@ -19,9 +19,13 @@
 
 #include <stdio.h>
 #include <string.h>
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem>
 #include <fstream>
+#include <system_error>
 
 #include <config_global.h>
+#include <o3tl/temporary.hxx>
 #include <osl/thread.hxx>
 #include <rtl/string.h>
 #include <sal/detail/log.h>
@@ -201,6 +205,9 @@ std::ofstream * getLogFile() {
 
         if (logFile)
         {
+            std::experimental::filesystem::create_directories(
+                std::experimental::filesystem::path(logFile).remove_filename(),
+                o3tl::temporary(std::error_code()));
             // stays until process exits
             static std::ofstream file(logFile, std::ios::app | std::ios::out);
             pResult = &file;
