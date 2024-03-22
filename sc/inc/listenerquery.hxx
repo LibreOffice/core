@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_LISTENERQUERY_HXX
-#define SC_LISTENERQUERY_HXX
+#pragma once
 
 #include "address.hxx"
 #include "rangelst.hxx"
@@ -63,7 +62,5 @@ public:
     void swapRanges(ScRangeList& rRanges);
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

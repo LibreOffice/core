@@ -7,12 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_LISTENERQUERYIDS_HXX
-#define SC_LISTENERQUERYIDS_HXX
+#pragma once
 
 #define SC_LISTENER_QUERY_FORMULA_GROUP_POS        0
 #define SC_LISTENER_QUERY_FORMULA_GROUP_RANGE      1
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
