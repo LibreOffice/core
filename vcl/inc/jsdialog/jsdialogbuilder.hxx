@@ -16,6 +16,7 @@
 #include <salvtables.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
+#include <vcl/toolkit/prgsbar.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -311,6 +312,7 @@ public:
     virtual std::unique_ptr<weld::Box> weld_box(const OUString& id) override;
     virtual std::unique_ptr<weld::Widget> weld_widget(const OUString& id) override;
     virtual std::unique_ptr<weld::Image> weld_image(const OUString& id) override;
+    virtual std::unique_ptr<weld::LevelBar> weld_level_bar(const OUString& id) override;
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OUString& id) override;
 
     static weld::MessageDialog*
@@ -887,6 +889,14 @@ public:
             bool bTakeOwnership);
     virtual void set_image(VirtualDevice* pDevice) override;
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+};
+
+class JSLevelBar : public JSWidget<SalInstanceLevelBar, ::ProgressBar>
+{
+public:
+    JSLevelBar(JSDialogSender* pSender, ::ProgressBar* pProgressBar, SalInstanceBuilder* pBuilder,
+               bool bTakeOwnership);
+    virtual void set_percentage(double fPercentage) override;
 };
 
 class JSCalendar : public JSWidget<SalInstanceCalendar, ::Calendar>

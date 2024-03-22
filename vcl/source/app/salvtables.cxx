@@ -58,7 +58,6 @@
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/menubtn.hxx>
-#include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <slider.hxx>
 #include <vcl/sysdata.hxx>
@@ -3307,24 +3306,6 @@ public:
     virtual OUString get_text() const override { return m_xProgressBar->GetText(); }
 
     virtual void set_text(const OUString& rText) override { m_xProgressBar->SetText(rText); }
-};
-
-class SalInstanceLevelBar : public SalInstanceWidget, public virtual weld::LevelBar
-{
-private:
-    VclPtr<::ProgressBar> m_xLevelBar;
-
-public:
-    SalInstanceLevelBar(::ProgressBar* pLevelBar, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceWidget(pLevelBar, pBuilder, bTakeOwnership)
-        , m_xLevelBar(pLevelBar)
-    {
-    }
-
-    virtual void set_percentage(double fPercentage) override
-    {
-        m_xLevelBar->SetValue(static_cast<sal_uInt16>(fPercentage));
-    }
 };
 }
 

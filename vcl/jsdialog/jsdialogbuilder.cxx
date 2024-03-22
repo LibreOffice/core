@@ -1269,6 +1269,19 @@ std::unique_ptr<weld::Image> JSInstanceBuilder::weld_image(const OUString& id)
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::LevelBar> JSInstanceBuilder::weld_level_bar(const OUString& id)
+{
+    ::ProgressBar* pLevelBar = m_xBuilder->get<::ProgressBar>(id);
+
+    auto pWeldWidget
+        = pLevelBar ? std::make_unique<JSLevelBar>(this, pLevelBar, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 std::unique_ptr<weld::Calendar> JSInstanceBuilder::weld_calendar(const OUString& id)
 {
     ::Calendar* pCalendar = m_xBuilder->get<::Calendar>(id);
@@ -2350,6 +2363,18 @@ void JSImage::set_image(VirtualDevice* pDevice)
 void JSImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
 {
     SalInstanceImage::set_image(rImage);
+    sendUpdate();
+}
+
+JSLevelBar::JSLevelBar(JSDialogSender* pSender, ::ProgressBar* pProgressBar,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceLevelBar, ::ProgressBar>(pSender, pProgressBar, pBuilder, bTakeOwnership)
+{
+}
+
+void JSLevelBar::set_percentage(double fPercentage)
+{
+    SalInstanceLevelBar::set_percentage(fPercentage);
     sendUpdate();
 }
 

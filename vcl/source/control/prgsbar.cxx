@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
+#include <tools/json_writer.hxx>
 
 #define PROGRESSBAR_OFFSET          3
 #define PROGRESSBAR_WIN_OFFSET      2
@@ -35,6 +36,7 @@ void ProgressBar::ImplInit()
     mnPercent = 0;
     mnPercentCount = 0;
     mbCalcNew = true;
+    SetType(WindowType::PROGRESSBAR);
 
     ImplInitSettings( true, true, true );
 }
@@ -234,6 +236,12 @@ void ProgressBar::DataChanged( const DataChangedEvent& rDCEvt )
     }
 
     Window::DataChanged( rDCEvt );
+}
+
+void ProgressBar::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    vcl::Window::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("value", mnPercent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

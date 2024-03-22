@@ -22,6 +22,7 @@
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/menubtn.hxx>
+#include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
@@ -2180,6 +2181,24 @@ public:
     virtual void customize_scrollbars(const Color& rBackgroundColor, const Color& rShadowColor,
                                       const Color& rFaceColor) override;
     virtual ~SalInstanceScrolledWindow() override;
+};
+
+class SalInstanceLevelBar : public SalInstanceWidget, public virtual weld::LevelBar
+{
+private:
+    VclPtr<::ProgressBar> m_xLevelBar;
+
+public:
+    SalInstanceLevelBar(::ProgressBar* pLevelBar, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceWidget(pLevelBar, pBuilder, bTakeOwnership)
+        , m_xLevelBar(pLevelBar)
+    {
+    }
+
+    virtual void set_percentage(double fPercentage) override
+    {
+        m_xLevelBar->SetValue(static_cast<sal_uInt16>(fPercentage));
+    }
 };
 
 class SalInstanceCalendar : public SalInstanceWidget, public virtual weld::Calendar
