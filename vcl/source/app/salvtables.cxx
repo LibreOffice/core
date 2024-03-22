@@ -5949,14 +5949,16 @@ void SalInstanceLabel::set_label_type(weld::LabelType eType)
             m_xLabel->SetControlBackground();
             break;
         case weld::LabelType::Warning:
-            m_xLabel->SetControlForeground();
+            m_xLabel->SetControlForeground(
+                m_xLabel->GetSettings().GetStyleSettings().GetWarningTextColor());
             m_xLabel->SetControlBackground(
                 m_xLabel->GetSettings().GetStyleSettings().GetWarningColor());
             break;
         case weld::LabelType::Error:
-            m_xLabel->SetControlForeground();
+            m_xLabel->SetControlForeground(
+                m_xLabel->GetSettings().GetStyleSettings().GetErrorTextColor());
             m_xLabel->SetControlBackground(
-                m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
+                m_xLabel->GetSettings().GetStyleSettings().GetErrorColor());
             break;
         case weld::LabelType::Title:
             m_xLabel->SetControlForeground(

@@ -2435,11 +2435,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aStyleSet.SetActiveColor( aHighlightColor );
         aStyleSet.SetActiveTextColor( aHighlightTextColor );
 
-        // warning color
-        GdkRGBA warning_color;
-        if (gtk_style_context_lookup_color(pCStyle, "warning_color", &warning_color))
-            aStyleSet.SetWarningColor(getColor(warning_color));
-
         // field background color
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
         ::Color aBackFieldColor = style_context_get_background_color(pCStyle);

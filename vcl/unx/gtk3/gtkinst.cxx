@@ -17925,9 +17925,11 @@ public:
                 break;
             case weld::LabelType::Warning:
                 set_text_background_color(Application::GetSettings().GetStyleSettings().GetWarningColor());
+                set_text_foreground_color(Application::GetSettings().GetStyleSettings().GetWarningTextColor(), false);
                 break;
             case weld::LabelType::Error:
-                set_text_background_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+                set_text_background_color(Application::GetSettings().GetStyleSettings().GetErrorColor());
+                set_text_foreground_color(Application::GetSettings().GetStyleSettings().GetErrorTextColor(), false);
                 break;
             case weld::LabelType::Title:
                 set_text_foreground_color(Application::GetSettings().GetStyleSettings().GetLightColor(), true);

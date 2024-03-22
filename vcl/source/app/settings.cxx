@@ -137,6 +137,9 @@ struct ImplStyleData
     Color                           maRadioCheckTextColor;
     Color                           maShadowColor;
     Color                           maWarningColor;
+    Color                           maWarningTextColor;
+    Color                           maErrorColor;
+    Color                           maErrorTextColor;
     Color                           maVisitedLinkColor;
     Color                           maToolTextColor;
     Color                           maWindowColor;
@@ -562,6 +565,9 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maRadioCheckTextColor( rData.maRadioCheckTextColor ),
     maShadowColor( rData.maShadowColor ),
     maWarningColor( rData.maWarningColor ),
+    maWarningTextColor( rData.maWarningTextColor ),
+    maErrorColor( rData.maErrorColor ),
+    maErrorTextColor( rData.maErrorTextColor ),
     maVisitedLinkColor( rData.maVisitedLinkColor ),
     maToolTextColor( rData.maToolTextColor ),
     maWindowColor( rData.maWindowColor ),
@@ -662,7 +668,10 @@ void ImplStyleData::SetStandardStyles()
     maShadowColor               = COL_GRAY;
     maDarkShadowColor           = COL_BLACK;
 
-    maWarningColor              = COL_YELLOW;
+    maWarningColor              = Color(0xFE, 0xEF, 0xB3); // tdf#105829
+    maWarningTextColor          = Color(0x70, 0x43, 0x00);
+    maErrorColor                = Color(0xFF, 0xBA, 0xBA);
+    maErrorTextColor            = Color(0x7A, 0x00, 0x06);
 
     maDefaultButtonTextColor                      = COL_BLACK;
     maButtonTextColor                             = COL_BLACK;
@@ -812,6 +821,45 @@ const Color&
 StyleSettings::GetWarningColor() const
 {
     return mxData->maWarningColor;
+}
+
+void
+StyleSettings::SetWarningTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maWarningTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetWarningTextColor() const
+{
+    return mxData->maWarningTextColor;
+}
+
+void
+StyleSettings::SetErrorColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maErrorColor = rColor;
+}
+
+const Color&
+StyleSettings::GetErrorColor() const
+{
+    return mxData->maErrorColor;
+}
+
+void
+StyleSettings::SetErrorTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maErrorTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetErrorTextColor() const
+{
+    return mxData->maErrorTextColor;
 }
 
 void
@@ -2520,6 +2568,9 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maShadowColor             == rSet.mxData->maShadowColor)              &&
          (mxData->maDarkShadowColor         == rSet.mxData->maDarkShadowColor)          &&
          (mxData->maWarningColor            == rSet.mxData->maWarningColor)             &&
+         (mxData->maWarningTextColor        == rSet.mxData->maWarningTextColor)         &&
+         (mxData->maErrorColor              == rSet.mxData->maErrorColor)               &&
+         (mxData->maErrorTextColor          == rSet.mxData->maErrorTextColor)           &&
          (mxData->maButtonTextColor         == rSet.mxData->maButtonTextColor)          &&
          (mxData->maDefaultActionButtonTextColor == rSet.mxData->maDefaultActionButtonTextColor) &&
          (mxData->maActionButtonTextColor   == rSet.mxData->maActionButtonTextColor)    &&

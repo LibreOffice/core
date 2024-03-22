@@ -44,6 +44,8 @@ void GetInfoBarColors(InfobarType ibType, BColor& rBackgroundColor, BColor& rFor
 {
     rMessageColor = basegfx::BColor(0.0, 0.0, 0.0);
 
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+
     switch (ibType)
     {
         case InfobarType::INFO: // blue; #004785/0,71,133; #BDE5F8/189,229,248
@@ -55,17 +57,15 @@ void GetInfoBarColors(InfobarType ibType, BColor& rBackgroundColor, BColor& rFor
             rForegroundColor = basegfx::BColor(0.196, 0.333, 0.047);
             break;
         case InfobarType::WARNING: // orange; #704300/112,67,0; #FEEFB3/254,239,179
-            rBackgroundColor = basegfx::BColor(0.996, 0.937, 0.702);
-            rForegroundColor = basegfx::BColor(0.439, 0.263, 0.0);
+            rBackgroundColor = rSettings.GetWarningColor().getBColor();
+            rForegroundColor = rSettings.GetWarningTextColor().getBColor();
             break;
         case InfobarType::DANGER: // red; #7A0006/122,0,6; #FFBABA/255,186,186
-            rBackgroundColor = basegfx::BColor(1.0, 0.729, 0.729);
-            rForegroundColor = basegfx::BColor(0.478, 0.0, 0.024);
+            rBackgroundColor = rSettings.GetErrorColor().getBColor();
+            rForegroundColor = rSettings.GetErrorTextColor().getBColor();
             break;
     }
 
-    //remove this?
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     if (rSettings.GetHighContrastMode())
     {
         rBackgroundColor = rSettings.GetLightColor().getBColor();
