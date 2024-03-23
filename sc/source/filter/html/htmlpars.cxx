@@ -731,19 +731,22 @@ void ScHTMLLayoutParser::SetWidths()
             for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
             {
                 auto& pE = maList[ i ];
-                if ( pE->nTab == nTable )
+                if (pE->nTab != nTable)
+                    continue;
+                nCol = pE->nCol - nColCntStart;
+                OSL_ENSURE( nCol < nColsPerRow, "ScHTMLLayoutParser::SetWidths: column overflow" );
+                if (nCol >= nColsPerRow)
+                    continue;
+                pE->nOffset = pOffsets[nCol];
+                nCol = nCol + pE->nColOverlap;
+                if ( nCol > nColsPerRow )
+                    nCol = nColsPerRow;
+                if (nCol < 0)
                 {
-                    nCol = pE->nCol - nColCntStart;
-                    OSL_ENSURE( nCol < nColsPerRow, "ScHTMLLayoutParser::SetWidths: column overflow" );
-                    if ( nCol < nColsPerRow )
-                    {
-                        pE->nOffset = pOffsets[nCol];
-                        nCol = nCol + pE->nColOverlap;
-                        if ( nCol > nColsPerRow )
-                            nCol = nColsPerRow;
-                        pE->nWidth = pOffsets[nCol] - pE->nOffset;
-                    }
+                    SAL_WARN("sc", "negative offset: " << nCol);
+                    continue;
                 }
+                pE->nWidth = pOffsets[nCol] - pE->nOffset;
             }
         }
     }
