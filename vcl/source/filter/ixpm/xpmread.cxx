@@ -61,99 +61,82 @@ enum ReadState
 class BitmapWriteAccess;
 class Graphic;
 
-namespace {
+namespace
+{
 
 class XPMReader : public GraphicReader
 {
 private:
+    SvStream& mrStream;
+    Bitmap maBitmap;
+    BitmapScopedWriteAccess mpWriterAccess;
+    Bitmap maMaskBitmap;
+    BitmapScopedWriteAccess mpMaskWriterAccess;
+    sal_uInt64 mnLastPos;
 
-    SvStream&                   mrIStm;
-    Bitmap                      maBmp;
-    BitmapScopedWriteAccess     mpAcc;
-    Bitmap                      maMaskBmp;
-    BitmapScopedWriteAccess     mpMaskAcc;
-    tools::Long                        mnLastPos;
-
-    sal_uLong               mnWidth;
-    sal_uLong               mnHeight;
-    sal_uLong               mnColors;
-    sal_uInt32              mnCpp;                              // characters per pix
-    bool                mbTransparent;
-    bool                mbStatus;
-    sal_uLong               mnStatus;
-    sal_uLong               mnIdentifier;
-    sal_uInt8               mcThisByte;
-    sal_uInt8               mcLastByte;
-    sal_uLong               mnTempAvail;
-    sal_uInt8*              mpTempBuf;
-    sal_uInt8*              mpTempPtr;
+    tools::Long mnWidth = 0;
+    tools::Long mnHeight = 0;
+    sal_uLong mnColors = 0;
+    sal_uInt32 mnCpp = 0; // characters per pix
+    bool mbTransparent = false;
+    bool mbStatus  = true;
+    sal_uLong mnStatus = 0;
+    sal_uLong mnIdentifier = XPMIDENTIFIER;
+    sal_uInt8 mcThisByte = 0;
+    sal_uInt8 mcLastByte = 0;
+    sal_uLong mnTempAvail = 0;
+    sal_uInt8* mpTempBuf = nullptr;
+    sal_uInt8* mpTempPtr = nullptr;
     // each key is ( mnCpp )Byte(s)-> ASCII entry assigned to the colour
     // each colordata is
     // 1 Byte   -> 0xFF if colour is transparent
     // 3 Bytes  -> RGB value of the colour
-    typedef std::array<sal_uInt8,4> colordata;
-    typedef std::map<OString, colordata> colormap;
-    colormap                maColMap;
-    sal_uLong               mnStringSize;
-    sal_uInt8*              mpStringBuf;
-    sal_uLong               mnParaSize;
-    sal_uInt8*              mpPara;
+    typedef std::array<sal_uInt8, 4> ColorData;
+    typedef std::map<OString, ColorData> ColorMap;
+    ColorMap maColMap;
+    sal_uLong mnStringSize = 0;
+    sal_uInt8* mpStringBuf = nullptr;
+    sal_uLong mnParaSize = 0;
+    sal_uInt8* mpPara = nullptr;
 
     bool                    ImplGetString();
     bool                    ImplGetColor();
     bool                    ImplGetScanLine( sal_uLong );
-    bool                    ImplGetColSub(colordata &rDest);
+    bool                    ImplGetColSub(ColorData &rDest);
     bool                    ImplGetColKey( sal_uInt8 );
-    void                    ImplGetRGBHex(colordata &rDest, sal_uLong);
+    void                    ImplGetRGBHex(ColorData &rDest, sal_uLong);
     bool                    ImplGetPara( sal_uLong numb );
     static bool             ImplCompare(sal_uInt8 const *, sal_uInt8 const *, sal_uLong);
     sal_uLong               ImplGetULONG( sal_uLong nPara );
 
 public:
-    explicit            XPMReader( SvStream& rStm );
+    explicit XPMReader(SvStream& rStream);
 
-    ReadState           ReadXPM( Graphic& rGraphic );
+    ReadState ReadXPM(Graphic& rGraphic);
 };
 
 }
 
-XPMReader::XPMReader(SvStream& rStm)
-    : mrIStm(rStm)
-    , mnLastPos(rStm.Tell())
-    , mnWidth(0)
-    , mnHeight(0)
-    , mnColors(0)
-    , mnCpp(0)
-    , mbTransparent(false)
-    , mbStatus(true)
-    , mnStatus( 0 )
-    , mnIdentifier(XPMIDENTIFIER)
-    , mcThisByte(0)
-    , mcLastByte(0)
-    , mnTempAvail(0)
-    , mpTempBuf(nullptr)
-    , mpTempPtr(nullptr)
-    , mnStringSize(0)
-    , mpStringBuf(nullptr)
-    , mnParaSize(0)
-    , mpPara(nullptr)
+XPMReader::XPMReader(SvStream& rStream)
+    : mrStream(rStream)
+    , mnLastPos(rStream.Tell())
 {
 }
 
-ReadState XPMReader::ReadXPM( Graphic& rGraphic )
+ReadState XPMReader::ReadXPM(Graphic& rGraphic)
 {
     ReadState   eReadState;
     sal_uInt8       cDummy;
 
     // check if we can real ALL
-    mrIStm.Seek( STREAM_SEEK_TO_END );
-    mrIStm.ReadUChar( cDummy );
+    mrStream.Seek( STREAM_SEEK_TO_END );
+    mrStream.ReadUChar( cDummy );
 
     // if we could not read all
     // return and wait for new data
-    if ( mrIStm.GetError() != ERRCODE_IO_PENDING )
+    if (mrStream.GetError() != ERRCODE_IO_PENDING)
     {
-        mrIStm.Seek( mnLastPos );
+        mrStream.Seek( mnLastPos );
         mbStatus = true;
 
         if ( mbStatus )
@@ -176,7 +159,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 mbStatus = false;
             //xpms are a minimum of one character (one byte) per pixel, so if the file isn't
             //even that long, it's not all there
-            if (mrIStm.remainingSize() + mnTempAvail < static_cast<sal_uInt64>(mnWidth) * mnHeight)
+            if (mrStream.remainingSize() + mnTempAvail < static_cast<sal_uInt64>(mnWidth) * mnHeight)
                 mbStatus = false;
             if ( mbStatus && mnWidth && mnHeight && mnColors && mnCpp )
             {
@@ -200,25 +183,25 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                     else
                         ePixelFormat = vcl::PixelFormat::N8_BPP;
 
-                    maBmp = Bitmap(Size(mnWidth, mnHeight), ePixelFormat);
-                    mpAcc = maBmp;
+                    maBitmap = Bitmap(Size(mnWidth, mnHeight), ePixelFormat);
+                    mpWriterAccess = maBitmap;
 
                     // mbTransparent is TRUE if at least one colour is transparent
                     if ( mbTransparent )
                     {
-                        maMaskBmp = Bitmap(Size(mnWidth, mnHeight), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-                        mpMaskAcc = maMaskBmp;
-                        if ( !mpMaskAcc )
+                        maMaskBitmap = Bitmap(Size(mnWidth, mnHeight), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+                        mpMaskWriterAccess = maMaskBitmap;
+                        if (!mpMaskWriterAccess)
                             mbStatus = false;
                     }
-                    if( mpAcc && mbStatus )
+                    if (mpWriterAccess && mbStatus)
                     {
                         if (mnColors <= 256)  // palette is only needed by using less than 257
                         {                     // colors
                             sal_uInt8 i = 0;
                             for (auto& elem : maColMap)
                             {
-                                mpAcc->SetPaletteColor(i, Color(elem.second[1], elem.second[2], elem.second[3]));
+                                mpWriterAccess->SetPaletteColor(i, Color(elem.second[1], elem.second[2], elem.second[3]));
                                 //reuse map entry, overwrite color with palette index
                                 elem.second[1] = i;
                                 i++;
@@ -227,7 +210,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 
                         // now we get the bitmap data
                         mnIdentifier = XPMPIXELS;
-                        for (sal_uLong i = 0; i < mnHeight; ++i)
+                        for (tools::Long i = 0; i < mnHeight; ++i)
                         {
                             if ( !ImplGetScanLine( i ) )
                             {
@@ -246,29 +229,29 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
         }
         if( mbStatus )
         {
-            mpAcc.reset();
-            if ( mpMaskAcc )
+            mpWriterAccess.reset();
+            if (mpMaskWriterAccess)
             {
-                mpMaskAcc.reset();
-                rGraphic = Graphic( BitmapEx( maBmp, maMaskBmp ) );
+                mpMaskWriterAccess.reset();
+                rGraphic = Graphic(BitmapEx(maBitmap, maMaskBitmap));
             }
             else
             {
-                rGraphic = BitmapEx(maBmp);
+                rGraphic = BitmapEx(maBitmap);
             }
             eReadState = XPMREAD_OK;
         }
         else
         {
-            mpMaskAcc.reset();
-            mpAcc.reset();
+            mpMaskWriterAccess.reset();
+            mpWriterAccess.reset();
 
             eReadState = XPMREAD_ERROR;
         }
     }
     else
     {
-        mrIStm.ResetError();
+        mrStream.ResetError();
         eReadState = XPMREAD_NEED_MORE;
     }
     return eReadState;
@@ -286,7 +269,7 @@ bool XPMReader::ImplGetColor()
         return false;
 
     OString aKey(reinterpret_cast<char*>(pString), mnCpp);
-    colordata aValue{0};
+    ColorData aValue{0};
     bool bStatus = ImplGetColSub(aValue);
     if (bStatus)
     {
@@ -306,29 +289,29 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
 
     if ( bStatus )
     {
-        if ( mpMaskAcc )
+        if (mpMaskWriterAccess)
         {
-            aWhite = mpMaskAcc->GetBestMatchingColor( COL_WHITE );
-            aBlack = mpMaskAcc->GetBestMatchingColor( COL_BLACK );
+            aWhite = mpMaskWriterAccess->GetBestMatchingColor( COL_WHITE );
+            aBlack = mpMaskWriterAccess->GetBestMatchingColor( COL_BLACK );
         }
-        if ( mnStringSize != ( mnWidth * mnCpp ))
+        if (mnStringSize != (sal_uLong(mnWidth) * mnCpp))
             bStatus = false;
         else
         {
-            Scanline pScanline = mpAcc->GetScanline(nY);
-            Scanline pMaskScanline = mpMaskAcc ? mpMaskAcc->GetScanline(nY) : nullptr;
-            for (sal_uLong i = 0; i < mnWidth; ++i)
+            Scanline pScanline = mpWriterAccess->GetScanline(nY);
+            Scanline pMaskScanline = mpMaskWriterAccess ? mpMaskWriterAccess->GetScanline(nY) : nullptr;
+            for (tools::Long i = 0; i < mnWidth; ++i)
             {
                 OString aKey(reinterpret_cast<char*>(pString), mnCpp);
                 auto it = maColMap.find(aKey);
                 if (it != maColMap.end())
                 {
                     if (mnColors > 256)
-                        mpAcc->SetPixelOnData(pScanline, i, Color(it->second[1], it->second[2], it->second[3]));
+                        mpWriterAccess->SetPixelOnData(pScanline, i, Color(it->second[1], it->second[2], it->second[3]));
                     else
-                        mpAcc->SetPixelOnData(pScanline, i, BitmapColor(it->second[1]));
+                        mpWriterAccess->SetPixelOnData(pScanline, i, BitmapColor(it->second[1]));
                     if (pMaskScanline)
-                        mpMaskAcc->SetPixelOnData(pMaskScanline, i, it->second[0] ? aWhite : aBlack);
+                        mpMaskWriterAccess->SetPixelOnData(pMaskScanline, i, it->second[0] ? aWhite : aBlack);
                 }
                 pString += mnCpp;
             }
@@ -341,7 +324,7 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
 // if a colour was found the RGB value is written a pDest[1]..pDest[2]
 // pDest[0] contains 0xFF if the colour is transparent otherwise 0
 
-bool XPMReader::ImplGetColSub(colordata &rDest)
+bool XPMReader::ImplGetColSub(ColorData& rDest)
 {
     unsigned char cTransparent[] = "None";
 
@@ -459,7 +442,7 @@ bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
 //           2 : '#1234abcd1234'                  "      "     "     "
 //           6 : '#12345678abcdefab12345678'      "      "     "     "
 
-void XPMReader::ImplGetRGBHex(colordata &rDest, sal_uLong  nAdd)
+void XPMReader::ImplGetRGBHex(ColorData& rDest, sal_uLong nAdd)
 {
     sal_uInt8*  pPtr = mpPara+1;
 
@@ -584,7 +567,7 @@ bool XPMReader::ImplGetString()
     {
         if ( mnTempAvail == 0 )
         {
-            mnTempAvail = mrIStm.ReadBytes( mpTempBuf, XPMTEMPBUFSIZE );
+            mnTempAvail = mrStream.ReadBytes( mpTempBuf, XPMTEMPBUFSIZE );
             if ( mnTempAvail == 0 )
                 break;
 
