@@ -125,7 +125,7 @@ void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > const
 
 void ImageProducer::NewDataAvailable()
 {
-    if( ( GraphicType::NONE == moGraphic->GetType() ) || moGraphic->GetReaderContext() )
+    if (GraphicType::NONE == moGraphic->GetType())
         startProduction();
 }
 
@@ -138,11 +138,11 @@ void ImageProducer::startProduction()
     bool bNotifyEmptyGraphics = false;
 
     // valid stream or filled graphic? => update consumers
-    if( mpStm || ( moGraphic->GetType() != GraphicType::NONE ) )
+    if (mpStm || moGraphic->GetType() != GraphicType::NONE)
     {
         // if we already have a graphic, we don't have to import again;
         // graphic is cleared if a new Stream is set
-        if( ( moGraphic->GetType() == GraphicType::NONE ) || moGraphic->GetReaderContext() )
+        if (moGraphic->GetType() == GraphicType::NONE)
         {
             if ( ImplImportGraphic( *moGraphic ) )
                 maDoneHdl.Call( &*moGraphic );

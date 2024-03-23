@@ -91,7 +91,6 @@
 #include "FilterConfigCache.hxx"
 
 #include <graphic/GraphicFormatDetector.hxx>
-#include <graphic/GraphicReader.hxx>
 
 // Support for GfxLinkType::NativeWebp is so far disabled,
 // as enabling it would write .webp images e.g. to .odt documents,
@@ -640,7 +639,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
         if (!rContext.mAlphaMask.IsEmpty()) // Need to move the AlphaMask back to the BitmapEx.
             *rContext.m_pGraphic = BitmapEx( rContext.m_pGraphic->GetBitmapExRef().GetBitmap(), rContext.mAlphaMask );
 
-        if (rContext.m_nStatus == ERRCODE_NONE && (rContext.m_eLinkType != GfxLinkType::NONE) && !rContext.m_pGraphic->GetReaderContext())
+        if (rContext.m_nStatus == ERRCODE_NONE && rContext.m_eLinkType != GfxLinkType::NONE)
         {
             BinaryDataContainer aGraphicContent;
 
@@ -1281,10 +1280,8 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
 
     ResetLastError();
 
-    std::shared_ptr<GraphicReader> pContext = rGraphic.GetReaderContext();
-    bool  bDummyContext = rGraphic.IsDummyContext();
-    if( !pContext || bDummyContext )
     {
+        bool bDummyContext = rGraphic.IsDummyContext();
         if( bDummyContext )
         {
             rGraphic.SetDummyContext( false );
@@ -1312,13 +1309,6 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
             *pDeterminedFormat = nFormat;
 
         aFilterName = pConfig->GetImportFilterName( nFormat );
-    }
-    else
-    {
-        aFilterName = pContext->GetUpperFilterName();
-
-        nStreamBegin = 0;
-        nStatus = ERRCODE_NONE;
     }
 
     // read graphic
@@ -1423,7 +1413,7 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
 
-    if( nStatus == ERRCODE_NONE && ( eLinkType != GfxLinkType::NONE ) && !rGraphic.GetReaderContext() && !bLinkSet )
+    if (nStatus == ERRCODE_NONE && eLinkType != GfxLinkType::NONE && !bLinkSet)
     {
         if (aGraphicContent.isEmpty())
         {
@@ -1854,7 +1844,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         default:
         break;
     }
-    if( GraphicType::NONE == rData.maGraphic.GetType() || rData.maGraphic.GetReaderContext() ) // Import
+    if (GraphicType::NONE == rData.maGraphic.GetType()) // Import
     {
         // Import
         nFormat = GetImportFormatNumberForShortName( aShortName );

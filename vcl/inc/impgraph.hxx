@@ -70,7 +70,6 @@ private:
     Size                         maExPrefSize;
     ImpSwapInfo                  maSwapInfo;
     std::unique_ptr<Animation>   mpAnimation;
-    std::shared_ptr<GraphicReader> mpContext;
     std::shared_ptr<ImpSwapFile> mpSwapFile;
     std::shared_ptr<GfxLink>     mpGfxLink;
     std::shared_ptr<VectorGraphicData> maVectorGraphicData;
@@ -189,8 +188,6 @@ private:
     bool swapOutGraphic(SvStream& rStream);
     // end swapping
 
-    std::shared_ptr<GraphicReader>& getContext() { return mpContext;}
-    void                setContext( const std::shared_ptr<GraphicReader>& pReader );
     void                setDummyContext( bool value ) { mbDummyContext = value; }
     bool                isDummyContext() const { return mbDummyContext; }
     void                setGfxLink( const std::shared_ptr<GfxLink>& );

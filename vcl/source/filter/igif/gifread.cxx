@@ -23,7 +23,6 @@
 #include "gifread.hxx"
 #include <memory>
 #include <vcl/BitmapWriteAccess.hxx>
-#include <graphic/GraphicReader.hxx>
 
 namespace {
 
@@ -53,7 +52,7 @@ class SvStream;
 
 namespace {
 
-class GIFReader : public GraphicReader
+class GIFReader
 {
     Animation           aAnimation;
     sal_uInt64          nAnimationByteSize;
@@ -155,7 +154,6 @@ GIFReader::GIFReader( SvStream& rStm )
     , cNonTransIndex1 ( 0 )
     , nPaletteSize( 0 )
 {
-    maUpperName = "SVIGIF";
     aSrcBuf.resize(256);    // Memory buffer for ReadNextBlock
     ClearImageExtensions();
 }

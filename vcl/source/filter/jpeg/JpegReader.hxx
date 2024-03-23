@@ -23,7 +23,6 @@
 #include <vcl/bitmap.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
-#include <graphic/GraphicReader.hxx>
 
 enum class GraphicFilterImportFlags;
 
@@ -44,7 +43,7 @@ struct JPEGCreateBitmapParam
     bool bGray;
 };
 
-class JPEGReader : public GraphicReader
+class JPEGReader
 {
     SvStream& mrStream;
     std::optional<Bitmap> mpBitmap;
@@ -52,8 +51,7 @@ class JPEGReader : public GraphicReader
     bool mbSetLogSize;
 
 public:
-            JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags );
-    virtual ~JPEGReader() override;
+    JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags );
 
     ReadState Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess);
 

@@ -319,7 +319,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/GraphicLoader \
     vcl/source/graphic/GraphicObject \
     vcl/source/graphic/GraphicObject2 \
-    vcl/source/graphic/GraphicReader \
     vcl/source/graphic/Manager \
     vcl/source/graphic/UnoBinaryDataContainer \
     vcl/source/graphic/UnoGraphic \

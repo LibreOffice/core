@@ -24,7 +24,6 @@
 #include <rtl/character.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
-#include <graphic/GraphicReader.hxx>
 
 #include "xbmread.hxx"
 
@@ -43,7 +42,7 @@ enum ReadState
     XBMREAD_ERROR
 };
 
-class XBMReader : public GraphicReader
+class XBMReader
 {
     SvStream& mrStream;
     Bitmap maBitmap;
@@ -74,7 +73,6 @@ XBMReader::XBMReader(SvStream& rStream)
     : mrStream(rStream)
     , mnLastPosition(rStream.Tell())
 {
-    maUpperName = "SVIXBM";
     InitTable();
 }
 

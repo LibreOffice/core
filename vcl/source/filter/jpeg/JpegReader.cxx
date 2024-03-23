@@ -174,16 +174,10 @@ JPEGReader::JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags
     mnLastPos        ( rStream.Tell() ),
     mbSetLogSize     ( nImportFlags & GraphicFilterImportFlags::SetLogsizeForJpeg )
 {
-    maUpperName = "SVIJPEG";
-
     if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
     {
         mpBitmap.emplace();
     }
-}
-
-JPEGReader::~JPEGReader()
-{
 }
 
 bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)

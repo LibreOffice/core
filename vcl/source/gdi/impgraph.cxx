@@ -92,7 +92,6 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maMetaFile(rImpGraphic.maMetaFile)
     , maBitmapEx(rImpGraphic.maBitmapEx)
     , maSwapInfo(rImpGraphic.maSwapInfo)
-    , mpContext(rImpGraphic.mpContext)
     , mpSwapFile(rImpGraphic.mpSwapFile)
     , mpGfxLink(rImpGraphic.mpGfxLink)
     , maVectorGraphicData(rImpGraphic.maVectorGraphicData)
@@ -119,7 +118,6 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
     , maBitmapEx(std::move(rImpGraphic.maBitmapEx))
     , maSwapInfo(std::move(rImpGraphic.maSwapInfo))
     , mpAnimation(std::move(rImpGraphic.mpAnimation))
-    , mpContext(std::move(rImpGraphic.mpContext))
     , mpSwapFile(std::move(rImpGraphic.mpSwapFile))
     , mpGfxLink(std::move(rImpGraphic.mpGfxLink))
     , maVectorGraphicData(std::move(rImpGraphic.maVectorGraphicData))
@@ -207,7 +205,6 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         updateCurrentSizeInBytes(mnSizeBytes);
 
         maSwapInfo = rImpGraphic.maSwapInfo;
-        mpContext = rImpGraphic.mpContext;
         mbDummyContext = rImpGraphic.mbDummyContext;
         maGraphicExternalLink = rImpGraphic.maGraphicExternalLink;
 
@@ -244,7 +241,6 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     meType = rImpGraphic.meType;
     mnSizeBytes = rImpGraphic.mnSizeBytes;
     maSwapInfo = std::move(rImpGraphic.maSwapInfo);
-    mpContext = std::move(rImpGraphic.mpContext);
     mbDummyContext = rImpGraphic.mbDummyContext;
     mpAnimation = std::move(rImpGraphic.mpAnimation);
     maBitmapEx = std::move(rImpGraphic.maBitmapEx);
@@ -1120,12 +1116,6 @@ sal_uInt32 ImpGraphic::getAnimationLoopCount() const
     return mpAnimation ? mpAnimation->GetLoopCount() : 0;
 }
 
-void ImpGraphic::setContext( const std::shared_ptr<GraphicReader>& pReader )
-{
-    mpContext = pReader;
-    mbDummyContext = false;
-}
-
 bool ImpGraphic::swapInContent(SvStream& rStream)
 {
     bool bRet = false;
@@ -1759,8 +1749,6 @@ sal_Int32 ImpGraphic::getPageNumber() const
 
 bool ImpGraphic::canReduceMemory() const
 {
-    if (mpContext)
-        return false;
     return !isSwappedOut();
 }
 

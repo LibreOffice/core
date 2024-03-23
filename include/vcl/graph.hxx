@@ -47,7 +47,6 @@ class GDIMetaFile;
 class SvStream;
 class ImpGraphic;
 class OutputDevice;
-class GraphicReader;
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC GraphicConversionParameters
 {
@@ -174,8 +173,6 @@ public:
 
     SAL_DLLPRIVATE OString getUniqueID() const;
 
-    std::shared_ptr<GraphicReader>& GetReaderContext();
-    SAL_DLLPRIVATE void             SetReaderContext( const std::shared_ptr<GraphicReader> &pReader );
     SAL_DLLPRIVATE void             SetDummyContext(bool value);
     SAL_DLLPRIVATE bool             IsDummyContext() const;
 

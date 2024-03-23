@@ -23,7 +23,6 @@
 #include <tools/stream.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
-#include <graphic/GraphicReader.hxx>
 
 #include "rgbtable.hxx"
 
@@ -63,7 +62,7 @@ class Graphic;
 namespace
 {
 
-class XPMReader : public GraphicReader
+class XPMReader
 {
 private:
     SvStream& mrStream;
