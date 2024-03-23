@@ -725,7 +725,6 @@ sal_uInt16 ScHTMLLayoutParser::GetWidth( const ScEEParseEntry* pE )
 
 void ScHTMLLayoutParser::SetWidths()
 {
-    SCCOL nCol;
     if ( !nTableWidth )
         nTableWidth = static_cast<sal_uInt16>(aPageSize.Width());
     SCCOL nColsPerRow = nMaxCol - nColCntStart;
@@ -736,7 +735,7 @@ void ScHTMLLayoutParser::SetWidths()
         sal_uInt16 nWidth = nTableWidth / static_cast<sal_uInt16>(nColsPerRow);
         sal_uInt16 nOff = nColOffsetStart;
         pLocalColOffset->clear();
-        for ( nCol = 0; nCol <= nColsPerRow; ++nCol, nOff = nOff + nWidth )
+        for (int nCol = 0; nCol <= nColsPerRow; ++nCol, nOff = nOff + nWidth)
         {
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
@@ -766,7 +765,7 @@ void ScHTMLLayoutParser::SetWidths()
                 auto& pE = maList[ i ];
                 if ( pE->nTab == nTable && pE->nWidth )
                 {
-                    nCol = pE->nCol - nColCntStart;
+                    SCCOL nCol = pE->nCol - nColCntStart;
                     if ( nCol < nColsPerRow )
                     {
                         if ( pE->nColOverlap == 1 )
@@ -803,7 +802,7 @@ void ScHTMLLayoutParser::SetWidths()
             }
             sal_uInt16 nWidths = 0;
             sal_uInt16 nUnknown = 0;
-            for ( nCol = 0; nCol < nColsPerRow; nCol++ )
+            for (SCCOL nCol = 0; nCol < nColsPerRow; nCol++)
             {
                 if ( pWidths[nCol] )
                     nWidths = nWidths + pWidths[nCol];
@@ -815,18 +814,18 @@ void ScHTMLLayoutParser::SetWidths()
                 sal_uInt16 nW = ((nWidths < nTableWidth) ?
                     ((nTableWidth - nWidths) / nUnknown) :
                     (nTableWidth / nUnknown));
-                for ( nCol = 0; nCol < nColsPerRow; nCol++ )
+                for (SCCOL nCol = 0; nCol < nColsPerRow; nCol++)
                 {
                     if ( !pWidths[nCol] )
                         pWidths[nCol] = nW;
                 }
             }
-            for ( nCol = 1; nCol <= nColsPerRow; nCol++ )
+            for (SCCOL nCol = 1; nCol <= nColsPerRow; nCol++)
             {
                 pOffsets[nCol] = pOffsets[nCol-1] + pWidths[nCol-1];
             }
             pLocalColOffset->clear();
-            for ( nCol = 0; nCol <= nColsPerRow; nCol++ )
+            for (SCCOL nCol = 0; nCol <= nColsPerRow; nCol++)
             {
                 MakeColNoRef( pLocalColOffset, pOffsets[nCol], 0, 0, 0 );
             }
@@ -837,7 +836,7 @@ void ScHTMLLayoutParser::SetWidths()
                 auto& pE = maList[ i ];
                 if (pE->nTab != nTable)
                     continue;
-                nCol = pE->nCol - nColCntStart;
+                SCCOL nCol = pE->nCol - nColCntStart;
                 OSL_ENSURE( nCol < nColsPerRow, "ScHTMLLayoutParser::SetWidths: column overflow" );
                 if (nCol >= nColsPerRow)
                     continue;
