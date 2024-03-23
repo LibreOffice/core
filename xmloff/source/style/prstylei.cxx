@@ -620,11 +620,6 @@ void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
     if(!rMapper.is())
         return;
 
-    static constexpr OUStringLiteral s_FillGradientName(u"FillGradientName");
-    static constexpr OUStringLiteral s_FillHatchName(u"FillHatchName");
-    static constexpr OUStringLiteral s_FillBitmapName(u"FillBitmapName");
-    static constexpr OUStringLiteral s_FillTransparenceGradientName(u"FillTransparenceGradientName");
-
     for(auto& a : maProperties)
     {
         if(a.mnIndex != -1)
@@ -632,15 +627,16 @@ void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
             const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
             XmlStyleFamily aStyleFamily(XmlStyleFamily::DATA_STYLE);
 
-            if(rPropName == s_FillGradientName || rPropName == s_FillTransparenceGradientName)
+            if(rPropName == u"FillGradientName"_ustr
+               || rPropName == u"FillTransparenceGradientName"_ustr)
             {
                 aStyleFamily = XmlStyleFamily::SD_GRADIENT_ID;
             }
-            else if(rPropName == s_FillHatchName)
+            else if(rPropName == u"FillHatchName"_ustr)
             {
                 aStyleFamily = XmlStyleFamily::SD_HATCH_ID;
             }
-            else if(rPropName == s_FillBitmapName)
+            else if(rPropName == u"FillBitmapName"_ustr)
             {
                 aStyleFamily = XmlStyleFamily::SD_FILL_IMAGE_ID;
             }

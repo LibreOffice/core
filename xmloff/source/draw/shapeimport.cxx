@@ -98,11 +98,6 @@ struct XMLShapeImportHelperImpl
     bool                        mbIsPresentationShapesSupported;
 };
 
-constexpr OUStringLiteral gsStartShape(u"StartShape");
-constexpr OUStringLiteral gsEndShape(u"EndShape");
-constexpr OUStringLiteral gsStartGluePointIndex(u"StartGluePointIndex");
-constexpr OUStringLiteral gsEndGluePointIndex(u"EndGluePointIndex");
-
 XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
         const uno::Reference< frame::XModel>& rModel,
@@ -461,8 +456,7 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
         uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            static constexpr OUStringLiteral sHandlePathObjScale = u"HandlePathObjScale";
-            xPropertySet->setPropertyValue(sHandlePathObjScale, uno::Any(true));
+            xPropertySet->setPropertyValue(u"HandlePathObjScale"_ustr, uno::Any(true));
         }
     }
 }
@@ -815,15 +809,15 @@ void XMLShapeImportHelper::restoreConnections()
             if( xShape.is() )
             {
                 if (rHint.bStart)
-                    xConnector->setPropertyValue( gsStartShape, uno::Any(xShape) );
+                    xConnector->setPropertyValue( u"StartShape"_ustr, uno::Any(xShape) );
                 else
-                    xConnector->setPropertyValue( gsEndShape, uno::Any(xShape) );
+                    xConnector->setPropertyValue( u"EndShape"_ustr, uno::Any(xShape) );
 
                 sal_Int32 nGlueId = rHint.nDestGlueId < 4 ? rHint.nDestGlueId : getGluePointId( xShape, rHint.nDestGlueId );
                 if(rHint.bStart)
-                    xConnector->setPropertyValue( gsStartGluePointIndex, uno::Any(nGlueId) );
+                    xConnector->setPropertyValue( u"StartGluePointIndex"_ustr, uno::Any(nGlueId) );
                 else
-                    xConnector->setPropertyValue( gsEndGluePointIndex, uno::Any(nGlueId) );
+                    xConnector->setPropertyValue( u"EndGluePointIndex"_ustr, uno::Any(nGlueId) );
             }
 
             // #86637# restore line deltas

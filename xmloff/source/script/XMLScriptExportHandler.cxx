@@ -31,8 +31,6 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::PropertyValue;
 
-constexpr OUStringLiteral gsURL(u"Script");
-
 XMLScriptExportHandler::XMLScriptExportHandler()
 {
 }
@@ -55,7 +53,7 @@ void XMLScriptExportHandler::Export(
 
     for(const auto& rValue : rValues)
     {
-        if (gsURL == rValue.Name)
+        if (u"Script"_ustr == rValue.Name)
         {
             OUString sTmp;
             rValue.Value >>= sTmp;

@@ -40,8 +40,6 @@ using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::container::XNameAccess;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
-constexpr OUStringLiteral gsEventType(u"EventType");
-
 XMLEventExport::XMLEventExport(SvXMLExport& rExp) :
     m_rExport(rExp),
     m_bExtNamespace(false)
@@ -187,7 +185,7 @@ void XMLEventExport::ExportEvent(
 {
     // search for EventType value and then delegate to EventHandler
     const PropertyValue* pValue = std::find_if(rEventValues.begin(), rEventValues.end(),
-        [](const PropertyValue& rValue) { return gsEventType == rValue.Name; });
+        [](const PropertyValue& rValue) { return u"EventType"_ustr == rValue.Name; });
 
     if (pValue == rEventValues.end())
         return;

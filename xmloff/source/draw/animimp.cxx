@@ -314,22 +314,6 @@ AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirecti
     }
 }
 
-namespace
-{
-    constexpr OUStringLiteral gsDimColor = u"DimColor";
-    constexpr OUStringLiteral gsDimHide = u"DimHide";
-    constexpr OUStringLiteral gsDimPrev = u"DimPrevious";
-    constexpr OUStringLiteral gsEffect = u"Effect";
-    constexpr OUStringLiteral gsPlayFull = u"PlayFull";
-    constexpr OUStringLiteral gsSound = u"Sound";
-    constexpr OUStringLiteral gsSoundOn = u"SoundOn";
-    constexpr OUStringLiteral gsSpeed = u"Speed";
-    constexpr OUStringLiteral gsTextEffect = u"TextEffect";
-    constexpr OUStringLiteral gsPresShapeService = u"com.sun.star.presentation.Shape";
-    constexpr OUStringLiteral gsAnimPath = u"AnimationPath";
-    constexpr OUStringLiteral gsIsAnimation = u"IsAnimation";
-};
-
 namespace {
 
 enum XMLActionKind
@@ -501,7 +485,7 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
                     // check for presentation shape service
                     {
                         Reference< XServiceInfo > xServiceInfo( xSet, UNO_QUERY );
-                        if( !xServiceInfo.is() || !xServiceInfo->supportsService( gsPresShapeService ) )
+                        if( !xServiceInfo.is() || !xServiceInfo->supportsService( u"com.sun.star.presentation.Shape"_ustr ) )
                             return;
                     }
 
@@ -518,13 +502,13 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
             {
                 if( meKind == XMLE_DIM )
                 {
-                    xSet->setPropertyValue( gsDimPrev, Any(true) );
+                    xSet->setPropertyValue( u"DimPrevious"_ustr, Any(true) );
 
-                    xSet->setPropertyValue( gsDimColor, Any(maDimColor) );
+                    xSet->setPropertyValue( u"DimColor"_ustr, Any(maDimColor) );
                 }
                 else if( meKind == XMLE_PLAY )
                 {
-                    xSet->setPropertyValue( gsIsAnimation, Any(true) );
+                    xSet->setPropertyValue( u"IsAnimation"_ustr, Any(true) );
 
                     // #i42894# speed is not supported for the old group animation fallback, so no need to set it
                     // aAny <<= meSpeed;
@@ -534,23 +518,23 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
                 {
                     if( meKind == XMLE_HIDE && !mbTextEffect && meEffect == EK_none )
                     {
-                        xSet->setPropertyValue( gsDimHide, Any(true) );
+                        xSet->setPropertyValue( u"DimHide"_ustr, Any(true) );
                     }
                     else
                     {
                         const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
 
                         if (mbTextEffect)
-                            xSet->setPropertyValue( gsTextEffect, Any( eEffect ) );
+                            xSet->setPropertyValue( u"TextEffect"_ustr, Any( eEffect ) );
                         else
-                            xSet->setPropertyValue( gsEffect, Any( eEffect ) );
-                        xSet->setPropertyValue( gsSpeed, Any( meSpeed ) );
+                            xSet->setPropertyValue( u"Effect"_ustr, Any( eEffect ) );
+                        xSet->setPropertyValue( u"Speed"_ustr, Any( meSpeed ) );
 
                         if( eEffect == AnimationEffect_PATH && !maPathShapeId.isEmpty() )
                         {
                             Reference< XShape > xPath( GetImport().getInterfaceToIdentifierMapper().getReference( maPathShapeId ), UNO_QUERY );
                             if( xPath.is() )
-                                xSet->setPropertyValue( gsAnimPath, Any( xPath ) );
+                                xSet->setPropertyValue( u"AnimationPath"_ustr, Any( xPath ) );
                         }
                     }
                 }
@@ -559,9 +543,9 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
             {
                 if( xSet.is() )
                 {
-                    xSet->setPropertyValue( gsSound, Any(maSoundURL) );
-                    xSet->setPropertyValue( gsPlayFull, Any(mbPlayFull) );
-                    xSet->setPropertyValue( gsSoundOn, Any(true) );
+                    xSet->setPropertyValue( u"Sound"_ustr, Any(maSoundURL) );
+                    xSet->setPropertyValue( u"PlayFull"_ustr, Any(mbPlayFull) );
+                    xSet->setPropertyValue( u"SoundOn"_ustr, Any(true) );
                 }
                 else
                 {
