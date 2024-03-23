@@ -230,7 +230,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         mpGfxLink = rImpGraphic.mpGfxLink;
 
         maVectorGraphicData = rImpGraphic.maVectorGraphicData;
-        maLastUsed = std::chrono::high_resolution_clock::now();
+        resetLastUsed();
 
         changeExisting(mnSizeBytes);
     }
@@ -257,7 +257,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
 
     rImpGraphic.clear();
     rImpGraphic.mbDummyContext = false;
-    maLastUsed = std::chrono::high_resolution_clock::now();
+    resetLastUsed();
 
     changeExisting(mnSizeBytes);
 
@@ -1364,7 +1364,7 @@ bool ImpGraphic::ensureAvailable() const
         bResult = pThis->swapIn();
     }
 
-    maLastUsed = std::chrono::high_resolution_clock::now();
+    resetLastUsed();
     return bResult;
 }
 
@@ -1491,7 +1491,7 @@ bool ImpGraphic::swapIn()
 
         updateFromLoadedGraphic(aGraphic.ImplGetImpGraphic());
 
-        maLastUsed = std::chrono::high_resolution_clock::now();
+        resetLastUsed();
         bReturn = true;
     }
     else if (mpGfxLink && mpGfxLink->IsNative())
@@ -1522,7 +1522,7 @@ bool ImpGraphic::swapIn()
             updateFromLoadedGraphic(pImpGraphic);
         }
 
-        maLastUsed = std::chrono::high_resolution_clock::now();
+        resetLastUsed();
         bReturn = true;
     }
     else
@@ -1772,6 +1772,11 @@ bool ImpGraphic::reduceMemory()
 std::chrono::high_resolution_clock::time_point ImpGraphic::getLastUsed() const
 {
     return maLastUsed;
+}
+
+void ImpGraphic::resetLastUsed() const
+{
+    maLastUsed = std::chrono::high_resolution_clock::now();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

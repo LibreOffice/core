@@ -217,6 +217,7 @@ private:
     bool canReduceMemory() const override;
     bool reduceMemory() override;
     std::chrono::high_resolution_clock::time_point getLastUsed() const override;
+    void resetLastUsed() const;
 
 public:
     void resetChecksum() { mnChecksum = 0; }
