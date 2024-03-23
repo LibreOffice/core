@@ -563,9 +563,12 @@ Public Function RunApplication(Optional ByVal Command As Variant _
 &apos;&apos;&apos;			The method does not validate the given parameters, but only passes them to the specified command
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True if success
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		UNKNOWNFILEERROR		Command could not be identified as a valid file
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		session.RunApplication(&quot;Notepad.exe&quot;)
 &apos;&apos;&apos;		session.RunApplication(&quot;C:\myFolder\myDocument.odt&quot;)
+&apos;&apos;&apos;		session.RunApplication(&quot;kate&quot;)							&apos;	(Linux)
 &apos;&apos;&apos;		session.RunApplication(&quot;kate&quot;, &quot;/home/me/install.txt&quot;)	&apos;	(Linux)
 
 Dim bReturn As Boolean			&apos;	Returned value
@@ -585,9 +588,23 @@ Check:
 	End If
 
 Try:
-	Set oShell = SF_Utils._GetUNOService(&quot;SystemShellExecute&quot;)
-	sCommand = SF_FileSystem._ConvertToUrl(Command)
-	oShell.execute(sCommand, Parameters, com.sun.star.system.SystemShellExecuteFlags.DEFAULTS)
+	&apos;	Cfr. discussion tdf#160222
+	&apos;	1) Try Shell(), always in not synchronized mode
+	&apos;	2) If failure	- check command existence as a valid file
+	&apos;					- try com.sun.star.system.SystemShellExecute
+	sCommand = SF_FileSystem._ConvertFromUrl(Command)
+	On Local Error GoTo Step2
+	Shell(sCommand, , Parameters, False)
+  Step2:
+	If Err &gt; 0 Then
+		On Error GoTo 0		&apos;	Reset error status
+		If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+		If Not SF_FileSystem.FileExists(Command) Then GoTo CatchNotExists
+		Set oShell = SF_Utils._GetUNOService(&quot;SystemShellExecute&quot;)
+		sCommand = SF_FileSystem._ConvertToUrl(Command)
+		oShell.execute(sCommand, Parameters, com.sun.star.system.SystemShellExecuteFlags.DEFAULTS)
+	End If
+
 	bReturn = True
 
 Finally:
@@ -595,6 +612,9 @@ Finally:
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
+	GoTo Finally
+CatchNotExists:
+	SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;Command&quot;, Command)
 	GoTo Finally
 End Function	&apos;	ScriptForge.SF_Session.RunApplication
 
