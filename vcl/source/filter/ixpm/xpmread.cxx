@@ -52,8 +52,7 @@ namespace {
 enum ReadState
 {
     XPMREAD_OK,
-    XPMREAD_ERROR,
-    XPMREAD_NEED_MORE
+    XPMREAD_ERROR
 };
 
 }
@@ -112,7 +111,7 @@ private:
 public:
     explicit XPMReader(SvStream& rStream);
 
-    ReadState ReadXPM(Graphic& rGraphic);
+    ReadState ReadXPM(BitmapEx& rBitmapEx);
 };
 
 }
@@ -123,136 +122,122 @@ XPMReader::XPMReader(SvStream& rStream)
 {
 }
 
-ReadState XPMReader::ReadXPM(Graphic& rGraphic)
+ReadState XPMReader::ReadXPM(BitmapEx& rBitmapEx)
 {
-    ReadState   eReadState;
-    sal_uInt8       cDummy;
+    if (!mrStream.good())
+        return XPMREAD_ERROR;
 
-    // check if we can real ALL
-    mrStream.Seek( STREAM_SEEK_TO_END );
-    mrStream.ReadUChar( cDummy );
+    ReadState eReadState = XPMREAD_ERROR;
 
-    // if we could not read all
-    // return and wait for new data
-    if (mrStream.GetError() != ERRCODE_IO_PENDING)
+    mrStream.Seek( mnLastPos );
+    mbStatus = true;
+
+    if ( mbStatus )
     {
-        mrStream.Seek( mnLastPos );
-        mbStatus = true;
+        mpStringBuf = new sal_uInt8 [ XPMSTRINGBUF ];
+        mpTempBuf = new sal_uInt8 [ XPMTEMPBUFSIZE ];
 
+        mbStatus = ImplGetString();
         if ( mbStatus )
         {
-            mpStringBuf = new sal_uInt8 [ XPMSTRINGBUF ];
-            mpTempBuf = new sal_uInt8 [ XPMTEMPBUFSIZE ];
+            mnIdentifier = XPMVALUES;           // fetch Bitmap information
+            mnWidth = ImplGetULONG( 0 );
+            mnHeight = ImplGetULONG( 1 );
+            mnColors = ImplGetULONG( 2 );
+            mnCpp = ImplGetULONG( 3 );
+        }
+        if ( mnColors > ( SAL_MAX_UINT32 / ( 4 + mnCpp ) ) )
+            mbStatus = false;
+        if ( ( mnWidth * mnCpp ) >= XPMSTRINGBUF )
+            mbStatus = false;
+        //xpms are a minimum of one character (one byte) per pixel, so if the file isn't
+        //even that long, it's not all there
+        if (mrStream.remainingSize() + mnTempAvail < static_cast<sal_uInt64>(mnWidth) * mnHeight)
+            mbStatus = false;
+        if ( mbStatus && mnWidth && mnHeight && mnColors && mnCpp )
+        {
+            mnIdentifier = XPMCOLORS;
 
-            mbStatus = ImplGetString();
+            for (sal_uLong i = 0; i < mnColors; ++i)
+            {
+                if (!ImplGetColor())
+                {
+                    mbStatus = false;
+                    break;
+                }
+            }
+
             if ( mbStatus )
             {
-                mnIdentifier = XPMVALUES;           // fetch Bitmap information
-                mnWidth = ImplGetULONG( 0 );
-                mnHeight = ImplGetULONG( 1 );
-                mnColors = ImplGetULONG( 2 );
-                mnCpp = ImplGetULONG( 3 );
-            }
-            if ( mnColors > ( SAL_MAX_UINT32 / ( 4 + mnCpp ) ) )
-                mbStatus = false;
-            if ( ( mnWidth * mnCpp ) >= XPMSTRINGBUF )
-                mbStatus = false;
-            //xpms are a minimum of one character (one byte) per pixel, so if the file isn't
-            //even that long, it's not all there
-            if (mrStream.remainingSize() + mnTempAvail < static_cast<sal_uInt64>(mnWidth) * mnHeight)
-                mbStatus = false;
-            if ( mbStatus && mnWidth && mnHeight && mnColors && mnCpp )
-            {
-                mnIdentifier = XPMCOLORS;
+                // create a 24bit graphic when more as 256 colours present
+                auto ePixelFormat = vcl::PixelFormat::INVALID;
+                if ( mnColors > 256 )
+                    ePixelFormat = vcl::PixelFormat::N24_BPP;
+                else
+                    ePixelFormat = vcl::PixelFormat::N8_BPP;
 
-                for (sal_uLong i = 0; i < mnColors; ++i)
+                maBitmap = Bitmap(Size(mnWidth, mnHeight), ePixelFormat);
+                mpWriterAccess = maBitmap;
+
+                // mbTransparent is TRUE if at least one colour is transparent
+                if ( mbTransparent )
                 {
-                    if (!ImplGetColor())
-                    {
+                    maMaskBitmap = Bitmap(Size(mnWidth, mnHeight), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+                    mpMaskWriterAccess = maMaskBitmap;
+                    if (!mpMaskWriterAccess)
                         mbStatus = false;
-                        break;
-                    }
                 }
-
-                if ( mbStatus )
+                if (mpWriterAccess && mbStatus)
                 {
-                    // create a 24bit graphic when more as 256 colours present
-                    auto ePixelFormat = vcl::PixelFormat::INVALID;
-                    if ( mnColors > 256 )
-                        ePixelFormat = vcl::PixelFormat::N24_BPP;
-                    else
-                        ePixelFormat = vcl::PixelFormat::N8_BPP;
-
-                    maBitmap = Bitmap(Size(mnWidth, mnHeight), ePixelFormat);
-                    mpWriterAccess = maBitmap;
-
-                    // mbTransparent is TRUE if at least one colour is transparent
-                    if ( mbTransparent )
-                    {
-                        maMaskBitmap = Bitmap(Size(mnWidth, mnHeight), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-                        mpMaskWriterAccess = maMaskBitmap;
-                        if (!mpMaskWriterAccess)
-                            mbStatus = false;
-                    }
-                    if (mpWriterAccess && mbStatus)
-                    {
-                        if (mnColors <= 256)  // palette is only needed by using less than 257
-                        {                     // colors
-                            sal_uInt8 i = 0;
-                            for (auto& elem : maColMap)
-                            {
-                                mpWriterAccess->SetPaletteColor(i, Color(elem.second[1], elem.second[2], elem.second[3]));
-                                //reuse map entry, overwrite color with palette index
-                                elem.second[1] = i;
-                                i++;
-                            }
-                        }
-
-                        // now we get the bitmap data
-                        mnIdentifier = XPMPIXELS;
-                        for (tools::Long i = 0; i < mnHeight; ++i)
+                    if (mnColors <= 256)  // palette is only needed by using less than 257
+                    {                     // colors
+                        sal_uInt8 i = 0;
+                        for (auto& elem : maColMap)
                         {
-                            if ( !ImplGetScanLine( i ) )
-                            {
-                                mbStatus = false;
-                                break;
-                            }
+                            mpWriterAccess->SetPaletteColor(i, Color(elem.second[1], elem.second[2], elem.second[3]));
+                            //reuse map entry, overwrite color with palette index
+                            elem.second[1] = i;
+                            i++;
                         }
-                        mnIdentifier = XPMEXTENSIONS;
                     }
+
+                    // now we get the bitmap data
+                    mnIdentifier = XPMPIXELS;
+                    for (tools::Long i = 0; i < mnHeight; ++i)
+                    {
+                        if ( !ImplGetScanLine( i ) )
+                        {
+                            mbStatus = false;
+                            break;
+                        }
+                    }
+                    mnIdentifier = XPMEXTENSIONS;
                 }
             }
-
-            delete[] mpStringBuf;
-            delete[] mpTempBuf;
-
         }
-        if( mbStatus )
+
+        delete[] mpStringBuf;
+        delete[] mpTempBuf;
+
+    }
+    if( mbStatus )
+    {
+        mpWriterAccess.reset();
+        if (mpMaskWriterAccess)
         {
-            mpWriterAccess.reset();
-            if (mpMaskWriterAccess)
-            {
-                mpMaskWriterAccess.reset();
-                rGraphic = Graphic(BitmapEx(maBitmap, maMaskBitmap));
-            }
-            else
-            {
-                rGraphic = BitmapEx(maBitmap);
-            }
-            eReadState = XPMREAD_OK;
+            mpMaskWriterAccess.reset();
+            rBitmapEx = BitmapEx(maBitmap, maMaskBitmap);
         }
         else
         {
-            mpMaskWriterAccess.reset();
-            mpWriterAccess.reset();
-
-            eReadState = XPMREAD_ERROR;
+            rBitmapEx = BitmapEx(maBitmap);
         }
+        eReadState = XPMREAD_OK;
     }
     else
     {
-        mrStream.ResetError();
-        eReadState = XPMREAD_NEED_MORE;
+        mpMaskWriterAccess.reset();
+        mpWriterAccess.reset();
     }
     return eReadState;
 }
@@ -650,29 +635,17 @@ bool XPMReader::ImplGetString()
 }
 
 
-VCL_DLLPUBLIC bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
+VCL_DLLPUBLIC bool ImportXPM(SvStream& rStream, Graphic& rGraphic)
 {
-    std::shared_ptr<GraphicReader> pContext = rGraphic.GetReaderContext();
-    rGraphic.SetReaderContext(nullptr);
-    XPMReader* pXPMReader = dynamic_cast<XPMReader*>( pContext.get() );
-    if (!pXPMReader)
-    {
-        pContext = std::make_shared<XPMReader>( rStm );
-        pXPMReader = static_cast<XPMReader*>( pContext.get() );
-    }
+    XPMReader aXPMReader(rStream);
 
-    bool bRet = true;
+    BitmapEx aBitmapEx;
+    ReadState eReadState = aXPMReader.ReadXPM(aBitmapEx);
 
-    ReadState eReadState = pXPMReader->ReadXPM( rGraphic );
-
-    if( eReadState == XPMREAD_ERROR )
-    {
-        bRet = false;
-    }
-    else if( eReadState == XPMREAD_NEED_MORE )
-        rGraphic.SetReaderContext( pContext );
-
-    return bRet;
+    if (eReadState == XPMREAD_ERROR)
+        return false;
+    rGraphic = Graphic(aBitmapEx);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
