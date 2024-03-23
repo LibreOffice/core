@@ -639,15 +639,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 }
             }
             break;
-        case SID_OPEN_HYPERLINK:
-            {
-                const SvxFieldItem* pFieldItem
-                    = pEditView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
-                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
-                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
-                    ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame(), true );
-                return;
-            }
         case SID_EDIT_HYPERLINK:
             {
                 // Ensure the field is selected first
@@ -832,7 +823,6 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 }
                 break;
 
-            case SID_OPEN_HYPERLINK:
             case SID_EDIT_HYPERLINK:
             case SID_COPY_HYPERLINK_LOCATION:
             case SID_REMOVE_HYPERLINK:

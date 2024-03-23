@@ -5798,6 +5798,59 @@ static void lcl_SetEngineTextKeepingDefaults(const std::shared_ptr<ScFieldEditEn
     }
 }
 
+static std::vector<std::unique_ptr<SvxFieldItem>> lcl_GetEditEngineFields(std::shared_ptr<ScFieldEditEngine> pEditEngine)
+{
+    std::vector<std::unique_ptr<SvxFieldItem>> vFieldVect;
+
+    sal_Int32 nPara = pEditEngine->GetParagraphCount();
+    for (sal_Int32 nCurrPara = 0; nCurrPara < nPara; ++nCurrPara)
+    {
+        sal_Int16 nField = pEditEngine->GetFieldCount(nCurrPara);
+        for (sal_Int16 nCurrField = 0; nCurrField < nField; ++nCurrField)
+        {
+            EFieldInfo aFieldInfo = pEditEngine->GetFieldInfo(nCurrPara, nCurrField);
+            vFieldVect.push_back(std::move(aFieldInfo.pFieldItem));
+        }
+    }
+    return vFieldVect;
+}
+
+
+std::vector<UrlData> ScGridWindow::GetEditUrls(const ScAddress& rSelectedCell)
+{
+    ScDocShell* pDocSh = mrViewData.GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    SCCOL nPosX = rSelectedCell.Col();
+    SCROW nPosY = rSelectedCell.Row();
+    SCTAB nTab  = rSelectedCell.Tab();
+
+    OUString sURL;
+    ScRefCellValue aCell;
+    std::vector<UrlData> vUrls;
+    if (!lcl_GetHyperlinkCell(rDoc, nPosX, nPosY, nTab, aCell, sURL))
+        return vUrls;
+
+    if (nPosX != rSelectedCell.Col())
+        return vUrls;
+
+    const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
+
+    std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
+
+    lcl_SetEngineTextKeepingDefaults(pEngine, rDoc, aCell, sURL);
+
+    std::vector<std::unique_ptr<SvxFieldItem>> vFieldItems = lcl_GetEditEngineFields(pEngine);
+    for (auto& pFieldItem : vFieldItems)
+    {
+        UrlData aData;
+        bool bIsUrl = extractURLInfo(pFieldItem.get(), &aData.aName, &aData.aUrl, &aData.aTarget);
+        if (bIsUrl && !aData.aUrl.isEmpty())
+            vUrls.push_back(aData);
+    }
+    return vUrls;
+}
+
 bool ScGridWindow::GetEditUrl( const Point& rPos,
                                OUString* pName, OUString* pUrl, OUString* pTarget )
 {

@@ -81,6 +81,13 @@ class ScLokRTLContext;
 #define SC_PD_BREAK_H       16
 #define SC_PD_BREAK_V       32
 
+struct UrlData
+{
+    OUString aName;
+    OUString aUrl;
+    OUString aTarget;
+};
+
 // predefines
 namespace sdr::overlay { class OverlayObjectList; }
 
@@ -508,6 +515,8 @@ public:
     void updateLOKInputHelp(const OUString& title, const OUString& content) const;
 
     void initiatePageBreaks();
+
+    std::vector<UrlData> GetEditUrls(const ScAddress& rSelectedCell);
 
 protected:
     void ImpCreateOverlayObjects();

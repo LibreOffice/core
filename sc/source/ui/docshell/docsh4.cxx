@@ -401,6 +401,54 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 rReq.Done();
             }
             break;
+        case SID_OPEN_HYPERLINK:
+            {
+                ScViewData* pViewData = GetViewData();
+                if ( !pViewData )
+                {
+                    rReq.Ignore();
+                    break;
+                }
+
+                if (SC_MOD()->IsEditMode())
+                {
+                    if (EditView* pEditView = pViewData->GetEditView(pViewData->GetActivePart()))
+                    {
+                        const SvxFieldItem* pFieldItem = pEditView->GetFieldAtSelection(/*bAlsoCheckBeforeCursor=*/true);
+                        const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+                        if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+                        {
+                            ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame(), true);
+                            rReq.Done();
+                            break;
+                        }
+                    }
+                    rReq.Ignore();
+                    break;
+                }
+
+                ScGridWindow* pWin = pViewData->GetActiveWin();
+                if ( !pWin )
+                {
+                    rReq.Ignore();
+                    break;
+                }
+
+                ScAddress aCell {pViewData->GetCurPos()};
+                std::vector<UrlData> vUrls = pWin->GetEditUrls(aCell);
+                if (vUrls.empty())
+                {
+                    rReq.Ignore();
+                    break;
+                }
+
+                for (UrlData& data : vUrls)
+                {
+                    ScGlobal::OpenURL(data.aUrl, data.aTarget, true);
+                }
+                rReq.Done();
+            }
+            break;
         case FID_RECALC:
             DoRecalc( rReq.IsAPI() );
             rReq.Done();
