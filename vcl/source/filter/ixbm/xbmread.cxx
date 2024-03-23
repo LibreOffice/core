@@ -28,7 +28,8 @@
 
 #include "xbmread.hxx"
 
-namespace {
+namespace
+{
 
 enum XBMFormat
 {
@@ -39,8 +40,7 @@ enum XBMFormat
 enum ReadState
 {
     XBMREAD_OK,
-    XBMREAD_ERROR,
-    XBMREAD_NEED_MORE
+    XBMREAD_ERROR
 };
 
 class XBMReader : public GraphicReader
@@ -51,7 +51,7 @@ class XBMReader : public GraphicReader
     std::array<short, 256> mpHexTable = { 0 };
     BitmapColor maWhite;
     BitmapColor maBlack;
-    tools::Long mnLastPos = 0;
+    sal_uInt64 mnLastPosition = 0;
     tools::Long nWidth = 0;
     tools::Long nHeight = 0;
     bool bStatus = true;
@@ -65,14 +65,14 @@ public:
 
     explicit XBMReader(SvStream& rStream);
 
-    ReadState ReadXBM(Graphic& rGraphic);
+    ReadState ReadXBM(BitmapEx& rBitmapEx);
 };
 
 }
 
 XBMReader::XBMReader(SvStream& rStream)
     : mrStream(rStream)
-    , mnLastPos(rStream.Tell())
+    , mnLastPosition(rStream.Tell())
 {
     maUpperName = "SVIXBM";
     InitTable();
@@ -262,128 +262,100 @@ void XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
     }
 }
 
-ReadState XBMReader::ReadXBM( Graphic& rGraphic )
+ReadState XBMReader::ReadXBM(BitmapEx& rBitmapEx)
 {
-    ReadState   eReadState;
-    sal_uInt8       cDummy;
+    if (!mrStream.good())
+        return XBMREAD_ERROR;
 
-    // check if we can read ALL
-    mrStream.Seek( STREAM_SEEK_TO_END );
-    mrStream.ReadUChar( cDummy );
+    ReadState eReadState = XBMREAD_ERROR;
 
-    // if we cannot read all
-    // we return and wait for new data
-    if (mrStream.GetError() != ERRCODE_IO_PENDING )
+    mrStream.Seek(mnLastPosition);
+    bStatus = false;
+    OString aLine = FindTokenLine(&mrStream, "#define", "_width");
+
+    if ( bStatus )
     {
-        mrStream.Seek(mnLastPos);
-        bStatus = false;
-        OString aLine = FindTokenLine(&mrStream, "#define", "_width");
+        int nValue;
+        if ( ( nValue = ParseDefine( aLine.getStr() ) ) > 0 )
+        {
+            nWidth = nValue;
+            aLine = FindTokenLine(&mrStream, "#define", "_height");
+
+            // if height was not received, we search again
+            // from start of the file
+            if ( !bStatus )
+            {
+                mrStream.Seek(mnLastPosition);
+                aLine = FindTokenLine(&mrStream, "#define", "_height");
+            }
+        }
+        else
+            bStatus = false;
 
         if ( bStatus )
         {
-            int nValue;
             if ( ( nValue = ParseDefine( aLine.getStr() ) ) > 0 )
             {
-                nWidth = nValue;
-                aLine = FindTokenLine(&mrStream, "#define", "_height");
+                nHeight = nValue;
+                aLine = FindTokenLine(&mrStream, "static", "_bits");
 
-                // if height was not received, we search again
-                // from start of the file
-                if ( !bStatus )
+                if ( bStatus )
                 {
-                    mrStream.Seek(mnLastPos);
-                    aLine = FindTokenLine(&mrStream, "#define", "_height");
-                }
-            }
-            else
-                bStatus = false;
+                    XBMFormat eFormat = XBM10;
 
-            if ( bStatus )
-            {
-                if ( ( nValue = ParseDefine( aLine.getStr() ) ) > 0 )
-                {
-                    nHeight = nValue;
-                    aLine = FindTokenLine(&mrStream, "static", "_bits");
+                    if (aLine.indexOf("short") != -1)
+                        eFormat = XBM10;
+                    else if (aLine.indexOf("char") != -1)
+                        eFormat = XBM11;
+                    else
+                        bStatus = false;
 
-                    if ( bStatus )
+                    //xbms are a minimum of one character per 8 pixels, so if the file isn't
+                    //even that long, it's not all there
+                    if (mrStream.remainingSize() < (static_cast<sal_uInt64>(nWidth) * nHeight) / 8)
+                        bStatus = false;
+
+                    if ( bStatus && nWidth && nHeight )
                     {
-                        XBMFormat eFormat = XBM10;
+                        maBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+                        mpWriteAccess = maBitmap;
 
-                        if (aLine.indexOf("short") != -1)
-                            eFormat = XBM10;
-                        else if (aLine.indexOf("char") != -1)
-                            eFormat = XBM11;
+                        if (mpWriteAccess)
+                        {
+                            maWhite = mpWriteAccess->GetBestMatchingColor(COL_WHITE);
+                            maBlack = mpWriteAccess->GetBestMatchingColor(COL_BLACK);
+                            ParseData(&mrStream, aLine, eFormat);
+                        }
                         else
                             bStatus = false;
-
-                        //xbms are a minimum of one character per 8 pixels, so if the file isn't
-                        //even that long, it's not all there
-                        if (mrStream.remainingSize() < (static_cast<sal_uInt64>(nWidth) * nHeight) / 8)
-                            bStatus = false;
-
-                        if ( bStatus && nWidth && nHeight )
-                        {
-                            maBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-                            mpWriteAccess = maBitmap;
-
-                            if (mpWriteAccess)
-                            {
-                                maWhite = mpWriteAccess->GetBestMatchingColor(COL_WHITE);
-                                maBlack = mpWriteAccess->GetBestMatchingColor(COL_BLACK);
-                                ParseData(&mrStream, aLine, eFormat);
-                            }
-                            else
-                                bStatus = false;
-                        }
                     }
                 }
             }
         }
-
-        if (bStatus && mpWriteAccess)
-        {
-            Bitmap aBlackBmp(Size(mpWriteAccess->Width(), mpWriteAccess->Height()), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-
-            mpWriteAccess.reset();
-            aBlackBmp.Erase( COL_BLACK );
-            rGraphic = BitmapEx(aBlackBmp, maBitmap);
-            eReadState = XBMREAD_OK;
-        }
-        else
-            eReadState = XBMREAD_ERROR;
     }
-    else
+
+    if (bStatus && mpWriteAccess)
     {
-        mrStream.ResetError();
-        eReadState = XBMREAD_NEED_MORE;
+        Bitmap aBlackBmp(Size(mpWriteAccess->Width(), mpWriteAccess->Height()), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+
+        mpWriteAccess.reset();
+        aBlackBmp.Erase( COL_BLACK );
+        rBitmapEx = BitmapEx(aBlackBmp, maBitmap);
+        eReadState = XBMREAD_OK;
     }
 
     return eReadState;
 }
 
-VCL_DLLPUBLIC bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
+VCL_DLLPUBLIC bool ImportXBM(SvStream& rStmeam, Graphic& rGraphic)
 {
-    std::shared_ptr<GraphicReader> pContext = rGraphic.GetReaderContext();
-    rGraphic.SetReaderContext(nullptr);
-    XBMReader* pXBMReader = dynamic_cast<XBMReader*>( pContext.get() );
-    if (!pXBMReader)
-    {
-        pContext = std::make_shared<XBMReader>( rStm );
-        pXBMReader = static_cast<XBMReader*>( pContext.get() );
-    }
-
-    bool bRet = true;
-
-    ReadState eReadState = pXBMReader->ReadXBM( rGraphic );
-
-    if( eReadState == XBMREAD_ERROR )
-    {
-        bRet = false;
-    }
-    else if( eReadState == XBMREAD_NEED_MORE )
-        rGraphic.SetReaderContext( pContext );
-
-    return bRet;
+    XBMReader aXBMReader(rStmeam);
+    BitmapEx aBitmapEx;
+    ReadState eReadState = aXBMReader.ReadXBM(aBitmapEx);
+    if (eReadState == XBMREAD_ERROR)
+        return false;
+    rGraphic = Graphic(aBitmapEx);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
