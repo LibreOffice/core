@@ -69,7 +69,6 @@ namespace basegfx::utils
             bool isCleared() const;
 
             bool operator==(const B2DClipState&) const;
-            bool operator!=(const B2DClipState&) const;
 
             void unionRange(const B2DRange& );
             void unionPolyPolygon(const B2DPolyPolygon& );

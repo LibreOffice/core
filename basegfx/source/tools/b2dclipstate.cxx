@@ -415,11 +415,6 @@ namespace basegfx::utils
         return ((*mpImpl) == (*rRHS.mpImpl));
     }
 
-    bool B2DClipState::operator!=(const B2DClipState& rRHS) const
-    {
-        return !(*this == rRHS);
-    }
-
     void B2DClipState::unionRange(const B2DRange& rRange)
     {
         mpImpl->unionRange(rRange);

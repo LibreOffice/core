@@ -241,11 +241,6 @@ public:
         return ((*mpPolyPolygon) == (*rPolyPolygon.mpPolyPolygon));
     }
 
-    bool B2DPolyPolygon::operator!=(const B2DPolyPolygon& rPolyPolygon) const
-    {
-        return !((*this) == rPolyPolygon);
-    }
-
     sal_uInt32 B2DPolyPolygon::count() const
     {
         return mpPolyPolygon->count();

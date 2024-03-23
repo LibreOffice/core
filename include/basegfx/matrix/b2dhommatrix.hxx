@@ -117,7 +117,6 @@ namespace basegfx
         void shearY(double fSy);
 
         bool operator==(const B2DHomMatrix& rMat) const;
-        bool operator!=(const B2DHomMatrix& rMat) const;
 
         // matrix multiplication from the left to the local
         B2DHomMatrix& operator*=(const B2DHomMatrix& rMat);

@@ -109,11 +109,6 @@ namespace basegfx
         return ((*mpImpl) == (*rRange.mpImpl));
     }
 
-    bool B2DPolyRange::operator!=(const B2DPolyRange& rRange) const
-    {
-        return !(*this == rRange);
-    }
-
     sal_uInt32 B2DPolyRange::count() const
     {
         return mpImpl->count();

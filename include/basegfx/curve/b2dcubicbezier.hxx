@@ -48,7 +48,6 @@ namespace basegfx
 
         // compare operators
         bool operator==(const B2DCubicBezier& rBezier) const;
-        bool operator!=(const B2DCubicBezier& rBezier) const;
         bool equal(const B2DCubicBezier& rBezier) const;
 
         // test if vectors are used

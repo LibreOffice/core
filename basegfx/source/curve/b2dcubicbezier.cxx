@@ -351,16 +351,6 @@ namespace basegfx
         );
     }
 
-    bool B2DCubicBezier::operator!=(const B2DCubicBezier& rBezier) const
-    {
-        return (
-            maStartPoint != rBezier.maStartPoint
-            || maEndPoint != rBezier.maEndPoint
-            || maControlPointA != rBezier.maControlPointA
-            || maControlPointB != rBezier.maControlPointB
-        );
-    }
-
     bool B2DCubicBezier::equal(const B2DCubicBezier& rBezier) const
     {
         return (

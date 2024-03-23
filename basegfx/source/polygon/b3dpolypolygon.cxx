@@ -223,11 +223,6 @@ namespace basegfx
         return ((*mpPolyPolygon) == (*rPolyPolygon.mpPolyPolygon));
     }
 
-    bool B3DPolyPolygon::operator!=(const B3DPolyPolygon& rPolyPolygon) const
-    {
-        return !(*this == rPolyPolygon);
-    }
-
     sal_uInt32 B3DPolyPolygon::count() const
     {
         return mpPolyPolygon->count();

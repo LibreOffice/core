@@ -54,7 +54,6 @@ namespace basegfx
 
         // compare operators
         bool operator==(const B2DPolyPolygon& rPolyPolygon) const;
-        bool operator!=(const B2DPolyPolygon& rPolyPolygon) const;
 
         // polygon interface
         sal_uInt32 count() const;

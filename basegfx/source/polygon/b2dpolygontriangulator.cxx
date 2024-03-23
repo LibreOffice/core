@@ -92,11 +92,6 @@ namespace basegfx
                 return (maStart.equal(rComp.maStart) && maEnd.equal(rComp.maEnd));
             }
 
-            bool operator!=(const EdgeEntry& rComp) const
-            {
-                return !(*this == rComp);
-            }
-
             const B2DPoint& getStart() const { return maStart; }
             const B2DPoint& getEnd() const { return maEnd; }
 

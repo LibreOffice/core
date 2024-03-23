@@ -61,7 +61,6 @@ namespace basegfx
         B2DPolyRange& operator=( const B2DPolyRange& );
 
         bool operator==(const B2DPolyRange&) const;
-        bool operator!=(const B2DPolyRange&) const;
 
         /// Number of included ranges
         sal_uInt32 count() const;

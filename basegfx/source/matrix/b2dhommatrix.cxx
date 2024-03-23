@@ -182,11 +182,6 @@ namespace basegfx
         return true;
     }
 
-    bool B2DHomMatrix::operator!=(const B2DHomMatrix& rMat) const
-    {
-        return !(*this == rMat);
-    }
-
     void B2DHomMatrix::rotate(double fRadiant)
     {
         if(fTools::equalZero(fRadiant))
