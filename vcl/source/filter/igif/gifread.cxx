@@ -25,8 +25,6 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <graphic/GraphicReader.hxx>
 
-#define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
-
 namespace {
 
 enum GIFAction
@@ -263,13 +261,13 @@ bool GIFReader::ReadGlobalHeader()
     bool    bRet = false;
 
     auto nRead = rIStm.ReadBytes(pBuf, 6);
-    if (nRead == 6 && NO_PENDING(rIStm))
+    if (nRead == 6 && (rIStm.GetError() != ERRCODE_IO_PENDING))
     {
         pBuf[ 6 ] = 0;
         if( !strcmp( pBuf, "GIF87a" ) || !strcmp( pBuf, "GIF89a" ) )
         {
             nRead = rIStm.ReadBytes(pBuf, 7);
-            if (nRead == 7 && NO_PENDING(rIStm))
+            if (nRead == 7 && (rIStm.GetError() != ERRCODE_IO_PENDING))
             {
                 sal_uInt8   nAspect;
                 sal_uInt8   nRF;
@@ -289,7 +287,7 @@ bool GIFReader::ReadGlobalHeader()
                 else
                     nBackgroundColor = 0;
 
-                if( NO_PENDING( rIStm ) )
+                if (rIStm.GetError() != ERRCODE_IO_PENDING)
                     bRet = true;
             }
         }
@@ -309,7 +307,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nLen ]);
     std::size_t nRead = rIStm.ReadBytes(pBuf.get(), nLen);
     nCount = nRead/3UL;
-    if( !(NO_PENDING( rIStm )) )
+    if (rIStm.GetError() == ERRCODE_IO_PENDING)
         return;
 
     sal_uInt8* pTmp = pBuf.get();
@@ -347,7 +345,7 @@ bool GIFReader::ReadExtension()
     // Extension-Label
     sal_uInt8 cFunction(0);
     rIStm.ReadUChar( cFunction );
-    if( NO_PENDING( rIStm ) )
+    if (rIStm.GetError() != ERRCODE_IO_PENDING)
     {
         bool    bOverreadDataBlocks = false;
         sal_uInt8 cSize(0);
@@ -365,7 +363,7 @@ bool GIFReader::ReadExtension()
                 sal_uInt8 cByte(0);
                 rIStm.ReadUChar(cByte);
 
-                if ( NO_PENDING( rIStm ) )
+                if (rIStm.GetError() != ERRCODE_IO_PENDING)
                 {
                     nGCDisposalMethod = ( cFlags >> 2) & 7;
                     bGCTransparent = ( cFlags & 1 );
@@ -378,7 +376,7 @@ bool GIFReader::ReadExtension()
             // Application extension
             case 0xff :
             {
-                if ( NO_PENDING( rIStm ) )
+                if (rIStm.GetError() != ERRCODE_IO_PENDING)
                 {
                     // by default overread this extension
                     bOverreadDataBlocks = true;
@@ -406,7 +404,7 @@ bool GIFReader::ReadExtension()
                                 rIStm.ReadUChar( cByte );
 
                                 bStatus = ( cByte == 0 );
-                                bRet = NO_PENDING( rIStm );
+                                bRet = rIStm.GetError() != ERRCODE_IO_PENDING;
                                 bOverreadDataBlocks = false;
 
                                 // Netscape interprets the loop count
@@ -429,7 +427,7 @@ bool GIFReader::ReadExtension()
                                 rIStm.ReadUInt32( nLogWidth100 ).ReadUInt32( nLogHeight100 );
                                 rIStm.ReadUChar( cByte );
                                 bStatus = ( cByte == 0 );
-                                bRet = NO_PENDING( rIStm );
+                                bRet = rIStm.GetError() != ERRCODE_IO_PENDING;
                                 bOverreadDataBlocks = false;
                             }
                             else
@@ -463,7 +461,7 @@ bool GIFReader::ReadExtension()
 
                 bRet = false;
                 std::size_t nRead = rIStm.ReadBytes(&cSize, 1);
-                if (NO_PENDING(rIStm) && nRead == 1)
+                if (rIStm.GetError() != ERRCODE_IO_PENDING && nRead == 1)
                 {
                     bRet = true;
                 }
@@ -482,7 +480,7 @@ bool GIFReader::ReadLocalHeader()
     bool    bRet = false;
 
     std::size_t nRead = rIStm.ReadBytes(pBuf, 9);
-    if (NO_PENDING(rIStm) && nRead == 9)
+    if (rIStm.GetError() != ERRCODE_IO_PENDING && nRead == 9)
     {
         SvMemoryStream  aMemStm;
         BitmapPalette*  pPal;
@@ -511,7 +509,7 @@ bool GIFReader::ReadLocalHeader()
         // if we could read everything, we will create the local image;
         // if the global colour table is valid for the image, we will
         // consider the BackGroundColorIndex.
-        if( NO_PENDING( rIStm ) )
+        if (rIStm.GetError() != ERRCODE_IO_PENDING)
         {
             CreateBitmaps( nImageWidth, nImageHeight, pPal, bGlobalPalette && ( pPal == &aGPalette ) );
             bRet = true;
@@ -530,7 +528,7 @@ sal_uLong GIFReader::ReadNextBlock()
 
     if ( rIStm.eof() )
         nRet = 4;
-    else if ( NO_PENDING( rIStm ) )
+    else if (rIStm.GetError() != ERRCODE_IO_PENDING)
     {
         if ( cBlockSize == 0 )
             nRet = 2;
@@ -538,7 +536,7 @@ sal_uLong GIFReader::ReadNextBlock()
         {
             rIStm.ReadBytes( aSrcBuf.data(), cBlockSize );
 
-            if( NO_PENDING( rIStm ) )
+            if (rIStm.GetError() != ERRCODE_IO_PENDING)
             {
                 if( bOverreadBlock )
                     nRet = 3;
@@ -769,7 +767,7 @@ bool GIFReader::ProcessGIF()
 
             if( rIStm.eof() )
                 eActAction = END_READING;
-            else if( NO_PENDING( rIStm ) )
+            else if (rIStm.GetError() != ERRCODE_IO_PENDING)
             {
                 bRead = true;
 
@@ -829,7 +827,7 @@ bool GIFReader::ProcessGIF()
                 eActAction = ABORT_READING;
             else if( cDataSize > 12 )
                 bStatus = false;
-            else if( NO_PENDING( rIStm ) )
+            else if (rIStm.GetError() != ERRCODE_IO_PENDING)
             {
                 bRead = true;
                 pDecomp = std::make_unique<GIFLZWDecompressor>( cDataSize );
