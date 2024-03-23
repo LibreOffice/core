@@ -535,8 +535,20 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
 // Or else this would create a wrong value at ScAddress (chance for an infinite loop)!
     bool bBadCol = false;
     bool bAgain;
-    ScRange aRange( pE->nCol, pE->nRow, 0,
-        pE->nCol + pE->nColOverlap - 1, pE->nRow + pE->nRowOverlap - 1, 0 );
+
+    SCCOL nEndCol(0);
+    SCROW nEndRow(0);
+    bool bFail = o3tl::checked_add<SCCOL>(pE->nCol, pE->nColOverlap - 1, nEndCol) ||
+                 o3tl::checked_add<SCROW>(pE->nRow, pE->nRowOverlap - 1, nEndRow);
+
+    if (bFail)
+    {
+        SAL_WARN("sc", "invalid range: " << pE->nCol << " " << pE->nColOverlap <<
+                                     " " << pE->nRow << " " << pE->nRowOverlap);
+        return;
+    }
+
+    ScRange aRange(pE->nCol, pE->nRow, 0, nEndCol, nEndRow, 0);
     do
     {
         bAgain = false;
