@@ -3888,9 +3888,8 @@ void ScInterpreter::Init( ScFormulaCell* pCell, const ScAddress& rPos, ScTokenAr
     aCode.ReInit(rTokArray);
     aPos = rPos;
     pArr = &rTokArray;
-    xResult = nullptr;
     pJumpMatrix = nullptr;
-    maTokenMatrixMap.clear();
+    DropTokenCaches();
     pMyFormulaCell = pCell;
     pCur = nullptr;
     nGlobalError = FormulaError::NONE;
@@ -3905,6 +3904,12 @@ void ScInterpreter::Init( ScFormulaCell* pCell, const ScAddress& rPos, ScTokenAr
     mnStringNoValueError = FormulaError::NoValue;
     mnSubTotalFlags = SubtotalFlags::NONE;
     cPar = 0;
+}
+
+void ScInterpreter::DropTokenCaches()
+{
+    xResult = nullptr;
+    maTokenMatrixMap.clear();
 }
 
 ScCalcConfig& ScInterpreter::GetOrCreateGlobalConfig()

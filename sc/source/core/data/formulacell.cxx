@@ -5011,6 +5011,13 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
             ScMutationDisable aGuard(rDocument, ScMutationGuardFlags::CORE);
 
+            // Here we turn off ref-counting for the contents of pCode on the basis
+            // that pCode is not modified by interpreting and when interpreting is
+            // complete all token refcounts will be back to their initial ref count
+            FormulaToken** pArray = pCode->GetArray();
+            for (sal_uInt16 i = 0, n = pCode->GetLen(); i < n; ++i)
+                pArray[i]->SetRefCntPolicy(RefCntPolicy::None);
+
             // Start nThreadCount new threads
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
             ScThreadedInterpreterContextGetterGuard aContextGetterGuard(nThreadCount, rDocument, pNonThreadedFormatter);
@@ -5031,6 +5038,13 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             // Do not join the threads here. They will get joined in ScDocument destructor
             // if they don't get joined from elsewhere before (via ThreadPool::waitUntilDone).
             rThreadPool.waitUntilDone(aTag, false);
+
+            // Drop any caches that reference Tokens before restoring ref counting policy
+            for (int i = 0; i < nThreadCount; ++i)
+                aInterpreters[i]->DropTokenCaches();
+
+            for (sal_uInt16 i = 0, n = pCode->GetLen(); i < n; ++i)
+                pArray[i]->SetRefCntPolicy(RefCntPolicy::ThreadSafe);
 
             rDocument.SetThreadedGroupCalcInProgress(false);
 

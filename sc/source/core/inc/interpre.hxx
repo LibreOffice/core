@@ -1092,6 +1092,9 @@ public:
     // Resets the interpreter object, allowing reuse of interpreter object for each cell
     // in the group.
     void Init( ScFormulaCell* pCell, const ScAddress& rPos, ScTokenArray& rTokArray );
+    // Used only for threaded formula-groups.
+    // Drops any caches that contain Tokens
+    void DropTokenCaches();
 
     formula::StackVar Interpret();
 
