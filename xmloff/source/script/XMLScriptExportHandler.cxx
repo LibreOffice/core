@@ -53,7 +53,7 @@ void XMLScriptExportHandler::Export(
 
     for(const auto& rValue : rValues)
     {
-        if (u"Script"_ustr == rValue.Name)
+        if (u"Script" == rValue.Name)
         {
             OUString sTmp;
             rValue.Value >>= sTmp;

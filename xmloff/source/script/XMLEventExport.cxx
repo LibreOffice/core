@@ -185,7 +185,7 @@ void XMLEventExport::ExportEvent(
 {
     // search for EventType value and then delegate to EventHandler
     const PropertyValue* pValue = std::find_if(rEventValues.begin(), rEventValues.end(),
-        [](const PropertyValue& rValue) { return u"EventType"_ustr == rValue.Name; });
+        [](const PropertyValue& rValue) { return u"EventType" == rValue.Name; });
 
     if (pValue == rEventValues.end())
         return;
