@@ -247,7 +247,7 @@ public:
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString, const NativeNumberWrapper* pNatNum ) const;
 
     // bStarFlag: Take *n format as ESC n
-    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor, const NativeNumberWrapper* pNatNum, bool bStarFlag = false) const;
+    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor, const NativeNumberWrapper* pNatNum, const SvNFLanguageData& rCurrentLang, bool bStarFlag = false) const;
     void GetOutputString( std::u16string_view sString, OUString& OutString, const Color** ppColor, bool bStarFlag = false) const;
 
     // True if type text
@@ -471,13 +471,13 @@ public:
     /** Switches to the first non-"gregorian" calendar, but only if the current
         calendar is "gregorian"; original calendar name and date/time returned,
         but only if calendar switched and rOrgCalendar was empty. */
-    void SwitchToOtherCalendar( OUString& rOrgCalendar, double& fOrgDateTime ) const;
+    void SwitchToOtherCalendar( OUString& rOrgCalendar, double& fOrgDateTime, CalendarWrapper& rCal ) const;
 
     /** Switches to the "gregorian" calendar, but only if the current calendar
         is non-"gregorian" and rOrgCalendar is not empty. Thus a preceding
         ImpSwitchToOtherCalendar() call should have been placed prior to
         calling this method. */
-    void SwitchToGregorianCalendar( std::u16string_view rOrgCalendar, double fOrgDateTime ) const;
+    void SwitchToGregorianCalendar( std::u16string_view rOrgCalendar, double fOrgDateTime, CalendarWrapper& rCal ) const;
 
 #ifdef THE_FUTURE
     /** Switches to the first specified calendar, if any, in subformat nNumFor
@@ -523,8 +523,6 @@ private:
 
     SVL_DLLPRIVATE sal_uInt16 ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) const;
 
-    SVL_DLLPRIVATE bool ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
-
 #ifdef THE_FUTURE
     SVL_DLLPRIVATE bool ImpSwitchToSpecifiedCalendar( OUString& rOrgCalendar,
                                                       double& fOrgDateTime,
@@ -556,7 +554,6 @@ private:
 
     const CharClass& rChrCls() const;
     const LocaleDataWrapper& rLoc() const;
-    CalendarWrapper& GetCal() const;
     const SvNFLanguageData& GetCurrentLanguageData() const;
 
     // divide in substrings and color conditions
@@ -699,16 +696,19 @@ private:
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
                                           const NativeNumberWrapper* pNatNum,
+                                          const SvNFLanguageData& rCurrentLang,
                                           OUStringBuffer& OutString ) const;
     SVL_DLLPRIVATE bool ImpGetTimeOutput( double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
                                           const NativeNumberWrapper* pNatNum,
+                                          const SvNFLanguageData& rCurrentLang,
                                           OUStringBuffer& OutString ) const;
     SVL_DLLPRIVATE bool ImpGetDateTimeOutput( double fNumber,
                                               sal_uInt16 nIx,
                                               bool bStarFlag,
                                               const NativeNumberWrapper* pNatNum,
+                                              const SvNFLanguageData& rCurrentLang,
                                               OUStringBuffer& OutString ) const;
 
     // Switches to the "gregorian" calendar if the current calendar is
@@ -716,7 +716,9 @@ private:
     // know a "before" era (like zh_TW ROC or ja_JP Gengou). If switched and
     // rOrgCalendar was "gregorian" the string is emptied. If rOrgCalendar was
     // empty the previous calendar name and date/time are returned.
-    SVL_DLLPRIVATE bool ImpFallBackToGregorianCalendar(OUString& rOrgCalendar, double& fOrgDateTime) const;
+    SVL_DLLPRIVATE bool ImpFallBackToGregorianCalendar(OUString& rOrgCalendar,
+                                                       double& fOrgDateTime,
+                                                       CalendarWrapper& rCal) const;
 
     // Append a "G" short era string of the given calendar. In the case of a
     // Gengou calendar this is a one character abbreviation, for other

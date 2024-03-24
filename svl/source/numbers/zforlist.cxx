@@ -958,15 +958,15 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
 }
 
 
-static OUString lcl_buildBooleanStringFormat( SvNumberformat* pEntry, const NativeNumberWrapper* pNatNum )
+static OUString lcl_buildBooleanStringFormat( SvNumberformat* pEntry, const NativeNumberWrapper* pNatNum, const SvNFLanguageData& rCurrentLang )
 {
     // Build Boolean number format, which needs non-zero and zero subformat
     // codes with TRUE and FALSE strings.
     const Color* pColor = nullptr;
     OUString aFormatStr, aTemp;
-    pEntry->GetOutputString( 1.0, aTemp, &pColor, pNatNum );
+    pEntry->GetOutputString( 1.0, aTemp, &pColor, pNatNum, rCurrentLang );
     aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
-    pEntry->GetOutputString( 0.0, aTemp, &pColor, pNatNum );
+    pEntry->GetOutputString( 0.0, aTemp, &pColor, pNatNum, rCurrentLang );
     aFormatStr += aTemp + "\"";
     return aFormatStr;
 }
@@ -987,7 +987,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
             // locales. You can't have both. We could force to English for all
             // locales like below, but Excel would display English strings then
             // even for the system locale matching this locale. YMMV.
-            aFormatStr = lcl_buildBooleanStringFormat( const_cast< SvNumberformat* >(pEntry), GetNatNum() );
+            aFormatStr = lcl_buildBooleanStringFormat( const_cast< SvNumberformat* >(pEntry), GetNatNum(), m_aCurrentLanguage );
         }
         else
         {
@@ -1023,7 +1023,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                     // >"VRAI";"VRAI";"FAUX"< recognized as real boolean and
                     // properly converted. Then written as
                     // >"TRUE";"TRUE";"FALSE"<
-                    aFormatStr = lcl_buildBooleanStringFormat( const_cast< SvNumberformat* >(pEntry), GetNatNum() );
+                    aFormatStr = lcl_buildBooleanStringFormat( const_cast< SvNumberformat* >(pEntry), GetNatNum(), m_aCurrentLanguage );
                 }
                 else
                 {
@@ -2006,7 +2006,7 @@ void SvNFEngine::GetInputLineString(SvNFLanguageData& rCurrentLanguage,
             rCurrentLanguage.ChangeStandardPrec(SvNumberFormatter::INPUTSTRING_PRECISION);
             bPrecChanged = true;
         }
-        pFormat->GetOutputString(fOutNumber, sOutString, &pColor, pNatNum);
+        pFormat->GetOutputString(fOutNumber, sOutString, &pColor, pNatNum, rCurrentLanguage);
 
         // The #FMT error string must not be used for input as it would lead to
         // data loss. This can happen for at least date(+time). Fall back to a
@@ -2020,7 +2020,7 @@ void SvNFEngine::GetInputLineString(SvNFLanguageData& rCurrentLanguage,
             {
                 rCurrentLanguage.ChangeStandardPrec(SvNumberFormatter::INPUTSTRING_PRECISION);
                 bPrecChanged = true;
-                pFormat->GetOutputString(fOutNumber, sOutString, &pColor, pNatNum);
+                pFormat->GetOutputString(fOutNumber, sOutString, &pColor, pNatNum, rCurrentLanguage);
             }
         }
         assert(sOutString != ImpSvNumberformatScan::sErrStr);
@@ -2096,7 +2096,7 @@ void SvNFEngine::GetOutputString(SvNFLanguageData& rCurrentLanguage,
     if (!pFormat)
         pFormat = rFormatData.GetFormatEntry(ZF_STANDARD);
     rCurrentLanguage.ChangeIntl(pFormat->GetLanguage());
-    pFormat->GetOutputString(fOutNumber, sOutString, ppColor, pNatNum, bUseStarFormat);
+    pFormat->GetOutputString(fOutNumber, sOutString, ppColor, pNatNum, rCurrentLanguage, bUseStarFormat);
 }
 
 void SvNumberFormatter::GetOutputString(const double& fOutNumber,
@@ -2145,7 +2145,7 @@ bool SvNFEngine::GetPreviewString(SvNFLanguageData& rCurrentLanguage,
         }
         else
         {
-            aEntry.GetOutputString(fPreviewNumber, sOutString, ppColor, pNatNum, bUseStarFormat);
+            aEntry.GetOutputString(fPreviewNumber, sOutString, ppColor, pNatNum, rCurrentLanguage, bUseStarFormat);
         }
         return true;
     }
@@ -2264,7 +2264,7 @@ bool SvNFEngine::GetPreviewStringGuess(SvNFLanguageData& rCurrentLanguage,
     if (nCheckPos == 0)                                 // String ok
     {
         rFuncs.mGetCLOffset(rCurrentLanguage, pNatNum, eLnge); // create new standard formats if necessary
-        pEntry->GetOutputString( fPreviewNumber, sOutString, ppColor, pNatNum );
+        pEntry->GetOutputString( fPreviewNumber, sOutString, ppColor, pNatNum, rCurrentLanguage );
         return true;
     }
     return false;

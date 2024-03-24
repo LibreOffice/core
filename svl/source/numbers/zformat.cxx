@@ -2512,6 +2512,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                                      OUString& OutString,
                                      const Color** ppColor,
                                      const NativeNumberWrapper* pNatNum,
+                                     const SvNFLanguageData& rCurrentLang,
                                      bool bStarFlag) const
 {
     bool bRes = false;
@@ -2600,15 +2601,15 @@ bool SvNumberformat::GetOutputString(double fNumber,
             bHadStandard = true;
             break;
         case SvNumFormatType::DATE:
-            bRes |= ImpGetDateOutput(fNumber, 0, bStarFlag, pNatNum, sBuff);
+            bRes |= ImpGetDateOutput(fNumber, 0, bStarFlag, pNatNum, rCurrentLang, sBuff);
             bHadStandard = true;
             break;
         case SvNumFormatType::TIME:
-            bRes |= ImpGetTimeOutput(fNumber, 0, bStarFlag, pNatNum, sBuff);
+            bRes |= ImpGetTimeOutput(fNumber, 0, bStarFlag, pNatNum, rCurrentLang, sBuff);
             bHadStandard = true;
             break;
         case SvNumFormatType::DATETIME:
-            bRes |= ImpGetDateTimeOutput(fNumber, 0, bStarFlag, pNatNum, sBuff);
+            bRes |= ImpGetDateTimeOutput(fNumber, 0, bStarFlag, pNatNum, rCurrentLang, sBuff);
             bHadStandard = true;
             break;
         default: break;
@@ -2670,13 +2671,13 @@ bool SvNumberformat::GetOutputString(double fNumber,
             }
             break;
         case SvNumFormatType::DATE:
-            bRes |= ImpGetDateOutput(fNumber, nIx, bStarFlag, pNatNum, sBuff);
+            bRes |= ImpGetDateOutput(fNumber, nIx, bStarFlag, pNatNum, rCurrentLang, sBuff);
             break;
         case SvNumFormatType::TIME:
-            bRes |= ImpGetTimeOutput(fNumber, nIx, bStarFlag, pNatNum, sBuff);
+            bRes |= ImpGetTimeOutput(fNumber, nIx, bStarFlag, pNatNum, rCurrentLang, sBuff);
                 break;
         case SvNumFormatType::DATETIME:
-            bRes |= ImpGetDateTimeOutput(fNumber, nIx, bStarFlag, pNatNum, sBuff);
+            bRes |= ImpGetDateTimeOutput(fNumber, nIx, bStarFlag, pNatNum, rCurrentLang, sBuff);
             break;
         case SvNumFormatType::NUMBER:
         case SvNumFormatType::PERCENT:
@@ -3129,6 +3130,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
                                       sal_uInt16 nIx,
                                       bool bStarFlag,
                                       const NativeNumberWrapper* pNatNum,
+                                      const SvNFLanguageData& rCurrentLang,
                                       OUStringBuffer& sBuff) const
 {
     using namespace ::com::sun::star::i18n;
@@ -3273,24 +3275,27 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
             }
             break;
         case NF_KEY_AMPM:               // AM/PM
+        {
+            CalendarWrapper& rCal = *rCurrentLang.GetCalendar();
             if ( !bCalendarSet )
             {
-                double fDiff = DateTime::Sub( DateTime(rScan.GetNullDate()), GetCal().getEpochStart());
+                double fDiff = DateTime::Sub( DateTime(rScan.GetNullDate()), rCal.getEpochStart());
                 fDiff += fNumberOrig;
-                GetCal().setLocalDateTime( fDiff );
+                rCal.setLocalDateTime( fDiff );
                 bCalendarSet = true;
             }
             if (cAmPm == 'a')
             {
-                sBuff.append(GetCal().getDisplayName(
+                sBuff.append(rCal.getDisplayName(
                                  CalendarDisplayIndex::AM_PM, AmPmValue::AM, 0 ));
             }
             else
             {
-                sBuff.append(GetCal().getDisplayName(
+                sBuff.append(rCal.getDisplayName(
                                  CalendarDisplayIndex::AM_PM, AmPmValue::PM, 0 ));
             }
             break;
+        }
         case NF_KEY_AP:                 // A/P
             if (cAmPm == 'a')
             {
@@ -3449,10 +3454,11 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
     return CalendarDisplayCode::LONG_MONTH_NAME;
 }
 
+namespace {
 
-bool SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
+bool ImpIsOtherCalendar( const ImpSvNumFor& rNumFor, const CalendarWrapper& rCal )
 {
-    if ( GetCal().getUniqueID() != GREGORIAN )
+    if ( rCal.getUniqueID() != GREGORIAN )
     {
         return false;
     }
@@ -3480,10 +3486,12 @@ bool SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
     return false;
 }
 
+}
+
 void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
-                                            double& fOrgDateTime ) const
+                                            double& fOrgDateTime,
+                                            CalendarWrapper& rCal ) const
 {
-    CalendarWrapper& rCal = GetCal();
     if ( rCal.getUniqueID() != GREGORIAN )
         return;
 
@@ -3509,9 +3517,9 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
 }
 
 void SvNumberformat::SwitchToGregorianCalendar( std::u16string_view rOrgCalendar,
-                                                double fOrgDateTime ) const
+                                                double fOrgDateTime,
+                                                CalendarWrapper& rCal ) const
 {
-    CalendarWrapper& rCal = GetCal();
     if ( rOrgCalendar.size() && rCal.getUniqueID() != GREGORIAN )
     {
         rCal.loadCalendar( GREGORIAN, rLoc().getLanguageTag().getLocale() );
@@ -3519,10 +3527,11 @@ void SvNumberformat::SwitchToGregorianCalendar( std::u16string_view rOrgCalendar
     }
 }
 
-bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, double& fOrgDateTime ) const
+bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar,
+                                                     double& fOrgDateTime,
+                                                     CalendarWrapper& rCal ) const
 {
     using namespace ::com::sun::star::i18n;
-    CalendarWrapper& rCal = GetCal();
     if ( rCal.getUniqueID() != GREGORIAN )
     {
         sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
@@ -3750,12 +3759,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                       sal_uInt16 nIx,
                                       bool bStarFlag,
                                       const NativeNumberWrapper* pNatNum,
+                                      const SvNFLanguageData& rCurrentLang,
                                       OUStringBuffer& sBuff) const
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
 
-    CalendarWrapper& rCal = GetCal();
+    CalendarWrapper& rCal = *rCurrentLang.GetCalendar();
     if (!lcl_getValidDate( rScan.GetNullDate(), rCal.getEpochStart(), fNumber))
     {
         sBuff = ImpSvNumberformatScan::sErrStr;
@@ -3766,12 +3776,12 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     OUString aOrgCalendar; // empty => not changed yet
 
     double fOrgDateTime(0.0);
-    bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
+    bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx], *rCurrentLang.GetCalendar() );
     if ( bOtherCalendar )
     {
-        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
     }
-    if ( ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
+    if ( ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() ) )
     {
         bOtherCalendar = false;
     }
@@ -3810,7 +3820,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLanguageTag().getLocale() );
             rCal.setDateTime( fOrgDateTime );
-            ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+            ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             break;
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
@@ -3881,7 +3891,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
         case NF_KEY_DDD:                // DDD
             if ( bOtherCalendar )
             {
-                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             aStr = rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
             // NatNum12: support at least capitalize, upper, lower, title
@@ -3892,13 +3902,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             sBuff.append(aStr);
             if ( bOtherCalendar )
             {
-                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             break;
         case NF_KEY_DDDD:               // DDDD
             if ( bOtherCalendar )
             {
-                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             aStr = rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
             // NatNum12: support variants of preposition, suffixation or article
@@ -3909,13 +3919,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             sBuff.append(aStr);
             if ( bOtherCalendar )
             {
-                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             break;
         case NF_KEY_YY:                 // YY
             if ( bOtherCalendar )
             {
-                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             // Prepend a minus sign if Gregorian BCE and era is not displayed.
             if (lcl_isSignedYear( rCal, NumFor[nIx] ))
@@ -3925,13 +3935,13 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum ));
             if ( bOtherCalendar )
             {
-                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             break;
         case NF_KEY_YYYY:               // YYYY
             if ( bOtherCalendar )
             {
-                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             // Prepend a minus sign if Gregorian BCE and era is not displayed.
             if (lcl_isSignedYear( rCal, NumFor[nIx] ))
@@ -3959,7 +3969,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             sBuff.append(aStr);
             if ( bOtherCalendar )
             {
-                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             break;
         case NF_KEY_EC:                 // E
@@ -4022,12 +4032,13 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
                                           const NativeNumberWrapper* pNatNum,
+                                          const SvNFLanguageData& rCurrentLang,
                                           OUStringBuffer& sBuff) const
 {
     using namespace ::com::sun::star::i18n;
     bool bRes = false;
 
-    CalendarWrapper& rCal = GetCal();
+    CalendarWrapper& rCal = *rCurrentLang.GetCalendar();
     if (!lcl_getValidDate( rScan.GetNullDate(), rCal.getEpochStart(), fNumber))
     {
         sBuff = ImpSvNumberformatScan::sErrStr;
@@ -4063,12 +4074,12 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     int nUseMonthCase = 0; // Not decided yet
     OUString aOrgCalendar; // empty => not changed yet
     double fOrgDateTime(0.0);
-    bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
+    bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx], *rCurrentLang.GetCalendar() );
     if ( bOtherCalendar )
     {
-        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
     }
-    if ( ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
+    if ( ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() ) )
     {
         bOtherCalendar = false;
     }
@@ -4156,7 +4167,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLanguageTag().getLocale() );
             rCal.setDateTime( fOrgDateTime );
-            ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+            ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             break;
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
@@ -4264,29 +4275,29 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         case NF_KEY_DDD:                // DDD
             if ( bOtherCalendar )
             {
-                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_DAY_NAME, nNatNum ));
             if ( bOtherCalendar )
             {
-                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             break;
         case NF_KEY_DDDD:               // DDDD
             if ( bOtherCalendar )
             {
-                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::LONG_DAY_NAME, nNatNum ));
             if ( bOtherCalendar )
             {
-                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             break;
         case NF_KEY_YY:                 // YY
             if ( bOtherCalendar )
             {
-                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             // Prepend a minus sign if Gregorian BCE and era is not displayed.
             if (lcl_isSignedYear( rCal, NumFor[nIx] ))
@@ -4296,13 +4307,13 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum ));
             if ( bOtherCalendar )
             {
-                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             break;
         case NF_KEY_YYYY:               // YYYY
             if ( bOtherCalendar )
             {
-                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             // Prepend a minus sign if Gregorian BCE and era is not displayed.
             if (lcl_isSignedYear( rCal, NumFor[nIx] ))
@@ -4328,7 +4339,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             if ( bOtherCalendar )
             {
-                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime, *rCurrentLang.GetCalendar() );
             }
             break;
         case NF_KEY_EC:                 // E
@@ -6114,11 +6125,6 @@ const CharClass& SvNumberformat::rChrCls() const
 const LocaleDataWrapper& SvNumberformat::rLoc() const
 {
     return rScan.GetLoc();
-}
-
-CalendarWrapper& SvNumberformat::GetCal() const
-{
-    return rScan.GetCal();
 }
 
 const SvNFLanguageData& SvNumberformat::GetCurrentLanguageData() const
