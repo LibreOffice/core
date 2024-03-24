@@ -1139,7 +1139,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         aRows.push_back(aRow);
     }
 
-    g_list_foreach (pSources, reinterpret_cast<GFunc>(g_object_unref), nullptr);
+    g_list_foreach (pSources, object_unref, nullptr);
     g_list_free (pSources);
 
     pResult->setRows(std::move(aRows));

@@ -402,7 +402,7 @@ public:
                 break;
             }
         }
-        g_list_foreach (pSources, reinterpret_cast<GFunc>(g_object_unref), nullptr);
+        g_list_foreach (pSources, object_unref, nullptr);
         g_list_free (pSources);
         if (!id)
             return nullptr;

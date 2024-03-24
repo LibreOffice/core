@@ -157,4 +157,6 @@ bool isSourceBackend(ESource *pSource, const char *backendname);
 
 G_END_DECLS
 
+inline void object_unref(gpointer data, gpointer) { g_object_unref(data); }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
