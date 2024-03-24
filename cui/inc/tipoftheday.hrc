@@ -101,7 +101,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Hold down %MOD1 and turn the mouse wheel to change the zoom factor."), "", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME has great extensions to increase your productivity—check them out."), "https://extensions.libreoffice.org", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to count words for just one particular paragraph style? Use Edit ▸ Find and Replace, click Paragraph Styles, select the style in Find, and click Find All. Read the result in the status bar."), "", "", swriter},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Generate fully customized PDF documents with the exact format, image compression, comments, access rights, password, etc., via File ▸ Export as PDF."), "", "", soffice},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Generate fully customized PDF documents with the exact format, image compression, comments, access rights, password, etc., you specify via File ▸ Export as PDF."), "", "", soffice},
 #if ENABLE_LIBRELOGO
      { NC_("RID_CUI_TIPOFTHEDAY", "Writer includes LibreLogo: simple Logo-like programming environment with turtle vector graphics, DTP and graphic design."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/librelogo/LibreLogo.html", "", swriter}, //local help missing
 #endif
