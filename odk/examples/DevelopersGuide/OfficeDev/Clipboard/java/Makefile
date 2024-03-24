@@ -34,7 +34,7 @@
 
 # Builds the OfficeDevClipboard example of the Developers Guide.
 
-PRJ=../../../..
+PRJ=../../../../..
 SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
