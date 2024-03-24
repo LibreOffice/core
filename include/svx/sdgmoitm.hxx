@@ -37,11 +37,11 @@ class SVXCORE_DLLPUBLIC SdrGrafModeItem final : public SdrGrafModeItem_Base
 public:
                             SdrGrafModeItem( GraphicDrawMode eMode = GraphicDrawMode::Standard ) : SdrGrafModeItem_Base( eMode ) {}
 
-    virtual SdrGrafModeItem* Clone( SfxItemPool* pPool = nullptr ) const override;
-    virtual sal_uInt16      GetValueCount() const override;
+    SAL_DLLPRIVATE virtual SdrGrafModeItem* Clone( SfxItemPool* pPool = nullptr ) const override;
+    SAL_DLLPRIVATE virtual sal_uInt16      GetValueCount() const override;
 
-    static OUString         GetValueTextByPos( sal_uInt16 nPos );
-    virtual bool GetPresentation( SfxItemPresentation ePres,
+    SAL_DLLPRIVATE static OUString         GetValueTextByPos( sal_uInt16 nPos );
+    SAL_DLLPRIVATE virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString& rText, const IntlWrapper& ) const override;

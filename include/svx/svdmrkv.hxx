@@ -134,13 +134,13 @@ protected:
     bool mbNegativeX : 1;
 
     // Helper to get a possible GridOffset from SdrObject
-    bool getPossibleGridOffsetForSdrObject(
+    SAL_DLLPRIVATE bool getPossibleGridOffsetForSdrObject(
         basegfx::B2DVector& rOffset,
         const SdrObject* pObj,
         const SdrPageView* pPV) const;
 
     // Helper to get a possible GridOffset from Position
-    bool getPossibleGridOffsetForPosition(
+    SAL_DLLPRIVATE bool getPossibleGridOffsetForPosition(
         basegfx::B2DVector& rOffset,
         const basegfx::B2DPoint& rPoint,
         const SdrPageView* pPV) const;
@@ -149,59 +149,59 @@ private:
     SVX_DLLPRIVATE void ImpSetPointsRects() const;
     void UndirtyMrkPnt() const;
 
-    void SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell);
-    OString CreateInnerTextRectString() const;
-    bool dumpGluePointsToJSON(boost::property_tree::ptree& rTree);
+    SAL_DLLPRIVATE void SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell);
+    SAL_DLLPRIVATE OString CreateInnerTextRectString() const;
+    SAL_DLLPRIVATE bool dumpGluePointsToJSON(boost::property_tree::ptree& rTree);
 
 protected:
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
-    virtual void ModelHasChanged() override; // Is called by the PaintView
-    virtual void SetMarkHandles(SfxViewShell* pOtherShell); // maHdlList - fill (List of handles)
-    void modelHasChangedLOKit();
-    void         SetMarkRects();                                             // Rects at the PageViews
+    SAL_DLLPRIVATE virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+    SAL_DLLPRIVATE virtual void ModelHasChanged() override; // Is called by the PaintView
+    SAL_DLLPRIVATE virtual void SetMarkHandles(SfxViewShell* pOtherShell); // maHdlList - fill (List of handles)
+    SAL_DLLPRIVATE void modelHasChangedLOKit();
+    SAL_DLLPRIVATE void         SetMarkRects();                                             // Rects at the PageViews
     void         CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
-    void         AddDragModeHdl(SdrDragMode eMode);
-    virtual bool MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin) override;
+    SAL_DLLPRIVATE void         AddDragModeHdl(SdrDragMode eMode);
+    SAL_DLLPRIVATE virtual bool MouseMove(const MouseEvent& rMEvt, OutputDevice* pWin) override;
     virtual bool RequestHelp(const HelpEvent& rHEvt) override;
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
 
-    void ForceRefToMarked();
+    SAL_DLLPRIVATE void ForceRefToMarked();
     void ForceUndirtyMrkPnt() const                                       { if (mbMrkPntDirty) UndirtyMrkPnt(); }
 
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay) const;
-    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj) const;
-    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
-    bool ImpIsFrameHandles() const;
-    OUString ImpGetDescriptionString(TranslateId pStrCacheID, ImpGetDescriptionOptions nOpt=ImpGetDescriptionOptions::NONE) const;
+    SAL_DLLPRIVATE SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj) const;
+    SAL_DLLPRIVATE SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
+    SAL_DLLPRIVATE bool ImpIsFrameHandles() const;
+    SAL_DLLPRIVATE OUString ImpGetDescriptionString(TranslateId pStrCacheID, ImpGetDescriptionOptions nOpt=ImpGetDescriptionOptions::NONE) const;
 
     // Generates a string including degrees symbol, from an angel specification in 1/100deg
-    bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
+    SAL_DLLPRIVATE bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
     virtual bool MarkPoints(const tools::Rectangle* pRect, bool bUnmark);
     bool MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark);
 
-    void SetMoveOutside(bool bOn);
+    SAL_DLLPRIVATE void SetMoveOutside(bool bOn);
     bool MarkableObjectsExceed( int n ) const;
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrMarkView(
+    SAL_DLLPRIVATE SdrMarkView(
         SdrModel& rSdrModel,
         OutputDevice* pOut);
 
-    virtual ~SdrMarkView() override;
+    SAL_DLLPRIVATE virtual ~SdrMarkView() override;
 
 public:
-    virtual bool IsAction() const override;
-    virtual void MovAction(const Point& rPnt) override;
-    virtual void EndAction() override;
-    virtual void BckAction() override;
-    virtual void BrkAction() override;
-    virtual void TakeActionRect(tools::Rectangle& rRect) const override;
+    SAL_DLLPRIVATE virtual bool IsAction() const override;
+    SAL_DLLPRIVATE virtual void MovAction(const Point& rPnt) override;
+    SAL_DLLPRIVATE virtual void EndAction() override;
+    SAL_DLLPRIVATE virtual void BckAction() override;
+    SAL_DLLPRIVATE virtual void BrkAction() override;
+    SAL_DLLPRIVATE virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
     virtual void ClearPageView() override;
-    virtual void HideSdrPage() override;
+    SAL_DLLPRIVATE virtual void HideSdrPage() override;
     bool IsObjMarkable(SdrObject const * pObj, SdrPageView const * pPV) const;
 
     // Returns sal_True if objects, points or gluepoints are selected by drawing a frame
@@ -210,9 +210,9 @@ public:
 
     // Marking objects by drawing of a selection frame
     void BegMarkObj(const Point& rPnt, bool bUnmark = false);
-    void MovMarkObj(const Point& rPnt);
+    SAL_DLLPRIVATE void MovMarkObj(const Point& rPnt);
     bool EndMarkObj();
-    void BrkMarkObj();
+    SAL_DLLPRIVATE void BrkMarkObj();
     bool IsMarkObj() const { return (nullptr != mpMarkObjOverlay); }
 
     // DragModes: SDRDRAG_CREATE,SdrDragMode::Move,SdrDragMode::Resize,SdrDragMode::Rotate,SdrDragMode::Mirror,SdrDragMode::Shear,SdrDragMode::Crook
@@ -247,7 +247,7 @@ public:
     /// whether all x coordinates in use are negated or not
     void SetNegativeX(bool bOn) { mbNegativeX = bOn; }
     bool IsNegativeX() const { return mbNegativeX; }
-    void SetInnerTextAreaForLOKit() const;
+    SAL_DLLPRIVATE void SetInnerTextAreaForLOKit() const;
 
 // migrate selections
 
@@ -293,12 +293,12 @@ public:
     // SdrSearchOptions::DEEP SdrSearchOptions::ALSOONMASTER SdrSearchOptions::TESTMARKABLE SdrSearchOptions::TESTTEXTEDIT
     // SdrSearchOptions::MARKED
     // SdrSearchOptions::WHOLEPAGE
-    SdrObject* PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect=nullptr) const;
+    SAL_DLLPRIVATE SdrObject* PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect=nullptr) const;
     SdrObject* PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
     bool MarkObj(const Point& rPnt, short nTol=-2, bool bToggle=false, bool bDeep=false);
 
     // Pick: Supported options for nOptions are SdrSearchOptions::PASS2BOUND
-    bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions) const;
+    SAL_DLLPRIVATE bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions) const;
 
     // Selects the most upper of the marked objects (O1) and scans from there
     // towards bottom direction, selecting the first non-marked object (O2).
@@ -353,7 +353,7 @@ public:
     // and from there it searches the first non-marked point(P2).
     // In case of success the marking of
     // P1 is deleted, a mark is set at P2.
-    void MarkNextPoint();
+    SAL_DLLPRIVATE void MarkNextPoint();
 
     // Search for the number of the suitable handle. In case of empty search result,
     // SAL_MAX_SIZE is returned.
@@ -366,15 +366,15 @@ public:
     bool BegMarkPoints(const Point& rPnt, bool bUnmark = false);
     void MovMarkPoints(const Point& rPnt);
     bool EndMarkPoints();
-    void BrkMarkPoints();
+    SAL_DLLPRIVATE void BrkMarkPoints();
     bool IsMarkPoints() const { return (nullptr != mpMarkPointsOverlay); }
 
     // Select that additional handles are displayed permanently.
     void SetPlusHandlesAlwaysVisible(bool bOn);
     bool IsPlusHandlesAlwaysVisible() const { return mbPlusHdlAlways; }
 
-    bool HasMarkableGluePoints() const;
-    bool HasMarkedGluePoints() const;
+    SAL_DLLPRIVATE bool HasMarkableGluePoints() const;
+    SAL_DLLPRIVATE bool HasMarkedGluePoints() const;
 
     // A gluepoint is clearly identified by the SdrObject
     // (to which it belongs) as well as by a sal_uInt16 nId (as each SdrObject may consist of
@@ -403,16 +403,16 @@ public:
     // and from there it searches the first non-marked point(P2).
     // In case of success the marking of
     // P1 is deleted, a mark is set at P2.
-    void MarkNextGluePoint();
+    SAL_DLLPRIVATE void MarkNextGluePoint();
 
     // Draw a selection frame for gluepoint marking.
     // This routine will just be started in case that HasMarkablePoints() returns sal_True.
     // The GlueEditMode sal_True is disregarded.
     // bool BegMarkGluePoints(const Point& rPnt, OutputDevice* pOut);
     bool BegMarkGluePoints(const Point& rPnt, bool bUnmark = false);
-    void MovMarkGluePoints(const Point& rPnt);
-    void EndMarkGluePoints();
-    void BrkMarkGluePoints();
+    SAL_DLLPRIVATE void MovMarkGluePoints(const Point& rPnt);
+    SAL_DLLPRIVATE void EndMarkGluePoints();
+    SAL_DLLPRIVATE void BrkMarkGluePoints();
     bool IsMarkGluePoints() const { return (nullptr != mpMarkGluePointsOverlay); }
 
     // bRestraintPaint=sal_False causes the handles not to be drawn immediately.
@@ -423,15 +423,15 @@ public:
 
     const tools::Rectangle& GetMarkedObjRect() const; // SnapRects of Objects, without line width
     tools::Rectangle GetMarkedObjBoundRect() const;   // incl. line width, overlapping rags, ...
-    const tools::Rectangle& GetMarkedPointsRect() const;     // Enclosing rectangle of all marked points
-    const tools::Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked gluepoints
+    SAL_DLLPRIVATE const tools::Rectangle& GetMarkedPointsRect() const;     // Enclosing rectangle of all marked points
+    SAL_DLLPRIVATE const tools::Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked gluepoints
     const tools::Rectangle& GetAllMarkedRect() const { return GetMarkedObjRect(); }
     tools::Rectangle GetAllMarkedBoundRect() const { return GetMarkedObjBoundRect(); }
 
     // Will be always called, if the list of marked objects might be changed.
     // If you override this method, be sure that you call the
     // methods of the base class!
-    virtual void MarkListHasChanged();
+    SAL_DLLPRIVATE virtual void MarkListHasChanged();
 
     // Entering (Editing) of a maybe marked object group. If there are several
     // object groups marked, the most upper group is selected. After that
@@ -443,11 +443,11 @@ public:
 
     // Rotation center point and start point of the axis of reflection, respectively
     const Point& GetRef1() const { return maRef1; }
-    void SetRef1(const Point& rPt);
+    SAL_DLLPRIVATE void SetRef1(const Point& rPt);
 
     // End point of the axis of reflection
     const Point& GetRef2() const { return maRef2; }
-    void SetRef2(const Point& rPt);
+    SAL_DLLPRIVATE void SetRef2(const Point& rPt);
     /// Get access to the view shell owning this draw view, if any.
     virtual SfxViewShell* GetSfxViewShell() const;
 };

@@ -112,21 +112,21 @@ friend class SdrPage;
     // we return 0.
     // If you want to play safe, check GetLayerCount()<SDRLAYER_MAXCOUNT
     // first, else all are given away already.
-    SdrLayerID         GetUniqueLayerID() const;
-    void               Broadcast() const;
+    SAL_DLLPRIVATE SdrLayerID         GetUniqueLayerID() const;
+    SAL_DLLPRIVATE void               Broadcast() const;
 public:
-    explicit SdrLayerAdmin(SdrLayerAdmin* pNewParent=nullptr);
+    SAL_DLLPRIVATE explicit SdrLayerAdmin(SdrLayerAdmin* pNewParent=nullptr);
     SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin);
     ~SdrLayerAdmin();
-    SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);
+    SAL_DLLPRIVATE SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);
 
-    void               SetModel(SdrModel* pNewModel);
+    SAL_DLLPRIVATE void               SetModel(SdrModel* pNewModel);
 
-    void               InsertLayer(std::unique_ptr<SdrLayer> pLayer, sal_uInt16 nPos);
-    std::unique_ptr<SdrLayer> RemoveLayer(sal_uInt16 nPos);
+    SAL_DLLPRIVATE void               InsertLayer(std::unique_ptr<SdrLayer> pLayer, sal_uInt16 nPos);
+    SAL_DLLPRIVATE std::unique_ptr<SdrLayer> RemoveLayer(sal_uInt16 nPos);
 
     // Delete all layers
-    void               ClearLayers();
+    SAL_DLLPRIVATE void               ClearLayers();
 
     // New layer is created and inserted
     SdrLayer*          NewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
@@ -137,7 +137,7 @@ public:
     SdrLayer*          GetLayer(sal_uInt16 i)                                        { return maLayers[i].get(); }
     const SdrLayer*    GetLayer(sal_uInt16 i) const                                  { return maLayers[i].get(); }
 
-    sal_uInt16         GetLayerPos(const SdrLayer* pLayer) const;
+    SAL_DLLPRIVATE sal_uInt16         GetLayerPos(const SdrLayer* pLayer) const;
 
     SdrLayer*          GetLayer(const OUString& rName);
     const SdrLayer*    GetLayer(const OUString& rName) const;

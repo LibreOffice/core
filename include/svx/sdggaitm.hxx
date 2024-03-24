@@ -35,10 +35,10 @@ public:
 
                             SdrGrafGamma100Item( sal_uInt32 nGamma100 = 100 ) : SfxUInt32Item( SDRATTR_GRAFGAMMA, nGamma100 ) {}
 
-    virtual SdrGrafGamma100Item* Clone( SfxItemPool* pPool = nullptr ) const override;
+    SAL_DLLPRIVATE virtual SdrGrafGamma100Item* Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SAL_DLLPRIVATE virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SAL_DLLPRIVATE virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 #endif // INCLUDED_SVX_SDGGAITM_HXX

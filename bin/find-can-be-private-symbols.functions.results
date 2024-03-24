@@ -3011,171 +3011,22 @@ SdrEscherImport::SeekToShape(SvStream&, SvxMSDffClientData*, unsigned int) const
 SdrEscherImport::~SdrEscherImport()
 SdrFormatter::GetStr(long) const
 SdrFormatter::GetUnitStr(MapUnit)
-SdrGluePoint::EscAngleToDir(o3tl::strong_int<int, FractionTag<100> >)
-SdrGluePoint::EscDirToAngle(SdrEscapeDirection)
-SdrGluePoint::GetAlignAngle() const
-SdrGluePoint::Invalidate(vcl::Window&, SdrObject const*) const
-SdrGluePoint::IsHit(Point const&, OutputDevice const&, SdrObject const*) const
-SdrGluePoint::Mirror(Point const&, Point const&, o3tl::strong_int<int, FractionTag<100> >, SdrObject const*)
-SdrGluePoint::Rotate(Point const&, o3tl::strong_int<int, FractionTag<100> >, double, double, SdrObject const*)
-SdrGluePoint::SetAbsolutePos(Point const&, SdrObject const&)
-SdrGluePoint::SetAlignAngle(o3tl::strong_int<int, FractionTag<100> >)
-SdrGluePoint::SetReallyAbsolute(bool, SdrObject const&)
-SdrGluePoint::Shear(Point const&, double, bool, SdrObject const*)
-SdrGluePointList::HitTest(Point const&, OutputDevice const&, SdrObject const*) const
-SdrGluePointList::Invalidate(vcl::Window&, SdrObject const*) const
-SdrGluePointList::Mirror(Point const&, Point const&, SdrObject const*)
-SdrGluePointList::Mirror(Point const&, Point const&, o3tl::strong_int<int, FractionTag<100> >, SdrObject const*)
-SdrGluePointList::Rotate(Point const&, o3tl::strong_int<int, FractionTag<100> >, double, double, SdrObject const*)
-SdrGluePointList::SetReallyAbsolute(bool, SdrObject const&)
-SdrGluePointList::Shear(Point const&, double, bool, SdrObject const*)
 SdrGluePointList::operator=(SdrGluePointList const&)
 SdrGrafBlueItem::Clone(SfxItemPool*) const
 SdrGrafContrastItem::Clone(SfxItemPool*) const
 SdrGrafCropItem::Clone(SfxItemPool*) const
-SdrGrafGamma100Item::Clone(SfxItemPool*) const
-SdrGrafGamma100Item::PutValue(com::sun::star::uno::Any const&, unsigned char)
-SdrGrafGamma100Item::QueryValue(com::sun::star::uno::Any&, unsigned char) const
 SdrGrafGreenItem::Clone(SfxItemPool*) const
 SdrGrafLuminanceItem::Clone(SfxItemPool*) const
-SdrGrafModeItem::Clone(SfxItemPool*) const
-SdrGrafModeItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SdrGrafModeItem::GetValueCount() const
-SdrGrafModeItem::GetValueTextByPos(unsigned short)
-SdrGrafObj::AddToHdlList(SdrHdlList&) const
-SdrGrafObj::CreateObjectSpecificProperties()
-SdrGrafObj::CreateObjectSpecificViewContact()
-SdrGrafObj::DoConvertToPolyObj(bool, bool) const
-SdrGrafObj::ForceSwapIn() const
-SdrGrafObj::GetGrafPrefMapMode() const
-SdrGrafObj::GetGrafPrefSize() const
-SdrGrafObj::GetGrafStreamURL() const
-SdrGrafObj::GetHdlCount() const
-SdrGrafObj::GetMetaFile(GraphicType&) const
-SdrGrafObj::GetObjIdentifier() const
-SdrGrafObj::GetReplacementGraphicObject() const
-SdrGrafObj::ImpDeregisterLink()
-SdrGrafObj::ImpRegisterLink()
-SdrGrafObj::ImpSetAttrToGrafInfo()
-SdrGrafObj::ImpSetLinkedGraphic(Graphic const&)
-SdrGrafObj::NbcMirror(Point const&, Point const&)
-SdrGrafObj::NbcSetGraphic(Graphic const&)
-SdrGrafObj::NewGeoData() const
-SdrGrafObj::Notify(SfxBroadcaster&, SfxHint const&)
-SdrGrafObj::RestoreGeoData(SdrObjGeoData const&)
-SdrGrafObj::SaveGeoData(SdrObjGeoData&) const
-SdrGrafObj::SdrGrafObj(SdrModel&, SdrGrafObj const&)
-SdrGrafObj::SetGrafAnimationAllowed(bool)
-SdrGrafObj::SetGrafStreamURL(rtl::OUString const&)
-SdrGrafObj::SetMirrored(bool)
-SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec&) const
-SdrGrafObj::TakeObjNamePlural() const
-SdrGrafObj::TakeObjNameSingul() const
-SdrGrafObj::addCropHandles(SdrHdlList&) const
-SdrGrafObj::getFullDragClone() const
-SdrGrafObj::getInputStream() const
-SdrGrafObj::handlePageChange(SdrPage*, SdrPage*)
-SdrGrafObj::onGraphicChanged()
-SdrGrafObj::~SdrGrafObj()
 SdrGrafRedItem::Clone(SfxItemPool*) const
 SdrGrafTransparenceItem::Clone(SfxItemPool*) const
-SdrHdl::CreateOverlayObject(basegfx::B2DPoint const&, BitmapColorIndex, BitmapMarkerKind, Point)
-SdrHdl::GetNextBigger(BitmapMarkerKind)
-SdrHdl::IsHdlHit(Point const&) const
-SdrHdl::SdrHdl()
-SdrHdl::Set1PixMore(bool)
-SdrHdl::SetHdlList(SdrHdlList*)
-SdrHdl::SetMoveOutside(bool)
-SdrHdl::SetRotationAngle(o3tl::strong_int<int, FractionTag<100> >)
-SdrHdl::createGluePointBitmap()
-SdrHdlColor::SdrHdlColor(Point const&, Color, Size const&, bool)
-SdrHdlColor::~SdrHdlColor()
-SdrHdlList::IsHdlListHit(Point const&) const
-SdrHdlList::RemoveHdl(unsigned long)
-SdrHdlList::SetDistortShear(bool)
-SdrHdlList::SetHdlSize(unsigned short)
-SdrHdlList::SetMoveOutside(bool)
-SdrHdlList::SetRotateShear(bool)
-SdrHdlList::Sort()
 SdrHelpLineList::HitTest(Point const&, unsigned short, OutputDevice const&) const
 SdrHint::SdrHint(SdrHintKind, SdrObject const&, SdrPage const*)
 SdrIFrameLink::DataChanged(rtl::OUString const&, com::sun::star::uno::Any const&)
 SdrIFrameLink::SdrIFrameLink(SdrOle2Obj*)
-SdrItemPool::Clone() const
-SdrItemPool::GetItemName(unsigned short)
-SdrItemPool::GetPresentation(SfxPoolItem const&, MapUnit, rtl::OUString&, IntlWrapper const&) const
-SdrItemPool::SdrItemPool(SdrItemPool const&)
-SdrItemPool::~SdrItemPool()
 SdrLayer::SdrLayer(o3tl::strong_int<short, SdrLayerIDTag>, rtl::OUString)
 SdrLayer::operator==(SdrLayer const&) const
-SdrLayerAdmin::Broadcast() const
-SdrLayerAdmin::ClearLayers()
-SdrLayerAdmin::GetLayerPos(SdrLayer const*) const
-SdrLayerAdmin::GetUniqueLayerID() const
-SdrLayerAdmin::InsertLayer(std::unique_ptr<SdrLayer, std::default_delete<SdrLayer> >, unsigned short)
-SdrLayerAdmin::RemoveLayer(unsigned short)
-SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin*)
-SdrLayerAdmin::SetModel(SdrModel*)
-SdrLayerAdmin::operator=(SdrLayerAdmin const&)
 SdrLayerIDSet::IsEmpty() const
 SdrLayerIDSet::operator&=(SdrLayerIDSet const&)
-SdrMark::ObjectInDestruction(SdrObject const&)
-SdrMark::SdrMark(SdrMark const&)
-SdrMark::SetMarkedSdrObj(SdrObject*)
-SdrMark::operator=(SdrMark const&)
-SdrMark::setTime()
-SdrMarkList::DeletePageView(SdrPageView const&)
-SdrMarkList::InsertPageView(SdrPageView const&)
-SdrMarkList::Merge(SdrMarkList const&, bool)
-SdrMarkList::ReplaceMark(SdrMark const&, unsigned long)
-SdrMarkList::TakeSnapRect(SdrPageView const*, tools::Rectangle&) const
-SdrMarkView::AddDragModeHdl(SdrDragMode)
-SdrMarkView::BckAction()
-SdrMarkView::BrkAction()
-SdrMarkView::BrkMarkGluePoints()
-SdrMarkView::BrkMarkObj()
-SdrMarkView::BrkMarkPoints()
-SdrMarkView::CheckSingleSdrObjectHit(Point const&, unsigned short, SdrObjList const*, SdrPageView*, SdrSearchOptions, SdrLayerIDSet const*, SdrObject*&) const
-SdrMarkView::CheckSingleSdrObjectHit(Point const&, unsigned short, SdrObjList const*, SdrPageView*, SdrSearchOptions, SdrLayerIDSet const*, SdrObject*&, SdrMarkList const*) const
-SdrMarkView::CreateInnerTextRectString() const
-SdrMarkView::EndAction()
-SdrMarkView::EndMarkGluePoints()
-SdrMarkView::ForceRefToMarked()
-SdrMarkView::GetMarkedGluePointsRect() const
-SdrMarkView::GetMarkedPointsRect() const
-SdrMarkView::HasMarkableGluePoints() const
-SdrMarkView::HasMarkedGluePoints() const
-SdrMarkView::HideSdrPage()
-SdrMarkView::ImpGetDescriptionString(TranslateId, ImpGetDescriptionOptions) const
-SdrMarkView::ImpIsFrameHandles() const
-SdrMarkView::ImpMarkPoint(SdrHdl*, SdrMark*, bool)
-SdrMarkView::IsAction() const
-SdrMarkView::MarkListHasChanged()
-SdrMarkView::MarkNextGluePoint()
-SdrMarkView::MarkNextPoint()
-SdrMarkView::MarkObj(tools::Rectangle const&, bool)
-SdrMarkView::ModelHasChanged()
-SdrMarkView::MouseMove(MouseEvent const&, OutputDevice*)
-SdrMarkView::MovAction(Point const&)
-SdrMarkView::MovMarkGluePoints(Point const&)
-SdrMarkView::MovMarkObj(Point const&)
-SdrMarkView::Notify(SfxBroadcaster&, SfxHint const&)
-SdrMarkView::PickMarkedObj(Point const&, SdrObject*&, SdrPageView*&, SdrSearchOptions) const
-SdrMarkView::PickObj(Point const&, short, SdrPageView*&, SdrSearchOptions, SdrObject**, bool*) const
-SdrMarkView::SdrMarkView(SdrModel&, OutputDevice*)
-SdrMarkView::SetInnerTextAreaForLOKit() const
-SdrMarkView::SetMarkHandles(SfxViewShell*)
-SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const&, SfxViewShell const*)
-SdrMarkView::SetMarkRects()
-SdrMarkView::SetMoveOutside(bool)
-SdrMarkView::SetRef1(Point const&)
-SdrMarkView::SetRef2(Point const&)
-SdrMarkView::TakeActionRect(tools::Rectangle&) const
-SdrMarkView::dumpGluePointsToJSON(boost::property_tree::basic_ptree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
-SdrMarkView::getPossibleGridOffsetForPosition(basegfx::B2DVector&, basegfx::B2DPoint const&, SdrPageView const*) const
-SdrMarkView::getPossibleGridOffsetForSdrObject(basegfx::B2DVector&, SdrObject const*, SdrPageView const*) const
-SdrMarkView::modelHasChangedLOKit()
-SdrMarkView::~SdrMarkView()
 SdrMeasureBelowRefEdgeItem::Clone(SfxItemPool*) const
 SdrMeasureDecimalPlacesItem::Clone(SfxItemPool*) const
 SdrMeasureField::Clone() const

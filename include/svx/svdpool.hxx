@@ -29,19 +29,19 @@ class SVXCORE_DLLPUBLIC SdrItemPool final : public SfxItemPool
 {
 public:
     SdrItemPool(SfxItemPool* pMaster = nullptr);
-    SdrItemPool(const SdrItemPool& rPool);
+    SAL_DLLPRIVATE SdrItemPool(const SdrItemPool& rPool);
 
 private:
-    virtual ~SdrItemPool() override;
+    SAL_DLLPRIVATE virtual ~SdrItemPool() override;
 
 public:
-    virtual rtl::Reference<SfxItemPool> Clone() const override;
-    virtual bool GetPresentation(const SfxPoolItem& rItem,
+    SAL_DLLPRIVATE virtual rtl::Reference<SfxItemPool> Clone() const override;
+    SAL_DLLPRIVATE virtual bool GetPresentation(const SfxPoolItem& rItem,
                                  MapUnit ePresentationMetric,
                                  OUString& rText,
                                  const IntlWrapper& rIntlWrapper) const override;
 
-    static OUString GetItemName(sal_uInt16 nWhich);
+    SAL_DLLPRIVATE static OUString GetItemName(sal_uInt16 nWhich);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -126,7 +126,7 @@ public:
         m_bNoPercent  = !bOn;
     }
     // temp for transformations on the reference object
-    void SetReallyAbsolute(bool bOn, const SdrObject& rObj);
+    SAL_DLLPRIVATE void SetReallyAbsolute(bool bOn, const SdrObject& rObj);
 
     // #i38892#
     bool IsUserDefined() const
@@ -165,17 +165,17 @@ public:
         m_nAlign = SdrAlign(m_nAlign & static_cast<SdrAlign>(0x00FF)) | (nAlg & static_cast<SdrAlign>(0xFF00));
     }
 
-    bool IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
-    void Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
+    SAL_DLLPRIVATE bool IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
+    SAL_DLLPRIVATE void Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     Point GetAbsolutePos(const SdrObject& rObj) const;
-    void SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
-    Degree100 GetAlignAngle() const;
-    void SetAlignAngle(Degree100 nAngle);
-    static Degree100 EscDirToAngle(SdrEscapeDirection nEsc);
-    static SdrEscapeDirection EscAngleToDir(Degree100 nAngle);
-    void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs, const SdrObject* pObj);
-    void Mirror(const Point& rRef1, const Point& rRef2, Degree100 nAngle, const SdrObject* pObj);
-    void Shear (const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
+    SAL_DLLPRIVATE void SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
+    SAL_DLLPRIVATE Degree100 GetAlignAngle() const;
+    SAL_DLLPRIVATE void SetAlignAngle(Degree100 nAngle);
+    SAL_DLLPRIVATE static Degree100 EscDirToAngle(SdrEscapeDirection nEsc);
+    SAL_DLLPRIVATE static SdrEscapeDirection EscAngleToDir(Degree100 nAngle);
+    SAL_DLLPRIVATE void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs, const SdrObject* pObj);
+    SAL_DLLPRIVATE void Mirror(const Point& rRef1, const Point& rRef2, Degree100 nAngle, const SdrObject* pObj);
+    SAL_DLLPRIVATE void Shear (const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
 };
 
 #define SDRGLUEPOINT_NOTFOUND 0xFFFF
@@ -211,15 +211,15 @@ public:
         return m_aList[nPos];
     }
     sal_uInt16 FindGluePoint(sal_uInt16 nId) const;
-    sal_uInt16 HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
-    void Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
+    SAL_DLLPRIVATE sal_uInt16 HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
+    SAL_DLLPRIVATE void Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
 
     // temp for transformations on the reference object
-    void SetReallyAbsolute(bool bOn, const SdrObject& rObj);
-    void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs, const SdrObject* pObj);
-    void Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
-    void Mirror(const Point& rRef1, const Point& rRef2, Degree100 nAngle, const SdrObject* pObj);
-    void Shear(const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
+    SAL_DLLPRIVATE void SetReallyAbsolute(bool bOn, const SdrObject& rObj);
+    SAL_DLLPRIVATE void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs, const SdrObject* pObj);
+    SAL_DLLPRIVATE void Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
+    SAL_DLLPRIVATE void Mirror(const Point& rRef1, const Point& rRef2, Degree100 nAngle, const SdrObject* pObj);
+    SAL_DLLPRIVATE void Shear(const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
 };
 
 

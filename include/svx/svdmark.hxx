@@ -52,19 +52,19 @@ class SVXCORE_DLLPUBLIC SdrMark final : public sdr::ObjectUser
     bool                                                mbCon2;       // for Connectors
     sal_uInt16                                          mnUser;       // E.g. for CopyObjects, also copy Edges
 
-    void setTime();
+    SAL_DLLPRIVATE void setTime();
 
 public:
     explicit SdrMark(SdrObject* pNewObj = nullptr, SdrPageView* pNewPageView = nullptr);
-    SdrMark(const SdrMark& rMark);
+    SAL_DLLPRIVATE SdrMark(const SdrMark& rMark);
     virtual ~SdrMark();
 
     // Derived from ObjectUser
-    virtual void ObjectInDestruction(const SdrObject& rObject) override;
+    SAL_DLLPRIVATE virtual void ObjectInDestruction(const SdrObject& rObject) override;
 
-    SdrMark& operator=(const SdrMark& rMark);
+    SAL_DLLPRIVATE SdrMark& operator=(const SdrMark& rMark);
 
-    void SetMarkedSdrObj(SdrObject* pNewObj);
+    SAL_DLLPRIVATE void SetMarkedSdrObj(SdrObject* pNewObj);
     SdrObject* GetMarkedSdrObj() const { return mpSelectedSdrObject;}
 
     SdrPageView* GetPageView() const
@@ -185,10 +185,10 @@ public:
     size_t FindObject(const SdrObject* pObj) const;
     void InsertEntry(const SdrMark& rMark, bool bChkSort = true);
     void DeleteMark(size_t nNum);
-    void ReplaceMark(const SdrMark& rNewMark, size_t nNum);
-    void Merge(const SdrMarkList& rSrcList, bool bReverse = false);
-    bool DeletePageView(const SdrPageView& rPV);
-    bool InsertPageView(const SdrPageView& rPV);
+    SAL_DLLPRIVATE void ReplaceMark(const SdrMark& rNewMark, size_t nNum);
+    SAL_DLLPRIVATE void Merge(const SdrMarkList& rSrcList, bool bReverse = false);
+    SAL_DLLPRIVATE bool DeletePageView(const SdrPageView& rPV);
+    SAL_DLLPRIVATE bool InsertPageView(const SdrPageView& rPV);
 
     void SetNameDirty()
     {
@@ -212,7 +212,7 @@ public:
 
     // pPage=0: Selection of everything! Respect Pages
     bool TakeBoundRect(SdrPageView const * pPageView, tools::Rectangle& rRect) const;
-    bool TakeSnapRect(SdrPageView const * pPageView, tools::Rectangle& rRect) const;
+    SAL_DLLPRIVATE bool TakeSnapRect(SdrPageView const * pPageView, tools::Rectangle& rRect) const;
 
     // All Entries are copied!
     SdrMarkList& operator=(const SdrMarkList& rLst);
