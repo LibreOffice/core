@@ -397,7 +397,7 @@ struct LoAccessibleClass
 };
 
 #if GTK_CHECK_VERSION(4, 10, 0)
-static void lo_accessible_range_init(GtkAccessibleRangeInterface* iface);
+static void lo_accessible_range_init(gpointer iface_, gpointer);
 static gboolean lo_accessible_range_set_current_value(GtkAccessibleRange* self, double fNewValue);
 #endif
 
@@ -412,12 +412,12 @@ const struct
     const css::uno::Type& (*aGetUnoType)();
 } TYPE_TABLE[] = {
 #if GTK_CHECK_VERSION(4, 14, 0)
-    { "Text", reinterpret_cast<GInterfaceInitFunc>(lo_accessible_text_init),
-      gtk_accessible_text_get_type, cppu::UnoType<css::accessibility::XAccessibleText>::get },
+    { "Text", lo_accessible_text_init, gtk_accessible_text_get_type,
+      cppu::UnoType<css::accessibility::XAccessibleText>::get },
 #endif
 #if GTK_CHECK_VERSION(4, 10, 0)
-    { "Value", reinterpret_cast<GInterfaceInitFunc>(lo_accessible_range_init),
-      gtk_accessible_range_get_type, cppu::UnoType<css::accessibility::XAccessibleValue>::get },
+    { "Value", lo_accessible_range_init, gtk_accessible_range_get_type,
+      cppu::UnoType<css::accessibility::XAccessibleValue>::get },
 #endif
 };
 
@@ -562,8 +562,9 @@ static void lo_accessible_accessible_init(GtkAccessibleInterface* iface)
 }
 
 #if GTK_CHECK_VERSION(4, 10, 0)
-static void lo_accessible_range_init(GtkAccessibleRangeInterface* iface)
+static void lo_accessible_range_init(gpointer iface_, gpointer)
 {
+    auto const iface = static_cast<GtkAccessibleRangeInterface*>(iface_);
     iface->set_current_value = lo_accessible_range_set_current_value;
 }
 #endif

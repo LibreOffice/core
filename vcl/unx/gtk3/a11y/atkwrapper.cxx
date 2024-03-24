@@ -684,8 +684,9 @@ atk_object_wrapper_finalize (GObject *obj)
 }
 
 static void
-atk_object_wrapper_class_init (AtkObjectWrapperClass *klass)
+atk_object_wrapper_class_init (gpointer klass_, gpointer)
 {
+  auto const klass = static_cast<AtkObjectWrapperClass *>(klass_);
   GObjectClass *gobject_class = G_OBJECT_CLASS( klass );
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS( klass );
 
@@ -744,7 +745,7 @@ atk_object_wrapper_get_type()
         sizeof (AtkObjectWrapperClass),
         nullptr,
         nullptr,
-        reinterpret_cast<GClassInitFunc>(atk_object_wrapper_class_init),
+        atk_object_wrapper_class_init,
         nullptr,
         nullptr,
         sizeof (AtkObjectWrapper),
@@ -824,53 +825,53 @@ const struct {
 } aTypeTable[] = {
 // re-location heaven:
     {
-        "Comp", reinterpret_cast<GInterfaceInitFunc>(componentIfaceInit),
+        "Comp", componentIfaceInit,
         atk_component_get_type,
         cppu::UnoType<accessibility::XAccessibleComponent>::get
     },
     {
-        "Act",  reinterpret_cast<GInterfaceInitFunc>(actionIfaceInit),
+        "Act",  actionIfaceInit,
         atk_action_get_type,
         cppu::UnoType<accessibility::XAccessibleAction>::get
     },
     {
-        "Txt",  reinterpret_cast<GInterfaceInitFunc>(textIfaceInit),
+        "Txt",  textIfaceInit,
         atk_text_get_type,
         cppu::UnoType<accessibility::XAccessibleText>::get
     },
     {
-        "Val",  reinterpret_cast<GInterfaceInitFunc>(valueIfaceInit),
+        "Val",  valueIfaceInit,
         atk_value_get_type,
         cppu::UnoType<accessibility::XAccessibleValue>::get
     },
     {
-        "Tab",  reinterpret_cast<GInterfaceInitFunc>(tableIfaceInit),
+        "Tab",  tableIfaceInit,
         atk_table_get_type,
         cppu::UnoType<accessibility::XAccessibleTable>::get
     },
     {
-        "Cell",  reinterpret_cast<GInterfaceInitFunc>(tablecellIfaceInit),
+        "Cell",  tablecellIfaceInit,
         atk_table_cell_get_type,
         // there is no UNO a11y interface for table cells, so this case is handled separately below
         nullptr
     },
     {
-        "Edt",  reinterpret_cast<GInterfaceInitFunc>(editableTextIfaceInit),
+        "Edt",  editableTextIfaceInit,
         atk_editable_text_get_type,
         cppu::UnoType<accessibility::XAccessibleEditableText>::get
     },
     {
-        "Img",  reinterpret_cast<GInterfaceInitFunc>(imageIfaceInit),
+        "Img",  imageIfaceInit,
         atk_image_get_type,
         cppu::UnoType<accessibility::XAccessibleImage>::get
     },
     {
-        "Hyp",  reinterpret_cast<GInterfaceInitFunc>(hypertextIfaceInit),
+        "Hyp",  hypertextIfaceInit,
         atk_hypertext_get_type,
         cppu::UnoType<accessibility::XAccessibleHypertext>::get
     },
     {
-        "Sel",  reinterpret_cast<GInterfaceInitFunc>(selectionIfaceInit),
+        "Sel",  selectionIfaceInit,
         atk_selection_get_type,
         cppu::UnoType<accessibility::XAccessibleSelection>::get
     }

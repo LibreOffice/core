@@ -42,8 +42,9 @@ noop_wrapper_ref_state_set( AtkObject * )
 }
 
 static void
-atk_noop_object_wrapper_class_init(AtkNoOpObjectClass *klass)
+atk_noop_object_wrapper_class_init(gpointer klass_, gpointer)
 {
+    auto const klass = static_cast<AtkNoOpObjectClass *>(klass_);
     AtkObjectClass *atk_class = ATK_OBJECT_CLASS( klass );
     atk_class->ref_state_set = noop_wrapper_ref_state_set;
 }
@@ -60,7 +61,7 @@ atk_noop_object_wrapper_get_type()
             sizeof (AtkNoOpObjectClass),
             nullptr,
             nullptr,
-            reinterpret_cast<GClassInitFunc>(atk_noop_object_wrapper_class_init),
+            atk_noop_object_wrapper_class_init,
             nullptr,
             nullptr,
             sizeof (AtkObjectWrapper),
@@ -154,8 +155,9 @@ AtkObject* ooo_fixed_get_accessible(GtkWidget *obj)
 }
 
 static void
-wrapper_factory_class_init( AtkObjectFactoryClass *klass )
+wrapper_factory_class_init( gpointer klass_, gpointer )
 {
+  auto const klass = static_cast<AtkObjectFactoryClass *>(klass_);
   klass->create_accessible   = wrapper_factory_create_accessible;
   klass->get_accessible_type = wrapper_factory_get_accessible_type;
 }
@@ -169,7 +171,7 @@ wrapper_factory_get_type()
     static const GTypeInfo tinfo =
     {
       sizeof (AtkObjectFactoryClass),
-      nullptr, nullptr, reinterpret_cast<GClassInitFunc>(wrapper_factory_class_init),
+      nullptr, nullptr, wrapper_factory_class_init,
       nullptr, nullptr, sizeof (AtkObjectFactory), 0, nullptr, nullptr
     };
 

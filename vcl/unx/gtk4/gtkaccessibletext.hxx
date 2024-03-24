@@ -13,7 +13,7 @@
 
 #if GTK_CHECK_VERSION(4, 14, 0)
 
-void lo_accessible_text_init(GtkAccessibleTextInterface* iface);
+void lo_accessible_text_init(gpointer iface_, gpointer);
 
 #endif
 

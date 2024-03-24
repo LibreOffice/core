@@ -177,8 +177,9 @@ editable_text_wrapper_copy_text( AtkEditableText  *text,
 } // extern "C"
 
 void
-editableTextIfaceInit (AtkEditableTextIface *iface)
+editableTextIfaceInit (gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkEditableTextIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->set_text_contents = editable_text_wrapper_set_text_contents;

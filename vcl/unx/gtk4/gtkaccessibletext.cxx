@@ -221,8 +221,9 @@ static void lo_accessible_text_get_default_attributes(GtkAccessibleText* self,
     convertUnoTextAttributesToGtk(aAttribs, attribute_names, attribute_values);
 }
 
-void lo_accessible_text_init(GtkAccessibleTextInterface* iface)
+void lo_accessible_text_init(gpointer iface_, gpointer)
 {
+    auto const iface = static_cast<GtkAccessibleTextInterface*>(iface_);
     iface->get_contents = lo_accessible_text_get_contents;
     iface->get_contents_at = lo_accessible_text_get_contents_at;
     iface->get_caret_position = lo_accessible_text_get_caret_position;

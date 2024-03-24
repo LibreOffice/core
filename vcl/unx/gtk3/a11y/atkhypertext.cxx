@@ -131,8 +131,9 @@ hyper_link_is_selected_link( AtkHyperlink * )
 }
 
 static void
-hyper_link_class_init (AtkHyperlinkClass *klass)
+hyper_link_class_init (gpointer klass_, gpointer)
 {
+    auto const klass = static_cast<AtkHyperlinkClass *>(klass_);
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
     gobject_class->finalize = hyper_link_finalize;
@@ -159,7 +160,7 @@ hyper_link_get_type()
             sizeof (AtkHyperlinkClass),
             nullptr,               /* base init */
             nullptr,               /* base finalize */
-            reinterpret_cast<GClassInitFunc>(hyper_link_class_init),
+            hyper_link_class_init,
             nullptr,               /* class finalize */
             nullptr,               /* class data */
             sizeof (HyperLink), /* instance size */
@@ -169,7 +170,7 @@ hyper_link_get_type()
         };
 
         static const GInterfaceInfo atk_action_info = {
-            reinterpret_cast<GInterfaceInitFunc>(actionIfaceInit),
+            actionIfaceInit,
             nullptr,
             nullptr
         };
@@ -265,8 +266,9 @@ hypertext_get_link_index( AtkHypertext *hypertext,
 } // extern "C"
 
 void
-hypertextIfaceInit (AtkHypertextIface *iface)
+hypertextIfaceInit (gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkHypertextIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->get_link = hypertext_get_link;

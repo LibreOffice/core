@@ -879,8 +879,9 @@ ooo_fixed_get_preferred_width(GtkWidget*, gint *minimum, gint *natural)
 }
 
 static void
-ooo_fixed_class_init(GtkFixedClass *klass)
+ooo_fixed_class_init(gpointer klass_, gpointer)
 {
+    auto const klass = static_cast<GtkFixedClass *>(klass_);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
     widget_class->get_accessible = ooo_fixed_get_accessible;
     widget_class->get_preferred_height = ooo_fixed_get_preferred_height;
@@ -904,7 +905,7 @@ ooo_fixed_get_type()
             sizeof (GtkFixedClass),
             nullptr,      /* base init */
             nullptr,  /* base finalize */
-            reinterpret_cast<GClassInitFunc>(ooo_fixed_class_init), /* class init */
+            ooo_fixed_class_init, /* class init */
             nullptr, /* class finalize */
             nullptr,                      /* class data */
             sizeof (GtkFixed),         /* instance size */
@@ -949,6 +950,10 @@ static void damaged(void *handle,
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(handle);
     pThis->damaged(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
 }
+
+#if !GTK_CHECK_VERSION(4,0,0)
+static void notifyUnref(gpointer data, GObject *) { g_object_unref(data); }
+#endif
 
 void GtkSalFrame::InitCommon()
 {
@@ -1062,7 +1067,7 @@ void GtkSalFrame::InitCommon()
     gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pZoomGesture));
 #else
     GtkGesture* pZoomGesture = gtk_gesture_zoom_new(GTK_WIDGET(pEventWidget));
-    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pZoomGesture);
+    g_object_weak_ref(G_OBJECT(pEventWidget), notifyUnref, pZoomGesture);
 #endif
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(pZoomGesture),
                                                GTK_PHASE_TARGET);
@@ -1077,7 +1082,7 @@ void GtkSalFrame::InitCommon()
     gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pRotateGesture));
 #else
     GtkGesture* pRotateGesture = gtk_gesture_rotate_new(GTK_WIDGET(pEventWidget));
-    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pRotateGesture);
+    g_object_weak_ref(G_OBJECT(pEventWidget), notifyUnref, pRotateGesture);
 #endif
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(pRotateGesture),
                                                GTK_PHASE_TARGET);
@@ -1122,7 +1127,7 @@ void GtkSalFrame::InitCommon()
 
 #if !GTK_CHECK_VERSION(4,0,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
-    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pSwipe);
+    g_object_weak_ref(G_OBJECT(pEventWidget), notifyUnref, pSwipe);
 #else
     GtkGesture *pSwipe = gtk_gesture_swipe_new();
     gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pSwipe));
@@ -1132,7 +1137,7 @@ void GtkSalFrame::InitCommon()
 
 #if !GTK_CHECK_VERSION(4,0,0)
     GtkGesture *pLongPress = gtk_gesture_long_press_new(pEventWidget);
-    g_object_weak_ref(G_OBJECT(pEventWidget), reinterpret_cast<GWeakNotify>(g_object_unref), pLongPress);
+    g_object_weak_ref(G_OBJECT(pEventWidget), notifyUnref, pLongPress);
 #else
     GtkGesture *pLongPress = gtk_gesture_long_press_new();
     gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pLongPress));

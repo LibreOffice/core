@@ -409,8 +409,9 @@ component_wrapper_remove_focus_handler (AtkComponent  *component,
 } // extern "C"
 
 void
-componentIfaceInit (AtkComponentIface *iface)
+componentIfaceInit (gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkComponentIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->add_focus_handler = component_wrapper_add_focus_handler;

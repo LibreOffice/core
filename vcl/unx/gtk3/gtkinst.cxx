@@ -8005,8 +8005,9 @@ immobilized_viewport_finalize(GObject* object)
     G_OBJECT_CLASS(immobilized_viewport_parent_class)->finalize(object);
 }
 
-static void immobilized_viewport_class_init(GtkWidgetClass* klass)
+static void immobilized_viewport_class_init(gpointer klass_, gpointer)
 {
+    auto const klass = static_cast<GtkWidgetClass*>(klass_);
     immobilized_viewport_parent_class = g_type_class_peek_parent(klass);
 
     GObjectClass* o_class = G_OBJECT_CLASS(klass);
@@ -8037,7 +8038,7 @@ GType immobilized_viewport_get_type()
             static_cast<guint16>(query.class_size),
             nullptr,  /* base init */
             nullptr,  /* base finalize */
-            reinterpret_cast<GClassInitFunc>(immobilized_viewport_class_init), /* class init */
+            immobilized_viewport_class_init, /* class init */
             nullptr,  /* class finalize */
             nullptr,  /* class data */
             static_cast<guint16>(query.instance_size), /* instance size */

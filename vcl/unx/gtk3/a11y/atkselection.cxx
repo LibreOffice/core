@@ -190,8 +190,9 @@ selection_select_all_selection( AtkSelection   *selection)
 } // extern "C"
 
 void
-selectionIfaceInit( AtkSelectionIface *iface)
+selectionIfaceInit( gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkSelectionIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->add_selection = selection_add_selection;

@@ -122,8 +122,9 @@ image_set_image_description( AtkImage *, const gchar * )
 } // extern "C"
 
 void
-imageIfaceInit (AtkImageIface *iface)
+imageIfaceInit (gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkImageIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->set_image_description = image_set_image_description;

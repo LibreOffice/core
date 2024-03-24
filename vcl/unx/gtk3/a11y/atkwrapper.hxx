@@ -101,16 +101,16 @@ AtkStateType mapAtkState( sal_Int64 nState );
 
 AtkRelation*           atk_object_wrapper_relation_new(const css::accessibility::AccessibleRelation& rRelation);
 
-void                   actionIfaceInit(AtkActionIface *iface);
-void                   componentIfaceInit(AtkComponentIface *iface);
-void                   editableTextIfaceInit(AtkEditableTextIface *iface);
-void                   hypertextIfaceInit(AtkHypertextIface *iface);
-void                   imageIfaceInit(AtkImageIface *iface);
-void                   selectionIfaceInit(AtkSelectionIface *iface);
-void                   tableIfaceInit(AtkTableIface *iface);
-void                   tablecellIfaceInit(AtkTableCellIface *iface);
-void                   textIfaceInit(AtkTextIface *iface);
-void                   valueIfaceInit(AtkValueIface *iface);
+void                   actionIfaceInit(gpointer iface_, gpointer);
+void                   componentIfaceInit(gpointer iface_, gpointer);
+void                   editableTextIfaceInit(gpointer iface_, gpointer);
+void                   hypertextIfaceInit(gpointer iface_, gpointer);
+void                   imageIfaceInit(gpointer iface_, gpointer);
+void                   selectionIfaceInit(gpointer iface_, gpointer);
+void                   tableIfaceInit(gpointer iface_, gpointer);
+void                   tablecellIfaceInit(gpointer iface_, gpointer);
+void                   textIfaceInit(gpointer iface_, gpointer);
+void                   valueIfaceInit(gpointer iface_, gpointer);
 
 } // extern "C"
 

@@ -253,8 +253,9 @@ action_wrapper_set_description (AtkAction *, gint, const gchar *)
 } // extern "C"
 
 void
-actionIfaceInit (AtkActionIface *iface)
+actionIfaceInit (gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkActionIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->do_action = action_wrapper_do_action;

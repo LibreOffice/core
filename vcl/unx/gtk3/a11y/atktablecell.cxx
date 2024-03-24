@@ -253,8 +253,9 @@ static AtkObject* tablecell_wrapper_get_table(AtkTableCell* cell)
 
 } // extern "C"
 
-void tablecellIfaceInit(AtkTableCellIface* iface)
+void tablecellIfaceInit(gpointer iface_, gpointer)
 {
+    auto const iface = static_cast<AtkTableCellIface*>(iface_);
     g_return_if_fail(iface != nullptr);
 
     iface->get_column_span = tablecell_wrapper_get_column_span;

@@ -141,8 +141,9 @@ value_wrapper_set_current_value( AtkValue     *value,
 } // extern "C"
 
 void
-valueIfaceInit (AtkValueIface *iface)
+valueIfaceInit (gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkValueIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->get_current_value = value_wrapper_get_current_value;

@@ -609,8 +609,9 @@ table_wrapper_set_summary( AtkTable *, AtkObject * )
 } // extern "C"
 
 void
-tableIfaceInit (AtkTableIface *iface)
+tableIfaceInit (gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkTableIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->ref_at = table_wrapper_ref_at;

@@ -852,8 +852,9 @@ text_wrapper_scroll_substring_to(AtkText       *text,
 } // extern "C"
 
 void
-textIfaceInit (AtkTextIface *iface)
+textIfaceInit (gpointer iface_, gpointer)
 {
+  auto const iface = static_cast<AtkTextIface *>(iface_);
   g_return_if_fail (iface != nullptr);
 
   iface->get_text = text_wrapper_get_text;
