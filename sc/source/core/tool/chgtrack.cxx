@@ -3988,7 +3988,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             {
                 ScChangeAction* p = GetAction(
                         static_cast<const ScChangeActionReject*>(pCur)->GetRejectAction() );
-                if (p != pAct && rMap.find( p->GetActionNumber() ) == rMap.end())
+                if (p != pAct && !rMap.contains( p->GetActionNumber() ))
                     cStack.push( p );
             }
         }

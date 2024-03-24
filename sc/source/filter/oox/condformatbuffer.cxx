@@ -1253,7 +1253,7 @@ void CondFormatBuffer::finalizeImport()
     RangeMap aRangeMap;
     for (auto& rxCondFormat : maCondFormats)
     {
-        if (aRangeMap.find(rxCondFormat->getRanges()) != aRangeMap.end())
+        if (aRangeMap.contains(rxCondFormat->getRanges()))
             continue;
         aRangeMap[rxCondFormat->getRanges()] = rxCondFormat.get();
     }

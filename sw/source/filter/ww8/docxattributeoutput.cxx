@@ -577,7 +577,7 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
             {
                 const SfxGrabBagItem& rParaGrabBag = static_cast<const SfxGrabBagItem&>(*pItem);
                 const std::map<OUString, css::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
-                bEndParaSdt = m_aParagraphSdt.m_bStartedSdt && rMap.find("ParaSdtEndBefore") != rMap.end();
+                bEndParaSdt = m_aParagraphSdt.m_bStartedSdt && rMap.contains("ParaSdtEndBefore");
             }
         }
     }

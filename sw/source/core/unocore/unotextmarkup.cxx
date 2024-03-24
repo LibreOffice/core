@@ -478,7 +478,7 @@ uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString & aKey)
 
 sal_Bool SAL_CALL SwXStringKeyMap::hasValue(const OUString & aKey)
 {
-    return maMap.find( aKey ) != maMap.end();
+    return maMap.contains(aKey);
 }
 
 void SAL_CALL SwXStringKeyMap::insertValue(const OUString & aKey, const uno::Any & aValue)

@@ -4577,7 +4577,7 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
 
     //  draw styles highlighter
     OUString sStyleName = GetTextNodeFirst()->GetTextColl()->GetName();
-    if (rParaStylesColorMap.find(sStyleName) != rParaStylesColorMap.end())
+    if (rParaStylesColorMap.contains(sStyleName))
     {
         SwRect aFrameAreaRect(getFrameArea());
 
