@@ -267,7 +267,7 @@ namespace frm
             aValues = xMe->getPropertyValues( aPropertyNames );
 
             if ( aValues.getLength() != aPropertyNames.getLength() )
-                throw RuntimeException();
+                throw RuntimeException("property name and value counts out of sync");
         }
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )

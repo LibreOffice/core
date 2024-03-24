@@ -389,7 +389,7 @@ namespace comphelper
         {
             aValues = OPropertyBag_PBase::getPropertyValues( aNames );
             if ( aValues.getLength() != aNames.getLength() )
-                throw RuntimeException();
+                throw RuntimeException("property name and value counts out of sync");
         }
         catch( const RuntimeException& )
         {

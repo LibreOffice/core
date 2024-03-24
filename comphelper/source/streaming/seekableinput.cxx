@@ -24,6 +24,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <comphelper/seekableinput.hxx>
 #include <utility>
@@ -64,7 +65,7 @@ OSeekableInputWrapper::OSeekableInputWrapper(
 , m_xOriginalStream(std::move( xInStream ))
 {
     if ( !m_xContext.is() )
-        throw uno::RuntimeException();
+        throw lang::IllegalArgumentException("no component context", *this, 1);
 }
 
 
@@ -91,7 +92,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
     if ( !m_xCopyInput.is() )
     {
         if ( !m_xContext.is() )
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("no component context");
 
         uno::Reference< io::XOutputStream > xTempOut(
                 io::TempFile::create(m_xContext),

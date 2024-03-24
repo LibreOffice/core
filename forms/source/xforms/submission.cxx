@@ -285,7 +285,7 @@ void Submission::liveCheck()
     bool bValid = mxModel.is();
 
     if( ! bValid )
-        throw RuntimeException();
+        throw RuntimeException("model not set");
 }
 
 css::uno::Reference<XModel> Submission::getModel() const

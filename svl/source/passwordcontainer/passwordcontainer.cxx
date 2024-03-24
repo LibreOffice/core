@@ -1222,7 +1222,7 @@ sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
     std::unique_lock aGuard( mMutex );
 
     if ( !m_xStorageFile )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("storage file not set");
 
     OUString aEncodedMP, aEncodedMPIV;
     return ( m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMasterPassword( aEncodedMP, aEncodedMPIV ) );
@@ -1233,7 +1233,7 @@ sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( sal_Bool bAllow )
     std::unique_lock aGuard( mMutex );
 
     if ( !m_xStorageFile )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("storage file not set");
 
     if ( !bAllow )
         removeMasterPassword(aGuard);
@@ -1250,7 +1250,7 @@ sal_Bool SAL_CALL PasswordContainer::isPersistentStoringAllowed()
     std::unique_lock aGuard( mMutex );
 
     if ( !m_xStorageFile )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("storage file not set");
 
     return m_xStorageFile->useStorage();
 }
@@ -1312,7 +1312,7 @@ sal_Bool SAL_CALL PasswordContainer::isDefaultMasterPasswordUsed()
     std::unique_lock aGuard( mMutex );
 
     if ( !m_xStorageFile )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("storage file not set");
 
     OUString aEncodedMP, aEncodedMPIV;
     return ( m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMasterPassword( aEncodedMP, aEncodedMPIV ) && aEncodedMP.isEmpty() );

@@ -20,6 +20,7 @@
 #include <windowstateguard.hxx>
 #include <frm_strings.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/awt/XWindowListener2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -35,6 +36,7 @@ namespace frm
     using ::com::sun::star::awt::XWindow2;
     using ::com::sun::star::awt::WindowEvent;
     using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::lang::EventObject;
@@ -88,8 +90,10 @@ namespace frm
         :m_xWindow( _rxWindow )
         ,m_xModelProps( _rxMdelProps )
     {
-        if ( !m_xWindow.is() || !m_xModelProps.is() )
-            throw RuntimeException();
+        if ( !m_xWindow.is() )
+            throw IllegalArgumentException("no window supplied", *this, 0);
+        if ( !m_xModelProps.is() )
+            throw IllegalArgumentException("no property set supplied", *this, 1);
 
         osl_atomic_increment( &m_refCount );
         {
