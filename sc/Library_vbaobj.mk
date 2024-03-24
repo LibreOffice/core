@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,vbaobj,\
 	cppuhelper \
 	editeng \
 	for \
+	i18nlangtag \
 	msfilter \
 	sal \
 	sb \
