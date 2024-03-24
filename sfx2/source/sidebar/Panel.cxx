@@ -28,7 +28,7 @@
 
 
 #if OSL_DEBUG_LEVEL >= 2
-#include <sfx2/sidebar/Tools.hxx>
+#include <sidebar/Tools.hxx>
 #include <sfx2/sidebar/Deck.hxx>
 #endif
 
