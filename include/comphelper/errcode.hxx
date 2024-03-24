@@ -24,6 +24,7 @@
 #include <ostream>
 #include <o3tl/typed_flags_set.hxx>
 #include <optional>
+#include <compare>
 
 #if defined(DBG_UTIL)
 #if __has_include(<version>)
@@ -94,12 +95,7 @@ public:
     explicit operator sal_uInt32() const { return m_value; }
     explicit operator bool() const { return m_value != 0; }
 
-    bool operator<(ErrCode const & other) const { return m_value < other.m_value; }
-    bool operator<=(ErrCode const & other) const { return m_value <= other.m_value; }
-    bool operator>(ErrCode const & other) const { return m_value > other.m_value; }
-    bool operator>=(ErrCode const & other) const { return m_value >= other.m_value; }
-    bool operator==(ErrCode const & other) const { return m_value == other.m_value; }
-    bool operator!=(ErrCode const & other) const { return m_value != other.m_value; }
+    auto operator<=>(ErrCode const & other) const = default;
 
     /** convert to ERRCODE_NONE if it's a warning, else return the error */
     ErrCode IgnoreWarning() const {

@@ -24,6 +24,7 @@
 #include <limits>
 #include <cassert>
 #include <type_traits>
+#include <compare>
 
 namespace o3tl
 {
@@ -100,12 +101,8 @@ public:
     explicit operator bool() const { return m_value != 0; }
     UNDERLYING_TYPE get() const { return m_value; }
 
-    bool operator<(strong_int const & other) const { return m_value < other.m_value; }
-    bool operator<=(strong_int const & other) const { return m_value <= other.m_value; }
-    bool operator>(strong_int const & other) const { return m_value > other.m_value; }
-    bool operator>=(strong_int const & other) const { return m_value >= other.m_value; }
-    bool operator==(strong_int const & other) const { return m_value == other.m_value; }
-    bool operator!=(strong_int const & other) const { return m_value != other.m_value; }
+    auto operator<=>(strong_int const & other) const = default;
+
     strong_int& operator++() { ++m_value; return *this; }
     strong_int operator++(int) { UNDERLYING_TYPE nOldValue = m_value; ++m_value; return strong_int(nOldValue); }
     strong_int& operator--() { --m_value; return *this; }
