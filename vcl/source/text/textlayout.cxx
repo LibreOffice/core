@@ -606,7 +606,7 @@ namespace vcl
             aTrace.append( " = ( " );
             for ( sal_Int32 i=0; i<_nLength; )
             {
-                aTrace.append( _pDXAry->at(i) );
+                aTrace.append( _pDXAry->get(i) );
                 if ( ++i < _nLength )
                     aTrace.append( ", " );
             }
