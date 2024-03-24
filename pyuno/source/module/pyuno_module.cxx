@@ -849,7 +849,18 @@ struct PyMethodDef PyUNOModule_methods [] =
     {"private_initTestEnvironment", initTestEnvironment, METH_VARARGS, nullptr},
     {"private_deinitTestEnvironment", deinitTestEnvironment, METH_VARARGS, nullptr},
     {"getComponentContext", getComponentContext, METH_VARARGS, nullptr},
+#if defined __clang__
+#pragma clang diagnostic push
+#if __has_warning("-Wcast-function-type-mismatch")
+#pragma clang diagnostic ignored "-Wcast-function-type-mismatch"
+#endif
+#endif
     {"_createUnoStructHelper", reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, nullptr},
+#if defined __clang__
+#if __has_warning("-Wcast-function-type-mismatch")
+#pragma clang diagnostic pop
+#endif
+#endif
     {"getTypeByName", getTypeByName, METH_VARARGS, nullptr},
     {"getConstantByName", getConstantByName, METH_VARARGS, nullptr},
     {"getClass", getClass, METH_VARARGS, nullptr},

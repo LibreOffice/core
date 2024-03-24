@@ -1531,7 +1531,18 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 
 static PyMethodDef PyUNOMethods[] =
 {
+#if defined __clang__
+#if __has_warning("-Wcast-function-type-mismatch")
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-mismatch"
+#endif
+#endif
     {"__dir__",    reinterpret_cast<PyCFunction>(PyUNO_dir),    METH_NOARGS,  nullptr},
+#if defined __clang__
+#if __has_warning("-Wcast-function-type-mismatch")
+#pragma clang diagnostic pop
+#endif
+#endif
     {nullptr,         nullptr,                                        0,            nullptr}
 };
 
