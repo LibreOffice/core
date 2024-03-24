@@ -45,7 +45,7 @@ bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
                    tools::Long nQualityPercent, tools::Long aChromaSubsampling,
                    css::uno::Reference<css::task::XStatusIndicator> const & status);
 
-void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, tools::Long* pLines,
+void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream,
                   GraphicFilterImportFlags nImportFlags,
                   BitmapScopedWriteAccess* ppAccess );
 

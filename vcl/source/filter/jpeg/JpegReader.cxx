@@ -172,7 +172,6 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
 JPEGReader::JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags ) :
     mrStream         ( rStream ),
     mnLastPos        ( rStream.Tell() ),
-    mnLastLines      ( 0 ),
     mbSetLogSize     ( nImportFlags & GraphicFilterImportFlags::SetLogsizeForJpeg )
 {
     maUpperName = "SVIJPEG";
@@ -180,7 +179,6 @@ JPEGReader::JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags
     if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
     {
         mpBitmap.emplace();
-        mpIncompleteAlpha.emplace();
     }
 }
 
@@ -242,90 +240,26 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
     return true;
 }
 
-Graphic JPEGReader::CreateIntermediateGraphic(tools::Long nLines)
+ReadState JPEGReader::Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )
 {
-    Graphic aGraphic;
-    const Size aSizePixel(mpBitmap->GetSizePixel());
-
-    if (!mnLastLines)
-    {
-        mpIncompleteAlpha.emplace(aSizePixel);
-        mpIncompleteAlpha->Erase(255);
-    }
-
-    if (nLines && (nLines < aSizePixel.Height()))
-    {
-        const tools::Long nNewLines = nLines - mnLastLines;
-
-        if (nNewLines > 0)
-        {
-            {
-                BitmapScopedWriteAccess pAccess(*mpIncompleteAlpha);
-                pAccess->SetFillColor(COL_ALPHA_OPAQUE);
-                pAccess->FillRect(tools::Rectangle(Point(0, mnLastLines), Size(pAccess->Width(), nNewLines)));
-            }
-
-            aGraphic = BitmapEx(*mpBitmap, *mpIncompleteAlpha);
-        }
-        else
-        {
-            aGraphic = BitmapEx(*mpBitmap);
-        }
-    }
-    else
-    {
-        aGraphic = BitmapEx(*mpBitmap);
-    }
-
-    mnLastLines = nLines;
-
-    return aGraphic;
-}
-
-ReadState JPEGReader::Read( Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )
-{
-    ReadState   eReadState;
-    bool        bRet = false;
+    bool bRet = false;
 
     // seek back to the original position
     mrStream.Seek( mnLastPos );
 
     // read the (partial) image
-    tools::Long nLines;
-    ReadJPEG( this, &mrStream, &nLines, nImportFlags, ppAccess );
+    ReadJPEG(this, &mrStream, nImportFlags, ppAccess);
 
     auto bUseExistingBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);
     if (bUseExistingBitmap || !mpBitmap->IsEmpty())
     {
-        if( mrStream.GetError() == ERRCODE_IO_PENDING )
-        {
-            rGraphic = CreateIntermediateGraphic(nLines);
-        }
-        else
-        {
-            if (!bUseExistingBitmap)
-                rGraphic = BitmapEx(*mpBitmap);
-        }
+        if (!bUseExistingBitmap)
+            rGraphic = BitmapEx(*mpBitmap);
 
         bRet = true;
     }
-    else if( mrStream.GetError() == ERRCODE_IO_PENDING )
-    {
-        bRet = true;
-    }
 
-    // Set status ( Pending has priority )
-    if (mrStream.GetError() == ERRCODE_IO_PENDING)
-    {
-        eReadState = JPEGREAD_NEED_MORE;
-        mrStream.ResetError();
-    }
-    else
-    {
-        eReadState = bRet ? JPEGREAD_OK : JPEGREAD_ERROR;
-    }
-
-    return eReadState;
+    return bRet ? JPEGREAD_OK : JPEGREAD_ERROR;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

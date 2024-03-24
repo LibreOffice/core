@@ -30,8 +30,7 @@ enum class GraphicFilterImportFlags;
 enum ReadState
 {
     JPEGREAD_OK,
-    JPEGREAD_ERROR,
-    JPEGREAD_NEED_MORE
+    JPEGREAD_ERROR
 };
 
 struct JPEGCreateBitmapParam
@@ -47,15 +46,10 @@ struct JPEGCreateBitmapParam
 
 class JPEGReader : public GraphicReader
 {
-    SvStream&           mrStream;
+    SvStream& mrStream;
     std::optional<Bitmap> mpBitmap;
-    std::optional<AlphaMask> mpIncompleteAlpha;
-
-    tools::Long                mnLastPos;
-    tools::Long                mnLastLines;
-    bool                mbSetLogSize;
-
-    Graphic CreateIntermediateGraphic(tools::Long nLines);
+    tools::Long mnLastPos;
+    bool mbSetLogSize;
 
 public:
             JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags );

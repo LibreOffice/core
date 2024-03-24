@@ -184,7 +184,7 @@ void progress_monitor(j_common_ptr cinfo)
 
 }
 
-static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, tools::Long* pLines,
+static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream,
               GraphicFilterImportFlags nImportFlags,
               BitmapScopedWriteAccess* ppAccess)
 {
@@ -311,9 +311,9 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
             }
 
             // tdf#138950 allow up to one short read (no_data_available_failures <= 1) to not trigger cancelling import
-            for (*pLines = 0; *pLines < nHeight && source->no_data_available_failures <= 1; (*pLines)++)
+            for (tools::Long nLine = 0; nLine < nHeight && source->no_data_available_failures <= 1; nLine++)
             {
-                size_t yIndex = *pLines;
+                size_t yIndex = nLine;
 
                 sal_uInt8* p = (rContext.cinfo.out_color_space == JCS_CMYK) ? rContext.pCYMKBuffer.data() : rContext.pScanLineBuffer.data();
                 jpeg_read_scanlines(&rContext.cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
@@ -362,12 +362,12 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
     }
 }
 
-void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, tools::Long* pLines,
+void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream,
                GraphicFilterImportFlags nImportFlags,
                BitmapScopedWriteAccess* ppAccess )
 {
     JpegStuff aContext;
-    ReadJPEG(aContext, pJPEGReader, pInputStream, pLines, nImportFlags, ppAccess);
+    ReadJPEG(aContext, pJPEGReader, pInputStream, nImportFlags, ppAccess);
 }
 
 bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,

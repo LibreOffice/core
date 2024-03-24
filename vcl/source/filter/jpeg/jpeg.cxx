@@ -25,29 +25,13 @@
 
 VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )
 {
-    bool        bReturn = true;
+    JPEGReader aJPEGReader(rInputStream, nImportFlags);
 
-    std::shared_ptr<GraphicReader> pContext = rGraphic.GetReaderContext();
-    rGraphic.SetReaderContext(nullptr);
-    JPEGReader* pJPEGReader = dynamic_cast<JPEGReader*>( pContext.get() );
-    if (!pJPEGReader)
-    {
-        pContext = std::make_shared<JPEGReader>( rInputStream, nImportFlags );
-        pJPEGReader = static_cast<JPEGReader*>( pContext.get() );
-    }
+    ReadState eReadState = aJPEGReader.Read(rGraphic, nImportFlags, ppAccess);
 
-    ReadState eReadState = pJPEGReader->Read( rGraphic, nImportFlags, ppAccess );
-
-    if( eReadState == JPEGREAD_ERROR )
-    {
-        bReturn = false;
-    }
-    else if( eReadState == JPEGREAD_NEED_MORE )
-    {
-        rGraphic.SetReaderContext( pContext );
-    }
-
-    return bReturn;
+    if (eReadState == JPEGREAD_ERROR)
+        return false;
+    return true;
 }
 
 bool ExportJPEG(SvStream& rOutputStream, const Graphic& rGraphic,
