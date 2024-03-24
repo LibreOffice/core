@@ -50,14 +50,17 @@
 
 namespace
 {
-extern "C" using Handler1 = void (*)(int);
-extern "C" using Handler2 = void (*)(int, siginfo_t *, void *);
+extern "C" using Handler1_t = void (*)(int);
+extern "C" using Handler2_t = void (*)(int, siginfo_t *, void *);
 struct SignalAction
 {
     int Signal;
     int Action;
-    Handler1 Handler;
-    bool siginfo; // Handler's type is Handler2
+    union {
+        Handler1_t Handler1;
+        Handler2_t Handler2;
+    };
+    bool siginfo; // Handler2 is active
 } Signals[] =
 {
     { SIGHUP,    ACT_HIDE,   SIG_DFL, false }, /* hangup */
@@ -205,13 +208,13 @@ bool onInitSignal()
                     if (sigaction(rSignal.Signal, &ign, &oact) == 0) {
                         rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
                         if (rSignal.siginfo) {
-                            rSignal.Handler = reinterpret_cast<Handler1>(
-                                oact.sa_sigaction);
+                            rSignal.Handler2 =
+                                oact.sa_sigaction;
                         } else {
-                            rSignal.Handler = oact.sa_handler;
+                            rSignal.Handler1 = oact.sa_handler;
                         }
                     } else {
-                        rSignal.Handler = SIG_DFL;
+                        rSignal.Handler1 = SIG_DFL;
                         rSignal.siginfo = false;
                     }
                 }
@@ -221,13 +224,13 @@ bool onInitSignal()
                     if (sigaction(rSignal.Signal, &act, &oact) == 0) {
                         rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
                         if (rSignal.siginfo) {
-                            rSignal.Handler = reinterpret_cast<Handler1>(
-                                oact.sa_sigaction);
+                            rSignal.Handler2 =
+                                oact.sa_sigaction;
                         } else {
-                            rSignal.Handler = oact.sa_handler;
+                            rSignal.Handler1 = oact.sa_handler;
                         }
                     } else {
-                        rSignal.Handler = SIG_DFL;
+                        rSignal.Handler1 = SIG_DFL;
                         rSignal.siginfo = false;
                     }
                 }
@@ -263,11 +266,11 @@ bool onDeInitSignal()
                 && (bSetILLHandler || Signals[i].Signal != SIGILL)))
         {
             if (Signals[i].siginfo) {
-                act.sa_sigaction = reinterpret_cast<Handler2>(
-                    Signals[i].Handler);
+                act.sa_sigaction =
+                    Signals[i].Handler2;
                 act.sa_flags = SA_SIGINFO;
             } else {
-                act.sa_handler = Signals[i].Handler;
+                act.sa_handler = Signals[i].Handler1;
                 act.sa_flags = 0;
             }
 
@@ -306,9 +309,9 @@ void callSystemHandler(int signal, siginfo_t * info, void * context)
     if (i >= NoSignals)
         return;
 
-    if ((Signals[i].Handler == SIG_DFL) ||
-        (Signals[i].Handler == SIG_IGN) ||
-         (Signals[i].Handler == SIG_ERR))
+    if ((Signals[i].Handler1 == SIG_DFL) ||
+        (Signals[i].Handler1 == SIG_IGN) ||
+         (Signals[i].Handler1 == SIG_ERR))
     {
         switch (Signals[i].Action)
         {
@@ -335,10 +338,10 @@ void callSystemHandler(int signal, siginfo_t * info, void * context)
         }
     }
     else if (Signals[i].siginfo) {
-        (*reinterpret_cast<Handler2>(Signals[i].Handler))(
+        (*Signals[i].Handler2)(
             signal, info, context);
     } else {
-        (*Signals[i].Handler)(signal);
+        (*Signals[i].Handler1)(signal);
     }
 }
 
