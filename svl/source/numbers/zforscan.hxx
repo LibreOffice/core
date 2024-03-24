@@ -66,7 +66,6 @@ public:
 
     const CharClass& GetChrCls() const          { return *mrCurrentLanguageData.GetCharClass(); }
     const LocaleDataWrapper& GetLoc() const     { return *mrCurrentLanguageData.GetLocaleData(); }
-    CalendarWrapper& GetCal() const             { return *mrCurrentLanguageData.GetCalendar(); }
 
     const NfKeywordTable & GetKeywords() const
         {
