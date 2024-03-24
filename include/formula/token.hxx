@@ -120,10 +120,18 @@ inline std::string StackVarEnumToString(StackVar const e)
     return os.str();
 }
 
+enum class RefCntPolicy : sal_uInt8
+{
+    ThreadSafe, // refcounting via thread-safe oslInterlockedCount
+    UnsafeRef,  // refcounting done with no locking/guarding against concurrent access
+    None        // no ref counting done
+};
+
 class FORMULA_DLLPUBLIC FormulaToken
 {
     OpCode                      eOp;
-    const StackVar              eType;          // type of data
+    const StackVar              eType;           // type of data
+    RefCntPolicy                eRefCntPolicy;   // style of reference counting
     mutable oslInterlockedCount mnRefCnt;        // reference count
 
     FormulaToken&            operator=( const FormulaToken& ) = delete;
@@ -145,14 +153,39 @@ public:
 
     void IncRef() const
     {
-        osl_atomic_increment(&mnRefCnt);
+        switch (eRefCntPolicy)
+        {
+            case RefCntPolicy::ThreadSafe:
+            default:
+                osl_atomic_increment(&mnRefCnt);
+                break;
+            case RefCntPolicy::UnsafeRef:
+                ++mnRefCnt;
+                break;
+            case RefCntPolicy::None:
+                break;
+        }
     }
 
     void DecRef() const
     {
-        if (!osl_atomic_decrement(&mnRefCnt))
-            const_cast<FormulaToken*>(this)->Delete();
+        switch (eRefCntPolicy)
+        {
+            case RefCntPolicy::ThreadSafe:
+            default:
+                if (!osl_atomic_decrement(&mnRefCnt))
+                    const_cast<FormulaToken*>(this)->Delete();
+                break;
+            case RefCntPolicy::UnsafeRef:
+                if (!--mnRefCnt)
+                    const_cast<FormulaToken*>(this)->Delete();
+                break;
+            case RefCntPolicy::None:
+                break;
+        }
     }
+
+    void SetRefCntPolicy(RefCntPolicy ePolicy) { eRefCntPolicy = ePolicy; }
 
     oslInterlockedCount GetRef() const       { return mnRefCnt; }
     OpCode              GetOpCode() const    { return eOp; }
