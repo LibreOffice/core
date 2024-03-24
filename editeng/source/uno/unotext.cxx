@@ -314,7 +314,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart()
         SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
         if(pText == nullptr)
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("Failed to retrieve a valid text base object from the Uno Tunnel");
 
         rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pText );
         xRange = pRange;
@@ -342,7 +342,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd()
         SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
         if(pText == nullptr)
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("Failed to retrieve a valid text base object from the Uno Tunnel");
 
         rtl::Reference<SvxUnoTextRange> pNew = new SvxUnoTextRange( *pText );
         xRet = pNew;
@@ -704,12 +704,12 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
         {
             SfxItemState eState = rSet.GetItemState( EE_PARA_NUMBULLET );
             if( eState != SfxItemState::SET && eState != SfxItemState::DEFAULT)
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("Invalid item state for paragraph numbering/bullet. Expected SET or DEFAULT.");
 
             const SvxNumBulletItem* pBulletItem = rSet.GetItem( EE_PARA_NUMBULLET );
 
             if( pBulletItem == nullptr )
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("Unable to retrieve paragraph numbering/bullet item.");
 
             aAny <<= SvxCreateNumRule( pBulletItem->GetNumRule() );
         }
