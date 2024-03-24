@@ -1571,6 +1571,8 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
 
                     if ( aEncryptionData.hasElements() )
                         rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData) ) );
+                    else
+                        return ERRCODE_ABORT;
                 }
             }
             catch( const IllegalArgumentException& ){}

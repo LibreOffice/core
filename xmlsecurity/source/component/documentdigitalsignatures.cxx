@@ -201,6 +201,9 @@ public:
                             css::uno::Reference<css::embed::XStorage> const& xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const& xStream) override;
 
+    sal_Bool SAL_CALL trustUntrustedCertificate(
+                            css::uno::Reference<css::security::XCertificate> const& xCertificate) override;
+
     sal_Bool SAL_CALL signScriptingContentWithCertificate(
                             css::uno::Reference<css::security::XCertificate> const& xCertificate,
                             css::uno::Reference<css::embed::XStorage> const& xStoragexStorage,
@@ -838,6 +841,17 @@ sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(
     uno::Reference<frame::XModel> xModel;
     return signWithCertificateImpl(xModel, xCertificate, xStorage, xStream,
                                    DocumentSignatureMode::Package);
+}
+
+sal_Bool DocumentDigitalSignatures::trustUntrustedCertificate(
+    css::uno::Reference<css::security::XCertificate> const& xCertificate)
+{
+    OUString aSubjectName(comphelper::xmlsec::GetContentPart(xCertificate->getSubjectName(), xCertificate->getCertificateKind()));
+    OUString aMsg(XsResId(STR_TRUST_UNTRUSTED_PUBKEY));
+    aMsg = aMsg.replaceFirst("%{data}", aSubjectName);
+    std::unique_ptr<weld::MessageDialog> m_xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Error, VclButtonsType::YesNo, aMsg));
+    m_xQueryBox->set_default_response(RET_NO);
+    return m_xQueryBox->run() == RET_YES;
 }
 
 sal_Bool DocumentDigitalSignatures::signScriptingContentWithCertificate(

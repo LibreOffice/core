@@ -65,5 +65,6 @@
 
 #define STR_BROKEN_MACRO_CERTIFICATE_DATA           NC_("STR_BROKEN_MACRO_CERTIFICATE_DATA", "Macro security problem!\n\nBroken certificate data: %{data}")
 #define STR_RELOAD_FILE_WARNING                     NC_("STR_RELOAD_FILE_WARNING", "Reload the file to apply the new macro security level")
+#define STR_TRUST_UNTRUSTED_PUBKEY                   NC_("STR_TRUST_UNTRUSTED_PUBKEY", "The following OpenPGP public key is not trusted:\n\n%{data}\n\nDo you want to use this untrusted OpenPGP public key?")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

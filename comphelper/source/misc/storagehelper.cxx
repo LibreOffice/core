@@ -476,13 +476,18 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     if (err)
         throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
-    ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
-    if (ctx == nullptr)
-        throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
-    ctx->setArmor(false);
-
+    bool bResetContext = true;
     for (const auto & cert : xSignCertificates)
     {
+        if (bResetContext)
+        {
+            bResetContext = false;
+            ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
+            if (ctx == nullptr)
+                throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+            ctx->setArmor(false);
+        }
+
         uno::Sequence < sal_Int8 > aKeyID;
         if (cert.is())
             aKeyID = cert->getSHA1Thumbprint();
@@ -503,6 +508,29 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         GpgME::EncryptionResult crypt_res = ctx->encrypt(
             keys, plain,
             cipher, GpgME::Context::NoCompress);
+
+        // tdf#160184 ask user if they want to trust an untrusted certificate
+        // gpgme contexts uses the "auto" trust model by default which only
+        // allows encrypting with keys that have their trust level set to
+        // "Ultimate". The gpg command, however, gives the user the option
+        // to encrypt with a certificate that has a lower trust level so
+        // emulate that bahavior by asking the user if they want to trust
+        // the certificate for just this operation only.
+        if (crypt_res.error().code() == GPG_ERR_UNUSABLE_PUBKEY)
+        {
+            if (xSigner->trustUntrustedCertificate(cert))
+            {
+                // Reset the trust model back to "auto" before processing
+                // the next certificate
+                bResetContext = true;
+
+                ctx->setFlag("trust-model", "tofu+pgp");
+                ctx->setFlag("tofu-default-policy", "unknown");
+                crypt_res = ctx->encrypt(
+                    keys, plain,
+                    cipher, GpgME::Context::NoCompress);
+            }
+        }
 
         off_t result = cipher.seek(0,SEEK_SET);
         (void) result;

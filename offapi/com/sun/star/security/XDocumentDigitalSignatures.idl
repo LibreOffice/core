@@ -212,6 +212,12 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     boolean signPackageWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
                                                 [in] ::com::sun::star::io::XStream xStream);
+
+    /** queries the user if the want to trust an untrusted certificate.
+
+        @since LibreOffice 24.2.3
+    */
+    boolean trustUntrustedCertificate([in] ::com::sun::star::security::XCertificate xCertificate);
 };
 
 } ; } ; } ; } ;
