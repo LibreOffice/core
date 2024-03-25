@@ -703,6 +703,65 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameXLSX)
                          pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpression)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Adds two hidden named expressions and two non-hidden named expressions
+    ScRangeName* pNamedRanges = pDoc->GetRangeName();
+    ScRangeData* pRangeData1 = new ScRangeData(*pDoc, "NAME1", "100");
+    pRangeData1->AddType(ScRangeData::Type::Hidden);
+    pNamedRanges->insert(pRangeData1);
+    ScRangeData* pRangeData2 = new ScRangeData(*pDoc, "NAME2", "text1");
+    pRangeData2->AddType(ScRangeData::Type::Hidden);
+    pNamedRanges->insert(pRangeData2);
+    ScRangeData* pRangeData3 = new ScRangeData(*pDoc, "NAME3", "200");
+    pNamedRanges->insert(pRangeData3);
+    ScRangeData* pRangeData4 = new ScRangeData(*pDoc, "NAME4", "text2");
+    pNamedRanges->insert(pRangeData4);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
+
+    // Save and reload to test whether the named expressions retain the hidden  where applicable
+    saveAndReload("calc8");
+    pDoc = getScDoc();
+    pNamedRanges = pDoc->GetRangeName();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), pNamedRanges->size());
+    pRangeData1 = pNamedRanges->findByUpperName(OUString("NAME1"));
+    CPPUNIT_ASSERT(pRangeData1);
+    CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Hidden, pRangeData1->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString("100"), pRangeData1->GetSymbol());
+    pRangeData2 = pNamedRanges->findByUpperName(OUString("NAME2"));
+    CPPUNIT_ASSERT(pRangeData2);
+    CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Hidden, pRangeData2->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString("text1"), pRangeData2->GetSymbol());
+    pRangeData3 = pNamedRanges->findByUpperName(OUString("NAME3"));
+    CPPUNIT_ASSERT(pRangeData3);
+    CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Name, pRangeData3->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString("200"), pRangeData3->GetSymbol());
+    pRangeData4 = pNamedRanges->findByUpperName(OUString("NAME4"));
+    CPPUNIT_ASSERT(pRangeData4);
+    CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Name, pRangeData4->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString("text2"), pRangeData4->GetSymbol());
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenNamedExpressionODS)
+{
+    createScDoc("ods/NamedExpressionsHidden.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // The document has 2 named expressions; the first is hidden; the second is visible
+    ScRangeName* pNamedRanges = pDoc->GetRangeName();
+    ScRangeData* pRangeData1 = pNamedRanges->findByUpperName(OUString("NAME1"));
+    CPPUNIT_ASSERT(pRangeData1);
+    CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Hidden, pRangeData1->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString("100"), pRangeData1->GetSymbol());
+    ScRangeData* pRangeData2 = pNamedRanges->findByUpperName(OUString("NAME2"));
+    CPPUNIT_ASSERT(pRangeData2);
+    CPPUNIT_ASSERT_EQUAL(ScRangeData::Type::Name, pRangeData2->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString("200"), pRangeData2->GetSymbol());
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHyperlinksXLSX)
 {
     createScDoc("xlsx/hyperlinks.xlsx");

@@ -2099,6 +2099,25 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         </rng:choice>
       </rng:attribute>
     </rng:optional>
+    </rng:define>
+
+    <rng:define name="table-named-expression-attlist">
+    <rng:attribute name="table:name">
+      <rng:ref name="string"/>
+    </rng:attribute>
+    <rng:attribute name="table:expression">
+      <rng:ref name="string"/>
+    </rng:attribute>
+    <rng:optional>
+      <rng:attribute name="table:base-cell-address">
+        <rng:ref name="cellAddress"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:hidden">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
 
    </rng:include>

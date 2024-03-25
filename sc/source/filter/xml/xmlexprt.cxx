@@ -4573,6 +4573,10 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
         else
         {
             AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, sTempSymbol);
+            // Check if it is a hidden named expression
+            sal_Int32 nRangeType = rxEntry.second->GetUnoType();
+            if ((nRangeType & sheet::NamedRangeFlag::HIDDEN) == sheet::NamedRangeFlag::HIDDEN)
+                AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDDEN, XML_TRUE);
             SvXMLElementExport aElemNE(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, true, true);
         }
     }

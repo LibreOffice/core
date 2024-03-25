@@ -151,6 +151,10 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
                 case XML_ELEMENT( TABLE, XML_BASE_CELL_ADDRESS ):
                     aNamedExpression.sBaseCellAddress = aIter.toString();
                     break;
+                case XML_ELEMENT(LO_EXT, XML_HIDDEN):
+                    if (aIter.toString() == GetXMLToken(XML_TRUE))
+                        aNamedExpression.sRangeType = GetXMLToken(XML_HIDDEN);
+                    break;
             }
         }
     }
