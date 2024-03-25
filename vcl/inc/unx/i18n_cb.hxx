@@ -28,7 +28,7 @@ extern "C" {
 
 // xim callbacks
 void PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data);
-int  PreeditStartCallback( XIC ic, XPointer client_data, XPointer call_data);
+void PreeditStartCallback( XIC ic, XPointer client_data, XPointer call_data);
 void PreeditDrawCallback ( XIC ic, XPointer client_data,
                            XIMPreeditDrawCallbackStruct *call_data );
 void PreeditCaretCallback( XIC ic, XPointer client_data,

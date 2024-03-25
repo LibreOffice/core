@@ -34,7 +34,7 @@
 
 // i. preedit start callback
 
-int
+void
 PreeditStartCallback ( XIC, XPointer client_data, XPointer )
 {
     preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
@@ -43,8 +43,6 @@ PreeditStartCallback ( XIC, XPointer client_data, XPointer )
         pPreeditData->eState = PreeditStatus::Active;
         pPreeditData->aText.nLength    = 0;
     }
-
-    return -1;
 }
 
 // ii. preedit done callback
