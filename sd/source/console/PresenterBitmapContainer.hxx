@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERBITMAPCONTAINER_HXX
-#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERBITMAPCONTAINER_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -140,7 +139,5 @@ typedef PresenterBitmapContainer::BitmapDescriptor PresenterBitmapDescriptor;
 typedef std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> SharedBitmapDescriptor;
 
 } // end of namespace ::sdext::presenter
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
