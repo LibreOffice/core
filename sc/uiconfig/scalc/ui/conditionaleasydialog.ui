@@ -85,7 +85,7 @@
                     <property name="margin-bottom">6</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="allInputs">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="spacing">12</property>
@@ -119,18 +119,6 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="with">
                             <property name="visible">True</property>
@@ -143,9 +131,21 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkComboBoxText" id="themeCombo">
                             <property name="visible">True</property>
