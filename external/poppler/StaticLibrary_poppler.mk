@@ -14,6 +14,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,poppler,poppler))
 $(eval $(call gb_StaticLibrary_set_precompiled_header,poppler,external/poppler/inc/pch/precompiled_poppler))
 
 $(eval $(call gb_StaticLibrary_use_externals,poppler,\
+	boost_headers \
 	libjpeg \
 	zlib \
 ))
