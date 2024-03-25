@@ -786,6 +786,8 @@ bool SolverSettings::TabHasSolverModel()
 {
     // Check if the named range for the objective value exists in the sheet
     const auto iter = m_mNamedRanges.find(SP_OBJ_CELL);
+    if (iter == m_mNamedRanges.end())
+        return false;
     OUString sRange = iter->second;
     ScRangeData* pRangeData
         = m_pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(sRange));
