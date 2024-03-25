@@ -1837,6 +1837,14 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, test160553Tdf)
+{
+    createSwDoc("tdf160553.rtf");
+    // new section should create second page
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();

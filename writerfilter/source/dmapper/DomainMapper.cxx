@@ -3350,7 +3350,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
     break;
     case NS_ooxml::LN_tblEnd:
-        m_pImpl->m_StreamStateStack.top().nTableDepth--;
+        if (m_pImpl->m_StreamStateStack.top().nTableDepth > 0)
+            m_pImpl->m_StreamStateStack.top().nTableDepth--;
     break;
     case NS_ooxml::LN_tcStart:
         m_pImpl->m_nTableCellDepth++;
