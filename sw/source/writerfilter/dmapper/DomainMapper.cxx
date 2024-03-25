@@ -1488,6 +1488,49 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
         return;
     }
+    case NS_ooxml::LN_tblStart:
+    {
+        if (rContext)
+        {
+            /*
+             * Hack for Importing Section Properties
+             * LO is not able to import section properties if first element in the
+             * section is a table. So in case first element is a table add a dummy para
+             * and remove it again when lcl_endSectionGroup is called
+             */
+            if (m_pImpl->m_StreamStateStack.top().nTableDepth == 0
+                && m_pImpl->GetIsFirstParagraphInSection()
+                    && !m_pImpl->GetIsDummyParaAddedForTableInSection() && !m_pImpl->GetIsTextFrameInserted()
+                    && !m_pImpl->GetIsPreviousParagraphFramed() && !IsInHeaderFooter())
+            {
+                m_pImpl->AddDummyParaForTableInSection();
+            }
+
+            // if first paragraph style in table has break-before-page, transfer that setting to the table itself.
+            if (m_pImpl->m_StreamStateStack.top().nTableDepth == 0)
+            {
+                const uno::Any aBreakType(style::BreakType_PAGE_BEFORE);
+                const PropertyMapPtr pParagraphProps = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+                if( pParagraphProps && pParagraphProps->isSet(PROP_PARA_STYLE_NAME) )
+                {
+                    StyleSheetEntryPtr pStyle;
+                    OUString sStyleName;
+                    pParagraphProps->getProperty(PROP_PARA_STYLE_NAME)->second >>= sStyleName;
+                    if( !sStyleName.isEmpty() && GetStyleSheetTable() )
+                        pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( sStyleName );
+
+                    if( pStyle && pStyle->m_pProperties
+                        && pStyle->m_pProperties->isSet(PROP_BREAK_TYPE)
+                        && pStyle->m_pProperties->getProperty(PROP_BREAK_TYPE)->second == aBreakType )
+                    {
+                        pParagraphProps->Insert(PROP_BREAK_TYPE, aBreakType);
+                    }
+                }
+            }
+        }
+        m_pImpl->m_StreamStateStack.top().nTableDepth++;
+        return;
+    }
     default:
         break;
     }
@@ -3392,47 +3435,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             pProperties->resolve(*this);
         }
-    }
-    break;
-    case NS_ooxml::LN_tblStart:
-    {
-        /*
-         * Hack for Importing Section Properties
-         * LO is not able to import section properties if first element in the
-         * section is a table. So in case first element is a table add a dummy para
-         * and remove it again when lcl_endSectionGroup is called
-         */
-        if (m_pImpl->m_StreamStateStack.top().nTableDepth == 0
-            && m_pImpl->GetIsFirstParagraphInSection()
-                && !m_pImpl->GetIsDummyParaAddedForTableInSection() && !m_pImpl->GetIsTextFrameInserted()
-                && !m_pImpl->GetIsPreviousParagraphFramed() && !IsInHeaderFooter())
-        {
-            m_pImpl->AddDummyParaForTableInSection();
-        }
-
-        // if first paragraph style in table has break-before-page, transfer that setting to the table itself.
-        if (m_pImpl->m_StreamStateStack.top().nTableDepth == 0)
-        {
-            const uno::Any aBreakType(style::BreakType_PAGE_BEFORE);
-            const PropertyMapPtr pParagraphProps = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
-            if( pParagraphProps && pParagraphProps->isSet(PROP_PARA_STYLE_NAME) )
-            {
-                StyleSheetEntryPtr pStyle;
-                OUString sStyleName;
-                pParagraphProps->getProperty(PROP_PARA_STYLE_NAME)->second >>= sStyleName;
-                if( !sStyleName.isEmpty() && GetStyleSheetTable() )
-                    pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( sStyleName );
-
-                if( pStyle && pStyle->m_pProperties
-                    && pStyle->m_pProperties->isSet(PROP_BREAK_TYPE)
-                    && pStyle->m_pProperties->getProperty(PROP_BREAK_TYPE)->second == aBreakType )
-                {
-                    pParagraphProps->Insert(PROP_BREAK_TYPE, aBreakType);
-                }
-            }
-        }
-
-        m_pImpl->m_StreamStateStack.top().nTableDepth++;
     }
     break;
     case NS_ooxml::LN_tblEnd:

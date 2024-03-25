@@ -1942,6 +1942,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152839)
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getCellNames().getLength());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, test160553Tdf)
+{
+    createSwDoc("tdf160553.rtf");
+    // new section should create second page
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
