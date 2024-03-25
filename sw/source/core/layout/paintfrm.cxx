@@ -7012,7 +7012,8 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                                         const SwRect &rRect ) const
 {
-    const bool bSubsOpt = isSubsidiaryLinesEnabled() || isSubsidiaryLinesForSectionsEnabled();
+    const bool bSubsOpt
+        = isSubsidiaryLinesEnabled() || (IsSctFrame() && isSubsidiaryLinesForSectionsEnabled());
     if ( bSubsOpt )
         PaintSubsidiaryLines( pPage, rRect );
 
