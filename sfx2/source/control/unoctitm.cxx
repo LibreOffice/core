@@ -520,83 +520,6 @@ void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::
 
 }
 
-// Checks if LOK is active and uno command is allowed for the current LOK view.
-static bool isCommandAllowedForViewType(const OUString& command)
-{
-    if (SfxViewShell::IsCurrentLokViewReadOnly())
-    {
-        // This is a sublist of "sUnoCommands".
-        constexpr OUString allowedCommandList[] = {
-            u"Copy"_ustr,
-            u"SelectAll"_ustr,
-            u"SelectColumn"_ustr,
-            u"SelectRow"_ustr,
-            u"EntireRow"_ustr,
-            u"EntireColumn"_ustr,
-            u"EntireCell"_ustr,
-            u"RowColSelCount"_ustr,
-            u"SpellOnline"_ustr,
-            u"StatePageNumber"_ustr,
-            u"StateWordCount"_ustr,
-            u"StateTableCell"_ustr,
-            u"SelectionMode"_ustr,
-            u"PageStatus"_ustr,
-            u"LayoutStatus"_ustr,
-            u"ToolbarMode"_ustr,
-            u"ChangeTheme"_ustr,
-            u"CopyHyperlinkLocation"_ustr,
-            u"ExportDirectToPDF"_ustr,
-            u"ExportToPDF"_ustr,
-            u"ExportToEPUB"_ustr,
-            u"CharRightSel"_ustr,
-            u"CharLeftSel"_ustr,
-            u"WordRightSel"_ustr,
-            u"WordLeftSel"_ustr,
-            u"EndOfParaSel"_ustr,
-            u"StartOfParaSel"_ustr,
-            u"GoRight"_ustr,
-            u"GoLeft"_ustr,
-            u"GoToNextWord"_ustr,
-            u"GoToPrevWord"_ustr,
-            u"GoToNextPara"_ustr,
-            u"GoToStartOfPara"_ustr,
-            u"GoUp"_ustr,
-            u"GoDown"_ustr,
-            u"GoRightSel"_ustr,
-            u"GoLeftSel"_ustr,
-            u"GoUpSel"_ustr,
-            u"GoDownSel"_ustr,
-            u"GoLeftToStartOfData"_ustr,
-            u"GoRightToEndOfData"_ustr,
-            u"GoToStart"_ustr,
-            u"GoToEndOfData"_ustr,
-            u"GoUpToStartOfData"_ustr,
-            u"GoDownToEndOfData"_ustr,
-            u"GoLeftToStartOfDataSel"_ustr,
-            u"GoRightToEndOfDataSel"_ustr,
-            u"GoUpToStartOfDataSel"_ustr,
-            u"GoDownToEndOfDataSel"_ustr
-        };
-
-        bool allowed = std::find(std::begin(allowedCommandList), std::end(allowedCommandList), command) != std::end(allowedCommandList);
-
-        if (!allowed && SfxViewShell::Current() && SfxViewShell::Current()->IsAllowChangeComments())
-        {
-            constexpr OUString allowedCommentCommandList[] = {
-                u"InsertAnnotation"_ustr,
-                u"DeleteComment"_ustr,
-                u"DeleteAnnotation"_ustr,
-                u"EditAnnotation"_ustr
-            };
-            allowed = std::find(std::begin(allowedCommentCommandList), std::end(allowedCommentCommandList), command) != std::end(allowedCommentCommandList);
-        }
-
-        return allowed;
-    }
-
-    return true;
-}
-
 void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
@@ -620,12 +543,6 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
 
         SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_COMMAND_BLOCKED, aTree.finishAndGetAsOString());
-        return;
-    }
-
-
-    if (aURL.Protocol == ".uno:" && !isCommandAllowedForViewType(aURL.Path))
-    {
         return;
     }
 

@@ -1590,6 +1590,9 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 
     bool bReadOnly = ( SfxSlotFilterState::ENABLED_READONLY != nSlotEnableMode && xImp->bReadOnly );
 
+    if (!bReadOnly && comphelper::LibreOfficeKit::isActive())
+        bReadOnly = xImp->pFrame && xImp->pFrame->GetViewShell() && xImp->pFrame->GetViewShell()->IsLokReadOnlyView();
+
     // search through all the shells of the chained dispatchers
     // from top to bottom
     sal_uInt16 nFirstShell = 0;
