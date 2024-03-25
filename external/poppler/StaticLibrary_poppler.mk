@@ -12,6 +12,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,poppler))
 $(eval $(call gb_StaticLibrary_use_unpacked,poppler,poppler))
 
 $(eval $(call gb_StaticLibrary_use_externals,poppler,\
+	boost_headers \
 	libjpeg \
 	zlib \
 ))
