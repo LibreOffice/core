@@ -2320,6 +2320,7 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
 #ifndef NDEBUG
     SwNode *const pFirst((*this)[nDelPos]);
 #endif
+    std::vector<SwTextAttr*> flys;
     for (SwNodeOffset nCnt(0); nCnt < nSz; nCnt++)
     {
         SwNode* pNode = (*this)[ nDelPos + nCnt ];
@@ -2332,11 +2333,11 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
             // so their anchor still points to correct node when deleted!
             // NOTE: this will call RemoveNode() recursively!
             // so adjust our indexes to account for removed nodes
-            SwNodeOffset const nPos = pTextNd->GetIndex();
             SwpHints *const pHints(pTextNd->GetpSwpHints());
             if (pHints)
             {
-                std::vector<SwTextAttr*> flys;
+                SwNodeOffset const nPos = pTextNd->GetIndex();
+                flys.clear();
                 for (size_t i = 0; i < pHints->Count(); ++i)
                 {
                     SwTextAttr *const pHint(pHints->Get(i));
