@@ -947,16 +947,20 @@ EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nP
     return nullptr;
 }
 
-namespace {
+namespace
+{
 
 class FindByStartPos
 {
     sal_Int32 mnPos;
 public:
-    explicit FindByStartPos(sal_Int32 nPos) : mnPos(nPos) {}
-    bool operator() (const std::unique_ptr<EditCharAttrib>& r) const
+    explicit FindByStartPos(sal_Int32 nPos)
+        : mnPos(nPos)
+    {}
+
+    bool operator() (std::unique_ptr<EditCharAttrib> const& pCharAttrib) const
     {
-        return r->GetStart() >= mnPos;
+        return pCharAttrib->GetStart() >= mnPos;
     }
 };
 
@@ -965,16 +969,28 @@ public:
 const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
 {
     // First, find the first attribute that starts at or after specified position.
-    AttribsType::const_iterator it =
+    AttribsType::const_iterator iterator =
         std::find_if(maAttribs.begin(), maAttribs.end(), FindByStartPos(nPos));
 
-    if (it == maAttribs.end())
+    if (iterator == maAttribs.end())
+    {
         // All attributes are before the specified position.
         return nullptr;
+    }
 
     // And find the first attribute with feature.
-    it = std::find_if(it, maAttribs.end(), [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsFeature(); } );
-    return it == maAttribs.end() ? nullptr : it->get();
+    iterator = std::find_if(iterator, maAttribs.end(), [](const std::unique_ptr<EditCharAttrib>& aAttrib) {
+        return aAttrib->IsFeature();
+    });
+
+    if (iterator == maAttribs.end())
+    {
+        // Couldn't find the feature
+        return nullptr;
+    }
+
+    // Found
+    return iterator->get();
 }
 
 void CharAttribList::DeleteEmptyAttribs()
