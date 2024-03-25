@@ -1154,10 +1154,12 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                 aHelpStr = ScResId(STR_ROW) +
                            " " + OUString::number(nScrollPos + 1);
 
+                // note that bLayoutRTL is always false here, because bLayoutRTL depends on bHoriz
+
                 // show quicktext always inside sheet area
-                aRect.SetLeft( bLayoutRTL ? (aPos.X() + aSize.Width() + 8) : (aPos.X() - 8) );
+                aRect.SetLeft(aPos.X() - 8);
                 aRect.SetTop( aMousePos.Y() );
-                nAlign       = (bLayoutRTL ? QuickHelpFlags::Left : QuickHelpFlags::Right) | QuickHelpFlags::VCenter;
+                nAlign = QuickHelpFlags::Right | QuickHelpFlags::VCenter;
             }
             aRect.SetRight( aRect.Left() );
             aRect.SetBottom( aRect.Top() );
