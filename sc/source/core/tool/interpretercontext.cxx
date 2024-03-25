@@ -41,7 +41,9 @@ ScInterpreterContext::ScInterpreterContext(const ScDocument& rDoc, SvNumberForma
     , pInterpreter(nullptr)
     , mpFormatter(pFormatter)
 {
-    if (pFormatter)
+    if (!pFormatter)
+        mpFormatData = nullptr;
+    else
     {
         mxLanguageData.reset(new SvNFLanguageData(pFormatter->GetROLanguageData()));
         mpFormatData = &pFormatter->GetROFormatData();
