@@ -465,8 +465,8 @@ POPPLER_DATA_TARBALL := poppler-data-0.4.12.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-POSTGRESQL_SHA256SUM := 4992ff647203566b670d4e54dc5317499a26856c93576d0ea951bdf6bee50bfb
-POSTGRESQL_TARBALL := postgresql-13.11.tar.bz2
+POSTGRESQL_SHA256SUM := b8df078551898960bd500dc5d38a177e9905376df81fe7f2b660a1407fa6a5ed
+POSTGRESQL_TARBALL := postgresql-13.14.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
