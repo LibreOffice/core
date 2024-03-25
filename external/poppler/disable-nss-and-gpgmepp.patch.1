@@ -11,7 +11,7 @@ disable NSS/GPGMEPP dependent code.
  #include "SignatureInfo.h"
  #include "CertificateInfo.h"
  #include "XRef.h"
-@@ -577,7 +577,7 @@
+@@ -578,7 +578,7 @@
  {
      return static_cast<FormFieldSignature *>(field)->validateSignature(doVerifyCert, forceRevalidation, validationTime, ocspRevocationCheck, enableAIA);
  }
@@ -20,12 +20,12 @@ disable NSS/GPGMEPP dependent code.
  // update hash with the specified range of data from the file
  static bool hashFileRange(FILE *f, CryptoSign::SigningInterface *handler, Goffset start, Goffset end)
  {
-@@ -607,10 +607,12 @@
+@@ -608,10 +608,12 @@
      delete[] buf;
      return true;
  }
 +#endif
- 
+
  bool FormWidgetSignature::signDocument(const std::string &saveFilename, const std::string &certNickname, const std::string &password, const GooString *reason, const GooString *location, const std::optional<GooString> &ownerPassword,
                                         const std::optional<GooString> &userPassword)
  {
@@ -33,44 +33,46 @@ disable NSS/GPGMEPP dependent code.
      auto backend = CryptoSign::Factory::createActive();
      if (!backend) {
          return false;
-@@ -698,6 +700,8 @@
+@@ -697,8 +699,8 @@
+     signatureField->setSignature(*signature);
+
      fclose(file);
- 
-     return true;
+-
+-    return true;
 +#endif
 +    return false;
  }
- 
- bool FormWidgetSignature::signDocumentWithAppearance(const std::string &saveFilename, const std::string &certNickname, const std::string &password, const GooString *reason, const GooString *location,
-@@ -2316,6 +2320,7 @@
- 
+
+ static std::tuple<double, double> calculateDxDy(int rot, const PDFRectangle *rect)
+@@ -2355,6 +2357,7 @@
+
  void FormFieldSignature::hashSignedDataBlock(CryptoSign::VerificationInterface *handler, Goffset block_len)
  {
 +#if 0
      if (!handler) {
          return;
      }
-@@ -2335,6 +2340,7 @@
+@@ -2374,6 +2377,7 @@
              i += BLOCK_SIZE;
          }
      }
 +#endif
  }
- 
+
  FormSignatureType FormWidgetSignature::signatureType() const
-@@ -2349,6 +2355,7 @@
- 
+@@ -2388,6 +2392,7 @@
+
  SignatureInfo *FormFieldSignature::validateSignature(bool doVerifyCert, bool forceRevalidation, time_t validationTime, bool ocspRevocationCheck, bool enableAIA)
  {
 +#if 0
      auto backend = CryptoSign::Factory::createActive();
      if (!backend) {
          return signature_info;
-@@ -2425,6 +2432,7 @@
+@@ -2464,6 +2469,7 @@
      const CertificateValidationStatus cert_val_state = signature_handler->validateCertificate(std::chrono::system_clock::from_time_t(validationTime), ocspRevocationCheck, enableAIA);
      signature_info->setCertificateValStatus(cert_val_state);
- 
+
 +#endif
      return signature_info;
  }
- 
+
