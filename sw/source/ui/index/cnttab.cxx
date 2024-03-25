@@ -3140,7 +3140,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
         //use the first two chars as symbol
         OUString sTmp(SwAuthorityFieldType::GetAuthFieldName(
                     static_cast<ToxAuthorityField>(aToInsertToken.nAuthorityField)));
-        pButton->SetText(sTmp.copy(0, 2));
+        pButton->SetText(sTmp.copy(0, std::min(sTmp.getLength(), sal_Int32(2))));
     }
 
     pButton->Check();
