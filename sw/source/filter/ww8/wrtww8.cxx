@@ -118,6 +118,7 @@
 #include <iodetect.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <fmtanchr.hxx>
 
 using namespace css;
 using namespace sw::util;
@@ -3280,8 +3281,11 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
     {
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Grf))
-            if (const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx())
-                m_aImplicitBookmarks.emplace_back(aURL, pIdx->GetNext()->GetIndex());
+        {
+            const SwFormatAnchor& rFormatAnchor = pFormat->GetAnchor();
+            if (SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode())
+                m_aImplicitBookmarks.emplace_back(aURL, pAnchorNode->GetIndex());
+        }
     }
     else if( sCmp == "frame" )
     {
@@ -3294,8 +3298,11 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
     {
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Ole))
-            if (const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx())
-                m_aImplicitBookmarks.emplace_back(aURL, pIdx->GetNext()->GetIndex());
+        {
+            const SwFormatAnchor& rFormatAnchor = pFormat->GetAnchor();
+            if (SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode())
+                m_aImplicitBookmarks.emplace_back(aURL, pAnchorNode->GetIndex());
+        }
     }
     else if( sCmp == "region" )
     {

@@ -119,7 +119,6 @@ public:
     const SwNodes& GetNodes() const { return m_pNode->GetNodes(); }
           SwNodes& GetNodes() { return m_pNode->GetNodes(); }
 
-    const SwNodeIndex* GetNext() const { return GetNextInRing(); }
     SwNode& GetNode() const { return *m_pNode; }
 };
 
