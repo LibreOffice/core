@@ -399,9 +399,21 @@
 #define STR_CONDITION_NOT_EQUAL                     NC_("STR_CONDITION_NOT_EQUAL", "not equal to")
 
 #define STR_CONDITION_BETWEEN                       NC_("STR_CONDITION_BETWEEN", "between")
-
+#define STR_CONDITION_NOT_BETWEEN                   NC_("STR_CONDITION_NOT_BETWEEN", "not between")
+#define STR_CONDITION_DUPLICATE                     NC_("STR_CONDITION_DUPLICATE", "duplicate")
+#define STR_CONDITION_NOT_DUPLICATE                 NC_("STR_CONDITION_NOT_DUPLICATE", "not duplicate")
+#define STR_CONDITION_TOP_N_ELEMENTS                NC_("STR_CONDITION_TOP_N_ELEMENTS", "in top N elements")
+#define STR_CONDITION_BOTTOM_N_ELEMENTS             NC_("STR_CONDITION_BOTTOM_N_ELEMENTS", "in bottom N elements")
+#define STR_CONDITION_TOP_N_PERCENT                 NC_("STR_CONDITION_TOP_N_PERCENT", "in top N percent")
+#define STR_CONDITION_BOTTOM_N_PERCENT              NC_("STR_CONDITION_BOTTOM_N_PERCENT", "in bottom N percent")
+#define STR_CONDITION_ABOVE_AVERAGE                 NC_("STR_CONDITION_ABOVE_AVERAGE", "above average")
+#define STR_CONDITION_BELOW_AVERAGE                 NC_("STR_CONDITION_BELOW_AVERAGE", "below average")
+#define STR_CONDITION_ABOVE_OR_EQUAL_AVERAGE        NC_("STR_CONDITION_ABOVE_OR_EQUAL_AVERAGE", "above or equal average")
+#define STR_CONDITION_BELOW_OR_EQUAL_AVERAGE        NC_("STR_CONDITION_BELOW_OR_EQUAL_AVERAGE", "below or equal average")
 #define STR_CONDITION_ERROR                         NC_("STR_CONDITION_ERROR", "with error ")
 #define STR_CONDITION_NOERROR                       NC_("STR_CONDITION_NOERROR", "without error ")
+#define STR_CONDITION_BEGINS_WITH                   NC_("STR_CONDITION_BEGINS_WITH", "begins with")
+#define STR_CONDITION_ENDS_WITH                     NC_("STR_CONDITION_ENDS_WITH", "ends with")
 #define STR_CONDITION_CONTAINS_TEXT                 NC_("STR_CONDITION_CONTAINS_TEXT", "containing text")
 #define STR_CONDITION_NOT_CONTAINS_TEXT             NC_("STR_CONDITION_NOT_CONTAINS_TEXT", "not containing text")
 

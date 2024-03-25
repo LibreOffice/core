@@ -66,6 +66,7 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mpDocument(&mpViewData->GetDocument())
     , mxNumberEntry(m_xBuilder->weld_entry("entryNumber"))
     , mxNumberEntry2(m_xBuilder->weld_entry("entryNumber2"))
+    , mxAllInputs(m_xBuilder->weld_container("allInputs"))
     , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry("entryRange")))
     , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
     , mxStyles(m_xBuilder->weld_combo_box("themeCombo"))
@@ -116,26 +117,62 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
             SetDescription(ScResId(STR_CONDITION_BETWEEN));
             mxNumberEntry2->show();
             break;
-        // NotBetween
-        // Duplicate
-        // NotDuplicate
-        // Direct
-        // Top10
-        // Bottom10
-        // TopPercent
-        // BottomPercent
-        // AboveAverage
-        // BelowAverage
-        // AboveEqualAverage
-        // BelowEqualAverage
+        case ScConditionMode::NotBetween:
+            SetDescription(ScResId(STR_CONDITION_NOT_BETWEEN));
+            mxNumberEntry2->show();
+            break;
+        case ScConditionMode::Duplicate:
+            SetDescription(ScResId(STR_CONDITION_DUPLICATE));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::NotDuplicate:
+            SetDescription(ScResId(STR_CONDITION_NOT_DUPLICATE));
+            mxAllInputs->hide();
+            break;
+        // TODO: Direct
+        case ScConditionMode::Top10:
+            SetDescription(ScResId(STR_CONDITION_TOP_N_ELEMENTS));
+            break;
+        case ScConditionMode::Bottom10:
+            SetDescription(ScResId(STR_CONDITION_BOTTOM_N_ELEMENTS));
+            break;
+
+        case ScConditionMode::TopPercent:
+            SetDescription(ScResId(STR_CONDITION_TOP_N_PERCENT));
+            break;
+        case ScConditionMode::BottomPercent:
+            SetDescription(ScResId(STR_CONDITION_BOTTOM_N_PERCENT));
+            break;
+
+        case ScConditionMode::AboveAverage:
+            SetDescription(ScResId(STR_CONDITION_ABOVE_AVERAGE));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::BelowAverage:
+            SetDescription(ScResId(STR_CONDITION_BELOW_AVERAGE));
+            mxAllInputs->hide();
+            break;
+
+        case ScConditionMode::AboveEqualAverage:
+            SetDescription(ScResId(STR_CONDITION_ABOVE_OR_EQUAL_AVERAGE));
+            mxAllInputs->hide();
+            break;
+        case ScConditionMode::BelowEqualAverage:
+            SetDescription(ScResId(STR_CONDITION_BELOW_OR_EQUAL_AVERAGE));
+            mxAllInputs->hide();
+            break;
         case ScConditionMode::Error:
             SetDescription(ScResId(STR_CONDITION_ERROR));
             break;
         case ScConditionMode::NoError:
             SetDescription(ScResId(STR_CONDITION_NOERROR));
             break;
-        // BeginsWith
-        // EndsWith
+        case ScConditionMode::BeginsWith:
+            SetDescription(ScResId(STR_CONDITION_BEGINS_WITH));
+            break;
+        case ScConditionMode::EndsWith:
+            SetDescription(ScResId(STR_CONDITION_ENDS_WITH));
+            break;
         case ScConditionMode::ContainsText:
             SetDescription(ScResId(STR_CONDITION_CONTAINS_TEXT));
             break;
@@ -209,8 +246,14 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
     {
         std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, mpDocument));
 
-        OUString sExpression1 = mxNumberEntry->get_text();
-        OUString sExpression2 = mxNumberEntry2->get_text();
+        OUString sExpression1
+            = (mxNumberEntry->get_visible() == true && mxAllInputs->get_visible() == true
+                   ? mxNumberEntry->get_text()
+                   : "");
+        OUString sExpression2
+            = (mxNumberEntry2->get_visible() == true && mxAllInputs->get_visible() == true
+                   ? mxNumberEntry2->get_text()
+                   : "");
 
         switch (meMode)
         {
