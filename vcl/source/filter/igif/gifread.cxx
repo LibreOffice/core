@@ -220,18 +220,22 @@ void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPal
     if (bGCTransparent)
     {
         const Color aWhite(COL_WHITE);
+        const Color aBlack(COL_BLACK);
 
         aBmp1 = Bitmap(aSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
 
         if (!aAnimation.Count())
-            aBmp1.Erase(aWhite);
+            aBmp1.Erase(aBlack);
 
         pAcc1 = aBmp1;
 
         if (pAcc1)
         {
-            cTransIndex1 = static_cast<sal_uInt8>(pAcc1->GetBestPaletteIndex(aWhite));
-            cNonTransIndex1 = cTransIndex1 ? 0 : 1;
+            // We have to make an AlphaMask from it, that needs to be inverted from transparency.
+            // It is faster to invert it here.
+            // So Non-Transparent color should be 0xff , and Transparent should be 0.
+            cNonTransIndex1 = static_cast<sal_uInt8>(pAcc1->GetBestPaletteIndex(aWhite));
+            cTransIndex1 = static_cast<sal_uInt8>(pAcc1->GetBestPaletteIndex(aBlack));
         }
         else
         {
@@ -671,7 +675,8 @@ void GIFReader::CreateNewBitmaps()
     {
         pAcc1.reset();
         AlphaMask aAlphaMask(aBmp1);
-        aAlphaMask.Invert(); // convert from transparency to alpha
+        // No need to convert from transparency to alpha
+        // aBmp1 is already inverted
         aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aAlphaMask );
     }
     else
