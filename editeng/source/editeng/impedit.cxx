@@ -1603,7 +1603,6 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
         // rectangle ...
         maVisDocStartPos = rOutDev.LogicToPixel(maVisDocStartPos);
         maVisDocStartPos = rOutDev.PixelToLogic(maVisDocStartPos);
-        maVisDocStartPos = rOutDev.PixelToLogic(maVisDocStartPos);
         tools::Rectangle aRect(maOutputArea);
 
         if (mpOutputWindow)
