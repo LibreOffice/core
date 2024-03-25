@@ -284,9 +284,7 @@ Scheduler::IdlesLockGuard::IdlesLockGuard()
         // condition to proceed. Only main thread returning to Application::Execute guarantees that
         // the flag really took effect.
         pSVData->m_inExecuteCondtion.reset();
-        std::optional<SolarMutexReleaser> releaser;
-        if (pSVData->mpDefInst->GetYieldMutex()->IsCurrentThread())
-            releaser.emplace();
+        SolarMutexReleaser releaser;
         pSVData->m_inExecuteCondtion.wait();
     }
 }

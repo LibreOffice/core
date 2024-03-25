@@ -207,15 +207,6 @@ private:
     }
 };
 
-namespace
-{
-struct SafeSolarMutexReleaser
-{
-    SolarMutexGuard guard; // To make sure we actually hold it prior to release
-    SolarMutexReleaser releaser;
-};
-}
-
 static DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 {
     if ( aFlavor.MimeType.indexOf( ";Aspect=THUMBNAIL" ) != -1 )
@@ -570,7 +561,7 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
             HRESULT hr;
             sal::systools::COMReference< IEnumFORMATETC > pFormatEnum;
             {
-                SafeSolarMutexReleaser releaser;
+                SolarMutexReleaser releaser;
                 hr = pDataObject->EnumFormatEtc(DATADIR_GET, &pFormatEnum);
             }
             if ( SUCCEEDED( hr ) && pFormatEnum )
@@ -860,7 +851,7 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
     // the object must be already disconnected from the temporary URL
     auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
 
-    SafeSolarMutexReleaser releaser;
+    SolarMutexReleaser releaser;
 
     auto pDataObject(pOleLinkComponentObj.QueryInterface<IDataObject>(sal::systools::COM_QUERY));
     if ( pDataObject && SUCCEEDED( OleQueryCreateFromData( pDataObject ) ) )
@@ -1007,7 +998,7 @@ void OleComponent::CloseObject()
     auto pOleObject(m_pNativeImpl->get<IOleObject>());
     if (pOleObject && OleIsRunning(pOleObject))
     {
-        SafeSolarMutexReleaser releaser;
+        SolarMutexReleaser releaser;
         HRESULT hr = pOleObject->Close(OLECLOSE_NOSAVE); // must be saved before
         SAL_WARN_IF(FAILED(hr), "embeddedobj.ole", "IOleObject::Close failed");
     }
@@ -1025,7 +1016,7 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
         sal::systools::COMReference< IEnumOLEVERB > pEnum;
         HRESULT hr;
         {
-            SafeSolarMutexReleaser releaser;
+            SolarMutexReleaser releaser;
             hr = pOleObject->EnumVerbs(&pEnum);
         }
         if (SUCCEEDED(hr))
@@ -1068,7 +1059,7 @@ void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
     if (!pOleObject)
         throw embed::WrongStateException(); // TODO
 
-    SafeSolarMutexReleaser releaser;
+    SolarMutexReleaser releaser;
 
     // TODO: probably extents should be set here and stored in aRect
     // TODO: probably the parent window also should be set
@@ -1085,7 +1076,7 @@ void OleComponent::SetHostName( const OUString& aEmbDocName )
     if (!pOleObject)
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    SafeSolarMutexReleaser releaser;
+    SolarMutexReleaser releaser;
     pOleObject->SetHostNames(L"app name", o3tl::toW(aEmbDocName.getStr()));
 }
 
@@ -1101,7 +1092,7 @@ void OleComponent::SetExtent( const awt::Size& aVisAreaSize, sal_Int64 nAspect )
     SIZEL aSize = { aVisAreaSize.Width, aVisAreaSize.Height };
     HRESULT hr;
     {
-        SafeSolarMutexReleaser releaser;
+        SolarMutexReleaser releaser;
         hr = pOleObject->SetExtent(nMSAspect, &aSize);
     }
 
@@ -1137,7 +1128,7 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
 
             HRESULT hr;
             {
-                SafeSolarMutexReleaser releaser;
+                SolarMutexReleaser releaser;
                 hr = pDataObject->GetData(&aFormat, &aMedium);
             }
 
@@ -1224,7 +1215,7 @@ awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
 
     HRESULT hr;
     {
-        SafeSolarMutexReleaser releaser;
+        SolarMutexReleaser releaser;
         hr = pViewObject2->GetExtent(nMSAspect, -1, nullptr, &aSize);
     }
 
@@ -1255,7 +1246,7 @@ awt::Size OleComponent::GetRecommendedExtent( sal_Int64 nAspect )
     SIZEL aSize;
     HRESULT hr;
     {
-        SafeSolarMutexReleaser releaser;
+        SolarMutexReleaser releaser;
         hr = pOleObject->GetExtent(nMSAspect, &aSize);
     }
     if ( FAILED( hr ) )
@@ -1276,7 +1267,7 @@ sal_Int64 OleComponent::GetMiscStatus( sal_Int64 nAspect )
 
     DWORD nResult = 0;
     {
-        SafeSolarMutexReleaser releaser;
+        SolarMutexReleaser releaser;
         pOleObject->GetMiscStatus(static_cast<DWORD>(nAspect), &nResult);
     }
     return static_cast<sal_Int64>(nResult); // first 32 bits are for MS flags
@@ -1292,7 +1283,7 @@ uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
     GUID aCLSID;
     HRESULT hr;
     {
-        SafeSolarMutexReleaser releaser;
+        SolarMutexReleaser releaser;
         hr = pOleObject->GetUserClassID(&aCLSID);
     }
     if ( FAILED( hr ) )
@@ -1315,7 +1306,7 @@ bool OleComponent::IsDirty()
     if ( !pPersistStorage )
         throw io::IOException(); // TODO
 
-    SafeSolarMutexReleaser releaser;
+    SolarMutexReleaser releaser;
     HRESULT hr = pPersistStorage->IsDirty();
     return ( hr != S_FALSE );
 }
@@ -1331,7 +1322,7 @@ void OleComponent::StoreOwnTmpIfNecessary()
     if ( !pPersistStorage )
         throw io::IOException(); // TODO
 
-    SafeSolarMutexReleaser releaser;
+    SolarMutexReleaser releaser;
 
     if ( m_bWorkaroundActive || pPersistStorage->IsDirty() != S_FALSE )
     {
@@ -1593,7 +1584,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
 
                 HRESULT hr;
                 {
-                    SafeSolarMutexReleaser releaser;
+                    SolarMutexReleaser releaser;
                     hr = pDataObject->GetData(&aFormat, &aMedium);
                 }
                 if ( SUCCEEDED( hr ) )
