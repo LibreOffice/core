@@ -2933,7 +2933,7 @@ SwTOXWidget* SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken&
             //use the first two chars as symbol
             OUString sTmp(SwAuthorityFieldType::GetAuthFieldName(
                         static_cast<ToxAuthorityField>(rToken.nAuthorityField)));
-            pButton->SetText(sTmp.copy(0, 2));
+            pButton->SetText(sTmp.copy(0, std::min(sTmp.getLength(), sal_Int32(2))));
         }
 
         sal_uInt32 nIndex = GetControlIndex( rToken.eTokenType );
