@@ -1893,6 +1893,13 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, test160553Tdf)
+{
+    createSwDoc("tdf160553.rtf");
+    // new section should create second page
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, test148544Tdf)
 {
     createSwDoc("tdf148544.rtf");
