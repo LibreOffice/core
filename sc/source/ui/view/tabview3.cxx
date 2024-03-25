@@ -425,9 +425,6 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     if (pModelObj)
         aNewSize = pModelObj->getDocumentSize();
 
-    if (aOldSize == aNewSize)
-        return;
-
     if (!pDocSh)
         return;
 
@@ -437,9 +434,13 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         if (pGridWindow)
         {
             Size aNewSizePx(aNewSize.Width() * aViewData.GetPPTX(), aNewSize.Height() * aViewData.GetPPTY());
-            pGridWindow->SetOutputSizePixel(aNewSizePx);
+            if (aNewSizePx != pGridWindow->GetOutputSizePixel())
+                pGridWindow->SetOutputSizePixel(aNewSizePx);
         }
     }
+
+    if (aOldSize == aNewSize)
+        return;
 
     // New area extended to the right of the sheet after last column
     // including overlapping area with aNewRowArea
@@ -2379,7 +2380,12 @@ void ScTabView::UpdateFormulas(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
     if ( aViewData.IsPagebreakMode() )
         UpdatePageBreakData();              //! asynchronous
 
-    UpdateHeaderWidth();
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    // UpdateHeaderWidth can fit the GridWindow widths to the frame, something
+    // we don't want in kit-mode where we try and match the GridWindow width
+    // to the tiled area separately
+    if (!bIsTiledRendering)
+        UpdateHeaderWidth();
 
     //  if in edit mode, adjust edit view area because widths/heights may have changed
     if ( aViewData.HasEditView( aViewData.GetActivePart() ) )
