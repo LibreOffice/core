@@ -62,13 +62,13 @@ m_aDash(rOther.m_aDash)
 
 XHatchEntry::XHatchEntry(const XHatch& rHatch, const OUString& rName)
 :   XPropertyEntry(rName),
-    aHatch(rHatch)
+    m_aHatch(rHatch)
 {
 }
 
 XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
 :   XPropertyEntry(rOther),
-    aHatch(rOther.aHatch)
+    m_aHatch(rOther.m_aHatch)
 {
 }
 

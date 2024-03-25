@@ -86,7 +86,7 @@ public:
 class SVXCORE_DLLPUBLIC XHatchEntry final : public XPropertyEntry
 {
 private:
-    XHatch  aHatch;
+    XHatch  m_aHatch;
 
 public:
     XHatchEntry(const XHatch& rHatch, const OUString& rName);
@@ -94,7 +94,7 @@ public:
 
     const XHatch& GetHatch() const
     {
-        return aHatch;
+        return m_aHatch;
     }
 };
 
