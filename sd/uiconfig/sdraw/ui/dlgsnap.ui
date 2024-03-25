@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="SnapObjectDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="dlgsnap|SnapObjectDialog">New Snap Object</property>
+    <property name="title" translatable="yes" context="dlgsnap|SnapObjectDialog">New Snap Guide</property>
     <property name="modal">True</property>
     <property name="default-width">0</property>
     <property name="default-height">0</property>
