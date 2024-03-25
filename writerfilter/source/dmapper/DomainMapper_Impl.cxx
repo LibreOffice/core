@@ -3793,26 +3793,14 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
 namespace
 {
 // Determines if the XText content is empty (no text, no shapes, no tables)
-bool isContentEmpty(uno::Reference<text::XText> const& xText, uno::Reference<text::XTextDocument> const& xTextDocument)
+bool isContentEmpty(uno::Reference<text::XText> const& xText)
 {
     if (!xText.is())
         return true; // no XText means it's empty
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
-    auto xDrawPage = xDrawPageSupplier->getDrawPage();
-    if (xDrawPage && xDrawPage->hasElements())
-    {
-        for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
-        {
-            uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
-            if (xShape.is())
-            {
-                uno::Reference<text::XTextRange> xAnchor = xShape->getAnchor();
-                if (xAnchor.is() && xAnchor->getText() == xText)
-                    return false;
-            }
-        }
-    }
+    uno::Reference<css::lang::XServiceInfo> xTextServiceInfo(xText, uno::UNO_QUERY);
+    if (xTextServiceInfo && xTextServiceInfo->getImplementationName() == "SwXHeadFootText")
+        return false;
 
     uno::Reference<container::XEnumerationAccess> xEnumAccess(xText->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
@@ -3959,7 +3947,7 @@ void DomainMapper_Impl::checkIfHeaderFooterIsEmpty(PagePartType ePagePartType, P
     if (!xPageStyle.is())
         return;
 
-    bool bEmpty = isContentEmpty(m_aTextAppendStack.top().xTextAppend, GetTextDocument());
+    bool bEmpty = isContentEmpty(m_aTextAppendStack.top().xTextAppend);
 
     if (eType == PageType::FIRST && bEmpty)
     {
