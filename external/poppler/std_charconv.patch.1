@@ -1,0 +1,30 @@
+no <charconv> in baseline GCC 7
+
+--- poppler/fofi/FoFiType1.cc.orig	2025-01-09 14:07:47.367442683 +0100
++++ poppler/fofi/FoFiType1.cc	2025-01-09 14:15:26.553919121 +0100
+@@ -28,7 +28,8 @@
+ 
+ #include <config.h>
+ 
+-#include <charconv>
++#include <boost/convert.hpp>
++#include <boost/convert/stream.hpp>
+ #include <optional>
+ 
+ #include <cstdlib>
+@@ -281,9 +282,13 @@
+ 
+                         int code = 0;
+                         if (codeToken->length() > 2 && codeToken->at(0) == '8' && codeToken->at(1) == '#') {
+-                            std::from_chars(codeToken->data() + 2, codeToken->data() + codeToken->length(), code, 8);
++                            boost::cnv::cstream ccnv;
++                            std::string_view temp(codeToken->data() + 2, codeToken->length() - 2);
++                            code = boost::convert<int>(temp, ccnv(std::oct)).value_or(-1);
+                         } else {
+-                            std::from_chars(codeToken->data(), codeToken->data() + codeToken->length(), code);
++                            boost::cnv::cstream ccnv;
++                            std::string_view temp(codeToken->data(), codeToken->length());
++                            code = boost::convert<int>(temp, ccnv(std::dec)).value_or(-1);
+                         }
+ 
+                         if (code >= 0 && code < 256 && nameToken->length() > 1) {
