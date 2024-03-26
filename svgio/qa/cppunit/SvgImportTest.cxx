@@ -441,6 +441,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156168)
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke[4]/line"_ostr, "color"_ostr, "#00ff00");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf160373)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf160373.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, nothing would be displayed
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor"_ostr, "color"_ostr, "#0000ff");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf129356)
 {
     Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf129356.svg");
