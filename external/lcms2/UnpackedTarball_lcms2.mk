@@ -15,10 +15,12 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,lcms2))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,lcms2,3))
 
+# external/lcms2/0001-Added-missing-export.patch.1:
+# backport of https://github.com/mm2/Little-CMS/commit/f7b3c637c20508655f8b49935a4b556d52937b69
 $(eval $(call gb_UnpackedTarball_add_patches,lcms2,\
+	external/lcms2/0001-Added-missing-export.patch.1 \
 	external/lcms2/lcms2-2.4-windows.patch \
 	external/lcms2/lcms2-windows_aarch64_outdir.patch.1 \
-	external/lcms2/c++17.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
