@@ -461,12 +461,10 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
 
         mpImpl->oGraphic.reset();
         mpImpl->aMediaType.clear();
-        mpImpl->oGraphic.emplace();
         mpImpl->mnGraphicVersion++;
     }
     else if ( !mpImpl->oGraphic )
     {
-        mpImpl->oGraphic.emplace();
         mpImpl->mnGraphicVersion++;
     }
     else
@@ -474,6 +472,8 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
         OSL_FAIL("No update, but replacement exists already!");
         return;
     }
+
+    mpImpl->oGraphic.emplace();
 
     std::unique_ptr<SvStream> pGraphicStream(GetGraphicStream( bUpdate ));
     if (!pGraphicStream && aOldGraphic.IsNone())
@@ -485,17 +485,24 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
                  "EmbeddedObjectRef::GetReplacement: failed to get updated graphic stream");
     }
 
+    if (!mpImpl->oGraphic)
+    {
+        // note that UpdateReplacementOnDemand which resets mpImpl->oGraphic to null may have been called
+        // e.g. when exporting ooo58458-1.odt to doc or kde274105-6.docx to rtf. Those looks like bugs as
+        // presumably generating the replacement graphic shouldn't re-trigger that the graphic needs
+        // to be updated, bodge this to work as callers naturally expect
+        SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetReplacement generating replacement image modified object to claim it needs to update replacement");
+        mpImpl->oGraphic.emplace();
+    }
+
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        if( mpImpl->oGraphic )
-            rGF.ImportGraphic( *mpImpl->oGraphic, u"", *pGraphicStream );
+        rGF.ImportGraphic( *mpImpl->oGraphic, u"", *pGraphicStream );
         mpImpl->mnGraphicVersion++;
     }
 
-    // note that UpdateReplacementOnDemand which resets mpImpl->oGraphic to null may have been called
-    // e.g. when exporting ooo58458-1.odt to doc
-    if (bUpdate && (!mpImpl->oGraphic || mpImpl->oGraphic->IsNone()) && !aOldGraphic.IsNone())
+    if (bUpdate && mpImpl->oGraphic->IsNone() && !aOldGraphic.IsNone())
     {
         // We used to have an old graphic, tried to update and the update
         // failed. Go back to the old graphic instead of having no graphic at
