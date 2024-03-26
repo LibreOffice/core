@@ -139,6 +139,9 @@ private:
     css::uno::Reference<css::drawing::framework::XResourceFactory> mxPaneFactory;
     css::uno::Reference<css::drawing::framework::XResourceFactory> mxViewFactory;
 
+    // IASS: Flag to note if InitializePresenterScreen() was executed
+    bool mbIsInitialized;
+
     class ViewDescriptor
     {
     public:
