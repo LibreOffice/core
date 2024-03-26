@@ -609,13 +609,57 @@ std::string UnixErrnoString(int nErrno)
         case EBFONT:
             return "EBFONT";
 #endif
+#if defined __clang__
+#if __has_warning("-Wdeprecated-pragma")
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-pragma"
+#endif
+#endif
         case ENOSTR:
+#if defined __clang__
+#if __has_warning("-Wdeprecated-pragma")
+#pragma clang diagnostic push
+#endif
+#endif
             return "ENOSTR";
+#if defined __clang__
+#if __has_warning("-Wdeprecated-pragma")
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-pragma"
+#endif
+#endif
         case ENODATA:
+#if defined __clang__
+#if __has_warning("-Wdeprecated-pragma")
+#pragma clang diagnostic push
+#endif
+#endif
             return "ENODATA";
+#if defined __clang__
+#if __has_warning("-Wdeprecated-pragma")
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-pragma"
+#endif
+#endif
         case ETIME:
+#if defined __clang__
+#if __has_warning("-Wdeprecated-pragma")
+#pragma clang diagnostic push
+#endif
+#endif
             return "ETIME";
+#if defined __clang__
+#if __has_warning("-Wdeprecated-pragma")
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-pragma"
+#endif
+#endif
         case ENOSR:
+#if defined __clang__
+#if __has_warning("-Wdeprecated-pragma")
+#pragma clang diagnostic push
+#endif
+#endif
             return "ENOSR";
 #ifdef ENONET
         case ENONET:
