@@ -475,7 +475,7 @@ namespace basegfx::utils
             return fRetval;
         }
 
-        double getLength(const B2DPolygon& rCandidate, bool bApproximateBezierLength)
+        double getLength(const B2DPolygon& rCandidate)
         {
             double fRetval(0.0);
             const sal_uInt32 nPointCount(rCandidate.count());
@@ -486,45 +486,18 @@ namespace basegfx::utils
 
                 if(rCandidate.areControlPointsUsed())
                 {
-                    if (bApproximateBezierLength)
+                    B2DCubicBezier aEdge;
+                    aEdge.setStartPoint(rCandidate.getB2DPoint(0));
+
+                    for(sal_uInt32 a(0); a < nEdgeCount; a++)
                     {
-                        B2DPoint aStartPoint = rCandidate.getB2DPoint(0);
+                        const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                        aEdge.setControlPointA(rCandidate.getNextControlPoint(a));
+                        aEdge.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
+                        aEdge.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
 
-                        for(sal_uInt32 a(0); a < nEdgeCount; a++)
-                        {
-                            // An approximate length of a cubic Bezier curve is the average
-                            // of its chord length and the sum of the lengths of its control net sides.
-                            const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                            const B2DPoint& aControlPoint1 = rCandidate.getNextControlPoint(a);
-                            const B2DPoint& aControlPoint2 = rCandidate.getPrevControlPoint(nNextIndex);
-                            const B2DPoint& aEndPoint = rCandidate.getB2DPoint(nNextIndex);
-
-                            double chord_length = B2DVector(aEndPoint - aStartPoint).getLength();
-                            double control_net_length = B2DVector(aStartPoint - aControlPoint1).getLength()
-                                + B2DVector(aControlPoint2 - aControlPoint1).getLength()
-                                + B2DVector(aEndPoint - aControlPoint2).getLength();
-                            double approximate_arc_length = (control_net_length + chord_length) / 2;
-
-                            fRetval += approximate_arc_length;
-                            aStartPoint = aEndPoint;
-                        }
-
-                    }
-                    else
-                    {
-                        B2DCubicBezier aEdge;
-                        aEdge.setStartPoint(rCandidate.getB2DPoint(0));
-
-                        for(sal_uInt32 a(0); a < nEdgeCount; a++)
-                        {
-                            const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                            aEdge.setControlPointA(rCandidate.getNextControlPoint(a));
-                            aEdge.setControlPointB(rCandidate.getPrevControlPoint(nNextIndex));
-                            aEdge.setEndPoint(rCandidate.getB2DPoint(nNextIndex));
-
-                            fRetval += aEdge.getLength();
-                            aEdge.setStartPoint(aEdge.getEndPoint());
-                        }
+                        fRetval += aEdge.getLength();
+                        aEdge.setStartPoint(aEdge.getEndPoint());
                     }
                 }
                 else
@@ -1259,9 +1232,9 @@ namespace basegfx::utils
             // precalculate maximal acceptable length of candidate polygon assuming
             // we want to create a maximum of fNumberOfAllowedSnippets. For
             // fNumberOfAllowedSnippets use ca. 65536, double due to line & gap.
-            static const double fNumberOfAllowedSnippets(100.0 * 2.0);
+            static const double fNumberOfAllowedSnippets(65535.0 * 2.0);
             const double fAllowedLength((fNumberOfAllowedSnippets * fDotDashLength) / double(rDotDashArray.size()));
-            const double fCandidateLength(basegfx::utils::getLength(rCandidate, /*bApproximateBezierLength*/true));
+            const double fCandidateLength(basegfx::utils::getLength(rCandidate));
             std::vector<double> aDotDashArray(rDotDashArray);
 
             if(fCandidateLength > fAllowedLength)
