@@ -240,9 +240,17 @@ void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject&)
 PresenterScreen::PresenterScreen (
     const Reference<XComponentContext>& rxContext,
     css::uno::Reference<css::frame::XModel2> xModel)
-    : PresenterScreenInterfaceBase(m_aMutex),
-      mxModel(std::move(xModel)),
-      mxContextWeak(rxContext)
+: PresenterScreenInterfaceBase(m_aMutex)
+, mxModel(std::move(xModel))
+, mxController()
+, mxConfigurationControllerWeak()
+, mxContextWeak(rxContext)
+, mpPresenterController()
+, mxSavedConfiguration()
+, mpPaneContainer()
+, mxPaneFactory()
+, mxViewFactory()
+, mbIsInitialized(false)
 {
 }
 
@@ -303,6 +311,10 @@ void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
 
 void PresenterScreen::InitializePresenterScreen()
 {
+    // IASS: already initialized (may even assert here?)
+    if (mbIsInitialized)
+        return;
+
     try
     {
         Reference<XComponentContext> xContext (mxContextWeak);
@@ -388,6 +400,9 @@ void PresenterScreen::InitializePresenterScreen()
     catch (const Exception&)
     {
     }
+
+    // IASS: Remember we are initialized
+    mbIsInitialized = true;
 }
 
 void PresenterScreen::SwitchMonitors()
@@ -545,6 +560,10 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
 
 void PresenterScreen::RequestShutdownPresenterScreen()
 {
+    // IASS: only cleanup when we are initialized
+    if (!mbIsInitialized)
+        return;
+
     // Restore the configuration that was active before the presenter screen
     // has been activated.  Now, that the presenter screen is displayed in
     // its own top level window this probably not necessary, but one never knows.
@@ -567,6 +586,9 @@ void PresenterScreen::RequestShutdownPresenterScreen()
             [pSelf](bool){ return pSelf->ShutdownPresenterScreen(); });
         xCC->update();
     }
+
+    // IASS: reset to non-initialized
+    mbIsInitialized = false;
 }
 
 void PresenterScreen::ShutdownPresenterScreen()
