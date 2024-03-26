@@ -153,11 +153,6 @@ short AbstractScDataFormDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-bool AbstractScDataFormDlg_Impl::StartExecuteAsync(AsyncContext& rCtx)
-{
-    return ScDataFormDlg::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
 BitmapEx AbstractScDataFormDlg_Impl::createScreenshot() const
 {
     VclPtr<VirtualDevice> xDialogSurface(m_xDlg->getDialog()->screenshot());
@@ -260,11 +255,6 @@ short AbstractScPivotFilterDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-bool AbstractScPivotFilterDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
-{
-    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
 short AbstractScDPFunctionDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -290,19 +280,9 @@ short AbstractScDPNumGroupDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-bool AbstractScDPNumGroupDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
-{
-    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
 short AbstractScDPDateGroupDlg_Impl::Execute()
 {
     return m_xDlg->run();
-}
-
-bool AbstractScDPDateGroupDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
-{
-    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractScDPShowDetailDlg_Impl::Execute()
@@ -310,19 +290,9 @@ short AbstractScDPShowDetailDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-bool AbstractScDPShowDetailDlg_Impl::StartExecuteAsync(AsyncContext& rCtx)
-{
-    return ScDPShowDetailDlg::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
 short AbstractScNewScenarioDlg_Impl::Execute()
 {
     return m_xDlg->run();
-}
-
-bool AbstractScNewScenarioDlg_Impl::StartExecuteAsync(AsyncContext& rCtx)
-{
-    return ScNewScenarioDlg::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractScShowTabDlg_Impl::Execute()
@@ -377,11 +347,6 @@ AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
 short AbstractScLinkedAreaDlg_Impl::Execute()
 {
     return m_xDlg->run();
-}
-
-bool AbstractScLinkedAreaDlg_Impl::StartExecuteAsync(AsyncContext& rCtx)
-{
-    return ScLinkedAreaDlg::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )

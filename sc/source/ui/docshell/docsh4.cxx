@@ -847,23 +847,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                                VclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected));
+                                ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected));
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
-                                pNewDlg->StartExecuteAsync(
-                                    [this, pNewDlg, nTab] (sal_Int32 nResult)->void
-                                    {
-                                        if (nResult == RET_OK)
-                                        {
-                                            OUString aName2, aComment2;
-                                            Color aColor2;
-                                            ScScenarioFlags nFlags2;
-                                            pNewDlg->GetScenarioData( aName2, aComment2, aColor2, nFlags2 );
-                                            ModifyScenario( nTab, aName2, aComment2, aColor2, nFlags2 );
-                                        }
-                                        pNewDlg->disposeOnce();
-                                    }
-                                );
-                                rReq.Done();
+                                if ( pNewDlg->Execute() == RET_OK )
+                                {
+                                    pNewDlg->GetScenarioData( aName, aComment, aColor, nFlags );
+                                    ModifyScenario( nTab, aName, aComment, aColor, nFlags );
+                                    rReq.Done();
+                                }
                             }
                         }
                     }

@@ -93,36 +93,30 @@ void ScPivotShell::Execute( const SfxRequest& rReq )
                     nSrcTab = pDesc->GetSourceRange().aStart.Tab();
                 }
 
+                ScViewData& rViewData = pViewShell->GetViewData();
                 SfxItemSetFixed<SCITEM_QUERYDATA, SCITEM_QUERYDATA> aArgSet( pViewShell->GetPool() );
-                aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &pViewShell->GetViewData(), &aQueryParam ) );
+                aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &rViewData, &aQueryParam ) );
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                VclPtr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
+                ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
                     pViewShell->GetFrameWeld(), aArgSet, nSrcTab));
 
-                pDlg->StartExecuteAsync(
-                    [this, pDlg, pDesc, pDPObj] (sal_Int32 nResult)->void
-                    {
-                        if (nResult == RET_OK)
-                        {
-                            ScViewData& rViewData = pViewShell->GetViewData();
-                            ScSheetSourceDesc aNewDesc(&rViewData.GetDocument());
-                            if( pDesc )
-                                aNewDesc = *pDesc;
+                if( pDlg->Execute() == RET_OK )
+                {
+                    ScSheetSourceDesc aNewDesc(&rViewData.GetDocument());
+                    if( pDesc )
+                        aNewDesc = *pDesc;
 
-                            const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                            aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
+                    const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
+                    aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
 
-                            ScDPObject aNewObj( *pDPObj );
-                            aNewObj.SetSheetDesc( aNewDesc );
-                            ScDBDocFunc aFunc( *rViewData.GetDocShell() );
-                            aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
-                            rViewData.GetView()->CursorPosChanged();       // shells may be switched
-                        }
-                        pDlg->disposeOnce();
-                    }
-                );
+                    ScDPObject aNewObj( *pDPObj );
+                    aNewObj.SetSheetDesc( aNewDesc );
+                    ScDBDocFunc aFunc( *rViewData.GetDocShell() );
+                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
+                    rViewData.GetView()->CursorPosChanged();       // shells may be switched
+                }
             }
         }
         break;

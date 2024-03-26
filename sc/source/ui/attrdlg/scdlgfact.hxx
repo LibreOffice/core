@@ -177,7 +177,7 @@ class AbstractScDeleteCellDlg_Impl : public AbstractScDeleteCellDlg
 {
     std::shared_ptr<ScDeleteCellDlg> m_xDlg;
 public:
-    explicit AbstractScDeleteCellDlg_Impl(std::shared_ptr<ScDeleteCellDlg> p)
+    explicit AbstractScDeleteCellDlg_Impl(std::unique_ptr<ScDeleteCellDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -193,14 +193,13 @@ public:
 //for dataform
 class AbstractScDataFormDlg_Impl : public AbstractScDataFormDlg
 {
-    std::shared_ptr<ScDataFormDlg> m_xDlg;
+    std::unique_ptr<ScDataFormDlg> m_xDlg;
 public:
-    explicit AbstractScDataFormDlg_Impl(std::shared_ptr<ScDataFormDlg> p)
+    explicit AbstractScDataFormDlg_Impl(std::unique_ptr<ScDataFormDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
-    virtual bool  StartExecuteAsync(AsyncContext& rCtx) override;
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
@@ -260,7 +259,7 @@ class AbstractScInsertCellDlg_Impl : public AbstractScInsertCellDlg
 {
     std::shared_ptr<ScInsertCellDlg> m_xDlg;
 public:
-    explicit AbstractScInsertCellDlg_Impl(std::shared_ptr<ScInsertCellDlg> p)
+    explicit AbstractScInsertCellDlg_Impl(std::unique_ptr<ScInsertCellDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -331,15 +330,14 @@ public:
 
 class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg
 {
-    std::shared_ptr<ScLinkedAreaDlg> m_xDlg;
+    std::unique_ptr<ScLinkedAreaDlg> m_xDlg;
 public:
-    explicit AbstractScLinkedAreaDlg_Impl(std::shared_ptr<ScLinkedAreaDlg> p)
+    explicit AbstractScLinkedAreaDlg_Impl(std::unique_ptr<ScLinkedAreaDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual                 ~AbstractScLinkedAreaDlg_Impl() override;
     virtual short           Execute() override;
-    virtual bool            StartExecuteAsync(AsyncContext& rCtx) override;
     virtual void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,
                                         sal_Int32 nRefreshDelaySeconds ) override;
@@ -416,14 +414,13 @@ public:
 
 class AbstractScPivotFilterDlg_Impl : public AbstractScPivotFilterDlg
 {
-    std::shared_ptr<ScPivotFilterDlg> m_xDlg;
+    std::unique_ptr<ScPivotFilterDlg> m_xDlg;
 public:
-    explicit AbstractScPivotFilterDlg_Impl(std::shared_ptr<ScPivotFilterDlg> p)
+    explicit AbstractScPivotFilterDlg_Impl(std::unique_ptr<ScPivotFilterDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
-    virtual bool  StartExecuteAsync(AsyncContext& rCtx) override;
     virtual const ScQueryItem&  GetOutputItem() override;
 };
 
@@ -459,54 +456,50 @@ public:
 
 class AbstractScDPNumGroupDlg_Impl : public AbstractScDPNumGroupDlg
 {
-    std::shared_ptr<ScDPNumGroupDlg> m_xDlg;
+    std::unique_ptr<ScDPNumGroupDlg> m_xDlg;
 public:
-    explicit AbstractScDPNumGroupDlg_Impl(std::shared_ptr<ScDPNumGroupDlg> p)
+    explicit AbstractScDPNumGroupDlg_Impl(std::unique_ptr<ScDPNumGroupDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
-    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual ScDPNumGroupInfo GetGroupInfo() const override;
 };
 
 class AbstractScDPDateGroupDlg_Impl : public AbstractScDPDateGroupDlg
 {
-    std::shared_ptr<ScDPDateGroupDlg> m_xDlg;
+    std::unique_ptr<ScDPDateGroupDlg> m_xDlg;
 public:
-    explicit AbstractScDPDateGroupDlg_Impl(std::shared_ptr<ScDPDateGroupDlg> p)
+    explicit AbstractScDPDateGroupDlg_Impl(std::unique_ptr<ScDPDateGroupDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
-    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual ScDPNumGroupInfo GetGroupInfo() const override;
     virtual sal_Int32 GetDatePart() const override;
 };
 
 class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 {
-    std::shared_ptr<ScDPShowDetailDlg> m_xDlg;
+    std::unique_ptr<ScDPShowDetailDlg> m_xDlg;
 public:
-    explicit AbstractScDPShowDetailDlg_Impl(std::shared_ptr<ScDPShowDetailDlg> p)
+    explicit AbstractScDPShowDetailDlg_Impl(std::unique_ptr<ScDPShowDetailDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
-    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual OUString GetDimensionName() const override;
 };
 
 class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg
 {
-    std::shared_ptr<ScNewScenarioDlg> m_xDlg;
+    std::unique_ptr<ScNewScenarioDlg> m_xDlg;
 public:
-    explicit AbstractScNewScenarioDlg_Impl(std::shared_ptr<ScNewScenarioDlg> p)
+    explicit AbstractScNewScenarioDlg_Impl(std::unique_ptr<ScNewScenarioDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
-    virtual bool            StartExecuteAsync(AsyncContext& rCtx) override;
 
     virtual void SetScenarioData( const OUString& rName, const OUString& rComment,
                             const Color& rColor, ScScenarioFlags nFlags ) override;

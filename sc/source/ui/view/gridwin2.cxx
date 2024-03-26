@@ -150,9 +150,10 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 
 void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup, bool bMultiField )
 {
+    ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.GetTabNo();
 
-    ScDPObject* pDPObj  = mrViewData.GetDocument().GetDPAtCursor(nCol, nRow, nTab);
+    ScDPObject* pDPObj  = rDoc.GetDPAtCursor(nCol, nRow, nTab);
 
     if (pDPObj)
     {
@@ -210,31 +211,24 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-            VclPtr<AbstractScPivotFilterDlg> pDlg(
+            ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(
                 pFact->CreateScPivotFilterDlg(
                     mrViewData.GetViewShell()->GetFrameWeld(), aArgSet, nSrcTab));
-            pDlg->StartExecuteAsync(
-                [this, pDlg, pDesc, pDPObj] (sal_Int32 nResult)->void
-                {
-                    if (nResult == RET_OK)
-                    {
-                        ScDocument& rDoc = mrViewData.GetDocument();
-                        ScSheetSourceDesc aNewDesc(&rDoc);
-                        if (pDesc)
-                            aNewDesc = *pDesc;
+            if ( pDlg->Execute() == RET_OK )
+            {
+                ScSheetSourceDesc aNewDesc(&rDoc);
+                if (pDesc)
+                    aNewDesc = *pDesc;
 
-                        const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                        aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
+                const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
+                aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
 
-                        ScDPObject aNewObj( *pDPObj );
-                        aNewObj.SetSheetDesc( aNewDesc );
-                        ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
-                        aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
-                        mrViewData.GetView()->CursorPosChanged();       // shells may be switched
-                    }
-                    pDlg->disposeOnce();
-                }
-            );
+                ScDPObject aNewObj( *pDPObj );
+                aNewObj.SetSheetDesc( aNewDesc );
+                ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
+                aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
+                mrViewData.GetView()->CursorPosChanged();       // shells may be switched
+            }
         }
     }
     else

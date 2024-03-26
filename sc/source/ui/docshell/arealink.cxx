@@ -77,25 +77,19 @@ void ScAreaLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& /* rE
     //  use own dialog instead of SvBaseLink::Edit...
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-    VclPtr<AbstractScLinkedAreaDlg> pDlg(pFact->CreateScLinkedAreaDlg(pParent));
+    ScopedVclPtr<AbstractScLinkedAreaDlg> pDlg(pFact->CreateScLinkedAreaDlg(pParent));
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelaySeconds() );
-    pDlg->StartExecuteAsync(
-        [this, pDlg] (sal_Int32 nResult)->void
-        {
-            if (nResult == RET_OK)
-            {
-                aOptions = pDlg->GetOptions();
-                Refresh( pDlg->GetURL(), pDlg->GetFilter(),
-                         pDlg->GetSource(), pDlg->GetRefreshDelaySeconds() );
+    if ( pDlg->Execute() == RET_OK )
+    {
+        aOptions = pDlg->GetOptions();
+        Refresh( pDlg->GetURL(), pDlg->GetFilter(),
+                 pDlg->GetSource(), pDlg->GetRefreshDelaySeconds() );
 
-                //  copy source data from members (set in Refresh) into link name for dialog
-                OUString aNewLinkName;
-                sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
-                SetName( aNewLinkName );
-            }
-            pDlg->disposeOnce();
-        }
-    );
+        //  copy source data from members (set in Refresh) into link name for dialog
+        OUString aNewLinkName;
+        sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
+        SetName( aNewLinkName );
+    }
 }
 
 ::sfx2::SvBaseLink::UpdateResult ScAreaLink::DataChanged(
