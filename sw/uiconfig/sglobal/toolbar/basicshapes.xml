@@ -45,4 +45,6 @@
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.frame"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ring"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.sinusoid"/>
 </toolbar:toolbar>

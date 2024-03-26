@@ -43,4 +43,6 @@
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cube"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.paper"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.frame"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.sinusoid"/>
 </toolbar:toolbar>

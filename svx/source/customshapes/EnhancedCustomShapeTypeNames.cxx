@@ -236,7 +236,8 @@ const NameTypeTable pNameTypeTableArray[] =
     { "mso-spt201", mso_sptHostControl },
     { "mso-spt202", mso_sptTextBox },
     { "teardrop",   mso_sptTearDrop },
-    { "ooxml-rect", mso_sptRectangle }
+    { "ooxml-rect", mso_sptRectangle },
+    { "sinusoid", mso_sptSinusoid }
 };
 
     // gallery: quadrat
@@ -518,7 +519,8 @@ const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "mso-spt202", mso_sptTextBox },*/
     { "frame", "Frame" },
     { "col-60da8460", "Octagon Bevel" },
-    { "col-502ad400", "Diamond Bevel" }
+    { "col-502ad400", "Diamond Bevel" },
+    { "sinusoid", "Sinusoid" }
 };
 
 typedef std::unordered_map<OUString, OUString> TypeACCNameHashMap;

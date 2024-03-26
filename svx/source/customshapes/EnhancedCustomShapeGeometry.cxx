@@ -8352,6 +8352,62 @@ const mso_CustomShape msoTearDrop =
     std::span<const SvxMSDffHandle>(mso_sptTearDropHandle),
 };
 
+///////////////////////////// sinusoid
+const SvxMSDffVertPair mso_sptSinusoidVert[] =
+{
+    // calculations courtesy of section 6.3.2 of
+    // https://documentation.libreoffice.org/assets/Uploads/Documentation/en/Tutorials/CustomShapes7/Custom-Shape-Tutorial.pdf#page=52
+
+    // taking K = (3pi/2 - 3pi^2/8 - 1/2)
+    // transforming points to viewbox of size 21600 x 21600
+
+    // Start point
+    {     0, 10800 }, // (0, 0)
+    // First Bezier
+    {  1757,  5278 }, // (K, K)
+    {  3437,     0 }, // (1, 1)
+    {  5400,     0 }, // (pi/2, 1)
+    // Second Bezier
+    {  7362,     0 }, // (pi - 1, 1)
+    {  9042,  5278 }, // (pi - K, K)
+    { 10800, 10800 }, // (pi, 0)
+    // Third Bezier
+    { 12557, 16321 }, // (pi + K, -K)
+    { 14237, 21600 }, // (pi + 1, -1)
+    { 16200, 21600 }, // (3pi/2, -1)
+    // Fourth Bezier
+    { 18162, 21600 }, // (2pi - 1, -1)
+    { 19842, 16321 }, // (2pi - K, -K)
+    { 21600, 10800 }  // (2pi, 0)
+};
+
+const sal_uInt16 mso_sptSinusoidSegm[] =
+{
+    0x4000, 0x2004, 0x8000
+};
+
+const SvxMSDffVertPair mso_sptSinusoidGluePoints[] =
+{
+    {     0, 10800 },  // x = 0.00
+    {  5400,     0 },  // x = 0.25
+    { 10800, 10800 },  // x = 0.50
+    { 16200, 21600 },  // x = 0.75
+    { 21600, 10800 }   // x = 1.00
+};
+
+const mso_CustomShape msoSinusoid =
+{
+    std::span<const SvxMSDffVertPair>(mso_sptSinusoidVert),                         // vertices
+    const_cast<sal_uInt16*>(mso_sptSinusoidSegm), sizeof(mso_sptSinusoidSegm) >> 1, // segments, count
+    std::span<const SvxMSDffCalculationData>(),                                     // calculations (none)
+    nullptr,                                                                        // default values (none)
+    std::span<const SvxMSDffTextRectangles>(),                                      // text area (default)
+    21600, 21600,                                                                   // viewbox w, h (default)
+    MIN_INT32, MIN_INT32,                                                           // stretch x, y (unset)
+    std::span<const SvxMSDffVertPair>(mso_sptSinusoidGluePoints),                   // glue points
+    std::span<const SvxMSDffHandle>(),                                              // handles (none)
+};
+
 
 const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
 {
@@ -8481,6 +8537,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptCloudCallout :              pCustomShape = &msoCloudCallout; break;
         case mso_sptWave :                      pCustomShape = &msoWave; break;
         case mso_sptDoubleWave :                pCustomShape = &msoDoubleWave; break;
+        case mso_sptSinusoid :                  pCustomShape = &msoSinusoid; break;
 
         // callout
         case mso_sptCallout1 :                  pCustomShape = &msoCallout1; break;

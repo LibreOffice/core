@@ -621,12 +621,13 @@ constexpr frozen::set<std::u16string_view, 57> constDenySet(
     u"flowchart-display"
 });
 
-constexpr frozen::set<std::u16string_view, 4> constAllowSet(
+constexpr frozen::set<std::u16string_view, 5> constAllowSet(
 {
     u"heart",
     u"puzzle",
     u"col-60da8460",
-    u"col-502ad400"
+    u"col-502ad400",
+    u"sinusoid"
 });
 
 } // end anonymous namespace

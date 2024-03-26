@@ -478,6 +478,7 @@ enum MSO_SPT: sal_Int32 {
    mso_sptTextBox = 202,
    //for pptx shape which doesn't exist in ppt
    mso_sptTearDrop = 203,
+   mso_sptSinusoid = 204,
    mso_sptMax = 0x0FFF,
    mso_sptNil = mso_sptMax
 };

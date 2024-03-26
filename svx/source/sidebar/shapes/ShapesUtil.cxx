@@ -87,7 +87,8 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {20, ".uno:BasicShapes.cube"},
         {21, ".uno:BasicShapes.paper"},
         {22, ".uno:BasicShapes.frame"},
-        {23, ".uno:BasicShapes.ring"}
+        {23, ".uno:BasicShapes.ring"},
+        {24, ".uno:SymbolShapes.sinusoid"}
     };
 
     mpSymbolShapes = decltype(mpSymbolShapes){
