@@ -406,9 +406,7 @@ sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
 }
 
 ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, OUString aN)
-    :ScChartObj_Base( m_aMutex )
-    ,ScChartObj_PBase( ScChartObj_Base::rBHelper )
-    ,pDocShell( pDocSh )
+    :pDocShell( pDocSh )
     ,nTab( nT )
     ,aChartName(std::move( aN ))
 {
@@ -519,7 +517,7 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
     return *ScChartObj_PABase::getArrayHelper();
 }
 
-void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue )
+void ScChartObj::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nHandle, const uno::Any& rValue )
 {
     switch ( nHandle )
     {
@@ -551,7 +549,7 @@ void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno:
     }
 }
 
-void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) const
+void ScChartObj::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/, uno::Any& rValue, sal_Int32 nHandle ) const
 {
     switch ( nHandle )
     {
