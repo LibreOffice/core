@@ -36,7 +36,6 @@ using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
 // necessary for MS compiler
-using ::comphelper::OPropertyContainer;
 using ::chart::impl::UncachedDataSequence_Base;
 
 namespace
@@ -57,9 +56,7 @@ namespace chart
 UncachedDataSequence::UncachedDataSequence(
     rtl::Reference< InternalDataProvider > xIntDataProv,
     OUString aRangeRepresentation )
-        : OPropertyContainer( GetBroadcastHelper()),
-          UncachedDataSequence_Base( GetMutex()),
-          m_nNumberFormatKey(0),
+        : m_nNumberFormatKey(0),
           m_xDataProvider(std::move( xIntDataProv )),
           m_aSourceRepresentation(std::move( aRangeRepresentation )),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
@@ -71,21 +68,18 @@ UncachedDataSequence::UncachedDataSequence(
     rtl::Reference< InternalDataProvider > xIntDataProv,
     OUString aRangeRepresentation,
     const OUString & rRole )
-        : OPropertyContainer( GetBroadcastHelper()),
-          UncachedDataSequence_Base( GetMutex()),
-          m_nNumberFormatKey(0),
+        : m_nNumberFormatKey(0),
           m_xDataProvider(std::move( xIntDataProv )),
           m_aSourceRepresentation(std::move( aRangeRepresentation )),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
-    setFastPropertyValue_NoBroadcast( PROP_PROPOSED_ROLE, uno::Any( rRole ));
+    std::unique_lock<std::mutex> aGuard;
+    setFastPropertyValue_NoBroadcast( aGuard, PROP_PROPOSED_ROLE, uno::Any( rRole ));
 }
 
 UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource )
-        : OPropertyContainer( GetBroadcastHelper()),
-          UncachedDataSequence_Base( GetMutex()),
-          m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
+        : m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
           m_xDataProvider( rSource.m_xDataProvider ),
           m_aSourceRepresentation( rSource.m_aSourceRepresentation ),
@@ -118,8 +112,8 @@ void UncachedDataSequence::registerProperties()
                       cppu::UnoType<decltype(m_aXMLRange)>::get() );
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( UncachedDataSequence, UncachedDataSequence_Base, OPropertyContainer )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( UncachedDataSequence, UncachedDataSequence_Base, OPropertyContainer )
+IMPLEMENT_FORWARD_XINTERFACE2( UncachedDataSequence, UncachedDataSequence_Base, comphelper::OPropertyContainer2 )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( UncachedDataSequence, UncachedDataSequence_Base, comphelper::OPropertyContainer2 )
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertySetInfo()
@@ -167,7 +161,7 @@ css::uno::Sequence< OUString > SAL_CALL UncachedDataSequence::getSupportedServic
 Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
 {
     Sequence< double > aResult;
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
     {
         const Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
@@ -182,7 +176,7 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
 Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
 {
     Sequence< OUString > aResult;
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
     {
         const Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
@@ -196,7 +190,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
 // ________ XDataSequence  ________
 Sequence< Any > SAL_CALL UncachedDataSequence::getData()
 {
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
         return m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation );
     return Sequence< Any >();
@@ -228,7 +222,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
 // ____ XIndexReplace ____
 void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element )
 {
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock<std::mutex> aGuard;
     Sequence< Any > aData( getData());
     if( Index < aData.getLength() &&
         m_xDataProvider.is() )

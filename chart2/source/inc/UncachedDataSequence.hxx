@@ -19,10 +19,10 @@
 #pragma once
 
 // helper classes
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/propertycontainer.hxx>
+#include <comphelper/propertycontainer2.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <rtl/ref.hxx>
 
@@ -46,7 +46,7 @@ class ModifyEventForwarder;
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper<
+typedef ::comphelper::WeakComponentImplHelper<
     css::chart2::data::XDataSequence,
     css::chart2::data::XNumericalDataSequence,
     css::chart2::data::XTextualDataSequence,
@@ -69,8 +69,7 @@ typedef ::cppu::WeakComponentImplHelper<
  * 'label 2', ...</p>
  */
 class UncachedDataSequence final :
-        public ::comphelper::OMutexAndBroadcastHelper,
-        public ::comphelper::OPropertyContainer,
+        public ::comphelper::OPropertyContainer2,
         public ::comphelper::OPropertyArrayUsageHelper< UncachedDataSequence >,
         public impl::UncachedDataSequence_Base
 {
@@ -103,7 +102,7 @@ private:
     /// @see css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
     /// @see ::comphelper::OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
