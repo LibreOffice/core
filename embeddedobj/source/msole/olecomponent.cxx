@@ -201,7 +201,8 @@ private:
 
     template <typename T> void registerInterface(T* pInterface, DWORD& cookie)
     {
-        assert(cookie == 0); // do not set again
+        if (cookie != 0) // E.g., on subsequent RunObject calls
+            return;
         HRESULT hr = m_pGlobalTable->RegisterInterfaceInGlobal(pInterface, __uuidof(T), &cookie);
         SAL_WARN_IF(FAILED(hr), "embeddedobj.ole", "RegisterInterfaceInGlobal failed");
     }
