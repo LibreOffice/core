@@ -33,6 +33,9 @@ enum SwFillOrder
     SW_FILL_ORDER_END
 };
 
+/// Some kind of fill order, mostly appears in the item set of a table line.
+///
+/// Doesn't seem to be used by the layout, also no UI to get or set it.
 class SwFormatFillOrder final : public SfxEnumItem<SwFillOrder>
 {
 public:
