@@ -20,10 +20,9 @@
 #pragma once
 
 #include <com/sun/star/form/binding/XListEntryTypedSource.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <comphelper/interfacecontainer3.hxx>
-#include <comphelper/propertycontainer.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/propertycontainer2.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -41,19 +40,18 @@ namespace calc
 
     class OCellListSource;
     // the base for our interfaces
-    typedef ::cppu::WeakComponentImplHelper <   css::form::binding::XListEntryTypedSource
+    typedef ::comphelper::WeakComponentImplHelper <   css::form::binding::XListEntryTypedSource
                                             ,   css::util::XModifyListener
                                             ,   css::lang::XServiceInfo
                                             ,   css::lang::XInitialization
                                             >   OCellListSource_Base;
     // the base for the property handling
-    typedef ::comphelper::OPropertyContainer        OCellListSource_PBase;
+    typedef ::comphelper::OPropertyContainer2        OCellListSource_PBase;
     // the second base for property handling
     typedef ::comphelper::OPropertyArrayUsageHelper< OCellListSource >
                                                     OCellListSource_PABase;
 
-    class OCellListSource :public ::cppu::BaseMutex
-                            ,public OCellListSource_Base      // order matters! before OCellListSource_PBase, so rBHelper gets initialized
+    class OCellListSource :public OCellListSource_Base      // order matters! before OCellListSource_PBase, so rBHelper gets initialized
                             ,public OCellListSource_PBase
                             ,public OCellListSource_PABase
     {
@@ -62,7 +60,7 @@ namespace calc
                     m_xDocument;            /// the document where our cell lives
         css::uno::Reference< css::table::XCellRange >
                     m_xRange;               /// the range of cells we're bound to
-        ::comphelper::OInterfaceContainerHelper3<css::form::binding::XListEntryListener>
+        ::comphelper::OInterfaceContainerHelper4<css::form::binding::XListEntryListener>
                     m_aListEntryListeners;  /// our listeners
         bool        m_bInitialized;         /// has XInitialization::initialize been called?
 
@@ -94,7 +92,7 @@ namespace calc
         virtual css::uno::Sequence< OUString > SAL_CALL getAllListEntriesTyped( css::uno::Sequence< css::uno::Any >& rDataValues ) override;
 
         // OComponentHelper/XComponent
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing( std::unique_lock<std::mutex>& ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -105,8 +103,8 @@ namespace calc
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+        virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -119,7 +117,6 @@ namespace calc
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     private:
-        void    checkDisposed( ) const;
         void    checkInitialized();
 
         /** retrieves the actual address of our cell range
@@ -139,11 +136,14 @@ namespace calc
         */
         OUString
                 getCellTextContent_noCheck(
+                    std::unique_lock<std::mutex>& rGuard,
                     sal_Int32 _nRangeRelativeRow,
                     css::uno::Any* pAny
                 );
 
         void    notifyModified();
+
+        sal_Int32 getListEntryCount(std::unique_lock<std::mutex>& rGuard);
 
     private:
         OCellListSource( const OCellListSource& ) = delete;
