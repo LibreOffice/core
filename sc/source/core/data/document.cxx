@@ -95,6 +95,7 @@
 #include <limits>
 #include <memory>
 #include <utility>
+#include <unordered_map>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -150,23 +151,13 @@ void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUSt
 
 struct ScDefaultAttr
 {
-    const ScPatternAttr*    pAttr;
-    SCROW                   nFirst;
-    SCSIZE                  nCount;
-    explicit ScDefaultAttr(const ScPatternAttr* pPatAttr) : pAttr(pPatAttr), nFirst(0), nCount(0) {}
-};
-
-struct ScLessDefaultAttr
-{
-    bool operator() (const ScDefaultAttr& rValue1, const ScDefaultAttr& rValue2) const
-    {
-        return rValue1.pAttr < rValue2.pAttr;
-    }
+    SCROW                   nFirst { 0 };
+    SCSIZE                  nCount { 0 };
 };
 
 }
 
-typedef std::set<ScDefaultAttr, ScLessDefaultAttr>  ScDefaultAttrSet;
+typedef std::unordered_map<const ScPatternAttr*, ScDefaultAttr> ScDefaultAttrMap;
 
 void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
 {
@@ -4676,40 +4667,36 @@ void ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& n
     if (nEndRow >= nLastRow)
         return;
 
-    ScDefaultAttrSet aSet;
-    ScDefaultAttrSet::iterator aItr = aSet.end();
+    ScDefaultAttrMap aMap;
     while (pAttr)
     {
-        ScDefaultAttr aAttr(pAttr);
-        aItr = aSet.find(aAttr);
-        if (aItr == aSet.end())
+        auto aItr = aMap.find(pAttr);
+        if (aItr == aMap.end())
         {
+            ScDefaultAttr aAttr;
             aAttr.nCount = static_cast<SCSIZE>(nEndRow - nStartRow + 1);
             aAttr.nFirst = nStartRow;
-            aSet.insert(aAttr);
+            aMap.insert({ pAttr, aAttr});
         }
         else
         {
-            aAttr.nCount = aItr->nCount + static_cast<SCSIZE>(nEndRow - nStartRow + 1);
-            aAttr.nFirst = aItr->nFirst;
-            aSet.erase(aItr);
-            aSet.insert(aAttr);
+            aItr->second.nCount += static_cast<SCSIZE>(nEndRow - nStartRow + 1);
         }
         pAttr = aDocAttrItr.GetNext(nColumn, nStartRow, nEndRow);
     }
-    ScDefaultAttrSet::iterator aDefaultItr = aSet.begin();
-    aItr = aDefaultItr;
+    auto aDefaultItr = aMap.begin();
+    auto aItr = aDefaultItr;
     ++aItr;
-    while (aItr != aSet.end())
+    while (aItr != aMap.end())
     {
         // for entries with equal count, use the one with the lowest start row,
         // don't use the random order of pointer comparisons
-        if ( aItr->nCount > aDefaultItr->nCount ||
-             ( aItr->nCount == aDefaultItr->nCount && aItr->nFirst < aDefaultItr->nFirst ) )
+        if ( aItr->second.nCount > aDefaultItr->second.nCount ||
+             ( aItr->second.nCount == aDefaultItr->second.nCount && aItr->second.nFirst < aDefaultItr->second.nFirst ) )
             aDefaultItr = aItr;
         ++aItr;
     }
-    nDefault = aDefaultItr->nFirst;
+    nDefault = aDefaultItr->second.nFirst;
 }
 
 void ScDocument::StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SCTAB nTab )
