@@ -1003,47 +1003,35 @@ void SbRtl_LCase(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Left(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 3)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    OUString aStr(rPar.Get(1)->GetOUString());
+    sal_Int32 nResultLen = rPar.Get(2)->GetLong();
+    if( nResultLen < 0 )
     {
+        nResultLen = 0;
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    else
+    else if(nResultLen > aStr.getLength())
     {
-        OUString aStr(rPar.Get(1)->GetOUString());
-        sal_Int32 nResultLen = rPar.Get(2)->GetLong();
-        if( nResultLen < 0 )
-        {
-            nResultLen = 0;
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-        }
-        else if(nResultLen > aStr.getLength())
-        {
-            nResultLen = aStr.getLength();
-        }
-        aStr = aStr.copy(0, nResultLen );
-        rPar.Get(0)->PutString(aStr);
+        nResultLen = aStr.getLength();
     }
+    aStr = aStr.copy(0, nResultLen );
+    rPar.Get(0)->PutString(aStr);
 }
 
 void SbRtl_Log(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        double aArg = rPar.Get(1)->GetDouble();
-        if ( aArg > 0 )
-        {
-            double d = log( aArg );
-            checkArithmeticOverflow( d );
-            rPar.Get(0)->PutDouble(d);
-        }
-        else
-        {
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-        }
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    double aArg = rPar.Get(1)->GetDouble();
+    if ( aArg <= 0 )
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    double d = log( aArg );
+    checkArithmeticOverflow( d );
+    rPar.Get(0)->PutDouble(d);
 }
 
 void SbRtl_LTrim(StarBASIC *, SbxArray & rPar, bool)
@@ -1164,18 +1152,14 @@ void SbRtl_Mid(StarBASIC *, SbxArray & rPar, bool bWrite)
 void SbRtl_Oct(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        SbxVariableRef pArg = rPar.Get(1);
-        // converting value to unsigned and limit to 2 or 4 byte representation
-        sal_uInt32 nVal = pArg->IsInteger() ?
-            static_cast<sal_uInt16>(pArg->GetInteger()) :
-            static_cast<sal_uInt32>(pArg->GetLong());
-        rPar.Get(0)->PutString(OUString::number(nVal, 8));
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxVariableRef pArg = rPar.Get(1);
+    // converting value to unsigned and limit to 2 or 4 byte representation
+    sal_uInt32 nVal = pArg->IsInteger() ?
+        static_cast<sal_uInt16>(pArg->GetInteger()) :
+        static_cast<sal_uInt32>(pArg->GetLong());
+    rPar.Get(0)->PutString(OUString::number(nVal, 8));
 }
 
 // Replace(expression, find, replace[, start[, count[, compare]]])
@@ -1184,9 +1168,7 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
 {
     const sal_uInt32 nArgCount = rPar.Count() - 1;
     if ( nArgCount < 3 || nArgCount > 6 )
-    {
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
 
     sal_Int32 lStartPos = 1;
     if (nArgCount >= 4)
@@ -1287,26 +1269,22 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Right(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 3)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    const OUString& rStr = rPar.Get(1)->GetOUString();
+    int nResultLen = rPar.Get(2)->GetLong();
+    if( nResultLen < 0 )
     {
+        nResultLen = 0;
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    else
+    int nStrLen = rStr.getLength();
+    if ( nResultLen > nStrLen )
     {
-        const OUString& rStr = rPar.Get(1)->GetOUString();
-        int nResultLen = rPar.Get(2)->GetLong();
-        if( nResultLen < 0 )
-        {
-            nResultLen = 0;
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-        }
-        int nStrLen = rStr.getLength();
-        if ( nResultLen > nStrLen )
-        {
-            nResultLen = nStrLen;
-        }
-        OUString aResultStr = rStr.copy( nStrLen - nResultLen );
-        rPar.Get(0)->PutString(aResultStr);
+        nResultLen = nStrLen;
     }
+    OUString aResultStr = rStr.copy( nStrLen - nResultLen );
+    rPar.Get(0)->PutString(aResultStr);
 }
 
 void SbRtl_RTL(StarBASIC * pBasic, SbxArray & rPar, bool)
@@ -1326,23 +1304,19 @@ void SbRtl_RTrim(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Sgn(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    double aDouble = rPar.Get(1)->GetDouble();
+    sal_Int16 nResult = 0;
+    if ( aDouble > 0 )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        nResult = 1;
     }
-    else
+    else if ( aDouble < 0 )
     {
-        double aDouble = rPar.Get(1)->GetDouble();
-        sal_Int16 nResult = 0;
-        if ( aDouble > 0 )
-        {
-            nResult = 1;
-        }
-        else if ( aDouble < 0 )
-        {
-            nResult = -1;
-        }
-        rPar.Get(0)->PutInteger(nResult);
+        nResult = -1;
     }
+    rPar.Get(0)->PutInteger(nResult);
 }
 
 void SbRtl_Space(StarBASIC *, SbxArray & rPar, bool)
