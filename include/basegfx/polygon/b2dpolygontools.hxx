@@ -113,7 +113,7 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC double getEdgeLength(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
         /** get length of polygon */
-        BASEGFX_DLLPUBLIC double getLength(const B2DPolygon& rCandidate, bool bApproximateBezierLength = false);
+        BASEGFX_DLLPUBLIC double getLength(const B2DPolygon& rCandidate);
 
         // get position on polygon for absolute given distance. If
         // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
