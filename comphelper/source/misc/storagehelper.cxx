@@ -514,7 +514,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         // allows encrypting with keys that have their trust level set to
         // "Ultimate". The gpg command, however, gives the user the option
         // to encrypt with a certificate that has a lower trust level so
-        // emulate that bahavior by asking the user if they want to trust
+        // emulate that behavior by asking the user if they want to trust
         // the certificate for just this operation only.
         if (crypt_res.error().code() == GPG_ERR_UNUSABLE_PUBKEY)
         {
