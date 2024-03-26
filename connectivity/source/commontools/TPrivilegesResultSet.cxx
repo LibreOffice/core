@@ -104,17 +104,17 @@ const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)
     return ODatabaseMetaDataResultSet::getValue(columnIndex);
 }
 
-void SAL_CALL OResultSetPrivileges::disposing()
+void OResultSetPrivileges::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    ODatabaseMetaDataResultSet::disposing();
+    ODatabaseMetaDataResultSet::disposing(rGuard);
     m_xTables.clear();
     m_xRow.clear();
 }
 
 sal_Bool SAL_CALL OResultSetPrivileges::next(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+    std::unique_lock aGuard( m_aMutex );
+    throwIfDisposed(aGuard);
 
     bool bReturn = false;
     if ( m_xTables.is() )
@@ -126,7 +126,7 @@ sal_Bool SAL_CALL OResultSetPrivileges::next(  )
                 return false;
         }
 
-        bReturn = ODatabaseMetaDataResultSet::next();
+        bReturn = ODatabaseMetaDataResultSet::next(aGuard);
         if ( !bReturn )
         {
             m_bBOF = false;

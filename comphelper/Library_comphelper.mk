@@ -147,6 +147,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/property/propagg \
     comphelper/source/property/propertybag \
     comphelper/source/property/propertycontainer \
+    comphelper/source/property/propertycontainer2 \
     comphelper/source/property/propertycontainerhelper \
     comphelper/source/property/property \
     comphelper/source/property/propertysethelper \

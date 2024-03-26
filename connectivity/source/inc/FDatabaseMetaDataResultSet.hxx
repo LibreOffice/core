@@ -32,16 +32,15 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
+#include <comphelper/propertycontainer2.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace connectivity
 {
-    typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XResultSet,
+    typedef ::comphelper::WeakComponentImplHelper<   css::sdbc::XResultSet,
                                                css::sdbc::XRow,
                                                css::sdbc::XResultSetMetaDataSupplier,
                                                css::util::XCancellable,
@@ -55,9 +54,8 @@ namespace connectivity
     //  typedef ORefVector<ORow>            ORows;
 
     class SAL_DLLPUBLIC_RTTI ODatabaseMetaDataResultSet :
-                                public cppu::BaseMutex,
                                 public  ODatabaseMetaDataResultSet_BASE,
-                                public  ::comphelper::OPropertyContainer,
+                                public  ::comphelper::OPropertyContainer2,
                                 public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
     {
 
@@ -118,8 +116,9 @@ namespace connectivity
 
         void construct();
         /// @throws css::sdbc::SQLException
-        void checkIndex(sal_Int32 columnIndex );
+        void checkIndex(std::unique_lock<std::mutex>& rGuard, sal_Int32 columnIndex );
         void setType(MetaDataResultSetType _eType);
+        css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData( std::unique_lock<std::mutex>& );
 
     protected:
         ORows                           m_aRows;
@@ -132,7 +131,11 @@ namespace connectivity
         // OPropertyArrayUsageHelper
         OOO_DLLPUBLIC_DBTOOLS virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         // OPropertySetHelper
-        OOO_DLLPUBLIC_DBTOOLS virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        OOO_DLLPUBLIC_DBTOOLS virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
+
+        bool next(std::unique_lock<std::mutex>& );
+        bool isBeforeFirst(std::unique_lock<std::mutex>& );
+        bool isAfterLast(std::unique_lock<std::mutex>& );
 
         virtual ~ODatabaseMetaDataResultSet() override;
     public:
@@ -153,8 +156,8 @@ namespace connectivity
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-        // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        // ::comphelper::WeakComponentImplHelper
+        virtual void disposing(std::unique_lock<std::mutex>&) override;
         // XInterface
         OOO_DLLPUBLIC_DBTOOLS virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         //XTypeProvider

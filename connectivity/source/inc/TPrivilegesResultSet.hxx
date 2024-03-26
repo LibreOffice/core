@@ -36,8 +36,8 @@ namespace connectivity
         OResultSetPrivileges(const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _rxMeta
             ,const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern);
 
-        // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        // ::comphelper::WeakComponentImplHelper
+        virtual void disposing(std::unique_lock<std::mutex>&) override;
         // XResultSet
         virtual sal_Bool SAL_CALL next(  ) override;
     };

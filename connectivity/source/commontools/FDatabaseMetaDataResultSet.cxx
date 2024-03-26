@@ -43,9 +43,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
-    :ODatabaseMetaDataResultSet_BASE(m_aMutex)
-    ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
-    ,m_nColPos(0)
+    :
+    m_nColPos(0)
     ,m_bBOF(true)
     ,m_bEOF(true)
 {
@@ -54,9 +53,8 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
 
 
 ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet( MetaDataResultSetType _eType )
-    :ODatabaseMetaDataResultSet_BASE(m_aMutex)
-    ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
-    ,m_nColPos(0)
+    :
+    m_nColPos(0)
     ,m_bBOF(true)
     ,m_bEOF(true)
 {
@@ -105,11 +103,10 @@ void ODatabaseMetaDataResultSet::setType(MetaDataResultSetType _eType)
     }
 }
 
-void ODatabaseMetaDataResultSet::disposing()
+void ODatabaseMetaDataResultSet::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    OPropertySetHelper::disposing();
+    OPropertySetHelper::disposing(rGuard);
 
-    ::osl::MutexGuard aGuard(m_aMutex);
     m_aStatement.clear();
     m_xMetaData.clear();
     m_aRowsIter = m_aRows.end();
@@ -151,11 +148,10 @@ void ODatabaseMetaDataResultSet::setRows(ORows&& _rRows)
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& columnName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+    std::unique_lock aGuard( m_aMutex );
+    throwIfDisposed(aGuard);
 
-
-    Reference< XResultSetMetaData > xMeta = getMetaData();
+    Reference< XResultSetMetaData > xMeta = getMetaData(aGuard);
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
@@ -170,7 +166,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
     O3TL_UNREACHABLE;
 }
 
-void ODatabaseMetaDataResultSet::checkIndex(sal_Int32 columnIndex )
+void ODatabaseMetaDataResultSet::checkIndex(std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 columnIndex )
 {
     if(columnIndex < 1 || o3tl::make_unsigned(columnIndex) >= (*m_aRowsIter).size())
         ::dbtools::throwInvalidIndexException(*this);
@@ -243,9 +239,13 @@ sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex )
 
 Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+    std::unique_lock aGuard( m_aMutex );
+    return getMetaData(aGuard);
+}
 
+Reference< XResultSetMetaData > ODatabaseMetaDataResultSet::getMetaData( std::unique_lock<std::mutex>& rGuard  )
+{
+    throwIfDisposed(rGuard);
 
     if(!m_xMetaData.is())
         m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
@@ -306,11 +306,15 @@ css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  )
+sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast()
 {
     return m_bEOF;
 }
 
+bool ODatabaseMetaDataResultSet::isAfterLast( std::unique_lock<std::mutex>& /*rGuard*/)
+{
+    return m_bEOF;
+}
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
 {
@@ -339,9 +343,8 @@ void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  )
 void SAL_CALL ODatabaseMetaDataResultSet::close(  )
 {
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
-
+        std::unique_lock aGuard( m_aMutex );
+        throwIfDisposed(aGuard);
     }
     dispose();
 }
@@ -404,16 +407,25 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
 }
 
 
-sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  )
+sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst()
 {
     return m_bBOF;
 }
 
+bool ODatabaseMetaDataResultSet::isBeforeFirst(std::unique_lock<std::mutex>& /*rGuard*/)
+{
+    return m_bBOF;
+}
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+    std::unique_lock aGuard( m_aMutex );
+    return next(aGuard);
+}
+
+bool ODatabaseMetaDataResultSet::next( std::unique_lock<std::mutex>& rGuard )
+{
+    throwIfDisposed(rGuard);
 
     if ( m_bBOF )
     {
@@ -441,9 +453,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
-
+    std::unique_lock aGuard( m_aMutex );
+    throwIfDisposed(aGuard);
 
     if(m_aRowsIter == m_aRows.end() || !(*m_aRowsIter)[m_nColPos].is())
         return true;
@@ -620,13 +631,13 @@ ORowSetValueDecorator& ORowSetValueDecorator::operator=(const ORowSetValue& _aVa
 
 const ORowSetValue& ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+    std::unique_lock aGuard( m_aMutex );
+    throwIfDisposed(aGuard);
 
-    if ( isBeforeFirst() || isAfterLast() )
+    if ( isBeforeFirst(aGuard) || isAfterLast(aGuard) )
         ::dbtools::throwFunctionSequenceException( *this );
 
-    checkIndex(columnIndex );
+    checkIndex(aGuard, columnIndex);
     m_nColPos = columnIndex;
 
     if(m_aRowsIter != m_aRows.end() && (*m_aRowsIter)[columnIndex].is())
