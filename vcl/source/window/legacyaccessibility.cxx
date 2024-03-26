@@ -109,7 +109,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
 static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Window* pLabeled )
 {
     Window* pWindow = nullptr;
-    if ( (nMyType != WindowType::GROUPBOX) && (nMyType != WindowType::FIXEDLINE) )
+    if (pFrameWindow && nMyType != WindowType::GROUPBOX && nMyType != WindowType::FIXEDLINE)
     {
         // search for a control that labels this window
         // a label is considered the last fixed text, fixed line or group box
