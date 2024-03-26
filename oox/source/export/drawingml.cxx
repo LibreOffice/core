@@ -2354,35 +2354,62 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             if (xPropertySet->getPropertyValue("RotateAngle") >>= nTmp)
                 nRotation = Degree100(nTmp);
         }
-        // tdf#133037: restore original rotate angle before output
-        if (nRotation && xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+
+        // As long as the support of MS Office 3D-features is rudimentary, we restore the original
+        // values from InteropGrabBag. This affects images and custom shapes.
+        if (xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         {
             uno::Sequence<beans::PropertyValue> aGrabBagProps;
             xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBagProps;
-            auto p3DEffectProps = std::find_if(std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
+            auto p3DEffectProps = std::find_if(
+                std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
                 [](const PropertyValue& rProp) { return rProp.Name == "3DEffectProperties"; });
             if (p3DEffectProps != std::cend(aGrabBagProps))
             {
                 uno::Sequence<beans::PropertyValue> a3DEffectProps;
                 p3DEffectProps->Value >>= a3DEffectProps;
-                auto pCameraProps = std::find_if(std::cbegin(a3DEffectProps), std::cend(a3DEffectProps),
-                    [](const PropertyValue& rProp) { return rProp.Name == "Camera"; });
-                if (pCameraProps != std::cend(a3DEffectProps))
+                // We have imported a scene3d.
+                if (rXShape->getShapeType() == "com.sun.star.drawing.CustomShape")
                 {
-                    uno::Sequence<beans::PropertyValue> aCameraProps;
-                    pCameraProps->Value >>= aCameraProps;
-                    auto pZRotationProp = std::find_if(std::cbegin(aCameraProps), std::cend(aCameraProps),
-                        [](const PropertyValue& rProp) { return rProp.Name == "rotRev"; });
-                    if (pZRotationProp != std::cend(aCameraProps))
+                    auto pMSORotation
+                        = std::find_if(std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
+                                       [](const PropertyValue& rProp) {
+                                           return rProp.Name == "mso-rotation-angle";
+                                       });
+                    sal_Int32 nMSORotation = 0;
+                    if (pMSORotation != std::cend(aGrabBagProps))
+                        pMSORotation->Value >>= nMSORotation;
+                    WriteTransformation(
+                        rXShape,
+                        tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)),
+                        nXmlNamespace, bFlipHWrite, bFlipVWrite, nMSORotation);
+                    return;
+                }
+                if (rXShape->getShapeType() == "com.sun.star.drawing.GraphicObjectShape")
+                {
+                    // tdf#133037: restore original rotate angle of image before output
+                    auto pCameraProps = std::find_if(
+                        std::cbegin(a3DEffectProps), std::cend(a3DEffectProps),
+                        [](const PropertyValue& rProp) { return rProp.Name == "Camera"; });
+                    if (pCameraProps != std::cend(a3DEffectProps))
                     {
-                        sal_Int32 nTmp = 0;
-                        pZRotationProp->Value >>= nTmp;
-                        nCameraRotation = NormAngle36000(Degree100(nTmp / -600));
+                        uno::Sequence<beans::PropertyValue> aCameraProps;
+                        pCameraProps->Value >>= aCameraProps;
+                        auto pZRotationProp = std::find_if(
+                            std::cbegin(aCameraProps), std::cend(aCameraProps),
+                            [](const PropertyValue& rProp) { return rProp.Name == "rotRev"; });
+                        if (pZRotationProp != std::cend(aCameraProps))
+                        {
+                            sal_Int32 nTmp = 0;
+                            pZRotationProp->Value >>= nTmp;
+                            nCameraRotation = NormAngle36000(Degree100(nTmp / -600));
+                            // FixMe tdf#160327. Vertical flip will be false.
+                        }
                     }
                 }
             }
         }
-    }
+    } // end if (!bSuppressRotation)
 
     // OOXML flips shapes before rotating them.
     if(bFlipH != bFlipV)

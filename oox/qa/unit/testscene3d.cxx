@@ -623,6 +623,18 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_pureImage)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(27000), nZRotate);
 }
 
+CPPUNIT_TEST_FIXTURE(TestScene3d, test_shape_rotation)
+{
+    // Given a document with a shape in 3D mode with shape rotation rot="300000".
+    loadFromFile(u"Scene3d_shape_rotation.pptx");
+    uno::Reference<drawing::XShape> xShape(getShape(0, 0));
+
+    // Make sure that the immediate export to pptx has the same shape rotation
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "//p:spPr/a:xfrm"_ostr, "rot"_ostr, "300000");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
