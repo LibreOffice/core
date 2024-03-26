@@ -35,12 +35,38 @@
 #include <svdata.hxx>
 #include <memory>
 #include <tools/json_writer.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
+#include <comphelper/base64.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 constexpr SvLBoxTabFlags MYTABMASK =
     SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::FORCE;
+
+namespace {
+    OString lcl_extractPngString(const BitmapEx& rImage)
+    {
+        SvMemoryStream aOStm(65535, 65535);
+        // Use fastest compression "1"
+        css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+            comphelper::makePropertyValue("Compression", sal_Int32(1)),
+        };
+        vcl::PngImageWriter aPNGWriter(aOStm);
+        aPNGWriter.setParameters(aFilterData);
+        if (aPNGWriter.write(rImage))
+        {
+            css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+                                            aOStm.Tell());
+            OStringBuffer aBuffer("data:image/png;base64,");
+            ::comphelper::Base64::encode(aBuffer, aSeq);
+            return aBuffer.makeStringAndClear();
+        }
+
+        return ""_ostr;
+    }
+}
 
 static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                                      SvTreeListEntry* pEntry,
@@ -51,6 +77,7 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
     {
         auto aNode = rJsonWriter.startStruct();
 
+        // DEPRECATED
         // simple listbox value
         const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::String);
         if (pIt)
@@ -79,6 +106,8 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                     {
                         const OUString& rCollapsed = pBmpItem->GetBitmap1().GetStock();
                         const OUString& rExpanded = pBmpItem->GetBitmap2().GetStock();
+
+                        // send identifier only, we will use svg icon
                         if (!o3tl::trim(rCollapsed).empty() || !o3tl::trim(rExpanded).empty())
                         {
                             auto aColumn = rJsonWriter.startStruct();
@@ -86,6 +115,22 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                                 rJsonWriter.put("collapsed", rCollapsed);
                             if (!o3tl::trim(rExpanded).empty())
                                 rJsonWriter.put("expanded", rExpanded);
+                        }
+                        // custom bitmap - send png
+                        else
+                        {
+                            BitmapEx aCollapsedImage = pBmpItem->GetBitmap1().GetBitmapEx();
+                            BitmapEx aExpandedImage = pBmpItem->GetBitmap2().GetBitmapEx();
+                            bool bHasCollapsed = !aCollapsedImage.IsEmpty() && !aCollapsedImage.GetSizePixel().IsEmpty();
+                            bool bHasExpanded = !aExpandedImage.IsEmpty() && !aExpandedImage.GetSizePixel().IsEmpty();
+                            if (bHasCollapsed || bHasExpanded)
+                            {
+                                auto aColumn = rJsonWriter.startStruct();
+                                if (bHasCollapsed)
+                                    rJsonWriter.put("collapsedimage", lcl_extractPngString(aCollapsedImage));
+                                if (bHasExpanded)
+                                    rJsonWriter.put("collapsedimage", lcl_extractPngString(aExpandedImage));
+                            }
                         }
                     }
                 }
