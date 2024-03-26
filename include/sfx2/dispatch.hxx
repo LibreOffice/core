@@ -90,6 +90,7 @@ friend class SfxHintPoster;
 
 
     bool                FindServer_( sal_uInt16 nId, SfxSlotServer &rServer );
+    static bool                IsCommandAllowedInLokReadOnlyViewMode (OUString commandName);
     bool                FillState_( const SfxSlotServer &rServer,
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );
     void                Execute_( SfxShell &rShell, const SfxSlot &rSlot,
