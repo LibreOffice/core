@@ -663,13 +663,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuFile-NewGlobalDoc">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:NewGlobalDoc</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuFile-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
