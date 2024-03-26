@@ -47,10 +47,6 @@
 #   define  NO_PTHREAD_PRIORITY
 #   define  PTHREAD_SIGACTION           pthread_sigaction
 
-#   ifndef ETIME
-#       define ETIME ETIMEDOUT
-#   endif
-
 #endif
 
 #ifdef HAIKU
@@ -71,9 +67,6 @@
 #   define  NO_PTHREAD_RTL
 #   define  PTHREAD_SIGACTION           pthread_sigaction
 
-#   ifndef ETIME
-#       define ETIME ETIMEDOUT
-#   endif
 #   define SIGIOT SIGABRT
 #   define SOCK_RDM 0
 //  hack: Haiku defines SOL_SOCKET as -1, but this makes GCC complain about
@@ -104,9 +97,6 @@
 #endif
 
 #ifdef FREEBSD
-#   ifndef ETIME
-#       define ETIME ETIMEDOUT
-#   endif
 #   include <pthread.h>
 #   include <sys/sem.h>
 #   include <dlfcn.h>
@@ -128,7 +118,6 @@
 #endif
 
 #ifdef OPENBSD
-#   define  ETIME ETIMEDOUT
 #   include <pthread.h>
 #   include <sys/sem.h>
 #   include <dlfcn.h>
@@ -152,7 +141,6 @@
 #endif
 
 #if defined(DRAGONFLY) || defined(NETBSD)
-#   define  ETIME ETIMEDOUT
 #   include <pthread.h>
 #   include <sys/sem.h>
 #   include <dlfcn.h>
@@ -187,9 +175,6 @@
 #define TimeValue CFTimeValue      // Do not conflict with TimeValue in sal/inc/osl/time.h
 #include <Carbon/Carbon.h>
 #undef TimeValue
-#   ifndef ETIME
-#       define  ETIME ETIMEDOUT
-#   endif
 #   include <dlfcn.h>
 #   include <pthread.h>
 #   include <sys/file.h>
@@ -208,9 +193,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #endif
 
 #ifdef IOS
-#   ifndef ETIME
-#       define  ETIME ETIMEDOUT
-#   endif
 #   include <dlfcn.h>
 #   include <pthread.h>
 #   include <sys/file.h>
@@ -225,9 +207,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #endif
 
 #ifdef EMSCRIPTEN
-#   ifndef ETIME
-#       define  ETIME ETIMEDOUT
-#   endif
 #   include <pthread.h>
 #   include <sys/file.h>
 #   include <sys/ioctl.h>
