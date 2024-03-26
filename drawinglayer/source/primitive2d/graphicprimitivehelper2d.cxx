@@ -528,7 +528,7 @@ namespace drawinglayer::primitive2d
                         // embedded Vector Graphic Data fill, create embed transform
                         const basegfx::B2DRange& rSvgRange(rGraphic.getVectorGraphicData()->getRange());
 
-                        if(basegfx::fTools::more(rSvgRange.getWidth(), 0.0) && basegfx::fTools::more(rSvgRange.getHeight(), 0.0))
+                        if(rSvgRange.getWidth() > 0.0 && rSvgRange.getHeight() > 0.0)
                         {
                             // translate back to origin, scale to unit coordinates
                             basegfx::B2DHomMatrix aEmbedVectorGraphic(

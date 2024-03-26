@@ -99,7 +99,7 @@ namespace drawinglayer::unorenderer
                 const double fWidth(aRange.getWidth());
                 const double fHeight(aRange.getHeight());
 
-                if(basegfx::fTools::more(fWidth, 0.0) && basegfx::fTools::more(fHeight, 0.0))
+                if(fWidth > 0.0 && fHeight > 0.0)
                 {
                     if(0 == DPI_X)
                     {

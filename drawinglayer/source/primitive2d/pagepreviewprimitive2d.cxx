@@ -37,8 +37,8 @@ namespace drawinglayer::primitive2d
             Primitive2DContainer aContent(getPageContent());
 
             if(!(!aContent.empty()
-                && basegfx::fTools::more(getContentWidth(), 0.0)
-                && basegfx::fTools::more(getContentHeight(), 0.0)))
+                && getContentWidth() > 0.0)
+                && getContentHeight() > 0.0)
                 return nullptr;
 
             // the decomposed matrix will be needed
@@ -46,7 +46,7 @@ namespace drawinglayer::primitive2d
             double fRotate, fShearX;
             getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-            if(!(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0)))
+            if(!(aScale.getX() > 0.0 && aScale.getY() > 0.0))
                 return nullptr;
 
             // check if content overlaps with target size and needs to be embedded with a

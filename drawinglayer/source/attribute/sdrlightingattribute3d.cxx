@@ -140,7 +140,7 @@ namespace drawinglayer::attribute
                     const Sdr3DLightAttribute& rLight(rLightVector[a]);
                     const double fCosFac(rLight.getDirection().scalar(aEyeNormal));
 
-                    if(basegfx::fTools::more(fCosFac, 0.0))
+                    if(fCosFac > 0.0)
                     {
                         aRetval += (rLight.getColor() * rColor) * fCosFac;
 
@@ -151,7 +151,7 @@ namespace drawinglayer::attribute
                             aSpecularNormal.normalize();
                             double fCosFac2(aSpecularNormal.scalar(aEyeNormal));
 
-                            if(basegfx::fTools::more(fCosFac2, 0.0))
+                            if(fCosFac2 > 0.0)
                             {
                                 fCosFac2 = pow(fCosFac2, static_cast<double>(nSpecularIntensity));
                                 aRetval += rSpecular * fCosFac2;
