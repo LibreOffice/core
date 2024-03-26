@@ -215,7 +215,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
 
     /** queries the user if the want to trust an untrusted certificate.
 
-        @since LibreOffice 24.2.3
+        @since LibreOffice 24.8
     */
     boolean trustUntrustedCertificate([in] ::com::sun::star::security::XCertificate xCertificate);
 };
