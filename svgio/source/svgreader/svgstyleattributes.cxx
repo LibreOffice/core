@@ -1287,18 +1287,9 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(31, 0),
-            mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
+            maResolvingParent(32, 0),
             mbStrokeDasharraySet(false)
         {
-            const SvgStyleAttributes* pParentStyle = getParentStyle();
-            if(!mbIsClipPathContent)
-            {
-                if(pParentStyle)
-                {
-                    mbIsClipPathContent = pParentStyle->mbIsClipPathContent;
-                }
-            }
         }
 
         SvgStyleAttributes::~SvgStyleAttributes()
@@ -2005,10 +1996,27 @@ namespace svgio::svgreader
             }
         }
 
+        bool SvgStyleAttributes::isClipPathContent() const
+        {
+            if (SVGToken::ClipPathNode == mrOwner.getType())
+                return true;
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+            if (pSvgStyleAttributes && maResolvingParent[31] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[31];
+                bool ret = pSvgStyleAttributes->isClipPathContent();
+                --maResolvingParent[31];
+                return ret;
+            }
+
+            return false;
+        }
+
         // #i125258# ask if fill is a direct hard attribute (no hierarchy)
         bool SvgStyleAttributes::isFillSet() const
         {
-            if(mbIsClipPathContent)
+            if(isClipPathContent())
             {
                 return false;
             }
@@ -2042,7 +2050,7 @@ namespace svgio::svgreader
                 {
                     return &maFill.getBColor();
                 }
-                else if(mbIsClipPathContent)
+                else if(isClipPathContent())
                 {
                     const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2066,7 +2074,7 @@ namespace svgio::svgreader
                     const basegfx::BColor* pFill = pSvgStyleAttributes->getFill();
                     --maResolvingParent[0];
 
-                    if(mbIsClipPathContent)
+                    if(isClipPathContent())
                     {
                         if (pFill)
                         {
@@ -2269,7 +2277,7 @@ namespace svgio::svgreader
                 return ret;
             }
 
-            if(mbIsClipPathContent)
+            if(isClipPathContent())
             {
                 return SvgNumber(0.0);
             }
