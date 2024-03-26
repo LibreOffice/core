@@ -644,6 +644,8 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
 #ifdef ENABLE_SDREMOTE
     RemoteServer::presentationStopped();
 #endif
+    // IASS: This is the central methodology to 'steer' the
+    // PresenterConsole - in this case, to shut it down
     if( mxShow.is() && mpDoc )
         NotifyDocumentEvent(
             *mpDoc,
@@ -1314,9 +1316,18 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         mxListenerProxy.set( new SlideShowListenerProxy( this, mxShow ) );
         mxListenerProxy->addAsSlideShowListener();
 
-        NotifyDocumentEvent(
-            *mpDoc,
-            "OnStartPresentation");
+        // IASS: Do only startup the PresenterConsole if this is not
+        // the SlideShow Preview mode (else would be double)
+        if (!mbInterActiveSetup)
+        {
+            // IASS: This is the central methodology to 'steer' the
+            // PresenterConsole - in this case, to start it up and make
+            // it visible (if activated)
+            NotifyDocumentEvent(
+                *mpDoc,
+                "OnStartPresentation");
+        }
+
         displaySlideIndex( mpSlideController->getStartSlideIndex() );
 
         return true;
