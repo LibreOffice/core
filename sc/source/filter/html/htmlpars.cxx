@@ -705,13 +705,12 @@ void ScHTMLLayoutParser::Adjust()
         //FIXME: This may not be correct, but works anyway ...
             pE->nColOverlap = 1;
         }
-        xLockedList->Join( ScRange( pE->nCol, pE->nRow, 0,
-            pE->nCol + pE->nColOverlap - 1, pE->nRow + pE->nRowOverlap - 1, 0 ) );
+        SCCOL nColTmp = o3tl::saturating_add(pE->nCol, pE->nColOverlap);
+        SCROW nRowTmp = o3tl::saturating_add(pE->nRow ,pE->nRowOverlap);
+        xLockedList->Join( ScRange( pE->nCol, pE->nRow, 0, nColTmp - 1, nRowTmp - 1, 0 ) );
         // Take over MaxDimensions
-        SCCOL nColTmp = pE->nCol + pE->nColOverlap;
         if ( nColMax < nColTmp )
             nColMax = nColTmp;
-        SCROW nRowTmp = pE->nRow + pE->nRowOverlap;
         if ( nRowMax < nRowTmp )
             nRowMax = nRowTmp;
     }
