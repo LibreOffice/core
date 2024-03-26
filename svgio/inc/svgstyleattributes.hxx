@@ -243,10 +243,6 @@ namespace svgio::svgreader
 
             mutable std::vector<sal_uInt16> maResolvingParent;
 
-            // defines if this attributes are part of a ClipPath. If yes,
-            // rough geometry will be created on decomposition by patching
-            // values for fill, stroke, strokeWidth and others
-            bool                        mbIsClipPathContent : 1;
 
             // #121221# Defines if evtl. an empty array *is* set
             bool                        mbStrokeDasharraySet : 1;
@@ -317,6 +313,11 @@ namespace svgio::svgreader
 
             SvgStyleAttributes(SvgNode& rOwner);
             ~SvgStyleAttributes();
+
+            // Check if this attribute is part of a ClipPath.
+            // If so, rough geometry will be created on decomposition by patching
+            // values for fill, stroke, strokeWidth and others
+            bool isClipPathContent() const;
 
             /// fill content
             bool isFillSet() const; // #i125258# ask if fill is a direct hard attribute (no hierarchy)
