@@ -103,7 +103,12 @@ void ScInterpreterContext::Cleanup()
 void ScInterpreterContext::ClearLookupCache(const ScDocument* pDoc)
 {
     if (pDoc == mpDoc)
+    {
         mxScLookupCache.reset();
+        mxLanguageData.reset();
+        mpFormatter = nullptr;
+        mpFormatData = nullptr;
+    }
 }
 
 SvNumFormatType ScInterpreterContext::NFGetType(sal_uInt32 nFIndex) const
