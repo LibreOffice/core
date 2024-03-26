@@ -273,7 +273,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 
                 if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize - 22, pBuf.get() + 22 ) )
                 {
-                    if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"", 57 ) )
+                    if ( aFlavor.MimeType.match( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) )
                     {
                         aResult <<= uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
                         bAnyIsReady = true;
@@ -290,7 +290,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
             pBuf.reset(new sal_Int8[nBufSize]);
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, reinterpret_cast<LPBYTE>(pBuf.get()) ) )
             {
-                if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"", 57 ) )
+                if ( aFlavor.MimeType.match( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) )
                 {
                     aResult <<= uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
                     bAnyIsReady = true;
@@ -310,7 +310,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
             pBuf.reset(new sal_Int8[nBufSize]);
             if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf.get() ) ) )
             {
-                if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", 54 ) )
+                if ( aFlavor.MimeType.match( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) )
                 {
                     aResult <<= uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
                     bAnyIsReady = true;
