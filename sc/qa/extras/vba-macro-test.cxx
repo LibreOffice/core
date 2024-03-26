@@ -323,6 +323,10 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMacroKeyBinding)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
     TestMacroInfo testInfo[] = {
         { OUString("TestAddress.xls"),
           OUString(
