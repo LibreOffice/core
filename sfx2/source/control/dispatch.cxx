@@ -1521,6 +1521,23 @@ SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) 
         return bFound ? SfxSlotFilterState::DISABLED : SfxSlotFilterState::ENABLED;
 }
 
+bool SfxDispatcher::IsCommandAllowedInLokReadOnlyViewMode (OUString commandName) {
+    constexpr OUString allowedList[] = {
+        u".uno:InsertAnnotation"_ustr,
+        u".uno:ReplyComment"_ustr,
+        u".uno:ResolveComment"_ustr,
+        u".uno:ResolveCommentThread"_ustr,
+        u".uno:DeleteComment"_ustr,
+        u".uno:DeleteAnnotation"_ustr,
+        u".uno:EditAnnotation"_ustr,
+    };
+
+    if (std::find(std::begin(allowedList), std::end(allowedList), commandName) != std::end(allowedList))
+        return true;
+    else
+        return false;
+}
+
 /** This helper method searches for the <Slot-Server> which currently serves
     the nSlot. As the result, rServe is filled accordingly.
 
@@ -1590,9 +1607,16 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
     }
 
     bool bReadOnly = ( SfxSlotFilterState::ENABLED_READONLY != nSlotEnableMode && xImp->bReadOnly );
+    bool bCheckForCommentCommands = false;
 
-    if (!bReadOnly && comphelper::LibreOfficeKit::isActive())
-        bReadOnly = xImp->pFrame && xImp->pFrame->GetViewShell() && xImp->pFrame->GetViewShell()->IsLokReadOnlyView();
+    if (!bReadOnly && comphelper::LibreOfficeKit::isActive() && xImp->pFrame && xImp->pFrame->GetViewShell())
+    {
+        SfxViewShell *pViewSh = xImp->pFrame->GetViewShell();
+        bReadOnly = pViewSh->IsLokReadOnlyView();
+
+        if (bReadOnly && pViewSh->IsAllowChangeComments())
+            bCheckForCommentCommands = true;
+    }
 
     // search through all the shells of the chained dispatchers
     // from top to bottom
@@ -1605,6 +1629,10 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 
         SfxInterface *pIFace = pObjShell->GetInterface();
         const SfxSlot *pSlot = pIFace->GetSlot(nSlot);
+
+        // This check can be true only if Lokit is active and view is readonly.
+        if (pSlot && bCheckForCommentCommands)
+            bReadOnly = IsCommandAllowedInLokReadOnlyViewMode(pSlot->GetCommand());
 
         if ( pSlot && pSlot->nDisableFlags != SfxDisableFlags::NONE &&
              ( static_cast<int>(pSlot->nDisableFlags) & static_cast<int>(pObjShell->GetDisableFlags()) ) != 0 )
