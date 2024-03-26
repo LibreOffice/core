@@ -34,7 +34,6 @@ using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
 // necessary for MS compiler
-using ::comphelper::OPropertyContainer;
 using ::chart::impl::CachedDataSequence_Base;
 
 namespace
@@ -53,26 +52,20 @@ namespace chart
 {
 
 CachedDataSequence::CachedDataSequence()
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_eCurrentDataType( NUMERICAL ),
+        : m_eCurrentDataType( NUMERICAL ),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
 }
 CachedDataSequence::CachedDataSequence( const Reference< uno::XComponentContext > & /*xContext*/ )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_eCurrentDataType( MIXED ),
+        : m_eCurrentDataType( MIXED ),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
 }
 
 CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_eCurrentDataType( TEXTUAL ),
+        : m_eCurrentDataType( TEXTUAL ),
           m_aTextualSequence({rSingleText}),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
@@ -80,9 +73,7 @@ CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
 }
 
 CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
+        : m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
           m_eCurrentDataType( rSource.m_eCurrentDataType ),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
@@ -213,8 +204,8 @@ Sequence< Any > CachedDataSequence::Impl_getMixedData() const
     return aResult;
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( CachedDataSequence, CachedDataSequence_Base, OPropertyContainer )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( CachedDataSequence, CachedDataSequence_Base, OPropertyContainer )
+IMPLEMENT_FORWARD_XINTERFACE2( CachedDataSequence, CachedDataSequence_Base, comphelper::OPropertyContainer2 )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( CachedDataSequence, CachedDataSequence_Base, comphelper::OPropertyContainer2 )
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySetInfo()
@@ -261,7 +252,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedDataSequence::getSupportedServiceN
 // ________ XNumericalDataSequence ________
 Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
 {
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     if( m_eCurrentDataType == NUMERICAL )
         return m_aNumericalSequence;
@@ -272,7 +263,7 @@ Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
 // ________ XTextualDataSequence ________
 Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
 {
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     if( m_eCurrentDataType == TEXTUAL )
         return m_aTextualSequence;
@@ -283,7 +274,7 @@ Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
 // ________ XDataSequence  ________
 Sequence< Any > SAL_CALL CachedDataSequence::getData()
 {
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     return Impl_getMixedData();
 }
 
