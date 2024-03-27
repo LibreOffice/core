@@ -290,7 +290,7 @@ def GetVCSFilename(file, srcdir):
                root = fileInfo.root
         elif os.path.isdir(os.path.join(path, ".svn")) or \
              os.path.isdir(os.path.join(path, "_svn")):
-            fileInfo = SVNFileInfo(file);
+            fileInfo = SVNFileInfo(file)
         vcsFileInfoCache[file] = fileInfo
 
     if fileInfo:
@@ -599,7 +599,7 @@ class Dumper_Solaris(Dumper):
         """Utility function, returns the output of file(1)"""
         try:
             output = os.popen("file " + file).read()
-            return output.split('\t')[1];
+            return output.split('\t')[1]
         except:
             return ""
 
