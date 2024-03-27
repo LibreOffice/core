@@ -8,22 +8,15 @@
 #
 
 # prepare Python environment - Add the path of this class
-from os import path
-from sys import modules
-from sys import path as syspath
 
 # pyUNO program itself
-import uno, unohelper
+import uno
+import unohelper
 
 # UNO GUI toolkit
-from com.sun.star.awt.WindowClass import TOP, SIMPLE
+from com.sun.star.awt.WindowClass import TOP
 from com.sun.star.awt.PushButtonType import STANDARD as standard
-from com.sun.star.awt.PushButtonType import OK as ok
-from com.sun.star.awt.PushButtonType import CANCEL as cancel
-from com.sun.star.awt.PushButtonType import HELP as help
-from com.sun.star.awt.TextAlign import CENTER as center
 from com.sun.star.awt.TextAlign import LEFT as left
-from com.sun.star.awt.TextAlign import RIGHT as right
 
 # used UNO listeners
 from com.sun.star.awt import XActionListener
