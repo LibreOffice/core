@@ -22,6 +22,11 @@ interface XUIObject
     sequence<string> getChildren();
 
     string getHierarchy();
+
+    /** Return true if the other XUIObject represents the same underlying vcl widget.
+        This is necessary because we return a new XUIObject every time we call getChild.
+    */
+    boolean equals([in] XUIObject other);
 };
 
 }; }; }; }; };

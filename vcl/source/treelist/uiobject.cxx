@@ -217,4 +217,13 @@ OUString TreeListEntryUIObject::get_type() const
     return "TreeListEntry";
 }
 
+bool TreeListEntryUIObject::equals(const UIObject& rOther) const
+{
+    const TreeListEntryUIObject* pOther = dynamic_cast<const TreeListEntryUIObject*>(&rOther);
+    if (!pOther)
+        return false;
+    return mxTreeList.get() == pOther->mxTreeList.get()
+            && maTreePath == pOther->maTreePath;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

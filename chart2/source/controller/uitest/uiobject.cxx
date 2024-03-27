@@ -95,6 +95,14 @@ OUString ChartUIObject::get_type() const
     return "ChartUIObject for type: ";
 }
 
+bool ChartUIObject::equals(const UIObject& rOther) const
+{
+    const ChartUIObject* pOther = dynamic_cast<const ChartUIObject*>(&rOther);
+    if (!pOther)
+        return false;
+    return mxChartWindow.get() == pOther->mxChartWindow.get();
+}
+
 ChartWindowUIObject::ChartWindowUIObject(const VclPtr<chart::ChartWindow>& xChartWindow):
     WindowUIObject(xChartWindow),
     mxChartWindow(xChartWindow)

@@ -396,6 +396,14 @@ OUString WindowUIObject::get_type() const
     return get_name();
 }
 
+bool WindowUIObject::equals(const UIObject& rOther) const
+{
+    const WindowUIObject* pOther = dynamic_cast<const WindowUIObject*>(&rOther);
+    if (!pOther)
+        return false;
+    return mxWindow.get() == pOther->mxWindow.get();
+}
+
 namespace {
 
 vcl::Window* findChild(vcl::Window* pParent, const OUString& rID, bool bRequireVisible = false, OUStringBuffer* debug = nullptr)

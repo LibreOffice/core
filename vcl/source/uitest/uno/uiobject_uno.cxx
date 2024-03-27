@@ -206,4 +206,9 @@ OUString SAL_CALL UIObjectUnoObj::getHierarchy()
     return mpObj->dumpHierarchy();
 }
 
+sal_Bool SAL_CALL UIObjectUnoObj::equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther)
+{
+    return mpObj->equals(*static_cast<UIObjectUnoObj&>(*rOther).mpObj);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

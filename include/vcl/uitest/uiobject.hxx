@@ -113,6 +113,11 @@ public:
      * Gets the corresponding Action string for the event.
      */
     virtual OUString get_action(VclEventId nEvent) const;
+
+    /**
+     * Does this represent the same underlying UI widget as rOther?
+     */
+    virtual bool equals(const UIObject& rOther) const = 0;
 };
 
 class UITEST_DLLPUBLIC WindowUIObject : public UIObject
@@ -143,6 +148,8 @@ public:
     virtual OUString get_action(VclEventId nEvent) const override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+    virtual bool equals(const UIObject& rOther) const override;
 
 protected:
 
@@ -504,6 +511,8 @@ public:
     virtual std::set<OUString> get_children() const override;
 
     virtual OUString get_type() const override;
+
+    virtual bool equals(const UIObject& rOther) const override;
 
 private:
 

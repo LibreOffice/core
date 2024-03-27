@@ -29,6 +29,8 @@ public:
 
     SdrObject* get_object() override;
 
+    virtual bool equals(const UIObject& rOther) const override;
+
 private:
     VclPtr<sd::Window> mxWindow;
 
@@ -73,6 +75,14 @@ ImpressSdrObject::ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, OUStri
 }
 
 SdrObject* ImpressSdrObject::get_object() { return getObject(mxWindow, maName); }
+
+bool ImpressSdrObject::equals(const UIObject& rOther) const
+{
+    const ImpressSdrObject* pOther = dynamic_cast<const ImpressSdrObject*>(&rOther);
+    if (!pOther)
+        return false;
+    return mxWindow.get() == pOther->mxWindow.get();
+}
 
 ImpressWindowUIObject::ImpressWindowUIObject(const VclPtr<sd::Window>& xWindow)
     : WindowUIObject(xWindow)

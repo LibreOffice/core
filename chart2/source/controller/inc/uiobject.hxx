@@ -32,6 +32,8 @@ public:
 
     virtual OUString get_type() const override;
 
+    virtual bool equals(const UIObject& rOther) const override;
+
 private:
 
     OUString maCID;

@@ -48,6 +48,8 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OUString SAL_CALL getHierarchy() override;
+
+    sal_Bool SAL_CALL equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
