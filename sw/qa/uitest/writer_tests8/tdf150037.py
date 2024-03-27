@@ -9,7 +9,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from com.sun.star.text.TextContentAnchorType import AT_PAGE, AT_PARAGRAPH
 
 class tdf150037(UITestCase):
 

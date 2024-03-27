@@ -7,10 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.linguistic.linguservice import get_lingu_service_manager
-from com.sun.star.lang import Locale
 
 # handle tdf#119908 smart justify with automatic hyphenation
 

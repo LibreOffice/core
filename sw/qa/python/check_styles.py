@@ -11,9 +11,7 @@ import unittest
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.container import NoSuchElementException
 from com.sun.star.beans import UnknownPropertyException
-from com.sun.star.lang import IndexOutOfBoundsException
 from com.sun.star.lang import IllegalArgumentException
-
 
 class CheckStyle(unittest.TestCase):
 

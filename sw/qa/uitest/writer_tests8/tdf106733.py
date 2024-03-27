@@ -10,7 +10,6 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.linguistic.linguservice import get_lingu_service_manager
-from com.sun.star.lang import Locale
 from uitest.uihelper.common import select_pos
 
 # handle tdf#106733 hyphenation of words disabled by character formatting
