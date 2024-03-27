@@ -157,7 +157,7 @@ def factoryAttributeToResourceMapInner(nsNode, defineNode):
     attributes = collectAttributeToResource(nsNode, defineNode)
     already_used = set()
     for k in attributes[1]:
-        if not (k in already_used):
+        if k not in already_used:
             ret.append("                { %s, %s }," % (k, attributes[0][k]))
             already_used.add(k)
 
@@ -202,7 +202,7 @@ def idToLabel(idName):
 def appendValueData(values, name, value):
     first = name[0:1]
 
-    if not (first in values):
+    if first not in values:
         values[first] = []
 
     values[first].append([name, value])
