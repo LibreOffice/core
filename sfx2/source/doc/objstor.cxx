@@ -1425,7 +1425,9 @@ bool SfxObjectShell::SaveTo_Impl
     // TODO/LATER: error handling
     if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
     {
-        SAL_WARN("sfx.doc", "SfxObjectShell::SaveTo_Impl: very early error return");
+        SAL_WARN("sfx.doc", "SfxObjectShell::SaveTo_Impl: "
+                 " very early error return " << rMedium.GetErrorCode() << " "
+                 << pMedium->GetErrorCode() << " " << GetErrorCode());
         return false;
     }
 

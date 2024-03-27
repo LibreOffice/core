@@ -76,6 +76,7 @@
 #include <tools/fileutil.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -344,6 +345,32 @@ CheckReadOnlyTaskTerminateListener::notifyTermination(const css::lang::EventObje
     lock.unlock();
     mCond.notify_one();
 }
+
+/// Temporary file wrapper to handle tmp file lifecyle
+/// for lok fork a background saving worker issues.
+class MediumTempFile : public ::utl::TempFileNamed
+{
+    bool m_bWasChild;
+public:
+    MediumTempFile(const OUString *pParent )
+        : ::utl::TempFileNamed(pParent)
+        , m_bWasChild(comphelper::LibreOfficeKit::isForkedChild())
+    {
+    }
+
+    MediumTempFile(const MediumTempFile &rFrom ) = delete;
+
+    ~MediumTempFile()
+    {
+        bool isForked = comphelper::LibreOfficeKit::isForkedChild();
+
+        // avoid deletion of files created by the parent
+        if (isForked && ! m_bWasChild)
+        {
+            EnableKillingFile(false);
+        }
+    }
+};
 }
 
 class SfxMedium_Impl
@@ -406,7 +433,7 @@ public:
 
     uno::Sequence < util::RevisionTag > aVersions;
 
-    std::unique_ptr<::utl::TempFileNamed> pTempFile;
+    std::unique_ptr<MediumTempFile> pTempFile;
 
     uno::Reference<embed::XStorage> xStorage;
     uno::Reference<embed::XStorage> m_xZipStorage;
@@ -3524,7 +3551,7 @@ void SfxMedium::CompleteReOpen()
     bool bUseInteractionHandler = pImpl->bUseInteractionHandler;
     pImpl->bUseInteractionHandler = false;
 
-    std::unique_ptr<::utl::TempFileNamed> pTmpFile;
+    std::unique_ptr<MediumTempFile> pTmpFile;
     if ( pImpl->pTempFile )
     {
         pTmpFile = std::move(pImpl->pTempFile);
@@ -4035,7 +4062,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
     }
 
     OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
-    pImpl->pTempFile.reset(new ::utl::TempFileNamed(&aLogicBase));
+    pImpl->pTempFile.reset(new MediumTempFile(&aLogicBase));
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     OUString aTmpURL = pImpl->pTempFile->GetURL();
@@ -4131,7 +4158,7 @@ void SfxMedium::CreateTempFileNoCopy()
     pImpl->pTempFile.reset();
 
     OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
-    pImpl->pTempFile.reset(new ::utl::TempFileNamed(&aLogicBase));
+    pImpl->pTempFile.reset(new MediumTempFile(&aLogicBase));
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     if ( pImpl->m_aName.isEmpty() )
