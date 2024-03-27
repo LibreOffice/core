@@ -120,7 +120,7 @@ class VCSFileInfo:
     def GetCleanRoot(self):
         """ This method should return the repository root for the file or 'None'
             on failure. """
-        raise NotImplementedErrors
+        raise NotImplementedError
 
     def GetRevision(self):
         """ This method should return the revision number for the file or 'None'
