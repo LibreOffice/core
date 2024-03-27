@@ -24,7 +24,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/string_view.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <rtl/ref.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <editeng/swafopt.hxx>
@@ -200,10 +199,10 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
     bool IsFileChanged_Imp();
     void LoadXMLExceptList_Imp( std::unique_ptr<SvStringsISortDtor>& rpLst,
                                 const OUString& sStrmName,
-                                rtl::Reference<SotStorage>& rStg);
+                                tools::SvRef<SotStorage>& rStg);
     static void SaveExceptList_Imp( const SvStringsISortDtor& rLst,
                                 const OUString& sStrmName,
-                                rtl::Reference<SotStorage> const & rStg,
+                                tools::SvRef<SotStorage> const & rStg,
                                 bool bConvert = false);
 
     bool MakeBlocklist_Imp( SotStorage& rStg );

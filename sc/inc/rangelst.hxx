@@ -23,7 +23,6 @@
 #include "address.hxx"
 #include <ostream>
 #include <vector>
-#include <tools/ref.hxx>
 #include <sal/types.h>
 
 class ScDocument;

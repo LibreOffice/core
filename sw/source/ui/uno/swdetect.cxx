@@ -91,7 +91,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
         try
         {
-            rtl::Reference<SotStorage> aStorage = new SotStorage ( pInStrm, false );
+            tools::SvRef<SotStorage> aStorage = new SotStorage ( pInStrm, false );
             if ( !aStorage->GetError() )
             {
                 bIsDetected = aStorage->IsContained( "WordDocument" );
@@ -116,7 +116,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                         // that byte.
                         if (aParser.getExtension().toAsciiLowerCase() != "dot")
                         {
-                            rtl::Reference<SotStorageStream> xWordDocument
+                            tools::SvRef<SotStorageStream> xWordDocument
                                 = aStorage->OpenSotStream("WordDocument", StreamMode::STD_READ);
                             xWordDocument->Seek(10);
                             if (xWordDocument->Tell() == 10)

@@ -27,7 +27,7 @@ namespace
 {
 using namespace ::com::sun::star;
 
-typedef rtl::Reference<SmDocShell> SmDocShellRef;
+typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 class MathMLExportTest : public test::BootstrapFixture, public XmlTestTools
 {

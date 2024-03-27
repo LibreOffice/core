@@ -243,7 +243,7 @@ ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
         ErrCode nResult = ERRCODE_ABORT;
         try
         {
-            rtl::Reference<SotStorage> aRef = new SotStorage(rStrm);
+            tools::SvRef<SotStorage> aRef = new SotStorage( rStrm );
             nResult = Write( rPaM, *aRef, pFName );
             if ( nResult == ERRCODE_NONE )
                 aRef->Commit();

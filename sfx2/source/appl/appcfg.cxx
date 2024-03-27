@@ -67,7 +67,6 @@ public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     explicit SfxEventAsyncer_Impl(const SfxEventHint& rHint);
-    ~SfxEventAsyncer_Impl();
     DECL_LINK( IdleHdl, Timer*, void );
 };
 
@@ -92,13 +91,6 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
     pIdle->SetInvokeHandler( LINK(this, SfxEventAsyncer_Impl, IdleHdl) );
     pIdle->SetPriority( TaskPriority::HIGH_IDLE );
     pIdle->Start();
-}
-
-
-SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
-{
-    if (aHint.GetObjShell())
-        EndListening(*aHint.GetObjShell());
 }
 
 
@@ -728,7 +720,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
-    rtl::Reference<SfxObjectShell> pDoc = rEventHint.GetObjShell();
+    SfxObjectShell *pDoc = rEventHint.GetObjShell();
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;
 

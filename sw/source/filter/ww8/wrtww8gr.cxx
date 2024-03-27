@@ -83,8 +83,8 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
     }
 }
 
-bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, rtl::Reference<SotStorage> const& xOleStg,
-                                    const rtl::Reference<SotStorage>& xObjStg,
+bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> const& xOleStg,
+                                    const tools::SvRef<SotStorage>& xObjStg,
                                     OUString const& rStorageName, SwOLENode* pOLENd)
 {
     bool bGraphicNeeded = false;
@@ -206,7 +206,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     nSize = sizeof( aSpecOLE_WW8 );
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
 
-    rtl::Reference<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
+    tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
 
     if( !xObjStg.is()  )
         return;
@@ -227,7 +227,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     nPictureId = aRes.first->second;
     Set_UInt32(pDataAdr, nPictureId);
     OUString sStorageName = "_" + OUString::number( nPictureId );
-    rtl::Reference<SotStorage> xOleStg = xObjStg->OpenSotStorage(sStorageName);
+    tools::SvRef<SotStorage> xOleStg = xObjStg->OpenSotStorage( sStorageName );
     if( !xOleStg.is() )
         return;
 
@@ -246,7 +246,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             if ( !xOleStg->IsStream( aObjInfo ) )
             {
                 const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
-                rtl::Reference<SotStorageStream> rObjInfoStream = xOleStg->OpenSotStream(aObjInfo);
+                tools::SvRef<SotStorageStream> rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
                 if ( rObjInfoStream.is() && !rObjInfoStream->GetError() )
                 {
                     rObjInfoStream->WriteBytes(pObjInfoData, sizeof(pObjInfoData));
@@ -317,14 +317,14 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 {
     uno::Reference< embed::XStorage > xDocStg = m_rDoc.GetDocStorage();
     uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( "OLELinks", embed::ElementModes::READ );
-    rtl::Reference<SotStorage> xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
+    tools::SvRef<SotStorage> xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
 
-    rtl::Reference<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
+    tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
 
     if( !(xObjStg.is() && xObjSrc.is()) )
         return;
 
-    rtl::Reference<SotStorage> xOleDst = xObjStg->OpenSotStorage(rOleId);
+    tools::SvRef<SotStorage> xOleDst = xObjStg->OpenSotStorage( rOleId );
     if ( xOleDst.is() )
         xObjSrc->CopyTo( xOleDst.get() );
 

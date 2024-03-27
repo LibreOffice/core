@@ -64,11 +64,12 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     : SwImpBlocks(rFile)
     , m_nFlags(SwXmlFlags::NONE)
 {
-    m_xDocShellRef = new SwDocShell(SfxObjectCreateMode::INTERNAL);
-    if (!m_xDocShellRef->DoInitNew())
+    SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
+    if( !pDocSh->DoInitNew() )
         return;
     m_bReadOnly = true;
-    m_xDoc = m_xDocShellRef->GetDoc();
+    m_xDoc = pDocSh->GetDoc();
+    m_xDocShellRef = pDocSh;
     m_xDoc->SetOle2Link( Link<bool,void>() );
     m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
     uno::Reference< embed::XStorage > refStg;
@@ -105,11 +106,12 @@ SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg
     : SwImpBlocks( rName )
     , m_nFlags(SwXmlFlags::NONE)
 {
-    m_xDocShellRef = new SwDocShell(SfxObjectCreateMode::INTERNAL);
-    if (!m_xDocShellRef->DoInitNew())
+    SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
+    if( !pDocSh->DoInitNew() )
         return;
     m_bReadOnly = false;
-    m_xDoc = m_xDocShellRef->GetDoc();
+    m_xDoc = pDocSh->GetDoc();
+    m_xDocShellRef = pDocSh;
     m_xDoc->SetOle2Link( Link<bool,void>() );
     m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
 

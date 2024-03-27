@@ -104,7 +104,7 @@ public:
     void                    GetState(SfxItemSet&);
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
-    SD_DLLPUBLIC rtl::Reference<SotStorageStream> GetOptionStream( std::u16string_view rOptionName, SdOptionStreamMode eMode );
+    SD_DLLPUBLIC tools::SvRef<SotStorageStream>     GetOptionStream( std::u16string_view rOptionName, SdOptionStreamMode eMode );
 
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
@@ -140,7 +140,7 @@ private:
     SdOptions*              pDrawOptions;
     std::unique_ptr<SvxSearchItem>      pSearchItem;
     std::unique_ptr<SvNumberFormatter>  pNumberFormatter;
-    rtl::Reference<SotStorage>          xOptionStorage;
+    tools::SvRef<SotStorage>            xOptionStorage;
     bool                    bWaterCan;
     std::unique_ptr<SfxErrorHandler> mpErrorHdl;
     /** This device is used for printer independent layout.  It is virtual

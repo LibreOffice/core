@@ -22,11 +22,10 @@
 
 #include <sal/config.h>
 
-#include <cppuhelper/weak.hxx>
-#include <rtl/ref.hxx>
+#include <tools/ref.hxx>
 #include <sot/sotdllapi.h>
 
-class SOT_DLLPUBLIC SotObject : public cppu::OWeakObject
+class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
     sal_uInt16 nOwnerLockCount;
     bool bInClose; // TRUE, in DoClose
@@ -43,7 +42,6 @@ public:
     void OwnerLock(bool bLock);
     bool DoClose();
     bool IsInClose() const { return bInClose; }
-    oslInterlockedCount GetRefCount() const { return m_refCount; }
 
 private:
     SotObject& operator=(const SotObject&) = delete;

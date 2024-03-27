@@ -60,13 +60,13 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
         OUString sStreamFullName = sPrefix.size() ? OUString::Concat(sPrefix) + "/" + aElement.GetName() : aElement.GetName();
         if (aElement.IsStorage())
         {
-            rtl::Reference<SotStorage> xSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
+            tools::SvRef<SotStorage> xSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
             lcl_getListOfStreams(xSubStorage.get(), aStreamsData, sStreamFullName);
         }
         else
         {
             // Read stream
-            rtl::Reference<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
+            tools::SvRef<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
             if (rStream.is())
             {
                 sal_Int32 nStreamSize = rStream->GetSize();
@@ -80,9 +80,9 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
     }
 }
 
-static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const rtl::Reference<SotStorage>& rStorage, std::shared_ptr<SvStream>& rNewStorageStrm)
+static tools::SvRef<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const tools::SvRef<SotStorage>& rStorage, std::shared_ptr<SvStream>& rNewStorageStrm)
 {
-    rtl::Reference<SotStorage> aNewStorage;
+    tools::SvRef<SotStorage> aNewStorage;
 
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
     Sequence< Any > aArguments;
@@ -108,7 +108,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
             return aNewStorage;
         }
 
-        rtl::Reference<SotStorageStream> rContentStream = rStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
+        tools::SvRef<SotStorageStream> rContentStream = rStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
         if (!rContentStream.is())
         {
             return aNewStorage;
@@ -146,12 +146,12 @@ bool SdPPTFilter::Import()
 {
     bool bRet = false;
     std::shared_ptr<SvStream> aDecryptedStorageStrm;
-    rtl::Reference<SotStorage> pStorage = new SotStorage(mrMedium.GetInStream(), false);
+    tools::SvRef<SotStorage> pStorage = new SotStorage( mrMedium.GetInStream(), false );
     if( !pStorage->GetError() )
     {
         /* check if there is a dualstorage, then the
         document is probably a PPT95 containing PPT97 */
-        rtl::Reference<SotStorage> xDualStorage;
+        tools::SvRef<SotStorage> xDualStorage;
         OUString sDualStorage( "PP97_DUALSTORAGE"  );
         if ( pStorage->IsContained( sDualStorage ) )
         {
@@ -163,7 +163,7 @@ bool SdPPTFilter::Import()
             // Document is DRM encrypted
             pStorage = lcl_DRMDecrypt(mrMedium, pStorage, aDecryptedStorageStrm);
         }
-        rtl::Reference<SotStorageStream> pDocStream(pStorage->OpenSotStream( "PowerPoint Document" , StreamMode::STD_READ ));
+        tools::SvRef<SotStorageStream> pDocStream(pStorage->OpenSotStream( "PowerPoint Document" , StreamMode::STD_READ ));
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
@@ -244,7 +244,7 @@ bool SdPPTFilter::Export()
             }
         }
 
-        rtl::Reference<SotStorage> xStorRef = new SotStorage(pOutputStrm, false);
+        tools::SvRef<SotStorage> xStorRef = new SotStorage(pOutputStrm, false);
 
         if (xStorRef.is())
         {
@@ -261,12 +261,12 @@ bool SdPPTFilter::Export()
                 Reference<css::io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(pOutputStrm, false));
                 Sequence<NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
 
-                rtl::Reference<SotStorage> xEncryptedRootStrg = new SotStorage(mrMedium.GetOutStream(), false);
+                tools::SvRef<SotStorage> xEncryptedRootStrg = new SotStorage(mrMedium.GetOutStream(), false);
                 for (const NamedValue & aStreamData : std::as_const(aStreams))
                 {
                     // To avoid long paths split and open substorages recursively
                     // Splitting paths manually, since comphelper::string::split is trimming special characters like \0x01, \0x09
-                    rtl::Reference<SotStorage> pStorage = xEncryptedRootStrg;
+                    tools::SvRef<SotStorage> pStorage = xEncryptedRootStrg.get();
                     OUString sFileName;
                     sal_Int32 idx = 0;
                     do
@@ -291,7 +291,7 @@ bool SdPPTFilter::Export()
                         break;
                     }
 
-                    rtl::Reference<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
+                    tools::SvRef<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
                     if (!pStream)
                     {
                         bRet = false;

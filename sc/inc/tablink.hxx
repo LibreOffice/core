@@ -76,7 +76,8 @@ class SfxFilter;
 class SC_DLLPUBLIC ScDocumentLoader
 {
 private:
-    rtl::Reference<ScDocShell> pDocShell;
+    ScDocShell*         pDocShell;
+    SfxObjectShellRef   aRef;
     SfxMedium*          pMedium;
 
 public:
@@ -84,11 +85,9 @@ public:
                      sal_uInt32 nRekCnt = 0, weld::Window* pInteractionParent = nullptr,
                      css::uno::Reference<css::io::XInputStream> xInputStream
                      = css::uno::Reference<css::io::XInputStream>());
-    ScDocumentLoader(const ScDocumentLoader&) = delete;
-    ScDocumentLoader(ScDocumentLoader&&) = delete;
     ~ScDocumentLoader();
     ScDocument*         GetDocument();
-    ScDocShell*         GetDocShell()       { return pDocShell.get(); }
+    ScDocShell*         GetDocShell()       { return pDocShell; }
     bool                IsError() const;
     OUString       GetTitle() const;
 

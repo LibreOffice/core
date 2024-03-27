@@ -26,7 +26,7 @@ namespace
 void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
                     const OString& rClassName)
 {
-    rtl::Reference<SotStorage> pStorage = new SotStorage(rOle2);
+    tools::SvRef<SotStorage> pStorage = new SotStorage(rOle2);
     OString aAnsiUserType;
     SvGlobalName aName;
     if (rClassName == "PBrush")
@@ -46,7 +46,7 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
     pStorage->SetClass(aName, SotClipboardFormatId::NONE, "");
 
     // [MS-OLEDS] 2.3.7 CompObjHeader
-    rtl::Reference<SotStorageStream> pCompObj = pStorage->OpenSotStream("\1CompObj");
+    tools::SvRef<SotStorageStream> pCompObj = pStorage->OpenSotStream("\1CompObj");
     // Reserved1
     pCompObj->WriteUInt32(0xfffe0001);
     // Version
@@ -80,7 +80,7 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
     pCompObj.clear();
 
     // [MS-OLEDS] 2.3.6 OLENativeStream
-    rtl::Reference<SotStorageStream> pOleNative = pStorage->OpenSotStream("\1Ole10Native");
+    tools::SvRef<SotStorageStream> pOleNative = pStorage->OpenSotStream("\1Ole10Native");
     // NativeDataSize
     pOleNative->WriteUInt32(nOle1Size);
     pOleNative->WriteStream(rOle1, nOle1Size);

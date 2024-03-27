@@ -3513,7 +3513,7 @@ rtl::Reference<SdrObject> XclImpDffConverter::CreateSdrObject( const XclImpPictu
         else
         {
             SfxObjectShell* pDocShell = GetDocShell();
-            rtl::Reference<SotStorage> xSrcStrg = GetRootStorage();
+            tools::SvRef<SotStorage> xSrcStrg = GetRootStorage();
             OUString aStrgName = rPicObj.GetOleStorageName();
             if( pDocShell && xSrcStrg.is() && (!aStrgName.isEmpty()) )
             {

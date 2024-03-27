@@ -1784,7 +1784,8 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             xMed->SetFilter( pSfxFlt );
 
             // If the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
-            xLockRef = new SwDocShell(SfxObjectCreateMode::INTERNAL);
+            SwDocShell *const pNew(new SwDocShell(SfxObjectCreateMode::INTERNAL));
+            xLockRef = pNew;
             xDocSh = static_cast<SfxObjectShell*>(xLockRef);
             if (xDocSh->DoLoad(xMed.release()))
             {

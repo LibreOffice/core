@@ -35,7 +35,7 @@ Math_FormulaDocument_get_implementation(
     css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
-            rtl::Reference<SfxObjectShell> pShell = new SmDocShell(_nCreationFlags);
+            SfxObjectShell* pShell = new SmDocShell( _nCreationFlags );
             return pShell->GetModel();
         });
     xInterface->acquire();

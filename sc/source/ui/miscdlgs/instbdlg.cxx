@@ -38,6 +38,7 @@ ScInsertTableDlg::ScInsertTableDlg(weld::Window* pParent, ScViewData& rData, SCT
     , aBrowseTimer("ScInsertTableDlg aBrowseTimer")
     , rViewData(rData)
     , rDoc(rData.GetDocument())
+    , pDocShTables(nullptr)
     , bMustClose(false)
     , nSelTabIndex(0)
     , nTableCount(nTabCount)
@@ -317,6 +318,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             pMed->UseInteractionHandler( true );    // to enable the filter options dialog
 
             pDocShTables = new ScDocShell;
+            aDocShTablesRef = pDocShTables;
 
             {
                 weld::WaitObject aWait(m_xDialog.get());
@@ -335,7 +337,8 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             else
             {
                 pDocShTables->DoClose();
-                pDocShTables.clear();
+                aDocShTablesRef.clear();
+                pDocShTables = nullptr;
 
                 FillTables_Impl( nullptr );
                 m_xFtPath->set_label(OUString());

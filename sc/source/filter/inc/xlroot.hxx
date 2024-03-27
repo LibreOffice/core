@@ -20,7 +20,7 @@
 #pragma once
 
 #include <i18nlangtag/lang.h>
-#include <rtl/ref.hxx>
+#include <tools/ref.hxx>
 #include <tools/long.hxx>
 #include "xlconst.hxx"
 #include <memory>
@@ -75,7 +75,7 @@ struct XclRootData
     XclBiff             meBiff;             /// Current BIFF version.
     XclOutput           meOutput;           /// Current Output format.
     SfxMedium&          mrMedium;           /// The medium to import from.
-    rtl::Reference<SotStorage> mxRootStrg;  /// The root OLE storage of imported/exported file.
+    tools::SvRef<SotStorage>       mxRootStrg;         /// The root OLE storage of imported/exported file.
     ScDocument&         mrDoc;              /// The source or destination document.
     OUString            maDocUrl;           /// Document URL of imported/exported file.
     OUString            maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
@@ -109,7 +109,7 @@ struct XclRootData
     const bool          mbExport;           /// false = Import, true = Export.
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            rtl::Reference<SotStorage> xRootStrg, ScDocument& rDoc,
+                            tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc,
                             rtl_TextEncoding eTextEnc, bool bExport );
     virtual             ~XclRootData();
 };
@@ -183,18 +183,18 @@ public:
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
-    const rtl::Reference<SotStorage>& GetRootStorage() const { return mrData.mxRootStrg; }
+    const tools::SvRef<SotStorage>& GetRootStorage() const { return mrData.mxRootStrg; }
     /** Returns true, if the document contains a VBA storage. */
     bool                HasVbaStorage() const;
 
     /** Tries to open a storage as child of the specified storage for reading or writing. */
-    rtl::Reference<SotStorage>       OpenStorage( rtl::Reference<SotStorage> const & xStrg, const OUString& rStrgName ) const;
+    tools::SvRef<SotStorage>       OpenStorage( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrgName ) const;
     /** Tries to open a storage as child of the root storage for reading or writing. */
-    rtl::Reference<SotStorage> OpenStorage(const OUString& rStrgName) const;
+    tools::SvRef<SotStorage>       OpenStorage( const OUString& rStrgName ) const;
     /** Tries to open a new stream in the specified storage for reading or writing. */
-    rtl::Reference<SotStorageStream> OpenStream( rtl::Reference<SotStorage> const & xStrg, const OUString& rStrmName ) const;
+    tools::SvRef<SotStorageStream> OpenStream( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrmName ) const;
     /** Tries to open a new stream in the root storage for reading or writing. */
-    rtl::Reference<SotStorageStream> OpenStream(const OUString& rStrmName) const;
+    tools::SvRef<SotStorageStream> OpenStream( const OUString& rStrmName ) const;
 
     /** Returns reference to the destination document (import) or source document (export). */
     ScDocument& GetDoc() const;

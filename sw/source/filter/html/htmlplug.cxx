@@ -1717,7 +1717,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             // export it.
             pOLENd->GetTwipSize();
             SvMemoryStream aMemory;
-            rtl::Reference<SotStorage> pStorage = new SotStorage(aMemory);
+            tools::SvRef<SotStorage> pStorage = new SotStorage(aMemory);
             aOLEExp.ExportOLEObject(rOLEObj.GetObject(), *pStorage);
             pStorage->Commit();
             aMemory.Seek(0);

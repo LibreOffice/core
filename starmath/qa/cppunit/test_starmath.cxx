@@ -31,7 +31,7 @@
 #include <starmath.hrc>
 #include <memory>
 
-typedef rtl::Reference<SmDocShell> SmDocShellRef;
+typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 using namespace ::com::sun::star;
 

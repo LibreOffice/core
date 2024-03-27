@@ -508,8 +508,8 @@ SwDoc* Reader::GetTemplateDoc(SwDoc& rDoc)
             SvtModuleOptions aModuleOptions;
             if (aModuleOptions.IsWriter())
             {
-                rtl::Reference<SwDocShell> pDocSh = new SwDocShell(SfxObjectCreateMode::INTERNAL);
-                SfxObjectShellLock xDocSh = pDocSh.get();
+                SwDocShell *pDocSh = new SwDocShell(SfxObjectCreateMode::INTERNAL);
+                SfxObjectShellLock xDocSh = pDocSh;
                 if (pDocSh->DoInitNew())
                 {
                     mxTemplate = pDocSh->GetDoc();

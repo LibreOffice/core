@@ -33,7 +33,7 @@ ErrCode SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
     ErrCode nRet = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     OUString aDstStgName( GetMSBasicStorageName() );
-    rtl::Reference<SotStorage> xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName,
+    tools::SvRef<SotStorage> xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName,
                                 StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL ) );
     if( xVBAStg.is() && !xVBAStg->GetError() )
     {
@@ -45,8 +45,8 @@ ErrCode SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
             if( pBasicMan && pBasicMan->IsBasicModified() )
                 nRet = ERRCODE_SVX_MODIFIED_VBASIC_STORAGE;
 #endif
-            rtl::Reference<SotStorage> xSrc = SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName, StreamMode::STD_READ );
-            rtl::Reference<SotStorage> xDst = xRoot->OpenSotStorage( rStorageName, StreamMode::READWRITE | StreamMode::TRUNC );
+            tools::SvRef<SotStorage> xSrc = SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName, StreamMode::STD_READ );
+            tools::SvRef<SotStorage> xDst = xRoot->OpenSotStorage( rStorageName, StreamMode::READWRITE | StreamMode::TRUNC );
             xSrc->CopyTo( xDst.get() );
             xDst->Commit();
             ErrCode nError = xDst->GetError();
@@ -65,7 +65,7 @@ ErrCode SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
 ErrCode SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
 {
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
-    rtl::Reference<SotStorage> xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),
+    tools::SvRef<SotStorage> xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),
                     StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL ));
     return ( xVBAStg.is() && !xVBAStg->GetError() )
                     ? ERRCODE_SVX_VBASIC_STORAGE_EXIST

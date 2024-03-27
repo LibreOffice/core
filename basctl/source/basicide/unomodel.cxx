@@ -123,7 +123,7 @@ com_sun_star_comp_basic_BasicID_get_implementation(
 {
     SolarMutexGuard aGuard;
     basctl::EnsureIde();
-    rtl::Reference<SfxObjectShell> pShell = new basctl::DocShell();
+    SfxObjectShell* pShell = new basctl::DocShell();
     auto pModel = pShell->GetModel();
     pModel->acquire();
     return pModel.get();

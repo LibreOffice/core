@@ -77,7 +77,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <itabenum.hxx>
 
-typedef rtl::Reference<SwDocShell> SwDocShellRef;
+typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
 using namespace ::com::sun::star;
 

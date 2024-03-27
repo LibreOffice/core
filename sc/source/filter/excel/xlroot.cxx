@@ -82,7 +82,7 @@ XclDebugObjCounter::~XclDebugObjCounter()
 #endif
 
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-        rtl::Reference<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
+        tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
     meBiff( eBiff ),
     meOutput( EXC_OUTPUT_BINARY ),
     mrMedium( rMedium ),
@@ -255,30 +255,30 @@ uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper:
 
 bool XclRoot::HasVbaStorage() const
 {
-    rtl::Reference<SotStorage> xRootStrg = GetRootStorage();
+    tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     return xRootStrg.is() && xRootStrg->IsContained( EXC_STORAGE_VBA_PROJECT );
 }
 
-rtl::Reference<SotStorage> XclRoot::OpenStorage( rtl::Reference<SotStorage> const & xStrg, const OUString& rStrgName ) const
+tools::SvRef<SotStorage> XclRoot::OpenStorage( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrgName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageWrite( xStrg, rStrgName ) :
         ScfTools::OpenStorageRead( xStrg, rStrgName );
 }
 
-rtl::Reference<SotStorage> XclRoot::OpenStorage(const OUString& rStrgName) const
+tools::SvRef<SotStorage> XclRoot::OpenStorage( const OUString& rStrgName ) const
 {
     return OpenStorage( GetRootStorage(), rStrgName );
 }
 
-rtl::Reference<SotStorageStream> XclRoot::OpenStream( rtl::Reference<SotStorage> const & xStrg, const OUString& rStrmName ) const
+tools::SvRef<SotStorageStream> XclRoot::OpenStream( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrmName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageStreamWrite( xStrg, rStrmName ) :
         ScfTools::OpenStorageStreamRead( xStrg, rStrmName );
 }
 
-rtl::Reference<SotStorageStream> XclRoot::OpenStream(const OUString& rStrmName) const
+tools::SvRef<SotStorageStream> XclRoot::OpenStream( const OUString& rStrmName ) const
 {
     return OpenStream( GetRootStorage(), rStrmName );
 }

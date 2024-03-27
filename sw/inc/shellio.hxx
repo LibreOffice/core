@@ -142,7 +142,7 @@ public:
 class SW_DLLPUBLIC SwReader: public SwDocFac
 {
     SvStream* mpStrm;
-    rtl::Reference<SotStorage> mpStg;
+    tools::SvRef<SotStorage> mpStg;
     css::uno::Reference < css::embed::XStorage > mxStg;
     SfxMedium* mpMedium;     // Who wants to obtain a Medium (W4W).
 
@@ -209,7 +209,7 @@ class SW_DLLPUBLIC Reader
 
 protected:
     SvStream* m_pStream;
-    rtl::Reference<SotStorage> m_pStorage;
+    tools::SvRef<SotStorage> m_pStorage;
     css::uno::Reference < css::embed::XStorage > m_xStorage;
     SfxMedium* m_pMedium;     // Who wants to obtain a Medium (W4W).
 
@@ -267,8 +267,8 @@ public:
     virtual size_t GetSectionList( SfxMedium& rMedium,
                                    std::vector<OUString>& rStrings) const;
 
-    const rtl::Reference<SotStorage>& getSotStorageRef() const { return m_pStorage; };
-    void setSotStorageRef(const rtl::Reference<SotStorage>& pStgRef) { m_pStorage = pStgRef; };
+    const tools::SvRef<SotStorage>& getSotStorageRef() const { return m_pStorage; };
+    void setSotStorageRef(const tools::SvRef<SotStorage>& pStgRef) { m_pStorage = pStgRef; };
 
 private:
     virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &)=0;
@@ -473,7 +473,7 @@ typedef tools::SvRef<Writer> WriterRef;
 class SW_DLLPUBLIC StgWriter : public Writer
 {
 protected:
-    rtl::Reference<SotStorage> m_pStg;
+    tools::SvRef<SotStorage> m_pStg;
     css::uno::Reference < css::embed::XStorage > m_xStg;
 
     // Create error at call.

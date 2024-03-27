@@ -6756,7 +6756,7 @@ void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader
     // will be overridden by SJ in Draw
 }
 
-bool SvxMSDffManager::GetOLEStorageName( sal_uInt32, OUString&, rtl::Reference<SotStorage>&, uno::Reference < embed::XStorage >& ) const
+bool SvxMSDffManager::GetOLEStorageName( sal_uInt32, OUString&, tools::SvRef<SotStorage>&, uno::Reference < embed::XStorage >& ) const
 {
     return false;
 }
@@ -6775,7 +6775,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportOLE( sal_uInt32 nOLEId,
 {
     rtl::Reference<SdrObject> pRet;
     OUString sStorageName;
-    rtl::Reference<SotStorage> xSrcStg;
+    tools::SvRef<SotStorage> xSrcStg;
     ErrCode nError = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
@@ -6797,7 +6797,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportOLE( sal_uInt32 nOLEId,
 
 bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile & rMtf )
 {
-    rtl::Reference<SotStorageStream> xStm = pStor->OpenSotStream(SVEXT_PERSIST_STREAM);
+    tools::SvRef<SotStorageStream> xStm = pStor->OpenSotStream(SVEXT_PERSIST_STREAM);
     xStm->SetVersion( pStor->GetVersion() );
     xStm->SetBufferSize( 8192 );
 
@@ -6937,10 +6937,10 @@ const ClsIDs aClsIDs[] = {
 
 
 bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
-                    const GDIMetaFile * pMtf, const rtl::Reference<SotStorage>& rDest )
+                    const GDIMetaFile * pMtf, const tools::SvRef<SotStorage>& rDest )
 {
     bool bMtfRead = false;
-    rtl::Reference<SotStorageStream> xOle10Stm = rDest->OpenSotStream( "\1Ole10Native",
+    tools::SvRef<SotStorageStream> xOle10Stm = rDest->OpenSotStream( "\1Ole10Native",
                                                     StreamMode::WRITE| StreamMode::SHARE_DENYALL );
     if( xOle10Stm->GetError() )
         return false;
@@ -6986,7 +6986,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                 // write to ole10 stream
                 xOle10Stm->WriteUInt32( nDataLen );
                 xOle10Stm->WriteBytes(pData.get(), nDataLen);
-                xOle10Stm.clear();
+                xOle10Stm = tools::SvRef<SotStorageStream>();
 
                 // set the compobj stream
                 const ClsIDs* pIds;
@@ -7104,7 +7104,7 @@ OUString SvxMSDffManager::GetFilterNameFromClassID( const SvGlobalName& aGlobNam
 
 void SvxMSDffManager::ExtractOwnStream(SotStorage& rSrcStg, SvMemoryStream& rMemStream)
 {
-    rtl::Reference<SotStorageStream> xStr
+    tools::SvRef<SotStorageStream> xStr
         = rSrcStg.OpenSotStream("package_stream", StreamMode::STD_READ);
     xStr->ReadStream(rMemStream);
 }
@@ -7177,7 +7177,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         }
         else
         {
-            rtl::Reference<SotStorage> xStorage = new SotStorage(false, aMemStream);
+            tools::SvRef<SotStorage> xStorage = new SotStorage( false, aMemStream );
             rSrcStg.CopyTo( xStorage.get() );
             xStorage->Commit();
             xStorage.clear();
@@ -7291,7 +7291,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
 rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
     SdrModel& rSdrModel,
     const OUString& rStorageName,
-    rtl::Reference<SotStorage> const & rSrcStorage,
+    tools::SvRef<SotStorage> const & rSrcStorage,
     const uno::Reference < embed::XStorage >& xDestStorage,
     const Graphic& rGrf,
     const tools::Rectangle& rBoundRect,
@@ -7314,12 +7314,12 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
         OUString aDstStgName = MSO_OLE_Obj + OUString::number( ++nMSOleObjCntr );
 
         {
-            rtl::Reference<SotStorage> xObjStg = rSrcStorage->OpenSotStorage(rStorageName);
+            tools::SvRef<SotStorage> xObjStg = rSrcStorage->OpenSotStorage( rStorageName );
             if( xObjStg.is()  )
             {
                 {
                     sal_uInt8 aTestA[10];   // exist the \1CompObj-Stream ?
-                    rtl::Reference<SotStorageStream> xSrcTst = xObjStg->OpenSotStream("\1CompObj");
+                    tools::SvRef<SotStorageStream> xSrcTst = xObjStg->OpenSotStream( "\1CompObj" );
                     bValidStorage = xSrcTst.is() && sizeof( aTestA ) ==
                                     xSrcTst->ReadBytes(aTestA, sizeof(aTestA));
                     if( !bValidStorage )
@@ -7340,7 +7340,7 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
                         // is a kind of embedded objects in Word documents
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
-                        rtl::Reference<SotStorageStream> xObjInfoSrc = xObjStg->OpenSotStream(
+                        tools::SvRef<SotStorageStream> xObjInfoSrc = xObjStg->OpenSotStream(
                             "\3ObjInfo", StreamMode::STD_READ );
                         if ( xObjInfoSrc.is() && !xObjInfoSrc->GetError() )
                         {
@@ -7382,11 +7382,11 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
         if( bValidStorage )
         {
             // object is not an own object
-            rtl::Reference<SotStorage> xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName, StreamMode::READWRITE );
+            tools::SvRef<SotStorage> xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName, StreamMode::READWRITE );
 
             if ( xObjStor.is() )
             {
-                rtl::Reference<SotStorage> xSrcStor = rSrcStorage->OpenSotStorage( rStorageName, StreamMode::READ );
+                tools::SvRef<SotStorage> xSrcStor = rSrcStorage->OpenSotStorage( rStorageName, StreamMode::READ );
                 xSrcStor->CopyTo( xObjStor.get() );
 
                 if( !xObjStor->GetError() )
@@ -7413,7 +7413,7 @@ rtl::Reference<SdrOle2Obj> SvxMSDffManager::CreateSdrOLEFromStorage(
             else
             {
                 // or is it an OLE-1 Stream in the DataStream?
-                rtl::Reference<SotStorage> xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName );
+                tools::SvRef<SotStorage> xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName );
                 //TODO/MBA: remove metafile conversion from ConvertToOle2
                 //when is this code used?!
                 GDIMetaFile aMtf;

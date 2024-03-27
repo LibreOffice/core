@@ -42,7 +42,7 @@ Writer_SwTextDocument_get_implementation(
     css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
-            rtl::Reference<SfxObjectShell> pShell = new SwDocShell(_nCreationFlags);
+            SfxObjectShell* pShell = new SwDocShell( _nCreationFlags );
             return pShell->GetModel();
         });
     xInterface->acquire();
@@ -55,7 +55,7 @@ com_sun_star_comp_Writer_WebDocument_get_implementation(css::uno::XComponentCont
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    rtl::Reference<SfxObjectShell> pShell = new SwWebDocShell;
+    SfxObjectShell* pShell = new SwWebDocShell;
     uno::Reference< uno::XInterface > model( pShell->GetModel() );
     model->acquire();
     return model.get();
@@ -68,7 +68,7 @@ com_sun_star_comp_Writer_GlobalDocument_get_implementation(css::uno::XComponentC
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    rtl::Reference<SfxObjectShell> pShell = new SwGlobalDocShell(SfxObjectCreateMode::STANDARD);
+    SfxObjectShell* pShell = new SwGlobalDocShell( SfxObjectCreateMode::STANDARD );
     uno::Reference< uno::XInterface > model( pShell->GetModel() );
     model->acquire();
     return model.get();

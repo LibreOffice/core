@@ -203,7 +203,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
             }
             catch( const uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
 
-            rtl::Reference<SotStorage> xOLEStor = new SotStorage( pStream, true );
+            tools::SvRef<SotStorage> xOLEStor = new SotStorage( pStream, true );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
         }
@@ -224,7 +224,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
             rDestStg.SetClass( aEmbName,
                                 SotClipboardFormatId::EMBEDDED_OBJ_OLE,
                                 GetStorageType( aEmbName ) );
-            rtl::Reference<SotStorageStream> xExtStm = rDestStg.OpenSotStream(
+            tools::SvRef<SotStorageStream> xExtStm = rDestStg.OpenSotStream(
                                             "properties_stream");
 
             bool bExtentSuccess = false;
@@ -279,7 +279,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
 
             if ( bExtentSuccess )
             {
-                rtl::Reference<SotStorageStream> xEmbStm = rDestStg.OpenSotStream(
+                tools::SvRef<SotStorageStream> xEmbStm = rDestStg.OpenSotStream(
                                                 "package_stream");
                 if( !xEmbStm->GetError() )
                 {
@@ -326,7 +326,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
             catch ( const uno::Exception& )
             {}
 
-            rtl::Reference<SotStorage> xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, StreamMode::STD_READ );
+            tools::SvRef<SotStorage> xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, StreamMode::STD_READ );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
         }

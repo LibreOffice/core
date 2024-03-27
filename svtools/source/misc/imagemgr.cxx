@@ -399,7 +399,7 @@ static SvImageId GetImageId_Impl(
             SvImageId nId = SvImageId::WriterTemplate;
             try
             {
-                rtl::Reference<SotStorage> aStorage = new SotStorage(sURL, StreamMode::STD_READ);
+                tools::SvRef<SotStorage> aStorage = new SotStorage( sURL, StreamMode::STD_READ );
                 if ( !aStorage->GetError() )
                 {
                     SvGlobalName aGlobalName = aStorage->GetClassName();

@@ -810,8 +810,8 @@ void XclExpPivotCache::WriteDConName( XclExpStream& rStrm ) const
 
 void XclExpPivotCache::WriteCacheStream()
 {
-    rtl::Reference<SotStorage> xSvStrg = OpenStorage(EXC_STORAGE_PTCACHE);
-    rtl::Reference<SotStorageStream> xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( maPCInfo.mnStrmId ) );
+    tools::SvRef<SotStorage> xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
+    tools::SvRef<SotStorageStream> xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( maPCInfo.mnStrmId ) );
     if( !xSvStrm.is() )
         return;
 

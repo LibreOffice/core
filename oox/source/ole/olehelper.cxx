@@ -437,7 +437,7 @@ MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm
 }
 
 bool
-MSConvertOCXControls::ReadOCXCtlsStream( rtl::Reference<SotStorageStream> const & rSrc1, Reference< XFormComponent > & rxFormComp,
+MSConvertOCXControls::ReadOCXCtlsStream( tools::SvRef<SotStorageStream> const & rSrc1, Reference< XFormComponent > & rxFormComp,
                                    sal_Int32 nPos,
                                    sal_Int32 nStreamSize)
 {
@@ -486,18 +486,18 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
     return rxFormComp.is();
 }
 
-bool MSConvertOCXControls::ReadOCXStorage( rtl::Reference<SotStorage> const & xOleStg,
+bool MSConvertOCXControls::ReadOCXStorage( tools::SvRef<SotStorage> const & xOleStg,
                                   Reference< XFormComponent > & rxFormComp )
 {
     if ( xOleStg.is() )
     {
-        rtl::Reference<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME", StreamMode::READ);
+        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME", StreamMode::READ);
         BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );
 
-        rtl::Reference<SotStorageStream> pContents = xOleStg->OpenSotStream("contents", StreamMode::READ);
+        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream("contents", StreamMode::READ);
         BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
 
-        rtl::Reference<SotStorageStream> pClsStrm = xOleStg->OpenSotStream("\1CompObj", StreamMode::READ);
+        tools::SvRef<SotStorageStream> pClsStrm = xOleStg->OpenSotStream("\1CompObj", StreamMode::READ);
         BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );
         aClsStrm.skip(12);
 
@@ -533,7 +533,7 @@ bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const css::uno::Reference<
     return true;
 }
 
-bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, rtl::Reference<SotStorage> const &xOleStg,
+bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, tools::SvRef<SotStorage> const &xOleStg,
     const Reference< XControlModel > &rxControlModel,
     const css::awt::Size& rSize, OUString &rName)
 {
@@ -550,17 +550,17 @@ bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, r
     rName = exportHelper.getTypeName();
     xOleStg->SetClass( aName, SotClipboardFormatId::EMBEDDED_OBJ_OLE, sFullName);
     {
-        rtl::Reference<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME");
+        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME");
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pNameStream );
         exportHelper.exportName( xOut );
     }
     {
-        rtl::Reference<SotStorageStream> pObjStream = xOleStg->OpenSotStream("\1CompObj");
+        tools::SvRef<SotStorageStream> pObjStream = xOleStg->OpenSotStream("\1CompObj");
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pObjStream );
         exportHelper.exportCompObj( xOut );
     }
     {
-        rtl::Reference<SotStorageStream> pContents = xOleStg->OpenSotStream("contents");
+        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream("contents");
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pContents );
         exportHelper.exportControl( xOut, rSize );
     }

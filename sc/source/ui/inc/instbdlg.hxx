@@ -44,7 +44,7 @@ public:
 
     const OUString* GetFirstTable( sal_uInt16* pN );
     const OUString* GetNextTable( sal_uInt16* pN );
-    ScDocShell*     GetDocShellTables() { return pDocShTables.get(); }
+    ScDocShell*     GetDocShellTables() { return pDocShTables; }
     bool        IsTableBefore() const { return m_xBtnBefore->get_active(); }
     SCTAB           GetTableCount() const { return nTableCount;}
 
@@ -52,8 +52,9 @@ private:
     Timer                   aBrowseTimer;
     ScViewData&             rViewData;
     ScDocument&             rDoc;
-    rtl::Reference<ScDocShell> pDocShTables;
+    ScDocShell*             pDocShTables;
     std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
+    SfxObjectShellRef       aDocShTablesRef;
 
     bool                bMustClose;
     sal_uInt16          nSelTabIndex;   // for GetFirstTable() / GetNextTable()

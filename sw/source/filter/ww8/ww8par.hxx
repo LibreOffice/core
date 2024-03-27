@@ -137,7 +137,7 @@ class WW8Reader : public StgReader
 {
     std::shared_ptr<SvStream> mDecodedStream;
     virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
-    ErrCode OpenMainStream(rtl::Reference<SotStorageStream>& rRef, sal_uInt16& rBuffSize);
+    ErrCode OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize );
     ErrCode DecryptDRMPackage();
 public:
     WW8Reader() {}
@@ -735,7 +735,7 @@ public:
         const css::awt::Size& rSize,
         css::uno::Reference<  css::drawing::XShape > *pShape, bool bFloatingCtrl) override;
     void ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
-    bool ReadOCXStream(rtl::Reference<SotStorage> const& rSrc1,
+    bool ReadOCXStream( tools::SvRef<SotStorage> const & rSrc1,
         css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl=false );
 private:
@@ -751,7 +751,7 @@ private:
     std::unordered_map<sal_uInt32, Graphic> m_aOldEscherBlipCache;
 
     virtual bool GetOLEStorageName( sal_uInt32 nOLEId, OUString& rStorageName,
-        rtl::Reference<SotStorage>& rSrcStorage, css::uno::Reference < css::embed::XStorage >& rDestStorage ) const override;
+        tools::SvRef<SotStorage>& rSrcStorage, css::uno::Reference < css::embed::XStorage >& rDestStorage ) const override;
     virtual bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const override;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
@@ -1577,7 +1577,7 @@ private:
     void ImportDopTypography(const WW8DopTypography &rTypo);
 
     ErrCode LoadThroughDecryption(WW8Glossary *pGloss);
-    ErrCode SetSubStreams(rtl::Reference<SotStorageStream> &rTableStream, rtl::Reference<SotStorageStream> &rDataStream);
+    ErrCode SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream, tools::SvRef<SotStorageStream> &rDataStream);
     ErrCode CoreLoad(WW8Glossary const *pGloss);
 
     void ReadDocVars();
@@ -1926,7 +1926,7 @@ public:     // really private, but can only be done public
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     SAL_WARN_UNUSED_RESULT static bool PicRead(SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
-    static bool ImportOleWMF(const rtl::Reference<SotStorage>& xSrc1, GDIMetaFile& rWMF, tools::Long& rX,
+    static bool ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMetaFile& rWMF, tools::Long& rX,
                              tools::Long& rY);
     static Color GetCol(sal_uInt8 nIco);
 

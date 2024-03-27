@@ -35,7 +35,7 @@ Calc_SpreadsheetDocument_get_implementation(
     css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
-            rtl::Reference<SfxObjectShell> pShell = new ScDocShell(_nCreationFlags);
+            SfxObjectShell* pShell = new ScDocShell( _nCreationFlags );
             return uno::Reference< uno::XInterface >( pShell->GetModel() );
         });
     xInterface->acquire();

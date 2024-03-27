@@ -254,9 +254,10 @@ bool SdModule::OutlineToImpress(SfxRequest const & rRequest)
 
         if (pBytes)
         {
-            rtl::Reference<sd::DrawDocShell> pDocSh = new ::sd::DrawDocShell(
+            SfxObjectShellLock xDocShell;
+            ::sd::DrawDocShell* pDocSh;
+            xDocShell = pDocSh = new ::sd::DrawDocShell(
                 SfxObjectCreateMode::STANDARD, false, DocumentType::Impress);
-            SfxObjectShellLock xDocShell(pDocSh.get());
 
             pDocSh->DoInitNew();
             SdDrawDocument* pDoc = pDocSh->GetDoc();
@@ -516,8 +517,9 @@ SfxFrame* SdModule::CreateEmptyDocument( const Reference< XFrame >& i_rFrame )
 {
     SfxFrame* pFrame = nullptr;
 
-    rtl::Reference<sd::DrawDocShell> pNewDocSh = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD,false,DocumentType::Impress);
-    SfxObjectShellLock xDocShell(pNewDocSh.get());
+    SfxObjectShellLock xDocShell;
+    ::sd::DrawDocShell* pNewDocSh;
+    xDocShell = pNewDocSh = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD,false,DocumentType::Impress);
     pNewDocSh->DoInitNew();
     SdDrawDocument* pDoc = pNewDocSh->GetDoc();
     if (pDoc)

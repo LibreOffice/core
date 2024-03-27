@@ -524,11 +524,11 @@ rtl::Reference<SdrObject> SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
 
     rtl::Reference<SdrObject> pRet;
     OUString sStorageName;
-    rtl::Reference<SotStorage> xSrcStg;
+    tools::SvRef<SotStorage> xSrcStg;
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
     {
-        rtl::Reference<SotStorage> xSrc = xSrcStg->OpenSotStorage(sStorageName);
+        tools::SvRef<SotStorage> xSrc = xSrcStg->OpenSotStorage( sStorageName );
         OSL_ENSURE(m_rReader.m_xFormImpl, "No Form Implementation!");
         css::uno::Reference< css::drawing::XShape > xShape;
         if ( (!(m_rReader.m_bIsHeader || m_rReader.m_bIsFooter)) &&
@@ -5015,17 +5015,17 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( std::u16string_view sCreatedFr
         if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.empty() && sCreatedFrom == aURL ) )
             continue; // don't try and read the same document as ourselves
 
-        rtl::Reference<SotStorage> rRoot = new SotStorage(aURL, StreamMode::STD_READWRITE);
+        tools::SvRef<SotStorage> rRoot = new SotStorage( aURL, StreamMode::STD_READWRITE );
 
         BasicProjImportHelper aBasicImporter( *m_pDocShell );
         // Import vba via oox filter
         aBasicImporter.import( m_pDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
-        rtl::Reference<SotStorageStream> refMainStream = rRoot->OpenSotStream("WordDocument");
+        tools::SvRef<SotStorageStream> refMainStream = rRoot->OpenSotStream( "WordDocument");
         refMainStream->SetEndian(SvStreamEndian::LITTLE);
         WW8Fib aWwFib( *refMainStream, 8 );
-        rtl::Reference<SotStorageStream> xTableStream =
+        tools::SvRef<SotStorageStream> xTableStream =
                 rRoot->OpenSotStream(aWwFib.m_fWhichTableStm ? OUString(SL::a1Table) : OUString(SL::a0Table), StreamMode::STD_READ);
 
         if (xTableStream.is() && ERRCODE_NONE == xTableStream->GetError())
@@ -5529,8 +5529,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     return ERRCODE_NONE;
 }
 
-ErrCode SwWW8ImplReader::SetSubStreams(rtl::Reference<SotStorageStream>& rTableStream,
-                                       rtl::Reference<SotStorageStream>& rDataStream)
+ErrCode SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream,
+    tools::SvRef<SotStorageStream> &rDataStream)
 {
     ErrCode nErrRet = ERRCODE_NONE;
     // 6 stands for "6 OR 7", 7 stands for "ONLY 7"
@@ -5803,7 +5803,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
     if (m_xWwFib->m_nFibError)
         nErrRet = ERR_SWG_READ_ERROR;
 
-    rtl::Reference<SotStorageStream> xTableStream, xDataStream;
+    tools::SvRef<SotStorageStream> xTableStream, xDataStream;
 
     if (!nErrRet)
         nErrRet = SetSubStreams(xTableStream, xDataStream);
@@ -6357,13 +6357,13 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
     FontCacheGuard aFontCacheGuard;
     std::unique_ptr<Reader> xReader(ImportDOC());
 
-    rtl::Reference<SotStorage> xStorage;
+    tools::SvRef<SotStorage> xStorage;
     xReader->m_pStream = &rStream;
     if (rFltName != "WW6")
     {
         try
         {
-            xStorage.set(new SotStorage(rStream));
+            xStorage = tools::SvRef<SotStorage>(new SotStorage(rStream));
             if (xStorage->GetError())
                 return false;
         }
@@ -6404,7 +6404,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWW2(SvStream &rStream)
     return TestImportDOC(rStream, "WW6");
 }
 
-ErrCode WW8Reader::OpenMainStream(rtl::Reference<SotStorageStream>& rRef, sal_uInt16& rBuffSize)
+ErrCode WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )
 {
     ErrCode nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE(m_pStorage, "Where is my Storage?");
@@ -6434,13 +6434,13 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
         OUString sStreamFullName = sPrefix.size() ? OUString::Concat(sPrefix) + "/" + aElement.GetName() : aElement.GetName();
         if (aElement.IsStorage())
         {
-            rtl::Reference<SotStorage> xSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
+            tools::SvRef<SotStorage> xSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
             lcl_getListOfStreams(xSubStorage.get(), aStreamsData, sStreamFullName);
         }
         else
         {
             // Read stream
-            rtl::Reference<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
+            tools::SvRef<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
             if (rStream.is())
             {
                 sal_Int32 nStreamSize = rStream->GetSize();
@@ -6480,7 +6480,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
             return ERRCODE_IO_ACCESSDENIED;
         }
 
-        rtl::Reference<SotStorageStream> rContentStream = m_pStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
+        tools::SvRef<SotStorageStream> rContentStream = m_pStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
         if (!rContentStream.is())
         {
             return ERRCODE_IO_NOTEXISTS;
@@ -6519,7 +6519,7 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
     sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !m_bInsertMode; // New Doc (no inserting)
 
-    rtl::Reference<SotStorageStream> refStrm; // So that no one else can steal the Stream
+    tools::SvRef<SotStorageStream> refStrm; // So that no one else can steal the Stream
     SvStream* pIn = m_pStream;
 
     ErrCode nRet = ERRCODE_NONE;
@@ -6546,7 +6546,7 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
         if( m_pStorage.is() )
         {
             // Check if we have special encrypted content
-            rtl::Reference<SotStorageStream> rRef = m_pStorage->OpenSotStream("\006DataSpaces/DataSpaceInfo/\011DRMDataSpace", StreamMode::READ | StreamMode::SHARE_DENYALL);
+            tools::SvRef<SotStorageStream> rRef = m_pStorage->OpenSotStream("\006DataSpaces/DataSpaceInfo/\011DRMDataSpace", StreamMode::READ | StreamMode::SHARE_DENYALL);
             if (rRef.is())
             {
                 nRet = DecryptDRMPackage();
@@ -6610,7 +6610,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
     WW8Reader *pThis = const_cast<WW8Reader *>(this);
 
     sal_uInt16 nOldBuffSize = 32768;
-    rtl::Reference<SotStorageStream> refStrm;
+    tools::SvRef<SotStorageStream> refStrm;
     if (!pThis->OpenMainStream(refStrm, nOldBuffSize))
     {
         WW8Glossary aGloss( refStrm, 8, m_pStorage.get() );
@@ -6620,7 +6620,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
 }
 
 bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName,
-    rtl::Reference<SotStorage>& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
+    tools::SvRef<SotStorage>& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
 {
     bool bRet = false;
 

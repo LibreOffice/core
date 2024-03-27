@@ -43,7 +43,7 @@ typedef ::std::map < SdrObject*, Ppt97AnimationPtr > tAnimationMap;
 
 class ImplSdPPTImport : public SdrPowerPointImport
 {
-    rtl::Reference<SotStorageStream> mxPicturesStream;
+    tools::SvRef<SotStorageStream> mxPicturesStream;
     SfxMedium&      mrMed;
     SotStorage&      mrStorage;
     DffRecordHeader maDocHd;
@@ -73,7 +73,7 @@ public:
     virtual ~ImplSdPPTImport() override;
 
     bool         Import();
-    virtual bool ReadFormControl(  rtl::Reference<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const override;
+    virtual bool ReadFormControl(  tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const override;
 };
 
 class SdPPTImport

@@ -27,8 +27,8 @@ class SwDocShell;
 
 #ifndef SW_DECL_SWDOCSHELL_DEFINED
 #define SW_DECL_SWDOCSHELL_DEFINED
-#include <rtl/ref.hxx>
-typedef rtl::Reference<SwDocShell> SwDocShellRef;
+#include <tools/ref.hxx>
+typedef tools::SvRef<SwDocShell> SwDocShellRef;
 #endif
 #include <cppuhelper/weakref.hxx>
 

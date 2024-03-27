@@ -76,7 +76,7 @@
 #include <sharedstringpoolpurge.hxx>
 #include <formulaopt.hxx>
 
-rtl::Reference<ScDocShell> ScGlobal::xDrawClipDocShellRef;
+tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
 std::unique_ptr<SvxSearchItem> ScGlobal::xSearchItem;
 std::unique_ptr<ScAutoFormat> ScGlobal::xAutoFormat;
 std::atomic<LegacyFuncCollection*> ScGlobal::pLegacyFuncCollection(nullptr);

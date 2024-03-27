@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <tools/datetime.hxx>
-#include <tools/ref.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docmacromode.hxx>

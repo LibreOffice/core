@@ -64,7 +64,7 @@ struct OLE_MFP
 
 using namespace ::com::sun::star;
 
-static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, rtl::Reference<SotStorage> const & rSrc1)
+static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, tools::SvRef<SotStorage> const & rSrc1)
 {
     // Getting the scaling factor:
     //      Information in the PIC-stream (by trying out)
@@ -79,7 +79,7 @@ static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, rtl::Reference<So
     //      0x2c, 0x30 scaling x,y in per thousand
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
-    rtl::Reference<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( "\3PIC",
+    tools::SvRef<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( "\3PIC",
         StreamMode::STD_READ );
     SotStorageStream* pS = xSrc3.get();
     pS->SetEndian( SvStreamEndian::LITTLE );
@@ -121,9 +121,9 @@ static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, rtl::Reference<So
 }
 
 static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
-                                rtl::Reference<SotStorage> const& rSrc1)
+    tools::SvRef<SotStorage> const & rSrc1)
 {
-    rtl::Reference<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( "\3META",
+    tools::SvRef<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( "\3META",
         StreamMode::STD_READ );
     SotStorageStream* pSt = xSrc2.get();
     pSt->SetEndian( SvStreamEndian::LITTLE );
@@ -174,10 +174,10 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     return true;
 }
 
-static bool SwWw6ReadMacPICTStream(Graphic& rGraph, rtl::Reference<SotStorage> const& rSrc1)
+static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage> const & rSrc1)
 {
     // 03-META-stream does not exist. Maybe a 03-PICT?
-    rtl::Reference<SotStorageStream> xSrc4 = rSrc1->OpenSotStream("\3PICT");
+    tools::SvRef<SotStorageStream> xSrc4 = rSrc1->OpenSotStream("\3PICT");
     SotStorageStream* pStp = xSrc4.get();
     pStp->SetEndian( SvStreamEndian::LITTLE );
     sal_uInt8 aTestA[10];        // Does the 01Ole-stream even exist?
@@ -300,7 +300,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     return pFormat;
 }
 
-bool SwWW8ImplReader::ImportOleWMF(const rtl::Reference<SotStorage>& xSrc1, GDIMetaFile& rWMF,
+bool SwWW8ImplReader::ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMetaFile& rWMF,
                                    tools::Long& rX, tools::Long& rY)
 {
     bool bOk = false;
@@ -340,8 +340,8 @@ rtl::Reference<SdrObject> SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     // results in the name "_4711"
     OUString aSrcStgName = "_" + OUString::number( m_nObjLocFc );
 
-    rtl::Reference<SotStorage> xSrc0 = m_pStg->OpenSotStorage(SL::aObjectPool);
-    rtl::Reference<SotStorage> xSrc1 = xSrc0->OpenSotStorage(aSrcStgName);
+    tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(SL::aObjectPool);
+    tools::SvRef<SotStorage> xSrc1 = xSrc0->OpenSotStorage( aSrcStgName );
 
     if (pGrf)
     {
@@ -414,7 +414,7 @@ rtl::Reference<SdrObject> SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
             {
-                rtl::Reference<SotStorageStream> xObjInfoSrc = xSrc1->OpenSotStream("\3ObjInfo",
+                tools::SvRef<SotStorageStream> xObjInfoSrc = xSrc1->OpenSotStream("\3ObjInfo",
                     StreamMode::STD_READ );
                 if ( xObjInfoSrc.is() && !xObjInfoSrc->GetError() )
                 {

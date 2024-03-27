@@ -318,7 +318,7 @@ void ImportExcel8::Feat()
 void ImportExcel8::ReadBasic()
 {
     SfxObjectShell* pShell = GetDocShell();
-    rtl::Reference<SotStorage> xRootStrg = GetRootStorage();
+    tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
     if( !pShell || !xRootStrg.is() )
         return;
@@ -332,7 +332,7 @@ void ImportExcel8::ReadBasic()
             rFilterOpt.IsLoadExcelBasicExecutable() )
         {
             // see if we have the XCB stream
-            rtl::Reference<SotStorageStream> xXCB = xRootStrg->OpenSotStream( "XCB", StreamMode::STD_READ );
+            tools::SvRef<SotStorageStream> xXCB = xRootStrg->OpenSotStream( "XCB", StreamMode::STD_READ );
             if ( xXCB.is()|| ERRCODE_NONE == xXCB->GetError() )
             {
                 ScCTBWrapper wrapper;
@@ -409,7 +409,7 @@ void ImportExcel8::PostDocLoad()
         return;
 
     // BIFF5+ without storage is possible
-    rtl::Reference<SotStorage> xRootStrg = GetRootStorage();
+    tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     if( xRootStrg.is() ) try
     {
         uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );

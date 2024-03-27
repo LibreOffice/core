@@ -61,13 +61,13 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
         OUString sStreamFullName = sPrefix.size() ? OUString::Concat(sPrefix) + "/" + aElement.GetName() : aElement.GetName();
         if (aElement.IsStorage())
         {
-            rtl::Reference<SotStorage> xSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
+            tools::SvRef<SotStorage> xSubStorage = pStorage->OpenSotStorage(aElement.GetName(), StreamMode::STD_READ | StreamMode::SHARE_DENYALL);
             lcl_getListOfStreams(xSubStorage.get(), aStreamsData, sStreamFullName);
         }
         else
         {
             // Read stream
-            rtl::Reference<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
+            tools::SvRef<SotStorageStream> rStream = pStorage->OpenSotStream(aElement.GetName(), StreamMode::READ | StreamMode::SHARE_DENYALL);
             if (rStream.is())
             {
                 sal_Int32 nStreamSize = rStream->GetSize();
@@ -81,9 +81,9 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
     }
 }
 
-static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const rtl::Reference<SotStorage>& rStorage, std::shared_ptr<SvStream>& rNewStorageStrm)
+static tools::SvRef<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const tools::SvRef<SotStorage>& rStorage, std::shared_ptr<SvStream>& rNewStorageStrm)
 {
-    rtl::Reference<SotStorage> aNewStorage;
+    tools::SvRef<SotStorage> aNewStorage;
 
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
     uno::Sequence< uno::Any > aArguments;
@@ -109,7 +109,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
             return aNewStorage;
         }
 
-        rtl::Reference<SotStorageStream> rContentStream = rStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
+        tools::SvRef<SotStorageStream> rContentStream = rStorage->OpenSotStream("\011DRMContent", StreamMode::READ | StreamMode::SHARE_DENYALL);
         if (!rContentStream.is())
         {
             return aNewStorage;
@@ -166,8 +166,8 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
     XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.
 
     // try to open an OLE storage
-    rtl::Reference<SotStorage> xRootStrg;
-    rtl::Reference<SotStorageStream> xStrgStrm;
+    tools::SvRef<SotStorage> xRootStrg;
+    tools::SvRef<SotStorageStream> xStrgStrm;
     std::shared_ptr<SvStream> aNewStorageStrm;
     if( SotStorage::IsStorageFile( pMedStrm ) )
     {
@@ -180,18 +180,18 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
     if( xRootStrg.is() )
     {
         // Check if there is DRM encryption in storage
-        rtl::Reference<SotStorageStream> xDRMStrm = ScfTools::OpenStorageStreamRead(xRootStrg, "\011DRMContent");
+        tools::SvRef<SotStorageStream> xDRMStrm = ScfTools::OpenStorageStreamRead(xRootStrg, "\011DRMContent");
         if (xDRMStrm.is())
         {
             xRootStrg = lcl_DRMDecrypt(rMedium, xRootStrg, aNewStorageStrm);
         }
 
         // try to open the "Book" stream
-        rtl::Reference<SotStorageStream> xBookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
+        tools::SvRef<SotStorageStream> xBookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
         XclBiff eBookBiff = xBookStrm.is() ?  XclImpStream::DetectBiffVersion( *xBookStrm ) : EXC_BIFF_UNKNOWN;
 
         // try to open the "Workbook" stream
-        rtl::Reference<SotStorageStream> xWorkbookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
+        tools::SvRef<SotStorageStream> xWorkbookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
         XclBiff eWorkbookBiff = xWorkbookStrm.is() ?  XclImpStream::DetectBiffVersion( *xWorkbookStrm ) : EXC_BIFF_UNKNOWN;
 
         // decide which stream to use
@@ -286,7 +286,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     }
 
     // try to open an OLE storage
-    rtl::Reference<SotStorage> xRootStrg = new SotStorage(pMedStrm, false);
+    tools::SvRef<SotStorage> xRootStrg = new SotStorage( pMedStrm, false );
     if( xRootStrg->GetError() ) return SCERR_IMPORT_OPEN;
 
     // create BIFF dependent strings
@@ -305,7 +305,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     }
 
     // open the "Book"/"Workbook" stream
-    rtl::Reference<SotStorageStream> xStrgStrm = ScfTools::OpenStorageStreamWrite( xRootStrg, aStrmName );
+    tools::SvRef<SotStorageStream> xStrgStrm = ScfTools::OpenStorageStreamWrite( xRootStrg, aStrmName );
     if( !xStrgStrm.is() || xStrgStrm->GetError() ) return SCERR_IMPORT_OPEN;
 
     xStrgStrm->SetBufferSize( 0x8000 );     // still needed?
@@ -343,12 +343,12 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         uno::Reference<io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(pMedStrm, false));
         uno::Sequence<beans::NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
 
-        rtl::Reference<SotStorage> xEncryptedRootStrg = new SotStorage(pOriginalMediaStrm, false);
-        for (const beans::NamedValue& aStreamData : aStreams)
+        tools::SvRef<SotStorage> xEncryptedRootStrg = new SotStorage(pOriginalMediaStrm, false);
+        for (const beans::NamedValue & aStreamData : std::as_const(aStreams))
         {
             // To avoid long paths split and open substorages recursively
             // Splitting paths manually, since comphelper::string::split is trimming special characters like \0x01, \0x09
-            rtl::Reference<SotStorage> pStorage = xEncryptedRootStrg;
+            tools::SvRef<SotStorage> pStorage = xEncryptedRootStrg.get();
             OUString sFileName;
             sal_Int32 idx = 0;
             do
@@ -373,7 +373,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
                 break;
             }
 
-            rtl::Reference<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
+            tools::SvRef<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
             if (!pStream)
             {
                 eRet = ERRCODE_IO_GENERAL;

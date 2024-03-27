@@ -684,8 +684,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             OUString sOleId = "_" +
                                 OUString::number( m_aFieldStack.back().mnObjLocFc );
 
-                            rtl::Reference<SotStorage> xSrc0 = m_pStg->OpenSotStorage(SL::aObjectPool);
-                            rtl::Reference<SotStorage> xSrc1 = xSrc0->OpenSotStorage( sOleId, StreamMode::READ );
+                            tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(SL::aObjectPool);
+                            tools::SvRef<SotStorage> xSrc1 = xSrc0->OpenSotStorage( sOleId, StreamMode::READ );
 
                             // Store it now!
                             uno::Reference< embed::XStorage > xDocStg = GetDoc().GetDocStorage();
@@ -693,7 +693,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             {
                                 uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
                                         "OLELinks", embed::ElementModes::WRITE );
-                                rtl::Reference<SotStorage> xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
+                                tools::SvRef<SotStorage> xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
 
                                 if ( xObjDst.is() )
                                 {

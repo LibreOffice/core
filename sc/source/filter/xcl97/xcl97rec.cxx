@@ -1016,7 +1016,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     sal_uInt32          nPictureId = sal_uInt32(reinterpret_cast<sal_uIntPtr>(this) >> 2);
     o3tl::sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
     aStorageName += OUString::createFromAscii(aBuf);
-    rtl::Reference<SotStorage> xOleStg = pRootStorage->OpenSotStorage(aStorageName);
+    tools::SvRef<SotStorage>    xOleStg = pRootStorage->OpenSotStorage( aStorageName );
     if( !xOleStg.is() )
         return;
 

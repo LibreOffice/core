@@ -1980,14 +1980,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 css::awt::Size     aSize;
                 OUString          aControlName;
-                rtl::Reference<SotStorage> xTemp(new SotStorage(new SvMemoryStream(), true));
+                tools::SvRef<SotStorage>    xTemp( new SotStorage( new SvMemoryStream(), true ) );
                 if ( oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xTemp, aXControlModel, aSize, aControlName ) )
                 {
                     OUString aUserName( xTemp->GetUserName() );
                     OUString aOleIdentifier;
                     if ( !aUserName.isEmpty() )
                     {
-                        rtl::Reference<SotStorageStream> xCompObj = xTemp->OpenSotStream(
+                        tools::SvRef<SotStorageStream> xCompObj = xTemp->OpenSotStream(
                             "\1CompObj",
                                 StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                         sal_uInt32 const nStreamLen = xCompObj->remainingSize();

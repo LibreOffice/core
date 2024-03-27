@@ -71,7 +71,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     bool bStorageOk = false;
     try
     {
-        rtl::Reference<SotStorage> aStorage = new SotStorage(pInStrm, false);
+        tools::SvRef<SotStorage> aStorage = new SotStorage( pInStrm, false );
         bStorageOk = !aStorage->GetError();
         if (bStorageOk)
         {

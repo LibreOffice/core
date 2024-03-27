@@ -249,7 +249,8 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     SfxMedium* pMed = ScDocumentLoader::CreateMedium( aNewUrl, pFilter, aOptions);
 
     // aRef->DoClose() will be closed explicitly, but it is still more safe to use SfxObjectShellLock here
-    rtl::Reference<ScDocShell> pSrcShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS);
+    ScDocShell* pSrcShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS);
+    SfxObjectShellLock aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
     ScDocument& rSrcDoc = pSrcShell->GetDocument();
@@ -474,7 +475,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
     //  clean up
 
-    pSrcShell->DoClose();
+    aRef->DoClose();
 
     rDoc.SetInLinkUpdate( false );
 

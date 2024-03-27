@@ -72,11 +72,11 @@ bool ReqIfRtfReader::WriteObjectData(SvStream& rOLE)
 }
 
 /// Looks up what OLE1 calls the ClassName, see [MS-OLEDS] 2.3.8 CompObjStream.
-OString ExtractOLEClassName(const rtl::Reference<SotStorage>& xStorage)
+OString ExtractOLEClassName(const tools::SvRef<SotStorage>& xStorage)
 {
     OString aRet;
 
-    rtl::Reference<SotStorageStream> pCompObj = xStorage->OpenSotStream("\1CompObj");
+    tools::SvRef<SotStorageStream> pCompObj = xStorage->OpenSotStream("\1CompObj");
     if (!pCompObj)
         return aRet;
 
@@ -106,8 +106,8 @@ bool ParseOLE2Presentation(SvStream& rOle2, sal_uInt32& nWidth, sal_uInt32& nHei
 {
     // See [MS-OLEDS] 2.3.4, OLEPresentationStream
     rOle2.Seek(0);
-    rtl::Reference<SotStorage> pStorage = new SotStorage(rOle2);
-    rtl::Reference<SotStorageStream> xOle2Presentation
+    tools::SvRef<SotStorage> pStorage = new SotStorage(rOle2);
+    tools::SvRef<SotStorageStream> xOle2Presentation
         = pStorage->OpenSotStream("\002OlePres000", StreamMode::STD_READ);
 
     // Read AnsiClipboardFormat.
@@ -164,10 +164,10 @@ bool ParseOLE2Presentation(SvStream& rOle2, sal_uInt32& nWidth, sal_uInt32& nHei
  * Inserts an OLE1 header before an OLE2 storage, assuming that the storage has an Ole10Native
  * stream.
  */
-OString InsertOLE1HeaderFromOle10NativeStream(const rtl::Reference<SotStorage>& xStorage,
+OString InsertOLE1HeaderFromOle10NativeStream(const tools::SvRef<SotStorage>& xStorage,
                                               SwOLENode& rOLENode, SvStream& rOle1)
 {
-    rtl::Reference<SotStorageStream> xOle1Stream
+    tools::SvRef<SotStorageStream> xOle1Stream
         = xStorage->OpenSotStream("\1Ole10Native", StreamMode::STD_READ);
     sal_uInt32 nOle1Size = 0;
     xOle1Stream->ReadUInt32(nOle1Size);
@@ -271,7 +271,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
                          sal_uInt64 nPresentationData)
 {
     rOle2.Seek(0);
-    rtl::Reference<SotStorage> xStorage(new SotStorage(rOle2));
+    tools::SvRef<SotStorage> xStorage(new SotStorage(rOle2));
     if (xStorage->GetError() != ERRCODE_NONE)
         return {};
 
@@ -407,7 +407,7 @@ bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle, bool& bOwnFormat)
     if (!xReader->WriteObjectData(rOle))
         return false;
 
-    rtl::Reference<SotStorage> pStorage = new SotStorage(rOle);
+    tools::SvRef<SotStorage> pStorage = new SotStorage(rOle);
     OUString aFilterName = SvxMSDffManager::GetFilterNameFromClassID(pStorage->GetClassName());
     bOwnFormat = !aFilterName.isEmpty();
     if (!bOwnFormat)
