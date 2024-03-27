@@ -957,8 +957,7 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
     rKeywords[ NF_KEY_THAI_T ] = "T";
 }
 
-
-static OUString lcl_buildBooleanStringFormat( SvNumberformat* pEntry, const NativeNumberWrapper* pNatNum, const SvNFLanguageData& rCurrentLang )
+static OUString lcl_buildBooleanStringFormat(const SvNumberformat* pEntry, const NativeNumberWrapper* pNatNum, const SvNFLanguageData& rCurrentLang)
 {
     // Build Boolean number format, which needs non-zero and zero subformat
     // codes with TRUE and FALSE strings.
@@ -970,7 +969,6 @@ static OUString lcl_buildBooleanStringFormat( SvNumberformat* pEntry, const Nati
     aFormatStr += aTemp + "\"";
     return aFormatStr;
 }
-
 
 OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKeywordTable& rKeywords,
         SvNumberFormatter& rTempFormatter ) const
@@ -987,7 +985,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
             // locales. You can't have both. We could force to English for all
             // locales like below, but Excel would display English strings then
             // even for the system locale matching this locale. YMMV.
-            aFormatStr = lcl_buildBooleanStringFormat( const_cast< SvNumberformat* >(pEntry), GetNatNum(), m_aCurrentLanguage );
+            aFormatStr = lcl_buildBooleanStringFormat(pEntry, GetNatNum(), m_aCurrentLanguage);
         }
         else
         {
@@ -1023,7 +1021,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                     // >"VRAI";"VRAI";"FAUX"< recognized as real boolean and
                     // properly converted. Then written as
                     // >"TRUE";"TRUE";"FALSE"<
-                    aFormatStr = lcl_buildBooleanStringFormat( const_cast< SvNumberformat* >(pEntry), GetNatNum(), m_aCurrentLanguage );
+                    aFormatStr = lcl_buildBooleanStringFormat(pEntry, GetNatNum(), m_aCurrentLanguage);
                 }
                 else
                 {
