@@ -65,7 +65,7 @@ with subprocess_find.stdout as txt:
             # 0000000000000000      DF *UND*  0000000000000000     _ZN16FilterConfigItem10WriteInt32ERKN3rtl8OUStringEi
             for line2_bytes in txt2:
                 line2 = line2_bytes.strip().decode("utf-8")
-                if not("*UND*"in line2): continue
+                if "*UND*" not in line2: continue
                 tokens = line2.split(" ")
                 sym = tokens[len(tokens)-1].strip()
                 imported_symbols1.add(sym)
@@ -100,7 +100,7 @@ subprocess_find.terminate()
 # Now we have to symbolize before comparing because sometimes (due to thunks) two
 # different encoded names symbolize to the same method/func name
 #
-progress = 0;
+progress = 0
 progress_max_len = len(imported_symbols1) + len(exported_symbols1)
 for sym in imported_symbols1:
     progress += 1
@@ -109,7 +109,7 @@ for sym in imported_symbols1:
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
     elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
     imported_symbols2.add(filtered_sym)
-progress = 0;
+progress = 0
 for sym in exported_symbols1:
     progress += 1
     if (progress % 128 == 0): print( str(int(progress * 100 / progress_max_len)) + "%")
