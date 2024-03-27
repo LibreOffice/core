@@ -387,6 +387,7 @@
                               <item id="4" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Proportional</item>
                               <item id="5" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">At least</item>
                               <item id="6" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Leading</item>
+                              <item id="7" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Fixed</item>
                             </items>
                           </object>
                           <packing>

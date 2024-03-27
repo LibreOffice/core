@@ -1188,7 +1188,6 @@ void SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
             */
     const SfxUInt16Item* pPageWidthItem = aSet.GetItem<SfxUInt16Item>(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH, false);
     const SfxUInt32Item* pFlagSetItem = aSet.GetItem<SfxUInt32Item>(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET, false);
-    const SfxUInt32Item* pLineDistItem = aSet.GetItem<SfxUInt32Item>(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, false);
 
     if (pPageWidthItem)
         nWidth = pPageWidthItem->GetValue();
@@ -1204,9 +1203,6 @@ void SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
         if ( ( 0x0004 & pFlagSetItem->GetValue())== 0x0004 )
             EnableAutoFirstLine();
     }
-
-    if(pLineDistItem)
-        EnableAbsLineDist(pLineDistItem->GetValue());
 
     if (pFlagSetItem)
     {
