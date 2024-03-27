@@ -9,7 +9,7 @@ headerSet = set()
 a = subprocess.Popen("git ls-files include/", stdout=subprocess.PIPE, shell=True)
 with a.stdout as txt:
     for line in txt:
-        header = line[8:].strip();
+        header = line[8:].strip()
         if b"README" in header: continue
         if header == b"version.hrc": continue
         # ignore URE headers
