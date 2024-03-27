@@ -632,6 +632,7 @@ void Dialog::dispose()
     css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogClosed";
+    aObject.Supplement <<= GetText(); // title
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log(u"Close Dialog");
 
@@ -1029,6 +1030,7 @@ bool Dialog::ImplStartExecute()
         css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogExecute";
+    aObject.Supplement <<= GetText(); // title
     xEventBroadcaster->documentEventOccured(aObject);
     if (bModal)
         UITestLogger::getInstance().log(Concat2View("Open Modal " + get_id()));
@@ -1651,6 +1653,7 @@ void Dialog::Activate()
         css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
         css::document::DocumentEvent aObject;
         aObject.EventName = "ModelessDialogVisible";
+        aObject.Supplement <<= GetText(); // title
         xEventBroadcaster->documentEventOccured(aObject);
     }
     SystemWindow::Activate();

@@ -36,15 +36,11 @@ class EventListener(XDocumentEventListener,unohelper.Base):
         self.xGEB.removeDocumentEventListener(self)
 
     def documentEventOccured(self, event):
-        if self.printEvents is True:
-            print(event.EventName)
-
+        print("documentEventOccured: name=" + event.EventName + ", title=" + str(event.Supplement))
+        print("documentEventOccured: found event we are waiting for")
         if event.EventName in self.eventNames:
             self.executed = True
             self.eventExecuted.append(event.EventName)
-        else:
-            print(self.eventNames)
-            print(event.EventName)
 
     def hasExecuted(self, eventName):
         return eventName in self.eventExecuted
