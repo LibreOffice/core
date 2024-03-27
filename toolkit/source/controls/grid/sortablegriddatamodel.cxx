@@ -30,11 +30,10 @@
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
 #include <com/sun/star/awt/grid/XSortableMutableGridDataModel.hpp>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/anycompare.hxx>
-#include <comphelper/componentguard.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -52,16 +51,14 @@ using namespace css::uno;
 namespace {
 
 class SortableGridDataModel;
-class MethodGuard;
 
-typedef ::cppu::WeakComponentImplHelper    <   css::awt::grid::XSortableMutableGridDataModel
+typedef ::comphelper::WeakComponentImplHelper    <   css::awt::grid::XSortableMutableGridDataModel
                                             ,   css::lang::XServiceInfo
                                             ,   css::lang::XInitialization
                                             >   SortableGridDataModel_Base;
 typedef ::cppu::ImplHelper1 <   css::awt::grid::XGridDataListener
                             >   SortableGridDataModel_PrivateBase;
-class SortableGridDataModel :public ::cppu::BaseMutex
-                            ,public SortableGridDataModel_Base
+class SortableGridDataModel :public SortableGridDataModel_Base
                             ,public SortableGridDataModel_PrivateBase
 {
 public:
@@ -103,7 +100,7 @@ public:
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
@@ -139,7 +136,7 @@ private:
         @throws css::lang::IndexOutOfBoundsException
             if the given index does not denote a valid row
     */
-    ::sal_Int32 impl_getPrivateRowIndex_throw( ::sal_Int32 const i_publicRowIndex ) const;
+    ::sal_Int32 impl_getPrivateRowIndex_throw( std::unique_lock<std::mutex>& rGuard, ::sal_Int32 const i_publicRowIndex ) const;
 
     /** translates the given private row index to a public one
     */
@@ -155,7 +152,7 @@ private:
         Neither <member>m_currentSortColumn</member> nor <member>m_sortAscending</member> are touched by this method.
         Also, the given column index is not checked, this is the responsibility of the caller.
     */
-    bool    impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, bool const i_sortAscending );
+    bool    impl_reIndex_nothrow( std::unique_lock<std::mutex>& rGuard, ::sal_Int32 const i_columnIndex, bool const i_sortAscending );
 
     /** translates the given event, obtained from our delegator, to a version which can be broadcasted to our own
         clients.
@@ -168,7 +165,7 @@ private:
     void    impl_broadcast(
                 void ( SAL_CALL css::awt::grid::XGridDataListener::*i_listenerMethod )( const css::awt::grid::GridDataEvent & ),
                 css::awt::grid::GridDataEvent const & i_publicEvent,
-                MethodGuard& i_instanceLock
+                std::unique_lock<std::mutex>& i_instanceLock
             );
 
     /** rebuilds our indexes, notifying row removal and row addition events
@@ -178,15 +175,21 @@ private:
 
         Only to be called when we're sorted.
     */
-    void    impl_rebuildIndexesAndNotify( MethodGuard& i_instanceLock );
+    void    impl_rebuildIndexesAndNotify( std::unique_lock<std::mutex>& i_instanceLock );
 
     /** removes the current sorting, and notifies a change of all data
     */
-    void    impl_removeColumnSort( MethodGuard& i_instanceLock );
+    void    impl_removeColumnSort( std::unique_lock<std::mutex>& i_instanceLock );
 
     /** removes the current sorting, without any broadcast
     */
     void    impl_removeColumnSort_noBroadcast();
+
+    void throwIfNotInitialized()
+    {
+        if (!isInitialized())
+            throw css::lang::NotInitializedException( OUString(), *this );
+    }
 
 private:
     css::uno::Reference< css::uno::XComponentContext >            m_xContext;
@@ -197,17 +200,7 @@ private:
     bool                                                    m_sortAscending;
     ::std::vector< ::sal_Int32 >                                  m_publicToPrivateRowIndex;
     ::std::vector< ::sal_Int32 >                                  m_privateToPublicRowIndex;
-};
-
-class MethodGuard : public ::comphelper::ComponentGuard
-{
-public:
-    MethodGuard( SortableGridDataModel& i_component, ::cppu::OBroadcastHelper & i_broadcastHelper )
-        :comphelper::ComponentGuard( i_component, i_broadcastHelper )
-    {
-        if ( !i_component.isInitialized() )
-            throw css::lang::NotInitializedException( OUString(), i_component );
-    }
+    comphelper::OInterfaceContainerHelper4<XGridDataListener>            m_GridListeners;
 };
 
 template< class STLCONTAINER >
@@ -217,9 +210,7 @@ void lcl_clear( STLCONTAINER& i_container )
 }
 
     SortableGridDataModel::SortableGridDataModel( Reference< XComponentContext > const & rxContext )
-        :SortableGridDataModel_Base( m_aMutex )
-        ,SortableGridDataModel_PrivateBase()
-        ,m_xContext( rxContext )
+        :m_xContext( rxContext )
         ,m_isInitialized( false )
         ,m_delegator()
         ,m_collator()
@@ -232,10 +223,7 @@ void lcl_clear( STLCONTAINER& i_container )
 
 
     SortableGridDataModel::SortableGridDataModel( SortableGridDataModel const & i_copySource )
-        :cppu::BaseMutex()
-        ,SortableGridDataModel_Base( m_aMutex )
-        ,SortableGridDataModel_PrivateBase()
-        ,m_xContext( i_copySource.m_xContext )
+        :m_xContext( i_copySource.m_xContext )
         ,m_isInitialized( true )
         ,m_delegator()
         ,m_collator( i_copySource.m_collator )
@@ -252,11 +240,8 @@ void lcl_clear( STLCONTAINER& i_container )
 
     SortableGridDataModel::~SortableGridDataModel()
     {
-        if ( !rBHelper.bDisposed )
-        {
-            acquire();
-            dispose();
-        }
+        acquire();
+        dispose();
     }
 
 
@@ -302,7 +287,8 @@ void lcl_clear( STLCONTAINER& i_container )
 
     void SAL_CALL SortableGridDataModel::initialize( const Sequence< Any >& i_arguments )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard( m_aMutex );
+        throwIfDisposed(aGuard);
 
         if ( m_delegator.is() )
             throw AlreadyInitializedException( OUString(), *this );
@@ -346,27 +332,22 @@ void lcl_clear( STLCONTAINER& i_container )
 
 
     void SortableGridDataModel::impl_broadcast( void ( SAL_CALL XGridDataListener::*i_listenerMethod )( const GridDataEvent & ),
-            GridDataEvent const & i_publicEvent, MethodGuard& i_instanceLock )
+            GridDataEvent const & i_publicEvent, std::unique_lock<std::mutex>& i_instanceLock )
     {
-        ::cppu::OInterfaceContainerHelper* pListeners = rBHelper.getContainer( cppu::UnoType<XGridDataListener>::get() );
-        if ( pListeners == nullptr )
-            return;
-
-        i_instanceLock.clear();
-        pListeners->notifyEach( i_listenerMethod, i_publicEvent );
+        m_GridListeners.notifyEach( i_instanceLock, i_listenerMethod, i_publicEvent );
     }
 
 
     void SAL_CALL SortableGridDataModel::rowsInserted( const GridDataEvent& i_event )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         if ( impl_isSorted_nothrow() )
         {
             // no infrastructure is in place currently to sort the new row to its proper location,
             // so we remove the sorting here.
             impl_removeColumnSort( aGuard );
-            aGuard.reset();
         }
 
         GridDataEvent const aEvent( impl_createPublicEvent( i_event ) );
@@ -382,7 +363,7 @@ void lcl_clear( STLCONTAINER& i_container )
         }
     }
 
-    void SortableGridDataModel::impl_rebuildIndexesAndNotify( MethodGuard& i_instanceLock )
+    void SortableGridDataModel::impl_rebuildIndexesAndNotify( std::unique_lock<std::mutex>& i_instanceLock )
     {
         OSL_PRECOND( impl_isSorted_nothrow(), "SortableGridDataModel::impl_rebuildIndexesAndNotify: illegal call!" );
 
@@ -391,7 +372,7 @@ void lcl_clear( STLCONTAINER& i_container )
         lcl_clear( m_privateToPublicRowIndex );
 
         // rebuild the index
-        if ( !impl_reIndex_nothrow( m_currentSortColumn, m_sortAscending ) )
+        if ( !impl_reIndex_nothrow( i_instanceLock, m_currentSortColumn, m_sortAscending ) )
         {
             impl_removeColumnSort( i_instanceLock );
             return;
@@ -400,7 +381,6 @@ void lcl_clear( STLCONTAINER& i_container )
         // broadcast an artificial event, saying that all rows have been removed
         GridDataEvent const aRemovalEvent( *this, -1, -1, -1, -1 );
         impl_broadcast( &XGridDataListener::rowsRemoved, aRemovalEvent, i_instanceLock );
-        i_instanceLock.reset();
 
         // broadcast an artificial event, saying that n rows have been added
         GridDataEvent const aAdditionEvent( *this, -1, -1, 0, m_delegator->getRowCount() - 1 );
@@ -410,7 +390,8 @@ void lcl_clear( STLCONTAINER& i_container )
 
     void SAL_CALL SortableGridDataModel::rowsRemoved( const GridDataEvent& i_event )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         // if the data is not sorted, broadcast the event unchanged
         if ( !impl_isSorted_nothrow() )
@@ -470,7 +451,8 @@ void lcl_clear( STLCONTAINER& i_container )
 
     void SAL_CALL SortableGridDataModel::dataChanged( const GridDataEvent& i_event )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         GridDataEvent const aEvent( impl_createPublicEvent( i_event ) );
         impl_broadcast( &XGridDataListener::dataChanged, aEvent, aGuard );
@@ -479,7 +461,8 @@ void lcl_clear( STLCONTAINER& i_container )
 
     void SAL_CALL SortableGridDataModel::rowHeadingChanged( const GridDataEvent& i_event )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         GridDataEvent const aEvent( impl_createPublicEvent( i_event ) );
         impl_broadcast( &XGridDataListener::rowHeadingChanged, aEvent, aGuard );
@@ -527,9 +510,12 @@ void lcl_clear( STLCONTAINER& i_container )
         bool const                          m_sortAscending;
     };
 
-    bool SortableGridDataModel::impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, bool const i_sortAscending )
+    bool SortableGridDataModel::impl_reIndex_nothrow( std::unique_lock<std::mutex>& rGuard, ::sal_Int32 const i_columnIndex, bool const i_sortAscending )
     {
-        ::sal_Int32 const rowCount( getRowCount() );
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        rGuard.unlock();
+        ::sal_Int32 const rowCount = delegator->getRowCount();
+        rGuard.lock();
         ::std::vector< ::sal_Int32 > aPublicToPrivate( rowCount );
 
         try
@@ -576,12 +562,17 @@ void lcl_clear( STLCONTAINER& i_container )
 
     void SAL_CALL SortableGridDataModel::sortByColumn( ::sal_Int32 i_columnIndex, sal_Bool i_sortAscending )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        if ( ( i_columnIndex < 0 ) || ( i_columnIndex >= getColumnCount() ) )
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.unlock();
+        sal_Int32 nColumnCount = delegator->getColumnCount();
+        aGuard.lock();
+        if ( ( i_columnIndex < 0 ) || ( i_columnIndex >= nColumnCount ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
-        if ( !impl_reIndex_nothrow( i_columnIndex, i_sortAscending ) )
+        if ( !impl_reIndex_nothrow( aGuard, i_columnIndex, i_sortAscending ) )
             return;
 
         m_currentSortColumn = i_columnIndex;
@@ -605,7 +596,7 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    void SortableGridDataModel::impl_removeColumnSort( MethodGuard& i_instanceLock )
+    void SortableGridDataModel::impl_removeColumnSort( std::unique_lock<std::mutex>& i_instanceLock )
     {
         impl_removeColumnSort_noBroadcast();
         impl_broadcast(
@@ -618,14 +609,16 @@ void lcl_clear( STLCONTAINER& i_container )
 
     void SAL_CALL SortableGridDataModel::removeColumnSort(  )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
         impl_removeColumnSort( aGuard );
     }
 
 
     css::beans::Pair< ::sal_Int32, sal_Bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         return css::beans::Pair< ::sal_Int32, sal_Bool >( m_currentSortColumn, m_sortAscending );
     }
@@ -633,213 +626,240 @@ void lcl_clear( STLCONTAINER& i_container )
 
     void SAL_CALL SortableGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->addRow( i_heading, i_data );
     }
 
 
     void SAL_CALL SortableGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->addRows( i_headings, i_data );
     }
 
 
     void SAL_CALL SortableGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data )
     {
-        MethodGuard aGuard( *this, rBHelper );
-
-        ::sal_Int32 const rowIndex = i_index == getRowCount() ? i_index : impl_getPrivateRowIndex_throw( i_index );
-            // note that |RowCount| is a valid index in this method, but not for impl_getPrivateRowIndex_throw
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
+        sal_Int32 nRowCount = delegator->getRowCount();
+        aGuard.lock();
+        
+        ::sal_Int32 const rowIndex = i_index == nRowCount ? i_index : impl_getPrivateRowIndex_throw( aGuard, i_index );
+            // note that |RowCount| is a valid index in this method, but not for impl_getPrivateRowIndex_throw
+
+        aGuard.unlock();
         delegator->insertRow( rowIndex, i_heading, i_data );
     }
 
 
     void SAL_CALL SortableGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data )
     {
-        MethodGuard aGuard( *this, rBHelper );
-
-        ::sal_Int32 const rowIndex = i_index == getRowCount() ? i_index : impl_getPrivateRowIndex_throw( i_index );
-            // note that |RowCount| is a valid index in this method, but not for impl_getPrivateRowIndex_throw
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
+        sal_Int32 nRowCount = delegator->getRowCount();
+        aGuard.lock();
+
+        ::sal_Int32 const rowIndex = i_index == nRowCount ? i_index : impl_getPrivateRowIndex_throw( aGuard, i_index );
+            // note that |RowCount| is a valid index in this method, but not for impl_getPrivateRowIndex_throw
+
+        aGuard.unlock();
         delegator->insertRows( rowIndex, i_headings, i_data );
     }
 
 
     void SAL_CALL SortableGridDataModel::removeRow( ::sal_Int32 i_rowIndex )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->removeRow( rowIndex );
     }
 
 
     void SAL_CALL SortableGridDataModel::removeAllRows(  )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->removeAllRows();
     }
 
 
     void SAL_CALL SortableGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->updateCellData( i_columnIndex, rowIndex, i_value );
     }
 
 
     void SAL_CALL SortableGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->updateRowData( i_columnIndexes, rowIndex, i_values );
     }
 
 
     void SAL_CALL SortableGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->updateRowHeading( rowIndex, i_heading );
     }
 
 
     void SAL_CALL SortableGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->updateCellToolTip( i_columnIndex, rowIndex, i_value );
     }
 
 
     void SAL_CALL SortableGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         delegator->updateRowToolTip( rowIndex, i_value );
     }
 
 
     void SAL_CALL SortableGridDataModel::addGridDataListener( const Reference< XGridDataListener >& i_listener )
     {
-        rBHelper.addListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
+        std::unique_lock aGuard(m_aMutex);
+        m_GridListeners.addInterface( aGuard, i_listener );
     }
 
 
     void SAL_CALL SortableGridDataModel::removeGridDataListener( const Reference< XGridDataListener >& i_listener )
     {
-        rBHelper.removeListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
+        std::unique_lock aGuard(m_aMutex);
+        m_GridListeners.removeInterface( aGuard, i_listener );
     }
 
 
     ::sal_Int32 SAL_CALL SortableGridDataModel::getRowCount()
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         return delegator->getRowCount();
     }
 
 
     ::sal_Int32 SAL_CALL SortableGridDataModel::getColumnCount()
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         return delegator->getColumnCount();
     }
 
 
     Any SAL_CALL SortableGridDataModel::getCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         return delegator->getCellData( i_columnIndex, rowIndex );
     }
 
 
     Any SAL_CALL SortableGridDataModel::getCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         return delegator->getCellToolTip( i_columnIndex, rowIndex );
     }
 
 
     Any SAL_CALL SortableGridDataModel::getRowHeading( ::sal_Int32 i_rowIndex )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         return delegator->getRowHeading( rowIndex );
     }
 
 
     Sequence< Any > SAL_CALL SortableGridDataModel::getRowData( ::sal_Int32 i_rowIndex )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
-        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( aGuard, i_rowIndex );
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
-        aGuard.clear();
+        aGuard.unlock();
         return delegator->getRowData( rowIndex );
     }
 
 
-    void SAL_CALL SortableGridDataModel::disposing()
+    void SortableGridDataModel::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
     {
         m_currentSortColumn = -1;
 
@@ -860,7 +880,8 @@ void lcl_clear( STLCONTAINER& i_container )
 
     Reference< css::util::XCloneable > SAL_CALL SortableGridDataModel::createClone(  )
     {
-        MethodGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfNotInitialized();
 
         return new SortableGridDataModel( *this );
     }
@@ -882,9 +903,12 @@ void lcl_clear( STLCONTAINER& i_container )
     }
 
 
-    ::sal_Int32 SortableGridDataModel::impl_getPrivateRowIndex_throw( ::sal_Int32 const i_publicRowIndex ) const
+    ::sal_Int32 SortableGridDataModel::impl_getPrivateRowIndex_throw( std::unique_lock<std::mutex>& rGuard, ::sal_Int32 const i_publicRowIndex ) const
     {
-        if ( ( i_publicRowIndex < 0 ) || ( i_publicRowIndex >= m_delegator->getRowCount() ) )
+        rGuard.unlock();
+        sal_Int32 nRowCount = m_delegator->getRowCount();
+        rGuard.lock();
+        if ( ( i_publicRowIndex < 0 ) || ( i_publicRowIndex >= nRowCount ) )
             throw IndexOutOfBoundsException( OUString(), *const_cast< SortableGridDataModel* >( this ) );
 
         if ( !impl_isSorted_nothrow() )
