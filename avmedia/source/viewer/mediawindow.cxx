@@ -461,20 +461,19 @@ void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XD
 }
 
 PlayerListener::PlayerListener(std::function<void(const css::uno::Reference<css::media::XPlayer>&)> fn)
-    : PlayerListener_BASE(m_aMutex)
-    , m_aFn(std::move(fn))
+    : m_aFn(std::move(fn))
 {
 }
 
-void PlayerListener::dispose()
+void PlayerListener::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    stopListening();
-    PlayerListener_BASE::dispose();
+    stopListening(rGuard);
+    WeakComponentImplHelperBase::disposing(rGuard);
 }
 
 void PlayerListener::startListening(const css::uno::Reference<media::XPlayerNotifier>& rNotifier)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     m_xNotifier = rNotifier;
     m_xNotifier->addPlayerListener(this);
@@ -482,7 +481,12 @@ void PlayerListener::startListening(const css::uno::Reference<media::XPlayerNoti
 
 void PlayerListener::stopListening()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
+    stopListening(aGuard);
+}
+
+void PlayerListener::stopListening(std::unique_lock<std::mutex>&)
+{
     if (!m_xNotifier)
         return;
     m_xNotifier->removePlayerListener(this);
@@ -491,12 +495,14 @@ void PlayerListener::stopListening()
 
 void SAL_CALL PlayerListener::preferredPlayerWindowSizeAvailable(const css::lang::EventObject&)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     css::uno::Reference<media::XPlayer> xPlayer(m_xNotifier, css::uno::UNO_QUERY_THROW);
+    aGuard.unlock();
     callPlayerWindowSizeAvailable(xPlayer);
+    aGuard.lock();
 
-    stopListening();
+    stopListening(aGuard);
 }
 
 void SAL_CALL PlayerListener::disposing(const css::lang::EventObject&)

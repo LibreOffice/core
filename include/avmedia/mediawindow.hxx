@@ -24,8 +24,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/media/XPlayerListener.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
 #include <avmedia/avmediadllapi.h>
 
@@ -55,9 +54,9 @@ namespace avmedia
 
     namespace priv { class MediaWindowImpl; }
 
-    typedef cppu::WeakComponentImplHelper<css::media::XPlayerListener> PlayerListener_BASE;
+    typedef comphelper::WeakComponentImplHelper<css::media::XPlayerListener> PlayerListener_BASE;
 
-    class AVMEDIA_DLLPUBLIC PlayerListener final : public cppu::BaseMutex, public PlayerListener_BASE
+    class AVMEDIA_DLLPUBLIC PlayerListener final : public PlayerListener_BASE
     {
     private:
         css::uno::Reference<css::media::XPlayerNotifier> m_xNotifier;
@@ -66,7 +65,7 @@ namespace avmedia
         using WeakComponentImplHelperBase::disposing;
     public:
         PlayerListener(std::function<void(const css::uno::Reference<css::media::XPlayer>&)> fn);
-        virtual void SAL_CALL dispose() override;
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
         virtual ~PlayerListener() override;
 
         virtual void SAL_CALL preferredPlayerWindowSizeAvailable(const css::lang::EventObject& rSource) override;
@@ -76,6 +75,8 @@ namespace avmedia
         void stopListening();
 
         void callPlayerWindowSizeAvailable(const css::uno::Reference<css::media::XPlayer>& rPlayer) { m_aFn(rPlayer); }
+    private:
+        void stopListening(std::unique_lock<std::mutex>& rGuard);
     };
 
     class AVMEDIA_DLLPUBLIC MediaWindow
