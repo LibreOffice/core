@@ -95,8 +95,8 @@ exclusionSet = set([
 def in_exclusion_set( a ):
     for f in exclusionSet:
         if a.startswith(f):
-            return True;
-    return False;
+            return True
+    return False
 
 
 # Hack to turn off unicode decoding errors, which sometimes happens in the output and I really don't
@@ -137,9 +137,9 @@ with a.stdout as txt:
                 if line2.startswith("/*"): continue
                 # check if we found one in actual code
                 if idName.startswith("SID_"):
-                    if not ".hrc:" in line2 and not ".src:" in line2 and not ".sdi:" in line2: found_reason_to_exclude = True
+                    if ".hrc:" not in line2 and ".src:" not in line2 and ".sdi:" not in line2: found_reason_to_exclude = True
                 else:
-                    if not ".hrc:" in line2 and not ".src:" in line2: found_reason_to_exclude = True
+                    if ".hrc:" not in line2 and ".src:" not in line2: found_reason_to_exclude = True
                 if idName.startswith("RID_"):
                         # is the constant being used as an identifier by entries in .src files?
                         if ".src:" in line2 and "Identifier = " in line2: found_reason_to_exclude = True
