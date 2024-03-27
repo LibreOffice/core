@@ -33,6 +33,8 @@ public:
 
 COMPHELPER_DLLPUBLIC void setActive(bool bActive = true);
 
+COMPHELPER_DLLPUBLIC void setForkedChild(bool bIsChild = true);
+
 enum class statusIndicatorCallbackType
 {
     Start,
@@ -48,6 +50,10 @@ COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(
 
 // Check whether the code is running as invoked through LibreOfficeKit.
 COMPHELPER_DLLPUBLIC bool isActive();
+
+/// Is this a transient forked child process, that shares many
+/// eg. file-system resources with its parent process?
+COMPHELPER_DLLPUBLIC bool isForkedChild();
 
 /// Shift the coordinates before rendering each bitmap.
 /// Used by Calc to render each tile separately.

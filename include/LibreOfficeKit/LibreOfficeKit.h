@@ -143,6 +143,9 @@ struct _LibreOfficeKitClass
 
     /// @see lok::Office::joinThreads
     int (*joinThreads)(LibreOfficeKit* pThis);
+
+    /// @see lok::Office::setForkedChild
+    void (*setForkedChild)(LibreOfficeKit* pThis, bool bIsChild);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

@@ -2548,6 +2548,8 @@ static void lo_stopURP(LibreOfficeKit* pThis, void* pSendURPToLOContext);
 
 static int lo_joinThreads(LibreOfficeKit* pThis);
 
+static void lo_setForkedChild(LibreOfficeKit* pThis, bool bIsChild);
+
 static void lo_runLoop(LibreOfficeKit* pThis,
                        LibreOfficeKitPollCallback pPollCallback,
                        LibreOfficeKitWakeCallback pWakeCallback,
@@ -2593,6 +2595,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->startURP = lo_startURP;
         m_pOfficeClass->stopURP = lo_stopURP;
         m_pOfficeClass->joinThreads = lo_joinThreads;
+        m_pOfficeClass->setForkedChild = lo_setForkedChild;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3343,6 +3346,11 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
         return 0;
 
     return 1;
+}
+
+static void lo_setForkedChild(LibreOfficeKit* /* pThis */, bool bIsChild)
+{
+    comphelper::LibreOfficeKit::setForkedChild(bIsChild);
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
