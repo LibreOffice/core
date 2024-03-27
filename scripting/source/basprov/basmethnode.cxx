@@ -59,9 +59,8 @@ namespace basprov
 
     BasicMethodNodeImpl::BasicMethodNodeImpl( const Reference< XComponentContext >& rxContext,
         OUString sScriptingContext, SbMethod* pMethod, bool isAppScript )
-        : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
-        ,OPropertyContainer( GetBroadcastHelper() )
-        ,m_xContext( rxContext )
+        :
+        m_xContext( rxContext )
         ,m_sScriptingContext(std::move( sScriptingContext ))
         ,m_pMethod( pMethod )
         ,m_bIsAppScript( isAppScript )
@@ -103,13 +102,13 @@ namespace basprov
     // XInterface
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( BasicMethodNodeImpl, BasicMethodNodeImpl_BASE, OPropertyContainer )
+    IMPLEMENT_FORWARD_XINTERFACE2( BasicMethodNodeImpl, BasicMethodNodeImpl_BASE, comphelper::OPropertyContainer2 )
 
 
     // XTypeProvider
 
 
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicMethodNodeImpl, BasicMethodNodeImpl_BASE, OPropertyContainer )
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicMethodNodeImpl, BasicMethodNodeImpl_BASE, comphelper::OPropertyContainer2 )
 
 
     // XBrowseNode

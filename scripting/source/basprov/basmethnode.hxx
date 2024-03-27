@@ -24,10 +24,10 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
+#include <comphelper/propertycontainer2.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 
@@ -40,14 +40,12 @@ namespace basprov
 
 
 
-    typedef ::cppu::WeakImplHelper<
+    typedef ::comphelper::WeakImplHelper<
         css::script::browse::XBrowseNode,
         css::script::XInvocation > BasicMethodNodeImpl_BASE;
 
     class BasicMethodNodeImpl : public BasicMethodNodeImpl_BASE,
-                                public cppu::BaseMutex,
-                                public ::scripting_helper::OBroadcastHelperHolder,
-                                public ::comphelper::OPropertyContainer,
+                                public ::comphelper::OPropertyContainer2,
                                 public ::comphelper::OPropertyArrayUsageHelper< BasicMethodNodeImpl >
     {
     private:
@@ -62,7 +60,7 @@ namespace basprov
 
     protected:
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  ) override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper(  ) override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
