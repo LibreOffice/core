@@ -1,0 +1,43 @@
+--- Python/pylifecycle.c	2024-03-27 14:34:43.905367358 +0000
++++ Python/pylifecycle.c	2024-03-27 14:40:16.339134322 +0000
+@@ -1723,6 +1723,20 @@
+     if (!is_valid_fd(fd))
+         Py_RETURN_NONE;
+ 
++    /* Check that stdin, etc is not a directory
++       Using shell redirection, you can redirect stdin to a directory,
++       crashing the Python interpreter. Catch this common mistake here
++       and output a useful error message. Note that under MS Windows,
++       the shell already prevents that. */
++#ifndef MS_WINDOWS
++    struct _Py_stat_struct sb;
++    if (_Py_fstat_noraise(fd, &sb) == 0 &&
++        S_ISDIR(sb.st_mode)) {
++        // "name" is a directory, cannot continue
++        Py_RETURN_NONE;
++    }
++#endif
++
+     /* stdin is always opened in buffered mode, first because it shouldn't
+        make a difference in common use cases, second because TextIOWrapper
+        depends on the presence of a read1() method which only exists on
+@@ -1854,19 +1868,6 @@
+     PyStatus res = _PyStatus_OK();
+     PyConfig *config = &interp->config;
+ 
+-    /* Check that stdin is not a directory
+-       Using shell redirection, you can redirect stdin to a directory,
+-       crashing the Python interpreter. Catch this common mistake here
+-       and output a useful error message. Note that under MS Windows,
+-       the shell already prevents that. */
+-#ifndef MS_WINDOWS
+-    struct _Py_stat_struct sb;
+-    if (_Py_fstat_noraise(fileno(stdin), &sb) == 0 &&
+-        S_ISDIR(sb.st_mode)) {
+-        return _PyStatus_ERR("<stdin> is a directory, cannot continue");
+-    }
+-#endif
+-
+     /* Hack to avoid a nasty recursion issue when Python is invoked
+        in verbose mode: pre-import the Latin-1 and UTF-8 codecs */
+     if ((m = PyImport_ImportModule("encodings.utf_8")) == NULL) {
