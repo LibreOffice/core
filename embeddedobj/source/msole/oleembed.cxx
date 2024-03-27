@@ -495,12 +495,12 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 // the loaded state must be set before, because of notifications!
                 m_nObjectState = nNewState;
 
-                aGuard.clear();
                 {
                     VerbExecutionControllerGuard aVerbGuard( m_aVerbExecutionController );
                     m_pOleComponent->CloseObject();
                 }
 
+                aGuard.clear();
                 StateChangeNotification_Impl( false, nOldState, m_nObjectState );
                 aGuard.reset();
             }
@@ -863,11 +863,9 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.StartControlExecution();
 
-            {
-                ClearedMutexArea clearedMutex(aGuard);
-                m_pOleComponent->ExecuteVerb(nVerbID);
-                m_pOleComponent->SetHostName(m_aContainerName);
-            }
+
+            m_pOleComponent->ExecuteVerb( nVerbID );
+            m_pOleComponent->SetHostName( m_aContainerName );
 
             // ==== the STAMPIT related solution =============================
             bool bModifiedOnExecution = m_aVerbExecutionController.EndControlExecution_WasModified();
@@ -974,7 +972,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
     }
     // end wrapping related part ====================
 
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -991,7 +989,6 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         //  throw embed::NeedsRunningStateException(); // TODO:
         // }
 
-        aGuard.clear();
         return m_pOleComponent->GetVerbList();
     }
     else
@@ -1131,7 +1128,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
     }
     // end wrapping related part ====================
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1146,10 +1143,8 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
         nResult = m_nStatus;
     else if ( m_pOleComponent )
     {
-        {
-            ClearedMutexArea clearedMutex(aGuard);
-            m_nStatus = m_pOleComponent->GetMiscStatus(nAspect);
-        }
+
+        m_nStatus = m_pOleComponent->GetMiscStatus( nAspect );
         m_nStatusAspect = nAspect;
         m_bGotStatus = true;
         nResult = m_nStatus;

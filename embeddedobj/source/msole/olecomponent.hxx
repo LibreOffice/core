@@ -41,7 +41,7 @@ namespace comphelper {
 class OleWrapperClientSite;
 class OleWrapperAdviseSink;
 class OleEmbeddedObject;
-class OleComponentNative_Impl;
+struct OleComponentNative_Impl;
 
 class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::lang::XComponent,
                                                     css::lang::XUnoTunnel, css::util::XModifiable,
@@ -52,11 +52,14 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
 
     bool m_bDisposed;
     bool m_bModified;
-    std::unique_ptr<OleComponentNative_Impl> m_pNativeImpl;
+    OleComponentNative_Impl* m_pNativeImpl;
 
     OleEmbeddedObject* m_pUnoOleObject;
     OleWrapperClientSite* m_pOleWrapClientSite;
     OleWrapperAdviseSink* m_pImplAdviseSink;
+
+    sal_Int32 m_nOLEMiscFlags;
+    sal_Int32 m_nAdvConn;
 
     css::uno::Sequence< css::embed::VerbDescriptor > m_aVerbList;
     css::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavors;
@@ -69,10 +72,9 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
     // such objects report the dirty state wrongly sometimes and do not allow to store them any time
     bool m_bWorkaroundActive;
 
-    void InitializeObject_Impl();
+    bool InitializeObject_Impl();
 
-    OUString getTempURL() const;
-
+    void CreateNewIStorage_Impl();
     void RetrieveObjectDataFlavors_Impl();
     void Dispose();
 

@@ -325,7 +325,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     }
     // end wrapping related part ====================
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -364,10 +364,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
                     cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
             embed::VisualRepresentation aVisualRepr;
-            {
-                ClearedMutexArea clearedMutex(aGuard);
-                aVisualRepr.Data = m_pOleComponent->getTransferData(aDataFlavor);
-            }
+            aVisualRepr.Data = m_pOleComponent->getTransferData( aDataFlavor );
             aVisualRepr.Flavor = aDataFlavor;
 
             uno::Sequence< sal_Int8 > aVisReplSeq;
