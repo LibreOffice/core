@@ -89,7 +89,6 @@ double SolverComponent::GetValue( const uno::Reference<sheet::XSpreadsheetDocume
 }
 
 SolverComponent::SolverComponent() :
-    OPropertyContainer( GetBroadcastHelper() ),
     mbMaximize( true ),
     mbNonNegative( false ),
     mbInteger( false ),
@@ -111,8 +110,8 @@ SolverComponent::~SolverComponent()
 {
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SolverComponent, SolverComponent_Base, OPropertyContainer )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SolverComponent, SolverComponent_Base, OPropertyContainer )
+IMPLEMENT_FORWARD_XINTERFACE2( SolverComponent, SolverComponent_Base, comphelper::OPropertyContainer2 )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( SolverComponent, SolverComponent_Base, comphelper::OPropertyContainer2 )
 
 cppu::IPropertyArrayHelper* SolverComponent::createArrayHelper() const
 {
@@ -121,7 +120,7 @@ cppu::IPropertyArrayHelper* SolverComponent::createArrayHelper() const
     return new cppu::OPropertyArrayHelper( aProps );
 }
 
-cppu::IPropertyArrayHelper& SAL_CALL SolverComponent::getInfoHelper()
+cppu::IPropertyArrayHelper& SolverComponent::getInfoHelper()
 {
     return *getArrayHelper();
 }
