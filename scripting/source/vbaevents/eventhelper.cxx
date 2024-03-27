@@ -21,8 +21,9 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/uno3.hxx>
+#include <comphelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
+#include <comphelper/propertycontainer2.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
@@ -518,7 +519,7 @@ private:
 
 }
 
-typedef ::cppu::WeakImplHelper< XScriptListener, util::XCloseListener, lang::XInitialization, css::lang::XServiceInfo > EventListener_BASE;
+typedef ::comphelper::WeakImplHelper< XScriptListener, util::XCloseListener, lang::XInitialization, css::lang::XServiceInfo > EventListener_BASE;
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
 constexpr OUStringLiteral EVENTLSTNR_PROPERTY_MODEL = u"Model";
@@ -526,8 +527,7 @@ constexpr OUStringLiteral EVENTLSTNR_PROPERTY_MODEL = u"Model";
 namespace {
 
 class EventListener : public EventListener_BASE
-    ,public ::comphelper::OMutexAndBroadcastHelper
-    ,public ::comphelper::OPropertyContainer
+    ,public ::comphelper::OPropertyContainer2
     ,public ::comphelper::OPropertyArrayUsageHelper< EventListener >
 {
 
@@ -535,7 +535,7 @@ public:
     EventListener();
     // XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& Source) override;
-    using cppu::OPropertySetHelper::disposing;
+    using comphelper::OPropertySetHelper::disposing;
 
     // XScriptListener
     virtual void SAL_CALL firing(const ScriptEvent& evt) override;
@@ -552,7 +552,7 @@ public:
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER()
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue ) override
+    virtual void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override
     {
         if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
         {
@@ -573,7 +573,7 @@ public:
                 }
             }
         }
-        OPropertyContainer::setFastPropertyValue( nHandle, rValue );
+        OPropertyContainer2::setFastPropertyValueImpl( rGuard, nHandle, rValue );
         if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
             setShellFromModel();
     }
@@ -595,7 +595,7 @@ public:
 
 protected:
     // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  ) override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper(  ) override;
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
@@ -613,7 +613,7 @@ private:
 }
 
 EventListener::EventListener() :
-OPropertyContainer(GetBroadcastHelper()), m_bDocClosed(false), mpShell( nullptr )
+m_bDocClosed(false), mpShell( nullptr )
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, cppu::UnoType<decltype(m_xModel)>::get() );
@@ -689,11 +689,11 @@ EventListener::initialize( const Sequence< Any >& aArguments )
 
 // XInterface
 
-IMPLEMENT_FORWARD_XINTERFACE2( EventListener, EventListener_BASE, OPropertyContainer )
+IMPLEMENT_FORWARD_XINTERFACE2( EventListener, EventListener_BASE, comphelper::OPropertyContainer2 )
 
 // XTypeProvider
 
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( EventListener, EventListener_BASE, OPropertyContainer )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( EventListener, EventListener_BASE, comphelper::OPropertyContainer2 )
 
 // OPropertySetHelper
 
