@@ -56,6 +56,31 @@ CPPUNIT_TEST_FIXTURE(Test, testAutocorrect)
     emulateTyping(*pTextDoc, u"But not now - with ");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDeleteSelNormalize)
+{
+    // Given a read-only document with a fillable form, the placeholder text is selected:
+    createSwDoc("delete-sel-normalize.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->GotoFormControl(/*bNext=*/true);
+
+    // When you press 'delete' to type some content instead:
+    pWrtShell->DelRight();
+
+    // Then make sure the position after the delete is correct:
+    SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
+    // The full text is "key <field start><field separator><field end>", so this marks the position
+    // after the field separator but before the field end.
+    sal_Int32 nExpectedCharPos = strlen("key **");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6
+    // - Actual  : 5
+    // so we started to type between the field start and the field separator, nothing was visible on
+    // the screen.
+    CPPUNIT_ASSERT_EQUAL(nExpectedCharPos, rCursor.nContent.GetIndex());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

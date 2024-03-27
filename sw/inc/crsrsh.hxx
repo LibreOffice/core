@@ -734,7 +734,7 @@ public:
 
     bool GotoFormatContentControl(const SwFormatContentControl& rContentControl);
 
-    void GotoFormControl(bool bNext);
+    SW_DLLPUBLIC void GotoFormControl(bool bNext);
 
     static SwTextField* GetTextFieldAtPos(
         const SwPosition* pPos,
