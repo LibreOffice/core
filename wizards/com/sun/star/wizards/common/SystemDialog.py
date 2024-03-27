@@ -114,7 +114,7 @@ class SystemDialog(object):
                     return str(i.Value).replace("%productname%", "LibreOffice")
 
             raise Exception(
-                "UIName property not found for Filter " + filterName);
+                "UIName property not found for Filter " + filterName)
         except Exception:
             traceback.print_exc()
             return None

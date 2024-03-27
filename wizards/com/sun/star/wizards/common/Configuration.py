@@ -44,7 +44,7 @@ class Configuration(object):
     @classmethod
     def getProductName(self, xMSF):
         try:
-            oProdNameAccess = self.getConfigurationRoot(xMSF, "org.openoffice.Setup/Product", False);
+            oProdNameAccess = self.getConfigurationRoot(xMSF, "org.openoffice.Setup/Product", False)
             return oProdNameAccess.getByName("ooName")
         except Exception:
             traceback.print_exc()
