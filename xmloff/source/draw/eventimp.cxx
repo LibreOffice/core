@@ -206,6 +206,9 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
 
     if( maData.mbValid )
         maData.mbValid = !sEventName.isEmpty();
+
+    if (!maData.msMacroName.isEmpty())
+        rImp.NotifyMacroEventRead();
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLEventContext::createFastChildContext(
