@@ -234,6 +234,9 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
 
     if( maData.mbValid )
         maData.mbValid = !sEventName.isEmpty();
+
+    if (!maData.msMacroName.isEmpty())
+        rImp.NotifyMacroEventRead();
 }
 
 SvXMLImportContextRef SdXMLEventContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
