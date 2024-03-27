@@ -7491,8 +7491,10 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
             return;
 
         // if the frame is wrap none or wrap through, then text boundary lines have no meaning
+        // (unless the frame itself contains text)
         const text::WrapTextMode aSurround = GetFormat()->GetSurround().GetSurround();
         if (GetFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR
+            && (!Lower() || !Lower()->IsTextFrame())
             && (aSurround == text::WrapTextMode::WrapTextMode_THROUGH
                 || aSurround == text::WrapTextMode::WrapTextMode_NONE))
         {
