@@ -1448,16 +1448,8 @@ class SolarMutexReleaser
 {
     const sal_uInt32 mnReleased;
 public:
-    SolarMutexReleaser()
-        : mnReleased(
-            Application::GetSolarMutex().IsCurrentThread() ? Application::ReleaseSolarMutex() : 0)
-    {
-    }
-    ~SolarMutexReleaser()
-    {
-        if (mnReleased)
-            Application::AcquireSolarMutex(mnReleased);
-    }
+    SolarMutexReleaser(): mnReleased(Application::ReleaseSolarMutex()) {}
+    ~SolarMutexReleaser() { Application::AcquireSolarMutex( mnReleased ); }
 };
 
 VCL_DLLPUBLIC Application* GetpApp();

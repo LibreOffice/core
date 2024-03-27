@@ -965,6 +965,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(Request& rRequest)
     {
         // tdf#146007: Make sure we don't hold solar mutex: COM may need to forward
         // the execution to the main thread, and holding solar mutex could deadlock
+        SolarMutexGuard g; // First acquire, to avoid releaser failure
         SolarMutexReleaser r;
         // show dialog and wait for user decision
         hResult = iDialog->Show(m_hParentWindow ? m_hParentWindow
