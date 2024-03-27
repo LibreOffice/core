@@ -26,8 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <standard/vclxaccessiblelist.hxx>
 
@@ -42,7 +41,7 @@ namespace com::sun::star::awt {
 
 // class VCLXAccessibleListItem ------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper< css::accessibility::XAccessible
+typedef ::comphelper::WeakComponentImplHelper< css::accessibility::XAccessible
                                             , css::accessibility::XAccessibleContext
                                             , css::accessibility::XAccessibleComponent
                                             , css::accessibility::XAccessibleEventBroadcaster
@@ -51,7 +50,7 @@ typedef ::cppu::WeakComponentImplHelper< css::accessibility::XAccessible
 
 /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
 */
-class VCLXAccessibleListItem final : public ::cppu::BaseMutex,
+class VCLXAccessibleListItem final :
                                      public ::comphelper::OCommonAccessibleText,
                                      public VCLXAccessibleListItem_BASE
 {
@@ -69,7 +68,7 @@ private:
     virtual ~VCLXAccessibleListItem() override = default;
     /** this function is called upon disposing the component
     */
-    virtual void SAL_CALL   disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // OCommonAccessibleText
     virtual OUString                        implGetText() override;
