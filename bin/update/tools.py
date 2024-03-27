@@ -12,7 +12,7 @@ def uncompress_file_to_dir(compressed_file, uncompress_dir):
             'msiexec', '/a', convert_to_native(compressed_file).replace('/', '\\'),
             '/quiet',
             'TARGETDIR=' + convert_to_native(uncompress_dir).replace('/', '\\')]) != 0:
-        raise Exception(f'msiexec failed')
+        raise Exception('msiexec failed')
 
     return uncompress_dir
 
