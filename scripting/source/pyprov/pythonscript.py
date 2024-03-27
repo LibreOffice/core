@@ -121,9 +121,7 @@ log.debug( "pythonscript loading" )
 from com.sun.star.uno import RuntimeException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.container import NoSuchElementException
-from com.sun.star.lang import XServiceInfo
-from com.sun.star.io import IOException
-from com.sun.star.ucb import CommandAbortedException, XCommandEnvironment, XProgressHandler, Command
+from com.sun.star.ucb import XCommandEnvironment, XProgressHandler, Command
 from com.sun.star.task import XInteractionHandler
 from com.sun.star.beans import XPropertySet, Property
 from com.sun.star.container import XNameContainer
@@ -132,10 +130,9 @@ from com.sun.star.uno import Exception as UnoException
 from com.sun.star.script import XInvocation
 from com.sun.star.awt import XActionListener
 
-from com.sun.star.script.provider import XScriptProvider, XScript, XScriptContext, ScriptFrameworkErrorException
+from com.sun.star.script.provider import XScriptProvider, XScript, ScriptFrameworkErrorException
 from com.sun.star.script.browse import XBrowseNode
-from com.sun.star.script.browse.BrowseNodeTypes import SCRIPT, CONTAINER, ROOT
-from com.sun.star.util import XModifyListener
+from com.sun.star.script.browse.BrowseNodeTypes import SCRIPT, CONTAINER
 
 LANGUAGENAME = "Python"
 GLOBAL_SCRIPTCONTEXT_NAME = "XSCRIPTCONTEXT"
@@ -284,15 +281,15 @@ def ensureSourceState( code ):
 
 def checkForPythonPathBesideScript( url ):
     if url.startswith( "file:" ):
-        path = unohelper.fileUrlToSystemPath( url+"/pythonpath.zip" );
+        path = unohelper.fileUrlToSystemPath( url+"/pythonpath.zip" )
         log.log( LogLevel.DEBUG,  "checking for existence of " + path )
-        if 1 == os.access( encfile(path), os.F_OK) and not path in sys.path:
+        if 1 == os.access( encfile(path), os.F_OK) and path not in sys.path:
             log.log( LogLevel.DEBUG, "adding " + path + " to sys.path" )
             sys.path.append( path )
 
-        path = unohelper.fileUrlToSystemPath( url+"/pythonpath" );
+        path = unohelper.fileUrlToSystemPath( url+"/pythonpath" )
         log.log( LogLevel.DEBUG,  "checking for existence of " + path )
-        if 1 == os.access( encfile(path), os.F_OK) and not path in sys.path:
+        if 1 == os.access( encfile(path), os.F_OK) and path not in sys.path:
             log.log( LogLevel.DEBUG, "adding " + path + " to sys.path" )
             sys.path.append( path )
 
@@ -824,7 +821,7 @@ def getModelFromDocUrl(ctx, url):
     try:
         ret = content.execute(c, 0, env)
         doc = ret.getObject(1, None)
-    except Exception as e:
+    except Exception:
         log.isErrorLevel() and log.error("getModelFromDocUrl: %s" % url)
     return doc
 
@@ -927,7 +924,7 @@ class PythonScript( unohelper.Base, XScript ):
             # this is really bad for most users.
             e.Message = e.Message + " (" + complete + ")"
             raise
-        except Exception as e:
+        except Exception:
             # General python exception are converted to uno RuntimeException
             text = lastException2String()
             complete = "Error during invoking function " + \
@@ -974,7 +971,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
                     "com.sun.star.frame.TransientDocumentsDocumentContentFactory",
                     ctx).createDocumentContent(doc)
                 storageType = content.getIdentifier().getContentIdentifier()
-            except Exception as e:
+            except Exception:
                 text = lastException2String()
                 log.error( text )
 
@@ -1045,7 +1042,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             log.debug( "getScript " + scriptUri + " invoked")
 
             storageUri = self.provCtx.getStorageUrlFromPersistentUrl(
-                self.provCtx.uriHelper.getStorageURI(scriptUri) );
+                self.provCtx.uriHelper.getStorageURI(scriptUri) )
             log.debug( "getScript: storageUri = " + storageUri)
             fileUri = storageUri[0:storageUri.find( "$" )]
             funcName = storageUri[storageUri.find( "$" )+1:len(storageUri)]
