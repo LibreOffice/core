@@ -122,7 +122,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
 {
     rRenderContext.Push();
     weld::SetPointFont(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
-
+    rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetLabelTextColor());
     rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
     rRenderContext.Erase();
 
