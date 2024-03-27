@@ -22,8 +22,7 @@
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/frame/XStatusbarController.hpp>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/multicontainer2.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <tools/gen.hxx>
 #include <unordered_map>
 #include <utility>
@@ -41,7 +40,6 @@ namespace svt
 
 class SVT_DLLPUBLIC StatusbarController :
                             public css::frame::XStatusbarController,
-                            public ::cppu::BaseMutex,
                             public ::cppu::OWeakObject
 {
     public:
@@ -123,9 +121,10 @@ class SVT_DLLPUBLIC StatusbarController :
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;
         URLToDispatchMap                                          m_aListenerMap;
-        comphelper::OMultiTypeInterfaceContainerHelper2           m_aListenerContainer;   /// container for ALL Listener
+        comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;
         mutable css::uno::Reference< css::util::XURLTransformer > m_xURLTransformer;
         css::uno::Reference< css::ui::XStatusbarItem >            m_xStatusbarItem;
+        std::mutex m_aMutex; // for m_aEventListeners
 };
 
 }

@@ -56,7 +56,6 @@ StatusbarController::StatusbarController(
     ,   m_xFrame( xFrame )
     ,   m_xContext( rxContext )
     ,   m_aCommandURL(std::move( aCommandURL ))
-    ,   m_aListenerContainer( m_aMutex )
 {
 }
 
@@ -65,7 +64,6 @@ StatusbarController::StatusbarController() :
     ,   m_bInitialized( false )
     ,   m_bDisposed( false )
     ,   m_nID( 0 )
-    ,   m_aListenerContainer( m_aMutex )
 {
 }
 
@@ -182,8 +180,11 @@ void SAL_CALL StatusbarController::dispose()
             return;
     }
 
-    css::lang::EventObject aEvent( xThis );
-    m_aListenerContainer.disposeAndClear( aEvent );
+    {
+        std::unique_lock aGuard(m_aMutex);
+        css::lang::EventObject aEvent( xThis );
+        m_aEventListeners.disposeAndClear( aGuard, aEvent );
+    }
 
     SolarMutexGuard aSolarMutexGuard;
     Reference< XStatusListener > xStatusListener = this;
@@ -220,12 +221,14 @@ void SAL_CALL StatusbarController::dispose()
 
 void SAL_CALL StatusbarController::addEventListener( const Reference< XEventListener >& xListener )
 {
-    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_aMutex);
+    m_aEventListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL StatusbarController::removeEventListener( const Reference< XEventListener >& aListener )
+void SAL_CALL StatusbarController::removeEventListener( const Reference< XEventListener >& xListener )
 {
-    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), aListener );
+    std::unique_lock aGuard(m_aMutex);
+    m_aEventListeners.removeInterface( aGuard, xListener );
 }
 
 // XEventListener
