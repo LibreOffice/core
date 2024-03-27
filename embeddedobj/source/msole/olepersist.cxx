@@ -58,6 +58,17 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
+namespace
+{
+#if defined(_WIN32)
+template <class Proc> auto ExecUnlocked(Proc proc, osl::ResettableMutexGuard& guard)
+{
+    ClearedMutexArea area(guard);
+    return proc();
+}
+#endif
+}
+
 
 bool KillFile_Impl( const OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
 {

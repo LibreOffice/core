@@ -601,7 +601,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
     }
     // end wrapping related part ====================
 
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -620,8 +620,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
 
         // the list of states can only be guessed based on standard verbs,
         // since there is no way to detect what additional verbs do
-        return GetReachableStatesList_Impl(
-            ExecUnlocked([this] { return m_pOleComponent->GetVerbList(); }, aGuard));
+        return GetReachableStatesList_Impl( m_pOleComponent->GetVerbList() );
     }
     else
 #endif
