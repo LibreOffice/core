@@ -1222,6 +1222,15 @@ public:
     {
         return mpThis->pClass->joinThreads(mpThis);
     }
+
+    /**
+     * Informs that this process is either a parent, or a child
+     * process post-fork, allowing improved resource sharing.
+     */
+    void setForkedChild(bool bIsChild)
+    {
+        return mpThis->pClass->setForkedChild(mpThis, bIsChild);
+    }
 };
 
 /// Factory method to create a lok::Office instance.

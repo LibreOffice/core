@@ -19,6 +19,8 @@ namespace comphelper::LibreOfficeKit
 
 static bool g_bActive(false);
 
+static bool g_bForkedChild(false);
+
 static bool g_bPartInInvalidation(false);
 
 static bool g_bTiledPainting(false);
@@ -96,6 +98,16 @@ void setActive(bool bActive)
 bool isActive()
 {
     return g_bActive;
+}
+
+void setForkedChild(bool bIsChild)
+{
+    g_bForkedChild = bIsChild;
+}
+
+bool isForkedChild()
+{
+    return g_bForkedChild;
 }
 
 void setPartInInvalidation(bool bPartInInvalidation)
