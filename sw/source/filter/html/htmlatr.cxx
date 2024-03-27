@@ -1526,8 +1526,9 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
 
         for (auto it = items.begin(); it != items.end();)
         {
-            HTMLStartEndPos* pTest = *it;
-            sal_Int32 nTestEnd = pTest->GetEnd();
+            auto itTest = it++; // forward early, allow 'continue', and keep a copy for 'erase'
+            HTMLStartEndPos* pTest = *itTest;
+            const sal_Int32 nTestEnd = pTest->GetEnd();
             if (nTestEnd <= nStart)
                 continue;
 
@@ -1535,30 +1536,27 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
             const SfxPoolItem& rTestItem = pTest->GetItem();
 
             // only the corresponding OnTag attributes have to be considered
-            if (rTestItem.Which() == nWhich && HTML_ON_VALUE == GetHTMLItemState(rTestItem))
+            if (rTestItem.Which() != nWhich || HTML_ON_VALUE != GetHTMLItemState(rTestItem))
+                continue;
+
+            // if necessary, insert the second part of the split attribute
+            if (nTestEnd > nEnd)
+                InsertItem(rTestItem, nEnd, nTestEnd);
+
+            if (nTestStart >= nStart)
             {
-                // if necessary, insert the second part of the split
-                // attribute
-                if (nTestEnd > nEnd)
-                    InsertItem(pTest->GetItem(), nEnd, nTestEnd);
-
-                if (nTestStart >= nStart)
-                {
-                    // the Test item only starts after the new end of the
-                    // attribute. Therefore, it can be completely erased.
-                    it = items.erase(it);
-                    auto& posItems = m_aEndLst[pTest->GetEnd()];
-                    posItems.erase(std::remove(posItems.begin(), posItems.end(), pTest),
-                                   posItems.end());
-                    delete pTest;
-                    continue;
-                }
-
-                // the start of the new attribute corresponds to the new
-                // end of the attribute
-                FixSplittedItem(pTest, nStart);
+                // the Test item only starts after the new end of the
+                // attribute. Therefore, it can be completely erased.
+                it = items.erase(itTest);
+                auto& posItems = m_aEndLst[nTestEnd];
+                posItems.erase(std::remove(posItems.begin(), posItems.end(), pTest),
+                               posItems.end());
+                delete pTest;
+                continue;
             }
-            ++it;
+
+            // the start of the new attribute corresponds to the new end of the attribute
+            FixSplittedItem(pTest, nStart);
         }
     }
 }

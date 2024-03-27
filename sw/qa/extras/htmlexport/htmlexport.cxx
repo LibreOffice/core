@@ -3047,6 +3047,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160017_spanClosingOrder)
     CPPUNIT_ASSERT(parseXml(maTempFile));
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160390)
+{
+    // This document must not hang infinitely on HTML export
+    createSwDoc("tdf160390.fodt");
+    save("HTML (StarWriter)");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
