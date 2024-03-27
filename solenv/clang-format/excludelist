@@ -9311,7 +9311,6 @@ scripting/source/dlgprov/dlgevtatt.cxx
 scripting/source/dlgprov/dlgevtatt.hxx
 scripting/source/dlgprov/dlgprov.cxx
 scripting/source/dlgprov/dlgprov.hxx
-scripting/source/inc/bcholder.hxx
 scripting/source/inc/util/MiscUtils.hxx
 scripting/source/protocolhandler/scripthandler.cxx
 scripting/source/protocolhandler/scripthandler.hxx

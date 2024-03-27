@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <bcholder.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>

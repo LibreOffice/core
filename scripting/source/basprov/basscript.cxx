@@ -27,7 +27,6 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
-#include <bcholder.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <map>
@@ -67,9 +66,8 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
 
 
     BasicScriptImpl::BasicScriptImpl( OUString funcName, SbMethodRef xMethod )
-        : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
-        ,OPropertyContainer( GetBroadcastHelper() )
-        ,m_xMethod(std::move( xMethod ))
+        :
+        m_xMethod(std::move( xMethod ))
         ,m_funcName(std::move( funcName ))
         ,m_documentBasicManager( nullptr )
         ,m_xDocumentScriptContext()
@@ -79,9 +77,8 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
 
 
     BasicScriptImpl::BasicScriptImpl( OUString funcName, SbMethodRef xMethod,
-        BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext ) : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
-        ,OPropertyContainer( GetBroadcastHelper() )
-        ,m_xMethod(std::move( xMethod ))
+        BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext ) :
+        m_xMethod(std::move( xMethod ))
         ,m_funcName(std::move( funcName ))
         ,m_documentBasicManager( &documentBasicManager )
         ,m_xDocumentScriptContext( documentScriptContext )
@@ -121,13 +118,13 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
     // XInterface
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( BasicScriptImpl, BasicScriptImpl_BASE, OPropertyContainer )
+    IMPLEMENT_FORWARD_XINTERFACE2( BasicScriptImpl, BasicScriptImpl_BASE, comphelper::OPropertyContainer2 )
 
 
     // XTypeProvider
 
 
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicScriptImpl, BasicScriptImpl_BASE, OPropertyContainer )
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicScriptImpl, BasicScriptImpl_BASE, comphelper::OPropertyContainer2 )
 
 
     // OPropertySetHelper

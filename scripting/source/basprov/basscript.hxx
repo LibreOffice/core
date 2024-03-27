@@ -19,13 +19,12 @@
 
 #pragma once
 
-#include <bcholder.hxx>
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
+#include <comphelper/propertycontainer2.hxx>
 #include <basic/sbmeth.hxx>
 #include <svl/lstner.hxx>
 
@@ -38,14 +37,12 @@ namespace basprov
 
 
 
-    typedef ::cppu::WeakImplHelper<
+    typedef ::comphelper::WeakImplHelper<
         css::script::provider::XScript > BasicScriptImpl_BASE;
 
 
     class BasicScriptImpl : public BasicScriptImpl_BASE, public SfxListener,
-                                public cppu::BaseMutex,
-                                public ::scripting_helper::OBroadcastHelperHolder,
-                                public ::comphelper::OPropertyContainer,
+                                public ::comphelper::OPropertyContainer2,
                                 public ::comphelper::OPropertyArrayUsageHelper< BasicScriptImpl >
     {
     private:
@@ -60,7 +57,7 @@ namespace basprov
         css::uno::Sequence< css::uno::Any > m_caller;
     protected:
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  ) override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper(  ) override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
