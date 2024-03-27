@@ -272,32 +272,6 @@ bool Scheduler::GetDeterministicMode()
     return g_bDeterministicMode;
 }
 
-Scheduler::IdlesLockGuard::IdlesLockGuard()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    ImplSchedulerContext& rSchedCtx = pSVData->maSchedCtx;
-    osl_atomic_increment(&rSchedCtx.mnIdlesLockCount);
-    if (!Application::IsMainThread())
-    {
-        // Make sure that main thread has reached the main message loop, so no idles are executing.
-        // It is important to ensure this, because e.g. ProcessEventsToIdle could be executed in a
-        // nested event loop, while an active processed idle in the main thread is waiting for some
-        // condition to proceed. Only main thread returning to Application::Execute guarantees that
-        // the flag really took effect.
-        pSVData->m_inExecuteCondtion.reset();
-        std::optional<SolarMutexReleaser> releaser;
-        if (pSVData->mpDefInst->GetYieldMutex()->IsCurrentThread())
-            releaser.emplace();
-        pSVData->m_inExecuteCondtion.wait();
-    }
-}
-
-Scheduler::IdlesLockGuard::~IdlesLockGuard()
-{
-    ImplSchedulerContext& rSchedCtx = ImplGetSVData()->maSchedCtx;
-    osl_atomic_decrement(&rSchedCtx.mnIdlesLockCount);
-}
-
 inline void Scheduler::UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,
                                           const sal_uInt64 nMinPeriod,
                                           const bool bForce, const sal_uInt64 nTime )
@@ -484,10 +458,8 @@ void Scheduler::CallbackTaskScheduling()
     // Delay invoking tasks with idle priorities as long as there are user input or repaint events
     // in the OS event queue. This will often effectively compress such events and repaint only
     // once at the end, improving performance in cases such as repeated zooming with a complex document.
-    bool bDelayInvoking
-        = bIsHighPriorityIdle
-          && (rSchedCtx.mnIdlesLockCount > 0
-              || Application::AnyInput(VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT));
+    bool bDelayInvoking = bIsHighPriorityIdle &&
+        Application::AnyInput( VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT );
 
     /*
     * Current policy is that scheduler tasks aren't allowed to throw an exception.
