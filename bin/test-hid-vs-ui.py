@@ -46,7 +46,7 @@ def init_hids():
 def init_core_files():
     global core_repo_dir, local_repo
     core_repo_dir = args['core_repo_dir']
-    if core_repo_dir is None: 
+    if core_repo_dir is None:
         core_repo_dir = os.path.dirname(os.path.abspath(os.path.dirname(sys.argv[0])))
         local_repo = True
 
@@ -114,7 +114,7 @@ if __name__ == "__main__":
             uifile = "svtools" + uifile[3:]
         elif uifile.startswith("fps"):
             uifile = "fpicker" + uifile[3:]
-        components = uifile.split('/',1);
+        components = uifile.split('/',1)
         uifile = components[0] + '/uiconfig/' + components[1]
         targets[uifile].add(compname.split(':')[0])
         origin[uifile].add(fname)  # help file(s)
@@ -128,9 +128,9 @@ if __name__ == "__main__":
                 errors += '\nFrom ' + origin[uikey].pop()
             else:
                 errors += '\nFrom one of ' + str(origin[uikey]).replace('set(','').replace(')','')
-            errors += ', we did not find file '+ uikey+'.' 
+            errors += ', we did not find file '+ uikey+'.'
             continue
-        
+
         full_path = os.path.join(core_repo_dir,uikey)
         # print full_path
         root = ET.parse(full_path).getroot()
@@ -149,12 +149,12 @@ if __name__ == "__main__":
 
     if args['send_to']:
         msg_from = os.path.basename(sys.argv[0]) + '@libreoffice.org'
-        if isinstance(args['send_to'], basestring):
+        if isinstance(args['send_to'], str):
             msg_to = [args['send_to']]
         else:
             msg_to = args['send_to']
-            print "send to array " + msg_to[0]
-            
+            print("send to array " + msg_to[0])
+
         server = smtplib.SMTP('localhost')
         body = '''
 Hello,
@@ -167,7 +167,7 @@ Here is the report for wrong hids from help related to .ui files
 
 Best,
 
-Your friendly LibreOffice Help-ids Checker 
+Your friendly LibreOffice Help-ids Checker
 
 Note: The bot generating this message can be found and improved here:
        https://gerrit.libreoffice.org/gitweb?p=dev-tools.git;a=blob;f=scripts/test-hid-vs-ui.py'''
@@ -183,6 +183,6 @@ Note: The bot generating this message can be found and improved here:
 
         server.sendmail(msg_from, msg_to, str(msg))
     else:
-        print errors
+        print(errors)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
