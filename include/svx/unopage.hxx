@@ -28,13 +28,14 @@
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
-#include <cppuhelper/basemutex.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdobjkind.hxx>
 #include <rtl/ref.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 
 #include <memory>
 
@@ -48,8 +49,8 @@ class SvxShapeGroup;
 class SvxShapeConnector;
 enum class SdrInventor : sal_uInt32;
 
-class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
-                                    public ::cppu::WeakImplHelper< css::drawing::XDrawPage,
+class SVXCORE_DLLPUBLIC SvxDrawPage :
+                                    public ::comphelper::WeakImplHelper< css::drawing::XDrawPage,
                                                css::drawing::XShapeGrouper,
                                                css::drawing::XShapes2,
                                                css::drawing::XShapes3,
@@ -60,8 +61,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
 
 {
  protected:
-    cppu::OBroadcastHelper mrBHelper;
-
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
     SdrPage*        mpPage;     // TTTT should be reference
     SdrModel*       mpModel;    // TTTT probably not needed -> use from SdrPage
     std::unique_ptr<SdrView> mpView;

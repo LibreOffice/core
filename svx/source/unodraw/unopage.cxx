@@ -66,8 +66,7 @@ using namespace ::com::sun::star::drawing;
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 
 SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT should be reference
-:   mrBHelper(m_aMutex)
-    ,mpPage(pInPage)
+:    mpPage(pInPage)
     ,mpModel(&pInPage->getSdrModelFromSdrPage())  // register at broadcaster
     ,mpView(new SdrView(pInPage->getSdrModelFromSdrPage())) // create (hidden) view
 {
@@ -76,7 +75,7 @@ SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT should be reference
 
 SvxDrawPage::~SvxDrawPage() noexcept
 {
-    if( !mrBHelper.bDisposed )
+    if( !m_bDisposed )
     {
         assert(!"SvxDrawPage must be disposed!");
         acquire();
@@ -108,67 +107,44 @@ void SvxDrawPage::dispose()
 
     // Guard dispose against multiple threading
     // Remark: It is an error to call dispose more than once
-    bool bDoDispose = false;
     {
-        osl::MutexGuard aGuard( mrBHelper.rMutex );
-        if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
-        {
-            // only one call go into this section
-            mrBHelper.bInDispose = true;
-            bDoDispose = true;
-        }
+        std::unique_lock aGuard( m_aMutex );
+        if( m_bDisposed )
+            return;
+        m_bDisposed = true;
     }
-
-    // Do not hold the mutex because we are broadcasting
-    if( !bDoDispose )
-        return;
 
     // Create an event with this as sender
-    try
+    css::document::EventObject aEvt;
+    aEvt.Source.set(uno::Reference<uno::XInterface>::query( static_cast<lang::XComponent *>(this) ));
+    // inform all listeners to release this object
+    // The listener container are automatically cleared
     {
-        css::document::EventObject aEvt;
-        aEvt.Source.set(uno::Reference<uno::XInterface>::query( static_cast<lang::XComponent *>(this) ));
-        // inform all listeners to release this object
-        // The listener container are automatically cleared
-        mrBHelper.aLC.disposeAndClear( aEvt );
-        // notify subclasses to do their dispose
-        disposing();
+        std::unique_lock aGuard( m_aMutex );
+        maEventListeners.disposeAndClear( aGuard, aEvt );
     }
-    catch(const css::uno::Exception&)
-    {
-        // catch exception and throw again but signal that
-        // the object was disposed. Dispose should be called
-        // only once.
-        osl::MutexGuard aGuard( mrBHelper.rMutex );
-        mrBHelper.bDisposed = true;
-        mrBHelper.bInDispose = false;
-        throw;
-    }
-
-    osl::MutexGuard aGuard( mrBHelper.rMutex );
-    mrBHelper.bDisposed = true;
-    mrBHelper.bInDispose = false;
-
+    // notify subclasses to do their dispose
+    disposing();
 }
 
 void SAL_CALL SvxDrawPage::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
-    SolarMutexGuard aGuard;
+    std::unique_lock aGuard( m_aMutex );
 
     if( mpModel == nullptr )
         throw lang::DisposedException();
 
-    mrBHelper.addListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
+    maEventListeners.addInterface( aGuard, aListener );
 }
 
 void SAL_CALL SvxDrawPage::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
-    SolarMutexGuard aGuard;
+    std::unique_lock aGuard( m_aMutex );
 
     if( mpModel == nullptr )
         throw lang::DisposedException();
 
-    mrBHelper.removeListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
+    maEventListeners.removeInterface( aGuard, aListener );
 }
 
 void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape )
