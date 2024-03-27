@@ -24,11 +24,10 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/propertycontainer.hxx>
+#include <comphelper/propertycontainer2.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/resmgr.hxx>
 
@@ -45,14 +44,11 @@ namespace xforms
 
     //= OXSDDataType
 
-    typedef ::cppu::WeakImplHelper             <   css::xsd::XDataType
+    typedef ::comphelper::WeakImplHelper        <   css::xsd::XDataType
                                                 >   OXSDDataType_Base;
-    typedef ::comphelper::OMutexAndBroadcastHelper  OXSDDataType_BBase;
-    typedef ::comphelper::OPropertyContainer        OXSDDataType_PBase;
 
     class OXSDDataType  :public OXSDDataType_Base
-                        ,public OXSDDataType_BBase         // order matters: OMutexAndBroadcastHelper before
-                        ,public OXSDDataType_PBase         // OPropertyContainer
+                        ,public ::comphelper::OPropertyContainer2
     {
     private:
         // <properties>
@@ -108,8 +104,9 @@ namespace xforms
 
     protected:
         // XPropertySet and friends
-        virtual sal_Bool SAL_CALL   convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
-        virtual void SAL_CALL       setFastPropertyValue_NoBroadcast(
+        virtual bool convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+        virtual void setFastPropertyValue_NoBroadcast(
+                                        std::unique_lock<std::mutex>& rGuard,
                                         sal_Int32 nHandle,
                                         const css::uno::Any& rValue
                                     ) override;
@@ -153,7 +150,8 @@ namespace xforms
                 void       initializeTypedClone( const OValueLimitedType_Base& _rCloneSource );
 
         // XPropertySet and friends
-        virtual void SAL_CALL       setFastPropertyValue_NoBroadcast(
+        virtual void setFastPropertyValue_NoBroadcast(
+                                        std::unique_lock<std::mutex>& rGuard,
                                         sal_Int32 nHandle,
                                         const css::uno::Any& rValue
                                     ) override;
@@ -218,7 +216,7 @@ namespace xforms
 
         // XPropertySet
         virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     };
 
     class OBooleanType;

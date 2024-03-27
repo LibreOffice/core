@@ -91,33 +91,32 @@ public:
        value and setFastPropertyValue is called.
      */
     virtual void SAL_CALL setPropertyValue(const ::rtl::OUString& rPropertyName,
-                                           const css::uno::Any& aValue) override final;
+                                           const css::uno::Any& aValue) override;
     /**
        Throw UnknownPropertyException if the property with the name
        rPropertyName does not exist.
      */
-    virtual css::uno::Any SAL_CALL
-    getPropertyValue(const ::rtl::OUString& aPropertyName) override final;
+    virtual css::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName) override;
 
     /** Ignored if the property is not bound. */
     virtual void SAL_CALL addPropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override final;
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
 
     /** Ignored if the property is not bound. */
     virtual void SAL_CALL removePropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override final;
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
 
     /** Ignored if the property is not constrained. */
     virtual void SAL_CALL addVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override final;
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     /** Ignored if the property is not constrained. */
     virtual void SAL_CALL removeVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override final;
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     /**
        Throw UnknownPropertyException or PropertyVetoException if the property with the name
