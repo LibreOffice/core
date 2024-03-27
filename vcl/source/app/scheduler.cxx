@@ -285,9 +285,6 @@ Scheduler::IdlesLockGuard::IdlesLockGuard()
         // condition to proceed. Only main thread returning to Application::Execute guarantees that
         // the flag really took effect.
         pSVData->m_inExecuteCondtion.reset();
-        // Put an empty event to the application's queue, to make sure that it loops through the
-        // code that sets the condition, even when there's no other events in the queue
-        Application::PostUserEvent({});
         SolarMutexReleaser releaser;
         pSVData->m_inExecuteCondtion.wait();
     }
