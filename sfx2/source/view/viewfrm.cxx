@@ -1344,6 +1344,32 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
 {
     SfxObjectShell_Impl* pObjImpl = m_xObjSh->Get_Impl();
 
+    auto aResId = STR_CONTAINS_MACROS;
+    if (SvtSecurityOptions::IsMacroDisabled())
+        aResId = STR_MACROS_DISABLED;
+    else if (pObjImpl->aMacroMode.hasUnsignedContentError())
+        aResId = STR_MACROS_DISABLED_CONTENT_UNSIGNED;
+    // The idea here is to always present an infobar is there was some
+    // macro/script related potential hazard disabled in the source document
+    auto pInfoBar = AppendInfoBar("macro", SfxResId(STR_MACROS_DISABLED_TITLE),
+                                  SfxResId(aResId), InfobarType::WARNING);
+    if (!pInfoBar)
+        return;
+
+    // Then show buttons to help navigate to whatever that hazard is.  Whether
+    // that is included macros, so the user could delete them.  Or events bound
+    // to scripts which could be cleared.  But there are likely other cases not
+    // captured here, which could be added, various blocked features where its
+    // likely still worth displaying the infobar that they have been disabled,
+    // even if we don't currently provide a way to indicate what exactly those
+    // are and how to remove them.
+
+    // No access to macro dialog when macros are disabled globally, so return
+    // early without adding buttons to help explore what the macros/script/events
+    // might be.
+    if (SvtSecurityOptions::IsMacroDisabled())
+        return;
+
     // what's the difference between pObjImpl->documentStorageHasMacros() and pObjImpl->aMacroMode.hasMacroLibrary() ?
     bool bHasDocumentMacros = pObjImpl->aMacroMode.hasMacroLibrary();
 
@@ -1380,35 +1406,18 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
         }
     }
 
-    if (bHasDocumentMacros || bHasBoundConfigEvents)
+    if (bHasDocumentMacros)
     {
-        auto aResId = STR_CONTAINS_MACROS;
-        if (SvtSecurityOptions::IsMacroDisabled())
-            aResId = STR_MACROS_DISABLED;
-        else if (pObjImpl->aMacroMode.hasUnsignedContentError())
-            aResId = STR_MACROS_DISABLED_CONTENT_UNSIGNED;
-        auto pInfoBar = AppendInfoBar("macro", SfxResId(STR_MACROS_DISABLED_TITLE),
-                                      SfxResId(aResId), InfobarType::WARNING);
-        if (!pInfoBar)
-            return;
+        weld::Button& rMacroButton = pInfoBar->addButton();
+        rMacroButton.set_label(SfxResId(STR_MACROS));
+        rMacroButton.connect_clicked(LINK(this, SfxViewFrame, MacroButtonHandler));
+    }
 
-        // No access to macro dialog when macros are disabled globally.
-        if (SvtSecurityOptions::IsMacroDisabled())
-            return;
-
-        if (bHasDocumentMacros)
-        {
-            weld::Button& rMacroButton = pInfoBar->addButton();
-            rMacroButton.set_label(SfxResId(STR_MACROS));
-            rMacroButton.connect_clicked(LINK(this, SfxViewFrame, MacroButtonHandler));
-        }
-
-        if (bHasBoundConfigEvents)
-        {
-            weld::Button& rEventButton = pInfoBar->addButton();
-            rEventButton.set_label(SfxResId(STR_EVENTS));
-            rEventButton.connect_clicked(LINK(this, SfxViewFrame, EventButtonHandler));
-        }
+    if (bHasBoundConfigEvents)
+    {
+        weld::Button& rEventButton = pInfoBar->addButton();
+        rEventButton.set_label(SfxResId(STR_EVENTS));
+        rEventButton.connect_clicked(LINK(this, SfxViewFrame, EventButtonHandler));
     }
 }
 
