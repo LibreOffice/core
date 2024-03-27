@@ -858,7 +858,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         else if (rScan.GetConvertMode() && ((nDecPos = sStr.indexOf( aConvertFromDecSep)) >= 0))
                         {
                             if (aConvertToDecSep.isEmpty())
-                                aConvertToDecSep = GetCurrentLanguageData().GetLangDecimalSep( rScan.GetNewLnge());
+                                aConvertToDecSep = rScan.GetCurrentLanguageData().GetLangDecimalSep( rScan.GetNewLnge());
                             if (aConvertToDecSep != aConvertFromDecSep)
                             {
                                 const OUString aStr( sStr.replaceAt( nDecPos,

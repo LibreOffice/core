@@ -264,7 +264,7 @@ public:
     const SvNumberformat* GetEntry(sal_uInt32 nKey) const;
 
     /// Obtain substituted GetFormatEntry(), i.e. system formats.
-    const SvNumberformat* GetSubstitutedEntry(sal_uInt32 nKey, sal_uInt32& o_rNewKey) const;
+    const SvNumberformat* GetSubstitutedEntry(sal_uInt32 nKey, sal_uInt32& o_rNewKey);
 
     /// Return the format index of the standard default number format for language/country
     sal_uInt32 GetStandardIndex(LanguageType eLnge = LANGUAGE_DONTKNOW);

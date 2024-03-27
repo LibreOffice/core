@@ -362,7 +362,7 @@ bool SvNFLanguageData::IsDecimalSep( std::u16string_view rStr ) const
     return rStr == GetNumDecimalSepAlt();
 }
 
-OUString SvNFLanguageData::GetLangDecimalSep( LanguageType nLang ) const
+OUString SvNFLanguageData::GetLangDecimalSep( LanguageType nLang )
 {
     if (nLang == ActLnge)
     {
@@ -377,9 +377,9 @@ OUString SvNFLanguageData::GetLangDecimalSep( LanguageType nLang ) const
     else
     {
         LanguageTag aSaveLocale( xLocaleData->getLanguageTag() );
-        const_cast<SvNFLanguageData*>(this)->xLocaleData.changeLocale( LanguageTag( nLang));
+        xLocaleData.changeLocale( LanguageTag( nLang));
         aRet = xLocaleData->getNumDecimalSep();
-        const_cast<SvNFLanguageData*>(this)->xLocaleData.changeLocale( aSaveLocale );
+        xLocaleData.changeLocale( aSaveLocale );
     }
     return aRet;
 }
@@ -2886,14 +2886,13 @@ const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
     return m_aFormatData.GetFormatEntry(nKey);
 }
 
-const SvNumberformat* SvNumberFormatter::GetSubstitutedEntry( sal_uInt32 nKey, sal_uInt32 & o_rNewKey ) const
+const SvNumberformat* SvNumberFormatter::GetSubstitutedEntry( sal_uInt32 nKey, sal_uInt32 & o_rNewKey )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     // A tad ugly, but GetStandardFormat() and GetFormatIndex() in
     // ImpSubstituteEntry() may have to add the LANGUAGE_SYSTEM formats if not
     // already present (which in practice most times they are).
-    SvNumberFormatter* pThis = const_cast<SvNumberFormatter*>(this);
-    return pThis->ImpSubstituteEntry( pThis->m_aFormatData.GetFormatEntry( nKey), &o_rNewKey);
+    return ImpSubstituteEntry(m_aFormatData.GetFormatEntry(nKey), &o_rNewKey);
 }
 
 const SvNumberformat* SvNumberFormatter::ImpSubstituteEntry( const SvNumberformat* pFormat, sal_uInt32 * o_pRealKey )

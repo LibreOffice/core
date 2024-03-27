@@ -92,7 +92,7 @@ public:
     bool IsDecimalSep(std::u16string_view rStr) const;
 
     /// Return the decimal separator matching the given locale / LanguageType.
-    OUString GetLangDecimalSep(LanguageType nLang) const;
+    OUString GetLangDecimalSep(LanguageType nLang);
 
     /// Change language/country, also input and format scanner
     void ChangeIntl(LanguageType eLnge);
