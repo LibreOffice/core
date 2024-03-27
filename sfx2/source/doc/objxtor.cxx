@@ -28,7 +28,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
@@ -136,14 +135,8 @@ public:
 
 } // namespace
 
-void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , sal_Bool bDeliverOwnership)
+void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , sal_Bool )
 {
-    if (mpDoc->Get_Impl()->m_nClosingLockLevel)
-    {
-        if (bDeliverOwnership)
-            mpDoc->Get_Impl()->m_bCloseModelScheduled = true;
-        throw util::CloseVetoException("Closing document is blocked", {});
-    }
 }
 
 void SAL_CALL SfxModelListener_Impl::notifyClosing( const css::lang::EventObject& )
@@ -308,6 +301,8 @@ SfxObjectShell::~SfxObjectShell()
     if ( pSfxApp && pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
 
+    pImpl->pBaseModel.set( nullptr );
+
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
     if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( false ) == pImpl->m_xDocStorage )
         pMedium->CanDisposeStorage_Impl( false );
@@ -342,33 +337,6 @@ SfxObjectShell::~SfxObjectShell()
     }
 }
 
-SfxCloseVetoLock::SfxCloseVetoLock(const SfxObjectShell& rDocShell)
-    : m_rDocShell(rDocShell)
-{
-    osl_atomic_increment(&m_rDocShell.Get_Impl()->m_nClosingLockLevel);
-}
-
-SfxCloseVetoLock::~SfxCloseVetoLock()
-{
-    if (osl_atomic_decrement(&m_rDocShell.Get_Impl()->m_nClosingLockLevel) == 0)
-    {
-        if (m_rDocShell.Get_Impl()->m_bCloseModelScheduled)
-        {
-            m_rDocShell.Get_Impl()->m_bCloseModelScheduled = false; // pass ownership
-            if (rtl::Reference model = static_cast<SfxBaseModel*>(m_rDocShell.GetBaseModel().get()))
-            {
-                try
-                {
-                    model->close(true);
-                }
-                catch (const util::CloseVetoException&)
-                {
-                    DBG_UNHANDLED_EXCEPTION("sfx.doc");
-                }
-            }
-        }
-    }
-}
 
 void SfxObjectShell::Stamp_SetPrintCancelState(bool bState)
 {
