@@ -24,7 +24,7 @@ def add_truncate_multiline(current):
   insertpos = 0
   for child in current:
     add_truncate_multiline(child)
-    insertpos = insertpos + 1;
+    insertpos = insertpos + 1
     if not istarget:
         continue
     if child.tag == "property":
@@ -87,7 +87,7 @@ def replace_button_use_stock(current):
   insertpos = 0
   for child in current:
     replace_button_use_stock(child)
-    insertpos = insertpos + 1;
+    insertpos = insertpos + 1
     if not isbutton:
         continue
     if child.tag == "property":
@@ -342,8 +342,8 @@ def remove_track_visited_links(current):
 
 def remove_toolbutton_focus(current):
   can_focus = None
-  classname = current.get('class');
-  istoolbutton = classname and classname.endswith("ToolButton");
+  classname = current.get('class')
+  istoolbutton = classname and classname.endswith("ToolButton")
   for child in current:
     remove_toolbutton_focus(child)
     if not istoolbutton:
@@ -444,7 +444,7 @@ def enforce_menubutton_indicator_consistency(current):
     if not ismenubutton:
       continue
     if child.tag == "property":
-      insertpos = insertpos + 1;
+      insertpos = insertpos + 1
       attributes = child.attrib
       if attributes.get("name") == "draw_indicator" or attributes.get("name") == "draw-indicator":
         draw_indicator = child
@@ -476,7 +476,7 @@ def enforce_active_in_group_consistency(current):
     if not isradiobutton:
         continue
     if child.tag == "property":
-      insertpos = insertpos + 1;
+      insertpos = insertpos + 1
       attributes = child.attrib
       if attributes.get("name") == "group":
         group = child
@@ -506,7 +506,7 @@ def enforce_toolbar_can_focus(current):
     if not istoolbar:
         continue
     if child.tag == "property":
-      insertpos = insertpos + 1;
+      insertpos = insertpos + 1
       attributes = child.attrib
       if attributes.get("name") == "can-focus" or attributes.get("name") == "can_focus":
         can_focus = child
@@ -531,7 +531,7 @@ def enforce_entry_text_column_id_column_for_gtkcombobox(current):
     if not isgtkcombobox:
         continue
     if child.tag == "property":
-      insertpos = insertpos + 1;
+      insertpos = insertpos + 1
       attributes = child.attrib
       if attributes.get("name") == "entry_text_column" or attributes.get("name") == "entry-text-column":
         entrytextcolumn = child
@@ -550,7 +550,7 @@ def enforce_entry_text_column_id_column_for_gtkcombobox(current):
       attributes["name"] = "entry-text-column"
       entrytextcolumn.text = "0"
       current.insert(insertpos, entrytextcolumn)
-      insertpos = insertpos + 1;
+      insertpos = insertpos + 1
     if idcolumn == None:
       # if there is no id_column, create one
       idcolumn = etree.Element("property")
@@ -569,7 +569,7 @@ def enforce_button_always_show_image(current):
     if not isbutton:
         continue
     if child.tag == "property":
-      insertpos = insertpos + 1;
+      insertpos = insertpos + 1
       attributes = child.attrib
       if attributes.get("name") == "always_show_image" or attributes.get("name") == "always-show-image":
         always_show_image = child
