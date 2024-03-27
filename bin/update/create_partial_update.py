@@ -67,7 +67,7 @@ def main():
         'see also': '',
         'update': get_file_info(mar_file, base_url),
         'languages': {}
-    };
+    }
     with open(os.path.join(update_dir, channel), "w") as f:
         json.dump(data, f, indent=4)
 
