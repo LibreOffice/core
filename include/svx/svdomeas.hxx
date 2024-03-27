@@ -49,18 +49,18 @@ private:
     friend class sdr::properties::MeasureProperties;
     friend class                SdrMeasureField;
 
-    virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
-    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     Point                       aPt1;
     Point                       aPt2;
     bool                        bTextDirty;
 
-    void ImpTakeAttr(ImpMeasureRec& rRec) const;
-    OUString TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const;
-    void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
-    static basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol);
-    void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
+    SAL_DLLPRIVATE void ImpTakeAttr(ImpMeasureRec& rRec) const;
+    SAL_DLLPRIVATE OUString TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const;
+    SAL_DLLPRIVATE void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
+    SAL_DLLPRIVATE static basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol);
+    SAL_DLLPRIVATE void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
     void SetTextDirty()
     {
         bTextDirty=true;
@@ -71,82 +71,82 @@ private:
             SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
         }
     }
-    void UndirtyText() const;
+    SAL_DLLPRIVATE void UndirtyText() const;
 
-    virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
-    virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
-    virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
+    SAL_DLLPRIVATE virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
+    SAL_DLLPRIVATE virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
+    SAL_DLLPRIVATE virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    SdrMeasureObj(SdrModel& rSdrModel);
+    SAL_DLLPRIVATE SdrMeasureObj(SdrModel& rSdrModel);
     // Copy constructor
-    SdrMeasureObj(SdrModel& rSdrModel, SdrMeasureObj const & rSource);
+    SAL_DLLPRIVATE SdrMeasureObj(SdrModel& rSdrModel, SdrMeasureObj const & rSource);
     SdrMeasureObj(
         SdrModel& rSdrModel,
         const Point& rPt1,
         const Point& rPt2);
-    virtual ~SdrMeasureObj() override;
+    SAL_DLLPRIVATE virtual ~SdrMeasureObj() override;
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual SdrObjKind GetObjIdentifier() const override;
+    SAL_DLLPRIVATE virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+    SAL_DLLPRIVATE virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
-    virtual OUString TakeObjNameSingul() const override;
-    virtual OUString TakeObjNamePlural() const override;
+    SAL_DLLPRIVATE virtual OUString TakeObjNameSingul() const override;
+    SAL_DLLPRIVATE virtual OUString TakeObjNamePlural() const override;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
-    virtual sal_uInt32 GetHdlCount() const override;
-    virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
+    SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetHdlCount() const override;
+    SAL_DLLPRIVATE virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const override;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
-    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual bool hasSpecialDrag() const override;
+    SAL_DLLPRIVATE virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
+    SAL_DLLPRIVATE virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const override;
 
-    virtual bool BegCreate(SdrDragStat& rStat) override;
-    virtual bool MovCreate(SdrDragStat& rStat) override;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
-    virtual bool BckCreate(SdrDragStat& rStat) override;
-    virtual void BrkCreate(SdrDragStat& rStat) override;
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
-    virtual PointerStyle GetCreatePointer() const override;
+    SAL_DLLPRIVATE virtual bool BegCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual bool MovCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
+    SAL_DLLPRIVATE virtual bool BckCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual void BrkCreate(SdrDragStat& rStat) override;
+    SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
+    SAL_DLLPRIVATE virtual PointerStyle GetCreatePointer() const override;
 
-    virtual void NbcMove(const Size& rSiz) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
-    virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
-    virtual Degree100 GetRotateAngle() const override;
-    virtual void RecalcSnapRect() override;
+    SAL_DLLPRIVATE virtual void NbcMove(const Size& rSiz) override;
+    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    SAL_DLLPRIVATE virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
+    SAL_DLLPRIVATE virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
+    SAL_DLLPRIVATE virtual void NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
+    SAL_DLLPRIVATE virtual Degree100 GetRotateAngle() const override;
+    SAL_DLLPRIVATE virtual void RecalcSnapRect() override;
 
-    virtual sal_uInt32 GetSnapPointCount() const override;
-    virtual Point GetSnapPoint(sal_uInt32 i) const override;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetSnapPointCount() const override;
+    SAL_DLLPRIVATE virtual Point GetSnapPoint(sal_uInt32 i) const override;
 
-    virtual bool IsPolyObj() const override;
-    virtual sal_uInt32 GetPointCount() const override;
+    SAL_DLLPRIVATE virtual bool IsPolyObj() const override;
+    SAL_DLLPRIVATE virtual sal_uInt32 GetPointCount() const override;
     virtual Point GetPoint(sal_uInt32 i) const override;
-    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;
+    SAL_DLLPRIVATE virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;
 
-    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual bool BegTextEdit(SdrOutliner& rOutl) override;
-    virtual const Size& GetTextSize() const override;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
+    SAL_DLLPRIVATE virtual bool BegTextEdit(SdrOutliner& rOutl) override;
+    SAL_DLLPRIVATE virtual const Size& GetTextSize() const override;
+    SAL_DLLPRIVATE virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
-    virtual void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const override;
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
-    virtual EEAnchorMode GetOutlinerViewAnchorMode() const override;
-    virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject) override;
-    virtual OutlinerParaObject* GetOutlinerParaObject() const override;
+    SAL_DLLPRIVATE virtual void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const override;
+    SAL_DLLPRIVATE virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
+    SAL_DLLPRIVATE virtual EEAnchorMode GetOutlinerViewAnchorMode() const override;
+    SAL_DLLPRIVATE virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject) override;
+    SAL_DLLPRIVATE virtual OutlinerParaObject* GetOutlinerParaObject() const override;
 
-    virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
+    SAL_DLLPRIVATE virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
         bool bEdit, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, std::optional<FontLineStyle>& rpFldLineStyle, OUString& rRet) const override;
 
     // #i97878#
-    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
+    SAL_DLLPRIVATE virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
+    SAL_DLLPRIVATE virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
 };
 
 // Creating:

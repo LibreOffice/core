@@ -36,23 +36,23 @@ class SVXCORE_DLLPUBLIC SdrMediaObj final : public SdrRectObj
 
 private:
     // protected destructor - due to final, make private
-    virtual ~SdrMediaObj() override;
+    SAL_DLLPRIVATE virtual ~SdrMediaObj() override;
 
 public:
-        SdrMediaObj(SdrModel& rSdrModel);
+        SAL_DLLPRIVATE SdrMediaObj(SdrModel& rSdrModel);
         // Copy constructor
-        SdrMediaObj(SdrModel& rSdrModel, SdrMediaObj const & rSource);
+        SAL_DLLPRIVATE SdrMediaObj(SdrModel& rSdrModel, SdrMediaObj const & rSource);
         SdrMediaObj(
                 SdrModel& rSdrModel,
                 const tools::Rectangle& rRect);
 
-        virtual bool                HasTextEdit() const override;
+        SAL_DLLPRIVATE virtual bool                HasTextEdit() const override;
 
-        virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-        virtual SdrObjKind          GetObjIdentifier() const override;
+        SAL_DLLPRIVATE virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
+        SAL_DLLPRIVATE virtual SdrObjKind          GetObjIdentifier() const override;
 
-        virtual OUString            TakeObjNameSingul() const override;
-        virtual OUString            TakeObjNamePlural() const override;
+        SAL_DLLPRIVATE virtual OUString            TakeObjNameSingul() const override;
+        SAL_DLLPRIVATE virtual OUString            TakeObjNamePlural() const override;
 
         virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
@@ -64,20 +64,20 @@ public:
         /// Returns the URL to the temporary extracted media file.
         const OUString&      getTempURL() const;
 
-        void                        setMediaProperties( const ::avmedia::MediaItem& rState );
+        SAL_DLLPRIVATE void                        setMediaProperties( const ::avmedia::MediaItem& rState );
         const ::avmedia::MediaItem& getMediaProperties() const;
 
         css::uno::Reference< css::graphic::XGraphic > const &
                                     getSnapshot() const;
         css::uno::Reference< css::io::XInputStream>
                                     GetInputStream() const;
-        void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);
+        SAL_DLLPRIVATE void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);
 
         virtual bool shouldKeepAspectRatio() const override { return true; }
 
 private:
-        void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
-        virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
+        SAL_DLLPRIVATE void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
+        SAL_DLLPRIVATE virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
         struct Impl;
         std::unique_ptr<Impl> m_xImpl;

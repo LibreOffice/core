@@ -31,14 +31,14 @@ public:
         : SfxEnumItem(SDRATTR_MEASURETEXTHPOS, ePos)
     {
     }
-    virtual SdrMeasureTextHPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual sal_uInt16     GetValueCount() const override; // { return 4; }
+    SAL_DLLPRIVATE virtual SdrMeasureTextHPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    SAL_DLLPRIVATE virtual sal_uInt16     GetValueCount() const override; // { return 4; }
 
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SAL_DLLPRIVATE virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SAL_DLLPRIVATE virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    static const OUString & GetValueTextByPos(sal_uInt16 nPos);
-    virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
+    SAL_DLLPRIVATE static const OUString & GetValueTextByPos(sal_uInt16 nPos);
+    SAL_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
 };
 
 class SVXCORE_DLLPUBLIC SdrMeasureTextVPosItem final : public SfxEnumItem<css::drawing::MeasureTextVertPos> {
@@ -47,14 +47,14 @@ public:
         : SfxEnumItem(SDRATTR_MEASURETEXTVPOS, ePos)
     {
     }
-    virtual SdrMeasureTextVPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual sal_uInt16     GetValueCount() const override; // { return 5; }
+    SAL_DLLPRIVATE virtual SdrMeasureTextVPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    SAL_DLLPRIVATE virtual sal_uInt16     GetValueCount() const override; // { return 5; }
 
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    SAL_DLLPRIVATE virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    SAL_DLLPRIVATE virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    static OUString GetValueTextByPos(sal_uInt16 nPos);
-    virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
+    SAL_DLLPRIVATE static OUString GetValueTextByPos(sal_uInt16 nPos);
+    SAL_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
 };
 
 #endif
