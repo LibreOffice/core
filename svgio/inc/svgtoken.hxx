@@ -109,6 +109,7 @@ namespace svgio::svgreader
             PatternContentUnits,
             PatternTransform,
             Opacity,
+            SystemLanguage,
             Visibility,
             Title,
             Desc,
