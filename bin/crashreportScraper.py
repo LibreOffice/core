@@ -15,7 +15,6 @@ import requests
 from bs4 import BeautifulSoup
 import sys
 import os
-import math
 from datetime import datetime
 import urllib.parse
 import re
