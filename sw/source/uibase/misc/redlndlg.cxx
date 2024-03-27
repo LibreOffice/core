@@ -90,6 +90,9 @@ SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
 
 void SwModelessRedlineAcceptDlg::Activate()
 {
+    if (mbInDestruction)
+        return;
+
     SwView *pView = ::GetActiveView();
     if (!pView) // can happen when switching to another app, when a Listbox in dialog
         return; // had the focus previously (actually THs Bug)
@@ -138,6 +141,7 @@ void SwModelessRedlineAcceptDlg::FillInfo(SfxChildWinInfo& rInfo) const
 
 SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 {
+    mbInDestruction = true;
 }
 
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, weld::Builder *pBuilder,

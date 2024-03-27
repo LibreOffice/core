@@ -131,6 +131,7 @@ class SwModelessRedlineAcceptDlg final : public SfxModelessDialogController
     std::unique_ptr<weld::Container> m_xContentArea;
     std::unique_ptr<SwRedlineAcceptDlg> m_xImplDlg;
     SwChildWinWrapper*      m_pChildWin;
+    bool mbInDestruction = false;
 
 public:
     SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, weld::Window *pParent);
