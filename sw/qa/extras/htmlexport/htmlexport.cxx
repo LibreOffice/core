@@ -374,11 +374,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testCharacterBorder)
     verify();
 }
 
-#define DECLARE_HTMLEXPORT_TEST(TestName, filename)                                                \
-    DECLARE_SW_EXPORT_TEST(TestName, filename, nullptr, HtmlExportTest)
-
-DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImages)
 {
+    createSwDoc("textAndImage.docx");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -435,8 +434,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbeddedDocument)
     assertXPathContent(pDoc, "/html/body/p/span/p/span"_ostr, "Inner.");
 }
 
-DECLARE_HTMLEXPORT_TEST(testExportImageProperties, "HTMLImage.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportImageProperties)
 {
+    createSwDoc("HTMLImage.odt");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -475,8 +476,10 @@ DECLARE_HTMLEXPORT_TEST(testExportImageProperties, "HTMLImage.odt")
     assertXPath(pDoc, "/html/body/p/a/font/img"_ostr, "usemap"_ostr, "#map1");
 }
 
-DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutton.doc")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportCheckboxRadioButtonState)
 {
+    createSwDoc("checkbox-radiobutton.doc");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -495,8 +498,10 @@ DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutto
     assertXPathNoAttribute(pDoc, "/html/body/form/p[4]/input"_ostr, "checked"_ostr);
 }
 
-DECLARE_HTMLEXPORT_TEST(testExportUrlEncoding, "tdf76291.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportUrlEncoding)
 {
+    createSwDoc("tdf76291.odt");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -505,8 +510,10 @@ DECLARE_HTMLEXPORT_TEST(testExportUrlEncoding, "tdf76291.odt")
                 "http://www.youtube.com/results?search_query=%E7%B2%B5%E8%AA%9Emv&sm=12");
 }
 
-DECLARE_HTMLEXPORT_TEST(testExportInternalUrl, "tdf90905.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportInternalUrl)
 {
+    createSwDoc("tdf90905.odt");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -515,8 +522,10 @@ DECLARE_HTMLEXPORT_TEST(testExportInternalUrl, "tdf90905.odt")
     assertXPath(pDoc, "/html/body/p[2]/a"_ostr, "href"_ostr, "#bookmark");
 }
 
-DECLARE_HTMLEXPORT_TEST(testExportImageBulletList, "tdf66822.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportImageBulletList)
 {
+    createSwDoc("tdf66822.odt");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -553,16 +562,20 @@ DECLARE_HTMLEXPORT_TEST(testExportImageBulletList, "tdf66822.odt")
         "4NCjwvc3ZnPg0K);");
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf83890, "tdf83890.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf83890)
 {
+    createSwDoc("tdf83890.odt");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body/ol[2]/ol"_ostr, "start"_ostr, "2");
 }
 
-DECLARE_HTMLEXPORT_TEST(testExtbChars, "extb.html")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExtbChars)
 {
+    createSwWebDoc("extb.html");
+    save(mpFilter);
     OUString aExpected(u"\U00024b62"_ustr);
     // Assert that UTF8 encoded non-BMP Unicode character is correct
     uno::Reference<text::XTextRange> xTextRange1 = getRun(getParagraph(1), 1);
@@ -573,8 +586,10 @@ DECLARE_HTMLEXPORT_TEST(testExtbChars, "extb.html")
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange2->getString());
 }
 
-DECLARE_HTMLEXPORT_TEST(testNormalImageExport, "textAndImage.docx")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testNormalImageExport)
 {
+    createSwDoc("textAndImage.docx");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -992,8 +1007,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2Odg)
     verify();
 }
 
-DECLARE_HTMLEXPORT_TEST(testList, "list.html")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testList)
 {
+    createSwWebDoc("list.html");
+    save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -1003,8 +1020,10 @@ DECLARE_HTMLEXPORT_TEST(testList, "list.html")
     CPPUNIT_ASSERT(aStream.indexOf("<li>") != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testTransparentImage, "transparent-image.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTransparentImage)
 {
+    createSwDoc("transparent-image.odt");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1065,8 +1084,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testNoLangReqIf)
                            "lang"_ostr);
 }
 
-DECLARE_HTMLEXPORT_TEST(testFieldShade, "field-shade.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShade)
 {
+    createSwDoc("field-shade.odt");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1081,8 +1102,10 @@ DECLARE_HTMLEXPORT_TEST(testFieldShade, "field-shade.odt")
     assertXPath(pDoc, "/html/body/p[2]/span/span"_ostr, 0);
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf132739, "tdf132739.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf132739)
 {
+    createSwDoc("tdf132739.odt");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -1111,8 +1134,10 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShadeReqIf)
     assertXPath(pDoc, "/html/body/div/p[1]/sdfield"_ostr, 0);
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf126879, "tdf126879.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf126879)
 {
+    createSwDoc("tdf126879.odt");
+    save(mpFilter);
     constexpr OString aExpected("<!DOCTYPE html>"_ostr);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);

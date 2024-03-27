@@ -61,21 +61,6 @@
 #define DECLARE_FODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 
-#define DECLARE_SW_EXPORT_TEST(TestName, filename, password, BaseClass) \
-    class TestName : public BaseClass { \
-        public:\
-    CPPUNIT_TEST_SUITE(TestName); \
-    CPPUNIT_TEST(Import_Export); \
-    CPPUNIT_TEST_SUITE_END(); \
-    \
-    void Import_Export() {\
-        executeImportExport(filename, password);\
-    }\
-    void verify() override;\
-    }; \
-    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
-    void TestName::verify()
-
 class SwXTextDocument;
 namespace vcl
 {
