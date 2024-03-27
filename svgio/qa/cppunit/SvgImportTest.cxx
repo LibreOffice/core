@@ -38,6 +38,7 @@ protected:
     void checkRectPrimitive(Primitive2DSequence const & rPrimitive);
 
     Primitive2DSequence parseSvg(std::u16string_view aSource);
+    xmlDocUniquePtr dumpAndParseSvg(std::u16string_view aSource);
 };
 
 Primitive2DSequence Test::parseSvg(std::u16string_view aSource)
@@ -57,6 +58,17 @@ Primitive2DSequence Test::parseSvg(std::u16string_view aSource)
     Reference<XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
 
     return xSvgParser->getDecomposition(aInputStream, aPath);
+}
+
+xmlDocUniquePtr Test::dumpAndParseSvg(std::u16string_view aSource)
+{
+    Primitive2DSequence aSequence = parseSvg(aSource);
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+    return pDocument;
 }
 
 void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
@@ -383,6 +395,17 @@ CPPUNIT_TEST_FIXTURE(Test, testFontsizeRelative)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "text"_ostr, "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "height"_ostr, "50");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "familyname"_ostr, "DejaVu Serif");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf160386)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf160386.svg");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 11
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion"_ostr, 1);
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion"_ostr, "text"_ostr, "Hello!");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf145896)

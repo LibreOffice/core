@@ -95,6 +95,9 @@ namespace svgio::svgreader
             /// Class svan value
             std::optional<OUString>   mpClass;
 
+            /// systemLanguage values
+            std::vector<OUString>  maSystemLanguage;
+
             /// XmlSpace value
             XmlSpace                    maXmlSpace;
 
@@ -173,6 +176,10 @@ namespace svgio::svgreader
             /// Class access
             std::optional<OUString> const & getClass() const { return mpClass; }
             void setClass(OUString const &);
+
+            /// SystemLanguage access
+            std::vector<OUString> const & getSystemLanguage() const { return maSystemLanguage; }
+            void setSystemLanguage(OUString const &);
 
             /// XmlSpace access
             XmlSpace getXmlSpace() const;

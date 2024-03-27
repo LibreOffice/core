@@ -367,17 +367,13 @@ namespace {
             mpParent(pParent),
             mpAlternativeParent(nullptr),
             maXmlSpace(XmlSpace::NotSet),
-            maDisplay(Display::Inline),
+            maDisplay(maType == SVGToken::Unknown ? Display::None : Display::Inline), // tdf#150124: do not display unknown nodes
             mbDecomposing(false),
             mbCssStyleVectorBuilt(false)
         {
             if (pParent)
             {
-                // tdf#150124 ignore when parent is unknown
-                if (pParent->getType() != SVGToken::Unknown)
-                    pParent->maChildren.emplace_back(this);
-                else
-                    mrDocument.addOrphanNode(this);
+                pParent->maChildren.emplace_back(this);
             }
         }
 
@@ -524,6 +520,14 @@ namespace {
                     if(!aContent.isEmpty())
                     {
                         setClass(aContent);
+                    }
+                    break;
+                }
+                case SVGToken::SystemLanguage:
+                {
+                    if(!aContent.isEmpty())
+                    {
+                        setSystemLanguage(aContent);
                     }
                     break;
                 }
@@ -750,6 +754,34 @@ namespace {
 
             mpClass = rClass;
             mrDocument.addSvgNodeToMapper(*mpClass, *this);
+        }
+
+        void SvgNode::setSystemLanguage(OUString const & rSystemClass)
+        {
+            const sal_Int32 nLen(rSystemClass.getLength());
+            sal_Int32 nPos(0);
+            OUStringBuffer aToken;
+
+            // split into single tokens (currently only comma separator)
+            while(nPos < nLen)
+            {
+                const sal_Int32 nInitPos(nPos);
+                copyToLimiter(rSystemClass, u',', nPos, aToken, nLen);
+                skip_char(rSystemClass, u',', nPos, nLen);
+                const OUString aLang(o3tl::trim(aToken));
+                aToken.setLength(0);
+
+                if(!aLang.isEmpty())
+                {
+                    maSystemLanguage.push_back(aLang);
+                }
+
+                if(nInitPos == nPos)
+                {
+                    OSL_ENSURE(false, "Could not interpret on current position (!)");
+                    nPos++;
+                }
+            }
         }
 
         XmlSpace SvgNode::getXmlSpace() const

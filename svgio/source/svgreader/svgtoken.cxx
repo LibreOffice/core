@@ -107,6 +107,7 @@ constexpr auto aSVGTokenMap = frozen::make_unordered_map<std::u16string_view, SV
     { u"patternContentUnits", SVGToken::PatternContentUnits },
     { u"patternTransform", SVGToken::PatternTransform },
     { u"opacity", SVGToken::Opacity },
+    { u"systemLanguage", SVGToken::SystemLanguage },
     { u"visibility", SVGToken::Visibility },
     { u"title", SVGToken::Title },
     { u"desc", SVGToken::Desc },
