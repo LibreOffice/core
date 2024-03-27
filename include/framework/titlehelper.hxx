@@ -27,10 +27,9 @@
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -51,8 +50,8 @@ namespace framework{
 
     @threadsafe
  */
-class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final : private ::cppu::BaseMutex
-                  , public  ::cppu::WeakImplHelper< css::frame::XTitle                 ,
+class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final :
+                  public  ::comphelper::WeakImplHelper< css::frame::XTitle                 ,
                                                      css::frame::XTitleChangeBroadcaster,
                                                      css::frame::XTitleChangeListener   ,
                                                      css::frame::XFrameActionListener   ,
@@ -172,7 +171,7 @@ class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final : private ::cppu::B
         ::sal_Int32 m_nLeasedNumber;
 
         /** contains all title change listener */
-        comphelper::OMultiTypeInterfaceContainerHelper2 m_aListener;
+        comphelper::OInterfaceContainerHelper4<css::frame::XTitleChangeListener> m_aTitleChangeListeners;
 };
 
 } // namespace framework
