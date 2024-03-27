@@ -25,8 +25,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <comphelper/broadcasthelper.hxx>
-#include <comphelper/propertycontainer.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/propertycontainer2.hxx>
 #include <comphelper/proparrhlp.hxx>
 
 #include <cmath>
@@ -96,13 +96,12 @@ enum
 
 } // end anonymous namespace
 
-typedef cppu::WeakImplHelper<sheet::XSolver, sheet::XSolverDescription, lang::XServiceInfo>
+typedef comphelper::WeakImplHelper<sheet::XSolver, sheet::XSolverDescription, lang::XServiceInfo>
     SwarmSolver_Base;
 
 namespace
 {
-class SwarmSolver : public comphelper::OMutexAndBroadcastHelper,
-                    public comphelper::OPropertyContainer,
+class SwarmSolver : public comphelper::OPropertyContainer2,
                     public comphelper::OPropertyArrayUsageHelper<SwarmSolver>,
                     public SwarmSolver_Base
 {
@@ -138,8 +137,7 @@ private:
 
 public:
     SwarmSolver()
-        : OPropertyContainer(GetBroadcastHelper())
-        , mbMaximize(true)
+        : mbMaximize(true)
         , mbNonNegative(false)
         , mbInteger(false)
         , mnTimeout(60000)
@@ -165,10 +163,7 @@ public:
         return createPropertySetInfo(getInfoHelper());
     }
     // OPropertySetHelper
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override
-    {
-        return *getArrayHelper();
-    }
+    virtual cppu::IPropertyArrayHelper& getInfoHelper() override { return *getArrayHelper(); }
     // OPropertyArrayUsageHelper
     virtual cppu::IPropertyArrayHelper* createArrayHelper() const override
     {
@@ -309,8 +304,8 @@ double SwarmSolver::getValue(const table::CellAddress& rPosition)
     return getCell(rPosition)->getValue();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2(SwarmSolver, SwarmSolver_Base, OPropertyContainer)
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(SwarmSolver, SwarmSolver_Base, OPropertyContainer)
+IMPLEMENT_FORWARD_XINTERFACE2(SwarmSolver, SwarmSolver_Base, comphelper::OPropertyContainer2)
+IMPLEMENT_FORWARD_XTYPEPROVIDER2(SwarmSolver, SwarmSolver_Base, comphelper::OPropertyContainer2)
 
 void SwarmSolver::applyVariables(std::vector<double> const& rVariables)
 {
