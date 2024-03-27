@@ -8,7 +8,7 @@ import argparse
 
 from tools import uncompress_file_to_dir, get_file_info, make_complete_mar_name
 from signing import sign_mar_file
-from path import UpdaterPath, convert_to_unix, convert_to_native
+from path import UpdaterPath, convert_to_native
 
 
 def main():
