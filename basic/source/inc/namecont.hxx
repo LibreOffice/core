@@ -51,19 +51,20 @@
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
 
 class BasicManager;
 
 namespace basic
 {
-typedef ::cppu::WeakImplHelper<
+typedef ::comphelper::WeakImplHelper<
     css::container::XNameContainer,
     css::container::XContainer,
     css::util::XChangesNotifier > NameContainer_BASE;
 
 
-class NameContainer final : public ::cppu::BaseMutex, public NameContainer_BASE
+class NameContainer final : public NameContainer_BASE
 {
     typedef std::unordered_map < OUString, sal_Int32 > NameContainerNameMap;
 
@@ -75,16 +76,14 @@ class NameContainer final : public ::cppu::BaseMutex, public NameContainer_BASE
     css::uno::Type mType;
     css::uno::XInterface* mpxEventSource;
 
-    ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> maContainerListeners;
-    ::comphelper::OInterfaceContainerHelper3<css::util::XChangesListener> maChangesListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::container::XContainerListener> maContainerListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::util::XChangesListener> maChangesListeners;
 
 public:
     NameContainer( const css::uno::Type& rType )
         : mnElementCount( 0 )
         , mType( rType )
         , mpxEventSource( nullptr )
-        , maContainerListeners( m_aMutex )
-        , maChangesListeners( m_aMutex )
     {}
 
     void setEventSource( css::uno::XInterface* pxEventSource )

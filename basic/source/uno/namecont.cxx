@@ -156,27 +156,29 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     mValues[ iHashResult ] = aElement;
 
 
+    std::unique_lock aGuard(m_aMutex);
+
     // Fire event
-    if( maContainerListeners.getLength() > 0 )
+    if( maContainerListeners.getLength(aGuard) > 0 )
     {
         ContainerEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Accessor <<= aName;
         aEvent.Element = aElement;
         aEvent.ReplacedElement = aOldElement;
-        maContainerListeners.notifyEach( &XContainerListener::elementReplaced, aEvent );
+        maContainerListeners.notifyEach( aGuard, &XContainerListener::elementReplaced, aEvent );
     }
 
     /*  After the container event has been fired (one listener will update the
         core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
-    if( maChangesListeners.getLength() > 0 )
+    if( maChangesListeners.getLength(aGuard) > 0 )
     {
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes = { { Any(aName), aElement, aOldElement } };
-        maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
+        maChangesListeners.notifyEach( aGuard, &XChangesListener::changesOccurred, aEvent );
     }
 }
 
@@ -205,26 +207,28 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
     mHashMap[ aName ] = nCount;
     mnElementCount++;
 
+    std::unique_lock aGuard(m_aMutex);
+
     // Fire event
-    if( maContainerListeners.getLength() > 0 )
+    if( maContainerListeners.getLength(aGuard) > 0 )
     {
         ContainerEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Accessor <<= aName;
         aEvent.Element = aElement;
-        maContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
+        maContainerListeners.notifyEach( aGuard, &XContainerListener::elementInserted, aEvent );
     }
 
     /*  After the container event has been fired (one listener will update the
         core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
-    if( maChangesListeners.getLength() > 0 )
+    if( maChangesListeners.getLength(aGuard) > 0 )
     {
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes = { { Any(aName), aElement, {} } };
-        maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
+        maChangesListeners.notifyEach( aGuard, &XChangesListener::changesOccurred, aEvent );
     }
 }
 
@@ -257,20 +261,22 @@ void NameContainer::removeByName( const OUString& aName )
     mValues.resize( iLast );
     mnElementCount--;
 
+    std::unique_lock aGuard(m_aMutex);
+
     // Fire event
-    if( maContainerListeners.getLength() > 0 )
+    if( maContainerListeners.getLength(aGuard) > 0 )
     {
         ContainerEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Accessor <<= aName;
         aEvent.Element = aOldElement;
-        maContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
+        maContainerListeners.notifyEach( aGuard, &XContainerListener::elementRemoved, aEvent );
     }
 
     /*  After the container event has been fired (one listener will update the
         core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
-    if( maChangesListeners.getLength() > 0 )
+    if( maChangesListeners.getLength(aGuard) > 0 )
     {
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
@@ -278,7 +284,7 @@ void NameContainer::removeByName( const OUString& aName )
         aEvent.Changes = { { Any(aName),
                              {}, // Element remains empty (meaning "replaced with nothing")
                              aOldElement } };
-        maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
+        maChangesListeners.notifyEach( aGuard, &XChangesListener::changesOccurred, aEvent );
     }
 }
 
@@ -290,7 +296,8 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
     {
         throw RuntimeException("addContainerListener called with null xListener",getXWeak());
     }
-    maContainerListeners.addInterface( xListener );
+    std::unique_lock aGuard(m_aMutex);
+    maContainerListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL NameContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
@@ -299,7 +306,8 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
     {
         throw RuntimeException("removeContainerListener called with null xListener",getXWeak());
     }
-    maContainerListeners.removeInterface( xListener );
+    std::unique_lock aGuard(m_aMutex);
+    maContainerListeners.removeInterface( aGuard, xListener );
 }
 
 // Methods XChangesNotifier
@@ -309,7 +317,8 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
     {
         throw RuntimeException("addChangesListener called with null xListener",getXWeak());
     }
-    maChangesListeners.addInterface( xListener );
+    std::unique_lock aGuard(m_aMutex);
+    maChangesListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesListener >& xListener )
@@ -318,7 +327,8 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
     {
         throw RuntimeException("removeChangesListener called with null xListener",getXWeak());
     }
-    maChangesListeners.removeInterface( xListener );
+    std::unique_lock aGuard(m_aMutex);
+    maChangesListeners.removeInterface( aGuard, xListener );
 }
 
 
