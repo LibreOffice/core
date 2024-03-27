@@ -8,7 +8,6 @@
 from optparse import OptionParser
 
 import re
-import sys
 import xml.etree.ElementTree as ET
 
 # foo_component_getFactory functions are split into groups, so that you could

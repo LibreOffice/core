@@ -4,7 +4,6 @@
 # Dumps all the implementing constructors to stdout
 
 import xml.sax
-import os.path
 import sys
 
 constructors = list()
