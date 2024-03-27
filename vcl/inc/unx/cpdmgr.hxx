@@ -38,7 +38,6 @@ typedef struct _GDBusConnection GDBusConnection;
 
 namespace psp
 {
-
 class PPDParser;
 
 struct CPDPrinter
@@ -57,13 +56,13 @@ struct CPDPrinter
 class CPDManager final : public PrinterInfoManager
 {
 #if ENABLE_DBUS && ENABLE_GIO
-    GDBusConnection * m_pConnection = nullptr;
+    GDBusConnection* m_pConnection = nullptr;
     bool m_aPrintersChanged = true;
     std::vector<std::pair<std::string, gchar*>> m_tBackends;
-    std::unordered_map< std::string, GDBusProxy * > m_pBackends;
-    std::unordered_map< FILE*, OString, FPtrHash > m_aSpoolFiles;
-    std::unordered_map< OUString, CPDPrinter * > m_aCPDDestMap;
-    std::unordered_map< OUString, PPDContext > m_aDefaultContexts;
+    std::unordered_map<std::string, GDBusProxy*> m_pBackends;
+    std::unordered_map<FILE*, OString, FPtrHash> m_aSpoolFiles;
+    std::unordered_map<OUString, CPDPrinter*> m_aCPDDestMap;
+    std::unordered_map<OUString, PPDContext> m_aDefaultContexts;
 #endif
     CPDManager();
     // Function called when CPDManager is destroyed
@@ -72,49 +71,45 @@ class CPDManager final : public PrinterInfoManager
     virtual void initialize() override;
 
 #if ENABLE_DBUS && ENABLE_GIO
-    static void onNameAcquired(GDBusConnection *connection, const gchar* name, gpointer user_data);
-    static void onNameLost (GDBusConnection *, const gchar *name, gpointer);
-    static void printerAdded (GDBusConnection *connection,
-                              const gchar     *sender_name,
-                              const gchar     *object_path,
-                              const gchar     *interface_name,
-                              const gchar     *signal_name,
-                              GVariant        *parameters,
-                              gpointer        user_data);
-    static void printerRemoved (GDBusConnection *connection,
-                                const gchar     *sender_name,
-                                const gchar     *object_path,
-                                const gchar     *interface_name,
-                                const gchar     *signal_name,
-                                GVariant        *parameters,
-                                gpointer        user_data);
+    static void onNameAcquired(GDBusConnection* connection, const gchar* name, gpointer user_data);
+    static void onNameLost(GDBusConnection*, const gchar* name, gpointer);
+    static void printerAdded(GDBusConnection* connection, const gchar* sender_name,
+                             const gchar* object_path, const gchar* interface_name,
+                             const gchar* signal_name, GVariant* parameters, gpointer user_data);
+    static void printerRemoved(GDBusConnection* connection, const gchar* sender_name,
+                               const gchar* object_path, const gchar* interface_name,
+                               const gchar* signal_name, GVariant* parameters, gpointer user_data);
 
-    static void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, const OString& rJobName, int& rNumOptions, GVariant **arr );
+    static void getOptionsFromDocumentSetup(const JobData& rJob, bool bBanner,
+                                            const OString& rJobName, int& rNumOptions,
+                                            GVariant** arr);
 #endif
 
 public:
 #if ENABLE_DBUS && ENABLE_GIO
     // Functions involved in initialization
     GDBusProxy* getProxy(const std::string& target);
-    void addBackend( std::pair< std::string, GDBusProxy * > pair );
+    void addBackend(std::pair<std::string, GDBusProxy*> pair);
     void addTempBackend(const std::pair<std::string, gchar*>& pair);
-    std::vector<std::pair<std::string, gchar*>> const & getTempBackends() const;
-    void addNewPrinter( const OUString&, const OUString&, CPDPrinter * );
+    std::vector<std::pair<std::string, gchar*>> const& getTempBackends() const;
+    void addNewPrinter(const OUString&, const OUString&, CPDPrinter*);
 #endif
 
     // Create CPDManager
     static CPDManager* tryLoadCPD();
 
     // Create a PPDParser for CPD Printers
-    const PPDParser* createCPDParser( const OUString& rPrinter );
+    const PPDParser* createCPDParser(const OUString& rPrinter);
 
     // Functions related to printing
-    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand ) override;
-    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) override;
-    virtual void setupJobContextData( JobData& rData ) override;
+    virtual FILE* startSpool(const OUString& rPrinterName, bool bQuickCommand) override;
+    virtual bool endSpool(const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile,
+                          const JobData& rDocumentJobData, bool bBanner,
+                          const OUString& rFaxNumber) override;
+    virtual void setupJobContextData(JobData& rData) override;
 
     // check if the printer configuration has changed
-    virtual bool checkPrintersChanged( bool bWait ) override;
+    virtual bool checkPrintersChanged(bool bWait) override;
 };
 
 } // namespace psp

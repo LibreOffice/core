@@ -14219,7 +14219,6 @@ vcl/inc/textlineinfo.hxx
 vcl/inc/textrender.hxx
 vcl/inc/toolbox.h
 vcl/inc/unx/cairotextrender.hxx
-vcl/inc/unx/cpdmgr.hxx
 vcl/inc/unx/cupsmgr.hxx
 vcl/inc/unx/fc_fontoptions.hxx
 vcl/inc/unx/fontmanager.hxx
@@ -14874,7 +14873,6 @@ vcl/unx/generic/print/prtsetup.cxx
 vcl/unx/generic/print/psputil.cxx
 vcl/unx/generic/print/psputil.hxx
 vcl/unx/generic/print/text_gfx.cxx
-vcl/unx/generic/printer/cpdmgr.cxx
 vcl/unx/generic/printer/cupsmgr.cxx
 vcl/unx/generic/printer/jobdata.cxx
 vcl/unx/generic/printer/ppdparser.cxx
