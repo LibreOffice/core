@@ -620,10 +620,8 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
 
         // the list of states can only be guessed based on standard verbs,
         // since there is no way to detect what additional verbs do
-        // Pass m_pOleComponent to the lambda by copy, to make sure it doesn't depend on possible
-        // destruction of 'this', while the lock is unset
         return GetReachableStatesList_Impl(
-            ExecUnlocked([p = m_pOleComponent] { return p->GetVerbList(); }, aGuard));
+            ExecUnlocked([this] { return m_pOleComponent->GetVerbList(); }, aGuard));
     }
     else
 #endif
