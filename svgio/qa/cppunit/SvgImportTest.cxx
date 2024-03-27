@@ -434,6 +434,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145896)
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[3]"_ostr, "color"_ostr, "#0000ff");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf156579)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf156579.svg");
+
+    // Without the fix in place, nothing would be displayed
+    assertXPath(pDocument, "/primitive2D/transform/mask/transform/polypolygoncolor[1]"_ostr, "color"_ostr, "#0000ff");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf156168)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf156168.svg");
