@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,svgio,\
     comphelper \
     cppu \
     cppuhelper \
+    i18nlangtag \
     sal \
     salhelper \
     tk \
@@ -87,6 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,svgio,\
     svgio/source/svgreader/svgstyleattributes \
     svgio/source/svgreader/svgstylenode \
     svgio/source/svgreader/svgsvgnode \
+    svgio/source/svgreader/svgswitchnode \
     svgio/source/svgreader/svgsymbolnode \
     svgio/source/svgreader/svgtextnode \
     svgio/source/svgreader/svgtextposition \

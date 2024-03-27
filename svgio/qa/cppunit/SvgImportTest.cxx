@@ -422,6 +422,17 @@ CPPUNIT_TEST_FIXTURE(Test, testFontsizeRelative)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "familyname"_ostr, "DejaVu Serif");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf160386)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf160386.svg");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 11
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion"_ostr, 1);
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion"_ostr, "text"_ostr, "Hello!");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf145896)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf145896.svg");

@@ -27,6 +27,7 @@
 #include <svgrectnode.hxx>
 #include <svggradientnode.hxx>
 #include <svggradientstopnode.hxx>
+#include <svgswitchnode.hxx>
 #include <svgsymbolnode.hxx>
 #include <svgusenode.hxx>
 #include <svgcirclenode.hxx>
@@ -203,7 +204,13 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGToken::Switch: //TODO: Support switch element
+                case SVGToken::Switch:
+                {
+                    /// new node for Switch
+                    mpTarget = new SvgSwitchNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
                 case SVGToken::Defs:
                 case SVGToken::G:
                 {
