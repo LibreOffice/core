@@ -268,7 +268,8 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties
         {"CharColor",                "CharColor"},
         {"CharContoured",            "CharContoured"},
         {"CharEmphasis",             "CharEmphasis"},//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
-
+        {"CharEscapement",           "CharEscapement"},
+        {"CharEscapementHeight",     "CharEscapementHeight"},
         {"CharFontFamily",           "CharFontFamily"},
         {"CharFontFamilyAsian",      "CharFontFamilyAsian"},
         {"CharFontFamilyComplex",    "CharFontFamilyComplex"},
