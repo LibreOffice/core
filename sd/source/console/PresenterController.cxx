@@ -51,6 +51,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <svx/unoapi.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -400,6 +401,16 @@ void PresenterController::UpdateViews()
         if (xDrawView.is())
             xDrawView->setCurrentPage(mxCurrentSlide);
     }
+}
+
+void PresenterController::CheckNextSlideUpdate(const Reference<drawing::XShape>& rxShape)
+{
+    if (!mxNextSlide)
+        return;
+
+    // check if shape is member of page or it's masterPage
+    if(IsXShapeAssociatedWithXDrawPage(rxShape, mxNextSlide))
+        UpdateViews();
 }
 
 SharedBitmapDescriptor
