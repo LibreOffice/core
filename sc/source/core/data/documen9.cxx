@@ -440,13 +440,8 @@ bool ScDocument::IsPrintEmpty( SCCOL nStartCol, SCROW nStartRow,
         //  keep vertical part of aMMRect, only update horizontal position
         aMMRect = *pLastMM;
 
-        tools::Long nLeft = 0;
-        SCCOL i;
-        for (i=0; i<nStartCol; i++)
-            nLeft += GetColWidth(i,nTab);
-        tools::Long nRight = nLeft;
-        for (i=nStartCol; i<=nEndCol; i++)
-            nRight += GetColWidth(i,nTab);
+        tools::Long nLeft = GetColWidth(0, nStartCol-1, nTab);
+        tools::Long nRight = nLeft + GetColWidth(nStartCol,nEndCol, nTab);
 
         aMMRect.SetLeft(o3tl::convert(nLeft, o3tl::Length::twip, o3tl::Length::mm100));
         aMMRect.SetRight(o3tl::convert(nRight, o3tl::Length::twip, o3tl::Length::mm100));
