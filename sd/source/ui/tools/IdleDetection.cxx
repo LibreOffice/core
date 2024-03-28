@@ -77,7 +77,7 @@ IdleState IdleDetection::CheckSlideShowRunning()
         if (pBase != nullptr)
         {
             rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( *pBase ) );
-            if( xSlideShow.is() && xSlideShow->isRunning() )
+            if( xSlideShow.is() && xSlideShow->isRunning() && !xSlideShow->IsInteractiveSlideshow()) // IASS
             {
                 if (xSlideShow->isFullScreen())
                     eResult |= IdleState::FullScreenShowActive;
