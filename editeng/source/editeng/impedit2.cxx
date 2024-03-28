@@ -4376,12 +4376,31 @@ tools::Long ImpEditEngine::GetXPos(
     return nX;
 }
 
+/** Is true if paragraph is in the empty cluster of paragraphs at the end */
+bool ImpEditEngine::isInEmptyClusterAtTheEnd(ParaPortion& rPortion)
+{
+    sal_Int32 nPortion = GetParaPortions().GetPos(&rPortion);
+
+    auto& rParagraphs = GetParaPortions();
+    if (rParagraphs.Count() <= 0)
+        return false;
+
+    sal_Int32 nCurrent = rParagraphs.lastIndex();
+    while (nCurrent > 0 && rParagraphs.getRef(nCurrent).IsEmpty())
+    {
+        if (nCurrent == nPortion)
+            return true;
+        nCurrent--;
+    }
+    return false;
+}
+
 void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
 {
     pPortion->nHeight = 0;
     pPortion->nFirstLineOffset = 0;
 
-    if ( !pPortion->IsVisible() )
+    if (!pPortion->IsVisible() || isInEmptyClusterAtTheEnd(*pPortion))
         return;
 
     OSL_ENSURE( pPortion->GetLines().Count(), "Paragraph with no lines in ParaPortion::CalcHeight" );
@@ -4415,7 +4434,6 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
     {
         pPortion->nHeight += scaleYSpacingValue(rULItem.GetLower());   // not in the last
     }
-
 
     if ( !nPortion || maStatus.ULSpaceSummation() )
         return;

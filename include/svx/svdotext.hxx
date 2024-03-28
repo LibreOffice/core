@@ -273,9 +273,9 @@ private:
                                        tools::Rectangle&       rAnchorRect,
                                        tools::Rectangle&       rPaintRect,
                                        Fraction&        aFitXCorrection ) const;
-    void ImpAutoFitText( SdrOutliner& rOutliner ) const;
-    void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting ) const;
-    void autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting) const;
+
+    void setupAutoFitText( SdrOutliner& rOutliner ) const;
+    void setupAutoFitText(SdrOutliner& rOutliner, const Size& rShapeSize) const;
 
     SVX_DLLPRIVATE rtl::Reference<SdrObject> ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpRegisterLink();

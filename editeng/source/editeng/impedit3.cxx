@@ -392,9 +392,108 @@ bool ImpEditEngine::IsPageOverflow( ) const
 
 void ImpEditEngine::FormatFullDoc()
 {
-    for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
-        GetParaPortions()[nPortion]->MarkSelectionInvalid( 0 );
+    for ( sal_Int32 nPortion = 0; nPortion < maParaPortionList.Count(); nPortion++ )
+        maParaPortionList[nPortion]->MarkSelectionInvalid( 0 );
     FormatDoc();
+}
+
+tools::Long ImpEditEngine::FormatParagraphs(o3tl::sorted_vector<sal_Int32>& aRepaintParagraphList)
+{
+    sal_Int32 nParaCount = maParaPortionList.Count();
+    tools::Long nY = 0;
+    bool bGrow = false;
+
+    for (sal_Int32 nParagraph = 0; nParagraph < nParaCount; nParagraph++)
+    {
+        ParaPortion& rParaPortion = maParaPortionList.getRef(nParagraph);
+        if (rParaPortion.MustRepaint() || (rParaPortion.IsInvalid() && rParaPortion.IsVisible()))
+        {
+            // No formatting should be necessary for MustRepaint()!
+            if (CreateLines(nParagraph, nY))
+            {
+                if (!bGrow && GetTextRanger())
+                {
+                    // For a change in height all below must be reformatted...
+                    for (sal_Int32 n = nParagraph + 1; n < nParaCount; n++)
+                    {
+                        ParaPortion& rParaPortionToInvalidate = maParaPortionList.getRef(n);
+                        rParaPortionToInvalidate.MarkSelectionInvalid(0);
+                        rParaPortionToInvalidate.GetLines().Reset();
+                    }
+                }
+                bGrow = true;
+                if (IsCallParaInsertedOrDeleted())
+                {
+                    GetEditEnginePtr()->ParagraphHeightChanged(nParagraph);
+
+                    for (EditView* pView : aEditViews)
+                    {
+                        ImpEditView* pImpView = pView->pImpEditView.get();
+                        pImpView->ScrollStateChange();
+                    }
+
+                }
+                rParaPortion.SetMustRepaint(false);
+            }
+
+            aRepaintParagraphList.insert(nParagraph);
+        }
+        nY += rParaPortion.GetHeight();
+    }
+    return nY;
+}
+
+namespace
+{
+constexpr std::array<ScalingParameters, 13> constScaleLevels =
+{
+    ScalingParameters{100.0, 100.0, 100.0,  90.0 },
+    ScalingParameters{ 92.5,  92.5, 100.0,  90.0 },
+    ScalingParameters{ 92.5,  92.5, 100.0,  80.0 },
+    ScalingParameters{ 85.0,  85.0, 100.0,  90.0 },
+    ScalingParameters{ 85.0,  85.0, 100.0,  80.0 },
+    ScalingParameters{ 77.5,  77.5, 100.0,  80.0 },
+    ScalingParameters{ 70.0,  70.0, 100.0,  80.0 },
+    ScalingParameters{ 62.5,  62.5, 100.0,  80.0 },
+    ScalingParameters{ 55.0,  55.0, 100.0,  80.0 },
+    ScalingParameters{ 47.5,  47.5, 100.0,  80.0 },
+    ScalingParameters{ 40.0,  40.0, 100.0,  80.0 },
+    ScalingParameters{ 32.5,  32.5, 100.0,  80.0 },
+    ScalingParameters{ 25.0,  25.0, 100.0,  80.0 },
+};
+
+} // end anonymous ns
+
+void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRepaintParagraphList)
+{
+    if (!maCustomScalingParameters.areValuesDefault())
+        maScalingParameters = maCustomScalingParameters;
+
+    tools::Long nHeight = FormatParagraphs(aRepaintParagraphList);
+    bool bOverflow = nHeight > (maMaxAutoPaperSize.Height() * mnColumns);
+
+    size_t nCurrentScaleLevel = 0;
+    while (bOverflow && nCurrentScaleLevel < constScaleLevels.size())
+    {
+        // Clean-up and reset paragraphs
+        aRepaintParagraphList.clear();
+        for (auto& pParaPortionToInvalidate : maParaPortionList)
+        {
+            pParaPortionToInvalidate->GetLines().Reset();
+            pParaPortionToInvalidate->MarkSelectionInvalid(0);
+            pParaPortionToInvalidate->SetMustRepaint(true);
+        }
+
+        // Get new scaling parameters
+        maScalingParameters = constScaleLevels[nCurrentScaleLevel];
+
+        // Try again with different scaling factor
+        nHeight = FormatParagraphs(aRepaintParagraphList);
+        bOverflow = nHeight > (maMaxAutoPaperSize.Height() * mnColumns);
+
+        // Increase scale level
+        nCurrentScaleLevel++;
+    }
 }
 
 void ImpEditEngine::FormatDoc()
@@ -405,55 +504,19 @@ void ImpEditEngine::FormatDoc()
     mbIsFormatting = true;
 
     // Then I can also start the spell-timer...
-    if ( GetStatus().DoOnlineSpelling() )
+    if (GetStatus().DoOnlineSpelling())
         StartOnlineSpellTimer();
 
-    tools::Long nY = 0;
-    bool bGrow = false;
-
-    // Here already, so that not always in CreateLines...
+    // Reserve, as it should match the current number of paragraphs
     bool bMapChanged = ImpCheckRefMapMode();
-    sal_Int32 nParaCount = GetParaPortions().Count();
-    o3tl::sorted_vector<sal_Int32> aRepaintParas;
-    aRepaintParas.reserve(nParaCount);
 
-    for ( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
-    {
-        ParaPortion* pParaPortion = GetParaPortions()[nPara];
-        if ( pParaPortion->MustRepaint() || ( pParaPortion->IsInvalid() && pParaPortion->IsVisible() ) )
-        {
-            // No formatting should be necessary for MustRepaint()!
-            if ( !pParaPortion->IsInvalid() || CreateLines( nPara, nY ) )
-            {
-                if ( !bGrow && GetTextRanger() )
-                {
-                    // For a change in height all below must be reformatted...
-                    for ( sal_Int32 n = nPara+1; n < GetParaPortions().Count(); n++ )
-                    {
-                        ParaPortion* pPP = GetParaPortions()[n];
-                        pPP->MarkSelectionInvalid( 0 );
-                        pPP->GetLines().Reset();
-                    }
-                }
-                bGrow = true;
-                if ( IsCallParaInsertedOrDeleted() )
-                {
-                    GetEditEnginePtr()->ParagraphHeightChanged( nPara );
+    o3tl::sorted_vector<sal_Int32> aRepaintParagraphList;
+    aRepaintParagraphList.reserve(maParaPortionList.Count());
 
-                    for (EditView* pView : aEditViews)
-                    {
-                        ImpEditView* pImpView = pView->pImpEditView.get();
-                        pImpView->ScrollStateChange();
-                    }
-
-                }
-                pParaPortion->SetMustRepaint( false );
-            }
-
-            aRepaintParas.insert(nPara);
-        }
-        nY += pParaPortion->GetHeight();
-    }
+    if (maStatus.DoStretch())
+        ScaleContentToFitWindow(aRepaintParagraphList);
+    else
+        FormatParagraphs(aRepaintParagraphList);
 
     aInvalidRect = tools::Rectangle(); // make empty
 
@@ -493,10 +556,10 @@ void ImpEditEngine::FormatDoc()
             }
         }
 
-        if (!aRepaintParas.empty())
+        if (!aRepaintParagraphList.empty())
         {
             auto CombineRepaintParasAreas = [&](const LineAreaInfo& rInfo) {
-                if (aRepaintParas.count(rInfo.nPortion))
+                if (aRepaintParagraphList.count(rInfo.nPortion))
                     aInvalidRect.Union(rInfo.aArea);
                 return CallbackResult::Continue;
             };
@@ -1015,9 +1078,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         if (maStatus.DoStretch() && (fFontScalingX != 100.0))
                             nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(fFontScalingX, 1.0));
 
-                        short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTextLeft()/* + rLRItem.GetTextLeft()*/ + nSpaceBeforeAndMinLabelWidth);
-                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, maEditDoc.GetDefTab() );
-                        aCurrentTab.nTabPos = scaleXFontValue(tools::Long(aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText/*rLRItem.GetTextLeft()*/));
+                        short nAllSpaceBeforeText = short(rLRItem.GetTextLeft());
+                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText , maEditDoc.GetDefTab() );
+                        aCurrentTab.nTabPos = tools::Long(aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText);
                         aCurrentTab.bValid = false;
 
                         // Switch direction in R2L para...
@@ -4470,7 +4533,7 @@ void ImpEditEngine::setScalingParameters(ScalingParameters const& rScalingParame
     }
 
     bool bScalingChanged = maScalingParameters != aNewScalingParameters;
-    maScalingParameters = aNewScalingParameters;
+    maCustomScalingParameters = maScalingParameters = aNewScalingParameters;
 
     if (bScalingChanged && maStatus.DoStretch())
     {

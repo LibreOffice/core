@@ -662,7 +662,9 @@ public:
 class ParaPortionList
 {
     mutable sal_Int32 nLastCache;
-    std::vector<std::unique_ptr<ParaPortion>> maPortions;
+    typedef std::vector<std::unique_ptr<ParaPortion>> ParaPortionContainerType;
+    ParaPortionContainerType maPortions;
+
 public:
                     ParaPortionList();
                     ~ParaPortionList();
@@ -683,6 +685,16 @@ public:
     void Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p);
     void Append(std::unique_ptr<ParaPortion> p);
     sal_Int32 Count() const;
+
+    ParaPortion& getRef(sal_Int32 nPosition) { return *maPortions[nPosition]; }
+    ParaPortion const& getRef(sal_Int32 nPosition) const { return *maPortions[nPosition]; }
+
+    sal_Int32 lastIndex() const { return Count() - 1; }
+
+    ParaPortionContainerType::iterator begin() { return maPortions.begin(); }
+    ParaPortionContainerType::iterator end() { return maPortions.end(); }
+    ParaPortionContainerType::const_iterator cbegin() const { return maPortions.cbegin(); }
+    ParaPortionContainerType::const_iterator cend() const { return maPortions.cend(); }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     // temporary:

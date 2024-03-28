@@ -897,7 +897,7 @@ public:
     /// Set attributes from rSet an all characters of nPara.
     void SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet);
     void            RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
-    void            QuickFormatDoc();
+    void QuickFormatDoc();
 
     bool            UpdateFields();
     void            RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData = [] (const SvxFieldData* ){return true;} );

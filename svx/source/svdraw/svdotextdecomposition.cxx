@@ -937,11 +937,11 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
         rOutliner.SetMinColumnWrapHeight(nAnchorTextWidth);
     }
 
-    rOutliner.SetPaperSize(aNullSize);
+    rOutliner.SetPaperSize(aAnchorTextSize);
     rOutliner.SetUpdateLayout(true);
     rOutliner.SetText(*pOutlinerParaObject);
-    ImpAutoFitText(rOutliner,aAnchorTextSize,bVerticalWriting);
 
+    setupAutoFitText(rOutliner, aAnchorTextSize);
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
