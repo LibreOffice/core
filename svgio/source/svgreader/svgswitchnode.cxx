@@ -112,7 +112,7 @@ void SvgSwitchNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DConta
             if (pNodeToDecompose)
             {
                 pNodeToDecompose->decomposeSvgNode(aContent, bReferenced);
-                // break once it's descomposed
+                // break once it's decomposed
                 break;
             }
         }
