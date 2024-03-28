@@ -1513,7 +1513,7 @@ namespace svgio::svgreader
                 {
                     SvgStringVector aSvgStringVector;
 
-                    if(readSvgStringVector(aContent, aSvgStringVector))
+                    if(readSvgStringVector(aContent, aSvgStringVector, ','))
                     {
                         maFontFamily = aSvgStringVector;
                     }

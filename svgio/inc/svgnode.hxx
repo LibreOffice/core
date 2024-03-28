@@ -21,6 +21,7 @@
 
 #include "SvgNumber.hxx"
 #include "svgtoken.hxx"
+#include "svgtools.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <memory>
@@ -96,7 +97,7 @@ namespace svgio::svgreader
             std::optional<OUString>   mpClass;
 
             /// systemLanguage values
-            std::vector<OUString>  maSystemLanguage;
+            SvgStringVector  maSystemLanguage;
 
             /// XmlSpace value
             XmlSpace                    maXmlSpace;
@@ -179,7 +180,6 @@ namespace svgio::svgreader
 
             /// SystemLanguage access
             std::vector<OUString> const & getSystemLanguage() const { return maSystemLanguage; }
-            void setSystemLanguage(OUString const &);
 
             /// XmlSpace access
             XmlSpace getXmlSpace() const;

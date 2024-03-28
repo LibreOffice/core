@@ -122,7 +122,7 @@ namespace svgio::svgreader
         SvgAspectRatio readSvgAspectRatio(std::u16string_view rCandidate);
 
         typedef ::std::vector< OUString > SvgStringVector;
-        bool readSvgStringVector(std::u16string_view rCandidate, SvgStringVector& rSvgStringVector);
+        bool readSvgStringVector(std::u16string_view rCandidate, SvgStringVector& rSvgStringVector, sal_Unicode nSeparator);
 
         void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rData);
 

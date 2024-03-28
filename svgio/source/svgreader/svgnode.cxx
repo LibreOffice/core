@@ -525,9 +525,11 @@ namespace {
                 }
                 case SVGToken::SystemLanguage:
                 {
-                    if(!aContent.isEmpty())
+                    SvgStringVector aSvgStringVector;
+
+                    if(readSvgStringVector(aContent, aSvgStringVector, ','))
                     {
-                        setSystemLanguage(aContent);
+                        maSystemLanguage = aSvgStringVector;
                     }
                     break;
                 }
@@ -753,34 +755,6 @@ namespace {
 
             mpClass = rClass;
             mrDocument.addSvgNodeToMapper(*mpClass, *this);
-        }
-
-        void SvgNode::setSystemLanguage(OUString const & rSystemClass)
-        {
-            const sal_Int32 nLen(rSystemClass.getLength());
-            sal_Int32 nPos(0);
-            OUStringBuffer aToken;
-
-            // split into single tokens (currently only comma separator)
-            while(nPos < nLen)
-            {
-                const sal_Int32 nInitPos(nPos);
-                copyToLimiter(rSystemClass, u',', nPos, aToken, nLen);
-                skip_char(rSystemClass, u',', nPos, nLen);
-                const OUString aLang(o3tl::trim(aToken));
-                aToken.setLength(0);
-
-                if(!aLang.isEmpty())
-                {
-                    maSystemLanguage.push_back(aLang);
-                }
-
-                if(nInitPos == nPos)
-                {
-                    OSL_ENSURE(false, "Could not interpret on current position (!)");
-                    nPos++;
-                }
-            }
         }
 
         XmlSpace SvgNode::getXmlSpace() const

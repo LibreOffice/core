@@ -1313,7 +1313,7 @@ namespace svgio::svgreader
             return SvgAspectRatio();
         }
 
-        bool readSvgStringVector(std::u16string_view rCandidate, SvgStringVector& rSvgStringVector)
+        bool readSvgStringVector(std::u16string_view rCandidate, SvgStringVector& rSvgStringVector, sal_Unicode nSeparator)
         {
             rSvgStringVector.clear();
             const sal_Int32 nLen(rCandidate.size());
@@ -1326,8 +1326,8 @@ namespace svgio::svgreader
 
                 while(nPos < nLen)
                 {
-                    copyToLimiter(rCandidate, ',', nPos, aTokenValue, nLen);
-                    skip_char(rCandidate, ',', ' ', nPos, nLen);
+                    copyToLimiter(rCandidate, nSeparator, nPos, aTokenValue, nLen);
+                    skip_char(rCandidate, nSeparator, nPos, nLen);
                     const OUString aString = aTokenValue.makeStringAndClear();
 
                     if(!aString.isEmpty())

@@ -75,36 +75,9 @@ namespace svgio::svgreader
         {
             // aSelectors: CssStyle selectors, any combination, no comma separations, no spaces at start/end
             // rNewStyle: the already prepared style to register on that name
-            if(aSelectors.empty())
-                return;
+            SvgStringVector aSelectorParts;
 
-            std::vector< OUString > aSelectorParts;
-            const sal_Int32 nLen(aSelectors.size());
-            sal_Int32 nPos(0);
-            OUStringBuffer aToken;
-
-            // split into single tokens (currently only space separator)
-            while(nPos < nLen)
-            {
-                const sal_Int32 nInitPos(nPos);
-                copyToLimiter(aSelectors, u' ', nPos, aToken, nLen);
-                skip_char(aSelectors, u' ', nPos, nLen);
-                const OUString aSelectorPart(o3tl::trim(aToken));
-                aToken.setLength(0);
-
-                if(!aSelectorPart.isEmpty())
-                {
-                    aSelectorParts.push_back(aSelectorPart);
-                }
-
-                if(nInitPos == nPos)
-                {
-                    OSL_ENSURE(false, "Could not interpret on current position (!)");
-                    nPos++;
-                }
-            }
-
-            if(aSelectorParts.empty())
+            if(!readSvgStringVector(aSelectors, aSelectorParts, ' '))
                 return;
 
             OUStringBuffer aConcatenatedSelector;
