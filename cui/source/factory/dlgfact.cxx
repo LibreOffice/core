@@ -1540,6 +1540,7 @@ AbstractDialogFactory_Impl::CreateWhatsNewDialog(weld::Window* pParent, const bo
         std::make_shared<WhatsNewDialog>(pParent, bWelcome));
 #else
     (void) pParent;
+    (void) bWelcome;
     return nullptr;
 #endif
 }
