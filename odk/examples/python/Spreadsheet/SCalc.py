@@ -13,6 +13,7 @@ import traceback
 
 import officehelper
 from com.sun.star.awt import Rectangle
+from com.sun.star.lang import IndexOutOfBoundsException
 
 """
 Step 1: get the remote component context from the office
@@ -35,7 +36,10 @@ def main():
         desktop = srv_mgr.createInstanceWithContext(
             "com.sun.star.frame.Desktop", remote_context
         )
-    except:
+    # removing bare except: and handling it similar to the try/except already
+    # committed in other parts of this script
+    except Exception as e:
+        print(f"Couldn't get Sheet: {e}")
         traceback.print_exc()
         sys.exit(1)
 
@@ -48,7 +52,10 @@ def main():
     doc_url = "private:factory/scalc"
     try:
         doc = desktop.loadComponentFromURL(doc_url, "_blank", 0, tuple())
-    except:
+    # removing bare except: and handling it similar to the try/except already
+    # committed in other parts of this script
+    except Exception as e:
+        print(f"Couldn't get Sheet: {e}")
         traceback.print_exc()
         return
 
@@ -69,7 +76,10 @@ def main():
         cell_styles["My Style2"] = cell_style
         cell_style.IsCellBackgroundTransparent = False
         cell_style.CellBackColor = 13421823
-    except:
+    # removing bare except: and handling it similar to the try/except already
+    # committed in other parts of this script
+    except Exception as e:
+        print(f"Couldn't get Sheet: {e}")
         traceback.print_exc()
 
     # oooooooooooooooooooooooooooStep 4oooooooooooooooooooooooooooooooooooooooooo
@@ -196,7 +206,7 @@ def main():
 def insert_into_cell(column: int, row: int, value: str, sheet, flag: str):
     try:
         cell = sheet[row, column]
-    except com.sun.star.lang.IndexOutOfBoundsException:
+    except IndexOutOfBoundsException:
         print("Could not get Cell", file=sys.stderr)
         traceback.print_exc()
     else:
@@ -210,7 +220,7 @@ def change_backcolor(left: int, top: int, right: int, bottom: int, template: str
     try:
         cell_range = sheet[top:bottom + 1, left:right + 1]
         cell_range.CellStyle = template
-    except com.sun.star.lang.IndexOutOfBoundsException:
+    except IndexOutOfBoundsException:
         print("Could not get CellRange", file=sys.stderr)
         traceback.print_exc()
     except Exception as e:

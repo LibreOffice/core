@@ -14,6 +14,7 @@ from typing import Union
 
 import officehelper
 from com.sun.star.awt import Rectangle
+from com.sun.star.lang import IndexOutOfBoundsException
 
 
 def main():
@@ -85,7 +86,7 @@ def main():
 def insert_into_cell(column: int, row: int, value: Union[str, float], sheet):
     try:
         cell = sheet[row, column]
-    except com.sun.star.lang.IndexOutOfBoundsException:
+    except IndexOutOfBoundsException:
         print("Could not get Cell", file=sys.stderr)
         traceback.print_exc()
     else:
