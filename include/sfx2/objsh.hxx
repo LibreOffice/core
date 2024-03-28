@@ -239,6 +239,7 @@ private:
 
 public:
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+
     /* Stampit disable/enable cancel button for print jobs
        default = true = enable! */
     void                        Stamp_SetPrintCancelState(bool bState);
@@ -698,6 +699,9 @@ public:
                                 const OUString& sSecondaryMessage, InfobarType aInfobarType,
                                 bool bShowCloseButton = true);
     std::vector<InfobarData>& getPendingInfobars();
+
+    // Destruction of storages and streams
+    void InternalCloseAndRemoveFiles();
 
     SAL_DLLPRIVATE bool CreatePreview_Impl(bool bFullContent, VirtualDevice* pDevice, GDIMetaFile* pFile) const;
 

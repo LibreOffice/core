@@ -1471,6 +1471,19 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
 
 LibLODocument_Impl::~LibLODocument_Impl()
 {
+    if (comphelper::LibreOfficeKit::isForkedChild())
+    {
+        // Touch the least memory possible, while trying to avoid leaking files.
+        SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+        if (pBaseModel)
+        {
+            SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+            if (pObjectShell)
+                pObjectShell->InternalCloseAndRemoveFiles();
+        }
+        return;
+    }
+
     try
     {
         mxComponent->dispose();
