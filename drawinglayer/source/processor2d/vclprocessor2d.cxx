@@ -142,8 +142,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
     // especially if the effect is less than a pixel.
     if (std::abs(aFontScaling.getY() * fShearX) < 1)
     {
-        if (basegfx::fTools::less(aFontScaling.getX(), 0.0)
-            && basegfx::fTools::less(aFontScaling.getY(), 0.0))
+        if (aFontScaling.getX() < 0.0 && aFontScaling.getY() < 0.0)
         {
             // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
             // be expressed as rotation by PI. Use this since the Font rendering will not
@@ -152,8 +151,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             fRotate += M_PI;
         }
 
-        if (basegfx::fTools::more(aFontScaling.getX(), 0.0)
-            && basegfx::fTools::more(aFontScaling.getY(), 0.0))
+        if (aFontScaling.getX() > 0.0 && aFontScaling.getY() > 0.0)
         {
             double fIgnoreRotate, fIgnoreShearX;
 
@@ -1099,7 +1097,7 @@ void VclProcessor2D::RenderPolygonStrokePrimitive2D(
     const double fLineWidth(rLineAttribute.getWidth());
     bool bDone(false);
 
-    if (basegfx::fTools::more(fLineWidth, 0.0))
+    if (fLineWidth > 0.0)
     {
         const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation
                                                * basegfx::B2DVector(fLineWidth, 0.0));
@@ -1348,7 +1346,7 @@ void VclProcessor2D::RenderSvgLinearAtomPrimitive2D(
 {
     const double fDelta(rCandidate.getOffsetB() - rCandidate.getOffsetA());
 
-    if (!basegfx::fTools::more(fDelta, 0.0))
+    if (fDelta <= 0.0)
         return;
 
     const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
@@ -1392,7 +1390,7 @@ void VclProcessor2D::RenderSvgRadialAtomPrimitive2D(
 {
     const double fDeltaScale(rCandidate.getScaleB() - rCandidate.getScaleA());
 
-    if (!basegfx::fTools::more(fDeltaScale, 0.0))
+    if (fDeltaScale <= 0.0)
         return;
 
     const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
