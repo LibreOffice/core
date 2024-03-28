@@ -1238,7 +1238,9 @@ void SAL_CALL ChartController::dispatch(
             this->executeDispatch_PositionAndSize();
         }
     }
-    else if( lcl_isFormatObjectCommand(aCommand) )
+    else if ( aCommand == "FontDialog" )
+        this->impl_ShapeControllerDispatch(rURL, rArgs);
+    else if (lcl_isFormatObjectCommand(aCommand))
         this->executeDispatch_FormatObject(rURL.Path);
     //more format
     else if( aCommand == "DiagramType" )
@@ -1605,7 +1607,7 @@ const o3tl::sorted_vector< OUString >& ChartController::impl_getAvailableCommand
         "InsertMenuDataTable",
         "InsertDataTable", "DeleteDataTable",
         //format objects
-        "FormatSelection",     "TransformDialog",
+        "FormatSelection",    "FontDialog",           "TransformDialog",
         "DiagramType",        "View3D",
         "Forward",            "Backward",
         "MainTitle",          "SubTitle",
