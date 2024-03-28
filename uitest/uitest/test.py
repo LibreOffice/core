@@ -190,13 +190,17 @@ class UITest(object):
                 time.sleep(DEFAULT_SLEEP)
 
     def close_dialog_through_button(self, button):
+        dialog = self._xUITest.getTopFocusWindow()
         with EventListener(self._xContext, "DialogClosed" ) as event:
             button.executeAction("CLICK", tuple())
             while True:
                 if event.executed:
                     time.sleep(DEFAULT_SLEEP)
-                    return
+                    break
                 time.sleep(DEFAULT_SLEEP)
+        parent = self._xUITest.getTopFocusWindow()
+        if parent == dialog:
+            raise Exception("executing the action did not close the dialog")
 
     def close_doc(self):
         desktop = self.get_desktop()
