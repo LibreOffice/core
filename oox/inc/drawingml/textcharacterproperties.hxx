@@ -64,6 +64,12 @@ struct TextCharacterProperties
     /// Set if there was a property set that alters run visually during import
     bool mbHasVisualRunProperties;
 
+    /// Set if there was an empty paragraph property set during import
+    /// <a:pPr><a:defRPr/></a:pPr>
+    /// In that case we use the default paragraph properties from the
+    /// <c:txPr><a:p><a:pPr><a:defRPr>...</a:defRPr>
+    bool mbHasEmptyParaProperties;
+
     std::vector<css::beans::PropertyValue> maTextEffectsProperties;
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
@@ -84,7 +90,7 @@ struct TextCharacterProperties
                             PropertySet& rPropSet,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
 
-    TextCharacterProperties() : mbHasVisualRunProperties(false) {}
+    TextCharacterProperties() : mbHasVisualRunProperties(false), mbHasEmptyParaProperties(false) {}
 };
 
 
