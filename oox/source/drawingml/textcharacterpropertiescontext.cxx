@@ -50,6 +50,9 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
     int nVisualTokenAmount = sax_fastparser::castToFastAttributeList(
                 rAttribs.getFastAttributeList() ).getFastAttributeTokens().size();
 
+    if (nVisualTokenAmount == 0)
+        mrTextCharacterProperties.mbHasEmptyParaProperties = true;
+
     if ( rAttribs.hasAttribute( XML_lang ) )
     {
         mrTextCharacterProperties.moLang = rAttribs.getString( XML_lang );
