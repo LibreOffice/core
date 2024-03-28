@@ -15,6 +15,7 @@ Script to generate https://wiki.documentfoundation.org/Development/DispatchComma
 """
 
 import os
+import sys
 
 # It is assumed that the script is called from $BUILDDIR;
 # and __file__ refers to the script location in $SRCDIR.
