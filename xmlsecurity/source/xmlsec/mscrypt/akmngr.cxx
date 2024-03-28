@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <xmlsec-wrapper.h>
 
 #include "akmngr.hxx"
 

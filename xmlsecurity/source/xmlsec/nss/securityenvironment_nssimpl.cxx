@@ -29,8 +29,6 @@
 #include "securityenvironment_nssimpl.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
-#include <xmlsec-wrapper.h>
-
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>

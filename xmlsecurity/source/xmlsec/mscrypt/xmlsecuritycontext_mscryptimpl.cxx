@@ -18,12 +18,12 @@
  */
 
 #include <sal/config.h>
-#include <xmlsec-wrapper.h>
 
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include "securityenvironment_mscryptimpl.hxx"
 
 #include <xmlsec/xmlstreamio.hxx>
+
 #include "akmngr.hxx"
 
 #include <cppuhelper/supportsservice.hxx>

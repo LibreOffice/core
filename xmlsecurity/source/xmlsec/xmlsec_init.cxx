@@ -8,7 +8,6 @@
  */
 
 #include <sal/config.h>
-#include <xmlsec-wrapper.h>
 
 #include <xmlsec/xmlsec_init.hxx>
 

@@ -136,7 +136,6 @@
 #include <xmloff/dllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <xmlsec-wrapper.h>
 #include <xsecxmlsecdllapi.h>
 #endif // PCH_LEVEL >= 4
 

@@ -26,7 +26,6 @@
 
 #include <key.h>
 #include <keylistresult.h>
-#include <xmlsec-wrapper.h>
 #include <libxml/xmlstring.h>
 #include <xmlsec/base64.h>
 #include <xmlsec/xmlsec.h>

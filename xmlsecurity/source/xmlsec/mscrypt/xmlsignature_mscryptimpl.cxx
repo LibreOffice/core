@@ -20,8 +20,9 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <rtl/uuid.h>
-#include <xmlsec-wrapper.h>
 
+#include <xmlsec/xmldsig.h>
+#include <xmlsec/xmltree.h> // this MUST precde the mscng/x509.h for some reason
 #include <xmlsec/mscng/x509.h>
 
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>

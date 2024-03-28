@@ -25,6 +25,9 @@
 #include <windows.h>
 #include <wincrypt.h>
 #include <sal/config.h>
+
+#include <xmlsec/keysmngr.h>
+
 #include <rtl/ustring.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/factory.hxx>
@@ -41,7 +44,6 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 
 #include <vector>
-#include <xmlsec-wrapper.h>
 
 #include <sal/types.h>
 

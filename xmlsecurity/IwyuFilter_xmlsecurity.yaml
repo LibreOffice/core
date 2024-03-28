@@ -95,9 +95,6 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/xml/wrapper/XXMLElementWrapper.hpp
-    xmlsecurity/source/xmlsec/errorcallback.cxx:
-    # Needed for xmlsec/errors.h
-    - xmlsec-wrapper.h
     xmlsecurity/source/xmlsec/xmlstreamio.cxx:
     # comphelper::ScopeGuard is in use but not noticed by IWYU
     - comphelper/scopeguard.hxx

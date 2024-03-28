@@ -22,6 +22,8 @@
 #include <cstddef>
 #include <string.h>
 
+#include <xmlsec/base64.h>
+
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
@@ -36,7 +38,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <xmlsec-wrapper.h>
 #include "akmngr.hxx"
 
 #include <biginteger.hxx>
