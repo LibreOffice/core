@@ -2091,17 +2091,19 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
         else
         {
             // These columns are visible.  Check for empty columns.
-            for (SCCOL j = i; j <= nLastCol; ++j)
+            SCCOL nEmptyCount = 0;
+            SCCOL j = i;
+            for (; j <= nLastCol; ++j)
             {
                 if ( j >= aCol.size() )
-                {
-                    aSkipCols.setTrue( j, rDocument.MaxCol() );
                     break;
-                }
-                if (aCol[j].GetCellCount() == 0)
-                    // empty
-                    aSkipCols.setTrue(j,j);
+                if (aCol[j].GetCellCount() == 0) // empty
+                    nEmptyCount++;
             }
+            if (nEmptyCount)
+                aSkipCols.setTrue(i,i+nEmptyCount);
+            if ( j >= aCol.size() )
+                aSkipCols.setTrue( j, rDocument.MaxCol() );
         }
         i = nLastCol;
     }
