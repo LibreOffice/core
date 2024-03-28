@@ -39,6 +39,7 @@ public: //methods
 
     bool isResizeableObjectSelected() const;
     bool isRotateableObjectSelected( const rtl::Reference<::chart::ChartModel>& xChartModel ) const;
+    bool isTitleObjectSelected() const;
     bool isDragableObjectSelected() const;
 
     bool isAdditionalShapeSelected() const;

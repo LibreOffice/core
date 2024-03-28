@@ -745,6 +745,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
     bool bMouseUpWithoutMouseDown = !m_bWaitingForMouseUp;
     m_bWaitingForMouseUp = false;
     bool bNotifySelectionChange = false;
+    bool bEditText = false;
     {
         SolarMutexGuard aGuard;
 
@@ -921,7 +922,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if( isDoubleClick(rMEvt) && !bMouseUpWithoutMouseDown /*#i106966#*/ )
         {
             Point aMousePixel = rMEvt.GetPosPixel();
-            execute_DoubleClick( &aMousePixel );
+            execute_DoubleClick( &aMousePixel, bEditText );
         }
 
         if( m_aSelection.isSelectionDifferentFromBeforeMouseDown() )
@@ -930,18 +931,17 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
     impl_SetMousePointer( rMEvt );
 
-    if(bNotifySelectionChange)
+    if(bNotifySelectionChange || bEditText)
         impl_notifySelectionChangeListeners();
 }
 
-void ChartController::execute_DoubleClick( const Point* pMousePixel )
+void ChartController::execute_DoubleClick( const Point* pMousePixel, bool &bEditText )
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     bool isMobilePhone = pViewShell && pViewShell->isLOKMobilePhone();
     if (isMobilePhone)
         return;
 
-    bool bEditText = false;
     if ( m_aSelection.hasSelection() )
     {
         OUString aCID( m_aSelection.getSelectedCID() );
@@ -1036,6 +1036,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
             OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, aFormatCommand );
+            if (eObjectType == OBJECTTYPE_TITLE && m_pDrawViewWrapper->IsTextEdit())
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FontDialog" );
 
             //some commands for dataseries and points:
 

@@ -314,6 +314,11 @@ bool Selection::isDragableObjectSelected() const
     return m_aSelectedOID.isDragableObject();
 }
 
+bool Selection::isTitleObjectSelected() const
+{
+    return m_aSelectedOID.getObjectType() == OBJECTTYPE_TITLE;
+}
+
 bool Selection::isAdditionalShapeSelected() const
 {
     return m_aSelectedOID.isAdditionalShape();
