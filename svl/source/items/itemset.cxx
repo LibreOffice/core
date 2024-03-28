@@ -1920,6 +1920,35 @@ sal_uInt16 SfxItemSet::GetWhichByOffset( sal_uInt16 nOffset ) const
     return GetRanges().getWhichFromOffset(nOffset);
 }
 
+const SfxPoolItem& SfxItemSet::GetByOffset( sal_uInt16 nWhich, sal_uInt16 nOffset ) const
+{
+    assert(nOffset < TotalCount());
+
+    const_iterator aFoundOne(begin() + nOffset);
+
+    if (nullptr != *aFoundOne)
+    {
+        if (IsInvalidItem(*aFoundOne))
+        {
+            return GetPool()->GetUserOrPoolDefaultItem(nWhich);
+        }
+#ifdef DBG_UTIL
+        if (IsDisabledItem(*aFoundOne))
+            SAL_INFO("svl.items", "SFX_WARNING: Getting disabled Item");
+#endif
+        return **aFoundOne;
+    }
+
+    if (nullptr != GetParent())
+    {
+        return GetParent()->Get(nWhich, /*bSrchInParent*/true);
+    }
+
+    // Get the Default from the Pool and return
+    assert(m_pPool);
+    return GetPool()->GetUserOrPoolDefaultItem(nWhich);
+}
+
 bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
 {
     return Equals( rCmp, true);

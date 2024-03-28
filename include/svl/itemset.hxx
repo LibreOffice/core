@@ -217,6 +217,10 @@ public:
 
     sal_uInt16                  GetWhichByOffset(sal_uInt16 nOffset) const;
 
+    // Optimised variant for those situations where we know exactly what our which ranges are,
+    // and we can determine the offset at compile time.
+    const SfxPoolItem&          GetByOffset(sal_uInt16 nWhich, sal_uInt16 nOffset) const;
+
     SfxItemState GetItemState(sal_uInt16 nWhich, bool bSrchInParent = true, const SfxPoolItem **ppItem = nullptr) const
     {
         // use local helper, start value for looped-through SfxItemState value is SfxItemState::UNKNOWN

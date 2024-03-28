@@ -745,7 +745,7 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     if( GetXFId() == EXC_XFID_NOTFOUND )
     {
        OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
-       bool bForceLineBreak = pPattern->GetItemSet().Get(ATTR_LINEBREAK ).GetValue();
+       bool bForceLineBreak = pPattern->GetItem(ATTR_LINEBREAK ).GetValue();
        SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
     }
 
@@ -832,7 +832,7 @@ XclExpFormulaCell::XclExpFormulaCell(
 
         // current cell number format
         sal_uInt32 nScNumFmt = pPattern ?
-            pPattern->GetItemSet().Get( ATTR_VALUE_FORMAT ).GetValue() :
+            pPattern->GetItem( ATTR_VALUE_FORMAT ).GetValue() :
             rNumFmtBfr.GetStandardFormat();
 
         // alternative number format passed to XF buffer
@@ -2634,7 +2634,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
                 if (pPattern)
                 {
-                    OUString aUrl = pPattern->GetItemSet().Get(ATTR_HYPERLINK).GetValue();
+                    OUString aUrl = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
                     if (!aUrl.isEmpty())
                     {
                         rtl::Reference<XclExpHyperlink> aLink =
@@ -2646,7 +2646,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 // try to create a Boolean cell
                 if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
                 {
-                    sal_uInt32 nScNumFmt = pPattern->GetItemSet().Get( ATTR_VALUE_FORMAT ).GetValue();
+                    sal_uInt32 nScNumFmt = pPattern->GetItem( ATTR_VALUE_FORMAT ).GetValue();
                     if( rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL )
                         xCell = new XclExpBooleanCell(
                             GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 );
@@ -2691,7 +2691,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             {
                 if (pPattern)
                 {
-                    OUString aUrl = pPattern->GetItemSet().Get(ATTR_HYPERLINK).GetValue();
+                    OUString aUrl = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
                     if (!aUrl.isEmpty())
                     {
                         rtl::Reference<XclExpHyperlink> aLink =

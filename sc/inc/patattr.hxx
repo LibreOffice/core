@@ -28,6 +28,7 @@
 #include "scdllapi.h"
 #include "fonthelper.hxx"
 #include "scitems.hxx"
+#include "attrib.hxx"
 #include <unordered_set>
 
 namespace vcl { class Font; }
@@ -137,7 +138,7 @@ public:
     const SfxItemSet& GetItemSet() const { return maLocalSfxItemSet; }
     SfxItemSet& GetItemSet() { return maLocalSfxItemSet; }
 
-    const SfxPoolItem& GetItem(sal_uInt16 nWhichP) const { return maLocalSfxItemSet.Get(nWhichP); }
+    const SfxPoolItem& GetItem(sal_uInt16 nWhichP) const { return maLocalSfxItemSet.GetByOffset(nWhichP, nWhichP - ATTR_PATTERN_START); }
     template<class T> const T& GetItem( TypedWhichId<T> nWhich ) const
         { return static_cast<const T&>(GetItem(sal_uInt16(nWhich))); }
     static const SfxPoolItem& GetItem(sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet);

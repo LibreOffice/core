@@ -1057,7 +1057,7 @@ static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner
     if ( rMerge.GetRowMerge() == nDistBottom + 1 )
         nDistBottom = 0;
 
-    const SvxBoxItem* pCellFrame = &pPattern->GetItemSet().Get( ATTR_BORDER );
+    const SvxBoxItem* pCellFrame = &pPattern->GetItem( ATTR_BORDER );
     const SvxBorderLine* pLeftAttr   = pCellFrame->GetLeft();
     const SvxBorderLine* pRightAttr  = pCellFrame->GetRight();
     const SvxBorderLine* pTopAttr    = pCellFrame->GetTop();
@@ -1159,7 +1159,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem&     rBoxItem,
     OSL_ENSURE( pBoxInfoItem, "Missing line attributes!" );
 
     const ScPatternAttr* pPattern = GetPattern( nStartRow );
-    const SvxBoxItem* pOldFrame = &pPattern->GetItemSet().Get( ATTR_BORDER );
+    const SvxBoxItem* pOldFrame = &pPattern->GetItem( ATTR_BORDER );
 
     // right/bottom border set when connected together
     const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);

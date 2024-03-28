@@ -976,12 +976,12 @@ inline const ScPatternAttr* ScColumnData::GetPattern( SCROW nRow ) const
 
 inline const SfxPoolItem& ScColumnData::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
 {
-    return pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
+    return pAttrArray->GetPattern( nRow )->GetItem(nWhich);
 }
 
 inline const SfxPoolItem& ScColumnData::GetAttr( SCROW nRow, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
 {
-    return pAttrArray->GetPatternRange( nStartRow, nEndRow, nRow )->GetItemSet().Get(nWhich);
+    return pAttrArray->GetPatternRange( nStartRow, nEndRow, nRow )->GetItem(nWhich);
 }
 
 inline sal_uInt32 ScColumnData::GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const
