@@ -312,6 +312,11 @@ SfxObjectShell::~SfxObjectShell()
     if ( pSfxApp && pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
 
+    InternalCloseAndRemoveFiles();
+}
+
+void SfxObjectShell::InternalCloseAndRemoveFiles()
+{
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
     if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( false ) == pImpl->m_xDocStorage )
         pMedium->CanDisposeStorage_Impl( false );
