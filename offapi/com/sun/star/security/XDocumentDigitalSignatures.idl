@@ -213,7 +213,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
                                                 [in] ::com::sun::star::io::XStream xStream);
 
-    /** queries the user if the want to trust an untrusted certificate.
+    /** queries the user if they want to trust an untrusted certificate.
 
         @since LibreOffice 24.8
     */
