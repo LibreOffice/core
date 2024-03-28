@@ -322,6 +322,7 @@ public:
     void setDrawMode( ChartDrawMode eMode ) { m_eDrawMode = eMode; }
 
     bool isShapeContext() const;
+    bool IsTextEdit() const;
 
     ViewElementListProvider getViewElementListProvider();
     DrawModelWrapper* GetDrawModelWrapper();
@@ -483,6 +484,8 @@ private:
     void executeDispatch_MoveSeries( bool bForward );
 
     bool EndTextEdit();
+    css::uno::Sequence< css::uno::Reference<css::chart2::XFormattedString >> GetFormattedTitle(
+        const EditTextObject& aEdit, const css::uno::Reference< css::drawing::XShape >& xShape );
 
     void executeDispatch_View3D();
     void executeDispatch_PositionAndSize( const ::css::uno::Sequence< ::css::beans::PropertyValue >* pArgs = nullptr );
@@ -513,7 +516,7 @@ private:
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
 
     DECL_LINK( DoubleClickWaitingHdl, Timer*, void );
-    void execute_DoubleClick( const Point* pMousePixel );
+    void execute_DoubleClick( const Point* pMousePixel, bool &bEditText );
     void startDoubleClickWaiting();
     void stopDoubleClickWaiting();
 
