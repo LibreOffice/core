@@ -220,6 +220,20 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
             mpPresenterScreen = nullptr;
         }
     }
+    else if ( Event.EventName == "ShapeModified" )
+    {
+        if (mpPresenterScreen.is())
+        {
+            Reference<drawing::XShape> xShape(Event.Source, UNO_QUERY);
+
+            if (xShape.is())
+            {
+                // when presenter is used and shape changes, check
+                // and evtl. trigger update of 'NextSlide' view
+                mpPresenterScreen->CheckNextSlideUpdate(xShape);
+            }
+        }
+    }
 }
 
 // XEventListener
@@ -430,6 +444,15 @@ void PresenterScreen::SwitchMonitors()
         xProperties->setPropertyValue("Display", Any(nNewScreen));
     } catch (const uno::Exception &) {
     }
+}
+
+void PresenterScreen::CheckNextSlideUpdate(const Reference<drawing::XShape>& rxShape)
+{
+    if (nullptr == mpPresenterController)
+        return;
+
+    // forward to PresenterController if used
+    mpPresenterController->CheckNextSlideUpdate(rxShape);
 }
 
 /**

@@ -909,6 +909,42 @@ SdrPage* GetSdrPageFromXDrawPage( const uno::Reference< drawing::XDrawPage >& xD
     return nullptr;
 }
 
+// helper that returns true if the given XShape is member of the given
+// XDrawPage or it's MasterPage (aka associated)
+bool IsXShapeAssociatedWithXDrawPage(
+    const css::uno::Reference<css::drawing::XShape>& rxShape,
+    const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage) noexcept
+{
+    if (!rxShape)
+        return false;
+
+    if (!rxDrawPage)
+        return false;
+
+    const SdrObject* pSdrObject(SdrObject::getSdrObjectFromXShape(rxShape));
+    if (nullptr == pSdrObject)
+        return false;
+
+    SdrPage* pSdrPage(GetSdrPageFromXDrawPage(rxDrawPage));
+    if (nullptr == pSdrPage)
+        return false;
+
+    const SdrPage* pPageFromObj(pSdrObject->getSdrPageFromSdrObject());
+    if (nullptr == pPageFromObj)
+        return false;
+
+    if (pSdrPage == pPageFromObj)
+        // given XShape is member of given XDrawPage
+        return true;
+
+    if (pSdrPage->TRG_HasMasterPage())
+        if (&pSdrPage->TRG_GetMasterPage() == pPageFromObj)
+            // given XShape is member of MasterPage of given XDrawPage
+            return true;
+
+    return false;
+}
+
 // XFormsSupplier
 css::uno::Reference< css::container::XNameContainer > SAL_CALL SvxDrawPage::getForms()
 {

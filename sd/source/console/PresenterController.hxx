@@ -130,6 +130,10 @@ public:
     void HandleMouseClick (const css::awt::MouseEvent& rEvent);
     void UpdatePaneTitles();
 
+    // check if the 'NextSlide' needs an update when the given
+    // XShape is changed and trigger that update
+    void CheckNextSlideUpdate(const css::uno::Reference<css::drawing::XShape>& rxShape);
+
     /** Request activation or deactivation of (some of) the views according
         to the given parameters.
     */
