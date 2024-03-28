@@ -80,8 +80,8 @@ CPPUNIT_TARBALL := cppunit-1.15.1.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CURL_SHA256SUM := 3ccd55d91af9516539df80625f818c734dc6f2ecf9bada33c76765e99121db15
-CURL_TARBALL := curl-8.6.0.tar.xz
+CURL_SHA256SUM := 6fea2aac6a4610fbd0400afb0bcddbe7258a64c63f1f68e5855ebc0c659710cd
+CURL_TARBALL := curl-8.7.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
