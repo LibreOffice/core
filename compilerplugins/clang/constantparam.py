@@ -13,7 +13,7 @@ def normalizeTypeParams( line ):
 
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
 with io.open("workdir/loplugin.constantparam.log", "r") as txt:
-    line_no = 1;
+    line_no = 1
     try:
         for line in txt:
             tokens = line.strip().split("\t")
@@ -26,7 +26,7 @@ with io.open("workdir/loplugin.constantparam.log", "r") as txt:
             paramType = normalizeTypeParams(tokens[4])
             callValue = tokens[5]
             callInfo = (returnType, nameAndParams, paramName, paramType, sourceLocation)
-            if not callInfo in callDict:
+            if callInfo not in callDict:
                 callDict[callInfo] = set()
             callDict[callInfo].add(callValue)
             line_no += 1
@@ -151,8 +151,8 @@ for callInfo, callValues in iter(callDict.items()):
     if len(callValues) < 2:
         continue
     # we are only interested in enum parameters
-    if not "enum" in callInfo[3]: continue
-    if not "Flag" in callInfo[3] and not "flag" in callInfo[3] and not "Bit" in callInfo[3] and not "State" in callInfo[3]: continue
+    if "enum" not in callInfo[3]: continue
+    if "Flag" not in callInfo[3] and "flag" not in callInfo[3] and "Bit" not in callInfo[3] and "State" not in callInfo[3]: continue
     # try to ignore setter methods
     if ("," not in nameAndParams) and (("::set" in nameAndParams) or ("::Set" in nameAndParams)):
         continue

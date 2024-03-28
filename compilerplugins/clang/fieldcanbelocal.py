@@ -54,7 +54,7 @@ with io.open("workdir/loplugin.fieldcanbelocal.log", "r", buffering=1024*1024) a
 
 outputSet = set()
 for d in definitionSet:
-    if not d in touchedMap:
+    if d not in touchedMap:
         continue
     fieldType = definitionToTypeMap[d]
     # ignore some types that are known false+

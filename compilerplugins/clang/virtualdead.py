@@ -23,7 +23,7 @@ with io.open("workdir/loplugin.virtualdead.log", "r", encoding="ascii", errors="
                 sourceLocation = tokens[2]
                 returnValue = tokens[3]
                 callInfo = (nameAndParams, sourceLocation)
-                if not callInfo in callDict:
+                if callInfo not in callDict:
                     callDict[callInfo] = set()
                 callDict[callInfo].add(returnValue)
                 definitionToSourceLocationMap[nameAndParams] = sourceLocation
@@ -74,7 +74,7 @@ def merge_bitfield(a, b):
             ret += "1"
         else:
             ret += "0"
-    return ret;
+    return ret
 tmp2dict = dict()
 tmp2list = list()
 for paramInfo in paramSet:
@@ -84,7 +84,7 @@ for paramInfo in paramSet:
     if re.match( r"\w+ ooo::vba::", name): continue
     if re.match( r"\w+ orcus::", name): continue
     if re.match( r"\w+ std::", name): continue
-    if not name in tmp2dict:
+    if name not in tmp2dict:
         tmp2dict[name] = bitfield
     else:
         tmp2dict[name] = merge_bitfield(tmp2dict[name], bitfield)

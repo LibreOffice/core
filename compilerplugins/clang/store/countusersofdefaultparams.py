@@ -24,14 +24,14 @@ with io.open("workdir/loplugin.countusersofdefaultparams.log", "rb", buffering=1
             sourceLocation = tokens[4]
             funcInfo = normalizeTypeParams(returnType) + " " + normalizeTypeParams(nameAndParams)
             definitionToSourceLocationMap[funcInfo] = sourceLocation
-            if not funcInfo in callDict:
+            if funcInfo not in callDict:
                 callDict[funcInfo] = set()
         elif tokens[0] == "call:":
             returnType = tokens[1]
             nameAndParams = tokens[2]
             sourceLocationOfCall = tokens[3]
             funcInfo = normalizeTypeParams(returnType) + " " + normalizeTypeParams(nameAndParams)
-            if not funcInfo in callDict:
+            if funcInfo not in callDict:
                 callDict[funcInfo] = set()
             callDict[funcInfo].add(sourceLocationOfCall)
         else:

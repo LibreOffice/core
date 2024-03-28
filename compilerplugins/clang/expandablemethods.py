@@ -40,7 +40,7 @@ with io.open("workdir/loplugin.expandablemethods.log", "rb", buffering=1024*1024
             returnType = tokens[2]
             nameAndParams = tokens[3]
             funcInfo = (normalizeTypeParams(returnType), normalizeTypeParams(nameAndParams))
-            if not funcInfo in calledFromDict:
+            if funcInfo not in calledFromDict:
                 calledFromDict[funcInfo] = set()
             calledFromDict[funcInfo].add(calleeLocation)
         elif tokens[0] == "outside:":

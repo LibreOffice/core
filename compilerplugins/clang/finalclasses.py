@@ -26,7 +26,7 @@ with open("workdir/loplugin.finalclasses.log") as txt:
                 parent = parent[6:]
             elif (parent.startswith("struct ")):
                 parent = parent[7:]
-            inheritFromSet.add(parent);
+            inheritFromSet.add(parent)
 
         else:
             print( "unknown line: " + line)

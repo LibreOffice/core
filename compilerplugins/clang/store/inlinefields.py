@@ -7,7 +7,7 @@ definitionToSourceLocationMap = dict() # dict of tuple(parentClass, fieldName) t
 definitionSet = set()
 excludedSet = set()
 deletedInDestructorSet = set()
-newedInConstructorSet = set();
+newedInConstructorSet = set()
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
 # so I need to substitute them to ensure we can match correctly.
@@ -50,7 +50,7 @@ for d in definitionSet:
 #    if d in excludedSet or d not in deletedInDestructorSet or d not in newedInConstructorSet:
     if d in excludedSet or d not in newedInConstructorSet:
         continue
-    srcLoc = definitionToSourceLocationMap[d];
+    srcLoc = definitionToSourceLocationMap[d]
     tmp1list.append((d[0] + " " + d[1], srcLoc))
 
 # sort results by filename:lineno

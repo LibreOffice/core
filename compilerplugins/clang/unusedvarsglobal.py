@@ -115,7 +115,7 @@ for d in definitionSet2:
     if "exception" in vartype and vartype.endswith(" &"):
         continue
     # TODO for now, focus on the simple stuff
-    if not (vartype in ["rtl::OUString", "Bool"]):
+    if vartype not in ["rtl::OUString", "Bool"]:
         continue
     readonlySet.add(d)
 

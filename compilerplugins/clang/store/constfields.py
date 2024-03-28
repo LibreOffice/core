@@ -46,7 +46,7 @@ canBeConstFieldSet = set()
 for d in definitionSet:
     if d in writeFromOutsideConstructorSet:
         continue
-    srcLoc = definitionToSourceLocationMap[d];
+    srcLoc = definitionToSourceLocationMap[d]
     fieldType = definitionToTypeMap[d]
     if fieldType.startswith("const "):
         continue

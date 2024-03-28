@@ -56,7 +56,7 @@ def write_pahole_commands(classes):
 # to split them up, and that creates a mess in the parsing logic.
 def read_generator(gdbOutput):
     while True:
-        line = gdbOutput.readline();
+        line = gdbOutput.readline()
         if line == "": return # end of file
         line = line.decode('utf8').strip()
         print("gdb: " + line)
@@ -79,7 +79,7 @@ with open("compilerplugins/clang/pahole.results", "wt") as f:
     # This number is chosen to make gdb peak at around 8G.
     while len(classList) > 0:
 
-        currClassList = classList[0:500];
+        currClassList = classList[0:500]
         classList = classList[500:]
 
         gdbProc = subprocess.Popen("gdb", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)

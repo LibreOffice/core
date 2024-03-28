@@ -77,7 +77,7 @@ def remove_reachable(callDict, startCaller):
     worklist.append(startCaller)
     while len(worklist) > 0:
         caller = worklist.pop()
-        if not caller in callDict:
+        if caller not in callDict:
             continue
         calleeSet = callDict[caller]
         del callDict[caller]
@@ -92,9 +92,9 @@ to_be_removed.add("int main(int,char **)")
 # random dynload entrypoints that we don't otherwise find
 to_be_removed.add("bool TestImportOLE2(SvStream &)")
 to_be_removed.add("void SbiRuntime::StepREDIMP()")
-to_be_removed.add("_object * (anonymous namespace)::createUnoStructHelper(_object *,_object *,_object *)");
+to_be_removed.add("_object * (anonymous namespace)::createUnoStructHelper(_object *,_object *,_object *)")
 for caller in definitionSet:
-    if not caller in definitionToSourceLocationMap:
+    if caller not in definitionToSourceLocationMap:
         to_be_removed.append(caller)
         continue
     location = definitionToSourceLocationMap[caller]
@@ -161,7 +161,7 @@ def print_tree(f, callDict, caller, depth):
         return
     # when printing out trees, things that are not in the map are things that are reachable,
     # so we're not interested in them
-    if not caller in callDict:
+    if caller not in callDict:
         return
     print_tree_recurse_set.add(caller)
     f.write("  " * depth + caller + "\n")
@@ -174,7 +174,7 @@ def print_tree(f, callDict, caller, depth):
 def dump_possible_roots():
     possibleRootList = list()
     for caller in callDict:
-        if not caller in inverseCallDict and caller in definitionToSourceLocationMap:
+        if caller not in inverseCallDict and caller in definitionToSourceLocationMap:
             possibleRootList.append(caller)
     possibleRootList.sort()
 
@@ -206,7 +206,7 @@ def print_cycles():
             # the code is still in use.
             for p in path:
                 for caller in inverseCallDict[p]:
-                    if not caller in path:
+                    if caller not in path:
                         return
             f.write("found cycle\n")
             for p in path:
@@ -242,7 +242,7 @@ def print_partitions():
         to_be_removed.clear()
         for caller in callDict2:
             if len(callDict2[caller]) == 0 \
-                or not caller in inverseCallDict[caller]:
+                or caller not in inverseCallDict[caller]:
                 to_be_removed.add(caller)
         if len(to_be_removed) == 0:
             break

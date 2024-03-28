@@ -63,7 +63,7 @@ untouchedSetD = set()
 for d in definitionSet:
     if d in touchedFromOutsideSet or d in touchedFromInsideSet:
         continue
-    srcLoc = definitionToSourceLocationMap[d];
+    srcLoc = definitionToSourceLocationMap[d]
     # this is all representations of on-disk data structures
     if (srcLoc.startswith("sc/source/filter/inc/scflt.hxx")
         or srcLoc.startswith("sw/source/filter/ww8/")
@@ -105,7 +105,7 @@ onlyUsedInConstructorSet = set()
 for d in definitionSet:
     if d in touchedFromOutsideSet or d in touchedFromOutsideConstructorSet:
         continue
-    srcLoc = definitionToSourceLocationMap[d];
+    srcLoc = definitionToSourceLocationMap[d]
     # this is all representations of on-disk data structures
     if (srcLoc.startswith("sc/source/filter/inc/scflt.hxx")
         or srcLoc.startswith("sw/source/filter/ww8/")
@@ -138,10 +138,10 @@ for d in definitionSet:
 
 writeonlySet = set()
 for d in definitionSet:
-    parentClazz = d[0];
+    parentClazz = d[0]
     if d in readFromSet or d in untouchedSetD:
         continue
-    srcLoc = definitionToSourceLocationMap[d];
+    srcLoc = definitionToSourceLocationMap[d]
     # this is all representations of on-disk data structures
     if (srcLoc.startswith("sc/source/filter/inc/scflt.hxx")
         or srcLoc.startswith("sw/source/filter/ww8/")
@@ -193,11 +193,11 @@ for d in definitionSet:
 
 readonlySet = set()
 for d in definitionSet:
-    parentClazz = d[0];
+    parentClazz = d[0]
     if d in writeToSet or d in untouchedSetD:
         continue
     fieldType = definitionToTypeMap[d]
-    srcLoc = definitionToSourceLocationMap[d];
+    srcLoc = definitionToSourceLocationMap[d]
     if "ModuleClient" in fieldType:
         continue
     # this is all representations of on-disk data structures
@@ -226,7 +226,7 @@ for d in protectedAndPublicDefinitionSet:
     clazz = d[0] + " " + d[1]
     if d in touchedFromOutsideSet:
         continue
-    srcLoc = definitionToSourceLocationMap[d];
+    srcLoc = definitionToSourceLocationMap[d]
 
     canBePrivateSet.add((clazz + " " + definitionToTypeMap[d], srcLoc))
 
@@ -250,7 +250,7 @@ allFieldsCanBePrivateSet = set()
 for d in (potentialClasses - excludedClasses):
     sourceLoc = potentialClassesSourceLocationMap[d]
     # when the class is inside a compile unit, assume that the compiler can figure this out for itself, much less interesting to me
-    if not ".cxx" in sourceLoc:
+    if ".cxx" not in sourceLoc:
         allFieldsCanBePrivateSet.add((d, sourceLoc))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely

@@ -33,7 +33,7 @@ with io.open("workdir/loplugin.fieldcast.log", "r", buffering=1024*1024) as txt:
             definitionToTypeMap[fieldInfo] = fieldType
             definitionToSourceLocationMap[fieldInfo] = srcLoc
 
-            if not (fieldInfo in castMap):
+            if fieldInfo not in castMap:
                 castMap[fieldInfo] = castToType
             elif castMap[fieldInfo] != "": # if we are not ignoring it
                 # if it is cast to more than one type, mark it as being ignored
