@@ -171,7 +171,7 @@ Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rProper
 
 sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rPropertyName )
 {
-    return maPropMap.find( rPropertyName ) != maPropMap.end();
+    return maPropMap.contains(rPropertyName);
 }
 
 } // namespace

@@ -203,7 +203,7 @@ void lcl_getFillDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
     if (!rTextFillSeq.hasElements())
         return;
     comphelper::SequenceAsHashMap aTextFillMap(rTextFillSeq);
-    if (aTextFillMap.find(u"noFill"_ustr) != aTextFillMap.end())
+    if (aTextFillMap.contains(u"noFill"_ustr))
     {
         rFillProperties.moFillType = oox::XML_noFill;
         return;
@@ -308,11 +308,11 @@ void lcl_getLineDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
 
     // LineJoint
     comphelper::SequenceAsHashMap aTextOutlineMap(rTextOutlineSeq);
-    if (aTextOutlineMap.find(u"bevel"_ustr) != aTextOutlineMap.end())
+    if (aTextOutlineMap.contains(u"bevel"_ustr))
         rLineProperties.moLineJoint = oox::XML_bevel;
-    else if (aTextOutlineMap.find(u"round"_ustr) != aTextOutlineMap.end())
+    else if (aTextOutlineMap.contains(u"round"_ustr))
         rLineProperties.moLineJoint = oox::XML_round;
-    else if (aTextOutlineMap.find(u"miter"_ustr) != aTextOutlineMap.end())
+    else if (aTextOutlineMap.contains(u"miter"_ustr))
     {
         // LineProperties has no member to store a miter limit. Therefore some heuristic is
         // added here. 0 is default for attribute "lim" in MS Office. It is rendered same as bevel.

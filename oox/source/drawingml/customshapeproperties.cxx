@@ -111,7 +111,7 @@ void CustomShapeProperties::pushToPropSet(
         PropertyMap aPropertyMap;
         PropertySet aPropSet( xPropSet );
 
-        if (maPresetDataMap.find(mnShapePresetType) != maPresetDataMap.end())
+        if (maPresetDataMap.contains(mnShapePresetType))
         {
             SAL_INFO(
                 "oox.drawingml",
