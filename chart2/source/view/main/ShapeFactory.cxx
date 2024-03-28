@@ -2183,7 +2183,8 @@ rtl::Reference<SvxShapeText>
 
         //set text and text properties
         uno::Reference< text::XTextCursor > xTextCursor( xShape->createTextCursor() );
-        if( !xTextCursor.is() )
+        uno::Reference< text::XTextCursor > xSelectionCursor( xShape->createTextCursor() );
+        if( !xTextCursor.is() || !xSelectionCursor.is() )
             return xShape;
 
         tPropertyNameValueMap aValueMap;
@@ -2232,18 +2233,32 @@ rtl::Reference<SvxShapeText>
             //if the characters should be stacked we use only the first character properties for code simplicity
             if( xFormattedString.hasElements() )
             {
-                OUString aLabel;
-                for (const auto& i : xFormattedString)
-                    aLabel += i->getString();
-                aLabel = ShapeFactory::getStackedString( aLabel, bStackCharacters );
-
-                xTextCursor->gotoEnd(false);
-                xShape->insertString( xTextCursor, aLabel, false );
-                xTextCursor->gotoEnd(true);
-                uno::Reference< beans::XPropertySet > xSourceProps( xFormattedString[0], uno::UNO_QUERY );
-
-                PropertyMapper::setMappedProperties( *xShape, xSourceProps
-                        , PropertyMapper::getPropertyNameMapForCharacterProperties() );
+                size_t nLBreaks = xFormattedString.size() - 1;
+                uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
+                for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
+                {
+                    if (!rxFS->getString().isEmpty())
+                    {
+                        xTextCursor->gotoEnd(false);
+                        xSelectionCursor->gotoEnd(false);
+                        OUString aLabel = ShapeFactory::getStackedString(rxFS->getString(), bStackCharacters);
+                        if (nLBreaks-- > 0)
+                            aLabel += OUStringChar('\r');
+                        xShape->insertString(xTextCursor, aLabel, false);
+                        xSelectionCursor->gotoEnd(true); // select current paragraph
+                        uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
+                        if (xFormattedString.size() > 1 && xSelectionProp.is())
+                        {
+                            PropertyMapper::setMappedProperties(xSelectionProp, xSourceProps,
+                                PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                        }
+                        else
+                        {
+                            PropertyMapper::setMappedProperties(*xShape, xSourceProps,
+                                PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                        }
+                    }
+                }
 
                 // adapt font size according to page size
                 awt::Size aOldRefSize;
@@ -2255,23 +2270,34 @@ rtl::Reference<SvxShapeText>
         }
         else
         {
+            uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
             for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
             {
-                xTextCursor->gotoEnd(false);
-                xShape->insertString( xTextCursor, rxFS->getString(), false );
-                xTextCursor->gotoEnd(true);
+                if (!rxFS->getString().isEmpty())
+                {
+                    xTextCursor->gotoEnd(false);
+                    xSelectionCursor->gotoEnd(false);
+                    xShape->insertString(xTextCursor, rxFS->getString(), false);
+                    xSelectionCursor->gotoEnd(true); // select current paragraph
+                    uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
+                    if (xFormattedString.size() > 1 && xSelectionProp.is())
+                    {
+                        PropertyMapper::setMappedProperties(xSelectionProp, xSourceProps,
+                            PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                    }
+                    else
+                    {
+                        PropertyMapper::setMappedProperties(*xShape, xSourceProps,
+                            PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                    }
+                }
             }
-            awt::Size aOldRefSize;
-            bool bHasRefPageSize =
-                ( xTextProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
 
             if( xFormattedString.hasElements() )
             {
-                uno::Reference< beans::XPropertySet > xSourceProps( xFormattedString[0], uno::UNO_QUERY );
-                PropertyMapper::setMappedProperties( *xShape, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
-
                 // adapt font size according to page size
-                if( bHasRefPageSize )
+                awt::Size aOldRefSize;
+                if( xTextProperties->getPropertyValue("ReferencePageSize") >>= aOldRefSize )
                 {
                     RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
                 }

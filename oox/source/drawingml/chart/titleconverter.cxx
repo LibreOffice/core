@@ -90,7 +90,16 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
                 bool bAddNewLine = ((aRIt + 1 == aREnd) && (aPIt + 1 != aPEnd)) || rTextRun.isLineBreak();
                 Reference< XFormattedString > xFmtStr = appendFormattedString( aStringVec, rTextRun.getText(), bAddNewLine );
                 PropertySet aPropSet( xFmtStr );
-                TextCharacterProperties aRunProps( rParaProps );
+                TextCharacterProperties aRunProps;
+                if (rParaProps.mbHasEmptyParaProperties && rxTextProp.is() && rxTextProp->hasParagraphProperties())
+                {
+                    const TextParagraphVector rDefTextParas = rxTextProp->getParagraphs();
+                    TextParagraphVector::const_iterator aDefPIt = rDefTextParas.begin();
+                    const TextParagraph& rDefTextPara = **aDefPIt;
+                    aRunProps = rDefTextPara.getProperties().getTextCharacterProperties();
+                }
+                else
+                    aRunProps = rParaProps;
                 aRunProps.assignUsed( rTextRun.getTextCharacterProperties() );
                 getFormatter().convertTextFormatting( aPropSet, aRunProps, eObjType );
             }
