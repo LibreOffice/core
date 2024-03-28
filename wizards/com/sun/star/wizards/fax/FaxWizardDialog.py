@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from .FaxWizardDialogResources import FaxWizardDialogResources
-from .FaxWizardDialogConst import FaxWizardDialogConst, HIDMAIN
+from .FaxWizardDialogConst import FaxWizardDialogConst, HIDMAIN, HID
 from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
 
 

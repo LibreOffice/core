@@ -6,16 +6,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-import sys
-import os
-import uno
-import unohelper
-import re
-import random
-import traceback
-import itertools
-import threading
-import time as __time__
+import sys, os, uno, unohelper
+import re, random, traceback, itertools
+import threading, time as __time__
 
 __lng__ = {}
 
@@ -201,7 +194,7 @@ class __Doc__:
         self.fontstyle = 0
         self.points = []
 
-from math import pi, sin, cos, asin, hypot
+from math import pi, sin, cos, asin, log10, hypot, sqrt
 
 from com.sun.star.awt import Point as __Point__
 from com.sun.star.awt import Gradient as __Gradient__
@@ -224,6 +217,8 @@ from com.sun.star.drawing.LineStyle import NONE as __LineStyle_NONE__
 from com.sun.star.drawing.LineStyle import SOLID as __LineStyle_SOLID__
 from com.sun.star.drawing.LineStyle import DASH as __LineStyle_DASHED__
 from com.sun.star.drawing.DashStyle import RECT as __DashStyle_RECT__
+from com.sun.star.drawing.DashStyle import ROUND as __DashStyle_ROUND__
+from com.sun.star.drawing.DashStyle import ROUNDRELATIVE as __DashStyle_ROUNDRELATIVE__
 from com.sun.star.drawing.CircleKind import FULL as __FULL__
 from com.sun.star.drawing.CircleKind import SECTION as __SECTION__
 from com.sun.star.drawing.CircleKind import CUT as __CUT__
@@ -365,7 +360,7 @@ def Print(s):
 
 def MessageBox(parent, message, title, msgtype = "messbox", buttons = __OK__):
     msgtypes = ("messbox", "infobox", "errorbox", "warningbox", "querybox")
-    if msgtype not in msgtypes:
+    if not (msgtype in msgtypes):
         msgtype = "messbox"
     d = __WinDesc__()
     d.Type = __MODALTOP__
@@ -555,13 +550,13 @@ class LogoProgram(threading.Thread):
                     _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor[0], False)
                 except:
                     _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor[0].getStart(), False)
-        except Exception:
+        except Exception as e:
             try:
               __unlock__(all_levels = True)
               TRACEPATTERN = '"<string>", line '
               message = traceback.format_exc()
               l = re.findall(TRACEPATTERN + '[0-9]+', message)
-              if len(l) > 0 and "SystemExit" not in message:
+              if len(l) > 0 and not "SystemExit" in message:
                 line = len(re.findall(__LINEBREAK__, ''.join(self.code.split("\n")[:int(l[-1][len(TRACEPATTERN):])]))) + 1
                 caption = __l12n__(_.lng)['LIBRELOGO']
                 if __prevcode__ and "\n" in __prevcode__:
@@ -589,7 +584,7 @@ class LogoProgram(threading.Thread):
                     MessageBox(parent, __l12n__(_.lng)['ERR_ARGUMENTS'] % (__locname__(r.group(1)), r.group(2), r.group(3)), caption, "errorbox")
                 else:
                     origline = __compiled__.split("\n")[line-1]
-                    if "com.sun.star" not in message and "__repeat__" not in message and "*)" not in message and ("[" in origline or "]" in origline):
+                    if not "com.sun.star" in message and not "__repeat__" in message and not "*)" in message and ("[" in origline or "]" in origline):
                         MessageBox(parent, __l12n__(_.lng)['ERR_BLOCK'], caption, "errorbox")
                     else:
                         MessageBox(parent, __l12n__(_.lng)['ERROR'] %line, __l12n__(_.lng)['LIBRELOGO'], "errorbox")
@@ -842,7 +837,7 @@ def run(arg=None, arg2 = -1):
         else:
           name = os.chdir(os.path.expanduser('~'))
         __thread__.start()
-    except Exception:
+    except Exception as e:
         __thread__ = None
         __trace__()
     return None
@@ -1885,14 +1880,14 @@ def __loadlang__(lang, a):
         for j in a[i[0]].split("|"):
             __colors__[lang][j.lower()] = i[1]
     for i in a:
-        if i[0:3] not in ["LIB", "ERR", "PT", "INC", "MM", "CM", "HOU", "DEG"] and i not in __STRCONST__: # uppercase native commands
+        if not i[0:3] in ["LIB", "ERR", "PT", "INC", "MM", "CM", "HOU", "DEG"] and not i in __STRCONST__: # uppercase native commands
             a[i] = a[i].upper()
     repcount = a['REPCOUNT'].split('|')[0]
     loopi = itertools.count()
     loop = lambda r: "%(i)s = 1\n%(orig)s%(j)s = %(i)s\n%(i)s += 1\n" % \
         { "i": repcount + str(next(loopi)), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(next(loopi)-1), r.group(0)) }
     __comp__[lang] = [
-    [r"(?i)(?<!:)(\b|(?=[-:]))(?:%s)\b" % "|".join([a[i].lower() for i in a if "_" not in i and i != "DECIMAL"]), lambda s: s.group().upper()], # uppercase all native commands in the source code
+    [r"(?i)(?<!:)(\b|(?=[-:]))(?:%s)\b" % "|".join([a[i].lower() for i in a if not "_" in i and i != "DECIMAL"]), lambda s: s.group().upper()], # uppercase all native commands in the source code
     [r"(?<!:)\b(?:%s) \[(?= |\n)" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
     [r"(?<!:)\b(?:%s) (%s[^[]*)\[(?= |\n)" % (a['GROUP'], __DECODE_STRING_REGEX__), "\n__groupstart__(\\1)\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__(\\1)\nbreak\n]\n"],
     [r"(?<!:)\b(?:%s)\b" % a['GROUP'], "\n__removeshape__(__ACTUAL__)\n"],
@@ -2111,7 +2106,7 @@ def __compil__(s):
         if "_" not in locals():
             _ = lambda: None
         _.lng = 'en_US'
-        if _.lng not in __comp__:
+        if not _.lng in __comp__:
             __loadlang__(_.lng, __l12n__(_.lng)) 
 
     _.decimal = __l12n__(_.lng)['DECIMAL']

@@ -47,7 +47,7 @@ class ConfigGroup(object):
         propertyName = field[len(prefix):]
         child = getattr(self, field)
         if isinstance(child, ConfigGroup):
-            child.setRoot(self.root)
+            child.setRoot(self.root);
             child.readConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
