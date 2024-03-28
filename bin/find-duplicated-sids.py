@@ -3,11 +3,11 @@
 
 # Scan .hrc files for conflicting SID constants
 #
-# This is not as easy as it sounds because some of the constants depend on other constants whose names do not start with SID_
+# This is not as easy as it sounds because some of the constants depend on other
+# constants whose names do not start with SID_
 #
 
 import subprocess
-import sys
 
 sidNameToValue = dict()
 sidNameToOriginalLine = dict()
@@ -41,28 +41,34 @@ with a.stdout as txt:
         line = line[idx1 : len(line)].strip()
         # extract the name
         idx1 = line.find(" ")
-        if (idx1 == -1): continue
-        sidName = line[0 : idx1].strip()
-        line = line[idx1 : len(line)].strip()
+        if (idx1 == -1):
+            continue
+        sidName = line[0:idx1].strip()
+        line = line[idx1:len(line)].strip()
         # strip any trailing comments
         idx1 = line.find("//")
         if (idx1 != -1):
-            line = line[0 : idx1].strip()
+            line = line[0:idx1].strip()
         idx1 = line.find("/*")
         if (idx1 != -1):
-            line = line[0 : idx1].strip()
-        if len(line) == 0: continue
+            line = line[0:idx1].strip()
+        if len(line) == 0:
+            continue
         # strip brackets
-        if line[0] == "(": line = line[1:]
-        if line[len(line)-1] == ")": line = line[0:len(line)-1]
+        if line[0] == "(":
+            line = line[1:]
+        if line[len(line)-1] == ")":
+            line = line[0:len(line)-1]
         sidTextValue = line.strip()
         # ignore the #define strings
-        if (sidTextValue.find("\"") != -1): continue
+        if (sidTextValue.find("\"") != -1):
+            continue
         # ignore the multiline macros
-        if (sidTextValue.find("\\") != -1): continue
+        if (sidTextValue.find("\\") != -1):
+            continue
         # check for redefinitions
         if sidName[0:4] == "SID_" and sidNameToValue.has_key(sidName):
-            print "Redefinition:\n\t",  sidNameToOriginalLine[sidName], "\n\t" , originalLine
+            print("Redefinition:\n\t",  sidNameToOriginalLine[sidName], "\n\t" , originalLine)
         else:
             sidNameToValue[sidName] = sidTextValue
         sidNameToOriginalLine[sidName] = originalLine
@@ -77,16 +83,18 @@ with a.stdout as txt:
         except KeyError:
             sidNamesToIgnore.add(sidName)
 
-    # check for conflicts    
+    # check for conflicts
     sidValueToName = dict()
     for sidName in sidNameToValue:
-        if sidName in sidNamesToIgnore: continue
-        if sidName[0:4] != "SID_": continue
+        if sidName in sidNamesToIgnore:
+            continue
+        if sidName[0:4] != "SID_":
+            continue
         sidValue = sidNameToValue[sidName]
         if sidValueToName.has_key(sidValue):
-            print "conflict:\n\t", sidNameToOriginalLine[sidName], "\n\t", sidNameToOriginalLine[sidValueToName[sidValue]]
+            print("conflict:\n\t", sidNameToOriginalLine[sidName], "\n\t", sidNameToOriginalLine[sidValueToName[sidValue]])
         else:
             sidValueToName[sidValue] = sidName
-        
-        
-        
+
+
+

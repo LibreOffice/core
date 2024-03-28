@@ -20,26 +20,26 @@ def parseFile(filename):
     old_line = None
     for line in data:
         if len(line) > 0:
-            if(old_line != None):
-                print filename
-                #print("failed to parse line")
-                #print(old_line)
+            if old_line is not None:
+                print(filename)
+                # print("failed to parse line")
+                # print(old_line)
                 line = old_line + line
-                print line
+                print(line)
                 old_line = None
             split_line = regEx.split(line)
-            #print(split_line)
-            #print(urlparse.unquote(split_line[2]))
-            #print(split_line[4])
-            if(old_line == None and split_line[4] == "" and split_line[3] != "0"):
+            # print(split_line)
+            # print(urlparse.unquote(split_line[2]))
+            # print(split_line[4])
+            if (old_line is None and split_line[4] == "" and split_line[3] != "0"):
                 print(line)
                 print(split_line)
                 old_line = line
             else:
                 pairs[urlparse.unquote(split_line[2])] = split_line[4]
                 assert(len(split_line) == 6)
-    #print data
-    #print(pairs)
+    # print data
+    # print(pairs)
     return pairs
 
 def parseFiles(dir):
@@ -90,8 +90,8 @@ def writeOutFiles(dir, strings):
                 file.write(value)
                 file.write("\n")
             except UnicodeDecodeError:
-                print key
-                print value
+                print(key)
+                print(value)
         file.close()
 
 def main (args):

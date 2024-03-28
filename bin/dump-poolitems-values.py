@@ -5,7 +5,6 @@
 #
 
 import subprocess
-import sys
 
 macroNameToValue = dict()
 macroNameToOriginalLine = dict()
@@ -39,36 +38,44 @@ with a.stdout as txt:
     for line in txt:
         line = line.strip()
         originalLine = line
-        if not line.startswith("#define "): continue        
+        if not line.startswith("#define "):
+            continue
         # strip the '#define' off the front
         idx1 = line.find(" ")
-        line = line[idx1 : len(line)].strip()
+        line = line[idx1:len(line)].strip()
         # extract the name
         idx1 = line.find(" ")
-        if (idx1 == -1): continue
-        macroName = line[0 : idx1].strip()
-        line = line[idx1 : len(line)].strip()
+        if (idx1 == -1):
+            continue
+        macroName = line[0:idx1].strip()
+        line = line[idx1:len(line)].strip()
         # ignore internal stuff
-        if macroName.startswith("_"): continue
+        if macroName.startswith("_"):
+            continue
         # strip any trailing comments
         idx1 = line.find("//")
         if (idx1 != -1):
-            line = line[0 : idx1].strip()
+            line = line[0:idx1].strip()
         idx1 = line.find("/*")
         if (idx1 != -1):
-            line = line[0 : idx1].strip()
-        if len(line) == 0: continue
+            line = line[0:idx1].strip()
+        if len(line) == 0:
+            continue
         # strip brackets
-        if line[0] == "(": line = line[1:]
-        if line[len(line)-1] == ")": line = line[0:len(line)-1]
+        if line[0] == "(":
+            line = line[1:]
+        if line[len(line)-1] == ")":
+            line = line[0:len(line)-1]
         macroValue = line.strip()
         # ignore macros that #define strings, not interested in those
-        if (macroValue.find("\"") != -1): continue
+        if (macroValue.find("\"") != -1):
+            continue
         # ignore the multiline macros
-        if (macroValue.find("\\") != -1): continue
+        if (macroValue.find("\\") != -1):
+            continue
         # check for redefinitions
         if macroNameToValue.has_key(macroName):
-            print "Redefinition:\n\t",  macroNameToOriginalLine[macroName], "\n\t" , originalLine
+            print("Redefinition:\n\t",  macroNameToOriginalLine[macroName], "\n\t", originalLine)
         else:
             macroNameToValue[macroName] = macroValue
             macroNameToOriginalLine[macroName] = originalLine
@@ -81,11 +88,11 @@ for macroName in macroNameToValue:
         macroValue = extractMacroValue(macroName)
         macroValueToName[macroValue] = macroName
     except KeyError:
-        print "warning: could not decode macro ", macroName
+        print("warning: could not decode macro ", macroName)
 
 for macroValue in sorted(macroValueToName):
     macroName = macroValueToName[macroValue]
-    print repr(macroNameToValue[macroName]).rjust(5), " ", macroName
-        
-        
-        
+    print(repr(macroNameToValue[macroName]).rjust(5), " ", macroName)
+
+
+

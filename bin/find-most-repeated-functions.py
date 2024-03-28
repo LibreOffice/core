@@ -7,11 +7,17 @@
 import subprocess
 from collections import defaultdict
 
-# the odd bash construction here is because some of the .o files returned by find are not object files
-# and I don't want xargs to stop when it hits an error
-a = subprocess.Popen("find instdir/program/ -name *.so | xargs echo nm --radix=d --size-sort --demangle | bash", stdout=subprocess.PIPE, shell=True)
+# the odd bash construction here is because some of the .o files returned
+# by find are not object files and I don't want xargs to stop when it hits
+# an error
+a = subprocess.Popen(
+    (
+        "find instdir/program/ -name *.so | "
+        "xargs echo nm --radix=d --size-sort --demangle | bash"
+    ),
+    stdout=subprocess.PIPE, shell=True)
 
-#xargs sh -c "somecommand || true"
+# xargs sh -c "somecommand || true"
 
 nameDict = defaultdict(int)
 with a.stdout as txt:
@@ -28,15 +34,16 @@ for k, v in nameDict.iteritems():
 
 cnt = 0
 for k in sorted(list(sizeDict), reverse=True):
-    print k
+    print(k)
     for v in sizeDict[k]:
-        print v
+        print(v)
     cnt += 1
-    if cnt > 100 : break
+    if cnt > 100:
+        break
 
-#first = sorted(list(sizeDict))[-1]
-#print first
+# first = sorted(list(sizeDict))[-1]
+# print first
 
 
-#include/vcl/ITiledRenderable.hxx
+# include/vcl/ITiledRenderable.hxx
 # why is gaLOKPointerMap declared inside this header?
