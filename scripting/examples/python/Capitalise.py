@@ -16,10 +16,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+
 def getNewString(theString):
-    """helper function
-    """
-    if (not theString):
+    """helper function"""
+    if not theString:
         return ""
 
     # should we tokenize on "."?
@@ -47,9 +47,10 @@ def capitalisePython():
     Otherwise, all are changed to "UPPERCASE".
     """
     # The context variable is of type XScriptContext and is available to
-    # all BeanShell scripts executed by the Script Framework
-    xModel = XSCRIPTCONTEXT.getDocument()
-
+    # all Python scripts executed by the Script Framework
+    # ask linters to therefore ignore it:
+    # # noqa: F821
+    xModel = XSCRIPTCONTEXT.getDocument()  # NOQA
     # the writer controller impl supports the css.view.XSelectionSupplier
     # interface
     xSelectionSupplier = xModel.getCurrentController()
@@ -58,7 +59,7 @@ def capitalisePython():
     xIndexAccess = xSelectionSupplier.getSelection()
     count = xIndexAccess.getCount()
 
-    if(count >= 1):  # ie we have a selection
+    if count >= 1:  # ie we have a selection
         i = 0
 
     while i < count:
@@ -91,6 +92,6 @@ def capitalisePython():
 
 # lists the scripts, that shall be visible inside OOo. Can be omitted, if
 # all functions shall be visible, however here getNewString shall be suppressed
-g_exportedScripts = capitalisePython,
+g_exportedScripts = (capitalisePython,)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
