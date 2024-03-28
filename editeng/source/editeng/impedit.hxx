@@ -571,6 +571,7 @@ private:
 
     Color               maBackgroundColor;
 
+    ScalingParameters maCustomScalingParameters;
     ScalingParameters maScalingParameters;
     bool mbRoundToNearestPt;
 
@@ -657,6 +658,7 @@ private:
     void                ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreUndoCheck = false );
     void                TextModified();
     void                CalcHeight(ParaPortion& rParaPortion);
+    bool isInEmptyClusterAtTheEnd(ParaPortion& rParaPortion);
 
     void                InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge = false );
     void                ResetUndoManager();
@@ -977,8 +979,11 @@ public:
 
     void SetMinColumnWrapHeight(tools::Long nVal) { mnMinColumnWrapHeight = nVal; }
 
-    void                    FormatDoc();
-    void                    FormatFullDoc();
+    tools::Long FormatParagraphs(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs);
+    void ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs);
+    void FormatDoc();
+    void FormatFullDoc();
+
     void                    UpdateViews( EditView* pCurView = nullptr );
     void                    Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
     void                    Paint(OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, Degree10 nOrientation = 0_deg10);

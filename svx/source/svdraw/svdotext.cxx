@@ -1233,14 +1233,14 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
     }
     else if (IsAutoFit())
     {
-        ImpAutoFitText(rOutliner);
+        setupAutoFitText(rOutliner);
     }
 }
 
 double SdrTextObj::GetFontScale() const
 {
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
-    // This eventually calls ImpAutoFitText
+    // This eventually calls setupAutoFitText
     UpdateOutlinerFormatting(rOutliner, o3tl::temporary(tools::Rectangle()));
 
     return rOutliner.getScalingParameters().fFontY;
@@ -1249,133 +1249,41 @@ double SdrTextObj::GetFontScale() const
 double SdrTextObj::GetSpacingScale() const
 {
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
-    // This eventually calls ImpAutoFitText
+    // This eventually calls setupAutoFitText
     UpdateOutlinerFormatting(rOutliner, o3tl::temporary(tools::Rectangle()));
 
     return rOutliner.getScalingParameters().fSpacingY;
 }
 
-void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
+void SdrTextObj::setupAutoFitText(SdrOutliner& rOutliner) const
 {
-    const Size aShapeSize=GetSnapRect().GetSize();
-    ImpAutoFitText( rOutliner,
-                    Size(aShapeSize.Width()-GetTextLeftDistance()-GetTextRightDistance(),
-                         aShapeSize.Height()-GetTextUpperDistance()-GetTextLowerDistance()),
-                    IsVerticalWriting() );
-}
+    const Size aShapeSize = GetSnapRect().GetSize();
+    Size aSize(aShapeSize.Width() - GetTextLeftDistance() - GetTextRightDistance(),
+               aShapeSize.Height() - GetTextUpperDistance() - GetTextLowerDistance());
 
-void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
-                                bool bIsVerticalWriting) const
-{
-    autoFitTextForCompatibility(rOutliner, rTextSize, bIsVerticalWriting);
+    setupAutoFitText(rOutliner, aSize);
 }
-
-void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size& rTextBoxSize, bool bIsVerticalWriting) const
+void SdrTextObj::setupAutoFitText(SdrOutliner& rOutliner, const Size& rTextBoxSize) const
 {
-    rOutliner.setRoundFontSizeToPt(true);
+    rOutliner.setRoundFontSizeToPt(true); // We need to round the font size nearest integer pt size
+    rOutliner.SetMaxAutoPaperSize(rTextBoxSize);
+    rOutliner.SetPaperSize(rTextBoxSize);
 
     const SdrTextFitToSizeTypeItem& rItem = GetObjectItem(SDRATTR_TEXT_FITTOSIZE);
-    double fMaxScale = rItem.getFontScale();
-    if (fMaxScale > 0.0)
+
+    double fFontScale = rItem.getFontScale();
+    double fSpacingScale = rItem.getSpacingScale();
+
+    if (fFontScale > 0.0 && fSpacingScale > 0.0 && !mbInEditMode)
     {
-        rOutliner.setScalingParameters({ fMaxScale, fMaxScale, 100.0, 100.0 });
+        rOutliner.setScalingParameters({ fFontScale, fFontScale, 100.0, fSpacingScale });
     }
     else
     {
-        fMaxScale = 100.0;
+        rOutliner.resetScalingParameters();
     }
 
-    Size aCurrentTextBoxSize = rOutliner.CalcTextSizeNTP();
-    if (aCurrentTextBoxSize.Height() == 0)
-        return;
-
-    tools::Long nExtendTextBoxBy = -50;
-    aCurrentTextBoxSize.extendBy(0, nExtendTextBoxBy);
-    double fCurrentFitFactor = 1.0;
-
-    if (bIsVerticalWriting)
-        fCurrentFitFactor = double(rTextBoxSize.Width()) / aCurrentTextBoxSize.Width();
-    else
-        fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
-
-    auto aParameters = rOutliner.getScalingParameters();
-    double fInitialFontScaleY = aParameters.fFontY;
-    double fInitialSpacing = aParameters.fSpacingY;
-
-    if (fCurrentFitFactor >= 1.0 && fInitialFontScaleY >= 100.0 && fInitialSpacing >= 100.0)
-        return;
-
-    sal_Int32 nFontHeight = GetObjectItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight();
-
-    double fFontHeightPt = o3tl::convert(double(nFontHeight), o3tl::Length::mm100, o3tl::Length::pt);
-    double fMinY = 0.0;
-    double fMaxY = fMaxScale;
-
-    double fBestFontScale = 0.0;
-    double fBestSpacing = 100.0;
-    double fBestFitFactor = fCurrentFitFactor;
-
-    if (fCurrentFitFactor >= 1.0)
-    {
-        fMinY = fInitialFontScaleY;
-        fBestFontScale = fInitialFontScaleY;
-        fBestSpacing = fInitialSpacing;
-        fBestFitFactor = fCurrentFitFactor;
-    }
-    else
-    {
-        fMaxY = std::min(fInitialFontScaleY, fMaxScale);
-    }
-
-    double fInTheMidle = 0.5;
-
-    int iteration = 0;
-    double fFitFactorTarget = 1.00;
-
-    while (iteration < 10)
-    {
-        iteration++;
-        double fScaleY = fMinY + (fMaxY - fMinY) * fInTheMidle;
-
-        double fScaledFontHeight = fFontHeightPt * (fScaleY / 100.0);
-        double fRoundedScaledFontHeight = std::floor(fScaledFontHeight * 10.0) / 10.0;
-        double fCurrentFontScale = (fRoundedScaledFontHeight / fFontHeightPt) * 100.0;
-
-        fCurrentFitFactor = 0.0; // reset fit factor;
-
-        for (double fCurrentSpacing : {100.0, 90.0, 80.0})
-        {
-            if (fCurrentFitFactor >= fFitFactorTarget)
-                continue;
-
-            rOutliner.setScalingParameters({ fCurrentFontScale, fCurrentFontScale, 100.0, fCurrentSpacing });
-
-            aCurrentTextBoxSize = rOutliner.CalcTextSizeNTP();
-            aCurrentTextBoxSize.extendBy(0, nExtendTextBoxBy);
-            if (bIsVerticalWriting)
-                fCurrentFitFactor = double(rTextBoxSize.Width()) / aCurrentTextBoxSize.Width();
-            else
-                fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
-
-
-            if (fCurrentSpacing == 100.0)
-            {
-                if (fCurrentFitFactor > fFitFactorTarget)
-                    fMinY = fCurrentFontScale;
-                else
-                    fMaxY = fCurrentFontScale;
-            }
-
-            if ((fBestFitFactor < fFitFactorTarget && fCurrentFitFactor > fBestFitFactor)
-            ||  (fCurrentFitFactor >= fFitFactorTarget && fCurrentFitFactor < fBestFitFactor))
-            {
-                fBestFontScale = fCurrentFontScale;
-                fBestSpacing = fCurrentSpacing;
-                fBestFitFactor = fCurrentFitFactor;
-            }
-        }
-    }
-    rOutliner.setScalingParameters({ fBestFontScale, fBestFontScale, 100.0, fBestSpacing });
+    rOutliner.QuickFormatDoc();
 }
 
 void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const
@@ -1966,10 +1874,13 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         assert(mpEditingOutliner);
         mbInDownScale = true;
 
+        // Need to reset scaling so it searches for the fitting size again
+        mpEditingOutliner->resetScalingParameters();
+
         // sucks that we cannot disable paints via
         // mpEditingOutliner->SetUpdateMode(FALSE) - but EditEngine skips
         // formatting as well, then.
-        ImpAutoFitText(*mpEditingOutliner);
+        setupAutoFitText(*mpEditingOutliner);
         mbInDownScale = false;
     }
 }

@@ -170,6 +170,10 @@ struct ScalingParameters
             && fSpacingX == rOther.fSpacingX
             && fSpacingY == rOther.fSpacingY;
     }
+    bool areValuesDefault()
+    {
+        return fFontX == 100.0 && fFontY == 100.0 && fSpacingX == 100.0 && fSpacingY == 100.0;
+    }
 };
 
 struct EECharAttrib

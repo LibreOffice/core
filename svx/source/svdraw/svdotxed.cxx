@@ -110,7 +110,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
     else if (IsAutoFit())
     {
-        ImpAutoFitText(rOutl);
+        setupAutoFitText(rOutl);
     }
 
     if(pOutlinerParaObject)

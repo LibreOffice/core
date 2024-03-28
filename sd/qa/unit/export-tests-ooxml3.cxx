@@ -226,7 +226,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testFontScale)
     OUString sScale = getXPath(pXmlDocContent,
                                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:normAutofit"_ostr,
                                "fontScale"_ostr);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(81111), sScale.toInt32(), 1000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(85000), sScale.toInt32(), 1000);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testShapeAutofitPPTX)
