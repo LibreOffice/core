@@ -841,6 +841,11 @@ void ScHTMLLayoutParser::SetWidths()
                 OSL_ENSURE( nCol < nColsPerRow, "ScHTMLLayoutParser::SetWidths: column overflow" );
                 if (nCol >= nColsPerRow)
                     continue;
+                if (nCol < 0)
+                {
+                    SAL_WARN("sc", "negative offset: " << nCol);
+                    continue;
+                }
                 pE->nOffset = pOffsets[nCol];
                 nCol = nCol + pE->nColOverlap;
                 if ( nCol > nColsPerRow )
