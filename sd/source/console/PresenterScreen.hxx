@@ -127,6 +127,8 @@ public:
 
     virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) override;
 
+    void CheckNextSlideUpdate(const css::uno::Reference<css::drawing::XShape>& rxShape);
+
 private:
     css::uno::Reference<css::frame::XModel2 > mxModel;
     rtl::Reference<::sd::DrawController> mxController;

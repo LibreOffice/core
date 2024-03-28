@@ -53,6 +53,12 @@ SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XDrawPage > GetXDrawPageFor
 /** Returns the SdrPage from the given StarOffice API wrapper */
 SVXCORE_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage ) noexcept ;
 
+// helper that returns true if the given XShape is member of the given
+// XDrawPage or it's MasterPage (aka associated)
+SVXCORE_DLLPUBLIC bool IsXShapeAssociatedWithXDrawPage(
+    const css::uno::Reference<css::drawing::XShape>& rxShape,
+    const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage) noexcept;
+
 /**
  * Maps the vcl MapUnit enum to an API constant MeasureUnit.
  * Returns false if conversion is not supported.
