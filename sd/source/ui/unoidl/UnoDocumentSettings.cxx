@@ -69,7 +69,7 @@ namespace sd
 {
     namespace {
 
-    class DocumentSettings : public WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >,
+    class DocumentSettings : public cppu::WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >,
                              public comphelper::PropertySetHelper,
                              public DocumentSettingsSerializer
     {

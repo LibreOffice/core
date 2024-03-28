@@ -227,6 +227,34 @@ css::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::c
     return pBase->comphelper::WeakComponentImplHelperBase::queryInterface(rType);
 }
 
+WeakImplHelperBase::~WeakImplHelperBase() {}
+
+css::uno::Any SAL_CALL WeakImplHelperBase::queryInterface(css::uno::Type const& rType)
+{
+    css::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<css::uno::XWeak*>(this));
+    if (aReturn.hasValue())
+        return aReturn;
+    return OWeakObject::queryInterface(rType);
+}
+
+css::uno::Any WeakImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
+                                   WeakImplHelperBase* pBase)
+{
+    checkInterface(rType);
+    typelib_TypeDescriptionReference* pTDR = rType.getTypeLibType();
+
+    // shortcut XInterface to WeakComponentImplHelperBase
+    if (!isXInterface(pTDR->pTypeName))
+    {
+        void* p = queryDeepNoXInterface(pTDR, cd, pBase);
+        if (p)
+        {
+            return css::uno::Any(&p, pTDR);
+        }
+    }
+    return pBase->comphelper::WeakImplHelperBase::queryInterface(rType);
+}
+
 } // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

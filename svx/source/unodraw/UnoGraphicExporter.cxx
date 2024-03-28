@@ -130,7 +130,7 @@ namespace {
 
         @implements com.sun.star.drawing.GraphicExportFilter
     */
-    class GraphicExporter : public WeakImplHelper< XGraphicExportFilter, XServiceInfo >
+    class GraphicExporter : public ::cppu::WeakImplHelper< XGraphicExportFilter, XServiceInfo >
     {
     public:
         GraphicExporter();
