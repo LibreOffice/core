@@ -30,6 +30,7 @@
 #include <TitleHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ControllerLockGuard.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
 #include <AccessibleTextHelper.hxx>
 #endif
@@ -43,8 +44,12 @@
 #include <editeng/editids.hrc>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/section.hxx>
 #include <memory>
 
 namespace chart
@@ -143,8 +148,30 @@ bool ChartController::EndTextEdit()
         // lock controllers till end of block
         ControllerLockGuardUNO aCLGuard( getChartModel() );
 
+        uno::Sequence< uno::Reference< chart2::XFormattedString > > aNewFormattedTitle =
+            GetFormattedTitle(pParaObj->GetTextObject(), pTextObject->getUnoShape());
+
         Title* pTitle = dynamic_cast<Title*>(xPropSet.get());
-        TitleHelper::setCompleteString( aString, pTitle, m_xCC );
+        if (pTitle && aNewFormattedTitle.hasElements())
+        {
+            bool bStacked = false;
+            if (xPropSet.is())
+                xPropSet->getPropertyValue("StackCharacters") >>= bStacked;
+
+            if (bStacked)
+            {
+                for (uno::Reference< chart2::XFormattedString >const& formattedStr : aNewFormattedTitle)
+                {
+                    formattedStr->setString(TitleHelper::getUnstackedStr(formattedStr->getString()));
+                }
+            }
+
+            pTitle->setText(aNewFormattedTitle);
+        }
+        else
+        {
+            TitleHelper::setCompleteString(aString, pTitle, m_xCC);
+        }
 
         OSL_ENSURE(m_pTextActionUndoGuard, "ChartController::EndTextEdit: no TextUndoGuard!");
         if (m_pTextActionUndoGuard)
@@ -152,6 +179,70 @@ bool ChartController::EndTextEdit()
     }
     m_pTextActionUndoGuard.reset();
     return true;
+}
+
+uno::Sequence< uno::Reference< chart2::XFormattedString > > ChartController::GetFormattedTitle(
+    const EditTextObject& aEdit, const uno::Reference< drawing::XShape >& xShape )
+{
+    std::vector < uno::Reference< chart2::XFormattedString > > aNewStrings;
+    if (!xShape.is())
+        return comphelper::containerToSequence(aNewStrings);
+
+    uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
+    if (!xText.is())
+        return comphelper::containerToSequence(aNewStrings);
+
+    uno::Reference< text::XTextCursor > xSelectionCursor(xText->createTextCursor());
+    if (!xSelectionCursor.is())
+        return comphelper::containerToSequence(aNewStrings);
+
+    xSelectionCursor->gotoStart(false);
+
+    std::vector<editeng::Section> aSecAttrs;
+    aEdit.GetAllSections(aSecAttrs);
+
+    for (editeng::Section const& rSection : aSecAttrs)
+    {
+        if (!xSelectionCursor->isCollapsed())
+            xSelectionCursor->collapseToEnd();
+
+        xSelectionCursor->goRight(rSection.mnEnd - rSection.mnStart, true);
+
+        OUString aNewString = xSelectionCursor->getString();
+
+        bool bNextPara = (aEdit.GetParagraphCount() > 1 && rSection.mnParagraph != aEdit.GetParagraphCount() - 1 &&
+            aEdit.GetTextLen(rSection.mnParagraph) <= rSection.mnEnd);
+
+        uno::Reference< chart2::XFormattedString2 > xFmtStr = chart2::FormattedString::create(m_xCC);
+        if (bNextPara)
+            aNewString = aNewString + OUStringChar('\n');
+        xFmtStr->setString(aNewString);
+        aNewStrings.emplace_back(xFmtStr);
+
+        uno::Reference< beans::XPropertySetInfo > xInfo = xFmtStr->getPropertySetInfo();
+        uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
+        try
+        {
+            for (const beans::Property& rProp : xSelectionProp->getPropertySetInfo()->getProperties())
+            {
+                if (xInfo.is() && xInfo->hasPropertyByName(rProp.Name))
+                {
+                    const uno::Any aValue = xSelectionProp->getPropertyValue(rProp.Name);
+                    xFmtStr->setPropertyValue(rProp.Name, aValue);
+                }
+            }
+        }
+        catch ( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+            aNewStrings.clear();
+        }
+
+        if (bNextPara)
+            xSelectionCursor->goRight(1, false); // next paragraph
+    }
+
+    return comphelper::containerToSequence(aNewStrings);
 }
 
 void ChartController::executeDispatch_InsertSpecialCharacter()

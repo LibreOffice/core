@@ -99,7 +99,7 @@ bool TitleDialogData::writeDifferenceToModel(
                 TitleHelper::getTitle( static_cast< TitleHelper::eTitleType >( nN ), xChartModel ) );
             if(xTitle.is())
             {
-                TitleHelper::setCompleteString( aTextList[nN], xTitle, xContext );
+                TitleHelper::setCompleteString( aTextList[nN], xTitle, xContext, nullptr, true );
                 bChanged = true;
             }
         }

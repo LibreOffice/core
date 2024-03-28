@@ -531,6 +531,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     // read-only
     bool bIsWritable = bModelStateIsValid && (! m_apModelState->bIsReadOnly);
     bool bShapeContext = m_xChartController.is() && m_xChartController->isShapeContext();
+    bool bIsTextEdit = m_xChartController.is() && m_xChartController->IsTextEdit();
 
     bool bEnableDataTableDialog = false;
     bool bCanCreateDataProvider = false;
@@ -597,9 +598,10 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // format objects
     bool bFormatObjectAvailable = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected;
-    m_aCommandAvailability[ ".uno:FormatSelection" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatSelection" ] = bFormatObjectAvailable && !bIsTextEdit;
+    m_aCommandAvailability[ ".uno:FontDialog" ] = bFormatObjectAvailable && bIsTextEdit;
     m_aCommandAvailability[ ".uno:FormatAxis" ] = bFormatObjectAvailable;
-    m_aCommandAvailability[ ".uno:FormatTitle" ] = bFormatObjectAvailable;
+    m_aCommandAvailability[ ".uno:FormatTitle" ] = bFormatObjectAvailable && !bIsTextEdit;
     m_aCommandAvailability[ ".uno:FormatDataSeries" ] = bFormatObjectAvailable;
     m_aCommandAvailability[ ".uno:FormatDataPoint" ] = bFormatObjectAvailable;
     m_aCommandAvailability[ ".uno:FormatDataLabels" ] = bFormatObjectAvailable;

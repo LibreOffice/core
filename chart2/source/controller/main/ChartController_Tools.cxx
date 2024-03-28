@@ -313,8 +313,8 @@ void ChartController::executeDispatch_Paste()
                 if( m_pDrawViewWrapper )
                 {
                     OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
-                    if( pOutlinerView )//in case of edit mode insert into edited string
-                        pOutlinerView->InsertText( aString );
+                    if (pOutlinerView)//in case of edit mode insert the formatted string
+                        pOutlinerView->PasteSpecial();
                     else
                     {
                         impl_PasteStringAsTextShape( aString, awt::Point( 0, 0 ) );
@@ -580,6 +580,13 @@ bool ChartController::isShapeContext() const
     return m_aSelection.isAdditionalShapeSelected() ||
          ( m_pDrawViewWrapper && m_pDrawViewWrapper->AreObjectsMarked() &&
            ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == SdrObjKind::Text ) );
+}
+
+bool ChartController::IsTextEdit() const
+{
+    // only Title objects are editable textshapes
+    return m_aSelection.isTitleObjectSelected() &&
+        m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit();
 }
 
 void ChartController::impl_ClearSelection()

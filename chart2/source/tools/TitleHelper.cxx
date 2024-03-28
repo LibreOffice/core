@@ -303,12 +303,36 @@ OUString TitleHelper::getCompleteString( const rtl::Reference< Title >& xTitle )
     return aRet.makeStringAndClear();
 }
 
+OUString TitleHelper::getUnstackedStr(const OUString& rNewText)
+{
+    //#i99841# remove linebreaks that were added for vertical stacking
+    OUStringBuffer aUnstackedStr;
+    OUStringBuffer aSource(rNewText);
+
+    bool bBreakIgnored = false;
+    sal_Int32 nLen = rNewText.getLength();
+    for (sal_Int32 nPos = 0; nPos < nLen; ++nPos)
+    {
+        sal_Unicode aChar = aSource[nPos];
+        if (aChar != '\n')
+        {
+            aUnstackedStr.append(aChar);
+            bBreakIgnored = false;
+        }
+        else if (aChar == '\n' && bBreakIgnored)
+            aUnstackedStr.append(aChar);
+        else
+            bBreakIgnored = true;
+    }
+    return aUnstackedStr.makeStringAndClear();
+}
+
 void TitleHelper::setCompleteString( const OUString& rNewText
                     , const rtl::Reference< Title >& xTitle
                     , const uno::Reference< uno::XComponentContext > & xContext
-                    , const float * pDefaultCharHeight /* = 0 */ )
+                    , const float * pDefaultCharHeight /* = 0 */
+                    , bool bDialogTitle /*= false*/ )
 {
-    //the format of the first old text portion will be maintained if there is any
     if(!xTitle.is())
         return;
 
@@ -318,37 +342,35 @@ void TitleHelper::setCompleteString( const OUString& rNewText
     if( xTitle.is() )
         xTitle->getPropertyValue( "StackCharacters" ) >>= bStacked;
 
+    uno::Sequence< uno::Reference< XFormattedString > > aOldStringList = xTitle->getText();
     if( bStacked )
     {
-        //#i99841# remove linebreaks that were added for vertical stacking
-        OUStringBuffer aUnstackedStr;
-        OUStringBuffer aSource(rNewText);
-
-        bool bBreakIgnored = false;
-        sal_Int32 nLen = rNewText.getLength();
-        for( sal_Int32 nPos = 0; nPos < nLen; ++nPos )
+        aNewText = getUnstackedStr(rNewText);
+        for (uno::Reference< XFormattedString >const & formattedStr : aOldStringList)
         {
-            sal_Unicode aChar = aSource[nPos];
-            if( aChar != '\n' )
-            {
-                aUnstackedStr.append( aChar );
-                bBreakIgnored = false;
-            }
-            else if( aChar == '\n' && bBreakIgnored )
-                aUnstackedStr.append( aChar );
-            else
-                bBreakIgnored = true;
+            formattedStr->setString(getUnstackedStr(formattedStr->getString()));
         }
-        aNewText = aUnstackedStr.makeStringAndClear();
     }
 
     uno::Sequence< uno::Reference< XFormattedString > > aNewStringList;
-
-    uno::Sequence< uno::Reference< XFormattedString > >  aOldStringList = xTitle->getText();
-    if( aOldStringList.hasElements() )
+    if( aOldStringList.hasElements())
     {
-        aNewStringList = { aOldStringList[0] };
-        aNewStringList[0]->setString( aNewText );
+        const OUString aFullString = getCompleteString(xTitle);
+        if (bDialogTitle && aNewText.equals(getUnstackedStr(aFullString)))
+        {
+            // If the new title setted from a dialog window to a new string
+            // the first old text portion will be maintained if its a new string,
+            // otherwise we use the original one.
+            aNewStringList = aOldStringList;
+        }
+        else
+        {
+            // If the new title setted from a dialog to a new string the first
+            // old text portion will be maintained if there was any. Also in case of ODF
+            // import which still not support non-uniform formatted titles
+            aNewStringList = { aOldStringList[0] };
+            aNewStringList[0]->setString(aNewText);
+        }
     }
     else
     {

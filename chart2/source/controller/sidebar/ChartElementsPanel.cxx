@@ -634,7 +634,8 @@ IMPL_LINK(ChartElementsPanel, EditHdl, weld::Entry&, rEdit, void)
 
     // set it
     OUString aText(rEdit.get_text());
-    TitleHelper::setCompleteString(aText, TitleHelper::getTitle(aTitleType, mxModel), comphelper::getProcessComponentContext());
+    TitleHelper::setCompleteString(aText, TitleHelper::getTitle(aTitleType, mxModel),
+        comphelper::getProcessComponentContext(), nullptr, true);
 }
 
 IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl, weld::ComboBox&, void)
