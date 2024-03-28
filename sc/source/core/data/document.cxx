@@ -6929,6 +6929,7 @@ void ScDocument::MergeContextBackIntoNonThreadedContext(ScInterpreterContext& th
         std::make_move_iterator(threadedContext.maDelayedSetNumberFormat.begin()),
         std::make_move_iterator(threadedContext.maDelayedSetNumberFormat.end()));
     // lookup cache is now only in pooled ScInterpreterContext's
+    threadedContext.MergeDefaultFormatKeys(*GetFormatTable());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

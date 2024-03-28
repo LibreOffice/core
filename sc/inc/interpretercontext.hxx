@@ -112,6 +112,8 @@ struct ScInterpreterContext
 
     OUString NFGetCalcCellReturn(sal_uInt32 nFormat) const;
 
+    void MergeDefaultFormatKeys(SvNumberFormatter& rFormatter) const;
+
 private:
     friend class ScInterpreterContextPool;
     void ResetTokens();
@@ -125,6 +127,11 @@ private:
     // the NumberFormat's data and a throw-away object for currently used language
     // This is essentially an exploded view of mpFormatter
     std::unique_ptr<SvNFLanguageData> mxLanguageData;
+    // FormatData can be driven read-only, but may want to cache some data,
+    // in RO Mode we can cache per thread to mxAuxFormatKeyMap, and
+    // discard or merge after threaded calculation is over
+    std::unique_ptr<SvNFFormatData::DefaultFormatKeysMap> mxAuxFormatKeyMap;
+
     const SvNFFormatData* mpFormatData;
     SvNFEngine::Accessor maROPolicy;
 

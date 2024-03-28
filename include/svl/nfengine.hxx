@@ -159,10 +159,12 @@ private:
 
 class SVL_DLLPUBLIC SvNFFormatData
 {
+public:
+    typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
+
 private:
     typedef std::map<sal_uInt32, std::unique_ptr<SvNumberformat>> FormatEntryMap;
     FormatEntryMap aFTable; // Table of format keys to format entries
-    typedef std::map<sal_uInt32, sal_uInt32> DefaultFormatKeysMap;
     DefaultFormatKeysMap aDefaultFormatKeys; // Table of default standard to format keys
     sal_uInt32 MaxCLOffset; // Max language/country offset used
     sal_uInt32 nDefaultSystemCurrencyFormat; // NewCurrency matching SYSTEM locale
@@ -189,6 +191,8 @@ public:
      */
     bool GetNewCurrencySymbolString(sal_uInt32 nFormat, OUString& rSymbol,
                                     const NfCurrencyEntry** ppEntry, bool* pBank = nullptr) const;
+
+    void MergeDefaultFormatKeys(const DefaultFormatKeysMap& rDefaultFormatKeys);
 
 private:
     SvNFFormatData(const SvNFFormatData&) = delete;
@@ -262,8 +266,7 @@ private:
     SVL_DLLPRIVATE sal_uInt32 ImpGetDefaultSystemCurrencyFormat(SvNFLanguageData& rCurrentLanguage,
                                                                 const NativeNumberWrapper* pNatNum);
 
-    SVL_DLLPRIVATE std::pair<sal_uInt32, bool>
-    ImpGetDefaultFormat(SvNumFormatType nType, sal_uInt32 nSearch, sal_uInt32 CLOffset) const;
+    SVL_DLLPRIVATE sal_uInt32 FindCachedDefaultFormat(sal_uInt32 nSearch) const;
 
     SVL_DLLPRIVATE static sal_Int32
     ImpGetFormatCodeIndex(const SvNFLanguageData& rCurrentLanguage,
@@ -282,6 +285,7 @@ public:
                                      const NativeNumberWrapper* pNatNum, LanguageType eLnge)>
         GetCLOffset;
     typedef std::function<void(sal_uInt32 nSearch, sal_uInt32 nFormat)> CacheFormat;
+    typedef std::function<sal_uInt32(sal_uInt32 nSearch)> FindFormat;
 
     typedef std::function<sal_uInt32(SvNFLanguageData& rCurrentLanguage,
                                      const NativeNumberWrapper* pNatNum, sal_uInt32 CLOffset,
@@ -292,11 +296,13 @@ public:
     {
         GetCLOffset mGetCLOffset;
         CacheFormat mCacheFormat;
+        FindFormat mFindFormat;
         GetDefaultCurrency mGetDefaultCurrency;
     };
 
     static Accessor GetRWPolicy(SvNFFormatData& rFormatData);
-    static Accessor GetROPolicy(const SvNFFormatData& rFormatData);
+    static Accessor GetROPolicy(const SvNFFormatData& rFormatData,
+                                SvNFFormatData::DefaultFormatKeysMap& rFormatCache);
 
     static void ChangeIntl(SvNFLanguageData& rCurrentLanguage, LanguageType eLnge);
     static void ChangeNullDate(SvNFLanguageData& rCurrentLanguage, sal_uInt16 nDay,
@@ -403,9 +409,12 @@ public:
                                    bool IsRed, sal_uInt16 nPrecision, sal_uInt16 nLeadingZeros);
 
 private:
-    static sal_uInt32 ImpGetDefaultFormat(const SvNFFormatData& rFormatData,
-                                          const SvNFEngine::CacheFormat& rFunc,
+    static sal_uInt32 ImpGetDefaultFormat(const SvNFFormatData& rFormatData, const Accessor& rFuncs,
                                           SvNumFormatType nType, sal_uInt32 CLOffset);
+
+    static sal_uInt32 ImpGetDefaultFormat(const SvNFFormatData& rFormatData, SvNumFormatType nType,
+                                          sal_uInt32 CLOffset);
+
     static sal_uInt32
     ImpGetStandardFormat(SvNFLanguageData& rCurrentLanguage, const SvNFFormatData& rFormatData,
                          const NativeNumberWrapper* pNatNum, const SvNFEngine::Accessor& rFuncs,
@@ -425,8 +434,13 @@ private:
                                     const NativeNumberWrapper*, LanguageType eLnge);
 
     static void CacheFormatRW(SvNFFormatData& rFormatData, sal_uInt32 nSearch, sal_uInt32 nFormat);
-    static void CacheFormatRO(const SvNFFormatData& rFormatData, sal_uInt32 nSearch,
+    static void CacheFormatRO(SvNFFormatData::DefaultFormatKeysMap& rMap, sal_uInt32 nSearch,
                               sal_uInt32 nFormat);
+
+    static sal_uInt32 FindFormatRW(const SvNFFormatData& rFormatData, sal_uInt32 nSearch);
+    static sal_uInt32 FindFormatRO(const SvNFFormatData& rFormatData,
+                                   const SvNFFormatData::DefaultFormatKeysMap& rMap,
+                                   sal_uInt32 nSearch);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

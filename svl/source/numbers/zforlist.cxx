@@ -1537,17 +1537,19 @@ static sal_uInt32 ImpGetSearchOffset(SvNumFormatType nType, sal_uInt32 CLOffset)
     return nSearch;
 }
 
+// static
 sal_uInt32 SvNFEngine::ImpGetDefaultFormat(const SvNFFormatData& rFormatData,
-                                           const SvNFEngine::CacheFormat& rFunc,
+                                           const SvNFEngine::Accessor& rFuncs,
                                            SvNumFormatType nType, sal_uInt32 CLOffset)
 {
     sal_uInt32 nSearch = ImpGetSearchOffset(nType, CLOffset);
 
-    std::pair<sal_uInt32, bool> aRes = rFormatData.ImpGetDefaultFormat(nType, nSearch, CLOffset);
-    const sal_uInt32 nDefaultFormat = aRes.first;
-    const bool bShouldCache = aRes.second;
-    if (bShouldCache)
-        rFunc(nSearch, nDefaultFormat);
+    sal_uInt32 nDefaultFormat = rFuncs.mFindFormat(nSearch);
+    if (nDefaultFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+        return nDefaultFormat;
+
+    nDefaultFormat = ImpGetDefaultFormat(rFormatData, nType, CLOffset);
+    rFuncs.mCacheFormat(nSearch, nDefaultFormat);
     return nDefaultFormat;
 }
 
@@ -1602,7 +1604,7 @@ sal_uInt32 SvNFEngine::ImpGetStandardFormat(SvNFLanguageData& rCurrentLanguage,
     case SvNumFormatType::DATETIME:
     case SvNumFormatType::PERCENT:
     case SvNumFormatType::SCIENTIFIC:
-        return ImpGetDefaultFormat(rFormatData, rFuncs.mCacheFormat, eType, CLOffset);
+        return ImpGetDefaultFormat(rFormatData, rFuncs, eType, CLOffset);
     case SvNumFormatType::FRACTION:
         return CLOffset + ZF_STANDARD_FRACTION;
     case SvNumFormatType::LOGICAL:
@@ -1669,59 +1671,70 @@ sal_uInt32 SvNFEngine::GetStandardFormat(SvNFLanguageData& rCurrentLanguage,
     return ImpGetStandardFormat(rCurrentLanguage, rFormatData, pNatNum, rFuncs, eType, nCLOffset, eLnge);
 }
 
-//return a std::pair with the result and true/false if that result should be cached in aDefaultFormatKeys
-std::pair<sal_uInt32, bool> SvNFFormatData::ImpGetDefaultFormat(SvNumFormatType nType, sal_uInt32 nSearch, sal_uInt32 CLOffset) const
+namespace
 {
-    bool bShouldCache = false;
-    DefaultFormatKeysMap::const_iterator it = aDefaultFormatKeys.find(nSearch);
-    sal_uInt32 nDefaultFormat = (it != aDefaultFormatKeys.end() ?
-                                 it->second : NUMBERFORMAT_ENTRY_NOT_FOUND);
-    if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    sal_uInt32 FindCachedDefaultFormat(const SvNFFormatData::DefaultFormatKeysMap& rDefaultFormatKeys, sal_uInt32 nSearch)
     {
-        // look for a defined standard
-        sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
-        sal_uInt32 nKey(0);
-        auto it2 = aFTable.find( CLOffset );
-        while ( it2 != aFTable.end() && (nKey = it2->first ) >= CLOffset && nKey < nStopKey )
-        {
-            const SvNumberformat* pEntry = it2->second.get();
-            if ( pEntry->IsStandard() && (pEntry->GetMaskedType() == nType) )
-            {
-                nDefaultFormat = nKey;
-                break;  // while
-            }
-            ++it2;
-        }
-
-        if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
-        {   // none found, use old fixed standards
-            switch( nType )
-            {
-            case SvNumFormatType::DATE:
-                nDefaultFormat = CLOffset + ZF_STANDARD_DATE;
-                break;
-            case SvNumFormatType::TIME:
-                nDefaultFormat = CLOffset + ZF_STANDARD_TIME+1;
-                break;
-            case SvNumFormatType::DATETIME:
-                nDefaultFormat = CLOffset + ZF_STANDARD_DATETIME;
-                break;
-            case SvNumFormatType::DURATION:
-                nDefaultFormat = CLOffset + ZF_STANDARD_DURATION;
-                break;
-            case SvNumFormatType::PERCENT:
-                nDefaultFormat = CLOffset + ZF_STANDARD_PERCENT+1;
-                break;
-            case SvNumFormatType::SCIENTIFIC:
-                nDefaultFormat = CLOffset + ZF_STANDARD_SCIENTIFIC;
-                break;
-            default:
-                nDefaultFormat = CLOffset + ZF_STANDARD;
-            }
-        }
-        bShouldCache = true;
+        auto it = rDefaultFormatKeys.find(nSearch);
+        sal_uInt32 nDefaultFormat = (it != rDefaultFormatKeys.end() ?
+                                     it->second : NUMBERFORMAT_ENTRY_NOT_FOUND);
+        return nDefaultFormat;
     }
-    return std::make_pair(nDefaultFormat, bShouldCache);
+}
+
+sal_uInt32 SvNFFormatData::FindCachedDefaultFormat(sal_uInt32 nSearch) const
+{
+    return ::FindCachedDefaultFormat(aDefaultFormatKeys, nSearch);
+}
+
+// static
+sal_uInt32 SvNFEngine::ImpGetDefaultFormat(const SvNFFormatData& rFormatData, SvNumFormatType nType, sal_uInt32 CLOffset)
+{
+    sal_uInt32 nDefaultFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+
+    // look for a defined standard
+    sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
+    sal_uInt32 nKey(0);
+    auto it2 = rFormatData.aFTable.find( CLOffset );
+    while ( it2 != rFormatData.aFTable.end() && (nKey = it2->first ) >= CLOffset && nKey < nStopKey )
+    {
+        const SvNumberformat* pEntry = it2->second.get();
+        if ( pEntry->IsStandard() && (pEntry->GetMaskedType() == nType) )
+        {
+            nDefaultFormat = nKey;
+            break;  // while
+        }
+        ++it2;
+    }
+
+    if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    {   // none found, use old fixed standards
+        switch( nType )
+        {
+        case SvNumFormatType::DATE:
+            nDefaultFormat = CLOffset + ZF_STANDARD_DATE;
+            break;
+        case SvNumFormatType::TIME:
+            nDefaultFormat = CLOffset + ZF_STANDARD_TIME+1;
+            break;
+        case SvNumFormatType::DATETIME:
+            nDefaultFormat = CLOffset + ZF_STANDARD_DATETIME;
+            break;
+        case SvNumFormatType::DURATION:
+            nDefaultFormat = CLOffset + ZF_STANDARD_DURATION;
+            break;
+        case SvNumFormatType::PERCENT:
+            nDefaultFormat = CLOffset + ZF_STANDARD_PERCENT+1;
+            break;
+        case SvNumFormatType::SCIENTIFIC:
+            nDefaultFormat = CLOffset + ZF_STANDARD_SCIENTIFIC;
+            break;
+        default:
+            nDefaultFormat = CLOffset + ZF_STANDARD;
+        }
+    }
+
+    return nDefaultFormat;
 }
 
 sal_uInt32 SvNumberFormatter::GetStandardFormat( sal_uInt32 nFIndex, SvNumFormatType eType,
@@ -3912,9 +3925,19 @@ sal_uInt32 SvNFEngine::GetCLOffsetRO(const SvNFFormatData& rFormatData, SvNFLang
     return nCLOffset;
 }
 
-void SvNFEngine::CacheFormatRO(const SvNFFormatData&, sal_uInt32, sal_uInt32)
+// we can't cache to SvNFFormatData in RO mode, so cache to a temp map which we can consult pre-thread in FindFormatRO
+// caches can be merged with SvNumberFormatter::MergeDefaultFormatKeys
+void SvNFEngine::CacheFormatRO(SvNFFormatData::DefaultFormatKeysMap& rFormatCache, sal_uInt32 nSearch, sal_uInt32 nFormat)
 {
-    assert(false && "not really fatal, just not cached");
+    rFormatCache[nSearch] = nFormat;
+}
+
+sal_uInt32 SvNFEngine::FindFormatRO(const SvNFFormatData& rFormatData, const SvNFFormatData::DefaultFormatKeysMap& rFormatCache, sal_uInt32 nSearch)
+{
+    sal_uInt32 nFormat = rFormatData.FindCachedDefaultFormat(nSearch);
+    if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+        return nFormat;
+    return ::FindCachedDefaultFormat(rFormatCache, nSearch);
 }
 
 sal_uInt32 SvNFEngine::GetCLOffsetRW(SvNFFormatData& rFormatData, SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper* pNatNum, LanguageType eLnge)
@@ -3925,6 +3948,11 @@ sal_uInt32 SvNFEngine::GetCLOffsetRW(SvNFFormatData& rFormatData, SvNFLanguageDa
 void SvNFEngine::CacheFormatRW(SvNFFormatData& rFormatData, sal_uInt32 nSearch, sal_uInt32 nFormat)
 {
     rFormatData.aDefaultFormatKeys[nSearch] = nFormat;
+}
+
+sal_uInt32 SvNFEngine::FindFormatRW(const SvNFFormatData& rFormatData, sal_uInt32 nSearch)
+{
+    return rFormatData.FindCachedDefaultFormat(nSearch);
 }
 
 sal_uInt32 SvNFEngine::DefaultCurrencyRW(SvNFFormatData& rFormatData, SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper* pNatNum, sal_uInt32 CLOffset, LanguageType eLnge)
@@ -3953,16 +3981,18 @@ SvNFEngine::Accessor SvNFEngine::GetRWPolicy(SvNFFormatData& rFormatData)
     {
         std::bind(SvNFEngine::GetCLOffsetRW, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
         std::bind(SvNFEngine::CacheFormatRW, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2),
+        std::bind(SvNFEngine::FindFormatRW, std::ref(rFormatData), std::placeholders::_1),
         std::bind(SvNFEngine::DefaultCurrencyRW, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4)
     };
 }
 
-SvNFEngine::Accessor SvNFEngine::GetROPolicy(const SvNFFormatData& rFormatData)
+SvNFEngine::Accessor SvNFEngine::GetROPolicy(const SvNFFormatData& rFormatData, SvNFFormatData::DefaultFormatKeysMap& rFormatCache)
 {
     return
     {
         std::bind(SvNFEngine::GetCLOffsetRO, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
-        std::bind(SvNFEngine::CacheFormatRO, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2),
+        std::bind(SvNFEngine::CacheFormatRO, std::ref(rFormatCache), std::placeholders::_1, std::placeholders::_2),
+        std::bind(SvNFEngine::FindFormatRO, std::ref(rFormatData), std::ref(rFormatCache), std::placeholders::_1),
         std::bind(SvNFEngine::DefaultCurrencyRO, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4)
     };
 }
@@ -4353,6 +4383,24 @@ bool SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(
         }
     }
     return true;
+}
+
+void SvNFFormatData::MergeDefaultFormatKeys(const DefaultFormatKeysMap& rDefaultFormatKeys)
+{
+    for (const auto& r : rDefaultFormatKeys)
+    {
+#ifndef NDEBUG
+        auto iter = aDefaultFormatKeys.find(r.first);
+        assert(iter == aDefaultFormatKeys.end() || iter->second == r.second);
+#endif
+        aDefaultFormatKeys[r.first] = r.second;
+    }
+}
+
+void SvNumberFormatter::MergeDefaultFormatKeys(const SvNFFormatData::DefaultFormatKeysMap& rDefaultFormatKeys)
+{
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
+    m_aFormatData.MergeDefaultFormatKeys(rDefaultFormatKeys);
 }
 
 bool SvNFFormatData::GetNewCurrencySymbolString(sal_uInt32 nFormat, OUString& rStr,

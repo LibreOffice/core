@@ -507,6 +507,8 @@ public:
         language/country, used in XML import */
     OUString GetStandardName(LanguageType eLnge);
 
+    void MergeDefaultFormatKeys(const SvNFFormatData::DefaultFormatKeysMap& rDefaultFormatKeys);
+
     /** Check if a specific locale has supported locale data. */
     static bool IsLocaleInstalled(LanguageType eLang);
 

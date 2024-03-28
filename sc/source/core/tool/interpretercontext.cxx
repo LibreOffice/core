@@ -46,8 +46,9 @@ ScInterpreterContext::ScInterpreterContext(const ScDocument& rDoc, SvNumberForma
     else
     {
         mxLanguageData.reset(new SvNFLanguageData(pFormatter->GetROLanguageData()));
+        mxAuxFormatKeyMap.reset(new SvNFFormatData::DefaultFormatKeysMap);
         mpFormatData = &pFormatter->GetROFormatData();
-        maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData);
+        maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData, *mxAuxFormatKeyMap);
     }
 }
 
@@ -74,8 +75,9 @@ void ScInterpreterContext::SetDocAndFormatter(const ScDocument& rDoc, SvNumberFo
     {
         // formatter has changed
         mxLanguageData.reset(new SvNFLanguageData(pFormatter->GetROLanguageData()));
+        mxAuxFormatKeyMap.reset(new SvNFFormatData::DefaultFormatKeysMap);
         mpFormatData = &pFormatter->GetROFormatData();
-        maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData);
+        maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData, *mxAuxFormatKeyMap);
         mpFormatter = pFormatter;
 
         // drop cache
@@ -88,8 +90,14 @@ void ScInterpreterContext::initFormatTable()
 {
     mpFormatter = mpDoc->GetFormatTable(); // will assert if not main thread
     mpFormatData = &mpFormatter->GetROFormatData();
-    maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData);
     mxLanguageData.reset(new SvNFLanguageData(mpFormatter->GetROLanguageData()));
+    mxAuxFormatKeyMap.reset(new SvNFFormatData::DefaultFormatKeysMap);
+    maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData, *mxAuxFormatKeyMap);
+}
+
+void ScInterpreterContext::MergeDefaultFormatKeys(SvNumberFormatter& rFormatter) const
+{
+    rFormatter.MergeDefaultFormatKeys(*mxAuxFormatKeyMap);
 }
 
 void ScInterpreterContext::Cleanup()
@@ -106,6 +114,7 @@ void ScInterpreterContext::ClearLookupCache(const ScDocument* pDoc)
     {
         mxScLookupCache.reset();
         mxLanguageData.reset();
+        mxAuxFormatKeyMap.reset();
         mpFormatter = nullptr;
         mpFormatData = nullptr;
     }
