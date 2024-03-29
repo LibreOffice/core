@@ -230,7 +230,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     if (succeeded)
     {
         hr = BindDC(hDC, bounds);   // Update the bounding rect.
-        succeeded &= SUCCEEDED(hr);
+        succeeded = SUCCEEDED(hr);
     }
 
     ID2D1SolidColorBrush* pBrush = nullptr;
@@ -238,7 +238,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     {
         COLORREF bgrTextColor = GetTextColor(hDC);
         D2D1::ColorF aD2DColor(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f);
-        succeeded &= SUCCEEDED(CHECKHR(mpRT->CreateSolidColorBrush(aD2DColor, &pBrush)));
+        succeeded = SUCCEEDED(CHECKHR(mpRT->CreateSolidColorBrush(aD2DColor, &pBrush)));
     }
 
     if (succeeded)
