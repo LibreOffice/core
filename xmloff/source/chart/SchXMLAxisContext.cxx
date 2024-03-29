@@ -565,6 +565,7 @@ void SchXMLAxisContext::SetAxisTitle()
     {
         try
         {
+            // TODO: ODF import for formatted chart titles
             xTitleProp->setPropertyValue("String", uno::Any(m_aCurrentAxis.aTitle) );
         }
         catch( beans::UnknownPropertyException & )
