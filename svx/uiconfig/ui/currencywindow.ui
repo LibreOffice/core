@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -11,22 +11,22 @@
     </columns>
   </object>
   <object class="GtkPopover" id="CurrencyWindow">
-    <property name="can_focus">False</property>
-    <property name="no_show_all">True</property>
-    <property name="border_width">4</property>
+    <property name="can-focus">False</property>
+    <property name="no-show-all">True</property>
+    <property name="border-width">4</property>
     <property name="constrain-to">none</property>
     <child>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel" id="label">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">currency</property>
+            <property name="can-focus">False</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">currency</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -38,22 +38,22 @@
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="shadow_type">in</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="currency">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="model">liststore1</property>
-                <property name="headers_visible">False</property>
-                <property name="headers_clickable">False</property>
-                <property name="search_column">0</property>
-                <property name="show_expanders">False</property>
+                <property name="headers-visible">False</property>
+                <property name="headers-clickable">False</property>
+                <property name="search-column">0</property>
+                <property name="show-expanders">False</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="selection"/>
                 </child>
@@ -80,8 +80,8 @@
           <object class="GtkButton" id="ok">
             <property name="label" translatable="yes" context="stock">_OK</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="use-underline">True</property>
           </object>
           <packing>
