@@ -1841,7 +1841,7 @@ void OfaTreeOptionsDialog::writerOptions(const std::vector<sal_uInt16>& vPageId)
     sal_uInt16 nPageId = 0;
 
     OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "S H I T!!!" );
+    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
 
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
@@ -1901,7 +1901,7 @@ void OfaTreeOptionsDialog::writerWebOptions(const std::vector<sal_uInt16>& vPage
     sal_uInt16 nPageId = 0;
 
     OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "S H I T!!!" );
+    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
 
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
@@ -1955,7 +1955,7 @@ void OfaTreeOptionsDialog::calcOptions(const std::vector<sal_uInt16>& vPageId)
     sal_uInt16 nPageId = 0;
 
     OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "S H I T!!!" );
+    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
 
     SvtModuleOptions aModuleOpt;
     // Calc options
@@ -1995,7 +1995,7 @@ void OfaTreeOptionsDialog::impressOptions(const std::vector<sal_uInt16>& vPageId
     sal_uInt16 nPageId = 0;
 
     OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "S H I T!!!" );
+    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
     SvtModuleOptions aModuleOpt;
 
     // Impress options
@@ -2035,7 +2035,7 @@ void OfaTreeOptionsDialog::drawOptions(const std::vector<sal_uInt16>& vPageId)
     sal_uInt16 nPageId = 0;
 
     OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "S H I T!!!" );
+    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
     SvtModuleOptions aModuleOpt;
 
     // Draw options
@@ -2076,7 +2076,7 @@ void OfaTreeOptionsDialog::mathOptions(const std::vector<sal_uInt16>& vPageId)
     sal_uInt16 nPageId = 0;
 
     OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "S H I T!!!" );
+    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
     SvtModuleOptions aModuleOpt;
 
     // Math options
