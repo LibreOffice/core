@@ -22,8 +22,6 @@
 #include <i18nutil/transliteration.hxx>
 #include "optjsearch.hxx"
 
-using namespace com::sun::star::i18n;
-
 
 SvxJSearchOptionsPage::SvxJSearchOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optjsearchpage.ui", "OptJSearchPage", &rSet)

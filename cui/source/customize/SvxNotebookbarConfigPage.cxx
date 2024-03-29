@@ -45,10 +45,8 @@
 
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
-namespace lang = com::sun::star::lang;
 namespace container = com::sun::star::container;
 namespace beans = com::sun::star::beans;
-namespace graphic = com::sun::star::graphic;
 
 static bool isCategoryAvailable(std::u16string_view sClassId, std::u16string_view sUIItemId,
                                 std::u16string_view sActiveCategory, bool& isCategory)

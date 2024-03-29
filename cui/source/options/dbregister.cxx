@@ -45,9 +45,7 @@ namespace svx
 {
 
 
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
 using namespace ::svt;
 
 // class RegistrationItemSetHolder  -------------------------------------------------

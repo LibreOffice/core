@@ -43,7 +43,6 @@
 #include <dialmgr.hxx>
 #include <strings.hrc>
 
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 

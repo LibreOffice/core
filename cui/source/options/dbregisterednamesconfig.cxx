@@ -32,7 +32,6 @@ namespace svx
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
-    using namespace ::com::sun::star::container;
 
     void DbRegisteredNamesConfig::GetOptions( SfxItemSet& _rFillItems )
     {

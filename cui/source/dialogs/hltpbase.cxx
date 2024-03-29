@@ -39,8 +39,6 @@
 #include <bitmaps.hlst>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 
-using namespace ::ucbhelper;
-
 namespace {
 
 OUString CreateUiNameFromURL( const OUString& aStrURL )

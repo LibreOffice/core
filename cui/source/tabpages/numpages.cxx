@@ -84,7 +84,6 @@ using namespace css::beans;
 using namespace css::lang;
 using namespace css::text;
 using namespace css::container;
-using namespace css::style;
 
 #define SHOW_NUMBERING              0
 #define SHOW_BULLET                 1

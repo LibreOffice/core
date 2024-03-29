@@ -34,10 +34,8 @@
 #include <o3tl/string_view.hxx>
 
 using namespace css::uno;
-using namespace css::i18n;
 using namespace ::svxform;
 using namespace css::sdbc;
-using namespace css::util;
 
 #define MAX_HISTORY_ENTRIES     50
 

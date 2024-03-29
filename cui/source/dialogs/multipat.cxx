@@ -36,7 +36,6 @@
 #include <unotools/pathoptions.hxx>
 #include <o3tl/string_view.hxx>
 
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 

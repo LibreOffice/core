@@ -59,8 +59,6 @@
 
 #define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 

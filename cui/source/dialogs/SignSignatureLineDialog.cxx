@@ -41,8 +41,6 @@ using namespace css;
 using namespace css::uno;
 using namespace css::beans;
 using namespace css::frame;
-using namespace css::io;
-using namespace css::lang;
 using namespace css::frame;
 using namespace css::text;
 using namespace css::graphic;

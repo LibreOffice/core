@@ -54,7 +54,6 @@
 
 static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 
 OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
