@@ -5505,8 +5505,9 @@ public:
         {
             GtkBox *pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
             GtkWidget *pLabel = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
+            gtk_label_set_xalign(GTK_LABEL(pLabel), 0.0);
             pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new() : gtk_menu_item_new();
-            gtk_box_pack_start(pBox, pImage, true, true, 0);
+            gtk_box_pack_start(pBox, pImage, false, true, 0);
             gtk_box_pack_start(pBox, pLabel, true, true, 0);
             gtk_container_add(GTK_CONTAINER(pItem), GTK_WIDGET(pBox));
             gtk_widget_show_all(pItem);
