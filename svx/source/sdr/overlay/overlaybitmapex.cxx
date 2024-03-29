@@ -35,7 +35,7 @@ namespace sdr::overlay
                     mfShearX,
                     mfRotation));
 
-            if(basegfx::fTools::more(mfAlpha, 0.0))
+            if(mfAlpha > 0.0)
             {
                 drawinglayer::primitive2d::Primitive2DContainer aNewTransPrimitiveVector { aReference };
                 aReference = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aNewTransPrimitiveVector), mfAlpha);

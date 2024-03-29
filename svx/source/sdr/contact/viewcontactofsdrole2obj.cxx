@@ -99,9 +99,7 @@ void ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(drawinglay
         const double fWidth(aChartContentRange.getWidth());
         const double fHeight(aChartContentRange.getHeight());
 
-        if(!aChartSequence.empty()
-            && basegfx::fTools::more(fWidth, 0.0)
-            && basegfx::fTools::more(fHeight, 0.0))
+        if(!aChartSequence.empty() && fWidth > 0.0 && fHeight > 0.0)
         {
             // create embedding transformation
             basegfx::B2DHomMatrix aEmbed(

@@ -62,7 +62,7 @@ Primitive2DReference OverlayStaticRectanglePrimitive::create2DDecomposition(cons
         maPosition.getX() - fHalfWidth, maPosition.getY() - fHalfHeight,
         maPosition.getX() + fHalfWidth, maPosition.getY() + fHalfHeight);
 
-    if (!basegfx::fTools::more(getDiscreteUnit(), 0.0) || mfTransparence > 1.0)
+    if (getDiscreteUnit() <= 0.0 || mfTransparence > 1.0)
         return nullptr;
 
     basegfx::B2DPolygon aPolygon(
@@ -138,7 +138,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
         {
             const Size aBitmapSize(getBitmapEx().GetSizePixel());
 
-            if(!aBitmapSize.Width() || !aBitmapSize.Height() || !basegfx::fTools::more(getDiscreteUnit(), 0.0))
+            if(!aBitmapSize.Width() || !aBitmapSize.Height() || getDiscreteUnit() <= 0.0)
                 return nullptr;
 
             // calculate back from internal bitmap's extreme coordinates (the edges)
@@ -287,7 +287,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             Primitive2DReference aRetval;
             basegfx::B2DRange aInnerRange(getObjectRange());
 
-            if(aInnerRange.isEmpty() || !basegfx::fTools::more(getDiscreteUnit(), 0.0) || getTransparence() > 1.0)
+            if(aInnerRange.isEmpty() || getDiscreteUnit() <= 0.0 || getTransparence() > 1.0)
                 return nullptr;
 
             if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
