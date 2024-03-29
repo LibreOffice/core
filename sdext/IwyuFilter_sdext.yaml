@@ -1,5 +1,5 @@
 ---
-assumeFilename: sdext/source/presenter/PresenterSlideSorter.cxx
+assumeFilename: sdext/source/pdfimport/pdfiadaptor.cxx
 excludelist:
     sdext/source/pdfimport/odf/odfemitter.cxx:
     # Actually in use

@@ -47,13 +47,10 @@
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
 
 IntroPage::IntroPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog)
     : vcl::OWizardPage(pPage, &rOptimizerDialog, "modules/simpress/ui/pmintropage.ui", "PMIntroPage")
