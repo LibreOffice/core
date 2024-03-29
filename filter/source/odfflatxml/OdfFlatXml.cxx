@@ -38,13 +38,11 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::cppu;
-using namespace ::osl;
 using namespace ::sax;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
 

@@ -52,6 +52,7 @@
 
 #include <memory>
 
+using namespace ::com::sun::star::style;
 
 constexpr OUString aPrefixClipPathId = u"clip_path_"_ustr;
 

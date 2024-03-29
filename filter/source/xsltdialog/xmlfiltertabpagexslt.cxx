@@ -27,9 +27,6 @@
 #include "xmlfiltercommon.hxx"
 #include "xmlfiltertabpagexslt.hxx"
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
 XMLFilterTabPageXSLT::XMLFilterTabPageXSLT(weld::Widget* pPage, weld::Dialog* pDialog)
     : sInstPath( "$(prog)/" )
     , m_pDialog(pDialog)

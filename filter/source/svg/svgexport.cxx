@@ -74,7 +74,7 @@
 using namespace css::animations;
 using namespace css::presentation;
 using namespace ::com::sun::star::graphic;
-using namespace ::com::sun::star::geometry;
+using namespace ::com::sun::star::style;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
