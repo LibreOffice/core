@@ -838,6 +838,14 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
             basegfx::B3DVector aLight2Vector(aSecondLightDirection.DirectionX, -aSecondLightDirection.DirectionY, aSecondLightDirection.DirectionZ);
             aLight2Vector.normalize();
 
+            // tdf#160421 a single flip inverts the light directions currently (March 2024). So invert
+            // their directions here for rendering.
+            if (bIsMirroredX != bIsMirroredY)
+            {
+                aLight1Vector *= -1.0;
+                aLight2Vector *= -1.0;
+            }
+
             // Light Intensity
 
             // For "FirstLight" the 3D-Scene light "1" is regularly used. In case of surface "Matte"
