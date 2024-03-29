@@ -33,7 +33,6 @@
 #include <xmlscript/xml_helper.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
-using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 
 using namespace ::com::sun::star;

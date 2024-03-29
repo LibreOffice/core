@@ -24,7 +24,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
-using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
