@@ -455,12 +455,13 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testChartMainWithSubTitle)
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // test properties of title
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "sz", "1300");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "b", "0");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr", "i", "1");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr/a:solidFill/a:srgbClr", "val", "f10d0c");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr/a:latin", "typeface", "Arial");
-    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:t", "It is a Maintitle\nIt is a Subtitle");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:pPr/a:defRPr", "sz", "1300");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:pPr/a:defRPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:pPr/a:defRPr", "i", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:pPr/a:defRPr/a:solidFill/a:srgbClr", "val", "f10d0c");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r/a:rPr/a:latin", "typeface", "Arial");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r/a:t", "It is a Maintitle");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r/a:t", "It is a Subtitle");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr", "val", "81d41a");
 }
 
@@ -739,6 +740,63 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf148142)
     CPPUNIT_ASSERT(xAxis2.is());
     chart2::ScaleData aScaleData2 = xAxis2->getScaleData();
     CPPUNIT_ASSERT(!aScaleData2.ShiftedCategoryPosition);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testFormattedChartTitles)
+{
+    loadFromFile(u"xlsx/tdf39052.xlsx");
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check run level properties [1] - first paragraph
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[1]/a:rPr", "b", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[1]/a:rPr", "sz", "1400");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[1]/a:rPr/a:solidFill/a:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[1]/a:rPr/a:latin", "typeface", "Aptos Narrow");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[1]/a:t", "This");
+    // Check run level properties [2]
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[2]/a:rPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[2]/a:rPr", "sz", "1400");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[2]/a:rPr/a:solidFill/a:srgbClr", "val", "595959");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[2]/a:t", " is");
+    // Check run level properties [3]
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[3]/a:rPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[3]/a:rPr", "sz", "1400");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[3]/a:rPr", "baseline", "30000");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[3]/a:t", "3");
+    // Check run level properties [4]
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[4]/a:rPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[4]/a:rPr", "sz", "1400");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[4]/a:t", " a ");
+    // Check run level properties [5]
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[5]/a:rPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[5]/a:rPr", "i", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[5]/a:rPr", "sz", "2000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[5]/a:rPr", "u", "sng");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[5]/a:rPr/a:solidFill/a:srgbClr", "val", "4ea72e");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[5]/a:rPr/a:uFillTx", 1);
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[5]/a:t", "custom");
+    // Check run level properties [6]
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[6]/a:rPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[6]/a:rPr", "sz", "1400");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r[6]/a:t", " erte1");
+    // Check run level properties [1] - second paragraph
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[1]/a:rPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[1]/a:rPr", "sz", "1400");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[1]/a:rPr/a:solidFill/a:srgbClr", "val", "595959");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[1]/a:rPr/a:latin", "typeface", "Aptos Narrow");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[1]/a:t", "2dfgd ch");
+    // Check run level properties [2]
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[2]/a:rPr", "b", "1");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[2]/a:t", "ar");
+    // Check run level properties [3]
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[3]/a:rPr", "b", "0");;
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[3]/a:t", "t ");
+    // Check run level properties [4]
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[4]/a:rPr", "b", "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[4]/a:rPr", "strike", "sngStrike");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[4]/a:t", "title");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

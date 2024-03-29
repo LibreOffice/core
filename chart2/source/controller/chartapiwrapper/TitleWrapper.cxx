@@ -106,6 +106,63 @@ Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPro
 
 namespace {
 
+    class WrappedTitleFormStringsProperty : public WrappedProperty
+    {
+        public:
+            explicit WrappedTitleFormStringsProperty();
+
+            virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
+            virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
+            virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const override;
+
+        protected:
+            Reference< uno::XComponentContext > m_xContext;
+    };
+
+}
+
+WrappedTitleFormStringsProperty::WrappedTitleFormStringsProperty()
+    : ::chart::WrappedProperty( "FormattedStrings", OUString() )
+{
+}
+
+void WrappedTitleFormStringsProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+{
+    Title* pTitle = dynamic_cast<Title*>(xInnerPropertySet.get());
+    if (pTitle)
+    {
+        Sequence< Reference< chart2::XFormattedString >> xFormattedStrings;
+        rOuterValue >>= xFormattedStrings;
+        TitleHelper::setFormattedString(pTitle, xFormattedStrings);
+    }
+}
+Any WrappedTitleFormStringsProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+{
+    Any aRet(getPropertyDefault(Reference< beans::XPropertyState >(xInnerPropertySet, uno::UNO_QUERY)));
+    Reference< chart2::XTitle > xTitle(xInnerPropertySet, uno::UNO_QUERY);
+    if (xTitle.is())
+    {
+        const Sequence< Reference< chart2::XFormattedString > > aStrings(xTitle->getText());
+
+        OUStringBuffer aBuf;
+        for (Reference< chart2::XFormattedString > const& formattedStr : aStrings)
+        {
+            aBuf.append(formattedStr->getString());
+        }
+        if (!aBuf.makeStringAndClear().isEmpty())
+        {
+            aRet <<= aStrings;
+        }
+    }
+    return aRet;
+}
+Any WrappedTitleFormStringsProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
+{
+    return uno::Any(Sequence< Reference< chart2::XFormattedString > >()); //default title is an empty Sequence of XFormattedStrings
+}
+
+namespace {
+
 class WrappedStackedTextProperty : public WrappedProperty
 {
 public:
@@ -127,6 +184,7 @@ namespace
 enum
 {
     PROP_TITLE_STRING,
+    PROP_TITLE_FORMATTED_STRINGS,
     PROP_TITLE_TEXT_ROTATION,
     PROP_TITLE_TEXT_STACKED
 };
@@ -139,7 +197,11 @@ void lcl_AddPropertiesToVector(
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
-
+    rOutProperties.emplace_back( "FormattedStrings",
+                  PROP_TITLE_FORMATTED_STRINGS,
+                  cppu::UnoType< Sequence< Reference< chart2::XFormattedString >>>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
     rOutProperties.emplace_back( "TextRotation",
                   PROP_TITLE_TEXT_ROTATION,
                   cppu::UnoType<sal_Int32>::get(),
@@ -468,6 +530,7 @@ std::vector< std::unique_ptr<WrappedProperty> > TitleWrapper::createWrappedPrope
     std::vector< std::unique_ptr<WrappedProperty> > aWrappedProperties;
 
     aWrappedProperties.emplace_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
+    aWrappedProperties.emplace_back( new WrappedTitleFormStringsProperty() );
     aWrappedProperties.emplace_back( new WrappedTextRotationProperty( true ) );
     aWrappedProperties.emplace_back( new WrappedStackedTextProperty() );
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );

@@ -1129,7 +1129,6 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
 
     // get Properties of ChartDocument
     bool bHasMainTitle = false;
-    OUString aSubTitle;
     bool bHasLegend = false;
     Reference< beans::XPropertySet > xDocPropSet( xChartDoc, uno::UNO_QUERY );
     if( xDocPropSet.is())
@@ -1147,12 +1146,13 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
         }
     } // if( xDocPropSet.is())
 
+    Sequence< uno::Reference< chart2::XFormattedString > > xFormattedSubTitle;
     Reference< beans::XPropertySet > xPropSubTitle( xChartDoc->getSubTitle(), UNO_QUERY );
     if( xPropSubTitle.is())
     {
         try
         {
-            xPropSubTitle->getPropertyValue("String") >>= aSubTitle;
+            xPropSubTitle->getPropertyValue("FormattedStrings") >>= xFormattedSubTitle;
         }
         catch( beans::UnknownPropertyException & )
         {
@@ -1166,12 +1166,12 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     // titles
     if( bHasMainTitle )
     {
-        exportTitle( xChartDoc->getTitle(), !aSubTitle.isEmpty() ? &aSubTitle : nullptr );
+        exportTitle( xChartDoc->getTitle(), xFormattedSubTitle);
         pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, "0");
     }
-    else if( !aSubTitle.isEmpty() )
+    else if( xFormattedSubTitle.hasElements() )
     {
-        exportTitle( xChartDoc->getSubTitle(), nullptr );
+        exportTitle( xChartDoc->getSubTitle() );
         pFS->singleElement(FSNS(XML_c, XML_autoTitleDeleted), XML_val, "0");
     }
     else
@@ -1440,20 +1440,40 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
     pFS->endElement( FSNS( XML_c, XML_legend ) );
 }
 
-void ChartExport::exportTitle( const Reference< XShape >& xShape, const OUString* pSubText)
+void ChartExport::exportTitle( const Reference< XShape >& xShape,
+    const css::uno::Sequence< uno::Reference< css::chart2::XFormattedString > >& xFormattedSubTitle )
 {
-    OUString sText;
+    Sequence< uno::Reference< chart2::XFormattedString > > xFormattedTitle;
     Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
     if( xPropSet.is())
     {
-        xPropSet->getPropertyValue("String") >>= sText;
+        xPropSet->getPropertyValue("FormattedStrings") >>= xFormattedTitle;
     }
 
     // tdf#101322: add subtitle to title
-    if( pSubText )
-        sText = sText.isEmpty() ? *pSubText : sText + "\n" + *pSubText;
+    if (xFormattedSubTitle.hasElements())
+    {
+        if (!xFormattedTitle.hasElements())
+        {
+            xFormattedTitle = xFormattedSubTitle;
+        }
+        else
+        {
+            sal_uInt32 nLength = xFormattedTitle.size();
+            const OUString aLastString = xFormattedTitle.getArray()[nLength - 1]->getString();
+            xFormattedTitle.getArray()[nLength - 1]->setString(aLastString + OUStringChar('\n'));
+            for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedSubTitle)
+            {
+                if (!rxFS->getString().isEmpty())
+                {
+                    xFormattedTitle.realloc(nLength + 1);
+                    xFormattedTitle.getArray()[nLength++] = rxFS;
+                }
+            }
+        }
+    }
 
-    if( sText.isEmpty() )
+    if (!xFormattedTitle.hasElements())
         return;
 
     FSHelperPtr pFS = GetFS();
@@ -1477,7 +1497,6 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, const OUString
             XML_rot, oox::drawingml::calcRotationValue(nRotation) );
     // TODO: lstStyle
     pFS->singleElement(FSNS(XML_a, XML_lstStyle));
-    // FIXME: handle multiple paragraphs to parse aText
     pFS->startElement(FSNS(XML_a, XML_p));
 
     pFS->startElement(FSNS(XML_a, XML_pPr));
@@ -1488,13 +1507,37 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, const OUString
 
     pFS->endElement( FSNS( XML_a, XML_pPr ) );
 
-    pFS->startElement(FSNS(XML_a, XML_r));
-    bDummy = false;
-    WriteRunProperties( xPropSet, false, XML_rPr, true, bDummy, nDummy );
-    pFS->startElement(FSNS(XML_a, XML_t));
-    pFS->writeEscaped( sText );
-    pFS->endElement( FSNS( XML_a, XML_t ) );
-    pFS->endElement( FSNS( XML_a, XML_r ) );
+    for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedTitle)
+    {
+        pFS->startElement(FSNS(XML_a, XML_r));
+        bDummy = false;
+        Reference< beans::XPropertySet > xRunPropSet(rxFS, uno::UNO_QUERY);
+        WriteRunProperties(xRunPropSet, false, XML_rPr, true, bDummy, nDummy);
+        pFS->startElement(FSNS(XML_a, XML_t));
+
+        // the linebreak should always be at the end of the XFormattedString text
+        bool bNextPara = rxFS->getString().endsWith(u"\n");
+        if (!bNextPara)
+            pFS->writeEscaped(rxFS->getString());
+        else
+        {
+            sal_Int32 nEnd = rxFS->getString().lastIndexOf('\n');
+            pFS->writeEscaped(rxFS->getString().replaceAt(nEnd, 1, u""));
+        }
+        pFS->endElement(FSNS(XML_a, XML_t));
+        pFS->endElement(FSNS(XML_a, XML_r));
+
+        if (bNextPara)
+        {
+            pFS->endElement(FSNS(XML_a, XML_p));
+
+            pFS->startElement(FSNS(XML_a, XML_p));
+            pFS->startElement(FSNS(XML_a, XML_pPr));
+            bDummy = false;
+            WriteRunProperties(xPropSet, false, XML_defRPr, true, bDummy, nDummy);
+            pFS->endElement(FSNS(XML_a, XML_pPr));
+        }
+    }
 
     pFS->endElement( FSNS( XML_a, XML_p ) );
 
