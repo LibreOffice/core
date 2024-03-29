@@ -57,8 +57,6 @@
 #include <mutex>
 
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::awt;
 
 namespace
 {

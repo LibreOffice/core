@@ -40,7 +40,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
-using namespace ::utl;
 
 FontMetric::FontMetric()
 :   mnAscent( 0 ),

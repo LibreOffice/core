@@ -45,7 +45,6 @@
 #include <window.h>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 
 class SystemWindow::ImplData
 {

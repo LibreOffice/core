@@ -28,7 +28,6 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
-using namespace com::sun::star::awt;
 using namespace x11;
 
 Sequence< OUString > x11::X11Clipboard_getSupportedServiceNames()

@@ -25,10 +25,8 @@
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace cppu;
-using namespace osl;
 
 using namespace x11;
 

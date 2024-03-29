@@ -45,7 +45,6 @@
 #include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
 
 // hmm. No support for regular expression. Well, I always (not really :) wanted to write a finite automat
 // so here comes a finite automat ...

@@ -58,7 +58,6 @@
 
 using namespace css;
 using namespace css::accessibility;
-using namespace css::beans;
 using namespace css::uno;
 
 QtAccessibleWidget::QtAccessibleWidget(const Reference<XAccessible> xAccessible, QObject* pObject)

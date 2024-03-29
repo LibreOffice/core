@@ -24,7 +24,6 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 
-using namespace osl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;

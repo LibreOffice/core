@@ -28,7 +28,6 @@
 #include <vector>
 
 using namespace vcl;
-using namespace cppu;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

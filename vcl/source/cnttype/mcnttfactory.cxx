@@ -22,7 +22,6 @@
 #include "mcnttfactory.hxx"
 #include "mcnttype.hxx"
 
-using namespace ::osl;
 using namespace ::cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

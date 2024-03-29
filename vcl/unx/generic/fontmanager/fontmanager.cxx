@@ -58,11 +58,8 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
 using namespace vcl;
-using namespace utl;
 using namespace psp;
-using namespace osl;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
 /*

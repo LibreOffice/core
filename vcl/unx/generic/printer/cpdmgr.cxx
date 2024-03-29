@@ -34,7 +34,6 @@
 #include <config_gio.h>
 
 using namespace psp;
-using namespace osl;
 
 #if ENABLE_DBUS && ENABLE_GIO
 // Function to execute when name is acquired on the bus

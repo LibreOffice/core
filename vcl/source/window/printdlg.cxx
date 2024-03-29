@@ -50,7 +50,6 @@
 using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 

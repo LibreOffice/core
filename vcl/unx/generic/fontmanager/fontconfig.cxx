@@ -55,7 +55,6 @@
 #include <algorithm>
 
 using namespace psp;
-using namespace osl;
 
 namespace
 {

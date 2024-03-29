@@ -39,7 +39,6 @@ using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
 using namespace ::com::sun::star::beans     ;   // PropertyValue
 using namespace ::com::sun::star::uno       ;   // Reference
 using namespace ::com::sun::star::util      ;   // XChangesBatch
-using namespace ::com::sun::star::awt       ;   // Size
 using namespace ::com::sun::star::container ;
 using namespace ::com::sun::star::configuration;
 using namespace ::com::sun::star::task      ;   // XStatusIndicator
