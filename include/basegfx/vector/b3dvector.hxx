@@ -106,10 +106,7 @@ namespace basegfx
         */
         double getLength() const
         {
-            double fLen(scalar(*this));
-            if((0.0 == fLen) || (1.0 == fLen))
-                return fLen;
-            return sqrt(fLen);
+            return std::hypot(mnX, mnY, mnZ);
         }
 
         /** Calculate the length in the XZ-Plane for this 3D Vector
@@ -118,10 +115,7 @@ namespace basegfx
         */
         double getXZLength() const
         {
-            double fLen((mnX * mnX) + (mnZ * mnZ)); // #i73040#
-            if((0.0 == fLen) || (1.0 == fLen))
-                return fLen;
-            return sqrt(fLen);
+            return std::hypot(mnX, mnZ);
         }
 
         /** Calculate the length in the YZ-Plane for this 3D Vector
@@ -130,10 +124,7 @@ namespace basegfx
         */
         double getYZLength() const
         {
-            double fLen((mnY * mnY) + (mnZ * mnZ));
-            if((0.0 == fLen) || (1.0 == fLen))
-                return fLen;
-            return sqrt(fLen);
+            return std::hypot(mnY, mnZ);
         }
 
         /** Set the length of this 3D Vector
@@ -143,7 +134,7 @@ namespace basegfx
         */
         B3DVector& setLength(double fLen)
         {
-            double fLenNow(scalar(*this));
+            double fLenNow(std::hypot(mnX, mnY, mnZ));
 
             if(!::basegfx::fTools::equalZero(fLenNow))
             {
@@ -151,7 +142,7 @@ namespace basegfx
 
                 if(!::basegfx::fTools::equal(fOne, fLenNow))
                 {
-                    fLen /= sqrt(fLenNow);
+                    fLen /= fLenNow;
                 }
 
                 mnX *= fLen;

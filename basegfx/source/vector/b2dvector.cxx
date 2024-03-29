@@ -25,27 +25,22 @@ namespace basegfx
 {
     B2DVector& B2DVector::normalize()
     {
-        double fLen(scalar(*this));
+        double fLen(std::hypot(mnX, mnY));
 
-        if(fTools::equalZero(fLen))
-        {
-            mnX = 0.0;
-            mnY = 0.0;
-        }
-        else
+        if(!fTools::equalZero(fLen))
         {
             const double fOne(1.0);
 
             if(!fTools::equal(fOne, fLen))
             {
-                fLen = sqrt(fLen);
-
-                if(!fTools::equalZero(fLen))
-                {
-                    mnX /= fLen;
-                    mnY /= fLen;
-                }
+                mnX /= fLen;
+                mnY /= fLen;
             }
+        }
+        else
+        {
+            mnX = 0.0;
+            mnY = 0.0;
         }
 
         return *this;
@@ -90,7 +85,7 @@ namespace basegfx
 
     B2DVector& B2DVector::setLength(double fLen)
     {
-        double fLenNow(scalar(*this));
+        double fLenNow(std::hypot(mnX, mnY));
 
         if(!fTools::equalZero(fLenNow))
         {
@@ -98,7 +93,7 @@ namespace basegfx
 
             if(!fTools::equal(fOne, fLenNow))
             {
-                fLen /= sqrt(fLenNow);
+                fLen /= fLenNow;
             }
 
             mnX *= fLen;

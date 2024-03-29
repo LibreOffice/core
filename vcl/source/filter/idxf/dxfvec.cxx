@@ -28,7 +28,7 @@
 
 double DXFVector::Abs() const
 {
-    return sqrt(SProd(*this));
+    return std::hypot(fx, fy, fz);
 }
 
 

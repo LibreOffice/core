@@ -24,7 +24,7 @@ namespace basegfx
 {
     B3DVector& B3DVector::normalize()
     {
-        double fLen(scalar(*this));
+        double fLen(std::hypot(mnX, mnY, mnZ));
 
         if(!::basegfx::fTools::equalZero(fLen))
         {
@@ -32,12 +32,16 @@ namespace basegfx
 
             if(!::basegfx::fTools::equal(fOne, fLen))
             {
-                fLen = sqrt(fLen);
-
                 mnX /= fLen;
                 mnY /= fLen;
                 mnZ /= fLen;
             }
+        }
+        else
+        {
+            mnX = 0.0;
+            mnY = 0.0;
+            mnZ = 0.0;
         }
 
         return *this;

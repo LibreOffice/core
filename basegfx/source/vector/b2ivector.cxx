@@ -42,7 +42,7 @@ namespace basegfx
 
     B2IVector& B2IVector::setLength(double fLen)
     {
-        double fLenNow(scalar(*this));
+        double fLenNow(std::hypot(mnX, mnY));
 
         if(!::basegfx::fTools::equalZero(fLenNow))
         {
@@ -50,7 +50,7 @@ namespace basegfx
 
             if(!::basegfx::fTools::equal(fOne, fLenNow))
             {
-                fLen /= sqrt(fLenNow);
+                fLen /= fLenNow;
             }
 
             mnX = fround( mnX*fLen );
