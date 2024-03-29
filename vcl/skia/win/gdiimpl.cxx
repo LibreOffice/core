@@ -216,9 +216,8 @@ catch (const sal::systools::ComError& e)
 
 bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    assert(dynamic_cast<const SkiaWinFontInstance*>(&rLayout.GetFont()));
-    const SkiaWinFontInstance* pWinFont
-        = static_cast<const SkiaWinFontInstance*>(&rLayout.GetFont());
+    assert(dynamic_cast<SkiaWinFontInstance*>(&rLayout.GetFont()));
+    SkiaWinFontInstance* pWinFont = static_cast<SkiaWinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
     double hScale = pWinFont->getHScale();
     LOGFONTW logFont;
@@ -251,7 +250,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
                 return false;
         }
         // Cache the typeface.
-        const_cast<SkiaWinFontInstance*>(pWinFont)->SetSkiaTypeface(typeface, dwrite);
+        pWinFont->SetSkiaTypeface(typeface, dwrite);
     }
 
     SkFont font(typeface);
