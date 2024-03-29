@@ -36,7 +36,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
