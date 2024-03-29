@@ -45,7 +45,6 @@ namespace frm
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
-    using namespace ::com::sun::star::graphic;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)

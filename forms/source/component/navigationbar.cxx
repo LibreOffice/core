@@ -39,9 +39,7 @@ namespace frm
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::io;
-    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
-    using namespace ::com::sun::star::container;
     using namespace ::comphelper;
 
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;

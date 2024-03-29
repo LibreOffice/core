@@ -35,7 +35,6 @@
 
 using namespace css::uno;
 using namespace css::io;
-using namespace css::xml::xpath;
 using namespace css::xml::dom;
 
 CSerializationURLEncoded::CSerializationURLEncoded()

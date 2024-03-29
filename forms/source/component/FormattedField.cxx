@@ -59,7 +59,6 @@ using namespace dbtools;
 using namespace css::uno;
 using namespace css::sdb;
 using namespace css::sdbc;
-using namespace css::sdbcx;
 using namespace css::beans;
 using namespace css::container;
 using namespace css::form;
@@ -67,7 +66,6 @@ using namespace css::awt;
 using namespace css::io;
 using namespace css::lang;
 using namespace css::util;
-using namespace css::form::binding;
 
 namespace frm
 {

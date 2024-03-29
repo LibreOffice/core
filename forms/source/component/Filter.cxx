@@ -74,8 +74,6 @@ namespace frm
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::ui::dialogs;
 
-    using namespace ::connectivity;
-
     OFilterControl::OFilterControl( const Reference< XComponentContext >& _rxORB )
         :m_aTextListeners( *this )
         ,m_xContext( _rxORB )
