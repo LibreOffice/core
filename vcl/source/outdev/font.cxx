@@ -948,7 +948,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     aOffset += Point( nEmphasisWidth2, nEmphasisHeight2 );
 
     basegfx::B2DPoint aOutPoint;
-    tools::Rectangle aRectangle;
+    basegfx::B2DRectangle aRectangle;
     const GlyphItem* pGlyph;
     const LogicalFontInstance* pGlyphFont;
     int nStart = 0;
@@ -968,7 +968,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
             else
             {
                 aAdjPoint = aOffset;
-                aAdjPoint.AdjustX(aRectangle.Left() + (aRectangle.GetWidth() - aEmphasisMark.GetWidth()) / 2 );
+                aAdjPoint.AdjustX(aRectangle.getMinX() + (aRectangle.getWidth() - aEmphasisMark.GetWidth()) / 2 );
             }
 
             if ( mpFontInstance->mnOrientation )
