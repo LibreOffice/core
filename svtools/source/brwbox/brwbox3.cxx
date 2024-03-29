@@ -35,8 +35,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace svt
 {
-    using namespace ::com::sun::star::lang;
-
     static Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
                                             sal_Int32 _nPos,
                                             AccessibleBrowseBoxObjType _eType,

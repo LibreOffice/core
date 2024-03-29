@@ -43,7 +43,6 @@
 #include <vcl/uitest/eventdescription.hxx>
 
 using namespace css::uno;
-using namespace css::lang;
 using namespace css::accessibility;
 
 namespace

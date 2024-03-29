@@ -27,9 +27,6 @@ const sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
 #define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
 
-using namespace ::osl;
-using namespace ::com::sun::star::uno;
-
 namespace svtools
 {
 

@@ -35,9 +35,6 @@
 
 #include <mutex>
 
-using namespace utl;
-using namespace com::sun::star::uno;
-
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
 
 namespace SvtAccessibilityOptions

@@ -35,7 +35,6 @@ namespace {
 constexpr OUStringLiteral UNODIALOG_PROPERTY_ALIASES = u"FieldMapping";
 
     using namespace css::uno;
-    using namespace css::lang;
     using namespace css::util;
     using namespace css::beans;
     using namespace css::sdbc;

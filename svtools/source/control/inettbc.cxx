@@ -60,7 +60,6 @@ using namespace ::ucbhelper;
 using namespace ::utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
