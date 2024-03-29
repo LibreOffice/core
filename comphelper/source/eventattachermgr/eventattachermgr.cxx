@@ -58,7 +58,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 using namespace cppu;
-using namespace osl;
 
 
 namespace comphelper

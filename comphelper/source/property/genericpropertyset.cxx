@@ -32,7 +32,6 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 
-using namespace ::osl;
 using namespace ::cppu;
 using namespace ::comphelper;
 using namespace ::com::sun::star;

@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <cassert>
 
-using namespace osl;
 using namespace com::sun::star;
 
 

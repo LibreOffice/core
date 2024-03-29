@@ -47,7 +47,6 @@ using ::cppu::WeakImplHelper;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::osl;
 
 namespace comphelper
 {
