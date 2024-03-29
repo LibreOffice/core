@@ -12,10 +12,7 @@
 #include <typelib/typedescription.hxx>
 #include "types.hxx"
 #include "abi.hxx"
-#include <stdio.h>
 #include <cstring>
-
-//#define BRIDGE_DEBUG
 
 namespace abi_riscv64
 {
@@ -133,10 +130,8 @@ ReturnKind getReturnKind(const typelib_TypeDescription* pTypeDescr)
 void fillUNOStruct(const typelib_TypeDescription* pTypeDescr, sal_Int64* gret, double* fret,
                    void* pRegisterReturn)
 {
-#ifdef BRIDGE_DEBUG
-    printf("In fillStruct, pTypeDescr = %p, gret = %p, fret = %p, pRegisterReturn = %p\n",
-           pTypeDescr, gret, fret, pRegisterReturn);
-#endif
+    BRIDGE_LOG("In fillStruct, pTypeDescr = %p, gret = %p, fret = %p, pRegisterReturn = %p\n",
+               pTypeDescr, gret, fret, pRegisterReturn);
     ReturnKind returnKind = getReturnKind(pTypeDescr);
     switch (returnKind)
     {
@@ -186,10 +181,8 @@ void fillUNOStruct(const typelib_TypeDescription* pTypeDescr, sal_Int64* gret, d
 void splitUNOStruct(const typelib_TypeDescription* pTypeDescr, sal_uInt64* pTarget,
                     sal_uInt64* pSource, sal_Int32& returnType)
 {
-#ifdef BRIDGE_DEBUG
-    printf("In splitUNOStruct, pTypeDescr = %p, pTarget = %p, pSource = %p\n", pTypeDescr, pTarget,
-           pSource);
-#endif
+    BRIDGE_LOG("In splitUNOStruct, pTypeDescr = %p, pTarget = %p, pSource = %p\n", pTypeDescr,
+               pTarget, pSource);
     sal_uInt64* pTemp = (sal_uInt64*)calloc(2, sizeof(sal_uInt64));
     ReturnKind returnKind = getReturnKind(pTypeDescr);
     switch (returnKind)

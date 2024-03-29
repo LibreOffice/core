@@ -29,20 +29,8 @@
 #include "share.hxx"
 #include "abi.hxx"
 
-#include <stdio.h>
-//#include <string.h>
 #include <cstring>
 #include <typeinfo>
-
-//#define BRIDGE_DEBUG
-
-#ifdef BRIDGE_DEBUG
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-using namespace ::std;
-using namespace ::osl;
-using namespace ::rtl;
-#endif
 
 using namespace com::sun::star::uno;
 
@@ -103,20 +91,17 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
              sal_Int32 nParams, typelib_MethodParameter* pParams, void** gpreg, void** fpreg,
              void** ovrflw, sal_uInt64* pRegisterReturn /* space for register return */)
 {
-#ifdef BRIDGE_DEBUG
-    printf("In cpp2uno_call, pThis = %p, pMemberTypeDescr = %p, pReturnTypeRef = %p\n", pThis,
-           pMemberTypeDescr, pReturnTypeRef);
-    printf("In cpp2uno_call, nParams = %d, pParams = %p, pRegisterReturn = %p\n", nParams, pParams,
-           pRegisterReturn);
-    printf("In cpp2uno_call, gpreg = %p, fpreg = %p, ovrflw = %p\n", gpreg, fpreg, ovrflw);
-#endif
+    BRIDGE_LOG("In cpp2uno_call, pThis = %p, pMemberTypeDescr = %p, pReturnTypeRef = %p\n", pThis,
+               pMemberTypeDescr, pReturnTypeRef);
+    BRIDGE_LOG("In cpp2uno_call, nParams = %d, pParams = %p, pRegisterReturn = %p\n", nParams,
+               pParams, pRegisterReturn);
+    BRIDGE_LOG("In cpp2uno_call, gpreg = %p, fpreg = %p, ovrflw = %p\n", gpreg, fpreg, ovrflw);
 
     unsigned int nr_gpr = 0;
     unsigned int nr_fpr = 0;
 
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "cpp2uno_call:begin\n");
-#endif
+    BRIDGE_LOG("cpp2uno_call:begin\n");
+
     // return
     typelib_TypeDescription* pReturnTypeDescr = 0;
     if (pReturnTypeRef)
@@ -135,16 +120,12 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTypeDescr)
                               ? alloca(pReturnTypeDescr->nSize)
                               : pCppReturn); // direct way
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "cpp2uno_call:complexreturn\n");
-#endif
+            BRIDGE_LOG("cpp2uno_call:complexreturn\n");
         }
         else
         {
             pUnoReturn = pRegisterReturn; // direct way for simple types
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "cpp2uno_call:simplereturn\n");
-#endif
+            BRIDGE_LOG("cpp2uno_call:simplereturn\n");
         }
     }
 
@@ -166,9 +147,8 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
 
     sal_Int32 nTempIndices = 0;
 
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "cpp2uno_call:nParams=%d\n", nParams);
-#endif
+    BRIDGE_LOG("cpp2uno_call:nParams=%d\n", nParams);
+
     for (sal_Int32 nPos = 0; nPos < nParams; ++nPos)
     {
         const typelib_MethodParameter& rParam = pParams[nPos];
@@ -178,34 +158,26 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType(pParamTypeDescr)) // value
         {
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "cpp2uno_call:Param %u, type %u\n", nPos, pParamTypeDescr->eTypeClass);
-#endif
+            BRIDGE_LOG("cpp2uno_call:Param %u, type %u\n", nPos, pParamTypeDescr->eTypeClass);
             switch (pParamTypeDescr->eTypeClass)
             {
                 case typelib_TypeClass_FLOAT:
                 case typelib_TypeClass_DOUBLE:
                     if (nr_fpr < MAX_FP_REGS)
                     {
-#ifdef BRIDGE_DEBUG
-                        fprintf(stdout, "cpp2uno_call:fpr=%p\n", *fpreg);
-#endif
+                        BRIDGE_LOG("cpp2uno_call:fpr=%p\n", *fpreg);
                         pCppArgs[nPos] = pUnoArgs[nPos] = fpreg++;
                         nr_fpr++;
                     }
                     else if (nr_gpr < MAX_GP_REGS)
                     {
-#ifdef BRIDGE_DEBUG
-                        fprintf(stdout, "cpp2uno_call:fpr=%p\n", *gpreg);
-#endif
+                        BRIDGE_LOG("cpp2uno_call:fpr=%p\n", *gpreg);
                         pCppArgs[nPos] = pUnoArgs[nPos] = gpreg++;
                         nr_gpr++;
                     }
                     else
                     {
-#ifdef BRIDGE_DEBUG
-                        fprintf(stdout, "cpp2uno_call:fpr=%p\n", *ovrflw);
-#endif
+                        BRIDGE_LOG("cpp2uno_call:fpr=%p\n", *ovrflw);
                         pCppArgs[nPos] = pUnoArgs[nPos] = ovrflw++;
                     }
 
@@ -214,17 +186,13 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
                 default:
                     if (nr_gpr < MAX_GP_REGS)
                     {
-#ifdef BRIDGE_DEBUG
-                        fprintf(stdout, "cpp2uno_call:gpr=%p\n", *gpreg);
-#endif
+                        BRIDGE_LOG("cpp2uno_call:gpr=%p\n", *gpreg);
                         pCppArgs[nPos] = pUnoArgs[nPos] = gpreg++;
                         nr_gpr++;
                     }
                     else
                     {
-#ifdef BRIDGE_DEBUG
-                        fprintf(stdout, "cpp2uno_call:gpr=%p\n", *ovrflw);
-#endif
+                        BRIDGE_LOG("cpp2uno_call:gpr=%p\n", *ovrflw);
                         pCppArgs[nPos] = pUnoArgs[nPos] = ovrflw++;
                     }
                     break;
@@ -234,9 +202,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
         }
         else // ptr to complex value | ref
         {
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "cpp2uno_call:ptr|ref\n");
-#endif
+            BRIDGE_LOG("cpp2uno_call:ptr|ref\n");
             void* pCppStack;
             if (nr_gpr < MAX_GP_REGS)
             {
@@ -247,9 +213,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
             {
                 pCppArgs[nPos] = pCppStack = *ovrflw++;
             }
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "cpp2uno_call:pCppStack=%p\n", pCppStack);
-#endif
+            BRIDGE_LOG("cpp2uno_call:pCppStack=%p\n", pCppStack);
 
             if (!rParam.bIn) // is pure out
             {
@@ -267,45 +231,34 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
                 pTempIndices[nTempIndices] = nPos; // has to be reconverted
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
-#ifdef BRIDGE_DEBUG
-                fprintf(stdout, "cpp2uno_call:related to interface,%p,%d,pUnoargs[%d]=%p\n",
-                        pCppStack, pParamTypeDescr->nSize, nPos, pUnoArgs[nPos]);
-#endif
+                BRIDGE_LOG("cpp2uno_call:related to interface,%p,%d,pUnoargs[%d]=%p\n", pCppStack,
+                           pParamTypeDescr->nSize, nPos, pUnoArgs[nPos]);
             }
             else // direct way
             {
                 pUnoArgs[nPos] = pCppStack;
-#ifdef BRIDGE_DEBUG
-                fprintf(stdout, "cpp2uno_call:direct,pUnoArgs[%d]=%p\n", nPos, pUnoArgs[nPos]);
-#endif
+                BRIDGE_LOG("cpp2uno_call:direct,pUnoArgs[%d]=%p\n", nPos, pUnoArgs[nPos]);
                 // no longer needed
                 TYPELIB_DANGER_RELEASE(pParamTypeDescr);
             }
         }
     }
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "cpp2uno_call2,%p,unoargs=%p\n", pThis->getUnoI()->pDispatcher, pUnoArgs);
-    printf("pMemberTypeDescr=%p,pUnoReturn=%p\n", pMemberTypeDescr, pUnoReturn);
-#endif
+    BRIDGE_LOG("cpp2uno_call2,%p,unoargs=%p\n", pThis->getUnoI()->pDispatcher, pUnoArgs);
+    BRIDGE_LOG("pMemberTypeDescr=%p,pUnoReturn=%p\n", pMemberTypeDescr, pUnoReturn);
 
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
     uno_Any* pUnoExc = &aUnoExc;
-#ifdef BRIDGE_DEBUG
-    printf("pThis=%p,pThis->getUnoI()=%p,pMemberTypeDescr=%p\npUnoReturn=%p,pUnoArgs=%p", pThis,
-           pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs);
-#endif
+    BRIDGE_LOG("pThis=%p,pThis->getUnoI()=%p,pMemberTypeDescr=%p\npUnoReturn=%p,pUnoArgs=%p", pThis,
+               pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs);
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)(pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs,
                                      &pUnoExc);
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "cpp2uno_call2,after dispatch\n");
-#endif
+    BRIDGE_LOG("cpp2uno_call2,after dispatch\n");
 
     // in case an exception occurred...
     if (pUnoExc)
     {
-        fflush(stdout);
         // destruct temporary in/inout params
         for (; nTempIndices--;)
         {
@@ -423,9 +376,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
                         {
                             std::memcpy(pRegisterReturn, pUnoReturn, 16);
                         }
-#ifdef BRIDGE_DEBUG
-                        printf("Unhandled Type: %d\n", pReturnTypeDescr->eTypeClass);
-#endif
+                        BRIDGE_LOG("Unhandled Type: %d\n", pReturnTypeDescr->eTypeClass);
                 }
             }
             else
@@ -453,11 +404,9 @@ sal_Int32 cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, voi
 {
     static_assert(sizeof(sal_Int64) == sizeof(void*), "### unexpected!");
 
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "in cpp_vtable_call nFunctionIndex is %d\n", nFunctionIndex);
-    fprintf(stdout, "in cpp_vtable_call nVtableOffset is %d\n", nVtableOffset);
-    fprintf(stdout, "in cpp_vtable_call gp=%p, fp=%p, ov=%p\n", gpreg, fpreg, ovrflw);
-#endif
+    BRIDGE_LOG("in cpp_vtable_call nFunctionIndex is %d\n", nFunctionIndex);
+    BRIDGE_LOG("in cpp_vtable_call nVtableOffset is %d\n", nVtableOffset);
+    BRIDGE_LOG("in cpp_vtable_call gp=%p, fp=%p, ov=%p\n", gpreg, fpreg, ovrflw);
 
     // gpreg:  [ret *], this, [other gpr params]
     // fpreg:  [fpr params]
@@ -472,17 +421,13 @@ sal_Int32 cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, voi
     {
         pThis = gpreg[0];
     }
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "cpp_vtable_call, pThis=%p, nFunctionIndex=%d, nVtableOffset=%d\n", pThis,
-            nFunctionIndex, nVtableOffset);
-#endif
+    BRIDGE_LOG("cpp_vtable_call, pThis=%p, nFunctionIndex=%d, nVtableOffset=%d\n", pThis,
+               nFunctionIndex, nVtableOffset);
 
     pThis = static_cast<char*>(pThis) - nVtableOffset;
     bridges::cpp_uno::shared::CppInterfaceProxy* pCppI
         = bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(pThis);
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "cpp_vtable_call, pCppI=%p\n", pCppI);
-#endif
+    BRIDGE_LOG("cpp_vtable_call, pCppI=%p\n", pCppI);
 
     typelib_InterfaceTypeDescription* pTypeDescr = pCppI->getTypeDescr();
 
@@ -503,18 +448,12 @@ sal_Int32 cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, voi
 
     TypeDescription aMemberDescr(pTypeDescr->ppAllMembers[nMemberPos]);
 
-#ifdef BRIDGE_DEBUG
-    //OString cstr( OUStringToOString( aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-    //fprintf(stdout, "calling %s, nFunctionIndex=%d\n", cstr.getStr(), nFunctionIndex );
-#endif
     sal_Int32 eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         {
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "cpp_vtable_call interface attribute\n");
-#endif
+            BRIDGE_LOG("cpp_vtable_call interface attribute\n");
             typelib_TypeDescriptionReference* pAttrTypeRef
                 = reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(aMemberDescr.get())
                       ->pAttributeTypeRef;
@@ -541,31 +480,23 @@ sal_Int32 cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, voi
         }
         case typelib_TypeClass_INTERFACE_METHOD:
         {
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "cpp_vtable_call interface method\n");
-#endif
+            BRIDGE_LOG("cpp_vtable_call interface method\n");
             // is METHOD
             switch (nFunctionIndex)
             {
                 case 1: // acquire()
-#ifdef BRIDGE_DEBUG
-                    fprintf(stdout, "cpp_vtable_call method acquire\n");
-#endif
+                    BRIDGE_LOG("cpp_vtable_call method acquire\n");
                     pCppI->acquireProxy(); // non virtual call!
                     eRet = 0;
                     break;
                 case 2: // release()
-#ifdef BRIDGE_DEBUG
-                    fprintf(stdout, "cpp_vtable_call method release\n");
-#endif
+                    BRIDGE_LOG("cpp_vtable_call method release\n");
                     pCppI->releaseProxy(); // non virtual call!
                     eRet = 0;
                     break;
                 case 0: // queryInterface() opt
                 {
-#ifdef BRIDGE_DEBUG
-                    fprintf(stdout, "cpp_vtable_call method query interface opt\n");
-#endif
+                    BRIDGE_LOG("cpp_vtable_call method query interface opt\n");
                     typelib_TypeDescription* pTD = 0;
                     TYPELIB_DANGER_GET(&pTD, reinterpret_cast<Type*>(gpreg[2])->getTypeLibType());
                     if (pTD)
@@ -593,9 +524,7 @@ sal_Int32 cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, voi
                     [[fallthrough]];
                 } // else perform queryInterface()
                 default:
-#ifdef BRIDGE_DEBUG
-                    fprintf(stdout, "cpp_vtable_call method query interface\n");
-#endif
+                    BRIDGE_LOG("cpp_vtable_call method query interface\n");
                     typelib_InterfaceMethodTypeDescription* pMethodTD
                         = reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(
                             aMemberDescr.get());
@@ -608,9 +537,7 @@ sal_Int32 cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, voi
         }
         default:
         {
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "cpp_vtable_call no member\n");
-#endif
+            BRIDGE_LOG("cpp_vtable_call no member\n");
             throw RuntimeException("no member description found!", (XInterface*)pThis);
         }
     }
@@ -625,15 +552,11 @@ int const codeSnippetSize = 0x6c;
 unsigned char* codeSnippet(unsigned char* code, sal_Int32 functionIndex, sal_Int32 vtableOffset,
                            bool bHasHiddenParam)
 {
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "in codeSnippet functionIndex is %d\n", functionIndex);
-    fprintf(stdout, "in codeSnippet vtableOffset is %d\n", vtableOffset);
-    fprintf(stdout, "in codeSnippet privateSnippetExecutor is %lx\n",
-            (unsigned long)privateSnippetExecutor);
-    fprintf(stdout, "in codeSnippet cpp_vtable_call is %lx\n", (unsigned long)cpp_vtable_call);
-
-    fflush(stdout);
-#endif
+    BRIDGE_LOG("in codeSnippet functionIndex is %d\n", functionIndex);
+    BRIDGE_LOG("in codeSnippet vtableOffset is %d\n", vtableOffset);
+    BRIDGE_LOG("in codeSnippet privateSnippetExecutor is %lx\n",
+               (unsigned long)privateSnippetExecutor);
+    BRIDGE_LOG("in codeSnippet cpp_vtable_call is %lx\n", (unsigned long)cpp_vtable_call);
 
     if (bHasHiddenParam)
         functionIndex |= 0x80000000;
@@ -767,12 +690,9 @@ unsigned char* bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     (*slots) -= functionCount;
     Slot* s = *slots;
 
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "in addLocalFunctions functionOffset is %d\n", functionOffset);
-    fprintf(stdout, "in addLocalFunctions vtableOffset is %d\n", vtableOffset);
-    fprintf(stdout, "nMembers=%d\n", type->nMembers);
-    fflush(stdout);
-#endif
+    BRIDGE_LOG("in addLocalFunctions functionOffset is %d\n", functionOffset);
+    BRIDGE_LOG("in addLocalFunctions vtableOffset is %d\n", vtableOffset);
+    BRIDGE_LOG("nMembers=%d\n", type->nMembers);
 
     for (sal_Int32 i = 0; i < type->nMembers; ++i)
     {

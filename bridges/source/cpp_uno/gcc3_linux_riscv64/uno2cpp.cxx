@@ -38,11 +38,6 @@
 #include "share.hxx"
 #include "abi.hxx"
 
-//#define BRIDGE_DEBUG
-#ifdef BRIDGE_DEBUG
-#include <stdio.h>
-#endif
-
 using namespace ::com::sun::star::uno;
 
 namespace
@@ -60,21 +55,19 @@ static void callVirtualMethod(void* pAdjustedThisPtr, sal_Int32 nVtableIndex, vo
                               sal_uInt64* pStack, sal_uInt32 nStack, sal_uInt64* pGPR, double* pFPR,
                               typelib_TypeDescription* pReturnTypeDescr)
 {
-#ifdef BRIDGE_DEBUG
-    printf("In callVirtualMethod:\n");
-    printf("pAdjustedThisPtr = %p, nVtableIndex = %d, pRegisterReturn = %p, pReturnTypeRef = %p\n",
-           pAdjustedThisPtr, nVtableIndex, pRegisterReturn, pReturnTypeRef);
-    printf("bSimpleReturn = %d, pStack = %p, nStack = %d, pGPR = %p, pFPR = %p, pReturnTypeDescr = "
-           "%p\n",
-           bSimpleReturn, pStack, nStack, pGPR, pFPR, pReturnTypeDescr);
-#endif
+    BRIDGE_LOG("In callVirtualMethod:\n");
+    BRIDGE_LOG(
+        "pAdjustedThisPtr = %p, nVtableIndex = %d, pRegisterReturn = %p, pReturnTypeRef = %p\n",
+        pAdjustedThisPtr, nVtableIndex, pRegisterReturn, pReturnTypeRef);
+    BRIDGE_LOG(
+        "bSimpleReturn = %d, pStack = %p, nStack = %d, pGPR = %p, pFPR = %p, pReturnTypeDescr = "
+        "%p\n",
+        bSimpleReturn, pStack, nStack, pGPR, pFPR, pReturnTypeDescr);
     // Get pointer to method
     sal_uInt64 pMethod = *((sal_uInt64*)pAdjustedThisPtr);
     pMethod += 8 * nVtableIndex;
     void* mfunc = (void*)*((sal_uInt64*)pMethod);
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "calling function %p\n", mfunc);
-#endif
+    BRIDGE_LOG("calling function %p\n", mfunc);
 
     // Load parameters to stack, if necessary
     sal_uInt64* pCallStack = NULL;
@@ -127,9 +120,7 @@ static void callVirtualMethod(void* pAdjustedThisPtr, sal_Int32 nVtableIndex, vo
               pCallStack) // dummy input to prevent the compiler from optimizing the alloca out
         : "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7", "ra", "fa0", "fa1", "fa2", "fa3", "fa4",
           "fa5", "fa6", "fa7", "memory");
-#ifdef BRIDGE_DEBUG
-    printf("In callVirtualMethod, fret = %p, gret = %p\n", fret, gret);
-#endif
+    BRIDGE_LOG("In callVirtualMethod, fret = %p, gret = %p\n", fret, gret);
 
     switch (pReturnTypeRef->eTypeClass)
     {
@@ -153,9 +144,7 @@ static void callVirtualMethod(void* pAdjustedThisPtr, sal_Int32 nVtableIndex, vo
         case typelib_TypeClass_EXCEPTION:
         {
             sal_Int32 const nRetSize = pReturnTypeRef->pType->nSize;
-#ifdef BRIDGE_DEBUG
-            printf("nRetSize = %d\n", nRetSize);
-#endif
+            BRIDGE_LOG("nRetSize = %d\n", nRetSize);
             if (bSimpleReturn && nRetSize <= 16 && nRetSize > 0)
             {
                 typelib_TypeDescription* pTypeDescr = 0;
@@ -166,9 +155,7 @@ static void callVirtualMethod(void* pAdjustedThisPtr, sal_Int32 nVtableIndex, vo
             break;
         }
         default:
-#ifdef BRIDGE_DEBUG
-            fprintf(stdout, "unhandled return type %u\n", pReturnTypeRef->eTypeClass);
-#endif
+            BRIDGE_LOG("unhandled return type %u\n", pReturnTypeRef->eTypeClass);
             break;
     }
 }
@@ -179,12 +166,10 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
                      typelib_MethodParameter* pParams, void* pUnoReturn, void* pUnoArgs[],
                      uno_Any** ppUnoExc)
 {
-#ifdef BRIDGE_DEBUG
-    printf("In cpp_call\n");
-    printf("pThis = %p, aVtableSlot = %p, pReturnTypeRef = %p, nParams = %d\n", pThis, aVtableSlot,
-           pReturnTypeRef, nParams);
-    printf("pParams = %p , pUnoReturn = %p, pUnoArgs = %p\n", pParams, pUnoReturn, pUnoArgs);
-#endif
+    BRIDGE_LOG("In cpp_call\n");
+    BRIDGE_LOG("pThis = %p, aVtableSlot = %p, pReturnTypeRef = %p, nParams = %d\n", pThis,
+               aVtableSlot, pReturnTypeRef, nParams);
+    BRIDGE_LOG("pParams = %p , pUnoReturn = %p, pUnoArgs = %p\n", pParams, pUnoReturn, pUnoArgs);
     // max space for: [complex ret ptr], values|ptr ...
     sal_uInt64* pStack = (sal_uInt64*)__builtin_alloca(((nParams + 3) * sizeof(sal_Int64)));
     sal_uInt64* pStackStart = pStack;
@@ -194,9 +179,7 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
 
     double pFPR[MAX_FP_REGS];
     sal_uInt32 nFPR = 0;
-#ifdef BRIDGE_DEBUG
-    printf("pGPR = %p, pFPR = %p\n", pGPR, pFPR);
-#endif
+    BRIDGE_LOG("pGPR = %p, pFPR = %p\n", pGPR, pFPR);
 
     // return
     typelib_TypeDescription* pReturnTypeDescr = 0;
@@ -236,30 +219,22 @@ static void cpp_call(bridges::cpp_uno::shared::UnoInterfaceProxy* pThis,
         = (typelib_TypeDescription**)(pCppArgs + (2 * nParams));
 
     sal_Int32 nTempIndices = 0;
-#ifdef BRIDGE_DEBUG
-    printf("In cpp_call, nParams = %d\n", nParams);
-    printf("pCppArgs = %p, pStack = %p\n", pCppArgs, pStack);
-#endif
+    BRIDGE_LOG("In cpp_call, nParams = %d\n", nParams);
+    BRIDGE_LOG("pCppArgs = %p, pStack = %p\n", pCppArgs, pStack);
     for (sal_Int32 nPos = 0; nPos < nParams; ++nPos)
     {
-#ifdef BRIDGE_DEBUG
-        printf("In cpp_call, nPos = %d\n", nPos);
-#endif
+        BRIDGE_LOG("In cpp_call, nPos = %d\n", nPos);
         const typelib_MethodParameter& rParam = pParams[nPos];
         typelib_TypeDescription* pParamTypeDescr = 0;
         TYPELIB_DANGER_GET(&pParamTypeDescr, rParam.pTypeRef);
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType(pParamTypeDescr))
         {
-#ifdef BRIDGE_DEBUG
-            printf("Before uno_copyAndConvertData and tons of switch.\n");
-#endif
+            BRIDGE_LOG("Before uno_copyAndConvertData and tons of switch.\n");
             uno_copyAndConvertData(pCppArgs[nPos] = alloca(8), pUnoArgs[nPos], pParamTypeDescr,
                                    pThis->getBridge()->getUno2Cpp());
-#ifdef BRIDGE_DEBUG
-            printf("Type = %d, Param = 0x%lx\n", pParamTypeDescr->eTypeClass,
-                   *reinterpret_cast<sal_uInt64*>(pCppArgs[nPos]));
-#endif
+            BRIDGE_LOG("Type = %d, Param = 0x%lx\n", pParamTypeDescr->eTypeClass,
+                       *reinterpret_cast<sal_uInt64*>(pCppArgs[nPos]));
             switch (pParamTypeDescr->eTypeClass)
             {
                 // In types.h:
@@ -450,19 +425,15 @@ namespace bridges::cpp_uno::shared
 void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescription* pMemberDescr,
                                void* pReturn, void* pArgs[], uno_Any** ppException)
 {
-#ifdef BRIDGE_DEBUG
-    printf("In unoInterfaceProxyDispatch:\n");
-    printf("pMemberDescr = %p, pReturn = %p, pArgs = %p, ppExeption = %p\n", pMemberDescr, pReturn,
-           pArgs, ppException);
-#endif
+    BRIDGE_LOG("In unoInterfaceProxyDispatch:\n");
+    BRIDGE_LOG("pMemberDescr = %p, pReturn = %p, pArgs = %p, ppExeption = %p\n", pMemberDescr,
+               pReturn, pArgs, ppException);
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy* pThis
         = static_cast<bridges::cpp_uno::shared::UnoInterfaceProxy*>(pUnoI);
     //typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
-#ifdef BRIDGE_DEBUG
-    fprintf(stdout, "in dispatch\n");
-#endif
+    BRIDGE_LOG("in dispatch\n");
 
     switch (pMemberDescr->eTypeClass)
     {
