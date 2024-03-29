@@ -51,7 +51,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;

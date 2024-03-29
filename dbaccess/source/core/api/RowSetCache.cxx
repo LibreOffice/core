@@ -60,9 +60,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
 using namespace ::cppu;
-using namespace ::osl;
 
 // This class calls m_pCacheSet->FOO_checked(..., sal_False)
 // (where FOO is absolute, last, previous)

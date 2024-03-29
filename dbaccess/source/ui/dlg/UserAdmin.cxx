@@ -45,7 +45,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace dbaui;
-using namespace comphelper;
 
 namespace {
 

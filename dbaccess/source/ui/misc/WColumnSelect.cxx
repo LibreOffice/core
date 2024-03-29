@@ -26,10 +26,7 @@
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace dbaui;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;

@@ -24,7 +24,6 @@
 namespace dbaui
 {
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::datatransfer;
 
     void OJoinExchObj::setDescriptors(const OJoinExchangeData& jxdSource,bool _bFirstEntry)

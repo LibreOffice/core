@@ -28,8 +28,6 @@
 #include "dbtreemodel.hxx"
 
 using namespace ::com::sun::star::frame;
-using namespace ::dbtools;
-using namespace ::svx;
 
 namespace dbaui
 {

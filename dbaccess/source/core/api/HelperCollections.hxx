@@ -25,15 +25,10 @@
 namespace dbaccess
 {
     using namespace dbtools;
-    using namespace comphelper;
     using namespace connectivity;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
-    using namespace ::com::sun::star::sdbcx;
-    using namespace ::com::sun::star::container;
-    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::script;
     using namespace ::cppu;
     using namespace ::osl;

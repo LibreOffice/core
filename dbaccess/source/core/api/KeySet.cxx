@@ -63,7 +63,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star;
 using namespace ::cppu;
-using namespace ::osl;
 using std::vector;
 
 namespace

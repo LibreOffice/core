@@ -33,7 +33,6 @@ using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
 
 OTableBorderWindow::OTableBorderWindow(OTableDesignView* pParent)
     : InterimItemWindow(pParent, "dbaccess/ui/tableborderwindow.ui", "TableBorderWindow", false)

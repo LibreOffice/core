@@ -53,7 +53,6 @@ constexpr OUStringLiteral PROPERTY_QUERYCOMPOSER = u"QueryComposer";
 constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbcx;

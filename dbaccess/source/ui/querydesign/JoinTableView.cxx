@@ -54,7 +54,6 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 #define LINE_SIZE           50

@@ -33,7 +33,6 @@ org_openoffice_comp_dbu_ODatasourceAdministrationDialog_get_implementation(
 namespace dbaui
 {
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 ODataSourcePropertyDialog::ODataSourcePropertyDialog(const Reference<XComponentContext>& _rxORB)

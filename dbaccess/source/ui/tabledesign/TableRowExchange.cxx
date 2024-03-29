@@ -26,7 +26,6 @@ namespace dbaui
 {
     constexpr sal_uInt32 FORMAT_OBJECT_ID_SBA_TABED = 1;
 
-    using namespace ::com::sun::star::uno;
     OTableRowExchange::OTableRowExchange(std::vector< std::shared_ptr<OTableRow> >&& _rvTableRow)
         : m_vTableRow(std::move(_rvTableRow))
     {

@@ -72,7 +72,6 @@
 #include <unotools/syslocale.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace utl;
 using namespace dbaccess;
 using namespace connectivity;
 using namespace comphelper;

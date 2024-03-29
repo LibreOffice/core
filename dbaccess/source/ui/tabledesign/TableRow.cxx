@@ -23,9 +23,7 @@
 #include <comphelper/types.hxx>
 
 using namespace dbaui;
-using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 
 OTableRow::OTableRow()
     :m_pActFieldDescr( nullptr )

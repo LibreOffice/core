@@ -34,7 +34,6 @@
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace dbaui;
 OQueryTableWindow::OQueryTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData)

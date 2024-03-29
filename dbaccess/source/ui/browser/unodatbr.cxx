@@ -111,7 +111,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::datatransfer;

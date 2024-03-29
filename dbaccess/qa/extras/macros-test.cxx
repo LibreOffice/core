@@ -11,7 +11,6 @@
 #include <test/unoapi_test.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 #if !defined(MACOSX) && !defined(_WIN32)
 

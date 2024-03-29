@@ -48,8 +48,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::container;
 using namespace ::cppu;
 

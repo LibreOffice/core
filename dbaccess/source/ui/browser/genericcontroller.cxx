@@ -56,7 +56,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::task;

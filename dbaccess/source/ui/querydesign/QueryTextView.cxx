@@ -26,8 +26,6 @@
 #include <undosqledit.hxx>
 
 using namespace dbaui;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 
 // end of temp classes
 OQueryTextView::OQueryTextView(OQueryContainerWindow* pParent, OQueryController& rController)

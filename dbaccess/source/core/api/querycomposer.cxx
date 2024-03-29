@@ -43,7 +43,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::utl;
 
 
 OQueryComposer::OQueryComposer(const Reference< XConnection>& _xConnection)

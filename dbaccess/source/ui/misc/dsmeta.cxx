@@ -28,7 +28,6 @@
 namespace dbaui
 {
 
-    using namespace dbaccess;
     using namespace ::com::sun::star;
 
     namespace {

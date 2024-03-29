@@ -58,16 +58,13 @@ org_openoffice_comp_dbu_ORelationDesign_get_implementation(
 }
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::util;
 using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;

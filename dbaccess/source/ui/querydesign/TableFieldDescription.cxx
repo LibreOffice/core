@@ -23,7 +23,6 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 
-using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace comphelper;

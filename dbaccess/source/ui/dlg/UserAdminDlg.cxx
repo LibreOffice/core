@@ -37,9 +37,7 @@ namespace dbaui
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdbc;
-    using namespace ::com::sun::star::sdbcx;
 
     // OUserAdminDlg
     OUserAdminDlg::OUserAdminDlg(weld::Window* pParent,

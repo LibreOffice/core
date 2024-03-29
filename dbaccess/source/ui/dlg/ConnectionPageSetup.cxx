@@ -28,14 +28,6 @@
 
 namespace dbaui
 {
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::ucb;
-    using namespace ::com::sun::star::ui::dialogs;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::container;
-    using namespace ::svt;
-
     std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateDbaseTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
         return std::make_unique<OConnectionTabPageSetup>( pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, STR_DBASE_HELPTEXT, STR_DBASE_HEADERTEXT, STR_DBASE_PATH_OR_FILE );

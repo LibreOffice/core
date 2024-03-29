@@ -74,7 +74,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::util;
 
 void OApplicationController::deleteTables(const std::vector< OUString>& _rList)
 {

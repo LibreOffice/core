@@ -45,11 +45,6 @@ namespace dbaui
 {
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::sdbc;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::container;
-    using namespace ::dbtools;
 
     OCommonBehaviourTabPage::OCommonBehaviourTabPage(weld::Container* pPage, weld::DialogController* pController,
         const OUString& rUIXMLDescription, const OUString& rId, const SfxItemSet& rCoreAttrs,

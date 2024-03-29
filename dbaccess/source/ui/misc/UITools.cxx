@@ -106,7 +106,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui::dialogs;
 using namespace ::svt;
 using ::com::sun::star::ucb::InteractiveIOException;
 using ::com::sun::star::ucb::IOErrorCode_NO_FILE;

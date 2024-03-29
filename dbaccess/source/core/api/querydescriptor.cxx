@@ -25,11 +25,8 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::cppu;
 

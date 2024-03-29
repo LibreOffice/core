@@ -24,11 +24,6 @@
 
 namespace dbaui
 {
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::ui::dialogs;
-
 ODatasourceSelectDialog::ODatasourceSelectDialog(weld::Window* _pParent, const std::set<OUString>& _rDatasources)
     : GenericDialogController(_pParent, "dbaccess/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")
     , m_xDatasource(m_xBuilder->weld_tree_view("treeview"))

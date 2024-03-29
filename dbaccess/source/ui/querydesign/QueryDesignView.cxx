@@ -53,12 +53,10 @@
 #include <string_view>
 
 using namespace ::dbaui;
-using namespace ::utl;
 using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

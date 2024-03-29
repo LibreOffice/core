@@ -32,7 +32,6 @@
 namespace dbaxml
 {
     using namespace ::xmloff::token;
-    using namespace ::com::sun::star::awt;
 
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {

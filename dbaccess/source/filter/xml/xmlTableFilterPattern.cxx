@@ -22,9 +22,6 @@
 
 namespace dbaxml
 {
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::xml::sax;
-
 OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport
                 ,bool _bNameFilter
                 ,OXMLTableFilterList& _rParent)

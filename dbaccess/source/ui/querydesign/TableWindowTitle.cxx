@@ -26,8 +26,6 @@
 #include <JoinController.hxx>
 
 using namespace dbaui;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
 OTableWindowTitle::OTableWindowTitle(OTableWindow* pParent)
     : InterimItemWindow(pParent, "dbaccess/ui/tabletitle.ui", "TableTitle")
     , m_pTabWin( pParent )
