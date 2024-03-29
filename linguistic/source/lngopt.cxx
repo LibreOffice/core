@@ -31,7 +31,6 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;

@@ -36,7 +36,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
-using namespace i18n;
 
 
 constexpr OUString SN_HH_CONV_DICTIONARY = u"com.sun.star.linguistic2.HangulHanjaConversionDictionary"_ustr;

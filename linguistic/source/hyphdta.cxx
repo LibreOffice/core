@@ -27,7 +27,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <utility>
 
-using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;

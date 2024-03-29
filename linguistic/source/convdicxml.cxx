@@ -34,12 +34,9 @@
 #include "convdicxml.hxx"
 #include <linguistic/misc.hxx>
 
-using namespace utl;
 using namespace com::sun::star;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
-using namespace linguistic;
 
 
 constexpr OUStringLiteral XML_NAMESPACE_TCD_STRING = u"http://openoffice.org/2003/text-conversion-dictionary";
