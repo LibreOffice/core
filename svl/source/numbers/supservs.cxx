@@ -34,7 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-using namespace ::utl;
 
 
 SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(css::uno::Reference< css::uno::XComponentContext > _xORB)

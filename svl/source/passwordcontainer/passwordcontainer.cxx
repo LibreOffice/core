@@ -43,11 +43,9 @@
 #include <rtl/byteseq.hxx>
 #include <rtl/ustrbuf.hxx>
 
-using namespace osl;
 using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;

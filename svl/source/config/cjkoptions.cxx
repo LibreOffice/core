@@ -26,8 +26,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <mutex>
 
-using namespace ::com::sun::star::uno;
-
 static void SvtCJKOptions_Load();
 
 namespace SvtCJKOptions
