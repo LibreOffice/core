@@ -61,7 +61,6 @@
 // XML-header to query SPELLML support
 constexpr OUStringLiteral SPELLML_SUPPORT = u"<?xml?>";
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;

@@ -52,7 +52,6 @@
 #include <set>
 #include <string.h>
 
-using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
