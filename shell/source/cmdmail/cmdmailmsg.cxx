@@ -22,7 +22,6 @@
 using com::sun::star::container::NoSuchElementException;
 using com::sun::star::container::XNameAccess;
 
-using namespace cppu;
 using namespace com::sun::star::uno;
 
 
