@@ -4606,10 +4606,17 @@ struct ScDependantsCalculator
                         continue;
                     }
 
+                    SCROW nFirstRefStartRow = bIsRef1RowRel ? aAbs.aStart.Row() + mnStartOffset : aAbs.aStart.Row();
+                    SCROW nLastRefEndRow =  bIsRef2RowRel ? aAbs.aEnd.Row() + mnEndOffset : aAbs.aEnd.Row();
+
+                    SCROW nFirstRefEndRow = bIsRef1RowRel ? aAbs.aStart.Row() + mnEndOffset : aAbs.aStart.Row();
+                    SCROW nLastRefStartRow =  bIsRef2RowRel ? aAbs.aEnd.Row() + mnStartOffset : aAbs.aEnd.Row();
+
                     // The first row that will be referenced through the doubleref.
-                    SCROW nFirstRefRow = bIsRef1RowRel ? aAbs.aStart.Row() + mnStartOffset : aAbs.aStart.Row();
+                    SCROW nFirstRefRow = std::min(nFirstRefStartRow, nLastRefStartRow);
                     // The last row that will be referenced through the doubleref.
-                    SCROW nLastRefRow =  bIsRef2RowRel ? aAbs.aEnd.Row() + mnEndOffset : aAbs.aEnd.Row();
+                    SCROW nLastRefRow =  std::max(nLastRefEndRow, nFirstRefEndRow);
+
                     // Number of rows to be evaluated from nFirstRefRow.
                     SCROW nArrayLength = nLastRefRow - nFirstRefRow + 1;
                     assert(nArrayLength > 0);
