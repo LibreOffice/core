@@ -14839,6 +14839,32 @@ private:
     }
 #endif
 
+    static gboolean search_equal_func(GtkTreeModel *model,
+                                      int           column,
+                                      const char   *key,
+                                      GtkTreeIter  *iter,
+                                      gpointer    /*user_data*/)
+    {
+        GValue aValue = G_VALUE_INIT;
+        gtk_tree_model_get_value(model, iter, column, &aValue);
+
+        GValue aStringValue = G_VALUE_INIT;
+        g_value_init(&aStringValue, G_TYPE_STRING);
+        const bool fail = !g_value_transform(&aValue, &aStringValue);
+        g_value_unset(&aValue);
+        if (fail)
+            return true;
+
+        bool bNoMatch(true);
+        if (const char *str = g_value_get_string(&aStringValue))
+        {
+            const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
+            bNoMatch = !rI18nHelper.MatchString(OUString::fromUtf8(key), OUString::fromUtf8(str));
+        }
+        g_value_unset(&aStringValue);
+        return bNoMatch;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pTreeView), pBuilder, bTakeOwnership)
@@ -14970,6 +14996,10 @@ public:
 
         m_nRowDeletedSignalId = g_signal_connect(m_pTreeModel, "row-deleted", G_CALLBACK(signalRowDeleted), this);
         m_nRowInsertedSignalId = g_signal_connect(m_pTreeModel, "row-inserted", G_CALLBACK(signalRowInserted), this);
+
+        // tdf#160028 LibreOffice embeds RTL/LTR direction markers in currency strings, which defeats the
+        // default gtk search mechanism, so switch in our one here
+        gtk_tree_view_set_search_equal_func(m_pTreeView, search_equal_func, nullptr, nullptr);
     }
 
     virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override
