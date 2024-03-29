@@ -22,7 +22,6 @@
 #include "emfpimageattributes.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::basegfx;
 
 namespace emfplushelper
 {
