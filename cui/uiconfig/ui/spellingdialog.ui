@@ -306,7 +306,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes" context="spellingdialog|insert">Special Character</property>
                         <property name="use-underline">True</property>
-                        <property name="icon-name">cmd/sc_insertsymbol.png</property>
+                        <property name="icon-name">accessories-character-map</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

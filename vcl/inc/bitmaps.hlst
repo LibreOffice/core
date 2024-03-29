@@ -140,6 +140,7 @@ inline constexpr OUString IMG_COPY = u"cmd/sc_copy.png"_ustr;
 inline constexpr OUString IMG_PASTE = u"cmd/sc_paste.png"_ustr;
 inline constexpr OUString IMG_MENU = u"sfx2/res/menu.png"_ustr;
 inline constexpr OUString IMG_CALENDAR = u"sc/res/date.png"_ustr;
+inline constexpr OUString IMG_CHARACTER_MAP = u"cmd/sc_insertsymbol.png"_ustr;
 inline constexpr OUString IMG_OPEN = u"cmd/sc_open.png"_ustr;
 
 inline constexpr OUString RID_BMP_TREENODE_COLLAPSED = u"res/plus.png"_ustr;

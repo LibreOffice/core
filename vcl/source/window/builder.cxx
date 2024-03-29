@@ -118,6 +118,8 @@ namespace
             return SV_RESID_BITMAP_CLOSEDOC;
         else if (sType == u"x-office-calendar")
             return IMG_CALENDAR;
+        else if (sType == u"accessories-character-map")
+            return IMG_CHARACTER_MAP;
         return OUString();
     }
 
