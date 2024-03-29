@@ -77,6 +77,8 @@ void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScaleY )
 
 } //anonymous namespace
 
+static bool AllowRect(const tools::Rectangle& rRect);
+
 MetaAction::MetaAction() :
     mnType( MetaActionType::NONE )
 {
@@ -675,6 +677,9 @@ MetaTextArrayAction::~MetaTextArrayAction()
 
 void MetaTextArrayAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowPoint(pOut->LogicToPixel(maStartPt)))
+        return;
+
     pOut->DrawTextArray( maStartPt, maStr, maDXAry, maKashidaAry, mnIndex, mnLen );
 }
 
