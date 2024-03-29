@@ -287,6 +287,7 @@ namespace svgio::svgreader
                 switch(aDominantBaseline)
                 {
                     case DominantBaseline::Middle:
+                    case DominantBaseline::Central:
                     {
                         aPosition.setY(aPosition.getY() - aRange.getCenterY());
                         break;

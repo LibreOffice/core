@@ -1207,6 +1207,30 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf154821_shape_in_group)
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRectOrig, aRectReload, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160003_copy_page_anchored)
+{
+    // Load a document, which has a chart anchored to page on sheet2. Copy&paste to other document
+    // had lost the chart object.
+    createScDoc("ods/tdf160003_page_anchored_object.ods");
+
+    // copy range with chart
+    goToCell("$Sheet2.$A$1:$L$24");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // close document and create new one
+    createScDoc();
+
+    // paste clipboard
+    goToCell("$Sheet1.$A$1");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Make sure the chart object exists.
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

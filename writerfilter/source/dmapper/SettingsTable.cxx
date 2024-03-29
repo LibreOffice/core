@@ -755,6 +755,8 @@ bool SettingsTable::GetNoLeading() const
 
 bool SettingsTable::GetGutterAtTop() const { return m_pImpl->m_bGutterAtTop; }
 
+bool SettingsTable::GetRecordChanges() const { return m_pImpl->m_bRecordChanges; }
+
 }//namespace dmapper
 } //namespace writerfilter
 

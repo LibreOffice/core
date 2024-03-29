@@ -15,6 +15,10 @@
 #include <tabfrm.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <flyfrm.hxx>
+#include <flyfrms.hxx>
 
 namespace
 {
@@ -129,6 +133,62 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyHeader)
 
     // Then make sure we get one more page, since the first page is now 2 pages:
     CPPUNIT_ASSERT_EQUAL(9, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyTableJoin)
+{
+    // Given a document with a multi-page floating table:
+    // When loading this document:
+    createSwDoc("floattable-table-join.docx");
+
+    // Then make sure this document doesn't crash the layout and has a floating table split on 4
+    // pages:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    {
+        SwSortedObjs& rPageObjs = *pPage1->GetSortedObjs();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+        auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+        CPPUNIT_ASSERT(pFly);
+        // Start of the chain.
+        CPPUNIT_ASSERT(!pFly->GetPrecede());
+        CPPUNIT_ASSERT(pFly->HasFollow());
+    }
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    {
+        SwSortedObjs& rPageObjs = *pPage2->GetSortedObjs();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+        auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+        CPPUNIT_ASSERT(pFly);
+        CPPUNIT_ASSERT(pFly->GetPrecede());
+        CPPUNIT_ASSERT(pFly->HasFollow());
+    }
+    auto pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage3);
+    CPPUNIT_ASSERT(pPage3->GetSortedObjs());
+    {
+        SwSortedObjs& rPageObjs = *pPage3->GetSortedObjs();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+        auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+        CPPUNIT_ASSERT(pFly);
+        CPPUNIT_ASSERT(pFly->GetPrecede());
+        CPPUNIT_ASSERT(pFly->HasFollow());
+    }
+    auto pPage4 = pPage3->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage4);
+    CPPUNIT_ASSERT(pPage4->GetSortedObjs());
+    SwSortedObjs& rPageObjs = *pPage4->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    auto pFly = rPageObjs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pFly);
+    // End of the chain.
+    CPPUNIT_ASSERT(pFly->GetPrecede());
+    CPPUNIT_ASSERT(!pFly->HasFollow());
 }
 }
 

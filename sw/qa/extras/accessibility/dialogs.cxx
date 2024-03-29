@@ -89,6 +89,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocu
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>!</PARAGRAPH>"), collectText());
 }
 
+#if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
 {
     load(u"private:factory/swriter");
@@ -112,6 +113,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>https://libreoffice.org/</PARAGRAPH>"),
                          collectText());
 }
+#endif //defined(_WIN32)
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
 {

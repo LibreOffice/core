@@ -371,7 +371,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_titlePg);
             if (((pBreak
                   && pBreak->getInt()
-                         == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous))
+                         == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous)
+                  && m_bHadSect) // tdf#158983 before first \sect, ignore \sbknone!
                  || m_nResetBreakOnSectBreak == RTFKeyword::SBKNONE)
                 && !(pTitlePg && pTitlePg->getInt()))
             {

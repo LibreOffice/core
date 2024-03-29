@@ -319,8 +319,8 @@ LIBGPGERROR_TARBALL := libgpg-error-1.43.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBLANGTAG_SHA256SUM := 1f12a20a02ec3a8d22e54dedb8b683a43c9c160bda1ba337bf1060607ae733bd
-LIBLANGTAG_TARBALL := liblangtag-0.6.3.tar.bz2
+LIBLANGTAG_SHA256SUM := 5ed6bcd4ae3f3c05c912e62f216cd1a44123846147f729a49fb5668da51e030e
+LIBLANGTAG_TARBALL := liblangtag-0.6.7.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -344,14 +344,14 @@ XMLSEC_TARBALL := xmlsec1-1.2.37.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBXML_SHA256SUM := 737e1d7f8ab3f139729ca13a2494fd17bf30ddb4b7a427cf336252cab57f57f7
-LIBXML_VERSION_MICRO := 4
-LIBXML_TARBALL := libxml2-2.11.$(LIBXML_VERSION_MICRO).tar.xz
+LIBXML_SHA256SUM := a972796696afd38073e0f59c283c3a2f5a560b5268b4babc391b286166526b21
+LIBXML_VERSION_MICRO := 5
+LIBXML_TARBALL := libxml2-2.12.$(LIBXML_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBXSLT_SHA256SUM := 1f32450425819a09acaff2ab7a5a7f8a2ec7956e505d7beeb45e843d0e1ecab1
-LIBXSLT_VERSION_MICRO := 38
+LIBXSLT_SHA256SUM := 2a20ad621148339b0759c4d4e96719362dee64c9a096dbba625ba053846349f0
+LIBXSLT_VERSION_MICRO := 39
 LIBXSLT_TARBALL := libxslt-1.1.$(LIBXSLT_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
@@ -470,8 +470,8 @@ POSTGRESQL_TARBALL := postgresql-13.11.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-PYTHON_SHA256SUM := 3ffb71cd349a326ba7b2fadc7e7df86ba577dd9c4917e52a8401adbda7405e3f
-PYTHON_TARBALL := Python-3.8.18.tar.xz
+PYTHON_SHA256SUM := d2807ac69f69b84fd46a0b93bbd02a4fa48d3e70f4b2835ff0f72a2885040076
+PYTHON_TARBALL := Python-3.8.19.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -555,8 +555,8 @@ XSLTML_TARBALL := a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ZLIB_SHA256SUM := 8a9ba2898e1d0d774eca6ba5b4627a11e5588ba85c8851336eb38de4683050a7
-ZLIB_TARBALL := zlib-1.3.tar.xz
+ZLIB_SHA256SUM := 38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32
+ZLIB_TARBALL := zlib-1.3.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

@@ -2975,7 +2975,11 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
         case Destination::SHAPE:
             m_bNeedFinalPar = true;
             m_bNeedCr = m_bNeedCrOrig;
-            if (rState.getFrame().hasProperties())
+            // tdf#47036 insert paragraph break for graphic object inside text
+            // frame at start of document - TODO: the object may actually be
+            // anchored inside the text frame and this ends up putting the
+            // anchor in the body, but better than losing the shape...
+            if (rState.getFrame().hasProperties() && m_pSdrImport->isTextGraphicObject())
             {
                 // parBreak() modifies m_aStates.top() so we can't apply resetFrame() directly on aState
                 resetFrame();

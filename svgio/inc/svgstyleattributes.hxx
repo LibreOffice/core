@@ -166,7 +166,8 @@ namespace svgio::svgreader
         {
             Auto,
             Middle,
-            Hanging
+            Hanging,
+            Central
         };
 
         enum class Visibility

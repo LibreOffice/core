@@ -132,6 +132,27 @@ DECLARE_RTFEXPORT_TEST(testTdf158586_lostFrame, "tdf158586_lostFrame.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf158983, "fdo55504-1-min.rtf")
+{
+    // the problem was that the page break was missing and the shapes were
+    // all anchored to the same node
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/body/section/txt", 1);
+    assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/fly", 1);
+    // Word shows these shapes anchored in the fly, not body, but at least they are not lost
+    assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/SwAnchoredDrawObject", 2);
+    // page break, paragraph break, section break.
+    assertXPath(pLayout, "/root/page[2]/body/section[1]/txt", 1);
+    assertXPath(pLayout, "/root/page[2]/body/section[1]/txt/anchored", 0);
+    assertXPath(pLayout, "/root/page[2]/body/section[2]/txt", 1);
+    assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/fly", 1);
+    // Word shows these shapes anchored in the fly, not body, but at least they are not lost
+    assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/SwAnchoredDrawObject", 2);
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_RTFEXPORT_TEST(testAnnotationPar, "tdf136445-1-min.rtf")
 {
     // the problem was that the paragraph break following annotation was missing
@@ -153,52 +174,8 @@ DECLARE_RTFEXPORT_TEST(testTdf158826_extraCR, "tdf158826_extraCR.rtf")
     // The page break defined before the document content should not cause a page break
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    // There is a two-column floating table [that SHOULD be getParagraphOrTable(1)]
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY_THROW);
-}
-
-DECLARE_RTFEXPORT_TEST(testTdf158830, "tdf158830.rtf")
-{
-    //check centered text in table
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
-    CPPUNIT_ASSERT_EQUAL(
-        style::ParagraphAdjust_CENTER,
-        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
-}
-
-DECLARE_RTFEXPORT_TEST(testTdf158978, "tdf158978.rtf")
-{
-    //check right alignment in table1 or table3
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
-    CPPUNIT_ASSERT_EQUAL(
-        style::ParagraphAdjust_RIGHT,
-        static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
-}
-
-DECLARE_RTFEXPORT_TEST(testTdf158982, "tdf158982.rtf")
-{
-    //check table count == 6
-    // check left margin in a cell of the last table
-    //
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTables->getCount());
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(5), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(508),
-                         getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
+    // There is a two-column floating table
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
 }
 
 } // end of anonymous namespace

@@ -417,6 +417,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282)
     xSourceDoc->dispose();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testStashedHeaderFooter)
+{
+    createSwDoc();
+    SwDoc* pSourceDocument = getSwDoc();
+    uno::Reference<lang::XComponent> xSourceDocument = mxComponent;
+    mxComponent.clear();
+
+    createSwDoc();
+    SwDoc* pTargetDocument = getSwDoc();
+    uno::Reference<lang::XComponent> xTargetDocument = mxComponent;
+    mxComponent.clear();
+
+    // Source
+    SwPageDesc* pSourcePageDesc = pSourceDocument->MakePageDesc("SourceStyle");
+    pSourcePageDesc->ChgFirstShare(false);
+    CPPUNIT_ASSERT(!pSourcePageDesc->IsFirstShared());
+    pSourcePageDesc->StashFrameFormat(pSourcePageDesc->GetFirstMaster(), true, false, true);
+    pSourceDocument->ChgPageDesc("SourceStyle", *pSourcePageDesc);
+    CPPUNIT_ASSERT(pSourcePageDesc->HasStashedFormat(true, false, true));
+
+    // Target
+    SwPageDesc* pTargetPageDesc = pTargetDocument->MakePageDesc("TargetStyle");
+
+    // Copy source to target
+    pTargetDocument->CopyPageDesc(*pSourcePageDesc, *pTargetPageDesc);
+
+    // Check the stashed frame format is copied
+    CPPUNIT_ASSERT(pTargetPageDesc->HasStashedFormat(true, false, true));
+
+    // Check document instance
+    auto pSourceStashedFormat = pSourcePageDesc->GetStashedFrameFormat(true, false, true);
+    CPPUNIT_ASSERT_EQUAL(true, pSourceStashedFormat->GetDoc() == pSourceDocument);
+
+    auto pTargetStashedFormat = pTargetPageDesc->GetStashedFrameFormat(true, false, true);
+    CPPUNIT_ASSERT_EQUAL(true, pTargetStashedFormat->GetDoc() == pTargetDocument);
+
+    xSourceDocument->dispose();
+    xTargetDocument->dispose();
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282WithMirror)
 {
     createSwDoc();

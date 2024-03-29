@@ -69,4 +69,6 @@
     <string name="calc_adjust_height">Upravit výšku</string>
     <string name="calc_optimal_height">Optimální výška</string>
     <string name="select_delete_options">Vyberte možnosti smazání:</string>
+    <string name="file_icon_desc">Ikona souboru</string>
+    <string name="calc_optimal_width">Optimální šířka</string>
 </resources>
