@@ -789,6 +789,8 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             case DataType::DATE:
             case DataType::TIME:
             case DataType::TIMESTAMP:
+            case DataType::TIME_WITH_TIMEZONE:
+            case DataType::TIMESTAMP_WITH_TIMEZONE:
                 DeactivateAggregate( tpLength ); // we don't need a length for date types
                 DeactivateAggregate( tpTextLen );
                 DeactivateAggregate( tpBoolDefault );
