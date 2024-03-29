@@ -47,7 +47,6 @@
 #include <extrusiondepthdialog.hxx>
 
 using namespace ::svx;
-using namespace ::cppu;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;

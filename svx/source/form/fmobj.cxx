@@ -39,11 +39,9 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;

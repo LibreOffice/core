@@ -48,7 +48,6 @@
 #include <memory>
 #include <mutex>
 
-using namespace ::osl;
 using namespace ::cppu;
 using namespace ::utl;
 using namespace ::com::sun::star;

@@ -53,7 +53,6 @@
 #include <svx/dialmgr.hxx>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 namespace svx

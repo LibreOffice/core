@@ -46,8 +46,6 @@ constexpr OUString TMP_STR_END = u"]"_ustr;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
 
 namespace {
 

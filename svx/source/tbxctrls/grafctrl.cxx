@@ -59,9 +59,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
 
 constexpr OUString TOOLBOX_NAME = u"colorbar"_ustr;
 #define RID_SVXSTR_UNDO_GRAFCROP    RID_SVXSTR_GRAFCROP

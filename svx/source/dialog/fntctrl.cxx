@@ -66,9 +66,6 @@
 //an arbitrary number of characters
 #define TEXT_WIDTH 80
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
 
 // small helper functions to set fonts
 

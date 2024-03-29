@@ -26,11 +26,6 @@
 #include <svx/linectrl.hxx>
 #include "linemetricbox.hxx"
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineWidthToolBoxControl, XLineWidthItem );

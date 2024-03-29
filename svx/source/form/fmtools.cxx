@@ -44,7 +44,6 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -53,10 +52,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::form;
 using namespace ::svxform;
-
 
 namespace
 {

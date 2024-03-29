@@ -76,9 +76,7 @@
 #include <svx/xdef.hxx>
 #include <officecfg/Office/Common.hxx>
 
-using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 using namespace comphelper;
 

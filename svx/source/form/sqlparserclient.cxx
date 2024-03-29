@@ -21,13 +21,11 @@
 
 #include <connectivity/sqlparse.hxx>
 
-using namespace ::dbtools;
 using namespace ::connectivity;
 
 namespace svxform
 {
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
 
     OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
         : m_pParser(std::make_shared<OSQLParser>(rxContext, getParseContext()))

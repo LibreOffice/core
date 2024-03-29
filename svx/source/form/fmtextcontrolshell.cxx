@@ -75,7 +75,6 @@ namespace svx
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::container;
 
 
     typedef sal_uInt16 WhichId;

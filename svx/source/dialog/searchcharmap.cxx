@@ -31,8 +31,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 

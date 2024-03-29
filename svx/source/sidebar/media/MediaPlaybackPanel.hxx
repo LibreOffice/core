@@ -28,7 +28,6 @@
 #include <vcl/idle.hxx>
 
 using namespace css;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
 namespace svx::sidebar {
