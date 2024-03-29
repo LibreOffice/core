@@ -486,6 +486,11 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
 
     ::tools::Rectangle aRect( eObjKind == PresObjKind::Title ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
 
+    // OOXML placeholder with auto grow height
+    // do not set the height here yet
+    if (xShape->getSize().Height == 0)
+        aRect.setHeight(0);
+
     const awt::Point aPos( aRect.Left(), aRect.Top() );
     xShape->setPosition( aPos );
 

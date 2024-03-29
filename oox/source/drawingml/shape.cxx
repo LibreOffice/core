@@ -1251,6 +1251,17 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             xSet->setPropertyValue("Decorative", Any(m_isDecorative));
         }
+
+        // set the placeholder height to "0" if it has the 'TextAutoGrowHeight' property
+        // the placeholder height is set later to the correct size.
+        bool bAutoGrowHeight = false;
+        xSet->getPropertyValue("TextAutoGrowHeight") >>= bAutoGrowHeight;
+        if (bAutoGrowHeight && mxShape->getShapeType().startsWith("com.sun.star.presentation."))
+        {
+            awt::Size aSize(mxShape->getSize().Width, 0);
+            mxShape->setSize(aSize);
+        }
+
         if (aServiceName != "com.sun.star.text.TextFrame")
             rxShapes->add( mxShape );
 
