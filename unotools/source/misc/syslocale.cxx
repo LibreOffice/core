@@ -35,7 +35,6 @@
 #include <optional>
 #include <vector>
 
-using namespace osl;
 using namespace com::sun::star;
 
 namespace {
