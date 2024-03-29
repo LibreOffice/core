@@ -2919,9 +2919,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                         pCondFormatList.reset();
 
-                    if (rDlgItem)
-                        pTabViewShell->setScCondFormatDlgItem(nullptr);
-
                     pDlg->disposeOnce();
                 });
             }

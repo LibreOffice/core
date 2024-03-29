@@ -436,6 +436,8 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, rDlgItem);
 
                 // Remove the pool item stored by Conditional Format Manager Dialog.
+                // tdf#160252 still needed *after* change to ScCondFormatDlgData due to
+                // UnitTest UITest_conditional_format
                 setScCondFormatDlgItem(nullptr);
             }
 
