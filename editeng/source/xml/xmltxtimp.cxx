@@ -38,9 +38,7 @@
 #include <unomodel.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::document;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::text;
 using namespace cppu;
