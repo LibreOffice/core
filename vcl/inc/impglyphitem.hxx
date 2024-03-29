@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_IMPGLYPHITEM_HXX
 #define INCLUDED_VCL_IMPGLYPHITEM_HXX
 
+#include <basegfx/range/b2drectangle.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <vector>
@@ -87,7 +87,7 @@ public:
         return bool(m_nFlags & GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA);
     }
 
-    inline bool GetGlyphBoundRect(const LogicalFontInstance*, tools::Rectangle&) const;
+    inline bool GetGlyphBoundRect(const LogicalFontInstance*, basegfx::B2DRectangle&) const;
     inline bool GetGlyphOutline(const LogicalFontInstance*, basegfx::B2DPolyPolygon&) const;
     inline void dropGlyph();
 
@@ -117,7 +117,7 @@ public:
 };
 
 bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
-                                  tools::Rectangle& rRect) const
+                                  basegfx::B2DRectangle& rRect) const
 {
     return pFontInstance->GetGlyphBoundRect(m_aGlyphId, rRect, IsVertical());
 }

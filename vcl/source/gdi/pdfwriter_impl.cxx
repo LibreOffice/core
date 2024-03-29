@@ -7006,7 +7006,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     else if ( eAlign == ALIGN_TOP )
         aOffset.AdjustY(GetFontInstance()->mxFontMetric->GetAscent() );
 
-    tools::Rectangle aRectangle;
+    basegfx::B2DRectangle aRectangle;
     nIndex = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, &pGlyphFont))
     {
@@ -7023,8 +7023,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             }
             else
             {
-                aAdjOffset = DevicePoint(aOffset.X(), aOffset.Y());
-                aAdjOffset.adjustX(aRectangle.Left() + (aRectangle.GetWidth() - aEmphasisMark.GetWidth()) / 2 );
+                aAdjOffset = basegfx::B2DPoint(aOffset.X(), aOffset.Y());
+                aAdjOffset.adjustX(aRectangle.getMinX() + (aRectangle.getWidth() - aEmphasisMark.GetWidth()) / 2 );
             }
 
             aAdjOffset = aRotScale.transform( aAdjOffset );

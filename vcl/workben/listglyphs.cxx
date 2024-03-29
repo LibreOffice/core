@@ -120,7 +120,7 @@ int ListGlyphs::Main()
              nChar = pCharMap->GetNextChar(nChar))
         {
             auto nGlyphIndex = pFontInstance->GetGlyphIndex(nChar);
-            tools::Rectangle aGlyphBounds;
+            basegfx::B2DRectangle aGlyphBounds;
             pFontInstance->GetGlyphBoundRect(nGlyphIndex, aGlyphBounds, false);
             std::cout << "Codepoint: " << pFontFace->GetGlyphName(nGlyphIndex)
                       << "; glyph bounds: " << aGlyphBounds << "\n";
