@@ -30,10 +30,8 @@
 #include <com/sun/star/awt/XGraphics2.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 
-using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 
 namespace framework

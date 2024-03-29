@@ -115,7 +115,6 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::frame;
-using namespace css::beans;
 
 namespace {
 

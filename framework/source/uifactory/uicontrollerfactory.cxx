@@ -34,7 +34,6 @@
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::beans;
-using namespace css::container;
 using namespace css::frame;
 using namespace framework;
 

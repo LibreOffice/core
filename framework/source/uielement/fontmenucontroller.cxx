@@ -40,7 +40,6 @@
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::frame;
-using namespace css::beans;
 using namespace css::util;
 
 static bool lcl_I18nCompareString(const OUString& rStr1, const OUString& rStr2)

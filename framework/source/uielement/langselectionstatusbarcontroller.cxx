@@ -51,8 +51,6 @@ using namespace ::com::sun::star;
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::frame;
-using namespace css::i18n;
-using namespace css::document;
 using namespace framework;
 
 namespace {

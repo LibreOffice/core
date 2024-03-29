@@ -28,12 +28,9 @@
 #include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::awt;
 using namespace css::uno;
 using namespace css::beans;
-using namespace css::lang;
 using namespace css::frame;
-using namespace css::util;
 
 namespace framework
 {
