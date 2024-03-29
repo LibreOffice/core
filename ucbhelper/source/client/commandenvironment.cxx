@@ -20,7 +20,6 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
