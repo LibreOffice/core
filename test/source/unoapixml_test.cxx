@@ -19,7 +19,6 @@
 #include <utility>
 
 using namespace css;
-using namespace css::uno;
 
 UnoApiXmlTest::UnoApiXmlTest(OUString path)
     : UnoApiTest(std::move(path))
