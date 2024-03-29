@@ -63,6 +63,9 @@ protected:
     // get shape nShapeIndex from page 0
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex);
     sal_uInt8 countShapes();
+    // fX and fY are positions relative to the size of the bitmap of the shape
+    // Thus the position is indepedent from DPI
+    Color getColor(uno::Reference<drawing::XShape> xShape, const double& fX, const double& fY);
 };
 
 uno::Reference<drawing::XShape> CustomshapesTest::getShape(sal_uInt8 nShapeIndex)
@@ -87,6 +90,18 @@ sal_uInt8 CustomshapesTest::countShapes()
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get xDrawPage", xDrawPage.is());
     return xDrawPage->getCount();
+}
+
+Color CustomshapesTest::getColor(uno::Reference<drawing::XShape> xShape, const double& fX,
+                                 const double& fY)
+{
+    GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "image/png", maTempFile.GetURL());
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    Bitmap aBMP = aPNGReader.read().GetBitmap();
+    Size aSize = aBMP.GetSizePixel();
+    BitmapScopedReadAccess pRead(aBMP);
+    return pRead->GetColor(aSize.Height() * fY, aSize.Width() * fX);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf150302)
@@ -1380,6 +1395,33 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf153000_MS0_SPT_25_31)
         CPPUNIT_ASSERT(lcl_getShapeCoordinates(aCoordinates, xShape));
         CPPUNIT_ASSERT_EQUAL(aExpected[i], aCoordinates.getLength());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf160421_3D_FlipLight)
+{
+    // The document contains (0)an extruded 'rectangle' custom shape which is illuminated with front
+    // light, (1) this shape vertically flipped and (2) this shape horizontally flipped.
+    // When the shape is flipped vertically or horizontally, the light direction should not
+    // change. MS Office behaves in this way for ppt and pptx and it is meaningful as flipping is
+    // applied to the shape, not to the scene.
+
+    // Load document.
+    loadFromFile(u"tdf160421_3D_FlipLight.odp");
+
+    // Get color from untransformed shape (0).
+    uno::Reference<drawing::XShape> xShape = getShape(0);
+    Color aNormalColor = getColor(xShape, 0.6, 0.6);
+
+    // Test that color from vertically flipped shape (1) is same as normal color. Without the fix
+    // it was only build from ambient light and thus much darker.
+    xShape = getShape(1);
+    sal_uInt16 nColorDistance = aNormalColor.GetColorError(getColor(xShape, 0.6, 0.6));
+    CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
+
+    // Same for horizontally flipped shape (2)
+    xShape = getShape(2);
+    nColorDistance = aNormalColor.GetColorError(getColor(xShape, 0.6, 0.6));
+    CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
 }
 }
 
