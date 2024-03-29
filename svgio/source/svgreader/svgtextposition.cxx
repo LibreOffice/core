@@ -19,8 +19,6 @@
 
 #include <svgtextposition.hxx>
 
-using namespace drawinglayer::primitive2d;
-
 namespace svgio::svgreader
 {
 SvgTextPosition::SvgTextPosition(SvgTextPosition* pParent, const SvgTspanNode& rSvgTspanNode)
