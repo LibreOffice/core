@@ -47,7 +47,6 @@
 #endif
 
 using namespace basegfx;
-using namespace basegfx::utils;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 

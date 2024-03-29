@@ -104,7 +104,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::ui;
 
 using namespace ::comphelper;
 

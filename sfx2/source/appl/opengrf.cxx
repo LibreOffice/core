@@ -44,7 +44,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
-using namespace ::cppu;
 
 static TranslateId SvxOpenGrfErr2ResId( ErrCode err )
 {

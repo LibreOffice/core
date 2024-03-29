@@ -33,7 +33,6 @@
 #include <tools/json_writer.hxx>
 
 using namespace css;
-using namespace css::uno;
 
 namespace sfx2::sidebar {
 

@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::embed;
 

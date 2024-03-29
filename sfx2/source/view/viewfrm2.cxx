@@ -48,8 +48,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
 
 
 void SfxFrameViewWindow_Impl::StateChanged( StateChangedType nStateChange )

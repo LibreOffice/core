@@ -121,7 +121,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
 using namespace ::cppu;
 
 class SfxClipboardChangeListener : public ::cppu::WeakImplHelper<

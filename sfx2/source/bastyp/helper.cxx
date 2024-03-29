@@ -39,7 +39,6 @@
 
 using namespace com::sun::star;
 using namespace comphelper;
-using namespace osl;
 
 using ::std::vector;
 

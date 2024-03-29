@@ -48,7 +48,6 @@
 #include <sfxslots.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 
 using ::basic::BasicManagerRepository;
