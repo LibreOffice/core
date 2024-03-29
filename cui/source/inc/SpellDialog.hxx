@@ -71,6 +71,7 @@ private:
 
 protected:
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void    StyleUpdated() override;
 
 public:
     SentenceEditWindow_Impl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
@@ -120,6 +121,8 @@ public:
     void            MoveErrorEnd(tools::Long nOffset);
 
     void            ResetIgnoreErrorsAt()   { m_aIgnoreErrorsAt.clear(); }
+
+    void            SetDocumentColor(weld::DrawingArea* pDrawingArea);
 };
 
 // class SvxSpellDialog ---------------------------------------------
