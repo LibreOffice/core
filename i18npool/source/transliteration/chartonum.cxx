@@ -19,8 +19,6 @@
 
 #include <chartonum.hxx>
 
-using namespace com::sun::star::uno;
-
 namespace i18npool {
 
 #define TRANSLITERATION_CHARTONUM( name ) \

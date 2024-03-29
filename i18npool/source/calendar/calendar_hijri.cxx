@@ -26,8 +26,6 @@
 #include <tools/long.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 
 namespace i18npool {

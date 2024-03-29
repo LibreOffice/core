@@ -24,8 +24,6 @@
 #include "data/indexdata_ja_phonetic.h"
 #include <string.h>
 
-using namespace ::com::sun::star::i18n;
-
 namespace i18npool {
 
 OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const OUString& rIndexEntry,

@@ -21,9 +21,6 @@
 
 #include <transliteration_OneToOne.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-
 namespace i18npool
 {
 // ftp://ftp.unicode.org/Public/3.0-Update/UnicodeData-3.0.0.txt

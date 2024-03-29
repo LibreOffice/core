@@ -19,8 +19,6 @@
 
 #include <transliteration_Ignore.hxx>
 
-using namespace com::sun::star::uno;
-
 namespace i18npool {
 
 const transliteration_Ignore::Mapping BaFa[] = {

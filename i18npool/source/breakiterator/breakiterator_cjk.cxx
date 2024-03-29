@@ -23,7 +23,6 @@
 #include <com/sun/star/i18n/BreakType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 

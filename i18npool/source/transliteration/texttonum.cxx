@@ -19,8 +19,6 @@
 
 #include <texttonum.hxx>
 
-using namespace com::sun::star::uno;
-
 namespace i18npool {
 
 #define TRANSLITERATION_TEXTTONUM( name ) \

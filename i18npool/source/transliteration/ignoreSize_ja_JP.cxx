@@ -22,7 +22,6 @@
 #include <rtl/ref.hxx>
 
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 
 namespace i18npool {
 

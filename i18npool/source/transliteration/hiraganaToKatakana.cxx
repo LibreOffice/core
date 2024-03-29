@@ -19,9 +19,6 @@
 
 #include <transliteration_OneToOne.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-
 namespace i18npool
 {
 // see http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
