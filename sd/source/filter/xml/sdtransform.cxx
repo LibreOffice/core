@@ -32,8 +32,6 @@
 #include <drawdoc.hxx>
 #include "sdtransform.hxx"
 
-using namespace ::com::sun::star::style;
-
 namespace {
 
 class SdTransformOOo2xDocument

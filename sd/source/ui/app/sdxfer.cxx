@@ -66,11 +66,9 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
-using namespace ::com::sun::star::datatransfer::clipboard;
 
 constexpr sal_uInt32 SDTRANSFER_OBJECTTYPE_DRAWMODEL = 1;
 constexpr sal_uInt32 SDTRANSFER_OBJECTTYPE_DRAWOLE   = 2;

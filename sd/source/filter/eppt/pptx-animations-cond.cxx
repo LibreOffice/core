@@ -15,7 +15,6 @@
 #include "pptx-animations-cond.hxx"
 
 using namespace ::com::sun::star::animations;
-using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
 namespace

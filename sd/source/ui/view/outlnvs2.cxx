@@ -56,9 +56,6 @@
 #include <slideshow.hxx>
 #include <memory>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-
 namespace sd {
 
 /************************************************************************/

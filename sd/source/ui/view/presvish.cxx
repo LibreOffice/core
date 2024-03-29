@@ -39,10 +39,6 @@
 using namespace sd;
 #include <sdslots.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-
 namespace sd {
 
 SFX_IMPL_INTERFACE(PresentationViewShell, DrawViewShell)

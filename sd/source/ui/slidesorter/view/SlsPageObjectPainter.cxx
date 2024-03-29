@@ -34,8 +34,6 @@
 #include <osl/diagnose.h>
 #include <memory>
 
-using namespace ::drawinglayer::primitive2d;
-
 namespace sd::slidesorter::view {
 
 //===== PageObjectPainter =====================================================

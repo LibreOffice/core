@@ -74,7 +74,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
-using namespace ::com::sun::star::drawing::framework;
 
 namespace {
     /** This local version of the work window overrides DataChanged() so that it

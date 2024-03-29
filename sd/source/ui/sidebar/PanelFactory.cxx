@@ -40,7 +40,6 @@
 
 using namespace css;
 using namespace css::uno;
-using namespace ::sd::framework;
 
 namespace sd::sidebar {
 

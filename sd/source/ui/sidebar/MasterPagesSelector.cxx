@@ -41,8 +41,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <memory>
 
-using namespace ::com::sun::star::text;
-
 namespace sd::sidebar {
 
     /** menu entry that is executed as default action when the left mouse button is

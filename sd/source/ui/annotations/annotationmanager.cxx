@@ -80,15 +80,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::geometry;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui;
-using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::office;
 
 namespace sd {

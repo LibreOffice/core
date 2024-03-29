@@ -20,7 +20,6 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace sd;
-using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;

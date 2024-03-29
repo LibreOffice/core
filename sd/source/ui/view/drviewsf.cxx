@@ -64,7 +64,6 @@
 #include <svx/nbdtmg.hxx>
 #include <memory>
 
-using namespace com::sun::star::drawing;
 using namespace svx::sidebar;
 using namespace ::com::sun::star;
 

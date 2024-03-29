@@ -76,7 +76,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui;
 
 namespace sd {
 

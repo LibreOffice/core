@@ -77,7 +77,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 using namespace ::sd::slidesorter::controller;
-using namespace ::basegfx;
 
 namespace sd::slidesorter::controller {
 

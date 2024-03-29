@@ -28,7 +28,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {

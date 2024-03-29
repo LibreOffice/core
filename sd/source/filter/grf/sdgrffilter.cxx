@@ -58,7 +58,6 @@ using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ucb;
 using namespace com::sun::star::ui::dialogs;
-using namespace ::sfx2;
 
 namespace {
 

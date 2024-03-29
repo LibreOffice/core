@@ -50,9 +50,6 @@
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
-
 namespace sd {
 
 ViewShell::Implementation::Implementation (ViewShell& rViewShell)

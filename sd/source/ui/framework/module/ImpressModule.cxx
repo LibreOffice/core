@@ -28,7 +28,6 @@
 #include <DrawController.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 namespace sd::framework {
 

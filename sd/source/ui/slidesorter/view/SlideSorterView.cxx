@@ -55,7 +55,6 @@
 #endif
 
 using namespace ::sd::slidesorter::model;
-using namespace ::drawinglayer::primitive2d;
 
 namespace sd::slidesorter::view {
 
