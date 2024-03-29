@@ -911,8 +911,6 @@ public:
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
 
     void PopPageHeaderFooter(PagePartType ePagePartType, PageType eType);
-    void PushPageHeader(SectionPropertyMap::PageType eType);
-    void PushPageFooter(SectionPropertyMap::PageType eType);
 
     bool IsInHeaderFooter() const { auto const type(m_StreamStateStack.top().eSubstreamType); return type == SubstreamType::Header || type == SubstreamType::Footer; }
     void ConvertHeaderFooterToTextFrame(bool, bool);
