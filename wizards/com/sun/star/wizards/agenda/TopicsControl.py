@@ -643,7 +643,7 @@ class TopicsControl(ControlScroller):
         elif tmp_switch_var1 == 3:
             return cr.timebox
         else:
-            raise Exception("No such column");
+            raise Exception("No such column")
 
     '''getControl
     returns a control out of the given row, which is

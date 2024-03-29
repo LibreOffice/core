@@ -15,17 +15,17 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import uno
 import traceback
-from ..text.TextElement import TextElement
-from ..text.TextDocument import TextDocument
-from ..text.TextSectionHandler import TextSectionHandler
-from ..common.FileAccess import FileAccess
-
 from datetime import datetime
 
+import uno
+from com.sun.star.i18n.NumberFormatIndex import DATE_SYSTEM_LONG, TIME_HHMM
 from com.sun.star.text.PlaceholderType import TEXT
-from com.sun.star.i18n.NumberFormatIndex import TIME_HHMM, DATE_SYSTEM_LONG
+
+from ..common.FileAccess import FileAccess
+from ..text.TextDocument import TextDocument
+from ..text.TextElement import TextElement
+from ..text.TextSectionHandler import TextSectionHandler
 
 '''
 The classes here implement the whole document-functionality of the agenda wizard:
@@ -434,7 +434,6 @@ class AgendaDocument(TextDocument):
                 topicStartTime = int(self.agenda.cp_Time)
                 # first I replace the minutes titles...
                 self.items = self.searchFillInItems()
-                itemIndex = 0
                 for item in self.items:
                     itemText = item.String.lstrip().lower()
                     if itemText == \
@@ -450,12 +449,15 @@ class AgendaDocument(TextDocument):
                     elif itemText == \
                             self.templateConsts.FILLIN_MINUTES_DATE:
                         self.fillMinutesItem(
-                            item, getDateString(self.agenda.cp_Date),
+                            item, self.getDateString(self.agenda.cp_Date),
                             self.resources.resPlaceHolderDate)
                     elif itemText == \
                             self.templateConsts.FILLIN_MINUTES_TIME:
-                        self.fillMinutesItem( item, self.agenda.cp_Time,
-                            self.resources.resPlaceHolderTime)
+                        self.fillMinutesItem(
+                            item,
+                            self.agenda.cp_Time,
+                            self.resources.resPlaceHolderTime
+                        )
 
                 self.items.clear()
                 '''
@@ -465,10 +467,9 @@ class AgendaDocument(TextDocument):
                 topics data has *always* an empty topic at the end...
                 '''
 
-                for i in xrange(len(topicsData) - 1):
+                for i in range(len(topicsData) - 1):
                     topic = topicsData[i]
                     items = self.searchFillInItems()
-                    itemIndex = 0
                     for item in items:
                         itemText = item.String.lstrip().lower()
                         if itemText == \

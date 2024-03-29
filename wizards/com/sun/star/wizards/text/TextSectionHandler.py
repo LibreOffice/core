@@ -18,6 +18,7 @@
 import uno
 import traceback
 
+
 class TextSectionHandler(object):
     '''Creates a new instance of TextSectionHandler'''
     def __init__(self, xMSF, xTextDocument):
@@ -32,7 +33,6 @@ class TextSectionHandler(object):
                 oTextSection = self.xTextDocument.TextSections.getByName(
                     SectionName)
                 self.removeTextSection(oTextSection)
-
 
         except Exception:
             traceback.print_exc()
@@ -62,8 +62,11 @@ class TextSectionHandler(object):
             oSectionLink = \
                 uno.createUnoStruct('com.sun.star.text.SectionFileLink')
             oSectionLink.FileURL = ""
-            uno.invoke(oTextSection, "setPropertyValues",
-                (("FileLink", "LinkRegion"), (oSectionLink, "")))
+            uno.invoke(
+                oTextSection,
+                "setPropertyValues",
+                (("FileLink", "LinkRegion"), (oSectionLink, ""))
+            )
         except Exception:
             traceback.print_exc()
 
@@ -76,8 +79,11 @@ class TextSectionHandler(object):
             oSectionLink = \
                 uno.createUnoStruct('com.sun.star.text.SectionFileLink')
             oSectionLink.FileURL = TemplateName
-            uno.invoke(oTextSection, "setPropertyValues",
-                (("FileLink", "LinkRegion"), (oSectionLink, SectionName)))
+            uno.invoke(
+                oTextSection,
+                "setPropertyValues",
+                (("FileLink", "LinkRegion"), (oSectionLink, SectionName))
+            )
 
             NewSectionName = oTextSection.Name
             if NewSectionName is not SectionName:
@@ -85,19 +91,28 @@ class TextSectionHandler(object):
         except Exception:
             traceback.print_exc()
 
-    def insertTextSection(self, GroupName, TemplateName, _bAddParagraph):
-        try:
-            if _bAddParagraph:
-                xTextCursor = self.xText.createTextCursor()
-                self.xText.insertControlCharacter(
-                    xTextCursor, ControlCharacter.PARAGRAPH_BREAK, False)
-                xTextCursor.collapseToEnd()
+    # The following pyflakes errors flagged this function for me. In my
+    # opinion it is impossible that the first function is ever used anywhere
+    # since it is re-defined immediately afterwards. It also contains the
+    # undefined insertTextSection call which I think is likely erroneous.
+    # ./TextSectionHandler.py:99:13: undefined name 'insertTextSection'
+    # ./TextSectionHandler.py:103:5:
+    # redefinition of unused 'insertTextSection' from line 89
 
-            xSecondTextCursor = self.xText.createTextCursor()
-            xSecondTextCursor.gotoEnd(False)
-            insertTextSection(GroupName, TemplateName, xSecondTextCursor)
-        except Exception:
-            traceback.print_exc()
+    # I have therefore commented this out for now.
+    # def insertTextSection(self, GroupName, TemplateName, _bAddParagraph):
+    #    try:
+    #        if _bAddParagraph:
+    #            xTextCursor = self.xText.createTextCursor()
+    #            self.xText.insertControlCharacter(
+    #                xTextCursor, ControlCharacter.PARAGRAPH_BREAK, False)
+    #            xTextCursor.collapseToEnd()
+    #
+    #        xSecondTextCursor = self.xText.createTextCursor()
+    #        xSecondTextCursor.gotoEnd(False)
+    #        insertTextSection(GroupName, TemplateName, xSecondTextCursor)
+    #    except Exception:
+    #        traceback.print_exc()
 
     def insertTextSection(self, sectionName, templateName, position):
         try:
@@ -110,7 +125,7 @@ class TextSectionHandler(object):
                 position.getText().insertTextContent(
                     position, xTextSection, False)
 
-            linkSectiontoTemplate(xTextSection, templateName, sectionName)
+            self.linkSectiontoTemplate(xTextSection, templateName, sectionName)
         except Exception:
             traceback.print_exc()
 

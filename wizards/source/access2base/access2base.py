@@ -40,7 +40,10 @@ import uno
 XSCRIPTCONTEXT = uno
 
 from platform import system as _opsys
-import datetime, os, sys, traceback
+import datetime
+import os
+import sys
+import traceback
 
 _LIBRARY = ''               # Should be 'Access2Base' or 'Access2BaseDev'
 _VERSION = '7.4'            # Actual version number

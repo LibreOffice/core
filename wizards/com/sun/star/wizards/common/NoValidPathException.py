@@ -22,7 +22,8 @@ class NoValidPathException(Exception):
         # TODO: NEVER open a dialog in an exception
         from .SystemDialog import SystemDialog
         if xMSF:
-            import sys, os
+            import sys
+            import os
 
             if sys.version_info < (3,4):
                 import imp

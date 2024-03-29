@@ -15,30 +15,33 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import traceback
 import os.path
-from .FaxWizardDialog import FaxWizardDialog, uno, HID
-from .CGFaxWizard import CGFaxWizard
-from .FaxDocument import FaxDocument
-from ..ui.PathSelection import PathSelection
-from ..ui.event.UnoDataAware import UnoDataAware
-from ..ui.event.RadioDataAware import RadioDataAware
-from ..ui.event.CommonListener import TerminateListenerProcAdapter
-from ..text.TextFieldHandler import TextFieldHandler
-from ..text.TextElement import TextElement
-from ..common.Configuration import Configuration
-from ..common.SystemDialog import SystemDialog
-from ..common.NoValidPathException import NoValidPathException
-from ..common.HelpIds import HelpIds
-from ..common.FileAccess import FileAccess
-from ..common.Desktop import Desktop
-from ..document.OfficeDocument import OfficeDocument
+import traceback
 
-from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
+from com.sun.star.awt.VclWindowPeerAttribute import DEF_NO, YES_NO
+from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
+from com.sun.star.document.UpdateDocMode import FULL_UPDATE
 from com.sun.star.util import CloseVetoException
 from com.sun.star.view.DocumentZoomType import OPTIMAL
-from com.sun.star.document.UpdateDocMode import FULL_UPDATE
-from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
+
+from ..common.Configuration import Configuration
+from ..common.Desktop import Desktop
+from ..common.FileAccess import FileAccess
+from ..common.HelpIds import HelpIds
+from ..common.NoValidPathException import NoValidPathException
+from ..common.SystemDialog import SystemDialog
+from ..document.OfficeDocument import OfficeDocument
+from ..text.TextElement import TextElement
+from ..text.TextFieldHandler import TextFieldHandler
+from ..ui.event.CommonListener import TerminateListenerProcAdapter
+from ..ui.event.RadioDataAware import RadioDataAware
+from ..ui.event.UnoDataAware import UnoDataAware
+from ..ui.PathSelection import PathSelection
+from .CGFaxWizard import CGFaxWizard
+from .FaxDocument import FaxDocument
+from .FaxWizardDialog import FaxWizardDialog, uno
+from .FaxWizardDialogConst import HID
+
 
 class FaxWizardDialogImpl(FaxWizardDialog):
 
@@ -210,12 +213,12 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def drawConstants(self):
         '''Localise the template'''
         constRangeList = self.myFaxDoc.searchFillInItems(1)
-        
+
         for i in constRangeList:
             text = i.String.lower()
             aux = TextElement(i, self.resources.dictConstants[text])
             aux.write()
-            
+
     def insertRoadmap(self):
         self.addRoadmap()
         self.insertRoadMapItems(
@@ -245,7 +248,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.sFaxPath, self.resources.dictBusinessTemplate)
             self.PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri",
                 self.sFaxPath, self.resources.dictPrivateTemplate)
-                
+
             self.xDialogModel.lstBusinessStyle.StringItemList = \
                 tuple(self.BusinessFiles[0])
             self.xDialogModel.lstPrivateStyle.StringItemList = \
@@ -604,7 +607,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.chkUseFooter.State = 0
 
         self.chkUseFooterItemChanged()
-        
+
     def optReceiverPlaceholderItemChanged(self):
         OfficeDocument.attachEventCall(
             self.myFaxDoc.xTextDocument, "OnNew", "StarBasic",

@@ -15,19 +15,21 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import uno
+import os
+import sys
 import traceback
 from abc import ABCMeta, abstractmethod
-from .UnoDialog2 import UnoDialog2, Desktop, PropertyNames, UIConsts, \
-    ItemListenerProcAdapter
-from ..common.HelpIds import HelpIds
-from ..common.FileAccess import FileAccess
 
-from com.sun.star.lang import NoSuchMethodException
-from com.sun.star.frame import TerminationVetoException
+import uno
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
+from com.sun.star.frame import TerminationVetoException
+from com.sun.star.lang import NoSuchMethodException
 
-import sys, os
+from ..common.FileAccess import FileAccess
+from ..common.HelpIds import HelpIds
+from .UIConsts import UIConsts
+from .UnoDialog2 import (Desktop, ItemListenerProcAdapter, PropertyNames,
+                         UnoDialog2)
 
 if sys.version_info < (3,4):
     import imp
@@ -41,8 +43,8 @@ elif sys.version_info < (3,7):
 else:
     # have to jump through hoops since 3.7, partly because python does not like loading modules that do have a .py extension
     import importlib
-    import importlib.util
     import importlib.machinery
+    import importlib.util
     module_name = 'strings'
     path = os.path.join(os.path.dirname(__file__), '../common/strings.hrc')
     spec = importlib.util.spec_from_loader(
@@ -188,6 +190,7 @@ class WizardDialog(UnoDialog2):
             self.oRoadmap.Text = strings.RID_COMMON_START_16
         except NoSuchMethodException:
             from com.sun.star.awt.VclWindowPeerAttribute import OK
+
             from .SystemDialog import SystemDialog
             sError = "The files required could not be found.\n" + \
                 "Please start the LibreOffice Setup and choose 'Repair'."
@@ -374,7 +377,7 @@ class WizardDialog(UnoDialog2):
                 while self.nNewStep > 0:
                     bIsEnabled = self.isStepEnabled(self.nNewStep)
                     if bIsEnabled:
-                        break;
+                        break
 
                     self.nNewStep -= 1
                 if (self.nNewStep == 0):

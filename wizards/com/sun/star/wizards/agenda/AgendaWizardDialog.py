@@ -16,7 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
+from ..ui.WizardDialog import WizardDialog, uno, PropertyNames
+from ..ui.UIConsts import UIConsts
 from .AgendaWizardDialogConst import AgendaWizardDialogConst, HID
 from .AgendaWizardDialogResources import AgendaWizardDialogResources
 
@@ -24,7 +25,7 @@ from .AgendaWizardDialogResources import AgendaWizardDialogResources
 class AgendaWizardDialog(WizardDialog):
 
     def __init__(self, xmsf):
-        super(AgendaWizardDialog,self).__init__(xmsf, HID )
+        super(AgendaWizardDialog, self).__init__(xmsf, HID)
 
         #Load Resources
         self.resources = AgendaWizardDialogResources()

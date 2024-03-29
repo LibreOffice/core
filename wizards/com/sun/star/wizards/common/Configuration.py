@@ -18,6 +18,7 @@
 import uno
 import traceback
 
+
 class Configuration(object):
     '''This class gives access to the OO configuration api.'''
 
@@ -44,7 +45,7 @@ class Configuration(object):
     @classmethod
     def getProductName(self, xMSF):
         try:
-            oProdNameAccess = self.getConfigurationRoot(xMSF, "org.openoffice.Setup/Product", False);
+            oProdNameAccess = self.getConfigurationRoot(xMSF, "org.openoffice.Setup/Product", False)
             return oProdNameAccess.getByName("ooName")
         except Exception:
             traceback.print_exc()
@@ -60,7 +61,13 @@ class Configuration(object):
 
     @classmethod
     def getInt(self, name, parent):
-        o = getNode(name, parent)
+        o = self.getNode(name, parent)
+        # com will be undefined as it seems to strem from a java module?
+        # so no need to add an import statement for this.
+        # pyflakes will give an undefined name error but it seems
+        # this can therefore be ignored.
+        # It would be good to use a linter that we can tell to ignore this
+        # type of thing (i.e. flake8 or ruff)
         if (com.sun.star.uno.AnyConverter.isVoid(o)):
             return 0
         return com.sun.star.uno.AnyConverter.toInt(o)

@@ -15,7 +15,9 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from .UnoDialog import UnoDialog, UIConsts
+
+from .UIConsts import UIConsts
+from .UnoDialog import UnoDialog
 from ..common.Desktop import Desktop
 from ..common.PropertyNames import PropertyNames
 from ..common.SystemDialog import SystemDialog
@@ -42,7 +44,11 @@ class UnoDialog2(UnoDialog):
 
     def __init__(self, xmsf):
         super(UnoDialog2,self).__init__(xmsf,(), ())
-        ControlList = {}
+        # previously this was variable "ControlList", which was never used
+        # below there is a self.ControlList in a boolean condition
+        # which is never initialised, so from that I am inferring that this
+        # should in fact be self.ControlList
+        self.ControlList = {}
 
     def insertButton(
         self, sName, actionPerformed, sPropNames, oPropValues, listener):

@@ -234,7 +234,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.xUnoDialog.endExecute()
                 self.running = False
 
-        return True;
+        return True
 
     def closeDocument(self):
         try:

@@ -56,19 +56,21 @@ class TextDocument(object):
             elif xArgs is not None:
                 '''creates an instance of TextDocument
                 and creates a frame and loads a document'''
-                self.xDesktop = Desktop.getDesktop(xMSF);
+                self.xDesktop = Desktop.getDesktop(xMSF)
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
                 self.xTextDocument = OfficeDocument.load(
-                    self.xFrame, URL, "_self", xArgs);
+                    # TODO: Find out which URL this is supposed to be,
+                    # it is currently not defined
+                    self.xFrame, URL, "_self", xArgs)
                 self.xWindowPeer = self.xFrame.getComponentWindow()
                 self.m_xDocProps = self.xTextDocument.DocumentProperties
-                CharLocale = self.xTextDocument.CharLocale
+                self.CharLocale = self.xTextDocument.CharLocale
                 return
 
             else:
                 '''creates an instance of TextDocument from
                 the desktop's current frame'''
-                self.xDesktop = Desktop.getDesktop(xMSF);
+                self.xDesktop = Desktop.getDesktop(xMSF)
                 self.xFrame = self.xDesktop.getActiveFrame()
                 self.xTextDocument = self.xFrame.getController().Model
 

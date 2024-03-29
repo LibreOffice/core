@@ -16,10 +16,11 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-from .LetterWizardDialogConst import LetterWizardDialogConst, HIDMAIN, HID
-from .LetterWizardDialogResources import LetterWizardDialogResources
 from ..common.HelpIds import HelpIds
-from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
+from ..ui.UIConsts import UIConsts
+from ..ui.WizardDialog import PropertyNames, WizardDialog, uno
+from .LetterWizardDialogConst import HID, HIDMAIN, LetterWizardDialogConst
+from .LetterWizardDialogResources import LetterWizardDialogResources
 
 
 class LetterWizardDialog(WizardDialog):
@@ -29,11 +30,11 @@ class LetterWizardDialog(WizardDialog):
 
         #Load Resources
         self.resources = LetterWizardDialogResources()
-        
-        #set dialog properties...        
-        self.setDialogProperties(True, 210, True, 104, 52, 1, 1, 
+
+        #set dialog properties...
+        self.setDialogProperties(True, 210, True, 104, 52, 1, 1,
             self.resources.resLetterWizardDialog_title, 350)
-                
+
         self.fontDescriptor5 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor6 = \
@@ -43,7 +44,7 @@ class LetterWizardDialog(WizardDialog):
 
     def buildStep1(self):
         self.optBusinessLetter = self.insertRadioButton(
-            "optBusinessLetter", 
+            "optBusinessLetter",
             LetterWizardDialogConst.OPTBUSINESSLETTER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,

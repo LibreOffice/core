@@ -15,9 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+from ..ui.UIConsts import UIConsts
+from ..ui.WizardDialog import PropertyNames, WizardDialog, uno
+from .FaxWizardDialogConst import HIDMAIN, FaxWizardDialogConst
 from .FaxWizardDialogResources import FaxWizardDialogResources
-from .FaxWizardDialogConst import FaxWizardDialogConst, HIDMAIN, HID
-from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
 
 
 class FaxWizardDialog(WizardDialog):

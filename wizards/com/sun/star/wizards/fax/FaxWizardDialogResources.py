@@ -19,7 +19,8 @@
 class FaxWizardDialogResources(object):
 
     def __init__(self):
-        import sys, os
+        import sys
+        import os
 
         if sys.version_info < (3,4):
             import imp
