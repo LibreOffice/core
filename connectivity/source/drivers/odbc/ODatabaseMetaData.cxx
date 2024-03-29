@@ -32,8 +32,6 @@
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon)

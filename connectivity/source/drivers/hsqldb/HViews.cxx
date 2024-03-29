@@ -33,10 +33,7 @@ using namespace connectivity;
 using namespace connectivity::hsqldb;
 using namespace css::uno;
 using namespace css::beans;
-using namespace css::sdbcx;
 using namespace css::sdbc;
-using namespace css::container;
-using namespace css::lang;
 using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 

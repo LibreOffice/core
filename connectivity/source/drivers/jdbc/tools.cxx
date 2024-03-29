@@ -32,7 +32,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
 
 void java_util_Properties::setProperty(const OUString& key, const OUString& value)
 {

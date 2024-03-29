@@ -20,8 +20,6 @@
 #include <java/sql/DriverPropertyInfo.hxx>
 
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 
 //************ Class: java.sql.Driver
 

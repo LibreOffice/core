@@ -30,12 +30,8 @@
 #include <hsqldb/HStorageAccess.hxx>
 #include <hsqldb/HStorageMap.hxx>
 
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
 using namespace ::connectivity::hsqldb;
 
 

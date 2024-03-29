@@ -46,7 +46,6 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
-using namespace ::comphelper;
 using ::osl::MutexGuard;
 
 namespace

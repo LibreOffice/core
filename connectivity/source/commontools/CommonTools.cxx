@@ -31,7 +31,6 @@
 #include <rtl/process.h>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace ::comphelper;
 static sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
 {
     return ch >= 0x0061 && ch <= 0x007a ? ch + 0x20 : ch;
@@ -40,8 +39,6 @@ static sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
 namespace connectivity
 {
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::java;
     using namespace dbtools;
 

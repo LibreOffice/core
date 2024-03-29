@@ -49,7 +49,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
-using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 namespace {

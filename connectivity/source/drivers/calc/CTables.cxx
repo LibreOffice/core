@@ -25,15 +25,10 @@
 #include <file/FCatalog.hxx>
 #include <file/FConnection.hxx>
 
-using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::calc;
 using namespace connectivity::file;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 sdbcx::ObjectType OCalcTables::createObject(const OUString& _rName)

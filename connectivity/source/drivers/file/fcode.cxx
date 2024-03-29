@@ -24,7 +24,6 @@
 #include <sqlbison.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 
-using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::file;
 using namespace ::com::sun::star::sdbc;

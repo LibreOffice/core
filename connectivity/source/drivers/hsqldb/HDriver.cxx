@@ -69,7 +69,6 @@ namespace connectivity
     using namespace css::embed;
     using namespace css::io;
     using namespace css::util;
-    using namespace css::reflection;
 
     constexpr OUString IMPL_NAME = u"com.sun.star.sdbcx.comp.hsqldb.Driver"_ustr;
 

@@ -24,18 +24,12 @@
 #include <unotools/ucbhelper.hxx>
 #include <strings.hrc>
 
-using namespace ::comphelper;
-
 using namespace utl;
 using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::connectivity::dbase;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
 
 sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
 {

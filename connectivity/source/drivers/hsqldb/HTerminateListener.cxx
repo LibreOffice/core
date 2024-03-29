@@ -23,7 +23,6 @@
 namespace connectivity
 {
 using namespace hsqldb;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 // XEventListener

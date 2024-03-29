@@ -26,7 +26,6 @@
 using namespace ::connectivity::sdbcx;
 using namespace ::connectivity;
 using namespace ::dbtools;
-using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;

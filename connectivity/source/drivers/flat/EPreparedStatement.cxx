@@ -22,7 +22,6 @@
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
-using namespace ::com::sun::star::uno;
 
 rtl::Reference<OResultSet> OFlatPreparedStatement::createResultSet()
 {

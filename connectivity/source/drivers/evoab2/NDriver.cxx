@@ -31,10 +31,8 @@ using namespace osl;
 using namespace connectivity::evoab;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ucb;
 
 
 OEvoabDriver::OEvoabDriver(const Reference< XComponentContext >& _rxContext) :

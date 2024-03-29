@@ -22,7 +22,6 @@
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
-using namespace css::uno;
 
 rtl::Reference<OResultSet> OFlatStatement::createResultSet()
 {

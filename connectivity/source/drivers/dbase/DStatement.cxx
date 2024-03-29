@@ -22,7 +22,6 @@
 
 using namespace connectivity::dbase;
 using namespace connectivity::file;
-using namespace com::sun::star::uno;
 
 
 rtl::Reference<OResultSet> ODbaseStatement::createResultSet()

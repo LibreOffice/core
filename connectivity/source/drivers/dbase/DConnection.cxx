@@ -33,10 +33,8 @@ typedef connectivity::file::OConnection  OConnection_BASE;
 
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::lang;
 
 ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
 {

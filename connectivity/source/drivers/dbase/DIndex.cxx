@@ -41,13 +41,10 @@ using namespace connectivity;
 using namespace utl;
 using namespace ::cppu;
 using namespace connectivity::file;
-using namespace connectivity::sdbcx;
 using namespace connectivity::dbase;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 

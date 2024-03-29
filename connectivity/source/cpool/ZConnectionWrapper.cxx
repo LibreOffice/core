@@ -23,7 +23,6 @@ using namespace connectivity;
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 OConnectionWeakWrapper::OConnectionWeakWrapper(Reference< XAggregation >& _xConnection)

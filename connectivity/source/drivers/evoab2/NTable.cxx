@@ -24,13 +24,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity;
-using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
 using namespace connectivity::evoab;
 
 OEvoabTable::OEvoabTable( sdbcx::OCollection* _pTables,
