@@ -79,19 +79,15 @@ IDWriteRenderingParams* lclSetRenderingMode(IDWriteFactory* pDWriteFactory, DWRI
 }
 
 #ifdef SAL_LOG_WARN
-HRESULT checkResult(HRESULT hr, const char* file, size_t line)
+HRESULT checkResult(HRESULT hr, const char* location)
 {
-    if (FAILED(hr))
-    {
-        OUString sLocationString = OUString::createFromAscii(file) + ":" + OUString::number(line) + " ";
-        SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_WARN, ::SAL_DETAIL_LOG_LEVEL_WARN,
-                              "vcl.gdi", sLocationString.toUtf8().getStr(),
-                              "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": " << WindowsErrorStringFromHRESULT(hr));
-    }
+    SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_WARN && FAILED(hr), ::SAL_DETAIL_LOG_LEVEL_WARN,
+                          "vcl.gdi", location,
+                          "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": " << WindowsErrorStringFromHRESULT(hr));
     return hr;
 }
 
-#define CHECKHR(funct) checkResult(funct, __FILE__, __LINE__)
+#define CHECKHR(funct) checkResult(funct, SAL_WHERE)
 #else
 #define CHECKHR(funct) (funct)
 #endif
