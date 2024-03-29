@@ -54,8 +54,7 @@ def run(command):
 
 def update_pch(filename, lines, marks):
     with open(filename, 'w') as f:
-        for i in xrange(len(marks)):
-            mark = marks[i]
+        for i, mark in enumerate(marks):
             if mark <= TEST_ON:
                 f.write(lines[i])
             else:
@@ -132,8 +131,7 @@ def get_marks(lines):
     marks = []
     min = -1
     max = -1
-    for i in xrange(len(lines)):
-        line = lines[i]
+    for i, line in enumerate(lines):
         if line.startswith('#include'):
             marks.append(TEST_ON)
             min = i if min < 0 else min
@@ -205,8 +203,8 @@ def main():
         # Simplify further, as sometimes we can have
         # false positives due to the benign nature
         # of includes that are not absolutely required.
-        for i in xrange(len(marks)):
-            if marks[i] == GOOD:
+        for i, mark in enumerate(marks):
+            if mark == GOOD:
                 marks[i] = TEST_OFF
                 update_pch(filename, lines, marks)
                 if not run(command):
@@ -214,14 +212,14 @@ def main():
                     marks[i] = GOOD
                 else:
                     marks[i] = BAD
-            elif marks[i] == TEST_OFF:
+            elif mark == TEST_OFF:
                 marks[i] = TEST_ON
 
     update_pch(filename, lines, marks)
 
     log('')
-    for i in xrange(len(marks)):
-        if marks[i] == (BAD if FIND_CONFLICTS else GOOD):
+    for i, mark in enumerate(marks):
+        if mark == (BAD if FIND_CONFLICTS else GOOD):
             print("'{}',".format(get_filename(lines[i].strip('\n'))))
 
     return 0
@@ -258,8 +256,7 @@ class TestBisectConflict(unittest.TestCase):
 
     def _update_func(self, lines, marks):
         self.lines = []
-        for i in xrange(len(marks)):
-            mark = marks[i]
+        for i, mark in enumerate(marks):
             if mark <= TEST_ON:
                 self.lines.append(lines[i])
             else:
@@ -282,7 +279,7 @@ class TestBisectConflict(unittest.TestCase):
 
     def test_conflict(self):
         lines = self.TEST.split('\n')
-        for pos in xrange(len(lines) + 1):
+        for pos in range(len(lines) + 1):
             lines = self.TEST.split('\n')
             lines.insert(pos, self.BAD_LINE)
             (marks, min, max) = get_marks(lines)
@@ -290,11 +287,11 @@ class TestBisectConflict(unittest.TestCase):
             marks = bisect(lines, marks, min, max,
                            lambda l, m: self._update_func(l, m),
                            lambda: self._test_func())
-            for i in xrange(len(marks)):
+            for i, mark in enumerate(marks):
                 if i == pos:
-                    self.assertEqual(BAD, marks[i])
+                    self.assertEqual(BAD, mark)
                 else:
-                    self.assertNotEqual(BAD, marks[i])
+                    self.assertNotEqual(BAD, mark)
 
 class TestBisectRequired(unittest.TestCase):
     TEST = """#include <algorithm>
@@ -310,8 +307,7 @@ class TestBisectRequired(unittest.TestCase):
 
     def _update_func(self, lines, marks):
         self.lines = []
-        for i in xrange(len(marks)):
-            mark = marks[i]
+        for i, mark in enumerate(marks):
             if mark <= TEST_ON:
                 self.lines.append(lines[i])
             else:
@@ -335,7 +331,7 @@ class TestBisectRequired(unittest.TestCase):
 
     def test_required(self):
         lines = self.TEST.split('\n')
-        for pos in xrange(len(lines) + 1):
+        for pos in range(len(lines) + 1):
             lines = self.TEST.split('\n')
             lines.insert(pos, self.REQ_LINE)
             (marks, min, max) = get_marks(lines)
@@ -343,11 +339,11 @@ class TestBisectRequired(unittest.TestCase):
             marks = bisect(lines, marks, min, max,
                            lambda l, m: self._update_func(l, m),
                            lambda: self._test_func())
-            for i in xrange(len(marks)):
+            for i, mark in enumerate(marks):
                 if i == pos:
-                    self.assertEqual(GOOD, marks[i])
+                    self.assertEqual(GOOD, mark)
                 else:
-                    self.assertNotEqual(GOOD, marks[i])
+                    self.assertNotEqual(GOOD, mark)
 
 unittest.main()
 

@@ -355,7 +355,7 @@ def runLoadPrintFileTests(opts, dirs, suffix, reference):
 def mkImages(file, resolution):
     argv = [ "gs", "-r" + resolution, "-sOutputFile=" + file + ".%04d.jpeg",
              "-dNOPROMPT", "-dNOPAUSE", "-dBATCH", "-sDEVICE=jpeg", file ]
-    ret = subprocess.check_call(argv)
+    subprocess.check_call(argv)
 
 def mkAllImages(dirs, suffix, resolution, reference, failed):
     if reference:

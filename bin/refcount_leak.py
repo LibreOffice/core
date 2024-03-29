@@ -95,7 +95,7 @@ def getFunction(frame):
     start = frame.index(" in ") + len(" in ")
     try:
         end = frame.index(" at ", start)
-    except ValueError as e:
+    except ValueError:
         # argh... stack frames may be split across multiple lines if
         # a parameter has a fancy pretty printer
         return frame[start:]

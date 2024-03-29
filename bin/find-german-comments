@@ -61,7 +61,6 @@ class Parser:
         """
         Extracts the source code comments.
         """
-        linenum = 0
         if self.args.verbose:
             print("processing file '%s'...\n" % filename)
         sock = open(filename)
@@ -95,7 +94,6 @@ class Parser:
             elif "/*" in i and "*/" not in i and not in_comment:
                 # start of a real multiline comment
                 in_comment = True
-                linenum = count
                 s = re.sub(r".*/\*+", "", i.strip(self.strip))
                 if len(s):
                     buf.append(s.strip(self.strip))
@@ -156,7 +154,7 @@ class Parser:
             if len(path) >= START:
                 return 1
             diff = START - len(path)
-            if diff % 4 is not 0:
+            if (diff % 4) != 0:
                 padding = 1
             else:
                 padding = 0
@@ -216,7 +214,7 @@ class Parser:
         done = False
         while not done:
             nextElem = os.path.split(lastElem)[0]
-            if nextElem is not '':
+            if nextElem != '':
                 lastElem = nextElem
             else:
                 done = True
@@ -378,10 +376,10 @@ class Parser:
                 if not baseDir in directory_allowlist:
                     sys.stderr.write("\n - Error: Missing path %s -\n\n" % baseDir)
                     sys.exit(1)
-                elif directory_allowlist[baseDir] is 0:
+                elif directory_allowlist[baseDir] == 0:
                     self.check_file(path.strip())
                     num_checked = num_checked + 1
-                elif directory_allowlist[baseDir] is 1:
+                elif directory_allowlist[baseDir] == 1:
                     sys.stderr.write("Skipping excluded directory %s\n" % baseDir)
                     directory_allowlist[baseDir] = 2
             elif not globalscan:
