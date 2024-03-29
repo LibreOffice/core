@@ -3925,7 +3925,7 @@ sal_uInt32 SvNFEngine::GetCLOffsetRO(const SvNFFormatData& rFormatData, SvNFLang
     return nCLOffset;
 }
 
-// we can't cache to SvNFFormatData in RO mode, so cache to a temp map which we can consult pre-thread in FindFormatRO
+// we can't cache to SvNFFormatData in RO mode, so cache to a per-thread temp map which we can consult in FindFormatRO
 // caches can be merged with SvNumberFormatter::MergeDefaultFormatKeys
 void SvNFEngine::CacheFormatRO(SvNFFormatData::DefaultFormatKeysMap& rFormatCache, sal_uInt32 nSearch, sal_uInt32 nFormat)
 {
