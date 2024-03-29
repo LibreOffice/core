@@ -22,7 +22,6 @@
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 namespace dp_misc
 {
