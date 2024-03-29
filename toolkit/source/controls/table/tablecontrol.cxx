@@ -33,7 +33,6 @@
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::lang;
 
 namespace svt::table
 {

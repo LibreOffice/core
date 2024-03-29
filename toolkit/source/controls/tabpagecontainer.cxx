@@ -38,7 +38,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::view;
 using ::com::sun::star::awt::tab::XTabPageModel;
 
 constexpr OUStringLiteral WRONG_TYPE_EXCEPTION = u"Type must be css::awt::tab::XTabPageModel!";

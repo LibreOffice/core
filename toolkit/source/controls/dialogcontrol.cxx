@@ -56,7 +56,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
 
 constexpr OUStringLiteral PROPERTY_DIALOGSOURCEURL = u"DialogSourceURL";
 constexpr OUStringLiteral PROPERTY_IMAGEURL = u"ImageURL";
