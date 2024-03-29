@@ -51,7 +51,6 @@ constexpr OUString SMGR_SINGLETON = u"/singletons/com.sun.star.lang.theServiceMa
 constexpr OUStringLiteral TDMGR_SINGLETON = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 constexpr OUStringLiteral AC_SINGLETON = u"/singletons/com.sun.star.security.theAccessController";
 
-using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 

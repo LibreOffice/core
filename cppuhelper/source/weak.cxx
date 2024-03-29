@@ -31,7 +31,6 @@
 #include <vector>
 #include <mutex>
 
-using namespace osl;
 using namespace com::sun::star::uno;
 
 namespace cppu

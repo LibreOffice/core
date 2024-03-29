@@ -26,7 +26,6 @@
 #include <com/sun/star/connection/SocketPermission.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

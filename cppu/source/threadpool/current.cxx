@@ -30,7 +30,6 @@
 #include "current.hxx"
 
 
-using namespace ::osl;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
