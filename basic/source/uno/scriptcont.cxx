@@ -51,7 +51,6 @@
 namespace basic
 {
 
-using namespace com::sun::star::document;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -61,7 +60,6 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace osl;
 
 
 // Implementation class SfxScriptLibraryContainer

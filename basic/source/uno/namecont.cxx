@@ -90,7 +90,6 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::deployment;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace osl;
 
 using com::sun::star::uno::Reference;
 

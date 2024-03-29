@@ -25,7 +25,6 @@
 
 using namespace com::sun::star;
 using namespace cppu;
-using namespace osl;
 
 ModuleSizeExceeded::ModuleSizeExceeded(const std::vector<OUString>& sModules)
 {
