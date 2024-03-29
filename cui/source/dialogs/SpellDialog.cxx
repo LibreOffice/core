@@ -1147,12 +1147,25 @@ void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     // tdf#132288 don't merge equal adjacent attributes
     m_xEditEngine->DisableAttributeExpanding();
 
+    SetDocumentColor(pDrawingArea);
+}
+
+void SentenceEditWindow_Impl::SetDocumentColor(weld::DrawingArea* pDrawingArea)
+{
+    if (!pDrawingArea || !m_xEditView || !m_xEditEngine)
+        return;
     // tdf#142631 use document background color in this widget
     Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
     rDevice.SetBackground(aBgColor);
     m_xEditView->SetBackgroundColor(aBgColor);
     m_xEditEngine->SetBackgroundColor(aBgColor);
+}
+
+void SentenceEditWindow_Impl::StyleUpdated()
+{
+    SetDocumentColor(GetDrawingArea());
+    WeldEditView::StyleUpdated();
 }
 
 SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
