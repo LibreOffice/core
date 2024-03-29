@@ -1344,6 +1344,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
             if( xPropSet.is())
             {
+                // TODO: ODF export for formatted chart titles
                 Any aAny( xPropSet->getPropertyValue( "String" ));
                 OUString aText;
                 aAny >>= aText;
@@ -1385,6 +1386,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
             if( xPropSet.is())
             {
+                // TODO: ODF import for formatted chart titles
                 Any aAny( xPropSet->getPropertyValue( "String" ));
                 OUString aText;
                 aAny >>= aText;
@@ -2264,6 +2266,7 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
     std::vector<XMLPropertyState> aPropertyStates = mxExpPropMapper->Filter(mrExport, rTitleProps);
     if( bExportContent )
     {
+        // TODO: ODF import for formatted chart titles
         OUString aText;
         Any aAny( rTitleProps->getPropertyValue( "String" ));
         aAny >>= aText;

@@ -128,16 +128,9 @@ bool ChartController::EndTextEdit()
     if(!pTextObject)
         return false;
 
-    SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     OutlinerParaObject* pParaObj = pTextObject->GetOutlinerParaObject();
-    if( !pParaObj || !pOutliner )
+    if( !pParaObj )
         return true;
-
-    pOutliner->SetText( *pParaObj );
-
-    OUString aString = pOutliner->GetText(
-                        pOutliner->GetParagraph( 0 ),
-                        pOutliner->GetParagraphCount() );
 
     OUString aObjectCID = m_aSelection.getSelectedCID();
     if ( !aObjectCID.isEmpty() )
@@ -152,26 +145,7 @@ bool ChartController::EndTextEdit()
             GetFormattedTitle(pParaObj->GetTextObject(), pTextObject->getUnoShape());
 
         Title* pTitle = dynamic_cast<Title*>(xPropSet.get());
-        if (pTitle && aNewFormattedTitle.hasElements())
-        {
-            bool bStacked = false;
-            if (xPropSet.is())
-                xPropSet->getPropertyValue("StackCharacters") >>= bStacked;
-
-            if (bStacked)
-            {
-                for (uno::Reference< chart2::XFormattedString >const& formattedStr : aNewFormattedTitle)
-                {
-                    formattedStr->setString(TitleHelper::getUnstackedStr(formattedStr->getString()));
-                }
-            }
-
-            pTitle->setText(aNewFormattedTitle);
-        }
-        else
-        {
-            TitleHelper::setCompleteString(aString, pTitle, m_xCC);
-        }
+        TitleHelper::setFormattedString(pTitle, aNewFormattedTitle);
 
         OSL_ENSURE(m_pTextActionUndoGuard, "ChartController::EndTextEdit: no TextUndoGuard!");
         if (m_pTextActionUndoGuard)

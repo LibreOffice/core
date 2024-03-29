@@ -327,32 +327,47 @@ OUString TitleHelper::getUnstackedStr(const OUString& rNewText)
     return aUnstackedStr.makeStringAndClear();
 }
 
+void TitleHelper::setFormattedString( const rtl::Reference< Title >& xTitle,
+    const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle )
+{
+    if (!xTitle.is() || !aNewFormattedTitle.hasElements())
+        return;
+
+    bool bStacked = false;
+    xTitle->getPropertyValue("StackCharacters") >>= bStacked;
+
+    if (bStacked)
+    {
+        for (uno::Reference< chart2::XFormattedString >const& formattedStr : aNewFormattedTitle)
+        {
+            formattedStr->setString(TitleHelper::getUnstackedStr(formattedStr->getString()));
+        }
+    }
+
+    xTitle->setText(aNewFormattedTitle);
+}
+
 void TitleHelper::setCompleteString( const OUString& rNewText
                     , const rtl::Reference< Title >& xTitle
                     , const uno::Reference< uno::XComponentContext > & xContext
                     , const float * pDefaultCharHeight /* = 0 */
                     , bool bDialogTitle /*= false*/ )
 {
-    if(!xTitle.is())
+    if (!xTitle.is())
         return;
-
-    OUString aNewText = rNewText;
 
     bool bStacked = false;
     if( xTitle.is() )
         xTitle->getPropertyValue( "StackCharacters" ) >>= bStacked;
 
-    uno::Sequence< uno::Reference< XFormattedString > > aOldStringList = xTitle->getText();
+    OUString aNewText = rNewText;
     if( bStacked )
     {
         aNewText = getUnstackedStr(rNewText);
-        for (uno::Reference< XFormattedString >const & formattedStr : aOldStringList)
-        {
-            formattedStr->setString(getUnstackedStr(formattedStr->getString()));
-        }
     }
 
     uno::Sequence< uno::Reference< XFormattedString > > aNewStringList;
+    uno::Sequence< uno::Reference< XFormattedString > > aOldStringList = xTitle->getText();
     if( aOldStringList.hasElements())
     {
         const OUString aFullString = getCompleteString(xTitle);

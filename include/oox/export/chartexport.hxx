@@ -25,6 +25,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <oox/dllapi.h>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/shapes.hxx>
@@ -176,7 +177,8 @@ private:
     void exportLegend( const css::uno::Reference<
                           css::chart::XChartDocument >& rChartDoc );
     void exportTitle( const css::uno::Reference< css::drawing::XShape >& xShape,
-                          const OUString* pSubText = nullptr );
+                          const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedSubTitle =
+                          css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >() );
     void exportPlotArea( const css::uno::Reference<
                              css::chart::XChartDocument >& rChartDoc );
     void exportAdditionalShapes( const css::uno::Reference<css::chart::XChartDocument >& rChartDoc );
