@@ -78,6 +78,8 @@ public:
 
     static OUString getCompleteString( const rtl::Reference< ::chart::Title >& xTitle );
     static OUString getUnstackedStr( const OUString& rNewText );
+    static void setFormattedString( const rtl::Reference< ::chart::Title >& xTitle,
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle );
     static void setCompleteString( const OUString& rNewText
         , const rtl::Reference< ::chart::Title >& xTitle
         , const css::uno::Reference< css::uno::XComponentContext > & xContext

@@ -727,6 +727,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
             {
                 try
                 {
+                    // TODO: ODF import for formatted chart titles
                     xTitleProp->setPropertyValue("String", uno::Any(maMainTitle) );
                 }
                 catch(const beans::UnknownPropertyException&)
@@ -742,6 +743,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
             {
                 try
                 {
+                    // TODO: ODF import for formatted chart titles
                     xTitleProp->setPropertyValue("String", uno::Any(maSubTitle) );
                 }
                 catch(const beans::UnknownPropertyException&)
