@@ -54,7 +54,6 @@ using namespace css::reflection;
 using namespace css::beans;
 using namespace css::container;
 using namespace cppu;
-using namespace osl;
 
 namespace stoc_inv
 {

@@ -49,7 +49,6 @@ using namespace css::uno;
 using namespace css::lang;
 using namespace css::script;
 using namespace cppu;
-using namespace osl;
 
 namespace stoc_tcv
 {

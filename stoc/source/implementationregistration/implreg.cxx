@@ -53,7 +53,6 @@ using namespace css::beans;
 using namespace css::lang;
 using namespace css::registry;
 using namespace cppu;
-using namespace osl;
 
 namespace {
 

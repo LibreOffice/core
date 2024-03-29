@@ -40,7 +40,6 @@ using namespace css::loader;
 using namespace css::lang;
 using namespace css::registry;
 using namespace cppu;
-using namespace osl;
 
 namespace {
 

@@ -29,7 +29,6 @@
 #include <unordered_map>
 
 using namespace cppu;
-using namespace osl;
 
 using namespace css::uno;
 using namespace css::lang;
