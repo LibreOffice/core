@@ -45,7 +45,6 @@ namespace o3tl {
 
 namespace basctl
 {
-using namespace ::com::sun::star::uno;
 
 enum EntryType
 {
