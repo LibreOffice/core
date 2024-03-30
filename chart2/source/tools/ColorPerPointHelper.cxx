@@ -26,7 +26,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 using namespace ::chart::DataSeriesProperties;
 
 namespace chart

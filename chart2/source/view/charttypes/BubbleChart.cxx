@@ -33,7 +33,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 BubbleChart::BubbleChart( const rtl::Reference<ChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount )

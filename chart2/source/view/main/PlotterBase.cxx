@@ -25,7 +25,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
         : m_nDimension(nDimensionCount)

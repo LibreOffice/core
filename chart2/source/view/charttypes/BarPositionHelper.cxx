@@ -23,7 +23,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 BarPositionHelper::BarPositionHelper()
         : CategoryPositionHelper( 1 )

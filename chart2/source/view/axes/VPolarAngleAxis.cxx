@@ -33,7 +33,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 VPolarAngleAxis::VPolarAngleAxis( const AxisProperties& rAxisProperties
             , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier

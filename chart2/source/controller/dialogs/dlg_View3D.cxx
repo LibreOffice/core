@@ -31,7 +31,6 @@ namespace chart
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 sal_uInt16 View3DDialog::m_nLastPageId = 0;
 

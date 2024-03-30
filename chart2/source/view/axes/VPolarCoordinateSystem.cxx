@@ -32,7 +32,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
 VPolarCoordinateSystem::VPolarCoordinateSystem( const rtl::Reference< BaseCoordinateSystem >& xCooSys )

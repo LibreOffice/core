@@ -28,7 +28,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 TitleDialogData::TitleDialogData( std::optional<ReferenceSizeProvider> pRefSizeProvider )
         : aPossibilityList{ true, true, true, true, true, true, true }

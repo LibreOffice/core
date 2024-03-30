@@ -71,7 +71,6 @@ using ::osl::MutexGuard;
 
 using namespace ::com::sun::star;
 using namespace ::apphelper;
-using namespace ::chart::CloneHelper;
 
 namespace
 {

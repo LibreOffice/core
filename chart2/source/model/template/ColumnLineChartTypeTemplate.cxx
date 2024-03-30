@@ -36,7 +36,6 @@
 
 #include <algorithm>
 
-using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;

@@ -27,7 +27,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 PolarLabelPositionHelper::PolarLabelPositionHelper(
                     PolarPlottingPositionHelper* pPosHelper
