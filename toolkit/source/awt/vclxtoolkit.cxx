@@ -49,9 +49,8 @@
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
 #include <com/sun/star/awt/XToolkitRobot.hpp>
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/conditn.hxx>
@@ -138,7 +137,7 @@
 #include <awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 
@@ -427,8 +426,7 @@ public:
     sal_Int32 m_nPauseMilliseconds;
 };
 
-class VCLXToolkit : public cppu::BaseMutex,
-                    public cppu::WeakComponentImplHelper<
+class VCLXToolkit : public comphelper::WeakComponentImplHelper<
                     css::awt::XToolkitExperimental,
                     css::awt::XToolkitRobot,
                     css::lang::XServiceInfo >
@@ -436,9 +434,9 @@ class VCLXToolkit : public cppu::BaseMutex,
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxSelection;
 
-    ::comphelper::OInterfaceContainerHelper3<css::awt::XTopWindowListener> m_aTopWindowListeners;
-    ::comphelper::OInterfaceContainerHelper3<css::awt::XKeyHandler> m_aKeyHandlers;
-    ::comphelper::OInterfaceContainerHelper3<css::awt::XFocusListener> m_aFocusListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::awt::XTopWindowListener> m_aTopWindowListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::awt::XKeyHandler> m_aKeyHandlers;
+    ::comphelper::OInterfaceContainerHelper4<css::awt::XFocusListener> m_aFocusListeners;
     ::Link<VclSimpleEvent&,void> m_aEventListenerLink;
     ::Link<VclWindowEvent&,bool> m_aKeyListenerLink;
     bool m_bEventListener;
@@ -458,13 +456,11 @@ class VCLXToolkit : public cppu::BaseMutex,
     void callFocusListeners(::VclSimpleEvent const * pEvent, bool bGained);
 
 protected:
-    ::osl::Mutex&   GetMutex() { return m_aMutex; }
-
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     static vcl::Window* ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent,
                              WinBits nWinBits, MessBoxStyle nMessBoxStyle );
-    css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor,
+    static css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor,
                              MessBoxStyle nForceMessBoxStyle );
 
 public:
@@ -924,13 +920,6 @@ static void ToolkitWorkerFunction( void* pArgs )
 
 // constructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit():
-    cppu::WeakComponentImplHelper<
-    css::awt::XToolkitExperimental,
-    css::awt::XToolkitRobot,
-    css::lang::XServiceInfo>( GetMutex() ),
-    m_aTopWindowListeners(rBHelper.rMutex),
-    m_aKeyHandlers(rBHelper.rMutex),
-    m_aFocusListeners(rBHelper.rMutex),
     m_aEventListenerLink(LINK(this, VCLXToolkit, eventListenerHandler)),
     m_aKeyListenerLink(LINK(this, VCLXToolkit, keyListenerHandler)),
     m_bEventListener(false),
@@ -948,9 +937,10 @@ VCLXToolkit::VCLXToolkit():
 #endif
 }
 
-void SAL_CALL VCLXToolkit::disposing()
+void VCLXToolkit::disposing(std::unique_lock<std::mutex>& rGuard)
 {
 #ifndef IOS
+    rGuard.unlock();
     {
         osl::Guard< osl::Mutex > aGuard( getInitMutex() );
         if( --nVCLToolkitInstanceCount == 0 )
@@ -963,6 +953,7 @@ void SAL_CALL VCLXToolkit::disposing()
             }
         }
     }
+    rGuard.lock();
 #endif
     if (m_bEventListener)
     {
@@ -976,9 +967,9 @@ void SAL_CALL VCLXToolkit::disposing()
     }
     css::lang::EventObject aEvent(
         getXWeak());
-    m_aTopWindowListeners.disposeAndClear(aEvent);
-    m_aKeyHandlers.disposeAndClear(aEvent);
-    m_aFocusListeners.disposeAndClear(aEvent);
+    m_aTopWindowListeners.disposeAndClear(rGuard, aEvent);
+    m_aKeyHandlers.disposeAndClear(rGuard, aEvent);
+    m_aFocusListeners.disposeAndClear(rGuard, aEvent);
 }
 
 
@@ -1008,8 +999,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const cs
 
 css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     rtl::Reference<VCLXVirtualDevice> pVDev = new VCLXVirtualDevice;
 
     SolarMutexGuard aSolarGuard;
@@ -1023,8 +1012,6 @@ css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevi
 
 css::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     css::uno::Reference< css::awt::XRegion >  xRef = new VCLXRegion;
     return xRef;
 }
@@ -1838,12 +1825,11 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
     return pNewWindow;
 }
 
+// static
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     const css::awt::WindowDescriptor& rDescriptor,
     MessBoxStyle nForceMessBoxStyle )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     SolarMutexGuard aSolarGuard;
 
     css::uno::Reference< css::awt::XVclWindowPeer > xRef;
@@ -1913,8 +1899,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
 css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     sal_uInt32 nComponents = rDescriptors.getLength();
     css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > aSeq( nComponents );
     for ( sal_uInt32 n = 0; n < nComponents; n++ )
@@ -2186,15 +2170,15 @@ void SAL_CALL VCLXToolkit::addTopWindowListener(
     css::uno::Reference< css::awt::XTopWindowListener > const & rListener)
 {
     OSL_ENSURE(rListener.is(), "Null rListener");
-    ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    std::unique_lock aGuard(m_aMutex);
+    if (m_bDisposed)
     {
-        aGuard.clear();
+        aGuard.unlock();
         rListener->disposing(
             css::lang::EventObject(
                 getXWeak()));
     }
-    else if (m_aTopWindowListeners.addInterface(rListener) == 1
+    else if (m_aTopWindowListeners.addInterface(aGuard, rListener) == 1
              && !m_bEventListener)
     {
         m_bEventListener = true;
@@ -2206,10 +2190,10 @@ void SAL_CALL VCLXToolkit::addTopWindowListener(
 void SAL_CALL VCLXToolkit::removeTopWindowListener(
     css::uno::Reference< css::awt::XTopWindowListener > const & rListener)
 {
-    ::osl::MutexGuard aGuard(rBHelper.rMutex);
-    if (!(rBHelper.bDisposed || rBHelper.bInDispose)
-        && m_aTopWindowListeners.removeInterface(rListener) == 0
-        && m_aFocusListeners.getLength() == 0 && m_bEventListener)
+    std::unique_lock aGuard(m_aMutex);
+    if (!m_bDisposed
+        && m_aTopWindowListeners.removeInterface(aGuard, rListener) == 0
+        && m_aFocusListeners.getLength(aGuard) == 0 && m_bEventListener)
     {
         ::Application::RemoveEventListener(m_aEventListenerLink);
         m_bEventListener = false;
@@ -2221,15 +2205,15 @@ void SAL_CALL VCLXToolkit::addKeyHandler(
     css::uno::Reference< css::awt::XKeyHandler > const & rHandler)
 {
     OSL_ENSURE(rHandler.is(), "Null rHandler");
-    ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    std::unique_lock aGuard(m_aMutex);
+    if (m_bDisposed)
     {
-        aGuard.clear();
+        aGuard.unlock();
         rHandler->disposing(
             css::lang::EventObject(
                 getXWeak()));
     }
-    else if (m_aKeyHandlers.addInterface(rHandler) == 1 && !m_bKeyListener)
+    else if (m_aKeyHandlers.addInterface(aGuard, rHandler) == 1 && !m_bKeyListener)
     {
         m_bKeyListener = true;
         ::Application::AddKeyListener(m_aKeyListenerLink);
@@ -2240,9 +2224,9 @@ void SAL_CALL VCLXToolkit::addKeyHandler(
 void SAL_CALL VCLXToolkit::removeKeyHandler(
     css::uno::Reference< css::awt::XKeyHandler > const & rHandler)
 {
-    ::osl::MutexGuard aGuard(rBHelper.rMutex);
-    if (!(rBHelper.bDisposed || rBHelper.bInDispose)
-        && m_aKeyHandlers.removeInterface(rHandler) == 0 && m_bKeyListener)
+    std::unique_lock aGuard(m_aMutex);
+    if (!m_bDisposed
+        && m_aKeyHandlers.removeInterface(aGuard, rHandler) == 0 && m_bKeyListener)
     {
         ::Application::RemoveKeyListener(m_aKeyListenerLink);
         m_bKeyListener = false;
@@ -2254,15 +2238,15 @@ void SAL_CALL VCLXToolkit::addFocusListener(
     css::uno::Reference< css::awt::XFocusListener > const & rListener)
 {
     OSL_ENSURE(rListener.is(), "Null rListener");
-    ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    std::unique_lock aGuard(m_aMutex);
+    if (m_bDisposed)
     {
-        aGuard.clear();
+        aGuard.unlock();
         rListener->disposing(
             css::lang::EventObject(
                 getXWeak()));
     }
-    else if (m_aFocusListeners.addInterface(rListener) == 1
+    else if (m_aFocusListeners.addInterface(aGuard, rListener) == 1
              && !m_bEventListener)
     {
         m_bEventListener = true;
@@ -2274,10 +2258,10 @@ void SAL_CALL VCLXToolkit::addFocusListener(
 void SAL_CALL VCLXToolkit::removeFocusListener(
     css::uno::Reference< css::awt::XFocusListener > const & rListener)
 {
-    ::osl::MutexGuard aGuard(rBHelper.rMutex);
-    if (!(rBHelper.bDisposed || rBHelper.bInDispose)
-        && m_aFocusListeners.removeInterface(rListener) == 0
-        && m_aTopWindowListeners.getLength() == 0 && m_bEventListener)
+    std::unique_lock aGuard(m_aMutex);
+    if (!m_bDisposed
+        && m_aFocusListeners.removeInterface(aGuard, rListener) == 0
+        && m_aTopWindowListeners.getLength(aGuard) == 0 && m_bEventListener)
     {
         ::Application::RemoveEventListener(m_aEventListenerLink);
         m_bEventListener = false;
@@ -2364,33 +2348,32 @@ void VCLXToolkit::callTopWindowListeners(
     if (!pWindow->IsTopWindow())
         return;
 
-    std::vector< css::uno::Reference< css::awt::XTopWindowListener > >
-          aListeners(m_aTopWindowListeners.getElements());
-    if (aListeners.empty())
+    std::unique_lock aGuard(m_aMutex);
+    if (m_aTopWindowListeners.getLength(aGuard) == 0)
         return;
 
     css::lang::EventObject aAwtEvent(
         static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()));
-    for (const css::uno::Reference<css::awt::XTopWindowListener> & xListener : aListeners)
-    {
-        try
+    m_aTopWindowListeners.forEach(aGuard,
+        [&pFn, &aAwtEvent](const css::uno::Reference<css::awt::XTopWindowListener> & xListener)
         {
-            (xListener.get()->*pFn)(aAwtEvent);
-        }
-        catch (const css::uno::RuntimeException &)
-        {
-            DBG_UNHANDLED_EXCEPTION("toolkit");
-        }
-    }
+            try
+            {
+                (xListener.get()->*pFn)(aAwtEvent);
+            }
+            catch (const css::uno::RuntimeException &)
+            {
+                DBG_UNHANDLED_EXCEPTION("toolkit");
+            }
+        });
 }
 
 bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                                   bool bPressed)
 {
-    std::vector< css::uno::Reference< css::awt::XKeyHandler > >
-          aHandlers(m_aKeyHandlers.getElements());
+    std::unique_lock aGuard(m_aMutex);
 
-    if (!aHandlers.empty())
+    if (m_aKeyHandlers.getLength(aGuard) != 0)
     {
         vcl::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
 
@@ -2410,12 +2393,15 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
             sal::static_int_cast< sal_Int16 >(
                 pKeyEvent->GetKeyCode().GetFunction()));
-        for (const css::uno::Reference<css::awt::XKeyHandler> & xHandler : aHandlers)
+        comphelper::OInterfaceIteratorHelper4 aIt(aGuard, m_aKeyHandlers);
+        aGuard.unlock();
+        while (aIt.hasMoreElements())
         {
+            css::awt::XKeyHandler* pL = aIt.next().get();
             try
             {
-                if (bPressed ? xHandler->keyPressed(aAwtEvent)
-                             : xHandler->keyReleased(aAwtEvent))
+                if (bPressed ? pL->keyPressed(aAwtEvent)
+                             : pL->keyReleased(aAwtEvent))
                     return true;
             }
             catch (const css::uno::RuntimeException &)
@@ -2435,9 +2421,8 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
     if (!pWindow->IsTopWindow())
         return;
 
-    std::vector< css::uno::Reference< css::awt::XFocusListener > >
-          aListeners(m_aFocusListeners.getElements());
-    if (aListeners.empty())
+    std::unique_lock aGuard(m_aMutex);
+    if (m_aFocusListeners.getLength(aGuard) == 0)
         return;
 
     // Ignore the interior of compound controls when determining the
@@ -2457,18 +2442,19 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
         static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
         static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
         xNext, false);
-    for (const css::uno::Reference<css::awt::XFocusListener> & xListener : aListeners)
-    {
-        try
+    m_aFocusListeners.forEach(aGuard,
+        [bGained, &aAwtEvent] (const css::uno::Reference<css::awt::XFocusListener> & xListener)
         {
-            bGained ? xListener->focusGained(aAwtEvent)
-                : xListener->focusLost(aAwtEvent);
-        }
-        catch (const css::uno::RuntimeException &)
-        {
-            DBG_UNHANDLED_EXCEPTION("toolkit");
-        }
-    }
+            try
+            {
+                bGained ? xListener->focusGained(aAwtEvent)
+                    : xListener->focusLost(aAwtEvent);
+            }
+            catch (const css::uno::RuntimeException &)
+            {
+                DBG_UNHANDLED_EXCEPTION("toolkit");
+            }
+        });
 }
 
 // css::awt::XReschedule:
