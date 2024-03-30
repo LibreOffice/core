@@ -467,6 +467,7 @@ void IconViewImpl::SyncVerThumb()
 void IconViewImpl::UpdateAll()
 {
     FindMostRight();
+    AdjustScrollBars(m_aOutputSize);
     SyncVerThumb();
     FillView();
     ShowVerSBar();
