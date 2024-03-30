@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testMemoryManager_Unloaded)
     CPPUNIT_ASSERT_EQUAL(sal_uLong(90000), aGraphic_300.GetSizeBytes());
 }
 
-CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testMemoryManager_Destrucion)
+CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testMemoryManager_Destruction)
 {
     auto& rManager = vcl::graphic::MemoryManager::get();
     CPPUNIT_ASSERT_EQUAL(size_t(0), rManager.getManagedObjects().size());
