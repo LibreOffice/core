@@ -361,7 +361,7 @@ void Font::Merge( const vcl::Font& rFont )
     {
         SetFamilyName( rFont.GetFamilyName() );
         SetStyleName( rFont.GetStyleName() );
-        SetCharSet( GetCharSet() );
+        SetCharSet( rFont.GetCharSet() );
         SetLanguageTag( rFont.GetLanguageTag() );
         SetCJKContextLanguageTag( rFont.GetCJKContextLanguageTag() );
         // don't use access methods here, might lead to AskConfig(), if DONTKNOW
