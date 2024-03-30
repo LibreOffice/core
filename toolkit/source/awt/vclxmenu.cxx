@@ -412,11 +412,30 @@ css::uno::Reference< css::awt::XPopupMenu > VCLXMenu::getPopupMenu(
                 break;
             }
         }
-        // it seems the popup menu is not insert into maPopupMenuRefs
-        // if the popup men is not created by stardiv.Toolkit.VCLXPopupMenu
+        /*
+           If the popup menu is not inserted via setPopupMenu then
+           maPopupMenuRefs won't have an entry for it, so create an XPopupMenu
+           for it now.
+
+           This means that this vcl PopupMenu "pMenu" either existed as a child
+           of the vcl Menu "mpMenu" before the VCLXMenu was created for that or
+           it was added directly via vcl.
+        */
         if( !aRef.is() )
         {
             aRef = new VCLXPopupMenu( static_cast<PopupMenu*>(pMenu) );
+            /*
+               In any case, the VCLXMenu has ownership of "mpMenu" and will
+               destroy it in the VCLXMenu dtor.
+
+               Similarly because VCLXPopupMenu takes ownership of the vcl
+               PopupMenu "pMenu", the underlying vcl popup will be destroyed
+               when VCLXPopupMenu is, so we should add it now to
+               maPopupMenuRefs to ensure its lifecycle is at least bound to
+               the VCLXMenu that owns the parent "mpMenu" similarly to
+               PopupMenus added via the more conventional setPopupMenu.
+            */
+            maPopupMenuRefs.push_back( aRef );
         }
     }
     return aRef;
