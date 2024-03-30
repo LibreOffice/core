@@ -3988,6 +3988,7 @@ SvNFEngine::Accessor SvNFEngine::GetRWPolicy(SvNFFormatData& rFormatData)
 
 SvNFEngine::Accessor SvNFEngine::GetROPolicy(const SvNFFormatData& rFormatData, SvNFFormatData::DefaultFormatKeysMap& rFormatCache)
 {
+    SvNumberFormatter::GetTheCurrencyTable(); // create this now so threads don't attempt to create it simultaneously
     return
     {
         std::bind(SvNFEngine::GetCLOffsetRO, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
