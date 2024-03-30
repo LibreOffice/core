@@ -28,9 +28,6 @@ namespace pcr
 {
 
 
-    using namespace ::com::sun::star::util;
-
-
     //= HelpIdUrl
 
 

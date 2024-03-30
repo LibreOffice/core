@@ -42,7 +42,6 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xforms;
-    using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::form::binding;
     using namespace ::com::sun::star::inspection;

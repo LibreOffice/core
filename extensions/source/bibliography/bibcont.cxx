@@ -49,7 +49,6 @@ BibSplitWindow::BibSplitWindow( vcl::Window* pParent, WinBits nStyle ) : SplitWi
 }
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 //split window size is a percent value
 #define WIN_MIN_HEIGHT 10

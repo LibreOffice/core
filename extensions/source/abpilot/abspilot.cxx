@@ -50,7 +50,6 @@ namespace abp
 #define PATH_NO_SETTINGS_NO_FIELDS  4
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
 
     OAddressBookSourcePilot::OAddressBookSourcePilot(weld::Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddressBookSourcePilot_Base( _pParent )

@@ -56,9 +56,7 @@ namespace pcr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::xforms;
     using namespace ::com::sun::star::xsd;
-    using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::inspection;
 
     using ::com::sun::star::beans::PropertyAttribute::MAYBEVOID;

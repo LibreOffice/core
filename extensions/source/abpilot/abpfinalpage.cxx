@@ -31,10 +31,6 @@
 
 namespace abp
 {
-
-    using namespace ::svt;
-    using namespace ::utl;
-
     static std::shared_ptr<const SfxFilter> lcl_getBaseFilter()
     {
         std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");

@@ -52,7 +52,6 @@ namespace pcr
     using namespace ::com::sun::star::table;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::i18n;
     using namespace ::com::sun::star::form::binding;
 
     namespace

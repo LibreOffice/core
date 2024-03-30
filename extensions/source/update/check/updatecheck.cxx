@@ -55,7 +55,6 @@
 
 namespace beans = com::sun::star::beans ;
 namespace deployment = com::sun::star::deployment ;
-namespace frame = com::sun::star::frame ;
 namespace lang = com::sun::star::lang ;
 namespace c3s = com::sun::star::system ;
 namespace task = com::sun::star::task ;

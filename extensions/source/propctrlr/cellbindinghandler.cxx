@@ -38,7 +38,6 @@ namespace pcr
     using namespace ::com::sun::star::table;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::inspection;
     using namespace ::com::sun::star::form::binding;

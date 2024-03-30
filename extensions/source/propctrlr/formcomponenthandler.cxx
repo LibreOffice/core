@@ -118,7 +118,6 @@ namespace pcr
     using namespace lang;
     using namespace beans;
     using namespace frame;
-    using namespace script;
     using namespace form;
     using namespace util;
     using namespace awt;

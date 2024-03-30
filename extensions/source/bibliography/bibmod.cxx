@@ -29,10 +29,6 @@ static BibModul*  pBibModul=nullptr;
 static sal_uInt32 nBibModulCount=0;
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ucb;
 
 HdlBibModul OpenBibModul()
 {
