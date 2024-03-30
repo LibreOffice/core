@@ -6,9 +6,16 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-import sys, os, uno, unohelper
-import re, random, traceback, itertools
-import threading, time as __time__
+import sys
+import os
+import uno
+import unohelper
+import re
+import random
+import traceback
+import itertools
+import threading
+import time as __time__
 
 __lng__ = {}
 
@@ -194,7 +201,7 @@ class __Doc__:
         self.fontstyle = 0
         self.points = []
 
-from math import pi, sin, cos, asin, log10, hypot, sqrt
+from math import pi, sin, cos, asin, hypot
 
 from com.sun.star.awt import Point as __Point__
 from com.sun.star.awt import Gradient as __Gradient__
@@ -217,8 +224,6 @@ from com.sun.star.drawing.LineStyle import NONE as __LineStyle_NONE__
 from com.sun.star.drawing.LineStyle import SOLID as __LineStyle_SOLID__
 from com.sun.star.drawing.LineStyle import DASH as __LineStyle_DASHED__
 from com.sun.star.drawing.DashStyle import RECT as __DashStyle_RECT__
-from com.sun.star.drawing.DashStyle import ROUND as __DashStyle_ROUND__
-from com.sun.star.drawing.DashStyle import ROUNDRELATIVE as __DashStyle_ROUNDRELATIVE__
 from com.sun.star.drawing.CircleKind import FULL as __FULL__
 from com.sun.star.drawing.CircleKind import SECTION as __SECTION__
 from com.sun.star.drawing.CircleKind import CUT as __CUT__
@@ -230,8 +235,8 @@ from com.sun.star.awt.FontStrikeout import SINGLE as __Strikeout_SINGLE__
 from com.sun.star.awt import Size as __Size__
 from com.sun.star.awt import WindowDescriptor as __WinDesc__
 from com.sun.star.awt.WindowClass import MODALTOP as __MODALTOP__
-from com.sun.star.awt.VclWindowPeerAttribute import OK as __OK__ 
-from com.sun.star.awt.VclWindowPeerAttribute import OK_CANCEL as __OK_CANCEL__ 
+from com.sun.star.awt.VclWindowPeerAttribute import OK as __OK__
+from com.sun.star.awt.VclWindowPeerAttribute import OK_CANCEL as __OK_CANCEL__
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO_CANCEL as __YES_NO_CANCEL__ # OK_CANCEL, YES_NO, RETRY_CANCEL, DEF_OK, DEF_CANCEL, DEF_RETRY, DEF_YES, DEF_NO
 from com.sun.star.awt.PushButtonType import OK as __Button_OK__
 from com.sun.star.awt.PushButtonType import CANCEL as __Button_CANCEL__
@@ -255,14 +260,27 @@ __bezierdot__.Coordinates = (tuple(__gendots__(32)),)
 __bezierdot__.Flags = ((0,) * 32,)
 
 # turtle shape
-__TURTLESHAPE__ = [tuple([(__Point__(-120, 130), __Point__(-245, 347), __Point__(-291, 176), ), (__Point__(0, -500), __Point__(126, -375), __Point__(0, -250), __Point__(-124, -375), ), (__Point__(295, 170), __Point__(124, 124), __Point__(250, 340), ), (__Point__(466, -204), __Point__(224, -269), __Point__(71, -180), __Point__(313, -116), ), (__Point__(-75, -175), __Point__(-292, -300), __Point__(-417, -83), ), (__Point__(250, 0), __Point__(0, -250), __Point__(-250, 0), __Point__(0, 250), )] + 
+__TURTLESHAPE__ = [tuple([(__Point__(-120, 130), __Point__(-245, 347), __Point__(-291, 176), ), (__Point__(0, -500), __Point__(126, -375), __Point__(0, -250), __Point__(-124, -375), ), (__Point__(295, 170), __Point__(124, 124), __Point__(250, 340), ), (__Point__(466, -204), __Point__(224, -269), __Point__(71, -180), __Point__(313, -116), ), (__Point__(-75, -175), __Point__(-292, -300), __Point__(-417, -83), ), (__Point__(250, 0), __Point__(0, -250), __Point__(-250, 0), __Point__(0, 250), )] +
             [(i,) for i in __gendots__(32)] + # single points for wider selection
             [(__Point__(0, 0),)]), # last point for position handling
             ((__Point__(0, 0),),)] # hidden turtle (single point to draw at the left border of the page area)
 
 def __getdocument__():
     global __docs__, _
-    doc = XSCRIPTCONTEXT.getDocument()
+    # The XSCRIPTCONTEXT object is part of the UNO (Universal Network Objects)
+    # API provided by LibreOffice, which allows scripting languages like Python
+    # to interact with LibreOffice's underlying functionality. It provides a
+    # bridge between the scripting environment and the LibreOffice application,
+    # making it possible for scripts to control and extend the functionality of LibreOffice.
+
+    # Because XSCRIPTCONTEXT is automatically available in LibreOffice Python
+    # scripts, developers can directly use it to access the LibreOffice API
+    # without needing to define it themselves, simplifying script development
+    # and making it easier to work with LibreOffice's features and capabilities._
+
+    # It would be good to use a linter that can be told to ignore this
+    # "undefined variable" in the code (like flake8 or ruff) using # noqa: F821
+    doc = XSCRIPTCONTEXT.getDocument() # noqa: F821
     try:
         _ = __docs__[doc.RuntimeUID]
     except:
@@ -275,7 +293,6 @@ def Input(s):
     try:
         ctx = uno.getComponentContext()
         smgr = ctx.ServiceManager
-        text = ""
 
         # dialog
         d = smgr.createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", ctx)
@@ -287,7 +304,6 @@ def Input(s):
         l = d.createInstance("com.sun.star.awt.UnoControlFixedTextModel" )
 
         if type(s) == list:
-            text = s[1]
             s = s[0]
         l.PositionX, l.PositionY, l.Width, l.Height, l.Name, l.TabIndex, l.Label = 5, 4, 140, 14, "l1", 2, s
 
@@ -301,17 +317,17 @@ def Input(s):
         b2 = d.createInstance( "com.sun.star.awt.UnoControlButtonModel" )
         b2.PositionX, b2.PositionY, b2.Width, b2.Height, b2.Name, b2.TabIndex, b2.PushButtonType = 100, 32, 45, 14, "b2", 1, __Button_CANCEL__
 
-        # insert the control models into the dialog model 
+        # insert the control models into the dialog model
         d.insertByName( "l1", l)
         d.insertByName( "b1", b)
-        d.insertByName( "b2", b2) 
-        d.insertByName( "e1", e) 
+        d.insertByName( "b2", b2)
+        d.insertByName( "e1", e)
 
-        # create the dialog control and set the model 
+        # create the dialog control and set the model
         controlContainer = smgr.createInstanceWithContext("com.sun.star.awt.UnoControlDialog", ctx)
         controlContainer.setModel(d)
 
-        # create a peer 
+        # create a peer
         toolkit = smgr.createInstanceWithContext("com.sun.star.awt.ExtToolkit", ctx)
         controlContainer.setVisible(False)
         controlContainer.createPeer(toolkit, None)
@@ -338,7 +354,6 @@ def __string__(s, decimal = None): # convert decimal sign, localized BOOL and SE
     if decimal == ',' and type(s) == float:
         return str(s).replace(".", ",")
     if type(s) in [list, tuple, dict, set]:
-        __strings__ = []
         s = re.sub("(?u)(['\"])(([^'\"]|\\['\"])*)(?<!\\\\)\\1", __encodestring__, str(s)) # XXX fix double '\'\"'
         if decimal == ',':
             s = s.replace(".", ",")
@@ -360,7 +375,7 @@ def Print(s):
 
 def MessageBox(parent, message, title, msgtype = "messbox", buttons = __OK__):
     msgtypes = ("messbox", "infobox", "errorbox", "warningbox", "querybox")
-    if not (msgtype in msgtypes):
+    if msgtype not in msgtypes:
         msgtype = "messbox"
     d = __WinDesc__()
     d.Type = __MODALTOP__
@@ -437,7 +452,6 @@ def __translate__(arg = None):
                 lang = __l12n__("en_US")
     lq = '\'' + lang['LEFTSTRING'].replace("|", "")
     rq = '\'' + lang['RIGHTSTRING'].replace("|", "")
-    __strings__ = []
 
     text = re.sub(r"^(([ \t]*[;#][^\n]*))", __encodecomment__, text)
     text = re.sub("(?u)([%s])((?:[^\n%s]|\\\\[%s])*)(?<!\\\\)[%s]" % (lq, rq, rq, rq), __encodestring__, selection.getString())
@@ -550,13 +564,13 @@ class LogoProgram(threading.Thread):
                     _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor[0], False)
                 except:
                     _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor[0].getStart(), False)
-        except Exception as e:
+        except Exception:
             try:
               __unlock__(all_levels = True)
               TRACEPATTERN = '"<string>", line '
               message = traceback.format_exc()
               l = re.findall(TRACEPATTERN + '[0-9]+', message)
-              if len(l) > 0 and not "SystemExit" in message:
+              if len(l) > 0 and "SystemExit" not in message:
                 line = len(re.findall(__LINEBREAK__, ''.join(self.code.split("\n")[:int(l[-1][len(TRACEPATTERN):])]))) + 1
                 caption = __l12n__(_.lng)['LIBRELOGO']
                 if __prevcode__ and "\n" in __prevcode__:
@@ -584,7 +598,7 @@ class LogoProgram(threading.Thread):
                     MessageBox(parent, __l12n__(_.lng)['ERR_ARGUMENTS'] % (__locname__(r.group(1)), r.group(2), r.group(3)), caption, "errorbox")
                 else:
                     origline = __compiled__.split("\n")[line-1]
-                    if not "com.sun.star" in message and not "__repeat__" in message and not "*)" in message and ("[" in origline or "]" in origline):
+                    if "com.sun.star" not in message and "__repeat__" not in message and "*)" not in message and ("[" in origline or "]" in origline):
                         MessageBox(parent, __l12n__(_.lng)['ERR_BLOCK'], caption, "errorbox")
                     else:
                         MessageBox(parent, __l12n__(_.lng)['ERROR'] %line, __l12n__(_.lng)['LIBRELOGO'], "errorbox")
@@ -626,7 +640,7 @@ def __initialize__():
         shape.AnchorType = __AT_PAGE__
         shape.TextWrap = __THROUGH__
         shape.Opaque = True
-        _.drawpage.add(shape) 
+        _.drawpage.add(shape)
         shape.PolyPolygon = __TURTLESHAPE__[0]
         _.shapecache[__TURTLE__] = shape
         shape.Name = __TURTLE__
@@ -720,7 +734,7 @@ def showturtle():
         z = turtle.getPosition()
         r, turtle.RotateAngle = turtle.RotateAngle, 0
         turtle.PolyPolygon, turtle.RotateAngle = __TURTLESHAPE__[0], r
-        z = __Point__(z.X - turtle.BoundRect.Width / 2.0, z.Y - turtle.BoundRect.Height / 2.0) 
+        z = __Point__(z.X - turtle.BoundRect.Width / 2.0, z.Y - turtle.BoundRect.Height / 2.0)
         turtle.setPosition(z)
         __visible__(turtle, True)
         pencolor(_.pencolor)
@@ -833,11 +847,11 @@ def run(arg=None, arg2 = -1):
         _.doc.CurrentController.select(turtle)
         # set working directory for file operations
         if _.doc.hasLocation():
-          name = os.chdir(unohelper.fileUrlToSystemPath(re.sub("[^/]*$", "", _.doc.getURL())))
+          os.chdir(unohelper.fileUrlToSystemPath(re.sub("[^/]*$", "", _.doc.getURL())))
         else:
-          name = os.chdir(os.path.expanduser('~'))
+          os.chdir(os.path.expanduser('~'))
         __thread__.start()
-    except Exception as e:
+    except Exception:
         __thread__ = None
         __trace__()
     return None
@@ -877,7 +891,6 @@ def home(arg=None):
     _.pencolor = 0
     _.pensize = __LINEWIDTH__
     _.areacolor = __FILLCOLOR__
-    pen = 1
     __removeshape__(__ACTUAL__)
 
 def clearscreen(arg=None):
@@ -917,7 +930,7 @@ def __cs__(select = True):
             _.doc.CurrentController.select(_.drawpage)
 
 def __dispatcher__(s, properties = (), doc = 0):
-    ctx = XSCRIPTCONTEXT.getComponentContext()
+    ctx = XSCRIPTCONTEXT.getComponentContext() # noqa: F821
     d = ctx.ServiceManager.createInstanceWithContext("com.sun.star.frame.DispatchHelper", ctx)
     if doc != 0:
       d.executeDispatch(doc.CurrentController.Frame, s, "", 0, properties)
@@ -980,10 +993,9 @@ def forward(n):
         position([pos[0] + dx, pos[1] - dy])
     elif type(n) == str:
         siz = label([1, 1, n])
-        shape = __getshape__(__ACTUAL__)
         pos = position()
         angle = heading()
-        w, h = siz.Width / (__PT_TO_TWIP__ / __MM10_TO_TWIP__), siz.Height / (__PT_TO_TWIP__ / __MM10_TO_TWIP__)
+        w, _ = siz.Width / (__PT_TO_TWIP__ / __MM10_TO_TWIP__), siz.Height / (__PT_TO_TWIP__ / __MM10_TO_TWIP__)
         dx = 0 * sin((pi/180) * (angle)) + w * sin((pi/180)*(angle + 90))
         dy = 0 * cos((pi/180) * (angle)) + w * cos((pi/180)*(angle + 90))
         position([pos[0] + dx, pos[1] - dy])
@@ -1071,7 +1083,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
     if shape and "LineShape" in shape.ShapeType:
             if _.continuous or dot:
                 last = shape.PolyPolygon[-1][-1]
-                if not (turtlepos and (abs(last.X - turtlepos.X) > 100 or abs(last.Y - turtlepos.Y) > 100) and 
+                if not (turtlepos and (abs(last.X - turtlepos.X) > 100 or abs(last.Y - turtlepos.Y) > 100) and
                   (__group__ == 0 or (shape.getPosition().X > 0 and turtle.getPosition().X > 0))): # picture [ ] keeps hanging shapes
                     if dot or _.linestyle == __LineStyle_DOTTED__:
                          shape.PolyPolygon = tuple( list(shape.PolyPolygon) + __dots__(n, turtlepos, dx, dy))
@@ -1159,7 +1171,7 @@ def __fillit__(filled = True):
         if shape.LineTransparence == 100:
             shape.LineStyle = 0
         if shape.FillTransparence == 100:
-            shape.FillTransparence = 0 # for hatching and better modifications on UI 
+            shape.FillTransparence = 0 # for hatching and better modifications on UI
             if not _.hatch:
                 shape.FillStyle = 0
         shape.setString(oldshape.getString())
@@ -1214,7 +1226,7 @@ def __boxshape__(shapetype, l):
     if shape.LineTransparence == 100:
         shape.LineStyle = 0
     if shape.FillTransparence == 100:
-        shape.FillTransparence = 0 # for hatching and better modifications on UI 
+        shape.FillTransparence = 0 # for hatching and better modifications on UI
         if not _.hatch:
             shape.FillStyle = 0
     shape.RotateAngle = turtle.RotateAngle
@@ -1274,9 +1286,9 @@ def rectangle(l):
         c = shape.PolyPolygon[0][0]
         k = [min(l[0] / 2.0, l[2]), min(l[1] / 2.0, l[2])]
         p = __dots__(l[0] - 2 * k[0], __Point__(c.X - l[0]/2 + k[0], c.Y - l[1]/2), l[0] - 2 * k[0], 0)
-        p = p[:-1] + __dots__(l[1] - 2 * k[1], __Point__(c.X + l[0]/2, c.Y - l[1]/2 + k[1]), 0, l[1] - 2 * k[1]) 
-        p = p[:-1] + __dots__(l[0] - 2 * k[0], __Point__(c.X + l[0]/2 - k[0], c.Y + l[1]/2), -l[0] + 2 * k[0], 0) 
-        p = p[:-1] + __dots__(l[1] - 2 * k[1], __Point__(c.X - l[0]/2, c.Y + l[1]/2 - k[1]), 0, -l[1] + 2 * k[1]) 
+        p = p[:-1] + __dots__(l[1] - 2 * k[1], __Point__(c.X + l[0]/2, c.Y - l[1]/2 + k[1]), 0, l[1] - 2 * k[1])
+        p = p[:-1] + __dots__(l[0] - 2 * k[0], __Point__(c.X + l[0]/2 - k[0], c.Y + l[1]/2), -l[0] + 2 * k[0], 0)
+        p = p[:-1] + __dots__(l[1] - 2 * k[1], __Point__(c.X - l[0]/2, c.Y + l[1]/2 - k[1]), 0, -l[1] + 2 * k[1])
         if l[2] > 0:
                p = p + __dots__(max(k) * 2 * pi, __Point__(c.X - l[0]/2 + k[0], c.Y - l[1]/2 + k[1]), 0, 0, k, 3)[1:]
                p = p + __dots__(max(k) * 2 * pi, __Point__(c.X + l[0]/2 - k[0], c.Y - l[1]/2 + k[1]), 0, 0, k, 2)[1:]
@@ -1292,7 +1304,7 @@ def rectangle(l):
 def label(st):
     if type(st) != type([]):
         st = [0, 0, st]
-    # get text size 
+    # get text size
     shape = _.doc.createInstance( "com.sun.star.drawing.TextShape")
     shape.TextAutoGrowWidth = True
     shape.Visible = False
@@ -1306,14 +1318,14 @@ def label(st):
     rectangle([z.Width / (__PT_TO_TWIP__ / __MM10_TO_TWIP__), z.Height / (__PT_TO_TWIP__ / __MM10_TO_TWIP__)])
     _.drawpage.remove(shape)
     _.pencolor, _.areacolor = pc, ac
-    lab = __getshape__(__ACTUAL__) 
+    lab = __getshape__(__ACTUAL__)
     text(lab, st[2])
     if st[0] != 0 or st[1] != 0:
         pos = position()
         angle = heading()
         n = [st[0] * z.Width/2, st[1] * z.Height/2]
         dx = n[1] * sin((pi/180) * angle) + n[0] * sin((pi/180)*(angle + 90))
-        dy = n[1] * cos((pi/180) * angle) + n[0] * cos((pi/180)*(angle + 90)) 
+        dy = n[1] * cos((pi/180) * angle) + n[0] * cos((pi/180)*(angle + 90))
         lab.setPosition(__Point__(round(pos[0] * __PT_TO_TWIP__ / __MM10_TO_TWIP__ + dx - lab.BoundRect.Width/2), round(pos[1] * __PT_TO_TWIP__ / __MM10_TO_TWIP__ - dy - lab.BoundRect.Height/2)))
     _.shapecache[__ACTUAL__] = actual
     return z
@@ -1803,12 +1815,12 @@ def __groupend__(name = ""):
     if name and ".SVG" == name[-4:].upper() and g != 0:
       _.doc.CurrentController.select(g)
       __dispatcher__(".uno:Copy")
-      ctx = XSCRIPTCONTEXT.getComponentContext()
+      ctx = XSCRIPTCONTEXT.getComponentContext() # noqa: F821
       d = ctx.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", ctx)
       draw = d.loadComponentFromURL("private:factory/sdraw", "_blank", 0, ())
       drawpage = draw.getDrawPages().getByIndex(0)
-      while XSCRIPTCONTEXT.getDocument() != draw:
-        if XSCRIPTCONTEXT.getDocument() not in [draw, _.doc, None]:
+      while XSCRIPTCONTEXT.getDocument() != draw: # noqa: F821
+        if XSCRIPTCONTEXT.getDocument() not in [draw, _.doc, None]: # noqa: F821
           __halt__ = True
           return
         __time__.sleep(0.1)
@@ -1824,8 +1836,8 @@ def __groupend__(name = ""):
         name = os.getcwd() + os.path.sep + name
       __dispatcher__(".uno:ExportTo", (__getprop__("URL", unohelper.systemPathToFileUrl(name)), __getprop__("FilterName", "draw_svg_Export")), draw)
       draw.close(True)
-      while XSCRIPTCONTEXT.getDocument() != _.doc:
-        if XSCRIPTCONTEXT.getDocument() not in [draw, _.doc, None]:
+      while XSCRIPTCONTEXT.getDocument() != _.doc: # noqa: F821
+        if XSCRIPTCONTEXT.getDocument() not in [draw, _.doc, None]: # noqa: F821
           __halt__ = True
           return
         __time__.sleep(0.1)
@@ -1880,14 +1892,14 @@ def __loadlang__(lang, a):
         for j in a[i[0]].split("|"):
             __colors__[lang][j.lower()] = i[1]
     for i in a:
-        if not i[0:3] in ["LIB", "ERR", "PT", "INC", "MM", "CM", "HOU", "DEG"] and not i in __STRCONST__: # uppercase native commands
+        if i[0:3] not in ["LIB", "ERR", "PT", "INC", "MM", "CM", "HOU", "DEG"] and i not in __STRCONST__: # uppercase native commands
             a[i] = a[i].upper()
     repcount = a['REPCOUNT'].split('|')[0]
     loopi = itertools.count()
     loop = lambda r: "%(i)s = 1\n%(orig)s%(j)s = %(i)s\n%(i)s += 1\n" % \
         { "i": repcount + str(next(loopi)), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(next(loopi)-1), r.group(0)) }
     __comp__[lang] = [
-    [r"(?i)(?<!:)(\b|(?=[-:]))(?:%s)\b" % "|".join([a[i].lower() for i in a if not "_" in i and i != "DECIMAL"]), lambda s: s.group().upper()], # uppercase all native commands in the source code
+    [r"(?i)(?<!:)(\b|(?=[-:]))(?:%s)\b" % "|".join([a[i].lower() for i in a if "_" not in i and i != "DECIMAL"]), lambda s: s.group().upper()], # uppercase all native commands in the source code
     [r"(?<!:)\b(?:%s) \[(?= |\n)" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
     [r"(?<!:)\b(?:%s) (%s[^[]*)\[(?= |\n)" % (a['GROUP'], __DECODE_STRING_REGEX__), "\n__groupstart__(\\1)\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__(\\1)\nbreak\n]\n"],
     [r"(?<!:)\b(?:%s)\b" % a['GROUP'], "\n__removeshape__(__ACTUAL__)\n"],
@@ -2098,7 +2110,7 @@ def __compil__(s):
             __loadlang__(_.lng, __l12n__(_.lng))
         except:
             __trace__()
-            _.lng = loc.Language 
+            _.lng = loc.Language
             __loadlang__(_.lng, __l12n__(_.lng))
     except:
         __trace__()
@@ -2106,8 +2118,8 @@ def __compil__(s):
         if "_" not in locals():
             _ = lambda: None
         _.lng = 'en_US'
-        if not _.lng in __comp__:
-            __loadlang__(_.lng, __l12n__(_.lng)) 
+        if _.lng not in __comp__:
+            __loadlang__(_.lng, __l12n__(_.lng))
 
     _.decimal = __l12n__(_.lng)['DECIMAL']
 
