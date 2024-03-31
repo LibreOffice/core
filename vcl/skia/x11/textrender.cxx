@@ -51,10 +51,10 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = rInstance.GetFreetypeFont();
     const vcl::font::FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
-    int nHeight = rFSD.mnHeight;
-    int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
-    if (nWidth == 0 || nHeight == 0)
+    if (rFSD.mnHeight == 0)
         return;
+    double nHeight = rFSD.mnHeight;
+    double nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
 
     if (!fontManager)
     {
@@ -65,7 +65,7 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
         = SkFontMgr_createTypefaceFromFcPattern(fontManager, rFont.GetFontOptions()->GetPattern());
     SkFont font(typeface);
     font.setSize(nHeight);
-    font.setScaleX(1.0 * nWidth / nHeight);
+    font.setScaleX(nWidth / nHeight);
     if (rInstance.NeedsArtificialItalic())
         font.setSkewX(-1.0 * ARTIFICIAL_ITALIC_SKEW);
     if (rInstance.NeedsArtificialBold())
@@ -94,7 +94,7 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     // Vertical font, use width as "height".
     SkFont verticalFont(font);
     verticalFont.setSize(nWidth);
-    verticalFont.setScaleX(1.0 * nHeight / nWidth);
+    verticalFont.setScaleX(nHeight / nWidth);
 
     assert(dynamic_cast<SkiaSalGraphicsImpl*>(rGraphics.GetImpl()));
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(rGraphics.GetImpl());
