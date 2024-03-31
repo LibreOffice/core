@@ -52,7 +52,7 @@ void MSFilterTest::testTransColToIco()
         15, 14, 13, 13, 12, 12,  9, 9,  9, 10, 10, 11, 11,
          1, 14, 13, 13,  1, 12,  1, 9,  1, 10,  1, 11,  1 };
 
-    for( size_t i = 0; i < SAL_N_ELEMENTS(aStdCol); ++i)
+    for( size_t i = 0; i < std::size(aStdCol); ++i)
     {
         const OString sMessage = "Index of unmatched color: " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aExpected[i],

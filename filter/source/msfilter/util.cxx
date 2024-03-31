@@ -279,7 +279,7 @@ sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const css::awt::Size& rSize )
 
     sal_Int32 nPaperSizeIndex = 0; // Undefined
     const ApiPaperSize* pItem = spPaperSizeTable;
-    const ApiPaperSize* pEnd =  spPaperSizeTable + SAL_N_ELEMENTS( spPaperSizeTable );
+    const ApiPaperSize* pEnd =  spPaperSizeTable + std::size( spPaperSizeTable );
     for ( ; pItem != pEnd; ++pItem )
     {
         sal_Int32 nCurDeltaHeight = std::abs( pItem->mnHeight - rSize.Height );
@@ -307,7 +307,7 @@ sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const css::awt::Size& rSize )
 
 const ApiPaperSize& PaperSizeConv::getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex )
 {
-    if ( nMSOPaperIndex  < 0 || nMSOPaperIndex > sal_Int32(SAL_N_ELEMENTS( spPaperSizeTable )) - 1 )
+    if ( nMSOPaperIndex  < 0 || nMSOPaperIndex > std::ssize( spPaperSizeTable ) - 1 )
         return spPaperSizeTable[ 0 ];
     return spPaperSizeTable[ nMSOPaperIndex ];
 }

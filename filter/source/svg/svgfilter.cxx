@@ -721,7 +721,7 @@ private:
         if(!mbIsSVG)
         {
             const sal_Int8 aMagic[] = {'<', 's', 'v', 'g'};
-            const sal_Int32 nMagicSize(SAL_N_ELEMENTS(aMagic));
+            const sal_Int32 nMagicSize(std::size(aMagic));
 
             mbIsSVG = impCheckForMagic(aMagic, nMagicSize);
         }
@@ -729,7 +729,7 @@ private:
         if(!mbIsSVG)
         {
             const sal_Int8 aMagic[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
-            const sal_Int32 nMagicSize(SAL_N_ELEMENTS(aMagic));
+            const sal_Int32 nMagicSize(std::size(aMagic));
 
             mbIsSVG = impCheckForMagic(aMagic, nMagicSize);
         }
@@ -773,7 +773,7 @@ public:
         {
             // xmlns:ooo
             const sal_Int8 aMagic[] = {'x', 'm', 'l', 'n', 's', ':', 'o', 'o', 'o'};
-            const sal_Int32 nMagicSize(SAL_N_ELEMENTS(aMagic));
+            const sal_Int32 nMagicSize(std::size(aMagic));
 
             return impCheckForMagic(aMagic, nMagicSize);
         }
@@ -789,7 +789,7 @@ public:
         {
             // ooo:meta_slides
             const sal_Int8 aMagic[] = {'o', 'o', 'o', ':', 'm', 'e', 't', 'a', '_', 's', 'l', 'i', 'd', 'e', 's'};
-            const sal_Int32 nMagicSize(SAL_N_ELEMENTS(aMagic));
+            const sal_Int32 nMagicSize(std::size(aMagic));
 
             return impCheckForMagic(aMagic, nMagicSize);
         }

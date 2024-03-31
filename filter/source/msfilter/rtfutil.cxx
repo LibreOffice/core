@@ -355,12 +355,12 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
 
     sal_uInt64 nPos = aStream.Tell();
     sal_uInt8 aSignature[8];
-    aStream.ReadBytes(aSignature, SAL_N_ELEMENTS(aSignature));
+    aStream.ReadBytes(aSignature, std::size(aSignature));
     aStream.Seek(nPos);
     const sal_uInt8 aOle2Signature[8] = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
     // Don't use Storage::IsStorageFile() here, that would seek to the start of the stream,
     // where the magic will always mismatch.
-    if (std::memcmp(aSignature, aOle2Signature, SAL_N_ELEMENTS(aSignature)) == 0)
+    if (std::memcmp(aSignature, aOle2Signature, sizeof(aSignature)) == 0)
     {
         // NativeData
         rOle2.WriteStream(aStream, nData);
