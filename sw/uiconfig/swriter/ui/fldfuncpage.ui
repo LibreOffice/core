@@ -259,7 +259,7 @@
             <property name="use_underline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="macro-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|macro">Opens the Macro Selector, where you can choose the macro that will run when you click the selected field in the document.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|macro">Opens the Macro Selector dialog, where you can choose the macro that will run when you click the selected field in the document.</property>
               </object>
             </child>
           </object>

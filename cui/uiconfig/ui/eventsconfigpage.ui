@@ -66,7 +66,7 @@
                     <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="macro-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="eventsconfigpage|extended_tip|macro">Opens the Macro Selector to assign a macro to the selected event.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="eventsconfigpage|extended_tip|macro">Opens the Macro Selector dialog to assign a macro to the selected event.</property>
                       </object>
                     </child>
                   </object>
