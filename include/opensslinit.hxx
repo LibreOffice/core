@@ -11,7 +11,7 @@
 
 #include <config_crypto.h>
 
-#if defined(LINUX) && !defined(SYSTEM_OPENSSL)
+#if !defined(_WIN32) && !defined(SYSTEM_OPENSSL)
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <unistd.h>
@@ -25,6 +25,7 @@ static char const* GetCABundleFile()
         "/etc/pki/tls/certs/ca-bundle.trust.crt",
         "/etc/ssl/certs/ca-certificates.crt",
         "/var/lib/ca-certificates/ca-bundle.pem",
+        "/etc/ssl/cert.pem", // macOS has one at this location
     };
     for (char const* const candidate : candidates)
     {

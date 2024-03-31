@@ -11,7 +11,9 @@
 
 #include <curl/curl.h>
 
-#if defined(LINUX) && !defined(SYSTEM_CURL)
+// curl is built with --with-secure-transport on macOS and iOS so doesn't need these
+// certs. Windows doesn't need them either, but lets assume everything else does
+#if !defined(SYSTEM_OPENSSL) && !defined(_WIN32) && !defined(MACOSX) && !defined(IOS)
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "opensslinit.hxx"

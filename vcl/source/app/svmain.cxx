@@ -194,7 +194,7 @@ int ImplSVMain()
 
     const bool bWasInitVCL = IsVCLInit();
 
-#if defined(LINUX) && !defined(SYSTEM_OPENSSL)
+#if !defined(_WIN32) && !defined(SYSTEM_OPENSSL)
     if (!bWasInitVCL)
     {
         OUString const name("SSL_CERT_FILE");
