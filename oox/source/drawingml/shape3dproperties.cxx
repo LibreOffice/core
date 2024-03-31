@@ -26,8 +26,6 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::graphic;
 
 
 namespace oox::drawingml {

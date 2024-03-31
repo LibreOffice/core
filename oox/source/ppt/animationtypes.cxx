@@ -25,7 +25,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
-using namespace ::com::sun::star::xml::sax;
 
 namespace oox::ppt
 {

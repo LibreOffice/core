@@ -20,7 +20,6 @@
 #include <drawingml/table/tablestylepart.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
-using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

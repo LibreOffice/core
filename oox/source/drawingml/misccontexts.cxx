@@ -34,7 +34,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandlerRef;
 

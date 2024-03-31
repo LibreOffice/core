@@ -78,7 +78,6 @@ namespace oox::core {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;

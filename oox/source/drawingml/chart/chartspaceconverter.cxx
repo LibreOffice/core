@@ -58,7 +58,6 @@ using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 
 ChartSpaceConverter::ChartSpaceConverter( const ConverterRoot& rParent, ChartSpaceModel& rModel ) :
     ConverterBase< ChartSpaceModel >( rParent, rModel )

@@ -26,7 +26,6 @@
 #include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
 namespace oox::drawingml {

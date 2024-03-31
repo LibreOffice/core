@@ -46,7 +46,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 namespace {

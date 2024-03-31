@@ -95,7 +95,6 @@ using namespace ::css;
 using namespace ::css::beans;
 using namespace ::css::uno;
 using namespace ::css::drawing;
-using namespace ::css::i18n;
 using namespace ::css::table;
 using namespace ::css::container;
 using namespace ::css::document;

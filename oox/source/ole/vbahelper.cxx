@@ -24,8 +24,6 @@
 
 namespace oox::ole {
 
-using namespace ::com::sun::star::uno;
-
 bool VbaHelper::readDirRecord( sal_uInt16& rnRecId, StreamDataSequence& rRecData, BinaryInputStream& rInStrm )
 {
     // read the record header

@@ -34,7 +34,6 @@
 #include <utility>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
 namespace oox::ppt {

@@ -26,7 +26,6 @@
 #include "texttabstoplistcontext.hxx"
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::xml::sax;
 

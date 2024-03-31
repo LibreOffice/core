@@ -19,10 +19,7 @@
 
 #include <drawingml/table/tablerow.hxx>
 
-using namespace ::oox::core;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 
 namespace oox::drawingml::table
 {

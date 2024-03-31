@@ -43,7 +43,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
 
 namespace oox::drawingml {
 

@@ -30,7 +30,6 @@
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
 
 namespace oox::ppt {
     AnimVariantContext::AnimVariantContext( FragmentHandler2 const & rParent, sal_Int32 aElement, Any & aValue )

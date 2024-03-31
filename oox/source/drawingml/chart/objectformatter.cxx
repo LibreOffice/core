@@ -45,7 +45,6 @@
 namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star::chart2;
-using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
