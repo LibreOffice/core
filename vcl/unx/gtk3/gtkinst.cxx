@@ -10532,6 +10532,37 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
     }
 }
 
+// tdf#153885/tdf#152438 for wayland if the popover window is the application
+// window, constrain it within the application window so it won't be cut off
+// screen. Leave dialog hosted ones alone, like format, watermark, which are
+// likely presented in the middle of the screen and are too small to constrain
+// the popover inside.
+void ConstrainApplicationWindowPopovers(GtkWidget* pItem)
+{
+#if defined(GDK_WINDOWING_WAYLAND)
+    GdkDisplay *pDisplay = gtk_widget_get_display(pItem);
+    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay) && GTK_IS_MENU_BUTTON(pItem))
+    {
+        GtkMenuButton* pMenuButton = GTK_MENU_BUTTON(pItem);
+        if (GtkPopover* pPopover = gtk_menu_button_get_popover(pMenuButton))
+        {
+            if (gtk_popover_get_constrain_to(pPopover) == GTK_POPOVER_CONSTRAINT_NONE)
+            {
+                GtkWidget* pTopLevel = widget_get_toplevel(pItem);
+                GtkSalFrame* pFrame = pTopLevel ? GtkSalFrame::getFromWindow(pTopLevel) : nullptr;
+                if (pFrame)
+                {
+                    // the toplevel is an application window
+                    gtk_popover_set_constrain_to(pPopover, GTK_POPOVER_CONSTRAINT_WINDOW);
+                }
+            }
+        }
+    }
+#else
+    (void)pItem;
+#endif
+}
+
 #endif
 
 /* four types of uses of this
@@ -10573,9 +10604,14 @@ private:
 #endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    static void signalMenuButtonToggled(GtkWidget*, gpointer widget)
+    static void signalMenuButtonToggled(GtkWidget* pItem, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
+        if (!pThis->m_pMenuHack)
+        {
+            ConstrainApplicationWindowPopovers(pItem);
+            return;
+        }
         SolarMutexGuard aGuard;
         pThis->menu_toggled();
     }
@@ -10584,8 +10620,6 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void menu_toggled()
     {
-        if (!m_pMenuHack)
-            return;
         if (!get_active())
         {
             m_nButtonPressSeen = false;
@@ -10916,6 +10950,8 @@ public:
             return;
         }
 
+        m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalMenuButtonToggled), this);
+
         if (!m_pMenuHack)
         {
             //under wayland a Popover will work to "escape" the parent dialog, not
@@ -10928,7 +10964,6 @@ public:
                 // See writer "format, watermark" for true here. Can't interact with the replacement popover otherwise.
                 gtk_window_set_modal(m_pMenuHack, true);
                 gtk_window_set_resizable(m_pMenuHack, false);
-                m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalMenuButtonToggled), this);
                 g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
                 g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
                 g_signal_connect(m_pMenuHack, "button-press-event", G_CALLBACK(signalButtonPress), this);
@@ -11794,38 +11829,6 @@ public:
 #endif
         return eRet;
     }
-
-    // tdf#153885 for wayland if the popover window is the application
-    // window, constrain it within the application window so it won't
-    // be cut off screen. Leave dialog hosted ones alone, like
-    // format, watermark, which are likely presented in the middle
-    // of the screen and are too small to constrain the popover inside.
-    void ConstrainApplicationWindowPopovers(GtkToggleButton* pItem)
-    {
-#if defined(GDK_WINDOWING_WAYLAND)
-        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(pItem));
-        if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay) && GTK_IS_MENU_BUTTON(pItem))
-        {
-            GtkMenuButton* pMenuButton = GTK_MENU_BUTTON(pItem);
-            if (GtkPopover* pPopover = gtk_menu_button_get_popover(pMenuButton))
-            {
-                if (gtk_popover_get_constrain_to(pPopover) == GTK_POPOVER_CONSTRAINT_NONE)
-                {
-                    GtkWidget* pTopLevel = widget_get_toplevel(GTK_WIDGET(pItem));
-                    GtkSalFrame* pFrame = pTopLevel ? GtkSalFrame::getFromWindow(pTopLevel) : nullptr;
-                    if (pFrame)
-                    {
-                        // the toplevel is an application window
-                        gtk_popover_set_constrain_to(pPopover, GTK_POPOVER_CONSTRAINT_WINDOW);
-                    }
-                }
-            }
-        }
-#else
-        (void)pItem;
-#endif
-    }
-
 #endif
 }
 
@@ -11985,7 +11988,7 @@ private:
     static void signalItemToggled(GtkToggleButton* pItem, gpointer widget)
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        ConstrainApplicationWindowPopovers(pItem);
+        ConstrainApplicationWindowPopovers(GTK_WIDGET(pItem));
 #endif
         GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
         SolarMutexGuard aGuard;
