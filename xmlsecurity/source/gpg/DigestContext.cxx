@@ -11,7 +11,6 @@
 
 using namespace css;
 using namespace css::uno;
-using namespace css::lang;
 
 void SAL_CALL DigestContext::updateDigest(const Sequence<sal_Int8>& /*aData*/) {}
 

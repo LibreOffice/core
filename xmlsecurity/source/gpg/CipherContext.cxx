@@ -11,7 +11,6 @@
 
 using namespace css;
 using namespace css::uno;
-using namespace css::lang;
 
 Sequence<sal_Int8>
     SAL_CALL CipherContext::convertWithCipherContext(const Sequence<sal_Int8>& /*aData*/)

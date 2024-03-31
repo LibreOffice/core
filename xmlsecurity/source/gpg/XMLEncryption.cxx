@@ -11,7 +11,6 @@
 
 using namespace css::uno;
 using namespace css::lang;
-using namespace css::xml::wrapper;
 using namespace css::xml::crypto;
 
 XMLEncryptionGpg::XMLEncryptionGpg() {
