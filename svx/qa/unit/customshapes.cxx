@@ -59,7 +59,7 @@ protected:
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex);
     sal_uInt8 countShapes();
     // fX and fY are positions relative to the size of the bitmap of the shape
-    // Thus the position is indepedent from DPI
+    // Thus the position is independent from DPI
     Color getColor(uno::Reference<drawing::XShape> xShape, const double& fX, const double& fY);
 };
 
