@@ -500,7 +500,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "TabBarVisible"
     };
 
-    rCount = ( IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 16 );
+    rCount = ( IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 15 );
     ppNames = aPropNames;
 }
 
