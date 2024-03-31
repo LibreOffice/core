@@ -3953,12 +3953,24 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
     }
 
     AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pVclParent, pThis->m_aFloatRect);
-    if (gdk_window_get_window_type(widget_get_surface(pThis->m_pParent->m_pWindow)) != GDK_WINDOW_TOPLEVEL)
+    switch (gdk_window_get_window_type(widget_get_surface(pThis->m_pParent->m_pWindow)))
     {
-        // See tdf#152155 for an example
-        gtk_coord nX(0), nY(0.0);
-        gtk_widget_translate_coordinates(pThis->m_pParent->m_pWindow, widget_get_toplevel(pThis->m_pParent->m_pWindow), 0, 0, &nX, &nY);
-        aFloatRect.Move(nX, nY);
+        case GDK_WINDOW_TOPLEVEL:
+            break;
+        case GDK_WINDOW_CHILD:
+        {
+            // See tdf#152155 for an example
+            gtk_coord nX(0), nY(0.0);
+            gtk_widget_translate_coordinates(pThis->m_pParent->m_pWindow, widget_get_toplevel(pThis->m_pParent->m_pWindow), 0, 0, &nX, &nY);
+            aFloatRect.Move(nX, nY);
+            break;
+        }
+        default:
+        {
+            // See tdf#154072 for an example
+            aFloatRect.Move(-pThis->m_pParent->maGeometry.x(), -pThis->m_pParent->maGeometry.y());
+            break;
+        }
     }
 
     GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
