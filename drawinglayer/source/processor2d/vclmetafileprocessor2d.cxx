@@ -1633,7 +1633,7 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
         const attribute::LineAttribute& rLine = rStrokePrimitive.getLineAttribute();
 
         // create MetaPolyLineActions, but without LineStyle::Dash
-        if (basegfx::fTools::more(rLine.getWidth(), 0.0))
+        if (rLine.getWidth() > 0.0)
         {
             const attribute::StrokeAttribute& rStroke = rStrokePrimitive.getStrokeAttribute();
 

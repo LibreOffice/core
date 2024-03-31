@@ -116,7 +116,7 @@ namespace drawinglayer::animation
 
         double AnimationEntryLinear::getStateAtTime(double fTime) const
         {
-            if(basegfx::fTools::more(mfDuration, 0.0))
+            if(mfDuration > 0.0)
             {
                 const double fFactor(fTime / mfDuration);
 

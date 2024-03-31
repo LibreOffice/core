@@ -53,7 +53,7 @@ basegfx::B2DVector getCorrectedScaleAndFontScale(basegfx::B2DVector& rScale)
         rScale.setY(1.0 / fDefaultFontScale);
         aFontScale.setY(fDefaultFontScale);
     }
-    else if (basegfx::fTools::less(aFontScale.getY(), 0.0))
+    else if (aFontScale.getY() < 0.0)
     {
         // negative font height; invert and adapt scale to get back to original scaling
         aFontScale.setY(-aFontScale.getY());
@@ -101,7 +101,7 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
 
     // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
     // be expressed as rotation by PI
-    if (basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+    if (aScale.getX() < 0.0 && aScale.getY() < 0.0)
     {
         aScale = basegfx::absolute(aScale);
         fRotate += M_PI;

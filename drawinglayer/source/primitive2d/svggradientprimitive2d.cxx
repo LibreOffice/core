@@ -539,7 +539,7 @@ namespace drawinglayer::primitive2d
                 Primitive2DContainer aTargetColor;
                 Primitive2DContainer aTargetOpacity;
 
-                if(basegfx::fTools::more(aUnitRange.getWidth(), 0.0))
+                if(aUnitRange.getWidth() > 0.0)
                 {
                     // add a pre-multiply to aUnitGradientToObject to allow
                     // multiplication of the polygon(xl, 0.0, xr, 1.0)
