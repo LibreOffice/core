@@ -35,6 +35,8 @@
 namespace rptxml
 {
     using namespace ::com::sun::star;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::text;
 
 namespace {
 

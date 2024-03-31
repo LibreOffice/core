@@ -30,7 +30,6 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-    using namespace ::com::sun::star::beans;
 
 OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
                 const Reference< XFastAttributeList > & _xAttrList

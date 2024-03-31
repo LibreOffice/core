@@ -41,7 +41,6 @@ using namespace ::com::sun::star;
 using namespace sdbc;
 using namespace sdb;
 using namespace uno;
-using namespace datatransfer;
 using namespace beans;
 using namespace lang;
 using namespace container;

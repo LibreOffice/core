@@ -49,7 +49,6 @@ namespace rptui
 #define DEFAUL_MOVE_SIZE    100
 
 using namespace ::com::sun::star;
-using namespace ::comphelper;
 
 static bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,tools::Long& _nXMov, tools::Long& _nYMov,SdrObject const * _pObj,SdrView const * _pView, ControlModification _nControlModification)
 {

@@ -174,7 +174,6 @@ static_assert((ITEMID_WEIGHT_COMPLEX - XATTR_FILL_FIRST) == 56, "Item ids are no
 namespace rptui
 {
 using namespace ::com::sun::star;
-using namespace formula;
 
 void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32 _nPos)
 {

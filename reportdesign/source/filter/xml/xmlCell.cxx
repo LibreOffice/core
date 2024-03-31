@@ -44,6 +44,7 @@ namespace rptxml
     using namespace ::com::sun::star;
     using namespace uno;
     using namespace beans;
+    using namespace lang;
     using namespace xml::sax;
 
 

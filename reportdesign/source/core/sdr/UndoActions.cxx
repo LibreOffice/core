@@ -36,10 +36,8 @@ namespace rptui
     using namespace ::com::sun::star;
     using namespace uno;
     using namespace lang;
-    using namespace script;
     using namespace beans;
     using namespace awt;
-    using namespace util;
     using namespace container;
     using namespace report;
 

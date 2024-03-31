@@ -22,10 +22,6 @@
 
 namespace rptxml
 {
-using namespace ::com::sun::star;
-using namespace xmloff;
-using namespace ::com::sun::star::uno;
-
 OXMLRptPropHdlFactory::OXMLRptPropHdlFactory() {}
 
 OXMLRptPropHdlFactory::~OXMLRptPropHdlFactory() {}

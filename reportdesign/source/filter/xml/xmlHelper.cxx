@@ -52,7 +52,6 @@ namespace rptxml
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::sdb;
-    using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::beans;
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {

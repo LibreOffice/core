@@ -158,7 +158,6 @@ static_assert((RPTUI_ID_METRIC - RPTUI_ID_LRSPACE) == 28, "Item ids are not cont
 
 using namespace ::com::sun::star;
 using namespace uno;
-using namespace io;
 using namespace beans;
 using namespace frame;
 using namespace util;

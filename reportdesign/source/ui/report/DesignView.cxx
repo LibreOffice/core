@@ -42,12 +42,9 @@
 namespace rptui
 {
 using namespace ::dbaui;
-using namespace ::utl;
 using namespace ::com::sun::star;
 using namespace uno;
-using namespace lang;
 using namespace beans;
-using namespace container;
 
 #define START_SIZE_TASKPANE 30
 #define COLSET_ID           1

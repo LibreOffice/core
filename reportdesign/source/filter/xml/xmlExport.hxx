@@ -43,11 +43,7 @@ using namespace css::uno;
 using namespace css::container;
 using namespace css::lang;
 using namespace css::beans;
-using namespace css::document;
-using namespace css::text;
 using namespace css::report;
-using namespace css::io;
-using namespace css::xml::sax;
 
 
 class ORptExport : public SvXMLExport

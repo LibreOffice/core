@@ -33,7 +33,6 @@
 namespace rptui
 {
 using namespace ::com::sun::star;
-using namespace ::comphelper;
 
 
 

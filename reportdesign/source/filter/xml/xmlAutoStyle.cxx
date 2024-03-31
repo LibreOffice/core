@@ -24,7 +24,6 @@
 namespace rptxml
 {
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::xml::sax;
 
 void OXMLAutoStylePoolP::exportStyleAttributes(
             comphelper::AttributeList& rAttrList,

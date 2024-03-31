@@ -27,7 +27,6 @@
 namespace rptxml
 {
     using namespace ::com::sun::star;
-    using namespace report;
     using namespace uno;
     using namespace xml::sax;
 
