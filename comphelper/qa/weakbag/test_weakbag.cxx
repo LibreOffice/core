@@ -28,7 +28,8 @@
 
 namespace
 {
-class Test : public CppUnit::TestFixture
+// Tests the behaviour of comphelper::WeakBag
+class WeakBagTest : public CppUnit::TestFixture
 {
 public:
     void test()
@@ -36,7 +37,9 @@ public:
         css::uno::Reference<css::uno::XInterface> ref1(new cppu::OWeakObject);
         css::uno::Reference<css::uno::XInterface> ref2(new cppu::OWeakObject);
         css::uno::Reference<css::uno::XInterface> ref3(new cppu::OWeakObject);
+
         comphelper::WeakBag<css::uno::XInterface> bag;
+
         bag.add(ref1);
         bag.add(ref1);
         bag.add(ref2);
@@ -44,18 +47,21 @@ public:
         ref1.clear();
         bag.add(ref3);
         ref3.clear();
-        CPPUNIT_ASSERT_MESSAGE("remove first ref2", bag.remove() == ref2);
-        CPPUNIT_ASSERT_MESSAGE("remove second ref2", bag.remove() == ref2);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("remove first ref2", bag.remove(), ref2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("remove second ref2", bag.remove(), ref2);
         CPPUNIT_ASSERT_MESSAGE("remove first null", !bag.remove().is());
         CPPUNIT_ASSERT_MESSAGE("remove second null", !bag.remove().is());
     }
 
-    CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST_SUITE(WeakBagTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+CPPUNIT_TEST_SUITE_REGISTRATION(WeakBagTest);
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
