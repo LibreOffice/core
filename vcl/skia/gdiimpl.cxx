@@ -2147,8 +2147,8 @@ bool SkiaSalGraphicsImpl::implDrawGradient(const basegfx::B2DPolyPolygon& rPolyP
 }
 
 static double toRadian(Degree10 degree10th) { return toRadians(3600_deg10 - degree10th); }
-static double toCos(Degree10 degree10th) { return SkScalarCos(toRadian(degree10th)); }
-static double toSin(Degree10 degree10th) { return SkScalarSin(toRadian(degree10th)); }
+static auto toCos(Degree10 degree10th) { return SkScalarCos(toRadian(degree10th)); }
+static auto toSin(Degree10 degree10th) { return SkScalarSin(toRadian(degree10th)); }
 
 void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Color textColor,
                                             const SkFont& font, const SkFont& verticalFont)
@@ -2163,15 +2163,16 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
+    auto cos = toCos(layout.GetOrientation());
+    auto sin = toSin(layout.GetOrientation());
     while (layout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         glyphIds.push_back(pGlyph->glyphId());
-        Degree10 angle = layout.GetOrientation();
-        if (pGlyph->IsVertical())
-            angle += 900_deg10;
-        SkRSXform form = SkRSXform::Make(toCos(angle), toSin(angle), aPos.getX(), aPos.getY());
-        glyphForms.emplace_back(std::move(form));
         verticals.emplace_back(pGlyph->IsVertical());
+        auto cos1 = pGlyph->IsVertical() ? sin : cos; // cos (x - 90) = sin (x)
+        auto sin1 = pGlyph->IsVertical() ? -cos : sin; // sin (x - 90) = -cos (x)
+        SkRSXform form = SkRSXform::Make(cos1, sin1, aPos.getX(), aPos.getY());
+        glyphForms.emplace_back(std::move(form));
     }
     if (glyphIds.empty())
         return;
