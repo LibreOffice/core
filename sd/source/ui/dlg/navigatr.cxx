@@ -157,6 +157,24 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
 {
     SdDrawDocument* pNonConstDoc = const_cast<SdDrawDocument*>(pDoc); // const as const can...
     sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
+    ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+
+    // tdf#139944 disable navigator in master mode
+    if (pViewShell)
+    {
+        if (const sd::DrawViewShell* pDrawViewShell = static_cast<::sd::DrawViewShell*>(pViewShell))
+        {
+            if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
+            {
+                m_xContainer->set_sensitive(false);
+                mxTlbObjects->clear();
+                return;
+            }
+            else
+                m_xContainer->set_sensitive(true);
+        }
+    }
+
     const OUString& aDocShName( pDocShell->GetName() );
     OUString aDocName = pDocShell->GetMedium()->GetName();
     if (!mxTlbObjects->IsEqualToDoc(pDoc))
@@ -165,7 +183,8 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
         RefreshDocumentLB();
         mxLbDocs->set_active_text(aDocShName);
     }
-    if (const sd::ViewShell* pViewShell = pDocShell->GetViewShell())
+
+    if (pViewShell)
         lcl_select_marked_object(pViewShell, mxTlbObjects.get());
 }
 
@@ -175,6 +194,22 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     ::sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     OUString aDocShName( pDocShell->GetName() );
     ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+
+    // tdf#139944 disable navigator in master mode
+    if (pViewShell)
+    {
+        if (const sd::DrawViewShell* pDrawViewShell = static_cast<::sd::DrawViewShell*>(pViewShell))
+        {
+            if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
+            {
+                m_xContainer->set_sensitive(false);
+                mxTlbObjects->clear();
+                return;
+            }
+            else
+                m_xContainer->set_sensitive(true);
+        }
+    }
 
     // Restore the 'ShowAllShapes' flag from the last time (in this session)
     // that the navigator was shown.
@@ -782,20 +817,6 @@ void SdNavigatorControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
     NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
     if( !(pInfo && pInfo->IsActive()) )
         return;
-
-    if (::sd::DrawDocShell* pDrawDocShell = pInfo->GetDrawDocShell())
-    {
-        const auto pDrawViewShell =
-                static_cast<::sd::DrawViewShell *>(pDrawDocShell->GetViewShell());
-        if (pDrawViewShell)
-        {
-            pNavigatorWin->FreshTree(pDrawDocShell->GetDoc());
-            bool bEditModePage(pDrawViewShell->GetEditMode() == EditMode::Page);
-            pNavigatorWin->mxToolbox->set_sensitive(bEditModePage);
-            pNavigatorWin->mxLbDocs->set_sensitive(bEditModePage);
-            pNavigatorWin->mxTlbObjects->set_sensitive(bEditModePage);
-        }
-    }
 
     const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
     NavState nState = static_cast<NavState>(rStateItem.GetValue());
