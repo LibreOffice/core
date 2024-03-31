@@ -57,7 +57,7 @@ css::uno::Sequence<OUString> SAL_CALL OCheckBoxControl::getSupportedServiceNames
 
 OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX )
-    // use the old control name for compytibility reasons
+    // use the old control name for compatibility reasons
 {
 
     m_nClassId = FormComponentType::CHECKBOX;

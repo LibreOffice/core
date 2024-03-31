@@ -266,7 +266,7 @@ void OFormattedModel::implConstruct()
 }
 OFormattedModel::OFormattedModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_SUN_CONTROL_FORMATTEDFIELD, true, true )
-    // use the old control name for compytibility reasons
+    // use the old control name for compatibility reasons
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
 {
     implConstruct();

@@ -56,7 +56,7 @@ css::uno::Sequence<OUString> ONumericControl::getSupportedServiceNames()
 
 ONumericModel::ONumericModel(const Reference<XComponentContext>& _rxFactory)
                 :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_SUN_CONTROL_NUMERICFIELD, true, true )
-                                    // use the old control name for compytibility reasons
+                                    // use the old control name for compatibility reasons
 {
 
     m_nClassId = FormComponentType::NUMERICFIELD;

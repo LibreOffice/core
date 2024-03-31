@@ -60,7 +60,7 @@ ORadioButtonControl::ORadioButtonControl(const Reference<XComponentContext>& _rx
 
 ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON )
-                    // use the old control name for compytibility reasons
+                    // use the old control name for compatibility reasons
 {
 
     m_nClassId = FormComponentType::RADIOBUTTON;

@@ -60,7 +60,7 @@ css::uno::Sequence<OUString> OPatternControl::getSupportedServiceNames()
 
 OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD, false, false )
-                                    // use the old control name for compytibility reasons
+                                    // use the old control name for compatibility reasons
 {
 
     m_nClassId = FormComponentType::PATTERNFIELD;

@@ -45,7 +45,7 @@ using namespace ::com::sun::star::util;
 // OImageButtonModel
 OImageButtonModel::OImageButtonModel(const Reference<XComponentContext>& _rxFactory)
                     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
-                    // use the old control name for compytibility reasons
+                    // use the old control name for compatibility reasons
 {
     m_nClassId = FormComponentType::IMAGEBUTTON;
 }

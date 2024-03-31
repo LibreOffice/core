@@ -129,7 +129,7 @@ Sequence<Type> OImageControlModel::_getTypes()
 
 OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, false, false, false )
-                    // use the old control name for compytibility reasons
+                    // use the old control name for compatibility reasons
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( false )
 {
@@ -142,7 +142,7 @@ OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFa
 
 OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
-                // use the old control name for compytibility reasons
+                // use the old control name for compatibility reasons
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( _pOriginal->m_bReadOnly )
     ,m_sImageURL( _pOriginal->m_sImageURL )

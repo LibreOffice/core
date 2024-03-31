@@ -69,7 +69,7 @@ Sequence<Type> ODateModel::_getTypes()
 ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
     : OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD,
         FRM_SUN_CONTROL_DATEFIELD, true, true)
-    // use the old control name for compytibility reasons
+    // use the old control name for compatibility reasons
     , OLimitedFormats(_rxFactory, FormComponentType::DATEFIELD)
     , m_bDateTimeField(false)
 {
