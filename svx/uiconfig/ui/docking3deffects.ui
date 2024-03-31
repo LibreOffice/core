@@ -1231,6 +1231,7 @@
                     <property name="valign">center</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -1469,6 +1470,7 @@
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1492,6 +1494,7 @@
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1510,6 +1513,7 @@
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1528,6 +1532,7 @@
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1546,6 +1551,7 @@
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1564,6 +1570,7 @@
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1582,6 +1589,7 @@
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1600,6 +1608,7 @@
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -2082,6 +2091,7 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -2105,6 +2115,7 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -2249,6 +2260,7 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
