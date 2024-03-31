@@ -93,9 +93,7 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     tools::Long nRectWidth = aRect.GetWidth();
     Point aBLPos = aRect.TopLeft();
 
-    vcl::Font aOldFont = pDev->GetFont();
-    Color aOldColor = pDev->GetLineColor();
-    Color aOldFillColor = pDev->GetFillColor();
+    pDev->Push(vcl::PushFlags::FONT | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getConfiguredSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     Size aSize = aFont.GetFontSize();
@@ -176,9 +174,7 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
 
     Invalidate( aRect );
-    pDev->SetLineColor(aOldColor);
-    pDev->SetFillColor(aOldFillColor);
-    pDev->SetFont(aOldFont);
+    pDev->Pop();
 
 }
 

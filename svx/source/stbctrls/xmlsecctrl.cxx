@@ -128,8 +128,7 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
 
     tools::Rectangle           aRect = rUsrEvt.GetRect();
-    Color               aOldLineColor = pDev->GetLineColor();
-    Color               aOldFillColor = pDev->GetFillColor();
+    pDev->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
@@ -155,8 +154,7 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     else
         pDev->DrawRect( aRect );
 
-    pDev->SetLineColor( aOldLineColor );
-    pDev->SetFillColor( aOldFillColor );
+    pDev->Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

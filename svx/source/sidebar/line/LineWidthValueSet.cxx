@@ -86,9 +86,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     //const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     //Color aBackColor(0,0,200);
     //const Color aTextColor = rStyleSettings.GetFieldTextColor();
-    vcl::Font aOldFont = pDev->GetFont();
-    Color aOldColor = pDev->GetLineColor();
-    Color aOldFillColor = pDev->GetFillColor();
+    pDev->Push(vcl::PushFlags::FONT | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getConfiguredSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     Size aSize = aFont.GetFontSize();
@@ -154,9 +152,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
 
     Invalidate( aRect );
-    pDev->SetLineColor(aOldColor);
-    pDev->SetFillColor(aOldFillColor);
-    pDev->SetFont(aOldFont);
+    pDev->Pop();
 }
 
 void LineWidthValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
