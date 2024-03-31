@@ -3044,9 +3044,8 @@ void SvxNumOptionsTabPage::PageCreated(const SfxAllItemSet& aSet)
     if (pListItem)
     {
         const std::vector<OUString> &aList = pListItem->GetList();
-        sal_uInt32 nCount = aList.size();
-        for(sal_uInt32 i = 0; i < nCount; i++)
-            m_xCharFmtLB->append_text(aList[i]);
+        for (const auto& rItem : aList)
+            m_xCharFmtLB->append_text(rItem);
     }
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
