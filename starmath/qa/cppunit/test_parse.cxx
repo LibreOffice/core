@@ -21,8 +21,6 @@
 
 namespace {
 
-using namespace ::com::sun::star;
-
 typedef rtl::Reference<SmDocShell> SmDocShellRef;
 
 class ParseTest : public test::BootstrapFixture

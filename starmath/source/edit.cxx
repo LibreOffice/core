@@ -42,7 +42,6 @@
 #include <cfgitem.hxx>
 #include <smediteng.hxx>
 
-using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 
 
