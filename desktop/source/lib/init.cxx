@@ -7509,6 +7509,9 @@ static void preloadData()
     if(bAbort)
         std::cerr << "CheckExtensionDependencies failed" << std::endl;
 
+    // inhibit forced 2nd synchronization from Main
+    ::rtl::Bootstrap::set( "DISABLE_EXTENSION_SYNCHRONIZATION", "true");
+
     std::cerr << "Preload textencodings"; // sal_textenc
     // Use RTL_TEXTENCODING_MS_1250 to trigger Impl_getTextEncodingData
     // to dlopen sal_textenclo
