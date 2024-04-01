@@ -279,15 +279,11 @@ void SbRtl_CDec(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_CDate(StarBASIC *, SbxArray & rPar, bool) // JSM
 {
     double nVal = 0.0;
-    if (rPar.Count() == 2)
-    {
-        SbxVariable* pSbxVariable = rPar.Get(1);
-        nVal = pSbxVariable->GetDate();
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxVariable* pSbxVariable = rPar.Get(1);
+    nVal = pSbxVariable->GetDate();
     rPar.Get(0)->PutDate(nVal);
 }
 
@@ -323,15 +319,11 @@ void SbRtl_CDbl(StarBASIC *, SbxArray & rPar, bool)  // JSM
 void SbRtl_CInt(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
     sal_Int16 nVal = 0;
-    if (rPar.Count() == 2)
-    {
-        SbxVariable* pSbxVariable = rPar.Get(1);
-        nVal = pSbxVariable->GetInteger();
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxVariable* pSbxVariable = rPar.Get(1);
+    nVal = pSbxVariable->GetInteger();
     rPar.Get(0)->PutInteger(nVal);
 }
 
@@ -478,15 +470,11 @@ void SbRtl_Green(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Blue(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() != 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        sal_Int32 nRGB = rPar.Get(1)->GetLong();
-        nRGB &= 0x000000FF;
-        rPar.Get(0)->PutInteger(static_cast<sal_Int16>(nRGB));
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    sal_Int32 nRGB = rPar.Get(1)->GetLong();
+    nRGB &= 0x000000FF;
+    rPar.Get(0)->PutInteger(static_cast<sal_Int16>(nRGB));
 }
 
 
