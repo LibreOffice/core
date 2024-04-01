@@ -69,7 +69,7 @@ class Desktop final : public Application
 
                                 Desktop();
                                 virtual ~Desktop() override;
-        virtual int             Main( ) override;
+        virtual int             Main() override;
         virtual void            Init() override;
         virtual void            InitFinished() override;
         virtual void            DeInit() override;
