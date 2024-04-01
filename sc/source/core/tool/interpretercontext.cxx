@@ -44,12 +44,7 @@ ScInterpreterContext::ScInterpreterContext(const ScDocument& rDoc, SvNumberForma
     if (!pFormatter)
         mpFormatData = nullptr;
     else
-    {
-        mxLanguageData.reset(new SvNFLanguageData(pFormatter->GetROLanguageData()));
-        mxAuxFormatKeyMap.reset(new SvNFFormatData::DefaultFormatKeysMap);
-        mpFormatData = &pFormatter->GetROFormatData();
-        maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData, *mxAuxFormatKeyMap);
-    }
+        prepFormatterForRoMode(pFormatter);
 }
 
 ScInterpreterContext::~ScInterpreterContext() { ResetTokens(); }
@@ -73,12 +68,10 @@ void ScInterpreterContext::SetDocAndFormatter(const ScDocument& rDoc, SvNumberFo
     }
     if (mpFormatter != pFormatter)
     {
-        // formatter has changed
-        mxLanguageData.reset(new SvNFLanguageData(pFormatter->GetROLanguageData()));
-        mxAuxFormatKeyMap.reset(new SvNFFormatData::DefaultFormatKeysMap);
-        mpFormatData = &pFormatter->GetROFormatData();
-        maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData, *mxAuxFormatKeyMap);
         mpFormatter = pFormatter;
+
+        // formatter has changed
+        prepFormatterForRoMode(pFormatter);
 
         // drop cache
         std::fill(maNFBuiltInCache.begin(), maNFBuiltInCache.end(), NFBuiltIn());
@@ -86,13 +79,19 @@ void ScInterpreterContext::SetDocAndFormatter(const ScDocument& rDoc, SvNumberFo
     }
 }
 
+void ScInterpreterContext::prepFormatterForRoMode(SvNumberFormatter* pFormatter)
+{
+    pFormatter->PrepForRoMode();
+    mpFormatData = &pFormatter->GetROFormatData();
+    mxLanguageData.reset(new SvNFLanguageData(pFormatter->GetROLanguageData()));
+    mxAuxFormatKeyMap.reset(new SvNFFormatData::DefaultFormatKeysMap);
+    maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData, *mxAuxFormatKeyMap);
+}
+
 void ScInterpreterContext::initFormatTable()
 {
     mpFormatter = mpDoc->GetFormatTable(); // will assert if not main thread
-    mpFormatData = &mpFormatter->GetROFormatData();
-    mxLanguageData.reset(new SvNFLanguageData(mpFormatter->GetROLanguageData()));
-    mxAuxFormatKeyMap.reset(new SvNFFormatData::DefaultFormatKeysMap);
-    maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData, *mxAuxFormatKeyMap);
+    prepFormatterForRoMode(mpFormatter);
 }
 
 void ScInterpreterContext::MergeDefaultFormatKeys(SvNumberFormatter& rFormatter) const

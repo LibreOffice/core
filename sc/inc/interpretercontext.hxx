@@ -121,6 +121,7 @@ private:
     void Cleanup();
     void ClearLookupCache(const ScDocument* pDoc);
     void initFormatTable();
+    void prepFormatterForRoMode(SvNumberFormatter* pFormatter);
 
     // During threaded calculation, where we don't need to add to the number
     // format data, we can access the numbering data with a RO unlocked view of

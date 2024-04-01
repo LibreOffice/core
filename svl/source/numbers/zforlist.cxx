@@ -242,8 +242,9 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
     }
 }
 
+static volatile bool bCurrencyTableInitialized = false;
+
 SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = nullptr;
-volatile bool SvNumberFormatter::bCurrencyTableInitialized = false;
 namespace
 {
     NfCurrencyTable& theCurrencyTable()
@@ -3986,9 +3987,20 @@ SvNFEngine::Accessor SvNFEngine::GetRWPolicy(SvNFFormatData& rFormatData)
     };
 }
 
-SvNFEngine::Accessor SvNFEngine::GetROPolicy(const SvNFFormatData& rFormatData, SvNFFormatData::DefaultFormatKeysMap& rFormatCache)
+void SvNumberFormatter::PrepForRoMode()
 {
     SvNumberFormatter::GetTheCurrencyTable(); // create this now so threads don't attempt to create it simultaneously
+    if (m_aFormatData.nDefaultSystemCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        m_aFormatData.ImpGetDefaultSystemCurrencyFormat(m_aCurrentLanguage, GetNatNum());
+        assert(m_aFormatData.nDefaultSystemCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND);
+    }
+}
+
+SvNFEngine::Accessor SvNFEngine::GetROPolicy(const SvNFFormatData& rFormatData, SvNFFormatData::DefaultFormatKeysMap& rFormatCache)
+{
+    assert(rFormatData.nDefaultSystemCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND && "ensure PrepForRoMode is called");
+    assert(bCurrencyTableInitialized && "ensure PrepForRoMode is called");
     return
     {
         std::bind(SvNFEngine::GetCLOffsetRO, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
@@ -4129,7 +4141,6 @@ const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()
     return theCurrencyTable();
 }
 
-
 // static
 const NfCurrencyEntry* SvNumberFormatter::MatchSystemCurrency()
 {
@@ -4137,7 +4148,6 @@ const NfCurrencyEntry* SvNumberFormatter::MatchSystemCurrency()
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     return nSystemCurrencyPosition ? &rTable[nSystemCurrencyPosition] : nullptr;
 }
-
 
 // static
 const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
@@ -4800,7 +4810,6 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     bInitializing = false;
     bCurrencyTableInitialized = true;
 }
-
 
 static std::ptrdiff_t addToCurrencyFormatsList( NfWSStringsDtor& rStrArr, const OUString& rFormat )
 {

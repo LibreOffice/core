@@ -552,7 +552,6 @@ private:
     OnDemandNativeNumberWrapper xNatNum; // Native number service loaded on demand
     Link<sal_uInt16, Color*> aColorLink; // User defined color table CallBack
 
-    SVL_DLLPRIVATE static volatile bool bCurrencyTableInitialized;
     SVL_DLLPRIVATE static sal_uInt16 nSystemCurrencyPosition;
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl* pFormatterRegistry;
 
@@ -651,6 +650,7 @@ public:
     // return the corresponding date separator
     const OUString& GetDateSep() const { return m_aCurrentLanguage.GetDateSep(); }
 
+    void PrepForRoMode();
     const SvNFFormatData& GetROFormatData() const { return m_aFormatData; }
     const SvNFLanguageData& GetROLanguageData() const { return m_aCurrentLanguage; }
 };
