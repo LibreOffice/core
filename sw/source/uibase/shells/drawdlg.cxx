@@ -41,8 +41,6 @@
 #include <comphelper/lok.hxx>
 #include <textboxhelper.hxx>
 
-using namespace com::sun::star::drawing;
-
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
     SwWrtShell*     pSh     = &GetShell();

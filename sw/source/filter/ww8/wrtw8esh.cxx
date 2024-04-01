@@ -96,7 +96,6 @@
 using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
 using namespace sw::util;
-using namespace sw::types;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 

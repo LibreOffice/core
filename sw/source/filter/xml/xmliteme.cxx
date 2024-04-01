@@ -36,7 +36,6 @@
 #include <editeng/prntitem.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 namespace {

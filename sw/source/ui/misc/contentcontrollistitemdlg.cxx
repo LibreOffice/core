@@ -21,8 +21,6 @@
 
 #include <formatcontentcontrol.hxx>
 
-using namespace com::sun::star;
-
 SwContentControlListItemDlg::SwContentControlListItemDlg(weld::Widget* pParent,
                                                          SwContentControlListItem& rItem)
     : GenericDialogController(pParent, "modules/swriter/ui/contentcontrollistitemdlg.ui",

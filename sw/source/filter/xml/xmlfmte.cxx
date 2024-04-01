@@ -48,11 +48,8 @@
 #include <docmodel/theme/Theme.hxx>
 
 
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 
 void SwXMLExport::ExportFormat(const SwFormat& rFormat, enum XMLTokenEnum eFamily,

@@ -25,7 +25,6 @@
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
 
 rtl::Reference<SwSmartTagMgr> SwSmartTagMgr::spTheSwSmartTagMgr;
 

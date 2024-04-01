@@ -63,7 +63,6 @@
 
 #include <workctrl.hxx>
 
-using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

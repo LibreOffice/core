@@ -90,8 +90,6 @@
 #define CHECK_NOTMERGED
 #endif
 
-using namespace ::com::sun::star::i18n;
-
 SwpHints::SwpHints(const SwTextNode& rParent)
     : m_rParent(rParent)
     , m_pHistory(nullptr)

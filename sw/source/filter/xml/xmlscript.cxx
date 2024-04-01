@@ -20,8 +20,6 @@
 #include <xmloff/xmlscripti.hxx>
 #include "xmlimp.hxx"
 
-using namespace ::com::sun::star;
-
 SvXMLImportContext* SwXMLImport::CreateScriptContext()
 {
     SvXMLImportContext* pContext = nullptr;

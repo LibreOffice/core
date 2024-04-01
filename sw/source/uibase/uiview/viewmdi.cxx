@@ -53,8 +53,6 @@
 sal_uInt16  SwView::s_nMoveType = NID_PGE;
 sal_Int32 SwView::s_nActMark = 0;
 
-using namespace ::com::sun::star::uno;
-
 namespace {
 
 void collectUIInformation(const OUString& aFactor)

@@ -97,7 +97,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::container;
 
 using beans::PropertyValue;
 using beans::UnknownPropertyException;

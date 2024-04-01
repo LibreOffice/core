@@ -12,8 +12,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-using namespace sw;
-
 class ToxMiscTest : public CppUnit::TestFixture
 {
 public:

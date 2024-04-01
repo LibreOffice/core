@@ -32,7 +32,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 

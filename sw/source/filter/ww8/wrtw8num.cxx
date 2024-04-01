@@ -35,8 +35,6 @@
 #include "ww8par.hxx"
 
 using namespace ::com::sun::star;
-using namespace sw::types;
-using namespace sw::util;
 
 SwNumRule* MSWordExportBase::DuplicateNumRuleImpl(const SwNumRule *pRule)
 {

@@ -54,7 +54,6 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::linguistic2;
 
 /** local method to determine positioning and alignment attributes for a drawing
  *  object, which is newly connected to the layout.

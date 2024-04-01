@@ -55,12 +55,10 @@
 #include <dbui.hrc>
 
 using namespace osl;
-using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 
 constexpr tools::Long DEFAULT_LEFT_DISTANCE = o3tl::toTwips(25, o3tl::Length::mm); // 2,5 cm

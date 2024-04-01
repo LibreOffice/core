@@ -47,7 +47,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::i18n;
 
 
 void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,

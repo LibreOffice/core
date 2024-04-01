@@ -45,7 +45,6 @@
 #include <vcl/uitest/eventdescription.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 namespace {
 
 void collectUIInformation(const OUString& rAction, const OUString& aParameters)

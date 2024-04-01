@@ -167,7 +167,6 @@ const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -35,7 +35,6 @@
 #include <tblafmt.hxx>
 #include <hints.hxx>
 
-using namespace ::editeng;
 using namespace ::com::sun::star;
 
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )

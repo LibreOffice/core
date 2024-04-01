@@ -63,7 +63,6 @@
 
 using namespace ::com::sun::star;
 using namespace css::beans;
-using namespace css::drawing;
 using namespace css::uno;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwDrawBaseShell, SwBaseShell)

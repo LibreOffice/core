@@ -30,7 +30,6 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 
-using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

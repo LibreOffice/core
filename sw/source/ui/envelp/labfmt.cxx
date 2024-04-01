@@ -37,8 +37,6 @@
 #include <strings.hrc>
 
 using namespace utl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 
 #define ROUND(x) static_cast<tools::Long>((x) + .5)
 

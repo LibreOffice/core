@@ -82,7 +82,6 @@
 #include <functional>
 
 using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 /*

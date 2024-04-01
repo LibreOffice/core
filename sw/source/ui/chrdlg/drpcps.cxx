@@ -53,7 +53,6 @@
 
 using namespace css;
 using namespace css::uno;
-using namespace css::lang;
 
 const WhichRangesContainer SwDropCapsPage::s_aPageRg(svl::Items<RES_PARATR_DROP, RES_PARATR_DROP>);
 

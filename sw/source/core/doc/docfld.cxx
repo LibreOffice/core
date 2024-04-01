@@ -60,8 +60,6 @@
 #include <fmtcntnt.hxx>
 #include <utility>
 
-using namespace ::com::sun::star::uno;
-
 // the StartIndex can be supplied optionally (e.g. if it was queried before - is a virtual
 // method otherwise!)
 SetGetExpField::SetGetExpField(

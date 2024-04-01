@@ -60,7 +60,6 @@
 #include <docary.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
 
 #define COLFUZZY 20
 #define ROWFUZZY 10

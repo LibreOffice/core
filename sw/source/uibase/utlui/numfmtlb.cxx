@@ -36,9 +36,6 @@
 #include <swabstdlg.hxx>
 #include <memory>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
 /**
  *  Description:
  *     nFormatType: Display the formats of this Type

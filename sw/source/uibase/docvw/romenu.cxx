@@ -41,10 +41,7 @@
 
 #include <cmdid.h>
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using namespace ::sfx2;
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {

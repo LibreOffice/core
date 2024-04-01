@@ -35,7 +35,6 @@
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace svt;
 
 SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(weld::Container* pPage, SwMailMergeWizard* pWizard)
     : vcl::OWizardPage(pPage, pWizard, "modules/swriter/ui/mmselectpage.ui", "MMSelectPage")
