@@ -54,7 +54,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <sfx2/ipclient.hxx>
 
-using namespace com::sun::star::drawing;
 using namespace com::sun::star;
 
 

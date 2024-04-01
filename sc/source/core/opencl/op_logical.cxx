@@ -11,8 +11,6 @@
 
 #include <sstream>
 
-using namespace formula;
-
 namespace sc::opencl {
 
 void OpLogicalBinaryOperator::GenSlidingWindowFunction(outputstream &ss,

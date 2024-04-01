@@ -12,8 +12,6 @@
 #include <sstream>
 #include "op_statistical_helpers.hxx"
 
-using namespace formula;
-
 #include "op_math_helpers.hxx"
 
 namespace sc::opencl {

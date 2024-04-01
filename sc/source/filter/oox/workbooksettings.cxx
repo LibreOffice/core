@@ -42,7 +42,6 @@
 namespace oox::xls {
 
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 

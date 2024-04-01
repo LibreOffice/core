@@ -11,8 +11,6 @@
 
 #include <sstream>
 
-using namespace formula;
-
 namespace sc::opencl {
 
 void OpBesselj::GenSlidingWindowFunction(outputstream &ss,

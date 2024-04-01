@@ -23,7 +23,6 @@
 #include <unotools/tempfile.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 /* Implementation of Filters test */
 

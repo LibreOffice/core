@@ -31,7 +31,6 @@
 #include "helper/shared_test_impl.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 /* Implementation of Filters test */
 

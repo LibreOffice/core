@@ -19,7 +19,6 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 class ScDataProvidersTest : public ScModelTestBase
 {

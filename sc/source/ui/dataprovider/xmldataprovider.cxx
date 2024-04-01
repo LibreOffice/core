@@ -17,8 +17,6 @@
 #include <vcl/svapp.hxx>
 #include <orcusfilters.hxx>
 
-using namespace com::sun::star;
-
 namespace sc
 {
 class XMLFetchThread : public salhelper::Thread

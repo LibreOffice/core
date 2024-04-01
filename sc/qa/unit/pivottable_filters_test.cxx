@@ -31,7 +31,6 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using ::std::cerr;
 using ::std::cout;
 using ::std::endl;

@@ -8,7 +8,6 @@
 #include <document.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 class ScOpenCLTest2
     : public ScModelTestBase

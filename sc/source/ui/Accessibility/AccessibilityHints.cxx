@@ -19,8 +19,6 @@
 
 #include <AccessibilityHints.hxx>
 
-using namespace ::com::sun::star;
-
 //      ScAccWinFocusLostHint - the current window lost its focus (to another application, view or document)
 
 ScAccWinFocusLostHint::~ScAccWinFocusLostHint()

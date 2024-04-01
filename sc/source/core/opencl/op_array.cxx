@@ -11,8 +11,6 @@
 
 #include <sstream>
 
-using namespace formula;
-
 namespace sc::opencl {
 
 void OpSumX2MY2::GenSlidingWindowFunction(outputstream &ss,

@@ -12,11 +12,6 @@
 #include <test/htmltesttools.hxx>
 #include <test/unoapixml_test.hxx>
 
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::frame;
-using namespace utl;
-
 class ScHTMLExportTest : public UnoApiXmlTest, public HtmlTestTools
 {
 public:

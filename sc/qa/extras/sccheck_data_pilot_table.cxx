@@ -27,7 +27,6 @@
 //check the DataPilot of Calc.
 
 using namespace css;
-using namespace css::lang;
 
 namespace sc_apitest
 {

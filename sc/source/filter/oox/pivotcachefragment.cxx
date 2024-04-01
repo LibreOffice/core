@@ -28,7 +28,6 @@
 
 namespace oox::xls {
 
-using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
 PivotCacheFieldContext::PivotCacheFieldContext( WorkbookFragmentBase& rFragment, PivotCacheField& rCacheField ) :

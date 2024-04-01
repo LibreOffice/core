@@ -24,7 +24,6 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace css;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 

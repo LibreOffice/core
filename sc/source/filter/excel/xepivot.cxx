@@ -48,8 +48,6 @@
 #include <generalfunction.hxx>
 #include <svl/numformat.hxx>
 
-using namespace ::oox;
-
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_ROW;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_COLUMN;

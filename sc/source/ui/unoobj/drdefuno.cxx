@@ -24,8 +24,6 @@
 #include <svx/unoprov.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace ::com::sun::star;
-
 ScDrawDefaultsObj::ScDrawDefaultsObj(ScDocShell* pDocSh) :
     SvxUnoDrawPool( nullptr, SvxPropertySetInfoPool::getDrawingDefaults() ),
     pDocShell( pDocSh )

@@ -11,8 +11,6 @@
 
 #include <sstream>
 
-using namespace formula;
-
 namespace sc::opencl {
 // Definitions of inline functions
 #include "op_financial_helpers.hxx"

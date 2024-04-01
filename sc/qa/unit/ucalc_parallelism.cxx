@@ -14,7 +14,6 @@
 #include <officecfg/Office/Calc.hxx>
 
 using namespace css;
-using namespace css::uno;
 
 // test-suite suitable for creating documents to test parallelism in
 // with access to internal unexported symbols

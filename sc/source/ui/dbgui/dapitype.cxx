@@ -22,8 +22,6 @@
 #include <dapitype.hxx>
 #include <comphelper/lok.hxx>
 
-using namespace com::sun::star;
-
 ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool bEnableExternal)
     : GenericDialogController(pParent, "modules/scalc/ui/selectsource.ui", "SelectSourceDialog")
     , m_xBtnSelection(m_xBuilder->weld_radio_button("selection"))

@@ -74,8 +74,6 @@
 
 #include <memory>
 
-using namespace ::com::sun::star;
-
 namespace {
 
 SvxCellHorJustify lclConvertSlotToHAlign( sal_uInt16 nSlot )
