@@ -2154,7 +2154,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         if (!m_pPrintState || nRenderer == nTabStart)
         {
             m_pPrintState.reset(new ScPrintState());
-            pPrintFunc->GetPrintState(*m_pPrintState, true);
+            pPrintFunc->GetPrintState(*m_pPrintState);
         }
 
         aPageSize.Width = convertTwipToMm100(aTwips.Width());
@@ -2434,12 +2434,12 @@ static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const ScPrin
                         if (bTopDown) // top-bottom page order
                         {
                             nX1 = 0;
-                            for (size_t i = 0; i < rState.nPagesX; ++i)
+                            for (size_t i = 0; i < rState.m_aRanges.m_nPagesX; ++i)
                             {
-                                nX2 = (*rState.xPageEndX)[i];
-                                for (size_t j = 0; j < rState.nPagesY; ++j)
+                                nX2 = (*rState.m_aRanges.m_xPageEndX)[i];
+                                for (size_t j = 0; j < rState.m_aRanges.m_nPagesY; ++j)
                                 {
-                                    auto& rPageRow = (*rState.xPageRows)[j];
+                                    auto& rPageRow = (*rState.m_aRanges.m_xPageRows)[j];
                                     nY1 = rPageRow.GetStartRow();
                                     nY2 = rPageRow.GetEndRow();
 
@@ -2459,15 +2459,15 @@ static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const ScPrin
                         }
                         else // left to right page order
                         {
-                            for (size_t i = 0; i < rState.nPagesY; ++i)
+                            for (size_t i = 0; i < rState.m_aRanges.m_nPagesY; ++i)
                             {
-                                auto& rPageRow = (*rState.xPageRows)[i];
+                                auto& rPageRow = (*rState.m_aRanges.m_xPageRows)[i];
                                 nY1 = rPageRow.GetStartRow();
                                 nY2 = rPageRow.GetEndRow();
                                 nX1 = 0;
-                                for (size_t j = 0; j < rState.nPagesX; ++j)
+                                for (size_t j = 0; j < rState.m_aRanges.m_nPagesX; ++j)
                                 {
-                                    nX2 = (*rState.xPageEndX)[j];
+                                    nX2 = (*rState.m_aRanges.m_xPageEndX)[j];
 
                                     tools::Rectangle aPageRect(rDoc.GetMMRect(nX1, nY1, nX2, nY2, nTab));
                                     tools::Rectangle aTmpRect(aPageRect.GetIntersection(pObj->GetCurrentBoundRect()));
@@ -2772,7 +2772,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     if (!m_pPrintState)
     {
         m_pPrintState.reset(new ScPrintState());
-        pPrintFunc->GetPrintState(*m_pPrintState, true);
+        pPrintFunc->GetPrintState(*m_pPrintState);
     }
 
     lcl_PDFExportBookmarkHelper(pDev, rDoc, pPrintFuncCache, aMark, nTab);

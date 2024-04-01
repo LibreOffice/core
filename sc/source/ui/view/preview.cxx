@@ -197,13 +197,7 @@ void ScPreview::TestLastPage()
     {
         nTab = 0;
         nPageNo = nTabPage = nTabStart = nDisplayStart = 0;
-        aState.nPrintTab = 0;
-        aState.nStartCol = aState.nEndCol = 0;
-        aState.nStartRow = aState.nEndRow = 0;
-        aState.nZoom = 0;
-        aState.nPagesX = aState.nPagesY = 0;
-        aState.nTabPages = aState.nTotalPages =
-        aState.nPageStart = aState.nDocPages = 0;
+        aState = ScPrintState();
     }
 }
 
@@ -736,7 +730,7 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
     pViewShell->UpdateNeededScrollBars(true);
     bInSetZoom = false;
 
-    bStateValid = false;
+//    bStateValid = false;
     InvalidateLocationData( SfxHintId::ScAccVisAreaChanged );
     DoInvalidate();
     Invalidate();

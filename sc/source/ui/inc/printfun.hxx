@@ -181,7 +181,9 @@ public:
 
 } // end sc namespace
 
-struct ScPrintState //  Save Variables from ScPrintFunc
+// Used to save expensive-to-compute data from ScPrintFunc in between
+// uses of ScPrintFunc
+struct ScPrintState
 {
     SCTAB   nPrintTab;
     SCCOL   nStartCol;
@@ -190,21 +192,13 @@ struct ScPrintState //  Save Variables from ScPrintFunc
     SCROW   nEndRow;
     bool    bPrintAreaValid; // the 4 variables above are set
     sal_uInt16  nZoom;
-    size_t  nPagesX;
-    size_t  nPagesY;
     tools::Long    nTabPages;
     tools::Long    nTotalPages;
     tools::Long    nPageStart;
     tools::Long    nDocPages;
 
     // Additional state of page ranges
-    bool bSavedStateRanges;
-    sc::PrintPageRangesInput aPrintPageRangesInput;
-    size_t nTotalY;
-    // use shared_ptr to avoid copying this (potentially large) map back and forth
-    std::shared_ptr<std::vector<SCCOL>> xPageEndX;
-    std::shared_ptr<std::vector<SCROW>> xPageEndY;
-    std::shared_ptr<std::map<size_t, ScPageRowEntry>> xPageRows;
+    sc::PrintPageRanges m_aRanges;
 
     ScPrintState()
         : nPrintTab(0)
@@ -214,14 +208,10 @@ struct ScPrintState //  Save Variables from ScPrintFunc
         , nEndRow(0)
         , bPrintAreaValid(false)
         , nZoom(0)
-        , nPagesX(0)
-        , nPagesY(0)
         , nTabPages(0)
         , nTotalPages(0)
         , nPageStart(0)
         , nDocPages(0)
-        , bSavedStateRanges(false)
-        , nTotalY(0)
     {}
 };
 
@@ -381,7 +371,7 @@ public:
 
     void            ResetBreaks( SCTAB nTab );
 
-    void            GetPrintState(ScPrintState& rState, bool bSavePageRanges = false);
+    void            GetPrintState(ScPrintState& rState);
     bool            GetLastSourceRange( ScRange& rRange ) const;
     sal_uInt16      GetLeftMargin() const{return nLeftMargin;}
     sal_uInt16      GetRightMargin() const{return nRightMargin;}

@@ -254,28 +254,14 @@ ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter, const ScPr
     nEndRow     = rState.nEndRow;
     bPrintAreaValid = rState.bPrintAreaValid;
     nZoom       = rState.nZoom;
-    m_aRanges.m_nPagesX = rState.nPagesX;
-    m_aRanges.m_nPagesY = rState.nPagesY;
+//    m_aRanges.m_nPagesX = rState.nPagesX;
+//    m_aRanges.m_nPagesY = rState.nPagesY;
+    m_aRanges = rState.m_aRanges;
     nTabPages   = rState.nTabPages;
     nTotalPages = rState.nTotalPages;
     nPageStart  = rState.nPageStart;
     nDocPages   = rState.nDocPages;
     bFromPrintState = true;
-
-    if (rState.bSavedStateRanges)
-    {
-        m_aRanges.m_nTotalY = rState.nTotalY;
-        m_aRanges.m_xPageEndX = rState.xPageEndX;
-        m_aRanges.m_xPageEndY = rState.xPageEndY;
-        m_aRanges.m_xPageRows = rState.xPageRows;
-        m_aRanges.m_aInput = rState.aPrintPageRangesInput;
-    }
-    else
-    {
-        m_aRanges.m_xPageEndX = std::make_shared<std::vector<SCCOL>>();
-        m_aRanges.m_xPageEndY = std::make_shared<std::vector<SCROW>>();
-        m_aRanges.m_xPageRows = std::make_shared<std::map<size_t, ScPageRowEntry>>();
-    }
 
     aSrcOffset = pPrinter->PixelToLogic(pPrinter->GetPageOffsetPixel(), MapMode(MapUnit::Map100thMM));
     Construct( pOptions );
@@ -338,33 +324,17 @@ ScPrintFunc::ScPrintFunc(OutputDevice* pOutDev, ScDocShell* pShell, const ScPrin
     nEndRow     = rState.nEndRow;
     bPrintAreaValid = rState.bPrintAreaValid;
     nZoom       = rState.nZoom;
-    m_aRanges.m_nPagesX = rState.nPagesX;
-    m_aRanges.m_nPagesY = rState.nPagesY;
+    m_aRanges   = rState.m_aRanges;
     nTabPages   = rState.nTabPages;
     nTotalPages = rState.nTotalPages;
     nPageStart  = rState.nPageStart;
     nDocPages   = rState.nDocPages;
     bFromPrintState = true;
 
-    if (rState.bSavedStateRanges)
-    {
-        m_aRanges.m_nTotalY = rState.nTotalY;
-        m_aRanges.m_xPageEndX = rState.xPageEndX;
-        m_aRanges.m_xPageEndY = rState.xPageEndY;
-        m_aRanges.m_xPageRows = rState.xPageRows;
-        m_aRanges.m_aInput = rState.aPrintPageRangesInput;
-    }
-    else
-    {
-        m_aRanges.m_xPageEndX = std::make_shared<std::vector<SCCOL>>();
-        m_aRanges.m_xPageEndY = std::make_shared<std::vector<SCROW>>();
-        m_aRanges.m_xPageRows = std::make_shared<std::map<size_t, ScPageRowEntry>>();
-    }
-
     Construct( pOptions );
 }
 
-void ScPrintFunc::GetPrintState(ScPrintState& rState,  bool bSavePageRanges)
+void ScPrintFunc::GetPrintState(ScPrintState& rState)
 {
     rState.nPrintTab    = nPrintTab;
     rState.nStartCol    = nStartCol;
@@ -373,21 +343,11 @@ void ScPrintFunc::GetPrintState(ScPrintState& rState,  bool bSavePageRanges)
     rState.nEndRow      = nEndRow;
     rState.bPrintAreaValid = bPrintAreaValid;
     rState.nZoom        = nZoom;
-    rState.nPagesX      = m_aRanges.m_nPagesX;
-    rState.nPagesY      = m_aRanges.m_nPagesY;
     rState.nTabPages    = nTabPages;
     rState.nTotalPages  = nTotalPages;
     rState.nPageStart   = nPageStart;
     rState.nDocPages    = nDocPages;
-    if (bSavePageRanges)
-    {
-        rState.bSavedStateRanges = true;
-        rState.nTotalY = m_aRanges.m_nTotalY;
-        rState.xPageEndX = m_aRanges.m_xPageEndX;
-        rState.xPageEndY = m_aRanges.m_xPageEndY;
-        rState.xPageRows = m_aRanges.m_xPageRows;
-        rState.aPrintPageRangesInput = m_aRanges.m_aInput;
-    }
+    rState.m_aRanges = m_aRanges;
 }
 
 bool ScPrintFunc::GetLastSourceRange( ScRange& rRange ) const
