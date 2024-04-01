@@ -858,7 +858,12 @@ void SdrPaintView::InvalidateAllWin(const tools::Rectangle& rRect)
 void SdrPaintView::InvalidateOneWin(OutputDevice& rDevice)
 {
     // do not erase background, that causes flicker (!)
-    rDevice.GetOwnerWindow()->Invalidate(InvalidateFlags::NoErase);
+    // tdf#160444 check device's owner window is a nullptr
+    // Since commit 563f7077f1dbce31ff95ee8d2e8d17b629693db1, the
+    // device's owner window gets deleted before this object is
+    // deleted.
+    if (rDevice.GetOwnerWindow())
+        rDevice.GetOwnerWindow()->Invalidate(InvalidateFlags::NoErase);
 }
 
 void SdrPaintView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rectangle& rRect)
