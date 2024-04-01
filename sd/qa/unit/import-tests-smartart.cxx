@@ -1527,21 +1527,22 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAutofitSync)
     uno::Reference<drawing::XShape> xMiddle = getChildShape(xDiagram, 2);
     uno::Reference<beans::XPropertySet> xFirstInner(getChildShape(getChildShape(xMiddle, 0), 0),
                                                     uno::UNO_QUERY);
-    double nFirstScale = 0;
-    CPPUNIT_ASSERT(xFirstInner->getPropertyValue("TextFitToSizeScale") >>= nFirstScale);
-    CPPUNIT_ASSERT_GREATER(0.0, nFirstScale);
-    CPPUNIT_ASSERT_LESS(100.0, nFirstScale);
+    double fFirstScale = 0;
+    CPPUNIT_ASSERT(xFirstInner->getPropertyValue("TextFitToSizeFontScale") >>= fFirstScale);
+    CPPUNIT_ASSERT_GREATER(0.0, fFirstScale);
+    CPPUNIT_ASSERT_LESS(100.0, fFirstScale);
+
     uno::Reference<beans::XPropertySet> xSecondInner(getChildShape(getChildShape(xMiddle, 2), 0),
                                                      uno::UNO_QUERY);
-    double nSecondScale = 0;
-    CPPUNIT_ASSERT(xSecondInner->getPropertyValue("TextFitToSizeScale") >>= nSecondScale);
+    double fSecondScale = 0;
+    CPPUNIT_ASSERT(xSecondInner->getPropertyValue("TextFitToSizeFontScale") >>= fSecondScale);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 56
     // - Actual  : 100
     // i.e. the left shape had no scale-down and the right shape was scaled down, even if it was
     // requested that their scaling matches.
-    CPPUNIT_ASSERT_EQUAL(nSecondScale, nFirstScale);
+    CPPUNIT_ASSERT_EQUAL(fSecondScale, fFirstScale);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0 (drawing::TextFitToSizeType_NONE)

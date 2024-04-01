@@ -1344,9 +1344,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf120028)
     xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(13.5, fCharHeight, 1E-12);
 
-    double fTextSclale = 0.0;
-    xShape->getPropertyValue("TextFitToSizeScale") >>= fTextSclale;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(92.0, fTextSclale, 1E1);
+    double fFontScale = 0.0;
+    xShape->getPropertyValue("TextFitToSizeFontScale") >>= fFontScale;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(92.0, fFontScale, 1E1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testDescriptionImport)

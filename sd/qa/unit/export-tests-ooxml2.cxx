@@ -1884,10 +1884,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTextColumns_3columns)
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(300)),
                              xColProps->getPropertyValue("AutomaticDistance"));
         // Scale value may be unstable; just test that the text is actually scaled
-        double fScale;
-        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeScale") >>= fScale);
-        CPPUNIT_ASSERT_GREATER(0.0, fScale);
-        CPPUNIT_ASSERT_LESS(100.0, fScale);
+        double fFontScale;
+        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeFontScale") >>= fFontScale);
+        CPPUNIT_ASSERT_GREATER(0.0, fFontScale);
+        CPPUNIT_ASSERT_LESS(100.0, fFontScale);
     }
 
     save("Impress Office Open XML");
@@ -1904,10 +1904,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTextColumns_3columns)
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(300)),
                              xColProps->getPropertyValue("AutomaticDistance"));
         // Scale value may be unstable; just test that the text is actually scaled
-        double fScale;
-        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeScale") >>= fScale);
-        CPPUNIT_ASSERT_GREATER(0.0, fScale);
-        CPPUNIT_ASSERT_LESS(100.0, fScale);
+        double fFontScale;
+        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeFontScale") >>= fFontScale);
+        CPPUNIT_ASSERT_GREATER(0.0, fFontScale);
+        CPPUNIT_ASSERT_LESS(100.0, fFontScale);
     }
 
     xmlDocUniquePtr pXmlDocRels = parseExport("ppt/slides/slide1.xml");

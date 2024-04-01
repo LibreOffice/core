@@ -185,30 +185,37 @@ void Diagram::syncDiagramFontHeights()
     {
         // Find out the minimum scale within this group.
         const ShapePairs& rShapePairs = rNameAndPairs.second;
-        double nMinScale = 100.0;
+        double fMinFontScale = 100.0;
+        double fMinSpacingScale = 100.0;
         for (const auto& rShapePair : rShapePairs)
         {
             uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
             if (xPropertySet.is())
             {
-                double nTextFitToSizeScale = 0.0;
-                xPropertySet->getPropertyValue("TextFitToSizeScale") >>= nTextFitToSizeScale;
-                if (nTextFitToSizeScale > 0 && nTextFitToSizeScale < nMinScale)
+                double fFontScale = 0.0;
+                double fSpacingScale = 0.0;
+                xPropertySet->getPropertyValue("TextFitToSizeFontScale") >>= fFontScale;
+                xPropertySet->getPropertyValue("TextFitToSizeSpacingScale") >>= fSpacingScale;
+
+                if (fFontScale > 0 && fSpacingScale > 0
+                    && (fFontScale < fMinFontScale || (fFontScale == fMinFontScale && fSpacingScale < fMinSpacingScale)))
                 {
-                    nMinScale = nTextFitToSizeScale;
+                    fMinFontScale = fFontScale;
+                    fMinSpacingScale = fSpacingScale;
                 }
             }
         }
 
         // Set that minimum scale for all members of the group.
-        if (nMinScale < 100.0)
+        if (fMinFontScale < 100.0 || fMinSpacingScale < 100.0)
         {
             for (const auto& rShapePair : rShapePairs)
             {
                 uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
                 if (xPropertySet.is())
                 {
-                    xPropertySet->setPropertyValue("TextFitToSizeScale", uno::Any(nMinScale));
+                    xPropertySet->setPropertyValue("TextFitToSizeFontScale", uno::Any(fMinFontScale));
+                    xPropertySet->setPropertyValue("TextFitToSizeSpacingScale", uno::Any(fMinSpacingScale));
                 }
             }
         }

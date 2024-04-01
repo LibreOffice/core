@@ -139,22 +139,22 @@ namespace {
 
 
 /// Calculates what scaling factor will be used for autofit text scaling of this shape.
-double GetTextFitToSizeScale(SdrObject* pObject)
+SdrTextObj* getTextObjectWithFitToSize(SdrObject* pObject)
 {
     SdrTextObj* pTextObj = DynCastSdrTextObj(pObject);
     if (!pTextObj)
     {
-        return 0;
+        return nullptr;
     }
 
     const SfxItemSet& rTextObjSet = pTextObj->GetMergedItemSet();
     if (rTextObjSet.GetItem<SdrTextFitToSizeTypeItem>(SDRATTR_TEXT_FITTOSIZE)->GetValue()
         != drawing::TextFitToSizeType_AUTOFIT)
     {
-        return 0;
+        return nullptr;
     }
 
-    return pTextObj->GetFontScale();
+    return pTextObj;
 }
 }
 
@@ -2332,13 +2332,26 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         break;
     }
 
-    case OWN_ATTR_TEXTFITTOSIZESCALE:
+    case OWN_ATTR_TEXTFITTOSIZE_FONT_SCALE:
     {
-        double nMaxScale = 0.0;
-        if (rValue >>= nMaxScale)
+        double fScale = 0.0;
+        if (rValue >>= fScale)
         {
             SdrTextFitToSizeTypeItem aItem(pSdrObject->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
-            aItem.SetMaxScale(nMaxScale);
+            aItem.setFontScale(fScale);
+            pSdrObject->SetMergedItem(aItem);
+            return true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_TEXTFITTOSIZE_SPACING_SCALE:
+    {
+        double fScale = 0.0;
+        if (rValue >>= fScale)
+        {
+            SdrTextFitToSizeTypeItem aItem(pSdrObject->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
+            aItem.setSpacingScale(fScale);
             pSdrObject->SetMergedItem(aItem);
             return true;
         }
@@ -2859,10 +2872,23 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         break;
     }
 
-    case OWN_ATTR_TEXTFITTOSIZESCALE:
+    case OWN_ATTR_TEXTFITTOSIZE_FONT_SCALE:
     {
-        double nScale = GetTextFitToSizeScale(GetSdrObject());
-        rValue <<= nScale;
+        auto* pTextObject = getTextObjectWithFitToSize(GetSdrObject());
+        if (pTextObject)
+        {
+            rValue <<= pTextObject->GetFontScale();
+        }
+        break;
+    }
+
+    case OWN_ATTR_TEXTFITTOSIZE_SPACING_SCALE:
+    {
+        auto* pTextObject = getTextObjectWithFitToSize(GetSdrObject());
+        if (pTextObject)
+        {
+            rValue <<= pTextObject->GetSpacingScale();
+        }
         break;
     }
 

@@ -1276,7 +1276,7 @@ void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size&
     rOutliner.setRoundFontSizeToPt(true);
 
     const SdrTextFitToSizeTypeItem& rItem = GetObjectItem(SDRATTR_TEXT_FITTOSIZE);
-    double fMaxScale = rItem.GetMaxScale();
+    double fMaxScale = rItem.getFontScale();
     if (fMaxScale > 0.0)
     {
         rOutliner.setScalingParameters({ fMaxScale, fMaxScale, 100.0, 100.0 });
