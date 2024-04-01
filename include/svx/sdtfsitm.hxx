@@ -42,7 +42,8 @@ public:
 
     SdrTextFitToSizeTypeItem(const SdrTextFitToSizeTypeItem& rItem)
         : SfxEnumItem(rItem)
-        , m_nMaxScale(rItem.GetMaxScale())
+        , mfFontScale(rItem.getFontScale())
+        , mfSpacingScale(rItem.getSpacingScale())
     {
     }
 
@@ -59,10 +60,14 @@ public:
     virtual bool             GetBoolValue() const override;
     virtual void             SetBoolValue(bool bVal) override;
 
-    void SetMaxScale(double nMaxScale) { m_nMaxScale = nMaxScale; }
-    double GetMaxScale() const { return m_nMaxScale; }
+    void setFontScale(double fScale) { mfFontScale = fScale; }
+    double getFontScale() const { return mfFontScale; }
+
+    void setSpacingScale(double fScale) { mfSpacingScale = fScale; }
+    double getSpacingScale() const { return mfSpacingScale; }
 private:
-    double m_nMaxScale = 0.0;
+    double mfFontScale = 0.0;
+    double mfSpacingScale = 0.0;
 };
 
 #endif

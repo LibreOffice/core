@@ -1134,8 +1134,9 @@ bool SdrTextFitToSizeTypeItem::operator==(const SfxPoolItem& rItem) const
     {
         return false;
     }
-
-    return m_nMaxScale == static_cast<const SdrTextFitToSizeTypeItem&>(rItem).m_nMaxScale;
+    auto& rTextFitToSizeTypeItem = static_cast<const SdrTextFitToSizeTypeItem&>(rItem);
+    return mfFontScale == rTextFitToSizeTypeItem.mfFontScale
+        && mfSpacingScale == rTextFitToSizeTypeItem.mfSpacingScale;
 }
 
 sal_uInt16 SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }

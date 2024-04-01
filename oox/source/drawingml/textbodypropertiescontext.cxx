@@ -237,8 +237,11 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
             case A_TOKEN( normAutofit ):    // CT_TextNormalAutofit
             {
                 mrTextBodyProp.maPropertyMap.setProperty( PROP_TextFitToSize, TextFitToSizeType_AUTOFIT);
-                mrTextBodyProp.maPropertyMap.setProperty( PROP_TextAutoGrowHeight, false);
+                mrTextBodyProp.maPropertyMap.setProperty(PROP_TextAutoGrowHeight, false);
                 mrTextBodyProp.mnFontScale = rAttribs.getInteger(XML_fontScale, 100000);
+                mrTextBodyProp.mnSpacingScale = rAttribs.getInteger(XML_lnSpcReduction, 100000);
+                mrTextBodyProp.maPropertyMap.setProperty(PROP_TextFitToSizeFontScale, double(mrTextBodyProp.mnFontScale) / 1000.0);
+                mrTextBodyProp.maPropertyMap.setProperty(PROP_TextFitToSizeSpacingScale, 100.0 - double(mrTextBodyProp.mnSpacingScale) / 1000.0);
                 break;
             }
             case A_TOKEN( spAutoFit ):

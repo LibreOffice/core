@@ -23,7 +23,7 @@
 // defines ------------------------------------------------------------------
 
 #define OWN_ATTR_VALUE_START                    3900
-#define OWN_ATTR_VALUE_END                      4009
+#define OWN_ATTR_VALUE_END                      4020
 
 #define RID_LIB_START               10000
 #define RID_LIB_END                 19999

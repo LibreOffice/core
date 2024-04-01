@@ -193,12 +193,13 @@
 #define OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE   (OWN_ATTR_VALUE_START+102)
 #define OWN_ATTR_SIGNATURELINE_IS_SIGNED        (OWN_ATTR_VALUE_START+103)
 #define OWN_ATTR_QRCODE                         (OWN_ATTR_VALUE_START+104)
-#define OWN_ATTR_TEXTFITTOSIZESCALE             (OWN_ATTR_VALUE_START+105)
-#define OWN_ATTR_TEXTCOLUMNS                    (OWN_ATTR_VALUE_START+106)
-#define OWN_ATTR_HYPERLINK                      (OWN_ATTR_VALUE_START+107)
-#define OWN_ATTR_MISC_OBJ_DECORATIVE            (OWN_ATTR_VALUE_START+108)
-#define OWN_ATTR_OBJ_ISEMPTYPRESOBJ             (OWN_ATTR_VALUE_START+109)
-// ATTENTION: current maximum is OWN_ATTR_VALUE_START+109 svx; when adding values, update
+#define OWN_ATTR_TEXTFITTOSIZE_FONT_SCALE       (OWN_ATTR_VALUE_START+105)
+#define OWN_ATTR_TEXTFITTOSIZE_SPACING_SCALE    (OWN_ATTR_VALUE_START+106)
+#define OWN_ATTR_TEXTCOLUMNS                    (OWN_ATTR_VALUE_START+107)
+#define OWN_ATTR_HYPERLINK                      (OWN_ATTR_VALUE_START+108)
+#define OWN_ATTR_MISC_OBJ_DECORATIVE            (OWN_ATTR_VALUE_START+109)
+#define OWN_ATTR_OBJ_ISEMPTYPRESOBJ             (OWN_ATTR_VALUE_START+110)
+// ATTENTION: current maximum is OWN_ATTR_VALUE_START+120 svx; when adding values, update
 // OWN_ATTR_VALUE_END in include/svl/solar.hrc accordingly
 
 // #FontWork#
@@ -367,7 +368,8 @@
     { UNO_NAME_MISC_OBJ_SIZEPROTECT,  SDRATTR_OBJSIZEPROTECT          , cppu::UnoType<bool>::get(),                      0,  0},\
     { u"UINameSingular"_ustr,          OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
     { u"UINamePlural"_ustr,            OWN_ATTR_UINAME_PLURAL          , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
-    { u"TextFitToSizeScale"_ustr, OWN_ATTR_TEXTFITTOSIZESCALE, ::cppu::UnoType<double>::get(), 0, 0}, \
+    { u"TextFitToSizeFontScale"_ustr, OWN_ATTR_TEXTFITTOSIZE_FONT_SCALE, ::cppu::UnoType<double>::get(), 0, 0}, \
+    { u"TextFitToSizeSpacingScale"_ustr, OWN_ATTR_TEXTFITTOSIZE_SPACING_SCALE, ::cppu::UnoType<double>::get(), 0, 0}, \
     /* #i68101# */ \
     { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , ::cppu::UnoType<OUString>::get(),    0,  0}, \
     { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0}, \

@@ -50,6 +50,7 @@ struct TextBodyProperties
     OUString                                        msPrst;
     /// Normal autofit: font scale (default: 100%).
     sal_Int32 mnFontScale = 100000;
+    sal_Int32 mnSpacingScale = 100000;
     OUString msHorzOverflow;
     std::optional< sal_Int32 > moVertOverflow{};
 
