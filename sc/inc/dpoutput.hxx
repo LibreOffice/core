@@ -43,6 +43,7 @@ namespace com::sun::star::sheet {
 namespace tools { class Rectangle; }
 class ScDocument;
 struct ScDPOutLevelData;
+class ScDPOutputImpl;
 
 class ScDPOutput
 {
@@ -108,6 +109,11 @@ private:
     void            GetRowFieldRange(SCCOL nCol, sal_Int32& nRowFieldStart, sal_Int32& nRowFieldEnd) const;
     /// Find row field index from row position in case of compact layout.
     sal_Int32       GetRowFieldCompact(SCCOL nColQuery, SCROW nRowQuery) const;
+
+    void outputPageFields(SCTAB nTab);
+    void outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl);
+    void outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl);
+    void outputDataResults(SCTAB nTab);
 
 public:
                     ScDPOutput( ScDocument* pD,
