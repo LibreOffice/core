@@ -1020,11 +1020,11 @@ void ScDPOutput::Output()
 
     for (size_t nField = 0; nField < mpPageFields.size(); ++nField)
     {
-        SCCOL nHdrCol = maStartPos.Col();
-        SCROW nHdrRow = maStartPos.Row() + nField + (mbDoFilter ? 1 : 0);
+        SCCOL nHeaderCol = maStartPos.Col();
+        SCROW nHeaderRow = maStartPos.Row() + nField + (mbDoFilter ? 1 : 0);
         // draw without frame for consistency with filter button:
-        FieldCell(nHdrCol, nHdrRow, nTab, mpPageFields[nField], false);
-        SCCOL nFldCol = nHdrCol + 1;
+        FieldCell(nHeaderCol, nHeaderRow, nTab, mpPageFields[nField], false);
+        SCCOL nFieldCol = nHeaderCol + 1;
 
         OUString aPageValue = ScResId(SCSTR_ALL);
         const uno::Sequence<sheet::MemberResult>& rRes = mpPageFields[nField].maResult;
@@ -1037,13 +1037,15 @@ void ScDPOutput::Output()
                 aPageValue = rRes[0].Caption;
         }
         else if (n > 1)
+        {
             aPageValue = ScResId(SCSTR_MULTIPLE);
+        }
 
         ScSetStringParam aParam;
         aParam.setTextInput();
-        mpDocument->SetString(nFldCol, nHdrRow, nTab, aPageValue, &aParam);
+        mpDocument->SetString(nFieldCol, nHeaderRow, nTab, aPageValue, &aParam);
 
-        lcl_SetFrame(mpDocument, nTab, nFldCol,nHdrRow, nFldCol,nHdrRow, 20);
+        lcl_SetFrame(mpDocument, nTab, nFieldCol, nHeaderRow, nFieldCol, nHeaderRow, 20);
     }
 
     //  data description
@@ -1066,52 +1068,62 @@ void ScDPOutput::Output()
         mnTabStartCol, mnTabStartRow,
         mnDataStartCol, mnDataStartRow, mnTabEndCol, mnTabEndRow);
     size_t nNumColFields = mpColFields.size();
-    for (size_t nField=0; nField<nNumColFields; nField++)
-    {
-        SCCOL nHdrCol = mnDataStartCol + static_cast<SCCOL>(nField);              //TODO: check for overflow
-        if (!mbHasCompactRowField || nNumColFields == 1)
-            FieldCell(nHdrCol, mnTabStartRow, nTab, mpColFields[nField], true);
-        else if (!nField)
-            MultiFieldCell(nHdrCol, mnTabStartRow, nTab, false /* bRowField */);
 
-        SCROW nRowPos = mnMemberStartRow + static_cast<SCROW>(nField);                //TODO: check for overflow
+    for (size_t nField = 0; nField < nNumColFields; nField++)
+    {
+        SCCOL nHeaderCol = mnDataStartCol + SCCOL(nField); //TODO: check for overflow
+
+        if (!mbHasCompactRowField || nNumColFields == 1)
+            FieldCell(nHeaderCol, mnTabStartRow, nTab, mpColFields[nField], true);
+        else if (!nField)
+            MultiFieldCell(nHeaderCol, mnTabStartRow, nTab, false /* bRowField */);
+
+        SCROW nRowPos = mnMemberStartRow + SCROW(nField); //TODO: check for overflow
         tools::Long nDimension = mpColFields[nField].mnDim;
         const uno::Sequence<sheet::MemberResult> rSequence = mpColFields[nField].maResult;
-        const sheet::MemberResult* pArray = rSequence.getConstArray();
+        const sheet::MemberResult* pMemberArray = rSequence.getConstArray();
         tools::Long nThisColCount = rSequence.getLength();
-        OSL_ENSURE(nThisColCount == mnColCount, "count mismatch");     //TODO: ???
+        OSL_ENSURE(nThisColCount == mnColCount, "count mismatch"); //TODO: ???
+
         tools::Long nColumnIndex = -1;
-        for (tools::Long nCol=0; nCol<nThisColCount; nCol++)
+        for (tools::Long nColumn = 0; nColumn < nThisColCount; nColumn++)
         {
-            if (!(pArray[nCol].Flags & sheet::MemberResultFlags::CONTINUE))
+            if (!(pMemberArray[nColumn].Flags & sheet::MemberResultFlags::CONTINUE))
                 nColumnIndex++;
-            SCCOL nColPos = mnDataStartCol + static_cast<SCCOL>(nCol);                //TODO: check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
-            if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
-                !( pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
+
+            SCCOL nColPos = mnDataStartCol + SCCOL(nColumn); //TODO: check for overflow
+            HeaderCell(nColPos, nRowPos, nTab, pMemberArray[nColumn], true, nField);
+            if ((pMemberArray[nColumn].Flags & sheet::MemberResultFlags::HASMEMBER) &&
+               !(pMemberArray[nColumn].Flags & sheet::MemberResultFlags::SUBTOTAL))
             {
-                tools::Long nEnd = nCol;
-                while ( nEnd+1 < nThisColCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
+                // Check the number of columns this spreads
+                tools::Long nEnd = nColumn;
+                while (nEnd + 1 < nThisColCount && (pMemberArray[nEnd + 1].Flags & sheet::MemberResultFlags::CONTINUE))
                     ++nEnd;
-                SCCOL nEndColPos = mnDataStartCol + static_cast<SCCOL>(nEnd);     //TODO: check for overflow
-                if ( nField+1 < mpColFields.size())
+
+                SCCOL nEndColPos = mnDataStartCol + SCCOL(nEnd); //TODO: check for overflow
+                if (nField + 1 < mpColFields.size())
                 {
-                    if ( nField == mpColFields.size() - 2 )
+                    if (nField == mpColFields.size() - 2)
                     {
                         outputimp.AddCol( nColPos );
-                        if ( nColPos + 1 == nEndColPos  )
-                            outputimp.OutputBlockFrame( nColPos,nRowPos, nEndColPos,nRowPos+1, true );
+                        if (nColPos + 1 == nEndColPos)
+                            outputimp.OutputBlockFrame(nColPos, nRowPos, nEndColPos, nRowPos + 1, true);
                     }
                     else
-                        outputimp.OutputBlockFrame( nColPos,nRowPos, nEndColPos,nRowPos );
+                        outputimp.OutputBlockFrame(nColPos, nRowPos, nEndColPos, nRowPos);
 
-                    lcl_SetStyleById(mpDocument, nTab, nColPos,nRowPos, nEndColPos, mnDataStartRow-1, STR_PIVOT_STYLENAME_CATEGORY);
+                    lcl_SetStyleById(mpDocument, nTab, nColPos, nRowPos, nEndColPos, mnDataStartRow - 1, STR_PIVOT_STYLENAME_CATEGORY);
                 }
                 else
-                    lcl_SetStyleById(mpDocument, nTab, nColPos,nRowPos, nColPos, mnDataStartRow-1, STR_PIVOT_STYLENAME_CATEGORY);
+                {
+                    lcl_SetStyleById(mpDocument, nTab, nColPos, nRowPos, nColPos, mnDataStartRow - 1, STR_PIVOT_STYLENAME_CATEGORY);
+                }
             }
-            else if (  pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL )
-                outputimp.AddCol( nColPos );
+            else if (pMemberArray[nColumn].Flags & sheet::MemberResultFlags::SUBTOTAL)
+            {
+                outputimp.AddCol(nColPos);
+            }
 
             // Apply format
             if (mpFormats)
@@ -1128,7 +1140,7 @@ void ScDPOutput::Output()
             // Apply the same number format as in data source.
             mpDocument->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, mpColFields[nField].mnSrcNumFmt));
         }
-        if ( nField== 0 && mpColFields.size() == 1 )
+        if (nField == 0 && mpColFields.size() == 1)
             outputimp.OutputBlockFrame(mnDataStartCol, mnTabStartRow, mnTabEndCol, nRowPos - 1);
     }
 
