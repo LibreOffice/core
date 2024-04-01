@@ -332,8 +332,7 @@ SgaObjectSvDraw GalleryFileStorage::insertModel(const FmFormModel& rModel,
     return SgaObjectSvDraw();
 }
 
-bool GalleryFileStorage::readModelStream(const GalleryObject* pObject,
-                                         tools::SvRef<SotTempStream> const& rxModelStream)
+bool GalleryFileStorage::readModelStream(const GalleryObject* pObject, SvStream& rxModelStream)
 {
     const INetURLObject aURL(ImplGetURL(pObject));
     rtl::Reference<SotStorage> xSotStorage(GetSvDrawStorage());
@@ -363,13 +362,13 @@ bool GalleryFileStorage::readModelStream(const GalleryObject* pObject,
 
                         {
                             uno::Reference<io::XOutputStream> xDocOut(
-                                new utl::OOutputStreamWrapper(*rxModelStream));
+                                new utl::OOutputStreamWrapper(rxModelStream));
 
                             SvxDrawingLayerExport(aModel.GetModel(), xDocOut);
                         }
                     }
 
-                    bRet = (rxModelStream->GetError() == ERRCODE_NONE);
+                    bRet = (rxModelStream.GetError() == ERRCODE_NONE);
                 }
             }
 
@@ -379,9 +378,8 @@ bool GalleryFileStorage::readModelStream(const GalleryObject* pObject,
     return bRet;
 }
 
-SgaObjectSvDraw
-GalleryFileStorage::insertModelStream(const tools::SvRef<SotTempStream>& rxModelStream,
-                                      const INetURLObject& rUserURL)
+SgaObjectSvDraw GalleryFileStorage::insertModelStream(SvStream& rModelStream,
+                                                      const INetURLObject& rUserURL)
 {
     INetURLObject aURL(implCreateUniqueURL(SgaObjKind::SvDraw, rUserURL));
     rtl::Reference<SotStorage> xSotStorage(GetSvDrawStorage());
@@ -397,7 +395,7 @@ GalleryFileStorage::insertModelStream(const tools::SvRef<SotTempStream>& rxModel
             GalleryCodec aCodec(*xOutputStream);
 
             xOutputStream->SetBufferSize(16348);
-            aCodec.Write(*rxModelStream);
+            aCodec.Write(rModelStream);
 
             if (!xOutputStream->GetError())
             {

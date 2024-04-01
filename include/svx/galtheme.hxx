@@ -140,8 +140,8 @@ public:
     bool                        GetModel(sal_uInt32 nPos, SdrModel& rModel);
     bool                        InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos);
 
-    SAL_DLLPRIVATE bool         GetModelStream(sal_uInt32 nPos, tools::SvRef<SotTempStream> const & rModelStreamRef);
-    SAL_DLLPRIVATE bool         InsertModelStream(const tools::SvRef<SotTempStream>& rModelStream, sal_uInt32 nInsertPos);
+    SAL_DLLPRIVATE bool         GetModelStream(sal_uInt32 nPos, SvStream & rModelStream);
+    SAL_DLLPRIVATE bool         InsertModelStream(SvStream& rModelStream, sal_uInt32 nInsertPos);
 
     SAL_DLLPRIVATE bool         GetURL(sal_uInt32 nPos, INetURLObject& rURL);
     bool                        InsertURL(const INetURLObject& rURL, sal_uInt32 nInsertPos = SAL_MAX_UINT32);

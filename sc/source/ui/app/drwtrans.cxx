@@ -425,7 +425,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bOK;
 }
 
-bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ScDrawTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const css::datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
@@ -437,7 +437,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
             {
                 SdrModel* pDrawModel = static_cast<SdrModel*>(pUserObject);
                 pDrawModel->BurnInStyleSheetAttributes();
-                rxOStm->SetBufferSize( 0xff00 );
+                rOStm.SetBufferSize( 0xff00 );
 
                 // for the changed pool defaults from drawing layer pool set those
                 // attributes as hard attributes to preserve them for saving
@@ -465,11 +465,11 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                 }
 
                 {
-                    css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                    css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( rOStm ) );
                     SvxDrawingLayerExport( pDrawModel, xDocOut );
                 }
 
-                bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                bRet = ( rOStm.GetError() == ERRCODE_NONE );
             }
             break;
 
@@ -493,13 +493,13 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                         xPers->storeToEntry( xWorkStore, aDummyName, aSeq, aSeq );
                         if ( xWorkStore->isStreamElement( aDummyName ) )
                         {
-                            uno::Reference < io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                            uno::Reference < io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( rOStm ) );
                             uno::Reference < io::XStream > xNewStream = xWorkStore->openStreamElement( aDummyName, embed::ElementModes::READ );
                             ::comphelper::OStorageHelper::CopyInputToOutput( xNewStream->getInputStream(), xDocOut );
                         }
                         else
                         {
-                            uno::Reference < io::XStream > xDocStr( new utl::OStreamWrapper( *rxOStm ) );
+                            uno::Reference < io::XStream > xDocStr( new utl::OStreamWrapper( rOStm ) );
                             uno::Reference< embed::XStorage > xDocStg = ::comphelper::OStorageHelper::GetStorageFromStream( xDocStr );
                             uno::Reference < embed::XStorage > xNewStg = xWorkStore->openStorageElement( aDummyName, embed::ElementModes::READ );
                             xNewStg->copyToStorage( xDocStg );
@@ -539,8 +539,8 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                     if ( xTransact.is() )
                         xTransact->commit();
 
-                    rxOStm->SetBufferSize( 0xff00 );
-                    rxOStm->WriteStream( *pTempStream );
+                    rOStm.SetBufferSize( 0xff00 );
+                    rOStm.WriteStream( *pTempStream );
 
                     xWorkStore->dispose();
                     xWorkStore.clear();
@@ -548,7 +548,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                 catch ( uno::Exception& )
                 {}
 
-                bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                bRet = ( rOStm.GetError() == ERRCODE_NONE );
             }
             break;
 

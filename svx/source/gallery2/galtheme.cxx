@@ -456,24 +456,24 @@ bool GalleryTheme::InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos)
     return bRet;
 }
 
-bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotTempStream> const & rxModelStream)
+bool GalleryTheme::GetModelStream(sal_uInt32 nPos, SvStream& rModelStream)
 {
     const GalleryObject*    pObject = maGalleryObjectCollection.getForPosition( nPos );
     bool                    bRet = false;
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
-        bRet = mpGalleryStorageEngine->readModelStream(pObject, rxModelStream);
+        bRet = mpGalleryStorageEngine->readModelStream(pObject, rModelStream);
     }
 
     return bRet;
 }
 
-bool GalleryTheme::InsertModelStream(const tools::SvRef<SotTempStream>& rxModelStream, sal_uInt32 nInsertPos)
+bool GalleryTheme::InsertModelStream(SvStream& rModelStream, sal_uInt32 nInsertPos)
 {
     bool            bRet = false;
 
-    const SgaObjectSvDraw aObjSvDraw = mpGalleryStorageEngine->insertModelStream(rxModelStream, GetParent()->GetUserURL());
+    const SgaObjectSvDraw aObjSvDraw = mpGalleryStorageEngine->insertModelStream(rModelStream, GetParent()->GetUserURL());
     if(aObjSvDraw.IsValid())
         bRet = InsertObject( aObjSvDraw, nInsertPos );
 
@@ -542,10 +542,10 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
 
         if( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
-            tools::SvRef<SotTempStream> xModelStm;
+            std::unique_ptr<SvStream> xModelStm;
 
             if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xModelStm ) )
-                bRet = InsertModelStream( xModelStm, nInsertPos );
+                bRet = InsertModelStream( *xModelStm, nInsertPos );
         }
         else if( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) ||
                  aDataHelper.HasFormat( SotClipboardFormatId::SIMPLE_FILE ) )

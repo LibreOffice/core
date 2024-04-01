@@ -81,10 +81,8 @@ public:
     bool readModel(const GalleryObject* pObject, SdrModel& rModel);
     SgaObjectSvDraw insertModel(const FmFormModel& rModel, const INetURLObject& rUserURL);
 
-    bool readModelStream(const GalleryObject* pObject,
-                         tools::SvRef<SotTempStream> const& rxModelStream);
-    SgaObjectSvDraw insertModelStream(const tools::SvRef<SotTempStream>& rxModelStream,
-                                      const INetURLObject& rUserURL);
+    bool readModelStream(const GalleryObject* pObject, SvStream& rModelStream);
+    SgaObjectSvDraw insertModelStream(SvStream& rModelStream, const INetURLObject& rUserURL);
 
     INetURLObject implCreateUniqueURL(SgaObjKind eObjKind, const INetURLObject& rUserURL,
                                       ConvertDataFormat nFormat = ConvertDataFormat::Unknown);

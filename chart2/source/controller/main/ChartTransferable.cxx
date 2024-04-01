@@ -105,7 +105,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bResult;
 }
 
-bool ChartTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ChartTransferable::WriteObject( SvStream& rOStm, void* pUserObject, sal_uInt32 nUserObjectId,
     const datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
@@ -118,7 +118,7 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                 SdrModel* pMarkedObjModel = static_cast< SdrModel* >( pUserObject );
                 if ( pMarkedObjModel )
                 {
-                    rxOStm->SetBufferSize( 0xff00 );
+                    rOStm.SetBufferSize( 0xff00 );
 
                     // for the changed pool defaults from drawing layer pool set those
                     // attributes as hard attributes to preserve them for saving
@@ -140,10 +140,10 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
                         }
                     }
 
-                    Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                    Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( rOStm ) );
                     SvxDrawingLayerExport( pMarkedObjModel, xDocOut );
 
-                    bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                    bRet = ( rOStm.GetError() == ERRCODE_NONE );
                 }
             }
             break;

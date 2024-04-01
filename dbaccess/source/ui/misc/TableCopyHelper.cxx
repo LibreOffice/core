@@ -265,16 +265,16 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
         _rAsyncDrop.bHtml           = bHtml;
         _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,true,_xConnection);
 
-        bRet = ( !_rAsyncDrop.bError && bOk && _rAsyncDrop.aHtmlRtfStorage.is() );
+        bRet = ( !_rAsyncDrop.bError && bOk && _rAsyncDrop.aHtmlRtfStorage );
         if ( bRet )
         {
             // now we need to copy the stream
             ::utl::TempFileNamed aTmp;
             _rAsyncDrop.aUrl = aTmp.GetURL();
-            ::tools::SvRef<SotTempStream> aNew = new SotTempStream( aTmp.GetFileName() );
+            std::unique_ptr<SvStream> aNew = SotTempStream::Create( aTmp.GetFileName() );
             _rAsyncDrop.aHtmlRtfStorage->Seek(STREAM_SEEK_TO_BEGIN);
-            _rAsyncDrop.aHtmlRtfStorage->CopyTo( aNew.get() );
-            _rAsyncDrop.aHtmlRtfStorage = aNew;
+            aNew->WriteStream(*_rAsyncDrop.aHtmlRtfStorage);
+            _rAsyncDrop.aHtmlRtfStorage = std::move(aNew);
         }
         else
             _rAsyncDrop.aHtmlRtfStorage = nullptr;
@@ -286,7 +286,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
                                 ,std::u16string_view i_rDestDataSource
                                 ,const SharedConnection& _xConnection)
 {
-    if ( _rDesc.aHtmlRtfStorage.is() )
+    if ( _rDesc.aHtmlRtfStorage )
     {
         copyTagTable(_rDesc,false,_xConnection);
         _rDesc.aHtmlRtfStorage = nullptr;

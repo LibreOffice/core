@@ -904,17 +904,17 @@ bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
 bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
 {
-    tools::SvRef<SotTempStream> xStm( new SotTempStream( OUString() ) );
+    SvMemoryStream aStm;
 
-    xStm->SetVersion( SOFFICE_FILEFORMAT_50 );
+    aStm.SetVersion( SOFFICE_FILEFORMAT_50 );
 
-    if( pUserObject && WriteObject( xStm, pUserObject, nUserObjectId, rFlavor ) )
+    if( pUserObject && WriteObject( aStm, pUserObject, nUserObjectId, rFlavor ) )
     {
-        const sal_uInt32        nLen = xStm->TellEnd();
+        const sal_uInt32        nLen = aStm.TellEnd();
         Sequence< sal_Int8 >    aSeq( nLen );
 
-        xStm->Seek( STREAM_SEEK_TO_BEGIN );
-        xStm->ReadBytes(aSeq.getArray(), nLen);
+        aStm.Seek( STREAM_SEEK_TO_BEGIN );
+        aStm.ReadBytes(aSeq.getArray(), nLen);
 
         if( nLen && ( SotExchange::GetFormat( rFlavor ) == SotClipboardFormatId::STRING ) )
         {
@@ -932,7 +932,7 @@ bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId,
 }
 
 
-bool TransferableHelper::WriteObject( tools::SvRef<SotTempStream>&, void*, sal_uInt32, const DataFlavor& )
+bool TransferableHelper::WriteObject( SvStream&, void*, sal_uInt32, const DataFlavor& )
 {
     OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
     return false;
@@ -1568,7 +1568,7 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx
 
 bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx ) const
 {
-    tools::SvRef<SotTempStream> xStm;
+    std::unique_ptr<SvStream> xStm;
     DataFlavor aSubstFlavor;
     bool bRet(GetSotStorageStream(rFlavor, xStm));
     bool bSuppressPNG(false); // #122982# If PNG stream not accessed, but BMP one, suppress trying to load PNG
@@ -1679,7 +1679,7 @@ bool TransferableDataHelper::GetGDIMetaFile(SotClipboardFormatId nFormat, GDIMet
 
 bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf ) const
 {
-    tools::SvRef<SotTempStream> xStm;
+    std::unique_ptr<SvStream> xStm;
     DataFlavor          aSubstFlavor;
     bool                bRet = false;
 
@@ -1762,7 +1762,7 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
             TransferableDataHelper::IsEqual(aFlavor, rFlavor))
     {
         Graphic aGraphic;
-        tools::SvRef<SotTempStream> xStm;
+        std::unique_ptr<SvStream> xStm;
         if (GetSotStorageStream(rFlavor, xStm))
         {
             if (GraphicConverter::Import(*xStm, aGraphic) == ERRCODE_NONE)
@@ -1800,7 +1800,7 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
     }
     else
     {
-        tools::SvRef<SotTempStream> xStm;
+        std::unique_ptr<SvStream> xStm;
 
         if( GetSotStorageStream( rFlavor, xStm ) )
         {
@@ -1823,8 +1823,8 @@ bool TransferableDataHelper::GetImageMap( SotClipboardFormatId nFormat, ImageMap
 
 bool TransferableDataHelper::GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap ) const
 {
-    tools::SvRef<SotTempStream> xStm;
-    bool                bRet = GetSotStorageStream( rFlavor, xStm );
+    std::unique_ptr<SvStream> xStm;
+    bool bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
     {
@@ -2018,7 +2018,7 @@ bool TransferableDataHelper::GetINetImage(
         const css::datatransfer::DataFlavor& rFlavor,
         INetImage& rINtImg ) const
 {
-    tools::SvRef<SotTempStream> xStm;
+    std::unique_ptr<SvStream> xStm;
     bool bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
@@ -2037,7 +2037,7 @@ bool TransferableDataHelper::GetFileList( SotClipboardFormatId nFormat,
 
 bool TransferableDataHelper::GetFileList( FileList& rFileList ) const
 {
-    tools::SvRef<SotTempStream> xStm;
+    std::unique_ptr<SvStream> xStm;
     bool                bRet = false;
 
     for( sal_uInt32 i = 0, nFormatCount = GetFormatCount(); ( i < nFormatCount ) && !bRet; ++i )
@@ -2088,20 +2088,20 @@ Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavo
 }
 
 
-bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotTempStream>& rxStream ) const
+bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, std::unique_ptr<SvStream>& rxStream ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSotStorageStream( aFlavor, rxStream ) );
 }
 
 
-bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, tools::SvRef<SotTempStream>& rxStream ) const
+bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, std::unique_ptr<SvStream>& rxStream ) const
 {
     Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
     if (aSeq.hasElements())
     {
-        rxStream = new SotTempStream( "" );
+        rxStream = SotTempStream::Create( "" );
         rxStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );
         rxStream->Seek( 0 );
     }

@@ -31,16 +31,16 @@ namespace dbaui
         : m_vTableRow(std::move(_rvTableRow))
     {
     }
-    bool OTableRowExchange::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool OTableRowExchange::WriteObject( SvStream& rOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if(nUserObjectId == FORMAT_OBJECT_ID_SBA_TABED)
         {
             std::vector< std::shared_ptr<OTableRow> >* pRows = static_cast< std::vector< std::shared_ptr<OTableRow> >* >(pUserObject);
             if(pRows)
             {
-                (*rxOStm).WriteInt32( pRows->size() ); // first stream the size
+                rOStm.WriteInt32( pRows->size() ); // first stream the size
                 for (auto const& row : *pRows)
-                    WriteOTableRow(*rxOStm, *row);
+                    WriteOTableRow(rOStm, *row);
                 return true;
             }
         }

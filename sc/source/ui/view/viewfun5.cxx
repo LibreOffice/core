@@ -232,7 +232,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     }
     else if (nFormatId == SotClipboardFormatId::SVXB)
     {
-        tools::SvRef<SotTempStream> xStm;
+        std::unique_ptr<SvStream> xStm;
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
         {
             Graphic aGraphic;
@@ -243,7 +243,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     }
     else if ( nFormatId == SotClipboardFormatId::DRAWING )
     {
-        tools::SvRef<SotTempStream> xStm;
+        std::unique_ptr<SvStream> xStm;
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
         {
             MakeDrawLayer();    // before loading model, so 3D factory has been created
@@ -677,8 +677,8 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
     pObj->SetOverwriting( true );
 
     auto pStrBuffer = std::make_shared<OUString>();
-    tools::SvRef<SotTempStream> xStream;
-    if ( rDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.is() )
+    std::unique_ptr<SvStream> xStream;
+    if ( rDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream )
     {
         // Static variables for per-session storage. This could be
         // changed to longer-term storage in future.

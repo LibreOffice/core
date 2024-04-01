@@ -42,60 +42,16 @@
 
 using namespace ::com::sun::star;
 
-static SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
+std::unique_ptr<SvStream> SotTempStream::Create( const OUString & rName, StreamMode nMode )
 {
-    SvLockBytesRef xLB;
     if( !rName.isEmpty() )
     {
-        SvStream * pFileStm = new SvFileStream( rName, nMode );
-        xLB = new SvLockBytes( pFileStm, true );
+        return std::make_unique<SvFileStream>( rName, nMode );
     }
     else
     {
-        SvStream * pCacheStm = new SvMemoryStream();
-        xLB = new SvLockBytes( pCacheStm, true );
+        return std::make_unique<SvMemoryStream>();
     }
-    return xLB;
-}
-
-SotTempStream::SotTempStream( const OUString & rName, StreamMode nMode )
-    : SvStream( MakeLockBytes_Impl( rName, nMode ).get() )
-{
-    if( nMode & StreamMode::WRITE )
-        m_isWritable = true;
-    else
-        m_isWritable = false;
-}
-
-SotTempStream::~SotTempStream()
-{
-    FlushBuffer();
-}
-
-void SotTempStream::CopyTo( SotTempStream * pDestStm )
-{
-    FlushBuffer(); // write all data
-
-    sal_uInt64 nPos = Tell();    // save position
-    Seek( 0 );
-    pDestStm->SetSize( 0 ); // empty target stream
-
-    constexpr int BUFSIZE = 64 * 1024;
-    std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ BUFSIZE ]);
-    sal_Int32  nRead;
-    while (0 != (nRead = ReadBytes(pMem.get(), BUFSIZE)))
-    {
-        if (nRead != static_cast<sal_Int32>(pDestStm->WriteBytes(pMem.get(), nRead)))
-        {
-            SetError( SVSTREAM_GENERALERROR );
-            break;
-        }
-    }
-    pMem.reset();
-
-    // set position
-    pDestStm->Seek( nPos );
-    Seek( nPos );
 }
 
 SotStorageStream::SotStorageStream( BaseStorageStream * pStm )

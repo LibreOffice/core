@@ -774,9 +774,9 @@ void OTableEditorCtrl::InsertRows( sal_Int32 nRow )
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
     if(aTransferData.HasFormat(SotClipboardFormatId::SBA_TABED))
     {
-        ::tools::SvRef<SotTempStream> aStreamRef;
+        std::unique_ptr<SvStream> aStreamRef;
         bool bOk = aTransferData.GetSotStorageStream(SotClipboardFormatId::SBA_TABED,aStreamRef);
-        if (bOk && aStreamRef.is())
+        if (bOk && aStreamRef)
         {
             aStreamRef->Seek(STREAM_SEEK_TO_BEGIN);
             aStreamRef->ResetError();

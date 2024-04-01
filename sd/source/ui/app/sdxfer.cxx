@@ -555,7 +555,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     return bOK;
 }
 
-bool SdTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
+bool SdTransferable::WriteObject( SvStream& rOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
 {
     bool bRet = false;
 
@@ -569,18 +569,18 @@ bool SdTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pOb
                 SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pObject);
                 if ( !bDontBurnInStyleSheet )
                     pDoc->BurnInStyleSheetAttributes();
-                rxOStm->SetBufferSize( 16348 );
+                rOStm.SetBufferSize( 16348 );
 
                 rtl::Reference< SdXImpressDocument > xComponent( new SdXImpressDocument( pDoc, true ) );
                 pDoc->setUnoModel( xComponent );
 
                 {
-                    css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                    css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( rOStm ) );
                     SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DocumentType::Impress) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" );
                 }
 
                 xComponent->dispose();
-                bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                bRet = ( rOStm.GetError() == ERRCODE_NONE );
             }
             catch( Exception& )
             {
@@ -612,8 +612,8 @@ bool SdTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pOb
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                rxOStm->SetBufferSize( 0xff00 );
-                rxOStm->WriteStream( *pTempStream );
+                rOStm.SetBufferSize( 0xff00 );
+                rOStm.WriteStream( *pTempStream );
 
                 bRet = true;
             }

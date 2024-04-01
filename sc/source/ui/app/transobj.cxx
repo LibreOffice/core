@@ -455,7 +455,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
     return bOK;
 }
 
-bool ScTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ScTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const datatransfer::DataFlavor& rFlavor )
 {
     // called from SetObject, put data into stream
@@ -469,8 +469,8 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUse
 
                 SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
                 // mba: no BaseURL for data exchange
-                if ( pImpEx->ExportStream( *rxOStm, OUString(), nFormat ) )
-                    bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                if ( pImpEx->ExportStream( rOStm, OUString(), nFormat ) )
+                    bRet = ( rOStm.GetError() == ERRCODE_NONE );
             }
             break;
 
@@ -480,8 +480,8 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUse
                 ScTabEditEngine* pEngine = static_cast<ScTabEditEngine*>(pUserObject);
                 if ( nUserObjectId == SCTRANS_TYPE_EDIT_RTF )
                 {
-                    pEngine->Write( *rxOStm, EETextFormat::Rtf );
-                    bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                    pEngine->Write( rOStm, EETextFormat::Rtf );
+                    bRet = ( rOStm.GetError() == ERRCODE_NONE );
                 }
                 else
                 {
@@ -497,7 +497,9 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUse
                     uno::Reference<datatransfer::XTransferable> xEditTrans = pEngine->CreateTransferable( aSel );
                     TransferableDataHelper aEditHelper( xEditTrans );
 
-                    bRet = aEditHelper.GetSotStorageStream( rFlavor, rxOStm );
+                    std::unique_ptr<SvStream> xStrm;
+                    bRet = aEditHelper.GetSotStorageStream( rFlavor, xStrm );
+                    rOStm.WriteStream(*xStrm);
                 }
             }
             break;
@@ -505,8 +507,8 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUse
         case SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT:
             {
                 ScTabEditEngine* pEngine = static_cast<ScTabEditEngine*>(pUserObject);
-                pEngine->Write(*rxOStm, EETextFormat::Xml);
-                bRet = (rxOStm->GetError() == ERRCODE_NONE);
+                pEngine->Write(rOStm, EETextFormat::Xml);
+                bRet = (rOStm.GetError() == ERRCODE_NONE);
             }
             break;
 
@@ -531,8 +533,8 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUse
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                rxOStm->SetBufferSize( 0xff00 );
-                rxOStm->WriteStream( *pTempStream );
+                rOStm.SetBufferSize( 0xff00 );
+                rOStm.WriteStream( *pTempStream );
 
                 bRet = true;
 

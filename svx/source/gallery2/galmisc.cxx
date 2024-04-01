@@ -394,13 +394,13 @@ void GalleryTransferable::InitData( bool bLazy )
                         mpGraphicObject.reset(new GraphicObject( std::move(aGraphic) ));
                 }
 
-                if( !mxModelStream.is() )
+                if( !mxModelStream )
                 {
-                    mxModelStream = new SotTempStream( "" );
+                    mxModelStream = SotTempStream::Create( "" );
                     mxModelStream->SetBufferSize( 16348 );
 
-                    if (!mpTheme || !mpTheme->GetModelStream(mnObjectPos, mxModelStream))
-                        mxModelStream.clear();
+                    if (!mpTheme || !mpTheme->GetModelStream(mnObjectPos, *mxModelStream))
+                        mxModelStream.reset();
                     else
                         mxModelStream->Seek( 0 );
                 }
@@ -480,7 +480,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
 
     if( ( SotClipboardFormatId::DRAWING == nFormat ) && ( SgaObjKind::SvDraw == meObjectKind ) )
     {
-        bRet = ( mxModelStream.is() && SetObject( mxModelStream.get(), 0, rFlavor ) );
+        bRet = ( mxModelStream && SetObject( mxModelStream.get(), 0, rFlavor ) );
     }
     else if( ( SotClipboardFormatId::SIMPLE_FILE == nFormat ) && mpURL )
     {
@@ -502,15 +502,15 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     return bRet;
 }
 
-bool GalleryTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject,
+bool GalleryTransferable::WriteObject( SvStream& rOStm, void* pUserObject,
                                            sal_uInt32, const datatransfer::DataFlavor& )
 {
     bool bRet = false;
 
     if( pUserObject )
     {
-        rxOStm->WriteStream( *static_cast< SotStorageStream* >( pUserObject ) );
-        bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+        rOStm.WriteStream( *static_cast< SotStorageStream* >( pUserObject ) );
+        bRet = ( rOStm.GetError() == ERRCODE_NONE );
     }
 
     return bRet;
@@ -533,7 +533,7 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 
 void GalleryTransferable::ObjectReleased()
 {
-    mxModelStream.clear();
+    mxModelStream.reset();
     mpGraphicObject.reset();
     mpURL.reset();
 }

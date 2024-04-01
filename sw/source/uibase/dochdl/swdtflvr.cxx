@@ -694,7 +694,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     return bOK;
 }
 
-bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
+bool SwTransferable::WriteObject( SvStream& rOStream,
                                     void* pObject, sal_uInt32 nObjectType,
                                     const DataFlavor& /*rFlavor*/ )
 {
@@ -707,7 +707,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
         {
             // don't change the sequence of commands
             SdrModel *pModel = static_cast<SdrModel*>(pObject);
-            xStream->SetBufferSize( 16348 );
+            rOStream.SetBufferSize( 16348 );
 
             // for the changed pool defaults from drawing layer pool set those
             // attributes as hard attributes to preserve them for saving
@@ -735,11 +735,11 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
             }
 
             {
-                uno::Reference<io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *xStream ) );
+                uno::Reference<io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( rOStream ) );
                 SvxDrawingLayerExport( pModel, xDocOut );
             }
 
-            bRet = ERRCODE_NONE == xStream->GetError();
+            bRet = ERRCODE_NONE == rOStream.GetError();
         }
         break;
 
@@ -764,8 +764,8 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                xStream->SetBufferSize( 0xff00 );
-                xStream->WriteStream( *pTempStream );
+                rOStream.SetBufferSize( 0xff00 );
+                rOStream.WriteStream( *pTempStream );
 
                 xWorkStore->dispose();
                 xWorkStore.clear();
@@ -774,17 +774,17 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
             {
             }
 
-            bRet = ( xStream->GetError() == ERRCODE_NONE );
+            bRet = ( rOStream.GetError() == ERRCODE_NONE );
         }
         break;
 
     case SWTRANSFER_OBJECTTYPE_DDE:
         {
-            xStream->SetBufferSize( 1024 );
+            rOStream.SetBufferSize( 1024 );
             SwTransferDdeLink* pDdeLnk = static_cast<SwTransferDdeLink*>(pObject);
-            if( pDdeLnk->WriteData( *xStream ) )
+            if( pDdeLnk->WriteData( rOStream ) )
             {
-                bRet = ERRCODE_NONE == xStream->GetError();
+                bRet = ERRCODE_NONE == rOStream.GetError();
             }
         }
         break;
@@ -830,10 +830,10 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
         aDbgWrt.Write( xWrt );
 #endif
 
-        SwWriter aWrt( *xStream, *pDoc );
+        SwWriter aWrt( rOStream, *pDoc );
         if( ! aWrt.Write( xWrt ).IsError() )
         {
-            xStream->WriteChar( '\0' );               // terminate with a zero
+            rOStream.WriteChar( '\0' );               // terminate with a zero
             bRet = true;
         }
     }
@@ -2148,7 +2148,7 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
 
-    tools::SvRef<SotTempStream> xStrm;
+    std::unique_ptr<SvStream> xStrm;
     SvStream* pStream = nullptr;
     Reader* pRead = nullptr;
     OUString sData;
@@ -2233,7 +2233,7 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
         pResId = STR_CLPBRD_FORMAT_ERROR;
 
     // Exist a SvMemoryStream? (data in the OUString and xStrm is empty)
-    if( pStream && !xStrm.is() )
+    if( pStream && !xStrm )
         delete pStream;
 
     if (bMsg && pResId)
@@ -2767,7 +2767,7 @@ bool SwTransferable::PasteSdrFormat(  const TransferableDataHelper& rData,
                                     const Point* pPt, SotExchangeActionFlags nActionFlags, bool bNeedToSelectBeforePaste)
 {
     bool bRet = false;
-    tools::SvRef<SotTempStream> xStrm;
+    std::unique_ptr<SvStream> xStrm;
     if( rData.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStrm ))
     {
         xStrm->SetVersion( SOFFICE_FILEFORMAT_50 );
@@ -2808,7 +2808,7 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
 
     case SotClipboardFormatId::SVXB:
     {
-        tools::SvRef<SotTempStream> xStm;
+        std::unique_ptr<SvStream> xStm;
 
         if(rData.GetSotStorageStream(SotClipboardFormatId::SVXB, xStm))
         {

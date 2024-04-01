@@ -72,7 +72,7 @@ namespace dbaui
             OUString                 sDefaultTableName;
 
             OUString                        aUrl;
-            tools::SvRef<SotTempStream> aHtmlRtfStorage;
+            std::unique_ptr<SvStream>       aHtmlRtfStorage;
             ElementType                     nType;
             std::unique_ptr<weld::TreeIter> xDroppedAt;
             sal_Int8                        nAction;

@@ -36,7 +36,6 @@ namespace com::sun::star::awt { class XProgressBar; }
 class INetURLObject;
 class GalleryTheme;
 class SotStorageStream;
-class SotTempStream;
 
 struct ExchangeData
 {
@@ -140,7 +139,7 @@ using TransferableHelper::CopyToClipboard;
     GalleryTheme*                   mpTheme;
     SgaObjKind                      meObjectKind;
     sal_uInt32                      mnObjectPos;
-    tools::SvRef<SotTempStream>  mxModelStream;
+    std::unique_ptr<SvStream>       mxModelStream;
     std::unique_ptr<GraphicObject>  mpGraphicObject;
     std::unique_ptr<INetURLObject>  mpURL;
 
@@ -155,7 +154,7 @@ public:
     // TransferableHelper
     virtual void                    AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-    virtual bool                    WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual bool                    WriteObject( SvStream& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void                    DragFinished( sal_Int8 nDropAction ) override;
     virtual void                    ObjectReleased() override;
 
