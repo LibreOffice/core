@@ -2229,35 +2229,19 @@ bool EditEngine::HasText( const SvxSearchItem& rSearchItem )
     return getImpl().HasText(rSearchItem);
 }
 
-void EditEngine::setGlobalScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY)
+ScalingParameters EditEngine::getScalingParameters() const
 {
-    getImpl().setScale(fFontScaleX, fFontScaleY, fSpacingScaleX, fSpacingScaleY);
+    return getImpl().getScalingParameters();
 }
 
-void EditEngine::getGlobalSpacingScale(double& rX, double& rY) const
+void EditEngine::resetScalingParameters()
 {
-    getImpl().getSpacingScale(rX, rY);
+    getImpl().resetScalingParameters();
 }
 
-basegfx::B2DTuple EditEngine::getGlobalSpacingScale() const
+void EditEngine::setScalingParameters(ScalingParameters const& rScalingParameters)
 {
-    double x = 0.0;
-    double y = 0.0;
-    getImpl().getSpacingScale(x, y);
-    return {x, y};
-}
-
-void EditEngine::getGlobalFontScale(double& rX, double& rY) const
-{
-    getImpl().getFontScale(rX, rY);
-}
-
-basegfx::B2DTuple EditEngine::getGlobalFontScale() const
-{
-    double x = 0.0;
-    double y = 0.0;
-    getImpl().getFontScale(x, y);
-    return {x, y};
+    getImpl().setScalingParameters(rScalingParameters);
 }
 
 void EditEngine::setRoundFontSizeToPt(bool bRound)

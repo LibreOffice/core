@@ -180,7 +180,7 @@ void NotesEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     // For setGlobalScale to work correctly EEControlBits::STRETCHING must be set.
     mrParentWindow.GetOutliner()->SetControlWord(mrParentWindow.GetOutliner()->GetControlWord()
                                                  | EEControlBits::STRETCHING);
-    mrParentWindow.GetOutliner()->setGlobalScale(30.0, 30.0);
+    mrParentWindow.GetOutliner()->setScalingParameters({ 30.0, 30.0 });
 
     provideNoteText();
 

@@ -416,12 +416,9 @@ public:
     void            QuickDelete( const ESelection& rSel );
     SAL_DLLPRIVATE void            QuickMarkToBeRepainted( sal_Int32 nPara );
 
-    SAL_DLLPRIVATE void setGlobalScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY);
-
-    SAL_DLLPRIVATE void getGlobalSpacingScale(double& rX, double& rY) const;
-    basegfx::B2DTuple getGlobalSpacingScale() const;
-    SAL_DLLPRIVATE void getGlobalFontScale(double& rX, double& rY) const;
-    basegfx::B2DTuple getGlobalFontScale() const;
+    void setScalingParameters(ScalingParameters const& rScalingParameters);
+    void resetScalingParameters();
+    ScalingParameters getScalingParameters() const;
 
     SAL_DLLPRIVATE void setRoundFontSizeToPt(bool bRound);
 

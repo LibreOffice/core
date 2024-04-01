@@ -188,7 +188,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         pOLV = pOView->GetViewByWindow(mpViewShell->GetActiveWindow());
 
                     if (pOutliner)
-                        pOutliner->getGlobalScale(o3tl::temporary(double()), stretchY, o3tl::temporary(double()), o3tl::temporary(double()));
+                        stretchY = pOutliner->getScalingParameters().fFontY;
 
                     if(pOLV && !pOLV->GetSelection().HasRange())
                     {
