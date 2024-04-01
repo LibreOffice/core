@@ -363,6 +363,10 @@ public:
     static TransferableDataHelper   CreateFromPrimarySelection();
     static bool                     IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
                                              const css::datatransfer::DataFlavor& rRequestFlavor );
+    static bool WriteDDELink(SvStream& stream, std::u16string_view application,
+                             std::u16string_view topic, std::u16string_view item,
+                             std::u16string_view extra = {});
+    bool ReadDDELink(OUString& application, OUString& topic, OUString& item, OUString& rest) const;
 };
 
 class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") DragSourceHelper

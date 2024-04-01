@@ -387,12 +387,9 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     //  get link data from transferable before string data,
     //  so the source knows it will be used for a link
 
-    uno::Sequence<sal_Int8> aSequence = aDataHelper.GetSequence(SotClipboardFormatId::LINK, OUString());
-    if (!aSequence.hasElements())
-    {
-        OSL_FAIL("DDE Data not found.");
+    OUString sApp, sTopic, sItem, sExtra;
+    if (!aDataHelper.ReadDDELink(sApp, sTopic, sItem, sExtra))
         return false;
-    }
 
     //  check size (only if string is available in transferable)
 
@@ -421,46 +418,14 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     }
 
     //  create formula
-
-    sal_Int32 nSeqLen = aSequence.getLength();
-    const char* p = reinterpret_cast<const char*>(aSequence.getConstArray());
-
-    rtl_TextEncoding eSysEnc = osl_getThreadTextEncoding();
-
-    // char array delimited by \0.
-    // app \0 topic \0 item \0 (extra \0) where the extra is optional.
-    ::std::vector<OUString> aStrs;
-    const char* pStart = p;
-    sal_Int32 nStart = 0;
-    for (sal_Int32 i = 0; i < nSeqLen; ++i, ++p)
-    {
-        if (*p == '\0')
-        {
-            sal_Int32 nLen = i - nStart;
-            aStrs.emplace_back(pStart, nLen, eSysEnc);
-            nStart = ++i;
-            pStart = ++p;
-        }
-    }
-
-    if (aStrs.size() < 3)
-        return false;
-
-    const OUString& pApp   = aStrs[0];
-    const OUString& pTopic = aStrs[1];
-    const OUString& pItem  = aStrs[2];
-    const OUString* pExtra = nullptr;
-    if (aStrs.size() > 3)
-        pExtra = &aStrs[3];
-
-    if ( pExtra && *pExtra == "calc:extref" )
+    if ( sExtra == "calc:extref" )
     {
         // Paste this as an external reference.  Note that paste link always
         // uses Calc A1 syntax even when another formula syntax is specified
         // in the UI.
         EnterMatrix("='"
-            + ScGlobal::GetAbsDocName(pTopic, GetViewData().GetDocument().GetDocumentShell())
-            + "'#" + pItem
+            + ScGlobal::GetAbsDocName(sTopic, GetViewData().GetDocument().GetDocumentShell())
+            + "'#" + sItem
                 , ::formula::FormulaGrammar::GRAM_NATIVE);
         return true;
     }
@@ -471,11 +436,11 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // TODO: we could define ocQuote for "
         EnterMatrix("=" + ScCompiler::GetNativeSymbol(ocDde)
             + ScCompiler::GetNativeSymbol(ocOpen)
-            + "\"" + pApp + "\""
+            + "\"" + sApp + "\""
             + ScCompiler::GetNativeSymbol(ocSep)
-            + "\"" + pTopic + "\""
+            + "\"" + sTopic + "\""
             + ScCompiler::GetNativeSymbol(ocSep)
-            + "\"" + pItem + "\""
+            + "\"" + sItem + "\""
             + ScCompiler::GetNativeSymbol(ocClose)
                 , ::formula::FormulaGrammar::GRAM_NATIVE);
     }

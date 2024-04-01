@@ -36,6 +36,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/temporary.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
@@ -2604,19 +2605,10 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
     // data from Clipboardformat
     OUString aApp, aTopic, aItem;
 
+    if (!rData.ReadDDELink(aApp, aTopic, aItem, o3tl::temporary(OUString())))
     {
-        tools::SvRef<SotTempStream> xStrm;
-        if( !rData.GetSotStorageStream( SotClipboardFormatId::LINK, xStrm ))
-        {
-            OSL_ENSURE( false, "DDE Data not found." );
-            return false;
-        }   // report useful error!!
-
-        rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
-        aApp = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
-        aTopic = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
-        aItem = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
-    }
+        return false;
+    }   // report useful error!!
 
     OUString aCmd;
     sfx2::MakeLnkName( aCmd, &aApp, aTopic, aItem );
@@ -4463,28 +4455,8 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
     if( !m_xRefObj.is() || !FindDocShell() )
         return false;
 
-    rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
-    const OString aAppNm(OUStringToOString(
-        Application::GetAppName(), eEncoding));
-    const OString aTopic(OUStringToOString(
-        m_pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
-    const OString aName(OUStringToOString(m_sName, eEncoding));
-
-    std::unique_ptr<char[]> pMem(new char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ]);
-
-    sal_Int32 nLen = aAppNm.getLength();
-    memcpy( pMem.get(), aAppNm.getStr(), nLen );
-    pMem[ nLen++ ] = 0;
-    memcpy( pMem.get() + nLen, aTopic.getStr(), aTopic.getLength() );
-    nLen = nLen + aTopic.getLength();
-    pMem[ nLen++ ] = 0;
-    memcpy( pMem.get() + nLen, aName.getStr(), aName.getLength() );
-    nLen = nLen + aName.getLength();
-    pMem[ nLen++ ] = 0;
-    pMem[ nLen++ ] = 0;
-
-    rStrm.WriteBytes( pMem.get(), nLen );
-    pMem.reset();
+    TransferableDataHelper::WriteDDELink(rStrm, Application::GetAppName(),
+                                         m_pDocShell->GetTitle(SFX_TITLE_FULLNAME), m_sName);
 
     IDocumentMarkAccess* const pMarkAccess = m_pDocShell->GetDoc()->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(m_sName);

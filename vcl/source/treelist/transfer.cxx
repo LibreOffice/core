@@ -24,6 +24,7 @@
 #endif
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <rtl/uri.hxx>
+#include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -2272,6 +2273,100 @@ bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInte
     }
 
     return bRet;
+}
+
+static bool WriteDDELink_impl(SvStream& stream, rtl_TextEncoding encoding,
+                              std::u16string_view application, std::u16string_view topic,
+                              std::u16string_view item, std::u16string_view extra)
+{
+    // Put Link format, potentially with extra: either application\0topic\0item\0\0
+    // or application\0topic\0item\0extra\0\0
+    assert(rtl_isOctetTextEncoding(encoding)); // The Link format is 8-bit
+    stream.WriteUnicodeOrByteText(application, encoding, true);
+    stream.WriteUnicodeOrByteText(topic, encoding, true);
+    stream.WriteUnicodeOrByteText(item, encoding, true);
+    if (!extra.empty())
+        stream.WriteUnicodeOrByteText(extra, encoding, true);
+    stream.WriteChar('\0'); // One more trailing zero
+    return stream.GetErrorCode() == ERRCODE_NONE;
+}
+
+// static
+bool TransferableDataHelper::WriteDDELink(SvStream& stream, std::u16string_view application,
+                                          std::u16string_view topic, std::u16string_view item,
+                                          std::u16string_view extra)
+{
+    // 1. Put standard Link format in the system encoding
+    WriteDDELink_impl(stream, osl_getThreadTextEncoding(), application, topic, item, extra);
+
+    // 2. Put our extension to the format. Start with a magic string "ULnk", followed by
+    // UTF-8-encoded Link format
+    stream.WriteOString("ULnk");
+    return WriteDDELink_impl(stream, RTL_TEXTENCODING_UTF8, application, topic, item, extra);
+}
+
+static size_t ReadDDELink_impl(std::string_view str, std::string_view& application,
+                               std::string_view& topic, std::string_view& item,
+                               std::string_view& rest)
+{
+    application = {};
+    topic = {};
+    item = {};
+    rest = {};
+
+    size_t start = 0;
+    size_t end = str.find('\0', start);
+    application = str.substr(start, end - start);
+    if (end == std::string_view::npos)
+        return end;
+    start = end + 1;
+    end = str.find('\0', start);
+    topic = str.substr(start, end - start);
+    if (end == std::string_view::npos)
+        return end;
+    start = end + 1;
+    end = str.find('\0', start);
+    item = str.substr(start, end - start);
+    if (end >= str.size() - 1 || str[end + 1] == '\0')
+        return end;
+    start = end + 1;
+    do
+    {
+        // Read all remaining data until \0\0 into rest, including possible single \0
+        end = str.find('\0', end + 1);
+    } while (end < str.size() - 1 && str[end + 1] != '\0');
+    rest = str.substr(start, end - start);
+    return end;
+}
+
+bool TransferableDataHelper::ReadDDELink(OUString& application, OUString& topic, OUString& item,
+                                         OUString& rest) const
+{
+    css::uno::Sequence<sal_Int8> sequence = GetSequence(SotClipboardFormatId::LINK, {});
+    if (!sequence.hasElements())
+    {
+        SAL_WARN("svtools", "DDE data not found");
+        return false;
+    }
+
+    std::string_view str(reinterpret_cast<const char*>(sequence.getConstArray()),
+                         sequence.getLength());
+    std::string_view application_view, topic_view, item_view, rest_view;
+    rtl_TextEncoding encoding = osl_getThreadTextEncoding();
+    size_t end = ReadDDELink_impl(str, application_view, topic_view, item_view, rest_view);
+    if (end < str.size() - 1 && str[end + 1] == '\0' && str.substr(end + 2, 4) == "ULnk")
+    {
+        // Now try to read our UTF-8 extension; if it's present, use it unconditionally, even if
+        // osl_getThreadTextEncoding gives RTL_TEXTENCODING_UTF8, because the extension is immune
+        // to possible different source encoding
+        encoding = RTL_TEXTENCODING_UTF8;
+        ReadDDELink_impl(str.substr(end + 6), application_view, topic_view, item_view, rest_view);
+    }
+    application = OStringToOUString(application_view, encoding);
+    topic = OStringToOUString(topic_view, encoding);
+    item = OStringToOUString(item_view, encoding);
+    rest = OStringToOUString(rest_view, encoding);
+    return !application.isEmpty() && !topic.isEmpty() && !item.isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

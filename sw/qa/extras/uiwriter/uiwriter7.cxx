@@ -2288,6 +2288,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf127635)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testDde)
 {
 #if HAVE_FEATURE_UI
+    Application::SetAppName("testDde"); // DDE needs an app name
+
     // Type asdf and copy it.
     createSwDoc();
     SwDoc* pDoc = getSwDoc();

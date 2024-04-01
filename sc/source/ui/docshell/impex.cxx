@@ -471,12 +471,8 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
 
             // extra bits are used to tell the client to prefer external
             // reference link.
-
-            rStrm.WriteUnicodeOrByteText(aAppName, true);
-            rStrm.WriteUnicodeOrByteText(aDocName, true);
-            rStrm.WriteUnicodeOrByteText(aRefName, true);
-            rStrm.WriteUnicodeOrByteText(u"calc:extref", true);
-            return rStrm.WriteUnicodeOrByteText(u"", true); // One more trailing zero
+            return TransferableDataHelper::WriteDDELink(rStrm, aAppName, aDocName, aRefName,
+                                                        u"calc:extref");
         }
     }
     if( nFmt == SotClipboardFormatId::HTML )
