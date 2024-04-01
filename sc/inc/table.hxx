@@ -1047,7 +1047,7 @@ public:
                                  const ScObjectHandling eObjectHandling = ScObjectHandling::RecalcPosMode);
 
     void SetRangeName(std::unique_ptr<ScRangeName> pNew);
-    ScRangeName* GetRangeName() const;
+    SC_DLLPUBLIC ScRangeName* GetRangeName() const;
 
     void PreprocessRangeNameUpdate(
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );

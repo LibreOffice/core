@@ -401,6 +401,7 @@ void SolverSettings::WriteConstraintPart(ConstraintPart ePart, tools::Long nInde
 
     OUString sRange = m_aConstraintParts[ePart] + OUString::number(nIndex);
     ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sValue);
+    pNewEntry->AddType(ScRangeData::Type::Hidden);
     m_pRangeName->insert(pNewEntry);
 }
 
@@ -615,6 +616,7 @@ void SolverSettings::WriteParamValue(SolverParameter eParam, OUString sValue, bo
     assert(iter != m_mNamedRanges.end());
     OUString sRange = iter->second;
     ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sValue);
+    pNewEntry->AddType(ScRangeData::Type::Hidden);
     m_pRangeName->insert(pNewEntry);
 }
 
@@ -631,6 +633,7 @@ void SolverSettings::WriteDoubleParamValue(SolverParameter eParam, std::u16strin
         fValue, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
         ScGlobal::getLocaleData().getNumDecimalSep()[0], true);
     ScRangeData* pNewEntry = new ScRangeData(m_rDoc, sRange, sLocalizedValue);
+    pNewEntry->AddType(ScRangeData::Type::Hidden);
     m_pRangeName->insert(pNewEntry);
 }
 

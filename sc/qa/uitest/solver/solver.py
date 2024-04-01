@@ -132,4 +132,61 @@ class solver(UITestCase):
             # Here isModified needs to be True because changes were made to the Solver dialog
             self.assertTrue(calc_doc.isModified())
 
+
+    # Tests whether all solver named ranges are hidden in the UI
+    def test_tdf160064(self):
+        # This test uses the same file from bug tdf#160104, so no need to check if the model is correct upon opening
+        with self.ui_test.load_file(get_url_for_data_file("tdf160104.ods")) as calc_doc:
+            # The Manage Names dialog must not contain any names
+            with self.ui_test.execute_dialog_through_command(".uno:DefineName") as xDialog:
+                xList = xDialog.getChild("names")
+                self.assertEqual('0', get_state_as_dict(xList)['Children'])
+
+            # Makes a small change in the solver dialog by clicking the "Minimize" button
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog", close_button="") as xDialog:
+                xMin = xDialog.getChild("min")
+                xMin.executeAction("CLICK", ())
+                # Closes the dialog
+                xCloseBtn = xDialog.getChild("close")
+                xCloseBtn.executeAction("CLICK", ())
+
+            # Here the file has been modified and needs to be saved and reloaded
+            self.assertTrue(calc_doc.isModified())
+            self.xUITest.executeCommand('.uno:Save')
+            self.xUITest.executeCommand('.uno:Reload')
+
+            # Open the Solver dialog and check whether the model is loaded correctly
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog", close_button="") as xDialog:
+                xTargetEdit = xDialog.getChild("targetedit")
+                xMin = xDialog.getChild("min")
+                xChangeEdit = xDialog.getChild("changeedit")
+                xRef1Edit = xDialog.getChild("ref1edit")
+                xVal1Edit = xDialog.getChild("val1edit")
+                xOp1List = xDialog.getChild("op1list")
+                xRef2Edit = xDialog.getChild("ref2edit")
+                xVal2Edit = xDialog.getChild("val2edit")
+                xOp2List = xDialog.getChild("op2list")
+
+                # Checks whether the solver model was loaded correctly
+                self.assertEqual("$F$2", get_state_as_dict(xTargetEdit)["Text"])
+                self.assertEqual("true", get_state_as_dict(xMin)["Checked"])
+                self.assertEqual("$D$2:$D$11", get_state_as_dict(xChangeEdit)["Text"])
+                self.assertEqual("$F$5", get_state_as_dict(xRef1Edit)["Text"])
+                self.assertEqual("$F$8", get_state_as_dict(xVal1Edit)["Text"])
+                self.assertEqual("≤", get_state_as_dict(xOp1List)["SelectEntryText"])
+                self.assertEqual("$D$2:$D$11", get_state_as_dict(xRef2Edit)["Text"])
+                self.assertEqual("", get_state_as_dict(xVal2Edit)["Text"])
+                self.assertEqual("Binary", get_state_as_dict(xOp2List)["SelectEntryText"])
+
+                # Closes the dialog
+                xCloseBtn = xDialog.getChild("close")
+                xCloseBtn.executeAction("CLICK", ())
+
+            # Open the Manage Names dialog again; it must not contain any names
+            with self.ui_test.execute_dialog_through_command(".uno:DefineName") as xDialog:
+                xList = xDialog.getChild("names")
+                self.assertEqual('0', get_state_as_dict(xList)['Children'])
+
+
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -216,4 +216,28 @@ CPPUNIT_TEST_FIXTURE(SolverTest, tdf156814)
     CPPUNIT_ASSERT_EQUAL(OUString("0"), aConstraints[2].aRightStr);
 }
 
+// Tests if all named ranges and expressions are hidden in the existing model
+CPPUNIT_TEST_FIXTURE(SolverTest, tdf160064)
+{
+    createScDoc("ods/SolverModel.ods");
+    ScDocument* pDoc = getScDoc();
+
+    ScTable* pTable = pDoc->FetchTable(0);
+    ScRangeName* pNamedRanges = pTable->GetRangeName();
+    ScRangeName::const_iterator it = pNamedRanges->begin();
+
+    // There are 34 hidden named ranges and expressions in the file
+    CPPUNIT_ASSERT_EQUAL(size_t(34), pNamedRanges->size());
+
+    // All named ranges and expressions are hidden in the file
+    while (it != pNamedRanges->end())
+    {
+        OUString sName = it->first;
+        ScRangeData* pRangeData
+            = pNamedRanges->findByUpperName(ScGlobal::getCharClass().uppercase(sName));
+        CPPUNIT_ASSERT(pRangeData->HasType(ScRangeData::Type::Hidden));
+        it++;
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
