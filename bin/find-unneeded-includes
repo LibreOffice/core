@@ -342,7 +342,6 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'oox|core|drawingml|ole|vml|'
                                     'OpenStormBento|'
                                     'osl|'
-                                    'PackageKit|'
                                     'pdfi|pdfparse|'
                                     'ppt|'
                                     'pyuno|'
@@ -359,6 +358,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'sfx2|DocTempl|'
                                     'sidebar|' # for sfx2::sidebar
                                     'skeletonmaker|'
+                                    'star|' # for com::sun::star
                                     'std|chrono_literals|literals|'
                                     'stoc_sec|'
                                     'store|'
@@ -374,7 +374,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'unopkg|'
                                     'util|db|qe|' # for xmlsearch::
                                     'utl|'
-                                    'vcl|'
+                                    'vcl|psp|x11|'
                                     'writerfilter|'
                                     'xforms|'
                                     'xmloff|token|EnhancedCustomShapeToken' # for xmloff::
