@@ -392,7 +392,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                     print("WARNING:", fileName, "This 'using namespace' is likely unnecessary:", nameSpace)
 
                     # Get the row number, normal IWYU output does not contain this info
-                    subprocess.run(["git", "grep", "-n", "using namespace.*"+nameSpace+";", fileName])
+                    subprocess.run(["git", "grep", "-n", "namespace.*[^a-zA-Z]"+nameSpace+" *;", fileName])
 
     for remove in sorted(toRemove):
         print("ERROR: %s: remove not needed include" % remove)
