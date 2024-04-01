@@ -191,7 +191,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
 OUString SAL_CALL
 CharacterClassificationImpl::getImplementationName()
 {
-    return "com.sun.star.i18n.CharacterClassification";
+    return u"com.sun.star.i18n.CharacterClassification"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -203,7 +203,7 @@ CharacterClassificationImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 CharacterClassificationImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.i18n.CharacterClassification" };
+    return { u"com.sun.star.i18n.CharacterClassification"_ustr };
 }
 
 }

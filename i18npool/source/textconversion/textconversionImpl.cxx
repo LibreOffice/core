@@ -104,7 +104,7 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale)
 OUString SAL_CALL
 TextConversionImpl::getImplementationName()
 {
-    return "com.sun.star.i18n.TextConversion";
+    return u"com.sun.star.i18n.TextConversion"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -116,7 +116,7 @@ TextConversionImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 TextConversionImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.i18n.TextConversion" };
+    return { u"com.sun.star.i18n.TextConversion"_ustr };
 }
 
 }

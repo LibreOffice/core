@@ -240,7 +240,7 @@ NumberFormatCodeMapper::mapElementUsageStringToShort(std::u16string_view formatU
 OUString SAL_CALL
 NumberFormatCodeMapper::getImplementationName()
 {
-    return "com.sun.star.i18n.NumberFormatCodeMapper";
+    return u"com.sun.star.i18n.NumberFormatCodeMapper"_ustr;
 }
 
 sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
@@ -251,7 +251,7 @@ sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServi
 css::uno::Sequence< OUString > SAL_CALL
 NumberFormatCodeMapper::getSupportedServiceNames()
 {
-    return { "com.sun.star.i18n.NumberFormatMapper" };
+    return { u"com.sun.star.i18n.NumberFormatMapper"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

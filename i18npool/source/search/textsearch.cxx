@@ -1543,7 +1543,7 @@ SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32
 OUString SAL_CALL
 TextSearch::getImplementationName()
 {
-    return "com.sun.star.util.TextSearch_i18n";
+    return u"com.sun.star.util.TextSearch_i18n"_ustr;
 }
 
 sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
@@ -1554,7 +1554,7 @@ sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 TextSearch::getSupportedServiceNames()
 {
-    return { "com.sun.star.util.TextSearch", "com.sun.star.util.TextSearch2" };
+    return { u"com.sun.star.util.TextSearch"_ustr, u"com.sun.star.util.TextSearch2"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

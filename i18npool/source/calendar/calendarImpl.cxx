@@ -350,7 +350,7 @@ CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativ
 OUString SAL_CALL
 CalendarImpl::getImplementationName()
 {
-    return "com.sun.star.i18n.CalendarImpl";
+    return u"com.sun.star.i18n.CalendarImpl"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -362,7 +362,7 @@ CalendarImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 CalendarImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.i18n.LocaleCalendar", "com.sun.star.i18n.LocaleCalendar2" };
+    return { u"com.sun.star.i18n.LocaleCalendar"_ustr, u"com.sun.star.i18n.LocaleCalendar2"_ustr };
 }
 
 }

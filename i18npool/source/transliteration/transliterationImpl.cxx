@@ -654,7 +654,7 @@ TransliterationImpl::loadModuleByName( std::u16string_view implName,
 OUString SAL_CALL
 TransliterationImpl::getImplementationName()
 {
-    return "com.sun.star.i18n.Transliteration";
+    return u"com.sun.star.i18n.Transliteration"_ustr;
 }
 
 sal_Bool SAL_CALL
@@ -666,7 +666,7 @@ TransliterationImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 TransliterationImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.i18n.Transliteration" };
+    return { u"com.sun.star.i18n.Transliteration"_ustr };
 }
 
 }

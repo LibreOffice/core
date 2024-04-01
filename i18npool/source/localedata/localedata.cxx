@@ -1521,7 +1521,7 @@ sal_Bool OutlineNumbering::hasElements(  )
 OUString SAL_CALL
 LocaleDataImpl::getImplementationName()
 {
-    return "com.sun.star.i18n.LocaleDataImpl";
+    return u"com.sun.star.i18n.LocaleDataImpl"_ustr;
 }
 
 sal_Bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)
@@ -1533,8 +1533,8 @@ Sequence< OUString > SAL_CALL
 LocaleDataImpl::getSupportedServiceNames()
 {
     Sequence< OUString > aRet {
-        "com.sun.star.i18n.LocaleData",
-        "com.sun.star.i18n.LocaleData2"
+        u"com.sun.star.i18n.LocaleData"_ustr,
+        u"com.sun.star.i18n.LocaleData2"_ustr
     };
     return aRet;
 }

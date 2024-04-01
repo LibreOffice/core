@@ -127,7 +127,7 @@ sal_Bool SAL_CALL transliteration_commonclass::supportsService(const OUString& r
 
 Sequence< OUString > SAL_CALL transliteration_commonclass::getSupportedServiceNames()
 {
-    return { "com.sun.star.i18n.Transliteration.l10n" };
+    return { u"com.sun.star.i18n.Transliteration.l10n"_ustr };
 }
 
 }
