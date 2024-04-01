@@ -2265,35 +2265,19 @@ bool EditEngine::HasText( const SvxSearchItem& rSearchItem )
     return pImpEditEngine->HasText( rSearchItem );
 }
 
-void EditEngine::setGlobalScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY)
+ScalingParameters EditEngine::getScalingParameters() const
 {
-    pImpEditEngine->setScale(fFontScaleX, fFontScaleY, fSpacingScaleX, fSpacingScaleY);
+    return pImpEditEngine->getScalingParameters();
 }
 
-void EditEngine::getGlobalSpacingScale(double& rX, double& rY) const
+void EditEngine::resetScalingParameters()
 {
-    pImpEditEngine->getSpacingScale(rX, rY);
+    pImpEditEngine->resetScalingParameters();
 }
 
-basegfx::B2DTuple EditEngine::getGlobalSpacingScale() const
+void EditEngine::setScalingParameters(ScalingParameters const& rScalingParameters)
 {
-    double x = 0.0;
-    double y = 0.0;
-    pImpEditEngine->getSpacingScale(x, y);
-    return {x, y};
-}
-
-void EditEngine::getGlobalFontScale(double& rX, double& rY) const
-{
-    pImpEditEngine->getFontScale(rX, rY);
-}
-
-basegfx::B2DTuple EditEngine::getGlobalFontScale() const
-{
-    double x = 0.0;
-    double y = 0.0;
-    pImpEditEngine->getFontScale(x, y);
-    return {x, y};
+    pImpEditEngine->setScalingParameters(rScalingParameters);
 }
 
 void EditEngine::setRoundFontSizeToPt(bool bRound) const

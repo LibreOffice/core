@@ -845,12 +845,10 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     }
 
     // Use original scale...
-    double nStretchY = 100.0;
-    getGlobalScale(o3tl::temporary(double()), nStretchY, o3tl::temporary(double()), o3tl::temporary(double()));
 
-    double fScale = pFmt->GetBulletRelSize() * nStretchY / 100.0;
+    double fFontScaleY = pFmt->GetBulletRelSize() * (getScalingParameters().fFontY / 100.0);
     double fScaledLineHeight = aStdFont.GetFontSize().Height();
-    fScaledLineHeight *= fScale * 10;
+    fScaledLineHeight *= fFontScaleY * 10;
     fScaledLineHeight /= 1000.0;
 
     aBulletFont.SetAlignment( ALIGN_BOTTOM );
@@ -893,12 +891,10 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
 
     tools::Rectangle aBulletArea( ImpCalcBulletArea( nPara, true, false ) );
 
-    double nStretchX = 100.0;
-    getGlobalScale(o3tl::temporary(double()), o3tl::temporary(double()),
-                   nStretchX, o3tl::temporary(double()));
+    double fSpacingFactorX = getScalingParameters().fSpacingX / 100.0;
 
-    tools::Long nStretchBulletX = basegfx::fround(double(aBulletArea.Left()) * nStretchX / 100.0);
-    tools::Long nStretchBulletWidth = basegfx::fround(double(aBulletArea.GetWidth()) * nStretchX / 100.0);
+    tools::Long nStretchBulletX = basegfx::fround(double(aBulletArea.Left()) * fSpacingFactorX);
+    tools::Long nStretchBulletWidth = basegfx::fround(double(aBulletArea.GetWidth()) * fSpacingFactorX);
     aBulletArea = tools::Rectangle(Point(nStretchBulletX, aBulletArea.Top()),
                              Size(nStretchBulletWidth, aBulletArea.GetHeight()) );
 

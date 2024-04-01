@@ -419,12 +419,10 @@ public:
     void            QuickDelete( const ESelection& rSel );
     void            QuickMarkToBeRepainted( sal_Int32 nPara );
 
-    void setGlobalScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY);
 
-    void getGlobalSpacingScale(double& rX, double& rY) const;
-    basegfx::B2DTuple getGlobalSpacingScale() const;
-    void getGlobalFontScale(double& rX, double& rY) const;
-    basegfx::B2DTuple getGlobalFontScale() const;
+    void setScalingParameters(ScalingParameters const& rScalingParameters);
+    void resetScalingParameters();
+    ScalingParameters getScalingParameters() const;
 
     void setRoundFontSizeToPt(bool bRound) const;
 

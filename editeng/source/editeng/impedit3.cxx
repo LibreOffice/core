@@ -1011,8 +1011,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         // Search for Tab-Pos...
                         tools::Long nCurPos = nTmpWidth + nStartX;
                         // consider scaling
-                        if (maStatus.DoStretch() && (mfFontScaleX != 100.0))
-                            nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(mfFontScaleX, 1.0));
+                        double fFontScalingX = maScalingParameters.fFontX;
+                        if (maStatus.DoStretch() && (fFontScalingX != 100.0))
+                            nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(fFontScalingX, 1.0));
 
                         short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTextLeft()/* + rLRItem.GetTextLeft()*/ + nSpaceBeforeAndMinLabelWidth);
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, maEditDoc.GetDefTab() );
@@ -1490,7 +1491,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 sal_uInt16 nPropLineSpace = rLSItem.GetPropLineSpace();
                 double fProportionalScale = double(nPropLineSpace) / 100.0;
                 constexpr const double f80Percent = 8.0 / 10.0;
-                double fSpacingFactor = mfSpacingScaleY / 100.0;
+                double fSpacingFactor = maScalingParameters.fSpacingY / 100.0;
                 if (nPropLineSpace && nPropLineSpace < 100)
                 {
                     // Adapted code from sw/source/core/text/itrform2.cxx
@@ -1514,9 +1515,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
             else if (rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Off)
             {
-                if (mfSpacingScaleY < 100.0)
+                if (maScalingParameters.fSpacingY < 100.0)
                 {
-                    double fSpacingFactor = mfSpacingScaleY / 100.0;
+                    double fSpacingFactor = maScalingParameters.fSpacingY / 100.0;
                     sal_uInt16 nPropLineSpace = basegfx::fround(100.0 * fSpacingFactor);
                     if (nPropLineSpace && nPropLineSpace < 100)
                     {
@@ -2991,23 +2992,25 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
         if (maStatus.DoStretch())
         {
-            if (mfFontScaleY != 100.0)
+            if (maScalingParameters.fFontY != 100.0)
             {
                 double fHeightRounded = roundToNearestPt(aRealSz.Height());
-                double fNewHeight = fHeightRounded * (mfFontScaleY / 100.0);
+                double fNewHeight = fHeightRounded * (maScalingParameters.fFontY / 100.0);
                 fNewHeight = roundToNearestPt(fNewHeight);
                 aRealSz.setHeight(basegfx::fround(fNewHeight));
             }
-            if (mfFontScaleX != 100.0)
+            if (maScalingParameters.fFontX != 100.0)
             {
-                if (mfFontScaleX == mfFontScaleY && nRelWidth == 100 )
+                auto fFontX = maScalingParameters.fFontX;
+                auto fFontY = maScalingParameters.fFontY;
+                if (fFontX == fFontY && nRelWidth == 100 )
                 {
                     aRealSz.setWidth( 0 );
                 }
                 else
                 {
                     double fWidthRounded = roundToNearestPt(aRealSz.Width());
-                    double fNewWidth = fWidthRounded * (mfFontScaleX / 100.0);
+                    double fNewWidth = fWidthRounded * (fFontX / 100.0);
                     fNewWidth = roundToNearestPt(fNewWidth);
                     aRealSz.setWidth(basegfx::fround(fNewWidth));
 
@@ -3024,15 +3027,15 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
   >0        >100        > (Proportional)
   <0        >100        < (The amount, thus disproportional)
 */
-                    if (nKerning < 0 && mfFontScaleX > 100.0)
+                    if (nKerning < 0 && fFontX > 100.0)
                     {
                         // disproportional
-                        nKerning = basegfx::fround((double(nKerning) * 100.0) / mfFontScaleX);
+                        nKerning = basegfx::fround((double(nKerning) * 100.0) / fFontX);
                     }
                     else if ( nKerning )
                     {
                         // Proportional
-                        nKerning = basegfx::fround((double(nKerning) * mfFontScaleX) / 100.0);
+                        nKerning = basegfx::fround((double(nKerning) * fFontX) / 100.0);
                     }
                     rFont.SetFixKerning( static_cast<short>(nKerning) );
                 }
@@ -4456,30 +4459,20 @@ void ImpEditEngine::SetFlatMode( bool bFlat )
         pActiveView->ShowCursor();
 }
 
-void ImpEditEngine::setScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY)
+void ImpEditEngine::setScalingParameters(ScalingParameters const& rScalingParameters)
 {
-    bool bChanged;
+    ScalingParameters aNewScalingParameters(rScalingParameters);
 
-    if (!IsEffectivelyVertical())
+    if (IsEffectivelyVertical())
     {
-        bChanged = mfFontScaleX != fFontScaleX || mfFontScaleY != fFontScaleY ||
-                   mfSpacingScaleX != fSpacingScaleX || mfSpacingScaleY != fSpacingScaleY;
-        mfFontScaleX = fFontScaleX;
-        mfFontScaleY = fFontScaleY;
-        mfSpacingScaleX = fSpacingScaleX;
-        mfSpacingScaleY = fSpacingScaleY;
-    }
-    else
-    {
-        bChanged = mfFontScaleX != fFontScaleY || mfFontScaleY != fFontScaleX ||
-                   mfSpacingScaleX != fSpacingScaleY || mfSpacingScaleY != fSpacingScaleX;
-        mfFontScaleX = fFontScaleY;
-        mfFontScaleY = fFontScaleX;
-        mfSpacingScaleX = fSpacingScaleY;
-        mfSpacingScaleY = fSpacingScaleX;
+        std::swap(aNewScalingParameters.fFontX, aNewScalingParameters.fFontY);
+        std::swap(aNewScalingParameters.fSpacingX, aNewScalingParameters.fSpacingY);
     }
 
-    if (bChanged && maStatus.DoStretch())
+    bool bScalingChanged = maScalingParameters != aNewScalingParameters;
+    maScalingParameters = aNewScalingParameters;
+
+    if (bScalingChanged && maStatus.DoStretch())
     {
         FormatFullDoc();
         // (potentially) need everything redrawn

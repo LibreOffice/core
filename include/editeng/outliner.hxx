@@ -936,8 +936,13 @@ public:
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBulletPos );
 
-    void setGlobalScale(double rFontX = 100.0, double rFontY = 100.0, double rSpacingX = 100.0, double rSpacingY = 100.0);
-    void getGlobalScale(double& rFontX, double& rFontY, double& rSpacingX, double& rSpacingY) const;
+    ScalingParameters getScalingParameters() const;
+    void setScalingParameters(ScalingParameters const& rScalingParameters);
+    void resetScalingParameters()
+    {
+        setScalingParameters(ScalingParameters());
+    }
+
     void setRoundFontSizeToPt(bool bRound) const;
 
     void            EraseVirtualDevice();

@@ -74,16 +74,16 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pEditEngine->GetParagraphCount());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(87.49, pEditEngine->getGlobalFontScale().getY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(90.0, pEditEngine->getGlobalSpacingScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(87.49, pEditEngine->getScalingParameters().fFontY, 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(90.0, pEditEngine->getScalingParameters().fSpacingY, 1E-2);
 
     // Add paragraph 5
     rEditView.SetSelection(ESelection(4, 0, 4, 0));
     rEditView.InsertText(u"\nD5"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pEditEngine->GetParagraphCount());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(54.68, pEditEngine->getGlobalFontScale().getY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pEditEngine->getGlobalSpacingScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(54.68, pEditEngine->getScalingParameters().fFontY, 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pEditEngine->getScalingParameters().fSpacingY, 1E-2);
 
     // Add paragraph 6
     rEditView.SetSelection(ESelection(5, 0, 5, 0));
@@ -106,8 +106,8 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pEditEngine->GetParagraphCount());
 
     // not ideal - scaling should be 100%, but close enough
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.05, pEditEngine->getGlobalFontScale().getY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pEditEngine->getGlobalSpacingScale().getY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(99.05, pEditEngine->getScalingParameters().fFontY, 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pEditEngine->getScalingParameters().fSpacingY, 1E-2);
 
     // are we still in text edit mode?
     CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
