@@ -134,8 +134,6 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     GraphicMetadata      aMetadata;
     bool                 bOwnStream;
 
-    SAL_DLLPRIVATE void                ImpConstruct();
-
     SAL_DLLPRIVATE bool            ImpDetectBMP( SvStream& rStm, bool bExtendedInfo );
     SAL_DLLPRIVATE bool            ImpDetectGIF( SvStream& rStm, bool bExtendedInfo );
     SAL_DLLPRIVATE bool            ImpDetectJPG( SvStream& rStm, bool bExtendedInfo );

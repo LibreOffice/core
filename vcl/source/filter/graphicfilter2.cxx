@@ -32,15 +32,12 @@ GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     aPathExt( rPath.GetFileExtension().toAsciiLowerCase() ),
     bOwnStream( true )
 {
-    ImpConstruct();
 }
 
 GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const OUString* pPath) :
     pFileStm    ( &rInStream ),
     bOwnStream  ( false )
 {
-    ImpConstruct();
-
     if ( pPath )
     {
         INetURLObject aURL( *pPath );
@@ -90,16 +87,6 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
         rStm.SetEndian( nOldFormat );
     }
     return bRet;
-}
-
-void GraphicDescriptor::ImpConstruct()
-{
-    aMetadata.mnFormat = GraphicFileFormat::NOT;
-    aMetadata.mnBitsPerPixel = 0;
-    aMetadata.mnPlanes = 0;
-    aMetadata.mnNumberOfImageComponents = 0;
-    aMetadata.mbIsTransparent = false;
-    aMetadata.mbIsAlpha = false;
 }
 
 bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
