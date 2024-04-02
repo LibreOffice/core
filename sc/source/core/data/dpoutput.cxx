@@ -1095,7 +1095,10 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
             if (mpFormats)
             {
                 auto& rColumnField = mpColFields[nField];
-                tools::Long nDimension = rColumnField.mnDim;
+                tools::Long nDimension = -2;
+                if (!rColumnField.mbDataLayout)
+                    nDimension = rColumnField.mnDim;
+
                 for (auto& aFormat : mpFormats->getVector())
                 {
                     if (aFormat.nField == nDimension && aFormat.nDataIndex == nColumnIndex)
@@ -1197,7 +1200,9 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
             if (mpFormats)
             {
                 auto& rRowField = mpRowFields[nField];
-                tools::Long nDimension = rRowField.mnDim;
+                tools::Long nDimension = -2;
+                if (!rRowField.mbDataLayout)
+                    nDimension = rRowField.mnDim;
                 for (auto& aFormat : mpFormats->getVector())
                 {
                     if (aFormat.nField == nDimension && aFormat.nDataIndex == nRowIndex)
