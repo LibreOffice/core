@@ -154,15 +154,17 @@ bool ScFormulaListener::NeedsRepaint() const
 ScColorScaleEntry::ScColorScaleEntry():
     mnVal(0),
     mpFormat(nullptr),
-    meType(COLORSCALE_VALUE)
+    meType(COLORSCALE_VALUE),
+    meMode(ScConditionMode::Equal)
 {
 }
 
-ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType):
+ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType, ScConditionMode eMode):
     mnVal(nVal),
     mpFormat(nullptr),
     maColor(rCol),
-    meType(eType)
+    meType(eType),
+    meMode(eMode)
 {
 }
 
@@ -170,7 +172,8 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
     mpFormat(rEntry.mpFormat),
     maColor(rEntry.maColor),
-    meType(rEntry.meType)
+    meType(rEntry.meType),
+    meMode(rEntry.meMode)
 {
     setListener();
     if(rEntry.mpCell)
@@ -185,7 +188,8 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     mnVal(rEntry.mnVal),
     mpFormat(rEntry.mpFormat),
     maColor(rEntry.maColor),
-    meType(rEntry.meType)
+    meType(rEntry.meType),
+    meMode(rEntry.meMode)
 {
     setListener();
     if(rEntry.mpCell)
@@ -1066,6 +1070,30 @@ void ScDataBarFormat::EnsureSize()
     }
 }
 
+static bool Compare(double nVal1, double nVal2, const ScIconSetFormat::const_iterator& itr)
+{
+    switch ((*itr)->GetMode())
+    {
+        case ScConditionMode::Equal:
+            return nVal1 == nVal2;
+        case ScConditionMode::Less:
+            return nVal1 < nVal2;
+        case ScConditionMode::Greater:
+            return nVal1 > nVal2;
+        case ScConditionMode::EqLess:
+            return nVal1 <= nVal2;
+        case ScConditionMode::EqGreater:
+            return nVal1 >= nVal2;
+        case ScConditionMode::NotEqual:
+            return nVal1 != nVal2;
+
+        default:
+            break;
+    }
+
+    return false;
+}
+
 ScIconSetFormatData::ScIconSetFormatData(ScIconSetFormatData const& rOther)
     : eIconSetType(rOther.eIconSetType)
     , mbShowValue(rOther.mbShowValue)
@@ -1131,27 +1159,32 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
     // now we have for sure a value
     double nVal = rCell.getValue();
 
-    if (mpFormatData->m_Entries.size() < 2)
+    if (mpFormatData->m_Entries.size() < 1)
         return nullptr;
 
     double nMin = GetMinValue();
     double nMax = GetMaxValue();
 
-    sal_Int32 nIndex = 0;
+    sal_Int32 nIndex = -1;
+    ScConditionMode eMode = ScConditionMode::EqGreater;
     const_iterator itr = begin();
-    ++itr;
-    double nValMax = CalcValue(nMin, nMax, itr);
+    double nValRef = 0;
 
-    ++itr;
-    while(itr != end() && nVal >= nValMax)
+    int i = 0;
+    while(itr != end())
     {
-        ++nIndex;
-        nValMax = CalcValue(nMin, nMax, itr);
-        ++itr;
+        nValRef = CalcValue(nMin, nMax, itr);
+        if (Compare(nVal, nValRef, itr))
+        {
+            nIndex = i;
+            eMode = (*itr)->GetMode();
+        }
+        itr++;
+        i++;
     }
 
-    if(nVal >= nValMax)
-        ++nIndex;
+    if (nIndex == -1)
+        return nullptr;
 
     std::unique_ptr<ScIconSetInfo> pInfo(new ScIconSetInfo);
 
@@ -1184,6 +1217,7 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
     }
 
     pInfo->mbShowValue = mpFormatData->mbShowValue;
+    pInfo->eConditionMode = eMode;
     return pInfo;
 }
 

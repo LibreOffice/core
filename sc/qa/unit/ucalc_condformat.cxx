@@ -731,9 +731,9 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testIconSet)
 
     ScIconSetFormat* pEntry = new ScIconSetFormat(m_pDoc);
     ScIconSetFormatData* pData = new ScIconSetFormatData;
-    pData->m_Entries.emplace_back(new ScColorScaleEntry(0, COL_BLUE));
-    pData->m_Entries.emplace_back(new ScColorScaleEntry(1, COL_GREEN));
-    pData->m_Entries.emplace_back(new ScColorScaleEntry(2, COL_RED));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(0, COL_BLUE, COLORSCALE_VALUE, ScConditionMode::EqGreater));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(1, COL_GREEN, COLORSCALE_VALUE, ScConditionMode::EqGreater));
+    pData->m_Entries.emplace_back(new ScColorScaleEntry(2, COL_RED, COLORSCALE_VALUE, ScConditionMode::Equal));
     pEntry->SetIconSetData(pData);
 
     m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
@@ -742,11 +742,10 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testIconSet)
     static struct {
         double nVal; sal_Int32 nIndex;
     } const aTests[] = {
-        { -1.0, 0 },
         { 0.0, 0 },
         { 1.0, 1 },
         { 2.0, 2 },
-        { 3.0, 2 }
+        { 3.0, 1 }
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {

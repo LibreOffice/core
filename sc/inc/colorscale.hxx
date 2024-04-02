@@ -48,11 +48,13 @@ private:
     ScConditionalFormat* mpFormat;
     Color maColor;
     ScColorScaleEntryType meType;
+    ScConditionMode meMode;
 
     void setListener();
 
 public:
-    SC_DLLPUBLIC ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType = COLORSCALE_VALUE);
+    SC_DLLPUBLIC ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType = COLORSCALE_VALUE,
+            ScConditionMode eMode = ScConditionMode::Equal);
     SC_DLLPUBLIC ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
     ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
@@ -74,7 +76,9 @@ public:
     SC_DLLPUBLIC OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;
 
     ScColorScaleEntryType GetType() const { return meType;}
+    ScConditionMode GetMode() const { return meMode; }
     SC_DLLPUBLIC void SetType( ScColorScaleEntryType eType );
+    SC_DLLPUBLIC void SetMode( ScConditionMode eMode ) { meMode = eMode; }
 
     void SetRepaintCallback(ScConditionalFormat* pParent);
     void SetRepaintCallback(const std::function<void()>& func);
