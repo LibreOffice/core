@@ -21,6 +21,8 @@
 
 #include <scitems.hxx>
 
+#include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <editeng/brushitem.hxx>
@@ -1311,6 +1313,8 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     aAppOptions.SetAutoComplete(true);
     SC_MOD()->SetAppOptions(aAppOptions);
 
+    OUString sThemeName;
+
     for (const beans::PropertyValue& rValue : rArguments)
     {
         if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
@@ -1319,6 +1323,8 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
             options.SetAutoSpell(rValue.Value.get<bool>());
             GetDocument()->SetDocOptions(options);
         }
+        else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
+            sThemeName = rValue.Value.get<OUString>();
     }
 
     // show us the text exactly
@@ -1335,6 +1341,16 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     auto xChanges = comphelper::ConfigurationChanges::create();
     officecfg::Office::Common::Save::Document::WarnAlienFormat::set(false, xChanges);
     xChanges->commit();
+
+    // if we know what theme the user wants, then we can dispatch that now early
+    if (!sThemeName.isEmpty())
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            { "NewTheme", uno::Any(sThemeName) }
+        }));
+        comphelper::dispatchCommand(".uno:ChangeTheme", aPropertyValues);
+    }
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )

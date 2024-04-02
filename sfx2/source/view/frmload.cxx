@@ -26,7 +26,6 @@
 #include <sfx2/doctempl.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -49,7 +48,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <comphelper/interaction.hxx>
-#include <comphelper/lok.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -59,7 +57,6 @@
 #include <sal/log.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/colorcfg.hxx>
 #include <unotools/fcm.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -711,7 +708,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             const OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", OUString() );
             xModel.set( m_aContext->getServiceManager()->createInstanceWithContext(sServiceName, m_aContext), UNO_QUERY_THROW );
 
-
             // load resp. init it
             const Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
             if ( bInitNewModel )
@@ -770,32 +766,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         }
 
         bLoadSuccess = true;
-
-        const OUString sThemes = aDescriptor.getOrDefault("Theme", OUString());
-        if (comphelper::LibreOfficeKit::isActive() && !sThemes.isEmpty())
-        {
-            const OUString sServiceName = aDescriptor.getOrDefault("DocumentService", OUString());
-            OUString sTheme, sType, sName;
-            sal_Int32 nTheme = 0, nIndex = 0;
-            do
-            {
-                sTheme = sThemes.getToken(0, ';', nTheme);
-                sType = sTheme.getToken(0, ':', nIndex);
-                sName = sTheme.getToken(0, ':', nIndex);
-                if (sType == SfxLokHelper::getDocumentType(sServiceName))
-                {
-                    svtools::EditableColorConfig aConfig;
-                    if (aConfig.GetCurrentSchemeName() != sName)
-                    {
-                        aConfig.LoadScheme(sName);
-                        break;
-                    }
-                }
-                nIndex = 0;
-
-            }
-            while ( nTheme >= 0 );
-        }
     }
     catch ( Exception& )
     {

@@ -388,21 +388,6 @@ void SfxLokHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
         g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
-OUString SfxLokHelper::getDocumentType(const OUString& sDocumentService)
-{
-    if (sDocumentService == "com.sun.star.sheet.SpreadsheetDocument")
-        return "spreadsheet";
-    else if (sDocumentService == "com.sun.star.presentation.PresentationDocument")
-        return "presentation";
-    else if (sDocumentService == "com.sun.star.drawing.DrawingDocument")
-        return "drawing";
-    else if (sDocumentService == "com.sun.star.text.TextDocument" ||
-             sDocumentService == "com.sun.star.text.WebDocument")
-        return "text";
-
-    return OUString();
-}
-
 void SfxLokHelper::setDefaultTimezone(bool isSet, const OUString& rTimezone)
 {
     g_isDefaultTimezoneSet = isSet;
