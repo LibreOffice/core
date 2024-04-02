@@ -27,15 +27,14 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace tools { class Rectangle; }
 class Ruler;
 
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef ::comphelper::WeakComponentImplHelper<
             css::accessibility::XAccessible,
             css::accessibility::XAccessibleComponent,
             css::accessibility::XAccessibleContext,
@@ -43,7 +42,7 @@ typedef ::cppu::WeakComponentImplHelper<
             css::lang::XServiceInfo >
             SvtRulerAccessible_Base;
 
-class SvtRulerAccessible final : public ::cppu::BaseMutex, public SvtRulerAccessible_Base
+class SvtRulerAccessible final : public SvtRulerAccessible_Base
 {
 public:
     //=====  internal  ========================================================
@@ -146,13 +145,7 @@ private:
 
     virtual ~SvtRulerAccessible() override;
 
-    virtual void SAL_CALL disposing() override;
-
-    /// @returns true if it's disposed or in disposing
-    inline bool IsAlive() const;
-
-    /// @throws DisposedException if it's not alive
-    void ThrowExceptionIfNotAlive();
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     /// @Return the object's current bounding box relative to the desktop.
     ///
@@ -177,11 +170,6 @@ private:
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32 mnClientId;
 };
-
-inline bool SvtRulerAccessible::IsAlive() const
-{
-    return !rBHelper.bDisposed && !rBHelper.bInDispose;
-}
 
 #endif
 

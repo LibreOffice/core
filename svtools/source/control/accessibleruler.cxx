@@ -42,7 +42,6 @@ using namespace ::com::sun::star::accessibility;
 SvtRulerAccessible::SvtRulerAccessible(
     uno::Reference< XAccessible > xParent, Ruler& rRepr, OUString aName ) :
 
-    SvtRulerAccessible_Base( m_aMutex ),
     msName(std::move( aName )),
     mxParent(std::move( xParent )),
     mpRepr( &rRepr ),
@@ -52,8 +51,7 @@ SvtRulerAccessible::SvtRulerAccessible(
 
 SvtRulerAccessible::~SvtRulerAccessible()
 {
-
-    if( IsAlive() )
+    if( !m_bDisposed )
     {
         osl_atomic_increment( &m_refCount );
         dispose();      // set mpRepr = NULL & release all children
@@ -78,14 +76,10 @@ sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint )
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )
 {
-    ::osl::MutexGuard           aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+    throwIfDisposed(aGuard);
 
-    ThrowExceptionIfNotAlive();
-
-    uno::Reference< XAccessible >   xRet;
-
-
-    return xRet;
+    return uno::Reference< XAccessible >();
 }
 
 awt::Rectangle SAL_CALL SvtRulerAccessible::getBounds()
@@ -114,9 +108,8 @@ awt::Size SAL_CALL SvtRulerAccessible::getSize()
 
 bool SvtRulerAccessible::isVisible()
 {
-    ::osl::MutexGuard           aGuard( m_aMutex );
-
-    ThrowExceptionIfNotAlive();
+    std::unique_lock aGuard( m_aMutex );
+    throwIfDisposed(aGuard);
 
     return mpRepr->IsVisible();
 }
@@ -124,9 +117,8 @@ bool SvtRulerAccessible::isVisible()
 //=====  XAccessibleContext  ==================================================
 sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-
-    ThrowExceptionIfNotAlive();
+    std::unique_lock aGuard( m_aMutex );
+    throwIfDisposed(aGuard);
 
     return 0;
 }
@@ -145,7 +137,8 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleParent()
 
 sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+
     //  Use a simple but slow solution for now.  Optimize later.
 
     //  Iterate over all the parent's children and search for this object.
@@ -195,16 +188,17 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL SvtRulerAccessible::getAccessi
 
 sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
 {
-    ::osl::MutexGuard                       aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+
     sal_Int64 nStateSet = 0;
 
-    if( IsAlive() )
+    if( !m_bDisposed )
     {
         nStateSet |= AccessibleStateType::ENABLED;
 
         nStateSet |= AccessibleStateType::SHOWING;
 
-        if( isVisible() )
+        if( mpRepr->IsVisible() )
             nStateSet |= AccessibleStateType::VISIBLE;
 
         if ( mpRepr->GetStyle() & WB_HORZ )
@@ -218,7 +212,8 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
 
 lang::Locale SAL_CALL SvtRulerAccessible::getLocale()
 {
-    ::osl::MutexGuard                           aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+
     if( mxParent.is() )
     {
         uno::Reference< XAccessibleContext >    xParentContext( mxParent->getAccessibleContext() );
@@ -234,7 +229,7 @@ void SAL_CALL SvtRulerAccessible::addAccessibleEventListener( const uno::Referen
 {
     if (xListener.is())
     {
-        ::osl::MutexGuard   aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if (!mnClientId)
             mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
         comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
@@ -246,7 +241,7 @@ void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Refe
     if (!(xListener.is() && mnClientId))
         return;
 
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
     if ( !nListenerCount )
@@ -262,29 +257,43 @@ void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Refe
 
 void SAL_CALL SvtRulerAccessible::grabFocus()
 {
+    VclPtr<Ruler> xRepr;
+    {
+        std::unique_lock aGuard( m_aMutex );
+        xRepr = mpRepr;
+    }
+    if (!xRepr)
+        throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
+
     SolarMutexGuard     aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
-
-    ThrowExceptionIfNotAlive();
-
-    mpRepr->GrabFocus();
+    xRepr->GrabFocus();
 }
 
 sal_Int32 SvtRulerAccessible::getForeground(  )
 {
-    SolarMutexGuard     aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
-    ThrowExceptionIfNotAlive();
+    VclPtr<Ruler> xRepr;
+    {
+        std::unique_lock aGuard( m_aMutex );
+        xRepr = mpRepr;
+    }
+    if (!xRepr)
+        throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    return sal_Int32(mpRepr->GetControlForeground());
+    SolarMutexGuard     aSolarGuard;
+    return sal_Int32(xRepr->GetControlForeground());
 }
 sal_Int32 SvtRulerAccessible::getBackground(  )
 {
-    SolarMutexGuard     aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
-    ThrowExceptionIfNotAlive();
+    VclPtr<Ruler> xRepr;
+    {
+        std::unique_lock aGuard( m_aMutex );
+        xRepr = mpRepr;
+    }
+    if (!xRepr)
+        throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    return sal_Int32(mpRepr->GetControlBackground());
+    SolarMutexGuard     aSolarGuard;
+    return sal_Int32(xRepr->GetControlBackground());
 }
 
 // XServiceInfo
@@ -309,12 +318,8 @@ Sequence< sal_Int8 > SAL_CALL SvtRulerAccessible::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL SvtRulerAccessible::disposing()
+void SvtRulerAccessible::disposing(std::unique_lock<std::mutex>&)
 {
-    if( rBHelper.bDisposed )
-        return;
-
-    ::osl::MutexGuard   aGuard( m_aMutex );
     mpRepr = nullptr;      // object dies with representation
 
     // Send a disposing to all listeners.
@@ -328,27 +333,30 @@ void SAL_CALL SvtRulerAccessible::disposing()
 
 tools::Rectangle SvtRulerAccessible::GetBoundingBoxOnScreen()
 {
-    SolarMutexGuard     aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    VclPtr<Ruler> xRepr;
+    {
+        std::unique_lock aGuard( m_aMutex );
+        xRepr = mpRepr;
+    }
+    if (!xRepr)
+        throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    ThrowExceptionIfNotAlive();
-    return tools::Rectangle( mpRepr->GetParent()->OutputToAbsoluteScreenPixel( mpRepr->GetPosPixel() ), mpRepr->GetSizePixel() );
+    SolarMutexGuard     aSolarGuard;
+    return tools::Rectangle( xRepr->GetParent()->OutputToAbsoluteScreenPixel( xRepr->GetPosPixel() ), xRepr->GetSizePixel() );
 }
 
 tools::Rectangle SvtRulerAccessible::GetBoundingBox()
 {
+    VclPtr<Ruler> xRepr;
+    {
+        std::unique_lock aGuard( m_aMutex );
+        xRepr = mpRepr;
+    }
+    if (!xRepr)
+        throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
+
     SolarMutexGuard     aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
-
-    ThrowExceptionIfNotAlive();
-
-    return tools::Rectangle( mpRepr->GetPosPixel(), mpRepr->GetSizePixel() );
-}
-
-void SvtRulerAccessible::ThrowExceptionIfNotAlive()
-{
-    if( rBHelper.bDisposed || rBHelper.bInDispose )
-        throw lang::DisposedException();
+    return tools::Rectangle( xRepr->GetPosPixel(), xRepr->GetSizePixel() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
