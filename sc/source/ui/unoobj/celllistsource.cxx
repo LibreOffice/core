@@ -309,9 +309,8 @@ namespace calc
         aEvent.Source.set(*this);
 
         m_aListEntryListeners.forEach(aGuard,
-            [&aEvent, &aGuard] (const css::uno::Reference<css::form::binding::XListEntryListener>& l)
+            [&aEvent] (const css::uno::Reference<css::form::binding::XListEntryListener>& l)
             {
-                aGuard.unlock();
                 try
                 {
                     l->allEntriesChanged( aEvent );
@@ -324,7 +323,6 @@ namespace calc
                 {
                     TOOLS_WARN_EXCEPTION( "sc", "OCellListSource::notifyModified: caught a (non-runtime) exception!" );
                 }
-                aGuard.lock();
             });
     }
 
