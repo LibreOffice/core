@@ -44,8 +44,8 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     auto pTextObject = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTextObject);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pTextObject->GetFontScale(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pTextObject->GetSpacingScale(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pTextObject->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pTextObject->GetSpacingScale(), 1E-4);
 
     {
         OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
@@ -73,16 +73,16 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rEditEngine.GetParagraphCount());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(92.5, rEditEngine.getScalingParameters().fFontY, 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(80.0, rEditEngine.getScalingParameters().fSpacingY, 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.925, rEditEngine.getScalingParameters().fFontY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, rEditEngine.getScalingParameters().fSpacingY, 1E-4);
 
     // Add paragraph 5
     rEditView.SetSelection(ESelection(4, 0, 4, 0));
     rEditView.InsertText(u"\nD5"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rEditEngine.GetParagraphCount());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(70.0, rEditEngine.getScalingParameters().fFontY, 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(80.0, rEditEngine.getScalingParameters().fSpacingY, 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.7, rEditEngine.getScalingParameters().fFontY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, rEditEngine.getScalingParameters().fSpacingY, 1E-4);
 
     // Add paragraph 6
     rEditView.SetSelection(ESelection(5, 0, 5, 0));
@@ -104,17 +104,17 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     rEditView.DeleteSelected();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rEditEngine.GetParagraphCount());
 
-    // We are back to 100%
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, rEditEngine.getScalingParameters().fFontY, 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, rEditEngine.getScalingParameters().fSpacingY, 1E-2);
+    // not ideal - scaling should be 100%, but close enough
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, rEditEngine.getScalingParameters().fFontY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, rEditEngine.getScalingParameters().fSpacingY, 1E-4);
 
     // are we still in text edit mode?
     CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
     pView1->SdrEndTextEdit();
     CPPUNIT_ASSERT_EQUAL(false, pView1->IsTextEdit());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pTextObject->GetFontScale(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, pTextObject->GetSpacingScale(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pTextObject->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pTextObject->GetSpacingScale(), 1E-4);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -2336,7 +2336,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         if (rValue >>= fScale)
         {
             SdrTextFitToSizeTypeItem aItem(pSdrObject->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
-            aItem.setFontScale(fScale);
+            aItem.setFontScale(fScale / 100.0);
             pSdrObject->SetMergedItem(aItem);
             return true;
         }
@@ -2349,7 +2349,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         if (rValue >>= fScale)
         {
             SdrTextFitToSizeTypeItem aItem(pSdrObject->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
-            aItem.setSpacingScale(fScale);
+            aItem.setSpacingScale(fScale / 100.0);
             pSdrObject->SetMergedItem(aItem);
             return true;
         }
@@ -2875,7 +2875,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         auto* pTextObject = getTextObjectWithFitToSize(GetSdrObject());
         if (pTextObject)
         {
-            rValue <<= pTextObject->GetFontScale();
+            rValue <<= pTextObject->GetFontScale() * 100.0;
         }
         break;
     }
@@ -2885,7 +2885,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         auto* pTextObject = getTextObjectWithFitToSize(GetSdrObject());
         if (pTextObject)
         {
-            rValue <<= pTextObject->GetSpacingScale();
+            rValue <<= pTextObject->GetSpacingScale() * 100.0;
         }
         break;
     }

@@ -158,21 +158,15 @@ struct ParagraphInfos
 
 struct ScalingParameters
 {
-    double fFontX = 100.0;
-    double fFontY = 100.0;
-    double fSpacingX = 100.0;
-    double fSpacingY = 100.0;
+    double fFontX = 1.0;
+    double fFontY = 1.0;
+    double fSpacingX = 1.0;
+    double fSpacingY = 1.0;
 
-    bool operator==(const ScalingParameters& rOther) const
-    {
-        return fFontX == rOther.fFontX
-            && fFontY == rOther.fFontY
-            && fSpacingX == rOther.fSpacingX
-            && fSpacingY == rOther.fSpacingY;
-    }
+    bool operator==(const ScalingParameters& rOther) const = default;
     bool areValuesDefault()
     {
-        return fFontX == 100.0 && fFontY == 100.0 && fSpacingX == 100.0 && fSpacingY == 100.0;
+        return fFontX == 1.0 && fFontY == 1.0 && fSpacingX == 1.0 && fSpacingY == 1.0;
     }
 };
 

@@ -929,8 +929,8 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     tools::Long nXTolMi=nWantWdt/25;  // tolerance: -4%
     tools::Long nXCorr =nWantWdt/20;  // correction scale: 5%
 
-    double nX = (nWantWdt * 100.0) / double(nIsWdt); // calculate X stretching
-    double nY = (nWantHgt * 100.0) / double(nIsHgt); // calculate Y stretching
+    double nX = nWantWdt / double(nIsWdt); // calculate X stretching
+    double nY = nWantHgt / double(nIsHgt); // calculate Y stretching
     bool bChkX = true;
     if (bNoStretching)
     { // might only be possible proportionally
@@ -949,14 +949,14 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     {
         if (nX < 0.0)
             nX = -nX;
-        if (nX < 1.0)
+        if (nX < 0.01)
         {
-            nX = 1.0;
+            nX = 0.01;
             bNoMoreLoop = true;
         }
-        if (nX > 65535.0)
+        if (nX > 655.35)
         {
-            nX = 65535.0;
+            nX = 655.35;
             bNoMoreLoop = true;
         }
 
@@ -964,14 +964,14 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         {
             nY = -nY;
         }
-        if (nY < 1.0)
+        if (nY < 0.01)
         {
-            nY = 1.0;
+            nY = 0.01;
             bNoMoreLoop = true;
         }
-        if (nY > 65535.0)
+        if (nY > 655.35)
         {
-            nY = 65535.0;
+            nY = 655.35;
             bNoMoreLoop = true;
         }
 
@@ -1276,7 +1276,7 @@ void SdrTextObj::setupAutoFitText(SdrOutliner& rOutliner, const Size& rTextBoxSi
 
     if (fFontScale > 0.0 && fSpacingScale > 0.0 && !mbInEditMode)
     {
-        rOutliner.setScalingParameters({ fFontScale, fFontScale, 100.0, fSpacingScale });
+        rOutliner.setScalingParameters({ fFontScale, fFontScale, 1.0, fSpacingScale });
     }
     else
     {

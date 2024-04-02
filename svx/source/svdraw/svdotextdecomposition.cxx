@@ -1375,7 +1375,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // to layout without mirroring
     const double fScaleX(fabs(aScale.getX()) / aOutlinerScale.getX());
     const double fScaleY(fabs(aScale.getY()) / aOutlinerScale.getY());
-    ScalingParameters aScalingParameters{fScaleX * 100.0, fScaleY * 100.0};
+    ScalingParameters aScalingParameters{fScaleX, fScaleY};
 
     rOutliner.setScalingParameters(aScalingParameters);
 

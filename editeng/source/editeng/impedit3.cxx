@@ -447,19 +447,19 @@ namespace
 {
 constexpr std::array<ScalingParameters, 13> constScaleLevels =
 {
-    ScalingParameters{100.0, 100.0, 100.0,  90.0 },
-    ScalingParameters{ 92.5,  92.5, 100.0,  90.0 },
-    ScalingParameters{ 92.5,  92.5, 100.0,  80.0 },
-    ScalingParameters{ 85.0,  85.0, 100.0,  90.0 },
-    ScalingParameters{ 85.0,  85.0, 100.0,  80.0 },
-    ScalingParameters{ 77.5,  77.5, 100.0,  80.0 },
-    ScalingParameters{ 70.0,  70.0, 100.0,  80.0 },
-    ScalingParameters{ 62.5,  62.5, 100.0,  80.0 },
-    ScalingParameters{ 55.0,  55.0, 100.0,  80.0 },
-    ScalingParameters{ 47.5,  47.5, 100.0,  80.0 },
-    ScalingParameters{ 40.0,  40.0, 100.0,  80.0 },
-    ScalingParameters{ 32.5,  32.5, 100.0,  80.0 },
-    ScalingParameters{ 25.0,  25.0, 100.0,  80.0 },
+    ScalingParameters{ 1.000,  1.000,  1.0,  0.9 },
+    ScalingParameters{ 0.925,  0.925,  1.0,  0.9 },
+    ScalingParameters{ 0.925,  0.925,  1.0,  0.8 },
+    ScalingParameters{ 0.850,  0.850,  1.0,  0.9 },
+    ScalingParameters{ 0.850,  0.850,  1.0,  0.8 },
+    ScalingParameters{ 0.775,  0.775,  1.0,  0.8 },
+    ScalingParameters{ 0.700,  0.700,  1.0,  0.8 },
+    ScalingParameters{ 0.625,  0.625,  1.0,  0.8 },
+    ScalingParameters{ 0.550,  0.550,  1.0,  0.8 },
+    ScalingParameters{ 0.475,  0.475,  1.0,  0.8 },
+    ScalingParameters{ 0.400,  0.400,  1.0,  0.8 },
+    ScalingParameters{ 0.325,  0.325,  1.0,  0.8 },
+    ScalingParameters{ 0.250,  0.250,  1.0,  0.8 },
 };
 
 } // end anonymous ns
@@ -1069,8 +1069,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         tools::Long nCurPos = nTmpWidth + nStartX;
                         // consider scaling
                         double fFontScalingX = maScalingParameters.fFontX;
-                        if (maStatus.DoStretch() && (fFontScalingX != 100.0))
-                            nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(fFontScalingX, 1.0));
+                        if (maStatus.DoStretch() && (fFontScalingX != 1.0))
+                            nCurPos = basegfx::fround(double(nCurPos) / std::max(fFontScalingX, 0.01));
 
                         short nAllSpaceBeforeText = short(rLRItem.GetTextLeft());
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText , maEditDoc.GetDefTab() );
@@ -1593,7 +1593,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 sal_uInt16 nPropLineSpace = rLSItem.GetPropLineSpace();
                 double fProportionalScale = double(nPropLineSpace) / 100.0;
                 constexpr const double f80Percent = 8.0 / 10.0;
-                double fSpacingFactor = maScalingParameters.fSpacingY / 100.0;
+                double fSpacingFactor = maScalingParameters.fSpacingY;
                 if (nPropLineSpace && nPropLineSpace < 100)
                 {
                     // Adapted code from sw/source/core/text/itrform2.cxx
@@ -1617,9 +1617,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
             else if (rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Off)
             {
-                if (maScalingParameters.fSpacingY < 100.0)
+                if (maScalingParameters.fSpacingY < 1.0)
                 {
-                    double fSpacingFactor = maScalingParameters.fSpacingY / 100.0;
+                    double fSpacingFactor = maScalingParameters.fSpacingY;
                     sal_uInt16 nPropLineSpace = basegfx::fround(100.0 * fSpacingFactor);
                     if (nPropLineSpace && nPropLineSpace < 100)
                     {
@@ -3085,14 +3085,14 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
         if (maStatus.DoStretch())
         {
-            if (maScalingParameters.fFontY != 100.0)
+            if (maScalingParameters.fFontY != 1.0)
             {
                 double fHeightRounded = roundToNearestPt(aRealSz.Height());
-                double fNewHeight = fHeightRounded * (maScalingParameters.fFontY / 100.0);
+                double fNewHeight = fHeightRounded * maScalingParameters.fFontY;
                 fNewHeight = roundToNearestPt(fNewHeight);
                 aRealSz.setHeight(basegfx::fround(fNewHeight));
             }
-            if (maScalingParameters.fFontX != 100.0)
+            if (maScalingParameters.fFontX != 1.0)
             {
                 auto fFontX = maScalingParameters.fFontX;
                 auto fFontY = maScalingParameters.fFontY;
@@ -3103,7 +3103,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                 else
                 {
                     double fWidthRounded = roundToNearestPt(aRealSz.Width());
-                    double fNewWidth = fWidthRounded * (fFontX / 100.0);
+                    double fNewWidth = fWidthRounded * fFontX;
                     fNewWidth = roundToNearestPt(fNewWidth);
                     aRealSz.setWidth(basegfx::fround(fNewWidth));
 
@@ -3120,15 +3120,15 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
   >0        >100        > (Proportional)
   <0        >100        < (The amount, thus disproportional)
 */
-                    if (nKerning < 0 && fFontX > 100.0)
+                    if (nKerning < 0 && fFontX > 1.0)
                     {
                         // disproportional
-                        nKerning = basegfx::fround((double(nKerning) * 100.0) / fFontX);
+                        nKerning = basegfx::fround(nKerning / fFontX);
                     }
                     else if ( nKerning )
                     {
                         // Proportional
-                        nKerning = basegfx::fround((double(nKerning) * fFontX) / 100.0);
+                        nKerning = basegfx::fround(nKerning * fFontX);
                     }
                     rFont.SetFixKerning( static_cast<short>(nKerning) );
                 }

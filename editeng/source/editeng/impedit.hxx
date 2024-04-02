@@ -780,34 +780,34 @@ private:
 
     double scaleXSpacingValue(tools::Long nXValue) const
     {
-        if (!maStatus.DoStretch() || maScalingParameters.fSpacingX == 100.0)
+        if (!maStatus.DoStretch() || maScalingParameters.fSpacingX == 1.0)
             return nXValue;
 
-        return double(nXValue) * (maScalingParameters.fSpacingX / 100.0);
+        return double(nXValue) * maScalingParameters.fSpacingX;
     }
 
     double scaleYSpacingValue(sal_uInt16 nYValue) const
     {
-        if (!maStatus.DoStretch() || maScalingParameters.fSpacingY == 100.0)
+        if (!maStatus.DoStretch() || maScalingParameters.fSpacingY == 1.0)
             return nYValue;
 
-        return double(nYValue) * (maScalingParameters.fSpacingY / 100.0);
+        return double(nYValue) * maScalingParameters.fSpacingY;
     }
 
     double scaleXFontValue(tools::Long nXValue) const
     {
-        if (!maStatus.DoStretch() || (maScalingParameters.fFontX == 100.0))
+        if (!maStatus.DoStretch() || (maScalingParameters.fFontX == 1.0))
             return nXValue;
 
-        return double(nXValue) * (maScalingParameters.fFontX / 100.0);
+        return double(nXValue) * maScalingParameters.fFontX;
     }
 
     double scaleYFontValue(sal_uInt16 nYValue) const
     {
-        if (!maStatus.DoStretch() || (maScalingParameters.fFontY == 100.0))
+        if (!maStatus.DoStretch() || (maScalingParameters.fFontY == 1.0))
             return nYValue;
 
-        return double(nYValue) * (maScalingParameters.fFontY / 100.0);
+        return double(nYValue) * maScalingParameters.fFontY;
     }
 
     void setRoundToNearestPt(bool bRound) { mbRoundToNearestPt = bRound; }
