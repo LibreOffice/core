@@ -3382,6 +3382,19 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
     pApp->m_pCallbackData = pLib->mpCallbackData = pData;
 }
 
+static SfxObjectShell* getSfxObjectShell(LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    if (!pDocument)
+        return nullptr;
+
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
+    if (!pBaseModel)
+        return nullptr;
+
+    return pBaseModel->GetObjectShell();
+}
+
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     comphelper::ProfileZone aZone("doc_saveAs");
@@ -3531,6 +3544,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(aFilterOptions);
         std::vector<OUString> aFilteredOptionVec;
         bool bTakeOwnership = false;
+        bool bCreateFromTemplate = false;
         MediaDescriptor aSaveMediaDescriptor;
         for (const auto& rOption : aOptionSeq)
         {
@@ -3538,8 +3552,19 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
                 bTakeOwnership = true;
             else if (rOption == "NoFileSync")
                 aSaveMediaDescriptor[u"NoFileSync"_ustr] <<= true;
+            else if (rOption == "FromTemplate")
+                bCreateFromTemplate = true;
             else
                 aFilteredOptionVec.push_back(rOption);
+        }
+
+        if (bCreateFromTemplate && bTakeOwnership)
+        {
+            if (SfxObjectShell* pObjectShell = getSfxObjectShell(pThis))
+            {
+                DateTime now( ::DateTime::SYSTEM );
+                pObjectShell->getDocProperties()->setCreationDate(now.GetUNODateTime());
+            }
         }
 
         aSaveMediaDescriptor[u"Overwrite"_ustr] <<= true;
@@ -5931,15 +5956,7 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 
 static char* getDocReadOnly(LibreOfficeKitDocument* pThis)
 {
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    if (!pDocument)
-        return nullptr;
-
-    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
-    if (!pBaseModel)
-        return nullptr;
-
-    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
     if (!pObjectShell)
         return nullptr;
 
