@@ -654,7 +654,7 @@ OUString replaceOrigin(
 
 
 void BackendImpl::PackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard &,
+    ::osl::ResettableMutexGuard & guard,
     bool doRegisterPackage,
     bool startup,
     ::rtl::Reference<AbortChannel> const &,
@@ -689,7 +689,10 @@ void BackendImpl::PackageImpl::processPackage_(
             if ((that->m_eContext != Context::Bundled && !startup)
                  || comphelper::LibreOfficeKit::isActive())
             {
-                if (m_isSchema)
+                bool bIsSchema = m_isSchema;
+                // tdf#159790 prevent lock-ordering deadlock, the code below might acquire the solar mutex
+                guard.clear();
+                if (bIsSchema)
                 {
                     css::configuration::Update::get(
                         that->m_xComponentContext)->insertExtensionXcsFile(
@@ -701,6 +704,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         that->m_xComponentContext)->insertExtensionXcuFile(
                             that->m_eContext == Context::Shared, expandUnoRcUrl(url));
                 }
+                guard.reset();
             }
             that->addToConfigmgrIni( m_isSchema, true, url, xCmdEnv );
             data.iniEntry = dp_misc::makeRcTerm(url);
