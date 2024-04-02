@@ -3049,6 +3049,11 @@ OUString StylesBuffer::createExtDxfStyle( sal_Int32 nDxfId ) const
     return rStyleName;
 }
 
+DxfRef StylesBuffer::getDxf(sal_Int32 nDxfId) const
+{
+    return maDxfs.get(nDxfId);
+}
+
 void StylesBuffer::writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs ) const
 {
     if( Font* pFont = maFonts.get( nFontId ).get() )

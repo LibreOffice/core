@@ -75,7 +75,9 @@ void PivotTableFormat::importPivotArea(const oox::AttributeList& rAttribs)
 
 void PivotTableFormat::finalizeImport()
 {
-    OUString const& rDxfStyle = getStyles().createDxfStyle(mnDxfId);
+    DxfRef pDxf = getStyles().getDxf(mnDxfId);
+    auto pPattern = std::make_shared<ScPatternAttr>(getScDocument().getCellAttributeHelper());
+    pDxf->fillToItemSet(pPattern->GetItemSet());
 
     ScDPObject* pDPObj = mrPivotTable.getDPObject();
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -93,7 +95,7 @@ void PivotTableFormat::finalizeImport()
             auto nField = *pReference->mnField;
             for (auto index : pReference->maFieldItemsIndices)
             {
-                aFormats.add(nField, index, rDxfStyle);
+                aFormats.add(nField, index, pPattern);
             }
         }
     }

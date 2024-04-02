@@ -864,6 +864,8 @@ public:
     OUString     createDxfStyle( sal_Int32 nDxfId ) const;
     OUString     createExtDxfStyle( sal_Int32 nDxfId ) const;
 
+    DxfRef getDxf(sal_Int32 nDxfId) const;
+
     void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs ) const;
     sal_uInt32          writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_uInt32 nNumFmtId, bool bSkipPoolDefs ) const;
     /** Writes the specified number format to the passed property map. */

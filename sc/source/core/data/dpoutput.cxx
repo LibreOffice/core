@@ -765,21 +765,6 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
     //  SubTotal formatting is controlled by headers
 }
 
-namespace
-{
-void lclApplyStyle(ScDocument* pDoc, SCTAB nTab,
-                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                      OUString const& rStyleName)
-{
-    ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
-    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pStlPool->Find(rStyleName, SfxStyleFamily::Para));
-    if (pStyle)
-    {
-        pDoc->ApplyStyleAreaTab(nCol1, nRow1, nCol2, nRow2, nTab, *pStyle);
-    }
-}
-}
-
 void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                              const sheet::MemberResult& rData, bool bColHeader, tools::Long nLevel )
 {
@@ -1103,7 +1088,7 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
                 {
                     if (aFormat.nField == nDimension && aFormat.nDataIndex == nColumnIndex)
                     {
-                        lclApplyStyle(mpDocument, nTab, nColPos, nRowPos, nColPos, mnDataStartRow - 1, aFormat.aStyleName);
+                        mpDocument->ApplyPattern(nColPos, nRowPos, nTab, *aFormat.pPattern);
                     }
                 }
             }
@@ -1207,7 +1192,7 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
                 {
                     if (aFormat.nField == nDimension && aFormat.nDataIndex == nRowIndex)
                     {
-                        lclApplyStyle(mpDocument, nTab, nColPos, nRowPos, mnDataStartCol - 1, nRowPos, aFormat.aStyleName);
+                        mpDocument->ApplyPattern(nColPos, nRowPos, nTab, *aFormat.pPattern);
                     }
                 }
             }

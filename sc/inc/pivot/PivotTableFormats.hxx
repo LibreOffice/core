@@ -12,6 +12,8 @@
 #include <memory>
 #include <vector>
 #include <rtl/ustring.hxx>
+#include <patattr.hxx>
+#include <memory>
 
 namespace sc
 {
@@ -19,12 +21,13 @@ struct PivotTableFormat
 {
     sal_Int32 nField;
     sal_Int32 nDataIndex;
-    OUString aStyleName;
+    std::shared_ptr<ScPatternAttr> pPattern;
 
-    PivotTableFormat(sal_Int32 _nField, sal_Int32 _nDataIndex, OUString _aStyleName)
+    PivotTableFormat(sal_Int32 _nField, sal_Int32 _nDataIndex,
+                     std::shared_ptr<ScPatternAttr> _pPattern)
         : nField(_nField)
         , nDataIndex(_nDataIndex)
-        , aStyleName(_aStyleName)
+        , pPattern(_pPattern)
     {
     }
 };
@@ -34,9 +37,10 @@ class PivotTableFormats
     std::vector<PivotTableFormat> maFormats;
 
 public:
-    void add(sal_Int32 nField, sal_Int32 nDataIndex, OUString const& rStyle)
+    void add(sal_Int32 nField, sal_Int32 nDataIndex,
+             std::shared_ptr<ScPatternAttr> const& rpPattern)
     {
-        maFormats.emplace_back(nField, nDataIndex, rStyle);
+        maFormats.emplace_back(nField, nDataIndex, rpPattern);
     }
 
     size_t size() { return maFormats.size(); }
