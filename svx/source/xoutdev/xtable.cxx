@@ -38,13 +38,13 @@ XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 
 XLineEndEntry::XLineEndEntry(basegfx::B2DPolyPolygon _aB2DPolyPolygon, const OUString& rName)
 :   XPropertyEntry(rName),
-    aB2DPolyPolygon(std::move(_aB2DPolyPolygon))
+    m_aB2DPolyPolygon(std::move(_aB2DPolyPolygon))
 {
 }
 
 XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
 :   XPropertyEntry(rOther),
-    aB2DPolyPolygon(rOther.aB2DPolyPolygon)
+    m_aB2DPolyPolygon(rOther.m_aB2DPolyPolygon)
 {
 }
 

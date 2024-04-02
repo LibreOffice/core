@@ -56,7 +56,7 @@ public:
 class SVXCORE_DLLPUBLIC XLineEndEntry final : public XPropertyEntry
 {
 private:
-    basegfx::B2DPolyPolygon aB2DPolyPolygon;
+    basegfx::B2DPolyPolygon m_aB2DPolyPolygon;
 
 public:
     XLineEndEntry(basegfx::B2DPolyPolygon aB2DPolyPolygon, const OUString& rName);
@@ -64,7 +64,7 @@ public:
 
     const basegfx::B2DPolyPolygon& GetLineEnd() const
     {
-        return aB2DPolyPolygon;
+        return m_aB2DPolyPolygon;
     }
 };
 
