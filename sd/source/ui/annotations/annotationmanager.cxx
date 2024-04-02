@@ -235,9 +235,9 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
     if ( aEvent.EventName == "OnAnnotationRemoved" )
     {
         Reference< XAnnotation > xAnnotation( aEvent.Source, uno::UNO_QUERY );
-        if ( xAnnotation.is() )
+        if ( auto pAnnotation = dynamic_cast<sd::Annotation*>(xAnnotation.get()) )
         {
-            LOKCommentNotify(CommentNotificationType::Remove, &mrBase, xAnnotation);
+            LOKCommentNotify(CommentNotificationType::Remove, &mrBase, pAnnotation);
         }
     }
 
@@ -258,8 +258,8 @@ rtl::Reference<Annotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 n
         {
             AnnotationVector aAnnotations(pPage->getAnnotations());
             auto iter = std::find_if(aAnnotations.begin(), aAnnotations.end(),
-                [nAnnotationId](const Reference<XAnnotation>& xAnnotation) {
-                    return sd::getAnnotationId(xAnnotation) == nAnnotationId;
+                [nAnnotationId](const rtl::Reference<sd::Annotation>& xAnnotation) {
+                    return xAnnotation->GetId() == nAnnotationId;
                 });
             if (iter != aAnnotations.end())
                 return *iter;

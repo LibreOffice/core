@@ -312,12 +312,11 @@ uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
     return m_TextRange;
 }
 
-std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const uno::Reference<office::XAnnotation>& xAnnotation, bool bInsert )
+std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const rtl::Reference<sd::Annotation>& xAnnotation, bool bInsert )
 {
-    Annotation* pAnnotation = dynamic_cast< Annotation* >( xAnnotation.get() );
-    if( pAnnotation )
+    if( xAnnotation )
     {
-        return std::make_unique< UndoInsertOrRemoveAnnotation >( *pAnnotation, bInsert );
+        return std::make_unique< UndoInsertOrRemoveAnnotation >( *xAnnotation, bInsert );
     }
     else
     {
@@ -325,26 +324,9 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const uno::Re
     }
 }
 
-sal_uInt32 getAnnotationId(const uno::Reference<office::XAnnotation>& xAnnotation)
-{
-    Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
-    sal_uInt32 nId = 0;
-    if (pAnnotation)
-        nId = pAnnotation->GetId();
-    return nId;
-}
-
-const SdPage* getAnnotationPage(const uno::Reference<office::XAnnotation>& xAnnotation)
-{
-    Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
-    if (pAnnotation)
-        return pAnnotation->GetPage();
-    return nullptr;
-}
-
 namespace
 {
-OString lcl_LOKGetCommentPayload(CommentNotificationType nType, uno::Reference<office::XAnnotation> const & rxAnnotation)
+OString lcl_LOKGetCommentPayload(CommentNotificationType nType, rtl::Reference<sd::Annotation> const & rxAnnotation)
 {
     ::tools::JsonWriter aJsonWriter;
     {
@@ -353,16 +335,16 @@ OString lcl_LOKGetCommentPayload(CommentNotificationType nType, uno::Reference<o
         aJsonWriter.put("action", (nType == CommentNotificationType::Add ? "Add" :
                                 (nType == CommentNotificationType::Remove ? "Remove" :
                                     (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
-        aJsonWriter.put("id", sd::getAnnotationId(rxAnnotation));
+        aJsonWriter.put("id", rxAnnotation->GetId());
 
         if (nType != CommentNotificationType::Remove && rxAnnotation.is())
         {
-            aJsonWriter.put("id", sd::getAnnotationId(rxAnnotation));
+            aJsonWriter.put("id", rxAnnotation->GetId());
             aJsonWriter.put("author", rxAnnotation->getAuthor());
             aJsonWriter.put("dateTime", utl::toISO8601(rxAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(rxAnnotation->getTextRange());
             aJsonWriter.put("text", xText->getString());
-            const SdPage* pPage = sd::getAnnotationPage(rxAnnotation);
+            const SdPage* pPage = rxAnnotation->GetPage();
             aJsonWriter.put("parthash", pPage ? OString::number(pPage->GetHashCode()) : OString());
             geometry::RealPoint2D const & rPoint = rxAnnotation->getPosition();
             geometry::RealSize2D const & rSize = rxAnnotation->getSize();
@@ -377,7 +359,7 @@ OString lcl_LOKGetCommentPayload(CommentNotificationType nType, uno::Reference<o
 }
 } // anonymous ns
 
-void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell, uno::Reference<office::XAnnotation> const & rxAnnotation)
+void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell, rtl::Reference<sd::Annotation> const & rxAnnotation)
 {
     // callbacks only if tiled annotations are explicitly turned off by LOK client
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
@@ -387,7 +369,7 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload);
 }
 
-void LOKCommentNotifyAll(CommentNotificationType nType, uno::Reference<office::XAnnotation> const & rxAnnotation)
+void LOKCommentNotifyAll(CommentNotificationType nType, rtl::Reference<sd::Annotation> const & rxAnnotation)
 {
     // callbacks only if tiled annotations are explicitly turned off by LOK client
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
@@ -432,8 +414,7 @@ void UndoInsertOrRemoveAnnotation::Undo()
     else
     {
         pPage->addAnnotation( mxAnnotation, mnIndex );
-        uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation );
-        LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
+        LOKCommentNotifyAll( CommentNotificationType::Add, mxAnnotation );
     }
 }
 
@@ -447,8 +428,7 @@ void UndoInsertOrRemoveAnnotation::Redo()
     if( mbInsert )
     {
         pPage->addAnnotation( mxAnnotation, mnIndex );
-        uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation );
-        LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
+        LOKCommentNotifyAll( CommentNotificationType::Add, mxAnnotation );
     }
     else
     {

@@ -50,17 +50,13 @@ enum class CommentNotificationType { Add, Modify, Remove };
 
 void createAnnotation( rtl::Reference< Annotation >& xAnnotation, SdPage* pPage );
 
-std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bInsert );
-
-sal_uInt32 getAnnotationId(const css::uno::Reference <css::office::XAnnotation>& xAnnotation);
-
-const SdPage* getAnnotationPage(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
+std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const rtl::Reference< sd::Annotation >& xAnnotation, bool bInsert );
 
 void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell,
-        css::uno::Reference<css::office::XAnnotation> const & rxAnnotation);
+        rtl::Reference<sd::Annotation> const & rxAnnotation);
 
 void LOKCommentNotifyAll(CommentNotificationType nType,
-        css::uno::Reference<css::office::XAnnotation> const & rxAnnotation);
+        rtl::Reference<sd::Annotation> const & rxAnnotation);
 
 struct SD_DLLPUBLIC CustomAnnotationMarker
 {
