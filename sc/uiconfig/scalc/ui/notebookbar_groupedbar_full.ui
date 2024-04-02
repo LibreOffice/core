@@ -1176,6 +1176,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuFile-Reload">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Reload</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuFile-separator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuFile-ExportTo">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1190,7 +1203,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuFile-separator2">
+      <object class="GtkSeparatorMenuItem" id="MenuFile-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1217,7 +1230,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuFile-separator3">
+      <object class="GtkSeparatorMenuItem" id="MenuFile-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1251,7 +1264,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuFile-separator4">
+      <object class="GtkSeparatorMenuItem" id="MenuFile-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>

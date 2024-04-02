@@ -774,6 +774,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuFile-Reload">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Reload</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuFile-separator">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="ExportToD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
