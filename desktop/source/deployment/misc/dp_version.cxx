@@ -21,7 +21,6 @@
 #include <sal/config.h>
 
 #include <o3tl/string_view.hxx>
-#include <rtl/ustring.hxx>
 
 #include <dp_version.hxx>
 

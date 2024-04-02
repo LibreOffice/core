@@ -11,7 +11,6 @@
 #include <memory>
 #include <string_view>
 
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -31,8 +30,6 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/math.hxx>
-#include <rtl/uri.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/unoapi_test.hxx>
@@ -45,14 +42,11 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
-#include <config_features.h>
 #include <config_fonts.h>
 #include <config_mpl.h>
 #include <tools/json_writer.hxx>
@@ -2343,6 +2337,7 @@ void DesktopLOKTest::testPaintPartTileDifferentSchemes()
 }
 
 #if HAVE_MORE_FONTS
+#include <rtl/uri.hxx>
 void DesktopLOKTest::testGetFontSubset()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");

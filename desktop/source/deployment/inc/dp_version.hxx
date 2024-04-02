@@ -21,9 +21,9 @@
 
 #include <sal/config.h>
 
-#include <rtl/ustring.hxx>
 #include "dp_misc_api.hxx"
 
+#include <string_view>
 
 namespace dp_misc {
 

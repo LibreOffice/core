@@ -30,7 +30,6 @@
 #include <dp_ucb.h>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>

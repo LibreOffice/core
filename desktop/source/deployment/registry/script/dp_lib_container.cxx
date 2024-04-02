@@ -22,7 +22,6 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <strings.hrc>
-#include <dp_resource.h>
 #include <dp_shared.hxx>
 #include <dp_xml.h>
 #include "dp_lib_container.h"

@@ -38,7 +38,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 
-#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 

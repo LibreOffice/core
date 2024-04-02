@@ -60,7 +60,6 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
-#include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -118,7 +117,6 @@
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>
 #include <desktop/crashreport.hxx>
-#include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svtools/fontsubstconfig.hxx>

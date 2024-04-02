@@ -24,8 +24,6 @@
 #include <com/sun/star/deployment/DependencyException.hpp>
 #include <com/sun/star/deployment/PlatformException.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <utility>
 #include "dp_commandenvironments.hxx"
 #include <osl/diagnose.h>

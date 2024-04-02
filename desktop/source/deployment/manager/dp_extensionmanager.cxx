@@ -24,14 +24,12 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/bootstrap.hxx>
 #include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/deployment/XExtensionManager.hpp>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/deployment/InstallException.hpp>
 #include <com/sun/star/deployment/VersionException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/beans/Ambiguous.hpp>
@@ -39,7 +37,6 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/sequence.hxx>
 #include <utility>
 #include <xmlscript/xml_helper.hxx>

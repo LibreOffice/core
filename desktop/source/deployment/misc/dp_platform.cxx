@@ -20,7 +20,6 @@
 
 #include <dp_platform.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>

@@ -30,7 +30,6 @@
 
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XPathException.hpp>

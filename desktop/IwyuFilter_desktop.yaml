@@ -94,3 +94,9 @@ excludelist:
     desktop/source/splash/splash.cxx:
     # Needed for rtl::math::round
     - rtl/math.hxx
+    desktop/source/lib/lokandroid.cxx:
+    # Needed for osl_getThreadTextEncoding
+    - osl/thread.hxx
+    desktop/source/deployment/misc/dp_misc.cxx:
+    # Needed for osl_getThreadTextEncoding
+    - osl/thread.hxx
