@@ -24,8 +24,7 @@
 #include <memory>
 
 #include <com/sun/star/office/XAnnotation.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 
 #include "sdpage.hxx"
@@ -53,8 +52,6 @@ void createAnnotation( rtl::Reference< Annotation >& xAnnotation, SdPage* pPage 
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bInsert );
 
-void CreateChangeUndo(const css::uno::Reference< css::office::XAnnotation >& xAnnotation);
-
 sal_uInt32 getAnnotationId(const css::uno::Reference <css::office::XAnnotation>& xAnnotation);
 
 const SdPage* getAnnotationPage(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
@@ -73,8 +70,8 @@ struct SD_DLLPUBLIC CustomAnnotationMarker
     std::vector<basegfx::B2DPolygon> maPolygons;
 };
 
-class SAL_DLLPUBLIC_RTTI Annotation final : private ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
+class SAL_DLLPUBLIC_RTTI Annotation final :
+                   public ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>,
                    public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
 public:
@@ -90,8 +87,8 @@ public:
 
     // XInterface:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
-    virtual void SAL_CALL acquire() noexcept override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::acquire(); }
-    virtual void SAL_CALL release() noexcept override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::release(); }
+    virtual void SAL_CALL acquire() noexcept override { ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>::acquire(); }
+    virtual void SAL_CALL release() noexcept override { ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>::release(); }
 
     // css::beans::XPropertySet:
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
@@ -144,7 +141,9 @@ private:
     // This function is called upon disposing the component,
     // if your component needs special work when it becomes
     // disposed, do it here.
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
+
+    void createChangeUndoImpl(std::unique_lock<std::mutex>& g);
 
     sal_uInt32 m_nId;
     SdPage* mpPage;

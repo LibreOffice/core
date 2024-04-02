@@ -118,8 +118,7 @@ void createAnnotation(rtl::Reference<Annotation>& xAnnotation, SdPage* pPage )
 sal_uInt32 Annotation::m_nLastId = 1;
 
 Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, SdPage* pPage)
-    : ::cppu::WeakComponentImplHelper<office::XAnnotation>(m_aMutex)
-    , ::cppu::PropertySetMixin<office::XAnnotation>(context, IMPLEMENTS_PROPERTY_SET,
+    : ::cppu::PropertySetMixin<office::XAnnotation>(context, IMPLEMENTS_PROPERTY_SET,
                                                     uno::Sequence<OUString>())
     , m_nId(m_nLastId++)
     , mpPage(pPage)
@@ -131,7 +130,7 @@ Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, Sd
 // This function is called upon disposing the component,
 // if your component needs special work when it becomes
 // disposed, do it here.
-void SAL_CALL Annotation::disposing()
+void Annotation::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     mpPage = nullptr;
     if( m_TextRange.is() )
@@ -143,7 +142,7 @@ void SAL_CALL Annotation::disposing()
 
 uno::Any Annotation::queryInterface(css::uno::Type const & type)
 {
-    return ::cppu::WeakComponentImplHelper<office::XAnnotation>::queryInterface(type);
+    return ::comphelper::WeakComponentImplHelper<office::XAnnotation>::queryInterface(type);
 }
 
 // com.sun.star.beans.XPropertySet:
@@ -184,7 +183,7 @@ void SAL_CALL Annotation::removeVetoableChangeListener(const OUString & aPropert
 
 uno::Any SAL_CALL Annotation::getAnchor()
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     uno::Any aRet;
     if( mpPage )
     {
@@ -197,7 +196,7 @@ uno::Any SAL_CALL Annotation::getAnchor()
 // css::office::XAnnotation:
 geometry::RealPoint2D SAL_CALL Annotation::getPosition()
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     return m_Position;
 }
 
@@ -205,8 +204,8 @@ void SAL_CALL Annotation::setPosition(const geometry::RealPoint2D & the_value)
 {
     prepareSet("Position", uno::Any(), uno::Any(), nullptr);
     {
-        osl::MutexGuard g(m_aMutex);
-        createChangeUndo();
+        std::unique_lock g(m_aMutex);
+        createChangeUndoImpl(g);
         m_Position = the_value;
     }
 }
@@ -214,7 +213,7 @@ void SAL_CALL Annotation::setPosition(const geometry::RealPoint2D & the_value)
 // css::office::XAnnotation:
 geometry::RealSize2D SAL_CALL Annotation::getSize()
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     return m_Size;
 }
 
@@ -222,15 +221,15 @@ void SAL_CALL Annotation::setSize(const geometry::RealSize2D & the_value)
 {
     prepareSet("Size", uno::Any(), uno::Any(), nullptr);
     {
-        osl::MutexGuard g(m_aMutex);
-        createChangeUndo();
+        std::unique_lock g(m_aMutex);
+        createChangeUndoImpl(g);
         m_Size = the_value;
     }
 }
 
 OUString SAL_CALL Annotation::getAuthor()
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     return m_Author;
 }
 
@@ -238,15 +237,15 @@ void SAL_CALL Annotation::setAuthor(const OUString & the_value)
 {
     prepareSet("Author", uno::Any(), uno::Any(), nullptr);
     {
-        osl::MutexGuard g(m_aMutex);
-        createChangeUndo();
+        std::unique_lock g(m_aMutex);
+        createChangeUndoImpl(g);
         m_Author = the_value;
     }
 }
 
 OUString SAL_CALL Annotation::getInitials()
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     return m_Initials;
 }
 
@@ -254,15 +253,15 @@ void SAL_CALL Annotation::setInitials(const OUString & the_value)
 {
     prepareSet("Initials", uno::Any(), uno::Any(), nullptr);
     {
-        osl::MutexGuard g(m_aMutex);
-        createChangeUndo();
+        std::unique_lock g(m_aMutex);
+        createChangeUndoImpl(g);
         m_Initials = the_value;
     }
 }
 
 util::DateTime SAL_CALL Annotation::getDateTime()
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     return m_DateTime;
 }
 
@@ -270,17 +269,27 @@ void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
 {
     prepareSet("DateTime", uno::Any(), uno::Any(), nullptr);
     {
-        osl::MutexGuard g(m_aMutex);
-        createChangeUndo();
+        std::unique_lock g(m_aMutex);
+        createChangeUndoImpl(g);
         m_DateTime = the_value;
     }
 }
 
 void Annotation::createChangeUndo()
 {
+    std::unique_lock g(m_aMutex);
+    createChangeUndoImpl(g);
+}
+
+void Annotation::createChangeUndoImpl(std::unique_lock<std::mutex>& g)
+{
     SdrModel* pModel = GetModel(); // TTTT should use reference
     if( pModel && pModel->IsUndoEnabled() )
+    {
+        g.unlock(); // AddUndo calls back into Annotation
         pModel->AddUndo( std::make_unique<UndoAnnotation>( *this ) );
+        g.lock();
+    }
 
     if( pModel )
     {
@@ -295,7 +304,7 @@ void Annotation::createChangeUndo()
 
 uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     if( !m_TextRange.is() && (mpPage != nullptr) )
     {
         m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( &mpPage->getSdrModelFromSdrPage() ) );
@@ -314,13 +323,6 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const uno::Re
     {
         return nullptr;
     }
-}
-
-void CreateChangeUndo(const uno::Reference<office::XAnnotation>& xAnnotation)
-{
-    Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
-    if (pAnnotation)
-        pAnnotation->createChangeUndo();
 }
 
 sal_uInt32 getAnnotationId(const uno::Reference<office::XAnnotation>& xAnnotation)

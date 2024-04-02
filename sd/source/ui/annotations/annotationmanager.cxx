@@ -389,7 +389,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
 void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    Reference< XAnnotation > xAnnotation;
+    rtl::Reference< Annotation > xAnnotation;
     OUString sText;
     sal_Int32 nPositionX = -1;
     sal_Int32 nPositionY = -1;
@@ -416,7 +416,7 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
 
     if (xAnnotation.is())
     {
-        CreateChangeUndo(xAnnotation);
+        xAnnotation->createChangeUndo();
 
         if (nPositionX >= 0 && nPositionY >= 0)
         {
@@ -570,7 +570,8 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     if (mpDoc->IsUndoEnabled())
         mpDoc->BegUndo(SdResId(STR_ANNOTATION_REPLY));
 
-    CreateChangeUndo(xAnnotation);
+    if (xAnnotation)
+        xAnnotation->createChangeUndo();
     ::Outliner aOutliner( GetAnnotationPool(),OutlinerMode::TextObject );
 
     SdDrawDocument::SetCalcFieldValueHdl( &aOutliner );
