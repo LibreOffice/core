@@ -364,11 +364,12 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testUnloadedGraphicSizeUnit)
 {
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "inch-size.emf";
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "inch-size.pct";
     Size aMtfSize100(42, 42);
     SvFileStream aStream(aURL, StreamMode::READ);
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream, 0, &aMtfSize100);
 
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(Size(42, 42), aGraphic.GetPrefSize());
 
     // Force it to swap in
