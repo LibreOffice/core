@@ -1436,99 +1436,64 @@ void SbiRuntime::StepGE()       { StepCompare( SbxGE );     }
 
 namespace
 {
-    bool NeedEsc(sal_Unicode cCode)
+    OUString VBALikeToRegexp(std::u16string_view sIn)
     {
-        if(!rtl::isAscii(cCode))
+        OUStringBuffer sResult("\\A"); // Match at the beginning of the input
+
+        for (auto start = sIn.begin(), end = sIn.end(); start < end;)
         {
-            return false;
-        }
-        switch(cCode)
-        {
-        case '.':
-        case '^':
-        case '$':
-        case '+':
-        case '\\':
-        case '|':
-        case '{':
-        case '}':
-        case '(':
-        case ')':
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    OUString VBALikeToRegexp(const OUString &rIn)
-    {
-        OUStringBuffer sResult;
-        const sal_Unicode *start = rIn.getStr();
-        const sal_Unicode *end = start + rIn.getLength();
-
-        int seenright = 0;
-
-        sResult.append("\\A"); // Match at the beginning of the input
-
-        while (start < end)
-        {
-            switch (*start)
+            switch (auto ch = *start++)
             {
             case '?':
                 sResult.append('.');
-                start++;
                 break;
             case '*':
                 sResult.append(".*");
-                start++;
                 break;
             case '#':
                 sResult.append("[0-9]");
-                start++;
-                break;
-            case ']':
-                sResult.append('\\');
-                sResult.append(*start++);
                 break;
             case '[':
-                sResult.append(*start++);
-                seenright = 0;
-                if (start < end && *start == '!')
+                sResult.append(ch);
+                if (start < end)
                 {
-                    sResult.append('^');
-                    start++;
+                    if (*start == '!')
+                    {
+                        sResult.append('^');
+                        ++start;
+                    }
+                    else if (*start == '^')
+                        sResult.append('\\');
                 }
-                while (start < end && !seenright)
+                for (bool seenright = false; start < end && !seenright; ++start)
                 {
                     switch (*start)
                     {
                     case '[':
-                    case '?':
-                    case '*':
+                    case '\\':
                         sResult.append('\\');
-                        sResult.append(*start);
                         break;
                     case ']':
-                        sResult.append(*start);
-                        seenright = 1;
-                        break;
-                    default:
-                        if (NeedEsc(*start))
-                        {
-                            sResult.append('\\');
-                        }
-                        sResult.append(*start);
+                        seenright = true;
                         break;
                     }
-                    start++;
+                    sResult.append(*start);
                 }
                 break;
+            case '.':
+            case '^':
+            case '$':
+            case '+':
+            case '\\':
+            case '|':
+            case '{':
+            case '}':
+            case '(':
+            case ')':
+                sResult.append('\\');
+                [[fallthrough]];
             default:
-                if (NeedEsc(*start))
-                {
-                    sResult.append('\\');
-                }
-                sResult.append(*start++);
+                sResult.append(ch);
             }
         }
 
