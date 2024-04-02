@@ -94,8 +94,7 @@ template< class Vec, class Iter, class Entry > static sal_Int32 insert_range( Ve
 
 
 TableModel::TableModel( SdrTableObj* pTableObj )
-: TableModelBase( m_aMutex  )
-, mpTableObj( pTableObj )
+: mpTableObj( pTableObj )
 , mbModified( false )
 , mbNotifyPending( false )
 , mnNotifyLock( 0 )
@@ -103,8 +102,7 @@ TableModel::TableModel( SdrTableObj* pTableObj )
 }
 
 TableModel::TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTable )
-: TableModelBase( m_aMutex  )
-, mpTableObj( pTableObj )
+: mpTableObj( pTableObj )
 , mbModified( false )
 , mbNotifyPending( false )
 , mnNotifyLock( 0 )
@@ -311,15 +309,6 @@ std::vector<sal_Int32> TableModel::getColumnWidths()
     return aRet;
 }
 
-// XComponent
-
-
-void TableModel::dispose()
-{
-    ::SolarMutexGuard aGuard;
-    TableModelBase::dispose();
-}
-
 
 // XModifiable
 
@@ -347,13 +336,15 @@ void SAL_CALL TableModel::setModified( sal_Bool bModified )
 
 void SAL_CALL TableModel::addModifyListener( const uno::Reference<util::XModifyListener>& xListener )
 {
-    rBHelper.addListener( cppu::UnoType<util::XModifyListener>::get() , xListener );
+    std::unique_lock aGuard(m_aMutex);
+    maModifyListeners.addInterface( aGuard, xListener );
 }
 
 
 void SAL_CALL TableModel::removeModifyListener( const uno::Reference<util::XModifyListener>& xListener )
 {
-    rBHelper.removeListener( cppu::UnoType<util::XModifyListener>::get() , xListener );
+    std::unique_lock aGuard(m_aMutex);
+    maModifyListeners.removeInterface( aGuard, xListener );
 }
 
 
@@ -486,8 +477,11 @@ sal_Int32 TableModel::getColumnCountImpl() const
 }
 
 
-void TableModel::disposing()
+void TableModel::disposing(std::unique_lock<std::mutex>& rGuard)
 {
+    rGuard.unlock(); // do not hold this while taking solar mutex
+    ::SolarMutexGuard aGuard;
+
     if( !maRows.empty() )
     {
         for( auto& rpRow : maRows )
@@ -515,6 +509,8 @@ void TableModel::disposing()
     }
 
     mpTableObj = nullptr;
+
+    rGuard.lock();
 }
 
 
@@ -543,18 +539,14 @@ void TableModel::unlockBroadcasts()
 
 void TableModel::notifyModification()
 {
-    ::osl::MutexGuard guard( m_aMutex );
     if( (mnNotifyLock == 0) && mpTableObj )
     {
         mbNotifyPending = false;
 
-        ::cppu::OInterfaceContainerHelper * pModifyListeners = rBHelper.getContainer( cppu::UnoType<util::XModifyListener>::get() );
-        if( pModifyListeners )
-        {
-            lang::EventObject aSource;
-            aSource.Source = getXWeak();
-            pModifyListeners->notifyEach(&util::XModifyListener::modified, aSource);
-        }
+        lang::EventObject aSource;
+        aSource.Source = getXWeak();
+        std::unique_lock aGuard(m_aMutex);
+        maModifyListeners.notifyEach(aGuard, &util::XModifyListener::modified, aSource);
     }
     else
     {
