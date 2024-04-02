@@ -154,8 +154,6 @@ private:
     const Iterator maEnd;
 };
 
-#include "SolverSettings.hxx"
-
 class ScTable
 {
 private:
