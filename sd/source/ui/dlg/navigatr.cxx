@@ -303,12 +303,18 @@ IMPL_LINK(SdNavigatorWin, CommandHdl, const CommandEvent&, rCEvt, bool)
 
 void SdNavigatorWin::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEntry)
 {
-    if (rSelectedPopupEntry == u"rename" && mpBindings)
+    if (rSelectedPopupEntry == u"rename")
     {
         weld::TreeView& rTreeView = GetObjects().get_treeview();
         std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
         if (rTreeView.get_selected(xIter.get()))
         {
+            // grab the shell focus so the navigator will update
+            if (SfxViewShell* pCurSh = SfxViewShell::Current())
+            {
+                if (vcl::Window* pShellWnd = pCurSh->GetWindow())
+                    pShellWnd->GrabFocus();
+            }
             if (rTreeView.get_iter_depth(*xIter) > 0)
                 mpBindings->Execute(SID_NAME_GROUP);
             else
