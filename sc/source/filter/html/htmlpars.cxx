@@ -832,12 +832,12 @@ void ScHTMLLayoutParser::SetWidths()
                         pWidths[nCol] = nW;
                 }
             }
-            for (SCCOL nCol = 1; nCol <= nColsPerRow; nCol++)
+            for (int nCol = 1; nCol <= nColsPerRow; nCol++)
             {
                 pOffsets[nCol] = pOffsets[nCol-1] + pWidths[nCol-1];
             }
             pLocalColOffset->clear();
-            for (SCCOL nCol = 0; nCol <= nColsPerRow; nCol++)
+            for (int nCol = 0; nCol <= nColsPerRow; nCol++)
             {
                 MakeColNoRef( pLocalColOffset, pOffsets[nCol], 0, 0, 0 );
             }
