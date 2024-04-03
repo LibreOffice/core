@@ -781,7 +781,7 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool 
 
 
 void BackendImpl::PackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard &,
+    ::osl::ResettableMutexGuard & guard,
     bool doRegisterPackage,
     bool startup,
     ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -802,10 +802,20 @@ void BackendImpl::PackageImpl::processPackage_(
                 xPackage->createAbortChannel() );
             AbortChannel::Chain chain( abortChannel, xSubAbortChannel );
             try {
+                // tdf#159790 temporarily release mutex for child packages
+                // This code is normally run on a separate thread so if a
+                // child package tries to acquire the solar mutex, a deadlock
+                // can occur if the main thread calls isRegistered() on this
+                // package or any of its parents. So, temporarily release
+                // this package's mutex while registering the child package.
+                guard.clear();
                 xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
+                guard.reset();
             }
             catch (const Exception &)
             {
+                guard.reset();
+
                //We even try a rollback if the user cancelled the action (CommandAbortedException)
                 //in order to prevent invalid database entries.
                 Any exc( ::cppu::getCaughtException() );
@@ -856,6 +866,11 @@ void BackendImpl::PackageImpl::processPackage_(
                     ::cppu::throwException(exc);
                 }
             }
+            catch (...) {
+                guard.reset();
+                throw;
+            }
+
             data.items.emplace_back(xPackage->getURL(),
                                  xPackage->getPackageType()->getMediaType());
         }
