@@ -2380,6 +2380,8 @@ RndStdIds SwFEShell::GetAnchorId() const
                 break;
             }
             SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+            if (!pContact)
+                continue;
             RndStdIds nId = pContact->GetFormat()->GetAnchor().GetAnchorId();
             if ( nRet == RndStdIds(SHRT_MAX) )
                 nRet = nId;
