@@ -9,42 +9,40 @@ get_SHA_for_change() {
 }
 
 submit() {
-        BRANCH=$1
-        TYPE=${2:-''}
-        if test -z "$BRANCH"
-        then
-            BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
-            BRANCH="${BRANCH##refs/heads/}"
-            if test -z "$BRANCH"
-            then
-                echo "no branch specified, and could not guess the current branch"
-                exit 1
-            fi
-            echo "no branch specified, guessing current branch $BRANCH"
+    BRANCH=$1
+    TYPE=${2:-''}
+    if test -z "$BRANCH"; then
+        BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
+        BRANCH="${BRANCH##refs/heads/}"
+        if test -z "$BRANCH"; then
+            echo "no branch specified, and could not guess the current branch"
+            exit 1
         fi
+        echo "no branch specified, guessing current branch $BRANCH"
+    fi
 
-        if [ "$BRANCH" = "master" ]; then
-            WEEKOLDDATE=$(date --date="7 days ago" +%s 2> /dev/null)
-            if [ "$WEEKOLDDATE" = "" ]; then
-                WEEKOLDDATE=$(date -v-7d +%s) # BSD equivalent
-            fi
-            PARENTDATE=$(git show -s --format=%ct HEAD~1)
-            if [[ $PARENTDATE -lt $WEEKOLDDATE ]]; then
-                echo "Your branch is older than a week, do './g pull -r' and retry"
-                exit 1
-            fi
+    if [ "$BRANCH" = "master" ]; then
+        WEEKOLDDATE=$(date --date="7 days ago" +%s 2> /dev/null)
+        if [ "$WEEKOLDDATE" = "" ]; then
+            WEEKOLDDATE=$(date -v-7d +%s) # BSD equivalent
         fi
-        git push "$GERRITURL" "HEAD:refs/for/$BRANCH$TYPE"
+        PARENTDATE=$(git show -s --format=%ct HEAD~1)
+        if [[ $PARENTDATE -lt $WEEKOLDDATE ]]; then
+            echo "Your branch is older than a week, do './g pull -r' and retry"
+            exit 1
+        fi
+    fi
+    git push "$GERRITURL" "HEAD:refs/for/$BRANCH$TYPE"
 }
 
 logerrit() {
-        echo "Host logerrit gerrit.libreoffice.org"
-        if test -n "${2-}" && test -f "$HOME/.ssh/id_$2"; then
-            echo "    IdentityFile ~/.ssh/id_$2"
-        fi
-        echo "    User $1"
-        echo "    Port 29418"
-        echo "    HostName gerrit.libreoffice.org"
+    echo "Host logerrit gerrit.libreoffice.org"
+    if test -n "${2-}" && test -f "$HOME/.ssh/id_$2"; then
+        echo "    IdentityFile ~/.ssh/id_$2"
+    fi
+    echo "    User $1"
+    echo "    Port 29418"
+    echo "    HostName gerrit.libreoffice.org"
 }
 
 case "$1" in
@@ -87,79 +85,76 @@ case "$1" in
             echo "Can't cd to $script_canonical_dir"
             exit 1
         fi
-	ssh_home="$HOME/.ssh";
-	ssh_key=
-	created_ssh=
-	if ! test -d "$ssh_home"; then
-	    echo "It appears that you have no ssh setup, running ssh-keygen to create that:"
-	    mkdir -m0700 "$ssh_home"
-	    created_ssh=TRUE
-	    echo
-	    echo "Hit enter to generate an ssh key - you will need to enter a pass-phrase"
-	    echo
-	    read -r
-        all_algo="$(ssh -Q key)"
-        if grep -q -x ssh-ed25519 <<< "$all_algo"
-        then
-            algo="ed25519"
-        elif grep -q -x ssh-rsa <<< "$all_algo"
-        then
-            algo="rsa"
-        else
-            echo "Could not find 'ssh-ed25519' or 'ssh-rsa' in the output from 'ssh -Q key'"
-            exit 1
-        fi
-        ssh-keygen -t "$algo" # Generate the key pair using the selected algorithm
-	fi
-    if test -d "$ssh_home"; then
-        # order algos based on the PubkeyAcceptedKeyTypes option from OpenSSH 8.1
-        for ssh_key_type in ecdsa ed25519 rsa; do
-            pk="$ssh_home/id_${ssh_key_type}.pub"
-            ssh_key=""
-            if test -f "$pk" && ssh_key="$(< "$pk")" && test -n "$ssh_key"; then
-                break
+        ssh_home="$HOME/.ssh";
+        ssh_key=
+        created_ssh=
+        if ! test -d "$ssh_home"; then
+            echo "It appears that you have no ssh setup, running ssh-keygen to create that:"
+            mkdir -m0700 "$ssh_home"
+            created_ssh=TRUE
+            echo
+            echo "Hit enter to generate an ssh key - you will need to enter a pass-phrase"
+            echo
+            read -r
+            all_algo="$(ssh -Q key)"
+            if grep -q -x ssh-ed25519 <<< "$all_algo"; then
+                algo="ed25519"
+            elif grep -q -x ssh-rsa <<< "$all_algo"; then
+                algo="rsa"
+            else
+                echo "Could not find 'ssh-ed25519' or 'ssh-rsa' in the output from 'ssh -Q key'"
+                exit 1
             fi
-        done
-    fi
-    echo "Please go to https://gerrit.libreoffice.org/ and click the \"Sign in\" link"
-    echo "at the top right of the page. You'll be sent to our Single Sign-On portal"
-    echo "for authentication (create an account if needs be), and automatically"
-    echo "redirected back to gerrit afterwards."
-    echo
-    echo "Visit https://gerrit.libreoffice.org/settings/#SSHKeys and paste the public"
-    if test -z "$ssh_key"; then
-        echo "part of your SSH key in the 'New SSH key' form."
-    else
-        echo "key below in the 'New SSH key' form."
+            ssh-keygen -t "$algo" # Generate the key pair using the selected algorithm
+        fi
+        if test -d "$ssh_home"; then
+            # order algos based on the PubkeyAcceptedKeyTypes option from OpenSSH 8.1
+            for ssh_key_type in ecdsa ed25519 rsa; do
+                pk="$ssh_home/id_${ssh_key_type}.pub"
+                ssh_key=""
+                if test -f "$pk" && ssh_key="$(< "$pk")" && test -n "$ssh_key"; then
+                    break
+                fi
+            done
+        fi
+        echo "Please go to https://gerrit.libreoffice.org/ and click the \"Sign in\" link"
+        echo "at the top right of the page. You'll be sent to our Single Sign-On portal"
+        echo "for authentication (create an account if needs be), and automatically"
+        echo "redirected back to gerrit afterwards."
         echo
-        printf '%s\n' "$ssh_key"
+        echo "Visit https://gerrit.libreoffice.org/settings/#SSHKeys and paste the public"
+        if test -z "$ssh_key"; then
+            echo "part of your SSH key in the 'New SSH key' form."
+        else
+            echo "key below in the 'New SSH key' form."
+            echo
+            printf '%s\n' "$ssh_key"
+            echo
+        fi
         echo
-    fi
-    echo
-    echo "Note that you need to register additional email addresses, if you want to"
-    echo "commit from them. Each additional email address must be confirmed by"
-    echo "following the verification link sent to it."
-    echo
+        echo "Note that you need to register additional email addresses, if you want to"
+        echo "commit from them. Each additional email address must be confirmed by"
+        echo "following the verification link sent to it."
+        echo
         read -r -p 'Which user name did you choose? ' GERRITUSER
-	if test -z "$created_ssh"; then
-        echo
-        echo "Please now add the following to your ~/.ssh/config, creating the file if needed:"
-        echo
-        logerrit "$GERRITUSER" ${ssh_key:+"$ssh_key_type"}
-        echo
-    else
+        if test -z "$created_ssh"; then
+            echo
+            echo "Please now add the following to your ~/.ssh/config, creating the file if needed:"
+            echo
+            logerrit "$GERRITUSER" ${ssh_key:+"$ssh_key_type"}
+            echo
+        else
         echo "Automatically creating your ssh config"
         logerrit "$GERRITUSER" ${ssh_key:+"$ssh_key_type"} >"$ssh_home/config"
-	fi
-	# setup the remote properly ...
-	git config remote.origin.pushurl ssh://logerrit/core
+        fi
+        # setup the remote properly ...
+        git config remote.origin.pushurl ssh://logerrit/core
         echo "To see if your setup was successful, run './logerrit test' then."
         # a good place to make sure the hooks are set up
         ./g -z
     ;;
     test)
-        if test -n "$(ssh "$GERRITHOST" 2>&1|grep "Welcome to Gerrit Code Review")"
-        then
+        if test -n "$(ssh "$GERRITHOST" 2>&1|grep "Welcome to Gerrit Code Review")"; then
             echo "Your gerrit setup was successful!"
         else
             echo "There seems to be trouble. Please have the output of:"
@@ -171,27 +166,23 @@ case "$1" in
         submit "$2"
     ;;
     nextchange)
-        if test -n "$(git status -s -uno)"
-        then
+        if test -n "$(git status -s -uno)"; then
             echo "You have uncommitted changes. Please commit or stash these:"
             git status
             exit 1
         fi
         CHANGEID=$(git log --format=format:%b -1 HEAD|grep Change-Id|cut -d: -f2|tr -d \ )
-        if test -z "$CHANGEID"
-        then
+        if test -z "$CHANGEID"; then
             CHANGEID="NOCHANGEID"
         fi
         BACKUPBRANCH=backup/$CHANGEID-$(date +%F-%H%M%S)
         git branch "$BACKUPBRANCH"
         echo "current state backed up as $BACKUPBRANCH"
         BRANCH=$2
-        if test -z "$BRANCH"
-        then
+        if test -z "$BRANCH"; then
             BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
             BRANCH="${BRANCH##refs/heads/}"
-            if test -z "$BRANCH"
-            then
+            if test -z "$BRANCH"; then
                 echo "no branch specified, and could not guess the current branch"
                 exit 1
             fi
@@ -229,20 +220,17 @@ case "$1" in
     ;;
     testfeature)
         CHANGEID=${3#I}
-        if test -n "$3" -a \( ${#3} -ne 41 -o -n "${CHANGEID//[0-9a-f]/}" \)
-        then
+        if test -n "$3" -a \( ${#3} -ne 41 -o -n "${CHANGEID//[0-9a-f]/}" \); then
             echo "${3} is not a valid Gerrit change id"
             exit 1
         fi
         CHANGEID=$3
 
         BRANCH=$2
-        if test -z "$BRANCH"
-        then
+        if test -z "$BRANCH"; then
             BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
             BRANCH="${BRANCH##refs/heads/}"
-            if test -z "$BRANCH"
-            then
+            if test -z "$BRANCH"; then
                 echo "no branch specified, and could not guess the current branch"
                 exit 1
             fi
@@ -250,8 +238,7 @@ case "$1" in
         fi
         BRANCH="${BRANCH##feature/}"
         WORKDIR=$(mktemp -d)
-        if test -z "$WORKDIR"
-        then
+        if test -z "$WORKDIR"; then
             echo "could not create work directory."
             exit 1
         fi
@@ -264,8 +251,7 @@ case "$1" in
         echo "branch is at:" >> ../commitmsg
         echo >> ../commitmsg
         git log -1|sed -e "s/Change-Id:/XXXXXX:/" >> ../commitmsg
-        if test -n "$CHANGEID"
-        then
+        if test -n "$CHANGEID"; then
             echo >> ../commitmsg
             echo "Change-Id: $CHANGEID" >> ../commitmsg
         fi
