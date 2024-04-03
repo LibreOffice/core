@@ -31,32 +31,148 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <o3tl/sorted_vector.hxx>
+#include <map>
 
+namespace
+{
+struct B2DPointCompare
+{
+    bool operator()(const basegfx::B2DPoint& lhs, const basegfx::B2DPoint& rhs) const
+    {
+        if (lhs.getX() < rhs.getX())
+            return true;
+        if (lhs.getX() > rhs.getX())
+            return false;
+        return lhs.getY() < rhs.getY();
+    }
+};
+
+struct B2DPointCompareYThenX
+{
+    bool operator()(const basegfx::B2DPoint& lhs, const basegfx::B2DPoint& rhs) const
+    {
+        if (lhs.getY() < rhs.getY())
+            return true;
+        if (lhs.getY() > rhs.getY())
+            return false;
+        return lhs.getX() < rhs.getX();
+    }
+};
+
+}
 
 namespace sdr::overlay
 {
-        // combine rages geometrically to a single, ORed polygon
-        static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
+
+    // Combine rectangles geometrically to a single OR'ed polygon.
+    // Algorithm is from
+    //     "Uniqueness of orthogonal connect-the-dots" Joseph O'Rourke 1988
+    // The basic algorithm is:
+    //   Sort points by lowest x, lowest y
+    //   Go through each column and create edges between the vertices 2i and 2i + 1 in that column
+    //   Sort points by lowest y, lowest x
+    //   Go through each row and create edges between the vertices 2i and 2i + 1 in that row.
+    //
+    static basegfx::B2DPolyPolygon impCombineRectanglesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRectangles)
+    {
+        o3tl::sorted_vector<basegfx::B2DPoint, B2DPointCompare> sort_x;
+        for (auto const & rRect : rRectangles)
         {
-            const sal_uInt32 nCount(rRanges.size());
-            basegfx::B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0); a < nCount; a++)
+            auto checkPoint = [&sort_x](double x, double y)
             {
-                const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(rRanges[a]));
+                basegfx::B2DPoint pt(x, y);
+                auto it = sort_x.find(pt);
+                if (it != sort_x.end()) // Shared vertice, remove it.
+                    sort_x.erase(it);
+                else
+                    sort_x.insert(pt);
+            };
+            checkPoint(rRect.getMinX(), rRect.getMinY());
+            checkPoint(rRect.getMinX(), rRect.getMaxY());
+            checkPoint(rRect.getMaxX(), rRect.getMinY());
+            checkPoint(rRect.getMaxX(), rRect.getMaxY());
+        }
 
-                if(0 == a)
+
+        o3tl::sorted_vector<basegfx::B2DPoint, B2DPointCompareYThenX> sort_y;
+        for (auto const & i : sort_x)
+            sort_y.insert(i);
+
+        std::map<basegfx::B2DPoint, basegfx::B2DPoint, B2DPointCompare> edges_h;
+        std::map<basegfx::B2DPoint, basegfx::B2DPoint, B2DPointCompare> edges_v;
+
+        size_t i = 0;
+        while (i < sort_x.size())
+        {
+            auto curr_y = sort_y[i].getY();
+            while (i < sort_x.size() && sort_y[i].getY() == curr_y)
+            {
+                edges_h[sort_y[i]] = sort_y[i + 1];
+                edges_h[sort_y[i + 1]] = sort_y[i];
+                i += 2;
+            }
+        }
+        i = 0;
+        while (i < sort_x.size())
+        {
+            auto curr_x = sort_x[i].getX();
+            while (i < sort_x.size() && sort_x[i].getX() == curr_x)
+            {
+                edges_v[sort_x[i]] = sort_x[i + 1];
+                edges_v[sort_x[i + 1]] = sort_x[i];
+                i += 2;
+            }
+        }
+
+        // Get all the polygons.
+        basegfx::B2DPolyPolygon aPolyPolygon;
+        std::vector<std::tuple<basegfx::B2DPoint, bool>> tmpPolygon;
+        while (!edges_h.empty())
+        {
+            tmpPolygon.clear();
+            // We can start with any point.
+            basegfx::B2DPoint pt = edges_h.begin()->first;
+            edges_h.erase(edges_h.begin());
+            tmpPolygon.push_back({pt, false});
+            for (;;)
+            {
+                auto [curr, e] = tmpPolygon.back();
+                if (!e)
                 {
-                    aRetval.append(aDiscretePolygon);
+                    auto it = edges_v.find(curr);
+                    auto next_vertex = it->second;
+                    edges_v.erase(it);
+                    tmpPolygon.push_back({next_vertex, true});
                 }
                 else
                 {
-                    aRetval = basegfx::utils::solvePolygonOperationOr(aRetval, basegfx::B2DPolyPolygon(aDiscretePolygon));
+                    auto it = edges_h.find(curr);
+                    auto next_vertex = it->second;
+                    edges_h.erase(it);
+                    tmpPolygon.push_back({next_vertex, false});
+                }
+                if (tmpPolygon.back() == tmpPolygon.front())
+                {
+                    // Closed polygon
+                    break;
                 }
             }
-
-            return aRetval;
+            for (auto const & pair : tmpPolygon)
+            {
+                auto const & vertex = std::get<0>(pair);
+                edges_h.erase(vertex);
+                edges_v.erase(vertex);
+            }
+            basegfx::B2DPolygon aPoly;
+            aPoly.reserve(tmpPolygon.size());
+            for (auto const & pair : tmpPolygon)
+                aPoly.append(std::get<0>(pair));
+            aPolyPolygon.append(std::move(aPoly));
         }
+
+        return aPolyPolygon;
+    }
 
         // check if wanted type OverlayType::Transparent or OverlayType::Solid
         // is possible. If not, fallback to invert mode (classic mode)
@@ -134,10 +250,9 @@ namespace sdr::overlay
 
                 if(mbBorder)
                 {
-                    basegfx::B2DPolyPolygon aBorderPolyPolygon(impCombineRangesToPolyPolygon(maRanges));
                     drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
                         new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                            std::move(aBorderPolyPolygon),
+                            impCombineRectanglesToPolyPolygon(maRanges),
                             aRGBColor));
 
                     // add both to result
