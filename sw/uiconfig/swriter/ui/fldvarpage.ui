@@ -524,7 +524,7 @@
           <object class="GtkEntry" id="name">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="valign">center</property>
+            <property name="valign">top</property>
             <property name="hexpand">True</property>
             <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
@@ -534,8 +534,8 @@
             </child>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
@@ -548,21 +548,29 @@
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-            <property name="width">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+            <property name="width">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="value">
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="valign">center</property>
             <property name="hexpand">True</property>
-            <property name="truncate-multiline">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="value-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|value">Enter the contents to add to a user-defined field.</property>
+            <property name="vexpand">True</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTextView" id="value">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="comments-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|value">Enter the contents to add to a user-defined field.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -576,7 +584,7 @@
           <object class="GtkGrid" id="toolbar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="valign">center</property>
+            <property name="valign">end</property>
             <property name="column-spacing">6</property>
             <child>
               <object class="GtkButton" id="apply">

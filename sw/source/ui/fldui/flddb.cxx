@@ -38,7 +38,7 @@ SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xDatabaseTLB(new SwDBTreeList(m_xBuilder->weld_tree_view("select")))
     , m_xAddDBPB(m_xBuilder->weld_button("browse"))
     , m_xCondition(m_xBuilder->weld_widget("condgroup"))
-    , m_xConditionED(new ConditionEdit(m_xBuilder->weld_entry("condition")))
+    , m_xConditionED(new ConditionEdit<weld::Entry>(m_xBuilder->weld_entry("condition")))
     , m_xValue(m_xBuilder->weld_widget("recgroup"))
     , m_xValueED(m_xBuilder->weld_entry("recnumber"))
     , m_xDBFormatRB(m_xBuilder->weld_radio_button("fromdatabasecb"))
