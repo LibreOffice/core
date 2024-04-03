@@ -712,13 +712,6 @@
                     "dest-filename": "@JFREEREPORT_SAC_TARBALL@"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/@SWING_TARBALL@",
-                    "sha256": "@SWING_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@SWING_TARBALL@"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/@LIBNUMBERTEXT_TARBALL@",
                     "sha256": "@LIBNUMBERTEXT_SHA256SUM@",
                     "type": "file",
