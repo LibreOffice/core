@@ -21,6 +21,8 @@
 #ifdef _WIN32
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #endif
 #ifndef SYSTEM_POPPLER
 #include <string>         // std::string
@@ -30,24 +32,58 @@
 
 FILE* g_binary_out=stderr;
 
-static const char *ownerPassword = "\001";
-static const char *userPassword  = "\001";
-static const char *outputFile    = "\001";
-static const char *options       = "\001";
+#ifdef _WIN32
 
-int main(int argc, char **argv)
+// Use Unicode API
+
+static const wchar_t *ownerPassword = nullptr;
+static const wchar_t *userPassword  = nullptr;
+static const wchar_t *outputFile    = nullptr;
+static const wchar_t *options       = L"";
+
+#define TO_STRING_VIEW(s) std::wstring_view(L##s)
+using my_string = std::wstring;
+
+// Poppler expects UTF-8 strings on Windows - see its openFile in poppler/goo/gfile.cc.
+static std::string myStringToStdString(std::wstring_view s)
 {
-    int k = 0;
+    int len = WideCharToMultiByte(CP_UTF8, 0, s.data(), s.size(), nullptr, 0, nullptr, nullptr);
+    char* buff = static_cast<char*>(_alloca(len * sizeof(char)));
+    len = WideCharToMultiByte(CP_UTF8, 0, s.data(), s.size(), buff, len, nullptr, nullptr);
+    return std::string(buff, len);
+}
+
+#else // ! _WIN32
+
+static const char *ownerPassword = nullptr;
+static const char *userPassword  = nullptr;
+static const char *outputFile    = nullptr;
+static const char *options       = "";
+
+#define TO_STRING_VIEW(s) std::string_view(s)
+using my_string = std::string;
+
+static std::string myStringToStdString(std::string&& s) { return std::move(s); }
+
+#endif
+
+#ifdef _WIN32
+int wmain(int argc, wchar_t **argv)
+#else
+int main(int argc, char **argv)
+#endif
+{
+    int k = 1;
     while (k < argc)
     {
-        if (!strcmp(argv[k], "-f"))
+        if (argv[k] == TO_STRING_VIEW("-f"))
         {
             outputFile = argv[k+1];
             argc -= 2;
             for (int j = k; j < argc; ++j)
                 argv[j] = argv[j+2];
         }
-        else if (!strcmp(argv[k], "-o"))
+        else if (argv[k] == TO_STRING_VIEW("-o"))
         {
             options = argv[k+1];
             argc -= 2;
@@ -55,14 +91,14 @@ int main(int argc, char **argv)
                 argv[j] = argv[j+2];
         }
 
-        else if (!strcmp(argv[k], "-opw"))
+        else if (argv[k] == TO_STRING_VIEW("-opw"))
         {
             ownerPassword = argv[k+1];
             argc -= 2;
             for (int j = k; j < argc; ++j)
                 argv[j] = argv[j+2];
         }
-        else if (!strcmp(argv[k], "-upw"))
+        else if (argv[k] == TO_STRING_VIEW("-upw"))
         {
             userPassword = argv[k+1];
             argc -= 2;
@@ -79,10 +115,10 @@ int main(int argc, char **argv)
     /* Creates an absolute path to the poppler_data directory, by taking the path
      * to the xpdfimport executable (provided in argv[0], and concatenating a
      * relative path to the poppler_data directory from the program directory. */
-    const std::string execPath = argv[0];
-    const std::size_t filenameStartPos = execPath.find_last_of("/\\")+1;
-    const std::string programPath = execPath.substr(0,filenameStartPos);
-    const std::string popplerDataPath = programPath + "../" LIBO_SHARE_FOLDER "/xpdfimport/poppler_data";
+    const my_string execPath = argv[0];
+    const std::size_t filenameStartPos = execPath.find_last_of(TO_STRING_VIEW("/\\")) + 1;
+    const my_string programPath = execPath.substr(0, filenameStartPos);
+    const std::string popplerDataPath = myStringToStdString(programPath + my_string(TO_STRING_VIEW("../" LIBO_SHARE_FOLDER "/xpdfimport/poppler_data")));
     const char* datadir = popplerDataPath.c_str();
 #endif
 
@@ -115,22 +151,26 @@ int main(int argc, char **argv)
     }
 
     // PDFDoc takes over ownership for all strings below
-    GooString* pFileName    = new GooString(argv[1]);
-    GooString* pErrFileName = new GooString(argv[2]);
+    GooString* pFileName = new GooString(myStringToStdString(argv[1]));
+    GooString* pErrFileName = new GooString(myStringToStdString(argv[2]));
 
     // check for password string(s)
     GooString* pOwnerPasswordStr( aPwBuf[0] != 0
                                  ? new GooString( aPwBuf )
-                                 : (ownerPassword[0] != '\001'
-                                    ? new GooString(ownerPassword)
+                                 : (ownerPassword
+                                    ? new GooString(myStringToStdString(ownerPassword))
                                     : nullptr ) );
     GooString* pUserPasswordStr( aPwBuf[0] != 0
                                 ? new GooString( aPwBuf )
-                                : (userPassword[0] != '\001'
-                                  ? new GooString(userPassword)
+                                : (userPassword
+                                  ? new GooString(myStringToStdString(userPassword))
                                   : nullptr ) );
-    if( outputFile[0] != '\001' )
+    if (outputFile)
+#if defined _WIN32
+        g_binary_out = _wfopen(outputFile, L"wb");
+#else
         g_binary_out = fopen(outputFile,"wb");
+#endif
 
 #ifdef _WIN32
     // Win actually modifies output for O_TEXT file mode, so need to
@@ -160,7 +200,7 @@ int main(int argc, char **argv)
     PDFDoc &rDoc = aDoc.isOk()? aDoc: aErrDoc;
 
     pdfi::PDFOutDev aOutDev(&rDoc);
-    if (!strcmp(options, "SkipImages")) {
+    if (options == TO_STRING_VIEW("SkipImages")) {
             aOutDev.setSkipImages(true);
     }
 
