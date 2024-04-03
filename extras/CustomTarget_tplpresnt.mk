@@ -37,11 +37,7 @@ extras_PRESENTATIONS_XMLFILES := \
 	Vivid/meta.xml  \
 	Yellow_Idea/meta.xml  \
 	Freshes/Object_1/content.xml  \
-	Freshes/Object_1/meta.xml  \
-	Freshes/Object_1/styles.xml  \
 	Freshes/Object_2/content.xml  \
-	Freshes/Object_2/meta.xml  \
-	Freshes/Object_2/styles.xml  \
 	Blueprint_Plans/Pictures/10000000000000580000001F99D2A38C014B254B.png  \
 	Blueprint_Plans/Pictures/100000000000033C0000026D847ACE982C6E20B6.png  \
 	Blueprint_Plans/Pictures/10000000000004220000031A5C2E04AB7C51FB60.png  \
@@ -58,7 +54,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Freshes/Pictures/100000000000049100000359E7B1AC100BA62FBB.jpg  \
 	Freshes/Pictures/10000000000006D7000003A637B7BBC50EDF4D24.jpg  \
 	Freshes/Pictures/1000000000000B8B0000067F7C4C059ECC323C6F.jpg  \
-	Freshes/Pictures/TablePreview1.svm  \
 	Grey_Elegant/Pictures/1000000000000007000000075D9D31963C8C0E25.jpg  \
 	Grey_Elegant/Pictures/1000000000000007000000076677E5BE1EDAF335.jpg  \
 	Grey_Elegant/Pictures/10000000000001920000019230489F7A89351262.jpg  \

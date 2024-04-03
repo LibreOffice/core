@@ -4,28 +4,21 @@
     <number:number-style style:name="N0">
       <number:number number:min-integer-digits="1"/>
     </number:number-style>
-    <number:date-style style:name="N10036" number:language="en" number:country="US" number:automatic-order="true">
-      <number:month number:style="long"/>
-      <number:text>/</number:text>
-      <number:day number:style="long"/>
-      <number:text>/</number:text>
-      <number:year number:style="long"/>
-    </number:date-style>
     <style:style style:name="ch1" style:family="chart">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
     </style:style>
     <style:style style:name="ch2" style:family="chart">
       <style:chart-properties chart:interpolation="cubic-spline" chart:symbol-type="automatic" chart:include-hidden-cells="false" chart:auto-position="true" chart:auto-size="true" chart:treat-empty-cells="leave-gap" chart:right-angled-axes="true"/>
     </style:style>
-    <style:style style:name="ch3" style:family="chart" style:data-style-name="N10036">
+    <style:style style:name="ch3" style:family="chart">
       <style:chart-properties chart:display-label="true" chart:logarithmic="false" chart:origin="0" chart:reverse-direction="false" text:line-break="false" loext:try-staggering-first="false" chart:link-data-style-to-source="true" chart:axis-position="0"/>
       <style:graphic-properties svg:stroke-color="#b3b3b3"/>
-      <style:text-properties fo:color="#ffffff" fo:font-family="Lato" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+      <style:text-properties fo:color="#ffffff" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
     </style:style>
     <style:style style:name="ch4" style:family="chart" style:data-style-name="N0">
       <style:chart-properties chart:display-label="true" chart:logarithmic="false" chart:origin="0" chart:reverse-direction="false" text:line-break="false" loext:try-staggering-first="false" chart:link-data-style-to-source="true" chart:axis-position="0"/>
       <style:graphic-properties svg:stroke-color="#b3b3b3"/>
-      <style:text-properties fo:color="#ffffff" fo:font-family="Lato" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+      <style:text-properties fo:color="#ffffff" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
     </style:style>
     <style:style style:name="ch5" style:family="chart">
       <style:graphic-properties svg:stroke-color="#ffffff" svg:stroke-opacity="30%"/>
@@ -58,7 +51,7 @@
           <chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="ch4">
             <chart:grid chart:style-name="ch5" chart:class="major"/>
           </chart:axis>
-          <chart:series chart:style-name="ch6" chart:values-cell-range-address="local-table.$C$2:.$C$5" chart:label-cell-address="local-table.$C$1" chart:class="chart:bar">
+          <chart:series chart:style-name="ch6" chart:values-cell-range-address="local-table.$b$2:.$b$5" chart:label-cell-address="local-table.$b$1" chart:class="chart:bar">
             <chart:data-point chart:style-name="ch7" chart:repeated="4"/>
           </chart:series>
           <chart:wall chart:style-name="ch8"/>
@@ -68,21 +61,10 @@
           <table:table-header-columns>
             <table:table-column/>
           </table:table-header-columns>
-          <table:table-columns>
-            <table:table-column table:visibility="collapse"/>
-            <table:table-column/>
-          </table:table-columns>
           <table:table-header-rows>
             <table:table-row>
-              <table:table-cell>
-                <text:p/>
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p/>
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p>Sales</text:p>
-              </table:table-cell>
+              <table:table-cell/>
+              <table:table-cell office:value-type="string"/>
             </table:table-row>
           </table:table-header-rows>
           <table:table-rows>
@@ -90,45 +72,25 @@
               <table:table-cell office:value-type="string">
                 <text:p>2016</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="float" office:value="NaN">
-                <text:p>NaN</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="float" office:value="25">
-                <text:p>25</text:p>
-              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="25"/>
             </table:table-row>
             <table:table-row>
               <table:table-cell office:value-type="string">
                 <text:p>2017</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="float" office:value="NaN">
-                <text:p>NaN</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="float" office:value="15">
-                <text:p>15</text:p>
-              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="15"/>
             </table:table-row>
             <table:table-row>
               <table:table-cell office:value-type="string">
                 <text:p>2018</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="float" office:value="NaN">
-                <text:p>NaN</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="float" office:value="40">
-                <text:p>40</text:p>
-              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="40"/>
             </table:table-row>
             <table:table-row>
               <table:table-cell office:value-type="string">
                 <text:p>2019</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="float" office:value="NaN">
-                <text:p>NaN</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="float" office:value="20">
-                <text:p>20</text:p>
-              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="20"/>
             </table:table-row>
           </table:table-rows>
         </table:table>
