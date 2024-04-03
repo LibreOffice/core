@@ -27,8 +27,8 @@ INFO: latest browser won't work anymore with 0.0.0.0 and need 127.0.0.1.
 ## Setup for the LO WASM build (with Qt)
 
 We're using Qt 5.15.2 with Emscripten 3.1.46. There are a bunch of Qt patches
-to fix the most grave bugs. Also newer Emscripten versions have various bugs
-with the FS image support.
+to fix the most grave bugs. Also there's rapid development in Emscripten, so
+using another version often causes arbitraty problems.
 
 - See below under Docker build for another build option
 
@@ -57,27 +57,29 @@ FWIW: Qt 5.15 LTS is not maintained publicly and Qt WASM has quite a few bugs. M
 WASM fixes from Qt 6 are needed for Qt 5.15 too. Allotropia offers a Qt repository
 with the necessary patches cherry-picked.
 
+With "-opensource -confirm-license" you agree to the open source license.
+
     git clone https://github.com/allotropia/qt5.git
     cd qt5
     git checkout v5.15.2+wasm
     ./init-repository --module-subset=qtbase
-    ./configure -xplatform wasm-emscripten -feature-thread -prefix <whatever>
+    ./configure -opensource -confirm-license -xplatform wasm-emscripten -feature-thread -prefix <whatever>
     make -j<CORES> module-qtbase
 
 Optionally you can add the configure flag "-compile-examples". But then you also have to
 patch at least mkspecs/wasm-emscripten/qmake.conf with EXIT_RUNTIME=0, otherwise they will
 fail to run. In addition, building with examples will break with some of them, but at that
-point Qt already works and also most examples.
-Building with examples will break with some of them, but at that point Qt already works.
-Or just skip them. Other interesting flags might be "-nomake tests -no-pch -ccache".
+point Qt already works and also most examples. Or just skip them. Other interesting flags
+might be "-nomake tests -no-pch -ccache".
 
-Linking takes quite a long time, because emscripten-finalize rewrites the whole WASM files
-with some options. This way the LO WASM needs at least 64GB RAM. For faster link times add
-"-s WASM_BIGINT=1", change to ASSERTIONS=1 nd use -g3 to prevent rewriting the WASM file
-and generating source maps (see emscripten.py, finalize_wasm, and avoid modify_wasm = True).
-This is just needed for Qt examples, as LO already uses the correct flags!
+Linking takes quite a long time, because emscripten-finalize rewrites the whole WASM files with
+some options. This way the LO WASM possibly needs 64GB RAM. For faster link times add
+"-s WASM_BIGINT=1", change to ASSERTIONS=1 and use -g3 to prevent rewriting the WASM file and
+generating source maps (see emscripten.py, finalize_wasm, and avoid modify_wasm = True). This is
+just needed for Qt examples, as LO already uses the correct flags!
 
-The install is not really needed, as LO currently just uses qtbase on its own. You can do
+It's needed to install Qt5 to the chosen prefix. Else LO won't find all needed files in the
+right place. For installation you can do
 
     make -j<CORES> install
 or
@@ -104,7 +106,7 @@ Recommended configure setup is thusly:
     `--with-distro=LibreOfficeWASM32`
 
 * local config
-    `QT5DIR=/dir/of/git_qt5/qtbase`
+    `QT5DIR=/dir/of/qt5/install/prefix`
 
 * if you want to use ccache on both sides of the build
     `--with-build-platform-configure-options=--enable-ccache`
