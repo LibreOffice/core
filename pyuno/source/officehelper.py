@@ -109,7 +109,7 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
       + Report processing in console
 
         import officehelper as oh
-        ctx = oh.bootstrap(delays=(5,10,15,20),report=print)  # every 5 sec.
+        ctx = oh.bootstrap(delays=(5,10,15,20),report=print)  # wait 5, 10, 15 and 20 sec.
         # your code goes here
 
     iii. Use a specific LibreOffice copy
@@ -119,6 +119,7 @@ def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
         # your code goes here
     """
     try:
+        process = None  # used in except clause
         if soffice:  # soffice fully qualified path as parm
             sOffice = soffice
         else:  # soffice script used on *ix, Mac; soffice.exe used on Win
