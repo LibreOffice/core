@@ -602,11 +602,6 @@ STAROFFICE_TARBALL := libstaroffice-0.0.$(STAROFFICE_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-SWING_SHA256SUM := 64585ac36a81291a58269ec5347e7e3e2e8596dbacb9221015c208191333c6e1
-SWING_TARBALL := 35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 TWAIN_DSM_SHA256SUM := 82c818be771f242388457aa8c807e4b52aa84dc22b21c6c56184a6b4cbb085e6
 TWAIN_DSM_TARBALL := twaindsm_2.4.1.orig.tar.gz
 # three static lines
