@@ -743,14 +743,14 @@ void ScHTMLLayoutParser::SetWidths()
                         pWidths[nCol] = nW;
                 }
             }
-            for ( nCol = 1; nCol <= nColsPerRow; nCol++ )
+            for (int nCol2 = 1; nCol2 <= nColsPerRow; nCol2++)
             {
-                pOffsets[nCol] = pOffsets[nCol-1] + pWidths[nCol-1];
+                pOffsets[nCol2] = pOffsets[nCol2-1] + pWidths[nCol2-1];
             }
             pLocalColOffset->clear();
-            for ( nCol = 0; nCol <= nColsPerRow; nCol++ )
+            for (int nCol2 = 0; nCol2 <= nColsPerRow; nCol2++)
             {
-                MakeColNoRef( pLocalColOffset, pOffsets[nCol], 0, 0, 0 );
+                MakeColNoRef( pLocalColOffset, pOffsets[nCol2], 0, 0, 0 );
             }
             nTableWidth = pOffsets[nColsPerRow] - pOffsets[0];
 
