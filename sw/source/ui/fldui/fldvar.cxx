@@ -47,7 +47,7 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     , m_xNameFT(m_xBuilder->weld_label("nameft"))
     , m_xNameED(m_xBuilder->weld_entry("name"))
     , m_xValueFT(m_xBuilder->weld_label("valueft"))
-    , m_xValueED(new ConditionEdit(m_xBuilder->weld_entry("value")))
+    , m_xValueED(new ConditionEdit<weld::TextView>(m_xBuilder->weld_text_view("value")))
     , m_xFormat(m_xBuilder->weld_widget("formatframe"))
     , m_xNumFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("numformat")))
     , m_xFormatLB(m_xBuilder->weld_tree_view("format"))
@@ -70,6 +70,9 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     m_xTypeLB->set_size_request(nWidth, nHeight);
     m_xSelectionLB->set_size_request(nWidth, nHeight);
     m_xFormatLB->set_size_request(nWidth, nHeight/2);
+
+    m_xValueED->get_widget().set_size_request(m_xValueED->get_widget().get_preferred_size().Width(),
+                                   m_xValueED->get_widget().get_height_rows(3));
 
     m_sOldValueFT = m_xValueFT->get_label();
     m_sOldNameFT = m_xNameFT->get_label();
@@ -148,7 +151,6 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     m_xFormatLB->connect_row_activated(LINK(this, SwFieldVarPage, TreeViewInsertHdl));
     m_xNumFormatLB->connect_row_activated(LINK(this, SwFieldVarPage, TreeViewInsertHdl));
     m_xNameED->connect_changed(LINK(this, SwFieldVarPage, ModifyHdl));
-    m_xValueED->connect_changed(LINK(this, SwFieldVarPage, ModifyHdl));
     m_xNewPB->connect_clicked(LINK(this, SwFieldVarPage, TBClickHdl));
     m_xDelPB->connect_clicked(LINK(this, SwFieldVarPage, TBClickHdl));
     m_xChapterLevelLB->connect_changed(LINK(this, SwFieldVarPage, ChapterHdl));
