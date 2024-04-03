@@ -273,19 +273,11 @@ css::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 }
 
 
-osl::Mutex& GrammarCheckingIterator::MyMutex()
-{
-    static osl::Mutex SINGLETON;
-    return SINGLETON;
-}
-
 GrammarCheckingIterator::GrammarCheckingIterator() :
     m_bEnd( false ),
     m_bGCServicesChecked( false ),
     m_nDocIdCounter( 0 ),
-    m_thread(nullptr),
-    m_aEventListeners( MyMutex() ),
-    m_aNotifyListeners( MyMutex() )
+    m_thread(nullptr)
 {
 }
 
@@ -299,7 +291,7 @@ void GrammarCheckingIterator::TerminateThread()
 {
     oslThread t;
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+        std::unique_lock aGuard( m_aMutex );
         t = m_thread;
         m_thread = nullptr;
         m_bEnd = true;
@@ -322,13 +314,14 @@ bool GrammarCheckingIterator::joinThreads()
 
 sal_Int32 GrammarCheckingIterator::NextDocId()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+    std::unique_lock aGuard( m_aMutex );
     m_nDocIdCounter += 1;
     return m_nDocIdCounter;
 }
 
 
 OUString GrammarCheckingIterator::GetOrCreateDocId(
+    std::unique_lock<std::mutex>& /*rGuard*/,
     const uno::Reference< lang::XComponent > &xComponent )
 {
     // internal method; will always be called with locked mutex
@@ -354,6 +347,7 @@ OUString GrammarCheckingIterator::GetOrCreateDocId(
 
 
 void GrammarCheckingIterator::AddEntry(
+    std::unique_lock<std::mutex>& /*rGuard*/,
     const uno::Reference< text::XFlatParagraphIterator >& xFlatParaIterator,
     const uno::Reference< text::XFlatParagraph >& xFlatPara,
     const OUString & rDocId,
@@ -373,7 +367,6 @@ void GrammarCheckingIterator::AddEntry(
     aNewFPEntry.m_bAutomatic    = bAutomatic;
 
     // add new entry to the end of this queue
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
     if (!m_thread)
         m_thread = osl_createThread( lcl_workerfunc, this );
     m_aFPEntriesQueue.push_back( aNewFPEntry );
@@ -486,7 +479,8 @@ void GrammarCheckingIterator::ProcessResult(
         // other sentences left to be checked in this paragraph?
         if (rRes.nStartOfNextSentencePosition < rRes.aText.getLength())
         {
-            AddEntry( rxFlatParagraphIterator, rRes.xFlatParagraph, rRes.aDocumentIdentifier, rRes.nStartOfNextSentencePosition, bIsAutomaticChecking );
+            std::unique_lock aGuard(m_aMutex);
+            AddEntry( aGuard, rxFlatParagraphIterator, rRes.xFlatParagraph, rRes.aDocumentIdentifier, rRes.nStartOfNextSentencePosition, bIsAutomaticChecking );
         }
         else    // current paragraph finished
         {
@@ -502,8 +496,11 @@ void GrammarCheckingIterator::ProcessResult(
     {
         // we need to continue with the next paragraph
         if (rxFlatParagraphIterator.is())
-            AddEntry(rxFlatParagraphIterator, rxFlatParagraphIterator->getNextPara(),
+        {
+            std::unique_lock aGuard(m_aMutex);
+            AddEntry(aGuard, rxFlatParagraphIterator, rxFlatParagraphIterator->getNextPara(),
                      rRes.aDocumentIdentifier, 0, bIsAutomaticChecking);
+        }
     }
 }
 
@@ -531,12 +528,10 @@ GrammarCheckingIterator::getServiceForLocale(const lang::Locale& rLocale) const
 
 
 uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarChecker(
+    std::unique_lock<std::mutex>& /*rGuard*/,
     lang::Locale &rLocale )
 {
     uno::Reference< linguistic2::XProofreader > xRes;
-
-    // ---- THREAD SAFE START ----
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
     // check supported locales for each grammarchecker if not already done
     if (!m_bGCServicesChecked)
@@ -590,7 +585,6 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         SAL_INFO("linguistic", "No grammar checker found for \""
                                    << LanguageTag::convertToBcp47(rLocale, false) << "\"");
     }
-    // ---- THREAD SAFE END ----
 
     return xRes;
 }
@@ -617,7 +611,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
         // ---- THREAD SAFE START ----
         bool bQueueEmpty = false;
         {
-            ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+            std::unique_lock aGuard( m_aMutex );
             if (m_bEnd)
             {
                 break;
@@ -634,7 +628,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
             OUString aCurDocId;
             // ---- THREAD SAFE START ----
             {
-                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+                std::unique_lock aGuard( m_aMutex );
                 aFPEntryItem        = m_aFPEntriesQueue.front();
                 xFPIterator         = aFPEntryItem.m_xParaIterator;
                 xFlatPara           = aFPEntryItem.m_xPara;
@@ -659,7 +653,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
                         // ---- THREAD SAFE START ----
                         {
-                            osl::ClearableMutexGuard aGuard(MyMutex());
+                            std::unique_lock aGuard( m_aMutex );
 
                             sal_Int32 nStartPos = aFPEntryItem.m_nStartIndex;
                             sal_Int32 nSuggestedEnd
@@ -669,10 +663,10 @@ void GrammarCheckingIterator::DequeueAndCheck()
                                        "nSuggestedEndOfSentencePos calculation failed?");
 
                             uno::Reference<linguistic2::XProofreader> xGC =
-                                GetGrammarChecker(aCurLocale);
+                                GetGrammarChecker(aGuard, aCurLocale);
                             if (xGC.is())
                             {
-                                aGuard.clear();
+                                aGuard.unlock();
                                 uno::Sequence<beans::PropertyValue> const aProps(
                                     lcl_makeProperties(xFlatPara, PROOFINFO_MARK_PARAGRAPH));
                                 aRes = xGC->doProofreading(aCurDocId, aCurTxt, aCurLocale,
@@ -718,7 +712,8 @@ void GrammarCheckingIterator::DequeueAndCheck()
                         // the paragraph changed meanwhile... (and maybe is still edited)
                         // thus we simply continue to ask for the next to be checked.
                         uno::Reference< text::XFlatParagraph > xFlatParaNext( xFPIterator->getNextPara() );
-                        AddEntry( xFPIterator, xFlatParaNext, aCurDocId, 0, aFPEntryItem.m_bAutomatic );
+                        std::unique_lock aGuard(m_aMutex);
+                        AddEntry( aGuard, xFPIterator, xFlatParaNext, aCurDocId, 0, aFPEntryItem.m_bAutomatic );
                     }
                 }
                 catch (css::uno::Exception &)
@@ -729,7 +724,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
             // ---- THREAD SAFE START ----
             {
-                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+                std::unique_lock aGuard( m_aMutex );
                 m_aCurCheckedDocId.clear();
             }
             // ---- THREAD SAFE END ----
@@ -738,7 +733,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
         {
             // ---- THREAD SAFE START ----
             {
-                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+                std::unique_lock aGuard( m_aMutex );
                 if (m_bEnd)
                 {
                     break;
@@ -772,13 +767,13 @@ void SAL_CALL GrammarCheckingIterator::startProofreading(
     uno::Reference< lang::XComponent > xComponent( xDoc, uno::UNO_QUERY );
 
     // ---- THREAD SAFE START ----
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+    std::unique_lock aGuard( m_aMutex );
     if (xPara.is() && xComponent.is())
     {
-        OUString aDocId = GetOrCreateDocId( xComponent );
+        OUString aDocId = GetOrCreateDocId( aGuard, xComponent );
 
         // create new entry and add it to queue
-        AddEntry( xFPIterator, xPara, aDocId, 0, bAutomatic );
+        AddEntry( aGuard, xFPIterator, xPara, aDocId, 0, bAutomatic );
     }
     // ---- THREAD SAFE END ----
 }
@@ -815,12 +810,12 @@ linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceA
 
             // ---- THREAD SAFE START ----
             {
-                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
-                aDocId = GetOrCreateDocId( xComponent );
+                std::unique_lock aGuard( m_aMutex );
+                aDocId = GetOrCreateDocId( aGuard, xComponent );
                 nSuggestedEndOfSentencePos = GetSuggestedEndOfSentence( rText, nStartPos, aCurLocale );
                 DBG_ASSERT( nSuggestedEndOfSentencePos > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
 
-                xGC = GetGrammarChecker( aCurLocale );
+                xGC = GetGrammarChecker( aGuard, aCurLocale );
             }
             // ---- THREAD SAFE START ----
             sal_Int32 nEndPos = -1;
@@ -927,7 +922,7 @@ sal_Bool SAL_CALL GrammarCheckingIterator::isProofreading(
     const uno::Reference< uno::XInterface >& xDoc )
 {
     // ---- THREAD SAFE START ----
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     bool bRes = false;
 
@@ -978,7 +973,9 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
     {
          uno::Reference< uno::XInterface > xThis( getXWeak() );
          linguistic2::LinguServiceEvent aEvent( xThis, linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN );
+         std::unique_lock aGuard( m_aMutex );
          m_aNotifyListeners.notifyEach(
+                aGuard,
                 &linguistic2::XLinguServiceEventListener::processLinguServiceEvent,
                 aEvent);
     }
@@ -999,7 +996,8 @@ sal_Bool SAL_CALL GrammarCheckingIterator::addLinguServiceEventListener(
 {
     if (xListener.is())
     {
-        m_aNotifyListeners.addInterface( xListener );
+        std::unique_lock aGuard( m_aMutex );
+        m_aNotifyListeners.addInterface( aGuard, xListener );
     }
     return true;
 }
@@ -1010,7 +1008,8 @@ sal_Bool SAL_CALL GrammarCheckingIterator::removeLinguServiceEventListener(
 {
     if (xListener.is())
     {
-        m_aNotifyListeners.removeInterface( xListener );
+        std::unique_lock aGuard( m_aMutex );
+        m_aNotifyListeners.removeInterface( aGuard, xListener );
     }
     return true;
 }
@@ -1019,13 +1018,16 @@ sal_Bool SAL_CALL GrammarCheckingIterator::removeLinguServiceEventListener(
 void SAL_CALL GrammarCheckingIterator::dispose()
 {
     lang::EventObject aEvt( static_cast<linguistic2::XProofreadingIterator *>(this) );
-    m_aEventListeners.disposeAndClear( aEvt );
+    {
+        std::unique_lock aGuard( m_aMutex );
+        m_aEventListeners.disposeAndClear( aGuard, aEvt );
+    }
 
     TerminateThread();
 
     // ---- THREAD SAFE START ----
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+        std::unique_lock aGuard( m_aMutex );
 
         // release all UNO references
 
@@ -1048,7 +1050,8 @@ void SAL_CALL GrammarCheckingIterator::addEventListener(
 {
     if (xListener.is())
     {
-        m_aEventListeners.addInterface( xListener );
+        std::unique_lock aGuard( m_aMutex );
+        m_aEventListeners.addInterface( aGuard, xListener );
     }
 }
 
@@ -1058,7 +1061,8 @@ void SAL_CALL GrammarCheckingIterator::removeEventListener(
 {
     if (xListener.is())
     {
-        m_aEventListeners.removeInterface( xListener );
+        std::unique_lock aGuard( m_aMutex );
+        m_aEventListeners.removeInterface( aGuard, xListener );
     }
 }
 
@@ -1077,7 +1081,7 @@ void SAL_CALL GrammarCheckingIterator::disposing( const lang::EventObject &rSour
     if (xDoc.is())
     {
         // ---- THREAD SAFE START ----
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+        std::unique_lock aGuard( m_aMutex );
         m_aDocIdMap.erase( xDoc.get() );
         // ---- THREAD SAFE END ----
     }
@@ -1151,7 +1155,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
 
     {
         // ---- THREAD SAFE START ----
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+        std::unique_lock aGuard( m_aMutex );
         m_aGCImplNamesByLang.swap(aTmpGCImplNamesByLang);
         // ---- THREAD SAFE END ----
     }
@@ -1181,7 +1185,7 @@ void GrammarCheckingIterator::SetServiceList(
     const lang::Locale &rLocale,
     const uno::Sequence< OUString > &rSvcImplNames )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     OUString sBcp47 = LanguageTag::convertToBcp47(rLocale, false);
     OUString aImplName;
@@ -1201,7 +1205,7 @@ void GrammarCheckingIterator::SetServiceList(
 uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
     const lang::Locale &rLocale ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     const OUString aImplName = getServiceForLocale(rLocale).first;     // there is only one grammar checker per language
 
