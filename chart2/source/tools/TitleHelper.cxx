@@ -374,7 +374,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
         if (bDialogTitle && aNewText.equals(getUnstackedStr(aFullString)))
         {
             // If the new title setted from a dialog window to a new string
-            // the first old text portion will be maintained if its a new string,
+            // the first old text portion will be maintained if it's a new string,
             // otherwise we use the original one.
             aNewStringList = aOldStringList;
         }
