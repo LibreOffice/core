@@ -162,22 +162,6 @@ private:
     SdOptionsLayout maOptionsLayout;
 };
 
-class SdOptionsContents : public SdOptionsGeneric
-{
-private:
-protected:
-
-    virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const css::uno::Any* pValues ) override;
-    virtual bool WriteData( css::uno::Any* pValues ) const override;
-
-public:
-
-            SdOptionsContents(bool bImpress);
-
-    bool    operator==( const SdOptionsContents& rOpt ) const;
-};
-
 class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
 private:
@@ -559,7 +543,7 @@ private:
     SdOptionsPrint  maOptionsPrint;
 };
 
-class SdOptions final : public SdOptionsLayout, public SdOptionsContents,
+class SdOptions final : public SdOptionsLayout,
                   public SdOptionsMisc, public SdOptionsSnap,
                   public SdOptionsZoom, public SdOptionsGrid,
                   public SdOptionsPrint

@@ -338,54 +338,6 @@ void SdOptionsLayoutItem::SetOptions( SdOptions* pOpts ) const
 
 /*************************************************************************
 |*
-|* SdOptionsContents
-|*
-\************************************************************************/
-
-SdOptionsContents::SdOptionsContents(bool bImpress) :
-    SdOptionsGeneric( bImpress, bImpress ?
-                        OUString( "Office.Impress/Content" ) :
-                        OUString( "Office.Draw/Content" ) )
-{
-    EnableModify( true );
-}
-
-bool SdOptionsContents::operator==(const SdOptionsContents&) const
-{
-    return true;
-}
-
-void SdOptionsContents::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
-{
-    static const char* aPropNames[] =
-    {
-        "Display/PicturePlaceholder",
-        "Display/ContourMode",
-        "Display/LineContour",
-        "Display/TextPlaceholder"
-    };
-
-    rCount = SAL_N_ELEMENTS(aPropNames);
-    ppNames = aPropNames;
-}
-
-bool SdOptionsContents::ReadData(const Any*)
-{
-    return true;
-}
-
-bool SdOptionsContents::WriteData( Any* pValues ) const
-{
-    //#i80528# no draft anymore
-    pValues[ 0 ] <<= false;
-    pValues[ 1 ] <<= false;
-    pValues[ 2 ] <<= false;
-    pValues[ 3 ] <<= false;
-
-    return true;
-}
-/*************************************************************************
-|*
 |* SdOptionsMisc
 |*
 \************************************************************************/
@@ -1342,7 +1294,6 @@ void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
 
 SdOptions::SdOptions(bool bImpress) :
     SdOptionsLayout( bImpress, true ),
-    SdOptionsContents( bImpress ),
     SdOptionsMisc( bImpress, true ),
     SdOptionsSnap( bImpress, true ),
     SdOptionsZoom( bImpress ),
@@ -1358,7 +1309,6 @@ SdOptions::~SdOptions()
 void SdOptions::StoreConfig()
 {
     SdOptionsLayout::Store();
-    SdOptionsContents::Store();
     SdOptionsMisc::Store();
     SdOptionsSnap::Store();
     SdOptionsZoom::Store();
