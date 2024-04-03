@@ -354,7 +354,6 @@ void BackingWindow::ApplyStyleSettings()
 
     // setup larger fonts
     setLargerFont(mxOpenButton, aButtonFont);
-    setLargerFont(mxOpenButton, aButtonFont);
     setLargerFont(mxRemoteButton, aButtonFont);
     setLargerFont(mxRecentButton, aButtonFont);
     setLargerFont(mxTemplateButton, aButtonFont);
