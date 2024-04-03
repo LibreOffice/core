@@ -85,6 +85,20 @@ static oslFileError osl_setup_createTempFile_impl_(
     return osl_error;
 }
 
+static LPCWSTR getEyeCatcher()
+{
+    static const OUString sEyeCatcher = []
+    {
+        OUString eyeCatcher = u"\0"_ustr;
+#ifdef DBG_UTIL
+        if (const wchar_t* eye = _wgetenv(L"LO_TESTNAME"))
+            eyeCatcher = OUString(o3tl::toU(eye), wcslen(eye) + 1); // including terminating nul
+#endif
+        return eyeCatcher;
+    }();
+    return o3tl::toW(sEyeCatcher.getStr());
+}
+
 static oslFileError osl_win32_GetTempFileName_impl_(
     rtl_uString* base_directory, LPWSTR temp_file_name)
 {
@@ -92,7 +106,7 @@ static oslFileError osl_win32_GetTempFileName_impl_(
 
     if (GetTempFileNameW(
             o3tl::toW(rtl_uString_getStr(base_directory)),
-            L"",
+            getEyeCatcher(),
             0,
             temp_file_name) == 0)
     {

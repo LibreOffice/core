@@ -28,6 +28,7 @@
 #include <unotools/tempfile.hxx>
 #include <rtl/ustring.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/mutex.hxx>
 #include <osl/detail/file.h>
 #include <osl/file.hxx>
@@ -273,53 +274,41 @@ OUString lcl_createName(
     return OUString();
 }
 
+const OUString& getEyeCatcher()
+{
+    static const OUString sEyeCatcher = []
+    {
+        OUString eyeCatcher = u"lu"_ustr;
+#ifdef DBG_UTIL
+#ifdef UNX
+        if (const char* eye = getenv("LO_TESTNAME"))
+            eyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
+#elif defined(_WIN32)
+        if (const wchar_t* eye = _wgetenv(L"LO_TESTNAME"))
+            eyeCatcher = OUString(o3tl::toU(eye));
+#endif
+#else
+#ifdef UNX
+        eyeCatcher += OUString::number(getpid());
+#elif defined(_WIN32)
+        eyeCatcher += OUString::number(_getpid());
+#endif
+#endif
+        return eyeCatcher;
+    }();
+    return sEyeCatcher;
+}
+
 OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = true )
 {
-    OUString aEyeCatcher = "lu";
-#ifdef UNX
-#ifdef DBG_UTIL
-    const char* eye = getenv("LO_TESTNAME");
-    if(eye)
-    {
-        aEyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
-    }
-#else
-    static const pid_t pid = getpid();
-    static const OUString aPidString = OUString::number(pid);
-    aEyeCatcher += aPidString;
-#endif
-#elif defined(_WIN32)
-    static const int pid = _getpid();
-    static const OUString aPidString = OUString::number(pid);
-    aEyeCatcher += aPidString;
-#endif
     UniqueTokens t;
-    return lcl_createName( aEyeCatcher, t, u"", pParent, bDir, bKeep,
+    return lcl_createName( getEyeCatcher(), t, u"", pParent, bDir, bKeep,
                            false, false);
 }
 
 OUString CreateTempNameFast()
 {
-    OUString aEyeCatcher = "lu";
-#ifdef UNX
-#ifdef DBG_UTIL
-    const char* eye = getenv("LO_TESTNAME");
-    if(eye)
-    {
-        aEyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
-    }
-#else
-    static const pid_t pid = getpid();
-    static const OUString aPidString = OUString::number(pid);
-    aEyeCatcher += aPidString;
-#endif
-#elif defined(_WIN32)
-    static const int pid = _getpid();
-    static const OUString aPidString = OUString::number(pid);
-    aEyeCatcher += aPidString;
-#endif
-
-    OUString aName = getTempNameBase_Impl() + aEyeCatcher;
+    OUString aName = getTempNameBase_Impl() + getEyeCatcher();
 
     tools::Guid aGuid(tools::Guid::Generate);
 
