@@ -26,12 +26,14 @@
 #include "cellvalue.hxx"
 #include "mtvelements.hxx"
 #include "queryparam.hxx"
+#include "attarray.hxx"
 #include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <memory>
 #include <set>
 #include <vector>
+#include <optional>
 
 class ScDocument;
 class ScPatternAttr;
@@ -255,13 +257,11 @@ private:
     SCROW           nStartRow;
     SCROW           nEndRow;
     SCCOL           nCol;
-    std::unique_ptr<ScAttrIterator>
-                    pColIter;
+    std::optional<ScAttrIterator> moColIter;
 
 public:
                     ScDocAttrIterator(ScDocument& rDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-                    ~ScDocAttrIterator();
 
     const ScPatternAttr*    GetNext( SCCOL& rCol, SCROW& rRow1, SCROW& rRow2 );
 };
@@ -277,13 +277,12 @@ private:
     SCROW           nEndRow;
     SCCOL           nIterStartCol;
     SCCOL           nIterEndCol;
-    std::unique_ptr<ScAttrIterator>
-                    pColIter;
+    std::optional<ScAttrIterator>
+                    moColIter;
 
 public:
                     ScAttrRectIterator(ScDocument& rDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-                    ~ScAttrRectIterator();
 
     void                    DataChanged();
     const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow1, SCROW& rRow2 );

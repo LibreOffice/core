@@ -1057,8 +1057,8 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
     SCROW nAttrRow1 = {}; // spurious -Werror=maybe-uninitialized
     SCROW nAttrRow2 = {}; // spurious -Werror=maybe-uninitialized
     const ScPatternAttr* pPattern;
-    std::unique_ptr<ScAttrIterator> pAttrIter(aCol[nCol].CreateAttrIterator( nRow1, nRow2 ));
-    while ( (pPattern = pAttrIter->Next( nAttrRow1, nAttrRow2 )) != nullptr )
+    ScAttrIterator aAttrIter(aCol[nCol].CreateAttrIterator( nRow1, nRow2 ));
+    while ( (pPattern = aAttrIter.Next( nAttrRow1, nAttrRow2 )) != nullptr )
     {
             // ptr compare OK, was so before
             if (&rDocument.getCellAttributeHelper().getDefaultCellAttribute() != pPattern)

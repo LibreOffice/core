@@ -2042,9 +2042,9 @@ void ScColumn::MixData(
     CellStorageModified();
 }
 
-std::unique_ptr<ScAttrIterator> ScColumnData::CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const
+ScAttrIterator ScColumnData::CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const
 {
-    return std::make_unique<ScAttrIterator>( pAttrArray.get(), nStartRow, nEndRow, &GetDoc().getCellAttributeHelper().getDefaultCellAttribute() );
+    return ScAttrIterator( pAttrArray.get(), nStartRow, nEndRow, &GetDoc().getCellAttributeHelper().getDefaultCellAttribute() );
 }
 
 namespace {

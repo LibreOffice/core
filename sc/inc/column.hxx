@@ -26,6 +26,7 @@
 #include "rangelst.hxx"
 #include "types.hxx"
 #include "mtvelements.hxx"
+#include "attarray.hxx"
 #include <formula/types.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svdobj.hxx>
@@ -165,7 +166,7 @@ public:
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
     bool        HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
 
-    std::unique_ptr<ScAttrIterator> CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
+    ScAttrIterator CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
     bool        IsAllAttrEqual( const ScColumnData& rCol, SCROW nStartRow, SCROW nEndRow ) const;
 
