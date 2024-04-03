@@ -1681,7 +1681,7 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
             }
             catch (beans::UnknownPropertyException&)
             {
-                // ignore, various code likes to opportunisticly set properties on objects that don't support those properties
+                // ignore, various code likes to opportunistically set properties on objects that don't support those properties
             }
             catch (uno::Exception&)
             {
