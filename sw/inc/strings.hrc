@@ -891,8 +891,7 @@
 #define STR_FILTER_DOC                          NC_("STR_FILTER_DOC", "Microsoft Word")
 #define STR_FILTER_TXT                          NC_("STR_FILTER_TXT", "Plain text")
 #define STR_FILTER_CSV                          NC_("STR_FILTER_CSV", "Text Comma Separated")
-#define STR_FILTER_MDB                          NC_("STR_FILTER_MDB", "Microsoft Access")
-#define STR_FILTER_ACCDB                        NC_("STR_FILTER_ACCDB", "Microsoft Access 2007")
+#define STR_FILTER_ACCDB                        NC_("STR_FILTER_ACCDB", "Microsoft Access")
 #define ST_CONFIGUREMAIL                        NC_("ST_CONFIGUREMAIL", "In order to be able to send mail merge documents by email, %PRODUCTNAME requires information about the email account to be used.\n\nDo you want to enter email account information now?")
 #define ST_FILTERNAME                           NC_("ST_FILTERNAME", "%PRODUCTNAME Address List (.csv)")
 

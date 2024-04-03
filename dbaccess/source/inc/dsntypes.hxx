@@ -55,7 +55,6 @@ enum DATASOURCE_TYPE
     DST_EVOLUTION_LDAP      = 19,
     DST_KAB                 = 20,
     DST_MACAB               = 21,
-    DST_MSACCESS_2007       = 22,
     DST_EMBEDDED_HSQLDB     = 23,
     DST_MYSQL_NATIVE        = 24,
     DST_MYSQL_NATIVE_DIRECT = 25,

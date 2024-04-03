@@ -105,7 +105,6 @@ namespace dbaui
                 m_xFT_Connection->set_label(DBA_RES(STR_COMMONURL));
                 break;
             case  ::dbaccess::DST_MSACCESS:
-            case  ::dbaccess::DST_MSACCESS_2007:
                 m_xFT_Connection->set_label(DBA_RES(STR_MSACCESS_MDB_FILE));
                 m_xConnectionURL->set_help_id(HID_DSADMIN_MSACCESS_MDB_FILE);
                 break;

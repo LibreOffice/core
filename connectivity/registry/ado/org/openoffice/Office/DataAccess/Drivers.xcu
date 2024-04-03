@@ -214,7 +214,7 @@
         </node>
       </node>
     </node>
-    <node oor:name="sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=*" oor:op="replace">
+    <node oor:name="sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=*" oor:op="replace">
       <prop oor:name="Driver">
         <value>com.sun.star.comp.sdbc.ado.ODriver</value>
       </prop>
@@ -340,27 +340,12 @@
         </node>
         <node oor:name="Extension" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:string">
-            <value>mdb</value>
+            <value></value>
           </prop>
         </node>
         <node oor:name="SupportsColumnDescription" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
-          </prop>
-        </node>
-      </node>
-    </node>
-    <node oor:name="sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=*" oor:op="replace">
-      <prop oor:name="ParentURLPattern">
-        <value>sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=*</value>
-      </prop>
-      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">Microsoft Access 2007</value>
-      </prop>
-      <node oor:name="MetaData">
-        <node oor:name="Extension" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:string">
-            <value></value>
           </prop>
         </node>
       </node>

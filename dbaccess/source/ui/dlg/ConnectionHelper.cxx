@@ -217,19 +217,8 @@ namespace dbaui
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,"*.mdb;*.mde");
+                aFileDlg.AddFilter(sFilterName,"*.accdb;*.accde;*.mdb;*.mde");
                 aFileDlg.SetCurrentFilter(sFilterName);
-                askForFileName(aFileDlg);
-            }
-            break;
-            case  ::dbaccess::DST_MSACCESS_2007:
-            {
-                OUString sFilterName2(DBA_RES (STR_MSACCESS_2007_FILTERNAME));
-                ::sfx2::FileDialogHelper aFileDlg(
-                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                    FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName2,"*.accdb;*.accde");
-                aFileDlg.SetCurrentFilter(sFilterName2);
                 askForFileName(aFileDlg);
             }
             break;
@@ -659,7 +648,7 @@ namespace dbaui
 
                 const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
 
-                if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_WRITER == eType) || ( ::dbaccess::DST_MSACCESS == eType) || ( ::dbaccess::DST_MSACCESS_2007 == eType) )
+                if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_WRITER == eType) || ( ::dbaccess::DST_MSACCESS == eType) )
                 {
                     if( pathExists(sURL, true) == PATH_NOT_EXIST )
                     {

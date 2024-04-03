@@ -121,9 +121,9 @@ void OConnection::construct(std::u16string_view url,const Sequence< PropertyValu
             WpADOProperties aProps = m_aAdoConnection.get_Properties();
             if(aProps.IsValid())
             {
-                OTools::putValue(aProps, std::u16string_view(u"Jet OLEDB:ODBC Parsing"), true);
+                OTools::putValue(aProps, std::u16string_view(u"ACE OLEDB:ODBC Parsing"), true);
                 OLEVariant aVar(
-                    OTools::getValue(aProps, std::u16string_view(u"Jet OLEDB:Engine Type")));
+                    OTools::getValue(aProps, std::u16string_view(u"ACE OLEDB:Engine Type")));
                 if(!aVar.isNull() && !aVar.isEmpty())
                     m_nEngineType = aVar.getInt32();
             }
@@ -184,7 +184,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sql )
     WpADOProperties aProps = m_aAdoConnection.get_Properties();
     if(aProps.IsValid())
     {
-        OTools::putValue(aProps, std::u16string_view(u"Jet OLEDB:ODBC Parsing"), true);
+        OTools::putValue(aProps, std::u16string_view(u"ACE OLEDB:ODBC Parsing"), true);
         WpADOCommand aCommand;
         aCommand.Create();
         aCommand.put_ActiveConnection(static_cast<IDispatch*>(m_aAdoConnection));

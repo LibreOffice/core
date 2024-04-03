@@ -293,7 +293,6 @@
 #define STR_JDBCDRIVER_SUCCESS                      NC_("STR_JDBCDRIVER_SUCCESS", "The JDBC driver was loaded successfully.")
 #define STR_JDBCDRIVER_NO_SUCCESS                   NC_("STR_JDBCDRIVER_NO_SUCCESS", "The JDBC driver could not be loaded.")
 #define STR_MSACCESS_FILTERNAME                     NC_("STR_MSACCESS_FILTERNAME", "MS Access file")
-#define STR_MSACCESS_2007_FILTERNAME                NC_("STR_MSACCESS_2007_FILTERNAME", "MS Access 2007 file")
 #define STR_FIREBIRD_FILTERNAME                     NC_("STR_FIREBIRD_FILTERNAME", "Firebird Database")
 
 #define STR_RSC_CHARSETS                            NC_("STR_RSC_CHARSETS", "System")

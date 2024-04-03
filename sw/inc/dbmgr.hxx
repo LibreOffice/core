@@ -485,7 +485,6 @@ enum class DBConnURIType
     CALC,
     DBASE,
     FLAT,
-    MSJET,
     MSACE,
     WRITER
 };

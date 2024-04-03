@@ -137,7 +137,6 @@ WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) c
                 case  ::dbaccess::DST_KAB:
                 case  ::dbaccess::DST_MACAB:
                 case  ::dbaccess::DST_MSACCESS:
-                case  ::dbaccess::DST_MSACCESS_2007:
                 case  ::dbaccess::DST_JDBC:
                 case  ::dbaccess::DST_CALC:
                 case  ::dbaccess::DST_WRITER:

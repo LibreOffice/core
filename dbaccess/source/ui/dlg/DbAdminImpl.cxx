@@ -465,7 +465,6 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
         case  ::dbaccess::DST_WRITER:
             break;
         case  ::dbaccess::DST_MSACCESS:
-        case  ::dbaccess::DST_MSACCESS_2007:
             {
                 OUString sFileName = pCollection->cutPrefix(pUrlItem->GetValue());
                 OUString sNewFileName;

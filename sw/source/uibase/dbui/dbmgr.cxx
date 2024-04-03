@@ -2571,11 +2571,8 @@ DBConnURIType GetDBunoType(const INetURLObject &rURL)
         type = DBConnURIType::FLAT;
     }
 #ifdef _WIN32
-    else if (sExt.equalsIgnoreAsciiCase("mdb") || sExt.equalsIgnoreAsciiCase("mde"))
-    {
-        type = DBConnURIType::MSJET;
-    }
-    else if (sExt.equalsIgnoreAsciiCase("accdb") || sExt.equalsIgnoreAsciiCase("accde"))
+    else if (sExt.equalsIgnoreAsciiCase("accdb") || sExt.equalsIgnoreAsciiCase("accde")
+             || sExt.equalsIgnoreAsciiCase("mdb") || sExt.equalsIgnoreAsciiCase("mde"))
     {
         type = DBConnURIType::MSACE;
     }
@@ -2631,14 +2628,6 @@ uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
             aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
     }
-    break;
-    case DBConnURIType::MSJET:
-#ifdef _WIN32
-    {
-        OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=" + rURL.PathToFileName());
-        aURLAny <<= sDBURL;
-    }
-#endif
     break;
     case DBConnURIType::MSACE:
 #ifdef _WIN32
@@ -2698,7 +2687,6 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
             aTableFilterAny <<= aFilters;
         }
         break;
-    case DBConnURIType::MSJET:
     case DBConnURIType::MSACE:
         aSuppressVersionsAny <<= true;
         break;
@@ -2805,8 +2793,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
         { SwResId(STR_FILTER_TXT), "*.txt" },
         { SwResId(STR_FILTER_CSV), "*.csv" },
 #ifdef _WIN32
-        { SwResId(STR_FILTER_MDB), "*.mdb;*.mde" },
-        { SwResId(STR_FILTER_ACCDB), "*.accdb;*.accde" },
+        { SwResId(STR_FILTER_ACCDB), "*.accdb;*.accde;*.mdb;*.mde" },
 #endif
     };
 

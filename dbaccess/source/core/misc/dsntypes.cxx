@@ -228,8 +228,7 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
             _rsHostname = sUrl.getToken(0,'/');
         _sDatabaseName = sUrl.copy(sUrl.lastIndexOf('/')+1);
     }
-    else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=")
-           || _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=") )
+    else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:"))
     {
         OUString sNewFileName;
         if ( ::osl::FileBase::getFileURLFromSystemPath( sUrl, sNewFileName ) == ::osl::FileBase::E_None )
@@ -339,10 +338,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
     {
         if (sDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:"))
         {
-            if (sDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;"))
-                return DST_MSACCESS_2007;
-            else
-                return DST_MSACCESS;
+            return DST_MSACCESS;
         }
         return DST_ADO;
     }
@@ -455,7 +451,6 @@ void ODsnTypeCollection::fillPageIds(std::u16string_view _sURL,std::vector<sal_I
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_LDAP);
             break;
         case DST_MSACCESS:
-        case DST_MSACCESS_2007:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MSACCESS);
             break;
         case DST_OUTLOOKEXP:
