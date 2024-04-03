@@ -290,6 +290,7 @@
           <info>
             <desc>Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
             <label>Image placeholders</label>
+            <deprecated>Not used anymore</deprecated>
           </info>
           <value>false</value>
         </prop>
@@ -298,6 +299,7 @@
           <info>
             <desc>Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
             <label>Contour mode</label>
+            <deprecated>Not used anymore</deprecated>
           </info>
           <value>false</value>
         </prop>
@@ -306,6 +308,7 @@
           <info>
             <desc>Indicates whether to show only a placeholder for text in graphical objects.</desc>
             <label>Text placeholders</label>
+            <deprecated>Not used anymore</deprecated>
           </info>
           <value>false</value>
         </prop>
@@ -314,6 +317,7 @@
           <info>
             <desc>Indicates whether to show only hairlines instead of the true line styles.</desc>
             <label>Line contour only</label>
+            <deprecated>Not used anymore</deprecated>
           </info>
           <value>false</value>
         </prop>
