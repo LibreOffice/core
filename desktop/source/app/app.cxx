@@ -127,6 +127,10 @@
 #include "langselect.hxx"
 #include <salhelper/thread.hxx>
 
+#if HAVE_FEATURE_UPDATE_MAR
+#include <tools/time.hxx>
+#endif
+
 #if defined MACOSX
 #include <errno.h>
 #include <sys/wait.h>
