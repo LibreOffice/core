@@ -982,7 +982,7 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
     {
         if (getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
             AddAttribute( nPrefixRfc, XML_RFC_LANGUAGE_TAG, rLanguageTag.getBcp47());
-        // Also in case of non-pure-ISO tag store best matching fo: attributes
+        // Also in case of non-pure-ISO tag store best matching for: attributes
         // for consumers not handling *:rfc-language-tag, ensuring that only
         // valid ISO codes are stored. Here the bWriteEmpty parameter has no
         // meaning.
