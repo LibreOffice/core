@@ -964,12 +964,12 @@ static array_type assembleGrid(const VclGrid &rGrid)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 14
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdangling-reference"
 #endif
             const GridEntry &rEntry = A[x][y];
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 14
 #pragma GCC diagnostic pop
 #endif
             const vcl::Window *pChild = rEntry.pChild;
@@ -1101,7 +1101,7 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 14
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdangling-reference"
 #elif defined _MSC_VER
@@ -1109,7 +1109,7 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
 #pragma warning(disable : 4459)
 #endif
             const GridEntry &rEntry = A[x][y];
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 14
 #pragma GCC diagnostic pop
 #elif defined _MSC_VER
 #pragma warning(pop)
@@ -1144,12 +1144,12 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 14
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdangling-reference"
 #endif
             const GridEntry &rEntry = A[x][y];
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 14
 #pragma GCC diagnostic pop
 #endif
             const vcl::Window *pChild = rEntry.pChild;
