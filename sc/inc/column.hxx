@@ -30,7 +30,6 @@
 #include <formula/types.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svdobj.hxx>
-#include "attarray.hxx"
 
 #include <optional>
 #include <set>
