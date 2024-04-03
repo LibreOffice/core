@@ -601,12 +601,12 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
                 m_aDriversBS.end(),         // end of search range
                 [&_rURL, this] (const DriverAccessArray::value_type& driverAccess) {
                     // extract the driver from the access, then ask the resulting driver for acceptance
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 14
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdangling-reference"
 #endif
                     const DriverAccess& ensuredAccess = EnsureDriver(m_xContext)(driverAccess);
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 14
 #pragma GCC diagnostic pop
 #endif
                     const Reference<XDriver> driver = ExtractDriverFromAccess()(ensuredAccess);
