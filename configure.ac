@@ -2356,11 +2356,8 @@ libo_FUZZ_ARG_ENABLE(scripting-javascript,
 
 AC_ARG_WITH(system-rhino,
     AS_HELP_STRING([--with-system-rhino],
-        [Use rhino already on system.]),,)
-#    [with_system_rhino="$with_system_jars"])
-# Above is not used as we have different debug interface
-# patched into internal rhino. This code needs to be fixed
-# before we can enable it by default.
+        [Use rhino already on system.]),,
+    [with_system_rhino="$with_system_jars"])
 
 AC_ARG_WITH(rhino-jar,
     AS_HELP_STRING([--with-rhino-jar=JARFILE],

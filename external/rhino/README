@@ -3,12 +3,3 @@ JavaScript engine/interpreter written in Java, used to provide JavaScript extens
 The Scripting Framework makes use of the Rhino ([http://www.mozilla.org/rhino/])
 JavaScript interpreter, available under the Mozilla Public License
 ([http://www.mozilla.org/MPL/MPL-1.1.html]).
-
-In addition, to support the debugging of scripts contained in OpenOffice.org
-documents, we have modified the Java source file Main.java.
-
-The Rhino source tarball is unpacked and patched with the modified code. The
-Rhino Jar file (js.jar) is then built (download/swingExSrc.zip is unpacked and
-built as part of this procesS) and delivered to the solver. The file
-rhino1_5R5.patch contains the changes made in order to build Rhino. The patch
-was generated using the command: diff -wurN
