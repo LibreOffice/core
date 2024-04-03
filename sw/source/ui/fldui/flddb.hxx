@@ -37,7 +37,7 @@ class SwFieldDBPage : public SwFieldPage
     std::unique_ptr<SwDBTreeList> m_xDatabaseTLB;
     std::unique_ptr<weld::Button> m_xAddDBPB;
     std::unique_ptr<weld::Widget> m_xCondition;
-    std::unique_ptr<ConditionEdit> m_xConditionED;
+    std::unique_ptr<ConditionEdit<weld::Entry>> m_xConditionED;
     std::unique_ptr<weld::Widget> m_xValue;
     std::unique_ptr<weld::Entry> m_xValueED;
     std::unique_ptr<weld::RadioButton> m_xDBFormatRB;

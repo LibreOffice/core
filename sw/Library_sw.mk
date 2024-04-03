@@ -777,7 +777,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/utlui/AccessibilityStatusBarControl \
     sw/source/uibase/utlui/attrdesc \
     sw/source/uibase/utlui/bookctrl \
-    sw/source/uibase/utlui/condedit \
     sw/source/uibase/utlui/content \
     sw/source/uibase/utlui/glbltree \
     sw/source/uibase/utlui/gloslst \
