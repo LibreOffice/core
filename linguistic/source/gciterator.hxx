@@ -29,13 +29,13 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <mutex>
+#include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.h>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/lok.hxx>
-#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <i18nlangtag/lang.h>
 
 #include <map>
@@ -84,8 +84,6 @@ class GrammarCheckingIterator:
     public LinguDispatcher,
     public comphelper::LibreOfficeKit::ThreadJoinable
 {
-    mutable std::mutex m_aMutex;
-
     //the queue is keeping track of all sentences to be checked
     //every element of this queue is a FlatParagraphEntry struct-object
     typedef std::deque< FPEntry > FPQueue_t;
@@ -116,8 +114,9 @@ class GrammarCheckingIterator:
     oslThread       m_thread;
 
     //! beware of initialization order!
-    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>  m_aEventListeners;
-    comphelper::OInterfaceContainerHelper4<css::linguistic2::XLinguServiceEventListener>  m_aNotifyListeners;
+    static osl::Mutex& MyMutex();
+    comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>  m_aEventListeners;
+    comphelper::OInterfaceContainerHelper3<css::linguistic2::XLinguServiceEventListener>  m_aNotifyListeners;
 
     css::uno::Reference< css::i18n::XBreakIterator > m_xBreakIterator;
     mutable css::uno::Reference< css::util::XChangesBatch >  m_xUpdateAccess;
@@ -125,10 +124,9 @@ class GrammarCheckingIterator:
     void TerminateThread();
 
     sal_Int32 NextDocId();
-    OUString GetOrCreateDocId( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference< css::lang::XComponent > &xComp );
+    OUString GetOrCreateDocId( const css::uno::Reference< css::lang::XComponent > &xComp );
 
     void AddEntry(
-            std::unique_lock<std::mutex>& rGuard,
             const css::uno::Reference< css::text::XFlatParagraphIterator >& xFlatParaIterator,
             const css::uno::Reference< css::text::XFlatParagraph >& xFlatPara,
             const OUString &rDocId, sal_Int32 nStartIndex, bool bAutomatic );
@@ -140,7 +138,7 @@ class GrammarCheckingIterator:
     sal_Int32 GetSuggestedEndOfSentence( const OUString &rText, sal_Int32 nSentenceStartPos, const css::lang::Locale &rLocale );
 
     void GetConfiguredGCSvcs_Impl();
-    css::uno::Reference< css::linguistic2::XProofreader > GetGrammarChecker( std::unique_lock<std::mutex>& rGuard, css::lang::Locale & rLocale );
+    css::uno::Reference< css::linguistic2::XProofreader > GetGrammarChecker( css::lang::Locale & rLocale );
 
     css::uno::Reference< css::util::XChangesBatch > const & GetUpdateAccess() const;
 
