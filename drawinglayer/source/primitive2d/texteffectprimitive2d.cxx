@@ -41,7 +41,6 @@ Primitive2DReference TextEffectPrimitive2D::create2DDecomposition(
     switch (getTextEffectStyle2D())
     {
         case TextEffectStyle2D::ReliefEmbossed:
-        case TextEffectStyle2D::ReliefEngraved:
         case TextEffectStyle2D::ReliefEmbossedDefault:
         case TextEffectStyle2D::ReliefEngravedDefault:
         {

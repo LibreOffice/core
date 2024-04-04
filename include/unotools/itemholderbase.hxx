@@ -25,8 +25,6 @@
 
 enum class EItem
 {
-    AccessibilityOptions          ,   // 2
-
     CmdOptions                    ,
     ColorConfig                   ,   // 2
     CTLOptions                    ,   // 2

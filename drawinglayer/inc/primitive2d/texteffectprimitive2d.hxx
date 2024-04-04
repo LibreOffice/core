@@ -30,7 +30,6 @@ enum class TextEffectStyle2D
     ReliefEmbossedDefault,
     ReliefEngravedDefault,
     ReliefEmbossed,
-    ReliefEngraved,
     Outline
 };
 

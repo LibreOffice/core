@@ -41,17 +41,6 @@ BASIC_DLLPUBLIC css::uno::Reference< css::script::XStarBasicAccess >
 
 class SotStorage;
 
-enum class BasicErrorReason
-{
-    OPENLIBSTORAGE   = 0x0002,
-    OPENMGRSTREAM    = 0x0004,
-    OPENLIBSTREAM    = 0x0008,
-    LIBNOTFOUND      = 0x0010,
-    STORAGENOTFOUND  = 0x0020,
-    BASICLOADERROR   = 0x0040,
-    STDLIB           = 0x0100
-};
-
 class BasicError
 {
 private:

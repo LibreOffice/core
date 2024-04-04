@@ -165,7 +165,6 @@ namespace skeleton
                 case PROPERTY_ID_DBASEPRECISIONCHANGED:     { rtl_uString_newFromAscii(&pStr,getPROPERTY_DBASEPRECISIONCHANGED() ); break; }
                 case PROPERTY_ID_ISCURRENCY:                { rtl_uString_newFromAscii(&pStr,getPROPERTY_ISCURRENCY()           ); break; }
                 case PROPERTY_ID_ISBOOKMARKABLE:            { rtl_uString_newFromAscii(&pStr,getPROPERTY_ISBOOKMARKABLE()       ); break; }
-                case PROPERTY_ID_INVALID_INDEX:             { rtl_uString_newFromAscii(&pStr,getSTAT_INVALID_INDEX()            ); break; }
                 case PROPERTY_ID_ERRORMSG_SEQUENCE:         { rtl_uString_newFromAscii(&pStr,getERRORMSG_SEQUENCE()             ); break; }
                 case PROPERTY_ID_HY010:                     { rtl_uString_newFromAscii(&pStr,getSQLSTATE_SEQUENCE()             ); break; }
                 case PROPERTY_ID_HY0000:                    { rtl_uString_newFromAscii(&pStr,getSQLSTATE_GENERAL()              ); break; }

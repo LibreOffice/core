@@ -127,18 +127,16 @@ namespace skeleton
 #define PROPERTY_ID_ISCURRENCY                      39
 #define PROPERTY_ID_ISBOOKMARKABLE                  40
 
-#define PROPERTY_ID_INVALID_INDEX                   41
-#define PROPERTY_ID_ERRORMSG_SEQUENCE               42
-#define PROPERTY_ID_HY010                           43
-#define PROPERTY_ID_HY0000                          44
-#define PROPERTY_ID_DELIMITER                       45
-#define PROPERTY_ID_FORMATKEY                       46
-#define PROPERTY_ID_LOCALE                          47
-#define PROPERTY_ID_IM001                           48
+#define PROPERTY_ID_ERRORMSG_SEQUENCE               41
+#define PROPERTY_ID_HY010                           42
+#define PROPERTY_ID_HY0000                          43
+#define PROPERTY_ID_DELIMITER                       44
+#define PROPERTY_ID_FORMATKEY                       45
+#define PROPERTY_ID_LOCALE                          46
 
-#define PROPERTY_ID_AUTOINCREMENTCREATION           49
+#define PROPERTY_ID_AUTOINCREMENTCREATION           47
 
-#define PROPERTY_ID_PRIVILEGES                      50
+#define PROPERTY_ID_PRIVILEGES                      48
 
 #endif // INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_PROPERTYIDS_HXX
 

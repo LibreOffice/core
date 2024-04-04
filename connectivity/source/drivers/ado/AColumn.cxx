@@ -141,7 +141,6 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                     getBOOL(rValue));
                 break;
 
-            case PROPERTY_ID_IM001:
             case PROPERTY_ID_DESCRIPTION:
                 sAdoPropertyName = u"Description";
                 break;
