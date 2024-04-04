@@ -221,6 +221,38 @@ static void lo_accessible_text_get_default_attributes(GtkAccessibleText* self,
     convertUnoTextAttributesToGtk(aAttribs, attribute_names, attribute_values);
 }
 
+#if GTK_CHECK_VERSION(4, 15, 0)
+static gboolean lo_accessible_text_get_extents(GtkAccessibleText* self, unsigned int start,
+                                               unsigned int end, graphene_rect_t* extents)
+{
+    css::uno::Reference<css::accessibility::XAccessibleText> xText = getXText(self);
+    if (!xText.is())
+        return false;
+
+    if (end != start + 1)
+    {
+        SAL_WARN("vcl.gtk", "lo_accessible_text_get_extents called for a text range of more than a "
+                            "single character. This is not implemented yet.");
+        return false;
+    }
+
+    if (start > o3tl::make_unsigned(xText->getCharacterCount()))
+    {
+        SAL_WARN("vcl.gtk",
+                 "lo_accessible_text_get_extents called with invalid start index: " << start);
+        return false;
+    }
+
+    com::sun::star::awt::Rectangle aBounds = xText->getCharacterBounds(start);
+    extents->origin.x = aBounds.X;
+    extents->origin.y = aBounds.Y;
+    extents->size.width = aBounds.Width;
+    extents->size.height = aBounds.Height;
+
+    return true;
+}
+#endif
+
 void lo_accessible_text_init(gpointer iface_, gpointer)
 {
     auto const iface = static_cast<GtkAccessibleTextInterface*>(iface_);
@@ -230,6 +262,9 @@ void lo_accessible_text_init(gpointer iface_, gpointer)
     iface->get_selection = lo_accessible_text_get_selection;
     iface->get_attributes = lo_accessible_text_get_attributes;
     iface->get_default_attributes = lo_accessible_text_get_default_attributes;
+#if GTK_CHECK_VERSION(4, 15, 0)
+    iface->get_extents = lo_accessible_text_get_extents;
+#endif
 }
 
 #endif
