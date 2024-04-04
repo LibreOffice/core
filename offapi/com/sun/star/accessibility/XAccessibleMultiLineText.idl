@@ -19,11 +19,11 @@
 
 module com { module sun { module star { module accessibility {
 
-/** Implement this interface to give provide a mapping between text index
+/** Implement this interface to provide a mapping between text index
     and line numbers.
 
     <p>This interface is typically used in conjunction with the
-    XAccessibleText interface and extents it with a notion
+    XAccessibleText interface and extends it with a notion
     of line numbers</p>
 
     @since OOo 3.0
