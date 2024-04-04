@@ -274,28 +274,30 @@ OUString lcl_createName(
     return OUString();
 }
 
-const OUString& getEyeCatcher()
+OUString createEyeCatcher()
 {
-    static const OUString sEyeCatcher = []
-    {
-        OUString eyeCatcher = u"lu"_ustr;
+    OUString eyeCatcher = u"lu"_ustr;
 #ifdef DBG_UTIL
 #ifdef UNX
-        if (const char* eye = getenv("LO_TESTNAME"))
-            eyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
+    if (const char* eye = getenv("LO_TESTNAME"))
+        eyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
 #elif defined(_WIN32)
-        if (const wchar_t* eye = _wgetenv(L"LO_TESTNAME"))
-            eyeCatcher = OUString(o3tl::toU(eye));
+    if (const wchar_t* eye = _wgetenv(L"LO_TESTNAME"))
+        eyeCatcher = OUString(o3tl::toU(eye));
 #endif
 #else
 #ifdef UNX
-        eyeCatcher += OUString::number(getpid());
+    eyeCatcher += OUString::number(getpid());
 #elif defined(_WIN32)
-        eyeCatcher += OUString::number(_getpid());
+    eyeCatcher += OUString::number(_getpid());
 #endif
 #endif
-        return eyeCatcher;
-    }();
+    return eyeCatcher;
+}
+
+const OUString& getEyeCatcher()
+{
+    static const OUString sEyeCatcher = createEyeCatcher();
     return sEyeCatcher;
 }
 
