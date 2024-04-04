@@ -742,7 +742,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
 {
     MapMode aMM( MapUnit::MapAppFont );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, nullptr );
-    vcl::Font aFnt( "Helvetica", aAppFontSz );
+    vcl::Font aFnt( "Noto Sans", aAppFontSz );
     aFnt.SetTransparent( true );
     aFnt.SetColor( COL_LIGHTRED );
     aFnt.SetWeight( WEIGHT_BOLD );
