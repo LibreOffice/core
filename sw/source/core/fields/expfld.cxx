@@ -233,7 +233,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             else
                 pContentFrame = pPgFrame->FindLastBodyContent();
 
-            if( pContentFrame )
+            if( pContentFrame && !pContentFrame->IsInFootnote() )
             {
                 assert(pContentFrame->IsTextFrame());
                 SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pContentFrame));
