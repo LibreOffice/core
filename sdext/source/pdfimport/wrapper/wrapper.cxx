@@ -61,6 +61,7 @@
 #include <memory>
 #include <string_view>
 #include <unordered_map>
+#include <vector>
 #include <string.h>
 
 using namespace com::sun::star;
@@ -1081,10 +1082,13 @@ bool xpdf_ImportFromFile(const OUString& rURL,
 
     // spawn separate process to keep LGPL/GPL code apart.
 
-    OUString aOptFlag("-o");
-    rtl_uString*  args[] = { aSysUPath.pData,
-                             aOptFlag.pData, rFilterOptions.pData };
-    sal_Int32 nArgs = rFilterOptions.isEmpty() ? std::size(args) - 2 : std::size(args);
+    constexpr OUString aOptFlag(u"-o"_ustr);
+    std::vector<rtl_uString*> args({ aSysUPath.pData });
+    if (!rFilterOptions.isEmpty())
+    {
+        args.push_back(aOptFlag.pData);
+        args.push_back(rFilterOptions.pData);
+    }
 
     oslProcess    aProcess;
     oslFileHandle pIn  = nullptr;
@@ -1093,8 +1097,8 @@ bool xpdf_ImportFromFile(const OUString& rURL,
     oslSecurity pSecurity = osl_getCurrentSecurity ();
     oslProcessError eErr =
         osl_executeProcess_WithRedirectedIO(converterURL.pData,
-                                            args,
-                                            nArgs,
+                                            args.data(),
+                                            args.size(),
                                             osl_Process_SEARCHPATH|osl_Process_HIDDEN,
                                             pSecurity,
                                             nullptr, nullptr, 0,
