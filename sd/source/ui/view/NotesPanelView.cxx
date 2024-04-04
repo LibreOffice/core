@@ -52,6 +52,9 @@ NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
     // fill Outliner with contents
     FillOutliner();
 
+    mrNotesPanelViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(
+        LINK(this, NotesPanelView, EventMultiplexerListener));
+
     // TODO: UNDO
     // sd::UndoManager* pDocUndoMgr = dynamic_cast<sd::UndoManager*>(mpDocSh->GetUndoManager());
     // if (pDocUndoMgr != nullptr)
@@ -60,8 +63,10 @@ NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
 
 NotesPanelView::~NotesPanelView()
 {
-    ResetLinks();
+    mrNotesPanelViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener(
+        LINK(this, NotesPanelView, EventMultiplexerListener));
 
+    ResetLinks();
     // DisconnectFromApplication();
     // mpProgress.reset();
 }
@@ -93,16 +98,9 @@ void NotesPanelView::FillOutliner()
 void NotesPanelView::SetLinks()
 {
     maOutliner.SetStatusEventHdl(LINK(this, NotesPanelView, StatusEventHdl));
-    mrNotesPanelViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(
-        LINK(this, NotesPanelView, EventMultiplexerListener));
 }
 
-void NotesPanelView::ResetLinks()
-{
-    maOutliner.SetStatusEventHdl(Link<EditStatus&, void>());
-    mrNotesPanelViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener(
-        LINK(this, NotesPanelView, EventMultiplexerListener));
-}
+void NotesPanelView::ResetLinks() { maOutliner.SetStatusEventHdl(Link<EditStatus&, void>()); }
 
 void NotesPanelView::removeListener()
 {
