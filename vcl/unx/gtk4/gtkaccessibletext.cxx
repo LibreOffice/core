@@ -251,6 +251,23 @@ static gboolean lo_accessible_text_get_extents(GtkAccessibleText* self, unsigned
 
     return true;
 }
+
+static gboolean lo_accessible_text_get_offset(GtkAccessibleText* self,
+                                              const graphene_point_t* point, unsigned int* offset)
+{
+    css::uno::Reference<css::accessibility::XAccessibleText> xText = getXText(self);
+    if (!xText.is())
+        return false;
+
+    css::awt::Point aPoint(point->x, point->y);
+    const sal_Int32 nIndex = xText->getIndexAtPoint(aPoint);
+
+    if (nIndex < 0)
+        return false;
+
+    *offset = nIndex;
+    return true;
+}
 #endif
 
 void lo_accessible_text_init(gpointer iface_, gpointer)
@@ -264,6 +281,7 @@ void lo_accessible_text_init(gpointer iface_, gpointer)
     iface->get_default_attributes = lo_accessible_text_get_default_attributes;
 #if GTK_CHECK_VERSION(4, 15, 0)
     iface->get_extents = lo_accessible_text_get_extents;
+    iface->get_offset = lo_accessible_text_get_offset;
 #endif
 }
 
