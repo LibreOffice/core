@@ -809,6 +809,12 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             unlockPositionOfObjects( pPg );
             pPg = static_cast<SwPageFrame*>(pPg->GetNext());
         }
+        if (m_pRoot->IsSuperfluous()) // could be newly set now!
+        {
+            bool bOld = IsAgain();
+            m_pRoot->RemoveSuperfluous();
+            SetAgain(bOld);
+        }
         // reset flag for special interrupt content formatting.
         mbFormatContentOnInterrupt = false;
     }
