@@ -59,9 +59,6 @@ enum RestartReason {
     // For the multi-threaded calculation changes to take effect,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_THREADING,
-    // For restructuring the Form menu,
-    // %PRODUCTNAME must be restarted:
-    RESTART_REASON_MSCOMPATIBLE_FORMS_MENU,
     // To apply changes, %PRODUCTNAME,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_UI_CHANGE,
