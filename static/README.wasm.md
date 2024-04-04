@@ -232,7 +232,6 @@ xSimpleText = new css.text.XSimpleText(xText.$query());
 xTextCursor = xSimpleText.createTextCursor();
 xTextRange = new css.text.XTextRange(xTextCursor.$query());
 xTextRange.setString("string here!");
-xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
 xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
 ```
 
