@@ -201,17 +201,10 @@ void winwrap::TransformRect(LPRECT rect,HWND pWnd,HWND pWndClipTo)
 
 static void NormalizeRect(LPRECT rp)
 {
-    if(rp->left > rp->right) {
-        UINT tmp = rp->left;
-        rp->left = rp->right;
-        rp->right = tmp;
-    }
-
-    if(rp->top > rp->bottom) {
-        UINT tmp = rp->top;
-        rp->top = rp->bottom;
-        rp->bottom = tmp;
-    }
+    if(rp->left > rp->right)
+        std::swap(rp->left, rp->right);
+    if(rp->top > rp->bottom)
+        std::swap(rp->top, rp->bottom);
 }
 
 
