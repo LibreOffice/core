@@ -26,6 +26,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -699,10 +700,21 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
         xPropertySet->setPropertyValue("ParaWidows", aAny);
         xPropertySet->setPropertyValue("ParaOrphans", aAny);
     }
+
+    std::pair<bool, bool> aAllow = GetCompatSettingHasAndValue(u"allowHyphenationAtTrackBottom");
+    std::pair<bool, bool> aUse = GetCompatSettingHasAndValue(u"useWord2013TrackBottomHyphenation");
+    // if allowHyphenationAtTrackBottom is not true and useWord2013TrackBottomHyphenation is
+    // not present or it is true, set ParaHyphenationKeep to COLUMN
+    if ( !aAllow.second && ( !aUse.first || aUse.second ) )
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue("ParaHyphenationKeep", uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
+    }
 }
 
-bool SettingsTable::GetCompatSettingValue( std::u16string_view sCompatName ) const
+std::pair<bool, bool> SettingsTable::GetCompatSettingHasAndValue( std::u16string_view sCompatName ) const
 {
+    bool bHas = false;
     bool bRet = false;
     for (const auto& rProp : m_pImpl->m_aCompatSettings)
     {
@@ -725,10 +737,11 @@ bool SettingsTable::GetCompatSettingValue( std::u16string_view sCompatName ) con
             aCurrentCompatSettings[2].Value >>= sVal;
             // if repeated, what happens?  Last one wins
             bRet = sVal.toBoolean();
+            bHas = true;
         }
     }
 
-    return bRet;
+    return std::pair<bool, bool>(bHas, bRet);
 }
 
 //Keep this function in-sync with the one in sw/.../docxattributeoutput.cxx

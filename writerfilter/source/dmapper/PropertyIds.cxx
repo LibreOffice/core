@@ -102,6 +102,7 @@ namespace
         { PROP_PARA_IS_HYPHENATION, u"ParaIsHyphenation"},
         { PROP_PARA_HYPHENATION_NO_CAPS, u"ParaHyphenationNoCaps"},
         { PROP_PARA_HYPHENATION_ZONE, u"ParaHyphenationZone"},
+        { PROP_PARA_HYPHENATION_KEEP, u"ParaHyphenationKeep"},
         { PROP_PARA_LINE_NUMBER_COUNT, u"ParaLineNumberCount"},
         { PROP_PARA_IS_HANGING_PUNCTUATION, u"ParaIsHangingPunctuation"},
         { PROP_PARA_LINE_SPACING, u"ParaLineSpacing"},

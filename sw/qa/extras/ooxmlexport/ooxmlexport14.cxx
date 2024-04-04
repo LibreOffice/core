@@ -28,6 +28,8 @@
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <editeng/unolingu.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -1422,6 +1424,68 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159032, "tdf124795-5.docx")
 {
     // This resulted crashing
     CPPUNIT_ASSERT_EQUAL(57, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf160518, "tdf160518_useWord2013TrackBottomHyphenation.docx")
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // TODO: fix export too
+    if (isExported())
+        return;
+    // This was 2 (without shifting last hyphenated line of the page)
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf160518_compatible, "tdf160518_allowHyphenationAtTrackBottom.docx")
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // TODO: fix export too
+    if (isExported())
+        return;
+    // This is still 2
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf160518_ODT, "tdf160518_useWord2013TrackBottomHyphenation.docx")
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // TODO: fix export too
+    if (isExported())
+        return;
+    // This was 2 (without shifting last hyphenated line of the page)
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    // check compatibility option in ODT export/import, too
+    saveAndReload("writer8");
+
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf160518_ODT_compatible, "tdf160518_allowHyphenationAtTrackBottom.docx")
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // TODO: fix export too
+    if (isExported())
+        return;
+    // This is still 2
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // check compatibility option in ODT export/import, too
+    saveAndReload("writer8");
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)

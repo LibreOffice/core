@@ -1161,7 +1161,8 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     // The wording is confusing here. Normally, the paragraph style DOES override the table-style.
                     // But for these two special situations, do not override the table-style. So the default is false.
                     // If false, then "CompatOverride" the normal behaviour, and apply the table-style's value.
-                    bCompatOverride &= !m_rDMapper_Impl.GetSettingsTable()->GetCompatSettingValue(u"overrideTableStyleFontSizeAndJustification");
+                    bCompatOverride &= !m_rDMapper_Impl.GetSettingsTable()->
+                        GetCompatSettingHasAndValue(u"overrideTableStyleFontSizeAndJustification").second;
                 }
 
                 // use table style when no paragraph style setting or a docDefault value is applied instead of it

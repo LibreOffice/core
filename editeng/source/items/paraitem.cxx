@@ -616,7 +616,7 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
 bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Int16 nNewVal = 0;
+    sal_Int32 nNewVal = 0; // sal_Int32 needs for MID_HYPHEN_KEEP
 
     if( nMemberId != MID_IS_HYPHEN && nMemberId != MID_HYPHEN_NO_CAPS &&
                 nMemberId != MID_HYPHEN_NO_LAST_WORD )
