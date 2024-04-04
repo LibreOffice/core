@@ -441,6 +441,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, SyncSelectionHdl, weld::Button&, void)
     m_xApplyToAllCB->show();
     m_xSearchCaseSensitiveCB->show();
     m_xSearchCaseWordOnlyCB->show();
+    m_xDialog->resize_to_request();
     m_xApplyToAllCB->set_sensitive(!m_aOrgStr.isEmpty() &&
         !(nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FLY_ANY )));
     SearchTypeHdl(*m_xApplyToAllCB);
