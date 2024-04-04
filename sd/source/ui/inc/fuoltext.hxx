@@ -24,22 +24,19 @@
 class SdDrawDocument;
 class SfxRequest;
 
-namespace sd {
+namespace sd
+{
 
-class View;
-class ViewShell;
-class OutlineView;
-class OutlineViewShell;
+class SimpleOutlinerView;
 
 /**
- * text functions in outline mode
+ * Functions class for shells that host only an Outliner e.g. NotesPanel
+ *
  */
-class FuOutlineText final
-    : public FuPoor
+class FuSimpleOutlinerText : public FuPoor
 {
 public:
-
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     virtual bool Command(const CommandEvent& rCEvt) override;
 
@@ -53,22 +50,42 @@ public:
     virtual void DoPaste() override;
     virtual void DoPasteUnformatted() override;
 
-    /** Call this method when the text in the outliner (may) has changed.
-        It will invalidate some slots of the view frame and update the
-        preview in the slide sorter.
+    /** Call this method when the text in the outliner (may) have changed.
+        It will invalidate some slots of the view frame.
     */
-    void UpdateForKeyPress (const KeyEvent& rEvent);
+    virtual void UpdateForKeyPress (const KeyEvent& rEvent);
 
-private:
-    FuOutlineText (
+protected:
+    FuSimpleOutlinerText(
         ViewShell* pViewShell,
         ::sd::Window* pWin,
-        ::sd::View* pView,
+        ::sd::SimpleOutlinerView* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    OutlineViewShell* pOutlineViewShell;
-    OutlineView* pOutlineView;
+    ViewShell* pOutlineViewShell;
+    SimpleOutlinerView* mpSimpleOutlinerView;
+};
+
+class FuOutlineText final : public FuSimpleOutlinerText
+{
+public:
+    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+    /** Call this method when the text in the outliner (may) have changed.
+        It will invalidate some slots of the view frame and update the
+        preview in the slide sorter.
+    */
+    virtual void UpdateForKeyPress(const KeyEvent& rEvent) override;
+
+private:
+    FuOutlineText(
+        ViewShell* pViewShell,
+        ::sd::Window* pWin,
+        ::sd::SimpleOutlinerView* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
 };
 
 } // end of namespace sd

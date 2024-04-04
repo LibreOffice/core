@@ -46,6 +46,7 @@ namespace {
         CenterPaneId,
         FullScreenPaneId,
         LeftImpressPaneId,
+        BottomImpressPaneId,
         LeftDrawPaneId
     };
 
@@ -116,6 +117,11 @@ BasicPaneFactory::BasicPaneFactory (
 
             aDescriptor.msPaneURL = FrameworkHelper::msLeftImpressPaneURL;
             aDescriptor.mePaneId = LeftImpressPaneId;
+            mpPaneContainer->push_back(aDescriptor);
+            xCC->addResourceFactory(aDescriptor.msPaneURL, this);
+
+            aDescriptor.msPaneURL = FrameworkHelper::msBottomImpressPaneURL;
+            aDescriptor.mePaneId = BottomImpressPaneId;
             mpPaneContainer->push_back(aDescriptor);
             xCC->addResourceFactory(aDescriptor.msPaneURL, this);
 
@@ -222,6 +228,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
                 break;
 
             case LeftImpressPaneId:
+            case BottomImpressPaneId:
             case LeftDrawPaneId:
                 xPane = CreateChildWindowPane(
                     rxPaneId,
@@ -366,6 +373,11 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
             case LeftImpressPaneId:
                 pShell.reset(new LeftImpressPaneShell());
                 nChildWindowId = ::sd::LeftPaneImpressChildWindow::GetChildWindowId();
+                break;
+
+            case BottomImpressPaneId:
+                pShell.reset(new BottomImpressPaneShell());
+                nChildWindowId = ::sd::BottomPaneImpressChildWindow::GetChildWindowId();
                 break;
 
             case LeftDrawPaneId:

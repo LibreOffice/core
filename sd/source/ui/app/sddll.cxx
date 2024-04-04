@@ -177,6 +177,7 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
 #endif
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(false, pMod);
+    ::sd::BottomPaneImpressChildWindow::RegisterChildWindow(false, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(false, pMod);
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
     ::sd::NotesChildWindow::RegisterChildWindow(false, pMod);

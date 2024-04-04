@@ -629,13 +629,11 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             break;
 
         case SID_NOTES_WINDOW:
-        {
-            SfxViewShell* pViewShell = SfxViewShell::Current();
-            SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
-            auto nID = rRequest.GetSlot();
-            rViewFrame.ToggleChildWindow(nID);
+            mpImpl->SetPaneVisibility(
+                rRequest,
+                framework::FrameworkHelper::msBottomImpressPaneURL,
+                framework::FrameworkHelper::msNotesPanelViewURL);
             break;
-        }
 
         case SID_TOGGLE_TABBAR_VISIBILITY:
         {
@@ -1287,19 +1285,10 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         break;
 
                     case SID_NOTES_WINDOW:
-                    {
-                        bState = false;
-                        auto* pViewShell = SfxViewShell::Current();
-                        if (pViewShell)
-                        {
-                            auto& rViewFrame = pViewShell->GetViewFrame();
-                            if (rViewFrame.KnowsChildWindow(nItemId))
-                            {
-                                bState = rViewFrame.HasChildWindow(nItemId);
-                            }
-                        }
+                        xResourceId = ResourceId::create(
+                            xContext, FrameworkHelper::msBottomImpressPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
                         break;
-                    }
 
                     case SID_DRAWINGMODE:
                     case SID_NORMAL_MULTI_PANE_GUI:

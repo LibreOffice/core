@@ -100,7 +100,8 @@ public:
         ST_OUTLINE,
         ST_SLIDE_SORTER,
         ST_PRESENTATION,
-        ST_SIDEBAR
+        ST_SIDEBAR,
+        ST_NOTESPANEL
     };
     static const int MAX_HSPLIT_CNT = 1;
     static const int MAX_VSPLIT_CNT = 1;

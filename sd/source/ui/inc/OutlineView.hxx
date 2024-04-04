@@ -46,12 +46,24 @@ class OutlineViewModelChangeGuard;
 const int MAX_OUTLINERVIEWS = 4;
 
 /**
- * Derivative of ::sd::View for the outline mode
+ *  Common base for OutlineView and NotesPanelView that only have a single Outliner in the view.
+|*
+\************************************************************************/
+class SimpleOutlinerView : public ::sd::View
+{
+public:
+    SimpleOutlinerView(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev, ViewShell* pViewSh)
+            : View(rDrawDoc, pOutDev, pViewSh) {}
+    virtual OutlinerView* GetViewByWindow(vcl::Window const* pWin) const = 0;
+};
+
+/**
+ * Derivative of ::sd::SimpleOutlinerView for the outline mode
 |*
 \************************************************************************/
 
 class OutlineView final
-    : public ::sd::View
+    : public SimpleOutlinerView
 {
     friend class OutlineViewModelChangeGuard;
 public:
@@ -78,7 +90,7 @@ public:
     virtual void AddDeviceToPaintView(OutputDevice& rDev, vcl::Window* pWindow) override;
     virtual void DeleteDeviceFromPaintView(OutputDevice& rDev) override;
 
-    OutlinerView*   GetViewByWindow(vcl::Window const * pWin) const;
+    OutlinerView*   GetViewByWindow(vcl::Window const * pWin) const override;
     SdrOutliner&    GetOutliner() { return mrOutliner; }
 
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
