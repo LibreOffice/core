@@ -2234,11 +2234,6 @@ ScalingParameters EditEngine::getScalingParameters() const
     return getImpl().getScalingParameters();
 }
 
-void EditEngine::resetScalingParameters()
-{
-    getImpl().resetScalingParameters();
-}
-
 void EditEngine::setScalingParameters(ScalingParameters const& rScalingParameters)
 {
     getImpl().setScalingParameters(rScalingParameters);

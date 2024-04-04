@@ -201,10 +201,6 @@ private:
     friend class SvNFEngine;
     friend class SvNumberFormatter;
 
-    SVL_DLLPRIVATE sal_uInt32 GetStandardFormat(SvNFLanguageData& rCurrentLanguage,
-                                                const NativeNumberWrapper* pNatNum,
-                                                SvNumFormatType eType, LanguageType eLnge);
-
     // Obtain the format entry for a given key index.
     SVL_DLLPRIVATE SvNumberformat* GetFormatEntry(sal_uInt32 nKey);
 
@@ -249,11 +245,6 @@ private:
     ImpInsertFormat(SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper* pNatNum,
                     const css::i18n::NumberFormatCode& rCode, sal_uInt32 nPos,
                     bool bAfterChangingSystemCL = false, sal_Int16 nOrgIndex = 0);
-
-    SVL_DLLPRIVATE sal_uInt32 ImpGetStandardFormat(SvNFLanguageData& rCurrentLanguage,
-                                                   const NativeNumberWrapper* pNatNum,
-                                                   SvNumFormatType eType, sal_uInt32 CLOffset,
-                                                   LanguageType eLnge);
 
     // Return the format index of the currency format of the current locale.
     // Format is created if not already present.

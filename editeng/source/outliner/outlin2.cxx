@@ -243,11 +243,6 @@ Size Outliner::CalcTextSize()
     return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeight());
 }
 
-Size Outliner::CalcTextSizeNTP()
-{
-    return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeightNTP());
-}
-
 void Outliner::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
     pEditEngine->SetStyleSheetPool( pSPool );

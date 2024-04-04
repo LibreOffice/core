@@ -116,9 +116,6 @@ public:
 
     SvLockBytes() : m_pStream(nullptr), m_bOwner(false), m_bSync(false) {}
 
-    SvLockBytes(SvStream * pTheStream, bool bTheOwner = false) :
-        m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(false) {}
-
     virtual ~SvLockBytes() override { close(); }
 
     const SvStream * GetStream() const { return m_pStream; }

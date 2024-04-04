@@ -106,14 +106,6 @@ awt::Size SAL_CALL SvtRulerAccessible::getSize()
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-bool SvtRulerAccessible::isVisible()
-{
-    std::unique_lock aGuard( m_aMutex );
-    throwIfDisposed(aGuard);
-
-    return mpRepr->IsVisible();
-}
-
 //=====  XAccessibleContext  ==================================================
 sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
 {

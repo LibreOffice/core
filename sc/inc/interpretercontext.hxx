@@ -90,8 +90,6 @@ struct ScInterpreterContext
 
     sal_uInt32 NFGetStandardFormat(SvNumFormatType eType, LanguageType eLnge = LANGUAGE_DONTKNOW);
     sal_uInt32 NFGetStandardFormat(sal_uInt32 nFIndex, SvNumFormatType eType, LanguageType eLnge);
-    sal_uInt32 NFGetStandardFormat(double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
-                                   LanguageType eLnge);
 
     bool NFGetPreviewString(const OUString& sFormatString, double fPreviewNumber,
                             OUString& sOutString, const Color** ppColor, LanguageType eLnge);

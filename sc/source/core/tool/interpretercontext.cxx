@@ -233,15 +233,6 @@ sal_uInt32 ScInterpreterContext::NFGetStandardFormat(sal_uInt32 nFIndex, SvNumFo
                                          nFIndex, eType, eLnge);
 }
 
-sal_uInt32 ScInterpreterContext::NFGetStandardFormat(double fNumber, sal_uInt32 nFIndex,
-                                                     SvNumFormatType eType, LanguageType eLnge)
-{
-    if (!mpDoc->IsThreadedGroupCalcInProgress())
-        return GetFormatTable()->GetStandardFormat(fNumber, nFIndex, eType, eLnge);
-    return SvNFEngine::GetStandardFormat(*mxLanguageData, *mpFormatData, nullptr, maROPolicy,
-                                         fNumber, nFIndex, eType, eLnge);
-}
-
 void ScInterpreterContext::NFGetInputLineString(const double& fOutNumber, sal_uInt32 nFIndex,
                                                 OUString& rOutString, bool bFiltering,
                                                 bool bForceSystemLocale) const

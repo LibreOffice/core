@@ -49,10 +49,6 @@ public:
     SvtRulerAccessible(
         css::uno::Reference< css::accessibility::XAccessible> xParent, Ruler& rRepresentation, OUString aName );
 
-    /// @throws css::uno::RuntimeException
-    bool
-        isVisible();
-
     //=====  XAccessible  =====================================================
 
     virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL

@@ -143,7 +143,6 @@ public:
     sal_Int32 getStartingAngle() const;
 
     void setPieChartSubType(css::chart2::PieChartSubType eSubType);
-    css::chart2::PieChartSubType getPieChartSubType() const;
 
     void setRoleOfSequenceForDataLabelNumberFormatDetection( std::u16string_view rRole );
 

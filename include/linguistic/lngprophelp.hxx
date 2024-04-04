@@ -301,7 +301,6 @@ public:
     sal_Int16   GetMinTrailing() const;
     sal_Int16   GetCompoundMinLeading() const;
     sal_Int16   GetMinWordLength() const;
-    sal_Int16   GetTextHyphenZone() const;
     bool IsNoHyphenateCaps() const;
     /// @throws css::uno::RuntimeException
     bool addLinguServiceEventListener(

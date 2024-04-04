@@ -28,7 +28,6 @@
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/componentguard.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -589,11 +589,6 @@ private:
 
     // Whether nFIndex is a special builtin format
     SVL_DLLPRIVATE bool ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageType eLnge);
-    SVL_DLLPRIVATE static bool ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, sal_uInt32 nCLOffset);
-
-    SVL_DLLPRIVATE sal_uInt32 ImpGetOrGenerateCLOffset(LanguageType eLnge);
-
-    SVL_DLLPRIVATE LanguageType ImpResolveLanguage(LanguageType eLnge) const;
 
     // Replace the SYSTEM language/country format codes. Called upon change of
     // the user configurable locale.
@@ -618,12 +613,6 @@ public:
     // return current (!) Locale
     const LanguageTag& GetLanguageTag() const { return m_aCurrentLanguage.GetLanguageTag(); }
 
-    // return corresponding Transliteration wrapper
-    const ::utl::TransliterationWrapper* GetTransliteration() const
-    {
-        return m_aCurrentLanguage.GetTransliteration();
-    }
-
     // return the corresponding CharacterClassification wrapper
     const CharClass* GetCharClass() const { return m_aCurrentLanguage.GetCharClass(); }
 
@@ -640,12 +629,6 @@ public:
 
     // return the corresponding decimal separator
     const OUString& GetNumDecimalSep() const { return m_aCurrentLanguage.GetNumDecimalSep(); }
-
-    // return the corresponding decimal separator alternative
-    const OUString& GetNumDecimalSepAlt() const { return m_aCurrentLanguage.GetNumDecimalSepAlt(); }
-
-    // return the corresponding group (AKA thousand) separator
-    const OUString& GetNumThousandSep() const { return m_aCurrentLanguage.GetNumThousandSep(); }
 
     // return the corresponding date separator
     const OUString& GetDateSep() const { return m_aCurrentLanguage.GetDateSep(); }

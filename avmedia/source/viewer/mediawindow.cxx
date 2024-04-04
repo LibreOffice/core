@@ -479,12 +479,6 @@ void PlayerListener::startListening(const css::uno::Reference<media::XPlayerNoti
     m_xNotifier->addPlayerListener(this);
 }
 
-void PlayerListener::stopListening()
-{
-    std::unique_lock aGuard(m_aMutex);
-    stopListening(aGuard);
-}
-
 void PlayerListener::stopListening(std::unique_lock<std::mutex>&)
 {
     if (!m_xNotifier)

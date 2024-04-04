@@ -2556,11 +2556,6 @@ size_t SwFEShell::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
     return GetDoc()->GetFlyCount(eType, bIgnoreTextBoxes);
 }
 
-const SwFrameFormat*  SwFEShell::GetFlyNum(size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes ) const
-{
-    return GetDoc()->GetFlyNum(nIdx, eType, bIgnoreTextBoxes);
-}
-
 std::vector<SwFrameFormat const*> SwFEShell::GetFlyFrameFormats(
         FlyCntType const eType, bool const bIgnoreTextBoxes)
 {

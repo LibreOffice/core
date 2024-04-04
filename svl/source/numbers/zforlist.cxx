@@ -1646,17 +1646,6 @@ bool SvNumberFormatter::ImpIsSpecialStandardFormat(sal_uInt32 nFIndex, LanguageT
     return ::ImpIsSpecialStandardFormat(m_aCurrentLanguage, GetNatNum(), m_aRWPolicy, nFIndex, eLnge);
 }
 
-sal_uInt32 SvNumberFormatter::ImpGetOrGenerateCLOffset(LanguageType eLnge)
-{
-    ::osl::MutexGuard aGuard(GetInstanceMutex());
-    sal_uInt32 nCLOffset = m_aFormatData.ImpGetCLOffset(eLnge);
-    if (nCLOffset > m_aFormatData.MaxCLOffset)
-    {
-        nCLOffset = m_aFormatData.ImpGenerateCL(m_aCurrentLanguage, GetNatNum(), eLnge);    // create new standard formats if necessary
-    }
-    return nCLOffset;
-}
-
 sal_uInt32 SvNFEngine::GetStandardFormat(SvNFLanguageData& rCurrentLanguage,
                                          const SvNFFormatData& rFormatData,
                                          const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
@@ -4035,11 +4024,6 @@ sal_uInt32 SvNumberFormatter::GetFormatForLanguageIfBuiltIn( sal_uInt32 nFormat,
 LanguageType SvNFLanguageData::ImpResolveLanguage(LanguageType eLnge) const
 {
     return eLnge == LANGUAGE_DONTKNOW ? IniLnge : eLnge;
-}
-
-LanguageType SvNumberFormatter::ImpResolveLanguage(LanguageType eLnge) const
-{
-    return m_aCurrentLanguage.ImpResolveLanguage(eLnge);
 }
 
 sal_uInt32 SvNFEngine::GetFormatIndex(SvNFLanguageData& rCurrentLanguage, const Accessor& rFuncs,

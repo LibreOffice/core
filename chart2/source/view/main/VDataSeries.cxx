@@ -407,11 +407,6 @@ void VDataSeries::setPieChartSubType(chart2::PieChartSubType eSubType)
     m_ePieChartSubType = eSubType;
 }
 
-chart2::PieChartSubType VDataSeries::getPieChartSubType() const
-{
-    return m_ePieChartSubType;
-}
-
 chart2::StackingDirection VDataSeries::getStackingDirection() const
 {
     return m_eStackingDirection;

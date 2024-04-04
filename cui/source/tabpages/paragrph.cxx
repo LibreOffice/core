@@ -1170,12 +1170,6 @@ void SvxStdParagraphTabPage::EnableAutoFirstLine()
     m_xAutoCB->show();
 }
 
-void SvxStdParagraphTabPage::EnableAbsLineDist(tools::Long nMinTwip)
-{
-    m_xLineDist->append_text(sAbsDist);
-    nMinFixDist = nMinTwip;
-}
-
 void SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
 

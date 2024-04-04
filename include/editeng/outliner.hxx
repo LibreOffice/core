@@ -851,7 +851,6 @@ public:
                              const Color& rTextLineColor);
 
     Size            CalcTextSize();
-    Size            CalcTextSizeNTP();
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool();

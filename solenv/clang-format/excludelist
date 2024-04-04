@@ -4857,7 +4857,6 @@ include/comphelper/basicio.hxx
 include/comphelper/broadcasthelper.hxx
 include/comphelper/classids.hxx
 include/comphelper/componentbase.hxx
-include/comphelper/componentguard.hxx
 include/comphelper/configuration.hxx
 include/comphelper/configurationhelper.hxx
 include/comphelper/configurationlistener.hxx

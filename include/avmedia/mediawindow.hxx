@@ -72,7 +72,6 @@ namespace avmedia
         virtual void SAL_CALL disposing(const css::lang::EventObject& rSource) override;
 
         void startListening(const css::uno::Reference<css::media::XPlayerNotifier>& rNotifier);
-        void stopListening();
 
         void callPlayerWindowSizeAvailable(const css::uno::Reference<css::media::XPlayer>& rPlayer) { m_aFn(rPlayer); }
     private:

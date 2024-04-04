@@ -164,14 +164,6 @@ protected:
     bool        m_bDeleted : 1;
 #endif
 
-private:
-    inline void SetRefCount(sal_uInt32 n)
-    {
-        m_nRefCount = n;
-        m_bStaticDefault = m_bDynamicDefault = false;
-    }
-
-protected:
     void setStaticDefault() { m_bStaticDefault = true; }
     void setDynamicDefault() { m_bDynamicDefault = true; }
     void setIsSetItem() { m_bIsSetItem = true; }

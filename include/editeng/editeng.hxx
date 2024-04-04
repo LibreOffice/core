@@ -417,7 +417,6 @@ public:
     SAL_DLLPRIVATE void            QuickMarkToBeRepainted( sal_Int32 nPara );
 
     void setScalingParameters(ScalingParameters const& rScalingParameters);
-    void resetScalingParameters();
     ScalingParameters getScalingParameters() const;
 
     SAL_DLLPRIVATE void setRoundFontSizeToPt(bool bRound);

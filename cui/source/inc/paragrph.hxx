@@ -113,7 +113,6 @@ public:
     void                    EnableRegisterMode();
     void                    EnableContextualMode();
     void                    EnableAutoFirstLine();
-    void                    EnableAbsLineDist(tools::Long nMinTwip);
     void                    EnableNegativeMode();
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };

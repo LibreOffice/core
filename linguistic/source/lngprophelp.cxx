@@ -714,11 +714,6 @@ sal_Int16 PropertyHelper_Hyphenation::GetMinWordLength() const
     return mxPropHelper->GetMinWordLength();
 }
 
-sal_Int16 PropertyHelper_Hyphenation::GetTextHyphenZone() const
-{
-    return mxPropHelper->GetTextHyphenZone();
-}
-
 bool PropertyHelper_Hyphenation::IsNoHyphenateCaps() const
 {
     return mxPropHelper->IsNoHyphenateCaps();
