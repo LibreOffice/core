@@ -9,6 +9,4 @@
 
 $(eval $(call gb_Package_Package,sdext_pdfimport_pdf,$(SRCDIR)/sdext))
 
-$(eval $(call gb_Package_add_file,sdext_pdfimport_pdf,$(LIBO_SHARE_FOLDER)/xpdfimport/xpdfimport_err.pdf,source/pdfimport/dialogs/xpdfimport_err.pdf))
-
 # vim: set noet sw=4 ts=4:

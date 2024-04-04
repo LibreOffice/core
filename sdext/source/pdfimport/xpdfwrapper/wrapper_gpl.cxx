@@ -152,7 +152,6 @@ int main(int argc, char **argv)
 
     // PDFDoc takes over ownership for all strings below
     GooString* pFileName = new GooString(myStringToStdString(argv[1]));
-    GooString* pErrFileName = new GooString(myStringToStdString(argv[2]));
 
     // check for password string(s)
     GooString* pOwnerPasswordStr( aPwBuf[0] != 0
@@ -182,30 +181,22 @@ int main(int argc, char **argv)
     PDFDoc aDoc( std::make_unique<GooString>(pFileName),
                  std::optional<GooString>(pOwnerPasswordStr),
                  std::optional<GooString>(pUserPasswordStr) );
-
-    PDFDoc aErrDoc( std::make_unique<GooString>(pErrFileName),
-                 std::optional<GooString>(pOwnerPasswordStr),
-                 std::optional<GooString>(pUserPasswordStr) );
 #else
     PDFDoc aDoc( pFileName,
                  pOwnerPasswordStr,
                  pUserPasswordStr );
-
-    PDFDoc aErrDoc( pErrFileName,
-                 pOwnerPasswordStr,
-                 pUserPasswordStr );
 #endif
 
-    // Check various permissions for aDoc.
-    PDFDoc &rDoc = aDoc.isOk()? aDoc: aErrDoc;
+    if (!aDoc.isOk())
+        return aDoc.getErrorCode();
 
-    pdfi::PDFOutDev aOutDev(&rDoc);
+    pdfi::PDFOutDev aOutDev(&aDoc);
     if (options == TO_STRING_VIEW("SkipImages")) {
             aOutDev.setSkipImages(true);
     }
 
     // tell the receiver early - needed for proper progress calculation
-    const int nPages = rDoc.isOk()? rDoc.getNumPages(): 0;
+    const int nPages = aDoc.getNumPages();
     pdfi::PDFOutDev::setPageNum(nPages);
 
     // virtual resolution of the PDF OutputDev in dpi
@@ -214,12 +205,12 @@ int main(int argc, char **argv)
     // do the conversion
     for (int i = 1; i <= nPages; ++i)
     {
-        rDoc.displayPage(&aOutDev,
+        aDoc.displayPage(&aOutDev,
                 i,
                 PDFI_OUTDEV_RESOLUTION,
                 PDFI_OUTDEV_RESOLUTION,
                 0, true, true, true);
-        rDoc.processLinks(&aOutDev, i);
+        aDoc.processLinks(&aOutDev, i);
     }
 
     return 0;

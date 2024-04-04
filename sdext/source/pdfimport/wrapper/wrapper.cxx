@@ -1079,24 +1079,12 @@ bool xpdf_ImportFromFile(const OUString& rURL,
     OUString converterURL("$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/xpdfimport");
     rtl::Bootstrap::expandMacros(converterURL); //TODO: detect failure
 
-    // Determine pathname of xpdfimport_err.pdf:
-    OUString errPathname("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/xpdfimport/xpdfimport_err.pdf");
-    rtl::Bootstrap::expandMacros(errPathname); //TODO: detect failure
-    if (osl::FileBase::getSystemPathFromFileURL(errPathname, errPathname)
-        != osl::FileBase::E_None)
-    {
-        SAL_WARN(
-            "sdext.pdfimport",
-            "getSystemPathFromFileURL(" << errPathname << ") failed");
-        return false;
-    }
-
     // spawn separate process to keep LGPL/GPL code apart.
 
     OUString aOptFlag("-o");
-    rtl_uString*  args[] = { aSysUPath.pData, errPathname.pData,
+    rtl_uString*  args[] = { aSysUPath.pData,
                              aOptFlag.pData, rFilterOptions.pData };
-    sal_Int32 nArgs = rFilterOptions.isEmpty() ? 2 : 4;
+    sal_Int32 nArgs = rFilterOptions.isEmpty() ? std::size(args) - 2 : std::size(args);
 
     oslProcess    aProcess;
     oslFileHandle pIn  = nullptr;
@@ -1206,6 +1194,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
                     "sdext.pdfimport",
                     "getProcessInfo of " << converterURL
                         << " failed with exit code " << info.Code);
+                // TODO: use xIHdl and/or exceptions to inform the user; see poppler/ErrorCodes.h
                 bRet = false;
             }
         }
