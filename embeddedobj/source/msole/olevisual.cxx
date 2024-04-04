@@ -365,7 +365,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
 
             embed::VisualRepresentation aVisualRepr;
             {
-                ClearedMutexArea clearedMutex(aGuard);
+                osl::ResettableMutexGuardScopedReleaser clearedMutex(aGuard);
                 aVisualRepr.Data = m_pOleComponent->getTransferData(aDataFlavor);
             }
             aVisualRepr.Flavor = aDataFlavor;

@@ -454,26 +454,12 @@ public:
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ClearedMutexArea
-{
-public:
-    ClearedMutexArea(osl::ResettableMutexGuard& guard)
-        : m_guard(guard)
-    {
-        m_guard.clear();
-    }
-    ~ClearedMutexArea() { m_guard.reset(); }
-
-private:
-    osl::ResettableMutexGuard& m_guard;
-};
-
 namespace
 {
 #if defined(_WIN32)
 template <class Proc> auto ExecUnlocked(Proc proc, osl::ResettableMutexGuard& guard)
 {
-    ClearedMutexArea area(guard);
+    osl::ResettableMutexGuardScopedReleaser area(guard);
     return proc();
 }
 #endif

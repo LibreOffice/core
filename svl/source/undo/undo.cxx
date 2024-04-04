@@ -283,16 +283,7 @@ namespace svl::undo::impl
 
         ~UndoManagerGuard();
 
-        struct ResetGuard {
-            ResetGuard(osl::ResettableMutexGuard& r) : rGuard(r) {}
-            ~ResetGuard() { rGuard.reset(); }
-            osl::ResettableMutexGuard& rGuard;
-        };
-        ResetGuard clear()
-        {
-            m_aGuard.clear();
-            return ResetGuard(m_aGuard);
-        }
+        auto clear() { return osl::ResettableMutexGuardScopedReleaser(m_aGuard); }
 
         void cancelNotifications()
         {

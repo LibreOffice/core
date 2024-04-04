@@ -870,7 +870,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             m_aVerbExecutionController.StartControlExecution();
 
             {
-                ClearedMutexArea clearedMutex(aGuard);
+                osl::ResettableMutexGuardScopedReleaser clearedMutex(aGuard);
                 m_pOleComponent->ExecuteVerb(nVerbID);
                 m_pOleComponent->SetHostName(m_aContainerName);
             }
@@ -1153,7 +1153,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
     else if ( m_pOleComponent )
     {
         {
-            ClearedMutexArea clearedMutex(aGuard);
+            osl::ResettableMutexGuardScopedReleaser clearedMutex(aGuard);
             m_nStatus = m_pOleComponent->GetMiscStatus(nAspect);
         }
         m_nStatusAspect = nAspect;
