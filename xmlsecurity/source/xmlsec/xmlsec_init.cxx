@@ -12,6 +12,7 @@
 
 #include <xmlsec/xmlsec_init.hxx>
 
+#include <xmlsec/xmlsec.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <xmlsec/xmlstreamio.hxx>
