@@ -41,6 +41,11 @@
                         <property name="truncate-multiline">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="applystyle-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="fontstyletoolbox|applystyle">Font style</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

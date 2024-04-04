@@ -3401,6 +3401,17 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (pAccLabelledBy)
         rJsonWriter.put("labelledBy", pAccLabelledBy->get_id());
 
+    if(!pAccLabelFor && !pAccLabelledBy)
+    {
+        auto aAria = rJsonWriter.startNode("aria");
+
+        OUString sAccString = GetAccessibleName();
+        rJsonWriter.put("label", sAccString);
+
+        sAccString = GetAccessibleDescription();
+        rJsonWriter.put("description", sAccString);
+    }
+
     mpWindowImpl->maDumpAsPropertyTreeHdl.Call(rJsonWriter);
 }
 
