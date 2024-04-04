@@ -252,9 +252,30 @@ namespace osl
         }
     };
 
+#ifdef LIBO_INTERNAL_ONLY
+    // A RAII helper to allow exception-safe scoped release of an acquired object
+    template<class ResettableGuard_t>
+    class ResettableGuardScopedReleaser
+    {
+    public:
+        ResettableGuardScopedReleaser(ResettableGuard_t& r)
+            : m_rResettableGuard(r)
+        {
+            m_rResettableGuard.clear();
+        }
+        ~ResettableGuardScopedReleaser() { m_rResettableGuard.reset(); }
+
+    private:
+        ResettableGuard_t& m_rResettableGuard;
+    };
+#endif
+
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
+#ifdef LIBO_INTERNAL_ONLY
+    typedef ResettableGuardScopedReleaser<ResettableMutexGuard> ResettableMutexGuardScopedReleaser;
+#endif
 }
 
 #endif // INCLUDED_OSL_MUTEX_HXX
