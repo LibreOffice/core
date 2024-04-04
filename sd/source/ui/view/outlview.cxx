@@ -71,7 +71,7 @@ namespace sd {
 #define PROCESS_WITH_PROGRESS_THRESHOLD  5
 
 OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineViewShell& rOutlineViewShell)
-: ::sd::View(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rOutlineViewShell)
+: ::sd::SimpleOutlinerView(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rOutlineViewShell)
 , mrOutlineViewShell(rOutlineViewShell)
 , mrOutliner(*mrDoc.GetOutliner())
 , mnPagesToProcess(0)
