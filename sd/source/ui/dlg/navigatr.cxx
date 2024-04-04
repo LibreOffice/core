@@ -50,6 +50,8 @@
 #include <vcl/commandevent.hxx>
 #include <comphelper/lok.hxx>
 
+#include <sdpage.hxx>
+
 /**
  * SdNavigatorWin - FloatingWindow
  */
@@ -136,7 +138,7 @@ SdNavigatorWin::~SdNavigatorWin()
     mxLbDocs.reset();
 }
 
-static void lcl_select_marked_object(const sd::ViewShell* pViewShell, SdPageObjsTLV* pTlbObjects)
+static void lcl_select_marked_objects(sd::ViewShell* pViewShell, SdPageObjsTLV* pTlbObjects)
 {
     if (const SdrView* pView = pViewShell->GetDrawView())
     {
@@ -148,7 +150,10 @@ static void lcl_select_marked_object(const sd::ViewShell* pViewShell, SdPageObjs
                 pTlbObjects->SelectEntry(rMarkedObject);
         }
         else
-            pTlbObjects->SelectEntry(pViewShell->GetName());
+        {
+            if (SdPage* pPage = pViewShell->GetActualPage())
+                pTlbObjects->SelectEntry(pPage->GetName());
+        }
     }
 }
 
@@ -185,7 +190,7 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
     }
 
     if (pViewShell)
-        lcl_select_marked_object(pViewShell, mxTlbObjects.get());
+        lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
 }
 
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
@@ -251,11 +256,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     }
 
     if (pViewShell)
-        lcl_select_marked_object(pViewShell, mxTlbObjects.get());
-
-    SfxViewFrame* pViewFrame = ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() );
-    if( pViewFrame )
-        pViewFrame->GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, true, true);
+        lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
 }
 
 /**
@@ -589,7 +590,7 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OUString&, rIdent, void )
             {
                 pFrameView->SetIsNavigatorShowingAllShapes(bShowAllShapes);
             }
-            lcl_select_marked_object(pViewShell, mxTlbObjects.get());
+            lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
         }
     }
 }
