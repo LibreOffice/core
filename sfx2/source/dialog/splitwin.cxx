@@ -36,6 +36,7 @@
 #include <sfx2/dockwin.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <cassert>
 #include <memory>
 #include <vector>
 #include <utility>
@@ -456,7 +457,8 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             if ( bNewLine && !pFoundDock )
             {
                 // Not known until now in which real line it is located
-                GetWindowPos( rDock.pWin, nL, nPos );
+                [[maybe_unused]] auto const ok = GetWindowPos( rDock.pWin, nL, nPos );
+                assert(ok);
                 nLine = static_cast<short>(nL);
             }
 
@@ -544,7 +546,8 @@ void SfxSplitWindow::MoveWindow( SfxDockingWindow* pDockWin, const Size& rSize,
 
 {
     sal_uInt16 nL, nP;
-    GetWindowPos( pDockWin, nL, nP );
+    [[maybe_unused]] auto const ok = GetWindowPos( pDockWin, nL, nP );
+    assert(ok);
 
     if ( nLine > nL && GetItemCount( GetItemId( nL ) ) == 1 )
     {
