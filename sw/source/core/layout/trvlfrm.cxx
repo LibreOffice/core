@@ -1205,7 +1205,7 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
     if ( !pContent && (GetPrev() && !bDontLeave) )
         pContent = ContainsContent();
 
-    if ( bBodyOnly && pContent && !pContent->IsInDocBody() )
+    if ( bBodyOnly )
         while ( pContent && !pContent->IsInDocBody() )
             pContent = pContent->GetNextContentFrame();
 
