@@ -41,6 +41,11 @@
                         <property name="truncate-multiline">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fontnamecombobox-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="font|fontnamecombobox">Font</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -76,6 +81,11 @@
                       <object class="GtkEntry">
                         <property name="can-focus">True</property>
                         <property name="truncate-multiline">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fontsizecombobox-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="font|fontsizecombobox">Font size</property>
                       </object>
                     </child>
                   </object>
