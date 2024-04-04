@@ -253,8 +253,6 @@ ScPrintFunc::ScPrintFunc(ScDocShell* pShell, SfxPrinter* pNewPrinter, const ScPr
     nEndRow     = rState.nEndRow;
     bPrintAreaValid = rState.bPrintAreaValid;
     nZoom       = rState.nZoom;
-//    m_aRanges.m_nPagesX = rState.nPagesX;
-//    m_aRanges.m_nPagesY = rState.nPagesY;
     m_aRanges = rState.m_aRanges;
     nTabPages   = rState.nTabPages;
     nTotalPages = rState.nTotalPages;

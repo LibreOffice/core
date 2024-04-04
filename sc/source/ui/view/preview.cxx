@@ -729,7 +729,6 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
     pViewShell->UpdateNeededScrollBars(true);
     bInSetZoom = false;
 
-//    bStateValid = false;
     InvalidateLocationData( SfxHintId::ScAccVisAreaChanged );
     DoInvalidate();
     Invalidate();
