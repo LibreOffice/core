@@ -993,6 +993,7 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
                 ToolBarManager::msSlideSorterObjectBar);
             break;
 
+        case ViewShell::ST_NOTESPANEL:
         case ViewShell::ST_NONE:
         case ViewShell::ST_PRESENTATION:
         case ViewShell::ST_SIDEBAR:
