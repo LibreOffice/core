@@ -71,6 +71,7 @@
 #include <sfx2/lokhelper.hxx>
 
 #include <editeng/acorrcfg.hxx>
+#include <bookmark.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <edtdd.hxx>
 #include <edtwin.hxx>
