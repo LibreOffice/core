@@ -103,8 +103,8 @@ enum class SfxHintId {
 
 // SFX stylesheet
     StyleSheetCreated,  // new
-    StyleSheetModified,  // changed
-    StyleSheetModifiedExtended,  // changed, but using the SfxStyleSheetModifiedHint, not the SfxStyleSheetHint
+    StyleSheetModified,  // changed (used by the SfxStyleSheetHint class)
+    StyleSheetModifiedExtended,  // changed (used by the SfxStyleSheetModifiedHint class)
     StyleSheetChanged,  // erased and re-created (replaced)
     StyleSheetErased,  // erased
     StyleSheetInDestruction,  // in the process of being destructed

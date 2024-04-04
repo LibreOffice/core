@@ -66,7 +66,7 @@ SfxStyleSheetModifiedHint::SfxStyleSheetModifiedHint
     OUString            aOldName,
     SfxStyleSheetBase&  rStyleSheet     // Remains with the caller
 )
-:   SfxStyleSheetHint( SfxHintId::StyleSheetModified, rStyleSheet ),
+:   SfxStyleSheetHint( SfxHintId::StyleSheetModifiedExtended, rStyleSheet ),
     aName(std::move( aOldName ))
 {}
 
