@@ -25,8 +25,6 @@
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 
-#include <officecfg/Office/Common.hxx>
-
 #include <sdattr.hrc>
 #include <present.hxx>
 #include <cusshow.hxx>
@@ -180,8 +178,6 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
 #endif
 
     m_xCbxInteractiveMode->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_INTERACTIVE ) ).GetValue() );
-    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
-        m_xCbxInteractiveMode->set_visible(false);
 
     InitMonitorSettings();
 
