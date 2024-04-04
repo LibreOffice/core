@@ -1111,6 +1111,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf158451)
+{
+    //Without the test, crash occurs when document loads
+    loadAndReload("tdf158451.docx");
+    //Asserts document contains grouped shapes with Anchor = "As Character"
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), getShape(1)->getShapeType());
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,
+                         getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf159110)
 {
     // Given a text with an URL with multiple spaces
