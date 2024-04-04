@@ -808,14 +808,11 @@ void BackendImpl::PackageImpl::processPackage_(
                 // can occur if the main thread calls isRegistered() on this
                 // package or any of its parents. So, temporarily release
                 // this package's mutex while registering the child package.
-                guard.clear();
+                osl::ResettableMutexGuardScopedReleaser releaser(guard);
                 xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
-                guard.reset();
             }
             catch (const Exception &)
             {
-                guard.reset();
-
                //We even try a rollback if the user cancelled the action (CommandAbortedException)
                 //in order to prevent invalid database entries.
                 Any exc( ::cppu::getCaughtException() );
@@ -865,10 +862,6 @@ void BackendImpl::PackageImpl::processPackage_(
                     // rethrow CommandFailedException
                     ::cppu::throwException(exc);
                 }
-            }
-            catch (...) {
-                guard.reset();
-                throw;
             }
 
             data.items.emplace_back(xPackage->getURL(),
