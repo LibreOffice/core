@@ -41,6 +41,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectPNG();
     void testDetectAPNG();
     void testDetectGIF();
+    void testDetectGIFMetadata();
     void testDetectPSD();
     void testDetectTGA();
     void testDetectTIF();
@@ -66,6 +67,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectPNG);
     CPPUNIT_TEST(testDetectAPNG);
     CPPUNIT_TEST(testDetectGIF);
+    CPPUNIT_TEST(testDetectGIFMetadata);
     CPPUNIT_TEST(testDetectPSD);
     CPPUNIT_TEST(testDetectTGA);
     CPPUNIT_TEST(testDetectTIF);
@@ -216,6 +218,22 @@ void GraphicFormatDetectorTest::testDetectGIF()
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(u"GIF"_ustr, rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectGIFMetadata()
+{
+    SvFileStream aFileStream(getFullUrl(u"123_Numbers.gif"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, "GIF", true);
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkGIF());
+    auto const& rMetadata = aDetector.getMetadata();
+
+    CPPUNIT_ASSERT_EQUAL(Size(124, 146), rMetadata.maPixSize);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), rMetadata.mnBitsPerPixel);
+
+    CPPUNIT_ASSERT_EQUAL(Size(), rMetadata.maLogSize);
+    CPPUNIT_ASSERT_EQUAL(true, rMetadata.mbIsAnimated);
 }
 
 void GraphicFormatDetectorTest::testDetectPSD()

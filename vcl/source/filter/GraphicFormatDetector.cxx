@@ -28,6 +28,7 @@
 #include <tools/zcodec.hxx>
 #include <tools/fract.hxx>
 #include <filter/WebpReader.hxx>
+#include "igif/gifread.hxx"
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/outdev.hxx>
 #include <utility>
@@ -824,6 +825,8 @@ bool GraphicFormatDetector::checkTIF()
 
 bool GraphicFormatDetector::checkGIF()
 {
+    SeekGuard aGuard(mrStream, mnStreamPosition);
+
     if (mnFirstLong == 0x47494638 && (maFirstBytes[4] == 0x37 || maFirstBytes[4] == 0x39)
         && maFirstBytes[5] == 0x61)
     {
@@ -834,6 +837,14 @@ bool GraphicFormatDetector::checkGIF()
             sal_uInt16 nHeight = maFirstBytes[8] | (maFirstBytes[9] << 8);
             maMetadata.maPixSize = Size(nWidth, nHeight);
             maMetadata.mnBitsPerPixel = ((maFirstBytes[10] & 112) >> 4) + 1;
+
+            Size aLogicSize;
+            bool bAnimated = IsGIFAnimated(mrStream, aLogicSize);
+            if (aLogicSize.getWidth() && aLogicSize.getHeight())
+            {
+                maMetadata.maLogSize = aLogicSize;
+            }
+            maMetadata.mbIsAnimated = bAnimated;
         }
         return true;
     }
@@ -954,6 +965,7 @@ bool GraphicFormatDetector::checkAPNG()
     if (PngImageReader::isAPng(mrStream))
     {
         maMetadata.mnFormat = GraphicFileFormat::APNG;
+        maMetadata.mbIsAnimated = true;
         return true;
     }
     return false;

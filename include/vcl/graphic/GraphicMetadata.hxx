@@ -51,6 +51,7 @@ enum class GraphicFileFormat
     SVGZ = 0x00fc,
     APNG = 0x00fd
 };
+
 struct GraphicMetadata
 {
     Size maPixSize{};
@@ -63,6 +64,7 @@ struct GraphicMetadata
     sal_uInt8 mnNumberOfImageComponents = 0;
     bool mbIsTransparent = false;
     bool mbIsAlpha = false;
+    bool mbIsAnimated = false;
 };
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
