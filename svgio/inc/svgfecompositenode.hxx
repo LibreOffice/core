@@ -31,6 +31,7 @@ enum class Operator
     Out,
     Xor,
     Atop,
+    Arithmetic
 };
 
 class SvgFeCompositeNode : public SvgFilterNode
@@ -40,6 +41,11 @@ private:
     OUString maIn2;
     OUString maResult;
     Operator maOperator;
+
+    SvgNumber maK1;
+    SvgNumber maK2;
+    SvgNumber maK3;
+    SvgNumber maK4;
 
 public:
     SvgFeCompositeNode(SvgDocument& rDocument, SvgNode* pParent);

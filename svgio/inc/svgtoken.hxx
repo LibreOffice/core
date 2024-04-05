@@ -122,6 +122,10 @@ namespace svgio::svgreader
             Title,
             Desc,
             Overflow,
+            K1,
+            K2,
+            K3,
+            K4,
 
             // AspectRatio and params
             PreserveAspectRatio,

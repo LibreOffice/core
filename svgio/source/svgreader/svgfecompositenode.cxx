@@ -23,6 +23,14 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/BitmapArithmeticBlendFilter.hxx>
+#include <drawinglayer/converters.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/BitmapTools.hxx>
 
 namespace svgio::svgreader
 {
@@ -83,6 +91,50 @@ void SvgFeCompositeNode::parseAttribute(SVGToken aSVGToken, const OUString& aCon
                 {
                     maOperator = Operator::Atop;
                 }
+                else if (o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"arithmetic"))
+                {
+                    maOperator = Operator::Arithmetic;
+                }
+            }
+            break;
+        }
+        case SVGToken::K1:
+        {
+            SvgNumber aNum;
+
+            if (readSingleNumber(aContent, aNum))
+            {
+                maK1 = aNum;
+            }
+            break;
+        }
+        case SVGToken::K2:
+        {
+            SvgNumber aNum;
+
+            if (readSingleNumber(aContent, aNum))
+            {
+                maK2 = aNum;
+            }
+            break;
+        }
+        case SVGToken::K3:
+        {
+            SvgNumber aNum;
+
+            if (readSingleNumber(aContent, aNum))
+            {
+                maK3 = aNum;
+            }
+            break;
+        }
+        case SVGToken::K4:
+        {
+            SvgNumber aNum;
+
+            if (readSingleNumber(aContent, aNum))
+            {
+                maK4 = aNum;
             }
             break;
         }
@@ -96,61 +148,127 @@ void SvgFeCompositeNode::parseAttribute(SVGToken aSVGToken, const OUString& aCon
 void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                                const SvgFilterNode* pParent) const
 {
-    basegfx::B2DPolyPolygon aPolyPolygon, aPolyPolygon2;
+    if (maOperator != Operator::Arithmetic)
+    {
+        basegfx::B2DPolyPolygon aPolyPolygon, aPolyPolygon2;
 
-    // Process maIn2 first
-    if (const drawinglayer::primitive2d::Primitive2DContainer* pSource2
-        = pParent->findGraphicSource(maIn2))
-    {
-        rTarget.append(*pSource2);
-        drawinglayer::processor2d::ContourExtractor2D aExtractor(
-            drawinglayer::geometry::ViewInformation2D(), true);
-        aExtractor.process(*pSource2);
-        const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
-        aPolyPolygon2 = basegfx::utils::mergeToSinglePolyPolygon(rResult);
-    }
+        // Process maIn2 first
+        if (const drawinglayer::primitive2d::Primitive2DContainer* pSource2
+            = pParent->findGraphicSource(maIn2))
+        {
+            rTarget.append(*pSource2);
+            drawinglayer::processor2d::ContourExtractor2D aExtractor(
+                drawinglayer::geometry::ViewInformation2D(), true);
+            aExtractor.process(*pSource2);
+            const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
+            aPolyPolygon2 = basegfx::utils::mergeToSinglePolyPolygon(rResult);
+        }
 
-    if (const drawinglayer::primitive2d::Primitive2DContainer* pSource
-        = pParent->findGraphicSource(maIn))
-    {
-        rTarget.append(*pSource);
-        drawinglayer::processor2d::ContourExtractor2D aExtractor(
-            drawinglayer::geometry::ViewInformation2D(), true);
-        aExtractor.process(*pSource);
-        const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
-        aPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(rResult);
-    }
+        if (const drawinglayer::primitive2d::Primitive2DContainer* pSource
+            = pParent->findGraphicSource(maIn))
+        {
+            rTarget.append(*pSource);
+            drawinglayer::processor2d::ContourExtractor2D aExtractor(
+                drawinglayer::geometry::ViewInformation2D(), true);
+            aExtractor.process(*pSource);
+            const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
+            aPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(rResult);
+        }
 
-    basegfx::B2DPolyPolygon aResult;
-    if (maOperator == Operator::Over)
-    {
-        aResult = basegfx::utils::solvePolygonOperationOr(aPolyPolygon, aPolyPolygon2);
-    }
-    else if (maOperator == Operator::Out)
-    {
-        aResult = basegfx::utils::solvePolygonOperationDiff(aPolyPolygon, aPolyPolygon2);
-    }
-    else if (maOperator == Operator::In)
-    {
-        aResult = basegfx::utils::solvePolygonOperationAnd(aPolyPolygon, aPolyPolygon2);
-    }
-    else if (maOperator == Operator::Xor)
-    {
-        aResult = basegfx::utils::solvePolygonOperationXor(aPolyPolygon, aPolyPolygon2);
-    }
-    else if (maOperator == Operator::Atop)
-    {
-        // Atop is the union of In and Out.
-        // The parts of in2 graphic that do not overlap with the in graphic stay untouched.
-        aResult = basegfx::utils::solvePolygonOperationDiff(aPolyPolygon2, aPolyPolygon);
-        aResult.append(basegfx::utils::solvePolygonOperationAnd(aPolyPolygon, aPolyPolygon2));
-    }
+        basegfx::B2DPolyPolygon aResult;
+        if (maOperator == Operator::Over)
+        {
+            aResult = basegfx::utils::solvePolygonOperationOr(aPolyPolygon, aPolyPolygon2);
+        }
+        else if (maOperator == Operator::Out)
+        {
+            aResult = basegfx::utils::solvePolygonOperationDiff(aPolyPolygon, aPolyPolygon2);
+        }
+        else if (maOperator == Operator::In)
+        {
+            aResult = basegfx::utils::solvePolygonOperationAnd(aPolyPolygon, aPolyPolygon2);
+        }
+        else if (maOperator == Operator::Xor)
+        {
+            aResult = basegfx::utils::solvePolygonOperationXor(aPolyPolygon, aPolyPolygon2);
+        }
+        else if (maOperator == Operator::Atop)
+        {
+            // Atop is the union of In and Out.
+            // The parts of in2 graphic that do not overlap with the in graphic stay untouched.
+            aResult = basegfx::utils::solvePolygonOperationDiff(aPolyPolygon2, aPolyPolygon);
+            aResult.append(basegfx::utils::solvePolygonOperationAnd(aPolyPolygon, aPolyPolygon2));
+        }
 
-    rTarget = drawinglayer::primitive2d::Primitive2DContainer{
-        new drawinglayer::primitive2d::MaskPrimitive2D(std::move(aResult), std::move(rTarget))
-    };
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::MaskPrimitive2D(std::move(aResult), std::move(rTarget))
+        };
 
-    pParent->addGraphicSourceToMapper(maResult, rTarget);
+        pParent->addGraphicSourceToMapper(maResult, rTarget);
+    }
+    else
+    {
+        basegfx::B2DRange aRange, aRange2;
+        BitmapEx aBmpEx, aBmpEx2;
+
+        if (const drawinglayer::primitive2d::Primitive2DContainer* pSource
+            = pParent->findGraphicSource(maIn))
+        {
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            aRange = pSource->getB2DRange(aViewInformation2D);
+            basegfx::B2DHomMatrix aEmbedding(
+                basegfx::utils::createTranslateB2DHomMatrix(-aRange.getMinX(), -aRange.getMinY()));
+
+            aEmbedding.scale(aRange.getWidth(), aRange.getHeight());
+
+            const drawinglayer::primitive2d::Primitive2DReference xEmbedRef(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
+                    aEmbedding, drawinglayer::primitive2d::Primitive2DContainer(*pSource)));
+            drawinglayer::primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
+
+            aBmpEx = drawinglayer::convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
+                                                     aRange.getWidth(), aRange.getHeight(), 500000);
+        }
+
+        if (const drawinglayer::primitive2d::Primitive2DContainer* pSource2
+            = pParent->findGraphicSource(maIn2))
+        {
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            aRange2 = pSource2->getB2DRange(aViewInformation2D);
+            basegfx::B2DHomMatrix aEmbedding(basegfx::utils::createTranslateB2DHomMatrix(
+                -aRange2.getMinX(), -aRange2.getMinY()));
+
+            aEmbedding.scale(aRange2.getWidth(), aRange2.getHeight());
+
+            const drawinglayer::primitive2d::Primitive2DReference xEmbedRef(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
+                    aEmbedding, drawinglayer::primitive2d::Primitive2DContainer(*pSource2)));
+            drawinglayer::primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
+
+            aBmpEx2
+                = drawinglayer::convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
+                                                  aRange2.getWidth(), aRange2.getHeight(), 500000);
+        }
+
+        basegfx::B2DRectangle aBaseRect(std::min(aRange.getMinX(), aRange2.getMinX()),
+                                        std::min(aRange.getMinY(), aRange2.getMinY()),
+                                        std::max(aRange.getMaxX(), aRange2.getMaxX()),
+                                        std::max(aRange.getMaxY(), aRange2.getMaxY()));
+
+        aBmpEx = vcl::bitmap::DrawBitmapInRect(aBmpEx, aRange, aBaseRect);
+        aBmpEx2 = vcl::bitmap::DrawBitmapInRect(aBmpEx2, aRange2, aBaseRect);
+
+        BitmapArithmeticBlendFilter* pArithmeticFilter
+            = new BitmapArithmeticBlendFilter(aBmpEx, aBmpEx2);
+        BitmapEx aResBmpEx = pArithmeticFilter->execute(maK1.getNumber(), maK2.getNumber(),
+                                                        maK3.getNumber(), maK4.getNumber());
+
+        const drawinglayer::primitive2d::Primitive2DReference xRef(
+            new drawinglayer::primitive2d::BitmapPrimitive2D(
+                aResBmpEx, basegfx::utils::createScaleTranslateB2DHomMatrix(
+                               aBaseRect.getRange(), aBaseRect.getMinimum())));
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
+    }
 }
 
 } // end of namespace svgio::svgreader

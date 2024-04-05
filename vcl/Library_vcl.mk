@@ -341,6 +341,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/bmpfast \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/bitmappaint \
+    vcl/source/bitmap/BitmapArithmeticBlendFilter \
     vcl/source/bitmap/BitmapShadowFilter \
     vcl/source/bitmap/BitmapAlphaClampFilter \
     vcl/source/bitmap/BitmapBasicMorphologyFilter \
