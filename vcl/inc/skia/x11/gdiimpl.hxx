@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_X11_GDIIMPL_HXX
-#define INCLUDED_VCL_INC_SKIA_X11_GDIIMPL_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -39,7 +38,5 @@ private:
                         int height, SkiaHelper::RenderMethod renderMethod, bool temporary);
     friend std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool);
 };
-
-#endif // INCLUDED_VCL_INC_SKIA_X11_GDIIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
