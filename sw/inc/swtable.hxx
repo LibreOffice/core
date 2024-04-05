@@ -436,6 +436,8 @@ public:
     // set/get (if it's possible, cached) redline type
     RedlineType GetRedlineType() const;
     void SetRedlineType(RedlineType eType) { m_eRedlineType = eType; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 /// SwTableBox is one table cell in the document model.

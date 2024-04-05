@@ -1745,17 +1745,10 @@ void SwTable::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTable"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("table-format"), "%p", GetFrameFormat());
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("lines"));
     for (const auto& pLine : m_aLines)
     {
-        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableLine"));
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pLine);
-        pLine->GetFrameFormat()->dumpAsXml(pWriter);
-        (void)xmlTextWriterEndElement(pWriter);
-    }
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("tab-sort-content-boxes"));
-    for (const auto& pBox : m_TabSortContentBoxes)
-    {
-        pBox->dumpAsXml(pWriter);
+        pLine->dumpAsXml(pWriter);
     }
     (void)xmlTextWriterEndElement(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
@@ -1999,6 +1992,23 @@ RedlineType SwTableLine::GetRedlineType() const
         return aRedlineTable[nTableRedline]->GetType();
 
     return RedlineType::None;
+}
+
+void SwTableLine::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableLine"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    GetFrameFormat()->dumpAsXml(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("boxes"));
+    for (const auto& pBox : m_aBoxes)
+    {
+        pBox->dumpAsXml(pWriter);
+    }
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLine *pUp )
