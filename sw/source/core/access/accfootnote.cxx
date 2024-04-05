@@ -33,11 +33,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-constexpr OUStringLiteral sImplementationNameFootnote
-    = u"com.sun.star.comp.Writer.SwAccessibleFootnoteView";
-constexpr OUStringLiteral sImplementationNameEndnote
-    = u"com.sun.star.comp.Writer.SwAccessibleEndnoteView";
-
 SwAccessibleFootnote::SwAccessibleFootnote(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         bool bIsEndnote,
@@ -90,9 +85,9 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
 OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
 {
     if( AccessibleRole::END_NOTE == GetRole() )
-        return sImplementationNameEndnote;
+        return u"com.sun.star.comp.Writer.SwAccessibleEndnoteView"_ustr;
     else
-        return sImplementationNameFootnote;
+        return u"com.sun.star.comp.Writer.SwAccessibleFootnoteView"_ustr;
 }
 
 sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(const OUString& sTestServiceName)

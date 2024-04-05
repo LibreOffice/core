@@ -48,8 +48,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace sw::access;
 
-constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleCellView";
-
 bool SwAccessibleCell::IsSelected()
 {
     bool bRet = false;
@@ -240,7 +238,7 @@ OUString SAL_CALL SwAccessibleCell::getAccessibleDescription()
 
 OUString SAL_CALL SwAccessibleCell::getImplementationName()
 {
-    return sImplementationName;
+    return u"com.sun.star.comp.Writer.SwAccessibleCellView"_ustr;
 }
 
 sal_Bool SAL_CALL SwAccessibleCell::supportsService(const OUString& sTestServiceName)

@@ -31,8 +31,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleEmbeddedObject";
-
 SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwFlyFrame* pFlyFrame  ) :
@@ -71,7 +69,7 @@ void SAL_CALL
 
 OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
 {
-    return sImplementationName;
+    return u"com.sun.star.comp.Writer.SwAccessibleEmbeddedObject"_ustr;
 }
 
 sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(const OUString& sTestServiceName)
