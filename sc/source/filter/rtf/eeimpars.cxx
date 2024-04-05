@@ -309,7 +309,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                         ScMF::Hor );
                 if ( pE->nRowOverlap > 1 )
                 {
-                    nRO = nRow + (pE->nRowOverlap - 1);
+                    nRO = o3tl::saturating_add(nRow, pE->nRowOverlap - 1);
                     mpDoc->ApplyFlagsTab( nCol, nRow+1,
                         nCol, nRO , nTab,
                         ScMF::Ver );
