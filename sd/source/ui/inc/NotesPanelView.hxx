@@ -38,7 +38,6 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
     Idle aModifyIdle;
 
     SdrTextObj* mpTextObj = nullptr;
-    bool mbFirstPaint = true;
     bool mbIgnoreNotifications = false;
 
     /** stores the last used document color.
