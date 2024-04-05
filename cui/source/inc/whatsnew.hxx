@@ -20,14 +20,14 @@ class WhatsNewImg : public weld::CustomWidgetController
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 
 public:
-    WhatsNewImg(){};
+    WhatsNewImg() {}
     void Update(const OUString& sImage, const OUString& sText)
     {
         m_sImage = sImage;
         m_sText = sText;
         SetAccessibleName(m_sText);
         Invalidate();
-    };
+    }
 };
 
 class WhatsNewProgress : public weld::CustomWidgetController
@@ -37,13 +37,17 @@ class WhatsNewProgress : public weld::CustomWidgetController
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 
 public:
-    WhatsNewProgress(){};
+    WhatsNewProgress()
+        : m_nTotal(0)
+        , m_nCurrent(0)
+    {
+    }
     void Update(const sal_Int32 nCurrent, const sal_Int32 nTotal)
     {
         m_nTotal = nTotal;
         m_nCurrent = nCurrent;
         Invalidate();
-    };
+    }
 };
 
 class WhatsNewDialog : public weld::GenericDialogController
