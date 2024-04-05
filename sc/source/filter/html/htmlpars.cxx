@@ -1303,12 +1303,13 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
                 else
                     pTab1 = it->second.get();
                 SCROW nRowSpan = pE->nRowOverlap;
-                SCROW nRowKGV;
+                using SCUROW = std::make_unsigned_t<SCROW>;
+                SCUROW nRowKGV;
                 SCROW nRowsPerRow1; // Outer table
                 SCROW nRowsPerRow2; // Inner table
                 if ( nRowSpan > 1 )
                 {   // LCM to which we can map the inner and outer rows
-                    nRowKGV = std::lcm( nRowSpan, nRows );
+                    nRowKGV = std::lcm<SCUROW>(nRowSpan, nRows);
                     nRowsPerRow1 = nRowKGV / nRowSpan;
                     nRowsPerRow2 = nRowKGV / nRows;
                 }
