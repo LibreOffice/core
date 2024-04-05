@@ -1,0 +1,97 @@
+--- a/nss/nspr/pr/src/md/unix/uxrng.c
++++ b/nss/nspr/pr/src/md/unix/uxrng.c
+@@ -68,13 +68,18 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>
++#include <dlfcn.h>
+ 
+ static int      fdDevURandom;
+ static PRCallOnceType coOpenDevURandom;
+ 
+ static PRStatus OpenDevURandom( void )
+ {
+-    fdDevURandom = open( "/dev/urandom", O_RDONLY );
++    static int (*lok_open_urandom)();
++    if (!lok_open_urandom)
++      lok_open_urandom = dlsym(RTLD_DEFAULT, "lok_open_urandom");
++    if (!lok_open_urandom || (fdDevURandom = lok_open_urandom()) < 0)
++      fdDevURandom = open( "/dev/urandom", O_RDONLY );
+     return((-1 == fdDevURandom)? PR_FAILURE : PR_SUCCESS );
+ } /* end OpenDevURandom() */
+ 
+--- a/nss/nss/lib/freebl/unix_rand.c
++++ b/nss/nss/lib/freebl/unix_rand.c
+@@ -13,6 +13,7 @@
+ #include <sys/wait.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#include <dlfcn.h>
+ #include <dirent.h>
+ #include "secrng.h"
+ #include "secerr.h"
+@@ -650,11 +651,21 @@
+         RNG_RandomUpdate(buf, strlen(buf));
+     }
+ 
++    {
++        unsigned char buffer[SYSTEM_RNG_SEED_COUNT];
++        bytes = RNG_SystemRNG(buffer, sizeof (buffer));
++        if (bytes == SYSTEM_RNG_SEED_COUNT) /* success */
++	       RNG_RandomUpdate(buffer, bytes);
++    }
++
++    if (bytes != SYSTEM_RNG_SEED_COUNT) /* fail */
++    {
+     /* grab some data from system's PRNG before any other files. */
+     bytes = RNG_FileUpdate("/dev/urandom", SYSTEM_RNG_SEED_COUNT);
+     if (!bytes) {
+         PORT_SetError(SEC_ERROR_NEED_RANDOM);
+     }
++    }
+ 
+     /* If the user points us to a random file, pass it through the rng */
+     randfile = PR_GetEnvSecure("NSRANDFILE");
+@@ -781,11 +794,19 @@
+     size_t fileBytes = 0;
+     unsigned char *buffer = dest;
+ 
++    static int (*lok_open_urandom)();
++    if (!lok_open_urandom)
++      lok_open_urandom = dlsym(NULL, "lok_open_urandom");
++    if (!lok_open_urandom || (fd = lok_open_urandom()) < 0)
++    {
+     file = fopen("/dev/urandom", "r");
+     if (file == NULL) {
+         PORT_SetError(SEC_ERROR_NEED_RANDOM);
+         return 0;
+     }
++    }
++    else
++      file = fdopen(fd, "r");
+     /* Read from the underlying file descriptor directly to bypass stdio
+      * buffering and avoid reading more bytes than we need from /dev/urandom.
+      * NOTE: we can't use fread with unbuffered I/O because fread may return
+--- a/nss/nss/lib/freebl/unix_urandom.c
++++ b/nss/nss/lib/freebl/unix_urandom.c
+@@ -5,6 +5,7 @@
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <errno.h>
++#include <dlfcn.h>
+ #include "secerr.h"
+ #include "secrng.h"
+ #include "prprf.h"
+@@ -62,7 +63,11 @@
+      * Reset the number of bytes to get and fall back to /dev/urandom. */
+     fileBytes = 0;
+ #endif
+-    fd = open("/dev/urandom", O_RDONLY);
++    static int (*lok_open_urandom)();
++    if (!lok_open_urandom)
++      lok_open_urandom = dlsym(NULL, "lok_open_urandom");
++    if (!lok_open_urandom || (fd = lok_open_urandom()) < 0)
++        fd = open("/dev/urandom", O_RDONLY);
+     if (fd < 0) {
+         PORT_SetError(SEC_ERROR_NEED_RANDOM);
+         return 0;
