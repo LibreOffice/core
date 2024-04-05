@@ -85,6 +85,11 @@ public:
     virtual const OutlinerView* GetTextEditOutlinerView() const override { return &maOutlinerView; }
     virtual OutlinerView* GetTextEditOutlinerView() override { return &maOutlinerView; }
 
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                                SdrLayerID nLayer) override;
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt, ::sd::Window* pTargetWindow,
+                                 sal_uInt16 nPage, SdrLayerID nLayer) override;
+
     DECL_LINK(StatusEventHdl, EditStatus&, void);
     DECL_LINK(EditModifiedHdl, LinkParamNone*, void);
     DECL_LINK(ModifyTimerHdl, Timer*, void);
