@@ -28,6 +28,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss-restore-manual-pre-dependencies.patch.1 \
     external/nss/Wincompatible-function-pointer-types.patch.0 \
     external/nss/nspr-win95-target.patch \
+    $(if $(filter LINUX,$(OS)), \
+        external/nss/nss.getrandom.patch) \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \
     $(if $(filter ANDROID,$(OS)), \
