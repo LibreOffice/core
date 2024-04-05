@@ -322,6 +322,10 @@ bool fcTLbeforeIDAT(SvStream& rStream)
     return false;
 }
 
+#if defined __GNUC__ && __GNUC__ == 14 && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclobbered"
+#endif
 bool reader(SvStream& rStream, Graphic& rGraphic,
             GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
             BitmapScopedWriteAccess* pAccess = nullptr,
@@ -817,6 +821,9 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
             return {};
     }
 }
+#if defined __GNUC__ && __GNUC__ == 14 && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
 } // anonymous namespace
 
