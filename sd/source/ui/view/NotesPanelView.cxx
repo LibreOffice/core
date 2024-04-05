@@ -149,16 +149,7 @@ void NotesPanelView::setNotesToDoc()
 
 void NotesPanelView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const* /*pWin*/)
 {
-    OutlinerView* pOlView = GetOutlinerView();
-
-    if (pOlView)
-    {
-        pOlView->HideCursor();
-        pOlView->Paint(rRect);
-
-        pOlView->ShowCursor(mbFirstPaint);
-        mbFirstPaint = false;
-    }
+    maOutlinerView.Paint(rRect);
 }
 
 void NotesPanelView::Notify(SfxBroadcaster&, const SfxHint& rHint)
@@ -227,7 +218,8 @@ void NotesPanelView::onResize()
 
     if (!aVisArea.IsEmpty()) // not when opening
     {
-        mrNotesPanelViewShell.InitWindows(Point(0, 0), aVisArea.GetSize(), aVisArea.TopLeft());
+        mrNotesPanelViewShell.InitWindows(Point(0, 0), aVisArea.GetSize(), aVisArea.TopLeft(),
+                                          true);
         mrNotesPanelViewShell.UpdateScrollBars();
     }
 }
