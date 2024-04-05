@@ -54,7 +54,10 @@ namespace calc
     using namespace ::com::sun::star::form::binding;
 
     OCellValueBinding::OCellValueBinding( const Reference< XSpreadsheetDocument >& _rxDocument, bool _bListPos )
-        :m_xDocument( _rxDocument )
+        :OCellValueBinding_Base( m_aMutex )
+        ,OCellValueBinding_PBase( OCellValueBinding_Base::rBHelper )
+        ,m_xDocument( _rxDocument )
+        ,m_aModifyListeners( m_aMutex )
         ,m_bInitialized( false )
         ,m_bListPos( _bListPos )
     {
@@ -73,7 +76,7 @@ namespace calc
 
     OCellValueBinding::~OCellValueBinding( )
     {
-        if ( !m_bDisposed )
+        if ( !OCellValueBinding_Base::rBHelper.bDisposed )
         {
             acquire();  // prevent duplicate dtor
             dispose();
@@ -84,7 +87,7 @@ namespace calc
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OCellValueBinding, OCellValueBinding_Base, OCellValueBinding_PBase )
 
-    void OCellValueBinding::disposing( std::unique_lock<std::mutex>& rGuard )
+    void SAL_CALL OCellValueBinding::disposing()
     {
         Reference<XModifyBroadcaster> xBroadcaster( m_xCell, UNO_QUERY );
         if ( xBroadcaster.is() )
@@ -92,7 +95,7 @@ namespace calc
             xBroadcaster->removeModifyListener( this );
         }
 
-        WeakComponentImplHelperBase::disposing(rGuard);
+        WeakComponentImplHelperBase::disposing();
 
         // TODO: clean up here whatever you need to clean up (e.g. deregister as XEventListener
         // for the cell)
@@ -103,7 +106,7 @@ namespace calc
         return createPropertySetInfo( getInfoHelper() ) ;
     }
 
-    ::cppu::IPropertyArrayHelper& OCellValueBinding::getInfoHelper()
+    ::cppu::IPropertyArrayHelper& SAL_CALL OCellValueBinding::getInfoHelper()
     {
         return *OCellValueBinding_PABase::getArrayHelper();
     }
@@ -115,7 +118,7 @@ namespace calc
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    void OCellValueBinding::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/, Any& _rValue, sal_Int32 _nHandle ) const
+    void SAL_CALL OCellValueBinding::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         OSL_ENSURE( _nHandle == PROP_HANDLE_BOUND_CELL, "OCellValueBinding::getFastPropertyValue: invalid handle!" );
             // we only have this one property...
@@ -128,14 +131,9 @@ namespace calc
 
     Sequence< Type > SAL_CALL OCellValueBinding::getSupportedValueTypes(  )
     {
-        std::unique_lock<std::mutex> aGuard(m_aMutex);
-        throwIfDisposed(aGuard);
+        checkDisposed( );
         checkInitialized( );
-        return getSupportedValueTypes(aGuard);
-    }
 
-    Sequence< Type > OCellValueBinding::getSupportedValueTypes( std::unique_lock<std::mutex>& /*rGuard*/  ) const
-    {
         sal_Int32 nCount = m_xCellText.is() ? 3 : m_xCell.is() ? 1 : 0;
         if ( m_bListPos )
             ++nCount;
@@ -165,16 +163,11 @@ namespace calc
 
     sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType )
     {
-        std::unique_lock<std::mutex> aGuard(m_aMutex);
-        throwIfDisposed(aGuard);
+        checkDisposed( );
         checkInitialized( );
-        return supportsType(aGuard, aType);
-    }
 
-    bool OCellValueBinding::supportsType( std::unique_lock<std::mutex>& rGuard, const Type& aType ) const
-    {
         // look up in our sequence
-        const Sequence< Type > aSupportedTypes( getSupportedValueTypes(rGuard) );
+        const Sequence< Type > aSupportedTypes( getSupportedValueTypes() );
         for ( auto const & i : aSupportedTypes )
             if ( aType == i )
                 return true;
@@ -184,10 +177,9 @@ namespace calc
 
     Any SAL_CALL OCellValueBinding::getValue( const Type& aType )
     {
-        std::unique_lock<std::mutex> aGuard(m_aMutex);
-        throwIfDisposed(aGuard);
+        checkDisposed( );
         checkInitialized( );
-        checkValueType( aGuard, aType );
+        checkValueType( aType );
 
         Any aReturn;
         switch ( aType.getTypeClass() )
@@ -271,11 +263,10 @@ namespace calc
 
     void SAL_CALL OCellValueBinding::setValue( const Any& aValue )
     {
-        std::unique_lock<std::mutex> aGuard(m_aMutex);
-        throwIfDisposed(aGuard);
+        checkDisposed( );
         checkInitialized( );
         if ( aValue.hasValue() )
-            checkValueType( aGuard, aValue.getValueType() );
+            checkValueType( aValue.getValueType() );
 
         switch ( aValue.getValueType().getTypeClass() )
         {
@@ -399,22 +390,30 @@ namespace calc
         }
     }
 
+    void OCellValueBinding::checkDisposed( ) const
+    {
+        if ( OCellValueBinding_Base::rBHelper.bInDispose || OCellValueBinding_Base::rBHelper.bDisposed )
+            throw DisposedException();
+            // TODO: is it worth having an error message here?
+    }
+
     void OCellValueBinding::checkInitialized()
     {
         if ( !m_bInitialized )
             throw NotInitializedException("CellValueBinding is not initialized", getXWeak());
     }
 
-    void OCellValueBinding::checkValueType( std::unique_lock<std::mutex>& rGuard, const Type& _rType ) const
+    void OCellValueBinding::checkValueType( const Type& _rType ) const
     {
-        if ( !supportsType( rGuard, _rType ) )
+        OCellValueBinding* pNonConstThis = const_cast< OCellValueBinding* >( this );
+        if ( !pNonConstThis->supportsType( _rType ) )
         {
             OUString sMessage = "The given type (" +
                 _rType.getTypeName() +
                 ") is not supported by this binding.";
                 // TODO: localize this error message
 
-            throw IncompatibleTypesException( sMessage, const_cast<OCellValueBinding&>(*this) );
+            throw IncompatibleTypesException( sMessage, *pNonConstThis );
                 // TODO: alternatively use a type converter service for this?
         }
     }
@@ -443,19 +442,13 @@ namespace calc
     void SAL_CALL OCellValueBinding::addModifyListener( const Reference< XModifyListener >& _rxListener )
     {
        if ( _rxListener.is() )
-       {
-           std::unique_lock<std::mutex> aGuard(m_aMutex);
-           m_aModifyListeners.addInterface( aGuard, _rxListener );
-       }
+           m_aModifyListeners.addInterface( _rxListener );
     }
 
     void SAL_CALL OCellValueBinding::removeModifyListener( const Reference< XModifyListener >& _rxListener )
     {
        if ( _rxListener.is() )
-       {
-           std::unique_lock<std::mutex> aGuard(m_aMutex);
-           m_aModifyListeners.removeInterface( aGuard, _rxListener );
-       }
+           m_aModifyListeners.removeInterface( _rxListener );
     }
 
     void OCellValueBinding::notifyModified()
@@ -463,25 +456,22 @@ namespace calc
         EventObject aEvent;
         aEvent.Source.set(*this);
 
-        std::unique_lock<std::mutex> aGuard(m_aMutex);
-        m_aModifyListeners.forEach(aGuard,
-            [&aEvent, &aGuard] (const css::uno::Reference<css::util::XModifyListener> & l)
+        ::comphelper::OInterfaceIteratorHelper3 aIter( m_aModifyListeners );
+        while ( aIter.hasMoreElements() )
+        {
+            try
             {
-                aGuard.unlock();
-                try
-                {
-                    l->modified( aEvent );
-                }
-                catch( const RuntimeException& )
-                {
-                    // silent this
-                }
-                catch( const Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION( "sc", "OCellValueBinding::notifyModified: caught a (non-runtime) exception!" );
-                }
-                aGuard.lock();
-            });
+                aIter.next()->modified( aEvent );
+            }
+            catch( const RuntimeException& )
+            {
+                // silent this
+            }
+            catch( const Exception& )
+            {
+                TOOLS_WARN_EXCEPTION( "sc", "OCellValueBinding::notifyModified: caught a (non-runtime) exception!" );
+            }
+        }
     }
 
     void SAL_CALL OCellValueBinding::modified( const EventObject& /* aEvent */ )

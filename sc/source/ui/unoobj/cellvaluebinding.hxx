@@ -21,9 +21,10 @@
 
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <comphelper/compbase.hxx>
-#include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/propertycontainer2.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -40,20 +41,20 @@ namespace calc
 
     class OCellValueBinding;
     // the base for our interfaces
-    typedef ::comphelper::WeakComponentImplHelper <   css::form::binding::XValueBinding
+    typedef ::cppu::WeakComponentImplHelper <   css::form::binding::XValueBinding
                                             ,   css::lang::XServiceInfo
                                             ,   css::util::XModifyBroadcaster
                                             ,   css::util::XModifyListener
                                             ,   css::lang::XInitialization
                                             >   OCellValueBinding_Base;
     // the base for the property handling
-    typedef ::comphelper::OPropertyContainer2        OCellValueBinding_PBase;
+    typedef ::comphelper::OPropertyContainer        OCellValueBinding_PBase;
     // the second base for property handling
     typedef ::comphelper::OPropertyArrayUsageHelper< OCellValueBinding >
                                                     OCellValueBinding_PABase;
 
-    class OCellValueBinding :
-                             public OCellValueBinding_Base      // order matters! before OCellValueBinding_PBase, so rBHelper gets initialized
+    class OCellValueBinding :public ::cppu::BaseMutex
+                            ,public OCellValueBinding_Base      // order matters! before OCellValueBinding_PBase, so rBHelper gets initialized
                             ,public OCellValueBinding_PBase
                             ,public OCellValueBinding_PABase
     {
@@ -64,7 +65,7 @@ namespace calc
                     m_xCell;                /// the cell we're bound to, for double value access
         css::uno::Reference< css::text::XTextRange >
                     m_xCellText;            /// the cell we're bound to, for text access
-        ::comphelper::OInterfaceContainerHelper4<css::util::XModifyListener>
+        ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>
                     m_aModifyListeners;     /// our modify listeners
         bool        m_bInitialized;         /// has XInitialization::initialize been called?
         bool        m_bListPos;             /// constructed as ListPositionCellBinding?
@@ -94,7 +95,7 @@ namespace calc
         virtual void SAL_CALL setValue( const css::uno::Any& aValue ) override;
 
         // OComponentHelper/XComponent
-        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
+        virtual void SAL_CALL disposing() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -105,8 +106,8 @@ namespace calc
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
-        virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -123,10 +124,9 @@ namespace calc
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     private:
-        void    checkValueType( std::unique_lock<std::mutex>& rGuard, const css::uno::Type& _rType ) const;
+        void    checkDisposed( ) const;
+        void    checkValueType( const css::uno::Type& _rType ) const;
         void    checkInitialized();
-        css::uno::Sequence< css::uno::Type > getSupportedValueTypes(std::unique_lock<std::mutex>& rGuard) const;
-        bool    supportsType( std::unique_lock<std::mutex>& rGuard, const css::uno::Type& aType ) const;
 
         /** notifies our modify listeners
             @precond
