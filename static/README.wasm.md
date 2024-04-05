@@ -28,7 +28,7 @@ INFO: latest browser won't work anymore with 0.0.0.0 and need 127.0.0.1.
 
 We're using Qt 5.15.2 with Emscripten 3.1.46. There are a bunch of Qt patches
 to fix the most grave bugs. Also there's rapid development in Emscripten, so
-using another version often causes arbitraty problems.
+using another version often causes arbitrary problems.
 
 - See below under Docker build for another build option
 
