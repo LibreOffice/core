@@ -671,8 +671,8 @@ void ScHTMLLayoutParser::Adjust()
         SkipLocked(pE.get(), false);
         if ( pE->nCol != nColBeforeSkip )
         {
-            SCCOL nCount = static_cast<SCCOL>(maColOffset.size());
-            if ( nCount <= pE->nCol )
+            size_t nCount = maColOffset.size();
+            if ( nCount <= o3tl::make_unsigned(pE->nCol) )
             {
                 pE->nOffset = static_cast<sal_uInt16>(maColOffset[nCount-1]);
                 MakeCol( &maColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
