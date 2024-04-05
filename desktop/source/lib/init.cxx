@@ -33,8 +33,10 @@
 
 #undef HAVE_MALLOC_TRIM
 
+#ifdef UNX
+#  include <fcntl.h>
+#endif
 #ifdef LINUX
-#include <fcntl.h>
 #if defined __GLIBC__
 #  include <malloc.h>
 #  define HAVE_MALLOC_TRIM
@@ -248,6 +250,20 @@ using namespace utl;
 using namespace bridge;
 using namespace uno;
 using namespace lang;
+
+#ifdef UNX
+
+static int urandom = -1;
+
+extern "C" {
+    int SAL_JNI_EXPORT lok_open_urandom()
+    {
+        return dup(urandom);
+    }
+};
+
+#endif
+
 
 using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
 
@@ -7944,6 +7960,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         const char* tz = ::getenv("TZ");
         SfxLokHelper::setDefaultTimezone(!!tz, tz ? OStringToOUString(tz, RTL_TEXTENCODING_UTF8)
                                                   : OUString());
+#ifdef UNX
+        if (urandom < 0)
+            urandom = open("/dev/urandom", O_RDONLY);
+#endif
     }
 
     if (eStage != SECOND_INIT)

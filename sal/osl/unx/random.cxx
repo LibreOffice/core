@@ -13,13 +13,19 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <dlfcn.h>
 
 int osl_get_system_random_data(char* buffer, size_t desired_len)
 {
     int fd;
 
     assert(buffer);
-    fd = open("/dev/urandom", O_RDONLY);
+
+    static int (*lok_open_urandom)()
+        = reinterpret_cast<int (*)()>(dlsym(RTLD_DEFAULT, "lok_open_urandom"));
+    if (!lok_open_urandom || (fd = lok_open_urandom()) < 0)
+        fd = open("/dev/urandom", O_RDONLY);
+
     if (fd != -1)
     {
         while (desired_len)

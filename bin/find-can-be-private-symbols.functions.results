@@ -20152,6 +20152,7 @@ linguistic::SpellAlternatives::SetFailureType(short)
 linguistic::SpellAlternatives::SetWordLanguage(rtl::OUString const&, o3tl::strong_int<unsigned short, LanguageTypeTag>)
 linguistic::SpellAlternatives::SpellAlternatives()
 load_BLAS
+lok_open_urandom
 longdual_testset
 lower_utf(w_char, int)
 lp_solve_version
