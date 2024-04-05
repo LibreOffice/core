@@ -4374,10 +4374,7 @@ short ScInterpreter::Compare( ScSortInfoArray* pArray, const ScMatrixRef& pMatSr
         ScSortInfo& rInfo2 = pArray->Get( nSort, nIndex2 );
         if (!pMatSrc)
         {
-            if (aSortParam.bByRow)
-                nRes = CompareCell( nSort, rInfo1.maCell, rInfo2.maCell );
-            else
-                nRes = CompareCell( nSort, rInfo1.maCell, rInfo2.maCell );
+            nRes = CompareCell(nSort, rInfo1.maCell, rInfo2.maCell);
         }
         else
         {
@@ -4403,7 +4400,8 @@ short ScInterpreter::Compare( ScSortInfoArray* pArray, const ScMatrixRef& pMatSr
     return nRes;
 }
 
-short ScInterpreter::CompareCell( sal_uInt16 nSort, ScRefCellValue& rCell1, ScRefCellValue& rCell2 ) const
+short ScInterpreter::CompareCell( sal_uInt16 nSort,
+    ScRefCellValue& rCell1, ScRefCellValue& rCell2 ) const
 {
     short nRes = 0;
 
@@ -4445,8 +4443,18 @@ short ScInterpreter::CompareCell( sal_uInt16 nSort, ScRefCellValue& rCell1, ScRe
 
             if ( bStr1 && bStr2 )           // only compare strings as strings!
             {
-                OUString aStr1 = rCell1.getSharedString()->getString();
-                OUString aStr2 = rCell2.getSharedString()->getString();
+                OUString aStr1;
+                OUString aStr2;
+
+                if (eType1 == CELLTYPE_STRING)
+                    aStr1 = rCell1.getSharedString()->getString();
+                else
+                    aStr1 = rCell1.getString(&mrDoc);
+
+                if (eType2 == CELLTYPE_STRING)
+                    aStr2 = rCell2.getSharedString()->getString();
+                else
+                    aStr2 = rCell2.getString(&mrDoc);
 
                 CollatorWrapper& rSortCollator = ScGlobal::GetCollator(aSortParam.bCaseSens);
                 nRes = static_cast<short>( rSortCollator.compareString( aStr1, aStr2 ) );
