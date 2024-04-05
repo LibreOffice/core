@@ -305,6 +305,16 @@ SvtScriptType NotesPanelView::GetScriptType() const
     return nScriptType;
 }
 
+sal_Int8 NotesPanelView::AcceptDrop(const AcceptDropEvent&, DropTargetHelper&, SdrLayerID)
+{
+    return DND_ACTION_NONE;
+}
+
+sal_Int8 NotesPanelView::ExecuteDrop(const ExecuteDropEvent&, ::sd::Window*, sal_uInt16, SdrLayerID)
+{
+    return DND_ACTION_NONE;
+}
+
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
