@@ -1135,6 +1135,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131771)
                          getProperty<OUString>(xTextTable2, "TableTemplateName"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf156546)
+{
+    createSwDoc();
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+
+    uno::Reference<text::XTextTablesSupplier> xTableSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTableSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+
+    // check that table was created and inserted into the document
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // create another document
+    createSwDoc();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    uno::Reference<text::XTextTablesSupplier> xTableSupplier2(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables2(xTableSupplier2->getTextTables(),
+                                                     uno::UNO_QUERY);
+
+    // check table exists after paste/undo
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables2->getCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables2->getCount());
+
+    // without the test, writer freezes on redo table paste into new doc
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables2->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf80663)
 {
     createSwDoc();
