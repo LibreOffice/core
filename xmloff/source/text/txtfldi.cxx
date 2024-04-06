@@ -3252,21 +3252,24 @@ void XMLAnnotationImportContext::endFastElement(sal_Int32 /*nElement*/)
             uno::Reference< text::XTextContent > xPrevField;
             {
                 Reference<XTextFieldsSupplier> xTextFieldsSupplier(GetImport().GetModel(), UNO_QUERY);
-                uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-                uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-                while (xFields->hasMoreElements())
+                if (xTextFieldsSupplier)
                 {
-                    uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySetInfo> const xInfo(
-                            xCurrField->getPropertySetInfo());
-                    if (xInfo->hasPropertyByName(sAPI_name))
+                    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+                    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+                    while (xFields->hasMoreElements())
                     {
-                        OUString aFieldName;
-                        xCurrField->getPropertyValue(sAPI_name) >>= aFieldName;
-                        if (aFieldName == aName)
+                        uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
+                        uno::Reference<beans::XPropertySetInfo> const xInfo(
+                                xCurrField->getPropertySetInfo());
+                        if (xInfo->hasPropertyByName(sAPI_name))
                         {
-                            xPrevField.set( xCurrField, uno::UNO_QUERY );
-                            break;
+                            OUString aFieldName;
+                            xCurrField->getPropertyValue(sAPI_name) >>= aFieldName;
+                            if (aFieldName == aName)
+                            {
+                                xPrevField.set( xCurrField, uno::UNO_QUERY );
+                                break;
+                            }
                         }
                     }
                 }
