@@ -34,9 +34,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
-#include <com/sun/star/xml/crypto/NSSInitializer.hpp>
-#include <com/sun/star/xml/crypto/XDigestContext.hpp>
-#include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
@@ -375,14 +372,11 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         // generate SHA256 start key
         try
         {
-            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-
-            uno::Reference< css::xml::crypto::XNSSInitializer > xDigestContextSupplier = css::xml::crypto::NSSInitializer::create(xContext);
-            uno::Reference< css::xml::crypto::XDigestContext > xDigestContext( xDigestContextSupplier->getDigestContext( css::xml::crypto::DigestID::SHA256, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
-
             OString aUTF8Password( OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 ) );
-            xDigestContext->updateDigest( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUTF8Password.getStr() ), aUTF8Password.getLength() ) );
-            uno::Sequence< sal_Int8 > aDigest = xDigestContext->finalizeDigestAndDispose();
+            std::vector<unsigned char> const hash(comphelper::Hash::calculateHash(
+                reinterpret_cast<unsigned char const*>(aUTF8Password.getStr()), aUTF8Password.getLength(),
+                comphelper::HashType::SHA256));
+            uno::Sequence<sal_Int8> aDigest(reinterpret_cast<const sal_Int8*>(hash.data()), hash.size());
 
             ++nSha1Ind;
             aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, uno::Any(aDigest) } };
