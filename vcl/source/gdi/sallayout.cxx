@@ -292,7 +292,7 @@ void GenericSalLayout::Justify(double nNewWidth)
     std::vector<GlyphItem>::iterator pGlyphIter;
     // count stretchable glyphs
     int nStretchable = 0;
-    double nMaxGlyphWidth = 0;
+    double nMaxGlyphWidth = 0.0;
     for(pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter)
     {
         if( !pGlyphIter->IsInCluster() )
@@ -303,7 +303,7 @@ void GenericSalLayout::Justify(double nNewWidth)
 
     // move rightmost glyph to requested position
     nOldWidth -= pGlyphIterRight->origWidth();
-    if( nOldWidth <= 0 )
+    if( nOldWidth <= 0.0 )
         return;
     if( nNewWidth < nMaxGlyphWidth)
         nNewWidth = nMaxGlyphWidth;
@@ -312,10 +312,10 @@ void GenericSalLayout::Justify(double nNewWidth)
 
     // justify glyph widths and positions
     double nDiffWidth = nNewWidth - nOldWidth;
-    if( nDiffWidth >= 0) // expanded case
+    if( nDiffWidth >= 0.0 ) // expanded case
     {
         // expand width by distributing space between glyphs evenly
-        int nDeltaSum = 0;
+        double nDeltaSum = 0.0;
         for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
         {
             // move glyph to justified position
