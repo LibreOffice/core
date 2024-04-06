@@ -777,7 +777,7 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
     , m_xTableParent(mxBox->CreateChildFrame())
     , mxTable(VclPtr<ScDataTableView>::Create(m_xTableParent, mxDoc))
     , mxDBRanges(m_xBuilder->weld_combo_box("select_db_range"))
-    , mxOKBtn(m_xBuilder->weld_button("okay"))
+    , mxOKBtn(m_xBuilder->weld_button("ok"))
     , mxCancelBtn(m_xBuilder->weld_button("cancel"))
     , mxAddTransformationBtn(m_xBuilder->weld_button("add_transformation"))
     , mxScroll(m_xBuilder->weld_scrolled_window("scroll"))

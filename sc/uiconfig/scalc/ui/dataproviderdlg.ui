@@ -19,11 +19,14 @@
             <property name="margin-bottom">6</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="okay">
-                <property name="label" translatable="yes" context="dataproviderdlg/okbtn">OK</property>
+              <object class="GtkButton" id="ok">
+                <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -33,10 +36,11 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes" context="dataproviderdlg/cancelbtn">Cancel</property>
+                <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -161,6 +165,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">True</property>
+                            <property name="use-underline">True</property>
                           </object>
                           <packing>
                             <property name="left-attach">2</property>
@@ -241,6 +246,7 @@
                             <property name="tooltip-text" translatable="yes" context="dataproviderdlg/AddTransformation_tooltip">Add Transformations</property>
                             <property name="halign">end</property>
                             <property name="margin-end">12</property>
+                            <property name="use-underline">True</property>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -357,6 +363,7 @@
                         <property name="tooltip-text" translatable="yes" context="dataproviderdlg/apply_tooltiptext">Apply Changes</property>
                         <property name="halign">end</property>
                         <property name="margin-end">6</property>
+                        <property name="use-underline">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -397,5 +404,9 @@
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+    </action-widgets>
   </object>
 </interface>
