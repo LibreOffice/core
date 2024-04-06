@@ -1055,6 +1055,10 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
             UpdateCellAnchorFromPositionEnd(*pObj, rNoRotatedAnchor, *pDoc, nTab1,
                                             true /*bUseLogicRect*/);
         }
+        else if (pObj->GetObjIdentifier() == SdrObjKind::Group)
+        {
+            // nothing to do.
+        }
         else
         {
             // In case there are hidden rows or cols, versions 7.0 and earlier have written width and

@@ -3530,10 +3530,12 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
         // rectangle from the anchor as if all column/rows are shown. Then we move and resize
         // (in case of "resize with cell") the object to meet this snap rectangle. We need to
         // manipulate the object itself, because the used methods in xmloff do not evaluate the
-        // ObjData. This manipulation is only done temporarily for export. Thus we stash the geometry
-        // and restore it when export is done and we use NbcFoo methods.
-        bool bNeedsRestore = false;
-        std::unique_ptr<SdrObjGeoData> pGeoData = pObj->GetGeoData();
+        // ObjData. We remember the transformations and restore them later.
+        Point aMoveBy(0, 0);
+        bool bNeedsRestorePosition = false;
+        Fraction aScaleWidth(1, 1);
+        Fraction aScaleHeight(1, 1);
+        bool bNeedsRestoreSize = false;
 
         // Determine top point of fictive snap rectangle ('Full' rectangle).
         SCTAB aTab(aSnapStartAddress.Tab());
@@ -3554,8 +3556,8 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
         Point aActualTopPoint = bNegativePage ? aOrigSnapRect.TopRight() : aOrigSnapRect.TopLeft();
         if (aFullTopPoint != aActualTopPoint)
         {
-            bNeedsRestore = true;
-            Point aMoveBy = aFullTopPoint - aActualTopPoint;
+            bNeedsRestorePosition = true;
+            aMoveBy = aFullTopPoint - aActualTopPoint;
             pObj->NbcMove(Size(aMoveBy.X(), aMoveBy.Y()));
         }
 
@@ -3567,6 +3569,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             // Object is anchored "To cell (resize with cell)". Compare size of actual snap rectangle
             // and fictive full one. Resize object accordingly.
             tools::Rectangle aActualSnapRect(pObj->GetSnapRect());
+
             Point aSnapEndOffset(pObjData->maEndOffset);
             aCol = aSnapEndAddress.Col();
             aRow = aSnapEndAddress.Row();
@@ -3583,12 +3586,13 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 
             if (aFullSnapRect != aActualSnapRect)
             {
-                bNeedsRestore = true;
-                Fraction aScaleWidth(aFullSnapRect.getOpenWidth(), aActualSnapRect.getOpenWidth());
+                bNeedsRestoreSize = true;
+                aScaleWidth
+                    = Fraction(aFullSnapRect.getOpenWidth(), aActualSnapRect.getOpenWidth());
                 if (!aScaleWidth.IsValid())
                     aScaleWidth = Fraction(1, 1);
-                Fraction aScaleHeight(aFullSnapRect.getOpenHeight(),
-                                      aActualSnapRect.getOpenHeight());
+                aScaleHeight
+                    = Fraction(aFullSnapRect.getOpenHeight(), aActualSnapRect.getOpenHeight());
                 if (!aScaleHeight.IsValid())
                     aScaleHeight = Fraction(1, 1);
                 pObj->NbcResize(aFullTopPoint, aScaleWidth, aScaleHeight);
@@ -3636,9 +3640,20 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 
         ExportShape(rShape.xShape, &aPoint);
 
-        // Restore object geometry
-        if (bNeedsRestore && pGeoData)
-            pObj->SetGeoData(*pGeoData);
+        if (bNeedsRestoreSize)
+        {
+            Fraction aScaleWidthInvers(aScaleWidth.GetDenominator(), aScaleWidth.GetNumerator());
+            if (!aScaleWidthInvers.IsValid())
+                aScaleWidthInvers = Fraction(1, 1);
+            Fraction aScaleHeightInvers(aScaleHeight.GetDenominator(), aScaleHeight.GetNumerator());
+            if (!aScaleHeightInvers.IsValid())
+                aScaleHeightInvers = Fraction(1, 1);
+            pObj->NbcResize(aFullTopPoint, aScaleWidthInvers, aScaleHeightInvers);
+        }
+        if (bNeedsRestorePosition)
+        {
+            pObj->NbcMove(Size(-aMoveBy.X(), -aMoveBy.Y()));
+        }
     }
 }
 
