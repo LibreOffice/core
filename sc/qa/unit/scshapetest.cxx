@@ -1227,6 +1227,74 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160003_copy_page_anchored)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160369_groupshape)
+{
+    // The document contains a group spanning range C5:F12. It is currently anchored to page to
+    // make sure its position does not change. When the group was anchored 'To Cell' and rows or
+    // columns were hidden before the group, saving changed the anchor position and anchor
+    // offset. This happened both with using 'resize with cell' and not.
+    createScDoc("ods/tdf160369_groupshape.ods");
+
+    // Get document and group object
+    ScDocument* pDoc = getScDoc();
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
+
+    // Anchor group 'To Cell (resize with cell)' to prepare the test.
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
+
+    // Hide rows 3 and 4 (UI number), which are before the group
+    // Hide column D, which is inside the group
+    pDoc->SetRowHidden(2, 3, 0, true);
+    pDoc->SetDrawPageSize(0); // trigger recalcpos, otherwise shapes are not changed
+    pDoc->SetColHidden(3, 3, 0, true);
+    pDoc->SetDrawPageSize(0);
+
+    // Get geometry of the group
+    ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    ScAddress aOrigStart = (*pObjData).maStart;
+    ScAddress aOrigEnd = (*pObjData).maEnd;
+    tools::Rectangle aOrigRect = pObj->GetSnapRect();
+
+    // Save document but do not reload. Saving alone had already caused the error.
+    save("calc8");
+
+    // Get geometry of the group again
+    ScDrawObjData* pAfterObjData = ScDrawLayer::GetObjData(pObj);
+    ScAddress aAfterStart = (*pAfterObjData).maStart;
+    ScAddress aAfterEnd = (*pAfterObjData).maEnd;
+    tools::Rectangle aAfterRect = pObj->GetSnapRect();
+
+    // verify Orig equals After
+    CPPUNIT_ASSERT_EQUAL(aOrigStart, aAfterStart);
+    CPPUNIT_ASSERT_EQUAL(aOrigEnd, aAfterEnd);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aOrigRect, aAfterRect, 1);
+
+    // The same but with saveAndReload.
+    createScDoc("ods/tdf160369_groupshape.ods");
+    pDoc = getScDoc();
+    pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
+    pDoc->SetRowHidden(2, 3, 0, true);
+    pDoc->SetDrawPageSize(0); // trigger recalcpos, otherwise shapes are not changed
+    pDoc->SetColHidden(3, 3, 0, true);
+    pDoc->SetDrawPageSize(0);
+
+    saveAndReload("calc8");
+
+    // Verify geometry is same as before save
+    pDoc = getScDoc();
+    pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
+    pAfterObjData = ScDrawLayer::GetObjData(pObj);
+    aAfterStart = (*pAfterObjData).maStart;
+    aAfterEnd = (*pAfterObjData).maEnd;
+    aAfterRect = pObj->GetSnapRect();
+
+    // verify Orig equals After
+    CPPUNIT_ASSERT_EQUAL(aOrigStart, aAfterStart);
+    CPPUNIT_ASSERT_EQUAL(aOrigEnd, aAfterEnd);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aOrigRect, aAfterRect, 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
