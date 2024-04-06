@@ -327,6 +327,9 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT(LO_EXT, XML_DATA_PILOT_SOURCE):
                 msDataPilotSource = aIter.toString();
                 break;
+            case XML_ELEMENT( XLINK, XML_TYPE ):
+                // Ignored for now.
+            break;
             case XML_ELEMENT(XLINK, XML_HREF):
                 m_aXLinkHRefAttributeToIndicateDataProvider = aIter.toString();
                 break;
