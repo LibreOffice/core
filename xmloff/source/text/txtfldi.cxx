@@ -3244,83 +3244,82 @@ void XMLAnnotationImportContext::endFastElement(sal_Int32 /*nElement*/)
     // reinstall old list item #91964#
     GetImport().GetTextImport()->PopListContext();
 
-    if ( bValid )
+    if (!bValid)
     {
-        if ( mnElement == XML_ELEMENT(OFFICE, XML_ANNOTATION_END) )
+        GetImportHelper().InsertString(GetContent());
+        return;
+    }
+
+    if ( mnElement == XML_ELEMENT(OFFICE, XML_ANNOTATION_END) )
+    {
+        // Search for a previous annotation with the same name.
+        uno::Reference< text::XTextContent > xPrevField;
         {
-            // Search for a previous annotation with the same name.
-            uno::Reference< text::XTextContent > xPrevField;
+            Reference<XTextFieldsSupplier> xTextFieldsSupplier(GetImport().GetModel(), UNO_QUERY);
+            if (!xTextFieldsSupplier)
+                return;
+            uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+            uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+            while (xFields->hasMoreElements())
             {
-                Reference<XTextFieldsSupplier> xTextFieldsSupplier(GetImport().GetModel(), UNO_QUERY);
-                if (xTextFieldsSupplier)
+                uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySetInfo> const xInfo(
+                        xCurrField->getPropertySetInfo());
+                if (xInfo->hasPropertyByName(sAPI_name))
                 {
-                    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-                    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-                    while (xFields->hasMoreElements())
+                    OUString aFieldName;
+                    xCurrField->getPropertyValue(sAPI_name) >>= aFieldName;
+                    if (aFieldName == aName)
                     {
-                        uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
-                        uno::Reference<beans::XPropertySetInfo> const xInfo(
-                                xCurrField->getPropertySetInfo());
-                        if (xInfo->hasPropertyByName(sAPI_name))
-                        {
-                            OUString aFieldName;
-                            xCurrField->getPropertyValue(sAPI_name) >>= aFieldName;
-                            if (aFieldName == aName)
-                            {
-                                xPrevField.set( xCurrField, uno::UNO_QUERY );
-                                break;
-                            }
-                        }
+                        xPrevField.set( xCurrField, uno::UNO_QUERY );
+                        break;
                     }
                 }
             }
-            if ( xPrevField.is() )
-            {
-                // So we are ending a previous annotation,
-                // let's create a text range covering the old and the current position.
-                uno::Reference<text::XText> xText = GetImportHelper().GetText();
-                uno::Reference<text::XTextCursor> xCursor =
-                    xText->createTextCursorByRange(GetImportHelper().GetCursorAsRange());
-                try
-                {
-                    xCursor->gotoRange(xPrevField->getAnchor(), true);
-                }
-                catch (const uno::RuntimeException&)
-                {
-                    // Losing the start of the anchor is better than not opening the document at
-                    // all.
-                    TOOLS_WARN_EXCEPTION(
-                        "xmloff.text",
-                        "XMLAnnotationImportContext::endFastElement: gotoRange() failed: ");
-                }
-
-                xText->insertTextContent(xCursor, xPrevField, !xCursor->isCollapsed());
-            }
         }
-        else
+        if ( xPrevField.is() )
         {
-            if ( mxField.is() || CreateField( mxField, sServicePrefix + GetServiceName() ) )
+            // So we are ending a previous annotation,
+            // let's create a text range covering the old and the current position.
+            uno::Reference<text::XText> xText = GetImportHelper().GetText();
+            uno::Reference<text::XTextCursor> xCursor =
+                xText->createTextCursorByRange(GetImportHelper().GetCursorAsRange());
+            try
             {
-                // set field properties
-                PrepareField( mxField );
-
-                // attach field to document
-                Reference < XTextContent > xTextContent( mxField, UNO_QUERY );
-
-                // workaround for #80606#
-                try
-                {
-                    GetImportHelper().InsertTextContent( xTextContent );
-                }
-                catch (const lang::IllegalArgumentException&)
-                {
-                    // ignore
-                }
+                xCursor->gotoRange(xPrevField->getAnchor(), true);
             }
+            catch (const uno::RuntimeException&)
+            {
+                // Losing the start of the anchor is better than not opening the document at
+                // all.
+                TOOLS_WARN_EXCEPTION(
+                    "xmloff.text",
+                    "XMLAnnotationImportContext::endFastElement: gotoRange() failed: ");
+            }
+
+            xText->insertTextContent(xCursor, xPrevField, !xCursor->isCollapsed());
+        }
+        return;
+    }
+
+    if ( mxField.is() || CreateField( mxField, sServicePrefix + GetServiceName() ) )
+    {
+        // set field properties
+        PrepareField( mxField );
+
+        // attach field to document
+        Reference < XTextContent > xTextContent( mxField, UNO_QUERY );
+
+        // workaround for #80606#
+        try
+        {
+            GetImportHelper().InsertTextContent( xTextContent );
+        }
+        catch (const lang::IllegalArgumentException&)
+        {
+            // ignore
         }
     }
-    else
-        GetImportHelper().InsertString(GetContent());
 }
 
 void XMLAnnotationImportContext::PrepareField(
