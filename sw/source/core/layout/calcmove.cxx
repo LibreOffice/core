@@ -1312,7 +1312,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     // #i28701# - move master forward, if it has to move,
     // because of its object positioning.
-    if ( !static_cast<SwTextFrame*>(this)->IsFollow() )
+    if (!IsFollow())
     {
         sal_uInt32 nToPageNum = 0;
         const bool bMoveFwdByObjPos = SwLayouter::FrameMovedFwdByObjPos(
@@ -1333,17 +1333,15 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             MoveFwd( bMakePage, false );
         }
     }
-
-    // If a Follow sits next to its Master and doesn't fit, we know it can
-    // be moved right now.
-    if ( lcl_Prev( this ) && static_cast<SwTextFrame*>(this)->IsFollow() && IsMoveable() )
+    else if (auto* prev = lcl_Prev(this); prev && IsMoveable())
     {
+        // If a Follow sits next to its Master and doesn't fit, we know it can be moved right now.
         bMovedFwd = true;
         // If follow frame is in table, its master will be the last in the
         // current table cell. Thus, invalidate the printing area of the master.
         if ( IsInTab() )
         {
-            lcl_Prev( this )->InvalidatePrt();
+            prev->InvalidatePrt();
         }
         MoveFwd( bMakePage, false );
     }
