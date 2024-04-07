@@ -231,8 +231,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     }
     else if (nFormatId == SotClipboardFormatId::SVXB)
     {
-        std::unique_ptr<SvStream> xStm;
-        if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
+        if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB ) )
         {
             Graphic aGraphic;
             TypeSerializer aSerializer(*xStm);
@@ -242,8 +241,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     }
     else if ( nFormatId == SotClipboardFormatId::DRAWING )
     {
-        std::unique_ptr<SvStream> xStm;
-        if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
+        if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING ))
         {
             MakeDrawLayer();    // before loading model, so 3D factory has been created
 
@@ -676,8 +674,7 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
     pObj->SetOverwriting( true );
 
     auto pStrBuffer = std::make_shared<OUString>();
-    std::unique_ptr<SvStream> xStream;
-    if ( rDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream )
+    if (std::unique_ptr<SvStream> xStream = rDataHelper.GetSotStorageStream( nFormatId ) )
     {
         // Static variables for per-session storage. This could be
         // changed to longer-term storage in future.

@@ -497,8 +497,8 @@ bool ScTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uInt32 
                     uno::Reference<datatransfer::XTransferable> xEditTrans = pEngine->CreateTransferable( aSel );
                     TransferableDataHelper aEditHelper( xEditTrans );
 
-                    std::unique_ptr<SvStream> xStrm;
-                    bRet = aEditHelper.GetSotStorageStream( rFlavor, xStrm );
+                    std::unique_ptr<SvStream> xStrm = aEditHelper.GetSotStorageStream( rFlavor );
+                    bRet = bool(xStrm);
                     rOStm.WriteStream(*xStrm);
                 }
             }

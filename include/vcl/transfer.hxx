@@ -351,8 +351,8 @@ public:
     css::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
     css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
-    bool                        GetSotStorageStream( SotClipboardFormatId nFormat, std::unique_ptr<SvStream>& rStreamRef ) const;
-    bool                        GetSotStorageStream( const css::datatransfer::DataFlavor& rFlavor, std::unique_ptr<SvStream>& rStreamRef ) const;
+    std::unique_ptr<SvStream>    GetSotStorageStream( SotClipboardFormatId nFormat ) const;
+    std::unique_ptr<SvStream>    GetSotStorageStream( const css::datatransfer::DataFlavor& rFlavor ) const;
 
     css::uno::Reference<css::io::XInputStream> GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
     css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;

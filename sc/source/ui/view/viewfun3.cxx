@@ -776,22 +776,20 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
     if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
     {
-        std::unique_ptr<SvStream> xStm;
-        ScDrawView* pScDrawView = GetScDrawView();
-
-        if( pScDrawView && aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
-        {
-            Graphic aGraphic;
-            TypeSerializer aSerializer(*xStm);
-            aSerializer.readGraphic(aGraphic);
-
-            const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
-
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, "" ))
+        if (ScDrawView* pScDrawView = GetScDrawView())
+            if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB ) )
             {
-                return true;
+                Graphic aGraphic;
+                TypeSerializer aSerializer(*xStm);
+                aSerializer.readGraphic(aGraphic);
+
+                const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
+
+                if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, "" ))
+                {
+                    return true;
+                }
             }
-        }
     }
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )
     {

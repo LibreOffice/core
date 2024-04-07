@@ -2177,7 +2177,7 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
         [[fallthrough]]; // because then test if we get a stream
 
     default:
-        if( rData.GetSotStorageStream( nFormat, xStrm ) )
+        if( (xStrm = rData.GetSotStorageStream( nFormat )) )
         {
             if( ( SotClipboardFormatId::HTML_SIMPLE == nFormat ) ||
                 ( SotClipboardFormatId::HTML_NO_COMMENT == nFormat ) )
@@ -2767,8 +2767,7 @@ bool SwTransferable::PasteSdrFormat(  const TransferableDataHelper& rData,
                                     const Point* pPt, SotExchangeActionFlags nActionFlags, bool bNeedToSelectBeforePaste)
 {
     bool bRet = false;
-    std::unique_ptr<SvStream> xStrm;
-    if( rData.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStrm ))
+    if( std::unique_ptr<SvStream> xStrm = rData.GetSotStorageStream( SotClipboardFormatId::DRAWING ))
     {
         xStrm->SetVersion( SOFFICE_FILEFORMAT_50 );
 
@@ -2808,9 +2807,7 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
 
     case SotClipboardFormatId::SVXB:
     {
-        std::unique_ptr<SvStream> xStm;
-
-        if(rData.GetSotStorageStream(SotClipboardFormatId::SVXB, xStm))
+        if (std::unique_ptr<SvStream> xStm = rData.GetSotStorageStream(SotClipboardFormatId::SVXB))
         {
             TypeSerializer aSerializer(*xStm);
             aSerializer.readGraphic(aGraphic);

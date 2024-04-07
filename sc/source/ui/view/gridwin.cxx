@@ -4371,7 +4371,7 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
         std::unique_ptr<SvStream> xStm;
         TransferableObjectDescriptor aObjDesc;
         if( aDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc ) &&
-            aDataHelper.GetSotStorageStream( SotClipboardFormatId::EMBED_SOURCE, xStm ) )
+            (xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::EMBED_SOURCE )) )
         {
             bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                          aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )

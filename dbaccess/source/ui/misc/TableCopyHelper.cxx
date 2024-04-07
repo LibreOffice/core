@@ -180,16 +180,15 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
         try
         {
             DropDescriptor aTrans;
-            bool bOk;
             if ( _nFormatId != SotClipboardFormatId::RTF )
-                bOk = _rTransData.GetSotStorageStream(SotClipboardFormatId::HTML ,aTrans.aHtmlRtfStorage);
+                aTrans.aHtmlRtfStorage = _rTransData.GetSotStorageStream(SotClipboardFormatId::HTML);
             else
-                bOk = _rTransData.GetSotStorageStream(SotClipboardFormatId::RTF,aTrans.aHtmlRtfStorage);
+                aTrans.aHtmlRtfStorage = _rTransData.GetSotStorageStream(SotClipboardFormatId::RTF);
 
             aTrans.nType            = E_TABLE;
             aTrans.bHtml            = SotClipboardFormatId::HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
-            if ( !bOk || !copyTagTable(aTrans,false,_xConnection) )
+            if ( !aTrans.aHtmlRtfStorage || !copyTagTable(aTrans,false,_xConnection) )
                 m_pController->showError(SQLException(DBA_RES(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
         }
         catch(const SQLException&)
@@ -254,16 +253,12 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
     bool bHtml = _aDroppedData.HasFormat(SotClipboardFormatId::HTML);
     if ( bHtml || _aDroppedData.HasFormat(SotClipboardFormatId::RTF) )
     {
-        bool bOk;
-        if ( bHtml )
-            bOk = _aDroppedData.GetSotStorageStream(SotClipboardFormatId::HTML ,_rAsyncDrop.aHtmlRtfStorage);
-        else
-            bOk = _aDroppedData.GetSotStorageStream(SotClipboardFormatId::RTF,_rAsyncDrop.aHtmlRtfStorage);
+        _rAsyncDrop.aHtmlRtfStorage = _aDroppedData.GetSotStorageStream(bHtml ? SotClipboardFormatId::HTML : SotClipboardFormatId::RTF);
 
         _rAsyncDrop.bHtml           = bHtml;
         _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,true,_xConnection);
 
-        bRet = ( !_rAsyncDrop.bError && bOk && _rAsyncDrop.aHtmlRtfStorage );
+        bRet = ( !_rAsyncDrop.bError && _rAsyncDrop.aHtmlRtfStorage );
         if ( bRet )
         {
             // now we need to copy the stream

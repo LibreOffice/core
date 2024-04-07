@@ -266,8 +266,7 @@ void ChartController::executeDispatch_Paste()
     {
         if ( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
-            std::unique_ptr<SvStream> xStm;
-            if ( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
+            if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING) )
             {
                 xStm->Seek( 0 );
                 Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
@@ -284,8 +283,7 @@ void ChartController::executeDispatch_Paste()
         else if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
         {
             // graphic exchange format (graphic manager bitmap format?)
-            std::unique_ptr<SvStream> xStm;
-            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ))
+            if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB ))
             {
                 TypeSerializer aSerializer(*xStm);
                 aSerializer.readGraphic(aGraphic);

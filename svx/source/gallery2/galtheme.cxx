@@ -542,9 +542,7 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
 
         if( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
-            std::unique_ptr<SvStream> xModelStm;
-
-            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xModelStm ) )
+            if (std::unique_ptr<SvStream> xModelStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING ) )
                 bRet = InsertModelStream( *xModelStm, nInsertPos );
         }
         else if( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) ||
