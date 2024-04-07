@@ -1958,6 +1958,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135581)
 
     // Without the fix, the image was moving when the anchor changed, letting text flow back.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+    // Make sure that the image is still on the first page, and the text is on the second
+    auto pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page[1]/body/txt/anchored/fly"_ostr);
+    assertXPath(pExportDump, "//page[1]/body/txt//SwLineLayout"_ostr, "length"_ostr, u"0"_ustr);
+    assertXPath(pExportDump, "//page[2]/body/txt//SwLineLayout"_ostr, "length"_ostr, u"26"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
