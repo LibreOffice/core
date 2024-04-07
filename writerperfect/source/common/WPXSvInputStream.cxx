@@ -99,7 +99,7 @@ struct OLEStreamData
 {
     OLEStreamData(OString aName, OString rvngName);
 
-    tools::SvRef<SotStorageStream> stream;
+    rtl::Reference<SotStorageStream> stream;
 
     /** Name of the stream.
       *
@@ -116,7 +116,7 @@ struct OLEStreamData
 };
 
 typedef std::unordered_map<OUString, std::size_t> NameMap_t;
-typedef std::unordered_map<OUString, tools::SvRef<SotStorage>> OLEStorageMap_t;
+typedef std::unordered_map<OUString, rtl::Reference<SotStorage>> OLEStorageMap_t;
 
 /** Representation of an OLE2 storage.
   *
@@ -140,16 +140,16 @@ struct OLEStorageImpl
 
     void initialize(std::unique_ptr<SvStream> pStream);
 
-    tools::SvRef<SotStorageStream> getStream(const OUString& rPath);
-    tools::SvRef<SotStorageStream> const& getStream(std::size_t nId);
+    rtl::Reference<SotStorageStream> getStream(const OUString& rPath);
+    rtl::Reference<SotStorageStream> const& getStream(std::size_t nId);
 
 private:
-    void traverse(const tools::SvRef<SotStorage>& rStorage, std::u16string_view rPath);
+    void traverse(const rtl::Reference<SotStorage>& rStorage, std::u16string_view rPath);
 
-    tools::SvRef<SotStorageStream> createStream(const OUString& rPath);
+    rtl::Reference<SotStorageStream> createStream(const OUString& rPath);
 
 public:
-    tools::SvRef<SotStorage> mxRootStorage; //< root storage of the OLE2
+    rtl::Reference<SotStorage> mxRootStorage; //< root storage of the OLE2
     OLEStorageMap_t maStorageMap; //< map of all sub storages by name
     ::std::vector<OLEStreamData> maStreams; //< list of streams and their names
     NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
@@ -179,7 +179,7 @@ void OLEStorageImpl::initialize(std::unique_ptr<SvStream> pStream)
     mbInitialized = true;
 }
 
-tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const OUString& rPath)
+rtl::Reference<SotStorageStream> OLEStorageImpl::getStream(const OUString& rPath)
 {
     const OUString aPath(lcl_normalizeSubStreamPath(rPath));
     NameMap_t::iterator aIt = maNameMap.find(aPath);
@@ -188,7 +188,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const OUString& rPath)
     // Later, given how libcdr's zip stream implementation behaves,
     // return the first stream in the storage if there is one.
     if (maNameMap.end() == aIt)
-        return tools::SvRef<SotStorageStream>();
+        return rtl::Reference<SotStorageStream>();
 
     if (!maStreams[aIt->second].stream.is())
         maStreams[aIt->second].stream
@@ -197,7 +197,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const OUString& rPath)
     return maStreams[aIt->second].stream;
 }
 
-tools::SvRef<SotStorageStream> const& OLEStorageImpl::getStream(const std::size_t nId)
+rtl::Reference<SotStorageStream> const& OLEStorageImpl::getStream(const std::size_t nId)
 {
     if (!maStreams[nId].stream.is())
         maStreams[nId].stream
@@ -206,7 +206,7 @@ tools::SvRef<SotStorageStream> const& OLEStorageImpl::getStream(const std::size_
     return maStreams[nId].stream;
 }
 
-void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, std::u16string_view rPath)
+void OLEStorageImpl::traverse(const rtl::Reference<SotStorage>& rStorage, std::u16string_view rPath)
 {
     SvStorageInfoList infos;
 
@@ -228,7 +228,7 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, std::u16
         else if (info.IsStorage())
         {
             const OUString aPath = concatPath(rPath, info.GetName());
-            tools::SvRef<SotStorage> aStorage
+            rtl::Reference<SotStorage> aStorage
                 = rStorage->OpenSotStorage(info.GetName(), StreamMode::STD_READ);
             maStorageMap[aPath] = aStorage;
 
@@ -243,7 +243,7 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, std::u16
     }
 }
 
-tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const OUString& rPath)
+rtl::Reference<SotStorageStream> OLEStorageImpl::createStream(const OUString& rPath)
 {
     const sal_Int32 nDelim = rPath.lastIndexOf(u'/');
 
@@ -422,7 +422,7 @@ private:
     void ensureZipIsInitialized();
 
     static librevenge::RVNGInputStream*
-    createWPXStream(const tools::SvRef<SotStorageStream>& rxStorage);
+    createWPXStream(const rtl::Reference<SotStorageStream>& rxStorage);
     static librevenge::RVNGInputStream* createWPXStream(const Reference<XInputStream>& rxStream);
 
 private:
@@ -726,7 +726,7 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
 }
 
 librevenge::RVNGInputStream*
-WPXSvInputStreamImpl::createWPXStream(const tools::SvRef<SotStorageStream>& rxStorage)
+WPXSvInputStreamImpl::createWPXStream(const rtl::Reference<SotStorageStream>& rxStorage)
 {
     if (rxStorage.is())
     {

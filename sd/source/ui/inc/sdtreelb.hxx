@@ -43,7 +43,7 @@ class ViewShell;
 class DrawDocShell;
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED
 #define SV_DECL_DRAW_DOC_SHELL_DEFINED
-typedef ::tools::SvRef<DrawDocShell> DrawDocShellRef;
+typedef rtl::Reference<DrawDocShell> DrawDocShellRef;
 #endif
 }
 namespace svt {

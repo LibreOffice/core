@@ -162,34 +162,34 @@ OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
 
 // *** streams and storages *** -----------------------------------------------
 
-tools::SvRef<SotStorage> ScfTools::OpenStorageRead( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrgName )
+rtl::Reference<SotStorage> ScfTools::OpenStorageRead( rtl::Reference<SotStorage> const & xStrg, const OUString& rStrgName )
 {
-    tools::SvRef<SotStorage> xSubStrg;
+    rtl::Reference<SotStorage> xSubStrg;
     if( xStrg.is() && xStrg->IsContained( rStrgName ) )
         xSubStrg = xStrg->OpenSotStorage( rStrgName, StreamMode::STD_READ );
     return xSubStrg;
 }
 
-tools::SvRef<SotStorage> ScfTools::OpenStorageWrite( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrgName )
+rtl::Reference<SotStorage> ScfTools::OpenStorageWrite( rtl::Reference<SotStorage> const & xStrg, const OUString& rStrgName )
 {
-    tools::SvRef<SotStorage> xSubStrg;
+    rtl::Reference<SotStorage> xSubStrg;
     if( xStrg.is() )
         xSubStrg = xStrg->OpenSotStorage( rStrgName, StreamMode::STD_WRITE );
     return xSubStrg;
 }
 
-tools::SvRef<SotStorageStream> ScfTools::OpenStorageStreamRead( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrmName )
+rtl::Reference<SotStorageStream> ScfTools::OpenStorageStreamRead( rtl::Reference<SotStorage> const & xStrg, const OUString& rStrmName )
 {
-    tools::SvRef<SotStorageStream> xStrm;
+    rtl::Reference<SotStorageStream> xStrm;
     if( xStrg.is() && xStrg->IsContained( rStrmName ) && xStrg->IsStream( rStrmName ) )
         xStrm = xStrg->OpenSotStream( rStrmName, StreamMode::STD_READ );
     return xStrm;
 }
 
-tools::SvRef<SotStorageStream> ScfTools::OpenStorageStreamWrite( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrmName )
+rtl::Reference<SotStorageStream> ScfTools::OpenStorageStreamWrite( rtl::Reference<SotStorage> const & xStrg, const OUString& rStrmName )
 {
     OSL_ENSURE( !xStrg.is() || !xStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
-    tools::SvRef<SotStorageStream> xStrm;
+    rtl::Reference<SotStorageStream> xStrm;
     if( xStrg.is() )
         xStrm = xStrg->OpenSotStream( rStrmName, StreamMode::STD_WRITE | StreamMode::TRUNC );
     return xStrm;

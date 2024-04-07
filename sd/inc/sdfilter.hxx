@@ -20,8 +20,8 @@
 #pragma once
 
 #include <osl/module.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/ref.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -57,7 +57,7 @@ protected:
 };
 
 SD_DLLPUBLIC bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMediaData,
-                    tools::SvRef<SotStorage> const & rSvStorage,
+                    rtl::Reference<SotStorage> const & rSvStorage,
                     css::uno::Reference< css::frame::XModel > const & rXModel,
                     css::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
                     SvMemoryStream* pVBA,

@@ -293,8 +293,7 @@ void ScSelectionTransferObj::CreateCellData()
                 // SetDragHandlePos is not used - there is no mouse position
                 //? pTransferObj->SetVisibleTab( nTab );
 
-                SfxObjectShellRef aPersistRef( aDragShellRef.get() );
-                pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+                pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
 
                 pTransferObj->SetDragSource( pDocSh, aNewMark );
 
@@ -340,8 +339,7 @@ void ScSelectionTransferObj::CreateDrawData()
 
             rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, std::move(aObjDesc) );
 
-            SfxObjectShellRef aPersistRef( aDragShellRef.get() );
-            pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+            pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
             pTransferObj->SetDragSource( pDrawView );       // copies selection
 
             mxDrawData = pTransferObj;

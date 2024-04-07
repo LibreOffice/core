@@ -664,12 +664,11 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     if ( m_aDocShellRef.is() )
         return;
 
-    ScDocShell* pDocSh = new ScDocShell;
-    m_aDocShellRef = pDocSh;      // ref must be there before InitNew
+    m_aDocShellRef = new ScDocShell; // ref must be there before InitNew
 
-    pDocSh->DoInitNew();
+    m_aDocShellRef->DoInitNew();
 
-    ScDocument& rDestDoc = pDocSh->GetDocument();
+    ScDocument& rDestDoc = m_aDocShellRef->GetDocument();
     ScMarkData aDestMark(rDestDoc.GetSheetLimits());
     aDestMark.SelectTable( 0, true );
 
@@ -719,7 +718,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     }
 
     if (m_pDoc->GetDrawLayer() || m_pDoc->HasNotes())
-        pDocSh->MakeDrawLayer();
+        m_aDocShellRef->MakeDrawLayer();
 
     //  cell range is copied to the original position, but on the first sheet
     //  -> bCutMode must be set
@@ -755,7 +754,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         pDestPool->CopyStyleFrom( pStylePool, aStyleName, SfxStyleFamily::Page );
     }
 
-    ScViewData aViewData( *pDocSh, nullptr );
+    ScViewData aViewData(*m_aDocShellRef, nullptr);
     aViewData.SetScreen( nStartX,nStartY, nEndX,nEndY );
     aViewData.SetCurX( nStartX );
     aViewData.SetCurY( nStartY );
@@ -796,14 +795,14 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     nSizeX = o3tl::convert(nSizeX, o3tl::Length::twip, o3tl::Length::mm100);
     nSizeY = o3tl::convert(nSizeY, o3tl::Length::twip, o3tl::Length::mm100);
 
-//      pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
+//      m_aDocShellRef->SetVisAreaSize( Size(nSizeX,nSizeY) );
 
     tools::Rectangle aNewArea( Point(nPosX,nPosY), Size(nSizeX,nSizeY) );
     //TODO/LATER: why twice?!
-    //pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
-    pDocSh->SetVisArea( aNewArea );
+    //m_aDocShellRef->SvInPlaceObject::SetVisArea( aNewArea );
+    m_aDocShellRef->SetVisArea(aNewArea);
 
-    pDocSh->UpdateOle(aViewData, true);
+    m_aDocShellRef->UpdateOle(aViewData, true);
 
     //! SetDocumentModified?
     if ( rDestDoc.IsChartListenerCollectionNeedsUpdate() )
