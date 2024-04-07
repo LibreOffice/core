@@ -450,7 +450,11 @@ void Application::Execute()
             std::abort();
         }
         while (!pSVData->maAppData.mbAppQuit)
+        {
             Application::Yield();
+            SolarMutexReleaser releaser; // Give a chance for the waiting threads to lock the mutex
+            pSVData->m_inExecuteCondtion.set();
+        }
     }
 
     pSVData->maAppData.mbInAppExecute = false;
