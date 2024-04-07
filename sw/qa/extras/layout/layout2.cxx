@@ -2919,6 +2919,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf156725)
                 "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column[2]/body/txt", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, test_i84870)
+{
+    // Given a document with a large as-char object, alone in its paragraph, shifted down by a
+    // header object: it must not hang in a layout loop on import
+    createSwDoc("i84870.fodt");
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
