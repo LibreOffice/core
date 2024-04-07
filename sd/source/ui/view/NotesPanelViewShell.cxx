@@ -272,6 +272,7 @@ SdPage* NotesPanelViewShell::getCurrentPage() const
             return GetDoc()->GetSdPage((pCurrentPage->GetPageNum() - 1) >> 1, PageKind::Notes);
         case PageKind::Notes:
             return pCurrentPage;
+        default:
         case PageKind::Handout:
             return nullptr;
     }
