@@ -4106,8 +4106,14 @@ static void ImplHandleMoveMsg(HWND hWnd, LPARAM lParam)
 #ifdef NDEBUG
     (void) lParam;
 #endif
-    assert(IsIconic(hWnd) || (pFrame->maGeometry.x() == static_cast<sal_Int16>(LOWORD(lParam))));
-    assert(IsIconic(hWnd) || (pFrame->maGeometry.y() == static_cast<sal_Int16>(HIWORD(lParam))));
+    SAL_WARN_IF(!IsIconic(hWnd) && pFrame->maGeometry.x() != static_cast<sal_Int16>(LOWORD(lParam)),
+                "vcl",
+                "Unexpected X: " << pFrame->maGeometry.x() << " instead of "
+                                 << static_cast<sal_Int16>(LOWORD(lParam)));
+    SAL_WARN_IF(!IsIconic(hWnd) && pFrame->maGeometry.y() != static_cast<sal_Int16>(HIWORD(lParam)),
+                "vcl",
+                "Unexpected Y: " << pFrame->maGeometry.y() << " instead of "
+                                 << static_cast<sal_Int16>(HIWORD(lParam)));
 
     if (GetWindowStyle(hWnd) & WS_VISIBLE)
         pFrame->mbDefPos = false;
