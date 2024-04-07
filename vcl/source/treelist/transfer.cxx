@@ -2087,26 +2087,22 @@ Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavo
     return aSeq;
 }
 
-
 bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, std::unique_ptr<SvStream>& rxStream ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSotStorageStream( aFlavor, rxStream ) );
 }
 
-
 bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, std::unique_ptr<SvStream>& rxStream ) const
 {
     Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
+    if (!aSeq.hasElements())
+        return false;
 
-    if (aSeq.hasElements())
-    {
-        rxStream = SotTempStream::Create( "" );
-        rxStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );
-        rxStream->Seek( 0 );
-    }
-
-    return aSeq.hasElements();
+    rxStream = SotTempStream::Create( "" );
+    rxStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );
+    rxStream->Seek(0);
+    return true;
 }
 
 Reference<XInputStream> TransferableDataHelper::GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const
