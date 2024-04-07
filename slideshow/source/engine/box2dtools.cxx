@@ -92,24 +92,10 @@ void addTriangleVectorToBody(const basegfx::triangulator::B2DTriangleVector& rTr
                 convertB2DPointToBox2DVec2(aTriangle.getB(), fScaleFactor),
                 convertB2DPointToBox2DVec2(aTriangle.getC(), fScaleFactor) };
 
-        bool bValidPointDistance = true;
-
-        // check whether the triangle has degenerately close points
-        for (int nPointIndexA = 0; nPointIndexA < 3; nPointIndexA++)
-        {
-            for (int nPointIndexB = 0; nPointIndexB < 3; nPointIndexB++)
-            {
-                if (nPointIndexA == nPointIndexB)
-                    continue;
-
-                if (b2DistanceSquared(aTriangleVertices[nPointIndexA],
-                                      aTriangleVertices[nPointIndexB])
-                    < 0.003f)
-                {
-                    bValidPointDistance = false;
-                }
-            }
-        }
+        bool bValidPointDistance
+            = b2DistanceSquared(aTriangleVertices[0], aTriangleVertices[1]) > 0.003f
+              && b2DistanceSquared(aTriangleVertices[0], aTriangleVertices[2]) > 0.003f
+              && b2DistanceSquared(aTriangleVertices[1], aTriangleVertices[2]) > 0.003f;
 
         if (bValidPointDistance)
         {
