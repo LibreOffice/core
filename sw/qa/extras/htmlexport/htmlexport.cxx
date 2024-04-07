@@ -1210,8 +1210,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("Object 2"),
                                                   uno::UNO_QUERY);
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    tools::SvRef<SotStorage> pStorage = new SotStorage(*pStream);
-    tools::SvRef<SotStorageStream> pOleNative = pStorage->OpenSotStream("\1Ole10Native");
+    rtl::Reference<SotStorage> pStorage = new SotStorage(*pStream);
+    rtl::Reference<SotStorageStream> pOleNative = pStorage->OpenSotStream("\1Ole10Native");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 39409
     // - Actual  : 0
@@ -1233,7 +1233,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("Object 2"),
                                                   uno::UNO_QUERY);
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    tools::SvRef<SotStorage> pStorage = new SotStorage(*pStream);
+    rtl::Reference<SotStorage> pStorage = new SotStorage(*pStream);
     // Check the clsid of the root stream of the OLE2 storage.
     SvGlobalName aActual = pStorage->GetClassName();
     SvGlobalName aExpected(0x0003000A, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);

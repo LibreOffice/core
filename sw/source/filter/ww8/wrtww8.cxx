@@ -3458,8 +3458,8 @@ ErrCode WW8Export::ExportDocument_Impl()
 
     m_pFib.reset(new WW8Fib(8, m_bDot));
 
-    tools::SvRef<SotStorageStream> xWwStrm( GetWriter().GetStorage().OpenSotStream( m_aMainStg ) );
-    tools::SvRef<SotStorageStream> xTableStrm( xWwStrm ), xDataStrm( xWwStrm );
+    rtl::Reference<SotStorageStream> xWwStrm(GetWriter().GetStorage().OpenSotStream(m_aMainStg));
+    rtl::Reference<SotStorageStream> xTableStrm(xWwStrm), xDataStrm(xWwStrm);
     xWwStrm->SetBufferSize( 32768 );
 
     m_pFib->m_fWhichTableStm = true;
@@ -3671,7 +3671,7 @@ void WW8Export::PrepareStorage()
     SvGlobalName aGName(MSO_WW8_CLASSID);
     GetWriter().GetStorage().SetClass(
         aGName, SotClipboardFormatId::NONE, "Microsoft Word-Document");
-    tools::SvRef<SotStorageStream> xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
+    rtl::Reference<SotStorageStream> xStor(GetWriter().GetStorage().OpenSotStream(sCompObj));
     xStor->WriteBytes(pData, sizeof(pData));
 
     SwDocShell* pDocShell = m_rDoc.GetDocShell ();
@@ -3702,7 +3702,7 @@ void WW8Export::PrepareStorage()
 
 ErrCode SwWW8Writer::WriteStorage()
 {
-    tools::SvRef<SotStorage> pOrigStg;
+    rtl::Reference<SotStorage> pOrigStg;
     uno::Reference< packages::XPackageEncryption > xPackageEncryption;
     std::shared_ptr<SvStream> pSotStorageStream;
     uno::Sequence< beans::NamedValue > aEncryptionData;
@@ -3756,7 +3756,7 @@ ErrCode SwWW8Writer::WriteStorage()
         {
             // To avoid long paths split and open substorages recursively
             // Splitting paths manually, since comphelper::string::split is trimming special characters like \0x01, \0x09
-            tools::SvRef<SotStorage> pStorage = m_pStg.get();
+            rtl::Reference<SotStorage> pStorage = m_pStg;
             OUString sFileName;
             sal_Int32 idx = 0;
             while (pStorage && idx >= 0)
@@ -3783,7 +3783,7 @@ ErrCode SwWW8Writer::WriteStorage()
                 break;
             }
 
-            tools::SvRef<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
+            rtl::Reference<SotStorageStream> pStream = pStorage->OpenSotStream(sFileName);
             if (!pStream)
             {
                 nErrorCode = ERRCODE_IO_GENERAL;

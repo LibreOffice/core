@@ -206,7 +206,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
 
         if( SfxInterfaceId(6) == nViewId )
         {
-            SwWebGlosDocShell* pDocSh = new SwWebGlosDocShell();
+            rtl::Reference<SwWebGlosDocShell> pDocSh = new SwWebGlosDocShell();
             xDocSh = pDocSh;
             pDocSh->DoInitNew();
             pDocSh->SetLongName( sLongName );
@@ -215,7 +215,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         }
         else
         {
-            SwGlosDocShell* pDocSh = new SwGlosDocShell(bShow);
+            rtl::Reference<SwGlosDocShell> pDocSh = new SwGlosDocShell(bShow);
             xDocSh = pDocSh;
             pDocSh->DoInitNew();
             pDocSh->SetLongName( sLongName );

@@ -430,7 +430,7 @@ namespace basic
             OUString aAppBasicDir = SvtPathOptions().GetBasicPath();
 
             // Storage and BaseURL are only needed by binary documents!
-            tools::SvRef<SotStorage> xDummyStor = new SotStorage( OUString() );
+            rtl::Reference<SotStorage> xDummyStor = new SotStorage(OUString());
             _out_rpBasicManager.reset(new BasicManager( *xDummyStor, u"" /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
                                                                 &aAppBasicDir, true ));

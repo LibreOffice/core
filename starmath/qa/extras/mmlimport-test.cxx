@@ -23,7 +23,7 @@ namespace
 {
 using namespace ::com::sun::star;
 
-typedef tools::SvRef<SmDocShell> SmDocShellRef;
+typedef rtl::Reference<SmDocShell> SmDocShellRef;
 
 class Test : public test::BootstrapFixture
 {

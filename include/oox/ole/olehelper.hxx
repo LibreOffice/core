@@ -25,9 +25,9 @@
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/graphichelper.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <tools/ref.hxx>
 #include <memory>
 
 namespace com::sun::star {
@@ -183,10 +183,10 @@ protected:
 public:
     MSConvertOCXControls( const css::uno::Reference< css::frame::XModel >& rxModel );
     virtual ~MSConvertOCXControls() override;
-    bool ReadOCXStorage( tools::SvRef<SotStorage> const & rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp );
-    bool ReadOCXCtlsStream(tools::SvRef<SotStorageStream> const & rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp,
+    bool ReadOCXStorage( rtl::Reference<SotStorage> const & rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp );
+    bool ReadOCXCtlsStream(rtl::Reference<SotStorageStream> const & rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );
-    static bool WriteOCXStream( const css::uno::Reference< css::frame::XModel >& rxModel, tools::SvRef<SotStorage> const &rSrc1, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
+    static bool WriteOCXStream( const css::uno::Reference< css::frame::XModel >& rxModel, rtl::Reference<SotStorage> const &rSrc1, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
     static bool WriteOCXExcelKludgeStream( const css::uno::Reference< css::frame::XModel >& rxModel, const css::uno::Reference< css::io::XOutputStream >& xOutStrm, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
 };
 

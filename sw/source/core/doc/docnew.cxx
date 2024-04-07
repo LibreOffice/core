@@ -886,7 +886,7 @@ void SwDoc::ReplaceCompatibilityOptions(const SwDoc& rSource)
     ((idx).GetNode().GetIndex() - GetNodes().GetEndOfExtras().GetIndex() - 1)
 #endif
 
-SfxObjectShell* SwDoc::CreateCopy( bool bCallInitNew, bool bEmpty ) const
+rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty) const
 {
     SAL_INFO( "sw.pageframe", "(SwDoc::CreateCopy in" );
     rtl::Reference<SwDoc> xRet( new SwDoc );
@@ -894,7 +894,7 @@ SfxObjectShell* SwDoc::CreateCopy( bool bCallInitNew, bool bEmpty ) const
     // we have to use pointer here, since the callee has to decide whether
     // SfxObjectShellLock or SfxObjectShellRef should be used sometimes the
     // object will be returned with refcount set to 0 ( if no DoInitNew is done )
-    SfxObjectShell* pRetShell = new SwDocShell( *xRet, SfxObjectCreateMode::STANDARD );
+    rtl::Reference<SfxObjectShell> pRetShell = new SwDocShell(*xRet, SfxObjectCreateMode::STANDARD);
     if( bCallInitNew )
     {
         // it could happen that DoInitNew creates model,

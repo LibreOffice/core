@@ -24,7 +24,7 @@
 #include <iodetect.hxx>
 #include <docsh.hxx>
 
-typedef tools::SvRef<SwDocShell> SwDocShellRef;
+typedef rtl::Reference<SwDocShell> SwDocShellRef;
 
 using namespace ::com::sun::star;
 

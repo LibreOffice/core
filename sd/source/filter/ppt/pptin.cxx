@@ -126,7 +126,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     pSummaryInformation.reset();
 #endif
 
-    tools::SvRef<SotStorageStream> pCurrentUserStream(rStorage.OpenSotStream("Current User", StreamMode::STD_READ));
+    rtl::Reference<SotStorageStream> pCurrentUserStream(rStorage.OpenSotStream("Current User", StreamMode::STD_READ));
     if (pCurrentUserStream)
     {
         ReadPptCurrentUserAtom(*pCurrentUserStream, maParam.aCurrentUserAtom);
@@ -2753,7 +2753,7 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
 }
 
 bool
-ImplSdPPTImport::ReadFormControl( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const
+ImplSdPPTImport::ReadFormControl( rtl::Reference<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const
 {
     uno::Reference< frame::XModel > xModel;
     if (  mpDoc->GetDocSh() )
@@ -2778,11 +2778,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPT(SvStream &rStream)
     bool bRet = false;
     try
     {
-        tools::SvRef<SotStorage> xStorage(new SotStorage(rStream));
+        rtl::Reference<SotStorage> xStorage(new SotStorage(rStream));
         if (xStorage->GetError())
             return false;
 
-        tools::SvRef<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", StreamMode::STD_READ));
+        rtl::Reference<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", StreamMode::STD_READ));
         if ( !xDocStream.is() )
             return false;
 

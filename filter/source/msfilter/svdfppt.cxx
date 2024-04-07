@@ -1677,7 +1677,7 @@ SdrPowerPointImport::~SdrPowerPointImport()
     m_pNotePages.reset();
 }
 
-bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
+bool PPTConvertOCXControls::ReadOCXStream( rtl::Reference<SotStorage>& rSrc,
         css::uno::Reference< css::drawing::XShape > *pShapeRef )
 {
     bool bRes = false;
@@ -1856,14 +1856,14 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
             {
                 pDest->Seek(0);
                 Storage* pObjStor = new Storage(*pDest, false);
-                tools::SvRef<SotStorage> xObjStor( new SotStorage( pObjStor ) );
+                rtl::Reference<SotStorage> xObjStor(new SotStorage(pObjStor));
                 if ( xObjStor.is() && !xObjStor->GetError() )
                 {
                     if ( xObjStor->GetClassName() == SvGlobalName() )
                     {
                         xObjStor->SetClass( SvGlobalName( pObjStor->GetClassId() ), pObjStor->GetFormat(), pObjStor->GetUserName() );
                     }
-                    tools::SvRef<SotStorageStream> xSrcTst = xObjStor->OpenSotStream( "\1Ole" );
+                    rtl::Reference<SotStorageStream> xSrcTst = xObjStor->OpenSotStream("\1Ole");
                     if ( xSrcTst.is() )
                     {
                         sal_uInt8 aTestA[ 10 ];
@@ -1914,7 +1914,7 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                 const css::uno::Reference < css::embed::XStorage >& rStorage = rOe.pShell->GetStorage();
                                 if (rStorage.is())
                                 {
-                                    tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage(rStorage, aNm, StreamMode::READWRITE);
+                                    rtl::Reference<SotStorage> xTarget = SotStorage::OpenOLEStorage(rStorage, aNm, StreamMode::READWRITE);
                                     if (xObjStor.is() && xTarget.is())
                                     {
                                         xObjStor->CopyTo(xTarget.get());
@@ -2035,16 +2035,16 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                     std::unique_ptr<SvMemoryStream> pBas = ImportExOleObjStg( nPersistPtr, nOleId );
                     if ( pBas )
                     {
-                        tools::SvRef<SotStorage> xSource( new SotStorage( pBas.release(), true ) );
-                        tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
+                        rtl::Reference<SotStorage> xSource(new SotStorage(pBas.release(), true));
+                        rtl::Reference<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
                         if ( xSource.is() && xDest.is() )
                         {
                             // is this a visual basic storage ?
-                            tools::SvRef<SotStorage> xSubStorage = xSource->OpenSotStorage( "VBA",
+                            rtl::Reference<SotStorage> xSubStorage = xSource->OpenSotStorage( "VBA",
                                 StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                             if( xSubStorage.is() && ( ERRCODE_NONE == xSubStorage->GetError() ) )
                             {
-                                tools::SvRef<SotStorage> xMacros = xDest->OpenSotStorage( "MACROS" );
+                                rtl::Reference<SotStorage> xMacros = xDest->OpenSotStorage( "MACROS" );
                                 if ( xMacros.is() )
                                 {
                                     SvStorageInfoList aList;
@@ -2063,13 +2063,13 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                         uno::Reference < embed::XStorage > xDoc( pShell->GetStorage() );
                                         if ( xDoc.is() )
                                         {
-                                            tools::SvRef<SotStorage> xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
+                                            rtl::Reference<SotStorage> xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
                                             if ( xVBA.is() && ( xVBA->GetError() == ERRCODE_NONE ) )
                                             {
-                                                tools::SvRef<SotStorage> xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
+                                                rtl::Reference<SotStorage> xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
                                                 if ( xSubVBA.is() && ( xSubVBA->GetError() == ERRCODE_NONE ) )
                                                 {
-                                                    tools::SvRef<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
+                                                    rtl::Reference<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
                                                     if ( xOriginal.is() && ( xOriginal->GetError() == ERRCODE_NONE ) )
                                                     {
                                                         if ( nPersistPtr && ( nPersistPtr < m_nPersistPtrCnt ) )

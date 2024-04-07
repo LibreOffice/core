@@ -130,7 +130,7 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
                 == (rFilter.GetUserData() == FILTER_WW8);
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
-                tools::SvRef<SotStorageStream> xRef =
+                rtl::Reference<SotStorageStream> xRef =
                     rStg.OpenSotStream("WordDocument",
                             StreamMode::STD_READ );
                 xRef->Seek(10);
@@ -161,7 +161,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
     if (SotStorage::IsStorageFile(rFileName))
     {
         // package storage or OLEStorage based format
-        tools::SvRef<SotStorage> xStg;
+        rtl::Reference<SotStorage> xStg;
         INetURLObject aObj;
         aObj.SetSmartProtocol( INetProtocol::File );
         aObj.SetSmartURL( rFileName );

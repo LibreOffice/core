@@ -44,7 +44,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     // Verify that the User Names stream exists before going any further. Excel adds both
     // "Revision Log" and "User Names" streams when Change Tracking is active but the Revision log
     // remains if Change Tracking is turned off.
-    tools::SvRef<SotStorageStream> xUserStrm = OpenStream( EXC_STREAM_USERNAMES );
+    rtl::Reference<SotStorageStream> xUserStrm = OpenStream( EXC_STREAM_USERNAMES );
     if( !xUserStrm.is() )
         return;
 

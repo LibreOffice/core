@@ -42,7 +42,7 @@ private:
     ScRange                         m_aBlock;
     SCROW                           m_nNonFiltered;       // non-filtered rows
     TransferableObjectDescriptor    m_aObjDesc;
-    SfxObjectShellRef               m_aDocShellRef;
+    rtl::Reference<ScDocShell>      m_aDocShellRef;
     SfxObjectShellRef               m_aDrawPersistRef;
     css::uno::Reference<css::sheet::XSheetCellRanges> m_xDragSourceRanges;
     SCCOL                           m_nDragHandleX;

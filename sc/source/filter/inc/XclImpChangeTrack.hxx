@@ -52,7 +52,7 @@ private:
     OUString                    sOldUsername;
 
     std::unique_ptr<ScChangeTrack> pChangeTrack;
-    tools::SvRef<SotStorageStream> xInStrm;        // input stream
+    rtl::Reference<SotStorageStream> xInStrm; // input stream
     std::unique_ptr<XclImpStream>  pStrm;          // stream import class
     sal_uInt16                  nTabIdCount;
     bool                        bGlobExit;      // global exit loop

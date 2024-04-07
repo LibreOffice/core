@@ -1026,7 +1026,7 @@ private:
     typedef std::shared_ptr< ScfProgressBar >     ScfProgressBarRef;
     typedef std::shared_ptr< XclImpDffConvData >  XclImpDffConvDataRef;
 
-    tools::SvRef<SotStorageStream> mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
+    rtl::Reference<SotStorageStream> mxCtlsStrm; /// The 'Ctls' stream for OCX form controls.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
     std::vector< XclImpDffConvDataRef >
                         maDataStack;     /// Stack for registered drawing managers.
