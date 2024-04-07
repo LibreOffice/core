@@ -2927,6 +2927,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, test_i84870)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf160549)
+{
+    // Given a document with a large as-char object, alone in its paragraph, shifted down by a
+    // header object: it must not hang in a layout loop on import (similar to i84870, but not
+    // fixed by its fix)
+    createSwDoc("tdf160549.fodt");
+    // The object is the first in the document; it must not move to the next page
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf160526)
+{
+    // Given a document with a large as-char object, alone in its paragraph, shifted down by
+    // another body object
+    createSwDoc("tdf160526.fodt");
+    // It must move to the next page
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    auto pExportDump = parseLayoutDump();
+    assertXPath(pExportDump, "//page[2]/body/txt/anchored/SwAnchoredDrawObject");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1003,6 +1003,53 @@ void SwTextFrame::ChangeOffset( SwTextFrame* pFrame, TextFrameIndex nNew )
         MoveFlyInCnt( pFrame, nNew, TextFrameIndex(COMPLETE_STRING) );
 }
 
+static bool isFirstVisibleFrameInBody(const SwTextFrame* pFrame)
+{
+    const SwFrame* pBodyFrame = pFrame->FindBodyFrame();
+    if (!pBodyFrame)
+        return false;
+    for (const SwFrame* pCur = pFrame;;)
+    {
+        if (pCur->GetPrev())
+            return false;
+        pCur = pCur->GetUpper();
+        assert(pCur); // We found pBodyFrame, right?
+        if (pCur->IsBodyFrame())
+            return true;
+    }
+}
+
+static bool hasFly(const SwTextFrame* pFrame)
+{
+    if (auto pDrawObjs = pFrame->GetDrawObjs(); pDrawObjs && pDrawObjs->size())
+    {
+        auto anchorId = (*pDrawObjs)[0]->GetFrameFormat().GetAnchor().GetAnchorId();
+        if (anchorId == RndStdIds::FLY_AT_PARA || anchorId == RndStdIds::FLY_AT_CHAR)
+            return true;
+    }
+    return false;
+}
+
+static bool hasAtPageFly(const SwFrame* pFrame)
+{
+    auto pPageFrame = pFrame->FindPageFrame();
+    if (!pPageFrame)
+        return false;
+    auto pPageDrawObjs = pPageFrame->GetDrawObjs();
+    if (pPageDrawObjs)
+    {
+        for (const auto pObject : *pPageDrawObjs)
+            if (pObject->GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+                return true;
+    }
+    return false;
+}
+
+static bool isReallyEmptyMaster(const SwTextFrame* pFrame)
+{
+    return pFrame->IsEmptyMaster() && (!pFrame->GetDrawObjs() || !pFrame->GetDrawObjs()->size());
+}
+
 void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                              WidowsAndOrphans &rFrameBreak,
                              TextFrameIndex const nStrLen,
@@ -1028,28 +1075,54 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                                !rFrameBreak.IsInside( rLine ) )
                            : rFrameBreak.IsBreakNow( rLine ) ) ) )
                      ? 1 : 0;
+
+    SwTextFormatInfo& rInf = rLine.GetInfo();
+    const SwFrame* pBodyFrame = FindBodyFrame();
+
     // i#84870
     // no split of text frame, which only contains an as-character anchored object
-    bool bOnlyContainsAsCharAnchoredObj =
+    bool bLoneAsCharAnchoredObj =
+            pBodyFrame &&
             !IsFollow() && nStrLen == TextFrameIndex(1) &&
             GetDrawObjs() && GetDrawObjs()->size() == 1 &&
             (*GetDrawObjs())[0]->GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
 
-    // Still try split text frame if we have columns.
-    if (FindColFrame())
-        bOnlyContainsAsCharAnchoredObj = false;
-
-    if ( nNew && bOnlyContainsAsCharAnchoredObj )
+    if (bLoneAsCharAnchoredObj)
     {
-        nNew = 0;
+        // Still try split text frame if we have columns.
+        if (FindColFrame())
+            bLoneAsCharAnchoredObj = false;
+        // tdf#160526: only no split if there is no preceding frames on same page
+        else if (!isFirstVisibleFrameInBody(this))
+            bLoneAsCharAnchoredObj = false;
+        else
+            nNew = 0;
+    }
+    else if (nNew)
+    {
+        if (IsFollow())
+        {
+            // tdf#160549: do not split the frame at the very beginning again, if its master was empty
+            auto precede = static_cast<SwTextFrame*>(GetPrecede());
+            assert(precede);
+            auto precedeText = precede->DynCastTextFrame();
+            assert(precedeText);
+            if (isReallyEmptyMaster(precedeText))
+                nNew = 0;
+        }
+        else
+        {
+            // Do not split immediately in the beginning of page (unless there is an at-para or
+            // at-char or at-page fly, which pushes the rest down)
+            if (isFirstVisibleFrameInBody(this) && !hasFly(this) && !hasAtPageFly(pBodyFrame))
+                nNew = 0;
+        }
     }
 
     if ( nNew )
     {
         SplitFrame( nEnd );
     }
-
-    const SwFrame *pBodyFrame = FindBodyFrame();
 
     const tools::Long nBodyHeight = pBodyFrame ? ( IsVertical() ?
                                           pBodyFrame->getFrameArea().Width() :
@@ -1139,9 +1212,10 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // content or contains no content, but has a numbering.
             // i#84870 - No split, if text frame only contains one
             // as-character anchored object.
-            if ( !bOnlyContainsAsCharAnchoredObj &&
-                 (nStrLen > TextFrameIndex(0) ||
-                   bHasVisibleNumRule )
+            if (!bLoneAsCharAnchoredObj
+                && (bHasVisibleNumRule
+                    || (nStrLen > TextFrameIndex(0)
+                        && (nEnd != rLine.GetStart() || rInf.GetRest())))
                )
             {
                 SplitFrame( nEnd );
@@ -1165,7 +1239,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     SwTwips nChg = rLine.CalcBottomLine() - nDocPrtTop - nOldHeight;
 
     //#i84870# - no shrink of text frame, if it only contains one as-character anchored object.
-    if ( nChg < 0 && !bDelta && bOnlyContainsAsCharAnchoredObj )
+    if (nChg < 0 && !bDelta && bLoneAsCharAnchoredObj)
     {
         nChg = 0;
     }
