@@ -93,6 +93,20 @@ HRESULT checkResult(HRESULT hr, const char* location)
 #endif
 
 
+// Sets and unsets the needed DirectWrite transform to support the font's rotation.
+class WinFontTransformGuard
+{
+public:
+    WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget,
+                          const GenericSalLayout& rLayout, const D2D1_POINT_2F& rBaseline,
+                          bool bIsVertical);
+    ~WinFontTransformGuard();
+
+private:
+    ID2D1RenderTarget* mpRenderTarget;
+    D2D1::Matrix3x2F maTransform;
+};
+
 } // end anonymous namespace
 
 D2DWriteTextOutRenderer::D2DWriteTextOutRenderer(bool bRenderingModeNatural)
@@ -214,7 +228,6 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     }
 
     const WinFontInstance& rWinFont = static_cast<const WinFontInstance&>(rLayout.GetFont());
-    float fHScale = rWinFont.getHScale();
 
     float lfEmHeight = 0;
     IDWriteFontFace* pFontFace = GetDWriteFace(rWinFont, &lfEmHeight);
@@ -247,11 +260,11 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
         {
             UINT16 glyphIndices[] = { static_cast<UINT16>(pGlyph->glyphId()) };
-            FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->newWidth()) / fHScale };
+            FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->newWidth()) };
             DWRITE_GLYPH_OFFSET glyphOffsets[] = { { 0.0f, 0.0f }, };
-            D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.getX() - bounds.Left()) / fHScale,
+            D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.getX() - bounds.Left()),
                                        static_cast<FLOAT>(aPos.getY() - bounds.Top()) };
-            WinFontTransformGuard aTransformGuard(mpRT, fHScale, rLayout, baseline, pGlyph->IsVertical());
+            WinFontTransformGuard aTransformGuard(mpRT, rLayout, baseline, pGlyph->IsVertical());
             DWRITE_GLYPH_RUN glyphs = {
                 pFontFace,
                 lfEmHeight,
@@ -302,7 +315,7 @@ IDWriteFontFace* D2DWriteTextOutRenderer::GetDWriteFace(const WinFontInstance& r
     return pFontFace;
 }
 
-WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, float fHScale,
+WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget,
                                              const GenericSalLayout& rLayout,
                                              const D2D1_POINT_2F& rBaseline,
                                              bool bIsVertical)
@@ -310,11 +323,6 @@ WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget, f
 {
     pRenderTarget->GetTransform(&maTransform);
     D2D1::Matrix3x2F aTransform = maTransform;
-    if (fHScale != 1.0f)
-    {
-        aTransform
-            = aTransform * D2D1::Matrix3x2F::Scale(D2D1::Size(fHScale, 1.0f), D2D1::Point2F(0, 0));
-    }
 
     Degree10 angle = rLayout.GetOrientation();
 
