@@ -524,7 +524,6 @@
           <object class="GtkEntry" id="name">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="valign">top</property>
             <property name="hexpand">True</property>
             <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
@@ -550,7 +549,6 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">1</property>
-            <property name="width">1</property>
           </packing>
         </child>
         <child>
