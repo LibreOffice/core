@@ -24,6 +24,7 @@
 
 #include <o3tl/lru_map.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <osl/conditn.hxx>
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/bitmapex.hxx>
@@ -383,6 +384,7 @@ struct ImplSchedulerContext
     std::mutex              maMutex;                        ///< the "scheduler mutex" (see
                                                             ///< vcl/README.scheduler)
     bool                    mbActive = true;                ///< is the scheduler active?
+    oslInterlockedCount     mnIdlesLockCount = 0;           ///< temporary ignore idles
 };
 
 struct ImplSVData
@@ -423,6 +425,9 @@ struct ImplSVData
 #if defined _WIN32
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_xSystemClipboard;
 #endif
+
+    osl::Condition m_inExecuteCondtion; // Set when code returns to Application::Execute,
+                                        // i.e. no nested message loops run
 
     Link<LinkParamNone*,void> maDeInitHook;
 
