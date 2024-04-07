@@ -268,7 +268,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     nFieldDlgFormatSel = 0;
 
     sal_uInt16 nFormatBoxPosition = USHRT_MAX;
-    if( !IsRefresh() )
+    if( !IsFieldEdit() )
     {
         sal_Int32 nIdx{ 0 };
         const OUString sUserData = GetUserData();
