@@ -475,8 +475,6 @@ const SwContentFrame* SwContentFrame::ImplGetNextContentFrame( bool bFwd ) const
 SwPageFrame* SwFrame::ImplFindPageFrame()
 {
     SwFrame *pRet = this;
-    if (pRet->IsInDtor())
-        return nullptr;
     while ( pRet )
     {
         if (pRet->IsInDtor())
