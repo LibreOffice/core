@@ -2483,6 +2483,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159456)
         "2");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, test_i84870)
+{
+    // Given a document with a large as-char object, alone in its paragraph, shifted down by a
+    // header object: it must not hang in a layout loop on import
+    createSwDoc("i84870.fodt");
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
