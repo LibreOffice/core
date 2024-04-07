@@ -342,11 +342,16 @@ public class ScriptEditorForBeanShell extends ScriptEditorBase implements Action
             String s = view.getText();
             fos = scriptURL.openConnection().getOutputStream();
 
-            if (fos  != null) {
+            if (fos != null && s != null) {
                 fos.write(s.getBytes());
             } else {
-                showErrorMessage(
-                    "Error saving script: Could not open stream for file");
+                if (fos == null) {
+                    showErrorMessage(
+                        "Error saving script: Could not open stream for file");
+                } else {
+                    showErrorMessage(
+                        "Error saving script: Could not get script text");
+                }
                 result = false;
             }
 

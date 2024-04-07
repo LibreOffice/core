@@ -109,7 +109,8 @@ public class ScriptSourceModel {
         Object result;
 
         if (view.isModified()) {
-            result = interpreter.eval(view.getText());
+            String s = view.getText();
+            result = interpreter.eval(s != null ? s : "");
         } else {
             result = interpreter.eval(getText());
         }
