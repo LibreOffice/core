@@ -48,7 +48,7 @@ namespace i18npool {
 thread_local static BreakIterator_Unicode::BIMap theBIMap;
 
 BreakIterator_Unicode::BreakIterator_Unicode()
-    : cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" )    // implementation name
+    : cBreakIterator( u"com.sun.star.i18n.BreakIterator_Unicode"_ustr )    // implementation name
     , lineRule( "line" )
     , icuBI( nullptr )
 {
@@ -579,7 +579,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 OUString SAL_CALL
 BreakIterator_Unicode::getImplementationName()
 {
-    return OUString::createFromAscii(cBreakIterator);
+    return cBreakIterator;
 }
 
 sal_Bool SAL_CALL
@@ -591,8 +591,7 @@ BreakIterator_Unicode::supportsService(const OUString& rServiceName)
 uno::Sequence< OUString > SAL_CALL
 BreakIterator_Unicode::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet { OUString::createFromAscii(cBreakIterator) };
-    return aRet;
+    return{ cBreakIterator };
 }
 
 }

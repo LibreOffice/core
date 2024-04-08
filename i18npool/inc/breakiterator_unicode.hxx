@@ -70,7 +70,8 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
-    const char *cBreakIterator, *lineRule;
+    OUString cBreakIterator;
+    const char *lineRule;
 
     /** Used as map value. */
     struct BI_ValueData

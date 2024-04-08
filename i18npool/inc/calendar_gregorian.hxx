@@ -102,7 +102,7 @@ protected:
     const Era *eraArray;
     std::unique_ptr<icu::Calendar> body;
     rtl::Reference<NativeNumberSupplierService> mxNatNum;
-    const char* cCalendar;
+    OUString cCalendar;
     css::lang::Locale aLocale;
     sal_uInt32 fieldSet;
     sal_Int16 fieldValue[FIELD_INDEX_COUNT];

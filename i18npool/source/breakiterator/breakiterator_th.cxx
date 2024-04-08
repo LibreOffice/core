@@ -34,7 +34,7 @@ namespace i18npool {
  */
 BreakIterator_th::BreakIterator_th()
 {
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
+    cBreakIterator = u"com.sun.star.i18n.BreakIterator_th"_ustr;
     // to improve performance, alloc big enough memory in construct.
     m_aNextCellIndex.assign(512, 0);
     m_aPreviousCellIndex.assign(512, 0);

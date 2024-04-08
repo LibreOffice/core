@@ -33,7 +33,7 @@ namespace i18npool {
 
 Calendar_jewish::Calendar_jewish()
 {
-    cCalendar = "com.sun.star.i18n.Calendar_jewish";
+    cCalendar = u"com.sun.star.i18n.Calendar_jewish"_ustr;
 }
 
 // The following C++ code is translated from the Lisp code in

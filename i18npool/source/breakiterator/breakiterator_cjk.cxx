@@ -34,7 +34,7 @@ namespace i18npool {
 
 BreakIterator_CJK::BreakIterator_CJK()
 {
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_CJK";
+    cBreakIterator = u"com.sun.star.i18n.BreakIterator_CJK"_ustr;
 }
 
 Boundary SAL_CALL
@@ -146,7 +146,7 @@ BreakIterator_zh::BreakIterator_zh()
     m_oDict.emplace("zh");
     assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "CN"));
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_zh";
+    cBreakIterator = u"com.sun.star.i18n.BreakIterator_zh"_ustr;
 }
 
 //      ----------------------------------------------------
@@ -157,7 +157,7 @@ BreakIterator_zh_TW::BreakIterator_zh_TW()
     m_oDict.emplace("zh");
     assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("zh", "TW"));
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_zh_TW";
+    cBreakIterator = u"com.sun.star.i18n.BreakIterator_zh_TW"_ustr;
 }
 
 //      ----------------------------------------------------
@@ -169,7 +169,7 @@ BreakIterator_ja::BreakIterator_ja()
     m_oDict->setJapaneseWordBreak();
     assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("ja", "JP"));
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";
+    cBreakIterator = u"com.sun.star.i18n.BreakIterator_ja"_ustr;
 }
 
 //      ----------------------------------------------------
@@ -179,7 +179,7 @@ BreakIterator_ko::BreakIterator_ko()
 {
     assert(hangingCharacters.pData);
     hangingCharacters = LocaleDataImpl::get()->getHangingCharacters(LOCALE("ko", "KR"));
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_ko";
+    cBreakIterator = u"com.sun.star.i18n.BreakIterator_ko"_ustr;
 }
 
 }
