@@ -81,7 +81,7 @@ public:
             return true;
         }
         bool castToVoid = false;
-        if (auto const ic = dyn_cast<ImplicitCastExpr>(arg1))
+        if (isa<ImplicitCastExpr>(arg1))
         {
             if (loplugin::TypeCheck(arg1->getType()).Pointer().Void())
             {
