@@ -330,6 +330,7 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue("DisableOffPagePositioning", uno::Any(true));
     xSettings->setPropertyValue("DropCapPunctuation", uno::Any(true));
     // rely on default for HyphenateURLs=false
+    // rely on default for APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH=true
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)

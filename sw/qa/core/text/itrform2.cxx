@@ -88,6 +88,24 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableLegacyWrapEmptyParagraph)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs2.size());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testApplyTextAttrToEmptyLineAtEndOfParagraph)
+{
+    createSwDoc("A011-charheight.rtf");
+
+    calcLayout();
+
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+
+    SwContentFrame* pLastPara = pPage->FindLastBodyContent();
+    // wrong was 449 (11.5pt)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(368), pLastPara->getFrameArea().Height());
+    SwContentFrame* pFirstPara = pPage->FindFirstBodyContent();
+    // wrong was 817 (11.5pt)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(736), pFirstPara->getFrameArea().Height());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFlyMinimalWrap)
 {
     // Given a document with a first page that has a shape and a table in it (not floating table),

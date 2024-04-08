@@ -1301,6 +1301,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bCollapseEmptyCellPara = false;
     bool bAutoFirstLineIndentDisregardLineSpace = false;
     bool bHyphenateURLs = false;
+    bool bApplyTextAttrToEmptyLineAtEndOfParagraph = false;
     bool bDoNotBreakWrappedTables = false;
     bool bAllowTextAfterFloatingTableBreak = false;
     bool bDropCapPunctuation = false;
@@ -1400,6 +1401,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 else if (rValue.Name == "HyphenateURLs")
                 {
                     bHyphenateURLs = true;
+                }
+                else if (rValue.Name == "ApplyTextAttrToEmptyLineAtEndOfParagraph")
+                {
+                    bApplyTextAttrToEmptyLineAtEndOfParagraph = true;
                 }
                 else if (rValue.Name == "DoNotBreakWrappedTables")
                 {
@@ -1576,6 +1581,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if (!bHyphenateURLs)
     {
         xProps->setPropertyValue("HyphenateURLs", Any(true));
+    }
+
+    if (!bApplyTextAttrToEmptyLineAtEndOfParagraph)
+    {
+        xProps->setPropertyValue("ApplyTextAttrToEmptyLineAtEndOfParagraph", Any(false));
     }
 
     if (bDoNotBreakWrappedTables)
