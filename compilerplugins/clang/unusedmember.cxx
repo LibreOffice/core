@@ -126,6 +126,8 @@ public:
                 {
 #if 0 //TODO: friend function definitions are not marked as referenced even if used?
                     if (!d3->isThisDeclarationADefinition()) //TODO: do this check for all kinds?
+#else
+                    (void)d3;
 #endif
                     {
                         continue;
