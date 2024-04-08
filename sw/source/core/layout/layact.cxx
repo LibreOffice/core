@@ -1439,9 +1439,9 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                 PopFormatLayout();
             }
         }
-        else if (pLay->IsSctFrame() && pLow->IsTextFrame() && pLow == pLay->GetLastLower())
+        else if (pLay->IsSctFrame() && pLay->GetNext() && pLay->GetNext()->IsSctFrame() && pLow->IsTextFrame() && pLow == pLay->GetLastLower())
         {
-            // else: only calc the last text lower of sections
+            // else: only calc the last text lower of sections, followed by sections
             pLow->OptCalc();
         }
 
