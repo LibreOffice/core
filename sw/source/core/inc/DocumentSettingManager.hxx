@@ -178,6 +178,7 @@ class DocumentSettingManager final :
     bool mbDoNotBreakWrappedTables = false;
     bool mbAllowTextAfterFloatingTableBreak = false;
     bool mbJustifyLinesWithShrinking = false;
+    bool mbApplyTextAttrToEmptyLineAtEndOfParagraph = true;
     // If this is on as_char flys wrapping will be handled the same like in Word
     bool mbNoNumberingShowFollowBy;
     bool mbDropCapPunctuation; // tdf#150200, tdf#150438

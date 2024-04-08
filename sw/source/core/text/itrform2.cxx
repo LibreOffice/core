@@ -852,6 +852,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
 
         // In empty lines the attributes are switched on via SeekStart
         const bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
+
         if ( pPor->IsQuoVadisPortion() )
             bChg = SeekStartAndChg( rInf, true );
         else
@@ -860,10 +861,16 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
             {
                 if( !rInf.GetText().isEmpty() )
                 {
-                    if ( pPor->GetLen() || !rInf.GetIdx()
-                         || ( m_pCurr != pLast && !pLast->IsFlyPortion() )
-                         || !m_pCurr->IsRest() ) // instead of !rInf.GetRest()
+                    if ((rInf.GetIdx() != TextFrameIndex(rInf.GetText().getLength())
+                            || rInf.GetRest() // field continued - not empty
+                            || !GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                                DocumentSettingId::APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH))
+                        && (pPor->GetLen() || !rInf.GetIdx()
+                            || (m_pCurr != pLast && !pLast->IsFlyPortion())
+                            || !m_pCurr->IsRest())) // instead of !rInf.GetRest()
+                    {
                         bChg = SeekAndChg( rInf );
+                    }
                     else
                         bChg = SeekAndChgBefore( rInf );
                 }
