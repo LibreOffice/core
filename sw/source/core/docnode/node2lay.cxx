@@ -146,7 +146,7 @@ SwFrame const* FindNeighbourFrameForNode(SwNode const& rNode)
 {
     SwNodeIndex idx(rNode);
     SwFlowFrame const* pFlow(nullptr);
-    if (SwNode *const pNode = GoPreviousWithFrame(&idx, &pFlow))
+    if (GoPreviousWithFrame(&idx, &pFlow))
     {
         if (::CheckNodesRange(rNode, idx.GetNode(), true))
         {
@@ -158,7 +158,7 @@ SwFrame const* FindNeighbourFrameForNode(SwNode const& rNode)
         }
     }
     idx = rNode;
-    if (SwNode *const pNode = GoNextWithFrame(idx.GetNodes(), &idx, &pFlow))
+    if (GoNextWithFrame(idx.GetNodes(), &idx, &pFlow))
     {
         if (::CheckNodesRange(rNode, idx.GetNode(), true))
         {
