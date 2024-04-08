@@ -46,7 +46,7 @@ namespace o3tl {
     template<> struct typed_flags<SwSectionFrameInvFlags> : is_typed_flags<SwSectionFrameInvFlags, 0x0011> {};
 }
 
-class SwSectionFrame final: public SwLayoutFrame, public SwFlowFrame
+class SW_DLLPUBLIC SwSectionFrame final: public SwLayoutFrame, public SwFlowFrame
     , public SvtListener // TODO?
 {
     SwSection* m_pSection;

@@ -21,6 +21,7 @@
 #include <sortedobjs.hxx>
 #include <tabfrm.hxx>
 #include <wrtsh.hxx>
+#include <sectfrm.hxx>
 
 namespace
 {
@@ -107,6 +108,27 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInSection)
     auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage2);
     CPPUNIT_ASSERT(!pPage2->GetSortedObjs());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testBadSplitSection)
+{
+    // Given a document with a section, containing 5 paragraphs:
+    createSwDoc("bad-split-section.odt");
+
+    // When laying out that document:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+
+    // Then make sure the entire section is on page 1:
+    auto pPage = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage);
+    auto pBody = pPage->FindBodyCont();
+    CPPUNIT_ASSERT(pBody);
+    auto pSection = dynamic_cast<SwSectionFrame*>(pBody->GetLastLower());
+    CPPUNIT_ASSERT(pSection);
+    // Without the fix in place, it would have failed, the section was split between page 1 and page
+    // 2.
+    CPPUNIT_ASSERT(!pSection->GetFollow());
 }
 }
 
