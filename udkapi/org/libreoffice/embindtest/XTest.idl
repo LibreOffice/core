@@ -112,6 +112,7 @@ interface XTest {
     boolean isSequenceEnum([in] sequence<Enum> value);
     sequence<Struct> getSequenceStruct();
     boolean isSequenceStruct([in] sequence<Struct> value);
+    void throwRuntimeException();
 };
 
 }; }; };
