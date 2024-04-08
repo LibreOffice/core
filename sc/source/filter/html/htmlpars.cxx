@@ -541,7 +541,7 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
     bool bFail = o3tl::checked_add<SCCOL>(pE->nCol, pE->nColOverlap - 1, nEndCol) ||
                  o3tl::checked_add<SCROW>(pE->nRow, pE->nRowOverlap - 1, nEndRow);
 
-    if (bFail)
+    if (bFail || nEndRow > mpDoc->MaxRow())
     {
         SAL_WARN("sc", "invalid range: " << pE->nCol << " " << pE->nColOverlap <<
                                      " " << pE->nRow << " " << pE->nRowOverlap);
