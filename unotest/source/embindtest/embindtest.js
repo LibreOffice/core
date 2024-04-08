@@ -539,11 +539,11 @@ Module.addOnPostRun(function() {
     console.assert(test.isDouble(uno.org.libreoffice.embindtest.Constants.Double));
     try {
         test.throwRuntimeException();
-   } catch (e) {
-       console.assert(e.name === 'com::sun::star::uno::RuntimeException');
-       console.assert(e.message === undefined); //TODO
-       //TODO: console.assert(e.Message.startsWith('test'));
-   }
+    } catch (e) {
+        console.assert(e.name === 'com::sun::star::uno::RuntimeException');
+        console.assert(e.message === undefined); //TODO
+        //TODO: console.assert(e.Message.startsWith('test'));
+    }
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
