@@ -226,15 +226,12 @@ namespace dbaui
             DispatchTarget(css::util::URL _aURL, css::uno::Reference< css::frame::XStatusListener > xRef) : aURL(std::move(_aURL)), xListener(std::move(xRef)) { }
         };
 
-        typedef std::map<sal_uInt16, FeatureState> StateCache;
-        typedef std::vector<DispatchTarget> Dispatch;
-
         ::std::deque< FeatureListener >
                                 m_aFeaturesToInvalidate;
 
         std::mutex              m_aFeatureMutex;        // locked when features are append to or remove from deque
-        StateCache              m_aStateCache;          // save the current status of feature state
-        Dispatch                m_arrStatusListener;    // all our listeners where we dispatch status changes
+        std::map<sal_uInt16, FeatureState> m_aStateCache; // save the current status of feature state
+        std::vector<DispatchTarget> m_arrStatusListener;  // all our listeners where we dispatch status changes
         OAsynchronousLink       m_aAsyncInvalidateAll;
         OAsynchronousLink       m_aAsyncCloseTask;      // called when a task should be closed
 

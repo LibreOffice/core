@@ -388,7 +388,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
         // it is possible that listeners are registered or revoked while
         // we are notifying them, so we must use a copy of m_arrStatusListener, not
         // m_arrStatusListener itself
-        Dispatch aNotifyLoop( m_arrStatusListener );
+        std::vector<DispatchTarget> aNotifyLoop( m_arrStatusListener );
 
         for (auto const& elem : aNotifyLoop)
         {
@@ -617,7 +617,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     else
     {
         // remove the listener only for the given URL
-        Dispatch::iterator iterSearch = std::find_if(m_arrStatusListener.begin(), m_arrStatusListener.end(),
+        auto iterSearch = std::find_if(m_arrStatusListener.begin(), m_arrStatusListener.end(),
             [&aListener, &_rURL](const DispatchTarget& rCurrent) {
                 return (rCurrent.xListener == aListener) && (rCurrent.aURL.Complete == _rURL.Complete); });
         if (iterSearch != m_arrStatusListener.end())
@@ -631,7 +631,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {   // clear the cache for that feature
-        StateCache::const_iterator aCachePos = m_aStateCache.find( aIter->second.nFeatureId );
+        auto aCachePos = m_aStateCache.find( aIter->second.nFeatureId );
         if ( aCachePos != m_aStateCache.end() )
             m_aStateCache.erase( aCachePos );
     }
@@ -660,7 +660,7 @@ void OGenericUnoController::disposing()
     {
         EventObject aDisposeEvent;
         aDisposeEvent.Source = static_cast<XWeak*>(this);
-        Dispatch aStatusListener = m_arrStatusListener;
+        std::vector<DispatchTarget> aStatusListener = m_arrStatusListener;
         for (auto const& statusListener : aStatusListener)
         {
             statusListener.xListener->disposing(aDisposeEvent);
