@@ -109,7 +109,12 @@ void SfxRequest_Impl::SetPool( SfxItemPool *pNewPool )
     {
         if ( pPool )
             EndListening( pPool->BC() );
+
+        // tdf#159719 reset SfxPoolItemHolder
+        aRetVal = SfxPoolItemHolder();
+
         pPool = pNewPool;
+
         if ( pNewPool )
             StartListening( pNewPool->BC() );
     }
