@@ -1039,7 +1039,7 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             case HtmlOptionId::COLSPAN:
             {
                 sal_Int32 nColOverlap = rOption.GetString().toInt32();
-                if (nColOverlap >= 0 && nColOverlap <= SCCOL_MAX)
+                if (nColOverlap >= 0 && nColOverlap <= mpDoc->MaxCol())
                     mxActEntry->nColOverlap = static_cast<SCCOL>(nColOverlap);
                 else
                     SAL_WARN("sc", "ScHTMLLayoutParser::TableDataOn ignoring colspan: " << nColOverlap);
@@ -1048,7 +1048,7 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             case HtmlOptionId::ROWSPAN:
             {
                 sal_Int32 nRowOverlap = rOption.GetString().toInt32();
-                if (nRowOverlap >= 0)
+                if (nRowOverlap >= 0 && nRowOverlap <= mpDoc->MaxRow())
                     mxActEntry->nRowOverlap = static_cast<SCROW>(nRowOverlap);
                 else
                     SAL_WARN("sc", "ScHTMLLayoutParser::TableDataOn ignoring rowspan: " << nRowOverlap);
