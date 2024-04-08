@@ -1945,6 +1945,7 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE, true);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::CONTINUOUS_ENDNOTES, true);
     // rely on default for HYPHENATE_URLS=false
+    // rely on default for APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH=true
 
     IDocumentSettingAccess& rIDSA = m_rDoc.getIDocumentSettingAccess();
     if (m_xWDop->fDontBreakWrappedTables)
