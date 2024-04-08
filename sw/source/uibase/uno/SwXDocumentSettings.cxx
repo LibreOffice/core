@@ -159,6 +159,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_NO_NUMBERING_SHOW_FOLLOWBY,
     HANDLE_DROP_CAP_PUNCTUATION,
     HANDLE_USE_VARIABLE_WIDTH_NBSP,
+    HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
 };
 
 }
@@ -264,6 +265,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("NoNumberingShowFollowBy"), HANDLE_NO_NUMBERING_SHOW_FOLLOWBY, cppu::UnoType<bool>::get(), 0 },
         { OUString("DropCapPunctuation"), HANDLE_DROP_CAP_PUNCTUATION, cppu::UnoType<bool>::get(), 0 },
         { OUString("UseVariableWidthNBSP"), HANDLE_USE_VARIABLE_WIDTH_NBSP, cppu::UnoType<bool>::get(), 0 },
+        { OUString("ApplyTextAttrToEmptyLineAtEndOfParagraph"), HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1074,6 +1076,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, bTmp);
+            }
+        }
+        break;
         case HANDLE_DO_NOT_BREAK_WRAPPED_TABLES:
         {
             bool bTmp;
@@ -1654,6 +1666,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::HYPHENATE_URLS);
+        }
+        break;
+        case HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH);
         }
         break;
         case HANDLE_DO_NOT_BREAK_WRAPPED_TABLES:
