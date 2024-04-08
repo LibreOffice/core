@@ -11,6 +11,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppu/unotype.hxx>
@@ -495,6 +496,11 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
                       { 1, 1.25, u"barr"_ustr },
                       { 123456, 100.75, u"bazzz"_ustr }
                   };
+    }
+
+    void SAL_CALL throwRuntimeException() override
+    {
+        throw css::uno::RuntimeException(u"test"_ustr);
     }
 };
 }
