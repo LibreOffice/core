@@ -499,7 +499,8 @@ bool ScTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uInt32 
 
                     std::unique_ptr<SvStream> xStrm = aEditHelper.GetSotStorageStream( rFlavor );
                     bRet = bool(xStrm);
-                    rOStm.WriteStream(*xStrm);
+                    if (bRet)
+                        rOStm.WriteStream(*xStrm);
                 }
             }
             break;
