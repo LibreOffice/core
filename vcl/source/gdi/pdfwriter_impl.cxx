@@ -6982,20 +6982,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
     Point aOffset(0,0);
-    Point aOffsetVert(0,0);
 
     if ( nEmphMark & FontEmphasisMark::PosBelow )
-    {
         aOffset.AdjustY(GetFontInstance()->mxFontMetric->GetDescent() + aEmphasisMark.GetYOffset() );
-        aOffsetVert = aOffset;
-    }
     else
-    {
         aOffset.AdjustY( -(GetFontInstance()->mxFontMetric->GetAscent() + aEmphasisMark.GetYOffset()) );
-        // Todo: use ideographic em-box or ideographic character face information.
-        aOffsetVert.AdjustY(-(GetFontInstance()->mxFontMetric->GetAscent() +
-                    GetFontInstance()->mxFontMetric->GetDescent() + aEmphasisMark.GetYOffset()));
-    }
 
     tools::Long nEmphWidth2 = aEmphasisMark.GetWidth() / 2;
     tools::Long nEmphHeight2 = nEmphHeight / 2;
@@ -7006,27 +6997,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     else if ( eAlign == ALIGN_TOP )
         aOffset.AdjustY(GetFontInstance()->mxFontMetric->GetAscent() );
 
-    tools::Rectangle aRectangle;
     nIndex = 0;
-    while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, &pGlyphFont))
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
     {
-        if (!pGlyph->GetGlyphBoundRect(pGlyphFont, aRectangle))
-            continue;
-
         if (!pGlyph->IsSpacing())
         {
-            DevicePoint aAdjOffset;
-            if (pGlyph->IsVertical())
-            {
-                aAdjOffset = DevicePoint(aOffsetVert.X(), aOffsetVert.Y());
-                aAdjOffset.adjustX((-pGlyph->origWidth() + aEmphasisMark.GetWidth()) / 2);
-            }
-            else
-            {
-                aAdjOffset = DevicePoint(aOffset.X(), aOffset.Y());
-                aAdjOffset.adjustX(aRectangle.Left() + (aRectangle.GetWidth() - aEmphasisMark.GetWidth()) / 2 );
-            }
-
+            DevicePoint aAdjOffset(aOffset.X(), aOffset.Y());
+            aAdjOffset.adjustX((pGlyph->newWidth() - aEmphasisMark.GetWidth()) / 2);
             aAdjOffset = aRotScale.transform( aAdjOffset );
 
             aAdjOffset -= DevicePoint(nEmphWidth2, nEmphHeight2);
