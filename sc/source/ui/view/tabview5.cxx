@@ -285,8 +285,10 @@ void ScTabView::ImplTabChanged(bool bSameTabButMoved)
     SfxLokCallbackInterface* pCallback = pViewShell->getLibreOfficeKitViewCallback();
     pViewShell->setLibreOfficeKitViewCallback(nullptr);
     comphelper::ScopeGuard aOutputGuard(
-        [pViewShell, pCallback] {
+        [this, pViewShell, pCallback] {
             pViewShell->setLibreOfficeKitViewCallback(pCallback);
+            // But possibly update any out of date formulas on the tab we switched to
+            UpdateFormulas();
         });
 
     if (pDrawView)

@@ -819,8 +819,15 @@ public:
         break;
         }
     }
-};
 
+    void ClearAllInvalids()
+    {
+        m_bInvalidateTiles = false;
+        m_aInvalidations.clear();
+        m_aInvalidationsParts.clear();
+        m_aInvalidationsMode.clear();
+    }
+};
 
 void ScTiledRenderingTest::testViewCursors()
 {
@@ -2015,6 +2022,41 @@ void ScTiledRenderingTest::testPageDownInvalidation()
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(15, 15, 1230, 225), aView1.m_aInvalidations[0]);
 }
 
+void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
+    ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true)
+{
+    if (!bInEdit)
+        pView->SetCursor(nCol, nRow);
+
+    for (const char& cChar : aStr)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, cChar, 0);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, cChar, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    if (bCommit)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
+}
+
+Bitmap getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY, tools::Long nTileWidth, tools::Long nTileHeight)
+{
+    size_t nCanvasSize = 1024;
+    size_t nTileSize = 256;
+    std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
+            Fraction(1.0), Point(), aPixmap.data());
+    pModelObj->paintTile(*pDevice, nCanvasSize, nCanvasSize, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    pDevice->EnableMapMode(false);
+    return pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+}
+
 void ScTiledRenderingTest::testSheetChangeNoInvalidation()
 {
     const bool oldPartInInvalidation = comphelper::LibreOfficeKit::isPartInInvalidation();
@@ -2024,20 +2066,70 @@ void ScTiledRenderingTest::testSheetChangeNoInvalidation()
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
+    // Set View to initial 100%
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 28050, 10605));
+    pModelObj->setClientZoom(256, 256, 1920, 1920);
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
     int nView1 = SfxLokHelper::getView();
     ViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     SfxLokHelper::setView(nView1);
-    aView1.m_bInvalidateTiles = false;
-    aView1.m_aInvalidations.clear();
-    aView1.m_aInvalidationsParts.clear();
-    aView1.m_aInvalidationsMode.clear();
+
+    aView1.ClearAllInvalids();
+
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
-    // switching sheets should trigger no invalidations
+    // switching sheets should trigger no unnecessary invalidations
     CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
+
+    // Get the known columns/rows of this sheet 2 now we have switched to it so
+    // it knows what range to broadcast invalidations for if it knows cells need
+    // to be redrawn.
+    tools::JsonWriter aJsonWriter1;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(0, 15, 19650, 5400), aJsonWriter1);
+    free(aJsonWriter1.extractData());
+    Scheduler::ProcessEventsToIdle();
+    aView1.ClearAllInvalids();
+
+    // switching back should also trigger no unnecessary invalidations
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEUP | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEUP | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
+
+    // The 2nd sheet has formulas that depend on B1 in the first sheet. So if
+    // we change B1 there should be an invalidation in the second sheet for the
+    // range that depends on it. Because this is a single user document with no
+    // active view on the 2nd sheet this will happen on switching back to sheet 2
+    lcl_typeCharsInCell("101", 1, 0, pView, pModelObj); // Type '101' in B1
+    aView1.ClearAllInvalids();
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
+    aView1.ClearAllInvalids();
+
+    // Paint it to make it valid again
+    getTile(pModelObj, 0, 0, 3840, 3840);
+
+    // switching back to sheet 1 should trigger no unnecessary invalidations
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEUP | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEUP | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
+
+    // switching to sheet 2 should trigger no unnecessary invalidations this time
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
+
     comphelper::LibreOfficeKit::setPartInInvalidation(oldPartInInvalidation);
 }
 
@@ -2722,27 +2814,6 @@ void ScTiledRenderingTest::testSortAscendingDescending()
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
-}
-
-void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
-    ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true)
-{
-    if (!bInEdit)
-        pView->SetCursor(nCol, nRow);
-
-    for (const char& cChar : aStr)
-    {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, cChar, 0);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, cChar, 0);
-        Scheduler::ProcessEventsToIdle();
-    }
-
-    if (bCommit)
-    {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
-        Scheduler::ProcessEventsToIdle();
-    }
 }
 
 void ScTiledRenderingTest::testAutoInputStringBlock()
@@ -4013,20 +4084,6 @@ void ScTiledRenderingTest::testExtendedAreasDontOverlap()
     CPPUNIT_ASSERT_EQUAL(aView1.m_aInvalidations[0].Top() +
                          aView1.m_aInvalidations[0].GetSize().Height(),
                          aView1.m_aInvalidations[1].Top());
-}
-
-Bitmap getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY, tools::Long nTileWidth, tools::Long nTileHeight)
-{
-    size_t nCanvasSize = 1024;
-    size_t nTileSize = 256;
-    std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
-    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
-    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
-            Fraction(1.0), Point(), aPixmap.data());
-    pModelObj->paintTile(*pDevice, nCanvasSize, nCanvasSize, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-    pDevice->EnableMapMode(false);
-    return pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
 }
 
 // Ensure that editing a shape not in the topleft tile has its text shown inside the shape
