@@ -20,7 +20,6 @@
 #endif
 
 #define CALC_DEBUG_OUTPUT 0
-#define CALC_TEST_PERF 0
 
 #include <sal/types.h>
 
