@@ -19,6 +19,7 @@ my_example_dirs = \
     DevelopersGuide/Database/DriverSkeleton \
     DevelopersGuide/Extensions/DialogWithHelp \
     DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp \
+    DevelopersGuide/OfficeDev/TerminationTest/cxx \
     DevelopersGuide/ProfUNO/CppBinding \
     DevelopersGuide/ProfUNO/SimpleBootstrap_cpp \
     OLE/activex \

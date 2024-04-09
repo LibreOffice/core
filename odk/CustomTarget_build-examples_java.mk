@@ -35,7 +35,7 @@ my_example_dirs_java = \
     DevelopersGuide/OfficeDev/Linguistic \
     DevelopersGuide/OfficeDev/PathSettings \
     DevelopersGuide/OfficeDev/PathSubstitution \
-    DevelopersGuide/OfficeDev/TerminationTest \
+    DevelopersGuide/OfficeDev/TerminationTest/java \
     DevelopersGuide/ProfUNO/InterprocessConn \
     DevelopersGuide/ProfUNO/Lifetime \
     DevelopersGuide/ProfUNO/SimpleBootstrap_java \

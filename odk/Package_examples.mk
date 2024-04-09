@@ -322,9 +322,11 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/OfficeDev/PathSettings/PathSettingsTest.java \
     DevelopersGuide/OfficeDev/PathSubstitution/Makefile \
     DevelopersGuide/OfficeDev/PathSubstitution/PathSubstitutionTest.java \
-    DevelopersGuide/OfficeDev/TerminationTest/Makefile \
-    DevelopersGuide/OfficeDev/TerminationTest/TerminateListener.java \
-    DevelopersGuide/OfficeDev/TerminationTest/TerminationTest.java \
+    DevelopersGuide/OfficeDev/TerminationTest/cxx/Makefile \
+    DevelopersGuide/OfficeDev/TerminationTest/cxx/TerminationTest.cxx \
+    DevelopersGuide/OfficeDev/TerminationTest/java/Makefile \
+    DevelopersGuide/OfficeDev/TerminationTest/java/TerminateListener.java \
+    DevelopersGuide/OfficeDev/TerminationTest/java/TerminationTest.java \
     DevelopersGuide/ProfUNO/CppBinding/Makefile \
     DevelopersGuide/ProfUNO/CppBinding/office_connect.cxx \
     DevelopersGuide/ProfUNO/CppBinding/string_samples.cxx \
