@@ -338,6 +338,8 @@ const std::vector< FormatEntry > g_TranslTable {
         FormatEntry("image/bmp", "Windows Bitmap", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::PNG
         FormatEntry("image/png", "PNG", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+    //SotClipboardFormatId::SVG
+        FormatEntry("image/svg+xml", "image/svg+xml", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::MATHML
         FormatEntry("application/mathml+xml", "MathML", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::DUMMY3
