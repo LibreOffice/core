@@ -171,8 +171,8 @@ void LogicalFontInstance::IgnoreFallbackForUnicode(sal_UCS4 cChar, FontWeight eW
 bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, basegfx::B2DRectangle& rRect,
                                             bool bVertical) const
 {
-    // TODO: find out if it's possible for the same glyph in the same font to be used both
-    // normally and vertically; if yes, then these two variants must be cached separately
+    // TODO/FIXME: bVertical handling here is highly suspicious. When it's true, it may
+    // return different rectangle, depending on if this glyph was cached already or not.
 
     if (mpFontCache && mpFontCache->GetCachedGlyphBoundRect(this, nID, rRect))
         return true;
@@ -191,13 +191,10 @@ bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, basegfx::B2DRectang
     double fMaxY = -(aExtents.y_bearing + aExtents.height) * nYScale;
     rRect = basegfx::B2DRectangle(fMinX, fMinY, fMaxX, fMaxY);
 
-    auto orientation = mnOrientation;
-    if (bVertical)
-        orientation += 900_deg10;
-    if (orientation)
+    if (mnOrientation && !bVertical)
     {
         // Apply font rotation.
-        rRect.transform(basegfx::utils::createRotateB2DHomMatrix(-toRadians(orientation)));
+        rRect.transform(basegfx::utils::createRotateB2DHomMatrix(-toRadians(mnOrientation)));
     }
 
     if (mpFontCache)
