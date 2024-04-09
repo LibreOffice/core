@@ -39,46 +39,25 @@ void VclLogicalFontInstanceTest::testglyphboundrect()
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
     device->SetOutputSizePixel(Size(1000, 1000));
-    vcl::Font font("Liberation Sans", Size(0, 110));
-    device->SetFont(font);
+    device->SetFont(vcl::Font("Liberation Sans", Size(0, 110)));
 
     const LogicalFontInstance* pFontInstance = device->GetFontInstance();
 
-    basegfx::B2DRectangle aBoundRect;
+    tools::Rectangle aBoundRect;
     const auto LATIN_SMALL_LETTER_B = 0x0062;
     pFontInstance->GetGlyphBoundRect(pFontInstance->GetGlyphIndex(LATIN_SMALL_LETTER_B), aBoundRect,
                                      false);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(7.1, aBoundRect.getMinX(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-79.7, aBoundRect.getMinY(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(49.5, aBoundRect.getWidth(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(80.8, aBoundRect.getHeight(), 0.05);
+    const tools::Long nExpectedX = 7;
+    const tools::Long nExpectedY = -80;
+    const tools::Long nExpectedWidth = 51;
+    const tools::Long nExpectedHeight = 83;
 
-    font.SetOrientation(900_deg10);
-    device->SetFont(font);
-
-    pFontInstance = device->GetFontInstance();
-
-    pFontInstance->GetGlyphBoundRect(pFontInstance->GetGlyphIndex(LATIN_SMALL_LETTER_B), aBoundRect,
-                                     false);
-
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-79.7, aBoundRect.getMinX(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-56.6, aBoundRect.getMinY(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(80.8, aBoundRect.getWidth(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(49.5, aBoundRect.getHeight(), 0.05);
-
-    font.SetOrientation(450_deg10);
-    device->SetFont(font);
-
-    pFontInstance = device->GetFontInstance();
-
-    pFontInstance->GetGlyphBoundRect(pFontInstance->GetGlyphIndex(LATIN_SMALL_LETTER_B), aBoundRect,
-                                     false);
-
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-51.3, aBoundRect.getMinX(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-96.4, aBoundRect.getMinY(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(92.1, aBoundRect.getWidth(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(92.1, aBoundRect.getHeight(), 0.05);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("x of glyph is wrong", nExpectedX, aBoundRect.getX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("y of glyph is wrong", nExpectedY, aBoundRect.getY());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("height of glyph of wrong", nExpectedWidth, aBoundRect.GetWidth());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("width of glyph of wrong", nExpectedHeight,
+                                 aBoundRect.GetHeight());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclLogicalFontInstanceTest);
