@@ -252,7 +252,6 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 void SVGFontExport::implEmbedGlyph( OutputDevice const & rOut, const OUString& rCellStr )
 {
     tools::PolyPolygon         aPolyPoly;
-    const sal_Unicode   nSpace = ' ';
 
     if( !rOut.GetTextOutline( aPolyPoly, rCellStr ) )
         return;
@@ -261,14 +260,10 @@ void SVGFontExport::implEmbedGlyph( OutputDevice const & rOut, const OUString& r
 
     aPolyPoly.Scale( 1.0, -1.0 );
 
-    if( !rOut.GetTextBoundRect( aBoundRect, rCellStr ) )
+    if (rCellStr == " " || !rOut.GetTextBoundRect(aBoundRect, rCellStr))
         aBoundRect = tools::Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( rCellStr ), 0 ) );
 
     mrExport.AddAttribute( XML_NAMESPACE_NONE, "unicode", rCellStr );
-
-    if( rCellStr[ 0 ] == nSpace && rCellStr.getLength() == 1 )
-        aBoundRect = tools::Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( OUString(' ') ), 0 ) );
-
     mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", OUString::number( aBoundRect.GetWidth() ) );
 
     const OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, false ) );
