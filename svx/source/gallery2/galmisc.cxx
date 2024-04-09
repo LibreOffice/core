@@ -494,7 +494,8 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     {
         bRet = SetGDIMetaFile( mpGraphicObject->GetGraphic().GetGDIMetaFile() );
     }
-    else if( ( SotClipboardFormatId::BITMAP == nFormat ) && mpGraphicObject )
+    else if( ( SotClipboardFormatId::BITMAP == nFormat || SotClipboardFormatId::PNG == nFormat)
+        && mpGraphicObject )
     {
         bRet = SetBitmapEx( mpGraphicObject->GetGraphic().GetBitmapEx(), rFlavor );
     }
