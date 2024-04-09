@@ -2067,6 +2067,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTspanFillOpacity)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(70), nTransparence);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDyInEms)
+{
+    // tdf#160593 given an SVG file with <tspan dy="1.5em" style="font-size:0.5em">:
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/dy_in_ems.svg");
+
+    assertXPath(pDocument, "//textsimpleportion"_ostr, 2);
+    assertXPath(pDocument, "//textsimpleportion[1]"_ostr, "y"_ostr, u"20"_ustr);
+    // Then make sure that the vertical offset is based on font-size of tspan, not of its parent.
+    // Given the parent's font-size is 16 px, the expected vertical offset is 1.5 * (16 * 0.5) = 12,
+    // which means that the resulting y is expected to be 20 + 12 = 32.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 32
+    // - Actual  : 44
+    // i.e. the offset was calculated as 1.5 multiplied by the parent's font-size of 16 px,
+    // not by the current tspan's half font-size.
+    assertXPath(pDocument, "//textsimpleportion[2]"_ostr, "y"_ostr, u"32"_ustr);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

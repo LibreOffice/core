@@ -53,8 +53,6 @@ namespace svgio::svgreader
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
-            double getCurrentFontSize() const;
-
             /// X content
             const SvgNumberVector& getX() const { return maX; }
             void setX(SvgNumberVector&& aX) { maX = std::move(aX); }
