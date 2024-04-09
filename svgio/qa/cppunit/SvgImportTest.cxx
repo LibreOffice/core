@@ -2103,11 +2103,12 @@ CPPUNIT_TEST_FIXTURE(Test, testDyInEms)
 
 CPPUNIT_TEST_FIXTURE(Test, testExs)
 {
-    // tdf#160594 given an SVG file with <tspan dy="3ex" style="font-size:1ex">:
+    // tdf#160594, tdf#160717 given an SVG file with <tspan dy="3ex" style="font-size:1ex">:
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/dy_in_exs.svg");
 
     assertXPath(pDocument, "//textsimpleportion"_ostr, 2);
     assertXPath(pDocument, "//textsimpleportion[1]"_ostr, "height"_ostr, u"16"_ustr);
+    assertXPath(pDocument, "//textsimpleportion[1]"_ostr, "y"_ostr, u"20"_ustr);
 
     sal_Int32 nSize = getXPath(pDocument, "//textsimpleportion[2]"_ostr, "height"_ostr).toInt32();
     // Without the accompanying fix in place, this test would have failed with:
@@ -2115,6 +2116,17 @@ CPPUNIT_TEST_FIXTURE(Test, testExs)
     // - Actual  : 16
     // i.e. the parent font-size was used, instead of its x-size.
     CPPUNIT_ASSERT_LESS(sal_Int32(16), nSize);
+
+    sal_Int32 nYPos = getXPath(pDocument, "//textsimpleportion[2]"_ostr, "y"_ostr).toInt32();
+    // Then make sure that the vertical offset is based on x-size of tspan, not of its parent.
+    // Given the tspan's font-size is nSize, its x-size is less than nSize, and the expected
+    // vertical offset is less than 3 * nSize, which means that the resulting y is expected
+    // to be strictly less than 20 + 3 * nSize.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 44
+    // - Actual  : 44
+    // i.e. the parent x-size (or current font-size) was used, instead of current x-size.
+    CPPUNIT_ASSERT_LESS(sal_Int32(20 + 3 * nSize), nYPos);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
