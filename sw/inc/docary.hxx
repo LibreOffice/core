@@ -144,6 +144,7 @@ public:
     static void dumpAsXml(xmlTextWriterPtr /*pWriter*/) {};
 };
 
+/// Provides a generic container for Writer styles: paragraph, graphic, section, etc styles.
 template<typename Value>
 class SwFormatsModifyBase : public SwVectorModifyBase<Value>, public SwFormatsBase
 {
@@ -178,6 +179,7 @@ public:
     SwFrameFormatsV() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
 };
 
+/// Container of paragraph styles.
 class SwTextFormatColls final : public SwFormatsModifyBase<SwTextFormatColl*>
 {
 public:
