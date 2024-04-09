@@ -646,11 +646,9 @@ void OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInf
     setModified( wasModified );
 }
 
-void OQueryController::impl_initialize()
+void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection& rArguments)
 {
-    OJoinController::impl_initialize();
-
-    const NamedValueCollection& rArguments( getInitParams() );
+    OJoinController::impl_initialize(rArguments);
 
     OUString sCommand;
     m_nCommandType = CommandType::QUERY;
@@ -1760,9 +1758,7 @@ bool OQueryController::allowQueries() const
     if ( !getSdbMetaData().supportsSubqueriesInFrom() )
         return false;
 
-    const NamedValueCollection& rArguments( getInitParams() );
-    sal_Int32 nCommandType = rArguments.getOrDefault( PROPERTY_COMMAND_TYPE, sal_Int32(CommandType::QUERY) );
-    bool bCreatingView = ( nCommandType == CommandType::TABLE );
+    bool bCreatingView = ( m_nCommandType == CommandType::TABLE );
     return !bCreatingView;
 }
 

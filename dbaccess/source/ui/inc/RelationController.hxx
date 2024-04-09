@@ -70,7 +70,7 @@ namespace dbaui
         // ask the user if the design should be saved when it is modified
         virtual short saveModified() override;
         virtual void reset() override;
-        virtual void impl_initialize() override;
+        virtual void impl_initialize(const ::comphelper::NamedValueCollection& rArguments) override;
         virtual OUString getPrivateTitle( ) const override;
         DECL_LINK( OnThreadFinished, void*, void );
     };

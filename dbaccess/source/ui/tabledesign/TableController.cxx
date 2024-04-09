@@ -453,13 +453,11 @@ void OTableController::doEditIndexes()
 
 }
 
-void OTableController::impl_initialize()
+void OTableController::impl_initialize(const ::comphelper::NamedValueCollection& rArguments)
 {
     try
     {
-        OTableController_BASE::impl_initialize();
-
-        const NamedValueCollection& rArguments( getInitParams() );
+        OTableController_BASE::impl_initialize(rArguments);
 
         rArguments.get_ensureType( PROPERTY_CURRENTTABLE, m_sName );
 

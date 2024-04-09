@@ -156,9 +156,9 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
     InvalidateFeature(_nId);
 }
 
-void ORelationController::impl_initialize()
+void ORelationController::impl_initialize(const ::comphelper::NamedValueCollection& rArguments)
 {
-    OJoinController::impl_initialize();
+    OJoinController::impl_initialize(rArguments);
 
     if( !getSdbMetaData().supportsRelations() )
     {// check if this database supports relations

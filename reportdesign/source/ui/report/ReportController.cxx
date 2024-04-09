@@ -1635,11 +1635,9 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
     InvalidateFeature(_nId,Reference< XStatusListener >(),bForceBroadcast);
 }
 
-void OReportController::impl_initialize( )
+void OReportController::impl_initialize( const ::comphelper::NamedValueCollection& rArguments )
 {
-    OReportController_BASE::impl_initialize();
-
-    const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
+    OReportController_BASE::impl_initialize(rArguments);
 
     rArguments.get_ensureType( PROPERTY_REPORTNAME, m_sName );
     if ( m_sName.isEmpty() )

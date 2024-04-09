@@ -222,7 +222,7 @@ namespace dbaui
         virtual vcl::Window* getMenuParent() const override;
         virtual void adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const override;
 
-        virtual void impl_initialize() override;
+        virtual void impl_initialize(const ::comphelper::NamedValueCollection& rArguments) override;
 
         // SbaGridListener overridables
         virtual void RowChanged() override;

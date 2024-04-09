@@ -274,7 +274,7 @@ namespace rptui
         virtual void impl_onModifyChanged() override;
 
         virtual void onLoadedMenu( const css::uno::Reference< css::frame::XLayoutManager >& _xLayoutManager ) override;
-        virtual void impl_initialize( ) override;
+        virtual void impl_initialize( const ::comphelper::NamedValueCollection& rArguments ) override;
         bool isUiVisible() const;
 
         /** creates a new default control for the currently set type when the modifier KEY_MOD1 was pressed

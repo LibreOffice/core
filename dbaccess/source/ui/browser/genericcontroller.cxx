@@ -166,7 +166,7 @@ IMPL_LINK_NOARG(OGenericUnoController, OnAsyncInvalidateAll, void*, void)
         InvalidateFeature_Impl();
 }
 
-void OGenericUnoController::impl_initialize()
+void OGenericUnoController::impl_initialize(const ::comphelper::NamedValueCollection& /*rArguments*/)
 {
 }
 
@@ -205,7 +205,6 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
             throw IllegalArgumentException("Parent window is null", *this, 1 );
         }
 
-        m_aInitParameters.assign( aArguments );
         Construct( pParentWin );
 
         ODataView* pView = getView();
@@ -215,7 +214,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         if ( m_bReadOnly || m_bPreview )
             pView->EnableInput( false );
 
-        impl_initialize();
+        impl_initialize(::comphelper::NamedValueCollection(aArguments));
     }
     catch(Exception&)
     {
@@ -686,7 +685,6 @@ void OGenericUnoController::disposing()
     m_xSlaveDispatcher = nullptr;
     m_xTitleHelper.clear();
     m_xUrlTransformer.clear();
-    m_aInitParameters.clear();
 }
 
 void SAL_CALL OGenericUnoController::addEventListener( const Reference< XEventListener >& xListener )

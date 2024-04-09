@@ -121,7 +121,7 @@ namespace dbaui
     private:
         void startTableListening();
         void stopTableListening();
-        virtual void impl_initialize() override;
+        virtual void impl_initialize(const ::comphelper::NamedValueCollection& rArguments) override;
     };
 }
 

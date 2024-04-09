@@ -75,7 +75,7 @@ namespace dbaui
 
     protected:
         // OGenericUnoController - initialization
-        virtual void impl_initialize() override;
+        virtual void impl_initialize(const ::comphelper::NamedValueCollection& rArguments) override;
 
         // OGenericUnoController
         virtual void      Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;

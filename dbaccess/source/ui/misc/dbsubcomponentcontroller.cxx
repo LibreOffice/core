@@ -176,11 +176,9 @@ namespace dbaui
     {
     }
 
-    void DBSubComponentController::impl_initialize()
+    void DBSubComponentController::impl_initialize(const ::comphelper::NamedValueCollection& rArguments)
     {
-        OGenericUnoController::impl_initialize();
-
-        const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
+        OGenericUnoController::impl_initialize(rArguments);
 
         Reference< XConnection > xConnection;
         xConnection = rArguments.getOrDefault( PROPERTY_ACTIVE_CONNECTION, xConnection );

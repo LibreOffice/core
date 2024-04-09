@@ -3094,13 +3094,13 @@ namespace
     }
 }
 
-void SbaTableQueryBrowser::impl_initialize()
+void SbaTableQueryBrowser::impl_initialize(const ::comphelper::NamedValueCollection& rArguments)
 {
     SolarMutexGuard aGuard;
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     // first initialize the parent
-    SbaXDataBrowserController::impl_initialize();
+    SbaXDataBrowserController::impl_initialize(rArguments);
 
     Reference<XConnection> xForeignConnection;
     Reference< XFrame > xFrame;
@@ -3111,8 +3111,6 @@ void SbaTableQueryBrowser::impl_initialize()
     sal_Int32 nInitialDisplayCommandType = CommandType::COMMAND;
     OUString sInitialDataSourceName;
     OUString sInitialCommand;
-
-    const NamedValueCollection& rArguments( getInitParams() );
 
     rArguments.get_ensureType( PROPERTY_DATASOURCENAME, sInitialDataSourceName );
     rArguments.get_ensureType( PROPERTY_COMMAND_TYPE, nInitialDisplayCommandType );

@@ -206,8 +206,6 @@ namespace dbaui
     {
     private:
         SupportedFeatures               m_aSupportedFeatures;
-        ::comphelper::NamedValueCollection
-                                        m_aInitParameters;
         ::sfx2::UserInputInterception   m_aUserInputInterception;
         VclPtr<ODataView>               m_pView;                // our (VCL) "main window"
 
@@ -258,8 +256,6 @@ namespace dbaui
         // methods
         OGenericUnoController( const css::uno::Reference< css::uno::XComponentContext >& _rM );
         OGenericUnoController() = delete;
-        const ::comphelper::NamedValueCollection&
-                                    getInitParams() const   { return m_aInitParameters; }
 
         // closes the task when possible
         void closeTask();
@@ -344,7 +340,7 @@ namespace dbaui
         css::uno::Reference< css::awt::XWindow> getTopMostContainerWindow() const;
 
         // XInitialize will be called inside initialize
-        virtual void impl_initialize();
+        virtual void impl_initialize(const ::comphelper::NamedValueCollection& rArguments);
 
         virtual OUString getPrivateTitle() const { return OUString(); }
 
