@@ -429,18 +429,14 @@ void SbRtl_CurDir(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_ChDir(StarBASIC * pBasic, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 2)
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    // VBA: track current directory per document type (separately for Writer, Calc, Impress, etc.)
+    if( SbiRuntime::isVBAEnabled() )
     {
-        // VBA: track current directory per document type (separately for Writer, Calc, Impress, etc.)
-        if( SbiRuntime::isVBAEnabled() )
-        {
-            ::basic::vba::registerCurrentDirectory(getDocumentModel(pBasic),
-                                                   rPar.Get(1)->GetOUString());
-        }
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        ::basic::vba::registerCurrentDirectory(getDocumentModel(pBasic),
+                                                rPar.Get(1)->GetOUString());
     }
 }
 
@@ -448,9 +444,7 @@ void SbRtl_ChDrive(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() != 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 }
 
 
@@ -499,129 +493,119 @@ void implStepRenameOSL( const OUString& aSource, const OUString& aDest )
 void SbRtl_FileCopy(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 3)
+    if (rPar.Count() != 3)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    OUString aSource = rPar.Get(1)->GetOUString();
+    OUString aDest = rPar.Get(2)->GetOUString();
+    if( hasUno() )
     {
-        OUString aSource = rPar.Get(1)->GetOUString();
-        OUString aDest = rPar.Get(2)->GetOUString();
-        if( hasUno() )
+        const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
+        if( xSFI.is() )
         {
-            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-            if( xSFI.is() )
+            try
             {
-                try
-                {
-                    xSFI->copy( getFullPath( aSource ), getFullPath( aDest ) );
-                }
-                catch(const Exception & )
-                {
-                    StarBASIC::Error( ERRCODE_BASIC_PATH_NOT_FOUND );
-                }
+                xSFI->copy( getFullPath( aSource ), getFullPath( aDest ) );
             }
-        }
-        else
-        {
-            FileBase::RC nRet = File::copy( getFullPath( aSource ), getFullPath( aDest ) );
-            if( nRet != FileBase::E_None )
+            catch(const Exception & )
             {
                 StarBASIC::Error( ERRCODE_BASIC_PATH_NOT_FOUND );
             }
         }
     }
     else
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    {
+        FileBase::RC nRet = File::copy( getFullPath( aSource ), getFullPath( aDest ) );
+        if( nRet != FileBase::E_None )
+        {
+            StarBASIC::Error( ERRCODE_BASIC_PATH_NOT_FOUND );
+        }
+    }
 }
 
 void SbRtl_Kill(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 2)
-    {
-        OUString aFileSpec = rPar.Get(1)->GetOUString();
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
-        if( hasUno() )
+    OUString aFileSpec = rPar.Get(1)->GetOUString();
+
+    if( hasUno() )
+    {
+        const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
+        if( xSFI.is() )
         {
-            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-            if( xSFI.is() )
+            OUString aFullPath = getFullPath( aFileSpec );
+            if( !xSFI->exists( aFullPath ) || xSFI->isFolder( aFullPath ) )
             {
-                OUString aFullPath = getFullPath( aFileSpec );
-                if( !xSFI->exists( aFullPath ) || xSFI->isFolder( aFullPath ) )
-                {
-                    StarBASIC::Error( ERRCODE_BASIC_FILE_NOT_FOUND );
-                    return;
-                }
-                try
-                {
-                    xSFI->kill( aFullPath );
-                }
-                catch(const Exception & )
-                {
-                    StarBASIC::Error( ERRCODE_IO_GENERAL );
-                }
+                StarBASIC::Error( ERRCODE_BASIC_FILE_NOT_FOUND );
+                return;
             }
-        }
-        else
-        {
-            File::remove( getFullPath( aFileSpec ) );
+            try
+            {
+                xSFI->kill( aFullPath );
+            }
+            catch(const Exception & )
+            {
+                StarBASIC::Error( ERRCODE_IO_GENERAL );
+            }
         }
     }
     else
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        File::remove( getFullPath( aFileSpec ) );
     }
 }
 
 void SbRtl_MkDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 {
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 2)
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    OUString aPath = rPar.Get(1)->GetOUString();
+    if ( SbiRuntime::isVBAEnabled() )
     {
-        OUString aPath = rPar.Get(1)->GetOUString();
-        if ( SbiRuntime::isVBAEnabled() )
+        // In vba if the full path is not specified then
+        // folder is created relative to the curdir
+        INetURLObject aURLObj( getFullPath( aPath ) );
+        if ( aURLObj.GetProtocol() != INetProtocol::File )
         {
-            // In vba if the full path is not specified then
-            // folder is created relative to the curdir
-            INetURLObject aURLObj( getFullPath( aPath ) );
-            if ( aURLObj.GetProtocol() != INetProtocol::File )
-            {
-                SbxArrayRef pPar = new SbxArray();
-                SbxVariableRef pResult = new SbxVariable();
-                SbxVariableRef pParam = new SbxVariable();
-                pPar->Insert(pResult.get(), pPar->Count());
-                pPar->Insert(pParam.get(), pPar->Count());
-                SbRtl_CurDir( pBasic, *pPar, bWrite );
+            SbxArrayRef pPar = new SbxArray();
+            SbxVariableRef pResult = new SbxVariable();
+            SbxVariableRef pParam = new SbxVariable();
+            pPar->Insert(pResult.get(), pPar->Count());
+            pPar->Insert(pParam.get(), pPar->Count());
+            SbRtl_CurDir( pBasic, *pPar, bWrite );
 
-                OUString sCurPathURL;
-                File::getFileURLFromSystemPath(pPar->Get(0)->GetOUString(), sCurPathURL);
+            OUString sCurPathURL;
+            File::getFileURLFromSystemPath(pPar->Get(0)->GetOUString(), sCurPathURL);
 
-                aURLObj.SetURL( sCurPathURL );
-                aURLObj.Append( aPath );
-                File::getSystemPathFromFileURL(aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri  ),aPath ) ;
-            }
+            aURLObj.SetURL( sCurPathURL );
+            aURLObj.Append( aPath );
+            File::getSystemPathFromFileURL(aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri  ),aPath ) ;
         }
+    }
 
-        if( hasUno() )
+    if( hasUno() )
+    {
+        const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
+        if( xSFI.is() )
         {
-            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-            if( xSFI.is() )
+            try
             {
-                try
-                {
-                    xSFI->createFolder( getFullPath( aPath ) );
-                }
-                catch(const Exception & )
-                {
-                    StarBASIC::Error( ERRCODE_IO_GENERAL );
-                }
+                xSFI->createFolder( getFullPath( aPath ) );
             }
-        }
-        else
-        {
-            Directory::create( getFullPath( aPath ) );
+            catch(const Exception & )
+            {
+                StarBASIC::Error( ERRCODE_IO_GENERAL );
+            }
         }
     }
     else
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        Directory::create( getFullPath( aPath ) );
     }
 }
 
