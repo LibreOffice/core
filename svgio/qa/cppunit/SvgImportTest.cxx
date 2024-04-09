@@ -2085,6 +2085,22 @@ CPPUNIT_TEST_FIXTURE(Test, testDyInEms)
     assertXPath(pDocument, "//textsimpleportion[2]"_ostr, "y"_ostr, u"32"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExs)
+{
+    // tdf#160594 given an SVG file with <tspan dy="3ex" style="font-size:1ex">:
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/dy_in_exs.svg");
+
+    assertXPath(pDocument, "//textsimpleportion"_ostr, 2);
+    assertXPath(pDocument, "//textsimpleportion[1]"_ostr, "height"_ostr, u"16"_ustr);
+
+    sal_Int32 nSize = getXPath(pDocument, "//textsimpleportion[2]"_ostr, "height"_ostr).toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 16
+    // - Actual  : 16
+    // i.e. the parent font-size was used, instead of its x-size.
+    CPPUNIT_ASSERT_LESS(sal_Int32(16), nSize);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
