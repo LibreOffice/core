@@ -692,24 +692,15 @@ namespace {
             }
         }
 
-        double SvgNode::getCurrentFontSizeInherited() const
-        {
-            if(getParent())
-            {
-                return getParent()->getCurrentFontSize();
-            }
-            else
-            {
-                return 0.0;
-            }
-        }
-
         double SvgNode::getCurrentFontSize() const
         {
             if(getSvgStyleAttributes())
                 return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, NumberType::xcoordinate);
 
-            return getCurrentFontSizeInherited();
+            if(getParent())
+                return getParent()->getCurrentFontSize();
+
+            return 0.0;
         }
 
         double SvgNode::getCurrentXHeightInherited() const
