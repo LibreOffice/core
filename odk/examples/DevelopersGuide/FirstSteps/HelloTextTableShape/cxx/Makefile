@@ -61,7 +61,7 @@ HelloTextTableShape: $(OUT_BIN)/$(APP_NAME)$(EXE_EXT)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo $(MAKE) HelloTextTableShap.run
+	@echo $(MAKE) HelloTextTableShape.run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/HelloTextTableShape$(EXE_EXT)
