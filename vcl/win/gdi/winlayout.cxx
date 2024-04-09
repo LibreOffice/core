@@ -147,12 +147,22 @@ WinFontInstance::~WinFontInstance()
         ::DeleteFont(m_hFont);
 }
 
+bool WinFontInstance::hasHScale() const
+{
+    const vcl::font::FontSelectPattern& rPattern = GetFontSelectPattern();
+    int nHeight(rPattern.mnHeight);
+    int nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetAverageWidthFactor() : nHeight);
+    return nWidth != nHeight;
+}
+
 float WinFontInstance::getHScale() const
 {
     const vcl::font::FontSelectPattern& rPattern = GetFontSelectPattern();
-    if (!rPattern.mnHeight || !rPattern.mnWidth)
+    int nHeight(rPattern.mnHeight);
+    if (!nHeight)
         return 1.0;
-    return rPattern.mnWidth * GetAverageWidthFactor() / rPattern.mnHeight;
+    float nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetAverageWidthFactor() : nHeight);
+    return nWidth / nHeight;
 }
 
 void WinFontInstance::ImplInitHbFont(hb_font_t* /*pHbFont*/)
