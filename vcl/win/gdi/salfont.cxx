@@ -1156,6 +1156,59 @@ void WinSalGraphics::ClearDevFontCache()
     ImplReleaseTempFonts(*GetSalData(), false);
 }
 
+bool WinFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bIsVertical) const
+{
+    assert(m_pGraphics);
+    HDC hDC = m_pGraphics->getHDC();
+    const HFONT hOrigFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
+    const HFONT hFont = GetHFONT();
+    if (hFont != hOrigFont)
+        SelectObject(hDC, hFont);
+
+    const ::comphelper::ScopeGuard aFontRestoreScopeGuard([hFont, hOrigFont, hDC]()
+        { if (hFont != hOrigFont) SelectObject(hDC, hOrigFont); });
+    const float fFontScale = GetScale();
+
+    // use unity matrix
+    MAT2 aMat;
+    const vcl::font::FontSelectPattern& rFSD = GetFontSelectPattern();
+
+    // Use identity matrix for fonts requested in horizontal
+    // writing (LTR or RTL), or rotated glyphs in vertical writing.
+    if (!rFSD.mbVertical || !bIsVertical)
+    {
+        aMat.eM11 = aMat.eM22 = FixedFromDouble(1.0);
+        aMat.eM12 = aMat.eM21 = FixedFromDouble(0.0);
+    }
+    else
+    {
+        constexpr double nCos = 0.0;
+        constexpr double nSin = 1.0;
+        aMat.eM11 = FixedFromDouble(nCos);
+        aMat.eM12 = FixedFromDouble(nSin);
+        aMat.eM21 = FixedFromDouble(-nSin);
+        aMat.eM22 = FixedFromDouble(nCos);
+    }
+
+    UINT nGGOFlags = GGO_METRICS;
+    nGGOFlags |= GGO_GLYPH_INDEX;
+
+    GLYPHMETRICS aGM;
+    aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
+    aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
+    DWORD nSize = ::GetGlyphOutlineW(hDC, nId, nGGOFlags, &aGM, 0, nullptr, &aMat);
+    if (nSize == GDI_ERROR)
+        return false;
+
+    rRect = tools::Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
+        Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
+    rRect.SetLeft(static_cast<int>( fFontScale * rRect.Left() ));
+    rRect.SetRight(static_cast<int>( fFontScale * rRect.Right() ) + 1);
+    rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
+    rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
+    return true;
+}
+
 bool WinFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2DPolyPoly, bool) const
 {
     rB2DPolyPoly.clear();

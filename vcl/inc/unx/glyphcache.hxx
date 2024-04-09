@@ -123,6 +123,7 @@ public:
 
     void                    GetFontMetric(ImplFontMetricDataRef const &) const;
 
+    bool                    GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
     bool                    GetAntialiasAdvice() const;
 

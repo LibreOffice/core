@@ -75,6 +75,14 @@ FreetypeFontInstance::~FreetypeFontInstance()
 {
 }
 
+bool FreetypeFontInstance::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool bVertical) const
+{
+    assert(mxFreetypeFont);
+    if (!mxFreetypeFont)
+        return false;
+    return mxFreetypeFont->GetGlyphBoundRect(nId, rRect, bVertical);
+}
+
 bool FreetypeFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rPoly, bool bVertical) const
 {
     assert(mxFreetypeFont);
