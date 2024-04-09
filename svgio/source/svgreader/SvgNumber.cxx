@@ -35,8 +35,9 @@ double SvgNumber::solveNonPercentage(const InfoProvider& rInfoProvider) const
 
     switch (meUnit)
     {
+        // See https://drafts.csswg.org/css-values-4/#font-relative-length
         case SvgUnit::em:
-            return mfNumber * rInfoProvider.getCurrentFontSizeInherited();
+            return mfNumber * rInfoProvider.getCurrentFontSize();
         case SvgUnit::ex:
             return mfNumber * rInfoProvider.getCurrentXHeightInherited() * 0.5;
         case SvgUnit::px:

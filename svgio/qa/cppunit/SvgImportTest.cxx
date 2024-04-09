@@ -1125,6 +1125,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTspanFillOpacity)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(70), nTransparence);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDyInEms)
+{
+    // tdf#160593 given an SVG file with <tspan dy="1.5em" style="font-size:0.5em">:
+    std::u16string_view aPath = u"/svgio/qa/cppunit/data/dy_in_ems.svg";
+    Primitive2DSequence aSequence = parseSvg(aPath);
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    assertXPath(pDocument, "//textsimpleportion", 2);
+    assertXPath(pDocument, "//textsimpleportion[1]", "y", "20");
+    // Then make sure that the vertical offset is based on font-size of tspan, not of its parent.
+    // Given the parent's font-size is 16 px, the expected vertical offset is 1.5 * (16 * 0.5) = 12,
+    // which means that the resulting y is expected to be 20 + 12 = 32.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 32
+    // - Actual  : 44
+    // i.e. the offset was calculated as 1.5 multiplied by the parent's font-size of 16 px,
+    // not by the current tspan's half font-size.
+    assertXPath(pDocument, "//textsimpleportion[2]", "y", "32");
+}
+
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
