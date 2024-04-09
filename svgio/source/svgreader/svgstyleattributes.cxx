@@ -2562,11 +2562,11 @@ namespace svgio::svgreader
                     if(pSvgStyleAttributes)
                     {
                         const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
+                        double n = aParentNumber.getNumber() * maFontSizeNumber.getNumber();
+                        if (SvgUnit::ex == maFontSizeNumber.getUnit())
+                            n *= 0.5; // FIXME: use "x-height of the first available font"
 
-                        return SvgNumber(
-                            aParentNumber.getNumber() * maFontSizeNumber.getNumber(),
-                            aParentNumber.getUnit(),
-                            true);
+                        return SvgNumber(n, aParentNumber.getUnit());
                     }
                 }
 
