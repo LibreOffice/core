@@ -204,12 +204,10 @@ namespace comphelper
         std::scoped_lock g(GetTheNotifiersMutex());
         // note: this doesn't happen atomically with the refcount
         // hence it's possible this deletes > 1 or 0 elements
-        g_Notifiers.erase(
-            std::remove_if(g_Notifiers.begin(), g_Notifiers.end(),
+        std::erase_if(g_Notifiers,
                 [](std::weak_ptr<AsyncEventNotifierAutoJoin> const& w) {
                     return w.expired();
-                } ),
-            g_Notifiers.end());
+                });
     }
 
     std::shared_ptr<AsyncEventNotifierAutoJoin>
