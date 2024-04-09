@@ -52,7 +52,7 @@ public:
 
     static const sal_Unicode cDefaultTextSep = '"';
 
-    void            ReadFromString( std::u16string_view rString );
+    void            ReadFromString( std::u16string_view rString, SvStream* pStream4Detect = nullptr );
     OUString        WriteToString() const;
 
     rtl_TextEncoding    GetCharSet() const      { return eCharSet; }

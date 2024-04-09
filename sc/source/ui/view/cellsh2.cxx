@@ -1040,6 +1040,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScImportExport::SetNoEndianSwap( aStream );
                     aExport.ExportStream( aStream, OUString(), SotClipboardFormatId::STRING );
 
+                    aStream.Seek(0);
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
                             pTabViewShell->GetFrameWeld(), OUString(), &aStream, SC_TEXTTOCOLUMNS));

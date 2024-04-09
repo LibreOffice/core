@@ -23,6 +23,9 @@ class tdf69981(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A7"}))
             #Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xtab = xDialog.getChild("tab")
                 xcomma = xDialog.getChild("comma")
                 xtab.executeAction("CLICK", tuple())

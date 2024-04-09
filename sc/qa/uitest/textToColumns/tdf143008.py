@@ -22,6 +22,9 @@ class tdf143008(UITestCase):
             enter_text_to_cell(gridwin, "A1", "22/06/2021 10:02 PM")
 
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xGrid = xDialog.getChild("csvgrid")
                 xColumnType = xDialog.getChild("columntype")
 

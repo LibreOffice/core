@@ -39,6 +39,9 @@ class tdf92423(UITestCase):
             self.assertEqual(gridWinState["MarkedArea"], "Sheet1.A7:Sheet1.A9")
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xSemicolon = xDialog.getChild("semicolon")  #check semicolon checkbox
                 if (get_state_as_dict(xSemicolon)["Selected"]) == "false":
                     xSemicolon.executeAction("CLICK", tuple())

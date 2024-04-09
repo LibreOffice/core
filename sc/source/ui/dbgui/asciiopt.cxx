@@ -22,9 +22,11 @@
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <o3tl/string_view.hxx>
+#include <sfx2/objsh.hxx>
 
 constexpr std::u16string_view pStrFix = u"FIX";
 constexpr std::u16string_view pStrMrg = u"MRG";
+constexpr std::u16string_view pStrDet = u"DETECT";
 
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),
@@ -86,9 +88,10 @@ static OUString lcl_decodeSepString( std::u16string_view rSepNums, bool & o_bMer
 // The options string must not contain semicolons (because of the pick list),
 // use comma as separator.
 
-void ScAsciiOptions::ReadFromString( std::u16string_view rString )
+void ScAsciiOptions::ReadFromString( std::u16string_view rString, SvStream* pStream4Detect )
 {
     sal_Int32 nPos = rString.empty() ? -1 : 0;
+    bool bDetectSep = false;
 
     // Token 0: Field separator.
     if ( nPos >= 0 )
@@ -96,9 +99,14 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString )
         bFixedLen = bMergeFieldSeps = false;
 
         const std::u16string_view aToken = o3tl::getToken(rString, 0, ',', nPos);
-        if ( aToken == pStrFix )
-            bFixedLen = true;
-        aFieldSeps = lcl_decodeSepString( aToken, bMergeFieldSeps);
+        if ( aToken == pStrDet)
+            bDetectSep = true;
+        else
+        {
+            if ( aToken == pStrFix )
+                bFixedLen = true;
+            aFieldSeps = lcl_decodeSepString( aToken, bMergeFieldSeps);
+        }
     }
 
     // Token 1: Text separator.
@@ -111,8 +119,21 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString )
     // Token 2: Text encoding.
     if ( nPos >= 0 )
     {
-        eCharSet = ScGlobal::GetCharsetValue( o3tl::getToken(rString, 0, ',', nPos) );
+        const std::u16string_view aToken = o3tl::getToken(rString, 0, ',', nPos);
+        SvStreamEndian endian;
+        bool bDetectCharSet = aToken == pStrDet;
+        if ( bDetectCharSet && pStream4Detect )
+        {
+            SfxObjectShell::DetectCharSet(*pStream4Detect, eCharSet, endian);
+            if (eCharSet == RTL_TEXTENCODING_UNICODE)
+                pStream4Detect->SetEndian(endian);
+        }
+        else if (!bDetectCharSet)
+            eCharSet = ScGlobal::GetCharsetValue( aToken );
     }
+
+    if (bDetectSep && pStream4Detect)
+        SfxObjectShell::DetectCsvSeparators(*pStream4Detect, eCharSet, aFieldSeps, cTextSep);
 
     // Token 3: Number of start row.
     if ( nPos >= 0 )

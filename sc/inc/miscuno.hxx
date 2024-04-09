@@ -152,8 +152,8 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& xProp,
         const OUString& rName, const OUString& rDefault );
 
-    SC_DLLPUBLIC static bool GetBoolFromAny( const css::uno::Any& aAny );
-    static sal_Int16        GetInt16FromAny( const css::uno::Any& aAny );
+    SC_DLLPUBLIC static bool        GetBoolFromAny( const css::uno::Any& aAny );
+    SC_DLLPUBLIC static sal_Int16   GetInt16FromAny( const css::uno::Any& aAny );
     static sal_Int32        GetInt32FromAny( const css::uno::Any& aAny );
     static sal_Int32        GetEnumFromAny( const css::uno::Any& aAny );
 

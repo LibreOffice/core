@@ -26,6 +26,9 @@ class CalcTextToColumns(UITestCase):
             #Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 #Untag Tab as separator and tag other. Put a dot into the input field next to the other checkbox
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xother = xDialog.getChild("other")
                 xinputother = xDialog.getChild("inputother")
 
@@ -85,6 +88,9 @@ class CalcTextToColumns(UITestCase):
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 # Untag Tab as separator and tag comma.
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xComma = xDialog.getChild("comma")
                 if (get_state_as_dict(xComma)["Selected"]) == "false":
                     xComma.executeAction("CLICK", tuple())
@@ -142,6 +148,9 @@ class CalcTextToColumns(UITestCase):
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 # Untag comma as separator and tag Semicolon
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xSemicolon = xDialog.getChild("semicolon")
                 if (get_state_as_dict(xSemicolon)["Selected"]) == "false":
                     xSemicolon.executeAction("CLICK", tuple())
@@ -199,6 +208,9 @@ class CalcTextToColumns(UITestCase):
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 # Untag comma as separator and tag Semicolon
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xSpace = xDialog.getChild("space")
                 if (get_state_as_dict(xSpace)["Selected"]) == "false":
                     xSpace.executeAction("CLICK", tuple())
@@ -257,6 +269,9 @@ class CalcTextToColumns(UITestCase):
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 # Untag comma as separator and tag Semicolon
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xother = xDialog.getChild("other")
                 xinputother = xDialog.getChild("inputother")
                 if (get_state_as_dict(xother)["Selected"]) == "false":
@@ -315,6 +330,9 @@ class CalcTextToColumns(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xspace = xDialog.getChild("space")
                 xother = xDialog.getChild("other")
                 xinputother = xDialog.getChild("inputother")

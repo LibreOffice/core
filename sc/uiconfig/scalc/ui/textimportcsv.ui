@@ -137,7 +137,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -151,7 +151,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -170,6 +170,18 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkLabel" id="textdetectedcharset">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="no" context="textimportcsv|textcharset"></property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkComboBoxText" id="language">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -181,7 +193,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -200,7 +212,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                   </object>
@@ -252,7 +264,7 @@
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
-                            <property name="group">toseparatedby</property>
+                            <property name="group">todetectseparator</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="tofixedwidth-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|tofixedwidth">Separates fixed-width data (equal number of characters) into columns.</property>
@@ -272,8 +284,8 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
-                            <property name="active">True</property>
                             <property name="draw-indicator">True</property>
+                            <property name="group">todetectseparator</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="toseparatedby-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|toseparatedby">Select the separator used in your data.</property>
@@ -284,6 +296,27 @@
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="todetectseparator">
+                            <property name="label" translatable="yes" context="textimportcsv|todetectseparator">Detected</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="active">True</property>
+                            <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="todetectseparator-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|todetectseparator">Use detected separator.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>

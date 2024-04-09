@@ -72,10 +72,12 @@ public:
 
     // common table box handling ----------------------------------------------
 public:
+    void                        Refresh();
     /** Sets the control to separators mode. */
     void                        SetSeparatorsMode();
     /** Sets the control to fixed width mode. */
     void                        SetFixedWidthMode();
+    bool                        IsFixedWidthMode(){ return mbFixedMode; }
 
     ScCsvRuler& GetRuler() { return *mxRuler; }
     ScCsvGrid& GetGrid() { return *mxGrid; }

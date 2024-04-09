@@ -141,6 +141,7 @@ typedef sal_uInt16 rtl_TextEncoding;
  */
 
 #define RTL_TEXTENCODING_USER_START             (RTL_TEXTENC_CAST( 0x8000 ))
+#define RTL_TEXTENCODING_USER_DETECTED          (RTL_TEXTENCODING_USER_START + 0)
 #define RTL_TEXTENCODING_USER_END               (RTL_TEXTENC_CAST( 0xEFFF ))
 
 #define RTL_TEXTENCODING_UCS4                   (RTL_TEXTENC_CAST( 0xFFFE ))

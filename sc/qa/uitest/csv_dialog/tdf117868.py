@@ -17,20 +17,11 @@ class Td117868(UITestCase):
 
         with load_csv_file(self, "tdf117868.csv", False) as xDialog:
             # Set text delimiter in case it's changed by another test
-            xSeparatedBy = xDialog.getChild("toseparatedby")
-            xSeparatedBy.executeAction("CLICK", tuple())
-
-            # Without the fix in place, this test would have failed with
-            # AssertionError: 'true' != 'false'
-            self.assertEqual('true', get_state_as_dict(xDialog.getChild("other"))['Selected'])
-            self.assertEqual('false', get_state_as_dict(xDialog.getChild("tab"))['Selected'])
-            self.assertEqual('false', get_state_as_dict(xDialog.getChild("comma"))['Selected'])
-            self.assertEqual('false', get_state_as_dict(xDialog.getChild("semicolon"))['Selected'])
+            self.assertEqual('Detected (|)', get_state_as_dict(xDialog.getChild("todetectseparator"))['Text'])
+            xDetected = xDialog.getChild("todetectseparator")
+            xDetected.executeAction("CLICK", tuple())
 
             self.assertEqual('1', get_state_as_dict(xDialog.getChild("fromrow"))['Text'])
-
-            xInputOther = xDialog.getChild("inputother")
-            self.assertEqual("|", get_state_as_dict(xInputOther)['Text'])
 
         document = self.ui_test.get_component()
 

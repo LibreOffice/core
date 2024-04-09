@@ -1354,7 +1354,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
             {
-                aOptions.ReadFromString( pOptionsItem->GetValue() );
+                aOptions.ReadFromString( pOptionsItem->GetValue(), rMedium.GetInStream() );
                 bOptInit = true;
             }
 

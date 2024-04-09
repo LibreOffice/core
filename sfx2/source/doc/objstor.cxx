@@ -119,7 +119,6 @@
 #include "objstor.hxx"
 #include "exoticfileloadexception.hxx"
 #include <unicode/ucsdet.h>
-#include <unicode/ucnv.h>
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
@@ -960,7 +959,7 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
     std::vector<std::unordered_map<sal_Unicode, sal_uInt32>> aLinesCharsCount;
     std::unordered_map<sal_Unicode, sal_uInt32> aCharsCount;
     std::unordered_map<sal_Unicode, std::pair<sal_uInt32, sal_uInt32>> aStats;
-    constexpr sal_uInt32 nMaxLinesToProcess = 20;
+    constexpr sal_uInt32 nTimeout = 500; // Timeout for detection in ms
     sal_uInt32 nLinesCount = 0;
     OUString sInitSeps;
     OUString sCommonSeps = u",\t;:| \\/"_ustr;//Sorted by importance
@@ -970,17 +969,18 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
     sal_uInt32 nMaxLinesSameChar = 0;
     sal_uInt32 nMinDiffs = 0xFFFFFFFF;
     sal_uInt64 nInitPos = stream.Tell();
+    sal_uInt64 nStartTime = tools::Time::GetSystemTicks();
 
     if (!cStringDelimiter)
         cStringDelimiter = '\"';
 
     for (sal_Int32 nComSepIdx = sCommonSeps.getLength() - 1; nComSepIdx >= 0; nComSepIdx --)
         usetCommonSeps.insert(sCommonSeps[nComSepIdx]);
-    aLinesCharsCount.reserve(nMaxLinesToProcess);
+    aLinesCharsCount.reserve(128);
     separators = "";
 
     stream.StartReadingUnicodeText(eCharSet);
-    while (stream.ReadUniOrByteStringLine(sLine, eCharSet) && aLinesCharsCount.size() < nMaxLinesToProcess)
+    while (stream.ReadUniOrByteStringLine(sLine, eCharSet) && (tools::Time::GetSystemTicks() - nStartTime < nTimeout))
     {
         if (sLine.isEmpty())
             continue;
@@ -1034,7 +1034,7 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
         {
             auto aCurStats = aStats.find(aCurLineChar->first);
             if (aCurStats == aStats.cend())
-                aStats.insert(std::pair<sal_Unicode, std::pair<sal_uInt32, sal_uInt32>>(aCurLineChar->first, std::pair<sal_uInt32, sal_uInt32>(1, 1)));
+                aCurStats = aStats.insert(std::pair<sal_Unicode, std::pair<sal_uInt32, sal_uInt32>>(aCurLineChar->first, std::pair<sal_uInt32, sal_uInt32>(1, 1))).first;
             else
             {
                 aCurStats->second.first ++;// Increment number of lines that contain the current character
@@ -1048,16 +1048,18 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
                 }
                 if (aPrevLineChar == aLinesCharsCount.cend())
                     aCurStats->second.second ++;// Increment number of different number of occurrences.
-
-                // Update the maximum of number of lines that contain the same character. This is a global value.
-                if (nMaxLinesSameChar < aCurStats->second.first)
-                    nMaxLinesSameChar = aCurStats->second.first;
             }
+
+            // Update the maximum of number of lines that contain the same character. This is a global value.
+            if (nMaxLinesSameChar < aCurStats->second.first)
+                nMaxLinesSameChar = aCurStats->second.first;
         }
 
         aLinesCharsCount.emplace_back();
         aLinesCharsCount[aLinesCharsCount.size() - 1].swap(aCharsCount);
     }
+
+    SAL_INFO("sfx.doc", "" << nLinesCount << " lines processed in " << tools::Time::GetSystemTicks() - nStartTime << " ms while detecting separator.");
 
     // Compute the global minimum of different number of occurrences.
     // But only for characters which occur in a maximum number of lines (previously computed).
@@ -1086,8 +1088,6 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCh
             }
         }
 
-        if (nInitSepIdx >= 0)
-            break;
     }
 
     stream.Seek(nInitPos);
@@ -1133,9 +1133,9 @@ void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterO
 
 
     //Detect separators
-    aFilterOptions = "";
     if (aSeps == aDetect)
     {
+        aFilterOptions = "";
         OUString separators;
         DetectCsvSeparators(stream, eCharSet, separators, static_cast<sal_Unicode>(o3tl::toInt32(aDelimiter)));
 
@@ -1198,7 +1198,6 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
     // FilterOptions should not be detected here (the detection is done before entering
     // interactive state). For now this is focused on CSV files.
     DetectFilterOptions(pMedium);
-    //::sleep(30);
 
     if ( !pData && (bTiledRendering || !pOptions) )
     {

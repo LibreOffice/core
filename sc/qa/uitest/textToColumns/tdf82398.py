@@ -29,6 +29,9 @@ class tdf82398(UITestCase):
             self.xUITest.executeCommand(".uno:NumberFormatDate")
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xother = xDialog.getChild("other")
                 xinputother = xDialog.getChild("inputother")
 

@@ -26,6 +26,9 @@ class tdf73006(UITestCase):
             self.xUITest.executeCommand(".uno:SelectColumn")
             # Data - Text to Columns
             with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
+                xSeparatedBy = xDialog.getChild("toseparatedby")
+                xSeparatedBy.executeAction("CLICK", tuple())
+
                 xspace = xDialog.getChild("space")
                 if (get_state_as_dict(xspace)["Selected"]) == "false":
                     xspace.executeAction("CLICK", tuple())

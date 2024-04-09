@@ -57,6 +57,26 @@ ScCsvTableBox::~ScCsvTableBox()
 
 // common table box handling --------------------------------------------------
 
+void ScCsvTableBox::Refresh()
+{
+    mxGrid->DisableRepaint();
+    mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
+    if (mbFixedMode)
+    {
+        mxGrid->Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
+        mxGrid->SetSplits( mxRuler->GetSplits() );
+        mxGrid->SetColumnStates( std::vector(maFixColStates) );
+    }
+    else
+    {
+        mxGrid->Execute( CSVCMD_SETPOSCOUNT, 1 );
+        mxGrid->Execute( CSVCMD_NEWCELLTEXTS );
+        mxGrid->SetColumnStates( std::vector(maSepColStates) );
+    }
+    InitControls();
+    mxGrid->EnableRepaint();
+}
+
 void ScCsvTableBox::SetSeparatorsMode()
 {
     if( !mbFixedMode )
@@ -68,13 +88,7 @@ void ScCsvTableBox::SetSeparatorsMode()
     // switch to separators mode
     mbFixedMode = false;
     // reset and reinitialize controls
-    mxGrid->DisableRepaint();
-    mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
-    mxGrid->Execute( CSVCMD_SETPOSCOUNT, 1 );
-    mxGrid->Execute( CSVCMD_NEWCELLTEXTS );
-    mxGrid->SetColumnStates( std::vector(maSepColStates) );
-    InitControls();
-    mxGrid->EnableRepaint();
+    Refresh();
 }
 
 void ScCsvTableBox::SetFixedWidthMode()
@@ -87,13 +101,7 @@ void ScCsvTableBox::SetFixedWidthMode()
     // switch to fixed width mode
     mbFixedMode = true;
     // reset and reinitialize controls
-    mxGrid->DisableRepaint();
-    mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
-    mxGrid->Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
-    mxGrid->SetSplits( mxRuler->GetSplits() );
-    mxGrid->SetColumnStates( std::vector(maFixColStates) );
-    InitControls();
-    mxGrid->EnableRepaint();
+    Refresh();
 }
 
 void ScCsvTableBox::Init()

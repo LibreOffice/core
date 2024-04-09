@@ -85,6 +85,8 @@
 #define SCSTR_FIELDSEP_SPACE                        NC_("SCSTR_FIELDSEP_SPACE", "space")
 #define SCSTR_UNDO_GRAFFILTER                       NC_("SCSTR_UNDO_GRAFFILTER", "Image Filter")
 #define STR_CAPTION_DEFAULT_TEXT                    NC_("STR_CAPTION_DEFAULT_TEXT", "Text")
+#define SCSTR_DETECTED                              NC_("SCSTR_DETECTED", "Detected (%1)")
+#define SCSTR_AUTOMATIC                             NC_("SCSTR_AUTOMATIC", "Automatic")
 // Select tables dialog title
 #define STR_DLG_SELECTTABLES_TITLE                  NC_("STR_DLG_SELECTTABLES_TITLE", "Select Sheets")
 #define STR_DLG_SELECTTABLE_TITLE                   NC_("STR_DLG_SELECTTABLE_TITLE", "Go to Sheet")
