@@ -39,7 +39,7 @@ double SvgNumber::solveNonPercentage(const InfoProvider& rInfoProvider) const
         case SvgUnit::em:
             return mfNumber * rInfoProvider.getCurrentFontSize();
         case SvgUnit::ex:
-            return mfNumber * rInfoProvider.getCurrentXHeightInherited() * 0.5;
+            return mfNumber * rInfoProvider.getCurrentXHeight();
         case SvgUnit::px:
             return mfNumber;
         case SvgUnit::pt:

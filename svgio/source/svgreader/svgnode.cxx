@@ -703,25 +703,12 @@ namespace {
             return 0.0;
         }
 
-        double SvgNode::getCurrentXHeightInherited() const
-        {
-            if(getParent())
-            {
-                return getParent()->getCurrentXHeight();
-            }
-            else
-            {
-                return 0.0;
-            }
-        }
-
         double SvgNode::getCurrentXHeight() const
         {
-            if(getSvgStyleAttributes())
-                // for XHeight, use FontSize currently
-                return getSvgStyleAttributes()->getFontSizeNumber().solve(*this, NumberType::ycoordinate);
-
-            return getCurrentXHeightInherited();
+            // https://drafts.csswg.org/css-values-4/#ex
+            // for XHeight, use 0.5em fallback currently
+            // FIXME: use "x-height of the first available font"
+            return getCurrentFontSize() * 0.5;
         }
 
         void SvgNode::setId(OUString const & rId)
