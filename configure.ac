@@ -1328,8 +1328,10 @@ dnl The following checks for gcc, cc and then cl (if it weren't guarded for win3
 dnl Needs to precede the AC_C_BIGENDIAN and AC_SEARCH_LIBS calls below, which apparently call
 dnl AC_PROG_CC internally.
 if test "$_os" != "WINNT"; then
-    # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that
+    # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that (and avoid -O2 during AC_PROG_CC,
+    # Clang 12.0.1 occasionally SEGVs on some of the test invocations during AC_PROG_CC with -O2):
     save_CFLAGS=$CFLAGS
+    CFLAGS=-g
     AC_PROG_CC
     CFLAGS=$save_CFLAGS
     if test -z "$CC_BASE"; then
@@ -7068,8 +7070,10 @@ dnl Testing for C++ compiler and version...
 dnl ===================================================================
 
 if test "$_os" != "WINNT"; then
-    # AC_PROG_CXX sets CXXFLAGS to -g -O2 if not set, avoid that
+    # AC_PROG_CXX sets CXXFLAGS to -g -O2 if not set, avoid that (and avoid -O2 during AC_PROG_CXX,
+    # see AC_PROG_CC above):
     save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS=-g
     AC_PROG_CXX
     CXXFLAGS=$save_CXXFLAGS
     if test -z "$CXX_BASE"; then
