@@ -90,29 +90,22 @@ static bool lcl_GetBoolFromAny( const uno::Any& aAny )
     return b.has_value() && *b;
 }
 
-ScDPSource::ScDPSource( ScDPTableData* pD ) :
-    pData( pD ),
-    bColumnGrand( true ),       // default is true
-    bRowGrand( true ),
-    bIgnoreEmptyRows( false ),
-    bRepeatIfEmpty( false ),
-    nDupCount( 0 ),
-    bResultOverflow( false ),
-    bPageFiltered( false )
+ScDPSource::ScDPSource(ScDPTableData* pData)
+    : mpData(pData)
 {
-    pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
+    mpData->SetEmptyFlags(mbIgnoreEmptyRows, mbRepeatIfEmpty);
 }
 
 ScDPSource::~ScDPSource()
 {
     // free lists
 
-    pColResults.reset();
-    pRowResults.reset();
+    mpColumnResults.reset();
+    mpRowResults.reset();
 
-    pColResRoot.reset();
-    pRowResRoot.reset();
-    pResData.reset();
+    mpColumnResultRoot.reset();
+    mpRowResultRoot.reset();
+    mpResultData.reset();
 }
 
 const std::optional<OUString> & ScDPSource::GetGrandTotalName() const
@@ -275,26 +268,24 @@ void ScDPSource::SetOrientation(sal_Int32 nColumn, sheet::DataPilotFieldOrientat
 
 bool ScDPSource::IsDataLayoutDimension(sal_Int32 nDim)
 {
-    return nDim == pData->GetColumnCount();
+    return nDim == mpData->GetColumnCount();
 }
 
 sheet::DataPilotFieldOrientation ScDPSource::GetDataLayoutOrientation()
 {
-    return GetOrientation(pData->GetColumnCount());
+    return GetOrientation(mpData->GetColumnCount());
 }
 
 bool ScDPSource::IsDateDimension(sal_Int32 nDim)
 {
-    return pData->IsDateDimension(nDim);
+    return mpData->IsDateDimension(nDim);
 }
 
 ScDPDimensions* ScDPSource::GetDimensionsObject()
 {
-    if (!pDimensions.is())
-    {
-        pDimensions = new ScDPDimensions(this);
-    }
-    return pDimensions.get();
+    if (!mpDimensions.is())
+        mpDimensions = new ScDPDimensions(this);
+    return mpDimensions.get();
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPSource::getDimensions()
@@ -304,19 +295,19 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPSource::getDimensions()
 
 void ScDPSource::SetDupCount( tools::Long nNew )
 {
-    nDupCount = nNew;
+    mnDupCount = nNew;
 }
 
 ScDPDimension* ScDPSource::AddDuplicated(std::u16string_view rNewName)
 {
-    OSL_ENSURE( pDimensions.is(), "AddDuplicated without dimensions?" );
+    OSL_ENSURE(mpDimensions.is(), "AddDuplicated without dimensions?");
 
     //  re-use
 
-    tools::Long nOldDimCount = pDimensions->getCount();
+    tools::Long nOldDimCount = mpDimensions->getCount();
     for (tools::Long i=0; i<nOldDimCount; i++)
     {
-        ScDPDimension* pDim = pDimensions->getByIndex(i);
+        ScDPDimension* pDim = mpDimensions->getByIndex(i);
         if (pDim && pDim->getName() == rNewName)
         {
             //TODO: test if pDim is a duplicate of source
@@ -324,21 +315,21 @@ ScDPDimension* ScDPSource::AddDuplicated(std::u16string_view rNewName)
         }
     }
 
-    SetDupCount( nDupCount + 1 );
-    pDimensions->CountChanged();        // uses nDupCount
+    SetDupCount(mnDupCount + 1);
+    mpDimensions->CountChanged(); // uses mnDupCount
 
-    return pDimensions->getByIndex( pDimensions->getCount() - 1 );
+    return mpDimensions->getByIndex(mpDimensions->getCount() - 1);
 }
 
 sal_Int32 ScDPSource::GetSourceDim(sal_Int32 nDim)
 {
     //  original source dimension or data layout dimension?
-    if ( nDim <= pData->GetColumnCount() )
+    if (nDim <= mpData->GetColumnCount())
         return nDim;
 
-    if ( nDim < pDimensions->getCount() )
+    if (nDim < mpDimensions->getCount())
     {
-        ScDPDimension* pDimObj = pDimensions->getByIndex( nDim );
+        ScDPDimension* pDimObj = mpDimensions->getByIndex( nDim );
         if ( pDimObj )
         {
             tools::Long nSource = pDimObj->GetSourceDim();
@@ -353,16 +344,16 @@ sal_Int32 ScDPSource::GetSourceDim(sal_Int32 nDim)
 
 uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResults()
 {
-    CreateRes_Impl();       // create pColResRoot and pRowResRoot
+    CreateRes_Impl(); // create mpColumnResultRoot and mpRowResultRoot
 
-    if ( bResultOverflow )      // set in CreateRes_Impl
+    if (mbResultOverflow) // set in CreateRes_Impl
     {
         //  no results available
         throw uno::RuntimeException();
     }
 
-    sal_Int32 nColCount = pColResRoot->GetSize(pResData->GetColStartMeasure());
-    sal_Int32 nRowCount = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
+    sal_Int32 nColCount = mpColumnResultRoot->GetSize(mpResultData->GetColStartMeasure());
+    sal_Int32 nRowCount = mpRowResultRoot->GetSize(mpResultData->GetRowStartMeasure());
 
     //  allocate full sequence
     //TODO: leave out empty rows???
@@ -376,8 +367,8 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
     }
 
     ScDPResultFilterContext aFilterCxt;
-    pRowResRoot->FillDataResults(
-        pColResRoot.get(), aFilterCxt, aSeq, pResData->GetRowStartMeasure());
+    mpRowResultRoot->FillDataResults(
+        mpColumnResultRoot.get(), aFilterCxt, aSeq, mpResultData->GetRowStartMeasure());
 
     maResFilterSet.swap(aFilterCxt.maFilterSet); // Keep this data for GETPIVOTDATA.
 
@@ -435,7 +426,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
         const OUString& aFieldName = rFilter.FieldName;
         for (sal_Int32 nCol = 0; nCol < nColumnCount; ++nCol)
         {
-            if (aFieldName == pData->getDimensionName(nCol))
+            if (aFieldName == mpData->getDimensionName(nCol))
             {
                 ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
                 ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
@@ -455,26 +446,26 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
 
     // Take into account the visibilities of field members.
     ScDPResultVisibilityData aResVisData(this);
-    pRowResRoot->FillVisibilityData(aResVisData);
-    pColResRoot->FillVisibilityData(aResVisData);
+    mpRowResultRoot->FillVisibilityData(aResVisData);
+    mpColumnResultRoot->FillVisibilityData(aResVisData);
     aResVisData.fillFieldFilters(aFilterCriteria);
 
     Sequence< Sequence<Any> > aTabData;
     std::unordered_set<sal_Int32> aCatDims;
     GetCategoryDimensionIndices(aCatDims);
-    pData->GetDrillDownData(std::move(aFilterCriteria), std::move(aCatDims), aTabData);
+    mpData->GetDrillDownData(std::move(aFilterCriteria), std::move(aCatDims), aTabData);
     return aTabData;
 }
 
 OUString ScDPSource::getDataDescription()
 {
-    CreateRes_Impl();       // create pResData
+    CreateRes_Impl();       // create mpResultData
 
     OUString aRet;
-    if ( pResData->GetMeasureCount() == 1 )
+    if (mpResultData->GetMeasureCount() == 1)
     {
         bool bTotalResult = false;
-        aRet = pResData->GetMeasureString(0, true, SUBTOTAL_FUNC_NONE, bTotalResult);
+        aRet = mpResultData->GetMeasureString(0, true, SUBTOTAL_FUNC_NONE, bTotalResult);
     }
 
     //  empty for more than one measure
@@ -484,34 +475,34 @@ OUString ScDPSource::getDataDescription()
 
 void ScDPSource::setIgnoreEmptyRows(bool bSet)
 {
-    bIgnoreEmptyRows = bSet;
-    pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
+    mbIgnoreEmptyRows = bSet;
+    mpData->SetEmptyFlags(mbIgnoreEmptyRows, mbRepeatIfEmpty);
 }
 
 void ScDPSource::setRepeatIfEmpty(bool bSet)
 {
-    bRepeatIfEmpty = bSet;
-    pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
+    mbRepeatIfEmpty = bSet;
+    mpData->SetEmptyFlags(mbIgnoreEmptyRows, mbRepeatIfEmpty);
 }
 
 void ScDPSource::disposeData()
 {
     maResFilterSet.clear();
 
-    if ( pResData )
+    if (mpResultData)
     {
         //  reset all data...
 
-        pColResRoot.reset();
-        pRowResRoot.reset();
-        pResData.reset();
-        pColResults.reset();
-        pRowResults.reset();
-        aColLevelList.clear();
-        aRowLevelList.clear();
+        mpColumnResultRoot.reset();
+        mpRowResultRoot.reset();
+        mpResultData.reset();
+        mpColumnResults.reset();
+        mpRowResults.reset();
+        maColumnLevelList.clear();
+        maRowLevelList.clear();
     }
 
-    pDimensions.clear(); // settings have to be applied (from SaveData) again!
+    mpDimensions.clear(); // settings have to be applied (from SaveData) again!
     SetDupCount( 0 );
 
     maColDims.clear();
@@ -519,9 +510,9 @@ void ScDPSource::disposeData()
     maDataDims.clear();
     maPageDims.clear();
 
-    pData->DisposeData();   // cached entries etc.
-    bPageFiltered = false;
-    bResultOverflow = false;
+    mpData->DisposeData();   // cached entries etc.
+    mbPageFiltered = false;
+    mbResultOverflow = false;
 }
 
 static tools::Long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLevel, tools::Long nLevels )
@@ -671,13 +662,13 @@ void ScDPSource::FilterCacheByPageDimensions()
     // be re-initialized. Currently, CreateRes_Impl always uses a fresh cache
     // because ScDBDocFunc::DataPilotUpdate calls InvalidateData.
 
-    if (bPageFiltered)
+    if (mbPageFiltered)
     {
         SAL_WARN( "sc.core","tried to apply page field filters several times");
 
-        pData->DisposeData();
-        pData->CreateCacheTable();  // re-initialize the cache table
-        bPageFiltered = false;
+        mpData->DisposeData();
+        mpData->CreateCacheTable();  // re-initialize the cache table
+        mbPageFiltered = false;
     }
 
     // filter table by page dimensions.
@@ -722,14 +713,14 @@ void ScDPSource::FilterCacheByPageDimensions()
     {
         std::unordered_set<sal_Int32> aCatDims;
         GetCategoryDimensionIndices(aCatDims);
-        pData->FilterCacheTable(std::move(aCriteria), std::move(aCatDims));
-        bPageFiltered = true;
+        mpData->FilterCacheTable(std::move(aCriteria), std::move(aCatDims));
+        mbPageFiltered = true;
     }
 }
 
 void ScDPSource::CreateRes_Impl()
 {
-    if (pResData)
+    if (mpResultData)
         return;
 
     sheet::DataPilotFieldOrientation nDataOrient = GetDataLayoutOrientation();
@@ -737,7 +728,7 @@ void ScDPSource::CreateRes_Impl()
                                 nDataOrient != sheet::DataPilotFieldOrientation_ROW ) )
     {
         //  if more than one data dimension, data layout orientation must be set
-        SetOrientation( pData->GetColumnCount(), sheet::DataPilotFieldOrientation_ROW );
+        SetOrientation(mpData->GetColumnCount(), sheet::DataPilotFieldOrientation_ROW);
         nDataOrient = sheet::DataPilotFieldOrientation_ROW;
     }
 
@@ -813,10 +804,10 @@ void ScDPSource::CreateRes_Impl()
             aInfo.aDataSrcCols.push_back(nDimIndex);
     }
 
-    pResData.reset( new ScDPResultData(*this) );
-    pResData->SetMeasureData(aDataFunctions, aDataRefValues, aDataRefOrient, aDataNames);
-    pResData->SetDataLayoutOrientation(nDataOrient);
-    pResData->SetLateInit( bLateInit );
+    mpResultData.reset( new ScDPResultData(*this) );
+    mpResultData->SetMeasureData(aDataFunctions, aDataRefValues, aDataRefOrient, aDataNames);
+    mpResultData->SetDataLayoutOrientation(nDataOrient);
+    mpResultData->SetLateInit( bLateInit );
 
     bool bHasAutoShow = false;
 
@@ -838,16 +829,16 @@ void ScDPSource::CreateRes_Impl()
     sheet::DataPilotFieldOrientation nDataLayoutOrient = GetDataLayoutOrientation();
     tools::Long nColDimCount2 = maColDims.size() - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_COLUMN ? 1 : 0);
     tools::Long nRowDimCount2 = maRowDims.size() - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_ROW ? 1 : 0);
-    bool bShowColGrand = bColumnGrand && nColDimCount2 > 0;
-    bool bShowRowGrand = bRowGrand && nRowDimCount2 > 0;
-    pColResRoot.reset( new ScDPResultMember(pResData.get(), bShowColGrand) );
-    pRowResRoot.reset( new ScDPResultMember(pResData.get(), bShowRowGrand) );
+    bool bShowColGrand = mbColumnGrand && nColDimCount2 > 0;
+    bool bShowRowGrand = mbRowGrand && nRowDimCount2 > 0;
+    mpColumnResultRoot.reset( new ScDPResultMember(mpResultData.get(), bShowColGrand) );
+    mpRowResultRoot.reset( new ScDPResultMember(mpResultData.get(), bShowRowGrand) );
 
     FillCalcInfo(false, aInfo, bHasAutoShow);
     tools::Long nColLevelCount = aInfo.aColLevels.size();
 
-    pColResRoot->InitFrom( aInfo.aColDims, aInfo.aColLevels, 0, aInitState );
-    pColResRoot->SetHasElements();
+    mpColumnResultRoot->InitFrom( aInfo.aColDims, aInfo.aColLevels, 0, aInitState );
+    mpColumnResultRoot->SetHasElements();
 
     FillCalcInfo(true, aInfo, bHasAutoShow);
     tools::Long nRowLevelCount = aInfo.aRowLevels.size();
@@ -858,8 +849,8 @@ void ScDPSource::CreateRes_Impl()
         aInfo.aRowLevels[nRowLevelCount-1]->SetEnableLayout( false );
     }
 
-    pRowResRoot->InitFrom( aInfo.aRowDims, aInfo.aRowLevels, 0, aInitState );
-    pRowResRoot->SetHasElements();
+    mpRowResultRoot->InitFrom( aInfo.aRowDims, aInfo.aRowLevels, 0, aInitState );
+    mpRowResultRoot->SetHasElements();
 
     // initialize members object also for all page dimensions (needed for numeric groups)
     for (const auto& rDimIndex : maPageDims)
@@ -886,7 +877,7 @@ void ScDPSource::CreateRes_Impl()
         //  resulting table is too big -> abort before calculating
         //  (this relies on late init, so no members are allocated in InitFrom above)
 
-        bResultOverflow = true;
+        mbResultOverflow = true;
         return;
     }
 
@@ -894,37 +885,37 @@ void ScDPSource::CreateRes_Impl()
 
     aInfo.aPageDims  = maPageDims;
     aInfo.pInitState = &aInitState;
-    aInfo.pColRoot   = pColResRoot.get();
-    aInfo.pRowRoot   = pRowResRoot.get();
-    pData->CalcResults(aInfo, false);
+    aInfo.pColRoot   = mpColumnResultRoot.get();
+    aInfo.pRowRoot   = mpRowResultRoot.get();
+    mpData->CalcResults(aInfo, false);
 
-    pColResRoot->CheckShowEmpty();
-    pRowResRoot->CheckShowEmpty();
+    mpColumnResultRoot->CheckShowEmpty();
+    mpRowResultRoot->CheckShowEmpty();
 
     //  With all data processed, calculate the final results:
 
     //  UpdateDataResults calculates all original results from the collected values,
     //  and stores them as reference values if needed.
-    pRowResRoot->UpdateDataResults( pColResRoot.get(), pResData->GetRowStartMeasure() );
+    mpRowResultRoot->UpdateDataResults(mpColumnResultRoot.get(), mpResultData->GetRowStartMeasure());
 
     if ( bHasAutoShow )     // do the double calculation only if AutoShow is used
     {
         //  Find the desired members and set bAutoHidden flag for the others
-        pRowResRoot->DoAutoShow( pColResRoot.get() );
+        mpRowResultRoot->DoAutoShow(mpColumnResultRoot.get());
 
         //  Reset all results to empty, so they can be built again with data for the
         //  desired members only.
-        pColResRoot->ResetResults();
-        pRowResRoot->ResetResults();
-        pData->CalcResults(aInfo, true);
+        mpColumnResultRoot->ResetResults();
+        mpRowResultRoot->ResetResults();
+        mpData->CalcResults(aInfo, true);
 
         //  Call UpdateDataResults again, with the new (limited) values.
-        pRowResRoot->UpdateDataResults( pColResRoot.get(), pResData->GetRowStartMeasure() );
+        mpRowResultRoot->UpdateDataResults(mpColumnResultRoot.get(), mpResultData->GetRowStartMeasure());
     }
 
     //  SortMembers does the sorting by a result dimension, using the original results,
     //  but not running totals etc.
-    pRowResRoot->SortMembers( pColResRoot.get() );
+    mpRowResultRoot->SortMembers(mpColumnResultRoot.get());
 
     //  UpdateRunningTotals calculates running totals along column/row dimensions,
     //  differences from other members (named or relative), and column/row percentages
@@ -933,9 +924,9 @@ void ScDPSource::CreateRes_Impl()
     //  Column/row percentages and index values must be done after sorting, because the
     //  results may no longer be in the right order (row total for percentage of row is
     //  always 1).
-    ScDPRunningTotalState aRunning( pColResRoot.get(), pRowResRoot.get() );
+    ScDPRunningTotalState aRunning(mpColumnResultRoot.get(), mpRowResultRoot.get());
     ScDPRowTotals aTotals;
-    pRowResRoot->UpdateRunningTotals( pColResRoot.get(), pResData->GetRowStartMeasure(), aRunning, aTotals );
+    mpRowResultRoot->UpdateRunningTotals(mpColumnResultRoot.get(), mpResultData->GetRowStartMeasure(), aRunning, aTotals);
 
 #if DUMP_PIVOT_TABLE
     DumpResults();
@@ -994,44 +985,44 @@ void ScDPSource::FillLevelList( sheet::DataPilotFieldOrientation nOrientation, s
 
 void ScDPSource::FillMemberResults()
 {
-    if ( pColResults || pRowResults )
+    if (mpColumnResults || mpRowResults)
         return;
 
     CreateRes_Impl();
 
-    if ( bResultOverflow )      // set in CreateRes_Impl
+    if (mbResultOverflow) // set in CreateRes_Impl
     {
         //  no results available -> abort (leave empty)
         //  exception is thrown in ScDPSource::getResults
         return;
     }
 
-    FillLevelList( sheet::DataPilotFieldOrientation_COLUMN, aColLevelList );
-    sal_Int32 nColLevelCount = aColLevelList.size();
+    FillLevelList(sheet::DataPilotFieldOrientation_COLUMN, maColumnLevelList);
+    sal_Int32 nColLevelCount = maColumnLevelList.size();
     if (nColLevelCount)
     {
-        tools::Long nColDimSize = pColResRoot->GetSize(pResData->GetColStartMeasure());
-        pColResults.reset(new uno::Sequence<sheet::MemberResult>[nColLevelCount]);
+        tools::Long nColDimSize = mpColumnResultRoot->GetSize(mpResultData->GetColStartMeasure());
+        mpColumnResults.reset(new uno::Sequence<sheet::MemberResult>[nColLevelCount]);
         for (tools::Long i=0; i<nColLevelCount; i++)
-            pColResults[i].realloc(nColDimSize);
+            mpColumnResults[i].realloc(nColDimSize);
 
         tools::Long nPos = 0;
-        pColResRoot->FillMemberResults( pColResults.get(), nPos, pResData->GetColStartMeasure(),
-                                        true, nullptr, nullptr );
+        mpColumnResultRoot->FillMemberResults(mpColumnResults.get(), nPos, mpResultData->GetColStartMeasure(),
+                                              true, nullptr, nullptr);
     }
 
-    FillLevelList( sheet::DataPilotFieldOrientation_ROW, aRowLevelList );
-    tools::Long nRowLevelCount = aRowLevelList.size();
+    FillLevelList(sheet::DataPilotFieldOrientation_ROW, maRowLevelList);
+    tools::Long nRowLevelCount = maRowLevelList.size();
     if (nRowLevelCount)
     {
-        tools::Long nRowDimSize = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
-        pRowResults.reset( new uno::Sequence<sheet::MemberResult>[nRowLevelCount] );
+        tools::Long nRowDimSize = mpRowResultRoot->GetSize(mpResultData->GetRowStartMeasure());
+        mpRowResults.reset( new uno::Sequence<sheet::MemberResult>[nRowLevelCount] );
         for (tools::Long i=0; i<nRowLevelCount; i++)
-            pRowResults[i].realloc(nRowDimSize);
+            mpRowResults[i].realloc(nRowDimSize);
 
         tools::Long nPos = 0;
-        pRowResRoot->FillMemberResults( pRowResults.get(), nPos, pResData->GetRowStartMeasure(),
-                                        true, nullptr, nullptr );
+        mpRowResultRoot->FillMemberResults(mpRowResults.get(), nPos, mpResultData->GetRowStartMeasure(),
+                                           true, nullptr, nullptr);
     }
 }
 
@@ -1040,19 +1031,19 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( const Sc
     FillMemberResults();
 
     sal_Int32 i = 0;
-    sal_Int32 nColCount = aColLevelList.size();
+    sal_Int32 nColCount = maColumnLevelList.size();
     for (i=0; i<nColCount; i++)
     {
-        ScDPLevel* pColLevel = aColLevelList[i];
+        ScDPLevel* pColLevel = maColumnLevelList[i];
         if ( pColLevel == pLevel )
-            return &pColResults[i];
+            return &mpColumnResults[i];
     }
-    sal_Int32 nRowCount = aRowLevelList.size();
+    sal_Int32 nRowCount = maRowLevelList.size();
     for (i=0; i<nRowCount; i++)
     {
-        ScDPLevel* pRowLevel = aRowLevelList[i];
+        ScDPLevel* pRowLevel = maRowLevelList[i];
         if ( pRowLevel == pLevel )
-            return &pRowResults[i];
+            return &mpRowResults[i];
     }
     return nullptr;
 }
@@ -1083,9 +1074,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
 void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
     if (aPropertyName == SC_UNO_DP_COLGRAND)
-        bColumnGrand = lcl_GetBoolFromAny(aValue);
+        mbColumnGrand = lcl_GetBoolFromAny(aValue);
     else if (aPropertyName == SC_UNO_DP_ROWGRAND)
-        bRowGrand = lcl_GetBoolFromAny(aValue);
+        mbRowGrand = lcl_GetBoolFromAny(aValue);
     else if (aPropertyName == SC_UNO_DP_IGNOREEMPTY)
         setIgnoreEmptyRows( lcl_GetBoolFromAny( aValue ) );
     else if (aPropertyName == SC_UNO_DP_REPEATEMPTY)
@@ -1107,13 +1098,13 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_COLGRAND )
-        aRet <<= bColumnGrand;
+        aRet <<= mbColumnGrand;
     else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
-        aRet <<= bRowGrand;
+        aRet <<= mbRowGrand;
     else if ( aPropertyName == SC_UNO_DP_IGNOREEMPTY )
-        aRet <<= bIgnoreEmptyRows;
+        aRet <<= mbIgnoreEmptyRows;
     else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
-        aRet <<= bRepeatIfEmpty;
+        aRet <<= mbRepeatIfEmpty;
     else if ( aPropertyName == SC_UNO_DP_DATADESC )             // read-only
         aRet <<= getDataDescription();
     else if ( aPropertyName == SC_UNO_DP_ROWFIELDCOUNT )        // read-only
@@ -1139,9 +1130,9 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
 void ScDPSource::DumpResults() const
 {
     std::cout << "+++++ column root" << std::endl;
-    pColResRoot->Dump(1);
+    mpColumnResultRoot->Dump(1);
     std::cout << "+++++ row root" << std::endl;
-    pRowResRoot->Dump(1);
+    mpRowResultRoot->Dump(1);
 }
 #endif
 

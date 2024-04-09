@@ -80,33 +80,32 @@ class ScDPSource final : public cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
 private:
-    ScDPTableData*          pData;              // data source (ScDPObject manages its life time)
-    rtl::Reference<ScDPDimensions> pDimensions; // api objects
-                                                // settings:
+    ScDPTableData* mpData; // data source (ScDPObject manages its life time)
+    rtl::Reference<ScDPDimensions> mpDimensions; // api objects
 
+    // settings:
     std::vector<sal_Int32> maColDims;
     std::vector<sal_Int32> maRowDims;
     std::vector<sal_Int32> maDataDims;
     std::vector<sal_Int32> maPageDims;
     ScDPResultTree maResFilterSet;
 
-    bool                    bColumnGrand;
-    bool                    bRowGrand;
-    bool                    bIgnoreEmptyRows;
-    bool                    bRepeatIfEmpty;
+    bool mbColumnGrand = true;
+    bool mbRowGrand = true;
+    bool mbIgnoreEmptyRows = false;
+    bool mbRepeatIfEmpty = false;
+    sal_Int32 mnDupCount = 0;
 
-    sal_Int32               nDupCount;
-
-                                                // results:
-    std::unique_ptr<ScDPResultData>   pResData;           // keep the rest in this!
-    std::unique_ptr<ScDPResultMember> pColResRoot;
-    std::unique_ptr<ScDPResultMember> pRowResRoot;
-    std::unique_ptr<css::uno::Sequence<css::sheet::MemberResult>[]> pColResults;
-    std::unique_ptr<css::uno::Sequence<css::sheet::MemberResult>[]> pRowResults;
-    std::vector<ScDPLevel*> aColLevelList;
-    std::vector<ScDPLevel*> aRowLevelList;
-    bool                    bResultOverflow;
-    bool                    bPageFiltered;      // set if page field filters have been applied to cache table
+    // results:
+    std::unique_ptr<ScDPResultData> mpResultData; // keep the rest in this!
+    std::unique_ptr<ScDPResultMember> mpColumnResultRoot;
+    std::unique_ptr<ScDPResultMember> mpRowResultRoot;
+    std::unique_ptr<css::uno::Sequence<css::sheet::MemberResult>[]> mpColumnResults;
+    std::unique_ptr<css::uno::Sequence<css::sheet::MemberResult>[]> mpRowResults;
+    std::vector<ScDPLevel*> maColumnLevelList;
+    std::vector<ScDPLevel*> maRowLevelList;
+    bool mbResultOverflow = false;
+    bool mbPageFiltered = false; // set if page field filters have been applied to cache table
 
     std::optional<OUString> mpGrandTotalName;
 
@@ -140,8 +139,8 @@ public:
                                 ScDPSource( ScDPTableData* pD );
     virtual                     ~ScDPSource() override;
 
-    ScDPTableData*          GetData()       { return pData; }
-    const ScDPTableData*    GetData() const { return pData; }
+    ScDPTableData*          GetData()       { return mpData; }
+    const ScDPTableData*    GetData() const { return mpData; }
 
     const std::optional<OUString> &
                             GetGrandTotalName() const;
@@ -165,7 +164,7 @@ public:
     bool                        SubTotalAllowed(sal_Int32 nColumn);      //! move to ScDPResultData
 
     ScDPDimension* AddDuplicated(std::u16string_view rNewName);
-    sal_Int32                    GetDupCount() const { return nDupCount; }
+    sal_Int32 GetDupCount() const { return mnDupCount; }
 
     sal_Int32                    GetSourceDim(sal_Int32 nDim);
 
