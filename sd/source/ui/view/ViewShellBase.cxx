@@ -39,6 +39,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
 #include <FormShellManager.hxx>
 #include <ToolBarManager.hxx>
 #include <Window.hxx>
@@ -1095,12 +1096,31 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
             }
         }
     }
-    else
+    // IASS: also need to handle OutlineViewShell
+    else if (nullptr != dynamic_cast<OutlineViewShell*>(GetMainViewShell().get()))
     {
-        SAL_WARN("sd", "dynamic_cast to DrawViewShell failed");
+        switch (nColorType)
+        {
+            case svtools::ColorConfigEntry::DOCCOLOR:
+            {
+                // IASS: OutlineViewShell does not have any SdViewOptions and no access
+                // to the (currently not shown) DrawViewShell. If that should be
+                // needed it may be added. For now, assume that DOCCOLOR is COL_WHITE
+                return COL_WHITE;
+            }
+            // Should never be called for an unimplemented color type
+            default:
+            {
+                O3TL_UNREACHABLE;
+            }
+        }
     }
 
-    return {};
+    SAL_WARN("sd", "Unknown ViewShell used: Consider adding a case for this to get correct colors, COL_WHITE is used as fallback.");
+    // NOTE: This returned COL_BLACK. For unknown ViewShells I would assume that
+    //       returning COL_WHITE would be safer - a better default for an office
+    //       application dealing with Paper as target
+    return COL_WHITE;
 }
 
 //===== ViewShellBase::Implementation =========================================
