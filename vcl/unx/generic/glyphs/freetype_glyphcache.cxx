@@ -564,6 +564,44 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
     }
 }
 
+bool FreetypeFont::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, bool bVertical) const
+{
+    FT_Activate_Size( maSizeFT );
+
+    FT_Error rc = FT_Load_Glyph(maFaceFT, nID, mnLoadFlags);
+
+    if (rc != FT_Err_Ok)
+        return false;
+
+    if (mrFontInstance.NeedsArtificialBold())
+        FT_GlyphSlot_Embolden(maFaceFT->glyph);
+
+    FT_Glyph pGlyphFT;
+    rc = FT_Get_Glyph(maFaceFT->glyph, &pGlyphFT);
+    if (rc != FT_Err_Ok)
+        return false;
+
+    ApplyGlyphTransform(bVertical, pGlyphFT);
+
+    FT_BBox aBbox;
+    FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
+    FT_Done_Glyph( pGlyphFT );
+
+    tools::Rectangle aRect(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin);
+    if (mnCos != 0x10000 && mnSin != 0)
+    {
+        const double nCos = mnCos / 65536.0;
+        const double nSin = mnSin / 65536.0;
+        rRect.SetLeft(  nCos*aRect.Left() + nSin*aRect.Top() );
+        rRect.SetTop( -nSin*aRect.Left() - nCos*aRect.Top() );
+        rRect.SetRight(  nCos*aRect.Right() + nSin*aRect.Bottom() );
+        rRect.SetBottom( -nSin*aRect.Right() - nCos*aRect.Bottom() );
+    }
+    else
+        rRect = aRect;
+    return true;
+}
+
 bool FreetypeFont::GetAntialiasAdvice() const
 {
     // TODO: also use GASP info

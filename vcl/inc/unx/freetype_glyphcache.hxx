@@ -107,6 +107,8 @@ class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance
 
     std::unique_ptr<FreetypeFont> mxFreetypeFont;
 
+    virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
+
     explicit FreetypeFontInstance(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP);
 
 public:

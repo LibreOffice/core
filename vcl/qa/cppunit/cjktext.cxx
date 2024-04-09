@@ -178,7 +178,7 @@ void VclCjkTextTest::testVerticalText()
     tools::Long height36Rotated = getCharacterRightSideHeight(device, Point(99, 35));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36, height36Rotated, 1);
     tools::Long width36Rotated = getCharacterTopWidth(device, Point(25, 0));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(width36, width36Rotated, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(width36, width36Rotated, 1);
 
     font = baseFont;
     font.SetFontSize(Size(0, 72));
