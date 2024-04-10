@@ -221,11 +221,10 @@ static double trimInsignificant(double n)
     return std::abs(n) >= 0x1p53 ? n : std::round(n * 1e5) / 1e5;
 }
 
-bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
+bool SalLayout::GetBoundRect(basegfx::B2DRectangle& rRect) const
 {
     bool bRet = false;
-
-    basegfx::B2DRectangle aUnion;
+    rRect.reset();
     basegfx::B2DRectangle aRectangle;
 
     DevicePoint aPos;
@@ -241,26 +240,26 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
             {
                 aRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(aPos));
                 // merge rectangle
-                aUnion.expand(aRectangle);
+                rRect.expand(aRectangle);
             }
             bRet = true;
         }
     }
-    if (aUnion.isEmpty())
-    {
-        rRect = {};
-    }
-    else
-    {
-        double l = rtl::math::approxFloor(trimInsignificant(aUnion.getMinX())),
-               t = rtl::math::approxFloor(trimInsignificant(aUnion.getMinY())),
-               r = rtl::math::approxCeil(trimInsignificant(aUnion.getMaxX())),
-               b = rtl::math::approxCeil(trimInsignificant(aUnion.getMaxY()));
-        assert(std::isfinite(l) && std::isfinite(t) && std::isfinite(r) && std::isfinite(b));
-        rRect = tools::Rectangle(l, t, r, b);
-    }
 
     return bRet;
+}
+
+tools::Rectangle SalLayout::BoundRect2Rectangle(basegfx::B2DRectangle& rRect)
+{
+    if (rRect.isEmpty())
+        return {};
+
+    double l = rtl::math::approxFloor(trimInsignificant(rRect.getMinX())),
+           t = rtl::math::approxFloor(trimInsignificant(rRect.getMinY())),
+           r = rtl::math::approxCeil(trimInsignificant(rRect.getMaxX())),
+           b = rtl::math::approxCeil(trimInsignificant(rRect.getMaxY()));
+    assert(std::isfinite(l) && std::isfinite(t) && std::isfinite(r) && std::isfinite(b));
+    return tools::Rectangle(l, t, r, b);
 }
 
 SalLayoutGlyphs SalLayout::GetGlyphs() const

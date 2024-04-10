@@ -238,8 +238,15 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     if (!pFontFace)
         return false;
 
-    tools::Rectangle bounds;
-    bool succeeded = rLayout.GetBoundRect(bounds);
+    auto [succeeded, bounds] = [&rLayout]()
+    {
+        basegfx::B2DRectangle r;
+        bool result = rLayout.GetBoundRect(r);
+        if (result)
+            r.grow(1); // plus 1 pixel to the tight range
+        return std::make_pair(result, SalLayout::BoundRect2Rectangle(r));
+    }();
+
     if (succeeded)
     {
         hr = BindDC(hDC, bounds);   // Update the bounding rect.

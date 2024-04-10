@@ -41,6 +41,8 @@ protected:
     void checkRectPrimitive(Primitive2DSequence const & rPrimitive);
 
     Primitive2DSequence parseSvg(std::u16string_view aSource);
+    void assertXPathDouble(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
+                           const OString& rAttribute, double nExpectedValue, double delta);
 };
 
 Primitive2DSequence Test::parseSvg(std::u16string_view aSource)
@@ -80,6 +82,13 @@ void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "3"); // rect stroke width
 
 
+}
+
+void Test::assertXPathDouble(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
+                             const OString& rAttribute, double nExpectedValue, double delta)
+{
+    auto sVal = getXPath(pXmlDoc, rXPath, rAttribute);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nExpectedValue, sVal.toDouble(), delta);
 }
 
 bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)

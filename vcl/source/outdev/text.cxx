@@ -23,6 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/lineend.hxx>
 #include <tools/debug.hxx>
@@ -233,7 +234,11 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     tools::Rectangle aBoundRect;
     rSalLayout.DrawBase() = DevicePoint( 0, 0 );
     rSalLayout.DrawOffset() = Point( 0, 0 );
-    if (!rSalLayout.GetBoundRect(aBoundRect))
+    if (basegfx::B2DRectangle r; rSalLayout.GetBoundRect(r))
+    {
+        aBoundRect = SalLayout::BoundRect2Rectangle(r);
+    }
+    else
     {
         // guess vertical text extents if GetBoundRect failed
         tools::Long nRight = rSalLayout.GetTextWidth();
@@ -2327,8 +2332,21 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          o3tl::span<const sal_Bool> pKashidaAry,
                                          const SalLayoutGlyphs* pGlyphs ) const
 {
+    basegfx::B2DRectangle aRect;
+    bool bRet = GetTextBoundRect(aRect, rStr, nBase, nIndex, nLen, nLayoutWidth, pDXAry,
+                                 pKashidaAry, pGlyphs);
+    rRect = SalLayout::BoundRect2Rectangle(aRect);
+    return bRet;
+}
+
+bool OutputDevice::GetTextBoundRect(basegfx::B2DRectangle& rRect, const OUString& rStr,
+                                    sal_Int32 nBase, sal_Int32 nIndex, sal_Int32 nLen,
+                                    sal_uLong nLayoutWidth, KernArraySpan pDXAry,
+                                    o3tl::span<const sal_Bool> pKashidaAry,
+                                    const SalLayoutGlyphs* pGlyphs) const
+{
     bool bRet = false;
-    rRect.SetEmpty();
+    rRect.reset();
 
     std::unique_ptr<SalLayout> pSalLayout;
     const Point aPoint;
@@ -2352,18 +2370,22 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                             nullptr, pGlyphs);
     if( pSalLayout )
     {
-        tools::Rectangle aPixelRect;
+        basegfx::B2DRectangle aPixelRect;
         bRet = pSalLayout->GetBoundRect(aPixelRect);
 
         if( bRet )
         {
-            Point aRotatedOfs( mnTextOffX, mnTextOffY );
-            DevicePoint aPos = pSalLayout->GetDrawPosition(DevicePoint(nXOffset, 0));
-            aRotatedOfs -= Point(aPos.getX(), aPos.getY());
-            aPixelRect += aRotatedOfs;
+            basegfx::B2DPoint aPos = pSalLayout->GetDrawPosition(basegfx::B2DPoint(nXOffset, 0));
+            auto m = basegfx::utils::createTranslateB2DHomMatrix(mnTextOffX - aPos.getX(),
+                                                                 mnTextOffY - aPos.getY());
+            aPixelRect.transform(m);
             rRect = PixelToLogic( aPixelRect );
-            if( mbMap )
-                rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
+            if (mbMap)
+            {
+                m = basegfx::utils::createTranslateB2DHomMatrix(maMapRes.mnMapOfsX,
+                                                                maMapRes.mnMapOfsY);
+                rRect.transform(m);
+            }
         }
     }
 
