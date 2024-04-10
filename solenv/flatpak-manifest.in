@@ -4,7 +4,7 @@
     "runtime-version": "23.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
-        "org.freedesktop.Sdk.Extension.openjdk17"
+        "org.freedesktop.Sdk.Extension.openjdk21"
     ],
     "command": "libreoffice",
     "modules": [
@@ -12,7 +12,7 @@
             "name": "openjdk",
             "buildsystem": "simple",
             "build-commands": [
-                "/usr/lib/sdk/openjdk17/install.sh"
+                "/usr/lib/sdk/openjdk21/install.sh"
             ]
         },
         {
@@ -34,6 +34,7 @@
                 "-Dhttp=false",
                 "-Dmtp=false",
                 "-Dnfs=false",
+                "-Donedrive=false",
                 "-Dsftp=false",
                 "-Dsmb=false",
                 "-Dudisks2=false",
@@ -44,13 +45,14 @@
                 "-Dgudev=false",
                 "-Dkeyring=false",
                 "-Dlogind=false",
-                "-Dlibusb=false"
+                "-Dlibusb=false",
+                "-Dwsdd=false"
             ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.gnome.org/sources/gvfs/1.52/gvfs-1.52.2.tar.xz",
-                    "sha256": "a643aceaa053caac0d8eff9a015f636e4bd1bb09cfe27864e347db67460e7b91",
+                    "url": "https://download.gnome.org/sources/gvfs/1.54/gvfs-1.54.0.tar.xz",
+                    "sha256": "f53d81df86c2e86cdd25182c2d8a669a22371e83623ded1b9d5416dcfc6de366",
                     "x-checker-data": {
                         "type": "gnome",
                         "name": "gvfs",
@@ -97,8 +99,8 @@
                 },
                 {
                     "type": "archive",
-                    "url": "https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.13-bin.tar.xz",
-                    "sha512": "26e56bf670c22c8093fe51ec952fa51e813b1ab4200cb09fcd68fa291c5f6f626d7c6a42b4d3358b38111466e249d4bc6089b8c4093383759d6f8a08d39bc32d",
+                    "url": "https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.14-bin.tar.bz2",
+                    "sha512": "05e9f786044b9ba0dcc5e2b40ed2bd4ecfb25896a453ba78e2d4df18896c6be7d1564fd615f483c90c0d26dd1e0fb507c778f0c10712818b1fc8c9acbc0a26c6",
                     "dest": "ant"
                 },
                 {
