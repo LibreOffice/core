@@ -376,6 +376,12 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                                 ::basegfx::B2DRectangle const & rDestRect,
                                 ::basegfx::B2DHomMatrix const & rLocalTransform )
 {
+    const Size aDestBmpSize( ::basegfx::fround( rDestRect.getWidth() ),
+                             ::basegfx::fround( rDestRect.getHeight() ) );
+
+    if( aDestBmpSize.IsEmpty() )
+        return BitmapEx();
+
     const Size aBmpSize( rBitmap.GetSizePixel() );
     Bitmap aSrcBitmap( rBitmap.GetBitmap() );
     Bitmap aSrcAlpha;
@@ -415,12 +421,6 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
             *pCur++ = val++;
     }
     // else: mapping table is not used
-
-    const Size aDestBmpSize( ::basegfx::fround( rDestRect.getWidth() ),
-                             ::basegfx::fround( rDestRect.getHeight() ) );
-
-    if( aDestBmpSize.IsEmpty() )
-        return BitmapEx();
 
     Bitmap aDstBitmap(aDestBmpSize, aSrcBitmap.getPixelFormat(), &pReadAccess->GetPalette());
     Bitmap aDstAlpha( AlphaMask( aDestBmpSize ).GetBitmap() );
