@@ -16,6 +16,7 @@
 #include <desktop/crashreport.hxx>
 #include <sfx2/safemode.hxx>
 #include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
@@ -33,8 +34,14 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
 {
     maSuccessMsg = mxEditPostUpload->get_text();
 
+    auto const offerSafeMode = officecfg::Office::Common::Misc::OfferSafeMode::get();
+    mxCBSafeMode->set_visible(offerSafeMode);
+
     auto nWidth = mxEditPreUpload->get_preferred_size().Width();
-    nWidth = std::max(nWidth, mxCBSafeMode->get_size_request().Width());
+    if (offerSafeMode)
+    {
+        nWidth = std::max(nWidth, mxCBSafeMode->get_size_request().Width());
+    }
     mxEditPreUpload->set_size_request(nWidth, -1);
     mxCBSafeMode->set_size_request(nWidth, -1);
 

@@ -72,8 +72,21 @@ static bool file_exists(const OUString& fileName)
 
 void TipOfTheDayDialog::UpdateTip()
 {
-    if ((nCurrentTip + 1 > nNumberOfTips) || (nCurrentTip < 0))
-        nCurrentTip = 0;
+    for (;;)
+    {
+        if ((nCurrentTip + 1 > nNumberOfTips) || (nCurrentTip < 0))
+            nCurrentTip = 0;
+        if (std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip])
+                == "svx/ui/safemodedialog/SafeModeDialog"
+            && !officecfg::Office::Common::Misc::OfferSafeMode::get())
+        {
+            ++nCurrentTip;
+        }
+        else
+        {
+            break;
+        }
+    }
     m_xDialog->set_title(CuiResId(STR_TITLE) + ": " + OUString::number(nCurrentTip + 1) + "/"
                          + OUString::number(nNumberOfTips));
 

@@ -5813,6 +5813,12 @@
           <desc>Number of saved searches in the Find and Replace dialog.</desc>
         </info>
       </prop>
+      <prop oor:name="OfferSafeMode" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Offer Safe Mode to the user.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Forms">
       <info>
