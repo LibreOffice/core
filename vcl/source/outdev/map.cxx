@@ -1230,6 +1230,14 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     return aTransformedPoly;
 }
 
+basegfx::B2DRectangle OutputDevice::PixelToLogic(const basegfx::B2DRectangle& rDeviceRect) const
+{
+    basegfx::B2DRectangle aTransformedRect = rDeviceRect;
+    const basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
+    aTransformedRect.transform(rTransformationMatrix);
+    return aTransformedRect;
+}
+
 vcl::Region OutputDevice::PixelToLogic( const vcl::Region& rDeviceRegion ) const
 {
 

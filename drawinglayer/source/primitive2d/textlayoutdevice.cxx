@@ -260,15 +260,9 @@ basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const OUString& rText, sa
 
     if (nTextLength)
     {
-        ::tools::Rectangle aRect;
-
+        basegfx::B2DRange aRect;
         mrDevice.GetTextBoundRect(aRect, rText, nIndex, nIndex, nLength);
-
-        // #i104432#, #i102556# take empty results into account
-        if (!aRect.IsEmpty())
-        {
-            return vcl::unotools::b2DRectangleFromRectangle(aRect);
-        }
+        return aRect;
     }
 
     return basegfx::B2DRange();
