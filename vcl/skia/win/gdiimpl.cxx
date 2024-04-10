@@ -126,8 +126,7 @@ sk_sp<SkTypeface>
 WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const WinFontInstance* pWinFont) try
 {
     using sal::systools::ThrowIfFailed;
-    IDWriteFactory* dwriteFactory;
-    WinSalGraphics::getDWriteFactory(&dwriteFactory);
+    IDWriteFactory* dwriteFactory = WinSalGraphics::getDWriteFactory();
     if (!dwriteDone)
     {
         dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory);
