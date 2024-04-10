@@ -66,6 +66,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <thread>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -3280,7 +3281,9 @@ void DesktopLOKTest::testControlState()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
     lcl_initializeSidebar();
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
     Scheduler::ProcessEventsToIdle();
 
     boost::property_tree::ptree aState;
@@ -3294,7 +3297,9 @@ void DesktopLOKTest::testMetricField()
 {
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
     SfxChildWindow* pSideBar = lcl_initializeSidebar();
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
     Scheduler::ProcessEventsToIdle();
 
     vcl::Window* pWin = pSideBar->GetWindow();

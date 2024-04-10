@@ -226,6 +226,9 @@ private:
     */
     VclPtr<vcl::Window> mpCloseIndicator;
 
+    Timer maChangeEventTimer;
+
+    DECL_DLLPRIVATE_LINK(TimeoutHdl, Timer*, void);
     DECL_DLLPRIVATE_LINK(WindowEventHandler, VclWindowEvent&, void);
     /** Make maRequestedContext the current context.
     */

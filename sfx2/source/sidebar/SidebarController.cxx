@@ -132,11 +132,14 @@ SidebarController::SidebarController (
       maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(nullptr),
-      mnWidthOnSplitterButtonDown(0)
+      mnWidthOnSplitterButtonDown(0),
+      maChangeEventTimer("sfx2::SidebarController maChangeEventTimer")
 {
     mnMaximumSidebarWidth = officecfg::Office::UI::Sidebar::General::MaximumWidth::get() * mpTabBar->GetDPIScaleFactor();
     // Decks and panel collections for this sidebar
     mpResourceManager = std::make_unique<ResourceManager>();
+    maChangeEventTimer.SetTimeout(200);
+    maChangeEventTimer.SetInvokeHandler(LINK(this, SidebarController, TimeoutHdl));
 }
 
 rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow* pParentWindow,
@@ -335,7 +338,7 @@ void SidebarController::disposing(std::unique_lock<std::mutex>&)
 
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
 {
-    SolarMutexGuard aSolarMutexGuard;
+    //SolarMutexGuard aSolarMutexGuard;
 
     // Update to the requested new context asynchronously to avoid
     // subtle errors caused by SFX2 which in rare cases can not
@@ -347,14 +350,21 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
 
     if (maRequestedContext != maCurrentContext)
     {
+        //TODO: keep rEvent.Source to use it in TimeoutHdl!
+        maChangeEventTimer.Start();
         mxCurrentController.set(rEvent.Source, css::uno::UNO_QUERY);
-        maContextChangeUpdate.RequestCall(); // async call, not a prob
+    }
+}
+
+IMPL_LINK_NOARG(SidebarController, TimeoutHdl, Timer*, void)
+{
+    SolarMutexGuard aSolarMutexGuard;
+    maContextChangeUpdate.RequestCall(); // async call, not a prob
                                              // calling with held
                                              // solarmutex
-        // TODO: this call is redundant but mandatory for unit test to update context on document loading
-        if (!comphelper::LibreOfficeKit::isActive())
-            UpdateConfigurations();
-    }
+    // TODO: this call is redundant but mandatory for unit test to update context on document loading
+    if (!comphelper::LibreOfficeKit::isActive())
+        UpdateConfigurations();
 }
 
 void SAL_CALL SidebarController::disposing (const css::lang::EventObject& )

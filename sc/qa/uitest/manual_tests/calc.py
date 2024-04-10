@@ -12,25 +12,26 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text, select_pos
 from uitest.uihelper.calc import enter_text_to_cell
+import time
+
+DEFAULT_SLEEP = 0.1
 
 class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/189/
     def test_define_database_range(self):
-
         with self.ui_test.create_doc_in_start_center("calc"):
 
             # Select range A1:D10
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D10"}))
+            time.sleep(DEFAULT_SLEEP)
 
             # Execute "Define DB Range dialog"
             with self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName") as xDefineNameDlg:
 
-
                 xEntryBox = xDefineNameDlg.getChild("entry")
                 type_text(xEntryBox, "my_database")
-
 
             # Deselect range
             xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -168,6 +169,7 @@ class ManualCalcTests(UITestCase):
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A10"}))
+            time.sleep(DEFAULT_SLEEP)
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog") as xRandomNumberDlg:
                 xDistributionLstBox = xRandomNumberDlg.getChild("distribution-combo")
