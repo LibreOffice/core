@@ -62,8 +62,10 @@ D2DTextAntiAliasMode lclGetSystemTextAntiAliasMode()
     return eMode;
 }
 
-IDWriteRenderingParams* lclSetRenderingMode(IDWriteFactory* pDWriteFactory, DWRITE_RENDERING_MODE eRenderingMode)
+IDWriteRenderingParams* lclSetRenderingMode(DWRITE_RENDERING_MODE eRenderingMode)
 {
+    IDWriteFactory* pDWriteFactory = WinSalGraphics::getDWriteFactory();
+
     IDWriteRenderingParams* pDefaultParameters = nullptr;
     pDWriteFactory->CreateRenderingParams(&pDefaultParameters);
 
@@ -118,20 +120,10 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer(bool bRenderingModeNatural)
     mbRenderingModeNatural(bRenderingModeNatural),
     meTextAntiAliasMode(D2DTextAntiAliasMode::Default)
 {
-    WinSalGraphics::getDWriteFactory(&mpDWriteFactory);
-    HRESULT hr = S_OK;
-    hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), nullptr, reinterpret_cast<void **>(&mpD2DFactory));
+    HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), nullptr, IID_PPV_ARGS_Helper(&mpD2DFactory));
     if (SUCCEEDED(hr))
         hr = CreateRenderTarget(bRenderingModeNatural);
     meTextAntiAliasMode = lclGetSystemTextAntiAliasMode();
-}
-
-D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
-{
-    if (mpRT)
-        mpRT->Release();
-    if (mpD2DFactory)
-        mpD2DFactory->Release();
 }
 
 void D2DWriteTextOutRenderer::applyTextAntiAliasMode(bool bRenderingModeNatural)
@@ -163,17 +155,12 @@ void D2DWriteTextOutRenderer::applyTextAntiAliasMode(bool bRenderingModeNatural)
     if (bRenderingModeNatural)
         eRenderingMode = DWRITE_RENDERING_MODE_CLEARTYPE_NATURAL;
 
-    mpRT->SetTextRenderingParams(lclSetRenderingMode(mpDWriteFactory, eRenderingMode));
+    mpRT->SetTextRenderingParams(lclSetRenderingMode(eRenderingMode));
     mpRT->SetTextAntialiasMode(eTextAAMode);
 }
 
 HRESULT D2DWriteTextOutRenderer::CreateRenderTarget(bool bRenderingModeNatural)
 {
-    if (mpRT)
-    {
-        mpRT->Release();
-        mpRT = nullptr;
-    }
     HRESULT hr = CHECKHR(mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT));
     if (SUCCEEDED(hr))
         applyTextAntiAliasMode(bRenderingModeNatural);
@@ -212,8 +199,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
     if (!Ready())
         return false;
 
-    HRESULT hr = S_OK;
-    hr = BindDC(hDC);
+    HRESULT hr = BindDC(hDC);
 
     if (hr == D2DERR_RECREATE_TARGET)
     {
@@ -242,7 +228,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         succeeded = SUCCEEDED(hr);
     }
 
-    ID2D1SolidColorBrush* pBrush = nullptr;
+    sal::systools::COMReference<ID2D1SolidColorBrush> pBrush;
     if (succeeded)
     {
         COLORREF bgrTextColor = GetTextColor(hDC);
@@ -281,9 +267,6 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
 
         hr = CHECKHR(mpRT->EndDraw());
     }
-
-    if (pBrush)
-        pBrush->Release();
 
     if (hr == D2DERR_RECREATE_TARGET)
     {

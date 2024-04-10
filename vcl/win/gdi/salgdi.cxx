@@ -758,35 +758,43 @@ void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
         rDPIX = rDPIY = 600;
 }
 
-void WinSalGraphics::getDWriteFactory(IDWriteFactory** pFactory, IDWriteGdiInterop** pInterop)
+// static
+IDWriteFactory* WinSalGraphics::getDWriteFactory()
 {
-    if (!bDWriteDone)
-    {
-        HRESULT hr = S_OK;
-        hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
-                                 reinterpret_cast<IUnknown**>(&mxDWriteFactory));
-        if (FAILED(hr))
+    static sal::systools::COMReference<IDWriteFactory> pDWriteFactory(
+        []()
         {
-            SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
-                                               << WindowsErrorStringFromHRESULT(hr));
-            abort();
-        }
+            sal::systools::COMReference<IDWriteFactory> pResult;
+            HRESULT hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                                             reinterpret_cast<IUnknown**>(&pResult));
+            if (FAILED(hr))
+            {
+                SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
+                                                   << WindowsErrorStringFromHRESULT(hr));
+                abort();
+            }
+            return pResult;
+        }());
+    return pDWriteFactory.get();
+}
 
-        hr = mxDWriteFactory->GetGdiInterop(&mxDWriteGdiInterop);
-        if (FAILED(hr))
+// static
+IDWriteGdiInterop* WinSalGraphics::getDWriteGdiInterop()
+{
+    static sal::systools::COMReference<IDWriteGdiInterop> pDWriteGdiInterop(
+        []()
         {
-            SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
-                                               << WindowsErrorStringFromHRESULT(hr));
-            abort();
-        }
-
-        bDWriteDone = true;
-    }
-
-    if (pFactory)
-        *pFactory = mxDWriteFactory.get();
-    if (pInterop)
-        *pInterop = mxDWriteGdiInterop.get();
+            sal::systools::COMReference<IDWriteGdiInterop> pResult;
+            HRESULT hr = getDWriteFactory()->GetGdiInterop(&pResult);
+            if (FAILED(hr))
+            {
+                SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
+                                                   << WindowsErrorStringFromHRESULT(hr));
+                abort();
+            }
+            return pResult;
+        }());
+    return pDWriteGdiInterop.get();
 }
 
 sal_uInt16 WinSalGraphics::GetBitCount() const

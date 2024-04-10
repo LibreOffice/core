@@ -1343,8 +1343,7 @@ IDWriteFontFace* WinFontInstance::GetDWFontFace() const
                 SelectObject(hDC, hOrigFont);
         });
 
-        IDWriteGdiInterop* pDWriteGdiInterop;
-        WinSalGraphics::getDWriteFactory(nullptr, &pDWriteGdiInterop);
+        IDWriteGdiInterop* pDWriteGdiInterop = WinSalGraphics::getDWriteGdiInterop();
 
         HRESULT hr = pDWriteGdiInterop->CreateFontFaceFromHdc(hDC, &mxDWFontFace);
         if (FAILED(hr))

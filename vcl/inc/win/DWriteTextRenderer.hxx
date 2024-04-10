@@ -23,6 +23,8 @@
 #include <d2d1.h>
 #include <dwrite.h>
 
+#include <systools/win32/comtools.hxx>
+
 #include <win/winlayout.hxx>
 
 enum class D2DTextAntiAliasMode
@@ -37,7 +39,6 @@ class D2DWriteTextOutRenderer : public TextOutRenderer
 {
 public:
     explicit D2DWriteTextOutRenderer(bool bRenderingModeNatural);
-    virtual ~D2DWriteTextOutRenderer() override;
 
     bool operator()(GenericSalLayout const &rLayout,
         SalGraphics &rGraphics,
@@ -62,9 +63,8 @@ private:
     IDWriteFontFace* GetDWriteFace(const WinFontInstance& rWinFont, float * lfSize) const;
     bool performRender(GenericSalLayout const &rLayout, SalGraphics &rGraphics, HDC hDC, bool& bRetry, bool bRenderingModeNatural);
 
-    ID2D1Factory        * mpD2DFactory;
-    IDWriteFactory      * mpDWriteFactory;
-    ID2D1DCRenderTarget * mpRT;
+    sal::systools::COMReference<ID2D1Factory> mpD2DFactory;
+    sal::systools::COMReference<ID2D1DCRenderTarget> mpRT;
     const D2D1_RENDER_TARGET_PROPERTIES mRTProps;
 
     bool mbRenderingModeNatural;
