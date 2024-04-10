@@ -22,7 +22,6 @@
 #include "gio_datasupplier.hxx"
 #include "gio_resultset.hxx"
 
-using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 

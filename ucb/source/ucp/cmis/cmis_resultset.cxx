@@ -10,7 +10,6 @@
 #include "cmis_datasupplier.hxx"
 #include "cmis_resultset.hxx"
 
-using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
