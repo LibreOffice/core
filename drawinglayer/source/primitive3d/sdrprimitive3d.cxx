@@ -23,9 +23,6 @@
 #include <utility>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::primitive3d
 {
         basegfx::B3DRange SdrPrimitive3D::getStandard3DRange() const

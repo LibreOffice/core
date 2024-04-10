@@ -24,9 +24,6 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::processor2d
 {
         LineGeometryExtractor2D::LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation)

@@ -21,9 +21,6 @@
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::primitive3d
 {
         HiddenGeometryPrimitive3D::HiddenGeometryPrimitive3D(

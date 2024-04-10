@@ -26,8 +26,6 @@
 #define _MAX_PATH PATH_MAX
 #endif
 
-using namespace com::sun::star;
-
 LoginDialog::~LoginDialog()
 {
 }

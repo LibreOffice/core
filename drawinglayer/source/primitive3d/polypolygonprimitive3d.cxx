@@ -23,9 +23,6 @@
 #include <utility>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::primitive3d
 {
         PolyPolygonMaterialPrimitive3D::PolyPolygonMaterialPrimitive3D(

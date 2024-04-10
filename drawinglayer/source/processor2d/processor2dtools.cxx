@@ -29,8 +29,6 @@
 #include <drawinglayer/processor2d/cairopixelprocessor2d.hxx>
 #endif
 
-using namespace com::sun::star;
-
 namespace drawinglayer::processor2d
 {
 std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(

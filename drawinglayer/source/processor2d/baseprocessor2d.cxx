@@ -22,9 +22,6 @@
 #include <utility>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::processor2d
 {
         void BaseProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& /*rCandidate*/)

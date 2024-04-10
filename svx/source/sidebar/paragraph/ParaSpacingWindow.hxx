@@ -23,8 +23,6 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <svx/relfld.hxx>
 
-using namespace com::sun::star;
-
 namespace svx
 {
 class ParaULSpacingWindow : public InterimItemWindow

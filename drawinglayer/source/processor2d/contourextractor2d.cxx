@@ -30,9 +30,6 @@
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::processor2d
 {
         ContourExtractor2D::ContourExtractor2D(

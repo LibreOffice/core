@@ -21,8 +21,6 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 
-using namespace com::sun::star;
-
 namespace drawinglayer::processor2d
 {
         void ObjectInfoPrimitiveExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)

@@ -29,8 +29,6 @@
 #include <osl/thread.h>
 #include <unotools/configmgr.hxx>
 
-using namespace com::sun::star;
-
 SalGenericSystem::SalGenericSystem()
 {
 }

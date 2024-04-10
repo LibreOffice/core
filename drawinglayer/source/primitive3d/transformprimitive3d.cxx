@@ -22,9 +22,6 @@
 #include <utility>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::primitive3d
 {
         TransformPrimitive3D::TransformPrimitive3D(

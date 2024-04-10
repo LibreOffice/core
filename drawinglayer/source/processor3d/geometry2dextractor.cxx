@@ -31,9 +31,6 @@
 #include <utility>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::processor3d
 {
         // as tooling, the process() implementation takes over API handling and calls this

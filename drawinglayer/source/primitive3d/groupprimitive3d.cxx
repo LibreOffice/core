@@ -22,9 +22,6 @@
 #include <utility>
 
 
-using namespace com::sun::star;
-
-
 namespace drawinglayer::primitive3d
 {
         GroupPrimitive3D::GroupPrimitive3D( Primitive3DContainer aChildren )
