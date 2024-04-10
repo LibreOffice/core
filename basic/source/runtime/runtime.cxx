@@ -3043,13 +3043,16 @@ void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
 {
     SbxVariableRef p = PopVar();
     sal_Int16 n = p->GetInteger();
-    if( nOp1 & 0x8000 )
-    {
+
+    if (nOp1 & 0x8000)
         nOp1 &= 0x7FFF;
-        PushGosub( pCode + 5 * nOp1 );
-    }
-    if( n < 1 || o3tl::make_unsigned(n) > nOp1 )
-        n = static_cast<sal_Int16>( nOp1 + 1 );
+
+    // tdf#160321 - do not execute the jump statement if the expression is out of range
+    if (n < 1 || o3tl::make_unsigned(n) > nOp1)
+        n = static_cast<sal_Int16>(nOp1 + 1);
+    else if (nOp1 & 0x8000)
+        PushGosub(pCode + 5 * nOp1);
+
     nOp1 = static_cast<sal_uInt32>(pCode - pImg->GetCode()) + 5 * --n;
     StepJUMP( nOp1 );
 }
