@@ -40,8 +40,14 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
 {
     maLinkTemplate = mxLinkButton->get_uri();
 
+    auto const offerSafeMode = officecfg::Office::Common::Misc::OfferSafeMode::get();
+    mxCBSafeMode->set_visible(offerSafeMode);
+
     auto nWidth = mxEditPreUpload->get_preferred_size().Width();
-    nWidth = std::max(nWidth, mxCBSafeMode->get_size_request().Width());
+    if (offerSafeMode)
+    {
+        nWidth = std::max(nWidth, mxCBSafeMode->get_size_request().Width());
+    }
     mxEditPreUpload->set_size_request(nWidth, -1);
     mxCBSafeMode->set_size_request(nWidth, -1);
 

@@ -1343,6 +1343,11 @@ void MenuBarManager::FillMenu(
                 {
                     continue;
                 }
+                if (aCommandURL == ".uno:SafeMode"
+                    && !officecfg::Office::Common::Misc::OfferSafeMode::get())
+                {
+                    continue;
+                }
 
                 if ( nType == css::ui::ItemType::DEFAULT )
                 {

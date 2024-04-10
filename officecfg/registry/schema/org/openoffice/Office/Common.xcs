@@ -5583,6 +5583,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="OfferSafeMode" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Offer Safe Mode to the user.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Forms">
       <info>
