@@ -34,7 +34,7 @@
 #include <sortparam.hxx>
 #include "parclass.hxx"
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <vector>
 #include <limits>
@@ -179,18 +179,16 @@ enum ScETSType
     etsStatMult
 };
 
-struct FormulaTokenRef_less
+struct FormulaTokenRef_hash
 {
-    bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
-        { return r1.get() < r2.get(); }
+    bool operator () ( const formula::FormulaConstTokenRef& r1 ) const
+        { return std::hash<const void*>()(static_cast<const void*>(r1.get())); }
     // So we don't have to create a FormulaConstTokenRef to search by formula::FormulaToken*
     using is_transparent = void;
-    bool operator () ( const formula::FormulaToken* p1, const formula::FormulaConstTokenRef& r2 ) const
-        { return p1 < r2.get(); }
-    bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaToken* p2 ) const
-        { return r1.get() < p2; }
+    bool operator () ( const formula::FormulaToken* p1 ) const
+        { return std::hash<const void *>()(static_cast<const void*>(p1)); }
 };
-typedef ::std::map< const formula::FormulaConstTokenRef, formula::FormulaConstTokenRef, FormulaTokenRef_less> ScTokenMatrixMap;
+typedef ::std::unordered_map< const formula::FormulaConstTokenRef, formula::FormulaConstTokenRef, FormulaTokenRef_hash> ScTokenMatrixMap;
 
 class ScInterpreter
 {
