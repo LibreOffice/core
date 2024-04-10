@@ -6477,6 +6477,8 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
 
     // OpCode of the "root" operator (which is already in RPN array).
     OpCode eOpCode = (*(pCode - 1))->GetOpCode();
+    // Param number of the "root" operator (which is already in RPN array).
+    sal_uInt8 nRootParam = (*(pCode - 1))->GetByte();
     // eOpCode can be some operator which does not change with operands with or contains zero values.
     if (eOpCode == ocSum)
     {
@@ -6569,7 +6571,8 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
         // such that one of the operands of ocEqual is a double-ref.
         // Examples of formula that matches this are:
         //   SUMPRODUCT(IF($A:$A=$L12;$D:$D*G:G))
-        // Also in case of DoubleRef arguments around other Binary operators can be trimmable:
+        // Also in case of DoubleRef arguments around other Binary operators can be trimmable inside one parameter
+        // of the root operator:
         //   SUMPRODUCT(($D:$D>M47:M47)*($D:$D<M48:M48)*($I:$I=N$41))
         bool bTillClose = true;
         bool bCloseTillIf = false;
@@ -6621,7 +6624,9 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                 case ocUnion:
                 case ocRange:
                     {
-                        if (!pTok->IsInForceArray())
+                        // tdf#160616: Double refs with these operators only
+                        // trimmable in case of one paramater
+                        if (!pTok->IsInForceArray() || nRootParam > 1)
                             break;
                         FormulaToken* pLHS = *(ppTok - 1);
                         FormulaToken* pRHS = *(ppTok - 2);
