@@ -108,7 +108,7 @@ public:
 
 private:
     ID2D1RenderTarget* mpRenderTarget;
-    D2D1::Matrix3x2F maTransform;
+    std::optional<D2D1::Matrix3x2F> moTransform;
 };
 
 } // end anonymous namespace
@@ -332,25 +332,27 @@ WinFontTransformGuard::WinFontTransformGuard(ID2D1RenderTarget* pRenderTarget,
                                              bool bIsVertical)
     : mpRenderTarget(pRenderTarget)
 {
-    pRenderTarget->GetTransform(&maTransform);
-    D2D1::Matrix3x2F aTransform = maTransform;
-
     Degree10 angle = rLayout.GetOrientation();
-
     if (bIsVertical)
         angle += 900_deg10;
 
     if (angle)
     {
+        D2D1::Matrix3x2F aTransform;
+        pRenderTarget->GetTransform(&aTransform);
+        moTransform = aTransform;
+
         // DWrite angle is in clockwise degrees, our orientation is in counter-clockwise 10th
         // degrees.
-        aTransform = aTransform
-                     * D2D1::Matrix3x2F::Rotation(
-                           -toDegrees(angle), rBaseline);
+        aTransform = aTransform * D2D1::Matrix3x2F::Rotation(-toDegrees(angle), rBaseline);
+        mpRenderTarget->SetTransform(aTransform);
     }
-    mpRenderTarget->SetTransform(aTransform);
 }
 
-WinFontTransformGuard::~WinFontTransformGuard() { mpRenderTarget->SetTransform(maTransform); }
+WinFontTransformGuard::~WinFontTransformGuard()
+{
+    if (moTransform)
+        mpRenderTarget->SetTransform(*moTransform);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
