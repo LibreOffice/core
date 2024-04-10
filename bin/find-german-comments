@@ -354,7 +354,6 @@ class Parser:
             "vbahelper" : 1,
             "vcl" : 1,
             "winaccessibility" : 1,
-            "writerfilter" : 1,
             "writerperfect" : 1,
             "xmlhelp" : 1,
             "xmloff" : 1,

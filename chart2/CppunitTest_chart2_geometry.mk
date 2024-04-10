@@ -114,6 +114,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_geometry,\
 	svtools/util/svt \
     svx/util/svx \
     svx/util/svxcore \
+    sw/util/sw_writerfilter \
     toolkit/util/tk \
     vcl/vcl.common \
     ucb/source/core/ucb1 \
@@ -123,7 +124,6 @@ $(eval $(call gb_CppunitTest_use_components,chart2_geometry,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
-    writerfilter/util/writerfilter \
     xmloff/util/xo \
     xmlscript/util/xmlscript \
 ))

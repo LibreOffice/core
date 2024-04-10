@@ -49,9 +49,11 @@ public:
         // some false +
         if (loplugin::isSamePathname(fn, SRCDIR "/unoidl/source/sourcetreeprovider.cxx"))
             return false;
-        if (loplugin::isSamePathname(fn, SRCDIR "/writerfilter/source/dmapper/StyleSheetTable.cxx"))
+        if (loplugin::isSamePathname(fn,
+                                     SRCDIR "/sw/source/writerfilter/dmapper/StyleSheetTable.cxx"))
             return false;
-        if (loplugin::isSamePathname(fn, SRCDIR "/writerfilter/source/dmapper/GraphicImport.cxx"))
+        if (loplugin::isSamePathname(fn,
+                                     SRCDIR "/sw/source/writerfilter/dmapper/GraphicImport.cxx"))
             return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/sdext/source/pdfimport/pdfparse/pdfparse.cxx"))
             return false;

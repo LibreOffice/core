@@ -186,7 +186,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	vbahelper \
 	vcl \
 	wizards \
-	writerfilter \
 	writerperfect \
 	xmerge \
     $(call gb_Helper_optional,XMLHELP,xmlhelp) \
@@ -233,7 +232,7 @@ $(eval $(call repositorymodule_serialize,\
 	$(if $(MERGELIBS_MORE),, \
 		sd \
 		$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
-		writerfilter cui) \
+		cui) \
 	$(if $(MERGELIBS), merged, \
 		chartcontroller chartcore oox svx svxcore xo sfx fwk svt vcl) \
 ))

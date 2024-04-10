@@ -27,10 +27,12 @@ $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
 	CustomTarget_generated \
+    CustomTarget_source \
 	Library_msword \
 	Library_sw \
 	Library_swd \
 	Library_swui \
+    Library_sw_writerfilter \
 	UIConfig_sglobal \
 	UIConfig_sweb \
 	UIConfig_swform \
@@ -168,6 +170,11 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_a11y \
     CppunitTest_sw_core_theme \
     CppunitTest_sw_pdf_test \
+    CppunitTest_sw_writerfilter_filters_test \
+    CppunitTest_sw_writerfilter_misc \
+    CppunitTest_sw_writerfilter_dmapper \
+    CppunitTest_sw_writerfilter_ooxml \
+    CppunitTest_sw_writerfilter_rtftok \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)

@@ -100,7 +100,7 @@ for name, bitfield in iter(tmp2dict.items()):
     # ignore external stuff
     if srcloc.startswith("workdir/"): continue
     # referenced by generated code in workdir/
-    if srcloc.startswith("writerfilter/source/ooxml/OOXMLFactory.hxx"): continue
+    if srcloc.startswith("sw/source/writerfilter/ooxml/OOXMLFactory.hxx"): continue
     if "0" in bitfield:
         tmp2list.append((srcloc, name, bitfield))
 

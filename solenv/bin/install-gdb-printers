@@ -138,6 +138,6 @@ else
     make_autoload utl program libutllo."$DYLIB"
     make_autoload vcl program libvcllo."$DYLIB"
 fi
-make_autoload writerfilter program libwriterfilterlo."$DYLIB"
+make_autoload sw_writerfilter program libsw_writerfilterlo."$DYLIB"
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

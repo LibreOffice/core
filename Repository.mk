@@ -564,7 +564,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	t602filter \
 	$(call gb_Helper_optional,SCRIPTING,vbaswobj) \
 	wpftwriter \
-	writerfilter \
+	sw_writerfilter \
 	$(call gb_Helper_optional,DBCONNECTIVITY,writer) \
 ))
 

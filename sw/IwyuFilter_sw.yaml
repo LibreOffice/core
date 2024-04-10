@@ -894,3 +894,66 @@ excludelist:
     sw/qa/extras/layout/layout2.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    sw/source/writerfilter/dmapper/BorderHandler.cxx:
+    # Needed for method parameter type
+    - tools/color.hxx
+    sw/source/writerfilter/dmapper/ConversionHelper.cxx:
+    # Actually used
+    - com/sun/star/table/BorderLine2.hpp
+    - com/sun/star/lang/Locale.hpp
+    sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    sw/source/writerfilter/dmapper/GraphicImport.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    sw/source/writerfilter/dmapper/NumberingManager.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    sw/source/writerfilter/dmapper/OLEHandler.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/text/XTextDocument.hpp
+    - com/sun/star/text/WrapTextMode.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    sw/source/writerfilter/dmapper/TDefTableHandler.cxx:
+    # Needed for method parameter type
+    - tools/color.hxx
+    sw/source/writerfilter/dmapper/TablePositionHandler.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    sw/source/writerfilter/dmapper/PropertyMap.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/text/XTextColumns.hpp
+    sw/source/writerfilter/dmapper/StyleSheetTable.cxx:
+    # Actually used
+    - com/sun/star/text/XTextDocument.hpp
+    sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    sw/source/writerfilter/rtftok/rtfsdrimport.hxx:
+    # IWYU assumes std::stack<IncompleteType> in a header is OK, but that's not
+    # the case for all of LO's supported platforms.
+    # See <https://github.com/include-what-you-use/include-what-you-use/issues/175>.
+    - dmapper/GraphicZOrderHelper.hxx
+    sw/source/writerfilter/rtftok/rtfvalue.cxx:
+    # complete type is needed
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    sw/source/writerfilter/rtftok/rtftokenizer.cxx:
+    # Actually used
+    - com/sun/star/task/XStatusIndicator.hpp
+    sw/source/writerfilter/filter/RtfFilter.cxx:
+    - comphelper/scopeguard.hxx
+    sw/source/writerfilter/filter/WriterFilter.cxx:
+    - comphelper/scopeguard.hxx

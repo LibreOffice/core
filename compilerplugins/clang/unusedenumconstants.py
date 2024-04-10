@@ -79,7 +79,7 @@ def is_ignore(srcLoc):
          "include/registry/version.h",
          "include/svtools/rtftoken.h",
          "sc/source/filter/inc/xltracer.hxx",
-         "writerfilter/source/dmapper/FieldTypes.hxx",
+         "sw/source/writerfilter/dmapper/FieldTypes.hxx",
          "vcl/source/fontsubset/cff.cxx",
          "vcl/source/filter/wmf/winmtf.hxx",
          "vcl/source/filter/sgvmain.hxx",
@@ -188,7 +188,7 @@ def is_ignore(srcLoc):
          "include/i18nlangtag/applelangid.hxx", # AppleLanguageId
          "connectivity/source/drivers/firebird/Util.hxx", # firebird::BlobSubtype
          "include/xmloff/xmltoken.hxx",
-         "writerfilter/source/rtftok/rtfcontrolwords.hxx",
+         "sw/source/writerfilter/rtftok/rtfcontrolwords.hxx",
          ]):
          return True
     if d[1] == "UNKNOWN" or d[1] == "LAST" or d[1].endswith("NONE") or d[1].endswith("None") or d[1].endswith("EQUAL_SIZE"):

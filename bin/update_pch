@@ -109,6 +109,7 @@ DEFAULTS = \
     'sw.sw'                             : ( 7, EXCLUDE, EXCLUDE, INCLUDE), # 129.6
     'sw.swui'                           : ( 3, EXCLUDE, INCLUDE, INCLUDE), #  26.1
     'sw.vbaswobj'                       : ( 4, EXCLUDE, INCLUDE, INCLUDE), #  13.1
+    'sw.sw_writerfilter'                : ( 5, EXCLUDE, EXCLUDE, EXCLUDE), #  19.7/27.3
     'tools.tl'                          : ( 5, EXCLUDE, EXCLUDE, EXCLUDE), #   4.2
     'unotools.utl'                      : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   7.0
     'unoxml.unoxml'                     : ( 1, EXCLUDE, EXCLUDE, EXCLUDE), #   4.6
@@ -116,7 +117,6 @@ DEFAULTS = \
     'vbahelper.msforms'                 : ( 3, EXCLUDE, INCLUDE, INCLUDE), #   5.2
     'vbahelper.vbahelper'               : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   7.0
     'vcl.vcl'                           : ( 6, EXCLUDE, INCLUDE, INCLUDE), #  35.7
-    'writerfilter.writerfilter'         : ( 5, EXCLUDE, EXCLUDE, EXCLUDE), #  19.7/27.3
     'xmloff.xo'                         : ( 7, EXCLUDE, INCLUDE, INCLUDE), #  22.1
     'xmloff.xof'                        : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #   4.4
     'xmlscript.xmlscript'               : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #   3.6
