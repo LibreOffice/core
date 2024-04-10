@@ -753,19 +753,6 @@ std::tuple<HFONT,bool,sal_Int32> WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::fon
     }
 
     hNewFont = ::CreateFontIndirectW( &aLogFont );
-
-    HDC hdcScreen = nullptr;
-    if( mbVirDev )
-        // only required for virtual devices, see below for details
-        hdcScreen = GetDC(nullptr);
-    if( hdcScreen )
-    {
-        // select font into screen hdc first to get an antialiased font
-        // and instantly restore the default font!
-        // see knowledge base article 305290:
-        // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
-        SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
-    }
     o_rOldFont = ::SelectFont(hDC, hNewFont);
 
     TEXTMETRICW aTextMetricW;
@@ -781,9 +768,6 @@ std::tuple<HFONT,bool,sal_Int32> WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::fon
         hNewFont = hNewFont2;
         bIsCJKVerticalFont = false;
     }
-
-    if( hdcScreen )
-        ::ReleaseDC( nullptr, hdcScreen );
 
     return std::make_tuple(hNewFont, bIsCJKVerticalFont, static_cast<sal_Int32>(aTextMetricW.tmDescent));
 }
