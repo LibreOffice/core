@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #!/bin/bash
 
-# TODO search also for 'using namespace com/::com/css' - this is likely the fattest target and clang-tidy can't do it
 for ns in accessibility basegfx chart com css cppu comphelper connectivity formula dbtools editeng rtl sfx2 svt osl oox sax_fastparser sal sd ucbhelper utl vcl xmloff; do
     echo "Searching for namespace: $ns";
     # search in cxx files, excluding URE headers, plus some files with false positives
