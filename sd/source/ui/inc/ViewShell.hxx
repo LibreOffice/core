@@ -548,6 +548,9 @@ private:
     /** Create the rulers.
     */
     void SetupRulers();
+
+    // IASS: Check if commands should be used for SlideShow
+    bool useInputForSlideShow() const;
 };
 
 SdrView* ViewShell::GetDrawView() const
