@@ -390,6 +390,34 @@ void ViewShell::Shutdown()
     Exit ();
 }
 
+// IASS: Check if commands should be used for SlideShow
+// This is the case when IASS is on, SlideShow is active
+// and the SlideShow Window has the focus
+bool ViewShell::useInputForSlideShow() const
+{
+    rtl::Reference< SlideShow > xSlideShow(SlideShow::GetSlideShow(GetViewShellBase()));
+
+    if (!xSlideShow.is())
+        // no SlideShow, do not use
+        return false;
+
+    if (!xSlideShow->isRunning())
+        // SlideShow not running, do not use
+        return false;
+
+    if(!xSlideShow->IsInteractiveSlideshow())
+        // if IASS is deactivated, do what was done before when
+        // SlideSHow is running: use for SlideShow
+        return true;
+
+    // else, check if SlideShow Window has the focus
+    OutputDevice* pShOut(xSlideShow->getShowWindow());
+    vcl::Window* pShWin(pShOut ? pShOut->GetOwnerWindow() : nullptr);
+
+    // return true if we got the SlideShow Window and it has the focus
+    return nullptr != pShWin && pShWin->HasFocus();
+}
+
 bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
     bool bReturn(false);
@@ -405,20 +433,10 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     const size_t OriCount = GetView()->GetMarkedObjectList().GetMarkCount();
     if(!bReturn)
     {
-        rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-        const bool bSlideShowRunning(xSlideShow.is() && xSlideShow->isRunning());
-        bool bUseForSlideShow(bSlideShowRunning);
-
-        if(bSlideShowRunning && xSlideShow->IsInteractiveSlideshow())
+        if(useInputForSlideShow()) //IASS
         {
-            // IASS
-            OutputDevice* pShOut(xSlideShow->getShowWindow());
-            vcl::Window* pShWin(pShOut ? pShOut->GetOwnerWindow() : nullptr);
-            bUseForSlideShow = pShWin && pShWin->HasFocus();
-        }
-
-        if(bUseForSlideShow) //IASS
-        {
+            // use for SlideShow
+            rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
             bReturn = xSlideShow->keyInput(rKEvt);
         }
         else
@@ -676,9 +694,10 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
     {
         case CommandEventId::GestureSwipe:
             {
-                rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-                if (xSlideShow.is())
+                if(useInputForSlideShow()) //IASS
                 {
+                    // use for SlideShow
+                    rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
                     const CommandGestureSwipeData* pSwipeData = rCEvt.GetGestureSwipeData();
                     bDone = xSlideShow->swipe(*pSwipeData);
                 }
@@ -686,9 +705,10 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
             break;
         case CommandEventId::GestureLongPress:
             {
-                rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-                if (xSlideShow.is())
+                if(useInputForSlideShow()) //IASS
                 {
+                    // use for SlideShow
+                    rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
                     const CommandGestureLongPressData* pLongPressData = rCEvt.GetLongPressData();
                     bDone = xSlideShow->longpress(*pLongPressData);
                 }
@@ -700,17 +720,21 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 Reference< XSlideShowController > xSlideShowController( SlideShow::GetSlideShowController(GetViewShellBase() ) );
                 if( xSlideShowController.is() )
                 {
-                    // We ignore zooming with control+mouse wheel.
-                    const CommandWheelData* pData = rCEvt.GetWheelData();
-                    if( pData && !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) && !pData->IsHorz() )
+                    if(useInputForSlideShow()) //IASS
                     {
-                        ::tools::Long nDelta = pData->GetDelta();
-                        if( nDelta > 0 )
-                            xSlideShowController->gotoPreviousSlide();
-                        else if( nDelta < 0 )
-                            xSlideShowController->gotoNextEffect();
+                        // use for SlideShow
+                        // We ignore zooming with control+mouse wheel.
+                        const CommandWheelData* pData = rCEvt.GetWheelData();
+                        if( pData && !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) && !pData->IsHorz() )
+                        {
+                            ::tools::Long nDelta = pData->GetDelta();
+                            if( nDelta > 0 )
+                                xSlideShowController->gotoPreviousSlide();
+                            else if( nDelta < 0 )
+                                xSlideShowController->gotoNextEffect();
+                        }
+                        break;
                     }
-                    break;
                 }
             }
             [[fallthrough]];
@@ -769,8 +793,6 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
         {
             const CommandGestureZoomData* pData = rCEvt.GetGestureZoomData();
 
-            Reference<XSlideShowController> xSlideShowController(SlideShow::GetSlideShowController(GetViewShellBase()));
-
             if (pData->meEventType == GestureEventZoomType::Begin)
             {
                 mfLastZoomScale = pData->mfScaleDelta;
@@ -783,7 +805,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 double deltaBetweenEvents = (pData->mfScaleDelta - mfLastZoomScale) / mfLastZoomScale;
                 mfLastZoomScale = pData->mfScaleDelta;
 
-                if (!GetDocSh()->IsUIActive() && !xSlideShowController.is())
+                if (!GetDocSh()->IsUIActive() && !useInputForSlideShow()) //IASS
                 {
                     const ::tools::Long nOldZoom = GetActiveWindow()->GetZoom();
                     ::tools::Long nNewZoom;
