@@ -122,6 +122,16 @@ bool DefaultMTLDeviceIsSupported()
            bRet = false;
     }
 
+    if (bRet)
+    {
+        // tdf#160590 Disable Metal with Intel HD Graphics 6000
+        // Releasing a Metal buffer resource hangs when fetching pixels from a
+        // Skia surface on this Intel MacBook Air built-in GPU.
+       static NSString* pIntelHDGraphics6000Prefix = @"Intel(R) Iris(TM) Graphics 6000";
+       if ([pMetalDevice.name hasPrefix:pIntelHDGraphics6000Prefix])
+           bRet = false;
+    }
+
     [pMetalDevice release];
     return bRet;
 }
