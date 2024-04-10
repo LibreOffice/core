@@ -24,12 +24,19 @@
 
 namespace svgio::svgreader
 {
+enum class Mode
+{
+    Normal,
+    Screen
+};
+
 class SvgFeBlendNode : public SvgFilterNode
 {
 private:
     OUString maIn;
     OUString maIn2;
     OUString maResult;
+    Mode maMode;
 
 public:
     SvgFeBlendNode(SvgDocument& rDocument, SvgNode* pParent);

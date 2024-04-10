@@ -95,6 +95,7 @@ constexpr auto aSVGTokenMap = frozen::make_unordered_map<std::u16string_view, SV
     { u"flood-opacity", SVGToken::FloodOpacity },
     { u"operator", SVGToken::Operator },
     { u"mask", SVGToken::Mask },
+    { u"mode", SVGToken::Mode },
     { u"clipPathUnits", SVGToken::ClipPathUnits },
     { u"maskUnits", SVGToken::MaskUnits },
     { u"maskContentUnits", SVGToken::MaskContentUnits },

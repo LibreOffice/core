@@ -512,6 +512,126 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
     return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
 }
 
+BitmapEx DrawBitmapInRect( const BitmapEx& rBitmap,
+                                ::basegfx::B2DRectangle const & rBitmapRect,
+                                ::basegfx::B2DRectangle const & rDestRect )
+{
+    if( rBitmapRect.isEmpty() || rDestRect.isEmpty() )
+        return BitmapEx();
+
+    const Size aDestBmpSize( ::basegfx::fround( rDestRect.getWidth() ),
+                             ::basegfx::fround( rDestRect.getHeight() ) );
+
+    Bitmap aSrcBitmap( rBitmap.GetBitmap() );
+    Bitmap aSrcAlpha;
+
+    // differentiate mask and alpha channel (on-off
+    // vs. multi-level transparency)
+    if( rBitmap.IsAlpha() )
+    {
+        aSrcAlpha = rBitmap.GetAlphaMask().GetBitmap();
+    }
+
+    BitmapScopedReadAccess pReadAccess( aSrcBitmap );
+    BitmapScopedReadAccess pAlphaReadAccess;
+    if (rBitmap.IsAlpha())
+        pAlphaReadAccess = aSrcAlpha;
+
+    if( !pReadAccess || (!pAlphaReadAccess && rBitmap.IsAlpha()) )
+    {
+        // TODO(E2): Error handling!
+        ENSURE_OR_THROW( false,
+                          "DrawBitmapInRect(): could not access source bitmap" );
+    }
+
+    // mapping table, to translate pAlphaReadAccess' pixel
+    // values into destination alpha values (needed e.g. for
+    // paletted 1-bit masks).
+    sal_uInt8 aAlphaMap[256];
+
+    if( rBitmap.IsAlpha() )
+    {
+        // source already has alpha channel - 1:1 mapping,
+        // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
+        sal_uInt8  val=0;
+        sal_uInt8* pCur=aAlphaMap;
+        sal_uInt8* const pEnd=&aAlphaMap[256];
+        while(pCur != pEnd)
+            *pCur++ = val++;
+    }
+    // else: mapping table is not used
+
+    Bitmap aDstBitmap(aDestBmpSize, aSrcBitmap.getPixelFormat(), &pReadAccess->GetPalette());
+    Bitmap aDstAlpha( AlphaMask( aDestBmpSize ).GetBitmap() );
+
+    {
+        // just to be on the safe side: let the
+        // ScopedAccessors get destructed before
+        // copy-constructing the resulting bitmap. This will
+        // rule out the possibility that cached accessor data
+        // is not yet written back.
+        BitmapScopedWriteAccess pWriteAccess( aDstBitmap );
+        BitmapScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
+
+
+        if( pWriteAccess.get() != nullptr &&
+            pAlphaWriteAccess.get() != nullptr)
+        {
+            // for the time being, always read as ARGB
+            for (tools::Long y(rDestRect.getMinY()); y < rDestRect.getMaxY(); y++)
+            {
+                // differentiate mask and alpha channel (on-off
+                // vs. multi-level transparency)
+                if( rBitmap.IsAlpha() )
+                {
+                    Scanline pScan = pWriteAccess->GetScanline( y  - rDestRect.getMinY() );
+                    Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y  - rDestRect.getMinY() );
+                    // Handling alpha and mask just the same...
+                    for (tools::Long x(rDestRect.getMinX()); x < rDestRect.getMaxX(); x++)
+                    {
+                        if (rBitmapRect.getMinX() <= x && rBitmapRect.getMaxX() > x && rBitmapRect.getMinY() <= y
+                          && rBitmapRect.getMaxY() > y)
+                        {
+                            const sal_uInt8 cAlphaIdx = pAlphaReadAccess->GetPixelIndex( x - rBitmapRect.getMinX(), y - rBitmapRect.getMinY() );
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha,  x - rDestRect.getMinX(), BitmapColor(aAlphaMap[ cAlphaIdx ]) );
+                            pWriteAccess->SetPixelOnData( pScan,  x - rDestRect.getMinX(), pReadAccess->GetPixel( x - rBitmapRect.getMinX(), y - rBitmapRect.getMinY() ) );
+                        }
+                        else
+                        {
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x - rDestRect.getMinX(), BitmapColor(0) );
+                        }
+                    }
+                }
+                else
+                {
+                    Scanline pScan = pWriteAccess->GetScanline( y  - rDestRect.getMinY() );
+                    Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y  - rDestRect.getMinY() );
+                    for (tools::Long x(rDestRect.getMinX()); x < rDestRect.getMaxX(); x++)
+                    {
+                        if (rBitmapRect.getMinX() <= x && rBitmapRect.getMaxX() > x && rBitmapRect.getMinY() <= y
+                          && rBitmapRect.getMaxY() > y)
+                        {
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha,  x - rDestRect.getMinX(), BitmapColor(255) );
+                            pWriteAccess->SetPixelOnData( pScan,  x - rDestRect.getMinX(), pReadAccess->GetPixel( x - rBitmapRect.getMinX(), y - rBitmapRect.getMinY() ) );
+                        }
+                        else
+                        {
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha,  x - rDestRect.getMinX(), BitmapColor(0) );
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            // TODO(E2): Error handling!
+            ENSURE_OR_THROW( false,
+                              "DrawBitmapInRect(): could not access bitmap" );
+        }
+    }
+
+    return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
+}
 
 void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparence, float fTransparence, AlphaMask & rNewMask)
 {
@@ -643,7 +763,6 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
         aBmpEx = BitmapEx(rBitmap.GetBitmap(), aVDevMask);
     }
 }
-
 
 css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
 {

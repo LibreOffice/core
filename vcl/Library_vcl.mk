@@ -346,6 +346,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapBasicMorphologyFilter \
     vcl/source/bitmap/BitmapMaskToAlphaFilter \
     vcl/source/bitmap/BitmapMonochromeFilter \
+    vcl/source/bitmap/BitmapScreenBlendFilter \
     vcl/source/bitmap/BitmapSmoothenFilter \
     vcl/source/bitmap/BitmapLightenFilter \
     vcl/source/bitmap/BitmapDisabledImageFilter \

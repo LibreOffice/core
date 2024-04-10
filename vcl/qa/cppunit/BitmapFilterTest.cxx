@@ -15,6 +15,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#include <vcl/BitmapScreenBlendFilter.hxx>
 #include <vcl/BitmapBasicMorphologyFilter.hxx>
 #include <vcl/BitmapFilterStackBlur.hxx>
 #include <BitmapSymmetryCheck.hxx>
@@ -39,12 +40,14 @@ public:
     void testBasicMorphology();
     void testPerformance();
     void testGenerateStripRanges();
+    void testScreenBlendFilter();
 
     CPPUNIT_TEST_SUITE(BitmapFilterTest);
     CPPUNIT_TEST(testBlurCorrectness);
     CPPUNIT_TEST(testBasicMorphology);
     CPPUNIT_TEST(testPerformance);
     CPPUNIT_TEST(testGenerateStripRanges);
+    CPPUNIT_TEST(testScreenBlendFilter);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -273,6 +276,60 @@ void BitmapFilterTest::testGenerateStripRanges()
         CPPUNIT_ASSERT_EQUAL(tools::Long(64), std::get<0>(aRanges[2]));
         CPPUNIT_ASSERT_EQUAL(tools::Long(95), std::get<1>(aRanges[2]));
         CPPUNIT_ASSERT_EQUAL(true, std::get<2>(aRanges[2]));
+    }
+}
+
+void BitmapFilterTest::testScreenBlendFilter()
+{
+    Bitmap aRedBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aRedBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aRedBitmap);
+        aWriteAccess->Erase(COL_LIGHTRED);
+    }
+
+    Bitmap aGreenBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aGreenBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aGreenBitmap);
+        aWriteAccess->Erase(COL_GREEN);
+    }
+
+    Bitmap aTransparentBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aTransparentBitmap.getPixelFormat());
+    {
+        BitmapScopedWriteAccess aWriteAccess(aTransparentBitmap);
+        aWriteAccess->Erase(COL_AUTO);
+    }
+
+    BitmapEx aRedBitmapEx(aRedBitmap);
+    BitmapEx aGreenBitmapEx(aGreenBitmap);
+    BitmapEx aTransparentBitmapEx(aTransparentBitmap);
+
+    // same color
+    {
+        BitmapScreenBlendFilter* pArithmeticFilter
+            = new BitmapScreenBlendFilter(aRedBitmapEx, aRedBitmapEx);
+        BitmapEx aResBitmapEx = pArithmeticFilter->execute();
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmapEx.GetPixelColor(2, 2));
+    }
+
+    // different color
+    {
+        BitmapScreenBlendFilter* pArithmeticFilter
+            = new BitmapScreenBlendFilter(aRedBitmapEx, aGreenBitmapEx);
+        BitmapEx aResBitmapEx = pArithmeticFilter->execute();
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x80, 0x00),
+                             aResBitmapEx.GetPixelColor(2, 2));
+    }
+
+    // transparent
+    {
+        BitmapScreenBlendFilter* pArithmeticFilter
+            = new BitmapScreenBlendFilter(aRedBitmapEx, aTransparentBitmapEx);
+        BitmapEx aResBitmapEx = pArithmeticFilter->execute();
+        CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
+                             aResBitmapEx.GetPixelColor(2, 2));
     }
 }
 
