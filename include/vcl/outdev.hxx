@@ -53,6 +53,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/vclreferencebase.hxx>
 
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -962,6 +963,11 @@ public:
                                                   sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
                                                   std::span<const sal_Bool> pKashidaArray = {},
                                                   const SalLayoutGlyphs* pGlyphs = nullptr ) const;
+    bool                        GetTextBoundRect( basegfx::B2DRectangle& rRect,
+                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                                  sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
+                                                  std::span<const sal_Bool> pKashidaArray = {},
+                                                  const SalLayoutGlyphs* pGlyphs = nullptr ) const;
 
     tools::Rectangle            ImplGetTextBoundRect( const SalLayout& ) const;
 
@@ -1615,6 +1621,7 @@ public:
     SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE tools::Polygon PixelToLogic(const tools::Polygon& rDevicePoly) const;
     SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE tools::PolyPolygon PixelToLogic(const tools::PolyPolygon& rDevicePolyPoly) const;
     SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE basegfx::B2DPolyPolygon PixelToLogic(const basegfx::B2DPolyPolygon& rDevicePolyPoly) const;
+    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE basegfx::B2DRectangle PixelToLogic(const basegfx::B2DRectangle& rDeviceRect) const;
     SAL_WARN_UNUSED_RESULT vcl::Region PixelToLogic(const vcl::Region& rDeviceRegion) const;
     SAL_WARN_UNUSED_RESULT Point PixelToLogic(const Point& rDevicePt, const MapMode& rMapMode) const;
     SAL_WARN_UNUSED_RESULT Size PixelToLogic(const Size& rDeviceSize, const MapMode& rMapMode) const;

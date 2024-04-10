@@ -40,6 +40,8 @@ protected:
 
     Primitive2DSequence parseSvg(std::u16string_view aSource);
     xmlDocUniquePtr dumpAndParseSvg(std::u16string_view aSource);
+    void assertXPathDouble(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
+                           const OString& rAttribute, double nExpectedValue, double delta);
 };
 
 Primitive2DSequence Test::parseSvg(std::u16string_view aSource)
@@ -88,6 +90,13 @@ void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor/polypolygon"_ostr, "maxy"_ostr, "110");
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line"_ostr, "color"_ostr, "#ff0000"); // rect stroke color
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line"_ostr, "width"_ostr, "3"); // rect stroke width
+}
+
+void Test::assertXPathDouble(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
+                             const OString& rAttribute, double nExpectedValue, double delta)
+{
+    auto sVal = getXPath(pXmlDoc, rXPath, rAttribute);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nExpectedValue, sVal.toDouble(), delta);
 }
 
 namespace
@@ -725,7 +734,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156834)
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "text"_ostr, "Hanging");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "x"_ostr, "30");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "y"_ostr, "94");
+    assertXPathDouble(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "y"_ostr, 93.5, 0.5);
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]"_ostr, "text"_ostr, "Central");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]"_ostr, "x"_ostr, "30");

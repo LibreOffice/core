@@ -21,6 +21,7 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>
@@ -103,7 +104,9 @@ public:
     virtual bool    GetNextGlyph(const GlyphItem** pGlyph, basegfx::B2DPoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr) const = 0;
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
-    bool GetBoundRect(tools::Rectangle&) const;
+    bool GetBoundRect(basegfx::B2DRectangle&) const;
+
+    static tools::Rectangle BoundRect2Rectangle(basegfx::B2DRectangle&);
 
     virtual SalLayoutGlyphs GetGlyphs() const;
 
