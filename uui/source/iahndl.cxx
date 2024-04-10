@@ -29,7 +29,6 @@
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/java/WrongJavaVersionException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/ErrorCodeRequest2.hpp>
@@ -92,7 +91,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::task::XInteractionContinuation;
 using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionApprove;
-using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::XInitialization;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::task::InteractionHandler;
@@ -100,7 +98,6 @@ using ::com::sun::star::task::XInteractionHandler2;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::task::XInteractionRequest;
-using ::com::sun::star::lang::XMultiServiceFactory;
 
 using namespace ::com::sun::star;
 

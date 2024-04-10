@@ -35,7 +35,6 @@ namespace frm
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::awt::XWindow2;
     using ::com::sun::star::awt::WindowEvent;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::beans::XPropertySet;

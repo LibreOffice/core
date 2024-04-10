@@ -139,7 +139,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::beans::NamedValue;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::container::XNameContainer;
 using ::com::sun::star::frame::XModel;

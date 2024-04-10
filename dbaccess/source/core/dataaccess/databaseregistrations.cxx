@@ -49,7 +49,6 @@ namespace dbaccess
     using ::com::sun::star::sdb::XDatabaseRegistrations;
     using ::com::sun::star::sdb::XDatabaseRegistrationsListener;
     using ::com::sun::star::sdb::DatabaseRegistrationEvent;
-    using ::com::sun::star::uno::XAggregation;
 
     constexpr OUString CONF_ROOT_PATH = u"org.openoffice.Office.DataAccess/RegisteredNames"_ustr;
     constexpr OUString LOCATION = u"Location"_ustr;

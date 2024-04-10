@@ -51,7 +51,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::IllegalArgumentException;

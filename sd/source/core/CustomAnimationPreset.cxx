@@ -51,7 +51,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
-using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::util::XCloneable;

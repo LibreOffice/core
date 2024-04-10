@@ -34,7 +34,6 @@ namespace chart
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::document::XUndoManager;
@@ -42,7 +41,6 @@ namespace chart
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::util::XModifyListener;
-    using ::com::sun::star::frame::XModel;
 
     namespace impl
     {

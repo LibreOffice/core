@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::osl::MutexGuard;
 
 // necessary for MS compiler
 using ::chart::impl::CachedDataSequence_Base;
