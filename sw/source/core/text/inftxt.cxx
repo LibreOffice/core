@@ -1462,14 +1462,14 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
 static void lcl_InitHyphValues( PropertyValues &rVals,
             sal_Int16 nMinLeading, sal_Int16 nMinTrailing,
             bool bNoCapsHyphenation, bool bNoLastWordHyphenation,
-            sal_Int16 nMinWordLength, sal_Int16 nTextHyphZone, sal_Int16 nKeep,
+            sal_Int16 nMinWordLength, sal_Int16 nTextHyphZone, bool bKeep, sal_Int16 nKeepType,
             sal_Int16 nCompoundMinLeading )
 {
     sal_Int32 nLen = rVals.getLength();
 
     if (0 == nLen)  // yet to be initialized?
     {
-        rVals.realloc( 8 );
+        rVals.realloc( 9 );
         PropertyValue *pVal = rVals.getArray();
 
         pVal[0].Name    = UPN_HYPH_MIN_LEADING;
@@ -1496,15 +1496,19 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
         pVal[5].Handle  = UPH_HYPH_ZONE;
         pVal[5].Value   <<= nTextHyphZone;
 
-        pVal[6].Name    = UPN_HYPH_KEEP;
-        pVal[6].Handle  = UPH_HYPH_KEEP;
-        pVal[6].Value   <<= nKeep;
+        pVal[6].Name    = UPN_HYPH_KEEP_TYPE;
+        pVal[6].Handle  = UPH_HYPH_KEEP_TYPE;
+        pVal[6].Value   <<= nKeepType;
 
         pVal[7].Name    = UPN_HYPH_COMPOUND_MIN_LEADING;
         pVal[7].Handle  = UPH_HYPH_COMPOUND_MIN_LEADING;
         pVal[7].Value   <<= nCompoundMinLeading;
+
+        pVal[8].Name    = UPN_HYPH_KEEP;
+        pVal[8].Handle  = UPH_HYPH_KEEP;
+        pVal[8].Value   <<= bKeep;
     }
-    else if (8 == nLen) // already initialized once?
+    else if (9 == nLen) // already initialized once?
     {
         PropertyValue *pVal = rVals.getArray();
         pVal[0].Value <<= nMinLeading;
@@ -1513,8 +1517,9 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
         pVal[3].Value <<= bNoLastWordHyphenation;
         pVal[4].Value <<= nMinWordLength;
         pVal[5].Value <<= nTextHyphZone;
-        pVal[6].Value <<= nKeep;
+        pVal[6].Value <<= nKeepType;
         pVal[7].Value <<= nCompoundMinLeading;
+        pVal[8].Value <<= bKeep;
     }
     else {
         OSL_FAIL( "unexpected size of sequence" );
@@ -1523,7 +1528,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
 
 const PropertyValues & SwTextFormatInfo::GetHyphValues() const
 {
-    OSL_ENSURE( 8 == m_aHyphVals.getLength(),
+    OSL_ENSURE( 9 == m_aHyphVals.getLength(),
             "hyphenation values not yet initialized" );
     return m_aHyphVals;
 }
@@ -1545,11 +1550,12 @@ bool SwTextFormatInfo::InitHyph( const bool bAutoHyphen )
         const bool bNoCapsHyphenation = rAttr.IsNoCapsHyphenation();
         const bool bNoLastWordHyphenation = rAttr.IsNoLastWordHyphenation();
         const sal_Int16 nTextHyphZone = rAttr.GetTextHyphenZone();
-        const sal_Int16 nKeep = rAttr.GetKeep();
+        const bool bKeep = rAttr.IsKeep();
+        const sal_Int16 nKeepType = rAttr.GetKeepType();
         const sal_Int16 nCompoundMinimalLeading  = std::max(rAttr.GetCompoundMinLead(), sal_uInt8(2));
         lcl_InitHyphValues( m_aHyphVals, nMinimalLeading, nMinimalTrailing,
                  bNoCapsHyphenation, bNoLastWordHyphenation,
-                 nMinimalWordLength, nTextHyphZone, nKeep, nCompoundMinimalLeading );
+                 nMinimalWordLength, nTextHyphZone, bKeep, nKeepType, nCompoundMinimalLeading );
     }
     return bAuto;
 }

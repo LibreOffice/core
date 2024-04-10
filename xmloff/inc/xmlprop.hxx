@@ -498,6 +498,7 @@ inline constexpr OUString PROP_ParaHyphenationNoCaps = u"ParaHyphenationNoCaps"_
 inline constexpr OUString PROP_ParaHyphenationNoLastWord = u"ParaHyphenationNoLastWord"_ustr;
 inline constexpr OUString PROP_ParaHyphenationZone = u"ParaHyphenationZone"_ustr;
 inline constexpr OUString PROP_ParaHyphenationKeep = u"ParaHyphenationKeep"_ustr;
+inline constexpr OUString PROP_ParaHyphenationKeepType = u"ParaHyphenationKeepType"_ustr;
 inline constexpr OUString PROP_ParaIsAutoFirstLineIndent = u"ParaIsAutoFirstLineIndent"_ustr;
 inline constexpr OUString PROP_ParaIsCharacterDistance = u"ParaIsCharacterDistance"_ustr;
 inline constexpr OUString PROP_ParaIsConnectBorder = u"ParaIsConnectBorder"_ustr;

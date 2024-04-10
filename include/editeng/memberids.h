@@ -52,7 +52,8 @@
 #define MID_HYPHEN_MIN_WORD_LENGTH 6
 #define MID_HYPHEN_ZONE         7
 #define MID_HYPHEN_KEEP         8
-#define MID_HYPHEN_COMPOUND_MIN_LEAD 9
+#define MID_HYPHEN_KEEP_TYPE    9
+#define MID_HYPHEN_COMPOUND_MIN_LEAD 10
 
 // SvxBoxInfoItem
 #define MID_HORIZONTAL          1

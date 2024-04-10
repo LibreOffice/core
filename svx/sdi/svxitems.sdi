@@ -275,7 +275,8 @@ struct SvxHyphenZone
     INT16       MaxHyphens    MID_HYPHEN_MAX_HYPHENS;
     INT16       MinWordLength MID_HYPHEN_MIN_WORD_LENGTH;
     INT16       HyphenZone    MID_HYPHEN_ZONE;
-    INT16       HyphenKeep    MID_HYPHEN_KEEP;
+    BOOL        HyphenKeep    MID_HYPHEN_KEEP;
+    INT16       HyphenKeepType MID_HYPHEN_KEEP_TYPE;
     INT16       MinLead       MID_HYPHEN_COMPOUND_MIN_LEAD;
 };
 item SvxHyphenZone SvxHyphenZoneItem;

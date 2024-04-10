@@ -41,6 +41,8 @@
 #include <anchoredobject.hxx>
 #include <flyfrm.hxx>
 
+#include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
+
 #undef WIDOWTWIPS
 
 namespace
@@ -458,7 +460,8 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
     const SwTwips nChg = aRectFnSet.YDiff( nTmpY, nDocPrtTop + nOldHeight );
 
-    // hyphenation-keep: truncate a hyphenated line at the end of the page (but not more)
+    // hyphenation-keep: truncate a hyphenated line at the end of
+    // the column, page or spread (but not more)
     int nExtraWidLines = 0;
     if( rLine.GetLineNr() >= m_nWidLines && pMaster->HasPara() &&
         ( rLine.GetLineNr() == m_nWidLines || !rLine.GetCurr()->IsEndHyph() ) )
@@ -466,7 +469,32 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         SwParaPortion *pMasterPara = pMaster->GetPara();
         const SwAttrSet& rSet = pFrame->GetTextNodeForParaProps()->GetSwAttrSet();
         const SvxHyphenZoneItem &rAttr = rSet.GetHyphenZone();
-        if ( pMasterPara && pMasterPara->GetNext() && rAttr.IsHyphen() && rAttr.GetKeep() )
+
+        bool bKeep = rAttr.IsHyphen() && rAttr.IsKeep() && rAttr.GetKeepType();
+
+        // if PAGE or SPREAD, allow hyphenation at bottom of the non-last columns
+        if( bKeep && pFrame->IsInSct() && (
+                rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::SPREAD ||
+                rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::PAGE ) )
+        {
+            const SwSectionFrame* const pSct = pFrame->FindSctFrame();
+            // multi-column section
+            if ( pSct->Lower()->IsColumnFrame() && pSct->Lower()->GetNext()
+                 // and not in the last column
+                 && !pFrame->FindColFrame()->GetNext() )
+            {
+                bKeep = false;
+            }
+        }
+
+        // if SPREAD, allow hyphenation at bottom of left pages
+        if ( bKeep && rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::SPREAD &&
+                   pFrame->FindPageFrame()->OnRightPage() )
+        {
+            bKeep = false;
+        }
+
+        if ( bKeep && pMasterPara && pMasterPara->GetNext() )
         {
             SwLineLayout * pNext = pMasterPara->GetNext();
             SwLineLayout * pCurr = pNext;

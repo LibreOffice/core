@@ -3066,6 +3066,22 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <!-- default value: column -->
+      <rng:attribute name="loext:hyphenation-keep-type">
+        <rng:choice>
+          <rng:value>auto</rng:value>
+          <rng:value>spread</rng:value>
+          <rng:value>page</rng:value>
+          <rng:value>column</rng:value>
+          <rng:value>always</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
   <rng:define name="chart-data-point-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="loext:custom-label-field">

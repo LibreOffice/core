@@ -211,6 +211,7 @@
 #define RID_PARA_HYPHENATION_MIN_WORD_LENGTH                NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Hyphenation Min Word Length")
 #define RID_PARA_HYPHENATION_ZONE                           NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Hyphenation Zone")
 #define RID_PARA_HYPHENATION_KEEP                           NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Hyphenation Keep")
+#define RID_PARA_HYPHENATION_KEEP_TYPE                      NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Hyphenation Keep Type")
 #define RID_PARA_INTEROP_GRAB_BAG                           NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Interop Grab Bag")
 #define RID_PARA_IS_AUTO_FIRST_LINE_INDENT                  NC_("RID_ATTRIBUTE_NAMES_MAP", "Para is Auto First Line Indent")
 #define RID_PARA_IS_CHARACTER_DISTANCE                      NC_("RID_ATTRIBUTE_NAMES_MAP", "Para is Character Distance")

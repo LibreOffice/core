@@ -969,6 +969,7 @@ hyperlink
 hyperlink-behaviour
 hyphenate
 hyphenation-keep
+hyphenation-keep-type
 hyphenation-ladder-count
 hyphenation-push-char-count
 hyphenation-remain-char-count
@@ -1755,6 +1756,7 @@ split
 split-column
 split-position
 split-row
+spread
 spreadsheet
 spreadMethod
 sql-statement

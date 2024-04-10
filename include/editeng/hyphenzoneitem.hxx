@@ -33,7 +33,7 @@
 class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
 {
     bool      bHyphen  : 1;
-    bool      bPageEnd : 1;
+    bool      bKeep : 1;        // avoid hyphenation across page etc., see ParagraphHyphenationKeep
     bool      bNoCapsHyphenation : 1;
     bool      bNoLastWordHyphenation : 1;
     sal_uInt8 nMinLead;
@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
     sal_uInt8 nMaxHyphens;      // max. consecutive lines with hyphenation
     sal_uInt8 nMinWordLength;   // hyphenate only words with at least nMinWordLength characters
     sal_uInt16 nTextHyphenZone; // don't force hyphenation at line end, allow this extra white space
-    sal_uInt8 nKeep;            // avoid hyphenation across page etc., see ParagraphHyphenationKeep
+    sal_uInt8 nKeepType;        // avoid hyphenation across page etc., see ParagraphHyphenationKeep
     sal_uInt8 nCompoundMinLead; // min. characters between compound word boundary and hyphenation
 
 public:
@@ -65,8 +65,8 @@ public:
     void SetHyphen( const bool bNew ) { bHyphen = bNew; }
     bool IsHyphen() const { return bHyphen; }
 
-    void SetPageEnd( const bool bNew ) { bPageEnd = bNew; }
-    bool IsPageEnd() const { return bPageEnd; }
+    void SetKeep( const bool bNew ) { bKeep = bNew; }
+    bool IsKeep() const { return bKeep; }
 
     void SetNoCapsHyphenation( const bool bNew ) { bNoCapsHyphenation = bNew; }
     bool IsNoCapsHyphenation() const { return bNoCapsHyphenation; }
@@ -91,8 +91,8 @@ public:
     sal_uInt16 &GetTextHyphenZone() { return nTextHyphenZone; }
     sal_uInt16 GetTextHyphenZone() const { return nTextHyphenZone; }
 
-    sal_uInt8 &GetKeep() { return nKeep; }
-    sal_uInt8 GetKeep() const { return nKeep; }
+    sal_uInt8 &GetKeepType() { return nKeepType; }
+    sal_uInt8 GetKeepType() const { return nKeepType; }
 };
 
 #endif

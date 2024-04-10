@@ -231,11 +231,12 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_ParaVerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry<sal_uInt16> const pXML_ParaHyphenationKeep_Enum[] =
+SvXMLEnumMapEntry<sal_uInt16> const pXML_ParaHyphenationKeepType_Enum[] =
 {
     { XML_AUTO,         ParagraphHyphenationKeepType::AUTO    },
-    // keep page and column for interoperability
-    { XML_PAGE,         ParagraphHyphenationKeepType::COLUMN  },
+    { XML_COLUMN,       ParagraphHyphenationKeepType::COLUMN  },
+    { XML_PAGE,         ParagraphHyphenationKeepType::PAGE    },
+    { XML_SPREAD,       ParagraphHyphenationKeepType::SPREAD  },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -1424,9 +1425,11 @@ static const XMLPropertyHandler *GetPropertyHandler
         pHdl = new XMLComplexColorHandler;
         break;
     case XML_TYPE_HYPHENATION_KEEP:
-        pHdl = new XMLConstantsPropertyHandler( pXML_ParaHyphenationKeep_Enum, XML_TOKEN_INVALID );
+        pHdl = new XMLNamedBoolPropertyHdl( ::xmloff::token::XML_PAGE, ::xmloff::token::XML_AUTO );
         break;
-
+    case XML_TYPE_HYPHENATION_KEEP_TYPE:
+        pHdl = new XMLConstantsPropertyHandler( pXML_ParaHyphenationKeepType_Enum, XML_TOKEN_INVALID );
+        break;
     default:
     {
         OSL_ENSURE(false, "XMLPropertyHandler missing (!)");

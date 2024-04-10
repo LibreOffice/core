@@ -35,7 +35,7 @@ class tdf137513(UITestCase):
             self.assertEqual(2, len(xListBox.getChild('0').getChildren()))
             self.assertEqual("Default Paragraph Style\t", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
             self.assertEqual("Table Contents\t", get_state_as_dict(xListBox.getChild('0').getChild('1'))['Text'])
-            self.assertEqual(142, len(xListBox.getChild('0').getChild('0').getChildren()))
+            self.assertEqual(143, len(xListBox.getChild('0').getChild('0').getChildren()))
 
             xTableContent = xListBox.getChild('0').getChild('1')
             self.assertEqual(5, len(xTableContent.getChildren()))

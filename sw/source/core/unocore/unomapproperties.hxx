@@ -121,7 +121,8 @@
         { UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS,        RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS                 }, \
         { UNO_NAME_PARA_HYPHENATION_MIN_WORD_LENGTH,    RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_WORD_LENGTH             }, \
         { UNO_NAME_PARA_HYPHENATION_ZONE,               RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE}, \
-        { UNO_NAME_PARA_HYPHENATION_KEEP,               RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP                        }, \
+        { UNO_NAME_PARA_HYPHENATION_KEEP,               RES_PARATR_HYPHENZONE,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP                        }, \
+        { UNO_NAME_PARA_HYPHENATION_KEEP_TYPE,          RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP_TYPE                   }, \
         { UNO_NAME_CHAR_AUTO_KERNING,                   RES_CHRATR_AUTOKERN,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_CHAR_BACK_COLOR,                     RES_CHRATR_BACKGROUND,         cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_BACK_COLOR                         }, \
         { UNO_NAME_CHAR_BACKGROUND_COMPLEX_COLOR,       RES_CHRATR_BACKGROUND,         cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE, MID_BACKGROUND_COMPLEX_COLOR },\
@@ -484,7 +485,8 @@
                     { UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS, RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},\
                     { UNO_NAME_PARA_HYPHENATION_MIN_WORD_LENGTH, RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_WORD_LENGTH},\
                     { UNO_NAME_PARA_HYPHENATION_ZONE, RES_PARATR_HYPHENZONE,                      cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE},\
-                    { UNO_NAME_PARA_HYPHENATION_KEEP, RES_PARATR_HYPHENZONE,                      cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP},\
+                    { UNO_NAME_PARA_HYPHENATION_KEEP, RES_PARATR_HYPHENZONE,                      cppu::UnoType<bool>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP},\
+                    { UNO_NAME_PARA_HYPHENATION_KEEP_TYPE, RES_PARATR_HYPHENZONE,                 cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP_TYPE},\
                     { UNO_NAME_NUMBERING_STYLE_NAME, RES_PARATR_NUMRULE,  cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID,   0},\
                     { UNO_NAME_NUMBERING_LEVEL, RES_PARATR_LIST_LEVEL,    cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID,   0},\
                     { UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES, RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },\

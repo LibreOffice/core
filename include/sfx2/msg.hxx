@@ -135,6 +135,7 @@ SFX_DECL_TYPE(5);
 SFX_DECL_TYPE(6);
 SFX_DECL_TYPE(7);
 SFX_DECL_TYPE(8);
+SFX_DECL_TYPE(9);  // for SvxHyphenZoneItem
 SFX_DECL_TYPE(10); // for SfxDocInfoItem
 SFX_DECL_TYPE(11);
 

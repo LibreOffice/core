@@ -429,13 +429,24 @@ published service ParagraphProperties
          */
         [optional, property, readonly] long SortedTextId;
 
-        /** Specifies how last word on a page or on other regions is hyphenated.
+        /** This value is `TRUE` if both parts of a hyphenated word shall lie
+            within a single spread, page, or column. The default type is column.
+
+            @see ParaHyphenationKeepType
+
+            @since LibreOffice 24.8
+         */
+        [optional, property] boolean ParaHyphenationKeep;
+
+        /** Specifies how last line on a page or on other regions is hyphenated.
+
+            @see ParaHyphenationKeep
 
             @see com::sun::star::text::ParagraphHyphenationKeepType
 
             @since LibreOffice 24.8
          */
-        [optional, property] long ParaHyphenationKeep;
+        [optional, property] long ParaHyphenationKeepType;
 
         /** specifies the minimum number of characters of the compound word part
             to remain before the hyphen character (when hyphenation is applied).

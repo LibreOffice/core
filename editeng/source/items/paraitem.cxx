@@ -20,6 +20,7 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <libxml/xmlwriter.h>
 #include <comphelper/extract.hxx>
@@ -560,7 +561,7 @@ bool SvxOrphansItem::GetPresentation
 SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     bHyphen(bHyph),
-    bPageEnd(true),
+    bKeep(false),
     bNoCapsHyphenation(false),
     bNoLastWordHyphenation(false),
     nMinLead(0),
@@ -568,7 +569,7 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     nMaxHyphens(255),
     nMinWordLength(0),
     nTextHyphenZone(0),
-    nKeep(0),           // TODO change default value to COLUMN
+    nKeepType(css::text::ParagraphHyphenationKeepType::COLUMN),
     nCompoundMinLead(0)
 {
 }
@@ -581,6 +582,9 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
     {
         case  MID_IS_HYPHEN:
             rVal <<= bHyphen;
+        break;
+        case MID_HYPHEN_KEEP:
+            rVal <<= bKeep;
         break;
         case MID_HYPHEN_MIN_LEAD:
             rVal <<= static_cast<sal_Int16>(nMinLead);
@@ -603,8 +607,8 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
         case MID_HYPHEN_ZONE:
             rVal <<= static_cast<sal_Int16>(nTextHyphenZone);
         break;
-        case MID_HYPHEN_KEEP:
-            rVal <<= static_cast<sal_Int16>(nKeep);
+        case MID_HYPHEN_KEEP_TYPE:
+            rVal <<= static_cast<sal_Int16>(nKeepType);
         break;
         case MID_HYPHEN_COMPOUND_MIN_LEAD:
             rVal <<= static_cast<sal_Int16>(nCompoundMinLead);
@@ -616,10 +620,10 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
 bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Int32 nNewVal = 0; // sal_Int32 needs for MID_HYPHEN_KEEP
+    sal_Int32 nNewVal = 0; // sal_Int32 needs for MID_HYPHEN_KEEP_TYPE
 
     if( nMemberId != MID_IS_HYPHEN && nMemberId != MID_HYPHEN_NO_CAPS &&
-                nMemberId != MID_HYPHEN_NO_LAST_WORD )
+                nMemberId != MID_HYPHEN_NO_LAST_WORD && nMemberId != MID_HYPHEN_KEEP )
     {
         if(!(rVal >>= nNewVal))
             return false;
@@ -629,6 +633,9 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case  MID_IS_HYPHEN:
             bHyphen = Any2Bool(rVal);
+        break;
+        case  MID_HYPHEN_KEEP:
+            bKeep = Any2Bool(rVal);
         break;
         case MID_HYPHEN_MIN_LEAD:
             nMinLead = static_cast<sal_uInt8>(nNewVal);
@@ -651,8 +658,8 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_HYPHEN_ZONE:
             nTextHyphenZone = nNewVal;
         break;
-        case MID_HYPHEN_KEEP:
-            nKeep = static_cast<sal_uInt8>(nNewVal);
+        case MID_HYPHEN_KEEP_TYPE:
+            nKeepType = static_cast<sal_uInt8>(nNewVal);
         break;
         case MID_HYPHEN_COMPOUND_MIN_LEAD:
             nCompoundMinLead = static_cast<sal_uInt8>(nNewVal);
@@ -670,14 +677,14 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
     return ( rItem.bHyphen == bHyphen
             && rItem.bNoCapsHyphenation == bNoCapsHyphenation
             && rItem.bNoLastWordHyphenation == bNoLastWordHyphenation
-            && rItem.bPageEnd == bPageEnd
+            && rItem.bKeep == bKeep
             && rItem.nMinLead == nMinLead
             && rItem.nMinTrail == nMinTrail
             && rItem.nCompoundMinLead == nCompoundMinLead
             && rItem.nMaxHyphens == nMaxHyphens
             && rItem.nMinWordLength == nMinWordLength
             && rItem.nTextHyphenZone == nTextHyphenZone
-            && rItem.nKeep == nKeep );
+            && rItem.nKeepType == nKeepType );
 }
 
 SvxHyphenZoneItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
@@ -699,14 +706,8 @@ bool SvxHyphenZoneItem::GetPresentation
         case SfxItemPresentation::Nameless:
         {
             TranslateId pId = RID_SVXITEMS_HYPHEN_FALSE;
-
             if ( bHyphen )
                 pId = RID_SVXITEMS_HYPHEN_TRUE;
-            rText = EditResId(pId) + cpDelimTmp;
-            pId = RID_SVXITEMS_PAGE_END_FALSE;
-
-            if ( bPageEnd )
-                pId = RID_SVXITEMS_PAGE_END_TRUE;
             rText += EditResId(pId) + cpDelimTmp +
                     OUString::number( nMinLead ) + cpDelimTmp +
                     OUString::number( nMinTrail ) + cpDelimTmp +
@@ -722,7 +723,11 @@ bool SvxHyphenZoneItem::GetPresentation
             if ( bNoLastWordHyphenation )
                 rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_LAST_WORD_TRUE);
 
-            rText += OUString::number( nKeep );
+            if ( bKeep )
+                rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_TRUE) +
+                                 cpDelimTmp + OUString::number( nKeepType );
+            else
+                rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_FALSE);
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -731,11 +736,6 @@ bool SvxHyphenZoneItem::GetPresentation
 
             if ( bHyphen )
                 pId = RID_SVXITEMS_HYPHEN_TRUE;
-            rText = EditResId(pId) + cpDelimTmp;
-            pId = RID_SVXITEMS_PAGE_END_FALSE;
-
-            if ( bPageEnd )
-                pId = RID_SVXITEMS_PAGE_END_TRUE;
             rText += EditResId(pId) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
@@ -761,24 +761,30 @@ bool SvxHyphenZoneItem::GetPresentation
             if ( bNoLastWordHyphenation )
                 rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_LAST_WORD_TRUE);
 
-            switch ( nKeep )
+            if ( bKeep )
             {
-                case 0:
-                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_AUTO);
-                    break;
-                case 1:
-                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_SPREAD);
-                    break;
-                case 2:
-                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_PAGE);
-                    break;
-                case 3:
-                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_COLUMN);
-                    break;
-                case 4:
-                    rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_KEEP_ALWAYS);
-                    break;
+                rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_TRUE) + cpDelimTmp;
+                switch ( nKeepType )
+                {
+                    case 0:
+                        rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_AUTO);
+                        break;
+                    case 1:
+                        rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_SPREAD);
+                        break;
+                    case 2:
+                        rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_PAGE);
+                        break;
+                    case 3:
+                        rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_COLUMN);
+                        break;
+                    case 4:
+                        rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_ALWAYS);
+                        break;
+                }
             }
+            else
+                rText += EditResId(RID_SVXITEMS_HYPHEN_KEEP_FALSE);
 
             return true;
         }

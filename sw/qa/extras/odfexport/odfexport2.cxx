@@ -128,7 +128,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106733)
         "hyphenate"_ostr, "false");
 }
 
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
@@ -151,6 +150,70 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto)
     loadAndReload("tdf132599_auto.fodt");
     // not truncated hyphenated line
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread"
+    loadAndReload("tdf132599_page.fodt");
+    // shift last line of right page, resulting 3 pages
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread_left_page)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread"
+    loadAndReload("tdf132599_spread-left-page.fodt");
+    // do not shift last line of left page
+    // This was 4 (shifted last line of left page, when it's hyphenated)
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_column)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // last line of the left column is shifted, according to
+    // fo:hyphenation-keep="page" loext:hyphenation-keep-type="column"
+    loadAndReload("tdf132599_column.fodt");
+    // shift last line of the first column, resulting 3 pages
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_not_last_column)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // last line of the not last column is not shifted, according to
+    // fo:hyphenation-keep="page" loext:hyphenation-keep-type="page"
+    loadAndReload("tdf132599_page_in_not_last_column.fodt");
+    // do not shift last line of the first column, resulting 2 pages
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_last_column)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    // last line of the last column is shifted, according to
+    // fo:hyphenation-keep="page" loext:hyphenation-keep-type="page"
+    loadAndReload("tdf132599_page_in_last_column.fodt");
+    // shift last line of the first page, resulting 3 pages
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158885_compound_remain)

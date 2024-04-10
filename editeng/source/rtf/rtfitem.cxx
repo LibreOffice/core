@@ -1094,7 +1094,7 @@ ATTR_SETEMPHASIS:
                                 SvxHyphenZoneItem aHypenZone(
                                             (nTokenValue & 1) != 0,
                                             aPardMap[SID_ATTR_PARA_HYPHENZONE]);
-                                aHypenZone.SetPageEnd((nTokenValue & 2) != 0);
+                                aHypenZone.SetKeep((nTokenValue & 2) != 0);
 
                                 if( aPardMap[SID_ATTR_PARA_HYPHENZONE] &&
                                     RTF_HYPHLEAD == GetNextToken() &&

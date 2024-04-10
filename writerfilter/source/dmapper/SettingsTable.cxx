@@ -708,7 +708,8 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     if ( !aAllow.second && ( !aUse.first || aUse.second ) )
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("ParaHyphenationKeep", uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
+        xPropertySet->setPropertyValue("ParaHyphenationKeep", uno::Any(true));
+        xPropertySet->setPropertyValue("ParaHyphenationKeepType", uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
     }
 }
 
