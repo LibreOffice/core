@@ -55,162 +55,273 @@
     <property name="column-spacing">12</property>
     <property name="column-homogeneous">True</property>
     <child>
-      <object class="GtkBox" id="box3">
+      <!-- n-columns=4 n-rows=2 -->
+      <object class="GtkGrid" id="gdNameValue">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">6</property>
         <child>
-          <object class="GtkFrame" id="typeframe">
+          <object class="GtkLabel" id="nameft">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes" context="fldvarpage|nameft">Na_me:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">name</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="name">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-top">6</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="type">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore1</property>
-                    <property name="headers-visible">False</property>
-                    <property name="headers-clickable">False</property>
-                    <property name="search-column">0</property>
-                    <property name="show-expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="type-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="fldvarpage|label1">_Type</property>
-                <property name="use-underline">True</property>
-                <property name="xalign">0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+            <property name="truncate-multiline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="name-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|name">Type the name of the user-defined field  to create.</property>
               </object>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+            <property name="width">2</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="valueft">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
+            <property name="label" translatable="yes" context="fldvarpage|valueft">_Value:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">value</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTextView" id="value">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="value-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|value">Enter the contents to add to a user-defined field.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <!-- n-columns=2 n-rows=1 -->
+          <object class="GtkGrid" id="toolbar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="valign">end</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkButton" id="apply">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="fldvarpage|apply|tooltip_text">Apply</property>
+                <property name="valign">center</property>
+                <property name="image">image2</property>
+                <property name="always-show-image">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="apply-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|apply">Adds the user-defined field to the Select list.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="delete">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="fldvarpage|delete|tooltip_text">Delete</property>
+                <property name="valign">center</property>
+                <property name="image">image1</property>
+                <property name="always-show-image">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|delete">Removes the user-defined field from the select list. You can only remove fields that are not used in the current document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">3</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="typeframe">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="margin-top">6</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTreeView" id="type">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="headers-visible">False</property>
+                <property name="headers-clickable">False</property>
+                <property name="search-column">0</property>
+                <property name="show-expanders">False</property>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="type-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="fldvarpage|label1">_Type</property>
+            <property name="use-underline">True</property>
+            <property name="xalign">0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
         </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
+        <property name="height">2</property>
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box4">
+      <object class="GtkFrame" id="selectframe">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
-          <object class="GtkFrame" id="selectframe">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
+            <property name="margin-top">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
+            <property name="shadow-type">in</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkTreeView" id="select">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="margin-top">6</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="shadow-type">in</property>
+                <property name="model">liststore2</property>
+                <property name="headers-visible">False</property>
+                <property name="headers-clickable">False</property>
+                <property name="search-column">0</property>
+                <property name="show-expanders">False</property>
                 <child>
-                  <object class="GtkTreeView" id="select">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore2</property>
-                    <property name="headers-visible">False</property>
-                    <property name="headers-clickable">False</property>
-                    <property name="search-column">0</property>
-                    <property name="show-expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection2"/>
-                    </child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
+                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
                     </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="select-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|select">Lists the available fields for the field type selected in the Type list. To insert a field, click the field, and then click Insert.</property>
-                      </object>
-                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="select-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|select">Lists the available fields for the field type selected in the Type list. To insert a field, click the field, and then click Insert.</property>
                   </object>
                 </child>
               </object>
             </child>
-            <child type="label">
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="fldvarpage|label2">_Select</property>
-                <property name="use-underline">True</property>
-                <property name="xalign">0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="fldvarpage|label2">_Select</property>
+            <property name="use-underline">True</property>
+            <property name="xalign">0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
         </child>
       </object>
       <packing>
@@ -219,139 +330,55 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkFrame" id="formatframe">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
-          <object class="GtkBox" id="box2">
+          <object class="GtkBox" id="box5">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="margin-top">6</property>
+            <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkFrame" id="formatframe">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="label-xalign">0</property>
-                <property name="shadow-type">none</property>
+                <property name="shadow-type">in</property>
                 <child>
-                  <object class="GtkBox" id="box5">
+                  <object class="GtkTreeView" id="numformat">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="margin-top">6</property>
+                    <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
+                    <property name="model">liststore3</property>
+                    <property name="headers-visible">False</property>
+                    <property name="headers-clickable">False</property>
+                    <property name="search-column">0</property>
+                    <property name="show-expanders">False</property>
                     <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                         <child>
-                          <object class="GtkTreeView" id="numformat">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="model">liststore3</property>
-                            <property name="headers-visible">False</property>
-                            <property name="headers-clickable">False</property>
-                            <property name="search-column">0</property>
-                            <property name="show-expanders">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection3"/>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="numformat-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|numformat">Click the format to apply to the selected field, or click "Additional formats" to define a custom format.</property>
-                              </object>
-                            </child>
-                          </object>
+                          <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="format">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="model">liststore4</property>
-                            <property name="headers-visible">False</property>
-                            <property name="headers-clickable">False</property>
-                            <property name="search-column">0</property>
-                            <property name="show-expanders">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection4"/>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext4"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="format-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|format">In the Format list, define if the value is inserted as text or as number.</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numformat-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|numformat">Click the format to apply to the selected field, or click "Additional formats" to define a custom format.</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="fldvarpage|label3">_Format</property>
-                    <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
                   </object>
                 </child>
               </object>
@@ -359,6 +386,48 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="format">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore4</property>
+                    <property name="headers-visible">False</property>
+                    <property name="headers-clickable">False</property>
+                    <property name="search-column">0</property>
+                    <property name="show-expanders">False</property>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext4"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="format-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|format">In the Format list, define if the value is inserted as text or as number.</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -378,7 +447,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -448,11 +517,11 @@
                       <object class="GtkEntry" id="separator">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes" context="fldvarpage|separator|tooltip_text">Enter the character to use as a separator between the heading number and the field number.</property>
                         <property name="max-length">1</property>
                         <property name="width-chars">2</property>
                         <property name="text" translatable="yes" context="fldvarpage|separator">.</property>
                         <property name="truncate-multiline">True</property>
-                        <property name="tooltip_text" translatable="yes" context="fldvarpage|separator|tooltip_text">Enter the character to use as a separator between the heading number and the field number.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="separator-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|separator">Enter the character to use as a separator between the heading number and the field number.</property>
@@ -482,159 +551,27 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label3">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="fldvarpage|label3">_Format</property>
+            <property name="use-underline">True</property>
+            <property name="xalign">0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
         </child>
       </object>
       <packing>
         <property name="left-attach">2</property>
         <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <!-- n-columns=3 n-rows=2 -->
-      <object class="GtkGrid">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="row-spacing">6</property>
-        <property name="column-spacing">12</property>
-        <property name="column-homogeneous">True</property>
-        <child>
-          <object class="GtkLabel" id="nameft">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="fldvarpage|nameft">Na_me</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">name</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="name">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="truncate-multiline">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="name-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|name">Type the name of the user-defined field  to create.</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="valueft">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="fldvarpage|valueft">_Value</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">value</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow1">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTextView" id="value">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="comments-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|value">Enter the contents to add to a user-defined field.</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <!-- n-columns=2 n-rows=1 -->
-          <object class="GtkGrid" id="toolbar">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="valign">end</property>
-            <property name="column-spacing">6</property>
-            <child>
-              <object class="GtkButton" id="apply">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes" context="fldvarpage|apply|tooltip_text">Apply</property>
-                <property name="valign">center</property>
-                <property name="image">image2</property>
-                <property name="always-show-image">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="apply-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|apply">Adds the user-defined field to the Select list.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="delete">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes" context="fldvarpage|delete|tooltip_text">Delete</property>
-                <property name="valign">center</property>
-                <property name="image">image1</property>
-                <property name="always-show-image">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="delete-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|delete">Removes the user-defined field from the select list. You can only remove fields that are not used in the current document.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">1</property>
-        <property name="width">3</property>
       </packing>
     </child>
   </object>
