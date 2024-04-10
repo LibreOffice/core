@@ -331,7 +331,15 @@ class cstr_vector
     std::vector<char*> values;
     std::vector<bool>  acquired;
 public:
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 14
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
     cstr_vector ()  { values.reserve(8); acquired.reserve(8); }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 14
+#pragma GCC diagnostic pop
+#endif
     ~cstr_vector ()
     {
         OSL_ENSURE(values.size() == acquired.size(), "pq_connection: cstr_vector values and acquired size mismatch");
