@@ -4904,6 +4904,9 @@
                       <class name="context-default"/>
                       <class name="context-Empty"/>
                       <class name="context-EditCell"/>
+                      <class name="context-Pivot"/>
+                      <class name="context-Sparkline"/>
+                      <class name="context-Trendline"/>
                     </style>
                   </object>
                   <packing>
