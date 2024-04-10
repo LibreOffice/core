@@ -209,6 +209,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
             {
                 m_xContainer->set_sensitive(false);
                 mxTlbObjects->clear();
+                RefreshDocumentLB();
                 return;
             }
             else
