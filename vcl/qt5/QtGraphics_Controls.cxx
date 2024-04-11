@@ -25,6 +25,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 
+#include <QtInstance.hxx>
 #include <QtTools.hxx>
 #include <QtGraphicsBase.hxx>
 #include <vcl/decoview.hxx>
@@ -715,13 +716,23 @@ bool QtGraphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     return returnVal;
 }
 
-bool QtGraphics_Controls::getNativeControlRegion(ControlType type, ControlPart part,
-                                                 const tools::Rectangle& controlRegion,
-                                                 ControlState controlState,
-                                                 const ImplControlValue& val, const OUString&,
-                                                 tools::Rectangle& nativeBoundingRegion,
-                                                 tools::Rectangle& nativeContentRegion)
+bool QtGraphics_Controls::getNativeControlRegion(
+    ControlType type, ControlPart part, const tools::Rectangle& controlRegion,
+    ControlState controlState, const ImplControlValue& val, const OUString& rCaption,
+    tools::Rectangle& nativeBoundingRegion, tools::Rectangle& nativeContentRegion)
 {
+    QtInstance* pQtInstance(GetQtInstance());
+    assert(pQtInstance);
+    if (!pQtInstance->IsMainThread())
+    {
+        bool bRet;
+        pQtInstance->RunInMainThread([&]() {
+            bRet = getNativeControlRegion(type, part, controlRegion, controlState, val, rCaption,
+                                          nativeBoundingRegion, nativeContentRegion);
+        });
+        return bRet;
+    }
+
     bool retVal = false;
 
     QRect boundingRect = toQRect(controlRegion);
