@@ -239,6 +239,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                 { SimpleMove( &SwWrtShell::BwdPara_, false/*bSelect*/ ); }
     void FwdSentence( bool bSelect = false )
                 { SimpleMove( &SwWrtShell::FwdSentence_, bSelect ); }
+    void EndSentence( bool bSelect = false )
+                { SimpleMove( &SwWrtShell::EndSentence_, bSelect ); }
     void BwdSentence( bool bSelect = false )
                 { SimpleMove( &SwWrtShell::BwdSentence_, bSelect ); }
 
@@ -590,6 +592,7 @@ private:
     SAL_DLLPRIVATE bool NxtWrdForDelete();
     SAL_DLLPRIVATE bool PrvWrdForDelete();
     SAL_DLLPRIVATE bool FwdSentence_();
+    SAL_DLLPRIVATE bool EndSentence_();
     SAL_DLLPRIVATE bool BwdSentence_();
     bool FwdPara_();
     SAL_DLLPRIVATE bool BwdPara_();

@@ -190,6 +190,23 @@ bool SwWrtShell::FwdSentence_()
     return true;
 }
 
+bool SwWrtShell::EndSentence_()
+{
+    Push();
+    ClearMark();
+    if(!SwCursorShell::Right(1,SwCursorSkipMode::Chars))
+    {
+        Pop(SwCursorShell::PopMode::DeleteCurrent);
+        return false;
+    }
+    if( !GoEndSentence() && !IsEndPara() )
+        SwCursorShell::MovePara(GoCurrPara, fnParaEnd);
+
+    ClearMark();
+    Combine();
+    return true;
+}
+
 bool SwWrtShell::BwdSentence_()
 {
     Push();
