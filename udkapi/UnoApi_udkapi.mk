@@ -520,19 +520,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/util,\
 	XVeto \
 ))
 
-ifeq ($(OS)-$(ENABLE_DBGUTIL),EMSCRIPTEN-TRUE)
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,org/libreoffice/embindtest, \
-    Constants \
-    Enum \
-    Exception \
-    Struct \
-    XTest \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,org/libreoffice/embindtest, \
-    Test \
-))
-endif
-
 $(eval $(call gb_UnoApi_set_reference_rdbfile,udkapi,$(SRCDIR)/udkapi/type_reference/udkapi.idl))
 
 # vim: set noet sw=4 ts=4:
