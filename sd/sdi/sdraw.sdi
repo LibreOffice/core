@@ -4401,9 +4401,9 @@ SfxBoolItem BottomPaneImpress SID_BOTTOM_PANE_IMPRESS
     Asynchron;
 
 
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
 
