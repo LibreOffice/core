@@ -1523,7 +1523,8 @@ namespace
                 }
             }
         }
-        if (rTab.IsCollapsingBorders() && !rCell.Lower()->IsRowFrame())
+        assert(rCell.Lower());
+        if (rTab.IsCollapsingBorders() && rCell.Lower() && !rCell.Lower()->IsRowFrame())
         {
             if (rRow.GetTopMarginForLowers() != 0
                 || rRow.GetBottomMarginForLowers() != 0)
