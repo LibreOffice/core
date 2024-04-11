@@ -489,8 +489,6 @@ namespace svgio::svgreader
                     if(!bWidthInvalid && !bHeightInvalid)
                     {
                         basegfx::B2DRange aSvgCanvasRange; // viewport
-                        double fW = 0.0; // dummy values
-                        double fH = 0.0;
                         if (const basegfx::B2DRange* pBox = getViewBox())
                         {
                             // SVG 1.1 defines in section 7.7 that a negative value for width or height
@@ -508,20 +506,20 @@ namespace svgio::svgreader
                                 const double fViewBoxRatio(fViewBoxWidth/fViewBoxHeight);
                                 if(bWidthIsAbsolute && bHeightIsAbsolute)
                                 {
-                                    fW = getWidth().solveNonPercentage(*this);
-                                    fH = getHeight().solveNonPercentage(*this);
+                                    double fW = getWidth().solveNonPercentage(*this);
+                                    double fH = getHeight().solveNonPercentage(*this);
                                     aSvgCanvasRange = basegfx::B2DRange(0.0, 0.0, fW, fH);
                                 }
                                 else if (bWidthIsAbsolute)
                                 {
-                                    fW = getWidth().solveNonPercentage(*this);
-                                    fH = fW / fViewBoxRatio ;
+                                    double fW = getWidth().solveNonPercentage(*this);
+                                    double fH = fW / fViewBoxRatio;
                                     aSvgCanvasRange = basegfx::B2DRange(0.0, 0.0, fW, fH);
                                 }
                                 else if (bHeightIsAbsolute)
                                 {
-                                    fH = getHeight().solveNonPercentage(*this);
-                                    fW = fH * fViewBoxRatio ;
+                                    double fH = getHeight().solveNonPercentage(*this);
+                                    double fW = fH * fViewBoxRatio;
                                     aSvgCanvasRange = basegfx::B2DRange(0.0, 0.0, fW, fH);
                                 }
                                 else
@@ -536,6 +534,7 @@ namespace svgio::svgreader
                                     const double fChildHeight(pBox->getHeight());
                                     const double fLeft(pBox->getMinX());
                                     const double fTop(pBox->getMinY());
+                                    double fW, fH;
                                     if ( fChildWidth / fViewBoxWidth > fChildHeight / fViewBoxHeight )
                                     {  // expand y
                                         fW = fChildWidth;
@@ -577,8 +576,8 @@ namespace svgio::svgreader
                             const bool bHeightIsAbsolute(getHeight().isSet() && SvgUnit::percent != getHeight().getUnit());
                             if (bWidthIsAbsolute && bHeightIsAbsolute)
                             {
-                                fW =getWidth().solveNonPercentage(*this);
-                                fH =getHeight().solveNonPercentage(*this);
+                                double fW = getWidth().solveNonPercentage(*this);
+                                double fH = getHeight().solveNonPercentage(*this);
                                 aSvgCanvasRange = basegfx::B2DRange(0.0, 0.0, fW, fH);
                             }
                             else
@@ -592,8 +591,8 @@ namespace svgio::svgreader
                                 const double fChildHeight(aChildRange.getHeight());
                                 const double fChildLeft(aChildRange.getMinX());
                                 const double fChildTop(aChildRange.getMinY());
-                                fW = bWidthIsAbsolute ? getWidth().solveNonPercentage(*this) : fChildWidth;
-                                fH = bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : fChildHeight;
+                                double fW = bWidthIsAbsolute ? getWidth().solveNonPercentage(*this) : fChildWidth;
+                                double fH = bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : fChildHeight;
                                 const double fLeft(bWidthIsAbsolute ? 0.0 : fChildLeft);
                                 const double fTop(bHeightIsAbsolute ? 0.0 : fChildTop);
                                 aSvgCanvasRange = basegfx::B2DRange(fLeft, fTop, fLeft+fW, fTop+fH);
