@@ -32,6 +32,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <comphelper/configuration.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/random.h>
@@ -4820,7 +4821,8 @@ void SwWW8ImplReader::ReadDocVars()
             OUString value = aDocValueStrings[i];
             value = value.replaceAll("\r\n", "\n");
             value = value.replaceAll("\r", "\n");
-            aValue <<= value;
+            // fdo48097-1.doc is an example of a case needing sanitizeStringSurrogates
+            aValue <<= comphelper::string::sanitizeStringSurrogates(value);
         }
 
         uno::Reference< beans::XPropertySet > xMaster;
