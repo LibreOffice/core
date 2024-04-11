@@ -458,14 +458,14 @@ ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const OUString& rName
 
 ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const OUString& rName)
 {
-    auto res = maMemberHash.find (rName);
-    if (res != maMemberHash.end())
-        return res->second.get();
+    ScDPSaveMember* pResult = GetExistingMemberByName(rName);
+    if (pResult)
+        return pResult;
 
-    ScDPSaveMember* pNew = new ScDPSaveMember( rName );
-    maMemberHash[rName] = std::unique_ptr<ScDPSaveMember>(pNew);
-    maMemberList.push_back( pNew );
-    return pNew;
+    pResult = new ScDPSaveMember(rName);
+    maMemberHash[rName] = std::unique_ptr<ScDPSaveMember>(pResult);
+    maMemberList.push_back(pResult);
+    return pResult;
 }
 
 void ScDPSaveDimension::SetMemberPosition( const OUString& rName, sal_Int32 nNewPos )
