@@ -69,14 +69,9 @@ $(call gb_HelpTranslatePartTarget_get_target,%) : $(gb_HelpTranslatePartTarget_D
 	$(call gb_HelpTranslatePartTarget__command,$@,$*,$^)
 	$(call gb_Trace_EndRange,$*,HPX)
 
-.PHONY : $(call gb_HelpTranslatePartTarget_get_clean_target,%)
-$(call gb_HelpTranslatePartTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),HPX,1)
-	$(call gb_Helper_abbreviate_dirs,\
-		rm -rf \
-			$(call gb_HelpTranslatePartTarget_get_target,$*) \
-			$(call gb_HelpTranslatePartTarget_get_workdir,$*) \
-	)
+clear_HelpTranslatePartTarget:
+	$(call gb_Output_announce,clear HelpTranslatePartTarget,$(false),HPX,1)
+	rm -rf 	$(call gb_HelpTranslatePartTarget_get_workdir)
 
 # Translate a set of .xhp files from one directory.
 #
@@ -145,7 +140,7 @@ define gb_HelpTranslateTarget__make_part
 $(call gb_HelpTranslatePartTarget_HelpTranslatePartTarget,$(2),$(3),$(wildcard $(gb_POLOCATION)/$(3)/$(patsubst %/,%,$(4)).po))
 
 $(call gb_HelpTranslateTarget_get_target,$(1)) : $(call gb_HelpTranslatePartTarget_get_target,$(2))
-$(call gb_HelpTranslateTarget_get_clean_target,$(1)) : $(call gb_HelpTranslatePartTarget_get_clean_target,$(2))
+$(call gb_HelpTranslateTarget_get_clean_target,$(1)) : clear_HelpTranslatePartTarget
 
 endef
 
