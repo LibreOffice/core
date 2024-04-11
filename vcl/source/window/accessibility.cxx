@@ -363,6 +363,10 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
             nRole = accessibility::AccessibleRole::TOOL_TIP;
             break;
 
+        case WindowType::PROGRESSBAR:
+            nRole = accessibility::AccessibleRole::PROGRESS_BAR;
+            break;
+
         case WindowType::RULER:
             nRole = accessibility::AccessibleRole::RULER;
             break;
