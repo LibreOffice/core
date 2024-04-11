@@ -1039,6 +1039,14 @@ public:
                 seq[0] >>= mpSlideShowImpl->mxPrefetchSlide;
                 seq[1] >>= mpSlideShowImpl->mxPrefetchAnimationNode;
             }
+            else // rProperty.Value might be tested to 'bool' and 'false'
+            {
+                // IASS: There is no 'next' slide (last one is displayed),
+                // so end/flush Prefetch since that might still hold the
+                // last slide what would prevent updating/re-creating it
+                mpSlideShowImpl->mxPrefetchSlide.clear();
+                mpSlideShowImpl->mpPrefetchSlide.reset();
+            }
         }
         else if ( rProperty.Name == "SkipAllMainSequenceEffects" )
         {
