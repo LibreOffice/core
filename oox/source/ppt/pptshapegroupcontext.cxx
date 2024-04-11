@@ -108,10 +108,10 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
         {
             auto pShape = std::make_shared<PPTShape>( meShapeLocation, u"com.sun.star.drawing.CustomShape"_ustr );
             bool bUseBgFill = rAttribs.getBool(XML_useBgFill, false);
+            pShape->getFillProperties().moUseBgFill = bUseBgFill;
             if (bUseBgFill)
             {
                 pShape->getFillProperties().moFillType = XML_noFill;
-                pShape->getFillProperties().moUseBgFill = true;
             }
             pShape->setModelId(rAttribs.getStringDefaulted( XML_modelId ));
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );

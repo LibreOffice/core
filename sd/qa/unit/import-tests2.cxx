@@ -2133,6 +2133,19 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf161430)
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, eXFS);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, tdf158512)
+{
+    // First shape on first slide should have no fill to avoid hiding background
+    createSdImpressDoc("pptx/tdf158512.pptx");
+
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE,
+                         pPage->GetObj(0)->GetMergedItem(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(false,
+                         pPage->GetObj(0)->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND).GetValue());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
