@@ -42,7 +42,10 @@ ScInterpreterContext::ScInterpreterContext(const ScDocument& rDoc, SvNumberForma
     , mpFormatter(pFormatter)
 {
     if (!pFormatter)
+    {
         mpFormatData = nullptr;
+        mpNatNum = nullptr;
+    }
     else
         prepFormatterForRoMode(pFormatter);
 }
@@ -83,6 +86,7 @@ void ScInterpreterContext::prepFormatterForRoMode(SvNumberFormatter* pFormatter)
 {
     pFormatter->PrepForRoMode();
     mpFormatData = &pFormatter->GetROFormatData();
+    mpNatNum = &pFormatter->GetNatNum();
     mxLanguageData.reset(new SvNFLanguageData(pFormatter->GetROLanguageData()));
     mxAuxFormatKeyMap.reset(new SvNFFormatData::DefaultFormatKeysMap);
     maROPolicy = SvNFEngine::GetROPolicy(*mpFormatData, *mxAuxFormatKeyMap);
@@ -116,6 +120,7 @@ void ScInterpreterContext::ClearLookupCache(const ScDocument* pDoc)
         mxAuxFormatKeyMap.reset();
         mpFormatter = nullptr;
         mpFormatData = nullptr;
+        mpNatNum = nullptr;
     }
 }
 
@@ -166,7 +171,7 @@ sal_uInt32 ScInterpreterContext::NFGetTimeFormat(double fNumber, LanguageType eL
 {
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetTimeFormat(fNumber, eLnge, bForceDuration);
-    return SvNFEngine::GetTimeFormat(*mxLanguageData, *mpFormatData, nullptr, maROPolicy, fNumber,
+    return SvNFEngine::GetTimeFormat(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy, fNumber,
                                      eLnge, bForceDuration);
 }
 
@@ -175,7 +180,7 @@ sal_uInt32 ScInterpreterContext::NFGetFormatIndex(NfIndexTableOffset nTabOff,
 {
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetFormatIndex(nTabOff, eLnge);
-    return SvNFEngine::GetFormatIndex(*mxLanguageData, maROPolicy, nullptr, nTabOff, eLnge);
+    return SvNFEngine::GetFormatIndex(*mxLanguageData, maROPolicy, *mpNatNum, nTabOff, eLnge);
 }
 OUString ScInterpreterContext::NFGetFormatDecimalSep(sal_uInt32 nFormat) const
 {
@@ -204,7 +209,7 @@ sal_uInt32 ScInterpreterContext::NFGetFormatForLanguageIfBuiltIn(sal_uInt32 nFor
     if (aFind != maNFBuiltInCache.end())
         return aFind->nFormat;
 
-    nFormat = SvNFEngine::GetFormatForLanguageIfBuiltIn(*mxLanguageData, nullptr, maROPolicy,
+    nFormat = SvNFEngine::GetFormatForLanguageIfBuiltIn(*mxLanguageData, *mpNatNum, maROPolicy,
                                                         nFormat, eLnge);
 
     std::move_backward(maNFBuiltInCache.begin(),
@@ -220,8 +225,8 @@ sal_uInt32 ScInterpreterContext::NFGetStandardFormat(SvNumFormatType eType, Lang
 {
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetStandardFormat(eType, eLnge);
-    return SvNFEngine::GetStandardFormat(*mxLanguageData, *mpFormatData, nullptr, maROPolicy, eType,
-                                         eLnge);
+    return SvNFEngine::GetStandardFormat(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
+                                         eType, eLnge);
 }
 
 sal_uInt32 ScInterpreterContext::NFGetStandardFormat(sal_uInt32 nFIndex, SvNumFormatType eType,
@@ -229,7 +234,7 @@ sal_uInt32 ScInterpreterContext::NFGetStandardFormat(sal_uInt32 nFIndex, SvNumFo
 {
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetStandardFormat(nFIndex, eType, eLnge);
-    return SvNFEngine::GetStandardFormat(*mxLanguageData, *mpFormatData, nullptr, maROPolicy,
+    return SvNFEngine::GetStandardFormat(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
                                          nFIndex, eType, eLnge);
 }
 
@@ -240,7 +245,7 @@ void ScInterpreterContext::NFGetInputLineString(const double& fOutNumber, sal_uI
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetInputLineString(fOutNumber, nFIndex, rOutString, bFiltering,
                                                     bForceSystemLocale);
-    return SvNFEngine::GetInputLineString(*mxLanguageData, *mpFormatData, nullptr, maROPolicy,
+    return SvNFEngine::GetInputLineString(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
                                           fOutNumber, nFIndex, rOutString, bFiltering,
                                           bForceSystemLocale);
 }
@@ -251,7 +256,7 @@ void ScInterpreterContext::NFGetOutputString(const double& fOutNumber, sal_uInt3
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetOutputString(fOutNumber, nFIndex, sOutString, ppColor,
                                                  bUseStarFormat);
-    return SvNFEngine::GetOutputString(*mxLanguageData, *mpFormatData, nullptr, maROPolicy,
+    return SvNFEngine::GetOutputString(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
                                        fOutNumber, nFIndex, sOutString, ppColor, bUseStarFormat);
 }
 
@@ -270,7 +275,8 @@ sal_uInt32 ScInterpreterContext::NFGetStandardIndex(LanguageType eLnge) const
 {
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetStandardIndex(eLnge);
-    return SvNFEngine::GetStandardIndex(*mxLanguageData, *mpFormatData, nullptr, maROPolicy, eLnge);
+    return SvNFEngine::GetStandardIndex(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
+                                        eLnge);
 }
 
 bool ScInterpreterContext::NFGetPreviewString(const OUString& sFormatString, double fPreviewNumber,
@@ -280,7 +286,7 @@ bool ScInterpreterContext::NFGetPreviewString(const OUString& sFormatString, dou
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetPreviewString(sFormatString, fPreviewNumber, sOutString,
                                                   ppColor, eLnge);
-    return SvNFEngine::GetPreviewString(*mxLanguageData, *mpFormatData, nullptr, maROPolicy,
+    return SvNFEngine::GetPreviewString(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
                                         sFormatString, fPreviewNumber, sOutString, ppColor, eLnge,
                                         false);
 }
@@ -291,7 +297,7 @@ bool ScInterpreterContext::NFGetPreviewString(const OUString& sFormatString,
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetPreviewString(sFormatString, sPreviewString, sOutString,
                                                   ppColor, eLnge);
-    return SvNFEngine::GetPreviewString(*mxLanguageData, *mpFormatData, nullptr, maROPolicy,
+    return SvNFEngine::GetPreviewString(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
                                         sFormatString, sPreviewString, sOutString, ppColor, eLnge);
 }
 
@@ -302,7 +308,7 @@ bool ScInterpreterContext::NFGetPreviewStringGuess(const OUString& sFormatString
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GetPreviewStringGuess(sFormatString, fPreviewNumber, sOutString,
                                                        ppColor, eLnge);
-    return SvNFEngine::GetPreviewStringGuess(*mxLanguageData, *mpFormatData, nullptr, maROPolicy,
+    return SvNFEngine::GetPreviewStringGuess(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
                                              sFormatString, fPreviewNumber, sOutString, ppColor,
                                              eLnge);
 }
@@ -314,7 +320,7 @@ OUString ScInterpreterContext::NFGenerateFormat(sal_uInt32 nIndex, LanguageType 
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->GenerateFormat(nIndex, eLnge, bThousand, bIsRed, nPrecision,
                                                 nLeadingCnt);
-    return SvNFEngine::GenerateFormat(*mxLanguageData, *mpFormatData, nullptr, maROPolicy, nIndex,
+    return SvNFEngine::GenerateFormat(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy, nIndex,
                                       eLnge, bThousand, bIsRed, nPrecision, nLeadingCnt);
 }
 OUString ScInterpreterContext::NFGetCalcCellReturn(sal_uInt32 nFormat) const
@@ -336,8 +342,8 @@ bool ScInterpreterContext::NFIsNumberFormat(const OUString& sString, sal_uInt32&
 {
     if (!mpDoc->IsThreadedGroupCalcInProgress())
         return GetFormatTable()->IsNumberFormat(sString, F_Index, fOutNumber, eInputOptions);
-    return SvNFEngine::IsNumberFormat(*mxLanguageData, *mpFormatData, nullptr, maROPolicy, sString,
-                                      F_Index, fOutNumber, eInputOptions);
+    return SvNFEngine::IsNumberFormat(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
+                                      sString, F_Index, fOutNumber, eInputOptions);
 }
 
 /* ScInterpreterContextPool */

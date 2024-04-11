@@ -1341,7 +1341,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         SvNumberFormatter* pFormatter = m_pData->GetNumberFormatter();
         if ( !pFormatter ) return;
 
-        sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
+        sal_Int32 nNatNum = pFormatter->GetNatNum().convertFromXmlAttributes( aNatNumAttr );
         m_aFormatCode.append( "[NatNum" );
         m_aFormatCode.append( nNatNum );
     }

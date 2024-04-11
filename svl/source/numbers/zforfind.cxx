@@ -129,7 +129,7 @@ void ImpSvNumberInputScan::Reset()
 }
 
 // native number transliteration if necessary
-static void TransformInput(const NativeNumberWrapper* pNatNum, const SvNFLanguageData& rCurrentLanguage, OUString& rStr)
+static void TransformInput(const NativeNumberWrapper& rNatNum, const SvNFLanguageData& rCurrentLanguage, OUString& rStr)
 {
     sal_Int32 nPos, nLen;
     for ( nPos = 0, nLen = rStr.getLength(); nPos < nLen; ++nPos )
@@ -142,7 +142,7 @@ static void TransformInput(const NativeNumberWrapper* pNatNum, const SvNFLanguag
     }
     if ( nPos < nLen )
     {
-        rStr = pNatNum->getNativeNumberString(rStr, rCurrentLanguage.GetLanguageTag().getLocale(), 0);
+        rStr = rNatNum.getNativeNumberString(rStr, rCurrentLanguage.GetLanguageTag().getLocale(), 0);
     }
 }
 
@@ -3852,7 +3852,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                                            SvNumFormatType& F_Type,         // IN: old type, OUT: new type
                                            double& fOutNumber,              // OUT: number if convertible
                                            const SvNumberformat* pFormat,   // maybe a number format to match against
-                                           const NativeNumberWrapper* pNatNum,
+                                           const NativeNumberWrapper& rNatNum,
                                            SvNumInputOptions eInputOptions )
 {
     bool res; // return value
@@ -3872,7 +3872,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
         // NoMoreUpperNeeded, all comparisons on UpperCase
         OUString aString = mrCurrentLanguageData.GetCharClass()->uppercase( rString );
         // convert native number to ASCII if necessary
-        TransformInput(pNatNum, mrCurrentLanguageData, aString);
+        TransformInput(rNatNum, mrCurrentLanguageData, aString);
         res = IsNumberFormatMain( aString, pFormat );
     }
 

@@ -219,16 +219,16 @@ private:
     // Generate builtin formats provided by i18n behind CLOffset,
     // if bNoAdditionalFormats==false also generate additional i18n formats.
     SVL_DLLPRIVATE void ImpGenerateFormats(SvNFLanguageData& rCurrentLanguage,
-                                           const NativeNumberWrapper* pNatNum, sal_uInt32 CLOffset,
+                                           const NativeNumberWrapper& rNatNum, sal_uInt32 CLOffset,
                                            bool bNoAdditionalFormats);
 
     // Create builtin formats for language/country if necessary, return CLOffset
     SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL(SvNFLanguageData& rCurrentLanguage,
-                                            const NativeNumberWrapper* pNatNum, LanguageType eLnge);
+                                            const NativeNumberWrapper& rNatNum, LanguageType eLnge);
 
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
-        SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper* pNatNum, sal_uInt32 CLOffset,
+        SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper& rNatNum, sal_uInt32 CLOffset,
         css::uno::Reference<css::i18n::XNumberFormatCode> const& rNumberFormatCode,
         bool bAfterChangingSystemCL);
 
@@ -236,26 +236,26 @@ private:
     SVL_DLLPRIVATE void ResetDefaultSystemCurrency();
 
     SVL_DLLPRIVATE bool PutEntry(SvNFLanguageData& rCurrentLanguage,
-                                 const NativeNumberWrapper* pNatNum, OUString& rString,
+                                 const NativeNumberWrapper& rNatNum, OUString& rString,
                                  sal_Int32& nCheckPos, SvNumFormatType& nType, sal_uInt32& nKey,
                                  LanguageType eLnge = LANGUAGE_DONTKNOW,
                                  bool bReplaceBooleanEquivalent = true);
 
     SVL_DLLPRIVATE SvNumberformat*
-    ImpInsertFormat(SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper* pNatNum,
+    ImpInsertFormat(SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper& rNatNum,
                     const css::i18n::NumberFormatCode& rCode, sal_uInt32 nPos,
                     bool bAfterChangingSystemCL = false, sal_Int16 nOrgIndex = 0);
 
     // Return the format index of the currency format of the current locale.
     // Format is created if not already present.
     SVL_DLLPRIVATE sal_uInt32 ImpGetDefaultCurrencyFormat(SvNFLanguageData& rCurrentLanguage,
-                                                          const NativeNumberWrapper* pNatNum,
+                                                          const NativeNumberWrapper& rNatNum,
                                                           sal_uInt32 CLOffset, LanguageType eLnge);
 
     // Return the format index of the currency format of the system locale.
     // Format is created if not already present.
     SVL_DLLPRIVATE sal_uInt32 ImpGetDefaultSystemCurrencyFormat(SvNFLanguageData& rCurrentLanguage,
-                                                                const NativeNumberWrapper* pNatNum);
+                                                                const NativeNumberWrapper& rNatNum);
 
     SVL_DLLPRIVATE sal_uInt32 FindCachedDefaultFormat(sal_uInt32 nSearch) const;
 
@@ -273,13 +273,13 @@ class SVL_DLLPUBLIC SvNFEngine
 {
 public:
     typedef std::function<sal_uInt32(SvNFLanguageData& rCurrentLanguage,
-                                     const NativeNumberWrapper* pNatNum, LanguageType eLnge)>
+                                     const NativeNumberWrapper& rNatNum, LanguageType eLnge)>
         GetCLOffset;
     typedef std::function<void(sal_uInt32 nSearch, sal_uInt32 nFormat)> CacheFormat;
     typedef std::function<sal_uInt32(sal_uInt32 nSearch)> FindFormat;
 
     typedef std::function<sal_uInt32(SvNFLanguageData& rCurrentLanguage,
-                                     const NativeNumberWrapper* pNatNum, sal_uInt32 CLOffset,
+                                     const NativeNumberWrapper& rNatNum, sal_uInt32 CLOffset,
                                      LanguageType eLnge)>
         GetDefaultCurrency;
 
@@ -300,45 +300,45 @@ public:
                                sal_uInt16 nMonth, sal_Int16 nYear);
 
     static sal_uInt32 GetFormatIndex(SvNFLanguageData& rCurrentLanguage, const Accessor& rFuncs,
-                                     const NativeNumberWrapper* pNatNum, NfIndexTableOffset nTabOff,
+                                     const NativeNumberWrapper& rNatNum, NfIndexTableOffset nTabOff,
                                      LanguageType eLnge);
 
     static sal_uInt32 GetFormatForLanguageIfBuiltIn(SvNFLanguageData& rCurrentLanguage,
-                                                    const NativeNumberWrapper* pNatNum,
+                                                    const NativeNumberWrapper& rNatNum,
                                                     const Accessor& rFunc, sal_uInt32 nFormat,
                                                     LanguageType eLnge);
 
     static bool IsNumberFormat(SvNFLanguageData& rCurrentLanguage,
                                const SvNFFormatData& rFormatData,
-                               const NativeNumberWrapper* pNatNum, const Accessor& rFunc,
+                               const NativeNumberWrapper& rNatNum, const Accessor& rFunc,
                                const OUString& sString, sal_uInt32& F_Index, double& fOutNumber,
                                SvNumInputOptions eInputOptions = SvNumInputOptions::NONE);
 
     static sal_uInt32 GetStandardFormat(SvNFLanguageData& rCurrentLanguage,
                                         const SvNFFormatData& rFormatData,
-                                        const NativeNumberWrapper* pNatNum, const Accessor& rFunc,
+                                        const NativeNumberWrapper& rNatNum, const Accessor& rFunc,
                                         SvNumFormatType eType, LanguageType eLnge);
 
     static sal_uInt32 GetStandardFormat(SvNFLanguageData& rCurrentLanguage,
                                         const SvNFFormatData& rFormatData,
-                                        const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                        const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                         sal_uInt32 nFIndex, SvNumFormatType eType,
                                         LanguageType eLnge);
 
     static sal_uInt32 GetStandardFormat(SvNFLanguageData& rCurrentLanguage,
                                         const SvNFFormatData& rFormatData,
-                                        const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                        const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                         double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
                                         LanguageType eLnge);
 
     static sal_uInt32 GetStandardIndex(SvNFLanguageData& rCurrentLanguage,
                                        const SvNFFormatData& rFormatData,
-                                       const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                       const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                        LanguageType eLnge = LANGUAGE_DONTKNOW);
 
     static sal_uInt32 GetTimeFormat(SvNFLanguageData& rCurrentLanguage,
                                     const SvNFFormatData& rFormatData,
-                                    const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                    const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                     double fNumber, LanguageType eLnge, bool bForceDuration);
 
     /// Return the decimal separator matching the locale of the given format
@@ -351,19 +351,19 @@ public:
 
     static void GetInputLineString(SvNFLanguageData& rCurrentLanguage,
                                    const SvNFFormatData& rFormatData,
-                                   const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                   const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                    const double& fOutNumber, sal_uInt32 nFIndex,
                                    OUString& sOutString, bool bFiltering, bool bForceSystemLocale);
 
     static sal_uInt32 GetEditFormat(SvNFLanguageData& rCurrentLanguage,
                                     const SvNFFormatData& rFormatData,
-                                    const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                    const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                     double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
                                     const SvNumberformat* pFormat, LanguageType eForLocale);
 
     static void GetOutputString(SvNFLanguageData& rCurrentLanguage,
                                 const SvNFFormatData& rFormatData,
-                                const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                 const double& fOutNumber, sal_uInt32 nFIndex, OUString& sOutString,
                                 const Color** ppColor, bool bUseStarFormat);
 
@@ -374,28 +374,28 @@ public:
 
     static bool GetPreviewString(SvNFLanguageData& rCurrentLanguage,
                                  const SvNFFormatData& rFormatData,
-                                 const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                 const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                  const OUString& sFormatString, double fPreviewNumber,
                                  OUString& sOutString, const Color** ppColor, LanguageType eLnge,
                                  bool bUseStarFormat);
 
     static bool GetPreviewString(SvNFLanguageData& rCurrentLanguage,
                                  const SvNFFormatData& rFormatData,
-                                 const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                 const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                  const OUString& sFormatString, const OUString& sPreviewString,
                                  OUString& sOutString, const Color** ppColor,
                                  LanguageType eLnge = LANGUAGE_DONTKNOW);
 
     static bool GetPreviewStringGuess(SvNFLanguageData& rCurrentLanguage,
                                       const SvNFFormatData& rFormatData,
-                                      const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                      const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                       const OUString& sFormatString, double fPreviewNumber,
                                       OUString& sOutString, const Color** ppColor,
                                       LanguageType eLnge);
 
     static OUString GenerateFormat(SvNFLanguageData& rCurrentLanguage,
                                    const SvNFFormatData& rFormatData,
-                                   const NativeNumberWrapper* pNatNum, const Accessor& rFuncs,
+                                   const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                    sal_uInt32 nIndex, LanguageType eLnge, bool bThousand,
                                    bool IsRed, sal_uInt16 nPrecision, sal_uInt16 nLeadingZeros);
 
@@ -408,21 +408,21 @@ private:
 
     static sal_uInt32
     ImpGetStandardFormat(SvNFLanguageData& rCurrentLanguage, const SvNFFormatData& rFormatData,
-                         const NativeNumberWrapper* pNatNum, const SvNFEngine::Accessor& rFuncs,
+                         const NativeNumberWrapper& rNatNum, const SvNFEngine::Accessor& rFuncs,
                          SvNumFormatType eType, sal_uInt32 CLOffset, LanguageType eLnge);
 
     static sal_uInt32 DefaultCurrencyRW(SvNFFormatData& rFormatData,
                                         SvNFLanguageData& rCurrentLanguage,
-                                        const NativeNumberWrapper* pNatNum, sal_uInt32 CLOffset,
+                                        const NativeNumberWrapper& rNatNum, sal_uInt32 CLOffset,
                                         LanguageType eLnge);
     static sal_uInt32 DefaultCurrencyRO(const SvNFFormatData& rFormatData, SvNFLanguageData&,
-                                        const NativeNumberWrapper*, sal_uInt32 CLOffset,
+                                        const NativeNumberWrapper&, sal_uInt32 CLOffset,
                                         LanguageType eLnge);
 
     static sal_uInt32 GetCLOffsetRW(SvNFFormatData& rFormatData, SvNFLanguageData& rCurrentLanguage,
-                                    const NativeNumberWrapper* pNatNum, LanguageType eLnge);
+                                    const NativeNumberWrapper& rNatNum, LanguageType eLnge);
     static sal_uInt32 GetCLOffsetRO(const SvNFFormatData& rFormatData, SvNFLanguageData&,
-                                    const NativeNumberWrapper*, LanguageType eLnge);
+                                    const NativeNumberWrapper&, LanguageType eLnge);
 
     static void CacheFormatRW(SvNFFormatData& rFormatData, sal_uInt32 nSearch, sal_uInt32 nFormat);
     static void CacheFormatRO(SvNFFormatData::DefaultFormatKeysMap& rMap, sal_uInt32 nSearch,

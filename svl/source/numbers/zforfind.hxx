@@ -51,7 +51,7 @@ public:
                          SvNumFormatType& F_Type,            /// format type (in + out)
                          double& fOutNumber,                 /// value determined (out)
                          const SvNumberformat* pFormat,      /// number format to which compare against
-                         const NativeNumberWrapper* pNatNum,
+                         const NativeNumberWrapper& rNatNum,
                          SvNumInputOptions eInputOptions);
 
     /// after IsNumberFormat: get decimal position

@@ -132,6 +132,7 @@ private:
     std::unique_ptr<SvNFFormatData::DefaultFormatKeysMap> mxAuxFormatKeyMap;
 
     const SvNFFormatData* mpFormatData;
+    const NativeNumberWrapper* mpNatNum;
     SvNFEngine::Accessor maROPolicy;
 
     // Some temp caches of the 4 most recent results from NumberFormatting

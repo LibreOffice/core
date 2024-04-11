@@ -175,7 +175,7 @@ public:
     SvNumberformat( OUString& rString,
                    ImpSvNumberformatScan* pSc,
                    ImpSvNumberInputScan* pISc,
-                   const NativeNumberWrapper* pNatNum,
+                   const NativeNumberWrapper& rNatNum,
                    sal_Int32& nCheckPos,
                    LanguageType& eLan,
                    bool bReplaceBooleanEquivalent = true );
@@ -244,10 +244,10 @@ public:
      * Get output string from a numeric value that fits the number of
      * characters specified.
      */
-    bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString, const NativeNumberWrapper* pNatNum ) const;
+    bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString, const NativeNumberWrapper& rNatNum ) const;
 
     // bStarFlag: Take *n format as ESC n
-    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor, const NativeNumberWrapper* pNatNum, const SvNFLanguageData& rCurrentLang, bool bStarFlag = false) const;
+    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor, const NativeNumberWrapper& rNatNum, const SvNFLanguageData& rCurrentLang, bool bStarFlag = false) const;
     void GetOutputString( std::u16string_view sString, OUString& OutString, const Color** ppColor, bool bStarFlag = false) const;
 
     // True if type text
@@ -463,7 +463,7 @@ public:
     void GetNatNumXml(
             css::i18n::NativeNumberXmlAttributes2& rAttr,
             sal_uInt16 nNumFor,
-            const NativeNumberWrapper* pNatNum ) const;
+            const NativeNumberWrapper& rNatNum ) const;
     /** Return empty string if no NatNum modifier or invalid nNumFor
         otherwise return "[NatNum1]" or "[NatNum12 ...]" */
     OUString GetNatNumModifierString( sal_uInt16 nNumFor = 0 ) const;
@@ -610,11 +610,11 @@ private:
 
     // standard number output
     SVL_DLLPRIVATE void ImpGetOutputStandard(double& fNumber, OUString& OutString,
-                                             const NativeNumberWrapper* pNatNum) const;
+                                             const NativeNumberWrapper& rNatNum) const;
     SVL_DLLPRIVATE void ImpGetOutputStandard(double& fNumber, OUStringBuffer& OutString,
-                                             const NativeNumberWrapper* pNatNum) const;
+                                             const NativeNumberWrapper& rNatNum) const;
     SVL_DLLPRIVATE void ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutString, sal_uInt16 nPrecision,
-                                                   const NativeNumberWrapper* pNatNum) const;
+                                                   const NativeNumberWrapper& rNatNum) const;
     // numbers in input line
     SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, OUString& OutString ) const;
 
@@ -628,7 +628,7 @@ private:
     // Helper function for number strings
     // append string symbols, insert leading 0 or ' ', or ...
     SVL_DLLPRIVATE bool ImpNumberFill(
-                    const NativeNumberWrapper* pNatNum,
+                    const NativeNumberWrapper& rNatNum,
                     OUStringBuffer& sStr,
                     double& rNumber,
                     sal_Int32& k,
@@ -640,7 +640,7 @@ private:
 
     // Helper function to fill in the integer part and the group (AKA thousand) separators
     SVL_DLLPRIVATE bool ImpNumberFillWithThousands(
-                                 const NativeNumberWrapper* pNatNum,
+                                 const NativeNumberWrapper& rNatNum,
                                  OUStringBuffer& sStr,
                                  double& rNumber,
                                  sal_Int32 k,
@@ -659,7 +659,7 @@ private:
                                       sal_Int32 & nDigitCount,
                                       utl::DigitGroupingIterator & ) const;
 
-    SVL_DLLPRIVATE bool ImpDecimalFill(const NativeNumberWrapper* pNatNum,
+    SVL_DLLPRIVATE bool ImpDecimalFill(const NativeNumberWrapper& rNatNum,
                                  OUStringBuffer& sStr,
                                  double& rNumber,
                                  sal_Int32 nDecPos,
@@ -684,30 +684,30 @@ private:
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
                                              bool bStarFlag,
-                                             const NativeNumberWrapper* pNatNum,
+                                             const NativeNumberWrapper& rNatNum,
                                              OUStringBuffer& OutString) const;
     SVL_DLLPRIVATE bool ImpGetScientificOutput(double fNumber,
                                                sal_uInt16 nIx,
                                                bool bStarFlag,
-                                               const NativeNumberWrapper* pNatNum,
+                                               const NativeNumberWrapper& rNatNum,
                                                OUStringBuffer& OutString) const;
 
     SVL_DLLPRIVATE bool ImpGetDateOutput( double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
-                                          const NativeNumberWrapper* pNatNum,
+                                          const NativeNumberWrapper& rNatNum,
                                           const SvNFLanguageData& rCurrentLang,
                                           OUStringBuffer& OutString ) const;
     SVL_DLLPRIVATE bool ImpGetTimeOutput( double fNumber,
                                           sal_uInt16 nIx,
                                           bool bStarFlag,
-                                          const NativeNumberWrapper* pNatNum,
+                                          const NativeNumberWrapper& rNatNum,
                                           const SvNFLanguageData& rCurrentLang,
                                           OUStringBuffer& OutString ) const;
     SVL_DLLPRIVATE bool ImpGetDateTimeOutput( double fNumber,
                                               sal_uInt16 nIx,
                                               bool bStarFlag,
-                                              const NativeNumberWrapper* pNatNum,
+                                              const NativeNumberWrapper& rNatNum,
                                               const SvNFLanguageData& rCurrentLang,
                                               OUStringBuffer& OutString ) const;
 
@@ -728,13 +728,13 @@ private:
 
     SVL_DLLPRIVATE bool ImpGetLogicalOutput( double fNumber,
                                              sal_uInt16 nIx,
-                                             const NativeNumberWrapper* pNatNum,
+                                             const NativeNumberWrapper& rNatNum,
                                              OUStringBuffer& OutString) const;
 
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
                                             sal_uInt16 nIx,
                                             bool bStarFlag,
-                                            const NativeNumberWrapper* pNatNum,
+                                            const NativeNumberWrapper& rNatNum,
                                             OUStringBuffer& OutString) const;
 
     SVL_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );
@@ -742,14 +742,14 @@ private:
     // normal digits or other digits, depending on ImpSvNumFor.aNatNum,
     // [NatNum1], [NatNum2], ...
     SVL_DLLPRIVATE static OUString ImpGetNatNumString(const SvNumberNatNum& rNum, sal_Int64 nVal,
-                                                      sal_uInt16 nMinDigits, const NativeNumberWrapper* pNatNum);
+                                                      sal_uInt16 nMinDigits, const NativeNumberWrapper& rNatNum);
 
-    OUString ImpIntToString(const NativeNumberWrapper* pNatNum, sal_uInt16 nIx, sal_Int64 nVal, sal_uInt16 nMinDigits = 0 ) const
+    OUString ImpIntToString(const NativeNumberWrapper& rNatNum, sal_uInt16 nIx, sal_Int64 nVal, sal_uInt16 nMinDigits = 0 ) const
     {
         const SvNumberNatNum& rNum = NumFor[nIx].GetNatNum();
         if ( nMinDigits || rNum.IsComplete() )
         {
-            return ImpGetNatNumString( rNum, nVal, nMinDigits, pNatNum );
+            return ImpGetNatNumString( rNum, nVal, nMinDigits, rNatNum );
         }
         return OUString::number(nVal);
     }
@@ -762,14 +762,14 @@ private:
     // line string where extra trailing "0" are discarded.
     SVL_DLLPRIVATE sal_uInt16 ImpGetFractionOfSecondString( OUStringBuffer& rBuf, double fFractionOfSecond,
             int nFractionDecimals, bool bAddOneRoundingDecimal, sal_uInt16 nIx, sal_uInt16 nMinimumInputLineDecimals,
-            const NativeNumberWrapper* pNatNum) const;
+            const NativeNumberWrapper& rNatNum) const;
 
     // transliterate according to NativeNumber
-    SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum, sal_uInt16 nDateKey, const NativeNumberWrapper* pNatNum) const;
+    SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum, sal_uInt16 nDateKey, const NativeNumberWrapper& rNatNum) const;
 
-    OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum, sal_uInt16 nDateKey, const NativeNumberWrapper* pNatNum) const
+    OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum, sal_uInt16 nDateKey, const NativeNumberWrapper& rNatNum) const
     {
-        return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum, nDateKey, pNatNum) : rStr;
+        return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum, nDateKey, rNatNum) : rStr;
     }
 
 };

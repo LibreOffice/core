@@ -271,11 +271,11 @@ public:
         moNativeNumber.reset();
     }
 
-    NativeNumberWrapper* get() const
+    NativeNumberWrapper& get() const
     {
         if (!moNativeNumber)
             moNativeNumber.emplace(m_xContext);
-        return &*moNativeNumber;
+        return *moNativeNumber;
     }
 };
 

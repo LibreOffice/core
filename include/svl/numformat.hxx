@@ -623,7 +623,7 @@ public:
     CalendarWrapper* GetCalendar() const { return m_aCurrentLanguage.GetCalendar(); }
 
     // return the corresponding NativeNumberSupplier wrapper
-    const NativeNumberWrapper* GetNatNum() const;
+    const NativeNumberWrapper& GetNatNum() const;
 
     // cached locale data items
 
