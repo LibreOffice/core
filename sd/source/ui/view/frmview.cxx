@@ -41,6 +41,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -222,7 +223,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
         SetEliminatePolyPoints(false);
         mbDoubleClickTextEdit = false;
         mbClickChangeRotation = false;
-        mnSlidesPerRow = 4;
+        mnSlidesPerRow = officecfg::Office::Impress::Misc::SorterSlidesPerRow::get();
 
         {
             bool bUseContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();

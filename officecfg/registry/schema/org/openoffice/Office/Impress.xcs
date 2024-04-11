@@ -423,6 +423,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="SorterSlidesPerRow" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Default number of slides per row in slide sorter.</desc>
+          <label>Sorter slides per row</label>
+        </info>
+        <value>4</value>
+      </prop>
       <prop oor:name="SlideshowRespectZOrder" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Slideshow Z order for animations -->
         <info>
