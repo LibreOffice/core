@@ -878,20 +878,33 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
     {
+        TransliterationFlags transFlags = m_aRotateCase.getNextMode();
+        bool bSentenceCase = TransliterationFlags::SENTENCE_CASE == transFlags;
         SwWrtShell& rSh = GetShell();
         if (rSh.HasSelection())
         {
-            rSh.TransliterateText(m_aRotateCase.getNextMode());
+            if (bSentenceCase)
+            {
+                OUString aSelection = rSh.GetSelText().trim();
+                if (aSelection.getLength() <= 2 || (aSelection.indexOf(' ') < 0 && aSelection.indexOf('\t') < 0))
+                    transFlags = m_aRotateCase.getNextMode();
+            }
+            rSh.TransliterateText(transFlags);
         }
         else
         {
+            if (bSentenceCase)
+            {
+                if (!rSh.IsEndSentence())
+                    rSh.EndSentence(false);
+            }
             if (rSh.IsEndSentence())
             {
                 rSh.BwdSentence(true);
-                rSh.TransliterateText(m_aRotateCase.getNextMode());
+                rSh.TransliterateText(transFlags);
             }
             else if ((rSh.IsEndWrd() || rSh.IsStartWord() || rSh.IsInWord()) && rSh.SelWrd())
-                rSh.TransliterateText(m_aRotateCase.getNextMode());
+                rSh.TransliterateText(transFlags);
         }
     }
 }

@@ -743,10 +743,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157988)
 
     dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
 
-    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodalesSODALES"));
-
-    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
-
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt"));
 
     dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
@@ -762,10 +758,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157988)
     dispatchCommand(mxComponent, ".uno:Escape", {});
 
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-
-    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
-
-    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodalesSODALES"));
 
     dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
 
