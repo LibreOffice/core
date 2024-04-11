@@ -215,111 +215,174 @@ void Window::SetAccessibleRole( sal_uInt16 nRole )
 sal_uInt16 Window::getDefaultAccessibleRole() const
 {
     sal_uInt16 nRole = 0xFFFF;
-    switch ( GetType() )
+    switch (GetType())
     {
-        case WindowType::MESSBOX:    // MT: Would be nice to have special roles!
+        case WindowType::MESSBOX: // MT: Would be nice to have special roles!
         case WindowType::INFOBOX:
         case WindowType::WARNINGBOX:
         case WindowType::ERRORBOX:
-        case WindowType::QUERYBOX: nRole = accessibility::AccessibleRole::ALERT; break;
+        case WindowType::QUERYBOX:
+            nRole = accessibility::AccessibleRole::ALERT;
+            break;
 
         case WindowType::MODELESSDIALOG:
         case WindowType::TABDIALOG:
         case WindowType::BUTTONDIALOG:
-        case WindowType::DIALOG: nRole = accessibility::AccessibleRole::DIALOG; break;
+        case WindowType::DIALOG:
+            nRole = accessibility::AccessibleRole::DIALOG;
+            break;
 
         case WindowType::PUSHBUTTON:
         case WindowType::OKBUTTON:
         case WindowType::CANCELBUTTON:
         case WindowType::HELPBUTTON:
         case WindowType::IMAGEBUTTON:
-        case WindowType::MOREBUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
-        case WindowType::MENUBUTTON: nRole = accessibility::AccessibleRole::BUTTON_MENU; break;
+        case WindowType::MOREBUTTON:
+            nRole = accessibility::AccessibleRole::PUSH_BUTTON;
+            break;
+        case WindowType::MENUBUTTON:
+            nRole = accessibility::AccessibleRole::BUTTON_MENU;
+            break;
 
-        case WindowType::RADIOBUTTON: nRole = accessibility::AccessibleRole::RADIO_BUTTON; break;
+        case WindowType::RADIOBUTTON:
+            nRole = accessibility::AccessibleRole::RADIO_BUTTON;
+            break;
         case WindowType::TRISTATEBOX:
-        case WindowType::CHECKBOX: nRole = accessibility::AccessibleRole::CHECK_BOX; break;
+        case WindowType::CHECKBOX:
+            nRole = accessibility::AccessibleRole::CHECK_BOX;
+            break;
 
-        case WindowType::MULTILINEEDIT: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
+        case WindowType::MULTILINEEDIT:
+            nRole = accessibility::AccessibleRole::SCROLL_PANE;
+            break;
 
         case WindowType::PATTERNFIELD:
-        case WindowType::EDIT: nRole = static_cast<Edit const *>(this)->IsPassword() ? accessibility::AccessibleRole::PASSWORD_TEXT : accessibility::AccessibleRole::TEXT; break;
+        case WindowType::EDIT:
+            nRole = static_cast<Edit const*>(this)->IsPassword()
+                        ? accessibility::AccessibleRole::PASSWORD_TEXT
+                        : accessibility::AccessibleRole::TEXT;
+            break;
 
         case WindowType::PATTERNBOX:
         case WindowType::NUMERICBOX:
         case WindowType::METRICBOX:
         case WindowType::CURRENCYBOX:
         case WindowType::LONGCURRENCYBOX:
-        case WindowType::COMBOBOX: nRole = accessibility::AccessibleRole::COMBO_BOX; break;
+        case WindowType::COMBOBOX:
+            nRole = accessibility::AccessibleRole::COMBO_BOX;
+            break;
 
         case WindowType::LISTBOX:
-        case WindowType::MULTILISTBOX: nRole = accessibility::AccessibleRole::LIST; break;
+        case WindowType::MULTILISTBOX:
+            nRole = accessibility::AccessibleRole::LIST;
+            break;
 
-        case WindowType::TREELISTBOX: nRole = accessibility::AccessibleRole::TREE; break;
+        case WindowType::TREELISTBOX:
+            nRole = accessibility::AccessibleRole::TREE;
+            break;
 
-        case WindowType::FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
+        case WindowType::FIXEDTEXT:
+            nRole = accessibility::AccessibleRole::LABEL;
+            break;
         case WindowType::FIXEDLINE:
-            if( !GetText().isEmpty() )
+            if (!GetText().isEmpty())
                 nRole = accessibility::AccessibleRole::LABEL;
             else
                 nRole = accessibility::AccessibleRole::SEPARATOR;
             break;
 
         case WindowType::FIXEDBITMAP:
-        case WindowType::FIXEDIMAGE: nRole = accessibility::AccessibleRole::ICON; break;
-        case WindowType::GROUPBOX: nRole = accessibility::AccessibleRole::GROUP_BOX; break;
-        case WindowType::SCROLLBAR: nRole = accessibility::AccessibleRole::SCROLL_BAR; break;
+        case WindowType::FIXEDIMAGE:
+            nRole = accessibility::AccessibleRole::ICON;
+            break;
+        case WindowType::GROUPBOX:
+            nRole = accessibility::AccessibleRole::GROUP_BOX;
+            break;
+        case WindowType::SCROLLBAR:
+            nRole = accessibility::AccessibleRole::SCROLL_BAR;
+            break;
 
         case WindowType::SLIDER:
         case WindowType::SPLITTER:
-        case WindowType::SPLITWINDOW: nRole = accessibility::AccessibleRole::SPLIT_PANE; break;
+        case WindowType::SPLITWINDOW:
+            nRole = accessibility::AccessibleRole::SPLIT_PANE;
+            break;
 
         case WindowType::DATEBOX:
         case WindowType::TIMEBOX:
         case WindowType::DATEFIELD:
-        case WindowType::TIMEFIELD: nRole = accessibility::AccessibleRole::DATE_EDITOR; break;
+        case WindowType::TIMEFIELD:
+            nRole = accessibility::AccessibleRole::DATE_EDITOR;
+            break;
 
         case WindowType::METRICFIELD:
         case WindowType::CURRENCYFIELD:
         case WindowType::SPINBUTTON:
         case WindowType::SPINFIELD:
-        case WindowType::FORMATTEDFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
+        case WindowType::FORMATTEDFIELD:
+            nRole = accessibility::AccessibleRole::SPIN_BOX;
+            break;
 
-        case WindowType::TOOLBOX: nRole = accessibility::AccessibleRole::TOOL_BAR; break;
-        case WindowType::STATUSBAR: nRole = accessibility::AccessibleRole::STATUS_BAR; break;
+        case WindowType::TOOLBOX:
+            nRole = accessibility::AccessibleRole::TOOL_BAR;
+            break;
+        case WindowType::STATUSBAR:
+            nRole = accessibility::AccessibleRole::STATUS_BAR;
+            break;
 
-        case WindowType::TABPAGE: nRole = accessibility::AccessibleRole::PANEL; break;
-        case WindowType::TABCONTROL: nRole = accessibility::AccessibleRole::PAGE_TAB_LIST; break;
+        case WindowType::TABPAGE:
+            nRole = accessibility::AccessibleRole::PANEL;
+            break;
+        case WindowType::TABCONTROL:
+            nRole = accessibility::AccessibleRole::PAGE_TAB_LIST;
+            break;
 
-        case WindowType::DOCKINGWINDOW: nRole = (mpWindowImpl->mbFrame) ? accessibility::AccessibleRole::FRAME :
-                                                                      accessibility::AccessibleRole::PANEL; break;
+        case WindowType::DOCKINGWINDOW:
+            nRole = (mpWindowImpl->mbFrame) ? accessibility::AccessibleRole::FRAME
+                                            : accessibility::AccessibleRole::PANEL;
+            break;
 
-        case WindowType::FLOATINGWINDOW: nRole = ( mpWindowImpl->mbFrame ||
-                                             (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) ||
-                                             (GetStyle() & WB_OWNERDRAWDECORATION) ) ? accessibility::AccessibleRole::FRAME :
-                                                                                       accessibility::AccessibleRole::WINDOW; break;
+        case WindowType::FLOATINGWINDOW:
+            nRole = (mpWindowImpl->mbFrame
+                     || (mpWindowImpl->mpBorderWindow
+                         && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame)
+                     || (GetStyle() & WB_OWNERDRAWDECORATION))
+                        ? accessibility::AccessibleRole::FRAME
+                        : accessibility::AccessibleRole::WINDOW;
+            break;
 
-        case WindowType::WORKWINDOW: nRole = accessibility::AccessibleRole::ROOT_PANE; break;
+        case WindowType::WORKWINDOW:
+            nRole = accessibility::AccessibleRole::ROOT_PANE;
+            break;
 
-        case WindowType::SCROLLBARBOX: nRole = accessibility::AccessibleRole::FILLER; break;
+        case WindowType::SCROLLBARBOX:
+            nRole = accessibility::AccessibleRole::FILLER;
+            break;
 
-        case WindowType::HELPTEXTWINDOW: nRole = accessibility::AccessibleRole::TOOL_TIP; break;
+        case WindowType::HELPTEXTWINDOW:
+            nRole = accessibility::AccessibleRole::TOOL_TIP;
+            break;
 
-        case WindowType::RULER: nRole = accessibility::AccessibleRole::RULER; break;
+        case WindowType::RULER:
+            nRole = accessibility::AccessibleRole::RULER;
+            break;
 
-        case WindowType::SCROLLWINDOW: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
+        case WindowType::SCROLLWINDOW:
+            nRole = accessibility::AccessibleRole::SCROLL_PANE;
+            break;
 
         case WindowType::WINDOW:
         case WindowType::CONTROL:
         case WindowType::BORDERWINDOW:
         case WindowType::SYSTEMCHILDWINDOW:
         default:
-            if (IsNativeFrame() )
+            if (IsNativeFrame())
                 nRole = accessibility::AccessibleRole::FRAME;
-            else if( IsScrollable() )
+            else if (IsScrollable())
                 nRole = accessibility::AccessibleRole::SCROLL_PANE;
-            else if( this->ImplGetWindow()->IsMenuFloatingWindow() )
-                nRole = accessibility::AccessibleRole::WINDOW;      // #106002#, contextmenus are windows (i.e. toplevel)
+            else if (this->ImplGetWindow()->IsMenuFloatingWindow())
+                // #106002#, contextmenus are windows (i.e. toplevel)
+                nRole = accessibility::AccessibleRole::WINDOW;
             else
                 // #104051# WINDOW seems to be a bad default role, use LAYEREDPANE instead
                 // a WINDOW is interpreted as a top-level window, which is typically not the case
