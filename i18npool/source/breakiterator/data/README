@@ -9,516 +9,10 @@ At various stages these copies have been customized and are now horribly out of
 sync. It unclear which diffs from the base versions are deliberate and which
 are now accidental :-(
 
-We need to review the various issues referenced in the commits that caused
-customizations and see if they're still relevant or not, write regression tests
-for them, if any are still relevant then apply the changes back on top of the
-latest versions.
-
-to-review, later are ok:
-
-commit e1ad946ef5db3f7c0a540207d0f0fd85799e3b66
-Author: Release Engineers <releng@openoffice.org>
-Date:   Thu Aug 6 18:13:57 2009 +0000
-
-    CWS-TOOLING: integrate CWS tl73
-    2009-07-31 15:29:33 +0200 tl  r274535 : #i64400# dash/hyphen should not break words
-
-commit 9964a76ef58786bba47d409970512d7ded6c8889
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Wed Jul 2 07:53:05 2008 +0000
-
-    INTEGRATION: CWS i18n41 (1.1.2); FILE ADDED
-    2008/04/25 17:06:26 khong 1.1.2.3: i55063, make period a sentence delimiter
-    2008/04/25 06:40:50 khong 1.1.2.2: i55063, make space as Thai sentence delimiter
-    2008/04/24 03:19:10 khong 1.1.2.1: i55063, set Thai letters as sentence delimiter for Thai and English mixed text
-
-commit e4a6e4284dae1ca6fbfa7d1e43690dbf87d796cd
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Wed Jul 2 07:52:44 2008 +0000
-
-    INTEGRATION: CWS i18n41 (1.9.12); FILE MERGED
-    2008/06/17 20:22:30 khong 1.9.12.2: i83229 fix the problem of leading hyphen for numbers
-    2008/04/23 06:20:16 khong 1.9.12.1: i72868, i80891, i83229, fix Chinese punctuations and hyphen for line breakiterator
-
-commit 55dff22611659a1567c968fbf9e512a2765ab62e
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Wed Jul 2 07:52:07 2008 +0000
-
-    INTEGRATION: CWS i18n41 (1.33.36); FILE MERGED
-    2008/06/05 22:18:29 khong 1.33.36.2: RESYNC: (1.33-1.35); FILE MERGED
-    2008/04/23 06:11:55 khong 1.33.36.1: i55063, enable language specific sentence breakiterator
-
-commit 1c2b8095631a3c2d2f396bf50a8f0c62f49be65c
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Wed Jul 2 07:51:12 2008 +0000
-
-    INTEGRATION: CWS i18n41 (1.12.140); FILE MERGED
-    2008/06/05 22:18:26 khong 1.12.140.2: RESYNC: (1.12-1.13); FILE MERGED
-    2008/04/23 06:04:53 khong 1.12.140.1: i87530 avoid breaking line before un-completed cell
-
-commit 9bbdb52df370c69c0f7eba387a2068ee80bd7994
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Wed Jul 2 07:50:43 2008 +0000
-
-    INTEGRATION: CWS i18n41 (1.25.2); FILE MERGED
-    2008/06/05 22:18:23 khong 1.25.2.2: RESYNC: (1.25-1.26); FILE MERGED
-    2008/04/23 06:09:02 khong 1.25.2.1: i88041: avoid startPos goes back to nStartPos when switching between Latin and CJK scripts
-
-commit 8dcdd3ca268f78295731b86797c2b8cd447ba667
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Tue May 20 13:36:01 2008 +0000
-
-    INTEGRATION: CWS i18n43_DEV300 (1.33.38); FILE MERGED
-    2008/04/29 21:51:51 khong 1.33.38.1: #i88411# apply the patch from Coleman Kane to fix icu setBreakType issue
-
-commit bedef98c24ef9ada6aaffe9bc5284d9759a31a9a
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Wed Apr 2 08:49:09 2008 +0000
-
-    INTEGRATION: CWS i18n40 (1.2.314); FILE MERGED
-    2008/03/19 06:30:23 khong 1.2.314.2: #i80815# count dash like MS Word
-    2008/03/15 07:32:44 khong 1.2.314.1: #i80815# count punctuation as word
-
-commit 59144104b3f91a2e6ed816f0bde0fdb91ea218d7
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Wed Apr 2 08:48:53 2008 +0000
-
-    INTEGRATION: CWS i18n40 (1.24.44); FILE MERGED
-    2008/03/19 18:56:42 khong 1.24.44.2: i80815 make word count feature like MS Word
-    2008/03/15 07:31:38 khong 1.24.44.1: #i80815# count punctuation as word
-
-commit 3f0b51776602c45e8aca991450fcbb30f2484ae5
-Author: Vladimir Glazounov <vg@openoffice.org>
-Date:   Mon Jan 28 14:33:46 2008 +0000
-
-    INTEGRATION: CWS i18n39 (1.8.4); FILE MERGED
-    2007/12/12 17:45:45 khong 1.8.4.3: b6634800# fix line break problem of dot after letter and before number
-    2007/12/08 01:05:52 khong 1.8.4.2: #i83649# fixed the problem of line break between quotation mark and open bracket
-    2007/12/07 23:44:30 khong 1.8.4.1: #i83464# fix the problem of line break between letter and 1326
-
-commit 5d8ef209b1f63d1c8ea5014bdbef96660b355423
-Author: Vladimir Glazounov <vg@openoffice.org>
-Date:   Tue Oct 23 08:09:00 2007 +0000
-
-    INTEGRATION: CWS i18n38 (1.7.4); FILE MERGED
-    2007/09/19 00:08:04 khong 1.7.4.3: i81448 fixed dot line break issue
-    2007/09/10 23:57:12 khong 1.7.4.2: i81440 fix the problem of line break on punctuations
-    2007/09/10 22:55:46 khong 1.7.4.1: i81448 fix problem of line break on symbols
-
-commit a2f3b48cacfcef338ca5e37acde34c83876e082e
-Author: Vladimir Glazounov <vg@openoffice.org>
-Date:   Tue Oct 23 08:08:47 2007 +0000
-
-    INTEGRATION: CWS i18n38 (1.32.10); FILE MERGED
-    2007/09/18 20:32:39 khong 1.32.10.1: i81519 set break type icu breakiterator
-
-commit 1967d8fb182b3101dee4f715e78be384400bc1e8
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Wed Sep 5 16:37:28 2007 +0000
-
-    INTEGRATION: CWS i18n37 (1.22.6); FILE MERGED
-    2007/09/03 18:27:39 khong 1.22.6.2: i8132 fixed a problem in skipping space for word breakiterator
-    2007/08/31 21:30:30 khong 1.22.6.1: i81158 fix skipping space problem
-
-commit d2c2baf1a31d281d20e8b4d4c806dda027b2d5a3
-Author: Vladimir Glazounov <vg@openoffice.org>
-Date:   Tue Aug 28 11:46:45 2007 +0000
-
-    INTEGRATION: CWS i18n36_SRC680 (1.5.20.1.2); FILE MERGED
-    2007/08/22 17:12:36 khong 1.5.20.1.2.1: i80841 fix hyphen line break problem
-
-commit d56bedfb425cf77f176f143455e4a9fb6ce65540
-Author: Vladimir Glazounov <vg@openoffice.org>
-Date:   Tue Aug 28 11:46:34 2007 +0000
-
-    INTEGRATION: CWS i18n36_SRC680 (1.21.2.1.2); FILE MERGED
-    2007/08/22 20:02:28 khong 1.21.2.1.2.2: i80923 fix infinite loop problem
-    2007/08/22 17:11:44 khong 1.21.2.1.2.1: i80923 fix a infinite loop
-
-commit 8a36b196925a5561eabde0a0ef293c73fcb5add3
-Author: Ivo Hinkelmann <ihi@openoffice.org>
-Date:   Fri Aug 17 13:58:48 2007 +0000
-
-    INTEGRATION: CWS i18n34 (1.5.22); FILE MERGED
-    2007/08/13 22:26:12 khong 1.5.22.1: i80548 i80645 fix dash and backslash issues in line breakiterator
-
-commit c00b2b49bad765144f90552139e63d87d520d1cf
-Author: Ivo Hinkelmann <ihi@openoffice.org>
-Date:   Fri Aug 17 13:58:36 2007 +0000
-
-    INTEGRATION: CWS i18n34 (1.15.4); FILE MERGED
-    2007/08/13 22:33:38 khong 1.15.4.1: i86439 fix surrogate characters handling issues
-
-commit 3fc5fbc71d4c244d7c8002aa530481741e585bd4
-Author: Ivo Hinkelmann <ihi@openoffice.org>
-Date:   Fri Aug 17 13:58:23 2007 +0000
-
-    INTEGRATION: CWS i18n34 (1.31.4); FILE MERGED
-    2007/08/13 22:33:37 khong 1.31.4.1: i86439 fix surrogate characters handling issues
-
-commit ee44b43881e7c82c379931f111c452a477b73341
-Author: Ivo Hinkelmann <ihi@openoffice.org>
-Date:   Fri Aug 17 13:58:11 2007 +0000
-
-    INTEGRATION: CWS i18n34 (1.21.4); FILE MERGED
-    2007/08/14 08:38:53 khong 1.21.4.2: i86439 fix surrogate characters handling issues
-    2007/08/13 22:33:37 khong 1.21.4.1: i86439 fix surrogate characters handling issues
-
-commit f47369dbbc385f8968ad43e43cba293a29a4c2df
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Tue Jul 31 16:09:13 2007 +0000
-
-    INTEGRATION: CWS i18n32 (1.29.14); FILE MERGED
-    2007/07/24 20:39:44 khong 1.29.14.1: #i79148# fix a local word breakiterator rules loading issue
-
-commit 2791553b4e3fc5e04b96d0b2fd119d9fba1946bc
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu Jul 26 08:08:51 2007 +0000
-
-    INTEGRATION: CWS i18n31 (1.14.60); FILE MERGED
-    2007/07/16 22:18:44 khong 1.14.60.4: i75631 i75632 i75633 i75412 handle surrogate pair characters
-    2007/07/13 20:37:32 khong 1.14.60.3: #i75632# use ICU characters properties
-    2007/07/04 01:17:22 khong 1.14.60.2: i75631 i75632 i75633 i75412 handle surrogate pair characters
-    2007/06/27 04:33:11 khong 1.14.60.1: i75631 i75632 i75633 i75412 handle surrogate pair characters
-
-commit 1c79a2bf1e89ac4eb409922ab7eb8ad3cacc688a
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu Jul 26 08:08:39 2007 +0000
-
-    INTEGRATION: CWS i18n31 (1.8.60); FILE MERGED
-    2007/06/27 04:33:11 khong 1.8.60.1: i75631 i75632 i75633 i75412 handle surrogate pair characters
-
-commit 517bbaddbaf81a5a6bb00979944cad13a1575d50
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu Jul 26 08:08:27 2007 +0000
-
-    INTEGRATION: CWS i18n31 (1.28.14); FILE MERGED
-    2007/07/13 20:37:32 khong 1.28.14.5: #i75632# use ICU characters properties
-    2007/07/04 01:17:22 khong 1.28.14.4: i75631 i75632 i75633 i75412 handle surrogate pair characters
-    2007/06/27 23:25:58 khong 1.28.14.3: i75412 handle surrogate pair characters
-    2007/06/27 05:33:20 khong 1.28.14.2: RESYNC: (1.28-1.29); FILE MERGED
-    2007/06/27 04:33:11 khong 1.28.14.1: i75631 i75632 i75633 i75412 handle surrogate pair characters
-
-commit 0154e3492f2527535c0d648274e7ff674674318b
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu Jul 26 08:08:14 2007 +0000
-
-    INTEGRATION: CWS i18n31 (1.14.42); FILE MERGED
-    2007/06/27 05:33:03 khong 1.14.42.2: RESYNC: (1.14-1.15); FILE MERGED
-    2007/06/27 04:33:11 khong 1.14.42.1: i75631 i75632 i75633 i75412 handle surrogate pair characters
-
-commit e2a5a2532ee187669980adb7bfa747c7803c330a
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu Jul 26 08:08:02 2007 +0000
-
-    INTEGRATION: CWS i18n31 (1.19.60); FILE MERGED
-    2007/07/13 20:37:32 khong 1.19.60.4: #i75632# use ICU characters properties
-    2007/07/04 01:17:22 khong 1.19.60.3: i75631 i75632 i75633 i75412 handle surrogate pair characters
-    2007/06/27 05:00:48 khong 1.19.60.2: i75231 handle surrogate pair characters
-    2007/06/27 04:33:11 khong 1.19.60.1: i75631 i75632 i75633 i75412 handle surrogate pair characters
-
-commit 80a26a7d4720b5b8cfa0acc624b28014c96d9948
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Tue Jun 26 16:41:02 2007 +0000
-
-    INTEGRATION: CWS ause081 (1.2.332); FILE MERGED
-    2007/06/21 10:53:19 hjs 1.2.332.1: #i78393# remove component_getDescriptionFunc from exports
-
-commit c2801db6b04bf6f0dbb07727c91b2c66e7e027b8
-Author: Ivo Hinkelmann <ihi@openoffice.org>
-Date:   Wed Jun 6 11:17:38 2007 +0000
-
-    INTEGRATION: CWS i18n30 (1.4.24); FILE MERGED
-    2007/05/08 21:32:18 khong 1.4.24.1: #i73903# update line breakiterator rule to icu3.6 style
-
-commit ea290668f78475c3b277c9e44bf5622ccb4dcec8
-Author: Ivo Hinkelmann <ihi@openoffice.org>
-Date:   Wed Jun 6 11:17:25 2007 +0000
-
-    INTEGRATION: CWS i18n30 (1.28.4); FILE MERGED
-    2007/05/08 21:47:00 khong 1.28.4.3: #i75412# remove fix from cws i18n30, move it to other cws to fix with other Japanese surrogate issues
-    2007/03/20 18:39:58 khong 1.28.4.2: #i72589# fixed BS problem for surrogate characters
-    2007/03/13 19:11:44 khong 1.28.4.1: #i75319# fixed ANY_WORD rule loading problem
-
-commit b6308a6e322fd4eaa7845793beb70900624f351c
-Author: Ivo Hinkelmann <ihi@openoffice.org>
-Date:   Wed Jun 6 11:17:12 2007 +0000
-
-    INTEGRATION: CWS i18n30 (1.14.32); FILE MERGED
-    2007/05/08 21:44:15 khong 1.14.32.1: #i76706# fix infinite loop for CJK word breakiterator for text mixed with Latin and CJK characters
-
-commit e068e0e9aa9405ea4016ad19e9a963129adfed79
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu Jan 25 08:35:42 2007 +0000
-
-    INTEGRATION: CWS i18n28 (1.1.2); FILE ADDED
-    2006/12/06 05:52:39 khong 1.1.2.1: #i64400# add an optional breakiterator entry in localedata
-
-commit 8d6f35a46085bb420e8896505504b376d17b842a
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu Jan 25 08:35:31 2007 +0000
-
-    INTEGRATION: CWS i18n28 (1.24.36); FILE MERGED
-    2006/12/19 17:27:58 khong 1.24.36.2: RESYNC: (1.24-1.25); FILE MERGED
-    2006/12/06 05:52:38 khong 1.24.36.1: #i64400# add an optional breakiterator entry in localedata
-
-commit 633d34fa33330339ab6795ce3703477216e0062e
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Tue Dec 12 15:14:36 2006 +0000
-
-    INTEGRATION: CWS icuupgrade (1.9.24); FILE MERGED
-    2006/10/11 06:11:11 khong 1.9.24.4: RESYNC: (1.10-1.11); FILE MERGED
-    2006/07/07 10:57:40 hdu 1.9.24.3: RESYNC: (1.9-1.10); FILE MERGED
-    2006/06/30 01:31:40 khong 1.9.24.2: #i53388# upgrade icu to 3.4.1
-    2006/06/15 19:16:55 khong 1.9.24.1: #i60645# upgrade icu to 3.4.1
-
-commit 5d46dabe95271c846601a2575d3304fd5b4b24f1
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Tue Dec 12 15:14:05 2006 +0000
-
-    INTEGRATION: CWS icuupgrade (1.22.20); FILE MERGED
-    2006/11/11 07:12:47 khong 1.22.20.6: #142664# fix breakiterator crash problem
-    2006/10/11 06:10:51 khong 1.22.20.5: RESYNC: (1.23-1.24); FILE MERGED
-    2006/09/06 01:00:31 khong 1.22.20.4: #i60645# upgrade to icu 3.6
-    2006/07/07 10:57:32 hdu 1.22.20.3: RESYNC: (1.22-1.23); FILE MERGED
-    2006/06/30 01:31:40 khong 1.22.20.2: #i53388# upgrade icu to 3.4.1
-    2006/06/20 14:27:26 hdu 1.22.20.1: #i60645# fix crash when udata_open failed
-
-commit 7431d816cdfc47b08978c0afd1f6503644bb11b8
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Mon Nov 6 13:40:05 2006 +0000
-
-    INTEGRATION: CWS i18n27 (1.3.142); FILE MERGED
-    2006/10/10 21:10:57 khong 1.3.142.1: #i65267# fix line break rule
-
-commit d7471e1462ffd9baeb3449eb86ccbb649e32b233
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Mon Nov 6 13:39:52 2006 +0000
-
-    INTEGRATION: CWS i18n27 (1.1.2); FILE ADDED
-    2006/10/10 21:08:55 khong 1.1.2.1: #i56348# add Hungarian word break rule for edit mode
-
-commit 1b65b0b886e2cb16382bc11770230fb6a140f33b
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Tue Oct 24 12:53:13 2006 +0000
-
-    INTEGRATION: CWS tl29 (1.12.24); FILE MERGED
-    2006/09/20 01:24:53 khong 1.12.24.1: #i69482# fixed mismatch of nextWord and getWordBoundary
-
-commit 97d89862a2285071202cc8010d888ffcbf96279a
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Thu Nov 17 19:30:35 2005 +0000
-
-    INTEGRATION: CWS i18n23 (1.20.22); FILE MERGED
-    2005/11/17 20:00:37 khong 1.20.22.3: RESYNC: (1.20-1.21); FILE MERGED
-    2005/11/17 19:45:05 khong 1.20.22.2: #i57866# merge cws i18n23 and thaiissues
-    2005/11/15 21:10:24 khong 1.20.22.1: #i57866# fix line breakiterator problem
-
-commit 05fadde6f025bcaafca4f3093e88be3cc1bb6836
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Wed Nov 16 09:18:37 2005 +0000
-
-    INTEGRATION: CWS thaiissues (1.20.6); FILE MERGED
-    2005/10/26 20:42:40 khong 1.20.6.2: use icu thai linke break algorithm for thai breakiterator
-    2005/10/26 13:36:24 fme 1.20.6.1: #i55716# Handling of WORDJOINER
-
-commit a10b0e70c641d7438c557ef718c6942b3abffaec
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Wed Nov 16 09:18:25 2005 +0000
-
-    INTEGRATION: CWS thaiissues (1.8.6); FILE MERGED
-    2005/10/26 20:42:39 khong 1.8.6.1: use icu thai linke break algorithm for thai breakiterator
-
-commit 4a1f1586173839d532f90507c72306bc9e2aec56
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Wed Nov 16 09:18:11 2005 +0000
-
-    INTEGRATION: CWS thaiissues (1.9.4); FILE MERGED
-    2005/10/28 17:54:39 khong 1.9.4.1: Fix a bug in ctl line break when there is word joiner character
-
-commit beb2a536738ba761a92f8266570f1859c85f94ae
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Tue Nov 8 15:59:16 2005 +0000
-
-    INTEGRATION: CWS siloch (1.3.50); FILE MERGED
-    2005/10/26 10:55:05 er 1.3.50.1: #i56347# apply patch to recognize suffixes of numbers in Hungarian spellchecking; contributed by Nemeth Laszlo <nemeth@ooo>
-
-commit 939e7c2bc93c13b6740051beeb08c5883b65ffce
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Nov 4 14:33:30 2005 +0000
-
-    INTEGRATION: CWS i18n21 (1.3.46); FILE MERGED
-    2005/10/21 00:35:09 khong 1.3.46.1: #i55778 reverse back last change, treat letter and number combination as one word.
-
-commit 51594ef552a872b9868e5c7a025a68665488a016
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Nov 4 14:33:16 2005 +0000
-
-    INTEGRATION: CWS i18n21 (1.2.2); FILE MERGED
-    2005/10/21 00:35:08 khong 1.2.2.1: #i55778 reverse back last change, treat letter and number combination as one word.
-
-commit f4fe39909c7ed645a8b387cf66de249572226ad6
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Nov 4 14:33:03 2005 +0000
-
-    INTEGRATION: CWS i18n21 (1.3.46); FILE MERGED
-    2005/10/21 00:35:08 khong 1.3.46.1: #i55778 reverse back last change, treat letter and number combination as one word.
-
-commit 7f8af14611e66655ea7354083eafd71afc9703e3
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Nov 4 14:32:41 2005 +0000
-
-    INTEGRATION: CWS i18n21 (1.4.46); FILE MERGED
-    2005/10/21 00:35:07 khong 1.4.46.1: #i55778 reverse back last change, treat letter and number combination as one word.
-
-commit 924e158b9d871fbf7500e9215540e26aa95b3b20
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Mon Oct 17 14:43:17 2005 +0000
-
-    INTEGRATION: CWS i18n20 (1.1.2); FILE ADDED
-    2005/09/22 23:47:49 khong 1.1.2.1: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
-
-commit a428a8927006a10ccfe7182e6fe5a8b677281eca
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Mon Oct 17 14:42:30 2005 +0000
-
-    INTEGRATION: CWS i18n20 (1.18.32); FILE MERGED
-    2005/09/23 15:59:13 khong 1.18.32.6: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
-    2005/09/23 08:09:54 khong 1.18.32.5: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
-    2005/09/23 07:38:03 khong 1.18.32.4: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule
-    2005/09/22 23:47:48 khong 1.18.32.3: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
-    2005/08/26 23:34:37 khong 1.18.32.2: #i50172# add cell breakiterator rule for Tamil
-    2005/08/26 23:31:59 khong 1.18.32.1: #i50172# add cell breakiterator rule for Tamil
-
-commit f518f78557931b81e06fd7b31bb22c6639e5e553
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Mon Oct 17 14:42:14 2005 +0000
-
-    INTEGRATION: CWS i18n20 (1.6.32); FILE MERGED
-    2005/09/23 15:59:13 khong 1.6.32.3: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
-    2005/09/23 07:38:02 khong 1.6.32.2: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule
-    2005/09/22 23:47:48 khong 1.6.32.1: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
-
-commit 9b870055ecd043d1d4fadeacd351f8739e1979a0
-Author: Vladimir Glazounov <vg@openoffice.org>
-Date:   Fri Feb 25 09:08:13 2005 +0000
-
-    INTEGRATION: CWS i18n16 (1.16.22); FILE MERGED
-    2005/02/04 19:05:45 khong 1.16.22.3: #i41671# use ICU rules for Thai breakiterator
-    2005/01/24 21:56:34 khong 1.16.22.2: #i35285# merge cws i18n16 with top version 1.17
-    2005/01/12 01:12:41 khong 1.16.22.1: #i35285# remove uprv_malloc, use udata_open for loading icu rule breakiterator
-
-commit 29b9e86f5dac388d7aaced24d3826ac9331b03e3
-Author: Vladimir Glazounov <vg@openoffice.org>
-Date:   Fri Feb 25 09:07:59 2005 +0000
-
-    INTEGRATION: CWS i18n16 (1.5.22); FILE MERGED
-    2005/02/04 19:05:45 khong 1.5.22.1: #i41671# use ICU rules for Thai breakiterator
-
-commit 746ea3d8c29b27b23af3433446f66db0ad3096d6
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Tue Jan 11 10:19:26 2005 +0000
-
-    INTEGRATION: CWS i18n15 (1.2.20); FILE MERGED
-    2004/09/04 02:03:53 khong 1.2.20.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
-
-commit a31a26ce1a9c7f63e354836fd9e1282b6a5063a1
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Tue Jan 11 10:19:07 2005 +0000
-
-    INTEGRATION: CWS i18n15 (1.2.58); FILE MERGED
-    2004/09/04 02:03:53 khong 1.2.58.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
-
-commit f7babbe5ffcae9d60ab5e547887a0ccc453c2bcb
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Tue Jan 11 10:18:51 2005 +0000
-
-    INTEGRATION: CWS i18n15 (1.3.36); FILE MERGED
-    2004/09/04 02:03:53 khong 1.3.36.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
-
-commit e5a62ce85bebcc9fb2bf0e5b9aced5fc7748055b
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Tue Jan 11 10:18:37 2005 +0000
-
-    INTEGRATION: CWS i18n15 (1.16.4); FILE MERGED
-    2004/10/07 18:19:11 khong 1.16.4.1: #i33756# update Hungarian breakiterator
-
-commit d2a6a31e6981800c2a920f8c6ff901c341a0466e
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Jul 30 13:38:57 2004 +0000
-
-    INTEGRATION: CWS i18n13 (1.8.92); FILE MERGED
-    2004/06/14 23:24:16 khong 1.8.92.2: #112772# Japanese word breakiterator is not correct
-    2004/06/11 19:23:04 khong 1.8.92.1: #112772# Japanese word breakiterator is not correct
-
-commit d6b8dabc3dc4811e1152d411a8428ccb334d16ab
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Jul 30 13:38:17 2004 +0000
-
-    INTEGRATION: CWS i18n13 (1.7.162); FILE MERGED
-    2004/06/11 19:23:04 khong 1.7.162.1: #112772# Japanese word breakiterator is not correct
-
-commit 9ea4c16a699ac7cf5e255a19653651ac993f022b
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Jul 30 13:38:05 2004 +0000
-
-    INTEGRATION: CWS i18n13 (1.9.92); FILE MERGED
-    2004/06/11 19:23:04 khong 1.9.92.1: #112772# Japanese word breakiterator is not correct
-
-commit 2887ecb5554eee699e1dce4ffbc2dfcf71a54a41
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Jul 30 13:37:54 2004 +0000
-
-    INTEGRATION: CWS i18n13 (1.15.18); FILE MERGED
-    2004/06/17 20:29:38 khong 1.15.18.2: #
-    2004/06/02 04:54:24 khong 1.15.18.1: #i11993# fix getWordBoundary problem when position is on the end of the word.
-
-commit 606556eed208d1218f950df2200510a7e19af1d9
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Fri May 28 15:33:28 2004 +0000
-
-    INTEGRATION: CWS i18n12 (1.1.2); FILE ADDED
-    2004/04/30 14:37:52 er 1.1.2.1: #i27711# Hungarian breakiterator (provided by Timar Andras)
-
-commit 9710ca90166c18c0a92f7f0246a7c2f7dae87ebc
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Fri May 28 15:33:17 2004 +0000
-
-    INTEGRATION: CWS i18n12 (1.4.22); FILE MERGED
-    2004/04/13 11:55:32 er 1.4.22.1: #i27711# Hungarian breakiterator
-
-commit b138663ef4f4ade38fb42f8a2f567527cf15949b
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Fri May 28 15:33:02 2004 +0000
-
-    INTEGRATION: CWS i18n12 (1.13.22); FILE MERGED
-    2004/04/30 11:25:47 er 1.13.22.2: RESYNC: (1.13-1.14); FILE MERGED
-    2004/04/13 11:55:32 er 1.13.22.1: #i27711# Hungarian breakiterator
-
-commit f5bc5f04e4de8fa502d498a99f4ef6a340d796c0
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Wed Mar 17 08:02:14 2004 +0000
-
-    INTEGRATION: CWS i18n11 (1.13.14); FILE MERGED
-    2004/02/04 02:09:04 khong 1.13.14.2: #i24098# skip preceding space for beginOfSentence
-    2004/01/06 19:41:49 khong 1.13.14.1: #i24098# fix beginOfSentence, which did not work correctly when cursor is on the beginning of the sentence
-
-commit 16401a5b865b5da8a2dd70057e8b048e9b797d5a
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Wed Mar 17 08:02:01 2004 +0000
-
-    INTEGRATION: CWS i18n11 (1.12.14); FILE MERGED
-    2004/02/10 14:21:13 er 1.12.14.3: RESYNC: (1.12-1.13); FILE MERGED
-    2004/02/05 16:45:30 khong 1.12.14.2: #i24850# fix the problem in previousCharBlock, when target char block is in position 1
-    2004/02/04 02:13:48 khong 1.12.14.1: #i24098# check boundary condition for Sentence, Script, CharBlock breakiterator
-
-commit 4da98b648497af30de0fcf1a16e649ce18b0564f
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Mon Mar 8 16:17:05 2004 +0000
-
-    INTEGRATION: CWS i18n09 (1.2.2); FILE MERGED
-    2003/12/04 23:45:37 khong 1.2.2.3: #i22602# make dot stick on beginning of a word when doing line break
-    2003/12/04 23:12:37 khong 1.2.2.2: #i21392# change line break rule to match with MS office
+The various issues and customizations have been reviewed, with tests written for
+customizations that are still relevant. However, these files are still extremely
+out-of-date and need to be refreshed. Relevant customizations should be reapplied
+on top of a current version.
 
 done, regression tests added:
 
@@ -541,3 +35,115 @@ fdo#31271 wrong line break with (
 #i13494# fix word breakiterator rule to handle punctuations and signs correctly
 #i29548# Fix Thai word breakiterator problem
 #i11993# #i14904# fix word breakiterator issues
+#i64400# dash/hyphen should not break words (de/nds/nl/sv)
+#i22602# make dot stick on beginning of a word when doing line break
+#i24098# skip preceding space for beginOfSentence
+#i24098# fix beginOfSentence, which did not work correctly when cursor is on the beginning of the sentence
+#i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
+#i50172# add cell breakiterator rule for Tamil
+#i55778# reverse back last change, treat letter and number combination as one word.
+#i56347# apply patch to recognize suffixes of numbers in Hungarian spellchecking
+#i56348# add Hungarian word break rule for edit mode
+#i65267# fix line break rule
+#i86439# many changes to implement, tweak, debug UTF-16 surrogate pair handling
+#i75631#         "
+#i75632#         "
+#i75633#         "
+#i75412#         "
+#i80645# fix backslash issues in line breakiterator
+#i80841# fix hyphen line break problem
+#i81448# fixed dot line break issue
+#i81448# fix the problem of line break on punctuations (commit message says i81440)
+#i81448# fix problem of line break on symbols
+#i83649# fixed the problem of line break between quotation mark and open bracket
+#i83464# fix the problem of line break between letter and 1326
+b6634800# fix line break problem of dot after letter and before number
+#i83229# fix the problem of leading hyphen for numbers
+#i80815# count words like MS Word
+
+likely superseded:
+
+#i21392# Obscure line break behavior mismatch in string of symbols between MSO and LO.
+#i80548# "fix dash issues in line breakiterator" - fix no longer works
+#i72868# "fix Chinese punctuation for line breakiterator" - fix no longer works
+#i80891# "fix Chinese punctuation for line breakiterator" - fix no longer works
+
+#i27711# Adding/tweaking/removing languages later added to ICU.
+#i33756#         "
+#i41671#         "
+#i41671#         "
+#i55063#         "
+#i24850# ICU upgrades, internal bug fixes, or other work-arounds.
+#i24098#         "
+#112772#         "
+#i35285#         "
+4a1f1586173839d532f90507c72306bc9e2aec56        "
+a10b0e70c641d7438c557ef718c6942b3abffaec        "
+05fadde6f025bcaafca4f3093e88be3cc1bb6836        "
+#i57866#         "
+#i57866#         "
+#i69482#         "
+#142664#         "
+#i60645#         "
+#i53388#         "
+#i60645#         "
+#i78393#         "
+#i73903#         "
+#i75412#         "
+#i72589#         "
+#i75319#         "
+#i76706#         "
+#i64400#         "
+#i64400#         "
+#i79148#         "
+#i55063#         "
+#i87530#         "
+#i88041#         "
+#i88411#         "
+#i80923#         "
+#i80923#         "
+#i81519#         "
+
+
+suspect:
+
+
+- The intentions behind the following commits are unclear, as the referenced bugs were in the
+StarOffice internal bug tracker. These changes are contemporaneous with TR14 Revision 17, and seem
+to be part of an effort to backport upstream rule changes across multiple language customizations.
+
+commit 746ea3d8c29b27b23af3433446f66db0ad3096d6
+Author: Oliver Bolte <obo@openoffice.org>
+Date:   Tue Jan 11 10:19:26 2005 +0000
+
+    INTEGRATION: CWS i18n15 (1.2.20); FILE MERGED
+    2004/09/04 02:03:53 khong 1.2.20.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
+
+commit a31a26ce1a9c7f63e354836fd9e1282b6a5063a1
+Author: Oliver Bolte <obo@openoffice.org>
+Date:   Tue Jan 11 10:19:07 2005 +0000
+
+    INTEGRATION: CWS i18n15 (1.2.58); FILE MERGED
+    2004/09/04 02:03:53 khong 1.2.58.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
+
+commit f7babbe5ffcae9d60ab5e547887a0ccc453c2bcb
+Author: Oliver Bolte <obo@openoffice.org>
+Date:   Tue Jan 11 10:18:51 2005 +0000
+
+    INTEGRATION: CWS i18n15 (1.3.36); FILE MERGED
+    2004/09/04 02:03:53 khong 1.3.36.1: #117685# make dictionary word contain only letter or only number, dot can be in middle or end of a word, but only one.
+
+
+- The intention behind the following commit is unclear, as the bug references are incorrect and no
+good candidates were immediately apparent. Based on the text of the commit, however, it appears to
+be a simple bug fix for skipSpace(). This function has also had a great deal of churn since this
+commit, further suggesting it is no longer pertinent.
+
+commit 1967d8fb182b3101dee4f715e78be384400bc1e8
+Author: Kurt Zenker <kz@openoffice.org>
+Date:   Wed Sep 5 16:37:28 2007 +0000
+
+    INTEGRATION: CWS i18n37 (1.22.6); FILE MERGED
+    2007/09/03 18:27:39 khong 1.22.6.2: i8132 fixed a problem in skipping space for word breakiterator
+    2007/08/31 21:30:30 khong 1.22.6.1: i81158 fix skipping space problem
+
