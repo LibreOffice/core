@@ -4377,7 +4377,7 @@ SfxBoolItem BottomPaneImpress SID_BOTTOM_PANE_IMPRESS
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
     RecordAbsolute = FALSE,
