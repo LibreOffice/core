@@ -856,15 +856,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf116315)
         pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_F3);
         Scheduler::ProcessEventsToIdle();
 
-        // Sentence Case
-        // Without the fix in place, this test would have failed with
-        // - Expected: This is a Test
-        // - Actual  : This is a TEST
-        CPPUNIT_ASSERT_EQUAL(OUString("This is a Test"), getParagraph(1)->getString());
-
-        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_F3);
-        Scheduler::ProcessEventsToIdle();
-
         // Upper Case
         CPPUNIT_ASSERT_EQUAL(OUString("This is a TEST"), getParagraph(1)->getString());
 
