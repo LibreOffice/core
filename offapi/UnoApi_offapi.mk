@@ -4438,6 +4438,19 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,org/freedesktop/PackageKit,\
     SyncDbusSessionHelper \
 ))
 
+ifeq ($(OS)-$(ENABLE_DBGUTIL),EMSCRIPTEN-TRUE)
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,org/libreoffice/embindtest, \
+    Constants \
+    Enum \
+    Exception \
+    Struct \
+    XTest \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,org/libreoffice/embindtest, \
+    Test \
+))
+endif
+
 $(eval $(call gb_UnoApi_set_reference_rdbfile,offapi,$(call gb_UnoApiTarget_get_target,udkapi) $(SRCDIR)/offapi/type_reference/offapi.idl))
 
 # vim: set noet sw=4 ts=4:
