@@ -101,6 +101,8 @@ bool lcl_isPrerequisite(LanguageType nLangType, bool requireSublang)
         nLangType != LANGUAGE_DONTKNOW &&
         nLangType != LANGUAGE_SYSTEM &&
         nLangType != LANGUAGE_NONE &&
+        nLangType != LANGUAGE_MULTIPLE &&
+        nLangType != LANGUAGE_UNDETERMINED &&
         nLangType != LANGUAGE_USER_KEYID &&
         !MsLangId::isLegacy( nLangType) &&
         (!requireSublang || MsLangId::getSubLanguage( nLangType));
@@ -311,6 +313,8 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
     if (bHasLangNone)
     {
         m_xControl->append(BuildEntry(LANGUAGE_NONE));
+        m_xControl->append(BuildEntry(LANGUAGE_MULTIPLE));
+        m_xControl->append(BuildEntry(LANGUAGE_UNDETERMINED));
         bAddSeparator = true;
     }
 
