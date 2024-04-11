@@ -8,15 +8,24 @@ get_SHA_for_change() {
     SHA=$(ssh "${GERRITHOST?}" gerrit query --all-approvals change:"$1" | grep ref | tail -1 | cut -d: -f2 | sed 's/^ *//')
 }
 
+get_tracked_branch() {
+    local BRANCH=$(git symbolic-ref HEAD|sed 's|refs/heads/||')
+    local REMOTE=$(git config branch.$BRANCH.remote)
+    git rev-parse --abbrev-ref --symbolic-full-name HEAD@{upstream}|sed "s|${REMOTE}/||"
+}
+
 submit() {
     BRANCH=$1
     TYPE=${2:-''}
     if test -z "$BRANCH"; then
-        BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
-        BRANCH="${BRANCH##refs/heads/}"
+        BRANCH=$(get_tracked_branch)
         if test -z "$BRANCH"; then
-            echo "no branch specified, and could not guess the current branch"
-            exit 1
+            BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
+            BRANCH="${BRANCH##refs/heads/}"
+            if test -z "$BRANCH"; then
+                echo "no branch specified, and could not guess the current branch"
+                exit 1
+            fi
         fi
         echo "no branch specified, guessing current branch $BRANCH"
     fi
@@ -180,11 +189,14 @@ case "$1" in
         echo "current state backed up as $BACKUPBRANCH"
         BRANCH=$2
         if test -z "$BRANCH"; then
-            BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
-            BRANCH="${BRANCH##refs/heads/}"
+            BRANCH=$(get_tracked_branch)
             if test -z "$BRANCH"; then
-                echo "no branch specified, and could not guess the current branch"
-                exit 1
+                BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
+                BRANCH="${BRANCH##refs/heads/}"
+                if test -z "$BRANCH"; then
+                    echo "no branch specified, and could not guess the current branch"
+                    exit 1
+                fi
             fi
             echo "no branch specified, guessing current branch $BRANCH"
         fi
@@ -228,11 +240,14 @@ case "$1" in
 
         BRANCH=$2
         if test -z "$BRANCH"; then
-            BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
-            BRANCH="${BRANCH##refs/heads/}"
+            BRANCH=$(get_tracked_branch)
             if test -z "$BRANCH"; then
-                echo "no branch specified, and could not guess the current branch"
-                exit 1
+                BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
+                BRANCH="${BRANCH##refs/heads/}"
+                if test -z "$BRANCH"; then
+                    echo "no branch specified, and could not guess the current branch"
+                    exit 1
+                fi
             fi
             echo "no branch specified, guessing current branch $BRANCH"
         fi
