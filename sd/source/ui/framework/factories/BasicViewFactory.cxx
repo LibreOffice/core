@@ -31,7 +31,6 @@
 #include <DrawViewShell.hxx>
 #include <GraphicViewShell.hxx>
 #include <OutlineViewShell.hxx>
-#include <NotesPanelViewShell.hxx>
 #include <PresentationViewShell.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <FrameView.hxx>
@@ -107,7 +106,6 @@ BasicViewFactory::BasicViewFactory (const rtl::Reference<::sd::DrawController>& 
         mxConfigurationController->addResourceFactory(FrameworkHelper::msHandoutViewURL, this);
         mxConfigurationController->addResourceFactory(FrameworkHelper::msPresentationViewURL, this);
         mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
-        mxConfigurationController->addResourceFactory(FrameworkHelper::msNotesPanelViewURL, this);
     }
     catch (RuntimeException&)
     {
@@ -368,11 +366,6 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
             &rWindow,
             pFrameView);
         pViewShell->GetContentWindow()->set_id("slidesorter");
-    }
-    else if (rsViewURL == FrameworkHelper::msNotesPanelViewURL)
-    {
-        pViewShell = std::make_shared<NotesPanelViewShell>(&rFrame, *mpBase, &rWindow, pFrameView);
-        pViewShell->GetContentWindow()->set_id("notes_panel_win");
     }
 
     return pViewShell;

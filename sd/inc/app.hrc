@@ -421,7 +421,7 @@
 
 #define SID_LEFT_PANE_IMPRESS               (SID_SD_START+414)
 #define SID_LEFT_PANE_DRAW                  (SID_SD_START+415)
-#define SID_BOTTOM_PANE_IMPRESS             (SID_SD_START+416)
+        // FREE
 #define SID_NOTES_WINDOW                    (SID_SD_START+417)
         // FREE
 #define SID_NORMAL_MULTI_PANE_GUI           TypedWhichId<SfxBoolItem>(SID_SD_START+420)

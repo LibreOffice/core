@@ -71,12 +71,8 @@ namespace sd {
 /**
  * Process SfxRequests
  */
-void TextObjectBar::Execute(SfxRequest& rReq)
-{
-    ExecuteImpl(mpViewShell, mpView, rReq, this);
-}
 
-void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxRequest& rReq, SfxShell* pTextObjectBar)
+void TextObjectBar::Execute( SfxRequest &rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -173,8 +169,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             }
             rReq.Done();
 
-            if(pTextObjectBar)
-                pTextObjectBar->Invalidate();
+            Invalidate();
             // to refresh preview (in outline mode), slot has to be invalidated:
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
 
@@ -279,8 +274,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             }
             rReq.Done();
 
-            if (pTextObjectBar)
-                pTextObjectBar->Invalidate();
+            Invalidate();
             // to refresh preview (in outline mode), slot has to be invalidated:
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_PARA_ULSPACE, true );
@@ -294,8 +288,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                 pOLV->AdjustDepth( -1 );
 
                 // Ensure bold/italic etc. icon state updates
-                if (pTextObjectBar)
-                    pTextObjectBar->Invalidate();
+                Invalidate();
                 // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
             }
@@ -310,8 +303,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                 pOLV->AdjustDepth( 1 );
 
                 // Ensure bold/italic etc. icon state updates
-                if (pTextObjectBar)
-                    pTextObjectBar->Invalidate();
+                Invalidate();
                 // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
             }
@@ -324,20 +316,19 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
                 SID_ATTR_PARA_LRSPACE));
 
-            SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aEditAttr(mpView->GetDoc().GetPool());
+            SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aEditAttr( GetPool() );
             aLRSpace.SetWhich( EE_PARA_LRSPACE );
 
             aEditAttr.Put( aLRSpace );
             mpView->SetAttributes( aEditAttr );
 
-            if (pTextObjectBar)
-                pTextObjectBar->Invalidate(SID_ATTR_PARA_LRSPACE);
+            Invalidate(SID_ATTR_PARA_LRSPACE);
         }
         break;
 
         case SID_HANGING_INDENT:
         {
-            SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aLRSpaceSet(mpView->GetDoc().GetPool());
+            SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aLRSpaceSet( GetPool() );
             mpView->GetAttributes( aLRSpaceSet );
             SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( EE_PARA_LRSPACE ) );
 
@@ -348,8 +339,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             aLRSpaceSet.Put( aNewMargin );
             mpView->SetAttributes( aLRSpaceSet );
 
-            if (pTextObjectBar)
-                pTextObjectBar->Invalidate(SID_ATTR_PARA_LRSPACE);
+            Invalidate(SID_ATTR_PARA_LRSPACE);
         }
         break;
 
@@ -393,8 +383,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                     SDRATTR_TEXTDIRECTION ) );
             rReq.Done( aAttr );
             mpView->SetAttributes( aAttr );
-            if (pTextObjectBar)
-                pTextObjectBar->Invalidate();
+            Invalidate();
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
         }
         break;
@@ -701,8 +690,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
 
-                if (pTextObjectBar)
-                    pTextObjectBar->Invalidate(SID_RULER_TEXT_RIGHT_TO_LEFT);
+                Invalidate( SID_RULER_TEXT_RIGHT_TO_LEFT );
             }
             else if ( nSlot == SID_ATTR_CHAR_FONT       ||
                       nSlot == SID_ATTR_CHAR_FONTHEIGHT ||
@@ -814,8 +802,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
 
             // invalidate entire shell because of performance and
             // extension reasons
-            if (pTextObjectBar)
-                pTextObjectBar->Invalidate();
+            Invalidate();
 
             // to refresh preview (in outline mode), slot has to be invalidated:
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
@@ -829,13 +816,10 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
         pOLV->GetWindow()->GrabFocus();
     }
 
-    if (pTextObjectBar)
-    {
-        pTextObjectBar->Invalidate(SID_OUTLINE_LEFT);
-        pTextObjectBar->Invalidate(SID_OUTLINE_RIGHT);
-        pTextObjectBar->Invalidate(SID_OUTLINE_UP);
-        pTextObjectBar->Invalidate(SID_OUTLINE_DOWN);
-    }
+    Invalidate( SID_OUTLINE_LEFT );
+    Invalidate( SID_OUTLINE_RIGHT );
+    Invalidate( SID_OUTLINE_UP );
+    Invalidate( SID_OUTLINE_DOWN );
 }
 
 } // end of namespace sd

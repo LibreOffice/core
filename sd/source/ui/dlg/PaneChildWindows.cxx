@@ -32,7 +32,6 @@ namespace sd {
 
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
-SFX_IMPL_DOCKINGWINDOW_WITHID(BottomPaneImpressChildWindow, SID_BOTTOM_PANE_IMPRESS)
 SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
 
 //===== PaneChildWindow =======================================================
@@ -41,8 +40,7 @@ PaneChildWindow::PaneChildWindow (
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    TranslateId pTitleBarResId,
-    SfxChildAlignment eAlignment)
+    TranslateId pTitleBarResId)
     : SfxChildWindow (pParentWindow, nId)
 {
     SetWindow( VclPtr<TitledDockingWindow>::Create(
@@ -50,7 +48,7 @@ PaneChildWindow::PaneChildWindow (
         this,
         pParentWindow,
         SdResId(pTitleBarResId)));
-    SetAlignment(eAlignment);
+    SetAlignment(SfxChildAlignment::LEFT);
     SfxDockingWindow* pDockingWindow = static_cast<SfxDockingWindow*>(GetWindow());
     pDockingWindow->EnableInput();
     pDockingWindow->Initialize(pInfo);
@@ -85,24 +83,7 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
         nId,
         pBindings,
         pInfo,
-        STR_LEFT_PANE_IMPRESS_TITLE,
-        SfxChildAlignment::LEFT)
-{
-}
-
-//===== BottomPaneImpressChildWindow ============================================
-BottomPaneImpressChildWindow::BottomPaneImpressChildWindow (
-    vcl::Window* pParentWindow,
-    sal_uInt16 nId,
-    SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo)
-    : PaneChildWindow(
-        pParentWindow,
-        nId,
-        pBindings,
-        pInfo,
-        STR_NOTES_MODE, // TODO this isn't a specific translatable string for this view.
-        SfxChildAlignment::BOTTOM)
+        STR_LEFT_PANE_IMPRESS_TITLE)
 {
 }
 
@@ -117,8 +98,7 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
         nId,
         pBindings,
         pInfo,
-        STR_LEFT_PANE_DRAW_TITLE,
-        SfxChildAlignment::LEFT)
+        STR_LEFT_PANE_DRAW_TITLE)
 {
 }
 

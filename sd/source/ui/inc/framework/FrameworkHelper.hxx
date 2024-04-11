@@ -60,7 +60,6 @@ public:
     static const OUString msCenterPaneURL;
     static const OUString msFullScreenPaneURL;
     static const OUString msLeftImpressPaneURL;
-    static const OUString msBottomImpressPaneURL;
     static const OUString msLeftDrawPaneURL;
 
     // URLs of frequently used views.
@@ -73,7 +72,6 @@ public:
     static const OUString msSlideSorterURL;
     static const OUString msPresentationViewURL;
     static const OUString msSidebarViewURL;
-    static const OUString msNotesPanelViewURL;
 
     // URLs of frequently used tool bars.
     static constexpr OUStringLiteral msToolBarURLPrefix = u"private:resource/toolbar/";

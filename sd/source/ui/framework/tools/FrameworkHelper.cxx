@@ -174,7 +174,6 @@ namespace {
 const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
 const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
-const OUString FrameworkHelper::msBottomImpressPaneURL( msPaneURLPrefix + "BottomImpressPane");
 const OUString FrameworkHelper::msLeftDrawPaneURL( msPaneURLPrefix + "LeftDrawPane");
 
 // View URLs.
@@ -187,7 +186,6 @@ const OUString FrameworkHelper::msHandoutViewURL( msViewURLPrefix + "HandoutView
 const OUString FrameworkHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
 const OUString FrameworkHelper::msPresentationViewURL( msViewURLPrefix + "PresentationView");
 const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView");
-const OUString FrameworkHelper::msNotesPanelViewURL( msViewURLPrefix + "NotesPanelView");
 
 // Tool bar URLs.
 
@@ -436,7 +434,6 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
         maViewURLMap[msSlideSorterURL] = ViewShell::ST_SLIDE_SORTER;
         maViewURLMap[msPresentationViewURL] = ViewShell::ST_PRESENTATION;
         maViewURLMap[msSidebarViewURL] = ViewShell::ST_SIDEBAR;
-        maViewURLMap[msNotesPanelViewURL] = ViewShell::ST_NOTESPANEL;
     }
     ViewURLMap::const_iterator iView (maViewURLMap.find(rsViewURL));
     if (iView != maViewURLMap.end())
@@ -457,7 +454,6 @@ OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
         case ViewShell::ST_SLIDE_SORTER : return msSlideSorterURL;
         case ViewShell::ST_PRESENTATION : return msPresentationViewURL;
         case ViewShell::ST_SIDEBAR : return msSidebarViewURL;
-        case ViewShell::ST_NOTESPANEL: return msNotesPanelViewURL;
         default:
             return OUString();
     }
