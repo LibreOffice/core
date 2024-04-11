@@ -4372,7 +4372,7 @@ SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
     GroupId = SfxGroupId::Modify;
 ]
 
-SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
+SfxBoolItem BottomPaneImpress SID_BOTTOM_PANE_IMPRESS
 
 [
     AutoUpdate = TRUE,

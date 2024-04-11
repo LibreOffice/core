@@ -630,7 +630,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
-        case SID_NOTES_WINDOW:
+        case SID_BOTTOM_PANE_IMPRESS:
             mpImpl->SetPaneVisibility(
                 rRequest,
                 framework::FrameworkHelper::msBottomImpressPaneURL,
@@ -1326,7 +1326,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
-                    case SID_NOTES_WINDOW:
+                    case SID_BOTTOM_PANE_IMPRESS:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msBottomImpressPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);

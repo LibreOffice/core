@@ -24,7 +24,7 @@
           <value xml:lang="en-US">S~lide</value>
         </prop>
       </node>
-      <node oor:name=".uno:NotesChildWindow" oor:op="replace">
+      <node oor:name=".uno:BottomPaneImpress" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Notes Panel</value>
         </prop>

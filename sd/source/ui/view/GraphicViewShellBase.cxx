@@ -61,7 +61,7 @@ void GraphicViewShellBase::Execute(SfxRequest& rRequest)
 
     switch (nSlotId)
     {
-        case SID_NOTES_WINDOW:
+        case SID_BOTTOM_PANE_IMPRESS:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
         case SID_SLIDE_SORTER_MODE:
         case SID_SLIDE_MASTER_MODE:

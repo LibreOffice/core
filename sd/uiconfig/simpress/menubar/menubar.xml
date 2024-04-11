@@ -125,7 +125,7 @@
       <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
       <menu:menuitem menu:id=".uno:LeftPaneImpress" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ToggleTabBarVisibility" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:NotesChildWindow" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:BottomPaneImpress" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ShowRuler"/>
       <menu:menu menu:id=".uno:GridMenu">
