@@ -368,7 +368,7 @@ void TestBreakIterator::testWordBoundaries()
         }
 
         const sal_Int32 aSinglePositions[] = {0, 1, 3, 4, 6, 7, 9, 10};
-        for (size_t j = 1; j < SAL_N_ELEMENTS(aTests); ++j)
+        for (size_t j = 1; j < std::size(aTests); ++j)
         {
             OUString aTest = aBase.replaceAll("xx", OUStringChar(aTests[j]));
             sal_Int32 nPos = -1;

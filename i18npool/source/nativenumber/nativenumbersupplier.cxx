@@ -668,7 +668,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
 
         std::size_t nStripCase = 0;
         size_t nCasing;
-        for (nCasing = 0; nCasing < SAL_N_ELEMENTS(Casings); ++nCasing)
+        for (nCasing = 0; nCasing < std::size(Casings); ++nCasing)
         {
             if (o3tl::starts_with(rNativeNumberParams, Casings[nCasing].aLiteral))
             {
@@ -1064,7 +1064,7 @@ static void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLas
         output.append(value == 1000 ? thousand : isLast ? thousands_last : thousands);
     } else {
         sal_Int16 nbOfChar = 0;
-        for (sal_Int32 j = 0; num > 0 && j < sal_Int32(SAL_N_ELEMENTS(HebrewNumberCharArray)); j++) {
+        for (sal_Int32 j = 0; num > 0 && j < sal_Int32(std::size(HebrewNumberCharArray)); j++) {
             if (num - HebrewNumberCharArray[j].value >= 0) {
                 nbOfChar++;
                 // https://en.wikipedia.org/wiki/Hebrew_numerals#Key_exceptions
@@ -1177,7 +1177,7 @@ static void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool add
             addTitlo = false;
     }
 
-    for (sal_Int32 j = 0; num > 0 && j < sal_Int32(SAL_N_ELEMENTS(CyrillicNumberCharArray)); j++) {
+    for (sal_Int32 j = 0; num > 0 && j < sal_Int32(std::size(CyrillicNumberCharArray)); j++) {
         if (num < 20 && num > 10) {
             num -= 10;
             makeCyrillicNumber(num, output, false);
