@@ -549,7 +549,7 @@ private:
     std::unique_ptr<SvNumberFormatterIndexTable>
         pMergeTable; // List of indices for merging two formatters
     SvNFLanguageData m_aCurrentLanguage;
-    OnDemandNativeNumberWrapper xNatNum; // Native number service loaded on demand
+    OnDemandNativeNumberWrapper m_xNatNum; // Native number service loaded on demand
     Link<sal_uInt16, Color*> aColorLink; // User defined color table CallBack
 
     SVL_DLLPRIVATE static sal_uInt16 nSystemCurrencyPosition;

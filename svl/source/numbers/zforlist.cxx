@@ -415,8 +415,8 @@ SvNumberFormatter::SvNumberFormatter( const Reference< XComponentContext >& rxCo
     , IniLnge(eLang != LANGUAGE_DONTKNOW ? eLang : UNKNOWN_SUBSTITUTE)
     , m_aRWPolicy(SvNFEngine::GetRWPolicy(m_aFormatData))
     , m_aCurrentLanguage(rxContext, IniLnge, *this)
+    , m_xNatNum(m_xContext)
 {
-    xNatNum.init( m_xContext );
 
     // 0 .. 999 for initialized language formats
     m_aFormatData.ImpGenerateFormats(m_aCurrentLanguage, GetNatNum(), 0, false);
@@ -624,7 +624,7 @@ const css::uno::Reference<css::uno::XComponentContext>& SvNumberFormatter::GetCo
     return m_xContext;
 }
 
-const NativeNumberWrapper& SvNumberFormatter::GetNatNum() const { return xNatNum.get(); }
+const NativeNumberWrapper& SvNumberFormatter::GetNatNum() const { return m_xNatNum.get(); }
 
 bool SvNFFormatData::IsTextFormat(sal_uInt32 F_Index) const
 {

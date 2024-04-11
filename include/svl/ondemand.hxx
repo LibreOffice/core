@@ -252,10 +252,6 @@ public:
 
 /** Load a native number service wrapper only if it's needed.
     SvNumberformatter uses it.
-
-    @ATTENTION
-    If the default ctor is used the init() method MUST be called
-    before accessing the native number supplier.
  */
 class OnDemandNativeNumberWrapper
 {
@@ -263,12 +259,9 @@ class OnDemandNativeNumberWrapper
     mutable std::optional<NativeNumberWrapper> moNativeNumber;
 
 public:
-    OnDemandNativeNumberWrapper() {}
-
-    void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    OnDemandNativeNumberWrapper(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+        : m_xContext(rContext)
     {
-        m_xContext = rxContext;
-        moNativeNumber.reset();
     }
 
     NativeNumberWrapper& get() const
