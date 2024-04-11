@@ -6616,7 +6616,7 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                 case ocRange:
                     {
                         // tdf#160616: Double refs with these operators only
-                        // trimmable in case of one paramater
+                        // trimmable in case of one parameter
                         if (!pTok->IsInForceArray() || nRootParam > 1)
                             break;
                         FormulaToken* pLHS = *(ppTok - 1);
