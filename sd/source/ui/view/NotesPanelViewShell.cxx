@@ -78,8 +78,6 @@
 
 #include <TextObjectBar.hxx>
 
-#include <memory>
-
 #define ShellClass_NotesPanelViewShell
 using namespace sd;
 #include <sdslots.hxx>
