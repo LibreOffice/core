@@ -108,7 +108,6 @@ private:
     bool mbSettingsChanged : 1;
     bool mbEnableGetPivotData : 1;
 
-    ScDPTableData*    GetTableData();
     void              CreateObjects();
     void              CreateOutput();
     void ClearSource();
@@ -130,6 +129,8 @@ public:
     void                InvalidateData();
     void Clear();
     void ClearTableData();
+    ScDPTableData* GetTableData();
+
     SC_DLLPUBLIC void ReloadGroupTableData();
 
     SC_DLLPUBLIC void   Output( const ScAddress& rPos );
@@ -188,6 +189,7 @@ public:
                                        tools::Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, tools::Long& rDimPos );
     bool                IsFilterButton( const ScAddress& rPos );
 
+    static OUString GetFormattedString(ScDPTableData* pTableData, tools::Long nDimension, const double fValue);
     SC_DLLPUBLIC OUString GetFormattedString( std::u16string_view rDimName, const double fValue );
 
     double GetPivotData(

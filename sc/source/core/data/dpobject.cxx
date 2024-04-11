@@ -528,7 +528,7 @@ void ScDPObject::CreateOutput()
     bool bFilterButton = IsSheetData() && mpSaveData && mpSaveData->GetFilterButton();
     bool bExpandCollapse = mpSaveData ? mpSaveData->GetExpandCollapse() : false;
 
-    mpOutput.reset(new ScDPOutput(mpDocument, mxSource, maOutputRange.aStart, bFilterButton, bExpandCollapse));
+    mpOutput.reset(new ScDPOutput(mpDocument, mxSource, maOutputRange.aStart, bFilterButton, bExpandCollapse, *this));
     mpOutput->SetHeaderLayout(mbHeaderLayout);
     if (mpSaveData->hasFormats())
         mpOutput->setFormats(mpSaveData->getFormats());
@@ -1442,6 +1442,13 @@ void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, tools::Long n
     mpOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
 }
 
+OUString ScDPObject::GetFormattedString(ScDPTableData* pTableData, tools::Long nDimension, const double fValue)
+{
+    ScDPItemData aItemData;
+    aItemData.SetValue(fValue);
+    return pTableData->GetFormattedString(nDimension, aItemData, false);
+}
+
 OUString ScDPObject::GetFormattedString(std::u16string_view rDimName, const double fValue)
 {
     ScDPTableData* pTableData = GetTableData();
@@ -1454,9 +1461,8 @@ OUString ScDPObject::GetFormattedString(std::u16string_view rDimName, const doub
         if(rDimName == pTableData->getDimensionName(nDim))
             break;
     }
-    ScDPItemData aItemData;
-    aItemData.SetValue(fValue);
-    return GetTableData()->GetFormattedString(nDim, aItemData, false);
+
+    return GetFormattedString(pTableData, nDim, fValue);
 }
 
 

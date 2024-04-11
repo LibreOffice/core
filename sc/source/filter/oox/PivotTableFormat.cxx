@@ -88,17 +88,24 @@ void PivotTableFormat::finalizeImport()
         aFormats = pSaveData->getFormats();
 
     // Resolve references - TODO
-    for (auto const& pReference : maReferences)
+
+    sc::PivotTableFormat aFormat;
+    if (mbDataOnly)
+        aFormat.eType = sc::FormatType::Data;
+    else if (mbLabelOnly)
+        aFormat.eType = sc::FormatType::Label;
+
+    aFormat.pPattern = pPattern;
+    for (auto& rReference : maReferences)
     {
-        if (pReference->mnField && pReference->mbSelected)
+        if (rReference->mnField)
         {
-            auto nField = *pReference->mnField;
-            for (auto index : pReference->maFieldItemsIndices)
-            {
-                aFormats.add(nField, index, pPattern);
-            }
+            aFormat.aSelections.push_back(
+                sc::Selection{ .nField = sal_Int32(*rReference->mnField),
+                               .nDataIndex = rReference->maFieldItemsIndices[0] });
         }
     }
+    aFormats.add(aFormat);
 
     pSaveData->setFormats(aFormats);
 }

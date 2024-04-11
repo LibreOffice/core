@@ -17,31 +17,38 @@
 
 namespace sc
 {
-struct PivotTableFormat
+/** Type of a pivot table cell format to which a selection can be made. */
+enum class FormatType
 {
-    sal_Int32 nField;
-    sal_Int32 nDataIndex;
-    std::shared_ptr<ScPatternAttr> pPattern;
-
-    PivotTableFormat(sal_Int32 _nField, sal_Int32 _nDataIndex,
-                     std::shared_ptr<ScPatternAttr> _pPattern)
-        : nField(_nField)
-        , nDataIndex(_nDataIndex)
-        , pPattern(_pPattern)
-    {
-    }
+    None,
+    Data,
+    Label
 };
 
+/** Information to make a selection in the pivot table. */
+struct Selection
+{
+    sal_Int32 nField = 0;
+    sal_uInt32 nDataIndex = 0;
+};
+
+/** Holds cell patter attributes and a selection information to which cells in the pivot table
+ *  the pattern should be applied.
+ */
+struct PivotTableFormat
+{
+    FormatType eType = FormatType::None;
+    std::vector<Selection> aSelections;
+    std::shared_ptr<ScPatternAttr> pPattern;
+};
+
+/** A holder for a collection of PivotTableFormat */
 class PivotTableFormats
 {
     std::vector<PivotTableFormat> maFormats;
 
 public:
-    void add(sal_Int32 nField, sal_Int32 nDataIndex,
-             std::shared_ptr<ScPatternAttr> const& rpPattern)
-    {
-        maFormats.emplace_back(nField, nDataIndex, rpPattern);
-    }
+    void add(PivotTableFormat const& rPivotTableFormat) { maFormats.push_back(rPivotTableFormat); }
 
     size_t size() { return maFormats.size(); }
 

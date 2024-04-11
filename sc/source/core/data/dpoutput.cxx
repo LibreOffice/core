@@ -29,6 +29,7 @@
 #include <svl/itemset.hxx>
 
 #include <dpoutput.hxx>
+#include <dpobject.hxx>
 #include <document.hxx>
 #include <attrib.hxx>
 #include <formula/errorcodes.hxx>
@@ -41,6 +42,7 @@
 #include <strings.hrc>
 #include <stringutil.hxx>
 #include <dputil.hxx>
+#include <pivot/DPOutLevelData.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
@@ -81,31 +83,6 @@ using ::com::sun::star::sheet::DataPilotTableResultData;
 #define SC_DP_FRAME_OUTER_BOLD      40
 
 #define SC_DP_FRAME_COLOR           Color(0,0,0) //( 0x20, 0x40, 0x68 )
-
-struct ScDPOutLevelData
-{
-    tools::Long mnDim;
-    tools::Long mnHier;
-    tools::Long mnLevel;
-    tools::Long mnDimPos;
-    sal_uInt32 mnSrcNumFmt; /// Prevailing number format used in the source data.
-    uno::Sequence<sheet::MemberResult> maResult;
-    OUString maName;     /// Name is the internal field name.
-    OUString maCaption;  /// Caption is the name visible in the output table.
-    bool mbHasHiddenMember:1;
-    bool mbDataLayout:1;
-    bool mbPageDim:1;
-
-    ScDPOutLevelData(tools::Long nDim, tools::Long nHier, tools::Long nLevel, tools::Long nDimPos, sal_uInt32 nSrcNumFmt, const uno::Sequence<sheet::MemberResult>  &aResult,
-                       OUString aName, OUString aCaption, bool bHasHiddenMember, bool bDataLayout, bool bPageDim) :
-        mnDim(nDim), mnHier(nHier), mnLevel(nLevel), mnDimPos(nDimPos), mnSrcNumFmt(nSrcNumFmt), maResult(aResult),
-        maName(std::move(aName)), maCaption(std::move(aCaption)), mbHasHiddenMember(bHasHiddenMember), mbDataLayout(bDataLayout),
-        mbPageDim(bPageDim)
-    {
-    }
-
-    // bug (73840) in uno::Sequence - copy and then assign doesn't work!
-};
 
 namespace
 {
@@ -509,8 +486,9 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
 } // end anonymous namespace
 
 ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsSupplier> xSource,
-                       const ScAddress& rPosition, bool bFilter, bool bExpandCollapse)
+                       const ScAddress& rPosition, bool bFilter, bool bExpandCollapse, ScDPObject& rObject)
     : mpDocument(pDocument)
+    , maFormatOutput(rObject)
     , mxSource(std::move(xSource))
     , maStartPos(rPosition)
     , mnColFormatCount(0)
@@ -1036,16 +1014,16 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
         tools::Long nThisColCount = rMemberSequence.getLength();
         OSL_ENSURE(nThisColCount == mnColCount, "count mismatch"); //TODO: ???
 
-        tools::Long nColumnIndex = -1;
         for (tools::Long nColumn = 0; nColumn < nThisColCount; nColumn++)
         {
-            if (!(pMemberArray[nColumn].Flags & sheet::MemberResultFlags::CONTINUE))
-                nColumnIndex++;
+            sheet::MemberResult const& rMember = rMemberSequence[nColumn];
 
             SCCOL nColPos = mnDataStartCol + SCCOL(nColumn); //TODO: check for overflow
-            HeaderCell(nColPos, nRowPos, nTab, pMemberArray[nColumn], true, nField);
-            if ((pMemberArray[nColumn].Flags & sheet::MemberResultFlags::HASMEMBER) &&
-               !(pMemberArray[nColumn].Flags & sheet::MemberResultFlags::SUBTOTAL))
+
+            HeaderCell(nColPos, nRowPos, nTab, rMember, true, nField);
+
+            if ((rMember.Flags & sheet::MemberResultFlags::HASMEMBER) &&
+               !(rMember.Flags & sheet::MemberResultFlags::SUBTOTAL))
             {
                 // Check the number of columns this spreads
                 tools::Long nEnd = nColumn;
@@ -1071,27 +1049,13 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
                     lcl_SetStyleById(mpDocument, nTab, nColPos, nRowPos, nColPos, mnDataStartRow - 1, STR_PIVOT_STYLENAME_CATEGORY);
                 }
             }
-            else if (pMemberArray[nColumn].Flags & sheet::MemberResultFlags::SUBTOTAL)
+            else if (rMember.Flags & sheet::MemberResultFlags::SUBTOTAL)
             {
                 rOutputImpl.AddCol(nColPos);
             }
 
-            // Apply format
-            if (mpFormats)
-            {
-                auto& rColumnField = mpColFields[nField];
-                tools::Long nDimension = -2;
-                if (!rColumnField.mbDataLayout)
-                    nDimension = rColumnField.mnDim;
-
-                for (auto& aFormat : mpFormats->getVector())
-                {
-                    if (aFormat.nField == nDimension && aFormat.nDataIndex == nColumnIndex)
-                    {
-                        mpDocument->ApplyPattern(nColPos, nRowPos, nTab, *aFormat.pPattern);
-                    }
-                }
-            }
+            // Resolve formats
+            maFormatOutput.insertFieldMember(nField, mpColFields[nField], nColumn, rMember, nColPos, nRowPos, sc::FormatResultDirection::COLUMN);
 
             // Apply the same number format as in data source.
             mpDocument->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, mpColFields[nField].mnSrcNumFmt));
@@ -1123,12 +1087,10 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
         const sheet::MemberResult* pMemberArray = rMemberSequence.getConstArray();
         sal_Int32 nThisRowCount = rMemberSequence.getLength();
         OSL_ENSURE(nThisRowCount == mnRowCount, "count mismatch");     //TODO: ???
-        tools::Long nRowIndex = -1;
         for (sal_Int32 nRow = 0; nRow < nThisRowCount; nRow++)
         {
-            if (!(pMemberArray[nRow].Flags & sheet::MemberResultFlags::CONTINUE))
-                nRowIndex++;
-            const sheet::MemberResult& rData = pMemberArray[nRow];
+            sheet::MemberResult const& rMember = rMemberSequence[nRow];
+            const sheet::MemberResult& rData = rMember;
             const bool bHasMember = rData.Flags & sheet::MemberResultFlags::HASMEMBER;
             const bool bSubtotal = rData.Flags & sheet::MemberResultFlags::SUBTOTAL;
             SCROW nRowPos = mnDataStartRow + SCROW(nRow); //TODO: check for overflow
@@ -1181,21 +1143,8 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
                 rOutputImpl.AddRow(nRowPos);
             }
 
-            // Apply format
-            if (mpFormats)
-            {
-                auto& rRowField = mpRowFields[nField];
-                tools::Long nDimension = -2;
-                if (!rRowField.mbDataLayout)
-                    nDimension = rRowField.mnDim;
-                for (auto& aFormat : mpFormats->getVector())
-                {
-                    if (aFormat.nField == nDimension && aFormat.nDataIndex == nRowIndex)
-                    {
-                        mpDocument->ApplyPattern(nColPos, nRowPos, nTab, *aFormat.pPattern);
-                    }
-                }
-            }
+            // Resolve formats
+            maFormatOutput.insertFieldMember(nField, mpRowFields[nField], nRow, rMember, nColPos, nRowPos, sc::FormatResultDirection::ROW);
 
             // Apply the same number format as in data source.
             mpDocument->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, mpRowFields[nField].mnSrcNumFmt));
@@ -1230,6 +1179,8 @@ void ScDPOutput::outputDataResults(SCTAB nTab)
             DataCell(nColPos, nRowPos, nTab, pColAry[nCol]);
         }
     }
+
+    maFormatOutput.apply(*mpDocument);
 }
 
 void ScDPOutput::Output()
@@ -1237,11 +1188,14 @@ void ScDPOutput::Output()
     SCTAB nTab = maStartPos.Tab();
 
     //  calculate output positions and sizes
-
     CalcSizes();
 
     if (mbSizeOverflow || mbResultsError)   // does output area exceed sheet limits?
         return;                             // nothing
+
+    // Prepare format output
+    bool bColumnFieldIsDataOnly = mnColCount == 1 && mnRowCount > 0 && mpColFields.empty();
+    maFormatOutput.prepare(nTab, mpColFields, mpRowFields, bColumnFieldIsDataOnly);
 
     //  clear whole (new) output area
     // when modifying table, clear old area !
@@ -1275,13 +1229,16 @@ void ScDPOutput::Output()
 
     outputRowHeader(nTab, aOutputImpl);
 
-    if (mnColCount == 1 && mnRowCount > 0 && mpColFields.empty())
+    if (bColumnFieldIsDataOnly)
     {
         // the table contains exactly one data field and no column fields.
         // Display data description at top right corner.
         ScSetStringParam aParam;
         aParam.setTextInput();
-        mpDocument->SetString(mnDataStartCol, mnDataStartRow - 1, nTab, maDataDescription, &aParam);
+        SCCOL nCol = mnDataStartCol;
+        SCCOL nRow = mnDataStartRow - 1;
+        mpDocument->SetString(nCol, nRow, nTab, maDataDescription, &aParam);
+        maFormatOutput.insertEmptyDataColumn(nCol, nRow);
     }
 
     outputDataResults(nTab);

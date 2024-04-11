@@ -178,6 +178,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/pagepar \
     sc/source/core/data/patattr \
     sc/source/core/data/pivot2 \
+    sc/source/core/data/PivotTableFormatOutput \
     sc/source/core/data/poolcach \
     sc/source/core/data/poolhelp \
     sc/source/core/data/postit \

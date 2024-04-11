@@ -29,6 +29,7 @@
 
 #include "dptypes.hxx"
 #include "pivot/PivotTableFormats.hxx"
+#include "pivot/PivotTableFormatOutput.hxx"
 
 #include <memory>
 #include <vector>
@@ -44,11 +45,13 @@ namespace tools { class Rectangle; }
 class ScDocument;
 struct ScDPOutLevelData;
 class ScDPOutputImpl;
+class ScDPObject;
 
 class ScDPOutput
 {
 private:
     ScDocument* mpDocument;
+    sc::FormatOutput maFormatOutput;
     css::uno::Reference<css::sheet::XDimensionsSupplier> mxSource;
     ScAddress maStartPos;
     std::vector<ScDPOutLevelData> mpColFields;
@@ -65,8 +68,6 @@ private:
     sal_Int32 mnRowFormatCount;
     sal_uInt32 mnSingleNumberFormat;
     size_t mnRowDims; // Including empty ones.
-
-    std::unique_ptr<sc::PivotTableFormats> mpFormats;
 
     // Output geometry related parameters
     sal_Int32 mnColCount;
@@ -116,10 +117,11 @@ private:
     void outputDataResults(SCTAB nTab);
 
 public:
-                    ScDPOutput( ScDocument* pD,
-                                css::uno::Reference< css::sheet::XDimensionsSupplier> xSrc,
-                                const ScAddress& rPos, bool bFilter, bool bExpandCollapse );
-                    ~ScDPOutput();
+    ScDPOutput(ScDocument* pDocument,
+               css::uno::Reference<css::sheet::XDimensionsSupplier> xSource,
+               const ScAddress& rPosition, bool bFilter, bool bExpandCollapse,
+               ScDPObject& rObject);
+    ~ScDPOutput();
 
     void            SetPosition( const ScAddress& rPos );
 
@@ -147,7 +149,7 @@ public:
 
     void setFormats(sc::PivotTableFormats const& rPivotTableFormats)
     {
-        mpFormats.reset(new sc::PivotTableFormats(rPivotTableFormats));
+        maFormatOutput.setFormats(rPivotTableFormats);
     }
 
     static void GetDataDimensionNames(
