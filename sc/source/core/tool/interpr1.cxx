@@ -11456,14 +11456,7 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
                     if ( mrDoc.IsInVBAMode() )
                         rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
                     else
-                    {
-                        // set searchtype hard to wildcard or regexp if applicable, the XLOOKUP
-                        // argument prevails over the configuration setting
-                        if ( MayBeWildcard( vsa.sSearchStr.getString() ) )
-                            rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
-                        else if ( MayBeRegExp( vsa.sSearchStr.getString() ) )
-                            rParam.eSearchType = utl::SearchParam::SearchType::Regexp;
-                    }
+                        rParam.eSearchType = DetectSearchType(vsa.sSearchStr.getString(), mrDoc);
                 }
             }
             else
