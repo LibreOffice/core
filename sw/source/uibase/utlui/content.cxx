@@ -1941,31 +1941,22 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
         else
         {
-            if (lcl_IsContentType(*xEntry, *m_xTreeView))
-                pType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry));
-            else
-                pType = weld::fromId<SwContent*>(
-                            m_xTreeView->get_id(*xEntry))->GetParent();
-            if (pType)
+            if (ContentTypeId::OUTLINE == nContentType)
             {
-                if (ContentTypeId::OUTLINE == nContentType)
+                bOutline = true;
+                if (State::HIDDEN != m_eState)
                 {
-                    bOutline = true;
-                    if (State::HIDDEN != m_eState)
-                    {
-                        lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry,
-                                                                  *xSubPopOutlineContent);
-                        bRemoveSendOutlineEntry = false;
-                    }
-                    bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry,
-                                                                               *xPop);
+                    lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry,
+                                                              *xSubPopOutlineContent);
+                    bRemoveSendOutlineEntry = false;
                 }
-                else if (State::HIDDEN != m_eState &&
-                         nContentType == ContentTypeId::POSTIT &&
-                         !m_pActiveShell->GetView().GetDocShell()->IsReadOnly() &&
-                         pType->GetMemberCount() > 0)
-                    bRemovePostItEntries = false;
+                bRemoveToggleExpandEntry
+                    = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
             }
+            else if (State::HIDDEN != m_eState && nContentType == ContentTypeId::POSTIT
+                     && !m_pActiveShell->GetView().GetDocShell()->IsReadOnly()
+                     && pType->GetMemberCount() > 0)
+                bRemovePostItEntries = false;
         }
     }
 
