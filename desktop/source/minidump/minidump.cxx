@@ -184,7 +184,13 @@ static bool uploadContent(std::map<std::string, std::string>& parameters, std::s
     response = response_body;
 
     if( CURLE_OK != cc )
+    {
+        if (response.empty())
+        {
+            response = curl_easy_strerror(cc);
+        }
         return false;
+    }
 
     return true;
 }
