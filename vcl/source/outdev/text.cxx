@@ -1121,7 +1121,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         {
             for(int i = 0; i < nLen; ++i)
                 xDXPixelArray[i] = pDXArray.get(i);
-            nEndGlyphCoord = std::lround(xDXPixelArray[nLen - 1]);
+            nEndGlyphCoord = std::round(xDXPixelArray[nLen - 1]);
         }
 
         aLayoutArgs.SetDXArray(xDXPixelArray.get());

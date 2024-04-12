@@ -555,9 +555,9 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 nYOffset = nYOffset * nYScale;
                 if (!GetSubpixelPositioning())
                 {
-                    nAdvance = std::lround(nAdvance);
-                    nXOffset = std::lround(nXOffset);
-                    nYOffset = std::lround(nYOffset);
+                    nAdvance = std::round(nAdvance);
+                    nXOffset = std::round(nXOffset);
+                    nYOffset = std::round(nYOffset);
                 }
 
                 basegfx::B2DPoint aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
