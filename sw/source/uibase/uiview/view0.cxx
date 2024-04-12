@@ -128,14 +128,10 @@ std::shared_ptr<SwMailMergeConfigItem> const & SwView::GetMailMergeConfigItem() 
 
 static bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {
-    return  rVOpt.IsHardBlank() &&
-            rVOpt.IsSoftHyph() &&
-            rVOpt.IsFieldShadings();
+    return  rVOpt.IsFieldShadings();
 }
 static void lcl_SetViewMarks(SwViewOption& rVOpt, bool bOn )
 {
-    rVOpt.SetHardBlank(bOn);
-    rVOpt.SetSoftHyph(bOn);
     rVOpt.SetAppearanceFlag(
             ViewOptFlags::FieldShadings, bOn, true);
 }

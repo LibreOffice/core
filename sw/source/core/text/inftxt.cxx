@@ -1407,54 +1407,56 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         return;
 
     bool bDraw = false;
-    switch( nWhich )
+    if ( !GetOpt().IsPagePreview()
+         && !GetOpt().IsReadonly() )
     {
-    case PortionType::Footnote:
-    case PortionType::QuoVadis:
-    case PortionType::Number:
-    case PortionType::Field:
-    case PortionType::Hidden:
-    case PortionType::Tox:
-    case PortionType::Ref:
-    case PortionType::Meta:
-    case PortionType::ContentControl:
-    case PortionType::ControlChar:
-        if ( !GetOpt().IsPagePreview()
-             && !GetOpt().IsReadonly()
-             && GetOpt().IsFieldShadings()
-             && ( PortionType::Number != nWhich
-                  || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
+        switch( nWhich )
         {
-            bDraw = PortionType::Footnote != nWhich || m_pFrame->IsFootnoteAllowed();
-            bDraw &= GetOpt().IsHardBlank();
-        }
-        break;
-    case PortionType::Bookmark:
-        // no shading
-        break;
-    case PortionType::InputField:
-        // input field shading also in read-only mode
-        if ( !GetOpt().IsPagePreview()
-             && GetOpt().IsFieldShadings() )
-        {
-            bDraw = true;
-        }
-        break;
-    case PortionType::Tab:
-        if ( GetOpt().IsTab() )     bDraw = true;
-        break;
-    case PortionType::SoftHyphen:
-        if ( GetOpt().IsSoftHyph() )bDraw = true;
-        break;
-    case PortionType::Blank:
-        if ( GetOpt().IsHardBlank())bDraw = true;
-        break;
-    default:
-        {
-            OSL_ENSURE( false, "SwTextPaintInfo::DrawViewOpt: don't know how to draw this" );
+        case PortionType::Tab:
+            if ( GetOpt().IsViewMetaChars() )
+                bDraw = GetOpt().IsTab();
             break;
+        case PortionType::SoftHyphen:
+            if ( GetOpt().IsViewMetaChars() )
+                bDraw = GetOpt().IsSoftHyph();
+            break;
+        case PortionType::Blank:
+            if ( GetOpt().IsViewMetaChars() )
+                bDraw = GetOpt().IsHardBlank();
+            break;
+        case PortionType::ControlChar:
+            if ( GetOpt().IsViewMetaChars() )
+                bDraw = true;
+            break;
+        case PortionType::Bookmark:
+            // no shading
+            break;
+        case PortionType::Footnote:
+        case PortionType::QuoVadis:
+        case PortionType::Number:
+        case PortionType::Hidden:
+        case PortionType::Tox:
+        case PortionType::Ref:
+        case PortionType::Meta:
+        case PortionType::ContentControl:
+        case PortionType::Field:
+        case PortionType::InputField:
+            // input field shading also in read-only mode
+            if (GetOpt().IsFieldShadings()
+                && ( PortionType::Number != nWhich
+                    || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
+            {
+                bDraw = PortionType::Footnote != nWhich || m_pFrame->IsFootnoteAllowed();
+            }
+            break;
+        default:
+            {
+                OSL_ENSURE( false, "SwTextPaintInfo::DrawViewOpt: don't know how to draw this" );
+                break;
+            }
         }
     }
+
     if ( bDraw )
         DrawBackground( rPor, pColor );
 }
