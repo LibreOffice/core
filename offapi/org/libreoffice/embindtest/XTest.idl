@@ -113,6 +113,9 @@ interface XTest {
     sequence<Struct> getSequenceStruct();
     boolean isSequenceStruct([in] sequence<Struct> value);
     void throwRuntimeException();
+    void passJob([in] com::sun::star::task::XJob object);
+    void passJobExecutor([in] com::sun::star::task::XJobExecutor object);
+    void passInterface([in] com::sun::star::uno::XInterface object);
 };
 
 }; }; };

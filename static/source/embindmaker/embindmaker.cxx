@@ -501,7 +501,7 @@ void dumpAttributes(std::ostream& out, rtl::Reference<TypeManager> const& manage
             }
             out << "->get" << attr.name << "(); }";
         }
-        out << ")\n";
+        out << ", ::emscripten::pure_virtual())\n";
         if (!attr.readOnly)
         {
             out << "        .function(\"set" << attr.name << "\", ";
@@ -530,7 +530,7 @@ void dumpAttributes(std::ostream& out, rtl::Reference<TypeManager> const& manage
                 }
                 out << "->set" << attr.name << "(the_value); }";
             }
-            out << ")\n";
+            out << ", ::emscripten::pure_virtual())\n";
         }
     }
 }
@@ -660,7 +660,7 @@ void dumpWrapper(std::ostream& out, rtl::Reference<TypeManager> const& manager,
     {
         out << ", ::emscripten::allow_raw_pointers()";
     }
-    out << ")\n";
+    out << ", ::emscripten::pure_virtual())\n";
 }
 
 void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
@@ -676,18 +676,18 @@ void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
         else
         {
             out << "        .function(\"" << meth.name << "\", &" << cppName(name)
-                << "::" << meth.name << ")\n";
+                << "::" << meth.name << ", ::emscripten::pure_virtual())\n";
         }
     }
 }
 
-rtl::Reference<unoidl::InterfaceTypeEntity> resolveBase(rtl::Reference<TypeManager> const& manager,
-                                                        OUString const& name)
+rtl::Reference<unoidl::InterfaceTypeEntity>
+resolveInterface(rtl::Reference<TypeManager> const& manager, OUString const& name)
 {
     auto const ent = manager->getManager()->findEntity(name);
     if (!ent.is() || ent->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
     {
-        throw CannotDumpException("bad interface base \"" + name + "\"");
+        throw CannotDumpException("bad interface \"" + name + "\"");
     }
     return static_cast<unoidl::InterfaceTypeEntity*>(ent.get());
 }
@@ -695,7 +695,7 @@ rtl::Reference<unoidl::InterfaceTypeEntity> resolveBase(rtl::Reference<TypeManag
 void recordVisitedBases(rtl::Reference<TypeManager> const& manager, OUString const& name,
                         std::set<OUString>& visitedBases)
 {
-    auto const ent = resolveBase(manager, name);
+    auto const ent = resolveInterface(manager, name);
     for (auto const& base : ent->getDirectMandatoryBases())
     {
         if (visitedBases.insert(base.name).second)
@@ -709,7 +709,7 @@ void dumpBase(std::ostream& out, rtl::Reference<TypeManager> const& manager,
               OUString const& interface, OUString const& name, std::set<OUString>& visitedBases,
               std::list<OUString> const& baseTrail)
 {
-    auto const ent = resolveBase(manager, name);
+    auto const ent = resolveInterface(manager, name);
     for (auto const& base : ent->getDirectMandatoryBases())
     {
         if (visitedBases.insert(base.name).second)
@@ -721,6 +721,126 @@ void dumpBase(std::ostream& out, rtl::Reference<TypeManager> const& manager,
     }
     dumpAttributes(out, manager, interface, ent, baseTrail);
     dumpMethods(out, manager, interface, ent, baseTrail);
+}
+
+void dumpWrapperClassMembers(std::ostream& out, rtl::Reference<TypeManager> const& manager,
+                             OUString const& interface, OUString const& name,
+                             std::set<OUString>& visitedBases)
+{
+    auto const ent = resolveInterface(manager, name);
+    for (auto const& base : ent->getDirectMandatoryBases())
+    {
+        if (visitedBases.insert(base.name).second)
+        {
+            dumpWrapperClassMembers(out, manager, interface, base.name, visitedBases);
+        }
+    }
+    for (auto const& attr : ent->getDirectAttributes())
+    {
+        out << "    ";
+        dumpType(out, manager, attr.type);
+        out << " get" << attr.name << "() override { return call<";
+        dumpType(out, manager, attr.type);
+        out << ">(\"get" << attr.name << "\"); }\n";
+        if (!attr.readOnly)
+        {
+            out << "    void set" << attr.name << "(";
+            dumpType(out, manager, attr.type);
+            switch (manager->getSort(resolveOuterTypedefs(manager, attr.type)))
+            {
+                case codemaker::UnoType::Sort::Boolean:
+                case codemaker::UnoType::Sort::Byte:
+                case codemaker::UnoType::Sort::Short:
+                case codemaker::UnoType::Sort::UnsignedShort:
+                case codemaker::UnoType::Sort::Long:
+                case codemaker::UnoType::Sort::UnsignedLong:
+                case codemaker::UnoType::Sort::Hyper:
+                case codemaker::UnoType::Sort::UnsignedHyper:
+                case codemaker::UnoType::Sort::Float:
+                case codemaker::UnoType::Sort::Double:
+                case codemaker::UnoType::Sort::Char:
+                case codemaker::UnoType::Sort::Enum:
+                    break;
+                case codemaker::UnoType::Sort::String:
+                case codemaker::UnoType::Sort::Type:
+                case codemaker::UnoType::Sort::Any:
+                case codemaker::UnoType::Sort::Sequence:
+                case codemaker::UnoType::Sort::PlainStruct:
+                case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+                case codemaker::UnoType::Sort::Interface:
+                    out << " const &";
+                    break;
+                default:
+                    throw CannotDumpException("unexpected entity \"" + attr.type
+                                              + "\" as attribute type");
+            }
+            out << " the_value) override { return call<void>(\"set" << attr.name
+                << "\", the_value); }\n";
+        }
+    }
+    for (auto const& meth : ent->getDirectMethods())
+    {
+        out << "    ";
+        dumpType(out, manager, meth.returnType);
+        out << " " << meth.name << "(";
+        bool first = true;
+        for (auto const& param : meth.parameters)
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                out << ", ";
+            }
+            dumpType(out, manager, param.type);
+            if (param.direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+            {
+                switch (manager->getSort(resolveOuterTypedefs(manager, param.type)))
+                {
+                    case codemaker::UnoType::Sort::Boolean:
+                    case codemaker::UnoType::Sort::Byte:
+                    case codemaker::UnoType::Sort::Short:
+                    case codemaker::UnoType::Sort::UnsignedShort:
+                    case codemaker::UnoType::Sort::Long:
+                    case codemaker::UnoType::Sort::UnsignedLong:
+                    case codemaker::UnoType::Sort::Hyper:
+                    case codemaker::UnoType::Sort::UnsignedHyper:
+                    case codemaker::UnoType::Sort::Float:
+                    case codemaker::UnoType::Sort::Double:
+                    case codemaker::UnoType::Sort::Char:
+                    case codemaker::UnoType::Sort::Enum:
+                        break;
+                    case codemaker::UnoType::Sort::String:
+                    case codemaker::UnoType::Sort::Type:
+                    case codemaker::UnoType::Sort::Any:
+                    case codemaker::UnoType::Sort::Sequence:
+                    case codemaker::UnoType::Sort::PlainStruct:
+                    case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+                    case codemaker::UnoType::Sort::Interface:
+                        out << " const &";
+                        break;
+                    default:
+                        throw CannotDumpException("unexpected entity \"" + param.type
+                                                  + "\" as parameter type");
+                }
+            }
+            else
+            {
+                out << " &";
+            }
+            out << " " << param.name;
+        }
+        out << ") override { return call<";
+        dumpType(out, manager, meth.returnType);
+        out << ">(\"" << meth.name << "\"";
+        for (auto const& param : meth.parameters)
+        {
+            out << ", " << param.name;
+        }
+        out << "); }\n";
+    }
 }
 
 void dumpRegisterFunctionProlog(std::ostream& out, unsigned long long& counter)
@@ -926,6 +1046,21 @@ SAL_IMPLEMENT_MAIN()
             assert(ent.is());
             assert(ent->getSort() == unoidl::Entity::SORT_INTERFACE_TYPE);
             rtl::Reference const ifcEnt(static_cast<unoidl::InterfaceTypeEntity*>(ent.get()));
+            {
+                auto i = ifc.lastIndexOf('.');
+                auto j = i + 1;
+                if (i == -1)
+                {
+                    i = 0;
+                }
+                cppOut << "namespace the_wrappers" << cppName(ifc.copy(0, i)) << " {\n"
+                       << "struct " << ifc.copy(j) << " final: public ::emscripten::wrapper<"
+                       << cppName(ifc) << "> {\n"
+                       << "    EMSCRIPTEN_WRAPPER(" << ifc.copy(j) << ");\n";
+                std::set<OUString> visitedBases;
+                dumpWrapperClassMembers(cppOut, mgr, ifc, ifc, visitedBases);
+                cppOut << "};\n}\n";
+            }
             dumpRegisterFunctionProlog(cppOut, n);
             cppOut << "    ::emscripten::class_<" << cppName(ifc);
             //TODO: Embind only supports single inheritance, so use that support at least for a UNO
@@ -938,9 +1073,16 @@ SAL_IMPLEMENT_MAIN()
             }
             cppOut << ">(\"uno_Type_" << jsName(ifc)
                    << "\")\n"
+                      "        .allow_subclass<the_wrappers"
+                   << cppName(ifc) << ">(\"uno_Wrapper_" << jsName(ifc)
+                   << "\")\n"
                       "        .smart_ptr<::com::sun::star::uno::Reference<"
                    << cppName(ifc) << ">>(\"uno_Reference_" << jsName(ifc)
                    << "\")\n"
+                      "        .class_function(\"reference\", +[]("
+                   << cppName(ifc)
+                   << " * the_interface) { return ::com::sun::star::uno::Reference(the_interface); "
+                      "}, ::emscripten::allow_raw_pointers())\n"
                       "        "
                       ".constructor(+[](::com::sun::star::uno::Reference<::com::sun::star::uno::"
                       "XInterface> const & the_object) { return ::com::sun::star::uno::Reference<"
