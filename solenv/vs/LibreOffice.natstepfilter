@@ -9,7 +9,7 @@
         <Action>NoStepInto</Action>
     </Function>
     <Function>
-        <Name>>	std::vector&lt;.*&gt;::operator[]</Name>
+        <Name>std::vector&lt;.*&gt;::operator[]</Name>
         <Action>NoStepInto</Action>
     </Function>
     <Function>
@@ -22,6 +22,16 @@
     </Function>
     <Function>
         <Name>rtl::Reference&lt;.*&gt;::operator-&gt;</Name>
+        <Action>NoStepInto</Action>
+    </Function>
+    <Function>
+        <Name>VclPtr&lt;.*&gt;::operator-&gt;</Name>
+        <Action>NoStepInto</Action>
+    </Function>
+    <Function>
+        <!-- VclPtr<VirtualDevice>::operator VirtualDevice * -->
+        <!-- It seems that natstepfilter regex doesn't support backreferences -->
+        <Name>VclPtr&lt;.*&gt;::operator .* \*</Name>
         <Action>NoStepInto</Action>
     </Function>
 </StepFilter>
