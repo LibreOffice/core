@@ -1140,7 +1140,11 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aTree.put("commandName", aEvent.FeatureURL.Complete);
         aTree.put("disabled", !aEvent.IsEnabled);
         aTree.put("state", bTemp ? "true" : "false");
-        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aTree.extractData());
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell)
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aTree.extractData());
+        }
         return;
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
