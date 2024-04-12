@@ -4036,8 +4036,9 @@ StackVar ScInterpreter::Interpret()
                 (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
         {
             // Path already calculated, reuse result.
-            if (sp >= pCur->GetParamCount())
-                nStackBase = sp - pCur->GetParamCount();
+            const sal_uInt8 nParamCount = pCur->GetParamCount();
+            if (sp >= nParamCount)
+                nStackBase = sp - nParamCount;
             else
             {
                 SAL_WARN("sc.core", "Stack anomaly with calculated path at "
@@ -4045,7 +4046,7 @@ StackVar ScInterpreter::Interpret()
                         << "  " << aPos.Format(
                             ScRefFlags::VALID | ScRefFlags::FORCE_DOC | ScRefFlags::TAB_3D, &mrDoc)
                         << "  eOp: " << static_cast<int>(eOp)
-                        << "  params: " << static_cast<int>(pCur->GetParamCount())
+                        << "  params: " << static_cast<int>(nParamCount)
                         << "  nStackBase: " << nStackBase << "  sp: " << sp);
                 nStackBase = sp;
                 assert(!"underflow");
@@ -4074,18 +4075,22 @@ StackVar ScInterpreter::Interpret()
                     eOp = ocNone;       // JumpMatrix created
                     nStackBase = sp;
                 }
-                else if (sp >= pCur->GetParamCount())
-                    nStackBase = sp - pCur->GetParamCount();
                 else
                 {
-                    SAL_WARN("sc.core", "Stack anomaly at " << aPos.Tab() << "," << aPos.Col() << "," << aPos.Row()
-                            << "  " << aPos.Format(
-                                ScRefFlags::VALID | ScRefFlags::FORCE_DOC | ScRefFlags::TAB_3D, &mrDoc)
-                            << "  eOp: " << static_cast<int>(eOp)
-                            << "  params: " << static_cast<int>(pCur->GetParamCount())
-                            << "  nStackBase: " << nStackBase << "  sp: " << sp);
-                    nStackBase = sp;
-                    assert(!"underflow");
+                    const sal_uInt8 nParamCount = pCur->GetParamCount();
+                    if (sp >= nParamCount)
+                        nStackBase = sp - nParamCount;
+                    else
+                    {
+                        SAL_WARN("sc.core", "Stack anomaly at " << aPos.Tab() << "," << aPos.Col() << "," << aPos.Row()
+                                << "  " << aPos.Format(
+                                    ScRefFlags::VALID | ScRefFlags::FORCE_DOC | ScRefFlags::TAB_3D, &mrDoc)
+                                << "  eOp: " << static_cast<int>(eOp)
+                                << "  params: " << static_cast<int>(nParamCount)
+                                << "  nStackBase: " << nStackBase << "  sp: " << sp);
+                        nStackBase = sp;
+                        assert(!"underflow");
+                    }
                 }
             }
 
