@@ -680,7 +680,7 @@ void ScHTMLLayoutParser::SetWidths()
                 if ( pE->nTab == nTable && pE->nWidth )
                 {
                     nCol = pE->nCol - nColCntStart;
-                    if ( nCol < nColsPerRow )
+                    if (nCol >= 0 && nCol < nColsPerRow)
                     {
                         if ( pE->nColOverlap == 1 )
                         {
