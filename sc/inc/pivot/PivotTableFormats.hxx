@@ -13,7 +13,6 @@
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <patattr.hxx>
-#include <memory>
 
 namespace sc
 {
