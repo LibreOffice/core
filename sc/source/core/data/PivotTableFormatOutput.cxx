@@ -253,7 +253,6 @@ void FormatOutput::apply(ScDocument& rDocument)
     if (!mpFormats)
         return;
 
-    size_t nEntryIndex = 0;
     for (auto const& rOutputEntry : maFormatOutputEntries)
     {
         if (!rOutputEntry.onTab || !rOutputEntry.pPattern)
@@ -339,7 +338,6 @@ void FormatOutput::apply(ScDocument& rDocument)
         {
             rDocument.ApplyPattern(*oColumn, *oRow, *rOutputEntry.onTab, *rOutputEntry.pPattern);
         }
-        nEntryIndex++;
     }
 }
 
