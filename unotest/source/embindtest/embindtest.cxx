@@ -9,11 +9,14 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
@@ -501,6 +504,25 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
     void SAL_CALL throwRuntimeException() override
     {
         throw css::uno::RuntimeException(u"test"_ustr);
+    }
+
+    void SAL_CALL passJob(css::uno::Reference<css::task::XJob> const& object) override
+    {
+        object->execute({ { u"name"_ustr, css::uno::Any(u"job"_ustr) } });
+    }
+
+    void SAL_CALL
+    passJobExecutor(css::uno::Reference<css::task::XJobExecutor> const& object) override
+    {
+        object->trigger(u"executor"_ustr);
+    }
+
+    void SAL_CALL passInterface(css::uno::Reference<css::uno::XInterface> const& object) override
+    {
+        css::uno::Reference<css::task::XJob>(object, css::uno::UNO_QUERY_THROW)
+            ->execute({ { u"name"_ustr, css::uno::Any(u"queried job"_ustr) } });
+        css::uno::Reference<css::task::XJobExecutor>(object, css::uno::UNO_QUERY_THROW)
+            ->trigger(u"queried executor"_ustr);
     }
 };
 }

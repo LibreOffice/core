@@ -544,6 +544,42 @@ Module.addOnPostRun(function() {
         console.assert(e.message === undefined); //TODO
         //TODO: console.assert(e.Message.startsWith('test'));
     }
+    const obj = {
+        refcount: 0,
+        queryInterface(type) {
+            if (type == 'com.sun.star.uno.XInterface') {
+                return new Module.uno_Any(type, css.uno.XInterface.reference(this.implXInterface));
+            } else if (type == 'com.sun.star.task.XJob') {
+                return new Module.uno_Any(type, css.task.XJob.reference(this.implXJob));
+            } else if (type == 'com.sun.star.task.XJobExecutor') {
+                return new Module.uno_Any(
+                    type, css.task.XJobExecutor.reference(this.implXJobExecutor));
+            } else {
+                return new Module.uno_Any(Module.uno_Type.Void(), undefined);
+            }
+        },
+        acquire() { ++this.refcount; },
+        release() {
+            if (--this.refcount === 0) {
+                this.implXInterface.delete();
+                this.implXJob.delete();
+                this.implXJobExecutor.delete();
+            }
+        },
+        execute(args) {
+            console.log('Hello ' + args.get(0).Value.get());
+            return new Module.uno_Any(Module.uno_Type.Void(), undefined);
+        },
+        trigger(event) { console.log('Ola ' + event); }
+    };
+    obj.implXInterface = css.uno.XInterface.implement(obj);
+    obj.implXJob = css.task.XJob.implement(obj);
+    obj.implXJobExecutor = css.task.XJobExecutor.implement(obj);
+    obj.acquire();
+    test.passJob(css.task.XJob.reference(obj.implXJob));
+    test.passJobExecutor(css.task.XJobExecutor.reference(obj.implXJobExecutor));
+    test.passInterface(css.uno.XInterface.reference(obj.implXInterface));
+    obj.release();
 });
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
