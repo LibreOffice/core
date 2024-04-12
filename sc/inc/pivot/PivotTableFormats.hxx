@@ -33,7 +33,7 @@ struct Selection
     sal_uInt32 nDataIndex = 0;
 };
 
-/** Holds cell patter attributes and a selection information to which cells in the pivot table
+/** Holds cell pattern attributes and a selection information to which cells in the pivot table
  *  the pattern should be applied.
  */
 struct PivotTableFormat
