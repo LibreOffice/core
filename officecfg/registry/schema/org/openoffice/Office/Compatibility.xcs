@@ -140,6 +140,18 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="TabsRelativeToIndent" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Set tabstops relative to indent of paragraph</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="TabOverMargin" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Allow tabs to extend beyond the right margin</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>

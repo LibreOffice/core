@@ -1059,6 +1059,30 @@ void SwViewShell::SetNoGapAfterNoteNumber(bool bNew)
     }
 }
 
+void SwViewShell::SetTabsRelativeToIndent(bool bNew)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) != bNew)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::TABS_RELATIVE_TO_INDENT, bNew);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::Size | SwInvalidateFlags::Section | SwInvalidateFlags::PrtArea | SwInvalidateFlags::Table | SwInvalidateFlags::Pos;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
+
+void SwViewShell::SetTabOverMargin(bool bNew)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) != bNew)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::TAB_OVER_MARGIN, bNew);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::Size | SwInvalidateFlags::Section | SwInvalidateFlags::PrtArea | SwInvalidateFlags::Table | SwInvalidateFlags::Pos;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );

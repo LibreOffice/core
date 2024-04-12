@@ -1490,6 +1490,8 @@
 #define STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA    NC_("STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA", "Hide paragraphs of database fields (e.g., mail merge) with an empty value")
 #define STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP     NC_("STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP", "Render non-breaking spaces (NBSP) as standard-space-width (off for fixed size)")
 #define STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER     NC_("STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER", "Do not add an extra space after number in footnotes / endnotes with hanging first line")
+#define STR_COMPAT_OPT_TABSRELATIVETOINDENT     NC_("STR_COMPAT_OPT_TABSRELATIVETOINDENT", "Set tabstops relative to indent of paragraph")
+#define STR_COMPAT_OPT_TABOVERMARGIN            NC_("STR_COMPAT_OPT_TABOVERMARGIN", "Allow tabs to extend beyond the right margin")
 
 #define STR_TABLE_PANEL_ALIGN_AUTO              NC_("sidebartableedit|alignautolabel", "Automatic")
 #define STR_TABLE_PANEL_ALIGN_LEFT              NC_("sidebartableedit|alignleftlabel", "Left")

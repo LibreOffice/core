@@ -447,6 +447,10 @@ public:
 
     SW_DLLPUBLIC void SetNoGapAfterNoteNumber(bool bNew);
 
+    SW_DLLPUBLIC void SetTabsRelativeToIndent(bool bNew);
+
+    SW_DLLPUBLIC void SetTabOverMargin(bool bNew);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.

@@ -60,6 +60,8 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"EmptyDbFieldHidesPara"_ustr, STR_COMPAT_OPT_EMPTYDBFIELDHIDESPARA },
     { u"UseVariableWidthNBSP"_ustr, STR_COMPAT_OPT_USEVARIABLEWIDTHNBSP },
     { u"NoGapAfterNoteNumber"_ustr, STR_COMPAT_OPT_NOGAPAFTERNOTENUMBER },
+    { u"TabsRelativeToIndent"_ustr, STR_COMPAT_OPT_TABSRELATIVETOINDENT },
+    { u"TabOverMargin"_ustr, STR_COMPAT_OPT_TABOVERMARGIN },
 };
 
 // DocumentSettingId, negate?
@@ -82,6 +84,8 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
         { u"EmptyDbFieldHidesPara"_ustr, { DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, false } },
         { u"UseVariableWidthNBSP"_ustr, { DocumentSettingId::USE_VARIABLE_WIDTH_NBSP, false } },
         { u"NoGapAfterNoteNumber"_ustr, { DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER, false } },
+        { u"TabsRelativeToIndent"_ustr, { DocumentSettingId::TABS_RELATIVE_TO_INDENT, false } },
+        { u"TabOverMargin"_ustr, { DocumentSettingId::TAB_OVER_MARGIN, false } },
 //        { u"AddTableLineSpacing"_ustr, { DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, false } },
     };
     return map.at(option);
@@ -304,6 +308,14 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER:
                         m_pWrtShell->SetNoGapAfterNoteNumber(bChecked);
+                        break;
+
+                    case DocumentSettingId::TABS_RELATIVE_TO_INDENT:
+                        m_pWrtShell->SetTabsRelativeToIndent(bChecked);
+                        break;
+
+                    case DocumentSettingId::TAB_OVER_MARGIN:
+                        m_pWrtShell->SetTabOverMargin(bChecked);
                         break;
 
                     default:

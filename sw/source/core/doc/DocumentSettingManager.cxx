@@ -137,6 +137,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbEmptyDbFieldHidesPara             = aOptions.get(u"EmptyDbFieldHidesPara"_ustr);
         mbUseVariableWidthNBSP              = aOptions.get(u"UseVariableWidthNBSP"_ustr);
         mbNoGapAfterNoteNumber              = aOptions.get(u"NoGapAfterNoteNumber"_ustr);
+        mbTabRelativeToIndent               = aOptions.get(u"TabsRelativeToIndent"_ustr);
+        mbTabOverMargin                     = aOptions.get(u"TabOverMargin"_ustr);
     }
     else
     {
