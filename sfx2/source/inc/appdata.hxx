@@ -114,6 +114,7 @@ public:
 
     bool                        bDowning:1;   // sal_True on Exit and afterwards
     bool                        bInQuit : 1;
+    bool                        bClosingDocs : 1;
 
                                 SfxAppData_Impl();
                                 ~SfxAppData_Impl();

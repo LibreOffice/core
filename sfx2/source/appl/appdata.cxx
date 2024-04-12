@@ -79,6 +79,7 @@ SfxAppData_Impl::SfxAppData_Impl()
     , pViewFrame( nullptr )
     , bDowning( true )
     , bInQuit( false )
+    , bClosingDocs( false )
 
 {
     pBasic = new BasicDLL;

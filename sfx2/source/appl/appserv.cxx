@@ -374,8 +374,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_QUITAPP:
         case SID_LOGOUT:
         {
-            // protect against reentrant calls
-            if ( pImpl->bInQuit )
+            // protect against reentrant calls and avoid closing the same files in parallel
+            if (pImpl->bInQuit || pImpl->bClosingDocs)
                 return;
 
             if ( rReq.GetSlot() == SID_LOGOUT )
@@ -484,34 +484,94 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_CLOSEDOCS:
         {
+            // protect against reentrant calls and avoid closing the same files in parallel
+            if (pImpl->bInQuit || pImpl->bClosingDocs)
+                return;
 
-            Reference < XDesktop2 > xDesktop  = Desktop::create( ::comphelper::getProcessComponentContext() );
-            Reference< XIndexAccess > xTasks = xDesktop->getFrames();
-            if ( !xTasks.is() )
-                break;
+            pImpl->bClosingDocs = true;
+            // closed all status for all visible frames
+            bool bClosedAll = true;
 
-            sal_Int32 n=0;
-            do
+            // Iterate over all documents and close them
+            for (SfxObjectShell *pObjSh = SfxObjectShell::GetFirst(); pObjSh;)
             {
-                if ( xTasks->getCount() <= n )
-                    break;
-
-                Any aAny = xTasks->getByIndex(n);
-                Reference < XCloseable > xTask;
-                aAny >>= xTask;
-                try
+                SfxObjectShell* pNxtObjSh = SfxObjectShell::GetNext(*pObjSh);
+                // can close immediately
+                if (!pObjSh->IsModified() || pObjSh->isSaveLocked())
                 {
-                    xTask->close(true);
-                    n++;
+                    // don't close the last remaining frame for close dispatch
+                    if (pNxtObjSh || !bClosedAll)
+                        pObjSh->DoClose();
                 }
-                catch( CloseVetoException& )
+                else
                 {
+                    // skip invisible frames when asking user to close
+                    SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pObjSh);
+                    if (pFrame && pFrame->GetWindow().IsReallyVisible())
+                    {
+                        // asks user to close
+                        if (pObjSh->PrepareClose())
+                        {
+                            pObjSh->SetModified(false);
+                            // get next pointer again after asking user since it can become invalid pointer from being manually closed by user
+                            // don't close the last remaining frame for close dispatch
+                            if ((pNxtObjSh = SfxObjectShell::GetNext(*pObjSh)) || !bClosedAll)
+                                pObjSh->DoClose();
+                        }
+                        // user disagrees to close
+                        else
+                        {
+                            bClosedAll = false;
+                            // get next pointer again after asking user since it can become invalid pointer from being manually closed by user
+                            pNxtObjSh = SfxObjectShell::GetNext(*pObjSh);
+                        }
+                    }
+                }
+                pObjSh = pNxtObjSh;
+            }
+
+            pImpl->bClosingDocs = false;
+
+            // close dispatch status
+            bool bDispatchOk = true;
+            // open backing window
+            if (bClosedAll)
+            {
+                // don't use pViewFrame = SfxViewFrame::Current() as dispatch won't load sometimes
+                SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+                SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(pObjSh);
+                if (pViewFrame)
+                {
+                    Reference<XFrame> xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
+                    if (xCurrentFrame.is())
+                    {
+                        uno::Reference<frame::XDispatchProvider> xProvider(xCurrentFrame, uno::UNO_QUERY);
+                        if (xProvider.is())
+                        {
+                            uno::Reference<frame::XDispatchHelper> xDispatcher
+                                = frame::DispatchHelper::create(::comphelper::getProcessComponentContext());
+                            // use .uno:CloseDoc to be able to close windows of the same document
+                            css::uno::Any aResult =
+                                xDispatcher->executeDispatch(xProvider,
+                                                             u".uno:CloseDoc"_ustr,
+                                                             u"_self"_ustr,
+                                                             0,
+                                                             uno::Sequence<beans::PropertyValue>());
+                            css::frame::DispatchResultEvent aEvent;
+                            bDispatchOk = (aResult >>= aEvent) && (aEvent.State == frame::DispatchResultState::SUCCESS);
+                        }
+                    }
                 }
             }
-            while( true );
+            // terminate the application if the dispatch fails or
+            // if there is no visible frame left after the command is run (e.g user manually closes the document again that was already cancelled for closing)
+            if (!bDispatchOk || (!bClosedAll && !SfxObjectShell::GetFirst()))
+            {
+                SfxRequest aReq(SID_QUITAPP, SfxCallMode::SLOT, GetPool());
+                MiscExec_Impl(aReq);
+            }
 
-            bool bOk = ( n == 0);
-            rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
+            rReq.SetReturnValue(SfxBoolItem(0, bDispatchOk));
             bDone = true;
             break;
         }
@@ -524,7 +584,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
             {
                 SfxRequest aReq( SID_SAVEDOC, SfxCallMode::SLOT, pObjSh->GetPool() );
-                if ( pObjSh->IsModified() && !pObjSh->isSaveLocked())
+                if ( pObjSh->IsModified() && !pObjSh->isSaveLocked() )
                 {
                     pObjSh->ExecuteSlot( aReq );
                     const SfxBoolItem* pItem(dynamic_cast<const SfxBoolItem*>(aReq.GetReturnValue().getItem()));
@@ -1235,7 +1295,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 case SID_QUITAPP:
                 {
-                    if ( pImpl->nDocModalMode )
+                    if (pImpl->nDocModalMode || pImpl->bClosingDocs)
                         rSet.DisableItem(nWhich);
                     else
                         rSet.Put(SfxStringItem(nWhich, SfxResId(STR_QUITAPP)));
@@ -1287,8 +1347,15 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_CLOSEDOCS:
                 {
+                    if ( pImpl->nDocModalMode || pImpl->bInQuit )
+                    {
+                        rSet.DisableItem(nWhich);
+                        return;
+                    }
+
                     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
                     Reference< XIndexAccess > xTasks = xDesktop->getFrames();
+
                     if ( !xTasks.is() || !xTasks->getCount() )
                         rSet.DisableItem(nWhich);
                     break;

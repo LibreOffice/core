@@ -49,6 +49,7 @@
 #include <svtools/ehdl.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
+#include <appdata.hxx>
 
 #include <comphelper/string.hxx>
 #include <basic/sbxcore.hxx>
@@ -1293,6 +1294,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_CLOSEDOC:
         {
+            // cancel requests during SfxApplication is closing or quiting.
+            SfxAppData_Impl* pAppData = SfxGetpApp()->Get_Impl();
+            if (pAppData && (pAppData->bInQuit || pAppData->bClosingDocs))
+            {
+                return;
+            }
+
             // Evaluate Parameter
             const SfxBoolItem* pSaveItem = rReq.GetArg<SfxBoolItem>(SID_CLOSEDOC_SAVE);
             const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(SID_CLOSEDOC_FILENAME);

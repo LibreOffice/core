@@ -631,9 +631,9 @@ SfxVoidItem CloseDocs SID_CLOSEDOCS
     RecordPerSet;
     Asynchron;
 
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
 
