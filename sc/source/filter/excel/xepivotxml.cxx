@@ -9,6 +9,7 @@
 
 #include <xepivotxml.hxx>
 #include <dpcache.hxx>
+#include <pivot/PivotTableFormats.hxx>
 #include <dpdimsave.hxx>
 #include <dpitemdata.hxx>
 #include <dpobject.hxx>
@@ -27,6 +28,7 @@
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <sax/fastattribs.hxx>
+#include <sax/fshelper.hxx>
 #include <svl/numformat.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1181,6 +1183,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         pPivotStrm->endElement(XML_dataFields);
     }
 
+    // <formats>
+    savePivotTableFormats(rStrm, rDPObj);
+
     // Now add style info (use grab bag, or just a set which is default on Excel 2007 through 2016)
     if (const auto [bHas, aVal] = rDPObj.GetInteropGrabBagValue("pivotTableStyleInfo"); bHas)
         WriteGrabBagItemToStream(rStrm, XML_pivotTableStyleInfo, aVal);
@@ -1200,6 +1205,66 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         aBuf);
 
     pPivotStrm->endElement(XML_pivotTableDefinition);
+}
+
+void XclExpXmlPivotTables::savePivotTableFormats(XclExpXmlStream& rStream, ScDPObject const& rDPObject)
+{
+    sax_fastparser::FSHelperPtr& pPivotStream = rStream.GetCurrentStream();
+
+    ScDPSaveData* pSaveData = rDPObject.GetSaveData();
+    if (pSaveData && pSaveData->hasFormats())
+    {
+        sc::PivotTableFormats const& rFormats = pSaveData->getFormats();
+        if (rFormats.size() > 0)
+        {
+            pPivotStream->startElement(XML_formats, XML_count, OString::number(rFormats.size()));
+
+            for (auto const& rFormat : rFormats.getVector())
+            {
+                if (!rFormat.pPattern)
+                    continue;
+
+                sal_Int32 nDxf = GetDxfs().GetDxfIdForPattern(rFormat.pPattern.get());
+                if (nDxf == -1)
+                    continue;
+
+                pPivotStream->startElement(XML_format, XML_dxfId, OString::number(nDxf));
+                {
+                    auto pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+                    if (!rFormat.bDataOnly) // default is true
+                        pAttributeList->add(XML_dataOnly, "0");
+                    if (rFormat.bLabelOnly) // default is false
+                        pAttributeList->add(XML_labelOnly, "1");
+                    if (!rFormat.bOutline) // default is true
+                        pAttributeList->add(XML_outline, "0");
+                    if (rFormat.oFieldPosition)
+                        pAttributeList->add(XML_fieldPosition, OString::number(*rFormat.oFieldPosition));
+                    pPivotStream->startElement(XML_pivotArea, pAttributeList);
+                }
+                pPivotStream->startElement(XML_references, XML_count, OString::number(rFormat.aSelections.size()));
+                for (sc::Selection const& rSelection : rFormat.getSelections())
+                {
+                    {
+                        auto pRefAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+                        pRefAttributeList->add(XML_field, OString::number(sal_uInt32(rSelection.nField)));
+                        pRefAttributeList->add(XML_count, "1");
+                        if (!rSelection.bSelected) // default is true
+                            pRefAttributeList->add(XML_selected, "0");
+                        pPivotStream->startElement(XML_reference, pRefAttributeList);
+                    }
+
+                    pPivotStream->singleElement(XML_x, XML_v, OString::number(rSelection.nDataIndex));
+
+                    pPivotStream->endElement(XML_reference);
+                }
+                pPivotStream->endElement(XML_references);
+                pPivotStream->endElement(XML_pivotArea);
+
+                pPivotStream->endElement(XML_format);
+            }
+            pPivotStream->endElement(XML_formats);
+        }
+    }
 }
 
 void XclExpXmlPivotTables::AppendTable( const ScDPObject* pTable, sal_Int32 nCacheId, sal_Int32 nPivotId )

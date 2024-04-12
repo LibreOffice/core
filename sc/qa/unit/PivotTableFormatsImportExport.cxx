@@ -73,6 +73,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_1_DataFieldInRow_RowLabelColor.xlsx");
     assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
@@ -84,6 +86,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     createScDoc(
         "xlsx/pivot-table/PivotTableCellFormatsTest_2_DataFieldInRow_ColumnLabelColor.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
     assertDocument(*getScDoc());
 }
 
@@ -98,6 +102,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc(
         "xlsx/pivot-table/PivotTableCellFormatsTest_3_DataFieldInColumn_ColumnLabelColor.xlsx");
     assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
@@ -109,6 +115,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     };
 
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_4_DataFieldInColumn_DataColor.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
     assertDocument(*getScDoc());
 }
 
@@ -124,6 +132,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     createScDoc("xlsx/pivot-table//"
                 "PivotTableCellFormatsTest_5_DataFieldInColumnAndTwoRowFields_DataColor.xlsx");
     assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
@@ -136,6 +146,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     createScDoc(
         "xlsx/pivot-table//PivotTableCellFormatsTest_6_SingleDataFieldInColumn_DataColor.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
     assertDocument(*getScDoc());
 }
 
@@ -153,6 +165,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     createScDoc(
         "xlsx/pivot-table//PivotTableCellFormatsTest_7_TwoRowTwoColumnFields_DataColor.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
     assertDocument(*getScDoc());
 }
 

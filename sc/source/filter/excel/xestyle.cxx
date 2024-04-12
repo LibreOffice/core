@@ -50,6 +50,9 @@
 #include <dbdata.hxx>
 #include <filterentries.hxx>
 #include <export/ExportTools.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+#include <pivot/PivotTableFormats.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <oox/export/utils.hxx>
@@ -3070,7 +3073,6 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     xFormatter->FillKeywordTableForExcel( *mpKeywordTable );
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
-    sal_Int32 nDxfId = 0;
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
         // Color filters
@@ -3089,21 +3091,21 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 // Does not matter it is text color or cell background color
                 for (auto& rColor : aFilterEntries.getBackgroundColors())
                 {
-                    if (!maColorToDxfId.emplace(rColor, nDxfId).second)
+                    if (!maColorToDxfId.emplace(rColor, mnDxfId).second)
                         continue;
 
                     std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
                     maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                    nDxfId++;
+                    mnDxfId++;
                 }
                 for (auto& rColor : aFilterEntries.getTextColors())
                 {
-                    if (!maColorToDxfId.emplace(rColor, nDxfId).second)
+                    if (!maColorToDxfId.emplace(rColor, mnDxfId).second)
                         continue;
 
                     std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
                     maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                    nDxfId++;
+                    mnDxfId++;
                 }
             }
         }
@@ -3137,57 +3139,74 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         aStyleName = pEntry->GetStyleName();
                     }
 
-                    if (maStyleNameToDxfId.emplace(aStyleName, nDxfId).second)
+                    if (maStyleNameToDxfId.emplace(aStyleName, mnDxfId).second)
                     {
                         SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
                         if(!pStyle)
                             continue;
 
                         SfxItemSet& rSet = pStyle->GetItemSet();
-
-                        std::unique_ptr<XclExpCellBorder> pBorder(new XclExpCellBorder);
-                        if (!pBorder->FillFromItemSet( rSet, GetPalette(), GetBiff()) )
-                        {
-                            pBorder.reset();
-                        }
-
-                        std::unique_ptr<XclExpCellAlign> pAlign(new XclExpCellAlign);
-                        if (!pAlign->FillFromItemSet(rRoot, rSet, false, GetBiff()))
-                        {
-                            pAlign.reset();
-                        }
-
-                        std::unique_ptr<XclExpCellProt> pCellProt(new XclExpCellProt);
-                        if (!pCellProt->FillFromItemSet( rSet ))
-                        {
-                            pCellProt.reset();
-                        }
-
-                        std::unique_ptr<XclExpColor> pColor(new XclExpColor);
-                        if(!pColor->FillFromItemSet( rSet ))
-                        {
-                            pColor.reset();
-                        }
-
-                        std::unique_ptr<XclExpDxfFont> pFont(new XclExpDxfFont(rRoot, rSet));
-
-                        std::unique_ptr<XclExpNumFmt> pNumFormat;
-                        if( const SfxUInt32Item *pPoolItem = rSet.GetItemIfSet( ATTR_VALUE_FORMAT ) )
-                        {
-                            sal_uInt32 nScNumFmt = pPoolItem->GetValue();
-                            sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
-                            pNumFormat.reset(new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, xFormatter.get(), mpKeywordTable.get() )));
-                        }
-
-                        maDxf.push_back(std::make_unique<XclExpDxf>( rRoot, std::move(pAlign), std::move(pBorder),
-                                std::move(pFont), std::move(pNumFormat), std::move(pCellProt), std::move(pColor) ));
-                        ++nDxfId;
+                        fillDxfFrom(rSet, xFormatter);
+                        mnDxfId++;
                     }
 
                 }
             }
         }
     }
+
+    ScDPCollection* pCollection = rRoot.GetDoc().GetDPCollection();
+    for (size_t nIndex = 0; nIndex < pCollection->GetCount(); nIndex++)
+    {
+        const ScDPObject& rObject = (*pCollection)[nIndex];
+        ScDPSaveData* pSaveData = rObject.GetSaveData();
+        if (pSaveData && pSaveData->hasFormats())
+        {
+            sc::PivotTableFormats const& rFormats = pSaveData->getFormats();
+            for (sc::PivotTableFormat const& rFormat : rFormats.getVector())
+            {
+                if (!rFormat.pPattern)
+                    continue;
+
+                SfxItemSet& rItemSet = rFormat.pPattern->GetItemSet();
+                fillDxfFrom(rItemSet, xFormatter);
+                maPatternToDxfId.emplace(rFormat.pPattern.get(), mnDxfId);
+                mnDxfId++;
+            }
+        }
+    }
+}
+
+void XclExpDxfs::fillDxfFrom(SfxItemSet& rItemSet, SvNumberFormatterPtr& xFormatter)
+{
+    std::unique_ptr<XclExpCellBorder> pBorder(new XclExpCellBorder);
+    if (!pBorder->FillFromItemSet(rItemSet, GetPalette(), GetBiff()))
+        pBorder.reset();
+
+    std::unique_ptr<XclExpCellAlign> pAlign(new XclExpCellAlign);
+    if (!pAlign->FillFromItemSet(GetRoot(), rItemSet, false, GetBiff()))
+        pAlign.reset();
+
+    std::unique_ptr<XclExpCellProt> pCellProtection(new XclExpCellProt);
+    if (!pCellProtection->FillFromItemSet(rItemSet))
+        pCellProtection.reset();
+
+    std::unique_ptr<XclExpColor> pColor(new XclExpColor);
+    if (!pColor->FillFromItemSet(rItemSet))
+        pColor.reset();
+
+    std::unique_ptr<XclExpDxfFont> pFont(new XclExpDxfFont(GetRoot(), rItemSet));
+
+    std::unique_ptr<XclExpNumFmt> pNumberFormat;
+    if (const SfxUInt32Item* pPoolItem = rItemSet.GetItemIfSet(ATTR_VALUE_FORMAT))
+    {
+        sal_uInt32 nScNumberFormat = pPoolItem->GetValue();
+        sal_Int32 nXclNumberFormat = GetRoot().GetNumFmtBuffer().Insert(nScNumberFormat);
+        pNumberFormat.reset(new XclExpNumFmt(nScNumberFormat, nXclNumberFormat, GetNumberFormatCode(*this, nScNumberFormat, xFormatter.get(), mpKeywordTable.get())));
+    }
+
+    maDxf.push_back(std::make_unique<XclExpDxf>(GetRoot(), std::move(pAlign), std::move(pBorder),
+                   std::move(pFont), std::move(pNumberFormat), std::move(pCellProtection), std::move(pColor)));
 }
 
 sal_Int32 XclExpDxfs::GetDxfId( const OUString& rStyleName ) const
@@ -3203,6 +3222,14 @@ sal_Int32 XclExpDxfs::GetDxfByColor(Color aColor) const
     std::map<Color, sal_Int32>::const_iterator itr = maColorToDxfId.find(aColor);
     if (itr != maColorToDxfId.end())
         return itr->second;
+    return -1;
+}
+
+sal_Int32 XclExpDxfs::GetDxfIdForPattern(ScPatternAttr* pPattern) const
+{
+    auto iterator = maPatternToDxfId.find(pPattern);
+    if (iterator != maPatternToDxfId.end())
+        return iterator->second;
     return -1;
 }
 

@@ -28,6 +28,7 @@ enum class FormatType
 /** Information to make a selection in the pivot table. */
 struct Selection
 {
+    bool bSelected = false;
     sal_Int32 nField = 0;
     sal_uInt32 nDataIndex = 0;
 };
@@ -38,8 +39,17 @@ struct Selection
 struct PivotTableFormat
 {
     FormatType eType = FormatType::None;
+
+    bool bDataOnly = true;
+    bool bLabelOnly = false;
+    bool bSelected = false;
+    bool bOutline = false;
+    std::optional<sal_uInt32> oFieldPosition = std::nullopt;
+
     std::vector<Selection> aSelections;
     std::shared_ptr<ScPatternAttr> pPattern;
+
+    std::vector<Selection> const& getSelections() const { return aSelections; }
 };
 
 /** A holder for a collection of PivotTableFormat */
@@ -50,9 +60,9 @@ class PivotTableFormats
 public:
     void add(PivotTableFormat const& rPivotTableFormat) { maFormats.push_back(rPivotTableFormat); }
 
-    size_t size() { return maFormats.size(); }
+    size_t size() const { return maFormats.size(); }
 
-    std::vector<PivotTableFormat> const& getVector() { return maFormats; }
+    std::vector<PivotTableFormat> const& getVector() const { return maFormats; }
 };
 }
 

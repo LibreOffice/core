@@ -62,15 +62,16 @@ void PivotTableFormat::importPivotArea(const oox::AttributeList& rAttribs)
         }
     }
 
+    moField = rAttribs.getUnsigned(XML_field);
     mbDataOnly = rAttribs.getBool(XML_dataOnly, true);
     mbLabelOnly = rAttribs.getBool(XML_labelOnly, false);
     mbGrandRow = rAttribs.getBool(XML_grandRow, false);
     mbGrandCol = rAttribs.getBool(XML_grandCol, false);
     mbCacheIndex = rAttribs.getBool(XML_cacheIndex, false);
-    mbOutline = rAttribs.getBool(XML_cacheIndex, true);
-    msOffset = rAttribs.getXString(XML_offset);
+    mbOutline = rAttribs.getBool(XML_outline, true);
+    moOffset = rAttribs.getXString(XML_offset);
     mbCollapsedLevelsAreSubtotals = rAttribs.getBool(XML_collapsedLevelsAreSubtotals, false);
-    mnFieldPosition = rAttribs.getUnsigned(XML_field);
+    moFieldPosition = rAttribs.getUnsigned(XML_fieldPosition);
 }
 
 void PivotTableFormat::finalizeImport()
@@ -95,13 +96,19 @@ void PivotTableFormat::finalizeImport()
     else if (mbLabelOnly)
         aFormat.eType = sc::FormatType::Label;
 
+    aFormat.bDataOnly = mbDataOnly;
+    aFormat.bLabelOnly = mbLabelOnly;
+    aFormat.bOutline = mbOutline;
+    aFormat.oFieldPosition = moFieldPosition;
+
     aFormat.pPattern = pPattern;
     for (auto& rReference : maReferences)
     {
         if (rReference->mnField)
         {
             aFormat.aSelections.push_back(
-                sc::Selection{ .nField = sal_Int32(*rReference->mnField),
+                sc::Selection{ .bSelected = rReference->mbSelected,
+                               .nField = sal_Int32(*rReference->mnField),
                                .nDataIndex = rReference->maFieldItemsIndices[0] });
         }
     }

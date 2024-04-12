@@ -43,16 +43,17 @@ private:
     // PivotArea
     std::optional<sal_Int32> mnField;
     PivotAreaType meType = PivotAreaType::Normal;
+    std::optional<sal_uInt32> moField = std::nullopt;
     bool mbDataOnly = true;
     bool mbLabelOnly = false;
     bool mbGrandRow = false;
     bool mbGrandCol = false;
     bool mbCacheIndex = false;
     bool mbOutline = true;
-    std::optional<OUString> msOffset;
+    std::optional<OUString> moOffset = std::nullopt;
     bool mbCollapsedLevelsAreSubtotals = false;
     // TODO Axis
-    std::optional<sal_uInt32> mnFieldPosition;
+    std::optional<sal_uInt32> moFieldPosition = std::nullopt;
 
     std::vector<std::shared_ptr<PivotTableReference>> maReferences;
 

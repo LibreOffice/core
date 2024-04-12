@@ -758,9 +758,10 @@ private:
 class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpDxfs( const XclExpRoot& rRoot );
+    XclExpDxfs(const XclExpRoot& rRoot);
 
     sal_Int32 GetDxfId(const OUString& rName) const;
+    sal_Int32 GetDxfIdForPattern(ScPatternAttr* pPattern) const;
     sal_Int32 GetDxfByColor(Color aColor) const;
     void addColor(Color aColor);
 
@@ -769,10 +770,15 @@ public:
 
 private:
     typedef std::vector< std::unique_ptr<XclExpDxf> > DxfContainer;
+    sal_Int32 mnDxfId = 0;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
     std::map<Color, sal_Int32> maColorToDxfId;
+    std::map<ScPatternAttr*, sal_Int32> maPatternToDxfId;
     DxfContainer maDxf;
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
+
+    void fillDxfFrom(SfxItemSet& rItemSet, SvNumberFormatterPtr& xFormatter);
+
 };
 
 class XclExpXmlStyleSheet : public XclExpRecordBase, protected XclExpRoot
