@@ -1341,8 +1341,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetCharacterKerningSpaceXLSX)
         "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]"_ostr,
         "spc"_ostr);
 
-    // make sure that the CharKerning is 1997.
-    CPPUNIT_ASSERT_EQUAL(OUString("1997"), CharKerningSpace);
+    // make sure that the CharKerning is 2001 (2000 in original document).
+    CPPUNIT_ASSERT_EQUAL(OUString("2001"), CharKerningSpace);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetCondensedCharacterSpaceXLSX)
@@ -1358,8 +1358,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetCondensedCharacterSpaceXLSX)
         "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]"_ostr,
         "spc"_ostr);
 
-    // make sure that the CondensedCharSpace is -1002.
-    CPPUNIT_ASSERT_EQUAL(OUString("-1002"), CondensedCharSpace);
+    // make sure that the CondensedCharSpace is -1001 (-1000 in original document).
+    CPPUNIT_ASSERT_EQUAL(OUString("-1001"), CondensedCharSpace);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testTextUnderlineColorXLSX)

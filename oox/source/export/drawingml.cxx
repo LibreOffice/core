@@ -167,6 +167,14 @@ const char* g_aPredefinedClrNames[] = {
     "hlink",
     "folHlink",
 };
+
+/** converts 1/100mm to the ST_TextSpacingPoint (1/100pt) */
+sal_Int64 toTextSpacingPoint(sal_Int64 mm100)
+{
+    constexpr auto mdToPt = o3tl::getConversionMulDiv(o3tl::Length::mm100, o3tl::Length::pt);
+    constexpr o3tl::detail::m_and_d md(mdToPt.first * 100, mdToPt.second);
+    return o3tl::convert(mm100, md.m, md.d);
+}
 }
 
 namespace oox::drawingml {
@@ -2491,7 +2499,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     *    therefore to get original value CharKerning need to be convert.
     *    https://opengrok.libreoffice.org/xref/core/oox/source/drawingml/drawingmltypes.cxx#95
     **/
-    nCharKerning = ((nCharKerning * 720)-360) / 254;
+    nCharKerning = toTextSpacingPoint(nCharKerning);
 
     if ((bComplex && GetProperty(rXPropSet, "CharWeightComplex"))
         || GetProperty(rXPropSet, "CharWeight"))
@@ -3445,7 +3453,7 @@ void DrawingML::WriteLinespacing(const LineSpacing& rSpacing, float fFirstCharHe
                                XML_val, OString::number(static_cast<sal_Int32>(rSpacing.Height)*1000));
     }
     else if (rSpacing.Mode == LineSpacingMode::MINIMUM
-             && fFirstCharHeight > static_cast<float>(rSpacing.Height) * 0.001 * 72.0 / 2.54)
+             && fFirstCharHeight > o3tl::convert(rSpacing.Height, o3tl::Length::mm100, o3tl::Length::pt))
     {
         // 100% proportional line spacing = single line spacing
         mpFS->singleElementNS(XML_a, XML_spcPct, XML_val,
@@ -3454,7 +3462,7 @@ void DrawingML::WriteLinespacing(const LineSpacing& rSpacing, float fFirstCharHe
     else
     {
         mpFS->singleElementNS( XML_a, XML_spcPts,
-                               XML_val, OString::number(std::lround(rSpacing.Height / 25.4 * 72)));
+                               XML_val, OString::number(toTextSpacingPoint(rSpacing.Height)));
     }
 }
 
@@ -3582,7 +3590,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         mpFS->startElementNS(XML_a, XML_spcBef);
         {
             mpFS->singleElementNS( XML_a, XML_spcPts,
-                                   XML_val, OString::number(std::lround(nParaTopMargin / 25.4 * 72)));
+                                   XML_val, OString::number(toTextSpacingPoint(nParaTopMargin)));
         }
         mpFS->endElementNS( XML_a, XML_spcBef );
     }
@@ -3592,7 +3600,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         mpFS->startElementNS(XML_a, XML_spcAft);
         {
             mpFS->singleElementNS( XML_a, XML_spcPts,
-                                   XML_val, OString::number(std::lround(nParaBottomMargin / 25.4 * 72)));
+                                   XML_val, OString::number(toTextSpacingPoint(nParaBottomMargin)));
         }
         mpFS->endElementNS( XML_a, XML_spcAft );
     }

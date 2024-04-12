@@ -92,22 +92,20 @@ float GetTextSize( std::u16string_view sValue )
     return fRet;
 }
 
-/** converts the ST_TextSpacingPoint to 1/100mm */
+/** converts the ST_TextSpacingPoint (1/100pt) to 1/100mm */
 sal_Int32 GetTextSpacingPoint( std::u16string_view sValue )
 {
     sal_Int32 nRet;
-    if( ::sax::Converter::convertNumber( nRet, sValue, (SAL_MIN_INT32 + 360) / 254, (SAL_MAX_INT32 - 360) / 254 ) )
+    if( ::sax::Converter::convertNumber( nRet, sValue ) )
         nRet = GetTextSpacingPoint( nRet );
     return nRet;
 }
 
 sal_Int32 GetTextSpacingPoint(sal_Int32 nValue)
 {
-    if (nValue > 0)
-        nValue = (nValue * 254 + 360);
-    else if (nValue < 0)
-        nValue = (nValue * 254 - 360);
-    return nValue / 720;
+    constexpr auto mdFromPt = o3tl::getConversionMulDiv(o3tl::Length::pt, o3tl::Length::mm100);
+    constexpr o3tl::detail::m_and_d md(mdFromPt.first, mdFromPt.second * 100);
+    return o3tl::convertNarrowing<sal_Int32, md.m, md.d>(nValue);
 }
 
 float GetFontHeight( sal_Int32 nHeight )
