@@ -249,7 +249,7 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
         }
         else
         {
-            if ( rCharLevel.mnFontHeight > static_cast<sal_uInt16>( static_cast<double>(-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+            if ( rCharLevel.mnFontHeight > o3tl::make_unsigned(o3tl::convert(-nLineSpacing, o3tl::Length::mm100, o3tl::Length::pt) ) )
             {
                 const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
                 if ( pDesc )

@@ -662,7 +662,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             }
             else
             {
-                if ( !pPara->mbFixedLineSpacing && rPortion.mnCharHeight > static_cast<sal_uInt16>( static_cast<double>(-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+                if ( !pPara->mbFixedLineSpacing && rPortion.mnCharHeight > o3tl::make_unsigned( o3tl::convert(-nLineSpacing, o3tl::Length::mm100, o3tl::Length::pt) ) )
                     nLineSpacing = nNormalSpacing;
                 else
                     nLineSpacing = static_cast<sal_Int16>( convertMm100ToMasterUnit(nLineSpacing) );
