@@ -41,6 +41,17 @@
 #import <UIKit/UIKit.h>
 #include <postmac.h>
 
+class iOSClipboard;
+
+@interface PasteboardChangedEventListener : NSObject
+{
+    iOSClipboard* piOSClipboard;
+}
+- (PasteboardChangedEventListener*)initWithiOSClipboard:(iOSClipboard*)pcb;
+- (void)pasteboardChanged:(NSNotification*)aNotification;
+- (void)disposing;
+@end
+
 class iOSClipboard
     : public ::cppu::BaseMutex,
       public ::cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
@@ -86,6 +97,8 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
+    void contentsChanged();
+
 private:
     /* Notify the current clipboard owner that he is no longer the clipboard owner. */
     void fireLostClipboardOwnershipEvent(
@@ -102,6 +115,8 @@ private:
         mClipboardListeners;
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> mXClipboardOwner;
     std::shared_ptr<DataFlavorMapper> mpDataFlavorMapper;
+    NSInteger mnPasteboardChangeCount;
+    PasteboardChangedEventListener* mpPasteboardChangedEventListener;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
