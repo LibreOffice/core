@@ -118,7 +118,7 @@ namespace o3tl {
     template<> struct typed_flags<Css1FrameSize> : is_typed_flags<Css1FrameSize, 0x17> {};
 }
 
-#define DOT_LEADERS_MAX_WIDTH   18
+constexpr int DOT_LEADERS_MAX_WIDTH = 18; // cm
 
 static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
                               IDocumentStylePoolAccess /*SwDoc*/ *pDoc, SwDoc *pTemplate );
@@ -2822,7 +2822,7 @@ static SwHTMLWriter& OutCSS1_SvxTextLeftMargin(SwHTMLWriter & rWrt, SfxPoolItem 
 
         // max-width = max-width - margin-left for TOC paragraphs with dot leaders
         if (rWrt.m_bParaDotLeaders)
-            rWrt.OutCSS1_UnitProperty(sCSS1_P_max_width, tools::Long(DOT_LEADERS_MAX_WIDTH/2.54*72*20) - nLeftMargin);
+            rWrt.OutCSS1_UnitProperty(sCSS1_P_max_width, o3tl::convert(DOT_LEADERS_MAX_WIDTH, o3tl::Length::cm, o3tl::Length::twip) - nLeftMargin);
 
     }
 
@@ -2859,7 +2859,7 @@ static SwHTMLWriter& OutCSS1_SvxLRSpace( SwHTMLWriter& rWrt, const SfxPoolItem& 
 
         // max-width = max-width - margin-left for TOC paragraphs with dot leaders
         if( rWrt.m_bParaDotLeaders )
-            rWrt.OutCSS1_UnitProperty( sCSS1_P_max_width, tools::Long(DOT_LEADERS_MAX_WIDTH/2.54*72*20) - nLeftMargin );
+            rWrt.OutCSS1_UnitProperty( sCSS1_P_max_width, o3tl::convert(DOT_LEADERS_MAX_WIDTH, o3tl::Length::cm, o3tl::Length::twip) - nLeftMargin );
 
     }
 
