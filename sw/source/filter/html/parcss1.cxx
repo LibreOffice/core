@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/string_view.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -379,86 +380,61 @@ CSS1Token CSS1Parser::GetNextToken()
                         bool bEOFOld = m_bEOF;
 
                         // parse the next identifier
-                        OUString aIdent;
                         OUStringBuffer sTmpBuffer2(64);
                         do {
-                            sTmpBuffer2.append( m_cNextCh );
+                            sTmpBuffer2.append(static_cast<sal_Unicode>(rtl::toAsciiLowerCase(m_cNextCh)));
                             m_cNextCh = GetNextChar();
                         } while( (rtl::isAsciiAlphanumeric(m_cNextCh) ||
                                  '-' == m_cNextCh) && !IsEOF() );
 
-                        aIdent += sTmpBuffer2;
+                        OUString aIdent = sTmpBuffer2.makeStringAndClear();
+                        nRet = CSS1_NUMBER;
 
                         // Is it a unit?
-                        const char *pCmp1 = nullptr, *pCmp2 = nullptr, *pCmp3 = nullptr;
-                        double nScale1 = 1., nScale2 = 1.;
-                        CSS1Token nToken1 = CSS1_LENGTH,
-                                  nToken2 = CSS1_LENGTH,
-                                  nToken3 = CSS1_LENGTH;
                         switch( aIdent[0] )
                         {
                         case 'c':
-                        case 'C':
-                            pCmp1 = "cm";
-                            nScale1 = (72.*20.)/2.54; // twip
+                            if (aIdent == "cm")
+                            {
+                                m_nValue = o3tl::convert(m_nValue, o3tl::Length::cm, o3tl::Length::twip);
+                                nRet = CSS1_LENGTH;
+                            }
                             break;
                         case 'e':
-                        case 'E':
-                            pCmp1 = "em";
-                            nToken1 = CSS1_EMS;
-
-                            pCmp2 = "ex";
-                            nToken2 = CSS1_EMX;
+                            if (aIdent == "em")
+                                nRet = CSS1_EMS;
+                            else if (aIdent == "ex")
+                                nRet = CSS1_EMX;
                             break;
                         case 'i':
-                        case 'I':
-                            pCmp1 = "in";
-                            nScale1 = 72.*20.; // twip
+                            if (aIdent == "in")
+                            {
+                                nRet = CSS1_LENGTH;
+                                m_nValue = o3tl::convert(m_nValue, o3tl::Length::in, o3tl::Length::twip);
+                            }
                             break;
                         case 'm':
-                        case 'M':
-                            pCmp1 = "mm";
-                            nScale1 = (72.*20.)/25.4; // twip
+                            if (aIdent == "mm")
+                            {
+                                nRet = CSS1_LENGTH;
+                                m_nValue = o3tl::convert(m_nValue, o3tl::Length::mm, o3tl::Length::twip);
+                            }
                             break;
                         case 'p':
-                        case 'P':
-                            pCmp1 = "pt";
-                            nScale1 = 20.; // twip
-
-                            pCmp2 = "pc";
-                            nScale2 = 12.*20.; // twip
-
-                            pCmp3 = "px";
-                            nToken3 = CSS1_PIXLENGTH;
+                            if (aIdent == "pt")
+                            {
+                                nRet = CSS1_LENGTH;
+                                m_nValue = o3tl::convert(m_nValue, o3tl::Length::pt, o3tl::Length::twip);
+                            }
+                            else if (aIdent == "pc")
+                            {
+                                nRet = CSS1_LENGTH;
+                                m_nValue = o3tl::convert(m_nValue, o3tl::Length::pc, o3tl::Length::twip);
+                            }
+                            else if (aIdent == "px")
+                                nRet = CSS1_PIXLENGTH;
                             break;
                         }
-
-                        double nScale = 0.0;
-                        OSL_ENSURE( pCmp1, "Where does the first digit come from?" );
-                        if( aIdent.equalsIgnoreAsciiCaseAscii( pCmp1 ) )
-                        {
-                            nScale = nScale1;
-                            nRet = nToken1;
-                        }
-                        else if( pCmp2 &&
-                                 aIdent.equalsIgnoreAsciiCaseAscii( pCmp2 ) )
-                        {
-                            nScale = nScale2;
-                            nRet = nToken2;
-                        }
-                        else if( pCmp3 &&
-                                 aIdent.equalsIgnoreAsciiCaseAscii( pCmp3 ) )
-                        {
-                            nScale =  1.; // nScale3
-                            nRet = nToken3;
-                        }
-                        else
-                        {
-                            nRet = CSS1_NUMBER;
-                        }
-
-                        if( CSS1_LENGTH==nRet && nScale!=1.0 )
-                            m_nValue *= nScale;
 
                         if( nRet == CSS1_NUMBER )
                         {
