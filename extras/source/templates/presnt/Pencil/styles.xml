@@ -94,9 +94,9 @@
     <style:style style:name="Text_20_A4" style:display-name="Text A4" style:family="graphic" style:parent-style-name="A4">
       <style:graphic-properties draw:stroke="none"/>
     </style:style>
-    <style:style style:name="A4" style:family="graphic" style:parent-style-name="Text">
+    <style:style style:name="A0" style:family="graphic" style:parent-style-name="Text">
       <style:graphic-properties draw:fill="none"/>
-      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+      <style:text-properties fo:font-size="48pt" style:font-size-asian="48pt" style:font-size-complex="48pt"/>
     </style:style>
     <style:style style:name="Title_20_A0" style:display-name="Title A0" style:family="graphic" style:parent-style-name="A0">
       <style:graphic-properties draw:stroke="none"/>
