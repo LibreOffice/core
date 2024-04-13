@@ -170,7 +170,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
         // cancel out rasterize's mm2pixel conversion
         // see fFactor100th_mmToInch in
         // drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx
-        const double fFakeDPI=2.54 * 1000.0;
+        constexpr double fFakeDPI = o3tl::convert(1.0, o3tl::Length::in, o3tl::Length::mm100);
 
         geometry::RealRectangle2D aRealRect(
             0, 0,
