@@ -2099,7 +2099,7 @@ double ScInterpreter::GetDoubleFromMatrix(const ScMatrixRef& pMat)
 
 double ScInterpreter::GetDouble()
 {
-    double nVal(0.0);
+    double nVal;
     switch( GetRawStackType() )
     {
         case svDouble:
@@ -2134,13 +2134,16 @@ double ScInterpreter::GetDouble()
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
-            if (nGlobalError == FormulaError::NONE)
+            if (nGlobalError != FormulaError::NONE)
             {
-                if (pToken->GetType() == svDouble || pToken->GetType() == svEmptyCell)
-                    nVal = pToken->GetDouble();
-                else
-                    nVal = ConvertStringToValue( pToken->GetString().getString());
+                nVal = 0.0;
+                break;
             }
+
+            if (pToken->GetType() == svDouble || pToken->GetType() == svEmptyCell)
+                nVal = pToken->GetDouble();
+            else
+                nVal = ConvertStringToValue( pToken->GetString().getString());
         }
         break;
         case svExternalDoubleRef:
@@ -2148,7 +2151,10 @@ double ScInterpreter::GetDouble()
             ScMatrixRef pMat;
             PopExternalDoubleRef(pMat);
             if (nGlobalError != FormulaError::NONE)
+            {
+                nVal = 0.0;
                 break;
+            }
 
             nVal = GetDoubleFromMatrix(pMat);
         }
