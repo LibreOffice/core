@@ -2292,11 +2292,8 @@ static void isMiss()
 
 sal_uInt16 WhichRangesContainer::getOffsetFromWhich(sal_uInt16 nWhich) const
 {
-    if (empty())
-        return INVALID_WHICHPAIR_OFFSET;
-
     // special case for single entry - happens often e.g. UI stuff
-    if (1 == m_size)
+    if (m_size == 1)
     {
         if( m_pairs->first <= nWhich && nWhich <= m_pairs->second )
             return nWhich - m_pairs->first;
@@ -2304,6 +2301,9 @@ sal_uInt16 WhichRangesContainer::getOffsetFromWhich(sal_uInt16 nWhich) const
         // we have only one WhichPair entry and it's not contained -> failed
         return INVALID_WHICHPAIR_OFFSET;
     }
+
+    if (m_size == 0)
+        return INVALID_WHICHPAIR_OFFSET;
 
     // check if nWhich is inside last successfully used WhichPair
     if (INVALID_WHICHPAIR_OFFSET != m_aLastWhichPairOffset
@@ -2350,12 +2350,8 @@ sal_uInt16 WhichRangesContainer::getOffsetFromWhich(sal_uInt16 nWhich) const
 
 sal_uInt16 WhichRangesContainer::getWhichFromOffset(sal_uInt16 nOffset) const
 {
-    // check for empty, if yes, return null which is an invalid WhichID
-    if (empty())
-        return 0;
-
     // special case for single entry - happens often e.g. UI stuff
-    if (1 == m_size)
+    if (m_size == 1)
     {
         if (nOffset <= m_pairs->second - m_pairs->first)
             return m_pairs->first + nOffset;
@@ -2363,6 +2359,10 @@ sal_uInt16 WhichRangesContainer::getWhichFromOffset(sal_uInt16 nOffset) const
         // we have only one WhichPair entry and it's not contained -> failed
         return 0;
     }
+
+    // check for empty, if yes, return null which is an invalid WhichID
+    if (m_size == 0)
+        return 0;
 
     // check if nWhich is inside last successfully used WhichPair
     if (INVALID_WHICHPAIR_OFFSET != m_aLastWhichPairOffset)
