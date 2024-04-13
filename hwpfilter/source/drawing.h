@@ -491,7 +491,6 @@ int cmd, void * /*argp*/, int /*argv*/)
     return HWPDODefaultFunc(cmd);
 }
 
-#define WTMM(x)     ((double)(x) / 1800. * 25.4)
 static int
 HWPDOEllipse2Func(int /*type*/, HWPDrawingObject * hdo,
 int cmd, void * /*argp*/, int /*argv*/)
