@@ -212,7 +212,7 @@ public:
     virtual ParamClass          GetInForceArray() const;
     virtual void                SetInForceArray( ParamClass c );
     virtual double              GetDouble() const;
-    virtual double&             GetDoubleAsReference();
+    virtual void                SetDouble(double fValue);
     virtual sal_Int16           GetDoubleType() const;
     virtual void                SetDoubleType( sal_Int16 nType );
     virtual const svl::SharedString & GetString() const;
@@ -340,8 +340,8 @@ public:
                                     FormulaToken( r ), fDouble( r.fDouble ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaDoubleToken(*this); }
-    virtual double              GetDouble() const override final;
-    virtual double&             GetDoubleAsReference() override final;
+    virtual double              GetDouble() const override final { return fDouble; }
+    virtual void                SetDouble(double fValue) override final { fDouble = fValue; }
     virtual sal_Int16           GetDoubleType() const override;     ///< always returns 0 for "not typed"
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };

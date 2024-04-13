@@ -1775,7 +1775,7 @@ formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, SvN
     {
         if (p && p->GetRef() == 1)
         {
-            p->GetDoubleAsReference() = fVal;
+            p->SetDouble(fVal);
             p->SetDoubleType( static_cast<sal_Int16>(nFmt) );
             return p;
         }

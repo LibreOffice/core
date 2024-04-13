@@ -1083,7 +1083,7 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
     switch (GetUpperLeftType())
     {
         case svDouble:
-            const_cast<FormulaToken*>(xUpperLeft.get())->GetDoubleAsReference() = f;
+            const_cast<FormulaToken*>(xUpperLeft.get())->SetDouble(f);
             break;
         case svString:
             xUpperLeft = new FormulaDoubleToken( f);

@@ -188,12 +188,10 @@ double FormulaToken::GetDouble() const
     return 0.0;
 }
 
-double & FormulaToken::GetDoubleAsReference()
+void FormulaToken::SetDouble(double)
 {
     // This Get is worth an assert.
     assert( !"virtual dummy called" );
-    static double fVal = 0.0;
-    return fVal;
 }
 
 sal_Int16 FormulaToken::GetDoubleType() const
@@ -1899,10 +1897,6 @@ void FormulaTokenArrayPlainIterator::AfterRemoveToken( sal_uInt16 nOffset, sal_u
 }
 
 // real implementations of virtual functions
-
-
-double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
-double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
 
 sal_Int16 FormulaDoubleToken::GetDoubleType() const
 {
