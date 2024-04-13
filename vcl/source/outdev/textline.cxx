@@ -494,8 +494,8 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
                 nDashWidth = 100;
                 nSpaceWidth = 50;
             }
-            nDashWidth = ((nDashWidth*mnDPIX)+1270)/2540;
-            nSpaceWidth = ((nSpaceWidth*mnDPIX)+1270)/2540;
+            nDashWidth = o3tl::convert(nDashWidth * mnDPIX, o3tl::Length::mm100, o3tl::Length::in);
+            nSpaceWidth = o3tl::convert(nSpaceWidth * mnDPIX, o3tl::Length::mm100, o3tl::Length::in);
             // DashWidth will be increased if the line is getting too thick
             // in proportion to the line's length
             if ( nDashWidth < nMinDashWidth )
@@ -521,7 +521,7 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
             nDotWidth += mnDPIY/2;
             nDotWidth /= mnDPIY;
 
-            tools::Long nDashWidth = ((100*mnDPIX)+1270)/2540;
+            tools::Long nDashWidth = o3tl::convert(100 * mnDPIX, o3tl::Length::mm100, o3tl::Length::in);
             tools::Long nMinDashWidth = nDotWidth*4;
             // DashWidth will be increased if the line is getting too thick
             // in proportion to the line's length
@@ -556,7 +556,7 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
             nDotWidth += mnDPIY/2;
             nDotWidth /= mnDPIY;
 
-            tools::Long nDashWidth = ((100*mnDPIX)+1270)/2540;
+            tools::Long nDashWidth = o3tl::convert(100 * mnDPIX, o3tl::Length::mm100, o3tl::Length::in);
             tools::Long nMinDashWidth = nDotWidth*4;
             // DashWidth will be increased if the line is getting too thick
             // in proportion to the line's length
