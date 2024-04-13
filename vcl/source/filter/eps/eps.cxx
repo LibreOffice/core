@@ -22,6 +22,7 @@
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
@@ -215,7 +216,6 @@ private:
     inline void         ImplWriteTextColor( NMode nMode );
     void                ImplWriteColor( NMode nMode );
 
-    static double       ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
     static bool         ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uInt32 nSize );
     static sal_uInt8*   ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uInt32 nComp, sal_uInt32 nSize );
@@ -2173,9 +2173,14 @@ void PSWriter::ImplWriteColor( NMode nMode )
 void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
     ImplWriteLine( "tm setmatrix" );
-    double fMul = ImplGetScaling(rMapMode);
-    double fScaleX = static_cast<double>(rMapMode.GetScaleX()) * fMul;
-    double fScaleY = static_cast<double>(rMapMode.GetScaleY()) * fMul;
+    double fScaleX(rMapMode.GetScaleX());
+    double fScaleY(rMapMode.GetScaleY());
+    if (o3tl::Length l = MapToO3tlLength(rMapMode.GetMapUnit(), o3tl::Length::invalid);
+        l != o3tl::Length::invalid)
+    {
+        fScaleX = o3tl::convert(fScaleX, l, o3tl::Length::mm100);
+        fScaleY = o3tl::convert(fScaleY, l, o3tl::Length::mm100);
+    }
     ImplTranslate( rMapMode.GetOrigin().X() * fScaleX, rMapMode.GetOrigin().Y() * fScaleY );
     ImplScale( fScaleX, fScaleY );
 }
@@ -2213,53 +2218,6 @@ inline void PSWriter::ImplWriteLine( const char* pString, NMode nMode )
     mnCursorPos += i;
     ImplExecMode( nMode );
 }
-
-double PSWriter::ImplGetScaling( const MapMode& rMapMode )
-{
-    double nMul;
-    switch (rMapMode.GetMapUnit())
-    {
-        case MapUnit::MapPixel :
-        case MapUnit::MapSysFont :
-        case MapUnit::MapAppFont :
-
-        case MapUnit::Map100thMM :
-            nMul = 1;
-            break;
-        case MapUnit::Map10thMM :
-            nMul = 10;
-            break;
-        case MapUnit::MapMM :
-            nMul = 100;
-            break;
-        case MapUnit::MapCM :
-            nMul = 1000;
-            break;
-        case MapUnit::Map1000thInch :
-            nMul = 2.54;
-            break;
-        case MapUnit::Map100thInch :
-            nMul = 25.4;
-            break;
-        case MapUnit::Map10thInch :
-            nMul = 254;
-            break;
-        case MapUnit::MapInch :
-            nMul = 2540;
-            break;
-        case MapUnit::MapTwip :
-            nMul = 1.76388889;
-            break;
-        case MapUnit::MapPoint :
-            nMul = 35.27777778;
-            break;
-        default:
-            nMul = 1.0;
-            break;
-    }
-    return nMul;
-}
-
 
 void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
                                   SvtGraphicStroke::CapType eLCap,
