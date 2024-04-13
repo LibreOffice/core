@@ -197,7 +197,7 @@ OUString SdTpOptionsContents::GetAllStrings()
     return sAllStrings.replaceAll("_", "");
 }
 
-bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
+bool SdTpOptionsContents::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
 
@@ -206,27 +206,46 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
         m_xCbxDragStripes->get_state_changed_from_saved() ||
         m_xCbxHandlesBezier->get_state_changed_from_saved() )
     {
-        SdOptionsLayoutItem aOptsItem;
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+            comphelper::ConfigurationChanges::create());
 
-        aOptsItem.GetOptionsLayout().SetRulerVisible( m_xCbxRuler->get_active() );
-        aOptsItem.GetOptionsLayout().SetMoveOutline( m_xCbxMoveOutline->get_active() );
-        aOptsItem.GetOptionsLayout().SetDragStripes( m_xCbxDragStripes->get_active() );
-        aOptsItem.GetOptionsLayout().SetHandlesBezier( m_xCbxHandlesBezier->get_active() );
+        if (m_bDrawMode)
+        {
+            officecfg::Office::Draw::Layout::Display::Ruler::set( m_xCbxRuler->get_active(), batch );
+            officecfg::Office::Draw::Layout::Display::Contour::set( m_xCbxMoveOutline->get_active(), batch );
+            officecfg::Office::Draw::Layout::Display::Guide::set( m_xCbxDragStripes->get_active(), batch );
+            officecfg::Office::Draw::Layout::Display::Bezier::set( m_xCbxHandlesBezier->get_active(), batch );
+        }
+        else
+        {
+            officecfg::Office::Impress::Layout::Display::Ruler::set( m_xCbxRuler->get_active(), batch );
+            officecfg::Office::Impress::Layout::Display::Contour::set( m_xCbxMoveOutline->get_active(), batch );
+            officecfg::Office::Impress::Layout::Display::Guide::set( m_xCbxDragStripes->get_active(), batch );
+            officecfg::Office::Impress::Layout::Display::Bezier::set( m_xCbxHandlesBezier->get_active(), batch );
+        }
 
-        rAttrs->Put( aOptsItem );
+        batch->commit();
         bModified = true;
     }
     return bModified;
 }
 
-void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
+void SdTpOptionsContents::Reset( const SfxItemSet* )
 {
-    SdOptionsLayoutItem aLayoutItem( rAttrs->Get( ATTR_OPTIONS_LAYOUT ) );
-
-    m_xCbxRuler->set_active( aLayoutItem.GetOptionsLayout().IsRulerVisible() );
-    m_xCbxMoveOutline->set_active( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
-    m_xCbxDragStripes->set_active( aLayoutItem.GetOptionsLayout().IsDragStripes() );
-    m_xCbxHandlesBezier->set_active( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
+    if (m_bDrawMode)
+    {
+        m_xCbxRuler->set_active( officecfg::Office::Draw::Layout::Display::Ruler::get() );
+        m_xCbxMoveOutline->set_active( officecfg::Office::Draw::Layout::Display::Contour::get() );
+        m_xCbxDragStripes->set_active( officecfg::Office::Draw::Layout::Display::Guide::get() );
+        m_xCbxHandlesBezier->set_active( officecfg::Office::Draw::Layout::Display::Bezier::get() );
+    }
+    else
+    {
+        m_xCbxRuler->set_active(officecfg::Office::Impress::Layout::Display::Ruler::get() );
+        m_xCbxMoveOutline->set_active(officecfg::Office::Impress::Layout::Display::Contour::get() );
+        m_xCbxDragStripes->set_active(officecfg::Office::Impress::Layout::Display::Guide::get() );
+        m_xCbxHandlesBezier->set_active(officecfg::Office::Impress::Layout::Display::Bezier::get() );
+    }
 
     bool bReadOnly = m_bDrawMode ? officecfg::Office::Draw::Layout::Display::Ruler::isReadOnly() :
         officecfg::Office::Impress::Layout::Display::Ruler::isReadOnly();
