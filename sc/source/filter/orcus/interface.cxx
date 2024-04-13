@@ -45,6 +45,7 @@
 #include <svl/intitem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <i18nlangtag/lang.h>
+#include <o3tl/unit_conversion.hxx>
 #include <tools/fontenum.hxx>
 #include <sal/log.hxx>
 
@@ -750,13 +751,15 @@ double translateToInternal(double nVal, orcus::length_unit_t unit)
     switch(unit)
     {
         case orcus::length_unit_t::inch:
-            return nVal * 72.0 * 20.0;
+            return o3tl::convert(nVal, o3tl::Length::in, o3tl::Length::twip);
         case orcus::length_unit_t::twip:
             return nVal;
         case orcus::length_unit_t::point:
-            return nVal * 20.0;
+            return o3tl::convert(nVal, o3tl::Length::pt, o3tl::Length::twip);
         case orcus::length_unit_t::centimeter:
-            return nVal * 20.0 * 72.0 / 2.54;
+            return o3tl::convert(nVal, o3tl::Length::cm, o3tl::Length::twip);
+        case orcus::length_unit_t::millimeter:
+            return o3tl::convert(nVal, o3tl::Length::mm, o3tl::Length::twip);
         case orcus::length_unit_t::unknown:
             if (nVal != 0)
                 SAL_WARN("sc.orcus", "unknown unit");
