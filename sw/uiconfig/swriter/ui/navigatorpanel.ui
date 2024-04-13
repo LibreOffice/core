@@ -554,6 +554,7 @@
                     <child>
                       <object class="GtkToolButton" id="promote">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|promote|tooltip_text">Promote Outline Level</property>
                         <property name="icon-name">sw/res/sc20172.png</property>
@@ -572,6 +573,7 @@
                     <child>
                       <object class="GtkToolButton" id="demote">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|demote|tooltip_text">Demote Outline Level</property>
                         <property name="icon-name">sw/res/sc20173.png</property>
@@ -590,6 +592,7 @@
                     <child>
                       <object class="GtkToolButton" id="chapterup">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|chapterup|tooltip_text">Move Heading Up</property>
                         <property name="icon-name">sw/res/sc20174.png</property>
@@ -608,6 +611,7 @@
                     <child>
                       <object class="GtkToolButton" id="chapterdown">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="navigatorpanel|chapterdown|tooltip_text">Move Heading Down</property>
                         <property name="icon-name">sw/res/sc20171.png</property>

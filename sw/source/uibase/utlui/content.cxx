@@ -1753,9 +1753,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             && nContentType != ContentTypeId::POSTIT && nContentType != ContentTypeId::UNKNOWN)
         {
             bRemoveSortEntry = false;
-            const sal_Int32 nMask = 1 << static_cast<int>(nContentType);
-            sal_uInt64 nSortAlphabeticallyBlock = m_pConfig->GetSortAlphabeticallyBlock();
-            xPop->set_active("sort", nSortAlphabeticallyBlock & nMask);
+            xPop->set_active("sort", pType->IsAlphabeticSort());
         }
 
         OUString aIdent;
@@ -1912,7 +1910,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 if (!bReadonly)
                 {
                     bRemoveSelectEntry = false;
-                    bRemoveChapterEntries = false;
+                    if (!pType->IsAlphabeticSort())
+                        bRemoveChapterEntries = false;
                 }
                 bRemoveCopyEntry = false;
             }
@@ -2893,20 +2892,8 @@ void SwContentTree::Display( bool bActive )
     }
     else if (State::HIDDEN == m_eState)
         m_eState = State::ACTIVE;
-    SwWrtShell* pShell = GetWrtShell();
-    const bool bReadOnly = !pShell || pShell->GetView().GetDocShell()->IsReadOnly();
-    if(bReadOnly != m_bIsLastReadOnly)
-    {
-        m_bIsLastReadOnly = bReadOnly;
-        bool bDisable =  pShell == nullptr || bReadOnly;
-        SwNavigationPI* pNavi = GetParentWindow();
-        pNavi->m_xContent6ToolBox->set_item_sensitive("chapterup", !bDisable);
-        pNavi->m_xContent6ToolBox->set_item_sensitive("chapterdown", !bDisable);
-        pNavi->m_xContent6ToolBox->set_item_sensitive("promote", !bDisable);
-        pNavi->m_xContent6ToolBox->set_item_sensitive("demote", !bDisable);
-        pNavi->m_xContent5ToolBox->set_item_sensitive("reminder", !bDisable);
-    }
 
+    SwWrtShell* pShell = GetWrtShell();
     if (pShell)
     {
         std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
@@ -3030,9 +3017,10 @@ void SwContentTree::Display( bool bActive )
             }
             // set_cursor unselects all entries, makes passed entry visible, and selects it
             m_xTreeView->set_cursor(*xSelEntry);
-            Select();
         }
     }
+
+    Select();
 
     if (!m_bIgnoreDocChange && GetEntryCount() == nOldEntryCount)
     {
@@ -5479,33 +5467,27 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
 }
 
 // Here the buttons for moving outlines are en-/disabled.
+// The buttons for moving outlines are disabled when the Navigator is in "Zoom" mode or when
+// the document is in read-only mode or when the outline content is displayed alphabetically
+// sorted or when the selected entry is not outline content.
 void SwContentTree::Select()
 {
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    if (!m_xTreeView->get_selected(xEntry.get()))
-        return;
+    SwNavigationPI* pNavi = GetParentWindow();
 
     bool bEnable = false;
-    std::unique_ptr<weld::TreeIter> xParentEntry(m_xTreeView->make_iterator(xEntry.get()));
-    bool bParentEntry = m_xTreeView->iter_parent(*xParentEntry);
-    while (bParentEntry && (!lcl_IsContentType(*xParentEntry, *m_xTreeView)))
-        bParentEntry = m_xTreeView->iter_parent(*xParentEntry);
-    if (!m_bIsLastReadOnly)
+
+    if (!pNavi->IsZoomedIn() && !m_bIsLastReadOnly)
     {
-        if (!m_xTreeView->get_visible())
-            bEnable = true;
-        else if (bParentEntry)
+        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+        if (m_xTreeView->get_selected(xEntry.get()) && lcl_IsContent(*xEntry, *m_xTreeView))
         {
-            if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
-                (lcl_IsContent(*xEntry, *m_xTreeView) &&
-                    weld::fromId<SwContentType*>(m_xTreeView->get_id(*xParentEntry))->GetType() == ContentTypeId::OUTLINE))
-            {
+            const SwContentType* pCntType =
+                    weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetParent();
+            if (pCntType->GetType() == ContentTypeId::OUTLINE && !pCntType->IsAlphabeticSort())
                 bEnable = true;
-            }
         }
     }
 
-    SwNavigationPI* pNavi = GetParentWindow();
     pNavi->m_xContent6ToolBox->set_item_sensitive("chapterup",  bEnable);
     pNavi->m_xContent6ToolBox->set_item_sensitive("chapterdown", bEnable);
     pNavi->m_xContent6ToolBox->set_item_sensitive("promote", bEnable);
