@@ -425,7 +425,7 @@ void Test::TestDrawLine()
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/line",
                 "linecap", "BUTT");
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/polypolygon",
-                "path", "m55.5192348773662 403.573503917507 874.352660545936-345.821325648415");
+                "path", "m89.1506452315894 403.573503917507 895.170581035125-345.821325648415");
 }
 
 void Test::TestDrawLineWithCaps()

@@ -244,6 +244,14 @@ namespace emfplushelper
         // helper functions
         Color EMFPGetBrushColorOrARGBColor(const sal_uInt16 flags, const sal_uInt32 brushIndexOrColor) const;
 
+        enum class Direction
+        {
+            horizontal,
+            vertical
+        };
+        sal_uInt32 DPI(Direction d) { return d == Direction::horizontal ? mnHDPI : mnVDPI; }
+        double unitToPixel(double n, sal_uInt32 aUnitType, Direction d);
+
     public:
         EmfPlusHelperData(
             SvMemoryStream& rMS,
@@ -262,8 +270,6 @@ namespace emfplushelper
         static void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
         static bool readXForm(SvStream& rIn, basegfx::B2DHomMatrix& rTarget);
         static ::basegfx::B2DPolyPolygon combineClip(::basegfx::B2DPolyPolygon const & leftPolygon, int combineMode, ::basegfx::B2DPolyPolygon const & rightPolygon);
-
-        static float getUnitToPixelMultiplier(const UnitType aUnitType, const sal_uInt32 aDPI);
     };
 }
 
