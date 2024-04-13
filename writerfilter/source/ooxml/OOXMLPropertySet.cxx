@@ -601,41 +601,28 @@ OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(std::string_view pValue, 
 {
     double val = o3tl::toDouble(pValue); // will ignore the trailing unit
 
-    int nLen = pValue.size();
-    if (nLen > 2 &&
-        pValue[nLen-2] == 'p' &&
-        pValue[nLen-1] == 't')
+    if (pValue.ends_with("pt"))
     {
-        mnValue = static_cast<int>(val * npPt);
+        val *= npPt;
     }
-    else if (nLen > 2 &&
-        pValue[nLen - 2] == 'c' &&
-        pValue[nLen - 1] == 'm')
+    else if (pValue.ends_with("cm"))
     {
-        mnValue = static_cast<int>(val * npPt * 72 / 2.54);
+        val = o3tl::convert(val, o3tl::Length::cm, o3tl::Length::pt) * npPt;
     }
-    else if (nLen > 2 &&
-        pValue[nLen - 2] == 'm' &&
-        pValue[nLen - 1] == 'm')
+    else if (pValue.ends_with("mm"))
     {
-        mnValue = static_cast<int>(val * npPt * 72 / 25.4);
+        val = o3tl::convert(val, o3tl::Length::mm, o3tl::Length::pt) * npPt;
     }
-    else if (nLen > 2 &&
-        pValue[nLen - 2] == 'i' &&
-        pValue[nLen - 1] == 'n')
+    else if (pValue.ends_with("in"))
     {
-        mnValue = static_cast<int>(val * npPt * 72);
+        val = o3tl::convert(val, o3tl::Length::in, o3tl::Length::pt) * npPt;
     }
-    else if (nLen > 2 &&
-        pValue[nLen - 2] == 'p' &&
-        ( pValue[nLen - 1] == 'c' || pValue[nLen - 1] == 'i' ))
+    else if (pValue.ends_with("pc") || pValue.ends_with("pi"))
     {
-        mnValue = static_cast<int>(val * npPt * 12);
+        val = o3tl::convert(val, o3tl::Length::pc, o3tl::Length::pt) * npPt;
     }
-    else
-    {
-        mnValue = static_cast<int>(val);
-    }
+
+    mnValue = std::round(val);
 }
 
 OOXMLUniversalMeasureValue::~OOXMLUniversalMeasureValue()
