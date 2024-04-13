@@ -38,6 +38,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 
 ORelationTableConnectionData::ORelationTableConnectionData()
     :m_nUpdateRules(KeyRule::NO_ACTION)
@@ -253,7 +254,8 @@ bool ORelationTableConnectionData::Update()
 
         xKey->setPropertyValue(PROPERTY_NAME,Any(sKeyName));
         xKey->setPropertyValue(PROPERTY_TYPE,Any(KeyType::FOREIGN));
-        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,Any(getReferencedTable()->GetTableName()));
+        // get the full name of the tables to ensure uniqueness across catalogs and schema
+        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,Any(getReferencedTable()->GetComposedName()));
         xKey->setPropertyValue(PROPERTY_UPDATERULE, Any(GetUpdateRules()));
         xKey->setPropertyValue(PROPERTY_DELETERULE, Any(GetDeleteRules()));
     }
@@ -298,7 +300,7 @@ bool ORelationTableConnectionData::Update()
         {
             OUString sReferencedTable;
             xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
-            if ( sReferencedTable == getReferencedTable()->GetTableName() )
+            if ( sReferencedTable == getReferencedTable()->GetComposedName() )
             {
                 xColSup.set(xKey,UNO_QUERY_THROW);
                 try

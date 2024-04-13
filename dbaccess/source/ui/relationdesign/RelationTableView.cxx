@@ -51,6 +51,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
 
@@ -107,7 +108,8 @@ void ORelationTableView::ReSync()
             // it should be cleaned up, including its data in the document
             pTabWin->clearListBox();
             pTabWin.disposeAndClear();
-            arrInvalidTables.push_back(pData->GetTableName());
+            // get the full name of the tables to ensure uniqueness across catalogs and schema
+            arrInvalidTables.push_back(pData->GetComposedName());
 
             std::erase(rTabWinDataList, *aIter);
             continue;
@@ -131,9 +133,9 @@ void ORelationTableView::ReSync()
         if ( !arrInvalidTables.empty() )
         {
             // do the tables to the  connection exist?
-            OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetTableName();
+            OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetComposedName();
             bool bInvalid = std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
-            strTabExistenceTest = pTabConnData->getReferencedTable()->GetTableName();
+            strTabExistenceTest = pTabConnData->getReferencedTable()->GetComposedName();
             bInvalid = bInvalid || std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
             if (bInvalid)
@@ -289,7 +291,8 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
     }
 
     // enter the new data structure into DocShell
-    TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
+    // show the table's full name as window name to ensure uniqueness across catalogs and schema
+    TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName, _rComposedName ));
     pNewTabWinData->ShowAll(false);
 
     // link new window into the window list
