@@ -353,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawLine)
                 "linecap"_ostr, "BUTT");
     assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/polypolygon",
                 "path"_ostr,
-                "m55.5192348773662 403.573503917507 874.352660545936-345.821325648415");
+                "m89.1506452315894 403.573503917507 895.170581035125-345.821325648415");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawLineWithCaps)

@@ -229,33 +229,33 @@ namespace emfplushelper
     {
     }
 
-    float EmfPlusHelperData::getUnitToPixelMultiplier(const UnitType aUnitType, const sal_uInt32 aDPI)
+    double EmfPlusHelperData::unitToPixel(double n, sal_uInt32 aUnitType, Direction d)
     {
-        switch (aUnitType)
+        switch (static_cast<UnitType>(aUnitType))
         {
             case UnitTypePixel:
-                return 1.0f;
+                return n;
 
             case UnitTypePoint:
-                return aDPI / 72.0;
+                return o3tl::convert(n, o3tl::Length::pt, o3tl::Length::in) * DPI(d);
 
             case UnitTypeInch:
-                return aDPI;
+                return n * DPI(d);
 
             case UnitTypeMillimeter:
-                return aDPI / 25.4;
+                return o3tl::convert(n, o3tl::Length::mm, o3tl::Length::in) * DPI(d);
 
             case UnitTypeDocument:
-                return aDPI / 300.0;
+                return n * DPI(d) / 300.0;
 
             case UnitTypeWorld:
             case UnitTypeDisplay:
                 SAL_WARN("drawinglayer.emf", "EMF+\t Converting to World/Display.");
-                return 1.0f;
+                return n;
 
             default:
                 SAL_WARN("drawinglayer.emf", "EMF+\tTODO Unimplemented support of Unit Type: 0x" << std::hex << aUnitType);
-                return 1.0f;
+                return n;
         }
     }
 
@@ -281,7 +281,7 @@ namespace emfplushelper
                 EMFPPen *pen = new EMFPPen();
                 maEMFPObjects[index].reset(pen);
                 pen->Read(rObjectStream, *this);
-                pen->penWidth = pen->penWidth * getUnitToPixelMultiplier(static_cast<UnitType>(pen->penUnit), mnHDPI);
+                pen->penWidth = unitToPixel(pen->penWidth, pen->penUnit, Direction::horizontal);
                 break;
             }
             case EmfPlusObjectTypePath:
@@ -325,7 +325,7 @@ namespace emfplushelper
                 font->fontFlags = 0;
                 font->Read(rObjectStream);
                 // tdf#113624 Convert unit to Pixels
-                font->emSize = font->emSize * getUnitToPixelMultiplier(static_cast<UnitType>(font->sizeUnit), mnHDPI);
+                font->emSize = unitToPixel(font->emSize, font->sizeUnit, Direction::horizontal);
 
                 break;
             }
@@ -1755,8 +1755,8 @@ namespace emfplushelper
                         }
                         else
                         {
-                            mnMmX *= mfPageScale * getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnHDPI);
-                            mnMmY *= mfPageScale * getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnVDPI);
+                            mnMmX = std::round(unitToPixel(static_cast<double>(mnMmX) * mfPageScale, flags, Direction::horizontal));
+                            mnMmY = std::round(unitToPixel(static_cast<double>(mnMmY) * mfPageScale, flags, Direction::vertical));
                             mappingChanged();
                         }
                         break;
@@ -1853,12 +1853,12 @@ namespace emfplushelper
                             SAL_WARN("drawinglayer.emf", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by BeginContainer in EMF+ specification.");
                             break;
                         }
-                        const float aPageScaleX = getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnHDPI);
-                        const float aPageScaleY = getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnVDPI);
                         GraphicStatePush(mGSContainerStack, stackIndex);
                         const basegfx::B2DHomMatrix transform = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                            aPageScaleX * ( dw / sw ), aPageScaleY * ( dh / sh ),
-                            aPageScaleX * ( dx - sx ), aPageScaleY * ( dy - sy) );
+                            unitToPixel(static_cast<double>(dw) / sw, flags, Direction::horizontal),
+                            unitToPixel(static_cast<double>(dh) / sh, flags, Direction::vertical),
+                            unitToPixel(static_cast<double>(dx) - sx, flags, Direction::horizontal),
+                            unitToPixel(static_cast<double>(dy) - sy, flags, Direction::vertical));
                         maWorldTransform *= transform;
                         mappingChanged();
                         break;
