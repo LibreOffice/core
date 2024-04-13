@@ -125,21 +125,21 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             // original drawing size
             tools::Long nWidth = 0, nHeight = 0;
             m_pGraphicObj->GetGrafOrgSize(nWidth, nHeight);
-            double fGrafOrgWidth = static_cast<double>(nWidth)/TWIPS_PER_CM;
-            double fGrafOrgHeight = static_cast<double>(nHeight)/TWIPS_PER_CM;
+            double fGrafOrgWidth = LwpTools::ConvertFromTwips(nWidth);
+            double fGrafOrgHeight = LwpTools::ConvertFromTwips(nHeight);
 
             // get margin values
             double fLeftMargin = xMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
             double fTopMargin = xMyFrameLayout->GetMarginsValue(MARGIN_TOP);
 
             // frame size
-            double fFrameWidth = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetWidth());
-            double fFrameHeight = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetHeight());
+            double fFrameWidth = LwpTools::ConvertFromUnits(pFrameGeo->GetWidth());
+            double fFrameHeight = LwpTools::ConvertFromUnits(pFrameGeo->GetHeight());
 
             // get frame offset
             LwpPoint& rOffset = pMyScale->GetOffset();
-            double fOffsetX = LwpTools::ConvertFromUnitsToMetric(rOffset.GetX());
-            double fOffsetY = LwpTools::ConvertFromUnitsToMetric(rOffset.GetY());
+            double fOffsetX = LwpTools::ConvertFromUnits(rOffset.GetX());
+            double fOffsetY = LwpTools::ConvertFromUnits(rOffset.GetY());
 
             // get scale mode
             sal_uInt16 nScalemode = pMyScale->GetScaleMode();
@@ -147,9 +147,9 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             if (nScalemode & LwpLayoutScale::CUSTOM)
             {
                 m_aTransformData.fScaleX =
-                    LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth()) / fGrafOrgWidth;
+                    LwpTools::ConvertFromUnits(pMyScale->GetScaleWidth()) / fGrafOrgWidth;
                 m_aTransformData.fScaleY =
-                    LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight()) / fGrafOrgHeight;
+                    LwpTools::ConvertFromUnits(pMyScale->GetScaleHeight()) / fGrafOrgHeight;
             }
             else if (nScalemode & LwpLayoutScale::PERCENTAGE)
             {
@@ -159,11 +159,11 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             }
             else if (nScalemode & LwpLayoutScale::FIT_IN_FRAME)
             {
-                double fWidth0 = static_cast<double>(right) / TWIPS_PER_CM;
-                double fHeight0 = static_cast<double>(bottom) / TWIPS_PER_CM;
+                double fWidth0 = LwpTools::ConvertFromTwips(right);
+                double fHeight0 = LwpTools::ConvertFromTwips(bottom);
 
-                double fWidth1 = LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
-                double fHeight1 = LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
+                double fWidth1 = LwpTools::ConvertFromUnits(pMyScale->GetScaleWidth());
+                double fHeight1 = LwpTools::ConvertFromUnits(pMyScale->GetScaleHeight());
 
                 double fScaleX = fWidth1 / fWidth0;
                 double fScaleY = fHeight1 / fHeight0;
@@ -189,11 +189,11 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
                     static_cast<tools::Long>(bottom * m_aTransformData.fScaleY));
                 Point aCenter = aBoundRect.Center();
 
-                double fNewCenterX = (double(left)/TWIPS_PER_CM + fFrameWidth/*-fOffsetX*/) / 2;
-                double fNewCenterY = (double(top)/TWIPS_PER_CM + fFrameHeight/*-fOffsetY*/) / 2;
+                double fNewCenterX = (LwpTools::ConvertFromTwips(left) + fFrameWidth/*-fOffsetX*/) / 2;
+                double fNewCenterY = (LwpTools::ConvertFromTwips(top) + fFrameHeight/*-fOffsetY*/) / 2;
 
-                m_aTransformData.fOffsetX = fNewCenterX - static_cast<double>(aCenter.X())/TWIPS_PER_CM;
-                m_aTransformData.fOffsetY = fNewCenterY -static_cast<double>(aCenter.Y())/TWIPS_PER_CM;
+                m_aTransformData.fOffsetX = fNewCenterX - LwpTools::ConvertFromTwips(aCenter.X());
+                m_aTransformData.fOffsetY = fNewCenterY - LwpTools::ConvertFromTwips(aCenter.Y());
             }
             else
             {

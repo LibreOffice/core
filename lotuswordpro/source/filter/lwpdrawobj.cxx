@@ -256,7 +256,7 @@ void LwpDrawObj::SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 n
     }
 
     // line width
-    double fWidth = static_cast<double>(nWidth)/TWIPS_PER_CM;
+    double fWidth = LwpTools::ConvertFromTwips(nWidth);
 
     // line color
     XFColor aXFColor(rColor.nR, rColor.nG, rColor.nB);
@@ -280,10 +280,11 @@ void LwpDrawObj::SetPosition(XFFrame* pObj)
         fScaleY = m_pTransData->fScaleY;
     }
 
-    pObj->SetPosition(static_cast<double>(m_aObjHeader.nLeft)/TWIPS_PER_CM * fScaleX+ fOffsetX,
-        static_cast<double>(m_aObjHeader.nTop)/TWIPS_PER_CM * fScaleY + fOffsetY,
-        static_cast<double>(m_aObjHeader.nRight-m_aObjHeader.nLeft)/TWIPS_PER_CM * fScaleX,
-        static_cast<double>(m_aObjHeader.nBottom-m_aObjHeader.nTop)/TWIPS_PER_CM * fScaleY);
+    pObj->SetPosition(
+        LwpTools::ConvertFromTwips(m_aObjHeader.nLeft) * fScaleX + fOffsetX,
+        LwpTools::ConvertFromTwips(m_aObjHeader.nTop) * fScaleY + fOffsetY,
+        LwpTools::ConvertFromTwips(m_aObjHeader.nRight-m_aObjHeader.nLeft) * fScaleX,
+        LwpTools::ConvertFromTwips(m_aObjHeader.nBottom-m_aObjHeader.nTop) * fScaleY);
 }
 
 /**
@@ -311,9 +312,10 @@ void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag
     // arrowhead flag of an object's end side
     sal_uInt8 nRightArrow = (nArrowFlag & 0xF0) >> 4;
 
-    double fWidth_inch = static_cast<double>(nLineWidth)/TWIPS_PER_CM;
+    // FIXME: this can't be correct: converting something to cm, then treating it as inches
+    double fWidth_inch = LwpTools::ConvertFromTwips(nLineWidth);
     double fArrowSize_inch = fWidth_inch + 0.08;
-    double fArrowSize = fArrowSize_inch * CM_PER_INCH;
+    double fArrowSize = o3tl::convert(fArrowSize_inch, o3tl::Length::in, o3tl::Length::cm);
 
     if (nLeftArrow)
     {
@@ -452,10 +454,10 @@ OUString LwpDrawLine::RegisterStyle()
 rtl::Reference<XFFrame> LwpDrawLine::CreateDrawObj(const OUString& rStyleName )
 {
     rtl::Reference<XFDrawPath> xLine(new XFDrawPath());
-    xLine->MoveTo(XFPoint(static_cast<double>(m_aLineRec.nStartX)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aLineRec.nStartY)/TWIPS_PER_CM * m_pTransData->fScaleY));
-    xLine->LineTo(XFPoint(static_cast<double>(m_aLineRec.nEndX)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aLineRec.nEndY)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    xLine->MoveTo(XFPoint(LwpTools::ConvertFromTwips(m_aLineRec.nStartX) * m_pTransData->fScaleX,
+                          LwpTools::ConvertFromTwips(m_aLineRec.nStartY) * m_pTransData->fScaleY));
+    xLine->LineTo(XFPoint(LwpTools::ConvertFromTwips(m_aLineRec.nEndX) * m_pTransData->fScaleX,
+                          LwpTools::ConvertFromTwips(m_aLineRec.nEndY) * m_pTransData->fScaleY));
     SetPosition(xLine.get());
 
     xLine->SetStyleName(rStyleName);
@@ -466,8 +468,10 @@ rtl::Reference<XFFrame> LwpDrawLine::CreateDrawObj(const OUString& rStyleName )
 rtl::Reference<XFFrame> LwpDrawLine::CreateStandardDrawObj(const  OUString& rStyleName)
 {
     rtl::Reference<XFDrawLine> xLine(new XFDrawLine());
-    xLine->SetStartPoint(static_cast<double>(m_aLineRec.nStartX)/TWIPS_PER_CM,static_cast<double>(m_aLineRec.nStartY)/TWIPS_PER_CM);
-    xLine->SetEndPoint(static_cast<double>(m_aLineRec.nEndX)/TWIPS_PER_CM,static_cast<double>(m_aLineRec.nEndY)/TWIPS_PER_CM);
+    xLine->SetStartPoint(LwpTools::ConvertFromTwips(m_aLineRec.nStartX),
+                         LwpTools::ConvertFromTwips(m_aLineRec.nStartY));
+    xLine->SetEndPoint(LwpTools::ConvertFromTwips(m_aLineRec.nEndX),
+                       LwpTools::ConvertFromTwips(m_aLineRec.nEndY));
 
     xLine->SetStyleName(rStyleName);
     return xLine;
@@ -529,12 +533,12 @@ OUString LwpDrawPolyLine::RegisterStyle()
 rtl::Reference<XFFrame> LwpDrawPolyLine::CreateDrawObj(const OUString& rStyleName )
 {
     rtl::Reference<XFDrawPath> xPolyline(new XFDrawPath());
-    xPolyline->MoveTo(XFPoint(static_cast<double>(m_pVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-            static_cast<double>(m_pVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    xPolyline->MoveTo(XFPoint(LwpTools::ConvertFromTwips(m_pVector[0].x) * m_pTransData->fScaleX,
+                              LwpTools::ConvertFromTwips(m_pVector[0].y) * m_pTransData->fScaleY));
     for (sal_uInt16 nC = 1; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
-        xPolyline->LineTo(XFPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-            static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+        xPolyline->LineTo(XFPoint(LwpTools::ConvertFromTwips(m_pVector[nC].x) * m_pTransData->fScaleX,
+                                  LwpTools::ConvertFromTwips(m_pVector[nC].y) * m_pTransData->fScaleY));
     }
     SetPosition(xPolyline.get());
 
@@ -548,8 +552,8 @@ rtl::Reference<XFFrame> LwpDrawPolyLine::CreateStandardDrawObj(const  OUString& 
     rtl::Reference<XFDrawPolyline> xPolyline(new XFDrawPolyline());
     for (sal_uInt16 nC = 0; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
-        xPolyline->AddPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM,
-            static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM);
+        xPolyline->AddPoint(LwpTools::ConvertFromTwips(m_pVector[nC].x),
+                            LwpTools::ConvertFromTwips(m_pVector[nC].y));
     }
 
     xPolyline->SetStyleName(rStyleName);
@@ -609,12 +613,12 @@ OUString LwpDrawPolygon::RegisterStyle()
 rtl::Reference<XFFrame> LwpDrawPolygon::CreateDrawObj(const OUString& rStyleName)
 {
     rtl::Reference<XFDrawPath> xPolygon(new XFDrawPath());
-    xPolygon->MoveTo(XFPoint(static_cast<double>(m_pVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-            static_cast<double>(m_pVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    xPolygon->MoveTo(XFPoint(LwpTools::ConvertFromTwips(m_pVector[0].x) * m_pTransData->fScaleX,
+                             LwpTools::ConvertFromTwips(m_pVector[0].y) * m_pTransData->fScaleY));
     for (sal_uInt16 nC = 1; nC < m_nNumPoints; nC++)
     {
-        xPolygon->LineTo(XFPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-            static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+        xPolygon->LineTo(XFPoint(LwpTools::ConvertFromTwips(m_pVector[nC].x) * m_pTransData->fScaleX,
+                                 LwpTools::ConvertFromTwips(m_pVector[nC].y) * m_pTransData->fScaleY));
     }
     xPolygon->ClosePath();
     SetPosition(xPolygon.get());
@@ -628,8 +632,8 @@ rtl::Reference<XFFrame> LwpDrawPolygon::CreateStandardDrawObj(const  OUString& r
     rtl::Reference<XFDrawPolygon> xPolygon(new XFDrawPolygon());
     for (sal_uInt16 nC = 0; nC < m_nNumPoints; nC++)
     {
-        xPolygon->AddPoint(static_cast<double>(m_pVector[nC].x)/TWIPS_PER_CM,
-            static_cast<double>(m_pVector[nC].y)/TWIPS_PER_CM);
+        xPolygon->AddPoint(LwpTools::ConvertFromTwips(m_pVector[nC].x),
+                           LwpTools::ConvertFromTwips(m_pVector[nC].y));
     }
 
     xPolygon->SetStyleName(rStyleName);
@@ -695,15 +699,15 @@ rtl::Reference<XFFrame> LwpDrawRectangle::CreateDrawObj(const OUString& rStyleNa
     else
     {
         rtl::Reference<XFDrawPath> xRect(new XFDrawPath());
-        xRect->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-            static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+        xRect->MoveTo(XFPoint(LwpTools::ConvertFromTwips(m_aVector[0].x) * m_pTransData->fScaleX,
+                              LwpTools::ConvertFromTwips(m_aVector[0].y) * m_pTransData->fScaleY));
         for (sal_uInt8 nC = 1; nC < 4; nC++)
         {
-            xRect->LineTo(XFPoint(static_cast<double>(m_aVector[nC].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-                static_cast<double>(m_aVector[nC].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+            xRect->LineTo(XFPoint(LwpTools::ConvertFromTwips(m_aVector[nC].x) * m_pTransData->fScaleX,
+                                  LwpTools::ConvertFromTwips(m_aVector[nC].y) * m_pTransData->fScaleY));
         }
-        xRect->LineTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-                static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+        xRect->LineTo(XFPoint(LwpTools::ConvertFromTwips(m_aVector[0].x) * m_pTransData->fScaleX,
+                              LwpTools::ConvertFromTwips(m_aVector[0].y) * m_pTransData->fScaleY));
         xRect->ClosePath();
         SetPosition(xRect.get());
 
@@ -716,38 +720,38 @@ rtl::Reference<XFFrame> LwpDrawRectangle::CreateDrawObj(const OUString& rStyleNa
 XFFrame* LwpDrawRectangle::CreateRoundedRect(const OUString& rStyleName)
 {
     XFDrawPath* pRoundedRect = new XFDrawPath();
-    pRoundedRect->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-    static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pRoundedRect->MoveTo(XFPoint(LwpTools::ConvertFromTwips(m_aVector[0].x) * m_pTransData->fScaleX,
+                                 LwpTools::ConvertFromTwips(m_aVector[0].y) * m_pTransData->fScaleY));
 
     sal_uInt8 nPtIndex = 1;
     for (sal_uInt8 nC = 0; nC < 7; nC++)
     {
         if (nC%2 == 0)
         {
-            XFPoint aCtrl1(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-                static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+            XFPoint aCtrl1(LwpTools::ConvertFromTwips(m_aVector[nPtIndex].x) * m_pTransData->fScaleX,
+                           LwpTools::ConvertFromTwips(m_aVector[nPtIndex].y) * m_pTransData->fScaleY);
             nPtIndex++;
-            XFPoint aCtrl2(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-                static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+            XFPoint aCtrl2(LwpTools::ConvertFromTwips(m_aVector[nPtIndex].x) * m_pTransData->fScaleX,
+                           LwpTools::ConvertFromTwips(m_aVector[nPtIndex].y) * m_pTransData->fScaleY);
             nPtIndex++;
-            XFPoint aDest(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-                static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+            XFPoint aDest(LwpTools::ConvertFromTwips(m_aVector[nPtIndex].x) * m_pTransData->fScaleX,
+                          LwpTools::ConvertFromTwips(m_aVector[nPtIndex].y) * m_pTransData->fScaleY);
             nPtIndex++;
 
             pRoundedRect->CurveTo(aDest, aCtrl1, aCtrl2);
         }
         else
         {
-            XFPoint aDest(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-                static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+            XFPoint aDest(LwpTools::ConvertFromTwips(m_aVector[nPtIndex].x) * m_pTransData->fScaleX,
+                          LwpTools::ConvertFromTwips(m_aVector[nPtIndex].y) * m_pTransData->fScaleY);
             nPtIndex++;
 
             pRoundedRect->LineTo(aDest);
         }
     }
 
-    pRoundedRect->LineTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-                static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    pRoundedRect->LineTo(XFPoint(LwpTools::ConvertFromTwips(m_aVector[0].x) * m_pTransData->fScaleX,
+                                 LwpTools::ConvertFromTwips(m_aVector[0].y) * m_pTransData->fScaleY));
     pRoundedRect->ClosePath();
     SetPosition(pRoundedRect);
 
@@ -792,9 +796,9 @@ rtl::Reference<XFFrame> LwpDrawRectangle::CreateStandardDrawObj(const  OUString&
         fWidth = aOriginalRect.GetWidth();
         fHeight = aOriginalRect.GetHeight();
 
-        xRect->SetStartPoint(XFPoint(fStartX/TWIPS_PER_CM + m_pTransData->fOffsetX,
-            fStartY/TWIPS_PER_CM + m_pTransData->fOffsetY));
-        xRect->SetSize(fWidth/TWIPS_PER_CM, fHeight/TWIPS_PER_CM);
+        xRect->SetStartPoint(XFPoint(LwpTools::ConvertFromTwips(fStartX) + m_pTransData->fOffsetX,
+                                     LwpTools::ConvertFromTwips(fStartY) + m_pTransData->fOffsetY));
+        xRect->SetSize(LwpTools::ConvertFromTwips(fWidth), LwpTools::ConvertFromTwips(fHeight));
 
         if (aSdwRect.IsRectRotated())
         {
@@ -848,19 +852,19 @@ OUString LwpDrawEllipse::RegisterStyle()
 rtl::Reference<XFFrame> LwpDrawEllipse::CreateDrawObj(const OUString& rStyleName )
 {
     rtl::Reference<XFDrawPath> xEllipse(new XFDrawPath());
-    xEllipse->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
+    xEllipse->MoveTo(XFPoint(LwpTools::ConvertFromTwips(m_aVector[0].x) * m_pTransData->fScaleX,
+                             LwpTools::ConvertFromTwips(m_aVector[0].y) * m_pTransData->fScaleY));
     sal_uInt8 nPtIndex = 1;
     for (sal_uInt8 nC = 0; nC < 4; nC++)
     {
-        XFPoint aCtrl1(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aCtrl1(LwpTools::ConvertFromTwips(m_aVector[nPtIndex].x) * m_pTransData->fScaleX,
+                       LwpTools::ConvertFromTwips(m_aVector[nPtIndex].y) * m_pTransData->fScaleY);
         nPtIndex++;
-        XFPoint aCtrl2(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aCtrl2(LwpTools::ConvertFromTwips(m_aVector[nPtIndex].x) * m_pTransData->fScaleX,
+                       LwpTools::ConvertFromTwips(m_aVector[nPtIndex].y) * m_pTransData->fScaleY);
         nPtIndex++;
-        XFPoint aDest(static_cast<double>(m_aVector[nPtIndex].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aVector[nPtIndex].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aDest(LwpTools::ConvertFromTwips(m_aVector[nPtIndex].x) * m_pTransData->fScaleX,
+                      LwpTools::ConvertFromTwips(m_aVector[nPtIndex].y) * m_pTransData->fScaleY);
         nPtIndex++;
 
         xEllipse->CurveTo(aDest, aCtrl1, aCtrl2);
@@ -927,14 +931,14 @@ OUString LwpDrawArc::RegisterStyle()
 rtl::Reference<XFFrame> LwpDrawArc::CreateDrawObj(const OUString& rStyleName )
 {
     rtl::Reference<XFDrawPath> xArc(new XFDrawPath());
-    xArc->MoveTo(XFPoint(static_cast<double>(m_aVector[0].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aVector[0].y)/TWIPS_PER_CM * m_pTransData->fScaleY));
-    XFPoint aDest(static_cast<double>(m_aVector[3].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aVector[3].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
-    XFPoint aCtl1(static_cast<double>(m_aVector[1].x)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(m_aVector[1].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
-    XFPoint aCtl2(static_cast<double>(m_aVector[2].x)/TWIPS_PER_CM* m_pTransData->fScaleX,
-        static_cast<double>(m_aVector[2].y)/TWIPS_PER_CM * m_pTransData->fScaleY);
+    xArc->MoveTo(XFPoint(LwpTools::ConvertFromTwips(m_aVector[0].x) * m_pTransData->fScaleX,
+                         LwpTools::ConvertFromTwips(m_aVector[0].y) * m_pTransData->fScaleY));
+    XFPoint aDest(LwpTools::ConvertFromTwips(m_aVector[3].x) * m_pTransData->fScaleX,
+                  LwpTools::ConvertFromTwips(m_aVector[3].y) * m_pTransData->fScaleY);
+    XFPoint aCtl1(LwpTools::ConvertFromTwips(m_aVector[1].x) * m_pTransData->fScaleX,
+                  LwpTools::ConvertFromTwips(m_aVector[1].y) * m_pTransData->fScaleY);
+    XFPoint aCtl2(LwpTools::ConvertFromTwips(m_aVector[2].x) * m_pTransData->fScaleX,
+                  LwpTools::ConvertFromTwips(m_aVector[2].y) * m_pTransData->fScaleY);
     xArc->CurveTo(aDest, aCtl1, aCtl2);
 
     SetPosition(xArc.get());
@@ -1145,8 +1149,8 @@ void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
     sal_Int16 nX, nY;
     nX = (m_aTextArtRec.aPath[0].aPts[0].x + m_aTextArtRec.aPath[1].aPts[0].x) / 2;
     nY = (m_aTextArtRec.aPath[0].aPts[0].y + m_aTextArtRec.aPath[1].aPts[0].y) / 2;
-    XFPoint aStart(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
-        static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
+    XFPoint aStart(LwpTools::ConvertFromTwips(nX) * m_pTransData->fScaleX,
+                   LwpTools::ConvertFromTwips(nY) * m_pTransData->fScaleY);
     pPath->MoveTo(aStart);
 
     sal_uInt8 nPtIndex = 1;
@@ -1154,20 +1158,20 @@ void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
     {
         nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
         nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
-        XFPoint aCtrl1(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
-            static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aCtrl1(LwpTools::ConvertFromTwips(nX) * m_pTransData->fScaleX,
+                       LwpTools::ConvertFromTwips(nY) * m_pTransData->fScaleY);
 
         nPtIndex++;
         nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
         nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
-        XFPoint aCtrl2(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
-            static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aCtrl2(LwpTools::ConvertFromTwips(nX) * m_pTransData->fScaleX,
+                       LwpTools::ConvertFromTwips(nY) * m_pTransData->fScaleY);
 
         nPtIndex++;
         nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
         nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
-        XFPoint aDest(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
-            static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
+        XFPoint aDest(LwpTools::ConvertFromTwips(nX) * m_pTransData->fScaleX,
+                      LwpTools::ConvertFromTwips(nY) * m_pTransData->fScaleY);
 
         pPath->CurveTo(aDest, aCtrl1, aCtrl2);
     }

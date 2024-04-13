@@ -281,12 +281,12 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster* pm1)
             throw o3tl::divide_by_zero();
 
         nLengthPercent = static_cast<sal_uInt32>(
-            100 * LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetLength()) / fMarginWidth);
+            100 * LwpTools::ConvertFromUnits(rFootnoteSep.GetLength()) / fMarginWidth);
         if (nLengthPercent > 100)
             nLengthPercent = 100;
     }
-    double fAbove = LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetAbove());
-    double fBelow = LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetBelow());
+    double fAbove = LwpTools::ConvertFromUnits(rFootnoteSep.GetAbove());
+    double fBelow = LwpTools::ConvertFromUnits(rFootnoteSep.GetBelow());
     LwpColor aColor = rFootnoteSep.GetTopBorderColor();
     enumXFAlignType eAlignType = enumXFAlignStart;
     if (rFootnoteSep.GetIndent() > 0)
@@ -297,7 +297,7 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster* pm1)
 
         //SODC don't support indent
         sal_uInt32 nIndentPercent = static_cast<sal_uInt32>(
-            100 * LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetIndent()) / fMarginWidth);
+            100 * LwpTools::ConvertFromUnits(rFootnoteSep.GetIndent()) / fMarginWidth);
         if (nIndentPercent + nLengthPercent >= 100)
             eAlignType = enumXFAlignEnd;
     }

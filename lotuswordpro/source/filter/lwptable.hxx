@@ -110,8 +110,8 @@ public:
     virtual ~LwpTable() override;
 
     virtual void Parse(IXFStream* pOutputStream) override;
-    double GetWidth() {return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
-    double GetHeight() {return LwpTools::ConvertFromUnitsToMetric(m_nHeight);}
+    double GetWidth() { return LwpTools::ConvertFromUnits(m_nWidth); }
+    double GetHeight() { return LwpTools::ConvertFromUnits(m_nHeight); }
     LwpObjectID& GetDefaultCellStyle() {return m_DefaultCellStyle;}
     sal_uInt16 GetRow() const {return m_nRow;}
     sal_uInt16 GetColumn() const {return m_nColumn;}

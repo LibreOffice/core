@@ -435,8 +435,8 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, const Lw
         {
             pTotalIndent->SetMAll(o3tl::saturating_add(pParentIndent->GetMAll(), pTotalIndent->GetMAll()));
             pTotalIndent->SetMRight(o3tl::saturating_add(pParentIndent->GetMRight(), pTotalIndent->GetMRight()));
-            pParaStyle->SetMargins(LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(
-                pTotalIndent->GetMAll())), pTotalIndent->GetRight());
+            pParaStyle->SetMargins(LwpTools::ConvertFromUnits(
+                pTotalIndent->GetMAll()), pTotalIndent->GetRight());
             pPara->SetIndent(pTotalIndent.release());
             return;
         }
@@ -461,8 +461,8 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, const Lw
         pTotalIndent.reset(pIndent->clone());
         if (pPara && pPara->GetBulletFlag())
         {
-            pParaStyle->SetMargins(LwpTools::ConvertToMetric(
-                LwpTools::ConvertFromUnits(pIndent->GetMAll())), pIndent->GetRight());
+            pParaStyle->SetMargins(
+                LwpTools::ConvertFromUnits(pIndent->GetMAll()), pIndent->GetRight());
             pPara->SetIndent(pTotalIndent.release());
             return;
         }
@@ -500,14 +500,14 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
     case LwpSpacingCommonOverride::SPACING_LEADING:
     {
     xftype = enumLHSpace;
-    height = LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(amount));
+    height = LwpTools::ConvertFromUnits(amount);
     pParaStyle->SetLineHeight(xftype,height);
     }
         break;
     case LwpSpacingCommonOverride::SPACING_CUSTOM:
     {
         xftype = enumLHHeight;
-        height =  LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(sal_Int32(float(multiple)/65536L*amount)));
+        height = LwpTools::ConvertFromUnits(multiple / 65536.0 * amount);
         pParaStyle->SetLineHeight(xftype,height);
     }
         break;
@@ -528,7 +528,7 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
     case LwpSpacingCommonOverride::SPACING_LEADING:
         break;
     case LwpSpacingCommonOverride::SPACING_CUSTOM:
-        above_val =  LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(sal_Int32(float(multiple)/65536L*amount)));
+        above_val = LwpTools::ConvertFromUnits(multiple / 65536.0 * amount);
         break;
     case LwpSpacingCommonOverride::SPACING_NONE:
         break;
@@ -545,7 +545,7 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
     case LwpSpacingCommonOverride::SPACING_LEADING:
         break;
     case LwpSpacingCommonOverride::SPACING_CUSTOM:
-        below_val =  LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(sal_Int32(float(multiple)/65536L*amount)));
+        below_val = LwpTools::ConvertFromUnits(multiple / 65536.0 * amount);
         break;
     case LwpSpacingCommonOverride::SPACING_NONE:
         break;
@@ -613,7 +613,7 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
         //get position
         sal_uInt32 nPos = pTab->GetPosition();
         //different feature between SODC and lwp, the tab length must minus the margin left of para.
-        double fLen = LwpTools::ConvertFromUnitsToMetric(nPos) - dMarginLeft;
+        double fLen = LwpTools::ConvertFromUnits(nPos) - dMarginLeft;
 
         //get leader type
         sal_Unicode cLeader = 0x00;

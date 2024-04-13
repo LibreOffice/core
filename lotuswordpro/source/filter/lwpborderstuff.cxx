@@ -198,13 +198,13 @@ float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
     switch(side)
     {
     case LEFT:
-        return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthLeft));
+        return LwpTools::ConvertFromUnits(m_nWidthLeft);
     case RIGHT:
-        return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthRight));
+        return LwpTools::ConvertFromUnits(m_nWidthRight);
     case TOP:
-        return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthTop));
+        return LwpTools::ConvertFromUnits(m_nWidthTop);
     case BOTTOM:
-        return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthBottom));
+        return LwpTools::ConvertFromUnits(m_nWidthBottom);
     }
     // FIXME: this is needed to avoid warning: control reaches end of non-void function
     //        a better solution would be to enum value for the parameter side

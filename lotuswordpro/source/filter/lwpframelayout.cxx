@@ -594,8 +594,8 @@ void LwpFrame::ParseAnchorType(XFFrame* pXFFrame)
     if (pLayoutGeo)
     {
         LwpPoint aPoint = pLayoutGeo->GetOrigin();
-        fXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());
-        fYOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetY());
+        fXOffset = LwpTools::ConvertFromUnits(aPoint.GetX());
+        fYOffset = LwpTools::ConvertFromUnits(aPoint.GetY());
     }
     //set anchor type
     eAnchor = enumXFAnchorNone;
@@ -670,7 +670,7 @@ void LwpFrame::ParseAnchorType(XFFrame* pXFFrame)
                 //experiential value
                 fYOffset = -(m_pLayout->GetGeometryHeight()
                              + 2 * m_pLayout->GetExtMarginsValue(MARGIN_BOTTOM)
-                             - LwpTools::ConvertFromUnitsToMetric(nOffset));
+                             - LwpTools::ConvertFromUnits(nOffset));
             }
             break;
         }
@@ -690,7 +690,8 @@ void LwpFrame::ParseAnchorType(XFFrame* pXFFrame)
             rtl::Reference<XFFont> pFont = m_pLayout->GetFont();
             if (pFont.is())
             {
-                offset = static_cast<double>(pFont->GetFontSize()) * CM_PER_INCH / POINTS_PER_INCH;
+                offset = o3tl::convert<double>(pFont->GetFontSize(), o3tl::Length::pt,
+                                               o3tl::Length::cm);
             }
             fYOffset = offset - fYOffset;
             break;
@@ -716,7 +717,7 @@ bool LwpFrame::IsLeftWider()
     if (!pParent)
         return false;
     LwpPoint aPoint = m_pLayout->GetOrigin();
-    double fXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());
+    double fXOffset = LwpTools::ConvertFromUnits(aPoint.GetX());
     double fWidth = m_pLayout->GetWidth();
     double fWrapLeft = m_pLayout->GetExtMarginsValue(MARGIN_LEFT);
     double fWrapRight = m_pLayout->GetExtMarginsValue(MARGIN_RIGHT);
@@ -944,7 +945,7 @@ double LwpFrameLayout::GetMaxWidth()
     if (pParent)
     {
         LwpPoint aPoint = GetOrigin();
-        double fXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());
+        double fXOffset = LwpTools::ConvertFromUnits(aPoint.GetX());
         double fWrapRight = GetExtMarginsValue(MARGIN_RIGHT);
 
         //Get parent layout width

@@ -121,11 +121,11 @@ void LwpRowLayout::RegisterStyle()
 
     if (m_nDirection & 0x0030)
     {
-        pRowStyle->SetMinRowHeight(static_cast<float>(LwpTools::ConvertFromUnitsToMetric(cheight)));
+        pRowStyle->SetMinRowHeight(LwpTools::ConvertFromUnits(cheight));
     }
     else
     {
-        pRowStyle->SetRowHeight(static_cast<float>(LwpTools::ConvertFromUnitsToMetric(cheight)));
+        pRowStyle->SetRowHeight(LwpTools::ConvertFromUnits(cheight));
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_StyleName = pXFStyleManager->AddStyle(std::move(pRowStyle)).m_pStyle->GetStyleName();

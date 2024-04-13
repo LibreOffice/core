@@ -244,7 +244,7 @@ public:
     virtual ~LwpColumnLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_COLUMN_LAYOUT;}
     sal_uInt32 GetColumnID() const {return ccolid;}
-    double GetWidth() override {return LwpTools::ConvertFromUnitsToMetric(cwidth);}
+    double GetWidth() override { return LwpTools::ConvertFromUnits(cwidth); }
     using LwpVirtualLayout::RegisterStyle;
     void RegisterStyle(double dCalculatedWidth);
     bool IsJustifiable() const {return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}

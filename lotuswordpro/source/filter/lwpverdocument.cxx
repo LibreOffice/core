@@ -93,7 +93,7 @@ void LwpVerDocument::Read()
 void LwpVerDocument::RegisterStyle()
 {
     std::unique_ptr<XFDefaultParaStyle> pDefault(new XFDefaultParaStyle);
-    double len = static_cast<double>(m_nTabSpacing) / UNITS_PER_INCH * CM_PER_INCH;
+    double len = LwpTools::ConvertFromUnits(m_nTabSpacing);
     if (len < 0.001)
     {
         len = 1.27; //0.5 inch

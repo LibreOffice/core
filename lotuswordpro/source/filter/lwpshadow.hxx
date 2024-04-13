@@ -91,12 +91,12 @@ private:
 inline double   LwpShadow::GetOffsetX()
 {
     //  return 0.102;
-    return LwpTools::ConvertFromUnitsToMetric(m_nDirX);
+    return LwpTools::ConvertFromUnits(m_nDirX);
 }
 
 inline double   LwpShadow::GetOffsetY()
 {
-    return LwpTools::ConvertFromUnitsToMetric(m_nDirY);
+    return LwpTools::ConvertFromUnits(m_nDirY);
 }
 
 inline const LwpColor& LwpShadow::GetColor() const

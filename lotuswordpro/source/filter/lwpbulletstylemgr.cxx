@@ -163,12 +163,12 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, const LwpBulletO
             if (pIndent->GetMRest() > 0) /* note: used to be 0.001, no idea why */
             {
                 pListStyle->SetListPosition(nC, 0.0,
-                    LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(pIndent->GetMRest())), 0.0, eAlign);
+                    LwpTools::ConvertFromUnits(pIndent->GetMRest()), 0.0, eAlign);
             }
             else
             {
                 pListStyle->SetListPosition(nC, 0.0,
-                    0.0, LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(pIndent->GetMFirst())), eAlign);
+                    0.0, LwpTools::ConvertFromUnits(pIndent->GetMFirst()), eAlign);
             }
         }
 

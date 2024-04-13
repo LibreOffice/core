@@ -258,7 +258,7 @@ double LwpSuperTableLayout::GetTableWidth()
 
     double dLeft    = GetMarginsValue(MARGIN_LEFT);
     double dRight   = GetMarginsValue(MARGIN_RIGHT);
-    return LwpTools::ConvertFromUnitsToMetric(nWidth)-dLeft-dRight;
+    return LwpTools::ConvertFromUnits(nWidth) - dLeft - dRight;
 
 }
 /**
@@ -342,7 +342,7 @@ void LwpSuperTableLayout::ApplyAlignment(XFTableStyle * pTableStyle)
     LwpPoint aPoint;
     if (LwpLayoutGeometry* pGeometry = GetGeometry())
         aPoint = pGeometry->GetOrigin();
-    double dXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());
+    double dXOffset = LwpTools::ConvertFromUnits(aPoint.GetX());
 
     // add left padding to alignment distance
     double dLeft = GetMarginsValue(MARGIN_LEFT);

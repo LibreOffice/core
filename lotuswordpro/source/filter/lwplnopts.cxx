@@ -78,7 +78,7 @@ void LwpLineNumberOptions::RegisterStyle()
         return;
     XFLineNumberConfig* pLineNumber = new XFLineNumberConfig;
     pLineNumber->SetNumberPosition(enumXFLineNumberLeft);
-    pLineNumber->SetNumberOffset(LwpTools::ConvertFromUnitsToMetric(m_nDistance));
+    pLineNumber->SetNumberOffset(LwpTools::ConvertFromUnits(m_nDistance));
     pLineNumber->SetNumberIncrement(m_nSeparator);
     if (m_nFlags & LN_RESETEACHPAGE)
         pLineNumber->SetRestartOnPage();

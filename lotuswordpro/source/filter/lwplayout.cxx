@@ -131,7 +131,7 @@ double LwpVirtualLayout::GetColGap(sal_uInt16 /*nIndex*/)
 {
     //return DEFAULTGAPSIZE;
     //return LwpTools::ConvertToMetric(0.17);//DEFAULTGAPSIZE=0.17
-    return LwpTools::ConvertToMetric(0.17);
+    return o3tl::convert(0.17, o3tl::Length::in, o3tl::Length::cm);
 }
 
 /**
@@ -662,7 +662,7 @@ double LwpMiddleLayout::GetGeometryHeight()
     LwpLayoutGeometry* pGeo = GetGeometry();
     if (pGeo)
     {
-        return LwpTools::ConvertFromUnitsToMetric(pGeo->GetHeight());
+        return LwpTools::ConvertFromUnits(pGeo->GetHeight());
     }
     else
         return -1;
@@ -677,7 +677,7 @@ double LwpMiddleLayout::GetGeometryWidth()
     LwpLayoutGeometry* pGeo = GetGeometry();
     if (pGeo)
     {
-        return LwpTools::ConvertFromUnitsToMetric(pGeo->GetWidth());
+        return LwpTools::ConvertFromUnits(pGeo->GetWidth());
     }
     else
         return -1;

@@ -122,8 +122,8 @@ void LwpGraphicOleObject::GetGrafScaledSize(double& fWidth, double& fHeight)
         if (pMyScale && pFrameGeo)
         {
             // frame size
-            double fFrameWidth = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetWidth());
-            double fFrameHeight = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetHeight());
+            double fFrameWidth = LwpTools::ConvertFromUnits(pFrameGeo->GetWidth());
+            double fFrameHeight = LwpTools::ConvertFromUnits(pFrameGeo->GetHeight());
 
             // calculate the displayed size of the frame
             double fDisFrameWidth = fFrameWidth - (fLeftMargin + fRightMargin);
@@ -133,8 +133,8 @@ void LwpGraphicOleObject::GetGrafScaledSize(double& fWidth, double& fHeight)
             sal_uInt16 nScalemode = pMyScale->GetScaleMode();
             if (nScalemode & LwpLayoutScale::CUSTOM)
             {
-                fSclGrafWidth = LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
-                fSclGrafHeight = LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
+                fSclGrafWidth = LwpTools::ConvertFromUnits(pMyScale->GetScaleWidth());
+                fSclGrafHeight = LwpTools::ConvertFromUnits(pMyScale->GetScaleHeight());
             }
             else if (nScalemode & LwpLayoutScale::PERCENTAGE)
             {

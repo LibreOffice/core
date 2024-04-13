@@ -424,8 +424,8 @@ void LwpGraphicObject::CreateGrafObject()
         LwpLayoutGeometry* pFrameGeo = pMyFrameLayout->GetGeometry();
 
         // original image size
-        double fOrgGrafWidth = static_cast<double>(m_Cache.Width)/TWIPS_PER_CM;
-        double fOrgGrafHeight = static_cast<double>(m_Cache.Height)/TWIPS_PER_CM;
+        double fOrgGrafWidth = LwpTools::ConvertFromTwips(m_Cache.Width);
+        double fOrgGrafHeight = LwpTools::ConvertFromTwips(m_Cache.Height);
 
         // get margin values
         double fLeftMargin = pMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
@@ -439,8 +439,8 @@ void LwpGraphicObject::CreateGrafObject()
                 throw o3tl::divide_by_zero();
 
             // frame size
-            double fFrameWidth = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetWidth());
-            double fFrameHeight = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetHeight());
+            double fFrameWidth = LwpTools::ConvertFromUnits(pFrameGeo->GetWidth());
+            double fFrameHeight = LwpTools::ConvertFromUnits(pFrameGeo->GetHeight());
 
             // calculate the displayed size of the frame
             double fDisFrameWidth = fFrameWidth - (fLeftMargin+fRightMargin);
@@ -454,8 +454,8 @@ void LwpGraphicObject::CreateGrafObject()
             sal_uInt16 nScalemode = pMyScale->GetScaleMode();
             if (nScalemode & LwpLayoutScale::CUSTOM)
             {
-                fSclGrafWidth = LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
-                fSclGrafHeight = LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
+                fSclGrafWidth = LwpTools::ConvertFromUnits(pMyScale->GetScaleWidth());
+                fSclGrafHeight = LwpTools::ConvertFromUnits(pMyScale->GetScaleHeight());
             }
             else if (nScalemode & LwpLayoutScale::PERCENTAGE)
             {
@@ -544,8 +544,8 @@ void LwpGraphicObject::CreateGrafObject()
 
                 // get image position offset
                 LwpPoint& rOffset = pMyScale->GetOffset();
-                double fOffsetX = LwpTools::ConvertFromUnitsToMetric(rOffset.GetX());
-                double fOffsetY = LwpTools::ConvertFromUnitsToMetric(rOffset.GetY());
+                double fOffsetX = LwpTools::ConvertFromUnits(rOffset.GetX());
+                double fOffsetY = LwpTools::ConvertFromUnits(rOffset.GetY());
 
                 struct LwpRect
                 {
@@ -686,8 +686,8 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 void LwpGraphicObject::GetGrafOrgSize(double & rWidth, double & rHeight)
 {
     // original image size
-    rWidth = static_cast<double>(m_Cache.Width)/TWIPS_PER_CM;
-    rHeight = static_cast<double>(m_Cache.Height)/TWIPS_PER_CM;
+    rWidth = LwpTools::ConvertFromTwips(m_Cache.Width);
+    rHeight = LwpTools::ConvertFromTwips(m_Cache.Height);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

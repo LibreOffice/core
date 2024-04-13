@@ -67,19 +67,11 @@
 #include "localtime.hxx"
 #include "xfilter/xfdatestyle.hxx"
 #include "xfilter/xftimestyle.hxx"
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/textenc.h>
 #include <stdexcept>
 #include <string_view>
 
-// 01/19/2005
-const sal_uInt32 UNITS_PER_INCH = 65536L * 72L;
-const double CM_PER_INCH = 2.54;
-//end
-
-const double POINTS_PER_INCH = 72.27;
-const double TWIPS_PER_POINT = 20.0;
-const double TWIPS_PER_INCH = TWIPS_PER_POINT * POINTS_PER_INCH;
-const double TWIPS_PER_CM = TWIPS_PER_INCH/CM_PER_INCH;
 /**
  * @brief   tool class (unicode, conversion) for lwp filter.
 */
@@ -91,9 +83,8 @@ public:
         OUString& str, sal_uInt16 strlen,  rtl_TextEncoding aEncoding );
     static bool IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len);
 
-    inline static double ConvertFromUnits(sal_Int32 nUnits);
-    inline static double ConvertToMetric(double fInch);
-    inline static double ConvertFromUnitsToMetric(sal_Int32 nUnits);
+    inline static double ConvertFromUnits(double nUnits); // to cm
+    inline static double ConvertFromTwips(double nTwips); // to cm
 
     inline static bool IsOddNumber(sal_uInt16 nNumber);
     inline static bool IsEvenNumber(sal_uInt16 nNumber);
@@ -106,18 +97,20 @@ public:
     static std::unique_ptr<XFTimeStyle> GetSystemTimeStyle();
 };
 
-inline double LwpTools::ConvertFromUnits(sal_Int32 nUnits)
+// Convert from "units" to centimeters
+inline double LwpTools::ConvertFromUnits(double nUnits)
 {
-    return static_cast<double>(nUnits)/UNITS_PER_INCH;
+    constexpr sal_uInt32 UNITS_PER_INCH = 65536 * 72;
+    constexpr auto mdFromIn = o3tl::getConversionMulDiv(o3tl::Length::in, o3tl::Length::cm);
+    constexpr o3tl::detail::m_and_d md(mdFromIn.first, mdFromIn.second * UNITS_PER_INCH);
+    return o3tl::convert(nUnits, md.m, md.d);
 }
-inline double LwpTools::ConvertToMetric(double fInch)
+// Convert from twips to centimeters, using definition of point = 72.27 in
+inline double LwpTools::ConvertFromTwips(double nTwips)
 {
-    return fInch*CM_PER_INCH;
-}
-inline double LwpTools::ConvertFromUnitsToMetric(sal_Int32 nUnits)
-{
-    double fInch = ConvertFromUnits(nUnits);
-    return ConvertToMetric(fInch);
+    constexpr auto mdFromIn = o3tl::getConversionMulDiv(o3tl::Length::in, o3tl::Length::cm);
+    constexpr o3tl::detail::m_and_d md(mdFromIn.first * 100, mdFromIn.second * 7227 * 20);
+    return o3tl::convert(nTwips, md.m, md.d);
 }
 inline bool LwpTools::IsOddNumber(sal_uInt16 nNumber)
 {

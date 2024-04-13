@@ -438,18 +438,18 @@ inline double LwpIndentOverride::GetFirst() const
     sal_Int32 nRes;
     if (o3tl::checked_sub(m_nFirst, m_nRest, nRes))
         throw std::range_error("bad len");
-    return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(nRes));
+    return LwpTools::ConvertFromUnits(nRes);
 }
 inline double LwpIndentOverride::GetLeft() const
 {
     sal_Int32 nRes;
     if (o3tl::checked_add(m_nAll, m_nRest, nRes))
         throw std::range_error("bad len");
-    return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(nRes));
+    return LwpTools::ConvertFromUnits(nRes);
 }
 inline double LwpIndentOverride::GetRight() const
 {
-    return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nRight));
+    return LwpTools::ConvertFromUnits(m_nRight);
 }
 
 class LwpBackgroundStuff;
