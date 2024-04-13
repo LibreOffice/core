@@ -29,6 +29,56 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+@implementation PasteboardChangedEventListener
+
+- (PasteboardChangedEventListener*)initWithiOSClipboard:(iOSClipboard*)pcb
+{
+    self = [super init];
+
+    if (self)
+    {
+        // Just to be safe, set clipboard to a nullptr to ignore any
+        // synchronous callbacks that might occur when adding the observer
+        piOSClipboard = nullptr;
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(pasteboardChanged:)
+                                                     name:UIPasteboardChangedNotification
+                                                   object:[UIPasteboard generalPasteboard]];
+
+        // According to following, no UIPasteboardChangedNotification
+        // notifications are received when an app is not active. So, post the
+        // notification so that the LibreOffice vcl/ios code can handle any
+        // clipboard changes:
+        //   https://stackoverflow.com/questions/4240087/receiving-uipasteboard-generalpasteboard-notification-while-in-the-background
+        // Note: UIApplicationDidBecomeActiveNotification is never sent when
+        // running in Mac Catalyst so listen for UISceneDidActivateNotification
+        // instead.
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(pasteboardChanged:)
+                                                     name:UISceneDidActivateNotification
+                                                   object:nil];
+
+        piOSClipboard = pcb;
+    }
+
+    return self;
+}
+
+- (void)pasteboardChanged:(NSNotification*)aNotification
+{
+    if (piOSClipboard)
+        piOSClipboard->contentsChanged();
+}
+
+- (void)disposing
+{
+    piOSClipboard = nullptr;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+@end
+
 iOSClipboard::iOSClipboard()
     : WeakComponentImplHelper<XSystemClipboard, XServiceInfo>(m_aMutex)
 {
@@ -37,9 +87,17 @@ iOSClipboard::iOSClipboard()
     mrXMimeCntFactory = css::datatransfer::MimeContentTypeFactory::create(xContext);
 
     mpDataFlavorMapper.reset(new DataFlavorMapper());
+
+    mnPasteboardChangeCount = 0;
+    mpPasteboardChangedEventListener =
+        [[PasteboardChangedEventListener alloc] initWithiOSClipboard:this];
 }
 
-iOSClipboard::~iOSClipboard() {}
+iOSClipboard::~iOSClipboard()
+{
+    [mpPasteboardChangedEventListener disposing];
+    [mpPasteboardChangedEventListener release];
+}
 
 css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL iOSClipboard::getContents()
 {
@@ -171,6 +229,23 @@ sal_Bool SAL_CALL iOSClipboard::supportsService(const OUString& ServiceName)
 css::uno::Sequence<OUString> SAL_CALL iOSClipboard::getSupportedServiceNames()
 {
     return { OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") };
+}
+
+void iOSClipboard::contentsChanged()
+{
+    NSInteger nPasteboardChangeCount = [[UIPasteboard generalPasteboard] changeCount];
+    if (mnPasteboardChangeCount != nPasteboardChangeCount)
+    {
+        // cool#5839 fire a clipboard changed event in the iOS app
+        // A clipboard changed event needs to be fired whenever the
+        // native general pasteboard changes. Otherwise, if the clipboard
+        // is empty when a document is opened, the Paste and Paste Special
+        // menu items and toolbar buttons will be disabled and will never
+        // be enabled even after something has been copied to the general
+        // pasteboard.
+        mnPasteboardChangeCount = nPasteboardChangeCount;
+        fireClipboardChangedEvent(getContents());
+    }
 }
 
 css::uno::Reference<css::uno::XInterface>
