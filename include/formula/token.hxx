@@ -186,6 +186,7 @@ public:
     }
 
     void SetRefCntPolicy(RefCntPolicy ePolicy) { eRefCntPolicy = ePolicy; }
+    RefCntPolicy GetRefCntPolicy() const { return eRefCntPolicy; }
 
     oslInterlockedCount GetRef() const       { return mnRefCnt; }
     OpCode              GetOpCode() const    { return eOp; }

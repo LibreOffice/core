@@ -62,6 +62,7 @@ class ScFormulaResult
         const formula::FormulaToken*  mpToken;    // if not, result token obtained from interpreter
     };
     bool                mbToken :1; // whether content of union is a token
+    bool                mbNoneRefCnt :1; // if token was added when using RefCntPolicy::None
     bool                mbEmpty :1; // empty cell result
     bool                mbEmptyDisplayedAsString :1;    // only if mbEmpty
     // If set it implies that the result is a simple double (in mfValue) and no error
@@ -208,6 +209,8 @@ public:
     /** Get the ScMatrixFormulaCellToken* if token is of that type, else NULL.
         Shouldn't be used externally except by ScFormulaCell::SetMatColsRows(). */
     ScMatrixFormulaCellToken* GetMatrixFormulaCellTokenNonConst();
+
+    void HandleStuffAfterParallelCalculation();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

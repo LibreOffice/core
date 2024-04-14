@@ -2337,6 +2337,8 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
 
 void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpreter)
 {
+    aResult.HandleStuffAfterParallelCalculation();
+
     if( !pCode->GetCodeLen() )
         return;
 
