@@ -338,7 +338,7 @@ BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer
         if (aBitmapEx.IsEmpty())
             return BitmapEx();
         aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-        aBitmapEx.SetPrefSize(Size(basegfx::fround(fWidth), basegfx::fround(fHeight)));
+        aBitmapEx.SetPrefSize(Size(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight)));
 
         return aBitmapEx;
     }

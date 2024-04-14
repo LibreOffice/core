@@ -830,8 +830,8 @@ namespace vclcanvas
 
                 // output GraphicObject
                 const ::Point aPt( vcl::unotools::pointFromB2DPoint( aOutputPos ) );
-                const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width() ),
-                                   ::basegfx::fround( aScale.getY() * aBmpSize.Height() ) );
+                const ::Size  aSz( ::basegfx::fround<::tools::Long>( aScale.getX() * aBmpSize.Width() ),
+                                   ::basegfx::fround<::tools::Long>( aScale.getY() * aBmpSize.Height() ) );
 
                 pGrfObj->Draw(mpOutDevProvider->getOutDev(),
                               aPt,

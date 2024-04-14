@@ -2656,8 +2656,8 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
 
         if(nSrcWidth && nSrcHeight)
         {
-            const tools::Long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
-            const tools::Long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
+            const tools::Long nDestWidth(basegfx::fround<tools::Long>(basegfx::B2DVector(rX - rNull).getLength()));
+            const tools::Long nDestHeight(basegfx::fround<tools::Long>(basegfx::B2DVector(rY - rNull).getLength()));
 
             if(nDestWidth && nDestHeight)
             {

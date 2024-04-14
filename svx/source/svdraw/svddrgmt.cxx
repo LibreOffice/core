@@ -3771,15 +3771,15 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
         // extract the old Rectangle structures
         tools::Rectangle aOldRect(
-            basegfx::fround(aRangeOriginalNoShearNoRotate.getMinX()),
-            basegfx::fround(aRangeOriginalNoShearNoRotate.getMinY()),
-            basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxX()),
-            basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxY()));
+            basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMinX()),
+            basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMinY()),
+            basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMaxX()),
+            basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMaxY()));
         tools::Rectangle aNewRect(
-            basegfx::fround(aRangeNewNoShearNoRotate.getMinX()),
-            basegfx::fround(aRangeNewNoShearNoRotate.getMinY()),
-            basegfx::fround(aRangeNewNoShearNoRotate.getMaxX()),
-            basegfx::fround(aRangeNewNoShearNoRotate.getMaxY()));
+            basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMinX()),
+            basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMinY()),
+            basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMaxX()),
+            basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMaxY()));
 
         // continue with the old original stuff
         if (!aOldRect.GetWidth() || !aOldRect.GetHeight())

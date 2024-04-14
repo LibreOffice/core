@@ -179,10 +179,10 @@ SwRect TransformableSwFrame::getUntransformedFrameArea() const
         const basegfx::B2DVector aAbsScale(basegfx::absolute(aScale));
 
         return SwRect(
-            basegfx::fround(aCenter.getX() - (0.5 * aAbsScale.getX())),
-            basegfx::fround(aCenter.getY() - (0.5 * aAbsScale.getY())),
-            basegfx::fround(aAbsScale.getX()),
-            basegfx::fround(aAbsScale.getY()));
+            basegfx::fround<tools::Long>(aCenter.getX() - (0.5 * aAbsScale.getX())),
+            basegfx::fround<tools::Long>(aCenter.getY() - (0.5 * aAbsScale.getY())),
+            basegfx::fround<tools::Long>(aAbsScale.getX()),
+            basegfx::fround<tools::Long>(aAbsScale.getY()));
     }
 }
 
@@ -204,10 +204,10 @@ SwRect TransformableSwFrame::getUntransformedFramePrintArea() const
         const SwRect aUntransformedFrameArea(getUntransformedFrameArea());
 
         return SwRect(
-            basegfx::fround(aCenter.getX() - (0.5 * aAbsScale.getX())) - aUntransformedFrameArea.Left(),
-            basegfx::fround(aCenter.getY() - (0.5 * aAbsScale.getY())) - aUntransformedFrameArea.Top(),
-            basegfx::fround(aAbsScale.getX()),
-            basegfx::fround(aAbsScale.getY()));
+            basegfx::fround<tools::Long>(aCenter.getX() - (0.5 * aAbsScale.getX())) - aUntransformedFrameArea.Left(),
+            basegfx::fround<tools::Long>(aCenter.getY() - (0.5 * aAbsScale.getY())) - aUntransformedFrameArea.Top(),
+            basegfx::fround<tools::Long>(aAbsScale.getX()),
+            basegfx::fround<tools::Long>(aAbsScale.getY()));
     }
 }
 
@@ -238,8 +238,8 @@ void TransformableSwFrame::adaptFrameAreasToTransformations()
         basegfx::B2DRange aRangeFrameArea(0.0, 0.0, 1.0, 1.0);
         aRangeFrameArea.transform(getLocalFrameAreaTransformation());
         const SwRect aNewFrm(
-            basegfx::fround(aRangeFrameArea.getMinX()), basegfx::fround(aRangeFrameArea.getMinY()),
-            basegfx::fround(aRangeFrameArea.getWidth()), basegfx::fround(aRangeFrameArea.getHeight()));
+            basegfx::fround<tools::Long>(aRangeFrameArea.getMinX()), basegfx::fround<tools::Long>(aRangeFrameArea.getMinY()),
+            basegfx::fround<tools::Long>(aRangeFrameArea.getWidth()), basegfx::fround<tools::Long>(aRangeFrameArea.getHeight()));
 
         if(aNewFrm != mrSwFrameAreaDefinition.getFrameArea())
         {
@@ -254,10 +254,10 @@ void TransformableSwFrame::adaptFrameAreasToTransformations()
     basegfx::B2DRange aRangeFramePrintArea(0.0, 0.0, 1.0, 1.0);
     aRangeFramePrintArea.transform(getLocalFramePrintAreaTransformation());
     const SwRect aNewPrt(
-        basegfx::fround(aRangeFramePrintArea.getMinX()) - mrSwFrameAreaDefinition.getFrameArea().Left(),
-        basegfx::fround(aRangeFramePrintArea.getMinY()) - mrSwFrameAreaDefinition.getFrameArea().Top(),
-        basegfx::fround(aRangeFramePrintArea.getWidth()),
-        basegfx::fround(aRangeFramePrintArea.getHeight()));
+        basegfx::fround<tools::Long>(aRangeFramePrintArea.getMinX()) - mrSwFrameAreaDefinition.getFrameArea().Left(),
+        basegfx::fround<tools::Long>(aRangeFramePrintArea.getMinY()) - mrSwFrameAreaDefinition.getFrameArea().Top(),
+        basegfx::fround<tools::Long>(aRangeFramePrintArea.getWidth()),
+        basegfx::fround<tools::Long>(aRangeFramePrintArea.getHeight()));
 
     if(aNewPrt != mrSwFrameAreaDefinition.getFramePrintArea())
     {

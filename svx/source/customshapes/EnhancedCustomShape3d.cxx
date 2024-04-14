@@ -499,7 +499,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
                 }
 
                 const basegfx::B2DRange aTempRange(basegfx::utils::getRange(aPolyPoly));
-                const tools::Rectangle aBoundRect(basegfx::fround(aTempRange.getMinX()), basegfx::fround(aTempRange.getMinY()), basegfx::fround(aTempRange.getMaxX()), basegfx::fround(aTempRange.getMaxY()));
+                const tools::Rectangle aBoundRect(basegfx::fround<tools::Long>(aTempRange.getMinX()), basegfx::fround<tools::Long>(aTempRange.getMinY()), basegfx::fround<tools::Long>(aTempRange.getMaxX()), basegfx::fround<tools::Long>(aTempRange.getMaxY()));
                 aTotalPolyPoly.append(aPolyPoly);
                 aBoundRect2d.Union( aBoundRect );
 

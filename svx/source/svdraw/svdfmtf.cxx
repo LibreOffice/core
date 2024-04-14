@@ -572,11 +572,11 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj1, bool bScale)
 
                         const Size aOrigSizePixel(aBitmapEx.GetSizePixel());
                         const Point aClipTopLeft(
-                            basegfx::fround(floor(std::max(0.0, aPixel.getMinX()))),
-                            basegfx::fround(floor(std::max(0.0, aPixel.getMinY()))));
+                            basegfx::fround<tools::Long>(floor(std::max(0.0, aPixel.getMinX()))),
+                            basegfx::fround<tools::Long>(floor(std::max(0.0, aPixel.getMinY()))));
                         const Size aClipSize(
-                            basegfx::fround(ceil(std::min(static_cast<double>(aOrigSizePixel.Width()), aPixel.getWidth()))),
-                            basegfx::fround(ceil(std::min(static_cast<double>(aOrigSizePixel.Height()), aPixel.getHeight()))));
+                            basegfx::fround<tools::Long>(ceil(std::min(static_cast<double>(aOrigSizePixel.Width()), aPixel.getWidth()))),
+                            basegfx::fround<tools::Long>(ceil(std::min(static_cast<double>(aOrigSizePixel.Height()), aPixel.getHeight()))));
                         const BitmapEx aClippedBitmap(
                             aBitmapEx,
                             aClipTopLeft,

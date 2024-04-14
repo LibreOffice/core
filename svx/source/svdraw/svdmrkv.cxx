@@ -1589,8 +1589,8 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                 // build handles
-                const Point aTmpPos1(basegfx::fround(aGradTransVector.maPositionA.getX()), basegfx::fround(aGradTransVector.maPositionA.getY()));
-                const Point aTmpPos2(basegfx::fround(aGradTransVector.maPositionB.getX()), basegfx::fround(aGradTransVector.maPositionB.getY()));
+                const Point aTmpPos1(basegfx::fround<tools::Long>(aGradTransVector.maPositionA.getX()), basegfx::fround<tools::Long>(aGradTransVector.maPositionA.getY()));
+                const Point aTmpPos2(basegfx::fround<tools::Long>(aGradTransVector.maPositionB.getX()), basegfx::fround<tools::Long>(aGradTransVector.maPositionB.getY()));
                 std::unique_ptr<SdrHdlColor> pColHdl1(new SdrHdlColor(aTmpPos1, aGradTransVector.aCol1, SDR_HANDLE_COLOR_SIZE_NORMAL, true));
                 std::unique_ptr<SdrHdlColor> pColHdl2(new SdrHdlColor(aTmpPos2, aGradTransVector.aCol2, SDR_HANDLE_COLOR_SIZE_NORMAL, true));
                 std::unique_ptr<SdrHdlGradient> pGradHdl(new SdrHdlGradient(aTmpPos1, aTmpPos2, false));
@@ -1630,8 +1630,8 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                     // build handles
-                    const Point aTmpPos1(basegfx::fround(aGradTransVector.maPositionA.getX()), basegfx::fround(aGradTransVector.maPositionA.getY()));
-                    const Point aTmpPos2(basegfx::fround(aGradTransVector.maPositionB.getX()), basegfx::fround(aGradTransVector.maPositionB.getY()));
+                    const Point aTmpPos1(basegfx::fround<tools::Long>(aGradTransVector.maPositionA.getX()), basegfx::fround<tools::Long>(aGradTransVector.maPositionA.getY()));
+                    const Point aTmpPos2(basegfx::fround<tools::Long>(aGradTransVector.maPositionB.getX()), basegfx::fround<tools::Long>(aGradTransVector.maPositionB.getY()));
                     std::unique_ptr<SdrHdlColor> pColHdl1(new SdrHdlColor(aTmpPos1, aGradTransVector.aCol1, aHdlSize, false));
                     std::unique_ptr<SdrHdlColor> pColHdl2(new SdrHdlColor(aTmpPos2, aGradTransVector.aCol2, aHdlSize, false));
                     std::unique_ptr<SdrHdlGradient> pGradHdl(new SdrHdlGradient(aTmpPos1, aTmpPos2, true));
@@ -2317,8 +2317,8 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     if(getPossibleGridOffsetForSdrObject(aGridOffset, pObj, pPV))
     {
         aRect += Point(
-            basegfx::fround(aGridOffset.getX()),
-            basegfx::fround(aGridOffset.getY()));
+            basegfx::fround<tools::Long>(aGridOffset.getX()),
+            basegfx::fround<tools::Long>(aGridOffset.getY()));
     }
 
     sal_uInt16 nTol2(nTol);

@@ -1431,19 +1431,19 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
             if(count == 0)
             {
                 Size aSize ( aTitleRect.GetSize() );
-                aSize.setHeight( basegfx::fround(aSize.Height() * propvalue[0]) );
-                aSize.setWidth( basegfx::fround(aSize.Width() * propvalue[1]) );
-                Point aPos( basegfx::fround(aTitlePos.X() +(aSize.Width() * propvalue[2])),
-                            basegfx::fround(aTitlePos.Y() + (aSize.Height() * propvalue[3])) );
+                aSize.setHeight( basegfx::fround<::tools::Long>(aSize.Height() * propvalue[0]) );
+                aSize.setWidth( basegfx::fround<::tools::Long>(aSize.Width() * propvalue[1]) );
+                Point aPos( basegfx::fround<::tools::Long>(aTitlePos.X() +(aSize.Width() * propvalue[2])),
+                            basegfx::fround<::tools::Long>(aTitlePos.Y() + (aSize.Height() * propvalue[3])) );
                 rRectangle[count] = ::tools::Rectangle(aPos, aSize);
                 count = count+1;
             }
             else
             {
-                Size aSize( basegfx::fround(aLayoutSize.Width() * propvalue[1]),
-                            basegfx::fround(aLayoutSize.Height() * propvalue[0]) );
-                Point aPos( basegfx::fround(aLayoutPos.X() +(aSize.Width() * propvalue[2])),
-                            basegfx::fround(aLayoutPos.Y() + (aSize.Height() * propvalue[3])) );
+                Size aSize( basegfx::fround<::tools::Long>(aLayoutSize.Width() * propvalue[1]),
+                            basegfx::fround<::tools::Long>(aLayoutSize.Height() * propvalue[0]) );
+                Point aPos( basegfx::fround<::tools::Long>(aLayoutPos.X() +(aSize.Width() * propvalue[2])),
+                            basegfx::fround<::tools::Long>(aLayoutPos.Y() + (aSize.Height() * propvalue[3])) );
                 rRectangle[count] = ::tools::Rectangle (aPos, aSize);
                 count = count+1;
             }

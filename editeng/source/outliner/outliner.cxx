@@ -889,8 +889,8 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
     tools::Rectangle aBulletArea( ImpCalcBulletArea( nPara, true, false ) );
     double nStretchX, nStretchY;
     GetGlobalCharStretching(nStretchX, nStretchY);
-    tools::Long nStretchBulletX = basegfx::fround(double(aBulletArea.Left()) * nStretchX / 100.0);
-    tools::Long nStretchBulletWidth = basegfx::fround(double(aBulletArea.GetWidth()) * nStretchX / 100.0);
+    tools::Long nStretchBulletX = basegfx::fround<tools::Long>(double(aBulletArea.Left()) * nStretchX / 100.0);
+    tools::Long nStretchBulletWidth = basegfx::fround<tools::Long>(double(aBulletArea.GetWidth()) * nStretchX / 100.0);
     aBulletArea = tools::Rectangle(Point(nStretchBulletX, aBulletArea.Top()),
                              Size(nStretchBulletWidth, aBulletArea.GetHeight()) );
 
