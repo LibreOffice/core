@@ -1077,8 +1077,8 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     // the object as we want to maintain page anchoring )
     ScDrawObjData aAnchor;
     const tools::Rectangle aRectangle(
-        basegfx::fround(rB2DRange.getMinX()), basegfx::fround(rB2DRange.getMinY()),
-        basegfx::fround(rB2DRange.getMaxX()), basegfx::fround(rB2DRange.getMaxY()));
+        basegfx::fround<tools::Long>(rB2DRange.getMinX()), basegfx::fround<tools::Long>(rB2DRange.getMinY()),
+        basegfx::fround<tools::Long>(rB2DRange.getMaxX()), basegfx::fround<tools::Long>(rB2DRange.getMaxY()));
     ScDrawLayer::GetCellAnchorFromPosition(
         aRectangle,
         aAnchor,

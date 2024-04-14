@@ -1055,7 +1055,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernAr
     if (mbMap)
         nWidth = ImplDevicePixelToLogicWidth( nWidth );
 
-    return nWidth;
+    return basegfx::fround<tools::Long>(nWidth);
 #endif /* VCL_FLOAT_DEVICE_PIXEL */
 }
 

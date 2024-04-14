@@ -44,7 +44,7 @@ namespace vclcanvas
         CanvasFont_Base( m_aMutex ),
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
-                      Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
+                      Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
         mpRefDevice( &rDevice ),
         mpOutDevProvider( rOutDevProvider ),

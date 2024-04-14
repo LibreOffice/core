@@ -276,8 +276,8 @@ void SdrObjEditView::ModelHasChanged()
             basegfx::B2DVector aGridOffset(0.0, 0.0);
             if (getPossibleGridOffsetForSdrObject(aGridOffset, pTextObj.get(), GetSdrPageView()))
             {
-                const Point aOffset(basegfx::fround(aGridOffset.getX()),
-                                    basegfx::fround(aGridOffset.getY()));
+                const Point aOffset(basegfx::fround<tools::Long>(aGridOffset.getX()),
+                                    basegfx::fround<tools::Long>(aGridOffset.getY()));
 
                 aEditArea1 += aOffset;
                 aMinArea1 += aOffset;
@@ -1357,8 +1357,8 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             basegfx::B2DVector aGridOffset(0.0, 0.0);
             if (getPossibleGridOffsetForSdrObject(aGridOffset, pTextObj.get(), pPV))
             {
-                const Point aOffset(basegfx::fround(aGridOffset.getX()),
-                                    basegfx::fround(aGridOffset.getY()));
+                const Point aOffset(basegfx::fround<tools::Long>(aGridOffset.getX()),
+                                    basegfx::fround<tools::Long>(aGridOffset.getY()));
 
                 aTextEditArea += aOffset;
                 aMinTextEditArea += aOffset;

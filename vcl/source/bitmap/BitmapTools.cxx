@@ -436,8 +436,8 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                         ::basegfx::B2DPoint aPoint(x,y);
                         aPoint *= aTransform;
 
-                        const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
-                        const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
+                        const tools::Long nSrcX( ::basegfx::fround<tools::Long>( aPoint.getX() ) );
+                        const tools::Long nSrcY( ::basegfx::fround<tools::Long>( aPoint.getY() ) );
                         if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                             nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                         {
@@ -460,8 +460,8 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                         ::basegfx::B2DPoint aPoint(x,y);
                         aPoint *= aTransform;
 
-                        const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
-                        const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
+                        const tools::Long nSrcX( ::basegfx::fround<tools::Long>( aPoint.getX() ) );
+                        const tools::Long nSrcY( ::basegfx::fround<tools::Long>( aPoint.getY() ) );
                         if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                             nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                         {

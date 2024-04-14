@@ -576,13 +576,13 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
 
                 if(fWH <= 1.0)
                 {
-                    aDrawSize.setWidth(basegfx::fround(GRAPHIC_MTFTOBMP_MAXEXT * fWH));
+                    aDrawSize.setWidth(basegfx::fround<tools::Long>(GRAPHIC_MTFTOBMP_MAXEXT * fWH));
                     aDrawSize.setHeight(GRAPHIC_MTFTOBMP_MAXEXT);
                 }
                 else
                 {
                     aDrawSize.setWidth(GRAPHIC_MTFTOBMP_MAXEXT);
-                    aDrawSize.setHeight(basegfx::fround(GRAPHIC_MTFTOBMP_MAXEXT / fWH));
+                    aDrawSize.setHeight(basegfx::fround<tools::Long>(GRAPHIC_MTFTOBMP_MAXEXT / fWH));
                 }
             }
 
@@ -804,7 +804,7 @@ Size ImpGraphic::getPrefSize() const
                            aSize = Size(basegfx::fround(rRange.getWidth() / 20.0f), basegfx::fround(rRange.getHeight() / 20.0f));
                         else
 #endif
-                        aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
+                            aSize = Size(basegfx::fround<tools::Long>(rRange.getWidth()), basegfx::fround<tools::Long>(rRange.getHeight()));
                     }
                     else
                     {

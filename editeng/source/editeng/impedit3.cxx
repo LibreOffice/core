@@ -1051,7 +1051,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         tools::Long nCurPos = nTmpWidth+nStartX;
                         // consider scaling
                         if ( aStatus.DoStretch() && ( mnStretchX != 100.0 ) )
-                            nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(mnStretchX, 1.0));
+                            nCurPos = basegfx::fround<tools::Long>(double(nCurPos) * 100.0 / std::max(mnStretchX, 1.0));
 
                         short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTextLeft()/* + rLRItem.GetTextLeft()*/ + nSpaceBeforeAndMinLabelWidth);
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, aEditDoc.GetDefTab() );
@@ -2993,7 +2993,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
             if (mnStretchY != 100.0)
             {
                 double fNewHeight = (double(aRealSz.Height()) * mnStretchY) / 100.0;
-                aRealSz.setHeight(basegfx::fround(fNewHeight));
+                aRealSz.setHeight(basegfx::fround<tools::Long>(fNewHeight));
             }
             if (mnStretchX != 100.0)
             {
@@ -3004,7 +3004,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                 else
                 {
                     double fNewWidth = (double(aRealSz.Width()) * mnStretchX) / 100.0;
-                    aRealSz.setWidth(basegfx::fround(fNewWidth));
+                    aRealSz.setWidth(basegfx::fround<tools::Long>(fNewWidth));
 
                     // Also the Kerning: (long due to handle Interim results)
                     tools::Long nKerning = rFont.GetFixKerning();

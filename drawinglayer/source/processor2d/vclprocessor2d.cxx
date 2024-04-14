@@ -375,15 +375,17 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                                              fIgnoreShearX);
 
                 const Point aOrigin(
-                    basegfx::fround(aCurrentTranslate.getX() / aCurrentScaling.getX()),
-                    basegfx::fround(aCurrentTranslate.getY() / aCurrentScaling.getY()));
+                    basegfx::fround<tools::Long>(aCurrentTranslate.getX() / aCurrentScaling.getX()),
+                    basegfx::fround<tools::Long>(aCurrentTranslate.getY()
+                                                 / aCurrentScaling.getY()));
                 MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin,
                                  Fraction(aCurrentScaling.getX()),
                                  Fraction(aCurrentScaling.getY()));
 
                 if (fCurrentRotate)
                     aTextTranslate *= basegfx::utils::createRotateB2DHomMatrix(fCurrentRotate);
-                aStartPoint = Point(aTextTranslate.getX(), aTextTranslate.getY());
+                aStartPoint = Point(basegfx::fround<tools::Long>(aTextTranslate.getX()),
+                                    basegfx::fround<tools::Long>(aTextTranslate.getY()));
 
                 bChangeMapMode = aMapMode != mpOutputDevice->GetMapMode();
                 if (bChangeMapMode)
@@ -395,7 +397,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             else
             {
                 const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
-                aStartPoint = Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
+                aStartPoint = Point(basegfx::fround<tools::Long>(aPoint.getX()),
+                                    basegfx::fround<tools::Long>(aPoint.getY()));
             }
 
             // tdf#152990 set the font after the MapMode is (potentially) set so canvas uses the desired
@@ -1049,8 +1052,8 @@ void VclProcessor2D::RenderMarkerArrayPrimitive2D(
     {
         const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * pos)
                                                  - aDiscreteHalfSize);
-        const Point aDiscretePoint(basegfx::fround(aDiscreteTopLeft.getX()),
-                                   basegfx::fround(aDiscreteTopLeft.getY()));
+        const Point aDiscretePoint(basegfx::fround<tools::Long>(aDiscreteTopLeft.getX()),
+                                   basegfx::fround<tools::Long>(aDiscreteTopLeft.getY()));
 
         mpOutputDevice->DrawBitmapEx(aDiscretePoint + aOrigin, rMarker);
     }
@@ -1070,8 +1073,8 @@ void VclProcessor2D::RenderPointArrayPrimitive2D(
     for (auto const& pos : rPositions)
     {
         const basegfx::B2DPoint aViewPosition(maCurrentTransformation * pos);
-        const Point aPos(basegfx::fround(aViewPosition.getX()),
-                         basegfx::fround(aViewPosition.getY()));
+        const Point aPos(basegfx::fround<tools::Long>(aViewPosition.getX()),
+                         basegfx::fround<tools::Long>(aViewPosition.getY()));
 
         mpOutputDevice->DrawPixel(aPos, aVCLColor);
     }

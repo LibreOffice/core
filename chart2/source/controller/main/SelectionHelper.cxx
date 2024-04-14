@@ -596,7 +596,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
                 for( sal_uInt32 nM = 0; nM < aPolygon.count(); nM++)
                 {
                     const ::basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(nM));
-                    rHdlList.AddHdl(std::make_unique<SdrHdl>(Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY())), SdrHdlKind::Poly));
+                    rHdlList.AddHdl(std::make_unique<SdrHdl>(Point(basegfx::fround<tools::Long>(aPoint.getX()), basegfx::fround<tools::Long>(aPoint.getY())), SdrHdlKind::Poly));
                 }
             }
             return true;
