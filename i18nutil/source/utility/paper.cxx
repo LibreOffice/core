@@ -22,7 +22,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>
-#include <sal/config.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
