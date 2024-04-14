@@ -429,12 +429,12 @@ void FrameSelectorImpl::InitBorderGeometry()
         {
             const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
             const tools::Rectangle aRect(
-                basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
-                basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
+                basegfx::fround<tools::Long>(aCellRange.getMinX()), basegfx::fround<tools::Long>(aCellRange.getMinY()),
+                basegfx::fround<tools::Long>(aCellRange.getMaxX()), basegfx::fround<tools::Long>(aCellRange.getMaxY()));
             const double fHorDiagAngle(atan2(fabs(aCellRange.getHeight()), fabs(aCellRange.getWidth())));
             const double fVerDiagAngle(fHorDiagAngle > 0.0 ? M_PI_2 - fHorDiagAngle : 0.0);
-            const tools::Long nDiagFocusOffsX(basegfx::fround(-mnFocusOffs / tan(fHorDiagAngle) + mnFocusOffs / sin(fHorDiagAngle)));
-            const tools::Long nDiagFocusOffsY(basegfx::fround(-mnFocusOffs / tan(fVerDiagAngle) + mnFocusOffs / sin(fVerDiagAngle)));
+            const tools::Long nDiagFocusOffsX(basegfx::fround<tools::Long>(-mnFocusOffs / tan(fHorDiagAngle) + mnFocusOffs / sin(fHorDiagAngle)));
+            const tools::Long nDiagFocusOffsY(basegfx::fround<tools::Long>(-mnFocusOffs / tan(fVerDiagAngle) + mnFocusOffs / sin(fVerDiagAngle)));
 
             std::vector< Point > aFocusVec;
             aFocusVec.emplace_back( aRect.Left()  - mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY );
@@ -489,8 +489,8 @@ void FrameSelectorImpl::InitBorderGeometry()
             // the usable area between horizontal/vertical frame borders of current quadrant
             const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
             const tools::Rectangle aRect(
-                basegfx::fround(aCellRange.getMinX()) + nClV + 1, basegfx::fround(aCellRange.getMinY()) + nClH + 1,
-                basegfx::fround(aCellRange.getMaxX()) - nClV + 1, basegfx::fround(aCellRange.getMaxY()) - nClH + 1);
+                basegfx::fround<tools::Long>(aCellRange.getMinX()) + nClV + 1, basegfx::fround<tools::Long>(aCellRange.getMinY()) + nClH + 1,
+                basegfx::fround<tools::Long>(aCellRange.getMaxX()) - nClV + 1, basegfx::fround<tools::Long>(aCellRange.getMaxY()) - nClH + 1);
 
             /*  Both diagonal frame borders enabled. */
             if( mbTLBR && mbBLTR )

@@ -595,8 +595,8 @@ EventMultiplexerImpl::toNormalPoint(uno::Reference<presentation::XSlideShowView>
     basegfx::B2DHomMatrix aMatrix((*aIter)->getTransformation());
     aPosition *= aMatrix;
 
-    aPosition.setX(basegfx::fround(aPosition.getX()));
-    aPosition.setY(basegfx::fround(aPosition.getY()));
+    aPosition.setX(std::round(aPosition.getX()));
+    aPosition.setY(std::round(aPosition.getY()));
     return aPosition;
 }
 
@@ -621,8 +621,8 @@ EventMultiplexerImpl::toMatrixPoint(uno::Reference<presentation::XSlideShowView>
                                " view matrix singular");
     aPosition *= aMatrix;
 
-    aPosition.setX(basegfx::fround(aPosition.getX()));
-    aPosition.setY(basegfx::fround(aPosition.getY()));
+    aPosition.setX(std::round(aPosition.getX()));
+    aPosition.setY(std::round(aPosition.getY()));
     return aPosition;
 }
 

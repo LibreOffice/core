@@ -1245,8 +1245,8 @@ tools::Rectangle vcl::Region::GetBoundRect() const
         {
             // #i122149# corrected rounding, no need for ceil() and floor() here
             return tools::Rectangle(
-                basegfx::fround(aRange.getMinX()), basegfx::fround(aRange.getMinY()),
-                basegfx::fround(aRange.getMaxX()), basegfx::fround(aRange.getMaxY()));
+                basegfx::fround<tools::Long>(aRange.getMinX()), basegfx::fround<tools::Long>(aRange.getMinY()),
+                basegfx::fround<tools::Long>(aRange.getMaxX()), basegfx::fround<tools::Long>(aRange.getMaxY()));
         }
     }
 

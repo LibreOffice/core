@@ -50,8 +50,10 @@ bool renderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWron
                                    * basegfx::B2DPoint(rWrongSpellCandidate.getStart(), 0.0));
     const basegfx::B2DPoint aStop(aLocalTransform
                                   * basegfx::B2DPoint(rWrongSpellCandidate.getStop(), 0.0));
-    const Point aVclStart(basegfx::fround(aStart.getX()), basegfx::fround(aStart.getY()));
-    const Point aVclStop(basegfx::fround(aStop.getX()), basegfx::fround(aStop.getY()));
+    const Point aVclStart(basegfx::fround<tools::Long>(aStart.getX()),
+                          basegfx::fround<tools::Long>(aStart.getY()));
+    const Point aVclStop(basegfx::fround<tools::Long>(aStop.getX()),
+                         basegfx::fround<tools::Long>(aStop.getY()));
 
     // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
     // e.g. when used with mask/transparence buffer device

@@ -109,10 +109,10 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
     xmlDocUniquePtr pXmlDoc = load("pptx/tdf128212.pptx");
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 7792
+    // - Expected: 7793
     // - Actual  : 12068
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray"_ostr, "x"_ostr, "4520");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray"_ostr, "y"_ostr, "7792");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray"_ostr, "x"_ostr, "4521");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray"_ostr, "y"_ostr, "7793");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)

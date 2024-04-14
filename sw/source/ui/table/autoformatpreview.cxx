@@ -237,9 +237,10 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
     Size aStrSize;
     sal_uInt8 nFormatIndex = GetFormatIndex(nCol, nRow);
     const basegfx::B2DRange aCellRange(maArray.GetCellRange(nCol, nRow));
-    const tools::Rectangle cellRect(
-        basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
-        basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
+    const tools::Rectangle cellRect(basegfx::fround<tools::Long>(aCellRange.getMinX()),
+                                    basegfx::fround<tools::Long>(aCellRange.getMinY()),
+                                    basegfx::fround<tools::Long>(aCellRange.getMaxX()),
+                                    basegfx::fround<tools::Long>(aCellRange.getMaxY()));
     Point aPos = cellRect.TopLeft();
     tools::Long nRightX = 0;
 
@@ -327,9 +328,11 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(aBrushItem.GetColor());
             const basegfx::B2DRange aCellRange(maArray.GetCellRange(nCol, nRow));
-            rRenderContext.DrawRect(tools::Rectangle(
-                basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
-                basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY())));
+            rRenderContext.DrawRect(
+                tools::Rectangle(basegfx::fround<tools::Long>(aCellRange.getMinX()),
+                                 basegfx::fround<tools::Long>(aCellRange.getMinY()),
+                                 basegfx::fround<tools::Long>(aCellRange.getMaxX()),
+                                 basegfx::fround<tools::Long>(aCellRange.getMaxY())));
             rRenderContext.Pop();
         }
     }

@@ -154,7 +154,7 @@ namespace drawinglayer::unorenderer
                     if(!aBitmapEx.IsEmpty())
                     {
                         aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                        aBitmapEx.SetPrefSize(Size(basegfx::fround(fWidth), basegfx::fround(fHeight)));
+                        aBitmapEx.SetPrefSize(Size(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight)));
                         XBitmap = vcl::unotools::xBitmapFromBitmapEx(aBitmapEx);
                     }
                 }

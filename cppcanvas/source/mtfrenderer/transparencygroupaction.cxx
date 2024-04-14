@@ -246,8 +246,8 @@ namespace cppcanvas::internal
                     }
 
                     // output size of metafile
-                    ::Size aOutputSizePixel( ::basegfx::fround( aScale.getX() * maDstSize.getWidth() ),
-                                             ::basegfx::fround( aScale.getY() * maDstSize.getHeight() ) );
+                    ::Size aOutputSizePixel( ::basegfx::fround<::tools::Long>( aScale.getX() * maDstSize.getWidth() ),
+                                             ::basegfx::fround<::tools::Long>( aScale.getY() * maDstSize.getHeight() ) );
 
                     sal_Int32 nBitmapExtra;
                     if ( bHasTextActions )

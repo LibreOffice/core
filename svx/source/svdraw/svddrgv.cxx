@@ -124,8 +124,8 @@ void SdrDragView::TakeActionRect(tools::Rectangle& rRect) const
                 else
                 {
                     rRect = tools::Rectangle(
-                        basegfx::fround(aBoundRange.getMinX()), basegfx::fround(aBoundRange.getMinY()),
-                        basegfx::fround(aBoundRange.getMaxX()), basegfx::fround(aBoundRange.getMaxY()));
+                        basegfx::fround<tools::Long>(aBoundRange.getMinX()), basegfx::fround<tools::Long>(aBoundRange.getMinY()),
+                        basegfx::fround<tools::Long>(aBoundRange.getMaxX()), basegfx::fround<tools::Long>(aBoundRange.getMaxY()));
                 }
             }
         }
@@ -165,8 +165,8 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
                 {
                     // drag the whole Object (Move, Resize, ...)
                     const basegfx::B2DPoint aTransformed(mpCurrentSdrDragMethod->getCurrentTransformation() * basegfx::B2DPoint(aPt.X(), aPt.Y()));
-                    rPos.setX( basegfx::fround(aTransformed.getX()) );
-                    rPos.setY( basegfx::fround(aTransformed.getY()) );
+                    rPos.setX( basegfx::fround<tools::Long>(aTransformed.getX()) );
+                    rPos.setY( basegfx::fround<tools::Long>(aTransformed.getY()) );
                 }
             }
         }
@@ -217,8 +217,8 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
             basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
             GetSdrPageView())))
         {
-            aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
-            aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
+            aPnt.AdjustX(basegfx::fround<tools::Long>(-aGridOffset.getX()));
+            aPnt.AdjustY(basegfx::fround<tools::Long>(-aGridOffset.getY()));
         }
 
         if(pHdl == nullptr
@@ -521,8 +521,8 @@ void SdrDragView::MovDragObj(const Point& rPnt)
         basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
         GetSdrPageView())))
     {
-        aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
-        aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
+        aPnt.AdjustX(basegfx::fround<tools::Long>(-aGridOffset.getX()));
+        aPnt.AdjustY(basegfx::fround<tools::Long>(-aGridOffset.getY()));
     }
 
     ImpLimitToWorkArea(aPnt);

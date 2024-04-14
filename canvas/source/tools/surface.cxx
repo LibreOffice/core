@@ -117,8 +117,7 @@ namespace canvas
         basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
             maSourceOffset.getX(), maSourceOffset.getY()));
         aTransform = aTransform * rTransform;
-        aTransform.translate(::basegfx::fround(rPos.getX()),
-                             ::basegfx::fround(rPos.getY()));
+        aTransform.translate(rPos);
 
         /*
             ######################################
@@ -237,8 +236,7 @@ namespace canvas
         // 3) translation to output position [rPos]
         basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(aPos1.getX(), aPos1.getY()));
         aTransform = aTransform * rTransform;
-        aTransform.translate(::basegfx::fround(rPos.getX()),
-                             ::basegfx::fround(rPos.getY()));
+        aTransform.translate(rPos);
 
 
         /*
@@ -333,8 +331,7 @@ namespace canvas
         // be calculated from the result, and this is why we need to use
         // integer coordinates here...
         basegfx::B2DHomMatrix aTransform = rTransform;
-        aTransform.translate(::basegfx::fround(rPos.getX()),
-                             ::basegfx::fround(rPos.getY()));
+        aTransform.translate(rPos);
 
         /*
             ######################################

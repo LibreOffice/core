@@ -31,11 +31,11 @@ namespace TransfrmHelper
     inline void ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const MapUnit ePoolUnit, const FieldUnit eDlgUnit)
     {
         const basegfx::B2DPoint aTopLeft(
-            static_cast<double>(vcl::ConvertValue(basegfx::fround(rRange.getMinX()), nDigits, ePoolUnit, eDlgUnit)),
-            static_cast<double>(vcl::ConvertValue(basegfx::fround(rRange.getMinY()), nDigits, ePoolUnit, eDlgUnit)));
+            static_cast<double>(vcl::ConvertValue(basegfx::fround64(rRange.getMinX()), nDigits, ePoolUnit, eDlgUnit)),
+            static_cast<double>(vcl::ConvertValue(basegfx::fround64(rRange.getMinY()), nDigits, ePoolUnit, eDlgUnit)));
         const basegfx::B2DPoint aBottomRight(
-            static_cast<double>(vcl::ConvertValue(basegfx::fround(rRange.getMaxX()), nDigits, ePoolUnit, eDlgUnit)),
-            static_cast<double>(vcl::ConvertValue(basegfx::fround(rRange.getMaxY()), nDigits, ePoolUnit, eDlgUnit)));
+            static_cast<double>(vcl::ConvertValue(basegfx::fround64(rRange.getMaxX()), nDigits, ePoolUnit, eDlgUnit)),
+            static_cast<double>(vcl::ConvertValue(basegfx::fround64(rRange.getMaxY()), nDigits, ePoolUnit, eDlgUnit)));
 
         rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
     }

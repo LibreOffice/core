@@ -3130,8 +3130,7 @@ double ImpEditEngine::roundToNearestPt(double fInput) const
     if (mbRoundToNearestPt)
     {
         double fInputPt = o3tl::convert(fInput, o3tl::Length::mm100, o3tl::Length::pt);
-        auto nInputRounded = basegfx::fround(fInputPt);
-        return o3tl::convert(double(nInputRounded), o3tl::Length::pt, o3tl::Length::mm100);
+        return o3tl::convert(std::round(fInputPt), o3tl::Length::pt, o3tl::Length::mm100);
     }
     else
     {

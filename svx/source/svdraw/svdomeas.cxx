@@ -339,7 +339,7 @@ static tools::Long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPo
     const basegfx::B2DRange aPolygonRange(rPolyPolygon.getB2DRange());
     const double fOldWidth(std::max(aPolygonRange.getWidth(), 1.0));
     const double fScale(static_cast<double>(nNewWidth) / fOldWidth);
-    tools::Long nHeight(basegfx::fround(aPolygonRange.getHeight() * fScale));
+    tools::Long nHeight(basegfx::fround<tools::Long>(aPolygonRange.getHeight() * fScale));
 
     if(bCenter)
     {
@@ -1407,8 +1407,8 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     }
 
     // derive new model data
-    const Point aNewPt1(basegfx::fround(aPosA.getX()), basegfx::fround(aPosA.getY()));
-    const Point aNewPt2(basegfx::fround(aPosB.getX()), basegfx::fround(aPosB.getY()));
+    const Point aNewPt1(basegfx::fround<tools::Long>(aPosA.getX()), basegfx::fround<tools::Long>(aPosA.getY()));
+    const Point aNewPt2(basegfx::fround<tools::Long>(aPosB.getX()), basegfx::fround<tools::Long>(aPosB.getY()));
 
     if(aNewPt1 == aPt1 && aNewPt2 == aPt2)
         return;

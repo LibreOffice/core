@@ -529,7 +529,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
                 // to 2d world coor
                 aPos2D *= rVCScene.getObjectTransformation();
 
-                rHdlList.AddHdl(std::make_unique<SdrHdl>(Point(basegfx::fround(aPos2D.getX()), basegfx::fround(aPos2D.getY())), SdrHdlKind::BezierWeight));
+                rHdlList.AddHdl(std::make_unique<SdrHdl>(Point(basegfx::fround<tools::Long>(aPos2D.getX()), basegfx::fround<tools::Long>(aPos2D.getY())), SdrHdlKind::BezierWeight));
             }
         }
     }

@@ -701,8 +701,8 @@ void RegionBand::Scale(double fScaleX, double fScaleY)
         // process the vertical move
         if(0.0 != fScaleY)
         {
-            pBand->mnYTop = basegfx::fround(pBand->mnYTop * fScaleY);
-            pBand->mnYBottom = basegfx::fround(pBand->mnYBottom * fScaleY);
+            pBand->mnYTop = basegfx::fround<tools::Long>(pBand->mnYTop * fScaleY);
+            pBand->mnYBottom = basegfx::fround<tools::Long>(pBand->mnYBottom * fScaleY);
         }
 
         // process the horizontal move

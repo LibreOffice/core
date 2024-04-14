@@ -2071,15 +2071,15 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(const SdrDragMethod& rDr
         if (bTail1)
         {
             const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aMyCon1.m_aObjOfs.X(), aMyCon1.m_aObjOfs.Y()));
-            aMyCon1.m_aObjOfs.setX( basegfx::fround(aTemp.getX()) );
-            aMyCon1.m_aObjOfs.setY( basegfx::fround(aTemp.getY()) );
+            aMyCon1.m_aObjOfs.setX( basegfx::fround<tools::Long>(aTemp.getX()) );
+            aMyCon1.m_aObjOfs.setY( basegfx::fround<tools::Long>(aTemp.getY()) );
         }
 
         if (bTail2)
         {
             const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aMyCon2.m_aObjOfs.X(), aMyCon2.m_aObjOfs.Y()));
-            aMyCon2.m_aObjOfs.setX( basegfx::fround(aTemp.getX()) );
-            aMyCon2.m_aObjOfs.setY( basegfx::fround(aTemp.getY()) );
+            aMyCon2.m_aObjOfs.setX( basegfx::fround<tools::Long>(aTemp.getX()) );
+            aMyCon2.m_aObjOfs.setY( basegfx::fround<tools::Long>(aTemp.getY()) );
         }
 
         SdrEdgeInfoRec aInfo(m_aEdgeInfo);
@@ -2104,15 +2104,15 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(const SdrDragMethod& rDr
         if (bTail1)
         {
             const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aPt1.X(), aPt1.Y()));
-            aPt1.setX( basegfx::fround(aTemp.getX()) );
-            aPt1.setY( basegfx::fround(aTemp.getY()) );
+            aPt1.setX( basegfx::fround<tools::Long>(aTemp.getX()) );
+            aPt1.setY( basegfx::fround<tools::Long>(aTemp.getY()) );
         }
 
         if (bTail2)
         {
             const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aPt2.X(), aPt2.Y()));
-            aPt2.setX( basegfx::fround(aTemp.getX()) );
-            aPt2.setY( basegfx::fround(aTemp.getY()) );
+            aPt2.setX( basegfx::fround<tools::Long>(aTemp.getX()) );
+            aPt2.setY( basegfx::fround<tools::Long>(aTemp.getY()) );
         }
 
         aResult.append(basegfx::B2DPoint(aPt1.X(), aPt1.Y()));

@@ -1012,7 +1012,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         tools::Long nCurPos = nTmpWidth + nStartX;
                         // consider scaling
                         if (maStatus.DoStretch() && (mfFontScaleX != 100.0))
-                            nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(mfFontScaleX, 1.0));
+                            nCurPos = basegfx::fround<tools::Long>(double(nCurPos) * 100.0 / std::max(mfFontScaleX, 1.0));
 
                         short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTextLeft()/* + rLRItem.GetTextLeft()*/ + nSpaceBeforeAndMinLabelWidth);
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, maEditDoc.GetDefTab() );
@@ -2996,7 +2996,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                 double fHeightRounded = roundToNearestPt(aRealSz.Height());
                 double fNewHeight = fHeightRounded * (mfFontScaleY / 100.0);
                 fNewHeight = roundToNearestPt(fNewHeight);
-                aRealSz.setHeight(basegfx::fround(fNewHeight));
+                aRealSz.setHeight(basegfx::fround<tools::Long>(fNewHeight));
             }
             if (mfFontScaleX != 100.0)
             {
@@ -3009,7 +3009,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                     double fWidthRounded = roundToNearestPt(aRealSz.Width());
                     double fNewWidth = fWidthRounded * (mfFontScaleX / 100.0);
                     fNewWidth = roundToNearestPt(fNewWidth);
-                    aRealSz.setWidth(basegfx::fround(fNewWidth));
+                    aRealSz.setWidth(basegfx::fround<tools::Long>(fNewWidth));
 
                     // Also the Kerning: (long due to handle Interim results)
                     tools::Long nKerning = rFont.GetFixKerning();

@@ -249,7 +249,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
     Size aStrSize;
     sal_uInt16 nFmtIndex = GetFormatIndex( nCol, nRow );
     const basegfx::B2DRange cellRange(maArray.GetCellRange( nCol, nRow ));
-    Point aPos(basegfx::fround(cellRange.getMinX()), basegfx::fround(cellRange.getMinY()));
+    Point aPos(basegfx::fround<tools::Long>(cellRange.getMinX()), basegfx::fround<tools::Long>(cellRange.getMinY()));
     sal_uInt16 nRightX = 0;
     bool bJustify = pCurData->GetIncludeJustify();
     SvxCellHorJustify eJustification;
@@ -269,7 +269,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         MakeFonts(rRenderContext, nFmtIndex, aFont, aCJKFont, aCTLFont);
 
-        theMaxStrSize = Size(basegfx::fround(cellRange.getWidth()), basegfx::fround(cellRange.getHeight()));
+        theMaxStrSize = Size(basegfx::fround<tools::Long>(cellRange.getWidth()), basegfx::fround<tools::Long>(cellRange.getHeight()));
         theMaxStrSize.AdjustWidth( -(FRAME_OFFSET) );
         theMaxStrSize.AdjustHeight( -(FRAME_OFFSET) );
 
@@ -375,8 +375,8 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
             rRenderContext.DrawRect(
                 tools::Rectangle(
-                    basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
-                    basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY())));
+                    basegfx::fround<tools::Long>(aCellRange.getMinX()), basegfx::fround<tools::Long>(aCellRange.getMinY()),
+                    basegfx::fround<tools::Long>(aCellRange.getMaxX()), basegfx::fround<tools::Long>(aCellRange.getMaxY())));
 
             rRenderContext.Pop();
         }

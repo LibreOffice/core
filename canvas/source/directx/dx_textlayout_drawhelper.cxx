@@ -112,7 +112,7 @@ namespace dxcanvas
             vcl::Font aFont(
                 rFontRequest.FontDescription.FamilyName,
                 rFontRequest.FontDescription.StyleName,
-                Size( 0, ::basegfx::fround(rFontRequest.CellSize)));
+                Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize)));
 
             aFont.SetAlignment( ALIGN_BASELINE );
             aFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
@@ -256,7 +256,7 @@ namespace dxcanvas
         vcl::Font aFont(
             rFontRequest.FontDescription.FamilyName,
             rFontRequest.FontDescription.StyleName,
-            Size( 0, ::basegfx::fround(rFontRequest.CellSize)));
+            Size( 0, ::basegfx::fround<::tools::Long>(rFontRequest.CellSize)));
 
         aFont.SetAlignment( ALIGN_BASELINE );
         aFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );

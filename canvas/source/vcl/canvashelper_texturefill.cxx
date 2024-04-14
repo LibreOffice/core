@@ -211,12 +211,12 @@ namespace vclcanvas
             // loop below, we set the _right_ edge here, which will be
             // readily copied into the left edge in the loop below
             const ::basegfx::B2DPoint& rPoint1( aLeftTop - 2.0*nDiagonalLength*aDirection );
-            aTempPoly[1] = ::Point( ::basegfx::fround( rPoint1.getX() ),
-                                    ::basegfx::fround( rPoint1.getY() ) );
+            aTempPoly[1] = ::Point( ::basegfx::fround<::tools::Long>( rPoint1.getX() ),
+                                    ::basegfx::fround<::tools::Long>( rPoint1.getY() ) );
 
             const ::basegfx::B2DPoint& rPoint2( aLeftBottom - 2.0*nDiagonalLength*aDirection );
-            aTempPoly[2] = ::Point( ::basegfx::fround( rPoint2.getX() ),
-                                    ::basegfx::fround( rPoint2.getY() ) );
+            aTempPoly[2] = ::Point( ::basegfx::fround<::tools::Long>( rPoint2.getX() ),
+                                    ::basegfx::fround<::tools::Long>( rPoint2.getY() ) );
 
 
             // iteratively render all other strips
@@ -258,14 +258,14 @@ namespace vclcanvas
                 const ::basegfx::B2DPoint& rPoint3(
                     (nStepCount - i-1)/double(nStepCount)*aLeftTop +
                     (i+1)/double(nStepCount)*aRightTop );
-                aTempPoly[1] = ::Point( ::basegfx::fround( rPoint3.getX() ),
-                                        ::basegfx::fround( rPoint3.getY() ) );
+                aTempPoly[1] = ::Point( ::basegfx::fround<::tools::Long>( rPoint3.getX() ),
+                                        ::basegfx::fround<::tools::Long>( rPoint3.getY() ) );
 
                 const ::basegfx::B2DPoint& rPoint4(
                     (nStepCount - i-1)/double(nStepCount)*aLeftBottom +
                     (i+1)/double(nStepCount)*aRightBottom );
-                aTempPoly[2] = ::Point( ::basegfx::fround( rPoint4.getX() ),
-                                        ::basegfx::fround( rPoint4.getY() ) );
+                aTempPoly[2] = ::Point( ::basegfx::fround<::tools::Long>( rPoint4.getX() ),
+                                        ::basegfx::fround<::tools::Long>( rPoint4.getY() ) );
 
                 rOutDev.DrawPolygon( aTempPoly );
             }
@@ -283,12 +283,12 @@ namespace vclcanvas
             // gradient rect two times the bound rect's diagonal to
             // the 'right'.
             const ::basegfx::B2DPoint& rPoint3( aRightTop + 2.0*nDiagonalLength*aDirection );
-            aTempPoly[0] = aTempPoly[4] = ::Point( ::basegfx::fround( rPoint3.getX() ),
-                                                   ::basegfx::fround( rPoint3.getY() ) );
+            aTempPoly[0] = aTempPoly[4] = ::Point( ::basegfx::fround<::tools::Long>( rPoint3.getX() ),
+                                                   ::basegfx::fround<::tools::Long>( rPoint3.getY() ) );
 
             const ::basegfx::B2DPoint& rPoint4( aRightBottom + 2.0*nDiagonalLength*aDirection );
-            aTempPoly[3] = ::Point( ::basegfx::fround( rPoint4.getX() ),
-                                    ::basegfx::fround( rPoint4.getY() ) );
+            aTempPoly[3] = ::Point( ::basegfx::fround<::tools::Long>( rPoint4.getX() ),
+                                    ::basegfx::fround<::tools::Long>( rPoint4.getY() ) );
 
             rOutDev.SetFillColor( rColors.back() );
 
@@ -418,8 +418,8 @@ namespace vclcanvas
                     const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
                     aTempPoly[static_cast<sal_uInt16>(p)] = ::Point(
-                        basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
-                        basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
+                        basegfx::fround<::tools::Long>( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
+                        basegfx::fround<::tools::Long>( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                 }
 
                 // close polygon explicitly
@@ -898,15 +898,15 @@ namespace vclcanvas
 
                     const ::Point aPtRepeat( vcl::unotools::pointFromB2DPoint(
                                                  aSingleDeviceTextureRect.getMinimum() ) );
-                    const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width ),
-                                       ::basegfx::fround( aScale.getY() * aBmpSize.Height ) );
+                    const ::Size  aSz( ::basegfx::fround<::tools::Long>( aScale.getX() * aBmpSize.Width ),
+                                       ::basegfx::fround<::tools::Long>( aScale.getY() * aBmpSize.Height ) );
                     const ::Size  aIntegerNextTileX( vcl::unotools::sizeFromB2DSize(aNextTileX) );
                     const ::Size  aIntegerNextTileY( vcl::unotools::sizeFromB2DSize(aNextTileY) );
 
                     const ::Point aPt( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
-                                       ::basegfx::fround( aOutputPos.getX() ) : aPtRepeat.X(),
+                                       ::basegfx::fround<::tools::Long>( aOutputPos.getX() ) : aPtRepeat.X(),
                                        textures[0].RepeatModeY == rendering::TexturingMode::NONE ?
-                                       ::basegfx::fround( aOutputPos.getY() ) : aPtRepeat.Y() );
+                                       ::basegfx::fround<::tools::Long>( aOutputPos.getY() ) : aPtRepeat.Y() );
                     const sal_Int32 nTilesX( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
                                              1 : nX2 - nX1 );
                     const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
