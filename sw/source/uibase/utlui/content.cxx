@@ -2252,38 +2252,61 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
         // Add for outline plus/minus
         if (pCntType->GetType() == ContentTypeId::OUTLINE)
         {
-            std::vector<std::unique_ptr<weld::TreeIter>> aParentCandidates;
-            for(size_t i = 0; i < nCount; ++i)
+            if (pCntType->IsAlphabeticSort())
             {
-                const SwContent* pCnt = pCntType->GetMember(i);
-                if(pCnt)
+                for (size_t i = 0; i < nCount; ++i)
                 {
-                    const auto nLevel = static_cast<const SwOutlineContent*>(pCnt)->GetOutlineLevel();
-                    OUString sEntry = pCnt->GetName();
-                    if(sEntry.isEmpty())
-                        sEntry = m_sSpace;
-                    OUString sId(weld::toId(pCnt));
-
-                    auto lambda = [nLevel, this](const std::unique_ptr<weld::TreeIter>& entry)
+                    const SwContent* pCnt = pCntType->GetMember(i);
+                    if (pCnt)
                     {
-                        return lcl_IsLowerOutlineContent(*entry, *m_xTreeView, nLevel);
-                    };
+                        OUString sEntry = pCnt->GetName();
+                        if (sEntry.isEmpty())
+                            sEntry = m_sSpace;
+                        OUString sId(weld::toId(pCnt));
 
-                    // if there is a preceding outline node candidate with a lower outline level use
-                    // that as a parent, otherwise use the root node
-                    auto aFind = std::find_if(aParentCandidates.rbegin(), aParentCandidates.rend(), lambda);
-                    if (aFind != aParentCandidates.rend())
-                        insert(aFind->get(), sEntry, sId, false, xChild.get());
-                    else
                         insert(&rParent, sEntry, sId, false, xChild.get());
-                    m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
-                    m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
+                        m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+                    }
+                }
+            }
+            else
+            {
+                std::vector<std::unique_ptr<weld::TreeIter>> aParentCandidates;
+                for (size_t i = 0; i < nCount; ++i)
+                {
+                    const SwContent* pCnt = pCntType->GetMember(i);
+                    if (pCnt)
+                    {
+                        const auto nLevel
+                            = static_cast<const SwOutlineContent*>(pCnt)->GetOutlineLevel();
+                        OUString sEntry = pCnt->GetName();
+                        if (sEntry.isEmpty())
+                            sEntry = m_sSpace;
+                        OUString sId(weld::toId(pCnt));
 
-                    // remove any parent candidates equal to or higher than this node
-                    std::erase_if(aParentCandidates, std::not_fn(lambda));
+                        auto lambda = [nLevel, this](const std::unique_ptr<weld::TreeIter>& entry) {
+                            return lcl_IsLowerOutlineContent(*entry, *m_xTreeView, nLevel);
+                        };
 
-                    // add this node as a parent candidate for any following nodes at a higher outline level
-                    aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));
+                        // if there is a preceding outline node candidate with a lower outline level
+                        // use that as a parent, otherwise use the root node
+                        auto aFind = std::find_if(aParentCandidates.rbegin(),
+                                                  aParentCandidates.rend(), lambda);
+                        if (aFind != aParentCandidates.rend())
+                            insert(aFind->get(), sEntry, sId, false, xChild.get());
+                        else
+                            insert(&rParent, sEntry, sId, false, xChild.get());
+                        m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+                        m_xTreeView->set_extra_row_indent(
+                            *xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
+
+                        // remove any parent candidates equal to or higher than this node
+                        std::erase_if(aParentCandidates, std::not_fn(lambda));
+
+                        // add this node as a parent candidate for any following nodes at a higher
+                        // outline level
+                        aParentCandidates.emplace_back(m_xTreeView->make_iterator(xChild.get()));
+                    }
                 }
             }
         }
@@ -5107,12 +5130,26 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
             pCntType = const_cast<SwContentType*>(weld::fromId<SwContent*>(rId)->GetParent());
 
         // toggle and persist alphabetical sort setting
+
+        // 1. Get the position of the bit in the block where the value of the alphabetical sort
+        //    setting is persistently stored for the content type.
         const int nShift = static_cast<int>(pCntType->GetType());
         assert(nShift > -1);
+
+        // 2. Create a bit mask to use to filter the sort value from the persistent block.
         const sal_Int32 nMask = 1 << nShift;
+
+        // 3. Toggle the persistent sort value only when it is different than the instance sort
+        //    value. These may already be the same if both the floating and sidebar version of the
+        //    Navigator are open.
         const sal_Int32 nBlock = m_pConfig->GetSortAlphabeticallyBlock();
-        pCntType->SetAlphabeticSort(~nBlock & nMask);
-        m_pConfig->SetSortAlphabeticallyBlock(nBlock ^ nMask);
+        bool bConfigSortValue = ~nBlock & nMask;
+        bool bInstanceSortValue = pCntType->IsAlphabeticSort();
+        if (bConfigSortValue != bInstanceSortValue)
+            m_pConfig->SetSortAlphabeticallyBlock(nBlock ^ nMask);
+
+        // 4. Always toggle the instance value.
+        pCntType->SetAlphabeticSort(!bInstanceSortValue);
 
         pCntType->FillMemberList();
         Display(true);
