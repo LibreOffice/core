@@ -105,7 +105,7 @@ void PivotTableFormat::finalizeImport()
     aFormat.pPattern = pPattern;
     for (auto& rReference : maReferences)
     {
-        if (rReference->mnField)
+        if (rReference->mnField && !rReference->maFieldItemsIndices.empty())
         {
             aFormat.aSelections.push_back(
                 sc::Selection{ .bSelected = rReference->mbSelected,
