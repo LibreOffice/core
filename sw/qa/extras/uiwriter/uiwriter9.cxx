@@ -47,6 +47,9 @@
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
 
+#include <svx/svdview.hxx>
+#include <svx/svdmark.hxx>
+
 namespace
 {
 class SwUiWriterTest9 : public SwModelTestBase
@@ -553,6 +556,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
+{
+    // Given a document with a number rule at the start of a paragraph and two drawing objects:
+    createSwDoc("tdf146190.odt");
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pXTextDocument->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    const SdrMarkList& rMrkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
+
+    // Assert the current cursor position has a number rule and is at the start of a paragraph:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    CPPUNIT_ASSERT(pWrtShell->GetNumRuleAtCurrCursorPos());
+    CPPUNIT_ASSERT(pWrtShell->IsSttOfPara());
+
+    // Then go to "Shape 1" drawing object using the GotoDrawingObject function:
+    pWrtShell->GotoDrawingObject(u"Shape 1");
+    CPPUNIT_ASSERT_EQUAL(OUString("Shape 1"), rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
+
+    // Move to the next drawing object by Tab key press:
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+    // Without the fix in place, this test would have failed with:
+    // equality assertion failed
+    // - Expected: Shape 2
+    // - Actual  : Shape 1
+    // i.e. Tab did not move to the next drawing object
+    CPPUNIT_ASSERT_EQUAL(OUString("Shape 2"), rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
+
+    // Tab key press should now select 'Shape 1':
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("Shape 1"), rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 }
 
 } // end of anonymous namespace

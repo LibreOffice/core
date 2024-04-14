@@ -670,32 +670,21 @@ bool SwWrtShell::GotoOutline( const OUString& rName )
 bool SwWrtShell::GotoDrawingObject(std::u16string_view rName)
 {
     SwPosition aPos = *GetCursor()->GetPoint();
-    bool bRet = false;
-    SdrView* pDrawView = GetDrawView();
-    if (pDrawView)
+    SdrPage* pPage = getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
-        pDrawView->SdrEndTextEdit();
-        pDrawView->UnmarkAll();
-        SdrPage* pPage = getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-        for (const rtl::Reference<SdrObject>& pObj : *pPage)
+        if (pObj->GetName() == rName)
         {
-            if (pObj->GetName() == rName)
+            bool bRet = SelectObj(Point(), 0, pObj.get());
+            if (bRet)
             {
-                SdrPageView* pPageView = pDrawView->GetSdrPageView();
-                if(pPageView)
-                {
-                    pDrawView->MarkObj(pObj.get(), pPageView);
-                    m_aNavigationMgr.addEntry(aPos);
-                    EnterStdMode();
-                    HideCursor();
-                    EnterSelFrameMode();
-                    bRet = true;
-                }
-                break;
+                m_aNavigationMgr.addEntry(aPos);
+                EnterSelFrameMode();
             }
+            return bRet;
         }
     }
-    return bRet;
+    return false;
 }
 
 bool SwWrtShell::GotoRegion( std::u16string_view rName )
