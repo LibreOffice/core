@@ -782,7 +782,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernAr
     if (mbMap)
         nWidth = ImplDevicePixelToLogicWidth( nWidth );
 
-    return basegfx::fround(nWidth);
+    return basegfx::fround<tools::Long>(nWidth);
 }
 
 void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretXArray,

@@ -376,8 +376,8 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                                 ::basegfx::B2DRectangle const & rDestRect,
                                 ::basegfx::B2DHomMatrix const & rLocalTransform )
 {
-    const Size aDestBmpSize( ::basegfx::fround( rDestRect.getWidth() ),
-                             ::basegfx::fround( rDestRect.getHeight() ) );
+    const Size aDestBmpSize( ::basegfx::fround<tools::Long>( rDestRect.getWidth() ),
+                             ::basegfx::fround<tools::Long>( rDestRect.getHeight() ) );
 
     if( aDestBmpSize.IsEmpty() )
         return BitmapEx();
@@ -460,8 +460,8 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                         ::basegfx::B2DPoint aPoint(x,y);
                         aPoint *= aTransform;
 
-                        const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
-                        const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
+                        const tools::Long nSrcX( ::basegfx::fround<tools::Long>( aPoint.getX() ) );
+                        const tools::Long nSrcY( ::basegfx::fround<tools::Long>( aPoint.getY() ) );
                         if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                             nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                         {
@@ -484,8 +484,8 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                         ::basegfx::B2DPoint aPoint(x,y);
                         aPoint *= aTransform;
 
-                        const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
-                        const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
+                        const tools::Long nSrcX( ::basegfx::fround<tools::Long>( aPoint.getX() ) );
+                        const tools::Long nSrcY( ::basegfx::fround<tools::Long>( aPoint.getY() ) );
                         if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                             nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                         {
@@ -519,8 +519,8 @@ BitmapEx DrawBitmapInRect( const BitmapEx& rBitmap,
     if( rBitmapRect.isEmpty() || rDestRect.isEmpty() )
         return BitmapEx();
 
-    const Size aDestBmpSize( ::basegfx::fround( rDestRect.getWidth() ),
-                             ::basegfx::fround( rDestRect.getHeight() ) );
+    const Size aDestBmpSize( ::basegfx::fround<tools::Long>( rDestRect.getWidth() ),
+                             ::basegfx::fround<tools::Long>( rDestRect.getHeight() ) );
 
     Bitmap aSrcBitmap( rBitmap.GetBitmap() );
     Bitmap aSrcAlpha;

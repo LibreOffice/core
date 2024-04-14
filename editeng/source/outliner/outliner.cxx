@@ -891,8 +891,8 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
 
     double fSpacingFactorX = getScalingParameters().fSpacingX;
 
-    tools::Long nStretchBulletX = basegfx::fround(double(aBulletArea.Left()) * fSpacingFactorX);
-    tools::Long nStretchBulletWidth = basegfx::fround(double(aBulletArea.GetWidth()) * fSpacingFactorX);
+    tools::Long nStretchBulletX = basegfx::fround<tools::Long>(double(aBulletArea.Left()) * fSpacingFactorX);
+    tools::Long nStretchBulletWidth = basegfx::fround<tools::Long>(double(aBulletArea.GetWidth()) * fSpacingFactorX);
     aBulletArea = tools::Rectangle(Point(nStretchBulletX, aBulletArea.Top()),
                              Size(nStretchBulletWidth, aBulletArea.GetHeight()) );
 

@@ -956,8 +956,8 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
 
                     // apply to aRect
                     aRect = tools::Rectangle(
-                        basegfx::fround(aNewRange.getMinX()), basegfx::fround(aNewRange.getMinY()),
-                        basegfx::fround(aNewRange.getMaxX()), basegfx::fround(aNewRange.getMaxY()));
+                        basegfx::fround<tools::Long>(aNewRange.getMinX()), basegfx::fround<tools::Long>(aNewRange.getMinY()),
+                        basegfx::fround<tools::Long>(aNewRange.getMaxX()), basegfx::fround<tools::Long>(aNewRange.getMaxY()));
                 }
             }
         }

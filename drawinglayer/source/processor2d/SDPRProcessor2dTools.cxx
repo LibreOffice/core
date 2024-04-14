@@ -55,7 +55,8 @@ void takeCareOfOffsetXY(
         {
             const Size& rSize(rTarget.GetSizePixel());
             const tools::Long w(rSize.Width());
-            const tools::Long a(basegfx::fround(w * (1.0 - rFillGraphicAttribute.getOffsetX())));
+            const tools::Long a(
+                basegfx::fround<tools::Long>(w * (1.0 - rFillGraphicAttribute.getOffsetX())));
 
             if (0 != a && w != a)
             {
@@ -98,7 +99,8 @@ void takeCareOfOffsetXY(
         {
             const Size& rSize(rTarget.GetSizePixel());
             const tools::Long h(rSize.Height());
-            const tools::Long a(basegfx::fround(h * (1.0 - rFillGraphicAttribute.getOffsetY())));
+            const tools::Long a(
+                basegfx::fround<tools::Long>(h * (1.0 - rFillGraphicAttribute.getOffsetY())));
 
             if (0 != a && h != a)
             {

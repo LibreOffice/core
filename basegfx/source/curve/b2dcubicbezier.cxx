@@ -1011,33 +1011,33 @@ namespace basegfx
         if(maControlPointA == maStartPoint)
         {
             maControlPointA = maStartPoint = basegfx::B2DPoint(
-                basegfx::fround(maStartPoint.getX()),
-                basegfx::fround(maStartPoint.getY()));
+                std::round(maStartPoint.getX()),
+                std::round(maStartPoint.getY()));
         }
         else
         {
             maStartPoint = basegfx::B2DPoint(
-                basegfx::fround(maStartPoint.getX()),
-                basegfx::fround(maStartPoint.getY()));
+                std::round(maStartPoint.getX()),
+                std::round(maStartPoint.getY()));
             maControlPointA = basegfx::B2DPoint(
-                basegfx::fround(maControlPointA.getX()),
-                basegfx::fround(maControlPointA.getY()));
+                std::round(maControlPointA.getX()),
+                std::round(maControlPointA.getY()));
         }
 
         if(maControlPointB == maEndPoint)
         {
             maControlPointB = maEndPoint = basegfx::B2DPoint(
-                basegfx::fround(maEndPoint.getX()),
-                basegfx::fround(maEndPoint.getY()));
+                std::round(maEndPoint.getX()),
+                std::round(maEndPoint.getY()));
         }
         else
         {
             maEndPoint = basegfx::B2DPoint(
-                basegfx::fround(maEndPoint.getX()),
-                basegfx::fround(maEndPoint.getY()));
+                std::round(maEndPoint.getX()),
+                std::round(maEndPoint.getY()));
             maControlPointB = basegfx::B2DPoint(
-                basegfx::fround(maControlPointB.getX()),
-                basegfx::fround(maControlPointB.getY()));
+                std::round(maControlPointB.getX()),
+                std::round(maControlPointB.getY()));
         }
     }
 } // end of namespace basegfx

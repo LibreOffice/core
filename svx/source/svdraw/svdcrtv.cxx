@@ -650,8 +650,8 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     if(getPossibleGridOffsetForSdrObject(aGridOffset, pObj.get(), mpCreatePV))
                     {
                         const Size aOffset(
-                            basegfx::fround(-aGridOffset.getX()),
-                            basegfx::fround(-aGridOffset.getY()));
+                            basegfx::fround<tools::Long>(-aGridOffset.getX()),
+                            basegfx::fround<tools::Long>(-aGridOffset.getY()));
 
                         pObj->NbcMove(aOffset);
                     }

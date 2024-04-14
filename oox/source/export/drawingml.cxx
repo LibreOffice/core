@@ -594,7 +594,7 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
 
 void DrawingML::WriteGradientStop(double fOffset, const basegfx::BColor& rColor, const basegfx::BColor& rAlpha)
 {
-    mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(basegfx::fround(fOffset * 100000)));
+    mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(basegfx::fround64(fOffset * 100000)));
     WriteColor(
         ::Color(rColor),
         basegfx::fround((1.0 - rAlpha.luminance()) * oox::drawingml::MAX_PERCENT));

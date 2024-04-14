@@ -523,8 +523,8 @@ private:
         // translation when aTmpRect was not properly initialized.
         if ( ! aTmpRect.isEmpty())
         {
-            aMatrix.translate( -basegfx::fround(aTmpRect.getMinX()),
-                               -basegfx::fround(aTmpRect.getMinY()) );
+            aMatrix.translate( -std::round(aTmpRect.getMinX()),
+                               -std::round(aTmpRect.getMinY()) );
         }
 
         return aMatrix;

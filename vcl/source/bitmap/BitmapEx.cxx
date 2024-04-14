@@ -739,7 +739,7 @@ BitmapEx BitmapEx::TransformBitmapEx(
         return BitmapEx();
 
     // force destination to 24 bit, we want to smooth output
-    const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
+    const Size aDestinationSize(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight));
     bool bSmooth = implTransformNeedsSmooth(rTransformation);
     const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bSmooth));
 

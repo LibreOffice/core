@@ -1332,12 +1332,12 @@ void E3dView::Start3DCreation()
     }
 
     basegfx::B2DPoint aCenter(aR.getCenter());
-    tools::Long      nMarkHgt = basegfx::fround(aR.getHeight()) - 1;
+    tools::Long      nMarkHgt = basegfx::fround<tools::Long>(aR.getHeight()) - 1;
     tools::Long      nHgt     = nMarkHgt + nObjDst * 2;
 
     if (nHgt < nMinLen) nHgt = nMinLen;
 
-    tools::Long nY1 = basegfx::fround(aCenter.getY()) - (nHgt + 1) / 2;
+    tools::Long nY1 = basegfx::fround<tools::Long>(aCenter.getY()) - (nHgt + 1) / 2;
     tools::Long nY2 = nY1 + nHgt;
 
     if (pOut && (nMinLen > nOutHgt)) nMinLen = nOutHgt;
@@ -1355,7 +1355,7 @@ void E3dView::Start3DCreation()
         }
     }
 
-    maRef1.setX( basegfx::fround(aR.getMinX()) );    // Initial move axis 2/100mm to the left
+    maRef1.setX( basegfx::fround<tools::Long>(aR.getMinX()) );    // Initial move axis 2/100mm to the left
     maRef1.setY( nY1 );
     maRef2.setX( maRef1.X() );
     maRef2.setY( nY2 );

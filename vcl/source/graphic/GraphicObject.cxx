@@ -743,10 +743,10 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 const double fFactorX(static_cast<double>(aBitmapEx.GetSizePixel().Width()) / aSrcSizePixel.Width());
                 const double fFactorY(static_cast<double>(aBitmapEx.GetSizePixel().Height()) / aSrcSizePixel.Height());
 
-                aCropLeftTop.setWidth( basegfx::fround(aCropLeftTop.Width() * fFactorX) );
-                aCropLeftTop.setHeight( basegfx::fround(aCropLeftTop.Height() * fFactorY) );
-                aCropRightBottom.setWidth( basegfx::fround(aCropRightBottom.Width() * fFactorX) );
-                aCropRightBottom.setHeight( basegfx::fround(aCropRightBottom.Height() * fFactorY) );
+                aCropLeftTop.setWidth( basegfx::fround<tools::Long>(aCropLeftTop.Width() * fFactorX) );
+                aCropLeftTop.setHeight( basegfx::fround<tools::Long>(aCropLeftTop.Height() * fFactorY) );
+                aCropRightBottom.setWidth( basegfx::fround<tools::Long>(aCropRightBottom.Width() * fFactorX) );
+                aCropRightBottom.setHeight( basegfx::fround<tools::Long>(aCropRightBottom.Height() * fFactorY) );
 
                 aSrcSizePixel = aBitmapEx.GetSizePixel();
             }

@@ -123,14 +123,14 @@ namespace vclcanvas::tools
             if( !::rtl::math::approxEqual(aScale.getY(), 1.0) )
             {
                 const sal_Int32 nFontHeight( io_rVCLFont.GetFontHeight() );
-                io_rVCLFont.SetFontHeight( ::basegfx::fround(nFontHeight * aScale.getY()) );
+                io_rVCLFont.SetFontHeight( ::basegfx::fround<::tools::Long>(nFontHeight * aScale.getY()) );
             }
 
             io_rVCLFont.SetOrientation( Degree10( ::basegfx::fround(-basegfx::rad2deg<10>(fmod(nRotate, 2*M_PI))) ) );
 
             // TODO(F2): Missing functionality in VCL: shearing
-            o_rPoint.setX( ::basegfx::fround(aTranslate.getX()) );
-            o_rPoint.setY( ::basegfx::fround(aTranslate.getY()) );
+            o_rPoint.setX( ::basegfx::fround<::tools::Long>(aTranslate.getX()) );
+            o_rPoint.setY( ::basegfx::fround<::tools::Long>(aTranslate.getY()) );
 
             return true;
         }
@@ -154,7 +154,7 @@ namespace vclcanvas::tools
                 if (!::basegfx::fTools::equalZero(fDividend))
                     fStretch /= fDividend;
 
-                const ::tools::Long nNewWidth = ::basegfx::fround(aSize.Width() * fStretch);
+                const ::tools::Long nNewWidth = ::basegfx::fround<::tools::Long>(aSize.Width() * fStretch);
 
                 rFont.SetAverageFontWidth(nNewWidth);
 

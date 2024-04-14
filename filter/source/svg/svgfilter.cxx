@@ -395,7 +395,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                 static_cast< double >(pTargetSdrPage->GetRightBorder()) / aPageSize.Width() +
                 static_cast< double >(pTargetSdrPage->GetUpperBorder()) / aPageSize.Height() +
                 static_cast< double >(pTargetSdrPage->GetLowerBorder()) / aPageSize.Height()) / 4.0);
-            const tools::Long nAllBorder(basegfx::fround((aGraphicSize.Width() + aGraphicSize.Height()) * fBorderRelation * 0.5));
+            const tools::Long nAllBorder(basegfx::fround<tools::Long>((aGraphicSize.Width() + aGraphicSize.Height()) * fBorderRelation * 0.5));
 
             // Adapt PageSize and Border stuff. To get all MasterPages and PresObjs
             // correctly adapted, do not just use

@@ -588,7 +588,7 @@ namespace emfio
                 fX2 -= mrclFrame.Left();
                 fY2 -= mrclFrame.Top();
             }
-            return Point(basegfx::fround(fX2), basegfx::fround(fY2));
+            return Point(basegfx::fround<tools::Long>(fX2), basegfx::fround<tools::Long>(fY2));
         }
         else
             return Point();
@@ -677,7 +677,7 @@ namespace emfio
                     break;
                 }
             }
-            return Size(basegfx::fround(fWidth), basegfx::fround(fHeight));
+            return Size(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight));
         }
         else
             return Size();
@@ -1672,7 +1672,7 @@ namespace emfio
                     const Size aSizeY(ImplMap(Size(0, nSumY)));
                     const basegfx::B2DVector aVectorY(aSizeY.Width(), aSizeY.Height());
                     // Reverse Y
-                    pDYArry[i] = basegfx::fround(aVectorY.getLength());
+                    pDYArry[i] = basegfx::fround<tools::Long>(aVectorY.getLength());
                     pDYArry[i] *= (nSumY >= 0 ? -1 : 1);
                 }
             }

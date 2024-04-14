@@ -926,8 +926,8 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             // that avoids to do it later by Metafile::Move what would be expensive
             aOutMap.SetOrigin(
                 Point(
-                    basegfx::fround(-aBound.getMinX() - aHalfPixelInMtf.getWidth()),
-                    basegfx::fround(-aBound.getMinY() - aHalfPixelInMtf.getHeight()) ) );
+                    basegfx::fround<tools::Long>(-aBound.getMinX() - aHalfPixelInMtf.getWidth()),
+                    basegfx::fround<tools::Long>(-aBound.getMinY() - aHalfPixelInMtf.getHeight()) ) );
             aOut->SetRelativeMapMode( aOutMap );
 
             sdr::contact::DisplayInfo aDisplayInfo;
@@ -965,8 +965,8 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             // export is always a risky thing, so it will have to show if this will
             // not influence something else.
             const Size aBoundSize(
-                basegfx::fround(aBound.getWidth() + 1),
-                basegfx::fround(aBound.getHeight() + 1));
+                basegfx::fround<tools::Long>(aBound.getWidth() + 1),
+                basegfx::fround<tools::Long>(aBound.getHeight() + 1));
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundSize );
 

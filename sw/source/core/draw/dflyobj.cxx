@@ -866,8 +866,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     // rRef is relative to the Crop-Action, si in X/Y-Ranges of [0.0 .. 1.0],
     // to get the correct absolute position, transform using the old Rect
     const Point aRef(
-        aOldRect.Left() + basegfx::fround(aOldRect.GetWidth() * rRef.getX()),
-        aOldRect.Top() + basegfx::fround(aOldRect.GetHeight() * rRef.getY()));
+        aOldRect.Left() + basegfx::fround<tools::Long>(aOldRect.GetWidth() * rRef.getX()),
+        aOldRect.Top() + basegfx::fround<tools::Long>(aOldRect.GetHeight() * rRef.getY()));
 
     // apply transformation, use old ResizeRect for now
     tools::Rectangle aNewRect( aOldRect );
@@ -956,8 +956,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
         // Create the new TopLeft of the unrotated, cropped object by creating
         // as if re-creating the unrotated geometry
         aNewTopLeft = Point(
-            basegfx::fround(aRotNewCenter.getX() - (0.5 * aNewRect.getOpenWidth())),
-            basegfx::fround(aRotNewCenter.getY() - (0.5 * aNewRect.getOpenHeight())));
+            basegfx::fround<tools::Long>(aRotNewCenter.getX() - (0.5 * aNewRect.getOpenWidth())),
+            basegfx::fround<tools::Long>(aRotNewCenter.getY() - (0.5 * aNewRect.getOpenHeight())));
     }
 
     // check if we have movement and execute if yes
@@ -1018,10 +1018,10 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
 
         // create new modified, but untransformed OutRect
         setOutRectangle(tools::Rectangle(
-            basegfx::fround(aCenter.getX() - (0.5 * aAbsScale.getX())),
-            basegfx::fround(aCenter.getY() - (0.5 * aAbsScale.getY())),
-            basegfx::fround(aCenter.getX() + (0.5 * aAbsScale.getX())),
-            basegfx::fround(aCenter.getY() + (0.5 * aAbsScale.getY()))));
+            basegfx::fround<tools::Long>(aCenter.getX() - (0.5 * aAbsScale.getX())),
+            basegfx::fround<tools::Long>(aCenter.getY() - (0.5 * aAbsScale.getY())),
+            basegfx::fround<tools::Long>(aCenter.getX() + (0.5 * aAbsScale.getX())),
+            basegfx::fround<tools::Long>(aCenter.getY() + (0.5 * aAbsScale.getY()))));
 
         // restore FrameAreas so that actions below not adapted to new
         // full transformations take the correct actions
@@ -1242,21 +1242,21 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
     basegfx::B2DPoint aPos;
 
     aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.0);
-    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround<tools::Long>(aPos.getX()), basegfx::fround<tools::Long>(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
     aPos = aTargetTransform * basegfx::B2DPoint(0.5, 0.0);
-    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Upper, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround<tools::Long>(aPos.getX()), basegfx::fround<tools::Long>(aPos.getY())), SdrHdlKind::Upper, fShearX, fRotate));
     aPos = aTargetTransform * basegfx::B2DPoint(1.0, 0.0);
-    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperRight, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround<tools::Long>(aPos.getX()), basegfx::fround<tools::Long>(aPos.getY())), SdrHdlKind::UpperRight, fShearX, fRotate));
     aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.5);
-    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Left , fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround<tools::Long>(aPos.getX()), basegfx::fround<tools::Long>(aPos.getY())), SdrHdlKind::Left , fShearX, fRotate));
     aPos = aTargetTransform * basegfx::B2DPoint(1.0, 0.5);
-    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Right, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround<tools::Long>(aPos.getX()), basegfx::fround<tools::Long>(aPos.getY())), SdrHdlKind::Right, fShearX, fRotate));
     aPos = aTargetTransform * basegfx::B2DPoint(0.0, 1.0);
-    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerLeft, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround<tools::Long>(aPos.getX()), basegfx::fround<tools::Long>(aPos.getY())), SdrHdlKind::LowerLeft, fShearX, fRotate));
     aPos = aTargetTransform * basegfx::B2DPoint(0.5, 1.0);
-    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Lower, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround<tools::Long>(aPos.getX()), basegfx::fround<tools::Long>(aPos.getY())), SdrHdlKind::Lower, fShearX, fRotate));
     aPos = aTargetTransform * basegfx::B2DPoint(1.0, 1.0);
-    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
+    rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround<tools::Long>(aPos.getX()), basegfx::fround<tools::Long>(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
 }
 
 // Macro

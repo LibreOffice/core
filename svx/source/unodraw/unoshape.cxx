@@ -2015,8 +2015,8 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             basegfx::B2DHomMatrix aNewHomogenMatrix;
             pSdrObject->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-            aVclPoint.AdjustX(basegfx::fround(aNewHomogenMatrix.get(0, 2)) );
-            aVclPoint.AdjustY(basegfx::fround(aNewHomogenMatrix.get(1, 2)) );
+            aVclPoint.AdjustX(basegfx::fround<tools::Long>(aNewHomogenMatrix.get(0, 2)) );
+            aVclPoint.AdjustY(basegfx::fround<tools::Long>(aNewHomogenMatrix.get(1, 2)) );
 
             // #88491# position relative to anchor
             if( pSdrObject->getSdrModelFromSdrObject().IsWriter() )
@@ -2542,8 +2542,8 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         GetSdrObject()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-        aVclPoint.AdjustX( -(basegfx::fround(aNewHomogenMatrix.get(0, 2))) );
-        aVclPoint.AdjustY( -(basegfx::fround(aNewHomogenMatrix.get(1, 2))) );
+        aVclPoint.AdjustX( -(basegfx::fround<tools::Long>(aNewHomogenMatrix.get(0, 2))) );
+        aVclPoint.AdjustY( -(basegfx::fround<tools::Long>(aNewHomogenMatrix.get(1, 2))) );
 
         // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
         // Need to adapt aVclPoint from app-specific to 100thmm

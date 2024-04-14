@@ -226,8 +226,10 @@ VclMetafileProcessor2D::impDumpToMetaFile(const primitive2d::Primitive2DContaine
     aPrimitiveRange.transform(maCurrentTransformation);
 
     const tools::Rectangle aPrimitiveRectangle(
-        basegfx::fround(aPrimitiveRange.getMinX()), basegfx::fround(aPrimitiveRange.getMinY()),
-        basegfx::fround(aPrimitiveRange.getMaxX()), basegfx::fround(aPrimitiveRange.getMaxY()));
+        basegfx::fround<tools::Long>(aPrimitiveRange.getMinX()),
+        basegfx::fround<tools::Long>(aPrimitiveRange.getMinY()),
+        basegfx::fround<tools::Long>(aPrimitiveRange.getMaxX()),
+        basegfx::fround<tools::Long>(aPrimitiveRange.getMaxY()));
     ScopedVclPtrInstance<VirtualDevice> aContentVDev;
     MapMode aNewMapMode(pLastOutputDevice->GetMapMode());
 
@@ -1183,9 +1185,10 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
         mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement, vcl::PDFWriter::Block);
         auto const range(rControlPrimitive.getB2DRange(getViewInformation2D()));
-        tools::Rectangle const aLogicRect(
-            basegfx::fround(range.getMinX()), basegfx::fround(range.getMinY()),
-            basegfx::fround(range.getMaxX()), basegfx::fround(range.getMaxY()));
+        tools::Rectangle const aLogicRect(basegfx::fround<tools::Long>(range.getMinX()),
+                                          basegfx::fround<tools::Long>(range.getMinY()),
+                                          basegfx::fround<tools::Long>(range.getMaxX()),
+                                          basegfx::fround<tools::Long>(range.getMaxY()));
         mpPDFExtOutDevData->SetStructureBoundingBox(aLogicRect);
         OUString const& rAltText(rControlPrimitive.GetAltText());
         if (!rAltText.isEmpty() && !bDecorative)
@@ -1641,7 +1644,7 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
 
             // use the transformed line width
             LineInfo aLineInfo(LineStyle::Solid,
-                               basegfx::fround(getTransformedLineWidth(rLine.getWidth())));
+                               std::round(getTransformedLineWidth(rLine.getWidth())));
             aLineInfo.SetLineJoin(rLine.getLineJoin());
             aLineInfo.SetLineCap(rLine.getLineCap());
 
@@ -1971,7 +1974,7 @@ void VclMetafileProcessor2D::processPolyPolygonHatchPrimitive2D(
         aToolsPolyPolygon,
         Hatch(aHatchStyle,
               Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
-              basegfx::fround(rFillHatchAttribute.getDistance()),
+              basegfx::fround<tools::Long>(rFillHatchAttribute.getDistance()),
               Degree10(basegfx::fround(basegfx::rad2deg<10>(rFillHatchAttribute.getAngle())))));
 
     impEndSvtGraphicFill(pSvtGraphicFill.get());
@@ -2526,10 +2529,11 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         basegfx::fround(aDiscreteRange.getHeight()), nMaximumQuadraticPixels));
 
     // add to target metafile (will create MetaFloatTransparentAction)
-    mpOutputDevice->DrawBitmapEx(
-        Point(basegfx::fround(aLogicRange.getMinX()), basegfx::fround(aLogicRange.getMinY())),
-        Size(basegfx::fround(aLogicRange.getWidth()), basegfx::fround(aLogicRange.getHeight())),
-        aBitmapEx);
+    mpOutputDevice->DrawBitmapEx(Point(basegfx::fround<tools::Long>(aLogicRange.getMinX()),
+                                       basegfx::fround<tools::Long>(aLogicRange.getMinY())),
+                                 Size(basegfx::fround<tools::Long>(aLogicRange.getWidth()),
+                                      basegfx::fround<tools::Long>(aLogicRange.getHeight())),
+                                 aBitmapEx);
 }
 
 void VclMetafileProcessor2D::processStructureTagPrimitive2D(
@@ -2597,8 +2601,10 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 {
                     auto const range(rStructureTagCandidate.getB2DRange(getViewInformation2D()));
                     tools::Rectangle const aLogicRect(
-                        basegfx::fround(range.getMinX()), basegfx::fround(range.getMinY()),
-                        basegfx::fround(range.getMaxX()), basegfx::fround(range.getMaxY()));
+                        basegfx::fround<tools::Long>(range.getMinX()),
+                        basegfx::fround<tools::Long>(range.getMinY()),
+                        basegfx::fround<tools::Long>(range.getMaxX()),
+                        basegfx::fround<tools::Long>(range.getMaxY()));
                     mpPDFExtOutDevData->SetStructureBoundingBox(aLogicRect);
                     break;
                 }

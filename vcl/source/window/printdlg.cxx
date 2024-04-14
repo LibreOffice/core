@@ -324,7 +324,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     const double fRatio(static_cast<double>(maPreviewSize.getWidth()) / static_cast<double>(maPreviewSize.getHeight()));
     const double fNewWidth(sqrt(static_cast<double>(nPlannedSquarePixels) * fRatio));
     const double fNewHeight(sqrt(static_cast<double>(nPlannedSquarePixels) / fRatio));
-    const Size aScaledSize(basegfx::fround(fNewWidth), basegfx::fround(fNewHeight));
+    const Size aScaledSize(basegfx::fround<tools::Long>(fNewWidth), basegfx::fround<tools::Long>(fNewHeight));
 
     // check if this eventual maximum is already reached
     // due to having hit the MaxSquarePixels. Due to using
@@ -403,7 +403,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
             fScale *= fCorrection;
         }
 
-        const Size aScaledSize2(basegfx::fround(fWidth), basegfx::fround(fHeight));
+        const Size aScaledSize2(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight));
         pPrerenderVDev->SetOutputSizePixel(aScaledSize2, false);
         aLogicSize = pPrerenderVDev->PixelToLogic( aScaledSize2, MapMode( MapUnit::Map100thMM ) );
     }

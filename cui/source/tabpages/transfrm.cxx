@@ -1140,8 +1140,8 @@ DeactivateRC SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 
         GetTopLeftPosition(fX, fY, maRange);
         const ::tools::Rectangle aOutRectangle(
-            basegfx::fround(fX), basegfx::fround(fY),
-            basegfx::fround(fX + maRange.getWidth()), basegfx::fround(fY + maRange.getHeight()));
+            basegfx::fround<tools::Long>(fX), basegfx::fround<tools::Long>(fY),
+            basegfx::fround<tools::Long>(fX + maRange.getWidth()), basegfx::fround<tools::Long>(fY + maRange.getHeight()));
         _pSet->Put(SfxRectangleItem(SID_ATTR_TRANSFORM_INTERN, aOutRectangle));
         _pSet->Put(SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_POS,
             m_xTsbPosProtect->get_state() == TRISTATE_TRUE ));
