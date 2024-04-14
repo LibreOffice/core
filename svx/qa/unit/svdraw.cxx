@@ -734,8 +734,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
 
     // make sure the text that isn't overflowing is still aligned properly
     assertXPathContent(pDocument, "count((//sdrblocktext)[5]//textsimpleportion)"_ostr, "3");
-    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[1]"_ostr, "y"_ostr, "5073");
-    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[3]"_ostr, "y"_ostr, "6597");
+    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[1]"_ostr, "y"_ostr, "5074");
+    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[3]"_ostr, "y"_ostr, "6598");
 
     // Test vertically overflowing text, with vertical text direction
     assertXPathContent(pDocument, "count((//sdrblocktext)[6]//textsimpleportion)"_ostr, "12");

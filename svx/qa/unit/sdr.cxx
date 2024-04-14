@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     // i.e. the shadow origin was not the top right corner for scaling (larger x position, so it was
     // visible on the right of the shape as well).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-705), fShadowX);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-684), fShadowY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-685), fShadowY);
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
@@ -97,35 +97,35 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
 
         // Without the accompanying fix in place, this test would have failed with:
-        // - Expected: -567
+        // - Expected: -568
         // - Actual  : 162
         // - In <>, attribute 'xy13' of '(//shadow/transform)[1]' incorrect value.
         // i.e. shadow alignment was ignored while scaling the shadow.
-        assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy13"_ostr, "-567");
+        assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy13"_ostr, "-568");
         assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy23"_ostr, "162");
 
-        assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy13"_ostr, "-1794");
+        assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy13"_ostr, "-1795");
         assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy23"_ostr, "162");
 
         assertXPath(pDocument, "(//shadow/transform)[3]"_ostr, "xy13"_ostr, "-3021");
         assertXPath(pDocument, "(//shadow/transform)[3]"_ostr, "xy23"_ostr, "161");
 
-        assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy13"_ostr, "-567");
+        assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy13"_ostr, "-568");
         assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy23"_ostr, "-749");
 
         assertXPath(pDocument, "(//shadow/transform)[5]"_ostr, "xy13"_ostr, "-3021");
         assertXPath(pDocument, "(//shadow/transform)[5]"_ostr, "xy23"_ostr, "-750");
 
-        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy13"_ostr, "-566");
-        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy23"_ostr, "-1691");
+        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy13"_ostr, "-567");
+        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy23"_ostr, "-1692");
 
-        assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy13"_ostr, "-1794");
+        assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy13"_ostr, "-1795");
         assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy23"_ostr, "-1693");
 
-        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy13"_ostr, "-3022");
-        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy23"_ostr, "-1691");
+        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy13"_ostr, "-3023");
+        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy23"_ostr, "-1692");
 
-        assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy13"_ostr, "-1794");
+        assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy13"_ostr, "-1795");
         assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy23"_ostr, "-750");
     }
     {

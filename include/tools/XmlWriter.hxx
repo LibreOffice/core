@@ -10,6 +10,9 @@
 #ifndef INCLUDED_TOOLS_XMLWRITER_HXX
 #define INCLUDED_TOOLS_XMLWRITER_HXX
 
+#include <sal/config.h>
+
+#include <basegfx/numeric/ftools.hxx>
 #include <tools/toolsdllapi.h>
 #include <rtl/string.hxx>
 #include <memory>
@@ -52,7 +55,15 @@ public:
     void attribute(const char* sTagName, const OString& aValue);
     void attribute(const OString& sTagName, const OString& aValue);
     void attribute(const char* sTagName, std::u16string_view aValue);
-    void attribute(const char* sTagName, sal_Int32 aNumber);
+    void attribute(const char* sTagName, sal_Int64 aNumber);
+    template <typename T>
+    requires std::is_arithmetic_v<T> void attribute(const char* sTagName, T aNumber)
+    {
+        if constexpr (std::is_floating_point_v<T>)
+            return attribute(sTagName, basegfx::fround64(aNumber));
+        else
+            return attribute(sTagName, static_cast<sal_Int64>(aNumber));
+    }
     void attributeDouble(const char* sTagName, double aNumber);
     void attributeBase64(const char* sTagName, std::vector<sal_uInt8> const& rValueInBytes);
     void attributeBase64(const char* sTagName, std::vector<char> const& rValueInBytes);
