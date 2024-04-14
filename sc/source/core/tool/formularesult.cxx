@@ -26,6 +26,7 @@ FormulaResultValue::FormulaResultValue( FormulaError nErr ) : mfValue(0.0), meTy
 ScFormulaResult::ScFormulaResult() :
     mpToken(nullptr),
     mbToken(true),
+    mbNoneRefCnt(false),
     mbEmpty(false),
     mbEmptyDisplayedAsString(false),
     mbValueCached(false),
@@ -58,10 +59,12 @@ ScFormulaResult::ScFormulaResult( const ScFormulaResult & r ) :
     }
     else
         mfValue = r.mfValue;
+    mbNoneRefCnt = mbToken && mpToken && mpToken->GetRefCntPolicy() == formula::RefCntPolicy::None;
 }
 
 ScFormulaResult::ScFormulaResult( const formula::FormulaToken* p ) :
     mbToken(false),
+    mbNoneRefCnt(false),
     mbEmpty(false),
     mbEmptyDisplayedAsString(false),
     mbValueCached(false),
@@ -129,6 +132,7 @@ void ScFormulaResult::ResolveToken( const formula::FormulaToken * p )
                 mbToken = true;
         }
     }
+    mbNoneRefCnt = mbToken && mpToken && mpToken->GetRefCntPolicy() == formula::RefCntPolicy::None;
 }
 
 ScFormulaResult & ScFormulaResult::operator=( const ScFormulaResult & r )
@@ -151,6 +155,7 @@ void ScFormulaResult::Assign( const ScFormulaResult & r )
         if (mbToken && mpToken)
             mpToken->DecRef();
         mbToken = false;
+        mbNoneRefCnt = false;
         mbEmpty = true;
         mbEmptyDisplayedAsString = r.mbEmptyDisplayedAsString;
         meMultiline = r.meMultiline;
@@ -236,6 +241,7 @@ void ScFormulaResult::SetDouble( double f )
             mpToken->DecRef();
         mfValue = f;
         mbToken = false;
+        mbNoneRefCnt = false;
         meMultiline = MULTILINE_FALSE;
         mbValueCached = true;
     }
@@ -563,12 +569,14 @@ void ScFormulaResult::SetHybridDouble( double f )
             mpToken->DecRef();
             mpToken = new ScHybridCellToken( f, aString, aFormula, false);
             mpToken->IncRef();
+            mbNoneRefCnt = false;
         }
     }
     else
     {
         mfValue = f;
         mbToken = false;
+        mbNoneRefCnt = false;
         meMultiline = MULTILINE_FALSE;
         mbValueCached = true;
     }
@@ -585,6 +593,7 @@ void ScFormulaResult::SetHybridString( const svl::SharedString& rStr )
     mpToken = new ScHybridCellToken( f, rStr, aFormula, false);
     mpToken->IncRef();
     mbToken = true;
+    mbNoneRefCnt = false;
 }
 
 void ScFormulaResult::SetHybridEmptyDisplayedAsString()
@@ -602,6 +611,7 @@ void ScFormulaResult::SetHybridEmptyDisplayedAsString()
     mpToken = new ScHybridCellToken( f, aStr, aFormula, true);
     mpToken->IncRef();
     mbToken = true;
+    mbNoneRefCnt = false;
 }
 
 void ScFormulaResult::SetHybridFormula( const OUString & rFormula )
@@ -615,6 +625,7 @@ void ScFormulaResult::SetHybridFormula( const OUString & rFormula )
     mpToken = new ScHybridCellToken( f, aStr, rFormula, false);
     mpToken->IncRef();
     mbToken = true;
+    mbNoneRefCnt = false;
 }
 
 void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL )
@@ -625,6 +636,7 @@ void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRe
     mpToken = new ScMatrixFormulaCellToken(nCols, nRows, pMat, pUL);
     mpToken->IncRef();
     mbToken = true;
+    mbNoneRefCnt = false;
 }
 
 const ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellToken() const
@@ -636,6 +648,19 @@ const ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellToken() con
 ScMatrixFormulaCellToken* ScFormulaResult::GetMatrixFormulaCellTokenNonConst()
 {
     return const_cast<ScMatrixFormulaCellToken*>( GetMatrixFormulaCellToken());
+}
+
+// If a token from the original tokens, supplied to a parallel group calculation
+// while RefCounting was disabled for those tokens, ends up as a FormulaResult
+// token, then fix up the ref count now
+void ScFormulaResult::HandleStuffAfterParallelCalculation()
+{
+    if (mbNoneRefCnt)
+    {
+        assert(mbToken && mpToken && mpToken->GetRefCntPolicy() != formula::RefCntPolicy::None);
+        mpToken->IncRef();
+        mbNoneRefCnt = false;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
