@@ -640,13 +640,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     bReadOnly = pROItem->GetValue();
 
                 // URL for dialog
+                const SfxStringItem* pFileSize = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+                sal_Int64 nFileSize = pFileSize ? pFileSize->GetValue().toInt64() : -1;
                 const OUString aURL( HasName() ? GetMedium()->GetName() : GetFactory().GetFactoryURL() );
 
                 Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
                 uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
 
                 SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(), aCmisProperties,
-                    IsUseUserData(), IsUseThumbnailSave() );
+                    IsUseUserData(), IsUseThumbnailSave(), nFileSize );
                 if ( !GetSlotState( SID_DOCTEMPLATE ) )
                     // templates not supported
                     aDocInfoItem.SetTemplate(false);
@@ -662,7 +664,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
                 std::shared_ptr<SfxDocumentInfoDialog> xDlg(CreateDocumentInfoDialog(rReq.GetFrameWeld(), aSet));
-                auto aFunc = [this, xDlg, xCmisDoc](sal_Int32 nResult, SfxRequest& rRequest)
+                auto aFunc = [this, xDlg, xCmisDoc, nFileSize](sal_Int32 nResult, SfxRequest& rRequest)
                 {
                     if (RET_OK == nResult)
                     {
@@ -679,7 +681,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             SetUseThumbnailSave( pDocInfoItem-> IsUseThumbnailSave() );
                             // add data from dialog for possible recording purpose
                             rRequest.AppendItem( SfxDocumentInfoItem( GetTitle(),
-                                getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave() ) );
+                                getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave(), nFileSize ) );
                         }
                         rRequest.Done();
                     }

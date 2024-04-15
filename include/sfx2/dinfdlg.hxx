@@ -74,6 +74,7 @@ private:
     OUString                     m_Keywords;
     OUString                     m_Subject;
     OUString                     m_Title;
+    sal_Int64                    m_nFileSize;
     bool                         m_bHasTemplate;
     bool                         m_bDeleteUserData;
     bool                         m_bUseUserData;
@@ -87,7 +88,7 @@ public:
     SfxDocumentInfoItem( const OUString &rFileName,
         const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
         const css::uno::Sequence< css::document::CmisProperty> & i_cmisProps,
-        bool bUseUserData, bool bUseThumbnailSave );
+        bool bUseUserData, bool bUseThumbnailSave, sal_Int64 nFileSize );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem() override;
 
@@ -124,6 +125,8 @@ public:
     void        setSubject(const OUString& i_val) { m_Subject = i_val; }
     const OUString& getTitle() const { return m_Title; }
     void        setTitle(const OUString& i_val) { m_Title = i_val; }
+    sal_Int64   getFileSize() const { return m_nFileSize; }
+    void setFileSize(sal_Int64 i_val) { m_nFileSize = i_val; }
 
     /// reset user-specific data (author, modified-by, ...)
     void        resetUserData(const OUString & i_rAuthor);
