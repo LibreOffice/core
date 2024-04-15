@@ -3382,7 +3382,7 @@ SfxBoolItem PrintPreview SID_PRINTPREVIEW
 
 
 SfxVoidItem SetDocumentProperties SID_DOCINFO
-(SfxDocumentInfoItem Properties SID_DOCINFO, SfxUnoAnyItem UpdatedProperties FN_PARAM_1)
+(SfxDocumentInfoItem Properties SID_DOCINFO, SfxUnoAnyItem UpdatedProperties FN_PARAM_1, SfxStringItem FileSize FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

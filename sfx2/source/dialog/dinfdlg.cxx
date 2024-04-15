@@ -180,6 +180,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
     , m_isAutoloadEnabled(false)
     , m_EditingCycles(0)
     , m_EditingDuration(0)
+    , m_nFileSize(-1)
     , m_bHasTemplate( true )
     , m_bDeleteUserData( false )
     , m_bUseUserData( true )
@@ -190,7 +191,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Sequence<document::CmisProperty>& i_cmisProps,
-        bool bIs, bool _bIs )
+        bool bIs, bool _bIs, sal_Int64 _nFileSize )
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
     , m_AutoloadURL( i_xDocProps->getAutoloadURL() )
@@ -210,6 +211,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
                     i_xDocProps->getKeywords()) )
     , m_Subject( i_xDocProps->getSubject() )
     , m_Title( i_xDocProps->getTitle() )
+    , m_nFileSize( _nFileSize )
     , m_bHasTemplate( true )
     , m_bDeleteUserData( false )
     , m_bUseUserData( bIs )
@@ -280,6 +282,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     , m_Type(rItem.getType())
     , m_Subject( rItem.getSubject() )
     , m_Title( rItem.getTitle() )
+    , m_nFileSize ( rItem.m_nFileSize )
     , m_bHasTemplate( rItem.m_bHasTemplate )
     , m_bDeleteUserData( rItem.m_bDeleteUserData )
     , m_bUseUserData( rItem.m_bUseUserData )
@@ -1117,9 +1120,13 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
     // determine size and type
     OUString aSizeText( m_aUnknownSize );
-    if ( aURL.GetProtocol() == INetProtocol::File ||
-         aURL.isAnyKnownWebDAVScheme() )
-        aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
+    // we might already know the size as an optional argument passed to .uno:SetDocumentProperties
+    sal_Int64 nSize = rInfoItem.getFileSize();
+    // otherwise, for some protocols we can reliably query for it
+    if (nSize == -1 && (aURL.GetProtocol() == INetProtocol::File || aURL.isAnyKnownWebDAVScheme()))
+        nSize = SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    if (nSize != -1)
+        aSizeText = CreateSizeText( nSize );
     m_xShowSizeFT->set_label( aSizeText );
 
     OUString aDescription = SvFileInformationManager::GetDescription( INetURLObject(rMainURL) );
