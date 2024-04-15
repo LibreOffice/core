@@ -48,12 +48,15 @@ public:
     void endDocument();
 
     void startElement(const char* sName);
-    void startElement(const OString& sName);
+    void startElement(const OString& sName) { startElement(sName.getStr()); }
     void startElement(const OString& sPrefix, const OString& sName, const OString& sNamespaceUri);
     void endElement();
 
     void attribute(const char* sTagName, const OString& aValue);
-    void attribute(const OString& sTagName, const OString& aValue);
+    void attribute(const OString& sTagName, const OString& aValue)
+    {
+        attribute(sTagName.getStr(), aValue);
+    }
     void attribute(const char* sTagName, std::u16string_view aValue);
     void attribute(const char* sTagName, sal_Int64 aNumber);
     template <typename T>

@@ -99,12 +99,6 @@ void XmlWriter::startElement(const char* pName)
     (void)xmlTextWriterStartElement(mpImpl->mpWriter, xmlName);
 }
 
-void XmlWriter::startElement(const OString& rName)
-{
-    xmlChar* xmlName = BAD_CAST(rName.getStr());
-    (void)xmlTextWriterStartElement(mpImpl->mpWriter, xmlName);
-}
-
 void XmlWriter::endElement() { (void)xmlTextWriterEndElement(mpImpl->mpWriter); }
 
 void XmlWriter::attributeBase64(const char* pName, std::vector<sal_uInt8> const& rValueInBytes)
@@ -124,13 +118,6 @@ void XmlWriter::attributeBase64(const char* pName, std::vector<char> const& rVal
 void XmlWriter::attribute(const char* name, const OString& value)
 {
     xmlChar* xmlName = BAD_CAST(name);
-    xmlChar* xmlValue = BAD_CAST(value.getStr());
-    (void)xmlTextWriterWriteAttribute(mpImpl->mpWriter, xmlName, xmlValue);
-}
-
-void XmlWriter::attribute(const OString& name, const OString& value)
-{
-    xmlChar* xmlName = BAD_CAST(name.getStr());
     xmlChar* xmlValue = BAD_CAST(value.getStr());
     (void)xmlTextWriterWriteAttribute(mpImpl->mpWriter, xmlName, xmlValue);
 }
