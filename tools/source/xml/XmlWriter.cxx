@@ -29,6 +29,15 @@ int funcCloseCallback(void* pContext)
     return 0; // 0 or -1 in case of error
 }
 
+template <typename T>
+requires(sizeof(T) == sizeof(char)) void attributeBase64_impl(xmlTextWriterPtr writer,
+                                                              const char* name, const T* value,
+                                                              int size)
+{
+    (void)xmlTextWriterStartAttribute(writer, BAD_CAST(name));
+    (void)xmlTextWriterWriteBase64(writer, reinterpret_cast<const char*>(value), 0, size);
+    (void)xmlTextWriterEndAttribute(writer);
+}
 } // end anonymous namespace
 
 struct XmlWriterImpl
@@ -103,16 +112,12 @@ void XmlWriter::endElement() { (void)xmlTextWriterEndElement(mpImpl->mpWriter); 
 
 void XmlWriter::attributeBase64(const char* pName, std::vector<sal_uInt8> const& rValueInBytes)
 {
-    std::vector<char> aSignedBytes(rValueInBytes.begin(), rValueInBytes.end());
-    attributeBase64(pName, aSignedBytes);
+    attributeBase64_impl(mpImpl->mpWriter, pName, rValueInBytes.data(), rValueInBytes.size());
 }
 
 void XmlWriter::attributeBase64(const char* pName, std::vector<char> const& rValueInBytes)
 {
-    xmlChar* xmlName = BAD_CAST(pName);
-    (void)xmlTextWriterStartAttribute(mpImpl->mpWriter, xmlName);
-    (void)xmlTextWriterWriteBase64(mpImpl->mpWriter, rValueInBytes.data(), 0, rValueInBytes.size());
-    (void)xmlTextWriterEndAttribute(mpImpl->mpWriter);
+    attributeBase64_impl(mpImpl->mpWriter, pName, rValueInBytes.data(), rValueInBytes.size());
 }
 
 void XmlWriter::attribute(const char* name, const OString& value)
