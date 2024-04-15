@@ -110,7 +110,7 @@ void PivotTableFormat::finalizeImport()
             aFormat.aSelections.push_back(
                 sc::Selection{ .bSelected = rReference->mbSelected,
                                .nField = sal_Int32(*rReference->mnField),
-                               .nDataIndex = rReference->maFieldItemsIndices[0] });
+                               .nIndices = rReference->maFieldItemsIndices });
         }
     }
     aFormats.add(aFormat);

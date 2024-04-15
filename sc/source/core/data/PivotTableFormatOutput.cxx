@@ -84,7 +84,7 @@ void initLines(std::vector<LineData>& rLines, std::vector<ScDPOutLevelData> cons
     }
 }
 
-void initFormatOutputField(std::vector<FormatOutputField>& rOutputFields,
+void initFormatOutputField(size_t nSelectionIndex, std::vector<FormatOutputField>& rOutputFields,
                            std::vector<ScDPOutLevelData> const& rFields,
                            PivotTableFormat const& rFormat, NameResolver& rNameResolver)
 {
@@ -99,19 +99,18 @@ void initFormatOutputField(std::vector<FormatOutputField>& rOutputFields,
         {
             if (rSelection.nField == rOutputField.nDimension)
             {
-                if (rOutputField.nDimension == -2)
-                {
-                    rOutputField.aName = "DATA";
-                    rOutputField.nIndex = rSelection.nDataIndex;
-                    rOutputField.bSet = true;
-                }
+                if (rSelection.nIndices.size() > 1)
+                    rOutputField.nIndex = rSelection.nIndices[nSelectionIndex];
                 else
-                {
+                    rOutputField.nIndex = rSelection.nIndices[0];
+
+                if (rOutputField.nDimension == -2)
+                    rOutputField.aName = "DATA";
+                else
                     rOutputField.aName
-                        = rNameResolver.getNameForIndex(rSelection.nDataIndex, rSelection.nField);
-                    rOutputField.nIndex = rSelection.nDataIndex;
-                    rOutputField.bSet = true;
-                }
+                        = rNameResolver.getNameForIndex(rOutputField.nIndex, rSelection.nField);
+
+                rOutputField.bSet = true;
             }
         }
     }
@@ -152,41 +151,56 @@ void FormatOutput::prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rCol
     // Initialize format output entries (FormatOutputEntry) and set the data already available from output fields
     // (rColumnFields and rRowFields) and the pivot table format list (PivotTableFormat).
 
-    maFormatOutputEntries.resize(mpFormats->size());
-
-    size_t nFormatIndex = 0;
     for (PivotTableFormat const& rFormat : mpFormats->getVector())
     {
-        sc::FormatOutputEntry& rEntry = maFormatOutputEntries[nFormatIndex];
-        rEntry.pPattern = rFormat.pPattern;
-        rEntry.onTab = nTab;
-        rEntry.eType = rFormat.eType;
-
-        initFormatOutputField(rEntry.aRowOutputFields, rRowFields, rFormat, aNameResolver);
-
-        // If column fields list is empty, but there is a data field in columns that is not part of column fields
-        if (rColumnFields.size() == 0 && bColumnFieldIsDataOnly)
+        size_t nMaxNumberOfIndices = 1;
+        for (auto const& rSelection : rFormat.aSelections)
         {
-            // Initialize column output fields to have 1 data output field
-            rEntry.aColumnOutputFields.resize(1);
-            FormatOutputField& rOutputField = rEntry.aColumnOutputFields[0];
+            if (rSelection.nIndices.size() > 1)
+                nMaxNumberOfIndices = rSelection.nIndices.size();
+        }
 
-            for (auto const& rSelection : rFormat.aSelections)
+        if (nMaxNumberOfIndices == 0)
+            continue;
+
+        for (size_t nSelectionIndex = 0; nSelectionIndex < nMaxNumberOfIndices; nSelectionIndex++)
+        {
+            sc::FormatOutputEntry aEntry;
+            aEntry.pPattern = rFormat.pPattern;
+            aEntry.onTab = nTab;
+            aEntry.eType = rFormat.eType;
+
+            initFormatOutputField(nSelectionIndex, aEntry.aRowOutputFields, rRowFields, rFormat,
+                                  aNameResolver);
+
+            // If column fields list is empty, but there is a data field in columns that is not part of column fields
+            if (rColumnFields.size() == 0 && bColumnFieldIsDataOnly)
             {
-                if (rSelection.nField == -2)
+                // Initialize column output fields to have 1 data output field
+                aEntry.aColumnOutputFields.resize(1);
+                FormatOutputField& rOutputField = aEntry.aColumnOutputFields[0];
+
+                for (auto const& rSelection : rFormat.aSelections)
                 {
-                    rOutputField.aName = "DATA";
-                    rOutputField.nIndex = rSelection.nDataIndex;
-                    rOutputField.bSet = true;
+                    if (rSelection.nField == -2)
+                    {
+                        if (rSelection.nIndices.size() > 1)
+                            rOutputField.nIndex = rSelection.nIndices[nSelectionIndex];
+                        else
+                            rOutputField.nIndex = rSelection.nIndices[0];
+                        rOutputField.aName = "DATA";
+                        rOutputField.bSet = true;
+                    }
                 }
             }
+            else
+            {
+                initFormatOutputField(nSelectionIndex, aEntry.aColumnOutputFields, rColumnFields,
+                                      rFormat, aNameResolver);
+            }
+
+            maFormatOutputEntries.push_back(aEntry);
         }
-        else
-        {
-            initFormatOutputField(rEntry.aColumnOutputFields, rColumnFields, rFormat,
-                                  aNameResolver);
-        }
-        nFormatIndex++;
     }
 }
 

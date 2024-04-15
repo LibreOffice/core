@@ -29,7 +29,7 @@ struct Selection
 {
     bool bSelected = false;
     sal_Int32 nField = 0;
-    sal_uInt32 nDataIndex = 0;
+    std::vector<sal_uInt32> nIndices;
 };
 
 /** Holds cell pattern attributes and a selection information to which cells in the pivot table

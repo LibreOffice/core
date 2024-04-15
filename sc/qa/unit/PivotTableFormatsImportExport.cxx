@@ -295,6 +295,21 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDocument(*getScDoc());
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     PivotTableCellFormatsTest_9_MultipleSelections)
+{
+    auto assertDocument = [](ScDocument& rDoc) {
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I6"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I8"_ustr));
+    };
+
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_9_MultipleSelections.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

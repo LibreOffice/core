@@ -1253,8 +1253,10 @@ void XclExpXmlPivotTables::savePivotTableFormats(XclExpXmlStream& rStream, ScDPO
                         pPivotStream->startElement(XML_reference, pRefAttributeList);
                     }
 
-                    pPivotStream->singleElement(XML_x, XML_v, OString::number(rSelection.nDataIndex));
-
+                    for (sal_uInt32 nIndex : rSelection.nIndices)
+                    {
+                        pPivotStream->singleElement(XML_x, XML_v, OString::number(nIndex));
+                    }
                     pPivotStream->endElement(XML_reference);
                 }
                 pPivotStream->endElement(XML_references);
