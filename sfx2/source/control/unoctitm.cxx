@@ -893,7 +893,8 @@ void SfxDispatchController_Impl::StateChangedAtToolBoxControl( sal_uInt16 nSID, 
 
 static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    const SfxViewShell* pViewShell = pViewFrame->GetViewShell();
+    if (!comphelper::LibreOfficeKit::isActive() || !pViewShell)
         return;
 
     OUStringBuffer aBuffer(aEvent.FeatureURL.Complete + "=");
@@ -1121,17 +1122,13 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     else if (aEvent.FeatureURL.Path == "ParaLeftToRight" ||
              aEvent.FeatureURL.Path == "ParaRightToLeft")
     {
-        const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell)
-        {
-            tools::JsonWriter aTree;
-            bool bTemp = false;
-            aEvent.State >>= bTemp;
-            aTree.put("commandName", aEvent.FeatureURL.Complete);
-            aTree.put("disabled", !aEvent.IsEnabled);
-            aTree.put("state", bTemp ? "true" : "false");
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aTree.finishAndGetAsOString());
-        }
+        tools::JsonWriter aTree;
+        bool bTemp = false;
+        aEvent.State >>= bTemp;
+        aTree.put("commandName", aEvent.FeatureURL.Complete);
+        aTree.put("disabled", !aEvent.IsEnabled);
+        aTree.put("state", bTemp ? "true" : "false");
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aTree.finishAndGetAsOString());
         return;
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
@@ -1152,8 +1149,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "TransformWidth" ||
              aEvent.FeatureURL.Path == "TransformHeight")
     {
-        const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (aEvent.IsEnabled && pViewShell && pViewShell->isLOKMobilePhone())
+        if (aEvent.IsEnabled && pViewShell->isLOKMobilePhone())
         {
             boost::property_tree::ptree aTree;
             boost::property_tree::ptree aState;
@@ -1198,11 +1194,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aTree.put("state", aString);
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);
-        const SfxViewShell* pShell = pViewFrame->GetViewShell();
-        if (pShell)
-        {
-            pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
-        }
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
         return;
     }
     else if (aEvent.FeatureURL.Path == "StateTableCell")
@@ -1316,14 +1308,13 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     else
     {
         // Try to send JSON state version
-        SfxLokHelper::sendUnoStatus(pViewFrame->GetViewShell(), pState);
+        SfxLokHelper::sendUnoStatus(pViewShell, pState);
 
         return;
     }
 
     OUString payload = aBuffer.makeStringAndClear();
-    if (const SfxViewShell* pViewShell = pViewFrame->GetViewShell())
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
