@@ -546,18 +546,21 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
 
     SolarMutexGuard aGuard;
 
-    if (comphelper::LibreOfficeKit::isActive() &&
-        SfxViewShell::Current()->isBlockedCommand(aURL.Complete))
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        tools::JsonWriter aTree;
-        aTree.put("code", "");
-        aTree.put("kind", "BlockedCommand");
-        aTree.put("cmd", aURL.Complete);
-        aTree.put("message", "Blocked feature");
-        aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell && pViewShell->isBlockedCommand(aURL.Complete))
+        {
+            tools::JsonWriter aTree;
+            aTree.put("code", "");
+            aTree.put("kind", "BlockedCommand");
+            aTree.put("cmd", aURL.Complete);
+            aTree.put("message", "Blocked feature");
+            aTree.put("viewID", pViewShell->GetViewShellId().get());
 
-        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_COMMAND_BLOCKED, aTree.extractData());
-        return;
+            pViewShell->libreOfficeKitViewCallback(LOK_COMMAND_BLOCKED, aTree.extractData());
+            return;
+        }
     }
 
     if (
