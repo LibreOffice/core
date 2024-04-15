@@ -479,11 +479,14 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         {
             const SwSectionFrame* const pSct = pFrame->FindSctFrame();
             // multi-column section
-            if ( pSct->Lower()->IsColumnFrame() && pSct->Lower()->GetNext()
-                 // and not in the last column
-                 && !pFrame->FindColFrame()->GetNext() )
+            if ( pSct->Lower()->IsColumnFrame() && pSct->Lower()->GetNext() )
             {
-                bKeep = false;
+                const SwFrame *pCol = pFrame->FindColFrame();
+                // and not in the last column
+                if (pCol && !pCol->GetNext())
+                {
+                    bKeep = false;
+                }
             }
         }
 
