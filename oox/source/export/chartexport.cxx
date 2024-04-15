@@ -1155,13 +1155,9 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     Reference< beans::XPropertySet > xPropSubTitle( xChartDoc->getSubTitle(), UNO_QUERY );
     if( xPropSubTitle.is())
     {
-        try
-        {
+        OUString aSubTitle;
+        if ((xPropSubTitle->getPropertyValue("String") >>= aSubTitle) && !aSubTitle.isEmpty())
             xPropSubTitle->getPropertyValue("FormattedStrings") >>= xFormattedSubTitle;
-        }
-        catch( beans::UnknownPropertyException & )
-        {
-        }
     }
 
     // chart element
@@ -1452,7 +1448,9 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape,
     Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
     if( xPropSet.is())
     {
-        xPropSet->getPropertyValue("FormattedStrings") >>= xFormattedTitle;
+        OUString aTitle;
+        if ((xPropSet->getPropertyValue("String") >>= aTitle) && !aTitle.isEmpty())
+            xPropSet->getPropertyValue("FormattedStrings") >>= xFormattedTitle;
     }
 
     // tdf#101322: add subtitle to title

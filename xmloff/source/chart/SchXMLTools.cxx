@@ -26,6 +26,7 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexp.hxx>
+#include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/maptype.hxx>
@@ -37,6 +38,7 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -47,6 +49,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <algorithm>
@@ -602,6 +605,95 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
     else // do not convert tabs and linefeeds (eg for numbers coming from unit converter)
     {
         rExport.GetDocHandler()->characters( rText );
+    }
+}
+
+void exportFormattedText( SvXMLExport& rExport, const uno::Reference< beans::XPropertySet >& xTitleProps )
+{
+    Sequence< uno::Reference< chart2::XFormattedString > > xFormattedTitle;
+    if (xTitleProps.is())
+    {
+        OUString aTitle;
+        if ((xTitleProps->getPropertyValue("String") >>= aTitle) && !aTitle.isEmpty())
+            xTitleProps->getPropertyValue("FormattedStrings") >>= xFormattedTitle;
+    }
+
+    if (xFormattedTitle.hasElements())
+    {
+        SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
+        for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedTitle)
+        {
+            Reference< beans::XPropertySet > xRunPropSet(rxFS, uno::UNO_QUERY);
+            bool bIsUICharStyle, bHasAutoStyle = false;
+            OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(xRunPropSet, bIsUICharStyle, bHasAutoStyle);
+            if (!sStyle.isEmpty())
+            {
+                rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                    rExport.EncodeStyleName(sStyle));
+            }
+
+            SvXMLElementExport aSpan(rExport, !sStyle.isEmpty(), XML_NAMESPACE_TEXT, XML_SPAN, true, false);
+            rExport.GetDocHandler()->characters(rxFS->getString());
+        }
+    }
+}
+
+void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUString, OUString>>& rTitle,
+    const uno::Reference< beans::XPropertySet >& xTitleProp )
+{
+    if (!xTitleProp.is())
+        return;
+
+    std::vector< Reference< chart2::XFormattedString > > aStringVec;
+    Sequence< uno::Reference< chart2::XFormattedString > > xFullTextTitle;
+    Reference < beans::XPropertySet > xFullTextTitleProps;
+
+    try
+    {
+        if ((xTitleProp->getPropertyValue("FormattedStrings") >>= xFullTextTitle) &&
+            xFullTextTitle.hasElements())
+        {
+            // these are the properies from the textshape object - needs to apply them
+            // to all the string parts firstly - (necessarry for backward compatibility)
+            xFullTextTitleProps.set(xFullTextTitle.getArray()[0], uno::UNO_QUERY);
+        }
+
+        for (auto aRIt = std::begin(rTitle); aRIt != std::end(rTitle); ++aRIt)
+        {
+            Reference< chart2::XFormattedString2 > xNewFmtStr;
+            xNewFmtStr = chart2::FormattedString::create(rImport.GetComponentContext());
+
+            if (xFullTextTitleProps.is())
+            {
+                // these are the properies from the textshape object - needs to apply them
+                // to all the string parts firstly
+                uno::Reference< beans::XPropertySetInfo > xInfo = xNewFmtStr->getPropertySetInfo();
+                for (const beans::Property& rProp : xFullTextTitleProps->getPropertySetInfo()->getProperties())
+                {
+                    if (xInfo.is() && xInfo->hasPropertyByName(rProp.Name))
+                    {
+                        const uno::Any aValue = xFullTextTitleProps->getPropertyValue(rProp.Name);
+                        xNewFmtStr->setPropertyValue(rProp.Name, aValue);
+                    }
+                }
+            }
+
+            if (auto pStyle = rImport.GetTextImport()->FindAutoCharStyle(aRIt->first))
+            {
+                pStyle->FillPropertySet(xNewFmtStr);
+            }
+
+            xNewFmtStr->setString(aRIt->second);
+            aStringVec.emplace_back(xNewFmtStr);
+        }
+
+        uno::Sequence< Reference< chart2::XFormattedString > > aStringSeq =
+            comphelper::containerToSequence(aStringVec);
+        xTitleProp->setPropertyValue("FormattedStrings", uno::Any(aStringSeq));
+    }
+    catch (const beans::UnknownPropertyException&)
+    {
+        SAL_WARN("xmloff.chart", "Property FormattedStrings for Title not available");
     }
 }
 

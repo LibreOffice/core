@@ -91,7 +91,7 @@ private:
     SchXMLTable maTable;
     SchXMLImportHelper& mrImportHelper;
 
-    OUString maMainTitle, maSubTitle;
+    std::vector<std::pair<OUString, OUString>> maMainTitle, maSubTitle;
     OUString m_aXLinkHRefAttributeToIndicateDataProvider;
     bool m_bHasRangeAtPlotArea;
     bool m_bHasTableElement;
@@ -130,14 +130,14 @@ class SchXMLTitleContext : public SvXMLImportContext
 {
 private:
     SchXMLImportHelper& mrImportHelper;
-    OUString& mrTitle;
+    std::vector<std::pair<OUString, OUString>>& mrTitle;
     css::uno::Reference< css::drawing::XShape > mxTitleShape;
     OUString msAutoStyleName;
 
 public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport,
-                        OUString& rTitle,
+                        std::vector<std::pair<OUString, OUString>>& rTitle,
                         css::uno::Reference< css::drawing::XShape > xTitleShape );
     virtual ~SchXMLTitleContext() override;
 

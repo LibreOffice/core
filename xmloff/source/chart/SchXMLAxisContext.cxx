@@ -552,26 +552,18 @@ void SchXMLAxisContext::CreateAxis()
 
 void SchXMLAxisContext::SetAxisTitle()
 {
-    if( m_aCurrentAxis.aTitle.isEmpty() )
+    if( m_aCurrentAxis.maTitle.empty() )
         return;
 
     Reference< chart::XAxis > xAxis( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ) );
     if( !xAxis.is() )
         return;
 
-    Reference< beans::XPropertySet > xTitleProp( xAxis->getAxisTitle() );
-    if( xTitleProp.is() )
-    {
-        try
-        {
-            // TODO: ODF import for formatted chart titles
-            xTitleProp->setPropertyValue("String", uno::Any(m_aCurrentAxis.aTitle) );
-        }
-        catch( beans::UnknownPropertyException & )
-        {
-            SAL_INFO("xmloff.chart", "Property String for Title not available" );
-        }
-    }
+    if (m_aCurrentAxis.maTitle.back().first.isEmpty() &&
+        m_aCurrentAxis.maTitle.back().second == OUStringChar(u'\x0D'))
+        m_aCurrentAxis.maTitle.pop_back(); // remove last end of paragraph break
+
+    SchXMLTools::importFormattedText(GetImport(), m_aCurrentAxis.maTitle, xAxis->getAxisTitle());
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLAxisContext::createFastChildContext(
@@ -583,7 +575,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLAxisContext::cre
         case XML_ELEMENT(CHART, XML_TITLE):
         {
             return new SchXMLTitleContext( m_rImportHelper, GetImport(),
-                                               m_aCurrentAxis.aTitle,
+                                               m_aCurrentAxis.maTitle,
                                                getTitleShape() );
         }
         break;

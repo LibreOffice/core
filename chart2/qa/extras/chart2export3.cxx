@@ -10,6 +10,9 @@
 #include "charttest.hxx"
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 
 using uno::Reference;
 using beans::XPropertySet;
@@ -432,11 +435,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testChartSubTitle)
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // test properties of subtitle
+    // paragraph props
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr"_ostr, "sz"_ostr, "1100");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr"_ostr, "b"_ostr, "1");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, "00a933");
+    // run props
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr"_ostr, "sz"_ostr, "1100");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr"_ostr, "b"_ostr, "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, "00a933");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr/a:latin"_ostr, "typeface"_ostr, "Times New Roman");
+    // text
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:t"_ostr, "It is a Subtitle");
+    // shape props
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, "b2b2b2");
 }
 
@@ -447,13 +456,19 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testChartMainWithSubTitle)
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // test properties of title
+    // paragraph props
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:pPr/a:defRPr"_ostr, "sz"_ostr, "1300");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:pPr/a:defRPr"_ostr, "b"_ostr, "0");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:pPr/a:defRPr"_ostr, "i"_ostr, "1");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:pPr/a:defRPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, "f10d0c");
+    // run props
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r/a:rPr"_ostr, "sz"_ostr, "1300");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r/a:rPr"_ostr, "b"_ostr, "0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r/a:rPr"_ostr, "i"_ostr, "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r/a:rPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, "f10d0c");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r/a:rPr/a:latin"_ostr, "typeface"_ostr, "Arial");
+    // text
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[1]/a:r/a:t"_ostr, "It is a Maintitle");
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r/a:t"_ostr, "It is a Subtitle");
+    // shape props
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, "81d41a");
 }
 
@@ -600,8 +615,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTitleCharacterPropertiesXLSX)
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr"_ostr, "sz"_ostr, "2400");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr"_ostr, "b"_ostr, "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr"_ostr, "sz"_ostr, "1300");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:pPr/a:defRPr"_ostr, "b"_ostr, "0");
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr"_ostr, "sz"_ostr, "2400");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p/a:r/a:rPr"_ostr, "b"_ostr, "1");
@@ -810,6 +825,119 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testFormattedChartTitles)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[4]/a:rPr"_ostr, "b"_ostr, "0");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[4]/a:rPr"_ostr, "strike"_ostr, "sngStrike");
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:tx/c:rich/a:p[2]/a:r[4]/a:t"_ostr, "title");
+}
+
+namespace {
+
+void checkCharacterProps(Reference<beans::XPropertySet> const & xTitleProp)
+{
+    Sequence< uno::Reference< chart2::XFormattedString > > xFormattedSubTitle;
+    CPPUNIT_ASSERT(xTitleProp->getPropertyValue("FormattedStrings") >>= xFormattedSubTitle);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), xFormattedSubTitle.getLength());
+    // check texts
+    std::vector<OUString> aValues = { "This", " is", "3", " a ", "custom", " erte1\n", "2dfgd ch", "ar", "t ", "title" };
+    for (sal_Int32 i = 0; i < xFormattedSubTitle.getLength(); i++)
+    {
+        const OUString aText = xFormattedSubTitle.getConstArray()[i]->getString();
+        CPPUNIT_ASSERT_EQUAL(aValues[i], aText);
+        Reference< beans::XPropertySet > xRunPropSet(xFormattedSubTitle.getConstArray()[i], uno::UNO_QUERY);
+        // common props
+        uno::Any aAny = xRunPropSet->getPropertyValue("CharFontName");
+        CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Aptos Narrow")), aAny);
+        // unique props
+        if (aText == aValues[0])
+        {
+            aAny = xRunPropSet->getPropertyValue("CharWeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::BOLD), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharHeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharColor");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0xff0000)), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharEscapement");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(short(0)), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharEscapementHeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(short(100)), aAny);
+        }
+        else if (aText == aValues[1] || aText == aValues[3] || aText == aValues[5] ||
+            aText == aValues[6] || aText == aValues[8])
+        {
+            aAny = xRunPropSet->getPropertyValue("CharWeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::NORMAL), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharHeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharColor");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x595959)), aAny);
+        }
+        else if (aText == aValues[2])
+        {
+            aAny = xRunPropSet->getPropertyValue("CharWeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::NORMAL), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharHeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharColor");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x595959)), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharEscapement");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(short(30)), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharEscapementHeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(short(58)), aAny);
+        }
+        else if (aText == aValues[4])
+        {
+            aAny = xRunPropSet->getPropertyValue("CharWeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::NORMAL), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharHeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(20.0f), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharColor");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x4ea72e)), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharPosture");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontSlant_ITALIC), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharUnderline");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontUnderline::SINGLE), aAny);
+        }
+        else if (aText == aValues[7])
+        {
+            aAny = xRunPropSet->getPropertyValue("CharWeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::BOLD), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharHeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharColor");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x595959)), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharPosture");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontSlant_NONE), aAny);
+        }
+        else // aText == aValues[9]
+        {
+            aAny = xRunPropSet->getPropertyValue("CharWeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::NORMAL), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharHeight");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(14.0f), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharColor");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0x595959)), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharPosture");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontSlant_ITALIC), aAny);
+            aAny = xRunPropSet->getPropertyValue("CharOverline");
+            CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontUnderline::NONE), aAny);
+        }
+    }
+}
+
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testODSFormattedChartTitles)
+{
+    // The document contains a line chart with "Between tick marks" X axis position.
+    loadFromFile(u"ods/tdf39052.ods");
+    // Check formatted strings after export.
+    saveAndReload("calc8");
+
+    Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChart2Doc.is());
+    Reference< chart::XChartDocument > xChartDoc(xChart2Doc, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference< beans::XPropertySet > xTitleProp(xChartDoc->getTitle(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTitleProp.is());
+
+    checkCharacterProps(xTitleProp);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

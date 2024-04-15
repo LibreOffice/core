@@ -18,6 +18,7 @@
  */
 
 #include <Title.hxx>
+#include <CharacterProperties.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <CloneHelper.hxx>
@@ -145,6 +146,7 @@ const ::chart::tPropertyValueMap& StaticTitleDefaults()
         {
             ::chart::tPropertyValueMap aTmp;
 
+            ::chart::CharacterProperties::AddDefaultsToMap( aTmp );
             ::chart::LinePropertiesHelper::AddDefaultsToMap( aTmp );
             ::chart::FillProperties::AddDefaultsToMap( aTmp );
 
@@ -178,6 +180,7 @@ const ::chart::tPropertyValueMap& StaticTitleDefaults()
         {
             std::vector< css::beans::Property > aProperties;
             lcl_AddPropertiesToVector( aProperties );
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
             ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
             ::chart::FillProperties::AddPropertiesToVector( aProperties );
 

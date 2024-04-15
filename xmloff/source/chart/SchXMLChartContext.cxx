@@ -729,37 +729,16 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
 
     if( xProp.is())
     {
-        if( !maMainTitle.isEmpty())
+        if( !maMainTitle.empty())
         {
-            uno::Reference< beans::XPropertySet > xTitleProp( xDoc->getTitle(), uno::UNO_QUERY );
-            if( xTitleProp.is())
-            {
-                try
-                {
-                    // TODO: ODF import for formatted chart titles
-                    xTitleProp->setPropertyValue("String", uno::Any(maMainTitle) );
-                }
-                catch(const beans::UnknownPropertyException&)
-                {
-                    SAL_WARN("xmloff.chart", "Property String for Title not available" );
-                }
-            }
+            uno::Reference< beans::XPropertySet > xTitleProp(xDoc->getTitle(), uno::UNO_QUERY);
+            SchXMLTools::importFormattedText(GetImport(), maMainTitle, xTitleProp);
         }
-        if( !maSubTitle.isEmpty())
+
+        if( !maSubTitle.empty())
         {
-            uno::Reference< beans::XPropertySet > xTitleProp( xDoc->getSubTitle(), uno::UNO_QUERY );
-            if( xTitleProp.is())
-            {
-                try
-                {
-                    // TODO: ODF import for formatted chart titles
-                    xTitleProp->setPropertyValue("String", uno::Any(maSubTitle) );
-                }
-                catch(const beans::UnknownPropertyException&)
-                {
-                    SAL_WARN("xmloff.chart", "Property String for Title not available" );
-                }
-            }
+            uno::Reference< beans::XPropertySet > xTitleProp(xDoc->getSubTitle(), uno::UNO_QUERY);
+            SchXMLTools::importFormattedText(GetImport(), maSubTitle, xTitleProp);
         }
     }
 
@@ -1181,7 +1160,7 @@ void SchXMLChartContext::InitChart(
 }
 
 SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
-                                        OUString& rTitle,
+                                        std::vector<std::pair<OUString, OUString>>& rTitle,
                                         uno::Reference< drawing::XShape > xTitleShape ) :
         SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
@@ -1247,7 +1226,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTitleContext::cr
     if( nElement == XML_ELEMENT(TEXT, XML_P) ||
         nElement == XML_ELEMENT(LO_EXT, XML_P) )
     {
-        pContext = new SchXMLParagraphContext( GetImport(), mrTitle );
+        pContext = new SchXMLTitleParaContext(GetImport(), mrTitle);
     }
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
