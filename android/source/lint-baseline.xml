@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
+<issues format="6" by="lint 8.3.2" type="baseline" client="gradle" dependencies="false" name="AGP (8.3.2)" variant="all" version="8.3.2">
 
     <issue
         id="ScopedStorage"
@@ -156,17 +156,6 @@
     </issue>
 
     <issue
-        id="PrivateResource"
-        message="The resource `@drawable/ic_keyboard_black_24dp` is marked as private in com.google.android.material:material:1.10.0"
-        errorLine1="    android:src=&quot;@drawable/ic_keyboard_black_24dp&quot;"
-        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/drawable-hdpi/ic_keyboard.xml"
-            line="4"
-            column="18"/>
-    </issue>
-
-    <issue
         id="SpUsage"
         message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes"
         errorLine1="                    android:textSize=&quot;14dp&quot;"
@@ -175,6 +164,17 @@
             file="res/layout/activity_document_browser.xml"
             line="77"
             column="21"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Should not restrict activity to fixed orientation. This may not be suitable for different form factors, causing the app to be letterboxed."
+        errorLine1="            android:screenOrientation=&quot;landscape&quot; >"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="AndroidManifest.xml"
+            line="109"
+            column="13"/>
     </issue>
 
     <issue
@@ -1214,17 +1214,6 @@
     </issue>
 
     <issue
-        id="RedundantNamespace"
-        message="This namespace declaration is redundant"
-        errorLine1="&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/about.xml"
-            line="6"
-            column="15"/>
-    </issue>
-
-    <issue
         id="TooDeepLayout"
         message="`toolbar_bottom.xml` has more than 10 levels, bad for performance"
         errorLine1="                                    &lt;ImageButton"
@@ -1233,50 +1222,6 @@
             file="res/layout/toolbar_bottom.xml"
             line="70"
             column="38"/>
-    </issue>
-
-    <issue
-        id="UnusedNamespace"
-        message="Unused namespace declaration xmlns:android; already declared on the root element"
-        errorLine1="&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="res/layout/about.xml"
-            line="6"
-            column="15"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Պահել որպես...&lt;/string>"
-        errorLine2="                                  ~~~~~~~~~~~~~~">
-        <location
-            file="res/values-hy/strings.xml"
-            line="36"
-            column="35"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Cadw Fel...&lt;/string>"
-        errorLine2="                                  ~~~~~~~~~~~">
-        <location
-            file="res/values-cy/strings.xml"
-            line="40"
-            column="35"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;action_save_as&quot;>Gardar como...&lt;/string>"
-        errorLine2="                                  ~~~~~~~~~~~~~~">
-        <location
-            file="res/values-gl/strings.xml"
-            line="42"
-            column="35"/>
     </issue>
 
     <issue
