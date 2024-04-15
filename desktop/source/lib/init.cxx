@@ -15,6 +15,7 @@
 #include <config_buildconfig.h>
 #include <config_cairo_rgba.h>
 #include <config_features.h>
+#include <editeng/unolingu.hxx>
 
 #include <stdio.h>
 
@@ -127,6 +128,7 @@
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
@@ -7581,6 +7583,12 @@ static void preloadData()
         xThesaurus->queryMeanings(u"forcefed"_ustr, it, aNone);
     }
     std::cerr << "\n";
+
+    std::cerr << "Preloading breakiterator: ";
+    css::uno::Reference< css::i18n::XBreakIterator > xBreakIterator = css::i18n::BreakIterator::create(xContext);
+    css::i18n::LineBreakUserOptions aUserOptions;
+    css::i18n::LineBreakHyphenationOptions aHyphOptions( LinguMgr::GetHyphenator(), css::uno::Sequence<beans::PropertyValue>(), 1 );
+    xBreakIterator->getLineBreak("", /*nMaxBreakPos*/0, aLocales[0], /*nMinBreakPos*/0, aHyphOptions, aUserOptions);
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
         comphelper::getProcessComponentContext());
