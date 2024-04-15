@@ -12,13 +12,18 @@
 
 #include <config_folders.h>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/bootstrap.hxx>
 #include <desktop/crashreport.hxx>
 #include <sfx2/safemode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
+#include <unotools/configmgr.hxx>
 
+#include <com/sun/star/configuration/ReadOnlyAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
@@ -32,7 +37,31 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     , mxEditPostUpload(m_xBuilder->weld_text_view("ed_post"))
     , mxCBSafeMode(m_xBuilder->weld_check_button("check_safemode"))
 {
-    maSuccessMsg = mxEditPostUpload->get_text();
+    auto const config = css::configuration::ReadOnlyAccess::create(
+        comphelper::getProcessComponentContext(),
+        LanguageTag(
+            css::uno::Reference<css::lang::XLocalizable>(
+                css::configuration::theDefaultProvider::get(
+                    comphelper::getProcessComponentContext()),
+                css::uno::UNO_QUERY_THROW)->
+            getLocale()).getBcp47());
+
+    auto const preText = config->getByHierarchicalName(
+        "/org.openoffice.Office.Common/Misc/CrashReportPreSendNotification");
+    if (OUString text; preText >>= text) {
+        mxEditPreUpload->set_label(
+            text.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName()));
+    }
+
+    auto const postText = config->getByHierarchicalName(
+        "/org.openoffice.Office.Common/Misc/CrashReportPostSendNotification");
+    if (OUString text; postText >>= text) {
+        OUString url;
+        rtl::Bootstrap::get("CrashDumpUrl", url);
+        maSuccessMsg = text.replaceAll("%CrashDumpUrl%", url);
+    } else {
+        maSuccessMsg = mxEditPostUpload->get_text();
+    }
 
     auto const offerSafeMode = officecfg::Office::Common::Misc::OfferSafeMode::get();
     mxCBSafeMode->set_visible(offerSafeMode);

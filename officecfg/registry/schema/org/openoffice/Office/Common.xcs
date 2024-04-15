@@ -5572,6 +5572,20 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="CrashReportPreSendNotification" oor:type="xs:string" oor:nillable="false"
+            oor:localized="true">
+        <info>
+          <desc>An override for the text presented in the crash report dialog before sending the
+          report.</desc>
+        </info>
+      </prop>
+      <prop oor:name="CrashReportPostSendNotification" oor:type="xs:string" oor:nillable="false"
+            oor:localized="true">
+        <info>
+          <desc>An override for the text presented in the crash report dialog after successfully
+          sending the report.</desc>
+        </info>
+      </prop>
       <prop oor:name="ShowTipOfTheDay" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - General -->
         <info>
