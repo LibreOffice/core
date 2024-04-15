@@ -3908,7 +3908,7 @@ void SfxViewShell::setBlockedCommandList(const char* blockedCommandList)
     }
 }
 
-bool SfxViewShell::isBlockedCommand(OUString command)
+bool SfxViewShell::isBlockedCommand(OUString command) const
 {
     return mvLOKBlockedCommandList.find(command) != mvLOKBlockedCommandList.end();
 }

@@ -485,7 +485,7 @@ public:
 
     // Blocked Command view settings
     void setBlockedCommandList(const char* blockedCommandList);
-    bool isBlockedCommand(OUString command);
+    bool isBlockedCommand(OUString command) const;
 
     void SetStoringHelper(const std::shared_ptr<SfxStoringHelper>& xHelper) { m_xHelper = xHelper; }
 
