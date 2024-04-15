@@ -1474,8 +1474,14 @@ void DrawViewShell::FuSupportRotate(SfxRequest const &rReq)
 
     if (!pOLV)
         return;
-
-    pOLV->TransliterateText( m_aRotateCase.getNextMode() );
+    TransliterationFlags transFlags = m_aRotateCase.getNextMode();
+    if (TransliterationFlags::SENTENCE_CASE == transFlags)
+    {
+        OUString SelectedText = pOLV->GetSelected().trim();
+        if (SelectedText.getLength() <= 2 || (SelectedText.indexOf(' ') < 0 && SelectedText.indexOf('\t') < 0))
+            transFlags = m_aRotateCase.getNextMode();
+    }
+    pOLV->TransliterateText( transFlags );
 }
 
 void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
