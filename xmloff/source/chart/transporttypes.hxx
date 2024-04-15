@@ -103,7 +103,7 @@ struct SchXMLAxis
     enum SchXMLAxisDimension eDimension;
     sal_Int8 nAxisIndex;//0->primary axis; 1->secondary axis
     OUString aName;
-    OUString aTitle;
+    std::vector<std::pair<OUString, OUString>> maTitle;
     bool bHasCategories;
 
     SchXMLAxis() : eDimension( SCH_XML_AXIS_UNDEF ), nAxisIndex( 0 ), bHasCategories( false ) {}

@@ -143,16 +143,7 @@ Any WrappedTitleFormStringsProperty::getPropertyValue( const Reference< beans::X
     if (xTitle.is())
     {
         const Sequence< Reference< chart2::XFormattedString > > aStrings(xTitle->getText());
-
-        OUStringBuffer aBuf;
-        for (Reference< chart2::XFormattedString > const& formattedStr : aStrings)
-        {
-            aBuf.append(formattedStr->getString());
-        }
-        if (!aBuf.makeStringAndClear().isEmpty())
-        {
-            aRet <<= aStrings;
-        }
+        aRet <<= aStrings;
     }
     return aRet;
 }
@@ -325,27 +316,12 @@ void SAL_CALL TitleWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( g, aListener );
 }
 
-Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
-{
-    Reference< beans::XPropertySet > xProp;
-
-    Reference< chart2::XTitle > xTitle( getTitleObject() );
-    if( xTitle.is())
-    {
-        Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
-        if( aStrings.hasElements() )
-            xProp.set( aStrings[0], uno::UNO_QUERY );
-    }
-
-    return xProp;
-}
-
 void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue )
 {
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
-    Reference< beans::XPropertySet > xProp = getFirstCharacterPropertySet();
+    Reference< beans::XPropertySet > xProp = getInnerPropertySet();
     Reference< beans::XFastPropertySet > xFastProp( xProp, uno::UNO_QUERY );
     if(xProp.is())
     {
@@ -385,6 +361,16 @@ void TitleWrapper::setFastCharacterPropertyValue(
         else if( xFastPropertySet.is() )
             xFastPropertySet->setFastPropertyValue( nHandle, rValue );
     }
+
+    Reference< beans::XPropertySet > xInnerProp = getInnerPropertySet();
+    Reference< beans::XFastPropertySet > xFastInnerProp( xInnerProp, uno::UNO_QUERY );
+    if (xInnerProp.is())
+    {
+        if (pWrappedProperty)
+            pWrappedProperty->setPropertyValue(rValue, xInnerProp);
+        else if (xFastInnerProp.is())
+            xFastInnerProp->setFastPropertyValue(nHandle, rValue);
+    }
 }
 
 // WrappedPropertySet
@@ -418,7 +404,7 @@ beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rP
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
-        Reference< beans::XPropertyState > xPropState( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+        Reference< beans::XPropertyState > xPropState( getInnerPropertySet(), uno::UNO_QUERY);
         if( xPropState.is() )
         {
             const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -451,7 +437,7 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
-        Reference< beans::XPropertyState > xPropState( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+        Reference< beans::XPropertyState > xPropState( getInnerPropertySet(), uno::UNO_QUERY );
         if( xPropState.is() )
         {
             const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -472,7 +458,7 @@ void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rProperty
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
-        Reference< beans::XPropertySet > xPropSet = getFirstCharacterPropertySet();
+        Reference< beans::XPropertySet > xPropSet = getInnerPropertySet();
         if( xPropSet.is() )
             xPropSet->addPropertyChangeListener( rPropertyName, xListener );
     }
@@ -484,7 +470,7 @@ void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPrope
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
-        Reference< beans::XPropertySet > xPropSet = getFirstCharacterPropertySet();
+        Reference< beans::XPropertySet > xPropSet = getInnerPropertySet();
         if( xPropSet.is() )
             xPropSet->removePropertyChangeListener( rPropertyName, xListener );
     }

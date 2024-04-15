@@ -207,6 +207,8 @@ public:
     ::std::queue< OUString > maAutoStyleNameQueue;
     void CollectAutoStyle(
         std::vector< XMLPropertyState >&& aStates );
+    void CollectAutoTextStyle(
+        const css::uno::Reference< css::beans::XPropertySet >& xTitlePropSet );
     void AddAutoStyleAttribute(
         const std::vector< XMLPropertyState >& aStates );
 
@@ -275,6 +277,7 @@ public:
     void addSize( const css::uno::Reference< css::drawing::XShape >& xShape );
     /// exports a string as a paragraph element
     void exportText( const OUString& rText );
+    void exportFormattedText( const css::uno::Reference< beans::XPropertySet >& xTitleProps );
 
 public:
     SvXMLExport& mrExport;
@@ -1314,15 +1317,14 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     if( bHasMainTitle )
     {
         // get property states for autostyles
-        if( mxExpPropMapper.is())
+        Reference< drawing::XShape > xShape = rChartDoc->getTitle();
+        Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+        if( mxExpPropMapper.is() && xPropSet.is())
         {
-            Reference< beans::XPropertySet > xPropSet( rChartDoc->getTitle(), uno::UNO_QUERY );
-            if( xPropSet.is())
-                aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
+            aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
         }
         if( bExportContent )
         {
-            Reference< drawing::XShape > xShape = rChartDoc->getTitle();
             if( xShape.is())    // && "hasTitleBeenMoved"
                 addPosition( xShape );
 
@@ -1333,19 +1335,12 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             SvXMLElementExport aElTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, true, true );
 
             // content (text:p)
-            Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-            if( xPropSet.is())
-            {
-                // TODO: ODF export for formatted chart titles
-                Any aAny( xPropSet->getPropertyValue( "String" ));
-                OUString aText;
-                aAny >>= aText;
-                exportText( aText );
-            }
+            exportFormattedText(xPropSet);
         }
         else    // autostyles
         {
             CollectAutoStyle( std::move(aPropertyStates) );
+            CollectAutoTextStyle( xPropSet );
         }
         // remove property states for autostyles
         aPropertyStates.clear();
@@ -1355,16 +1350,15 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     if( bHasSubTitle )
     {
         // get property states for autostyles
-        if( mxExpPropMapper.is())
+        Reference< drawing::XShape > xShape = rChartDoc->getSubTitle();
+        Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+        if( mxExpPropMapper.is() && xPropSet.is())
         {
-            Reference< beans::XPropertySet > xPropSet( rChartDoc->getSubTitle(), uno::UNO_QUERY );
-            if( xPropSet.is())
-                aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
+            aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
         }
 
         if( bExportContent )
         {
-            Reference< drawing::XShape > xShape = rChartDoc->getSubTitle();
             if( xShape.is())
                 addPosition( xShape );
 
@@ -1375,19 +1369,12 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             SvXMLElementExport aElSubTitle( mrExport, XML_NAMESPACE_CHART, XML_SUBTITLE, true, true );
 
             // content (text:p)
-            Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-            if( xPropSet.is())
-            {
-                // TODO: ODF import for formatted chart titles
-                Any aAny( xPropSet->getPropertyValue( "String" ));
-                OUString aText;
-                aAny >>= aText;
-                exportText( aText );
-            }
+            exportFormattedText(xPropSet);
         }
         else    // autostyles
         {
             CollectAutoStyle( std::move(aPropertyStates) );
+            CollectAutoTextStyle(xPropSet);
         }
         // remove property states for autostyles
         aPropertyStates.clear();
@@ -2258,11 +2245,6 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
     std::vector<XMLPropertyState> aPropertyStates = mxExpPropMapper->Filter(mrExport, rTitleProps);
     if( bExportContent )
     {
-        // TODO: ODF import for formatted chart titles
-        OUString aText;
-        Any aAny( rTitleProps->getPropertyValue( "String" ));
-        aAny >>= aText;
-
         Reference< drawing::XShape > xShape( rTitleProps, uno::UNO_QUERY );
         if( xShape.is())
             addPosition( xShape );
@@ -2271,11 +2253,12 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
         SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, true, true );
 
         // paragraph containing title
-        exportText( aText );
+        exportFormattedText( rTitleProps );
     }
     else
     {
         CollectAutoStyle( std::move(aPropertyStates) );
+        CollectAutoTextStyle( rTitleProps );
     }
     aPropertyStates.clear();
 }
@@ -3819,6 +3802,27 @@ void SchXMLExportHelper_Impl::CollectAutoStyle( std::vector< XMLPropertyState >&
         maAutoStyleNameQueue.push( mrAutoStylePool.Add( XmlStyleFamily::SCH_CHART_ID, std::move(aStates) ));
 }
 
+void SchXMLExportHelper_Impl::CollectAutoTextStyle( const css::uno::Reference< beans::XPropertySet >& xTitlePropSet )
+{
+    if (xTitlePropSet.is())
+    {
+        Sequence< uno::Reference< chart2::XFormattedString > > xFormattedTitle;
+
+        OUString aTitle;
+        if ((xTitlePropSet->getPropertyValue("String") >>= aTitle) && !aTitle.isEmpty())
+            xTitlePropSet->getPropertyValue("FormattedStrings") >>= xFormattedTitle;
+
+        if (xFormattedTitle.hasElements())
+        {
+            for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedTitle)
+            {
+                Reference< beans::XPropertySet > xRunPropSet(rxFS, uno::UNO_QUERY);
+                mrExport.GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT, xRunPropSet);
+            }
+        }
+    }
+}
+
 void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )
 {
     if( !aStates.empty() )
@@ -3833,6 +3837,11 @@ void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPrope
 void SchXMLExportHelper_Impl::exportText( const OUString& rText )
 {
     SchXMLTools::exportText( mrExport, rText, false/*bConvertTabsLFs*/ );
+}
+
+void SchXMLExportHelper_Impl::exportFormattedText( const css::uno::Reference< beans::XPropertySet >& xTitleProps )
+{
+    SchXMLTools::exportFormattedText( mrExport, xTitleProps );
 }
 
 
