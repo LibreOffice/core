@@ -1202,7 +1202,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         {
             // Do not split immediately in the beginning of page (unless there is an at-para or
             // at-char or at-page fly, which pushes the rest down)
-            if (isFirstVisibleFrameInBody(this) && !hasFly(this) && !hasAtPageFly(pBodyFrame))
+            if (isFirstVisibleFrameInBody(this) && !hasFly(this) && pBodyFrame && !hasAtPageFly(pBodyFrame))
                 nNew = 0;
         }
     }
