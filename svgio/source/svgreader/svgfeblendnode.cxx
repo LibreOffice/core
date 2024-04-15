@@ -147,8 +147,8 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
         aBmpEx = vcl::bitmap::DrawBitmapInRect(aBmpEx, aRange, aBaseRect);
         aBmpEx2 = vcl::bitmap::DrawBitmapInRect(aBmpEx2, aRange2, aBaseRect);
 
-        BitmapScreenBlendFilter* pScreenBlendFilter = new BitmapScreenBlendFilter(aBmpEx, aBmpEx2);
-        BitmapEx aResBmpEx = pScreenBlendFilter->execute();
+        BitmapScreenBlendFilter aScreenBlendFilter(aBmpEx, aBmpEx2);
+        BitmapEx aResBmpEx = aScreenBlendFilter.execute();
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
