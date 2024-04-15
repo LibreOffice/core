@@ -1288,8 +1288,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
 
 LanguageType SvNumberFormatter::GetLanguage() const
 {
-    ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    return IniLnge;
+    return IniLnge; // immutable
 }
 
 // static
