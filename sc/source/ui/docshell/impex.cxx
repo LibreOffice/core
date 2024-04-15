@@ -1592,7 +1592,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     ScDocumentImport aDocImport(rDoc);
     do
     {
-        SCCOL nLastCol = nEndCol; // tdf#129701 preserve value of nEndCol
+        const SCCOL nLastCol = nEndCol; // tdf#129701 preserve value of nEndCol
         for( ;; )
         {
             aLine = ReadCsvLine(rStrm, !bFixed, aSeps, cStr, cDetectSep);
@@ -1714,15 +1714,15 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                                 aTransliteration, aCalendar,
                                 pEnglishTransliteration.get(), pEnglishCalendar.get());
                         }
+                        ++nCol;
                         if (bIsLastColEmpty)
                         {
                             bIsLastColEmpty = false; // toggle to stop
                         }
                         else
                         {
-                            ++nCol;
                             // tdf#129701 detect if there is a last empty column when we need it
-                            bIsLastColEmpty = !(*p) && !bSkipEmptyCells && !bDetermineRange && nCol == nLastCol;
+                            bIsLastColEmpty = (nCol == nLastCol) && !(*p) && !bSkipEmptyCells && !bDetermineRange;
                         }
 
                     }
