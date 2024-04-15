@@ -19,7 +19,6 @@
 #pragma once
 
 #include "breakiterator_unicode.hxx"
-#include "xdictionary.hxx"
 #include <optional>
 #include <memory>
 
@@ -31,19 +30,12 @@ class BreakIterator_CJK : public BreakIterator_Unicode
 public:
     BreakIterator_CJK();
 
-    css::i18n::Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
-            const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    css::i18n::Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
-            const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    css::i18n::Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
-            const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection ) override;
     css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const css::i18n::LineBreakHyphenationOptions& hOptions,
         const css::i18n::LineBreakUserOptions& bOptions ) override;
 
 protected:
-    std::optional<xdictionary> m_oDict;
     OUString hangingCharacters;
 };
 

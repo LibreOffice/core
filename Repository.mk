@@ -701,8 +701,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 ))
 
 $(eval $(call gb_Helper_register_plugins_for_install,PLAINLIBS_OOO,ooo, \
-    dict_ja \
-    dict_zh \
     localedata_en \
     localedata_es \
     localedata_euro \

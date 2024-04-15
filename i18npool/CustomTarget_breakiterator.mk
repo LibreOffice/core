@@ -11,37 +11,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,i18npool/breakiterator))
 
 i18npool_BIDIR := $(call gb_CustomTarget_get_workdir,i18npool/breakiterator)
 
-ifneq ($(filter iOS ANDROID,$(OS)),)
-
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
-	$(i18npool_BIDIR)/dict_ja.data $(i18npool_BIDIR)/dict_zh.data $(i18npool_BIDIR)/OpenOffice_dat.c
-
-$(i18npool_BIDIR)/dict_%.data : \
-		$(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
-		$(call gb_Executable_get_runtime_dependencies,gendict) \
-		| $(i18npool_BIDIR)/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),DIC)
-	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(i18npool_BIDIR)/dict_%.cxx,%,$@))
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),DIC)
-
-else # !iOS ANDROID
-
-$(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
-	$(i18npool_BIDIR)/dict_ja.cxx $(i18npool_BIDIR)/dict_zh.cxx $(i18npool_BIDIR)/OpenOffice_dat.c
-
-$(i18npool_BIDIR)/dict_%.cxx : \
-		$(SRCDIR)/i18npool/source/breakiterator/data/%.dic \
-		$(call gb_Executable_get_runtime_dependencies,gendict) \
-		| $(i18npool_BIDIR)/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DIC,1)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),DIC)
-	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(i18npool_BIDIR)/dict_%.cxx,%,$@))
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),DIC)
-
-endif
+	$(i18npool_BIDIR)/OpenOffice_dat.c
 
 i18npool_BRKTXTS := \
     count_word.brk \

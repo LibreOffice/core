@@ -50,7 +50,7 @@ public:
     void testLegacyDictWordPrepostDash_sv_SE();
     void testLegacyHebrewQuoteInsideWord();
     void testLegacySurrogatePairs();
-    void testLegacyWordCountCompat();
+    void testWordCount();
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
@@ -73,7 +73,7 @@ public:
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_sv_SE);
     CPPUNIT_TEST(testLegacyHebrewQuoteInsideWord);
     CPPUNIT_TEST(testLegacySurrogatePairs);
-    CPPUNIT_TEST(testLegacyWordCountCompat);
+    CPPUNIT_TEST(testWordCount);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -930,6 +930,22 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(31), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(37), aBounds.endPos);
     }
+
+    // tdf#49885: Upgrade CJ word boundary analysis to ICU frequency-based analysis
+    {
+        aLocale.Language = "ja";
+        aLocale.Country = "JP";
+
+        static constexpr OUString aTest = u"通産省工業技術院北海道工業開発試験所"_ustr;
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 9, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+
+        // When using the old LO custom dictionaries, this will select the entire phrase.
+        // When using ICU, it will select only 北海道.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aBounds.endPos);
+    }
 }
 
 void TestBreakIterator::testSentenceBoundaries()
@@ -1399,12 +1415,12 @@ void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > co
     i18n::Boundary aBounds;
 
     {
-        static constexpr OUStringLiteral aTest = u"\u30B7\u30E3\u30C3\u30C8\u30C0\u30A6\u30F3";
+        static constexpr OUString aTest = u"シャットダウン"_ustr;
 
         aBounds = xBreak->getWordBoundary(aTest, 5, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.endPos);
     }
 
@@ -1570,8 +1586,7 @@ void TestBreakIterator::testLegacySurrogatePairs()
     //
     // BreakIterator supports surrogate pairs (UTF-16). This is a simple characteristic test.
     {
-        const sal_Unicode buf[] = { u"X 𠮟 X" };
-        OUString aTest(buf, SAL_N_ELEMENTS(buf));
+        static constexpr OUString aTest = u"X 𠮟 X"_ustr;
 
         auto aBounds
             = m_xBreak->getWordBoundary(aTest, 1, aLocale, i18n::WordType::DICTIONARY_WORD, false);
@@ -1581,7 +1596,7 @@ void TestBreakIterator::testLegacySurrogatePairs()
         aBounds
             = m_xBreak->getWordBoundary(aTest, 2, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.endPos);
 
         aBounds
             = m_xBreak->getWordBoundary(aTest, 5, aLocale, i18n::WordType::DICTIONARY_WORD, false);
@@ -1590,16 +1605,44 @@ void TestBreakIterator::testLegacySurrogatePairs()
     }
 }
 
-void TestBreakIterator::testLegacyWordCountCompat()
+void TestBreakIterator::testWordCount()
 {
-    lang::Locale aLocale;
+    auto count_words_fn = [&](const OUString& str, const lang::Locale& aLocale) -> int
+    {
+        int num_words = 0;
+        sal_Int32 next_pos = 0;
+        int iter_guard = 0;
 
-    aLocale.Language = "en";
-    aLocale.Country = "US";
+        if (m_xBreak->isBeginWord(str, next_pos, aLocale, i18n::WordType::WORD_COUNT))
+        {
+            ++num_words;
+        }
+
+        while (true)
+        {
+            CPPUNIT_ASSERT_MESSAGE("Tripped infinite loop check", ++iter_guard < 100);
+
+            auto aBounds = m_xBreak->nextWord(str, next_pos, aLocale, i18n::WordType::WORD_COUNT);
+
+            if (aBounds.endPos < next_pos || aBounds.startPos == aBounds.endPos)
+            {
+                break;
+            }
+
+            next_pos = aBounds.endPos;
+            ++num_words;
+        }
+
+        return num_words;
+    };
 
     // i#80815: "Word count differs from MS Word"
     // This is a characteristic test for word count using test data from the linked bug.
     {
+        lang::Locale aLocale;
+        aLocale.Language = "en";
+        aLocale.Country = "US";
+
         const OUString str = u""
                              "test data for word count issue #80815\n"
                              "fo\\\'sforos\n"
@@ -1622,25 +1665,18 @@ void TestBreakIterator::testLegacyWordCountCompat()
                              "aaaaaaa,aaaaaaa\n"
                              "aaaaaaa;aaaaaaa\n"_ustr;
 
-        int num_words = 0;
-        sal_Int32 next_pos = 0;
-        int iter_guard = 0;
-        while (true)
-        {
-            CPPUNIT_ASSERT_MESSAGE("Tripped infinite loop check", ++iter_guard < 100);
+        CPPUNIT_ASSERT_EQUAL(24, count_words_fn(str, aLocale));
+    }
 
-            auto aBounds = m_xBreak->nextWord(str, next_pos, aLocale, i18n::WordType::WORD_COUNT);
+    // Test that the switch to upstream ICU for CJ word boundary analysis doesn't change word count.
+    {
+        lang::Locale aLocale;
+        aLocale.Language = "ja";
+        aLocale.Country = "JP";
 
-            if (aBounds.endPos < next_pos)
-            {
-                break;
-            }
+        const OUString str = u"Wordの様にワード数をするのにTest\n植松町"_ustr;
 
-            next_pos = aBounds.endPos;
-            ++num_words;
-        }
-
-        CPPUNIT_ASSERT_EQUAL(23, num_words);
+        CPPUNIT_ASSERT_EQUAL(7, count_words_fn(str, aLocale));
     }
 }
 
