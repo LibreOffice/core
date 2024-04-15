@@ -12,19 +12,11 @@
 #include "helper/qahelper.hxx"
 
 #include <patattr.hxx>
-#include <scitems.hxx>
 #include <document.hxx>
-#include <generalfunction.hxx>
-#include <dpcache.hxx>
 #include <dpobject.hxx>
-#include <dpsave.hxx>
-#include <dputil.hxx>
 #include <attrib.hxx>
-#include <dpshttab.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <queryentry.hxx>
-#include <queryparam.hxx>
 #include <rtl/string.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
@@ -61,6 +53,24 @@ Color getFontColor(ScDocument& rDoc, OUString const& rAddressString)
     const SvxColorItem& rItem = pPattern->GetItem(ATTR_FONT_COLOR);
     return rItem.getColor();
 }
+
+template <typename T> OUString checkNonEmptyAddresses(ScDocument& rDoc, T const& rArrayOfAddresses)
+{
+    OUString aString;
+    for (auto const& rAddressString : rArrayOfAddresses)
+    {
+        ScAddress aAddress;
+        aAddress.Parse(rAddressString, rDoc);
+        const ScPatternAttr* pPattern = rDoc.GetPattern(aAddress);
+        if (pPattern->GetItem(ATTR_FONT_COLOR).getColor() != COL_BLACK
+            || pPattern->GetItem(ATTR_BACKGROUND).GetColor() != COL_TRANSPARENT)
+        {
+            aString += rAddressString + " ";
+        }
+    }
+    return aString;
+}
+
 } // end anonymous namespace
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
@@ -69,6 +79,24 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     auto assertDocument = [](ScDocument& rDoc) {
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G6"_ustr));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"G7"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"G5"_ustr,
+            u"H5"_ustr,
+            u"I5"_ustr,
+            u"J5"_ustr,
+            u"K5"_ustr,
+            u"H6"_ustr,
+            u"I6"_ustr,
+            u"J6"_ustr,
+            u"K6"_ustr,
+            u"H7"_ustr,
+            u"I7"_ustr,
+            u"J7"_ustr,
+            u"K7"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
     };
 
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_1_DataFieldInRow_RowLabelColor.xlsx");
@@ -82,6 +110,25 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 {
     auto assertDocument = [](ScDocument& rDoc) {
         CPPUNIT_ASSERT_EQUAL(Color(0x00B050), getBackgroundColor(rDoc, u"H5"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"G5"_ustr,
+            u"I5"_ustr,
+            u"J5"_ustr,
+            u"K5"_ustr,
+            u"G6"_ustr,
+            u"H6"_ustr,
+            u"I6"_ustr,
+            u"J6"_ustr,
+            u"K6"_ustr,
+            u"G7"_ustr,
+            u"H7"_ustr,
+            u"I7"_ustr,
+            u"J7"_ustr,
+            u"K7"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
     };
 
     createScDoc(
@@ -97,6 +144,24 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     auto assertDocument = [](ScDocument& rDoc) {
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H5"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I5"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"G5"_ustr,
+            u"G6"_ustr,
+            u"H6"_ustr,
+            u"I6"_ustr,
+            u"G7"_ustr,
+            u"H7"_ustr,
+            u"I7"_ustr,
+            u"G8"_ustr,
+            u"H8"_ustr,
+            u"I8"_ustr,
+            u"G9"_ustr,
+            u"H9"_ustr,
+            u"I9"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
     };
 
     createScDoc(
@@ -112,6 +177,23 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     auto assertDocument = [](ScDocument& rDoc) {
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H7"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I9"_ustr));
+
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"G5"_ustr,
+            u"H5"_ustr,
+            u"I5"_ustr,
+            u"G6"_ustr,
+            u"H6"_ustr,
+            u"I6"_ustr,
+            u"G7"_ustr,
+            u"I7"_ustr,
+            u"G8"_ustr,
+            u"H8"_ustr,
+            u"I8"_ustr,
+            u"G9"_ustr,
+            u"H9"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
     };
 
     createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_4_DataFieldInColumn_DataColor.xlsx");
@@ -127,6 +209,17 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
         CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I8"_ustr));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"I11"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"J13"_ustr));
+
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"G5"_ustr,  u"H5"_ustr,  u"I5"_ustr,  u"J5"_ustr,  u"G6"_ustr,  u"H6"_ustr,
+            u"I6"_ustr,  u"J6"_ustr,  u"G7"_ustr,  u"H7"_ustr,  u"I7"_ustr,  u"J7"_ustr,
+            u"G8"_ustr,  u"H8"_ustr,  u"J8"_ustr,  u"G9"_ustr,  u"H9"_ustr,  u"I9"_ustr,
+            u"J9"_ustr,  u"G10"_ustr, u"H10"_ustr, u"I10"_ustr, u"J10"_ustr, u"G11"_ustr,
+            u"H11"_ustr, u"J11"_ustr, u"G12"_ustr, u"H12"_ustr, u"I12"_ustr, u"J12"_ustr,
+            u"G13"_ustr, u"H13"_ustr, u"I13"_ustr, u"G14"_ustr, u"H14"_ustr, u"I14"_ustr,
+            u"J14"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
     };
 
     createScDoc("xlsx/pivot-table//"
@@ -165,6 +258,38 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     createScDoc(
         "xlsx/pivot-table//PivotTableCellFormatsTest_7_TwoRowTwoColumnFields_DataColor.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     PivotTableCellFormatsTest_8_DataFieldInRow_DataColor)
+{
+    auto assertDocument = [](ScDocument& rDoc) {
+        CPPUNIT_ASSERT_EQUAL(Color(0x00B0F0), getBackgroundColor(rDoc, u"I6"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"K7"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"G5"_ustr,
+            u"H5"_ustr,
+            u"I5"_ustr,
+            u"J5"_ustr,
+            u"K5"_ustr,
+            u"G6"_ustr,
+            u"H6"_ustr,
+            u"J6"_ustr,
+            u"K6"_ustr,
+            u"G7"_ustr,
+            u"H7"_ustr,
+            u"I7"_ustr,
+            u"J7"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
+    };
+
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_8_DataFieldInRow_DataColor.xlsx");
     assertDocument(*getScDoc());
     saveAndReload("Calc Office Open XML");
     assertDocument(*getScDoc());

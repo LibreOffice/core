@@ -28,12 +28,14 @@ struct ScDPOutLevelData;
 
 namespace sc
 {
+/// Direction or orientation of the results
 enum class FormatResultDirection
 {
     ROW,
     COLUMN
 };
 
+/// A field data for a format output,
 struct FormatOutputField
 {
     tools::Long nDimension = -2;
@@ -42,6 +44,7 @@ struct FormatOutputField
     bool bSet = false;
 };
 
+/// Data for a entry of a format output, which matches a one format entry
 struct FormatOutputEntry
 {
     FormatType eType = FormatType::None;
@@ -52,6 +55,7 @@ struct FormatOutputEntry
     std::vector<FormatOutputField> aColumnOutputFields;
 };
 
+/// data of one "field" that is part of a line
 struct FieldData
 {
     tools::Long mnDimension = -2;
@@ -64,15 +68,19 @@ struct FieldData
     bool bContinue = false;
 };
 
+/// data for a "line" of one row/column axis
 struct LineData
 {
+    /// primary axis depending if we are row or column oriented (when selecting a column or row we get a "line")
     std::optional<SCCOLROW> oLine = std::nullopt;
+    /// secondary axis depending if we are row or column oriented (position in a line)
     std::optional<SCCOLROW> oPosition = std::nullopt;
+    /// fields of a line
     std::vector<FieldData> maFields;
 };
 
-class NameResolver;
-
+/** Format output class, which is responsible to check if any of the formats and matches the
+ *  pivot table output, and applies the cell attributes when the match is found. */
 class FormatOutput
 {
 private:
@@ -93,7 +101,6 @@ public:
     void setFormats(sc::PivotTableFormats const& rPivotTableFormats)
     {
         mpFormats.reset(new sc::PivotTableFormats(rPivotTableFormats));
-        maFormatOutputEntries.resize(mpFormats->size());
     }
 
     void insertFieldMember(size_t nFieldIndex, const ScDPOutLevelData& rField,
