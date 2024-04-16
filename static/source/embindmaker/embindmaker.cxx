@@ -1096,11 +1096,6 @@ SAL_IMPLEMENT_MAIN()
                       "        .function(\"$is\", +[](::com::sun::star::uno::Reference<"
                    << cppName(ifc)
                    << "> const & the_self) { return the_self.is(); })\n"
-                      "        .function(\"$query\", +[](::com::sun::star::uno::Reference<"
-                   << cppName(ifc)
-                   << "> const & the_self) { return "
-                      "::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface>(the_"
-                      "self); })\n"
                       "        .function(\"$equals\", +[](::com::sun::star::uno::Reference<"
                    << cppName(ifc)
                    << "> const & the_self, "

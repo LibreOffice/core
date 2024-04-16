@@ -228,11 +228,11 @@ Some usage examples through javascript of the current implementation:
 let uno = init_unoembind_uno(Module);
 let css = uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
-xTextDocument = new css.text.XTextDocument(xModel.$query());
+xTextDocument = new css.text.XTextDocument(xModel);
 xText = xTextDocument.getText();
-xSimpleText = new css.text.XSimpleText(xText.$query());
+xSimpleText = new css.text.XSimpleText(xText);
 xTextCursor = xSimpleText.createTextCursor();
-xTextRange = new css.text.XTextRange(xTextCursor.$query());
+xTextRange = new css.text.XTextRange(xTextCursor);
 xTextRange.setString("string here!");
 xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); xTextCursor.delete(); xTextRange.delete();
 ```
@@ -242,13 +242,13 @@ xModel.delete(); xTextDocument.delete(); xText.delete(); xSimpleText.delete(); x
 let uno = init_unoembind_uno(Module);
 let css = uno.com.sun.star;
 xModel = Module.getCurrentModelFromViewSh();
-xEnumAccess = new css.container.XEnumerationAccess(xText.$query());
+xEnumAccess = new css.container.XEnumerationAccess(xText);
 xParaEnumeration = xEnumAccess.createEnumeration();
 
 while (xParaEnumeration.hasMoreElements()) {
     xParagraph = new css.text.XTextRange(xParaEnumeration.nextElement(), Module.uno_Reference.FromAny);
     if (xParagraph.$is()) {
-        xParaProps = new css.beans.XPropertySet(xParagraph.$query());
+        xParaProps = new css.beans.XPropertySet(xParagraph);
         let color = new Module.uno_Any(
             Module.uno_Type.Long(), Math.floor(Math.random() * 0xFFFFFF));
         xParaProps.setPropertyValue("CharColor", color);
