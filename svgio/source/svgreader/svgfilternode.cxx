@@ -44,7 +44,15 @@ void SvgFilterNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarg
     const sal_uInt32 nCount(rChildren.size());
 
     addGraphicSourceToMapper("SourceGraphic", rTarget);
-    //TODO: Add SourceAlpha, BackgroundImage, BackgroundAlpha, FillPaint, StrokePaint ??
+
+    // TODO: For now, map SourceAlpha, BackgroundImage,
+    // BackgroundAlpha, FillPaint and StrokePaint to rTarget
+    // so at least something is displayed
+    addGraphicSourceToMapper("SourceAlpha", rTarget);
+    addGraphicSourceToMapper("BackgroundImage", rTarget);
+    addGraphicSourceToMapper("BackgroundAlpha", rTarget);
+    addGraphicSourceToMapper("FillPaint", rTarget);
+    addGraphicSourceToMapper("StrokePaint", rTarget);
 
     // apply children's filters
     for (sal_uInt32 a(0); a < nCount; a++)
