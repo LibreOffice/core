@@ -1697,6 +1697,29 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 
     SAL_INFO("lok", "Queue: [" << type << "]: [" << aCallbackData.getPayload() << "] on " << m_queue1.size() << " entries.");
 
+    if (comphelper::LibreOfficeKit::isForkedChild())
+    {
+        // In background mode - avoid any extraneous or confusing messages
+        switch (type)
+        {
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_CURSOR_VISIBLE:
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        case LOK_CALLBACK_TABLE_SELECTED:
+        case LOK_CALLBACK_SET_PART:
+        case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case LOK_CALLBACK_MOUSE_POINTER:
+        case LOK_CALLBACK_INVALIDATE_HEADER:
+        case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+            SAL_INFO("lok", "Elide event in background save mode");
+            return;
+        default:
+            break;
+        }
+    }
+
     bool bIsChartActive = false;
     bool bIsComment = false;
     if (type == LOK_CALLBACK_GRAPHIC_SELECTION)
