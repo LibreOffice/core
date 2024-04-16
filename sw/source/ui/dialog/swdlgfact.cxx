@@ -1223,9 +1223,9 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwWrapDlg(weld::Wi
     return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwWrapDlg>(pParent, rSet, pSh, true/*bDrawMode*/));
 }
 
-VclPtr<AbstractSwTableWidthDlg> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc)
+VclPtr<AbstractSwTableWidthDlg> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(weld::Window *pParent, SwWrtShell *pShell)
 {
-    return VclPtr<AbstractSwTableWidthDlg_Impl>::Create(std::make_unique<SwTableWidthDlg>(pParent, rFnc));
+    return VclPtr<AbstractSwTableWidthDlg_Impl>::Create(std::make_unique<SwTableWidthDlg>(pParent, pShell));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(weld::Window* pParent,

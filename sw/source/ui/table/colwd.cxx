@@ -29,38 +29,41 @@
 IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, weld::SpinButton&, void)
 {
     sal_uInt16 nId = o3tl::narrowing<sal_uInt16>(m_xColNF->get_value()) - 1;
-    const SwTwips lWidth = m_rFnc.GetColWidth(nId);
-    m_xWidthMF->set_max(m_xWidthMF->normalize(m_rFnc.GetMaxColWidth(nId)), FieldUnit::TWIP);
+    const SwTwips lWidth = m_xFnc->GetColWidth(nId);
+    m_xWidthMF->set_max(m_xWidthMF->normalize(m_xFnc->GetMaxColWidth(nId)), FieldUnit::TWIP);
     m_xWidthMF->set_value(m_xWidthMF->normalize(lWidth), FieldUnit::TWIP);
 }
 
-SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rTableFnc)
+SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwWrtShell *pShell)
     : GenericDialogController(pParent, "modules/swriter/ui/columnwidth.ui", "ColumnWidthDialog")
-    , m_rFnc(rTableFnc)
+    , m_xFnc(new SwTableFUNC(pShell))
     , m_xColNF(m_xBuilder->weld_spin_button("column"))
     , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM))
 {
-    bool bIsWeb = rTableFnc.GetShell()
+    m_xFnc->InitTabCols();
+    bool bIsWeb = m_xFnc->GetShell()
                   && (dynamic_cast< const SwWebDocShell* >(
-                                     rTableFnc.GetShell()->GetView().GetDocShell()) != nullptr );
+                                     m_xFnc->GetShell()->GetView().GetDocShell()) != nullptr );
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
     ::SetFieldUnit(*m_xWidthMF, eFieldUnit);
 
-    m_xColNF->set_max(m_rFnc.GetColCount() + 1);
-    m_xColNF->set_value(m_rFnc.GetCurColNum() + 1);
+    m_xColNF->set_max(m_xFnc->GetColCount() + 1);
+    m_xColNF->set_value(m_xFnc->GetCurColNum() + 1);
 
-    if (m_rFnc.GetColCount() == 0)
-        m_xWidthMF->set_min(m_xWidthMF->normalize(m_rFnc.GetColWidth(0)), FieldUnit::TWIP);
+    if (m_xFnc->GetColCount() == 0)
+        m_xWidthMF->set_min(m_xWidthMF->normalize(m_xFnc->GetColWidth(0)), FieldUnit::TWIP);
     else
         m_xWidthMF->set_min(m_xWidthMF->normalize(MINLAY), FieldUnit::TWIP);
     m_xColNF->connect_value_changed(LINK(this, SwTableWidthDlg, LoseFocusHdl));
     LoseFocusHdl(*m_xColNF);
 }
 
+SwTableWidthDlg::~SwTableWidthDlg() {}
+
 void SwTableWidthDlg::Apply()
 {
-    m_rFnc.InitTabCols();
-    m_rFnc.SetColWidth(o3tl::narrowing<sal_uInt16>(m_xColNF->get_value() - 1),
+    m_xFnc->InitTabCols();
+    m_xFnc->SetColWidth(o3tl::narrowing<sal_uInt16>(m_xColNF->get_value() - 1),
                        o3tl::narrowing<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::TWIP))));
 }
 

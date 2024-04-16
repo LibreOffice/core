@@ -20,13 +20,15 @@
 #define INCLUDED_SW_INC_COLWD_HXX
 
 #include <vcl/weld.hxx>
+#include <memory>
 
 class SwTableFUNC;
+class SwWrtShell;
 
 class SwTableWidthDlg final : public weld::GenericDialogController
 {
 private:
-    SwTableFUNC& m_rFnc;
+    std::unique_ptr<SwTableFUNC> m_xFnc;
 
     std::unique_ptr<weld::SpinButton> m_xColNF;
     std::unique_ptr<weld::MetricSpinButton> m_xWidthMF;
@@ -34,7 +36,8 @@ private:
     DECL_LINK(LoseFocusHdl, weld::SpinButton&, void);
 
 public:
-    SwTableWidthDlg(weld::Window* pParent, SwTableFUNC& rFnc);
+    SwTableWidthDlg(weld::Window* pParent, SwWrtShell* pShell);
+    ~SwTableWidthDlg();
     void Apply();
 };
 

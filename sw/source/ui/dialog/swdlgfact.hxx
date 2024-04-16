@@ -832,7 +832,7 @@ public:
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) override;
 
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh) override;
-    virtual VclPtr<AbstractSwTableWidthDlg> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) override;
+    virtual VclPtr<AbstractSwTableWidthDlg> CreateSwTableWidthDlg(weld::Window *pParent, SwWrtShell *pShell) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(weld::Window* pParent,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) override;
     virtual VclPtr<AbstractSwFieldDlg> CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent) override;

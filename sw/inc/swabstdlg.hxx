@@ -51,7 +51,6 @@ class SwSectionData;
 struct SwDBData;
 class Printer;
 class SwLabItem;
-class SwTableFUNC;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
 class SwTOXMark;
@@ -540,7 +539,7 @@ public:
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh) = 0;
 
-    virtual VclPtr<AbstractSwTableWidthDlg> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) = 0;
+    virtual VclPtr<AbstractSwTableWidthDlg> CreateSwTableWidthDlg(weld::Window *pParent, SwWrtShell *pShell) = 0;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(weld::Window* pParent,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) = 0;
 

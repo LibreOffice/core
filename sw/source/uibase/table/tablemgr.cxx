@@ -45,22 +45,6 @@
 
 using namespace ::com::sun::star;
 
-// Adjust line height (dialogue)
-void SwTableFUNC::ColWidthDlg(weld::Window *pParent)
-{
-    InitTabCols();
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    VclPtr<AbstractSwTableWidthDlg> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
-    pDlg->StartExecuteAsync(
-        [pDlg] (sal_Int32 nResult)->void
-        {
-            if (nResult == RET_OK)
-                pDlg->Apply();
-            pDlg->disposeOnce();
-        }
-    );
-}
-
 // Determine the width
 SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
 {

@@ -1349,8 +1349,17 @@ void SwTableShell::Execute(SfxRequest &rReq)
         // The last case branch which needs a table manager!!
         case FN_TABLE_SET_COL_WIDTH:
         {
-            SwTableFUNC aMgr( &rSh );
-            aMgr.ColWidthDlg(GetView().GetFrameWeld());
+            // Adjust line height (dialogue)
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            VclPtr<AbstractSwTableWidthDlg> pDlg(pFact->CreateSwTableWidthDlg(GetView().GetFrameWeld(), &rSh));
+            pDlg->StartExecuteAsync(
+                [pDlg] (sal_Int32 nResult)->void
+                {
+                    if (nResult == RET_OK)
+                        pDlg->Apply();
+                    pDlg->disposeOnce();
+                }
+            );
             break;
         }
         case SID_TABLE_VERT_NONE:
