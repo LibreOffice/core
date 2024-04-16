@@ -257,9 +257,12 @@ namespace svgio::svgreader
                 // prepare locale
                 css::lang::Locale aLocale;
 
-                // prepare TextLayouterDevice
+                // prepare TextLayouterDevice; use a larger font size for more linear size
+                // calculations. Similar to nTextSizeFactor in sd/source/ui/view/sdview.cxx
+                // (ViewRedirector::createRedirectedPrimitive2DSequence).
+                const double sizeFactor = fFontHeight < 50000 ? 50000 / fFontHeight : 1.0;
                 TextLayouterDevice aTextLayouterDevice;
-                aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
+                aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth * sizeFactor, fFontHeight * sizeFactor, aLocale);
 
                 // prepare TextArray
                 ::std::vector< double > aTextArray(rSvgTextPosition.getX());
@@ -293,7 +296,7 @@ namespace svgio::svgreader
 
                 // get current TextPosition and TextWidth in units
                 basegfx::B2DPoint aPosition(rSvgTextPosition.getPosition());
-                double fTextWidth(aTextLayouterDevice.getTextWidth(getText(), nIndex, nLength));
+                double fTextWidth(aTextLayouterDevice.getTextWidth(getText(), nIndex, nLength) / sizeFactor);
 
                 // check for user-given TextLength
                 if(0.0 != rSvgTextPosition.getTextLength()
@@ -306,7 +309,10 @@ namespace svgio::svgreader
                         // spacing, need to create and expand TextArray
                         if(aTextArray.empty())
                         {
-                            aTextArray = aTextLayouterDevice.getTextArray(getText(), nIndex, nLength);
+                            auto aExtendArray(aTextLayouterDevice.getTextArray(getText(), nIndex, nLength));
+                            aTextArray.reserve(aExtendArray.size());
+                            for (auto n : aExtendArray)
+                                aTextArray.push_back(n / sizeFactor);
                         }
 
                         for(auto &a : aTextArray)
@@ -384,12 +390,12 @@ namespace svgio::svgreader
                 {
                     case BaselineShift::Sub:
                     {
-                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset());
+                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset() / sizeFactor);
                         break;
                     }
                     case BaselineShift::Super:
                     {
-                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset());
+                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset() / sizeFactor);
                         break;
                     }
                     case BaselineShift::Percentage:
