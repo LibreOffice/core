@@ -36,20 +36,23 @@ ScPivotTableFormatsImportExport::ScPivotTableFormatsImportExport()
 
 namespace
 {
-Color getBackgroundColor(ScDocument& rDoc, OUString const& rAddressString)
+ScAddress parseAddress(ScDocument& rDoc, OUString const& rAddressString)
 {
     ScAddress aAddress;
     aAddress.Parse(rAddressString, rDoc);
-    const ScPatternAttr* pPattern = rDoc.GetPattern(aAddress);
+    return aAddress;
+}
+
+Color getBackgroundColor(ScDocument& rDoc, OUString const& rAddressString)
+{
+    const ScPatternAttr* pPattern = rDoc.GetPattern(parseAddress(rDoc, rAddressString));
     const SvxBrushItem& rItem = pPattern->GetItem(ATTR_BACKGROUND);
     return rItem.GetColor();
 }
 
 Color getFontColor(ScDocument& rDoc, OUString const& rAddressString)
 {
-    ScAddress aAddress;
-    aAddress.Parse(rAddressString, rDoc);
-    const ScPatternAttr* pPattern = rDoc.GetPattern(aAddress);
+    const ScPatternAttr* pPattern = rDoc.GetPattern(parseAddress(rDoc, rAddressString));
     const SvxColorItem& rItem = pPattern->GetItem(ATTR_FONT_COLOR);
     return rItem.getColor();
 }
@@ -308,6 +311,28 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDocument(*getScDoc());
     saveAndReload("Calc Office Open XML");
     assertDocument(*getScDoc());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     PivotTableCellFormatsTest_10_FormatDefinitionNotMatchingPivotTable)
+{
+    // The pivot table format data in this document doesn't match the pivot table data, which can produce
+    // a crash during loading and resolving of formats. Specifically
+
+    // Load the document, which shouldn't result in a crash
+    createScDoc(
+        "xlsx/pivot-table/PivotTableCellFormatsTest_10_FormatDefinitionNotMatchingPivotTable.xlsx");
+    ScDocument& rDoc = *getScDoc();
+
+    // Let's check the pivot table exists
+    ScDPCollection* pCollection = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCollection->GetCount());
+
+    auto aAddress = parseAddress(rDoc, u"G2"_ustr);
+    const ScDPObject* pDPObject = rDoc.GetDPAtCursor(aAddress);
+    CPPUNIT_ASSERT(pDPObject);
+
+    CPPUNIT_ASSERT_EQUAL(u"60"_ustr, rDoc.GetString(aAddress));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
