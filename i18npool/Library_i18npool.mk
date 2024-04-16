@@ -50,7 +50,6 @@ endif
 $(eval $(call gb_Library_add_exception_objects,i18npool,\
 	i18npool/source/breakiterator/breakiterator_cjk \
 	i18npool/source/breakiterator/breakiteratorImpl \
-	i18npool/source/breakiterator/breakiterator_th \
 	i18npool/source/breakiterator/breakiterator_unicode \
 	i18npool/source/breakiterator/xdictionary \
 	i18npool/source/calendar/calendarImpl \

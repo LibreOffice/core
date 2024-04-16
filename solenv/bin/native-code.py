@@ -239,7 +239,6 @@ core_constructor_list = [
     "com_sun_star_text_DefaultNumberingProvider_get_implementation",
     ("i18npool_BreakIterator_ja_get_implementation", "#if WITH_LOCALE_ALL || WITH_LOCALE_ja"),
     ("i18npool_BreakIterator_ko_get_implementation", "#if WITH_LOCALE_ALL || WITH_LOCALE_ko"),
-    ("i18npool_BreakIterator_th_get_implementation", "#if WITH_LOCALE_ALL || WITH_LOCALE_th"),
     ("i18npool_BreakIterator_zh_get_implementation", "#if WITH_LOCALE_ALL || WITH_LOCALE_zh"),
     ("i18npool_BreakIterator_zh_TW_get_implementation", "#if WITH_LOCALE_ALL || WITH_LOCALE_zh"),
     "i18npool_CalendarImpl_get_implementation",

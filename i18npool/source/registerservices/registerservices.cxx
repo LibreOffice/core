@@ -41,7 +41,6 @@
 #include <calendar_jewish.hxx>
 
 #include <breakiterator_cjk.hxx>
-#include <breakiterator_th.hxx>
 
 #include <indexentrysupplier.hxx>
 #include <indexentrysupplier_asian.hxx>
@@ -219,7 +218,6 @@ IMPL_UNO_CONSTRUCTOR( NumToTextInformalUpper_ko )
 
 #if WITH_LOCALE_ALL || WITH_LOCALE_th
 IMPL_CREATEINSTANCE( NumToChar_th )
-IMPL_UNO_CONSTRUCTOR( BreakIterator_th )
 IMPL_UNO_CONSTRUCTOR( CharToNum_th )
 IMPL_UNO_CONSTRUCTOR( InputSequenceChecker_th )
 #endif

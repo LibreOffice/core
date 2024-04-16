@@ -35,10 +35,6 @@
     constructor="i18npool_BreakIterator_ko_get_implementation">
     <service name="com.sun.star.i18n.BreakIterator_ko"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.BreakIterator_th"
-    constructor="i18npool_BreakIterator_th_get_implementation">
-    <service name="com.sun.star.i18n.BreakIterator_th"/>
-  </implementation>
   <implementation name="com.sun.star.i18n.BreakIterator_zh"
     constructor="i18npool_BreakIterator_zh_get_implementation">
     <service name="com.sun.star.i18n.BreakIterator_zh"/>

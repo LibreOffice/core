@@ -592,10 +592,6 @@ bool BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocal
     if (aLocaleName == "ko")
         return false;
 #endif
-#if !WITH_LOCALE_ALL && !WITH_LOCALE_th
-    if (aLocaleName == "th")
-        return false;
-#endif
 
     Reference < uno::XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.i18n.BreakIterator_" + aLocaleName, m_xContext);

@@ -4577,7 +4577,6 @@ i18nlangtag/source/languagetag/languagetag.cxx
 i18nlangtag/source/languagetag/languagetagicu.cxx
 i18npool/inc/breakiteratorImpl.hxx
 i18npool/inc/breakiterator_cjk.hxx
-i18npool/inc/breakiterator_th.hxx
 i18npool/inc/breakiterator_unicode.hxx
 i18npool/inc/bullet.h
 i18npool/inc/calendarImpl.hxx
@@ -4625,7 +4624,6 @@ i18npool/qa/cppunit/test_ordinalsuffix.cxx
 i18npool/qa/cppunit/test_textsearch.cxx
 i18npool/source/breakiterator/breakiteratorImpl.cxx
 i18npool/source/breakiterator/breakiterator_cjk.cxx
-i18npool/source/breakiterator/breakiterator_th.cxx
 i18npool/source/breakiterator/breakiterator_unicode.cxx
 i18npool/source/breakiterator/gendict.cxx
 i18npool/source/breakiterator/xdictionary.cxx

@@ -1120,6 +1120,48 @@ void TestBreakIterator::testGraphemeIteration()
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(0), nPos);
     }
+
+    // tdf#49885: Replace custom Thai implementation with ICU
+    {
+        aLocale.Language = "th";
+        aLocale.Country = "TH";
+
+        static constexpr OUString aTest = u"กำ"_ustr;
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32{ 2 }, aTest.getLength());
+
+        sal_Int32 nDone = 0;
+        sal_Int32 nPos = 0;
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1,
+                                        nDone);
+        CPPUNIT_ASSERT_EQUAL(aTest.getLength(), nPos);
+
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
+                                            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32{ 0 }, nPos);
+    }
+
+    // Korean may also use grapheme clusters for character composition
+    {
+        aLocale.Language = "ko";
+        aLocale.Country = "KR";
+
+        static constexpr OUString aTest = u"각"_ustr;
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32{ 3 }, aTest.getLength());
+
+        sal_Int32 nDone = 0;
+        sal_Int32 nPos = 0;
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1,
+                                        nDone);
+        CPPUNIT_ASSERT_EQUAL(aTest.getLength(), nPos);
+
+        nPos = m_xBreak->previousCharacters(aTest, aTest.getLength(), aLocale,
+                                            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32{ 0 }, nPos);
+    }
 }
 
 //A test to ensure that certain ranges and codepoints that are categorized as
