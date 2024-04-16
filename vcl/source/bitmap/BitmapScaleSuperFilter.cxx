@@ -870,8 +870,8 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     double fScaleX = std::fabs(mrScaleX);
     double fScaleY = std::fabs(mrScaleY);
 
-    const sal_Int32 nDstW = FRound(aSizePix.Width()  * fScaleX);
-    const sal_Int32 nDstH = FRound(aSizePix.Height() * fScaleY);
+    const sal_Int32 nDstW = basegfx::fround(aSizePix.Width() * fScaleX);
+    const sal_Int32 nDstH = basegfx::fround(aSizePix.Height() * fScaleY);
 
     constexpr double fScaleThresh = 0.6;
 

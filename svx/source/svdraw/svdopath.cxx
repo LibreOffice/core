@@ -324,18 +324,18 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     if (bRet) {
         double cs = cos(toRadians(nTmpAngle));
         double nR=static_cast<double>(GetLen(Point(dx,dy)))/cs/2;
-        nRad=std::abs(FRound(nR));
+        nRad = std::abs(basegfx::fround<tools::Long>(nR));
     }
     if (dAngle<18000_deg100) {
         nCircStAngle=NormAngle36000(nTangAngle-9000_deg100);
         nCircRelAngle=NormAngle36000(2_deg100*dAngle);
-        aCircCenter.AdjustX(FRound(nRad * cos(toRadians(nTangAngle + 9000_deg100))));
-        aCircCenter.AdjustY(-(FRound(nRad * sin(toRadians(nTangAngle + 9000_deg100)))));
+        aCircCenter.AdjustX(basegfx::fround<tools::Long>(nRad * cos(toRadians(nTangAngle + 9000_deg100))));
+        aCircCenter.AdjustY(basegfx::fround<tools::Long>(nRad * -sin(toRadians(nTangAngle + 9000_deg100))));
     } else {
         nCircStAngle=NormAngle36000(nTangAngle+9000_deg100);
         nCircRelAngle=-NormAngle36000(36000_deg100-2_deg100*dAngle);
-        aCircCenter.AdjustX(FRound(nRad * cos(toRadians(nTangAngle - 9000_deg100))));
-        aCircCenter.AdjustY(-(FRound(nRad * sin(toRadians(nTangAngle - 9000_deg100)))));
+        aCircCenter.AdjustX(basegfx::fround<tools::Long>(nRad * cos(toRadians(nTangAngle - 9000_deg100))));
+        aCircCenter.AdjustY(basegfx::fround<tools::Long>(nRad * -sin(toRadians(nTangAngle - 9000_deg100))));
     }
     bAngleSnap=pView!=nullptr && pView->IsAngleSnapEnabled();
     if (bAngleSnap) {
@@ -457,8 +457,8 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
         double sn=sin(a);
         double cs=cos(a);
         double nGKathLen=nHypLen*sn;
-        y+=FRound(nGKathLen*sn);
-        x+=FRound(nGKathLen*cs);
+        y += basegfx::fround<tools::Long>(nGKathLen * sn);
+        x += basegfx::fround<tools::Long>(nGKathLen * cs);
     }
     aRectP2.AdjustX(x );
     aRectP2.AdjustY(y );
@@ -1659,8 +1659,8 @@ static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPoly
         return tools::Rectangle();
 
     return tools::Rectangle(
-        FRound(aRange.getMinX()), FRound(aRange.getMinY()),
-        FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
+        basegfx::fround<tools::Long>(aRange.getMinX()), basegfx::fround<tools::Long>(aRange.getMinY()),
+        basegfx::fround<tools::Long>(aRange.getMaxX()), basegfx::fround<tools::Long>(aRange.getMaxY()));
 }
 
 void SdrPathObj::ImpForceLineAngle()
@@ -1671,10 +1671,13 @@ void SdrPathObj::ImpForceLineAngle()
     const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
     const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
     const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
-    const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
-    const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
+    const Point aPoint0(basegfx::fround<tools::Long>(aB2DPoint0.getX()),
+                        basegfx::fround<tools::Long>(aB2DPoint0.getY()));
+    const Point aPoint1(basegfx::fround<tools::Long>(aB2DPoint1.getX()),
+                        basegfx::fround<tools::Long>(aB2DPoint1.getY()));
     const basegfx::B2DPoint aB2DDelt(aB2DPoint1 - aB2DPoint0);
-    const Point aDelt(FRound(aB2DDelt.getX()), FRound(aB2DDelt.getY()));
+    const Point aDelt(basegfx::fround<tools::Long>(aB2DDelt.getX()),
+                      basegfx::fround<tools::Long>(aB2DDelt.getY()));
 
     maGeo.nRotationAngle=GetAngle(aDelt);
     maGeo.nShearAngle=0_deg100;
@@ -2414,7 +2417,8 @@ Point SdrPathObj::GetSnapPoint(sal_uInt32 nSnapPnt) const
     }
 
     const basegfx::B2DPoint aB2DPoint(GetPathPoly().getB2DPolygon(nPoly).getB2DPoint(nPnt));
-    return Point(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
+    return Point(basegfx::fround<tools::Long>(aB2DPoint.getX()),
+                 basegfx::fround<tools::Long>(aB2DPoint.getY()));
 }
 
 bool SdrPathObj::IsPolyObj() const
@@ -2443,7 +2447,8 @@ Point SdrPathObj::GetPoint(sal_uInt32 nHdlNum) const
     {
         const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(nPoly));
         const basegfx::B2DPoint aPoint(aPoly.getB2DPoint(nPnt));
-        aRetval = Point(FRound(aPoint.getX()), FRound(aPoint.getY()));
+        aRetval = Point(basegfx::fround<tools::Long>(aPoint.getX()),
+                        basegfx::fround<tools::Long>(aPoint.getY()));
     }
 
     return aRetval;
@@ -2953,7 +2958,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         aTransform.shearX(tan(-atan(fShearX)));
-        maGeo.nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
+        maGeo.nShearAngle = Degree100(basegfx::fround(basegfx::rad2deg<100>(atan(fShearX))));
         maGeo.RecalcTan();
     }
 
@@ -2967,7 +2972,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        maGeo.nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
+        maGeo.nRotationAngle = NormAngle36000(Degree100(basegfx::fround(-basegfx::rad2deg<100>(fRotate))));
         maGeo.RecalcSinCos();
     }
 

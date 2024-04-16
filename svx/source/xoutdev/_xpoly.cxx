@@ -407,9 +407,10 @@ tools::Rectangle XPolygon::GetBoundRect() const
         // correct and never was.
 
         const basegfx::B2DRange aPolygonRange(basegfx::utils::getRange(getB2DPolygon()));
-        aRetval = tools::Rectangle(
-            FRound(aPolygonRange.getMinX()), FRound(aPolygonRange.getMinY()),
-            FRound(aPolygonRange.getMaxX()), FRound(aPolygonRange.getMaxY()));
+        aRetval = tools::Rectangle(basegfx::fround<tools::Long>(aPolygonRange.getMinX()),
+                                   basegfx::fround<tools::Long>(aPolygonRange.getMinY()),
+                                   basegfx::fround<tools::Long>(aPolygonRange.getMaxX()),
+                                   basegfx::fround<tools::Long>(aPolygonRange.getMaxY()));
     }
 
     return aRetval;

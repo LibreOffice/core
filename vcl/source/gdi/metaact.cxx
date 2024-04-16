@@ -40,8 +40,8 @@ namespace
 
 void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
 {
-    rPt.setX( FRound( fScaleX * rPt.X() ) );
-    rPt.setY( FRound( fScaleY * rPt.Y() ) );
+    rPt.setX(basegfx::fround<tools::Long>(fScaleX * rPt.X()));
+    rPt.setY(basegfx::fround<tools::Long>(fScaleY * rPt.Y()));
 }
 
 void ImplScaleRect( tools::Rectangle& rRect, double fScaleX, double fScaleY )
@@ -68,10 +68,10 @@ void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScaleY )
     {
         const double fScale = ( fabs(fScaleX) + fabs(fScaleY) ) * 0.5;
 
-        rLineInfo.SetWidth( FRound( fScale * rLineInfo.GetWidth() ) );
-        rLineInfo.SetDashLen( FRound( fScale * rLineInfo.GetDashLen() ) );
-        rLineInfo.SetDotLen( FRound( fScale * rLineInfo.GetDotLen() ) );
-        rLineInfo.SetDistance( FRound( fScale * rLineInfo.GetDistance() ) );
+        rLineInfo.SetWidth(fScale * rLineInfo.GetWidth());
+        rLineInfo.SetDashLen(fScale * rLineInfo.GetDashLen());
+        rLineInfo.SetDotLen(fScale * rLineInfo.GetDotLen());
+        rLineInfo.SetDistance(fScale * rLineInfo.GetDistance());
     }
 }
 
@@ -292,8 +292,8 @@ void MetaRoundRectAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 void MetaRoundRectAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
-    mnHorzRound = FRound( mnHorzRound * fabs(fScaleX) );
-    mnVertRound = FRound( mnVertRound * fabs(fScaleY) );
+    mnHorzRound = basegfx::fround<sal_uInt32>(mnHorzRound * fabs(fScaleX));
+    mnVertRound = basegfx::fround<sal_uInt32>(mnVertRound * fabs(fScaleY));
 }
 
 MetaEllipseAction::MetaEllipseAction() :
@@ -665,7 +665,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     if ( !maDXAry.empty() && mnLen )
     {
         for ( sal_uInt16 i = 0, nCount = mnLen; i < nCount; i++ )
-            maDXAry.set(i, FRound(maDXAry[i] * fabs(fScaleX)));
+            maDXAry.set(i, basegfx::fround(maDXAry[i] * fabs(fScaleX)));
     }
 }
 
@@ -718,7 +718,7 @@ void MetaStretchTextAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
-    mnWidth = static_cast<sal_uLong>(FRound( mnWidth * fabs(fScaleX) ));
+    mnWidth = basegfx::fround<sal_uInt32>(mnWidth * fabs(fScaleX));
 }
 MetaTextRectAction::MetaTextRectAction() :
     MetaAction  ( MetaActionType::TEXTRECT ),
@@ -819,7 +819,7 @@ void MetaTextLineAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 void MetaTextLineAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPos, fScaleX, fScaleY );
-    mnWidth = FRound( mnWidth * fabs(fScaleX) );
+    mnWidth = basegfx::fround<tools::Long>(mnWidth * fabs(fScaleX));
 }
 
 MetaBmpAction::MetaBmpAction() :
@@ -1480,8 +1480,8 @@ rtl::Reference<MetaAction> MetaMoveClipRegionAction::Clone() const
 
 void MetaMoveClipRegionAction::Scale( double fScaleX, double fScaleY )
 {
-    mnHorzMove = FRound( mnHorzMove * fScaleX );
-    mnVertMove = FRound( mnVertMove * fScaleY );
+    mnHorzMove = basegfx::fround<tools::Long>(mnHorzMove * fScaleX);
+    mnVertMove = basegfx::fround<tools::Long>(mnVertMove * fScaleY);
 }
 
 MetaLineColorAction::MetaLineColorAction() :
@@ -1730,8 +1730,8 @@ rtl::Reference<MetaAction> MetaFontAction::Clone() const
 void MetaFontAction::Scale( double fScaleX, double fScaleY )
 {
     const Size aSize(
-        FRound(maFont.GetFontSize().Width() * fabs(fScaleX)),
-        FRound(maFont.GetFontSize().Height() * fabs(fScaleY)));
+        basegfx::fround<tools::Long>(maFont.GetFontSize().Width() * fabs(fScaleX)),
+        basegfx::fround<tools::Long>(maFont.GetFontSize().Height() * fabs(fScaleY)));
     maFont.SetFontSize( aSize );
 }
 

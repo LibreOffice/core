@@ -1574,8 +1574,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
-                    aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
+                    aSrcPt.setX(basegfx::fround<tools::Long>(aSrcPt.X() * fScaleX));
+                    aSrcPt.setY(basegfx::fround<tools::Long>(aSrcPt.Y() * fScaleY));
                 }
 
                 nMoveX = aDestPt.X() - aSrcPt.X();

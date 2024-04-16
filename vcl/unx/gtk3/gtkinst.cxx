@@ -39,6 +39,7 @@
 #include <sal/log.hxx>
 #include <rtl/uri.hxx>
 
+#include <basegfx/numeric/ftools.hxx>
 #include <vcl/settings.hxx>
 
 #include <dlfcn.h>
@@ -17316,7 +17317,7 @@ private:
 
     sal_Int64 fromGtk(double fValue) const
     {
-        return FRound(fValue * Power10(get_digits()));
+        return basegfx::fround64(fValue * Power10(get_digits()));
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)

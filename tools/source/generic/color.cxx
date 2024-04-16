@@ -29,6 +29,7 @@
 #include <tools/long.hxx>
 #include <o3tl/string_view.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 void Color::IncreaseLuminance(sal_uInt8 cLumInc)
 {
@@ -51,9 +52,9 @@ void Color::DecreaseContrast(sal_uInt8 nContDec)
         const double fM = (128.0 - 0.4985 * nContDec) / 128.0;
         const double fOff = 128.0 - fM * 128.0;
 
-        R = sal_uInt8(std::clamp(FRound(R * fM + fOff), tools::Long(0), tools::Long(255)));
-        G = sal_uInt8(std::clamp(FRound(G * fM + fOff), tools::Long(0), tools::Long(255)));
-        B = sal_uInt8(std::clamp(FRound(B * fM + fOff), tools::Long(0), tools::Long(255)));
+        R = basegfx::fround<sal_uInt8>(R * fM + fOff);
+        G = basegfx::fround<sal_uInt8>(G * fM + fOff);
+        B = basegfx::fround<sal_uInt8>(B * fM + fOff);
     }
 }
 

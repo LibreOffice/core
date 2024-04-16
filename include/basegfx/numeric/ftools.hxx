@@ -35,41 +35,25 @@ namespace basegfx
 
         @return the nearest integer
     */
-    inline sal_Int32 fround32( double fVal )
+    template <class Int = sal_Int32>
+    inline std::enable_if_t<std::is_integral_v<Int>, Int> fround(double fVal)
     {
         if (fVal >= 0.0)
         {
-            if (fVal >= std::numeric_limits<sal_Int32>::max() - .5)
-                return std::numeric_limits<sal_Int32>::max();
-            return static_cast<sal_Int32>(fVal + .5);
+            if (fVal >= static_cast<double>(std::numeric_limits<Int>::max()) - 0.5)
+                return std::numeric_limits<Int>::max();
+            return static_cast<Int>(fVal + .5);
         }
-        if (fVal <= std::numeric_limits<sal_Int32>::min() + .5)
-            return std::numeric_limits<sal_Int32>::min();
-        return static_cast<sal_Int32>(fVal - .5);
+        if (fVal <= static_cast<double>(std::numeric_limits<Int>::min()) + 0.5)
+            return std::numeric_limits<Int>::min();
+        return static_cast<Int>(fVal - .5);
     }
 
     /** Round double to nearest integer
 
         @return the nearest 64 bit integer
     */
-    inline sal_Int64 fround64( double fVal )
-    {
-        return fVal > 0.0 ? static_cast<sal_Int64>( fVal + .5 ) : -static_cast<sal_Int64>( -fVal + .5 );
-    }
-
-    /** Round double to nearest integer
-
-        @return the nearest integer
-    */
-    template <class Int = sal_Int32>
-    inline std::enable_if_t<std::is_integral_v<Int> && std::is_signed_v<Int>, Int>
-    fround(double fVal)
-    {
-        if constexpr (sizeof(Int) == sizeof(sal_Int64))
-            return fround64(fVal);
-        else
-            return fround32(fVal);
-    }
+    inline sal_Int64 fround64(double fVal) { return fround<sal_Int64>(fVal); }
 
     /** Prune a small epsilon range around zero.
 

@@ -8521,12 +8521,12 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
                     const sal_uInt32 nNextIndex((a + 1) % nPointCount);
                     const basegfx::B2DPoint aNext(aPoly.getB2DPoint(nNextIndex));
 
-                    m_aPages.back().appendPoint( Point( FRound(aCurrent.getX()),
-                                                        FRound(aCurrent.getY()) ),
+                    m_aPages.back().appendPoint( Point( basegfx::fround<tools::Long>(aCurrent.getX()),
+                                                        basegfx::fround<tools::Long>(aCurrent.getY()) ),
                                                  aLine );
                     aLine.append( " m " );
-                    m_aPages.back().appendPoint( Point( FRound(aNext.getX()),
-                                                        FRound(aNext.getY()) ),
+                    m_aPages.back().appendPoint( Point( basegfx::fround<tools::Long>(aNext.getX()),
+                                                        basegfx::fround<tools::Long>(aNext.getY()) ),
                                                  aLine );
                     aLine.append( " l" );
 

@@ -171,13 +171,13 @@ bool SfxObjectShell::CreatePreview_Impl( bool bFullContent, VirtualDevice* pDevi
             double      fWH = static_cast< double >( aSizePix.Width() ) / aSizePix.Height();
             if ( fWH <= 1.0 )
             {
-                aSizePix.setWidth( FRound( nMaximumExtent * fWH ) );
+                aSizePix.setWidth(basegfx::fround<tools::Long>(nMaximumExtent * fWH));
                 aSizePix.setHeight( nMaximumExtent );
             }
             else
             {
                 aSizePix.setWidth( nMaximumExtent );
-                aSizePix.setHeight( FRound(  nMaximumExtent / fWH ) );
+                aSizePix.setHeight(basegfx::fround<tools::Long>(nMaximumExtent / fWH));
             }
         }
         // do it 4x larger to be able to scale it down & get beautiful antialias

@@ -1558,7 +1558,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple cons
     }
 
     mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-            FRound(aTRScale.getX()));
+                                                         basegfx::fround(aTRScale.getX()));
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStr);
 
@@ -1576,7 +1576,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple cons
     }
 
     mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-            FRound(aTRScale.getY()));
+                                                         basegfx::fround(aTRScale.getY()));
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
@@ -1611,7 +1611,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple cons
         {
             // svg: x
             mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-                    FRound(rTRTranslate.getX()));
+                    basegfx::fround(rTRTranslate.getX()));
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X, aStr);
         }
@@ -1620,7 +1620,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple cons
         {
             // svg: y
             mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-                    FRound(rTRTranslate.getY()));
+                    basegfx::fround(rTRTranslate.getY()));
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y, aStr);
         }
@@ -2169,7 +2169,8 @@ void XMLShapeExport::ImpExportLineShape(
     ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
 
     // create base position
-    awt::Point aBasePosition(FRound(aTRTranslate.getX()), FRound(aTRTranslate.getY()));
+    awt::Point aBasePosition(basegfx::fround(aTRTranslate.getX()),
+                             basegfx::fround(aTRTranslate.getY()));
 
     if (xPropSet->getPropertySetInfo()->hasPropertyByName("Geometry"))
     {
@@ -2327,7 +2328,8 @@ void XMLShapeExport::ImpExportPolygonShape(
     ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
 
     // create and export ViewBox
-    awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
+    awt::Size aSize(basegfx::fround<tools::Long>(aTRScale.getX()),
+                    basegfx::fround<tools::Long>(aTRScale.getY()));
     SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
@@ -2820,7 +2822,8 @@ void XMLShapeExport::ImpExportConnectorShape(
             fTRRotate, aTRTranslate, pRefPoint);
 
     // fdo#49678: create and export ViewBox
-    awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
+    awt::Size aSize(basegfx::fround<tools::Long>(aTRScale.getX()),
+                    basegfx::fround<tools::Long>(aTRScale.getY()));
     SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
