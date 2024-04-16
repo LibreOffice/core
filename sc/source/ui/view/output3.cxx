@@ -207,7 +207,7 @@ void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
             if(pPageView)
             {
                 // tdf#160589 need to check for registered PaintWindow using the
-                // 'original' TragetDevice, mpDev might have been changed by a
+                // 'original' TargetDevice, mpDev might have been changed by a
                 // call to ::SetContentDevice. That again might patch in a
                 // pre-render device fetched from SdrPaintWindow::GetTargetOutputDevice
                 // and thus the test if target is aregistered PageWindow would fail
