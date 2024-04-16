@@ -96,6 +96,8 @@
 #include <fuzoom.hxx>
 #include <sdmod.hxx>
 #include <basegfx/utils/zoomtools.hxx>
+#include <officecfg/Office/Draw.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1117,12 +1119,19 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if(bOldHasRuler != bHasRuler)
             {
-                SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
+                std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                    comphelper::ConfigurationChanges::create());
 
-                if(pOptions && pOptions->IsRulerVisible() != bHasRuler)
+                if (GetDoc()->GetDocumentType() == DocumentType::Impress)
                 {
-                    pOptions->SetRulerVisible(bHasRuler);
+                    officecfg::Office::Impress::Layout::Display::Ruler::set(bHasRuler, batch);
                 }
+                else
+                {
+                    officecfg::Office::Draw::Layout::Display::Ruler::set(bHasRuler, batch);
+                }
+
+                batch->commit();
             }
 
             Invalidate (SID_RULER);

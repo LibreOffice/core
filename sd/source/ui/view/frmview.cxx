@@ -41,6 +41,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>
 
 using namespace ::com::sun::star;
@@ -280,7 +281,17 @@ void FrameView::Update(SdOptions const * pOptions)
     if (!pOptions)
         return;
 
-    mbRuler = pOptions->IsRulerVisible();
+    SdDrawDocument* pDrawDocument = dynamic_cast<SdDrawDocument*>(&GetModel());
+
+    if (pDrawDocument->GetDocumentType() == DocumentType::Impress)
+    {
+        mbRuler = officecfg::Office::Impress::Layout::Display::Ruler::get();
+    }
+    else
+    {
+        mbRuler = officecfg::Office::Draw::Layout::Display::Ruler::get();
+    }
+
     SetGridVisible( pOptions->IsGridVisible() );
     SetSnapAngle( pOptions->GetAngle() );
     SetGridSnap( pOptions->IsUseGridSnap() );
