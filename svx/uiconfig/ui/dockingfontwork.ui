@@ -159,7 +159,7 @@
               <object class="GtkLabel" id="frameStyle">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="dockingforntwork|frameStyle">Style</property>
+                <property name="label" translatable="yes" context="dockingfontwork|frameStyle">Style</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -293,7 +293,7 @@
               <object class="GtkLabel" id="frameAdjust">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="dockingforntwork|frameAdjust">Adjust</property>
+                <property name="label" translatable="yes" context="dockingfontwork|frameAdjust">Adjust</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -426,7 +426,7 @@
               <object class="GtkLabel" id="frameShadow">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="dockingforntwork|frameShadow">Shadow</property>
+                <property name="label" translatable="yes" context="dockingfontwork|frameShadow">Shadow</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -468,7 +468,7 @@
               <object class="GtkLabel" id="frameColor">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="dockingforntwork|frameColor">Shadow Color</property>
+                <property name="label" translatable="yes" context="dockingfontwork|frameColor">Shadow Color</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -574,7 +574,7 @@
               <object class="GtkLabel" id="frameShadowOffset">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="dockingforntwork|frameShadowOffset">Shadow Offset</property>
+                <property name="label" translatable="yes" context="dockingfontwork|frameShadowOffset">Shadow Offset</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -679,7 +679,7 @@
               <object class="GtkLabel" id="framePosition">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="dockingforntwork|framePosition">Position and Indent</property>
+                <property name="label" translatable="yes" context="dockingfontwork|framePosition">Position and Indent</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
