@@ -224,6 +224,40 @@ void NotesPanelView::onResize()
     }
 }
 
+void NotesPanelView::onGrabFocus()
+{
+    if (mbInFocus)
+        return;
+    mbInFocus = true;
+
+    if (mpTextObj && mpTextObj->IsEmptyPresObj())
+    {
+        // clear the "Click to add Notes" text on entering the window.
+        maOutliner.SetToEmptyText();
+    }
+}
+
+void NotesPanelView::onLoseFocus()
+{
+    if (!mbInFocus)
+        return;
+    mbInFocus = false;
+
+    aModifyIdle.Stop();
+    if (mpTextObj)
+    {
+        if (maOutliner.GetEditEngine().GetText().getLength() == 0)
+        {
+            // if the notes are empty restore the placeholder text and state.
+            SdPage* pPage = dynamic_cast<SdPage*>(mpTextObj->getSdrPageFromSdrObject());
+            if (pPage)
+                pPage->RestoreDefaultText(mpTextObj);
+        }
+        else
+            setNotesToDoc();
+    }
+}
+
 /**
  * Handler for StatusEvents
  */

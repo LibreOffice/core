@@ -738,6 +738,7 @@ void Window::LoseFocus()
 {
     mnTicks = 0;
     vcl::Window::LoseFocus ();
+    GetViewShell()->onLoseFocus();
 }
 
 /**
@@ -747,6 +748,7 @@ void Window::GrabFocus()
 {
     mnTicks      = 0;
     vcl::Window::GrabFocus ();
+    GetViewShell()->onGrabFocus();
 }
 
 void Window::DataChanged( const DataChangedEvent& rDCEvt )
