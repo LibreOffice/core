@@ -63,6 +63,8 @@ class DRAWINGLAYER_DLLPUBLIC TextLayouterDevice
     /// internally used VirtualDevice
     SolarMutexGuard maSolarGuard;
     VirtualDevice& mrDevice;
+    double mnFontScalingFixX = 1.0;
+    double mnFontScalingFixY = 1.0;
 
 public:
     /// constructor/destructor
