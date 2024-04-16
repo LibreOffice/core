@@ -393,7 +393,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
     if(bText && mbFntDirty)
     {
         vcl::Font aFnt(mpVD->GetFont());
-        const sal_uInt32 nHeight(FRound(aFnt.GetFontSize().Height() * mfScaleY));
+        const sal_uInt32 nHeight(basegfx::fround(aFnt.GetFontSize().Height() * mfScaleY));
 
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO ) );
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO_CJK ) );
@@ -1001,11 +1001,12 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     sal_Int32 nTextWidth = static_cast<sal_Int32>( mpVD->GetTextWidth( rStr ) * mfScaleX );
     sal_Int32 nTextHeight = static_cast<sal_Int32>( mpVD->GetTextHeight() * mfScaleY );
 
-    Point aPos( FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()) );
+    Point aPos(basegfx::fround<tools::Long>(rPos.X() * mfScaleX + maOfs.X()),
+               basegfx::fround<tools::Long>(rPos.Y() * mfScaleY + maOfs.Y()));
     Size aSize( nTextWidth, nTextHeight );
 
     if ( eAlg == ALIGN_BASELINE )
-        aPos.AdjustY( -(FRound(aFontMetric.GetAscent() * mfScaleY)) );
+        aPos.AdjustY(basegfx::fround<tools::Long>(aFontMetric.GetAscent() * -mfScaleY));
     else if ( eAlg == ALIGN_BOTTOM )
         aPos.AdjustY( -nTextHeight );
 

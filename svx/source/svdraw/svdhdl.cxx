@@ -1420,16 +1420,20 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
     // back transformation, set values on pIAOHandle
     GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, _pObj);
 
-    SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
-    Set2ndPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
+    SetPos({ basegfx::fround<tools::Long>(aGradTransVector.maPositionA.getX()),
+             basegfx::fround<tools::Long>(aGradTransVector.maPositionA.getY()) });
+    Set2ndPos({ basegfx::fround<tools::Long>(aGradTransVector.maPositionB.getX()),
+                basegfx::fround<tools::Long>(aGradTransVector.maPositionB.getY()) });
     if(m_pColHdl1)
     {
-        m_pColHdl1->SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
+        m_pColHdl1->SetPos({ basegfx::fround<tools::Long>(aGradTransVector.maPositionA.getX()),
+                             basegfx::fround<tools::Long>(aGradTransVector.maPositionA.getY()) });
         m_pColHdl1->SetColor(aGradTransVector.aCol1);
     }
     if(m_pColHdl2)
     {
-        m_pColHdl2->SetPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
+        m_pColHdl2->SetPos({ basegfx::fround<tools::Long>(aGradTransVector.maPositionB.getX()),
+                             basegfx::fround<tools::Long>(aGradTransVector.maPositionB.getY()) });
         m_pColHdl2->SetColor(aGradTransVector.aCol2);
     }
 }

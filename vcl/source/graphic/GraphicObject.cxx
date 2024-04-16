@@ -385,20 +385,20 @@ bool GraphicObject::ImplGetCropParams(const OutputDevice& rOut, Point& rPt, Size
         if( !aSize100.IsEmpty() && nTotalWidth > 0 && nTotalHeight > 0 )
         {
             double fScale = static_cast<double>(aSize100.Width()) / nTotalWidth;
-            const tools::Long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
-            const tools::Long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
+            const tools::Long nNewLeft = basegfx::fround<tools::Long>( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * -fScale );
+            const tools::Long nNewRight = nNewLeft + basegfx::fround<tools::Long>( aSize100.Width() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Width()) / aSize100.Width();
-            rPt.AdjustX(FRound( nNewLeft * fScale ) );
-            rSz.setWidth( FRound( ( nNewRight - nNewLeft + 1 ) * fScale ) );
+            rPt.AdjustX(basegfx::fround<tools::Long>(nNewLeft * fScale));
+            rSz.setWidth(basegfx::fround<tools::Long>((nNewRight - nNewLeft + 1) * fScale));
 
             fScale = static_cast<double>(aSize100.Height()) / nTotalHeight;
-            const tools::Long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
-            const tools::Long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
+            const tools::Long nNewTop = basegfx::fround<tools::Long>( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * -fScale );
+            const tools::Long nNewBottom = nNewTop + basegfx::fround<tools::Long>( aSize100.Height() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Height()) / aSize100.Height();
-            rPt.AdjustY(FRound( nNewTop * fScale ) );
-            rSz.setHeight( FRound( ( nNewBottom - nNewTop + 1 ) * fScale ) );
+            rPt.AdjustY(basegfx::fround<tools::Long>(nNewTop * fScale));
+            rSz.setHeight(basegfx::fround<tools::Long>((nNewBottom - nNewTop + 1) * fScale));
 
             if( nRot10 )
             {

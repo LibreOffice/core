@@ -139,13 +139,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 
             if( fBmpWH < fMaxWH )
             {
-                aNewBmpSize.setWidth( FRound( fMaxPixelY * fBmpWH ) );
-                aNewBmpSize.setHeight( FRound( fMaxPixelY ) );
+                aNewBmpSize.setWidth(basegfx::fround<tools::Long>(fMaxPixelY * fBmpWH));
+                aNewBmpSize.setHeight(basegfx::fround<tools::Long>(fMaxPixelY));
             }
             else if( fBmpWH > 0.0 )
             {
-                aNewBmpSize.setWidth( FRound( fMaxPixelX ) );
-                aNewBmpSize.setHeight( FRound( fMaxPixelX / fBmpWH) );
+                aNewBmpSize.setWidth(basegfx::fround<tools::Long>(fMaxPixelX));
+                aNewBmpSize.setHeight(basegfx::fround<tools::Long>(fMaxPixelX / fBmpWH));
             }
 
             if( aNewBmpSize.Width() && aNewBmpSize.Height() )

@@ -32,8 +32,8 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
     const Size aSizePix(aBitmap.GetSizePixel());
-    const sal_Int32 nNewWidth = FRound(aSizePix.Width() * mfScaleX);
-    const sal_Int32 nNewHeight = FRound(aSizePix.Height() * mfScaleY);
+    const sal_Int32 nNewWidth = basegfx::fround(aSizePix.Width() * mfScaleX);
+    const sal_Int32 nNewHeight = basegfx::fround(aSizePix.Height() * mfScaleY);
     bool bRet = false;
 
     SAL_INFO("vcl.gdi", "New width: " << nNewWidth << "\nNew height: " << nNewHeight);

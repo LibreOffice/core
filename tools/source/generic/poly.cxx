@@ -203,8 +203,8 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
 
         for( i=0, nAngle = 0.0; i < nPoints4; i++, nAngle += nAngleStep )
         {
-            tools::Long nX = FRound( nRadX * cos( nAngle ) );
-            tools::Long nY = FRound( -nRadY * sin( nAngle ) );
+            tools::Long nX = basegfx::fround<tools::Long>(nRadX * cos(nAngle));
+            tools::Long nY = basegfx::fround<tools::Long>(nRadY * -sin(nAngle));
 
             Point* pPt = &(mxPointAry[i]);
             pPt->setX(  nX + rCenter.X() );
@@ -291,7 +291,8 @@ ImplPolygon::ImplPolygon(const tools::Rectangle& rBound, const Point& rStart, co
 
         if (PolyStyle::Pie == eStyle)
         {
-            const Point aCenter2(FRound(fCenterX), FRound(fCenterY));
+            const Point aCenter2(basegfx::fround<tools::Long>(fCenterX),
+                                 basegfx::fround<tools::Long>(fCenterY));
 
             nStart = 1;
             nEnd = nPoints + 1;
@@ -310,8 +311,8 @@ ImplPolygon::ImplPolygon(const tools::Rectangle& rBound, const Point& rStart, co
         {
             Point& rPt = mxPointAry[nStart];
 
-            rPt.setX( FRound( fCenterX + fRadX * cos( fStart ) ) );
-            rPt.setY( FRound( fCenterY - fRadY * sin( fStart ) ) );
+            rPt.setX(basegfx::fround<tools::Long>(fCenterX + fRadX * cos(fStart)));
+            rPt.setY(basegfx::fround<tools::Long>(fCenterY - fRadY * sin(fStart)));
         }
 
         if( PolyStyle::Chord == eStyle )
@@ -355,8 +356,8 @@ ImplPolygon::ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1,
         double fK12 = fK_1 * fK1_2;
         double fK21 = fK_2 * fK1_1;
 
-        rPt.setX( FRound( fK1_3 * fX0 + fK12 * fX1 + fK21 * fX2 + fK_3 * fX3 ) );
-        rPt.setY( FRound( fK1_3 * fY0 + fK12 * fY1 + fK21 * fY2 + fK_3 * fY3 ) );
+        rPt.setX(basegfx::fround<tools::Long>(fK1_3 * fX0 + fK12 * fX1 + fK21 * fX2 + fK_3 * fX3));
+        rPt.setY(basegfx::fround<tools::Long>(fK1_3 * fY0 + fK12 * fY1 + fK21 * fY2 + fK_3 * fY3));
     }
 }
 
@@ -399,7 +400,9 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
             for(sal_uInt32 a(0); a < nLoopCount; a++)
             {
                 // add current point (always) and remember StartPointIndex for evtl. later corrections
-                const Point aStartPoint(FRound(aBezier.getStartPoint().getX()), FRound(aBezier.getStartPoint().getY()));
+                const Point aStartPoint(
+                    basegfx::fround<tools::Long>(aBezier.getStartPoint().getX()),
+                    basegfx::fround<tools::Long>(aBezier.getStartPoint().getY()));
                 const sal_uInt32 nStartPointIndex(nArrayInsert);
                 mxPointAry[nStartPointIndex] = aStartPoint;
                 mxFlagAry[nStartPointIndex] = PolyFlags::Normal;
@@ -414,11 +417,13 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
                 if(aBezier.isBezier())
                 {
                     // if one is used, add always two control points due to the old schema
-                    mxPointAry[nArrayInsert] = Point(FRound(aBezier.getControlPointA().getX()), FRound(aBezier.getControlPointA().getY()));
+                    mxPointAry[nArrayInsert] = Point(basegfx::fround<tools::Long>(aBezier.getControlPointA().getX()),
+                                                     basegfx::fround<tools::Long>(aBezier.getControlPointA().getY()));
                     mxFlagAry[nArrayInsert] = PolyFlags::Control;
                     nArrayInsert++;
 
-                    mxPointAry[nArrayInsert] = Point(FRound(aBezier.getControlPointB().getX()), FRound(aBezier.getControlPointB().getY()));
+                    mxPointAry[nArrayInsert] = Point(basegfx::fround<tools::Long>(aBezier.getControlPointB().getX()),
+                                                     basegfx::fround<tools::Long>(aBezier.getControlPointB().getY()));
                     mxFlagAry[nArrayInsert] = PolyFlags::Control;
                     nArrayInsert++;
                 }
@@ -453,7 +458,8 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
             {
                 // add last point as closing point
                 const basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nB2DLocalCount - 1));
-                const Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
+                const Point aEnd(basegfx::fround<tools::Long>(aClosingPoint.getX()),
+                                 basegfx::fround<tools::Long>(aClosingPoint.getY()));
                 mxPointAry[nArrayInsert] = aEnd;
                 mxFlagAry[nArrayInsert] = PolyFlags::Normal;
                 nArrayInsert++;
@@ -486,7 +492,8 @@ ImplPolygon::ImplPolygon(const basegfx::B2DPolygon& rPolygon)
             for(sal_uInt32 a(0); a < nB2DLocalCount; a++)
             {
                 basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
-                Point aPoint(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
+                Point aPoint(basegfx::fround<tools::Long>(aB2DPoint.getX()),
+                             basegfx::fround<tools::Long>(aB2DPoint.getY()));
                 mxPointAry[nIndex++] = aPoint;
             }
 
@@ -1180,7 +1187,7 @@ static void ImplAdaptiveSubdivide( std::vector<Point>& rPoints,
         // requested resolution reached.
         // Add end points to output iterator.
         // order is preserved, since this is so to say depth first traversal.
-        rPoints.push_back(Point(FRound(P1x), FRound(P1y)));
+        rPoints.push_back(Point(basegfx::fround<tools::Long>(P1x), basegfx::fround<tools::Long>(P1y)));
     }
 }
 
@@ -1432,8 +1439,8 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 
         const tools::Long nX = rPt.X() - nCenterX;
         const tools::Long nY = rPt.Y() - nCenterY;
-        rPt.setX( FRound(fCos * nX + fSin * nY + nCenterX) );
-        rPt.setY( FRound(-(fSin * nX - fCos * nY - nCenterY)) );
+        rPt.setX(basegfx::fround<tools::Long>(fCos * nX + fSin * nY + nCenterX));
+        rPt.setY(basegfx::fround<tools::Long>(-(fSin * nX - fCos * nY - nCenterY)));
     }
 }
 

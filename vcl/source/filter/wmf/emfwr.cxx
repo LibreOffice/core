@@ -900,7 +900,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, K
             const double fFactor = static_cast<double>(nWidth) / nNormWidth;
 
             for( i = 0; i < ( nLen - 1 ); i++ )
-                aOwnArray.set(i, FRound(aOwnArray[i] * fFactor));
+                aOwnArray.set(i, basegfx::fround(aOwnArray[i] * fFactor));
         }
     }
 
@@ -1219,8 +1219,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
-                    aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
+                    aSrcPt.setX(basegfx::fround<tools::Long>(aSrcPt.X() * fScaleX));
+                    aSrcPt.setY(basegfx::fround<tools::Long>(aSrcPt.Y() * fScaleY));
                 }
 
                 nMoveX = aDestPt.X() - aSrcPt.X();

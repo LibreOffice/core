@@ -687,7 +687,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             fPercentStep_2 = 45.0 / n;
 
         fPercent += 10.0;
-        VECT_PROGRESS( pProgress, FRound( fPercent ) );
+        VECT_PROGRESS( pProgress, basegfx::fround<tools::Long>( fPercent ) );
 
         for( sal_uInt16 i = 0; i < n; i++ )
         {
@@ -697,7 +697,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             ImplExpand( oMap, pRAcc.get(), aFindColor );
 
             fPercent += fPercentStep_2;
-            VECT_PROGRESS( pProgress, FRound( fPercent ) );
+            VECT_PROGRESS( pProgress, basegfx::fround<tools::Long>( fPercent ) );
 
             if( oMap )
             {
@@ -721,7 +721,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             }
 
             fPercent += fPercentStep_2;
-            VECT_PROGRESS( pProgress, FRound( fPercent ) );
+            VECT_PROGRESS( pProgress, basegfx::fround<tools::Long>( fPercent ) );
         }
 
         if( rMtf.GetActionSize() )

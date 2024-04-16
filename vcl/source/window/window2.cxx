@@ -420,8 +420,8 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
     {
         vcl::Font aFont(rFont);
         Size aSize = aFont.GetFontSize();
-        aSize.setWidth( FRound(double(aSize.Width() * rZoom)) );
-        aSize.setHeight( FRound(double(aSize.Height() * rZoom)) );
+        aSize.setWidth(basegfx::fround<tools::Long>(double(aSize.Width() * rZoom)));
+        aSize.setHeight(basegfx::fround<tools::Long>(double(aSize.Height() * rZoom)));
         aFont.SetFontSize(aSize);
         SetPointFont(rRenderContext, aFont);
     }
@@ -438,7 +438,7 @@ tools::Long Window::CalcZoom( tools::Long nCalc ) const
     if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
     {
         double n = double(nCalc * rZoom);
-        nCalc = FRound( n );
+        nCalc = basegfx::fround<tools::Long>(n);
     }
     return nCalc;
 }

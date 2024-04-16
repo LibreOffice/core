@@ -90,7 +90,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     // Do horizontal filtering
     OSL_ENSURE(rScaleX > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
     const sal_Int32 nWidth(rSource.GetSizePixel().Width());
-    const sal_Int32 nNewWidth(FRound(nWidth * rScaleX));
+    const sal_Int32 nNewWidth(basegfx::fround(nWidth * rScaleX));
 
     if(nWidth == nNewWidth)
     {
@@ -180,7 +180,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     // Do vertical filtering
     OSL_ENSURE(rScaleY > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
     const sal_Int32 nHeight(rSource.GetSizePixel().Height());
-    const sal_Int32 nNewHeight(FRound(nHeight * rScaleY));
+    const sal_Int32 nNewHeight(basegfx::fround(nHeight * rScaleY));
 
     if(nHeight == nNewHeight)
     {
@@ -263,8 +263,8 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
     const double fScaleY(bMirrorVer ? -rScaleY : rScaleY);
     const sal_Int32 nWidth(rBitmap.GetSizePixel().Width());
     const sal_Int32 nHeight(rBitmap.GetSizePixel().Height());
-    const sal_Int32 nNewWidth(FRound(nWidth * fScaleX));
-    const sal_Int32 nNewHeight(FRound(nHeight * fScaleY));
+    const sal_Int32 nNewWidth(basegfx::fround(nWidth * fScaleX));
+    const sal_Int32 nNewHeight(basegfx::fround(nHeight * fScaleY));
     const bool bScaleHor(nWidth != nNewWidth);
     const bool bScaleVer(nHeight != nNewHeight);
     const bool bMirror(bMirrorHor || bMirrorVer);

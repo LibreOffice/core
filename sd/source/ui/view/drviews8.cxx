@@ -74,13 +74,13 @@ void DrawViewShell::ScannerEvent()
 
                         if( fGrfWH < fWinWH )
                         {
-                            aBmpSize.setWidth( FRound( aPageSize.Height() * fGrfWH ) );
+                            aBmpSize.setWidth( basegfx::fround<::tools::Long>( aPageSize.Height() * fGrfWH ) );
                             aBmpSize.setHeight( aPageSize.Height() );
                         }
                         else if( fGrfWH > 0.F )
                         {
                             aBmpSize.setWidth( aPageSize.Width() );
-                            aBmpSize.setHeight( FRound( aPageSize.Width() / fGrfWH ) );
+                            aBmpSize.setHeight( basegfx::fround<::tools::Long>( aPageSize.Width() / fGrfWH ) );
                         }
                     }
 

@@ -94,27 +94,27 @@ inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, 
 {
     double nxFract = xFract.IsValid() ? static_cast<double>(xFract) : 1.0;
     double nyFract = yFract.IsValid() ? static_cast<double>(yFract) : 1.0;
-    rPnt.setX(rRef.X() + FRound( (rPnt.X() - rRef.X()) * nxFract ));
-    rPnt.setY(rRef.Y() + FRound( (rPnt.Y() - rRef.Y()) * nyFract ));
+    rPnt.setX(rRef.X() + basegfx::fround<tools::Long>((rPnt.X() - rRef.X()) * nxFract));
+    rPnt.setY(rRef.Y() + basegfx::fround<tools::Long>((rPnt.Y() - rRef.Y()) * nyFract));
 }
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
 {
     tools::Long dx=rPnt.X()-rRef.X();
     tools::Long dy=rPnt.Y()-rRef.Y();
-    rPnt.setX(FRound(rRef.X()+dx*cs+dy*sn));
-    rPnt.setY(FRound(rRef.Y()+dy*cs-dx*sn));
+    rPnt.setX(basegfx::fround<tools::Long>(rRef.X() + dx * cs + dy * sn));
+    rPnt.setY(basegfx::fround<tools::Long>(rRef.Y() + dy * cs - dx * sn));
 }
 
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear)
 {
     if (!bVShear) { // Horizontal
         if (rPnt.Y()!=rRef.Y()) { // else not needed
-            rPnt.AdjustX(-FRound((rPnt.Y()-rRef.Y())*tn));
+            rPnt.AdjustX(basegfx::fround<tools::Long>((rRef.Y() - rPnt.Y()) * tn));
         }
     } else { // or else vertical
         if (rPnt.X()!=rRef.X()) { // else not needed
-            rPnt.AdjustY(-FRound((rPnt.X()-rRef.X())*tn));
+            rPnt.AdjustY(basegfx::fround<tools::Long>((rRef.X() - rPnt.X()) * tn));
         }
     }
 }

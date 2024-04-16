@@ -462,14 +462,14 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     tools::Long nOverhang=rRec.nHelplineOverhang;
     tools::Long nHelplineDist=rRec.nHelplineDist;
 
-    tools::Long dx= FRound(nLineDist*nHlpCos);
-    tools::Long dy=-FRound(nLineDist*nHlpSin);
-    tools::Long dxh1a= FRound((nHelplineDist-rRec.nHelpline1Len)*nHlpCos);
-    tools::Long dyh1a=-FRound((nHelplineDist-rRec.nHelpline1Len)*nHlpSin);
-    tools::Long dxh1b= FRound((nHelplineDist-rRec.nHelpline2Len)*nHlpCos);
-    tools::Long dyh1b=-FRound((nHelplineDist-rRec.nHelpline2Len)*nHlpSin);
-    tools::Long dxh2= FRound((nLineDist+nOverhang)*nHlpCos);
-    tools::Long dyh2=-FRound((nLineDist+nOverhang)*nHlpSin);
+    tools::Long dx = basegfx::fround<tools::Long>(nLineDist * nHlpCos);
+    tools::Long dy = basegfx::fround<tools::Long>(nLineDist * -nHlpSin);
+    tools::Long dxh1a = basegfx::fround<tools::Long>((nHelplineDist - rRec.nHelpline1Len) * nHlpCos);
+    tools::Long dyh1a = basegfx::fround<tools::Long>((nHelplineDist - rRec.nHelpline1Len) * -nHlpSin);
+    tools::Long dxh1b = basegfx::fround<tools::Long>((nHelplineDist - rRec.nHelpline2Len) * nHlpCos);
+    tools::Long dyh1b = basegfx::fround<tools::Long>((nHelplineDist - rRec.nHelpline2Len) * -nHlpSin);
+    tools::Long dxh2 = basegfx::fround<tools::Long>((nLineDist + nOverhang) * nHlpCos);
+    tools::Long dyh2 = basegfx::fround<tools::Long>((nLineDist + nOverhang) * -nHlpSin);
 
     // extension line 1
     rPol.aHelpline1.aP1=Point(aP1.X()+dxh1a,aP1.Y()+dyh1a);

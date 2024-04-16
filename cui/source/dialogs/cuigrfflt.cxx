@@ -192,8 +192,8 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     Graphic         aRet;
     tools::Long            nTileWidth = static_cast<tools::Long>(mxMtrWidth->get_value(FieldUnit::PIXEL));
     tools::Long            nTileHeight = static_cast<tools::Long>(mxMtrHeight->get_value(FieldUnit::PIXEL));
-    const Size      aSize( std::max( FRound( nTileWidth * fScaleX ), tools::Long(1) ),
-                           std::max( FRound( nTileHeight * fScaleY ), tools::Long(1) ) );
+    const Size      aSize( std::max( basegfx::fround<tools::Long>( nTileWidth * fScaleX ), tools::Long(1) ),
+                           std::max( basegfx::fround<tools::Long>( nTileHeight * fScaleY ), tools::Long(1) ) );
 
     if( rGraphic.IsAnimated() )
     {
@@ -270,7 +270,7 @@ GraphicFilterSolarize::GraphicFilterSolarize(weld::Window* pParent, const Graphi
     , mxMtrThreshold(m_xBuilder->weld_metric_spin_button("value", FieldUnit::PERCENT))
     , mxCbxInvert(m_xBuilder->weld_check_button("invert"))
 {
-    mxMtrThreshold->set_value(FRound(cGreyThreshold / 2.55), FieldUnit::PERCENT);
+    mxMtrThreshold->set_value(basegfx::fround(cGreyThreshold / 2.55), FieldUnit::PERCENT);
     mxMtrThreshold->connect_value_changed(LINK(this, GraphicFilterSolarize, EditModifyHdl));
 
     mxCbxInvert->set_active(bInvert);
@@ -290,7 +290,7 @@ IMPL_LINK_NOARG(GraphicFilterSolarize, EditModifyHdl, weld::MetricSpinButton&, v
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    sal_uInt8       nGreyThreshold = static_cast<sal_uInt8>(FRound(mxMtrThreshold->get_value(FieldUnit::PERCENT) * 2.55));
+    sal_uInt8       nGreyThreshold = basegfx::fround<sal_uInt8>(mxMtrThreshold->get_value(FieldUnit::PERCENT) * 2.55);
 
     if( rGraphic.IsAnimated() )
     {

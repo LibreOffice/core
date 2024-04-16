@@ -1517,8 +1517,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         // corresponding bentConnector as calculated above.
         auto SegmentPoint = [&aXP1](const sal_uInt16& nEnd, const double& fFactor) {
             return Point(
-                aXP1[nEnd - 1].X() + FRound(fFactor * (aXP1[nEnd].X() - aXP1[nEnd - 1].X())),
-                aXP1[nEnd - 1].Y() + FRound(fFactor * (aXP1[nEnd].Y() - aXP1[nEnd - 1].Y())));
+                aXP1[nEnd - 1].X() + basegfx::fround<tools::Long>(fFactor * (aXP1[nEnd].X() - aXP1[nEnd - 1].X())),
+                aXP1[nEnd - 1].Y() + basegfx::fround<tools::Long>(fFactor * (aXP1[nEnd].Y() - aXP1[nEnd - 1].Y())));
         };
 
         // We change the path going from end to start. Thus inserting points does not affect the index

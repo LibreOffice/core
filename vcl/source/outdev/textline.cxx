@@ -774,7 +774,7 @@ void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
     {
         tools::Long nXAdd = nWidth - nDistX;
         if( mpFontInstance->mnOrientation )
-            nXAdd = FRound( nXAdd * cos( toRadians(mpFontInstance->mnOrientation) ) );
+            nXAdd = basegfx::fround<tools::Long>( nXAdd * cos( toRadians(mpFontInstance->mnOrientation) ) );
 
         nX += nXAdd - 1;
     }
@@ -847,7 +847,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                     {
                         const double nDY = aPos.getY() - aStartPt.getY();
                         const double fRad = toRadians(mpFontInstance->mnOrientation);
-                        nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
+                        nDist = basegfx::fround<tools::Long>(nDist * cos(fRad) - nDY * sin(fRad));
                     }
                 }
 

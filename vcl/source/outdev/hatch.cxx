@@ -280,10 +280,10 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     {
         const double    fAngle = std::abs( toRadians(nAngle) );
         const double    fTan = tan( fAngle );
-        const tools::Long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
+        const tools::Long      nYOff = basegfx::fround<tools::Long>( ( rRect.Right() - rRect.Left() ) * fTan );
         tools::Long            nPY;
 
-        nDist = FRound( nDist / cos( fAngle ) );
+        nDist = basegfx::fround<tools::Long>(nDist / cos(fAngle));
         rInc = Size( 0, nDist );
 
         if( nAngle > 0_deg10 )
@@ -291,14 +291,14 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
             rPt1 = rRect.TopLeft();
             rPt2 = Point( rRect.Right(), rRect.Top() - nYOff );
             rEndPt1 = Point( rRect.Left(), rRect.Bottom() + nYOff );
-            nPY = FRound( aRef.Y() - ( ( rPt1.X() - aRef.X() ) * fTan ) );
+            nPY = basegfx::fround<tools::Long>(aRef.Y() - ((rPt1.X() - aRef.X()) * fTan));
         }
         else
         {
             rPt1 = rRect.TopRight();
             rPt2 = Point( rRect.Left(), rRect.Top() - nYOff );
             rEndPt1 = Point( rRect.Right(), rRect.Bottom() + nYOff );
-            nPY = FRound( aRef.Y() + ( ( rPt1.X() - aRef.X() ) * fTan ) );
+            nPY = basegfx::fround<tools::Long>(aRef.Y() + ((rPt1.X() - aRef.X()) * fTan));
         }
 
         if( nPY <= rPt1.Y() )
@@ -313,10 +313,10 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     {
         const double fAngle = std::abs( toRadians(nAngle) );
         const double fTan = tan( fAngle );
-        const tools::Long   nXOff = FRound( (static_cast<double>(rRect.Bottom()) - rRect.Top()) / fTan );
+        const tools::Long   nXOff = basegfx::fround<tools::Long>( (static_cast<double>(rRect.Bottom()) - rRect.Top()) / fTan );
         tools::Long         nPX;
 
-        nDist = FRound( nDist / sin( fAngle ) );
+        nDist = basegfx::fround<tools::Long>(nDist / sin(fAngle));
         rInc = Size( nDist, 0 );
 
         if( nAngle > 0_deg10 )
@@ -324,14 +324,14 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
             rPt1 = rRect.TopLeft();
             rPt2 = Point( rRect.Left() - nXOff, rRect.Bottom() );
             rEndPt1 = Point( rRect.Right() + nXOff, rRect.Top() );
-            nPX = FRound( aRef.X() - ( (static_cast<double>(rPt1.Y()) - aRef.Y()) / fTan ) );
+            nPX = basegfx::fround<tools::Long>( aRef.X() - ( (static_cast<double>(rPt1.Y()) - aRef.Y()) / fTan ) );
         }
         else
         {
             rPt1 = rRect.BottomLeft();
             rPt2 = Point( rRect.Left() - nXOff, rRect.Top() );
             rEndPt1 = Point( rRect.Right() + nXOff, rRect.Bottom() );
-            nPX = FRound( aRef.X() + ( (static_cast<double>(rPt1.Y()) - aRef.Y()) / fTan ) );
+            nPX = basegfx::fround<tools::Long>( aRef.X() + ( (static_cast<double>(rPt1.Y()) - aRef.Y()) / fTan ) );
         }
 
         if( nPX <= rPt1.X() )
@@ -401,7 +401,8 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
                             SAL_WARN("vcl.gdi", "too many hatch points");
                             return;
                         }
-                        pPtBuffer[ nPCounter++ ] = Point( FRound( fX ), FRound( fY ) );
+                        pPtBuffer[nPCounter++] = Point(basegfx::fround<tools::Long>(fX),
+                                                       basegfx::fround<tools::Long>(fY));
                     }
                 }
 

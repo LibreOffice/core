@@ -57,7 +57,8 @@ static Point GetAnglePnt(const tools::Rectangle& rR, Degree100 nAngle)
     tools::Long nHgt=rR.Bottom()-rR.Top();
     tools::Long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
     double a = toRadians(nAngle);
-    Point aRetval(FRound(cos(a)*nMaxRad),-FRound(sin(a)*nMaxRad));
+    Point aRetval(basegfx::fround<tools::Long>(cos(a) * nMaxRad),
+                  basegfx::fround<tools::Long>(-sin(a) * nMaxRad));
     if (nWdt==0) aRetval.setX(0 );
     if (nHgt==0) aRetval.setY(0 );
     if (nWdt!=nHgt) {
@@ -888,13 +889,15 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         tools::Long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
         // starting point
         double a = toRadians(nStartAngle);
-        aTmpPt1=Point(FRound(cos(a)*nMaxRad),-FRound(sin(a)*nMaxRad));
+        aTmpPt1 = Point(basegfx::fround<tools::Long>(cos(a) * nMaxRad),
+                        basegfx::fround<tools::Long>(-sin(a) * nMaxRad));
         if (nWdt==0) aTmpPt1.setX(0 );
         if (nHgt==0) aTmpPt1.setY(0 );
         aTmpPt1+=aCenter;
         // finishing point
         a = toRadians(nEndAngle);
-        aTmpPt2=Point(FRound(cos(a)*nMaxRad),-FRound(sin(a)*nMaxRad));
+        aTmpPt2 = Point(basegfx::fround<tools::Long>(cos(a) * nMaxRad),
+                        basegfx::fround<tools::Long>(-sin(a) * nMaxRad));
         if (nWdt==0) aTmpPt2.setX(0 );
         if (nHgt==0) aTmpPt2.setY(0 );
         aTmpPt2+=aCenter;
@@ -1013,7 +1016,7 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     if (maGeo.m_nShearAngle==0_deg100)
         return;
 
-    tools::Long nDst = FRound((rRect.Bottom() - rRect.Top()) * maGeo.mfTanShearAngle);
+    tools::Long nDst = basegfx::fround<tools::Long>((rRect.Bottom() - rRect.Top()) * maGeo.mfTanShearAngle);
     if (maGeo.m_nShearAngle > 0_deg100)
     {
         Point aRef(rRect.TopLeft());

@@ -424,7 +424,8 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
-    Size newSize(FRound(mSize.Width() * rScaleX), FRound(mSize.Height() * rScaleY));
+    Size newSize(basegfx::fround<tools::Long>(mSize.Width() * rScaleX),
+                 basegfx::fround<tools::Long>(mSize.Height() * rScaleY));
     if (mSize == newSize)
         return true;
 

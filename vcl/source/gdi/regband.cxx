@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <basegfx/numeric/ftools.hxx>
 #include <tools/helpers.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -314,8 +317,8 @@ void ImplRegionBand::ScaleX( double fHorzScale )
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
     {
-        pSep->mnXLeft   = FRound( pSep->mnXLeft * fHorzScale );
-        pSep->mnXRight  = FRound( pSep->mnXRight * fHorzScale );
+        pSep->mnXLeft = basegfx::fround<tools::Long>(pSep->mnXLeft * fHorzScale);
+        pSep->mnXRight = basegfx::fround<tools::Long>(pSep->mnXRight * fHorzScale);
         pSep = pSep->mpNextSep;
     }
 }
