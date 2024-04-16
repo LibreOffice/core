@@ -39,6 +39,7 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
 
     SdrTextObj* mpTextObj = nullptr;
     bool mbIgnoreNotifications = false;
+    bool mbInFocus = false;
 
     /** stores the last used document color.
         this is changed in onUpdateStyleSettings()
@@ -61,6 +62,8 @@ public:
 
     void Paint(const ::tools::Rectangle& rRect, ::sd::Window const* pWin);
     void onResize();
+    void onGrabFocus();
+    void onLoseFocus();
 
     OutlinerView* GetOutlinerView();
     OutlinerView* GetViewByWindow(vcl::Window const* pWin) const override;
