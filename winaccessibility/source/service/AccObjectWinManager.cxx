@@ -1062,26 +1062,6 @@ void AccObjectWinManager::UpdateChildState(css::accessibility::XAccessible* pAcc
     }
 }
 
-
-bool AccObjectWinManager::IsSpecialToolbarItem(css::accessibility::XAccessible* pXAcc)
-{
-    if (pXAcc && oldFocus != pXAcc)
-    {
-        if (GetParentRole(pXAcc) == AccessibleRole::TOOL_BAR)
-        {
-            Reference< XAccessibleContext > pRContext(pXAcc->getAccessibleContext());
-            if (pRContext.is())
-            {
-                if (pRContext->getAccessibleRole() == AccessibleRole::TOGGLE_BUTTON)
-                {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
 short AccObjectWinManager::GetRole(css::accessibility::XAccessible* pXAcc)
 {
     assert(pXAcc != nullptr);

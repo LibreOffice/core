@@ -207,6 +207,19 @@ void AccComponentEventListener::SetComponentState(sal_Int64 state, bool enable)
  */
 void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool set)
 {
+    if (!m_xAccessible.is())
+        return;
+
+    css::uno::Reference<css::accessibility::XAccessibleContext> xAccContext = m_xAccessible->getAccessibleContext();
+    if (!xAccContext.is())
+        return;
+
+    const sal_Int16 nRole = xAccContext->getAccessibleRole();
+    // for these button roles, MSAA state STATE_SYSTEM_PRESSED is used instead of
+    // STATE_SYSTEM_CHECKED (s. AccObject::GetMSAAStateFromUNO)
+    const bool bPressedInsteadOfChecked
+        = (nRole == AccessibleRole::PUSH_BUTTON) || (nRole == AccessibleRole::TOGGLE_BUTTON);
+
     if( set)
     {
         // new value
@@ -216,11 +229,10 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         case AccessibleStateType::INDETERMINATE:
             m_rObjManager.IncreaseState(m_xAccessible.get(), state);
             m_rObjManager.UpdateAction(m_xAccessible.get());
-
-            if (!m_rObjManager.IsSpecialToolbarItem(m_xAccessible.get()))
-            {
+            if (bPressedInsteadOfChecked)
+                m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
+            else
                 m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_CHECKED);
-            }
             break;
         case AccessibleStateType::PRESSED:
             m_rObjManager.IncreaseState(m_xAccessible.get(), state);
@@ -256,11 +268,10 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         case AccessibleStateType::INDETERMINATE:
             m_rObjManager.DecreaseState(m_xAccessible.get(), state);
             m_rObjManager.UpdateAction(m_xAccessible.get());
-
-            if (!m_rObjManager.IsSpecialToolbarItem(m_xAccessible.get()))
-            {
+            if (bPressedInsteadOfChecked)
+                m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
+            else
                 m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_CHECKED);
-            }
             break;
         case AccessibleStateType::PRESSED:
             m_rObjManager.DecreaseState(m_xAccessible.get(), state);

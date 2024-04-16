@@ -132,8 +132,6 @@ public:
 
     void UpdateChildState(css::accessibility::XAccessible* pXAcc);
 
-    bool IsSpecialToolbarItem(css::accessibility::XAccessible* pXAcc);
-
     static short GetRole(css::accessibility::XAccessible* pXAcc);
 
     css::accessibility::XAccessible* GetAccDocByAccTopWin( css::accessibility::XAccessible* pXAcc );
