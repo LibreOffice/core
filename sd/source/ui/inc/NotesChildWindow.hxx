@@ -47,6 +47,9 @@ class NotesEditWindow : public WeldEditView, public SfxListener
     DECL_LINK(ModifyTimerHdl, Timer*, void);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
 
+    DECL_LINK(BeginPasteOrDropHdl, PasteOrDropInfos*, void);
+    DECL_LINK(EndPasteOrDropHdl, PasteOrDropInfos*, void);
+
     void removeListener();
     void addListener();
 
@@ -73,6 +76,7 @@ public:
     virtual void LoseFocus() override;
     virtual bool Command(const CommandEvent& rCEvt) override;
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
 };
 
 class NotesChildDockingWindow final : public SfxDockingWindow

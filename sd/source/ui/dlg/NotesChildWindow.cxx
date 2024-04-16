@@ -69,6 +69,9 @@ NotesChildDockingWindow::NotesChildDockingWindow(SfxBindings* _pBindings,
     mpOutliner = std::make_unique<Outliner>(&mpViewShellBase->GetDocShell()->GetPool(),
                                             OutlinerMode::TextObject);
 
+    mpOutliner->SetStyleSheetPool(
+        static_cast<SfxStyleSheetPool*>(mpViewShellBase->GetDocShell()->GetStyleSheetPool()));
+
     mpOutlinerView = std::make_unique<OutlinerView>(mpOutliner.get(), nullptr);
     mpOutliner->InsertView(mpOutlinerView.get());
 
@@ -132,6 +135,51 @@ IMPL_LINK(NotesEditWindow, EventMultiplexerListener, tools::EventMultiplexerEven
     }
 }
 
+IMPL_LINK(NotesEditWindow, EndPasteOrDropHdl, PasteOrDropInfos*, pInfo, void)
+{
+    /* Style Sheet handling */
+    if (!mrParentWindow.GetOutliner() || !mpTextObj)
+        return;
+
+    SdPage* pPage = static_cast<SdPage*>(mpTextObj->getSdrPageFromSdrObject());
+    if (!pPage)
+        return;
+
+    SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj(PresObjKind::Notes);
+    if (!pStyleSheet)
+        return;
+
+    for (sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++)
+    {
+        SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+        mrParentWindow.GetOutliner()->SetStyleSheet(nPara, pStyleSheet);
+
+        // force the pasted paragraph font height to the notes placeholder default.
+        SfxItemSet aFontHeightSet(*rItemSet.GetPool(),
+                                  WhichRangesContainer(EE_CHAR_START, EE_CHAR_END));
+
+        for (auto& rWhich : { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL })
+        {
+            if (auto pFontHeightItem = rItemSet.GetItemIfSet(rWhich))
+                aFontHeightSet.Put(*pFontHeightItem);
+        }
+
+        mrParentWindow.GetOutliner()->SetCharAttribs(nPara, aFontHeightSet);
+    }
+}
+
+IMPL_LINK(NotesEditWindow, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfo, void)
+{
+    if (!mrParentWindow.GetOutliner() || !mpTextObj || !mpTextObj->getSdrPageFromSdrObject())
+        return;
+
+    // Turn character attributes of the paragraph of the insert position into
+    // character-level attributes, so they are not lost when OnEndPasteOrDrop()
+    // sets the paragraph stylesheet.
+    SfxItemSet aSet(mrParentWindow.GetOutliner()->GetParaAttribs(pInfo->nStartPara));
+    mrParentWindow.GetOutliner()->SetCharAttribs(pInfo->nStartPara, aSet);
+}
+
 void NotesEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     Size aSize(pDrawingArea->get_size_request());
@@ -184,6 +232,11 @@ void NotesEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     mrParentWindow.GetOutliner()->setGlobalScale(30.0, 30.0);
 
     provideNoteText();
+
+    mrParentWindow.GetOutliner()->SetEndPasteOrDropHdl(
+        LINK(this, NotesEditWindow, EndPasteOrDropHdl));
+    mrParentWindow.GetOutliner()->SetBeginPasteOrDropHdl(
+        LINK(this, NotesEditWindow, BeginPasteOrDropHdl));
 
     GetEditEngine()->SetStatusEventHdl(LINK(this, NotesEditWindow, EditStatusHdl));
 }
@@ -597,6 +650,19 @@ void NotesEditWindow::Notify(SfxBroadcaster&, const SfxHint& rHint)
                 break;
         }
     }
+}
+
+bool NotesEditWindow::KeyInput(const KeyEvent& rKEvt)
+{
+    bool bDone = false;
+
+    if (::OutlinerView* pOutlinerView = mrParentWindow.GetOutlinerView())
+        bDone = pOutlinerView->PostKeyEvent(rKEvt);
+
+    if (!bDone)
+        bDone = WeldEditView::KeyInput(rKEvt);
+
+    return bDone;
 }
 
 IMPL_LINK_NOARG(NotesEditWindow, EditStatusHdl, EditStatus&, void) { Resize(); }
