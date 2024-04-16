@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <basegfx/numeric/ftools.hxx>
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
 #include <tools/long.hxx>
@@ -925,7 +926,7 @@ static AquaSalFrame* getMouseContainerFrame()
         // adapt NSEvent-sensitivity to application expectations
         // TODO: rather make CommandWheelMode::ZOOM handlers smarter
         const float fDeltaZ = mfMagnifyDeltaSum * fMagnifyFactor;
-        int nDeltaZ = FRound( fDeltaZ );
+        int nDeltaZ = basegfx::fround<int>( fDeltaZ );
         if( !nDeltaZ )
         {
             // handle new series immediately

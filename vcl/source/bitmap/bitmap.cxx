@@ -353,8 +353,8 @@ void Bitmap::ReassignWithSize(const Bitmap& rBitmap)
 
     if ((aOldSizePix != aNewSizePix) && aOldSizePix.Width() && aOldSizePix.Height())
     {
-        aNewPrefSize.setWidth(FRound(maPrefSize.Width() * aNewSizePix.Width() / aOldSizePix.Width()));
-        aNewPrefSize.setHeight(FRound(maPrefSize.Height() * aNewSizePix.Height() / aOldSizePix.Height()));
+        aNewPrefSize.setWidth(maPrefSize.Width() * aNewSizePix.Width() / aOldSizePix.Width());
+        aNewPrefSize.setHeight(maPrefSize.Height() * aNewSizePix.Height() / aOldSizePix.Height());
     }
     else
     {
@@ -1618,30 +1618,30 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
             const bool bGamma = ( fGamma != 1.0 );
 
-            // create mapping table
-            for( tools::Long nX = 0; nX < 256; nX++ )
-            {
-                if(!msoBrightness)
-                {
-                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fROff ), 0, 255 ));
-                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fGOff ), 0, 255 ));
-                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( nX * fM + fBOff ), 0, 255 ));
-                }
-                else
-                {
-                    // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
-                    // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
-                    // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
-                    cMapR[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 ));
-                    cMapG[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 ));
-                    cMapB[ nX ] = static_cast<sal_uInt8>(MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 ));
-                }
-                if( bGamma )
-                {
-                    cMapR[ nX ] = GAMMA( cMapR[ nX ], fGamma );
-                    cMapG[ nX ] = GAMMA( cMapG[ nX ], fGamma );
-                    cMapB[ nX ] = GAMMA( cMapB[ nX ], fGamma );
-                }
+    // create mapping table
+    for( tools::Long nX = 0; nX < 256; nX++ )
+    {
+        if(!msoBrightness)
+        {
+            cMapR[nX] = basegfx::fround<sal_uInt8>(nX * fM + fROff);
+            cMapG[nX] = basegfx::fround<sal_uInt8>(nX * fM + fGOff);
+            cMapB[nX] = basegfx::fround<sal_uInt8>(nX * fM + fBOff);
+        }
+        else
+        {
+            // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
+            // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
+            // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
+            cMapR[nX] = basegfx::fround<sal_uInt8>((nX + fROff / 2 - 128) * fM + 128 + fROff / 2);
+            cMapG[nX] = basegfx::fround<sal_uInt8>((nX + fGOff / 2 - 128) * fM + 128 + fGOff / 2);
+            cMapB[nX] = basegfx::fround<sal_uInt8>((nX + fBOff / 2 - 128) * fM + 128 + fBOff / 2);
+        }
+        if( bGamma )
+        {
+            cMapR[ nX ] = GAMMA( cMapR[ nX ], fGamma );
+            cMapG[ nX ] = GAMMA( cMapG[ nX ], fGamma );
+            cMapB[ nX ] = GAMMA( cMapB[ nX ], fGamma );
+        }
 
                 if( bInvert )
                 {

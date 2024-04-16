@@ -2184,7 +2184,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
 
         for( size_t k = 0; k < rShape.maDashArray.size(); ++k )
         {
-            const sal_Int32 nDash = ImplMap( FRound( rShape.maDashArray[ k ] ) );
+            const sal_Int32 nDash = ImplMap(basegfx::fround(rShape.maDashArray[k]));
 
             if( k )
                 aDashArrayStr.append(",");
@@ -2546,8 +2546,8 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
     if (fScaleX != 1.0 || fScaleY != 1.0)
     {
         rMtf.Scale(fScaleX, fScaleY);
-        aSrcPt.setX(FRound(aSrcPt.X() * fScaleX));
-        aSrcPt.setY(FRound(aSrcPt.Y() * fScaleY));
+        aSrcPt.setX(basegfx::fround<tools::Long>(aSrcPt.X() * fScaleX));
+        aSrcPt.setY(basegfx::fround<tools::Long>(aSrcPt.Y() * fScaleY));
     }
 
     nMoveX = rDestPt.X() - aSrcPt.X();
@@ -2747,7 +2747,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                 const double fFactor = static_cast<double>(nWidth) / aNormSize.Width();
 
                 for( i = 0; i < ( nLen - 1 ); i++ )
-                    aTmpArray.set(i, FRound(aTmpArray[i] * fFactor));
+                    aTmpArray.set(i, basegfx::fround(aTmpArray[i] * fFactor));
             }
             else
             {
@@ -2811,11 +2811,11 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
         return;
 
     tools::Polygon aPoly( 4 );
-    const tools::Long  nLineHeight = std::max<tools::Long>( FRound( aMetric.GetLineHeight() * 0.05 ), 1 );
+    const tools::Long  nLineHeight = std::max<tools::Long>( basegfx::fround<tools::Long>( aMetric.GetLineHeight() * 0.05 ), 1 );
 
     if( rFont.GetStrikeout() )
     {
-        const tools::Long nYLinePos = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 );
+        const tools::Long nYLinePos = aBaseLinePos.Y() - basegfx::fround<tools::Long>( aMetric.GetAscent() * 0.26 );
 
         aPoly[ 0 ].setX( aBaseLinePos.X() ); aPoly[ 0 ].setY( nYLinePos - ( nLineHeight >> 1 ) );
         aPoly[ 1 ].setX( aBaseLinePos.X() + aNormSize.Width() - 1 ); aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
@@ -3323,8 +3323,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         // i.e. invisible line, because it makes it visible,
                         // resulting an extra line behind the normal shape line
                         if ( aNewLineColor.GetAlpha() > 0 )
-                            aNewLineColor.SetAlpha( 255 - sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
-                        aNewFillColor.SetAlpha( 255 - sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
+                            aNewLineColor.SetAlpha( 255 - basegfx::fround<sal_uInt8>( pA->GetTransparence() * 2.55 ) );
+                        aNewFillColor.SetAlpha( 255 - basegfx::fround<sal_uInt8>( pA->GetTransparence() * 2.55 ) );
 
                         maAttributeWriter.AddPaintAttr( aNewLineColor, aNewFillColor );
                         ImplWritePolyPolygon( rPolyPoly, false );
@@ -3435,7 +3435,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                             mapCurShape->maShapePolyPoly = aShapePolyPoly;
                             mapCurShape->maShapeFillColor = aFill.getFillColor();
-                            mapCurShape->maShapeFillColor.SetAlpha( 255 - static_cast<sal_uInt8>(FRound( 255.0 * aFill.getTransparency() )) );
+                            mapCurShape->maShapeFillColor.SetAlpha( 255 - basegfx::fround<sal_uInt8>( 255.0 * aFill.getTransparency() ) );
 
                             if( bGradient )
                             {
@@ -3525,8 +3525,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
 
                     mapCurShape->maShapeLineColor = mpVDev->GetLineColor();
-                    mapCurShape->maShapeLineColor.SetAlpha( 255 - static_cast<sal_uInt8>(FRound( aStroke.getTransparency() * 255.0 )) );
-                    mapCurShape->mnStrokeWidth = FRound( aStroke.getStrokeWidth() );
+                    mapCurShape->maShapeLineColor.SetAlpha( 255 - basegfx::fround<sal_uInt8>( aStroke.getTransparency() * 255.0 ) );
+                    mapCurShape->mnStrokeWidth = basegfx::fround(aStroke.getStrokeWidth());
                     aStroke.getDashArray( mapCurShape->maDashArray );
 
                     // added support for LineJoin

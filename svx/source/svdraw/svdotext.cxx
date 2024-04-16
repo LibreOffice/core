@@ -1655,7 +1655,8 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // build and set BaseRect (use scale)
-    Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
+    Size aSize(basegfx::fround<tools::Long>(aScale.getX()),
+               basegfx::fround<tools::Long>(aScale.getY()));
     tools::Rectangle aBaseRect(Point(), aSize);
     SetSnapRect(aBaseRect);
 
@@ -1673,7 +1674,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         GeoStat aGeoStat;
-        aGeoStat.nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
+        aGeoStat.nShearAngle = Degree100(basegfx::fround(basegfx::rad2deg<100>(atan(fShearX))));
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
     }
@@ -1686,7 +1687,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is matematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
+        aGeoStat.nRotationAngle = NormAngle36000(Degree100(basegfx::fround(-basegfx::rad2deg<100>(fRotate))));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
     }
@@ -1694,7 +1695,8 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // translate?
     if(!aTranslate.equalZero())
     {
-        Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
+        Move(Size(basegfx::fround<tools::Long>(aTranslate.getX()),
+                  basegfx::fround<tools::Long>(aTranslate.getY())));
     }
 }
 

@@ -161,10 +161,10 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
 
     // create forward mapping tables
     for( nX = 0; nX <= nSrcWidth; nX++ )
-        pMapX[ nX ] = aDestPt.X() + FRound( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
+        pMapX[ nX ] = aDestPt.X() + basegfx::fround<tools::Long>( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
 
     for( nY = 0; nY <= nSrcHeight; nY++ )
-        pMapY[ nY ] = aDestPt.Y() + FRound( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
+        pMapY[ nY ] = aDestPt.Y() + basegfx::fround<tools::Long>( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
 
     // walk through all rectangles of mask
     const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
@@ -245,7 +245,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     tools::Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
     const Size      aDPISize( LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)) );
-    const tools::Long      nBaseExtent = std::max<tools::Long>( FRound( aDPISize.Width() / 300. ), 1 );
+    const tools::Long      nBaseExtent = std::max<tools::Long>( basegfx::fround<tools::Long>( aDPISize.Width() / 300. ), 1 );
     tools::Long            nMove;
     const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
         ( nTransparencePercent < 38 ) ? 25 :
@@ -748,10 +748,10 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 
     // create forward mapping tables
     for( nX = 0; nX <= nSrcWidth; nX++ )
-        pMapX[ nX ] = aDestPt.X() + FRound( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
+        pMapX[ nX ] = aDestPt.X() + basegfx::fround<tools::Long>( static_cast<double>(aDestSz.Width()) * nX / nSrcWidth );
 
     for( nY = 0; nY <= nSrcHeight; nY++ )
-        pMapY[ nY ] = aDestPt.Y() + FRound( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
+        pMapY[ nY ] = aDestPt.Y() + basegfx::fround<tools::Long>( static_cast<double>(aDestSz.Height()) * nY / nSrcHeight );
 
     // walk through all rectangles of mask
     const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));

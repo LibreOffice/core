@@ -342,7 +342,8 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
     if (bText && mbFntDirty)
     {
         vcl::Font aFnt(mpVD->GetFont());
-        const sal_uInt32 nHeight(FRound(aFnt.GetFontSize().Height() * mfScaleY));
+        const sal_uInt32 nHeight(
+            basegfx::fround<sal_uInt32>(aFnt.GetFontSize().Height() * mfScaleY));
 
         mpTextAttr->Put(SvxFontItem(aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(),
                                     aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO));
@@ -782,12 +783,13 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
     // sal_Int32 nTextWidth = static_cast<sal_Int32>(mpVD->GetTextWidth(rStr) * mfScaleX);
     sal_Int32 nTextHeight = static_cast<sal_Int32>(mpVD->GetTextHeight() * mfScaleY);
 
-    Point aPosition(FRound(rPos.X() * mfScaleX + maOfs.X()),
-                    FRound(rPos.Y() * mfScaleY + maOfs.Y()));
-    Size aSize(FRound(rSize.Width() * mfScaleX), FRound(rSize.Height() * mfScaleY));
+    Point aPosition(basegfx::fround<tools::Long>(rPos.X() * mfScaleX + maOfs.X()),
+                    basegfx::fround<tools::Long>(rPos.Y() * mfScaleY + maOfs.Y()));
+    Size aSize(basegfx::fround<tools::Long>(rSize.Width() * mfScaleX),
+               basegfx::fround<tools::Long>(rSize.Height() * mfScaleY));
 
     if (eAlignment == ALIGN_BASELINE)
-        aPosition.AdjustY(-FRound(aFontMetric.GetAscent() * mfScaleY));
+        aPosition.AdjustY(basegfx::fround<tools::Long>(aFontMetric.GetAscent() * -mfScaleY));
     else if (eAlignment == ALIGN_BOTTOM)
         aPosition.AdjustY(-nTextHeight);
 

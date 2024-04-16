@@ -51,9 +51,9 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
                 std::unique_ptr<sal_Int32[]> pHMap(new sal_Int32[nWidth + 2]);
                 std::unique_ptr<sal_Int32[]> pVMap(new sal_Int32[nHeight + 2]);
                 sal_Int32 nX, nY, nNx, nNy, nDotL;
-                const sal_Int32 nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
-                const sal_Int32 nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
-                const sal_Int32 nLz = FRound(sin(fElev) * 255.0);
+                const sal_Int32 nLx = basegfx::fround(cos(fAzim) * cos(fElev) * 255.0);
+                const sal_Int32 nLy = basegfx::fround(sin(fAzim) * cos(fElev) * 255.0);
+                const sal_Int32 nLz = basegfx::fround(sin(fElev) * 255.0);
                 const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
                 const sal_Int32 nNzLz = ((6 * 255) / 4) * nLz;
                 const sal_uInt8 cLz

@@ -3033,7 +3033,8 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     }
 
     // scale
-    Size aSize(FRound(fabs(aScale.getX())), FRound(fabs(aScale.getY())));
+    Size aSize(basegfx::fround<tools::Long>(fabs(aScale.getX())),
+               basegfx::fround<tools::Long>(fabs(aScale.getY())));
     // fdo#47434 We need a valid rectangle here
     if( !aSize.Height() ) aSize.setHeight( 1 );
     if( !aSize.Width() ) aSize.setWidth( 1 );
@@ -3053,7 +3054,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i123181# The fix for #121932# here was wrong, the trunk version does not correct the
         // mirrored shear values, neither at the object level, nor on the API or XML level. Taking
         // back the mirroring of the shear angle
-        aGeoStat.nShearAngle = Degree100(FRound(basegfx::rad2deg<100>(atan(fShearX))));
+        aGeoStat.nShearAngle = Degree100(basegfx::fround(basegfx::rad2deg<100>(atan(fShearX))));
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
     }
@@ -3066,7 +3067,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nRotationAngle = NormAngle36000(Degree100(FRound(-basegfx::rad2deg<100>(fRotate))));
+        aGeoStat.nRotationAngle = NormAngle36000(Degree100(basegfx::fround(-basegfx::rad2deg<100>(fRotate))));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
     }
@@ -3074,7 +3075,8 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     // translate?
     if(!aTranslate.equalZero())
     {
-        Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
+        Move(Size(basegfx::fround<tools::Long>(aTranslate.getX()),
+                  basegfx::fround<tools::Long>(aTranslate.getY())));
     }
 
     // Apply flipping from enhanced geometry at center of the shape.
@@ -3095,11 +3097,11 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     double fCenterX = aCenter.getX();
     double fCenterY = aCenter.getY();
     if (bIsMirroredX) // vertical axis
-        Mirror(Point(FRound(fCenterX),FRound(fCenterY)),
-            Point(FRound(fCenterX), FRound(fCenterY + 1000.0)));
+        Mirror(Point(basegfx::fround<tools::Long>(fCenterX), basegfx::fround<tools::Long>(fCenterY)),
+            Point(basegfx::fround<tools::Long>(fCenterX), basegfx::fround<tools::Long>(fCenterY + 1000.0)));
     if (bIsMirroredY) // horizontal axis
-        Mirror(Point(FRound(fCenterX),FRound(fCenterY)),
-            Point(FRound(fCenterX + 1000.0), FRound(fCenterY)));
+        Mirror(Point(basegfx::fround<tools::Long>(fCenterX), basegfx::fround<tools::Long>(fCenterY)),
+            Point(basegfx::fround<tools::Long>(fCenterX + 1000.0), basegfx::fround<tools::Long>(fCenterY)));
 }
 
 // taking fObjectRotation instead of aGeo.nAngle

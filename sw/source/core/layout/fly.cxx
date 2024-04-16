@@ -2751,7 +2751,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
                                 else
                                     aNewPoint = OutputDevice::LogicToLogic( rPoly[ i ], aGrfMap, aDispMap  );
 
-                                rPoly[ i ] = Point( FRound( aNewPoint.getX() * fScaleX ), FRound( aNewPoint.getY() * fScaleY ) );
+                                rPoly[ i ] = Point( basegfx::fround<tools::Long>( aNewPoint.getX() * fScaleX ), basegfx::fround<tools::Long>( aNewPoint.getY() * fScaleY ) );
                             }
                         }
                     }

@@ -3036,8 +3036,10 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     }
 
     // build BaseRect
-    Point aPoint(FRound(aTranslate.getX()), FRound(aTranslate.getY()));
-    tools::Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
+    Point aPoint(basegfx::fround<tools::Long>(aTranslate.getX()),
+                 basegfx::fround<tools::Long>(aTranslate.getY()));
+    tools::Rectangle aBaseRect(aPoint, Size(basegfx::fround<tools::Long>(aScale.getX()),
+                                            basegfx::fround<tools::Long>(aScale.getY())));
 
     // set BaseRect
     SetSnapRect(aBaseRect);
