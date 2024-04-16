@@ -308,7 +308,7 @@ Module.addOnPostRun(function() {
     {
         let v = test.getAnyInterface();
         console.log(v);
-        console.assert(v.get().$equals(test.$query()));
+        console.assert(v.get().$equals(test));
         console.assert(test.isAnyInterface(v));
         v.delete();
         let a = new Module.uno_Any(
