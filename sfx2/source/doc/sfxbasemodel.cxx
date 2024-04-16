@@ -389,6 +389,9 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell const * pObjectShell )
     if ( !pObjectShell )
         return;
 
+    if ( comphelper::LibreOfficeKit::isForkedChild() )
+        return; // no need to tweak UI when in the background
+
     for (   SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pObjectShell );
             pFrame;
             pFrame = SfxViewFrame::GetNext( *pFrame, pObjectShell )
