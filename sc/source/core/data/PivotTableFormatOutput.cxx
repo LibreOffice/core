@@ -64,6 +64,8 @@ public:
         else
         {
             std::vector<OUString>& rNames = iterator->second;
+            if (nIndex >= rNames.size())
+                return OUString();
             return rNames[nIndex];
         }
     }
@@ -97,7 +99,7 @@ void initFormatOutputField(size_t nSelectionIndex, std::vector<FormatOutputField
 
         for (auto const& rSelection : rFormat.aSelections)
         {
-            if (rSelection.nField == rOutputField.nDimension)
+            if (!rSelection.nIndices.empty() && rSelection.nField == rOutputField.nDimension)
             {
                 if (rSelection.nIndices.size() > 1)
                     rOutputField.nIndex = rSelection.nIndices[nSelectionIndex];
@@ -107,8 +109,8 @@ void initFormatOutputField(size_t nSelectionIndex, std::vector<FormatOutputField
                 if (rOutputField.nDimension == -2)
                     rOutputField.aName = "DATA";
                 else
-                    rOutputField.aName
-                        = rNameResolver.getNameForIndex(rOutputField.nIndex, rSelection.nField);
+                    rOutputField.aName = rNameResolver.getNameForIndex(rOutputField.nIndex,
+                                                                       rOutputField.nDimension);
 
                 rOutputField.bSet = true;
             }
