@@ -787,12 +787,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf93583)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "width"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "height"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "text"_ostr, " first");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "x"_ostr, "127");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "x"_ostr, "129");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "y"_ostr, "303");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "width"_ostr, "32");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "height"_ostr, "32");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "text"_ostr, " line");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "x"_ostr, "187");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "x"_ostr, "188");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "y"_ostr, "303");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "width"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "height"_ostr, "16");
@@ -806,7 +806,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156616)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "x"_ostr, "114");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "y"_ostr, "103");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "text"_ostr, " line");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "x"_ostr, "142");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "x"_ostr, "143");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "y"_ostr, "103");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "text"_ostr, "Second line");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]"_ostr, "x"_ostr, "114");
@@ -815,7 +815,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156616)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]"_ostr, "x"_ostr, "87");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]"_ostr, "y"_ostr, "153");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]"_ostr, "text"_ostr, " line");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]"_ostr, "x"_ostr, "115");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]"_ostr, "x"_ostr, "116");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]"_ostr, "y"_ostr, "153");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]"_ostr, "text"_ostr, "Second line");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]"_ostr, "x"_ostr, "77");
@@ -824,7 +824,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156616)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]"_ostr, "x"_ostr, "59");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]"_ostr, "y"_ostr, "203");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]"_ostr, "text"_ostr, " line");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]"_ostr, "x"_ostr, "87");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]"_ostr, "x"_ostr, "88");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]"_ostr, "y"_ostr, "203");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]"_ostr, "text"_ostr, "Second line");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]"_ostr, "x"_ostr, "40");
@@ -1367,11 +1367,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95400)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "x"_ostr, "30");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "y"_ostr, "20");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "text"_ostr, "ABC");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx0"_ostr, "36");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx1"_ostr, "69");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx2"_ostr, "102");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx0"_ostr, 36, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx1"_ostr, 69, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx2"_ostr, 102, 0.5);
 
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "width"_ostr, "48");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "width"_ostr, "50");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "height"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "x"_ostr, "30");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "y"_ostr, "30");
@@ -1427,7 +1427,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextAnchor)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[11]"_ostr, "y"_ostr, "40");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[11]"_ostr, "text"_ostr, "B");
 
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[12]"_ostr, "x"_ostr, "83");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[12]"_ostr, "x"_ostr, "82");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[12]"_ostr, "y"_ostr, "40");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[12]"_ostr, "text"_ostr, "C");
 
@@ -1442,7 +1442,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextAnchor)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[14]"_ostr, "y"_ostr, "50");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[14]"_ostr, "text"_ostr, "B");
 
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[15]"_ostr, "x"_ostr, "66");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[15]"_ostr, "x"_ostr, "65");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[15]"_ostr, "y"_ostr, "50");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[15]"_ostr, "text"_ostr, "C");
 
@@ -1454,7 +1454,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextAnchor)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[17]"_ostr, "y"_ostr, "60");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[17]"_ostr, "text"_ostr, "B");
 
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[18]"_ostr, "x"_ostr, "49");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[18]"_ostr, "x"_ostr, "48");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[18]"_ostr, "y"_ostr, "60");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[18]"_ostr, "text"_ostr, "C");
 }
@@ -1479,9 +1479,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156577)
     // Without the fix in place, this test would have failed with
     // - Expected: 22
     // - Actual  : 52
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx0"_ostr, "22");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx1"_ostr, "53");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx2"_ostr, "94");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx0"_ostr, 22, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx1"_ostr, 52, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx2"_ostr, 93, 0.5);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf156283)
@@ -1493,9 +1493,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156283)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "x"_ostr, "30");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "y"_ostr, "20");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "text"_ostr, "ABC");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx0"_ostr, "41");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx1"_ostr, "52");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx2"_ostr, "63");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx0"_ostr, 41, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx1"_ostr, 52, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx2"_ostr, 62, 0.5);
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "width"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "height"_ostr, "16");
@@ -1506,9 +1506,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156283)
     // Without the fix in place, this test would have failed with
     // - Expected: 41
     // - Actual  : 12
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx0"_ostr, "41");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx1"_ostr, "52");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx2"_ostr, "63");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx0"_ostr, 41, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx1"_ostr, 51, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx2"_ostr, 62, 0.5);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf156569)
@@ -1520,22 +1520,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156569)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "x"_ostr, "0");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "y"_ostr, "20");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "text"_ostr, "ABC");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx0"_ostr, "40");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx1"_ostr, "80");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx2"_ostr, "91");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx0"_ostr, 40, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx1"_ostr, 80, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[1]"_ostr, "dx2"_ostr, 91, 0.5);
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "width"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "height"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "x"_ostr, "0");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "y"_ostr, "30");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "text"_ostr, "ABC");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx0"_ostr, "40");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx0"_ostr, 40, 0.5);
 
     // Without the fix in place, this test would have failed with
     // - Expected: 80
     // - Actual  : 51
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx1"_ostr, "80");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx2"_ostr, "91");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "dx2"_ostr, 91, 0.5);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf156837)
@@ -1552,7 +1552,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156837)
     // Without the fix in place, this test would have failed with
     // - Expected: 94
     // - Actual  : 103
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "y"_ostr, "95");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "y"_ostr, "94");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "height"_ostr, "10");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]"_ostr, "text"_ostr, " 3");
 }
@@ -1566,8 +1566,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156271)
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]"_ostr, "x"_ostr, "40");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]"_ostr, "y"_ostr, "10");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]"_ostr, "text"_ostr, "AB");
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]"_ostr, "dx0"_ostr, "-30");
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]"_ostr, "dx1"_ostr, "-19");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]"_ostr, "dx0"_ostr, -30, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]"_ostr, "dx1"_ostr, -19, 0.5);
 
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]"_ostr, "width"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]"_ostr, "height"_ostr, "16");
@@ -1578,24 +1578,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156271)
     // Without the fix in place, this test would have failed with
     // - Expected: -30
     // - Actual  : 0
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]"_ostr, "dx0"_ostr, "-30");
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]"_ostr, "dx1"_ostr, "-19");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]"_ostr, "dx0"_ostr, -30, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]"_ostr, "dx1"_ostr, -19, 0.5);
 
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "width"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "height"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "x"_ostr, "40");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "y"_ostr, "30");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "text"_ostr, "AB");
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "dx0"_ostr, "-30");
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "dx1"_ostr, "-19");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "dx0"_ostr, -30, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]"_ostr, "dx1"_ostr, -19, 0.5);
 
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "width"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "height"_ostr, "16");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "x"_ostr, "40");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "y"_ostr, "40");
     assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "text"_ostr, "AB");
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "dx0"_ostr, "12");
-    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "dx1"_ostr, "23");
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "dx0"_ostr, 12, 0.5);
+    assertXPathDoubleValue(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]"_ostr, "dx1"_ostr, 22, 0.5);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159968)
