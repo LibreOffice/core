@@ -206,7 +206,13 @@ void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
 
             if(pPageView)
             {
-                if (nullptr != pPageView->FindPageWindow(*mpDev))
+                // tdf#160589 need to check for registered PaintWindow using the
+                // 'original' TragetDevice, mpDev might have been changed by a
+                // call to ::SetContentDevice. That again might patch in a
+                // pre-render device fetched from SdrPaintWindow::GetTargetOutputDevice
+                // and thus the test if target is aregistered PageWindow would fail
+                assert(nullptr != mpOriginalTargetDevice && "mpOriginalTargetDevice *must* be set when constructing ScOutputData (!)");
+                if (nullptr != pPageView->FindPageWindow(*mpOriginalTargetDevice))
                 {
                     // Target OutputDevice is registered for this view
                     // (as it should be), we can just render
