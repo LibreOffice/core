@@ -913,7 +913,7 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
     {   // Replaced
         nCol = pE->nCol - nColCntStart;
         SCCOL nCount = static_cast<SCCOL>(xLocalColOffset->size());
-        if ( nCol < nCount )
+        if (nCol >= 0 && nCol < nCount)
             nColOffset = static_cast<sal_uInt16>((*xLocalColOffset)[nCol]);
         else
             nColOffset = static_cast<sal_uInt16>((*xLocalColOffset)[nCount - 1]);
