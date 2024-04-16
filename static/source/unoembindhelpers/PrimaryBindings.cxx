@@ -45,7 +45,7 @@ template <> struct emscripten::smart_ptr_trait<css::uno::Type>
     {
         return ptr.getTypeLibType();
     }
-    static sharing_policy get_sharing_policy() { return sharing_policy::INTRUSIVE; }
+    static sharing_policy get_sharing_policy() { return sharing_policy::NONE; }
     static css::uno::Type* share(typelib_TypeDescriptionReference* v)
     {
         return new css::uno::Type(v);
