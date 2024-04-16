@@ -233,6 +233,10 @@ void NotesPanelViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
     GetViewShellBase().GetDrawController()->FireVisAreaChanged(rRect);
 }
 
+void NotesPanelViewShell::onGrabFocus() { mpNotesPanelView->onGrabFocus(); }
+
+void NotesPanelViewShell::onLoseFocus() { mpNotesPanelView->onLoseFocus(); }
+
 void NotesPanelViewShell::ArrangeGUIElements()
 {
     // Retrieve the current size (thickness) of the scroll bars.  That is
