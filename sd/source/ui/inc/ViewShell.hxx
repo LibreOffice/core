@@ -413,6 +413,20 @@ public:
         SdPage* pPage,
         const sal_Int32 nInsertPosition = -1);
 
+    /** Called by sd::Window::LoseFocus to enable sd::ViewShell to take action
+        when focus is lost.
+
+        e.g. overriden by NotesPanelViewShell
+     */
+    virtual void onLoseFocus(){};
+
+    /** Called by sd::Window::GrabFocus to enable sd::ViewShell to take action
+        when focus is grabbed.
+
+        e.g. overriden by NotesPanelViewShell
+     */
+    virtual void onGrabFocus(){};
+
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Gets the current selection
