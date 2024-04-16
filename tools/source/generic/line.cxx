@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <basegfx/numeric/ftools.hxx>
 #include <tools/line.hxx>
 #include <tools/helpers.hxx>
 
@@ -37,8 +40,8 @@ bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
 
     if( Intersection( rLine, fX, fY ) )
     {
-        rIntersection.setX( FRound( fX ) );
-        rIntersection.setY( FRound( fY ) );
+        rIntersection.setX(basegfx::fround<tools::Long>(fX));
+        rIntersection.setY(basegfx::fround<tools::Long>(fY));
         bRet = true;
     }
     else

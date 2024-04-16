@@ -422,7 +422,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
         const double fNumberSteps =
             (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-        nLoopTime = FRound(fNumberSteps * mnFrequency);
+        nLoopTime = basegfx::fround<sal_uInt32>(fNumberSteps * mnFrequency);
 
         // init loop
         ScrollTextAnimNode aInitNode(
@@ -451,7 +451,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
         const double fNumberSteps =
             (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-        nLoopTime = FRound(fNumberSteps * mnFrequency);
+        nLoopTime = basegfx::fround<sal_uInt32>(fNumberSteps * mnFrequency);
 
         if(0 == mnRepeat)
         {
@@ -501,7 +501,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
     const double fNumberSteps =
         (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
-    nLoopTime = FRound(fNumberSteps * mnFrequency);
+    nLoopTime = basegfx::fround<sal_uInt32>(fNumberSteps * mnFrequency);
 
     // exit loop
     ScrollTextAnimNode aExitNode(

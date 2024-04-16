@@ -47,7 +47,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
     const double nLz = sin(fElev) * 255.0;
     const double nNz = 6 * 255.0 / 4;
     const double nNzLz = nNz * nLz;
-    const sal_uInt8 cLz = FRound(std::clamp(nLz, 0.0, 255.0));
+    const sal_uInt8 cLz = basegfx::fround<sal_uInt8>(nLz);
 
     // fill mapping tables
     pHMap[0] = 0;
@@ -97,7 +97,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
             else
             {
                 const double fGrey = nDotL / std::hypot(nNx, nNy, nNz);
-                aGrey.SetIndex(FRound(std::clamp(fGrey, 0.0, 255.0)));
+                aGrey.SetIndex(basegfx::fround<sal_uInt8>(fGrey));
             }
 
             pWriteAcc->SetPixelOnData(pScanline, nX, aGrey);

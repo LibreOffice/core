@@ -558,7 +558,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
     aCtr1 -= aCtr0;
 
     if(bRotOk)
-        pO->Rotate(aCtr0, Degree100(FRound(basegfx::rad2deg<100>(nAngle))), nSin, nCos);
+        pO->Rotate(aCtr0, Degree100(basegfx::fround(basegfx::rad2deg<100>(nAngle))), nSin, nCos);
 
     pO->Move(Size(aCtr1.X(),aCtr1.Y()));
 }
@@ -1674,7 +1674,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
                     double nNew = tan(toRadians(nNewShearAngle));
                     nNew-=nOld;
                     nNew = basegfx::rad2deg<100>(atan(nNew));
-                    nShearAngle=Degree100(FRound(nNew));
+                    nShearAngle = Degree100(basegfx::fround(nNew));
                 } else {
                     nShearAngle=nNewShearAngle-nOldShearAngle;
                 }

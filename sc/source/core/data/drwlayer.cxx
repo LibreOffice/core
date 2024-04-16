@@ -1020,10 +1020,10 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
                 static_cast<SdrPathObj*>(pObj)->GetPathPoly().getB2DPolygon(0));
             const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
             const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
-            const Point aPointLT(FRound(std::min(aB2DPoint0.getX(), aB2DPoint1.getX())),
-                                 FRound(std::min(aB2DPoint0.getY(), aB2DPoint1.getY())));
-            const Point aPointRB(FRound(std::max(aB2DPoint0.getX(), aB2DPoint1.getX())),
-                                 FRound(std::max(aB2DPoint0.getY(), aB2DPoint1.getY())));
+            const Point aPointLT(basegfx::fround<tools::Long>(std::min(aB2DPoint0.getX(), aB2DPoint1.getX())),
+                                 basegfx::fround<tools::Long>(std::min(aB2DPoint0.getY(), aB2DPoint1.getY())));
+            const Point aPointRB(basegfx::fround<tools::Long>(std::max(aB2DPoint0.getX(), aB2DPoint1.getX())),
+                                 basegfx::fround<tools::Long>(std::max(aB2DPoint0.getY(), aB2DPoint1.getY())));
             const tools::Rectangle aObjRect(aPointLT, aPointRB);
             GetCellAnchorFromPosition(aObjRect, rNoRotatedAnchor, *pDoc, nTab1,
                                       false /*bHiddenAsZero*/);

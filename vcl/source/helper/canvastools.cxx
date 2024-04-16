@@ -323,8 +323,8 @@ namespace vcl::unotools
 
         ::Size sizeFromB2DSize( const basegfx::B2DVector& rVec )
         {
-            return ::Size( FRound( rVec.getX() ),
-                           FRound( rVec.getY() ) );
+            return ::Size(basegfx::fround<tools::Long>(rVec.getX()),
+                          basegfx::fround<tools::Long>(rVec.getY()));
         }
 
         ::Point pointFromB2DPoint( const basegfx::B2DPoint& rPoint )

@@ -121,11 +121,11 @@ void AnimationRenderer::getPosSize( const AnimationFrame& rAnimationFrame, Point
     else
         fFactY = 1.0;
 
-    rPosPix.setX( FRound( rAnimationFrame.maPositionPixel.X() * fFactX ) );
-    rPosPix.setY( FRound( rAnimationFrame.maPositionPixel.Y() * fFactY ) );
+    rPosPix.setX(basegfx::fround<tools::Long>(rAnimationFrame.maPositionPixel.X() * fFactX));
+    rPosPix.setY(basegfx::fround<tools::Long>(rAnimationFrame.maPositionPixel.Y() * fFactY));
 
-    aPt2.setX( FRound( aPt2.X() * fFactX ) );
-    aPt2.setY( FRound( aPt2.Y() * fFactY ) );
+    aPt2.setX(basegfx::fround<tools::Long>(aPt2.X() * fFactX));
+    aPt2.setY(basegfx::fround<tools::Long>(aPt2.Y() * fFactY));
 
     rSizePix.setWidth( aPt2.X() - rPosPix.X() + 1 );
     rSizePix.setHeight( aPt2.Y() - rPosPix.Y() + 1 );

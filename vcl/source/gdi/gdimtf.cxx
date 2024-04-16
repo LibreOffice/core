@@ -749,8 +749,8 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
 {
     ScaleActions(fScaleX, fScaleY);
 
-    m_aPrefSize.setWidth( FRound( m_aPrefSize.Width() * fScaleX ) );
-    m_aPrefSize.setHeight( FRound( m_aPrefSize.Height() * fScaleY ) );
+    m_aPrefSize.setWidth(basegfx::fround<tools::Long>(m_aPrefSize.Width() * fScaleX));
+    m_aPrefSize.setHeight(basegfx::fround<tools::Long>(m_aPrefSize.Height() * fScaleY));
 }
 
 void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
@@ -795,8 +795,8 @@ Point GDIMetaFile::ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt
     const tools::Long nX = rPt.X() - rRotatePt.X();
     const tools::Long nY = rPt.Y() - rRotatePt.Y();
 
-    return Point( FRound( fCos * nX + fSin * nY ) + rRotatePt.X() + rOffset.Width(),
-                  -FRound( fSin * nX - fCos * nY ) + rRotatePt.Y() + rOffset.Height() );
+    return { basegfx::fround<tools::Long>(fCos * nX + fSin * nY) + rRotatePt.X() + rOffset.Width(),
+             basegfx::fround<tools::Long>(fCos * nY - fSin * nX) + rRotatePt.Y() + rOffset.Height() };
 }
 
 tools::Polygon GDIMetaFile::ImplGetRotatedPolygon( const tools::Polygon& rPoly, const Point& rRotatePt,
@@ -2108,15 +2108,15 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
     {
         if(!msoBrightness)
         {
-            aColParam.pMapR[ nX ] = FRound(std::clamp( nX * fM + fROff, 0.0, 255.0 ));
-            aColParam.pMapG[ nX ] = FRound(std::clamp( nX * fM + fGOff, 0.0, 255.0 ));
-            aColParam.pMapB[ nX ] = FRound(std::clamp( nX * fM + fBOff, 0.0, 255.0 ));
+            aColParam.pMapR[nX] = basegfx::fround<sal_uInt8>(nX * fM + fROff);
+            aColParam.pMapG[nX] = basegfx::fround<sal_uInt8>(nX * fM + fGOff);
+            aColParam.pMapB[nX] = basegfx::fround<sal_uInt8>(nX * fM + fBOff);
         }
         else
         {
-            aColParam.pMapR[ nX ] = FRound(std::clamp( (nX+fROff/2-128) * fM + 128 + fROff/2, 0.0, 255.0 ));
-            aColParam.pMapG[ nX ] = FRound(std::clamp( (nX+fGOff/2-128) * fM + 128 + fGOff/2, 0.0, 255.0 ));
-            aColParam.pMapB[ nX ] = FRound(std::clamp( (nX+fBOff/2-128) * fM + 128 + fBOff/2, 0.0, 255.0 ));
+            aColParam.pMapR[nX] = basegfx::fround<sal_uInt8>((nX+fROff/2-128) * fM + 128 + fROff/2);
+            aColParam.pMapG[nX] = basegfx::fround<sal_uInt8>((nX+fGOff/2-128) * fM + 128 + fGOff/2);
+            aColParam.pMapB[nX] = basegfx::fround<sal_uInt8>((nX+fBOff/2-128) * fM + 128 + fBOff/2);
         }
         if( bGamma )
         {
@@ -2298,17 +2298,17 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
 
         if ( fWH <= 1.0 )
         {
-            aSizePix.setWidth( FRound( nMaximumExtent * fWH ) );
+            aSizePix.setWidth(basegfx::fround<tools::Long>(nMaximumExtent * fWH));
             aSizePix.setHeight( nMaximumExtent );
         }
         else
         {
             aSizePix.setWidth( nMaximumExtent );
-            aSizePix.setHeight( FRound(  nMaximumExtent / fWH ) );
+            aSizePix.setHeight(basegfx::fround<tools::Long>(nMaximumExtent / fWH));
         }
 
-        aDrawSize.setWidth( FRound( ( static_cast< double >( aDrawSize.Width() ) * aSizePix.Width() ) / aOldSizePix.Width() ) );
-        aDrawSize.setHeight( FRound( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() ) );
+        aDrawSize.setWidth( basegfx::fround<tools::Long>( ( static_cast< double >( aDrawSize.Width() ) * aSizePix.Width() ) / aOldSizePix.Width() ) );
+        aDrawSize.setHeight( basegfx::fround<tools::Long>( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() ) );
     }
 
     // draw image(s) into VDev and get resulting image

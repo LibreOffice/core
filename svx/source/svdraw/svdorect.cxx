@@ -181,7 +181,7 @@ void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     if (maGeo.m_nShearAngle==0_deg100)
         return;
 
-    tools::Long nDst=FRound((getRectangle().Bottom()-getRectangle().Top()) * maGeo.mfTanShearAngle);
+    tools::Long nDst=basegfx::fround<tools::Long>((getRectangle().Bottom()-getRectangle().Top()) * maGeo.mfTanShearAngle);
     if (maGeo.m_nShearAngle>0_deg100)
     {
         Point aRef(rRect.TopLeft());

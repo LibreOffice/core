@@ -687,7 +687,7 @@ bool Vectorizer::vectorize(BitmapEx const& rBitmap, GDIMetaFile& rMetafile)
             fPercentStep_2 = 45.0 / n;
 
         fPercent += 10.0;
-        updateProgress(FRound(fPercent));
+        updateProgress(basegfx::fround<tools::Long>(fPercent));
 
         for( sal_uInt16 i = 0; i < n; i++ )
         {
@@ -697,7 +697,7 @@ bool Vectorizer::vectorize(BitmapEx const& rBitmap, GDIMetaFile& rMetafile)
             ImplExpand( oMap, pRAcc.get(), aFindColor );
 
             fPercent += fPercentStep_2;
-            updateProgress(FRound(fPercent));
+            updateProgress(basegfx::fround<tools::Long>(fPercent));
 
             if( oMap )
             {
@@ -721,7 +721,7 @@ bool Vectorizer::vectorize(BitmapEx const& rBitmap, GDIMetaFile& rMetafile)
             }
 
             fPercent += fPercentStep_2;
-            updateProgress(FRound(fPercent));
+            updateProgress(basegfx::fround<tools::Long>(fPercent));
         }
 
         if (rMetafile.GetActionSize())

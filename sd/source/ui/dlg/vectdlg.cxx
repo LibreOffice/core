@@ -225,9 +225,9 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
         }
     }
 
-    const Color aColor( static_cast<sal_uInt8>(FRound( nSumR * fMult )),
-                        static_cast<sal_uInt8>(FRound( nSumG * fMult )),
-                        static_cast<sal_uInt8>(FRound( nSumB * fMult )) );
+    const Color aColor( basegfx::fround<sal_uInt8>( nSumR * fMult ),
+                        basegfx::fround<sal_uInt8>( nSumG * fMult ),
+                        basegfx::fround<sal_uInt8>( nSumB * fMult ) );
 
     ::tools::Rectangle   aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
     const Size& rMaxSize = rMtf.GetPrefSize();

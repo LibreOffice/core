@@ -340,8 +340,8 @@ void Bitmap::ReassignWithSize(const Bitmap& rBitmap)
 
     if ((aOldSizePix != aNewSizePix) && aOldSizePix.Width() && aOldSizePix.Height())
     {
-        aNewPrefSize.setWidth(FRound(maPrefSize.Width() * aNewSizePix.Width() / aOldSizePix.Width()));
-        aNewPrefSize.setHeight(FRound(maPrefSize.Height() * aNewSizePix.Height() / aOldSizePix.Height()));
+        aNewPrefSize.setWidth(maPrefSize.Width() * aNewSizePix.Width() / aOldSizePix.Width());
+        aNewPrefSize.setHeight(maPrefSize.Height() * aNewSizePix.Height() / aOldSizePix.Height());
     }
     else
     {
@@ -1505,18 +1505,18 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     {
         if(!msoBrightness)
         {
-            cMapR[ nX ] = FRound( std::clamp( nX * fM + fROff, 0.0, 255.0 ) );
-            cMapG[ nX ] = FRound( std::clamp( nX * fM + fGOff, 0.0, 255.0 ) );
-            cMapB[ nX ] = FRound( std::clamp( nX * fM + fBOff, 0.0, 255.0 ) );
+            cMapR[nX] = basegfx::fround<sal_uInt8>(nX * fM + fROff);
+            cMapG[nX] = basegfx::fround<sal_uInt8>(nX * fM + fGOff);
+            cMapB[nX] = basegfx::fround<sal_uInt8>(nX * fM + fBOff);
         }
         else
         {
             // LO simply uses (in a somewhat optimized form) "newcolor = (oldcolor-128)*contrast+brightness+128"
             // as the formula, i.e. contrast first, brightness afterwards. MSOffice, for whatever weird reason,
             // use neither first, but apparently it applies half of brightness before contrast and half afterwards.
-            cMapR[ nX ] = FRound( std::clamp( (nX+fROff/2-128) * fM + 128 + fROff/2, 0.0, 255.0 ) );
-            cMapG[ nX ] = FRound( std::clamp( (nX+fGOff/2-128) * fM + 128 + fGOff/2, 0.0, 255.0 ) );
-            cMapB[ nX ] = FRound( std::clamp( (nX+fBOff/2-128) * fM + 128 + fBOff/2, 0.0, 255.0 ) );
+            cMapR[nX] = basegfx::fround<sal_uInt8>((nX + fROff / 2 - 128) * fM + 128 + fROff / 2);
+            cMapG[nX] = basegfx::fround<sal_uInt8>((nX + fGOff / 2 - 128) * fM + 128 + fGOff / 2);
+            cMapB[nX] = basegfx::fround<sal_uInt8>((nX + fBOff / 2 - 128) * fM + 128 + fBOff / 2);
         }
         if( bGamma )
         {

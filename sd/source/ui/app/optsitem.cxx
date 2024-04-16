@@ -971,13 +971,13 @@ bool SdOptionsGrid::ReadData( const Any* pValues )
 
     if( pValues[2].hasValue() )
     {
-        const sal_uInt32 nDivX = FRound( *o3tl::doAccess<double>(pValues[ 2 ]) );
+        const sal_uInt32 nDivX = basegfx::fround<sal_uInt32>(*o3tl::doAccess<double>(pValues[2]));
         SetFieldDivisionX( SvxOptionsGrid::GetFieldDrawX() / ( nDivX + 1 ) );
     }
 
     if( pValues[3].hasValue() )
     {
-        const sal_uInt32 nDivY = FRound( *o3tl::doAccess<double>(pValues[ 3 ]) );
+        const sal_uInt32 nDivY = basegfx::fround<sal_uInt32>(*o3tl::doAccess<double>(pValues[3]));
         SetFieldDivisionY( SvxOptionsGrid::GetFieldDrawY() / ( nDivY + 1 ) );
     }
     if( pValues[4].hasValue() ) SetUseGridSnap( *o3tl::doAccess<bool>(pValues[ 4 ]) );

@@ -231,6 +231,7 @@ void SdrPageWindow::PrepareRedraw(const vcl::Region& rReg)
 // clip test
 #ifdef CLIPPER_TEST
 #include <svx/svdopath.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <tools/helpers.hxx>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
@@ -262,8 +263,10 @@ namespace
             {
                 const basegfx::B2DPoint aBStart(aCandidate.getB2DPoint(a));
                 const basegfx::B2DPoint aBEnd(aCandidate.getB2DPoint((a + 1) % aCandidate.count()));
-                const Point aStart(FRound(aBStart.getX()), FRound(aBStart.getY()));
-                const Point aEnd(FRound(aBEnd.getX()), FRound(aBEnd.getY()));
+                const Point aStart(basegfx::fround<tools::Long>(aBStart.getX()),
+                                   basegfx::fround<tools::Long>(aBStart.getY()));
+                const Point aEnd(basegfx::fround<tools::Long>(aBEnd.getX()),
+                                 basegfx::fround<tools::Long>(aBEnd.getY()));
                 rOutDev.DrawLine(aStart, aEnd);
             }
         }

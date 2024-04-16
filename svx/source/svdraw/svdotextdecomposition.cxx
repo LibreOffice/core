@@ -910,8 +910,8 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     setSuitableOutlinerBg(rOutliner);
 
     // add one to range sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
+    const sal_uInt32 nAnchorTextWidth(basegfx::fround<sal_uInt32>(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(basegfx::fround<sal_uInt32>(aAnchorTextRange.getHeight() + 1));
     const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
     const bool bVerticalWriting(pOutlinerParaObject->IsEffectivelyVertical());
@@ -1101,8 +1101,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     setSuitableOutlinerBg(rOutliner);
 
     // add one to range sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
+    const sal_uInt32 nAnchorTextWidth(basegfx::fround<sal_uInt32>(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(basegfx::fround<sal_uInt32>(aAnchorTextRange.getHeight() + 1));
     const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsEffectivelyVertical());
     const bool bTopToBottom(rSdrBlockTextPrimitive.getOutlinerParaObject().IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
@@ -1717,8 +1717,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
     // add one to range sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
+    const sal_uInt32 nAnchorTextWidth(basegfx::fround<sal_uInt32>(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(basegfx::fround<sal_uInt32>(aAnchorTextRange.getHeight() + 1));
 
     // Text
     const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();

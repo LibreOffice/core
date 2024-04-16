@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_BITMAP_HXX
 #define INCLUDED_VCL_BITMAP_HXX
 
+#include <sal/config.h>
+
+#include <basegfx/numeric/ftools.hxx>
 #include <tools/degree.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/checksum.hxx>
@@ -35,7 +38,7 @@
 
 inline sal_uInt8 GAMMA(double _def_cVal, double _def_InvGamma)
 {
-    return FRound(std::clamp(pow(_def_cVal / 255.0, _def_InvGamma) * 255.0, 0.0, 255.0));
+    return basegfx::fround<sal_uInt8>(pow(_def_cVal / 255.0, _def_InvGamma) * 255.0);
 }
 
 class Color;

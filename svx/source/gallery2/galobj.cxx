@@ -118,9 +118,9 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     double  fFactorPix = static_cast< double >( aBmpSize.Width() ) / aBmpSize.Height();
 
                     if( fFactorPix > fFactorLog )
-                        aBmpSize.setWidth( FRound( aBmpSize.Height() * fFactorLog ) );
+                        aBmpSize.setWidth( basegfx::fround<tools::Long>( aBmpSize.Height() * fFactorLog ) );
                     else
-                        aBmpSize.setHeight( FRound( aBmpSize.Width() / fFactorLog ) );
+                        aBmpSize.setHeight( basegfx::fround<tools::Long>( aBmpSize.Width() / fFactorLog ) );
 
                     aBmpEx.Scale(aBmpSize, BmpScaleFlag::BestQuality);
                 }
