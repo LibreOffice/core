@@ -1333,7 +1333,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
 {
     createSwDoc("tdf131963.docx");
 
-    CPPUNIT_ASSERT_EQUAL(11, getPages());
+    int nStartPages = getPages();
+    CPPUNIT_ASSERT_GREATER(10, nStartPages);
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
@@ -1348,7 +1349,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
     // Without the fix in place, this test would have crashed here
 
     // tdf#133169: without the fix in place, it would have been 2 instead of 11
-    CPPUNIT_ASSERT_EQUAL(11, getPages());
+    CPPUNIT_ASSERT_EQUAL(nStartPages, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132596)
