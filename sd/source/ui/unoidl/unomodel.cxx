@@ -2342,6 +2342,8 @@ OString SdXImpressDocument::getViewRenderState(SfxViewShell* pViewShell)
     if (pView)
     {
         const SdViewOptions& pVOpt = pView->GetViewOptions();
+        if (mpDoc->GetOnlineSpell())
+            aState.append('S');
         aState.append(';');
 
         OString aThemeName = OUStringToOString(pVOpt.msColorSchemeName, RTL_TEXTENCODING_UTF8);
