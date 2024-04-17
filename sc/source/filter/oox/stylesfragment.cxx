@@ -139,7 +139,7 @@ ContextHandlerRef XfContext::onCreateContext( sal_Int32 nElement, const Attribut
 
 ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( mxDxf ) switch( getCurrentElement() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( dxf ):
             switch( nElement )
@@ -155,17 +155,14 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
 #endif
             }
         break;
-    }
 
-    if( mxExtDxf ) switch( getCurrentElement() )
-    {
         case XLS14_TOKEN( dxf ):
             switch( nElement )
             {
-                case XLS_TOKEN( font ):         return new FontContext( *this, mxExtDxf->createFont() );
-                case XLS_TOKEN( border ):       return new BorderContext( *this, mxExtDxf->createBorder() );
-                case XLS_TOKEN( fill ):         return new FillContext( *this, mxExtDxf->createFill() );
-                case XLS_TOKEN( numFmt ):       mxExtDxf->importNumFmt( rAttribs );     break;
+                case XLS_TOKEN( font ):         return new FontContext( *this, mxDxf->createFont() );
+                case XLS_TOKEN( border ):       return new BorderContext( *this, mxDxf->createBorder() );
+                case XLS_TOKEN( fill ):         return new FillContext( *this, mxDxf->createFill() );
+                case XLS_TOKEN( numFmt ):       mxDxf->importNumFmt( rAttribs );     break;
             }
         break;
     }
