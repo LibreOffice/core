@@ -30,7 +30,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="certpage|label1">Certification path</property>
+            <property name="label" translatable="yes" context="certpage|label1">Certificate Path</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">signatures</property>
             <property name="xalign">0</property>
@@ -119,7 +119,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="certpage|label2">Certification status</property>
+            <property name="label" translatable="yes" context="certpage|label2">Certificate status</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">status</property>
             <property name="xalign">0</property>

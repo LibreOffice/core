@@ -203,7 +203,7 @@
               <object class="GtkLabel" id="path">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="viewcertdialog|path">Certification Path</property>
+                <property name="label" translatable="yes" context="viewcertdialog|path">Certificate Path</property>
               </object>
               <packing>
                 <property name="position">2</property>
