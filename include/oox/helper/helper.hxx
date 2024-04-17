@@ -54,7 +54,7 @@ template<typename T> constexpr std::make_unsigned_t<T> make_unsigned(T value) {
 /** Expands to the 'index'-th element of a STATIC data array, or to 'def', if
     'index' is out of the array limits. */
 #define STATIC_ARRAY_SELECT( array, index, def ) \
-    ((detail::make_unsigned(index) < SAL_N_ELEMENTS(array)) ? ((array)[static_cast<size_t>(index)]) : (def))
+    ((detail::make_unsigned(index) < std::size(array)) ? ((array)[static_cast<size_t>(index)]) : (def))
 
 // Common constants ===========================================================
 
