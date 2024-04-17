@@ -41,6 +41,7 @@ struct FormatOutputField
     tools::Long nDimension = -2;
     OUString aName;
     sal_Int32 nIndex = -1;
+    bool bMatchesAll = false;
     bool bSet = false;
 };
 

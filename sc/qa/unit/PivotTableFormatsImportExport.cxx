@@ -335,6 +335,174 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     CPPUNIT_ASSERT_EQUAL(u"60"_ustr, rDoc.GetString(aAddress));
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     PivotTableCellFormatsTest_11_WholeDataColumnSelected)
+{
+    auto assertDocument = [](ScDocument& rDoc) {
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G2"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G3"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G4"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G5"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G6"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G7"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"F1"_ustr,
+            u"G1"_ustr,
+            u"F2"_ustr,
+            u"F3"_ustr,
+            u"F4"_ustr,
+            u"F5"_ustr,
+            u"F6"_ustr,
+            u"F7"_ustr,
+            u"F8"_ustr,
+            u"G8"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
+    };
+
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_11_WholeDataColumnSelected.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     PivotTableCellFormatsTest_12_WholeLabelColumnSelected)
+{
+    auto assertDocument = [](ScDocument& rDoc) {
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F2"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F3"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F4"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F5"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F6"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F7"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"F1"_ustr,
+            u"G1"_ustr,
+            u"G2"_ustr,
+            u"G3"_ustr,
+            u"G4"_ustr,
+            u"G5"_ustr,
+            u"G6"_ustr,
+            u"G7"_ustr,
+            u"F8"_ustr,
+            u"G8"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
+    };
+
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_12_WholeLabelColumnSelected.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     PivotTableCellFormatsTest_13_SelectionInLabelAndData)
+{
+    auto assertDocument = [](ScDocument& rDoc) {
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F5"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"G5"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"F1"_ustr,
+            u"G1"_ustr,
+            u"F2"_ustr,
+            u"G2"_ustr,
+            u"F3"_ustr,
+            u"G3"_ustr,
+            u"F4"_ustr,
+            u"G4"_ustr,
+            u"F6"_ustr,
+            u"G6"_ustr,
+            u"F7"_ustr,
+            u"G7"_ustr,
+            u"F8"_ustr,
+            u"G8"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
+    };
+
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_13_SelectionInLabelAndData.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     PivotTableCellFormatsTest_14_TwoRowsDataFieldInColumn_LabelColor)
+{
+    auto assertDocument = [](ScDocument& rDoc) {
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I5"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J5"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"G5"_ustr,  u"H5"_ustr,  u"G6"_ustr,  u"H6"_ustr,  u"i6"_ustr,  u"j6"_ustr,
+            u"G7"_ustr,  u"H7"_ustr,  u"i7"_ustr,  u"j7"_ustr,  u"G8"_ustr,  u"H8"_ustr,
+            u"i8"_ustr,  u"j8"_ustr,  u"G9"_ustr,  u"H9"_ustr,  u"i9"_ustr,  u"j9"_ustr,
+            u"G10"_ustr, u"H10"_ustr, u"i10"_ustr, u"j10"_ustr, u"G11"_ustr, u"H11"_ustr,
+            u"i11"_ustr, u"j11"_ustr, u"G12"_ustr, u"H12"_ustr, u"i12"_ustr, u"j12"_ustr,
+            u"G13"_ustr, u"H13"_ustr, u"i13"_ustr, u"j13"_ustr, u"G14"_ustr, u"H14"_ustr,
+            u"i14"_ustr, u"j14"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
+    };
+
+    createScDoc(
+        "xlsx/pivot-table/PivotTableCellFormatsTest_14_TwoRowsDataFieldInColumn_LabelColor.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     PivotTableCellFormatsTest_15_TwoDataFieldColumns_WholeDataColumnSelected)
+{
+    auto assertDocument = [](ScDocument& rDoc) {
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H3"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H4"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H5"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H6"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H7"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H8"_ustr));
+
+        // Make sure the other cells have the font color or background set to default
+        auto aEmptyAddresses = std::to_array<OUString>({
+            u"F1"_ustr,
+            u"G1"_ustr,
+            u"H1"_ustr,
+            u"F2"_ustr,
+            u"G2"_ustr,
+            u"H2"_ustr,
+            u"F3"_ustr,
+            u"G3"_ustr,
+            u"F4"_ustr,
+            u"G4"_ustr,
+            u"F5"_ustr,
+            u"G5"_ustr,
+            u"F6"_ustr,
+            u"G6"_ustr,
+            u"F7"_ustr,
+            u"G7"_ustr,
+            u"F8"_ustr,
+            u"G8"_ustr,
+        });
+        CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
+    };
+
+    createScDoc("xlsx/pivot-table/"
+                "PivotTableCellFormatsTest_15_TwoDataFieldColumns_WholeDataColumnSelected.xlsx");
+    assertDocument(*getScDoc());
+    saveAndReload("Calc Office Open XML");
+    assertDocument(*getScDoc());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

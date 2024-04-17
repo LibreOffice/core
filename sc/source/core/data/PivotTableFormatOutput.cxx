@@ -83,6 +83,39 @@ void initLines(std::vector<LineData>& rLines, std::vector<ScDPOutLevelData> cons
     }
 }
 
+Selection const* findSelection(PivotTableFormat const& rFormat, tools::Long nDimension)
+{
+    for (Selection const& rSelection : rFormat.getSelections())
+    {
+        if (rSelection.nField == nDimension)
+            return &rSelection;
+    }
+    return nullptr;
+}
+
+void fillOutputFieldFromSelection(FormatOutputField& rOutputField, Selection const& rSelection,
+                                  size_t nSelectionIndex, NameResolver& rNameResolver)
+{
+    if (rSelection.nIndices.empty())
+    {
+        rOutputField.bMatchesAll = true;
+    }
+    else
+    {
+        if (rSelection.nIndices.size() > 1 && rSelection.nIndices.size() > nSelectionIndex)
+            rOutputField.nIndex = rSelection.nIndices[nSelectionIndex];
+        else
+            rOutputField.nIndex = rSelection.nIndices[0];
+
+        if (rOutputField.nDimension == -2)
+            rOutputField.aName = "DATA";
+        else
+            rOutputField.aName
+                = rNameResolver.getNameForIndex(rOutputField.nIndex, rOutputField.nDimension);
+    }
+    rOutputField.bSet = true;
+}
+
 void initFormatOutputField(size_t nSelectionIndex, std::vector<FormatOutputField>& rOutputFields,
                            std::vector<ScDPOutLevelData> const& rFields,
                            PivotTableFormat const& rFormat, NameResolver& rNameResolver)
@@ -94,24 +127,11 @@ void initFormatOutputField(size_t nSelectionIndex, std::vector<FormatOutputField
         if (!rFields[i].mbDataLayout)
             rOutputField.nDimension = rFields[i].mnDim;
 
-        for (auto const& rSelection : rFormat.aSelections)
-        {
-            if (!rSelection.nIndices.empty() && rSelection.nField == rOutputField.nDimension)
-            {
-                if (rSelection.nIndices.size() > nSelectionIndex)
-                    rOutputField.nIndex = rSelection.nIndices[nSelectionIndex];
-                else
-                    rOutputField.nIndex = rSelection.nIndices[0];
+        Selection const* pSelection = findSelection(rFormat, rOutputField.nDimension);
+        if (pSelection == nullptr)
+            continue;
 
-                if (rOutputField.nDimension == -2)
-                    rOutputField.aName = "DATA";
-                else
-                    rOutputField.aName = rNameResolver.getNameForIndex(rOutputField.nIndex,
-                                                                       rOutputField.nDimension);
-
-                rOutputField.bSet = true;
-            }
-        }
+        fillOutputFieldFromSelection(rOutputField, *pSelection, nSelectionIndex, rNameResolver);
     }
 }
 
@@ -159,9 +179,6 @@ void FormatOutput::prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rCol
                 nMaxNumberOfIndices = rSelection.nIndices.size();
         }
 
-        if (nMaxNumberOfIndices == 0)
-            continue;
-
         for (size_t nSelectionIndex = 0; nSelectionIndex < nMaxNumberOfIndices; nSelectionIndex++)
         {
             sc::FormatOutputEntry aEntry;
@@ -178,19 +195,11 @@ void FormatOutput::prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rCol
                 // Initialize column output fields to have 1 data output field
                 aEntry.aColumnOutputFields.resize(1);
                 FormatOutputField& rOutputField = aEntry.aColumnOutputFields[0];
-
-                for (auto const& rSelection : rFormat.aSelections)
-                {
-                    if (rSelection.nField == -2)
-                    {
-                        if (rSelection.nIndices.size() > 1)
-                            rOutputField.nIndex = rSelection.nIndices[nSelectionIndex];
-                        else
-                            rOutputField.nIndex = rSelection.nIndices[0];
-                        rOutputField.aName = "DATA";
-                        rOutputField.bSet = true;
-                    }
-                }
+                rOutputField.nDimension = -2;
+                Selection const* pSelection = findSelection(rFormat, -2);
+                if (pSelection)
+                    fillOutputFieldFromSelection(rOutputField, *pSelection, nSelectionIndex,
+                                                 aNameResolver);
             }
             else
             {
@@ -273,6 +282,7 @@ namespace
 {
 void checkForMatchingLines(std::vector<LineData> const& rLines,
                            std::vector<FormatOutputField> const& rFormatOutputField,
+                           FormatType eType,
                            std::vector<std::reference_wrapper<const LineData>>& rMatches,
                            std::vector<std::reference_wrapper<const LineData>>& rMaybeMatches)
 {
@@ -294,12 +304,15 @@ void checkForMatchingLines(std::vector<LineData> const& rLines,
             {
                 if (rFormatEntry.bSet)
                 {
-                    if (nDimension == -2 && rFieldData.nIndex == rFormatEntry.nIndex)
+                    if (rFormatEntry.bMatchesAll && !rFieldData.bSubtotal)
+                        bFieldMatch = true;
+                    else if (nDimension == -2 && rFieldData.nIndex == rFormatEntry.nIndex)
                         bFieldMatch = true;
                     else if (nDimension != -2 && rFieldData.aName == rFormatEntry.aName)
                         bFieldMatch = true;
                 }
-                else if (!rFormatEntry.bSet && !rFieldData.bIsMember && !rFieldData.bContinue)
+                else if (!rFormatEntry.bSet && eType == FormatType::Data && !rFieldData.bIsMember
+                         && !rFieldData.bContinue)
                 {
                     bFieldMatch = true;
                 }
@@ -322,9 +335,8 @@ void checkForMatchingLines(std::vector<LineData> const& rLines,
         if (nMatch == nNoOfFields)
         {
             rMatches.push_back(std::cref(rLineData));
-            break;
         }
-        else if (nMatch + nMaybeMatch == nNoOfFields && nMatch != 0)
+        else if (nMatch + nMaybeMatch == nNoOfFields)
         {
             rMaybeMatches.push_back(std::cref(rLineData));
         }
@@ -335,42 +347,46 @@ void checkForMatchingLines(std::vector<LineData> const& rLines,
 void evaluateMatches(ScDocument& rDocument,
                      std::vector<std::reference_wrapper<const LineData>> const& rMatches,
                      std::vector<std::reference_wrapper<const LineData>> const& rMaybeMatches,
-                     std::optional<SCCOLROW>& oRow, std::optional<SCCOLROW>& oColumn,
+                     std::vector<SCCOLROW>& aRows, std::vector<SCCOLROW>& aColumns,
                      FormatOutputEntry const& rOutputEntry, FormatResultDirection eResultDirection)
 {
     // We expect that tab and pattern to be set or this method shouldn't be called at all
     assert(rOutputEntry.onTab);
     assert(rOutputEntry.pPattern);
 
-    // We can output only if there is exactly 1 match or 1 maybe match
-    if (rMatches.size() != 1 && rMaybeMatches.size() != 1)
+    if (rMatches.empty() && rMaybeMatches.empty())
         return;
 
-    LineData const& rLineData = !rMatches.empty() ? rMatches.back() : rMaybeMatches.back();
+    bool bMaybeExists = rMatches.empty();
 
-    // Can't continue if we don't have complete row/column data
-    if (!rLineData.oLine || !rLineData.oPosition)
-        return;
+    auto const& rLineDataVector = bMaybeExists ? rMaybeMatches : rMatches;
 
-    if (rOutputEntry.eType == FormatType::Label)
+    for (LineData const& rLineData : rLineDataVector)
     {
-        // Primary axis is set to column (line) then row (position)
-        SCCOLROW nColumn = *rLineData.oLine;
-        SCCOLROW nRow = *rLineData.oPosition;
+        // Can't continue if we don't have complete row/column data
+        if (!rLineData.oLine || !rLineData.oPosition)
+            continue;
 
-        // In row orientation, the primary axis is row, then column, so we need to swap
-        if (eResultDirection == FormatResultDirection::ROW)
-            std::swap(nRow, nColumn);
+        if (rOutputEntry.eType == FormatType::Label && !bMaybeExists)
+        {
+            // Primary axis is set to column (line) then row (position)
+            SCCOLROW nColumn = *rLineData.oLine;
+            SCCOLROW nRow = *rLineData.oPosition;
 
-        // Set the pattern to the sheet
-        rDocument.ApplyPattern(nColumn, nRow, *rOutputEntry.onTab, *rOutputEntry.pPattern);
-    }
-    else if (rOutputEntry.eType == FormatType::Data)
-    {
-        if (eResultDirection == FormatResultDirection::ROW)
-            oRow = rLineData.oLine;
-        else if (eResultDirection == FormatResultDirection::COLUMN)
-            oColumn = rLineData.oLine;
+            // In row orientation, the primary axis is row, then column, so we need to swap
+            if (eResultDirection == FormatResultDirection::ROW)
+                std::swap(nRow, nColumn);
+
+            // Set the pattern to the sheet
+            rDocument.ApplyPattern(nColumn, nRow, *rOutputEntry.onTab, *rOutputEntry.pPattern);
+        }
+        else if (rOutputEntry.eType == FormatType::Data)
+        {
+            if (eResultDirection == FormatResultDirection::ROW)
+                aRows.push_back(*rLineData.oLine);
+            else if (eResultDirection == FormatResultDirection::COLUMN)
+                aColumns.push_back(*rLineData.oLine);
+        }
     }
 }
 
@@ -386,15 +402,16 @@ void FormatOutput::apply(ScDocument& rDocument)
         if (!rOutputEntry.onTab || !rOutputEntry.pPattern)
             continue;
 
-        std::optional<SCCOLROW> oRow;
-        std::optional<SCCOLROW> oColumn;
+        std::vector<SCCOLROW> aRows;
+        std::vector<SCCOLROW> aColumns;
         {
             std::vector<std::reference_wrapper<const LineData>> rMatches;
             std::vector<std::reference_wrapper<const LineData>> rMaybeMatches;
 
-            checkForMatchingLines(maRowLines, rOutputEntry.aRowOutputFields, rMatches,
-                                  rMaybeMatches);
-            evaluateMatches(rDocument, rMatches, rMaybeMatches, oRow, oColumn, rOutputEntry,
+            checkForMatchingLines(maRowLines, rOutputEntry.aRowOutputFields, rOutputEntry.eType,
+                                  rMatches, rMaybeMatches);
+
+            evaluateMatches(rDocument, rMatches, rMaybeMatches, aRows, aColumns, rOutputEntry,
                             FormatResultDirection::ROW);
         }
 
@@ -402,15 +419,19 @@ void FormatOutput::apply(ScDocument& rDocument)
             std::vector<std::reference_wrapper<const LineData>> rMatches;
             std::vector<std::reference_wrapper<const LineData>> rMaybeMatches;
 
-            checkForMatchingLines(maColumnLines, rOutputEntry.aColumnOutputFields, rMatches,
-                                  rMaybeMatches);
-            evaluateMatches(rDocument, rMatches, rMaybeMatches, oRow, oColumn, rOutputEntry,
+            checkForMatchingLines(maColumnLines, rOutputEntry.aColumnOutputFields,
+                                  rOutputEntry.eType, rMatches, rMaybeMatches);
+
+            evaluateMatches(rDocument, rMatches, rMaybeMatches, aRows, aColumns, rOutputEntry,
                             FormatResultDirection::COLUMN);
         }
 
-        if (oColumn && oRow && rOutputEntry.eType == FormatType::Data)
+        if (!aColumns.empty() && !aRows.empty() && rOutputEntry.eType == FormatType::Data)
         {
-            rDocument.ApplyPattern(*oColumn, *oRow, *rOutputEntry.onTab, *rOutputEntry.pPattern);
+            for (SCCOLROW nRow : aRows)
+                for (SCCOLROW nColumn : aColumns)
+                    rDocument.ApplyPattern(nColumn, nRow, *rOutputEntry.onTab,
+                                           *rOutputEntry.pPattern);
         }
     }
 }
