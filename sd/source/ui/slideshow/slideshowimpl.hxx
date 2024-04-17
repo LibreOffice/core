@@ -217,6 +217,10 @@ private:
     // helper to check if given hint is associated with CurrentSlide
     bool isCurrentSlideInvolved(const SdrHint& rHint);
 
+    // tdf#160669 IASS: helper to inform presentation::XSlideShow about change so that
+    // prefetch can be corrected/flushed
+    void sendHintSlideChanged(const SdrPage* pChangedPage) const;
+
     // override WeakComponentImplHelperBase::disposing()
     // This function is called upon disposing the component,
     // if your component needs special work when it becomes
