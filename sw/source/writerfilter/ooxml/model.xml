@@ -12620,6 +12620,12 @@
           <ref name="CT_Cnf"/>
         </element>
       </define>
+      <define name="CT_Style_pPr">
+        <ref name="CT_PPrBase"/>
+        <element name="rPr">
+          <ref name="CT_ParaRPr"/>
+        </element>
+      </define>
       <define name="CT_PPr">
         <ref name="CT_PPrBase"/>
         <element name="rPr">
@@ -16226,7 +16232,7 @@
           <ref name="CT_LongHexNumber"/>
         </element>
         <element name="pPr">
-          <ref name="CT_PPrBase"/>
+          <ref name="CT_Style_pPr"/>
         </element>
         <element name="rPr">
           <ref name="EG_RPrBase"/>
@@ -17738,6 +17744,9 @@
       <element name="outlineLvl" tokenid="ooxml:CT_PPrBase_outlineLvl"/>
       <element name="divId" tokenid="ooxml:CT_PPrBase_divId"/>
       <element name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
+    </resource>
+    <resource name="CT_Style_pPr" resource="Properties">
+      <element name="rPr" tokenid="ooxml:CT_PPr_rPr"/>
     </resource>
     <resource name="CT_PPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_PPr_rPr"/>

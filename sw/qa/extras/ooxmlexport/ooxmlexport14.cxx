@@ -963,6 +963,9 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
     assertXPath(pXmlDoc, "//w:body/w:p[2]/w:pPr/w:rPr/w:highlight"_ostr, "val"_ostr, "none");
     // Visually, the "none" highlight means the bullet point should not have a character background.
 
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='CustomParaStyleHighlightGreen']/w:rPr/w:highlight"_ostr, "val"_ostr, "green");
+
     if (bWasExportToShade)
     {
         officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(false, batch);
