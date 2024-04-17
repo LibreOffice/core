@@ -460,6 +460,14 @@ rtl::Reference<ScTransferObj> ScViewFunc::CopyToTransferable()
             return new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
         }
     }
+    else if (eMarkType == SC_MARK_MULTI)
+    {
+        ScDocumentUniquePtr pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+        // This takes care of the input line and calls CopyToClipMultiRange() for us.
+        CopyToClip(pClipDoc.get(), /*bCut=*/false, /*bApi=*/true);
+        TransferableObjectDescriptor aObjDesc;
+        return new ScTransferObj(std::move(pClipDoc), std::move(aObjDesc));
+    }
 
     return nullptr;
 }
