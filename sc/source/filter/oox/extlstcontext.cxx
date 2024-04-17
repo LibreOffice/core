@@ -292,7 +292,8 @@ void ExtConditionalFormattingContext::onEndElement()
                 maModel.eOperator = ScConditionMode::Direct;
             }
 
-            getStyles().getExtDxfs().forEachMem( &Dxf::finalizeImport );
+            if (Dxf* pDxf = getStyles().getExtDxfs().get(rStyleIdx).get())
+                pDxf->finalizeImport();
             maModel.aStyle = getStyles().createExtDxfStyle(rStyleIdx);
             rStyleIdx++;
             nFormulaCount = 0;
