@@ -1018,9 +1018,12 @@ void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
 // reset the print area created by the Print Dialog to the page style's print area.
 void PrinterController::resetPrintArea()
 {
-    mpImplData->mxPrinter->ResetPrintArea(true);
-    mpImplData->mxPrinter->SetUsePrintDialogSetting(false);
-    getPageCount();
+    if (mpImplData->mxPrinter->IsUsePrintDialogSetting())
+    {
+        mpImplData->mxPrinter->ResetPrintArea(true);
+        mpImplData->mxPrinter->SetUsePrintDialogSetting(false);
+        getPageCount();
+    }
 }
 
 int PrinterController::getPageCountProtected() const
