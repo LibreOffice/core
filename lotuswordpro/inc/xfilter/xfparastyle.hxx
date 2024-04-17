@@ -78,9 +78,11 @@
 #include <xfilter/xflineheight.hxx>
 #include <memory>
 
-#define     XFPARA_FLAG_FONT        0X00000001
-#define     XFPARA_FLAG_DROPCAP     0X00000002
-#define     XFPARA_FLAG_BACKCOLOR   0X00000004
+enum XFParaFlags {
+    XFPARA_FLAG_FONT      = 0X00000001,
+    XFPARA_FLAG_DROPCAP   = 0X00000002,
+    XFPARA_FLAG_BACKCOLOR = 0X00000004
+};
 
 class XFBorders;
 class XFBGImage;
