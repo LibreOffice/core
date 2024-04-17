@@ -440,7 +440,8 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
     }
 
-    //See https://bz.apache.org/ooo/show_bug.cgi?id=85411
+    // i#85411: ZWSP should be a word separator for spellchecking
+    // - This fix was applied to both dict and edit customizations
     for (int j = 0; j < 3; ++j)
     {
         switch (j)
@@ -462,21 +463,23 @@ void TestBreakIterator::testWordBoundaries()
                 break;
         }
 
-        static constexpr OUString aTest =
-            u"I\u200Bwant\u200Bto\u200Bgo"_ustr;
+        static constexpr OUString aTest = u"I\u200Bwant\u200Bto\u200Bgo"_ustr;
 
         sal_Int32 nPos = 0;
-        sal_Int32 aExpected[] = {1, 6, 9, 12};
+        sal_Int32 aExpected[] = { 1, 6, 9, 12 };
         size_t i = 0;
         do
         {
             CPPUNIT_ASSERT(i < std::size(aExpected));
-            nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
-                i18n::WordType::DICTIONARY_WORD, true).endPos;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
+            auto dwPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                                                   i18n::WordType::DICTIONARY_WORD, true);
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], dwPos.endPos);
+            auto ewPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                                                   i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], ewPos.endPos);
+            nPos = dwPos.endPos;
             ++i;
-        }
-        while (nPos++ < aTest.getLength());
+        } while (nPos++ < aTest.getLength());
         CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
     }
 
