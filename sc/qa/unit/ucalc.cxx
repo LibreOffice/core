@@ -2735,6 +2735,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "MINVERSE",
         "MMULT",
         "MUNIT",
+        "SEQUENCE",
         "SUMPRODUCT",
         "SUMX2MY2",
         "SUMX2PY2",

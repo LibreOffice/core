@@ -1547,6 +1547,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocSumIf:
             case ocNegSub:
             case ocAveDev:
+            case ocMatSequence:
             // Don't change the state.
             break;
             default:

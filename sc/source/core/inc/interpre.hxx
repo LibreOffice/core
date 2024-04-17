@@ -906,6 +906,7 @@ private:
     void ScMatDet();
     void ScMatInv();
     void ScMatMult();
+    void ScMatSequence();
     void ScMatTrans();
     void ScEMat();
     void ScMatRef();

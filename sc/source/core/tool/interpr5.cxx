@@ -1110,6 +1110,67 @@ void ScInterpreter::ScMatMult()
         PushIllegalParameter();
 }
 
+void ScInterpreter::ScMatSequence()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 1, 4))
+        return;
+
+    // 4th argument is the step number (optional)
+    double nSteps = 1.0;
+    if (nParamCount == 4)
+        nSteps = GetDoubleWithDefault(nSteps);
+
+    // 3d argument is the start number (optional)
+    double nStart = 1.0;
+    if (nParamCount >= 3)
+        nStart = GetDoubleWithDefault(nStart);
+
+    // 2nd argument is the col number (optional)
+    sal_Int32 nColumns = 1;
+    if (nParamCount >= 2)
+    {
+        nColumns = GetInt32WithDefault(nColumns);
+        if (nColumns < 1)
+        {
+            PushIllegalArgument();
+            return;
+        }
+    }
+
+    // 1st argument is the row number (required)
+    sal_Int32 nRows = GetInt32WithDefault(1);
+    if (nRows < 1)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+
+    size_t nMatrixSize = nColumns * nRows;
+    ScMatrixRef pResMat = GetNewMat(nColumns, nRows, /*bEmpty*/true);
+    for (size_t iPos = 0; iPos < nMatrixSize; iPos++)
+    {
+        pResMat->PutDoubleTrans(nStart, iPos);
+        nStart = nStart + nSteps;
+    }
+
+    if (pResMat)
+    {
+        PushMatrix(pResMat);
+    }
+    else
+    {
+        PushIllegalParameter();
+        return;
+    }
+}
+
 void ScInterpreter::ScMatTrans()
 {
     if ( !MustHaveParamCount( GetByte(), 1 ) )
