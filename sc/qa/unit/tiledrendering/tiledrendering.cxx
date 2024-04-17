@@ -3900,6 +3900,34 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditShapeText)
     CPPUNIT_ASSERT_MESSAGE("Text is not visible", aBitmapBefore != aBitmapAfter);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
+{
+    // Given a document with A1 and A3 as selected cells:
+    ScModelObj* pModelObj = createDoc("multi-selection.ods");
+    ViewCallback aView1;
+    // Get the center of A3:
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$A$3")),
+    };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    Point aPoint = aView1.m_aCellCursorBounds.Center();
+    // Go to A1:
+    aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
+    };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    // Ctrl-click on A3:
+    int nCtrl = KEY_MOD1;
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+                              MOUSE_LEFT, nCtrl);
+
+    // When getting the selection:
+    uno::Reference<datatransfer::XTransferable> xTransferable = pModelObj->getSelection();
+
+    // Make sure we get A1+A3 instead of an error:
+    CPPUNIT_ASSERT(xTransferable.is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
