@@ -280,6 +280,7 @@ public:
                                           const OUString &rParent);
 
     void                        Reindex();
+    void                        ReindexOnNameChange(const OUString& rOldName, const OUString& rNewName);
     /** Add a style sheet.
      * Not an actual public function. Do not call it from non-subclasses.
      */
