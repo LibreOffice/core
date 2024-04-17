@@ -20,7 +20,7 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=2 n-rows=8 -->
+              <!-- n-columns=2 n-rows=9 -->
               <object class="GtkGrid" id="grid6">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -127,7 +127,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">7</property>
+                    <property name="top-attach">8</property>
                   </packing>
                 </child>
                 <child>
@@ -192,7 +192,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">6</property>
+                    <property name="top-attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -224,7 +224,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">6</property>
+                    <property name="top-attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -237,7 +237,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">7</property>
+                    <property name="top-attach">8</property>
                   </packing>
                 </child>
                 <child>
@@ -270,6 +270,38 @@
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="editcellbg">
+                    <property name="label" translatable="yes" context="tpviewpage|value">Edit cell background highlighting</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="editcellbg-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|value">Mark the Edit cell background highlighting checkbox to show cell frame background color as the edit cell background.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockeditcellbghigh">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">6</property>
                   </packing>
                 </child>
               </object>

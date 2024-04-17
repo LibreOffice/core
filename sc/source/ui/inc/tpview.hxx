@@ -47,6 +47,8 @@ class ScTpContentOptions : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xValueImg;
     std::unique_ptr<weld::CheckButton> m_xColRowHighCB;
     std::unique_ptr<weld::Widget> m_xColRowHighImg;
+    std::unique_ptr<weld::CheckButton> m_xEditCellBgHighCB;
+    std::unique_ptr<weld::Widget> m_xEditCellBgHighImg;
     std::unique_ptr<weld::CheckButton> m_xAnchorCB;
     std::unique_ptr<weld::Widget> m_xAnchorImg;
     std::unique_ptr<weld::CheckButton> m_xRangeFindCB;

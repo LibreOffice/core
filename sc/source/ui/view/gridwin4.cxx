@@ -38,6 +38,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcomponenthelpers.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
@@ -719,6 +720,15 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
         SCCOL nEditEndCol = mrViewData.GetEditEndCol();
         SCROW nEditEndRow = mrViewData.GetEditEndRow();
+
+        if (officecfg::Office::Calc::Content::Display::EditCellBackgroundHighlighting::get()
+                && !getViewData().GetMarkData().IsMarked())
+        {
+            const Color aBackgroundColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            Color aHighlightColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+            aHighlightColor.Merge(aBackgroundColor, 100);
+            pEditView->SetBackgroundColor(aHighlightColor);
+        }
 
         if ( nEditEndCol >= nX1 && nEditCol <= nX2 && nEditEndRow >= nY1 && nEditRow <= nY2 )
             aOutputData.SetEditCell( nEditCol, nEditRow );

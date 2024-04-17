@@ -137,6 +137,14 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="EditCellBackgroundHighlighting" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether the edit cell background highlighting is enabled or not.</desc>
+            <label>Edit cell background highlighting</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="Anchor" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
           <info>

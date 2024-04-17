@@ -54,6 +54,8 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     , m_xValueImg(m_xBuilder->weld_widget("lockvalue"))
     , m_xColRowHighCB(m_xBuilder->weld_check_button("colrowhigh"))
     , m_xColRowHighImg(m_xBuilder->weld_widget("lockcolrowhigh"))
+    , m_xEditCellBgHighCB(m_xBuilder->weld_check_button("editcellbg"))
+    , m_xEditCellBgHighImg(m_xBuilder->weld_widget("lockeditcellbghigh"))
     , m_xAnchorCB(m_xBuilder->weld_check_button("anchor"))
     , m_xAnchorImg(m_xBuilder->weld_widget("lockanchor"))
     , m_xRangeFindCB(m_xBuilder->weld_check_button("rangefind"))
@@ -97,6 +99,7 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     m_xFormulaMarkCB->connect_toggled(aCBHdl);
     m_xValueCB->connect_toggled(aCBHdl);
     m_xColRowHighCB->connect_toggled(aCBHdl);
+    m_xEditCellBgHighCB->connect_toggled(aCBHdl);
     m_xAnchorCB->connect_toggled(aCBHdl);
 
     m_xVScrollCB->connect_toggled(aCBHdl);
@@ -189,6 +192,13 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         pChange->commit();
         bRet = true;
     }
+    if (m_xEditCellBgHighCB->get_state_changed_from_saved())
+    {
+        auto pChange(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Content::Display::EditCellBackgroundHighlighting::set(m_xEditCellBgHighCB->get_active(), pChange);
+        pChange->commit();
+        bRet = true;
+    }
 
     return bRet;
 }
@@ -205,6 +215,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xFormulaMarkCB->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS_MARKS));
     m_xValueCB   ->set_active(m_xLocalOptions->GetOption(VOPT_SYNTAX));
     m_xColRowHighCB->set_active(officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get());
+    m_xEditCellBgHighCB->set_active(officecfg::Office::Calc::Content::Display::EditCellBackgroundHighlighting::get());
     m_xAnchorCB  ->set_active(m_xLocalOptions->GetOption(VOPT_ANCHOR));
 
     m_xObjGrfLB  ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_OLE)) );
@@ -269,6 +280,10 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xColRowHighCB->set_sensitive(!bReadOnly);
     m_xColRowHighImg->set_visible(bReadOnly);
 
+    bReadOnly = officecfg::Office::Calc::Content::Display::EditCellBackgroundHighlighting::isReadOnly();
+    m_xEditCellBgHighCB->set_sensitive(!bReadOnly);
+    m_xEditCellBgHighImg->set_visible(bReadOnly);
+
     bReadOnly = officecfg::Office::Calc::Content::Display::Anchor::isReadOnly();
     m_xAnchorCB->set_sensitive(!bReadOnly);
     m_xAnchorImg->set_visible(bReadOnly);
@@ -331,6 +346,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xFormulaMarkCB->save_state();
     m_xValueCB->save_state();
     m_xColRowHighCB->save_state();
+    m_xEditCellBgHighCB->save_state();
     m_xAnchorCB->save_state();
     m_xObjGrfLB->save_value();
     m_xDiagramLB->save_value();
