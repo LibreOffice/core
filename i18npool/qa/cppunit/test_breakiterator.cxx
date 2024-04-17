@@ -184,11 +184,10 @@ void TestBreakIterator::testLineBreaking()
 
         {
             // Per the bug, the line break should leave -bar clumped together on the next line.
-            // However, this change was reverted at some point. This test asserts the new behavior.
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
                 u"foo -bar"_ustr, strlen("foo -ba"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected a break at the first dash",
-                                         static_cast<sal_Int32>(5), aResult.breakIndex);
+                                         static_cast<sal_Int32>(4), aResult.breakIndex);
         }
     }
 
@@ -198,11 +197,29 @@ void TestBreakIterator::testLineBreaking()
         aLocale.Country = "US";
 
         {
-            // Here we want the line break to leave C:\Program Files\ on the first line
+            // Note that the current behavior deviates from the original fix for this bug.
+            //
+            // The original report was filed due to wrapping all of "\Program Files\aaaa" to the
+            // next line, even though only "aaaa" overflowed. The original fix was to simply make
+            // U+005C reverse solidus (backslash) a breaking character.
+            //
+            // However, the root cause for this bug was not the behavior of '\', but rather some
+            // other bug making all of "\Program Files\" behave like a single token, despite it
+            // even containing whitespace.
+            //
+            // Reverting to the ICU line rules fixes this root issue. Now, in the following,
+            // "C:\Program" and "Files\LibreOffice" are treated as separate tokens. This is also
+            // consistent with the behavior of other office programs.
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
                 u"C:\\Program Files\\LibreOffice"_ustr, strlen("C:\\Program Files\\Libre"), aLocale, 0,
                 aHyphOptions, aUserOptions);
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17), aResult.breakIndex);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11), aResult.breakIndex);
+
+            // An identical result should be generated for solidus.
+            aResult = m_xBreak->getLineBreak(
+                "C:/Program Files/LibreOffice", strlen("C:/Program Files/Libre"), aLocale, 0,
+                aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11), aResult.breakIndex);
         }
     }
 
@@ -251,23 +268,125 @@ void TestBreakIterator::testLineBreaking()
         aLocale.Country = "US";
 
         {
+            // The root cause for this bug was the Unicode standard introducing special treatment
+            // for '-' in a number range context. This change makes number ranges (e.g. "100-199")
+            // behave as if they are single tokens for the purposes of line breaking. Unfortunately,
+            // this caused a significant appearance change to existing documents.
+            //
+            // Despite being a user-visible layout change, this isn't exactly a bug. Wrapping
+            // number ranges as a single token is consistent with other applications, including web
+            // browsers, and other office suites as mentioned in the bug discussion. Removing this
+            // customization seems like it would be a major change, however.
+            //
             // Here we want the line break to leave 100- clumped on the first line.
+
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
                 u"word 100-199 word"_ustr, strlen("word 100-1"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9), aResult.breakIndex);
         }
-    }
 
-    // i#83649: Line break should be between typographical quote and left bracket
-    {
+        {
+            // From the same bug: "the leading minus must stay with numbers and strings"
+
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
+                    "range of -100.000 to 100.000", strlen("range of -1"), aLocale, 0,
+                    aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32{9}, aResult.breakIndex);
+
+            constexpr OUString str = u"range of \u2212100.000 to 100.000"_ustr;
+            aResult = m_xBreak->getLineBreak(
+                    str, strlen("range of -"), aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32{9}, aResult.breakIndex);
+        }
+
         aLocale.Language = "de";
         aLocale.Country = "DE";
 
         {
-            // Here we want the line break to leave »angetan werden« on the first line
+            // From the same bug: "the leading minus must stay with numbers and strings"
+
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
+                    "EURO is -10,50", strlen("EURO is -1"), aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32{8}, aResult.breakIndex);
+
+            // Also the mathematical minus sign:
+
+            constexpr OUString str = u"EURO is \u221210,50"_ustr;
+            aResult = m_xBreak->getLineBreak(
+                    str, strlen("EURO is -"), aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32{8}, aResult.breakIndex);
+        }
+
+        {
+            // From the same bug: "the leading minus must stay with numbers and strings"
+
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
+                    "und -kosten", strlen("und -ko"), aLocale, 0,
+                    aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32{4}, aResult.breakIndex);
+
+            // But not the non-breaking hyphen:
+
+            constexpr OUString str = u"und \u2011"_ustr;
+            aResult = m_xBreak->getLineBreak(
+                    str, strlen("und -ko"), aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32{5}, aResult.breakIndex);
+        }
+    }
+
+    // i#83649: "Line break should be between typographical quote and left bracket"
+    // - Actually: Spaces between quotation mark and opening punctuation not treated as a break.
+    // - Note that per the Unicode standard, prohibiting breaks in this context is intentional
+    // because it may cause issues in certain languages due to the various ways quotation
+    // characters are used.
+    // - We do it anyway by customizing the ICU line breaking rules.
+    {
+        {
+            // This uses the sample text provided in the bug report. Based on usage, it is assumed
+            // they were in the de_DE locale.
+
+            aLocale.Language = "de";
+            aLocale.Country = "DE";
+
+            // Per the bug report, it is expected that »angetan werden« remains on the first line.
             const OUString str = u"»angetan werden« [Passiv]"_ustr;
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
-                str, strlen("Xangetan werdenX ["), aLocale, 0, aHyphOptions, aUserOptions);
+                str, str.getLength() - 4, aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17), aResult.breakIndex);
+
+            // The same result should be returned for this and the first case.
+            const OUString str2 = u"»angetan werden« Passiv"_ustr;
+            aResult = m_xBreak->getLineBreak(
+                str2, str2.getLength() - 4, aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17), aResult.breakIndex);
+
+            // Under ICU rules, no amount of spaces would cause this to wrap.
+            const OUString str3 = u"»angetan werden«    [Passiv]"_ustr;
+            aResult = m_xBreak->getLineBreak(
+                str3, str3.getLength() - 4, aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(20), aResult.breakIndex);
+
+            // However, tabs will
+            const OUString str4 = u"»angetan werden«\t[Passiv]"_ustr;
+            aResult = m_xBreak->getLineBreak(
+                str4, str4.getLength() - 4, aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17), aResult.breakIndex);
+        }
+
+        {
+            // The same behavior is seen in English
+
+            aLocale.Language = "en";
+            aLocale.Country = "US";
+
+            const OUString str = u"\"angetan werden\" [Passiv]"_ustr;
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
+                str, str.getLength() - 4, aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17), aResult.breakIndex);
+
+            const OUString str2 = u"\"angetan werden\" Passiv"_ustr;
+            aResult = m_xBreak->getLineBreak(
+                str2, str2.getLength() - 4, aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17), aResult.breakIndex);
         }
     }
@@ -355,7 +474,7 @@ void TestBreakIterator::testLineBreaking()
             auto res = m_xBreak->getLineBreak(u"Wort -prinzessinnen, wort"_ustr,
                                               strlen("Wort -prinzessinnen,"), aLocale, 0,
                                               aHyphOptions, aUserOptions);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32{ 6 }, res.breakIndex);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32{ 5 }, res.breakIndex);
         }
     }
 }
@@ -638,7 +757,8 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
     }
 
-    //See https://bz.apache.org/ooo/show_bug.cgi?id=85411
+    // i#85411: ZWSP should be a word separator for spellchecking
+    // - This fix was applied to both dict and edit customizations
     for (int j = 0; j < 3; ++j)
     {
         switch (j)
@@ -660,21 +780,23 @@ void TestBreakIterator::testWordBoundaries()
                 break;
         }
 
-        static constexpr OUString aTest =
-            u"I\u200Bwant\u200Bto\u200Bgo"_ustr;
+        static constexpr OUString aTest = u"I\u200Bwant\u200Bto\u200Bgo"_ustr;
 
         sal_Int32 nPos = 0;
-        sal_Int32 aExpected[] = {1, 6, 9, 12};
+        sal_Int32 aExpected[] = { 1, 6, 9, 12 };
         size_t i = 0;
         do
         {
             CPPUNIT_ASSERT(i < std::size(aExpected));
-            nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
-                i18n::WordType::DICTIONARY_WORD, true).endPos;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
+            auto dwPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                                                   i18n::WordType::DICTIONARY_WORD, true);
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], dwPos.endPos);
+            auto ewPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                                                   i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], ewPos.endPos);
+            nPos = dwPos.endPos;
             ++i;
-        }
-        while (nPos++ < aTest.getLength());
+        } while (nPos++ < aTest.getLength());
         CPPUNIT_ASSERT_EQUAL(std::size(aExpected), i);
     }
 
@@ -814,121 +936,45 @@ void TestBreakIterator::testWordBoundaries()
     }
 
     // i#56347: "BreakIterator patch for Hungarian"
+    // i#56348: Special chars in first pos not handled by spell checking in Writer (Hungarian)
     // Rules for Hungarian affixes after numbers and certain symbols
     {
-        auto mode = i18n::WordType::DICTIONARY_WORD;
         aLocale.Language = "hu";
         aLocale.Country = "HU";
 
         OUString aTest = u"szavak 15 15-tel 15%-kal €-val szavak"_ustr;
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 2, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
+        for (auto mode :
+             { i18n::WordType::DICTIONARY_WORD, i18n::WordType::ANYWORD_IGNOREWHITESPACES })
+        {
+            aBounds = m_xBreak->getWordBoundary(aTest, 2, aLocale, mode, true);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 7, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
+            aBounds = m_xBreak->getWordBoundary(aTest, 7, aLocale, mode, true);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.startPos);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 11, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
+            aBounds = m_xBreak->getWordBoundary(aTest, 11, aLocale, mode, true);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 18, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(17), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(24), aBounds.endPos);
+            aBounds = m_xBreak->getWordBoundary(aTest, 18, aLocale, mode, true);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(17), aBounds.startPos);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(24), aBounds.endPos);
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 25, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.endPos);
+            aBounds = m_xBreak->getWordBoundary(aTest, 25, aLocale, mode, true);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.startPos);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.endPos);
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 27, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.endPos);
+            aBounds = m_xBreak->getWordBoundary(aTest, 27, aLocale, mode, true);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.startPos);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.endPos);
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 34, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(31), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(37), aBounds.endPos);
-    }
-
-    // i#56348: Special chars in first pos not handled by spell checking in Writer (Hungarian)
-    // Rules for Hungarian affixes after numbers and certain symbols in edit mode.
-    // The patch was merged, but the original bug was never closed and the current behavior seems
-    // identical to the ICU default behavior. Added this test to ensure that doesn't change.
-    {
-        auto mode = i18n::WordType::ANY_WORD;
-        aLocale.Language = "hu";
-        aLocale.Country = "HU";
-
-        OUString aTest = u"szavak 15 15-tel 15%-kal €-val szavak"_ustr;
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 2, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 7, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 11, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 11, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 12, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 13, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 16, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(17), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 17, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(17), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 19, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 20, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(21), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 21, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(21), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(24), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 24, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(24), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 25, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(26), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 26, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(26), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(27), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 27, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(27), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 30, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(31), aBounds.endPos);
-
-        aBounds = m_xBreak->getWordBoundary(aTest, 31, aLocale, mode, true);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(31), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(37), aBounds.endPos);
+            aBounds = m_xBreak->getWordBoundary(aTest, 34, aLocale, mode, true);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(31), aBounds.startPos);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(37), aBounds.endPos);
+        }
     }
 
     // tdf#49885: Upgrade CJ word boundary analysis to ICU frequency-based analysis
@@ -982,6 +1028,56 @@ void TestBreakIterator::testSentenceBoundaries()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19), m_xBreak->endOfSentence(aTest, 20, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(24), m_xBreak->beginOfSentence(aTest, 26, aLocale));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(53), m_xBreak->endOfSentence(aTest, 26, aLocale));
+    }
+
+    // i#55063: Sentence selection in Thai should select a space-delimited phrase.
+    // - This customization broke at some point. It works in an English locale in a synthetic test
+    // like this one, but does not work in the Thai locale, nor on Thai text in practice.
+    {
+        static constexpr OUString aTest = u"ว้อย โหลยโท่ยคอร์รัปชันโอเพ่นฮอตดอก โปรโมเตอร์"_ustr;
+
+        aLocale.Language = "en";
+        aLocale.Country = "US";
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(46), m_xBreak->endOfSentence(aTest, 23, aLocale));
+
+        aLocale.Language = "th";
+        aLocale.Country = "TH";
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(46), m_xBreak->endOfSentence(aTest, 23, aLocale));
+    }
+
+    // i#55063: Thai phrases should delimit English sentence selection.
+    // - This customization broke at some point. It works in an English locale in a synthetic test
+    // like this one, but does not work in the Thai locale, nor on Thai text in practice.
+    {
+        static constexpr OUString aTest = u"ว้อย English usually ends with a period โปรโมเตอร์."_ustr;
+
+        aLocale.Language = "en";
+        aLocale.Country = "US";
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(51), m_xBreak->endOfSentence(aTest, 23, aLocale));
+
+        aLocale.Language = "th";
+        aLocale.Country = "TH";
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(51), m_xBreak->endOfSentence(aTest, 23, aLocale));
+    }
+
+    // i#55063: Characteristic test for English text delimiting Thai phrases (sentences)
+    // - English text should not delimit Thai phrases.
+    {
+        static constexpr OUString aTest = u"Englishโหลยโท่ยคอร์รัปชันโอเพ่นฮอตดอกEnglish"_ustr;
+
+        aLocale.Language = "en";
+        aLocale.Country = "US";
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(44), m_xBreak->endOfSentence(aTest, 23, aLocale));
+
+        aLocale.Language = "th";
+        aLocale.Country = "TH";
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), m_xBreak->beginOfSentence(aTest, 23, aLocale));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(44), m_xBreak->endOfSentence(aTest, 23, aLocale));
     }
 }
 
@@ -1559,6 +1655,7 @@ void TestBreakIterator::testLegacyHebrewQuoteInsideWord()
     aLocale.Language = "he";
     aLocale.Country = "IL";
 
+    // i#51661: Add quotation mark as middle letter for Hebrew
     {
         auto aTest = u"פַּרְדּ״ס פַּרְדּ\"ס"_ustr;
 
@@ -1569,6 +1666,21 @@ void TestBreakIterator::testLegacyHebrewQuoteInsideWord()
 
         aBounds
             = m_xBreak->getWordBoundary(aTest, 13, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.endPos);
+    }
+
+    // i#51661: Add quotation mark as middle letter for Hebrew
+    {
+        auto aTest = u"פַּרְדּ״ס פַּרְדּ\"ס"_ustr;
+
+        i18n::Boundary aBounds = m_xBreak->getWordBoundary(
+            aTest, 3, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 13, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.endPos);
     }

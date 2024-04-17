@@ -16,16 +16,12 @@ $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 
 i18npool_BRKTXTS := \
     count_word.brk \
-    $(call gb_Helper_optional_locale,he,dict_word_he.brk) \
     $(call gb_Helper_optional_locale,hu,dict_word_hu.brk) \
-    dict_word_nodash.brk \
     dict_word_prepostdash.brk \
     dict_word.brk \
-    $(call gb_Helper_optional_locale,he,edit_word_he.brk) \
     $(call gb_Helper_optional_locale,hu,edit_word_hu.brk) \
     edit_word.brk \
-    line.brk \
-    sent.brk
+    line.brk
 
 # 'gencmn', 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
 # The output of gencmn generates warnings under Windows. We want to minimize the patches to external tools,
