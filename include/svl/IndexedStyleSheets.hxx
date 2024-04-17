@@ -145,6 +145,7 @@ public:
     void Clear(StyleSheetDisposer& cleanup);
 
     void Reindex();
+    void ReindexOnNameChange(const OUString& rOldName, const OUString& rNewName);
 
     /** Warning: counting for n starts at 0, i.e., the 0th style sheet is the first that is found. */
     SfxStyleSheetBase* GetNthStyleSheetThatMatchesPredicate(sal_Int32 n,
