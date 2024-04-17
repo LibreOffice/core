@@ -4381,6 +4381,7 @@ StackVar ScInterpreter::Interpret()
                     case ocMatDet           : ScMatDet();                   break;
                     case ocMatInv           : ScMatInv();                   break;
                     case ocMatMult          : ScMatMult();                  break;
+                    case ocMatSequence      : ScMatSequence();              break;
                     case ocMatTrans         : ScMatTrans();                 break;
                     case ocMatRef           : ScMatRef();                   break;
                     case ocB                : ScB();                        break;

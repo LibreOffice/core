@@ -4221,4 +4221,18 @@ const TranslateId SC_OPCODE_SORTBY_ARY[] =
     NC_("SC_OPCODE_SORTBY", "Order 1, order 2,... are the orders to use for sorting. 1 for ascending, -1 for descending. Default is ascending.")
 };
 
+// -=*# Resource for function SEQUENCE #*=-
+const TranslateId SC_OPCODE_MAT_SEQUENCE_ARY[] =
+{
+    NC_("SC_OPCODE_MAT_SEQUENCE", "Allows you to generate a list of sequential numbers in an array, such as 1, 2, 3, 4."),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "Rows"),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "The number of rows to return."),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "Columns"),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "The number of columns to return."),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "Start"),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "The first number in the sequence."),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "Step"),
+    NC_("SC_OPCODE_MAT_SEQUENCE", "The amount to increment each subsequent value in the array.")
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

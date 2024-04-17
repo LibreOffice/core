@@ -879,7 +879,8 @@ const FunctionData saFuncTable2021[] =
     { "COM.MICROSOFT.XMATCH",              "XMATCH",              NOID,   NOID,   2,  4,  V, { VR, VA }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.FILTER",              "FILTER",              NOID,   NOID,   2,  3,  A, { VR, VA }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.SORT",                "SORT",                NOID,   NOID,   1,  4,  A, { VO }, FuncFlags::MACROCALL_NEW },
-    { "COM.MICROSOFT.SORTBY",              "SORTBY",              NOID,   NOID,   2,  MX, V, { RO, RO, VR }, FuncFlags::MACROCALL_NEW | FuncFlags::PARAMPAIRS }
+    { "COM.MICROSOFT.SORTBY",              "SORTBY",              NOID,   NOID,   2,  MX, V, { RO, RO, VR }, FuncFlags::MACROCALL_NEW | FuncFlags::PARAMPAIRS },
+    { "COM.MICROSOFT.SEQUENCE",            "SEQUENCE",            NOID,   NOID,   1,  4,  A, { VO }, FuncFlags::MACROCALL_NEW },
 };
 
 

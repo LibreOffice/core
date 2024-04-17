@@ -338,6 +338,7 @@ inline constexpr OUString HID_FUNC_KGV = u"SC_HID_FUNC_KGV"_ustr;
 inline constexpr OUString HID_FUNC_UMRECHNEN = u"SC_HID_FUNC_UMRECHNEN"_ustr;
 inline constexpr OUString HID_FUNC_EUROCONVERT = u"SC_HID_FUNC_EUROCONVERT"_ustr;
 
+inline constexpr OUString HID_FUNC_MSEQUENCE_MS = u"SC_HID_FUNC_MSEQUENCE_MS"_ustr;
 inline constexpr OUString HID_FUNC_MTRANS = u"SC_HID_FUNC_MTRANS"_ustr;
 inline constexpr OUString HID_FUNC_MMULT = u"SC_HID_FUNC_MMULT"_ustr;
 inline constexpr OUString HID_FUNC_MDET = u"SC_HID_FUNC_MDET"_ustr;

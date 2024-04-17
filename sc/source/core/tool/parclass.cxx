@@ -177,6 +177,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocMatDet,          {{ ForceArray                                           }, 0, Value }},
     { ocMatInv,          {{ ForceArray                                           }, 0, Value }},
     { ocMatMult,         {{ ForceArray, ForceArray                               }, 0, Value }},
+    { ocMatSequence,     {{ Value, Value, Value, Value                           }, 0, ForceArrayReturn }},
     { ocMatTrans,        {{ ForceArray                                           }, 0, ForceArrayReturn }},
     { ocMatValue,        {{ Reference, Value, Value                              }, 0, Value }},
     { ocMatch,           {{ Value, ReferenceOrForceArray, Value                  }, 0, Value }},

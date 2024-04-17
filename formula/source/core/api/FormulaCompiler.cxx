@@ -1255,6 +1255,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocLogest :
         case ocLinest :
         case ocFrequency :
+        case ocMatSequence :
         case ocMatTrans :
         case ocMatMult :
         case ocMatInv :

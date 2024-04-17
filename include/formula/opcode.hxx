@@ -509,6 +509,7 @@ enum OpCode : sal_uInt16
         ocFilter            = SC_OPCODE_FILTER,
         ocSort              = SC_OPCODE_SORT,
         ocSortBy            = SC_OPCODE_SORTBY,
+        ocMatSequence       = SC_OPCODE_MAT_SEQUENCE,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,
@@ -838,6 +839,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocMatDet: return "MatDet";
     case ocMatInv: return "MatInv";
     case ocMatMult: return "MatMult";
+    case ocMatSequence: return "MatSequence";
     case ocMatTrans: return "MatTrans";
     case ocMatrixUnit: return "MatrixUnit";
     case ocBackSolver: return "BackSolver";
