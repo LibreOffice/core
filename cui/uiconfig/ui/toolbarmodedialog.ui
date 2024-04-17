@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="imgApply">
@@ -15,9 +15,6 @@
     <property name="modal">True</property>
     <property name="window-position">center-on-parent</property>
     <property name="type-hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox">
         <property name="can-focus">False</property>
@@ -76,6 +73,22 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="help">
+                <property name="label" translatable="yes" context="stock">_Help</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <property name="image-position">right</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -344,7 +357,7 @@
                                 <property name="max-width-chars">50</property>
                                 <property name="xalign">0</property>
                                 <attributes>
-                                  <attribute name="scale" value="0.9"/>
+                                  <attribute name="scale" value="0.90000000000000002"/>
                                 </attributes>
                               </object>
                             </child>
@@ -389,6 +402,7 @@
       <action-widget response="-5">btnApplyAll</action-widget>
       <action-widget response="-5">btnApply</action-widget>
       <action-widget response="-7">close</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
 </interface>
