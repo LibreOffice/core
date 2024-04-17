@@ -3434,6 +3434,21 @@ bool SlideshowImpl::isCurrentSlideInvolved(const SdrHint& rHint)
     return pHintPage == pCurrentSlide;
 }
 
+void SlideshowImpl::sendHintSlideChanged(const SdrPage* pChangedPage) const
+{
+    if (nullptr == pChangedPage)
+        return;
+
+    if (!mxShow.is())
+        return;
+
+    mxShow->setProperty(
+        beans::PropertyValue( "HintSlideChanged" ,
+            -1,
+            Any( GetXDrawPageForSdrPage(const_cast<SdrPage*>(pChangedPage)) ),
+            beans::PropertyState_DIRECT_VALUE ) );
+}
+
 void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     if (SfxHintId::ThisIsAnSdrHint != rHint.GetId())
@@ -3463,6 +3478,9 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
                 // avoid multiple events
                 return;
 
+            // tdf#160669 IASS: inform about ALL changed slides due to prefetch
+            sendHintSlideChanged(rSdrHint.GetPage());
+
             if (!isCurrentSlideInvolved(rSdrHint))
                 // nothing to do when current slide is not involved
                 return;
@@ -3478,6 +3496,9 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
                 // avoid multiple events
                 return;
 
+            // tdf#160669 IASS: inform about ALL changed slides due to prefetch
+            sendHintSlideChanged(rSdrHint.GetPage());
+
             if (!isCurrentSlideInvolved(rSdrHint))
                 // nothing to do when current slide is not involved
                 return;
@@ -3492,6 +3513,9 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
             if (nullptr != mnEventObjectChange)
                 // avoid multiple events
                 return;
+
+            // tdf#160669 IASS: inform about ALL changed slides due to prefetch
+            sendHintSlideChanged(rSdrHint.GetPage());
 
             if (!isCurrentSlideInvolved(rSdrHint))
                 // nothing to do when current slide is not involved
@@ -3515,6 +3539,9 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
             // good solution yet for this.
             if (nullptr != mnEventPageOrderChange)
                 Application::RemoveUserEvent( mnEventPageOrderChange );
+
+            // tdf#160669 IASS: inform about ALL changed slides due to prefetch
+            sendHintSlideChanged(rSdrHint.GetPage());
 
             // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
             uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());

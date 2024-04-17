@@ -1609,6 +1609,20 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 
+    // tdf#160669 IASS: if hint is about PrefetchSlide, flush it to avoid errors
+    if ( rProperty.Name == "HintSlideChanged" )
+    {
+        uno::Reference< drawing::XDrawPage > xDrawPage;
+        if (rProperty.Value >>= xDrawPage)
+        {
+            if (xDrawPage == mxPrefetchSlide)
+            {
+                mxPrefetchSlide.clear();
+                mpPrefetchSlide.reset();
+            }
+        }
+    }
+
     if ( rProperty.Name == "AutomaticAdvancement" )
     {
         double nTimeout(0.0);
