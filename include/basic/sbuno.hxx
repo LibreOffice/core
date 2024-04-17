@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBUNO_HXX
-#define INCLUDED_BASIC_SBUNO_HXX
+#pragma once
 
 #include <com/sun/star/uno/Type.hxx>
 #include <basic/sbxvar.hxx>
@@ -41,7 +40,5 @@ BASIC_DLLPUBLIC css::uno::Any sbxToUnoValue( const SbxValue* pVar );
 css::uno::Any sbxToUnoValue( const SbxValue* pVar, const css::uno::Type& rType, css::beans::Property const * pUnoProperty = nullptr );
 
 BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const css::uno::Any& aValue );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
