@@ -1,6 +1,6 @@
 --- Makefile.vc.sav	2021-07-30 00:55:37.000000000 +0200
 +++ Makefile.vc	2022-01-25 17:35:30.206117700 +0100
-@@ -8,11 +8,11 @@
+@@ -8,13 +8,13 @@
  LIBSHARPYUV_BASENAME = libsharpyuv
  
  !IFNDEF ARCH
@@ -10,12 +10,15 @@
 -!ELSE IF ! [ cl 2>&1 | find "x64" > NUL ]
 +!ELSE IF ! [ $(CC) 2>&1 | grep -q "x64" > NUL ]
  ARCH = x64
+-!ELSE IF ! [ cl 2>&1 | find "ARM64" > NUL ]
++!ELSE IF ! [ $(CC) 2>&1 | grep -q "ARM64" > NUL ]
+ ARCH = ARM64
 -!ELSE IF ! [ cl 2>&1 | find "ARM" > NUL ]
 +!ELSE IF ! [ $(CC) 2>&1 | grep -q "ARM" > NUL ]
  ARCH = ARM
  !ELSE
  !ERROR Unable to auto-detect toolchain architecture! \
-@@ -28,8 +28,8 @@
+@@ -30,8 +30,8 @@
  ## Nothing more to do below this line!
  
  NOLOGO     = /nologo
@@ -26,7 +29,7 @@
  CFLAGS     = /I. /Isrc $(NOLOGO) /W3 /EHsc /c
  CFLAGS     = $(CFLAGS) /DWIN32 /D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN
  LDFLAGS    = /LARGEADDRESSAWARE /MANIFEST:EMBED /NXCOMPAT /DYNAMICBASE
-@@ -67,7 +67,7 @@
+@@ -69,7 +69,7 @@
  RTLIB   = /MD
  RTLIBD  = /MDd
  !ENDIF
@@ -35,7 +38,7 @@
  DIROBJ = $(DIRBASE)\obj
  DIRLIB = $(DIRBASE)\lib
  DIRINC = $(DIRBASE)\include
-@@ -87,10 +87,10 @@
+@@ -89,10 +89,10 @@
  
  # Target configuration
  !IF "$(CFG)" == "release-static"
@@ -48,7 +51,7 @@
  RTLIB          = $(RTLIBD)
  STATICLIBBUILD = TRUE
  LIBWEBPDECODER_BASENAME = $(LIBWEBPDECODER_BASENAME)_debug
-@@ -99,11 +99,11 @@
+@@ -101,11 +101,11 @@
  LIBWEBPDEMUX_BASENAME = $(LIBWEBPDEMUX_BASENAME)_debug
  LIBSHARPYUV_BASENAME = $(LIBSHARPYUV_BASENAME)_debug
  !ELSE IF "$(CFG)" == "release-dynamic"
@@ -62,7 +65,7 @@
  RC        = $(RCDEBUG)
  RTLIB     = $(RTLIBD)
  DLLBUILD  = TRUE
-@@ -115,7 +115,7 @@
+@@ -117,7 +117,7 @@
  !ENDIF
  
  !IF "$(STATICLIBBUILD)" == "TRUE"
@@ -71,7 +74,7 @@
  CFGSET = TRUE
  LIBWEBPDECODER = $(DIRLIB)\$(LIBWEBPDECODER_BASENAME).lib
  LIBWEBP = $(DIRLIB)\$(LIBWEBP_BASENAME).lib
-@@ -123,7 +123,7 @@
+@@ -125,7 +125,7 @@
  LIBWEBPDEMUX = $(DIRLIB)\$(LIBWEBPDEMUX_BASENAME).lib
  LIBSHARPYUV = $(DIRLIB)\$(LIBSHARPYUV_BASENAME).lib
  !ELSE IF "$(DLLBUILD)" == "TRUE"
@@ -80,7 +83,7 @@
  LIBWEBPDECODER = $(DIRLIB)\$(LIBWEBPDECODER_BASENAME)_dll.lib
  LIBWEBP = $(DIRLIB)\$(LIBWEBP_BASENAME)_dll.lib
  LIBWEBPMUX = $(DIRLIB)\$(LIBWEBPMUX_BASENAME)_dll.lib
-@@ -434,7 +434,7 @@
+@@ -438,7 +438,7 @@
  
  !IF "$(DLLBUILD)" == "TRUE"
  {$(DIROBJ)}.c{$(DIROBJ)}.obj:
@@ -89,7 +92,7 @@
  
  {src}.rc{$(DIROBJ)}.res:
  	$(RC) /fo$@ $<
-@@ -467,41 +467,41 @@
+@@ -471,41 +471,41 @@
  # File-specific flag builds. Note batch rules take precedence over wildcards,
  # so for now name each file individually.
  $(DIROBJ)\examples\anim_diff.obj: examples\anim_diff.c
