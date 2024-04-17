@@ -1151,10 +1151,19 @@ void ImplEESdrObject::Init()
     {
         // if it's a group, the unrotated range is needed for that group
         const basegfx::B2DRange aUnrotatedRange(getUnrotatedGroupBoundRange(mXShape));
-        const Point aNewP(basegfx::fround<tools::Long>(aUnrotatedRange.getMinX()), basegfx::fround<tools::Long>(aUnrotatedRange.getMinY()));
-        const Size aNewS(basegfx::fround<tools::Long>(aUnrotatedRange.getWidth()), basegfx::fround<tools::Long>(aUnrotatedRange.getHeight()));
+        if (aUnrotatedRange.isEmpty())
+        {
+            SetRect(tools::Rectangle());
+        }
+        else
+        {
+            const Point aNewP(basegfx::fround<tools::Long>(aUnrotatedRange.getMinX()),
+                              basegfx::fround<tools::Long>(aUnrotatedRange.getMinY()));
+            const Size aNewS(basegfx::fround<tools::Long>(aUnrotatedRange.getWidth()),
+                             basegfx::fround<tools::Long>(aUnrotatedRange.getHeight()));
 
-        SetRect(ImplEESdrWriter::ImplMapPoint(aNewP), ImplEESdrWriter::ImplMapSize(aNewS));
+            SetRect(ImplEESdrWriter::ImplMapPoint(aNewP), ImplEESdrWriter::ImplMapSize(aNewS));
+        }
     }
     else
     {
