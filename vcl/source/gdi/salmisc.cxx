@@ -234,6 +234,8 @@ std::optional<BitmapBuffer> StretchAndConvert(
     FncSetPixel     pFncSetPixel;
     std::optional<BitmapBuffer> pDstBuffer(std::in_place);
 
+
+    pDstBuffer->meDirection = rSrcBuffer.meDirection;
     // set function for getting pixels
     pFncGetPixel = BitmapReadAccess::GetPixelFunction(rSrcBuffer.meFormat);
     if( !pFncGetPixel )
