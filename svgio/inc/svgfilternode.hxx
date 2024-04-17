@@ -23,6 +23,7 @@
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/bitmapex.hxx>
 
 typedef std::unordered_map<OUString, drawinglayer::primitive2d::Primitive2DContainer>
     IdGraphicSourceMapper;
@@ -46,6 +47,8 @@ public:
                              drawinglayer::primitive2d::Primitive2DContainer pGraphicSource) const;
     const drawinglayer::primitive2d::Primitive2DContainer*
     findGraphicSource(const OUString& rStr) const;
+
+    static BitmapEx convertToBitmapEx(const drawinglayer::primitive2d::Primitive2DContainer* pSeq);
 };
 
 } // end of namespace svgio::svgreader

@@ -25,6 +25,10 @@
 #include <svgfegaussianblurnode.hxx>
 #include <svgfeoffsetnode.hxx>
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/converters.hxx>
+
 namespace svgio::svgreader
 {
 SvgFilterNode::SvgFilterNode(SVGToken aType, SvgDocument& rDocument, SvgNode* pParent)
@@ -89,6 +93,23 @@ SvgFilterNode::findGraphicSource(const OUString& rStr) const
     {
         return &aResult->second;
     }
+}
+
+BitmapEx
+SvgFilterNode::convertToBitmapEx(const drawinglayer::primitive2d::Primitive2DContainer* pSeq)
+{
+    drawinglayer::primitive2d::Primitive2DContainer aSequence(*pSeq);
+
+    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    basegfx::B2DRange aRange = aSequence.getB2DRange(aViewInformation2D);
+    basegfx::B2DHomMatrix aEmbedding(
+        basegfx::utils::createTranslateB2DHomMatrix(-aRange.getMinX(), -aRange.getMinY()));
+    aEmbedding.scale(aRange.getWidth(), aRange.getHeight());
+    const drawinglayer::primitive2d::Primitive2DReference xEmbedRef(
+        new drawinglayer::primitive2d::TransformPrimitive2D(aEmbedding, std::move(aSequence)));
+    drawinglayer::primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
+    return drawinglayer::convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
+                                           aRange.getWidth(), aRange.getHeight(), 500000);
 }
 
 } // end of namespace svgio::svgreader

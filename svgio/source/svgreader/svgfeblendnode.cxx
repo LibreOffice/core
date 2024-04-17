@@ -111,15 +111,7 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
         {
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
             aRange = pSource->getB2DRange(aViewInformation2D);
-            basegfx::B2DHomMatrix aEmbedding(
-                basegfx::utils::createTranslateB2DHomMatrix(-aRange.getMinX(), -aRange.getMinY()));
-            aEmbedding.scale(aRange.getWidth(), aRange.getHeight());
-            const drawinglayer::primitive2d::Primitive2DReference xEmbedRef(
-                new drawinglayer::primitive2d::TransformPrimitive2D(
-                    aEmbedding, drawinglayer::primitive2d::Primitive2DContainer(*pSource)));
-            drawinglayer::primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
-            aBmpEx = drawinglayer::convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
-                                                     aRange.getWidth(), aRange.getHeight(), 500000);
+            aBmpEx = convertToBitmapEx(pSource);
         }
 
         if (const drawinglayer::primitive2d::Primitive2DContainer* pSource2
@@ -127,16 +119,7 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
         {
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
             aRange2 = pSource2->getB2DRange(aViewInformation2D);
-            basegfx::B2DHomMatrix aEmbedding(basegfx::utils::createTranslateB2DHomMatrix(
-                -aRange2.getMinX(), -aRange2.getMinY()));
-            aEmbedding.scale(aRange2.getWidth(), aRange2.getHeight());
-            const drawinglayer::primitive2d::Primitive2DReference xEmbedRef(
-                new drawinglayer::primitive2d::TransformPrimitive2D(
-                    aEmbedding, drawinglayer::primitive2d::Primitive2DContainer(*pSource2)));
-            drawinglayer::primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
-            aBmpEx2
-                = drawinglayer::convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
-                                                  aRange2.getWidth(), aRange2.getHeight(), 500000);
+            aBmpEx2 = convertToBitmapEx(pSource2);
         }
 
         basegfx::B2DRectangle aBaseRect(std::min(aRange.getMinX(), aRange2.getMinX()),
