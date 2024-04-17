@@ -506,9 +506,6 @@ OUString AccObject::GetMAccessibleValueFromAny(Any pAny)
 {
     OUString strValue;
 
-    if(nullptr == m_pIMAcc)
-        return strValue;
-
     if(pAny.getValueType() == cppu::UnoType<cppu::UnoUnsignedShortType>::get() )
     {
         sal_uInt16 val;
