@@ -156,7 +156,7 @@ protected:
     // For FormatQuoVadis
     void Right( const SwTwips nNew ) { mnRight = nNew; }
 
-    void CtorInitTextMargin( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
+    SW_DLLPUBLIC void CtorInitTextMargin( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
     explicit SwTextMargin(SwTextNode const * pTextNode)
         : SwTextIter(pTextNode)
         , mnLeft(0)

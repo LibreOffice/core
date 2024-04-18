@@ -29,7 +29,7 @@ class SwRedlineItr;
 class SwViewShell;
 class SwTextFrame;
 
-class SwAttrIter
+class SAL_DLLPUBLIC_RTTI SwAttrIter
 {
     friend class SwFontSave;
 protected:
@@ -68,7 +68,7 @@ protected:
     void Chg( SwTextAttr const *pHt );
     void Rst( SwTextAttr const *pHt );
     void CtorInitAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const* pFrame = nullptr);
-    explicit SwAttrIter(SwTextNode const * pTextNode);
+    SW_DLLPUBLIC explicit SwAttrIter(SwTextNode const * pTextNode);
 
 public:
     /// All subclasses of this always have a SwTextFrame passed to the
@@ -76,7 +76,7 @@ public:
     /// SwTextFrame in certain special cases via this ctor here
     SwAttrIter(SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const*const pFrame = nullptr);
 
-    virtual ~SwAttrIter();
+    SW_DLLPUBLIC virtual ~SwAttrIter();
 
     SwRedlineItr *GetRedln() { return m_pRedline.get(); }
     // The parameter returns the position of the next change before or at the
