@@ -1088,11 +1088,6 @@ SAL_IMPLEMENT_MAIN()
                       "XInterface> const & the_object) { return ::com::sun::star::uno::Reference<"
                    << cppName(ifc)
                    << ">(the_object, ::com::sun::star::uno::UNO_QUERY); })\n"
-                      "        .constructor(+[](::com::sun::star::uno::Any const & the_object, "
-                      "[[maybe_unused]] ::unoembindhelpers::uno_Reference) { return "
-                      "::com::sun::star::uno::Reference<"
-                   << cppName(ifc)
-                   << ">(the_object, ::com::sun::star::uno::UNO_QUERY); })\n"
                       "        .function(\"$is\", +[](::com::sun::star::uno::Reference<"
                    << cppName(ifc)
                    << "> const & the_self) { return the_self.is(); })\n"

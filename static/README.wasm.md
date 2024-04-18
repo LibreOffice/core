@@ -246,7 +246,7 @@ xEnumAccess = new css.container.XEnumerationAccess(xText);
 xParaEnumeration = xEnumAccess.createEnumeration();
 
 while (xParaEnumeration.hasMoreElements()) {
-    xParagraph = new css.text.XTextRange(xParaEnumeration.nextElement(), Module.uno_Reference.FromAny);
+    xParagraph = new css.text.XTextRange(xParaEnumeration.nextElement().get());
     if (xParagraph.$is()) {
         xParaProps = new css.beans.XPropertySet(xParagraph);
         let color = new Module.uno_Any(
