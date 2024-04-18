@@ -227,7 +227,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
     while(nWhich)
     {
         bool bReadonly = GetDocShell()->IsReadOnly();
-        if ( bReadonly && nWhich != FN_VIEW_GRAPHIC )
+        if ( bReadonly && nWhich != FN_VIEW_GRAPHIC && nWhich != SID_AUTOSPELL_CHECK )
         {
             rSet.DisableItem(nWhich);
             nWhich = 0;

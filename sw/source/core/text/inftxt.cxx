@@ -49,14 +49,17 @@
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <frmtool.hxx>
+#include <fmteiro.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <paratr.hxx>
+#include <sectfrm.hxx>
 #include <rootfrm.hxx>
 #include "inftxt.hxx"
 #include <blink.hxx>
 #include <noteurl.hxx>
+#include <flyfrm.hxx>
 #include "porftn.hxx"
 #include "porrst.hxx"
 #include "itratr.hxx"
@@ -561,6 +564,30 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
     return pCol->IsDark();
 }
 
+static bool lcl_IsFrameReadonly(SwTextFrame* pFrame)
+{
+    const SwFlyFrame* pFly;
+    const SwSection* pSection;
+
+    if( pFrame && pFrame->IsInFly() &&
+        (pFly = pFrame->FindFlyFrame())->GetFormat()->GetEditInReadonly().GetValue() &&
+        pFly->Lower() &&
+        !pFly->Lower()->IsNoTextFrame() )
+    {
+        return false;
+    }
+    // edit in readonly sections
+    else if ( pFrame && pFrame->IsInSct() &&
+        nullptr != ( pSection = pFrame->FindSctFrame()->GetSection() ) &&
+        pSection->IsEditInReadonlyFlag() )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
 void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPor,
                                 TextFrameIndex const nStart, TextFrameIndex const nLength,
                                 const bool bKern, const bool bWrong,
@@ -617,7 +644,14 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     bool bCfgIsAutoGrammar = false;
     SvtLinguConfig().GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bCfgIsAutoGrammar;
     const bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
-    const bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell();
+    bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell();
+    SfxObjectShell* pObjShell = m_pFrame->GetDoc().GetDocShell();
+    if (bTmpWrong && pObjShell)
+    {
+        if (pObjShell->IsReadOnly() && lcl_IsFrameReadonly(m_pFrame))
+            bTmpWrong = false;
+    }
+
     const bool bTmpGrammarCheck = bGrammarCheck && OnWin() && bCfgIsAutoGrammar && GetOpt().IsOnlineSpell();
     const bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled();
 

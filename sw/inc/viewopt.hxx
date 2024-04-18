@@ -343,7 +343,7 @@ public:
         { SetCoreOption(b, ViewOptFlags1::GridVisible); }
 
     bool IsOnlineSpell() const
-        { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::OnlineSpell); }
+        { return bool(m_nCoreOptions & ViewOptFlags1::OnlineSpell); }
     void SetOnlineSpell( bool b );
 
     bool IsViewMetaChars() const
