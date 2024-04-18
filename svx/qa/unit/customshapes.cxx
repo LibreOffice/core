@@ -426,18 +426,14 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_Fontwork_rendering_font_siz
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
 
     // Without the fix in place left|top, width x height was 1279|1279, 2815 x 2448.
-    // The expected values 1501|1777, 3941 x 1446 are only valid for 96dpi.
+    // The expected values 1501|1777, 3947 x 1446 are only valid for 96dpi.
     tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
-    tools::Rectangle aExpected(Point(1501, 1777), Size(3941, 1446));
+    tools::Rectangle aExpected(Point(1501, 1777), Size(3947, 1446));
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpected, aBoundRect, 5);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
 {
-    // The tested positions depend on dpi.
-    if (!IsDefaultDPI())
-        return;
-
     // tdf#145004 In case ScaleX is true in property TextPath, SDRTEXTVERTADJUST is
     // evaluated and should shift the Fontwork text. That did not work for
     // 'Top-Left' and 'Bottom-Left'.
@@ -451,10 +447,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
         SdrObjCustomShape& rSdrCustomShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
 
-        // Without the fix in place top was 2295, but should be 2908 for 96dpi.
-        // Was 2184, should be 2886 for 120dpi.
+        // Without the fix in place top was 2295, but should be 2900.
         tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(2908), aBoundRect.Top(), 5);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(2900), aBoundRect.Top(), 5);
     }
     {
         // Second shape has anchor set to Bottom-Left, which shifts Fontwork text up.
@@ -462,10 +457,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
         SdrObjCustomShape& rSdrCustomShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
 
-        // Without the fix in place top was 10294, but should be 9508 for 96dpi.
-        // Was 10184, should be 9481 for 120dpi.
+        // Without the fix in place top was 10294, but should be 9500.
         tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(9508), aBoundRect.Top(), 5);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(9500), aBoundRect.Top(), 5);
     }
 }
 

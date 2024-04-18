@@ -237,7 +237,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleTextFontSpecificKerning)
     tools::Long nRefTextWidth = 2671;
     std::vector<sal_Int32> aRefCharWidths = { 1270, 2671 };
     KernArray aCharWidths;
-    tools::Long nTextWidth = pOutDev->GetTextArray(aAV, &aCharWidths);
+    tools::Long nTextWidth = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aAV, &aCharWidths));
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths.get_subunit_array()[0]);
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths.get_subunit_array()[1]);
@@ -286,7 +286,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleTextNoKerning)
     tools::Long nRefTextWidth = 2802;
     std::vector<sal_Int32> aRefCharWidths = { 1401, 2802 };
     KernArray aCharWidths;
-    tools::Long nTextWidth = pOutDev->GetTextArray(aAV, &aCharWidths);
+    tools::Long nTextWidth = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aAV, &aCharWidths));
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths.get_subunit_array()[0]);
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths.get_subunit_array()[1]);

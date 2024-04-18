@@ -38,7 +38,7 @@ static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr,
 
 {
     const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(pOut, rStr, nIndex, nLen);
-    return pOut->GetTextArray( rStr, pDXAry, nIndex, nLen, true, nullptr, layoutGlyphs);
+    return basegfx::fround<tools::Long>(pOut->GetTextArray( rStr, pDXAry, nIndex, nLen, true, nullptr, layoutGlyphs));
 }
 
 SvxFont::SvxFont()
@@ -719,7 +719,7 @@ void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     if (pDXAry)
     {
         KernArray aKernArray;
-        aPartSize.setWidth(pOut->GetTextArray(_rTxt, &aKernArray, _nIdx, _nLen));
+        aPartSize.setWidth(basegfx::fround<tools::Long>(pOut->GetTextArray(_rTxt, &aKernArray, _nIdx, _nLen)));
         assert(pDXAry->get_factor() == aKernArray.get_factor());
         auto& dest = pDXAry->get_subunit_array();
         sal_Int32 nStart = dest.empty() ? 0 : dest.back();

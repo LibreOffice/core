@@ -486,7 +486,7 @@ namespace vcl
     tools::Long DefaultTextLayout::GetTextArray( const OUString& _rText, KernArray* _pDXArray,
         sal_Int32 _nStartIndex, sal_Int32 _nLength, bool bCaret ) const
     {
-        return m_rTargetDevice.GetTextArray( _rText, _pDXArray, _nStartIndex, _nLength, bCaret );
+        return basegfx::fround<tools::Long>(m_rTargetDevice.GetTextArray( _rText, _pDXArray, _nStartIndex, _nLength, bCaret ));
     }
 
     sal_Int32 DefaultTextLayout::GetTextBreak( const OUString& _rText, tools::Long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
@@ -594,7 +594,7 @@ namespace vcl
             return 0;
 
         // retrieve the character widths from the reference device
-        tools::Long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength, bCaret );
+        tools::Long nTextWidth = basegfx::fround<tools::Long>(m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength, bCaret ));
 #if OSL_DEBUG_LEVEL > 1
         if ( _pDXAry )
         {
