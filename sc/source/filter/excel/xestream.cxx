@@ -745,7 +745,8 @@ OString XclXmlUtils::ToOString( const ScDocument& rDoc, const ScRange& rRange, b
 OString XclXmlUtils::ToOString( const ScDocument& rDoc, const ScRangeList& rRangeList )
 {
     OUString s;
-    rRangeList.Format(s, ScRefFlags::VALID, rDoc, FormulaGrammar::CONV_XL_OOX, ' ');
+    rRangeList.Format(s, ScRefFlags::VALID, rDoc, FormulaGrammar::CONV_XL_OOX, ' ',
+                      /*FullAddressNotation=*/true);
     return s.toUtf8();
 }
 
