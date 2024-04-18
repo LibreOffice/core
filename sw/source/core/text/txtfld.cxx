@@ -409,7 +409,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
 
     if (oFontBackColor)
         pNumFnt->SetBackColor(oFontBackColor);
-    if (aHighlight != COL_TRANSPARENT)
+    if (aHighlight != COL_TRANSPARENT && !pCleanedSet->HasItem(RES_CHRATR_HIGHLIGHT))
         pNumFnt->SetHighlightColor(aHighlight);
 }
 

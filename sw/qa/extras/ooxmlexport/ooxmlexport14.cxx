@@ -965,6 +965,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     assertXPath(pXmlStyles, "//w:style[@w:styleId='CustomParaStyleHighlightGreen']/w:rPr/w:highlight"_ostr, "val"_ostr, "green");
+    // Visually, the last bullet point's text should be green-highlighted (but the bullet point itself shouldn't)
 
     if (bWasExportToShade)
     {
