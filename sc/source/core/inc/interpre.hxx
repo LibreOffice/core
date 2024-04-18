@@ -83,6 +83,7 @@ struct VectorSearchArguments
     SCTAB nTab2 = 0;
     ScMatrixRef pMatSrc;
     bool isStringSearch = true;
+    bool isEmptySearch = false;
     double fSearchVal;
     svl::SharedString sSearchStr;
     bool bVLookup;

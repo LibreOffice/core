@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2024-01-16T18:30:06.278000000</meta:creation-date><meta:editing-duration>PT1H22M11S</meta:editing-duration><meta:editing-cycles>26</meta:editing-cycles><meta:generator>LibreOfficeDev/24.8.0.0.alpha0$Windows_X86_64 LibreOffice_project/3f63df475b9c7039d93d0d66c74c4d0ad7989486</meta:generator><dc:date>2024-02-27T14:15:45.125000000</dc:date><meta:document-statistic meta:table-count="2" meta:cell-count="888" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2024-01-16T18:30:06.278000000</meta:creation-date><meta:editing-duration>PT1H51M16S</meta:editing-duration><meta:editing-cycles>29</meta:editing-cycles><meta:generator>LibreOfficeDev/24.8.0.0.alpha0$Windows_X86_64 LibreOffice_project/24914caa6013b41b6614710322a3084cf4a2aa10</meta:generator><dc:date>2024-04-18T19:16:45.855000000</dc:date><meta:document-statistic meta:table-count="2" meta:cell-count="924" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
@@ -14,7 +14,7 @@
      <config:config-item-map-named config:name="Tables">
       <config:config-item-map-entry config:name="Sheet1">
        <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">4</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">0</config:config-item>
        <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
@@ -31,12 +31,12 @@
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
        <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">128</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">133</config:config-item>
        <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">46</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">90</config:config-item>
        <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
        <config:config-item config:name="ZoomValue" config:type="int">65</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -48,7 +48,7 @@
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet1</config:config-item>
-     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">2479</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1677</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">65</config:config-item>
      <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -1353,6 +1353,194 @@
    <style:map style:condition="value()&lt;0" style:apply-style-name="N344P1"/>
    <style:map style:condition="value()=0" style:apply-style-name="N344P2"/>
   </number:text-style>
+  <number:number-style style:name="N345P0" style:volatile="true">
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+  </number:number-style>
+  <number:number-style style:name="N345">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N345P0"/>
+  </number:number-style>
+  <number:number-style style:name="N346P0" style:volatile="true">
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+  </number:number-style>
+  <number:number-style style:name="N346">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N346P0"/>
+  </number:number-style>
+  <number:number-style style:name="N347P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+  </number:number-style>
+  <number:number-style style:name="N347">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N347P0"/>
+  </number:number-style>
+  <number:number-style style:name="N348P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+  </number:number-style>
+  <number:number-style style:name="N348">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> Ft</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N348P0"/>
+  </number:number-style>
+  <number:number-style style:name="N349P0" style:volatile="true">
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+  </number:number-style>
+  <number:number-style style:name="N349">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N349P0"/>
+  </number:number-style>
+  <number:number-style style:name="N350P0" style:volatile="true">
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+  </number:number-style>
+  <number:number-style style:name="N350">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N350P0"/>
+  </number:number-style>
+  <number:number-style style:name="N351P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+  </number:number-style>
+  <number:number-style style:name="N351">
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N351P0"/>
+  </number:number-style>
+  <number:number-style style:name="N352P0" style:volatile="true">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+  </number:number-style>
+  <number:number-style style:name="N352">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3">    </number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N352P0"/>
+  </number:number-style>
+  <number:number-style style:name="N353P0" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:number-style style:name="N353P1" style:volatile="true">
+   <number:text>-</number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:number-style style:name="N353P2" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:text loext:blank-width-char="F2_t4_-5">-     </number:text>
+  </number:number-style>
+  <number:text-style style:name="N353">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:text-content/>
+   <number:text loext:blank-width-char="-"> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N353P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N353P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N353P2"/>
+  </number:text-style>
+  <number:number-style style:name="N354P0" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:number-style style:name="N354P1" style:volatile="true">
+   <number:text>-</number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:number-style style:name="N354P2" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:text loext:blank-width-char="-4">- Ft </number:text>
+  </number:number-style>
+  <number:text-style style:name="N354">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:text-content/>
+   <number:text loext:blank-width-char="-"> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N354P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N354P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N354P2"/>
+  </number:text-style>
+  <number:number-style style:name="N355P0" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:number-style style:name="N355P1" style:volatile="true">
+   <number:text>-</number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:number-style style:name="N355P2" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="2" loext:max-blank-integer-digits="2"/>
+   <number:text loext:blank-width-char="F1_t3_-4">     </number:text>
+  </number:number-style>
+  <number:text-style style:name="N355">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:text-content/>
+   <number:text loext:blank-width-char="-"> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N355P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N355P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N355P2"/>
+  </number:text-style>
+  <number:number-style style:name="N356P0" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:number-style style:name="N356P1" style:volatile="true">
+   <number:text>-</number:text>
+   <number:fill-character> </number:fill-character>
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:number-style style:name="N356P2" style:volatile="true">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:fill-character> </number:fill-character>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="0" number:min-decimal-places="0" number:min-integer-digits="2" loext:max-blank-integer-digits="2"/>
+   <number:text loext:blank-width-char="-3"> Ft </number:text>
+  </number:number-style>
+  <number:text-style style:name="N356">
+   <number:text loext:blank-width-char="-"> </number:text>
+   <number:text-content/>
+   <number:text loext:blank-width-char="-"> </number:text>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N356P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N356P1"/>
+   <style:map style:condition="value()=0" style:apply-style-name="N356P2"/>
+  </number:text-style>
   <number:date-style style:name="N10129" number:language="en" number:country="US">
    <number:month/>
    <number:text>/</number:text>
@@ -1912,6 +2100,10 @@
   <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
   </style:style>
+  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
+   <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
+   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0cm" style:writing-mode="page"/>
+  </style:style>
   <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0"/>
   <style:page-layout style:name="pm1">
    <style:page-layout-properties style:writing-mode="lr-tb"/>
@@ -1955,7 +2147,7 @@
      <text:p><text:sheet-name>???</text:sheet-name><text:s/>(<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2024-02-27">0000.00.00</text:date>, <text:time style:data-style-name="N2" text:time-value="14:14:04.231000000">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2024-04-18">0000.00.00</text:date>, <text:time style:data-style-name="N2" text:time-value="18:47:40">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -5079,7 +5271,14 @@
      <table:table-cell table:formula="of:=FORMULA([.A120])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;0;-2)" calcext:value-type="string">
       <text:p>=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;0;-2)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>Quarter</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>Amount</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.R$1:.R$11];[.T$1:.T$11];;-1;-2)" office:value-type="string" office:string-value="I" calcext:value-type="string">
@@ -5094,7 +5293,14 @@
      <table:table-cell table:formula="of:=FORMULA([.A121])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;-1;-2)" calcext:value-type="string">
       <text:p>=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;-1;-2)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>Q1-2023</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" office:value-type="float" office:value="89" calcext:value-type="float">
+      <text:p>89</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.R$1:.R$11];[.T$1:.T$11];;1;-2)" office:value-type="string" office:string-value="g" calcext:value-type="string">
@@ -5109,7 +5315,14 @@
      <table:table-cell table:formula="of:=FORMULA([.A122])" office:value-type="string" office:string-value="=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;1;-2)" calcext:value-type="string">
       <text:p>=XLOOKUP($O$1;R$1:R$11;T$1:T$11;;1;-2)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>Q2-2023</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" office:value-type="float" office:value="67" calcext:value-type="float">
+      <text:p>67</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.S$1:.S$11];[.T$1:.T$11];;0;-2)" office:value-type="string" office:string-value="h" calcext:value-type="string">
@@ -5124,7 +5337,14 @@
      <table:table-cell table:formula="of:=FORMULA([.A123])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;0;-2)" calcext:value-type="string">
       <text:p>=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;0;-2)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>Q3-2023</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" office:value-type="float" office:value="50" calcext:value-type="float">
+      <text:p>50</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.S$1:.S$11];[.T$1:.T$11];;-1;-2)" office:value-type="string" office:string-value="h" calcext:value-type="string">
@@ -5139,7 +5359,14 @@
      <table:table-cell table:formula="of:=FORMULA([.A124])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;-1;-2)" calcext:value-type="string">
       <text:p>=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;-1;-2)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>Q4-2023</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" office:value-type="float" office:value="123" calcext:value-type="float">
+      <text:p>123</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.$O$1];[.S$1:.S$11];[.T$1:.T$11];;1;-2)" office:value-type="string" office:string-value="h" calcext:value-type="string">
@@ -5154,12 +5381,24 @@
      <table:table-cell table:formula="of:=FORMULA([.A125])" office:value-type="string" office:string-value="=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;1;-2)" calcext:value-type="string">
       <text:p>=XLOOKUP($O$1;S$1:S$11;T$1:T$11;;1;-2)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>Q1-2024</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" office:value-type="float" office:value="78" calcext:value-type="float">
+      <text:p>78</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce18"/>
-     <table:table-cell table:number-columns-repeated="17"/>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce21"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>leer7</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.N25];[.K22:.K26];[.L22:.L26];COM.MICROSOFT.XLOOKUP([.N25];[.P22:.P26];[.Q22:.Q26]))" office:value-type="float" office:value="16" calcext:value-type="float">
@@ -5174,7 +5413,12 @@
      <table:table-cell table:formula="of:=FORMULA([.A127])" office:value-type="string" office:string-value="=XLOOKUP(N25;K22:K26;L22:L26;XLOOKUP(N25;P22:P26;Q22:Q26))" calcext:value-type="string">
       <text:p>=XLOOKUP(N25;K22:K26;L22:L26;XLOOKUP(N25;P22:P26;Q22:Q26))</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce21"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>leer8</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP([.N26];[.K22:.K26];[.L22:.L26];COM.MICROSOFT.XLOOKUP([.N26];[.P22:.P26];[.Q22:.Q26]))" office:value-type="float" office:value="86" calcext:value-type="float">
@@ -5189,9 +5433,99 @@
      <table:table-cell table:formula="of:=FORMULA([.A128])" office:value-type="string" office:string-value="=XLOOKUP(N26;K22:K26;L22:L26;XLOOKUP(N26;P22:P26;Q22:Q26))" calcext:value-type="string">
       <text:p>=XLOOKUP(N26;K22:K26;L22:L26;XLOOKUP(N26;P22:P26;Q22:Q26))</text:p>
      </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce21"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>leer9</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce18"/>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce21"/>
+     <table:table-cell table:style-name="ce21" office:value-type="string" calcext:value-type="string">
+      <text:p>leer10</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP( ;[.H$121:.H$129];[.H$121:.H$129])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A130]=[.B130]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A130])" office:value-type="string" office:string-value="=XLOOKUP( ;H$121:H$129;H$121:H$129)" calcext:value-type="string">
+      <text:p>=XLOOKUP( ;H$121:H$129;H$121:H$129)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="74">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.XLOOKUP( ;[.H$121:.H$129];[.I$121:.I$129])" office:value-type="string" office:string-value="leer7" calcext:value-type="string">
+      <text:p>leer7</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>leer7</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A131]=[.B131]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A131])" office:value-type="string" office:string-value="=XLOOKUP( ;H$121:H$129;I$121:I$129)" calcext:value-type="string">
+      <text:p>=XLOOKUP( ;H$121:H$129;I$121:I$129)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=CELL(&quot;ADDRESS&quot;;COM.MICROSOFT.XLOOKUP( ;[.H$121:.H$129];[.H$121:.H$129]))" office:value-type="string" office:string-value="$H$126" calcext:value-type="string">
+      <text:p>$H$126</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>$H$126</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A132]=[.B132]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A132])" office:value-type="string" office:string-value="=CELL(&quot;ADDRESS&quot;;XLOOKUP( ;H$121:H$129;H$121:H$129))" calcext:value-type="string">
+      <text:p>=CELL(&quot;ADDRESS&quot;;XLOOKUP( ;H$121:H$129;H$121:H$129))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=CELL(&quot;ADDRESS&quot;;COM.MICROSOFT.XLOOKUP( ;[.H$121:.H$129];[.I$121:.I$129]))" office:value-type="string" office:string-value="$I$126" calcext:value-type="string">
+      <text:p>$I$126</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>$I$126</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A133]=[.B133]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A133])" office:value-type="string" office:string-value="=CELL(&quot;ADDRESS&quot;;XLOOKUP( ;H$121:H$129;I$121:I$129))" calcext:value-type="string">
+      <text:p>=CELL(&quot;ADDRESS&quot;;XLOOKUP( ;H$121:H$129;I$121:I$129))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=ROW(COM.MICROSOFT.XLOOKUP( ;[.H$121:.H$129];[.I$121:.I$129]))" office:value-type="float" office:value="126" calcext:value-type="float">
+      <text:p>126</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="126" calcext:value-type="float">
+      <text:p>126</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=[.A134]=[.B134]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>IGAZ</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A134])" office:value-type="string" office:string-value="=ROW(XLOOKUP( ;H$121:H$129;I$121:I$129))" calcext:value-type="string">
+      <text:p>=ROW(XLOOKUP( ;H$121:H$129;I$121:I$129))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="68">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce18"/>
      <table:table-cell table:number-columns-repeated="17"/>

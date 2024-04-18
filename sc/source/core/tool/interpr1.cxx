@@ -7960,8 +7960,17 @@ void ScInterpreter::ScXLookup()
     // 1st argument is search value
     if (nGlobalError == FormulaError::NONE)
     {
-        switch ( GetStackType() )
+        switch ( GetRawStackType() )
         {
+            case svMissing:
+            case svEmptyCell:
+            {
+                vsa.isEmptySearch = true;
+                vsa.isStringSearch = false;
+                vsa.sSearchStr = GetString();
+            }
+            break;
+
             case svDouble:
             {
                 vsa.isStringSearch = false;
@@ -11482,6 +11491,11 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
             else
                 rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), mrDoc);
         }
+    }
+    else if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP && vsa.isEmptySearch )
+    {
+        rEntry.SetQueryByEmpty();
+        rItem.mbMatchEmpty = true;
     }
     else
     {
