@@ -250,6 +250,14 @@ inline bool isPureVirtual(clang::FunctionDecl const * decl) {
 #endif
 }
 
+inline bool isUnnamedBitField(clang::FieldDecl const * decl) {
+#if CLANG_VERSION >= 190000
+    return decl->isUnnamedBitField();
+#else
+    return decl->isUnnamedBitfield();
+#endif
+}
+
 inline clang::TemplateTypeParmDecl const * getReplacedParameter(
     clang::SubstTemplateTypeParmType const * type)
 {

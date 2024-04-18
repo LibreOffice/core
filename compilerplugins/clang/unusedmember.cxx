@@ -155,7 +155,7 @@ public:
             }
             if (auto const d1 = dyn_cast<FieldDecl>(d))
             {
-                if (d1->isUnnamedBitfield())
+                if (compat::isUnnamedBitField(d1))
                 {
                     continue;
                 }
