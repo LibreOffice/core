@@ -1033,12 +1033,16 @@ public:
     tools::Long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                   vcl::text::TextLayoutCache const* = nullptr,
                                   SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
+    double GetTextWidthDouble(const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                              vcl::text::TextLayoutCache const* = nullptr,
+                              SalLayoutGlyphs const* const pLayoutCache = nullptr) const;
 
     /** Height where any character of the current font fits; in logic coordinates.
 
         See also GetTextBoundRect() for more explanation + code examples.
     */
     tools::Long                        GetTextHeight() const;
+    double GetTextHeightDouble() const;
     float                       approximate_digit_width() const;
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
@@ -1048,7 +1052,7 @@ public:
                                                sal_Int32 nLen,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                const SalLayoutGlyphs* pLayoutCache = nullptr);
-    tools::Long                        GetTextArray( const OUString& rStr, KernArray* pDXAry,
+    double                      GetTextArray( const OUString& rStr, KernArray* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1, bool bCaret = false,
                                               vcl::text::TextLayoutCache const* = nullptr,
                                               SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
@@ -1840,6 +1844,9 @@ private:
      @returns Device's Y pixel coordinate
      */
     SAL_DLLPRIVATE tools::Long         ImplLogicYToDevicePixel( tools::Long nY ) const;
+
+    SAL_DLLPRIVATE double ImplDevicePixelToLogicWidthDouble(double nWidth) const;
+    SAL_DLLPRIVATE double ImplDevicePixelToLogicHeightDouble(double nHeight) const;
 
     /** @name Native Widget Rendering functions
 

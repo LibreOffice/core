@@ -406,10 +406,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_Fontwork_rendering_font_siz
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
 {
-    // The tested positions depend on dpi.
-    if (!IsDefaultDPI())
-        return;
-
     // tdf#145004 In case ScaleX is true in property TextPath, SDRTEXTVERTADJUST is
     // evaluated and should shift the Fontwork text. That did not work for
     // 'Top-Left' and 'Bottom-Left'.
@@ -423,8 +419,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
         SdrObjCustomShape& rSdrCustomShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
 
-        // Without the fix in place top was 2295, but should be 2916 for 96dpi.
-        // Was 2184, should be 2886 for 120dpi.
+        // Without the fix in place top was 2295, but should be 2900.
         tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(2916), aBoundRect.Top(), 5);
     }
@@ -434,8 +429,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
         SdrObjCustomShape& rSdrCustomShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
 
-        // Without the fix in place top was 10294, but should be 9519 for 96dpi.
-        // Was 10184, should be 9481 for 120dpi.
+        // Without the fix in place top was 10294, but should be 9500.
         tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(9519), aBoundRect.Top(), 5);
     }

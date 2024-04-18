@@ -3673,7 +3673,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106234)
                 "type", "PortionType::Margin");
     // This was a justified line, without width
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwGluePortion",
-                "width", "7881");
+                "width", "7882");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287b)
@@ -3686,7 +3686,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287b)
     assertXPath(
         pXmlDoc,
         "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']",
-        "width", "17");
+        "width", "19");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf120287c)
@@ -3819,7 +3819,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607)
     assertXPath(pXmlDoc,
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
                 "fly/txt/SwParaPortion/SwLineLayout/child::*[1]",
-                "width", "428");
+                "width", "427");
     assertXPath(pXmlDoc,
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
                 "fly/txt/SwParaPortion/SwLineLayout/child::*[1]",

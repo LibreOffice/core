@@ -272,6 +272,19 @@ static tools::Long ImplPixelToLogic(tools::Long n, tools::Long nDPI, tools::Long
     return n;
 }
 
+static double ImplPixelToLogicDouble(double n, tools::Long nDPI, tools::Long nMapNum,
+                                     tools::Long nMapDenom)
+{
+    assert(nDPI > 0);
+    if (nMapNum == 0)
+        return 0;
+
+    n *= nMapDenom;
+    n /= nDPI;
+    n /= nMapNum;
+    return n;
+}
+
 tools::Long OutputDevice::ImplLogicXToDevicePixel( tools::Long nX ) const
 {
     if ( !mbMap )
@@ -314,12 +327,28 @@ tools::Long OutputDevice::ImplDevicePixelToLogicWidth( tools::Long nWidth ) cons
     return ImplPixelToLogic(nWidth, mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
 }
 
+SAL_DLLPRIVATE double OutputDevice::ImplDevicePixelToLogicWidthDouble(double nWidth) const
+{
+    if (!mbMap)
+        return nWidth;
+
+    return ImplPixelToLogicDouble(nWidth, mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
+}
+
 tools::Long OutputDevice::ImplDevicePixelToLogicHeight( tools::Long nHeight ) const
 {
     if ( !mbMap )
         return nHeight;
 
     return ImplPixelToLogic(nHeight, mnDPIY, maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY);
+}
+
+double OutputDevice::ImplDevicePixelToLogicHeightDouble(double nHeight) const
+{
+    if (!mbMap)
+        return nHeight;
+
+    return ImplPixelToLogicDouble(nHeight, mnDPIY, maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY);
 }
 
 Point OutputDevice::ImplLogicToDevicePixel( const Point& rLogicPt ) const
