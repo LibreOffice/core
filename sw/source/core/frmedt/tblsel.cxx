@@ -1878,9 +1878,18 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
             // erroneous results could occur during split/merge.
             // To prevent these we will determine the first and last row
             // within the union and use their values for a new union
-            const SwLayoutFrame* pRow = pTable->IsFollow() ?
-                                      pTable->GetFirstNonHeadlineRow() :
-                                      static_cast<const SwLayoutFrame*>(pTable->Lower());
+            const SwLayoutFrame* pRow = nullptr;
+            if (pTable->IsFollow())
+            {
+                SwRowFrame* pRowFrame = pTable->GetFirstNonHeadlineRow();
+                //tdf#159027: follow returns a frame without height if
+                // merged cells are invoved
+                if (pRowFrame->getFrameArea().IsEmpty())
+                    pRowFrame = static_cast<SwRowFrame*>(pRowFrame->GetNext());
+                pRow = pRowFrame;
+            }
+            else
+                pRow = static_cast<const SwLayoutFrame*>(pTable->Lower());
 
             while ( pRow && !pRow->getFrameArea().Overlaps( aUnion ) )
                 pRow = static_cast<const SwLayoutFrame*>(pRow->GetNext());
