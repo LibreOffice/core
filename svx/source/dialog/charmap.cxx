@@ -952,7 +952,7 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x0000, 0x007F, SvxResId(RID_SUBSETSTR_BASIC_LATIN) );
                     break;
                 case UBLOCK_LATIN_1_SUPPLEMENT:
-                    aAllSubsets.emplace_back( 0x0080, 0x00FF, SvxResId(RID_SUBSETSTR_LATIN_1) );
+                    aAllSubsets.emplace_back( 0x0080, 0x00FF, SvxResId(RID_SUBSETSTR_LATIN_1_SUPPLEMENT) );
                     break;
                 case UBLOCK_LATIN_EXTENDED_A:
                     aAllSubsets.emplace_back( 0x0100, 0x017F, SvxResId(RID_SUBSETSTR_LATIN_EXTENDED_A) );
