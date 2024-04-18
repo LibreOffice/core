@@ -79,7 +79,7 @@ void VclComplexTextTest::testArabic()
     std::vector<sal_Int32> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
     KernArray aCharWidths;
-    tools::Long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, &aCharWidths);
+    tools::Long nTextWidth = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aOneTwoThree, &aCharWidths));
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
     // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73

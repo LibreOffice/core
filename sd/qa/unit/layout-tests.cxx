@@ -103,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
     xmlDocUniquePtr pXmlDoc = load("pptx/tdf128212.pptx");
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 7793
+    // - Expected: 7795
     // - Actual  : 12068
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "x", "4525");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "y", "7797");
@@ -310,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", "406");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "first", "114");
 #ifndef _WIN32 // Windows seems to differ in text layouting, so ignore for now
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "last", "7010");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]/dxarray", "last", "6984");
 #endif
 }
 

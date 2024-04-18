@@ -166,7 +166,7 @@ namespace vcl
             return 0;
 
         // retrieve the character widths from the reference device
-        tools::Long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength );
+        tools::Long nTextWidth = basegfx::fround<tools::Long>(m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength ));
 #if OSL_DEBUG_LEVEL > 1
         if ( _pDXAry )
         {

@@ -37,7 +37,7 @@ static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr,
 
 {
     const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(pOut, rStr, nIndex, nLen);
-    return pOut->GetTextArray( rStr, pDXAry, nIndex, nLen, true, nullptr, layoutGlyphs);
+    return basegfx::fround<tools::Long>(pOut->GetTextArray( rStr, pDXAry, nIndex, nLen, true, nullptr, layoutGlyphs));
 }
 
 SvxFont::SvxFont()

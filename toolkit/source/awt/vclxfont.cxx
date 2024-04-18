@@ -156,7 +156,7 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, css::uno::Sequence
         vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
         KernArray aDXA;
-        nRet = pOutDev->GetTextArray( str, &aDXA );
+        nRet = basegfx::fround(pOutDev->GetTextArray(str, &aDXA));
         rDXArray.realloc(aDXA.size());
         sal_Int32* pArray = rDXArray.getArray();
         for (size_t i = 0, nLen = aDXA.size(); i < nLen; ++i)
