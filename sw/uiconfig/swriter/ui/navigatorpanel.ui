@@ -283,6 +283,11 @@
                                     <attribute name="pixbuf">2</attribute>
                                   </attributes>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="NavElementWidget-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|accessible_name|navigateby">Navigate By</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
