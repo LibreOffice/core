@@ -3935,11 +3935,11 @@ reg_get_value()
     unset regvalue
 
     if test "$build_os" = "wsl"; then
-        regvalue=$($WSL_LO_HELPER --read-registry $1 "$2" 2>/dev/null)
+        regvalue=$($WSL_LO_HELPER --read-registry $1 "$2/$3" 2>/dev/null)
         return
     fi
 
-    local _regentry="/proc/registry${1}/${2}"
+    local _regentry="/proc/registry${1}/${2}/${3}"
     if test -f "$_regentry"; then
         # Stop bash complaining about \0 bytes in input, as it can't handle them.
         # Registry keys read via /proc/registry* are always \0 terminated!
@@ -3953,13 +3953,13 @@ reg_get_value()
 # Get a value from the 32-bit side of the Registry
 reg_get_value_32()
 {
-    reg_get_value "32" "$1"
+    reg_get_value "32" "$1" "$2"
 }
 
 # Get a value from the 64-bit side of the Registry
 reg_get_value_64()
 {
-    reg_get_value "64" "$1"
+    reg_get_value "64" "$1" "$2"
 }
 
 reg_list_values()
@@ -4158,12 +4158,15 @@ win_get_env_from_vsdevcmdbat()
 
 find_ucrt()
 {
-    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/InstallationFolder"
+    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0" "InstallationFolder"
     if test -n "$regvalue"; then
         PathFormat "$regvalue"
         UCRTSDKDIR=$formatted_path_unix
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
-        UCRTVERSION=$regvalue
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0" "ProductVersion"
+        if test -n "$regvalue"; then
+            UCRTVERSION="$regvalue".0
+        fi
+
         # Rest if not exist
         if ! test -d "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"; then
           UCRTSDKDIR=
@@ -4352,7 +4355,7 @@ if test "$_os" = "WINNT"; then
 
     AC_MSG_CHECKING([for MSBuild.exe location for: $vcnumwithdot])
     # Find the proper version of MSBuild.exe to use based on the VS version
-    reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
+    reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot MSBuildOverrideTasksPath
     if test -z "$regvalue" ; then
         if test "$WIN_BUILD_ARCH" != "x64"; then
             regvalue="$VC_PRODUCT_DIR/../MSBuild/Current/Bin"
@@ -6649,7 +6652,7 @@ find_csc()
 
     unset csctest
 
-    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
+    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client" "InstallPath"
     if test -n "$regvalue"; then
         csctest=$regvalue
         return
@@ -6664,7 +6667,7 @@ find_al()
 
     # We need this check to detect 4.6.1 or above.
     for ver in 4.8.1 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools" "InstallationFolder"
         PathFormat "$regvalue"
         if test -n "$regvalue" -a \( -f "$formatted_path_unix/al.exe" -o -f "$formatted_path_unix/bin/al.exe" \); then
             altest=$regvalue
@@ -6674,7 +6677,7 @@ find_al()
 
     reg_list_values_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows"
     for x in $reglist; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools" "InstallationFolder"
         PathFormat "$regvalue"
         if test -n "$regvalue" -a \( -f "$formatted_path_unix/al.exe" -o -f "$formatted_path_unix/bin/al.exe" \); then
             altest=$regvalue
@@ -6688,7 +6691,7 @@ find_dotnetsdk()
     unset frametest
 
     for ver in 4.8.1 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver" "KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
             return
@@ -6706,7 +6709,7 @@ find_winsdk_version()
 
     case "$1" in
     8.0|8.0A)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots" "KitsRoot"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             winsdklibsubdir=win8
@@ -6714,7 +6717,7 @@ find_winsdk_version()
         fi
         ;;
     8.1|8.1A)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots" "KitsRoot81"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             winsdklibsubdir=winv6.3
@@ -6722,10 +6725,10 @@ find_winsdk_version()
         fi
         ;;
     10.0)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}" "InstallationFolder"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
-            reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/ProductVersion"
+            reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}" "ProductVersion"
             if test -n "$regvalue"; then
                 winsdkbinsubdir="$regvalue".0
                 winsdklibsubdir=$winsdkbinsubdir
@@ -8701,10 +8704,10 @@ if test "$ENABLE_JAVA" != ""; then
         if test -z "$with_jdk_home"; then
             dnl See <https://docs.oracle.com/javase/9/migrate/toc.htm#JSMIG-GUID-EEED398E-AE37-4D12-
             dnl AB10-49F82F720027> section "Windows Registry Key Changes":
-            reg_get_value "$WIN_HOST_BITS" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/CurrentVersion"
+            reg_get_value "$WIN_HOST_BITS" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK" "CurrentVersion"
             if test -n "$regvalue"; then
                 ver=$regvalue
-                reg_get_value "$WIN_HOST_BITS" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/$ver/JavaHome"
+                reg_get_value "$WIN_HOST_BITS" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/$ver" "JavaHome"
                 with_jdk_home=$regvalue
             fi
             howfound="found automatically"
