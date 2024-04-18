@@ -22172,6 +22172,7 @@ public:
             g_signal_connect(getContainer(), "query-tooltip", G_CALLBACK(signalComboTooltipQuery), this);
         }
 
+        // take over a11y characteristics from the stock GtkComboBox to the toggle button
         if (AtkObject* pComboBoxAccessible = gtk_widget_get_accessible(GTK_WIDGET(m_pComboBox)))
         {
             if (AtkObject* pToggleButtonAccessible = gtk_widget_get_accessible(GTK_WIDGET(m_pToggleButton)))
@@ -22181,6 +22182,20 @@ public:
                     atk_object_set_name(pToggleButtonAccessible, pName);
                 if (const char* pDesc = atk_object_get_description(pComboBoxAccessible))
                     atk_object_set_description(pToggleButtonAccessible, pDesc);
+
+                if (AtkRelationSet* pComboBoxRelationSet = atk_object_ref_relation_set(pComboBoxAccessible))
+                {
+                    AtkRelationSet* pToggleButtonRelationSet = atk_object_ref_relation_set(pToggleButtonAccessible);
+                    assert(pToggleButtonRelationSet);
+                    for (int i = 0; i < atk_relation_set_get_n_relations(pComboBoxRelationSet); i++)
+                    {
+                        AtkRelation* pRelation = atk_relation_set_get_relation(pComboBoxRelationSet, i);
+                        assert(pRelation);
+                        atk_relation_set_add(pToggleButtonRelationSet, pRelation);
+                    }
+                    g_object_unref(pComboBoxRelationSet);
+                    g_object_unref(pToggleButtonRelationSet);
+                }
             }
         }
 
