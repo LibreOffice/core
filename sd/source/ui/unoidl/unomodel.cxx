@@ -2556,7 +2556,7 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
 
         for (const rtl::Reference<Annotation>& xAnnotation : aPageAnnotations)
         {
-            sal_uInt32 nID = sd::getAnnotationId(xAnnotation);
+            sal_uInt32 nID = xAnnotation->GetId();
             OString nodeName = "comment" + OString::number(nID);
             auto commentNode = rJsonWriter.startNode(nodeName);
             rJsonWriter.put("id", nID);
