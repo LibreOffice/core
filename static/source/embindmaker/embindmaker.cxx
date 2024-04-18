@@ -1082,18 +1082,15 @@ SAL_IMPLEMENT_MAIN()
                       "        .smart_ptr<::com::sun::star::uno::Reference<"
                    << cppName(ifc) << ">>(\"uno_Reference_" << jsName(ifc)
                    << "\")\n"
+                      "        .class_function(\"query\", "
+                      "+[](::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface> "
+                      "const & the_object) { return ::com::sun::star::uno::Reference<"
+                   << cppName(ifc)
+                   << ">(the_object, ::com::sun::star::uno::UNO_QUERY); })\n"
                       "        .class_function(\"reference\", +[]("
                    << cppName(ifc)
                    << " * the_interface) { return ::com::sun::star::uno::Reference(the_interface); "
                       "}, ::emscripten::allow_raw_pointers())\n"
-                      "        "
-                      ".constructor(+[](::com::sun::star::uno::Reference<::com::sun::star::uno::"
-                      "XInterface> const & the_object) { return ::com::sun::star::uno::Reference<"
-                   << cppName(ifc)
-                   << ">(the_object, ::com::sun::star::uno::UNO_QUERY); })\n"
-                      "        .function(\"$is\", +[](::com::sun::star::uno::Reference<"
-                   << cppName(ifc)
-                   << "> const & the_self) { return the_self.is(); })\n"
                       "        .function(\"$equals\", +[](::com::sun::star::uno::Reference<"
                    << cppName(ifc)
                    << "> const & the_self, "

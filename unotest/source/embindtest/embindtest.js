@@ -517,6 +517,17 @@ Module.addOnPostRun(function() {
         console.assert(test.isSequenceStruct(v));
         v.delete();
     }
+    {
+        let v = test.getNull();
+        console.log(v);
+        console.assert(v === null);
+        console.assert(test.isNull(v));
+    }
+    {
+        let v = css.task.XJob.query(test);
+        console.log(v);
+        console.assert(v === null);
+    }
     console.assert(uno.org.libreoffice.embindtest.Constants.Boolean === true);
     console.assert(test.isBoolean(uno.org.libreoffice.embindtest.Constants.Boolean));
     console.assert(uno.org.libreoffice.embindtest.Constants.Byte === -12);
