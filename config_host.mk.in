@@ -793,3 +793,5 @@ include @SRC_ROOT@/download.lst
 # prep for WSL-as-helper-builds where build runs from within git-bash/MSYS that would otherwise
 # messes with anything that looks like a path (starts with /) but it cannot resolve
 export MSYS_NO_PATHCONV=1
+STRAWBERRY_PERL=@STRAWBERRY_PERL@
+WSL=@WSL@

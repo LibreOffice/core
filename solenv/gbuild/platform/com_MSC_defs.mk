@@ -243,7 +243,7 @@ gb_COMPILERDEBUGOPTFLAGS :=
 ifeq ($(gb_FULLDEPS),$(true))
 gb_COMPILERDEPFLAGS := -showIncludes
 define gb_create_deps
-| $(GBUILDDIR)/platform/filter-showIncludes.awk -vdepfile=$(1) -vobjectfile=$(2) -vsourcefile=$(3); exit $${PIPESTATUS[0]}
+| $(call gb_Helper_cyg_path,$(GBUILDDIR)/platform/filter-showIncludes.awk -vdepfile=$(1) -vobjectfile=$(2) -vsourcefile=$(3)); exit $${PIPESTATUS[0]}
 endef
 else
 gb_COMPILERDEPFLAGS :=
@@ -317,15 +317,15 @@ endif
 
 # Helper class
 
-gb_Helper_set_ld_path := PATH="$(shell cygpath -u $(INSTDIR_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER)):$(shell cygpath -u $(INSTDIR_FOR_BUILD)/$(LIBO_BIN_FOLDER)):$$PATH"
+gb_Helper_set_ld_path := $(call gb_Helper_cyg_path,PATH="$(INSTDIR_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER):$(INSTDIR_FOR_BUILD)/$(LIBO_BIN_FOLDER):$$PATH")
 
 define gb_Helper_prepend_ld_path
-PATH="$(shell cygpath -u $(INSTDIR_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER)):$(shell cygpath -u $(INSTDIR_FOR_BUILD)/$(LIBO_BIN_FOLDER)):$(1):$$PATH"
+PATH="$(call gb_Helper_cyg_path,$(INSTDIR_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER):$(INSTDIR_FOR_BUILD)/$(LIBO_BIN_FOLDER):$(1):$$PATH")
 endef
 
 # $(1): one directory pathname to append to the ld path
 define gb_Helper_extend_ld_path
-$(gb_Helper_set_ld_path)':$(shell cygpath -u $(1))'
+$(gb_Helper_set_ld_path)':$(call gb_Helper_cyg_path,$(1))'
 endef
 
 # common macros to build GPG related libraries

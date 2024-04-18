@@ -41,6 +41,7 @@ SCPDEFS=""
 GIT_NEEDED_SUBMODULES=""
 LO_PATH= # used by path_munge to construct a PATH variable
 
+
 FilterLibs()
 {
     # Return value: $filteredlibs
@@ -191,6 +192,19 @@ PathFormat()
         # But Cygwin can
         formatted_path_unix="$formatted_path"
     fi
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+        # if already in unix format, switch to windows format to create shortened path
+        case "$formatted_path" in
+            /*)
+                formatted_path=$(wslpath -m "$formatted_path")
+                ;;
+        esac
+
+        # cd to /mnt/c to avoid wsl/cmd complaining about not supporting UNC paths/the current working directory
+        formatted_path_unix=$(wslpath -u "$(cd /mnt/c; cmd.exe /c $shortpath_cmd "$formatted_path" | tr -d '\r')")
+        # WSL can't run Windows binaries from Windows pathnames so we need a separate return value in Unix format
+        formatted_path=$(wslpath -m "$formatted_path_unix")
+    fi
 }
 
 AbsolutePath()
@@ -301,6 +315,35 @@ dnl ===================================================================
 dnl checks build and host OSes
 dnl do this before argument processing to allow for platform dependent defaults
 dnl ===================================================================
+
+# are we running in wsl but are called from git-bash/env with mingw64 in path?
+# if so, we aim to run nearly everything in the Windows realm, and only run autogen/configure
+# in wsl and run a few tools via wsl
+WSL_ONLY_AS_HELPER=
+if test -n "$WSL_DISTRO_NAME" && $(echo $PATH |grep -q mingw64); then
+    WSL_ONLY_AS_HELPER=TRUE
+    AC_ARG_WITH([strawberry-perl-portable],
+        [AS_HELP_STRING([--with-strawberry-perl-portable],
+            [Specify the base path to strawberry perl portable])],
+        [],
+        [AC_MSG_ERROR(
+            [for the moment strawberry-perl-portable is a requirement, feel free to replace it])])
+    shortpath_cmd=$(wslpath -m $srcdir/solenv/bin/shortpath.cmd)
+    PathFormat "$with_strawberry_perl_portable"
+    if test ! -f "$formatted_path_unix/perl/bin/perl.exe" -o ! -d "$formatted_path_unix/c/bin"; then
+        AC_MSG_ERROR([$formatted_path doesn't contain perl or the utilities - sure you provided the base path?])
+    fi
+    STRAWBERRY_TOOLS="$formatted_path/c/bin"
+    STRAWBERRY_PERL="$formatted_path/perl/bin/perl.exe"
+    AC_ARG_WITH([wsl-command],
+        [AS_HELP_STRING([--with-wsl-command],
+            [Specify your wsl distro command if it isn't the default/the one used with just wsl.exe])],
+        [],
+        [with_wsl_command="wsl.exe"])
+    WSL="$with_wsl_command"
+fi
+AC_SUBST([STRAWBERRY_PERL])
+AC_SUBST([WSL])
 
 # Check for WSL (version 2, at least). But if --host is explicitly specified (to really do build for
 # Linux on WSL) trust that.
@@ -593,6 +636,15 @@ win_short_path_for_make()
     local short_path="$1"
     if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
         cygpath -sm "$short_path"
+    elif test -n "$WSL_ONLY_AS_HELPER"; then
+        # when already unix-style path, wslpath doesn't return anything
+        case "$short_path" in
+        /*)
+            echo $short_path
+            exit
+            ;;
+        esac
+        wslpath -m "$(wslpath -u "$short_path")"
     else
         cygpath -u "$(cygpath -d "$short_path")"
     fi
@@ -3939,6 +3991,9 @@ reg_get_value()
     if test "$build_os" = "wsl"; then
         regvalue=$($WSL_LO_HELPER --read-registry $1 "$2/$3" 2>/dev/null)
         return
+    elif test -n "$WSL_ONLY_AS_HELPER"; then
+        regvalue=$(reg.exe query "$(echo $2 | tr '/' '\\')" /v "$3" /reg:$1 |sed -ne "s|\s*$3.*REG_SZ\s*\(.*\)[\s\r]*$|\1|p")
+        return
     fi
 
     local _regentry="/proc/registry${1}/${2}/${3}"
@@ -4149,7 +4204,7 @@ win_get_env_from_vsdevcmdbat()
     # use 'echo.%ENV%' syntax (instead of 'echo %ENV%') to avoid outputting "ECHO is off." in case when ENV is empty or a space
     printf '@setlocal\r\n@echo.%%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
     local result
-    if test "$build_os" = "wsl"; then
+    if test "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
         result=$(cd /mnt/c && cmd.exe /c $(wslpath -w $WRAPPERBATCHFILEPATH) | tr -d '\r')
     else
         chmod +x $WRAPPERBATCHFILEPATH
@@ -4209,6 +4264,8 @@ find_msvc()
         if test -z "$vswhere"; then
             vswhere="c:\\Program Files (x86)"
         fi
+    elif test -n "$WSL_ONLY_AS_HELPER"; then
+        vswhere="$(perl.exe -e 'print $ENV{"ProgramFiles(x86)"}')"
     else
         vswhere="$(perl -e 'print $ENV{"ProgramFiles(x86)"}')"
     fi
@@ -6838,7 +6895,7 @@ dnl Check for the Windows  SDK.
 dnl =========================================
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([for Windows SDK])
-    if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
         find_winsdk
         WINDOWS_SDK_HOME=$winsdktest
 
@@ -6911,7 +6968,7 @@ the  Windows SDK are installed.])
     PathFormat "$WINDOWS_SDK_HOME"
     WINDOWS_SDK_HOME="$formatted_path"
     WINDOWS_SDK_HOME_unix="$formatted_path_unix"
-    if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
         SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/Include"
         if test -d "$WINDOWS_SDK_HOME_unix/include/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
@@ -6958,7 +7015,7 @@ AC_SUBST(WINDOWS_SDK_LIB_SUBDIR)
 AC_SUBST(WINDOWS_SDK_VERSION)
 AC_SUBST(WINDOWS_SDK_WILANGID)
 
-if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
+if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
     dnl Check midl.exe; this being the first check for a tool in the SDK bin
     dnl dir, it also determines that dir's path w/o an arch segment if any,
     dnl WINDOWS_SDK_BINDIR_NO_ARCH:
@@ -8698,7 +8755,7 @@ dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
 
     # Windows-specific tests
-    if test "$build_os" = "cygwin"; then
+    if test "$build_os" = "cygwin" -o -n "$WSL_ONLY_AS_HELPER"; then
         if test -z "$with_jdk_home"; then
             dnl See <https://docs.oracle.com/javase/9/migrate/toc.htm#JSMIG-GUID-EEED398E-AE37-4D12-
             dnl AB10-49F82F720027> section "Windows Registry Key Changes":
@@ -9003,7 +9060,7 @@ _ACEOF
         fi
     fi
     PathFormat "$JAVA_HOME"
-    JAVA_HOME="$formatted_path"
+    JAVA_HOME="$formatted_path_unix"
 fi
 
 if test -z "$JAWTLIB" -a -n "$ENABLE_JAVA" -a "$_os" != Android -a \
@@ -10822,7 +10879,7 @@ if test "$with_system_odbc" = "yes" -o '(' "$with_system_headers" = "yes" -a "$w
     AC_MSG_RESULT([external])
     SYSTEM_ODBC_HEADERS=TRUE
 
-    if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
         save_CPPFLAGS=$CPPFLAGS
         find_winsdk
         PathFormat "$winsdktest"
@@ -14147,6 +14204,14 @@ EOF
         </project>
 EOF
 
+        if test -n "$WSL_ONLY_AS_HELPER"; then
+            # need to set it directly, since ant only tries java, not java.exe from JAVA_HOME
+            export JAVACMD="$JAVAINTERPRETER"
+            # similarly it doesn't expect to be called from wsl, so it uses the wsl-realm path when
+            # building the classpath, but we need the windows-style one for the windows-java
+            PathFormat "$ANT_HOME"
+            export LOCALCLASSPATH=";$formatted_path/lib/ant-launcher.jar"
+        fi
         AC_TRY_COMMAND("$ANT" -buildfile conftest.xml 1>&2)
         if test $? = 0 -a -f ./conftest.class; then
             AC_MSG_RESULT([Ant works])
@@ -14171,9 +14236,9 @@ EOF
         ANT_HOME="NO_ANT_HOME"
     else
         PathFormat "$ANT_HOME"
-        ANT_HOME="$formatted_path"
+        ANT_HOME="$formatted_path_unix"
         PathFormat "$ANT"
-        ANT="$formatted_path"
+        ANT="$formatted_path_unix"
     fi
 
     dnl Checking for ant.jar
@@ -14772,7 +14837,7 @@ AC_SUBST(PARALLELISM)
 # Set up ILIB for MSVC build
 #
 ILIB1=
-if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
+if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER"; then
     ILIB="."
     if test -n "$JAVA_HOME"; then
         ILIB="$ILIB;$JAVA_HOME/lib"
@@ -15180,7 +15245,7 @@ AC_MSG_NOTICE([setting up the build environment variables...])
 
 AC_SUBST(COMPATH)
 
-if test "$build_os" = "cygwin" -o "$build_os" = wsl; then
+if test "$build_os" = "cygwin" -o "$build_os" = wsl -o -n "$WSL_ONLY_AS_HELPER"; then
     if test -d "$COMPATH_unix/atlmfc/lib/spectre"; then
         ATL_LIB="$COMPATH/atlmfc/lib/spectre"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
@@ -15337,9 +15402,37 @@ CPPFLAGS=$my_original_CPPFLAGS
 
 AC_CONFIG_LINKS([include:include])
 
+if test -n "$WSL_ONLY_AS_HELPER"; then
+    # while we configure in linux, we actually compile in "cygwin" (close enough at least)
+    build="x86_64-pc-cygwin"
+    PathFormat "$SRC_ROOT"
+    SRC_ROOT="$formatted_path"
+    PathFormat "$BUILDDIR"
+    BUILDDIR="$formatted_path"
+    # git-bash has (gnu) tar, curl and sha256sum
+    CURL="curl.exe"
+    WGET=
+    GNUTAR="tar.exe"
+    SHA256SUM="sha256sum.exe"
+    # TODO: maybe switch to strawberry-perl right away?
+    # only openssl seems to actually require it (for Pod/Usage.pm and maybe more)
+    PERL="perl.exe"
+    # use flex, gperf and nasm from wsl-container
+    # if using absolute path, would need to use double-leading slash for the msys path mangling
+    FLEX="wsl.exe $FLEX"
+    NASM="wsl.exe $NASM"
+    # some externals (libebook) checks with AC_PATH_PROGS, and that requires argument to begin with slash...
+    GPERF="/c/Windows/system32/wsl.exe gperf"
+    # append strawberry tools dir to PATH (for e.g. windres, ar)
+    LO_PATH="$LO_PATH:$STRAWBERRY_TOOLS"
+    # temp-dir needs to be in windows realm, hardcode for now
+    mkdir -p tmp
+    TEMP_DIRECTORY="$BUILDDIR/tmp"
+fi
+
 # Keep in sync with list of files far up, at AC_MSG_CHECKING([for
 # BUILD platform configuration] - otherwise breaks cross building
-AC_CONFIG_FILES([config_host.mk
+AC_CONFIG_FILES([
                  config_host_lang.mk
                  Makefile
                  bin/bffvalidator.sh
@@ -15350,6 +15443,12 @@ AC_CONFIG_FILES([config_host.mk
                  hardened_runtime.xcent:sysui/desktop/macosx/hardened_runtime.xcent.in
                  lo.xcent:sysui/desktop/macosx/lo.xcent.in
                  vs-code.code-workspace.template:.vscode/vs-code-template.code-workspace.in])
+# map unix-style mount dirs to windows directories: /mnt/c/foobar -> C:/foobar
+# easier to do it in a postprocessing command than to modify every single variable
+AC_CONFIG_FILES([config_host.mk], [
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+        sed -i -e 's#/mnt/\([[:alpha:]]\)/#\u\1:/#g' config_host.mk
+    fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER])
 
 AC_CONFIG_HEADERS([config_host/config_atspi.h])
 AC_CONFIG_HEADERS([config_host/config_buildconfig.h])

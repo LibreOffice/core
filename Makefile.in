@@ -38,6 +38,11 @@ Makefile $(BUILDDIR)/Makefile: $(BUILDDIR)/config_host.mk $(BUILDDIR)/config_hos
 	@touch $@
 
 # run configure in an environment not polluted by config_host.mk
+ifneq ($(MSYSTEM),)
+WSL:=@WSL@
+# wsl needs unix-style path into windows realm
+$(BUILDDIR)/config_host.mk : SRCDIR:=/$(shell $(WSL) wslpath -u $(SRCDIR))
+endif
 $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/autogen.sh \
 		$(SRCDIR)/config_host.mk.in \
@@ -51,9 +56,8 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
 		) \
-		$(shell . $(SRCDIR)/bin/get_config_variables JAVA_HOME && \
-			if test -n "$${JAVA_HOME}" -a ! -d "$${JAVA_HOME}/bin"; then echo force-restart; fi)
-	sh -c $(SRCDIR)/autogen.sh
+		$(shell if test -n '$(JAVA_HOME)' -a ! -d '$(JAVA_HOME)'; then echo force-restart; fi)
+	sh -c "$(if $(MSYSTEM),$(WSL) )$(SRCDIR)/autogen.sh"
 
 else # MAKE_RESTARTS
 
