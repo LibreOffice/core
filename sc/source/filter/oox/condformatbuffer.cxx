@@ -1354,7 +1354,7 @@ void CondFormatBuffer::finalizeImport()
         ++nExtCFIndex;
     }
 
-    rStyleIdx = 0; // Resets <extlst> <cfRule> style index.
+    gnStyleIdx = 0; // Resets <extlst> <cfRule> style index.
 }
 
 CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm )

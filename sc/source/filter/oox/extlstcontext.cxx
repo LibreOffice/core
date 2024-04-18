@@ -30,7 +30,7 @@
 using ::oox::core::ContextHandlerRef;
 using ::oox::xls::CondFormatBuffer;
 
-sal_Int32 rStyleIdx = 0;
+sal_Int32 gnStyleIdx = 0; // Holds index of the <extlst> <cfRule> style (Will be reset by finalize import)
 
 namespace oox::xls {
 
@@ -292,10 +292,10 @@ void ExtConditionalFormattingContext::onEndElement()
                 maModel.eOperator = ScConditionMode::Direct;
             }
 
-            if (Dxf* pDxf = getStyles().getExtDxfs().get(rStyleIdx).get())
+            if (Dxf* pDxf = getStyles().getExtDxfs().get(gnStyleIdx).get())
                 pDxf->finalizeImport();
-            maModel.aStyle = getStyles().createExtDxfStyle(rStyleIdx);
-            rStyleIdx++;
+            maModel.aStyle = getStyles().createExtDxfStyle(gnStyleIdx);
+            gnStyleIdx++;
             nFormulaCount = 0;
             maModels.push_back(maModel);
         }
