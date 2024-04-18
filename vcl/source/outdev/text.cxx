@@ -642,11 +642,15 @@ tools::Long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, 
      vcl::text::TextLayoutCache const*const pLayoutCache,
      SalLayoutGlyphs const*const pSalLayoutCache) const
 {
+    double nWidth = GetTextWidthDouble(rStr, nIndex, nLen, pLayoutCache, pSalLayoutCache);
+    return basegfx::fround<tools::Long>(nWidth);
+}
 
-    tools::Long nWidth = GetTextArray( rStr, nullptr, nIndex,
-            nLen, false, pLayoutCache, pSalLayoutCache );
-
-    return nWidth;
+double OutputDevice::GetTextWidthDouble(const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
+                                        vcl::text::TextLayoutCache const* const pLayoutCache,
+                                        SalLayoutGlyphs const* const pSalLayoutCache) const
+{
+    return GetTextArray(rStr, nullptr, nIndex, nLen, false, pLayoutCache, pSalLayoutCache);
 }
 
 tools::Long OutputDevice::GetTextHeight() const
@@ -660,6 +664,16 @@ tools::Long OutputDevice::GetTextHeight() const
         nHeight = ImplDevicePixelToLogicHeight( nHeight );
 
     return nHeight;
+}
+
+double OutputDevice::GetTextHeightDouble() const
+{
+    if (!InitFont())
+        return 0;
+
+    tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+
+    return ImplDevicePixelToLogicHeightDouble(nHeight);
 }
 
 float OutputDevice::approximate_char_width() const
@@ -710,7 +724,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen, flags );
 }
 
-tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
+double OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernArray,
                                  sal_Int32 nIndex, sal_Int32 nLen, bool bCaret,
                                  vcl::text::TextLayoutCache const*const pLayoutCache,
                                  SalLayoutGlyphs const*const pSalLayoutCache) const
@@ -768,7 +782,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernAr
         if (mbMap)
         {
             for (int i = 0; i < nLen; ++i)
-                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidth((*pDXPixelArray)[i] * nSubPixelFactor);
+                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidthDouble((*pDXPixelArray)[i] * nSubPixelFactor);
         }
         else if (nSubPixelFactor)
         {
@@ -784,10 +798,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, KernArray* pKernAr
             (*pDXAry)[i] = basegfx::fround((*pDXPixelArray)[i]);
     }
 
-    if (mbMap)
-        nWidth = ImplDevicePixelToLogicWidth( nWidth );
-
-    return basegfx::fround<tools::Long>(nWidth);
+    return ImplDevicePixelToLogicWidthDouble(nWidth);
 }
 
 void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretXArray,
