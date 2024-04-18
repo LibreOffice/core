@@ -29,7 +29,7 @@ class SwRedlineItr;
 class SwViewShell;
 class SwTextFrame;
 
-class SwAttrIter
+class SW_DLLPUBLIC SwAttrIter
 {
     friend class SwFontSave;
 protected:

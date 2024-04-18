@@ -22,6 +22,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
 
@@ -45,6 +46,8 @@
 #include <txatbase.hxx>
 #include <textcontentcontrol.hxx>
 #include <pagefrm.hxx>
+#include <inftxt.hxx>
+#include <itrtxt.hxx>
 
 /// Covers sw/source/core/text/ fixes.
 class SwCoreTextTest : public SwModelTestBase
@@ -114,6 +117,65 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLastBibliographyPdfExport)
 
     // Without the accompanying fix, the export to PDF would get stuck in an infinite loop
     CPPUNIT_ASSERT(true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf156146)
+{
+    createSwDoc("tdf156146.fodt");
+
+    uno::Reference<container::XIndexAccess> const xLevels1(
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules"));
+    uno::Reference<container::XNamed> const xNum1(xLevels1, uno::UNO_QUERY);
+    ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-700), props1["FirstLineIndent"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1330), props1["IndentAt"].get<sal_Int32>());
+
+    // common style applies list-style-name and margin-left
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+
+    SwTextFrame* const pFrame(dynamic_cast<SwTextFrame*>(
+        static_cast<SwPageFrame*>(getSwDoc()->GetDocShell()->GetWrtShell()->GetLayout()->GetLower())
+            ->FindFirstBodyContent()));
+    CPPUNIT_ASSERT(pFrame);
+    // this appears to be the only way to get the actual computed margins
+    SwTextSizeInfo info(pFrame);
+    SwTextMargin tm(pFrame, &info);
+    // this was wrong, 357
+    CPPUNIT_ASSERT_EQUAL(SwTwips(0), tm.FirstLeft() - pFrame->getFrameArea().Left());
+    // this was wrong, 754
+    CPPUNIT_ASSERT_EQUAL(SwTwips(0), tm.Left() - pFrame->getFrameArea().Left());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159903)
+{
+    createSwDoc("Broken indent demo.odt");
+
+    uno::Reference<container::XIndexAccess> const xLevels1(
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules"));
+    uno::Reference<container::XNamed> const xNum1(xLevels1, uno::UNO_QUERY);
+    ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4001), props1["FirstLineIndent"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4001), props1["IndentAt"].get<sal_Int32>());
+
+    // common style applies list-style-name, parent style margin-left
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+
+    SwTextFrame* const pFrame(dynamic_cast<SwTextFrame*>(
+        static_cast<SwPageFrame*>(getSwDoc()->GetDocShell()->GetWrtShell()->GetLayout()->GetLower())
+            ->FindFirstBodyContent()));
+    CPPUNIT_ASSERT(pFrame);
+    // this appears to be the only way to get the actual computed margins
+    SwTextSizeInfo info(pFrame);
+    SwTextMargin tm(pFrame, &info);
+    CPPUNIT_ASSERT_EQUAL(SwTwips(0), tm.FirstLeft() - pFrame->getFrameArea().Left());
+    // left was wrong, was same as first
+    CPPUNIT_ASSERT_EQUAL(SwTwips(2268), tm.Left() - pFrame->getFrameArea().Left());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159336)

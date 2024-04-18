@@ -71,8 +71,8 @@ class SwLineInfo
     void CtorInitLineInfo( const SwAttrSet& rAttrSet,
                            const SwTextNode& rTextNode );
 
-    SwLineInfo();
-    ~SwLineInfo();
+    SW_DLLPUBLIC SwLineInfo();
+    SW_DLLPUBLIC ~SwLineInfo();
 public:
     // #i24363# tab stops relative to indent - returns the tab stop following nSearchPos or NULL
     const SvxTabStop* GetTabStop(const SwTwips nSearchPos, SwTwips& nRight) const;
@@ -183,7 +183,7 @@ public:
     SwTextSizeInfo( const SwTextSizeInfo &rInf );
     SwTextSizeInfo( const SwTextSizeInfo &rInf, const OUString* pText,
                    TextFrameIndex nIdx = TextFrameIndex(0) );
-    SwTextSizeInfo(SwTextFrame *pTextFrame, TextFrameIndex nIndex = TextFrameIndex(0));
+    SW_DLLPUBLIC SwTextSizeInfo(SwTextFrame *pTextFrame, TextFrameIndex nIndex = TextFrameIndex(0));
 
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
