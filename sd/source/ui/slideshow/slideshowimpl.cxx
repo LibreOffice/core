@@ -500,18 +500,6 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
                 Any(aValue),
                 PropertyState_DIRECT_VALUE);
     }
-    else if (-1 == nNextSlideNumber)
-    {
-        // IASS: next slide does not exist, thus current slide is the last one.
-        // we need to signal to stop Prefetch since else SlideShowImpl *keeps* the
-        // last slide buffered and will just re-use it when asked to update, thus
-        // updates will not work.
-        aProperties.emplace_back( "Prefetch" ,
-                -1,
-                Any(false),
-                PropertyState_DIRECT_VALUE);
-    }
-
     if (bSkipAllMainSequenceEffects)
     {
         // Add one property that prevents the slide transition from being
