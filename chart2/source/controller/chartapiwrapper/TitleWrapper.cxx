@@ -114,9 +114,6 @@ namespace {
             virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
             virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
             virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const override;
-
-        protected:
-            Reference< uno::XComponentContext > m_xContext;
     };
 
 }

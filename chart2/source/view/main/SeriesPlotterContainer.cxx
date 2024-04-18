@@ -278,7 +278,6 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                 pSeries->setConnectBars(bConnectBars);
                 pSeries->setGroupBarsPerAxis(bGroupBarsPerAxis);
                 pSeries->setStartingAngle(nStartingAngle);
-                pSeries->setPieChartSubType(ePieChartSubType);
 
                 pSeries->setMissingValueTreatment(nMissingValueTreatment);
 

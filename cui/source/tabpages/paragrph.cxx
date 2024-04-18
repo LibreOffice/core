@@ -926,8 +926,6 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xRegisterCB(m_xBuilder->weld_check_button("checkCB_REGISTER"))
     , m_xExampleWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWN_EXAMPLE", m_aExampleWin))
 {
-    sAbsDist = m_xAbsDist->get_label();
-
     // this page needs ExchangeSupport
     SetExchangeSupport();
 

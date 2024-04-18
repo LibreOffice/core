@@ -246,7 +246,6 @@ private: //member
 
     bool                  m_bUseRings;
     bool                  m_bSizeExcludesLabelsAndExplodedSegments;
-    std::vector< ExplicitScaleData > m_aCartesianScales; // for bar-of-pie
     ::css::chart2::PieChartSubType m_eSubType;
 
     struct PieLabelInfo

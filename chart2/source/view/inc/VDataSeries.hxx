@@ -142,8 +142,6 @@ public:
     void setStartingAngle( sal_Int32 nStartingAngle );
     sal_Int32 getStartingAngle() const;
 
-    void setPieChartSubType(css::chart2::PieChartSubType eSubType);
-
     void setRoleOfSequenceForDataLabelNumberFormatDetection( std::u16string_view rRole );
 
     //this is only temporarily here for area chart:
@@ -233,8 +231,6 @@ private: //member
     bool                m_bGroupBarsPerAxis;
 
     sal_Int32               m_nStartingAngle;
-
-    css::chart2::PieChartSubType m_ePieChartSubType;
 
     OUString           m_aSeriesParticle;
     OUString           m_aCID;

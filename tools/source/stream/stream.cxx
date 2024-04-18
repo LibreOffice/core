@@ -156,8 +156,6 @@ void SvStream::writeNumberWithoutSwap_(const void * pDataSrc, int nDataSize)
 
 void SvLockBytes::close()
 {
-    if (m_bOwner)
-        delete m_pStream;
     m_pStream = nullptr;
 }
 

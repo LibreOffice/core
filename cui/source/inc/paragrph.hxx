@@ -46,7 +46,6 @@ private:
     tools::Long                    nWidth;
     tools::Long                    nMinFixDist;
     bool                    bRelativeMode;
-    OUString                sAbsDist;
 
     SvxParaPrevWindow m_aExampleWin;
 
