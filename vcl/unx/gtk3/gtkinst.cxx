@@ -22172,6 +22172,18 @@ public:
             g_signal_connect(getContainer(), "query-tooltip", G_CALLBACK(signalComboTooltipQuery), this);
         }
 
+        if (AtkObject* pComboBoxAccessible = gtk_widget_get_accessible(GTK_WIDGET(m_pComboBox)))
+        {
+            if (AtkObject* pToggleButtonAccessible = gtk_widget_get_accessible(GTK_WIDGET(m_pToggleButton)))
+            {
+                atk_object_set_role(pToggleButtonAccessible, atk_object_get_role(pComboBoxAccessible));
+                if (const char* pName = atk_object_get_name(pComboBoxAccessible))
+                    atk_object_set_name(pToggleButtonAccessible, pName);
+                if (const char* pDesc = atk_object_get_description(pComboBoxAccessible))
+                    atk_object_set_description(pToggleButtonAccessible, pDesc);
+            }
+        }
+
         insertAsParent(GTK_WIDGET(m_pComboBox), GTK_WIDGET(getContainer()));
         gtk_widget_set_visible(GTK_WIDGET(m_pComboBox), false);
         gtk_widget_set_no_show_all(GTK_WIDGET(m_pComboBox), true);

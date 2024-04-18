@@ -51,6 +51,11 @@
             </child>
           </object>
         </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="button-atkobject">
+            <property name="AtkObject::accessible-role">combo-box</property>
+          </object>
+        </child>
         <style>
           <class name="combo"/>
         </style>
