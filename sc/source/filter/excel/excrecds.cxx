@@ -478,6 +478,9 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->startElement(XML_protectedRanges);
     for (const auto& rProt : rProts)
     {
+        if (!rProt.maRangeList.is())
+            continue; // Excel refuses to open if sqref is missing from a protectedRange
+
         SAL_WARN_IF( rProt.maSecurityDescriptorXML.isEmpty() && !rProt.maSecurityDescriptor.empty(),
                 "sc.filter", "XclExpSheetProtection::SaveXml: losing BIFF security descriptor");
         rWorksheet->singleElement( XML_protectedRange,
@@ -492,7 +495,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
                 XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : rProt.maPasswordHash.maHashValue.toUtf8().getStr(),
                 XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : rProt.maPasswordHash.maSaltValue.toUtf8().getStr(),
                 XML_spinCount, rProt.maPasswordHash.mnSpinCount ? OString::number( rProt.maPasswordHash.mnSpinCount).getStr() : nullptr,
-                XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( rStrm.GetRoot().GetDoc(), *rProt.maRangeList).getStr() : nullptr);
+                XML_sqref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), *rProt.maRangeList).getStr());
     }
     rWorksheet->endElement( XML_protectedRanges);
 }
