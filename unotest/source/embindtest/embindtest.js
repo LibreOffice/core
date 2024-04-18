@@ -540,9 +540,14 @@ Module.addOnPostRun(function() {
     try {
         test.throwRuntimeException();
     } catch (e) {
+        incrementExceptionRefcount(e);
+            //TODO, needed when building with JS-based -fexceptions, see
+            // <https://github.com/emscripten-core/emscripten/issues/17115> "[EH] Fix inconsistency
+            // of refcounting in Emscripten EH vs. Wasm EH"
         console.assert(e.name === 'com::sun::star::uno::RuntimeException');
         console.assert(e.message === undefined); //TODO
         //TODO: console.assert(e.Message.startsWith('test'));
+        decrementExceptionRefcount(e);
     }
     const obj = {
         implRefcount: 0,
