@@ -254,9 +254,14 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyle
 
 } // namespace
 
-ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, bool bForceName )
+ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName )
 {
-    return lclMakeStyleSheet( rPool, rStyleName, SfxStyleFamily::Para, bForceName );
+    SfxStyleSheetBase* pOldStyleSheet = rPool.Find( rStyleName, SfxStyleFamily::Para );
+    if( pOldStyleSheet )
+        return static_cast< ScStyleSheet& >(*pOldStyleSheet);
+
+    // create new style sheet
+    return static_cast< ScStyleSheet& >( rPool.Make( rStyleName, SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined ) );
 }
 
 ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, bool bForceName )

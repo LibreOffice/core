@@ -3005,7 +3005,7 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
         // Create a cell style. This may overwrite an existing style if
         // one with the same name exists.
         ScStyleSheet& rStyleSheet = ScfTools::MakeCellStyleSheet(
-                *getScDocument().GetStyleSheetPool(), rStyleName, true);
+                *getScDocument().GetStyleSheetPool(), rStyleName);
 
         rStyleSheet.ResetParent();
         SfxItemSet& rStyleItemSet =
@@ -3033,7 +3033,7 @@ OUString StylesBuffer::createExtDxfStyle( sal_Int32 nDxfId ) const
         // Create a cell style. This may overwrite an existing style if
         // one with the same name exists.
         ScStyleSheet& rStyleSheet = ScfTools::MakeCellStyleSheet(
-                *getScDocument().GetStyleSheetPool(), rStyleName, true);
+                *getScDocument().GetStyleSheetPool(), rStyleName);
 
         rStyleSheet.ResetParent();
         SfxItemSet& rStyleItemSet =

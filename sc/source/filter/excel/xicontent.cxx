@@ -576,7 +576,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     // *** create style sheet ***
 
     OUString aStyleName( XclTools::GetCondFormatStyleName( GetCurrScTab(), mnFormatIndex, mnCondIndex ) );
-    SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName, true ).GetItemSet();
+    SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName ).GetItemSet();
 
     const XclImpPalette& rPalette = GetPalette();
 
