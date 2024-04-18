@@ -724,6 +724,16 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
         {
             break;
         }
+        else if (isa<DeclRefExpr>(parent)) // things like o3tl::convertNarrowing pass members as template params
+        {
+            bPotentiallyReadFrom = true;
+            break;
+        }
+        else if (isa<DesignatedInitExpr>(parent))
+        {
+            bPotentiallyReadFrom = true;
+            break;
+        }
         else
         {
             bPotentiallyReadFrom = true;
@@ -947,6 +957,15 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
                  || isa<CXXTypeidExpr>(parent)
                  || isa<DefaultStmt>(parent))
         {
+            break;
+        }
+        else if (isa<DeclRefExpr>(parent)) // things like o3tl::convertNarrowing pass members as template params
+        {
+            break;
+        }
+        else if (isa<DesignatedInitExpr>(parent))
+        {
+            bPotentiallyWrittenTo = true;
             break;
         }
         else
