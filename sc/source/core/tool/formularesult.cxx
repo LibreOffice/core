@@ -661,6 +661,13 @@ void ScFormulaResult::HandleStuffAfterParallelCalculation()
         mpToken->IncRef();
         mbNoneRefCnt = false;
     }
+    // If ScInterpreter::CreateFormulaDoubleToken tokens make it into a result
+    if (mbToken && mpToken)
+    {
+        // temp check to look for this
+        assert(mpToken->GetRefCntPolicy() == formula::RefCntPolicy::ThreadSafe);
+        const_cast<formula::FormulaToken*>(mpToken)->SetRefCntPolicy(formula::RefCntPolicy::ThreadSafe);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

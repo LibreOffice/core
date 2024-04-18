@@ -1783,6 +1783,7 @@ formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, SvN
 
     // Allocate a new token
     auto p = new FormulaTypedDoubleToken( fVal, static_cast<sal_Int16>(nFmt) );
+    p->SetRefCntPolicy(RefCntPolicy::UnsafeRef);
     if ( mrContext.maTokens[mrContext.mnTokenCachePos] )
         mrContext.maTokens[mrContext.mnTokenCachePos]->DecRef();
     mrContext.maTokens[mrContext.mnTokenCachePos] = p;
