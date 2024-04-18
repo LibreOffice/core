@@ -501,6 +501,17 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
                   };
     }
 
+    css::uno::Reference<org::libreoffice::embindtest::XTest> SAL_CALL getNull() override
+    {
+        return {};
+    }
+
+    sal_Bool SAL_CALL
+    isNull(css::uno::Reference<org::libreoffice::embindtest::XTest> const& value) override
+    {
+        return !value;
+    }
+
     void SAL_CALL throwRuntimeException() override
     {
         throw css::uno::RuntimeException(u"test"_ustr);
