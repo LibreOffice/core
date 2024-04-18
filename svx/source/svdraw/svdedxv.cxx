@@ -1972,10 +1972,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             if (mpModel)
             {
                 if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
-                {
                     mpModel->SetChanged();
-                    SetInnerTextAreaForLOKit();
-                }
             }
 
             /* Start chaining processing */
@@ -2167,10 +2164,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 // It could execute CommandEventId::ExtTextInput, while SdrObjEditView::KeyInput
                 // isn't called
                 if (mpTextEditOutliner && mpTextEditOutliner->IsModified())
-                {
                     mpModel->SetChanged();
-                    SetInnerTextAreaForLOKit();
-                }
             }
             return true;
         }
@@ -2434,10 +2428,8 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             mpTextEditOutlinerView->SetAttribs(rSet);
 
             Outliner* pTEOutliner = mpTextEditOutlinerView->GetOutliner();
-            if (mpModel && pTEOutliner && pTEOutliner->IsModified()) {
+            if (mpModel && pTEOutliner && pTEOutliner->IsModified())
                 mpModel->SetChanged();
-                SetInnerTextAreaForLOKit();
-            }
 
             ImpMakeTextCursorAreaVisible();
         }

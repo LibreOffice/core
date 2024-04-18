@@ -791,42 +791,6 @@ namespace
     };
 }
 
-OString SdrMarkView::CreateInnerTextRectString() const
-{
-    if (!mpMarkedObj)
-        return OString();
-
-    SdrPageView* pPageView = GetSdrPageView();
-    const sdr::contact::ViewObjectContact& rVOC = mpMarkedObj->GetViewContact().GetViewObjectContact(
-        pPageView->GetPageWindow(0)->GetObjectContact());
-
-    sdr::contact::DisplayInfo aDisplayInfo;
-    TextBoundsExtractor aTextBoundsExtractor(rVOC.GetObjectContact().getViewInformation2D());
-    basegfx::B2DRange aRange = aTextBoundsExtractor.getTextBounds(rVOC, aDisplayInfo);
-    if (!aRange.isEmpty()) {
-        tools::Rectangle rect(aRange.getMinX(), aRange.getMinY(), aRange.getMaxX(), aRange.getMaxY());
-        tools::Rectangle aRangeTWIP = o3tl::convert(rect, o3tl::Length::mm100, o3tl::Length::twip);
-        OString innerTextInfo = "\"innerTextRect\":[" +
-            OString::number(aRangeTWIP.getX()) + "," +
-            OString::number(aRangeTWIP.getY()) + "," +
-            OString::number(aRangeTWIP.GetWidth()) + "," +
-            OString::number(aRangeTWIP.GetHeight()) + "]";
-        return innerTextInfo;
-    }
-
-    return OString();
-}
-
-void SdrMarkView::SetInnerTextAreaForLOKit() const
-{
-    if (!comphelper::LibreOfficeKit::isActive())
-        return;
-    SfxViewShell* pViewShell = GetSfxViewShell();
-    OString sRectString = CreateInnerTextRectString();
-    if (pViewShell && !sRectString.isEmpty())
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SHAPE_INNER_TEXT, sRectString.getStr());
-}
-
 void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
 {
     SfxViewShell* pViewShell = GetSfxViewShell();
@@ -925,9 +889,23 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
             if (mpMarkedObj && !pOtherShell)
             {
-                OString innerTextInfo = CreateInnerTextRectString();
-                if (!innerTextInfo.isEmpty())
-                    aExtraInfo.append("," + innerTextInfo);
+                const sdr::contact::ViewObjectContact& rVOC = mpMarkedObj->GetViewContact().GetViewObjectContact(
+                    pPageView->GetPageWindow(0)->GetObjectContact());
+
+                sdr::contact::DisplayInfo aDisplayInfo;
+                TextBoundsExtractor aTextBoundsExtractor(rVOC.GetObjectContact().getViewInformation2D());
+                basegfx::B2DRange aRange = aTextBoundsExtractor.getTextBounds(rVOC, aDisplayInfo);
+                if (!aRange.isEmpty()) {
+                    tools::Rectangle rect(aRange.getMinX(), aRange.getMinY(), aRange.getMaxX(), aRange.getMaxY());
+                    tools::Rectangle aRangeTWIP = o3tl::convert(rect, o3tl::Length::mm100, o3tl::Length::twip);
+                    OString innerTextInfo = ",\"innerTextRect\":[" +
+                        OString::number(aRangeTWIP.getX()) + "," +
+                        OString::number(aRangeTWIP.getY()) + "," +
+                        OString::number(aRangeTWIP.GetWidth()) + "," +
+                        OString::number(aRangeTWIP.GetHeight()) + "]";
+
+                    aExtraInfo.append(innerTextInfo);
+                }
             }
 
             // In core, the gridOffset is calculated based on the LogicRect's TopLeft coordinate

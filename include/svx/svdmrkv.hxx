@@ -150,7 +150,6 @@ private:
     void UndirtyMrkPnt() const;
 
     void SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell);
-    OString CreateInnerTextRectString() const;
     bool dumpGluePointsToJSON(boost::property_tree::ptree& rTree);
 
 protected:
@@ -247,7 +246,6 @@ public:
     /// whether all x coordinates in use are negated or not
     void SetNegativeX(bool bOn) { mbNegativeX = bOn; }
     bool IsNegativeX() const { return mbNegativeX; }
-    void SetInnerTextAreaForLOKit() const;
 
 // migrate selections
 
