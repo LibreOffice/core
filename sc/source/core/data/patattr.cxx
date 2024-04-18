@@ -81,6 +81,17 @@ CellAttributeHelper::~CellAttributeHelper()
     delete mpDefaultCellAttribute;
 }
 
+static int CompareStringPtr(const OUString* lhs, const OUString* rhs)
+{
+    if (lhs == rhs)
+        return 0;
+    if (lhs && rhs)
+        return (*lhs).compareTo(*rhs);
+    if (!lhs && rhs)
+        return -1;
+    return 1;
+}
+
 const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& rCandidate, bool bPassingOwnership) const
 {
     if (&rCandidate == &getDefaultCellAttribute())
@@ -103,13 +114,13 @@ const ScPatternAttr* CellAttributeHelper::registerAndCheck(const ScPatternAttr& 
             delete &rCandidate;
         return mpLastHit;
     }
-
-    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
+    const OUString* pCandidateStyleName = rCandidate.GetStyleName();
+    auto it = maRegisteredCellAttributes.lower_bound(pCandidateStyleName);
+    for (; it != maRegisteredCellAttributes.end(); ++it)
     {
-        if (mpLastHit == pCheck)
-            // ptr compare: already checked above, skip this one
-            continue;
-
+        const ScPatternAttr* pCheck = *it;
+        if (CompareStringPtr(pCheck->GetStyleName(), pCandidateStyleName) != 0)
+            break;
         if (ScPatternAttr::areSame(pCheck, &rCandidate))
         {
             pCheck->mnRefCount++;
@@ -174,30 +185,54 @@ const ScPatternAttr& CellAttributeHelper::getDefaultCellAttribute() const
 
 void CellAttributeHelper::CellStyleDeleted(const ScStyleSheet& rStyle)
 {
-    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
+    const OUString& rCandidateStyleName = rStyle.GetName();
+    auto it = maRegisteredCellAttributes.lower_bound(&rCandidateStyleName);
+    for (; it != maRegisteredCellAttributes.end(); ++it)
     {
+        const ScPatternAttr* pCheck = *it;
+        if (CompareStringPtr(pCheck->GetStyleName(), &rCandidateStyleName) != 0)
+            break;
         if (&rStyle == pCheck->GetStyleSheet())
             const_cast<ScPatternAttr*>(pCheck)->StyleToName();
     }
 }
 
-void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, std::u16string_view rName)
+void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, const OUString& rName)
 {
     // If a style was created, don't keep any pattern with its name string in the pool,
     // because it would compare equal to a pattern with a pointer to the new style.
     // Calling StyleSheetChanged isn't enough because the pool may still contain items
     // for undo or clipboard content.
-    for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
+    std::vector<const ScPatternAttr*> aChanged;
+    auto it = maRegisteredCellAttributes.lower_bound(&rName);
+    while(it != maRegisteredCellAttributes.end())
     {
-        if (nullptr == pCheck->GetStyleSheet() && pCheck->GetStyleName() && rName == *pCheck->GetStyleName())
-            const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc); // find and store style pointer
+        const ScPatternAttr* pCheck = *it;
+        if (CompareStringPtr(pCheck->GetStyleName(), &rName) != 0)
+            break;
+        if (nullptr == pCheck->GetStyleSheet())
+            if (const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc)) // find and store style pointer
+            {
+                aChanged.push_back(pCheck);
+                // if the name changed, we have to re-insert it
+                it = maRegisteredCellAttributes.erase(it);
+            }
+            else
+                ++it;
+        else
+            ++it;
     }
+    for (const ScPatternAttr* p : aChanged)
+        maRegisteredCellAttributes.insert(p);
 }
 
 void CellAttributeHelper::UpdateAllStyleSheets(ScDocument& rDoc)
 {
+    bool bNameChanged = false;
     for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)
-        const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc);
+        bNameChanged |= const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc);
+    if (bNameChanged)
+        ReIndexRegistered();
 
     // force existence, then access
     getDefaultCellAttribute();
@@ -213,6 +248,44 @@ void CellAttributeHelper::AllStylesToNames()
     getDefaultCellAttribute();
     mpDefaultCellAttribute->StyleToName();
 }
+
+/// If the style name changed, we need to reindex.
+void CellAttributeHelper::ReIndexRegistered()
+{
+    RegisteredAttrSet aNewSet;
+    for (auto const & p : maRegisteredCellAttributes)
+        aNewSet.insert(p);
+    maRegisteredCellAttributes = std::move(aNewSet);
+}
+
+bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const ScPatternAttr* lhs, const ScPatternAttr* rhs) const
+{
+    int cmp = CompareStringPtr(lhs->GetStyleName(), rhs->GetStyleName());
+    if (cmp < 0)
+        return true;
+    if (cmp > 0)
+        return false;
+    return lhs < rhs;
+}
+bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const ScPatternAttr* lhs, const OUString* rhs) const
+{
+    int cmp = CompareStringPtr(lhs->GetStyleName(), rhs);
+    if (cmp < 0)
+        return true;
+    if (cmp > 0)
+        return false;
+    return lhs < static_cast<const ScPatternAttr*>(nullptr);
+}
+bool CellAttributeHelper::RegisteredAttrSetLess::operator()(const OUString* lhs, const ScPatternAttr* rhs) const
+{
+    int cmp = CompareStringPtr(lhs, rhs->GetStyleName());
+    if (cmp < 0)
+        return true;
+    if (cmp > 0)
+        return false;
+    return static_cast<const ScPatternAttr*>(nullptr) < rhs;
+}
+
 
 CellAttributeHolder::CellAttributeHolder(const ScPatternAttr* pNew, bool bPassingOwnership)
 : mpScPatternAttr(nullptr)
@@ -309,7 +382,6 @@ const WhichRangesContainer aScPatternAttrSchema(svl::Items<ATTR_PATTERN_START, A
 
 ScPatternAttr::ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pItemSet, const OUString* pStyleName)
 : maLocalSfxItemSet(rHelper.GetPool(), aScPatternAttrSchema)
-, pName()
 , mxVisible()
 , pStyle(nullptr)
 , pCellAttributeHelper(&rHelper)
@@ -321,7 +393,7 @@ ScPatternAttr::ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pIt
 #endif
 {
     if (nullptr != pStyleName)
-        pName = *pStyleName;
+        moName = *pStyleName;
 
     // We need to ensure that ScPatternAttr is using the correct WhichRange,
     // see comments in commit message. This does transfers the items with
@@ -338,7 +410,7 @@ ScPatternAttr::ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pIt
 
 ScPatternAttr::ScPatternAttr(const ScPatternAttr& rPatternAttr)
 : maLocalSfxItemSet(rPatternAttr.maLocalSfxItemSet)
-, pName(rPatternAttr.pName)
+, moName(rPatternAttr.moName)
 , mxVisible()
 , pStyle(rPatternAttr.pStyle)
 , pCellAttributeHelper(rPatternAttr.pCellAttributeHelper)
@@ -1548,7 +1620,7 @@ bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
 
 const OUString* ScPatternAttr::GetStyleName() const
 {
-    return pName ? &*pName : ( pStyle ? &pStyle->GetName() : nullptr );
+    return moName ? &*moName : ( pStyle ? &pStyle->GetName() : nullptr );
 }
 
 void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFormat )
@@ -1568,7 +1640,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         }
         rPatternSet.SetParent(&pNewStyle->GetItemSet());
         pStyle = pNewStyle;
-        pName.reset();
+        moName.reset();
     }
     else
     {
@@ -1579,11 +1651,12 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
     mxVisible.reset();
 }
 
-void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
+bool ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
 {
-    if (pName)
+    bool bNameChanged = false;
+    if (moName)
     {
-        pStyle = static_cast<ScStyleSheet*>(rDoc.GetStyleSheetPool()->Find(*pName, SfxStyleFamily::Para));
+        pStyle = static_cast<ScStyleSheet*>(rDoc.GetStyleSheetPool()->Find(*moName, SfxStyleFamily::Para));
 
         //  use Standard if Style is not found,
         //  to avoid empty display in Toolbox-Controller
@@ -1597,12 +1670,16 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
         if (pStyle)
         {
             GetItemSet().SetParent(&pStyle->GetItemSet());
-            pName.reset();
+            moName.reset();
         }
     }
     else
+    {
         pStyle = nullptr;
+        bNameChanged = true;
+    }
     mxVisible.reset();
+    return bNameChanged;
 }
 
 void ScPatternAttr::StyleToName()
@@ -1611,7 +1688,7 @@ void ScPatternAttr::StyleToName()
 
     if ( pStyle )
     {
-        pName = pStyle->GetName();
+        moName = pStyle->GetName();
         pStyle = nullptr;
         GetItemSet().SetParent( nullptr );
         mxVisible.reset();

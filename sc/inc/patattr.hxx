@@ -29,7 +29,7 @@
 #include "fonthelper.hxx"
 #include "scitems.hxx"
 #include "attrib.hxx"
-#include <unordered_set>
+#include <set>
 
 namespace vcl { class Font; }
 namespace model { class ComplexColor; }
@@ -59,9 +59,23 @@ class SC_DLLPUBLIC CellAttributeHelper final
 {
     friend class CellAttributeHolder;
 
+    // Data structure chosen so that
+    // (a) we can find by name
+    // (b) we can erase quickly, by using name and pointer.
+    // so we sort the set first by name, and then by pointer.
+    struct RegisteredAttrSetLess
+    {
+        bool operator()(const ScPatternAttr* lhs, const ScPatternAttr* rhs) const;
+        // so we can search in std::set without a ScPatternAttr
+        using is_transparent = void;
+        bool operator()(const ScPatternAttr* lhs, const OUString* rhs) const;
+        bool operator()(const OUString* lhs, const ScPatternAttr* rhs) const;
+    };
+    typedef std::set<const ScPatternAttr*, RegisteredAttrSetLess> RegisteredAttrSet;
+
     SfxItemPool&                                        mrSfxItemPool;
     mutable ScPatternAttr*                              mpDefaultCellAttribute;
-    mutable std::unordered_set<const ScPatternAttr*>    maRegisteredCellAttributes;
+    mutable RegisteredAttrSet                           maRegisteredCellAttributes;
     mutable const ScPatternAttr*                        mpLastHit;
     mutable sal_uInt64                                  mnCurrentMaxKey;
 
@@ -77,9 +91,10 @@ public:
     SfxItemPool& GetPool() const { return mrSfxItemPool; }
 
     void CellStyleDeleted(const ScStyleSheet& rStyle);
-    void CellStyleCreated(ScDocument& rDoc, std::u16string_view rName);
+    void CellStyleCreated(ScDocument& rDoc, const OUString& rName);
     void UpdateAllStyleSheets(ScDocument& rDoc);
     void AllStylesToNames();
+    void ReIndexRegistered();
 };
 
 class SC_DLLPUBLIC CellAttributeHolder final
@@ -111,7 +126,7 @@ class SC_DLLPUBLIC ScPatternAttr final
     friend class CellAttributeHelper;
 
     SfxItemSet                  maLocalSfxItemSet;
-    std::optional<OUString>     pName;
+    std::optional<OUString>     moName;
     mutable std::optional<bool> mxVisible;
     ScStyleSheet*               pStyle;
     CellAttributeHelper*        pCellAttributeHelper;
@@ -228,7 +243,7 @@ public:
     void                    SetStyleSheet(ScStyleSheet* pNewStyle, bool bClearDirectFormat = true);
     const ScStyleSheet*     GetStyleSheet() const  { return pStyle; }
     const OUString*         GetStyleName() const;
-    void                    UpdateStyleSheet(const ScDocument& rDoc);
+    bool                    UpdateStyleSheet(const ScDocument& rDoc);
     void                    StyleToName();
 
     bool                    IsVisible() const;
