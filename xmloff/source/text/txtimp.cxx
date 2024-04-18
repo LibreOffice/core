@@ -1014,6 +1014,10 @@ auto IsPropertySet(uno::Reference<container::XNameContainer> const& rxParaStyles
     {
         return true;
     }
+    if (xPropState->getPropertyState("NumberingStyleName") == beans::PropertyState_DIRECT_VALUE)
+    {
+        return false; // tdf#159903 this overrides value in the parent style
+    }
     // check if it is set by any parent common style
     OUString style;
     rxPropSet->getPropertyValue("ParaStyleName") >>= style;
@@ -1025,6 +1029,10 @@ auto IsPropertySet(uno::Reference<container::XNameContainer> const& rxParaStyles
         if (xStyleProps->getPropertyState(rProperty) == beans::PropertyState_DIRECT_VALUE)
         {
             return true;
+        }
+        if (xStyleProps->getPropertyState("NumberingStyleName") == beans::PropertyState_DIRECT_VALUE)
+        {
+            return false; // tdf#159903 this overrides value in the parent style
         }
         style = xStyle->getParentStyle();
     }
