@@ -4142,7 +4142,8 @@ win_get_env_from_vsdevcmdbat()
 {
     local WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
     printf '@set VSCMD_SKIP_SENDTELEMETRY=1\r\n' > $WRAPPERBATCHFILEPATH
-    printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" >> $WRAPPERBATCHFILEPATH
+    PathFormat "$VC_PRODUCT_DIR"
+    printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$formatted_path" >> $WRAPPERBATCHFILEPATH
     # use 'echo.%ENV%' syntax (instead of 'echo %ENV%') to avoid outputting "ECHO is off." in case when ENV is empty or a space
     printf '@setlocal\r\n@echo.%%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
     local result
@@ -4177,7 +4178,7 @@ find_ucrt()
         ide_env_file="${ide_env_dir}VsDevCmd.bat"
         if test -f "$ide_env_file"; then
             PathFormat "$(win_get_env_from_vsdevcmdbat UniversalCRTSdkDir)"
-            UCRTSDKDIR=$formatted_path
+            UCRTSDKDIR=$formatted_path_unix
             UCRTVERSION=$(win_get_env_from_vsdevcmdbat UCRTVersion)
             dnl Hack needed at least by tml:
             if test "$UCRTVERSION" = 10.0.15063.0 \
@@ -4371,9 +4372,9 @@ if test "$_os" = "WINNT"; then
     fi
 
     # Find the version of devenv.exe
-    # MSVC 2017 devenv does not start properly from a DOS 8.3 path
-    DEVENV=$(cygpath -lm "$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe")
-    DEVENV_unix=$(cygpath -u "$DEVENV")
+    PathFormat "$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
+    DEVENV="$formatted_path"
+    DEVENV_unix="$formatted_path_unix"
     if test ! -e "$DEVENV_unix"; then
         AC_MSG_WARN([No devenv.exe found - this is expected for VC++ Build Tools])
     fi
@@ -4398,11 +4399,10 @@ if test "$_os" = "WINNT"; then
         # Remove /cl.exe from CC case insensitive
         AC_MSG_NOTICE([found Visual C++ $vcyear])
 
-        main_include_dir=`cygpath -d -m "$COMPATH/Include"`
-        CPPFLAGS="$CPPFLAGS -I$main_include_dir"
-
         PathFormat "$COMPATH"
-        COMPATH=`win_short_path_for_make "$formatted_path"`
+        COMPATH="$formatted_path"
+        COMPATH_unix="$formatted_path_unix"
+        CPPFLAGS="$CPPFLAGS -I$COMPATH/Include"
 
         VCVER=$vcnumwithdot
         VCTOOLSET=$vctoolset
@@ -6733,15 +6733,10 @@ find_winsdk_version()
                 winsdkbinsubdir="$regvalue".0
                 winsdklibsubdir=$winsdkbinsubdir
                 local tmppath="$winsdktest\\Include\\$winsdklibsubdir"
-                local tmppath_unix=$(cygpath -u "$tmppath")
+                PathFormat "$tmppath"
+                local tmppath_unix=$formatted_path_unix
                 # test exist the SDK path
-                if test -d "$tmppath_unix"; then
-                   # when path is convertible to a short path then path is okay
-                   cygpath -d "$tmppath" >/dev/null 2>&1
-                   if test $? -ne 0; then
-                      AC_MSG_ERROR([Windows SDK doesn't have a 8.3 name, see NtfsDisable8dot3NameCreation])
-                   fi
-                else
+                if test ! -d "$tmppath_unix"; then
                    AC_MSG_ERROR([The Windows SDK not found, check the installation])
                 fi
             fi
@@ -6847,8 +6842,8 @@ if test "$_os" = "WINNT"; then
 
         # normalize if found
         if test -n "$WINDOWS_SDK_HOME"; then
-            WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
-            WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
+            PathFormat "$WINDOWS_SDK_HOME"
+            WINDOWS_SDK_HOME=$formatted_path_unix
         fi
 
         WINDOWS_SDK_LIB_SUBDIR=$winsdklibsubdir
@@ -6916,9 +6911,9 @@ the  Windows SDK are installed.])
     WINDOWS_SDK_HOME_unix="$formatted_path_unix"
     if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
         SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/Include"
-        if test -d "$WINDOWS_SDK_HOME/include/um"; then
+        if test -d "$WINDOWS_SDK_HOME_unix/include/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
-        elif test -d "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um"; then
+        elif test -d "$WINDOWS_SDK_HOME_unix/Include/$winsdklibsubdir/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/shared"
         fi
     fi
@@ -6931,20 +6926,18 @@ the  Windows SDK are installed.])
     dnl better, but I do not know under which conditions exactly it is needed by
     dnl msiglobal.pm:
     if test -z "$WINDOWS_SDK_WILANGID" -a -n "$WINDOWS_SDK_HOME"; then
-        WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/Samples/sysmgmt/msi/scripts/WiLangId.vbs
-        WINDOWS_SDK_WILANGID_unix=$(cygpath -u "$WINDOWS_SDK_WILANGID")
+        WINDOWS_SDK_WILANGID_unix=$WINDOWS_SDK_HOME_unix/Samples/sysmgmt/msi/scripts/WiLangId.vbs
         if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
-            WINDOWS_SDK_WILANGID="${WINDOWS_SDK_HOME}/bin/${WINDOWS_SDK_LIB_SUBDIR}/${WIN_BUILD_ARCH}/WiLangId.vbs"
-            WINDOWS_SDK_WILANGID_unix=$(cygpath -u "$WINDOWS_SDK_WILANGID")
+            WINDOWS_SDK_WILANGID_unix="${WINDOWS_SDK_HOME_unix}/bin/${WINDOWS_SDK_LIB_SUBDIR}/${WIN_BUILD_ARCH}/WiLangId.vbs"
         fi
         if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
-            WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/bin/$WIN_BUILD_ARCH/WiLangId.vbs
-            WINDOWS_SDK_WILANGID_unix=$(cygpath -u "$WINDOWS_SDK_WILANGID")
+            WINDOWS_SDK_WILANGID_unix=$WINDOWS_SDK_HOME_unix/bin/$WIN_BUILD_ARCH/WiLangId.vbs
         fi
         if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
-            WINDOWS_SDK_WILANGID=$(cygpath -sm "C:/Program Files (x86)/Windows Kits/8.1/bin/$WIN_BUILD_ARCH/WiLangId.vbs")
-            WINDOWS_SDK_WILANGID_unix=$(cygpath -u "$WINDOWS_SDK_WILANGID")
+            WINDOWS_SDK_WILANGID_unix="C:/Program Files (x86)/Windows Kits/8.1/bin/$WIN_BUILD_ARCH/WiLangId.vbs"
         fi
+        PathFormat "$WINDOWS_SDK_WILANGID_unix"
+        WINDOWS_SDK_WILANGID="$formatted_path"
     fi
     if test -n "$with_lang" -a "$with_lang" != "en-US"; then
         if test -n "$with_package_format" -a "$with_package_format" != no; then
@@ -6976,13 +6969,13 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
     if test -n "$winsdkbinsubdir" \
         -a -f "$winsdktest_unix/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/midl.exe"
     then
-        MIDL_PATH=$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH
+        MIDL_PATH=$winsdktest_unix/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH
         WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME_unix/Bin/$winsdkbinsubdir
     elif test -f "$winsdktest_unix/Bin/$WIN_BUILD_ARCH/midl.exe"; then
-        MIDL_PATH=$winsdktest/Bin/$WIN_BUILD_ARCH
+        MIDL_PATH=$winsdktest_unix/Bin/$WIN_BUILD_ARCH
         WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME_unix/Bin
     elif test -f "$winsdktest_unix/Bin/midl.exe"; then
-        MIDL_PATH=$winsdktest/Bin
+        MIDL_PATH=$winsdktest_unix/Bin
         WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME_unix/Bin
     fi
     PathFormat "$MIDL_PATH"
@@ -8667,12 +8660,15 @@ if test $_os = "WINNT"; then
         dnl explicitly disabled
         UCRT_REDISTDIR=""
     else
-        if ! test -f "$UCRT_REDISTDIR/Windows6.1-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows6.1-KB2999226-x86.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows8.1-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows8.1-KB2999226-x86.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows8-RT-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows8-RT-KB2999226-x86.msu"; then
+        PathFormat "$UCRT_REDISTDIR"
+        UCRT_REDISTDIR="$formatted_path"
+        UCRT_REDISTDIR_unix="$formatted_path_unix"
+        if ! test -f "$UCRT_REDISTDIR_unix/Windows6.1-KB2999226-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR_unix/Windows6.1-KB2999226-x86.msu" -a \
+                  -f "$UCRT_REDISTDIR_unix/Windows8.1-KB2999226-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR_unix/Windows8.1-KB2999226-x86.msu" -a \
+                  -f "$UCRT_REDISTDIR_unix/Windows8-RT-KB2999226-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR_unix/Windows8-RT-KB2999226-x86.msu"; then
             UCRT_REDISTDIR=""
             if test -n "$PKGFORMAT"; then
                for i in $PKGFORMAT; do
@@ -14101,7 +14097,8 @@ if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE" -a "$cross_compiling" != "y
     else
         if test "$_os" = "WINNT"; then
             # AC_PATH_PROGS needs unix path
-            with_ant_home=`cygpath -u "$with_ant_home"`
+            PathFormat "$with_ant_home"
+            with_ant_home="$formatted_path_unix"
         fi
         AbsolutePath "$with_ant_home"
         with_ant_home=$absolute_path
@@ -15179,10 +15176,10 @@ AC_MSG_NOTICE([setting up the build environment variables...])
 AC_SUBST(COMPATH)
 
 if test "$build_os" = "cygwin" -o "$build_os" = wsl; then
-    if test -d "$COMPATH/atlmfc/lib/spectre"; then
+    if test -d "$COMPATH_unix/atlmfc/lib/spectre"; then
         ATL_LIB="$COMPATH/atlmfc/lib/spectre"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
-    elif test -d "$COMPATH/atlmfc/lib"; then
+    elif test -d "$COMPATH_unix/atlmfc/lib"; then
         ATL_LIB="$COMPATH/atlmfc/lib"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
     else
