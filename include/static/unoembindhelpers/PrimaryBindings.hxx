@@ -41,11 +41,6 @@ namespace detail
 void registerUnoType(css::uno::Type const& type, std::type_info const* id);
 }
 
-enum class uno_Reference
-{
-    FromAny
-};
-
 enum class uno_Sequence
 {
     FromSize

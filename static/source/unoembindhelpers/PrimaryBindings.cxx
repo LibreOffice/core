@@ -200,8 +200,6 @@ void registerUnoType(css::uno::Type const& type, std::type_info const* id) { uno
 
 EMSCRIPTEN_BINDINGS(PrimaryBindings)
 {
-    enum_<unoembindhelpers::uno_Reference>("uno_Reference")
-        .value("FromAny", unoembindhelpers::uno_Reference::FromAny);
     enum_<unoembindhelpers::uno_Sequence>("uno_Sequence")
         .value("FromSize", unoembindhelpers::uno_Sequence::FromSize);
 
