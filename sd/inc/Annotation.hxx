@@ -37,27 +37,18 @@
 
 class SdrUndoAction;
 
-namespace com::sun::star::office {
-    class XAnnotation;
-}
+namespace com::sun::star::office { class XAnnotation; }
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SfxViewShell;
 
-namespace sd {
-
-enum class CommentNotificationType { Add, Modify, Remove };
+namespace sd
+{
 
 void createAnnotation( rtl::Reference< Annotation >& xAnnotation, SdPage* pPage );
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const rtl::Reference< sd::Annotation >& xAnnotation, bool bInsert );
-
-void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell,
-        rtl::Reference<sd::Annotation> const & rxAnnotation);
-
-void LOKCommentNotifyAll(CommentNotificationType nType,
-        rtl::Reference<sd::Annotation> const & rxAnnotation);
 
 struct SD_DLLPUBLIC CustomAnnotationMarker
 {
@@ -124,9 +115,8 @@ public:
         return bool(m_pCustomAnnotationMarker);
     }
 
-    void setIsFreeText(bool value) { m_bIsFreeText = value; }
-
-    bool isFreeText() const { return m_bIsFreeText; }
+    OUString GetText() override;
+    void SetText(OUString const& rText) override;
 
 private:
     // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}

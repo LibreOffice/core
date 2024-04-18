@@ -36,7 +36,6 @@
 
 #include <notifydocumentevent.hxx>
 
-#include <tools/json_writer.hxx>
 
 using namespace css;
 
@@ -58,52 +57,6 @@ protected:
     rtl::Reference< Annotation > mxAnnotation;
     bool mbInsert;
     int mnIndex;
-};
-
-struct AnnotationData
-{
-    geometry::RealPoint2D m_Position;
-    geometry::RealSize2D m_Size;
-    OUString m_Author;
-    OUString m_Initials;
-    util::DateTime m_DateTime;
-    OUString m_Text;
-
-    void get( const rtl::Reference< Annotation >& xAnnotation )
-    {
-        m_Position = xAnnotation->getPosition();
-        m_Size = xAnnotation->getSize();
-        m_Author = xAnnotation->getAuthor();
-        m_Initials = xAnnotation->getInitials();
-        m_DateTime = xAnnotation->getDateTime();
-        uno::Reference<text::XText> xText(xAnnotation->getTextRange());
-        m_Text = xText->getString();
-    }
-
-    void set( const rtl::Reference< Annotation >& xAnnotation )
-    {
-        xAnnotation->setPosition(m_Position);
-        xAnnotation->setSize(m_Size);
-        xAnnotation->setAuthor(m_Author);
-        xAnnotation->setInitials(m_Initials);
-        xAnnotation->setDateTime(m_DateTime);
-        uno::Reference<text::XText> xText(xAnnotation->getTextRange());
-        xText->setString(m_Text);
-    }
-};
-
-class UndoAnnotation : public SdrUndoAction
-{
-public:
-    explicit UndoAnnotation( Annotation& rAnnotation );
-
-    virtual void Undo() override;
-    virtual void Redo() override;
-
-protected:
-    rtl::Reference< Annotation > mxAnnotation;
-    AnnotationData maUndoData;
-    AnnotationData maRedoData;
 };
 
 }
@@ -271,6 +224,18 @@ void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
     }
 }
 
+OUString Annotation::GetText()
+{
+    uno::Reference<text::XText> xText(getTextRange());
+    return xText->getString();
+}
+
+void Annotation::SetText(OUString const& rText)
+{
+    uno::Reference<text::XText> xText(getTextRange());
+    return xText->setString(rText);
+}
+
 void Annotation::createChangeUndo()
 {
     std::unique_lock g(m_aMutex);
@@ -283,7 +248,7 @@ void Annotation::createChangeUndoImpl(std::unique_lock<std::mutex>& g)
     if( pModel && pModel->IsUndoEnabled() )
     {
         g.unlock(); // AddUndo calls back into Annotation
-        pModel->AddUndo( std::make_unique<UndoAnnotation>( *this ) );
+        pModel->AddUndo(createUndoAnnotation());
         g.lock();
     }
 
@@ -320,67 +285,6 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const rtl::Re
     }
 }
 
-namespace
-{
-OString lcl_LOKGetCommentPayload(CommentNotificationType nType, rtl::Reference<sd::Annotation> const & rxAnnotation)
-{
-    ::tools::JsonWriter aJsonWriter;
-    {
-        auto aCommentNode = aJsonWriter.startNode("comment");
-
-        aJsonWriter.put("action", (nType == CommentNotificationType::Add ? "Add" :
-                                (nType == CommentNotificationType::Remove ? "Remove" :
-                                    (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
-        aJsonWriter.put("id", rxAnnotation->GetId());
-
-        if (nType != CommentNotificationType::Remove && rxAnnotation.is())
-        {
-            aJsonWriter.put("id", rxAnnotation->GetId());
-            aJsonWriter.put("author", rxAnnotation->getAuthor());
-            aJsonWriter.put("dateTime", utl::toISO8601(rxAnnotation->getDateTime()));
-            uno::Reference<text::XText> xText(rxAnnotation->getTextRange());
-            aJsonWriter.put("text", xText->getString());
-            const SdPage* pPage = rxAnnotation->GetPage();
-            aJsonWriter.put("parthash", pPage ? OString::number(pPage->GetHashCode()) : OString());
-            geometry::RealPoint2D const & rPoint = rxAnnotation->getPosition();
-            geometry::RealSize2D const & rSize = rxAnnotation->getSize();
-            ::tools::Rectangle aRectangle(Point(std::round(o3tl::toTwips(rPoint.X, o3tl::Length::mm)),
-                                                std::round(o3tl::toTwips(rPoint.Y, o3tl::Length::mm))),
-                                          Size(std::round(o3tl::toTwips(rSize.Width, o3tl::Length::mm)),
-                                               std::round(o3tl::toTwips(rSize.Height, o3tl::Length::mm))));
-            aJsonWriter.put("rectangle", aRectangle.toString());
-        }
-    }
-    return aJsonWriter.finishAndGetAsOString();
-}
-} // anonymous ns
-
-void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell, rtl::Reference<sd::Annotation> const & rxAnnotation)
-{
-    // callbacks only if tiled annotations are explicitly turned off by LOK client
-    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
-        return ;
-
-    OString aPayload = lcl_LOKGetCommentPayload(nType, rxAnnotation);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload);
-}
-
-void LOKCommentNotifyAll(CommentNotificationType nType, rtl::Reference<sd::Annotation> const & rxAnnotation)
-{
-    // callbacks only if tiled annotations are explicitly turned off by LOK client
-    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
-        return ;
-
-    OString aPayload = lcl_LOKGetCommentPayload(nType, rxAnnotation);
-
-    const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
-    {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload);
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
-}
-
 UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotation, bool bInsert )
 : SdrUndoAction( *rAnnotation.GetModel() )
 , mxAnnotation( &rAnnotation )
@@ -410,7 +314,7 @@ void UndoInsertOrRemoveAnnotation::Undo()
     else
     {
         pPage->addAnnotation( mxAnnotation, mnIndex );
-        LOKCommentNotifyAll( CommentNotificationType::Add, mxAnnotation );
+        LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
     }
 }
 
@@ -424,33 +328,12 @@ void UndoInsertOrRemoveAnnotation::Redo()
     if( mbInsert )
     {
         pPage->addAnnotation( mxAnnotation, mnIndex );
-        LOKCommentNotifyAll( CommentNotificationType::Add, mxAnnotation );
+        LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
     }
     else
     {
         pPage->removeAnnotation( mxAnnotation );
     }
-}
-
-UndoAnnotation::UndoAnnotation( Annotation& rAnnotation )
-: SdrUndoAction( *rAnnotation.GetModel() )
-, mxAnnotation( &rAnnotation )
-{
-    maUndoData.get( mxAnnotation );
-}
-
-void UndoAnnotation::Undo()
-{
-    maRedoData.get( mxAnnotation );
-    maUndoData.set( mxAnnotation );
-    LOKCommentNotifyAll( CommentNotificationType::Modify, mxAnnotation );
-}
-
-void UndoAnnotation::Redo()
-{
-    maUndoData.get( mxAnnotation );
-    maRedoData.set( mxAnnotation );
-    LOKCommentNotifyAll( CommentNotificationType::Modify, mxAnnotation );
 }
 
 } // namespace sd
