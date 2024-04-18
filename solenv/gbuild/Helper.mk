@@ -62,6 +62,42 @@ define gb_Helper_windows_path
 $(subst /,\\,$(1))
 endef
 
+
+ifeq ($(OS),WNT)
+# path-replacement optimizations, instead of calling cygpath/wslpath all the time, just do it once
+# and then do all other path-replacements without the need to spawn processes/shells for that
+SRCDIR_CYG := $(shell cygpath -u $(SRCDIR))
+BUILDDIR_CYG := $(shell cygpath -u $(BUILDDIR))
+INSTDIR_CYG := $(shell cygpath -u $(INSTDIR))
+WORKDIR_CYG := $(shell cygpath -u $(WORKDIR))
+TARFILE_LOCATION_CYG := $(shell cygpath -u $(TARFILE_LOCATION))
+
+define gb_Helper_cyg_path
+$(subst $(TARFILE_LOCATION)/,$(TARFILE_LOCATION_CYG)/,$(subst $(SRCDIR)/,$(SRCDIR_CYG)/,$(subst $(BUILDDIR)/,$(BUILDDIR_CYG)/,$(subst $(INSTDIR)/,$(INSTDIR_CYG)/,$(subst $(WORKDIR)/,$(WORKDIR_CYG)/,$(1))))))
+endef
+
+ifneq ($(MSYSTEM),)
+# paths to reach into windows realm from within wsl
+SRCDIR_WSL := $(shell $(WSL) wslpath -u $(SRCDIR))
+BUILDDIR_WSL := $(shell $(WSL) wslpath -u $(BUILDDIR))
+INSTDIR_WSL := $(shell $(WSL) wslpath -u $(INSTDIR))
+WORKDIR_WSL := $(shell $(WSL) wslpath -u $(WORKDIR))
+TARFILE_LOCATION_WSL := $(shell $(WSL) wslpath -u $(TARFILE_LOCATION))
+
+define gb_Helper_wsl_path
+$(subst $(TARFILE_LOCATION)/,$(TARFILE_LOCATION_WSL)/,$(subst $(SRCDIR)/,$(SRCDIR_WSL)/,$(subst $(BUILDDIR)/,$(BUILDDIR_WSL)/,$(subst $(INSTDIR)/,$(INSTDIR_WSL)/,$(subst $(WORKDIR)/,$(WORKDIR_WSL)/,$(1))))))
+endef
+else
+# not needed for cygwin
+gb_Helper_wsl_path=$(1)
+endif
+
+else
+# noop for non-Windows
+gb_Helper_wsl_path=$(1)
+gb_Helper_cyg_path=$(1)
+endif
+
 define gb_Helper_make_clean_target
 gb_$(1)_get_clean_target = $(WORKDIR)/Clean/$(1)/$$(1)
 
