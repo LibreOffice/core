@@ -16,6 +16,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/temporary.hxx>
 #include <o3tl/unreachable.hxx>
@@ -191,6 +192,65 @@ std::type_info const* getTypeId(css::uno::Type const& type)
     }
     return i->second;
 }
+
+Any constructAny(const css::uno::Type& rUnoType, const val& rObject)
+{
+    switch (rUnoType.getTypeClass())
+    {
+        case TypeClass_VOID:
+            return {};
+        case TypeClass_BOOLEAN:
+            return Any{ rObject.as<bool>() };
+        case TypeClass_BYTE:
+            return Any{ rObject.as<sal_Int8>() };
+        case TypeClass_SHORT:
+            return Any{ rObject.as<sal_Int16>() };
+        case TypeClass_UNSIGNED_SHORT:
+            return Any{ rObject.as<sal_uInt16>() };
+        case TypeClass_LONG:
+            return Any{ rObject.as<sal_Int32>() };
+        case TypeClass_UNSIGNED_LONG:
+            return Any{ rObject.as<sal_uInt32>() };
+        case TypeClass_HYPER:
+            return Any{ rObject.as<sal_Int64>() };
+        case TypeClass_UNSIGNED_HYPER:
+            return Any{ rObject.as<sal_uInt64>() };
+        case TypeClass_FLOAT:
+            return Any{ rObject.as<float>() };
+        case TypeClass_DOUBLE:
+            return Any{ rObject.as<double>() };
+        case TypeClass_CHAR:
+            return Any{ rObject.as<char16_t>() };
+        case TypeClass_STRING:
+            return Any{ OUString(rObject.as<std::u16string>()) };
+        case TypeClass_TYPE:
+            return css::uno::Any(rObject.as<css::uno::Type>());
+        case TypeClass_SEQUENCE:
+        case TypeClass_STRUCT:
+        case TypeClass_EXCEPTION:
+        case TypeClass_INTERFACE:
+        {
+            emscripten::internal::EM_DESTRUCTORS destructors = nullptr;
+            emscripten::internal::EM_GENERIC_WIRE_TYPE result
+                = _emval_as(rObject.as_handle(), getTypeId(rUnoType), &destructors);
+            emscripten::internal::DestructorsRunner dr(destructors);
+            return css::uno::Any(emscripten::internal::fromGenericWireType<void const*>(result),
+                                 rUnoType);
+        }
+        case TypeClass_ENUM:
+        {
+            emscripten::internal::EM_DESTRUCTORS destructors = nullptr;
+            emscripten::internal::EM_GENERIC_WIRE_TYPE result
+                = _emval_as(rObject.as_handle(), getTypeId(rUnoType), &destructors);
+            emscripten::internal::DestructorsRunner dr(destructors);
+            return css::uno::Any(
+                &o3tl::temporary(emscripten::internal::fromGenericWireType<sal_Int32>(result)),
+                rUnoType);
+        }
+        default:
+            throw std::invalid_argument("bad type class");
+    }
+}
 }
 
 namespace unoembindhelpers::detail
@@ -248,64 +308,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
 
     // Any
     class_<Any>("uno_Any")
-        .constructor(+[](const css::uno::Type& rUnoType, const val& rObject) -> Any {
-            switch (rUnoType.getTypeClass())
-            {
-                case TypeClass_VOID:
-                    return {};
-                case TypeClass_BOOLEAN:
-                    return Any{ rObject.as<bool>() };
-                case TypeClass_BYTE:
-                    return Any{ rObject.as<sal_Int8>() };
-                case TypeClass_SHORT:
-                    return Any{ rObject.as<sal_Int16>() };
-                case TypeClass_UNSIGNED_SHORT:
-                    return Any{ rObject.as<sal_uInt16>() };
-                case TypeClass_LONG:
-                    return Any{ rObject.as<sal_Int32>() };
-                case TypeClass_UNSIGNED_LONG:
-                    return Any{ rObject.as<sal_uInt32>() };
-                case TypeClass_HYPER:
-                    return Any{ rObject.as<sal_Int64>() };
-                case TypeClass_UNSIGNED_HYPER:
-                    return Any{ rObject.as<sal_uInt64>() };
-                case TypeClass_FLOAT:
-                    return Any{ rObject.as<float>() };
-                case TypeClass_DOUBLE:
-                    return Any{ rObject.as<double>() };
-                case TypeClass_CHAR:
-                    return Any{ rObject.as<char16_t>() };
-                case TypeClass_STRING:
-                    return Any{ OUString(rObject.as<std::u16string>()) };
-                case TypeClass_TYPE:
-                    return css::uno::Any(rObject.as<css::uno::Type>());
-                case TypeClass_SEQUENCE:
-                case TypeClass_STRUCT:
-                case TypeClass_EXCEPTION:
-                case TypeClass_INTERFACE:
-                {
-                    emscripten::internal::EM_DESTRUCTORS destructors = nullptr;
-                    emscripten::internal::EM_GENERIC_WIRE_TYPE result
-                        = _emval_as(rObject.as_handle(), getTypeId(rUnoType), &destructors);
-                    emscripten::internal::DestructorsRunner dr(destructors);
-                    return css::uno::Any(
-                        emscripten::internal::fromGenericWireType<void const*>(result), rUnoType);
-                }
-                case TypeClass_ENUM:
-                {
-                    emscripten::internal::EM_DESTRUCTORS destructors = nullptr;
-                    emscripten::internal::EM_GENERIC_WIRE_TYPE result
-                        = _emval_as(rObject.as_handle(), getTypeId(rUnoType), &destructors);
-                    emscripten::internal::DestructorsRunner dr(destructors);
-                    return css::uno::Any(
-                        &o3tl::temporary(
-                            emscripten::internal::fromGenericWireType<sal_Int32>(result)),
-                        rUnoType);
-                }
-                default:
-                    throw std::invalid_argument("bad type class");
-            }
-        })
+        .constructor(&constructAny)
         .function("get", +[](css::uno::Any const& self) {
             switch (self.getValueType().getTypeClass())
             {
@@ -395,6 +398,9 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
     function("getUnoComponentContext", &comphelper::getProcessComponentContext);
+    function("throwUnoException", +[](css::uno::Type const& type, emscripten::val const& value) {
+        cppu::throwException(constructAny(type, value));
+    });
     function("rtl_uString_release",
              +[](std::uintptr_t ptr) { rtl_uString_release(reinterpret_cast<rtl_uString*>(ptr)); });
 

@@ -585,6 +585,11 @@ Module.addOnPostRun(function() {
         getTypes() { return this.implTypes; },
         getImplementationId() { return this.implImplementationId; },
         execute(args) {
+            if (args.size() !== 1 || args.get(0).Name !== 'name') {
+                Module.throwUnoException(
+                    Module.uno_Type.Exception('com.sun.star.lang.IllegalArgumentException'),
+                    {Message: 'bad args', Context: null, ArgumentPosition: 0});
+            }
             console.log('Hello ' + args.get(0).Value.get());
             return new Module.uno_Any(Module.uno_Type.Void(), undefined);
         },

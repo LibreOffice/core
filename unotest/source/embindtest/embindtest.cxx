@@ -508,7 +508,14 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     void SAL_CALL passJob(css::uno::Reference<css::task::XJob> const& object) override
     {
-        object->execute({ { u"name"_ustr, css::uno::Any(u"job"_ustr) } });
+        try
+        {
+            object->execute({});
+        }
+        catch (css::uno::RuntimeException& e)
+        {
+            object->execute({ { u"name"_ustr, css::uno::Any(e.Message) } });
+        }
     }
 
     void SAL_CALL
