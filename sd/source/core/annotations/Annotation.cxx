@@ -115,14 +115,10 @@ void createAnnotation(rtl::Reference<Annotation>& xAnnotation, SdPage* pPage )
     pPage->addAnnotation(xAnnotation, -1);
 }
 
-sal_uInt32 Annotation::m_nLastId = 1;
-
 Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, SdPage* pPage)
-    : ::cppu::PropertySetMixin<office::XAnnotation>(context, IMPLEMENTS_PROPERTY_SET,
-                                                    uno::Sequence<OUString>())
-    , m_nId(m_nLastId++)
+    : sdr::annotation::Annotation(pPage)
+    , ::cppu::PropertySetMixin<office::XAnnotation>(context, IMPLEMENTS_PROPERTY_SET, uno::Sequence<OUString>())
     , mpPage(pPage)
-    , m_bIsFreeText(false)
 {
 }
 
