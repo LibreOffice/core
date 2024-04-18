@@ -1263,6 +1263,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf126024XLSX)
                 "External");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testProtectedRange)
+{
+    createScDoc("xlsx/protectedRange.xlsx");
+    save("Calc Office Open XML");
+
+    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    // entire row was being exported as shorthand 'B:B' which LO couldn't read back
+    assertXPath(pDoc, "//x:protectedRanges/x:protectedRange"_ostr, "sqref"_ostr, "B1:B1048576");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91332)
 {
     createScDoc("xlsx/tdf91332.xlsx");
