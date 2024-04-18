@@ -27,6 +27,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
+#include <svx/annotation/Annotation.hxx>
 
 #include "sdpage.hxx"
 #include "textapi.hxx"
@@ -74,19 +75,16 @@ struct SD_DLLPUBLIC CustomAnnotationMarker
 };
 
 class SD_DLLPUBLIC Annotation final : private ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
-                   public ::cppu::PropertySetMixin<css::office::XAnnotation>
+                    public sdr::annotation::Annotation,
+                    public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
+                    public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
 public:
     explicit Annotation( const css::uno::Reference<css::uno::XComponentContext>& context, SdPage* pPage );
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
 
-    static sal_uInt32 m_nLastId;
-
     SdPage* GetPage() const { return mpPage; }
-    SdrModel* GetModel() { return (mpPage != nullptr) ? &mpPage->getSdrModelFromSdrPage() : nullptr; }
-    sal_uInt32 GetId() const { return m_nId; }
 
     // XInterface:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
@@ -146,17 +144,9 @@ private:
     // disposed, do it here.
     virtual void SAL_CALL disposing() override;
 
-    sal_uInt32 m_nId;
     SdPage* mpPage;
-    css::geometry::RealPoint2D m_Position;
-    css::geometry::RealSize2D m_Size;
-    OUString m_Author;
-    OUString m_Initials;
-    css::util::DateTime m_DateTime;
     rtl::Reference<TextApiObject> m_TextRange;
-
     std::unique_ptr<CustomAnnotationMarker> m_pCustomAnnotationMarker;
-    bool m_bIsFreeText;
 };
 
 }
