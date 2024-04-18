@@ -486,53 +486,80 @@ namespace svgio::svgreader
             }
         }
 
-        void SvgCharacterNode::whiteSpaceHandling()
+        SvgCharacterNode*
+        SvgCharacterNode::whiteSpaceHandling(SvgCharacterNode* pPreviousCharacterNode)
         {
             bool bIsDefault(XmlSpace::Default == getXmlSpace());
             // if xml:space="default" then remove all newline characters, otherwise convert them to space
             // convert tab to space too
-            maText = maTextBeforeSpaceHandling = maText.replaceAll(u"\n", bIsDefault ? u"" : u" ").replaceAll(u"\t", u" ");
+            maText = maText.replaceAll(u"\n", bIsDefault ? u"" : u" ").replaceAll(u"\t", u" ");
 
-            if(bIsDefault)
+            if (!bIsDefault)
             {
-                // strip of all leading and trailing spaces
-                // and consolidate contiguous space
-                maText = consolidateContiguousSpace(maText.trim());
-            }
-        }
-
-        SvgCharacterNode* SvgCharacterNode::addGap(SvgCharacterNode* pPreviousCharacterNode)
-        {
-            // maText may have lost all text. If that's the case, ignore as invalid character node
-            // Also ignore if maTextBeforeSpaceHandling just have spaces
-            if(!maText.isEmpty() && !o3tl::trim(maTextBeforeSpaceHandling).empty())
-            {
-                if(pPreviousCharacterNode)
+                if (maText.isEmpty())
                 {
-                    bool bAddGap(true);
-
-                    // Do not add a gap if last node doesn't end with a space and
-                    // current note doesn't start with a space
-                    const sal_uInt32 nLastLength(pPreviousCharacterNode->maTextBeforeSpaceHandling.getLength());
-                    if(pPreviousCharacterNode->maTextBeforeSpaceHandling[nLastLength - 1] != ' ' && maTextBeforeSpaceHandling[0] != ' ')
-                        bAddGap = false;
-
-                    // Do not add a gap if this node and last node are in different lines
-                    if(pPreviousCharacterNode->mpParentLine != mpParentLine)
-                        bAddGap = false;
-
-                    // add in-between whitespace (single space) to the beginning of the current character node
-                    if(bAddGap)
-                    {
-                        maText = " " + maText;
-                    }
+                    // Ignore this empty node for the purpose of whitespace handling
+                    return pPreviousCharacterNode;
                 }
 
-                // this becomes the previous character node
+                if (pPreviousCharacterNode && pPreviousCharacterNode->mbHadTrailingSpace)
+                {
+                    // pPreviousCharacterNode->mbHadTrailingSpace implies its xml:space="default".
+                    // Even if this xml:space="preserve" node is whitespace-only, the trailing space
+                    // of the previous node is significant - restore it
+                    pPreviousCharacterNode->maText += " ";
+                }
+
                 return this;
             }
 
-            return pPreviousCharacterNode;
+            bool bHadLeadingSpace = maText.startsWith(" ");
+            mbHadTrailingSpace = maText.endsWith(" "); // Only set for xml:space="default"
+
+            // strip of all leading and trailing spaces
+            // and consolidate contiguous space
+            maText = consolidateContiguousSpace(maText.trim());
+
+            if (pPreviousCharacterNode)
+            {
+                if (pPreviousCharacterNode->mbHadTrailingSpace)
+                {
+                    // pPreviousCharacterNode->mbHadTrailingSpace implies its xml:space="default".
+                    // The previous node already has a pending trailing space.
+                    if (maText.isEmpty())
+                    {
+                        // Leading spaces in this empty node are insignificant.
+                        // Ignore this empty node for the purpose of whitespace handling
+                        return pPreviousCharacterNode;
+                    }
+                    // The previous node's trailing space is significant - restore it. Note that
+                    // it is incorrect to insert a space in this node instead: the spaces in
+                    // different nodes may have different size
+                    pPreviousCharacterNode->maText += " ";
+                    return this;
+                }
+
+                if (bHadLeadingSpace)
+                {
+                    // This possibly whitespace-only xml:space="default" node goes after another
+                    // node either having xml:space="default", but without a trailing space; or
+                    // having xml:space="preserve" (in that case, it's irrelevant if that node had
+                    // any trailing spaces).
+                    if (!maText.isEmpty())
+                    {
+                        // The leading whitespace in this node is significant - restore it
+                        maText = " " + maText;
+                    }
+                    // The trailing whitespace in this node may or may not be
+                    // significant (it will be significant, if there will be more nodes). Keep it as
+                    // it is (even empty), but return this, to participate in whitespace handling
+                    return this;
+                }
+            }
+
+            // No previous node, or no leading/trailing space on the previous node's boundary: if
+            // this is whitespace-only, its whitespace is never significant
+            return maText.isEmpty() ? pPreviousCharacterNode : this;
         }
 
         void SvgCharacterNode::concatenate(std::u16string_view rText)
