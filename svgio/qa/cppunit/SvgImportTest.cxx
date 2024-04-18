@@ -14,6 +14,7 @@
 #include <test/xmltesttools.hxx>
 
 #include <comphelper/seqstream.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
@@ -1615,6 +1616,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159968)
             "/primitive2D/transform/transform/transform/transform/polypolygoncolor"_ostr, "color"_ostr, "#000000");
     assertXPath(pDocument,
             "/primitive2D/transform/transform/transform/transform/polypolygoncolor/polypolygon/polygon/point"_ostr, 5);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf160517)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf160517.svg");
+
+    assertXPath(pDocument,
+            "/primitive2D/transform/bitmap"_ostr, "height"_ostr, "100");
+    assertXPath(pDocument,
+            "/primitive2D/transform/bitmap"_ostr, "width"_ostr, "100");
+    assertXPath(pDocument,
+            "/primitive2D/transform/bitmap/data"_ostr, 100);
+
+    // Check the color of a pixel in the middle
+    const OUString sDataRow = getXPath(pDocument, "/primitive2D/transform/bitmap/data[50]"_ostr, "row"_ostr);
+    std::vector<OUString> aPixels = comphelper::string::split(sDataRow, ',');
+    CPPUNIT_ASSERT_EQUAL(OUString("008100"), aPixels[50]);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149880)

@@ -516,7 +516,7 @@ BitmapEx DrawBitmapInRect( const BitmapEx& rBitmap,
                                 ::basegfx::B2DRectangle const & rBitmapRect,
                                 ::basegfx::B2DRectangle const & rDestRect )
 {
-    if( rBitmapRect.isEmpty() || rDestRect.isEmpty() )
+    if( rDestRect.isEmpty() )
         return BitmapEx();
 
     const Size aDestBmpSize( ::basegfx::fround<tools::Long>( rDestRect.getWidth() ),
@@ -537,13 +537,6 @@ BitmapEx DrawBitmapInRect( const BitmapEx& rBitmap,
     if (rBitmap.IsAlpha())
         pAlphaReadAccess = aSrcAlpha;
 
-    if( !pReadAccess || (!pAlphaReadAccess && rBitmap.IsAlpha()) )
-    {
-        // TODO(E2): Error handling!
-        ENSURE_OR_THROW( false,
-                          "DrawBitmapInRect(): could not access source bitmap" );
-    }
-
     // mapping table, to translate pAlphaReadAccess' pixel
     // values into destination alpha values (needed e.g. for
     // paletted 1-bit masks).
@@ -561,7 +554,7 @@ BitmapEx DrawBitmapInRect( const BitmapEx& rBitmap,
     }
     // else: mapping table is not used
 
-    Bitmap aDstBitmap(aDestBmpSize, aSrcBitmap.getPixelFormat(), &pReadAccess->GetPalette());
+    Bitmap aDstBitmap(aDestBmpSize, vcl::PixelFormat::N24_BPP);
     Bitmap aDstAlpha( AlphaMask( aDestBmpSize ).GetBitmap() );
 
     {
