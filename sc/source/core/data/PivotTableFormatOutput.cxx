@@ -58,16 +58,13 @@ public:
         {
             std::vector<OUString> aNames;
             fillNamesForDimension(aNames, nDimension);
-            maNameCache.emplace(nDimension, aNames);
-            return aNames[nIndex];
+            iterator = maNameCache.emplace(nDimension, aNames).first;
         }
-        else
-        {
-            std::vector<OUString>& rNames = iterator->second;
-            if (nIndex >= rNames.size())
-                return OUString();
-            return rNames[nIndex];
-        }
+
+        const std::vector<OUString>& rNames = iterator->second;
+        if (nIndex >= rNames.size())
+            return OUString();
+        return rNames[nIndex];
     }
 };
 
