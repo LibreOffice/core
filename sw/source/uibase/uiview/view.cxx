@@ -460,6 +460,7 @@ void SwView::SelectShell()
                 rDispatcher.Push( *m_pShell );
             }
             m_pShell = new SwTextShell(*this);
+
             rDispatcher.Push( *m_pShell );
             if ( m_nSelectionType & SelectionType::Table )
             {
@@ -667,7 +668,10 @@ void SwView::CheckReadonlyState()
             SID_ATTR_PARA_ORPHANS,
             SID_ATTR_PARA_MODEL,        SID_PARA_DLG,
             FN_SELECT_PARA,             SID_DEC_INDENT,
-            SID_INC_INDENT
+            SID_INC_INDENT,
+            FN_INSERT_TABLE,            FN_FORMAT_TABLE_DLG,        FN_EXPAND_GLOSSARY,
+            FN_NUM_BULLET_ON,           FN_NUM_NUMBERING_ON,        FN_SVX_SET_NUMBER,
+            FN_SVX_SET_BULLET,          FN_SVX_SET_OUTLINE,         SID_AUTOSPELL_CHECK,
         };
         static bool bFirst = true;
         if ( bFirst )

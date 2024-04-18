@@ -554,7 +554,7 @@ public:
 
     bool IsOnlineSpell() const
     {
-        return !m_bReadonly && m_nCoreOptions.bOnlineSpell;
+        return m_nCoreOptions.bOnlineSpell;
     }
     void SetOnlineSpell( bool b )
     {

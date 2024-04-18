@@ -14,6 +14,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <vcl/scheduler.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -22,7 +24,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/XParagraphCursor.hpp>
 
+#include <cmdid.h>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -320,6 +324,36 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, TestTdf152839_Formtext)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(723), nHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testEditInReadonly)
+{
+    createSwDoc("editinsection.odt");
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwView* pView = pDocShell->GetView();
+
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_EDITDOC, SfxCallMode::SYNCHRON);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XParagraphCursor> xParaCursor(xTextDocument->getText()->createTextCursor(),
+                                                       uno::UNO_QUERY);
+
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
+                                                          uno::UNO_QUERY_THROW);
+
+    xSelSupplier->select(css::uno::Any(xParaCursor));
+    std::unique_ptr<SfxPoolItem> pItem;
+    SfxItemState eState = pView->GetViewFrame().GetBindings().QueryState(FN_INSERT_TABLE, pItem);
+    //status disabled in read only content
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
+
+    //move cursor to section
+    xParaCursor->gotoNextParagraph(false);
+    xSelSupplier->select(css::uno::Any(xParaCursor));
+    eState = pView->GetViewFrame().GetBindings().QueryState(FN_INSERT_TABLE, pItem);
+    //status default in editable section
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eState);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
