@@ -513,7 +513,7 @@ AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MICRO,$LIBO_VERSION_MICRO)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
 
-git_date=`git log -1 --pretty=format:"%cd" --date=format:'%Y' 2>&/dev/null`
+git_date=`git log -1 --pretty=format:"%cd" --date=format:'%Y' 2>/dev/null`
 LIBO_THIS_YEAR=${git_date:-2024}
 AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
 
