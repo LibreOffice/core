@@ -665,7 +665,7 @@ void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUSt
 
             if (xFullTextTitleProps.is())
             {
-                // these are the properies from the textshape object - needs to apply them
+                // these are the properties from the textshape object - needs to apply them
                 // to all the string parts firstly
                 uno::Reference< beans::XPropertySetInfo > xInfo = xNewFmtStr->getPropertySetInfo();
                 for (const beans::Property& rProp : xFullTextTitleProps->getPropertySetInfo()->getProperties())
