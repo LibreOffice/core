@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <editeng/outliner.hxx>
 
-class SdDrawDocument;
+class SdrModel;
 
 namespace sd {
 
@@ -32,9 +32,9 @@ class TextAPIEditSource;
 class TextApiObject final : public SvxUnoText
 {
 public:
-    static rtl::Reference< TextApiObject > create( SdDrawDocument* pDoc );
+    static rtl::Reference<TextApiObject> create(SdrModel* pModel);
 
-    virtual             ~TextApiObject() noexcept override;
+    virtual ~TextApiObject() noexcept override;
 
     /// @throws css::uno::RuntimeException
     void dispose();
