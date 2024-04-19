@@ -951,6 +951,7 @@ SAL_IMPLEMENT_MAIN()
         cppOut << "#include <emscripten/bind.h>\n"
                   "#include <com/sun/star/uno/Any.hxx>\n"
                   "#include <com/sun/star/uno/Reference.hxx>\n"
+                  "#include <o3tl/unreachable.hxx>\n"
                   "#include <static/unoembindhelpers/PrimaryBindings.hxx>\n";
         for (auto const& enm : enums)
         {
@@ -977,14 +978,11 @@ SAL_IMPLEMENT_MAIN()
             cppOut << "#include <" << sng.replace('.', '/') << ".hpp>\n";
         }
         cppOut << "\n"
-                  "// TODO: This is a temporary workaround that likely causes the Embind UNO\n"
-                  "// bindings to leak memory. Reference counting and cloning mechanisms of\n"
-                  "// Embind should be investigated to figure out what exactly we need here:\n"
                   "namespace emscripten::internal {\n";
         for (auto const& ifc : interfaces)
         {
             cppOut << "    template<> void raw_destructor<" << cppName(ifc) << ">(" << cppName(ifc)
-                   << " *) {}\n";
+                   << " *) { O3TL_UNREACHABLE; }\n";
         }
         cppOut << "}\n\n";
         unsigned long long n = 0;
