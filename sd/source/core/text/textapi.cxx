@@ -83,13 +83,14 @@ void UndoTextAPIChanged::Redo()
     }
 }
 
-namespace {
+namespace
+{
 
-struct TextAPIEditSource_Impl
+struct OutlinerHolder
 {
     SdrModel* mpModel;
-    Outliner* mpOutliner;
-    SvxOutlinerForwarder* mpTextForwarder;
+    std::unique_ptr<Outliner> mpOutliner;
+    std::unique_ptr<SvxOutlinerForwarder> mpTextForwarder;
 };
 
 }
@@ -97,22 +98,20 @@ struct TextAPIEditSource_Impl
 class TextAPIEditSource : public SvxEditSource
 {
     // refcounted
-    std::shared_ptr<TextAPIEditSource_Impl> m_xImpl;
+    std::shared_ptr<OutlinerHolder> mpHolder;
 
     virtual std::unique_ptr<SvxEditSource> Clone() const override;
-    virtual SvxTextForwarder*   GetTextForwarder() override;
-    virtual void                UpdateData() override;
-    explicit            TextAPIEditSource( const TextAPIEditSource& rSource );
+    virtual SvxTextForwarder* GetTextForwarder() override;
+    virtual void UpdateData() override;
+    explicit TextAPIEditSource(const TextAPIEditSource& rSource);
 
 public:
-    explicit            TextAPIEditSource(SdrModel* pModel);
+    explicit TextAPIEditSource(SdrModel* pModel);
 
-    void                Dispose();
-    void                SetText( OutlinerParaObject const & rText );
+    void SetText(OutlinerParaObject const & rText);
     std::optional<OutlinerParaObject> CreateText();
-    OUString            GetText() const;
-
-    SdrModel* getModel() { return m_xImpl->mpModel; }
+    OUString GetText() const;
+    SdrModel* getModel() { return mpHolder->mpModel; }
 };
 
 static const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
@@ -152,12 +151,8 @@ rtl::Reference<TextApiObject> TextApiObject::create(SdrModel* pModel)
 
 void TextApiObject::dispose()
 {
-    if( mpSource )
-    {
-        mpSource->Dispose();
+    if (mpSource)
         mpSource.reset();
-    }
-
 }
 
 std::optional<OutlinerParaObject> TextApiObject::CreateText()
@@ -192,13 +187,13 @@ TextApiObject* TextApiObject::getImplementation( const css::uno::Reference< css:
 
 TextAPIEditSource::TextAPIEditSource(const TextAPIEditSource& rSource)
     : SvxEditSource(*this)
-    , m_xImpl(rSource.m_xImpl) // shallow copy; uses internal refcounting
+    , mpHolder(rSource.mpHolder) // shallow copy; uses internal refcounting
 {
 }
 
 std::unique_ptr<SvxEditSource> TextAPIEditSource::Clone() const
 {
-    return std::unique_ptr<SvxEditSource>(new TextAPIEditSource( *this ));
+    return std::unique_ptr<SvxEditSource>(new TextAPIEditSource(*this));
 }
 
 void TextAPIEditSource::UpdateData()
@@ -207,70 +202,58 @@ void TextAPIEditSource::UpdateData()
 }
 
 TextAPIEditSource::TextAPIEditSource(SdrModel* pModel)
-: m_xImpl(std::make_shared<TextAPIEditSource_Impl>())
+    : mpHolder(std::make_shared<OutlinerHolder>())
 {
-    m_xImpl->mpModel = pModel;
-    m_xImpl->mpOutliner = nullptr;
-    m_xImpl->mpTextForwarder = nullptr;
-}
-
-void TextAPIEditSource::Dispose()
-{
-    m_xImpl->mpModel = nullptr;
-    delete m_xImpl->mpTextForwarder;
-    m_xImpl->mpTextForwarder = nullptr;
-
-    delete m_xImpl->mpOutliner;
-    m_xImpl->mpOutliner = nullptr;
+    mpHolder->mpModel = pModel;
 }
 
 SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
 {
-    if(!m_xImpl->mpModel)
+    if (!mpHolder->mpModel)
         return nullptr; // mpModel == 0 can be used to flag this as disposed
 
-    if (!m_xImpl->mpOutliner)
+    if (!mpHolder->mpOutliner)
     {
         //init draw model first
-        SfxItemPool* pPool = &m_xImpl->mpModel->GetItemPool();
-        m_xImpl->mpOutliner = new SdrOutliner(pPool, OutlinerMode::TextObject);
-        SdDrawDocument::SetCalcFieldValueHdl(m_xImpl->mpOutliner);
+        SfxItemPool* pPool = &mpHolder->mpModel->GetItemPool();
+        mpHolder->mpOutliner.reset(new SdrOutliner(pPool, OutlinerMode::TextObject));
+        SdDrawDocument::SetCalcFieldValueHdl(mpHolder->mpOutliner.get());
     }
 
-    if (!m_xImpl->mpTextForwarder)
-        m_xImpl->mpTextForwarder = new SvxOutlinerForwarder(*m_xImpl->mpOutliner, false);
+    if (!mpHolder->mpTextForwarder)
+        mpHolder->mpTextForwarder.reset(new SvxOutlinerForwarder(*mpHolder->mpOutliner, false));
 
-    return m_xImpl->mpTextForwarder;
+    return mpHolder->mpTextForwarder.get();
 }
 
 void TextAPIEditSource::SetText( OutlinerParaObject const & rText )
 {
-    if (m_xImpl->mpModel)
+    if (mpHolder->mpModel)
     {
-        if (!m_xImpl->mpOutliner)
+        if (!mpHolder->mpOutliner)
         {
             //init draw model first
-            SfxItemPool* pPool = &m_xImpl->mpModel->GetItemPool();
-            m_xImpl->mpOutliner = new SdrOutliner(pPool, OutlinerMode::TextObject);
-            SdDrawDocument::SetCalcFieldValueHdl(m_xImpl->mpOutliner);
+            SfxItemPool* pPool = &mpHolder->mpModel->GetItemPool();
+            mpHolder->mpOutliner.reset(new SdrOutliner(pPool, OutlinerMode::TextObject));
+            SdDrawDocument::SetCalcFieldValueHdl(mpHolder->mpOutliner.get());
         }
 
-        m_xImpl->mpOutliner->SetText( rText );
+        mpHolder->mpOutliner->SetText(rText);
     }
 }
 
 std::optional<OutlinerParaObject> TextAPIEditSource::CreateText()
 {
-    if (m_xImpl->mpModel && m_xImpl->mpOutliner)
-        return m_xImpl->mpOutliner->CreateParaObject();
+    if (mpHolder->mpModel && mpHolder->mpOutliner)
+        return mpHolder->mpOutliner->CreateParaObject();
     else
         return std::nullopt;
 }
 
 OUString TextAPIEditSource::GetText() const
 {
-    if (m_xImpl->mpModel && m_xImpl->mpOutliner)
-        return m_xImpl->mpOutliner->GetEditEngine().GetText();
+    if (mpHolder->mpModel && mpHolder->mpOutliner)
+        return mpHolder->mpOutliner->GetEditEngine().GetText();
     else
         return OUString();
 }
