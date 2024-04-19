@@ -20,6 +20,7 @@
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <svx/annotation/Annotation.hxx>
+#include <svx/annotation/TextAPI.hxx>
 
 class SdrUndoAction;
 class SfxViewShell;
@@ -70,6 +71,7 @@ protected:
     OUString m_Author;
     OUString m_Initials;
     css::util::DateTime m_DateTime;
+    rtl::Reference<sdr::annotation::TextApiObject> m_TextRange;
 
     bool m_bIsFreeText = false;
 
@@ -84,11 +86,11 @@ public:
     virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& type) override;
     virtual void SAL_CALL acquire() noexcept override
     {
-        ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>::acquire();
+        comphelper::WeakComponentImplHelper<css::office::XAnnotation>::acquire();
     }
     virtual void SAL_CALL release() noexcept override
     {
-        ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>::release();
+        comphelper::WeakComponentImplHelper<css::office::XAnnotation>::release();
     }
 
     css::geometry::RealPoint2D GetPosition() const { return m_Position; }
@@ -106,8 +108,16 @@ public:
     css::util::DateTime GetDateTime() const { return m_DateTime; }
     void SetDateTime(const css::util::DateTime& rValue) { m_DateTime = rValue; }
 
-    virtual OUString GetText() = 0;
-    virtual void SetText(OUString const& rText) = 0;
+    virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
+
+    // override WeakComponentImplHelperBase::disposing()
+    // This function is called upon disposing the component,
+    // if your component needs special work when it becomes
+    // disposed, do it here.
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
+
+    OUString GetText();
+    void SetText(OUString const& rText);
 
     SdrModel* GetModel() const;
     SdrPage const* getPage() const { return mpPage; }

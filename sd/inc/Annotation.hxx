@@ -29,7 +29,6 @@
 #include <svx/annotation/Annotation.hxx>
 
 #include "sdpage.hxx"
-#include "textapi.hxx"
 #include "sddllapi.h"
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -88,7 +87,6 @@ public:
     virtual void SAL_CALL setInitials(const OUString & the_value) override;
     SD_DLLPUBLIC virtual css::util::DateTime SAL_CALL getDateTime() override;
     virtual void SAL_CALL setDateTime(const css::util::DateTime & the_value) override;
-    SD_DLLPUBLIC virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
 
     void createChangeUndo();
 
@@ -107,21 +105,9 @@ public:
         return bool(m_pCustomAnnotationMarker);
     }
 
-    OUString GetText() override;
-    void SetText(OUString const& rText) override;
-
 private:
-    // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}
-
-    // override WeakComponentImplHelperBase::disposing()
-    // This function is called upon disposing the component,
-    // if your component needs special work when it becomes
-    // disposed, do it here.
-    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
-
     void createChangeUndoImpl(std::unique_lock<std::mutex>& g);
 
-    rtl::Reference<TextApiObject> m_TextRange;
     std::unique_ptr<CustomAnnotationMarker> m_pCustomAnnotationMarker;
 };
 

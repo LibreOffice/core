@@ -9359,7 +9359,6 @@ sd/inc/stlfamily.hxx
 sd/inc/stlpool.hxx
 sd/inc/stlsheet.hxx
 sd/inc/strings.hxx
-sd/inc/textapi.hxx
 sd/inc/undo/undofactory.hxx
 sd/inc/undo/undomanager.hxx
 sd/qa/unit/SVGExportTests.cxx
@@ -9452,7 +9451,6 @@ sd/source/core/shapelist.cxx
 sd/source/core/stlfamily.cxx
 sd/source/core/stlpool.cxx
 sd/source/core/stlsheet.cxx
-sd/source/core/text/textapi.cxx
 sd/source/core/undo/undofactory.cxx
 sd/source/core/undo/undomanager.cxx
 sd/source/core/undo/undoobjects.cxx

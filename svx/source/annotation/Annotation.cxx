@@ -163,6 +163,38 @@ std::unique_ptr<SdrUndoAction> Annotation::createUndoAnnotation()
     return std::make_unique<UndoAnnotation>(*this);
 }
 
+OUString Annotation::GetText()
+{
+    uno::Reference<text::XText> xText(getTextRange());
+    return xText->getString();
+}
+
+void Annotation::SetText(OUString const& rText)
+{
+    uno::Reference<text::XText> xText(getTextRange());
+    return xText->setString(rText);
+}
+
+uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
+{
+    std::unique_lock g(m_aMutex);
+    if (!m_TextRange.is() && mpPage != nullptr)
+    {
+        m_TextRange = sdr::annotation::TextApiObject::create(&mpPage->getSdrModelFromSdrPage());
+    }
+    return m_TextRange;
+}
+
+void Annotation::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
+{
+    mpPage = nullptr;
+    if (m_TextRange.is())
+    {
+        m_TextRange->dispose();
+        m_TextRange.clear();
+    }
+}
+
 } // namespace sdr::annotation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

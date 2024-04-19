@@ -54,7 +54,7 @@
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>
-#include <textapi.hxx>
+#include <svx/annotation/TextAPI.hxx>
 #include <sdresid.hxx>
 
 #include <memory>
@@ -484,12 +484,12 @@ IMPL_LINK(AnnotationWindow, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, v
     GetOutlinerView()->Scroll( 0, nDiff );
 }
 
-TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
+sdr::annotation::TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation )
 {
     if( xAnnotation.is() )
     {
         Reference< XText > xText( xAnnotation->getTextRange() );
-        return TextApiObject::getImplementation( xText );
+        return sdr::annotation::TextApiObject::getImplementation(xText);
     }
     return nullptr;
 }
@@ -507,7 +507,7 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
     mbProtected = aUserOptions.GetFullName() != xAnnotation->getAuthor();
 
     mpOutliner->Clear();
-    TextApiObject* pTextApi = getTextApiObject( mxAnnotation );
+    auto* pTextApi = getTextApiObject( mxAnnotation );
 
     if( pTextApi )
     {
@@ -572,7 +572,7 @@ void AnnotationWindow::SaveToDocument()
     // write changed text back to annotation
     if (mpOutliner->IsModified())
     {
-        TextApiObject* pTextApi = getTextApiObject( xAnnotation );
+        auto* pTextApi = getTextApiObject( xAnnotation );
 
         if( pTextApi )
         {

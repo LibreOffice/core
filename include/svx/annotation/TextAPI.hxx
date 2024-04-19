@@ -22,14 +22,15 @@
 #include <editeng/unotext.hxx>
 #include <rtl/ref.hxx>
 #include <editeng/outliner.hxx>
+#include <svx/svxdllapi.h>
 
 class SdrModel;
 
-namespace sd {
-
+namespace sdr::annotation
+{
 class TextAPIEditSource;
 
-class TextApiObject final : public SvxUnoText
+class SVXCORE_DLLPUBLIC TextApiObject final : public SvxUnoText
 {
 public:
     static rtl::Reference<TextApiObject> create(SdrModel* pModel);
@@ -40,16 +41,16 @@ public:
     void dispose();
 
     std::optional<OutlinerParaObject> CreateText();
-    void                SetText( OutlinerParaObject const & rText );
-    OUString            GetText() const;
+    void SetText(OutlinerParaObject const& rText);
+    OUString GetText() const;
 
-    static TextApiObject* getImplementation( const css::uno::Reference< css::text::XText >& );
+    static TextApiObject* getImplementation(const css::uno::Reference<css::text::XText>&);
 
 private:
-    std::unique_ptr<TextAPIEditSource>  mpSource;
-    TextApiObject( std::unique_ptr<TextAPIEditSource> pEditSource );
+    std::unique_ptr<TextAPIEditSource> mpSource;
+    TextApiObject(std::unique_ptr<TextAPIEditSource> pEditSource);
 };
 
-} // namespace sd
+} // namespace sdr::annotation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
