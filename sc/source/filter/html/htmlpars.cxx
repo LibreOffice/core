@@ -437,7 +437,9 @@ bool ScHTMLLayoutParser::SeekOffset( const ScHTMLColOffset* pOffset, sal_uInt16 
     OSL_ENSURE( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
     ScHTMLColOffset::const_iterator it = pOffset->find( nOffset );
     bool bFound = it != pOffset->end();
-    sal_uInt16 nPos = it - pOffset->begin();
+    size_t nPos = it - pOffset->begin();
+    if (nPos > o3tl::make_unsigned(std::numeric_limits<SCCOL>::max()))
+        return false;
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
         return true;
