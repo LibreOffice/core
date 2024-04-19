@@ -6367,10 +6367,6 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getRulerState(pThis);
     }
-    else if (aCommand == ".uno:ViewRenderState")
-    {
-        return convertOString(pDoc->getViewRenderState());
-    }
     else if (o3tl::starts_with(aCommand, aViewRowColumnHeaders))
     {
         tools::Rectangle aRectangle;

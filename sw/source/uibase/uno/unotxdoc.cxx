@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 #include <officecfg/Office/Common.hxx>
-#include <comphelper/dispatchcommand.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <AnnotationWin.hxx>
 #include <o3tl/any.hxx>
@@ -3643,7 +3641,6 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // the case of clicking in the header area of a document with no headers
     aViewOption.SetUseHeaderFooterMenu(false);
 
-    OUString sThemeName;
     OUString sOrigAuthor = SW_MOD()->GetRedlineAuthor(SW_MOD()->GetRedlineAuthor());
     OUString sAuthor;
 
@@ -3665,8 +3662,6 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         }
         else if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
             aViewOption.SetOnlineSpell(rValue.Value.get<bool>());
-        else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
-            sThemeName = rValue.Value.get<OUString>();
     }
 
     if (!sAuthor.isEmpty() && sAuthor != sOrigAuthor)
@@ -3715,16 +3710,6 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // don't change the whitespace at the beginning of paragraphs, this is
     // annoying when taking minutes without further formatting
     SwEditShell::GetAutoFormatFlags()->bAFormatByInpDelSpacesAtSttEnd = false;
-
-    // if we know what theme the user wants, then we can dispatch that now early
-    if (!sThemeName.isEmpty())
-    {
-        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-        {
-            { "NewTheme", uno::Any(sThemeName) }
-        }));
-        comphelper::dispatchCommand(".uno:ChangeTheme", aPropertyValues);
-    }
 }
 
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
