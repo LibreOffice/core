@@ -301,18 +301,12 @@ void SwEditShell::ReRead( const OUString& rGrfName, const OUString& rFltName,
 
 /// Returns the name and the filter name of a graphic if the pointer is on a graphic.
 /// If a String-pointer is != 0 then return corresponding name.
-void SwEditShell::GetGrfNms( OUString* pGrfName, OUString* pFltName,
-                            const SwFlyFrameFormat* pFormat ) const
+void SwEditShell::GetGrfNms( OUString* pGrfName, OUString* pFltName ) const
 {
     OSL_ENSURE( pGrfName || pFltName, "No parameters" );
-    if( pFormat )
-        SwDoc::GetGrfNms( *pFormat, pGrfName, pFltName );
-    else
-    {
-        SwGrfNode *pGrfNode = GetGrfNode_();
-        if( pGrfNode && pGrfNode->IsLinkedFile() )
-            pGrfNode->GetFileFilterNms( pGrfName, pFltName );
-    }
+    SwGrfNode *pGrfNode = GetGrfNode_();
+    if( pGrfNode && pGrfNode->IsLinkedFile() )
+        pGrfNode->GetFileFilterNms( pGrfName, pFltName );
 }
 
 const tools::PolyPolygon *SwEditShell::GetGraphicPolygon() const
