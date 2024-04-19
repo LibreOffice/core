@@ -47,7 +47,7 @@ NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
         ::tools::Rectangle{ Point(0, 0), mrNotesPanelViewShell.GetActiveWindow()->GetViewSize() });
     maOutliner.InsertView(&maOutlinerView, EE_APPEND);
 
-    onUpdateStyleSettings(true);
+    onUpdateStyleSettings();
 
     // fill Outliner with contents
     FillOutliner();
@@ -178,12 +178,10 @@ void NotesPanelView::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 OutlinerView* NotesPanelView::GetOutlinerView() { return &maOutlinerView; }
 
-void NotesPanelView::onUpdateStyleSettings(bool bForceUpdate /* = false */)
+void NotesPanelView::onUpdateStyleSettings()
 {
     svtools::ColorConfig aColorConfig;
     const Color aDocColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
-    if (!(bForceUpdate || (maDocColor != aDocColor)))
-        return;
 
     maOutlinerView.SetBackgroundColor(aDocColor);
     if (vcl::Window* pWindow = maOutlinerView.GetWindow())

@@ -71,7 +71,7 @@ class HtmlExport final
     void Init();
     void ExportSingleDocument();
 
-    bool WriteHtml( const OUString& rFileName, bool bAddExtension, std::u16string_view rHtmlData );
+    bool WriteHtml( std::u16string_view rFileName, std::u16string_view rHtmlData );
 
  public:
     HtmlExport(OUString aPath,

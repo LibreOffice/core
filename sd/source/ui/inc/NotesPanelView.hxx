@@ -71,7 +71,7 @@ public:
     SdOutliner& GetOutliner() { return maOutliner; }
 
     void FillOutliner();
-    void onUpdateStyleSettings(bool bForceUpdate);
+    void onUpdateStyleSettings();
     virtual SvtScriptType GetScriptType() const override;
 
     void SetLinks();

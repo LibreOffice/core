@@ -631,8 +631,6 @@ constexpr OUStringLiteral gaHTMLHeader(
             "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
             "<html>\r\n<head>\r\n" );
 
-constexpr OUStringLiteral gaHTMLExtension = u"" STR_HTMLEXP_DEFAULT_EXTENSION;
-
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
     OUString aPath,
@@ -718,7 +716,7 @@ void HtmlExport::ExportSingleDocument()
     // close page
     aStr.append("</body>\r\n</html>");
 
-    WriteHtml(maDocFileName, false, aStr);
+    WriteHtml(maDocFileName, aStr);
 
     pOutliner->Clear();
     ResetProgress();
@@ -758,17 +756,13 @@ OUString HtmlExport::DocumentMetadata() const
 
 /** exports the given html data into a non unicode file in the current export path with
     the given filename */
-bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, std::u16string_view rHtmlData )
+bool HtmlExport::WriteHtml( std::u16string_view rFileName, std::u16string_view rHtmlData )
 {
     ErrCode nErr = ERRCODE_NONE;
 
-    OUString aFileName( rFileName );
-    if( bAddExtension )
-        aFileName += gaHTMLExtension;
-
     EasyFile aFile;
     SvStream* pStr;
-    OUString aFull(maExportPath + aFileName);
+    OUString aFull(maExportPath + rFileName);
     nErr = aFile.createStream(aFull , pStr);
     if(nErr == ERRCODE_NONE)
     {
