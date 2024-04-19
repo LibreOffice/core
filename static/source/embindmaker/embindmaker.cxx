@@ -667,16 +667,19 @@ void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                  OUString const& name, rtl::Reference<unoidl::InterfaceTypeEntity> const& entity,
                  std::list<OUString> const& baseTrail)
 {
-    for (auto const& meth : entity->getDirectMethods())
+    if (name != "com.sun.star.uno.XInterface")
     {
-        if (!baseTrail.empty() || hasInOutParameters(meth))
+        for (auto const& meth : entity->getDirectMethods())
         {
-            dumpWrapper(out, manager, name, meth, baseTrail);
-        }
-        else
-        {
-            out << "        .function(\"" << meth.name << "\", &" << cppName(name)
-                << "::" << meth.name << ", ::emscripten::pure_virtual())\n";
+            if (!baseTrail.empty() || hasInOutParameters(meth))
+            {
+                dumpWrapper(out, manager, name, meth, baseTrail);
+            }
+            else
+            {
+                out << "        .function(\"" << meth.name << "\", &" << cppName(name)
+                    << "::" << meth.name << ", ::emscripten::pure_virtual())\n";
+            }
         }
     }
 }
