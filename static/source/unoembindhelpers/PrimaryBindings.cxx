@@ -13,8 +13,10 @@
 #include <emscripten/bind.h>
 
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
@@ -401,6 +403,9 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     function("throwUnoException", +[](css::uno::Type const& type, emscripten::val const& value) {
         cppu::throwException(constructAny(type, value));
     });
+    function("sameUnoObject",
+             +[](css::uno::Reference<css::uno::XInterface> const& ref1,
+                 css::uno::Reference<css::uno::XInterface> const& ref2) { return ref1 == ref2; });
     function("rtl_uString_release",
              +[](std::uintptr_t ptr) { rtl_uString_release(reinterpret_cast<rtl_uString*>(ptr)); });
 

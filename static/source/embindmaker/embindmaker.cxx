@@ -1088,12 +1088,7 @@ SAL_IMPLEMENT_MAIN()
                       "        .class_function(\"reference\", +[]("
                    << cppName(ifc)
                    << " * the_interface) { return ::com::sun::star::uno::Reference(the_interface); "
-                      "}, ::emscripten::allow_raw_pointers())\n"
-                      "        .function(\"$equals\", +[](::com::sun::star::uno::Reference<"
-                   << cppName(ifc)
-                   << "> const & the_self, "
-                      "::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface> const & "
-                      "the_other) { return the_self == the_other; })\n";
+                      "}, ::emscripten::allow_raw_pointers())\n";
             if (bases.size() > 1)
             {
                 std::set<OUString> visitedBases;
