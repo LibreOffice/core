@@ -29,13 +29,13 @@ class OutlinerView;
 class Outliner;
 class SvxLanguageItem;
 class SdDrawDocument;
+namespace sdr::annotation { class TextApiObject; }
 
-namespace sd {
+namespace sd
+{
 
 class AnnotationManagerImpl;
 class DrawDocShell;
-class TextApiObject;
-
 class AnnotationWindow;
 
 class AnnotationTextWindow : public WeldEditView
@@ -135,7 +135,7 @@ public:
     void SetColor();
 };
 
-TextApiObject* getTextApiObject( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+sdr::annotation::TextApiObject* getTextApiObject( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
 
 } // namespace sd

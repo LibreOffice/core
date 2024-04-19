@@ -69,7 +69,7 @@
 #include <ViewShellBase.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
-#include <textapi.hxx>
+#include <svx/annotation/TextAPI.hxx>
 #include <optsitem.hxx>
 #include <sdmod.hxx>
 
@@ -563,7 +563,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
             sReplyText = static_cast<const SvxPostItTextItem*>( pPoolItem )->GetValue();
     }
 
-    TextApiObject* pTextApi = getTextApiObject( xAnnotation );
+    auto* pTextApi = getTextApiObject( xAnnotation );
     if( !pTextApi )
         return;
 

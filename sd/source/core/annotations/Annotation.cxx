@@ -72,20 +72,6 @@ Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, Sd
 {
 }
 
-// override WeakComponentImplHelperBase::disposing()
-// This function is called upon disposing the component,
-// if your component needs special work when it becomes
-// disposed, do it here.
-void SAL_CALL Annotation::disposing()
-{
-    mpPage = nullptr;
-    if( m_TextRange.is() )
-    {
-        m_TextRange->dispose();
-        m_TextRange.clear();
-    }
-}
-
 // com.sun.star.beans.XPropertySet:
 uno::Reference<beans::XPropertySetInfo> SAL_CALL Annotation::getPropertySetInfo()
 {
@@ -216,18 +202,6 @@ void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
     }
 }
 
-OUString Annotation::GetText()
-{
-    uno::Reference<text::XText> xText(getTextRange());
-    return xText->getString();
-}
-
-void Annotation::SetText(OUString const& rText)
-{
-    uno::Reference<text::XText> xText(getTextRange());
-    return xText->setString(rText);
-}
-
 void Annotation::createChangeUndo()
 {
     SdrModel* pModel = GetModel(); // TTTT should use reference
@@ -243,16 +217,6 @@ void Annotation::createChangeUndo()
             "OnAnnotationChanged" ,
             xSource );
     }
-}
-
-uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
-{
-    osl::MutexGuard g(m_aMutex);
-    if( !m_TextRange.is() && (mpPage != nullptr) )
-    {
-        m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( &mpPage->getSdrModelFromSdrPage() ) );
-    }
-    return m_TextRange;
 }
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert)
