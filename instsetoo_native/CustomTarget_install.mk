@@ -121,6 +121,7 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
 	$(if $(filter %msi‧nostrip,$@),$(gb_Make_JobLimiter) grab)
 	$(call gb_Trace_StartRange,$@,INSTALLER)
 	$(call gb_Helper_print_on_error, \
+	    $(if $(MSYSTEM),export PERLIO=:unix PERL=$(STRAWBERRY_PERL) &&) \
 	    $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) $(subst ‧,:,$@),\
 	    $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@).log)
 	$(if $(filter %msi‧nostrip,$@),$(gb_Make_JobLimiter) release)
