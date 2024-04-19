@@ -17,6 +17,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <test/lokcallback.hxx>
 #include <vcl/scheduler.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/string.hxx>
 
 #include <docuno.hxx>
 
@@ -79,6 +81,7 @@ class ViewCallback final
 
 public:
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
+    tools::Rectangle m_aCellCursorBounds;
     TestLokCallbackWrapper m_callbackWrapper;
 
     ViewCallback()
@@ -108,6 +111,20 @@ public:
     {
         switch (nType)
         {
+            case LOK_CALLBACK_CELL_CURSOR:
+            {
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
+                    OUString::createFromAscii(pPayload));
+                m_aCellCursorBounds = tools::Rectangle();
+                if (aSeq.getLength() >= 4)
+                {
+                    m_aCellCursorBounds.SetLeft(aSeq[0].toInt32());
+                    m_aCellCursorBounds.SetTop(aSeq[1].toInt32());
+                    m_aCellCursorBounds.setWidth(aSeq[2].toInt32());
+                    m_aCellCursorBounds.setHeight(aSeq[3].toInt32());
+                }
+            }
+            break;
             case LOK_CALLBACK_STATE_CHANGED:
             {
                 std::stringstream aStream(pPayload);
@@ -158,6 +175,34 @@ CPPUNIT_TEST_FIXTURE(Test, testSidebarLocale)
     CPPUNIT_ASSERT(it != aView2.m_aStateChanges.end());
     std::string aLocale = it->second.get<std::string>("locale");
     CPPUNIT_ASSERT_EQUAL(std::string("de-DE"), aLocale);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCopyMultiSelection)
+{
+    // Given a document with A1 and A3 as selected cells:
+    ScModelObj* pModelObj = createDoc("multi-selection.ods");
+    ViewCallback aView1;
+    // Get the center of A3:
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$A$3")),
+    };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    Point aPoint = aView1.m_aCellCursorBounds.Center();
+    // Go to A1:
+    aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
+    };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    // Ctrl-click on A3:
+    int nCtrl = KEY_MOD1;
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+                              MOUSE_LEFT, nCtrl);
+
+    // When getting the selection:
+    uno::Reference<datatransfer::XTransferable> xTransferable = pModelObj->getSelection();
+
+    // Make sure we get A1+A3 instead of an error:
+    CPPUNIT_ASSERT(xTransferable.is());
 }
 }
 
