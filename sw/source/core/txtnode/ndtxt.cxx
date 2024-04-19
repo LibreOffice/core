@@ -3579,7 +3579,7 @@ OUString SwTextNode::GetExpandText(SwRootFrame const*const pLayout,
 
 bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwContentIndex* pDestIdx,
                         sal_Int32 nIdx, sal_Int32 nLen,
-                        SwRootFrame const*const pLayout, bool bWithNum,
+                        SwRootFrame const*const pLayout,
                         bool bWithFootnote, bool bReplaceTabsWithSpaces ) const
 {
     if( &rDestNd == this )
@@ -3708,12 +3708,6 @@ bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwContentIndex* pDest
                 }
             }
         }
-    }
-
-    if( bWithNum )
-    {
-        aDestIdx = nDestStt;
-        rDestNd.InsertText( GetNumString(true, MAXLEVEL, pLayout), aDestIdx );
     }
 
     aDestIdx = 0;

@@ -149,7 +149,7 @@ public:
     SW_DLLPUBLIC bool IsRefToNumItemCrossRefBookmark() const;
     SW_DLLPUBLIC const SwTextNode* GetReferencedTextNode(SwTextNode* pTextNode, SwFrame* pFrame) const;
     // #i85090#
-    SW_DLLPUBLIC OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout, SwTextNode* pTextNode, SwFrame* pFrame) const;
+    SW_DLLPUBLIC OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout) const;
 
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return m_nSeqNo; }

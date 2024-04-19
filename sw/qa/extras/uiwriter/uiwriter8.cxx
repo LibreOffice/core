@@ -2639,9 +2639,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[0]->GetField()->GetSubType());
     CPPUNIT_ASSERT_EQUAL(OUString("bookmarkchapter1_text"),
                          static_cast<SwGetRefField const*>(fields[0]->GetField())->GetSetRefName());
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), static_cast<SwGetRefField const*>(fields[0]->GetField())
-                                               ->GetExpandedTextOfReferencedTextNode(
-                                                   *pWrtShell->GetLayout(), nullptr, nullptr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         static_cast<SwGetRefField const*>(fields[0]->GetField())
+                             ->GetExpandedTextOfReferencedTextNode(*pWrtShell->GetLayout()));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[1]->GetField()->GetSubType());
     CPPUNIT_ASSERT(
         static_cast<SwGetRefField const*>(fields[1]->GetField())->IsRefToHeadingCrossRefBookmark());

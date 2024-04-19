@@ -746,7 +746,7 @@ public:
     bool CopyExpandText( SwTextNode& rDestNd, const SwContentIndex* pDestIdx,
                            sal_Int32 nIdx, sal_Int32 nLen,
                            SwRootFrame const* pLayout,
-                           bool bWithNum = false, bool bWithFootnote = true,
+                           bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
 
     SW_DLLPUBLIC OUString GetRedlineText() const;

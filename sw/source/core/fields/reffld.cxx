@@ -416,9 +416,9 @@ static OUString lcl_formatStringByCombiningCharacter(std::u16string_view sText, 
 
 // #i85090#
 OUString SwGetRefField::GetExpandedTextOfReferencedTextNode(
-        SwRootFrame const& rLayout, SwTextNode* pTextNode, SwFrame* pFrame) const
+        SwRootFrame const& rLayout) const
 {
-    const SwTextNode* pReferencedTextNode( GetReferencedTextNode(pTextNode, pFrame) );
+    const SwTextNode* pReferencedTextNode( GetReferencedTextNode(/*pTextNode*/nullptr, /*pFrame*/nullptr) );
     if ( !pReferencedTextNode )
         return OUString();
 

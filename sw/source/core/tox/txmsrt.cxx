@@ -620,7 +620,7 @@ void SwTOXPara::FillText( SwTextNode& rNd, const SwContentIndex& rInsPos, sal_uI
         {
             pSrc->CopyExpandText( rNd, &rInsPos, nStartIndex,
                     nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
-                    pLayout, false, false, true );
+                    pLayout, false, true );
         }
         else
         {
@@ -628,7 +628,7 @@ void SwTOXPara::FillText( SwTextNode& rNd, const SwContentIndex& rInsPos, sal_uI
             assert(nEndIndex == -1);
             // sw_redlinehide: this probably won't HideDeletions
             pSrc->CopyExpandText( rNd, &rInsPos, 0, -1,
-                    pLayout, false, false, true );
+                    pLayout, false, true );
             if (pLayout && pLayout->HasMergedParas())
             {
                 if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(pSrc->getLayoutFrame(pLayout)))
@@ -646,7 +646,7 @@ void SwTOXPara::FillText( SwTextNode& rNd, const SwContentIndex& rInsPos, sal_uI
 
                                 pTmp->GetTextNode()->CopyExpandText(
                                         rNd, &rInsPos, 0, -1,
-                                        pLayout, false, false, false );
+                                        pLayout, false, false );
                             }
                         }
                     }

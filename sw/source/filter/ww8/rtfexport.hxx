@@ -188,7 +188,7 @@ public:
     void resetStream();
     void OutUnicode(std::string_view pToken, std::u16string_view rContent, bool bUpr = false);
     void OutDateTime(std::string_view pStr, const css::util::DateTime& rDT);
-    void OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage);
+    void OutPageDescription(const SwPageDesc& rPgDsc);
 
     sal_uInt16 GetColor(const Color& rColor) const;
     void InsColor(const Color& rCol);

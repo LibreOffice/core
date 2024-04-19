@@ -899,7 +899,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         // All sections are unlocked by default
         Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED);
         Strm().WriteOString("1");
-        OutPageDescription(rPageDesc, true); // Changed bCheckForFirstPage to true so headers
+        OutPageDescription(rPageDesc); // Changed bCheckForFirstPage to true so headers
         // following title page are correctly added - i13107
         if (pSttPgDsc)
         {
@@ -1413,14 +1413,13 @@ const OUString* RtfExport::GetRedline(sal_uInt16 nId)
     return nullptr;
 }
 
-void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage)
+void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc)
 {
     SAL_INFO("sw.rtf", __func__ << " start");
     const SwPageDesc* pSave = m_pCurrentPageDesc;
 
     m_pCurrentPageDesc = &rPgDsc;
-    if (bCheckForFirstPage && m_pCurrentPageDesc->GetFollow()
-        && m_pCurrentPageDesc->GetFollow() != m_pCurrentPageDesc)
+    if (m_pCurrentPageDesc->GetFollow() && m_pCurrentPageDesc->GetFollow() != m_pCurrentPageDesc)
         m_pCurrentPageDesc = m_pCurrentPageDesc->GetFollow();
 
     if (m_pCurrentPageDesc->GetLandscape())
