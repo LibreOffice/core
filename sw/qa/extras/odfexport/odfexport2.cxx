@@ -1515,7 +1515,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
     CPPUNIT_ASSERT(xFields->hasMoreElements());
     auto xTextField(xFields->nextElement().queryThrow<text::XTextField>());
     // Save must not create markup with text:bookmark-end element before text:bookmark-start
-    // Withoud the fix, this would fail with
+    // Without the fix, this would fail with
     // - Expected: 1
     // - Actual  : Error: Reference source not found
     // i.e., the bookmark wasn't imported, and the field had no proper source
