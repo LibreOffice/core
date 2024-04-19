@@ -187,6 +187,7 @@ sub control_fundamental_parameter
 sub make_path_absolute
 {
     my ($pathref) = @_;
+    return if ( $^O =~ /MSWin/i ); # no need to do anything here
 
     if ( $installer::globals::isunix )
     {

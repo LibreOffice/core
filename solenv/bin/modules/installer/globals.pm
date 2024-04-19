@@ -265,7 +265,7 @@ BEGIN
     @installer::globals::removedirs = ();
     @installer::globals::removefiletable = ();
 
-    if ( $^O =~ /cygwin/i )
+    if ( $^O =~ /cygwin/i || $^O =~ /MSWin/i )
     {
         $installer::globals::zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $installer::globals::separator = "/";
