@@ -26,15 +26,16 @@
 
 namespace com::sun::star::office { class XAnnotation; }
 
-namespace sd {
-class Annotation;
+namespace sdr::annotation { class Annotation; }
+namespace sd
+{
 class View;
 class AnnotationManagerImpl;
 
 class AnnotationTag final : public SmartTag
 {
 public:
-    AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const rtl::Reference< Annotation >& xAnnotation, Color const & rColor, int nIndex, const vcl::Font& rFont );
+    AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, Color const & rColor, int nIndex, const vcl::Font& rFont );
     virtual ~AnnotationTag() override;
 
     /// @return true if the SmartTag handled the event.
@@ -58,7 +59,7 @@ public:
 
     BitmapEx CreateAnnotationBitmap(bool);
 
-    const rtl::Reference< Annotation >& GetAnnotation() const { return mxAnnotation; }
+    rtl::Reference<sdr::annotation::Annotation> const& GetAnnotation() const { return mxAnnotation; }
 
     void OpenPopup( bool bEdit );
     void ClosePopup();
@@ -74,7 +75,7 @@ private:
     DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
 
     AnnotationManagerImpl& mrManager;
-    rtl::Reference< Annotation >                    mxAnnotation;
+    rtl::Reference<sdr::annotation::Annotation> mxAnnotation;
     std::unique_ptr<AnnotationWindow>               mpAnnotationWindow;
     Color                                           maColor;
     int                                             mnIndex;

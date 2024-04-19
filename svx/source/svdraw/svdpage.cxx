@@ -51,6 +51,7 @@
 #include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/annotation/Annotation.hxx>
 #include <algorithm>
 #include <clonelist.hxx>
 #include <svl/hint.hxx>

@@ -378,19 +378,19 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     rSrcPage.cloneAnimations(*this);
 
     // annotations
-    for(const rtl::Reference< Annotation >& srcAnnotation : rSrcPage.maAnnotations)
+    for (auto const& rSourceAnnotation : rSrcPage.maAnnotations)
     {
-        rtl::Reference< Annotation > ref;
-        createAnnotation(ref);
-        ref->setPosition(srcAnnotation->getPosition());
-        ref->setSize(srcAnnotation->getSize());
-        ref->setAuthor(srcAnnotation->getAuthor());
-        ref->setInitials(srcAnnotation->getInitials());
-        ref->setDateTime(srcAnnotation->getDateTime());
-        Reference< ::css::text::XTextCopy > srcRange ( srcAnnotation->getTextRange(), uno::UNO_QUERY);
-        Reference< ::css::text::XTextCopy > range ( ref->getTextRange(), uno::UNO_QUERY);
-        if(srcRange.is() && range.is())
-            range->copyText( srcRange );
+        rtl::Reference<sdr::annotation::Annotation> aNewAnnotation;
+        createAnnotation(aNewAnnotation);
+        aNewAnnotation->setPosition(rSourceAnnotation->getPosition());
+        aNewAnnotation->setSize(rSourceAnnotation->getSize());
+        aNewAnnotation->setAuthor(rSourceAnnotation->getAuthor());
+        aNewAnnotation->setInitials(rSourceAnnotation->getInitials());
+        aNewAnnotation->setDateTime(rSourceAnnotation->getDateTime());
+        uno::Reference<css::text::XTextCopy> xSourceRange (rSourceAnnotation->getTextRange(), uno::UNO_QUERY);
+        uno::Reference<css::text::XTextCopy> xRange (aNewAnnotation->getTextRange(), uno::UNO_QUERY);
+        if(xSourceRange.is() && xRange.is())
+            xRange->copyText(xSourceRange);
     }
 
     // fix user calls for duplicated slide
@@ -553,16 +553,16 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
     return true;
  }
 
-void SdPage::createAnnotation( rtl::Reference< Annotation >& xAnnotation )
+void SdPage::createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation)
 {
-    sd::createAnnotation( xAnnotation, this );
+    sd::createAnnotation(xAnnotation, this);
 }
 
-void SdPage::addAnnotation( const rtl::Reference< Annotation >& xAnnotation, int nIndex )
+void SdPage::addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex )
 {
-    if( (nIndex == -1) || (nIndex > static_cast<int>(maAnnotations.size())) )
+    if ((nIndex == -1) || (nIndex > int(maAnnotations.size())))
     {
-        maAnnotations.push_back( xAnnotation );
+        maAnnotations.push_back(xAnnotation);
     }
     else
     {
@@ -571,8 +571,9 @@ void SdPage::addAnnotation( const rtl::Reference< Annotation >& xAnnotation, int
 
     if( getSdrModelFromSdrPage().IsUndoEnabled() )
     {
-        std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, true );
-        if( pAction )
+        rtl::Reference<sdr::annotation::Annotation> xUnconstAnnotation(xAnnotation);
+        std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation(xUnconstAnnotation, true);
+        if (pAction)
             getSdrModelFromSdrPage().AddUndo( std::move(pAction) );
     }
 
@@ -584,18 +585,19 @@ void SdPage::addAnnotation( const rtl::Reference< Annotation >& xAnnotation, int
         Reference<XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY));
 }
 
-void SdPage::removeAnnotation( const rtl::Reference< Annotation >& xAnnotation )
+void SdPage::removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
 {
     if( getSdrModelFromSdrPage().IsUndoEnabled() )
     {
-        std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, false );
+        rtl::Reference<sdr::annotation::Annotation> xUnconstAnnotation(xAnnotation);
+        std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation(xUnconstAnnotation, false);
         if( pAction )
             getSdrModelFromSdrPage().AddUndo( std::move(pAction) );
     }
 
-    AnnotationVector::iterator iter = std::find( maAnnotations.begin(), maAnnotations.end(), xAnnotation );
-    if( iter != maAnnotations.end() )
-        maAnnotations.erase( iter );
+    sdr::annotation::AnnotationVector::iterator iterator = std::find(maAnnotations.begin(), maAnnotations.end(), xAnnotation);
+    if (iterator != maAnnotations.end())
+        maAnnotations.erase(iterator);
 
     getSdrModelFromSdrPage().SetChanged();
     NotifyDocumentEvent(

@@ -248,7 +248,7 @@ void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*
 {
 }
 
-rtl::Reference<Annotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 nAnnotationId)
+rtl::Reference<sdr::annotation::Annotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 nAnnotationId)
 {
     SdPage* pPage = nullptr;
     do
@@ -256,17 +256,17 @@ rtl::Reference<Annotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 n
         pPage = GetNextPage(pPage, true);
         if( pPage && !pPage->getAnnotations().empty() )
         {
-            AnnotationVector aAnnotations(pPage->getAnnotations());
-            auto iter = std::find_if(aAnnotations.begin(), aAnnotations.end(),
-                [nAnnotationId](rtl::Reference<sd::Annotation>& xAnnotation) {
+            sdr::annotation::AnnotationVector aAnnotations(pPage->getAnnotations());
+            auto iterator = std::find_if(aAnnotations.begin(), aAnnotations.end(),
+                [nAnnotationId](rtl::Reference<sdr::annotation::Annotation>& xAnnotation) {
                     return xAnnotation->GetId() == nAnnotationId;
                 });
-            if (iter != aAnnotations.end())
-                return *iter;
+            if (iterator != aAnnotations.end())
+                return *iterator;
         }
-    } while( pPage );
+    } while(pPage);
 
-    rtl::Reference<Annotation> xAnnotationEmpty;
+    rtl::Reference<sdr::annotation::Annotation> xAnnotationEmpty;
     return xAnnotationEmpty;
 }
 
@@ -355,7 +355,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
         break;
     case SID_DELETE_POSTIT:
         {
-            rtl::Reference< Annotation > xAnnotation;
+            rtl::Reference<sdr::annotation::Annotation> xAnnotation;
             sal_uInt32 nId = 0;
             if( pArgs )
             {
@@ -365,7 +365,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
                     uno::Reference<XAnnotation> xTmpAnnotation;
                     if (static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xTmpAnnotation)
                     {
-                        xAnnotation = dynamic_cast<Annotation*>(xTmpAnnotation.get());
+                        xAnnotation = dynamic_cast<sdr::annotation::Annotation*>(xTmpAnnotation.get());
                         assert(bool(xAnnotation) == bool(xTmpAnnotation) && "must be of concrete type sd::Annotation");
                     }
                 }
@@ -376,9 +376,9 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
             if (nId != 0)
                 xAnnotation = GetAnnotationById(nId);
             else if( !xAnnotation.is() )
-                GetSelectedAnnotation( xAnnotation );
+                GetSelectedAnnotation(xAnnotation);
 
-            DeleteAnnotation( xAnnotation );
+            DeleteAnnotation(xAnnotation);
         }
         break;
     }
@@ -389,7 +389,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
 void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    rtl::Reference<sd::Annotation> xAnnotation;
+    rtl::Reference<sdr::annotation::Annotation> xAnnotation;
     OUString sText;
     sal_Int32 nPositionX = -1;
     sal_Int32 nPositionY = -1;
@@ -416,7 +416,8 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
 
     if (xAnnotation.is())
     {
-        xAnnotation->createChangeUndo();
+        auto pSdAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
+        pSdAnnotation->createChangeUndo();
 
         if (nPositionX >= 0 && nPositionY >= 0)
         {
@@ -452,7 +453,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     // find free space for new annotation
     int y = 0, x = 0;
 
-    AnnotationVector aAnnotations( pPage->getAnnotations() );
+    sdr::annotation::AnnotationVector aAnnotations(pPage->getAnnotations());
     if( !aAnnotations.empty() )
     {
         const int page_width = pPage->GetSize().Width();
@@ -496,8 +497,8 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
         }
     }
 
-    rtl::Reference< Annotation > xAnnotation;
-    pPage->createAnnotation( xAnnotation );
+    rtl::Reference<sdr::annotation::Annotation> xAnnotation;
+    pPage->createAnnotation(xAnnotation);
 
     OUString sAuthor;
     if (comphelper::LibreOfficeKit::isActive())
@@ -536,7 +537,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
 
 void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
 {
-    rtl::Reference< Annotation > xAnnotation;
+    rtl::Reference< sdr::annotation::Annotation> xAnnotation;
     const SfxItemSet* pArgs = rReq.GetArgs();
     OUString sReplyText;
     if( pArgs )
@@ -569,7 +570,11 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     if (mpDoc->IsUndoEnabled())
         mpDoc->BegUndo(SdResId(STR_ANNOTATION_REPLY));
 
-    xAnnotation->createChangeUndo();
+    if (xAnnotation)
+    {
+        auto pSdAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
+        pSdAnnotation->createChangeUndo();
+    }
     ::Outliner aOutliner( GetAnnotationPool(),OutlinerMode::TextObject );
 
     SdDrawDocument::SetCalcFieldValueHdl( &aOutliner );
@@ -634,7 +639,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     SelectAnnotation( xAnnotation, true );
 }
 
-void AnnotationManagerImpl::DeleteAnnotation( const rtl::Reference< Annotation >& xAnnotation )
+void AnnotationManagerImpl::DeleteAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation )
 {
     SdPage* pPage = GetCurrentPage();
 
@@ -664,7 +669,7 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( std::u16string_view sAuth
 
         if( pPage )
         {
-            for( const rtl::Reference< Annotation >& xAnnotation : pPage->getAnnotations() )
+            for (auto const& xAnnotation : pPage->getAnnotations())
             {
                 if( xAnnotation->getAuthor() == sAuthor )
                 {
@@ -693,8 +698,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
         if( pPage && !pPage->getAnnotations().empty() )
         {
 
-            AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( const auto& rxAnnotation : aAnnotations )
+            for( const auto& rxAnnotation : pPage->getAnnotations())
             {
                 pPage->removeAnnotation( rxAnnotation );
             }
@@ -722,8 +726,8 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
 
     rSet.Put(SfxBoolItem(SID_TOGGLE_NOTES, mbShowAnnotations));
 
-    rtl::Reference< Annotation > xAnnotation;
-    GetSelectedAnnotation( xAnnotation );
+    rtl::Reference<sdr::annotation::Annotation> xAnnotation;
+    GetSelectedAnnotation(xAnnotation);
 
     // Don't disable these slot in case of LOK, as postit doesn't need to
     // selected before doing an operation on it in LOK
@@ -761,13 +765,13 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForward)
 {
     ShowAnnotations( true );
 
-    rtl::Reference< Annotation > xCurrent;
-    GetSelectedAnnotation( xCurrent );
+    rtl::Reference<sdr::annotation::Annotation> xCurrent;
+    GetSelectedAnnotation(xCurrent);
     SdPage* pPage = GetCurrentPage();
     if( !pPage )
         return;
 
-    AnnotationVector aAnnotations( pPage->getAnnotations() );
+    sdr::annotation::AnnotationVector const& aAnnotations = pPage->getAnnotations();
 
     if( bForward )
     {
@@ -804,8 +808,9 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForward)
         }
         else if( !aAnnotations.empty() )
         {
-            AnnotationVector::iterator iter( aAnnotations.end() );
-            SelectAnnotation( *(--iter) );
+            auto iterator = aAnnotations.end();
+            iterator--;
+            SelectAnnotation(*iterator);
             return;
         }
     }
@@ -864,14 +869,14 @@ void AnnotationManagerImpl::onTagSelected( AnnotationTag const & rTag )
 
 void AnnotationManagerImpl::onTagDeselected( AnnotationTag const & rTag )
 {
-    if( rTag.GetAnnotation() == mxSelectedAnnotation )
+    if (rTag.GetAnnotation() == mxSelectedAnnotation)
     {
         mxSelectedAnnotation.clear();
         invalidateSlots();
     }
 }
 
-void AnnotationManagerImpl::SelectAnnotation( const rtl::Reference< Annotation >& xAnnotation, bool bEdit /* = sal_False */ )
+void AnnotationManagerImpl::SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, bool bEdit)
 {
     mxSelectedAnnotation = xAnnotation;
 
@@ -885,7 +890,7 @@ void AnnotationManagerImpl::SelectAnnotation( const rtl::Reference< Annotation >
     }
 }
 
-void AnnotationManagerImpl::GetSelectedAnnotation( rtl::Reference< Annotation >& xAnnotation )
+void AnnotationManagerImpl::GetSelectedAnnotation( rtl::Reference<sdr::annotation::Annotation>& xAnnotation )
 {
     xAnnotation = mxSelectedAnnotation;
 }
@@ -973,13 +978,13 @@ void AnnotationManagerImpl::CreateTags()
 
         rtl::Reference< AnnotationTag > xSelectedTag;
 
-        for (const rtl::Reference< Annotation > & xAnnotation : mxCurrentPage->getAnnotations() )
+        for (rtl::Reference<sdr::annotation::Annotation> const& xAnnotation : mxCurrentPage->getAnnotations())
         {
             Color aColor( GetColorLight( mpDoc->GetAnnotationAuthorIndex( xAnnotation->getAuthor() ) ) );
             rtl::Reference< AnnotationTag > xTag( new AnnotationTag( *this, *xViewShell->GetView(), xAnnotation, aColor, nIndex++, maFont ) );
             maTagVector.push_back(xTag);
 
-            if( xAnnotation == mxSelectedAnnotation )
+            if (xAnnotation == mxSelectedAnnotation)
             {
                 xSelectedTag = xTag;
             }
@@ -1048,7 +1053,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
 }
 
-void AnnotationManagerImpl::ExecuteAnnotationTagContextMenu(const rtl::Reference<Annotation>& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect)
+void AnnotationManagerImpl::ExecuteAnnotationTagContextMenu(const rtl::Reference<sdr::annotation::Annotation>& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect)
 {
     SfxDispatcher* pDispatcher( getDispatcher( mrBase ) );
     if( !pDispatcher )

@@ -36,14 +36,14 @@ class SdPage;
 class SdDrawDocument;
 struct ImplSVEvent;
 
+namespace sdr::annotation { class Annotation; }
+
 namespace sd
 {
 class Annotation;
 class ViewShellBase;
 
-namespace tools {
-class EventMultiplexerEvent;
-}
+namespace tools { class EventMultiplexerEvent; }
 
 typedef comphelper::WeakComponentImplHelper <
     css::document::XEventListener
@@ -73,15 +73,15 @@ public:
 
     void SelectNextAnnotation(bool bForward);
 
-    void SelectAnnotation( const rtl::Reference< Annotation >& xAnnotation, bool bEdit = false );
-    void GetSelectedAnnotation( rtl::Reference< Annotation >& xAnnotation );
+    void SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, bool bEdit = false);
+    void GetSelectedAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation);
 
     void InsertAnnotation(const OUString& rText);
-    void DeleteAnnotation( const rtl::Reference< Annotation >& xAnnotation );
+    void DeleteAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation);
     void DeleteAnnotationsByAuthor( std::u16string_view sAuthor );
     void DeleteAllAnnotations();
 
-    void ExecuteAnnotationTagContextMenu(const rtl::Reference<Annotation>& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect);
+    void ExecuteAnnotationTagContextMenu(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect);
 
     static Color GetColorDark(sal_uInt16 aAuthorIndex);
     static Color GetColorLight(sal_uInt16 aAuthorIndex);
@@ -120,14 +120,14 @@ private:
     std::vector< rtl::Reference< AnnotationTag > > maTagVector;
 
     css::uno::Reference< css::drawing::XDrawView > mxView;
-    rtl::Reference< SdPage > mxCurrentPage;
-    rtl::Reference< Annotation > mxSelectedAnnotation;
+    rtl::Reference<SdPage> mxCurrentPage;
+    rtl::Reference<sdr::annotation::Annotation> mxSelectedAnnotation;
 
     bool mbShowAnnotations;
     ImplSVEvent * mnUpdateTagsEvent;
     vcl::Font maFont;
 
-    rtl::Reference<Annotation> GetAnnotationById(sal_uInt32 nAnnotationId);
+    rtl::Reference<sdr::annotation::Annotation> GetAnnotationById(sal_uInt32 nAnnotationId);
 };
 
 OUString getAnnotationDateTimeString( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );

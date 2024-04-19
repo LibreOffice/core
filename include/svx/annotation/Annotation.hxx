@@ -13,12 +13,18 @@
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
-#include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svxdllapi.h>
 
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/propertysetmixin.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <svx/annotation/Annotation.hxx>
+
 class SdrUndoAction;
 class SfxViewShell;
+class SdrPage;
 
 namespace sdr::annotation
 {
@@ -49,13 +55,16 @@ struct SVXCORE_DLLPUBLIC AnnotationData
 };
 
 class SVXCORE_DLLPUBLIC Annotation
+    : protected ::cppu::BaseMutex,
+      public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
+      public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
 private:
     static sal_uInt32 m_nLastId;
     static sal_uInt32 nextID() { return m_nLastId++; }
 
 protected:
-    SdrPage* mpSdrPage;
+    SdrPage* mpPage;
     sal_uInt32 m_nId;
 
     css::geometry::RealPoint2D m_Position;
@@ -69,10 +78,19 @@ protected:
     std::unique_ptr<SdrUndoAction> createUndoAnnotation();
 
 public:
-    Annotation(SdrPage* pPage)
-        : mpSdrPage(pPage)
-        , m_nId(nextID())
+    Annotation(const css::uno::Reference<css::uno::XComponentContext>& context, SdrPage* pPage);
+    Annotation(const Annotation&) = delete;
+    Annotation& operator=(const Annotation&) = delete;
+
+    // XInterface:
+    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& type) override;
+    virtual void SAL_CALL acquire() noexcept override
     {
+        ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::acquire();
+    }
+    virtual void SAL_CALL release() noexcept override
+    {
+        ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::release();
     }
 
     css::geometry::RealPoint2D GetPosition() const { return m_Position; }
@@ -93,11 +111,9 @@ public:
     virtual OUString GetText() = 0;
     virtual void SetText(OUString const& rText) = 0;
 
-    SdrModel* GetModel()
-    {
-        return mpSdrPage != nullptr ? &mpSdrPage->getSdrModelFromSdrPage() : nullptr;
-    }
-    SdrPage const* getPage() const { return mpSdrPage; }
+    SdrModel* GetModel() const;
+    SdrPage const* getPage() const { return mpPage; }
+    SdrPage* getPage() { return mpPage; }
 
     sal_uInt32 GetId() const { return m_nId; }
 
@@ -106,7 +122,7 @@ public:
     bool isFreeText() const { return m_bIsFreeText; }
 };
 
-//typedef std::vector<rtl::Reference<Annotation>> AnnotationVector;
+typedef std::vector<rtl::Reference<Annotation>> AnnotationVector;
 
 } // namespace sdr::annotation
 

@@ -106,6 +106,7 @@ endif
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/annotation/Annotation \
+    svx/source/annotation/AnnotationEnumeration \
     svx/source/core/extedit \
     svx/source/core/graphichelper \
     svx/source/customshapes/EnhancedCustomShape2d \

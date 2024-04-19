@@ -20,18 +20,19 @@
 #pragma once
 
 #include <sal/config.h>
-
-#include "sdpage.hxx"
+#include <svx/svxdllapi.h>
 
 namespace com::sun::star::office
 {
 class XAnnotationEnumeration;
 }
 
-namespace sd
+namespace sdr::annotation
 {
-css::uno::Reference<css::office::XAnnotationEnumeration>
-createAnnotationEnumeration(AnnotationVector&&);
+class Annotation;
+SVXCORE_DLLPUBLIC css::uno::Reference<css::office::XAnnotationEnumeration>
+createAnnotationEnumeration(
+    std::vector<rtl::Reference<sdr::annotation::Annotation>>&& xAnnotationVector);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

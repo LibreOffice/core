@@ -24,8 +24,6 @@
 #include <memory>
 
 #include <com/sun/star/office/XAnnotation.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <svx/annotation/Annotation.hxx>
 
@@ -47,9 +45,9 @@ class SfxViewShell;
 namespace sd
 {
 
-void createAnnotation( rtl::Reference< Annotation >& xAnnotation, SdPage* pPage );
+void createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, SdPage* pPage);
 
-std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bInsert );
+std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert);
 
 struct SD_DLLPUBLIC CustomAnnotationMarker
 {
@@ -59,22 +57,12 @@ struct SD_DLLPUBLIC CustomAnnotationMarker
     std::vector<basegfx::B2DPolygon> maPolygons;
 };
 
-class SD_DLLPUBLIC Annotation final : private ::cppu::BaseMutex,
-                    public sdr::annotation::Annotation,
-                    public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
-                    public ::cppu::PropertySetMixin<css::office::XAnnotation>
+class SD_DLLPUBLIC Annotation final : public sdr::annotation::Annotation
 {
 public:
     explicit Annotation( const css::uno::Reference<css::uno::XComponentContext>& context, SdPage* pPage );
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
-
-    SdPage* GetPage() const { return mpPage; }
-
-    // XInterface:
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
-    virtual void SAL_CALL acquire() noexcept override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::acquire(); }
-    virtual void SAL_CALL release() noexcept override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::release(); }
 
     // css::beans::XPropertySet:
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
@@ -128,7 +116,6 @@ private:
     // disposed, do it here.
     virtual void SAL_CALL disposing() override;
 
-    SdPage* mpPage;
     rtl::Reference<TextApiObject> m_TextRange;
     std::unique_ptr<CustomAnnotationMarker> m_pCustomAnnotationMarker;
 };
