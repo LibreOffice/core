@@ -87,9 +87,9 @@ namespace {
 
 struct TextAPIEditSource_Impl
 {
-    SdDrawDocument*                 mpDoc;
-    Outliner*                       mpOutliner;
-    SvxOutlinerForwarder*           mpTextForwarder;
+    SdrModel* mpModel;
+    Outliner* mpOutliner;
+    SvxOutlinerForwarder* mpTextForwarder;
 };
 
 }
@@ -105,13 +105,14 @@ class TextAPIEditSource : public SvxEditSource
     explicit            TextAPIEditSource( const TextAPIEditSource& rSource );
 
 public:
-    explicit            TextAPIEditSource(SdDrawDocument* pDoc);
+    explicit            TextAPIEditSource(SdrModel* pModel);
 
     void                Dispose();
     void                SetText( OutlinerParaObject const & rText );
     std::optional<OutlinerParaObject> CreateText();
     OUString            GetText() const;
-    SdDrawDocument*     GetDoc() { return m_xImpl->mpDoc; }
+
+    SdrModel* getModel() { return m_xImpl->mpModel; }
 };
 
 static const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
@@ -143,9 +144,9 @@ TextApiObject::~TextApiObject() noexcept
     dispose();
 }
 
-rtl::Reference< TextApiObject > TextApiObject::create( SdDrawDocument* pDoc )
+rtl::Reference<TextApiObject> TextApiObject::create(SdrModel* pModel)
 {
-    rtl::Reference< TextApiObject > xRet( new TextApiObject( std::make_unique<TextAPIEditSource>( pDoc ) ) );
+    rtl::Reference<TextApiObject> xRet(new TextApiObject(std::make_unique<TextAPIEditSource>(pModel)));
     return xRet;
 }
 
@@ -166,7 +167,7 @@ std::optional<OutlinerParaObject> TextApiObject::CreateText()
 
 void TextApiObject::SetText( OutlinerParaObject const & rText )
 {
-    SdrModel* pModel = mpSource->GetDoc();
+    SdrModel* pModel = mpSource->getModel();
     if( pModel && pModel->IsUndoEnabled() )
         pModel->AddUndo( std::make_unique<UndoTextAPIChanged>( *pModel, this ) );
 
@@ -205,17 +206,17 @@ void TextAPIEditSource::UpdateData()
     // data is kept in outliner all the time
 }
 
-TextAPIEditSource::TextAPIEditSource(SdDrawDocument* pDoc)
+TextAPIEditSource::TextAPIEditSource(SdrModel* pModel)
 : m_xImpl(std::make_shared<TextAPIEditSource_Impl>())
 {
-    m_xImpl->mpDoc = pDoc;
+    m_xImpl->mpModel = pModel;
     m_xImpl->mpOutliner = nullptr;
     m_xImpl->mpTextForwarder = nullptr;
 }
 
 void TextAPIEditSource::Dispose()
 {
-    m_xImpl->mpDoc=nullptr;
+    m_xImpl->mpModel = nullptr;
     delete m_xImpl->mpTextForwarder;
     m_xImpl->mpTextForwarder = nullptr;
 
@@ -225,13 +226,14 @@ void TextAPIEditSource::Dispose()
 
 SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
 {
-    if(!m_xImpl->mpDoc)
-        return nullptr; // mpDoc == 0 can be used to flag this as disposed
+    if(!m_xImpl->mpModel)
+        return nullptr; // mpModel == 0 can be used to flag this as disposed
 
     if (!m_xImpl->mpOutliner)
     {
         //init draw model first
-        m_xImpl->mpOutliner = new SdOutliner(m_xImpl->mpDoc, OutlinerMode::TextObject);
+        SfxItemPool* pPool = &m_xImpl->mpModel->GetItemPool();
+        m_xImpl->mpOutliner = new SdrOutliner(pPool, OutlinerMode::TextObject);
         SdDrawDocument::SetCalcFieldValueHdl(m_xImpl->mpOutliner);
     }
 
@@ -243,12 +245,13 @@ SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
 
 void TextAPIEditSource::SetText( OutlinerParaObject const & rText )
 {
-    if (m_xImpl->mpDoc)
+    if (m_xImpl->mpModel)
     {
         if (!m_xImpl->mpOutliner)
         {
             //init draw model first
-            m_xImpl->mpOutliner = new SdOutliner(m_xImpl->mpDoc, OutlinerMode::TextObject);
+            SfxItemPool* pPool = &m_xImpl->mpModel->GetItemPool();
+            m_xImpl->mpOutliner = new SdrOutliner(pPool, OutlinerMode::TextObject);
             SdDrawDocument::SetCalcFieldValueHdl(m_xImpl->mpOutliner);
         }
 
@@ -258,7 +261,7 @@ void TextAPIEditSource::SetText( OutlinerParaObject const & rText )
 
 std::optional<OutlinerParaObject> TextAPIEditSource::CreateText()
 {
-    if (m_xImpl->mpDoc && m_xImpl->mpOutliner)
+    if (m_xImpl->mpModel && m_xImpl->mpOutliner)
         return m_xImpl->mpOutliner->CreateParaObject();
     else
         return std::nullopt;
@@ -266,7 +269,7 @@ std::optional<OutlinerParaObject> TextAPIEditSource::CreateText()
 
 OUString TextAPIEditSource::GetText() const
 {
-    if (m_xImpl->mpDoc && m_xImpl->mpOutliner)
+    if (m_xImpl->mpModel && m_xImpl->mpOutliner)
         return m_xImpl->mpOutliner->GetEditEngine().GetText();
     else
         return OUString();
