@@ -1046,9 +1046,9 @@ DECLARE_ODFEXPORT_TEST(testTdf114287, "tdf114287.odt")
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "left"_ostr, "2268");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "right"_ostr, "11339");
-    // the problem was that the list style name of the list must override the
-    // paragraph style even though it's the same list style
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "left"_ostr, "357");
+    // the list style name of the list is the same as the list style name of the
+    // paragraph, but in any case the margins of the paragraph take precedence
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "left"_ostr, "2268");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "right"_ostr, "11339");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds"_ostr, "left"_ostr, "357");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds"_ostr, "right"_ostr, "11339");
