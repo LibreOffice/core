@@ -3491,6 +3491,8 @@ static void lo_startThreads(LibreOfficeKit* /* pThis */)
 static void lo_setForkedChild(LibreOfficeKit* /* pThis */, bool bIsChild)
 {
     comphelper::LibreOfficeKit::setForkedChild(bIsChild);
+    if (bIsChild)
+        Application::UpdateMainThread();
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
