@@ -11,7 +11,7 @@ Module.addOnPostRun(function() {
     console.log('Running embindtest');
     let uno = init_unoembind_uno(Module);
     let css = uno.com.sun.star;
-    let test = new uno.org.libreoffice.embindtest.Test(Module.getUnoComponentContext());
+    let test = uno.org.libreoffice.embindtest.Test(Module.getUnoComponentContext());
     console.assert(typeof test === 'object');
     {
         let v = test.getBoolean();
