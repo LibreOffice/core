@@ -92,63 +92,61 @@ namespace sdr::overlay
         drawinglayer::primitive2d::Primitive2DContainer OverlaySelection::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval;
-            const sal_uInt32 nCount(getRanges().size());
+            const sal_uInt32 nCount(maRanges.size());
 
-            if(nCount)
+            if(!nCount)
+                return aRetval;
+
+            // create range primitives
+            const bool bInvert(OverlayType::Invert == maLastOverlayType);
+            basegfx::BColor aRGBColor(getBaseColor().getBColor());
+            if(bInvert)
             {
-                // create range primitives
-                const bool bInvert(OverlayType::Invert == maLastOverlayType);
-                basegfx::BColor aRGBColor(getBaseColor().getBColor());
-                aRetval.resize(nCount);
+                // force color to white for invert to get a full invert
+                aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
+            }
 
-                if(bInvert)
+            basegfx::B2DPolyPolygon aPolyPolygon;
+            aPolyPolygon.reserve(nCount);
+            for(sal_uInt32 a(0);a < nCount; a++)
+                aPolyPolygon.append(basegfx::utils::createPolygonFromRect(maRanges[a]));
+            aRetval.append(
+                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                    std::move(aPolyPolygon),
+                    aRGBColor));
+
+            if(bInvert)
+            {
+                // embed all in invert primitive
+                aRetval = drawinglayer::primitive2d::Primitive2DContainer {
+                        new drawinglayer::primitive2d::InvertPrimitive2D(
+                            std::move(aRetval))
+                };
+            }
+            else if(OverlayType::Transparent == maLastOverlayType)
+            {
+                // embed all rectangles in transparent paint
+                const double fTransparence(mnLastTransparence / 100.0);
+                drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
+                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                        std::move(aRetval),
+                        fTransparence));
+
+                if(mbBorder)
                 {
-                    // force color to white for invert to get a full invert
-                    aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
+                    basegfx::B2DPolyPolygon aBorderPolyPolygon(impCombineRangesToPolyPolygon(maRanges));
+                    drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
+                        new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
+                            std::move(aBorderPolyPolygon),
+                            aRGBColor));
+
+                    // add both to result
+                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aSelectionOutline };
                 }
-
-                for(sal_uInt32 a(0);a < nCount; a++)
+                else
                 {
-                    const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(maRanges[a]));
-                    aRetval[a] =
-                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                            basegfx::B2DPolyPolygon(aPolygon),
-                            aRGBColor);
-                }
-
-                if(bInvert)
-                {
-                    // embed all in invert primitive
-                    aRetval = drawinglayer::primitive2d::Primitive2DContainer {
-                            new drawinglayer::primitive2d::InvertPrimitive2D(
-                                std::move(aRetval))
-                    };
-                }
-                else if(OverlayType::Transparent == maLastOverlayType)
-                {
-                    // embed all rectangles in transparent paint
-                    const double fTransparence(mnLastTransparence / 100.0);
-                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
-                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                            std::move(aRetval),
-                            fTransparence));
-
-                    if(mbBorder)
-                    {
-                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
-                        const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
-                            new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                                std::move(aPolyPolygon),
-                                aRGBColor));
-
-                        // add both to result
-                        aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aSelectionOutline };
-                    }
-                    else
-                    {
-                        // just add transparent part
-                        aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
-                    }
+                    // just add transparent part
+                    aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };
                 }
             }
 
