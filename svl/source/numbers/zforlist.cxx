@@ -52,7 +52,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 
-#include <math.h>
+#include <atomic>
 #include <limits>
 #include <memory>
 #include <set>
@@ -242,7 +242,7 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
     }
 }
 
-static volatile bool bCurrencyTableInitialized = false;
+static std::atomic<bool> g_CurrencyTableInitialized;
 
 SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = nullptr;
 namespace
@@ -3989,7 +3989,7 @@ void SvNumberFormatter::PrepForRoMode()
 SvNFEngine::Accessor SvNFEngine::GetROPolicy(const SvNFFormatData& rFormatData, SvNFFormatData::DefaultFormatKeysMap& rFormatCache)
 {
     assert(rFormatData.nDefaultSystemCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND && "ensure PrepForRoMode is called");
-    assert(bCurrencyTableInitialized && "ensure PrepForRoMode is called");
+    assert(g_CurrencyTableInitialized && "ensure PrepForRoMode is called");
     return
     {
         std::bind(SvNFEngine::GetCLOffsetRO, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
@@ -4112,7 +4112,7 @@ void SvNumberFormatter::resetTheCurrencyTable()
     SAL_INFO("svl", "Resetting the currency table.");
 
     nSystemCurrencyPosition = 0;
-    bCurrencyTableInitialized = false;
+    g_CurrencyTableInitialized = false;
 
     GetFormatterRegistry().ConfigurationChanged(nullptr, ConfigurationHints::Locale | ConfigurationHints::Currency | ConfigurationHints::DatePatterns);
 }
@@ -4120,7 +4120,7 @@ void SvNumberFormatter::resetTheCurrencyTable()
 // static
 const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()
 {
-    while ( !bCurrencyTableInitialized )
+    while (!g_CurrencyTableInitialized)
         ImpInitCurrencyTable();
     return theCurrencyTable();
 }
@@ -4638,10 +4638,10 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 {
     // Race condition possible:
     // ::osl::MutexGuard aGuard( GetMutex() );
-    // while ( !bCurrencyTableInitialized )
+    // while (!g_CurrencyTableInitialized)
     //      ImpInitCurrencyTable();
     static bool bInitializing = false;
-    if ( bCurrencyTableInitialized || bInitializing )
+    if (g_CurrencyTableInitialized || bInitializing)
     {
         return ;
     }
@@ -4792,7 +4792,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     pLocaleData.reset();
     SvtSysLocaleOptions::SetCurrencyChangeLink( LINK( nullptr, SvNumberFormatter, CurrencyChangeLink ) );
     bInitializing = false;
-    bCurrencyTableInitialized = true;
+    g_CurrencyTableInitialized = true;
 }
 
 static std::ptrdiff_t addToCurrencyFormatsList( NfWSStringsDtor& rStrArr, const OUString& rFormat )
