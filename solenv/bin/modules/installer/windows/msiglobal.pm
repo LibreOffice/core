@@ -461,7 +461,7 @@ sub create_msi_database
 
     $msifilename = installer::converter::make_path_conform($msifilename);
 
-    if ( $^O =~ /cygwin/i ) {
+    if ( $^O =~ /cygwin/i || $^O =~ /MSWin/i ) {
         # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
         $idtdirbase =~ s/\//\\\\/g;
         $msifilename =~ s/\//\\\\/g;
@@ -472,14 +472,15 @@ sub create_msi_database
     }
     my $systemcall = $msidb . " -f " . $idtdirbase . " -d " . $msifilename . " -c " . "-i " . $extraslash . "*";
 
-    my $returnvalue = system($systemcall);
+    my $systemcall_output = `$systemcall`;
+    my $returnvalue = $? >> 8;
 
     my $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute $msidb!\n";
+        $infoline = "ERROR: Could not execute $msidb! - returncode: $returnvalue - output:\n$systemcall_output\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
@@ -625,14 +626,15 @@ sub write_summary_into_msi_database
                     . " -j " . $subject . " -o " . $comment . " -k " . $keywords . " -n " . $appname
                     . " -u " . $security . " -w " . $wordcount;
 
-    my $returnvalue = system($systemcall);
+    my $systemcall_output = `$systemcall`;
+    my $returnvalue = $? >> 8;
 
     my $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute $systemcall (return $returnvalue)\n";
+        $infoline = "ERROR: Could not execute $systemcall (return $returnvalue) - output:\n$systemcall_output\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
@@ -808,16 +810,17 @@ sub create_transforms
         }
     }
 
-    my $systemcall = "TEMP=$ENV{'TMPDIR'} $cscript \"$wilangid\" $basedbname Package $templatevalue";
-
-    my $returnvalue = system($systemcall);
+    $ENV{TEMP} = $ENV{TMPDIR};
+    my $systemcall = "$cscript \"$wilangid\" $basedbname Package $templatevalue";
+    my $systemcall_output = `$systemcall`;
+    my $returnvalue = $? >> 8;
 
     my $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: $returnvalue from $systemcall\n";
+        $infoline = "ERROR: $returnvalue from $systemcall - output:\n$systemcall_output\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
