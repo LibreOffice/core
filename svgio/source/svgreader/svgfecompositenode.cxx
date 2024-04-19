@@ -235,10 +235,9 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
         aBmpEx = vcl::bitmap::DrawBitmapInRect(aBmpEx, aRange, aBaseRect);
         aBmpEx2 = vcl::bitmap::DrawBitmapInRect(aBmpEx2, aRange2, aBaseRect);
 
-        BitmapArithmeticBlendFilter* pArithmeticFilter
-            = new BitmapArithmeticBlendFilter(aBmpEx, aBmpEx2);
-        BitmapEx aResBmpEx = pArithmeticFilter->execute(maK1.getNumber(), maK2.getNumber(),
-                                                        maK3.getNumber(), maK4.getNumber());
+        BitmapArithmeticBlendFilter aArithmeticFilter(aBmpEx, aBmpEx2);
+        BitmapEx aResBmpEx = aArithmeticFilter.execute(maK1.getNumber(), maK2.getNumber(),
+                                                       maK3.getNumber(), maK4.getNumber());
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
