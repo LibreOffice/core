@@ -386,7 +386,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
             };
         });
 
-    registerInOutParam<bool>("uno_InOutParam_boolean");
+    registerInOutParam<sal_Bool>("uno_InOutParam_boolean");
     registerInOutParam<sal_Int8>("uno_InOutParam_byte");
     registerInOutParam<sal_Int16>("uno_InOutParam_short");
     registerInOutParam<sal_uInt16>("uno_InOutParam_unsigned_short");
@@ -396,7 +396,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
     registerInOutParam<sal_uInt64>("uno_InOutParam_unsigned_hyper");
     registerInOutParam<float>("uno_InOutParam_float");
     registerInOutParam<double>("uno_InOutParam_double");
-    registerInOutParam<char16_t>("uno_InOutParam_char");
+    registerInOutParam<sal_Unicode>("uno_InOutParam_char");
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
     function("getUnoComponentContext", &comphelper::getProcessComponentContext);

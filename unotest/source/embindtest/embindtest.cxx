@@ -512,6 +512,24 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         return !value;
     }
 
+    void SAL_CALL getOut(sal_Bool& value1, sal_Int8& value2, sal_Int16& value3, sal_uInt16& value4,
+                         sal_Int32& value5, sal_uInt32& value6, sal_Int64& value7,
+                         sal_uInt64& value8, float& value9, double& value10,
+                         sal_Unicode& value11) override
+    {
+        value1 = true;
+        value2 = -12;
+        value3 = -1234;
+        value4 = 54321;
+        value5 = -123456;
+        value6 = 3456789012;
+        value7 = -123456789;
+        value8 = 9876543210;
+        value9 = -10.25;
+        value10 = 100.5;
+        value11 = u'Ö';
+    }
+
     void SAL_CALL throwRuntimeException() override
     {
         throw css::uno::RuntimeException(u"test"_ustr);
