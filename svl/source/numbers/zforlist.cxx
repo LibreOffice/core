@@ -616,7 +616,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
 
     // append new system additional formats
     css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
-    ImpGenerateAdditionalFormats( nCLOffset, xNFC, true );
+    ImpGenerateAdditionalFormats( nCLOffset, xNFC );
 }
 
 const css::uno::Reference<css::uno::XComponentContext>& SvNumberFormatter::GetComponentContext() const
@@ -3453,10 +3453,9 @@ void SvNFFormatData::ImpGenerateAdditionalFormats(SvNFLanguageData& rCurrentLang
 }
 
 void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
-            css::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode,
-            bool bAfterChangingSystemCL )
+            css::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode )
 {
-    m_aFormatData.ImpGenerateAdditionalFormats(m_aCurrentLanguage, GetNatNum(), CLOffset, rNumberFormatCode, bAfterChangingSystemCL);
+    m_aFormatData.ImpGenerateAdditionalFormats(m_aCurrentLanguage, GetNatNum(), CLOffset, rNumberFormatCode, /*bAfterChangingSystemCL*/true);
 }
 
 namespace {

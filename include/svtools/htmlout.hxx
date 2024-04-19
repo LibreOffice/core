@@ -73,8 +73,7 @@ struct HTMLOutFuncs
     // the 3rd parameter is an array of HTMLOutEvents which is terminated
     // by an entry that consists only of 0s
     SVT_DLLPUBLIC static SvStream& Out_Events( SvStream&, const SvxMacroTableDtor&,
-                                    const HTMLOutEvent*, bool bOutStarBasic,
-                                    OUString *pNonConvertableChars = nullptr );
+                                    const HTMLOutEvent*, bool bOutStarBasic );
 
     // <TD SDVAL="..." SDNUM="...">
     SVT_DLLPUBLIC static OString CreateTableDataOptionsValNum(

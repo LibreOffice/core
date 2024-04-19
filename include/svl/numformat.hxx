@@ -561,8 +561,7 @@ private:
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
         sal_uInt32 CLOffset,
-        css::uno::Reference<css::i18n::XNumberFormatCode> const& rNumberFormatCode,
-        bool bAfterChangingSystemCL);
+        css::uno::Reference<css::i18n::XNumberFormatCode> const& rNumberFormatCode);
 
     // Test whether format code already exists, then return index key,
     // otherwise NUMBERFORMAT_ENTRY_NOT_FOUND

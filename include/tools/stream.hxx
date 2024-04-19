@@ -366,8 +366,8 @@ public:
         eDestCharSet==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
         Bytecodes converted to eDestCharSet. Write trailing zero, if bZero is true. */
     bool            WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestCharSet, bool bZero = false);
-    bool            WriteUnicodeOrByteText(std::u16string_view rStr, bool bZero = false)
-                    { return WriteUnicodeOrByteText(rStr, GetStreamCharSet(), bZero); }
+    bool            WriteUnicodeOrByteText(std::u16string_view rStr)
+                    { return WriteUnicodeOrByteText(rStr, GetStreamCharSet(), /*bZero*/false); }
 
     /** Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
         otherwise write as Bytecode converted to eDestCharSet.

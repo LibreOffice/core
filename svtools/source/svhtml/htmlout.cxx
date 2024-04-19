@@ -880,8 +880,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
                                     const SvxMacroTableDtor& rMacroTable,
                                     const HTMLOutEvent *pEventTable,
-                                    bool bOutStarBasic,
-                                    OUString *pNonConvertableChars )
+                                    bool bOutStarBasic )
 {
     sal_uInt16 i=0;
     while( pEventTable[i].pBasicName || pEventTable[i].pJavaName )
@@ -901,7 +900,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
                 OString sOut = OString::Concat(" ") + pStr + "=\"";
                 rStrm.WriteOString( sOut );
 
-                Out_String( rStrm, pMacro->GetMacName(), pNonConvertableChars ).WriteChar( '\"' );
+                Out_String( rStrm, pMacro->GetMacName(), /*pNonConvertableChars*/nullptr ).WriteChar( '\"' );
             }
         }
         i++;
