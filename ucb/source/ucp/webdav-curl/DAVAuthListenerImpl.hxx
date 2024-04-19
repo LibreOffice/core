@@ -46,8 +46,7 @@ namespace http_dav_ucp
                                   const OUString & inHostName,
                                   OUString & inoutUserName,
                                   OUString & outPassWord,
-                                  bool bCanUseSystemCredentials,
-                                  bool bUsePreviousCredentials = true ) override;
+                                  bool bCanUseSystemCredentials ) override;
     private:
 
         const css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;

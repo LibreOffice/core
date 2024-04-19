@@ -34,8 +34,7 @@ class DAVAuthListener : public salhelper::SimpleReferenceObject
             const OUString & inHostName,
             OUString & inoutUserName,
             OUString & outPassWord,
-            bool bCanUseSystemCredentials,
-            bool bUsePreviousCredentials = true ) = 0;
+            bool bCanUseSystemCredentials) = 0;
 };
 
 } // namespace http_dav_ucp

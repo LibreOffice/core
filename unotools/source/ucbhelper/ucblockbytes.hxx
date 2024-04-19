@@ -105,8 +105,7 @@ public:
     // calling this method delegates the responsibility to call closeinput to the caller!
     css::uno::Reference < css::io::XInputStream > getInputStream();
 
-    bool                    setInputStream( const css::uno::Reference < css::io::XInputStream > &rxInputStream,
-                                                 bool bSetXSeekable = true );
+    bool                    setInputStream( const css::uno::Reference < css::io::XInputStream > &rxInputStream );
     void                    setStream( const css::uno::Reference < css::io::XStream > &rxStream );
     void                    terminate();
 

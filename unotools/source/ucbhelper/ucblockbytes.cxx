@@ -998,10 +998,10 @@ void UcbLockBytes::setStream( const Reference<XStream>& aStream )
     }
 }
 
-bool UcbLockBytes::setInputStream( const Reference<XInputStream> &rxInputStream, bool bSetXSeekable )
+bool UcbLockBytes::setInputStream( const Reference<XInputStream> &rxInputStream )
 {
     std::unique_lock aGuard( m_aMutex );
-    return setInputStreamImpl(aGuard, rxInputStream, bSetXSeekable);
+    return setInputStreamImpl(aGuard, rxInputStream, /*bSetXSeekable*/true);
 }
 
 bool UcbLockBytes::setInputStreamImpl( std::unique_lock<std::mutex>& /*rGuard*/, const Reference<XInputStream> &rxInputStream, bool bSetXSeekable )
