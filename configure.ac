@@ -3523,6 +3523,8 @@ dnl ===================================================================
 dnl Java support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with Java support])
+javacompiler="javac"
+javadoc="javadoc"
 if test "$with_java" != "no"; then
     if test "$DISABLE_SCRIPTING" = TRUE; then
         AC_MSG_RESULT([no, overridden by --disable-scripting])
@@ -8708,13 +8710,17 @@ if test "$ENABLE_JAVA" != ""; then
             fi
             howfound="found automatically"
         else
-            with_jdk_home=`win_short_path_for_make "$with_jdk_home"`
             howfound="you passed"
         fi
+        PathFormat "$with_jdk_home"
+        with_jdk_home="$formatted_path_unix"
 
         if ! test -f "$with_jdk_home/lib/jvm.lib" -a -f "$with_jdk_home/bin/java.exe"; then
             AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option (or fix the path) pointing to a $WIN_HOST_BITS-bit JDK >= 8])
         fi
+        with_java="java.exe"
+        javacompiler="javac.exe"
+        javadoc="javadoc.exe"
     fi
 
     # macOS: /usr/libexec/java_home helps to set the current JDK_HOME. Actually JDK_HOME should NOT be set where java (/usr/bin/java) is located.
@@ -8847,7 +8853,6 @@ dnl ===================================================================
 dnl Checks for javac
 dnl ===================================================================
 if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
-    javacompiler="javac"
     : ${JAVA_SOURCE_VER=8}
     : ${JAVA_TARGET_VER=8}
     if test -z "$with_jdk_home"; then
@@ -8875,14 +8880,14 @@ dnl Checks for javadoc
 dnl ===================================================================
 if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     if test -z "$with_jdk_home"; then
-        AC_PATH_PROG(JAVADOC, javadoc)
+        AC_PATH_PROG(JAVADOC, $javadoc)
     else
-        _javadoc_path="$with_jdk_home/bin/javadoc"
+        _javadoc_path="$with_jdk_home/bin/$javadoc"
         dnl Check if there is a javadoc at all.
         if test -x "$_javadoc_path"; then
             JAVADOC=$_javadoc_path
         else
-            AC_PATH_PROG(JAVADOC, javadoc)
+            AC_PATH_PROG(JAVADOC, $javadoc)
         fi
     fi
     if test -z "$JAVADOC"; then
