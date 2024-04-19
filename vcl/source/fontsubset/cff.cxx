@@ -2615,7 +2615,7 @@ bool FontSubsetInfo::CreateFontSubsetFromCff()
     // TODO: also support CFF->CFF subsetting (when PDF-export and PS-printing need it)
     const bool bPfbSubset(mnReqFontTypeMask & FontType::TYPE1_PFB);
     Type1Emitter aType1Emitter( mpOutFile, bPfbSubset);
-    aType1Emitter.setSubsetName( mpReqFontName);
+    aType1Emitter.setSubsetName( maReqFontName.getStr() );
     aCff.emitAsType1( aType1Emitter,
         mpReqGlyphIds, mpReqEncodedIds,
         mnReqGlyphCount, *this);

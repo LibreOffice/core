@@ -77,7 +77,7 @@ private:
     // subset-request details
     FontType                mnReqFontTypeMask;  ///< allowed subset-target font types
     SvStream*               mpOutFile;
-    const char*             mpReqFontName;
+    OString                 maReqFontName;
     const sal_GlyphId*      mpReqGlyphIds;
     const sal_uInt8*        mpReqEncodedIds;
     int                     mnReqGlyphCount;
