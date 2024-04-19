@@ -1523,7 +1523,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
 
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Check that we export the bookmark in the empty paragraph as a single text:bookmark
-    // element. Another walid markup is text:bookmark-start followed by text:bookmark-end
+    // element. Another valid markup is text:bookmark-start followed by text:bookmark-end
     // (in that order). The problem was, that text:bookmark-end was before text:bookmark-start.
     assertXPathChildren(pXmlDoc, "//office:text/text:list/text:list-item/text:p"_ostr, 1);
     assertXPath(pXmlDoc, "//office:text/text:list/text:list-item/text:p/text:bookmark"_ostr);
