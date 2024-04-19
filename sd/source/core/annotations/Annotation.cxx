@@ -48,32 +48,32 @@ namespace {
 class UndoInsertOrRemoveAnnotation : public SdrUndoAction
 {
 public:
-    UndoInsertOrRemoveAnnotation( Annotation& rAnnotation, bool bInsert );
+    UndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert);
 
     virtual void Undo() override;
     virtual void Redo() override;
 
 protected:
-    rtl::Reference< Annotation > mxAnnotation;
+    rtl::Reference<sdr::annotation::Annotation> mxAnnotation;
     bool mbInsert;
-    int mnIndex;
+    int mnIndex = 0;
 };
 
 }
 
-void createAnnotation(rtl::Reference<Annotation>& xAnnotation, SdPage* pPage )
+void createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, SdPage* pPage )
 {
-    xAnnotation.set(
-        new Annotation(comphelper::getProcessComponentContext(), pPage));
+    xAnnotation.set(new Annotation(comphelper::getProcessComponentContext(), pPage));
     pPage->addAnnotation(xAnnotation, -1);
 }
 
 Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, SdPage* pPage)
-    : sdr::annotation::Annotation(pPage)
-    , ::cppu::PropertySetMixin<office::XAnnotation>(context, IMPLEMENTS_PROPERTY_SET, uno::Sequence<OUString>())
-    , mpPage(pPage)
+    : sdr::annotation::Annotation(context, pPage)
 {
 }
+
+Annotation::~Annotation()
+{}
 
 // override WeakComponentImplHelperBase::disposing()
 // This function is called upon disposing the component,
@@ -87,11 +87,6 @@ void Annotation::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
         m_TextRange->dispose();
         m_TextRange.clear();
     }
-}
-
-uno::Any Annotation::queryInterface(css::uno::Type const & type)
-{
-    return ::comphelper::WeakComponentImplHelper<office::XAnnotation>::queryInterface(type);
 }
 
 // com.sun.star.beans.XPropertySet:
@@ -273,11 +268,11 @@ uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
     return m_TextRange;
 }
 
-std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const rtl::Reference<sd::Annotation>& xAnnotation, bool bInsert )
+std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert)
 {
-    if( xAnnotation )
+    if (xAnnotation)
     {
-        return std::make_unique< UndoInsertOrRemoveAnnotation >( *xAnnotation, bInsert );
+        return std::make_unique<UndoInsertOrRemoveAnnotation>(xAnnotation, bInsert);
     }
     else
     {
@@ -285,54 +280,53 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const rtl::Re
     }
 }
 
-UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotation, bool bInsert )
-: SdrUndoAction( *rAnnotation.GetModel() )
-, mxAnnotation( &rAnnotation )
-, mbInsert( bInsert )
-, mnIndex( 0 )
+UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert)
+    : SdrUndoAction(*xAnnotation->GetModel())
+    , mxAnnotation(xAnnotation)
+    , mbInsert(bInsert)
 {
-    SdPage* pPage = rAnnotation.GetPage();
-    if( pPage )
+    SdrPage const* pPage = mxAnnotation->getPage();
+    if (pPage)
     {
-        const AnnotationVector& rVec = pPage->getAnnotations();
-        auto iter = std::find(rVec.begin(), rVec.end(), &rAnnotation);
-        mnIndex += std::distance(rVec.begin(), iter);
+        sdr::annotation::AnnotationVector const& rVector = pPage->getAnnotations();
+        auto iterator = std::find(rVector.begin(), rVector.end(), mxAnnotation);
+        mnIndex += std::distance(rVector.begin(), iterator);
     }
 }
 
 void UndoInsertOrRemoveAnnotation::Undo()
 {
-    SdPage* pPage = mxAnnotation->GetPage();
+    SdrPage* pPage = mxAnnotation->getPage();
     SdrModel* pModel = mxAnnotation->GetModel();
-    if( !(pPage && pModel) )
+    if (!pPage || !pModel)
         return;
 
-    if( mbInsert )
+    if (mbInsert)
     {
-        pPage->removeAnnotation( mxAnnotation );
+        pPage->removeAnnotation(mxAnnotation);
     }
     else
     {
-        pPage->addAnnotation( mxAnnotation, mnIndex );
+        pPage->addAnnotation(mxAnnotation, mnIndex);
         LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
     }
 }
 
 void UndoInsertOrRemoveAnnotation::Redo()
 {
-    SdPage* pPage = mxAnnotation->GetPage();
+    SdrPage* pPage = mxAnnotation->getPage();
     SdrModel* pModel = mxAnnotation->GetModel();
-    if( !(pPage && pModel) )
+    if (!pPage || !pModel)
         return;
 
-    if( mbInsert )
+    if (mbInsert)
     {
-        pPage->addAnnotation( mxAnnotation, mnIndex );
+        pPage->addAnnotation(mxAnnotation, mnIndex);
         LOKCommentNotifyAll(sdr::annotation::CommentNotificationType::Add, *mxAnnotation);
     }
     else
     {
-        pPage->removeAnnotation( mxAnnotation );
+        pPage->removeAnnotation(mxAnnotation);
     }
 }
 

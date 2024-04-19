@@ -23,29 +23,25 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
 
-#include <Annotation.hxx>
-#include <AnnotationEnumeration.hxx>
-#include <sdpage.hxx>
+#include <svx/annotation/Annotation.hxx>
+#include <svx/annotation/AnnotationEnumeration.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::office;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
+using namespace css;
 
-namespace sd {
-
-namespace {
-
-class AnnotationEnumeration: public ::cppu::WeakImplHelper< css::office::XAnnotationEnumeration >
+namespace sdr::annotation
+{
+namespace
+{
+class AnnotationEnumeration : public ::cppu::WeakImplHelper<css::office::XAnnotationEnumeration>
 {
 public:
-    explicit AnnotationEnumeration( AnnotationVector&& rAnnotations );
+    explicit AnnotationEnumeration(AnnotationVector&& rAnnotations);
     AnnotationEnumeration(const AnnotationEnumeration&) = delete;
     AnnotationEnumeration& operator=(const AnnotationEnumeration&) = delete;
 
     // css::office::XAnnotationEnumeration:
     virtual sal_Bool SAL_CALL hasMoreElements() override;
-    virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() override;
+    virtual css::uno::Reference<css::office::XAnnotation> SAL_CALL nextElement() override;
 
 private:
     // destructor is private and will be called indirectly by the release call    virtual ~AnnotationEnumeration() {}
@@ -54,33 +50,31 @@ private:
     AnnotationVector::iterator maIter;
 };
 
-}
+} // end anonymous ns
 
-Reference< XAnnotationEnumeration > createAnnotationEnumeration( sd::AnnotationVector&& rAnnotations )
+uno::Reference<office::XAnnotationEnumeration>
+createAnnotationEnumeration(AnnotationVector&& rAnnotations)
 {
-    return new AnnotationEnumeration( std::move(rAnnotations) );
+    return new AnnotationEnumeration(std::move(rAnnotations));
 }
 
-AnnotationEnumeration::AnnotationEnumeration( AnnotationVector&& rAnnotations )
-: maAnnotations(std::move(rAnnotations))
+AnnotationEnumeration::AnnotationEnumeration(AnnotationVector&& rAnnotations)
+    : maAnnotations(std::move(rAnnotations))
 {
     maIter = maAnnotations.begin();
 }
 
 // css::office::XAnnotationEnumeration:
-sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements()
-{
-    return maIter != maAnnotations.end();
-}
+sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() { return maIter != maAnnotations.end(); }
 
-css::uno::Reference< css::office::XAnnotation > SAL_CALL AnnotationEnumeration::nextElement()
+css::uno::Reference<css::office::XAnnotation> SAL_CALL AnnotationEnumeration::nextElement()
 {
-    if( maIter == maAnnotations.end() )
+    if (maIter == maAnnotations.end())
         throw css::container::NoSuchElementException();
 
     return (*maIter++);
 }
 
-} // namespace sd
+} // end sdr::annotation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

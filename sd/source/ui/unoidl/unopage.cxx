@@ -42,7 +42,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 #include <Annotation.hxx>
-#include <AnnotationEnumeration.hxx>
+#include <svx/annotation/AnnotationEnumeration.hxx>
 #include <createunopageimpl.hxx>
 #include <unomodel.hxx>
 #include <unopage.hxx>
@@ -2529,7 +2529,7 @@ Reference< XAnnotation > SAL_CALL SdGenericDrawPage::createAndInsertAnnotation()
     if( !GetPage() )
         throw DisposedException();
 
-    rtl::Reference< sd::Annotation > xRet;
+    rtl::Reference<sdr::annotation::Annotation> xRet;
     GetPage()->createAnnotation(xRet);
     return xRet;
 }
@@ -2543,7 +2543,7 @@ void SAL_CALL SdGenericDrawPage::removeAnnotation(const Reference< XAnnotation >
 
 Reference< XAnnotationEnumeration > SAL_CALL SdGenericDrawPage::createAnnotationEnumeration()
 {
-    return ::sd::createAnnotationEnumeration( std::vector(GetPage()->getAnnotations()) );
+    return sdr::annotation::createAnnotationEnumeration(std::vector(GetPage()->getAnnotations()));
 }
 
 void SdDrawPage::getBackground(Any& rValue)

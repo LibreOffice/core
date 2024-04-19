@@ -8,6 +8,7 @@
  */
 
 #include <svx/annotation/Annotation.hxx>
+#include <svx/svdpage.hxx>
 #include <tools/json_writer.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/datetime.hxx>
@@ -136,7 +137,26 @@ void AnnotationData::set(Annotation& rAnnotation)
     rAnnotation.SetText(m_Text);
 }
 
+Annotation::Annotation(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+                       SdrPage* pPage)
+    : cppu::PropertySetMixin<office::XAnnotation>(rxContext, IMPLEMENTS_PROPERTY_SET,
+                                                  uno::Sequence<OUString>())
+    , mpPage(pPage)
+    , m_nId(nextID())
+{
+}
+
 sal_uInt32 Annotation::m_nLastId = 1;
+
+SdrModel* Annotation::GetModel() const
+{
+    return mpPage != nullptr ? &mpPage->getSdrModelFromSdrPage() : nullptr;
+}
+
+uno::Any Annotation::queryInterface(uno::Type const& type)
+{
+    return comphelper::WeakComponentImplHelper<office::XAnnotation>::queryInterface(type);
+}
 
 std::unique_ptr<SdrUndoAction> Annotation::createUndoAnnotation()
 {

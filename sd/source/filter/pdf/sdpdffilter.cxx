@@ -93,7 +93,7 @@ bool SdPdfFilter::Import()
 
         for (auto const& rPDFAnnotation : rPDFGraphicResult.GetAnnotations())
         {
-            rtl::Reference<sd::Annotation> xAnnotation;
+            rtl::Reference<sdr::annotation::Annotation> xAnnotation;
             pPage->createAnnotation(xAnnotation);
 
             xAnnotation->setAuthor(rPDFAnnotation.maAuthor);
@@ -111,9 +111,10 @@ bool SdPdfFilter::Import()
 
             if (rPDFAnnotation.mpMarker)
             {
-                xAnnotation->createCustomAnnotationMarker();
+                auto* pAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
+                pAnnotation->createCustomAnnotationMarker();
                 sd::CustomAnnotationMarker& rCustomAnnotationMarker
-                    = xAnnotation->getCustomAnnotationMarker();
+                    = pAnnotation->getCustomAnnotationMarker();
 
                 rCustomAnnotationMarker.maLineColor = rPDFAnnotation.maColor;
 

@@ -46,9 +46,9 @@ class SfxViewShell;
 namespace sd
 {
 
-void createAnnotation( rtl::Reference< Annotation >& xAnnotation, SdPage* pPage );
+void createAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, SdPage* pPage);
 
-std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const rtl::Reference< sd::Annotation >& xAnnotation, bool bInsert );
+std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert);
 
 struct SD_DLLPUBLIC CustomAnnotationMarker
 {
@@ -58,22 +58,14 @@ struct SD_DLLPUBLIC CustomAnnotationMarker
     std::vector<basegfx::B2DPolygon> maPolygons;
 };
 
-class SAL_DLLPUBLIC_RTTI Annotation final :
-                    public sdr::annotation::Annotation,
-                    public ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>,
-                     public ::cppu::PropertySetMixin<css::office::XAnnotation>
+class SAL_DLLPUBLIC_RTTI Annotation final : public sdr::annotation::Annotation
 {
 public:
     explicit Annotation( const css::uno::Reference<css::uno::XComponentContext>& context, SdPage* pPage );
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
 
-    SdPage* GetPage() const { return mpPage; }
-
-    // XInterface:
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
-    virtual void SAL_CALL acquire() noexcept override { ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>::acquire(); }
-    virtual void SAL_CALL release() noexcept override { ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>::release(); }
+    virtual ~Annotation();
 
     // css::beans::XPropertySet:
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
@@ -129,7 +121,6 @@ private:
 
     void createChangeUndoImpl(std::unique_lock<std::mutex>& g);
 
-    SdPage* mpPage;
     rtl::Reference<TextApiObject> m_TextRange;
     std::unique_ptr<CustomAnnotationMarker> m_pCustomAnnotationMarker;
 };

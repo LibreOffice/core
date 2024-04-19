@@ -43,6 +43,7 @@
 #include "annotationmanagerimpl.hxx"
 #include "annotationwindow.hxx"
 #include "annotationtag.hxx"
+#include <svx/annotation/Annotation.hxx>
 #include <Annotation.hxx>
 #include <ViewShell.hxx>
 #include <Window.hxx>
@@ -159,22 +160,22 @@ namespace {
 class AnnotationHdl : public SmartHdl
 {
 public:
-    AnnotationHdl( const SmartTagReference& xTag, const rtl::Reference< Annotation >& xAnnotation, const Point& rPnt );
+    AnnotationHdl( const SmartTagReference& xTag, rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, const Point& rPnt );
 
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
 
 private:
-    rtl::Reference< sd::Annotation > mxAnnotation;
-    rtl::Reference< AnnotationTag > mxTag;
+    rtl::Reference<sdr::annotation::Annotation> mxAnnotation;
+    rtl::Reference<AnnotationTag> mxTag;
 };
 
 }
 
-AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const rtl::Reference< Annotation >& xAnnotation, const Point& rPnt )
-: SmartHdl( xTag, rPnt, SdrHdlKind::SmartTag )
-, mxAnnotation( xAnnotation )
-, mxTag( dynamic_cast< AnnotationTag* >( xTag.get() ) )
+AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, const Point& rPnt )
+    : SmartHdl(xTag, rPnt, SdrHdlKind::SmartTag)
+    , mxAnnotation(xAnnotation)
+    , mxTag(dynamic_cast<AnnotationTag*>(xTag.get()))
 {
 }
 
@@ -221,10 +222,10 @@ void AnnotationHdl::CreateB2dIAObject()
         if(rPaintWindow.OutputToWindow() && xManager.is() )
         {
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
-
-            if (mxAnnotation && mxAnnotation->hasCustomAnnotationMarker())
+            auto pSdAnnotation = dynamic_cast<sd::Annotation*>(mxAnnotation.get());
+            if (pSdAnnotation && pSdAnnotation->hasCustomAnnotationMarker())
             {
-                CustomAnnotationMarker& rCustomAnnotationMarker = mxAnnotation->getCustomAnnotationMarker();
+                CustomAnnotationMarker& rCustomAnnotationMarker = pSdAnnotation->getCustomAnnotationMarker();
 
                 auto& rPolygons = rCustomAnnotationMarker.maPolygons;
                 if (!rPolygons.empty())
@@ -269,7 +270,7 @@ bool AnnotationHdl::IsFocusHdl() const
     return true;
 }
 
-AnnotationTag::AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const rtl::Reference< Annotation >& xAnnotation, Color const & rColor, int nIndex, const vcl::Font& rFont )
+AnnotationTag::AnnotationTag(AnnotationManagerImpl& rManager, ::sd::View& rView, rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, Color const & rColor, int nIndex, const vcl::Font& rFont)
 : SmartTag( rView )
 , mrManager( rManager )
 , mxAnnotation( xAnnotation )
