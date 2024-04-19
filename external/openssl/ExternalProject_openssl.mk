@@ -62,11 +62,12 @@ OPENSSL_PLATFORM := \
 ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalProject_use_nmake,openssl,build))
 
+$(call gb_ExternalProject_get_state_target,openssl,build): export PERL:=$(if $(MSYSTEM),$(STRAWBERRY_PERL),$(shell cygpath -m $(PERL)))
+
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_Trace_StartRange,openssl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		CONFIGURE_INSIST=1 $(PERL) Configure $(OPENSSL_PLATFORM) no-tests no-multilib \
-		&& export PERL="$(shell cygpath -w $(PERL))" \
 		&& nmake -f makefile \
 			$(if $(call gb_Module__symbols_enabled,openssl),DEBUG_FLAGS_VALUE="$(gb_DEBUGINFO_FLAGS)") \
 	)
