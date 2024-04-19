@@ -54,7 +54,7 @@ public:
                     const unsigned char* pFontBytes, int nByteLength );
 
     SAL_DLLPRIVATE bool CreateFontSubset( FontType nOutFontTypeMask,
-                    SvStream* pOutFile, const char* pOutFontName,
+                    SvStream* pOutFile,
                     const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncodedIds,
                     int nReqGlyphCount);
 

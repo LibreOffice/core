@@ -4889,11 +4889,9 @@ namespace
         return Image(aMirrBitmapEx);
     }
 
-    GdkPixbuf* getPixbuf(const css::uno::Reference<css::graphic::XGraphic>& rImage, bool bMirror = false)
+    GdkPixbuf* getPixbuf(const css::uno::Reference<css::graphic::XGraphic>& rImage)
     {
         Image aImage(rImage);
-        if (bMirror)
-            aImage = mirrorImage(aImage);
 
         OUString sStock(aImage.GetStock());
         if (!sStock.isEmpty())

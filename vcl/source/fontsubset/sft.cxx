@@ -1463,7 +1463,7 @@ bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
     SvStream* pStream = aTempFile.GetStream(StreamMode::READWRITE);
 
     rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
-    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pStream, nullptr, pGlyphIds, pEncoding,
+    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pStream, pGlyphIds, pEncoding,
                                        nGlyphCount);
 
     if (bRet)

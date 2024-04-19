@@ -161,7 +161,7 @@ std::vector<fontID> PrintFontManager::addFontFile( std::u16string_view rFileUrl 
     return aFontIds;
 }
 
-std::vector<PrintFontManager::PrintFont> PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, const char *pFormat ) const
+std::vector<PrintFontManager::PrintFont> PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile) const
 {
     std::vector<PrintFontManager::PrintFont> aNewFonts;
 
@@ -184,21 +184,12 @@ std::vector<PrintFontManager::PrintFont> PrintFontManager::analyzeFontFile( int 
             return aNewFonts;
 
         bSupported = false;
-        if (pFormat)
-        {
-            if (!strcmp(pFormat, "TrueType") ||
-                !strcmp(pFormat, "CFF"))
-                bSupported = true;
-        }
-        if (!bSupported)
-        {
-            OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
-            if( aExt.equalsIgnoreAsciiCase("ttf")
-                 ||  aExt.equalsIgnoreAsciiCase("ttc")
-                 ||  aExt.equalsIgnoreAsciiCase("tte")   // #i33947# for Gaiji support
-                 ||  aExt.equalsIgnoreAsciiCase("otf") ) // check for TTF- and PS-OpenType too
-                bSupported = true;
-        }
+        OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
+        if( aExt.equalsIgnoreAsciiCase("ttf")
+             ||  aExt.equalsIgnoreAsciiCase("ttc")
+             ||  aExt.equalsIgnoreAsciiCase("tte")   // #i33947# for Gaiji support
+             ||  aExt.equalsIgnoreAsciiCase("otf") ) // check for TTF- and PS-OpenType too
+            bSupported = true;
     }
 
     if (bSupported)

@@ -251,7 +251,7 @@ int GetCommandLineTokenCount(const OUString& rLine)
     return nTokenCount;
 }
 
-OUString WhitespaceToSpace( std::u16string_view rLine, bool bProtect )
+OUString WhitespaceToSpace( std::u16string_view rLine )
 {
     size_t nLen = rLine.size();
     if( ! nLen )
@@ -283,11 +283,11 @@ OUString WhitespaceToSpace( std::u16string_view rLine, bool bProtect )
                 if( pRun != pEnd )
                     pRun++;
             }
-            else if( bProtect && *pRun == '`' )
+            else if( *pRun == '`' )
                 CopyUntil( pLeap, pRun, '`', true );
-            else if( bProtect && *pRun == '\'' )
+            else if( *pRun == '\'' )
                 CopyUntil( pLeap, pRun, '\'', true );
-            else if( bProtect && *pRun == '"' )
+            else if( *pRun == '"' )
                 CopyUntil( pLeap, pRun, '"', true );
             else
             {
