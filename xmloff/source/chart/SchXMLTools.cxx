@@ -653,7 +653,7 @@ void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUSt
         if ((xTitleProp->getPropertyValue("FormattedStrings") >>= xFullTextTitle) &&
             xFullTextTitle.hasElements())
         {
-            // these are the properies from the textshape object - needs to apply them
+            // these are the properties from the textshape object - needs to apply them
             // to all the string parts firstly - (necessarry for backward compatibility)
             xFullTextTitleProps.set(xFullTextTitle.getArray()[0], uno::UNO_QUERY);
         }
