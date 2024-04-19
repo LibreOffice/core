@@ -2004,7 +2004,7 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, vcl::Window *_pWin, SwView &rShell )
 
     // place the cursor on the first field...
     IFieldmark *pBM = nullptr;
-    if (IsFormProtected() && (pBM = GetFieldmarkAfter(/*bLoop=*/true)) !=nullptr) {
+    if (IsFormProtected() && (pBM = GetFieldmarkAfter()) !=nullptr) {
         GotoFieldmark(pBM);
     }
 }
@@ -2022,7 +2022,7 @@ SwWrtShell::SwWrtShell( SwDoc& rDoc, vcl::Window *_pWin, SwView &rShell,
 
     // place the cursor on the first field...
     IFieldmark *pBM = nullptr;
-    if (IsFormProtected() && (pBM = GetFieldmarkAfter(/*bLoop=*/true)) !=nullptr) {
+    if (IsFormProtected() && (pBM = GetFieldmarkAfter()) !=nullptr) {
         GotoFieldmark(pBM);
     }
 }

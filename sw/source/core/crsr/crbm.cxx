@@ -290,16 +290,16 @@ bool SwCursorShell::IsFormProtected()
     return getIDocumentMarkAccess()->getInnerFieldmarkFor(pos);
 }
 
-sw::mark::IFieldmark* SwCursorShell::GetFieldmarkAfter(bool bLoop)
+sw::mark::IFieldmark* SwCursorShell::GetFieldmarkAfter()
 {
     SwPosition pos(*GetCursor()->GetPoint());
-    return getIDocumentMarkAccess()->getFieldmarkAfter(pos, bLoop);
+    return getIDocumentMarkAccess()->getFieldmarkAfter(pos, /*bLoop*/true);
 }
 
-sw::mark::IFieldmark* SwCursorShell::GetFieldmarkBefore(bool bLoop)
+sw::mark::IFieldmark* SwCursorShell::GetFieldmarkBefore()
 {
     SwPosition pos(*GetCursor()->GetPoint());
-    return getIDocumentMarkAccess()->getFieldmarkBefore(pos, bLoop);
+    return getIDocumentMarkAccess()->getFieldmarkBefore(pos, /*bLoop*/true);
 }
 
 bool SwCursorShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark, bool completeSelection)

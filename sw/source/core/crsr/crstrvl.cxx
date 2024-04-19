@@ -938,7 +938,7 @@ void SwCursorShell::GotoFormControl(bool bNext)
     if (aFormMap.begin() == aFormMap.end())
     {
         // only legacy fields exist. Avoid reprocessing everything and use legacy code path.
-        GotoFieldmark(bNext ? GetFieldmarkAfter(/*Loop=*/true) : GetFieldmarkBefore(/*Loop=*/true));
+        GotoFieldmark(bNext ? GetFieldmarkAfter() : GetFieldmarkBefore());
         return;
     }
 
