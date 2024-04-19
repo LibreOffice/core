@@ -531,7 +531,7 @@ public:
     bool MoveNumParas( bool bUpperLower, bool bUpperLeft );
 
     /// Switch on/off of numbering via Delete/Backspace.
-    SW_DLLPUBLIC bool NumOrNoNum(bool bDelete = false, bool bChkStart = true);
+    SW_DLLPUBLIC bool NumOrNoNum(bool bDelete = false);
 
     // #i23726#
     // #i90078#
@@ -542,7 +542,7 @@ public:
     void SetIndent(short nIndent, const SwPosition & rPos);
     bool IsFirstOfNumRuleAtCursorPos() const;
 
-    bool IsNoNum( bool bChkStart = true ) const;
+    bool IsNoNum() const;
 
     /** @return Num-Level of the node in which point of cursor is.
      @return values can be: NO_NUMBERING, 0..MAXLEVEL-1 */

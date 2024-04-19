@@ -628,15 +628,13 @@ bool SwEditShell::IsOutlineCopyable( SwOutlineNodes::size_type nIdx ) const
     return lcl_IsOutlineMoveAndCopyable( *this, nIdx, true );
 }
 
-bool SwEditShell::NumOrNoNum(
-    bool bNumOn,
-    bool bChkStart )
+bool SwEditShell::NumOrNoNum( bool bNumOn )
 {
     bool bRet = false;
 
     if ( !IsMultiSelection()
          && !HasSelection()
-         && ( !bChkStart || IsSttPara() ) )
+         && IsSttPara() )
     {
         StartAllAction();
         SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *GetCursor()->GetPoint()));
@@ -646,14 +644,14 @@ bool SwEditShell::NumOrNoNum(
     return bRet;
 }
 
-bool SwEditShell::IsNoNum( bool bChkStart ) const
+bool SwEditShell::IsNoNum() const
 {
     // a Backspace in the paragraph without number becomes a Delete
     bool bResult = false;
 
     if ( !IsMultiSelection()
          && !HasSelection()
-         && ( !bChkStart || IsSttPara() ) )
+         && IsSttPara() )
     {
         const SwTextNode* pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->GetNode());
         if ( pTextNd != nullptr )
