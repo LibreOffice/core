@@ -528,6 +528,53 @@ Module.addOnPostRun(function() {
         console.log(v);
         console.assert(v === null);
     }
+    {
+        const v1 = new Module.uno_InOutParam_boolean;
+        const v2 = new Module.uno_InOutParam_byte;
+        const v3 = new Module.uno_InOutParam_short;
+        const v4 = new Module.uno_InOutParam_unsigned_short;
+        const v5 = new Module.uno_InOutParam_long;
+        const v6 = new Module.uno_InOutParam_unsigned_long;
+        const v7 = new Module.uno_InOutParam_hyper;
+        const v8 = new Module.uno_InOutParam_unsigned_hyper;
+        const v9 = new Module.uno_InOutParam_float;
+        const v10 = new Module.uno_InOutParam_double;
+        const v11 = new Module.uno_InOutParam_char;
+        test.getOut(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11);
+        console.log(v1.val);
+        console.log(v2.val);
+        console.log(v3.val);
+        console.log(v4.val);
+        console.log(v5.val);
+        console.log(v6.val);
+        console.log(v7.val);
+        console.log(v8.val);
+        console.log(v9.val);
+        console.log(v10.val);
+        console.log(v11.val);
+        console.assert(v1.val === 1); //TODO: true
+        console.assert(v2.val === -12);
+        console.assert(v3.val === -1234);
+        console.assert(v4.val === 54321);
+        console.assert(v5.val === -123456);
+        console.assert(v6.val === 3456789012);
+        console.assert(v7.val === -123456789n);
+        console.assert(v8.val === 9876543210n);
+        console.assert(v9.val === -10.25);
+        console.assert(v10.val === 100.5);
+        console.assert(v11.val === 'Ö');
+        v1.delete();
+        v2.delete();
+        v3.delete();
+        v4.delete();
+        v5.delete();
+        v6.delete();
+        v7.delete();
+        v8.delete();
+        v9.delete();
+        v10.delete();
+        v11.delete();
+    }
     console.assert(uno.org.libreoffice.embindtest.Constants.Boolean === true);
     console.assert(test.isBoolean(uno.org.libreoffice.embindtest.Constants.Boolean));
     console.assert(uno.org.libreoffice.embindtest.Constants.Byte === -12);

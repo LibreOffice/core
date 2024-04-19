@@ -114,6 +114,10 @@ interface XTest {
     boolean isSequenceStruct([in] sequence<Struct> value);
     XTest getNull();
     boolean isNull([in] XTest value);
+    void getOut(
+        [out] boolean value1, [out] byte value2, [out] short value3, [out] unsigned short value4,
+        [out] long value5, [out] unsigned long value6, [out] hyper value7,
+        [out] unsigned hyper value8, [out] float value9, [out] double value10, [out] char value11);
     void throwRuntimeException();
     void passJob([in] com::sun::star::task::XJob object);
     void passJobExecutor([in] com::sun::star::task::XJobExecutor object);
