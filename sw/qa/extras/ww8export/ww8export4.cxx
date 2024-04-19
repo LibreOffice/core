@@ -19,8 +19,11 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/string_view.hxx>
+#include <svx/svdpage.hxx>
 
 #include <docsh.hxx>
+#include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <unotxdoc.hxx>
 
@@ -76,6 +79,27 @@ DECLARE_WW8EXPORT_TEST(testTdf155465_paraAdjustDistribute, "tdf155465_paraAdjust
 DECLARE_WW8EXPORT_TEST(testTdf104704_mangledFooter, "tdf104704_mangledFooter.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEmptyGroup)
+{
+    // Given a document with an empty group
+    createSwDoc("empty_group.docx");
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Empty group"), pObject->GetName());
+    CPPUNIT_ASSERT(pObject->IsGroupObject());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pObject->GetSubList()->GetObjCount());
+
+    // it must not assert/crash on save
+    saveAndReload(OUString::createFromAscii(mpFilter));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
